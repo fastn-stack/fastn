@@ -78,10 +78,7 @@ let main = function (parent) {
   })), inherited);
 }
 let foo__increment = function (args) {
-  let __args__ = {
-    a: null,
-    ...args
-  };
+  let __args__ = args;
   let fastn_utils_val___args___a = fastn_utils.getter(__args__.a) + 1;
   if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
     __args__.a = fastn_utils_val___args___a;
@@ -90,16 +87,9 @@ let foo__increment = function (args) {
 global.foo__num = fastn.mutable(2);
 let foo__multiply_by_two = function (args)
 {
-  let __args__ = {
-    a: null,
-    ...args
-  };
+  let __args__ = args;
   return (fastn_utils.getter(__args__.a) * 2);
 }
-let inherited = fastn.recordInstance({
-  colors: ftd.default_colors,
-  types: ftd.default_types
-});
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

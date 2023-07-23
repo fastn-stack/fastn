@@ -790,3 +790,20 @@ pub(crate) fn insert_export_thing(
         );
     }
 }
+
+pub fn get_children_properties_from_properties(
+    properties: &[ftd::interpreter::Property],
+) -> Vec<ftd::interpreter::Property> {
+    use itertools::Itertools;
+
+    properties
+        .iter()
+        .filter_map(|v| {
+            if v.value.kind().inner_list().is_subsection_ui() {
+                Some(v.to_owned())
+            } else {
+                None
+            }
+        })
+        .collect_vec()
+}

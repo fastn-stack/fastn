@@ -4,3 +4,4 @@ pub const INHERITED_PREFIX: &str = "__$$inherited$$__";
 pub const INHERITED_VARIABLE: &str = "inherited";
 pub const MAIN_FUNCTION: &str = "main";
 pub const FUNCTION_PARENT: &str = "root";
+pub const COMPONENT_PARENT: &str = "parent";

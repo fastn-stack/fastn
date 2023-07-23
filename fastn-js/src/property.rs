@@ -28,8 +28,15 @@ impl fastn_js::SetPropertyValue {
         matches!(&self, fastn_js::SetPropertyValue::Formula(_))
     }
 
-    pub fn null() -> fastn_js::SetPropertyValue {
-        fastn_js::SetPropertyValue::Value(fastn_js::Value::Null)
+    pub fn undefined() -> fastn_js::SetPropertyValue {
+        fastn_js::SetPropertyValue::Value(fastn_js::Value::Undefined)
+    }
+
+    pub fn is_undefined(&self) -> bool {
+        matches!(
+            self,
+            fastn_js::SetPropertyValue::Value(fastn_js::Value::Undefined)
+        )
     }
 }
 
@@ -152,6 +159,7 @@ pub enum Value {
         value: Vec<fastn_js::ComponentStatement>,
     },
     Null,
+    Undefined,
 }
 
 impl Value {
@@ -198,6 +206,7 @@ impl Value {
                     .join("")
             ),
             Value::Null => "null".to_string(),
+            Value::Undefined => "undefined".to_string(),
         }
     }
 }

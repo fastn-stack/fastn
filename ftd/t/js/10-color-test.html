@@ -145,10 +145,7 @@ global.foo__bg_og = fastn.recordInstance({
 global.foo__value = fastn.mutable(0);
 let foo__increment = function (args)
 {
-  let __args__ = {
-    a: null,
-    ...args
-  };
+  let __args__ = args;
   let fastn_utils_val___args___a = fastn_utils.getter(__args__.a) + 1;
   if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
     __args__.a = fastn_utils_val___args___a;
@@ -183,10 +180,6 @@ global.foo__rtype = fastn.recordInstance({
 global.foo__bg_bp = fastn.recordInstance({
   light: "#e8eafc",
   dark: "#f4e8fc"
-});
-let inherited = fastn.recordInstance({
-  colors: ftd.default_colors,
-  types: ftd.default_types
 });
 
         fastn_virtual.hydrate(main);

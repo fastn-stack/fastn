@@ -95,10 +95,7 @@ let main = function (parent) {
 }
 global.foo__value = fastn.mutable(0);
 let foo__clamp = function (args) {
-  let __args__ = {
-    a: null,
-    ...args
-  };
+  let __args__ = args;
   let fastn_utils_val___args___a = (fastn_utils.getter(__args__.a) + 1) % 2;
   if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
     __args__.a = fastn_utils_val___args___a;
@@ -107,7 +104,6 @@ let foo__clamp = function (args) {
 let foo__append_integer = function (args) {
   let __args__ = {
     a: fastn.mutableList([]),
-    v: null,
     ...args
   };
   return (ftd.append(__args__.a, __args__.v));
@@ -115,10 +111,7 @@ let foo__append_integer = function (args) {
 global.foo__counters = fastn.mutableList([]);
 let foo__increment = function (args)
 {
-  let __args__ = {
-    a: null,
-    ...args
-  };
+  let __args__ = args;
   let fastn_utils_val___args___a = fastn_utils.getter(__args__.a) + 1;
   if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
     __args__.a = fastn_utils_val___args___a;
@@ -145,10 +138,6 @@ let foo__counter_list = function (parent, inherited, args) {
   });
   return parenti0;
 }
-let inherited = fastn.recordInstance({
-  colors: ftd.default_colors,
-  types: ftd.default_types
-});
 
         fastn_virtual.hydrate(main);
         ftd.post_init();
