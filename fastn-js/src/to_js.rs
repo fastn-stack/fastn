@@ -194,9 +194,9 @@ impl fastn_js::ComponentStatement {
 impl fastn_js::InstantiateComponent {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         pretty::RcDoc::text(format!(
-            "{}{}(",
-            if self.should_return { "return " } else { "" },
-            fastn_js::utils::name_to_js(self.name.as_str())
+            "let {} = {}(",
+            self.var_name,
+            fastn_js::utils::name_to_js(self.component_name.as_str())
         ))
         .append(pretty::RcDoc::text(self.parent.clone()))
         .append(comma().append(space()))
@@ -219,6 +219,11 @@ impl fastn_js::InstantiateComponent {
             pretty::RcDoc::nil()
         })
         .append(text(");"))
+        .append(if self.should_return {
+            text(format!("return {};", self.var_name).as_str())
+        } else {
+            pretty::RcDoc::nil()
+        })
     }
 }
 

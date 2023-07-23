@@ -80,10 +80,11 @@ let main = function (parent) {
     }, parenti1);
   });
   global.foo__people.forLoop(parent, function (root, item, index) {
-    return foo__show_person(root, inherited, {
+    let rooti0 = foo__show_person(root, inherited, {
       name: item,
       index: index
     });
+    return rooti0;
   });
 }
 let foo__append_string = function (args) {

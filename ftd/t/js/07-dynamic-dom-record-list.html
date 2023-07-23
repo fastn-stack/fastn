@@ -72,10 +72,11 @@ let main = function (parent) {
     }, parenti0);
   });
   global.foo__people.forLoop(parent, function (root, item, index) {
-    return foo__show_person(root, inherited, {
+    let rooti0 = foo__show_person(root, inherited, {
       p: item,
       index: index
     });
+    return rooti0;
   });
 }
 let foo__append_person = function (args) {

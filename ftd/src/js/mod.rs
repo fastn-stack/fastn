@@ -374,21 +374,31 @@ impl ftd::interpreter::Component {
                         .map(|val| (v.name.to_string(), val.to_set_property_value(doc, rdata)))
                 })
                 .collect_vec();
-            // Todo: Add event
-            /*for event in self.events.iter() {
-                component_statements.push(fastn_js::ComponentStatement::AddEventHandler(
-                    event.to_event_handler_js(element_name, doc, component_definition_name.clone()),
-                ));
-            }*/
-            vec![fastn_js::ComponentStatement::InstantiateComponent(
-                fastn_js::InstantiateComponent {
-                    name: self.name.to_string(),
-                    arguments,
-                    parent: parent.to_string(),
-                    inherited: rdata.inherited_variable_name.to_string(),
-                    should_return,
-                },
-            )]
+            let mut component_statements = vec![];
+            let instantiate_component = fastn_js::InstantiateComponent::new(
+                self.name.as_str(),
+                arguments,
+                parent,
+                rdata.inherited_variable_name,
+                should_return,
+                index,
+            );
+
+            let instantiate_component_var_name = instantiate_component.var_name.clone();
+
+            component_statements.push(fastn_js::ComponentStatement::InstantiateComponent(
+                instantiate_component,
+            ));
+
+            component_statements.extend(self.events.iter().filter_map(|event| {
+                event
+                    .to_event_handler_js(instantiate_component_var_name.as_str(), doc, rdata)
+                    .map(|event_handler| {
+                        fastn_js::ComponentStatement::AddEventHandler(event_handler)
+                    })
+            }));
+
+            component_statements
         } else {
             panic!("Can't find, {}", self.name)
         }
