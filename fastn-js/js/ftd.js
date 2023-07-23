@@ -39,7 +39,58 @@ let ftd = {
         const inputs = riveConst.stateMachineInputs(stateMachineName);
         const trigger = inputs.find(i => i.name === args.input);
         trigger.value = !trigger.value;
-    }
+    },
+
+    set_rive_integer(args, node) {
+        if (!!args.rive) {
+            let riveNode = ftd.riveNodes[`${args.rive}__${ftd.device.get()}`];
+            node = riveNode ? riveNode: node;
+        }
+        let riveConst = node.getExtraData().rive;
+        const stateMachineName = riveConst.stateMachineNames[0];
+        const inputs = riveConst.stateMachineInputs(stateMachineName);
+        const trigger = inputs.find(i => i.name === args.input);
+        trigger.value = args.value;
+    },
+
+    fire_rive(args, node) {
+        if (!!args.rive) {
+            let riveNode = ftd.riveNodes[`${args.rive}__${ftd.device.get()}`];
+            node = riveNode ? riveNode: node;
+        }
+        let riveConst = node.getExtraData().rive;
+        const stateMachineName = riveConst.stateMachineNames[0];
+        const inputs = riveConst.stateMachineInputs(stateMachineName);
+        const trigger = inputs.find(i => i.name === args.input);
+        trigger.fire();
+    },
+
+    play_rive(args, node) {
+        if (!!args.rive) {
+            let riveNode = ftd.riveNodes[`${args.rive}__${ftd.device.get()}`];
+            node = riveNode ? riveNode: node;
+        }
+        node.getExtraData().rive.play(args.input);
+    },
+
+    pause_rive(args, node) {
+        if (!!args.rive) {
+            let riveNode = ftd.riveNodes[`${args.rive}__${ftd.device.get()}`];
+            node = riveNode ? riveNode: node;
+        }
+        node.getExtraData().rive.pause(args.input);
+    },
+
+    toggle_play_rive(args, node) {
+        if (!!args.rive) {
+            let riveNode = ftd.riveNodes[`${args.rive}__${ftd.device.get()}`];
+            node = riveNode ? riveNode: node;
+        }
+        let riveConst = node.getExtraData().rive
+        riveConst.playingAnimationNames.includes(args.input)
+            ? riveConst.pause(args.input)
+            : riveConst.play(args.input);
+    },
 
 };
 
