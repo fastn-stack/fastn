@@ -214,7 +214,9 @@ mod test {
             \\-- yo:
             body ho"
             ),
-            super::to_string(&[ftd::ftd2021::p1::Section::with_name("foo").and_body("-- yo:\nbody ho")]),
+            super::to_string(&[
+                ftd::ftd2021::p1::Section::with_name("foo").and_body("-- yo:\nbody ho")
+            ]),
         );
 
         assert_eq!(
