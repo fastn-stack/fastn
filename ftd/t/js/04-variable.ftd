@@ -8,6 +8,7 @@ margin.px: $i
 $on-click$: $increment($a = $i)
 
 -- foo: Foo says Hello
+$on-click$: $increment($a = $i)
 
 -- ftd.text: Hello
 if: { i > 11 }
