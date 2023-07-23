@@ -1540,6 +1540,22 @@ impl Rive {
         let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Rive, parent, index);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
+        let rive_name = self
+            .common
+            .id
+            .as_ref()
+            .map(|v| v.get_string_data())
+            .flatten()
+            .map(|v| {
+                format!(
+                    indoc::indoc! {"
+                        ftd.riveNodes[`{rive_name}__${{ftd.device.get()}}`] = {canvas};
+                    "},
+                    rive_name = v,
+                    canvas = kernel.name,
+                )
+            });
+
         component_statements.push(fastn_js::ComponentStatement::AnyBlock(format!(
             indoc::indoc! {"
                 let extraData = {canvas}.getExtraData();
@@ -1553,6 +1569,7 @@ impl Rive {
                         extraData.rive.resizeDrawingSurfaceToCanvas();
                     }},
                 }});
+                {rive_name_content}
             "},
             src = self.src.to_set_property_value(doc, rdata).to_js(),
             canvas = kernel.name,
@@ -1566,6 +1583,7 @@ impl Rive {
                 .as_ref()
                 .map(|v| v.to_set_property_value(doc, rdata).to_js())
                 .unwrap_or_else(|| "null".to_string()),
+            rive_name_content = rive_name.unwrap_or_default()
         )));
 
         component_statements.extend(self.common.to_set_properties(
