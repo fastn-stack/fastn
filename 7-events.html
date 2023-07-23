@@ -1979,6 +1979,12 @@ a.value = v
 
 
 
+function ftd__set_boolean___main(a,v,args,data,id){
+a.value = v
+}
+
+
+
 function ftd__set_string___main(a,v,args,data,id){
 a.value = v
 }
@@ -2041,9 +2047,9 @@ window.ftd.utils.set_value_helper(data, "foo#value", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#value", "main");
 window.ftd.call_immutable_value_changes("foo#value", "main");
-window.ftd.utils.node_change_call("main","4:main__padding", data);
 window.ftd.utils.node_change_call("main","0:main__text", data);
 window.ftd.utils.node_change_call("main","1:main__text", data);
+window.ftd.utils.node_change_call("main","4:main__padding", data);
 };
 
 

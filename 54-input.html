@@ -1988,6 +1988,12 @@ a.value = v
 
 
 
+function ftd__set_boolean___main(a,v,args,data,id){
+a.value = v
+}
+
+
+
 function ftd__set_string___main(a,v,args,data,id){
 a.value = v
 }
@@ -2050,8 +2056,8 @@ window.ftd.utils.set_value_helper(data, "foo#color", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#color", "main");
 window.ftd.call_immutable_value_changes("foo#color", "main");
-window.ftd.utils.node_change_call("main","20:main__text", data);
 window.ftd.utils.node_change_call("main","20:main__color", data);
+window.ftd.utils.node_change_call("main","20:main__text", data);
 };
 
 window.set_value_main["foo#date"] = function (data, new_value, remaining) {

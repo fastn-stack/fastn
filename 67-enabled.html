@@ -1977,6 +1977,12 @@ a.value = v
 
 
 
+function ftd__set_boolean___main(a,v,args,data,id){
+a.value = v
+}
+
+
+
 function ftd__set_string___main(a,v,args,data,id){
 a.value = v
 }
@@ -2010,8 +2016,8 @@ window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","0:main__text", data);
 window.ftd.utils.node_change_call("main","2:main__disabled", data);
+window.ftd.utils.node_change_call("main","0:main__text", data);
 };
 
 
