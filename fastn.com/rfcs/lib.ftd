@@ -33,6 +33,7 @@ $rfc.status
 
 
 -- ftd.column:
+width: fill-container
 children: $rfc.c
 
 -- end: ftd.column
@@ -107,6 +108,7 @@ optional body b:
 children c:
 
 -- ftd.column:
+width: fill-container
 
 -- ds.h1: $titled-section.title
 
@@ -116,6 +118,7 @@ if: { titled-section.b != NULL }
 $titled-section.b
 
 -- ftd.column:
+width: fill-container
 children: $titled-section.c
 
 -- end: ftd.column
