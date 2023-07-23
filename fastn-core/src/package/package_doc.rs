@@ -329,14 +329,14 @@ pub(crate) fn file_id_to_names(id: &str) -> Vec<String> {
 }
 
 pub enum FTDResult {
-    HTML(Vec<u8>),
+    Html(Vec<u8>),
     Redirect(String),
 }
 
 impl FTDResult {
     pub fn html(&self) -> Vec<u8> {
         match self {
-            FTDResult::HTML(d) => d.to_vec(),
+            FTDResult::Html(d) => d.to_vec(),
             FTDResult::Redirect(_r) => todo!(),
         }
     }
@@ -345,7 +345,7 @@ impl FTDResult {
 impl From<FTDResult> for fastn_core::http::Response {
     fn from(val: FTDResult) -> Self {
         match val {
-            FTDResult::HTML(body) => {
+            FTDResult::Html(body) => {
                 fastn_core::http::ok_with_content_type(body, mime_guess::mime::TEXT_HTML_UTF_8)
             }
             FTDResult::Redirect(r) => fastn_core::http::redirect(r),
@@ -448,7 +448,7 @@ pub(crate) async fn read_ftd_2022(
         base_url,
     );
 
-    Ok(FTDResult::HTML(file_content.into()))
+    Ok(FTDResult::Html(file_content.into()))
 }
 
 #[allow(clippy::await_holding_refcell_ref)]
@@ -525,7 +525,7 @@ pub(crate) async fn read_ftd_2023(
         font_style.as_str(),
     );
 
-    Ok(FTDResult::HTML(file_content.into()))
+    Ok(FTDResult::Html(file_content.into()))
 }
 
 pub(crate) async fn process_ftd(
