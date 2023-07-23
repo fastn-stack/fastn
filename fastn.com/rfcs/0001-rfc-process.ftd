@@ -2,6 +2,7 @@
 
 -- lib.rfc: RFC: The RFC Process
 id: rfc-process
+status: accepted
 
 The "RFC" (request for comments) process is intended to provide a consistent and
 controlled path for new features to enter the language, fasnt cli and tha

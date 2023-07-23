@@ -107,12 +107,12 @@ border-radius.px: 5
 
 \-- end: toggle-text
 
-\-- toggle-text: `ftd` is cool!
+\-- toggle-text: `fastn` is cool!
 
 
 -- ds.output:
 
--- ftd-index.toggle-text: click me to toggle colors
+-- ftd-index.toggle-text: `fastn` is cool!
 
 -- end: ds.output
 
