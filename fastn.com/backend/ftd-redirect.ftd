@@ -1,0 +1,28 @@
+-- ds.page: `ftd.redirect`: Dynamic Redirect
+
+In any document you can use `ftd.redirect` to ignore the document and return a
+HTTP Redirect response.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.redirect: /
+
+-- ds.h1: Redirect To A Dynamic URL
+
+You can fetch the URL to redirect using any variable as well, this can be used
+with [processors](/processor/-/backend/).
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\;; get query parameter next
+\-- string next:
+$processor$: pr.request-data
+
+\-- ftd.redirect: $next
+
+
+-- end: ds.page

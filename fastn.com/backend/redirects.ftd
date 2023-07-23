@@ -1,27 +1,36 @@
--- ds.page: fastn Redirects
+-- ds.page: Setting Up Redirects
 
-`fastn` allows to redirect any outdated/broken URL to any other URL.
-It could be any sitemap URL or any other external link. This can be done by
-using `fastn.redirects`.
+With `fastn` you can set up redirects for you site. This can be used to create
+short urls e.g. `<your-domain>/t` to redirect to your twitter handle, e.g.
+`https://twitter.com/<your-twitter-handle>` etc, or you can use it to fix
+broken URLs in case you change your mind about some URL.
 
--- ds.h1: Format of using redirects
+This can be done by using `fastn.redirects` in your `FASTN.ftd` file.
 
-The links which needs to be redirected somewhere has to be listed down in the
-body section of `fastn.redirects` as `key-value` tuples in the format
-`<REDIRECT-FROM>: <REDIRECT-TO>`.
-
--- ds.code: `fastn.redirects` example
+-- ds.code: `FASTN.ftd` example that uses `fastn.redirects`
 lang: ftd
 
-\-- fastn.redirects:
+\-- import: fastn
+\-- fastn.package: redirect-example
+
+\-- fastn.redirects: ;; <hl>
 
 /ftd/kernel/: /kernel/
 /discord/: https://discord.gg/eNXVBMq4xt
 
 -- ds.markdown:
 
+The links which needs to be redirected somewhere has to be listed down in the
+body section of `fastn.redirects` as `key-value` tuples in the format
+`<REDIRECT-FROM>: <REDIRECT-TO>`.
+
 In the above example, the url `/ftd/kernel/` will be redirected to `/kernel/`.
-Similarly, visiting `/discord/` will redirect to the official fastn discord
-server [link](https://discord.gg/eNXVBMq4xt)
+Similarly, visiting `/discord/` will redirect to the official `fastn` discord
+server [https://discord.gg/eNXVBMq4xt](https://discord.gg/eNXVBMq4xt).
+
+-- ds.h1: Dynamic Redirect
+
+You can also conditionally redirect from any web page, check out
+[`ftd.redirect`](/ftd/redirect/).
 
 -- end: ds.page
