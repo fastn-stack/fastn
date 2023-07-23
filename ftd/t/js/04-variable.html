@@ -69,7 +69,7 @@ let main = function (parent) {
   parenti0.addEventHandler(fastn_dom.Event.Click, function () {
     foo__increment({
       a: global.foo__i,
-    });
+    }, parenti0);
   });
   parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn.formula([global.foo__i], function () {
     if (function () {
@@ -98,7 +98,7 @@ let main = function (parent) {
     foo__append_string({
       a: global.foo__names,
       v: "Tom",
-    });
+    }, parenti3);
   });
   global.foo__names.forLoop(parent, function (root, item, index) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);

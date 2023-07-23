@@ -16,10 +16,14 @@ pub enum SetPropertyValue {
 
 impl fastn_js::SetPropertyValue {
     pub fn to_js(&self) -> String {
+        self.to_js_with_element_name(&None)
+    }
+
+    pub fn to_js_with_element_name(&self, element_name: &Option<String>) -> String {
         match self {
             fastn_js::SetPropertyValue::Reference(name) => fastn_js::utils::reference_to_js(name),
-            fastn_js::SetPropertyValue::Value(v) => v.to_js(),
-            fastn_js::SetPropertyValue::Formula(f) => f.to_js(),
+            fastn_js::SetPropertyValue::Value(v) => v.to_js(element_name),
+            fastn_js::SetPropertyValue::Formula(f) => f.to_js(element_name),
             fastn_js::SetPropertyValue::Clone(name) => fastn_js::utils::clone_to_js(name),
         }
     }
@@ -53,7 +57,7 @@ pub enum FormulaType {
 }
 
 impl Formula {
-    pub(crate) fn to_js(&self) -> String {
+    pub(crate) fn to_js(&self, element_name: &Option<String>) -> String {
         use itertools::Itertools;
 
         format!(
@@ -63,18 +67,18 @@ impl Formula {
                 .map(|v| fastn_js::utils::reference_to_js(v))
                 .collect_vec()
                 .join(", "),
-            self.formula_value_to_js()
+            self.formula_value_to_js(element_name)
         )
     }
 
-    pub(crate) fn formula_value_to_js(&self) -> String {
+    pub(crate) fn formula_value_to_js(&self, element_name: &Option<String>) -> String {
         match self.type_ {
             fastn_js::FormulaType::Conditional(ref conditional_values) => {
-                conditional_values_to_js(conditional_values.as_slice())
+                conditional_values_to_js(conditional_values.as_slice(), element_name)
             }
             fastn_js::FormulaType::FunctionCall(ref function_call) => {
                 let mut w = Vec::new();
-                let o = function_call.to_js();
+                let o = function_call.to_js(element_name);
                 o.render(80, &mut w).unwrap();
                 format!("function(){{return {}}}", String::from_utf8(w).unwrap())
             }
@@ -90,6 +94,7 @@ pub struct ConditionalValue {
 
 pub(crate) fn conditional_values_to_js(
     conditional_values: &[fastn_js::ConditionalValue],
+    element_name: &Option<String>,
 ) -> String {
     let mut conditions = vec![];
     let mut default = None;
@@ -115,10 +120,16 @@ pub(crate) fn conditional_values_to_js(
                     "else if"
                 },
                 condition = condition,
-                expression = conditional_value.expression.to_js(),
+                expression = conditional_value
+                    .expression
+                    .to_js_with_element_name(element_name),
             ));
         } else {
-            default = Some(conditional_value.expression.to_js())
+            default = Some(
+                conditional_value
+                    .expression
+                    .to_js_with_element_name(element_name),
+            )
         }
     }
 
@@ -163,7 +174,7 @@ pub enum Value {
 }
 
 impl Value {
-    pub(crate) fn to_js(&self) -> String {
+    pub(crate) fn to_js(&self, element_name: &Option<String>) -> String {
         use itertools::Itertools;
         match self {
             Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n")),
@@ -172,14 +183,21 @@ impl Value {
             Value::Boolean(b) => b.to_string(),
             Value::OrType { variant, value } => {
                 if let Some(value) = value {
-                    format!("{}({})", variant, value.to_js())
+                    format!(
+                        "{}({})",
+                        variant,
+                        value.to_js_with_element_name(element_name)
+                    )
                 } else {
                     variant.to_owned()
                 }
             }
             Value::List { value } => format!(
                 "fastn.mutableList([{}])",
-                value.iter().map(|v| v.to_js()).join(", ")
+                value
+                    .iter()
+                    .map(|v| v.to_js_with_element_name(element_name))
+                    .join(", ")
             ),
             Value::Record { fields } => format!(
                 "fastn.recordInstance({{{}}})",
@@ -188,7 +206,7 @@ impl Value {
                     .map(|(k, v)| format!(
                         "{}: {}",
                         fastn_js::utils::kebab_to_snake_case(k),
-                        v.to_js()
+                        v.to_js_with_element_name(element_name)
                     ))
                     .join(", ")
             ),

@@ -69,12 +69,12 @@ let main = function (parent) {
   parenti0.addEventHandler(fastn_dom.Event.Click, function () {
     foo__increment({
       a: global.foo__num,
-    });
+    }, parenti0);
   });
   parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Em(fastn.formula([global.foo__num], function () {
     return foo__multiply_by_two({
       a: global.foo__num,
-    });
+    }, parenti0);
   })), inherited);
 }
 let foo__increment = function (args) {

@@ -70,30 +70,30 @@ let main = function (parent) {
     ftd.set_bool({
       a: global.foo__flag,
       v: true,
-    });
+    }, parenti0);
   });
   parenti0.addEventHandler(fastn_dom.Event.MouseLeave, function () {
     ftd.set_bool({
       a: global.foo__flag,
       v: false,
-    });
+    }, parenti0);
   });
   parenti0.addEventHandler(fastn_dom.Event.GlobalKey(["Control",
   "a"]), function () {
     ftd.toggle({
       a: global.foo__flag,
-    });
+    }, parenti0);
   });
   parenti0.addEventHandler(fastn_dom.Event.GlobalKeySeq(["Shift",
   "Shift"]), function () {
     ftd.toggle({
       a: global.foo__flag,
-    });
+    }, parenti0);
   });
   parenti0.addEventHandler(fastn_dom.Event.ClickOutside, function () {
     ftd.toggle({
       a: global.foo__flag,
-    });
+    }, parenti0);
   });
   parenti0.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([global.foo__flag], function () {
     if (function () {
