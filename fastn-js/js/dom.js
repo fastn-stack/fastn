@@ -458,8 +458,8 @@ fastn_dom.BackgroundPosition = {
 }
 
 fastn_dom.LinearGradientDirection = {
-    Angle: (value) => { return value; },
-    Turn: (value) => { return value; },
+    Angle: (value) => { return `${value}deg`; },
+    Turn: (value) => { return `${value}turn`; },
     Left: "270deg",
     Right: "90deg",
     Top: "0deg",
