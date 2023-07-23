@@ -1,9 +1,11 @@
--- ds.page: `request-data` processor
+-- ds.page: Getting Request Data
 
-`request-data` processor can be used to find the data from query string and
-[named-path parameters](/dynamic-urls/) or from request body.
+`request-data` processor can be used to find the data from the HTTP request.
+Query string and [named-path parameters](/dynamic-urls/) or from request body.
 
--- ds.h1: Query Parameters
+-- ds.h1: Reading Individual Fields
+
+Say the request was:
 
 -- ds.code:
 lang: sh
@@ -12,8 +14,69 @@ curl 'http://127.0.0.1:8000/test/?message=hello%20world'
 
 -- ds.markdown:
 
+And you wanted to extract the value of `message`, you can do it like this:
+
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- string message:
+$processor$: pr.request-data    ;; <hl>
+
+\-- ds.markdown: $message
+
+
+-- ds.markdown:
+
+Note that the field must be present or else this will give an error.
+
+-- ds.h2: Using Default Value As Fallback
+
+If you expect the message to be optional, maybe the user made a request like
+this:
+
+-- ds.code:
+lang: sh
+
+curl 'http://127.0.0.1:8000/test/'
+
+-- ds.markdown:
+
+without passing `message`, the earlier code will return HTTP 500 Error ([this
+is a bug, should return 404](https://github.com/fastn-stack/fastn/issues/1103)),
+one way to avoid that is to specify a default value:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- string message: hello     ;; <hl>
+$processor$: pr.request-data
+
+\-- ds.markdown: $message
+
+-- ds.markdown:
+
+In this case we have provided a default value of `hello`, so if `message` is not
+found the HTTP request, the variable `message` be assiged the default value,
+`hello`.
+
+-- ds.h1: Reading Multiple Bits In One Go
+
+You can use a record to read multiple data from request.
+
+-- ds.code:
+lang: sh
+
+curl 'http://127.0.0.1:8000/test/?message=hello%20world&flag=true'
+
+-- ds.markdown:
+
 In above example url contains query parameter `message` with value `hello
-world`. We can access this value in `ftd` file as like below by calling
+world` and `flag` with value `true`. We can access them `ftd` file by using
 `request-data` processor.
 
 -- ds.code:
@@ -22,7 +85,8 @@ lang: ftd
 \-- import: fastn/processors as pr
 
 \-- record r-data:
-string message:
+string message: default value of message
+boolean flag:
 
 \-- r-data data:
 $processor$: pr.request-data
@@ -31,16 +95,14 @@ $processor$: pr.request-data
 
 -- ds.markdown:
 
-Please note that all the parameters defined in the record must be present. If
-you have not specified the default value to any of the record fields, they will
-not be used if the parameter is missing in the request. [RFC
-#832](https://github.com/orgs/fastn-stack/discussions/832) is to fix this
-behaviour.
+Please note that all the parameters defined in the record must be present, or
+they must have a default value.
 
--- ds.h1: Named Parameters In Dynamic URLs
+-- ds.h1: Key Values In Dynamic URLs And Sitemap
 
-When using [dynamic URLs](/dynamic-urls/), the named parameters can also be
-extracted using the same method:
+When using [dynamic URLs](/dynamic-urls/) or the
+[sitemap](/understanding-sitemap/-/build/), the key value parameters can also
+be extracted using the same method:
 
 -- ds.code:
 lang: ftd
@@ -50,11 +112,12 @@ lang: ftd
 # RD Test:
   url: /rd-test/<string:message>/
   document: ftd-host/r.ftd
+  flag: false
 
 -- ds.markdown:
 
-The same code used above will get the data from URL as well if someone visits,
-say, `/rd-test/hello/`, the value `data.message` would be `hello`.
+Here we have specified `flag: false` in the dynamic URL configuration, and it
+will be picked up.
 
 -- ds.h1: JSON Body
 
@@ -64,8 +127,12 @@ well.
 
 -- ds.h1: Note On Priority
 
-If a field is present in more than one places, the JSON value is preferred over
-the named URL pattern, which itself is preferred over the query string.
+If a field is present in more than one places, this is the order of preference:
+
+- data in `FASTN.ftd` is highest priority
+- then comes data in JSON body
+- then the data in the named parameter
+- and finally the GET query parameter is lowest priorty
 
 
 -- end: ds.page

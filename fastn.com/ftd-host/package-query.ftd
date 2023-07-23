@@ -13,31 +13,18 @@ db: db.sqlite
 SELECT * FROM user;
 
 
--- ds.page: Package Query: Run SQL Queries
+-- ds.page: Data In SQLite Database
 
 `package-query` processor allows you to execute SQL queries against SQLite 
-files present in your `fastn` package.
-
-Say you have a record and a variable like this:
-
-
--- ds.code:
-lang: ftd
-
-\-- record person:
-integer id:
-string name:
-string department:
-
-
-
--- ds.markdown:
+files that are part of your `fastn` package.
 
 And say you have an SQLite database file with table like this:
 
-
--- ds.code: sqlite3 db.sqlite
+-- ds.code: creating table
 lang: sql
+
+\-- run `sqlite3 db.sqlite` in shell to create the database
+\-- and paste this
 
 CREATE TABLE user (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -45,15 +32,11 @@ CREATE TABLE user (
     department TEXT
 );
 
-
 -- ds.markdown:
 
-Notice how the able and the record have matching fields.
+And you have initilised it like this:
 
-Say you have inserted some data:
-
-
--- ds.code:
+-- ds.code: inserting data
 lang: sql
 
 INSERT INTO user (name, department) VALUES ("amit", "engineering");
@@ -65,8 +48,7 @@ INSERT INTO user (name, department) VALUES ("jack", "ops");
 Assuming the SQLite file is `db.sqlite`, you can fetch data from the SQLite
 database using `package-query` processor:
 
-
--- ds.code:
+-- ds.code: querying database and storing result in a list
 lang: ftd
 
 \-- import: fastn/processors as pr
@@ -77,32 +59,49 @@ db: db.sqlite
 
 SELECT * FROM user;
 
+-- ds.markdown:
+
+For this to work you have to also create a record with same data as the result
+of your SQL query. In this query you are using `SELECT *`, which will fetch all
+three columns, `id`, `name` and `department`, so your record will look something
+like this:
+
+-- ds.code: a record corresponding to your query result
+lang: ftd
+
+\-- record person:
+integer id:
+string name:
+string department:
+
 
 -- ds.markdown:
 
-The record we use must match with the result of the query, so if we would have
-individually selected columns, or used expressions in the SELECT clause, the 
-type of expression must match with the record in which you are going to store 
-the result.
+Note that the type columns in query result must match the type of fields in the
+record. The order of fields of record must also match the order of columns in
+the query result.
 
-You can then show the results in the FTD document, eg:
+Also note that since the result of this query can be multiple rows (or one or
+none), we have to read the result in a `person list`, so all data can be stored
+in corresponding list.
+
+-- ds.markdown:
+
+Now that you have data in a variable, you can pass it to some component to view
+it using the [`$loop$`](/list/#using-loop):
 
 
--- ds.code:
+-- ds.code: show data in page ([view full source](https://github.com/fastn-stack/fastn.com/blob/main/ftd-host/package-query.ftd))
 lang: ftd
 
 \-- show-person: $p
 $loop$: $people as $p
 
 
+-- ds.markdown:
 
--- ds.h1: `db`
+Which will look something like this:
 
-The name of `sqlite` database file is provided by the key `db`.
-
--- ds.h1: Output
-
-[View Source](https://github.com/fastn-stack/fastn.com/blob/main/ftd-host/package-query.ftd)
 
 -- show-person: $p
 $loop$: $people as $p
