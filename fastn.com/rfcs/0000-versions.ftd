@@ -1,0 +1,25 @@
+-- import: fastn.com/rfcs/lib
+
+-- lib.rfc: RFC: Versions
+id: versions
+status: rfc-not-ready
+
+This RFC proses versioning feature. It describes how versions can be specified,
+and how should the fastn cli manage various dependency version related concerns.
+
+
+-- lib.motivation:
+
+`fastn` allows authors to depend on fastn packages published by others as part
+of website they are creating. This works well but poses a potential risk of
+author's code breaking if the dependency changes. In this RFC we propose package
+versioning to allow authors to specify versions of their dependency so any
+changes in upstread does not effect an existing site.
+
+-- end: lib.motivation
+
+
+
+-- end: lib.rfc
+
+
