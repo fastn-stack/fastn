@@ -951,7 +951,7 @@ pub(crate) fn get_variable_declaration(variable: &str) -> pretty::RcDoc<'static>
 #[cfg(test)]
 #[track_caller]
 pub fn e(f: fastn_js::Ast, s: &str) {
-    let g = to_js(&vec![f], false);
+    let g = to_js(&[f], false);
     println!("got: {}", g);
     println!("expected: {}", s);
     assert_eq!(g, s);

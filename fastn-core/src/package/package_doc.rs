@@ -328,7 +328,31 @@ pub(crate) fn file_id_to_names(id: &str) -> Vec<String> {
     ids
 }
 
-#[allow(clippy::await_holding_refcell_ref)]
+pub enum FTDResult {
+    Html(Vec<u8>),
+    Redirect(String),
+}
+
+impl FTDResult {
+    pub fn html(&self) -> Vec<u8> {
+        match self {
+            FTDResult::Html(d) => d.to_vec(),
+            FTDResult::Redirect(_r) => todo!(),
+        }
+    }
+}
+
+impl From<FTDResult> for fastn_core::http::Response {
+    fn from(val: FTDResult) -> Self {
+        match val {
+            FTDResult::Html(body) => {
+                fastn_core::http::ok_with_content_type(body, mime_guess::mime::TEXT_HTML_UTF_8)
+            }
+            FTDResult::Redirect(r) => fastn_core::http::redirect(r),
+        }
+    }
+}
+
 #[tracing::instrument(skip_all)]
 pub(crate) async fn read_ftd(
     config: &mut fastn_core::Config,
@@ -336,7 +360,7 @@ pub(crate) async fn read_ftd(
     base_url: &str,
     download_assets: bool,
     test: bool,
-) -> fastn_core::Result<Vec<u8>> {
+) -> fastn_core::Result<FTDResult> {
     tracing::info!(document = main.id);
     match config.ftd_edition {
         fastn_core::FTDEdition::FTD2021 => {
@@ -359,7 +383,7 @@ pub(crate) async fn read_ftd_2022(
     base_url: &str,
     download_assets: bool,
     test: bool,
-) -> fastn_core::Result<Vec<u8>> {
+) -> fastn_core::Result<FTDResult> {
     let lib_config = config.clone();
     let mut all_packages = config.all_packages.borrow_mut();
     let current_package = all_packages
@@ -400,6 +424,9 @@ pub(crate) async fn read_ftd_2022(
             });
         }
     };
+    if let Some(r) = main_ftd_doc.get_redirect() {
+        return Ok(FTDResult::Redirect(r));
+    }
     let executor = ftd::executor::ExecuteDoc::from_interpreter(main_ftd_doc)?;
     let node = ftd::node::NodeData::from_rt(executor);
     let html_ui = ftd::html::HtmlUI::from_node_data(node, "main", test)?;
@@ -421,7 +448,7 @@ pub(crate) async fn read_ftd_2022(
         base_url,
     );
 
-    Ok(file_content.into())
+    Ok(FTDResult::Html(file_content.into()))
 }
 
 #[allow(clippy::await_holding_refcell_ref)]
@@ -431,7 +458,7 @@ pub(crate) async fn read_ftd_2023(
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
-) -> fastn_core::Result<Vec<u8>> {
+) -> fastn_core::Result<FTDResult> {
     let lib_config = config.clone();
     let mut all_packages = config.all_packages.borrow_mut();
     let current_package = all_packages
@@ -472,6 +499,10 @@ pub(crate) async fn read_ftd_2023(
             });
         }
     };
+
+    if let Some(r) = main_ftd_doc.get_redirect() {
+        return Ok(FTDResult::Redirect(r));
+    }
 
     let js_ast_data = ftd::js::document_into_js_ast(main_ftd_doc);
     let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), true);
@@ -494,7 +525,7 @@ pub(crate) async fn read_ftd_2023(
         font_style.as_str(),
     );
 
-    Ok(file_content.into())
+    Ok(FTDResult::Html(file_content.into()))
 }
 
 pub(crate) async fn process_ftd(
@@ -503,7 +534,7 @@ pub(crate) async fn process_ftd(
     base_url: &str,
     no_static: bool,
     test: bool,
-) -> fastn_core::Result<Vec<u8>> {
+) -> fastn_core::Result<FTDResult> {
     if main.id.eq("FASTN.ftd") {
         tokio::fs::copy(
             config.root.join(main.id.as_str()),
@@ -541,7 +572,7 @@ pub(crate) async fn process_ftd(
     fastn_core::utils::write(
         &config.build_dir(),
         file_rel_path.as_str(),
-        response.as_slice(),
+        &response.html(),
     )
     .await?;
 

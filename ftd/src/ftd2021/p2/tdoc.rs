@@ -1532,13 +1532,13 @@ mod test {
         let data: Vec<Vec<serde_json::Value>> = vec![
             vec![
                 serde_json::json!("Amitu"),
-                serde_json::json!(20 as i64),
+                serde_json::json!(20_i64),
                 serde_json::json!("Bangalore"),
                 serde_json::json!("CEO of fifthTry"),
             ],
             vec![
                 serde_json::json!("Arpita"),
-                serde_json::json!(20 as i64),
+                serde_json::json!(20_i64),
                 serde_json::json!("Varanasi"),
                 serde_json::json!("Software Developer of fifthTry"),
             ],

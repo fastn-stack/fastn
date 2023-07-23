@@ -3468,6 +3468,20 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
+            "ftd#redirect".to_string(),
+            ftd::interpreter::Thing::Component(ftd::interpreter::ComponentDefinition {
+                name: "ftd#redirect".to_string(),
+                arguments: vec![ftd::interpreter::Argument::default(
+                    "value",
+                    ftd::interpreter::Kind::string()
+                        .into_kind_data().caption_or_body(),
+                ),],
+                definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+                css: None,
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter::FTD_BACKGROUND_COLOR.to_string(),
             ftd::interpreter::Thing::Record(ftd::interpreter::Record {
                 name: ftd::interpreter::FTD_BACKGROUND_COLOR.to_string(),
