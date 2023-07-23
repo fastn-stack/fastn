@@ -1073,11 +1073,25 @@ impl Document {
             bag: ftd::interpreter::BagOrState::Bag(&self.data),
         }
     }
+    pub fn get_instructions(&self, component_name: &str) -> Vec<ftd::interpreter::Component> {
+        use itertools::Itertools;
+
+        self.tree
+            .iter()
+            .filter_map(|v| {
+                if v.name.eq(component_name) {
+                    Some(v.clone())
+                } else {
+                    None
+                }
+            })
+            .collect_vec()
+    }
+
     pub fn get_redirect(&self) -> Option<String> {
-        self.data
-            .get("ftd#redirect")
-            .and_then(|v| v.to_owned().variable(self.name.as_str(), 0).ok())
-            .and_then(|v| v.value.resolve(&self.tdoc(), 0).ok())
+        self.get_instructions("ftd#redirect")
+            .first()
+            .and_then(|v| v.get_interpreter_value_of_argument("value", &self.tdoc()))
             .and_then(|v| v.string(self.name.as_str(), 0).ok())
     }
 }

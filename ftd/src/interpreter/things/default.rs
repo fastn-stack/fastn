@@ -3405,21 +3405,16 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#redirect".to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Component(ftd::interpreter::ComponentDefinition {
                 name: "ftd#redirect".to_string(),
-                kind: ftd::interpreter::Kind::string().into_optional().into_kind_data(),
-                mutable: true,
-                value: ftd::interpreter::PropertyValue::Value {
-                    value: ftd::interpreter::Value::Optional{
-                        data: Box::new(None),
-                        kind: ftd::interpreter::Kind::string().into_optional().into_kind_data()
-                    },
-                    is_mutable: true,
-                    line_number: 0,
-                },
-                conditional_value: vec![],
+                arguments: vec![ftd::interpreter::Argument::default(
+                    "value",
+                    ftd::interpreter::Kind::string()
+                        .into_kind_data().caption_or_body(),
+                ),],
+                definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+                css: None,
                 line_number: 0,
-                is_static: false,
             }),
         ),
         (
