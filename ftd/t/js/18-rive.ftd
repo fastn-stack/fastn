@@ -28,8 +28,8 @@ id: vehicle
 src: https://cdn.rive.app/animations/vehicles.riv
 autoplay: false
 artboard: Jeep
-;; $on-rive-play[idle]$: $ftd.set-string($a = $idle, v = Playing Idle)
-;; $on-rive-pause[idle]$: $ftd.set-string($a = $idle, v = Pausing Idle)
+$on-rive-play[idle]$: $ftd.set-string($a = $idle, v = Playing Idle)
+$on-rive-pause[idle]$: $ftd.set-string($a = $idle, v = Pausing Idle)
 
 
 -- ftd.text: Idle/ \Run

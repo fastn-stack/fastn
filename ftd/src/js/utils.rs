@@ -5,6 +5,61 @@ pub fn trim_all_lines(s: &str) -> String {
     s.split('\n').map(|v| v.trim()).join("\n")
 }
 
+pub(crate) fn get_rive_event(
+    events: &[ftd::interpreter::Event],
+    doc: &ftd::interpreter::TDoc,
+    rdata: &ftd::js::ResolverData,
+    element_name: &str,
+) -> String {
+    let mut events_map: ftd::VecMap<(&String, &ftd::interpreter::FunctionCall)> =
+        ftd::VecMap::new();
+    for event in events.iter() {
+        let (event_name, input, action) = match &event.name {
+            ftd::interpreter::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),
+            ftd::interpreter::EventName::RivePause(timeline) => {
+                ("onPause", timeline, &event.action)
+            }
+            ftd::interpreter::EventName::RiveStateChange(state) => {
+                ("onStateChange", state, &event.action)
+            }
+            _ => continue,
+        };
+        events_map.insert(event_name.to_string(), (input, action));
+    }
+    let mut events_vec = vec![];
+    for (on, actions) in events_map.value {
+        let mut actions_vec = vec![];
+        for (input, action) in actions {
+            let action = ftd::js::utils::function_call_to_js_formula(action, doc, rdata)
+                .formula_value_to_js(&Some(element_name.to_string()));
+            actions_vec.push(format!(
+                indoc::indoc! {"
+                      if (input === \"{input}\") {{
+                        let action = {action};
+                        action();
+                      }}
+                "},
+                input = input,
+                action = action
+            ));
+        }
+
+        events_vec.push(format!(
+            indoc::indoc! {"
+                    {on}: (event) => {{
+                        const inputs = event.data;
+                        inputs.forEach((input) => {{
+                          {actions_vec}
+                        }});
+                    }},
+                "},
+            on = on,
+            actions_vec = actions_vec.join("\n")
+        ));
+    }
+    events_vec.join("\n")
+}
+
 pub(crate) fn get_external_scripts(has_rive_components: bool) -> Vec<String> {
     let mut scripts = vec![];
     if has_rive_components {
@@ -87,4 +142,20 @@ pub(crate) fn get_js_value_from_properties(
     }
 
     Some(ftd::js::Value::ConditionalFormula(properties.to_owned()))
+}
+
+pub(crate) fn function_call_to_js_formula(
+    function_call: &ftd::interpreter::FunctionCall,
+    doc: &ftd::interpreter::TDoc,
+    rdata: &ftd::js::ResolverData,
+) -> fastn_js::Formula {
+    let mut deps = vec![];
+    for property_value in function_call.values.values() {
+        deps.extend(property_value.get_deps(rdata));
+    }
+
+    fastn_js::Formula {
+        deps,
+        type_: fastn_js::FormulaType::FunctionCall(function_call.to_js_function(doc, rdata)),
+    }
 }
