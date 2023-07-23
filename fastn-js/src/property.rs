@@ -57,7 +57,7 @@ pub enum FormulaType {
 }
 
 impl Formula {
-    pub(crate) fn to_js(&self, element_name: &Option<String>) -> String {
+    pub fn to_js(&self, element_name: &Option<String>) -> String {
         use itertools::Itertools;
 
         format!(
@@ -71,7 +71,7 @@ impl Formula {
         )
     }
 
-    pub(crate) fn formula_value_to_js(&self, element_name: &Option<String>) -> String {
+    pub fn formula_value_to_js(&self, element_name: &Option<String>) -> String {
         match self.type_ {
             fastn_js::FormulaType::Conditional(ref conditional_values) => {
                 conditional_values_to_js(conditional_values.as_slice(), element_name)
