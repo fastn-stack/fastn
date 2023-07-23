@@ -1,5 +1,6 @@
 let ftd = {
     // source: https://stackoverflow.com/questions/400212/ (cc-by-sa)
+    riveNodes: {},
     copy_to_clipboard(args) {
         let text = args.a;
         if (text.startsWith("\\", 0)) {
@@ -17,9 +18,13 @@ let ftd = {
     },
 
     set_rive_boolean(args, node) {
-        let rive_const = node.getExtraData().rive;
-        const stateMachineName = rive_const.stateMachineNames[0];
-        const inputs = rive_const.stateMachineInputs(stateMachineName);
+        if (!!args.rive) {
+            let riveNode = ftd.riveNodes[`${args.rive}__${ftd.device.get()}`];
+            node = riveNode ? riveNode: node;
+        }
+        let riveConst = node.getExtraData().rive;
+        const stateMachineName = riveConst.stateMachineNames[0];
+        const inputs = riveConst.stateMachineInputs(stateMachineName);
         const bumpTrigger = inputs.find(i => i.name === args.input);
         bumpTrigger.value = args.value;
     }
