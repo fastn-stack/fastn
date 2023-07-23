@@ -1,11 +1,12 @@
 -- import: fastn.com/rfcs/lib
 
--- lib.rfc: RFC: Versions
-id: versions
+-- lib.rfc: RFC: Dependency Versioning
+id: dependency-versioning
 status: rfc-not-ready
 
-This RFC proses versioning feature. It describes how versions can be specified,
-and how should the fastn cli manage various dependency version related concerns.
+This RFC proses dependency versioning feature. It describes how versions can be
+specified, and how should the fastn cli manage various dependency version
+related concerns.
 
 
 -- lib.motivation:
