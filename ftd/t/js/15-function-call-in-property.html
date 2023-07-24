@@ -84,7 +84,7 @@ let foo__increment = function (args) {
     __args__.a = fastn_utils_val___args___a;
   };
 }
-global.foo__num = fastn.mutable(2);
+fastn_utils.createNestedObject(global, "foo__num", fastn.mutable(2));
 let foo__multiply_by_two = function (args)
 {
   let __args__ = args;

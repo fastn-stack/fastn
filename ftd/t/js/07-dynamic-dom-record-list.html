@@ -86,15 +86,15 @@ let foo__append_person = function (args) {
   };
   return (ftd.append(__args__.a, __args__.v));
 }
-global.foo__first = fastn.recordInstance({
+fastn_utils.createNestedObject(global, "foo__first", fastn.recordInstance({
   name: "Jill",
   bio: "I am Jill"
-});
-global.foo__people = fastn.mutableList([global.foo__first]);
-global.foo__tom = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([global.foo__first]));
+fastn_utils.createNestedObject(global, "foo__tom", fastn.recordInstance({
   name: "Tom",
   bio: "I am Tom"
-});
+}));
 let foo__show_person = function (parent, inherited, args)
 {
   let __args__ = {
