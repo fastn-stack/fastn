@@ -93,6 +93,9 @@ fastn_dom.property_map = {
     "text-decoration": "td",
     "align-items": "ali",
     "background-image": "bg",
+    "background-size": "bgs",
+    "background-position": "bgp",
+    "background-repeat": "bgr",
 };
 
 // dynamic-class-css.md
@@ -458,8 +461,8 @@ fastn_dom.BackgroundPosition = {
 }
 
 fastn_dom.LinearGradientDirection = {
-    Angle: (value) => { return value; },
-    Turn: (value) => { return value; },
+    Angle: (value) => { return `${value}deg`; },
+    Turn: (value) => { return `${value}turn`; },
     Left: "270deg",
     Right: "90deg",
     Top: "0deg",
@@ -757,8 +760,32 @@ class Node2 {
         let darkValue = fastn_utils.getStaticValue(src.get("dark"));
 
         let position = fastn_utils.getStaticValue(value.get("position"));
+        let positionX = null;
+        let positionY = null;
+        if (position !== null) {
+            positionX = fastn_utils.getStaticValue(position.get("x"));
+            positionY = fastn_utils.getStaticValue(position.get("y"));
+
+            if (positionX !== null) position = `${positionX}`;
+            if (positionY !== null) {
+                if (positionX === null) position = `0px ${positionY}`;
+                else position = `${position} ${positionY}`;
+            }
+        }
         let repeat = fastn_utils.getStaticValue(value.get("repeat"));
         let size = fastn_utils.getStaticValue(value.get("size"));
+        let sizeX = null;
+        let sizeY = null;
+        if (size !== null) {
+            sizeX = fastn_utils.getStaticValue(size.get("x"));
+            sizeY = fastn_utils.getStaticValue(size.get("y"));
+
+            if (sizeX !== null) size = `${sizeX}`;
+            if (sizeY !== null) {
+                if (sizeX === null) size = `0px ${sizeY}`;
+                else size = `${size} ${sizeY}`;
+            }
+        }
 
         if (repeat !== null) this.attachCss("background-repeat", repeat);
         if (position !== null) this.attachCss("background-position", position);

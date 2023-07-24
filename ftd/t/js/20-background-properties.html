@@ -54,7 +54,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column w-1 pt-2 pb-3 g-4 ali-5"><div data-id="3" class="ft_column as-6 w-7 h-8 bgc-9"></div><div data-id="4" class="ft_column as-6 w-7 h-8 background-repeat-10 background-size-11 bg-12"></div><div data-id="5" class="ft_column as-6 w-7 h-8 bg-13"></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column w-1 pt-2 pb-3 g-4 ali-5"><div data-id="3" class="ft_column as-6 w-7 h-8 bgc-9"></div><div data-id="4" class="ft_column as-6 w-7 h-8 bgr-10 bgp-11 bgs-12 bg-13"></div><div data-id="5" class="ft_column as-6 w-7 h-8 bg-14"></div></div></body><style id="styles">
     .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
 	.w-1 { width: 100%; }
@@ -67,12 +67,13 @@
 	.h-8 { height: 200px; }
 	.bgc-9 { background-color: red; }
 	body.dark .bgc-9 { background-color: green; }
-	.background-repeat-10 { background-repeat: no-repeat; }
-	.background-size-11 { background-size: contain; }
-	.bg-12 { background-image: url(https://picsum.photos/id/236/200/300); }
-	body.dark .bg-12 { background-image: url(https://picsum.photos/id/237/200/300); }
-	.bg-13 { background-image: linear-gradient(225deg, red, 40%, yellow); }
-	body.dark .bg-13 { background-image: linear-gradient(225deg, orange, 40%, blue); }
+	.bgr-10 { background-repeat: no-repeat; }
+	.bgp-11 { background-position: 0px 25px; }
+	.bgs-12 { background-size: 150px 150px; }
+	.bg-13 { background-image: url(https://picsum.photos/id/236/200/300); }
+	body.dark .bg-13 { background-image: url(https://picsum.photos/id/237/200/300); }
+	.bg-14 { background-image: linear-gradient(225deg, red, 40%, yellow); }
+	body.dark .bg-14 { background-image: linear-gradient(225deg, orange, 40%, blue); }
     </style>
 <script>
     (function() {
@@ -115,11 +116,19 @@ global.foo__bg_image_src = fastn.recordInstance({
   light: "https://picsum.photos/id/236/200/300",
   dark: "https://picsum.photos/id/237/200/300"
 });
+global.foo__len = fastn_dom.BackgroundSize.Length(fastn.recordInstance({
+  x: fastn_dom.Length.Px(150),
+  y: fastn_dom.Length.Px(150)
+}));
+global.foo__pos = fastn_dom.BackgroundPosition.Length(fastn.recordInstance({
+  x: fastn_dom.Length.Px(0),
+  y: fastn_dom.Length.Px(25)
+}));
 global.foo__bg_image = fastn.recordInstance({
   src: global.foo__bg_image_src,
   repeat: fastn_dom.BackgroundRepeat.NoRepeat,
-  size: fastn_dom.BackgroundSize.Contain,
-  position: null
+  size: global.foo__len,
+  position: global.foo__pos
 });
 global.foo__red_orange = fastn.recordInstance({
   light: "red",
