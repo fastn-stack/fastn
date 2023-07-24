@@ -337,7 +337,7 @@ impl FTDResult {
     pub fn html(&self) -> Vec<u8> {
         match self {
             FTDResult::Html(d) => d.to_vec(),
-            FTDResult::Redirect(_r) => todo!(),
+            FTDResult::Redirect(r) => fastn_core::utils::redirect_page_html(r).into_bytes(),
         }
     }
 }
