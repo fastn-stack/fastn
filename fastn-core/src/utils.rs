@@ -637,9 +637,14 @@ pub fn replace_markers_2023(
             .replace(
                 "__script_file__",
                 format!(
-                    "<script src=\"{}\"></script><script src=\"{}\"></script>",
+                    r#"
+                        <script src=\"{}\"></script>
+                        <script src=\"{}\"></script>
+                        <script src=\"{}\"></script>
+                    "#,
                     hashed_default_ftd_js(),
-                    hashed_markdown_js()
+                    hashed_markdown_js(),
+                    hashed_prism_js()
                 )
                 .as_str(),
             )
@@ -853,6 +858,13 @@ static MARKDOWN_HASH: once_cell::sync::Lazy<String> =
 
 pub fn hashed_markdown_js() -> &'static str {
     &MARKDOWN_HASH
+}
+
+static PRISM_HASH: once_cell::sync::Lazy<String> =
+    once_cell::sync::Lazy::new(|| format!("prism-{}.js", generate_hash(ftd::prism_js()),));
+
+pub fn hashed_prism_js() -> &'static str {
+    &PRISM_HASH
 }
 
 #[cfg(test)]

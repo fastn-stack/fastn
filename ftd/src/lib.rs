@@ -54,6 +54,10 @@ pub fn markdown_js() -> &'static str {
     include_str!("../markdown.js")
 }
 
+pub fn prism_js() -> &'static str {
+    include_str!("../prism.js")
+}
+
 pub fn terminal() -> &'static str {
     include_str!("../terminal.ftd")
 }

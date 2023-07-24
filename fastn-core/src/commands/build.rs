@@ -208,8 +208,15 @@ pub async fn default_build_files(
 
         let markdown_js_content = ftd::markdown_js();
         let hashed_markdown_js_name = fastn_core::utils::hashed_markdown_js();
-        let save_default_ftd_js = base_path.join(hashed_markdown_js_name);
-        fastn_core::utils::update(save_default_ftd_js, markdown_js_content.as_bytes())
+        let save_markdown_js = base_path.join(hashed_markdown_js_name);
+        fastn_core::utils::update(save_markdown_js, markdown_js_content.as_bytes())
+            .await
+            .ok();
+
+        let prism_js_content = ftd::prism_js();
+        let hashed_prism_js_name = fastn_core::utils::hashed_prism_js();
+        let save_prism_js = base_path.join(hashed_prism_js_name);
+        fastn_core::utils::update(save_prism_js, prism_js_content.as_bytes())
             .await
             .ok();
     } else {

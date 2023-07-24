@@ -586,6 +586,12 @@ fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
                 .body(ftd::markdown_js()),
         );
+    } else if req.path().ends_with(fastn_core::utils::hashed_prism_js()) {
+        return Some(
+            actix_web::HttpResponse::Ok()
+                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .body(ftd::prism_js()),
+        );
     }
 
     None

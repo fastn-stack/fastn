@@ -89,7 +89,11 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
                 js_ast_data.scripts.join(""),
                 if manual {
                     format!(
-                        "<script>\n{}\n</script><script src=\"../../markdown.js\"></script>",
+                        r#"
+                            <script>{}</script>
+                            <script src=\"../../markdown.js\"></script>
+                            <script src=\"../../prism.js\"></script>
+                        "#,
                         ftd::js::all_js_with_test()
                     )
                 } else {
