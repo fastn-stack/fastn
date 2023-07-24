@@ -41,7 +41,8 @@
           }
         ],
         "js": null,
-        "line_number": 33
+        "line_number": 33,
+        "external_implementation": false
       }
     },
     "foo#arpita": {

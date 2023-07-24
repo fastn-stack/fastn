@@ -39,7 +39,7 @@ impl Value {
                 properties_to_js_conditional_formula(doc, formulas, rdata),
             ),
             Value::FunctionCall(function_call) => fastn_js::SetPropertyValue::Formula(
-                function_call_to_js_formula(function_call, doc, rdata),
+                ftd::js::utils::function_call_to_js_formula(function_call, doc, rdata),
             ),
             Value::Clone(name) => {
                 fastn_js::SetPropertyValue::Clone(ftd::js::utils::update_reference(name, rdata))
@@ -73,22 +73,6 @@ impl Value {
             return Some(text.to_string());
         }
         None
-    }
-}
-
-fn function_call_to_js_formula(
-    function_call: &ftd::interpreter::FunctionCall,
-    doc: &ftd::interpreter::TDoc,
-    rdata: &ftd::js::ResolverData,
-) -> fastn_js::Formula {
-    let mut deps = vec![];
-    for property_value in function_call.values.values() {
-        deps.extend(property_value.get_deps(rdata));
-    }
-
-    fastn_js::Formula {
-        deps,
-        type_: fastn_js::FormulaType::FunctionCall(function_call.to_js_function(doc, rdata)),
     }
 }
 

@@ -102,9 +102,7 @@ async fn serve_file(
             )
             .await
             {
-                Ok(r) => {
-                    fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8)
-                }
+                Ok(r) => r.into(),
                 Err(e) => {
                     tracing::error!(
                         msg = "fastn-Error",
@@ -174,7 +172,7 @@ async fn serve_cr_file(
             )
             .await
             {
-                Ok(r) => fastn_core::http::ok(r),
+                Ok(r) => r.into(),
                 Err(e) => {
                     fastn_core::server_error!("fastn-Error: path: {}, {:?}", path, e)
                 }

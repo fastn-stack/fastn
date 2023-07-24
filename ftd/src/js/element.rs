@@ -1540,22 +1540,44 @@ impl Rive {
         let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Rive, parent, index);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
-        let rive_name = self.common.id.as_ref().unwrap().get_string_data().unwrap();
+        let rive_name = self
+            .common
+            .id
+            .as_ref()
+            .and_then(|v| v.get_string_data())
+            .map(|v| {
+                format!(
+                    indoc::indoc! {"
+                        ftd.riveNodes[`{rive_name}__${{ftd.device.get()}}`] = {canvas};
+                    "},
+                    rive_name = v,
+                    canvas = kernel.name,
+                )
+            });
+
+        let rive_events = ftd::js::utils::get_rive_event(
+            self.common.events.as_slice(),
+            doc,
+            rdata,
+            kernel.name.as_str(),
+        );
 
         component_statements.push(fastn_js::ComponentStatement::AnyBlock(format!(
             indoc::indoc! {"
-                let {rive_name} = new rive.Rive({{
+                let extraData = {canvas}.getExtraData();
+                extraData.rive = new rive.Rive({{
                     src: fastn_utils.getFlattenStaticValue({src}),
                     canvas: {canvas}.getNode(),
                     autoplay: fastn_utils.getStaticValue({autoplay}),
                     stateMachines: fastn_utils.getFlattenStaticValue({state_machines}),
                     artboard: {artboard},
                     onLoad: (_) => {{
-                        {rive_name}.resizeDrawingSurfaceToCanvas();
+                        extraData.rive.resizeDrawingSurfaceToCanvas();
                     }},
+                    {rive_events}
                 }});
+                {rive_name_content}
             "},
-            rive_name = rive_name,
             src = self.src.to_set_property_value(doc, rdata).to_js(),
             canvas = kernel.name,
             autoplay = self.autoplay.to_set_property_value(doc, rdata).to_js(),
@@ -1568,6 +1590,8 @@ impl Rive {
                 .as_ref()
                 .map(|v| v.to_set_property_value(doc, rdata).to_js())
                 .unwrap_or_else(|| "null".to_string()),
+            rive_events = rive_events,
+            rive_name_content = rive_name.unwrap_or_default()
         )));
 
         component_statements.extend(self.common.to_set_properties(
@@ -1875,9 +1899,10 @@ impl Common {
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         for event in self.events.iter() {
-            component_statements.push(fastn_js::ComponentStatement::AddEventHandler(
-                event.to_event_handler_js(element_name, doc, rdata),
-            ));
+            if let Some(event_handler) = event.to_event_handler_js(element_name, doc, rdata) {
+                component_statements
+                    .push(fastn_js::ComponentStatement::AddEventHandler(event_handler));
+            }
         }
         if let Some(ref id) = self.id {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
@@ -2439,12 +2464,14 @@ impl ftd::interpreter::Event {
         element_name: &str,
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
-    ) -> fastn_js::EventHandler {
-        fastn_js::EventHandler {
-            event: self.name.to_js_event_name(),
-            action: self.action.to_js_function(doc, rdata),
-            element_name: element_name.to_string(),
-        }
+    ) -> Option<fastn_js::EventHandler> {
+        self.name
+            .to_js_event_name()
+            .map(|event| fastn_js::EventHandler {
+                event,
+                action: self.action.to_js_function(doc, rdata),
+                element_name: element_name.to_string(),
+            })
     }
 }
 
@@ -2476,25 +2503,27 @@ impl ftd::interpreter::FunctionCall {
 }
 
 impl ftd::interpreter::EventName {
-    fn to_js_event_name(&self) -> fastn_js::Event {
+    fn to_js_event_name(&self) -> Option<fastn_js::Event> {
         use itertools::Itertools;
 
         match self {
-            ftd::interpreter::EventName::Click => fastn_js::Event::Click,
-            ftd::interpreter::EventName::MouseEnter => fastn_js::Event::MouseEnter,
-            ftd::interpreter::EventName::MouseLeave => fastn_js::Event::MouseLeave,
-            ftd::interpreter::EventName::ClickOutside => fastn_js::Event::ClickOutside,
-            ftd::interpreter::EventName::GlobalKey(gk) => fastn_js::Event::GlobalKey(
+            ftd::interpreter::EventName::Click => Some(fastn_js::Event::Click),
+            ftd::interpreter::EventName::MouseEnter => Some(fastn_js::Event::MouseEnter),
+            ftd::interpreter::EventName::MouseLeave => Some(fastn_js::Event::MouseLeave),
+            ftd::interpreter::EventName::ClickOutside => Some(fastn_js::Event::ClickOutside),
+            ftd::interpreter::EventName::GlobalKey(gk) => Some(fastn_js::Event::GlobalKey(
                 gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
-            ),
-            ftd::interpreter::EventName::GlobalKeySeq(gk) => fastn_js::Event::GlobalKeySeq(
+            )),
+            ftd::interpreter::EventName::GlobalKeySeq(gk) => Some(fastn_js::Event::GlobalKeySeq(
                 gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
-            ),
-            ftd::interpreter::EventName::Input => fastn_js::Event::Input,
-            ftd::interpreter::EventName::Change => fastn_js::Event::Change,
-            ftd::interpreter::EventName::Blur => fastn_js::Event::Blur,
-            ftd::interpreter::EventName::Focus => fastn_js::Event::Focus,
-            t => todo!("{:#?}", t),
+            )),
+            ftd::interpreter::EventName::Input => Some(fastn_js::Event::Input),
+            ftd::interpreter::EventName::Change => Some(fastn_js::Event::Change),
+            ftd::interpreter::EventName::Blur => Some(fastn_js::Event::Blur),
+            ftd::interpreter::EventName::Focus => Some(fastn_js::Event::Focus),
+            ftd::interpreter::EventName::RivePlay(_)
+            | ftd::interpreter::EventName::RivePause(_)
+            | ftd::interpreter::EventName::RiveStateChange(_) => None,
         }
     }
 }

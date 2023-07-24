@@ -585,6 +585,165 @@
     }
   },
   "bag": {
+    "foo#new-name": {
+      "Variable": {
+        "name": "foo#new-name",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "FunctionCall": {
+            "name": "foo#append",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "is_mutable": false,
+            "line_number": 35,
+            "values": {
+              "a": {
+                "Reference": {
+                  "name": "foo#name",
+                  "kind": {
+                    "kind": "String",
+                    "caption": false,
+                    "body": false
+                  },
+                  "source": "Global",
+                  "is_mutable": false,
+                  "line_number": 35
+                }
+              },
+              "b": {
+                "Value": {
+                  "value": {
+                    "String": {
+                      "text": "FifthTry"
+                    }
+                  },
+                  "is_mutable": false,
+                  "line_number": 35
+                }
+              }
+            },
+            "order": [
+              "a",
+              "b"
+            ]
+          }
+        },
+        "conditional_value": [],
+        "line_number": 35,
+        "is_static": true
+      }
+    },
+    "foo#length": {
+      "Function": {
+        "name": "foo#length",
+        "return_kind": {
+          "kind": "Integer",
+          "caption": false,
+          "body": false
+        },
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 27,
+            "access_modifier": "Public"
+          }
+        ],
+        "expression": [
+          {
+            "expression": "len(a)",
+            "line_number": 32
+          }
+        ],
+        "js": null,
+        "line_number": 26,
+        "external_implementation": false
+      }
+    },
+    "foo#name": {
+      "Variable": {
+        "name": "foo#name",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Arpita"
+              }
+            },
+            "is_mutable": false,
+            "line_number": 33
+          }
+        },
+        "conditional_value": [],
+        "line_number": 33,
+        "is_static": true
+      }
+    },
+    "foo#sum": {
+      "Function": {
+        "name": "foo#sum",
+        "return_kind": {
+          "kind": "Integer",
+          "caption": false,
+          "body": false
+        },
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 9,
+            "access_modifier": "Public"
+          },
+          {
+            "name": "b",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 10,
+            "access_modifier": "Public"
+          }
+        ],
+        "expression": [
+          {
+            "expression": "a + b",
+            "line_number": 14
+          }
+        ],
+        "js": null,
+        "line_number": 8,
+        "external_implementation": false
+      }
+    },
     "foo#append": {
       "Function": {
         "name": "foo#append",
@@ -626,7 +785,33 @@
           }
         ],
         "js": null,
-        "line_number": 1
+        "line_number": 1,
+        "external_implementation": false
+      }
+    },
+    "foo#number": {
+      "Variable": {
+        "name": "foo#number",
+        "kind": {
+          "kind": "Integer",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Integer": {
+                "value": 10
+              }
+            },
+            "is_mutable": false,
+            "line_number": 34
+          }
+        },
+        "conditional_value": [],
+        "line_number": 34,
+        "is_static": true
       }
     },
     "foo#compare": {
@@ -694,189 +879,8 @@
           }
         ],
         "js": null,
-        "line_number": 15
-      }
-    },
-    "foo#length": {
-      "Function": {
-        "name": "foo#length",
-        "return_kind": {
-          "kind": "Integer",
-          "caption": false,
-          "body": false
-        },
-        "arguments": [
-          {
-            "name": "a",
-            "kind": {
-              "kind": "String",
-              "caption": false,
-              "body": false
-            },
-            "mutable": false,
-            "value": null,
-            "line_number": 27,
-            "access_modifier": "Public"
-          }
-        ],
-        "expression": [
-          {
-            "expression": "len(a)",
-            "line_number": 32
-          }
-        ],
-        "js": null,
-        "line_number": 26
-      }
-    },
-    "foo#name": {
-      "Variable": {
-        "name": "foo#name",
-        "kind": {
-          "kind": "String",
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Value": {
-            "value": {
-              "String": {
-                "text": "Arpita"
-              }
-            },
-            "is_mutable": false,
-            "line_number": 33
-          }
-        },
-        "conditional_value": [],
-        "line_number": 33,
-        "is_static": true
-      }
-    },
-    "foo#new-name": {
-      "Variable": {
-        "name": "foo#new-name",
-        "kind": {
-          "kind": "String",
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "FunctionCall": {
-            "name": "foo#append",
-            "kind": {
-              "kind": "String",
-              "caption": false,
-              "body": false
-            },
-            "is_mutable": false,
-            "line_number": 35,
-            "values": {
-              "a": {
-                "Reference": {
-                  "name": "foo#name",
-                  "kind": {
-                    "kind": "String",
-                    "caption": false,
-                    "body": false
-                  },
-                  "source": "Global",
-                  "is_mutable": false,
-                  "line_number": 35
-                }
-              },
-              "b": {
-                "Value": {
-                  "value": {
-                    "String": {
-                      "text": "FifthTry"
-                    }
-                  },
-                  "is_mutable": false,
-                  "line_number": 35
-                }
-              }
-            },
-            "order": [
-              "a",
-              "b"
-            ]
-          }
-        },
-        "conditional_value": [],
-        "line_number": 35,
-        "is_static": true
-      }
-    },
-    "foo#number": {
-      "Variable": {
-        "name": "foo#number",
-        "kind": {
-          "kind": "Integer",
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Value": {
-            "value": {
-              "Integer": {
-                "value": 10
-              }
-            },
-            "is_mutable": false,
-            "line_number": 34
-          }
-        },
-        "conditional_value": [],
-        "line_number": 34,
-        "is_static": true
-      }
-    },
-    "foo#sum": {
-      "Function": {
-        "name": "foo#sum",
-        "return_kind": {
-          "kind": "Integer",
-          "caption": false,
-          "body": false
-        },
-        "arguments": [
-          {
-            "name": "a",
-            "kind": {
-              "kind": "Integer",
-              "caption": false,
-              "body": false
-            },
-            "mutable": false,
-            "value": null,
-            "line_number": 9,
-            "access_modifier": "Public"
-          },
-          {
-            "name": "b",
-            "kind": {
-              "kind": "Integer",
-              "caption": false,
-              "body": false
-            },
-            "mutable": false,
-            "value": null,
-            "line_number": 10,
-            "access_modifier": "Public"
-          }
-        ],
-        "expression": [
-          {
-            "expression": "a + b",
-            "line_number": 14
-          }
-        ],
-        "js": null,
-        "line_number": 8
+        "line_number": 15,
+        "external_implementation": false
       }
     }
   },

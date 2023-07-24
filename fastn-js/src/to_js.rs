@@ -59,7 +59,14 @@ impl fastn_js::SetProperty {
         text(format!("{}.setProperty(", self.element_name).as_str())
             .append(text(format!("{},", self.kind.to_js()).as_str()))
             .append(space())
-            .append(text(format!("{},", self.value.to_js()).as_str()))
+            .append(text(
+                format!(
+                    "{},",
+                    self.value
+                        .to_js_with_element_name(&Some(self.element_name.clone()))
+                )
+                .as_str(),
+            ))
             .append(space())
             .append(text(format!("{});", self.inherited).as_str()))
     }
@@ -74,7 +81,7 @@ impl fastn_js::EventHandler {
             .append(text("function()"))
             .append(space())
             .append(text("{"))
-            .append(self.action.to_js())
+            .append(self.action.to_js(&Some(self.element_name.clone())))
             .append(text("});"))
     }
 }
@@ -117,16 +124,25 @@ impl fastn_js::Event {
 }
 
 impl fastn_js::Function {
-    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+    pub fn to_js(&self, element_name: &Option<String>) -> pretty::RcDoc<'static> {
         text(format!("{}(", fastn_js::utils::name_to_js(self.name.as_str())).as_str())
             .append(text("{"))
             .append(pretty::RcDoc::intersperse(
                 self.parameters
                     .iter()
-                    .map(|(k, v)| format!("{k}: {},", v.to_js())),
+                    .map(|(k, v)| format!("{k}: {},", v.to_js_with_element_name(element_name))),
                 pretty::RcDoc::softline(),
             ))
-            .append(text("});"))
+            .append(text(
+                format!(
+                    "}}{});",
+                    element_name
+                        .as_ref()
+                        .map(|v| format!(", {}", v))
+                        .unwrap_or_default()
+                )
+                .as_str(),
+            ))
     }
 }
 
@@ -178,9 +194,9 @@ impl fastn_js::ComponentStatement {
 impl fastn_js::InstantiateComponent {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         pretty::RcDoc::text(format!(
-            "{}{}(",
-            if self.should_return { "return " } else { "" },
-            fastn_js::utils::name_to_js(self.name.as_str())
+            "let {} = {}(",
+            self.var_name,
+            fastn_js::utils::name_to_js(self.component_name.as_str())
         ))
         .append(pretty::RcDoc::text(self.parent.clone()))
         .append(comma().append(space()))
@@ -203,6 +219,11 @@ impl fastn_js::InstantiateComponent {
             pretty::RcDoc::nil()
         })
         .append(text(");"))
+        .append(if self.should_return {
+            text(format!("return {};", self.var_name).as_str())
+        } else {
+            pretty::RcDoc::nil()
+        })
     }
 }
 
@@ -935,7 +956,7 @@ pub(crate) fn get_variable_declaration(variable: &str) -> pretty::RcDoc<'static>
 #[cfg(test)]
 #[track_caller]
 pub fn e(f: fastn_js::Ast, s: &str) {
-    let g = to_js(&vec![f], false);
+    let g = to_js(&[f], false);
     println!("got: {}", g);
     println!("expected: {}", s);
     assert_eq!(g, s);
