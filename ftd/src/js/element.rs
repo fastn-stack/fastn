@@ -1167,9 +1167,9 @@ impl Document {
                 component_definition.arguments.as_slice(),
             ),
             breakpoint_width: ftd::js::value::get_optional_js_value(
-                "breakpoint-width",
-                properties,
-                arguments,
+                "breakpoint",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
             ),
             metadata: DocumentMeta::from(
                 component.properties.as_slice(),
@@ -1203,7 +1203,6 @@ impl Document {
             doc,
             rdata,
             kernel.name.as_str(),
-            has_rive_components,
         ));
 
         if should_return {
@@ -1261,8 +1260,7 @@ impl DocumentMeta {
         &self,
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
-        component_name: &str,
-        has_rive_components: &mut bool,
+        element_name: &str,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
 
