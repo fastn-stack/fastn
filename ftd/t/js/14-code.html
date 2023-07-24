@@ -54,41 +54,39 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column w-1 bgc-2"><div data-id="3" class="ft_column role-3"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">ftd.column</span><span style="color:#cecfd2;">:
-</span><span style="color:#c973d9;">padding.px</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">10
-</span><span style="color:#c973d9;">spacing.fixed.px</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">50
-</span><span style="color:#c973d9;">height.fixed.px</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">200
-</span><span style="color:#c973d9;">width.fixed.px</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">300
-</span><span style="color:#c973d9;">overflow-y</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">scroll
-</span><span style="color:#c973d9;">border-color</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">$red-yellow
-</span><span style="color:#c973d9;">border-style</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">solid
-</span><span style="color:#c973d9;">border-width.px</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">2
-</span><span style="color:#c0c5ce;">
-</span><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">ftd.text</span><span style="color:#cecfd2;">: </span><span style="color:#2fb170;">The blue planet below is sticky
-</span><span style="color:#c0c5ce;">
-</span><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">ftd.text</span><span style="color:#cecfd2;">: </span><span style="color:#2fb170;">Blue planet
-</span><span style="color:#c973d9;">color</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">black
-</span><span style="color:#c973d9;">background.solid</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">deepskyblue
-</span><span style="color:#c973d9;">sticky</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">true
-</span><span style="color:#c973d9;">width.fixed.px</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">120
-</span><span style="color:#c973d9;">text-align</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">center
-</span><span style="color:#c973d9;">left.px</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">50
-</span><span style="color:#c973d9;">top.px</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">0
-</span><span style="color:#c0c5ce;">
-</span><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">ftd.text</span><span style="color:#cecfd2;">:
-</span><span style="color:#c973d9;">padding.px</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">10
-</span><span style="color:#c0c5ce;">
-</span><span style="color:#c0c5ce;">Far out in the uncharted backwaters of the unfashionable end of the western
-</span><span style="color:#c0c5ce;">spiral arm of the Galaxy lies a small unregarded blue planet.
-</span><span style="color:#c0c5ce;">Orbiting this at a distance of roughly ninety-two million miles is an
-</span><span style="color:#c0c5ce;">utterly insignificant little planet whose ape-descended life
-</span><span style="color:#c0c5ce;">forms are so amazingly primitive that they still think fastn code written
-</span><span style="color:#c0c5ce;">by humans is still a pretty neat idea of escalating knowledge throughout the
-</span><span style="color:#c0c5ce;">universe.
-</span><span style="color:#c0c5ce;">
-</span><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">end</span><span style="color:#cecfd2;">: </span><span style="color:#2fb170;">ftd.column
-</span></pre>
-</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column w-1 bgc-2"><div data-id="3" class="ft_column role-3">-- ftd.column:
+padding.px: 10
+spacing.fixed.px: 50
+height.fixed.px: 200
+width.fixed.px: 300
+overflow-y: scroll
+border-color: $red-yellow
+border-style: solid
+border-width.px: 2
+
+-- ftd.text: The blue planet below is sticky
+
+-- ftd.text: Blue planet
+color: black
+background.solid: deepskyblue
+sticky: true
+width.fixed.px: 120
+text-align: center
+left.px: 50
+top.px: 0
+
+-- ftd.text:
+padding.px: 10
+
+Far out in the uncharted backwaters of the unfashionable end of the western
+spiral arm of the Galaxy lies a small unregarded blue planet.
+Orbiting this at a distance of roughly ninety-two million miles is an
+utterly insignificant little planet whose ape-descended life
+forms are so amazingly primitive that they still think fastn code written
+by humans is still a pretty neat idea of escalating knowledge throughout the
+universe.
+
+-- end: ftd.column</div></div></body><style id="styles">
     .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
 	.w-1 { width: fit-content; }
@@ -109,7 +107,7 @@ let main = function (parent) {
   })), inherited);
   parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-    rooti0.setProperty(fastn_dom.PropertyKind.Code, "<pre style=\"padding: 0.7720588235em 1.1764705882em; \"><span style=\"color:#cecfd2;\">-- </span><span style=\"color:#6791e0;\">ftd.column</span><span style=\"color:#cecfd2;\">:\n</span><span style=\"color:#c973d9;\">padding.px</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">10\n</span><span style=\"color:#c973d9;\">spacing.fixed.px</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">50\n</span><span style=\"color:#c973d9;\">height.fixed.px</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">200\n</span><span style=\"color:#c973d9;\">width.fixed.px</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">300\n</span><span style=\"color:#c973d9;\">overflow-y</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">scroll\n</span><span style=\"color:#c973d9;\">border-color</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">$red-yellow\n</span><span style=\"color:#c973d9;\">border-style</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">solid\n</span><span style=\"color:#c973d9;\">border-width.px</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">2\n</span><span style=\"color:#c0c5ce;\">\n</span><span style=\"color:#cecfd2;\">-- </span><span style=\"color:#6791e0;\">ftd.text</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#2fb170;\">The blue planet below is sticky\n</span><span style=\"color:#c0c5ce;\">\n</span><span style=\"color:#cecfd2;\">-- </span><span style=\"color:#6791e0;\">ftd.text</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#2fb170;\">Blue planet\n</span><span style=\"color:#c973d9;\">color</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">black\n</span><span style=\"color:#c973d9;\">background.solid</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">deepskyblue\n</span><span style=\"color:#c973d9;\">sticky</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">true\n</span><span style=\"color:#c973d9;\">width.fixed.px</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">120\n</span><span style=\"color:#c973d9;\">text-align</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">center\n</span><span style=\"color:#c973d9;\">left.px</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">50\n</span><span style=\"color:#c973d9;\">top.px</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">0\n</span><span style=\"color:#c0c5ce;\">\n</span><span style=\"color:#cecfd2;\">-- </span><span style=\"color:#6791e0;\">ftd.text</span><span style=\"color:#cecfd2;\">:\n</span><span style=\"color:#c973d9;\">padding.px</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#d5d7e2;\">10\n</span><span style=\"color:#c0c5ce;\">\n</span><span style=\"color:#c0c5ce;\">Far out in the uncharted backwaters of the unfashionable end of the western\n</span><span style=\"color:#c0c5ce;\">spiral arm of the Galaxy lies a small unregarded blue planet.\n</span><span style=\"color:#c0c5ce;\">Orbiting this at a distance of roughly ninety-two million miles is an\n</span><span style=\"color:#c0c5ce;\">utterly insignificant little planet whose ape-descended life\n</span><span style=\"color:#c0c5ce;\">forms are so amazingly primitive that they still think fastn code written\n</span><span style=\"color:#c0c5ce;\">by humans is still a pretty neat idea of escalating knowledge throughout the\n</span><span style=\"color:#c0c5ce;\">universe.\n</span><span style=\"color:#c0c5ce;\">\n</span><span style=\"color:#cecfd2;\">-- </span><span style=\"color:#6791e0;\">end</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#2fb170;\">ftd.column\n</span></pre>\n", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Code, "-- ftd.column:\npadding.px: 10\nspacing.fixed.px: 50\nheight.fixed.px: 200\nwidth.fixed.px: 300\noverflow-y: scroll\nborder-color: $red-yellow\nborder-style: solid\nborder-width.px: 2\n\n-- ftd.text: The blue planet below is sticky\n\n-- ftd.text: Blue planet\ncolor: black\nbackground.solid: deepskyblue\nsticky: true\nwidth.fixed.px: 120\ntext-align: center\nleft.px: 50\ntop.px: 0\n\n-- ftd.text:\npadding.px: 10\n\nFar out in the uncharted backwaters of the unfashionable end of the western\nspiral arm of the Galaxy lies a small unregarded blue planet.\nOrbiting this at a distance of roughly ninety-two million miles is an\nutterly insignificant little planet whose ape-descended life\nforms are so amazingly primitive that they still think fastn code written\nby humans is still a pretty neat idea of escalating knowledge throughout the\nuniverse.\n\n-- end: ftd.column", inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_small"), inherited);
   }
   ]), inherited);

@@ -102,9 +102,9 @@ let main = function (parent) {
   }
   ]), inherited);
 }
-global.foo__name = fastn.mutable("Ritesh");
-global.foo__name2 = fastn_utils.clone(global.foo__name);
-global.foo__name3 = global.foo__name;
+fastn_utils.createNestedObject(global, "foo__name", fastn.mutable("Ritesh"));
+fastn_utils.createNestedObject(global, "foo__name2", fastn_utils.clone(global.foo__name));
+fastn_utils.createNestedObject(global, "foo__name3", global.foo__name);
 let foo__append_yo = function (args)
 {
   let __args__ = args;
