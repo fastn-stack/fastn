@@ -219,7 +219,9 @@ fastn.formula = function (deps, func) {
     let closure = fastn.closure(func);
     let mutable = new Mutable(closure.get());
     for (let idx in deps) {
-        if (!deps[idx].addClosure) {
+        if (deps[idx] === null ||
+            deps[idx] === undefined ||
+            !deps[idx].addClosure) {
             continue;
         }
         deps[idx].addClosure(new Closure(function () {
@@ -235,8 +237,6 @@ fastn.proxy = function (targets, differentiator) {
     return new Proxy(targets, differentiator);
 };
 
-fastn.mutableClass = Mutable;
-fastn.mutableListClass = MutableList;
 
 fastn.wrapMutable = function (obj) {
     if (!(obj instanceof Mutable)
@@ -273,7 +273,12 @@ class RecordInstance {
         return this.#fields[key];
     }
     set(key, value) {
-        this.#fields[key].set(value);
+        if (this.#fields[key] === undefined) {
+            this.#fields[key] = fastn.mutable(null);
+            this.#fields[key].setWithoutUpdate(value);
+        } else {
+            this.#fields[key].set(value);
+        }
     }
     replace(obj) {
         for (let key in this.#fields) {
@@ -289,8 +294,10 @@ fastn.recordInstance = function (obj) {
     return new RecordInstance(obj);
 }
 
-
-
 fastn.color = function (r, g, b) {
     return `rgb(${r},${g},${b})`;
 }
+
+fastn.mutableClass = Mutable;
+fastn.mutableListClass = MutableList;
+fastn.recordInstanceClass = RecordInstance;

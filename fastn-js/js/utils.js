@@ -101,5 +101,32 @@ let fastn_utils = {
         else {
             return event.key;
         }
+    },
+
+    createNestedObject(currentObject, path, value) {
+        const properties = path.split('.');
+
+        for (let i = 0; i < properties.length - 1; i++) {
+            const property = properties[i];
+            if (currentObject instanceof fastn.recordInstanceClass) {
+                if (currentObject.get(property) === undefined) {
+                    currentObject.set(property, fastn.recordInstance({}));
+                }
+                currentObject = currentObject.get(property).get();
+            } else {
+                if (!currentObject.hasOwnProperty(property)) {
+                    currentObject[property] = fastn.recordInstance({});
+                }
+                currentObject = currentObject[property];
+            }
+        }
+
+        const innermostProperty = properties[properties.length - 1];
+        if (currentObject instanceof fastn.recordInstanceClass) {
+            currentObject.set(innermostProperty, value)
+        } else {
+            currentObject[innermostProperty] = value;
+        }
     }
+
 }

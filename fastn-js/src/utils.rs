@@ -97,3 +97,7 @@ pub fn trim_brackets(s: &str) -> String {
     }
     s.to_string()
 }
+
+pub(crate) fn kebab_to_snake_case(s: &str) -> String {
+    s.replace('-', "_")
+}
