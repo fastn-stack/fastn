@@ -459,7 +459,7 @@ pub struct Code {
 }
 
 impl Code {
-    pub fn from(component: &ftd::interpreter::Component, doc: &ftd::interpreter::TDoc) -> Code {
+    pub fn from(component: &ftd::interpreter::Component, _doc: &ftd::interpreter::TDoc) -> Code {
         let component_definition = ftd::interpreter::default::default_bag()
             .get("ftd#code")
             .unwrap()
@@ -467,12 +467,12 @@ impl Code {
             .component()
             .unwrap();
 
-        let raw_code = ftd::js::value::get_optional_js_value(
+        /*let raw_code = dbg!(ftd::js::value::get_optional_js_value(
             "text",
             component.properties.as_slice(),
             component_definition.arguments.as_slice(),
         )
-        .unwrap()
+        .unwrap())
         .get_string_data()
         .unwrap();
 
@@ -505,7 +505,7 @@ impl Code {
         )
         .ok()
         .unwrap()
-        .replace('\"', "\\\"");
+        .replace('\"', "\\\"");*/
 
         Code {
             common: Common::from(
@@ -517,7 +517,13 @@ impl Code {
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            code: ftd::js::Value::from_str_value(stylized_code.as_str()),
+            // code: ftd::js::Value::from_str_value(stylized_code.as_str()),
+            code: ftd::js::value::get_optional_js_value(
+                "text",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            )
+            .unwrap(),
         }
     }
 

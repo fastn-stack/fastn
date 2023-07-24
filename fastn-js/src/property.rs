@@ -205,7 +205,7 @@ impl Value {
                     .iter()
                     .map(|(k, v)| format!(
                         "{}: {}",
-                        fastn_js::utils::kebab_to_snake_case(k),
+                        fastn_js::utils::name_to_js_(k),
                         v.to_js_with_element_name(element_name)
                     ))
                     .join(", ")

@@ -128,9 +128,13 @@ impl fastn_js::Function {
         text(format!("{}(", fastn_js::utils::name_to_js(self.name.as_str())).as_str())
             .append(text("{"))
             .append(pretty::RcDoc::intersperse(
-                self.parameters
-                    .iter()
-                    .map(|(k, v)| format!("{k}: {},", v.to_js_with_element_name(element_name))),
+                self.parameters.iter().map(|(k, v)| {
+                    format!(
+                        "{}: {},",
+                        fastn_js::utils::name_to_js_(k),
+                        v.to_js_with_element_name(element_name)
+                    )
+                }),
                 pretty::RcDoc::softline(),
             ))
             .append(text(
@@ -206,9 +210,9 @@ impl fastn_js::InstantiateComponent {
                 text("{")
                     .append(
                         pretty::RcDoc::intersperse(
-                            self.arguments
-                                .iter()
-                                .map(|(k, v)| format!("{}: {}", k, v.to_js())),
+                            self.arguments.iter().map(|(k, v)| {
+                                format!("{}: {}", fastn_js::utils::name_to_js_(k), v.to_js())
+                            }),
                             comma().append(space()),
                         )
                         .group(),
@@ -411,9 +415,9 @@ impl fastn_js::Component {
                 .append(space())
                 .append(text("{"))
                 .append(pretty::RcDoc::intersperse(
-                    self.args
-                        .iter()
-                        .map(|(k, v)| format!("{k}: {},", v.to_js())),
+                    self.args.iter().map(|(k, v)| {
+                        format!("{}: {},", fastn_js::utils::name_to_js_(k), v.to_js())
+                    }),
                     pretty::RcDoc::softline(),
                 ))
                 .append(text("};"))
@@ -574,7 +578,11 @@ impl fastn_js::UDF {
                     .append(pretty::RcDoc::intersperse(
                         self.args.iter().filter_map(|(k, v)| {
                             if !v.is_undefined() {
-                                Some(format!("{k}: {},", v.to_js()))
+                                Some(format!(
+                                    "{}: {},",
+                                    fastn_js::utils::name_to_js_(k),
+                                    v.to_js()
+                                ))
                             } else {
                                 None
                             }

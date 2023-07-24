@@ -305,6 +305,7 @@ fastn_dom.TextStyle = {
 fastn_dom.Resizing = {
     FillContainer: "100%",
     HugContent: "fit-content",
+    Auto: "auto",
     Fixed: (value) => { return value; }
 }
 
