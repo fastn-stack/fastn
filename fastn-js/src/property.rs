@@ -319,6 +319,15 @@ pub enum PropertyKind {
     ImageSrc,
     YoutubeSrc,
     Code,
+    MetaTitle,
+    MetaOGTitle,
+    MetaTwitterTitle,
+    MetaDescription,
+    MetaOGDescription,
+    MetaTwitterDescription,
+    MetaOGImage,
+    MetaTwitterImage,
+    MetaThemeColor,
 }
 
 impl PropertyKind {
@@ -414,6 +423,15 @@ impl PropertyKind {
             PropertyKind::Alt => "fastn_dom.PropertyKind.Alt",
             PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
             PropertyKind::Code => "fastn_dom.PropertyKind.Code",
+            PropertyKind::MetaTitle => "fastn_dom.PropertyKind.MetaTitle",
+            PropertyKind::MetaOGTitle => "fastn_dom.PropertyKind.MetaOGTitle",
+            PropertyKind::MetaTwitterTitle => "fastn_dom.PropertyKind.MetaTwitterTitle",
+            PropertyKind::MetaDescription => "fastn_dom.PropertyKind.MetaDescription",
+            PropertyKind::MetaOGDescription => "fastn_dom.PropertyKind.MetaOGDescription",
+            PropertyKind::MetaTwitterDescription => "fastn_dom.PropertyKind.MetaTwitterDescription",
+            PropertyKind::MetaOGImage => "fastn_dom.PropertyKind.MetaOGImage",
+            PropertyKind::MetaTwitterImage => "fastn_dom.PropertyKind.MetaTwitterImage",
+            PropertyKind::MetaThemeColor => "fastn_dom.PropertyKind.MetaThemeColor",
         }
     }
 }
