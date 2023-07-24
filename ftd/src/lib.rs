@@ -50,6 +50,10 @@ pub fn ftd_js_css() -> &'static str {
     include_str!("../ftd-js.css")
 }
 
+pub fn markdown_js() -> &'static str {
+    include_str!("../markdown.js")
+}
+
 pub fn terminal() -> &'static str {
     include_str!("../terminal.ftd")
 }

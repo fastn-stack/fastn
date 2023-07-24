@@ -636,7 +636,12 @@ pub fn replace_markers_2023(
             )
             .replace(
                 "__script_file__",
-                format!("<script src=\"{}\"></script>", hashed_default_ftd_js()).as_str(),
+                format!(
+                    "<script src=\"{}\"></script><script src=\"{}\"></script>",
+                    hashed_default_ftd_js(),
+                    hashed_markdown_js()
+                )
+                .as_str(),
             )
             .replace("__default_css__", default_css)
             .as_str(),
@@ -841,6 +846,13 @@ static FTD_JS_HASH: once_cell::sync::Lazy<String> = once_cell::sync::Lazy::new(|
 
 pub fn hashed_default_ftd_js() -> &'static str {
     &FTD_JS_HASH
+}
+
+static MARKDOWN_HASH: once_cell::sync::Lazy<String> =
+    once_cell::sync::Lazy::new(|| format!("markdown-{}.js", generate_hash(ftd::markdown_js()),));
+
+pub fn hashed_markdown_js() -> &'static str {
+    &MARKDOWN_HASH
 }
 
 #[cfg(test)]
