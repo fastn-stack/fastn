@@ -235,6 +235,15 @@ fastn_dom.PropertyKind = {
     Code: 86,
     ImageSrc: 87,
     Alt: 88,
+    MetaTitle: 89,
+    MetaOGTitle: 90,
+    MetaTwitterTitle: 91,
+    MetaDescription: 92,
+    MetaOGDescription: 93,
+    MetaTwitterDescription: 94,
+    MetaOGImage: 95,
+    MetaTwitterImage: 96,
+    MetaThemeColor: 97,
 }
 
 fastn_dom.Loading = {
@@ -627,6 +636,21 @@ class Node2 {
     updateTagName(name) {
         if (ssr) {
             this.#node.updateTagName(name);
+        }
+    }
+
+    updateMetaTitle(value) {
+        if (!ssr && hydrating) {
+            window.document.title = value;
+        }
+    }
+
+    addMetaTag(tagName, value) {
+        if (!ssr && hydrating) {
+            const metaTag = window.document.createElement('meta');
+            metaTag.setAttribute('name', tagName);
+            metaTag.setAttribute('content', value);
+            document.head.appendChild(metaTag);
         }
     }
 
@@ -1162,6 +1186,27 @@ class Node2 {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Code) {
             this.#node.innerHTML = staticValue;
+        } else if (kind === fastn_dom.PropertyKind.MetaTitle) {
+            this.updateMetaTitle(staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MetaOGTitle) {
+            this.addMetaTag("og:title", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MetaTwitterTitle) {
+            this.addMetaTag("twitter:title", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MetaDescription) {
+            this.addMetaTag("description", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MetaOGDescription) {
+            this.addMetaTag("og:description", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MetaTwitterDescription) {
+            this.addMetaTag("twitter:description", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MetaOGImage) {
+            // staticValue is of ftd.raw-image-src RecordInstance type
+            this.addMetaTag("og:image", fastn_utils.getStaticValue(staticValue.get('src')));
+        } else if (kind === fastn_dom.PropertyKind.MetaTwitterImage) {
+            // staticValue is of ftd.raw-image-src RecordInstance type
+            this.addMetaTag("twitter:image", fastn_utils.getStaticValue(staticValue.get('src')));
+        } else if (kind === fastn_dom.PropertyKind.MetaThemeColor) {
+            // staticValue is of ftd.color RecordInstance type
+            this.addMetaTag("theme-color", fastn_utils.getStaticValue(staticValue.get('light')));
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
             kind === fastn_dom.PropertyKind.StringValue
         ) {
