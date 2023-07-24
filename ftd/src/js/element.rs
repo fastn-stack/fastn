@@ -1397,9 +1397,9 @@ impl DocumentMeta {
 
         if let Some(ref twitter_image) = self.twitter_image {
             if self.has_self_reference(twitter_image) {
-                if let Some(ref description) = self.description {
+                if let Some(ref og_image) = self.og_image {
                     component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                        description.to_set_property(
+                        og_image.to_set_property(
                             fastn_js::PropertyKind::MetaTwitterImage,
                             doc,
                             element_name,
