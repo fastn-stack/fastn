@@ -93,6 +93,9 @@ fastn_dom.property_map = {
     "text-decoration": "td",
     "align-items": "ali",
     "background-image": "bg",
+    "background-size": "bgs",
+    "background-position": "bgp",
+    "background-repeat": "bgr",
 };
 
 // dynamic-class-css.md
@@ -746,8 +749,30 @@ class Node2 {
         let darkValue = fastn_utils.getStaticValue(src.get("dark"));
 
         let position = fastn_utils.getStaticValue(value.get("position"));
+        let positionX = null;
+        let positionY = null;
+        if (position !== null) {
+            positionX = fastn_utils.getStaticValue(position.get("x"));
+            positionY = fastn_utils.getStaticValue(position.get("y"));
+
+            if (positionX !== null) position = `${positionX}`;
+            if (positionY !== null) position = `${position} ${positionY}`;
+        }
         let repeat = fastn_utils.getStaticValue(value.get("repeat"));
         let size = fastn_utils.getStaticValue(value.get("size"));
+        let sizeX = null;
+        let sizeY = null;
+        if (size !== null) {
+            sizeX = fastn_utils.getStaticValue(size.get("x"));
+            sizeY = fastn_utils.getStaticValue(size.get("y"));
+
+            if (sizeX !== null) size = `${sizeX}`;
+            if (sizeY !== null) size = `${size} ${sizeY}`;
+        }
+
+        console.log(position);
+        console.log(positionX, positionY);
+        console.log(sizeX, sizeY);
 
         if (repeat !== null) this.attachCss("background-repeat", repeat);
         if (position !== null) this.attachCss("background-position", position);

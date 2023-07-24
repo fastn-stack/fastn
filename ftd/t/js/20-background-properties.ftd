@@ -14,10 +14,19 @@ dark: orange
 light: yellow
 dark: blue
 
+-- ftd.background-size.length len:
+x.px: 150
+y.px: 150
+
+-- ftd.background-position.length pos:
+x.px: 0
+y.px: 25
+
 -- ftd.background-image bg-image:
 src: $bg-image-src
 repeat: no-repeat
-size: contain
+size.length: $len
+position.length: $pos
 
 -- ftd.linear-gradient lg:
 direction: bottom-left
