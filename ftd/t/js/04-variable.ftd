@@ -17,10 +17,10 @@ if: { i > 11 }
 
 
 -- component foo:
-caption name: Hello
+caption name-g: Hello
 
 -- ftd.column:
--- ftd.text: $foo.name
+-- ftd.text: $foo.name-g
 -- ftd.text: Foo 2
 -- end: ftd.column
 

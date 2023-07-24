@@ -492,7 +492,8 @@ fn resizing_variants(name: &str) -> (&'static str, bool) {
         "fixed" => ("Fixed", true),
         "fill-container" => ("FillContainer", false),
         "hug-content" => ("HugContent", false),
-        t => todo!("invalid resizing variant {}", t),
+        "auto" => ("Auto", false),
+        t => panic!("invalid resizing variant {}", t),
     }
 }
 
