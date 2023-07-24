@@ -88,7 +88,7 @@ let main = function (parent) {
     rooti0.addEventHandler(fastn_dom.Event.Click, function () {
       foo__append_yo({
         a: global.foo__name,
-      });
+      }, rooti0);
     });
   },
   function (root, inherited) {
@@ -97,7 +97,7 @@ let main = function (parent) {
     rooti0.addEventHandler(fastn_dom.Event.Click, function () {
       foo__append_yo({
         a: global.foo__name2,
-      });
+      }, rooti0);
     });
   }
   ]), inherited);
@@ -107,19 +107,12 @@ global.foo__name2 = fastn_utils.clone(global.foo__name);
 global.foo__name3 = global.foo__name;
 let foo__append_yo = function (args)
 {
-  let __args__ = {
-    a: null,
-    ...args
-  };
+  let __args__ = args;
   let fastn_utils_val___args___a = fastn_utils.getter(__args__.a) + " yo ";
   if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
     __args__.a = fastn_utils_val___args___a;
   }
 }
-let inherited = fastn.recordInstance({
-  colors: ftd.default_colors,
-  types: ftd.default_types
-});
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

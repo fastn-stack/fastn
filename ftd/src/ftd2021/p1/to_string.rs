@@ -214,7 +214,7 @@ mod test {
             \\-- yo:
             body ho"
             ),
-            super::to_string(&vec![
+            super::to_string(&[
                 ftd::ftd2021::p1::Section::with_name("foo").and_body("-- yo:\nbody ho")
             ]),
         );
@@ -226,8 +226,8 @@ mod test {
 
             --- bar:"
             ),
-            super::to_string(&vec![ftd::ftd2021::p1::Section::with_name("foo")
-                .add_sub_section(ftd::ftd2021::p1::SubSection::with_name("bar")),]),
+            super::to_string(&[ftd::ftd2021::p1::Section::with_name("foo")
+                .add_sub_section(ftd::ftd2021::p1::SubSection::with_name("bar"))]),
         );
     }
 }

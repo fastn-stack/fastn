@@ -152,24 +152,27 @@ impl Component {
         }
     }
 
+    pub fn get_interpreter_value_of_argument(
+        &self,
+        argument_name: &str,
+        doc: &ftd::interpreter::TDoc,
+    ) -> Option<ftd::interpreter::Value> {
+        let component_definition = doc.get_component(self.name.as_str(), 0).unwrap();
+        let argument = component_definition
+            .arguments
+            .iter()
+            .find(|v| v.name.eq(argument_name))
+            .unwrap();
+        argument.get_default_interpreter_value(doc, self.properties.as_slice())
+    }
+
     // Todo: Remove this function after removing 0.3
     pub fn get_children_property(&self) -> Option<ftd::interpreter::Property> {
         self.get_children_properties().first().map(|v| v.to_owned())
     }
 
     pub fn get_children_properties(&self) -> Vec<ftd::interpreter::Property> {
-        use itertools::Itertools;
-
-        self.properties
-            .iter()
-            .filter_map(|v| {
-                if v.value.kind().inner_list().is_subsection_ui() {
-                    Some(v.to_owned())
-                } else {
-                    None
-                }
-            })
-            .collect_vec()
+        ftd::interpreter::utils::get_children_properties_from_properties(&self.properties)
     }
 
     pub fn get_children(

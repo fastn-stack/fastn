@@ -69,7 +69,7 @@ let main = function (parent) {
   parenti0.addEventHandler(fastn_dom.Event.Click, function () {
     foo__increment({
       a: global.foo__i,
-    });
+    }, parenti0);
   });
   parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn.formula([global.foo__i], function () {
     if (function () {
@@ -80,8 +80,13 @@ let main = function (parent) {
   }
   ), inherited);
   parenti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(global.foo__i), inherited);
-  foo__foo(parent, inherited, {
+  let parenti1 = foo__foo(parent, inherited, {
     name: "Foo says Hello"
+  });
+  parenti1.addEventHandler(fastn_dom.Event.Click, function () {
+    foo__increment({
+      a: global.foo__i,
+    }, parenti1);
   });
   fastn_dom.conditionalDom(parent, [
     global.foo__i
@@ -98,7 +103,7 @@ let main = function (parent) {
     foo__append_string({
       a: global.foo__names,
       v: "Tom",
-    });
+    }, parenti3);
   });
   global.foo__names.forLoop(parent, function (root, item, index) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
@@ -120,10 +125,7 @@ let main = function (parent) {
   });
 }
 let foo__increment = function (args) {
-  let __args__ = {
-    a: null,
-    ...args
-  };
+  let __args__ = args;
   let fastn_utils_val___args___a = fastn_utils.getter(__args__.a) + 1;
   if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
     __args__.a = fastn_utils_val___args___a;
@@ -160,16 +162,11 @@ let foo__foo = function (parent, inherited, args)
 let foo__append_string = function (args) {
   let __args__ = {
     a: fastn.mutableList([]),
-    v: null,
     ...args
   };
   return (ftd.append(__args__.a, __args__.v));
 }
 global.foo__names = fastn.mutableList([]);
-let inherited = fastn.recordInstance({
-  colors: ftd.default_colors,
-  types: ftd.default_types
-});
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

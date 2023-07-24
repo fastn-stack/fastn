@@ -59,7 +59,8 @@
           }
         ],
         "js": null,
-        "line_number": 1
+        "line_number": 1,
+        "external_implementation": false
       }
     }
   },

@@ -92,6 +92,10 @@ fastn_dom.property_map = {
     "font-style": "fst",
     "text-decoration": "td",
     "align-items": "ali",
+    "background-image": "bg",
+    "background-size": "bgs",
+    "background-position": "bgp",
+    "background-repeat": "bgr",
 };
 
 // dynamic-class-css.md
@@ -413,7 +417,60 @@ fastn_dom.WhiteSpace = {
 
 
 fastn_dom.BackgroundStyle = {
-    Solid: (value) => { return value; }
+    Solid: (value) => {
+        return [1, value];
+    },
+    Image: (value) => {
+        return [2, value];
+    },
+    LinearGradient: (value) => {
+        return [3, value];
+    },
+}
+
+fastn_dom.BackgroundRepeat = {
+    Repeat: "repeat",
+    RepeatX: "repeat-x",
+    RepeatY: "repeat-y",
+    NoRepeat: "no-repeat",
+    Space: "space",
+    Round: "round",
+}
+
+fastn_dom.BackgroundSize = {
+    Auto: "auto",
+    Cover: "cover",
+    Contain: "contain",
+    Length: (value) => { return value; },
+}
+
+fastn_dom.BackgroundPosition = {
+    Left: "left",
+    Right: "right",
+    Center: "center",
+    LeftTop: "left top",
+    LeftCenter: "left center",
+    LeftBottom: "left bottom",
+    CenterTop: "center top",
+    CenterCenter: "center center",
+    CenterBottom: "center bottom",
+    RightTop: "right top",
+    RightCenter: "right center",
+    RightBottom: "right bottom",
+    Length: (value) => { return value; },
+}
+
+fastn_dom.LinearGradientDirection = {
+    Angle: (value) => { return `${value}deg`; },
+    Turn: (value) => { return `${value}turn`; },
+    Left: "270deg",
+    Right: "90deg",
+    Top: "0deg",
+    Bottom: "180deg",
+    TopLeft: "315deg",
+    TopRight: "45deg",
+    BottomLeft: "225deg",
+    BottomRight: "135deg",
 }
 
 fastn_dom.FontSize = {
@@ -522,7 +579,17 @@ class Node2 {
     #node;
     #kind;
     #parent;
+    /**
+     * This is where we store all the attached closures, so we can free them
+     * when we are done.
+     */
     #mutables;
+    /**
+     * This is where we store the extraData related to node. This is
+     * especially useful to store data for integrated external library (like
+     * rive).
+     */
+    #extraData;
     constructor(parent, kind) {
         this.#kind = kind;
 
@@ -536,8 +603,9 @@ class Node2 {
             this.#node.classList.add(classes[c]);
         }
         this.#parent = parent;
-        // this is where we store all the attached closures, so we can free them when we are done
         this.#mutables = [];
+
+        this.#extraData = {};
         /*if (!!parent.parent) {
             parent = parent.parent();
         }*/
@@ -637,6 +705,99 @@ class Node2 {
         return cls;
     }
 
+    attachLinearGradientCss(value) {
+        var lightGradientString = "";
+        var darkGradientString = "";
+
+        let colorsList = value.get("colors").get().getList();
+        let direction = fastn_utils.getStaticValue(value.get("direction"));
+        colorsList.map(function (element) {
+            // LinearGradient RecordInstance
+            let lg_color = element.item;
+
+            let color = lg_color.get("color").get();
+            let lightColor = fastn_utils.getStaticValue(color.get("light"));
+            let darkColor = fastn_utils.getStaticValue(color.get("dark"));
+
+            lightGradientString = `${lightGradientString} ${lightColor}`;
+            darkGradientString = `${darkGradientString} ${darkColor}`;
+
+            let start = fastn_utils.getStaticValue(lg_color.get("start"));
+            if (start !== undefined && start !== null ) {
+                lightGradientString = `${lightGradientString} ${start}`;
+                darkGradientString = `${darkGradientString} ${start}`;
+            }
+
+            let end = fastn_utils.getStaticValue(lg_color.get("end"));
+            if (end !== undefined && end !== null ) {
+                lightGradientString = `${lightGradientString} ${end}`;
+                darkGradientString = `${darkGradientString} ${end}`;
+            }
+
+            let stop_position = fastn_utils.getStaticValue(lg_color.get("stop_position"));
+            if (stop_position !== undefined && stop_position !== null ) {
+                lightGradientString = `${lightGradientString}, ${stop_position}`;
+                darkGradientString = `${darkGradientString}, ${stop_position}`;
+            }
+
+            lightGradientString = `${lightGradientString},`
+            darkGradientString = `${darkGradientString},`
+        });
+
+        lightGradientString = lightGradientString.trim().slice(0, -1);
+        darkGradientString = darkGradientString.trim().slice(0, -1);
+
+        if (lightGradientString === darkGradientString) {
+            this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
+        } else {
+            let lightClass = this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`,true);
+            this.attachCss("background-image", `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
+        }
+    }
+    attachBackgroundImageCss(value) {
+        let src = fastn_utils.getStaticValue(value.get("src"));
+        let lightValue = fastn_utils.getStaticValue(src.get("light"));
+        let darkValue = fastn_utils.getStaticValue(src.get("dark"));
+
+        let position = fastn_utils.getStaticValue(value.get("position"));
+        let positionX = null;
+        let positionY = null;
+        if (position !== null) {
+            positionX = fastn_utils.getStaticValue(position.get("x"));
+            positionY = fastn_utils.getStaticValue(position.get("y"));
+
+            if (positionX !== null) position = `${positionX}`;
+            if (positionY !== null) {
+                if (positionX === null) position = `0px ${positionY}`;
+                else position = `${position} ${positionY}`;
+            }
+        }
+        let repeat = fastn_utils.getStaticValue(value.get("repeat"));
+        let size = fastn_utils.getStaticValue(value.get("size"));
+        let sizeX = null;
+        let sizeY = null;
+        if (size !== null) {
+            sizeX = fastn_utils.getStaticValue(size.get("x"));
+            sizeY = fastn_utils.getStaticValue(size.get("y"));
+
+            if (sizeX !== null) size = `${sizeX}`;
+            if (sizeY !== null) {
+                if (sizeX === null) size = `0px ${sizeY}`;
+                else size = `${size} ${sizeY}`;
+            }
+        }
+
+        if (repeat !== null) this.attachCss("background-repeat", repeat);
+        if (position !== null) this.attachCss("background-position", position);
+        if (size !== null)  this.attachCss("background-size", size);
+
+        if (lightValue === darkValue) {
+            this.attachCss("background-image", `url(${lightValue})`, false);
+        } else {
+            let lightClass = this.attachCss("background-image", `url(${lightValue})`, true);
+            this.attachCss("background-image", `url(${darkValue})`, true, `body.dark .${lightClass}`);
+        }
+    }
     attachColorCss(property, value) {
         let lightValue = fastn_utils.getStaticValue(value.get("light"));
         let darkValue = fastn_utils.getStaticValue(value.get("dark"));
@@ -908,7 +1069,18 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
-            this.attachColorCss("background-color", staticValue);
+            let backgroundType = staticValue[0];
+            switch (backgroundType) {
+                case fastn_dom.BackgroundStyle.Solid()[0]:
+                    this.attachColorCss("background-color", staticValue[1]);
+                    break;
+                case fastn_dom.BackgroundStyle.Image()[0]:
+                    this.attachBackgroundImageCss(staticValue[1]);
+                    break;
+                case fastn_dom.BackgroundStyle.LinearGradient()[0]:
+                    this.attachLinearGradientCss(staticValue[1]);
+                    break;
+            }
         } else if (kind === fastn_dom.PropertyKind.Display) {
             this.attachCss("display", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Checked) {
@@ -1015,6 +1187,10 @@ class Node2 {
     }
     getNode() {
         return this.#node;
+    }
+
+    getExtraData() {
+        return this.#extraData
     }
     addEventHandler(event, func) {
         if (event === fastn_dom.Event.Click) {

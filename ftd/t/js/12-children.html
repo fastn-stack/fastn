@@ -64,7 +64,7 @@
         let global = {
 };
 let main = function (parent) {
-  foo__page(parent, inherited, {
+  let parenti0 = foo__page(parent, inherited, {
     uis: fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
@@ -102,10 +102,6 @@ let foo__page = function (parent, inherited, args) {
   ]), inherited);
   return parenti0;
 }
-let inherited = fastn.recordInstance({
-  colors: ftd.default_colors,
-  types: ftd.default_types
-});
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

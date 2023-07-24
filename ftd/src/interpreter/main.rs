@@ -1065,6 +1065,37 @@ pub struct Document {
     pub css: std::collections::HashSet<String>,
 }
 
+impl Document {
+    pub fn tdoc(&self) -> ftd::interpreter::TDoc {
+        ftd::interpreter::TDoc {
+            name: self.name.as_str(),
+            aliases: &self.aliases,
+            bag: ftd::interpreter::BagOrState::Bag(&self.data),
+        }
+    }
+    pub fn get_instructions(&self, component_name: &str) -> Vec<ftd::interpreter::Component> {
+        use itertools::Itertools;
+
+        self.tree
+            .iter()
+            .filter_map(|v| {
+                if v.name.eq(component_name) {
+                    Some(v.clone())
+                } else {
+                    None
+                }
+            })
+            .collect_vec()
+    }
+
+    pub fn get_redirect(&self) -> Option<String> {
+        self.get_instructions("ftd#redirect")
+            .first()
+            .and_then(|v| v.get_interpreter_value_of_argument("value", &self.tdoc()))
+            .and_then(|v| v.string(self.name.as_str(), 0).ok())
+    }
+}
+
 #[derive(Debug)]
 pub enum StateWithThing<T> {
     Thing(T),

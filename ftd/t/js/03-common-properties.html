@@ -546,7 +546,7 @@ let main = function (parent) {
     rooti0.addEventHandler(fastn_dom.Event.Click, function () {
       foo__increment({
         a: global.foo__value,
-      });
+      }, rooti0);
     });
     rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([global.foo__og,
     global.foo__value,
@@ -1422,10 +1422,7 @@ global.foo__red_yellow = fastn.recordInstance({
 });
 let foo__increment = function (args)
 {
-  let __args__ = {
-    a: null,
-    ...args
-  };
+  let __args__ = args;
   let fastn_utils_val___args___a = fastn_utils.getter(__args__.a) + 1;
   if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
     __args__.a = fastn_utils_val___args___a;
@@ -1464,10 +1461,6 @@ global.foo__red_blue = fastn.recordInstance({
 });
 global.foo__sample_text = "Far far away, behind the word mountains, far from the countries\nVokalia and Consonantia, there live the blind texts. Separated they\nin Bookmarksgrove right at the coast of the Semantics, a large language\nocean. A small river named Duden flows by their place and supplies it\nwith the necessary regelialia. It is a paradisematic country, in which\nroasted parts of sentences fly into your mouth. Even the all-powerful\nPointing has no control about the blind texts it is an almost unorthographic\nlife One day however a small line of blind text by the name of Lorem\nIpsum decided to leave for the far World of Grammar.";
 global.foo__sample_text2 = "But ere she from the church-door stepped She smiled and told us why:\n\n'It was a wicked woman's curse,' Quoth she, 'and what care I?'\nShe smiled, and smiled, and passed it off Ere from the door she stept-";
-let inherited = fastn.recordInstance({
-  colors: ftd.default_colors,
-  types: ftd.default_types
-});
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

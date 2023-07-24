@@ -1,0 +1,74 @@
+-- ftd.color bg-solid:
+light: red
+dark: green
+
+-- ftd.image-src bg-image-src:
+light: https://picsum.photos/id/236/200/300
+dark: https://picsum.photos/id/237/200/300
+
+-- ftd.color red-orange:
+light: red
+dark: orange
+
+-- ftd.color yellow-blue:
+light: yellow
+dark: blue
+
+-- ftd.background-size.length len:
+x.px: 150
+y.px: 150
+
+-- ftd.background-position.length pos:
+x.px: 0
+y.px: 25
+
+-- ftd.background-image bg-image:
+src: $bg-image-src
+repeat: no-repeat
+size.length: $len
+position.length: $pos
+
+-- ftd.linear-gradient lg:
+direction: bottom-left
+colors: $color-values
+
+-- ftd.linear-gradient-color list color-values:
+
+-- ftd.linear-gradient-color: $red-orange
+stop-position.percent: 40
+
+-- ftd.linear-gradient-color: $yellow-blue
+
+-- end: color-values
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-vertical.px: 30
+spacing.fixed.px: 10
+
+-- ftd.column:
+background.solid: $bg-solid
+width.fixed.px: 400
+height.fixed.px: 200
+align-self: center
+
+-- end: ftd.column
+
+-- ftd.column:
+background.image: $bg-image
+width.fixed.px: 400
+height.fixed.px: 200
+align-self: center
+
+-- end: ftd.column
+
+-- ftd.column:
+background.linear-gradient: $lg
+width.fixed.px: 400
+height.fixed.px: 200
+align-self: center
+
+-- end: ftd.column
+
+-- end: ftd.column

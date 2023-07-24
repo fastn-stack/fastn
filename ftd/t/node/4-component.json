@@ -311,6 +311,56 @@
     }
   },
   "bag": {
+    "foo#print:name:1": {
+      "Variable": {
+        "name": "foo#print:name:1",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Hello Again"
+              }
+            },
+            "is_mutable": false,
+            "line_number": 17
+          }
+        },
+        "conditional_value": [],
+        "line_number": 16,
+        "is_static": true
+      }
+    },
+    "foo#print:name:0": {
+      "Variable": {
+        "name": "foo#print:name:0",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Hello"
+              }
+            },
+            "is_mutable": false,
+            "line_number": 14
+          }
+        },
+        "conditional_value": [],
+        "line_number": 13,
+        "is_static": true
+      }
+    },
     "foo#print": {
       "Component": {
         "name": "foo#print",
@@ -422,56 +472,6 @@
         },
         "css": null,
         "line_number": 1
-      }
-    },
-    "foo#print:name:0": {
-      "Variable": {
-        "name": "foo#print:name:0",
-        "kind": {
-          "kind": "String",
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Value": {
-            "value": {
-              "String": {
-                "text": "Hello"
-              }
-            },
-            "is_mutable": false,
-            "line_number": 14
-          }
-        },
-        "conditional_value": [],
-        "line_number": 13,
-        "is_static": true
-      }
-    },
-    "foo#print:name:1": {
-      "Variable": {
-        "name": "foo#print:name:1",
-        "kind": {
-          "kind": "String",
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Value": {
-            "value": {
-              "String": {
-                "text": "Hello Again"
-              }
-            },
-            "is_mutable": false,
-            "line_number": 17
-          }
-        },
-        "conditional_value": [],
-        "line_number": 16,
-        "is_static": true
       }
     }
   },
