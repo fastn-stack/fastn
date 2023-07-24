@@ -24,5 +24,35 @@ $processor$: pr.request-data
 
 \-- ftd.redirect: $next
 
+-- ds.h1: Status Code
+
+By default `ftd.redirect` returns HTTP response with `308 Permanent Redirect`
+code. You can overwrite it by passing a `code` value:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.redirect: /
+code: 301
+
+-- ds.markdown:
+
+This will send `301 Moved Permanently` response. Possible status codes are:
+
+-- ds.markdown:
+
+| Code | Name               | Temporary Or Permanent | Usage Notes |
+|------|--------------------|------------------------|-------------|
+| 301  | Moved Permanently  | Permanent              | Prefer 308  |
+| 302  | Found              | Temporary              | Prefer 307  |
+| 303  | See Other          | Temporary              | Prefer 307  |
+| 307  | Temporary Redirect | Temporary              |             |
+| 308  | Permanent Redirect | Permanent              |             |
+
+-- ds.markdown:
+
+We do not yet support `300 - Multiple Choices` or `305 - Use Proxy` because we
+have not found a use case for them.
+
 
 -- end: ds.page
