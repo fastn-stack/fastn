@@ -767,7 +767,10 @@ class Node2 {
             positionY = fastn_utils.getStaticValue(position.get("y"));
 
             if (positionX !== null) position = `${positionX}`;
-            if (positionY !== null) position = `${position} ${positionY}`;
+            if (positionY !== null) {
+                if (positionX === null) position = `0px ${positionY}`;
+                else position = `${position} ${positionY}`;
+            }
         }
         let repeat = fastn_utils.getStaticValue(value.get("repeat"));
         let size = fastn_utils.getStaticValue(value.get("size"));
@@ -778,7 +781,10 @@ class Node2 {
             sizeY = fastn_utils.getStaticValue(size.get("y"));
 
             if (sizeX !== null) size = `${sizeX}`;
-            if (sizeY !== null) size = `${size} ${sizeY}`;
+            if (sizeY !== null) {
+                if (sizeX === null) size = `0px ${sizeY}`;
+                else size = `${size} ${sizeY}`;
+            }
         }
 
         if (repeat !== null) this.attachCss("background-repeat", repeat);
