@@ -1262,6 +1262,13 @@ impl DocumentMeta {
         }
     }
 
+    pub fn has_self_reference(&self, value: &ftd::js::Value) -> bool {
+        if let ftd::js::Value::Reference(name) = value {
+            return name.starts_with("ftd#document");
+        }
+        false
+    }
+
     pub(crate) fn to_component_statements(
         &self,
         doc: &ftd::interpreter::TDoc,
@@ -1277,25 +1284,51 @@ impl DocumentMeta {
         }
 
         if let Some(ref og_title) = self.og_title {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                og_title.to_set_property(
-                    fastn_js::PropertyKind::MetaOGTitle,
-                    doc,
-                    element_name,
-                    rdata,
-                ),
-            ));
+            if self.has_self_reference(og_title) {
+                if let Some(ref title) = self.title {
+                    component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                        title.to_set_property(
+                            fastn_js::PropertyKind::MetaOGTitle,
+                            doc,
+                            element_name,
+                            rdata,
+                        ),
+                    ));
+                }
+            } else {
+                component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                    og_title.to_set_property(
+                        fastn_js::PropertyKind::MetaOGTitle,
+                        doc,
+                        element_name,
+                        rdata,
+                    ),
+                ));
+            }
         }
 
         if let Some(ref twitter_title) = self.twitter_title {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                twitter_title.to_set_property(
-                    fastn_js::PropertyKind::MetaTwitterTitle,
-                    doc,
-                    element_name,
-                    rdata,
-                ),
-            ));
+            if self.has_self_reference(twitter_title) {
+                if let Some(ref title) = self.title {
+                    component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                        title.to_set_property(
+                            fastn_js::PropertyKind::MetaTwitterTitle,
+                            doc,
+                            element_name,
+                            rdata,
+                        ),
+                    ));
+                }
+            } else {
+                component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                    twitter_title.to_set_property(
+                        fastn_js::PropertyKind::MetaTwitterTitle,
+                        doc,
+                        element_name,
+                        rdata,
+                    ),
+                ));
+            }
         }
 
         if let Some(ref description) = self.description {
@@ -1310,25 +1343,51 @@ impl DocumentMeta {
         }
 
         if let Some(ref og_description) = self.og_description {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                og_description.to_set_property(
-                    fastn_js::PropertyKind::MetaOGDescription,
-                    doc,
-                    element_name,
-                    rdata,
-                ),
-            ));
+            if self.has_self_reference(og_description) {
+                if let Some(ref description) = self.description {
+                    component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                        description.to_set_property(
+                            fastn_js::PropertyKind::MetaOGDescription,
+                            doc,
+                            element_name,
+                            rdata,
+                        ),
+                    ));
+                }
+            } else {
+                component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                    og_description.to_set_property(
+                        fastn_js::PropertyKind::MetaOGDescription,
+                        doc,
+                        element_name,
+                        rdata,
+                    ),
+                ));
+            }
         }
 
         if let Some(ref twitter_description) = self.twitter_description {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                twitter_description.to_set_property(
-                    fastn_js::PropertyKind::MetaTwitterDescription,
-                    doc,
-                    element_name,
-                    rdata,
-                ),
-            ));
+            if self.has_self_reference(twitter_description) {
+                if let Some(ref description) = self.description {
+                    component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                        description.to_set_property(
+                            fastn_js::PropertyKind::MetaTwitterDescription,
+                            doc,
+                            element_name,
+                            rdata,
+                        ),
+                    ));
+                }
+            } else {
+                component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                    twitter_description.to_set_property(
+                        fastn_js::PropertyKind::MetaTwitterDescription,
+                        doc,
+                        element_name,
+                        rdata,
+                    ),
+                ));
+            }
         }
 
         if let Some(ref og_image) = self.og_image {
@@ -1343,14 +1402,27 @@ impl DocumentMeta {
         }
 
         if let Some(ref twitter_image) = self.twitter_image {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                twitter_image.to_set_property(
-                    fastn_js::PropertyKind::MetaTwitterImage,
-                    doc,
-                    element_name,
-                    rdata,
-                ),
-            ));
+            if self.has_self_reference(twitter_image) {
+                if let Some(ref description) = self.description {
+                    component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                        description.to_set_property(
+                            fastn_js::PropertyKind::MetaTwitterImage,
+                            doc,
+                            element_name,
+                            rdata,
+                        ),
+                    ));
+                }
+            } else {
+                component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                    twitter_image.to_set_property(
+                        fastn_js::PropertyKind::MetaTwitterImage,
+                        doc,
+                        element_name,
+                        rdata,
+                    ),
+                ));
+            }
         }
 
         if let Some(ref theme_color) = self.theme_color {
