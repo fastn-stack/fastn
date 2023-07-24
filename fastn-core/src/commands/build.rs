@@ -82,8 +82,7 @@ async fn handle_file(
 ) -> fastn_core::Result<()> {
     let start = std::time::Instant::now();
     print!(
-        "Processing {}/{} ... ",
-        config.package.name.as_str(),
+        "Processing {} ... ",
         document.get_id_with_package()
     );
 
