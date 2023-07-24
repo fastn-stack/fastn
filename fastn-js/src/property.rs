@@ -423,15 +423,27 @@ impl PropertyKind {
             PropertyKind::Alt => "fastn_dom.PropertyKind.Alt",
             PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
             PropertyKind::Code => "fastn_dom.PropertyKind.Code",
-            PropertyKind::MetaTitle => "fastn_dom.PropertyKind.MetaTitle",
-            PropertyKind::MetaOGTitle => "fastn_dom.PropertyKind.MetaOGTitle",
-            PropertyKind::MetaTwitterTitle => "fastn_dom.PropertyKind.MetaTwitterTitle",
-            PropertyKind::MetaDescription => "fastn_dom.PropertyKind.MetaDescription",
-            PropertyKind::MetaOGDescription => "fastn_dom.PropertyKind.MetaOGDescription",
-            PropertyKind::MetaTwitterDescription => "fastn_dom.PropertyKind.MetaTwitterDescription",
-            PropertyKind::MetaOGImage => "fastn_dom.PropertyKind.MetaOGImage",
-            PropertyKind::MetaTwitterImage => "fastn_dom.PropertyKind.MetaTwitterImage",
-            PropertyKind::MetaThemeColor => "fastn_dom.PropertyKind.MetaThemeColor",
+            PropertyKind::MetaTitle => "fastn_dom.PropertyKind.DocumentProperties.MetaTitle",
+            PropertyKind::MetaOGTitle => "fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle",
+            PropertyKind::MetaTwitterTitle => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaTwitterTitle"
+            }
+            PropertyKind::MetaDescription => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaDescription"
+            }
+            PropertyKind::MetaOGDescription => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription"
+            }
+            PropertyKind::MetaTwitterDescription => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription"
+            }
+            PropertyKind::MetaOGImage => "fastn_dom.PropertyKind.DocumentProperties.MetaOGImage",
+            PropertyKind::MetaTwitterImage => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage"
+            }
+            PropertyKind::MetaThemeColor => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor"
+            }
         }
     }
 }
