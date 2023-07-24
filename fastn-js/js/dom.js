@@ -770,10 +770,6 @@ class Node2 {
             if (sizeY !== null) size = `${size} ${sizeY}`;
         }
 
-        console.log(position);
-        console.log(positionX, positionY);
-        console.log(sizeX, sizeY);
-
         if (repeat !== null) this.attachCss("background-repeat", repeat);
         if (position !== null) this.attachCss("background-position", position);
         if (size !== null)  this.attachCss("background-size", size);
