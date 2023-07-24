@@ -621,7 +621,13 @@ pub fn replace_markers_2022(
 }
 
 #[allow(clippy::too_many_arguments)]
-pub fn replace_markers_2023(s: &str, js_script: &str, ssr_body: &str, font_style: &str) -> String {
+pub fn replace_markers_2023(
+    s: &str,
+    js_script: &str,
+    ssr_body: &str,
+    font_style: &str,
+    default_css: &str,
+) -> String {
     ftd::html::utils::trim_all_lines(
         s.replace("__js_script__", js_script)
             .replace(
@@ -632,6 +638,7 @@ pub fn replace_markers_2023(s: &str, js_script: &str, ssr_body: &str, font_style
                 "__script_file__",
                 format!("<script src=\"{}\"></script>", hashed_default_ftd_js()).as_str(),
             )
+            .replace("__default_css__", default_css)
             .as_str(),
     )
 }

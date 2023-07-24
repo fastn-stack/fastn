@@ -528,6 +528,7 @@ pub(crate) async fn read_ftd_2023(
         format!("{}{}", js_ast_data.scripts.join(""), js_document_script).as_str(),
         ssr_body.as_str(),
         font_style.as_str(),
+        ftd::ftd_js_css(),
     );
 
     Ok(FTDResult::Html(file_content.into()))
