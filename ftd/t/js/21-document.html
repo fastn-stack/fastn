@@ -69,19 +69,19 @@ let main = function (parent) {
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is document component", inherited);
   }
   ]), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.MetaTitle, "This is main title", inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.MetaOGTitle, "This is og title", inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.MetaTwitterTitle, "This is twitter title", inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.MetaDescription, "This is main description", inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.MetaOGDescription, "This is og description", inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.MetaTwitterDescription, "This is twitter description", inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.MetaOGImage, fastn.recordInstance({
+  parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaTitle, "This is main title", inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle, "This is main title", inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaTwitterTitle, "This is main title", inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaDescription, "This is main description", inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription, "This is og description", inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription, "This is twitter description", inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaOGImage, fastn.recordInstance({
     src: global.foo__fastn_image.get("light")
   }), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.MetaTwitterImage, fastn.recordInstance({
+  parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage, fastn.recordInstance({
     src: global.foo__fastn_image.get("dark")
   }), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.MetaThemeColor, fastn.recordInstance({
+  parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor, fastn.recordInstance({
     dark: "white",
     light: "white"
   }), inherited);
