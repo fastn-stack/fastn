@@ -189,6 +189,21 @@ impl Field {
         }
     }
 
+    pub fn default_with_value(
+        name: &str,
+        kind: ftd::interpreter::KindData,
+        value: ftd::interpreter::PropertyValue,
+    ) -> Field {
+        Field {
+            name: name.to_string(),
+            kind,
+            mutable: false,
+            value: Some(value),
+            line_number: 0,
+            access_modifier: Default::default(),
+        }
+    }
+
     pub(crate) fn scan_ast_fields(
         fields: Vec<ftd::ast::Field>,
         doc: &mut ftd::interpreter::TDoc,
