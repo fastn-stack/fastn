@@ -235,15 +235,17 @@ fastn_dom.PropertyKind = {
     Code: 86,
     ImageSrc: 87,
     Alt: 88,
-    MetaTitle: 89,
-    MetaOGTitle: 90,
-    MetaTwitterTitle: 91,
-    MetaDescription: 92,
-    MetaOGDescription: 93,
-    MetaTwitterDescription: 94,
-    MetaOGImage: 95,
-    MetaTwitterImage: 96,
-    MetaThemeColor: 97,
+    DocumentProperties: {
+        MetaTitle: 89,
+        MetaOGTitle: 90,
+        MetaTwitterTitle: 91,
+        MetaDescription: 92,
+        MetaOGDescription: 93,
+        MetaTwitterDescription: 94,
+        MetaOGImage: 95,
+        MetaTwitterImage: 96,
+        MetaThemeColor: 97,
+    },
 }
 
 fastn_dom.Loading = {
@@ -1186,25 +1188,25 @@ class Node2 {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Code) {
             this.#node.innerHTML = staticValue;
-        } else if (kind === fastn_dom.PropertyKind.MetaTitle) {
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle) {
             this.updateMetaTitle(staticValue);
-        } else if (kind === fastn_dom.PropertyKind.MetaOGTitle) {
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle) {
             this.addMetaTag("og:title", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.MetaTwitterTitle) {
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterTitle) {
             this.addMetaTag("twitter:title", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.MetaDescription) {
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaDescription) {
             this.addMetaTag("description", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.MetaOGDescription) {
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription) {
             this.addMetaTag("og:description", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.MetaTwitterDescription) {
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription) {
             this.addMetaTag("twitter:description", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.MetaOGImage) {
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGImage) {
             // staticValue is of ftd.raw-image-src RecordInstance type
             this.addMetaTag("og:image", fastn_utils.getStaticValue(staticValue.get('src')));
-        } else if (kind === fastn_dom.PropertyKind.MetaTwitterImage) {
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage) {
             // staticValue is of ftd.raw-image-src RecordInstance type
             this.addMetaTag("twitter:image", fastn_utils.getStaticValue(staticValue.get('src')));
-        } else if (kind === fastn_dom.PropertyKind.MetaThemeColor) {
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor) {
             // staticValue is of ftd.color RecordInstance type
             this.addMetaTag("theme-color", fastn_utils.getStaticValue(staticValue.get('light')));
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
