@@ -141,7 +141,8 @@ fastn_dom.ElementKind = {
     CheckBox: 9,
     TextInput: 10,
     ContainerElement: 11,
-    Rive: 12
+    Rive: 12,
+    Document: 13,
 };
 
 fastn_dom.PropertyKind = {

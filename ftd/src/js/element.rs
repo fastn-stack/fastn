@@ -18,6 +18,7 @@ pub enum Element {
     Iframe(Iframe),
     Code(Code),
     Rive(Rive),
+    Document(Document),
 }
 
 impl Element {
@@ -42,6 +43,7 @@ impl Element {
                 Element::Device(Device::from(component, component.name.as_str()))
             }
             "ftd#rive" => Element::Rive(Rive::from(component)),
+            "ftd#document" => Element::Document(Document::from(component)),
             _ => todo!("{}", component.name.as_str()),
         }
     }
@@ -69,6 +71,14 @@ impl Element {
                 boolean.to_component_statements(parent, index, doc, rdata, should_return)
             }
             Element::Column(column) => column.to_component_statements(
+                parent,
+                index,
+                doc,
+                rdata,
+                should_return,
+                has_rive_components,
+            ),
+            Element::Document(document) => document.to_component_statements(
                 parent,
                 index,
                 doc,
@@ -677,6 +687,26 @@ pub struct Boolean {
 }
 
 #[derive(Debug)]
+pub struct Document {
+    pub container: Container,
+    pub breakpoint_width: Option<ftd::js::Value>,
+    pub metadata: DocumentMeta,
+}
+
+#[derive(Debug)]
+pub struct DocumentMeta {
+    pub title: Option<ftd::js::Value>,
+    pub og_title: Option<ftd::js::Value>,
+    pub twitter_title: Option<ftd::js::Value>,
+    pub description: Option<ftd::js::Value>,
+    pub og_description: Option<ftd::js::Value>,
+    pub twitter_description: Option<ftd::js::Value>,
+    pub og_image: Option<ftd::js::Value>,
+    pub twitter_image: Option<ftd::js::Value>,
+    pub theme_color: Option<ftd::js::Value>,
+}
+
+#[derive(Debug)]
 pub struct Column {
     pub container: Container,
     pub container_properties: ContainerProperties,
@@ -1124,6 +1154,218 @@ impl Boolean {
                 component_name: kernel.name,
             });
         }
+        component_statements
+    }
+}
+
+impl Document {
+    pub fn from(component: &ftd::interpreter::Component) -> Document {
+        let component_definition = ftd::interpreter::default::default_bag()
+            .get("ftd#document")
+            .unwrap()
+            .clone()
+            .component()
+            .unwrap();
+
+        Document {
+            container: Container::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            breakpoint_width: ftd::js::value::get_optional_js_value(
+                "breakpoint-width",
+                properties,
+                arguments,
+            ),
+            metadata: DocumentMeta::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+        }
+    }
+
+    pub fn to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        rdata: &ftd::js::ResolverData,
+        should_return: bool,
+        has_rive_components: &mut bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        let kernel =
+            fastn_js::Kernel::from_component(fastn_js::ElementKind::Document, parent, index);
+        component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+
+        component_statements.extend(self.container.to_component_statements(
+            doc,
+            rdata,
+            kernel.name.as_str(),
+            has_rive_components,
+        ));
+
+        component_statements.extend(self.metadata.to_component_statements(
+            doc,
+            rdata,
+            kernel.name.as_str(),
+            has_rive_components,
+        ));
+
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
+        component_statements
+    }
+}
+
+impl DocumentMeta {
+    pub fn from(
+        properties: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
+    ) -> DocumentMeta {
+        DocumentMeta {
+            title: ftd::js::value::get_optional_js_value("title", properties, arguments),
+            og_title: ftd::js::value::get_optional_js_value("og-title", properties, arguments),
+            twitter_title: ftd::js::value::get_optional_js_value(
+                "twitter-title",
+                properties,
+                arguments,
+            ),
+            description: ftd::js::value::get_optional_js_value(
+                "description",
+                properties,
+                arguments,
+            ),
+            og_description: ftd::js::value::get_optional_js_value(
+                "og-description",
+                properties,
+                arguments,
+            ),
+            twitter_description: ftd::js::value::get_optional_js_value(
+                "twitter-description",
+                properties,
+                arguments,
+            ),
+            og_image: ftd::js::value::get_optional_js_value("og-image", properties, arguments),
+            twitter_image: ftd::js::value::get_optional_js_value(
+                "twitter-image",
+                properties,
+                arguments,
+            ),
+            theme_color: ftd::js::value::get_optional_js_value(
+                "theme-color",
+                properties,
+                arguments,
+            ),
+        }
+    }
+
+    pub(crate) fn to_component_statements(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        rdata: &ftd::js::ResolverData,
+        component_name: &str,
+        has_rive_components: &mut bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+
+        if let Some(ref title) = self.title {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                title.to_set_property(fastn_js::PropertyKind::MetaTitle, doc, element_name, rdata),
+            ));
+        }
+
+        if let Some(ref og_title) = self.og_title {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                og_title.to_set_property(
+                    fastn_js::PropertyKind::MetaOGTitle,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
+            ));
+        }
+
+        if let Some(ref twitter_title) = self.twitter_title {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                twitter_title.to_set_property(
+                    fastn_js::PropertyKind::MetaTwitterTitle,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
+            ));
+        }
+
+        if let Some(ref description) = self.description {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                description.to_set_property(
+                    fastn_js::PropertyKind::MetaDescription,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
+            ));
+        }
+
+        if let Some(ref og_description) = self.og_description {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                og_description.to_set_property(
+                    fastn_js::PropertyKind::MetaOGDescription,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
+            ));
+        }
+
+        if let Some(ref twitter_description) = self.twitter_description {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                twitter_description.to_set_property(
+                    fastn_js::PropertyKind::MetaTwitterDescription,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
+            ));
+        }
+
+        if let Some(ref og_image) = self.og_image {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                og_image.to_set_property(
+                    fastn_js::PropertyKind::MetaOGImage,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
+            ));
+        }
+
+        if let Some(ref twitter_image) = self.twitter_image {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                twitter_image.to_set_property(
+                    fastn_js::PropertyKind::MetaTwitterImage,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
+            ));
+        }
+
+        if let Some(ref theme_color) = self.theme_color {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                theme_color.to_set_property(
+                    fastn_js::PropertyKind::MetaThemeColor,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
+            ));
+        }
+
         component_statements
     }
 }
@@ -2551,6 +2793,7 @@ pub fn is_kernel(s: &str) -> bool {
         "ftd#code",
         "ftd#image",
         "ftd#rive",
+        "ftd#document",
     ]
     .contains(&s)
 }
