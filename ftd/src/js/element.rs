@@ -1263,6 +1263,29 @@ impl DocumentMeta {
         false
     }
 
+    pub fn set_property_value_with_self_reference(
+        &self,
+        value: &ftd::js::Value,
+        value_kind: fastn_js::PropertyKind,
+        referenced_value: &Option<ftd::js::Value>,
+        component_statements: &mut Vec<fastn_js::ComponentStatement>,
+        doc: &ftd::interpreter::TDoc,
+        rdata: &ftd::js::ResolverData,
+        element_name: &str,
+    ) {
+        if self.has_self_reference(value) {
+            if let Some(ref referenced_value) = referenced_value {
+                component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                    referenced_value.to_set_property(value_kind, doc, element_name, rdata),
+                ));
+            }
+        } else {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                value.to_set_property(value_kind, doc, element_name, rdata),
+            ));
+        }
+    }
+
     pub(crate) fn to_component_statements(
         &self,
         doc: &ftd::interpreter::TDoc,
@@ -1278,51 +1301,27 @@ impl DocumentMeta {
         }
 
         if let Some(ref og_title) = self.og_title {
-            if self.has_self_reference(og_title) {
-                if let Some(ref title) = self.title {
-                    component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                        title.to_set_property(
-                            fastn_js::PropertyKind::MetaOGTitle,
-                            doc,
-                            element_name,
-                            rdata,
-                        ),
-                    ));
-                }
-            } else {
-                component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                    og_title.to_set_property(
-                        fastn_js::PropertyKind::MetaOGTitle,
-                        doc,
-                        element_name,
-                        rdata,
-                    ),
-                ));
-            }
+            self.set_property_value_with_self_reference(
+                og_title,
+                fastn_js::PropertyKind::MetaOGTitle,
+                &self.title,
+                &mut component_statements,
+                doc,
+                rdata,
+                element_name,
+            );
         }
 
         if let Some(ref twitter_title) = self.twitter_title {
-            if self.has_self_reference(twitter_title) {
-                if let Some(ref title) = self.title {
-                    component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                        title.to_set_property(
-                            fastn_js::PropertyKind::MetaTwitterTitle,
-                            doc,
-                            element_name,
-                            rdata,
-                        ),
-                    ));
-                }
-            } else {
-                component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                    twitter_title.to_set_property(
-                        fastn_js::PropertyKind::MetaTwitterTitle,
-                        doc,
-                        element_name,
-                        rdata,
-                    ),
-                ));
-            }
+            self.set_property_value_with_self_reference(
+                twitter_title,
+                fastn_js::PropertyKind::MetaTwitterTitle,
+                &self.title,
+                &mut component_statements,
+                doc,
+                rdata,
+                element_name,
+            );
         }
 
         if let Some(ref description) = self.description {
@@ -1337,51 +1336,27 @@ impl DocumentMeta {
         }
 
         if let Some(ref og_description) = self.og_description {
-            if self.has_self_reference(og_description) {
-                if let Some(ref description) = self.description {
-                    component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                        description.to_set_property(
-                            fastn_js::PropertyKind::MetaOGDescription,
-                            doc,
-                            element_name,
-                            rdata,
-                        ),
-                    ));
-                }
-            } else {
-                component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                    og_description.to_set_property(
-                        fastn_js::PropertyKind::MetaOGDescription,
-                        doc,
-                        element_name,
-                        rdata,
-                    ),
-                ));
-            }
+            self.set_property_value_with_self_reference(
+                og_description,
+                fastn_js::PropertyKind::MetaOGDescription,
+                &self.description,
+                &mut component_statements,
+                doc,
+                rdata,
+                element_name,
+            );
         }
 
         if let Some(ref twitter_description) = self.twitter_description {
-            if self.has_self_reference(twitter_description) {
-                if let Some(ref description) = self.description {
-                    component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                        description.to_set_property(
-                            fastn_js::PropertyKind::MetaTwitterDescription,
-                            doc,
-                            element_name,
-                            rdata,
-                        ),
-                    ));
-                }
-            } else {
-                component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                    twitter_description.to_set_property(
-                        fastn_js::PropertyKind::MetaTwitterDescription,
-                        doc,
-                        element_name,
-                        rdata,
-                    ),
-                ));
-            }
+            self.set_property_value_with_self_reference(
+                twitter_description,
+                fastn_js::PropertyKind::MetaTwitterDescription,
+                &self.description,
+                &mut component_statements,
+                doc,
+                rdata,
+                element_name,
+            );
         }
 
         if let Some(ref og_image) = self.og_image {
@@ -1396,27 +1371,15 @@ impl DocumentMeta {
         }
 
         if let Some(ref twitter_image) = self.twitter_image {
-            if self.has_self_reference(twitter_image) {
-                if let Some(ref og_image) = self.og_image {
-                    component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                        og_image.to_set_property(
-                            fastn_js::PropertyKind::MetaTwitterImage,
-                            doc,
-                            element_name,
-                            rdata,
-                        ),
-                    ));
-                }
-            } else {
-                component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                    twitter_image.to_set_property(
-                        fastn_js::PropertyKind::MetaTwitterImage,
-                        doc,
-                        element_name,
-                        rdata,
-                    ),
-                ));
-            }
+            self.set_property_value_with_self_reference(
+                twitter_image,
+                fastn_js::PropertyKind::MetaTwitterImage,
+                &self.og_image,
+                &mut component_statements,
+                doc,
+                rdata,
+                element_name,
+            );
         }
 
         if let Some(ref theme_color) = self.theme_color {

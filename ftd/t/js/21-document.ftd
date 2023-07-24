@@ -1,7 +1,7 @@
 -- ftd.document:
 title: This is main title
-og-title: This is og title
-twitter-title: This is twitter title
+/og-title: This is og title
+/twitter-title: This is twitter title
 description: This is main description
 og-description: This is og description
 twitter-description: This is twitter description
