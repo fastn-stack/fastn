@@ -1,6 +1,10 @@
 let ftd = {
     // source: https://stackoverflow.com/questions/400212/ (cc-by-sa)
     riveNodes: {},
+    is_empty(value) {
+        return fastn_utils.isNull(value) || value.length === 0;
+    },
+
     copy_to_clipboard(args) {
         let text = args.a;
         if (text.startsWith("\\", 0)) {
