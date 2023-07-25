@@ -1312,8 +1312,14 @@ impl PropertyValueSource {
             .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
             .unwrap_or(name);
         match self {
-            PropertyValueSource::Global | PropertyValueSource::Local(_) => doc.resolve_name(name),
-            PropertyValueSource::Loop(_) => doc.resolve_name(name), //TODO: Some different name for loop
+            PropertyValueSource::Global => doc.resolve_name(name),
+            PropertyValueSource::Local(_) | PropertyValueSource::Loop(_) => {
+                if name.contains('#') {
+                    name.to_string()
+                } else {
+                    format!("{}#{}", doc.name, name)
+                }
+            } //TODO: Some different name for loop
         }
     }
 }
