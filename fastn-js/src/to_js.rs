@@ -412,10 +412,19 @@ impl fastn_js::Component {
             pretty::RcDoc::nil()
         } else {
             let mut local_arguments = vec![];
+            let mut local_arguments_dependent = vec![];
             let mut arguments = vec![];
             for (argument_name, value) in self.args.iter() {
                 if value.is_local_value() {
+                    // Todo: Fix order
+                    // -- component show-name:
+                    // caption name:
+                    // string full-name: $show-name.nickname
+                    // string nickname: $show-name.name
                     local_arguments.push((argument_name.to_owned(), value.to_owned()));
+                } else if value.is_local_value_dependent() {
+                    // Todo: Fix order
+                    local_arguments_dependent.push((argument_name.to_owned(), value.to_owned()));
                 } else {
                     arguments.push((argument_name.to_owned(), value.to_owned()));
                 }
@@ -475,7 +484,21 @@ impl fastn_js::Component {
                                     },
                                     l = fastn_js::LOCAL_VARIABLE_MAP,
                                     v = v.to_js(),
-                                    k = k
+                                    k = fastn_js::utils::name_to_js_(k)
+                                )
+                            }),
+                            pretty::RcDoc::softline(),
+                        ))
+                        .append(pretty::RcDoc::softline())
+                        .append(pretty::RcDoc::intersperse(
+                            local_arguments_dependent.iter().map(|(k, v)| {
+                                format!(
+                                    indoc::indoc! {
+                                        "{l}.{k} =  {l}.{k}? {l}.{k}: {v};"
+                                    },
+                                    l = fastn_js::LOCAL_VARIABLE_MAP,
+                                    v = v.to_js(),
+                                    k = fastn_js::utils::name_to_js_(k)
                                 )
                             }),
                             pretty::RcDoc::softline(),
