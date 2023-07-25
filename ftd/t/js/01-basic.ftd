@@ -1,1 +1,15 @@
 -- ftd.text: Hello
+
+-- string append(a,b):
+string a:
+string b:
+
+a + " " + b
+
+
+-- component print:
+caption name:
+
+-- ftd.text: $print.name
+
+-- end: print
