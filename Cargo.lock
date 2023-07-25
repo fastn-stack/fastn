@@ -1811,6 +1811,7 @@ dependencies = [
 name = "ftd"
 version = "0.3.0"
 dependencies = [
+ "colored",
  "comrak 0.18.0",
  "crossterm 0.26.1",
  "css-color-parser",
