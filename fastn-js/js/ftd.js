@@ -21,6 +21,10 @@ let ftd = {
         });
     },
 
+    clean_code(args) {
+        return args.a;
+    },
+
     set_rive_boolean(args, node) {
         if (!!args.rive) {
             let riveNode = ftd.riveNodes[`${args.rive}__${ftd.device.get()}`];

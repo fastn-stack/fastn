@@ -1,0 +1,18 @@
+-- import: 01-basic as dd
+
+
+-- dd: Arpita
+
+
+-- component dd:
+caption name:
+string a: $dd.name
+
+-- ftd.column:
+
+-- ftd.text: $dd.a
+-- ftd.text: $dd.name
+
+-- end: ftd.column
+
+-- end: dd

@@ -201,14 +201,11 @@ impl ftd::interpreter::Argument {
         // line_number: usize
     ) -> Option<ftd::js::Value> {
         let sources = self.to_sources();
-        let properties = ftd::interpreter::utils::find_properties_by_source(
+
+        let properties = ftd::interpreter::utils::find_properties_by_source_without_default(
             sources.as_slice(),
             properties,
-            "", // doc_name
-            self,
-            0, // line_number
-        )
-        .unwrap();
+        );
 
         ftd::js::utils::get_js_value_from_properties(properties.as_slice())
     }
