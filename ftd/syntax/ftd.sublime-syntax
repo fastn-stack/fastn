@@ -6,13 +6,16 @@ file_extensions:
 scope: source.ftd
 contexts:
   main:
-    - match: "\\\\--\\s.*?:"
+    - match: "\/--\\s.*?:"
       captures:
         1: punctuation.definition.section.start.ftd
       push:
         - meta_scope: comment.block.ftd
         - match: "(--$|^$)"
           pop: true
+    - match: "\\\\--\\s.*?:"
+      captures:
+        1: punctuation.definition.section.start.ftd
     - match: "(--\\s*)(\\w+.*):"
       captures:
         1: punctuation.definition.section.start.ftd
