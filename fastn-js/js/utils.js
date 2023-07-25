@@ -131,10 +131,10 @@ let fastn_utils = {
     },
 
     /**
-     * Takes an input string and processes it as inline markup using the 'marked' library.
-     * The function removes the last occurrence of wrapping <p> tags (i.e.
-     * <p> tag found at the end) from the result and adjusts spaces around
-     * the content.
+     * Takes an input string and processes it as inline markup using the
+     * 'marked' library. The function removes the last occurrence of
+     * wrapping <p> tags (i.e. <p> tag found at the end) from the result and
+     * adjusts spaces around the content.
      *
      * @param {string} i - The input string to be processed as inline markup.
      * @returns {string} - The processed string with inline markup.
