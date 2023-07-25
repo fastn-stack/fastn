@@ -233,6 +233,8 @@ impl Value {
 pub enum PropertyKind {
     Children,
     StringValue,
+    IntegerValue,
+    DecimalValue,
     Id,
     Region,
     OpenInNewTab,
@@ -338,6 +340,8 @@ impl PropertyKind {
             PropertyKind::AlignSelf => "fastn_dom.PropertyKind.AlignSelf",
             PropertyKind::Anchor => "fastn_dom.PropertyKind.Anchor",
             PropertyKind::StringValue => "fastn_dom.PropertyKind.StringValue",
+            PropertyKind::IntegerValue => "fastn_dom.PropertyKind.IntegerValue",
+            PropertyKind::DecimalValue => "fastn_dom.PropertyKind.DecimalValue",
             PropertyKind::Width => "fastn_dom.PropertyKind.Width",
             PropertyKind::Padding => "fastn_dom.PropertyKind.Padding",
             PropertyKind::PaddingHorizontal => "fastn_dom.PropertyKind.PaddingHorizontal",
