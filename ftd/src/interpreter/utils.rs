@@ -670,17 +670,23 @@ pub(crate) fn find_properties_by_source(
     argument: &ftd::interpreter::Argument,
     line_number: usize,
 ) -> ftd::interpreter::Result<Vec<ftd::interpreter::Property>> {
-    use itertools::Itertools;
-
-    let mut properties = properties
-        .iter()
-        .filter(|v| sources.iter().any(|s| v.source.is_equal(s)))
-        .map(ToOwned::to_owned)
-        .collect_vec();
-
+    let mut properties = find_properties_by_source_without_default(sources, properties);
     validate_properties_and_set_default(&mut properties, argument, doc_name, line_number)?;
 
     Ok(properties)
+}
+
+pub(crate) fn find_properties_by_source_without_default(
+    sources: &[ftd::interpreter::PropertySource],
+    properties: &[ftd::interpreter::Property],
+) -> Vec<ftd::interpreter::Property> {
+    use itertools::Itertools;
+
+    properties
+        .iter()
+        .filter(|v| sources.iter().any(|s| v.source.is_equal(s)))
+        .map(ToOwned::to_owned)
+        .collect_vec()
 }
 
 pub(crate) fn validate_properties_and_set_default(
