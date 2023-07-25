@@ -219,9 +219,7 @@ fastn.formula = function (deps, func) {
     let closure = fastn.closure(func);
     let mutable = new Mutable(closure.get());
     for (let idx in deps) {
-        if (deps[idx] === null ||
-            deps[idx] === undefined ||
-            !deps[idx].addClosure) {
+        if (fastn_utils.isNull(deps[idx]) || !deps[idx].addClosure) {
             continue;
         }
         deps[idx].addClosure(new Closure(function () {

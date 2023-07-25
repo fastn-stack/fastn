@@ -1236,7 +1236,7 @@ class Node2 {
     setDynamicProperty(kind, deps, func, inherited) {
         let closure = fastn.closure(func).addNodeProperty(this, kind, inherited);
         for (let dep in deps) {
-            if (!deps[dep].addClosure) {
+            if (fastn_utils.isNull(deps[dep]) || !deps[dep].addClosure) {
                 continue;
             }
             deps[dep].addClosure(closure);
@@ -1306,7 +1306,11 @@ class ConditionalDom {
                 this.#conditionUI = null;
             }
         })
-        deps.forEach(dep => dep.addClosure(closure));
+        deps.forEach(dep => {
+            if (!fastn_utils.isNull(dep) && dep.addClosure) {
+                dep.addClosure(closure);
+            }
+        });
 
 
         this.#parent = domNode;

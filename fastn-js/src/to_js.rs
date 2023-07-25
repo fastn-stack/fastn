@@ -335,7 +335,7 @@ impl fastn_js::ForLoop {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         text(
             format!(
-                "{}{}.forLoop(",
+                "{}fastn_utils.getter({}).forLoop(",
                 if self.should_return { "return " } else { "" },
                 self.list_variable.to_js() //Todo: if self.list_variable is fastn_js::SetPropertyValue::Value then convert it to fastn.mutableList()
             )
