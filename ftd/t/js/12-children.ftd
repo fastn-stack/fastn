@@ -14,10 +14,21 @@ width: fill-container
 
 -- ftd.text: My page
 
--- ftd.column:
-children: $page.uis
--- end: ftd.column
+-- show-children:
+uis: $page.uis
 
 -- end: ftd.column
 
 -- end: page
+
+
+-- component show-children:
+ftd.ui list uis:
+
+-- ftd.column:
+color: red
+children: $show-children.uis
+
+-- end: ftd.column
+
+-- end: show-children
