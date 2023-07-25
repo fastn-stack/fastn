@@ -81,10 +81,7 @@ async fn handle_file(
     no_static: bool,
 ) -> fastn_core::Result<()> {
     let start = std::time::Instant::now();
-    print!(
-        "Processing {} ... ",
-        document.get_id_with_package()
-    );
+    print!("Processing {} ... ", document.get_id_with_package());
 
     if let Ok(()) = handle_file_(document, config, base_url, ignore_failed, test, no_static).await {
         fastn_core::utils::print_end(
