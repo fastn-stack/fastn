@@ -6,6 +6,7 @@ pub enum Ast {
     MutableVariable(fastn_js::MutableVariable),
     MutableList(fastn_js::MutableList),
     RecordInstance(fastn_js::RecordInstance),
+    Export { from: String, to: String },
 }
 
 impl Ast {

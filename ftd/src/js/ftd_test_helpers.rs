@@ -15,14 +15,18 @@ pub fn interpret_helper(
             ftd::interpreter::Interpreter::StuckOnImport {
                 module, state: st, ..
             } => {
-                let source = "";
+                let mut source = "".to_string();
                 let mut foreign_variable = vec![];
                 let mut foreign_function = vec![];
                 if module.eq("test") {
                     foreign_variable.push("var".to_string());
                     foreign_function.push("fn".to_string());
                 }
-                let document = ftd::interpreter::ParsedDocument::parse(module.as_str(), source)?;
+                if let Ok(value) = std::fs::read_to_string(format!("./t/js/{}.ftd", module)) {
+                    source = value;
+                }
+                let document =
+                    ftd::interpreter::ParsedDocument::parse(module.as_str(), source.as_str())?;
                 s = st.continue_after_import(
                     module.as_str(),
                     document,
