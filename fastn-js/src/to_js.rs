@@ -34,15 +34,9 @@ impl fastn_js::Ast {
             fastn_js::Ast::MutableVariable(m) => m.to_js(),
             fastn_js::Ast::MutableList(ml) => ml.to_js(),
             fastn_js::Ast::RecordInstance(ri) => ri.to_js(),
-            fastn_js::Ast::Export { from, to } => text("let")
-                .append(space())
-                .append(fastn_js::utils::name_to_js(to))
-                .append(space())
-                .append(text("="))
-                .append(space())
-                .append(fastn_js::utils::name_to_js(from))
-                .append(text(";")),
-            //Todo: fix this for variables
+            fastn_js::Ast::Export { from, to } => {
+                variable_to_js(to, &None, text(fastn_js::utils::name_to_js(from).as_str()))
+            }
         }
     }
 }
