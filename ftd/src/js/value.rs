@@ -339,7 +339,7 @@ impl ftd::interpreter::Value {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::List {
                     value: data
                         .iter()
-                        .map(|v| v.to_fastn_js_value(doc, rdata))
+                        .map(|v| v.to_fastn_js_value_with_ui(doc, rdata, has_rive_components))
                         .collect_vec(),
                 })
             }
@@ -353,7 +353,7 @@ impl ftd::interpreter::Value {
             }
             ftd::interpreter::Value::UI { component, .. } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::UI {
-                    value: component.to_component_statements_(
+                    value: component.to_component_statements(
                         fastn_js::FUNCTION_PARENT,
                         0,
                         doc,
