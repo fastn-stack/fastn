@@ -1219,7 +1219,7 @@ class Node2 {
             this.#node.innerHTML = staticValue;
         } else if (kind === fastn_dom.PropertyKind.StringValue) {
             if (!ssr) {
-                staticValue = marked.parse(staticValue);
+                staticValue = fastn_utils.markup_inline(staticValue);
             }
             this.#node.innerHTML = staticValue;
         }else {
