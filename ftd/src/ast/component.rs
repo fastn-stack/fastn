@@ -447,7 +447,7 @@ impl Loop {
 
         let loop_statement = loop_header.value.string(doc_id)?;
 
-        if loop_header.key.eq("for") {
+        if loop_header.key.eq(ftd::ast::utils::FOR) {
             let (alias, on) =
                 ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::IN);
 
@@ -557,9 +557,19 @@ impl Loop {
                 line_number: loop_header.get_line_number(),
             })?;
 
-        if loop_header.get_key().eq("for") {
-            let (on, alias) =
+        if loop_header.get_key().eq(ftd::ast::utils::FOR) {
+            let (alias, on) =
                 ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::IN);
+
+            let on = if let Some(on) = on {
+                on
+            } else {
+                return ftd::ast::parse_error(
+                    "Statement \"for\" needs a list to operate on",
+                    doc_id,
+                    loop_header.get_line_number(),
+                );
+            };
 
             if !on.starts_with(ftd::ast::utils::REFERENCE)
                 && !on.starts_with(ftd::ast::utils::CLONE)
@@ -574,25 +584,20 @@ impl Loop {
                 );
             }
 
-            let alias = {
-                if let Some(alias) = alias {
-                    if !alias.starts_with(ftd::ast::utils::REFERENCE) {
-                        return ftd::ast::parse_error(
-                            format!(
-                                "Loop alias should start with reference, found: `{}`. Help: use `${}` instead",
-                                alias, alias
-                            ),
-                            doc_id,
-                            loop_header.get_line_number(),
-                        );
-                    }
-                    alias
-                        .trim_start_matches(ftd::ast::utils::REFERENCE)
-                        .to_string()
-                } else {
-                    "object".to_string()
-                }
-            };
+            if !alias.starts_with(ftd::ast::utils::REFERENCE) {
+                return ftd::ast::parse_error(
+                    format!(
+                    "Loop alias should start with reference, found: `{}`. Help: use `${}` instead",
+                    alias, alias
+                ),
+                    doc_id,
+                    loop_header.get_line_number(),
+                );
+            }
+
+            let alias = alias
+                .trim_start_matches(ftd::ast::utils::REFERENCE)
+                .to_string();
 
             Ok(Some(Loop::new(
                 on.as_str(),
