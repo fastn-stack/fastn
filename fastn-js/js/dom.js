@@ -738,6 +738,10 @@ class Node2 {
     }
 
     attachLinearGradientCss(value) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss("background-image", value);
+            return;
+        }
         var lightGradientString = "";
         var darkGradientString = "";
 
@@ -787,6 +791,14 @@ class Node2 {
         }
     }
     attachBackgroundImageCss(value) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss("background-repeat", value);
+            this.attachCss("background-position", value);
+            this.attachCss("background-size", value);
+            this.attachCss("background-image", value);
+            return;
+        }
+
         let src = fastn_utils.getStaticValue(value.get("src"));
         let lightValue = fastn_utils.getStaticValue(src.get("light"));
         let darkValue = fastn_utils.getStaticValue(src.get("dark"));
@@ -831,6 +843,10 @@ class Node2 {
         }
     }
     attachColorCss(property, value) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss(property, value);
+            return;
+        }
         let lightValue = fastn_utils.getStaticValue(value.get("light"));
         let darkValue = fastn_utils.getStaticValue(value.get("dark"));
         if (lightValue === darkValue) {
@@ -1101,6 +1117,13 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
+            if (fastn_utils.isNull(staticValue)) {
+                this.attachColorCss("background-color", staticValue);
+                this.attachBackgroundImageCss(staticValue);
+                this.attachLinearGradientCss(staticValue);
+                return;
+            }
+
             let backgroundType = staticValue[0];
             switch (backgroundType) {
                 case fastn_dom.BackgroundStyle.Solid()[0]:
