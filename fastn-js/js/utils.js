@@ -131,15 +131,15 @@ let fastn_utils = {
     },
 
     /**
-     * Takes an input string and processes it as inline markup using the
+     * Takes an input string and processes it as inline markdown using the
      * 'marked' library. The function removes the last occurrence of
      * wrapping <p> tags (i.e. <p> tag found at the end) from the result and
      * adjusts spaces around the content.
      *
-     * @param {string} i - The input string to be processed as inline markup.
-     * @returns {string} - The processed string with inline markup.
+     * @param {string} i - The input string to be processed as inline markdown.
+     * @returns {string} - The processed string with inline markdown.
      */
-    markup_inline(i) {
+    markdown_inline(i) {
         const { space_before, space_after } = fastn_utils.private.spaces(i);
         const o = (() => {
             let g = fastn_utils.private.replace_last_occurrence(marked.parse(i), "<p>", "");
@@ -153,7 +153,7 @@ let fastn_utils = {
 
 fastn_utils.private = {
     /**
-     * Helper function for `fastn_utils.markup_inline` to find the number of
+     * Helper function for `fastn_utils.markdown_inline` to find the number of
      * spaces before and after the content.
      *
      * @param {string} s - The input string.
@@ -186,7 +186,7 @@ fastn_utils.private = {
     },
 
     /**
-     * Helper function for `fastn_utils.markup_inline` to replace the last
+     * Helper function for `fastn_utils.markdown_inline` to replace the last
      * occurrence of a substring in a string.
      *
      * @param {string} s - The input string.
@@ -204,7 +204,7 @@ fastn_utils.private = {
     },
 
     /**
-     * Helper function for `fastn_utils.markup_inline` to generate a string
+     * Helper function for `fastn_utils.markdown_inline` to generate a string
      * containing a specified number of spaces.
      *
      * @param {number} n - The number of spaces to be generated.
