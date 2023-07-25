@@ -1214,7 +1214,8 @@ class Node2 {
             // staticValue is of ftd.color RecordInstance type
             this.addMetaTag("theme-color", fastn_utils.getStaticValue(staticValue.get('light')));
         } else if (kind === fastn_dom.PropertyKind.IntegerValue
-            || kind === fastn_dom.PropertyKind.DecimalValue) {
+            || kind === fastn_dom.PropertyKind.DecimalValue
+            || kind === fastn_dom.PropertyKind.BooleanValue) {
             this.#node.innerHTML = staticValue;
         } else if (kind === fastn_dom.PropertyKind.StringValue) {
             if (!ssr) {
