@@ -68,6 +68,13 @@ fn get_prefix(s: &str) -> (Option<&str>, String) {
     (prefix, s)
 }
 
+pub(crate) fn is_local_variable_map_prefix(s: &str) -> bool {
+    fastn_js::utils::get_prefix(s)
+        .0
+        .map(|v| v.eq(fastn_js::LOCAL_VARIABLE_MAP))
+        .unwrap_or_default()
+}
+
 pub fn name_to_js(s: &str) -> String {
     let (prefix, s) = get_prefix(s);
     format!(

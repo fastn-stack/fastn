@@ -28,6 +28,14 @@ impl fastn_js::SetPropertyValue {
         }
     }
 
+    pub(crate) fn is_local_value(&self) -> bool {
+        if let fastn_js::SetPropertyValue::Reference(name) = self {
+            fastn_js::utils::is_local_variable_map_prefix(name)
+        } else {
+            false
+        }
+    }
+
     pub fn is_formula(&self) -> bool {
         matches!(&self, fastn_js::SetPropertyValue::Formula(_))
     }

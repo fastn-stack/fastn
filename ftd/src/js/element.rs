@@ -1790,7 +1790,7 @@ impl Rive {
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
-            autoplay: ftd::js::value::get_optional_js_value(
+            autoplay: ftd::js::value::get_optional_js_value_with_default(
                 "autoplay",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
