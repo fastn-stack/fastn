@@ -36,6 +36,19 @@ impl fastn_js::SetPropertyValue {
         }
     }
 
+    pub(crate) fn is_local_value_dependent(&self) -> bool {
+        match self {
+            fastn_js::SetPropertyValue::Reference(name)
+            | fastn_js::SetPropertyValue::Clone(name) => {
+                fastn_js::utils::is_local_variable_map_prefix(name)
+            }
+            fastn_js::SetPropertyValue::Value(value) => value.is_local_value_dependent(),
+            fastn_js::SetPropertyValue::Formula(formula) => {
+                formula.type_.is_local_value_dependent()
+            }
+        }
+    }
+
     pub fn is_formula(&self) -> bool {
         matches!(&self, fastn_js::SetPropertyValue::Formula(_))
     }
@@ -62,6 +75,20 @@ pub struct Formula {
 pub enum FormulaType {
     Conditional(Vec<ConditionalValue>),
     FunctionCall(fastn_js::Function),
+}
+
+impl FormulaType {
+    pub(crate) fn is_local_value_dependent(&self) -> bool {
+        match self {
+            FormulaType::Conditional(conditional_values) => conditional_values
+                .iter()
+                .any(|v| v.expression.is_local_value_dependent()),
+            FormulaType::FunctionCall(function) => function
+                .parameters
+                .iter()
+                .any(|v| v.1.is_local_value_dependent()),
+        }
+    }
 }
 
 impl Formula {
@@ -233,6 +260,22 @@ impl Value {
             ),
             Value::Null => "null".to_string(),
             Value::Undefined => "undefined".to_string(),
+        }
+    }
+
+    pub(crate) fn is_local_value_dependent(&self) -> bool {
+        match self {
+            Value::OrType { value, .. } => value
+                .as_ref()
+                .map(|v| v.is_local_value_dependent())
+                .unwrap_or_default(),
+            Value::List { value } => value.iter().any(|v| v.is_local_value_dependent()),
+            Value::Record { fields } => fields.iter().any(|v| v.1.is_local_value_dependent()),
+            Value::UI { .. } => {
+                //Todo: Check for UI
+                false
+            }
+            _ => false,
         }
     }
 }
