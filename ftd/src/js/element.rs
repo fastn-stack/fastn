@@ -1001,7 +1001,7 @@ impl Integer {
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
-                kind: fastn_js::PropertyKind::StringValue,
+                kind: fastn_js::PropertyKind::IntegerValue,
                 value: self.value.to_set_property_value(doc, rdata),
                 element_name: kernel.name.to_string(),
                 inherited: rdata.inherited_variable_name.to_string(),
@@ -1067,7 +1067,7 @@ impl Decimal {
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
-                kind: fastn_js::PropertyKind::StringValue,
+                kind: fastn_js::PropertyKind::DecimalValue,
                 value: self.value.to_set_property_value(doc, rdata),
                 element_name: kernel.name.to_string(),
                 inherited: rdata.inherited_variable_name.to_string(),
