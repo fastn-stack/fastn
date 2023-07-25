@@ -525,7 +525,8 @@ pub(crate) async fn read_ftd_2023(
     let font_style = config.get_font_style();
     let file_content = fastn_core::utils::replace_markers_2023(
         ftd::ftd_js_html(),
-        format!("{}{}", js_ast_data.scripts.join(""), js_document_script).as_str(),
+        js_document_script.as_str(),
+        js_ast_data.scripts.join("").as_str(),
         ssr_body.as_str(),
         font_style.as_str(),
         ftd::ftd_js_css(),

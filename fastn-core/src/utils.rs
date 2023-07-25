@@ -624,6 +624,7 @@ pub fn replace_markers_2022(
 pub fn replace_markers_2023(
     s: &str,
     js_script: &str,
+    scripts: &str,
     ssr_body: &str,
     font_style: &str,
     default_css: &str,
@@ -637,9 +638,10 @@ pub fn replace_markers_2023(
             .replace(
                 "__script_file__",
                 format!(
-                    "<script src=\"{}\"></script><script src=\"{}\"></script>",
+                    "<script src=\"{}\"></script><script src=\"{}\"></script>{}",
                     hashed_default_ftd_js(),
-                    hashed_markdown_js()
+                    hashed_markdown_js(),
+                    scripts
                 )
                 .as_str(),
             )
