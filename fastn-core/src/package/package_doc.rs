@@ -330,14 +330,18 @@ pub(crate) fn file_id_to_names(id: &str) -> Vec<String> {
 
 pub enum FTDResult {
     Html(Vec<u8>),
-    Redirect(String),
+    Redirect { url: String, code: i32 },
 }
 
 impl FTDResult {
     pub fn html(&self) -> Vec<u8> {
         match self {
             FTDResult::Html(d) => d.to_vec(),
-            FTDResult::Redirect(_r) => todo!(),
+            FTDResult::Redirect { url, .. } => {
+                // Note: this is a hack to redirect to a html page, we can not handle code in this
+                // case
+                fastn_core::utils::redirect_page_html(url).into_bytes()
+            }
         }
     }
 }
@@ -348,7 +352,7 @@ impl From<FTDResult> for fastn_core::http::Response {
             FTDResult::Html(body) => {
                 fastn_core::http::ok_with_content_type(body, mime_guess::mime::TEXT_HTML_UTF_8)
             }
-            FTDResult::Redirect(r) => fastn_core::http::redirect(r),
+            FTDResult::Redirect { url, code } => fastn_core::http::redirect_with_code(url, code),
         }
     }
 }
@@ -424,8 +428,8 @@ pub(crate) async fn read_ftd_2022(
             });
         }
     };
-    if let Some(r) = main_ftd_doc.get_redirect() {
-        return Ok(FTDResult::Redirect(r));
+    if let Some((url, code)) = main_ftd_doc.get_redirect() {
+        return Ok(FTDResult::Redirect { url, code });
     }
     let executor = ftd::executor::ExecuteDoc::from_interpreter(main_ftd_doc)?;
     let node = ftd::node::NodeData::from_rt(executor);
@@ -500,13 +504,14 @@ pub(crate) async fn read_ftd_2023(
         }
     };
 
-    if let Some(r) = main_ftd_doc.get_redirect() {
-        return Ok(FTDResult::Redirect(r));
+    if let Some((url, code)) = main_ftd_doc.get_redirect() {
+        return Ok(FTDResult::Redirect { url, code });
     }
 
     let js_ast_data = ftd::js::document_into_js_ast(main_ftd_doc);
     let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), true);
     let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), false);
+    // dbg!(&js_document_script);
     let ssr_body =
         fastn_js::ssr_with_js_string(format!("{js_ftd_script}\n{js_document_script}").as_str());
 
@@ -523,6 +528,7 @@ pub(crate) async fn read_ftd_2023(
         format!("{}{}", js_ast_data.scripts.join(""), js_document_script).as_str(),
         ssr_body.as_str(),
         font_style.as_str(),
+        ftd::ftd_js_css(),
     );
 
     Ok(FTDResult::Html(file_content.into()))

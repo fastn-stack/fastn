@@ -3,54 +3,7 @@
     <script src="fastn-js.js"></script>
 
     <style>
-        /* http://meyerweb.com/eric/tools/css/reset/
-           v2.0 | 20110126
-           License: none (public domain)
-        */
-
-        html, body, div, span, applet, object, iframe,
-        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-        a, abbr, acronym, address, big, cite, code,
-        del, dfn, em, img, ins, kbd, q, s, samp,
-        small, strike, strong, sub, sup, tt, var,
-        b, u, i, center,
-        dl, dt, dd, ol, ul, li,
-        fieldset, form, label, legend,
-        table, caption, tbody, tfoot, thead, tr, th, td,
-        article, aside, canvas, details, embed,
-        figure, figcaption, footer, header, hgroup,
-        menu, nav, output, ruby, section, summary,
-        time, mark, audio, video {
-            margin: 0;
-            padding: 0;
-            border: 0;
-            font-size: 100%;
-            font: inherit;
-            vertical-align: baseline;
-        }
-        /* HTML5 display-role reset for older browsers */
-        article, aside, details, figcaption, figure,
-        footer, header, hgroup, menu, nav, section {
-            display: block;
-        }
-        body {
-            line-height: 1;
-        }
-        ol, ul {
-            list-style: none;
-        }
-        blockquote, q {
-            quotes: none;
-        }
-        blockquote:before, blockquote:after,
-        q:before, q:after {
-            content: '';
-            content: none;
-        }
-        table {
-            border-collapse: collapse;
-            border-spacing: 0;
-        }
+       
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
@@ -108,37 +61,37 @@ let main = function (parent) {
   }
   ]), inherited);
 }
-global.foo__bg_solid = fastn.recordInstance({
+fastn_utils.createNestedObject(global, "foo__bg_solid", fastn.recordInstance({
   light: "red",
   dark: "green"
-});
-global.foo__bg_image_src = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__bg_image_src", fastn.recordInstance({
   light: "https://picsum.photos/id/236/200/300",
   dark: "https://picsum.photos/id/237/200/300"
-});
-global.foo__len = fastn_dom.BackgroundSize.Length(fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__len", fastn_dom.BackgroundSize.Length(fastn.recordInstance({
   x: fastn_dom.Length.Px(150),
   y: fastn_dom.Length.Px(150)
-}));
-global.foo__pos = fastn_dom.BackgroundPosition.Length(fastn.recordInstance({
+})));
+fastn_utils.createNestedObject(global, "foo__pos", fastn_dom.BackgroundPosition.Length(fastn.recordInstance({
   x: fastn_dom.Length.Px(0),
   y: fastn_dom.Length.Px(25)
-}));
-global.foo__bg_image = fastn.recordInstance({
+})));
+fastn_utils.createNestedObject(global, "foo__bg_image", fastn.recordInstance({
   src: global.foo__bg_image_src,
   repeat: fastn_dom.BackgroundRepeat.NoRepeat,
   size: global.foo__len,
   position: global.foo__pos
-});
-global.foo__red_orange = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__red_orange", fastn.recordInstance({
   light: "red",
   dark: "orange"
-});
-global.foo__yellow_blue = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__yellow_blue", fastn.recordInstance({
   light: "yellow",
   dark: "blue"
-});
-global.foo__color_values = fastn.mutableList([fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__color_values", fastn.mutableList([fastn.recordInstance({
   color: global.foo__red_orange,
   end: null,
   start: null,
@@ -149,11 +102,11 @@ fastn.recordInstance({
   end: null,
   start: null,
   stop_position: null
-})]);
-global.foo__lg = fastn.recordInstance({
+})]));
+fastn_utils.createNestedObject(global, "foo__lg", fastn.recordInstance({
   direction: fastn_dom.LinearGradientDirection.BottomLeft,
   colors: global.foo__color_values
-});
+}));
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

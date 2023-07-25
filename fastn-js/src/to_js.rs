@@ -128,9 +128,13 @@ impl fastn_js::Function {
         text(format!("{}(", fastn_js::utils::name_to_js(self.name.as_str())).as_str())
             .append(text("{"))
             .append(pretty::RcDoc::intersperse(
-                self.parameters
-                    .iter()
-                    .map(|(k, v)| format!("{k}: {},", v.to_js_with_element_name(element_name))),
+                self.parameters.iter().map(|(k, v)| {
+                    format!(
+                        "{}: {},",
+                        fastn_js::utils::name_to_js_(k),
+                        v.to_js_with_element_name(element_name)
+                    )
+                }),
                 pretty::RcDoc::softline(),
             ))
             .append(text(
@@ -163,6 +167,7 @@ impl fastn_js::ElementKind {
             fastn_js::ElementKind::CheckBox => "fastn_dom.ElementKind.CheckBox",
             fastn_js::ElementKind::TextInput => "fastn_dom.ElementKind.TextInput",
             fastn_js::ElementKind::Rive => "fastn_dom.ElementKind.Rive",
+            fastn_js::ElementKind::Document => "fastn_dom.ElementKind.Document",
         }
     }
 }
@@ -206,9 +211,9 @@ impl fastn_js::InstantiateComponent {
                 text("{")
                     .append(
                         pretty::RcDoc::intersperse(
-                            self.arguments
-                                .iter()
-                                .map(|(k, v)| format!("{}: {}", k, v.to_js())),
+                            self.arguments.iter().map(|(k, v)| {
+                                format!("{}: {}", fastn_js::utils::name_to_js_(k), v.to_js())
+                            }),
                             comma().append(space()),
                         )
                         .group(),
@@ -411,9 +416,9 @@ impl fastn_js::Component {
                 .append(space())
                 .append(text("{"))
                 .append(pretty::RcDoc::intersperse(
-                    self.args
-                        .iter()
-                        .map(|(k, v)| format!("{k}: {},", v.to_js())),
+                    self.args.iter().map(|(k, v)| {
+                        format!("{}: {},", fastn_js::utils::name_to_js_(k), v.to_js())
+                    }),
                     pretty::RcDoc::softline(),
                 ))
                 .append(text("};"))
@@ -465,74 +470,70 @@ impl fastn_js::Component {
 
 impl fastn_js::MutableVariable {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        let name = fastn_js::utils::name_to_js(self.name.as_str());
-        if let Some(ref prefix) = self.prefix {
-            text(prefix).append(text("."))
-        } else if name.contains('.') {
-            // `.` means the variable is placed in object so no need of `let`.
-            // e.g: ftd.device
-            pretty::RcDoc::nil()
-        } else {
-            text("let").append(space())
-        }
-        .append(text(name.as_str()))
-        .append(space())
-        .append(text("="))
-        .append(space())
-        .append(text("fastn.mutable("))
-        .append(text(&self.value.to_js()))
-        .append(text(");"))
+        variable_to_js(
+            self.name.as_str(),
+            &self.prefix,
+            text("fastn.mutable(")
+                .append(text(&self.value.to_js()))
+                .append(text(")")),
+        )
     }
 }
 
 impl fastn_js::MutableList {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        let name = fastn_js::utils::name_to_js(self.name.as_str());
-        if let Some(ref prefix) = self.prefix {
-            text(prefix).append(text("."))
-        } else if name.contains('.') {
-            // `.` means the variable is placed in object so no need of `let`.
-            // e.g: ftd.device
-            pretty::RcDoc::nil()
-        } else {
-            text("let").append(space())
-        }
-        .append(text(name.as_str()))
-        .append(space())
-        .append(text("="))
-        .append(space())
-        .append(text(self.value.to_js().as_str()))
-        .append(text(";"))
+        variable_to_js(
+            self.name.as_str(),
+            &self.prefix,
+            text(self.value.to_js().as_str()),
+        )
     }
 }
 
 impl fastn_js::RecordInstance {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        let name = fastn_js::utils::name_to_js(self.name.as_str());
-        if let Some(ref prefix) = self.prefix {
-            text(prefix).append(text("."))
-        } else if name.contains('.') {
-            // `.` means the variable is placed in object so no need of `let`.
-            // e.g: ftd.device
-            pretty::RcDoc::nil()
-        } else {
-            text("let").append(space())
-        }
-        .append(text(name.as_str()))
-        .append(space())
-        .append(text("="))
-        .append(space())
-        .append(text(self.fields.to_js().as_str()))
-        .append(text(";"))
+        variable_to_js(
+            self.name.as_str(),
+            &self.prefix,
+            text(self.fields.to_js().as_str()),
+        )
     }
 }
 
 impl fastn_js::StaticVariable {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        let name = fastn_js::utils::name_to_js(self.name.as_str());
-        if let Some(ref prefix) = self.prefix {
-            text(prefix).append(text("."))
-        } else if name.contains('.') {
+        variable_to_js(
+            self.name.as_str(),
+            &self.prefix,
+            text(self.value.to_js().as_str()),
+        )
+    }
+}
+
+fn variable_to_js(
+    variable_name: &str,
+    prefix: &Option<String>,
+    value: pretty::RcDoc<'static>,
+) -> pretty::RcDoc<'static> {
+    let name = {
+        let (doc_name, remaining) = fastn_js::utils::get_doc_name_and_remaining(variable_name);
+        let mut name = fastn_js::utils::name_to_js(doc_name.as_str());
+        if let Some(remaining) = remaining {
+            name = format!(
+                "{}.{}",
+                name,
+                fastn_js::utils::kebab_to_snake_case(remaining.as_str())
+            );
+        }
+        name
+    };
+
+    if let Some(ref prefix) = prefix {
+        text(format!("fastn_utils.createNestedObject({}, \"{}\",", prefix, name,).as_str())
+            .append(value)
+            .append(text(");"))
+    } else {
+        if name.contains('.') {
             // `.` means the variable is placed in object so no need of `let`.
             // e.g: ftd.device
             pretty::RcDoc::nil()
@@ -543,7 +544,7 @@ impl fastn_js::StaticVariable {
         .append(space())
         .append(text("="))
         .append(space())
-        .append(text(self.value.to_js().as_str()))
+        .append(value)
         .append(text(";"))
     }
 }
@@ -574,7 +575,11 @@ impl fastn_js::UDF {
                     .append(pretty::RcDoc::intersperse(
                         self.args.iter().filter_map(|(k, v)| {
                             if !v.is_undefined() {
-                                Some(format!("{k}: {},", v.to_js()))
+                                Some(format!(
+                                    "{}: {},",
+                                    fastn_js::utils::name_to_js_(k),
+                                    v.to_js()
+                                ))
                             } else {
                                 None
                             }

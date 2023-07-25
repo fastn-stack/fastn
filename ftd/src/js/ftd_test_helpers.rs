@@ -79,8 +79,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
     let ssr_body =
         fastn_js::ssr_with_js_string(format!("{js_ftd_script}\n{js_document_script}").as_str());
 
-    let html_str = std::fs::read_to_string("ftd-js.html")
-        .expect("can't read ftd-js.html")
+    let html_str = ftd::ftd_js_html()
         .replace("__js_script__", js_document_script.as_str())
         .replace("__html_body__", ssr_body.as_str())
         .replace(
@@ -89,12 +88,19 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
                 "{}{}",
                 js_ast_data.scripts.join(""),
                 if manual {
-                    format!("<script>\n{}\n</script>", ftd::js::all_js_with_test())
+                    format!(
+                        "<script>\n{}\n</script><script src=\"../../markdown.js\"></script>",
+                        ftd::js::all_js_with_test()
+                    )
                 } else {
                     "<script src=\"fastn-js.js\"></script>".to_string()
                 }
             )
             .as_str(),
+        )
+        .replace(
+            "__default_css__",
+            format!("{}", if manual { ftd::ftd_js_css() } else { "" }).as_str(),
         );
     if fix || manual {
         std::fs::write(file_location, html_str).unwrap();

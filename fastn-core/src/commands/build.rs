@@ -205,6 +205,13 @@ pub async fn default_build_files(
         fastn_core::utils::update(save_default_ftd_js, default_ftd_js_content.as_bytes())
             .await
             .ok();
+
+        let markdown_js_content = ftd::markdown_js();
+        let hashed_markdown_js_name = fastn_core::utils::hashed_markdown_js();
+        let save_default_ftd_js = base_path.join(hashed_markdown_js_name);
+        fastn_core::utils::update(save_default_ftd_js, markdown_js_content.as_bytes())
+            .await
+            .ok();
     } else {
         let default_css_content = ftd::css();
         let hashed_css_name = fastn_core::utils::hashed_default_css_name();

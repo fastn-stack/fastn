@@ -205,7 +205,7 @@ impl Value {
                     .iter()
                     .map(|(k, v)| format!(
                         "{}: {}",
-                        fastn_js::utils::kebab_to_snake_case(k),
+                        fastn_js::utils::name_to_js_(k),
                         v.to_js_with_element_name(element_name)
                     ))
                     .join(", ")
@@ -233,6 +233,9 @@ impl Value {
 pub enum PropertyKind {
     Children,
     StringValue,
+    IntegerValue,
+    DecimalValue,
+    BooleanValue,
     Id,
     Region,
     OpenInNewTab,
@@ -319,6 +322,15 @@ pub enum PropertyKind {
     ImageSrc,
     YoutubeSrc,
     Code,
+    MetaTitle,
+    MetaOGTitle,
+    MetaTwitterTitle,
+    MetaDescription,
+    MetaOGDescription,
+    MetaTwitterDescription,
+    MetaOGImage,
+    MetaTwitterImage,
+    MetaThemeColor,
 }
 
 impl PropertyKind {
@@ -329,6 +341,9 @@ impl PropertyKind {
             PropertyKind::AlignSelf => "fastn_dom.PropertyKind.AlignSelf",
             PropertyKind::Anchor => "fastn_dom.PropertyKind.Anchor",
             PropertyKind::StringValue => "fastn_dom.PropertyKind.StringValue",
+            PropertyKind::IntegerValue => "fastn_dom.PropertyKind.IntegerValue",
+            PropertyKind::DecimalValue => "fastn_dom.PropertyKind.DecimalValue",
+            PropertyKind::BooleanValue => "fastn_dom.PropertyKind.BooleanValue",
             PropertyKind::Width => "fastn_dom.PropertyKind.Width",
             PropertyKind::Padding => "fastn_dom.PropertyKind.Padding",
             PropertyKind::PaddingHorizontal => "fastn_dom.PropertyKind.PaddingHorizontal",
@@ -414,6 +429,27 @@ impl PropertyKind {
             PropertyKind::Alt => "fastn_dom.PropertyKind.Alt",
             PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
             PropertyKind::Code => "fastn_dom.PropertyKind.Code",
+            PropertyKind::MetaTitle => "fastn_dom.PropertyKind.DocumentProperties.MetaTitle",
+            PropertyKind::MetaOGTitle => "fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle",
+            PropertyKind::MetaTwitterTitle => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaTwitterTitle"
+            }
+            PropertyKind::MetaDescription => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaDescription"
+            }
+            PropertyKind::MetaOGDescription => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription"
+            }
+            PropertyKind::MetaTwitterDescription => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription"
+            }
+            PropertyKind::MetaOGImage => "fastn_dom.PropertyKind.DocumentProperties.MetaOGImage",
+            PropertyKind::MetaTwitterImage => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage"
+            }
+            PropertyKind::MetaThemeColor => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor"
+            }
         }
     }
 }

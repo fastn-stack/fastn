@@ -1088,11 +1088,19 @@ impl Document {
             .collect_vec()
     }
 
-    pub fn get_redirect(&self) -> Option<String> {
-        self.get_instructions("ftd#redirect")
-            .first()
-            .and_then(|v| v.get_interpreter_value_of_argument("value", &self.tdoc()))
-            .and_then(|v| v.string(self.name.as_str(), 0).ok())
+    pub fn get_redirect(&self) -> Option<(String, i32)> {
+        let components = self.get_instructions("ftd#redirect");
+        let c = match components.first() {
+            Some(v) => v,
+            None => return None,
+        };
+        let url = c
+            .get_interpreter_value_of_argument("url", &self.tdoc())
+            .and_then(|v| v.string(self.name.as_str(), 0).ok());
+        let code = c
+            .get_interpreter_value_of_argument("code", &self.tdoc())
+            .and_then(|v| v.integer(self.name.as_str(), 0).ok());
+        url.and_then(|url| code.map(|code| (url, code as i32)))
     }
 }
 

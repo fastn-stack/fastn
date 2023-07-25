@@ -3,54 +3,7 @@
     <script src="fastn-js.js"></script>
 
     <style>
-        /* http://meyerweb.com/eric/tools/css/reset/
-           v2.0 | 20110126
-           License: none (public domain)
-        */
-
-        html, body, div, span, applet, object, iframe,
-        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-        a, abbr, acronym, address, big, cite, code,
-        del, dfn, em, img, ins, kbd, q, s, samp,
-        small, strike, strong, sub, sup, tt, var,
-        b, u, i, center,
-        dl, dt, dd, ol, ul, li,
-        fieldset, form, label, legend,
-        table, caption, tbody, tfoot, thead, tr, th, td,
-        article, aside, canvas, details, embed,
-        figure, figcaption, footer, header, hgroup,
-        menu, nav, output, ruby, section, summary,
-        time, mark, audio, video {
-            margin: 0;
-            padding: 0;
-            border: 0;
-            font-size: 100%;
-            font: inherit;
-            vertical-align: baseline;
-        }
-        /* HTML5 display-role reset for older browsers */
-        article, aside, details, figcaption, figure,
-        footer, header, hgroup, menu, nav, section {
-            display: block;
-        }
-        body {
-            line-height: 1;
-        }
-        ol, ul {
-            list-style: none;
-        }
-        blockquote, q {
-            quotes: none;
-        }
-        blockquote:before, blockquote:after,
-        q:before, q:after {
-            content: '';
-            content: none;
-        }
-        table {
-            border-collapse: collapse;
-            border-spacing: 0;
-        }
+       
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
@@ -1318,15 +1271,15 @@ let main = function (parent) {
   parenti17.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween, inherited);
   parenti17.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, 32, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, 32, inherited);
   },
   function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Decimal);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, 1.123, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.DecimalValue, 1.123, inherited);
   },
   function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Boolean);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, true, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.BooleanValue, true, inherited);
   }
   ]), inherited);
   let parenti18 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
@@ -1347,7 +1300,7 @@ let main = function (parent) {
   },
   function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, 1234, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, 1234, inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
       dark: "red",
       light: "red"
@@ -1356,7 +1309,7 @@ let main = function (parent) {
   },
   function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Decimal);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, 3.142, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.DecimalValue, 3.142, inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
       dark: "red",
       light: "red"
@@ -1366,7 +1319,7 @@ let main = function (parent) {
   },
   function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Boolean);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, true, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.BooleanValue, true, inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
       dark: "red",
       light: "red"
@@ -1412,14 +1365,14 @@ let main = function (parent) {
   }
   ]), inherited);
 }
-global.foo__ylg = fastn.recordInstance({
+fastn_utils.createNestedObject(global, "foo__ylg", fastn.recordInstance({
   light: "yellow",
   dark: "lightgreen"
-});
-global.foo__red_yellow = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__red_yellow", fastn.recordInstance({
   light: "red",
   dark: "yellow"
-});
+}));
 let foo__increment = function (args)
 {
   let __args__ = args;
@@ -1428,39 +1381,39 @@ let foo__increment = function (args)
     __args__.a = fastn_utils_val___args___a;
   };
 }
-global.foo__value = fastn.mutable(0);
-global.foo__og = fastn.recordInstance({
+fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));
+fastn_utils.createNestedObject(global, "foo__og", fastn.recordInstance({
   light: "orange",
   dark: "green"
-});
-global.foo__bp = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__bp", fastn.recordInstance({
   light: "blue",
   dark: "purple"
-});
-global.foo__dtype = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__dtype", fastn.recordInstance({
   size: fastn_dom.FontSize.Px(40),
   line_height: fastn_dom.FontSize.Px(65),
   letter_spacing: fastn_dom.FontSize.Px(5),
   weight: 700,
   font_family: "cursive"
-});
-global.foo__mtype = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__mtype", fastn.recordInstance({
   size: fastn_dom.FontSize.Px(20),
   line_height: fastn_dom.FontSize.Px(35),
   letter_spacing: fastn_dom.FontSize.Px(3),
   weight: 100,
   font_family: "fantasy"
-});
-global.foo__rtype = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__rtype", fastn.recordInstance({
   desktop: global.foo__dtype,
   mobile: global.foo__mtype
-});
-global.foo__red_blue = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__red_blue", fastn.recordInstance({
   light: "red",
   dark: "blue"
-});
-global.foo__sample_text = "Far far away, behind the word mountains, far from the countries\nVokalia and Consonantia, there live the blind texts. Separated they\nin Bookmarksgrove right at the coast of the Semantics, a large language\nocean. A small river named Duden flows by their place and supplies it\nwith the necessary regelialia. It is a paradisematic country, in which\nroasted parts of sentences fly into your mouth. Even the all-powerful\nPointing has no control about the blind texts it is an almost unorthographic\nlife One day however a small line of blind text by the name of Lorem\nIpsum decided to leave for the far World of Grammar.";
-global.foo__sample_text2 = "But ere she from the church-door stepped She smiled and told us why:\n\n'It was a wicked woman's curse,' Quoth she, 'and what care I?'\nShe smiled, and smiled, and passed it off Ere from the door she stept-";
+}));
+fastn_utils.createNestedObject(global, "foo__sample_text", "Far far away, behind the word mountains, far from the countries\nVokalia and Consonantia, there live the blind texts. Separated they\nin Bookmarksgrove right at the coast of the Semantics, a large language\nocean. A small river named Duden flows by their place and supplies it\nwith the necessary regelialia. It is a paradisematic country, in which\nroasted parts of sentences fly into your mouth. Even the all-powerful\nPointing has no control about the blind texts it is an almost unorthographic\nlife One day however a small line of blind text by the name of Lorem\nIpsum decided to leave for the far World of Grammar.");
+fastn_utils.createNestedObject(global, "foo__sample_text2", "But ere she from the church-door stepped She smiled and told us why:\n\n'It was a wicked woman's curse,' Quoth she, 'and what care I?'\nShe smiled, and smiled, and passed it off Ere from the door she stept-");
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

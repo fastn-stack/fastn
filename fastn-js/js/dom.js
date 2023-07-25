@@ -141,100 +141,116 @@ fastn_dom.ElementKind = {
     CheckBox: 9,
     TextInput: 10,
     ContainerElement: 11,
-    Rive: 12
+    Rive: 12,
+    Document: 13,
 };
 
 fastn_dom.PropertyKind = {
     Color: 0,
     IntegerValue: 1,
     StringValue: 2,
-    Width: 3,
-    Padding: 4,
-    Height: 5,
-    Id: 6,
-    BorderWidth: 7,
-    BorderStyle: 8,
-    Margin: 9,
-    Background: 10,
-    PaddingHorizontal: 11,
-    PaddingVertical: 12,
-    PaddingLeft: 13,
-    PaddingRight: 14,
-    PaddingTop: 15,
-    PaddingBottom: 16,
-    MarginHorizontal: 17,
-    MarginVertical: 18,
-    MarginLeft: 19,
-    MarginRight: 20,
-    MarginTop: 21,
-    MarginBottom: 22,
-    Role: 23,
-    ZIndex: 24,
-    Sticky: 25,
-    Top: 26,
-    Bottom: 27,
-    Left: 28,
-    Right: 29,
-    Overflow: 30,
-    OverflowX: 31,
-    OverflowY: 32,
-    Spacing: 33,
-    Wrap: 34,
-    TextTransform: 35,
-    TextIndent: 36,
-    TextAlign: 37,
-    LineClamp: 38,
-    Opacity: 39,
-    Cursor: 40,
-    Resize: 41,
-    MinHeight: 42,
-    MaxHeight: 43,
-    MinWidth: 44,
-    MaxWidth: 45,
-    WhiteSpace: 46,
-    BorderTopWidth: 47,
-    BorderBottomWidth: 48,
-    BorderLeftWidth: 49,
-    BorderRightWidth: 50,
-    BorderRadius: 51,
-    BorderTopLeftRadius: 52,
-    BorderTopRightRadius: 53,
-    BorderBottomLeftRadius: 54,
-    BorderBottomRightRadius: 55,
-    BorderStyleVertical: 56,
-    BorderStyleHorizontal: 57,
-    BorderLeftStyle: 58,
-    BorderRightStyle: 59,
-    BorderTopStyle: 60,
-    BorderBottomStyle: 61,
-    BorderColor: 62,
-    BorderLeftColor: 63,
-    BorderRightColor: 64,
-    BorderTopColor: 65,
-    BorderBottomColor: 66,
-    AlignSelf: 67,
-    Classes: 68,
-    Anchor: 69,
-    Link: 70,
-    Children: 71,
-    OpenInNewTab: 72,
-    TextStyle: 73,
-    Region: 74,
-    AlignContent: 75,
-    Display: 76,
-    Checked: 77,
-    Enabled: 78,
-    TextInputType: 79,
-    Placeholder: 80,
-    Multiline: 81,
-    DefaultTextInputValue: 82,
-    Loading: 83,
-    Src: 84,
-    YoutubeSrc: 85,
-    Code: 86,
-    ImageSrc: 87,
-    Alt: 88,
-}
+    DecimalValue: 3,
+    BooleanValue: 4,
+    Width: 5,
+    Padding: 6,
+    Height: 7,
+    Id: 8,
+    BorderWidth: 9,
+    BorderStyle: 10,
+    Margin: 11,
+    Background: 12,
+    PaddingHorizontal: 13,
+    PaddingVertical: 14,
+    PaddingLeft: 15,
+    PaddingRight: 16,
+    PaddingTop: 17,
+    PaddingBottom: 18,
+    MarginHorizontal: 19,
+    MarginVertical: 20,
+    MarginLeft: 21,
+    MarginRight: 22,
+    MarginTop: 23,
+    MarginBottom: 24,
+    Role: 25,
+    ZIndex: 26,
+    Sticky: 27,
+    Top: 28,
+    Bottom: 29,
+    Left: 30,
+    Right: 31,
+    Overflow: 32,
+    OverflowX: 33,
+    OverflowY: 34,
+    Spacing: 35,
+    Wrap: 36,
+    TextTransform: 37,
+    TextIndent: 38,
+    TextAlign: 39,
+    LineClamp: 40,
+    Opacity: 41,
+    Cursor: 42,
+    Resize: 43,
+    MinHeight: 44,
+    MaxHeight: 45,
+    MinWidth: 46,
+    MaxWidth: 47,
+    WhiteSpace: 48,
+    BorderTopWidth: 49,
+    BorderBottomWidth: 50,
+    BorderLeftWidth: 51,
+    BorderRightWidth: 52,
+    BorderRadius: 53,
+    BorderTopLeftRadius: 54,
+    BorderTopRightRadius: 55,
+    BorderBottomLeftRadius: 56,
+    BorderBottomRightRadius: 57,
+    BorderStyleVertical: 58,
+    BorderStyleHorizontal: 59,
+    BorderLeftStyle: 60,
+    BorderRightStyle: 61,
+    BorderTopStyle: 62,
+    BorderBottomStyle: 63,
+    BorderColor: 64,
+    BorderLeftColor: 65,
+    BorderRightColor: 66,
+    BorderTopColor: 67,
+    BorderBottomColor: 68,
+    AlignSelf: 69,
+    Classes: 70,
+    Anchor: 71,
+    Link: 72,
+    Children: 73,
+    OpenInNewTab: 74,
+    TextStyle: 75,
+    Region: 76,
+    AlignContent: 77,
+    Display: 78,
+    Checked: 79,
+    Enabled: 80,
+    TextInputType: 81,
+    Placeholder: 82,
+    Multiline: 83,
+    DefaultTextInputValue: 84,
+    Loading: 85,
+    Src: 86,
+    YoutubeSrc: 87,
+    Code: 88,
+    ImageSrc: 89,
+    Alt: 90,
+    DocumentProperties: {
+        MetaTitle: 91,
+        MetaOGTitle: 92,
+        MetaTwitterTitle: 93,
+        MetaDescription: 94,
+        MetaOGDescription: 95,
+        MetaTwitterDescription: 96,
+        MetaOGImage: 97,
+        MetaTwitterImage: 98,
+        MetaThemeColor: 99,
+    },
+};
+
+
 
 fastn_dom.Loading = {
     Lazy: "lazy",
@@ -305,6 +321,7 @@ fastn_dom.TextStyle = {
 fastn_dom.Resizing = {
     FillContainer: "100%",
     HugContent: "fit-content",
+    Auto: "auto",
     Fixed: (value) => { return value; }
 }
 
@@ -625,6 +642,21 @@ class Node2 {
     updateTagName(name) {
         if (ssr) {
             this.#node.updateTagName(name);
+        }
+    }
+
+    updateMetaTitle(value) {
+        if (!ssr && hydrating) {
+            window.document.title = value;
+        }
+    }
+
+    addMetaTag(tagName, value) {
+        if (!ssr && hydrating) {
+            const metaTag = window.document.createElement('meta');
+            metaTag.setAttribute('name', tagName);
+            metaTag.setAttribute('content', value);
+            document.head.appendChild(metaTag);
         }
     }
 
@@ -1160,11 +1192,37 @@ class Node2 {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Code) {
             this.#node.innerHTML = staticValue;
-        } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
-            kind === fastn_dom.PropertyKind.StringValue
-        ) {
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle) {
+            this.updateMetaTitle(staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle) {
+            this.addMetaTag("og:title", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterTitle) {
+            this.addMetaTag("twitter:title", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaDescription) {
+            this.addMetaTag("description", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription) {
+            this.addMetaTag("og:description", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription) {
+            this.addMetaTag("twitter:description", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGImage) {
+            // staticValue is of ftd.raw-image-src RecordInstance type
+            this.addMetaTag("og:image", fastn_utils.getStaticValue(staticValue.get('src')));
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage) {
+            // staticValue is of ftd.raw-image-src RecordInstance type
+            this.addMetaTag("twitter:image", fastn_utils.getStaticValue(staticValue.get('src')));
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor) {
+            // staticValue is of ftd.color RecordInstance type
+            this.addMetaTag("theme-color", fastn_utils.getStaticValue(staticValue.get('light')));
+        } else if (kind === fastn_dom.PropertyKind.IntegerValue
+            || kind === fastn_dom.PropertyKind.DecimalValue
+            || kind === fastn_dom.PropertyKind.BooleanValue) {
             this.#node.innerHTML = staticValue;
-        } else {
+        } else if (kind === fastn_dom.PropertyKind.StringValue) {
+            if (!ssr) {
+                staticValue = fastn_utils.markdown_inline(staticValue);
+            }
+            this.#node.innerHTML = staticValue;
+        }else {
             throw ("invalid fastn_dom.PropertyKind: " + kind);
         }
     }
