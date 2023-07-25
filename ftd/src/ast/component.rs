@@ -438,7 +438,7 @@ impl Loop {
         let loop_header = headers
             .0
             .iter()
-            .find(|v| v.key.eq(ftd::ast::utils::LOOP) || v.key.eq(ftd::ast::utils::FOR));
+            .find(|v| [ftd::ast::utils::LOOP, ftd::ast::utils::FOR].contains(&v.key.as_str()));
         let loop_header = if let Some(loop_header) = loop_header {
             loop_header
         } else {
@@ -495,6 +495,13 @@ impl Loop {
                 loop_header.line_number,
             )))
         } else {
+            use colored::Colorize;
+
+            println!(
+                "{}",
+                "Warning: \"$loop$\" is deprecated, use \"for:\" instead".bright_yellow()
+            );
+
             let (on, alias) =
                 ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::AS);
 
@@ -541,7 +548,7 @@ impl Loop {
 
     fn from_headers(headers: &ftd::p1::Headers, doc_id: &str) -> ftd::ast::Result<Option<Loop>> {
         let loop_header = headers.0.iter().find(|v| {
-            v.get_key().eq(ftd::ast::utils::LOOP) || v.get_key().eq(ftd::ast::utils::FOR)
+            [ftd::ast::utils::LOOP, ftd::ast::utils::FOR].contains(&v.get_key().as_str())
         });
         let loop_header = if let Some(loop_header) = loop_header {
             loop_header
@@ -605,6 +612,13 @@ impl Loop {
                 loop_header.get_line_number(),
             )))
         } else {
+            use colored::Colorize;
+
+            println!(
+                "{}",
+                "Warning: \"$loop$\" is deprecated, use \"for:\" instead".bright_yellow()
+            );
+
             let (on, alias) =
                 ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::AS);
 
