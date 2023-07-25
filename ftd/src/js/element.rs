@@ -818,7 +818,6 @@ impl Container {
         }
 
         component_statements.extend(self.children.iter().map(|v| {
-            dbg!(&v);
             fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::Children,
                 value: v.to_set_property_value_with_ui(

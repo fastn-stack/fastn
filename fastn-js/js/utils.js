@@ -47,7 +47,7 @@ let fastn_utils = {
     },
 
     getter(value) {
-        if (value.get) {
+        if (value instanceof fastn.mutableClass) {
             return value.get();
         } else {
             return value;
@@ -55,7 +55,7 @@ let fastn_utils = {
     },
 
     setter(variable, value) {
-        if (variable.set) {
+        if (!fastn_utils.isNull(variable) && variable.set) {
            variable.set(value);
            return true;
         }
@@ -148,6 +148,10 @@ let fastn_utils = {
         })();
         return `${fastn_utils.private.repeated_space(space_before)}${o}${fastn_utils.private.repeated_space(space_after)}`;
     },
+
+    isNull(a) {
+        return a === null || a === undefined;
+    }
 }
 
 
