@@ -14,9 +14,11 @@ There are three common options available for installation on each system:
 
 -- cbox.info: Our Recommendation
 
-If you are using Windows, we recommend you to install `fastn` through fastn installer
-which can be found can be found under the [releases](https://github.com/fastn-stack/fastn/releases/)
-section of the official [fastn](https://github.com/fastn-stack/fastn) github repository.
+If you are using Windows, we recommend you to install `fastn` through fastn
+installer which can be found under the 
+[releases](https://github.com/fastn-stack/fastn/releases/) 
+section of the official [fastn](https://github.com/fastn-stack/fastn) 
+github repository.
 
 This is the preferred method as it only requires downloading the setup and
 installing it on your local system.
