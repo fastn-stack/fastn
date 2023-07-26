@@ -36,6 +36,11 @@ class Node {
     setAttribute(attribute, value) {
         this.#attributes[attribute] = value;
     }
+
+    removeAttribute(attribute) {
+        if (attribute in this.#attributes) delete this.#attributes[attribute];
+    }
+
     // Caution: This is only supported in ssr mode
     updateTagName(tagName) {
         this.#tagName = tagName;

@@ -23,79 +23,79 @@ fastn_dom.common = {
 fastn_dom.classes = { ...fastn_dom.common }
 fastn_dom.unsanitised_classes = {}
 fastn_dom.class_count = 0;
-fastn_dom.property_map = {
+fastn_dom.propertyMap = {
+    "align-items": "ali",
     "align-self": "as",
+    "background-color": "bgc",
+    "background-image": "bgi",
+    "background-position": "bgp",
+    "background-repeat": "bgr",
+    "background-size": "bgs",
+    "border-bottom-color": "bbc",
+    "border-bottom-left-radius": "bblr",
+    "border-bottom-right-radius": "bbrr",
+    "border-bottom-style": "bbs",
+    "border-bottom-width": "bbw",
+    "border-color": "bc",
+    "border-left-color": "blc",
+    "border-left-style": "bls",
+    "border-left-width": "blw",
+    "border-radius": "br",
+    "border-right-color": "brc",
+    "border-right-style": "brs",
+    "border-right-width": "brw",
+    "border-style": "bs",
+    "border-top-color": "btc",
+    "border-top-left-radius": "btlr",
+    "border-top-right-radius": "btrr",
+    "border-top-style": "bts",
+    "border-top-width": "btw",
+    "border-width": "bw",
+    "bottom": "b",
     "color": "c",
-    "width": "w",
-    "padding": "p",
-    "padding-horizontal": "ph",
-    "padding-vertical": "pv",
-    "padding-left": "pl",
-    "padding-right": "pr",
-    "padding-top": "pt",
-    "padding-bottom": "pb",
+    "cursor": "cur",
+    "display": "d",
+    "flex-wrap": "fw",
+    "font-style": "fst",
+    "font-weight": "fwt",
+    "gap": "g",
+    "height": "h",
+    "justify-content": "jc",
+    "left": "l",
     "margin": "m",
+    "margin-bottom": "mb",
     "margin-horizontal": "mh",
-    "margin-vertical": "mv",
     "margin-left": "ml",
     "margin-right": "mr",
     "margin-top": "mt",
-    "margin-bottom": "mb",
-    "height": "h",
-    "border-width": "bw",
-    "border-left-width": "blw",
-    "border-right-width": "brw",
-    "border-top-width": "btw",
-    "border-bottom-width": "bbw",
-    "border-radius": "br",
-    "border-top-left-radius": "btlr",
-    "border-top-right-radius": "btrr",
-    "border-bottom-left-radius": "bblr",
-    "border-bottom-right-radius": "bbrr",
-    "border-style": "bs",
-    "border-top-style": "bts",
-    "border-bottom-style": "bbs",
-    "border-left-style": "bls",
-    "border-right-style": "brs",
-    "border-color": "bc",
-    "border-top-color": "btc",
-    "border-bottom-color": "bbc",
-    "border-left-color": "blc",
-    "border-right-color": "brc",
-    "background-color": "bgc",
-    "z-index": "z",
-    "sticky": "s",
-    "top": "t",
-    "bottom": "b",
-    "left": "l",
-    "right": "r",
+    "margin-vertical": "mv",
+    "max-height": "mxh",
+    "max-width": "mxw",
+    "min-height": "mnh",
+    "min-width": "mnw",
+    "opacity": "op",
     "overflow": "o",
     "overflow-x": "ox",
     "overflow-y": "oy",
-    "gap": "g",
-    "justify-content": "jc",
+    "padding": "p",
+    "padding-bottom": "pb",
+    "padding-horizontal": "ph",
+    "padding-left": "pl",
+    "padding-right": "pr",
+    "padding-top": "pt",
+    "padding-vertical": "pv",
     "position": "pos",
-    "flex-wrap": "fw",
-    "text-transform": "tt",
+    "resize": "res",
+    "right": "r",
+    "sticky": "s",
     "text-align": "ta",
+    "text-decoration": "td",
+    "text-transform": "tt",
+    "top": "t",
+    "width": "w",
+    "z-index": "z",
     "-webkit-box-orient": "wbo",
     "-webkit-line-clamp": "wlc",
-    "display": "d",
-    "opacity": "op",
-    "cursor": "cur",
-    "resize": "r",
-    "max-height": "mxh",
-    "min-height": "mnh",
-    "max-width": "mxw",
-    "min-width": "mnw",
-    "font-weight": "fw",
-    "font-style": "fst",
-    "text-decoration": "td",
-    "align-items": "ali",
-    "background-image": "bg",
-    "background-size": "bgs",
-    "background-position": "bgp",
-    "background-repeat": "bgr",
 };
 
 // dynamic-class-css.md
@@ -326,10 +326,10 @@ fastn_dom.Resizing = {
 }
 
 fastn_dom.Spacing = {
-    SpaceEvenly: "space-evenly",
-    SpaceBetween: "space-between",
-    SpaceAround: "space-around",
-    Fixed: (value) => { return value; }
+    SpaceEvenly: [1, "space-evenly"],
+    SpaceBetween: [2, "space-between"],
+    SpaceAround: [3, "space-around"],
+    Fixed: (value) => { return [4, value]; }
 }
 
 
@@ -584,10 +584,10 @@ fastn_dom.Event = {
     ClickOutside: 3,
     GlobalKey: (val) => {return [4, val];},
     GlobalKeySeq: (val) => {return [5, val];},
-    Input: 5,
-    Change: 6,
-    Blur: 7,
-    Focus: 8
+    Input: 6,
+    Change: 7,
+    Blur: 8,
+    Focus: 9,
 }
 
 // Node2 -> Intermediate node
@@ -636,6 +636,9 @@ class Node2 {
     }
     // for attaching inline attributes
     attachAttribute(property, value) {
+        if (fastn_utils.isNull(value)) {
+            this.#node.removeAttribute(property);
+        }
         this.#node.setAttribute(property, value);
     }
 
@@ -662,7 +665,7 @@ class Node2 {
 
     // dynamic-class-css
     attachCss(property, value, createClass, className) {
-        const propertyShort = fastn_dom.property_map[property] || property;
+        const propertyShort = fastn_dom.propertyMap[property] || property;
         let cls = `${propertyShort}-${JSON.stringify(value)}`;
         if (!!className) {
            cls = className;
@@ -857,6 +860,10 @@ class Node2 {
         }
     }
     attachRoleCss(value) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss('role', value);
+            return;
+        }
         let desktopValue = fastn_utils.getStaticValue(value.get("desktop"));
         let mobileValue = fastn_utils.getStaticValue(value.get("mobile"));
         if (fastn_utils.sameResponsiveRole(desktopValue, mobileValue)) {
@@ -867,6 +874,12 @@ class Node2 {
         }
     }
     attachTextStyles(styles) {
+        if (fastn_utils.isNull(styles)) {
+            this.attachCss('font-style', styles);
+            this.attachCss('font-weight', styles);
+            this.attachCss('text-decoration', styles);
+            return;
+        }
         for (var s of styles) {
             switch (s) {
               case 'italic':
@@ -883,6 +896,10 @@ class Node2 {
     }
 
     attachAlignContent(value, node_kind) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss('align-items', value);
+            return;
+        }
         if (node_kind === fastn_dom.ElementKind.Row) {
             switch (value) {
                 case 'top-left':
@@ -1030,7 +1047,7 @@ class Node2 {
                 this.attachCss("position", "static");
                 break;
               default:
-                this.attachCss("position", "static");
+                this.attachCss("position", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.Top) {
             this.attachCss("top", staticValue);
@@ -1047,15 +1064,24 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.OverflowY) {
             this.attachCss("overflow-y", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Spacing) {
-            switch (staticValue) {
-              case 'space-evenly':
-              case 'space-between':
-              case 'space-around':
+            if (fastn_utils.isNull(staticValue)) {
                 this.attachCss("justify-content", staticValue);
-                break;
-              default:
                 this.attachCss("gap", staticValue);
+                return;
             }
+
+            let spacingType = staticValue[0];
+            switch (spacingType) {
+                case fastn_dom.Spacing.SpaceEvenly[0]:
+                case fastn_dom.Spacing.SpaceBetween[0]:
+                case fastn_dom.Spacing.SpaceAround[0]:
+                    this.attachCss("justify-content", staticValue[1]);
+                    break;
+                case fastn_dom.Spacing.Fixed()[0]:
+                    this.attachCss("gap", staticValue[1]);
+                    break;
+            }
+
         } else if (kind === fastn_dom.PropertyKind.Wrap) {
             // sticky is boolean type
             switch (staticValue) {
@@ -1068,7 +1094,7 @@ class Node2 {
                 this.attachCss("flex-wrap", "no-wrap");
                 break;
               default:
-                this.attachCss("flex-wrap", "no-wrap");
+                this.attachCss("flex-wrap", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextTransform) {
             this.attachCss("text-transform", staticValue);
@@ -1144,6 +1170,8 @@ class Node2 {
                 case true:
                     this.attachAttribute("checked", "");
                     break;
+                default:
+                    this.attachAttribute("checked", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.Enabled) {
             switch (staticValue) {
@@ -1151,6 +1179,8 @@ class Node2 {
                 case false:
                     this.attachAttribute("disabled", "");
                     break;
+                default:
+                    this.attachAttribute("disabled", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextInputType) {
             this.attachAttribute("type", staticValue);
@@ -1181,6 +1211,8 @@ class Node2 {
               case true:
                 this.attachAttribute("target", "_blank");
                 break;
+              default:
+                this.attachAttribute("target", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextStyle) {
             let styles = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
@@ -1200,6 +1232,10 @@ class Node2 {
             this.attachAttribute("src", staticValue);
         } else if (kind === fastn_dom.PropertyKind.ImageSrc) {
             ftd.dark_mode.addClosure(fastn.closure(() => {
+                if (fastn_utils.isNull(staticValue)) {
+                    this.attachAttribute("src", staticValue);
+                    return;
+                }
                 const is_dark_mode = ftd.dark_mode.get();
                 const src = staticValue.get(is_dark_mode ? 'dark' : 'light');
 
@@ -1208,6 +1244,10 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Alt) {
             this.attachAttribute("alt", staticValue);
         } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
+            if (fastn_utils.isNull(staticValue)) {
+                this.attachAttribute("src", staticValue);
+                return;
+            }
             const id_pattern = "^([a-zA-Z0-9_-]{11})$";
             let id = staticValue.match(id_pattern);
             this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
