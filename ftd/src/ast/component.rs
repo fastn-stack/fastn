@@ -537,23 +537,11 @@ impl Loop {
 
         let is_for_loop = loop_header.get_key().eq(ftd::ast::utils::FOR);
 
-        if !is_for_loop {
-            use colored::Colorize;
-
-            println!(
-                "{}",
-                "Warning: \"$loop$\" is deprecated, use \"for:\" instead".bright_yellow()
-            );
-        }
-
-        let (p1, p2) = if is_for_loop {
-            ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::IN)
-        } else {
-            ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::AS)
-        };
-
         let (alias, on) = if is_for_loop {
-            let on = if let Some(on) = p2 {
+            let (alias, on) =
+                ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::IN);
+
+            let on = if let Some(on) = on {
                 on
             } else {
                 return ftd::ast::parse_error(
@@ -563,9 +551,19 @@ impl Loop {
                 );
             };
 
-            (p1, on)
+            (alias, on)
         } else {
-            let alias = if let Some(alias) = p2 {
+            use colored::Colorize;
+
+            println!(
+                "{}",
+                "Warning: \"$loop$\" is deprecated, use \"for:\" instead".bright_yellow()
+            );
+
+            let (on, alias) =
+                ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::AS);
+
+            let alias = if let Some(alias) = alias {
                 if !alias.starts_with(ftd::ast::utils::REFERENCE) {
                     return ftd::ast::parse_error(
                     format!(
@@ -582,7 +580,7 @@ impl Loop {
                 "object".to_string()
             };
 
-            (alias, p1)
+            (alias, on)
         };
 
         if !on.starts_with(ftd::ast::utils::REFERENCE) && !on.starts_with(ftd::ast::utils::CLONE) {
