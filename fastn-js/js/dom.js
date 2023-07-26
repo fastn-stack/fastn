@@ -1,5 +1,8 @@
 let fastn_dom = {};
 
+fastn_dom.commentNode = "comment";
+fastn_dom.commentMessage = "***DON'T REMOVE THIS COMMENT. THIS IS MARKER***";
+
 fastn_dom.common = {
     ".ft_row": {
         "value": {
@@ -143,6 +146,7 @@ fastn_dom.ElementKind = {
     ContainerElement: 11,
     Rive: 12,
     Document: 13,
+    Comment: 14,
 };
 
 fastn_dom.PropertyKind = {
@@ -607,33 +611,60 @@ class Node2 {
      * rive).
      */
     #extraData;
-    constructor(parent, kind) {
+
+    #isSibiling;
+    constructor(parentOrSibiling, kind) {
         this.#kind = kind;
+        this.#isSibiling = false;
 
         let [node, classes, attributes] = fastn_utils.htmlNode(kind);
 
-        this.#node = fastn_virtual.document.createElement(node);
+        this.#node = fastn_virtual.document.createElement(node, parentOrSibiling);
         for (let key in attributes) {
           this.#node.setAttribute(key, attributes[key])
         }
         for (let c in classes) {
             this.#node.classList.add(classes[c]);
         }
-        this.#parent = parent;
+
+        let notParentButSibiling = false;
+        this.#parent = parentOrSibiling;
+
+        if (this.#parent.isSibiling && this.#parent.isSibiling()) {
+            this.#parent = parentOrSibiling.getParent();
+            notParentButSibiling = true;
+        }
         this.#mutables = [];
 
         this.#extraData = {};
         /*if (!!parent.parent) {
             parent = parent.parent();
         }*/
+
+
         if (this.#parent.getNode) {
             this.#parent = this.#parent.getNode();
         }
-        this.#parent.appendChild(this.#node);
+
+        if (notParentButSibiling) {
+            this.#parent.insertBefore(this.#node, fastn_utils.nextSibling(parentOrSibiling));
+            parentOrSibiling.setSibiling(false);
+        } else {
+            this.#parent.appendChild(this.#node);
+        }
     }
-    parent() {
+    getParent() {
         return this.#parent;
     }
+
+    isSibiling() {
+        return this.#isSibiling;
+    }
+
+    setSibiling(value) {
+        this.#isSibiling = value;
+    }
+
     // for attaching inline attributes
     attachAttribute(property, value) {
         if (fastn_utils.isNull(value)) {
@@ -1387,8 +1418,8 @@ class ConditionalDom {
     }
 }
 
-fastn_dom.createKernel = function (parent, kind) {
-    return new Node2(parent, kind);
+fastn_dom.createKernel = function (parent, kind, sibiling) {
+    return new Node2(parent, kind, sibiling);
 }
 
 fastn_dom.conditionalDom = function (parent, deps, condition, node_constructor) {
@@ -1399,23 +1430,31 @@ class ForLoop {
     #node_constructor;
     #list;
     #wrapper;
+    #parent;
+    #nodes;
     constructor(parent, node_constructor, list) {
-        this.#wrapper = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Div);
+        this.#wrapper = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Comment);
+        this.#parent = parent;
         this.#node_constructor = node_constructor;
         this.#list = list;
+        this.#wrapper.setSibiling(true);
+        let sibiling = this.#wrapper;
         for (let idx in list.getList()) {
-            // let v = list.get(idx);
-            // node_constructor(this.#wrapper, v.item, v.index).done();
-            this.createNode(idx);
+            sibiling = this.createNode(sibiling, idx);
+            sibiling.setSibiling(true);
         }
     }
-    createNode(index) {
+    createNode(sibiling, index) {
         let v = this.#list.get(index);
-        this.#node_constructor(this.#wrapper, v.item, v.index);
+        return this.#node_constructor(sibiling, v.item, v.index);
+    }
+
+    getWrapper() {
+        return this.#wrapper;
     }
 
     getParent() {
-        return this.#wrapper;
+        return this.#parent;
     }
 }
 

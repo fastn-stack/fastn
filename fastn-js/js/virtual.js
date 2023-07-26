@@ -19,7 +19,8 @@ class Node {
     #tagName
     #children
     #attributes
-    constructor(id, tagName) {
+    #parent
+    constructor(id, tagName, parent) {
         this.#tagName = tagName;
         this.#id = id;
         this.classList = new ClassList();
@@ -28,9 +29,18 @@ class Node {
         this.innerHTML = "";
         this.style = {};
         this.onclick = null;
+        this.#parent = parent;
     }
     appendChild(c) {
         this.#children.push(c);
+    }
+
+    insertBefore(node, index) {
+        this.#children.splice(index, 0, node);
+    }
+
+    getChildren() {
+        return this.#children;
     }
 
     setAttribute(attribute, value) {
@@ -84,19 +94,24 @@ class Node {
 }
 
 class Document2 {
-    createElement(tagName) {
+    createElement(tagName, parent) {
         id_counter++;
+
+        parent = fastn_utils.getParent(parent);
+
         if (ssr) {
-            return new Node(id_counter, tagName);
+            return new Node(id_counter, tagName, parent);
         }
 
         if (tagName === "body") {
             return window.document.body;
         }
 
-        if (hydrating) {
+        if (fastn_utils.isCommentNode(tagName)) {
+            return window.document.createComment(fastn_dom.commentMessage);
+        } else if (hydrating) {
             return this.getElementByDataID(id_counter);
-        } else {
+        }else {
             return window.document.createElement(tagName);
         }
     }
