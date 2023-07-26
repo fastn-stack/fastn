@@ -107,11 +107,18 @@ class Document2 {
             return window.document.body;
         }
 
-        if (fastn_utils.isCommentNode(tagName)) {
-            return window.document.createComment(fastn_dom.commentMessage);
-        } else if (hydrating) {
-            return this.getElementByDataID(id_counter);
-        }else {
+        if (hydrating) {
+            let node = this.getElementByDataID(id_counter);
+            if (fastn_utils.isCommentNode(tagName)) {
+                let comment= window.document.createComment(fastn_dom.commentMessage);
+                node.parentNode.replaceChild(comment, node);
+                return comment;
+            }
+            return node;
+        } else {
+            if (fastn_utils.isCommentNode(tagName)) {
+                return window.document.createComment(fastn_dom.commentMessage);
+            }
             return window.document.createElement(tagName);
         }
     }
