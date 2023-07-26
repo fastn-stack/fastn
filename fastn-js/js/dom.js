@@ -584,10 +584,10 @@ fastn_dom.Event = {
     ClickOutside: 3,
     GlobalKey: (val) => {return [4, val];},
     GlobalKeySeq: (val) => {return [5, val];},
-    Input: 5,
-    Change: 6,
-    Blur: 7,
-    Focus: 8
+    Input: 6,
+    Change: 7,
+    Blur: 8,
+    Focus: 9,
 }
 
 // Node2 -> Intermediate node
