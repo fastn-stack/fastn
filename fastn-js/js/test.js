@@ -1,5 +1,5 @@
 function assertKindIdIsUnique() {
-    let maps = [fastn_dom.PropertyKind, fastn_dom.ElementKind, fastn_dom.Event];
+    let maps = [fastn_dom.PropertyKind, fastn_dom.ElementKind, fastn_dom.Event, fastn_dom.propertyMap];
     for (let idx in maps) {
         let ids = new Set();
         let values = Object.values(maps[idx]);
