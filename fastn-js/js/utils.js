@@ -23,6 +23,8 @@ let fastn_utils = {
             attributes["type"] = "checkbox";
         } else if (kind === fastn_dom.ElementKind.TextInput) {
             node = "input";
+        } else if (kind === fastn_dom.ElementKind.Comment) {
+            node = fastn_dom.commentNode;
         }
         return [node, css, attributes];
     },
@@ -151,6 +153,31 @@ let fastn_utils = {
 
     isNull(a) {
         return a === null || a === undefined;
+    },
+
+    isCommentNode(node) {
+      return node === fastn_dom.commentNode
+    },
+
+    nextSibling(node) {
+        if (node.nextSibling) {
+          return node.nextSibling;
+        }
+        if (node.getNode && node.getNode().nextSibling !== undefined) {
+            return node.getNode().nextSibling;
+        }
+        return node.getParent().getChildren().indexOf(node.getNode()) + 1;
+    },
+
+    getParent(parent) {
+        if (!fastn_utils.isNull(parent)
+            && parent.isSibiling
+            && parent.isSibiling()
+        ) {
+            return parent.getParent();
+        } else {
+            return parent;
+        }
     }
 }
 
