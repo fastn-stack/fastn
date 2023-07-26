@@ -5,12 +5,6 @@
 `fastn` is compatible with various operating systems, including Windows, MacOS,
 and Linux.
 
-There are three common options available for installation on each system:
-
-1. Using a `pre-built binary`
-2. Installing with `cargo`
-3. Building from `github repo source`
-
 
 -- cbox.info: Our Recommendation
 
