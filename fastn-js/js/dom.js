@@ -326,10 +326,10 @@ fastn_dom.Resizing = {
 }
 
 fastn_dom.Spacing = {
-    SpaceEvenly: "space-evenly",
-    SpaceBetween: "space-between",
-    SpaceAround: "space-around",
-    Fixed: (value) => { return value; }
+    SpaceEvenly: [1, "space-evenly"],
+    SpaceBetween: [1, "space-between"],
+    SpaceAround: [1, "space-around"],
+    Fixed: (value) => { return [2, value]; }
 }
 
 
@@ -636,6 +636,9 @@ class Node2 {
     }
     // for attaching inline attributes
     attachAttribute(property, value) {
+        if (fastn_utils.isNull(value)) {
+            this.#node.removeAttribute(property);
+        }
         this.#node.setAttribute(property, value);
     }
 
@@ -857,6 +860,10 @@ class Node2 {
         }
     }
     attachRoleCss(value) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss('role', value);
+            return;
+        }
         let desktopValue = fastn_utils.getStaticValue(value.get("desktop"));
         let mobileValue = fastn_utils.getStaticValue(value.get("mobile"));
         if (fastn_utils.sameResponsiveRole(desktopValue, mobileValue)) {
@@ -867,6 +874,12 @@ class Node2 {
         }
     }
     attachTextStyles(styles) {
+        if (fastn_utils.isNull(styles)) {
+            this.attachCss('font-style', styles);
+            this.attachCss('font-weight', styles);
+            this.attachCss('text-decoration', styles);
+            return;
+        }
         for (var s of styles) {
             switch (s) {
               case 'italic':
@@ -883,6 +896,10 @@ class Node2 {
     }
 
     attachAlignContent(value, node_kind) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss('align-items', value);
+            return;
+        }
         if (node_kind === fastn_dom.ElementKind.Row) {
             switch (value) {
                 case 'top-left':
@@ -1030,7 +1047,7 @@ class Node2 {
                 this.attachCss("position", "static");
                 break;
               default:
-                this.attachCss("position", "static");
+                this.attachCss("position", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.Top) {
             this.attachCss("top", staticValue);
@@ -1047,15 +1064,24 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.OverflowY) {
             this.attachCss("overflow-y", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Spacing) {
-            switch (staticValue) {
-              case 'space-evenly':
-              case 'space-between':
-              case 'space-around':
+            if (fastn_utils.isNull(staticValue)) {
                 this.attachCss("justify-content", staticValue);
-                break;
-              default:
                 this.attachCss("gap", staticValue);
+                return;
             }
+
+            let spacingType = staticValue[0];
+            switch (spacingType) {
+                case fastn_dom.Spacing.SpaceEvenly[0]:
+                case fastn_dom.Spacing.SpaceBetween[0]:
+                case fastn_dom.Spacing.SpaceAround[0]:
+                    this.attachCss("justify-content", staticValue[1]);
+                    break;
+                case fastn_dom.Spacing.Fixed()[0]:
+                    this.attachCss("gap", staticValue[1]);
+                    break;
+            }
+
         } else if (kind === fastn_dom.PropertyKind.Wrap) {
             // sticky is boolean type
             switch (staticValue) {
@@ -1068,7 +1094,7 @@ class Node2 {
                 this.attachCss("flex-wrap", "no-wrap");
                 break;
               default:
-                this.attachCss("flex-wrap", "no-wrap");
+                this.attachCss("flex-wrap", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextTransform) {
             this.attachCss("text-transform", staticValue);
@@ -1144,6 +1170,8 @@ class Node2 {
                 case true:
                     this.attachAttribute("checked", "");
                     break;
+                default:
+                    this.attachAttribute("checked", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.Enabled) {
             switch (staticValue) {
@@ -1151,6 +1179,8 @@ class Node2 {
                 case false:
                     this.attachAttribute("disabled", "");
                     break;
+                default:
+                    this.attachAttribute("disabled", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextInputType) {
             this.attachAttribute("type", staticValue);
@@ -1181,6 +1211,8 @@ class Node2 {
               case true:
                 this.attachAttribute("target", "_blank");
                 break;
+              default:
+                this.attachAttribute("target", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextStyle) {
             let styles = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
@@ -1200,6 +1232,10 @@ class Node2 {
             this.attachAttribute("src", staticValue);
         } else if (kind === fastn_dom.PropertyKind.ImageSrc) {
             ftd.dark_mode.addClosure(fastn.closure(() => {
+                if (fastn_utils.isNull(staticValue)) {
+                    this.attachAttribute("src", staticValue);
+                    return;
+                }
                 const is_dark_mode = ftd.dark_mode.get();
                 const src = staticValue.get(is_dark_mode ? 'dark' : 'light');
 
@@ -1208,6 +1244,10 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Alt) {
             this.attachAttribute("alt", staticValue);
         } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
+            if (fastn_utils.isNull(staticValue)) {
+                this.attachAttribute("src", staticValue);
+                return;
+            }
             const id_pattern = "^([a-zA-Z0-9_-]{11})$";
             let id = staticValue.match(id_pattern);
             this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
