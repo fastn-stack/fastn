@@ -214,7 +214,7 @@ wins over the manager etc. Any such heuristics can be picked and one can go on
 with life.
 
 If the stakes were low. This is what Google Docs and Dropbox/iCloud etc do. They
-use a heuristic, which one? Decided by their product team, and siltently resolve
+use a heuristic, which one? Decided by their product team, and silently resolve
 the conflict. User is not informed about the conflict, and people go on their
 blissful ignorant merry life. Butterflies and rainbows everywhere, no conflict
 in sight. Life is good.
