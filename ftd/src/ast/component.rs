@@ -450,7 +450,8 @@ impl Loop {
         let is_for_loop = loop_header.key.eq(ftd::ast::utils::FOR);
 
         let (alias, on) = if is_for_loop {
-            let (alias, on) = ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::IN);
+            let (alias, on) =
+                ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::IN);
 
             let on = if let Some(on) = on {
                 on
@@ -471,7 +472,8 @@ impl Loop {
                 "Warning: \"$loop$\" is deprecated, use \"for:\" instead".bright_yellow()
             );
 
-            let (on, alias) = ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::AS);
+            let (on, alias) =
+                ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::AS);
 
             let alias = if let Some(alias) = alias {
                 if !alias.starts_with(ftd::ast::utils::REFERENCE) {
