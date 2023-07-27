@@ -212,7 +212,7 @@ impl Value {
     pub(crate) fn to_js(&self, element_name: &Option<String>) -> String {
         use itertools::Itertools;
         match self {
-            Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n")),
+            Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n").replace("\"", "\\\"")),
             Value::Integer(i) => i.to_string(),
             Value::Decimal(f) => f.to_string(),
             Value::Boolean(b) => b.to_string(),

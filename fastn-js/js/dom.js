@@ -1285,13 +1285,19 @@ class Node2 {
             this.addMetaTag("twitter:description", staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGImage) {
             // staticValue is of ftd.raw-image-src RecordInstance type
-            this.addMetaTag("og:image", fastn_utils.getStaticValue(staticValue.get('src')));
+            if (!fastn_utils.isNull(staticValue)) {
+                this.addMetaTag("og:image", fastn_utils.getStaticValue(staticValue.get('src')));
+            }
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage) {
             // staticValue is of ftd.raw-image-src RecordInstance type
-            this.addMetaTag("twitter:image", fastn_utils.getStaticValue(staticValue.get('src')));
+            if (!fastn_utils.isNull(staticValue)) {
+                this.addMetaTag("twitter:image", fastn_utils.getStaticValue(staticValue.get('src')));
+            }
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor) {
             // staticValue is of ftd.color RecordInstance type
-            this.addMetaTag("theme-color", fastn_utils.getStaticValue(staticValue.get('light')));
+            if (!fastn_utils.isNull(staticValue)) {
+                this.addMetaTag("theme-color", fastn_utils.getStaticValue(staticValue.get('light')));
+            }
         } else if (kind === fastn_dom.PropertyKind.IntegerValue
             || kind === fastn_dom.PropertyKind.DecimalValue
             || kind === fastn_dom.PropertyKind.BooleanValue) {
