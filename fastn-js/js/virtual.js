@@ -104,7 +104,7 @@ class Document2 {
         }
 
         if (fastn_utils.isWrapperNode(tagName)) {
-            return;
+            return window.document.createComment(fastn_dom.commentMessage);
         }
         if (hydrating) {
             let node = this.getElementByDataID(id_counter);

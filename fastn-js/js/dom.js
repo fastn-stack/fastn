@@ -1275,7 +1275,8 @@ class Node2 {
                 const src = staticValue.get(is_dark_mode ? 'dark' : 'light');
 
                 this.attachAttribute("src", fastn_utils.getStaticValue(src));
-            }));
+            }).addNodeProperty(this, null, inherited));
+            this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Alt) {
             this.attachAttribute("alt", staticValue);
         } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
