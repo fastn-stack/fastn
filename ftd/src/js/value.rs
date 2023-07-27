@@ -132,6 +132,12 @@ impl ftd::interpreter::Expression {
                     operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
                         identifier: "index".to_string(),
                     }
+                } else if let Some(key_name) = rdata.loop_key_name {
+                    if format!("${}", key_name).eq(identifier) {
+                        operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
+                            identifier: "index".to_string(),
+                        }
+                    }
                 } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
                     references.get(identifier)
                 {

@@ -94,6 +94,12 @@ pub(crate) fn update_reference_with_none(reference: &str) -> String {
 pub(crate) fn update_reference(reference: &str, rdata: &ftd::js::ResolverData) -> String {
     let name = reference.to_string();
 
+    if let Some(key_name) = rdata.loop_key_name {
+        if name.eq(key_name) {
+            return "index".to_string();
+        }
+    }
+
     if let Some(component_definition_name) = rdata.component_definition_name {
         if let Some(alias) = name.strip_prefix(format!("{component_definition_name}.").as_str()) {
             return format!("{}.{alias}", fastn_js::LOCAL_VARIABLE_MAP);
@@ -130,6 +136,7 @@ fn is_ftd_thing(name: &str) -> bool {
 pub(crate) fn get_js_value_from_properties(
     properties: &[ftd::interpreter::Property],
 ) -> Option<ftd::js::Value> {
+    dbg!(properties);
     if properties.is_empty() {
         return None;
     }

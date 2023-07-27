@@ -251,7 +251,7 @@ pub fn get_argument_for_reference_and_remaining(
     name: &str,
     doc: &ftd::interpreter::TDoc,
     component_definition_name_with_arguments: &Option<(&str, &mut [ftd::interpreter::Argument])>,
-    loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+    loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
     line_number: usize,
 ) -> ftd::interpreter::Result<
     Option<(
@@ -281,7 +281,7 @@ pub fn get_argument_for_reference_and_remaining(
             };
         }
     }
-    if let Some((loop_name, loop_argument)) = loop_object_name_and_kind {
+    if let Some((loop_name, loop_argument, loop_key_name)) = loop_object_name_and_kind {
         let p2 = ftd::interpreter::utils::split_at(name, ".").1;
         let name = doc.resolve_name(name);
         if name.starts_with(format!("{}.", loop_name).as_str())
@@ -307,6 +307,21 @@ pub fn get_argument_for_reference_and_remaining(
                 None,
                 ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
             )));
+        }
+
+        if let Some(key_name) = loop_key_name {
+            if name.starts_with(format!("{}#{}", doc.name, key_name).as_str()) {
+                return Ok(Some((
+                    ftd::interpreter::Field::default(
+                        key_name,
+                        ftd::interpreter::Kind::integer()
+                            .into_optional()
+                            .into_kind_data(),
+                    ),
+                    None,
+                    ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
+                )));
+            }
         }
     }
 

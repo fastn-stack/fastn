@@ -10,5 +10,8 @@
 
 -- end: weekdays
 
--- ftd.text: $day
+/-- ftd.integer: $LOOP.COUNTER
 for: $day in $weekdays
+
+-- ftd.integer: $key
+for: $day, $key in $weekdays

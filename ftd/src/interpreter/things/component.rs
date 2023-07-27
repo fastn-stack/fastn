@@ -297,6 +297,7 @@ impl Component {
             loop_object_name_and_kind = Some((
                 iteration.alias.to_string(),
                 iteration.loop_object_as_argument(doc)?,
+                iteration.key_name.to_owned(),
             ));
             Some(iteration)
         } else {
@@ -408,7 +409,7 @@ impl Component {
         doc: &mut ftd::interpreter::TDoc,
         iteration: &Option<Loop>,
         condition: &Option<ftd::interpreter::Expression>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         events: &[Event],
         ast_properties: &Vec<ftd::ast::Property>,
         ast_children: &Vec<ftd::ast::Component>,
@@ -586,7 +587,7 @@ impl Property {
         ast_children: Vec<ftd::ast::Component>,
         component_name: &str,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Property>>> {
@@ -800,7 +801,7 @@ impl Property {
         ast_properties: Vec<ftd::ast::Property>,
         component_name: &str,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Property>>> {
@@ -838,7 +839,7 @@ impl Property {
         component_name: &str,
         component_arguments: &[Argument],
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Property>> {
         let argument = try_ok_state!(Property::get_argument_for_property(
@@ -1107,15 +1108,17 @@ fn search_things_for_module(
 pub struct Loop {
     pub on: ftd::interpreter::PropertyValue,
     pub alias: String,
+    pub key_name: Option<String>,
     pub line_number: usize,
 }
 
 impl Loop {
-    fn new(on: ftd::interpreter::PropertyValue, alias: &str, line_number: usize) -> Loop {
+    fn new(on: ftd::interpreter::PropertyValue, alias: &str, key_name: Option<String>, line_number: usize) -> Loop {
         Loop {
             on,
             alias: alias.to_string(),
             line_number,
+            key_name
         }
     }
 
@@ -1198,6 +1201,7 @@ impl Loop {
         Ok(ftd::interpreter::StateWithThing::new_thing(Loop::new(
             on,
             doc.resolve_name(ast_loop.alias.as_str()).as_str(),
+            dbg!(ast_loop.key_name.map(|key_name| doc.resolve_name(key_name.as_str()))),
             ast_loop.line_number,
         )))
     }
@@ -1233,7 +1237,7 @@ impl Event {
     fn from_ast_event(
         ast_event: ftd::ast::Event,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Event>> {
         let action = try_ok_state!(ftd::interpreter::FunctionCall::from_string(
@@ -1261,7 +1265,7 @@ impl Event {
     fn from_ast_events(
         ast_events: Vec<ftd::ast::Event>,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Event>>> {
         let mut events = vec![];

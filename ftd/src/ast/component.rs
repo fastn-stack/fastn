@@ -421,15 +421,17 @@ impl PropertySource {
 pub struct Loop {
     pub on: String,
     pub alias: String,
+    pub key_name: Option<String>,
     #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
 impl Loop {
-    fn new(on: &str, alias: &str, line_number: usize) -> Loop {
+    fn new(on: &str, alias: &str, key_name: Option<String>, line_number: usize) -> Loop {
         Loop {
             on: on.to_string(),
             alias: alias.to_string(),
+            key_name,
             line_number,
         }
     }
@@ -449,8 +451,8 @@ impl Loop {
 
         let is_for_loop = loop_header.key.eq(ftd::ast::utils::FOR);
 
-        let (alias, on) = if is_for_loop {
-            let (alias, on) =
+        let (alias, on, key_name) = if is_for_loop {
+            let (pair, on) =
                 ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::IN);
 
             let on = if let Some(on) = on {
@@ -463,7 +465,9 @@ impl Loop {
                 );
             };
 
-            (alias, on)
+            let (alias, key_name) = ftd::ast::utils::split_at(pair.as_str(), ", ");
+
+            (alias, on, key_name)
         } else {
             use colored::Colorize;
 
@@ -492,7 +496,7 @@ impl Loop {
                 "object".to_string()
             };
 
-            (alias, on)
+            (alias, on, None)
         };
 
         if !on.starts_with(ftd::ast::utils::REFERENCE) && !on.starts_with(ftd::ast::utils::CLONE) {
@@ -513,6 +517,7 @@ impl Loop {
         Ok(Some(Loop::new(
             on.as_str(),
             alias.as_str(),
+            key_name,
             loop_header.line_number,
         )))
     }
@@ -537,8 +542,8 @@ impl Loop {
 
         let is_for_loop = loop_header.get_key().eq(ftd::ast::utils::FOR);
 
-        let (alias, on) = if is_for_loop {
-            let (alias, on) =
+        let (alias, on, key_name) = if is_for_loop {
+            let (pair, on) =
                 ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::IN);
 
             let on = if let Some(on) = on {
@@ -551,7 +556,9 @@ impl Loop {
                 );
             };
 
-            (alias, on)
+            let (alias, key_name) = ftd::ast::utils::split_at(pair.as_str(), ", ");
+
+            (alias, on, key_name)
         } else {
             use colored::Colorize;
 
@@ -580,7 +587,7 @@ impl Loop {
                 "object".to_string()
             };
 
-            (alias, on)
+            (alias, on, None)
         };
 
         if !on.starts_with(ftd::ast::utils::REFERENCE) && !on.starts_with(ftd::ast::utils::CLONE) {
@@ -601,6 +608,7 @@ impl Loop {
         Ok(Some(Loop::new(
             on.as_str(),
             alias.as_str(),
+            key_name,
             loop_header.get_line_number(),
         )))
     }

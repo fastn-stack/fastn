@@ -226,7 +226,7 @@ impl PropertyValue {
         mutable: bool,
         line_number: usize,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>>
     {
         let value = ftd::ast::VariableValue::String {
@@ -354,7 +354,7 @@ impl PropertyValue {
         is_mutable: bool,
         expected_kind: Option<&ftd::interpreter::KindData>,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>>
     {
         if let Some(reference) = try_ok_state!(PropertyValue::reference_from_ast_value(
@@ -383,7 +383,7 @@ impl PropertyValue {
         value: ftd::ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>>
     {
         let line_number = value.line_number();
@@ -425,7 +425,7 @@ impl PropertyValue {
         is_mutable: bool,
         _expected_kind: &ftd::interpreter::KindData,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>>
     {
         if !(value.is_record() || value.is_string()) {
@@ -701,7 +701,7 @@ impl PropertyValue {
         is_mutable: bool,
         expected_kind: Option<&ftd::interpreter::KindData>,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>>
     {
         let expected_kind = expected_kind.ok_or(ftd::interpreter::Error::ParseError {
@@ -724,7 +724,7 @@ impl PropertyValue {
             is_mutable: bool,
             expected_kind: &ftd::interpreter::KindData,
             definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-            loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+            loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         ) -> ftd::interpreter::Result<
             ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>,
         > {
@@ -1001,7 +1001,7 @@ impl PropertyValue {
         mutable: bool,
         expected_kind: Option<&ftd::interpreter::KindData>,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<Option<ftd::interpreter::PropertyValue>>,
     > {
