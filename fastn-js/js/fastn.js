@@ -192,7 +192,8 @@ class MutableList {
         }
 
         for (let i in this.#watchers) {
-            this.#watchers[i].createNode(idx);
+            let forLoop = this.#watchers[i];
+            forLoop.insertNode(idx, forLoop.createNode(idx));
         }
     }
     push(value) {
