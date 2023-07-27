@@ -1113,12 +1113,17 @@ pub struct Loop {
 }
 
 impl Loop {
-    fn new(on: ftd::interpreter::PropertyValue, alias: &str, key_name: Option<String>, line_number: usize) -> Loop {
+    fn new(
+        on: ftd::interpreter::PropertyValue,
+        alias: &str,
+        key_name: Option<String>,
+        line_number: usize,
+    ) -> Loop {
         Loop {
             on,
             alias: alias.to_string(),
             line_number,
-            key_name
+            key_name,
         }
     }
 
@@ -1201,7 +1206,9 @@ impl Loop {
         Ok(ftd::interpreter::StateWithThing::new_thing(Loop::new(
             on,
             doc.resolve_name(ast_loop.alias.as_str()).as_str(),
-            dbg!(ast_loop.key_name.map(|key_name| doc.resolve_name(key_name.as_str()))),
+            dbg!(ast_loop
+                .key_name
+                .map(|key_name| doc.resolve_name(key_name.as_str()))),
             ast_loop.line_number,
         )))
     }

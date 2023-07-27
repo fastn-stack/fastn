@@ -724,7 +724,11 @@ impl PropertyValue {
             is_mutable: bool,
             expected_kind: &ftd::interpreter::KindData,
             definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-            loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
+            loop_object_name_and_kind: &Option<(
+                String,
+                ftd::interpreter::Argument,
+                Option<String>,
+            )>,
         ) -> ftd::interpreter::Result<
             ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>,
         > {
