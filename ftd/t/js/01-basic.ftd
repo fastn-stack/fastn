@@ -1,4 +1,4 @@
--- ftd.text: Hello
+-- ftd.text: "Hello"
 
 -- ftd.text: Hello
 background.solid: $inherited.colors.background.step-1
