@@ -12,8 +12,7 @@ let fastn_utils = {
             node = "iframe";
         } else if (kind === fastn_dom.ElementKind.Image) {
             node = "img";
-        } else if (kind === fastn_dom.ElementKind.Div ||
-            kind === fastn_dom.ElementKind.ContainerElement ||
+        } else if (kind === fastn_dom.ElementKind.ContainerElement ||
             kind === fastn_dom.ElementKind.Text) {
             node = "div";
         } else if (kind === fastn_dom.ElementKind.Rive) {
@@ -25,6 +24,8 @@ let fastn_utils = {
             node = "input";
         } else if (kind === fastn_dom.ElementKind.Comment) {
             node = fastn_dom.commentNode;
+        } else if (kind === fastn_dom.ElementKind.Wrapper) {
+            node = fastn_dom.wrapperNode;
         }
         return [node, css, attributes];
     },
@@ -156,7 +157,11 @@ let fastn_utils = {
     },
 
     isCommentNode(node) {
-      return node === fastn_dom.commentNode
+      return node === fastn_dom.commentNode;
+    },
+
+    isWrapperNode(node) {
+        return node === fastn_dom.wrapperNode;
     },
 
     nextSibling(node, parent) {

@@ -156,7 +156,6 @@ impl fastn_js::Function {
 impl fastn_js::ElementKind {
     pub fn to_js(&self) -> &'static str {
         match self {
-            fastn_js::ElementKind::Div => "fastn_dom.ElementKind.Div",
             fastn_js::ElementKind::Row => "fastn_dom.ElementKind.Row",
             fastn_js::ElementKind::ContainerElement => "fastn_dom.ElementKind.ContainerElement",
             fastn_js::ElementKind::Column => "fastn_dom.ElementKind.Column",
@@ -166,7 +165,7 @@ impl fastn_js::ElementKind {
             fastn_js::ElementKind::Text => "fastn_dom.ElementKind.Text",
             fastn_js::ElementKind::Image => "fastn_dom.ElementKind.Image",
             fastn_js::ElementKind::IFrame => "fastn_dom.ElementKind.IFrame",
-            fastn_js::ElementKind::Device => "fastn_dom.ElementKind.Div",
+            fastn_js::ElementKind::Device => "fastn_dom.ElementKind.Wrapper",
             fastn_js::ElementKind::CheckBox => "fastn_dom.ElementKind.CheckBox",
             fastn_js::ElementKind::TextInput => "fastn_dom.ElementKind.TextInput",
             fastn_js::ElementKind::Rive => "fastn_dom.ElementKind.Rive",

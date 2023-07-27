@@ -346,9 +346,11 @@ impl ftd::interpreter::Component {
 
         if let Some(iteration) = self.iteration.as_ref() {
             component_statements = vec![fastn_js::ComponentStatement::ForLoop(fastn_js::ForLoop {
-                list_variable: iteration
-                    .on
-                    .to_fastn_js_value(doc, &rdata.clone_with_new_loop_alias(&loop_alias)),
+                list_variable: iteration.on.to_fastn_js_value(
+                    doc,
+                    &rdata.clone_with_new_loop_alias(&loop_alias),
+                    false,
+                ),
                 statements: component_statements,
                 parent: parent.to_string(),
                 should_return,

@@ -21,7 +21,6 @@ impl Kernel {
 
 #[derive(Copy, Clone, Debug)]
 pub enum ElementKind {
-    Div,
     Row,
     Column,
     ContainerElement,
