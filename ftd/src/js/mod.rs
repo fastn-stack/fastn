@@ -333,7 +333,11 @@ impl ftd::interpreter::Component {
                     deps: condition
                         .references
                         .values()
-                        .flat_map(|v| v.get_deps(&rdata.clone_with_new_loop_alias(&loop_alias, &loop_key_name)))
+                        .flat_map(|v| {
+                            v.get_deps(
+                                &rdata.clone_with_new_loop_alias(&loop_alias, &loop_key_name),
+                            )
+                        })
                         .collect_vec(),
                     condition: condition.update_node_with_variable_reference_js(
                         &rdata.clone_with_new_loop_alias(&loop_alias, &loop_key_name),
@@ -347,9 +351,10 @@ impl ftd::interpreter::Component {
 
         if let Some(iteration) = self.iteration.as_ref() {
             component_statements = vec![fastn_js::ComponentStatement::ForLoop(fastn_js::ForLoop {
-                list_variable: iteration
-                    .on
-                    .to_fastn_js_value(doc, &rdata.clone_with_new_loop_alias(&loop_alias, &loop_key_name)),
+                list_variable: iteration.on.to_fastn_js_value(
+                    doc,
+                    &rdata.clone_with_new_loop_alias(&loop_alias, &loop_key_name),
+                ),
                 statements: component_statements,
                 parent: parent.to_string(),
                 should_return,
