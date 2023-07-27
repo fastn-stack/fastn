@@ -1025,8 +1025,7 @@ impl PropertyValue {
                         loop_object_name_and_kind,
                     ))
                     .ok()
-                    .map(|v| v.into_optional().map(|v| v.1))
-                    .flatten();
+                    .and_then(|v| v.into_optional().map(|v| v.1));
 
                     if let Some(found_kind) = found_kind {
                         match expected_kind {
