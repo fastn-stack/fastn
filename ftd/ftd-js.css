@@ -48,7 +48,8 @@ table {
 }*/
 
 *, :after, :before {
-    box-sizing: inherit;
+    /*box-sizing: inherit;*/
+    box-sizing: border-box;
 }
 
 *, pre, div {
@@ -117,6 +118,21 @@ pre code {
     display: flex;
     align-items: start;
     justify-content: start
+}
+
+.ft_row {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: row;
+    box-sizing: border-box;
+}
+.ft_column {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .ft_row {
