@@ -1367,6 +1367,7 @@ class Node2 {
 }
 
 class ConditionalDom {
+    #marker;
     #parent;
     #node_constructor;
     #condition;
@@ -1374,7 +1375,8 @@ class ConditionalDom {
     #conditionUI;
 
     constructor(parent, deps, condition, node_constructor) {
-        let domNode = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Div);
+        this.#marker = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Comment);
+        this.#parent = parent;
 
         this.#conditionUI = null;
         let closure = fastn.closure(() => {
@@ -1382,7 +1384,7 @@ class ConditionalDom {
                 if (this.#conditionUI) {
                     this.#conditionUI.destroy();
                 }
-                this.#conditionUI = node_constructor(domNode);
+                this.#conditionUI = node_constructor(new ParentNodeWithSibiling(this.#parent, this.#marker));
             } else if (this.#conditionUI) {
                 this.#conditionUI.destroy();
                 this.#conditionUI = null;
@@ -1394,15 +1396,17 @@ class ConditionalDom {
             }
         });
 
-
-        this.#parent = domNode;
         this.#node_constructor = node_constructor;
         this.#condition = condition;
         this.#mutables = [];
     }
 
     getParent() {
-        return this.#parent;
+        let nodes =  [this.#marker];
+        if (this.#conditionUI) {
+            nodes.push(this.#conditionUI);
+        }
+        nodes
     }
 }
 
