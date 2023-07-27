@@ -136,7 +136,6 @@ fn is_ftd_thing(name: &str) -> bool {
 pub(crate) fn get_js_value_from_properties(
     properties: &[ftd::interpreter::Property],
 ) -> Option<ftd::js::Value> {
-    dbg!(properties);
     if properties.is_empty() {
         return None;
     }

@@ -65,11 +65,12 @@ impl<'a> ResolverData<'a> {
     pub(crate) fn clone_with_new_loop_alias(
         &self,
         loop_alias: &'a Option<String>,
+        loop_key_name: &'a Option<String>,
     ) -> ResolverData<'a> {
         ResolverData {
             component_definition_name: self.component_definition_name,
             loop_alias,
-            loop_key_name: self.loop_key_name,
+            loop_key_name,
             inherited_variable_name: self.inherited_variable_name,
             device: self.device,
         }

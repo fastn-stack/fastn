@@ -133,7 +133,7 @@ impl ftd::interpreter::Expression {
                         identifier: "index".to_string(),
                     }
                 } else if let Some(key_name) = rdata.loop_key_name {
-                    if format!("${}", key_name).eq(identifier) {
+                    if dbg!(format!("${}", key_name.split('#').last().unwrap())).eq(identifier) {
                         operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
                             identifier: "index".to_string(),
                         }

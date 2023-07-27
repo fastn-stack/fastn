@@ -13,5 +13,12 @@
 /-- ftd.integer: $LOOP.COUNTER
 for: $day in $weekdays
 
--- ftd.integer: $key
+-- ftd.text: $join(a = $key, b = $day)
 for: $day, $key in $weekdays
+if: { key >= 2 }
+
+-- string join(a,b):
+integer a:
+string b:
+
+a + " " + b

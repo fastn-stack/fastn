@@ -1206,9 +1206,9 @@ impl Loop {
         Ok(ftd::interpreter::StateWithThing::new_thing(Loop::new(
             on,
             doc.resolve_name(ast_loop.alias.as_str()).as_str(),
-            dbg!(ast_loop
+            ast_loop
                 .key_name
-                .map(|key_name| doc.resolve_name(key_name.as_str()))),
+                .map(|key_name| doc.resolve_name(key_name.as_str())),
             ast_loop.line_number,
         )))
     }

@@ -310,7 +310,7 @@ pub fn get_argument_for_reference_and_remaining(
         }
 
         if let Some(key_name) = loop_key_name {
-            if name.starts_with(format!("{}#{}", doc.name, key_name).as_str()) {
+            if name.starts_with(key_name.as_str()) {
                 return Ok(Some((
                     ftd::interpreter::Field::default(
                         key_name,
