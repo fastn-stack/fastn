@@ -1,4 +1,4 @@
--- string inherited-name: $inherited.name
+/-- string inherited-name: $inherited.name
 
 -- ftd.column:
 colors: $main
@@ -16,10 +16,10 @@ color: $inherited.colors.background.step-1
 
 
 
--- foo:
+/-- foo:
 name: Foo
 
--- ftd.text: $inherited-name
+-- ftd.text: $inherited.name
 -- bar:
 
 -- foo:
@@ -40,21 +40,21 @@ name: FOO2
 -- end: foo
 
 
--- pink-block:
+/-- pink-block:
 
 -- render-title:
 
 -- end: pink-block
 
 
--- orange-block:
+/-- orange-block:
 
 -- render-title:
 
 -- end: orange-block
 
 
--- green-block:
+/-- green-block:
 
 -- render-title:
 

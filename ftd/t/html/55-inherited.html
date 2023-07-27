@@ -474,15 +474,6 @@
 "dark": "#D84836",
 "light": "#D84836"
 },
-"foo#foo:name:1": "Foo",
-"foo#foo:name:1,1,2": "FOO2",
-"foo#foo:wrapper:1": [],
-"foo#foo:wrapper:1,1,2": [],
-"foo#green-block:title-color:4": {
-"dark": "darkgreen",
-"light": "darkgreen"
-},
-"foo#green-block:wrapper:4": [],
 "foo#info-base-": {
 "dark": "#233a5dc7",
 "light": "#DAE7FB"
@@ -821,20 +812,10 @@
 }
 }
 },
-"foo#orange-block:title-color:3": {
-"dark": "orange",
-"light": "orange"
-},
-"foo#orange-block:wrapper:3": [],
 "foo#overlay-": {
 "dark": "#000000",
 "light": "#000000"
 },
-"foo#pink-block:title-color:2": {
-"dark": "red",
-"light": "red"
-},
-"foo#pink-block:wrapper:2": [],
 "foo#scrim-": {
 "dark": "#393939",
 "light": "#393939"
@@ -1685,7 +1666,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_column"><div data-id="0,0:main" style="color: rgba(0,0,255,1)" class="ft_common ft_md">Hello</div></div><div data-id="1:main" style="" class="ft_common ft_column"><div data-id="1,0:main" style="" class="ft_common ft_md">Foo</div><div data-id="1,1:main" style="" class="ft_common ft_column"><div data-id="1,1,0:main" style="" class="ft_common ft_md">Foo</div><div data-id="1,1,1:main" style="" class="ft_common ft_md">Foo</div><div data-id="1,1,2:main" style="" class="ft_common ft_column"><div data-id="1,1,2,0:main" style="" class="ft_common ft_md">FOO2</div><div data-id="1,1,2,1:main" style="" class="ft_common ft_column"><div data-id="1,1,2,1,0:main" style="" class="ft_common ft_md">FOO2</div><div data-id="1,1,2,1,1:main" style="" class="ft_common ft_md">FOO2</div></div></div><div data-id="1,1,3:main" style="" class="ft_common ft_column"><div data-id="1,1,3,0:main" style="" class="ft_common ft_md">Foo</div><div data-id="1,1,3,1:main" style="" class="ft_common ft_md">Foo</div></div></div></div><div data-id="2:main" style="align-items: center; background-color: rgba(255,192,203,1); height: 100px; justify-content: center; width: 100px" class="ft_common ft_column"><div data-id="2,0:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">Title</div></div><div data-id="3:main" style="align-items: center; background-color: rgba(255,255,0,1); height: 100px; justify-content: center; width: 100px" class="ft_common ft_column"><div data-id="3,0:main" style="color: rgba(255,165,0,1)" class="ft_common ft_md">Title</div></div><div data-id="4:main" style="align-items: center; background-color: rgba(110,207,110,1); height: 100px; justify-content: center; width: 100px" class="ft_common ft_column"><div data-id="4,0:main" style="color: rgba(0,100,0,1)" class="ft_common ft_md">Title</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_column"><div data-id="0,0:main" style="color: rgba(0,0,255,1)" class="ft_common ft_md">Hello</div></div></div>
 
 
 <script>
@@ -2905,86 +2886,7 @@ document.querySelector(`[data-id="0,0:main"]`).style["color"] = resolve_referenc
 }
 else {document.querySelector(`[data-id="0,0:main"]`).style["color"] = resolve_reference("foo#main.background.step-1", data).dark;}
 }
-window.node_change_main["1,0:main__text"] = function(data) {
-document.querySelector(`[data-id="1,0:main"]`).innerHTML = resolve_reference("foo#foo:name:1", data);
-}
-window.node_change_main["1,1,0:main__text"] = function(data) {
-document.querySelector(`[data-id="1,1,0:main"]`).innerHTML = resolve_reference("foo#inherited-name", data);
-}
-window.node_change_main["1,1,1:main__text"] = function(data) {
-document.querySelector(`[data-id="1,1,1:main"]`).innerHTML = resolve_reference("foo#foo:name:1", data);
-}
-window.node_change_main["1,1,2,0:main__text"] = function(data) {
-document.querySelector(`[data-id="1,1,2,0:main"]`).innerHTML = resolve_reference("foo#foo:name:1,1,2", data);
-}
-window.node_change_main["1,1,2,1,0:main__text"] = function(data) {
-document.querySelector(`[data-id="1,1,2,1,0:main"]`).innerHTML = resolve_reference("foo#foo:name:1,1,2", data);
-}
-window.node_change_main["1,1,2,1,1:main__text"] = function(data) {
-document.querySelector(`[data-id="1,1,2,1,1:main"]`).innerHTML = resolve_reference("foo#foo:name:1,1,2", data);
-}
-window.node_change_main["1,1,3,0:main__text"] = function(data) {
-document.querySelector(`[data-id="1,1,3,0:main"]`).innerHTML = resolve_reference("foo#foo:name:1", data);
-}
-window.node_change_main["1,1,3,1:main__text"] = function(data) {
-document.querySelector(`[data-id="1,1,3,1:main"]`).innerHTML = resolve_reference("foo#foo:name:1", data);
-}
-window.node_change_main["2,0:main__color"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="2,0:main"]`).style["color"] = resolve_reference("foo#pink-block:title-color:2", data).light;
-}
-else {document.querySelector(`[data-id="2,0:main"]`).style["color"] = resolve_reference("foo#pink-block:title-color:2", data).dark;}
-}
-window.node_change_main["3,0:main__color"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="3,0:main"]`).style["color"] = resolve_reference("foo#orange-block:title-color:3", data).light;
-}
-else {document.querySelector(`[data-id="3,0:main"]`).style["color"] = resolve_reference("foo#orange-block:title-color:3", data).dark;}
-}
-window.node_change_main["4,0:main__color"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="4,0:main"]`).style["color"] = resolve_reference("foo#green-block:title-color:4", data).light;
-}
-else {document.querySelector(`[data-id="4,0:main"]`).style["color"] = resolve_reference("foo#green-block:title-color:4", data).dark;}
-}
 window.set_value_main = {};
-window.set_value_main["foo#foo:name:1"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#foo:name:1", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("foo#foo:name:1", "main");
-window.ftd.call_immutable_value_changes("foo#foo:name:1", "main");
-window.ftd.utils.node_change_call("main","1,0:main__text", data);
-window.ftd.utils.node_change_call("main","1,1,1:main__text", data);
-window.ftd.utils.node_change_call("main","1,1,3,0:main__text", data);
-window.ftd.utils.node_change_call("main","1,1,3,1:main__text", data);
-};
-
-window.set_value_main["foo#foo:name:1,1,2"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#foo:name:1,1,2", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("foo#foo:name:1,1,2", "main");
-window.ftd.call_immutable_value_changes("foo#foo:name:1,1,2", "main");
-window.ftd.utils.node_change_call("main","1,1,2,0:main__text", data);
-window.ftd.utils.node_change_call("main","1,1,2,1,0:main__text", data);
-window.ftd.utils.node_change_call("main","1,1,2,1,1:main__text", data);
-};
-
-window.set_value_main["foo#green-block:title-color:4"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#green-block:title-color:4", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("foo#green-block:title-color:4", "main");
-window.ftd.call_immutable_value_changes("foo#green-block:title-color:4", "main");
-window.ftd.utils.node_change_call("main","4,0:main__color", data);
-};
-
-window.set_value_main["foo#inherited-name"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#inherited-name", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("foo#inherited-name", "main");
-window.ftd.call_immutable_value_changes("foo#inherited-name", "main");
-window.ftd.utils.node_change_call("main","1,1,0:main__text", data);
-};
-
 window.set_value_main["foo#main"] = function (data, new_value, remaining) {
 window.ftd.utils.set_value_helper(data, "foo#main", remaining, new_value);
 
@@ -2993,43 +2895,12 @@ window.ftd.call_immutable_value_changes("foo#main", "main");
 window.ftd.utils.node_change_call("main","0,0:main__color", data);
 };
 
-window.set_value_main["foo#orange-block:title-color:3"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#orange-block:title-color:3", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("foo#orange-block:title-color:3", "main");
-window.ftd.call_immutable_value_changes("foo#orange-block:title-color:3", "main");
-window.ftd.utils.node_change_call("main","3,0:main__color", data);
-};
-
-window.set_value_main["foo#pink-block:title-color:2"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#pink-block:title-color:2", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("foo#pink-block:title-color:2", "main");
-window.ftd.call_immutable_value_changes("foo#pink-block:title-color:2", "main");
-window.ftd.utils.node_change_call("main","2,0:main__color", data);
-};
-
 window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
 window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
 window.ftd.utils.node_change_call("main","0,0:main__color", data);
-window.ftd.utils.node_change_call("main","2,0:main__color", data);
-window.ftd.utils.node_change_call("main","3,0:main__color", data);
-window.ftd.utils.node_change_call("main","4,0:main__color", data);
-};
-
-window.set_value_main["inherited.name"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "inherited.name", remaining, new_value);
-if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#inherited-name"]){window["resolve_value_main"]["foo#inherited-name"](data);
-} else {
-let value = resolve_reference("inherited.name", data, null);
-set_data_value(data, "foo#inherited-name", value);
-}
-window.ftd.call_mutable_value_changes("inherited.name", "main");
-window.ftd.call_immutable_value_changes("inherited.name", "main");
-window.ftd.utils.node_change_call("main","1,1,0:main__text", data);
 };
 
 
