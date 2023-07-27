@@ -641,11 +641,13 @@ class Node2 {
             parent = parent.parent();
         }*/
 
+
         if (this.#parent.getNode) {
             this.#parent = this.#parent.getNode();
         }
 
         if (fastn_utils.isWrapperNode(this.#tagName)) {
+            this.#parent = parentOrSibiling;
             return;
         }
         if (sibiling) {
@@ -969,7 +971,7 @@ class Node2 {
                 if (Array.isArray(staticValue)) {
                     staticValue.forEach((func, index) => {
                         if (index !== 0) {
-                            parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#children[index-1]);
+                            parentWithSibiling = new ParentNodeWithSibiling(this.#parent.getParent(), this.#children[index-1]);
                         }
                         this.#children.push(fastn_utils.getStaticValue(func.item)(parentWithSibiling, inherited))
                     });
