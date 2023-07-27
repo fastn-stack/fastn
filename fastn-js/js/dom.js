@@ -1464,6 +1464,10 @@ class ForLoop {
         return this.#wrapper;
     }
 
+    insertNode(index, node) {
+        this.#nodes.splice(index, 0, node);
+    }
+
     getParent() {
         return this.#parent;
     }
