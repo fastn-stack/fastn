@@ -1,7 +1,7 @@
 let fastn_dom = {};
 
 fastn_dom.commentNode = "comment";
-fastn_dom.commentMessage = "***DON'T REMOVE THIS COMMENT. THIS IS MARKER***";
+fastn_dom.commentMessage = "***FASTN***";
 
 fastn_dom.common = {
     ".ft_row": {
