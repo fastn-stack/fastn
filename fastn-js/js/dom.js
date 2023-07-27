@@ -4,27 +4,7 @@ fastn_dom.commentNode = "comment";
 fastn_dom.wrapperNode = "wrapper";
 fastn_dom.commentMessage = "***FASTN***";
 
-fastn_dom.common = {
-    ".ft_row": {
-        "value": {
-            "display": "flex",
-            "align-items": "start",
-            "justify-content": "start",
-            "flex-direction": "row",
-        }
-    },
-    ".ft_column": {
-        "value": {
-            "display": "flex",
-            "align-items": "start",
-            "justify-content": "start",
-            "flex-direction": "column",
-        }
-    }
-};
-
-
-fastn_dom.classes = { ...fastn_dom.common }
+fastn_dom.classes = { }
 fastn_dom.unsanitised_classes = {}
 fastn_dom.class_count = 0;
 fastn_dom.propertyMap = {
