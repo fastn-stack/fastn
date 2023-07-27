@@ -306,7 +306,7 @@ impl ftd::interpreter::Component {
         use itertools::Itertools;
 
         let loop_alias = self.iteration.clone().map(|v| v.alias);
-        let loop_key_name = self.iteration.clone().map(|v| v.key_name).unwrap();
+        let loop_key_name = self.iteration.clone().map(|v| v.key_name).flatten();
         let mut component_statements = if self.is_loop() || self.condition.is_some() {
             self.to_component_statements_(
                 fastn_js::FUNCTION_PARENT,
