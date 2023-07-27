@@ -1,6 +1,7 @@
 let fastn_dom = {};
 
 fastn_dom.commentNode = "comment";
+fastn_dom.wrapperNode = "wrapper";
 fastn_dom.commentMessage = "***FASTN***";
 
 fastn_dom.common = {
@@ -140,13 +141,13 @@ fastn_dom.ElementKind = {
     Image: 6,
     IFrame: 7,
     // To create parent for dynamic DOM
-    Div: 8,
+    Comment: 8,
     CheckBox: 9,
     TextInput: 10,
     ContainerElement: 11,
     Rive: 12,
     Document: 13,
-    Comment: 14,
+    Wrapper: 14,
 };
 
 fastn_dom.PropertyKind = {
@@ -600,6 +601,7 @@ class Node2 {
     #node;
     #kind;
     #parent;
+    #tagName;
     /**
      * This is where we store all the attached closures, so we can free them
      * when we are done.
@@ -611,9 +613,11 @@ class Node2 {
      * rive).
      */
     #extraData;
+    #children;
     constructor(parentOrSibiling, kind) {
         this.#kind = kind;
         this.#parent = parentOrSibiling;
+        this.#children = [];
         let sibiling = undefined;
 
         if (parentOrSibiling instanceof ParentNodeWithSibiling) {
@@ -622,7 +626,7 @@ class Node2 {
         }
 
         let [node, classes, attributes] = fastn_utils.htmlNode(kind);
-
+        this.#tagName = node;
         this.#node = fastn_virtual.document.createElement(node);
         for (let key in attributes) {
           this.#node.setAttribute(key, attributes[key])
@@ -632,27 +636,30 @@ class Node2 {
         }
 
         this.#mutables = [];
-
         this.#extraData = {};
         /*if (!!parent.parent) {
             parent = parent.parent();
         }*/
 
-
         if (this.#parent.getNode) {
             this.#parent = this.#parent.getNode();
         }
 
+        if (fastn_utils.isWrapperNode(this.#tagName)) {
+            return;
+        }
         if (sibiling) {
             this.#parent.insertBefore(this.#node, fastn_utils.nextSibling(sibiling, this.#parent));
         } else {
             this.#parent.appendChild(this.#node);
         }
     }
+    getTagName(){
+        return this.#tagName;
+    }
     getParent() {
         return this.#parent;
     }
-
     // for attaching inline attributes
     attachAttribute(property, value) {
         if (fastn_utils.isNull(value)) {
@@ -660,19 +667,16 @@ class Node2 {
         }
         this.#node.setAttribute(property, value);
     }
-
     updateTagName(name) {
         if (ssr) {
             this.#node.updateTagName(name);
         }
     }
-
     updateMetaTitle(value) {
         if (!ssr && hydrating) {
             window.document.title = value;
         }
     }
-
     addMetaTag(tagName, value) {
         if (!ssr && hydrating) {
             const metaTag = window.document.createElement('meta');
@@ -681,7 +685,6 @@ class Node2 {
             document.head.appendChild(metaTag);
         }
     }
-
     // dynamic-class-css
     attachCss(property, value, createClass, className) {
         const propertyShort = fastn_dom.propertyMap[property] || property;
@@ -758,7 +761,6 @@ class Node2 {
         this.#node.classList.add(cls);
         return cls;
     }
-
     attachLinearGradientCss(value) {
         if (fastn_utils.isNull(value)) {
             this.attachCss("background-image", value);
@@ -913,7 +915,6 @@ class Node2 {
             }
         }
     }
-
     attachAlignContent(value, node_kind) {
         if (fastn_utils.isNull(value)) {
             this.attachCss('align-items', value);
@@ -959,16 +960,29 @@ class Node2 {
             }
         }
     }
-
     setStaticProperty(kind, value, inherited) {
         // value can be either static or mutable
         let staticValue = fastn_utils.getStaticValue(value);
         if (kind === fastn_dom.PropertyKind.Children) {
-            if (Array.isArray(staticValue)) {
-                staticValue.forEach(func =>
-                    fastn_utils.getStaticValue(func.item)(this, inherited));
+            if (fastn_utils.isWrapperNode(this.#tagName)) {
+                let parentWithSibiling = this.#parent;
+                if (Array.isArray(staticValue)) {
+                    staticValue.forEach((func, index) => {
+                        if (index !== 0) {
+                            parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#children[index-1]);
+                        }
+                        this.#children.push(fastn_utils.getStaticValue(func.item)(parentWithSibiling, inherited))
+                    });
+                } else {
+                    this.#children.push(staticValue(parentWithSibiling, inherited));
+                }
             } else {
-                staticValue(this, inherited);
+                if (Array.isArray(staticValue)) {
+                    staticValue.forEach(func =>
+                        this.#children.push(fastn_utils.getStaticValue(func.item)(this, inherited)));
+                } else {
+                    this.#children.push(staticValue(this, inherited));
+                }
             }
         } else if (kind === fastn_dom.PropertyKind.Id) {
             this.#node.id = staticValue;
@@ -1328,9 +1342,11 @@ class Node2 {
     getNode() {
         return this.#node;
     }
-
     getExtraData() {
         return this.#extraData
+    }
+    getChildren() {
+        return this.#children;
     }
     addEventHandler(event, func) {
         if (event === fastn_dom.Event.Click) {
@@ -1382,11 +1398,28 @@ class ConditionalDom {
         let closure = fastn.closure(() => {
             if (condition()) {
                 if (this.#conditionUI) {
-                    this.#conditionUI.destroy();
+                    if (Array.isArray(this.#conditionUI)) {
+                        while (this.#conditionUI.length > 0) {
+                            let poppedElement = this.#conditionUI.pop();
+                            poppedElement.destroy();
+                        }
+                    } else {
+                        this.#conditionUI.destroy();
+                    }
                 }
                 this.#conditionUI = node_constructor(new ParentNodeWithSibiling(this.#parent, this.#marker));
+                if (fastn_utils.isWrapperNode(this.#conditionUI.getTagName())) {
+                    this.#conditionUI = this.#conditionUI.getChildren();
+                }
             } else if (this.#conditionUI) {
-                this.#conditionUI.destroy();
+                if (Array.isArray(this.#conditionUI)) {
+                    while (this.#conditionUI.length > 0) {
+                        let poppedElement = this.#conditionUI.pop();
+                        poppedElement.destroy();
+                    }
+                } else {
+                    this.#conditionUI.destroy();
+                }
                 this.#conditionUI = null;
             }
         })

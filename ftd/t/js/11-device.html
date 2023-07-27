@@ -7,7 +7,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><comment data-id="2"></comment><div data-id="3"><div data-id="4">Hello from desktop</div><div data-id="5">Hello again from desktop</div></div><comment data-id="6"></comment></body><style id="styles">
+<body data-id="1"><comment data-id="2"></comment><div data-id="4">Hello from desktop</div><div data-id="5">Hello again from desktop</div><comment data-id="6"></comment></body><style id="styles">
     .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
     </style>
@@ -21,14 +21,16 @@ let main = function (parent) {
   ], function () {
     return (ftd.device.get() === "desktop");
   }, function (root) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Div);
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Wrapper);
     rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop", inherited);
+      return rooti0;
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello again from desktop", inherited);
+      return rooti0;
     }
     ]), inherited);
     return rooti0;
@@ -38,14 +40,16 @@ let main = function (parent) {
   ], function () {
     return (ftd.device.get() === "mobile");
   }, function (root) {
-    let rooti1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Div);
+    let rooti1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Wrapper);
     rooti1.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from mobile", inherited);
+      return rooti0;
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello again from mobile", inherited);
+      return rooti0;
     }
     ]), inherited);
     return rooti1;

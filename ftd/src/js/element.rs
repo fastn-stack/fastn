@@ -799,6 +799,7 @@ impl Container {
         rdata: &ftd::js::ResolverData,
         component_name: &str,
         has_rive_components: &mut bool,
+        should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
 
@@ -824,6 +825,7 @@ impl Container {
                     doc,
                     &rdata.clone_with_new_inherited_variable(&inherited_variable_name),
                     has_rive_components,
+                    should_return,
                 ),
                 element_name: component_name.to_string(),
                 inherited: inherited_variable_name.to_string(),
@@ -1203,6 +1205,7 @@ impl Document {
             rdata,
             kernel.name.as_str(),
             has_rive_components,
+            false,
         ));
 
         component_statements.extend(self.metadata.to_component_statements(
@@ -1458,6 +1461,7 @@ impl Column {
             rdata,
             kernel.name.as_str(),
             has_rive_components,
+            false,
         ));
 
         if should_return {
@@ -1524,6 +1528,7 @@ impl Row {
             rdata,
             kernel.name.as_str(),
             has_rive_components,
+            false,
         ));
 
         if should_return {
@@ -1585,6 +1590,7 @@ impl ContainerElement {
             rdata,
             kernel.name.as_str(),
             has_rive_components,
+            false,
         ));
 
         if should_return {
@@ -1647,6 +1653,7 @@ impl Device {
             &rdata.clone_with_new_device(&Some(self.device.clone())),
             kernel.name.as_str(),
             has_rive_components,
+            true,
         ));
         component_statements.push(fastn_js::ComponentStatement::Return {
             component_name: kernel.name,
