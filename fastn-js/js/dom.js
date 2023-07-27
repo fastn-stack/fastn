@@ -611,15 +611,19 @@ class Node2 {
      * rive).
      */
     #extraData;
-
-    #isSibiling;
     constructor(parentOrSibiling, kind) {
         this.#kind = kind;
-        this.#isSibiling = false;
+        this.#parent = parentOrSibiling;
+        let sibiling = undefined;
+
+        if (parentOrSibiling instanceof ParentNodeWithSibiling) {
+            this.#parent = parentOrSibiling.getParent();
+            sibiling = parentOrSibiling.getSibiling();
+        }
 
         let [node, classes, attributes] = fastn_utils.htmlNode(kind);
 
-        this.#node = fastn_virtual.document.createElement(node, parentOrSibiling);
+        this.#node = fastn_virtual.document.createElement(node);
         for (let key in attributes) {
           this.#node.setAttribute(key, attributes[key])
         }
@@ -627,13 +631,6 @@ class Node2 {
             this.#node.classList.add(classes[c]);
         }
 
-        let notParentButSibiling = false;
-        this.#parent = parentOrSibiling;
-
-        if (this.#parent.isSibiling && this.#parent.isSibiling()) {
-            this.#parent = parentOrSibiling.getParent();
-            notParentButSibiling = true;
-        }
         this.#mutables = [];
 
         this.#extraData = {};
@@ -646,23 +643,14 @@ class Node2 {
             this.#parent = this.#parent.getNode();
         }
 
-        if (notParentButSibiling) {
-            this.#parent.insertBefore(this.#node, fastn_utils.nextSibling(parentOrSibiling));
-            parentOrSibiling.setSibiling(false);
+        if (sibiling) {
+            this.#parent.insertBefore(this.#node, fastn_utils.nextSibling(sibiling, this.#parent));
         } else {
             this.#parent.appendChild(this.#node);
         }
     }
     getParent() {
         return this.#parent;
-    }
-
-    isSibiling() {
-        return this.#isSibiling;
-    }
-
-    setSibiling(value) {
-        this.#isSibiling = value;
     }
 
     // for attaching inline attributes
@@ -1426,6 +1414,21 @@ fastn_dom.conditionalDom = function (parent, deps, condition, node_constructor) 
     return new ConditionalDom(parent, deps, condition, node_constructor);
 }
 
+class ParentNodeWithSibiling {
+    #parent;
+    #sibiling;
+    constructor(parent, sibiling) {
+        this.#parent = parent;
+        this.#sibiling = sibiling;
+    }
+    getParent() {
+        return this.#parent;
+    }
+    getSibiling() {
+        return this.#sibiling;
+    }
+}
+
 class ForLoop {
     #node_constructor;
     #list;
@@ -1437,11 +1440,13 @@ class ForLoop {
         this.#parent = parent;
         this.#node_constructor = node_constructor;
         this.#list = list;
-        this.#wrapper.setSibiling(true);
-        let sibiling = this.#wrapper;
+        this.#nodes = [];
+
+        let parentWithSibiling = new ParentNodeWithSibiling(parent, this.#wrapper);
         for (let idx in list.getList()) {
-            sibiling = this.createNode(sibiling, idx);
-            sibiling.setSibiling(true);
+            let node = this.createNode(parentWithSibiling, idx);
+            parentWithSibiling = new ParentNodeWithSibiling(parent, node);
+            this.#nodes.push(node);
         }
     }
     createNode(sibiling, index) {

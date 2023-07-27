@@ -159,26 +159,15 @@ let fastn_utils = {
       return node === fastn_dom.commentNode
     },
 
-    nextSibling(node) {
+    nextSibling(node, parent) {
         if (node.nextSibling) {
           return node.nextSibling;
         }
         if (node.getNode && node.getNode().nextSibling !== undefined) {
             return node.getNode().nextSibling;
         }
-        return node.getParent().getChildren().indexOf(node.getNode()) + 1;
+        return parent.getChildren().indexOf(node.getNode()) + 1;
     },
-
-    getParent(parent) {
-        if (!fastn_utils.isNull(parent)
-            && parent.isSibiling
-            && parent.isSibiling()
-        ) {
-            return parent.getParent();
-        } else {
-            return parent;
-        }
-    }
 }
 
 

@@ -19,8 +19,7 @@ class Node {
     #tagName
     #children
     #attributes
-    #parent
-    constructor(id, tagName, parent) {
+    constructor(id, tagName) {
         this.#tagName = tagName;
         this.#id = id;
         this.classList = new ClassList();
@@ -29,7 +28,6 @@ class Node {
         this.innerHTML = "";
         this.style = {};
         this.onclick = null;
-        this.#parent = parent;
     }
     appendChild(c) {
         this.#children.push(c);
@@ -94,13 +92,11 @@ class Node {
 }
 
 class Document2 {
-    createElement(tagName, parent) {
+    createElement(tagName) {
         id_counter++;
 
-        parent = fastn_utils.getParent(parent);
-
         if (ssr) {
-            return new Node(id_counter, tagName, parent);
+            return new Node(id_counter, tagName);
         }
 
         if (tagName === "body") {

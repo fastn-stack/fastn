@@ -1,0 +1,32 @@
+<html>
+<head>
+    <script src="fastn-js.js"></script>
+
+    <style>
+       
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><comment data-id="2"></comment><div data-id="3">Arpita</div><div data-id="4">Ayushi</div></body><style id="styles">
+    .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
+	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
+    </style>
+<script>
+    (function() {
+        let global = {
+};
+let main = function (parent) {
+  fastn_utils.getter(global.foo__names).forLoop(parent, function (root, item, index) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
+    return rooti0;
+  });
+}
+fastn_utils.createNestedObject(global, "foo__names", fastn.mutableList(["Arpita",
+"Ayushi"]));
+
+        fastn_virtual.hydrate(main);
+        ftd.post_init();
+    })();
+</script>
+</html>
