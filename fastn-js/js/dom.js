@@ -1442,16 +1442,18 @@ class ForLoop {
         this.#list = list;
         this.#nodes = [];
 
-        let parentWithSibiling = new ParentNodeWithSibiling(parent, this.#wrapper);
         for (let idx in list.getList()) {
-            let node = this.createNode(parentWithSibiling, idx);
-            parentWithSibiling = new ParentNodeWithSibiling(parent, node);
+            let node = this.createNode(idx);
             this.#nodes.push(node);
         }
     }
-    createNode(sibiling, index) {
+    createNode(index) {
+        let parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#wrapper);
+        if (index !== 0) {
+            parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#nodes[index-1]);
+        }
         let v = this.#list.get(index);
-        return this.#node_constructor(sibiling, v.item, v.index);
+        return this.#node_constructor(parentWithSibiling, v.item, v.index);
     }
 
     getWrapper() {
