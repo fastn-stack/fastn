@@ -522,7 +522,7 @@ impl<'a> TDoc<'a> {
             &str,
             &mut [ftd::interpreter::Argument],
         )>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<(
             ftd::interpreter::PropertyValueSource,
