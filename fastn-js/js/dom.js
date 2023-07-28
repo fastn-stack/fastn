@@ -670,17 +670,79 @@ class Node2 {
             this.#node.updateTagName(name);
         }
     }
+
+    updateToAnchor() {
+        let node_kind = this.#kind;
+        if (ssr) {
+            if (node_kind !== fastn_dom.ElementKind.Image) this.updateTagName('a');
+        }
+
+        if (!ssr && hydrating) {
+            let current_query = `[data-id="${id_counter}"]`;
+            let currentElement = document.querySelector(current_query);
+            console.log(currentElement);
+
+            if (node_kind !== fastn_dom.ElementKind.Image) {
+                let newElement = document.createElement('a');
+                newElement.innerHTML = currentElement.innerHTML;
+
+                console.log(newElement);
+                currentElement.replaceWith(newElement);
+            }
+        }
+    }
+
     updateMetaTitle(value) {
         if (!ssr && hydrating) {
             window.document.title = value;
         }
     }
-    addMetaTag(tagName, value) {
+    addMetaTagByName(name, value) {
+        if (value === null || value === undefined) {
+            this.removeMetaTagByName(name);
+            return;
+        }
         if (!ssr && hydrating) {
             const metaTag = window.document.createElement('meta');
-            metaTag.setAttribute('name', tagName);
+            metaTag.setAttribute('name', name);
             metaTag.setAttribute('content', value);
             document.head.appendChild(metaTag);
+        }
+    }
+    addMetaTagByProperty(property, value) {
+        if (value === null || value === undefined) {
+            this.removeMetaTagByProperty(property);
+            return;
+        }
+        if (!ssr && hydrating) {
+            const metaTag = window.document.createElement('meta');
+            metaTag.setAttribute('property', property);
+            metaTag.setAttribute('content', value);
+            document.head.appendChild(metaTag);
+        }
+    }
+    removeMetaTagByName(name) {
+        if (!ssr && hydrating) {
+            const metaTags = document.getElementsByTagName('meta');
+            for (let i = 0; i < metaTags.length; i++) {
+                const metaTag = metaTags[i];
+                if (metaTag.getAttribute('name') === name) {
+                    metaTag.remove();
+                    break;
+                }
+            }
+        }
+    }
+    removeMetaTagByProperty(property) {
+        if (!ssr && hydrating) {
+            const metaTags = document.getElementsByTagName('meta');
+            for (let i = 0; i < metaTags.length; i++) {
+                const metaTag = metaTags[i];
+                if (metaTag.getAttribute('property') === property) {
+                    metaTag.remove();
+                    break;
+                }
+            }
         }
     }
     // dynamic-class-css
@@ -1267,7 +1329,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
-            this.updateTagName("a");
+            this.updateToAnchor();
             this.attachAttribute("href", staticValue);
         } else if (kind === fastn_dom.PropertyKind.OpenInNewTab) {
             // open_in_new_tab is boolean type
@@ -1335,30 +1397,36 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle) {
             this.updateMetaTitle(staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle) {
-            this.addMetaTag("og:title", staticValue);
+            this.addMetaTagByProperty("og:title", staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterTitle) {
-            this.addMetaTag("twitter:title", staticValue);
+            this.addMetaTagByName("twitter:title", staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaDescription) {
-            this.addMetaTag("description", staticValue);
+            this.addMetaTagByName("description", staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription) {
-            this.addMetaTag("og:description", staticValue);
+            this.addMetaTagByProperty("og:description", staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription) {
-            this.addMetaTag("twitter:description", staticValue);
+            this.addMetaTagByName("twitter:description", staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGImage) {
             // staticValue is of ftd.raw-image-src RecordInstance type
-            if (!fastn_utils.isNull(staticValue)) {
-                this.addMetaTag("og:image", fastn_utils.getStaticValue(staticValue.get('src')));
+            if (fastn_utils.isNull(staticValue)) {
+                this.removeMetaTagByProperty("og:image");
+                return;
             }
+            this.addMetaTagByProperty("og:image", fastn_utils.getStaticValue(staticValue.get('src')));
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage) {
             // staticValue is of ftd.raw-image-src RecordInstance type
-            if (!fastn_utils.isNull(staticValue)) {
-                this.addMetaTag("twitter:image", fastn_utils.getStaticValue(staticValue.get('src')));
+            if (fastn_utils.isNull(staticValue)) {
+                this.removeMetaTagByName("twitter:image");
+                return;
             }
+            this.addMetaTagByName("twitter:image", fastn_utils.getStaticValue(staticValue.get('src')));
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor) {
             // staticValue is of ftd.color RecordInstance type
-            if (!fastn_utils.isNull(staticValue)) {
-                this.addMetaTag("theme-color", fastn_utils.getStaticValue(staticValue.get('light')));
+            if (fastn_utils.isNull(staticValue)) {
+                this.removeMetaTagByName("theme-color");
+                return;
             }
+            this.addMetaTagByName("theme-color", fastn_utils.getStaticValue(staticValue.get('light')));
         } else if (kind === fastn_dom.PropertyKind.IntegerValue
             || kind === fastn_dom.PropertyKind.DecimalValue
             || kind === fastn_dom.PropertyKind.BooleanValue) {
