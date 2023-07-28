@@ -673,8 +673,6 @@ class Node2 {
                 }
 
                 currentElement.childNodes.forEach(node => {
-                    console.log("INSIDE LOOP");
-                    console.log(newElement);
                     newElement.appendChild(node);
                 });
                 currentElement.parentNode.insertBefore(newElement, currentElement);
