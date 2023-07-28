@@ -86,6 +86,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
     let html_str = ftd::ftd_js_html()
         .replace("__js_script__", js_document_script.as_str())
         .replace("__html_body__", ssr_body.as_str())
+        .replace("__base_url__", "/")
         .replace(
             "__script_file__",
             format!(

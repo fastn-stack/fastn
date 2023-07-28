@@ -628,6 +628,7 @@ pub fn replace_markers_2023(
     ssr_body: &str,
     font_style: &str,
     default_css: &str,
+    base_url: &str,
 ) -> String {
     ftd::html::utils::trim_all_lines(
         s.replace("__js_script__", js_script)
@@ -646,6 +647,7 @@ pub fn replace_markers_2023(
                 .as_str(),
             )
             .replace("__default_css__", default_css)
+            .replace("__base_url__", base_url)
             .as_str(),
     )
 }
