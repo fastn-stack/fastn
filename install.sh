@@ -20,25 +20,43 @@ else
   }
 fi
 
-print_fastn_logo() {
-    local orange_color='\033[38;5;208m'
-    local reset_color='\033[0m'
-    
-    local text="
-      /@@@@%                                                                    
-  /@@@@@@@@%                                      /&&&&&&,                      
-  /@@@@@@*..                                      /@@@@@@,                      
-@@@@@@@@@@@%  *##@@@@@@@##*      (#%@@@@@@&##. ,@@@@@@@@@@@% %@@@@@@##&@@@&##.  
-@@@@@@@@@@@% %@@@@@@@@@@@@@&(. ,@@@@@@@@@@@@@@/,@@@@@@@@@@@% %@@@@@@@@@@@@@@@@/ 
-  /@@@@%     *(/(/,  *%@@@@@@,/@@@@@@#/* *(/(/(*  /@@@@@@,   %@@@@@&(. .(&@@@@%*
-  /@@@@%     ,#@@@@@@@@@@@@@@, ,@@@@@@@@@@@@@(.   /@@@@@@,   %@@@@@%     %@@@@@@
-  /@@@@%   ,@@@@@@&%%%&@@@@@@,    *%%%%%@@@@@@@%  /@@@@@@,   %@@@@@%     %@@@@@@
-  /@@@@%   ,@@@@@@(...(@@@@@@,/@@@@@@*...%@@@@@%  /@@@@@@*.. %@@@@@%     %@@@@@@
-  /@@@@%     %@@@@@@@@@@@@@@@, ,@@@@@@@@@@@@@@/   /@@@@@@@@% %@@@@@%     %@@@@@@
-               ,@@@@@,             ,@@@@@@(           (@@@@%                   ,
-"
+setup_colors() {
+    if ! is_tty; then
+        FMT_RED=""
+        FMT_GREEN=""
+        FMT_YELLOW=""
+        FMT_BLUE=""
+        FMT_BOLD=""
+        FMT_ORANGE=""
+        FMT_RESET=""
+    else
+        FMT_RED=$(printf '\033[31m')
+        FMT_GREEN=$(printf '\033[32m')
+        FMT_YELLOW=$(printf '\033[33m')
+        FMT_BLUE=$(printf '\033[34m')
+        FMT_BOLD=$(printf '\033[1m')
+        FMT_ORANGE=$(printf '\033[38;5;208m')
+        FMT_RESET=$(printf '\033[0m')
+    fi
+}
 
-    echo -e "${orange_color}${text}${reset_color}"
+print_fastn_logo() {
+    echo "${FMT_ORANGE}       .:~!!~^.                                                                                     "
+    echo "     7B@@@@@@@&.                                                                                    "
+    echo "   .J@@@@@@&&B?                                                .7GBBBP.                             "
+    echo "   !#@@@@&^                                                    ^P@@@@@^                             "
+    echo "..:5&@@@@#~.:.        .:~!!~^..             ..^~!!~^..       .:?B@@@@@?^:..   .::::.   .:~!~^:.     "
+    echo "5#@@@@@@@@@@@#7   .!G&@@@@@@@@@#5^       :JB@@@@@@@@@@#Y^   :P@@@@@@@@@@@&J   G@@@@G77P@@@@@@@&5^   "
+    echo "?5&@@@@@@@&&&5^  ~B@@@@@#GGB&@@@@@P.    ?&@@@@@BPPB&@@@@&Y. .?&@@@@@@@&&&G!   P@@@@&&@@@@@@@@@@@&7. "
+    echo "   J&@@@@#:     .YB&&#P^    ^P@@@@@!   .&@@@@#7    :JB&##G:    ~G@@@@&~.      P@@@@@@Y^...~P@@@@@&^ "
+    echo "   7&@@@@B.              ...!G@@@@@?.  .#@@@@@B7^..            ^5@@@@&^       P@@@@&5      :B@@@@@! "
+    echo "   ?&@@@@B.       .!JPB#&@@@@@@@@@@?.   ^5@@@@@@@@@&#GY7:      ^P@@@@&^       P@@@@#?      :5&@@@@! "
+    echo "   ?&@@@@B.     :P&@@@@@&BG5YG@@@@@?.     :!YG#&@@@@@@@@@G:    ^P@@@@&^       P@@@@#?      :5&@@@@! "
+    echo "   ?&@@@@B.    .Y@@@@&?:    .!&@@@@?.           ..^J#@@@@@Y.   ^P@@@@&^       P@@@@#?      :5&@@@@! "
+    echo "   ?&@@@@B.    :P@@@@B:     ?#@@@@@?.  ~#@&@&Y^    :Y&@@@@Y.   :5@@@@@J:.     P@@@@#?      :5&@@@@! "
+    echo "   ?&@@@@B.     7@@@@@&B55G&&@@@@@@?.  .P@@@@@@BGPB&@@@@@B^     !&@@@@@@&P~   P@@@@#?      :5&@@@@! "
+    echo "   ?&@@@@#.      ~P&@@@@@@@B7!@@@@@J.    :Y#@@@@@@@@@@#5~        ~P&@@@@@&5   G@@@@&J      :P@@@@@! "
+    echo "    ......         .:^~~^:.   .....         .:^~!!~^:.             .:^~~^..   ......        ......  ${FMT_RESET}"
 }
 
 update_path() {
@@ -52,7 +70,7 @@ update_path() {
     fi
 
     # Check if the path is already added to the shell config file
-    if ! grep -q "export PATH=\"\$PATH:${DESTINATION_PATH}\"" "$shell_config_file"; then
+    if ! grep -qF "export PATH=\"\$PATH:${DESTINATION_PATH}\"" "$shell_config_file"; then
         echo "export PATH=\"\$PATH:${DESTINATION_PATH}\"" >> "$shell_config_file"
         echo "Updated the PATH variable in $shell_config_file"
         echo "Please restart your terminal session to start using fastn."
@@ -61,24 +79,6 @@ update_path() {
 
 command_exists() {
   command -v "$@" >/dev/null 2>&1
-}
-
-setup_colors() {
-    if ! is_tty; then
-        FMT_RED=""
-        FMT_GREEN=""
-        FMT_YELLOW=""
-        FMT_BLUE=""
-        FMT_BOLD=""
-        FMT_RESET=""
-    else
-        FMT_RED=$(printf '\033[31m')
-        FMT_GREEN=$(printf '\033[32m')
-        FMT_YELLOW=$(printf '\033[33m')
-        FMT_BLUE=$(printf '\033[34m')
-        FMT_BOLD=$(printf '\033[1m')
-        FMT_RESET=$(printf '\033[0m')
-    fi
 }
 
 setup() {
@@ -139,7 +139,7 @@ setup() {
     echo "│   the changes.                         │"
     echo "│                                        │"
     echo "│   Get started with fastn at:           │"
-    echo "│   https://fastn.com                    │"
+    echo "│   ${FMT_BLUE}https://fastn.com${FMT_RESET}${FMT_GREEN}                    │"
     echo "│                                        │"
     echo "╰────────────────────────────────────────╯${FMT_RESET}"
 }
