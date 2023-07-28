@@ -1,3 +1,4 @@
+-- ftd.text: ====Start====
 -- ftd.desktop:
 
 -- ftd.text: Hello from desktop
@@ -5,9 +6,13 @@
 
 -- end: ftd.desktop
 
+-- ftd.text: ====Middle====
+
 -- ftd.mobile:
 
 -- ftd.text: Hello from mobile
 -- ftd.text: Hello again from mobile
 
 -- end: ftd.mobile
+
+-- ftd.text: ====End====

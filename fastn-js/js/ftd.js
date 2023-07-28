@@ -2,6 +2,7 @@ let ftd = {
     // source: https://stackoverflow.com/questions/400212/ (cc-by-sa)
     riveNodes: {},
     is_empty(value) {
+        value = fastn_utils.getFlattenStaticValue(value);
         return fastn_utils.isNull(value) || value.length === 0;
     },
 

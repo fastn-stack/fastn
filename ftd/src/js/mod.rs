@@ -358,6 +358,7 @@ impl ftd::interpreter::Component {
                 list_variable: iteration.on.to_fastn_js_value(
                     doc,
                     &rdata.clone_with_new_loop_alias(&loop_alias, &loop_counter_alias),
+                    false,
                 ),
                 statements: component_statements,
                 parent: parent.to_string(),

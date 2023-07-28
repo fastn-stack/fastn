@@ -1014,6 +1014,66 @@ impl PropertyValue {
                 if expression
                     .starts_with(format!("${}.", ftd::interpreter::FTD_INHERITED).as_str()) =>
             {
+                let reference = expression
+                    .trim_start_matches(ftd::interpreter::utils::REFERENCE)
+                    .to_string();
+
+                // Todo: remove it after 0.3
+                if reference.starts_with("inherited.colors")
+                    || reference.starts_with("inherited.types")
+                {
+                    let found_kind = dbg!(doc.get_kind_with_argument(
+                        reference.as_str(),
+                        value.line_number(),
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                    ))
+                    .ok()
+                    .and_then(|v| v.into_optional().map(|v| v.1));
+
+                    if let Some(found_kind) = found_kind {
+                        match expected_kind {
+                            Some(ekind)
+                                if !ekind.kind.is_same_as(&found_kind.kind)
+                                    && (ekind.kind.ref_inner().is_record()
+                                        || ekind.kind.ref_inner().is_or_type()) =>
+                            {
+                                return Ok(PropertyValue::value_from_ast_value(
+                                    value,
+                                    doc,
+                                    mutable,
+                                    expected_kind,
+                                    definition_name_with_arguments,
+                                    loop_object_name_and_kind,
+                                )?
+                                .map(Some));
+                            }
+                            Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
+                                return ftd::interpreter::utils::e2(
+                                    format!(
+                                        "3 Expected kind `{:?}`, found: `{:?}`",
+                                        ekind, found_kind
+                                    )
+                                    .as_str(),
+                                    doc.name,
+                                    value.line_number(),
+                                );
+                            }
+                            _ => {}
+                        }
+                        let kind = get_kind(expected_kind, &found_kind);
+
+                        return Ok(ftd::interpreter::StateWithThing::new_thing(Some(
+                            ftd::interpreter::PropertyValue::Reference {
+                                name: reference,
+                                kind: kind.to_owned(),
+                                source: PropertyValueSource::Global,
+                                is_mutable: false,
+                                line_number: 0,
+                            },
+                        )));
+                    }
+                }
                 if let Some(kind) = expected_kind {
                     Ok(ftd::interpreter::StateWithThing::new_thing(Some(
                         ftd::interpreter::PropertyValue::Reference {

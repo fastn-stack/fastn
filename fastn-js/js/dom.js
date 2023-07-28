@@ -1,26 +1,10 @@
 let fastn_dom = {};
 
-fastn_dom.common = {
-    ".ft_row": {
-        "value": {
-            "display": "flex",
-            "align-items": "start",
-            "justify-content": "start",
-            "flex-direction": "row",
-        }
-    },
-    ".ft_column": {
-        "value": {
-            "display": "flex",
-            "align-items": "start",
-            "justify-content": "start",
-            "flex-direction": "column",
-        }
-    }
-};
+fastn_dom.commentNode = "comment";
+fastn_dom.wrapperNode = "wrapper";
+fastn_dom.commentMessage = "***FASTN***";
 
-
-fastn_dom.classes = { ...fastn_dom.common }
+fastn_dom.classes = { }
 fastn_dom.unsanitised_classes = {}
 fastn_dom.class_count = 0;
 fastn_dom.propertyMap = {
@@ -137,12 +121,13 @@ fastn_dom.ElementKind = {
     Image: 6,
     IFrame: 7,
     // To create parent for dynamic DOM
-    Div: 8,
+    Comment: 8,
     CheckBox: 9,
     TextInput: 10,
     ContainerElement: 11,
     Rive: 12,
     Document: 13,
+    Wrapper: 14,
 };
 
 fastn_dom.PropertyKind = {
@@ -596,6 +581,7 @@ class Node2 {
     #node;
     #kind;
     #parent;
+    #tagName;
     /**
      * This is where we store all the attached closures, so we can free them
      * when we are done.
@@ -607,11 +593,20 @@ class Node2 {
      * rive).
      */
     #extraData;
-    constructor(parent, kind) {
+    #children;
+    constructor(parentOrSibiling, kind) {
         this.#kind = kind;
+        this.#parent = parentOrSibiling;
+        this.#children = [];
+        let sibiling = undefined;
+
+        if (parentOrSibiling instanceof ParentNodeWithSibiling) {
+            this.#parent = parentOrSibiling.getParent();
+            sibiling = parentOrSibiling.getSibiling();
+        }
 
         let [node, classes, attributes] = fastn_utils.htmlNode(kind);
-
+        this.#tagName = node;
         this.#node = fastn_virtual.document.createElement(node);
         for (let key in attributes) {
           this.#node.setAttribute(key, attributes[key])
@@ -619,19 +614,32 @@ class Node2 {
         for (let c in classes) {
             this.#node.classList.add(classes[c]);
         }
-        this.#parent = parent;
-        this.#mutables = [];
 
+        this.#mutables = [];
         this.#extraData = {};
         /*if (!!parent.parent) {
             parent = parent.parent();
         }*/
+
+
         if (this.#parent.getNode) {
             this.#parent = this.#parent.getNode();
         }
-        this.#parent.appendChild(this.#node);
+
+        if (fastn_utils.isWrapperNode(this.#tagName)) {
+            this.#parent = parentOrSibiling;
+            return;
+        }
+        if (sibiling) {
+            this.#parent.insertBefore(this.#node, fastn_utils.nextSibling(sibiling, this.#parent));
+        } else {
+            this.#parent.appendChild(this.#node);
+        }
     }
-    parent() {
+    getTagName(){
+        return this.#tagName;
+    }
+    getParent() {
         return this.#parent;
     }
     // for attaching inline attributes
@@ -641,19 +649,16 @@ class Node2 {
         }
         this.#node.setAttribute(property, value);
     }
-
     updateTagName(name) {
         if (ssr) {
             this.#node.updateTagName(name);
         }
     }
-
     updateMetaTitle(value) {
         if (!ssr && hydrating) {
             window.document.title = value;
         }
     }
-
     addMetaTag(tagName, value) {
         if (!ssr && hydrating) {
             const metaTag = window.document.createElement('meta');
@@ -662,7 +667,6 @@ class Node2 {
             document.head.appendChild(metaTag);
         }
     }
-
     // dynamic-class-css
     attachCss(property, value, createClass, className) {
         const propertyShort = fastn_dom.propertyMap[property] || property;
@@ -739,7 +743,6 @@ class Node2 {
         this.#node.classList.add(cls);
         return cls;
     }
-
     attachLinearGradientCss(value) {
         if (fastn_utils.isNull(value)) {
             this.attachCss("background-image", value);
@@ -894,7 +897,6 @@ class Node2 {
             }
         }
     }
-
     attachAlignContent(value, node_kind) {
         if (fastn_utils.isNull(value)) {
             this.attachCss('align-items', value);
@@ -940,16 +942,29 @@ class Node2 {
             }
         }
     }
-
     setStaticProperty(kind, value, inherited) {
         // value can be either static or mutable
         let staticValue = fastn_utils.getStaticValue(value);
         if (kind === fastn_dom.PropertyKind.Children) {
-            if (Array.isArray(staticValue)) {
-                staticValue.forEach(func =>
-                    fastn_utils.getStaticValue(func.item)(this, inherited));
+            if (fastn_utils.isWrapperNode(this.#tagName)) {
+                let parentWithSibiling = this.#parent;
+                if (Array.isArray(staticValue)) {
+                    staticValue.forEach((func, index) => {
+                        if (index !== 0) {
+                            parentWithSibiling = new ParentNodeWithSibiling(this.#parent.getParent(), this.#children[index-1]);
+                        }
+                        this.#children.push(fastn_utils.getStaticValue(func.item)(parentWithSibiling, inherited))
+                    });
+                } else {
+                    this.#children.push(staticValue(parentWithSibiling, inherited));
+                }
             } else {
-                staticValue(this, inherited);
+                if (Array.isArray(staticValue)) {
+                    staticValue.forEach(func =>
+                        this.#children.push(fastn_utils.getStaticValue(func.item)(this, inherited)));
+                } else {
+                    this.#children.push(staticValue(this, inherited));
+                }
             }
         } else if (kind === fastn_dom.PropertyKind.Id) {
             this.#node.id = staticValue;
@@ -1240,7 +1255,8 @@ class Node2 {
                 const src = staticValue.get(is_dark_mode ? 'dark' : 'light');
 
                 this.attachAttribute("src", fastn_utils.getStaticValue(src));
-            }));
+            }).addNodeProperty(this, null, inherited));
+            this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Alt) {
             this.attachAttribute("alt", staticValue);
         } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
@@ -1269,13 +1285,19 @@ class Node2 {
             this.addMetaTag("twitter:description", staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGImage) {
             // staticValue is of ftd.raw-image-src RecordInstance type
-            this.addMetaTag("og:image", fastn_utils.getStaticValue(staticValue.get('src')));
+            if (!fastn_utils.isNull(staticValue)) {
+                this.addMetaTag("og:image", fastn_utils.getStaticValue(staticValue.get('src')));
+            }
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage) {
             // staticValue is of ftd.raw-image-src RecordInstance type
-            this.addMetaTag("twitter:image", fastn_utils.getStaticValue(staticValue.get('src')));
+            if (!fastn_utils.isNull(staticValue)) {
+                this.addMetaTag("twitter:image", fastn_utils.getStaticValue(staticValue.get('src')));
+            }
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor) {
             // staticValue is of ftd.color RecordInstance type
-            this.addMetaTag("theme-color", fastn_utils.getStaticValue(staticValue.get('light')));
+            if (!fastn_utils.isNull(staticValue)) {
+                this.addMetaTag("theme-color", fastn_utils.getStaticValue(staticValue.get('light')));
+            }
         } else if (kind === fastn_dom.PropertyKind.IntegerValue
             || kind === fastn_dom.PropertyKind.DecimalValue
             || kind === fastn_dom.PropertyKind.BooleanValue) {
@@ -1309,9 +1331,11 @@ class Node2 {
     getNode() {
         return this.#node;
     }
-
     getExtraData() {
         return this.#extraData
+    }
+    getChildren() {
+        return this.#children;
     }
     addEventHandler(event, func) {
         if (event === fastn_dom.Event.Click) {
@@ -1348,6 +1372,7 @@ class Node2 {
 }
 
 class ConditionalDom {
+    #marker;
     #parent;
     #node_constructor;
     #condition;
@@ -1355,17 +1380,35 @@ class ConditionalDom {
     #conditionUI;
 
     constructor(parent, deps, condition, node_constructor) {
-        let domNode = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Div);
+        this.#marker = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Comment);
+        this.#parent = parent;
 
         this.#conditionUI = null;
         let closure = fastn.closure(() => {
             if (condition()) {
                 if (this.#conditionUI) {
+                    if (Array.isArray(this.#conditionUI)) {
+                        while (this.#conditionUI.length > 0) {
+                            let poppedElement = this.#conditionUI.pop();
+                            poppedElement.destroy();
+                        }
+                    } else {
+                        this.#conditionUI.destroy();
+                    }
+                }
+                this.#conditionUI = node_constructor(new ParentNodeWithSibiling(this.#parent, this.#marker));
+                if (fastn_utils.isWrapperNode(this.#conditionUI.getTagName())) {
+                    this.#conditionUI = this.#conditionUI.getChildren();
+                }
+            } else if (this.#conditionUI) {
+                if (Array.isArray(this.#conditionUI)) {
+                    while (this.#conditionUI.length > 0) {
+                        let poppedElement = this.#conditionUI.pop();
+                        poppedElement.destroy();
+                    }
+                } else {
                     this.#conditionUI.destroy();
                 }
-                this.#conditionUI = node_constructor(domNode);
-            } else if (this.#conditionUI) {
-                this.#conditionUI.destroy();
                 this.#conditionUI = null;
             }
         })
@@ -1375,47 +1418,80 @@ class ConditionalDom {
             }
         });
 
-
-        this.#parent = domNode;
         this.#node_constructor = node_constructor;
         this.#condition = condition;
         this.#mutables = [];
     }
 
     getParent() {
-        return this.#parent;
+        let nodes =  [this.#marker];
+        if (this.#conditionUI) {
+            nodes.push(this.#conditionUI);
+        }
+        nodes
     }
 }
 
-fastn_dom.createKernel = function (parent, kind) {
-    return new Node2(parent, kind);
+fastn_dom.createKernel = function (parent, kind, sibiling) {
+    return new Node2(parent, kind, sibiling);
 }
 
 fastn_dom.conditionalDom = function (parent, deps, condition, node_constructor) {
     return new ConditionalDom(parent, deps, condition, node_constructor);
 }
 
+class ParentNodeWithSibiling {
+    #parent;
+    #sibiling;
+    constructor(parent, sibiling) {
+        this.#parent = parent;
+        this.#sibiling = sibiling;
+    }
+    getParent() {
+        return this.#parent;
+    }
+    getSibiling() {
+        return this.#sibiling;
+    }
+}
+
 class ForLoop {
     #node_constructor;
     #list;
     #wrapper;
+    #parent;
+    #nodes;
     constructor(parent, node_constructor, list) {
-        this.#wrapper = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Div);
+        this.#wrapper = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Comment);
+        this.#parent = parent;
         this.#node_constructor = node_constructor;
         this.#list = list;
+        this.#nodes = [];
+
         for (let idx in list.getList()) {
-            // let v = list.get(idx);
-            // node_constructor(this.#wrapper, v.item, v.index).done();
-            this.createNode(idx);
+            let node = this.createNode(idx);
+            this.#nodes.push(node);
         }
     }
     createNode(index) {
+        let parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#wrapper);
+        if (index !== 0) {
+            parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#nodes[index-1]);
+        }
         let v = this.#list.get(index);
-        this.#node_constructor(this.#wrapper, v.item, v.index);
+        return this.#node_constructor(parentWithSibiling, v.item, v.index);
+    }
+
+    getWrapper() {
+        return this.#wrapper;
+    }
+
+    insertNode(index, node) {
+        this.#nodes.splice(index, 0, node);
     }
 
     getParent() {
-        return this.#wrapper;
+        return this.#parent;
     }
 }
 

@@ -1,4 +1,14 @@
+-- ftd.text: "Hello"
+
 -- ftd.text: Hello
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.text: Hello
+background.solid: $bg-og
+
+-- ftd.color bg-og:
+light: yellow
+dark: green
 
 -- string append(a,b):
 string a:
