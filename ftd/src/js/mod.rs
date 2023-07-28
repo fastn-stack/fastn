@@ -125,10 +125,17 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
     }
 
     document_asts.extend(export_asts);
+    let mut scripts = ftd::js::utils::get_external_scripts(has_rive_components);
+    scripts.push(ftd::html::utils::get_js_html(
+        document.js.into_iter().collect_vec().as_slice(),
+    ));
+    scripts.push(ftd::html::utils::get_css_html(
+        document.css.into_iter().collect_vec().as_slice(),
+    ));
 
     JSAstData {
         asts: document_asts,
-        scripts: ftd::js::utils::get_external_scripts(has_rive_components),
+        scripts,
     }
 }
 
