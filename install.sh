@@ -20,6 +20,44 @@ else
   }
 fi
 
+print_fastn_logo() {
+    local orange_color='\033[38;5;208m'
+    local reset_color='\033[0m'
+    
+    local text="
+      /@@@@%                                                                    
+  /@@@@@@@@%                                      /&&&&&&,                      
+  /@@@@@@*..                                      /@@@@@@,                      
+@@@@@@@@@@@%  *##@@@@@@@##*      (#%@@@@@@&##. ,@@@@@@@@@@@% %@@@@@@##&@@@&##.  
+@@@@@@@@@@@% %@@@@@@@@@@@@@&(. ,@@@@@@@@@@@@@@/,@@@@@@@@@@@% %@@@@@@@@@@@@@@@@/ 
+  /@@@@%     *(/(/,  *%@@@@@@,/@@@@@@#/* *(/(/(*  /@@@@@@,   %@@@@@&(. .(&@@@@%*
+  /@@@@%     ,#@@@@@@@@@@@@@@, ,@@@@@@@@@@@@@(.   /@@@@@@,   %@@@@@%     %@@@@@@
+  /@@@@%   ,@@@@@@&%%%&@@@@@@,    *%%%%%@@@@@@@%  /@@@@@@,   %@@@@@%     %@@@@@@
+  /@@@@%   ,@@@@@@(...(@@@@@@,/@@@@@@*...%@@@@@%  /@@@@@@*.. %@@@@@%     %@@@@@@
+  /@@@@%     %@@@@@@@@@@@@@@@, ,@@@@@@@@@@@@@@/   /@@@@@@@@% %@@@@@%     %@@@@@@
+               ,@@@@@,             ,@@@@@@(           (@@@@%                   ,
+"
+
+    echo -e "${orange_color}${text}${reset_color}"
+}
+
+update_path() {
+    local shell_config_file
+    if [ -n "$ZSH_VERSION" ]; then
+        shell_config_file="${HOME}/.zshrc"
+    elif [ -n "$BASH_VERSION" ]; then
+        shell_config_file="${HOME}/.bashrc"
+    else
+        shell_config_file="${HOME}/.profile"
+    fi
+
+    # Check if the path is already added to the shell config file
+    if ! grep -q "export PATH=\"\$PATH:${DESTINATION_PATH}\"" "$shell_config_file"; then
+        echo "export PATH=\"\$PATH:${DESTINATION_PATH}\"" >> "$shell_config_file"
+        echo "Updated the PATH variable in $shell_config_file"
+        echo "Please restart your terminal session to start using fastn."
+    fi
+}
 
 command_exists() {
   command -v "$@" >/dev/null 2>&1
@@ -43,9 +81,9 @@ setup_colors() {
     fi
 }
 
-
-
 setup() {
+    print_fastn_logo
+
     # Parse arguments
     while [ $# -gt 0 ]; do
         case $1 in
@@ -72,31 +110,38 @@ setup() {
         mkdir -p $DESTINATION_PATH
     fi
 
-
     if [[ $CONTROLLER ]]; then 
-        curl -s $URL | grep ".*\/releases\/download\/.*\/fastn_controller_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -O -J -L %
+        curl -# -L "$URL" | grep ".*\/releases\/download\/.*\/fastn_controller_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -# -O -J -L % > /dev/null
         mv fastn_controller_linux_musl_x86_64 "${DESTINATION_PATH}/fastn"
         mv fastn_controller_linux_musl_x86_64.d "${DESTINATION_PATH}/fastn.d"
     elif [[ "$OSTYPE" == "darwin"* ]]; then
-        curl -s $URL | grep ".*\/releases\/download\/.*\/fastn_macos.*" | head -1 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -O -J -L %
+        curl -# -L "$URL" | grep ".*\/releases\/download\/.*\/fastn_macos.*" | head -1 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -# -O -J -L % > /dev/null
         mv fastn_macos_x86_64 "${DESTINATION_PATH}/fastn"
     else
-        curl -s $URL | grep ".*\/releases\/download\/.*\/fastn_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -O -J -L %
+        curl -# -L "$URL" | grep ".*\/releases\/download\/.*\/fastn_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -# -O -J -L % > /dev/null
         mv fastn_linux_musl_x86_64 "${DESTINATION_PATH}/fastn"
         mv fastn_linux_musl_x86_64.d "${DESTINATION_PATH}/fastn.d"
     fi
+
+
+    echo ""
+
     chmod +x "${DESTINATION_PATH}/fastn"*
-    
 
-    if ! [[ $DESTINATION_PATH == "/usr/local/bin" ]]; then 
-        cat <<EOF
-Unable to create a binary link for your system. Please add the following to your .bashrc/.zshrc file
+    # Add fastn to PATH if not already done
+    update_path
 
-${FMT_GREEN}PATH="\$PATH:${DESTINATION_PATH}"${FMT_RESET}
-
-and reload the configuration/restart the terminal session
-EOF
-    fi
+    echo "${FMT_GREEN}╭────────────────────────────────────────╮"
+    echo "│                                        │"
+    echo "│   fastn installation completed         │"
+    echo "│                                        │"
+    echo "│   Restart your terminal to apply       │"
+    echo "│   the changes.                         │"
+    echo "│                                        │"
+    echo "│   Get started with fastn at:           │"
+    echo "│   https://fastn.com                    │"
+    echo "│                                        │"
+    echo "╰────────────────────────────────────────╯${FMT_RESET}"
 }
 
 main() {
