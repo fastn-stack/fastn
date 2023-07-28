@@ -530,6 +530,7 @@ pub(crate) async fn read_ftd_2023(
         ssr_body.as_str(),
         font_style.as_str(),
         ftd::ftd_js_css(),
+        base_url,
     );
 
     Ok(FTDResult::Html(file_content.into()))
