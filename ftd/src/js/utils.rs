@@ -93,7 +93,6 @@ pub(crate) fn update_reference_with_none(reference: &str) -> String {
 
 pub(crate) fn update_reference(reference: &str, rdata: &ftd::js::ResolverData) -> String {
     let name = reference.to_string();
-    dbg!(&name);
 
     if let Some(loop_counter_alias) = rdata.loop_counter_alias {
         if name.eq(loop_counter_alias) {

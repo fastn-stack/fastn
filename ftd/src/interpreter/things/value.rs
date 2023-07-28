@@ -1022,12 +1022,12 @@ impl PropertyValue {
                 if reference.starts_with("inherited.colors")
                     || reference.starts_with("inherited.types")
                 {
-                    let found_kind = dbg!(doc.get_kind_with_argument(
+                    let found_kind = doc.get_kind_with_argument(
                         reference.as_str(),
                         value.line_number(),
                         definition_name_with_arguments,
                         loop_object_name_and_kind,
-                    ))
+                    )
                     .ok()
                     .and_then(|v| v.into_optional().map(|v| v.1));
 
