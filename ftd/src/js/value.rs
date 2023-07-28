@@ -132,8 +132,8 @@ impl ftd::interpreter::Expression {
                     operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
                         identifier: "index".to_string(),
                     }
-                } else if let Some(key_name) = rdata.loop_key_name {
-                    if key_name
+                } else if let Some(loop_counter_alias) = rdata.loop_counter_alias {
+                    if loop_counter_alias
                         .split('#')
                         .last()
                         .unwrap()

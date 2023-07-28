@@ -281,7 +281,7 @@ pub fn get_argument_for_reference_and_remaining(
             };
         }
     }
-    if let Some((loop_name, loop_argument, loop_key_name)) = loop_object_name_and_kind {
+    if let Some((loop_name, loop_argument, loop_counter_alias)) = loop_object_name_and_kind {
         let p2 = ftd::interpreter::utils::split_at(name, ".").1;
         let name = doc.resolve_name(name);
         if name.starts_with(format!("{}.", loop_name).as_str())
@@ -309,11 +309,11 @@ pub fn get_argument_for_reference_and_remaining(
             )));
         }
 
-        if let Some(key_name) = loop_key_name {
-            if name.starts_with(key_name.as_str()) {
+        if let Some(loop_counter_alias) = loop_counter_alias {
+            if name.starts_with(loop_counter_alias.as_str()) {
                 return Ok(Some((
                     ftd::interpreter::Field::default(
-                        key_name,
+                        loop_counter_alias,
                         ftd::interpreter::Kind::integer()
                             .into_optional()
                             .into_kind_data(),

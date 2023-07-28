@@ -2,7 +2,7 @@
 pub struct ResolverData<'a> {
     pub component_definition_name: &'a Option<String>,
     pub loop_alias: &'a Option<String>,
-    pub loop_key_name: &'a Option<String>,
+    pub loop_counter_alias: &'a Option<String>,
     pub inherited_variable_name: &'a str,
     pub device: &'a Option<fastn_js::DeviceType>,
 }
@@ -12,7 +12,7 @@ impl<'a> ResolverData<'a> {
         ResolverData {
             component_definition_name: &None,
             loop_alias: &None,
-            loop_key_name: &None,
+            loop_counter_alias: &None,
             inherited_variable_name: fastn_js::INHERITED_VARIABLE,
             device: &None,
         }
@@ -30,7 +30,7 @@ impl<'a> ResolverData<'a> {
         ResolverData {
             component_definition_name: self.component_definition_name,
             loop_alias: self.loop_alias,
-            loop_key_name: self.loop_key_name,
+            loop_counter_alias: self.loop_counter_alias,
             inherited_variable_name: fastn_js::INHERITED_VARIABLE,
             device: self.device,
         }
@@ -43,7 +43,7 @@ impl<'a> ResolverData<'a> {
         ResolverData {
             component_definition_name: self.component_definition_name,
             loop_alias: self.loop_alias,
-            loop_key_name: self.loop_key_name,
+            loop_counter_alias: self.loop_counter_alias,
             inherited_variable_name,
             device: self.device,
         }
@@ -56,7 +56,7 @@ impl<'a> ResolverData<'a> {
         ResolverData {
             component_definition_name: self.component_definition_name,
             loop_alias: self.loop_alias,
-            loop_key_name: self.loop_key_name,
+            loop_counter_alias: self.loop_counter_alias,
             inherited_variable_name: self.inherited_variable_name,
             device,
         }
@@ -65,12 +65,12 @@ impl<'a> ResolverData<'a> {
     pub(crate) fn clone_with_new_loop_alias(
         &self,
         loop_alias: &'a Option<String>,
-        loop_key_name: &'a Option<String>,
+        loop_counter_alias: &'a Option<String>,
     ) -> ResolverData<'a> {
         ResolverData {
             component_definition_name: self.component_definition_name,
             loop_alias,
-            loop_key_name,
+            loop_counter_alias,
             inherited_variable_name: self.inherited_variable_name,
             device: self.device,
         }

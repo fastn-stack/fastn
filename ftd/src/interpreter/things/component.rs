@@ -297,7 +297,7 @@ impl Component {
             loop_object_name_and_kind = Some((
                 iteration.alias.to_string(),
                 iteration.loop_object_as_argument(doc)?,
-                iteration.key_name.to_owned(),
+                iteration.loop_counter_alias.to_owned(),
             ));
             Some(iteration)
         } else {
@@ -1108,7 +1108,7 @@ fn search_things_for_module(
 pub struct Loop {
     pub on: ftd::interpreter::PropertyValue,
     pub alias: String,
-    pub key_name: Option<String>,
+    pub loop_counter_alias: Option<String>,
     pub line_number: usize,
 }
 
@@ -1116,14 +1116,14 @@ impl Loop {
     fn new(
         on: ftd::interpreter::PropertyValue,
         alias: &str,
-        key_name: Option<String>,
+        loop_counter_alias: Option<String>,
         line_number: usize,
     ) -> Loop {
         Loop {
             on,
             alias: alias.to_string(),
             line_number,
-            key_name,
+            loop_counter_alias,
         }
     }
 
@@ -1207,8 +1207,8 @@ impl Loop {
             on,
             doc.resolve_name(ast_loop.alias.as_str()).as_str(),
             ast_loop
-                .key_name
-                .map(|key_name| doc.resolve_name(key_name.as_str())),
+                .loop_counter_alias
+                .map(|loop_counter_alias| doc.resolve_name(loop_counter_alias.as_str())),
             ast_loop.line_number,
         )))
     }

@@ -306,13 +306,17 @@ impl ftd::interpreter::Component {
         use itertools::Itertools;
 
         let loop_alias = self.iteration.clone().map(|v| v.alias);
-        let loop_key_name = self.iteration.clone().map(|v| v.key_name).flatten();
+        let loop_counter_alias = self
+            .iteration
+            .clone()
+            .map(|v| v.loop_counter_alias)
+            .flatten();
         let mut component_statements = if self.is_loop() || self.condition.is_some() {
             self.to_component_statements_(
                 fastn_js::FUNCTION_PARENT,
                 0,
                 doc,
-                &rdata.clone_with_new_loop_alias(&loop_alias, &loop_key_name),
+                &rdata.clone_with_new_loop_alias(&loop_alias, &loop_counter_alias),
                 true,
                 has_rive_components,
             )
@@ -335,12 +339,12 @@ impl ftd::interpreter::Component {
                         .values()
                         .flat_map(|v| {
                             v.get_deps(
-                                &rdata.clone_with_new_loop_alias(&loop_alias, &loop_key_name),
+                                &rdata.clone_with_new_loop_alias(&loop_alias, &loop_counter_alias),
                             )
                         })
                         .collect_vec(),
                     condition: condition.update_node_with_variable_reference_js(
-                        &rdata.clone_with_new_loop_alias(&loop_alias, &loop_key_name),
+                        &rdata.clone_with_new_loop_alias(&loop_alias, &loop_counter_alias),
                     ),
                     statements: component_statements,
                     parent: parent.to_string(),
@@ -353,7 +357,7 @@ impl ftd::interpreter::Component {
             component_statements = vec![fastn_js::ComponentStatement::ForLoop(fastn_js::ForLoop {
                 list_variable: iteration.on.to_fastn_js_value(
                     doc,
-                    &rdata.clone_with_new_loop_alias(&loop_alias, &loop_key_name),
+                    &rdata.clone_with_new_loop_alias(&loop_alias, &loop_counter_alias),
                 ),
                 statements: component_statements,
                 parent: parent.to_string(),

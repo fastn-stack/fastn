@@ -421,17 +421,17 @@ impl PropertySource {
 pub struct Loop {
     pub on: String,
     pub alias: String,
-    pub key_name: Option<String>,
+    pub loop_counter_alias: Option<String>,
     #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
 impl Loop {
-    fn new(on: &str, alias: &str, key_name: Option<String>, line_number: usize) -> Loop {
+    fn new(on: &str, alias: &str, loop_counter_alias: Option<String>, line_number: usize) -> Loop {
         Loop {
             on: on.to_string(),
             alias: alias.to_string(),
-            key_name,
+            loop_counter_alias,
             line_number,
         }
     }
@@ -451,29 +451,25 @@ impl Loop {
 
         let is_for_loop = loop_header.key.eq(ftd::ast::utils::FOR);
 
-        let (alias, on, key_name) = if is_for_loop {
+        let (alias, on, loop_counter_alias) = if is_for_loop {
             let (pair, on) =
                 ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::IN);
 
-            let on = if let Some(on) = on {
-                on
-            } else {
-                return ftd::ast::parse_error(
-                    "Statement \"for\" needs a list to operate on",
-                    doc_id,
-                    loop_header.line_number,
-                );
-            };
+            let on = on.ok_or(ftd::ast::Error::Parse {
+                message: "Statement \"for\" needs a list to operate on".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number: loop_header.line_number,
+            })?;
 
-            let (alias, key_name) = ftd::ast::utils::split_at(pair.as_str(), ", ");
+            let (alias, loop_counter_alias) = ftd::ast::utils::split_at(pair.as_str(), ", ");
 
-            (alias, on, key_name)
+            (alias, on, loop_counter_alias)
         } else {
             use colored::Colorize;
 
             println!(
                 "{}",
-                "Warning: \"$loop$\" is deprecated, use \"for:\" instead".bright_yellow()
+                "Warning: \"$loop$\" is deprecated, use \"for\" instead".bright_yellow()
             );
 
             let (on, alias) =
@@ -517,7 +513,7 @@ impl Loop {
         Ok(Some(Loop::new(
             on.as_str(),
             alias.as_str(),
-            key_name,
+            loop_counter_alias,
             loop_header.line_number,
         )))
     }
@@ -542,29 +538,25 @@ impl Loop {
 
         let is_for_loop = loop_header.get_key().eq(ftd::ast::utils::FOR);
 
-        let (alias, on, key_name) = if is_for_loop {
+        let (alias, on, loop_counter_alias) = if is_for_loop {
             let (pair, on) =
                 ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::IN);
 
-            let on = if let Some(on) = on {
-                on
-            } else {
-                return ftd::ast::parse_error(
-                    "Statement \"for\" needs a list to operate on",
-                    doc_id,
-                    loop_header.get_line_number(),
-                );
-            };
+            let on = on.ok_or(ftd::ast::Error::Parse {
+                message: "Statement \"for\" needs a list to operate on".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number: loop_header.get_line_number(),
+            })?;
 
-            let (alias, key_name) = ftd::ast::utils::split_at(pair.as_str(), ", ");
+            let (alias, loop_counter_alias) = ftd::ast::utils::split_at(pair.as_str(), ", ");
 
-            (alias, on, key_name)
+            (alias, on, loop_counter_alias)
         } else {
             use colored::Colorize;
 
             println!(
                 "{}",
-                "Warning: \"$loop$\" is deprecated, use \"for:\" instead".bright_yellow()
+                "Warning: \"$loop$\" is deprecated, use \"for\" instead".bright_yellow()
             );
 
             let (on, alias) =
@@ -608,7 +600,7 @@ impl Loop {
         Ok(Some(Loop::new(
             on.as_str(),
             alias.as_str(),
-            key_name,
+            loop_counter_alias,
             loop_header.get_line_number(),
         )))
     }
