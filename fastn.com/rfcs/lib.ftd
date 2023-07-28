@@ -51,6 +51,9 @@ children: $rfc.c
 
 
 
+
+
+
 -- component motivation:
 optional body b:
 children c:
@@ -87,6 +90,16 @@ b: $alternatives.b
 
 -- end: alternatives
 
+
+-- component teaching-notes:
+optional body b:
+children c:
+
+-- titled-section: Teaching Notes
+c: $teaching-notes.c
+b: $teaching-notes.b
+
+-- end: teaching-notes
 
 
 -- component unresolved-questions:

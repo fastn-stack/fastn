@@ -477,6 +477,7 @@ favicon: /-/fastn.com/images/favicon.svg
 - Overview: /d/
 - Maintenance: /d/m/
 - Next Edition: /d/next-edition/
+- RFCs: /rfcs/
 - Architecture: /architecture/
   document: d/architecture.ftd
   - `ftd` crate 🚧: /ftd-crate/
