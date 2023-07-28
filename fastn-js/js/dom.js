@@ -52,6 +52,7 @@ fastn_dom.propertyMap = {
     "height": "h",
     "justify-content": "jc",
     "left": "l",
+    "link": "lk",
     "margin": "m",
     "margin-bottom": "mb",
     "margin-horizontal": "mh",
@@ -76,6 +77,7 @@ fastn_dom.propertyMap = {
     "padding-vertical": "pv",
     "position": "pos",
     "resize": "res",
+    "role": "rl",
     "right": "r",
     "sticky": "s",
     "text-align": "ta",
@@ -677,17 +679,31 @@ class Node2 {
             if (node_kind !== fastn_dom.ElementKind.Image) this.updateTagName('a');
         }
 
-        if (!ssr && hydrating) {
-            let current_query = `[data-id="${id_counter}"]`;
-            let currentElement = document.querySelector(current_query);
+        if (hydrating) {
+            let currentElement = document.querySelector(`[data-id="${id_counter}"]`);
+            console.log("current element");
             console.log(currentElement);
 
             if (node_kind !== fastn_dom.ElementKind.Image) {
                 let newElement = document.createElement('a');
-                newElement.innerHTML = currentElement.innerHTML;
+                for( const { name, value } of currentElement.attributes) {
+                    newElement.setAttribute(name, value);
+                }
 
+                currentElement.childNodes.forEach(node => {
+                    console.log("INSIDE LOOP");
+                    console.log(newElement);
+                    newElement.appendChild(node);
+                });
+
+                console.log("new element");
+                console.log("OUTSIDE LOOP");
+                console.log(currentElement);
+                console.log(currentElement.isConnected);
+                currentElement.parentNode.insertBefore(newElement, currentElement);
+                // currentElement.remove();
                 console.log(newElement);
-                currentElement.replaceWith(newElement);
+                console.log(newElement.isConnected);
             }
         }
     }
