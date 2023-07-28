@@ -681,8 +681,6 @@ class Node2 {
 
         if (hydrating) {
             let currentElement = document.querySelector(`[data-id="${id_counter}"]`);
-            console.log("current element");
-            console.log(currentElement);
 
             if (node_kind !== fastn_dom.ElementKind.Image) {
                 let newElement = document.createElement('a');
@@ -695,15 +693,7 @@ class Node2 {
                     console.log(newElement);
                     newElement.appendChild(node);
                 });
-
-                console.log("new element");
-                console.log("OUTSIDE LOOP");
-                console.log(currentElement);
-                console.log(currentElement.isConnected);
                 currentElement.parentNode.insertBefore(newElement, currentElement);
-                // currentElement.remove();
-                console.log(newElement);
-                console.log(newElement.isConnected);
             }
         }
     }
