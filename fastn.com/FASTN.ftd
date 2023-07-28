@@ -454,7 +454,7 @@ favicon: /-/fastn.com/images/favicon.svg
 
 
 # Blog: /blog/
-  document: blog/the-intimidation-of-programming.ftd/
+  document: blog/the-intimidation-of-programming.ftd
 
 - The Intimidation of Programming: /blog/intimidation-of-programming/
   document: blog/the-intimidation-of-programming.ftd
