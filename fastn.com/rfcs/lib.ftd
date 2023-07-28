@@ -17,10 +17,18 @@ children c:
 ;; this message should go to the sidebar
 
 This document exists to describe a proposal for enhancing the `fastn` language.
-This is a Request For Comment. Please share your comments by
+This is a Request For Comment. Please share your comments by posting them in the
+pull request for this RFC if this RFC is not merged yet. If the RFC is merged,
+you can post comment on our [official Discord](https://fastn.com/discord/), or
+open a [discussion on Github](https://github.com/orgs/fastn-stack/discussions).
 
-Learn about our [RFC process](/rfcs/0001-rfc-process/). View all
-[active RFCs](/rfcs/).
+;; TODO: instead of comment on PR vs on discord/github, if we know the rfc
+;; status, which we know, show a more precise message
+
+Learn about our [RFC process](/rfcs/rfc-process/). View all [active
+RFCs](/rfcs/). WIP RFCs, and RFCs awaiting initial comments can be [found on
+Github](https://github.com/fastn-stack/fastn.com/pulls?q=is%3Apr+is%3Aopen+label%3Arfc),
+as Pull Requests, with label `rfc`.
 
 -- ds.markdown:
 

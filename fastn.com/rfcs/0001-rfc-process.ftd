@@ -1,6 +1,6 @@
 -- import: fastn.com/rfcs/lib
 
--- lib.rfc: RFC: The RFC Process
+-- lib.rfc: RFC-1: The RFC Process
 id: rfc-process
 status: accepted
 

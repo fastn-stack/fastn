@@ -478,6 +478,9 @@ favicon: /-/fastn.com/images/favicon.svg
 - Maintenance: /d/m/
 - Next Edition: /d/next-edition/
 - RFCs: /rfcs/
+  - RFC-1: The RFC Process
+    url: /rfcs/rfc-process/
+    document: rfcs/0001-rfc-process.ftd
 - Architecture: /architecture/
   document: d/architecture.ftd
   - `ftd` crate 🚧: /ftd-crate/

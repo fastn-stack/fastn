@@ -1,12 +1,12 @@
 -- ds.page: `fastn` RFC
 
-The RFC Process is described in [0001-rfc-process](/rfcs/0001-rfc-process/).
+The RFC Process is described in [0001-rfc-process](/rfcs/rfc-process/).
 
 Accepted RFCs are listed on this page. [WIP RFCs, and RFCs awaiting initial
 comments can be found on Github](https://github.com/fastn-stack/fastn.com/pulls?q=is%3Apr+is%3Aopen+label%3Arfc).
 
 -- ds.h1: Accepted RFCs
 
-- [0001-rfc-process](/rfcs/0001-rfc-process/)
+- [0001-rfc-process](/rfcs/rfc-process/)
 
 -- end: ds.page
