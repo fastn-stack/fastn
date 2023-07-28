@@ -848,7 +848,7 @@ class Node2 {
             this.attachCss("background-image", `url(${darkValue})`, true, `body.dark .${lightClass}`);
         }
     }
-    attachColorCss(property, value) {
+    attachColorCss(property, value, visited) {
         if (fastn_utils.isNull(value)) {
             this.attachCss(property, value);
             return;
@@ -860,6 +860,10 @@ class Node2 {
         } else {
             let lightClass = this.attachCss(property, lightValue, true);
             this.attachCss(property, darkValue, true, `body.dark .${lightClass}`);
+            if (visited) {
+                this.attachCss(property, lightValue, true, `.${lightClass}:visited`);
+                this.attachCss(property, darkValue, true, `body.dark  .${lightClass}:visited`);
+            }
         }
     }
     attachRoleCss(value) {
@@ -1156,7 +1160,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.BorderBottomColor) {
             this.attachColorCss("border-bottom-color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
-            this.attachColorCss("color", staticValue);
+            this.attachColorCss("color", staticValue, true);
         } else if (kind === fastn_dom.PropertyKind.Background) {
             if (fastn_utils.isNull(staticValue)) {
                 this.attachColorCss("background-color", staticValue);

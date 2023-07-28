@@ -10,15 +10,10 @@ ftd.post_init = function () {
     const COOKIE_LIGHT_MODE = "light";
     const DARK_MODE_CLASS = "dark";
     const MOBILE_CLASS = "mobile";
+    let last_device = "desktop";
 
     window.onresize = function () {
-        let current = get_device();
-        console.log("last_device", last_device);
-        if (current === last_device) {
-            return;
-        }
-        ftd.device.set(current);
-        last_device = current;
+        initialise_device()
     };
     function initialise_click_outside_events() {
         document.addEventListener("click", function (event) {
@@ -73,9 +68,13 @@ ftd.post_init = function () {
         })
     }
     function initialise_device() {
-        last_device = get_device();
-        console.log("last_device", last_device);
-        ftd.device.set(last_device);
+        let current = get_device();
+        if (current === last_device) {
+            return;
+        }
+        console.log("last_device", last_device, "current_device", current);
+        ftd.device.set(current);
+        last_device = current;
     }
 
     function get_device() {
