@@ -436,6 +436,55 @@ impl Loop {
         }
     }
 
+    fn get_loop_parameters(
+        loop_statement: &str,
+        is_for_loop: bool,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::ast::Result<(String, String, Option<String>)> {
+        if is_for_loop {
+            let (pair, on) = ftd::ast::utils::split_at(loop_statement, ftd::ast::utils::IN);
+
+            let on = on.ok_or(ftd::ast::Error::Parse {
+                message: "Statement \"for\" needs a list to operate on".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number,
+            })?;
+
+            let (alias, loop_counter_alias) = ftd::ast::utils::split_at(pair.as_str(), ", ");
+
+            Ok((alias, on, loop_counter_alias))
+        } else {
+            use colored::Colorize;
+
+            println!(
+                "{}",
+                "Warning: \"$loop$\" is deprecated, use \"for\" instead".bright_yellow()
+            );
+
+            let (on, alias) = ftd::ast::utils::split_at(loop_statement, ftd::ast::utils::AS);
+
+            let alias = if let Some(alias) = alias {
+                if !alias.starts_with(ftd::ast::utils::REFERENCE) {
+                    return ftd::ast::parse_error(
+                    format!(
+                        "Loop alias should start with reference, found: `{}`. Help: use `${}` instead",
+                        alias, alias
+                    ),
+                    doc_id,
+                    line_number,
+                );
+                }
+
+                alias
+            } else {
+                "object".to_string()
+            };
+
+            Ok((alias, on, None))
+        }
+    }
+
     fn from_ast_headers(headers: &HeaderValues, doc_id: &str) -> ftd::ast::Result<Option<Loop>> {
         let loop_header = headers
             .0
@@ -451,49 +500,12 @@ impl Loop {
 
         let is_for_loop = loop_header.key.eq(ftd::ast::utils::FOR);
 
-        let (alias, on, loop_counter_alias) = if is_for_loop {
-            let (pair, on) =
-                ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::IN);
-
-            let on = on.ok_or(ftd::ast::Error::Parse {
-                message: "Statement \"for\" needs a list to operate on".to_string(),
-                doc_id: doc_id.to_string(),
-                line_number: loop_header.line_number,
-            })?;
-
-            let (alias, loop_counter_alias) = ftd::ast::utils::split_at(pair.as_str(), ", ");
-
-            (alias, on, loop_counter_alias)
-        } else {
-            use colored::Colorize;
-
-            println!(
-                "{}",
-                "Warning: \"$loop$\" is deprecated, use \"for\" instead".bright_yellow()
-            );
-
-            let (on, alias) =
-                ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::AS);
-
-            let alias = if let Some(alias) = alias {
-                if !alias.starts_with(ftd::ast::utils::REFERENCE) {
-                    return ftd::ast::parse_error(
-                    format!(
-                        "Loop alias should start with reference, found: `{}`. Help: use `${}` instead",
-                        alias, alias
-                    ),
-                    doc_id,
-                    loop_header.line_number,
-                );
-                }
-
-                alias
-            } else {
-                "object".to_string()
-            };
-
-            (alias, on, None)
-        };
+        let (alias, on, loop_counter_alias) = Self::get_loop_parameters(
+            loop_statement.as_str(),
+            is_for_loop,
+            doc_id,
+            loop_header.line_number,
+        )?;
 
         if !on.starts_with(ftd::ast::utils::REFERENCE) && !on.starts_with(ftd::ast::utils::CLONE) {
             return ftd::ast::parse_error(
@@ -538,49 +550,12 @@ impl Loop {
 
         let is_for_loop = loop_header.get_key().eq(ftd::ast::utils::FOR);
 
-        let (alias, on, loop_counter_alias) = if is_for_loop {
-            let (pair, on) =
-                ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::IN);
-
-            let on = on.ok_or(ftd::ast::Error::Parse {
-                message: "Statement \"for\" needs a list to operate on".to_string(),
-                doc_id: doc_id.to_string(),
-                line_number: loop_header.get_line_number(),
-            })?;
-
-            let (alias, loop_counter_alias) = ftd::ast::utils::split_at(pair.as_str(), ", ");
-
-            (alias, on, loop_counter_alias)
-        } else {
-            use colored::Colorize;
-
-            println!(
-                "{}",
-                "Warning: \"$loop$\" is deprecated, use \"for\" instead".bright_yellow()
-            );
-
-            let (on, alias) =
-                ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::AS);
-
-            let alias = if let Some(alias) = alias {
-                if !alias.starts_with(ftd::ast::utils::REFERENCE) {
-                    return ftd::ast::parse_error(
-                    format!(
-                        "Loop alias should start with reference, found: `{}`. Help: use `${}` instead",
-                        alias, alias
-                    ),
-                    doc_id,
-                    loop_header.get_line_number(),
-                );
-                }
-
-                alias
-            } else {
-                "object".to_string()
-            };
-
-            (alias, on, None)
-        };
+        let (alias, on, loop_counter_alias) = Self::get_loop_parameters(
+            loop_statement.as_str(),
+            is_for_loop,
+            doc_id,
+            loop_header.get_line_number(),
+        )?;
 
         if !on.starts_with(ftd::ast::utils::REFERENCE) && !on.starts_with(ftd::ast::utils::CLONE) {
             return ftd::ast::parse_error(

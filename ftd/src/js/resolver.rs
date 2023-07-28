@@ -5,6 +5,7 @@ pub struct ResolverData<'a> {
     pub loop_counter_alias: &'a Option<String>,
     pub inherited_variable_name: &'a str,
     pub device: &'a Option<fastn_js::DeviceType>,
+    pub doc_name: Option<String>,
 }
 
 impl<'a> ResolverData<'a> {
@@ -15,6 +16,7 @@ impl<'a> ResolverData<'a> {
             loop_counter_alias: &None,
             inherited_variable_name: fastn_js::INHERITED_VARIABLE,
             device: &None,
+            doc_name: None,
         }
     }
 
@@ -33,6 +35,7 @@ impl<'a> ResolverData<'a> {
             loop_counter_alias: self.loop_counter_alias,
             inherited_variable_name: fastn_js::INHERITED_VARIABLE,
             device: self.device,
+            doc_name: None,
         }
     }
 
@@ -46,6 +49,7 @@ impl<'a> ResolverData<'a> {
             loop_counter_alias: self.loop_counter_alias,
             inherited_variable_name,
             device: self.device,
+            doc_name: None,
         }
     }
 
@@ -59,6 +63,7 @@ impl<'a> ResolverData<'a> {
             loop_counter_alias: self.loop_counter_alias,
             inherited_variable_name: self.inherited_variable_name,
             device,
+            doc_name: None,
         }
     }
 
@@ -66,6 +71,7 @@ impl<'a> ResolverData<'a> {
         &self,
         loop_alias: &'a Option<String>,
         loop_counter_alias: &'a Option<String>,
+        doc_name: String,
     ) -> ResolverData<'a> {
         ResolverData {
             component_definition_name: self.component_definition_name,
@@ -73,6 +79,7 @@ impl<'a> ResolverData<'a> {
             loop_counter_alias,
             inherited_variable_name: self.inherited_variable_name,
             device: self.device,
+            doc_name: Some(doc_name),
         }
     }
 }

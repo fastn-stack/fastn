@@ -141,12 +141,7 @@ impl ftd::interpreter::Expression {
                         identifier: "index".to_string(),
                     }
                 } else if let Some(loop_counter_alias) = rdata.loop_counter_alias {
-                    if loop_counter_alias
-                        .split('#')
-                        .last()
-                        .unwrap()
-                        .eq(identifier.trim_start_matches('$'))
-                    {
+                    if loop_counter_alias.eq(identifier.trim_start_matches('$')) {
                         operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
                             identifier: "index".to_string(),
                         }
