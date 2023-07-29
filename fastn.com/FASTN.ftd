@@ -354,13 +354,15 @@ favicon: /-/fastn.com/images/favicon.svg
   skip: true
 - Dynamic URLs: /dynamic-urls/
   document: backend/dynamic-urls.ftd
-- `processor`: /processor/-/backend/
+- `processors`: /processor/-/backend/
   document: ftd-host/processor.ftd
   - Getting Request Data: /request-data/
     document: ftd-host/request-data.ftd
-  - `http` processor: /http/
+  - Fetching Data Using `http`: /http/
     document: ftd-host/http.ftd
-  - SQL Processor: /sql/
+  - Querying PostgreSQL: /sql/
+    document: ftd-host/pg.ftd
+  - Querying SQLite: /sqlite/
     document: ftd-host/package-query.ftd
   - Reading JSON: /get-data/
     document: ftd-host/get-data.ftd

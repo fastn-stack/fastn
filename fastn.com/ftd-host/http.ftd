@@ -1,7 +1,7 @@
 -- import: fastn.com/ftd-host/processor
 
 
--- ds.page: `$processor$: http`
+-- ds.page: Fetching Data Using `http`
 
 This processor is used to initialise some FTD variable with content of JSON
 fetched from HTTP.

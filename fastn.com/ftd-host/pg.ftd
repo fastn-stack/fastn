@@ -2,41 +2,26 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/ftd-host/processor
 
--- record person:
-integer id:
-string name:
-string department:
 
--- person list people:
-$processor$: pr.package-query
-db: db.sqlite
-
-SELECT * FROM user;
+-- ds.page: Querying PostgreSQL Using `fastn`
 
 
--- ds.page: Querying SQLite Using `fastn`
+Note: This document is about querying PostgreSQL Database. You can also [query
+SQLite using `fastn`](/sqlite/).
 
-Note: This document is about querying SQLite Database that is part of your
-`fastn` package. You can also [query PostgreSQL using `fastn`](/sql/).
-
-`package-query` processor allows you to execute SQL queries against SQLite 
-files that are part of your `fastn` package.
+`pg` processor allows you to execute SQL queries against a PostgreSQL database.
 
 -- processor.static-vs-dynamic:
 
 -- ds.markdown:
 
-
-And say you have an SQLite database file with table like this:
+Say you have an PostgreSQL database with a table like this:
 
 -- ds.code: creating table
 lang: sql
 
-\-- run `sqlite3 db.sqlite` in shell to create the database
-\-- and paste this
-
-CREATE TABLE user (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE users (
+    id SERIAL,
     name TEXT,
     department TEXT
 );
@@ -48,14 +33,31 @@ And you have initilised it like this:
 -- ds.code: inserting data
 lang: sql
 
-INSERT INTO user (name, department) VALUES ("amit", "engineering");
-INSERT INTO user (name, department) VALUES ("jack", "ops");
+INSERT INTO "users" (name, department) VALUES ('jack', 'design');
+INSERT INTO "users" (name, department) VALUES ('jill', 'engineering');
 
+
+-- ds.h1: Telling `fastn` about your database
+
+Before we make any queries we have to inform `fastn` about your PostgreSQL
+database credentials. We do this by creating a `.env` file:
+
+-- ds.code:
+lang: sh
+
+export FASTN_PG_URL=postgres://username:password@db-host/db-name
 
 -- ds.markdown:
 
-Assuming the SQLite file is `db.sqlite`, you can fetch data from the SQLite
-database using `package-query` processor:
+The `FASTN_PG_URL` must contain a valid [connection
+string](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING).
+
+`.env` file must be present in the same folder as your `FASTN.ftd` file.
+
+-- ds.h1: Querying Data
+
+If `.env` file is properly setup you can fetch data from the SQLite database
+using `pg` processor:
 
 -- ds.code: querying database and storing result in a list
 lang: ftd
@@ -63,10 +65,10 @@ lang: ftd
 \-- import: fastn/processors as pr
 
 \-- person list people:
-$processor$: pr.package-query
+$processor$: pr.pg
 db: db.sqlite
 
-SELECT * FROM user;
+SELECT * FROM users;
 
 -- ds.markdown:
 
@@ -100,7 +102,7 @@ Now that you have data in a variable, you can pass it to some component to view
 it using the [`$loop$`](/list/#using-loop):
 
 
--- ds.code: show data in page ([view full source](https://github.com/fastn-stack/fastn.com/blob/main/ftd-host/package-query.ftd))
+-- ds.code: show data in page
 lang: ftd
 
 \-- show-person: $p
@@ -115,13 +117,30 @@ Which will look something like this:
 -- show-person: $p
 $loop$: $people as $p
 
+
 -- end: ds.page
 
 
 
 
+-- record person:
+integer id:
+string name:
+string department:
 
+-- person list people:
 
+-- person:
+id: 1
+name: jack
+department: design
+
+-- person:
+id: 2
+name: jill
+department: engineering
+
+-- end: people
 
 
 
