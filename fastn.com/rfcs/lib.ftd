@@ -1,3 +1,5 @@
+-- import: fastn-community.github.io/bling/note
+
 -- component rfc:
 ;; the title of the RFC
 caption title:
@@ -14,7 +16,9 @@ children c:
 
 -- ds.page: $rfc.title
 
-;; this message should go to the sidebar
+$rfc.short
+
+-- note.note: This is a RFC document
 
 This document exists to describe a proposal for enhancing the `fastn` language.
 This is a Request For Comment. Please share your comments by posting them in the
@@ -30,9 +34,6 @@ RFCs](/rfcs/). WIP RFCs, and RFCs awaiting initial comments can be [found on
 Github](https://github.com/fastn-stack/fastn.com/pulls?q=is%3Apr+is%3Aopen+label%3Arfc),
 as Pull Requests, with label `rfc`.
 
--- ds.markdown:
-
-$rfc.short
 
 -- ds.h2: Status
 
