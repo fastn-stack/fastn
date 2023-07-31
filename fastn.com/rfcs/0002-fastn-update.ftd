@@ -12,7 +12,7 @@ your versioned dependencies.
 
 Ready for development on 31st July 2023.
 
-- [ ] `fastn build` to generate manifest.json
+- [ ] `fastn build` to generate `manifest.json`
 - [ ] `fastn update`
 - [ ] `fastn update --status` command
 - [ ] `fastn check`
@@ -134,6 +134,29 @@ CI machine, prod machine during deployment.
 We consider vendoring a superior approach as it reduces overall load on the
 central package repository, reduces total network activity in general. Vendoring
 also allows local changes to upstream packages.
+
+-- ds.h2: `fastn update` Only Downloads
+
+One option we considered is to ensure only `fastn udpate` does any network
+activity. If any document is missing we rest of fastn will report a hint asking
+user to run `fastn udpate` to fix it. This simplifies our code, and gaurantees
+no unneeded network call. Possibly.
+
+This was rejected because a. we would have still wanted to give "automatically
+run `fastn update` on need, at least in dev mode".
+
+We rejected this option as for `fastn update` to detect all the dependencies we
+have to parse all documents in the package, and this takes time, making `fastn
+update` a slow process. A slow process that has to be used is a lot is a bad
+user experience.
+
+If we make the process itself fast using incremental analysis approach (only
+analyse documents that have changed since last run) we can make this fast and
+use this.
+
+Since this is a small decision, rest of the RFC is applicable in both cases, we
+have decided to start working on it for now till we implment the incremental
+anaysis approach.
 
 -- end: lib.alternatives
 

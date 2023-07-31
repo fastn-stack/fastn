@@ -486,6 +486,9 @@ favicon: /-/fastn.com/images/favicon.svg
   - RFC-2: `fastn update`
     url: /rfcs/fastn-update/
     document: rfcs/0002-fastn-update.ftd
+  - RFC-3: Variable Interpolation
+    url: /rfcs/variable-interpolation/
+    document: rfcs/0003-variable-interpolation.ftd
 - Architecture: /architecture/
   document: d/architecture.ftd
   - `ftd` crate 🚧: /ftd-crate/
