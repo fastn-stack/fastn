@@ -8,7 +8,15 @@ This RFC proposes we make vendoring dependencies as official solution for versio
 lock files. It also proposes `fastn update` command, which helps you ugprade
 your versioned dependencies.
 
+-- lib.development-status:
 
+Ready for development on 31st July 2023.
+
+- [ ] `fastn build` to generate manifest.json
+- [ ] `fastn update`
+- [ ] `fastn update --status` command
+- [ ] `fastn check`
+- [ ] `fastn {serve,build} --release`
 
 -- lib.motivation:
 

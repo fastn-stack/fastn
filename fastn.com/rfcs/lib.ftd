@@ -100,6 +100,17 @@ b: $alternatives.b
 -- end: alternatives
 
 
+-- component development-status:
+optional body b:
+children c:
+
+-- titled-section: Development Status
+c: $development-status.c
+b: $development-status.b
+
+-- end: development-status
+
+
 -- component teaching-notes:
 optional body b:
 children c:
