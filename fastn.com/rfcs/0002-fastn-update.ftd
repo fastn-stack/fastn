@@ -2,7 +2,7 @@
 
 -- lib.rfc: RFC: Vendoring And `fastn update`
 id: vendoring
-status: wip-rfc
+status: accepted
 
 This RFC proposes we make vendoring dependencies as official solution for version
 lock files. It also proposes `fastn update` command, which helps you ugprade

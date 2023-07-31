@@ -8,5 +8,6 @@ comments can be [found on Github](https://github.com/fastn-stack/fastn.com/pulls
 -- ds.h1: Accepted RFCs
 
 - [0001-rfc-process](/rfcs/rfc-process/)
+- [0002-fastn-update](/rfcs/fastn-update/)
 
 -- end: ds.page
