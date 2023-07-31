@@ -1,6 +1,6 @@
 -- import: fastn.com/rfcs/lib
 
--- lib.rfc: RFC: Vendoring And `fastn update`
+-- lib.rfc: RFC-2: Vendoring And `fastn update`
 id: vendoring
 status: accepted
 

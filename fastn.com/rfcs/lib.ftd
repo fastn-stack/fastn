@@ -29,7 +29,7 @@ open a [discussion on Github](https://github.com/orgs/fastn-stack/discussions).
 ;; TODO: instead of comment on PR vs on discord/github, if we know the rfc
 ;; status, which we know, show a more precise message
 
-Learn about our [RFC process](/rfcs/rfc-process/). View all [active
+Learn about our [RFC process](/rfc/rfc-process/). View all [active
 RFCs](/rfcs/). WIP RFCs, and RFCs awaiting initial comments can be [found on
 Github](https://github.com/fastn-stack/fastn.com/pulls?q=is%3Apr+is%3Aopen+label%3Arfc),
 as Pull Requests, with label `rfc`.

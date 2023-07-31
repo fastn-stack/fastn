@@ -487,15 +487,19 @@ favicon: /-/fastn.com/images/favicon.svg
 - Maintenance: /d/m/
 - Next Edition: /d/next-edition/
 - RFCs: /rfcs/
-  - RFC-1: The RFC Process
-    url: /rfcs/rfc-process/
+  - 1: The RFC Process
+    url: /rfc/rfc-process/
     document: rfcs/0001-rfc-process.ftd
-  - RFC-2: `fastn update`
-    url: /rfcs/fastn-update/
+  - 2: `fastn update`
+    url: /rfc/fastn-update/
     document: rfcs/0002-fastn-update.ftd
-  - RFC-3: Variable Interpolation
-    url: /rfcs/variable-interpolation/
+    skip: true
+  - 3: Variable Interpolation
+    url: /rfc/variable-interpolation/
     document: rfcs/0003-variable-interpolation.ftd
+  - 4: Incremental Build
+    url: /rfc/incremental-build/
+    document: rfcs/0004-incremental-build.ftd
 - Architecture: /architecture/
   document: d/architecture.ftd
   - `ftd` crate 🚧: /ftd-crate/
@@ -550,7 +554,7 @@ favicon: /-/fastn.com/images/favicon.svg
 /discord/: https://discord.gg/eNXVBMq4xt
 /package-query/: /sql/
 /images-in-modules/: /using-images/
-/images-in-modules/-/planning/: `/using-images/-/planning/
+/images-in-modules/-/planning/: /using-images/-/planning/
 /ftd/variables/: /variables/
 /ftd/built-in-types/: /built-in-types/
 /ftd/record/: /record/
@@ -577,3 +581,6 @@ favicon: /-/fastn.com/images/favicon.svg
 /blog/seo-meta-data/: /blog/seo-meta/
 /markdown-in-doc-site/-/planning/: /markdown/-/planning/
 /create-page/-/planning/: /ds-page/-/planning/
+/rfcs/rfc-process/: /rfc/rfc-process/
+/rfcs/fastn-update/: /rfc/fastn-update/
+/rfcs/variable-interpolation/: /rfc/variable-interpolation/
