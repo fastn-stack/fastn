@@ -79,8 +79,10 @@ favicon: /-/fastn.com/images/favicon.svg
 - Docs: /docs/
 - Student Ambassador Program: /ambassador/
   document: /student-programs/ambassador.ftd
+  skip: true
 - Champion Program: /champion/
   document: /student-programs/champion.ftd
+  skip: true
 
 ## Features: /features/
 
