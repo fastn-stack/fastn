@@ -77,6 +77,10 @@ favicon: /-/fastn.com/images/favicon.svg
   document: author/how-to/vscode.ftd
 - `fastn` Community: /community/
 - Docs: /docs/
+- Student Ambassador Program: /ambassador/
+  document: /student-programs/ambassador.ftd
+- Champion Program: /champion/
+  document: /student-programs/champion.ftd
 
 ## Features: /features/
 
@@ -307,7 +311,8 @@ favicon: /-/fastn.com/images/favicon.svg
   - **g** Hosting 🚧: /book/hosting/
     document: book/appendix/g-hosting.ftd
 
-## Video Course: /expander/
+## Learn: /learn/
+  document: /expander/index.ftd
    
 - Expander Crash Course: /expander/
   - Part 1. Hello World: /expander/hello-world/
