@@ -1,0 +1,183 @@
+-- import: fastn.com/rfcs/lib
+
+-- lib.rfc: RFC: Vendoring And `fastn update`
+id: vendoring
+status: wip-rfc
+
+This RFC proposes we make vendoring dependencies as official solution for version
+lock files. It also proposes we consolidate all network calls into `fastn update`
+command, which gives reliable performance in production.
+
+
+
+-- lib.motivation:
+
+`fastn` downloads and stores all the dependencies in a folder named `.packages`.
+We also have what we call download on demand, so when a dependency is
+encountered we do not download the entire dependency, as is the case with most
+other package managers, but the individual documents in the dependency, based on
+demand.
+
+We currently do not have package versioning, so we have been asking people to
+not checking `.packages` in the version control system along with their source
+code. We do that so latest versions of the dependencies are downloaded and
+used when the package is being built. This has allowed us to quickly do
+dependency updates and have the ecosystem get the latest updates.
+
+This is not a good long term solution though. We have been able to manage a
+level of quality control on our changes, not making any breaking changes, not
+making logical or surpisiing changes in packages, etc, mostly bug fixes and
+minor enhancements.
+
+Backward incompatible or logical changes in package may happen when there are
+more packages, e.g. from more authors and programmers who are learning `fastn`,
+and to keep our package ecosystem healthy and **reliable**, we have to implement
+version pinning of dependencies as well.
+
+One other downside of downloading on demand is the speed issue. When someone
+checks out a new package, the time to take to respond to first request is quite
+large, where we download all the dependencies needed to serve that document. If
+`.packages` contained all dependencies, and `.packages` was managed by `fastn
+update`, rest of fastn operations will not be making any HTTP requests, and will
+be have consistent performance.
+
+-- end: lib.motivation
+
+
+
+-- lib.detailed-design:
+
+-- ds.h2: Package Manifest File
+
+For every fastn package we will be creating a package manifest file:
+
+-- ds.code:
+lang: ftd
+
+\-- record package:
+string name:             \;; full package name
+document list documents: \;; all the ftd files
+file list assets:        \;; all the images etc assets
+file list fonts:         \;; if the package is a font package
+
+\-- record file:
+string full-name:        \;; relative to FASTN.ftd
+string checksum:         \;; sha256 checksum of the document content
+integer file-size:       \;; in bytes
+
+\-- record document:
+string list dependencies: \;; this is all the direct dependencies
+file file:
+
+-- ds.h2: `fastn build`
+
+`fastn build` will create the `/-/manifest.json` file.
+
+-- ds.h2: Structure of `.packages` folder
+
+A packages e.g., `fastn-community.github.io/doc-site` will be stored in:
+`.packages/fastn-community.github.io/doc-site`, and it's `manifest file` will be
+in `.packages/fastn-community.github.io/doc-site/-/manifest.json`.
+
+-- ds.h2: `fastn update` Basic Operation
+
+We will create a new command `fastn update`, which will download all the missing
+dependncies and store them in `.packages` folder. By default it will not update
+the existing files there.
+
+-- ds.h2: `fastn update --status`
+
+`fastn update --status` will download latest `manifest.json` for each package,
+and compare the one `.packages` folder and list all the packages and files that
+are out of date.
+
+-- ds.h2: `fastn update --upgrade <optional package-name>`
+
+`fastn update --upgrade`, without package name will upgrade all the out of date
+files in `.packages`. If `package-name` is passed, only that package will be
+upgraded. If during package upgade we encounter new dependencies we do not
+already have we download them as well.
+
+-- ds.h2: Transitive Dependencies
+
+Dependencies of dependencies will also be downloaded by `fastn update`.
+Similarly, `fastn update --upgrade` will download all dependencies including
+transitive dependencies.
+
+-- ds.h2: How The Packages Will Be Developed Locally?
+
+Checkout the entire repo at the right location in the `.packages` folder.
+
+-- end: lib.detailed-design
+
+
+
+
+-- lib.alternatives:
+
+-- ds.h2: Lockfile Approach
+
+Other package ecosystems do not typically vendor dependencies, instead create a
+lockfile with exact versions. Dependencies are downloaded on every developer and
+CI machine, prod machine during deployment.
+
+We consider vendoring a superior approach as it reduces overall load on the
+central package repository, reduces total network activity in general. Vendoring
+also allows local changes to upstream packages.
+
+-- end: lib.alternatives
+
+
+
+
+-- lib.teaching-notes:
+
+We will have to create documentation and education about `fastn update --status`
+and taking decisions about if a package is safe to update or not is actually
+tricky, as how does one decide? One can give instructions to just try out and
+see if nothing fails so it is safe to update. Can we let `fastn update --status`
+report more information, like if the package will build if this particular
+dependency was updated, and so it is safe to update?
+
+
+-- end: lib.teaching-notes
+
+
+
+
+-- lib.unresolved-questions:
+
+-- ds.h2: Auto run `fastn update`?
+
+Teaching about `fastn update` command should not require much effort. We have to
+document `fastn update`, and we should also do the default operation of
+downloading missing dependencies unprompted, so user has to execute this command
+less during normal operation. Or we can take the opposite approach and prompt
+user to run `fastn update` every time we enoucnted an issue that can be fixed by
+running `fastn update` so users get into the habit of running it.
+
+
+-- ds.h2: Would This Lead To Conflicts?
+
+If two developers have both done an update at different times, so they get
+different versions of the same dependency, can two diff versions cause
+conflicts?
+
+-- ds.h2: Would having ability to modify dependency code cause ecosystem issues?
+
+Like if I am vendoring code, it's trivial for me to modify them, and people will
+start modifying them, and so is that a good thing, or a bad, and we start
+building features to disallow that (e.g., fastn update complaining about
+checksum mismatch).
+
+If it is a good thing we can make `fastn update` do a three way merge to keep
+your local changes while updating dependencies.
+
+
+-- end: lib.unresolved-questions
+
+
+
+-- end: lib.rfc
+
+
