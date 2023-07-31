@@ -5,8 +5,8 @@ id: vendoring
 status: wip-rfc
 
 This RFC proposes we make vendoring dependencies as official solution for version
-lock files. It also proposes we consolidate all network calls into `fastn update`
-command, which gives reliable performance in production.
+lock files. It also proposes `fastn update` command, which helps you ugprade
+your versioned dependencies.
 
 
 
@@ -79,34 +79,36 @@ A packages e.g., `fastn-community.github.io/doc-site` will be stored in:
 `.packages/fastn-community.github.io/doc-site`, and it's `manifest file` will be
 in `.packages/fastn-community.github.io/doc-site/-/manifest.json`.
 
--- ds.h2: `fastn update` Basic Operation
-
-We will create a new command `fastn update`, which will download all the missing
-dependncies and store them in `.packages` folder. By default it will not update
-the existing files there.
-
 -- ds.h2: `fastn update --status`
 
 `fastn update --status` will download latest `manifest.json` for each package,
 and compare the one `.packages` folder and list all the packages and files that
 are out of date.
 
--- ds.h2: `fastn update --upgrade <optional package-name>`
+-- ds.h2: `fastn update <optional package-name>`
 
-`fastn update --upgrade`, without package name will upgrade all the out of date
+`fastn update`, without package name will update all the out of date
 files in `.packages`. If `package-name` is passed, only that package will be
-upgraded. If during package upgade we encounter new dependencies we do not
+updated. If during package update we encounter new dependencies we do not
 already have we download them as well.
 
 -- ds.h2: Transitive Dependencies
 
-Dependencies of dependencies will also be downloaded by `fastn update`.
-Similarly, `fastn update --upgrade` will download all dependencies including
-transitive dependencies.
+`fastn update` will download all dependencies including transitive dependencies.
 
 -- ds.h2: How The Packages Will Be Developed Locally?
 
 Checkout the entire repo at the right location in the `.packages` folder.
+
+-- ds.h2: `fastn serve --release` flag
+
+The download on demand feature would be only available in "debug mode", which is
+the default. For deploying on production server, `--release` should be used,
+which considers a missing document an error.
+
+Running `fastn check` can be used to check if the package has all its
+dependencies available in `.packages` folder. Check will in future perform more
+checks.
 
 -- end: lib.detailed-design
 
@@ -146,15 +148,6 @@ dependency was updated, and so it is safe to update?
 
 
 -- lib.unresolved-questions:
-
--- ds.h2: Auto run `fastn update`?
-
-Teaching about `fastn update` command should not require much effort. We have to
-document `fastn update`, and we should also do the default operation of
-downloading missing dependencies unprompted, so user has to execute this command
-less during normal operation. Or we can take the opposite approach and prompt
-user to run `fastn update` every time we enoucnted an issue that can be fixed by
-running `fastn update` so users get into the habit of running it.
 
 
 -- ds.h2: Would This Lead To Conflicts?
