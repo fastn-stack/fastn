@@ -30,7 +30,7 @@ person list persons:
 
 -- show-person: $p.name
 emp-id: $p.emp-id
-$loop$: $show-persons.persons as $p
+for: p in $show-persons.persons
 
 -- end: ftd.column
 
