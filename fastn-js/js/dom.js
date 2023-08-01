@@ -641,11 +641,6 @@ class Node2 {
             let [node, classes, attributes] = fastn_utils.htmlNode(kind);
             [this.#tagName, this.#node] = fastn_utils.createNodeHelper(node, classes, attributes);
             let codeNode = new Node2(this.#node, fastn_dom.ElementKind.CodeChild);
-            let preNode = this.#node;
-            if (preNode.getNode) {
-                preNode = preNode.getNode();
-            }
-            preNode.appendChild(codeNode.#node);
             this.#children.push(codeNode);
         } else {
             let [node, classes, attributes] = fastn_utils.htmlNode(kind);
