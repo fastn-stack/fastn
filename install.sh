@@ -110,6 +110,9 @@ setup() {
         mkdir -p $DESTINATION_PATH
     fi
 
+    # remove temporary files from previous install attempts
+    rm -f fastn_macos_x86_64 fastn_linux_musl_x86_64 fastn_controller_linux_musl_x86_64
+
     if [[ $CONTROLLER ]]; then 
         curl -# -L "$URL" | grep ".*\/releases\/download\/.*\/fastn_controller_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -# -O -J -L % > /dev/null
         mv fastn_controller_linux_musl_x86_64 "${DESTINATION_PATH}/fastn"
@@ -123,25 +126,29 @@ setup() {
         mv fastn_linux_musl_x86_64.d "${DESTINATION_PATH}/fastn.d"
     fi
 
-
     echo ""
 
-    chmod +x "${DESTINATION_PATH}/fastn"*
-
-    # Add fastn to PATH if not already done
-    update_path
-
-    echo "${FMT_GREEN}╭────────────────────────────────────────╮"
-    echo "│                                        │"
-    echo "│   fastn installation completed         │"
-    echo "│                                        │"
-    echo "│   Restart your terminal to apply       │"
-    echo "│   the changes.                         │"
-    echo "│                                        │"
-    echo "│   Get started with fastn at:           │"
-    echo "│   ${FMT_BLUE}https://fastn.com${FMT_RESET}${FMT_GREEN}                    │"
-    echo "│                                        │"
-    echo "╰────────────────────────────────────────╯${FMT_RESET}"
+    # Check if the destination files are moved successfully before setting permissions
+    if [[ -e "${DESTINATION_PATH}/fastn" ]]; then
+        chmod +x "${DESTINATION_PATH}/fastn"*
+    
+        # Add fastn to PATH if not already done
+        update_path
+    
+        echo "${FMT_GREEN}╭────────────────────────────────────────╮"
+        echo "│                                        │"
+        echo "│   fastn installation completed         │"
+        echo "│                                        │"
+        echo "│   Restart your terminal to apply       │"
+        echo "│   the changes.                         │"
+        echo "│                                        │"
+        echo "│   Get started with fastn at:           │"
+        echo "│   ${FMT_BLUE}https://fastn.com${FMT_RESET}${FMT_GREEN}                    │"
+        echo "│                                        │"
+        echo "╰────────────────────────────────────────╯${FMT_RESET}"
+    else
+        echo "${FMT_RED}ERROR:${FMT_RESET} Installation failed. Please check if you have sufficient permissions to install in $DESTINATION_PATH."
+    fi
 }
 
 main() {
