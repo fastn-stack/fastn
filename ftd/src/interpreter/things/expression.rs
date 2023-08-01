@@ -49,7 +49,7 @@ impl Expression {
     pub(crate) fn from_ast_condition(
         condition: ftd::ast::Condition,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Expression>> {
         if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
@@ -101,7 +101,7 @@ impl Expression {
     pub(crate) fn get_references(
         node: &mut fastn_grammar::evalexpr::ExprNode,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<

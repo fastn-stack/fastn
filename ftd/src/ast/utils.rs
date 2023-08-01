@@ -76,5 +76,7 @@ pub const REFERENCE: &str = "$";
 pub const CLONE: &str = "*$";
 pub const LOOP: &str = "$loop$";
 pub const AS: &str = " as ";
+pub const IN: &str = " in ";
 pub const IF: &str = "if";
+pub const FOR: &str = "for";
 pub const PROCESSOR: &str = "$processor$";

@@ -1,0 +1,54 @@
+<html>
+<head>
+    <base href="/">
+    <script src="fastn-js.js"></script>
+
+    <style>
+       
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><comment data-id="2"></comment><comment data-id="3"></comment><comment data-id="4"></comment><comment data-id="5"></comment><div data-id="6">2 Tuesday</div><comment data-id="7"></comment><div data-id="8">3 Wednesday</div><comment data-id="9"></comment><div data-id="10">4 Thursday</div><comment data-id="11"></comment><div data-id="12">5 Friday</div><comment data-id="13"></comment><div data-id="14">6 Saturday</div></body><style id="styles">
+    
+    </style>
+<script>
+    (function() {
+        let global = {
+};
+let main = function (parent) {
+  fastn_utils.getter(global.foo__weekdays).forLoop(parent, function (root, item, index) {
+    return fastn_dom.conditionalDom(parent, [
+      index
+    ], function () {
+      return (fastn_utils.getter(index) >= 2);
+    }, function (root) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([index,
+      item], function () {
+        return foo__join({
+          a: index,
+          b: item,
+        }, rooti0);
+      }), inherited);
+      return rooti0;
+    }).getParent();
+  });
+}
+fastn_utils.createNestedObject(global, "foo__weekdays", fastn.mutableList(["Sunday",
+"Monday",
+"Tuesday",
+"Wednesday",
+"Thursday",
+"Friday",
+"Saturday"]));
+let foo__join = function (args)
+{
+  let __args__ = args;
+  return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
+}
+
+        fastn_virtual.hydrate(main);
+        ftd.post_init();
+    })();
+</script>
+</html>

@@ -112,6 +112,20 @@ pub(crate) fn update_reference(reference: &str, rdata: &ftd::js::ResolverData) -
         return format!("{}.{remaining}", rdata.inherited_variable_name);
     }
 
+    if let Some(loop_counter_alias) = rdata.loop_counter_alias {
+        if let Some(ref doc_name) = rdata.doc_name {
+            let resolved_alias = ftd::interpreter::utils::resolve_name(
+                loop_counter_alias,
+                doc_name.as_str(),
+                &ftd::interpreter::default::default_aliases(),
+            );
+
+            if name.eq(resolved_alias.as_str()) {
+                return "index".to_string();
+            }
+        }
+    }
+
     if name.contains(ftd::interpreter::FTD_LOOP_COUNTER) {
         return "index".to_string();
     }

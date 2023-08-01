@@ -20,11 +20,6 @@ else
   }
 fi
 
-
-command_exists() {
-  command -v "$@" >/dev/null 2>&1
-}
-
 setup_colors() {
     if ! is_tty; then
         FMT_RED=""
@@ -32,6 +27,7 @@ setup_colors() {
         FMT_YELLOW=""
         FMT_BLUE=""
         FMT_BOLD=""
+        FMT_ORANGE=""
         FMT_RESET=""
     else
         FMT_RED=$(printf '\033[31m')
@@ -39,13 +35,55 @@ setup_colors() {
         FMT_YELLOW=$(printf '\033[33m')
         FMT_BLUE=$(printf '\033[34m')
         FMT_BOLD=$(printf '\033[1m')
+        FMT_ORANGE=$(printf '\033[38;5;208m')
         FMT_RESET=$(printf '\033[0m')
     fi
 }
 
+print_fastn_logo() {
+    echo "${FMT_ORANGE}       .:~!!~^.                                                                                     "
+    echo "     7B@@@@@@@&.                                                                                    "
+    echo "   .J@@@@@@&&B?                                                .7GBBBP.                             "
+    echo "   !#@@@@&^                                                    ^P@@@@@^                             "
+    echo "..:5&@@@@#~.:.        .:~!!~^..             ..^~!!~^..       .:?B@@@@@?^:..   .::::.   .:~!~^:.     "
+    echo "5#@@@@@@@@@@@#7   .!G&@@@@@@@@@#5^       :JB@@@@@@@@@@#Y^   :P@@@@@@@@@@@&J   G@@@@G77P@@@@@@@&5^   "
+    echo "?5&@@@@@@@&&&5^  ~B@@@@@#GGB&@@@@@P.    ?&@@@@@BPPB&@@@@&Y. .?&@@@@@@@&&&G!   P@@@@&&@@@@@@@@@@@&7. "
+    echo "   J&@@@@#:     .YB&&#P^    ^P@@@@@!   .&@@@@#7    :JB&##G:    ~G@@@@&~.      P@@@@@@Y^...~P@@@@@&^ "
+    echo "   7&@@@@B.              ...!G@@@@@?.  .#@@@@@B7^..            ^5@@@@&^       P@@@@&5      :B@@@@@! "
+    echo "   ?&@@@@B.       .!JPB#&@@@@@@@@@@?.   ^5@@@@@@@@@&#GY7:      ^P@@@@&^       P@@@@#?      :5&@@@@! "
+    echo "   ?&@@@@B.     :P&@@@@@&BG5YG@@@@@?.     :!YG#&@@@@@@@@@G:    ^P@@@@&^       P@@@@#?      :5&@@@@! "
+    echo "   ?&@@@@B.    .Y@@@@&?:    .!&@@@@?.           ..^J#@@@@@Y.   ^P@@@@&^       P@@@@#?      :5&@@@@! "
+    echo "   ?&@@@@B.    :P@@@@B:     ?#@@@@@?.  ~#@&@&Y^    :Y&@@@@Y.   :5@@@@@J:.     P@@@@#?      :5&@@@@! "
+    echo "   ?&@@@@B.     7@@@@@&B55G&&@@@@@@?.  .P@@@@@@BGPB&@@@@@B^     !&@@@@@@&P~   P@@@@#?      :5&@@@@! "
+    echo "   ?&@@@@#.      ~P&@@@@@@@B7!@@@@@J.    :Y#@@@@@@@@@@#5~        ~P&@@@@@&5   G@@@@&J      :P@@@@@! "
+    echo "    ......         .:^~~^:.   .....         .:^~!!~^:.             .:^~~^..   ......        ......  ${FMT_RESET}"
+}
 
+update_path() {
+    local shell_config_file
+    if [ -n "$ZSH_VERSION" ]; then
+        shell_config_file="${HOME}/.zshrc"
+    elif [ -n "$BASH_VERSION" ]; then
+        shell_config_file="${HOME}/.bashrc"
+    else
+        shell_config_file="${HOME}/.profile"
+    fi
+
+    # Check if the path is already added to the shell config file
+    if ! grep -qF "export PATH=\"\$PATH:${DESTINATION_PATH}\"" "$shell_config_file"; then
+        echo "export PATH=\"\$PATH:${DESTINATION_PATH}\"" >> "$shell_config_file"
+        echo "Updated the PATH variable in $shell_config_file"
+        echo "Please restart your terminal session to start using fastn."
+    fi
+}
+
+command_exists() {
+  command -v "$@" >/dev/null 2>&1
+}
 
 setup() {
+    print_fastn_logo
+
     # Parse arguments
     while [ $# -gt 0 ]; do
         case $1 in
@@ -72,30 +110,44 @@ setup() {
         mkdir -p $DESTINATION_PATH
     fi
 
+    # remove temporary files from previous install attempts
+    rm -f fastn_macos_x86_64 fastn_linux_musl_x86_64 fastn_controller_linux_musl_x86_64
 
     if [[ $CONTROLLER ]]; then 
-        curl -s $URL | grep ".*\/releases\/download\/.*\/fastn_controller_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -O -J -L %
+        curl -# -L "$URL" | grep ".*\/releases\/download\/.*\/fastn_controller_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -# -O -J -L % > /dev/null
         mv fastn_controller_linux_musl_x86_64 "${DESTINATION_PATH}/fastn"
         mv fastn_controller_linux_musl_x86_64.d "${DESTINATION_PATH}/fastn.d"
     elif [[ "$OSTYPE" == "darwin"* ]]; then
-        curl -s $URL | grep ".*\/releases\/download\/.*\/fastn_macos.*" | head -1 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -O -J -L %
+        curl -# -L "$URL" | grep ".*\/releases\/download\/.*\/fastn_macos.*" | head -1 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -# -O -J -L % > /dev/null
         mv fastn_macos_x86_64 "${DESTINATION_PATH}/fastn"
     else
-        curl -s $URL | grep ".*\/releases\/download\/.*\/fastn_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -O -J -L %
+        curl -# -L "$URL" | grep ".*\/releases\/download\/.*\/fastn_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -# -O -J -L % > /dev/null
         mv fastn_linux_musl_x86_64 "${DESTINATION_PATH}/fastn"
         mv fastn_linux_musl_x86_64.d "${DESTINATION_PATH}/fastn.d"
     fi
-    chmod +x "${DESTINATION_PATH}/fastn"*
+
+    echo ""
+
+    # Check if the destination files are moved successfully before setting permissions
+    if [[ -e "${DESTINATION_PATH}/fastn" ]]; then
+        chmod +x "${DESTINATION_PATH}/fastn"*
     
-
-    if ! [[ $DESTINATION_PATH == "/usr/local/bin" ]]; then 
-        cat <<EOF
-Unable to create a binary link for your system. Please add the following to your .bashrc/.zshrc file
-
-${FMT_GREEN}PATH="\$PATH:${DESTINATION_PATH}"${FMT_RESET}
-
-and reload the configuration/restart the terminal session
-EOF
+        # Add fastn to PATH if not already done
+        update_path
+    
+        echo "${FMT_GREEN}╭────────────────────────────────────────╮"
+        echo "│                                        │"
+        echo "│   fastn installation completed         │"
+        echo "│                                        │"
+        echo "│   Restart your terminal to apply       │"
+        echo "│   the changes.                         │"
+        echo "│                                        │"
+        echo "│   Get started with fastn at:           │"
+        echo "│   ${FMT_BLUE}https://fastn.com${FMT_RESET}${FMT_GREEN}                    │"
+        echo "│                                        │"
+        echo "╰────────────────────────────────────────╯${FMT_RESET}"
+    else
+        echo "${FMT_RED}ERROR:${FMT_RESET} Installation failed. Please check if you have sufficient permissions to install in $DESTINATION_PATH."
     fi
 }
 
