@@ -598,15 +598,11 @@ fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http
             })
     {
         let theme_css = ftd::theme_css();
-        return if let Some(theme) = theme_css.get(theme).cloned() {
-            Some(
-                actix_web::HttpResponse::Ok()
-                    .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
-                    .body(theme),
-            )
-        } else {
-            None
-        };
+        return theme_css.get(theme).cloned().map(|theme| {
+            actix_web::HttpResponse::Ok()
+                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .body(theme)
+        });
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_js()) {
         return Some(
             actix_web::HttpResponse::Ok()
