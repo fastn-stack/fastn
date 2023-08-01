@@ -452,6 +452,8 @@ favicon: /-/fastn.com/images/favicon.svg
     skip: true
   - Footers: /featured/components/footers/
     skip: true
+  - Hero Components: /featured/components/hero/
+    skip: true
 /  - Buttons: /featured/components/buttons/
     skip: true
 - Design Elements: /featured/cs/

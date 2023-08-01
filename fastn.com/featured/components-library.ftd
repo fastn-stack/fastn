@@ -70,6 +70,14 @@ more-link: /featured/components/headers/
 We have designed and developed below header / navbar packages. You can use them
 on your `FTD` web site. 
 
+-- ft-ui.grid-view: Hero Components
+templates: $heros
+more-link-text: View all
+more-link: /featured/components/hero/
+
+We have designed and developed below hero components. You can use them on your
+`FTD` web site. 
+
 -- ft-ui.grid-view: Footers
 templates: $footers
 more-link-text: View all
@@ -177,4 +185,36 @@ The footer component is already included inside doc-site. If you are using
 doc-site then don’t add footer as fastn dependency.
 
 -- end: footers
+
+
+
+
+-- ft-ui.template list heros:
+
+-- ft-ui.template: Hero - 1
+template-url: https://fastnui.trizwit.com/UI-Components/Hero/hero-1/
+screenshot: $fastn-assets.files.images.featured.components.hero-1.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Hero components can be used inside your fastn projects.
+
+-- ft-ui.template: Hero - 2
+template-url: https://fastnui.trizwit.com/UI-Components/Hero/hero-2/
+screenshot: $fastn-assets.files.images.featured.components.hero-2.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Hero components can be used inside your fastn projects.
+
+-- ft-ui.template: Hero - 3
+template-url: https://fastnui.trizwit.com/UI-Components/Hero/hero-3/
+screenshot: $fastn-assets.files.images.featured.components.hero-3.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Hero components can be used inside your fastn projects.
+
+-- end: heros
+
 
