@@ -1847,9 +1847,6 @@ impl<'a> TDoc<'a> {
             line_number: value.line_number(),
         })?;
 
-        println!("ORIGINAL DATA -------------");
-        dbg!(&value, &json);
-
         self.as_json_(kind, value, &json)
     }
 
@@ -1859,8 +1856,6 @@ impl<'a> TDoc<'a> {
         value: &ftd::ast::VariableValue,
         o: &serde_json::Map<String, serde_json::Value>,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-        println!("INSIDE HANDLE OBJECT");
-        dbg!(&value, &o);
         let inner_value = value.inner();
         if let Some(ftd::ast::VariableValue::Record { name, .. }) = inner_value.as_ref() {
             if let Some(v) = o.get(name) {
