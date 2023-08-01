@@ -193,7 +193,28 @@ let fastn_utils = {
         }
 
         return [tagName, element];
+    },
+
+    addCssFile(url) {
+        // Create a new link element
+        const linkElement = document.createElement("link");
+
+        // Set the attributes of the link element
+        linkElement.rel = "stylesheet";
+        linkElement.href = url;
+
+        // Append the link element to the head section of the document
+        document.head.appendChild(linkElement);
+    },
+
+    addCodeTheme(theme) {
+        if (!fastn_dom.codeData.addedCssFile.includes(theme)) {
+            let themeCssUrl = fastn_dom.codeData.availableThemes[theme];
+            fastn_utils.addCssFile(themeCssUrl);
+            fastn_dom.codeData.addedCssFile.push(theme);
+        }
     }
+
 }
 
 

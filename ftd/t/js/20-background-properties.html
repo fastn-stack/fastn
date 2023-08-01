@@ -106,7 +106,8 @@ fastn_utils.createNestedObject(global, "foo__lg", fastn.recordInstance({
   direction: fastn_dom.LinearGradientDirection.BottomLeft,
   colors: global.foo__color_values
 }));
-
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "ftd/ftd/theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "ftd/ftd/theme_css/fastn-theme.light.css";
         fastn_virtual.hydrate(main);
         ftd.post_init();
     })();

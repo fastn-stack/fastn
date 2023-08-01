@@ -29,6 +29,7 @@ pub mod taffy;
 #[cfg(feature = "terminal")]
 pub mod terminal;
 pub mod test_helper;
+mod utils;
 #[cfg(feature = "native-rendering")]
 mod wasm;
 
@@ -40,6 +41,16 @@ pub fn css() -> &'static str {
     // }
 
     include_str!("../ftd.css")
+}
+
+pub fn theme_css() -> ftd::Map<String> {
+    let mut themes: ftd::Map<String> = Default::default();
+    let paths = ftd::utils::find_all_files_matching_extension_recursively("theme_css", "css");
+    for path in paths {
+        let stem = path.file_stem().unwrap().to_str().unwrap();
+        themes.insert(stem.to_string(), std::fs::read_to_string(&path).unwrap());
+    }
+    themes
 }
 
 pub fn ftd_js_html() -> &'static str {

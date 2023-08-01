@@ -1,5 +1,10 @@
 let fastn_dom = {};
 
+fastn_dom.codeData = {
+    availableThemes: {},
+    addedCssFile: []
+}
+
 fastn_dom.commentNode = "comment";
 fastn_dom.wrapperNode = "wrapper";
 fastn_dom.commentMessage = "***FASTN***";
@@ -1317,11 +1322,16 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Code) {
             this.#children[0].getNode().innerHTML= staticValue;
         } else if (kind === fastn_dom.PropertyKind.CodeTheme) {
+            if (!ssr) {
+                fastn_utils.addCodeTheme(staticValue);
+            }
             let theme = staticValue.replace("\.", "-");
             this.#node.classList.add(theme);
             this.#children[0].getNode().classList.add(theme);
         } else if (kind === fastn_dom.PropertyKind.CodeLanguage) {
-            this.#children[0].getNode().classList.add(`language-${staticValue}`);
+            let language = `language-${staticValue}`;
+            this.#node.classList.add(language);
+            this.#children[0].getNode().classList.add(language);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle) {
             this.updateMetaTitle(staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle) {

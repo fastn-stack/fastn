@@ -32,7 +32,8 @@ fastn_utils.createNestedObject(global, "foo__bg_og", fastn.recordInstance({
   light: "yellow",
   dark: "green"
 }));
-
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "ftd/ftd/theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "ftd/ftd/theme_css/fastn-theme.light.css";
         fastn_virtual.hydrate(main);
         ftd.post_init();
     })();

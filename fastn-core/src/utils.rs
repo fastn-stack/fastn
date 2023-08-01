@@ -631,30 +631,33 @@ pub fn replace_markers_2023(
     base_url: &str,
 ) -> String {
     ftd::html::utils::trim_all_lines(
-        s.replace("__js_script__", js_script)
-            .replace(
-                "__html_body__",
-                format!("{}{}", ssr_body, font_style).as_str(),
-            )
-            .replace(
-                "__script_file__",
-                format!(
-                    r#"
+        s.replace(
+            "__js_script__",
+            format!("{js_script}{}", fastn_core::utils::available_code_themes()).as_str(),
+        )
+        .replace(
+            "__html_body__",
+            format!("{}{}", ssr_body, font_style).as_str(),
+        )
+        .replace(
+            "__script_file__",
+            format!(
+                r#"
                         <script src=\"{}\"></script>
                         <script src=\"{}\"></script>
                         <script src=\"{}\"></script>
                         {}
                     "#,
-                    hashed_markdown_js(),
-                    hashed_prism_js(),
-                    hashed_default_ftd_js(),
-                    scripts
-                )
-                .as_str(),
+                hashed_markdown_js(),
+                hashed_prism_js(),
+                hashed_default_ftd_js(),
+                scripts
             )
-            .replace("__default_css__", default_css)
-            .replace("__base_url__", base_url)
             .as_str(),
+        )
+        .replace("__default_css__", default_css)
+        .replace("__base_url__", base_url)
+        .as_str(),
     )
 }
 
@@ -870,6 +873,29 @@ static PRISM_HASH: once_cell::sync::Lazy<String> =
 
 pub fn hashed_prism_js() -> &'static str {
     &PRISM_HASH
+}
+
+static CODE_THEME_HASH: once_cell::sync::Lazy<ftd::Map<String>> =
+    once_cell::sync::Lazy::new(|| {
+        ftd::theme_css()
+            .into_iter()
+            .map(|(k, v)| (k, format!("code-theme-{}.css", generate_hash(v.as_str()))))
+            .collect()
+    });
+
+pub fn hashed_code_theme_css() -> &'static ftd::Map<String> {
+    &CODE_THEME_HASH
+}
+
+pub fn available_code_themes() -> String {
+    let themes = hashed_code_theme_css();
+    let mut result = vec![];
+    for (theme, url) in themes {
+        result.push(format!(
+            "fastn_dom.codeData.availableThemes[\"{theme}\"] = \"{url}\";"
+        ))
+    }
+    result.join("\n")
 }
 
 #[cfg(test)]

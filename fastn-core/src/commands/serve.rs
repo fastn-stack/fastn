@@ -586,6 +586,26 @@ fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
                 .body(ftd::markdown_js()),
         );
+    } else if let Some(theme) =
+        fastn_core::utils::hashed_code_theme_css()
+            .iter()
+            .find_map(|(theme, url)| {
+                if (req.path().ends_with(url)) {
+                    Some(theme)
+                } else {
+                    None
+                }
+            })
+    {
+        return if let Some(theme) = ftd::theme_css().get(theme) {
+            Some(
+                actix_web::HttpResponse::Ok()
+                    .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                    .body(theme),
+            )
+        } else {
+            None
+        };
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_js()) {
         return Some(
             actix_web::HttpResponse::Ok()
