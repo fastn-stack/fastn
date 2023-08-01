@@ -73,7 +73,7 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div><div
 She smiled, and smiled, and passed it off Ere from the door she stept-</div><div data-id="130" class="w-120 p-3 bw-49 bs-23 bc-40 white-space-124">But ere she from the church-door stepped She smiled and told us why:
 
 'It was a wicked woman's curse,' Quoth she, 'and what care I?'
-She smiled, and smiled, and passed it off Ere from the door she stept-</div></div><div data-id="131" class="ft_column w-57"><div data-id="132" class="as-125 c-126">Start</div><div data-id="133" class="as-127 c-126">Center</div><div data-id="134" class="as-128 c-126">End</div></div><div data-id="135" class="a,b,c,d c-126">This is text with class</div><div data-id="136" class="ft_column w-129 p-58 m-110 bw-49 bs-23 bc-40"><div data-id="137" class="ft_column w-120 p-58 bw-49 bs-23 bc-130"><div data-id="138" class="pos-131 t-71 l-132 c-133">Inside Inner Container</div></div></div><div data-id="139" class="ft_column w-129 p-58 m-110 bw-49 bs-23 bc-40"><div data-id="140" class="ft_column w-120 p-58 bw-49 bs-23 bc-134"><div data-id="141" class="pos-131 t-71 l-132 c-98">Inside Outer Container</div></div></div><div data-id="142" class="ft_row w-1 jc-94"><div data-id="143">32</div><div data-id="144">1.123</div><div data-id="145">true</div></div><div data-id="146" class="ft_column w-1 bgc-135"><div data-id="147" class="c-126 fst-136 fwt-137">These are stylized values</div><div data-id="148" class="c-126 fwt-138">1234</div><div data-id="149" class="c-126 td-139 fst-136">3.142</div><div data-id="150" class="c-126 fwt-140">true</div></div><div data-id="151" class="ft_column w-1 m-141"><h1 data-id="152" class="c-98">Hello World</h1></div><div data-id="153" class="ft_column w-66 m-141 bw-49 bs-23 bc-40 c-133 ali-115"><div data-id="154">One</div><div data-id="155">Two</div><div data-id="156">Three</div></div></body><style id="styles">
+She smiled, and smiled, and passed it off Ere from the door she stept-</div></div><div data-id="131" class="ft_column w-57"><div data-id="132" class="as-125 c-126">Start</div><div data-id="133" class="as-127 c-126">Center</div><div data-id="134" class="as-128 c-126">End</div></div><div data-id="135" class="a,b,c,d c-126">This is text with class</div><div data-id="136" class="ft_column w-129 p-58 m-110 bw-49 bs-23 bc-40"><div data-id="137" class="ft_column w-120 p-58 bw-49 bs-23 bc-130"><div data-id="138" class="pos-131 t-71 l-132 c-133">Inside Inner Container</div></div></div><div data-id="139" class="ft_column w-129 p-58 m-110 bw-49 bs-23 bc-40"><div data-id="140" class="ft_column w-120 p-58 bw-49 bs-23 bc-134"><div data-id="141" class="pos-131 t-71 l-132 c-98">Inside Outer Container</div></div></div><div data-id="142" class="ft_row w-1 jc-94"><div data-id="143">32</div><div data-id="144">1.123</div><div data-id="145">true</div></div><div data-id="146" class="ft_column w-1 bgc-135"><div data-id="147" class="c-126 fst-136 fwt-137">These are stylized values</div><div data-id="148" class="c-126 fwt-138">1234</div><div data-id="149" class="c-126 td-139 fst-136">3.142</div><div data-id="150" class="c-126 fwt-140">true</div></div><div data-id="151" class="ft_column w-1 m-141"><h1 data-id="152" class="c-98">Hello World</h1></div><div data-id="153" class="ft_column w-66 m-141 bw-49 bs-23 bc-40 c-133 ali-115"><div data-id="154">One</div><div data-id="155">Two</div><div data-id="156">Three</div></div><div data-id="157" class="ft_column w-96 h-80 m-110 box-shadow-142"></div></body><style id="styles">
     .w-1 { width: 100%; }
 	.bgc-2 { background-color: yellow; }
 	body.dark .bgc-2 { background-color: lightgreen; }
@@ -228,6 +228,8 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
 	.td-139 { text-decoration: underline; }
 	.fwt-140 { font-weight: 900; }
 	.m-141 { margin: 20px; }
+	.box-shadow-142 { box-shadow: 10px 10px 20px 0px yellow; }
+	body.dark .box-shadow-142 { box-shadow: 10px 10px 20px 0px red; }
     </style>
 <script>
     (function() {
@@ -1367,6 +1369,11 @@ let main = function (parent) {
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Three", inherited);
   }
   ]), inherited);
+  let parenti21 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti21.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+  parenti21.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+  parenti21.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(10), inherited);
+  parenti21.setProperty(fastn_dom.PropertyKind.Shadow, global.foo__s, inherited);
 }
 fastn_utils.createNestedObject(global, "foo__ylg", fastn.recordInstance({
   light: "yellow",
@@ -1417,6 +1424,18 @@ fastn_utils.createNestedObject(global, "foo__red_blue", fastn.recordInstance({
 }));
 fastn_utils.createNestedObject(global, "foo__sample_text", "Far far away, behind the word mountains, far from the countries\nVokalia and Consonantia, there live the blind texts. Separated they\nin Bookmarksgrove right at the coast of the Semantics, a large language\nocean. A small river named Duden flows by their place and supplies it\nwith the necessary regelialia. It is a paradisematic country, in which\nroasted parts of sentences fly into your mouth. Even the all-powerful\nPointing has no control about the blind texts it is an almost unorthographic\nlife One day however a small line of blind text by the name of Lorem\nIpsum decided to leave for the far World of Grammar.");
 fastn_utils.createNestedObject(global, "foo__sample_text2", "But ere she from the church-door stepped She smiled and told us why:\n\n'It was a wicked woman's curse,' Quoth she, 'and what care I?'\nShe smiled, and smiled, and passed it off Ere from the door she stept-");
+fastn_utils.createNestedObject(global, "foo__yellow_red", fastn.recordInstance({
+  light: "yellow",
+  dark: "red"
+}));
+fastn_utils.createNestedObject(global, "foo__s", fastn.recordInstance({
+  x_offset: fastn_dom.Length.Px(10),
+  y_offset: fastn_dom.Length.Px(10),
+  blur: fastn_dom.Length.Px(20),
+  spread: fastn_dom.Length.Px(0),
+  color: global.foo__yellow_red,
+  inset: false
+}));
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

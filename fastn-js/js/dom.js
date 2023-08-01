@@ -762,7 +762,7 @@ class Node2 {
         const spread = fastn_utils.getStaticValue(value.get("spread"));
         const inset = fastn_utils.getStaticValue(value.get("inset"));
 
-        const shadowCommonCss = `${inset ? "inset " : ""}${xOffset} ${yOffset} ${spread}${blur ? ` ${blur}` : ''}`;
+        const shadowCommonCss = `${inset ? "inset " : ""}${xOffset} ${yOffset} ${blur ? `${blur} ${spread}` : spread ? spread : ''}`;
         const lightShadowCss =  `${shadowCommonCss} ${lightColor}`;
         const darkShadowCss = `${shadowCommonCss} ${darkColor}`;
 
