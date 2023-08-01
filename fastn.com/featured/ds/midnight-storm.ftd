@@ -13,7 +13,7 @@
 
 
 
--- ds.page: SPA / Landing Pages - Midnight Storm 
+-- ds.page: Featured components
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -39,7 +39,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: SPA / Landing Pages - Midnight Storm 
+-- ds.layout: Documentation Sites - Midnight Storm
 previous-url: /featured/
 
 -- end: ds.page.layout-bar
@@ -60,22 +60,28 @@ connect: $social-links
 
 -- ds.page.body:
 
-We have designed and developed below landing pages site themes. You can use them
-for creating SPA(Single Page Application or websites) etc. 
+⚡️ Midnight Storm DS will help you create a beautiful documentation site in no
+time.
+
+It provides out-of-the-box documentation features that can be used to create any
+kind of site(personal website, blog, etc).
+
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.landing.set-2-landing.jpg
-cta-url: https://fastn-community.github.io/midnight-storm/landing/
+image: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
+cta-url: https://fastn-community.github.io/midnight-storm/
 wip: true
 
--- ft-ui.grid-view: SPA / Landing Pages
+-- ft-ui.grid-view: Documentation Sites
 if: { show-grid }
-templates: $ft-ui.landing-pages-2
+templates: $ft-ui.doc-sites
 more-link-text: View all
-more-link: /featured/landing-pages/
+more-link: /featured/doc-sites/
 
-We have designed and developed below landing pages site themes. You can use them
-for creating SPA(Single Page Application or websites) etc. 
+`doc-sites` will help you create a beautiful documentation site in no time. 
+
+It provides out-of-the-box documentation features that can be used to create any
+kind of site(personal website, blog, etc).
 
 -- end: ds.page
 

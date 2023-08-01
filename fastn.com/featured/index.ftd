@@ -423,8 +423,8 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 wip: true
 
 -- template: Midnight Storm
-template-url: featured/ds/set-2-ds/
-screenshot: $fastn-assets.files.images.featured.doc-sites.set-2-ds.jpg
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 wip: true
 
 -- end: doc-sites
@@ -441,8 +441,8 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 wip: true
 
 -- template: Midnight Storm
-template-url: featured/ds/set-2-ds/
-screenshot: $fastn-assets.files.images.featured.doc-sites.set-2-ds.jpg
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 wip: true
 
 -- end: doc-sites-1
@@ -470,8 +470,8 @@ wip: true
 -- template list landing-pages-1:
 
 -- template: Midnight Storm
-template-url: featured/landing/set-2-landing/
-screenshot: $fastn-assets.files.images.featured.landing.set-2-landing.jpg
+template-url: featured/landing/midnight-storm-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
 wip: true
 
 -- end: landing-pages-1

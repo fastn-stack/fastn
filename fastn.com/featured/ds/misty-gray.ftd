@@ -39,7 +39,8 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Documentation Sites - Midnight Storm
+-- ds.layout: Documentation Sites - Misty Gray
+cta-url: https://github.com/fastn-stack/fastn-template/generate
 previous-url: /featured/
 
 -- end: ds.page.layout-bar
@@ -48,9 +49,9 @@ previous-url: /featured/
 
 -- ds.distributors: 
 owners: $owner-fastn
-license-url: https://github.com/fastn-community/midnight-storm/blob/main/LICENSE
+license-url: https://github.com/fastn-community/misty-gray/blob/main/LICENSE
 license: Creative Commons
-published-date: 02-June-2023
+published-date: 31-May-2023
 used-by: 1 +
 likes: 1 Stars
 connect: $social-links
@@ -60,17 +61,15 @@ connect: $social-links
 
 -- ds.page.body:
 
-⚡️ Midnight Storm DS will help you create a beautiful documentation site in no
-time.
+⚡️ Misty Gray will help you create a beautiful documentation site in no time.
 
 It provides out-of-the-box documentation features that can be used to create any
 kind of site(personal website, blog, etc).
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.doc-sites.set-2-ds.jpg
-cta-url: https://fastn-community.github.io/midnight-storm/
-wip: true
+image: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+cta-url: https://fastn-community.github.io/misty-gray/
 
 -- ft-ui.grid-view: Documentation Sites
 if: { show-grid }
