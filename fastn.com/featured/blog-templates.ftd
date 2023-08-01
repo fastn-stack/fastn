@@ -110,4 +110,48 @@ wip: true
 It provides out-of-the-box documentation features that can be used to create any
 kind of site(personal website, blog, etc).
 
+
+-- ft-ui.template: Pink Tree
+template-url: featured/blog-templates/
+screenshot: $fastn-assets.files.images.featured.blog.pink-tree.png
+licence-url: https://github.com/MeenuKumari28/pink-tree
+github-url: https://github.com/MeenuKumari28/pink-tree
+wip: true
+
+⚡️ Pink Tree will help you create a beautiful blog site in no time.
+
+-- ft-ui.template: Yellow Lily
+template-url: featured/blog-templates/
+screenshot: $fastn-assets.files.images.featured.blog.yellow-lily.png
+licence-url: https://github.com/MeenuKumari28/yellow-lily
+github-url: https://github.com/MeenuKumari28/yellow-lily
+wip: true
+
+⚡️ Yellow Lily will help you create a beautiful blog site in no time.
+
+-- ft-ui.template: Blue Wave
+template-url: featured/blog-templates/
+screenshot: $fastn-assets.files.images.featured.blog.blue-wave.png
+licence-url: https://github.com/MeenuKumari28/blue-wave
+github-url: https://github.com/MeenuKumari28/blue-wave
+wip: true
+
+⚡️ Blue Wave will help you create a beautiful blog site in no time.
+
+-- ft-ui.template: Navy Nebula
+template-url: featured/blog-templates/
+screenshot: $fastn-assets.files.images.featured.blog.navy-nebula.png
+licence-url: https://github.com/fastn-community/navy-nebula/
+github-url: https://github.com/fastn-community/navy-nebula/
+
+⚡️ Navy Nebula will help you create a beautiful blog site in no time.
+
+-- ft-ui.template: Blog Template 1
+template-url: featured/blog-templates/
+screenshot: $fastn-assets.files.images.featured.blog.blog-template-1.png
+licence-url: https://github.com/fastn-community/blog-template-1/
+github-url: https://github.com/fastn-community/blog-template-1/
+
+⚡️ Blog Template 1 will help you create a beautiful blog site in no time.
+
 -- end: doc-sites

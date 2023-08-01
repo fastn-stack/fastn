@@ -79,12 +79,22 @@ template-url: fastn-community.github.io/midnight-storm
 screenshot: $fastn-assets.files.images.featured.landing.set-2-landing.jpg
 licence-url: https://github.com/fastn-community/midnight-storm/blob/master/LICENSE
 github-url: https://github.com/fastn-community/midnight-storm
-is-last: true
 wip: true
 
 ⚡️ Midnight Storm will help you create a beautiful documentation site in no time.
 
 It provides out-of-the-box documentation features that can be used to create any
 kind of site(personal website, blog, etc).
+
+-- ft-ui.template: Studious Couscous
+template-url: featured/landing-pages/
+screenshot: $fastn-assets.files.images.featured.blog.studious-couscous.png
+licence-url: https://github.com/fastn-community/studious-couscous/
+github-url: https://github.com/fastn-community/studious-couscous/
+wip: true
+
+⚡️ Studious Couscous will help you create a beautiful landing page. site in no
+time.
+
 
 -- end: doc-sites
