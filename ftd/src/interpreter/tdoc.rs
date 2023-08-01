@@ -522,7 +522,7 @@ impl<'a> TDoc<'a> {
             &str,
             &mut [ftd::interpreter::Argument],
         )>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<(
             ftd::interpreter::PropertyValueSource,
@@ -1822,7 +1822,7 @@ impl<'a> TDoc<'a> {
             );
         }
 
-        self.as_json_(value, &row[0], kind)
+        self.as_json_(kind, value, &row[0])
     }
 
     pub fn from_json<T>(
@@ -1834,31 +1834,39 @@ impl<'a> TDoc<'a> {
     where
         T: serde::Serialize + std::fmt::Debug,
     {
+        let name = match value.inner() {
+            Some(ftd::ast::VariableValue::Record { name, .. }) => name,
+            _ => {
+                panic!("from_json called with non record value: {:?}", value);
+            }
+        };
+
         let json = serde_json::to_value(json).map_err(|e| ftd::interpreter::Error::ParseError {
-            message: format!("Can't serialize to json: {:?}, found: {:?}", e, json),
+            message: format!("Can't serialize to json: {e:?}, key={name}, found: {json:?}"),
             doc_id: self.name.to_string(),
             line_number: value.line_number(),
         })?;
 
-        self.as_json_(value, &json, kind)
+        self.as_json_(kind, value, &json)
     }
 
     fn handle_object(
         &self,
-        o: &serde_json::Map<String, serde_json::Value>,
-        value: &ftd::ast::VariableValue,
         kind: &ftd::interpreter::Kind,
+        value: &ftd::ast::VariableValue,
+        o: &serde_json::Map<String, serde_json::Value>,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-        if let ftd::ast::VariableValue::Record { name, .. } = value {
+        let inner_value = value.inner();
+        if let Some(ftd::ast::VariableValue::Record { name, .. }) = inner_value.as_ref() {
             if let Some(v) = o.get(name) {
-                return self.as_json_(value, v, kind);
+                return self.as_json_(kind, value, v);
             } else if let Some(v) = value.caption() {
-                return self.as_json_(value, &serde_json::Value::String(v), kind);
+                return self.as_json_(kind, value, &serde_json::Value::String(v));
             }
         }
 
         ftd::interpreter::utils::e2(
-            format!("Can't parse to integer, found: {o:?}"),
+            format!("Can't parse {value:?} to {kind:?}, found: {o:?}"),
             self.name,
             value.line_number(),
         )
@@ -1866,19 +1874,19 @@ impl<'a> TDoc<'a> {
 
     fn as_json_(
         &self,
+        kind: &ftd::interpreter::Kind,
         value: &ftd::ast::VariableValue,
         json: &serde_json::Value,
-        kind: &ftd::interpreter::Kind,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         let line_number = value.line_number();
         Ok(match kind {
             ftd::interpreter::Kind::String { .. } => ftd::interpreter::Value::String {
                 text: match json {
                     serde_json::Value::String(v) => v.to_string(),
-                    serde_json::Value::Object(o) => return self.handle_object(o, value, kind),
+                    serde_json::Value::Object(o) => return self.handle_object(kind, value, o),
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't parse to string, found: {json}"),
+                            format!("Can't parse {value:?} to string, found: {json}"),
                             self.name,
                             line_number,
                         )
@@ -1890,7 +1898,7 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::Number(n) => {
                         n.as_i64()
                             .ok_or_else(|| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse to integer, found: {json}"),
+                                message: format!("Can't parse {value:?} to integer, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
@@ -1898,15 +1906,15 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::String(s) => {
                         s.parse::<i64>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse to integer, found: {json}"),
+                                message: format!("Can't parse {value:?} to integer, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
                     }
-                    serde_json::Value::Object(o) => return self.handle_object(o, value, kind),
+                    serde_json::Value::Object(o) => return self.handle_object(kind, value, o),
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't parse to integer, found: {json}"),
+                            format!("Can't parse {value:?} to integer, found: {json}"),
                             self.name,
                             line_number,
                         )
@@ -1918,7 +1926,7 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::Number(n) => {
                         n.as_f64()
                             .ok_or_else(|| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse to integer, found: {json}"),
+                                message: format!("Can't parse {value:?} to decimal, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
@@ -1926,15 +1934,15 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::String(s) => {
                         s.parse::<f64>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse to decimal, found: {json}"),
+                                message: format!("Can't parse {value:?} to decimal, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
                     }
-                    serde_json::Value::Object(o) => return self.handle_object(o, value, kind),
+                    serde_json::Value::Object(o) => return self.handle_object(kind, value, o),
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't parse to integer, found: {}", json),
+                            format!("Can't parse {value:?} to decimal, found: {}", json),
                             self.name,
                             line_number,
                         )
@@ -1947,15 +1955,18 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::String(s) => {
                         s.parse::<bool>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse to boolean, found: {}", json),
+                                message: format!(
+                                    "Can't parse {value:?} to boolean, found: {}",
+                                    json
+                                ),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
                     }
-                    serde_json::Value::Object(o) => return self.handle_object(o, value, kind),
+                    serde_json::Value::Object(o) => return self.handle_object(kind, value, o),
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't parse to boolean, found: {}", json),
+                            format!("Can't parse {value:?} to boolean, found: {}", json),
                             self.name,
                             line_number,
                         )
@@ -1982,7 +1993,7 @@ impl<'a> TDoc<'a> {
                         fields.insert(
                             field.name,
                             ftd::interpreter::PropertyValue::Value {
-                                value: self.as_json_(value, &val, &field.kind.kind)?,
+                                value: self.as_json_(&field.kind.kind, value, &val)?,
                                 is_mutable: false,
                                 line_number,
                             },
@@ -2024,7 +2035,7 @@ impl<'a> TDoc<'a> {
                 if let serde_json::Value::Array(list) = json {
                     for item in list {
                         data.push(ftd::interpreter::PropertyValue::Value {
-                            value: self.as_json_(value, item, kind)?,
+                            value: self.as_json_(kind, value, item)?,
                             is_mutable: false,
                             line_number,
                         });
@@ -2048,7 +2059,32 @@ impl<'a> TDoc<'a> {
                         kind: kind.clone().into_kind_data(),
                         data: Box::new(None),
                     },
-                    _ => self.as_json_(value, json, kind)?,
+                    serde_json::Value::Object(o)
+                        if value.inner().map_or(false, |v| v.is_record()) =>
+                    {
+                        let name = match value.inner() {
+                            Some(ftd::ast::VariableValue::Record { name, .. }) => name,
+                            _ => {
+                                panic!("from_json called with non record value: {:?}", value);
+                            }
+                        };
+
+                        let is_request_data_call = value.has_request_data_header();
+
+                        // For request-data - Optional null query parameters = None
+                        // When using request-data
+                        //      Query parameters are passed as record values
+                        //      Record name is set to query parameter name
+                        if !o.contains_key(name.as_str()) && is_request_data_call {
+                            return Ok(ftd::interpreter::Value::Optional {
+                                kind: kind.clone().into_kind_data(),
+                                data: Box::new(None),
+                            });
+                        }
+
+                        self.as_json_(kind, value, json)?
+                    }
+                    _ => self.as_json_(kind, value, json)?,
                 }
             }
             t => unimplemented!(

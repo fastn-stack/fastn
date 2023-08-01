@@ -1,5 +1,6 @@
 <html>
 <head>
+    <base href="/">
     <script src="fastn-js.js"></script>
 
     <style>
@@ -7,9 +8,8 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2">Click to add Tom</div><div data-id="3">update $first</div><div data-id="4"><div data-id="5" class="ft_column"><div data-id="6">hello</div><div data-id="7">0</div></div><div data-id="8" class="ft_column"><div data-id="9">world</div><div data-id="10">1</div></div></div></body><style id="styles">
-    .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
-	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
+<body data-id="1"><div data-id="2">Click to add Tom</div><div data-id="3">update $first</div><comment data-id="4"></comment><div data-id="5" class="ft_column"><div data-id="6">hello</div><div data-id="7">0</div></div><div data-id="8" class="ft_column"><div data-id="9">world</div><div data-id="10">1</div></div></body><style id="styles">
+    
     </style>
 <script>
     (function() {
@@ -32,7 +32,7 @@ let main = function (parent) {
       v: "Bob",
     }, parenti1);
   });
-  global.foo__people.forLoop(parent, function (root, item, index) {
+  fastn_utils.getter(global.foo__people).forLoop(parent, function (root, item, index) {
     let rooti0 = foo__show_person(root, inherited, {
       name: item,
       index: index
@@ -77,7 +77,7 @@ let foo__show_person = function (parent, inherited, args) {
   },
   function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.index, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, __args__.index, inherited);
   }
   ]), inherited);
   return parenti0;

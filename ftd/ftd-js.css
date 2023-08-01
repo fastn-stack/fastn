@@ -48,7 +48,17 @@ table {
 }*/
 
 *, :after, :before {
-    box-sizing: inherit;
+    /*box-sizing: inherit;*/
+    box-sizing: border-box;
+    text-decoration: none;
+    box-sizing: border-box;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-style: solid;
+    height: auto;
+    width: auto;
 }
 
 *, pre, div {
@@ -117,6 +127,21 @@ pre code {
     display: flex;
     align-items: start;
     justify-content: start
+}
+
+.ft_row {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: row;
+    box-sizing: border-box;
+}
+.ft_column {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .ft_row {

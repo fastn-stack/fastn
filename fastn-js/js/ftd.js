@@ -1,6 +1,11 @@
 let ftd = {
     // source: https://stackoverflow.com/questions/400212/ (cc-by-sa)
     riveNodes: {},
+    is_empty(value) {
+        value = fastn_utils.getFlattenStaticValue(value);
+        return fastn_utils.isNull(value) || value.length === 0;
+    },
+
     copy_to_clipboard(args) {
         let text = args.a;
         if (text.startsWith("\\", 0)) {
@@ -15,6 +20,10 @@ let ftd = {
         }, function(err) {
             console.error('Async: Could not copy text: ', err);
         });
+    },
+
+    clean_code(args) {
+        return args.a;
     },
 
     set_rive_boolean(args, node) {

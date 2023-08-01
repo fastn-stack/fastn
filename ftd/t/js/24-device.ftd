@@ -1,0 +1,27 @@
+
+
+-- footer: Ritesh
+
+-- component footer:
+caption name:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- show-name: $footer.name
+
+-- end: ftd.desktop
+
+-- end: ftd.column
+
+-- end: footer
+
+
+-- component show-name:
+caption name:
+
+-- ftd.text: $show-name.name
+
+-- end: show-name

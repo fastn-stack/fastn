@@ -1,0 +1,5 @@
+-- import: 01-basic
+export: append, print
+exposing: append
+
+-- ftd.text: $append(a = FifthTry, b = Click here)

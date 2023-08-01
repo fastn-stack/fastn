@@ -28,6 +28,27 @@ impl fastn_js::SetPropertyValue {
         }
     }
 
+    pub(crate) fn is_local_value(&self) -> bool {
+        if let fastn_js::SetPropertyValue::Reference(name) = self {
+            fastn_js::utils::is_local_variable_map_prefix(name)
+        } else {
+            false
+        }
+    }
+
+    pub(crate) fn is_local_value_dependent(&self) -> bool {
+        match self {
+            fastn_js::SetPropertyValue::Reference(name)
+            | fastn_js::SetPropertyValue::Clone(name) => {
+                fastn_js::utils::is_local_variable_map_prefix(name)
+            }
+            fastn_js::SetPropertyValue::Value(value) => value.is_local_value_dependent(),
+            fastn_js::SetPropertyValue::Formula(formula) => {
+                formula.type_.is_local_value_dependent()
+            }
+        }
+    }
+
     pub fn is_formula(&self) -> bool {
         matches!(&self, fastn_js::SetPropertyValue::Formula(_))
     }
@@ -54,6 +75,20 @@ pub struct Formula {
 pub enum FormulaType {
     Conditional(Vec<ConditionalValue>),
     FunctionCall(fastn_js::Function),
+}
+
+impl FormulaType {
+    pub(crate) fn is_local_value_dependent(&self) -> bool {
+        match self {
+            FormulaType::Conditional(conditional_values) => conditional_values
+                .iter()
+                .any(|v| v.expression.is_local_value_dependent()),
+            FormulaType::FunctionCall(function) => function
+                .parameters
+                .iter()
+                .any(|v| v.1.is_local_value_dependent()),
+        }
+    }
 }
 
 impl Formula {
@@ -177,7 +212,7 @@ impl Value {
     pub(crate) fn to_js(&self, element_name: &Option<String>) -> String {
         use itertools::Itertools;
         match self {
-            Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n")),
+            Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n").replace('\"', "\\\"")),
             Value::Integer(i) => i.to_string(),
             Value::Decimal(f) => f.to_string(),
             Value::Boolean(b) => b.to_string(),
@@ -227,12 +262,31 @@ impl Value {
             Value::Undefined => "undefined".to_string(),
         }
     }
+
+    pub(crate) fn is_local_value_dependent(&self) -> bool {
+        match self {
+            Value::OrType { value, .. } => value
+                .as_ref()
+                .map(|v| v.is_local_value_dependent())
+                .unwrap_or_default(),
+            Value::List { value } => value.iter().any(|v| v.is_local_value_dependent()),
+            Value::Record { fields } => fields.iter().any(|v| v.1.is_local_value_dependent()),
+            Value::UI { .. } => {
+                //Todo: Check for UI
+                false
+            }
+            _ => false,
+        }
+    }
 }
 
 #[derive(Debug)]
 pub enum PropertyKind {
     Children,
     StringValue,
+    IntegerValue,
+    DecimalValue,
+    BooleanValue,
     Id,
     Region,
     OpenInNewTab,
@@ -318,7 +372,17 @@ pub enum PropertyKind {
     Src,
     ImageSrc,
     YoutubeSrc,
+    Shadow,
     Code,
+    MetaTitle,
+    MetaOGTitle,
+    MetaTwitterTitle,
+    MetaDescription,
+    MetaOGDescription,
+    MetaTwitterDescription,
+    MetaOGImage,
+    MetaTwitterImage,
+    MetaThemeColor,
 }
 
 impl PropertyKind {
@@ -329,6 +393,9 @@ impl PropertyKind {
             PropertyKind::AlignSelf => "fastn_dom.PropertyKind.AlignSelf",
             PropertyKind::Anchor => "fastn_dom.PropertyKind.Anchor",
             PropertyKind::StringValue => "fastn_dom.PropertyKind.StringValue",
+            PropertyKind::IntegerValue => "fastn_dom.PropertyKind.IntegerValue",
+            PropertyKind::DecimalValue => "fastn_dom.PropertyKind.DecimalValue",
+            PropertyKind::BooleanValue => "fastn_dom.PropertyKind.BooleanValue",
             PropertyKind::Width => "fastn_dom.PropertyKind.Width",
             PropertyKind::Padding => "fastn_dom.PropertyKind.Padding",
             PropertyKind::PaddingHorizontal => "fastn_dom.PropertyKind.PaddingHorizontal",
@@ -413,7 +480,29 @@ impl PropertyKind {
             PropertyKind::ImageSrc => "fastn_dom.PropertyKind.ImageSrc",
             PropertyKind::Alt => "fastn_dom.PropertyKind.Alt",
             PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
+            PropertyKind::Shadow => "fastn_dom.PropertyKind.Shadow",
             PropertyKind::Code => "fastn_dom.PropertyKind.Code",
+            PropertyKind::MetaTitle => "fastn_dom.PropertyKind.DocumentProperties.MetaTitle",
+            PropertyKind::MetaOGTitle => "fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle",
+            PropertyKind::MetaTwitterTitle => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaTwitterTitle"
+            }
+            PropertyKind::MetaDescription => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaDescription"
+            }
+            PropertyKind::MetaOGDescription => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription"
+            }
+            PropertyKind::MetaTwitterDescription => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription"
+            }
+            PropertyKind::MetaOGImage => "fastn_dom.PropertyKind.DocumentProperties.MetaOGImage",
+            PropertyKind::MetaTwitterImage => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage"
+            }
+            PropertyKind::MetaThemeColor => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor"
+            }
         }
     }
 }

@@ -251,7 +251,7 @@ pub fn get_argument_for_reference_and_remaining(
     name: &str,
     doc: &ftd::interpreter::TDoc,
     component_definition_name_with_arguments: &Option<(&str, &mut [ftd::interpreter::Argument])>,
-    loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+    loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
     line_number: usize,
 ) -> ftd::interpreter::Result<
     Option<(
@@ -281,7 +281,7 @@ pub fn get_argument_for_reference_and_remaining(
             };
         }
     }
-    if let Some((loop_name, loop_argument)) = loop_object_name_and_kind {
+    if let Some((loop_name, loop_argument, loop_counter_alias)) = loop_object_name_and_kind {
         let p2 = ftd::interpreter::utils::split_at(name, ".").1;
         let name = doc.resolve_name(name);
         if name.starts_with(format!("{}.", loop_name).as_str())
@@ -307,6 +307,21 @@ pub fn get_argument_for_reference_and_remaining(
                 None,
                 ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
             )));
+        }
+
+        if let Some(loop_counter_alias) = loop_counter_alias {
+            if name.starts_with(loop_counter_alias.as_str()) {
+                return Ok(Some((
+                    ftd::interpreter::Field::default(
+                        loop_counter_alias,
+                        ftd::interpreter::Kind::integer()
+                            .into_optional()
+                            .into_kind_data(),
+                    ),
+                    None,
+                    ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
+                )));
+            }
         }
     }
 
@@ -670,17 +685,23 @@ pub(crate) fn find_properties_by_source(
     argument: &ftd::interpreter::Argument,
     line_number: usize,
 ) -> ftd::interpreter::Result<Vec<ftd::interpreter::Property>> {
-    use itertools::Itertools;
-
-    let mut properties = properties
-        .iter()
-        .filter(|v| sources.iter().any(|s| v.source.is_equal(s)))
-        .map(ToOwned::to_owned)
-        .collect_vec();
-
+    let mut properties = find_properties_by_source_without_default(sources, properties);
     validate_properties_and_set_default(&mut properties, argument, doc_name, line_number)?;
 
     Ok(properties)
+}
+
+pub(crate) fn find_properties_by_source_without_default(
+    sources: &[ftd::interpreter::PropertySource],
+    properties: &[ftd::interpreter::Property],
+) -> Vec<ftd::interpreter::Property> {
+    use itertools::Itertools;
+
+    properties
+        .iter()
+        .filter(|v| sources.iter().any(|s| v.source.is_equal(s)))
+        .map(ToOwned::to_owned)
+        .collect_vec()
 }
 
 pub(crate) fn validate_properties_and_set_default(

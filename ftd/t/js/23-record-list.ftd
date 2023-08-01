@@ -1,0 +1,58 @@
+-- show-persons:
+persons: $people
+
+
+
+-- record person:
+caption name:
+integer emp-id:
+
+
+
+-- person list people:
+
+-- person: Ritesh
+emp-id: 1
+
+-- person: Ajinosaurus
+emp-id: 2
+
+-- end: people
+
+
+
+
+
+-- component show-persons:
+person list persons:
+
+-- ftd.column:
+
+-- show-person: $p.name
+emp-id: $p.emp-id
+$loop$: $show-persons.persons as $p
+
+-- end: ftd.column
+
+-- end: show-persons
+
+
+
+
+
+-- component show-person:
+caption name:
+integer emp-id:
+
+-- ftd.row:
+spacing.fixed.px: 5
+
+-- ftd.integer: $show-person.emp-id
+color: green
+
+-- ftd.text: $show-person.name
+color: blue
+
+-- end: ftd.row
+
+-- end: show-person

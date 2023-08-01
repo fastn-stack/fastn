@@ -624,9 +624,11 @@ pub fn replace_markers_2022(
 pub fn replace_markers_2023(
     s: &str,
     js_script: &str,
+    scripts: &str,
     ssr_body: &str,
     font_style: &str,
     default_css: &str,
+    base_url: &str,
 ) -> String {
     ftd::html::utils::trim_all_lines(
         s.replace("__js_script__", js_script)
@@ -641,14 +643,17 @@ pub fn replace_markers_2023(
                         <script src=\"{}\"></script>
                         <script src=\"{}\"></script>
                         <script src=\"{}\"></script>
+                        {}
                     "#,
                     hashed_default_ftd_js(),
                     hashed_markdown_js(),
-                    hashed_prism_js()
+                    hashed_prism_js(),
+                    scripts
                 )
                 .as_str(),
             )
             .replace("__default_css__", default_css)
+            .replace("__base_url__", base_url)
             .as_str(),
     )
 }

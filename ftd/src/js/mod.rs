@@ -35,6 +35,7 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
         aliases: &ftd::interpreter::default::default_aliases(),
         bag: ftd::interpreter::BagOrState::Bag(&bag),
     };
+    let mut export_asts = vec![];
     for thing in ftd::interpreter::default::default_bag().values() {
         if let ftd::interpreter::Thing::Variable(v) = thing {
             ftd_asts.push(v.to_ast(&doc, None, &mut false));
@@ -43,6 +44,11 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
                 continue;
             }
             ftd_asts.push(f.to_ast(&doc));
+        } else if let ftd::interpreter::Thing::Export { from, to, .. } = thing {
+            export_asts.push(fastn_js::Ast::Export {
+                from: from.to_string(),
+                to: to.to_string(),
+            })
         }
     }
 
@@ -66,6 +72,8 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
         }),
         prefix: None,
     }));
+
+    ftd_asts.extend(export_asts);
     ftd_asts
 }
 
@@ -92,6 +100,8 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         .map(|v| v.0)
         .collect_vec();
 
+    let mut export_asts = vec![];
+
     for (key, thing) in document.data.iter() {
         if default_thing_name.contains(key) {
             continue;
@@ -106,8 +116,15 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
             ));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
             document_asts.push(f.to_ast(&doc));
+        } else if let ftd::interpreter::Thing::Export { from, to, .. } = thing {
+            export_asts.push(fastn_js::Ast::Export {
+                from: from.to_string(),
+                to: to.to_string(),
+            })
         }
     }
+
+    document_asts.extend(export_asts);
 
     JSAstData {
         asts: document_asts,
@@ -289,12 +306,28 @@ impl ftd::interpreter::Component {
         use itertools::Itertools;
 
         let loop_alias = self.iteration.clone().map(|v| v.alias);
+        let loop_counter_alias = self.iteration.clone().and_then(|v| {
+            if let Some(ref loop_counter_alias) = v.loop_counter_alias {
+                let (_, loop_counter_alias, _remaining) =
+                    ftd::interpreter::utils::get_doc_name_and_thing_name_and_remaining(
+                        loop_counter_alias.as_str(),
+                        doc.name,
+                        v.line_number,
+                    );
+                return Some(loop_counter_alias);
+            }
+            None
+        });
         let mut component_statements = if self.is_loop() || self.condition.is_some() {
             self.to_component_statements_(
                 fastn_js::FUNCTION_PARENT,
                 0,
                 doc,
-                &rdata.clone_with_new_loop_alias(&loop_alias),
+                &rdata.clone_with_new_loop_alias(
+                    &loop_alias,
+                    &loop_counter_alias,
+                    doc.name.to_string(),
+                ),
                 true,
                 has_rive_components,
             )
@@ -303,7 +336,7 @@ impl ftd::interpreter::Component {
                 parent,
                 index,
                 doc,
-                &rdata.clone_with_new_loop_alias(&None),
+                &rdata.clone_with_new_loop_alias(&None, &None, doc.name.to_string()),
                 should_return,
                 has_rive_components,
             )
@@ -315,10 +348,20 @@ impl ftd::interpreter::Component {
                     deps: condition
                         .references
                         .values()
-                        .flat_map(|v| v.get_deps(&rdata.clone_with_new_loop_alias(&loop_alias)))
+                        .flat_map(|v| {
+                            v.get_deps(&rdata.clone_with_new_loop_alias(
+                                &loop_alias,
+                                &loop_counter_alias,
+                                doc.name.to_string(),
+                            ))
+                        })
                         .collect_vec(),
                     condition: condition.update_node_with_variable_reference_js(
-                        &rdata.clone_with_new_loop_alias(&loop_alias),
+                        &rdata.clone_with_new_loop_alias(
+                            &loop_alias,
+                            &loop_counter_alias,
+                            doc.name.to_string(),
+                        ),
                     ),
                     statements: component_statements,
                     parent: parent.to_string(),
@@ -329,9 +372,15 @@ impl ftd::interpreter::Component {
 
         if let Some(iteration) = self.iteration.as_ref() {
             component_statements = vec![fastn_js::ComponentStatement::ForLoop(fastn_js::ForLoop {
-                list_variable: iteration
-                    .on
-                    .to_fastn_js_value(doc, &rdata.clone_with_new_loop_alias(&loop_alias)),
+                list_variable: iteration.on.to_fastn_js_value(
+                    doc,
+                    &rdata.clone_with_new_loop_alias(
+                        &loop_alias,
+                        &loop_counter_alias,
+                        doc.name.to_string(),
+                    ),
+                    false,
+                ),
                 statements: component_statements,
                 parent: parent.to_string(),
                 should_return,

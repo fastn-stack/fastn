@@ -21,7 +21,6 @@ impl Kernel {
 
 #[derive(Copy, Clone, Debug)]
 pub enum ElementKind {
-    Div,
     Row,
     Column,
     ContainerElement,
@@ -35,6 +34,7 @@ pub enum ElementKind {
     CheckBox,
     TextInput,
     Rive,
+    Document,
 }
 
 #[derive(Debug)]

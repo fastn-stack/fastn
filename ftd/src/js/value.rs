@@ -13,7 +13,12 @@ impl Value {
         doc: &ftd::interpreter::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::SetPropertyValue {
-        self.to_set_property_value_with_ui(doc, &ftd::js::ResolverData::none(), has_rive_components)
+        self.to_set_property_value_with_ui(
+            doc,
+            &ftd::js::ResolverData::none(),
+            has_rive_components,
+            false,
+        )
     }
 
     pub(crate) fn to_set_property_value(
@@ -21,7 +26,7 @@ impl Value {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> fastn_js::SetPropertyValue {
-        self.to_set_property_value_with_ui(doc, rdata, &mut false)
+        self.to_set_property_value_with_ui(doc, rdata, &mut false, false)
     }
 
     pub(crate) fn to_set_property_value_with_ui(
@@ -29,9 +34,12 @@ impl Value {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
+        should_return: bool,
     ) -> fastn_js::SetPropertyValue {
         match self {
-            Value::Data(value) => value.to_fastn_js_value(doc, rdata, has_rive_components),
+            Value::Data(value) => {
+                value.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
+            }
             Value::Reference(name) => {
                 fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(name, rdata))
             }
@@ -94,7 +102,7 @@ fn properties_to_js_conditional_formula(
                 .condition
                 .as_ref()
                 .map(|condition| condition.update_node_with_variable_reference_js(rdata)),
-            expression: property.value.to_fastn_js_value(doc, rdata),
+            expression: property.value.to_fastn_js_value(doc, rdata, false),
         });
     }
 
@@ -131,6 +139,12 @@ impl ftd::interpreter::Expression {
                 if format!("${}", ftd::interpreter::FTD_LOOP_COUNTER).eq(identifier) {
                     operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
                         identifier: "index".to_string(),
+                    }
+                } else if let Some(loop_counter_alias) = rdata.loop_counter_alias {
+                    if loop_counter_alias.eq(identifier.trim_start_matches('$')) {
+                        operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
+                            identifier: "index".to_string(),
+                        }
                     }
                 } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
                     references.get(identifier)
@@ -201,14 +215,11 @@ impl ftd::interpreter::Argument {
         // line_number: usize
     ) -> Option<ftd::js::Value> {
         let sources = self.to_sources();
-        let properties = ftd::interpreter::utils::find_properties_by_source(
+
+        let properties = ftd::interpreter::utils::find_properties_by_source_without_default(
             sources.as_slice(),
             properties,
-            "", // doc_name
-            self,
-            0, // line_number
-        )
-        .unwrap();
+        );
 
         ftd::js::utils::get_js_value_from_properties(properties.as_slice())
     }
@@ -249,15 +260,21 @@ impl ftd::interpreter::PropertyValue {
         doc: &ftd::interpreter::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::SetPropertyValue {
-        self.to_fastn_js_value_with_ui(doc, &ftd::js::ResolverData::none(), has_rive_components)
+        self.to_fastn_js_value_with_ui(
+            doc,
+            &ftd::js::ResolverData::none(),
+            has_rive_components,
+            false,
+        )
     }
 
     pub(crate) fn to_fastn_js_value(
         &self,
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
+        should_return: bool,
     ) -> fastn_js::SetPropertyValue {
-        self.to_fastn_js_value_with_ui(doc, rdata, &mut false)
+        self.to_fastn_js_value_with_ui(doc, rdata, &mut false, should_return)
     }
 
     pub(crate) fn to_fastn_js_value_with_ui(
@@ -265,9 +282,14 @@ impl ftd::interpreter::PropertyValue {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
+        should_return: bool,
     ) -> fastn_js::SetPropertyValue {
-        self.to_value()
-            .to_set_property_value_with_ui(doc, rdata, has_rive_components)
+        self.to_value().to_set_property_value_with_ui(
+            doc,
+            rdata,
+            has_rive_components,
+            should_return,
+        )
     }
 
     pub(crate) fn to_value(&self) -> ftd::js::Value {
@@ -294,6 +316,7 @@ impl ftd::interpreter::Value {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
+        should_return: bool,
     ) -> fastn_js::SetPropertyValue {
         use itertools::Itertools;
 
@@ -303,7 +326,7 @@ impl ftd::interpreter::Value {
             }
             ftd::interpreter::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
-                    data.to_fastn_js_value(doc, rdata, has_rive_components)
+                    data.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
                 } else {
                     fastn_js::SetPropertyValue::Value(fastn_js::Value::Null)
                 }
@@ -327,7 +350,7 @@ impl ftd::interpreter::Value {
                 if has_value {
                     return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                         variant: js_variant,
-                        value: Some(Box::new(value.to_fastn_js_value(doc, rdata))),
+                        value: Some(Box::new(value.to_fastn_js_value(doc, rdata, should_return))),
                     });
                 }
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
@@ -339,7 +362,14 @@ impl ftd::interpreter::Value {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::List {
                     value: data
                         .iter()
-                        .map(|v| v.to_fastn_js_value(doc, rdata))
+                        .map(|v| {
+                            v.to_fastn_js_value_with_ui(
+                                doc,
+                                rdata,
+                                has_rive_components,
+                                should_return,
+                            )
+                        })
                         .collect_vec(),
                 })
             }
@@ -347,18 +377,23 @@ impl ftd::interpreter::Value {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
                     fields: fields
                         .iter()
-                        .map(|(k, v)| (k.to_string(), v.to_fastn_js_value(doc, rdata)))
+                        .map(|(k, v)| {
+                            (
+                                k.to_string(),
+                                v.to_fastn_js_value(doc, rdata, should_return),
+                            )
+                        })
                         .collect_vec(),
                 })
             }
             ftd::interpreter::Value::UI { component, .. } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::UI {
-                    value: component.to_component_statements_(
+                    value: component.to_component_statements(
                         fastn_js::FUNCTION_PARENT,
                         0,
                         doc,
                         &rdata.clone_with_default_inherited_variable(),
-                        false,
+                        should_return,
                         has_rive_components,
                     ),
                 })
