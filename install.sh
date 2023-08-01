@@ -77,16 +77,6 @@ update_path() {
     fi
 }
 
-remove_existing_files() {
-    local existing_files=(fastn_macos_x86_64 fastn_linux_musl_x86_64 fastn_controller_linux_musl_x86_64)
-
-    for file in "${existing_files[@]}"; do
-        if [ -f "$file" ]; then
-            rm -f "$file"
-        fi
-    done
-}
-
 command_exists() {
   command -v "$@" >/dev/null 2>&1
 }
@@ -120,7 +110,8 @@ setup() {
         mkdir -p $DESTINATION_PATH
     fi
 
-    remove_existing_files
+    # remove temporary files from previous install attempts
+    rm -f fastn_macos_x86_64 fastn_linux_musl_x86_64 fastn_controller_linux_musl_x86_64
 
     if [[ $CONTROLLER ]]; then 
         curl -# -L "$URL" | grep ".*\/releases\/download\/.*\/fastn_controller_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -# -O -J -L % > /dev/null
