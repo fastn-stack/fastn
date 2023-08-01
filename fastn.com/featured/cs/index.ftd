@@ -58,6 +58,7 @@ template-url: featured/cs/blog-template-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-cs.png
 licence-url: https://github.com/fastn-community/blog-template-cs/blob/main/LICENSE
 github-url: https://github.com/fastn-community/blog-template-cs
+two-fold: true
 
 Add warmth and energy to your designs with the `blog-template-cs`.
 
@@ -90,6 +91,7 @@ template-url: featured/cs/midnight-storm-cs/
 screenshot: $fastn-assets.files.images.featured.cs.midnight-storm-cs.png
 licence-url: https://github.com/fastn-community/midnight-storm-cs/blob/main/LICENSE
 github-url: https://github.com/fastn-community/midnight-storm-cs
+two-fold: true
 
 Add warmth and energy to your designs with the `midnight-storm-cs`.
 
