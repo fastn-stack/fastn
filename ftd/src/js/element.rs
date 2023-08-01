@@ -466,6 +466,8 @@ pub struct Code {
     pub common: Common,
     pub text_common: TextCommon,
     pub code: ftd::js::Value,
+    pub lang: ftd::js::Value,
+    pub theme: ftd::js::Value,
 }
 
 impl Code {
@@ -476,46 +478,6 @@ impl Code {
             .clone()
             .component()
             .unwrap();
-
-        /*let raw_code = dbg!(ftd::js::value::get_optional_js_value(
-            "text",
-            component.properties.as_slice(),
-            component_definition.arguments.as_slice(),
-        )
-        .unwrap())
-        .get_string_data()
-        .unwrap();
-
-        let lang = ftd::js::value::get_js_value_with_default(
-            "lang",
-            component.properties.as_slice(),
-            component_definition.arguments.as_slice(),
-            ftd::js::Value::from_str_value("txt"),
-        )
-        .get_string_data()
-        .unwrap();
-
-        let theme = ftd::js::value::get_js_value_with_default(
-            "theme",
-            component.properties.as_slice(),
-            component_definition.arguments.as_slice(),
-            ftd::js::Value::from_str_value(ftd::js::CODE_DEFAULT_THEME),
-        )
-        .get_string_data()
-        .unwrap();
-
-        let stylized_code = ftd::executor::code::code(
-            raw_code
-                .replace("\n\\-- ", "\n-- ")
-                .replace("\\$", "$")
-                .as_str(),
-            lang.as_str(),
-            theme.as_str(),
-            doc.name,
-        )
-        .ok()
-        .unwrap()
-        .replace('\"', "\\\"");*/
 
         Code {
             common: Common::from(
@@ -534,6 +496,18 @@ impl Code {
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
+            lang: ftd::js::value::get_js_value_with_default(
+                "lang",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+                ftd::js::Value::from_str_value("txt"),
+            ),
+            theme: ftd::js::value::get_js_value_with_default(
+                "theme",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+                ftd::js::Value::from_str_value(ftd::js::CODE_DEFAULT_THEME),
+            ),
         }
     }
 
@@ -546,17 +520,35 @@ impl Code {
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Column, parent, index);
+        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Code, parent, index);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
-        let code = self.code.to_set_property(
-            fastn_js::PropertyKind::Code,
-            doc,
-            kernel.name.as_str(),
-            rdata,
-        );
+        component_statements.push(fastn_js::ComponentStatement::SetProperty(
+            self.code.to_set_property(
+                fastn_js::PropertyKind::Code,
+                doc,
+                kernel.name.as_str(),
+                rdata,
+            ),
+        ));
 
-        component_statements.push(fastn_js::ComponentStatement::SetProperty(code));
+        component_statements.push(fastn_js::ComponentStatement::SetProperty(
+            self.lang.to_set_property(
+                fastn_js::PropertyKind::CodeLanguage,
+                doc,
+                kernel.name.as_str(),
+                rdata,
+            ),
+        ));
+
+        component_statements.push(fastn_js::ComponentStatement::SetProperty(
+            self.theme.to_set_property(
+                fastn_js::PropertyKind::CodeTheme,
+                doc,
+                kernel.name.as_str(),
+                rdata,
+            ),
+        ));
 
         component_statements.extend(self.common.to_set_properties(
             kernel.name.as_str(),

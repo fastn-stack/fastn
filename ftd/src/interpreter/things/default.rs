@@ -9738,12 +9738,14 @@ pub fn code_function() -> ftd::interpreter::ComponentDefinition {
                         .into_kind_data()
                         .caption_or_body(),
                 ),
+                // TODO: Added `txt` as default
                 ftd::interpreter::Argument::default(
                     "lang",
                     ftd::interpreter::Kind::string()
                         .into_optional()
                         .into_kind_data(),
                 ),
+                // TODO: Added `CODE_DEFAULT_THEME` as default
                 ftd::interpreter::Argument::default(
                     "theme",
                     ftd::interpreter::Kind::string()

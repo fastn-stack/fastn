@@ -8,7 +8,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column w-1 bgc-2"><div data-id="3" class="ft_column role-3">-- ftd.column:
+<body data-id="1"><div data-id="2" class="ft_column w-1 bgc-2"><pre data-id="3" class="fastn-theme.dark role-3"><code data-id="4" class="language-ftd fastn-theme.dark">-- ftd.column:
 padding.px: 10
 spacing.fixed.px: 50
 height.fixed.px: 200
@@ -40,7 +40,39 @@ forms are so amazingly primitive that they still think fastn code written
 by humans is still a pretty neat idea of escalating knowledge throughout the
 universe.
 
--- end: ftd.column</div></div></body><style id="styles">
+-- end: ftd.column</code><code data-id="4" class="language-ftd fastn-theme.dark">-- ftd.column:
+padding.px: 10
+spacing.fixed.px: 50
+height.fixed.px: 200
+width.fixed.px: 300
+overflow-y: scroll
+border-color: $red-yellow
+border-style: solid
+border-width.px: 2
+
+-- ftd.text: The blue planet below is sticky
+
+-- ftd.text: Blue planet
+color: black
+background.solid: deepskyblue
+sticky: true
+width.fixed.px: 120
+text-align: center
+left.px: 50
+top.px: 0
+
+-- ftd.text:
+padding.px: 10
+
+Far out in the uncharted backwaters of the unfashionable end of the western
+spiral arm of the Galaxy lies a small unregarded blue planet.
+Orbiting this at a distance of roughly ninety-two million miles is an
+utterly insignificant little planet whose ape-descended life
+forms are so amazingly primitive that they still think fastn code written
+by humans is still a pretty neat idea of escalating knowledge throughout the
+universe.
+
+-- end: ftd.column</code></pre></div></body><style id="styles">
     .w-1 { width: fit-content; }
 	.bgc-2 { background-color: #0d260d; }
 	.role-3 {  font-family: sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; }
@@ -58,8 +90,10 @@ let main = function (parent) {
     light: "#0d260d"
   })), inherited);
   parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Code);
     rooti0.setProperty(fastn_dom.PropertyKind.Code, "-- ftd.column:\npadding.px: 10\nspacing.fixed.px: 50\nheight.fixed.px: 200\nwidth.fixed.px: 300\noverflow-y: scroll\nborder-color: $red-yellow\nborder-style: solid\nborder-width.px: 2\n\n-- ftd.text: The blue planet below is sticky\n\n-- ftd.text: Blue planet\ncolor: black\nbackground.solid: deepskyblue\nsticky: true\nwidth.fixed.px: 120\ntext-align: center\nleft.px: 50\ntop.px: 0\n\n-- ftd.text:\npadding.px: 10\n\nFar out in the uncharted backwaters of the unfashionable end of the western\nspiral arm of the Galaxy lies a small unregarded blue planet.\nOrbiting this at a distance of roughly ninety-two million miles is an\nutterly insignificant little planet whose ape-descended life\nforms are so amazingly primitive that they still think fastn code written\nby humans is still a pretty neat idea of escalating knowledge throughout the\nuniverse.\n\n-- end: ftd.column", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.CodeTheme, "fastn-theme.dark", inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_small"), inherited);
   }
   ]), inherited);

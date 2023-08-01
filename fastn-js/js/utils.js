@@ -26,6 +26,10 @@ let fastn_utils = {
             node = fastn_dom.commentNode;
         } else if (kind === fastn_dom.ElementKind.Wrapper) {
             node = fastn_dom.wrapperNode;
+        } else if (kind === fastn_dom.ElementKind.Code) {
+           node = "pre";
+        } else if (kind === fastn_dom.ElementKind.CodeChild) {
+            node = "code";
         }
         return [node, css, attributes];
     },
@@ -177,6 +181,19 @@ let fastn_utils = {
         }
         return parent.getChildren().indexOf(node.getNode()) + 1;
     },
+
+    createNodeHelper(node, classes, attributes) {
+        let tagName = node;
+        let element = fastn_virtual.document.createElement(node);
+        for (let key in attributes) {
+            element.setAttribute(key, attributes[key])
+        }
+        for (let c in classes) {
+            element.classList.add(classes[c]);
+        }
+
+        return [tagName, element];
+    }
 }
 
 
