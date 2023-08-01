@@ -2071,9 +2071,9 @@ impl<'a> TDoc<'a> {
 
                         let is_request_data_call = value.has_request_data_header();
 
-                        // For request-data treat optional null query parameters as None
-                        // For request-data
-                        //      Query parameter are passed as record values
+                        // For request-data - Optional null query parameters = None
+                        // When using request-data
+                        //      Query parameters are passed as record values
                         //      Record name is set to query parameter name
                         if !o.contains_key(name.as_str()) && is_request_data_call {
                             return Ok(ftd::interpreter::Value::Optional {
