@@ -170,6 +170,7 @@ impl fastn_js::ElementKind {
             fastn_js::ElementKind::TextInput => "fastn_dom.ElementKind.TextInput",
             fastn_js::ElementKind::Rive => "fastn_dom.ElementKind.Rive",
             fastn_js::ElementKind::Document => "fastn_dom.ElementKind.Document",
+            fastn_js::ElementKind::Code => "fastn_dom.ElementKind.Code",
         }
     }
 }

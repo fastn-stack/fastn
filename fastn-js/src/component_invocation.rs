@@ -35,6 +35,7 @@ pub enum ElementKind {
     TextInput,
     Rive,
     Document,
+    Code,
 }
 
 #[derive(Debug)]

@@ -33,12 +33,12 @@ caption name-g: Hello
 $on-click$: $append-string($a = $names, v = Tom)
 
 -- ftd.text: $obj
-$loop$: $names as $obj
+for: obj in $names
 
 -- ftd.text: End
 
 -- ftd.text: $obj
-$loop$: $names as $obj
+for: obj in $names
 if: { LOOP.COUNTER % 2 == 0 }
 
 

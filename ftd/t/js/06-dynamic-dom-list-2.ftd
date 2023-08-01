@@ -14,7 +14,7 @@ $on-click$: $append-string($a = $people, v = Tom)
 $on-click$: $set-string($a = $first, v = Bob)
 
 -- show-person: $p
-$loop$: $people as $p
+for: p in $people
 index: $LOOP.COUNTER
 
 

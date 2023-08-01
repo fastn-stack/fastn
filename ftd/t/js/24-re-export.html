@@ -29,7 +29,8 @@ let _01_basic__append = function (args) {
   return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
 }
 let foo__append = _01_basic__append;
-
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "ftd/ftd/theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "ftd/ftd/theme_css/fastn-theme.light.css";
         fastn_virtual.hydrate(main);
         ftd.post_init();
     })();
