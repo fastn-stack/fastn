@@ -2074,32 +2074,13 @@ impl<'a> TDoc<'a> {
                             }
                         };
 
-                        // dbg!(&name);
-                        // dbg!(&value);
-                        // dbg!(&o);
+                        let is_request_data_call = value.has_request_data_header();
 
-                        let mut is_request_data_call = false;
-                        if let Some(ftd::ast::VariableValue::Record { headers, .. }) = value.inner()
-                        {
-                            for h in headers.0.iter() {
-                                // println!("Header: {}", h.key.as_str());
-                                if h.key.contains("processor") {
-                                    if let ftd::ast::VariableValue::String { ref value, .. } =
-                                        h.value
-                                    {
-                                        // println!("Value: {}", value);
-                                        if value.contains("request-data") {
-                                            is_request_data_call = true;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        dbg!(is_request_data_call);
-
+                        // For request-data treat optional null query parameters as None
+                        // For request-data
+                        //      Query parameter are passed as record values
+                        //      Record name is set to query parameter name
                         if !o.contains_key(name.as_str()) && is_request_data_call {
-                            println!("SENDING NONE");
                             return Ok(ftd::interpreter::Value::Optional {
                                 kind: kind.clone().into_kind_data(),
                                 data: Box::new(None),
