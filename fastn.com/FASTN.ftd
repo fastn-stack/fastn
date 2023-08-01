@@ -425,21 +425,21 @@ favicon: /-/fastn.com/images/favicon.svg
       skip: true
     - Midnight Rush: /featured/ds/mr-ds/
       skip: true
-    - Set 2 DS: /featured/ds/set-2-ds/
+    - Midnight Storm: /featured/ds/midnight-storm/
       skip: true
-    - Set 3 DS: /featured/ds/set-3-ds/
+    - Misty Gray: /featured/ds/misty-gray/
       skip: true
     - Doc Site Blog: /featured/blogs/doc-site/
       skip: true
     - Doc Site Blog: /featured/blogs/mr-blog/
       skip: true
-    - Set 2 Blog: /featured/blogs/set-2-blog/
+    - Midnight Storm Blog: /featured/blogs/set-2-blog/
       skip: true
-    - Set 3 Blog: /featured/blogs/set-3-blog/
+    - Misty Gray Blog: /featured/blogs/set-3-blog/
       skip: true
     - Midnight Rush Landing: /featured/landing/mr-landing/
       skip: true
-    - Set 2 Landing: /featured/landing/set-2-landing/
+    - Midnight Storm Landing: /featured/landing/midnight-storm-landing/
       skip: true
   - SPA / Landing Pages: /featured/landing-pages/
   - Blog Templates: /featured/blog-templates/
