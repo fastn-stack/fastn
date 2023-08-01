@@ -643,11 +643,11 @@ pub fn replace_markers_2023(
             "__script_file__",
             format!(
                 r#"
-                        <script src=\"{}\"></script>
-                        <script src=\"{}\"></script>
-                        <script src=\"{}\"></script>
-                        {}
-                    "#,
+                    <script src="{}"></script>
+                    <script src="{}"></script>
+                    <script src="{}"></script>
+                    {}
+                "#,
                 hashed_markdown_js(),
                 hashed_prism_js(),
                 hashed_default_ftd_js(),

@@ -590,14 +590,15 @@ fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http
         fastn_core::utils::hashed_code_theme_css()
             .iter()
             .find_map(|(theme, url)| {
-                if (req.path().ends_with(url)) {
+                if req.path().ends_with(url) {
                     Some(theme)
                 } else {
                     None
                 }
             })
     {
-        return if let Some(theme) = ftd::theme_css().get(theme) {
+        let theme_css = ftd::theme_css();
+        return if let Some(theme) = theme_css.get(theme).cloned() {
             Some(
                 actix_web::HttpResponse::Ok()
                     .content_type(mime_guess::mime::TEXT_JAVASCRIPT)

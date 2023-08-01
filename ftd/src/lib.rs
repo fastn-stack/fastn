@@ -43,12 +43,15 @@ pub fn css() -> &'static str {
     include_str!("../ftd.css")
 }
 
+static THEME_CSS_DIR: include_dir::Dir<'_> =
+    include_dir::include_dir!("$CARGO_MANIFEST_DIR/theme_css");
+
 pub fn theme_css() -> ftd::Map<String> {
     let mut themes: ftd::Map<String> = Default::default();
-    let paths = ftd::utils::find_all_files_matching_extension_recursively("theme_css", "css");
-    for path in paths {
-        let stem = path.file_stem().unwrap().to_str().unwrap();
-        themes.insert(stem.to_string(), std::fs::read_to_string(&path).unwrap());
+    // let paths = ftd::utils::find_all_files_matching_extension_recursively("theme_css", "css");
+    for file in THEME_CSS_DIR.files() {
+        let stem = file.path().file_stem().unwrap().to_str().unwrap();
+        themes.insert(stem.to_string(), file.contents_utf8().unwrap().to_string());
     }
     themes
 }
