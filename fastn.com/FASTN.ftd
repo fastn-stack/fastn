@@ -448,6 +448,8 @@ favicon: /-/fastn.com/images/favicon.svg
     skip: true
   - Bling Components: /featured/components/bling/
     skip: true
+  - Modal / Dialog: /featured/components/dialogs/
+    skip: true
   - Headers: /featured/components/headers/
     skip: true
   - Footers: /featured/components/footers/

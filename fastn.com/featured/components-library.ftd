@@ -61,6 +61,13 @@ more-link: /featured/components-library/
 We have designed and developed below code block packages. You can use them on
 your `FTD` web site. 
 
+-- ft-ui.grid-view: Modal / Dialog Box
+templates: $dialogs
+more-link-text: View all
+more-link: /featured/components/dialogs/
+
+We have designed and developed below Modal / Dialog Box components. You can use
+them on your `FTD` web site. 
 
 -- ft-ui.grid-view: Headers / Navbars
 templates: $headers
@@ -155,6 +162,40 @@ depending on the programming language.
 
 
 
+-- ft-ui.template list dialogs:
+
+-- ft-ui.template: Dialog - 1
+template-url: https://fastnui.trizwit.com/UI-Components/Content/dialog-1/
+screenshot: $fastn-assets.files.images.featured.components.dialog-1.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Dialog / Modal components can be used inside your fastn projects.
+
+-- ft-ui.template: Dialog - 1
+template-url: https://fastnui.trizwit.com/UI-Components/Content/dialog-2/
+screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Dialog / Modal components can be used inside your fastn projects.
+
+-- ft-ui.template: Alert Dialog
+template-url: https://fastnui.trizwit.com/UI-Components/Content/alert-dialog/
+screenshot: $fastn-assets.files.images.featured.components.dialog-3.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Dialog / Modal components can be used inside your fastn projects.
+
+
+-- end: dialogs
+
+
+
+
+
+
 
 -- ft-ui.template list headers:
 
@@ -166,6 +207,23 @@ github-url: https://github.com/fastn-community/header
 
 The header component is already included inside doc-site. If you are using
 doc-site then don’t add header as fastn dependency.
+
+-- ft-ui.template: Header 1
+template-url: https://fastnui.trizwit.com/UI-Components/Header/header-1/
+screenshot: $fastn-assets.files.images.featured.components.header-1.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Header components can be used inside your fastn projects.
+
+-- ft-ui.template: Header 3
+template-url: https://fastnui.trizwit.com/UI-Components/Header/header-3/
+screenshot: $fastn-assets.files.images.featured.components.header-2.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Header components can be used inside your fastn projects.
+
 
 -- end: headers
 
@@ -183,6 +241,22 @@ github-url: https://github.com/fastn-community/footer
 
 The footer component is already included inside doc-site. If you are using
 doc-site then don’t add footer as fastn dependency.
+
+-- ft-ui.template: Footer - 1
+template-url: https://fastnui.trizwit.com/UI-Components/Footer/footer-1/
+screenshot: $fastn-assets.files.images.featured.components.footer-1.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Footer component can be used inside your fastn projects.
+
+-- ft-ui.template: Footer - 2
+template-url: https://fastnui.trizwit.com/UI-Components/Footer/footer-2/
+screenshot: $fastn-assets.files.images.featured.components.footer-2.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Footer component can be used inside your fastn projects.
 
 -- end: footers
 

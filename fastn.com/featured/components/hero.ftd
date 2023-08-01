@@ -88,4 +88,12 @@ github-url: https://github.com/Trizwit/FastnUI
 
 Hero components can be used inside your fastn projects.
 
+-- ft-ui.template: Hero - 6
+template-url: https://fastnui.trizwit.com/UI-Components/Hero/hero-6/
+screenshot: $fastn-assets.files.images.featured.components.hero-6.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Hero components can be used inside your fastn projects.
+
 -- end: heros

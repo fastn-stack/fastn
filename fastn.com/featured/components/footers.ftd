@@ -57,4 +57,28 @@ github-url: https://github.com/fastn-community/footer
 The footer component is already included inside doc-site. If you are using
 doc-site then don’t add footer as fastn dependency.
 
+-- ft-ui.template: Footer - 1
+template-url: https://fastnui.trizwit.com/UI-Components/Footer/footer-1/
+screenshot: $fastn-assets.files.images.featured.components.footer-1.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Footer component can be used inside your fastn projects.
+
+-- ft-ui.template: Footer - 2
+template-url: https://fastnui.trizwit.com/UI-Components/Footer/footer-2/
+screenshot: $fastn-assets.files.images.featured.components.footer-2.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Footer component can be used inside your fastn projects.
+
+-- ft-ui.template: Footer - 3
+template-url: https://fastnui.trizwit.com/UI-Components/Footer/footer-3/
+screenshot: $fastn-assets.files.images.featured.components.footer-3.png
+licence-url: https://github.com/Trizwit/FastnUI
+github-url: https://github.com/Trizwit/FastnUI
+
+Footer component can be used inside your fastn projects.
+
 -- end: footers
