@@ -237,8 +237,8 @@ favicon: /-/fastn.com/images/favicon.svg
 - Best Practices: /best-practices/
   - Formatting: /formatting/
     document: /best-practices/formatting.ftd
-  - Import: /import-at-top/
-    document: /best-practices/import-at-top.ftd
+  - Import: /importing-packages/
+    document: /best-practices/import.ftd
   - Auto-import: /auto-import/
     document: /best-practices/auto-import.ftd
   - Device: /device-guidelines/
