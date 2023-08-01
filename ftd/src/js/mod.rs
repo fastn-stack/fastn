@@ -20,12 +20,6 @@ pub fn all_js_without_test() -> String {
     format!("{all_js}\n{default_bag_js}")
 }
 
-pub fn all_js_with_test() -> String {
-    let all_js = fastn_js::all_js_with_test();
-    let default_bag_js = fastn_js::to_js(default_bag_into_js_ast().as_slice(), false);
-    format!("{all_js}\n{default_bag_js}")
-}
-
 /// This returns asts of things present in `ftd` module or `default_bag`
 pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
     let mut ftd_asts = vec![];

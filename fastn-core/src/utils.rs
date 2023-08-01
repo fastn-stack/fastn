@@ -645,9 +645,9 @@ pub fn replace_markers_2023(
                         <script src=\"{}\"></script>
                         {}
                     "#,
-                    hashed_default_ftd_js(),
                     hashed_markdown_js(),
                     hashed_prism_js(),
+                    hashed_default_ftd_js(),
                     scripts
                 )
                 .as_str(),

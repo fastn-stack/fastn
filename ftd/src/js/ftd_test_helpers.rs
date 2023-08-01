@@ -95,11 +95,11 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
                 if manual {
                     format!(
                         r#"
+                            <script src="ftd/ftd/markdown.js"></script>
+                            <script src="ftd/ftd/prism.js"></script>
                             <script>{}</script>
-                            <script src=\"../../markdown.js\"></script>
-                            <script src=\"../../prism.js\"></script>
                         "#,
-                        ftd::js::all_js_with_test()
+                        ftd::js::all_js_without_test()
                     )
                 } else {
                     "<script src=\"fastn-js.js\"></script>".to_string()

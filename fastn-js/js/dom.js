@@ -1317,8 +1317,9 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Code) {
             this.#children[0].getNode().innerHTML= staticValue;
         } else if (kind === fastn_dom.PropertyKind.CodeTheme) {
-            this.#node.classList.add(staticValue);
-            this.#children[0].getNode().classList.add(staticValue);
+            let theme = staticValue.replace("\.", "-");
+            this.#node.classList.add(theme);
+            this.#children[0].getNode().classList.add(theme);
         } else if (kind === fastn_dom.PropertyKind.CodeLanguage) {
             this.#children[0].getNode().classList.add(`language-${staticValue}`);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle) {
