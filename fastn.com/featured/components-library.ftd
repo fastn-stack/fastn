@@ -53,13 +53,21 @@ more-link: /featured/components/cards/
 We have designed and developed below business-cards. You can use them on your
 `FTD` web site. 
 
+-- ft-ui.grid-view: Buttons
+templates: $buttons
+;;more-link-text: View all
+;;more-link: /featured/components-library/
+
+We have designed and developed below button components package. You can use them
+on your `FTD` web site. 
+
 -- ft-ui.grid-view: Code Block
 templates: $code-block
-more-link-text: View all
-more-link: /featured/components-library/
+;;more-link-text: View all
+;;more-link: /featured/components-library/
 
-We have designed and developed below code block packages. You can use them on
-your `FTD` web site. 
+We have designed and developed below code block and button components package.
+You can use them on your `FTD` web site. 
 
 -- ft-ui.grid-view: Modal / Dialog Box
 templates: $dialogs
@@ -158,6 +166,21 @@ Code blocks are typically defined by using specific syntax or indentation rules,
 depending on the programming language.
 
 -- end: code-block
+
+
+
+
+-- ft-ui.template list buttons:
+
+-- ft-ui.template: Buttons
+template-url: https://fifthtry.github.io/button/
+screenshot: $fastn-assets.files.images.featured.components.button-1.png
+licence-url: https://github.com/FifthTry/button/blob/main/LICENSE
+github-url: https://github.com/FifthTry/button
+
+Button components can be used inside your fastn projects.
+
+-- end: buttons
 
 
 
