@@ -1964,6 +1964,7 @@ pub struct Common {
     pub whitespace: Option<ftd::js::Value>,
     pub classes: Option<ftd::js::Value>,
     pub anchor: Option<ftd::js::Value>,
+    pub shadow: Option<ftd::js::Value>,
     pub events: Vec<ftd::interpreter::Event>,
 }
 
@@ -2175,6 +2176,7 @@ impl Common {
             min_height: ftd::js::value::get_optional_js_value("min-height", properties, arguments),
             min_width: ftd::js::value::get_optional_js_value("min-width", properties, arguments),
             whitespace: ftd::js::value::get_optional_js_value("white-space", properties, arguments),
+            shadow: ftd::js::value::get_optional_js_value("shadow", properties, arguments),
             events: events.to_vec(),
         }
     }
@@ -2740,6 +2742,11 @@ impl Common {
                     element_name,
                     rdata,
                 ),
+            ));
+        }
+        if let Some(ref shadow) = self.shadow {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                shadow.to_set_property(fastn_js::PropertyKind::Shadow, doc, element_name, rdata),
             ));
         }
         component_statements

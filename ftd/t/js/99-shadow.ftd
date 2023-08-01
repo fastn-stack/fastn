@@ -1,0 +1,13 @@
+-- ftd.color yellow-red:
+light: yellow
+dark: red
+
+-- ftd.shadow s: 
+color: $yellow-red 
+x-offset.px: 10 
+y-offset.px: 10 
+blur.px: 1 
+
+-- ftd.text: FifthTry
+shadow: $s 
+margin.px: 10

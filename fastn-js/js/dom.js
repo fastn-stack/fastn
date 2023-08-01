@@ -37,6 +37,7 @@ fastn_dom.propertyMap = {
     "border-width": "bw",
     "bottom": "b",
     "color": "c",
+    "shadow": "sh",
     "cursor": "cur",
     "display": "d",
     "flex-wrap": "fw",
@@ -233,6 +234,7 @@ fastn_dom.PropertyKind = {
         MetaTwitterImage: 98,
         MetaThemeColor: 99,
     },
+    Shadow: 100,
 };
 
 
@@ -743,6 +745,34 @@ class Node2 {
         this.#node.classList.add(cls);
         return cls;
     }
+    attachShadow(value) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss("box-shadow", value);
+            return;
+        }
+
+        const color = value.get("color");
+
+        const lightColor = fastn_utils.getStaticValue(color.get("light"));
+        const darkColor = fastn_utils.getStaticValue(color.get("dark"));
+
+        const blur = fastn_utils.getStaticValue(value.get("blur"));
+        const xOffset = fastn_utils.getStaticValue(value.get("x_offset"));
+        const yOffset = fastn_utils.getStaticValue(value.get("y_offset"));
+        const spread = fastn_utils.getStaticValue(value.get("spread"));
+        const inset = fastn_utils.getStaticValue(value.get("inset"));
+
+        const shadowCommonCss = `${inset ? "inset " : ""}${xOffset} ${yOffset} ${spread}${blur ? ` ${blur}` : ''}`;
+        const lightShadowCss =  `${shadowCommonCss} ${lightColor}`;
+        const darkShadowCss = `${shadowCommonCss} ${darkColor}`;
+
+        if (lightShadowCss === darkShadowCss) {
+            this.attachCss("box-shadow", lightShadowCss, false);
+        } else {
+            let lightClass = this.attachCss("box-shadow", lightShadowCss, true);
+            this.attachCss("box-shadow", darkShadowCss, true, `body.dark .${lightClass}`);
+        }
+    }
     attachLinearGradientCss(value) {
         if (fastn_utils.isNull(value)) {
             this.attachCss("background-image", value);
@@ -1046,6 +1076,8 @@ class Node2 {
             this.attachCss("border-bottom-style", staticValue);
         } else if (kind === fastn_dom.PropertyKind.ZIndex) {
             this.attachCss("z-index", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Shadow) {
+            this.attachShadow(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Classes) {
             // todo: this needs to be fixed
             this.#node.classList.add(staticValue.map(obj => fastn_utils.getStaticValue(obj.item)));
