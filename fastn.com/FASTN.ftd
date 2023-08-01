@@ -444,6 +444,16 @@ favicon: /-/fastn.com/images/favicon.svg
   - SPA / Landing Pages: /featured/landing-pages/
   - Blog Templates: /featured/blog-templates/
 - Component Library: /featured/components-library/
+  - Business Cards: /featured/components/cards/
+    skip: true
+  - Bling Components: /featured/components/bling/
+    skip: true
+  - Headers: /featured/components/headers/
+    skip: true
+  - Footers: /featured/components/footers/
+    skip: true
+/  - Buttons: /featured/components/buttons/
+    skip: true
 - Design Elements: /featured/cs/
   - Color Schemes: /featured/cs/
   - Font Typographies: /featured/fonts-typography/

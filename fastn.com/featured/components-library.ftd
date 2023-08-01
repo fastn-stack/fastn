@@ -34,10 +34,49 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- ds.page.body:
 
 We haver developed many components using our `FTD` language. You can use these
-components on your `FASTN` package. Click on each component to see how to use it.
+components on your `FASTN` package. Click on each component to see how to use
+it.
 
--- ft-ui.grid-view:
+-- ft-ui.grid-view: Bling Components
 templates: $bling
+more-link-text: View all
+more-link: /featured/components/bling/
+
+We have designed and developed below bling components. You can use them on your
+`FTD` web site. 
+
+-- ft-ui.grid-view: Business Cards
+templates: $cards
+more-link-text: View all
+more-link: /featured/components/cards/
+
+We have designed and developed below business-cards. You can use them on your
+`FTD` web site. 
+
+-- ft-ui.grid-view: Code Block
+templates: $code-block
+more-link-text: View all
+more-link: /featured/components-library/
+
+We have designed and developed below code block packages. You can use them on
+your `FTD` web site. 
+
+
+-- ft-ui.grid-view: Headers / Navbars
+templates: $headers
+more-link-text: View all
+more-link: /featured/components/headers/
+
+We have designed and developed below header / navbar packages. You can use them
+on your `FTD` web site. 
+
+-- ft-ui.grid-view: Footers
+templates: $footers
+more-link-text: View all
+more-link: /featured/components/footers/
+
+We have designed and developed below footer packages. You can use them on your
+`FTD` web site.  
 
 -- end: ds.page
 
@@ -61,6 +100,39 @@ github-url: https://github.com/fastn-community/bling
 Bling components refer to a collection of visually appealing and interactive
 elements designed to enhance the presentation and engagement of web pages.
 
+-- end: bling
+
+
+
+
+
+
+-- ft-ui.template list cards:
+
+-- ft-ui.template: Business Card
+template-url: https://fastn-community.github.io/business-card/
+screenshot: $fastn-assets.files.images.featured.components.business-card.png
+licence-url: https://github.com/fastn-community/business-card/blob/main/LICENSE
+github-url: https://github.com/fastn-community/business-card
+
+Build you own business-card using business-card package.
+
+-- ft-ui.template: Green Business Card
+template-url: https://gsalunke.github.io/green-business-card/
+screenshot: $fastn-assets.files.images.featured.components.green-business-card.png
+licence-url: https://github.com/gsalunke/green-business-card/blob/main/LICENSE
+github-url: https://github.com/gsalunke/green-business-card
+
+Build you own business-card using business-card package.
+
+-- end: cards
+
+
+
+
+
+-- ft-ui.template list code-block:
+
 -- ft-ui.template: Code Block
 template-url: https://fastn-community.github.io/code-block/
 screenshot: $fastn-assets.files.images.featured.components.code-block.jpg
@@ -70,16 +142,39 @@ github-url: https://github.com/fastn-community/code-block
 Code blocks are typically defined by using specific syntax or indentation rules,
 depending on the programming language.
 
+-- end: code-block
 
+
+
+
+
+-- ft-ui.template list headers:
 
 -- ft-ui.template: Header / Navbar
 template-url: https://fastn-community.github.io/header/
 screenshot: $fastn-assets.files.images.featured.components.header.jpg
 licence-url: https://github.com/fastn-community/header/blob/main/LICENSE
 github-url: https://github.com/fastn-community/header
-is-last: true
 
 The header component is already included inside doc-site. If you are using
 doc-site then don’t add header as fastn dependency.
 
--- end: bling
+-- end: headers
+
+
+
+
+
+-- ft-ui.template list footers:
+
+-- ft-ui.template: Footers
+template-url: https://fastn-community.github.io/footer/
+screenshot: $fastn-assets.files.images.featured.components.footer.png
+licence-url: https://github.com/fastn-community/footer/blob/main/LICENSE
+github-url: https://github.com/fastn-community/footer
+
+The footer component is already included inside doc-site. If you are using
+doc-site then don’t add footer as fastn dependency.
+
+-- end: footers
+

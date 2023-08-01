@@ -1,0 +1,60 @@
+-- import: fastn.com/featured as ft-ui
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-io-typography as typo
+
+
+
+
+
+-- ds.page: Footers
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
+
+-- ds.page.footer:
+
+-- footer.social-sideline-footer:
+social: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-url: /
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+
+-- end: ds.page.footer
+
+-- ds.page.body:
+
+We have designed and developed below footer packages. You can use them on your
+`FTD` web site. 
+
+-- ft-ui.grid-view:
+templates: $footers
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template list footers:
+
+-- ft-ui.template: Footers
+template-url: https://fastn-community.github.io/footer/
+screenshot: $fastn-assets.files.images.featured.components.footer.png
+licence-url: https://github.com/fastn-community/footer/blob/main/LICENSE
+github-url: https://github.com/fastn-community/footer
+
+The footer component is already included inside doc-site. If you are using
+doc-site then don’t add footer as fastn dependency.
+
+-- end: footers
