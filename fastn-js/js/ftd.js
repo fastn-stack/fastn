@@ -107,6 +107,9 @@ let ftd = {
 ftd.append = function (a, v) { a.push(v) }
 
 ftd.http = function (url, method, ...request_data) {
+    if (url instanceof Mutable) url = url.get();
+    if (method instanceof Mutable) method = method.get();
+
     let method_name = method.trim().toUpperCase();
     if (method_name == "GET") {
         let query_parameters = new URLSearchParams();
