@@ -2,8 +2,6 @@ pub fn ssr_str(js: &str) -> String {
     let all_js = fastn_js::all_js_with_test();
     let js = format!("{all_js}{js}");
 
-    // dbg!(&js);
-
     #[cfg(target_os = "windows")]
     {
         rquickjs::Context::full(&rquickjs::Runtime::new().unwrap())

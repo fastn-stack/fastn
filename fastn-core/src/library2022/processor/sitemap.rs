@@ -18,7 +18,6 @@ pub fn process(
             .replace(std::path::MAIN_SEPARATOR, "/");
 
         if let Some(sitemap) = sitemap.get_sitemap_by_id(doc_id.as_str()) {
-            dbg!(&sitemap, &kind, &value);
             return doc.from_json(&sitemap, &kind, &value);
         }
     }
