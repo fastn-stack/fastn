@@ -4,7 +4,7 @@ output: amitu/.build
 
 -- stdout:
 
-Processing www.amitu.com/FASTN.ftd ... done in <omitted>
-Processing www.amitu.com/index.ftd ... done in <omitted>
+Processing www.amitu.com/FASTN/ ... done in <omitted>
+Processing www.amitu.com/ ... done in <omitted>
 Processing www.amitu.com/scrot.png ... done in <omitted>
 Processing www.amitu.com/static/scrot_2.png ... done in <omitted>

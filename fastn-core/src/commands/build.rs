@@ -141,7 +141,7 @@ async fn handle_file_(
             match (resp, ignore_failed) {
                 (Ok(_), _) => (),
                 (_, true) => {
-                    println!("Failed");
+                    print!("Failed ");
                     return Ok(());
                 }
                 (Err(e), _) => {
@@ -156,14 +156,14 @@ async fn handle_file_(
                 .eq(&fastn_core::config::FTDEdition::FTD2021)
             {
                 // TODO: bring this feature back
-                println!("Skipped");
+                print!("Skipped ");
                 return Ok(());
             }
             let resp = process_markdown(config, doc, base_url, no_static, test).await;
             match (resp, ignore_failed) {
                 (Ok(r), _) => r,
                 (_, true) => {
-                    println!("Failed");
+                    print!("Failed ");
                     return Ok(());
                 }
                 (e, _) => {
@@ -181,7 +181,7 @@ async fn handle_file_(
                 match (resp, ignore_failed) {
                     (Ok(r), _) => r,
                     (_, true) => {
-                        println!("Failed");
+                        print!("Failed ");
                         return Ok(());
                     }
                     (e, _) => {
@@ -210,7 +210,7 @@ async fn handle_file_(
                 match (resp, ignore_failed) {
                     (Ok(r), _) => r,
                     (_, true) => {
-                        println!("Failed");
+                        print!("Failed ");
                         return Ok(());
                     }
                     (e, _) => {
