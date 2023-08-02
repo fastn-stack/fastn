@@ -8,7 +8,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column"><comment data-id="3"></comment><div data-id="4" class="ft_row g-1"><div data-id="5" class="c-2">1</div><div data-id="6" class="c-3">Ritesh</div></div><div data-id="7" class="ft_row g-1"><div data-id="8" class="c-2">2</div><div data-id="9" class="c-3">Ajinosaurus</div></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column"><comment data-id="3"></comment><div data-id="4" class="ft_row g-1"><div data-id="5" class="c-2">1</div><div data-id="6" class="c-3">Ritesh</div></div><div data-id="7" class="ft_row g-1"><div data-id="8" class="c-2">2</div><div data-id="9" class="c-3">Ajinosaurus</div></div></div><div data-id="10" class="ft_row g-1"><div data-id="11" class="c-2">1</div><div data-id="12" class="c-3">Ritesh</div></div></body><style id="styles">
     .g-1 { gap: 5px; }
 	.c-2 { color: green; }
 	.c-3 { color: blue; }
@@ -20,6 +20,10 @@
 let main = function (parent) {
   let parenti0 = foo__show_persons(parent, inherited, {
     persons: global.foo__people
+  });
+  let parenti1 = foo__show_person(parent, inherited, {
+    name: global.foo__first_person.get("name"),
+    emp_id: global.foo__first_person.get("emp_id")
   });
 }
 let foo__show_person = function (parent, inherited, args) {
@@ -90,6 +94,19 @@ fastn.recordInstance({
   emp_id: 2,
   name: "Ajinosaurus"
 })]));
+let foo__get_first_person = function (args)
+{
+  let __args__ = {
+    a: fastn.mutableList([]),
+    ...args
+  };
+  return (ftd.get(__args__.a, 0));
+}
+fastn_utils.createNestedObject(global, "foo__first_person", fastn.formula([global.foo__people], function () {
+  return foo__get_first_person({
+    a: global.foo__people,
+  });
+}));
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "ftd/ftd/theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "ftd/ftd/theme_css/fastn-theme.light.css";
         fastn_virtual.hydrate(main);

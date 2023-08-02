@@ -37,9 +37,13 @@ let fastn_utils = {
     getStaticValue(obj) {
         if (obj instanceof fastn.mutableClass) {
            return this.getStaticValue(obj.get());
-        } if (obj instanceof fastn.mutableListClass) {
+        } else if (obj instanceof fastn.mutableListClass) {
             return obj.getList();
-        } else {
+        }/*
+        Todo: Make this work
+        else if (obj instanceof fastn.recordInstanceClass) {
+            return obj.getAllFields();
+        }*/ else {
            return obj;
         }
     },
@@ -49,13 +53,33 @@ let fastn_utils = {
         if (Array.isArray(staticValue)) {
             return staticValue.map(func =>
                 fastn_utils.getFlattenStaticValue(func.item));
-        }
+        } /*
+        Todo: Make this work
+        else if (typeof staticValue === 'object' && fastn_utils.isNull(staticValue)) {
+            return Object.fromEntries(
+                Object.entries(staticValue).map(([k,v]) =>
+                    [k, fastn_utils.getFlattenStaticValue(v)]
+                )
+            );
+        }*/
         return staticValue;
     },
 
     getter(value) {
         if (value instanceof fastn.mutableClass) {
             return value.get();
+        } else {
+            return value;
+        }
+    },
+
+    // Todo: Merge getterByKey with getter
+    getterByKey(value, index) {
+        if (value instanceof fastn.mutableClass
+            || value instanceof fastn.recordInstanceClass) {
+            return value.get(index);
+        } else if (value instanceof fastn.mutableListClass) {
+            return value.get(index).item;
         } else {
             return value;
         }
@@ -281,3 +305,8 @@ fastn_utils.private = {
         return Array.from({ length: n }, () => ' ').join('');
     }
 }
+
+
+/*Object.prototype.get = function(index) {
+    return this[index];
+}*/
