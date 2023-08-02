@@ -4,6 +4,7 @@ output: amitu/.build
 
 -- stdout:
 
-Processing www.amitu.com/FASTN.ftd ... done in <omitted>
-Processing www.amitu.com/fail_doc.ftd ... Failed
-Processing www.amitu.com/index.ftd ... done in <omitted>
+Processing www.amitu.com/FASTN/ ... done in <omitted>
+Processing www.amitu.com/fail_doc/ ... Failed done in <omitted>
+Processing www.amitu.com/ ... done in <omitted>
+

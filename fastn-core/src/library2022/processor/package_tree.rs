@@ -30,7 +30,7 @@ pub async fn process(
             line_number: value.line_number(),
         })?
         .into_iter()
-        .map(|v| v.get_id())
+        .map(|v| v.get_id().to_string())
         .collect_vec();
     let deleted_files = snapshots
         .keys()

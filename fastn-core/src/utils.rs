@@ -41,7 +41,8 @@ pub fn print_end(msg: &str, start: std::time::Instant) {
     } else {
         println!(
             // TODO: instead of lots of spaces put proper erase current terminal line thing
-            "\r{} in {:?}.                          ",
+            "\r{:?} {} in {:?}.                          ",
+            std::time::Instant::now(),
             msg.green(),
             start.elapsed()
         );

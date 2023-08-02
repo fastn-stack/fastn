@@ -1,6 +1,7 @@
+// #[tracing::instrument(skip(config))]
 pub async fn build(
     config: &mut fastn_core::Config,
-    file: Option<&str>,
+    only_id: Option<&str>,
     base_url: &str,
     ignore_failed: bool,
     test: bool,
@@ -8,15 +9,16 @@ pub async fn build(
     tokio::fs::create_dir_all(config.build_dir()).await?;
     let documents = get_documents_for_current_package(config).await?;
 
-    // No need to build static files when file is passed during fastn_core build (no-static behaviour)
-    let no_static: bool = file.is_some();
-
     // Default css and js
     default_build_files(config.root.join(".build"), &config.ftd_edition).await?;
 
+    if let Some(id) = only_id {
+        handle_only_id(id, config, base_url, ignore_failed, test, documents).await?;
+        return Ok(());
+    }
+
     // All redirect html files under .build
-    let redirects = config.package.redirects.clone();
-    if let Some(r) = redirects {
+    if let Some(ref r) = config.package.redirects {
         for (redirect_from, redirect_to) in r.iter() {
             println!(
                 "Processing redirect {}/{} -> {}... ",
@@ -41,159 +43,188 @@ pub async fn build(
         }
     }
 
-    for main in documents.values() {
-        if file.is_some() && file != Some(main.get_id().as_str()) {
-            continue;
+    for document in documents.values() {
+        handle_file(document, config, base_url, ignore_failed, test, false).await?;
+    }
+
+    config.download_fonts().await
+}
+
+#[tracing::instrument(skip(config, documents))]
+async fn handle_only_id(
+    id: &str,
+    config: &mut fastn_core::Config,
+    base_url: &str,
+    ignore_failed: bool,
+    test: bool,
+    documents: std::collections::BTreeMap<String, fastn_core::File>,
+) -> fastn_core::Result<()> {
+    for doc in documents.values() {
+        if doc.get_id().eq(id) || doc.get_id_with_package().eq(id) {
+            return handle_file(doc, config, base_url, ignore_failed, test, true).await;
         }
-        config.current_document = Some(main.get_id());
-        let start = std::time::Instant::now();
+    }
 
-        print!(
-            "Processing {}/{} ... ",
-            config.package.name.as_str(),
-            main.get_id()
-        );
+    Err(fastn_core::Error::GenericError(format!(
+        "Document {} not found in package {}",
+        id,
+        config.package.name.as_str()
+    )))
+}
 
-        match main {
-            fastn_core::File::Ftd(doc) => {
-                if !config
-                    .ftd_edition
-                    .eq(&fastn_core::config::FTDEdition::FTD2021)
-                {
-                    // Ignore redirect paths
-                    if let Some(r) = config.package.redirects.as_ref() {
-                        if fastn_core::package::redirects::find_redirect(r, doc.id.as_str())
-                            .is_some()
-                        {
-                            println!("Ignored by redirect {}", doc.id.as_str());
-                            continue;
-                        }
-                    }
+async fn handle_file(
+    document: &fastn_core::File,
+    config: &mut fastn_core::Config,
+    base_url: &str,
+    ignore_failed: bool,
+    test: bool,
+    no_static: bool,
+) -> fastn_core::Result<()> {
+    let start = std::time::Instant::now();
+    print!("Processing {} ... ", document.get_id_with_package());
 
-                    fastn_core::utils::copy(
-                        config.root.join(doc.id.as_str()),
-                        config.root.join(".build").join(doc.id.as_str()),
-                    )
-                    .await
-                    .ok();
-
-                    if doc.id.eq("FASTN.ftd") {
-                        fastn_core::utils::print_end(
-                            format!(
-                                "Processed {}/{}",
-                                config.package.name.as_str(),
-                                main.get_id()
-                            )
-                            .as_str(),
-                            start,
-                        );
-                        continue;
-                    }
-                }
-                let resp = fastn_core::package::package_doc::process_ftd(
-                    config, doc, base_url, no_static, test,
-                )
-                .await;
-                match (resp, ignore_failed) {
-                    (Ok(_), _) => (),
-                    (_, true) => {
-                        println!("Failed");
-                        continue;
-                    }
-                    (Err(e), _) => {
-                        return Err(e);
-                    }
-                }
-            }
-            fastn_core::File::Static(sa) => {
-                process_static(sa, &config.root, &config.package).await?
-            }
-            fastn_core::File::Markdown(doc) => {
-                if !config
-                    .ftd_edition
-                    .eq(&fastn_core::config::FTDEdition::FTD2021)
-                {
-                    // TODO: bring this feature back
-                    println!("Skipped");
-                    continue;
-                }
-                let resp = process_markdown(config, doc, base_url, no_static, test).await;
-                match (resp, ignore_failed) {
-                    (Ok(r), _) => r,
-                    (_, true) => {
-                        println!("Failed");
-                        continue;
-                    }
-                    (e, _) => {
-                        return e;
-                    }
-                }
-            }
-            fastn_core::File::Image(main_doc) => {
-                process_static(main_doc, &config.root, &config.package).await?;
-                if config
-                    .ftd_edition
-                    .eq(&fastn_core::config::FTDEdition::FTD2021)
-                {
-                    let resp = process_image(config, main_doc, base_url, no_static, test).await;
-                    match (resp, ignore_failed) {
-                        (Ok(r), _) => r,
-                        (_, true) => {
-                            println!("Failed");
-                            continue;
-                        }
-                        (e, _) => {
-                            return e;
-                        }
-                    }
-                }
-            }
-            fastn_core::File::Code(doc) => {
-                process_static(
-                    &fastn_core::Static {
-                        id: doc.id.to_string(),
-                        content: vec![],
-                        base_path: camino::Utf8PathBuf::from(doc.parent_path.as_str()),
-                    },
-                    &config.root,
-                    &config.package,
-                )
-                .await?;
-                if config
-                    .ftd_edition
-                    .eq(&fastn_core::config::FTDEdition::FTD2021)
-                {
-                    let resp = process_code(config, doc, base_url, no_static, test).await;
-                    match (resp, ignore_failed) {
-                        (Ok(r), _) => r,
-                        (_, true) => {
-                            println!("Failed");
-                            continue;
-                        }
-                        (e, _) => {
-                            return e;
-                        }
-                    }
-                }
-            }
-        }
+    if let Ok(()) = handle_file_(document, config, base_url, ignore_failed, test, no_static).await {
         fastn_core::utils::print_end(
             format!(
                 "Processed {}/{}",
                 config.package.name.as_str(),
-                main.get_id()
+                document.get_id()
             )
             .as_str(),
             start,
         );
     }
 
-    if !no_static {
-        config.download_fonts().await?;
-    }
     Ok(())
 }
 
+#[tracing::instrument(skip(document, config))]
+async fn handle_file_(
+    document: &fastn_core::File,
+    config: &mut fastn_core::Config,
+    base_url: &str,
+    ignore_failed: bool,
+    test: bool,
+    no_static: bool,
+) -> fastn_core::Result<()> {
+    config.current_document = Some(document.get_id().to_string());
+
+    match document {
+        fastn_core::File::Ftd(doc) => {
+            if !config
+                .ftd_edition
+                .eq(&fastn_core::config::FTDEdition::FTD2021)
+            {
+                // Ignore redirect paths
+                if let Some(r) = config.package.redirects.as_ref() {
+                    if fastn_core::package::redirects::find_redirect(r, doc.id.as_str()).is_some() {
+                        println!("Ignored by redirect {}", doc.id.as_str());
+                        return Ok(());
+                    }
+                }
+
+                fastn_core::utils::copy(
+                    config.root.join(doc.id.as_str()),
+                    config.root.join(".build").join(doc.id.as_str()),
+                )
+                .await
+                .ok();
+
+                if doc.id.eq("FASTN.ftd") {
+                    return Ok(());
+                }
+            }
+            let resp = fastn_core::package::package_doc::process_ftd(
+                config, doc, base_url, no_static, test,
+            )
+            .await;
+            match (resp, ignore_failed) {
+                (Ok(_), _) => (),
+                (_, true) => {
+                    print!("Failed ");
+                    return Ok(());
+                }
+                (Err(e), _) => {
+                    return Err(e);
+                }
+            }
+        }
+        fastn_core::File::Static(sa) => process_static(sa, &config.root, &config.package).await?,
+        fastn_core::File::Markdown(doc) => {
+            if !config
+                .ftd_edition
+                .eq(&fastn_core::config::FTDEdition::FTD2021)
+            {
+                // TODO: bring this feature back
+                print!("Skipped ");
+                return Ok(());
+            }
+            let resp = process_markdown(config, doc, base_url, no_static, test).await;
+            match (resp, ignore_failed) {
+                (Ok(r), _) => r,
+                (_, true) => {
+                    print!("Failed ");
+                    return Ok(());
+                }
+                (e, _) => {
+                    return e;
+                }
+            }
+        }
+        fastn_core::File::Image(main_doc) => {
+            process_static(main_doc, &config.root, &config.package).await?;
+            if config
+                .ftd_edition
+                .eq(&fastn_core::config::FTDEdition::FTD2021)
+            {
+                let resp = process_image(config, main_doc, base_url, no_static, test).await;
+                match (resp, ignore_failed) {
+                    (Ok(r), _) => r,
+                    (_, true) => {
+                        print!("Failed ");
+                        return Ok(());
+                    }
+                    (e, _) => {
+                        return e;
+                    }
+                }
+            }
+        }
+        fastn_core::File::Code(doc) => {
+            process_static(
+                &fastn_core::Static {
+                    package_name: config.package.name.to_string(),
+                    id: doc.id.to_string(),
+                    content: vec![],
+                    base_path: camino::Utf8PathBuf::from(doc.parent_path.as_str()),
+                },
+                &config.root,
+                &config.package,
+            )
+            .await?;
+            if config
+                .ftd_edition
+                .eq(&fastn_core::config::FTDEdition::FTD2021)
+            {
+                let resp = process_code(config, doc, base_url, no_static, test).await;
+                match (resp, ignore_failed) {
+                    (Ok(r), _) => r,
+                    (_, true) => {
+                        print!("Failed ");
+                        return Ok(());
+                    }
+                    (e, _) => {
+                        return e;
+                    }
+                }
+            }
+        }
+    }
+
+    Ok(())
+}
+
+#[tracing::instrument]
 pub async fn default_build_files(
     base_path: camino::Utf8PathBuf,
     ftd_edition: &fastn_core::FTDEdition,
@@ -248,6 +279,7 @@ pub async fn default_build_files(
     Ok(())
 }
 
+#[tracing::instrument(skip(config))]
 async fn get_documents_for_current_package(
     config: &mut fastn_core::Config,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, fastn_core::File>> {
@@ -256,7 +288,7 @@ async fn get_documents_for_current_package(
             .get_files(&config.package)
             .await?
             .into_iter()
-            .map(|v| (v.get_id(), v)),
+            .map(|v| (v.get_id().to_string(), v)),
     );
 
     if let Some(ref sitemap) = config.package.sitemap {
@@ -284,7 +316,7 @@ async fn get_documents_for_current_package(
                 }
                 file
             };
-            files.insert(file.get_id(), file);
+            files.insert(file.get_id().to_string(), file);
         }
 
         config

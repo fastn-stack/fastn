@@ -160,7 +160,7 @@ async fn serve_cr_file(
         }
     }
 
-    config.current_document = Some(f.get_id());
+    config.current_document = Some(f.get_id().to_string());
     match f {
         fastn_core::File::Ftd(main_document) => {
             match fastn_core::package::package_doc::read_ftd(
