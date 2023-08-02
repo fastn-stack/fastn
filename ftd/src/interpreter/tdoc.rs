@@ -1822,19 +1822,13 @@ impl<'a> TDoc<'a> {
             );
         }
 
-        let name = {
-            let mut name = None;
-            let inner_value = value.inner();
-            if let Some(ftd::ast::VariableValue::Record {
-                name: record_name, ..
-            }) = inner_value.as_ref()
-            {
-                name = Some(record_name.to_owned());
-            }
-            name
-        };
-
-        self.as_json_(kind, &row[0], value.caption(), name, value.line_number())
+        self.as_json_(
+            kind,
+            &row[0],
+            value.caption(),
+            value.record_name(),
+            value.line_number(),
+        )
     }
 
     pub fn from_json<T>(
@@ -1859,19 +1853,13 @@ impl<'a> TDoc<'a> {
             line_number: value.line_number(),
         })?;
 
-        let name = {
-            let mut name = None;
-            let inner_value = value.inner();
-            if let Some(ftd::ast::VariableValue::Record {
-                name: record_name, ..
-            }) = inner_value.as_ref()
-            {
-                name = Some(record_name.to_owned());
-            }
-            name
-        };
-
-        self.as_json_(kind, &json, value.caption(), name, value.line_number())
+        self.as_json_(
+            kind,
+            &json,
+            value.caption(),
+            value.record_name(),
+            value.line_number(),
+        )
     }
 
     fn handle_object(
