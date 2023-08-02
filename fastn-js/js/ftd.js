@@ -101,6 +101,10 @@ let ftd = {
             : riveConst.play(args.input);
     },
 
+    get(value, index) {
+         return fastn_utils.getStaticValue(fastn_utils.getterByKey(value, index));
+    }
+
 };
 
 // ftd.append($a = $people, v = Tom)

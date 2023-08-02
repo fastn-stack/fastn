@@ -1,6 +1,12 @@
 -- show-persons:
 persons: $people
 
+-- person first-person: $get-first-person(a = $people)
+
+
+-- show-person: $first-person.name
+emp-id: $first-person.emp-id
+
 
 
 -- record person:
@@ -18,6 +24,12 @@ emp-id: 1
 emp-id: 2
 
 -- end: people
+
+
+-- person get-first-person(a):
+person list a:
+
+ftd.get(a, 0)
 
 
 

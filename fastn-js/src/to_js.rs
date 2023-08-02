@@ -911,7 +911,8 @@ impl ExpressionGenerator {
             let prefix = arguments
                 .iter()
                 .find_map(|v| {
-                    if value.to_string().eq(&v.0) {
+                    if value.to_string().eq(&v.0) || value.starts_with(format!("{}.", v.0).as_str())
+                    {
                         v.1.clone()
                     } else {
                         None
