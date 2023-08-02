@@ -42,6 +42,7 @@ async fn handle_view_source(
                 false,
             )
             .await
+            .map(|r| r.html())
         }
         fastn_core::File::Static(ref file) | fastn_core::File::Image(ref file) => {
             Ok(file.content.to_owned())

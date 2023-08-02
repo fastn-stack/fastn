@@ -1,0 +1,34 @@
+<html>
+<head>
+    <base href="/">
+    <script src="fastn-js.js"></script>
+
+    <style>
+       
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><img data-id="2" src="https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg" class="w-1 h-2"></img></body><style id="styles">
+    .w-1 { width: 200px; }
+	.h-2 { height: 115px; }
+    </style>
+<script>
+    (function() {
+        let global = {
+};
+let main = function (parent) {
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Image);
+  parenti0.setProperty(fastn_dom.PropertyKind.ImageSrc, global.foo__my_images, inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(115)), inherited);
+}
+fastn_utils.createNestedObject(global, "foo__my_images", fastn.recordInstance({
+  light: "https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg",
+  dark: "https://fastn.com/-/fastn.com/images/cs/show-cs-1-dark.jpg"
+}));
+
+        fastn_virtual.hydrate(main);
+        ftd.post_init();
+    })();
+</script>
+</html>

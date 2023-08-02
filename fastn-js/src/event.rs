@@ -7,11 +7,20 @@ pub struct EventHandler {
 
 #[derive(Debug)]
 pub enum Event {
-    OnClick,
+    Click,
+    MouseEnter,
+    MouseLeave,
+    ClickOutside,
+    GlobalKey(Vec<String>),
+    GlobalKeySeq(Vec<String>),
+    Input,
+    Change,
+    Blur,
+    Focus,
 }
 
 #[derive(Debug)]
 pub struct Function {
     pub name: String,
-    pub parameters: Vec<fastn_js::SetPropertyValue>,
+    pub parameters: Vec<(String, fastn_js::SetPropertyValue)>,
 }

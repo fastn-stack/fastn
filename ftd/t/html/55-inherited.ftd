@@ -19,7 +19,7 @@ color: $inherited.colors.background.step-1
 -- foo:
 name: Foo
 
--- ftd.text: $inherited-name
+-- ftd.text: $inherited.name
 -- bar:
 
 -- foo:
@@ -38,6 +38,7 @@ name: FOO2
 -- end: ftd.column
 
 -- end: foo
+
 
 
 -- pink-block:

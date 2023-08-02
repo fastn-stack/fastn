@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub enum Ast {
     Component(fastn_js::Component),
     UDF(fastn_js::UDF), // user defined function
@@ -5,6 +6,7 @@ pub enum Ast {
     MutableVariable(fastn_js::MutableVariable),
     MutableList(fastn_js::MutableList),
     RecordInstance(fastn_js::RecordInstance),
+    Export { from: String, to: String },
 }
 
 impl Ast {

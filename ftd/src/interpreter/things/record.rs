@@ -134,6 +134,30 @@ impl Field {
         }
     }
 
+    pub(crate) fn get_default_interpreter_value(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        properties: &[ftd::interpreter::Property],
+    ) -> Option<ftd::interpreter::Value> {
+        let sources = self.to_sources();
+        let properties = ftd::interpreter::utils::find_properties_by_source(
+            sources.as_slice(),
+            properties,
+            "", // doc_name
+            self,
+            0, // line_number
+        )
+        .unwrap();
+
+        for property in properties {
+            if property.condition.is_none() {
+                return property.value.resolve(doc, 0).ok();
+            }
+        }
+
+        None
+    }
+
     pub fn to_sources(&self) -> Vec<ftd::interpreter::PropertySource> {
         let mut sources = vec![ftd::interpreter::PropertySource::Header {
             name: self.name.to_string(),
@@ -160,6 +184,21 @@ impl Field {
             kind,
             mutable: false,
             value: None,
+            line_number: 0,
+            access_modifier: Default::default(),
+        }
+    }
+
+    pub fn default_with_value(
+        name: &str,
+        kind: ftd::interpreter::KindData,
+        value: ftd::interpreter::PropertyValue,
+    ) -> Field {
+        Field {
+            name: name.to_string(),
+            kind,
+            mutable: false,
+            value: Some(value),
             line_number: 0,
             access_modifier: Default::default(),
         }

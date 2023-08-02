@@ -8,6 +8,7 @@ margin.px: $i
 $on-click$: $increment($a = $i)
 
 -- foo: Foo says Hello
+$on-click$: $increment($a = $i)
 
 -- ftd.text: Hello
 if: { i > 11 }
@@ -16,10 +17,10 @@ if: { i > 11 }
 
 
 -- component foo:
-caption name: Hello
+caption name-g: Hello
 
 -- ftd.column:
--- ftd.text: $foo.name
+-- ftd.text: $foo.name-g
 -- ftd.text: Foo 2
 -- end: ftd.column
 

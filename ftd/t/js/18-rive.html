@@ -1,0 +1,190 @@
+<html>
+<head>
+    <base href="/">
+    <script src="https://unpkg.com/@rive-app/canvas@1.0.98"></script><script src="fastn-js.js"></script>
+
+    <style>
+       
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><canvas data-id="2" class="w-1 bgc-2"></canvas><canvas data-id="3" class="w-3"></canvas><div data-id="4">Start Idle</div><canvas data-id="5"></canvas><div data-id="6">Idle/ Run</div><div data-id="7">Wiper On/Off</div><div data-id="8">Rainy On/Off</div><div data-id="9">No Wiper On/Off</div><div data-id="10">Sunny On/Off</div><div data-id="11">Stationary On/Off</div><div data-id="12">Bouncing On/Off</div><div data-id="13">Broken On/Off</div></body><style id="styles">
+    .w-1 { width: 500px; }
+	.bgc-2 { background-color: yellow; }
+	.w-3 { width: 440px; }
+    </style>
+<script>
+    (function() {
+        let global = {
+};
+let main = function (parent) {
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Rive);
+  if (!ssr) {
+    let extraData = parenti0.getExtraData();
+    extraData.rive = new rive.Rive({
+      src: fastn_utils.getFlattenStaticValue("https://cdn.rive.app/animations/vehicles.riv"),
+      canvas: parenti0.getNode(),
+      autoplay: fastn_utils.getStaticValue(true),
+      stateMachines: fastn_utils.getFlattenStaticValue(fastn.mutableList(["bumpy"])),
+      artboard: null,
+      onLoad: (_) =>{
+        extraData.rive.resizeDrawingSurfaceToCanvas();
+      },
+    });
+    ftd.riveNodes[`panda__${ftd.device.get() }`] = parenti0;
+  }
+  parenti0.setProperty(fastn_dom.PropertyKind.Id, "panda", inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(500)), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+    dark: "yellow",
+    light: "yellow"
+  })), inherited);
+  let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Rive);
+  if (!ssr) {
+    let extraData = parenti1.getExtraData();
+    extraData.rive = new rive.Rive({
+      src: fastn_utils.getFlattenStaticValue("/ftd/ftd/t/assets/fastn.riv"),
+      canvas: parenti1.getNode(),
+      autoplay: fastn_utils.getStaticValue(true),
+      stateMachines: fastn_utils.getFlattenStaticValue(fastn.mutableList(["State Machine 1"])),
+      artboard: null,
+      onLoad: (_) =>{
+        extraData.rive.resizeDrawingSurfaceToCanvas();
+      },
+    });
+    ftd.riveNodes[`fastn__${ftd.device.get() }`] = parenti1;
+  }
+  parenti1.addEventHandler(fastn_dom.Event.MouseEnter, function () {
+    ftd.set_rive_boolean({
+      rive: "fastn",
+      input: "play",
+      value: true,
+    }, parenti1);
+  });
+  parenti1.addEventHandler(fastn_dom.Event.MouseLeave, function () {
+    ftd.set_rive_boolean({
+      rive: "fastn",
+      input: "play",
+      value: false,
+    }, parenti1);
+  });
+  parenti1.setProperty(fastn_dom.PropertyKind.Id, "fastn", inherited);
+  parenti1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(440)), inherited);
+  let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti2.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__idle, inherited);
+  let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Rive);
+  if (!ssr) {
+    let extraData = parenti3.getExtraData();
+    extraData.rive = new rive.Rive({
+      src: fastn_utils.getFlattenStaticValue("https://cdn.rive.app/animations/vehicles.riv"),
+      canvas: parenti3.getNode(),
+      autoplay: fastn_utils.getStaticValue(false),
+      stateMachines: fastn_utils.getFlattenStaticValue(fastn.mutableList([])),
+      artboard: "Jeep",
+      onLoad: (_) =>{
+        extraData.rive.resizeDrawingSurfaceToCanvas();
+      },
+      onPause: (event) =>{
+        const inputs = event.data;
+        inputs.forEach((input) =>{
+          if (input=== "idle") {
+            let action = function () {
+              return ftd.set_string({
+                a: global.foo__idle,
+                v: "Pausing Idle",
+              }, parenti3);
+            };
+            action();
+          }
+        });
+      },
+      onPlay: (event) =>{
+        const inputs = event.data;
+        inputs.forEach((input) =>{
+          if (input=== "idle") {
+            let action = function () {
+              return ftd.set_string({
+                a: global.foo__idle,
+                v: "Playing Idle",
+              }, parenti3);
+            };
+            action();
+          }
+        });
+      },
+    });
+    ftd.riveNodes[`vehicle__${ftd.device.get() }`] = parenti3;
+  }
+  parenti3.setProperty(fastn_dom.PropertyKind.Id, "vehicle", inherited);
+  let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti4.setProperty(fastn_dom.PropertyKind.StringValue, "Idle/ \Run", inherited);
+  parenti4.addEventHandler(fastn_dom.Event.Click, function () {
+    ftd.toggle_play_rive({
+      rive: "vehicle",
+      input: "idle",
+    }, parenti4);
+  });
+  let parenti5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti5.setProperty(fastn_dom.PropertyKind.StringValue, "Wiper On/Off", inherited);
+  parenti5.addEventHandler(fastn_dom.Event.Click, function () {
+    ftd.toggle_play_rive({
+      rive: "vehicle",
+      input: "windshield_wipers",
+    }, parenti5);
+  });
+  let parenti6 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti6.setProperty(fastn_dom.PropertyKind.StringValue, "Rainy On/Off", inherited);
+  parenti6.addEventHandler(fastn_dom.Event.Click, function () {
+    ftd.toggle_play_rive({
+      rive: "vehicle",
+      input: "rainy",
+    }, parenti6);
+  });
+  let parenti7 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti7.setProperty(fastn_dom.PropertyKind.StringValue, "No Wiper On/Off", inherited);
+  parenti7.addEventHandler(fastn_dom.Event.Click, function () {
+    ftd.toggle_play_rive({
+      rive: "vehicle",
+      input: "no_wipers",
+    }, parenti7);
+  });
+  let parenti8 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti8.setProperty(fastn_dom.PropertyKind.StringValue, "Sunny On/Off", inherited);
+  parenti8.addEventHandler(fastn_dom.Event.Click, function () {
+    ftd.toggle_play_rive({
+      rive: "vehicle",
+      input: "sunny",
+    }, parenti8);
+  });
+  let parenti9 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti9.setProperty(fastn_dom.PropertyKind.StringValue, "Stationary On/Off", inherited);
+  parenti9.addEventHandler(fastn_dom.Event.Click, function () {
+    ftd.toggle_play_rive({
+      rive: "vehicle",
+      input: "stationary",
+    }, parenti9);
+  });
+  let parenti10 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti10.setProperty(fastn_dom.PropertyKind.StringValue, "Bouncing On/Off", inherited);
+  parenti10.addEventHandler(fastn_dom.Event.Click, function () {
+    ftd.toggle_play_rive({
+      rive: "vehicle",
+      input: "bouncing",
+    }, parenti10);
+  });
+  let parenti11 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti11.setProperty(fastn_dom.PropertyKind.StringValue, "Broken On/Off", inherited);
+  parenti11.addEventHandler(fastn_dom.Event.Click, function () {
+    ftd.toggle_play_rive({
+      rive: "vehicle",
+      input: "broken",
+    }, parenti11);
+  });
+}
+fastn_utils.createNestedObject(global, "foo__idle", fastn.mutable("Start Idle"));
+
+        fastn_virtual.hydrate(main);
+        ftd.post_init();
+    })();
+</script>
+</html>

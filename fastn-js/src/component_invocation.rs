@@ -13,7 +13,7 @@ impl Kernel {
     ) -> Kernel {
         Kernel {
             element_kind,
-            name: format!("{parent}i{index}"),
+            name: component_declaration_variable_name(parent, index),
             parent: parent.to_string(),
         }
     }
@@ -23,6 +23,7 @@ impl Kernel {
 pub enum ElementKind {
     Row,
     Column,
+    ContainerElement,
     Integer,
     Decimal,
     Boolean,
@@ -32,13 +33,40 @@ pub enum ElementKind {
     Device,
     CheckBox,
     TextInput,
+    Rive,
+    Document,
 }
 
 #[derive(Debug)]
 pub struct InstantiateComponent {
-    pub name: String,
+    pub component_name: String,
     pub arguments: Vec<(String, fastn_js::SetPropertyValue)>,
     pub parent: String,
     pub inherited: String,
     pub should_return: bool,
+    pub var_name: String,
+}
+
+impl InstantiateComponent {
+    pub fn new(
+        component_name: &str,
+        arguments: Vec<(String, fastn_js::SetPropertyValue)>,
+        parent: &str,
+        inherited: &str,
+        should_return: bool,
+        index: usize,
+    ) -> InstantiateComponent {
+        InstantiateComponent {
+            component_name: component_name.to_string(),
+            arguments,
+            parent: parent.to_string(),
+            inherited: inherited.to_string(),
+            should_return,
+            var_name: component_declaration_variable_name(parent, index),
+        }
+    }
+}
+
+fn component_declaration_variable_name(parent: &str, index: usize) -> String {
+    format!("{parent}i{index}")
 }

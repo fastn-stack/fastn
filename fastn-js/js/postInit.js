@@ -1,7 +1,8 @@
+ftd.clickOutsideEvents = [];
+ftd.globalKeyEvents = [];
+ftd.globalKeySeqEvents = [];
+
 ftd.post_init = function () {
-    let DARK_MODE = false;
-    let SYSTEM_DARK_MODE = false;
-    let FOLLOW_SYSTEM_DARK_MODE = false;
     const DARK_MODE_COOKIE = "fastn-dark-mode";
     const COOKIE_SYSTEM_LIGHT = "system-light";
     const COOKIE_SYSTEM_DARK = "system-dark";
@@ -9,20 +10,71 @@ ftd.post_init = function () {
     const COOKIE_LIGHT_MODE = "light";
     const DARK_MODE_CLASS = "dark";
     const MOBILE_CLASS = "mobile";
+    let last_device = "desktop";
 
     window.onresize = function () {
+        initialise_device()
+    };
+    function initialise_click_outside_events() {
+        document.addEventListener("click", function (event) {
+            ftd.clickOutsideEvents.forEach(([ftdNode, func]) => {
+                let node = ftdNode.getNode();
+                if (!!node && node.style.display !== "none" && !node.contains(event.target)) {
+                    func();
+                }
+            })
+        })
+    }
+    function initialise_global_key_events() {
+        let globalKeys = {};
+        let buffer = [];
+        let lastKeyTime = Date.now();
+
+        document.addEventListener("keydown", function (event) {
+            let eventKey =  fastn_utils.getEventKey(event);
+            globalKeys[eventKey] = true;
+            const currentTime = Date.now();
+            if (currentTime - lastKeyTime > 1000) {
+                buffer = [];
+            }
+            lastKeyTime = currentTime;
+            if (event.target.nodeName === "INPUT" || event.target.nodeName === "TEXTAREA") {
+                return;
+            }
+            buffer.push(eventKey);
+
+            ftd.globalKeyEvents.forEach(([_ftdNode, func, array]) => {
+                let globalKeysPresent = array.reduce((accumulator, currentValue) => accumulator && !!globalKeys[currentValue], true);
+                if (globalKeysPresent && buffer.join(',').includes(array.join(','))) {
+                    func();
+                    globalKeys[eventKey] = false;
+                    buffer = [];
+                }
+                return;
+            })
+
+            ftd.globalKeySeqEvents.forEach(([_ftdNode, func, array]) => {
+                if (buffer.join(',').includes(array.join(','))) {
+                    func();
+                    globalKeys[eventKey] = false;
+                    buffer = [];
+                }
+                return;
+            })
+        })
+
+        document.addEventListener("keyup", function(event) {
+            globalKeys[fastn_utils.getEventKey(event)] = false;
+        })
+    }
+    function initialise_device() {
         let current = get_device();
-        console.log("last_device", last_device);
         if (current === last_device) {
             return;
         }
+        console.log("last_device", last_device, "current_device", current);
         ftd.device.set(current);
         last_device = current;
-    };
-    function initialise_device() {
-        last_device = get_device();
-        console.log("last_device", last_device);
-        ftd.device.set(last_device);
     }
 
     function get_device() {
@@ -89,18 +141,18 @@ ftd.post_init = function () {
     window.enable_dark_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
-        DARK_MODE = true;
-        FOLLOW_SYSTEM_DARK_MODE = false;
-        SYSTEM_DARK_MODE = system_dark_mode();
+        ftd.dark_mode.set(true);
+        ftd.follow_system_dark_mode.set(false);
+        ftd.system_dark_mode.set(system_dark_mode());
         document.body.classList.add(DARK_MODE_CLASS);
         set_cookie(DARK_MODE_COOKIE, COOKIE_DARK_MODE);
     };
     window.enable_light_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
-        DARK_MODE = false;
-        FOLLOW_SYSTEM_DARK_MODE = false;
-        SYSTEM_DARK_MODE = system_dark_mode();
+        ftd.dark_mode.set(false);
+        ftd.follow_system_dark_mode.set(false);
+        ftd.system_dark_mode.set(system_dark_mode());
         if (document.body.classList.contains(DARK_MODE_CLASS)) {
             document.body.classList.remove(DARK_MODE_CLASS);
         }
@@ -109,15 +161,16 @@ ftd.post_init = function () {
     window.enable_system_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
-        FOLLOW_SYSTEM_DARK_MODE = true;
-        SYSTEM_DARK_MODE = system_dark_mode();
-        if (SYSTEM_DARK_MODE) {
-            DARK_MODE = true;
+        let systemMode = system_dark_mode();
+        ftd.follow_system_dark_mode.set(true);
+        ftd.system_dark_mode.set(systemMode);
+        if (systemMode) {
+            ftd.dark_mode.set(true);
             document.body.classList.add(DARK_MODE_CLASS);
             set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_DARK);
         }
         else {
-            DARK_MODE = false;
+            ftd.dark_mode.set(false);
             if (document.body.classList.contains(DARK_MODE_CLASS)) {
                 document.body.classList.remove(DARK_MODE_CLASS);
             }
@@ -161,5 +214,7 @@ ftd.post_init = function () {
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener("change", update_dark_mode);
     }
     initialise_dark_mode();
-    initialise_device()
+    initialise_device();
+    initialise_click_outside_events();
+    initialise_global_key_events()
 }

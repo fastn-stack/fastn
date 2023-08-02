@@ -6,6 +6,7 @@ pub struct Function {
     pub expression: Vec<Expression>,
     pub js: Option<ftd::interpreter::PropertyValue>,
     pub line_number: usize,
+    pub external_implementation: bool,
 }
 
 impl Function {
@@ -24,6 +25,7 @@ impl Function {
             expression,
             js,
             line_number,
+            external_implementation: false,
         }
     }
 
@@ -307,7 +309,7 @@ impl FunctionCall {
         doc: &mut ftd::interpreter::TDoc,
         mutable: bool,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::FunctionCall>>
     {

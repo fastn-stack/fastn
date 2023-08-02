@@ -1,5 +1,12 @@
 pub fn is_kernel(s: &str) -> bool {
-    ["ftd#text", "ftd#row", "ftd#column", "ftd#integer"].contains(&s)
+    [
+        "ftd#text",
+        "ftd#row",
+        "ftd#column",
+        "ftd#integer",
+        "ftd#container",
+    ]
+    .contains(&s)
 }
 
 pub fn reference_to_js(s: &str) -> String {
@@ -20,6 +27,10 @@ pub fn reference_to_js(s: &str) -> String {
         "{}{p1}",
         prefix.map(|v| format!("{v}.")).unwrap_or_default()
     )
+}
+
+pub fn clone_to_js(s: &str) -> String {
+    format!("fastn_utils.clone({})", reference_to_js(s))
 }
 
 pub(crate) fn get_doc_name_and_remaining(s: &str) -> (String, Option<String>) {
@@ -57,6 +68,13 @@ fn get_prefix(s: &str) -> (Option<&str>, String) {
     (prefix, s)
 }
 
+pub(crate) fn is_local_variable_map_prefix(s: &str) -> bool {
+    fastn_js::utils::get_prefix(s)
+        .0
+        .map(|v| v.eq(fastn_js::LOCAL_VARIABLE_MAP))
+        .unwrap_or_default()
+}
+
 pub fn name_to_js(s: &str) -> String {
     let (prefix, s) = get_prefix(s);
     format!(
@@ -87,6 +105,6 @@ pub fn trim_brackets(s: &str) -> String {
     s.to_string()
 }
 
-pub fn kebab_to_snake_case(s: &str) -> String {
+pub(crate) fn kebab_to_snake_case(s: &str) -> String {
     s.replace('-', "_")
 }

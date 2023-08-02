@@ -1,56 +1,10 @@
 <html>
 <head>
+    <base href="/">
     <script src="fastn-js.js"></script>
 
     <style>
-        /* http://meyerweb.com/eric/tools/css/reset/
-           v2.0 | 20110126
-           License: none (public domain)
-        */
-
-        html, body, div, span, applet, object, iframe,
-        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-        a, abbr, acronym, address, big, cite, code,
-        del, dfn, em, img, ins, kbd, q, s, samp,
-        small, strike, strong, sub, sup, tt, var,
-        b, u, i, center,
-        dl, dt, dd, ol, ul, li,
-        fieldset, form, label, legend,
-        table, caption, tbody, tfoot, thead, tr, th, td,
-        article, aside, canvas, details, embed,
-        figure, figcaption, footer, header, hgroup,
-        menu, nav, output, ruby, section, summary,
-        time, mark, audio, video {
-            margin: 0;
-            padding: 0;
-            border: 0;
-            font-size: 100%;
-            font: inherit;
-            vertical-align: baseline;
-        }
-        /* HTML5 display-role reset for older browsers */
-        article, aside, details, figcaption, figure,
-        footer, header, hgroup, menu, nav, section {
-            display: block;
-        }
-        body {
-            line-height: 1;
-        }
-        ol, ul {
-            list-style: none;
-        }
-        blockquote, q {
-            quotes: none;
-        }
-        blockquote:before, blockquote:after,
-        q:before, q:after {
-            content: '';
-            content: none;
-        }
-        table {
-            border-collapse: collapse;
-            border-spacing: 0;
-        }
+       
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
@@ -69,14 +23,14 @@ quisquam ab repellat molestiae qui quia repudiandae ut doloribus impedit.
 A repellendus sapiente id Quis doloremque qui Quis omnis in blanditiis tenetur
 quo esse dolor. 33 vitae modi ut voluptates distinctio est dicta temporibus est
 consectetur voluptatum et Quis inventore ab dignissimos amet?</div></div></body><style id="styles">
-    .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
-	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
-	.w-1 { width: 100%; }
+    .w-1 { width: 100%; }
 	.bgc-2 { background-color: #170d03; }
 	body.dark .bgc-2 { background-color: #edfce8; }
 	.p-3 { padding: 40px; }
 	.c-4 { color: orange; }
 	body.dark .c-4 { color: green; }
+	.c-4:visited { color: orange; }
+	body.dark  .c-4:visited { color: green; }
 	.role-5 {  font-family: cursive; letter-spacing: 5px; font-size: 36px; font-weight: 700; line-height: 40px; }
 	body.mobile .role-5 {  font-family: fantasy; letter-spacing: 3px; font-size: 20px; font-weight: 100; line-height: 35px; }
     </style>
@@ -109,7 +63,9 @@ let main = function (parent) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Lorem ipsum dolor sit amet. Quo aliquam natus id cumque Quis quo eligendi quia\nqui aliquid dolores. Qui atque delectus quo maxime numquam qui architecto\ndelectus. Qui maxime galisum sit magni placeat sed illum sunt. Ut illo excepturi\naut nulla molestiae et excepturi voluptas aut voluptatem obcaecati id harum quia.\n\nUt esse consequatur ex molestiae consequatur sed nobis consequuntur ut\ntemporibus eveniet ut aperiam esse a rerum libero. Et perferendis voluptas eos\nculpa odit et architecto officiis aut eveniet commodi. Eos quia quia qui nulla\nerror et quaerat dolor vel odit reprehenderit ut nemo numquam non molestias\nillum aut nobis omnis. Qui galisum commodi At internos dolorum sed repudiandae\nquisquam ab repellat molestiae qui quia repudiandae ut doloribus impedit.\n\nA repellendus sapiente id Quis doloremque qui Quis omnis in blanditiis tenetur\nquo esse dolor. 33 vitae modi ut voluptates distinctio est dicta temporibus est\nconsectetur voluptatum et Quis inventore ab dignissimos amet?", inherited);
     rooti0.addEventHandler(fastn_dom.Event.Click, function () {
-      foo__increment(global.foo__value);
+      foo__increment({
+        a: global.foo__value,
+      }, rooti0);
     });
     rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(40), inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([global.foo__og,
@@ -136,52 +92,49 @@ let main = function (parent) {
   }
   ]), inherited);
 }
-global.foo__bg_og = fastn.recordInstance({
+fastn_utils.createNestedObject(global, "foo__bg_og", fastn.recordInstance({
   light: "#170d03",
   dark: "#edfce8"
-});
-global.foo__value = fastn.mutable(0);
-let foo__increment = function (a)
+}));
+fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));
+let foo__increment = function (args)
 {
-  let fastn_utils_val_a = fastn_utils.getter(a) + 1;
-  if (!fastn_utils.setter(a, fastn_utils_val_a)) {
-    a = fastn_utils_val_a;
+  let __args__ = args;
+  let fastn_utils_val___args___a = fastn_utils.getter(__args__.a) + 1;
+  if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
+    __args__.a = fastn_utils_val___args___a;
   };
 }
-global.foo__og = fastn.recordInstance({
+fastn_utils.createNestedObject(global, "foo__og", fastn.recordInstance({
   light: "orange",
   dark: "green"
-});
-global.foo__bp = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__bp", fastn.recordInstance({
   light: "blue",
   dark: "purple"
-});
-global.foo__dtype = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__dtype", fastn.recordInstance({
   size: fastn_dom.FontSize.Px(36),
   line_height: fastn_dom.FontSize.Px(40),
   letter_spacing: fastn_dom.FontSize.Px(5),
   weight: 700,
   font_family: "cursive"
-});
-global.foo__mtype = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__mtype", fastn.recordInstance({
   size: fastn_dom.FontSize.Px(20),
   line_height: fastn_dom.FontSize.Px(35),
   letter_spacing: fastn_dom.FontSize.Px(3),
   weight: 100,
   font_family: "fantasy"
-});
-global.foo__rtype = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__rtype", fastn.recordInstance({
   desktop: global.foo__dtype,
   mobile: global.foo__mtype
-});
-global.foo__bg_bp = fastn.recordInstance({
+}));
+fastn_utils.createNestedObject(global, "foo__bg_bp", fastn.recordInstance({
   light: "#e8eafc",
   dark: "#f4e8fc"
-});
-let inherited = fastn.recordInstance({
-  colors: ftd.default_colors,
-  types: ftd.default_types
-});
+}));
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

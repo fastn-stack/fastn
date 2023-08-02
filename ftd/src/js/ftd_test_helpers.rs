@@ -15,14 +15,18 @@ pub fn interpret_helper(
             ftd::interpreter::Interpreter::StuckOnImport {
                 module, state: st, ..
             } => {
-                let source = "";
+                let mut source = "".to_string();
                 let mut foreign_variable = vec![];
                 let mut foreign_function = vec![];
                 if module.eq("test") {
                     foreign_variable.push("var".to_string());
                     foreign_function.push("fn".to_string());
                 }
-                let document = ftd::interpreter::ParsedDocument::parse(module.as_str(), source)?;
+                if let Ok(value) = std::fs::read_to_string(format!("./t/js/{}.ftd", module)) {
+                    source = value;
+                }
+                let document =
+                    ftd::interpreter::ParsedDocument::parse(module.as_str(), source.as_str())?;
                 s = st.continue_after_import(
                     module.as_str(),
                     document,
@@ -73,24 +77,35 @@ pub fn interpret_helper(
 #[track_caller]
 fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathBuf) {
     let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
-    let js_ast = ftd::js::document_into_js_ast(i);
-    let js_document_script = fastn_js::to_js(js_ast.as_slice(), true);
+    let js_ast_data = ftd::js::document_into_js_ast(i);
+    let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), true);
     let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), false);
     let ssr_body =
         fastn_js::ssr_with_js_string(format!("{js_ftd_script}\n{js_document_script}").as_str());
 
-    let html_str = std::fs::read_to_string("ftd-js.html")
-        .expect("can't read ftd-js.html")
+    let html_str = ftd::ftd_js_html()
         .replace("__js_script__", js_document_script.as_str())
         .replace("__html_body__", ssr_body.as_str())
+        .replace("__base_url__", "/")
         .replace(
             "__script_file__",
-            if manual {
-                format!("<script>\n{}\n</script>", ftd::js::all_js_with_test())
-            } else {
-                "<script src=\"fastn-js.js\"></script>".to_string()
-            }
+            format!(
+                "{}{}",
+                js_ast_data.scripts.join(""),
+                if manual {
+                    format!(
+                        "<script>\n{}\n</script><script src=\"../../markdown.js\"></script>",
+                        ftd::js::all_js_with_test()
+                    )
+                } else {
+                    "<script src=\"fastn-js.js\"></script>".to_string()
+                }
+            )
             .as_str(),
+        )
+        .replace(
+            "__default_css__",
+            format!("{}", if manual { ftd::ftd_js_css() } else { "" }).as_str(),
         );
     if fix || manual {
         std::fs::write(file_location, html_str).unwrap();

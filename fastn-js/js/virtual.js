@@ -33,9 +33,22 @@ class Node {
         this.#children.push(c);
     }
 
+    insertBefore(node, index) {
+        this.#children.splice(index, 0, node);
+    }
+
+    getChildren() {
+        return this.#children;
+    }
+
     setAttribute(attribute, value) {
         this.#attributes[attribute] = value;
     }
+
+    removeAttribute(attribute) {
+        if (attribute in this.#attributes) delete this.#attributes[attribute];
+    }
+
     // Caution: This is only supported in ssr mode
     updateTagName(tagName) {
         this.#tagName = tagName;
@@ -69,8 +82,8 @@ class Node {
     getAttributesString() {
         const nodeAttributes = Object.entries(this.#attributes)
             .map(([attribute, value]) => {
-                if (value != null) {
-                    return `${attribute}=${value}`;
+                if (value !== undefined && value !== null && value !== "") {
+                    return `${attribute}=\"${value}\"`;
                 }
                 return `${attribute}`;
             }).join(' ');
@@ -81,6 +94,7 @@ class Node {
 class Document2 {
     createElement(tagName) {
         id_counter++;
+
         if (ssr) {
             return new Node(id_counter, tagName);
         }
@@ -89,9 +103,21 @@ class Document2 {
             return window.document.body;
         }
 
+        if (fastn_utils.isWrapperNode(tagName)) {
+            return window.document.createComment(fastn_dom.commentMessage);
+        }
         if (hydrating) {
-            return this.getElementByDataID(id_counter);
+            let node = this.getElementByDataID(id_counter);
+            if (fastn_utils.isCommentNode(tagName)) {
+                let comment= window.document.createComment(fastn_dom.commentMessage);
+                node.parentNode.replaceChild(comment, node);
+                return comment;
+            }
+            return node;
         } else {
+            if (fastn_utils.isCommentNode(tagName)) {
+                return window.document.createComment(fastn_dom.commentMessage);
+            }
             return window.document.createElement(tagName);
         }
     }

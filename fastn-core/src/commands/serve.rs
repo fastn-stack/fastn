@@ -102,9 +102,7 @@ async fn serve_file(
             )
             .await
             {
-                Ok(r) => {
-                    fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8)
-                }
+                Ok(r) => r.into(),
                 Err(e) => {
                     tracing::error!(
                         msg = "fastn-Error",
@@ -174,7 +172,7 @@ async fn serve_cr_file(
             )
             .await
             {
-                Ok(r) => fastn_core::http::ok(r),
+                Ok(r) => r.into(),
                 Err(e) => {
                     fastn_core::server_error!("fastn-Error: path: {}, {:?}", path, e)
                 }
@@ -578,6 +576,15 @@ fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
                 .body(ftd::js::all_js_without_test()),
+        );
+    } else if req
+        .path()
+        .ends_with(fastn_core::utils::hashed_markdown_js())
+    {
+        return Some(
+            actix_web::HttpResponse::Ok()
+                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .body(ftd::markdown_js()),
         );
     }
 

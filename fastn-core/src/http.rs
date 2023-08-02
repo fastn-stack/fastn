@@ -48,6 +48,22 @@ pub fn redirect(url: String) -> fastn_core::http::Response {
         .finish()
 }
 
+pub fn redirect_with_code(url: String, code: i32) -> fastn_core::http::Response {
+    match code {
+        301 => actix_web::HttpResponse::MovedPermanently(),
+        302 => actix_web::HttpResponse::Found(),
+        303 => actix_web::HttpResponse::SeeOther(),
+        307 => actix_web::HttpResponse::TemporaryRedirect(),
+        308 => actix_web::HttpResponse::PermanentRedirect(),
+        _ => {
+            fastn_core::warning!("invalid redirect code: {code}");
+            actix_web::HttpResponse::PermanentRedirect()
+        }
+    }
+    .insert_header(("LOCATION", url))
+    .finish()
+}
+
 pub fn ok_with_content_type(
     data: Vec<u8>,
     content_type: mime_guess::Mime,

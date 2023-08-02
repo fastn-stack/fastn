@@ -29,12 +29,14 @@ pub use device::{DeviceBlock, DeviceType};
 pub use event::{Event, EventHandler, Function};
 pub use loop_component::ForLoop;
 pub use mutable_variable::{mutable_integer, mutable_string, MutableList, MutableVariable};
-pub use property::{ConditionalValue, Formula, PropertyKind, SetProperty, SetPropertyValue, Value};
+pub use property::{
+    ConditionalValue, Formula, FormulaType, PropertyKind, SetProperty, SetPropertyValue, Value,
+};
 pub use record::RecordInstance;
 pub use ssr::{ssr, ssr_str, ssr_with_js_string};
 pub use static_variable::{static_integer, static_string, StaticVariable};
 pub use to_js::to_js;
-pub use udf::{udf0, udf1, udf2, udf_with_params, UDF};
+pub use udf::{udf0, udf1, udf2, udf_with_arguments, UDF};
 pub use udf_statement::UDFStatement;
 
 pub fn all_js_without_test() -> String {

@@ -1,0 +1,6 @@
+-- import: 24-re-export as h
+exposing: append
+
+-- ftd.text: $append(a = FifthTry, b = Click here)
+
+-- h.print: Arpita

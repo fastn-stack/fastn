@@ -9,32 +9,90 @@ pub struct SetProperty {
 #[derive(Debug)]
 pub enum SetPropertyValue {
     Reference(String),
-    Value(Value),
-    Formula(Formula),
+    Value(fastn_js::Value),
+    Formula(fastn_js::Formula),
+    Clone(String),
 }
 
-impl SetPropertyValue {
+impl fastn_js::SetPropertyValue {
     pub fn to_js(&self) -> String {
+        self.to_js_with_element_name(&None)
+    }
+
+    pub fn to_js_with_element_name(&self, element_name: &Option<String>) -> String {
         match self {
-            SetPropertyValue::Reference(name) => fastn_js::utils::reference_to_js(name),
-            SetPropertyValue::Value(v) => v.to_js(),
-            SetPropertyValue::Formula(f) => f.to_js(),
+            fastn_js::SetPropertyValue::Reference(name) => fastn_js::utils::reference_to_js(name),
+            fastn_js::SetPropertyValue::Value(v) => v.to_js(element_name),
+            fastn_js::SetPropertyValue::Formula(f) => f.to_js(element_name),
+            fastn_js::SetPropertyValue::Clone(name) => fastn_js::utils::clone_to_js(name),
+        }
+    }
+
+    pub(crate) fn is_local_value(&self) -> bool {
+        if let fastn_js::SetPropertyValue::Reference(name) = self {
+            fastn_js::utils::is_local_variable_map_prefix(name)
+        } else {
+            false
+        }
+    }
+
+    pub(crate) fn is_local_value_dependent(&self) -> bool {
+        match self {
+            fastn_js::SetPropertyValue::Reference(name)
+            | fastn_js::SetPropertyValue::Clone(name) => {
+                fastn_js::utils::is_local_variable_map_prefix(name)
+            }
+            fastn_js::SetPropertyValue::Value(value) => value.is_local_value_dependent(),
+            fastn_js::SetPropertyValue::Formula(formula) => {
+                formula.type_.is_local_value_dependent()
+            }
         }
     }
 
     pub fn is_formula(&self) -> bool {
-        matches!(&self, SetPropertyValue::Formula(_))
+        matches!(&self, fastn_js::SetPropertyValue::Formula(_))
+    }
+
+    pub fn undefined() -> fastn_js::SetPropertyValue {
+        fastn_js::SetPropertyValue::Value(fastn_js::Value::Undefined)
+    }
+
+    pub fn is_undefined(&self) -> bool {
+        matches!(
+            self,
+            fastn_js::SetPropertyValue::Value(fastn_js::Value::Undefined)
+        )
     }
 }
 
 #[derive(Debug)]
 pub struct Formula {
     pub deps: Vec<String>,
-    pub conditional_values: Vec<ConditionalValue>,
+    pub type_: FormulaType,
+}
+
+#[derive(Debug)]
+pub enum FormulaType {
+    Conditional(Vec<ConditionalValue>),
+    FunctionCall(fastn_js::Function),
+}
+
+impl FormulaType {
+    pub(crate) fn is_local_value_dependent(&self) -> bool {
+        match self {
+            FormulaType::Conditional(conditional_values) => conditional_values
+                .iter()
+                .any(|v| v.expression.is_local_value_dependent()),
+            FormulaType::FunctionCall(function) => function
+                .parameters
+                .iter()
+                .any(|v| v.1.is_local_value_dependent()),
+        }
+    }
 }
 
 impl Formula {
-    pub(crate) fn to_js(&self) -> String {
+    pub fn to_js(&self, element_name: &Option<String>) -> String {
         use itertools::Itertools;
 
         format!(
@@ -44,57 +102,22 @@ impl Formula {
                 .map(|v| fastn_js::utils::reference_to_js(v))
                 .collect_vec()
                 .join(", "),
-            self.conditional_values_to_js()
+            self.formula_value_to_js(element_name)
         )
     }
 
-    pub(crate) fn conditional_values_to_js(&self) -> String {
-        let mut conditions = vec![];
-        let mut default = None;
-        for conditional_value in &self.conditional_values {
-            if let Some(ref condition) = conditional_value.condition {
-                let condition = format!(
-                    indoc::indoc! {"
-                        function(){{
-                            {expression}
-                        }}()"
-                    },
-                    expression = fastn_js::to_js::ExpressionGenerator.to_js(condition).trim(),
-                );
-                conditions.push(format!(
-                    indoc::indoc! {
-                        "{if_exp}({condition}){{
-                            return {expression};
-                        }}"
-                    },
-                    if_exp = if conditions.is_empty() {
-                        "if"
-                    } else {
-                        "else if"
-                    },
-                    condition = condition,
-                    expression = conditional_value.expression.to_js(),
-                ));
-            } else {
-                default = Some(conditional_value.expression.to_js())
+    pub fn formula_value_to_js(&self, element_name: &Option<String>) -> String {
+        match self.type_ {
+            fastn_js::FormulaType::Conditional(ref conditional_values) => {
+                conditional_values_to_js(conditional_values.as_slice(), element_name)
+            }
+            fastn_js::FormulaType::FunctionCall(ref function_call) => {
+                let mut w = Vec::new();
+                let o = function_call.to_js(element_name);
+                o.render(80, &mut w).unwrap();
+                format!("function(){{return {}}}", String::from_utf8(w).unwrap())
             }
         }
-
-        let default = match default {
-            Some(d) if conditions.is_empty() => d,
-            Some(d) => format!("else {{ return {}; }}", d),
-            None => "".to_string(),
-        };
-
-        format!(
-            indoc::indoc! {"
-            function() {{
-                {expressions}{default}
-            }}
-        "},
-            expressions = conditions.join(" "),
-            default = default,
-        )
     }
 }
 
@@ -102,6 +125,64 @@ impl Formula {
 pub struct ConditionalValue {
     pub condition: Option<fastn_grammar::evalexpr::ExprNode>,
     pub expression: SetPropertyValue,
+}
+
+pub(crate) fn conditional_values_to_js(
+    conditional_values: &[fastn_js::ConditionalValue],
+    element_name: &Option<String>,
+) -> String {
+    let mut conditions = vec![];
+    let mut default = None;
+    for conditional_value in conditional_values {
+        if let Some(ref condition) = conditional_value.condition {
+            let condition = format!(
+                indoc::indoc! {"
+                        function(){{
+                            {expression}
+                        }}()"
+                },
+                expression = fastn_js::to_js::ExpressionGenerator.to_js(condition).trim(),
+            );
+            conditions.push(format!(
+                indoc::indoc! {
+                    "{if_exp}({condition}){{
+                            return {expression};
+                        }}"
+                },
+                if_exp = if conditions.is_empty() {
+                    "if"
+                } else {
+                    "else if"
+                },
+                condition = condition,
+                expression = conditional_value
+                    .expression
+                    .to_js_with_element_name(element_name),
+            ));
+        } else {
+            default = Some(
+                conditional_value
+                    .expression
+                    .to_js_with_element_name(element_name),
+            )
+        }
+    }
+
+    let default = match default {
+        Some(d) if conditions.is_empty() => d,
+        Some(d) => format!("else {{ return {}; }}", d),
+        None => "".to_string(),
+    };
+
+    format!(
+        indoc::indoc! {"
+            function() {{
+                {expressions}{default}
+            }}
+        "},
+        expressions = conditions.join(" "),
+        default = default,
+    )
 }
 
 #[derive(Debug)]
@@ -123,26 +204,35 @@ pub enum Value {
     UI {
         value: Vec<fastn_js::ComponentStatement>,
     },
+    Null,
+    Undefined,
 }
 
 impl Value {
-    pub(crate) fn to_js(&self) -> String {
+    pub(crate) fn to_js(&self, element_name: &Option<String>) -> String {
         use itertools::Itertools;
         match self {
-            Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n")),
+            Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n").replace('\"', "\\\"")),
             Value::Integer(i) => i.to_string(),
             Value::Decimal(f) => f.to_string(),
             Value::Boolean(b) => b.to_string(),
             Value::OrType { variant, value } => {
                 if let Some(value) = value {
-                    format!("{}({})", variant, value.to_js())
+                    format!(
+                        "{}({})",
+                        variant,
+                        value.to_js_with_element_name(element_name)
+                    )
                 } else {
                     variant.to_owned()
                 }
             }
             Value::List { value } => format!(
                 "fastn.mutableList([{}])",
-                value.iter().map(|v| v.to_js()).join(", ")
+                value
+                    .iter()
+                    .map(|v| v.to_js_with_element_name(element_name))
+                    .join(", ")
             ),
             Value::Record { fields } => format!(
                 "fastn.recordInstance({{{}}})",
@@ -150,8 +240,8 @@ impl Value {
                     .iter()
                     .map(|(k, v)| format!(
                         "{}: {}",
-                        fastn_js::utils::kebab_to_snake_case(k),
-                        v.to_js()
+                        fastn_js::utils::name_to_js_(k),
+                        v.to_js_with_element_name(element_name)
                     ))
                     .join(", ")
             ),
@@ -168,6 +258,24 @@ impl Value {
                     })
                     .join("")
             ),
+            Value::Null => "null".to_string(),
+            Value::Undefined => "undefined".to_string(),
+        }
+    }
+
+    pub(crate) fn is_local_value_dependent(&self) -> bool {
+        match self {
+            Value::OrType { value, .. } => value
+                .as_ref()
+                .map(|v| v.is_local_value_dependent())
+                .unwrap_or_default(),
+            Value::List { value } => value.iter().any(|v| v.is_local_value_dependent()),
+            Value::Record { fields } => fields.iter().any(|v| v.1.is_local_value_dependent()),
+            Value::UI { .. } => {
+                //Todo: Check for UI
+                false
+            }
+            _ => false,
         }
     }
 }
@@ -176,6 +284,9 @@ impl Value {
 pub enum PropertyKind {
     Children,
     StringValue,
+    IntegerValue,
+    DecimalValue,
+    BooleanValue,
     Id,
     Region,
     OpenInNewTab,
@@ -257,8 +368,21 @@ pub enum PropertyKind {
     TextInputType,
     DefaultTextInputValue,
     Loading,
+    Alt,
     Src,
+    ImageSrc,
     YoutubeSrc,
+    Shadow,
+    Code,
+    MetaTitle,
+    MetaOGTitle,
+    MetaTwitterTitle,
+    MetaDescription,
+    MetaOGDescription,
+    MetaTwitterDescription,
+    MetaOGImage,
+    MetaTwitterImage,
+    MetaThemeColor,
 }
 
 impl PropertyKind {
@@ -269,6 +393,9 @@ impl PropertyKind {
             PropertyKind::AlignSelf => "fastn_dom.PropertyKind.AlignSelf",
             PropertyKind::Anchor => "fastn_dom.PropertyKind.Anchor",
             PropertyKind::StringValue => "fastn_dom.PropertyKind.StringValue",
+            PropertyKind::IntegerValue => "fastn_dom.PropertyKind.IntegerValue",
+            PropertyKind::DecimalValue => "fastn_dom.PropertyKind.DecimalValue",
+            PropertyKind::BooleanValue => "fastn_dom.PropertyKind.BooleanValue",
             PropertyKind::Width => "fastn_dom.PropertyKind.Width",
             PropertyKind::Padding => "fastn_dom.PropertyKind.Padding",
             PropertyKind::PaddingHorizontal => "fastn_dom.PropertyKind.PaddingHorizontal",
@@ -350,7 +477,32 @@ impl PropertyKind {
             PropertyKind::DefaultTextInputValue => "fastn_dom.PropertyKind.DefaultTextInputValue",
             PropertyKind::Loading => "fastn_dom.PropertyKind.Loading",
             PropertyKind::Src => "fastn_dom.PropertyKind.Src",
+            PropertyKind::ImageSrc => "fastn_dom.PropertyKind.ImageSrc",
+            PropertyKind::Alt => "fastn_dom.PropertyKind.Alt",
             PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
+            PropertyKind::Shadow => "fastn_dom.PropertyKind.Shadow",
+            PropertyKind::Code => "fastn_dom.PropertyKind.Code",
+            PropertyKind::MetaTitle => "fastn_dom.PropertyKind.DocumentProperties.MetaTitle",
+            PropertyKind::MetaOGTitle => "fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle",
+            PropertyKind::MetaTwitterTitle => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaTwitterTitle"
+            }
+            PropertyKind::MetaDescription => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaDescription"
+            }
+            PropertyKind::MetaOGDescription => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription"
+            }
+            PropertyKind::MetaTwitterDescription => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription"
+            }
+            PropertyKind::MetaOGImage => "fastn_dom.PropertyKind.DocumentProperties.MetaOGImage",
+            PropertyKind::MetaTwitterImage => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage"
+            }
+            PropertyKind::MetaThemeColor => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor"
+            }
         }
     }
 }

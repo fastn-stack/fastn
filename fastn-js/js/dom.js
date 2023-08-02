@@ -1,97 +1,86 @@
 let fastn_dom = {};
 
-fastn_dom.common = {
-    ".ft_row": {
-        "value": {
-            "display": "flex",
-            "align-items": "start",
-            "justify-content": "start",
-            "flex-direction": "row",
-        }
-    },
-    ".ft_column": {
-        "value": {
-            "display": "flex",
-            "align-items": "start",
-            "justify-content": "start",
-            "flex-direction": "column",
-        }
-    }
-};
+fastn_dom.commentNode = "comment";
+fastn_dom.wrapperNode = "wrapper";
+fastn_dom.commentMessage = "***FASTN***";
 
-
-fastn_dom.classes = { ...fastn_dom.common }
+fastn_dom.classes = { }
 fastn_dom.unsanitised_classes = {}
 fastn_dom.class_count = 0;
-fastn_dom.property_map = {
+fastn_dom.propertyMap = {
+    "align-items": "ali",
     "align-self": "as",
+    "background-color": "bgc",
+    "background-image": "bgi",
+    "background-position": "bgp",
+    "background-repeat": "bgr",
+    "background-size": "bgs",
+    "border-bottom-color": "bbc",
+    "border-bottom-left-radius": "bblr",
+    "border-bottom-right-radius": "bbrr",
+    "border-bottom-style": "bbs",
+    "border-bottom-width": "bbw",
+    "border-color": "bc",
+    "border-left-color": "blc",
+    "border-left-style": "bls",
+    "border-left-width": "blw",
+    "border-radius": "br",
+    "border-right-color": "brc",
+    "border-right-style": "brs",
+    "border-right-width": "brw",
+    "border-style": "bs",
+    "border-top-color": "btc",
+    "border-top-left-radius": "btlr",
+    "border-top-right-radius": "btrr",
+    "border-top-style": "bts",
+    "border-top-width": "btw",
+    "border-width": "bw",
+    "bottom": "b",
     "color": "c",
-    "width": "w",
-    "padding": "p",
-    "padding-horizontal": "ph",
-    "padding-vertical": "pv",
-    "padding-left": "pl",
-    "padding-right": "pr",
-    "padding-top": "pt",
-    "padding-bottom": "pb",
+    "shadow": "sh",
+    "cursor": "cur",
+    "display": "d",
+    "flex-wrap": "fw",
+    "font-style": "fst",
+    "font-weight": "fwt",
+    "gap": "g",
+    "height": "h",
+    "justify-content": "jc",
+    "left": "l",
     "margin": "m",
+    "margin-bottom": "mb",
     "margin-horizontal": "mh",
-    "margin-vertical": "mv",
     "margin-left": "ml",
     "margin-right": "mr",
     "margin-top": "mt",
-    "margin-bottom": "mb",
-    "height": "h",
-    "border-width": "bw",
-    "border-left-width": "blw",
-    "border-right-width": "brw",
-    "border-top-width": "btw",
-    "border-bottom-width": "bbw",
-    "border-radius": "br",
-    "border-top-left-radius": "btlr",
-    "border-top-right-radius": "btrr",
-    "border-bottom-left-radius": "bblr",
-    "border-bottom-right-radius": "bbrr",
-    "border-style": "bs",
-    "border-top-style": "bts",
-    "border-bottom-style": "bbs",
-    "border-left-style": "bls",
-    "border-right-style": "brs",
-    "border-color": "bc",
-    "border-top-color": "btc",
-    "border-bottom-color": "bbc",
-    "border-left-color": "blc",
-    "border-right-color": "brc",
-    "background-color": "bgc",
-    "z-index": "z",
-    "sticky": "s",
-    "top": "t",
-    "bottom": "b",
-    "left": "l",
-    "right": "r",
+    "margin-vertical": "mv",
+    "max-height": "mxh",
+    "max-width": "mxw",
+    "min-height": "mnh",
+    "min-width": "mnw",
+    "opacity": "op",
     "overflow": "o",
     "overflow-x": "ox",
     "overflow-y": "oy",
-    "gap": "g",
-    "justify-content": "jc",
+    "padding": "p",
+    "padding-bottom": "pb",
+    "padding-horizontal": "ph",
+    "padding-left": "pl",
+    "padding-right": "pr",
+    "padding-top": "pt",
+    "padding-vertical": "pv",
     "position": "pos",
-    "flex-wrap": "fw",
-    "text-transform": "tt",
+    "resize": "res",
+    "right": "r",
+    "sticky": "s",
     "text-align": "ta",
+    "text-decoration": "td",
+    "text-transform": "tt",
+    "top": "t",
+    "width": "w",
+    "z-index": "z",
     "-webkit-box-orient": "wbo",
     "-webkit-line-clamp": "wlc",
-    "display": "d",
-    "opacity": "op",
-    "cursor": "cur",
-    "resize": "r",
-    "max-height": "mxh",
-    "min-height": "mnh",
-    "max-width": "mxw",
-    "min-width": "mnw",
-    "font-weight": "fw",
-    "font-style": "fst",
-    "text-decoration": "td",
-    "align-items": "ali",
 };
 
 // dynamic-class-css.md
@@ -133,99 +122,122 @@ fastn_dom.ElementKind = {
     Image: 6,
     IFrame: 7,
     // To create parent for dynamic DOM
-    Div: 8,
+    Comment: 8,
     CheckBox: 9,
     TextInput: 10,
+    ContainerElement: 11,
+    Rive: 12,
+    Document: 13,
+    Wrapper: 14,
 };
 
 fastn_dom.PropertyKind = {
     Color: 0,
     IntegerValue: 1,
     StringValue: 2,
-    Width: 3,
-    Padding: 4,
-    Height: 5,
-    Id: 6,
-    BorderWidth: 7,
-    BorderStyle: 8,
-    Margin: 9,
-    Background: 10,
-    PaddingHorizontal: 11,
-    PaddingVertical: 12,
-    PaddingLeft: 13,
-    PaddingRight: 14,
-    PaddingTop: 15,
-    PaddingBottom: 16,
-    MarginHorizontal: 17,
-    MarginVertical: 18,
-    MarginLeft: 19,
-    MarginRight: 20,
-    MarginTop: 21,
-    MarginBottom: 22,
-    Role: 23,
-    ZIndex: 24,
-    Sticky: 25,
-    Top: 26,
-    Bottom: 27,
-    Left: 28,
-    Right: 29,
-    Overflow: 30,
-    OverflowX: 31,
-    OverflowY: 32,
-    Spacing: 33,
-    Wrap: 34,
-    TextTransform: 35,
-    TextIndent: 36,
-    TextAlign: 37,
-    LineClamp: 38,
-    Opacity: 39,
-    Cursor: 40,
-    Resize: 41,
-    MinHeight: 42,
-    MaxHeight: 43,
-    MinWidth: 44,
-    MaxWidth: 45,
-    WhiteSpace: 46,
-    BorderTopWidth: 47,
-    BorderBottomWidth: 48,
-    BorderLeftWidth: 49,
-    BorderRightWidth: 50,
-    BorderRadius: 51,
-    BorderTopLeftRadius: 52,
-    BorderTopRightRadius: 53,
-    BorderBottomLeftRadius: 54,
-    BorderBottomRightRadius: 55,
-    BorderStyleVertical: 56,
-    BorderStyleHorizontal: 57,
-    BorderLeftStyle: 58,
-    BorderRightStyle: 59,
-    BorderTopStyle: 60,
-    BorderBottomStyle: 61,
-    BorderColor: 62,
-    BorderLeftColor: 63,
-    BorderRightColor: 64,
-    BorderTopColor: 65,
-    BorderBottomColor: 66,
-    AlignSelf: 67,
-    Classes: 68,
-    Anchor: 69,
-    Link: 70,
-    Children: 71,
-    OpenInNewTab: 72,
-    TextStyle: 73,
-    Region: 74,
-    AlignContent: 75,
-    Display: 76,
-    Checked: 77,
-    Enabled: 78,
-    TextInputType: 79,
-    Placeholder: 80,
-    Multiline: 81,
-    DefaultTextInputValue: 82,
-    Loading: 83,
-    Src: 84,
-    YoutubeSrc: 85,
-}
+    DecimalValue: 3,
+    BooleanValue: 4,
+    Width: 5,
+    Padding: 6,
+    Height: 7,
+    Id: 8,
+    BorderWidth: 9,
+    BorderStyle: 10,
+    Margin: 11,
+    Background: 12,
+    PaddingHorizontal: 13,
+    PaddingVertical: 14,
+    PaddingLeft: 15,
+    PaddingRight: 16,
+    PaddingTop: 17,
+    PaddingBottom: 18,
+    MarginHorizontal: 19,
+    MarginVertical: 20,
+    MarginLeft: 21,
+    MarginRight: 22,
+    MarginTop: 23,
+    MarginBottom: 24,
+    Role: 25,
+    ZIndex: 26,
+    Sticky: 27,
+    Top: 28,
+    Bottom: 29,
+    Left: 30,
+    Right: 31,
+    Overflow: 32,
+    OverflowX: 33,
+    OverflowY: 34,
+    Spacing: 35,
+    Wrap: 36,
+    TextTransform: 37,
+    TextIndent: 38,
+    TextAlign: 39,
+    LineClamp: 40,
+    Opacity: 41,
+    Cursor: 42,
+    Resize: 43,
+    MinHeight: 44,
+    MaxHeight: 45,
+    MinWidth: 46,
+    MaxWidth: 47,
+    WhiteSpace: 48,
+    BorderTopWidth: 49,
+    BorderBottomWidth: 50,
+    BorderLeftWidth: 51,
+    BorderRightWidth: 52,
+    BorderRadius: 53,
+    BorderTopLeftRadius: 54,
+    BorderTopRightRadius: 55,
+    BorderBottomLeftRadius: 56,
+    BorderBottomRightRadius: 57,
+    BorderStyleVertical: 58,
+    BorderStyleHorizontal: 59,
+    BorderLeftStyle: 60,
+    BorderRightStyle: 61,
+    BorderTopStyle: 62,
+    BorderBottomStyle: 63,
+    BorderColor: 64,
+    BorderLeftColor: 65,
+    BorderRightColor: 66,
+    BorderTopColor: 67,
+    BorderBottomColor: 68,
+    AlignSelf: 69,
+    Classes: 70,
+    Anchor: 71,
+    Link: 72,
+    Children: 73,
+    OpenInNewTab: 74,
+    TextStyle: 75,
+    Region: 76,
+    AlignContent: 77,
+    Display: 78,
+    Checked: 79,
+    Enabled: 80,
+    TextInputType: 81,
+    Placeholder: 82,
+    Multiline: 83,
+    DefaultTextInputValue: 84,
+    Loading: 85,
+    Src: 86,
+    YoutubeSrc: 87,
+    Code: 88,
+    ImageSrc: 89,
+    Alt: 90,
+    DocumentProperties: {
+        MetaTitle: 91,
+        MetaOGTitle: 92,
+        MetaTwitterTitle: 93,
+        MetaDescription: 94,
+        MetaOGDescription: 95,
+        MetaTwitterDescription: 96,
+        MetaOGImage: 97,
+        MetaTwitterImage: 98,
+        MetaThemeColor: 99,
+    },
+    Shadow: 100,
+};
+
+
 
 fastn_dom.Loading = {
     Lazy: "lazy",
@@ -296,14 +308,15 @@ fastn_dom.TextStyle = {
 fastn_dom.Resizing = {
     FillContainer: "100%",
     HugContent: "fit-content",
+    Auto: "auto",
     Fixed: (value) => { return value; }
 }
 
 fastn_dom.Spacing = {
-    SpaceEvenly: "space-evenly",
-    SpaceBetween: "space-between",
-    SpaceAround: "space-around",
-    Fixed: (value) => { return value; }
+    SpaceEvenly: [1, "space-evenly"],
+    SpaceBetween: [2, "space-between"],
+    SpaceAround: [3, "space-around"],
+    Fixed: (value) => { return [4, value]; }
 }
 
 
@@ -408,7 +421,60 @@ fastn_dom.WhiteSpace = {
 
 
 fastn_dom.BackgroundStyle = {
-    Solid: (value) => { return value; }
+    Solid: (value) => {
+        return [1, value];
+    },
+    Image: (value) => {
+        return [2, value];
+    },
+    LinearGradient: (value) => {
+        return [3, value];
+    },
+}
+
+fastn_dom.BackgroundRepeat = {
+    Repeat: "repeat",
+    RepeatX: "repeat-x",
+    RepeatY: "repeat-y",
+    NoRepeat: "no-repeat",
+    Space: "space",
+    Round: "round",
+}
+
+fastn_dom.BackgroundSize = {
+    Auto: "auto",
+    Cover: "cover",
+    Contain: "contain",
+    Length: (value) => { return value; },
+}
+
+fastn_dom.BackgroundPosition = {
+    Left: "left",
+    Right: "right",
+    Center: "center",
+    LeftTop: "left top",
+    LeftCenter: "left center",
+    LeftBottom: "left bottom",
+    CenterTop: "center top",
+    CenterCenter: "center center",
+    CenterBottom: "center bottom",
+    RightTop: "right top",
+    RightCenter: "right center",
+    RightBottom: "right bottom",
+    Length: (value) => { return value; },
+}
+
+fastn_dom.LinearGradientDirection = {
+    Angle: (value) => { return `${value}deg`; },
+    Turn: (value) => { return `${value}turn`; },
+    Left: "270deg",
+    Right: "90deg",
+    Top: "0deg",
+    Bottom: "180deg",
+    TopLeft: "315deg",
+    TopRight: "45deg",
+    BottomLeft: "225deg",
+    BottomRight: "135deg",
 }
 
 fastn_dom.FontSize = {
@@ -499,7 +565,16 @@ fastn_dom.Length = {
 
 
 fastn_dom.Event = {
-    Click: 0
+    Click: 0,
+    MouseEnter: 1,
+    MouseLeave: 2,
+    ClickOutside: 3,
+    GlobalKey: (val) => {return [4, val];},
+    GlobalKeySeq: (val) => {return [5, val];},
+    Input: 6,
+    Change: 7,
+    Blur: 8,
+    Focus: 9,
 }
 
 // Node2 -> Intermediate node
@@ -508,43 +583,95 @@ class Node2 {
     #node;
     #kind;
     #parent;
+    #tagName;
+    /**
+     * This is where we store all the attached closures, so we can free them
+     * when we are done.
+     */
     #mutables;
-    constructor(parent, kind) {
+    /**
+     * This is where we store the extraData related to node. This is
+     * especially useful to store data for integrated external library (like
+     * rive).
+     */
+    #extraData;
+    #children;
+    constructor(parentOrSibiling, kind) {
         this.#kind = kind;
+        this.#parent = parentOrSibiling;
+        this.#children = [];
+        let sibiling = undefined;
 
-        let [node, classes] = fastn_utils.htmlNode(kind);
+        if (parentOrSibiling instanceof ParentNodeWithSibiling) {
+            this.#parent = parentOrSibiling.getParent();
+            sibiling = parentOrSibiling.getSibiling();
+        }
+
+        let [node, classes, attributes] = fastn_utils.htmlNode(kind);
+        this.#tagName = node;
         this.#node = fastn_virtual.document.createElement(node);
+        for (let key in attributes) {
+          this.#node.setAttribute(key, attributes[key])
+        }
         for (let c in classes) {
             this.#node.classList.add(classes[c]);
         }
-        this.#parent = parent;
-        // this is where we store all the attached closures, so we can free them when we are done
+
         this.#mutables = [];
+        this.#extraData = {};
         /*if (!!parent.parent) {
             parent = parent.parent();
         }*/
+
+
         if (this.#parent.getNode) {
             this.#parent = this.#parent.getNode();
         }
-        this.#parent.appendChild(this.#node);
+
+        if (fastn_utils.isWrapperNode(this.#tagName)) {
+            this.#parent = parentOrSibiling;
+            return;
+        }
+        if (sibiling) {
+            this.#parent.insertBefore(this.#node, fastn_utils.nextSibling(sibiling, this.#parent));
+        } else {
+            this.#parent.appendChild(this.#node);
+        }
     }
-    parent() {
+    getTagName(){
+        return this.#tagName;
+    }
+    getParent() {
         return this.#parent;
     }
     // for attaching inline attributes
     attachAttribute(property, value) {
+        if (fastn_utils.isNull(value)) {
+            this.#node.removeAttribute(property);
+        }
         this.#node.setAttribute(property, value);
     }
-
     updateTagName(name) {
         if (ssr) {
             this.#node.updateTagName(name);
         }
     }
-
+    updateMetaTitle(value) {
+        if (!ssr && hydrating) {
+            window.document.title = value;
+        }
+    }
+    addMetaTag(tagName, value) {
+        if (!ssr && hydrating) {
+            const metaTag = window.document.createElement('meta');
+            metaTag.setAttribute('name', tagName);
+            metaTag.setAttribute('content', value);
+            document.head.appendChild(metaTag);
+        }
+    }
     // dynamic-class-css
     attachCss(property, value, createClass, className) {
-        const propertyShort = fastn_dom.property_map[property] || property;
+        const propertyShort = fastn_dom.propertyMap[property] || property;
         let cls = `${propertyShort}-${JSON.stringify(value)}`;
         if (!!className) {
            cls = className;
@@ -618,8 +745,144 @@ class Node2 {
         this.#node.classList.add(cls);
         return cls;
     }
+    attachShadow(value) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss("box-shadow", value);
+            return;
+        }
 
-    attachColorCss(property, value) {
+        const color = value.get("color");
+
+        const lightColor = fastn_utils.getStaticValue(color.get("light"));
+        const darkColor = fastn_utils.getStaticValue(color.get("dark"));
+
+        const blur = fastn_utils.getStaticValue(value.get("blur"));
+        const xOffset = fastn_utils.getStaticValue(value.get("x_offset"));
+        const yOffset = fastn_utils.getStaticValue(value.get("y_offset"));
+        const spread = fastn_utils.getStaticValue(value.get("spread"));
+        const inset = fastn_utils.getStaticValue(value.get("inset"));
+
+        const shadowCommonCss = `${inset ? "inset " : ""}${xOffset} ${yOffset} ${blur} ${spread}`;
+        const lightShadowCss =  `${shadowCommonCss} ${lightColor}`;
+        const darkShadowCss = `${shadowCommonCss} ${darkColor}`;
+
+        if (lightShadowCss === darkShadowCss) {
+            this.attachCss("box-shadow", lightShadowCss, false);
+        } else {
+            let lightClass = this.attachCss("box-shadow", lightShadowCss, true);
+            this.attachCss("box-shadow", darkShadowCss, true, `body.dark .${lightClass}`);
+        }
+    }
+    attachLinearGradientCss(value) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss("background-image", value);
+            return;
+        }
+        var lightGradientString = "";
+        var darkGradientString = "";
+
+        let colorsList = value.get("colors").get().getList();
+        let direction = fastn_utils.getStaticValue(value.get("direction"));
+        colorsList.map(function (element) {
+            // LinearGradient RecordInstance
+            let lg_color = element.item;
+
+            let color = lg_color.get("color").get();
+            let lightColor = fastn_utils.getStaticValue(color.get("light"));
+            let darkColor = fastn_utils.getStaticValue(color.get("dark"));
+
+            lightGradientString = `${lightGradientString} ${lightColor}`;
+            darkGradientString = `${darkGradientString} ${darkColor}`;
+
+            let start = fastn_utils.getStaticValue(lg_color.get("start"));
+            if (start !== undefined && start !== null ) {
+                lightGradientString = `${lightGradientString} ${start}`;
+                darkGradientString = `${darkGradientString} ${start}`;
+            }
+
+            let end = fastn_utils.getStaticValue(lg_color.get("end"));
+            if (end !== undefined && end !== null ) {
+                lightGradientString = `${lightGradientString} ${end}`;
+                darkGradientString = `${darkGradientString} ${end}`;
+            }
+
+            let stop_position = fastn_utils.getStaticValue(lg_color.get("stop_position"));
+            if (stop_position !== undefined && stop_position !== null ) {
+                lightGradientString = `${lightGradientString}, ${stop_position}`;
+                darkGradientString = `${darkGradientString}, ${stop_position}`;
+            }
+
+            lightGradientString = `${lightGradientString},`
+            darkGradientString = `${darkGradientString},`
+        });
+
+        lightGradientString = lightGradientString.trim().slice(0, -1);
+        darkGradientString = darkGradientString.trim().slice(0, -1);
+
+        if (lightGradientString === darkGradientString) {
+            this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
+        } else {
+            let lightClass = this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`,true);
+            this.attachCss("background-image", `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
+        }
+    }
+    attachBackgroundImageCss(value) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss("background-repeat", value);
+            this.attachCss("background-position", value);
+            this.attachCss("background-size", value);
+            this.attachCss("background-image", value);
+            return;
+        }
+
+        let src = fastn_utils.getStaticValue(value.get("src"));
+        let lightValue = fastn_utils.getStaticValue(src.get("light"));
+        let darkValue = fastn_utils.getStaticValue(src.get("dark"));
+
+        let position = fastn_utils.getStaticValue(value.get("position"));
+        let positionX = null;
+        let positionY = null;
+        if (position !== null) {
+            positionX = fastn_utils.getStaticValue(position.get("x"));
+            positionY = fastn_utils.getStaticValue(position.get("y"));
+
+            if (positionX !== null) position = `${positionX}`;
+            if (positionY !== null) {
+                if (positionX === null) position = `0px ${positionY}`;
+                else position = `${position} ${positionY}`;
+            }
+        }
+        let repeat = fastn_utils.getStaticValue(value.get("repeat"));
+        let size = fastn_utils.getStaticValue(value.get("size"));
+        let sizeX = null;
+        let sizeY = null;
+        if (size !== null) {
+            sizeX = fastn_utils.getStaticValue(size.get("x"));
+            sizeY = fastn_utils.getStaticValue(size.get("y"));
+
+            if (sizeX !== null) size = `${sizeX}`;
+            if (sizeY !== null) {
+                if (sizeX === null) size = `0px ${sizeY}`;
+                else size = `${size} ${sizeY}`;
+            }
+        }
+
+        if (repeat !== null) this.attachCss("background-repeat", repeat);
+        if (position !== null) this.attachCss("background-position", position);
+        if (size !== null)  this.attachCss("background-size", size);
+
+        if (lightValue === darkValue) {
+            this.attachCss("background-image", `url(${lightValue})`, false);
+        } else {
+            let lightClass = this.attachCss("background-image", `url(${lightValue})`, true);
+            this.attachCss("background-image", `url(${darkValue})`, true, `body.dark .${lightClass}`);
+        }
+    }
+    attachColorCss(property, value, visited) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss(property, value);
+            return;
+        }
         let lightValue = fastn_utils.getStaticValue(value.get("light"));
         let darkValue = fastn_utils.getStaticValue(value.get("dark"));
         if (lightValue === darkValue) {
@@ -627,9 +890,17 @@ class Node2 {
         } else {
             let lightClass = this.attachCss(property, lightValue, true);
             this.attachCss(property, darkValue, true, `body.dark .${lightClass}`);
+            if (visited) {
+                this.attachCss(property, lightValue, true, `.${lightClass}:visited`);
+                this.attachCss(property, darkValue, true, `body.dark  .${lightClass}:visited`);
+            }
         }
     }
     attachRoleCss(value) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss('role', value);
+            return;
+        }
         let desktopValue = fastn_utils.getStaticValue(value.get("desktop"));
         let mobileValue = fastn_utils.getStaticValue(value.get("mobile"));
         if (fastn_utils.sameResponsiveRole(desktopValue, mobileValue)) {
@@ -640,6 +911,12 @@ class Node2 {
         }
     }
     attachTextStyles(styles) {
+        if (fastn_utils.isNull(styles)) {
+            this.attachCss('font-style', styles);
+            this.attachCss('font-weight', styles);
+            this.attachCss('text-decoration', styles);
+            return;
+        }
         for (var s of styles) {
             switch (s) {
               case 'italic':
@@ -654,8 +931,11 @@ class Node2 {
             }
         }
     }
-
     attachAlignContent(value, node_kind) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss('align-items', value);
+            return;
+        }
         if (node_kind === fastn_dom.ElementKind.Row) {
             switch (value) {
                 case 'top-left':
@@ -696,16 +976,29 @@ class Node2 {
             }
         }
     }
-
     setStaticProperty(kind, value, inherited) {
         // value can be either static or mutable
         let staticValue = fastn_utils.getStaticValue(value);
         if (kind === fastn_dom.PropertyKind.Children) {
-            if (Array.isArray(staticValue)) {
-                staticValue.forEach(func =>
-                    fastn_utils.getStaticValue(func.item)(this, inherited));
+            if (fastn_utils.isWrapperNode(this.#tagName)) {
+                let parentWithSibiling = this.#parent;
+                if (Array.isArray(staticValue)) {
+                    staticValue.forEach((func, index) => {
+                        if (index !== 0) {
+                            parentWithSibiling = new ParentNodeWithSibiling(this.#parent.getParent(), this.#children[index-1]);
+                        }
+                        this.#children.push(fastn_utils.getStaticValue(func.item)(parentWithSibiling, inherited))
+                    });
+                } else {
+                    this.#children.push(staticValue(parentWithSibiling, inherited));
+                }
             } else {
-                staticValue(this, inherited);
+                if (Array.isArray(staticValue)) {
+                    staticValue.forEach(func =>
+                        this.#children.push(fastn_utils.getStaticValue(func.item)(this, inherited)));
+                } else {
+                    this.#children.push(staticValue(this, inherited));
+                }
             }
         } else if (kind === fastn_dom.PropertyKind.Id) {
             this.#node.id = staticValue;
@@ -783,6 +1076,8 @@ class Node2 {
             this.attachCss("border-bottom-style", staticValue);
         } else if (kind === fastn_dom.PropertyKind.ZIndex) {
             this.attachCss("z-index", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Shadow) {
+            this.attachShadow(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Classes) {
             // todo: this needs to be fixed
             this.#node.classList.add(staticValue.map(obj => fastn_utils.getStaticValue(obj.item)));
@@ -803,7 +1098,7 @@ class Node2 {
                 this.attachCss("position", "static");
                 break;
               default:
-                this.attachCss("position", "static");
+                this.attachCss("position", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.Top) {
             this.attachCss("top", staticValue);
@@ -820,15 +1115,24 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.OverflowY) {
             this.attachCss("overflow-y", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Spacing) {
-            switch (staticValue) {
-              case 'space-evenly':
-              case 'space-between':
-              case 'space-around':
+            if (fastn_utils.isNull(staticValue)) {
                 this.attachCss("justify-content", staticValue);
-                break;
-              default:
                 this.attachCss("gap", staticValue);
+                return;
             }
+
+            let spacingType = staticValue[0];
+            switch (spacingType) {
+                case fastn_dom.Spacing.SpaceEvenly[0]:
+                case fastn_dom.Spacing.SpaceBetween[0]:
+                case fastn_dom.Spacing.SpaceAround[0]:
+                    this.attachCss("justify-content", staticValue[1]);
+                    break;
+                case fastn_dom.Spacing.Fixed()[0]:
+                    this.attachCss("gap", staticValue[1]);
+                    break;
+            }
+
         } else if (kind === fastn_dom.PropertyKind.Wrap) {
             // sticky is boolean type
             switch (staticValue) {
@@ -841,7 +1145,7 @@ class Node2 {
                 this.attachCss("flex-wrap", "no-wrap");
                 break;
               default:
-                this.attachCss("flex-wrap", "no-wrap");
+                this.attachCss("flex-wrap", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextTransform) {
             this.attachCss("text-transform", staticValue);
@@ -888,24 +1192,46 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.BorderBottomColor) {
             this.attachColorCss("border-bottom-color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
-            this.attachColorCss("color", staticValue);
+            this.attachColorCss("color", staticValue, true);
         } else if (kind === fastn_dom.PropertyKind.Background) {
-            this.attachColorCss("background-color", staticValue);
+            if (fastn_utils.isNull(staticValue)) {
+                this.attachColorCss("background-color", staticValue);
+                this.attachBackgroundImageCss(staticValue);
+                this.attachLinearGradientCss(staticValue);
+                return;
+            }
+
+            let backgroundType = staticValue[0];
+            switch (backgroundType) {
+                case fastn_dom.BackgroundStyle.Solid()[0]:
+                    this.attachColorCss("background-color", staticValue[1]);
+                    break;
+                case fastn_dom.BackgroundStyle.Image()[0]:
+                    this.attachBackgroundImageCss(staticValue[1]);
+                    break;
+                case fastn_dom.BackgroundStyle.LinearGradient()[0]:
+                    this.attachLinearGradientCss(staticValue[1]);
+                    break;
+            }
         } else if (kind === fastn_dom.PropertyKind.Display) {
             this.attachCss("display", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Checked) {
             switch (staticValue) {
                 case "true":
                 case true:
-                    this.attachAttribute("checked", null);
+                    this.attachAttribute("checked", "");
                     break;
+                default:
+                    this.attachAttribute("checked", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.Enabled) {
             switch (staticValue) {
                 case "false":
                 case false:
-                    this.attachAttribute("disabled", null);
+                    this.attachAttribute("disabled", "");
                     break;
+                default:
+                    this.attachAttribute("disabled", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextInputType) {
             this.attachAttribute("type", staticValue);
@@ -936,6 +1262,8 @@ class Node2 {
               case true:
                 this.attachAttribute("target", "_blank");
                 break;
+              default:
+                this.attachAttribute("target", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextStyle) {
             let styles = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
@@ -953,17 +1281,69 @@ class Node2 {
             this.attachAttribute("loading", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Src) {
             this.attachAttribute("src", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.ImageSrc) {
+            ftd.dark_mode.addClosure(fastn.closure(() => {
+                if (fastn_utils.isNull(staticValue)) {
+                    this.attachAttribute("src", staticValue);
+                    return;
+                }
+                const is_dark_mode = ftd.dark_mode.get();
+                const src = staticValue.get(is_dark_mode ? 'dark' : 'light');
+
+                this.attachAttribute("src", fastn_utils.getStaticValue(src));
+            }).addNodeProperty(this, null, inherited));
+            this.#mutables.push(ftd.dark_mode);
+        } else if (kind === fastn_dom.PropertyKind.Alt) {
+            this.attachAttribute("alt", staticValue);
         } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
+            if (fastn_utils.isNull(staticValue)) {
+                this.attachAttribute("src", staticValue);
+                return;
+            }
             const id_pattern = "^([a-zA-Z0-9_-]{11})$";
             let id = staticValue.match(id_pattern);
             this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
-        } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
-            kind === fastn_dom.PropertyKind.StringValue
-        ) {
+        } else if (kind === fastn_dom.PropertyKind.Code) {
             this.#node.innerHTML = staticValue;
-        } else {
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle) {
+            this.updateMetaTitle(staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle) {
+            this.addMetaTag("og:title", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterTitle) {
+            this.addMetaTag("twitter:title", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaDescription) {
+            this.addMetaTag("description", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription) {
+            this.addMetaTag("og:description", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription) {
+            this.addMetaTag("twitter:description", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGImage) {
+            // staticValue is of ftd.raw-image-src RecordInstance type
+            if (!fastn_utils.isNull(staticValue)) {
+                this.addMetaTag("og:image", fastn_utils.getStaticValue(staticValue.get('src')));
+            }
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage) {
+            // staticValue is of ftd.raw-image-src RecordInstance type
+            if (!fastn_utils.isNull(staticValue)) {
+                this.addMetaTag("twitter:image", fastn_utils.getStaticValue(staticValue.get('src')));
+            }
+        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor) {
+            // staticValue is of ftd.color RecordInstance type
+            if (!fastn_utils.isNull(staticValue)) {
+                this.addMetaTag("theme-color", fastn_utils.getStaticValue(staticValue.get('light')));
+            }
+        } else if (kind === fastn_dom.PropertyKind.IntegerValue
+            || kind === fastn_dom.PropertyKind.DecimalValue
+            || kind === fastn_dom.PropertyKind.BooleanValue) {
+            this.#node.innerHTML = staticValue;
+        } else if (kind === fastn_dom.PropertyKind.StringValue) {
+            if (!ssr) {
+                staticValue = fastn_utils.markdown_inline(staticValue);
+            }
+            this.#node.innerHTML = staticValue;
+        }else {
             throw ("invalid fastn_dom.PropertyKind: " + kind);
         }
     }
@@ -977,7 +1357,7 @@ class Node2 {
     setDynamicProperty(kind, deps, func, inherited) {
         let closure = fastn.closure(func).addNodeProperty(this, kind, inherited);
         for (let dep in deps) {
-            if (!deps[dep].addClosure) {
+            if (fastn_utils.isNull(deps[dep]) || !deps[dep].addClosure) {
                 continue;
             }
             deps[dep].addClosure(closure);
@@ -987,9 +1367,33 @@ class Node2 {
     getNode() {
         return this.#node;
     }
+    getExtraData() {
+        return this.#extraData
+    }
+    getChildren() {
+        return this.#children;
+    }
     addEventHandler(event, func) {
         if (event === fastn_dom.Event.Click) {
             this.#node.onclick = func;
+        } else if (event === fastn_dom.Event.MouseEnter) {
+            this.#node.onmouseenter = func;
+        } else if (event === fastn_dom.Event.MouseLeave) {
+            this.#node.onmouseleave = func;
+        } else if (event === fastn_dom.Event.ClickOutside) {
+            ftd.clickOutsideEvents.push([this, func]);
+        } else if (!!event[0] && event[0] === fastn_dom.Event.GlobalKey()[0]) {
+            ftd.globalKeyEvents.push([this, func, event[1]]);
+        } else if (!!event[0] && event[0] === fastn_dom.Event.GlobalKeySeq()[0]) {
+            ftd.globalKeySeqEvents.push([this, func, event[1]]);
+        } else if (event === fastn_dom.Event.Input) {
+            this.#node.oninput = func;
+        } else if (event === fastn_dom.Event.Change) {
+            this.#node.onchange = func;
+        } else if (event === fastn_dom.Event.Blur) {
+            this.#node.onblur = func;
+        } else if (event === fastn_dom.Event.Focus) {
+            this.#node.onfocus = func;
         }
     }
     destroy() {
@@ -1004,6 +1408,7 @@ class Node2 {
 }
 
 class ConditionalDom {
+    #marker;
     #parent;
     #node_constructor;
     #condition;
@@ -1011,63 +1416,118 @@ class ConditionalDom {
     #conditionUI;
 
     constructor(parent, deps, condition, node_constructor) {
-        let domNode = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Div);
+        this.#marker = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Comment);
+        this.#parent = parent;
 
         this.#conditionUI = null;
         let closure = fastn.closure(() => {
             if (condition()) {
                 if (this.#conditionUI) {
+                    if (Array.isArray(this.#conditionUI)) {
+                        while (this.#conditionUI.length > 0) {
+                            let poppedElement = this.#conditionUI.pop();
+                            poppedElement.destroy();
+                        }
+                    } else {
+                        this.#conditionUI.destroy();
+                    }
+                }
+                this.#conditionUI = node_constructor(new ParentNodeWithSibiling(this.#parent, this.#marker));
+                if (fastn_utils.isWrapperNode(this.#conditionUI.getTagName())) {
+                    this.#conditionUI = this.#conditionUI.getChildren();
+                }
+            } else if (this.#conditionUI) {
+                if (Array.isArray(this.#conditionUI)) {
+                    while (this.#conditionUI.length > 0) {
+                        let poppedElement = this.#conditionUI.pop();
+                        poppedElement.destroy();
+                    }
+                } else {
                     this.#conditionUI.destroy();
                 }
-                this.#conditionUI = node_constructor(domNode);
-            } else if (this.#conditionUI) {
-                this.#conditionUI.destroy();
                 this.#conditionUI = null;
             }
         })
-        deps.forEach(dep => dep.addClosure(closure));
+        deps.forEach(dep => {
+            if (!fastn_utils.isNull(dep) && dep.addClosure) {
+                dep.addClosure(closure);
+            }
+        });
 
-
-        this.#parent = domNode;
         this.#node_constructor = node_constructor;
         this.#condition = condition;
         this.#mutables = [];
     }
 
     getParent() {
-        return this.#parent;
+        let nodes =  [this.#marker];
+        if (this.#conditionUI) {
+            nodes.push(this.#conditionUI);
+        }
+        nodes
     }
 }
 
-fastn_dom.createKernel = function (parent, kind) {
-    return new Node2(parent, kind);
+fastn_dom.createKernel = function (parent, kind, sibiling) {
+    return new Node2(parent, kind, sibiling);
 }
 
 fastn_dom.conditionalDom = function (parent, deps, condition, node_constructor) {
     return new ConditionalDom(parent, deps, condition, node_constructor);
 }
 
+class ParentNodeWithSibiling {
+    #parent;
+    #sibiling;
+    constructor(parent, sibiling) {
+        this.#parent = parent;
+        this.#sibiling = sibiling;
+    }
+    getParent() {
+        return this.#parent;
+    }
+    getSibiling() {
+        return this.#sibiling;
+    }
+}
+
 class ForLoop {
     #node_constructor;
     #list;
     #wrapper;
+    #parent;
+    #nodes;
     constructor(parent, node_constructor, list) {
-        this.#wrapper = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Div);
+        this.#wrapper = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Comment);
+        this.#parent = parent;
         this.#node_constructor = node_constructor;
         this.#list = list;
+        this.#nodes = [];
+
         for (let idx in list.getList()) {
-            // let v = list.get(idx);
-            // node_constructor(this.#wrapper, v.item, v.index).done();
-            this.createNode(idx);
+            let node = this.createNode(idx);
+            this.#nodes.push(node);
         }
     }
     createNode(index) {
+        let parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#wrapper);
+        if (index !== 0) {
+            parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#nodes[index-1]);
+        }
         let v = this.#list.get(index);
-        this.#node_constructor(this.#wrapper, v.item, v.index);
+        return this.#node_constructor(parentWithSibiling, v.item, v.index);
+    }
+
+    getWrapper() {
+        return this.#wrapper;
+    }
+
+    insertNode(index, node) {
+        this.#nodes.splice(index, 0, node);
     }
 
     getParent() {
-        return this.#wrapper;
+        return this.#parent;
     }
 }
 

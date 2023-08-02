@@ -256,6 +256,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: true,
             })
         ),
         (
@@ -293,6 +294,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: true
             })
         ),
         (
@@ -338,6 +340,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: true
             })
         ),
         (
@@ -375,6 +378,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: true
             })
         ),
         (
@@ -412,6 +416,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: true
             })
         ),
         (
@@ -449,6 +454,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: true
             })
         ),
         (
@@ -486,6 +492,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: true
             })
         ),
         (
@@ -519,6 +526,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: false
             })
         ),
         (
@@ -552,6 +560,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: false
             })
         ),
         (
@@ -597,6 +606,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: false
             })
         ),
         (
@@ -618,6 +628,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: false
             })
         ),
         (
@@ -639,6 +650,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: false
             })
         ),
         (
@@ -660,6 +672,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: false
             })
         ),
         (
@@ -705,6 +718,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: true
             })
         ),
         (
@@ -738,6 +752,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: true
             })
         ),
         (
@@ -783,6 +798,53 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: false
+            })
+        ),
+        (
+            "ftd#set-boolean".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#set-boolean".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "a".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::boolean(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "v".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::boolean(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "a = v".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+                external_implementation: false
             })
         ),
         (
@@ -828,6 +890,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: false
             })
         ),
         (
@@ -873,6 +936,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
+                external_implementation: false
             })
         ),
         (
@@ -3401,6 +3465,32 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 conditional_value: vec![],
                 line_number: 0,
                 is_static: false,
+            }),
+        ),
+        (
+            "ftd#redirect".to_string(),
+            ftd::interpreter::Thing::Component(ftd::interpreter::ComponentDefinition {
+                name: "ftd#redirect".to_string(),
+                arguments: vec![
+                    ftd::interpreter::Argument::default(
+                    "url",
+                    ftd::interpreter::Kind::string()
+                        .into_kind_data().caption_or_body(),
+                    ),
+                    ftd::interpreter::Argument::default_with_value(
+                        "code",
+                        ftd::interpreter::Kind::integer()
+                            .into_kind_data(),
+                        ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::Integer { value: 308 },
+                            is_mutable: false,
+                            line_number: 0,
+                        }
+                    ),
+                ],
+                definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+                css: None,
+                line_number: 0,
             }),
         ),
         (
