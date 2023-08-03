@@ -9752,6 +9752,11 @@ pub fn code_function() -> ftd::interpreter::ComponentDefinition {
                         .into_optional()
                         .into_kind_data(),
                 ),
+                ftd::interpreter::Argument::default_with_value(
+                    "show-line-number",
+                    ftd::interpreter::Kind::boolean().into_kind_data(),
+                    ftd::interpreter::Value::Boolean { value: false }.into_property_value(false, 0),
+                ),
             ],
         ]
         .concat()

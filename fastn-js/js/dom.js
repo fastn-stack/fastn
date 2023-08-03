@@ -246,6 +246,7 @@ fastn_dom.PropertyKind = {
     Shadow: 100,
     CodeTheme: 101,
     CodeLanguage: 102,
+    CodeShowLineNumber: 103
 };
 
 
@@ -1331,6 +1332,12 @@ class Node2 {
                 staticValue = modifiedText;
             }
             this.#children[0].getNode().innerHTML= staticValue;
+        }  else if (kind === fastn_dom.PropertyKind.CodeShowLineNumber) {
+            if (staticValue) {
+                this.#node.classList.add("line-numbers");
+            } else {
+                this.#node.classList.remove("line-numbers");
+            }
         } else if (kind === fastn_dom.PropertyKind.CodeTheme) {
             if (!ssr) {
                 fastn_utils.addCodeTheme(staticValue);

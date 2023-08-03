@@ -87,6 +87,7 @@ body {
 
 input, code {
     vertical-align: middle;
+    font: inherit;
 }
 pre {
     white-space: break-spaces;
@@ -104,9 +105,12 @@ iframe {
 }
 
 pre code {
+    /*
+    This break show-line-number in `ftd.code`
     overflow-x: auto;
+    */
     display: block;
-    padding: 0 10px !important;
+    padding: 0 1em !important;
 }
 
 /* Common styles  */

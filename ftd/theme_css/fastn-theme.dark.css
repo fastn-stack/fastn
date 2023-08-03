@@ -12,13 +12,13 @@ code[class*=language-].fastn-theme-dark,
 pre[class*=language-].fastn-theme-dark {
     color: #fff;
     text-shadow: 0 1px 1px #000;
-    font-family: Menlo, Monaco, "Courier New", monospace;
+    /*font-family: Menlo, Monaco, "Courier New", monospace;*/
     direction: ltr;
     text-align: left;
     word-spacing: normal;
     white-space: pre;
     word-wrap: normal;
-    line-height: 1.4;
+    /*line-height: 1.4;*/
     background: none;
     border: 0;
 

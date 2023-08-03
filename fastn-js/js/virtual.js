@@ -9,6 +9,10 @@ class ClassList {
     add(item) {
         this.#classes.push(item);
     }
+
+    remove(itemToRemove) {
+        this.#classes.filter(item => item !== itemToRemove)
+    }
     toString() {
         return this.#classes.join(' ');
     }

@@ -468,6 +468,7 @@ pub struct Code {
     pub code: ftd::js::Value,
     pub lang: ftd::js::Value,
     pub theme: ftd::js::Value,
+    pub show_line_number: ftd::js::Value,
 }
 
 impl Code {
@@ -508,6 +509,12 @@ impl Code {
                 component_definition.arguments.as_slice(),
                 ftd::js::Value::from_str_value(ftd::js::CODE_DEFAULT_THEME),
             ),
+            show_line_number: ftd::js::value::get_optional_js_value_with_default(
+                "show-line-number",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            )
+            .unwrap(),
         }
     }
 
@@ -544,6 +551,15 @@ impl Code {
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             self.theme.to_set_property(
                 fastn_js::PropertyKind::CodeTheme,
+                doc,
+                kernel.name.as_str(),
+                rdata,
+            ),
+        ));
+
+        component_statements.push(fastn_js::ComponentStatement::SetProperty(
+            self.show_line_number.to_set_property(
+                fastn_js::PropertyKind::CodeShowLineNumber,
                 doc,
                 kernel.name.as_str(),
                 rdata,
