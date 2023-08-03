@@ -131,7 +131,7 @@ pre[class*=language-].fastn-theme-dark {
 
 .fastn-theme-dark .line-highlight.line-highlight:before,
 .fastn-theme-dark .line-highlight.line-highlight[data-end]:after {
-    top: .3em;
+    top: auto;
     background-color: rgba(255, 255, 255, .3);
     color: #fff;
     -moz-border-radius: 8px;

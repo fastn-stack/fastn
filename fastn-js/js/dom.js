@@ -1320,6 +1320,16 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Code) {
+            if (!fastn_utils.isNull(staticValue)) {
+                let {
+                    modifiedText,
+                    highlightedLines
+                } = fastn_utils.findAndRemoveHighlighter(staticValue);
+                if (highlightedLines.length !== 0) {
+                    this.attachAttribute("data-line", highlightedLines);
+                }
+                staticValue = modifiedText;
+            }
             this.#children[0].getNode().innerHTML= staticValue;
         } else if (kind === fastn_dom.PropertyKind.CodeTheme) {
             if (!ssr) {

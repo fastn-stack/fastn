@@ -111,6 +111,10 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
                         r#"
                             <script src="ftd/ftd/markdown.js"></script>
                             <script src="ftd/ftd/prism.js"></script>
+                            <script src="ftd/ftd/prism-line-highlight.js"></script>
+                            <script src="ftd/ftd/prism-line-numbers.js"></script>
+                            <link rel="stylesheet" href="ftd/ftd/prism-line-highlight.css">
+                            <link rel="stylesheet" href="ftd/ftd/prism-line-numbers.css">
                             <script>{}</script>
                         "#,
                         ftd::js::all_js_without_test()
