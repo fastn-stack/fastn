@@ -192,7 +192,8 @@ $grid-view.body
 -- ftd.desktop:
 
 -- ftd.row:
-spacing.fixed.px: 16
+width: fill-container
+spacing.fixed.px: 24
 classes: wrapper
 
 -- grid-of-items: $obj.title
