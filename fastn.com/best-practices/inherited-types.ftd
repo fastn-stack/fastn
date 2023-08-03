@@ -5,7 +5,7 @@
 Using `inherited` types for colors and roles allows for greater flexibility in
 using different color schemes and typography.
 
--- utils.code-display: `inherited-colors`: Prefer using `inherited.colors`to give colors
+-- utils.code-display: `inherited-colors`: Prefer using `inherited.colors` to give colors
 id: inherited-colors
 
 `inherited.colors` are part of `fastn` design system. If you use custom /
