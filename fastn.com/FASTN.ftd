@@ -11,6 +11,7 @@ favicon: /-/fastn.com/images/favicon.svg
 -- fastn.dependency: fastn-community.github.io/winter-cs
 -- fastn.dependency: fastn-community.github.io/footer
 -- fastn.dependency: fastn-community.github.io/spectrum-ds
+-- fastn.dependency: fastn-community.github.io/pattern-business-card
 -- fastn.dependency: fifthtry.github.io/admonitions
 -- fastn.dependency: fastn-community.github.io/banner
 -- fastn.dependency: fifthtry.github.io/button
