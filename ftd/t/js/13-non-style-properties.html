@@ -8,7 +8,8 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column w-1 ali-2"><a data-id="3" href="https://www.fastn.com" class="m-3">This is a link</a></div><div data-id="4" class="ft_column w-1 ali-2"><a data-id="5" href="https://www.fastn.com" target="_blank" class="m-3">This is a link (will open in new tab)</a></div><div data-id="6" class="ft_column w-1 mt-4 mb-5"><input data-id="7" type="checkbox" checked></input><input data-id="8" type="checkbox" checked="false" disabled></input></div><div data-id="9" class="ft_column w-1 mt-4 mb-5"><input data-id="10" placeholder="Enter some text"></input><textarea data-id="11" placeholder="Multiline input"></textarea><input data-id="12" type="password"></input><input data-id="13" placeholder="This would be disabled" disabled></input><input data-id="14" value="This is default text"></input></div><iframe data-id="15" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik"></iframe><pre data-id="16" class="language-ftd fastn-theme-dark"><code data-id="17" class="language-ftd fastn-theme-dark">-- ftd.text: Hello World</code></pre></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column w-1 ali-2"><a data-id="3" href="https://www.fastn.com" class="m-3">This is a link</a></div><div data-id="4" class="ft_column w-1 ali-2"><a data-id="5" href="https://www.fastn.com" target="_blank" class="m-3">This is a link (will open in new tab)</a></div><div data-id="6" class="ft_column w-1 mt-4 mb-5"><input data-id="7" type="checkbox" checked></input><input data-id="8" type="checkbox" checked="false" disabled></input></div><div data-id="9" class="ft_column w-1 mt-4 mb-5"><input data-id="10" placeholder="Enter some text"></input><textarea data-id="11" placeholder="Multiline input"></textarea><input data-id="12" type="password"></input><input data-id="13" placeholder="This would be disabled" disabled></input><input data-id="14" value="This is default text"></input></div><iframe data-id="15" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik"></iframe><pre data-id="16" class="language-ftd fastn-theme-dark"><code data-id="17" class="language-ftd fastn-theme-dark">-- ftd.text: Hello World
+</code></pre></body><style id="styles">
     .w-1 { width: 100%; }
 	.ali-2 { align-items: center; }
 	.m-3 { margin: 20px; }
@@ -87,6 +88,7 @@ let main = function (parent) {
   parenti5.setProperty(fastn_dom.PropertyKind.Code, "-- ftd.text: Hello World", inherited);
   parenti5.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
   parenti5.setProperty(fastn_dom.PropertyKind.CodeTheme, "fastn-theme.dark", inherited);
+  parenti5.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
 }
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "ftd/ftd/theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "ftd/ftd/theme_css/fastn-theme.light.css";

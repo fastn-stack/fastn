@@ -237,7 +237,56 @@ let fastn_utils = {
             fastn_utils.addCssFile(themeCssUrl);
             fastn_dom.codeData.addedCssFile.push(theme);
         }
-    }
+    },
+
+    /**
+     * Searches for highlighter occurrences in the text, removes them,
+     * and returns the modified text along with highlighted line numbers.
+     *
+     * @param {string} text - The input text to process.
+     * @returns {{ modifiedText: string, highlightedLines: number[] }}
+     *   Object containing modified text and an array of highlighted line numbers.
+     *
+     * @example
+     * const text = `/-- ftd.text: Hello ;; hello
+     *
+     * -- some-component: caption-value
+     * attr-name: attr-value ;; <hl>
+     *
+     *
+     * -- other-component: caption-value ;; <hl>
+     * attr-name: attr-value`;
+     *
+     * const result = findAndRemoveHighlighter(text);
+     * console.log(result.modifiedText);
+     * console.log(result.highlightedLines);
+     */
+    findAndRemoveHighlighter(text) {
+        const lines = text.split('\n');
+        const highlighter = ';; <hl>';
+        const result = {
+            modifiedText: '',
+            highlightedLines: ''
+        };
+
+        let highlightedLines = [];
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            const highlighterIndex = line.indexOf(highlighter);
+
+            if (highlighterIndex !== -1) {
+                highlightedLines.push(i + 1); // Adding 1 to convert to human-readable line numbers
+                result.modifiedText += line.substring(0, highlighterIndex) + line.substring(highlighterIndex + highlighter.length) + '\n';
+            } else {
+                result.modifiedText += line + '\n';
+            }
+        }
+
+        result.highlightedLines = fastn_utils.private.mergeNumbers(highlightedLines);
+
+        return result;
+    },
+
 
 }
 
@@ -303,6 +352,48 @@ fastn_utils.private = {
      */
     repeated_space(n) {
         return Array.from({ length: n }, () => ' ').join('');
+    },
+
+    /**
+     * Merges consecutive numbers in a comma-separated list into ranges.
+     *
+     * @param {string} input - Comma-separated list of numbers.
+     * @returns {string} Merged number ranges.
+     *
+     * @example
+     * const input = '1,2,3,5,6,7,8,9,11';
+     * const output = mergeNumbers(input);
+     * console.log(output); // Output: '1-3,5-9,11'
+     */
+    mergeNumbers(numbers) {
+        if (numbers.length === 0) {
+            return "";
+        }
+        const mergedRanges = [];
+
+        let start = numbers[0];
+        let end = numbers[0];
+
+        for (let i = 1; i < numbers.length; i++) {
+            if (numbers[i] === end + 1) {
+                end = numbers[i];
+            } else {
+                if (start === end) {
+                    mergedRanges.push(start.toString());
+                } else {
+                    mergedRanges.push(`${start}-${end}`);
+                }
+                start = end = numbers[i];
+            }
+        }
+
+        if (start === end) {
+            mergedRanges.push(start.toString());
+        } else {
+            mergedRanges.push(`${start}-${end}`);
+        }
+
+        return mergedRanges.join(',');
     }
 }
 

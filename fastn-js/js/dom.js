@@ -248,6 +248,7 @@ fastn_dom.PropertyKind = {
     Shadow: 100,
     CodeTheme: 101,
     CodeLanguage: 102,
+    CodeShowLineNumber: 103
 };
 
 
@@ -1370,7 +1371,23 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Code) {
+            if (!fastn_utils.isNull(staticValue)) {
+                let {
+                    modifiedText,
+                    highlightedLines
+                } = fastn_utils.findAndRemoveHighlighter(staticValue);
+                if (highlightedLines.length !== 0) {
+                    this.attachAttribute("data-line", highlightedLines);
+                }
+                staticValue = modifiedText;
+            }
             this.#children[0].getNode().innerHTML= staticValue;
+        }  else if (kind === fastn_dom.PropertyKind.CodeShowLineNumber) {
+            if (staticValue) {
+                this.#node.classList.add("line-numbers");
+            } else {
+                this.#node.classList.remove("line-numbers");
+            }
         } else if (kind === fastn_dom.PropertyKind.CodeTheme) {
             if (!ssr) {
                 fastn_utils.addCodeTheme(staticValue);

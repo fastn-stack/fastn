@@ -260,6 +260,13 @@ pub async fn default_build_files(
         fastn_core::utils::update(save_prism_js, prism_js_content.as_bytes())
             .await
             .ok();
+
+        let prism_css_content = ftd::prism_css();
+        let hashed_prism_css_name = fastn_core::utils::hashed_prism_css();
+        let save_prism_css = base_path.join(hashed_prism_css_name);
+        fastn_core::utils::update(save_prism_css, prism_css_content.as_bytes())
+            .await
+            .ok();
     } else {
         let default_css_content = ftd::css();
         let hashed_css_name = fastn_core::utils::hashed_default_css_name();

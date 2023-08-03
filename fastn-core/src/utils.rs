@@ -647,11 +647,13 @@ pub fn replace_markers_2023(
                     <script src="{}"></script>
                     <script src="{}"></script>
                     <script src="{}"></script>
+                    <link rel="stylesheet" href="{}">
                     {}
                 "#,
                 hashed_markdown_js(),
                 hashed_prism_js(),
                 hashed_default_ftd_js(),
+                hashed_prism_css(),
                 scripts
             )
             .as_str(),
@@ -869,11 +871,19 @@ pub fn hashed_markdown_js() -> &'static str {
     &MARKDOWN_HASH
 }
 
-static PRISM_HASH: once_cell::sync::Lazy<String> =
-    once_cell::sync::Lazy::new(|| format!("prism-{}.js", generate_hash(ftd::prism_js()),));
+static PRISM_JS_HASH: once_cell::sync::Lazy<String> =
+    once_cell::sync::Lazy::new(|| format!("prism-{}.js", generate_hash(ftd::prism_js().as_str()),));
 
 pub fn hashed_prism_js() -> &'static str {
-    &PRISM_HASH
+    &PRISM_JS_HASH
+}
+
+static PRISM_CSS_HASH: once_cell::sync::Lazy<String> = once_cell::sync::Lazy::new(|| {
+    format!("prism-{}.css", generate_hash(ftd::prism_css().as_str()),)
+});
+
+pub fn hashed_prism_css() -> &'static str {
+    &PRISM_CSS_HASH
 }
 
 static CODE_THEME_HASH: once_cell::sync::Lazy<ftd::Map<String>> =
