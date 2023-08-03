@@ -170,6 +170,7 @@ impl fastn_js::ElementKind {
             fastn_js::ElementKind::TextInput => "fastn_dom.ElementKind.TextInput",
             fastn_js::ElementKind::Rive => "fastn_dom.ElementKind.Rive",
             fastn_js::ElementKind::Document => "fastn_dom.ElementKind.Document",
+            fastn_js::ElementKind::Code => "fastn_dom.ElementKind.Code",
         }
     }
 }
@@ -910,7 +911,8 @@ impl ExpressionGenerator {
             let prefix = arguments
                 .iter()
                 .find_map(|v| {
-                    if value.to_string().eq(&v.0) {
+                    if value.to_string().eq(&v.0) || value.starts_with(format!("{}.", v.0).as_str())
+                    {
                         v.1.clone()
                     } else {
                         None

@@ -274,6 +274,18 @@ impl VariableValue {
         }
     }
 
+    pub(crate) fn record_name(&self) -> Option<String> {
+        let mut name = None;
+        let inner_value = self.inner();
+        if let Some(ftd::ast::VariableValue::Record {
+            name: record_name, ..
+        }) = inner_value.as_ref()
+        {
+            name = Some(record_name.to_owned());
+        }
+        name
+    }
+
     pub fn string(&self, doc_id: &str) -> ftd::ast::Result<String> {
         match self {
             VariableValue::String { value, .. } => Ok(value.to_string()),

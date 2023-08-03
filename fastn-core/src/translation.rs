@@ -114,13 +114,13 @@ impl TranslatedDocument {
             original_latest: &u128,
         ) -> fastn_core::Result<String> {
             let last_marked_on_path = fastn_core::utils::history_path(
-                original.get_id().as_str(),
+                original.get_id(),
                 config.original_path()?.as_str(),
                 last_marked_on,
             );
             let last_marked_on_data = tokio::fs::read_to_string(last_marked_on_path).await?;
             let original_latest_path = fastn_core::utils::history_path(
-                original.get_id().as_str(),
+                original.get_id(),
                 config.original_path()?.as_str(),
                 original_latest,
             );

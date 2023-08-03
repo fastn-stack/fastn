@@ -74,6 +74,17 @@ pub fn interpret_helper(
     Ok(document)
 }
 
+fn test_available_code_themes() -> String {
+    let themes = ftd::theme_css();
+    let mut result = vec![];
+    for theme in themes.keys() {
+        result.push(format!(
+            "fastn_dom.codeData.availableThemes[\"{theme}\"] = \"ftd/ftd/theme_css/{theme}.css\";"
+        ))
+    }
+    result.join("\n")
+}
+
 #[track_caller]
 fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathBuf) {
     let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
@@ -84,7 +95,10 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
         fastn_js::ssr_with_js_string(format!("{js_ftd_script}\n{js_document_script}").as_str());
 
     let html_str = ftd::ftd_js_html()
-        .replace("__js_script__", js_document_script.as_str())
+        .replace(
+            "__js_script__",
+            format!("{js_document_script}{}", test_available_code_themes()).as_str(),
+        )
         .replace("__html_body__", ssr_body.as_str())
         .replace("__base_url__", "/")
         .replace(
@@ -94,8 +108,12 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
                 js_ast_data.scripts.join(""),
                 if manual {
                     format!(
-                        "<script>\n{}\n</script><script src=\"../../markdown.js\"></script>",
-                        ftd::js::all_js_with_test()
+                        r#"
+                            <script src="ftd/ftd/markdown.js"></script>
+                            <script src="ftd/ftd/prism.js"></script>
+                            <script>{}</script>
+                        "#,
+                        ftd::js::all_js_without_test()
                     )
                 } else {
                     "<script src=\"fastn-js.js\"></script>".to_string()
@@ -150,31 +168,9 @@ fn fastn_js_test_all() {
     }
 }
 
-fn find_all_files_matching_extension_recursively(
-    dir: impl AsRef<std::path::Path>,
-    extension: &str,
-) -> Vec<std::path::PathBuf> {
-    let mut files = vec![];
-    for entry in std::fs::read_dir(dir).unwrap() {
-        let entry = entry.unwrap();
-        let path = entry.path();
-        if path.is_dir() {
-            files.extend(find_all_files_matching_extension_recursively(
-                &path, extension,
-            ));
-        } else {
-            match path.extension() {
-                Some(ext) if ext == extension => files.push(path),
-                _ => continue,
-            }
-        }
-    }
-    files
-}
-
 fn find_file_groups(manual: bool) -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
     let files = {
-        let mut f = find_all_files_matching_extension_recursively("t/js", "ftd");
+        let mut f = ftd::utils::find_all_files_matching_extension_recursively("t/js", "ftd");
         f.sort();
         f
     };

@@ -160,7 +160,7 @@ async fn serve_cr_file(
         }
     }
 
-    config.current_document = Some(f.get_id());
+    config.current_document = Some(f.get_id().to_string());
     match f {
         fastn_core::File::Ftd(main_document) => {
             match fastn_core::package::package_doc::read_ftd(
@@ -585,6 +585,29 @@ fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
                 .body(ftd::markdown_js()),
+        );
+    } else if let Some(theme) =
+        fastn_core::utils::hashed_code_theme_css()
+            .iter()
+            .find_map(|(theme, url)| {
+                if req.path().ends_with(url) {
+                    Some(theme)
+                } else {
+                    None
+                }
+            })
+    {
+        let theme_css = ftd::theme_css();
+        return theme_css.get(theme).cloned().map(|theme| {
+            actix_web::HttpResponse::Ok()
+                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .body(theme)
+        });
+    } else if req.path().ends_with(fastn_core::utils::hashed_prism_js()) {
+        return Some(
+            actix_web::HttpResponse::Ok()
+                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .body(ftd::prism_js()),
         );
     }
 

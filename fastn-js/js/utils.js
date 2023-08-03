@@ -26,6 +26,10 @@ let fastn_utils = {
             node = fastn_dom.commentNode;
         } else if (kind === fastn_dom.ElementKind.Wrapper) {
             node = fastn_dom.wrapperNode;
+        } else if (kind === fastn_dom.ElementKind.Code) {
+           node = "pre";
+        } else if (kind === fastn_dom.ElementKind.CodeChild) {
+            node = "code";
         }
         return [node, css, attributes];
     },
@@ -33,9 +37,13 @@ let fastn_utils = {
     getStaticValue(obj) {
         if (obj instanceof fastn.mutableClass) {
            return this.getStaticValue(obj.get());
-        } if (obj instanceof fastn.mutableListClass) {
+        } else if (obj instanceof fastn.mutableListClass) {
             return obj.getList();
-        } else {
+        }/*
+        Todo: Make this work
+        else if (obj instanceof fastn.recordInstanceClass) {
+            return obj.getAllFields();
+        }*/ else {
            return obj;
         }
     },
@@ -45,13 +53,33 @@ let fastn_utils = {
         if (Array.isArray(staticValue)) {
             return staticValue.map(func =>
                 fastn_utils.getFlattenStaticValue(func.item));
-        }
+        } /*
+        Todo: Make this work
+        else if (typeof staticValue === 'object' && fastn_utils.isNull(staticValue)) {
+            return Object.fromEntries(
+                Object.entries(staticValue).map(([k,v]) =>
+                    [k, fastn_utils.getFlattenStaticValue(v)]
+                )
+            );
+        }*/
         return staticValue;
     },
 
     getter(value) {
         if (value instanceof fastn.mutableClass) {
             return value.get();
+        } else {
+            return value;
+        }
+    },
+
+    // Todo: Merge getterByKey with getter
+    getterByKey(value, index) {
+        if (value instanceof fastn.mutableClass
+            || value instanceof fastn.recordInstanceClass) {
+            return value.get(index);
+        } else if (value instanceof fastn.mutableListClass) {
+            return value.get(index).item;
         } else {
             return value;
         }
@@ -177,6 +205,40 @@ let fastn_utils = {
         }
         return parent.getChildren().indexOf(node.getNode()) + 1;
     },
+
+    createNodeHelper(node, classes, attributes) {
+        let tagName = node;
+        let element = fastn_virtual.document.createElement(node);
+        for (let key in attributes) {
+            element.setAttribute(key, attributes[key])
+        }
+        for (let c in classes) {
+            element.classList.add(classes[c]);
+        }
+
+        return [tagName, element];
+    },
+
+    addCssFile(url) {
+        // Create a new link element
+        const linkElement = document.createElement("link");
+
+        // Set the attributes of the link element
+        linkElement.rel = "stylesheet";
+        linkElement.href = url;
+
+        // Append the link element to the head section of the document
+        document.head.appendChild(linkElement);
+    },
+
+    addCodeTheme(theme) {
+        if (!fastn_dom.codeData.addedCssFile.includes(theme)) {
+            let themeCssUrl = fastn_dom.codeData.availableThemes[theme];
+            fastn_utils.addCssFile(themeCssUrl);
+            fastn_dom.codeData.addedCssFile.push(theme);
+        }
+    }
+
 }
 
 
@@ -243,3 +305,8 @@ fastn_utils.private = {
         return Array.from({ length: n }, () => ' ').join('');
     }
 }
+
+
+/*Object.prototype.get = function(index) {
+    return this[index];
+}*/

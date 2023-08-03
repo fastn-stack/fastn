@@ -7,4 +7,4 @@
 
 
 -- ftd.text: $obj
-$loop$: $names as $obj
+for: obj in $names

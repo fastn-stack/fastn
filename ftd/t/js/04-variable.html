@@ -119,7 +119,8 @@ let foo__append_string = function (args) {
   return (ftd.append(__args__.a, __args__.v));
 }
 fastn_utils.createNestedObject(global, "foo__names", fastn.mutableList([]));
-
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "ftd/ftd/theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "ftd/ftd/theme_css/fastn-theme.light.css";
         fastn_virtual.hydrate(main);
         ftd.post_init();
     })();

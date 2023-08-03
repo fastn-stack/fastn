@@ -1,5 +1,10 @@
 let fastn_dom = {};
 
+fastn_dom.codeData = {
+    availableThemes: {},
+    addedCssFile: []
+}
+
 fastn_dom.commentNode = "comment";
 fastn_dom.wrapperNode = "wrapper";
 fastn_dom.commentMessage = "***FASTN***";
@@ -131,6 +136,10 @@ fastn_dom.ElementKind = {
     Rive: 12,
     Document: 13,
     Wrapper: 14,
+    Code: 15,
+    // Note: This is called internally, it gives `code` as tagName. This is used
+    // along with the Code: 15.
+    CodeChild: 16
 };
 
 fastn_dom.PropertyKind = {
@@ -237,6 +246,8 @@ fastn_dom.PropertyKind = {
         MetaThemeColor: 99,
     },
     Shadow: 100,
+    CodeTheme: 101,
+    CodeLanguage: 102,
 };
 
 
@@ -609,15 +620,7 @@ class Node2 {
             sibiling = parentOrSibiling.getSibiling();
         }
 
-        let [node, classes, attributes] = fastn_utils.htmlNode(kind);
-        this.#tagName = node;
-        this.#node = fastn_virtual.document.createElement(node);
-        for (let key in attributes) {
-          this.#node.setAttribute(key, attributes[key])
-        }
-        for (let c in classes) {
-            this.#node.classList.add(classes[c]);
-        }
+        this.createNode(kind);
 
         this.#mutables = [];
         this.#extraData = {};
@@ -638,6 +641,17 @@ class Node2 {
             this.#parent.insertBefore(this.#node, fastn_utils.nextSibling(sibiling, this.#parent));
         } else {
             this.#parent.appendChild(this.#node);
+        }
+    }
+    createNode(kind) {
+        if (kind === fastn_dom.ElementKind.Code) {
+            let [node, classes, attributes] = fastn_utils.htmlNode(kind);
+            [this.#tagName, this.#node] = fastn_utils.createNodeHelper(node, classes, attributes);
+            let codeNode = new Node2(this.#node, fastn_dom.ElementKind.CodeChild);
+            this.#children.push(codeNode);
+        } else {
+            let [node, classes, attributes] = fastn_utils.htmlNode(kind);
+            [this.#tagName, this.#node] = fastn_utils.createNodeHelper(node, classes, attributes);
         }
     }
     getTagName(){
@@ -1356,7 +1370,18 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Code) {
-            this.#node.innerHTML = staticValue;
+            this.#children[0].getNode().innerHTML= staticValue;
+        } else if (kind === fastn_dom.PropertyKind.CodeTheme) {
+            if (!ssr) {
+                fastn_utils.addCodeTheme(staticValue);
+            }
+            let theme = staticValue.replace("\.", "-");
+            this.#node.classList.add(theme);
+            this.#children[0].getNode().classList.add(theme);
+        } else if (kind === fastn_dom.PropertyKind.CodeLanguage) {
+            let language = `language-${staticValue}`;
+            this.#node.classList.add(language);
+            this.#children[0].getNode().classList.add(language);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle) {
             this.updateMetaTitle(staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle) {
@@ -1524,8 +1549,8 @@ class ConditionalDom {
     }
 }
 
-fastn_dom.createKernel = function (parent, kind, sibiling) {
-    return new Node2(parent, kind, sibiling);
+fastn_dom.createKernel = function (parent, kind) {
+    return new Node2(parent, kind);
 }
 
 fastn_dom.conditionalDom = function (parent, deps, condition, node_constructor) {

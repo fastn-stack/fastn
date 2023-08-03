@@ -24,7 +24,7 @@ $on-click$: $append-person($a = $people, v = $tom)
 
 
 -- show-person: $p
-$loop$: $people as $p
+for: p in $people
 index: $LOOP.COUNTER
 
 

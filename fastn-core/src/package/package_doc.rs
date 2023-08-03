@@ -1,5 +1,5 @@
 impl fastn_core::Package {
-    #[tracing::instrument(skip_all)]
+    #[tracing::instrument(skip(self))]
     pub(crate) async fn fs_fetch_by_file_name(
         &self,
         name: &str,
@@ -45,7 +45,7 @@ impl fastn_core::Package {
         }
     }
 
-    #[tracing::instrument(skip_all)]
+    #[tracing::instrument(skip(self))]
     pub(crate) async fn fs_fetch_by_id(
         &self,
         id: &str,
@@ -219,6 +219,7 @@ impl fastn_core::Package {
         }
     }
 
+    #[tracing::instrument(skip(self))]
     pub(crate) async fn resolve_by_id(
         &self,
         id: &str,

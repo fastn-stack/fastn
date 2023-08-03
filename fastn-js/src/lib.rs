@@ -39,7 +39,7 @@ pub use to_js::to_js;
 pub use udf::{udf0, udf1, udf2, udf_with_arguments, UDF};
 pub use udf_statement::UDFStatement;
 
-pub fn all_js_without_test() -> String {
+pub fn all_js_without_test_and_ftd_langugage_js() -> String {
     let fastn_js = include_str!("../js/fastn.js");
     let dom_js = include_str!("../js/dom.js");
     let utils_js = include_str!("../js/utils.js");
@@ -49,8 +49,14 @@ pub fn all_js_without_test() -> String {
     format!("{fastn_js}{dom_js}{utils_js}{virtual_js}{ftd_js}{post_init_js}")
 }
 
+pub fn all_js_without_test() -> String {
+    let fastn_js = all_js_without_test_and_ftd_langugage_js();
+    let ftd_language_js = include_str!("../js/ftd-language.js");
+    format!("{ftd_language_js}{fastn_js}")
+}
+
 pub fn all_js_with_test() -> String {
     let test_js = include_str!("../js/test.js");
-    let all_js = all_js_without_test();
+    let all_js = all_js_without_test_and_ftd_langugage_js();
     format!("{all_js}{test_js}")
 }

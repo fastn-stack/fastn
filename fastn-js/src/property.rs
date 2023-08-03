@@ -374,6 +374,8 @@ pub enum PropertyKind {
     YoutubeSrc,
     Shadow,
     Code,
+    CodeTheme,
+    CodeLanguage,
     MetaTitle,
     MetaOGTitle,
     MetaTwitterTitle,
@@ -482,6 +484,8 @@ impl PropertyKind {
             PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
             PropertyKind::Shadow => "fastn_dom.PropertyKind.Shadow",
             PropertyKind::Code => "fastn_dom.PropertyKind.Code",
+            PropertyKind::CodeTheme => "fastn_dom.PropertyKind.CodeTheme",
+            PropertyKind::CodeLanguage => "fastn_dom.PropertyKind.CodeLanguage",
             PropertyKind::MetaTitle => "fastn_dom.PropertyKind.DocumentProperties.MetaTitle",
             PropertyKind::MetaOGTitle => "fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle",
             PropertyKind::MetaTwitterTitle => {

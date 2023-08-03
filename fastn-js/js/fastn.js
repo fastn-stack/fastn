@@ -178,6 +178,9 @@ class MutableList {
         return this.#list;
     }
     get(idx) {
+        if (fastn_utils.isNull(idx)) {
+            return this.getList();
+        }
         return this.#list[idx];
     }
     set(idx, value) {

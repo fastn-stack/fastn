@@ -1822,7 +1822,13 @@ impl<'a> TDoc<'a> {
             );
         }
 
-        self.as_json_(kind, value, &row[0])
+        self.as_json_(
+            kind,
+            &row[0],
+            value.caption(),
+            value.record_name(),
+            value.line_number(),
+        )
     }
 
     pub fn from_json<T>(
@@ -1847,46 +1853,56 @@ impl<'a> TDoc<'a> {
             line_number: value.line_number(),
         })?;
 
-        self.as_json_(kind, value, &json)
+        self.as_json_(
+            kind,
+            &json,
+            value.caption(),
+            value.record_name(),
+            value.line_number(),
+        )
     }
 
     fn handle_object(
         &self,
         kind: &ftd::interpreter::Kind,
-        value: &ftd::ast::VariableValue,
         o: &serde_json::Map<String, serde_json::Value>,
+        default_value: Option<String>,
+        record_name: Option<String>,
+        line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-        let inner_value = value.inner();
-        if let Some(ftd::ast::VariableValue::Record { name, .. }) = inner_value.as_ref() {
-            if let Some(v) = o.get(name) {
-                return self.as_json_(kind, value, v);
-            } else if let Some(v) = value.caption() {
-                return self.as_json_(kind, value, &serde_json::Value::String(v));
+        if let Some(name) = record_name {
+            if let Some(v) = o.get(name.as_str()) {
+                return self.as_json_(kind, v, default_value, None, line_number);
+            } else if let Some(v) = default_value {
+                return self.as_json_(kind, &serde_json::Value::String(v), None, None, line_number);
             }
         }
 
         ftd::interpreter::utils::e2(
-            format!("Can't parse {value:?} to {kind:?}, found: {o:?}"),
+            format!("Can't parse to {kind:?}, found: {o:?}"),
             self.name,
-            value.line_number(),
+            line_number,
         )
     }
 
     fn as_json_(
         &self,
         kind: &ftd::interpreter::Kind,
-        value: &ftd::ast::VariableValue,
         json: &serde_json::Value,
+        default_value: Option<String>,
+        record_name: Option<String>,
+        line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-        let line_number = value.line_number();
         Ok(match kind {
             ftd::interpreter::Kind::String { .. } => ftd::interpreter::Value::String {
                 text: match json {
                     serde_json::Value::String(v) => v.to_string(),
-                    serde_json::Value::Object(o) => return self.handle_object(kind, value, o),
+                    serde_json::Value::Object(o) => {
+                        return self.handle_object(kind, o, default_value, record_name, line_number)
+                    }
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't parse {value:?} to string, found: {json}"),
+                            format!("Can't parse to string, found: {json}"),
                             self.name,
                             line_number,
                         )
@@ -1898,7 +1914,7 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::Number(n) => {
                         n.as_i64()
                             .ok_or_else(|| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse {value:?} to integer, found: {json}"),
+                                message: format!("Can't parse to integer, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
@@ -1906,15 +1922,17 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::String(s) => {
                         s.parse::<i64>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse {value:?} to integer, found: {json}"),
+                                message: format!("Can't parse to integer, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
                     }
-                    serde_json::Value::Object(o) => return self.handle_object(kind, value, o),
+                    serde_json::Value::Object(o) => {
+                        return self.handle_object(kind, o, default_value, record_name, line_number)
+                    }
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't parse {value:?} to integer, found: {json}"),
+                            format!("Can't parse to integer, found: {json}"),
                             self.name,
                             line_number,
                         )
@@ -1926,7 +1944,7 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::Number(n) => {
                         n.as_f64()
                             .ok_or_else(|| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse {value:?} to decimal, found: {json}"),
+                                message: format!("Can't parse to decimal, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
@@ -1934,15 +1952,17 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::String(s) => {
                         s.parse::<f64>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse {value:?} to decimal, found: {json}"),
+                                message: format!("Can't parse to decimal, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
                     }
-                    serde_json::Value::Object(o) => return self.handle_object(kind, value, o),
+                    serde_json::Value::Object(o) => {
+                        return self.handle_object(kind, o, default_value, record_name, line_number)
+                    }
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't parse {value:?} to decimal, found: {}", json),
+                            format!("Can't parse to decimal, found: {}", json),
                             self.name,
                             line_number,
                         )
@@ -1955,18 +1975,17 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::String(s) => {
                         s.parse::<bool>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!(
-                                    "Can't parse {value:?} to boolean, found: {}",
-                                    json
-                                ),
+                                message: format!("Can't parse to boolean, found: {}", json),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
                     }
-                    serde_json::Value::Object(o) => return self.handle_object(kind, value, o),
+                    serde_json::Value::Object(o) => {
+                        return self.handle_object(kind, o, default_value, record_name, line_number)
+                    }
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't parse {value:?} to boolean, found: {}", json),
+                            format!("Can't parse to boolean, found: {}", json),
                             self.name,
                             line_number,
                         )
@@ -1993,7 +2012,17 @@ impl<'a> TDoc<'a> {
                         fields.insert(
                             field.name,
                             ftd::interpreter::PropertyValue::Value {
-                                value: self.as_json_(&field.kind.kind, value, &val)?,
+                                value: self.as_json_(
+                                    &field.kind.kind,
+                                    &val,
+                                    if field.kind.caption {
+                                        default_value.clone()
+                                    } else {
+                                        None
+                                    },
+                                    None,
+                                    line_number,
+                                )?,
                                 is_mutable: false,
                                 line_number,
                             },
@@ -2019,6 +2048,7 @@ impl<'a> TDoc<'a> {
                         );
                     }
                 } else {
+                    // Todo: Handle default_value
                     return ftd::interpreter::utils::e2(
                         format!("expected object of record type, found: {}", json),
                         self.name,
@@ -2035,12 +2065,13 @@ impl<'a> TDoc<'a> {
                 if let serde_json::Value::Array(list) = json {
                     for item in list {
                         data.push(ftd::interpreter::PropertyValue::Value {
-                            value: self.as_json_(kind, value, item)?,
+                            value: self.as_json_(kind, item, None, None, line_number)?,
                             is_mutable: false,
                             line_number,
                         });
                     }
                 } else {
+                    // Todo: Handle `default_value`
                     return ftd::interpreter::utils::e2(
                         format!("expected object of list type, found: {}", json),
                         self.name,
@@ -2060,31 +2091,17 @@ impl<'a> TDoc<'a> {
                         data: Box::new(None),
                     },
                     serde_json::Value::Object(o)
-                        if value.inner().map_or(false, |v| v.is_record()) =>
+                        if record_name
+                            .as_ref()
+                            .map(|v| !o.contains_key(v))
+                            .unwrap_or_default() =>
                     {
-                        let name = match value.inner() {
-                            Some(ftd::ast::VariableValue::Record { name, .. }) => name,
-                            _ => {
-                                panic!("from_json called with non record value: {:?}", value);
-                            }
-                        };
-
-                        let is_request_data_call = value.has_request_data_header();
-
-                        // For request-data - Optional null query parameters = None
-                        // When using request-data
-                        //      Query parameters are passed as record values
-                        //      Record name is set to query parameter name
-                        if !o.contains_key(name.as_str()) && is_request_data_call {
-                            return Ok(ftd::interpreter::Value::Optional {
-                                kind: kind.clone().into_kind_data(),
-                                data: Box::new(None),
-                            });
-                        }
-
-                        self.as_json_(kind, value, json)?
+                        return Ok(ftd::interpreter::Value::Optional {
+                            kind: kind.clone().into_kind_data(),
+                            data: Box::new(None),
+                        });
                     }
-                    _ => self.as_json_(kind, value, json)?,
+                    _ => self.as_json_(kind, json, default_value, record_name, line_number)?,
                 }
             }
             t => unimplemented!(

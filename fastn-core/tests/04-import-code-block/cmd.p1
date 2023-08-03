@@ -5,6 +5,6 @@ output: amitu/.build
 
 -- stdout:
 
-Processing amitu/FASTN.ftd ... done in <omitted>
-Processing amitu/index.ftd ... done in <omitted>
-Processing amitu/lib.ftd ... done in <omitted>
+Processing amitu/FASTN/ ... done in <omitted>
+Processing amitu/ ... done in <omitted>
+Processing amitu/lib/ ... done in <omitted>

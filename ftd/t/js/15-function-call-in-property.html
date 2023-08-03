@@ -42,7 +42,8 @@ let foo__multiply_by_two = function (args)
   let __args__ = args;
   return (fastn_utils.getter(__args__.a) * 2);
 }
-
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "ftd/ftd/theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "ftd/ftd/theme_css/fastn-theme.light.css";
         fastn_virtual.hydrate(main);
         ftd.post_init();
     })();
