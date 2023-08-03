@@ -128,6 +128,7 @@ optional body body:
 -- ftd.column:
 width: fill-container
 padding-top.px: 8
+spacing.fixed.px if { ftd.device == "mobile" }: 24
 
 -- ftd.row:
 width: fill-container
@@ -215,6 +216,7 @@ two-fold: $obj.two-fold
 
 -- ftd.column:
 width: fill-container
+spacing.fixed.px: 32
 
 -- grid-of-items: $obj.title
 $loop$: $grid-view.templates as $obj
