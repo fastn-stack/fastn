@@ -106,7 +106,7 @@ iframe {
 pre code {
     overflow-x: auto;
     display: block;
-    padding: 10px !important;
+    padding: 0 10px !important;
 }
 
 /* Common styles  */
