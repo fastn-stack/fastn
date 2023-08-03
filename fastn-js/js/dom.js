@@ -664,22 +664,6 @@ class Node2 {
         if (ssr) {
             if (node_kind !== fastn_dom.ElementKind.Image) this.updateTagName('a');
         }
-
-        if (hydrating) {
-            let currentElement = document.querySelector(`[data-id="${id_counter}"]`);
-
-            if (node_kind !== fastn_dom.ElementKind.Image) {
-                let newElement = document.createElement('a');
-                for( const { name, value } of currentElement.attributes) {
-                    newElement.setAttribute(name, value);
-                }
-
-                currentElement.childNodes.forEach(node => {
-                    newElement.appendChild(node);
-                });
-                currentElement.parentNode.insertBefore(newElement, currentElement);
-            }
-        }
     }
 
     updateMetaTitle(value) {
