@@ -48,6 +48,7 @@ to convert.
 -- lib.zigzag-card: 
 bg-color: $inherited.colors.background.step-2
 image: $fastn-assets.files.images.featured.business-cards.zigzag-card-1.png
+bg-color-mobile: $inherited.colors.background.step-2
 
 -- lib.zigzag-card: Simple
 bg-color: $inherited.colors.background.step-1
@@ -56,6 +57,7 @@ Start with one of dozens of templates (or a blank canvas) and make it your own
 
 -- lib.zigzag-card: Free
 bg-color: $inherited.colors.background.step-1
+bg-color-mobile: $inherited.colors.background.step-2
 
 Build up to three sites per account and use all of Carrd's core features – for
 free!
@@ -63,10 +65,12 @@ free!
 -- lib.zigzag-card: 
 bg-color: $inherited.colors.background.step-2
 image: $fastn-assets.files.images.featured.business-cards.zigzag-card-1.png
+bg-color-mobile: $inherited.colors.background.step-1
 
 -- lib.zigzag-card: 
 bg-color: $inherited.colors.background.step-2
 image: $fastn-assets.files.images.featured.business-cards.zigzag-card-2.png
+bg-color-mobile: $inherited.colors.background.step-2
 
 -- lib.zigzag-card: Light and dark theme
 bg-color: $inherited.colors.background.step-1
