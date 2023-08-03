@@ -24,33 +24,27 @@ pub async fn process(
     }
 
     let url = match headers.get_optional_string_by_key("url", doc.name, line_number)? {
-        Some(v) => {
-            if !v.starts_with('$') {
-                v
-            } else {
-                let thing = match doc.get_thing(v.as_str(), line_number) {
-                    Ok(ftd::interpreter::Thing::Variable(v)) => {
-                        v.value.resolve(doc, line_number)?
-                    }
-                    Ok(v2) => {
-                        return ftd::interpreter::utils::e2(
-                            format!("{v} is not a variable, it's a {v2:?}"),
-                            doc.name,
-                            line_number,
-                        )
-                    }
-                    Err(e) => {
-                        return ftd::interpreter::utils::e2(
-                            format!("${v} not found in the document: {e:?}"),
-                            doc.name,
-                            line_number,
-                        )
-                    }
-                };
-
-                thing.string(doc.name, line_number)?
+        Some(v) if v.starts_with('$') => match doc.get_thing(v.as_str(), line_number) {
+            Ok(ftd::interpreter::Thing::Variable(v)) => v
+                .value
+                .resolve(doc, line_number)?
+                .string(doc.name, line_number)?,
+            Ok(v2) => {
+                return ftd::interpreter::utils::e2(
+                    format!("{v} is not a variable, it's a {v2:?}"),
+                    doc.name,
+                    line_number,
+                )
             }
-        }
+            Err(e) => {
+                return ftd::interpreter::utils::e2(
+                    format!("${v} not found in the document: {e:?}"),
+                    doc.name,
+                    line_number,
+                )
+            }
+        },
+        Some(v) => v,
         None => {
             return ftd::interpreter::utils::e2(
                 format!(
