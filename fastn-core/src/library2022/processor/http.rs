@@ -48,7 +48,7 @@ pub async fn process(
                     }
                 };
 
-                thing.string(doc.name, line_number).unwrap()
+                thing.string(doc.name, line_number)?
             }
         }
         None => {
