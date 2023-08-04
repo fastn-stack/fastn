@@ -412,6 +412,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/ds/markdown.ftd
 - Adding typography: /typography/
   document: /expander/ds/ds-typography.ftd
+- Adding color scheme: /color-scheme/
+  document: /expander/ds/ds-cs.ftd
 - Using page component: /ds-page/
   document: /expander/ds/ds-page.ftd
   skip: true
