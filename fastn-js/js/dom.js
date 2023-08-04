@@ -1471,13 +1471,22 @@ class Node2 {
     getChildren() {
         return this.#children;
     }
+    mergeFnCalls(current, newFunc) {
+        return () => {
+            if (current instanceof Function) current();
+            if (newFunc instanceof Function) newFunc();
+        };
+    }
     addEventHandler(event, func) {
         if (event === fastn_dom.Event.Click) {
-            this.#node.onclick = func;
+            let onclickEvents = this.mergeFnCalls(this.#node.onclick, func);
+            this.#node.onclick = onclickEvents;
         } else if (event === fastn_dom.Event.MouseEnter) {
-            this.#node.onmouseenter = func;
+            let mouseEnterEvents = this.mergeFnCalls(this.#node.onmouseenter, func);
+            this.#node.onmouseenter = mouseEnterEvents;
         } else if (event === fastn_dom.Event.MouseLeave) {
-            this.#node.onmouseleave = func;
+            let mouseLeaveEvents = this.mergeFnCalls(this.#node.onmouseleave, func);
+            this.#node.onmouseleave = mouseLeaveEvents;
         } else if (event === fastn_dom.Event.ClickOutside) {
             ftd.clickOutsideEvents.push([this, func]);
         } else if (!!event[0] && event[0] === fastn_dom.Event.GlobalKey()[0]) {
@@ -1485,13 +1494,17 @@ class Node2 {
         } else if (!!event[0] && event[0] === fastn_dom.Event.GlobalKeySeq()[0]) {
             ftd.globalKeySeqEvents.push([this, func, event[1]]);
         } else if (event === fastn_dom.Event.Input) {
-            this.#node.oninput = func;
+            let onInputEvents = this.mergeFnCalls(this.#node.oninput, func);
+            this.#node.oninput = onInputEvents;
         } else if (event === fastn_dom.Event.Change) {
-            this.#node.onchange = func;
+            let onChangeEvents = this.mergeFnCalls(this.#node.onchange, func);
+            this.#node.onchange = onChangeEvents;
         } else if (event === fastn_dom.Event.Blur) {
-            this.#node.onblur = func;
+            let onBlurEvents = this.mergeFnCalls(this.#node.onblur, func);
+            this.#node.onblur = onBlurEvents;
         } else if (event === fastn_dom.Event.Focus) {
-            this.#node.onfocus = func;
+            let onFocusEvents = this.mergeFnCalls(this.#node.onfocus, func);
+            this.#node.onfocus = onFocusEvents;
         }
     }
     destroy() {
