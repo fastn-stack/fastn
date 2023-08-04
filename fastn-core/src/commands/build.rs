@@ -19,9 +19,7 @@ pub async fn build(
                 return handle_only_id(id, config, base_url, ignore_failed, test, documents).await
             }
             None => {
-                for document in documents.values() {
-                    handle_file(document, config, base_url, ignore_failed, test, true).await?;
-                }
+                incremental_build(config, documents, base_url, ignore_failed, test).await?;
             }
         }
     }
@@ -53,6 +51,21 @@ pub async fn build(
     }
 
     config.download_fonts().await
+}
+
+#[tracing::instrument(skip(config, documents))]
+async fn incremental_build(
+    config: &mut fastn_core::Config,
+    documents: std::collections::BTreeMap<String, fastn_core::File>,
+    base_url: &str,
+    ignore_failed: bool,
+    test: bool,
+) -> fastn_core::Result<()> {
+    for document in documents.values() {
+        handle_file(document, config, base_url, ignore_failed, test, true).await?;
+    }
+
+    Ok(())
 }
 
 #[tracing::instrument(skip(config, documents))]
