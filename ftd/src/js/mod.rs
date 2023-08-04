@@ -493,6 +493,7 @@ impl ftd::interpreter::WebComponentDefinition {
                                     self.name.to_string(),
                                 )),
                             ),
+                            v.mutable.to_owned(),
                         )
                     })
                 })
