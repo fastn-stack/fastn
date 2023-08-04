@@ -473,8 +473,10 @@ favicon: /-/fastn.com/images/favicon.svg
 
 
 # Blog: /blog/
-  document: blog/the-intimidation-of-programming.ftd
+  document: blog/prove-you-wrong.ftd
 
+- fastn might prove you wrong: /blog/prove-you-wrong/
+  document: blog/prove-you-wrong.ftd 
 - The Intimidation of Programming: /blog/intimidation-of-programming/
   document: blog/the-intimidation-of-programming.ftd
 - Optimize your website: /blog/seo-meta/
