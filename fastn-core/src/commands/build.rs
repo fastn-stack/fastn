@@ -53,6 +53,28 @@ pub async fn build(
     config.download_fonts().await
 }
 
+mod cache {
+    #[derive(serde::Serialize, serde::Deserialize)]
+    pub(crate) struct Cache {
+        // fastn_version: String, // TODO: Add this
+        pub(crate) documents: Vec<Document>,
+        pub(crate) assets: std::collections::BTreeMap<String, File>,
+    }
+
+    #[derive(serde::Serialize, serde::Deserialize)]
+    pub(crate) struct File {
+        pub(crate) path: String,
+        pub(crate) checksum: String,
+    }
+
+    #[derive(serde::Serialize, serde::Deserialize)]
+    pub(crate) struct Document {
+        pub(crate) file: File,
+        pub(crate) html_checksum: String,
+        pub(crate) dependencies: Vec<String>,
+    }
+}
+
 #[tracing::instrument(skip(config, documents))]
 async fn incremental_build(
     config: &mut fastn_core::Config,
@@ -61,8 +83,30 @@ async fn incremental_build(
     ignore_failed: bool,
     test: bool,
 ) -> fastn_core::Result<()> {
-    for document in documents.values() {
-        handle_file(document, config, base_url, ignore_failed, test, true).await?;
+    // https://fastn.com/rfc/incremental-build/
+
+    if let Some(_c) = fastn_core::utils::get_cached::<cache::Cache>("build_cache") {
+        tracing::debug!("cached hash mismatch");
+    } else {
+        tracing::debug!("cached miss");
+        let mut c = cache::Cache {
+            // fastn_version: fastn_core::utils::get_fastn_version(),
+            documents: vec![],
+            assets: std::collections::BTreeMap::new(),
+        };
+        for document in documents.values() {
+            handle_file(
+                document,
+                config,
+                base_url,
+                ignore_failed,
+                test,
+                true,
+                Some(&mut c),
+            )
+            .await?;
+        }
+        fastn_core::utils::cache_it("build_cache", &c)?;
     }
 
     Ok(())
@@ -79,7 +123,7 @@ async fn handle_only_id(
 ) -> fastn_core::Result<()> {
     for doc in documents.values() {
         if doc.get_id().eq(id) || doc.get_id_with_package().eq(id) {
-            return handle_file(doc, config, base_url, ignore_failed, test, false).await;
+            return handle_file(doc, config, base_url, ignore_failed, test, false, None).await;
         }
     }
 
@@ -97,6 +141,7 @@ async fn handle_file(
     ignore_failed: bool,
     test: bool,
     build_static_files: bool,
+    cache: Option<&mut cache::Cache>,
 ) -> fastn_core::Result<()> {
     let start = std::time::Instant::now();
     print!("Processing {} ... ", document.get_id_with_package());
@@ -108,6 +153,7 @@ async fn handle_file(
         ignore_failed,
         test,
         build_static_files,
+        cache,
     )
     .await
     {
@@ -125,7 +171,7 @@ async fn handle_file(
     Ok(())
 }
 
-#[tracing::instrument(skip(document, config))]
+#[tracing::instrument(skip(document, config, _cache))]
 async fn handle_file_(
     document: &fastn_core::File,
     config: &mut fastn_core::Config,
@@ -133,9 +179,9 @@ async fn handle_file_(
     ignore_failed: bool,
     test: bool,
     build_static_files: bool,
+    _cache: Option<&mut cache::Cache>,
 ) -> fastn_core::Result<()> {
     config.current_document = Some(document.get_id().to_string());
-
     match document {
         fastn_core::File::Ftd(doc) => {
             if !config
@@ -227,7 +273,7 @@ async fn handle_file_(
                 &fastn_core::Static {
                     package_name: config.package.name.to_string(),
                     id: doc.id.to_string(),
-                    content: vec![],
+                    content: doc.content.clone().into_bytes(),
                     base_path: camino::Utf8PathBuf::from(doc.parent_path.as_str()),
                 },
                 &config.root,
