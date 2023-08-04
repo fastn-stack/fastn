@@ -490,7 +490,7 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
         }
         "ftd#anchor" => {
             let js_variant = anchor_variants(variant);
-            (format!("fastn_dom.Anchor.{}", js_variant), false)
+            (format!("fastn_dom.Anchor.{}", js_variant.0), js_variant.1)
         }
         "ftd#device-data" => {
             let js_variant = device_data_variants(variant);
@@ -757,11 +757,11 @@ fn align_self_variants(name: &str) -> &'static str {
     }
 }
 
-fn anchor_variants(name: &str) -> &'static str {
+fn anchor_variants(name: &str) -> (&'static str, bool) {
     match name {
-        "window" => "Window",
-        "parent" => "Parent",
-        "id" => "Id",
+        "window" => ("Window", false),
+        "parent" => ("Parent", false),
+        "id" => ("Id", true),
         t => todo!("invalid anchor variant {}", t),
     }
 }

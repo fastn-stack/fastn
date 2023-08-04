@@ -294,9 +294,9 @@ fastn_dom.Region = {
 }
 
 fastn_dom.Anchor = {
-    Window: "fixed",
-    Parent: "absolute",
-    Id: "absolute",
+    Window: [1, "fixed"],
+    Parent: [2, "absolute"],
+    Id: (value) => { return [3, value]; },
 }
 
 fastn_dom.DeviceData = {
@@ -678,6 +678,16 @@ class Node2 {
         let node_kind = this.#kind;
         if (ssr) {
             if (node_kind !== fastn_dom.ElementKind.Image) this.updateTagName('a');
+        }
+    }
+    updatePositionForNodeById(node_id, value) {
+        console.log("Inside fn 1");
+        if (hydrating) {
+            console.log("Hydrating");
+            console.log(node_id, value);
+            const target_node = document.querySelector(`[id="${node_id}"]`);
+            if (target_node !== null && target_node !== undefined)
+                target_node.style['position'] = value;
         }
     }
 
@@ -1066,6 +1076,7 @@ class Node2 {
                 }
             }
         } else if (kind === fastn_dom.PropertyKind.Id) {
+            console.log("Setting Id", staticValue);
             this.#node.id = staticValue;
         } else if (kind === fastn_dom.PropertyKind.Width) {
             this.attachCss("width", staticValue);
@@ -1150,7 +1161,24 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Anchor) {
             // todo: this needs fixed for anchor.id = v
             // need to change position of element with id = v to relative
-            this.attachCss("position", staticValue);
+            let anchorType = staticValue[0];
+            switch (anchorType) {
+              case 1:
+                console.log("Setting Window Anchor:", staticValue[1]);
+                this.attachCss("position", staticValue[1]);
+                break;
+              case 2:
+                console.log("Setting Parent Anchor:", staticValue[1]);
+                this.attachCss("position", staticValue[1]);
+                this.#parent.attachCss("position", "relative");
+                break;
+              case 3:
+                const parent_node_id = staticValue[1];
+                console.log(parent_node_id);
+                this.attachCss("position", "absolute");
+                this.updatePositionForNodeById(parent_node_id, "relative");
+                break;
+            }
         } else if (kind === fastn_dom.PropertyKind.Sticky) {
             // sticky is boolean type
             switch (staticValue) {
