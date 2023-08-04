@@ -19,7 +19,7 @@ impl Kernel {
     }
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Debug)]
 pub enum ElementKind {
     Row,
     Column,
@@ -36,6 +36,7 @@ pub enum ElementKind {
     Rive,
     Document,
     Code,
+    WebComponent(String),
 }
 
 #[derive(Debug)]

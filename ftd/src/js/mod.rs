@@ -108,6 +108,8 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
                 Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
                 &mut has_rive_components,
             ));
+        } else if let ftd::interpreter::Thing::WebComponent(web_component) = thing {
+            document_asts.push(web_component.to_ast(&doc));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
             document_asts.push(f.to_ast(&doc));
         } else if let ftd::interpreter::Thing::Export { from, to, .. } = thing {
@@ -120,10 +122,10 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
 
     document_asts.extend(export_asts);
     let mut scripts = ftd::js::utils::get_external_scripts(has_rive_components);
-    scripts.push(ftd::html::utils::get_js_html(
+    scripts.push(ftd::js::utils::get_js_html(
         document.js.into_iter().collect_vec().as_slice(),
     ));
-    scripts.push(ftd::html::utils::get_css_html(
+    scripts.push(ftd::js::utils::get_css_html(
         document.css.into_iter().collect_vec().as_slice(),
     ));
 
@@ -413,11 +415,14 @@ impl ftd::interpreter::Component {
                 should_return,
                 has_rive_components,
             )
-        } else if let Ok(component_definition) =
-            doc.get_component(self.name.as_str(), self.line_number)
+        } else if let Ok(arguments) = doc
+            .get_component(self.name.as_str(), self.line_number)
+            .map(|v| v.arguments)
+            .or(doc
+                .get_web_component(self.name.as_str(), self.line_number)
+                .map(|v| v.arguments))
         {
-            let arguments = component_definition
-                .arguments
+            let arguments = arguments
                 .iter()
                 .filter_map(|v| {
                     v.get_optional_value(self.properties.as_slice())
@@ -452,5 +457,45 @@ impl ftd::interpreter::Component {
         } else {
             panic!("Can't find, {}", self.name)
         }
+    }
+}
+
+impl ftd::interpreter::WebComponentDefinition {
+    pub fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
+        use itertools::Itertools;
+
+        let kernel = fastn_js::Kernel::from_component(
+            fastn_js::ElementKind::WebComponent(self.name.clone()),
+            fastn_js::COMPONENT_PARENT,
+            0,
+        );
+
+        let statements = vec![
+            fastn_js::ComponentStatement::CreateKernel(kernel.clone()),
+            fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            },
+        ];
+
+        fastn_js::component_with_params(
+            self.name.as_str(),
+            statements,
+            self.arguments
+                .iter()
+                .flat_map(|v| {
+                    v.get_default_value().map(|val| {
+                        (
+                            v.name.to_string(),
+                            val.to_set_property_value(
+                                doc,
+                                &ftd::js::ResolverData::new_with_component_definition_name(&Some(
+                                    self.name.to_string(),
+                                )),
+                            ),
+                        )
+                    })
+                })
+                .collect_vec(),
+        )
     }
 }

@@ -30,6 +30,11 @@ let fastn_utils = {
            node = "pre";
         } else if (kind === fastn_dom.ElementKind.CodeChild) {
             node = "code";
+        } else if (kind[0] === fastn_dom.ElementKind.WebComponent()[0]) {
+            let {webcomponent, arguments} = kind[1];
+            node = `${webcomponent}`;
+            fastn_dom.webComponent.push(arguments);
+            attributes[fastn_dom.webComponentArgument] = fastn_dom.webComponent.length;
         }
         return [node, css, attributes];
     },

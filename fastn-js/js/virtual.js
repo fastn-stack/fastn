@@ -49,6 +49,10 @@ class Node {
         this.#attributes[attribute] = value;
     }
 
+    getAttribute(attribute) {
+        return this.#attributes[attribute];
+    }
+
     removeAttribute(attribute) {
         if (attribute in this.#attributes) delete this.#attributes[attribute];
     }
