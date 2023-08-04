@@ -85,29 +85,34 @@ async fn incremental_build(
 ) -> fastn_core::Result<()> {
     // https://fastn.com/rfc/incremental-build/
 
-    if let Some(_c) = fastn_core::utils::get_cached::<cache::Cache>("build_cache") {
-        tracing::debug!("cached hash mismatch");
-    } else {
-        tracing::debug!("cached miss");
-        let mut c = cache::Cache {
-            // fastn_version: fastn_core::utils::get_fastn_version(),
-            documents: vec![],
-            assets: std::collections::BTreeMap::new(),
-        };
-        for document in documents.values() {
-            handle_file(
-                document,
-                config,
-                base_url,
-                ignore_failed,
-                test,
-                true,
-                Some(&mut c),
-            )
-            .await?;
+    let mut c = match fastn_core::utils::get_cached::<cache::Cache>("build_cache") {
+        Some(v) => {
+            tracing::debug!("cached hit");
+            v
         }
-        fastn_core::utils::cache_it("build_cache", &c)?;
+        None => {
+            tracing::debug!("cached miss");
+            cache::Cache {
+                // fastn_version: fastn_core::utils::get_fastn_version(),
+                documents: vec![],
+                assets: std::collections::BTreeMap::new(),
+            }
+        }
+    };
+
+    for document in documents.values() {
+        handle_file(
+            document,
+            config,
+            base_url,
+            ignore_failed,
+            test,
+            true,
+            Some(&mut c),
+        )
+        .await?;
     }
+    fastn_core::utils::cache_it("build_cache", &c)?;
 
     Ok(())
 }
