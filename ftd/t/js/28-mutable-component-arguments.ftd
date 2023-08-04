@@ -1,0 +1,30 @@
+-- component foo:
+integer $a: 1
+boolean $clicked: false
+
+-- ftd.column:
+width.fixed.px: 400
+padding.px: 20
+spacing.fixed.px: 10
+
+-- ftd.integer: $foo.a
+$on-click$: $ftd.increment($a = $foo.a)
+/$on-click$: $plus-one($a = $foo.a)
+$on-click$: $ftd.toggle($a = $foo.clicked)
+
+-- ftd.boolean: $foo.clicked
+
+-- end: ftd.column
+
+-- end: foo
+
+
+
+
+-- foo:
+
+
+-- void plus-one(a):
+integer $a:
+
+a = a + 1

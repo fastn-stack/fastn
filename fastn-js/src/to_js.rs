@@ -428,7 +428,7 @@ impl fastn_js::Component {
             let mut local_arguments = vec![];
             let mut local_arguments_dependent = vec![];
             let mut arguments = vec![];
-            for (argument_name, value) in self.args.iter() {
+            for (argument_name, value, is_mutable) in self.args.iter() {
                 if value.is_local_value() {
                     // Todo: Fix order
                     // -- component show-name:
@@ -440,7 +440,13 @@ impl fastn_js::Component {
                     // Todo: Fix order
                     local_arguments_dependent.push((argument_name.to_owned(), value.to_owned()));
                 } else {
-                    arguments.push((argument_name.to_owned(), value.to_owned()));
+                    let value = if *is_mutable {
+                        format!("fastn.mutable({})", value.to_js())
+                    } else {
+                        value.to_js()
+                    };
+
+                    arguments.push((argument_name.to_owned(), value));
                 }
             }
 
@@ -452,9 +458,9 @@ impl fastn_js::Component {
                 .append(space())
                 .append(text("{"))
                 .append(pretty::RcDoc::intersperse(
-                    arguments.iter().map(|(k, v)| {
-                        format!("{}: {},", fastn_js::utils::name_to_js_(k), v.to_js())
-                    }),
+                    arguments
+                        .iter()
+                        .map(|(k, v)| format!("{}: {},", fastn_js::utils::name_to_js_(k), v)),
                     pretty::RcDoc::softline(),
                 ))
                 .append(text("};"))

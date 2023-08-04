@@ -269,6 +269,7 @@ impl ftd::interpreter::ComponentDefinition {
                                     self.name.to_string(),
                                 )),
                             ),
+                            v.mutable.to_owned(),
                         )
                     })
                 })
