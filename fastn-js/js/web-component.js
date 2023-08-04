@@ -19,7 +19,6 @@ class MutableVariable {
         this.#closures.push(fastn.closure(func));
     }
 }
-
 class StaticVariable {
     #value;
     #closures;
