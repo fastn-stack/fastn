@@ -29,6 +29,49 @@ macro_rules! warning {
     }};
 }
 
+fn id_to_cache_key(id: &str) -> String {
+    id.replace('/', "_")
+}
+
+pub fn get_cached<T>(id: &str) -> Option<T>
+where
+    T: serde::de::DeserializeOwned,
+{
+    let cache_file = dirs::cache_dir()?
+        .join("fastn.com/ast-cache/")
+        .join(id_to_cache_key(id));
+    serde_json::from_str(
+        &std::fs::read_to_string(cache_file)
+            .map_err(|e| {
+                tracing::debug!("file read error: {}", e.to_string());
+                e
+            })
+            .ok()?,
+    )
+    .map_err(|e| {
+        tracing::debug!("not valid json: {}", e.to_string());
+        e
+    })
+    .ok()
+}
+
+pub fn cache_it<T>(id: &str, d: T) -> ftd::interpreter::Result<T>
+where
+    T: serde::ser::Serialize,
+{
+    let cache_file = dirs::cache_dir()
+        .ok_or_else(|| ftd::interpreter::Error::OtherError("cache dir not found".to_string()))?
+        .join("fastn.com/ast-cache/")
+        .join(id_to_cache_key(id));
+    std::fs::create_dir_all(cache_file.parent().unwrap()).map_err(|e| {
+        ftd::interpreter::Error::OtherError(format!("failed to create cache dir: {}", e))
+    })?;
+    std::fs::write(cache_file, serde_json::to_string(&d)?).map_err(|e| {
+        ftd::interpreter::Error::OtherError(format!("failed to write cache file: {}", e))
+    })?;
+    Ok(d)
+}
+
 pub fn redirect_page_html(url: &str) -> String {
     include_str!("../redirect.html").replace("__REDIRECT_URL__", url)
 }
