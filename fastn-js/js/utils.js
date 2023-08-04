@@ -34,7 +34,7 @@ let fastn_utils = {
             let {webcomponent, arguments} = kind[1];
             node = `${webcomponent}`;
             fastn_dom.webComponent.push(arguments);
-            attributes[fastn_dom.webComponentArgument] = fastn_dom.webComponent.length;
+            attributes[fastn_dom.webComponentArgument] = fastn_dom.webComponent.length - 1;
         }
         return [node, css, attributes];
     },
