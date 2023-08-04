@@ -2,7 +2,7 @@
 pub struct Component {
     pub name: String,
     pub params: Vec<String>,
-    pub args: Vec<(String, fastn_js::SetPropertyValue, bool)>,
+    pub args: Vec<(String, fastn_js::SetPropertyValue, bool)>, // Vec<(name, value, is_mutable)>
     pub body: Vec<fastn_js::ComponentStatement>,
 }
 
