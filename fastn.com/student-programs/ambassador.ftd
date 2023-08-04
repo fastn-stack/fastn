@@ -1,21 +1,32 @@
+-- import: fastn-community.github.io/bling/collapse
+-- import: fifthtry.github.io/button
+
 -- ds.page: `fastn` Ambassador Program
 
-Amplify your impact and establish yourself as a mentor and leader in your community while developing the technical skills and proficiency you need to succeed.
+Amplify your impact and establish yourself as a mentor and leader in your
+community while developing the technical skills and proficiency you need to
+succeed.
 
 
 -- ds.h1: What makes a `fastn` Champion?
 
-A `fastn` Ambassador is one who will help unlock the true potential of `fastn` as a platform. 
+A `fastn` Ambassador is one who will help unlock the true potential of `fastn`
+as a platform. 
 
-They go the extra mile, demonstrating proficiency & skill. They dig deeper on technical documentations, explore all the collections, stay true to the best practises and gain the deepest understanding on all things `fastn`.  
+They go the extra mile, demonstrating proficiency & skill. They dig deeper on
+technical documentations, explore all the collections, stay true to the best
+practises and gain the deepest understanding on all things `fastn`.  
 
 - **Beacons of Knowledge**: They are veritable experts that anyone can turn to.
 
-- **Passionate Advocates**: Actively promote `fastn` across communities, forums & events.
+- **Passionate Advocates**: Actively promote `fastn` across communities,
+    forums & events.
 
-- **Power Collaborators**: Have the ability to provide meaningful advice & timely assists to others.
+- **Power Collaborators**: Have the ability to provide meaningful advice &
+    timely assists to others.
 
-- **Intrepid Explorers**: They are developers who will push the boundaries and help 'fastn' get better.
+- **Intrepid Explorers**: They are developers who will push the boundaries and
+    help 'fastn' get better.
 
 
 
@@ -23,64 +34,322 @@ They go the extra mile, demonstrating proficiency & skill. They dig deeper on te
 
 Champions are built different. Champions stand out from the crowd. 
 
-For all the time & effort you put in, `fastn` commits to help you gain an worthwhile advantage, when it comes to building your career and network. `fastn` supports Champions in many ways. Some of them may include:
+For all the time & effort you put in, `fastn` commits to help you gain an
+worthwhile advantage, when it comes to building your career and network.
+`fastn` supports Champions in many ways. Some of them may include:
 
-- **Badges & Roles**: A unique role will be awarded to Champions within our discord server. And they also gain access to a select channel on Discord, where they can network with other Champions. This group has access to special `fastn` projects & giveaways!
+- **Badges & Roles**: A unique role will be awarded to Champions within our
+    discord server. And they also gain access to a select channel on Discord,
+    where they can network with other Champions. This group has access to
+    special `fastn` projects & giveaways!
 
-- **Special Feature**: Your work and your profile is on put on a pedestal! All Champions get a special shoutout on our `fastn` website and their contributions are promoted across our platforms. 
+- **Special Feature**: Your work and your profile is on put on a pedestal! All
+    Champions get a special shoutout on our `fastn` website and their
+    contributions are promoted across our platforms. 
 
-- **Certifications**: Your skill can get you certified. You will receive official `fastn` certificates and accrediations to bolster your achievements. This includes an official NSDC recognised certification in collaboration with LetsUpgrade. And that's not all, all Champions gets a unique `fastn` Champions NFT to go with! 
+- **Certifications**: Your skill can get you certified. You will receive
+    official `fastn` certificates and accrediations to bolster your
+    achievements. This includes an official NSDC recognised certification in
+    collaboration with LetsUpgrade. And that's not all, all Champions gets a
+    unique `fastn` Champions NFT to go with! 
 
 
 -- ds.h1: How to become a `fastn` Champion?
 
-To become a Champion, all we ask of you is to put in some time & effort. Afterall, a Champion becomes so, only by overcoming series of challenges and combating obstacles. We simply ask the same of you. 
+To become a Champion, all we ask of you is to put in some time & effort.
+Afterall, a Champion becomes so, only by overcoming series of challenges and
+combating obstacles. We simply ask the same of you. 
 
-Spend some time exploring the `fastn` website & the `fastn` discord channel. This will help you get an idea of the lay of the land, and where to find what information.  
+Spend some time exploring the `fastn` website & the `fastn` discord channel.
+This will help you get an idea of the lay of the land, and where to find what
+information.  
 
-You can find almost all of the necessary documentation on our website. Start with some basics. If it helps, go through our video courses in our [Learn](/learn/) section. You should also familiarize youself about some of the `fastn` [Best Practises](/best-practices/).
+You can find almost all of the necessary documentation on our website. Start
+with some basics. If it helps, go through our video courses in our [Learn]
+(/learn/) section. You should also familiarize youself about some of the
+`fastn` [Best Practises](/best-practices/).
 
-Once you feel, you have a good understanding, simply face the following challenges head-on! 
+Once you feel, you have a good understanding, simply face the following
+challenges head-on! 
 
-You have a three week window to complete all 10 challenges listed below. You can complete the challenges at your own pace within the time-frame. You will have continued access to all the resources and the `fastn` community at all times. You are encouraged to seek help and reach out. 
+You have a three week window to complete all 10 challenges listed below. You can
+complete the challenges at your own pace within the time-frame. You will have
+continued access to all the resources and the `fastn` community at all times.
+You are encouraged to seek help and reach out. 
 
-After completing all the challanges, simply fill out the `fastn` Champions application on this page. You will be asked to provide "proof of your work", in the form of the github links. Post a short review, we will let you know of application status.
+After completing all the challanges, simply fill out the `fastn` Champions
+application on this page. You will be asked to provide "proof of your work", in
+the form of the github links. Post a short review, we will let you know of
+application status.
 
 
 -- ds.h1: `fastn' Champion Challenges
 
--- ds.h3: Create a Button
 
-This challenge is a beginner's level challenge, to get you started with creating your first component. It will test you ability to understand basics, and intrduce you to `fastn` 101.
+-- collapse.collapse: **Challenge 1**: Create a Button
 
-image
-Resources:
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge, to get you started with creating
+your first component. It will test you ability to understand basics, and
+intrduce you to `fastn` 101.
+
+-- ftd.column:
+width: fill-container 
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-1-button.png
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+-- collapse.collapse: **Challenge 2**: Create a login page UI
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container 
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-2-login-form.png
+width.fixed.percent: 40
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+
+-- collapse.collapse: **Challenge 3**: Create a bio-link page 
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container 
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-3-bio-link.png
+width.fixed.percent: 40
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+
+-- collapse.collapse: **Challenge 4**: Create an expander UI
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container 
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-4-expander-ui.png
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+
+-- collapse.collapse: **Challenge 5**: Create a colour package
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container 
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.featured.cs.winter-cs.png 
+width.fixed.percent: 50
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+
+-- collapse.collapse: **Challenge 6**: Create a typography package
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container 
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-6-typography.png
+width.fixed.percent: 50
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
 
 
 
--- ds.h3: Create a login page UI
+-- collapse.collapse: **Challenge 7**: Create a portfolio page
 
--- ds.h3: Create a bio-link page 
+Challenge criteria: `fastn` basics & reading developer documentation
 
--- ds.h3: Create an expander UI
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
 
--- ds.h3: Create a colour package
+-- ftd.column:
+width: fill-container 
+padding-vertical.px: 30
 
--- ds.h3: Create a typography package
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-7-portfolio.png
+width.fixed.percent: 80
 
--- ds.h3: Create a portfolio page
+-- end: ftd.column
 
--- ds.h3: Create a submission form page
+-- ds.markdown:
 
--- ds.h3: Create a blog site
+Resources: [Learn](learn/)
 
--- ds.h3: Create a multi-page design layout
-
-
---
+-- end: collapse.collapse
 
 
-Submit your `fastn` Champion Application [Submit](/*/)
+-- collapse.collapse: **Challenge 8**: Create a submission form page
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container 
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-8-form-submission.png
+width.fixed.percent: 50
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+
+-- collapse.collapse: **Challenge 9**: Create a blog site
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container 
+margin-vertical.px: 30 
+max-height.fixed.px: 500 
+overflow: auto
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-9-blog.png
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+
+-- collapse.collapse: **Challenge 10**: Create a multi-page design layout
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container 
+margin-vertical.px: 30 
+max-height.fixed.px: 500 
+overflow: auto
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-10-multi-page.png
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+-- ds.markdown:
+
+Submit your `fastn` Champion Application
+
+-- button.button: Submit
+role: primary large: true link: champion/
 
 
 -- end: ds.page

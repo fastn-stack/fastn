@@ -4,22 +4,31 @@
 
 -- ds.page: `fastn` Champion Program
 
-At `fastn` we are keen to raise the next generation of champion developers. The `fastn` Champion Program aims to engage enthusiastic folks who are passionate to undertake this journey. If you are someone, who wants to know and understand `fastn` at its core, then this program is for you. 
+At `fastn` we are keen to raise the next generation of champion developers. The
+`fastn` Champion Program aims to engage enthusiastic folks who are passionate
+to undertake this journey. If you are someone, who wants to know and understand
+`fastn` at its core, then this program is for you. 
 
 
 -- ds.h1: What makes a `fastn` Champion?
 
-A `fastn` Champion is one who will help unlock the true potential of `fastn` as a platform. 
+A `fastn` Champion is one who will help unlock the true potential of `fastn` as
+a platform. 
 
-They go the extra mile, demonstrating proficiency & skill. They dig deeper on technical documentations, explore all the collections, stay true to the best practises and gain the deepest understanding on all things `fastn`.  
+They go the extra mile, demonstrating proficiency & skill. They dig deeper on
+technical documentations, explore all the collections, stay true to the best
+practises and gain the deepest understanding on all things `fastn`.  
 
 - **Beacons of Knowledge**: They are veritable experts that anyone can turn to.
 
-- **Passionate Advocates**: Actively promote `fastn` across communities, forums & events.
+- **Passionate Advocates**: Actively promote `fastn` across communities,
+    forums & events.
 
-- **Power Collaborators**: Have the ability to provide meaningful advice & timely assists to others.
+- **Power Collaborators**: Have the ability to provide meaningful advice &
+    timely assists to others.
 
-- **Intrepid Explorers**: They are developers who will push the boundaries and help 'fastn' get better.
+- **Intrepid Explorers**: They are developers who will push the boundaries and
+    help 'fastn' get better.
 
 
 
@@ -27,30 +36,60 @@ They go the extra mile, demonstrating proficiency & skill. They dig deeper on te
 
 Champions are built different. Champions stand out from the crowd. 
 
-For all the time & effort you put in, `fastn` commits to help you gain an worthwhile advantage, when it comes to building your career and network. `fastn` supports Champions in many ways. Some of them may include:
+For all the time & effort you put in, `fastn` commits to help you gain an
+worthwhile advantage, when it comes to building your career and network.
+`fastn` supports Champions in many ways. Some of them may include:
 
-- **Badges & Roles**: A unique role will be awarded to Champions within our discord server. And they also gain access to a select channel on Discord, where they can network with other Champions. This group has access to special `fastn` projects & giveaways!
+- **Badges & Roles**: A unique role will be awarded to Champions within our
+    discord server. And they also gain access to a select channel on Discord,
+    where they can network with other Champions. This group has access to
+    special `fastn` projects & giveaways!
 
-- **Special Feature**: Your work and your profile is on put on a pedestal! All Champions get a special shoutout on our `fastn` website and their contributions are promoted across our platforms. 
+- **Special Feature**: Your work and your profile is on put on a pedestal! All
+    Champions get a special shoutout on our `fastn` website and their
+    contributions are promoted across our platforms. 
 
-- **Certifications**: Your skill can get you certified. You will receive official `fastn` certificates and accrediations to bolster your achievements.  This includes an official NSDC recognised certification in collaboration with LetsUpgrade. And that's not all. You get a super cool `fastn` Champions NFT to go with! 
+- **Certifications**: Your skill can get you certified. You will receive
+    official `fastn` certificates and accrediations to bolster your
+    achievements.  This includes an official NSDC recognised certification in
+    collaboration with LetsUpgrade. And that's not all. You get a super cool
+    `fastn` Champions NFT to go with! 
 
 
 -- ds.h1: How to become a `fastn` Champion?
 
-To become a Champion, all we ask of you is to put in some time & effort. Afterall, a Champion becomes so, only by overcoming series of challenges and combating obstacles. We simply ask the same of you. 
+To become a Champion, all we ask of you is to put in some time & effort.
+Afterall, a Champion becomes so, only by overcoming series of challenges and
+combating obstacles. We simply ask the same of you. 
 
-Spend some time exploring the `fastn` website & the `fastn` discord channel. Learn and develop essential `fastn' skills 
+Spend some time exploring the `fastn` website & the `fastn` discord channel.
+Learn and develop essential `fastn' skills 
 
-You can find almost all of the necessary documentation on our website. Start with some basics. If it helps, go through our video courses in our [Learn](learn/) section. You should also familiarize youself about some of the `fastn` [Best Practises](best-practices/).
+You can find almost all of the necessary documentation on our website. Start
+with some basics. If it helps, go through our video courses in our [Learn]
+(learn/) section. You should also familiarize youself about some of the
+`fastn` [Best Practises](best-practices/).
 
-Deepen your understanding on various aspects of `fastn' through these resources. This will help you to develop your practical skills and knowledge to build various solutions for different scenarios and domains.
+Deepen your understanding on various aspects of `fastn' through these resources.
+This will help you to develop your practical skills and knowledge to build
+various solutions for different scenarios and domains.
 
-Once you feel you have a good understanding, simply face the following challenges head-on! 
+Once you feel you have a good understanding, simply face the following
+challenges head-on! 
 
-You have a three week window to complete all 10 challenges listed below. The challenges will get increasingly complex as you go along, and will help reinforce all that you have learnt. You can complete the challenges at your own pace within the time-frame. You will have continued access to all the resources and the `fastn` community at all times. You are encouraged to seek help and reach out. 
+You have a three week window to complete all 10 challenges listed below. The
+challenges will get increasingly complex as you go along, and will help
+reinforce all that you have learnt. You can complete the challenges at your own
+pace within the time-frame. You will have continued access to all the resources
+and the `fastn` community at all times. You are encouraged to seek help and
+reach out. 
 
-After completing all the challanges, simply fill out the `fastn` Champions application on this page. There in, you will be asked to provide individual github/heroku links against each of the challenges you have successfully completed. You are also encouraged to document your journey across a series of blog posts. Once submitted, post a short internal review by the `fastn` team, we will let you know of application status.
+After completing all the challanges, simply fill out the `fastn` Champions
+application on this page. There in, you will be asked to provide individual
+github/heroku links against each of the challenges you have successfully
+completed. You are also encouraged to document your journey across a series of
+blog posts. Once submitted, post a short internal review by the `fastn` team,
+we will let you know of application status.
 
 
 -- ds.h1: `fastn' Champion Challenges
@@ -65,7 +104,7 @@ basics, and teaches you how to use developer documentation to solve
 challenges. 
 
 -- ftd.column:
-width: fill-container
+width: fill-container 
 padding-vertical.px: 30
 
 -- ds.image: 
@@ -91,7 +130,7 @@ basics, and teaches you how to use developer documentation to solve
 challenges. 
 
 -- ftd.column:
-width: fill-container
+width: fill-container 
 padding-vertical.px: 30
 
 -- ds.image: 
@@ -117,7 +156,7 @@ basics, and teaches you how to use developer documentation to solve
 challenges. 
 
 -- ftd.column:
-width: fill-container
+width: fill-container 
 padding-vertical.px: 30
 
 -- ds.image: 
@@ -143,7 +182,7 @@ basics, and teaches you how to use developer documentation to solve
 challenges. 
 
 -- ftd.column:
-width: fill-container
+width: fill-container 
 padding-vertical.px: 30
 
 -- ds.image: 
@@ -168,11 +207,11 @@ basics, and teaches you how to use developer documentation to solve
 challenges. 
 
 -- ftd.column:
-width: fill-container
+width: fill-container 
 padding-vertical.px: 30
 
 -- ds.image: 
-src: $fastn-assets.files.images.featured.cs.winter-cs.png
+src: $fastn-assets.files.images.featured.cs.winter-cs.png 
 width.fixed.percent: 50
 
 -- end: ftd.column
@@ -194,7 +233,7 @@ basics, and teaches you how to use developer documentation to solve
 challenges. 
 
 -- ftd.column:
-width: fill-container
+width: fill-container 
 padding-vertical.px: 30
 
 -- ds.image: 
@@ -221,7 +260,7 @@ basics, and teaches you how to use developer documentation to solve
 challenges. 
 
 -- ftd.column:
-width: fill-container
+width: fill-container 
 padding-vertical.px: 30
 
 -- ds.image: 
@@ -247,7 +286,7 @@ basics, and teaches you how to use developer documentation to solve
 challenges. 
 
 -- ftd.column:
-width: fill-container
+width: fill-container 
 padding-vertical.px: 30
 
 -- ds.image: 
@@ -273,9 +312,9 @@ basics, and teaches you how to use developer documentation to solve
 challenges. 
 
 -- ftd.column:
-width: fill-container
-margin-vertical.px: 30
-max-height.fixed.px: 500
+width: fill-container 
+margin-vertical.px: 30 
+max-height.fixed.px: 500 
 overflow: auto
 
 -- ds.image: 
@@ -300,9 +339,9 @@ basics, and teaches you how to use developer documentation to solve
 challenges. 
 
 -- ftd.column:
-width: fill-container
-margin-vertical.px: 30
-max-height.fixed.px: 500
+width: fill-container 
+margin-vertical.px: 30 
+max-height.fixed.px: 500 
 overflow: auto
 
 -- ds.image: 
@@ -321,9 +360,7 @@ Resources: [Learn](learn/)
 Submit your `fastn` Champion Application
 
 -- button.button: Submit
-role: primary
-large: true
-link: champion/
+role: primary large: true link: champion/
 
 
 -- end: ds.page
