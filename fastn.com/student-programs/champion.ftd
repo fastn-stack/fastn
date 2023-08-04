@@ -1,3 +1,7 @@
+-- import: fastn-community.github.io/bling/collapse
+-- import: fifthtry.github.io/button
+
+
 -- ds.page: `fastn` Champion Program
 
 At `fastn` we are keen to raise the next generation of champion developers. The `fastn` Champion Program aims to engage enthusiastic folks who are passionate to undertake this journey. If you are someone, who wants to know and understand `fastn` at its core, then this program is for you. 
@@ -38,7 +42,7 @@ To become a Champion, all we ask of you is to put in some time & effort. Afteral
 
 Spend some time exploring the `fastn` website & the `fastn` discord channel. Learn and develop essential `fastn' skills 
 
-You can find almost all of the necessary documentation on our website. Start with some basics. If it helps, go through our video courses in our [Learn](/learn/) section. You should also familiarize youself about some of the `fastn` [Best Practises](/best-practices/).
+You can find almost all of the necessary documentation on our website. Start with some basics. If it helps, go through our video courses in our [Learn](learn/) section. You should also familiarize youself about some of the `fastn` [Best Practises](best-practices/).
 
 Deepen your understanding on various aspects of `fastn' through these resources. This will help you to develop your practical skills and knowledge to build various solutions for different scenarios and domains.
 
@@ -51,7 +55,57 @@ After completing all the challanges, simply fill out the `fastn` Champions appli
 
 -- ds.h1: `fastn' Champion Challenges
 
--- ds.h3: Create a Button
+-- collapse.collapse: **Challenge 1**: Create a Button
+
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with creating your very first component. It will test you ability to understand basics, and teaches you how to use developer documentation to solve challenges. 
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge_1_button.png
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+
+Resources: [Learn](learn/)
+
+
+
+-- end: collapse.collapse
+
+-- collapse.collapse: **Challenge 2**: Create a login page UI
+
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with creating your very first component. It will test you ability to understand basics, and teaches you how to use developer documentation to solve challenges. 
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge_1_button.png
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+
+Resources: [Learn](learn/)
+
+
+
+-- end: collapse.collapse
+
+
 
 -- ds.h3: Create a login page UI
 
@@ -75,7 +129,12 @@ After completing all the challanges, simply fill out the `fastn` Champions appli
 --
 
 
-Submit your `fastn` Champion Application [Submit](/*/)
+Submit your `fastn` Champion Application
+
+-- button.button: Submit
+role: primary
+large: true
+link: champion/
 
 
 -- end: ds.page
