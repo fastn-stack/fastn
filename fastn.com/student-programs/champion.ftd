@@ -57,77 +57,266 @@ After completing all the challanges, simply fill out the `fastn` Champions appli
 
 -- collapse.collapse: **Challenge 1**: Create a Button
 
-
 Challenge criteria: `fastn` basics & reading developer documentation
 
-This challenge is a beginner's level challenge. This will get you started with creating your very first component. It will test you ability to understand basics, and teaches you how to use developer documentation to solve challenges. 
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
 
 -- ftd.column:
 width: fill-container
 padding-vertical.px: 30
 
 -- ds.image: 
-src: $fastn-assets.files.images.champions.challenge_1_button.png
+src: $fastn-assets.files.images.champions.challenge-1-button.png
 
 -- end: ftd.column
 
 -- ds.markdown:
 
-
 Resources: [Learn](learn/)
 
-
-
 -- end: collapse.collapse
+
+
 
 -- collapse.collapse: **Challenge 2**: Create a login page UI
 
-
 Challenge criteria: `fastn` basics & reading developer documentation
 
-This challenge is a beginner's level challenge. This will get you started with creating your very first component. It will test you ability to understand basics, and teaches you how to use developer documentation to solve challenges. 
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
 
 -- ftd.column:
 width: fill-container
 padding-vertical.px: 30
 
 -- ds.image: 
-src: $fastn-assets.files.images.champions.challenge_1_button.png
+src: $fastn-assets.files.images.champions.challenge-2-login-form.png
+width.fixed.percent: 40
 
 -- end: ftd.column
 
 -- ds.markdown:
 
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+
+-- collapse.collapse: **Challenge 3**: Create a bio-link page 
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-3-bio-link.png
+width.fixed.percent: 40
+
+-- end: ftd.column
+
+-- ds.markdown:
 
 Resources: [Learn](learn/)
 
+-- end: collapse.collapse
 
+
+-- collapse.collapse: **Challenge 4**: Create an expander UI
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-4-expander-ui.png
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+
+-- collapse.collapse: **Challenge 5**: Create a colour package
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.featured.cs.winter-cs.png
+width.fixed.percent: 50
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+
+-- collapse.collapse: **Challenge 6**: Create a typography package
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-6-typography.png
+width.fixed.percent: 50
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
 
 -- end: collapse.collapse
 
 
 
--- ds.h3: Create a login page UI
+-- collapse.collapse: **Challenge 7**: Create a portfolio page
 
--- ds.h3: Create a bio-link page 
+Challenge criteria: `fastn` basics & reading developer documentation
 
--- ds.h3: Create an expander UI
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
 
--- ds.h3: Create a colour package
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 30
 
--- ds.h3: Create a typography package
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-7-portfolio.png
+width.fixed.percent: 80
 
--- ds.h3: Create a portfolio page
+-- end: ftd.column
 
--- ds.h3: Create a submission form page
+-- ds.markdown:
 
--- ds.h3: Create a blog site
+Resources: [Learn](learn/)
 
--- ds.h3: Create a multi-page design layout
+-- end: collapse.collapse
 
 
---
+-- collapse.collapse: **Challenge 8**: Create a submission form page
 
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 30
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-8-form-submission.png
+width.fixed.percent: 50
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+
+-- collapse.collapse: **Challenge 9**: Create a blog site
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 30
+max-height.fixed.px: 500
+overflow: auto
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-9-blog.png
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+
+-- collapse.collapse: **Challenge 10**: Create a multi-page design layout
+
+Challenge criteria: `fastn` basics & reading developer documentation
+
+This challenge is a beginner's level challenge. This will get you started with
+creating your very first component. It will test you ability to understand
+basics, and teaches you how to use developer documentation to solve
+challenges. 
+
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 30
+max-height.fixed.px: 500
+overflow: auto
+
+-- ds.image: 
+src: $fastn-assets.files.images.champions.challenge-10-multi-page.png
+
+-- end: ftd.column
+
+-- ds.markdown:
+
+Resources: [Learn](learn/)
+
+-- end: collapse.collapse
+
+-- ds.markdown:
 
 Submit your `fastn` Champion Application
 
