@@ -348,6 +348,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/ds/markdown.ftd
 - Adding typography: /typography/-/frontend/
   document: /expander/ds/ds-typography.ftd
+- Adding color scheme: /color-scheme/-/frontend/
+  document: /expander/ds/ds-cs.ftd
 - Using `ds.page` component: /ds-page/-/frontend/
   document: /expander/ds/ds-page.ftd
   skip: true
