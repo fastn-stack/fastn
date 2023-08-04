@@ -357,6 +357,12 @@ impl InterpreterState {
                                 return Ok(s.into_interpreter(self))
                             }
                             ftd::interpreter::StateWithThing::Thing(web_component) => {
+                                let js = web_component
+                                    .js
+                                    .to_owned()
+                                    .resolve(&doc, web_component.line_number)?
+                                    .string(doc.name, web_component.line_number)?;
+                                self.js.insert(format!("{}:type=\"module\"", js));
                                 ftd::interpreter::utils::insert_export_thing(
                                     exports.as_slice(),
                                     web_component.name.as_str(),

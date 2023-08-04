@@ -5,6 +5,26 @@ pub fn trim_all_lines(s: &str) -> String {
     s.split('\n').map(|v| v.trim()).join("\n")
 }
 
+pub fn get_js_html(external_js: &[String]) -> String {
+    let mut result = "".to_string();
+    for js in external_js {
+        if let Some((js, tags)) = js.rsplit_once(':') {
+            result = format!("{}<script src=\"{}\" {}></script>", result, js, tags);
+        } else {
+            result = format!("{}<script src=\"{}\"></script>", result, js);
+        }
+    }
+    result
+}
+
+pub fn get_css_html(external_css: &[String]) -> String {
+    let mut result = "".to_string();
+    for css in external_css {
+        result = format!("{}<link rel=\"stylesheet\" href=\"{}\">", result, css);
+    }
+    result
+}
+
 pub(crate) fn get_rive_event(
     events: &[ftd::interpreter::Event],
     doc: &ftd::interpreter::TDoc,

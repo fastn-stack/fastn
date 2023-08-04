@@ -22,6 +22,7 @@ let ftd = {
         });
     },
 
+    // Todo: Implement this (Remove highlighter)
     clean_code(args) {
         return args.a;
     },
@@ -103,6 +104,10 @@ let ftd = {
 
     get(value, index) {
          return fastn_utils.getStaticValue(fastn_utils.getterByKey(value, index));
+    },
+
+    component_data(component) {
+        return component.getAttribute(fastn_dom.webComponentArgument);
     }
 
 };

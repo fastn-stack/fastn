@@ -5,9 +5,12 @@ fastn_dom.codeData = {
     addedCssFile: []
 }
 
+fastn_dom.webComponent = [];
+
 fastn_dom.commentNode = "comment";
 fastn_dom.wrapperNode = "wrapper";
 fastn_dom.commentMessage = "***FASTN***";
+fastn_dom.webComponentArgument = "args";
 
 fastn_dom.classes = { }
 fastn_dom.unsanitised_classes = {}
@@ -139,7 +142,8 @@ fastn_dom.ElementKind = {
     Code: 15,
     // Note: This is called internally, it gives `code` as tagName. This is used
     // along with the Code: 15.
-    CodeChild: 16
+    CodeChild: 16,
+    WebComponent: (webcomponent, arguments) => { return [17, {webcomponent, arguments}]; }
 };
 
 fastn_dom.PropertyKind = {
