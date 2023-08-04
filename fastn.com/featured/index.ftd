@@ -128,6 +128,7 @@ optional body body:
 -- ftd.column:
 width: fill-container
 padding-top.px: 8
+spacing.fixed.px if { ftd.device == "mobile" }: 24
 
 -- ftd.row:
 width: fill-container
@@ -193,7 +194,7 @@ $grid-view.body
 
 -- ftd.row:
 width: fill-container
-spacing.fixed.px: 24
+spacing.fixed.px: 32
 classes: wrapper
 
 -- grid-of-items: $obj.title
@@ -215,6 +216,7 @@ two-fold: $obj.two-fold
 
 -- ftd.column:
 width: fill-container
+spacing.fixed.px: 32
 
 -- grid-of-items: $obj.title
 $loop$: $grid-view.templates as $obj
@@ -259,13 +261,9 @@ boolean two-fold: false
 boolean $mouse-in: false
 
 -- ftd.column:
-;;width.fixed.percent if { ftd.device != "mobile" && !grid-of-items.two-fold }: 31.58
-;;width.fixed.percent if { ftd.device != "mobile" && grid-of-items.two-fold }: 64.42
 width if { ftd.device == "mobile" }: fill-container
-;;margin-bottom.px: 60
 spacing.fixed.px: 16
 ;;open-in-new-tab: true
-;;height: fill-container
 classes if {grid-of-items.two-fold}: two-folded
 $on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)

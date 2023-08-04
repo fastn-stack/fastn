@@ -1,5 +1,5 @@
 -- import: fastn.com/featured as ft-ui
--- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds as lib
 -- import: fastn-community.github.io/footer
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
@@ -9,35 +9,77 @@
 
 
 -- ds.page: 
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
 full-width: true
+sidebar: false
 
--- ds.page.footer:
+-- lib.wrapper:
 
--- footer.social-sideline-footer:
-social: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+-- lib.hero: Business cards
+image: $fastn-assets.files.images.featured.business-cards.hero-image.jpg
+cta-text: View all templates
+cta-link: featured/components/cards/
 
+Fastn provides exhaustive frameworks to set up and  scale your project in
+minutes. Fastn provides exhaustive frameworks to set up and  scale your project
+in minutes.
 
--- end: ds.page.footer
-
+-- lib.wrap-1440:
 
 -- ft-ui.grid-view: Featured designs
 templates: $cards
 more-link-text: View all
-more-link: /featured/doc-sites/
+more-link: /featured/components/cards/
+
+-- end: lib.wrap-1440
+
+-- lib.category-hero: Create and customize Business card in minutes
+image: $fastn-assets.files.images.featured.business-cards.category-hero-inage.png
+icon: $fastn-assets.files.images.featured.business-cards.element.svg
+cta-text: View all designs
+cta-link: featured/components/cards/
+
+Connect your TikTok, Instagram, Twitter, website, store, videos, music, podcast,
+events and more. It all comes together in a link in bio landing page designed
+to convert.
+
+
+-- lib.wrap-1440-row:
+
+-- lib.zigzag-card: 
+bg-color: $inherited.colors.background.step-2
+image: $fastn-assets.files.images.featured.business-cards.zigzag-card-1.png
+bg-color-mobile: $inherited.colors.background.step-2
+
+-- lib.zigzag-card: Simple
+bg-color: $inherited.colors.background.step-1
+
+Start with one of dozens of templates (or a blank canvas) and make it your own
+
+-- lib.zigzag-card: Free
+bg-color: $inherited.colors.background.step-1
+bg-color-mobile: $inherited.colors.background.step-2
+
+Build up to three sites per account and use all of Carrd's core features – for
+free!
+
+-- lib.zigzag-card: 
+bg-color: $inherited.colors.background.step-2
+image: $fastn-assets.files.images.featured.business-cards.zigzag-card-1.png
+bg-color-mobile: $inherited.colors.background.step-1
+
+-- lib.zigzag-card: 
+bg-color: $inherited.colors.background.step-2
+image: $fastn-assets.files.images.featured.business-cards.zigzag-card-2.png
+bg-color-mobile: $inherited.colors.background.step-2
+
+-- lib.zigzag-card: Light and dark theme
+bg-color: $inherited.colors.background.step-1
+
+Connect your TikTok, Instagram, Twitter, website, store, videos, music,
+
+-- end: lib.wrap-1440-row
+
+-- end: lib.wrapper
 
 -- end: ds.page
 
@@ -47,28 +89,22 @@ more-link: /featured/doc-sites/
 
 -- ft-ui.template list cards:
 
--- ft-ui.template: Business Card
-template-url: https://fastn-community.github.io/business-card/
-screenshot: $fastn-assets.files.images.featured.components.business-card.png
-licence-url: https://github.com/fastn-community/business-card/blob/main/LICENSE
-github-url: https://github.com/fastn-community/business-card
+-- ft-ui.template: Midnight Business Card
+template-url: featured/business-card/midnight-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
 
-Build you own business-card using business-card package.
+Build you own business-card using gradient-business-card package.
 
--- ft-ui.template: Green Business Card
-template-url: https://gsalunke.github.io/green-business-card/
-screenshot: $fastn-assets.files.images.featured.components.green-business-card.png
-licence-url: https://github.com/gsalunke/green-business-card/blob/main/LICENSE
-github-url: https://github.com/gsalunke/green-business-card
+-- ft-ui.template: Pattern Business Card
+template-url: featured/business-card/pattern-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
 
-Build you own business-card using business-card package.
+Build you own business-card using pattern-business-card package.
 
--- ft-ui.template: Gradient Business Card
-template-url: https://fastn-community.github.io/gradient-business-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
-licence-url: https://github.com/fastn-community/business-card/blob/main/LICENSE
-github-url: https://github.com/fastn-community/business-card
+-- ft-ui.template: Sunset Business Card
+template-url: featured/business-card/sunset-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.sunset-business-card-front.jpg
 
-Build you own business-card using business-card package.
+Build you own business-card using sunset-business-card package.
 
 -- end: cards
