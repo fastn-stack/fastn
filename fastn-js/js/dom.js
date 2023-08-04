@@ -681,13 +681,19 @@ class Node2 {
         }
     }
     updatePositionForNodeById(node_id, value) {
-        console.log("Inside fn 1");
         if (hydrating) {
-            console.log("Hydrating");
-            console.log(node_id, value);
             const target_node = document.querySelector(`[id="${node_id}"]`);
             if (target_node !== null && target_node !== undefined)
                 target_node.style['position'] = value;
+        }
+    }
+    updateParentPosition(value) {
+        if (hydrating) {
+            let current_node = document.querySelector(`[data-id="${id_counter}"]`);
+            if (current_node) {
+                let parent_node = current_node.parentNode;
+                parent_node.style['position'] = value;
+            }
         }
     }
 
@@ -1161,20 +1167,22 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Anchor) {
             // todo: this needs fixed for anchor.id = v
             // need to change position of element with id = v to relative
+            if (fastn_utils.isNull(staticValue)) {
+                this.attachCss("position", staticValue);
+                return;
+            }
+
             let anchorType = staticValue[0];
             switch (anchorType) {
               case 1:
-                console.log("Setting Window Anchor:", staticValue[1]);
                 this.attachCss("position", staticValue[1]);
                 break;
               case 2:
-                console.log("Setting Parent Anchor:", staticValue[1]);
                 this.attachCss("position", staticValue[1]);
-                this.#parent.attachCss("position", "relative");
+                this.updateParentPosition("relative");
                 break;
               case 3:
                 const parent_node_id = staticValue[1];
-                console.log(parent_node_id);
                 this.attachCss("position", "absolute");
                 this.updatePositionForNodeById(parent_node_id, "relative");
                 break;
