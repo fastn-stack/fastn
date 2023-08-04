@@ -54,11 +54,36 @@ pub async fn build(
 }
 
 mod cache {
+    const FILE_NAME: &str = "fastn.cache";
+
+    pub(crate) fn get() -> Cache {
+        match fastn_core::utils::get_cached(FILE_NAME) {
+            Some(v) => {
+                tracing::debug!("cached hit");
+                v
+            }
+            None => {
+                tracing::debug!("cached miss");
+                Cache {
+                    documents: vec![],
+                    assets: std::collections::BTreeMap::new(),
+                }
+            }
+        }
+    }
+
     #[derive(serde::Serialize, serde::Deserialize)]
     pub(crate) struct Cache {
         // fastn_version: String, // TODO: Add this
         pub(crate) documents: Vec<Document>,
         pub(crate) assets: std::collections::BTreeMap<String, File>,
+    }
+
+    impl Cache {
+        pub(crate) fn cache_it(&self) -> fastn_core::Result<()> {
+            fastn_core::utils::cache_it(FILE_NAME, self)?;
+            Ok(())
+        }
     }
 
     #[derive(serde::Serialize, serde::Deserialize)]
@@ -85,20 +110,7 @@ async fn incremental_build(
 ) -> fastn_core::Result<()> {
     // https://fastn.com/rfc/incremental-build/
 
-    let mut c = match fastn_core::utils::get_cached::<cache::Cache>("build_cache") {
-        Some(v) => {
-            tracing::debug!("cached hit");
-            v
-        }
-        None => {
-            tracing::debug!("cached miss");
-            cache::Cache {
-                // fastn_version: fastn_core::utils::get_fastn_version(),
-                documents: vec![],
-                assets: std::collections::BTreeMap::new(),
-            }
-        }
-    };
+    let mut c = cache::get();
 
     for document in documents.values() {
         handle_file(
@@ -112,7 +124,10 @@ async fn incremental_build(
         )
         .await?;
     }
-    fastn_core::utils::cache_it("build_cache", &c)?;
+
+    // TODO: Handle deleted files (files present in cache/.build but not in documents)
+
+    c.cache_it()?;
 
     Ok(())
 }
