@@ -107,9 +107,20 @@ let ftd = {
     },
 
     component_data(component) {
-        return component.getAttribute(fastn_dom.webComponentArgument);
+        let attributesIndex = component.getAttribute(fastn_dom.webComponentArgument);
+        let attributes = fastn_dom.webComponent[attributesIndex];
+        return Object.fromEntries(
+            Object.entries(attributes).map(([k,v]) => {
+                    if (v instanceof fastn.mutableClass) {
+                        v = fastn.webComponentVariable.mutable(v);
+                    } else {
+                        v = fastn.webComponentVariable.static(v);
+                    }
+                    return [k, v];
+                }
+            )
+        );
     }
-
 };
 
 // ftd.append($a = $people, v = Tom)

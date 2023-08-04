@@ -45,14 +45,15 @@ pub fn all_js_without_test_and_ftd_langugage_js() -> String {
     let utils_js = include_str!("../js/utils.js");
     let virtual_js = include_str!("../js/virtual.js");
     let ftd_js = include_str!("../js/ftd.js");
+    let web_component_js = include_str!("../js/web-component.js");
     let post_init_js = include_str!("../js/postInit.js");
-    format!("{fastn_js}{dom_js}{utils_js}{virtual_js}{ftd_js}{post_init_js}")
+    format!("{fastn_js}{dom_js}{utils_js}{virtual_js}{ftd_js}{web_component_js}{post_init_js}")
 }
 
 pub fn all_js_without_test() -> String {
     let fastn_js = all_js_without_test_and_ftd_langugage_js();
     let ftd_language_js = include_str!("../js/ftd-language.js");
-    format!("{ftd_language_js}{fastn_js}")
+    format!("{ftd_language_js}{fastn_js}\nwindow.ftd = ftd;\n")
 }
 
 pub fn all_js_with_test() -> String {
