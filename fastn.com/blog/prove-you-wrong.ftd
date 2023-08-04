@@ -1,4 +1,7 @@
 -- ds.page: `fastn` might prove you wrong in the best possible way
+document-title: `fastn` might prove you wrong in the best possible way
+document-description: fastn is built for those who have never encountered a line of code before. 
+
 
 Nandhini, 03 August 2023
 
@@ -57,7 +60,8 @@ using fastn.
 -- ftd.iframe:
 src: https://www.linkedin.com/embed/feed/update/urn:li:share:7091077165768687616
 width: fill-container
-height.fixed.px: 1000
+height.fixed.px: 1080
+
 
 -- ds.markdown:
 
