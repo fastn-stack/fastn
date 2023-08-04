@@ -133,20 +133,23 @@ elements designed to enhance the presentation and engagement of web pages.
 -- ft-ui.template list cards:
 
 -- ft-ui.template: Business Card
-template-url: https://fastn-community.github.io/business-card/
+template-url: featured/business-card/card-1/
 screenshot: $fastn-assets.files.images.featured.components.business-card.png
-licence-url: https://github.com/fastn-community/business-card/blob/main/LICENSE
-github-url: https://github.com/fastn-community/business-card
 
 Build you own business-card using business-card package.
 
--- ft-ui.template: Green Business Card
-template-url: https://gsalunke.github.io/green-business-card/
-screenshot: $fastn-assets.files.images.featured.components.green-business-card.png
-licence-url: https://github.com/gsalunke/green-business-card/blob/main/LICENSE
-github-url: https://github.com/gsalunke/green-business-card
+-- ft-ui.template: Gradient Business Card
+template-url: featured/business-card/gradient-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
 
-Build you own business-card using business-card package.
+Build you own business-card using gradient-business-card package.
+
+-- ft-ui.template: Midnight Business Card
+template-url: featured/business-card/midnight-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
+
+Build you own business-card using gradient-business-card package.
+
 
 -- end: cards
 
