@@ -92,6 +92,41 @@ pub fn print_end(msg: &str, start: std::time::Instant) {
     }
 }
 
+/// replace_last_n("a.b.c.d.e.f", 2, ".", "/") => "a.b.c.d/e/f"
+pub fn replace_last_n(s: &str, n: usize, pattern: &str, replacement: &str) -> String {
+    use itertools::Itertools;
+
+    s.rsplitn(n + 1, pattern)
+        .collect_vec()
+        .into_iter()
+        .rev()
+        .join(replacement)
+}
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn replace_last_n() {
+        assert_eq!(
+            super::replace_last_n("a.b.c.d.e.f", 2, ".", "/"),
+            "a.b.c.d/e/f"
+        );
+        assert_eq!(
+            super::replace_last_n("a.b.c.d.e.", 2, ".", "/"),
+            "a.b.c.d/e/"
+        );
+        assert_eq!(super::replace_last_n("d-e.f", 2, ".", "/"), "d-e/f");
+        assert_eq!(
+            super::replace_last_n("a.ftd/b.ftd", 1, ".ftd", "/index.html"),
+            "a.ftd/b/index.html"
+        );
+        assert_eq!(
+            super::replace_last_n("index.ftd/b/index.ftd", 1, "index.ftd", "index.html"),
+            "index.ftd/b/index.html"
+        );
+    }
+}
+
 pub fn value_to_colored_string(value: &serde_json::Value, indent_level: u32) -> String {
     use colored::Colorize;
 

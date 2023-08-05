@@ -572,9 +572,9 @@ pub(crate) async fn process_ftd(
     let file_rel_path = if main.id.eq("404.ftd") {
         "404.html".to_string()
     } else if main.id.ends_with("index.ftd") {
-        replace_last_n(main.id.as_str(), 1, "index.ftd", "index.html")
+        fastn_core::utils::replace_last_n(main.id.as_str(), 1, "index.ftd", "index.html")
     } else {
-        replace_last_n(main.id.as_str(), 1, ".ftd", "/index.html")
+        fastn_core::utils::replace_last_n(main.id.as_str(), 1, ".ftd", "/index.html")
     };
 
     let response = read_ftd(config, &main, base_url, build_static_files, test).await?;
@@ -586,39 +586,4 @@ pub(crate) async fn process_ftd(
     .await?;
 
     Ok(response)
-}
-
-/// replace_last_n("a.b.c.d.e.f", 2, ".", "/") => "a.b.c.d/e/f"
-fn replace_last_n(s: &str, n: usize, pattern: &str, replacement: &str) -> String {
-    use itertools::Itertools;
-
-    s.rsplitn(n + 1, pattern)
-        .collect_vec()
-        .into_iter()
-        .rev()
-        .join(replacement)
-}
-
-#[cfg(test)]
-mod test {
-    #[test]
-    fn replace_last_n() {
-        assert_eq!(
-            super::replace_last_n("a.b.c.d.e.f", 2, ".", "/"),
-            "a.b.c.d/e/f"
-        );
-        assert_eq!(
-            super::replace_last_n("a.b.c.d.e.", 2, ".", "/"),
-            "a.b.c.d/e/"
-        );
-        assert_eq!(super::replace_last_n("d-e.f", 2, ".", "/"), "d-e/f");
-        assert_eq!(
-            super::replace_last_n("a.ftd/b.ftd", 1, ".ftd", "/index.html"),
-            "a.ftd/b/index.html"
-        );
-        assert_eq!(
-            super::replace_last_n("index.ftd/b/index.ftd", 1, "index.ftd", "index.html"),
-            "index.ftd/b/index.html"
-        );
-    }
 }
