@@ -552,7 +552,7 @@ pub(crate) async fn process_ftd(
         fastn_core::utils::replace_last_n(main.id.as_str(), 1, ".ftd", "/index.html")
     };
 
-    let response = read_ftd(config, &main, base_url, build_static_files, test).await?;
+    let response = read_ftd(config, main, base_url, build_static_files, test).await?;
     fastn_core::utils::write(
         &config.build_dir(),
         file_rel_path.as_str(),

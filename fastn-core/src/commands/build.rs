@@ -406,26 +406,7 @@ async fn process_static(
             .join(package.name.as_str());
 
         std::fs::create_dir_all(&build_path)?;
-        if let Some((dir, _)) = sa.id.rsplit_once('/') {
-            std::fs::create_dir_all(build_path.join(dir))?;
-        }
-        std::fs::copy(
-            sa.base_path.join(sa.id.as_str()),
-            build_path.join(sa.id.as_str()),
-        )?;
-
-        {
-            // TODO: need to remove this once download_base_url is removed
-            std::fs::create_dir_all(base_path.join(".build"))?;
-            if let Some((dir, _)) = sa.id.rsplit_once('/') {
-                std::fs::create_dir_all(base_path.join(".build").join(dir))?;
-            }
-
-            std::fs::copy(
-                sa.base_path.join(sa.id.as_str()),
-                base_path.join(".build").join(sa.id.as_str()),
-            )?;
-        }
+        std::fs::write(build_path.join(sa.id.as_str()), sa.content.as_bytes())?;
         Ok(())
     }
 }
