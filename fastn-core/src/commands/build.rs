@@ -55,7 +55,7 @@ pub async fn build(
 
 mod build_dir {
     pub(crate) fn get_build_content() -> std::collections::BTreeMap<String, String> {
-        todo!()
+        Default::default()
     }
 }
 
@@ -406,7 +406,7 @@ async fn process_static(
             .join(package.name.as_str());
 
         std::fs::create_dir_all(&build_path)?;
-        std::fs::write(build_path.join(sa.id.as_str()), sa.content.as_bytes())?;
+        std::fs::write(build_path.join(sa.id.as_str()), &sa.content)?;
         Ok(())
     }
 }
