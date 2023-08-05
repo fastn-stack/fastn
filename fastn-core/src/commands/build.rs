@@ -204,29 +204,25 @@ async fn handle_file_(
     config.current_document = Some(document.get_id().to_string());
     match document {
         fastn_core::File::Ftd(doc) => {
-            if !config
-                .ftd_edition
-                .eq(&fastn_core::config::FTDEdition::FTD2021)
-            {
-                // Ignore redirect paths
-                if let Some(r) = config.package.redirects.as_ref() {
-                    if fastn_core::package::redirects::find_redirect(r, doc.id.as_str()).is_some() {
-                        println!("Ignored by redirect {}", doc.id.as_str());
-                        return Ok(());
-                    }
-                }
-
-                fastn_core::utils::copy(
-                    config.root.join(doc.id.as_str()),
-                    config.root.join(".build").join(doc.id.as_str()),
-                )
-                .await
-                .ok();
-
-                if doc.id.eq("FASTN.ftd") {
+            // Ignore redirect paths
+            if let Some(r) = config.package.redirects.as_ref() {
+                if fastn_core::package::redirects::find_redirect(r, doc.id.as_str()).is_some() {
+                    println!("Ignored by redirect {}", doc.id.as_str());
                     return Ok(());
                 }
             }
+
+            fastn_core::utils::copy(
+                config.root.join(doc.id.as_str()),
+                config.root.join(".build").join(doc.id.as_str()),
+            )
+            .await
+            .ok();
+
+            if doc.id.eq("FASTN.ftd") {
+                return Ok(());
+            }
+
             let resp = fastn_core::package::package_doc::process_ftd(
                 config,
                 doc,
@@ -248,45 +244,12 @@ async fn handle_file_(
         }
         fastn_core::File::Static(sa) => process_static(sa, &config.root, &config.package).await?,
         fastn_core::File::Markdown(doc) => {
-            if !config
-                .ftd_edition
-                .eq(&fastn_core::config::FTDEdition::FTD2021)
-            {
-                // TODO: bring this feature back
-                print!("Skipped ");
-                return Ok(());
-            }
-            let resp = process_markdown(config, doc, base_url, build_static_files, test).await;
-            match (resp, ignore_failed) {
-                (Ok(r), _) => r,
-                (_, true) => {
-                    print!("Failed ");
-                    return Ok(());
-                }
-                (e, _) => {
-                    return e;
-                }
-            }
+            // TODO: bring this feature back
+            print!("Skipped ");
+            return Ok(());
         }
         fastn_core::File::Image(main_doc) => {
             process_static(main_doc, &config.root, &config.package).await?;
-            if config
-                .ftd_edition
-                .eq(&fastn_core::config::FTDEdition::FTD2021)
-            {
-                let resp =
-                    process_image(config, main_doc, base_url, build_static_files, test).await;
-                match (resp, ignore_failed) {
-                    (Ok(r), _) => r,
-                    (_, true) => {
-                        print!("Failed ");
-                        return Ok(());
-                    }
-                    (e, _) => {
-                        return e;
-                    }
-                }
-            }
         }
         fastn_core::File::Code(doc) => {
             process_static(
@@ -300,22 +263,6 @@ async fn handle_file_(
                 &config.package,
             )
             .await?;
-            if config
-                .ftd_edition
-                .eq(&fastn_core::config::FTDEdition::FTD2021)
-            {
-                let resp = process_code(config, doc, base_url, build_static_files, test).await;
-                match (resp, ignore_failed) {
-                    (Ok(r), _) => r,
-                    (_, true) => {
-                        print!("Failed ");
-                        return Ok(());
-                    }
-                    (e, _) => {
-                        return e;
-                    }
-                }
-            }
         }
     }
 
