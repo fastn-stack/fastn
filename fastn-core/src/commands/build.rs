@@ -53,11 +53,17 @@ pub async fn build(
     config.download_fonts().await
 }
 
+mod build_dir {
+    pub(crate) fn get_build_content() -> std::collections::BTreeMap<String, String> {
+        todo!()
+    }
+}
+
 mod cache {
     const FILE_NAME: &str = "fastn.cache";
 
     pub(crate) fn get() -> Cache {
-        match fastn_core::utils::get_cached(FILE_NAME) {
+        let mut v = match fastn_core::utils::get_cached(FILE_NAME) {
             Some(v) => {
                 tracing::debug!("cached hit");
                 v
@@ -65,16 +71,21 @@ mod cache {
             None => {
                 tracing::debug!("cached miss");
                 Cache {
+                    build_content: std::collections::BTreeMap::new(),
                     documents: vec![],
                     assets: std::collections::BTreeMap::new(),
                 }
             }
-        }
+        };
+        v.build_content = super::build_dir::get_build_content();
+        v
     }
 
     #[derive(serde::Serialize, serde::Deserialize)]
     pub(crate) struct Cache {
         // fastn_version: String, // TODO: Add this
+        #[serde(skip)]
+        pub(crate) build_content: std::collections::BTreeMap<String, String>,
         pub(crate) documents: Vec<Document>,
         pub(crate) assets: std::collections::BTreeMap<String, File>,
     }
@@ -204,14 +215,6 @@ async fn handle_file_(
     config.current_document = Some(document.get_id().to_string());
     match document {
         fastn_core::File::Ftd(doc) => {
-            // Ignore redirect paths
-            if let Some(r) = config.package.redirects.as_ref() {
-                if fastn_core::package::redirects::find_redirect(r, doc.id.as_str()).is_some() {
-                    println!("Ignored by redirect {}", doc.id.as_str());
-                    return Ok(());
-                }
-            }
-
             fastn_core::utils::copy(
                 config.root.join(doc.id.as_str()),
                 config.root.join(".build").join(doc.id.as_str()),

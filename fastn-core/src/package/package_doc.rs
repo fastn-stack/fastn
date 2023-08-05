@@ -544,31 +544,6 @@ pub(crate) async fn process_ftd(
     build_static_files: bool,
     test: bool,
 ) -> fastn_core::Result<FTDResult> {
-    if main.id.eq("FASTN.ftd") {
-        tokio::fs::copy(
-            config.root.join(main.id.as_str()),
-            config.root.join(".build").join(main.id.as_str()),
-        )
-        .await?;
-    }
-
-    let main = {
-        let mut main = main.to_owned();
-        if main.id.eq("FASTN.ftd") {
-            main.id = "-.ftd".to_string();
-            let path = config.root.join("fastn").join("info.ftd");
-            main.content = if path.is_file() {
-                std::fs::read_to_string(path)?
-            } else {
-                format!(
-                    "-- import: {}/package-info as pi\n\n-- pi.package-info-page:",
-                    config.package_info_package()
-                )
-            }
-        }
-        main
-    };
-
     let file_rel_path = if main.id.eq("404.ftd") {
         "404.html".to_string()
     } else if main.id.ends_with("index.ftd") {
