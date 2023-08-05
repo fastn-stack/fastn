@@ -1,7 +1,9 @@
 <div align="center">
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-) ![Contributors](https://img.shields.io/github/contributors/fastn-stack/fastn?color=dark-green) ![Issues](https://img.shields.io/github/issues/fastn-stack/fastn) ![License](https://img.shields.io/github/license/fastn-stack/fastn) [![Discord](https://img.shields.io/discord/793929082483769345)](https://discord.com/channels/793929082483769345/)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fftd-lang%2Ffpm.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fftd-lang%2Ffpm?ref=badge_shield)
+![Contributors](https://img.shields.io/github/contributors/fastn-stack/fastn?color=dark-green) 
+![Issues](https://img.shields.io/github/issues/fastn-stack/fastn) 
+![License](https://img.shields.io/github/license/fastn-stack/fastn) 
+[![Discord](https://dcbadge.vercel.app/api/server/eNXVBMq4xt?style=flat)](https://fastn.com/discord/)
 
 </div>
 
