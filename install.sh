@@ -103,7 +103,7 @@ setup() {
 
     DESTINATION_PATH="/usr/local/bin"
 
-    if [ -d "$DESTINATION_PATH" ]; then
+    if [ -d "$DESTINATION_PATH" ] && [ -w "$DESTINATION_PATH" ]; then
         DESTINATION_PATH=$DESTINATION_PATH
     else
         DESTINATION_PATH="${HOME}/.fastn/bin"
