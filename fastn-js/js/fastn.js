@@ -161,13 +161,14 @@ class Proxy {
 class MutableList {
     #list;
     #watchers;
-    #dom_constructors;
+    #closures;
     constructor(list) {
         this.#list = [];
         for (let idx in list) {
             this.#list.push( { item: fastn.wrapMutable(list[idx]), index: new Mutable(parseInt(idx)) });
         }
         this.#watchers = [];
+        this.#closures = [];
     }
     forLoop(root, dom_constructor) {
         let l = fastn_dom.forLoop(root, dom_constructor, this);
@@ -196,7 +197,7 @@ class MutableList {
 
         for (let i in this.#watchers) {
             let forLoop = this.#watchers[i];
-            forLoop.insertNode(idx, forLoop.createNode(idx));
+            forLoop.createNode(idx);
         }
     }
     push(value) {
@@ -208,6 +209,15 @@ class MutableList {
         for (let i = idx; i < this.#list.length; i++) {
             this.#list[i].index.set(i);
         }
+
+        for (let i in this.#watchers) {
+            let forLoop = this.#watchers[i];
+            forLoop.deleteNode(idx);
+        }
+    }
+
+    pop() {
+        this.deleteAt(this.#list.length - 1);
     }
 }
 

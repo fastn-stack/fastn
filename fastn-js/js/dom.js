@@ -677,14 +677,12 @@ class Node2 {
             this.#node.updateTagName(name);
         }
     }
-
     updateToAnchor() {
         let node_kind = this.#kind;
         if (ssr) {
             if (node_kind !== fastn_dom.ElementKind.Image) this.updateTagName('a');
         }
     }
-
     updateMetaTitle(value) {
         if (!ssr && hydrating) {
             window.document.title = value;
@@ -1620,8 +1618,7 @@ class ForLoop {
         this.#nodes = [];
 
         for (let idx in list.getList()) {
-            let node = this.createNode(idx);
-            this.#nodes.push(node);
+            this.createNode(idx);
         }
     }
     createNode(index) {
@@ -1630,15 +1627,17 @@ class ForLoop {
             parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#nodes[index-1]);
         }
         let v = this.#list.get(index);
-        return this.#node_constructor(parentWithSibiling, v.item, v.index);
+        let node = this.#node_constructor(parentWithSibiling, v.item, v.index);
+        this.#nodes.splice(index, 0, node);
+        return node;
     }
 
     getWrapper() {
         return this.#wrapper;
     }
-
-    insertNode(index, node) {
-        this.#nodes.splice(index, 0, node);
+    deleteNode(index) {
+       let node = this.#nodes.splice(index, 1)[0];
+        node.destroy();
     }
 
     getParent() {
