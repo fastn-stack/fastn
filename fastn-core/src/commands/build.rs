@@ -54,15 +54,41 @@ pub async fn build(
 }
 
 mod build_dir {
-    pub(crate) fn get_build_content() -> std::collections::BTreeMap<String, String> {
-        Default::default()
+    pub(crate) fn get_build_content() -> std::io::Result<std::collections::BTreeMap<String, String>>
+    {
+        let mut b = std::collections::BTreeMap::new();
+
+        for f in find_all_files_recursively(".build") {
+            b.insert(
+                f.to_string_lossy().to_string().replacen(".build/", "", 1),
+                fastn_core::utils::generate_hash(std::fs::read(&f)?),
+            );
+        }
+
+        Ok(dbg!(b))
+    }
+
+    fn find_all_files_recursively(
+        dir: impl AsRef<std::path::Path> + std::fmt::Debug,
+    ) -> Vec<std::path::PathBuf> {
+        let mut files = vec![];
+        for entry in std::fs::read_dir(dir).unwrap() {
+            let entry = entry.unwrap();
+            let path = entry.path();
+            if path.is_dir() {
+                files.extend(find_all_files_recursively(&path));
+            } else {
+                files.push(path)
+            }
+        }
+        files
     }
 }
 
 mod cache {
     const FILE_NAME: &str = "fastn.cache";
 
-    pub(crate) fn get() -> Cache {
+    pub(crate) fn get() -> std::io::Result<Cache> {
         let mut v = match fastn_core::utils::get_cached(FILE_NAME) {
             Some(v) => {
                 tracing::debug!("cached hit");
@@ -77,8 +103,8 @@ mod cache {
                 }
             }
         };
-        v.build_content = super::build_dir::get_build_content();
-        v
+        v.build_content = super::build_dir::get_build_content()?;
+        Ok(v)
     }
 
     #[derive(serde::Serialize, serde::Deserialize)]
@@ -121,7 +147,7 @@ async fn incremental_build(
 ) -> fastn_core::Result<()> {
     // https://fastn.com/rfc/incremental-build/
 
-    let mut c = cache::get();
+    let mut c = cache::get()?;
 
     for document in documents.values() {
         handle_file(
