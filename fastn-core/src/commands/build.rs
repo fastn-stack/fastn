@@ -107,7 +107,7 @@ mod cache {
         Ok(v)
     }
 
-    #[derive(serde::Serialize, serde::Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize, Debug)]
     pub(crate) struct Cache {
         // fastn_version: String, // TODO
         #[serde(skip)]
@@ -123,13 +123,13 @@ mod cache {
         }
     }
 
-    #[derive(serde::Serialize, serde::Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize, Debug)]
     pub(crate) struct File {
         pub(crate) path: String,
         pub(crate) checksum: String,
     }
 
-    #[derive(serde::Serialize, serde::Deserialize)]
+    #[derive(serde::Serialize, serde::Deserialize, Debug)]
     pub(crate) struct Document {
         pub(crate) file: File,
         pub(crate) html_checksum: String,
@@ -147,7 +147,7 @@ async fn incremental_build(
 ) -> fastn_core::Result<()> {
     // https://fastn.com/rfc/incremental-build/
 
-    let mut c = cache::get()?;
+    let mut c = dbg!(cache::get()?);
 
     for document in documents.values() {
         handle_file(
@@ -164,7 +164,7 @@ async fn incremental_build(
 
     // TODO: Handle deleted files (files present in cache/.build but not in documents)
 
-    c.cache_it()?;
+    dbg!(c).cache_it()?;
 
     Ok(())
 }
@@ -256,14 +256,23 @@ async fn handle_file_(
                 if let Some(cached_doc) = cache.documents.get(doc.id.as_str()) {
                     // if it exists, check if the checksums match
                     // if they do, return
+                    dbg!(cached_doc);
                     if let Some(doc_hash) = cache.build_content.get(file_path.as_str()) {
+                        dbg!(doc_hash);
                         if doc_hash == &cached_doc.html_checksum {
+                            println!("cache hit, returning");
                             return Ok(());
+                        } else {
+                            println!("cache miss");
                         }
                     }
+                } else {
+                    println!("no cache entry for {}", doc.id.as_str());
                 }
                 // if it exists, check if the checksums match
                 // if they do, return
+            } else {
+                println!("no have cache");
             }
 
             fastn_core::utils::copy(
@@ -291,7 +300,7 @@ async fn handle_file_(
                     if let Some(cache) = cache {
                         cache.documents.insert(
                             doc.id.to_string(),
-                            cache::Document {
+                            dbg!(cache::Document {
                                 file: cache::File {
                                     path: doc.id.to_string(),
                                     checksum: fastn_core::utils::generate_hash(
@@ -300,7 +309,7 @@ async fn handle_file_(
                                 },
                                 html_checksum: r.checksum(),
                                 dependencies: config.dependencies_during_render.clone(),
-                            },
+                            }),
                         );
                     }
                 }
