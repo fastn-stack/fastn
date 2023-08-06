@@ -345,6 +345,10 @@ impl FTDResult {
             }
         }
     }
+
+    pub fn checksum(&self) -> String {
+        fastn_core::utils::generate_hash(self.html())
+    }
 }
 
 impl From<FTDResult> for fastn_core::http::Response {
@@ -543,22 +547,10 @@ pub(crate) async fn process_ftd(
     base_url: &str,
     build_static_files: bool,
     test: bool,
+    file_path: &str,
 ) -> fastn_core::Result<FTDResult> {
-    let file_rel_path = if main.id.eq("404.ftd") {
-        "404.html".to_string()
-    } else if main.id.ends_with("index.ftd") {
-        fastn_core::utils::replace_last_n(main.id.as_str(), 1, "index.ftd", "index.html")
-    } else {
-        fastn_core::utils::replace_last_n(main.id.as_str(), 1, ".ftd", "/index.html")
-    };
-
     let response = read_ftd(config, main, base_url, build_static_files, test).await?;
-    fastn_core::utils::write(
-        &config.build_dir(),
-        file_rel_path.as_str(),
-        &response.html(),
-    )
-    .await?;
+    fastn_core::utils::write(&config.build_dir(), file_path, &response.html()).await?;
 
     Ok(response)
 }

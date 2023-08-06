@@ -896,7 +896,7 @@ pub fn query(uri: &str) -> fastn_core::Result<Vec<(String, String)>> {
             .collect_vec(),
     )
 }
-pub fn generate_hash(content: &str) -> String {
+pub fn generate_hash(content: impl AsRef<[u8]>) -> String {
     use sha2::digest::FixedOutput;
     use sha2::Digest;
     let mut hasher = sha2::Sha256::new();

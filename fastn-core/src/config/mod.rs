@@ -39,6 +39,7 @@ pub struct Config {
     pub named_parameters: Vec<(String, ftd::Value)>,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub current_document: Option<String>,
+    pub dependencies_during_render: Vec<String>,
     pub request: Option<fastn_core::http::Request>, // TODO: It should only contain reference
     pub ftd_edition: FTDEdition,
     pub ftd_external_js: Vec<String>,
@@ -1291,6 +1292,7 @@ impl Config {
             ftd_inline_js: Default::default(),
             ftd_external_css: Default::default(),
             ftd_inline_css: Default::default(),
+            dependencies_during_render: Default::default(),
         };
 
         // Update global_ids map from the current package files

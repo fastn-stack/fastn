@@ -72,7 +72,7 @@ mod cache {
                 tracing::debug!("cached miss");
                 Cache {
                     build_content: std::collections::BTreeMap::new(),
-                    documents: vec![],
+                    documents: std::collections::BTreeMap::new(),
                     assets: std::collections::BTreeMap::new(),
                 }
             }
@@ -83,10 +83,10 @@ mod cache {
 
     #[derive(serde::Serialize, serde::Deserialize)]
     pub(crate) struct Cache {
-        // fastn_version: String, // TODO: Add this
+        // fastn_version: String, // TODO
         #[serde(skip)]
         pub(crate) build_content: std::collections::BTreeMap<String, String>,
-        pub(crate) documents: Vec<Document>,
+        pub(crate) documents: std::collections::BTreeMap<String, Document>,
         pub(crate) assets: std::collections::BTreeMap<String, File>,
     }
 
@@ -202,7 +202,7 @@ async fn handle_file(
     Ok(())
 }
 
-#[tracing::instrument(skip(document, config, _cache))]
+#[tracing::instrument(skip(document, config, cache))]
 async fn handle_file_(
     document: &fastn_core::File,
     config: &mut fastn_core::Config,
@@ -210,11 +210,36 @@ async fn handle_file_(
     ignore_failed: bool,
     test: bool,
     build_static_files: bool,
-    _cache: Option<&mut cache::Cache>,
+    cache: Option<&mut cache::Cache>,
 ) -> fastn_core::Result<()> {
     config.current_document = Some(document.get_id().to_string());
+    config.dependencies_during_render = vec![];
+
     match document {
         fastn_core::File::Ftd(doc) => {
+            let file_path = if doc.id.eq("404.ftd") {
+                "404.html".to_string()
+            } else if doc.id.ends_with("index.ftd") {
+                fastn_core::utils::replace_last_n(doc.id.as_str(), 1, "index.ftd", "index.html")
+            } else {
+                fastn_core::utils::replace_last_n(doc.id.as_str(), 1, ".ftd", "/index.html")
+            };
+
+            // find the document in cache
+            if let Some(ref cache) = cache {
+                if let Some(cached_doc) = cache.documents.get(doc.id.as_str()) {
+                    // if it exists, check if the checksums match
+                    // if they do, return
+                    if let Some(doc_hash) = cache.build_content.get(file_path.as_str()) {
+                        if doc_hash == &cached_doc.html_checksum {
+                            return Ok(());
+                        }
+                    }
+                }
+                // if it exists, check if the checksums match
+                // if they do, return
+            }
+
             fastn_core::utils::copy(
                 config.root.join(doc.id.as_str()),
                 config.root.join(".build").join(doc.id.as_str()),
@@ -232,10 +257,27 @@ async fn handle_file_(
                 base_url,
                 build_static_files,
                 test,
+                file_path.as_str(),
             )
             .await;
             match (resp, ignore_failed) {
-                (Ok(_), _) => (),
+                (Ok(r), _) => {
+                    if let Some(cache) = cache {
+                        cache.documents.insert(
+                            doc.id.to_string(),
+                            cache::Document {
+                                file: cache::File {
+                                    path: doc.id.to_string(),
+                                    checksum: fastn_core::utils::generate_hash(
+                                        doc.content.as_str(),
+                                    ),
+                                },
+                                html_checksum: r.checksum(),
+                                dependencies: config.dependencies_during_render.clone(),
+                            },
+                        );
+                    }
+                }
                 (_, true) => {
                     print!("Failed ");
                     return Ok(());
