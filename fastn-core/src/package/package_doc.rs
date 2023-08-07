@@ -384,7 +384,6 @@ pub(crate) async fn read_ftd(
     }
 }
 
-#[allow(clippy::await_holding_refcell_ref)]
 #[tracing::instrument(name = "read_ftd_2022", skip_all)]
 pub(crate) async fn read_ftd_2022(
     config: &mut fastn_core::Config,
@@ -394,7 +393,7 @@ pub(crate) async fn read_ftd_2022(
     test: bool,
 ) -> fastn_core::Result<FTDResult> {
     let lib_config = config.clone();
-    let mut all_packages = config.all_packages.borrow_mut();
+    let all_packages = config.all_packages.borrow();
     let current_package = all_packages
         .get(main.package_name.as_str())
         .unwrap_or(&config.package);
@@ -413,6 +412,7 @@ pub(crate) async fn read_ftd_2022(
         current_package.get_prefixed_body(main.content.as_str(), main.id.as_str(), true);
     // Fix aliased imports to full path (if any)
     doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
+    drop(all_packages);
 
     let line_number = doc_content.split('\n').count() - main.content.split('\n').count();
     let main_ftd_doc = match fastn_core::doc::interpret_helper(
@@ -439,9 +439,6 @@ pub(crate) async fn read_ftd_2022(
     let executor = ftd::executor::ExecuteDoc::from_interpreter(main_ftd_doc)?;
     let node = ftd::node::NodeData::from_rt(executor);
     let html_ui = ftd::html::HtmlUI::from_node_data(node, "main", test)?;
-
-    all_packages.extend(lib.config.all_packages.into_inner());
-    drop(all_packages);
 
     config
         .downloaded_assets
