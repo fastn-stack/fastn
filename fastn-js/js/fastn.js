@@ -193,7 +193,11 @@ class MutableList {
                 value = new MutableList(value);
             }
 
-            this.#list = value.#list;
+            let list = value.#list;
+            this.#list = [];
+            for (let i in list) {
+                this.#list.push(list[i]);
+            }
 
             for (let i in this.#watchers) {
                 this.#watchers[i].createAllNode();
