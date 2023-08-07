@@ -40,20 +40,20 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Blog Templates - Midnight Rush Blog
+-- ds.layout: Blog Templates - Midnight Storm Blog
 cta-text: Use this template
-cta-url: https://github.com/fastn-community/midnight-rush-template/generate
+cta-url: https://github.com/fastn-community/midnight-storm-template/generate
 previous-url: /featured/blog-templates/
-github-url: https://github.com/fastn-community/midnight-rush/
-cta-url-1: https://fastn-community.github.io/midnight-rush/
+github-url: https://github.com/fastn-community/midnight-storm/
+cta-url-1: https://fastn-community.github.io/midnight-storm/
 cta-text-1: User Manual
 
 -- end: ds.page.layout-bar
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
-cta-url: https://fastn-community.github.io/midnight-rush/blog/
+image: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
+cta-url: https://fastn-community.github.io/midnight-storm/blog/
 cta-text: Demo
 
 -- ft-ui.grid-view: Featured Blog Templates
@@ -74,9 +74,9 @@ more-link: /featured/blog-templates/
 template-url: featured/blogs/doc-site/
 screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.png
 
--- ft-ui.template: Midnight Storm
-template-url: featured/blogs/ms-blog/
-screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
+-- ft-ui.template: Midnight Rush
+template-url: featured/blogs/mr-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
 
 -- ft-ui.template: Misty Gray
 template-url: featured/blogs/mg-blog/

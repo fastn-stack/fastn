@@ -543,75 +543,19 @@ screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
 -- template list blog-sites:
 
--- template: Doc-site
-template-url: featured/blogs/doc-site/
-screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.jpg
-
 -- template: Midnight Rush
 template-url: featured/blogs/mr-blog/
 screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
-wip: true
 
 -- template: Midnight Storm
-template-url: featured/blogs/set-2-blog/
-screenshot: $fastn-assets.files.images.featured.blog.set-2-blog.jpg
-wip: true
+template-url: featured/blogs/ms-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
+
+-- template: Misty Gray
+template-url: featured/blogs/mg-blog/
+screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
 -- end: blog-sites
-
-
-
-
--- template list blog-sites-1:
-
--- template: Midnight Rush
-template-url: featured/blogs/mr-blog/
-screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
-wip: true
-
--- template: Midnight Storm
-template-url: featured/blogs/set-2-blog/
-screenshot: $fastn-assets.files.images.featured.blog.set-2-blog.jpg
-wip: true
-
--- end: blog-sites-1
-
-
-
-
--- template list blog-sites-2:
-
--- template: Doc-site
-template-url: featured/blogs/doc-site/
-screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.jpg
-
--- template: Midnight Storm
-template-url: featured/blogs/set-2-blog/
-screenshot: $fastn-assets.files.images.featured.blog.set-2-blog.jpg
-wip: true
-
--- end: blog-sites-2
-
-
-
-
--- template list blog-sites-3:
-
--- template: Doc-site
-template-url: featured/blogs/doc-site/
-screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.jpg
-
--- template: Midnight Rush
-template-url: featured/blogs/mr-blog/
-screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
-wip: true
-
--- end: blog-sites-3
-
-
-
-
-
 
 
 
