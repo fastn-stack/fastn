@@ -11,9 +11,10 @@ impl Kernel {
         parent: &str,
         index: usize,
     ) -> Kernel {
+        let name = component_declaration_variable_name(parent, index);
         Kernel {
             element_kind,
-            name: component_declaration_variable_name(parent, index),
+            name,
             parent: parent.to_string(),
         }
     }

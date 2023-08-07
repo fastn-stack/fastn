@@ -62,6 +62,9 @@ fn get_prefix(s: &str) -> (Option<&str>, String) {
     } else if let Some(prefix) = s.strip_prefix("ftd.").or(s.strip_prefix("ftd#")) {
         s = prefix.to_string();
         Some("ftd")
+    } else if let Some(prefix) = s.strip_prefix("fastn_utils.") {
+        s = prefix.to_string();
+        Some("fastn_utils")
     } else {
         None
     };

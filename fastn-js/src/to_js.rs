@@ -881,7 +881,7 @@ impl ExpressionGenerator {
                 let val = self.to_js_(second, false, arguments, true);
                 return format!(
                     indoc::indoc! {
-                        "let fastn_utils_val_{refined_var} = {val};
+                        "let fastn_utils_val_{refined_var} = fastn_utils.clone({val});
                         if (!fastn_utils.setter({var}, fastn_utils_val_{refined_var})) {{
                             {var} = fastn_utils_val_{refined_var};
                         }}"
