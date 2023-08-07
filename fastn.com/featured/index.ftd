@@ -492,41 +492,18 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
 -- template list landing-pages:
 
 -- template: Midnight Storm
-template-url: featured/landing/set-2-landing/
-screenshot: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
-wip: true
-
--- template: Midnight Rush
-template-url: featured/landing/mr-landing/
-screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
-wip: true
-
--- end: landing-pages
-
-
-
-
--- template list landing-pages-1:
-
--- template: Midnight Storm
 template-url: featured/landing/midnight-storm-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
-wip: true
-
--- end: landing-pages-1
-
-
-
-
--- template list landing-pages-2:
 
 -- template: Midnight Rush
 template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
-wip: true
 
--- end: landing-pages-2
+-- template: Misty Gray
+template-url: featured/landing/misty-gray-landing/
+screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
+-- end: landing-pages
 
 
 

@@ -40,20 +40,20 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: SPA / Landing Pages - Midnight Storm 
+-- ds.layout: SPA / Landing Pages - Misty Gray
 cta-text: Use this template
-cta-url: https://github.com/fastn-community/midnight-storm-template/generate
+cta-url: https://github.com/fastn-community/misty-gray-template/generate
 previous-url: /featured/landing-pages/
-github-url: https://github.com/fastn-community/midnight-storm
-cta-url-1: https://fastn-community.github.io/midnight-storm/
+github-url: https://github.com/fastn-community/misty-gray/
+cta-url-1: https://fastn-community.github.io/misty-gray/
 cta-text-1: User Manual
-
 
 -- end: ds.page.layout-bar
 
+
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
-cta-url: https://fastn-community.github.io/midnight-storm/landing/
+image: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
+cta-url: https://fastn-community.github.io/misty-gray/landing/
 cta-text: Demo
 
 -- ft-ui.grid-view: Featured SPA / Landing Pages
@@ -69,13 +69,13 @@ more-link: /featured/landing-pages/
 
 -- ft-ui.template list landing:
 
+-- ft-ui.template: Midnight Storm
+template-url: featured/landing/midnight-storm-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
+
 -- ft-ui.template: Midnight Rush
 template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
-
--- ft-ui.template: Misty Gray
-template-url: featured/landing/misty-gray-landing/
-screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
 -- ft-ui.template: CT Landing Page
 template-url: featured/landing-pages/
@@ -85,4 +85,3 @@ github-url: https://github.com/saurabh-lohiya/ct-landing-page/
 wip: true
 
 -- end: landing
-
