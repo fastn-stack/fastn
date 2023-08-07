@@ -278,6 +278,8 @@ overflow: hidden
 border-radius.px: 8
 link: $grid-of-items.template-url
 
+-- ftd.desktop:
+
 -- ftd.row:
 width: fill-container
 spacing.fixed.px: 12
@@ -303,6 +305,37 @@ src: $fastn-assets.files.images.featured.arrow-right.svg
 width.fixed.px: 22
 
 -- end: ftd.row
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 12
+padding.px: 20
+anchor: parent
+bottom.px: 0
+left.px: 0
+z-index: 999
+background.solid: #222222cc
+border-bottom-left-radius.px: 8
+border-bottom-right-radius.px: 8
+align-content: center
+classes: mouse-over
+
+-- ftd.text: $grid-of-items.title
+role: $inherited.types.label-large
+color: #FFFFFF
+width: fill-container
+
+-- ftd.image:
+src: $fastn-assets.files.images.featured.arrow-right.svg
+width.fixed.px: 22
+
+-- end: ftd.row
+
+-- end: ftd.mobile
 
 -- ftd.column:
 if: { grid-of-items.wip }
