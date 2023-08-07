@@ -53,6 +53,7 @@ github-url: https://github.com/fastn-community/pattern-business-card
 image: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
 cta-url: https://gsalunke.github.io/pattern-card-demo/
 cta-text: Demo
+width.fixed.px: 600
 
 -- ft-ui.grid-view: Featured Business Cards
 if: { show-grid }
