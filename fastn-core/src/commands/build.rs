@@ -98,6 +98,7 @@ mod cache {
                 tracing::debug!("cached miss");
                 Cache {
                     build_content: std::collections::BTreeMap::new(),
+                    ftd_cache: std::collections::BTreeMap::new(),
                     documents: std::collections::BTreeMap::new(),
                     assets: std::collections::BTreeMap::new(),
                 }
@@ -112,6 +113,8 @@ mod cache {
         // fastn_version: String, // TODO
         #[serde(skip)]
         pub(crate) build_content: std::collections::BTreeMap<String, String>,
+        #[serde(skip)]
+        pub(crate) ftd_cache: std::collections::BTreeMap<String, Option<String>>,
         pub(crate) documents: std::collections::BTreeMap<String, Document>,
         pub(crate) assets: std::collections::BTreeMap<String, File>,
     }
@@ -121,15 +124,32 @@ mod cache {
             fastn_core::utils::cache_it(FILE_NAME, self)?;
             Ok(())
         }
+        pub(crate) fn get_file_hash(&mut self, path: &str) -> fastn_core::Result<String> {
+            match self.ftd_cache.get(path) {
+                Some(Some(v)) => Ok(v.to_owned()),
+                Some(None) => Err(fastn_core::Error::GenericError(path.to_string())),
+                None => {
+                    let hash = match fastn_core::utils::get_file_hash(path) {
+                        Ok(v) => v,
+                        Err(e) => {
+                            self.ftd_cache.insert(path.to_string(), None);
+                            return Err(e);
+                        }
+                    };
+                    self.ftd_cache.insert(path.to_string(), Some(hash.clone()));
+                    Ok(hash)
+                }
+            }
+        }
     }
 
-    #[derive(serde::Serialize, serde::Deserialize, Debug)]
+    #[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
     pub(crate) struct File {
         pub(crate) path: String,
         pub(crate) checksum: String,
     }
 
-    #[derive(serde::Serialize, serde::Deserialize, Debug)]
+    #[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
     pub(crate) struct Document {
         pub(crate) file: File,
         pub(crate) html_checksum: String,
@@ -228,35 +248,35 @@ async fn handle_file(
     Ok(())
 }
 
-fn is_cached(
-    cache: &Option<&mut cache::Cache>,
+fn is_cached<'a>(
+    cache: Option<&'a mut cache::Cache>,
     doc: &fastn_core::Document,
     file_path: &str,
-) -> bool {
-    let cache = match cache {
+) -> (Option<&'a mut cache::Cache>, bool) {
+    let cache: &mut cache::Cache = match cache {
         Some(c) => c,
         None => {
             println!("cache miss: no have cache");
-            return false;
+            return (cache, false);
         }
     };
 
-    let cached_doc = match cache.documents.get(doc.id.as_str()) {
+    let cached_doc: cache::Document = match cache.documents.get(doc.id.as_str()).cloned() {
         Some(cached_doc) => cached_doc,
         None => {
             println!("cache miss: no cache entry for {}", doc.id.as_str());
-            return false;
+            return (Some(cache), false);
         }
     };
 
     // if it exists, check if the checksums match
     // if they do, return
-    dbg!(cached_doc);
+    dbg!(&cached_doc);
     let doc_hash = match cache.build_content.get(file_path) {
         Some(doc_hash) => doc_hash,
         None => {
             println!("cache miss: document not present in .build: {}", file_path);
-            return false;
+            return (Some(cache), false);
         }
     };
 
@@ -264,11 +284,39 @@ fn is_cached(
 
     if doc_hash != &cached_doc.html_checksum {
         println!("cache miss: html file checksums don't match");
+        return (Some(cache), false);
     }
 
-    // if it exists, check if the checksums match
+    if cached_doc.file.checksum != fastn_core::utils::generate_hash(doc.content.as_str()) {
+        println!("cache miss: ftd file checksums don't match");
+        return (Some(cache), false);
+    }
+
+    for dep in &cached_doc.dependencies {
+        let dep_doc = match cache.documents.get(dep) {
+            None => {
+                println!("cache miss: dependency {} not present in cache", dep);
+                return (Some(cache), false);
+            }
+            Some(dep_doc) => dep_doc.clone(),
+        };
+
+        let current_hash = match cache.get_file_hash(dep_doc.file.path.as_str()) {
+            Ok(hash) => hash,
+            Err(_) => {
+                println!("cache miss: dependency {} not present current folder", dep);
+                return (Some(cache), false);
+            }
+        };
+
+        if dep_doc.file.checksum != current_hash {
+            println!("cache miss: dependency {} checksums don't match", dep);
+            return (Some(cache), false);
+        }
+    }
+
     println!("cache hit");
-    true
+    (Some(cache), true)
 }
 
 #[tracing::instrument(skip(document, config, cache))]
@@ -294,7 +342,8 @@ async fn handle_file_(
                 fastn_core::utils::replace_last_n(doc.id.as_str(), 1, ".ftd", "/index.html")
             };
 
-            if is_cached(&cache, doc, file_path.as_str()) {
+            let (cache, is_cached) = is_cached(cache, doc, file_path.as_str());
+            if is_cached {
                 return Ok(());
             }
 

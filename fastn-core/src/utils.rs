@@ -33,6 +33,10 @@ fn id_to_cache_key(id: &str) -> String {
     id.replace('/', "_")
 }
 
+pub fn get_file_hash(_path: &str) -> fastn_core::Result<String> {
+    todo!()
+}
+
 pub fn get_cached<T>(id: &str) -> Option<T>
 where
     T: serde::de::DeserializeOwned,
