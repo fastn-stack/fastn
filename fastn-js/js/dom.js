@@ -1632,6 +1632,19 @@ class ForLoop {
         return node;
     }
 
+    createAllNode() {
+        this.deleteAllNode();
+        for (let idx in this.#list.getList()) {
+            this.createNode(idx);
+        }
+    }
+
+    deleteAllNode() {
+        while (this.#nodes.length > 0) {
+            this.#nodes.pop().destroy();
+        }
+    }
+
     getWrapper() {
         return this.#wrapper;
     }
