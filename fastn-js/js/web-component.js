@@ -4,7 +4,6 @@ class MutableVariable {
     constructor(value) {
         this.#value = value;
         this.#closures = [];
-        this.#value.addClosure(fastn.closure(() => this.#closures.forEach((closure) => closure.update())));
     }
 
     get() {
@@ -16,7 +15,7 @@ class MutableVariable {
     }
 
     on_change(func) {
-        this.#closures.push(fastn.closure(func));
+        this.#value.addClosure(fastn.closureWithoutExecute(func));
     }
 }
 
@@ -26,19 +25,26 @@ class MutableListVariable {
     constructor(value) {
         this.#value = value;
         this.#closures = [];
-        this.#value.addClosure(fastn.closure(() => this.#closures.forEach((closure) => closure.update())));
+        // this.#value.addClosure(fastn.closure(() => this.#closures.forEach((closure) => closure.update())));
     }
 
     get() {
         return fastn_utils.getStaticValue(this.#value);
     }
 
-    set(value) {
-        this.#value.set(value);
+    set(list) {
+        list = list.map((value) => {
+            if (value instanceof Object) {
+                value = new RecordInstance(value);
+            }
+            return value;
+        })
+
+        this.#value.set(list);
     }
 
     on_change(func) {
-        this.#closures.push(fastn.closure(func));
+        this.#value.addClosure(fastn.closureWithoutExecute(func));
     }
 }
 class StaticVariable {
@@ -57,7 +63,9 @@ class StaticVariable {
     }
 
     on_change(func) {
-        this.#closures.push(fastn.closure(func));
+        if (this.#value instanceof fastn.mutableClass) {
+            this.#value.addClosure(fastn.closure(func));
+        }
     }
 }
 

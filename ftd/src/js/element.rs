@@ -57,24 +57,25 @@ impl Element {
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
+        let mut rdata = rdata.clone();
         match self {
             Element::Text(text) => {
-                text.to_component_statements(parent, index, doc, rdata, should_return)
+                text.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::Integer(integer) => {
-                integer.to_component_statements(parent, index, doc, rdata, should_return)
+                integer.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::Decimal(decimal) => {
-                decimal.to_component_statements(parent, index, doc, rdata, should_return)
+                decimal.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::Boolean(boolean) => {
-                boolean.to_component_statements(parent, index, doc, rdata, should_return)
+                boolean.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::Column(column) => column.to_component_statements(
                 parent,
                 index,
                 doc,
-                rdata,
+                &mut rdata,
                 should_return,
                 has_rive_components,
             ),
@@ -82,7 +83,7 @@ impl Element {
                 parent,
                 index,
                 doc,
-                rdata,
+                &mut rdata,
                 should_return,
                 has_rive_components,
             ),
@@ -90,7 +91,7 @@ impl Element {
                 parent,
                 index,
                 doc,
-                rdata,
+                &mut rdata,
                 should_return,
                 has_rive_components,
             ),
@@ -98,33 +99,35 @@ impl Element {
                 parent,
                 index,
                 doc,
-                rdata,
+                &mut rdata,
                 should_return,
                 has_rive_components,
             ),
             Element::Image(image) => {
-                image.to_component_statements(parent, index, doc, rdata, should_return)
+                image.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::Device(d) => d.to_component_statements(
                 parent,
                 index,
                 doc,
-                rdata,
+                &mut rdata,
                 should_return,
                 has_rive_components,
             ),
             Element::CheckBox(c) => {
-                c.to_component_statements(parent, index, doc, rdata, should_return)
+                c.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::TextInput(t) => {
-                t.to_component_statements(parent, index, doc, rdata, should_return)
+                t.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::Iframe(i) => {
-                i.to_component_statements(parent, index, doc, rdata, should_return)
+                i.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
-            Element::Code(c) => c.to_component_statements(parent, index, doc, rdata, should_return),
+            Element::Code(c) => {
+                c.to_component_statements(parent, index, doc, &mut rdata, should_return)
+            }
             Element::Rive(rive) => {
-                rive.to_component_statements(parent, index, doc, rdata, should_return)
+                rive.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
         }
     }
@@ -170,12 +173,11 @@ impl CheckBox {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel =
-            fastn_js::Kernel::from_component(fastn_js::ElementKind::CheckBox, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::CheckBox, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.extend(self.common.to_set_properties(
             kernel.name.as_str(),
@@ -271,12 +273,11 @@ impl TextInput {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel =
-            fastn_js::Kernel::from_component(fastn_js::ElementKind::TextInput, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::TextInput, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.extend(self.common.to_set_properties(
             kernel.name.as_str(),
@@ -396,11 +397,11 @@ impl Iframe {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::IFrame, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::IFrame, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.extend(self.common.to_set_properties(
             kernel.name.as_str(),
@@ -523,11 +524,11 @@ impl Code {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Code, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Code, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
@@ -627,11 +628,11 @@ impl Image {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Image, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Image, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -805,15 +806,17 @@ impl Container {
         &self,
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
-        component_name: &str,
         has_rive_components: &mut bool,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
 
+        // rdata will have component_name
+        let component_name = rdata.component_name.clone().unwrap().to_string();
+
         let inherited_variables =
             self.inherited
-                .get_inherited_variables(doc, rdata, component_name);
+                .get_inherited_variables(doc, rdata, component_name.as_str());
 
         let inherited_variable_name = inherited_variables
             .as_ref()
@@ -936,11 +939,11 @@ impl Text {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Text, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Text, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -1002,12 +1005,11 @@ impl Integer {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel =
-            fastn_js::Kernel::from_component(fastn_js::ElementKind::Integer, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Integer, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -1068,12 +1070,11 @@ impl Decimal {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel =
-            fastn_js::Kernel::from_component(fastn_js::ElementKind::Decimal, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Decimal, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -1134,12 +1135,11 @@ impl Boolean {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel =
-            fastn_js::Kernel::from_component(fastn_js::ElementKind::Boolean, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Boolean, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -1199,19 +1199,17 @@ impl Document {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel =
-            fastn_js::Kernel::from_component(fastn_js::ElementKind::Document, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Document, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         component_statements.extend(self.container.to_component_statements(
             doc,
-            rdata,
-            kernel.name.as_str(),
+            &rdata,
             has_rive_components,
             false,
         ));
@@ -1445,12 +1443,12 @@ impl Column {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Column, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Column, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.extend(self.common.to_set_properties(
             kernel.name.as_str(),
@@ -1466,8 +1464,7 @@ impl Column {
 
         component_statements.extend(self.container.to_component_statements(
             doc,
-            rdata,
-            kernel.name.as_str(),
+            &rdata,
             has_rive_components,
             false,
         ));
@@ -1511,12 +1508,12 @@ impl Row {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Row, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Row, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         component_statements.extend(self.common.to_set_properties(
@@ -1533,8 +1530,7 @@ impl Row {
 
         component_statements.extend(self.container.to_component_statements(
             doc,
-            rdata,
-            kernel.name.as_str(),
+            &rdata,
             has_rive_components,
             false,
         ));
@@ -1575,15 +1571,16 @@ impl ContainerElement {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(
+        let kernel = create_element(
             fastn_js::ElementKind::ContainerElement,
             parent,
             index,
+            rdata,
         );
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
@@ -1595,8 +1592,7 @@ impl ContainerElement {
 
         component_statements.extend(self.container.to_component_statements(
             doc,
-            rdata,
-            kernel.name.as_str(),
+            &rdata,
             has_rive_components,
             false,
         ));
@@ -1638,7 +1634,7 @@ impl Device {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -1649,17 +1645,17 @@ impl Device {
             }
         }
 
-        let kernel = fastn_js::Kernel::from_component(
+        let kernel = create_element(
             fastn_js::ElementKind::Device,
             fastn_js::FUNCTION_PARENT,
             index,
+            rdata,
         );
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         component_statements.extend(self.container.to_component_statements(
             doc,
             &rdata.clone_with_new_device(&Some(self.device.clone())),
-            kernel.name.as_str(),
             has_rive_components,
             true,
         ));
@@ -1829,11 +1825,11 @@ impl Rive {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Rive, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Rive, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         let rive_name = self
@@ -2855,4 +2851,15 @@ pub fn is_kernel(s: &str) -> bool {
 
 pub(crate) fn is_rive_component(s: &str) -> bool {
     "ftd#rive".eq(s)
+}
+
+pub(crate) fn create_element(
+    element_kind: fastn_js::ElementKind,
+    parent: &str,
+    index: usize,
+    rdata: &mut ftd::js::ResolverData,
+) -> fastn_js::Kernel {
+    let kernel = fastn_js::Kernel::from_component(element_kind, parent, index);
+    *rdata = rdata.clone_with_new_component_name(Some(kernel.name.to_string()));
+    kernel
 }

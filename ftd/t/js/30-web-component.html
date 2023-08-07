@@ -134,7 +134,7 @@ let foo__header = function (parent, inherited, args) {
       rooti0.addEventHandler(fastn_dom.Event.Input, function () {
         ftd.set_string({
           a: __args__.input_value,
-          v: global.VALUE,
+          v: fastn_utils.getNodeValue(rooti0),
         }, rooti0);
       });
       rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(213)), inherited);

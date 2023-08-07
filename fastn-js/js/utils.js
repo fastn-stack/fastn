@@ -103,11 +103,11 @@ let fastn_utils = {
     },
 
     sameResponsiveRole(desktop, mobile) {
-       return (desktop.get("font_family") ==  mobile.get("font_family")) &&
-       (desktop.get("letter_spacing") ==  mobile.get("letter_spacing")) &&
-       (desktop.get("line_height") ==  mobile.get("line_height")) &&
-       (desktop.get("size") ==  mobile.get("size")) &&
-       (desktop.get("weight") ==  mobile.get("weight"));
+       return (desktop.get("font_family") ===  mobile.get("font_family")) &&
+       (desktop.get("letter_spacing") ===  mobile.get("letter_spacing")) &&
+       (desktop.get("line_height") ===  mobile.get("line_height")) &&
+       (desktop.get("size") ===  mobile.get("size")) &&
+       (desktop.get("weight") ===  mobile.get("weight"));
     },
 
     getRoleValues(value) {
@@ -292,7 +292,9 @@ let fastn_utils = {
         return result;
     },
 
-
+    getNodeValue(node) {
+        return node.getNode().value;
+    }
 }
 
 

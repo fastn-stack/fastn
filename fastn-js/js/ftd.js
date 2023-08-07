@@ -125,6 +125,14 @@ let ftd = {
     }
 };
 
+ftd.set_string = function (args, node) {
+    let __args__ = args;
+    let fastn_utils_val___args___a = __args__.v;
+    if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
+        __args__.a = fastn_utils_val___args___a;
+    }
+}
+
 // ftd.append($a = $people, v = Tom)
 ftd.append = function (list, item) { list.push(item) }
 ftd.pop = function (list) { list.pop() }

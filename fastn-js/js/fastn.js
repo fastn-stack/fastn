@@ -6,8 +6,10 @@ class Closure {
     #property;
     #formula;
     #inherited;
-    constructor(func) {
-        this.#cached_value = func();
+    constructor(func, execute = true) {
+        if (execute) {
+            this.#cached_value = func();
+        }
         this.#formula = func;
     }
 
@@ -80,7 +82,7 @@ class Mutable {
         }
 
         if (this.#value instanceof Mutable) {
-            this.#old_closure = fastn.closure(() => this.#closureInstance.update());
+            this.#old_closure = fastn.closureWithoutExecute(() => this.#closureInstance.update());
             this.#value.addClosure(this.#old_closure);
         } else {
             this.#old_closure = null;
@@ -258,6 +260,10 @@ fastn.mutable = function (val) {
 
 fastn.closure = function (func) {
     return new Closure(func);
+}
+
+fastn.closureWithoutExecute = function (func) {
+    return new Closure(func, false);
 }
 
 fastn.formula = function (deps, func) {
