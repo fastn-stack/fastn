@@ -53,7 +53,7 @@ fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([global.
 let foo__set_string = function (args)
 {
   let __args__ = args;
-  let fastn_utils_val___args___a = __args__.v;
+  let fastn_utils_val___args___a = fastn_utils.clone(__args__.v);
   if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
     __args__.a = fastn_utils_val___args___a;
   };

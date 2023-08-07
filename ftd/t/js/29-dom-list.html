@@ -8,7 +8,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2">Click to append one</div><div data-id="3">Click to insert 2 at start</div><div data-id="4">Click to pop</div><div data-id="5">Click to delete at start</div><div data-id="6">Click to clear all</div><comment data-id="7"></comment></body><style id="styles">
+<body data-id="1"><div data-id="2">Click to append one</div><div data-id="3">Click to insert 3 at start</div><div data-id="4">Click to pop</div><div data-id="5">Click to delete at start</div><div data-id="6">Click to clear all</div><div data-id="7">Click to set [10, 11, 12]</div><comment data-id="8"></comment></body><style id="styles">
     
     </style>
 <script>
@@ -25,7 +25,7 @@ let main = function (parent) {
     }, parenti0);
   });
   let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "Click to insert 2 at start", inherited);
+  parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "Click to insert 3 at start", inherited);
   parenti1.addEventHandler(fastn_dom.Event.Click, function () {
     foo__insert_integer({
       a: global.foo__counters,
@@ -52,6 +52,14 @@ let main = function (parent) {
     foo__clear_integer({
       a: global.foo__counters,
     }, parenti4);
+  });
+  let parenti5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti5.setProperty(fastn_dom.PropertyKind.StringValue, "Click to set [10, 11, 12]", inherited);
+  parenti5.addEventHandler(fastn_dom.Event.Click, function () {
+    foo__set_integer({
+      a: global.foo__counters,
+      other: global.foo__c,
+    }, parenti5);
   });
   fastn_utils.getter(global.foo__counters).forLoop(parent, function (root, item, index) {
     let rooti0 = foo__counter_list(root, inherited, {
@@ -97,9 +105,21 @@ let foo__clear_integer = function (args) {
   };
   return (ftd.clear_all(__args__.a));
 }
-let foo__increment = function (args) {
+let foo__set_integer = function (args) {
+  let __args__ = {
+    a: fastn.mutableList([]),
+    other: fastn.mutableList([]),
+    ...args
+  };
+  return (ftd.set_list(__args__.a, __args__.other));
+}
+fastn_utils.createNestedObject(global, "foo__c", fastn.mutableList([10,
+11,
+12]));
+let foo__increment = function (args)
+{
   let __args__ = args;
-  let fastn_utils_val___args___a = fastn_utils.getter(__args__.a) + 1;
+  let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
   if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
     __args__.a = fastn_utils_val___args___a;
   };

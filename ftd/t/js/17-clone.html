@@ -60,7 +60,7 @@ fastn_utils.createNestedObject(global, "foo__name3", global.foo__name);
 let foo__append_yo = function (args)
 {
   let __args__ = args;
-  let fastn_utils_val___args___a = fastn_utils.getter(__args__.a) + " yo ";
+  let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + " yo ");
   if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
     __args__.a = fastn_utils_val___args___a;
   }
