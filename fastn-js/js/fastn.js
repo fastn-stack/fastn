@@ -184,20 +184,33 @@ class MutableList {
         }
         return this.#list[idx];
     }
-    set(idx, value) {
-        this.#list[idx].item.set(value);
+    set(value, index) {
+        if (fastn_utils.isNull(index)) {
+            if (!(value instanceof MutableList)) {
+                if (!Array.isArray(value)) {
+                    value = [value];
+                }
+                value = new MutableList(value);
+            }
+
+            this.#list = value.#list;
+
+            for (let i in this.#watchers) {
+                this.#watchers[i].createAllNode();
+            }
+        }
+        this.#list[index].item.set(value);
     }
-    insertAt(idx, value) {
+    insertAt(index, value) {
         let mutable = fastn.wrapMutable(value);
-        this.#list.splice(idx, 0, { item: mutable, index: new Mutable(idx) });
+        this.#list.splice(index, 0, { item: mutable, index: new Mutable(index) });
         // for every item after the inserted item, update the index
-        for (let i = idx + 1; i < this.#list.length; i++) {
+        for (let i = index + 1; i < this.#list.length; i++) {
             this.#list[i].index.set(i);
         }
 
         for (let i in this.#watchers) {
-            let forLoop = this.#watchers[i];
-            forLoop.createNode(idx);
+            this.#watchers[i].createNode(index);
         }
     }
     push(value) {
@@ -215,7 +228,6 @@ class MutableList {
             forLoop.deleteNode(idx);
         }
     }
-
     pop() {
         this.deleteAt(this.#list.length - 1);
     }
