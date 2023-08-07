@@ -13,7 +13,7 @@
 
 
 
--- ds.page: Featured components
+-- ds.page: 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -22,8 +22,9 @@ logo-width: 120
 colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-distribution-bar: true
+github-url: https://github.com/fastn-community/doc-site
+full-width: true
+show-layout-bar: true
 
 -- ds.page.footer:
 
@@ -40,8 +41,12 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- ds.page.layout-bar:
 
 -- ds.layout: Documentation Sites - Doc Site
+cta-text: Use this template
 cta-url: https://github.com/fastn-stack/fastn-template/generate
-previous-url: /featured/
+previous-url: /featured/doc-sites/
+github-url: https://github.com/fastn-community/doc-site
+cta-url-1: https://fastn-community.github.io/doc-site/
+cta-text-1: User Manual
 
 -- end: ds.page.layout-bar
 
@@ -58,29 +63,16 @@ connect: $social-links
 
 -- end: ds.page.abstract-bar
 
-
--- ds.page.body:
-
-We have designed and developed below components using `fastn`. 
-
-These components can be used inside your personal web sites or organizational static 
-web sites developed using `fastn` package.
-
-
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
-cta-url: https://fastn-community.github.io/doc-site/
+cta-url: https://gsalunke.github.io/doc-site-demo/
+cta-text: Demo
 
--- ft-ui.grid-view: Documentation Sites
+-- ft-ui.grid-view: Featured Documentation Sites
 if: { show-grid }
-templates: $ft-ui.doc-sites-1
-more-link-text: View all
+templates: $ft-ui.doc-sites-3
+more-link-text: View more
 more-link: /featured/doc-sites/
-
-`doc-sites` will help you create a beautiful documentation site in no time. 
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
 
 -- end: ds.page
 
