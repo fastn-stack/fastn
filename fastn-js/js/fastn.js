@@ -170,6 +170,9 @@ class MutableList {
         this.#watchers = [];
         this.#closures = [];
     }
+    addClosure(closure) {
+        this.#closures.push(closure);
+    }
     forLoop(root, dom_constructor) {
         let l = fastn_dom.forLoop(root, dom_constructor, this);
         this.#watchers.push(l);
@@ -202,9 +205,11 @@ class MutableList {
             for (let i in this.#watchers) {
                 this.#watchers[i].createAllNode();
             }
-            return;
+        } else {
+            this.#list[index].item.set(value);
         }
-        this.#list[index].item.set(value);
+
+        this.#closures.forEach((closure) => closure.update());
     }
     insertAt(index, value) {
         let mutable = fastn.wrapMutable(value);
@@ -217,6 +222,7 @@ class MutableList {
         for (let i in this.#watchers) {
             this.#watchers[i].createNode(index);
         }
+        this.#closures.forEach((closure) => closure.update());
     }
     push(value) {
         this.insertAt(this.#list.length, value);
@@ -232,12 +238,14 @@ class MutableList {
             let forLoop = this.#watchers[i];
             forLoop.deleteNode(idx);
         }
+        this.#closures.forEach((closure) => closure.update());
     }
     clearAll() {
         this.#list = [];
         for (let i in this.#watchers) {
             this.#watchers[i].deleteAllNode();
         }
+        this.#closures.forEach((closure) => closure.update());
     }
     pop() {
         this.deleteAt(this.#list.length - 1);
