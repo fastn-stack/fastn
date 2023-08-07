@@ -46,7 +46,7 @@ for creating SPA(Single Page Application or websites) etc.
 
 -- ft-ui.grid-view:
 if: { show-grid }
-templates: $doc-sites
+templates: $landing
 
 -- end: ds.page
 
@@ -59,32 +59,19 @@ templates: $doc-sites
 
 
 
--- ft-ui.template list doc-sites:
-
+-- ft-ui.template list landing:
 
 -- ft-ui.template: Midnight Rush
 template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
-licence-url: https://github.com/fastn-community/midnight-rush/blob/main/LICENSE
-github-url: https://github.com/fastn-community/midnight-rush
-wip: true
-
-⚡️ Midnight Rush will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
 
 -- ft-ui.template: Midnight Storm
-template-url: fastn-community.github.io/midnight-storm
+template-url: featured/landing/midnight-storm-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
-licence-url: https://github.com/fastn-community/midnight-storm/blob/master/LICENSE
-github-url: https://github.com/fastn-community/midnight-storm
-wip: true
 
-⚡️ Midnight Storm will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
+-- ft-ui.template: Misty Gray
+template-url: featured/landing/misty-gray-landing/
+screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
 -- ft-ui.template: Studious Couscous
 template-url: featured/landing-pages/
@@ -93,10 +80,6 @@ licence-url: https://github.com/fastn-community/studious-couscous/
 github-url: https://github.com/fastn-community/studious-couscous/
 wip: true
 
-⚡️ Studious Couscous will help you create a beautiful landing page. site in no
-time.
-
-
 -- ft-ui.template: CT Landing Page
 template-url: featured/landing-pages/
 screenshot: $fastn-assets.files.images.featured.landing.ct-landing-page.png
@@ -104,7 +87,4 @@ licence-url: https://github.com/saurabh-lohiya/ct-landing-page/
 github-url: https://github.com/saurabh-lohiya/ct-landing-page/
 wip: true
 
-⚡️ CT Landing Page will help you create a beautiful landing page. site in no
-time.
-
--- end: doc-sites
+-- end: landing

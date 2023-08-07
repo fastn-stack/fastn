@@ -13,7 +13,7 @@
 
 
 
--- ds.page: SPA / Landing Pages - Midnight Rush 
+-- ds.page: 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -23,7 +23,8 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
-distribution-bar: true
+full-width: true
+show-layout-bar: true
 
 -- ds.page.footer:
 
@@ -40,83 +41,47 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- ds.page.layout-bar:
 
 -- ds.layout: SPA / Landing Pages - Midnight Rush 
-previous-url: /featured/
+cta-text: Use this template
+cta-url: https://github.com/fastn-community/midnight-rush-template/generate
+previous-url: /featured/landing-pages/
+github-url: https://github.com/fastn-community/midnight-rush
+cta-url-1: https://fastn-community.github.io/midnight-rush/
+cta-text-1: User Manual
 
 -- end: ds.page.layout-bar
 
--- ds.page.abstract-bar:
-
--- ds.distributors: 
-owners: $owner-fastn
-license-url: https://github.com/fastn-community/midnight-rush/blob/main/LICENSE
-license: Creative Commons
-published-date: 05-June-2023
-used-by: 1 +
-likes: 1 Stars
-connect: $social-links
-
--- end: ds.page.abstract-bar
-
-
--- ds.page.body:
-
-We have designed and developed below landing pages site themes. You can use them
-for creating SPA(Single Page Application or websites) etc. 
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 cta-url: https://fastn-community.github.io/midnight-rush/landing/
-wip: true
+cta-text: Demo
 
--- ft-ui.grid-view: SPA / Landing Pages
+-- ft-ui.grid-view: Featured SPA / Landing Pages
 if: { show-grid }
-templates: $ft-ui.landing-pages-1
-more-link-text: View all
+templates: $landing
+more-link-text: View more
 more-link: /featured/landing-pages/
-
-We have designed and developed below landing pages site themes. You can use them
-for creating SPA(Single Page Application or websites) etc. 
 
 -- end: ds.page
 
 
 
 
+-- ft-ui.template list landing:
 
+-- ft-ui.template: Midnight Storm
+template-url: featured/landing/midnight-storm-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
 
+-- ft-ui.template: Misty Gray
+template-url: featured/landing/misty-gray-landing/
+screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
+-- ft-ui.template: CT Landing Page
+template-url: featured/landing-pages/
+screenshot: $fastn-assets.files.images.featured.landing.ct-landing-page.png
+licence-url: https://github.com/saurabh-lohiya/ct-landing-page/
+github-url: https://github.com/saurabh-lohiya/ct-landing-page/
+wip: true
 
-
-
--- common.social-media list social-links:
-
--- common.social-media: 
-link: https://discord.gg/bucrdvptYd
-src: $assets.files.images.discord.svg
-
--- common.social-media: 
-link: https://twitter.com/fastn_stack
-src: $assets.files.images.twitter.svg
-
--- common.social-media: 
-link: https://www.linkedin.com/company/fifthtry/
-src: $assets.files.images.linkedin.svg
-
--- end: social-links
-
-
-
-
-
-
-
-
-
--- common.owner list owner-fastn:
-
--- common.owner: Fastn Community
-profile: https://github.com/fastn-community
-avatar: $assets.files.images.fastn.svg
-
--- end: owner-fastn
-
+-- end: landing
