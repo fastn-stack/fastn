@@ -198,6 +198,7 @@ class MutableList {
             for (let i in this.#watchers) {
                 this.#watchers[i].createAllNode();
             }
+            return;
         }
         this.#list[index].item.set(value);
     }
@@ -226,6 +227,12 @@ class MutableList {
         for (let i in this.#watchers) {
             let forLoop = this.#watchers[i];
             forLoop.deleteNode(idx);
+        }
+    }
+    clearAll() {
+        this.#list = [];
+        for (let i in this.#watchers) {
+            this.#watchers[i].deleteAllNode();
         }
     }
     pop() {
