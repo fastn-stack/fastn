@@ -1,20 +1,20 @@
--- ds.page: `$processor$: get-data`
+-- ds.page: Reading JSON Using `fastn`
 
-`get-data` processor is used to get data from a JSON files in the package or
-from [document-metadata in
-sitemap](/sitemap/#document-metadata-key-value-data-in-sitemap).
+`get-data` processor is used to get data from a JSON files in the package.
 
 -- ds.code:
 lang: ftd
 
+\-- import: fastn/processors as pr
+
 \-- string foo:
-$processor$: get-data
+$processor$: pr.get-data ;; <hl>
+file: foo.json
 
 -- ds.markdown:
 
-Assuming `foo: "hello"` is part of "data", the variable `foo` will be get
-"hello" as the value.
-
+This will read the key `foo` from `foo.json` and store it in the variable named
+`foo`.
 
 -- ds.h1: Key
 
@@ -24,12 +24,12 @@ used as the key. You can overwrite the key using `key` attribute:
 -- ds.code:
 lang: ftd
 
+\-- import: fastn/processors as pr
+
 \-- string foo:
-$processor$: get-data
+$processor$: pr.get-data
 key: some-other-key-instead-of-foo
-
-
-
+file: foo.json
 
 
 -- ds.h1: Default Value
@@ -39,8 +39,10 @@ If the data is not found, we use the body as default value if body is available.
 -- ds.code:
 lang: ftd
 
+\-- import: fastn/processors as pr
+
 \-- string foo:
-$processor$: get-data
+$processor$: pr.get-data
 
 "hello world"
 
@@ -51,34 +53,39 @@ using the `get-data` processor.
 
 
 
+-- ds.h1: Default Value in Caption For Primitive Types
 
-
--- ds.h1: Default Value in Caption For Basic Types
-
-For basic types like `integer`, `boolean` etc, the default value can also be
-provided in the caption. E.g.
+For [primitive types](/built-in-types#primitive-types) like `integer`,
+`boolean`, `string` etc, the default value can also be provided in the caption.
+E.g.
 
 -- ds.code:
 lang: ftd
 
+\-- import: fastn/processors as pr
+
 \-- string foo: hello world
-$processor$: get-data
+$processor$: pr.get-data
 
 
 -- ds.markdown:
 
 Providing both `body` and `caption` when using `get-data` is an error.
 
--- ds.h1: Reading data from JSON File
+-- ds.h1: Tutorial
 
-We will be reading the data from JSON file and injecting the value to the caller of the processor (caller could be variable or component).
+We will be reading the data from JSON file and injecting the value to the caller
+of the processor (caller could be variable or component).
 
-Step - 1 : We need to make two files i.e. one file should be .ftd and another file should be .json
+-- ds.h2: Creating `index.ftd`
 
-Step - 2 : Creating .ftd (for example, record.ftd)
+We need to make two files i.e. one file should be `index.ftd` and another
+file should be `foo.json`
 
--- ds.code:
+-- ds.code: `index.ftd`
 lang: ftd
+
+\-- import: fastn/processors as pr
 
 \-- record person:
 caption name:
@@ -86,20 +93,21 @@ integer age:
 string gender:
 
 \-- person arpita:
-$processor$: get-data
-file: foo.json
+$processor$: pr.get-data ;; <hl>
+file: foo.json           ;; <hl>
 
 \-- ftd.text: $foo.name
 \-- ftd.text: $foo.age
 \-- ftd.text: $foo.gender
 
-
 -- ds.markdown:
 
+NOTE: `file` must point to a valid `json` file with extension `.json`.
 
-Step - 3 : Creating .json (for example, foo.json)
+-- ds.h2: Creating `foo.json`
+
 -- ds.code:
-lang: ftd
+lang: json
 
 {
   "name": "arpita",
@@ -107,21 +115,20 @@ lang: ftd
   "gender": "female"
 }
 
--- ds.markdown:
 
 
-Step - 4 : Output
+-- ds.h2: Running
+
+Run `fastn serve` and view `127.0.0.1:8000` (use whatever port reported by
+`fastn serve`), and you should see something like this:
+
 
 -- ds.code:
-lang: ftd
+lang: txt
 
 arpita
 15
 female
 
--- ds.markdown:
-
-
-NOTE : It will throw an error if other than .json file is used.
 
 -- end: ds.page

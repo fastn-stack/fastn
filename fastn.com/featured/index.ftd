@@ -128,6 +128,7 @@ optional body body:
 -- ftd.column:
 width: fill-container
 padding-top.px: 8
+spacing.fixed.px if { ftd.device == "mobile" }: 24
 
 -- ftd.row:
 width: fill-container
@@ -143,7 +144,6 @@ color: $inherited.colors.accent.primary
 width: fill-container
 
 -- end: ftd.desktop
-
 
 -- ftd.mobile:
 
@@ -194,10 +194,8 @@ $grid-view.body
 
 -- ftd.row:
 width: fill-container
-wrap: true
-spacing.fixed.px: 13
-margin-top.px: 60
-margin-bottom.px: 40
+spacing.fixed.px: 32
+classes: wrapper
 
 -- grid-of-items: $obj.title
 $loop$: $grid-view.templates as $obj
@@ -208,16 +206,17 @@ screenshot: $obj.screenshot
 body: $obj.body
 is-last: $obj.is-last
 wip: $obj.wip
+two-fold: $obj.two-fold
 
 -- end: ftd.row
 
 -- end: ftd.desktop
 
-
 -- ftd.mobile:
 
 -- ftd.column:
 width: fill-container
+spacing.fixed.px: 32
 
 -- grid-of-items: $obj.title
 $loop$: $grid-view.templates as $obj
@@ -228,6 +227,7 @@ screenshot: $obj.screenshot
 body: $obj.body
 is-last: $obj.is-last
 wip: $obj.wip
+two-fold: $obj.two-fold
 
 -- end: ftd.column
 
@@ -257,23 +257,52 @@ boolean $mit-hover: false
 optional body body:
 optional ftd.image-src screenshot:
 boolean wip: false
+boolean two-fold: false
+boolean $mouse-in: false
 
 -- ftd.column:
-width.fixed.percent if { ftd.device != "mobile" }: 31.58
 width if { ftd.device == "mobile" }: fill-container
-margin-bottom.px: 60
 spacing.fixed.px: 16
-link: $grid-of-items.template-url
 ;;open-in-new-tab: true
+classes if {grid-of-items.two-fold}: two-folded
+$on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
+height.fixed.px if {!grid-of-items.two-fold}: 220
 
 -- ftd.column:
 width: fill-container
-height.fixed.px: 220
 align-content: center
 border-width.px: 1
 border-color: $inherited.colors.border
 overflow: hidden
-border-radius.px: 10
+border-radius.px: 8
+link: $grid-of-items.template-url
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 12
+padding.px: 20
+anchor: parent
+bottom.px if { grid-of-items.mouse-in }: 0
+bottom.px if { !grid-of-items.mouse-in }: -60
+left.px: 0
+z-index: 999
+background.solid: #222222cc
+border-bottom-left-radius.px: 8
+border-bottom-right-radius.px: 8
+align-content: center
+classes: mouse-over
+
+-- ftd.text: $grid-of-items.title
+role: $inherited.types.label-large
+color: #FFFFFF
+width: fill-container
+
+-- ftd.image:
+src: $fastn-assets.files.images.featured.arrow-right.svg
+width.fixed.px: 22
+
+-- end: ftd.row
 
 -- ftd.column:
 if: { grid-of-items.wip }
@@ -282,7 +311,7 @@ height.fixed.px: 166
 anchor: parent
 background.solid: $overlay-bg
 overflow: hidden
-border-radius.px: 10
+border-radius.px: 8
 align-content: center
 z-index: 99
 
@@ -308,12 +337,12 @@ color: #d9d9d9
 if: { $grid-of-items.screenshot != NULL }
 src: $grid-of-items.screenshot
 width: fill-container
-height.fixed.px: 230
+height.fixed.px if {!grid-of-items.two-fold}: 230
 border-radius.px: 10
 $on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
 $on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
 classes if { grid-of-items.wip }: filter-1px
-css if { grid-of-items.wip }: [$fastn-assets.files.featured.filter.css]
+css: [$fastn-assets.files.featured.filter.css]
 
 -- end: ftd.column
 
@@ -323,35 +352,39 @@ spacing.fixed.px: 12
 padding-top.px: 8
 anchor: parent
 right.px: 16
-bottom.px: 52
-z-index: 99
+top.px: 0
+z-index: 999999
 
 -- ftd.row:
 
--- ftd.image:
+-- ftd.column:
 if: { grid-of-items.github-url != NULL  }
+link: $grid-of-items.github-url
+
+-- ftd.image:
 src: $fastn-assets.files.images.icon-github.svg
 width.fixed.px: 16
 height.fixed.px: 16
 align-self: center
 margin-right.px: 8
 
+-- end: ftd.column
+
+-- ftd.column:
+if: { grid-of-items.licence-url != NULL  }
+link: $grid-of-items.licence-url
+
 -- ftd.image:
-if: { grid-of-items.licence-url != NULL }
 src: $fastn-assets.files.images.mit-icon.svg
 width.fixed.px: 16
 height.fixed.px: 16
 align-self: center
 
--- end: ftd.row
+-- end: ftd.column
 
 -- end: ftd.row
 
--- ftd.text: $grid-of-items.title
-role: $inherited.types.label-large
-color: $inherited.colors.text-strong
-width: fill-container
-text-align: center
+-- end: ftd.row
 
 -- end: ftd.column
 
@@ -375,6 +408,7 @@ optional string github-url:
 optional body body: 
 boolean is-last: false
 boolean wip: false
+boolean two-fold: false
 
 -- template list doc-sites:
 
@@ -388,8 +422,8 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 wip: true
 
 -- template: Midnight Storm
-template-url: featured/ds/set-2-ds/
-screenshot: $fastn-assets.files.images.featured.doc-sites.set-2-ds.jpg
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 wip: true
 
 -- end: doc-sites
@@ -406,8 +440,8 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 wip: true
 
 -- template: Midnight Storm
-template-url: featured/ds/set-2-ds/
-screenshot: $fastn-assets.files.images.featured.doc-sites.set-2-ds.jpg
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 wip: true
 
 -- end: doc-sites-1
@@ -417,14 +451,14 @@ wip: true
 
 -- template list landing-pages:
 
+-- template: Midnight Storm
+template-url: featured/landing/set-2-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
+wip: true
+
 -- template: Midnight Rush
 template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
-wip: true
-
--- template: Midnight Storm
-template-url: featured/landing/set-2-landing/
-screenshot: $fastn-assets.files.images.featured.landing.set-2-landing.jpg
 wip: true
 
 -- end: landing-pages
@@ -435,8 +469,8 @@ wip: true
 -- template list landing-pages-1:
 
 -- template: Midnight Storm
-template-url: featured/landing/set-2-landing/
-screenshot: $fastn-assets.files.images.featured.landing.set-2-landing.jpg
+template-url: featured/landing/midnight-storm-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
 wip: true
 
 -- end: landing-pages-1

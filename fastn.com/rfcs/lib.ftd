@@ -1,3 +1,5 @@
+-- import: fastn-community.github.io/bling/note
+
 -- component rfc:
 ;; the title of the RFC
 caption title:
@@ -14,17 +16,24 @@ children c:
 
 -- ds.page: $rfc.title
 
-;; this message should go to the sidebar
+$rfc.short
+
+-- note.note: This is a RFC document
 
 This document exists to describe a proposal for enhancing the `fastn` language.
-This is a Request For Comment. Please share your comments by
+This is a Request For Comment. Please share your comments by posting them in the
+pull request for this RFC if this RFC is not merged yet. If the RFC is merged,
+you can post comment on our [official Discord](https://fastn.com/discord/), or
+open a [discussion on Github](https://github.com/orgs/fastn-stack/discussions).
 
-Learn about our [RFC process](/rfcs/0001-rfc-process/). View all
-[active RFCs](/rfcs/).
+;; TODO: instead of comment on PR vs on discord/github, if we know the rfc
+;; status, which we know, show a more precise message
 
--- ds.markdown:
+Learn about our [RFC process](/rfc/rfc-process/). View all [active
+RFCs](/rfcs/). WIP RFCs, and RFCs awaiting initial comments can be [found on
+Github](https://github.com/fastn-stack/fastn.com/pulls?q=is%3Apr+is%3Aopen+label%3Arfc),
+as Pull Requests, with label `rfc`.
 
-$rfc.short
 
 -- ds.h2: Status
 
@@ -41,6 +50,9 @@ children: $rfc.c
 -- end: ds.page
 
 -- end: rfc
+
+
+
 
 
 
@@ -87,6 +99,27 @@ b: $alternatives.b
 
 -- end: alternatives
 
+
+-- component development-status:
+optional body b:
+children c:
+
+-- titled-section: Development Status
+c: $development-status.c
+b: $development-status.b
+
+-- end: development-status
+
+
+-- component teaching-notes:
+optional body b:
+children c:
+
+-- titled-section: Teaching Notes
+c: $teaching-notes.c
+b: $teaching-notes.b
+
+-- end: teaching-notes
 
 
 -- component unresolved-questions:

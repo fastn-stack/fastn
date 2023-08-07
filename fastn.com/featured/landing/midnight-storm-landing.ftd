@@ -13,7 +13,7 @@
 
 
 
--- ds.page: Featured components
+-- ds.page: SPA / Landing Pages - Midnight Storm 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -39,8 +39,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Documentation Sites - Set 3 DS
-cta-url: https://github.com/fastn-stack/fastn-template/generate
+-- ds.layout: SPA / Landing Pages - Midnight Storm 
 previous-url: /featured/
 
 -- end: ds.page.layout-bar
@@ -49,9 +48,9 @@ previous-url: /featured/
 
 -- ds.distributors: 
 owners: $owner-fastn
-license-url: https://github.com/fastn-community/set-3-ds/blob/main/LICENSE
+license-url: https://github.com/fastn-community/midnight-storm/blob/main/LICENSE
 license: Creative Commons
-published-date: 31-May-2023
+published-date: 02-June-2023
 used-by: 1 +
 likes: 1 Stars
 connect: $social-links
@@ -61,26 +60,22 @@ connect: $social-links
 
 -- ds.page.body:
 
-⚡️ Set 2 DS will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
-
+We have designed and developed below landing pages site themes. You can use them
+for creating SPA(Single Page Application or websites) etc. 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.doc-sites.set-2-ds.jpg
-cta-url: https://fastn-community.github.io/set-2-ds/
+image: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
+cta-url: https://fastn-community.github.io/midnight-storm/landing/
+wip: true
 
--- ft-ui.grid-view: Documentation Sites
+-- ft-ui.grid-view: SPA / Landing Pages
 if: { show-grid }
-templates: $ft-ui.doc-sites
+templates: $ft-ui.landing-pages-2
 more-link-text: View all
-more-link: /featured/doc-sites/
+more-link: /featured/landing-pages/
 
-`doc-sites` will help you create a beautiful documentation site in no time. 
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
+We have designed and developed below landing pages site themes. You can use them
+for creating SPA(Single Page Application or websites) etc. 
 
 -- end: ds.page
 

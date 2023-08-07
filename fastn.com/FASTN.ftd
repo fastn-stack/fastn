@@ -11,6 +11,7 @@ favicon: /-/fastn.com/images/favicon.svg
 -- fastn.dependency: fastn-community.github.io/winter-cs
 -- fastn.dependency: fastn-community.github.io/footer
 -- fastn.dependency: fastn-community.github.io/spectrum-ds
+-- fastn.dependency: fastn-community.github.io/pattern-business-card
 -- fastn.dependency: fifthtry.github.io/admonitions
 -- fastn.dependency: fastn-community.github.io/banner
 -- fastn.dependency: fifthtry.github.io/button
@@ -77,7 +78,13 @@ favicon: /-/fastn.com/images/favicon.svg
   document: author/how-to/vscode.ftd
 - `fastn` Community: /community/
 - Docs: /docs/
-
+- Student Ambassador Program: /ambassador/
+  document: /student-programs/ambassador.ftd
+  skip: true
+- Champion Program: /champions-program/
+  document: /student-programs/champion.ftd
+  skip: true
+  
 ## Features: /features/
 
 - Overview: /features/
@@ -231,8 +238,8 @@ favicon: /-/fastn.com/images/favicon.svg
 - Best Practices: /best-practices/
   - Formatting: /formatting/
     document: /best-practices/formatting.ftd
-  - Import: /import-at-top/
-    document: /best-practices/import-at-top.ftd
+  - Import: /importing-packages/
+    document: /best-practices/import.ftd
   - Auto-import: /auto-import/
     document: /best-practices/auto-import.ftd
   - Device: /device-guidelines/
@@ -307,7 +314,8 @@ favicon: /-/fastn.com/images/favicon.svg
   - **g** Hosting 🚧: /book/hosting/
     document: book/appendix/g-hosting.ftd
 
-## Video Course: /expander/
+## Learn: /learn/
+  document: /expander/index.ftd
    
 - Expander Crash Course: /expander/
   - Part 1. Hello World: /expander/hello-world/
@@ -340,6 +348,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/ds/markdown.ftd
 - Adding typography: /typography/-/frontend/
   document: /expander/ds/ds-typography.ftd
+- Adding color scheme: /color-scheme/-/frontend/
+  document: /expander/ds/ds-cs.ftd
 - Using `ds.page` component: /ds-page/-/frontend/
   document: /expander/ds/ds-page.ftd
   skip: true
@@ -354,13 +364,15 @@ favicon: /-/fastn.com/images/favicon.svg
   skip: true
 - Dynamic URLs: /dynamic-urls/
   document: backend/dynamic-urls.ftd
-- `processor`: /processor/-/backend/
+- `processors`: /processor/-/backend/
   document: ftd-host/processor.ftd
   - Getting Request Data: /request-data/
     document: ftd-host/request-data.ftd
-  - `http` processor: /http/
+  - Fetching Data Using `http`: /http/
     document: ftd-host/http.ftd
-  - SQL Processor: /sql/
+  - Querying PostgreSQL: /sql/
+    document: ftd-host/pg.ftd
+  - Querying SQLite: /sqlite/
     document: ftd-host/package-query.ftd
   - Reading JSON: /get-data/
     document: ftd-host/get-data.ftd
@@ -402,6 +414,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/ds/markdown.ftd
 - Adding typography: /typography/
   document: /expander/ds/ds-typography.ftd
+- Adding color scheme: /color-scheme/
+  document: /expander/ds/ds-cs.ftd
 - Using page component: /ds-page/
   document: /expander/ds/ds-page.ftd
   skip: true
@@ -416,25 +430,32 @@ favicon: /-/fastn.com/images/favicon.svg
       skip: true
     - Midnight Rush: /featured/ds/mr-ds/
       skip: true
-    - Set 2 DS: /featured/ds/set-2-ds/
+    - Midnight Storm: /featured/ds/midnight-storm/
       skip: true
-    - Set 3 DS: /featured/ds/set-3-ds/
+    - Misty Gray: /featured/ds/misty-gray/
       skip: true
     - Doc Site Blog: /featured/blogs/doc-site/
       skip: true
     - Doc Site Blog: /featured/blogs/mr-blog/
       skip: true
-    - Set 2 Blog: /featured/blogs/set-2-blog/
+    - Midnight Storm Blog: /featured/blogs/set-2-blog/
       skip: true
-    - Set 3 Blog: /featured/blogs/set-3-blog/
+    - Misty Gray Blog: /featured/blogs/set-3-blog/
       skip: true
     - Midnight Rush Landing: /featured/landing/mr-landing/
       skip: true
-    - Set 2 Landing: /featured/landing/set-2-landing/
+    - Midnight Storm Landing: /featured/landing/midnight-storm-landing/
       skip: true
   - SPA / Landing Pages: /featured/landing-pages/
   - Blog Templates: /featured/blog-templates/
 - Component Library: /featured/components-library/
+  - Business Cards: /featured/components/cards/
+  - Bling Components: /featured/components/bling/
+  - Modal / Dialog: /featured/components/dialogs/
+  - Headers: /featured/components/headers/
+  - Footers: /featured/components/footers/
+  - Hero Components: /featured/components/hero/
+  - Buttons: /featured/components/buttons/
 - Design Elements: /featured/cs/
   - Color Schemes: /featured/cs/
   - Font Typographies: /featured/fonts-typography/
@@ -454,8 +475,10 @@ favicon: /-/fastn.com/images/favicon.svg
 
 
 # Blog: /blog/
-  document: blog/the-intimidation-of-programming.ftd
+  document: blog/prove-you-wrong.ftd
 
+- fastn might prove you wrong: /blog/prove-you-wrong/
+  document: blog/prove-you-wrong.ftd 
 - The Intimidation of Programming: /blog/intimidation-of-programming/
   document: blog/the-intimidation-of-programming.ftd
 - Optimize your website: /blog/seo-meta/
@@ -479,6 +502,20 @@ favicon: /-/fastn.com/images/favicon.svg
 - Overview: /d/
 - Maintenance: /d/m/
 - Next Edition: /d/next-edition/
+- RFCs: /rfcs/
+  - 1: The RFC Process
+    url: /rfc/rfc-process/
+    document: rfcs/0001-rfc-process.ftd
+  - 2: `fastn update`
+    url: /rfc/fastn-update/
+    document: rfcs/0002-fastn-update.ftd
+    skip: true
+  - 3: Variable Interpolation
+    url: /rfc/variable-interpolation/
+    document: rfcs/0003-variable-interpolation.ftd
+  - 4: Incremental Build
+    url: /rfc/incremental-build/
+    document: rfcs/0004-incremental-build.ftd
 - Architecture: /architecture/
   document: d/architecture.ftd
   - `ftd` crate 🚧: /ftd-crate/
@@ -533,7 +570,7 @@ favicon: /-/fastn.com/images/favicon.svg
 /discord/: https://discord.gg/eNXVBMq4xt
 /package-query/: /sql/
 /images-in-modules/: /using-images/
-/images-in-modules/-/planning/: `/using-images/-/planning/
+/images-in-modules/-/planning/: /using-images/-/planning/
 /ftd/variables/: /variables/
 /ftd/built-in-types/: /built-in-types/
 /ftd/record/: /record/
@@ -560,3 +597,6 @@ favicon: /-/fastn.com/images/favicon.svg
 /blog/seo-meta-data/: /blog/seo-meta/
 /markdown-in-doc-site/-/planning/: /markdown/-/planning/
 /create-page/-/planning/: /ds-page/-/planning/
+/rfcs/rfc-process/: /rfc/rfc-process/
+/rfcs/fastn-update/: /rfc/fastn-update/
+/rfcs/variable-interpolation/: /rfc/variable-interpolation/

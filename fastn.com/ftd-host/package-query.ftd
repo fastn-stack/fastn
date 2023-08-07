@@ -1,5 +1,6 @@
 -- import: fastn.com/ftd/built-in-variables as v
 -- import: fastn/processors as pr
+-- import: fastn.com/ftd-host/processor
 
 -- record person:
 integer id:
@@ -13,10 +14,18 @@ db: db.sqlite
 SELECT * FROM user;
 
 
--- ds.page: Data In SQLite Database
+-- ds.page: Querying SQLite Using `fastn`
+
+Note: This document is about querying SQLite Database that is part of your
+`fastn` package. You can also [query PostgreSQL using `fastn`](/sql/).
 
 `package-query` processor allows you to execute SQL queries against SQLite 
 files that are part of your `fastn` package.
+
+-- processor.static-vs-dynamic:
+
+-- ds.markdown:
+
 
 And say you have an SQLite database file with table like this:
 

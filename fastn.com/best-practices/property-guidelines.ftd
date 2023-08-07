@@ -1,7 +1,7 @@
 -- import: fastn.com/utils
 -- import: fastn-community.github.io/bling/note
 
--- ds.page: Property Guidelines
+-- ds.page: Property related best practices
 
 -- utils.code-display: `horizontal-not-left-right`: Use `horizontal` property
 id: horizontal-not-left-right

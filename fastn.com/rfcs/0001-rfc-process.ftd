@@ -1,6 +1,6 @@
 -- import: fastn.com/rfcs/lib
 
--- lib.rfc: RFC: The RFC Process
+-- lib.rfc: RFC-1: The RFC Process
 id: rfc-process
 status: accepted
 
@@ -20,6 +20,8 @@ more self-discipline when it comes to changing the system. This is a proposal
 for a more principled RFC process to make it a more integral part of the overall
 development process, and one that is followed consistently to introduce
 features to `fastn`.
+
+
 
 -- lib.detailed-design:
 
@@ -93,6 +95,25 @@ removed from the Active RFC List; an RFC that fails after becoming active is
 -- end: lib.detailed-design
 
 
+
+
+
+-- lib.teaching-notes:
+
+We have to only teach `developers-of-fastn` about this new process, so teaching
+impact of this RFC is minimal. Even for `developers-of-fastn`, given `fastn` is
+implemented in Rust, so all developers of fastn are familiar with Rust, and also
+given we have heavily borrewed from Rust's RFC process, teaching this should not
+pose a challenge in terms of new concepts.
+
+People will be proposing ideas via Github Issues, and we will have to direct
+them to [`fastn.com/rfcs/`](https://fastn.com/rfcs/).
+
+-- end: lib.teaching-notes
+
+
+
+
 -- lib.alternatives:
 
 Retain the current informal RFC process. The newly proposed RFC process is
@@ -118,6 +139,8 @@ designed to improve over the informal process in the following ways:
 - Should we retain rejected RFCs in the archive?
 
 -- end: lib.unresolved-questions
+
+
 
 -- end: lib.rfc
 
