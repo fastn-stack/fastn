@@ -125,6 +125,16 @@ mod cache {
             Ok(())
         }
         pub(crate) fn get_file_hash(&mut self, path: &str) -> fastn_core::Result<String> {
+            if path == "$fastn$/fastn.ftd"
+                || path == "$fastn$/processors.ftd"
+                || path == "$fastn$/time.ftd"
+                || path.ends_with("/-/fonts.ftd")
+                || path.ends_with("/-/assets.ftd")
+            {
+                // these are virtual file, they don't exist on disk, and hash only changes when
+                // fastn source changes
+                return Ok("hello".to_string());
+            }
             match self.ftd_cache.get(path) {
                 Some(Some(v)) => Ok(v.to_owned()),
                 Some(None) => Err(fastn_core::Error::GenericError(path.to_string())),

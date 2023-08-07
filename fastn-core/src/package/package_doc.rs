@@ -433,6 +433,7 @@ pub(crate) async fn read_ftd_2022(
             });
         }
     };
+    config.dependencies_during_render = lib.config.dependencies_during_render;
     if let Some((url, code)) = main_ftd_doc.get_redirect() {
         return Ok(FTDResult::Redirect { url, code });
     }
@@ -505,7 +506,7 @@ pub(crate) async fn read_ftd_2023(
             });
         }
     };
-
+    config.dependencies_during_render = lib.config.dependencies_during_render;
     if let Some((url, code)) = main_ftd_doc.get_redirect() {
         return Ok(FTDResult::Redirect { url, code });
     }

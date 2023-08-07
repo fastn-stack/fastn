@@ -53,9 +53,10 @@ pub async fn interpret_helper<'a>(
                 state: mut st,
                 caller_module,
             } => {
-                let (source, foreign_variable, foreign_function, ignore_line_numbers) =
+                let (source, path, foreign_variable, foreign_function, ignore_line_numbers) =
                     resolve_import_2022(lib, &mut st, module.as_str(), caller_module.as_str())
                         .await?;
+                lib.config.dependencies_during_render.push(path);
                 let doc = cached_parse(module.as_str(), source.as_str(), ignore_line_numbers)?;
                 s = st.continue_after_import(
                     module.as_str(),
@@ -162,13 +163,20 @@ pub async fn resolve_import_2022<'a>(
     _state: &mut ftd::interpreter::InterpreterState,
     module: &str,
     caller_module: &str,
-) -> ftd::interpreter::Result<(String, Vec<String>, Vec<String>, usize)> {
+) -> ftd::interpreter::Result<(String, String, Vec<String>, Vec<String>, usize)> {
     let current_package = lib.get_current_package(caller_module)?;
     let source = if module.eq("fastn/time") {
-        ("".to_string(), vec!["time".to_string()], vec![], 0)
+        (
+            "".to_string(),
+            "$fastn$/time.ftd".to_string(),
+            vec!["time".to_string()],
+            vec![],
+            0,
+        )
     } else if module.eq("fastn/processors") {
         (
             fastn_core::processor_ftd().to_string(),
+            "$fastn$/processors.ftd".to_string(),
             vec![],
             vec![
                 "figma-typo-token".to_string(),
@@ -206,12 +214,14 @@ pub async fn resolve_import_2022<'a>(
         if module.starts_with(current_package.name.as_str()) {
             (
                 current_package.get_font_ftd().unwrap_or_default(),
+                format!("{name}/-/assets.ftd", name = current_package.name),
                 foreign_variable,
                 vec![],
                 0,
             )
         } else {
             let mut font_ftd = "".to_string();
+            let mut path = "".to_string();
             for (alias, package) in current_package.aliases() {
                 if module.starts_with(alias) {
                     lib.push_package_under_process(module, package).await?;
@@ -223,16 +233,18 @@ pub async fn resolve_import_2022<'a>(
                         .unwrap()
                         .get_font_ftd()
                         .unwrap_or_default();
+                    path = format!("{name}/-/fonts.ftd", name = package.name);
                     break;
                 }
             }
-            (font_ftd, foreign_variable, vec![], 0)
+            (font_ftd, path, foreign_variable, vec![], 0)
         }
     } else {
-        let (content, ignore_line_numbers) = lib.get_with_result(module, caller_module).await?;
-
+        let (content, path, ignore_line_numbers) =
+            lib.get_with_result(module, caller_module).await?;
         (
             content,
+            path,
             vec![],
             vec![
                 "figma-typo-token".to_string(),
