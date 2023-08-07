@@ -128,6 +128,8 @@ ftd.append = function (list, item) { list.push(item) }
 ftd.pop = function (list) { list.pop() }
 ftd.insert_at = function (list, index, item) { list.insertAt(index, item) }
 ftd.delete_at = function (list, index) { list.deleteAt(index) }
+ftd.clear_all = function (list) { list.clearAll() }
+ftd.set_list = function (list, value) { list.set(value) }
 
 ftd.http = function (url, method, ...request_data) {
     if (url instanceof Mutable) url = url.get();
