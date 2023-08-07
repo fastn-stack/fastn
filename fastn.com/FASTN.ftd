@@ -348,6 +348,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/ds/markdown.ftd
 - Adding typography: /typography/-/frontend/
   document: /expander/ds/ds-typography.ftd
+- Adding color scheme: /color-scheme/-/frontend/
+  document: /expander/ds/ds-cs.ftd
 - Using `ds.page` component: /ds-page/-/frontend/
   document: /expander/ds/ds-page.ftd
   skip: true
@@ -412,6 +414,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/ds/markdown.ftd
 - Adding typography: /typography/
   document: /expander/ds/ds-typography.ftd
+- Adding color scheme: /color-scheme/
+  document: /expander/ds/ds-cs.ftd
 - Using page component: /ds-page/
   document: /expander/ds/ds-page.ftd
   skip: true
@@ -471,8 +475,10 @@ favicon: /-/fastn.com/images/favicon.svg
 
 
 # Blog: /blog/
-  document: blog/the-intimidation-of-programming.ftd
+  document: blog/prove-you-wrong.ftd
 
+- fastn might prove you wrong: /blog/prove-you-wrong/
+  document: blog/prove-you-wrong.ftd 
 - The Intimidation of Programming: /blog/intimidation-of-programming/
   document: blog/the-intimidation-of-programming.ftd
 - Optimize your website: /blog/seo-meta/
