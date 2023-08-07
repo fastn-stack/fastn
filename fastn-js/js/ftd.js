@@ -113,7 +113,9 @@ let ftd = {
             Object.entries(attributes).map(([k,v]) => {
                     if (v instanceof fastn.mutableClass) {
                         v = fastn.webComponentVariable.mutable(v);
-                    } else {
+                    } else if (v instanceof fastn.mutableListClass) {
+                        v = fastn.webComponentVariable.mutableList(v);
+                    }else {
                         v = fastn.webComponentVariable.static(v);
                     }
                     return [k, v];
