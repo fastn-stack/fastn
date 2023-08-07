@@ -53,7 +53,7 @@ github-url: https://github.com/fastn-community/business-card
 image: $fastn-assets.files.images.featured.components.business-card.png
 cta-url: https://hsfastn.github.io/1strepo/
 cta-text: Demo
-width.fixed.px: 600
+width.fixed.px if {ftd.device == "desktop"}: 600
 
 -- ft-ui.grid-view: Featured Business Cards
 if: { show-grid }
