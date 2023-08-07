@@ -228,6 +228,49 @@ async fn handle_file(
     Ok(())
 }
 
+fn is_cached(
+    cache: &Option<&mut cache::Cache>,
+    doc: &fastn_core::Document,
+    file_path: &str,
+) -> bool {
+    let cache = match cache {
+        Some(c) => c,
+        None => {
+            println!("cache miss: no have cache");
+            return false;
+        }
+    };
+
+    let cached_doc = match cache.documents.get(doc.id.as_str()) {
+        Some(cached_doc) => cached_doc,
+        None => {
+            println!("cache miss: no cache entry for {}", doc.id.as_str());
+            return false;
+        }
+    };
+
+    // if it exists, check if the checksums match
+    // if they do, return
+    dbg!(cached_doc);
+    let doc_hash = match cache.build_content.get(file_path) {
+        Some(doc_hash) => doc_hash,
+        None => {
+            println!("cache miss: document not present in .build: {}", file_path);
+            return false;
+        }
+    };
+
+    dbg!(doc_hash);
+
+    if doc_hash != &cached_doc.html_checksum {
+        println!("cache miss: html file checksums don't match");
+    }
+
+    // if it exists, check if the checksums match
+    println!("cache hit");
+    true
+}
+
 #[tracing::instrument(skip(document, config, cache))]
 async fn handle_file_(
     document: &fastn_core::File,
@@ -251,28 +294,8 @@ async fn handle_file_(
                 fastn_core::utils::replace_last_n(doc.id.as_str(), 1, ".ftd", "/index.html")
             };
 
-            // find the document in cache
-            if let Some(ref cache) = cache {
-                if let Some(cached_doc) = cache.documents.get(doc.id.as_str()) {
-                    // if it exists, check if the checksums match
-                    // if they do, return
-                    dbg!(cached_doc);
-                    if let Some(doc_hash) = cache.build_content.get(file_path.as_str()) {
-                        dbg!(doc_hash);
-                        if doc_hash == &cached_doc.html_checksum {
-                            println!("cache hit, returning");
-                            return Ok(());
-                        } else {
-                            println!("cache miss");
-                        }
-                    }
-                } else {
-                    println!("no cache entry for {}", doc.id.as_str());
-                }
-                // if it exists, check if the checksums match
-                // if they do, return
-            } else {
-                println!("no have cache");
+            if is_cached(&cache, doc, file_path.as_str()) {
+                return Ok(());
             }
 
             fastn_core::utils::copy(
