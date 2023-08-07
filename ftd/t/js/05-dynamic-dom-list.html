@@ -51,7 +51,7 @@ fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));
 let foo__clamp = function (args)
 {
   let __args__ = args;
-  let fastn_utils_val___args___a = (fastn_utils.getter(__args__.a) + 1) % 2;
+  let fastn_utils_val___args___a = fastn_utils.clone((fastn_utils.getter(__args__.a) + 1) % 2);
   if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
     __args__.a = fastn_utils_val___args___a;
   }
@@ -67,7 +67,7 @@ fastn_utils.createNestedObject(global, "foo__counters", fastn.mutableList([]));
 let foo__increment = function (args)
 {
   let __args__ = args;
-  let fastn_utils_val___args___a = fastn_utils.getter(__args__.a) + 1;
+  let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
   if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
     __args__.a = fastn_utils_val___args___a;
   };
