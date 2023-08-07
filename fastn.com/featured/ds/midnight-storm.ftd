@@ -13,7 +13,7 @@
 
 
 
--- ds.page: Featured components
+-- ds.page: 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -23,7 +23,8 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
-distribution-bar: true
+full-width: true
+show-layout-bar: true
 
 -- ds.page.footer:
 
@@ -40,7 +41,12 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- ds.page.layout-bar:
 
 -- ds.layout: Documentation Sites - Midnight Storm
-previous-url: /featured/
+cta-text: Use this template
+cta-url: https://github.com/fastn-community/midnight-storm-template/generate
+previous-url: /featured/doc-sites/
+github-url: https://github.com/fastn-community/midnight-storm
+cta-url-1: https://fastn-community.github.io/midnight-storm/
+cta-text-1: User Manual
 
 -- end: ds.page.layout-bar
 
@@ -57,31 +63,17 @@ connect: $social-links
 
 -- end: ds.page.abstract-bar
 
-
--- ds.page.body:
-
-⚡️ Midnight Storm DS will help you create a beautiful documentation site in no
-time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
-
-
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
-cta-url: https://fastn-community.github.io/midnight-storm/
-wip: true
+cta-url: https://gsalunke.github.io/midnight-storm-demo/
+cta-text: Demo
 
--- ft-ui.grid-view: Documentation Sites
+
+-- ft-ui.grid-view: Featured Documentation Sites
 if: { show-grid }
-templates: $ft-ui.doc-sites
-more-link-text: View all
+templates: $ft-ui.doc-sites-1
+more-link-text: View more
 more-link: /featured/doc-sites/
-
-`doc-sites` will help you create a beautiful documentation site in no time. 
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
 
 -- end: ds.page
 

@@ -65,49 +65,17 @@ templates: $doc-sites
 -- ft-ui.template: Doc-site
 template-url: featured/ds/doc-site/
 screenshot: $fastn-assets.files.images.featured.doc-site.jpg
-licence-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
-github-url: https://github.com/fastn-community/doc-site
-
-⚡️ doc-site will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
 
 -- ft-ui.template: Midnight Rush
 template-url: featured/ds/mr-ds/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
-licence-url: https://github.com/fastn-community/midnight-rush/blob/main/LICENSE
-github-url: https://github.com/fastn-community/midnight-rush
-wip: true
-
-⚡️ Midnight Rush will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
 
 -- ft-ui.template: Midnight Storm
 template-url: featured/ds/midnight-storm/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
-licence-url: https://github.com/fastn-community/midnight-storm/blob/master/LICENSE
-github-url: https://github.com/fastn-community/midnight-storm
-is-last: true
-wip: true
-
-⚡️ Set 2 DS will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
 
 -- ft-ui.template: Misty Gray
 template-url: featured/ds/misty-gray/
 screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
-licence-url: https://github.com/fastn-community/misty-gray/blob/master/LICENSE
-github-url: https://github.com/fastn-community/misty-gray
-wip: true
-
-⚡️ Misty Gray will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
 
 -- end: doc-sites

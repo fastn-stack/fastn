@@ -419,12 +419,10 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
 -- template: Midnight Rush
 template-url: featured/ds/mr-ds/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
-wip: true
 
 -- template: Midnight Storm
 template-url: featured/ds/midnight-storm/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
-wip: true
 
 -- end: doc-sites
 
@@ -434,17 +432,59 @@ wip: true
 
 -- template list doc-sites-1:
 
+-- template: Doc-site
+template-url: featured/ds/doc-site/
+screenshot: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
+
 -- template: Midnight Rush
 template-url: featured/ds/mr-ds/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
-wip: true
+
+-- template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+
+-- end: doc-sites-1
+
+
+
+
+
+-- template list doc-sites-2:
+
+-- template: Doc-site
+template-url: featured/ds/doc-site/
+screenshot: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
+
+-- template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
 
 -- template: Midnight Storm
 template-url: featured/ds/midnight-storm/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
-wip: true
 
--- end: doc-sites-1
+-- end: doc-sites-2
+
+
+
+
+
+-- template list doc-sites-3:
+
+-- template: Midnight Rush
+template-url: featured/ds/mr-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
+
+-- template: Midnight Storm
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
+
+-- template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+
+-- end: doc-sites-3
 
 
 
@@ -567,11 +607,11 @@ wip: true
 
 
 
-/-- template list resumes:
+-- template list resumes:
 
 -- template: Caffeine
 template-url: http://fifthtry.github.io/caffeine-resume/
-screenshot: $fastn-assets.files.static.caffiene.png
+screenshot: $fastn-assets.files.images.caffiene.png
 licence-url: https://github.com/FifthTry/caffeine-resume/blob/main/LICENSE
 github-url: https://github.com/FifthTry/caffeine-resume/
 
@@ -580,7 +620,7 @@ of `fifthtry.github.io/doc-site/`
 
 -- template: Paper
 template-url: http://fifthtry.github.io/paper-resume/
-screenshot: $fastn-assets.files.static.paper.png
+screenshot: $fastn-assets.files.images.paper.png
 licence-url: https://github.com/FifthTry/paper-resume/blob/main/LICENSE
 github-url: https://github.com/FifthTry/paper-resume/
 

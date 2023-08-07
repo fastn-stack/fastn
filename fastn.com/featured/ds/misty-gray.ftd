@@ -13,7 +13,7 @@
 
 
 
--- ds.page: Featured components
+-- ds.page: 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -23,7 +23,8 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
-distribution-bar: true
+show-layout-bar: true
+full-width: true
 
 -- ds.page.footer:
 
@@ -40,8 +41,11 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- ds.page.layout-bar:
 
 -- ds.layout: Documentation Sites - Misty Gray
-cta-url: https://github.com/fastn-stack/fastn-template/generate
-previous-url: /featured/
+cta-url: https://github.com/fastn-community/misty-gray-template/generate
+previous-url: /featured/doc-sites/
+github-url: https://github.com/fastn-community/misty-gray
+cta-url-1: https://fastn-community.github.io/misty-gray/
+cta-text-1: User Manual
 
 -- end: ds.page.layout-bar
 
@@ -59,28 +63,16 @@ connect: $social-links
 -- end: ds.page.abstract-bar
 
 
--- ds.page.body:
-
-⚡️ Misty Gray will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
-
-
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
-cta-url: https://fastn-community.github.io/misty-gray/
+cta-url: https://gsalunke.github.io/misty-gray-demo/
+cta-text: Demo
 
--- ft-ui.grid-view: Documentation Sites
+-- ft-ui.grid-view: Featured Documentation Sites
 if: { show-grid }
 templates: $ft-ui.doc-sites
-more-link-text: View all
+more-link-text: View more
 more-link: /featured/doc-sites/
-
-`doc-sites` will help you create a beautiful documentation site in no time. 
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
 
 -- end: ds.page
 
