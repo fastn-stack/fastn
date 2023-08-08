@@ -1,0 +1,96 @@
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn-community.github.io/footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fastn.com/featured as ft-ui
+-- import: fastn.com/assets
+
+
+-- boolean show-grid: true
+-- boolean show-list: false
+
+
+
+
+-- ds.page: 
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
+full-width: true
+show-layout-bar: true
+
+-- ds.page.footer:
+
+-- footer.social-sideline-footer:
+social: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-url: /
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+-- end: ds.page.footer
+
+-- ds.page.layout-bar:
+
+-- ds.layout: Business Card
+cta-text: User Manual
+cta-url: https://fastn-community.github.io/business-card/
+previous-url: /featured/components/cards/
+github-url: https://github.com/fastn-community/business-card
+
+-- end: ds.page.layout-bar
+
+
+-- ds.preview-card:
+image: $fastn-assets.files.images.featured.components.business-card.png
+cta-url: https://hsfastn.github.io/1strepo/
+cta-text: Demo
+width.fixed.px if {ftd.device == "desktop"}: 600
+
+-- ft-ui.grid-view: Featured Business Cards
+if: { show-grid }
+templates: $cards
+more-link-text: View more
+more-link: /featured/components/cards/
+
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list cards:
+
+-- ft-ui.template: Gradient Business Card
+template-url: featured/sections/cards/gradient-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
+
+Build you own business-card using gradient-business-card package.
+
+-- ft-ui.template: Midnight Business Card
+template-url: featured/sections/cards/midnight-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
+
+Build you own business-card using gradient-business-card package.
+
+-- ft-ui.template: Pattern Business Card
+template-url: featured/sections/cards/pattern-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
+
+Build you own business-card using pattern-business-card package.
+
+-- end: cards

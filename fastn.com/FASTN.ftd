@@ -422,20 +422,21 @@ favicon: /-/fastn.com/images/favicon.svg
 - Redirects: /redirects/
   document: backend/redirects.ftd
 
-## Featured Components: /featured/
+## Featured Templates: /featured/
 
 - Website Categories: /featured/doc-sites/
   - Documentation Sites: /featured/doc-sites/
   - SPA / Landing Pages: /featured/landing-pages/
-  - Blog Templates: /featured/blog-templates/
+  - Blogs: /featured/blog-templates/
+- Section Library: /featured/sections/
+  - Business Cards: /featured/sections/cards/
+  - Hero Components: /featured/sections/heros/
+  - Modal / Dialog: /featured/sections/modals/
 - Component Library: /featured/components-library/
-  - Business Cards: /featured/components/cards/
-  - Bling Components: /featured/components/bling/
-  - Modal / Dialog: /featured/components/dialogs/
   - Headers: /featured/components/headers/
   - Footers: /featured/components/footers/
-  - Hero Components: /featured/components/hero/
   - Buttons: /featured/components/buttons/
+  - Bling Components: /featured/components/bling/
 - Design Elements: /featured/cs/
   - Color Schemes: /featured/cs/
   - Font Typographies: /featured/fonts-typography/

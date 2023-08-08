@@ -40,26 +40,26 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Business Card
+-- ds.layout: Alert Dialog
 cta-text: User Manual
-cta-url: https://fastn-community.github.io/business-card/
-previous-url: /featured/components/cards/
-github-url: https://github.com/fastn-community/business-card
+cta-url: https://fastnui.trizwit.com/UI-Components/Content/alert-dialog/
+previous-url: /featured/sections/modals/
+github-url: https://github.com/Trizwit/FastnUI/
 
 -- end: ds.page.layout-bar
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.components.business-card.png
-cta-url: https://hsfastn.github.io/1strepo/
+image: $fastn-assets.files.images.featured.components.dialog-3.png
+cta-url: https://fastnui.trizwit.com/UI-Components/Content/alert-dialog/
 cta-text: Demo
 width.fixed.px if {ftd.device == "desktop"}: 600
 
--- ft-ui.grid-view: Featured Business Cards
+-- ft-ui.grid-view: Featured Modal / Dialog Box
 if: { show-grid }
-templates: $cards
+templates: $dialogs
 more-link-text: View more
-more-link: /featured/components/cards/
+more-link: /featured/sections/modals/
 
 
 -- end: ds.page
@@ -73,24 +73,19 @@ more-link: /featured/components/cards/
 
 
 
--- ft-ui.template list cards:
+-- ft-ui.template list dialogs:
 
--- ft-ui.template: Gradient Business Card
-template-url: featured/business-card/gradient-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
+-- ft-ui.template: Dialog - 1
+template-url: featured/sections/modals/dialog-1/
+screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
 
-Build you own business-card using gradient-business-card package.
+-- ft-ui.template: Dialog - 2
+template-url: featured/sections/modals/dialog-2/
+screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
 
--- ft-ui.template: Midnight Business Card
-template-url: featured/business-card/midnight-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
+-- ft-ui.template: Modal Cover
+template-url: featured/sections/modals/modal-2/
+screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 
-Build you own business-card using gradient-business-card package.
+-- end: dialogs
 
--- ft-ui.template: Pattern Business Card
-template-url: featured/business-card/pattern-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
-
-Build you own business-card using pattern-business-card package.
-
--- end: cards

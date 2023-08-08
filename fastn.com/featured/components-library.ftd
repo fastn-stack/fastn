@@ -45,14 +45,6 @@ more-link: /featured/components/bling/
 We have designed and developed below bling components. You can use them on your
 `FTD` web site. 
 
--- ft-ui.grid-view: Business Cards
-templates: $cards
-more-link-text: View all
-more-link: /featured/components/cards/
-
-We have designed and developed below business-cards. You can use them on your
-`FTD` web site. 
-
 -- ft-ui.grid-view: Buttons
 templates: $buttons
 ;;more-link-text: View all
@@ -69,14 +61,6 @@ templates: $code-block
 We have designed and developed below code block and button components package.
 You can use them on your `FTD` web site. 
 
--- ft-ui.grid-view: Modal / Dialog Box
-templates: $dialogs
-more-link-text: View all
-more-link: /featured/components/dialogs/
-
-We have designed and developed below Modal / Dialog Box components. You can use
-them on your `FTD` web site. 
-
 -- ft-ui.grid-view: Headers / Navbars
 templates: $headers
 more-link-text: View all
@@ -84,14 +68,6 @@ more-link: /featured/components/headers/
 
 We have designed and developed below header / navbar packages. You can use them
 on your `FTD` web site. 
-
--- ft-ui.grid-view: Hero Components
-templates: $heros
-more-link-text: View all
-more-link: /featured/components/hero/
-
-We have designed and developed below hero components. You can use them on your
-`FTD` web site. 
 
 -- ft-ui.grid-view: Footers
 templates: $footers
@@ -129,34 +105,6 @@ elements designed to enhance the presentation and engagement of web pages.
 
 
 
-
--- ft-ui.template list cards:
-
--- ft-ui.template: Business Card
-template-url: featured/business-card/card-1/
-screenshot: $fastn-assets.files.images.featured.components.business-card.png
-
-Build you own business-card using business-card package.
-
--- ft-ui.template: Gradient Business Card
-template-url: featured/business-card/gradient-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
-
-Build you own business-card using gradient-business-card package.
-
--- ft-ui.template: Midnight Business Card
-template-url: featured/business-card/midnight-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
-
-Build you own business-card using gradient-business-card package.
-
-
--- end: cards
-
-
-
-
-
 -- ft-ui.template list code-block:
 
 -- ft-ui.template: Code Block
@@ -184,38 +132,6 @@ github-url: https://github.com/FifthTry/button
 Button components can be used inside your fastn projects.
 
 -- end: buttons
-
-
-
-
--- ft-ui.template list dialogs:
-
--- ft-ui.template: Dialog - 1
-template-url: https://fastnui.trizwit.com/UI-Components/Content/dialog-1/
-screenshot: $fastn-assets.files.images.featured.components.dialog-1.png
-licence-url: https://github.com/Trizwit/FastnUI
-github-url: https://github.com/Trizwit/FastnUI
-
-Dialog / Modal components can be used inside your fastn projects.
-
--- ft-ui.template: Dialog - 1
-template-url: https://fastnui.trizwit.com/UI-Components/Content/dialog-2/
-screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
-licence-url: https://github.com/Trizwit/FastnUI
-github-url: https://github.com/Trizwit/FastnUI
-
-Dialog / Modal components can be used inside your fastn projects.
-
--- ft-ui.template: Alert Dialog
-template-url: https://fastnui.trizwit.com/UI-Components/Content/alert-dialog/
-screenshot: $fastn-assets.files.images.featured.components.dialog-3.png
-licence-url: https://github.com/Trizwit/FastnUI
-github-url: https://github.com/Trizwit/FastnUI
-
-Dialog / Modal components can be used inside your fastn projects.
-
-
--- end: dialogs
 
 
 
@@ -285,36 +201,5 @@ github-url: https://github.com/Trizwit/FastnUI
 Footer component can be used inside your fastn projects.
 
 -- end: footers
-
-
-
-
--- ft-ui.template list heros:
-
--- ft-ui.template: Hero - 1
-template-url: https://fastnui.trizwit.com/UI-Components/Hero/hero-1/
-screenshot: $fastn-assets.files.images.featured.components.hero-1.png
-licence-url: https://github.com/Trizwit/FastnUI
-github-url: https://github.com/Trizwit/FastnUI
-
-Hero components can be used inside your fastn projects.
-
--- ft-ui.template: Hero - 2
-template-url: https://fastnui.trizwit.com/UI-Components/Hero/hero-2/
-screenshot: $fastn-assets.files.images.featured.components.hero-2.png
-licence-url: https://github.com/Trizwit/FastnUI
-github-url: https://github.com/Trizwit/FastnUI
-
-Hero components can be used inside your fastn projects.
-
--- ft-ui.template: Hero - 3
-template-url: https://fastnui.trizwit.com/UI-Components/Hero/hero-3/
-screenshot: $fastn-assets.files.images.featured.components.hero-3.png
-licence-url: https://github.com/Trizwit/FastnUI
-github-url: https://github.com/Trizwit/FastnUI
-
-Hero components can be used inside your fastn projects.
-
--- end: heros
 
 
