@@ -223,3 +223,17 @@ ftd.http = function (url, method, ...request_data) {
     };
     xhr.send(JSON.stringify(json));
 };
+
+const len = ftd.len;
+ftd.len = function (data, key) {
+    if (!!key && (data instanceof RecordInstance || data instanceof MutableList || data instanceof Mutable)) {
+        return len(data.get(key));
+    }
+    if (!!data && data instanceof fastn.mutableListClass) {
+        return data.getLength();
+    }
+    if (!!data && data.length) {
+        return data.length;
+    }
+    return 0;
+}

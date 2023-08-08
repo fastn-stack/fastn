@@ -183,6 +183,9 @@ class MutableList {
     getList() {
         return this.#list;
     }
+    getLength() {
+        return this.#list.length;
+    }
     get(idx) {
         if (fastn_utils.isNull(idx)) {
             return this.getList();
