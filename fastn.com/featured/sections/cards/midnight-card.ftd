@@ -40,18 +40,18 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Pattern Business Card
+-- ds.layout: Midnight Business Card
 cta-text: User Manual
-cta-url: https://fastn-community.github.io/pattern-business-card/
+cta-url: https://fastn-community.github.io/midnight-business-card/
 previous-url: /featured/components/cards/
-github-url: https://github.com/fastn-community/pattern-business-card
+github-url: https://github.com/fastn-community/midnight-business-card
 
 -- end: ds.page.layout-bar
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
-cta-url: https://gsalunke.github.io/pattern-card-demo/
+image: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
+cta-url: https://gsalunke.github.io/midnight-card-demo/
 cta-text: Demo
 width.fixed.px if {ftd.device == "desktop"}: 600
 
@@ -76,21 +76,22 @@ more-link: /featured/components/cards/
 -- ft-ui.template list cards:
 
 -- ft-ui.template: Gradient Business Card
-template-url: featured/business-card/gradient-card/
+template-url: featured/sections/cards/gradient-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
 
 Build you own business-card using gradient-business-card package.
 
--- ft-ui.template: Midnight Business Card
-template-url: featured/business-card/midnight-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
+-- ft-ui.template: Pattern Business Card
+template-url: featured/sections/cards/pattern-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
 
-Build you own business-card using gradient-business-card package.
+Build you own business-card using pattern-business-card package.
 
 -- ft-ui.template: Sunset Business Card
-template-url: featured/business-card/sunset-card/
+template-url: featured/sections/cards/sunset-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.sunset-business-card-front.jpg
 
 Build you own business-card using sunset-business-card package.
+
 
 -- end: cards

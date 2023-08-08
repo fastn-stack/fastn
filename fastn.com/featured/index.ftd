@@ -10,7 +10,7 @@
 
 
 
--- ds.page: Featured components
+-- ds.page: Featured Templates
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -35,10 +35,10 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.body:
 
-We have designed and developed below components using `fastn`. 
+We have designed and developed below templates using `fastn`. 
 
-These components can be used inside your personal web sites or organizational static 
-web sites developed using `fastn` package.
+These templates can be used inside your personal web sites or organizational
+static web sites developed using `fastn` package.
 
 -- grid-view: Documentation Sites
 if: { show-grid }

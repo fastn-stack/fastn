@@ -49,43 +49,23 @@ templates: $dialogs
 -- ft-ui.template list dialogs:
 
 -- ft-ui.template: Dialog - 1
-template-url: https://fastnui.trizwit.com/UI-Components/Content/dialog-1/
+template-url: featured/sections/modals/dialog-1/
 screenshot: $fastn-assets.files.images.featured.components.dialog-1.png
-licence-url: https://github.com/Trizwit/FastnUI
-github-url: https://github.com/Trizwit/FastnUI
 
-Dialog / Modal components can be used inside your fastn projects.
-
--- ft-ui.template: Dialog - 1
-template-url: https://fastnui.trizwit.com/UI-Components/Content/dialog-2/
+-- ft-ui.template: Dialog - 2
+template-url: featured/sections/modals/dialog-2/
 screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
-licence-url: https://github.com/Trizwit/FastnUI
-github-url: https://github.com/Trizwit/FastnUI
-
-Dialog / Modal components can be used inside your fastn projects.
 
 -- ft-ui.template: Alert Dialog
-template-url: https://fastnui.trizwit.com/UI-Components/Content/alert-dialog/
+template-url: featured/sections/modals/alert-1/
 screenshot: $fastn-assets.files.images.featured.components.dialog-3.png
-licence-url: https://github.com/Trizwit/FastnUI
-github-url: https://github.com/Trizwit/FastnUI
-
-Dialog / Modal components can be used inside your fastn projects.
 
 -- ft-ui.template: Modal
-template-url: https://fastnui.trizwit.com/UI-Components/Modal/modal/
+template-url: featured/sections/modals/modal-1/
 screenshot: $fastn-assets.files.images.featured.components.modal-1.png
-licence-url: https://github.com/Trizwit/FastnUI
-github-url: https://github.com/Trizwit/FastnUI
-
-Dialog / Modal components can be used inside your fastn projects.
 
 -- ft-ui.template: Modal Cover
-template-url: https://fastn-community.github.io/bling/modal-cover/
+template-url: featured/sections/modals/modal-2/
 screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
-licence-url: https://github.com/fastn-community/bling/blob/main/LICENSE
-github-url: https://github.com/fastn-community/bling/
-
-Dialog / Modal components can be used inside your fastn projects.
 
 -- end: dialogs
