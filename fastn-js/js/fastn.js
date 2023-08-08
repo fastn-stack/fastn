@@ -303,8 +303,10 @@ fastn.mutableList = function (list) {
 
 class RecordInstance {
     #fields;
+    #closures;
     constructor(obj) {
         this.#fields = {};
+        this.#closures = [];
 
         for (let key in obj) {
             if (obj[key] instanceof fastn.mutableClass) {
@@ -318,16 +320,32 @@ class RecordInstance {
     getAllFields() {
         return this.#fields;
     }
+    addClosure(closure) {
+        this.#closures.push(closure);
+    }
     get(key) {
         return this.#fields[key];
     }
-    set(key, value) {
+    set(value, key) {
+        if (fastn_utils.isNull(key)) {
+            if (!(value instanceof RecordInstance)) {
+                value = new RecordInstance(value);
+            }
+
+            let fields = {};
+            for(let key in value.#fields) {
+                fields[key] = value.#fields[key]
+            }
+
+            this.#fields = fields;
+        }
         if (this.#fields[key] === undefined) {
             this.#fields[key] = fastn.mutable(null);
             this.#fields[key].setWithoutUpdate(value);
         } else {
             this.#fields[key].set(value);
         }
+        this.#closures.forEach((closure) => closure.update());
     }
     replace(obj) {
         for (let key in this.#fields) {
@@ -336,6 +354,7 @@ class RecordInstance {
             }
             this.#fields[key] = fastn.wrapMutable(obj.#fields[key]);
         }
+        this.#closures.forEach((closure) => closure.update());
     }
 }
 

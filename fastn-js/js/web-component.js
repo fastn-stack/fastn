@@ -1,9 +1,7 @@
 class MutableVariable {
     #value;
-    #closures;
     constructor(value) {
         this.#value = value;
-        this.#closures = [];
     }
 
     get() {
@@ -13,7 +11,7 @@ class MutableVariable {
     set(value) {
         this.#value.set(value);
     }
-
+    // Todo: Remove closure when node is removed.
     on_change(func) {
         this.#value.addClosure(fastn.closureWithoutExecute(func));
     }
@@ -21,11 +19,8 @@ class MutableVariable {
 
 class MutableListVariable {
     #value;
-    #closures;
     constructor(value) {
         this.#value = value;
-        this.#closures = [];
-        // this.#value.addClosure(fastn.closure(() => this.#closures.forEach((closure) => closure.update())));
     }
 
     get() {
@@ -33,14 +28,26 @@ class MutableListVariable {
     }
 
     set(list) {
-        list = list.map((value) => {
-            if (value instanceof Object) {
-                value = new RecordInstance(value);
-            }
-            return value;
-        })
+        this.#value.set(fastn_utils.staticToMutables(list));
+    }
 
-        this.#value.set(list);
+    on_change(func) {
+        this.#value.addClosure(fastn.closureWithoutExecute(func));
+    }
+}
+
+class RecordVariable {
+    #value;
+    constructor(value) {
+        this.#value = value;
+    }
+
+    get() {
+        return fastn_utils.getStaticValue(this.#value);
+    }
+
+    set(record) {
+        this.#value.set(fastn_utils.staticToMutables(record));
     }
 
     on_change(func) {
@@ -78,5 +85,8 @@ fastn.webComponentVariable =  {
     },
     static: (value) => {
         return new StaticVariable(value);
-    }
+    },
+    record: (value) => {
+        return new RecordVariable(value);
+    },
 }

@@ -53,6 +53,31 @@ let fastn_utils = {
         }
     },
 
+    staticToMutables(obj) {
+        if (!(obj instanceof fastn.mutableClass) &&
+            !(obj instanceof fastn.mutableListClass) &&
+            !(obj instanceof fastn.recordInstanceClass))
+        {
+            if (Array.isArray(obj)) {
+                let list = [];
+                for (let index in obj) {
+                    list.push(fastn_utils.staticToMutables(obj[index]));
+                }
+                return fastn.mutableList(list);
+            } else if (obj instanceof Object) {
+                let fields = {};
+                for (let objKey in obj) {
+                    fields[objKey] = fastn_utils.staticToMutables(obj[objKey]);
+                }
+                return fastn.recordInstance(fields);
+            } else {
+                return fastn.mutable(obj);
+            }
+        } else {
+            return obj;
+        }
+    },
+
     getFlattenStaticValue(obj) {
         let staticValue = fastn_utils.getStaticValue(obj);
         if (Array.isArray(staticValue)) {
