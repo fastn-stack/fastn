@@ -111,11 +111,14 @@ let ftd = {
         let attributes = fastn_dom.webComponent[attributesIndex];
         return Object.fromEntries(
             Object.entries(attributes).map(([k,v]) => {
+                // Todo: check if argument is mutable reference or not
                     if (v instanceof fastn.mutableClass) {
                         v = fastn.webComponentVariable.mutable(v);
                     } else if (v instanceof fastn.mutableListClass) {
                         v = fastn.webComponentVariable.mutableList(v);
-                    }else {
+                    } else if (v instanceof fastn.recordInstanceClass) {
+                        v = fastn.webComponentVariable.record(v);
+                    } else {
                         v = fastn.webComponentVariable.static(v);
                     }
                     return [k, v];
@@ -124,14 +127,6 @@ let ftd = {
         );
     }
 };
-
-ftd.set_string = function (args, node) {
-    let __args__ = args;
-    let fastn_utils_val___args___a = __args__.v;
-    if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
-        __args__.a = fastn_utils_val___args___a;
-    }
-}
 
 // ftd.append($a = $people, v = Tom)
 ftd.append = function (list, item) { list.push(item) }

@@ -5,6 +5,7 @@ fastn_dom.codeData = {
     addedCssFile: []
 }
 
+// Todo: Object (key, value) pair (counter type key)
 fastn_dom.webComponent = [];
 
 fastn_dom.commentNode = "comment";
