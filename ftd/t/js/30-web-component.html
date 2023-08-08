@@ -1,0 +1,406 @@
+<html>
+<head>
+    <base href="/">
+    <script src="ftd/ftd/t/assets/todo.js" type="module"></script><script src="fastn-js.js"></script>
+
+    <style>
+       
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><div data-id="2" class="ft_column w-1 p-2 g-3"><div data-id="3" class="ft_column w-1 p-4 bgc-5 ali-6"><div data-id="4" class="rl-7 ta-8">Web Component Demo</div><div data-id="5" class="ft_row mt-9 mb-10 g-11 ali-6"><div data-id="6" class="rl-13">Task:</div><input data-id="7" placeholder="Your task here..." type="url" class="w-14 h-15 p-16 bw-17 rl-18"></input><div data-id="8" class="pl-19 pr-20 pt-21 pb-22 br-23 bgc-24">Create</div></div><comment data-id="9"></comment><div data-id="10" class="ft_row as-25 rl-18 g-26 ali-6"><div data-id="11">Checkout out our</div><a data-id="12" href="https://fastn.io/blog/web-components/">blog post to learn more</a></div></div><div data-id="13" class="ft_row w-1 g-3"><div data-id="14" class="ft_column w-27"><todo-list-display data-id="15" args="0"></todo-list-display></div><div data-id="16" class="ft_column w-27 p-4 pb-28 bgc-5 g-11"><div data-id="17" class="rl-29">FTD World</div><div data-id="18" class="ft_column w-1 p-4 bgc-30 mnh-31 g-11"><comment data-id="19"></comment></div></div></div></div></body><style id="styles">
+    .w-1 { width: 100%; }
+	.p-2 { padding: 40px; }
+	.g-3 { gap: 40px; }
+	.p-4 { padding: 20px; }
+	.bgc-5 { background-color: #dae6f0; }
+	.ali-6 { align-items: center; }
+	.rl-7 {  font-family: sans-serif; font-size: 22px; font-weight: 400; line-height: 34px; }
+	body.mobile .rl-7 {  font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 28px; }
+	.ta-8 { text-align: center; }
+	.mt-9 { margin-top: 40px; }
+	.mb-10 { margin-bottom: 40px; }
+	.g-11 { gap: 10px; }
+	.rl-13 {  font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 24px; }
+	body.mobile .rl-13 {  font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 24px; }
+	.w-14 { width: 213px; }
+	.h-15 { height: 30px; }
+	.p-16 { padding: 10px; }
+	.bw-17 { border-width: 2px; }
+	.rl-18 {  font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px; }
+	body.mobile .rl-18 {  font-family: sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.pl-19 { padding-left: 10px; }
+	.pr-20 { padding-right: 10px; }
+	.pt-21 { padding-top: 6px; }
+	.pb-22 { padding-bottom: 6px; }
+	.br-23 { border-radius: 5px; }
+	.bgc-24 { background-color: #B6CDE1; }
+	.as-25 { align-self: center; }
+	.g-26 { gap: 5px; }
+	.w-27 { width: 50%; }
+	.pb-28 { padding-bottom: 20px; }
+	.rl-29 {  font-family: sans-serif; font-size: 38px; font-weight: 400; line-height: 57px; }
+	body.mobile .rl-29 {  font-family: sans-serif; font-size: 26px; font-weight: 400; line-height: 40px; }
+	.bgc-30 { background-color: white; }
+	.mnh-31 { min-height: 234px; }
+    </style>
+<script>
+    (function() {
+        let global = {
+};
+let main = function (parent) {
+  let parenti0 = foo__demo(parent, inherited);
+}
+fastn_utils.createNestedObject(global, "foo__task", fastn.mutable(null));
+let foo__demo_link = function (parent, inherited, args)
+{
+  let __args__ = {
+  };
+  inherited = fastn.recordInstance({
+    ...__args__,
+    ...inherited.getAllFields(),
+    ...args
+  });
+  __args__ = {
+    ...__args__,
+    ...args
+  };
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+  parenti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.Center, inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(5)), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Checkout out our", inherited);
+  },
+  function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "blog post to learn more", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://fastn.io/blog/web-components/", inherited);
+  }
+  ]), inherited);
+  return parenti0;
+}
+let foo__header = function (parent, inherited, args) {
+  let __args__ = {
+    show_link: false,
+    mouse_in: fastn.mutable(false),
+    input_value: fastn.mutable(null),
+  };
+  inherited = fastn.recordInstance({
+    ...__args__,
+    ...inherited.getAllFields(),
+    ...args
+  });
+  __args__ = {
+    ...__args__,
+    ...args
+  };
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+    dark: "#dae6f0",
+    light: "#dae6f0"
+  })), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Web Component Demo", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_large"), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
+  },
+  function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+    rooti0.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(40), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Wrap, fastn.formula([ftd.device], function () {
+      if (function () {
+        return (fastn_utils.getter(ftd.device) == "mobile");
+      }()) {
+        return true;
+      }
+    }
+    ), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Task:", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("button_large"), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+      rooti0.addEventHandler(fastn_dom.Event.Input, function () {
+        ftd.set_string({
+          a: __args__.input_value,
+          v: fastn_utils.getNodeValue(rooti0),
+        }, rooti0);
+      });
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(213)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(30)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "Your task here...", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.TextInputType, fastn_dom.TextInputType.Url, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Create", inherited);
+      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+        ftd.set_string({
+          a: global.foo__task,
+          v: __args__.input_value,
+        }, rooti0);
+      });
+      rooti0.addEventHandler(fastn_dom.Event.MouseEnter, function () {
+        ftd.set_bool({
+          a: __args__.mouse_in,
+          v: true,
+        }, rooti0);
+      });
+      rooti0.addEventHandler(fastn_dom.Event.MouseLeave, function () {
+        ftd.set_bool({
+          a: __args__.mouse_in,
+          v: false,
+        }, rooti0);
+      });
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingHorizontal, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(6), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderRadius, fastn_dom.Length.Px(5), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn.formula([__args__.mouse_in], function () {
+        if (function () {
+          return fastn_utils.getter(__args__.mouse_in);
+        }()) {
+          return fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+            dark: "#92B4D2",
+            light: "#92B4D2"
+          }));
+        } else {
+          return fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+            dark: "#B6CDE1",
+            light: "#B6CDE1"
+          }));
+        }
+      }
+      ), inherited);
+    }
+    ]), inherited);
+  },
+  function (root, inherited) {
+    fastn_dom.conditionalDom(root, [
+      __args__.show_link
+    ], function () {
+      return fastn_utils.getter(__args__.show_link);
+    }, function (root) {
+      let rooti0 = foo__demo_link(root, inherited);
+      return rooti0;
+    });
+  }
+  ]), inherited);
+  return parenti0;
+}
+let foo__todo_list_display = function (parent, inherited, args) {
+  let __args__ = {
+    todo_list: fastn.mutable(fastn.mutableList([])),
+  };
+  inherited = fastn.recordInstance({
+    ...__args__,
+    ...inherited.getAllFields(),
+    ...args
+  });
+  __args__ = {
+    ...__args__,
+    ...args
+  };
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.WebComponent("todo-list-display", __args__));
+  return parenti0;
+}
+fastn_utils.createNestedObject(global, "foo__todo_list", fastn.mutableList([]));
+let foo__ftd_todo_display = function (parent, inherited, args)
+{
+  let __args__ = {
+  };
+  inherited = fastn.recordInstance({
+    ...__args__,
+    ...inherited.getAllFields(),
+    ...args
+  });
+  __args__ = {
+    ...__args__,
+    ...args
+  };
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.PaddingHorizontal, fastn_dom.Length.Px(5), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+    dark: "#b8dbfb",
+    light: "#b8dbfb"
+  })), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween, inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.item.get("name"), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("button_large"), inherited);
+  },
+  function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.item.get("status"), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.Center, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+      dark: "blue",
+      light: "blue"
+    }), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("button_large"), inherited);
+  }
+  ]), inherited);
+  return parenti0;
+}
+let foo__ftd_world = function (parent, inherited, args) {
+  let __args__ = {
+  };
+  inherited = fastn.recordInstance({
+    ...__args__,
+    ...inherited.getAllFields(),
+    ...args
+  });
+  __args__ = {
+    ...__args__,
+    ...args
+  };
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([ftd.device], function () {
+    if (function () {
+      return (fastn_utils.getter(ftd.device) == "mobile");
+    }()) {
+      return fastn_dom.Resizing.FillContainer;
+    } else {
+      return fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(50));
+    }
+  }
+  ), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.PaddingBottom, fastn_dom.Length.Px(20), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+    dark: "#dae6f0",
+    light: "#dae6f0"
+  })), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "FTD World", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Role, fastn.formula([inherited.get("types").get("heading_medium"),
+    ftd.device,
+    inherited.get("types").get("heading_small")], function () {
+      if (function () {
+        return (fastn_utils.getter(ftd.device) != "mobile");
+      }()) {
+        return inherited.get("types").get("heading_medium");
+      } else {
+        return inherited.get("types").get("heading_small");
+      }
+    }
+    ), inherited);
+  },
+  function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+      dark: "white",
+      light: "white"
+    })), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.MinHeight, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(234)), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      fastn_utils.getter(global.foo__todo_list).forLoop(root, function (root, item, index) {
+        let rooti0 = foo__ftd_todo_display(root, inherited, {
+          item: item
+        });
+        return rooti0;
+      });
+    }
+    ]), inherited);
+  }
+  ]), inherited);
+  return parenti0;
+}
+let foo__demo = function (parent, inherited, args) {
+  let __args__ = {
+    show_link: true,
+  };
+  inherited = fastn.recordInstance({
+    ...__args__,
+    ...inherited.getAllFields(),
+    ...args
+  });
+  __args__ = {
+    ...__args__,
+    ...args
+  };
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn.formula([ftd.device], function () {
+    if (function () {
+      return (fastn_utils.getter(ftd.device) != "mobile");
+    }()) {
+      return fastn_dom.Length.Px(40);
+    } else {
+      return fastn_dom.Length.Px(20);
+    }
+  }
+  ), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(40)), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    let rooti0 = foo__header(root, inherited, {
+      show_link: __args__.show_link
+    });
+  },
+  function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(40)), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Wrap, fastn.formula([ftd.device], function () {
+      if (function () {
+        return (fastn_utils.getter(ftd.device) == "mobile");
+      }()) {
+        return true;
+      }
+    }
+    ), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([ftd.device], function () {
+        if (function () {
+          return (fastn_utils.getter(ftd.device) == "mobile");
+        }()) {
+          return fastn_dom.Resizing.FillContainer;
+        } else {
+          return fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(50));
+        }
+      }
+      ), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = foo__todo_list_display(root, inherited, {
+          name: global.foo__task,
+          todo_list: global.foo__todo_list
+        });
+      }
+      ]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = foo__ftd_world(root, inherited);
+    }
+    ]), inherited);
+  }
+  ]), inherited);
+  return parenti0;
+}
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "ftd/ftd/theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "ftd/ftd/theme_css/fastn-theme.light.css";
+        fastn_virtual.hydrate(main);
+        ftd.post_init();
+    })();
+</script>
+</html>

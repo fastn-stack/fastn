@@ -8,7 +8,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><comment data-id="2"></comment><comment data-id="3"></comment><comment data-id="4"></comment><comment data-id="5"></comment><div data-id="6">2 Tuesday</div><comment data-id="7"></comment><div data-id="8">3 Wednesday</div><comment data-id="9"></comment><div data-id="10">4 Thursday</div><comment data-id="11"></comment><div data-id="12">5 Friday</div><comment data-id="13"></comment><div data-id="14">6 Saturday</div></body><style id="styles">
+<body data-id="1"><comment data-id="2"></comment><comment data-id="3"></comment><comment data-id="4"></comment><comment data-id="5"></comment><div data-id="6">undefined Tuesday</div><comment data-id="7"></comment><div data-id="8">undefined Wednesday</div><comment data-id="9"></comment><div data-id="10">undefined Thursday</div><comment data-id="11"></comment><div data-id="12">undefined Friday</div><comment data-id="13"></comment><div data-id="14">undefined Saturday</div></body><style id="styles">
     
     </style>
 <script>
@@ -23,10 +23,10 @@ let main = function (parent) {
       return (fastn_utils.getter(index) >= 2);
     }, function (root) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([index,
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([global.foo__key,
       item], function () {
         return foo__join({
-          a: index,
+          a: global.foo__key,
           b: item,
         }, rooti0);
       }), inherited);

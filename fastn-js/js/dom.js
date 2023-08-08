@@ -8,9 +8,13 @@ fastn_dom.codeData = {
 fastn_dom.externalCss = new Set();
 fastn_dom.externalJs = new Set();
 
+// Todo: Object (key, value) pair (counter type key)
+fastn_dom.webComponent = [];
+
 fastn_dom.commentNode = "comment";
 fastn_dom.wrapperNode = "wrapper";
 fastn_dom.commentMessage = "***FASTN***";
+fastn_dom.webComponentArgument = "args";
 
 fastn_dom.classes = { }
 fastn_dom.unsanitised_classes = {}
@@ -142,7 +146,8 @@ fastn_dom.ElementKind = {
     Code: 15,
     // Note: This is called internally, it gives `code` as tagName. This is used
     // along with the Code: 15.
-    CodeChild: 16
+    CodeChild: 16,
+    WebComponent: (webcomponent, arguments) => { return [17, {webcomponent, arguments}]; }
 };
 
 fastn_dom.PropertyKind = {
@@ -678,7 +683,6 @@ class Node2 {
             this.#node.updateTagName(name);
         }
     }
-
     updateToAnchor() {
         let node_kind = this.#kind;
         if (ssr) {
@@ -701,7 +705,6 @@ class Node2 {
             }
         }
     }
-
     updateMetaTitle(value) {
         if (!ssr && hydrating) {
             window.document.title = value;
@@ -1693,8 +1696,7 @@ class ForLoop {
         this.#nodes = [];
 
         for (let idx in list.getList()) {
-            let node = this.createNode(idx);
-            this.#nodes.push(node);
+            this.createNode(idx);
         }
     }
     createNode(index) {
@@ -1703,15 +1705,30 @@ class ForLoop {
             parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#nodes[index-1]);
         }
         let v = this.#list.get(index);
-        return this.#node_constructor(parentWithSibiling, v.item, v.index);
+        let node = this.#node_constructor(parentWithSibiling, v.item, v.index);
+        this.#nodes.splice(index, 0, node);
+        return node;
+    }
+
+    createAllNode() {
+        this.deleteAllNode();
+        for (let idx in this.#list.getList()) {
+            this.createNode(idx);
+        }
+    }
+
+    deleteAllNode() {
+        while (this.#nodes.length > 0) {
+            this.#nodes.pop().destroy();
+        }
     }
 
     getWrapper() {
         return this.#wrapper;
     }
-
-    insertNode(index, node) {
-        this.#nodes.splice(index, 0, node);
+    deleteNode(index) {
+       let node = this.#nodes.splice(index, 1)[0];
+        node.destroy();
     }
 
     getParent() {

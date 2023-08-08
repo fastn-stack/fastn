@@ -22,6 +22,7 @@ let ftd = {
         });
     },
 
+    // Todo: Implement this (Remove highlighter)
     clean_code(args) {
         return args.a;
     },
@@ -103,12 +104,37 @@ let ftd = {
 
     get(value, index) {
          return fastn_utils.getStaticValue(fastn_utils.getterByKey(value, index));
-    }
+    },
 
+    component_data(component) {
+        let attributesIndex = component.getAttribute(fastn_dom.webComponentArgument);
+        let attributes = fastn_dom.webComponent[attributesIndex];
+        return Object.fromEntries(
+            Object.entries(attributes).map(([k,v]) => {
+                // Todo: check if argument is mutable reference or not
+                    if (v instanceof fastn.mutableClass) {
+                        v = fastn.webComponentVariable.mutable(v);
+                    } else if (v instanceof fastn.mutableListClass) {
+                        v = fastn.webComponentVariable.mutableList(v);
+                    } else if (v instanceof fastn.recordInstanceClass) {
+                        v = fastn.webComponentVariable.record(v);
+                    } else {
+                        v = fastn.webComponentVariable.static(v);
+                    }
+                    return [k, v];
+                }
+            )
+        );
+    }
 };
 
 // ftd.append($a = $people, v = Tom)
-ftd.append = function (a, v) { a.push(v) }
+ftd.append = function (list, item) { list.push(item) }
+ftd.pop = function (list) { list.pop() }
+ftd.insert_at = function (list, index, item) { list.insertAt(index, item) }
+ftd.delete_at = function (list, index) { list.deleteAt(index) }
+ftd.clear_all = function (list) { list.clearAll() }
+ftd.set_list = function (list, value) { list.set(value) }
 
 ftd.http = function (url, method, ...request_data) {
     if (url instanceof Mutable) url = url.get();

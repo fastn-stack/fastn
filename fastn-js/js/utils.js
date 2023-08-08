@@ -30,6 +30,11 @@ let fastn_utils = {
            node = "pre";
         } else if (kind === fastn_dom.ElementKind.CodeChild) {
             node = "code";
+        } else if (kind[0] === fastn_dom.ElementKind.WebComponent()[0]) {
+            let {webcomponent, arguments} = kind[1];
+            node = `${webcomponent}`;
+            fastn_dom.webComponent.push(arguments);
+            attributes[fastn_dom.webComponentArgument] = fastn_dom.webComponent.length - 1;
         }
         return [node, css, attributes];
     },
@@ -45,6 +50,31 @@ let fastn_utils = {
             return obj.getAllFields();
         }*/ else {
            return obj;
+        }
+    },
+
+    staticToMutables(obj) {
+        if (!(obj instanceof fastn.mutableClass) &&
+            !(obj instanceof fastn.mutableListClass) &&
+            !(obj instanceof fastn.recordInstanceClass))
+        {
+            if (Array.isArray(obj)) {
+                let list = [];
+                for (let index in obj) {
+                    list.push(fastn_utils.staticToMutables(obj[index]));
+                }
+                return fastn.mutableList(list);
+            } else if (obj instanceof Object) {
+                let fields = {};
+                for (let objKey in obj) {
+                    fields[objKey] = fastn_utils.staticToMutables(obj[objKey]);
+                }
+                return fastn.recordInstance(fields);
+            } else {
+                return fastn.mutable(obj);
+            }
+        } else {
+            return obj;
         }
     },
 
@@ -98,11 +128,11 @@ let fastn_utils = {
     },
 
     sameResponsiveRole(desktop, mobile) {
-       return (desktop.get("font_family") ==  mobile.get("font_family")) &&
-       (desktop.get("letter_spacing") ==  mobile.get("letter_spacing")) &&
-       (desktop.get("line_height") ==  mobile.get("line_height")) &&
-       (desktop.get("size") ==  mobile.get("size")) &&
-       (desktop.get("weight") ==  mobile.get("weight"));
+       return (desktop.get("font_family") ===  mobile.get("font_family")) &&
+       (desktop.get("letter_spacing") ===  mobile.get("letter_spacing")) &&
+       (desktop.get("line_height") ===  mobile.get("line_height")) &&
+       (desktop.get("size") ===  mobile.get("size")) &&
+       (desktop.get("weight") ===  mobile.get("weight"));
     },
 
     getRoleValues(value) {
@@ -142,7 +172,7 @@ let fastn_utils = {
             const property = properties[i];
             if (currentObject instanceof fastn.recordInstanceClass) {
                 if (currentObject.get(property) === undefined) {
-                    currentObject.set(property, fastn.recordInstance({}));
+                    currentObject.set(fastn.recordInstance({}), property);
                 }
                 currentObject = currentObject.get(property).get();
             } else {
@@ -155,7 +185,7 @@ let fastn_utils = {
 
         const innermostProperty = properties[properties.length - 1];
         if (currentObject instanceof fastn.recordInstanceClass) {
-            currentObject.set(innermostProperty, value)
+            currentObject.set(value, innermostProperty)
         } else {
             currentObject[innermostProperty] = value;
         }
@@ -287,7 +317,9 @@ let fastn_utils = {
         return result;
     },
 
-
+    getNodeValue(node) {
+        return node.getNode().value;
+    }
 }
 
 

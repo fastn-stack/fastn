@@ -52,7 +52,7 @@ impl fastn_js::Kernel {
             .append(text("fastn_dom.createKernel("))
             .append(text(&format!("{},", self.parent.clone())))
             .append(space())
-            .append(text(self.element_kind.to_js()))
+            .append(text(self.element_kind.to_js().as_str()))
             .append(text(");"))
     }
 }
@@ -154,23 +154,37 @@ impl fastn_js::Function {
 }
 
 impl fastn_js::ElementKind {
-    pub fn to_js(&self) -> &'static str {
+    pub fn to_js(&self) -> String {
         match self {
-            fastn_js::ElementKind::Row => "fastn_dom.ElementKind.Row",
-            fastn_js::ElementKind::ContainerElement => "fastn_dom.ElementKind.ContainerElement",
-            fastn_js::ElementKind::Column => "fastn_dom.ElementKind.Column",
-            fastn_js::ElementKind::Integer => "fastn_dom.ElementKind.Integer",
-            fastn_js::ElementKind::Decimal => "fastn_dom.ElementKind.Decimal",
-            fastn_js::ElementKind::Boolean => "fastn_dom.ElementKind.Boolean",
-            fastn_js::ElementKind::Text => "fastn_dom.ElementKind.Text",
-            fastn_js::ElementKind::Image => "fastn_dom.ElementKind.Image",
-            fastn_js::ElementKind::IFrame => "fastn_dom.ElementKind.IFrame",
-            fastn_js::ElementKind::Device => "fastn_dom.ElementKind.Wrapper",
-            fastn_js::ElementKind::CheckBox => "fastn_dom.ElementKind.CheckBox",
-            fastn_js::ElementKind::TextInput => "fastn_dom.ElementKind.TextInput",
-            fastn_js::ElementKind::Rive => "fastn_dom.ElementKind.Rive",
-            fastn_js::ElementKind::Document => "fastn_dom.ElementKind.Document",
-            fastn_js::ElementKind::Code => "fastn_dom.ElementKind.Code",
+            fastn_js::ElementKind::Row => "fastn_dom.ElementKind.Row".to_string(),
+            fastn_js::ElementKind::ContainerElement => {
+                "fastn_dom.ElementKind.ContainerElement".to_string()
+            }
+            fastn_js::ElementKind::Column => "fastn_dom.ElementKind.Column".to_string(),
+            fastn_js::ElementKind::Integer => "fastn_dom.ElementKind.Integer".to_string(),
+            fastn_js::ElementKind::Decimal => "fastn_dom.ElementKind.Decimal".to_string(),
+            fastn_js::ElementKind::Boolean => "fastn_dom.ElementKind.Boolean".to_string(),
+            fastn_js::ElementKind::Text => "fastn_dom.ElementKind.Text".to_string(),
+            fastn_js::ElementKind::Image => "fastn_dom.ElementKind.Image".to_string(),
+            fastn_js::ElementKind::IFrame => "fastn_dom.ElementKind.IFrame".to_string(),
+            fastn_js::ElementKind::Device => "fastn_dom.ElementKind.Wrapper".to_string(),
+            fastn_js::ElementKind::CheckBox => "fastn_dom.ElementKind.CheckBox".to_string(),
+            fastn_js::ElementKind::TextInput => "fastn_dom.ElementKind.TextInput".to_string(),
+            fastn_js::ElementKind::Rive => "fastn_dom.ElementKind.Rive".to_string(),
+            fastn_js::ElementKind::Document => "fastn_dom.ElementKind.Document".to_string(),
+            fastn_js::ElementKind::Code => "fastn_dom.ElementKind.Code".to_string(),
+            fastn_js::ElementKind::WebComponent(web_component_name) => {
+                let name = if let Some((_, name)) = web_component_name.split_once('#') {
+                    name.to_string()
+                } else {
+                    web_component_name.to_string()
+                };
+
+                format!(
+                    "fastn_dom.ElementKind.WebComponent(\"{name}\", {})",
+                    fastn_js::LOCAL_VARIABLE_MAP
+                )
+            }
         }
     }
 }
@@ -867,7 +881,7 @@ impl ExpressionGenerator {
                 let val = self.to_js_(second, false, arguments, true);
                 return format!(
                     indoc::indoc! {
-                        "let fastn_utils_val_{refined_var} = {val};
+                        "let fastn_utils_val_{refined_var} = fastn_utils.clone({val});
                         if (!fastn_utils.setter({var}, fastn_utils_val_{refined_var})) {{
                             {var} = fastn_utils_val_{refined_var};
                         }}"

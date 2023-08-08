@@ -5,6 +5,26 @@ pub fn trim_all_lines(s: &str) -> String {
     s.split('\n').map(|v| v.trim()).join("\n")
 }
 
+pub fn get_js_html(external_js: &[String]) -> String {
+    let mut result = "".to_string();
+    for js in external_js {
+        if let Some((js, tags)) = js.rsplit_once(':') {
+            result = format!("{}<script src=\"{}\" {}></script>", result, js, tags);
+        } else {
+            result = format!("{}<script src=\"{}\"></script>", result, js);
+        }
+    }
+    result
+}
+
+pub fn get_css_html(external_css: &[String]) -> String {
+    let mut result = "".to_string();
+    for css in external_css {
+        result = format!("{}<link rel=\"stylesheet\" href=\"{}\">", result, css);
+    }
+    result
+}
+
 pub(crate) fn get_rive_event(
     events: &[ftd::interpreter::Event],
     doc: &ftd::interpreter::TDoc,
@@ -93,6 +113,14 @@ pub(crate) fn update_reference_with_none(reference: &str) -> String {
 
 pub(crate) fn update_reference(reference: &str, rdata: &ftd::js::ResolverData) -> String {
     let name = reference.to_string();
+
+    if ftd::interpreter::FTD_SPECIAL_VALUE
+        .trim_start_matches('$')
+        .eq(reference)
+    {
+        let component_name = rdata.component_name.clone().unwrap();
+        return format!("fastn_utils.getNodeValue({component_name})");
+    }
 
     if let Some(component_definition_name) = rdata.component_definition_name {
         if let Some(alias) = name.strip_prefix(format!("{component_definition_name}.").as_str()) {

@@ -6,8 +6,10 @@ class Closure {
     #property;
     #formula;
     #inherited;
-    constructor(func) {
-        this.#cached_value = func();
+    constructor(func, execute = true) {
+        if (execute) {
+            this.#cached_value = func();
+        }
         this.#formula = func;
     }
 
@@ -80,7 +82,7 @@ class Mutable {
         }
 
         if (this.#value instanceof Mutable) {
-            this.#old_closure = fastn.closure(() => this.#closureInstance.update());
+            this.#old_closure = fastn.closureWithoutExecute(() => this.#closureInstance.update());
             this.#value.addClosure(this.#old_closure);
         } else {
             this.#old_closure = null;
@@ -161,13 +163,17 @@ class Proxy {
 class MutableList {
     #list;
     #watchers;
-    #dom_constructors;
+    #closures;
     constructor(list) {
         this.#list = [];
         for (let idx in list) {
             this.#list.push( { item: fastn.wrapMutable(list[idx]), index: new Mutable(parseInt(idx)) });
         }
         this.#watchers = [];
+        this.#closures = [];
+    }
+    addClosure(closure) {
+        this.#closures.push(closure);
     }
     forLoop(root, dom_constructor) {
         let l = fastn_dom.forLoop(root, dom_constructor, this);
@@ -183,21 +189,42 @@ class MutableList {
         }
         return this.#list[idx];
     }
-    set(idx, value) {
-        this.#list[idx].item.set(value);
+    set(value, index) {
+        if (fastn_utils.isNull(index)) {
+            if (!(value instanceof MutableList)) {
+                if (!Array.isArray(value)) {
+                    value = [value];
+                }
+                value = new MutableList(value);
+            }
+
+            let list = value.#list;
+            this.#list = [];
+            for (let i in list) {
+                this.#list.push(list[i]);
+            }
+
+            for (let i in this.#watchers) {
+                this.#watchers[i].createAllNode();
+            }
+        } else {
+            this.#list[index].item.set(value);
+        }
+
+        this.#closures.forEach((closure) => closure.update());
     }
-    insertAt(idx, value) {
+    insertAt(index, value) {
         let mutable = fastn.wrapMutable(value);
-        this.#list.splice(idx, 0, { item: mutable, index: new Mutable(idx) });
+        this.#list.splice(index, 0, { item: mutable, index: new Mutable(index) });
         // for every item after the inserted item, update the index
-        for (let i = idx + 1; i < this.#list.length; i++) {
+        for (let i = index + 1; i < this.#list.length; i++) {
             this.#list[i].index.set(i);
         }
 
         for (let i in this.#watchers) {
-            let forLoop = this.#watchers[i];
-            forLoop.insertNode(idx, forLoop.createNode(idx));
+            this.#watchers[i].createNode(index);
         }
+        this.#closures.forEach((closure) => closure.update());
     }
     push(value) {
         this.insertAt(this.#list.length, value);
@@ -208,6 +235,22 @@ class MutableList {
         for (let i = idx; i < this.#list.length; i++) {
             this.#list[i].index.set(i);
         }
+
+        for (let i in this.#watchers) {
+            let forLoop = this.#watchers[i];
+            forLoop.deleteNode(idx);
+        }
+        this.#closures.forEach((closure) => closure.update());
+    }
+    clearAll() {
+        this.#list = [];
+        for (let i in this.#watchers) {
+            this.#watchers[i].deleteAllNode();
+        }
+        this.#closures.forEach((closure) => closure.update());
+    }
+    pop() {
+        this.deleteAt(this.#list.length - 1);
     }
 }
 
@@ -217,6 +260,10 @@ fastn.mutable = function (val) {
 
 fastn.closure = function (func) {
     return new Closure(func);
+}
+
+fastn.closureWithoutExecute = function (func) {
+    return new Closure(func, false);
 }
 
 fastn.formula = function (deps, func) {
@@ -256,8 +303,10 @@ fastn.mutableList = function (list) {
 
 class RecordInstance {
     #fields;
+    #closures;
     constructor(obj) {
         this.#fields = {};
+        this.#closures = [];
 
         for (let key in obj) {
             if (obj[key] instanceof fastn.mutableClass) {
@@ -271,16 +320,32 @@ class RecordInstance {
     getAllFields() {
         return this.#fields;
     }
+    addClosure(closure) {
+        this.#closures.push(closure);
+    }
     get(key) {
         return this.#fields[key];
     }
-    set(key, value) {
+    set(value, key) {
+        if (fastn_utils.isNull(key)) {
+            if (!(value instanceof RecordInstance)) {
+                value = new RecordInstance(value);
+            }
+
+            let fields = {};
+            for(let key in value.#fields) {
+                fields[key] = value.#fields[key]
+            }
+
+            this.#fields = fields;
+        }
         if (this.#fields[key] === undefined) {
             this.#fields[key] = fastn.mutable(null);
             this.#fields[key].setWithoutUpdate(value);
         } else {
             this.#fields[key].set(value);
         }
+        this.#closures.forEach((closure) => closure.update());
     }
     replace(obj) {
         for (let key in this.#fields) {
@@ -289,6 +354,7 @@ class RecordInstance {
             }
             this.#fields[key] = fastn.wrapMutable(obj.#fields[key]);
         }
+        this.#closures.forEach((closure) => closure.update());
     }
 }
 

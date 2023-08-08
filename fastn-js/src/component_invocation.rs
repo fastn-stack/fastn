@@ -11,15 +11,16 @@ impl Kernel {
         parent: &str,
         index: usize,
     ) -> Kernel {
+        let name = component_declaration_variable_name(parent, index);
         Kernel {
             element_kind,
-            name: component_declaration_variable_name(parent, index),
+            name,
             parent: parent.to_string(),
         }
     }
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Debug)]
 pub enum ElementKind {
     Row,
     Column,
@@ -36,6 +37,7 @@ pub enum ElementKind {
     Rive,
     Document,
     Code,
+    WebComponent(String),
 }
 
 #[derive(Debug)]
