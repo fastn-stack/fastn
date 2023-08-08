@@ -223,3 +223,12 @@ ftd.http = function (url, method, ...request_data) {
     };
     xhr.send(JSON.stringify(json));
 };
+
+ftd.toggle_mode = function () {
+    const is_dark_mode = ftd.get(ftd.dark_mode);
+    if(is_dark_mode) {
+        enable_light_mode();
+    } else {
+        enable_dark_mode();
+    }
+};
