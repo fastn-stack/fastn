@@ -136,22 +136,22 @@ github-url: https://github.com/fastn-community/winter-cs
 Add warmth and energy to your designs with the `winter-cs`.
 
 -- ft-ui.template: Pink Tree CS
-template-url: featured/cs/
+template-url: featured/cs/pink-tree-cs/
 screenshot: $fastn-assets.files.images.featured.cs.pink-tree-cs.png
 licence-url: https://github.com/MeenuKumari28/pink-tree-cs/blob/main/LICENSE
 github-url: https://github.com/MeenuKumari28/pink-tree-cs/
 
 Add warmth and energy to your designs with the Pink Tree CS.
 
--- ft-ui.template: Yellow Lily CS
-template-url: featured/cs/
+/-- ft-ui.template: Yellow Lily CS
+template-url: featured/cs/yellow-lily-cs/
 screenshot: $fastn-assets.files.images.featured.cs.yellow-lily-cs.png
 licence-url: https://github.com/MeenuKumari28/yellow-lily-cs/blob/main/LICENSE
 github-url: https://github.com/MeenuKumari28/yellow-lily-cs/
 
 Add warmth and energy to your designs with the Yellow Lily CS.
 
--- ft-ui.template: Blue Wave CS
+/-- ft-ui.template: Blue Wave CS
 template-url: featured/cs/
 screenshot: $fastn-assets.files.images.featured.cs.blue-wave-cs.png
 licence-url: https://github.com/MeenuKumari28/blue-wave-cs/blob/main/LICENSE
@@ -160,7 +160,7 @@ github-url: https://github.com/MeenuKumari28/blue-wave-cs/
 Add warmth and energy to your designs with the Blue Wave CS.
 
 -- ft-ui.template: Little Blue CS
-template-url: featured/cs/
+template-url: featured/cs/little-blue-cs/
 screenshot: $fastn-assets.files.images.featured.cs.little-blue-cs.png
 licence-url: https://github.com/MeenuKumari28/little-blue-cs/blob/main/LICENSE
 github-url: https://github.com/MeenuKumari28/little-blue-cs/
@@ -168,7 +168,7 @@ github-url: https://github.com/MeenuKumari28/little-blue-cs/
 Add warmth and energy to your designs with the Little Blue CS.
 
 -- ft-ui.template: Blog Template 1 CS
-template-url: featured/cs/
+template-url: featured/cs/blog-template-1-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 licence-url: https://github.com/fastn-community/blog-template-1-cs/blob/main/LICENSE
 github-url: https://github.com/fastn-community/blog-template-1-cs/
