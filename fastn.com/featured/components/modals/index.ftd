@@ -49,23 +49,23 @@ templates: $dialogs
 -- ft-ui.template list dialogs:
 
 -- ft-ui.template: Dialog - 1
-template-url: featured/sections/modals/dialog-1/
+template-url: featured/components/modals/dialog-1/
 screenshot: $fastn-assets.files.images.featured.components.dialog-1.png
 
 -- ft-ui.template: Dialog - 2
-template-url: featured/sections/modals/dialog-2/
+template-url: featured/components/modals/dialog-2/
 screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
 
 -- ft-ui.template: Alert Dialog
-template-url: featured/sections/modals/alert-1/
+template-url: featured/components/modals/alert-1/
 screenshot: $fastn-assets.files.images.featured.components.dialog-3.png
 
 -- ft-ui.template: Modal
-template-url: featured/sections/modals/modal-1/
+template-url: featured/components/modals/modal-1/
 screenshot: $fastn-assets.files.images.featured.components.modal-1.png
 
 -- ft-ui.template: Modal Cover
-template-url: featured/sections/modals/modal-2/
+template-url: featured/components/modals/modal-2/
 screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 
 -- end: dialogs

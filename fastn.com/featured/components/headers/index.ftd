@@ -48,13 +48,17 @@ templates: $headers
 
 -- ft-ui.template list headers:
 
--- ft-ui.template: Header / Navbar
-template-url: https://fastn-community.github.io/header/
+-- ft-ui.template: Header
+template-url: /featured/components/headers/header/
 screenshot: $fastn-assets.files.images.featured.components.header.jpg
-licence-url: https://github.com/fastn-community/header/blob/main/LICENSE
-github-url: https://github.com/fastn-community/header
 
-The header component is already included inside doc-site. If you are using
-doc-site then don’t add header as fastn dependency.
+-- ft-ui.template: Header 1
+template-url: /featured/components/headers/header-1/
+screenshot: $fastn-assets.files.images.featured.components.header-1.png
+
+-- ft-ui.template: Header 2
+template-url: /featured/components/headers/header-2/
+screenshot: $fastn-assets.files.images.featured.components.header-2.png
 
 -- end: headers
+
