@@ -518,6 +518,8 @@ favicon: /-/fastn.com/images/favicon.svg
 - Overview: /planning/
 - Orientation video planning: /orientation-planning/
   document: /planning/orientation-planning-video.ftd
+- Page Nomenclature: /page-nomenclature/
+  document: /planning/page-nomenclature.ftd
 - Documentation Systems: /documentation/
   document: /planning/documentation-systems.ftd
 - Adding color-scheme: /color-scheme/-/planning/
