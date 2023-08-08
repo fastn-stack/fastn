@@ -1209,7 +1209,7 @@ impl Document {
 
         component_statements.extend(self.container.to_component_statements(
             doc,
-            &rdata,
+            rdata,
             has_rive_components,
             false,
         ));
@@ -1464,7 +1464,7 @@ impl Column {
 
         component_statements.extend(self.container.to_component_statements(
             doc,
-            &rdata,
+            rdata,
             has_rive_components,
             false,
         ));
@@ -1530,7 +1530,7 @@ impl Row {
 
         component_statements.extend(self.container.to_component_statements(
             doc,
-            &rdata,
+            rdata,
             has_rive_components,
             false,
         ));
@@ -1592,7 +1592,7 @@ impl ContainerElement {
 
         component_statements.extend(self.container.to_component_statements(
             doc,
-            &rdata,
+            rdata,
             has_rive_components,
             false,
         ));
