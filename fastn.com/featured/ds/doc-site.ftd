@@ -23,8 +23,9 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-community/doc-site
-full-width: true
 show-layout-bar: true
+full-width: true
+distribution-bar: false
 
 -- ds.page.footer:
 
@@ -50,6 +51,19 @@ cta-text-1: User Manual
 
 -- end: ds.page.layout-bar
 
+-- ds.page.abstract-bar:
+
+-- ds.distributors: 
+owners: $owner-fastn
+license-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
+license: Creative Commons
+published-date: 24-May-2023
+used-by: 12 +
+likes: 1 Stars
+connect: $social-links
+
+-- end: ds.page.abstract-bar
+
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
 cta-url: https://gsalunke.github.io/doc-site-demo/
@@ -62,3 +76,39 @@ more-link-text: View more
 more-link: /featured/doc-sites/
 
 -- end: ds.page
+
+
+
+
+
+-- common.social-media list social-links:
+
+-- common.social-media: 
+link: https://discord.gg/bucrdvptYd
+src: $assets.files.images.discord.svg
+
+-- common.social-media: 
+link: https://twitter.com/fastn_stack
+src: $assets.files.images.twitter.svg
+
+-- common.social-media: 
+link: https://www.linkedin.com/company/fifthtry/
+src: $assets.files.images.linkedin.svg
+
+-- end: social-links
+
+
+
+
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Fastn Community
+profile: https://github.com/fastn-community
+avatar: $assets.files.images.fastn.svg
+
+-- end: owner-fastn

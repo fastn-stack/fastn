@@ -40,26 +40,26 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Gradient Business Card
+-- ds.layout: Code Block
 cta-text: User Manual
-cta-url: https://fastn-community.github.io/gradient-business-card/
-previous-url: /featured/components/cards/
-github-url: https://github.com/fastn-community/gradient-business-card
+cta-url: https://fastn-community.github.io/code-block/
+previous-url: featured/components-library/	
+github-url: https://github.com/fastn-community/code-block
 
 -- end: ds.page.layout-bar
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
-cta-url: https://gsalunke.github.io/gradient-card-demo/
+image: $fastn-assets.files.images.featured.components.code-block.jpg
+cta-url: https://fastn-community.github.io/code-block/docs/code/
 cta-text: Demo
-width.fixed.px if {ftd.device == "desktop"}: 600
+width.fixed.px if { ftd.device == "desktop" }: 800
 
--- ft-ui.grid-view: Featured Business Cards
+-- ft-ui.grid-view: Featured from Components Library
 if: { show-grid }
-templates: $cards
+templates: $components
 more-link-text: View more
-more-link: /featured/components/cards/
+more-link: /featured/components-library/
 
 
 -- end: ds.page
@@ -73,25 +73,22 @@ more-link: /featured/components/cards/
 
 
 
--- ft-ui.template list cards:
+-- ft-ui.template list components:
 
--- ft-ui.template: Midnight Business Card
-template-url: featured/sections/cards/midnight-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
+-- ft-ui.template: Gradient Business Card
+template-url: featured/components/business-cards/gradient-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
 
 Build you own business-card using gradient-business-card package.
 
+-- ft-ui.template: Modal Cover
+template-url: featured/components/modals/modal-2/
+screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
+
 -- ft-ui.template: Pattern Business Card
-template-url: featured/sections/cards/pattern-card/
+template-url: featured/components/business-cards/pattern-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
 
 Build you own business-card using pattern-business-card package.
 
--- ft-ui.template: Sunset Business Card
-template-url: featured/sections/cards/sunset-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.sunset-business-card-front.jpg
-
-Build you own business-card using sunset-business-card package.
-
-
--- end: cards
+-- end: components

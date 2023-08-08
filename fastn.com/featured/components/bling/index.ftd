@@ -1,14 +1,19 @@
--- import: fastn.com/featured as ft-ui
 -- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
 -- import: fastn-community.github.io/footer
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fastn.com/featured as ft-ui
+-- import: fastn.com/assets
+
+
+-- boolean show-grid: true
+-- boolean show-list: false
 
 
 
 
-
--- ds.page: Business Cards
+-- ds.page: 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -18,6 +23,8 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
+full-width: true
+show-layout-bar: true
 
 -- ds.page.footer:
 
@@ -29,16 +36,31 @@ twitter-url: https://twitter.com/FifthTryHQ
 discord-url: https://discord.gg/bucrdvptYd
 copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
-
 -- end: ds.page.footer
 
--- ds.page.body:
+-- ds.page.layout-bar:
 
-We have designed and developed below business-cards. You can use them on your
-`FTD` web site. 
+-- ds.layout: Bling Componets
+cta-text: User Manual
+cta-url: https://fastn-community.github.io/bling/
+previous-url: featured/components-library/
+github-url: https://github.com/fastn-community/bling
 
--- ft-ui.grid-view:
-templates: $cards
+-- end: ds.page.layout-bar
+
+
+-- ds.preview-card:
+image: $fastn-assets.files.images.featured.components.bling.jpg
+cta-url: https://fastn-community.github.io/bling/
+cta-text: Demo
+width.fixed.px if { ftd.device == "desktop" }: 800
+
+-- ft-ui.grid-view: Featured from Components Library
+if: { show-grid }
+templates: $components
+more-link-text: View more
+more-link: /featured/components-library/
+
 
 -- end: ds.page
 
@@ -46,36 +68,27 @@ templates: $cards
 
 
 
--- ft-ui.template list cards:
 
--- ft-ui.template: Business Card
-template-url: featured/sections/cards/card-1/
-screenshot: $fastn-assets.files.images.featured.components.business-card.png
 
-Build you own business-card using business-card package.
+
+
+
+-- ft-ui.template list components:
 
 -- ft-ui.template: Gradient Business Card
-template-url: featured/sections/cards/gradient-card/
+template-url: featured/components/business-cards/gradient-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
 
 Build you own business-card using gradient-business-card package.
 
--- ft-ui.template: Midnight Business Card
-template-url: featured/sections/cards/midnight-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
-
-Build you own business-card using gradient-business-card package.
+-- ft-ui.template: Modal Cover
+template-url: featured/components/modals/modal-2/
+screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 
 -- ft-ui.template: Pattern Business Card
-template-url: featured/sections/cards/pattern-card/
+template-url: featured/components/business-cards/pattern-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
 
 Build you own business-card using pattern-business-card package.
 
--- ft-ui.template: Sunset Business Card
-template-url: featured/sections/cards/sunset-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.sunset-business-card-front.jpg
-
-Build you own business-card using sunset-business-card package.
-
--- end: cards
+-- end: components

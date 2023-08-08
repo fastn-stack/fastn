@@ -40,26 +40,26 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Alert Dialog
+-- ds.layout: Header 2
 cta-text: User Manual
-cta-url: https://fastnui.trizwit.com/UI-Components/Content/alert-dialog/
-previous-url: /featured/sections/modals/
-github-url: https://github.com/Trizwit/FastnUI/
+cta-url: https://fastnui.trizwit.com/UI-Components/Header/header-3/
+previous-url: /featured/components/headers/
+github-url: https://github.com/Trizwit/FastnUI
 
 -- end: ds.page.layout-bar
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.components.dialog-3.png
-cta-url: https://fastnui.trizwit.com/UI-Components/Content/alert-dialog/
+image: $fastn-assets.files.images.featured.components.header-2.png
+cta-url: https://fastnui.trizwit.com/UI-Components/Header/header-3/
 cta-text: Demo
-width.fixed.px if {ftd.device == "desktop"}: 600
+width.fixed.px if {ftd.device == "desktop"}: 800
 
--- ft-ui.grid-view: Featured Modal / Dialog Box
+-- ft-ui.grid-view: Featured Headers
 if: { show-grid }
-templates: $dialogs
+templates: $headers
 more-link-text: View more
-more-link: /featured/sections/modals/
+more-link: /featured/components/headers/
 
 
 -- end: ds.page
@@ -73,19 +73,18 @@ more-link: /featured/sections/modals/
 
 
 
--- ft-ui.template list dialogs:
+-- ft-ui.template list headers:
 
--- ft-ui.template: Dialog - 1
-template-url: featured/sections/modals/dialog-1/
-screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
+-- ft-ui.template: Header
+template-url: /featured/components/headers/header/
+screenshot: $fastn-assets.files.images.featured.components.header.jpg
 
--- ft-ui.template: Dialog - 2
-template-url: featured/sections/modals/dialog-2/
-screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
+-- ft-ui.template: Header 1
+template-url: /featured/components/headers/header-1/
+screenshot: $fastn-assets.files.images.featured.components.header-1.png
 
--- ft-ui.template: Modal Cover
-template-url: featured/sections/modals/modal-2/
-screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
+-- ft-ui.template: Header 2
+template-url: /featured/components/headers/header-2/
+screenshot: $fastn-assets.files.images.featured.components.header-2.png
 
--- end: dialogs
-
+-- end: headers

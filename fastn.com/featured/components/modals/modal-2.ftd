@@ -40,19 +40,18 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Modal 1
+-- ds.layout: Modal 2
 cta-text: User Manual
-cta-url: https://fastnui.trizwit.com/UI-Components/Modal/modal/
-previous-url: /featured/sections/modals/
-github-url: https://github.com/Trizwit/FastnUI/
+cta-url: https://fastn-community.github.io/bling/modal-cover/
+previous-url: /featured/components/modals
+github-url: https://github.com/fastn-community/bling
 
 -- end: ds.page.layout-bar
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.components.modal-1.png
-cta-url: https://fastnui.trizwit.com/UI-Components/Modal/modal/
+image: $fastn-assets.files.images.featured.components.modal-cover.png
+cta-url: https://fastn-community.github.io/bling/modal-cover/
 cta-text: Demo
-width.fixed.px if {ftd.device == "desktop"}: 800
 
 -- ft-ui.grid-view: Featured Modal / Dialog Box
 if: { show-grid }
@@ -75,16 +74,16 @@ more-link: /featured/sections/modals/
 -- ft-ui.template list dialogs:
 
 -- ft-ui.template: Alert Dialog
-template-url: featured/sections/modals/alert-1/
+template-url: featured/components/modals/alert-1/
 screenshot: $fastn-assets.files.images.featured.components.dialog-3.png
 
 -- ft-ui.template: Dialog - 1
-template-url: featured/sections/modals/dialog-1/
+template-url: featured/components/modals/dialog-1/
 screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
 
--- ft-ui.template: Modal Cover
-template-url: featured/sections/modals/modal-2/
-screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
+-- ft-ui.template: Modal
+template-url: featured/components/modals/modal-1/
+screenshot: $fastn-assets.files.images.featured.components.modal-1.png
 
 -- end: dialogs
 

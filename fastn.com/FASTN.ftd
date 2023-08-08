@@ -426,17 +426,88 @@ favicon: /-/fastn.com/images/favicon.svg
 
 - Website Categories: /featured/doc-sites/
   - Documentation Sites: /featured/doc-sites/
+    - Doc Site: /featured/ds/doc-site/
+    skip: true
+    - Midnight Rush: /featured/ds/mr-ds/
+    skip: true
+    - Midnight Storm: /featured/ds/midnight-storm/
+    skip: true
+    - Misty Gray: /featured/ds/misty-gray/
+    skip: true
   - SPA / Landing Pages: /featured/landing-pages/
+    - Midnight Rush: /featured/landing/mr-landing/
+    skip: true
+    - Midnight Storm: /featured/landing/midnight-storm-landing/
+    skip: true
+    - Misty Gray: /featured/landing/misty-gray-landing/
+    skip: true
   - Blogs: /featured/blog-templates/
+    - Doc Site: /featured/blogs/doc-site/
+    skip: true  
+    - Midnight Rush: /featured/blogs/mr-blog/
+    skip: true  
+    - Midnight Rush: /featured/blogs/mr-blog/
+    skip: true  
+    - Midnight Storm: /featured/blogs/ms-blog/
+    skip: true  
+    - Misty Gray: /featured/blogs/mg-blog/
+    skip: true  
 - Section Library: /featured/sections/
-  - Business Cards: /featured/sections/cards/
   - Hero Components: /featured/sections/heros/
-  - Modal / Dialog: /featured/sections/modals/
+    - Hero 1: /featured/sections/heros/hero-1/
+    skip: true  
+    - Hero 2: /featured/sections/heros/hero-2/
+    skip: true  
+    - Hero 3: /featured/sections/heros/hero-3/
+    skip: true  
+    - Hero 4: /featured/sections/heros/hero-4/
+    skip: true  
+    - Hero 5: /featured/sections/heros/hero-5/
+    skip: true  
+    - Hero 6: /featured/sections/heros/hero-6/
+    skip: true  
 - Component Library: /featured/components-library/
-  - Headers: /featured/components/headers/
-  - Footers: /featured/components/footers/
-  - Buttons: /featured/components/buttons/
   - Bling Components: /featured/components/bling/
+  - Buttons: /featured/components/buttons/
+  - Business Cards: /featured/components/business-cards/
+    - Business Card: /featured/components/business-cards/card-1/
+    skip: true  
+    - Gradient Business Card: /featured/components/business-cards/gradient-card/
+    skip: true  
+    - Midnight Business Card: /featured/components/business-cards/midnight-card/
+    skip: true  
+    - Pattern Business Card: /featured/components/business-cards/pattern-card/
+    skip: true  
+    - Sunset Business Card: /featured/components/business-cards/sunset-card/
+    skip: true  
+  - Code Block: /featured/components/code-block/
+  - Header / Navbar: /featured/components/headers/
+    - Header: /featured/components/headers/header/
+    skip: true  
+    - Header 1: /featured/components/headers/header-1/
+    skip: true  
+    - Header 2: /featured/components/headers/header-2/
+    skip: true  
+  - Footers: /featured/components/footers/
+    - Footer: /featured/components/footers/footer/
+    skip: true  
+    - Footer 1: /featured/components/footers/footer-1/
+    skip: true  
+    - Footer 2: /featured/components/footers/footer-2/
+    skip: true  
+    - Footer 3: /featured/components/footers/footer-3/
+    skip: true  
+  - Modal / Dialog: /featured/components/modals/
+    - Dialog 1: /featured/components/modals/dialog-1/
+    skip: true  
+    - Dialog 2: /featured/components/modals/dialog-2/
+    skip: true  
+    - Alert Dialog: /featured/components/modals/alert-1/
+    skip: true  
+    - Modal 1: /featured/components/modals/modal-1/
+    skip: true  
+    - Modal 2: /featured/components/modals/modal-2/
+    skip: true  
 - Design Elements: /featured/cs/
   - Color Schemes: /featured/cs/
   - Font Typographies: /featured/fonts-typography/
