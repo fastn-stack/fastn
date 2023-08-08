@@ -51,15 +51,16 @@ assigned values like `wide`, `narrow`, `half`, `flush`, `2/3`, and `1/3`.
 
 For instance, 
 
-Flush: When width is set to flush, the section's content spans the entire width 
-of the screen. 
+**`Flush`**: When width is set to flush, the section's content spans the entire 
+width of the screen. 
 
-Wide: A wide width occupies a substantial portion of the page's width, offering
-more room for content without taking up the full width. 
+**`Wide`**: A wide width occupies a substantial portion of the page's width, 
+offering more room for content without taking up the full width. 
 
-Half: A section set to half width occupies half of the screen's width.  
+**`Half`**: A section set to half width occupies half of the screen's width.  
 
-1/3: A section set to 1/3 width occupies about one-third of the screen's width.
+**`1/3`**: A section set to 1/3 width occupies about one-third of the screen's 
+width.
 
 (Embed interactive element to show the different width values. Example: 
 sliders or toggles to allow readers to dynamically see how different 
@@ -107,22 +108,6 @@ One-column, two-column, three-column, one-third right column, one-third left
 column, full-width column. 
 
 (Show Example for each type)
-
--- ds.h1: Need Clarification
-
-	- Naming a section grid
-	- Is the above mentioned types of section grid correct? If not, is the one 
-	  given below coorect?
-
-	  Section grids can be organized in various ways: (Option 2)
-
-	- Horizontal/ Column Arrangement: Sections are placed side by side, creating a 
-	  seamless flow of content.
-
-	- Vertical/ Row Arrangement: Sections stacked atop one another, guiding users 
-	  through a logical progression of information.
-
-	- Clustered Formation: A group of both horizontal and vertical sections.  
 
 
 
