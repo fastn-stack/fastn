@@ -45,16 +45,6 @@ We have designed and developed below sections. You can use them for inside you
 fastn projects. These sections can be used inside your personal websites or
 blog sites or organizational sites, documentation pages etc.
 
--- ft-ui.grid-view: Business Cards
-templates: $cards
-more-link-text: View more
-more-link: /featured/sections/cards/
-
--- ft-ui.grid-view: Modal / Dialog Box
-templates: $dialogs
-more-link-text: View more
-more-link: /featured/sections/modals/
-
 -- ft-ui.grid-view: Heros
 templates: $heros
 more-link-text: View more
@@ -88,42 +78,3 @@ screenshot: $fastn-assets.files.images.featured.components.hero-3.png
 
 -- end: heros
 
-
-
-
-
--- ft-ui.template list dialogs:
-
--- ft-ui.template: Alert Dialog
-template-url: featured/sections/modals/alert-1/
-screenshot: $fastn-assets.files.images.featured.components.dialog-3.png
-
--- ft-ui.template: Modal
-template-url: featured/sections/modals/modal-1/
-screenshot: $fastn-assets.files.images.featured.components.modal-1.png
-
--- ft-ui.template: Modal Cover
-template-url: featured/sections/modals/modal-2/
-screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
-
--- end: dialogs
-
-
-
-
-
--- ft-ui.template list cards:
-
--- ft-ui.template: Gradient Business Card
-template-url: featured/sections/cards/gradient-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
-
--- ft-ui.template: Midnight Business Card
-template-url: featured/sections/cards/midnight-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
-
--- ft-ui.template: Pattern Business Card
-template-url: featured/sections/cards/pattern-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
-
--- end: cards

@@ -40,26 +40,26 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Dialog 2
+-- ds.layout: Footer
 cta-text: User Manual
-cta-url: https://fastnui.trizwit.com/UI-Components/Content/dialog-2/
-previous-url: /featured/sections/modals/
-github-url: https://github.com/Trizwit/FastnUI/
+cta-url: https://fastn-community.github.io/footer/
+previous-url: /featured/components/footers/
+github-url: https://github.com/fastn-community/footer
 
 -- end: ds.page.layout-bar
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.components.dialog-2.png
-cta-url: https://fastnui.trizwit.com/UI-Components/Content/dialog-2/
+image: $fastn-assets.files.images.featured.components.footer.png
+cta-url: https://fastn-community.github.io/footer/
 cta-text: Demo
-width.fixed.px if {ftd.device == "desktop"}: 600
+width.fixed.px if {ftd.device == "desktop"}: 800
 
--- ft-ui.grid-view: Featured Modal / Dialog Box
+-- ft-ui.grid-view: Featured Footers
 if: { show-grid }
-templates: $dialogs
+templates: $footers
 more-link-text: View more
-more-link: /featured/sections/modals/
+more-link: /featured/components/footers/
 
 
 -- end: ds.page
@@ -73,19 +73,18 @@ more-link: /featured/sections/modals/
 
 
 
--- ft-ui.template list dialogs:
+-- ft-ui.template list footers:
 
--- ft-ui.template: Alert Dialog
-template-url: featured/sections/modals/alert-1/
-screenshot: $fastn-assets.files.images.featured.components.dialog-3.png
+-- ft-ui.template: Footer - 1
+template-url: /featured/components/footers/footer-1/
+screenshot: $fastn-assets.files.images.featured.components.footer-1.png
 
--- ft-ui.template: Dialog - 1
-template-url: featured/sections/modals/dialog-1/
-screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
+-- ft-ui.template: Footer - 2
+template-url: /featured/components/footers/footer-2/
+screenshot: $fastn-assets.files.images.featured.components.footer-2.png
 
--- ft-ui.template: Modal Cover
-template-url: featured/sections/modals/modal-2/
-screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
+-- ft-ui.template: Footer - 3
+template-url: /featured/components/footers/footer-3/
+screenshot: $fastn-assets.files.images.featured.components.footer-3.png
 
--- end: dialogs
-
+-- end: footers

@@ -72,6 +72,15 @@ We have designed and developed below landing pages site themes. You can use them
 for creating SPA(Single Page Application or websites) etc. 
 
 
+-- grid-view: Section Library
+if: { show-grid }
+templates: $sections
+more-link-text: View all
+more-link: /featured/sections/
+
+We have designed and developed below sections. You can use them for inside you
+fastn projects.
+
 /-- grid-view: Resumes:
 if: { show-grid }
 templates: $resumes
@@ -631,19 +640,13 @@ Add warmth and energy to your designs with the `winter-cs`.
 
 -- template list bling:
 
--- template: Bling
-template-url: https://fastn-community.github.io/bling/
-screenshot: $fastn-assets.files.images.featured.components.bling.jpg
+-- template: Business Cards
+template-url: /featured/components/business-cards/
+screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
 
-Bling components refer to a collection of visually appealing and interactive
-elements designed to enhance the presentation and engagement of web pages.
-
--- template: Code Block
-template-url: https://fastn-community.github.io/code-block/
-screenshot: $fastn-assets.files.images.featured.components.code-block.jpg
-
-Code blocks are typically defined by using specific syntax or indentation rules,
-depending on the programming language.
+-- template: Modal / Dialog
+template-url: /featured/components/modals/
+screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
 
 -- template: Header / Navbars
 template-url: https://fastn-community.github.io/header/
@@ -695,6 +698,24 @@ packages.
 
 -- end: fonts
 
+
+
+-- template list sections:
+
+-- template: Hero - 1
+template-url: featured/sections/heros/hero-1/
+screenshot: $fastn-assets.files.images.featured.components.hero-1.png
+
+-- template: Hero - 2
+template-url: featured/sections/heros/hero-2/
+screenshot: $fastn-assets.files.images.featured.components.hero-2.png
+
+-- template: Hero - 3
+template-url: featured/sections/heros/hero-3/
+screenshot: $fastn-assets.files.images.featured.components.hero-3.png
+
+
+-- end: sections
 
 
 
