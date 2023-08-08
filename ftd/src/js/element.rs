@@ -1969,6 +1969,8 @@ pub struct Common {
     pub classes: Option<ftd::js::Value>,
     pub anchor: Option<ftd::js::Value>,
     pub shadow: Option<ftd::js::Value>,
+    pub css: Option<ftd::js::Value>,
+    pub js: Option<ftd::js::Value>,
     pub events: Vec<ftd::interpreter::Event>,
 }
 
@@ -1980,6 +1982,8 @@ impl Common {
     ) -> Common {
         Common {
             id: ftd::js::value::get_optional_js_value("id", properties, arguments),
+            css: ftd::js::value::get_optional_js_value("css", properties, arguments),
+            js: ftd::js::value::get_optional_js_value("js", properties, arguments),
             region: ftd::js::value::get_optional_js_value("region", properties, arguments),
             link: ftd::js::value::get_optional_js_value("link", properties, arguments),
             open_in_new_tab: ftd::js::value::get_optional_js_value(
@@ -2201,6 +2205,16 @@ impl Common {
         if let Some(ref id) = self.id {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 id.to_set_property(fastn_js::PropertyKind::Id, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref external_css) = self.css {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                external_css.to_set_property(fastn_js::PropertyKind::Css, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref external_js) = self.js {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                external_js.to_set_property(fastn_js::PropertyKind::Js, doc, element_name, rdata),
             ));
         }
         if let Some(ref region) = self.region {

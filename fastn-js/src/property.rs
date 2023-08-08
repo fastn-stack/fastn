@@ -288,6 +288,8 @@ pub enum PropertyKind {
     DecimalValue,
     BooleanValue,
     Id,
+    Css,
+    Js,
     Region,
     OpenInNewTab,
     Link,
@@ -393,6 +395,8 @@ impl PropertyKind {
         match self {
             PropertyKind::Children => "fastn_dom.PropertyKind.Children",
             PropertyKind::Id => "fastn_dom.PropertyKind.Id",
+            PropertyKind::Css => "fastn_dom.PropertyKind.Css",
+            PropertyKind::Js => "fastn_dom.PropertyKind.Js",
             PropertyKind::AlignSelf => "fastn_dom.PropertyKind.AlignSelf",
             PropertyKind::Anchor => "fastn_dom.PropertyKind.Anchor",
             PropertyKind::StringValue => "fastn_dom.PropertyKind.StringValue",
