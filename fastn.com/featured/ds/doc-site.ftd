@@ -50,19 +50,6 @@ cta-text-1: User Manual
 
 -- end: ds.page.layout-bar
 
--- ds.page.abstract-bar:
-
--- ds.distributors: 
-owners: $owner-fastn
-license-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
-license: Creative Commons
-published-date: 24-May-2023
-used-by: 12 +
-likes: 1 Stars
-connect: $social-links
-
--- end: ds.page.abstract-bar
-
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
 cta-url: https://gsalunke.github.io/doc-site-demo/
