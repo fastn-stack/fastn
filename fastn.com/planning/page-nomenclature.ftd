@@ -95,7 +95,7 @@ referencing.
 
 (Show examples of both sections)
 
--- ds.page: The Section Grid
+-- ds.h1: The Section Grid
 
 A section grid brings multiple sections together in a grid format.  These grids 
 act as the foundation for arranging multiple sections in a cohesive and 
@@ -108,7 +108,7 @@ column, full-width column.
 
 (Show Example for each type)
 
--- ds.page: Need Clarification
+-- ds.h1: Need Clarification
 
 1) Naming a section grid
 2) Is the above mentioned types of section grid correct? If not, is the one 
