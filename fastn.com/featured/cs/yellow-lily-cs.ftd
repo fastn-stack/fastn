@@ -41,11 +41,11 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Color schemes - Winter CS
-cta-url: https://fastn-community.github.io/winter-cs/
+-- ds.layout: Color schemes - Yellow Lily CS
+cta-url: https://meenukumari28.github.io/yellow-lily-cs/
 previous-url: /featured/cs/
 cta-text: Use this color scheme
-github-url: https://github.com/fastn-community/winter-cs
+github-url: https://github.com/MeenuKumari28/yellow-lily-cs/
 
 -- end: ds.page.layout-bar
 
@@ -64,8 +64,8 @@ connect: $social-links
 
 
 -- ds.preview-card: 
-image: $fastn-assets.files.images.featured.cs.winter-cs.png
-cta-url: https://fastn-community.github.io/winter-cs/
+image: $fastn-assets.files.images.featured.cs.yellow-lily-cs.png
+cta-url: https://meenukumari28.github.io/yellow-lily-cs/
 cta-text: Demo
 width.fixed.px if { ftd.device == "desktop" }: 800
 
@@ -132,12 +132,20 @@ avatar: $assets.files.images.fastn.svg
 
 -- ft-ui.template list similar-schemes:
 
--- ft-ui.template: Blue Heal CS
-template-url: featured/cs/blue-heal-cs/
-screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
-licence-url: https://github.com/fastn-community/blue-heal-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/blue-heal-cs
+-- ft-ui.template: Navy Nebula CS
+template-url: featured/cs/navy-nebula-cs/
+screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
+licence-url: https://github.com/fastn-community/navy-nebula-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/navy-nebula-cs
 
-Add warmth and energy to your designs with the `blue-heal-cs`.
+Add warmth and energy to your designs with the `navy-nebula-cs`.
+
+-- ft-ui.template: Saturated Sunset CS
+template-url: featured/cs/saturated-sunset-cs/
+screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
+licence-url: https://github.com/fastn-community/saturated-sunset-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/saturated-sunset-cs
+
+Add warmth and energy to your designs with the `saturated-sunset-cs`.
 
 -- end: similar-schemes

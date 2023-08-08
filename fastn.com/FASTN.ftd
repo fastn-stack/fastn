@@ -510,6 +510,30 @@ favicon: /-/fastn.com/images/favicon.svg
     skip: true  
 - Design Elements: /featured/cs/
   - Color Schemes: /featured/cs/
+    - Blog Template CS: /featured/cs/blog-template-cs/
+    skip: true  
+    - Blue Heal CS: /featured/cs/blue-heal-cs/
+    skip: true  
+    - Dark Flame CS: /featured/cs/dark-flame-cs/
+    skip: true  
+    - Forest CS: /featured/cs/forest-cs/
+    skip: true  
+    - Midnight Storm CS: /featured/cs/midnight-storm-cs/
+    skip: true  
+    - Misty Gray CS: /featured/cs/misty-gray-cs/
+    skip: true  
+    - Navy Nebula CS: /featured/cs/navy-nebula-cs/
+    skip: true  
+    - Pretty CS: /featured/cs/pretty-cs/
+    skip: true  
+    - Saturated Sunset CS: /featured/cs/saturated-sunset-cs/
+    skip: true  
+    - Winter CS: /featured/cs/winter-cs/
+    skip: true  
+    - Little Blue CS: /featured/cs/little-blue-cs/
+    skip: true  
+    - Blog Template 1 CS: /featured/cs/blog-template-1-cs/
+    skip: true
   - Font Typographies: /featured/fonts-typography/
 
 ## Deploy: /deploy/

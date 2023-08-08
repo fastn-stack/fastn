@@ -41,11 +41,11 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Color schemes - Winter CS
-cta-url: https://fastn-community.github.io/winter-cs/
+-- ds.layout: Color schemes - Little Blue CS
+cta-url: https://meenukumari28.github.io/little-blue-cs/
 previous-url: /featured/cs/
 cta-text: Use this color scheme
-github-url: https://github.com/fastn-community/winter-cs
+github-url: https://github.com/MeenuKumari28/little-blue-cs/
 
 -- end: ds.page.layout-bar
 
@@ -64,8 +64,8 @@ connect: $social-links
 
 
 -- ds.preview-card: 
-image: $fastn-assets.files.images.featured.cs.winter-cs.png
-cta-url: https://fastn-community.github.io/winter-cs/
+image: $fastn-assets.files.images.featured.cs.little-blue-cs.png
+cta-url: https://meenukumari28.github.io/little-blue-cs/
 cta-text: Demo
 width.fixed.px if { ftd.device == "desktop" }: 800
 
@@ -131,6 +131,14 @@ avatar: $assets.files.images.fastn.svg
 
 
 -- ft-ui.template list similar-schemes:
+
+-- ft-ui.template: Winter CS
+template-url: featured/cs/winter-cs/
+screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
+licence-url: https://github.com/fastn-community/winter-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/winter-cs
+
+Add warmth and energy to your designs with the `winter-cs`.
 
 -- ft-ui.template: Blue Heal CS
 template-url: featured/cs/blue-heal-cs/
