@@ -5,6 +5,9 @@ fastn_dom.codeData = {
     addedCssFile: []
 }
 
+fastn_dom.externalCss = new Set();
+fastn_dom.externalJs = new Set();
+
 fastn_dom.commentNode = "comment";
 fastn_dom.wrapperNode = "wrapper";
 fastn_dom.commentMessage = "***FASTN***";
@@ -248,7 +251,9 @@ fastn_dom.PropertyKind = {
     Shadow: 100,
     CodeTheme: 101,
     CodeLanguage: 102,
-    CodeShowLineNumber: 103
+    CodeShowLineNumber: 103,
+    Css: 104,
+    Js: 105,
 };
 
 
@@ -959,6 +964,32 @@ class Node2 {
             this.attachCss("background-image", `url(${darkValue})`, true, `body.dark .${lightClass}`);
         }
     }
+    attachExternalCss(css) {
+        if (hydrating) {
+            let css_tag = document.createElement('link');
+            css_tag.rel = 'stylesheet';
+            css_tag.type = 'text/css';
+            css_tag.href = css;
+
+            let head = document.head || document.getElementsByTagName("head")[0];
+            if (!fastn_dom.externalCss.has(css)){
+                head.appendChild(css_tag);
+                fastn_dom.externalCss.add(css);
+            }
+        }
+    }
+    attachExternalJs(js) {
+        if (hydrating) {
+            let js_tag = document.createElement('script');
+            js_tag.src = js;
+
+            let head = document.head || document.getElementsByTagName("head")[0];
+            if (!fastn_dom.externalJs.has(js)){
+                head.appendChild(js_tag);
+                fastn_dom.externalCss.add(js);
+            }
+        }
+    }
     attachColorCss(property, value, visited) {
         if (fastn_utils.isNull(value)) {
             this.attachCss(property, value);
@@ -1082,8 +1113,17 @@ class Node2 {
                 }
             }
         } else if (kind === fastn_dom.PropertyKind.Id) {
-            console.log("Setting Id", staticValue);
             this.#node.id = staticValue;
+        } else if (kind === fastn_dom.PropertyKind.Css) {
+            let css_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            css_list.forEach((css) => {
+                this.attachExternalCss(css);
+            });
+        } else if (kind === fastn_dom.PropertyKind.Js) {
+            let js_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            js_list.forEach((js) => {
+                this.attachExternalJs(js);
+            });
         } else if (kind === fastn_dom.PropertyKind.Width) {
             this.attachCss("width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Height) {
@@ -1161,9 +1201,10 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Shadow) {
             this.attachShadow(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Classes) {
-            // todo: this needs to be fixed
-            this.#node.classList.add(staticValue.map(obj => fastn_utils.getStaticValue(obj.item)));
-            // this.attachCss("classes", staticValue);
+            let cls = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            cls.forEach((c) => {
+               this.#node.classList.add(c);
+            });
         } else if (kind === fastn_dom.PropertyKind.Anchor) {
             // todo: this needs fixed for anchor.id = v
             // need to change position of element with id = v to relative
