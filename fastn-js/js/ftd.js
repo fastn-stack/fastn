@@ -137,20 +137,20 @@ ftd.clear_all = function (list) { list.clearAll() }
 ftd.set_list = function (list, value) { list.set(value) }
 
 ftd.http = function (url, method, body, headers) {
-    if (url instanceof Mutable) url = url.get();
-    if (method instanceof Mutable) method = method.get();
+    if (url instanceof fastn.mutableClass) url = url.get();
+    if (method instanceof fastn.mutableClass) method = method.get();
     method = method.trim().toUpperCase();
     const init = {
         method,
         headers: {}
     };
-    if(headers && headers instanceof RecordInstance) {
+    if(headers && headers instanceof fastn.recordInstanceClass) {
         Object.assign(init.headers, headers.toObject());
     }
     if(method !== 'GET') {
         init.headers['Content-Type'] = 'application/json';
     }
-    if(body && body instanceof RecordInstance && method !== 'GET') {
+    if(body && body instanceof fastn.recordInstanceClass && method !== 'GET') {
         init.body = JSON.stringify(body.toObject());
     }
     fetch(url, init)
