@@ -16,7 +16,9 @@ score: 90
 
 -- end: ftd.row
 
-/-- form:
+
+
+-- form:
 
 
 
@@ -30,22 +32,50 @@ for: obj in $name-scores
 
 
 -- component form:
-name-score $ns:
+name-score $ns: *$ns
 
 -- ftd.column:
 width.fixed.responsive: $width
-background.solid: orange
+background.solid: #f2f2f2
 margin-bottom.px: 40
+padding.px: 20
+role: $inherited.types.copy-large
+border-radius.px: 5
 
 -- ftd.text: Enter name:
 
 -- ftd.text-input:
 placeholder: Enter your name here...
+role: $inherited.types.copy-small
+width: fill-container
+$on-input$: $ftd.set-string($a = $form.ns.name, v = $VALUE)
 
--- end:ftd.column
+-- ftd.text: Enter score:
+
+-- ftd.text-input:
+placeholder: Enter your score here...
+default-value: 0
+width: fill-container
+role: $inherited.types.copy-small
+$on-input$: $ftd.set-integer($a = $form.ns.score, v = $VALUE)
+
+-- ftd.text: Submit
+if: { form.ns.name != ftd.empty }
+$on-click$: $insert($a = $name-scores, v = *$form.ns)
+
+-- end: ftd.column
 
 -- end: form
 
+
+
+
+
+-- void insert(a,v):
+name-score list $a:
+name-score v:
+
+ftd.append(a, v)
 
 
 
@@ -70,10 +100,14 @@ spacing: space-between
 
 
 -- ftd.responsive-length width:
-desktop.px: 70
+desktop.px: 500
 mobile.percent: 40
 
 
 -- record name-score:
 caption name:
 integer score:
+
+
+-- name-score ns: $ftd.empty
+score: 0
