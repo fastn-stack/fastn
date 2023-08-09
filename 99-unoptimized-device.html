@@ -563,10 +563,14 @@
 }
 },
 "ftd#device": "desktop",
+"ftd#empty": "",
 "ftd#follow-system-dark-mode": true,
 "ftd#font-code": "sans-serif",
 "ftd#font-copy": "sans-serif",
 "ftd#font-display": "sans-serif",
+"ftd#nbsp": "&nbsp;",
+"ftd#non-breaking-space": "&nbsp;",
+"ftd#space": " ",
 "ftd#system-dark-mode": false
 }
 </script>
@@ -2118,20 +2122,20 @@ window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","0,1,1,0:main__display", data);
-window.ftd.utils.node_change_call("main","0,0,1,0:main__display", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,1:main__display", data);
-window.ftd.utils.node_change_call("main","0,1,1,0,1,0:main__display", data);
-window.ftd.utils.node_change_call("main","0,1,1,0,1,1:main__display", data);
 window.ftd.utils.node_change_call("main","0,0,1,1:main__display", data);
-window.ftd.utils.node_change_call("main","0,1:main__display", data);
-window.ftd.utils.node_change_call("main","0,1,1,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,1,1,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,1,1,0,1,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,0,1,1,1,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,0,1,0:main__display", data);
 window.ftd.utils.node_change_call("main","0,1,1,1,1,0:main__display", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0:main__display", data);
 window.ftd.utils.node_change_call("main","0,1,1,1,1,1:main__display", data);
 window.ftd.utils.node_change_call("main","0,0:main__display", data);
-window.ftd.utils.node_change_call("main","0,0,1,1,1,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,1,1,1:main__display", data);
 window.ftd.utils.node_change_call("main","0,0,1,1,1,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,1,1,0,1,0:main__display", data);
 };
 
 

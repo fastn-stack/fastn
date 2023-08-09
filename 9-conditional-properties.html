@@ -564,10 +564,14 @@
 }
 },
 "ftd#device": "desktop",
+"ftd#empty": "",
 "ftd#follow-system-dark-mode": true,
 "ftd#font-code": "sans-serif",
 "ftd#font-copy": "sans-serif",
 "ftd#font-display": "sans-serif",
+"ftd#nbsp": "&nbsp;",
+"ftd#non-breaking-space": "&nbsp;",
+"ftd#space": " ",
 "ftd#system-dark-mode": false
 }
 </script>
@@ -2035,8 +2039,8 @@ window.ftd.utils.set_value_helper(data, "foo#g", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#g", "main");
 window.ftd.call_immutable_value_changes("foo#g", "main");
-window.ftd.utils.node_change_call("main","1:main__padding", data);
 window.ftd.utils.node_change_call("main","0:main__text", data);
+window.ftd.utils.node_change_call("main","1:main__padding", data);
 };
 
 
