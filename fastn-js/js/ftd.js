@@ -136,7 +136,7 @@ ftd.delete_at = function (list, index) { list.deleteAt(index) }
 ftd.clear_all = function (list) { list.clearAll() }
 ftd.set_list = function (list, value) { list.set(value) }
 
-ftd.http = function (url, method, body, headers, ) {
+ftd.http = function (url, method, body, headers) {
     if (url instanceof Mutable) url = url.get();
     if (method instanceof Mutable) method = method.get();
     method = method.trim().toUpperCase();
