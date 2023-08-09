@@ -396,9 +396,9 @@ async fn handle_file_(
                 (Ok(r), _) => {
                     if let Some(cache) = cache {
                         cache.documents.insert(
-                            remove_extension(doc.id.as_str()),
+                            dbg!(remove_extension(doc.id.as_str())),
                             cache::Document {
-                                html_checksum: r.checksum(),
+                                html_checksum: dbg!(r.checksum()),
                                 dependencies: config.dependencies_during_render.clone(),
                             },
                         );
