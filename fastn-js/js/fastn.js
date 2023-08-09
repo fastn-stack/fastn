@@ -364,7 +364,7 @@ class RecordInstance {
                 value = value.toObject();
             }
 
-            [key, value];
+            return [key, value];
         }));
     }
 }

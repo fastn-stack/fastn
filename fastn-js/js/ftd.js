@@ -136,7 +136,7 @@ ftd.delete_at = function (list, index) { list.deleteAt(index) }
 ftd.clear_all = function (list) { list.clearAll() }
 ftd.set_list = function (list, value) { list.set(value) }
 
-ftd.http = function (url, method, body, headers) {
+ftd.http = function (url, method, body, headers, ) {
     if (url instanceof Mutable) url = url.get();
     if (method instanceof Mutable) method = method.get();
     method = method.trim().toUpperCase();
@@ -153,7 +153,18 @@ ftd.http = function (url, method, body, headers) {
     if(body && body instanceof RecordInstance && method !== 'GET') {
         init.body = JSON.stringify(body.toObject());
     }
-    fetch(url, init);
+    fetch(url, init)
+    .then(res => {
+        if(!res.ok) {
+            return new Error("[http]: Request failed", res)
+        }
+
+        return res.json();
+    })
+    .then(json => {
+        console.log("[http]: Response OK", json);
+    })
+    .catch(console.error);
 }
 
 ftd.navigate = function(url, request_data) {
