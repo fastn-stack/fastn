@@ -618,8 +618,10 @@ favicon: /-/fastn.com/images/favicon.svg
 
 
 # Blog: /blog/
-  document: blog/prove-you-wrong.ftd
+  document: blog/writer-journey.ftd
 
+- A Content Writer’s Journey with fastn: /blog/writer-journey/
+  document: blog/writer-journey.ftd
 - fastn might prove you wrong: /blog/prove-you-wrong/
   document: blog/prove-you-wrong.ftd 
 - The Intimidation of Programming: /blog/intimidation-of-programming/
