@@ -294,7 +294,7 @@ let foo__ftd_world = function (parent, inherited, args) {
     ftd.device,
     inherited.get("types").get("heading_small")], function () {
       if (function () {
-        return (fastn_utils.getter(ftd.device) != "mobile");
+        return (fastn_utils.getter(ftd.device) !== "mobile");
       }()) {
         return inherited.get("types").get("heading_medium");
       } else {
@@ -343,7 +343,7 @@ let foo__demo = function (parent, inherited, args) {
   parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
   parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn.formula([ftd.device], function () {
     if (function () {
-      return (fastn_utils.getter(ftd.device) != "mobile");
+      return (fastn_utils.getter(ftd.device) !== "mobile");
     }()) {
       return fastn_dom.Length.Px(40);
     } else {
