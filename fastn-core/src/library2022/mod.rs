@@ -91,7 +91,7 @@ impl Library2022 {
             let package = lib.get_current_package(current_processing_module).ok()?;
             if name.starts_with(package.name.as_str()) {
                 if let Some((content, size)) = get_data_from_package(name, &package, lib).await {
-                    return Some((content, format!("{name}.ftd"), size));
+                    return Some((content, name.to_string(), size));
                 }
             }
             // Self package referencing
@@ -111,7 +111,7 @@ impl Library2022 {
                     if let Some((content, size)) =
                         get_data_from_package(name.as_str(), package, lib).await
                     {
-                        return Some((content, format!("{name}.ftd"), size));
+                        return Some((content, name.to_string(), size));
                     }
                 }
             }
@@ -126,7 +126,7 @@ impl Library2022 {
                 if let Some((content, size)) =
                     get_data_from_package(name.as_str(), &translation_of, lib).await
                 {
-                    return Some((content, format!("{name}.ftd"), size));
+                    return Some((content, name.to_string(), size));
                 }
             }
 
@@ -136,7 +136,7 @@ impl Library2022 {
                     if let Some((content, size)) =
                         get_data_from_package(name.as_str(), package, lib).await
                     {
-                        return Some((content, format!("{name}.ftd"), size));
+                        return Some((content, name.to_string(), size));
                     }
                 }
             }

@@ -65,7 +65,7 @@ mod build_dir {
             );
         }
 
-        Ok(dbg!(b))
+        Ok(b)
     }
 
     fn find_all_files_recursively(
@@ -100,7 +100,7 @@ mod cache {
                     build_content: std::collections::BTreeMap::new(),
                     ftd_cache: std::collections::BTreeMap::new(),
                     documents: std::collections::BTreeMap::new(),
-                    assets: std::collections::BTreeMap::new(),
+                    file_checksum: std::collections::BTreeMap::new(),
                 }
             }
         };
@@ -116,7 +116,7 @@ mod cache {
         #[serde(skip)]
         pub(crate) ftd_cache: std::collections::BTreeMap<String, Option<String>>,
         pub(crate) documents: std::collections::BTreeMap<String, Document>,
-        pub(crate) assets: std::collections::BTreeMap<String, File>,
+        pub(crate) file_checksum: std::collections::BTreeMap<String, String>,
     }
 
     impl Cache {
@@ -125,9 +125,7 @@ mod cache {
             Ok(())
         }
         pub(crate) fn get_file_hash(&mut self, path: &str) -> fastn_core::Result<String> {
-            if path == "$fastn$/fastn.ftd"
-                || path == "$fastn$/processors.ftd"
-                || path == "$fastn$/time.ftd"
+            if path.starts_with("$fastn$/")
                 || path.ends_with("/-/fonts.ftd")
                 || path.ends_with("/-/assets.ftd")
             {
@@ -139,7 +137,7 @@ mod cache {
                 Some(Some(v)) => Ok(v.to_owned()),
                 Some(None) => Err(fastn_core::Error::GenericError(path.to_string())),
                 None => {
-                    let hash = match fastn_core::utils::get_file_hash(path) {
+                    let hash = match fastn_core::utils::get_ftd_hash(path) {
                         Ok(v) => v,
                         Err(e) => {
                             self.ftd_cache.insert(path.to_string(), None);
@@ -161,7 +159,6 @@ mod cache {
 
     #[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
     pub(crate) struct Document {
-        pub(crate) file: File,
         pub(crate) html_checksum: String,
         pub(crate) dependencies: Vec<String>,
     }
@@ -271,10 +268,12 @@ fn is_cached<'a>(
         }
     };
 
-    let cached_doc: cache::Document = match cache.documents.get(doc.id.as_str()).cloned() {
+    let id = remove_extension(doc.id.as_str());
+
+    let cached_doc: cache::Document = match cache.documents.get(id.as_str()).cloned() {
         Some(cached_doc) => cached_doc,
         None => {
-            println!("cache miss: no cache entry for {}", doc.id.as_str());
+            println!("cache miss: no cache entry for {}", id.as_str());
             return (Some(cache), false);
         }
     };
@@ -297,21 +296,29 @@ fn is_cached<'a>(
         return (Some(cache), false);
     }
 
-    if cached_doc.file.checksum != fastn_core::utils::generate_hash(doc.content.as_str()) {
+    let file_checksum = match cache.file_checksum.get(id.as_str()).cloned() {
+        Some(file_checksum) => file_checksum,
+        None => {
+            println!("cache miss: no cache entry for {}", id.as_str());
+            return (Some(cache), false);
+        }
+    };
+
+    if file_checksum != fastn_core::utils::generate_hash(doc.content.as_str()) {
         println!("cache miss: ftd file checksums don't match");
         return (Some(cache), false);
     }
 
     for dep in &cached_doc.dependencies {
-        let dep_doc = match cache.documents.get(dep) {
+        let file_checksum = match cache.file_checksum.get(dep) {
             None => {
-                println!("cache miss: dependency {} not present in cache", dep);
+                println!("cache miss: file {} not present in cache", dep);
                 return (Some(cache), false);
             }
-            Some(dep_doc) => dep_doc.clone(),
+            Some(file_checksum) => file_checksum.clone(),
         };
 
-        let current_hash = match cache.get_file_hash(dep_doc.file.path.as_str()) {
+        let current_hash = match cache.get_file_hash(dep.as_str()) {
             Ok(hash) => hash,
             Err(_) => {
                 println!("cache miss: dependency {} not present current folder", dep);
@@ -319,7 +326,7 @@ fn is_cached<'a>(
             }
         };
 
-        if dep_doc.file.checksum != current_hash {
+        if file_checksum != current_hash {
             println!("cache miss: dependency {} checksums don't match", dep);
             return (Some(cache), false);
         }
@@ -327,6 +334,14 @@ fn is_cached<'a>(
 
     println!("cache hit");
     (Some(cache), true)
+}
+
+fn remove_extension(id: &str) -> String {
+    if id.ends_with("/index.ftd") {
+        fastn_core::utils::replace_last_n(id, 1, "/index.ftd", "")
+    } else {
+        fastn_core::utils::replace_last_n(id, 1, ".ftd", "")
+    }
 }
 
 #[tracing::instrument(skip(document, config, cache))]
@@ -381,17 +396,15 @@ async fn handle_file_(
                 (Ok(r), _) => {
                     if let Some(cache) = cache {
                         cache.documents.insert(
-                            doc.id.to_string(),
-                            dbg!(cache::Document {
-                                file: cache::File {
-                                    path: doc.id.to_string(),
-                                    checksum: fastn_core::utils::generate_hash(
-                                        doc.content.as_str(),
-                                    ),
-                                },
+                            remove_extension(doc.id.as_str()),
+                            cache::Document {
                                 html_checksum: r.checksum(),
                                 dependencies: config.dependencies_during_render.clone(),
-                            }),
+                            },
+                        );
+                        cache.file_checksum.insert(
+                            remove_extension(doc.id.as_str()),
+                            fastn_core::utils::generate_hash(doc.content.as_str()),
                         );
                     }
                 }

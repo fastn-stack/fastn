@@ -33,17 +33,32 @@ fn id_to_cache_key(id: &str) -> String {
     id.replace('/', "_")
 }
 
-pub fn get_file_hash(_path: &str) -> fastn_core::Result<String> {
-    todo!()
+pub fn get_ftd_hash(path: &str) -> fastn_core::Result<String> {
+    let path = fastn_core::utils::replace_last_n(path, 1, "/", "");
+    Ok(fastn_core::utils::generate_hash(
+        std::fs::read(format!("{path}.ftd"))
+            .or_else(|_| std::fs::read(format!("{path}/index.ftd")))?,
+    ))
+}
+
+pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
+    Some(
+        dirs::cache_dir()?
+            .join("fastn.com/")
+            .join(id_to_cache_key(
+                &std::env::current_dir()
+                    .expect("cant read current dir")
+                    .to_string_lossy(),
+            ))
+            .join(id_to_cache_key(id)),
+    )
 }
 
 pub fn get_cached<T>(id: &str) -> Option<T>
 where
     T: serde::de::DeserializeOwned,
 {
-    let cache_file = dirs::cache_dir()?
-        .join("fastn.com/ast-cache/")
-        .join(id_to_cache_key(id));
+    let cache_file = get_cache_file(id)?;
     serde_json::from_str(
         &std::fs::read_to_string(cache_file)
             .map_err(|e| {
@@ -63,10 +78,8 @@ pub fn cache_it<T>(id: &str, d: T) -> ftd::interpreter::Result<T>
 where
     T: serde::ser::Serialize,
 {
-    let cache_file = dirs::cache_dir()
-        .ok_or_else(|| ftd::interpreter::Error::OtherError("cache dir not found".to_string()))?
-        .join("fastn.com/ast-cache/")
-        .join(id_to_cache_key(id));
+    let cache_file = get_cache_file(id)
+        .ok_or_else(|| ftd::interpreter::Error::OtherError("cache dir not found".to_string()))?;
     std::fs::create_dir_all(cache_file.parent().unwrap()).map_err(|e| {
         ftd::interpreter::Error::OtherError(format!("failed to create cache dir: {}", e))
     })?;
