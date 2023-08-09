@@ -625,6 +625,8 @@ favicon: /-/fastn.com/images/favicon.svg
   show-planning: true
 
 - Overview: /planning/
+- Page Nomenclature: /page-nomenclature/
+  document: /planning/page-nomenclature.ftd
 - Orientation video planning: /orientation-planning/
   document: /planning/orientation-planning-video.ftd
 - Documentation Systems: /documentation/
