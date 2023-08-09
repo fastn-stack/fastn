@@ -65,6 +65,7 @@ templates: $doc-sites
 -- ft-ui.template: Doc-site
 template-url: featured/ds/doc-site/
 screenshot: $fastn-assets.files.images.featured.doc-site.jpg
+two-fold: true
 
 -- ft-ui.template: Midnight Rush
 template-url: featured/ds/mr-ds/
