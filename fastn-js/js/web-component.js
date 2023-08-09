@@ -22,15 +22,31 @@ class MutableListVariable {
     constructor(value) {
         this.#value = value;
     }
-
     get() {
         return fastn_utils.getStaticValue(this.#value);
     }
-
-    set(list) {
-        this.#value.set(fastn_utils.staticToMutables(list));
+    set(index, list) {
+        if (list === undefined) {
+            this.#value.set(fastn_utils.staticToMutables(index));
+            return;
+        }
+        this.#value.set(index, fastn_utils.staticToMutables(list));
     }
-
+    insertAt(index, value) {
+        this.#value.insertAt(index, fastn_utils.staticToMutables(value))
+    }
+    deleteAt(index) {
+        this.#value.deleteAt(index);
+    }
+    push(value) {
+        this.#value.push(value);
+    }
+    pop() {
+        this.#value.pop()
+    }
+    clearAll() {
+        this.#value.clearAll()
+    }
     on_change(func) {
         this.#value.addClosure(fastn.closureWithoutExecute(func));
     }
