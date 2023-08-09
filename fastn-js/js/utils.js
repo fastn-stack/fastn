@@ -159,6 +159,13 @@ let fastn_utils = {
         }
         return value;
     },
+
+    getListItem(value) {
+        if (value === undefined){
+            return null;
+        }
+        return value.item;
+    },
   
     getEventKey(event) {
         if (65 <= event.keyCode && event.keyCode <= 90) {
