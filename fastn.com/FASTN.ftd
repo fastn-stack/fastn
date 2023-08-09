@@ -452,6 +452,20 @@ favicon: /-/fastn.com/images/favicon.svg
     skip: true  
     - Misty Gray: /featured/blogs/mg-blog/
     skip: true  
+    - Pink Tree: /featured/blogs/pink-tree/
+    skip: true  
+    - Yellow Lily: /featured/blogs/yellow-lily/
+    skip: true  
+    - Blue Wave: /featured/blogs/blue-wave/
+    skip: true  
+    - Navy Nebula: /featured/blogs/navy-nebula/
+    skip: true  
+    - Blog Template 1: /featured/blogs/blog-template-1/
+    skip: true  
+    - Galaxia: /featured/blogs/galaxia/
+    skip: true  
+    - Little Blue: /featured/blogs/little-blue/
+    skip: true  
 - Section Library: /featured/sections/
   - Hero Components: /featured/sections/heros/
     - Hero 1: /featured/sections/heros/hero-1/

@@ -79,49 +79,37 @@ template-url: featured/blogs/mg-blog/
 screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
 -- ft-ui.template: Pink Tree
-template-url: featured/blog-templates/
+template-url: featured/blogs/pink-tree/
 screenshot: $fastn-assets.files.images.featured.blog.pink-tree.png
-licence-url: https://github.com/MeenuKumari28/pink-tree
-github-url: https://github.com/MeenuKumari28/pink-tree
 wip: true
 
 -- ft-ui.template: Yellow Lily
-template-url: featured/blog-templates/
+template-url: featured/blogs/yellow-lily/
 screenshot: $fastn-assets.files.images.featured.blog.yellow-lily.png
-licence-url: https://github.com/MeenuKumari28/yellow-lily
-github-url: https://github.com/MeenuKumari28/yellow-lily
 wip: true
 
 -- ft-ui.template: Blue Wave
-template-url: featured/blog-templates/
+template-url: featured/blogs/blue-wave/
 screenshot: $fastn-assets.files.images.featured.blog.blue-wave.png
-licence-url: https://github.com/MeenuKumari28/blue-wave
-github-url: https://github.com/MeenuKumari28/blue-wave
 wip: true
 
 -- ft-ui.template: Navy Nebula
-template-url: featured/blog-templates/
+template-url: featured/blogs/navy-nebula/
 screenshot: $fastn-assets.files.images.featured.blog.navy-nebula.png
-licence-url: https://github.com/fastn-community/navy-nebula/
-github-url: https://github.com/fastn-community/navy-nebula/
 wip: true
 
 -- ft-ui.template: Blog Template 1
-template-url: featured/blog-templates/
+template-url: featured/blogs/blog-template-1/
 screenshot: $fastn-assets.files.images.featured.blog.blog-template-1.png
-licence-url: https://github.com/fastn-community/blog-template-1/
-github-url: https://github.com/fastn-community/blog-template-1/
 wip: true
 
 -- ft-ui.template: Galaxia
-template-url: featured/blog-templates/
+template-url: featured/blogs/galaxia/
 screenshot: $fastn-assets.files.images.featured.blog.galaxia.png
-licence-url: https://github.com/meenukumari28/galaxia/
-github-url: https://github.com/meenukumari28/galaxia/
 wip: true
 
 -- ft-ui.template: Little Blue
-template-url: featured/blog-templates/
+template-url: featured/blogs/little-blue/
 screenshot: $fastn-assets.files.images.featured.blog.little-blue.png
 licence-url: https://github.com/meenukumari28/little-blue/
 github-url: https://github.com/meenukumari28/little-blue/
