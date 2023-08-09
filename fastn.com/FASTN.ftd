@@ -466,6 +466,11 @@ favicon: /-/fastn.com/images/favicon.svg
     skip: true  
     - Little Blue: /featured/blogs/little-blue/
     skip: true  
+  - Portfolios / Personal Sites: /featured/portfolios/
+    - Texty PS: /featured/portfolios/texty-ps/
+    skip: true  
+    - Johny PS: /featured/portfolios/johny-ps/
+    skip: true  
 - Section Library: /featured/sections/
   - Hero Components: /featured/sections/heros/
     - Hero 1: /featured/sections/heros/hero-1/
