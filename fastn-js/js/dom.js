@@ -588,7 +588,7 @@ fastn_dom.Length = {
                     return mobile ? mobile: desktop;
                 }
             },
-            [ftd.device]
+            [ftd.device, length]
         );
     }
 }
