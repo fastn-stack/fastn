@@ -101,7 +101,7 @@ spacing.fixed.px: 10
 
 -- ftd-todo-display:
 item: $obj
-$loop$: $todo_list as $obj
+for: obj in $todo_list
 
 -- end: ftd.column
 

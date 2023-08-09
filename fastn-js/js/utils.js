@@ -172,7 +172,7 @@ let fastn_utils = {
             const property = properties[i];
             if (currentObject instanceof fastn.recordInstanceClass) {
                 if (currentObject.get(property) === undefined) {
-                    currentObject.set(fastn.recordInstance({}), property);
+                    currentObject.set(property, fastn.recordInstance({}));
                 }
                 currentObject = currentObject.get(property).get();
             } else {
@@ -185,7 +185,7 @@ let fastn_utils = {
 
         const innermostProperty = properties[properties.length - 1];
         if (currentObject instanceof fastn.recordInstanceClass) {
-            currentObject.set(value, innermostProperty)
+            currentObject.set(innermostProperty, value)
         } else {
             currentObject[innermostProperty] = value;
         }
