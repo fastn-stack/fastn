@@ -75,9 +75,6 @@ templates: $similar-schemes
 more-link-text: View all
 more-link: /featured/cs/
 
-Add warmth and energy to your fastn web site designs with our fastn Color
-Schemes.
-
 -- end: ds.page
 
 
@@ -135,17 +132,9 @@ avatar: $assets.files.images.fastn.svg
 -- ft-ui.template: Winter CS
 template-url: featured/cs/winter-cs/
 screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
-licence-url: https://github.com/fastn-community/winter-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/winter-cs
-
-Add warmth and energy to your designs with the `winter-cs`.
 
 -- ft-ui.template: Blue Heal CS
 template-url: featured/cs/blue-heal-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
-licence-url: https://github.com/fastn-community/blue-heal-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/blue-heal-cs
-
-Add warmth and energy to your designs with the `blue-heal-cs`.
 
 -- end: similar-schemes

@@ -76,9 +76,6 @@ templates: $similar-schemes
 more-link-text: View all
 more-link: /featured/cs/
 
-Add warmth and energy to your fastn web site designs with our fastn Color
-Schemes.
-
 -- end: ds.page
 
 
@@ -136,26 +133,13 @@ avatar: $assets.files.images.fastn.svg
 -- ft-ui.template: Forest CS
 template-url: featured/cs/forest-cs/
 screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
-licence-url: https://github.com/fastn-community/forest-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/forest-cs
-
-Add warmth and energy to your designs with the `forest-cs`.
 
 -- ft-ui.template: Misty Gray CS
 template-url: featured/cs/misty-gray-cs/
 screenshot: $fastn-assets.files.images.featured.cs.misty-gray-cs.png
-licence-url: https://github.com/fastn-community/misty-gray-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/misty-gray-cs
-
-Add warmth and energy to your designs with the `misty-gray-cs`.
 
 -- ft-ui.template: Pretty CS
 template-url: featured/cs/pretty-cs/
 screenshot: $fastn-assets.files.images.featured.cs.pretty-cs.png
-licence-url: https://github.com/fastn-community/pretty-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/pretty-cs
-
-Add warmth and energy to your designs with the `pretty-cs`.
-
 
 -- end: similar-schemes

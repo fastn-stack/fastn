@@ -87,6 +87,4 @@ screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 template-url: featured/components/business-cards/pattern-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
 
-Build you own business-card using pattern-business-card package.
-
 -- end: components

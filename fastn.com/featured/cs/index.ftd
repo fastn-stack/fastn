@@ -35,7 +35,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- ds.page.body:
 
 We have designed and developed below color schemes. You can use them
-to change your `FTD` web site color scheme. 
+to change your `fastn` web site color scheme. 
 
 -- ft-ui.grid-view:
 templates: $schemes
