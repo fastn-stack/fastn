@@ -256,6 +256,14 @@ class MutableList {
     pop() {
         this.deleteAt(this.#list.length - 1);
     }
+    getClone() {
+        let current_list = this.#list;
+        let new_list = [];
+        for (let idx in current_list) {
+            new_list.push( { item: fastn_utils.clone(current_list[idx].item), index: new Mutable(parseInt(idx)) });
+        }
+        return new MutableList(new_list);
+    }
 }
 
 fastn.mutable = function (val) {
