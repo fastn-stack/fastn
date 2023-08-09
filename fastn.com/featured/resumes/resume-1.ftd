@@ -1,14 +1,19 @@
--- import: fastn.com/featured as ft-ui
 -- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
 -- import: fastn-community.github.io/footer
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fastn.com/featured as ft-ui
+-- import: fastn.com/assets
+
+
+-- boolean show-grid: true
+-- boolean show-list: false
 
 
 
 
-
--- ds.page: Resumes
+-- ds.page: 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -18,6 +23,8 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
+full-width: true
+show-layout-bar: true
 
 -- ds.page.footer:
 
@@ -29,13 +36,36 @@ twitter-url: https://twitter.com/FifthTryHQ
 discord-url: https://discord.gg/bucrdvptYd
 copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
-
 -- end: ds.page.footer
 
--- ft-ui.grid-view:
+-- ds.page.layout-bar:
+
+-- ds.layout: Resume 1 
+previous-url: /featured/resumes/
+github-url: https://github.com/priyanka9634/resume-1
+
+
+-- end: ds.page.layout-bar
+
+
+-- ds.preview-card:
+image: $fastn-assets.files.images.featured.resumes.resume-1.png
+cta-url: https://priyanka9634.github.io/resume-1/
+cta-text: Demo
+
+-- ft-ui.grid-view: Featured Resumes
+if: { show-grid }
 templates: $resumes
+more-link-text: View more
+more-link: /featured/resumes/
+
 
 -- end: ds.page
+
+
+
+
+
 
 
 
@@ -47,8 +77,5 @@ templates: $resumes
 template-url: featured/resumes/caffiene/
 screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
 
--- ft-ui.template: Resume 1
-template-url: featured/resumes/resume-1/
-screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
-
 -- end: resumes
+

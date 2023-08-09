@@ -577,9 +577,9 @@ screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 template-url: featured/resumes/caffiene/
 screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
 
-/-- template: Paper
-template-url: http://fifthtry.github.io/paper-resume/
-screenshot: $fastn-assets.files.images.paper.png
+-- template: Resume 1
+template-url: featured/resumes/resume-1/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
 
 -- end: resumes
 
