@@ -37,10 +37,18 @@ We haver developed many components using our `fastn` language. You can use these
 components on your `fastn` package. Click on each component to see how to use
 it.
 
+-- ft-ui.grid-view: Admonitions
+templates: $admonitions
+;;more-link-text: View all
+;;more-link: /featured/components/admonitions/
+
+We have designed and developed below bling components. You can use them on your
+`fastn` web site. 
+
 -- ft-ui.grid-view: Bling Components
 templates: $bling
-more-link-text: View all
-more-link: /featured/components/bling/
+;;more-link-text: View all
+;;more-link: /featured/components/bling/
 
 We have designed and developed below bling components. You can use them on your
 `fastn` web site. 
@@ -93,6 +101,16 @@ more-link: /featured/components/modals/
 We have designed and developed below footer packages. You can use them on your
 `fastn` web site.  
 
+-- ft-ui.grid-view: Language Switcher
+templates: $language-switcher
+;;more-link-text: View all
+;;more-link: /featured/components-library/
+
+-- ft-ui.grid-view: Forms
+templates: $forms
+;;more-link-text: View all
+;;more-link: /featured/components-library/
+
 -- end: ds.page
 
 
@@ -100,6 +118,17 @@ We have designed and developed below footer packages. You can use them on your
 
 
 
+
+
+
+
+-- ft-ui.template list admonitions:
+
+-- ft-ui.template: Admonitions
+template-url: /featured/components/admonitions/
+screenshot: $fastn-assets.files.images.featured.components.admonitions.png
+
+-- end: admonitions
 
 
 
@@ -124,6 +153,27 @@ screenshot: $fastn-assets.files.images.featured.components.code-block.jpg
 
 -- end: code-block
 
+
+
+
+-- ft-ui.template list forms:
+
+-- ft-ui.template: Subscription Form
+template-url: /featured/components/subscription-form/
+screenshot: $fastn-assets.files.images.featured.components.subscription-form.png
+
+-- end: forms
+
+
+
+
+-- ft-ui.template list language-switcher:
+
+-- ft-ui.template: Language Switcher
+template-url: /featured/components/language-switcher/
+screenshot: $fastn-assets.files.images.featured.components.language-switcher.png
+
+-- end: language-switcher
 
 
 

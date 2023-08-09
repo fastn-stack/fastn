@@ -73,15 +73,29 @@ screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
 -- ft-ui.template: Midnight Storm
 template-url: featured/blogs/ms-blog/
 screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
-two-fold: true
 
 -- ft-ui.template: Misty Gray
 template-url: featured/blogs/mg-blog/
 screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
+-- ft-ui.template: Dash Dash DS
+template-url: featured/blogs/dash-dash-ds/
+screenshot: $fastn-assets.files.images.featured.blog.dash-dash-ds.png
+wip: true
+
 -- ft-ui.template: Pink Tree
 template-url: featured/blogs/pink-tree/
 screenshot: $fastn-assets.files.images.featured.blog.pink-tree.png
+wip: true
+
+-- ft-ui.template: Rocky
+template-url: featured/blogs/rocky/
+screenshot: $fastn-assets.files.images.featured.blog.rocky.png
+wip: true
+
+-- ft-ui.template: Simple Blog
+template-url: featured/blogs/simple-blog/
+screenshot: $fastn-assets.files.images.featured.blog.simple-blog.png
 wip: true
 
 -- ft-ui.template: Yellow Lily
@@ -92,6 +106,11 @@ wip: true
 -- ft-ui.template: Blue Wave
 template-url: featured/blogs/blue-wave/
 screenshot: $fastn-assets.files.images.featured.blog.blue-wave.png
+wip: true
+
+-- ft-ui.template: Blog Components
+template-url: featured/blogs/blog-components/
+screenshot: $fastn-assets.files.images.featured.blog.blog-components.png
 wip: true
 
 -- ft-ui.template: Navy Nebula
