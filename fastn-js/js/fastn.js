@@ -356,6 +356,17 @@ class RecordInstance {
         }
         this.#closures.forEach((closure) => closure.update());
     }
+    toObject() {
+        return Object.fromEntries(Object.entries(this.#fields).map(([key, val]) => {
+            let value = (val instanceof Mutable) ? ftd.get(val) : val;
+
+            if(value instanceof RecordInstance) {
+                value = value.toObject();
+            }
+
+            [key, value];
+        }));
+    }
 }
 
 fastn.recordInstance = function (obj) {
