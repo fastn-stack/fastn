@@ -35,7 +35,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- ds.page.body:
 
 We have designed and developed below Modal / Dialog box components. You can use
-them on your `FTD` web site. 
+them on your `fastn` web site. 
 
 -- ft-ui.grid-view:
 templates: $dialogs

@@ -76,9 +76,6 @@ templates: $similar-schemes
 more-link-text: View all
 more-link: /featured/cs/
 
-Add warmth and energy to your fastn web site designs with our fastn Color
-Schemes.
-
 -- end: ds.page
 
 
@@ -136,17 +133,9 @@ avatar: $assets.files.images.fastn.svg
 -- ft-ui.template: Dark Flame CS
 template-url: featured/cs/dark-flame-cs/
 screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
-licence-url: https://github.com/fastn-community/dark-flame-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/dark-flame-cs/
-
-Add warmth and energy to your designs with the `dark-flame-cs`.
 
 -- ft-ui.template: Navy Nebula CS
 template-url: featured/cs/navy-nebula-cs/
 screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
-licence-url: https://github.com/fastn-community/navy-nebula-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/navy-nebula-cs
-
-Add warmth and energy to your designs with the `navy-nebula-cs`.
 
 -- end: similar-schemes

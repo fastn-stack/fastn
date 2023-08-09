@@ -79,18 +79,12 @@ more-link: /featured/components/business-cards/
 template-url: featured/components/business-cards/gradient-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
 
-Build you own business-card using gradient-business-card package.
-
 -- ft-ui.template: Midnight Business Card
 template-url: featured/components/business-cards/midnight-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
 
-Build you own business-card using gradient-business-card package.
-
 -- ft-ui.template: Sunset Business Card
 template-url: featured/components/business-cards/sunset-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.sunset-business-card-front.jpg
-
-Build you own business-card using sunset-business-card package.
 
 -- end: cards

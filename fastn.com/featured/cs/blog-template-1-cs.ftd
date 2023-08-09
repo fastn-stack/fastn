@@ -62,13 +62,6 @@ connect: $social-links
 
 -- end: ds.page.abstract-bar
 
-
--- ds.page.body:
-
-We have designed and developed below color schemes. You can use them
-to change your `FTD` web site color scheme. 
-
-
 -- ds.preview-card: 
 image: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 cta-url: https://fastn-community.github.io/blog-template-1-cs/
@@ -80,9 +73,6 @@ if: { show-grid }
 templates: $similar-schemes
 more-link-text: View all
 more-link: /featured/cs/
-
-Add warmth and energy to your fastn web site designs with our fastn Color
-Schemes.
 
 -- end: ds.page
 

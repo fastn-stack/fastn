@@ -33,8 +33,8 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.body:
 
-We haver developed many components using our `FTD` language. You can use these
-components on your `FASTN` package. Click on each component to see how to use
+We haver developed many components using our `fastn` language. You can use these
+components on your `fastn` package. Click on each component to see how to use
 it.
 
 -- ft-ui.grid-view: Bling Components
@@ -43,7 +43,7 @@ more-link-text: View all
 more-link: /featured/components/bling/
 
 We have designed and developed below bling components. You can use them on your
-`FTD` web site. 
+`fastn` web site. 
 
 -- ft-ui.grid-view: Buttons
 templates: $buttons
@@ -51,7 +51,7 @@ templates: $buttons
 ;;more-link: /featured/components-library/
 
 We have designed and developed below button components package. You can use them
-on your `FTD` web site. 
+on your `fastn` web site. 
 
 -- ft-ui.grid-view: Business Cards
 templates: $cards
@@ -59,7 +59,7 @@ more-link-text: View all
 more-link: /featured/components/business-cards/
 
 We have designed and developed below business-cards. You can use them on your
-`FTD` web site. 
+`fastn` web site. 
 
 -- ft-ui.grid-view: Code Block
 templates: $code-block
@@ -67,7 +67,7 @@ templates: $code-block
 ;;more-link: /featured/components-library/
 
 We have designed and developed below code block and button components package.
-You can use them on your `FTD` web site. 
+You can use them on your `fastn` web site. 
 
 -- ft-ui.grid-view: Headers / Navbars
 templates: $headers
@@ -75,7 +75,7 @@ more-link-text: View all
 more-link: /featured/components/headers/
 
 We have designed and developed below header / navbar packages. You can use them
-on your `FTD` web site. 
+on your `fastn` web site. 
 
 -- ft-ui.grid-view: Footers
 templates: $footers
@@ -83,7 +83,7 @@ more-link-text: View all
 more-link: /featured/components/footers/
 
 We have designed and developed below footer packages. You can use them on your
-`FTD` web site.  
+`fastn` web site.  
 
 -- ft-ui.grid-view: Modal / Dialog Box
 templates: $dialogs
@@ -91,7 +91,7 @@ more-link-text: View all
 more-link: /featured/components/modals/
 
 We have designed and developed below footer packages. You can use them on your
-`FTD` web site.  
+`fastn` web site.  
 
 -- end: ds.page
 
@@ -189,19 +189,13 @@ screenshot: $fastn-assets.files.images.featured.components.footer-3.png
 template-url: featured/components/business-cards/card-1/
 screenshot: $fastn-assets.files.images.featured.components.business-card.png
 
-Build you own business-card using business-card package.
-
 -- ft-ui.template: Gradient Business Card
 template-url: featured/components/business-cards/gradient-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
 
-Build you own business-card using gradient-business-card package.
-
 -- ft-ui.template: Midnight Business Card
 template-url: featured/components/business-cards/midnight-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
-
-Build you own business-card using gradient-business-card package.
 
 -- end: cards
 

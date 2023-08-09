@@ -35,7 +35,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- ds.page.body:
 
 We have designed and developed below header / navbar packages. You can use them
-on your `FTD` web site. 
+on your `fastn` web site. 
 
 -- ft-ui.grid-view:
 templates: $headers
