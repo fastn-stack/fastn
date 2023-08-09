@@ -1,4 +1,18 @@
--- ds.page: Backend Video
+-- ds.page: A hands-on guide to Dynamic UI using REST API
+
+We are going to create a project in `fastn` that will create a Dynamic UI to 
+display the countries along with their Population, Region and Capital.
+
+
+
+
+
+
+Before that, let's take another example where the json data will only have 
+country-name and capital.
+
+
+
 
 
 
