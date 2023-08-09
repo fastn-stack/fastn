@@ -59,7 +59,7 @@ width.fixed.px if {ftd.device == "desktop"}: 600
 if: { show-grid }
 templates: $dialogs
 more-link-text: View more
-more-link: /featured/sections/modals/
+more-link: /featured/components/modals/
 
 
 -- end: ds.page
