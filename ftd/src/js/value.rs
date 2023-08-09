@@ -543,6 +543,7 @@ fn length_variants(name: &str) -> &'static str {
         "vmin" => "Vmin",
         "vmax" => "Vmax",
         "calc" => "Calc",
+        "responsive" => "Responsive",
         t => todo!("invalid length variant {}", t),
     }
 }

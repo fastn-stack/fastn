@@ -1,0 +1,45 @@
+-- name-score list $name-scores:
+
+-- name-score: Arpita
+score: 100
+
+-- name-score: Arpita
+score: 90
+
+-- end: $name-scores
+
+
+-- show-name-score: $obj
+for: obj in $name-scores
+
+-- component show-name-score:
+caption name-score item:
+
+-- ftd.row:
+;; width.fixed.responsive: $width
+background.solid: yellow
+padding.px: 10
+margin-bottom.px: 10
+spacing: space-between
+
+-- ftd.row.width.fixed.responsive:
+desktop.px: 70
+mobile.percent: 40
+
+-- ftd.text: $show-name-score.item.name
+-- ftd.integer: $show-name-score.item.score
+
+-- end: ftd.row
+
+-- end: show-name-score
+
+
+
+-- ftd.responsive-length width:
+desktop.px: 70
+mobile.percent: 40
+
+
+-- record name-score:
+caption name:
+integer score:
