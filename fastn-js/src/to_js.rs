@@ -899,13 +899,17 @@ impl ExpressionGenerator {
             .join("");
         }
 
-        if let Some(operator) = self.has_operator(node.operator()) {
+        if let Some(mut operator) = self.has_operator(node.operator()) {
             // Todo: if node.children().len() != 2 {throw error}
             let first = node.children().first().unwrap(); //todo remove unwrap()
             if matches!(node.operator(), fastn_grammar::evalexpr::Operator::Not)
                 || matches!(node.operator(), fastn_grammar::evalexpr::Operator::Neg)
             {
                 return vec![operator, self.to_js_(first, false, arguments, false)].join("");
+            }
+            if matches!(node.operator(), fastn_grammar::evalexpr::Operator::Neq) {
+                // For js conversion
+                operator = "!==".to_string();
             }
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
             return vec![

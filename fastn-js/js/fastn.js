@@ -376,7 +376,11 @@ class RecordInstance {
         let current_fields = this.#fields;
         let cloned_fields = {};
         for (let key in current_fields) {
-            cloned_fields[key] = fastn_utils.clone(current_fields[key]);
+            let value = fastn_utils.clone(current_fields[key]);
+            if (value instanceof fastn.mutableClass) {
+                value = value.get();
+            }
+            cloned_fields[key] = value;
         }
         return new RecordInstance(cloned_fields);
     }
