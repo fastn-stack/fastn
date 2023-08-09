@@ -1,14 +1,19 @@
--- import: fastn.com/featured as ft-ui
 -- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
 -- import: fastn-community.github.io/footer
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fastn.com/featured as ft-ui
+-- import: fastn.com/assets
+
+
+-- boolean show-grid: true
+-- boolean show-list: false
 
 
 
 
-
--- ds.page: Portfolio / Personal Sites
+-- ds.page: 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -18,6 +23,8 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
+full-width: true
+show-layout-bar: true
 
 -- ds.page.footer:
 
@@ -29,18 +36,36 @@ twitter-url: https://twitter.com/FifthTryHQ
 discord-url: https://discord.gg/bucrdvptYd
 copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
-
 -- end: ds.page.footer
 
--- ds.page.body:
+-- ds.page.layout-bar:
 
-We have designed and developed below portfolio / personal website themes. You
-can use them on your `fastn` web site. 
+-- ds.layout: Portfolio
+previous-url: /featured/portfolios/
+github-url: https://github.com/saurabh-lohiya/portfolio/
 
--- ft-ui.grid-view:
+
+-- end: ds.page.layout-bar
+
+
+-- ds.preview-card:
+image: $fastn-assets.files.images.featured.portfolios.portfolio.png
+cta-url: https://saurabh-lohiya.github.io/portfolio/
+cta-text: Demo
+
+-- ft-ui.grid-view: Featured Portfolio / Personal Sites
+if: { show-grid }
 templates: $text-ps
+more-link-text: View more
+more-link: /featured/portfolios/
+
 
 -- end: ds.page
+
+
+
+
+
 
 
 
@@ -56,8 +81,6 @@ screenshot: $fastn-assets.files.images.featured.portfolios.texty-ps.png
 template-url: featured/portfolios/johny-ps/
 screenshot: $fastn-assets.files.images.featured.portfolios.johny-ps.png
 
--- ft-ui.template: Portfolio
-template-url: featured/portfolios/portfolio/
-screenshot: $fastn-assets.files.images.featured.portfolios.portfolio.png
 
 -- end: text-ps
+

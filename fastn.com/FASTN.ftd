@@ -471,6 +471,8 @@ favicon: /-/fastn.com/images/favicon.svg
     skip: true  
     - Johny PS: /featured/portfolios/johny-ps/
     skip: true  
+    - Portfolio: /featured/portfolios/portfolio/
+    skip: true  
 - Section Library: /featured/sections/
   - Hero Components: /featured/sections/heros/
     - Hero 1: /featured/sections/heros/hero-1/
