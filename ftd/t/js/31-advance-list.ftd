@@ -26,6 +26,8 @@ score: 90
 index: $index
 for: obj, index in $name-scores
 
+/-- ftd.integer: $length(a = $name-scores)
+
 
 
 
@@ -148,3 +150,8 @@ ftd.delete_at(a, i)
 integer a:
 
 a + 1
+
+-- integer length(a):
+name-score list a:
+
+ftd.len(a)

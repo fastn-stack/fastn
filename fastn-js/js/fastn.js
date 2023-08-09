@@ -175,6 +175,9 @@ class MutableList {
     addClosure(closure) {
         this.#closures.push(closure);
     }
+    unlinkNode(node) {
+        this.#closures = this.#closures.filter(closure => closure.getNode() !== node);
+    }
     forLoop(root, dom_constructor) {
         let l = fastn_dom.forLoop(root, dom_constructor, this);
         this.#watchers.push(l);
@@ -337,6 +340,9 @@ class RecordInstance {
     }
     addClosure(closure) {
         this.#closures.push(closure);
+    }
+    unlinkNode(node) {
+        this.#closures = this.#closures.filter(closure => closure.getNode() !== node);
     }
     get(key) {
         return this.#fields[key];
