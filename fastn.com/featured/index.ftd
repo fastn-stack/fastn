@@ -81,9 +81,10 @@ more-link: /featured/sections/
 We have designed and developed below sections. You can use them for inside you
 fastn projects.
 
-/-- grid-view: Resumes:
+-- grid-view: Resumes
 if: { show-grid }
 templates: $resumes
+more-link-text: View all
 more-link: /featured/resumes/
 
 -- grid-view: Component Libraries
@@ -573,22 +574,12 @@ screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 -- template list resumes:
 
 -- template: Caffeine
-template-url: http://fifthtry.github.io/caffeine-resume/
-screenshot: $fastn-assets.files.images.caffiene.png
-licence-url: https://github.com/FifthTry/caffeine-resume/blob/main/LICENSE
-github-url: https://github.com/FifthTry/caffeine-resume/
+template-url: featured/resumes/caffiene/
+screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
 
-`fifthtry.github.io/caffeine-resume` is resume theme based on our grey color scheme
-of `fifthtry.github.io/doc-site/`
-
--- template: Paper
+/-- template: Paper
 template-url: http://fifthtry.github.io/paper-resume/
 screenshot: $fastn-assets.files.images.paper.png
-licence-url: https://github.com/FifthTry/paper-resume/blob/main/LICENSE
-github-url: https://github.com/FifthTry/paper-resume/
-
-`fifthtry.github.io/paper-resume` is resume theme based on our grey color scheme
-of `fifthtry.github.io/doc-site/`
 
 -- end: resumes
 
