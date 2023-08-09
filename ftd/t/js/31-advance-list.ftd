@@ -8,23 +8,57 @@ score: 90
 
 -- end: $name-scores
 
+-- ftd.row:
+
+-- ftd.text: fastn
+-- ftd.text: $ftd.nbsp
+-- ftd.text: language
+
+-- end: ftd.row
+
+/-- form:
+
+
 
 -- show-name-score: $obj
 for: obj in $name-scores
+
+
+
+
+
+
+
+-- component form:
+name-score $ns:
+
+-- ftd.column:
+width.fixed.responsive: $width
+background.solid: orange
+margin-bottom.px: 40
+
+-- ftd.text: Enter name:
+
+-- ftd.text-input:
+placeholder: Enter your name here...
+
+-- end:ftd.column
+
+-- end: form
+
+
+
+
 
 -- component show-name-score:
 caption name-score item:
 
 -- ftd.row:
-;; width.fixed.responsive: $width
+width.fixed.responsive: $width
 background.solid: yellow
 padding.px: 10
 margin-bottom.px: 10
 spacing: space-between
-
--- ftd.row.width.fixed.responsive:
-desktop.px: 70
-mobile.percent: 40
 
 -- ftd.text: $show-name-score.item.name
 -- ftd.integer: $show-name-score.item.score

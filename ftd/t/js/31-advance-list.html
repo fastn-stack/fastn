@@ -8,7 +8,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><comment data-id="2"></comment><div data-id="3" class="ft_row w-1 p-2 mb-3 bgc-4 jc-5"><div data-id="4">Arpita</div><div data-id="5">100</div></div><div data-id="6" class="ft_row w-1 p-2 mb-3 bgc-4 jc-5"><div data-id="7">Arpita</div><div data-id="8">90</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2"> </div><comment data-id="3"></comment><div data-id="4" class="ft_row w-1 p-2 mb-3 bgc-4 jc-5"><div data-id="5">Arpita</div><div data-id="6">100</div></div><div data-id="7" class="ft_row w-1 p-2 mb-3 bgc-4 jc-5"><div data-id="8">Arpita</div><div data-id="9">90</div></div></body><style id="styles">
     .w-1 { width: 70px; }
 	.p-2 { padding: 10px; }
 	.mb-3 { margin-bottom: 10px; }
@@ -20,6 +20,8 @@
         let global = {
 };
 let main = function (parent) {
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, ftd.space, inherited);
   fastn_utils.getter(global.foo__name_scores).forLoop(parent, function (root, item, index) {
     let rooti0 = foo__show_name_score(root, inherited, {
       item: item
@@ -35,6 +37,10 @@ fastn.recordInstance({
   name: "Arpita",
   score: 90
 })]));
+fastn_utils.createNestedObject(global, "foo__width", fastn.recordInstance({
+  desktop: fastn_dom.Length.Px(70),
+  mobile: fastn_dom.Length.Percent(40)
+}));
 let foo__show_name_score = function (parent, inherited, args)
 {
   let __args__ = {
@@ -49,10 +55,7 @@ let foo__show_name_score = function (parent, inherited, args)
     ...args
   };
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Responsive(fastn.recordInstance({
-    desktop: fastn_dom.Length.Px(70),
-    mobile: fastn_dom.Length.Percent(40)
-  }))), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Responsive(global.foo__width)), inherited);
   parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
   parenti0.setProperty(fastn_dom.PropertyKind.MarginBottom, fastn_dom.Length.Px(10), inherited);
   parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
