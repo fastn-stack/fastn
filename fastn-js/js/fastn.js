@@ -113,7 +113,7 @@ class Mutable {
         return thisClosures === otherClosures;
     }
     getClone() {
-        return new Mutable(this.#value);
+        return new Mutable(fastn_utils.clone(this.#value));
     }
 }
 

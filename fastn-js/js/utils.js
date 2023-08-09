@@ -149,9 +149,12 @@ let fastn_utils = {
         if (value === null || value === undefined) {
             return value;
         }
-        if (value instanceof fastn.mutable ||
-            value instanceof fastn.mutableListClass ||
-            value instanceof fastn.recordInstanceClass) {
+        if (value instanceof fastn.mutableClass ||
+            value instanceof fastn.mutableListClass )
+        {
+            return value.getClone();
+        }
+           if (value instanceof fastn.recordInstanceClass) {
             return value.getClone();
         }
         return value;
