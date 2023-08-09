@@ -113,7 +113,7 @@ class Mutable {
         return thisClosures === otherClosures;
     }
     getClone() {
-        return new Mutable(this.#value);
+        return new Mutable(fastn_utils.clone(this.#value));
     }
 }
 
@@ -175,6 +175,9 @@ class MutableList {
     addClosure(closure) {
         this.#closures.push(closure);
     }
+    unlinkNode(node) {
+        this.#closures = this.#closures.filter(closure => closure.getNode() !== node);
+    }
     forLoop(root, dom_constructor) {
         let l = fastn_dom.forLoop(root, dom_constructor, this);
         this.#watchers.push(l);
@@ -182,6 +185,9 @@ class MutableList {
     }
     getList() {
         return this.#list;
+    }
+    getLength() {
+        return this.#list.length;
     }
     get(idx) {
         if (fastn_utils.isNull(idx)) {
@@ -209,12 +215,14 @@ class MutableList {
                 this.#watchers[i].createAllNode();
             }
         } else {
+            index = fastn_utils.getFlattenStaticValue(index);
             this.#list[index].item.set(value);
         }
 
         this.#closures.forEach((closure) => closure.update());
     }
     insertAt(index, value) {
+        index = fastn_utils.getFlattenStaticValue(index);
         let mutable = fastn.wrapMutable(value);
         this.#list.splice(index, 0, { item: mutable, index: new Mutable(index) });
         // for every item after the inserted item, update the index
@@ -230,16 +238,17 @@ class MutableList {
     push(value) {
         this.insertAt(this.#list.length, value);
     }
-    deleteAt(idx) {
-        this.#list.splice(idx, 1);
+    deleteAt(index) {
+        index = fastn_utils.getFlattenStaticValue(index);
+        this.#list.splice(index, 1);
         // for every item after the deleted item, update the index
-        for (let i = idx; i < this.#list.length; i++) {
+        for (let i = index; i < this.#list.length; i++) {
             this.#list[i].index.set(i);
         }
 
         for (let i in this.#watchers) {
             let forLoop = this.#watchers[i];
-            forLoop.deleteNode(idx);
+            forLoop.deleteNode(index);
         }
         this.#closures.forEach((closure) => closure.update());
     }
@@ -252,6 +261,14 @@ class MutableList {
     }
     pop() {
         this.deleteAt(this.#list.length - 1);
+    }
+    getClone() {
+        let current_list = this.#list;
+        let new_list = [];
+        for (let idx in current_list) {
+            new_list.push( { item: fastn_utils.clone(current_list[idx].item), index: new Mutable(parseInt(idx)) });
+        }
+        return new MutableList(new_list);
     }
 }
 
@@ -324,6 +341,9 @@ class RecordInstance {
     addClosure(closure) {
         this.#closures.push(closure);
     }
+    unlinkNode(node) {
+        this.#closures = this.#closures.filter(closure => closure.getNode() !== node);
+    }
     get(key) {
         return this.#fields[key];
     }
@@ -357,6 +377,18 @@ class RecordInstance {
             this.#fields[key] = fastn.wrapMutable(obj.#fields[key]);
         }
         this.#closures.forEach((closure) => closure.update());
+    }
+    getClone() {
+        let current_fields = this.#fields;
+        let cloned_fields = {};
+        for (let key in current_fields) {
+            let value = fastn_utils.clone(current_fields[key]);
+            if (value instanceof fastn.mutableClass) {
+                value = value.get();
+            }
+            cloned_fields[key] = value;
+        }
+        return new RecordInstance(cloned_fields);
     }
 }
 

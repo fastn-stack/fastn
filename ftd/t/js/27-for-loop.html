@@ -1,6 +1,6 @@
 <html>
 <head>
-    <base href="/">
+    
     <script src="fastn-js.js"></script>
 
     <style>
@@ -46,8 +46,8 @@ let foo__join = function (args)
   let __args__ = args;
   return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
 }
-fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "ftd/ftd/theme_css/fastn-theme.dark.css";
-fastn_dom.codeData.availableThemes["fastn-theme.light"] = "ftd/ftd/theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
         fastn_virtual.hydrate(main);
         ftd.post_init();
     })();

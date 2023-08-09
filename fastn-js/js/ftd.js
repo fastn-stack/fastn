@@ -6,6 +6,18 @@ let ftd = {
         return fastn_utils.isNull(value) || value.length === 0;
     },
 
+    len(data) {
+        if (!!data && data instanceof fastn.mutableListClass) {
+            if (data.getLength)
+                return data.getLength();
+            return -1;
+        }
+        if (!!data && data.length) {
+            return data.length;
+        }
+        return -2;
+    },
+
     copy_to_clipboard(args) {
         let text = args.a;
         if (text.startsWith("\\", 0)) {
@@ -232,3 +244,5 @@ ftd.toggle_mode = function () {
         enable_dark_mode();
     }
 };
+
+const len = ftd.len;

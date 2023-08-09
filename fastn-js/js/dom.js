@@ -577,12 +577,19 @@ fastn_dom.Length = {
         }
         return `${value}vmax`;
     },
-    Responsive: (desktop, mobile) => {
-        if (ftd.device.get() === "desktop") {
-            return desktop;
-        } else {
-            return mobile ? mobile: desktop;
-        }
+    Responsive: (length) => {
+        return new PropertyValueAsClosure(
+            () => {
+                if (ftd.device.get() === "desktop") {
+                    return length.get("desktop");
+                } else {
+                    let mobile = length.get("mobile");
+                    let desktop = length.get("desktop");
+                    return mobile ? mobile: desktop;
+                }
+            },
+            [ftd.device, length]
+        );
     }
 }
 
@@ -599,6 +606,15 @@ fastn_dom.Event = {
     Change: 7,
     Blur: 8,
     Focus: 9,
+}
+
+class PropertyValueAsClosure {
+    closureFunction;
+    deps;
+    constructor(closureFunction, deps) {
+        this.closureFunction = closureFunction;
+        this.deps = deps;
+    }
 }
 
 // Node2 -> Intermediate node
@@ -628,6 +644,9 @@ class Node2 {
 
         if (parentOrSibiling instanceof ParentNodeWithSibiling) {
             this.#parent = parentOrSibiling.getParent();
+            while(this.#parent instanceof ParentNodeWithSibiling) {
+                this.#parent = this.#parent.getParent();
+            }
             sibiling = parentOrSibiling.getSibiling();
         }
 
@@ -1528,6 +1547,8 @@ class Node2 {
     setProperty(kind, value, inherited) {
         if (value instanceof fastn.mutableClass) {
             this.setDynamicProperty(kind, [value], () => { return value.get(); });
+        } else if (value instanceof PropertyValueAsClosure) {
+            this.setDynamicProperty(kind, value.deps, value.closureFunction);
         } else {
             this.setStaticProperty(kind, value, inherited);
         }

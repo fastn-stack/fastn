@@ -79,7 +79,7 @@ fn test_available_code_themes() -> String {
     let mut result = vec![];
     for theme in themes.keys() {
         result.push(format!(
-            "fastn_dom.codeData.availableThemes[\"{theme}\"] = \"ftd/ftd/theme_css/{theme}.css\";"
+            "fastn_dom.codeData.availableThemes[\"{theme}\"] = \"../../theme_css/{theme}.css\";"
         ))
     }
     result.join("\n")
@@ -100,7 +100,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
             format!("{js_document_script}{}", test_available_code_themes()).as_str(),
         )
         .replace("__html_body__", ssr_body.as_str())
-        .replace("__base_url__", "/")
+        .replace("<base href=\"__base_url__\">", "")
         .replace(
             "__script_file__",
             format!(
@@ -109,12 +109,12 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
                 if manual {
                     format!(
                         r#"
-                            <script src="ftd/ftd/markdown.js"></script>
-                            <script src="ftd/ftd/prism/prism.js"></script>
-                            <script src="ftd/ftd/prism/prism-line-highlight.js"></script>
-                            <script src="ftd/ftd/prism/prism-line-numbers.js"></script>
-                            <link rel="stylesheet" href="ftd/ftd/prism/prism-line-highlight.css">
-                            <link rel="stylesheet" href="ftd/ftd/prism/prism-line-numbers.css">
+                            <script src="../../markdown.js"></script>
+                            <script src="../../prism/prism.js"></script>
+                            <script src="../../prism/prism-line-highlight.js"></script>
+                            <script src="../../prism/prism-line-numbers.js"></script>
+                            <link rel="stylesheet" href="../../prism/prism-line-highlight.css">
+                            <link rel="stylesheet" href="../../prism/prism-line-numbers.css">
                             <script>{}</script>
                         "#,
                         ftd::js::all_js_without_test()

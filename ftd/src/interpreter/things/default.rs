@@ -3436,6 +3436,70 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
+            "ftd#empty".to_string(),
+            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                name: "ftd#empty".to_string(),
+                kind: ftd::interpreter::Kind::string().into_kind_data(),
+                mutable: false,
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::String { text: "".to_string() },
+                    is_mutable: false,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
+        (
+            "ftd#space".to_string(),
+            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                name: "ftd#space".to_string(),
+                kind: ftd::interpreter::Kind::string().into_kind_data(),
+                mutable: false,
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::String { text: " ".to_string() },
+                    is_mutable: false,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
+        (
+            "ftd#nbsp".to_string(),
+            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                name: "ftd#nbsp".to_string(),
+                kind: ftd::interpreter::Kind::string().into_kind_data(),
+                mutable: false,
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::String { text: "&nbsp;".to_string() },
+                    is_mutable: false,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
+        (
+            "ftd#non-breaking-space".to_string(),
+            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                name: "ftd#non-breaking-space".to_string(),
+                kind: ftd::interpreter::Kind::string().into_kind_data(),
+                mutable: false,
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::String { text: "&nbsp;".to_string() },
+                    is_mutable: false,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
+        (
             "ftd#system-dark-mode".to_string(),
             ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
                 name: "ftd#system-dark-mode".to_string(),
