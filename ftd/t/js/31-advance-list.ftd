@@ -26,7 +26,12 @@ score: 90
 index: $index
 for: obj, index in $name-scores
 
+-- ftd.row:
+spacing.fixed.px: 2
+
+-- ftd.text: Total items are:
 -- ftd.integer: $length(a = $name-scores)
+-- end: ftd.row
 
 
 
