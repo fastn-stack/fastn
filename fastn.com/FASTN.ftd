@@ -473,6 +473,9 @@ favicon: /-/fastn.com/images/favicon.svg
     skip: true  
     - Portfolio: /featured/portfolios/portfolio/
     skip: true  
+  - Resumes: /featured/resumes/
+    - Caffiene: /featured/resumes/caffiene/
+    skip: true  
 - Section Library: /featured/sections/
   - Hero Components: /featured/sections/heros/
     - Hero 1: /featured/sections/heros/hero-1/
