@@ -237,3 +237,12 @@ ftd.len = function (data, key) {
     }
     return 0;
 }
+
+ftd.toggle_mode = function () {
+    const is_dark_mode = ftd.get(ftd.dark_mode);
+    if(is_dark_mode) {
+        enable_light_mode();
+    } else {
+        enable_dark_mode();
+    }
+};

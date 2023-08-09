@@ -192,8 +192,9 @@ class MutableList {
         }
         return this.#list[idx];
     }
-    set(value, index) {
-        if (fastn_utils.isNull(index)) {
+    set(index, value) {
+        if (value === undefined) {
+            value = index
             if (!(value instanceof MutableList)) {
                 if (!Array.isArray(value)) {
                     value = [value];
@@ -329,8 +330,9 @@ class RecordInstance {
     get(key) {
         return this.#fields[key];
     }
-    set(value, key) {
-        if (fastn_utils.isNull(key)) {
+    set(key, value) {
+        if (value === undefined) {
+            value = key;
             if (!(value instanceof RecordInstance)) {
                 value = new RecordInstance(value);
             }
