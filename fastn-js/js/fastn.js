@@ -212,12 +212,14 @@ class MutableList {
                 this.#watchers[i].createAllNode();
             }
         } else {
+            index = fastn_utils.getFlattenStaticValue(index);
             this.#list[index].item.set(value);
         }
 
         this.#closures.forEach((closure) => closure.update());
     }
     insertAt(index, value) {
+        index = fastn_utils.getFlattenStaticValue(index);
         let mutable = fastn.wrapMutable(value);
         this.#list.splice(index, 0, { item: mutable, index: new Mutable(index) });
         // for every item after the inserted item, update the index
@@ -233,16 +235,17 @@ class MutableList {
     push(value) {
         this.insertAt(this.#list.length, value);
     }
-    deleteAt(idx) {
-        this.#list.splice(idx, 1);
+    deleteAt(index) {
+        index = fastn_utils.getFlattenStaticValue(index);
+        this.#list.splice(index, 1);
         // for every item after the deleted item, update the index
-        for (let i = idx; i < this.#list.length; i++) {
+        for (let i = index; i < this.#list.length; i++) {
             this.#list[i].index.set(i);
         }
 
         for (let i in this.#watchers) {
             let forLoop = this.#watchers[i];
-            forLoop.deleteNode(idx);
+            forLoop.deleteNode(index);
         }
         this.#closures.forEach((closure) => closure.update());
     }
