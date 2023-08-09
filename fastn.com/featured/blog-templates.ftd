@@ -73,6 +73,7 @@ screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
 -- ft-ui.template: Midnight Storm
 template-url: featured/blogs/ms-blog/
 screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
+two-fold: true
 
 -- ft-ui.template: Misty Gray
 template-url: featured/blogs/mg-blog/
@@ -111,8 +112,6 @@ wip: true
 -- ft-ui.template: Little Blue
 template-url: featured/blogs/little-blue/
 screenshot: $fastn-assets.files.images.featured.blog.little-blue.png
-licence-url: https://github.com/meenukumari28/little-blue/
-github-url: https://github.com/meenukumari28/little-blue/
 wip: true
 
 -- end: doc-sites
