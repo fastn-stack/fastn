@@ -67,7 +67,6 @@ screenshot: $fastn-assets.files.images.featured.components.hero-4.png
 -- ft-ui.template: Hero - 5
 template-url: featured/sections/heros/hero-5/
 screenshot: $fastn-assets.files.images.featured.components.hero-5.png
-two-fold: true
 
 -- ft-ui.template: Hero - 6
 template-url: featured/sections/heros/hero-6/

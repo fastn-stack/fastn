@@ -587,6 +587,17 @@ screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
 
 
 
+-- template list workshops:
+
+-- template: Workshop 1
+template-url: featured/workshops/workshop-1/
+screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
+
+-- end: workshops
+
+
+
+
 
 
 

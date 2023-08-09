@@ -65,7 +65,6 @@ templates: $doc-sites
 -- ft-ui.template: Doc-site
 template-url: featured/ds/doc-site/
 screenshot: $fastn-assets.files.images.featured.doc-site.jpg
-two-fold: true
 
 -- ft-ui.template: Midnight Rush
 template-url: featured/ds/mr-ds/
@@ -78,5 +77,25 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 -- ft-ui.template: Misty Gray
 template-url: featured/ds/misty-gray/
 screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+
+-- ft-ui.template: Dash Dash DS
+template-url: featured/ds/dash-dash-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.dash-dash-ds.png
+wip: true
+
+-- ft-ui.template: API DS
+template-url: featured/ds/api-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.api-ds.png
+wip: true
+
+-- ft-ui.template: Framework DS
+template-url: featured/ds/framework/
+screenshot: $fastn-assets.files.images.featured.ds-framework.png
+wip: true
+
+-- ft-ui.template: Spider Book DS
+template-url: featured/ds/spider-book-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.spider-book-ds.png
+wip: true
 
 -- end: doc-sites
