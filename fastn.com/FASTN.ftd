@@ -384,11 +384,11 @@ favicon: /-/fastn.com/images/favicon.svg
   document: backend/ftd-redirect.ftd
 
 
-# Create Website: /install/-/build/
+# Create Website: /create-website/
   document: author/how-to/install.ftd
   source: build
   
-## Create Website: /install/-/build/
+## Create Website: /create-website/
   document: author/how-to/install.ftd
 
 - Install: /install/-/build/
@@ -632,6 +632,8 @@ favicon: /-/fastn.com/images/favicon.svg
 - Overview: /planning/
 - Page Nomenclature: /page-nomenclature/
   document: /planning/page-nomenclature.ftd
+- Create website planning: /create-website-planning/
+  document: /users/index.ftd
 - Orientation video planning: /orientation-planning/
   document: /planning/orientation-planning-video.ftd
 - Documentation Systems: /documentation/
