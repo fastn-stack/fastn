@@ -369,6 +369,14 @@ class RecordInstance {
         }
         this.#closures.forEach((closure) => closure.update());
     }
+    getClone() {
+        let current_fields = this.#fields;
+        let cloned_fields = {};
+        for (let key in current_fields) {
+            cloned_fields[key] = fastn_utils.clone(current_fields[key]);
+        }
+        return new RecordInstance(cloned_fields);
+    }
 }
 
 fastn.recordInstance = function (obj) {
