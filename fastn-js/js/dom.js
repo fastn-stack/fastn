@@ -644,6 +644,9 @@ class Node2 {
 
         if (parentOrSibiling instanceof ParentNodeWithSibiling) {
             this.#parent = parentOrSibiling.getParent();
+            while(this.#parent instanceof ParentNodeWithSibiling) {
+                this.#parent = this.#parent.getParent();
+            }
             sibiling = parentOrSibiling.getSibiling();
         }
 
