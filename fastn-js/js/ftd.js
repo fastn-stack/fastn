@@ -232,3 +232,39 @@ ftd.toggle_mode = function () {
         enable_dark_mode();
     }
 };
+
+ftd.storage = {
+    set(key, value) {
+        key = key instanceof fastn.mutableClass ? key.get() : key;
+
+        value = fastn_utils.getFlattenStaticValue(value);
+
+        localStorage.setItem(key, value && typeof value === 'object' ? JSON.stringify(value) : value);
+    },
+    get(key) {
+        key = key instanceof fastn.mutableClass ? key.get() : key;
+
+        if(ssr && !hydrating) {
+            return;
+        }
+
+        const item = localStorage.getItem(key);
+
+        if(!item) {
+            return;
+        }
+
+        try {
+            const obj = JSON.parse(item);
+
+            return fastn_utils.staticToMutables(obj);
+        } catch {
+            return item;
+        }
+    },
+    delete(key) {
+        key = key instanceof fastn.mutableClass ? key.get() : key;
+
+        localStorage.removeItem(key);
+    }
+}
