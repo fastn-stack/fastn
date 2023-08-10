@@ -378,6 +378,12 @@ class RecordInstance {
         }
         this.#closures.forEach((closure) => closure.update());
     }
+    toObject() {
+        return Object.fromEntries(Object.entries(this.#fields).map(([key, value]) => [
+            key, 
+            fastn_utils.getFlattenStaticValue(value)
+        ]));
+    },
     getClone() {
         let current_fields = this.#fields;
         let cloned_fields = {};
