@@ -1,11 +1,10 @@
--- import: fastn.com/featured as ft-ui
 -- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
 -- import: fastn-community.github.io/footer
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
-
-
-
+-- import: fastn.com/featured as ft-ui
+-- import: fastn.com/assets
 
 
 -- boolean show-grid: true
@@ -14,8 +13,7 @@
 
 
 
-
--- ds.page: Single Page Application - Landing pages
+-- ds.page: 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -25,6 +23,8 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
+full-width: true
+show-layout-bar: true
 
 -- ds.page.footer:
 
@@ -36,34 +36,34 @@ twitter-url: https://twitter.com/FifthTryHQ
 discord-url: https://discord.gg/bucrdvptYd
 copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
-
 -- end: ds.page.footer
 
--- ds.page.body:
+-- ds.page.layout-bar:
 
-We have designed and developed below landing pages site themes. You can use them
-for creating SPA(Single Page Application or websites) etc. 
+-- ds.layout: SPA / Landing Pages - Forest FOSS Template
+previous-url: /featured/landing-pages/
+github-url: https://github.com/FifthTry/Forest-FOSS-Template
 
--- ft-ui.grid-view:
+-- end: ds.page.layout-bar
+
+
+-- ds.preview-card:
+image: $fastn-assets.files.images.featured.landing.forest-foss-template.png
+cta-url: https://fifthtry.github.io/Forest-FOSS-Template/
+cta-text: Demo
+
+-- ft-ui.grid-view: Featured SPA / Landing Pages
 if: { show-grid }
 templates: $landing
+more-link-text: View more
+more-link: /featured/landing-pages/
 
 -- end: ds.page
 
 
 
 
-
-
-
-
-
-
 -- ft-ui.template list landing:
-
--- ft-ui.template: Midnight Rush
-template-url: featured/landing/mr-landing/
-screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 
 -- ft-ui.template: Midnight Storm
 template-url: featured/landing/midnight-storm-landing/
@@ -73,24 +73,8 @@ screenshot: $fastn-assets.files.images.featured.landing.midnight-storm-landing.j
 template-url: featured/landing/misty-gray-landing/
 screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
--- ft-ui.template: Studious Couscous
-template-url: featured/landing/studious-couscous/
-screenshot: $fastn-assets.files.images.featured.landing.studious-couscous.png
-wip: true
-
--- ft-ui.template: CT Landing Page
-template-url: featured/landing/ct-landing/
-screenshot: $fastn-assets.files.images.featured.landing.ct-landing-page.png
-wip: true
-
--- ft-ui.template: Docusaurus Theme
-template-url: featured/landing/docusaurus-theme/
-screenshot: $fastn-assets.files.images.featured.landing.docusaurus-theme.png
-wip: true
-
--- ft-ui.template: Forest FOSS Template
-template-url: featured/landing/forest-foss-template/
-screenshot: $fastn-assets.files.images.featured.landing.forest-foss-template.png
-wip: true
+-- ft-ui.template: Midnight Rush
+template-url: featured/landing/mr-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 
 -- end: landing

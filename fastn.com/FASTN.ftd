@@ -442,12 +442,24 @@ favicon: /-/fastn.com/images/favicon.svg
     skip: true
     - Framework DS: /featured/ds/framework/
     skip: true
+    - Blue Sapphire Template: /featured/ds/blue-sapphire-template/
+    skip: true
+    - Forest Template DS: /featured/ds/forest-template/
+    skip: true
+    - Docusaurus Theme: /featured/ds/docusaurus-theme/
+    skip: true
   - SPA / Landing Pages: /featured/landing-pages/
     - Midnight Rush: /featured/landing/mr-landing/
     skip: true
     - Midnight Storm: /featured/landing/midnight-storm-landing/
     skip: true
     - Misty Gray: /featured/landing/misty-gray-landing/
+    skip: true
+    - CT Landing Page: /featured/landing/ct-landing/
+    skip: true
+    - Docusaurus Theme: /featured/landing/docusaurus-theme/
+    skip: true
+    - Forest FOSS Template: /featured/landing/forest-foss-template/
     skip: true
   - Blogs: /featured/blog-templates/
     - Doc Site: /featured/blogs/doc-site/
@@ -503,6 +515,12 @@ favicon: /-/fastn.com/images/favicon.svg
   - Cards: /featured/sections/cards/
     - Card 1: /featured/sections/cards/card-1/
     skip: true  
+    - Image Card 1: /featured/sections/cards/image-card-1/
+    skip: true  
+    - Image Gallery IG: /featured/sections/cards/image-gallery-ig/
+    skip: true  
+    - Imagen IG: /featured/sections/cards/imagen-ig/
+    skip: true
   - Hero Components: /featured/sections/heros/
     - Hero 1: /featured/sections/heros/hero-1/
     skip: true  

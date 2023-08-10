@@ -93,6 +93,21 @@ template-url: featured/ds/framework/
 screenshot: $fastn-assets.files.images.featured.doc-sites.ds-framework.png
 wip: true
 
+-- ft-ui.template: Blue Sapphire Template
+template-url: featured/ds/blue-sapphire-template/
+screenshot: $fastn-assets.files.images.featured.doc-sites.blue-sapphire-template.png
+wip: true
+
+-- ft-ui.template: Forest Template
+template-url: featured/ds/forest-template/
+screenshot: $fastn-assets.files.images.featured.doc-sites.forest-template.png
+wip: true
+
+-- ft-ui.template: Docusaurus Theme
+template-url: featured/ds/docusaurus-theme/
+screenshot: $fastn-assets.files.images.featured.doc-sites.docusaurus-theme.png
+wip: true
+
 -- ft-ui.template: Spider Book DS
 template-url: featured/ds/spider-book-ds/
 screenshot: $fastn-assets.files.images.featured.doc-sites.spider-book-ds.png
