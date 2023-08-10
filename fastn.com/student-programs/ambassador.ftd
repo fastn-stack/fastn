@@ -1,82 +1,174 @@
 -- ds.page: `fastn` Ambassador Program
 
-Amplify your impact and establish yourself as a mentor and leader in your community while developing the technical skills and proficiency you need to succeed.
+By being a `fastn` Ambassador, you can create definitive social impact, while
+establishing yourself as a mentor & tech-leader within your college community.  
+
+Through our Students Ambassador Program, you become a representative of 
+`fastn` for your college.  `fastn` Ambassadors plan & host several events during 
+the school year, introducing students to the various aspects and features of 
+the `fastn` platform. 
+
+By being a `fastn` Ambassador, you can grow your skills and build your 
+reputation as a 'fastn' campaigner, and be a skilled manager in your own right.
+
 
 
 -- ds.h1: What makes a `fastn` Ambassador?
 
-A `fastn` Ambassador is one who will help unlock the true potential of `fastn` as a platform. 
-
-They go the extra mile, demonstrating proficiency & skill. They dig deeper on technical documentations, explore all the collections, stay true to the best practises and gain the deepest understanding on all things `fastn`.  
-
-- **Beacons of Knowledge**: They are veritable experts that anyone can turn to.
-
-- **Passionate Advocates**: Actively promote `fastn` across communities, forums & events.
-
-- **Power Collaborators**: Have the ability to provide meaningful advice & timely assists to others.
-
-- **Intrepid Explorers**: They are developers who will push the boundaries and help 'fastn' get better.
+A `fastn` Ambassador is keen to contribute, and grow a community, and share the 
+richness of their knowledge with others.
 
 
-
--- ds.h1: Why become a `fastn` Champion?
-
-Champions are built different. Champions stand out from the crowd. 
-
-For all the time & effort you put in, `fastn` commits to help you gain an worthwhile advantage, when it comes to building your career and network. `fastn` supports Champions in many ways. Some of them may include:
-
-- **Badges & Roles**: A unique role will be awarded to Champions within our discord server. And they also gain access to a select channel on Discord, where they can network with other Champions. This group has access to special `fastn` projects & giveaways!
-
-- **Special Feature**: Your work and your profile is on put on a pedestal! All Champions get a special shoutout on our `fastn` website and their contributions are promoted across our platforms. 
-
-- **Certifications**: Your skill can get you certified. You will receive official `fastn` certificates and accrediations to bolster your achievements. This includes an official NSDC recognised certification in collaboration with LetsUpgrade. And that's not all, all Champions gets a unique `fastn` Champions NFT to go with! 
+They demonstrate strong managerial qualities, organization capabilities, 
+and a command over technical & communication skills. They are passionate about 
+technology, and should be deftly able to plan events and manage budgets.
 
 
--- ds.h1: How to become a `fastn` Champion?
+- **Avid Learners**: They are veritable experts that anyone can turn to for 
+    assistance.
 
-To become a Champion, all we ask of you is to put in some time & effort. Afterall, a Champion becomes so, only by overcoming series of challenges and combating obstacles. We simply ask the same of you. 
+- **Passionate Advocates**: Actively promote `fastn` across communities, forums 
+    & events within their college / university.
 
-Spend some time exploring the `fastn` website & the `fastn` discord channel. This will help you get an idea of the lay of the land, and where to find what information.  
+- **Strong Organizers**: Have the ability to conduct workshops, hackathons & 
+    learning sessions resulting in tangible outcomes.
 
-You can find almost all of the necessary documentation on our website. Start with some basics. If it helps, go through our video courses in our [Learn](/learn/) section. You should also familiarize youself about some of the `fastn` [Best Practises](/best-practices/).
-
-Once you feel, you have a good understanding, simply face the following challenges head-on! 
-
-You have a three week window to complete all 10 challenges listed below. You can complete the challenges at your own pace within the time-frame. You will have continued access to all the resources and the `fastn` community at all times. You are encouraged to seek help and reach out. 
-
-After completing all the challanges, simply fill out the `fastn` Champions application on this page. You will be asked to provide "proof of your work", in the form of the github links. Post a short review, we will let you know of application status.
-
-
--- ds.h1: `fastn' Champion Challenges
-
--- ds.h3: Create a Button
+- **Savvy Marketers**: Have a way of handling promotions and marketing events 
+    across social channels to generate heighetend participation.
 
 
 
+-- ds.h1: Why become a `fastn` Ambassador?
 
--- ds.h3: Create a login page UI
+Ambassadors are powerful, yet with a keen sense of doing good for the community 
+at large. 
 
--- ds.h3: Create a bio-link page 
+For all the time & effort you put in, `fastn` commits to help you gain an 
+worthwhile advantage, when it comes to building your career and network. 
+`fastn` supports Ambassadors in many ways. Some of them may include:
 
--- ds.h3: Create an expander UI
+- **Badges & Roles**: A unique role will be awarded to s within our
+    Discord server. They also gain access to a select channel on Discord,
+    where they can network with other Ambassadors. This group has access to
+    special `fastn` projects & giveaways!
 
--- ds.h3: Create a colour package
+- **Shout-out & Endorsement**: Your work and your profile is put on a 
+    pedestal! All Ambassadors get a special shoutout on our `fastn` website and 
+    their contributions are promoted across our platforms. 
 
--- ds.h3: Create a typography package
+- **Certifications**: Your skills & efforts will get validated & certified. 
+    You will receive official `fastn` certificates and accrediations to bolster 
+    your achievements. This includes an official NSDC recognised certification 
+    in collaboration with LetsUpgrade.
 
--- ds.h3: Create a portfolio page
+- **fastn Ambassador NFT**: You will unlock a special fastn NFT, tailor-made for
+    Ambassadors. This super-cool NFT will provide you access to a select fastn 
+    reward bundles & giveaways. 
 
--- ds.h3: Create a submission form page
+- **Career Opportunities**: For Ambassadors who display outstanding levels 
+    of committment & results, fastn will promote you to our Clients & Partner 
+    network as a fastn-certified potential hire. On successful selection, 
+    Ambassadors will be able to work full-time/part-time or as a consultant across 
+    active projects. 
 
--- ds.h3: Create a blog site
+- **IRL Ambassador Upskilling**: Ambassadors will attend periodic "Ambassadors 
+    All-Hands" & "Train the trainer" events at different locations around the 
+    country. This will allow them to forge a strong network as well build a 
+    cohesive array of manegerial skills to augment your developer skills. 
 
--- ds.h3: Create a multi-page design layout
+- **Event Support**: All Ambassadors, get access to `fastn` Event Set-Up Kits 
+    that would allow them to set up and create fastn workshops on the fly. 
+    Consistent performers would get instant access to sponsorships, swag 
+    material & rewards to assist their event management capabilities.
 
+- **Major Developer Events**: Select Ambassadors would be chosen to represent 
+    fastn across major developer events in the country. Tickets, stay and travel 
+    would be handled by the fastn team on their behalf.
+    
+
+
+ -- ds.h1: How to become a `fastn` Ambassador?
+
+To become an Ambassador, we ask you to demonstrate your power to structure, 
+organize, manage & communicate. An Ambassador is a true flag-bearer of the 
+domain he/she represents. It is only fair that a `fastn` Ambassador ensures 
+that they help `fastn` find a presence amongst the highest echelons of 
+successful technology platforms. 
+
+To qualify as a potential Ambassador candidate, you have to do the following:
+
+- **Championing `fastn`**: An intimate understanding of the fastn platform is a 
+    pre-requisite. To be a fastn Ambassador, you have to first & foremost be a 
+    `fastn` (Champion)[champions/].
+
+- **Workshop Proposal**: Put together a plan to host an `Introduction to fastn' 
+    event in your school / college. You can read about the steps involved to 
+    host your first event (here)[*]. 
+
+- **HOD Approval**: Use the marketing material (Approval template)[*] provided 
+    by fastn to raise a formal approval from your HOD. Once approved, share 
+    your event details, along with the scanned HOD approval to our email -
+    ambassador.program@fastn.com.
+
+- **Discord Group**: Once approved, we will contact you and generate a new 
+    channel for your school / college on our Discord. You will also be put in 
+    touch with our dev-rel team for any assistance in coordination.
+
+- **Event Kit**: You will be provided a default `fastn` workshop presentation 
+    slides, engagement templates & videos to help you execute the event. The 
+    necessary event / swag supplies will be shipped to you basis our discretion.
+
+- **Event Kit**: You will be provided a default `fastn` workshop presentation 
+    slides, engagement templates & videos to help you execute the event. The 
+    necessary event promotional material / swag supplies will be shipped to you 
+    basis our discretion. 
+
+- **`fastn' Campus Contest**: You are to then conduct the hands-on workshop as 
+    planned. All participant details / repos are to be shared across the Discord 
+    channel provided earlier. Success of the event will be based on the work 
+    submitted by the participants. Apart from the `fastn` basics, you are to 
+    emphasize on the `fastn` Champions program and drive spirited participation.     
+
+- **`fastn' Campus Contest**: All participants from hands-on workshop are 
+    further encouraged to take part in a contest. Winners from the contest have 
+    to fulfil a creative challenge, based on the things they learnt from the 
+    workshop.  The deadline for the contest will be week from the event being 
+    conducted. 
+
+- **Judging & Winners**: Create a panel of judges from students committee, 
+    and professors. And select winning entries based on creativity and other 
+    judging criterias. Depending on number of submissions, `fastn' will provide 
+    prize money to the winners. Prize Money details & assessment criterias have 
+    been included in the event kit shared.
+
+- **Marketing & Social**: You ability to generate a buzz about the event, drive 
+    participate before and after the event will be a key factor to receiving 
+    your Ambassador status. Share photos, links to repos and social media 
+    handles to showcase the outcomes.
+
+
+
+After completing all the challenges, simply fill out the `fastn` Ambassadors 
+application on this page. You will be asked to provide "proof of your work", in 
+the form of the github links. Post a short internal review, we will let you know 
+of your application status.
+
+Once you receive your Ambassador status, is when you work actually begins. As 
+an Ambassador you are expected to continue driving engagement around `fastn` 
+within your campus as well as your Discord channel on `fastn`. 
+
+Ambassador status is not a permanent one. To maintain your qualification, you 
+are expected to remain active and conduct periodic `fastn` meet-ups / workshops.
+Our dev-rel team can help you put together an event-calendar tailored to you and 
+your college.
+
+Rest assured, you as an Ambassador will receive ample benefits & goodies for 
+each event successfully completed as a part of this program.
 
 --
 
 
-Submit your `fastn` Champion Application [Submit](/*/)
+Submit your `fastn` Ambassador Application [Submit](/*/)
 
 
 -- end: ds.page
