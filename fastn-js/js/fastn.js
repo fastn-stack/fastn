@@ -383,7 +383,7 @@ class RecordInstance {
             key, 
             fastn_utils.getFlattenStaticValue(value)
         ]));
-    },
+    }
     getClone() {
         let current_fields = this.#fields;
         let cloned_fields = {};
