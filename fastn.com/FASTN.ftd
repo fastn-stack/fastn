@@ -680,6 +680,8 @@ favicon: /-/fastn.com/images/favicon.svg
   show-planning: true
 
 - Overview: /planning/
+- dynamic UI planning: /dynamic-ui/-/planning/
+  document: /planning/country-details/index.ftd
 - Page Nomenclature: /page-nomenclature/
   document: /planning/page-nomenclature.ftd
 - Create website planning: /create-website-planning/
