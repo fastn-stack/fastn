@@ -466,15 +466,9 @@ impl ftd::interpreter::Component {
                     );
 
                 if component_name.eq(component_definition_name) {
-                    let component_thing = doc
-                        .get_component(component_name.as_str(), self.line_number)
-                        .unwrap();
-                    let arguments = &component_thing.arguments;
-                    if let Some(ref remaining) = remaining {
-                        let ui_argument_found = arguments
-                            .iter()
-                            .any(|a| a.name.eq(remaining) && a.kind.is_ui());
-                        if ui_argument_found {
+                    if let Some(remaining) = remaining {
+                        if is_ui_argument(component_name.as_str(), remaining.as_str(), &doc, &self)
+                        {
                             let instantiate_component = fastn_js::InstantiateComponent::new(
                                 format!(
                                     "fastn_utils.getStaticValue({}.{})",
@@ -503,7 +497,7 @@ impl ftd::interpreter::Component {
                             component_statements.extend(self.events.iter().filter_map(|event| {
                                 event
                                     .to_event_handler_js(
-                                        instantiate_component_var_name.as_str(),
+                                        &instantiate_component_var_name,
                                         doc,
                                         rdata,
                                     )
@@ -520,6 +514,22 @@ impl ftd::interpreter::Component {
 
             panic!("Can't find, {}", self.name)
         }
+    }
+}
+
+fn is_ui_argument(
+    component_name: &str,
+    remaining: &str,
+    doc: &ftd::interpreter::TDoc,
+    component: &ftd::interpreter::Component,
+) -> bool {
+    if let Ok(component_thing) = doc.get_component(component_name, component.line_number) {
+        let arguments = &component_thing.arguments;
+        arguments
+            .iter()
+            .any(|a| a.name.eq(remaining) && a.kind.is_ui())
+    } else {
+        false
     }
 }
 
