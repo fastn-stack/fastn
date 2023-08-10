@@ -531,7 +531,7 @@ impl ftd::interpreter::Component {
 
             if component_name.eq(component_definition_name) {
                 if let Some(remaining) = remaining {
-                    if is_ui_argument(component_name.as_str(), remaining.as_str(), &doc, self) {
+                    if is_ui_argument(component_name.as_str(), remaining.as_str(), doc, self) {
                         let instantiate_component = fastn_js::InstantiateComponent::new(
                             format!(
                                 "fastn_utils.getStaticValue({}.{})",
