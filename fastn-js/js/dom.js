@@ -1546,9 +1546,9 @@ class Node2 {
     }
     setProperty(kind, value, inherited) {
         if (value instanceof fastn.mutableClass) {
-            this.setDynamicProperty(kind, [value], () => { return value.get(); });
+            this.setDynamicProperty(kind, [value], () => { return value.get(); }, inherited);
         } else if (value instanceof PropertyValueAsClosure) {
-            this.setDynamicProperty(kind, value.deps, value.closureFunction);
+            this.setDynamicProperty(kind, value.deps, value.closureFunction, inherited);
         } else {
             this.setStaticProperty(kind, value, inherited);
         }
