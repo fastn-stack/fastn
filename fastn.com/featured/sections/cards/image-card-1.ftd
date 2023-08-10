@@ -40,23 +40,24 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Slides / Presentations - Streamline Slides
-previous-url: /featured/sections/slides/
-github-url: https://github.com/FifthTry/streamline-slides
+-- ds.layout: Cards - Image Card 1
+previous-url: /featured/sections/cards/
+github-url: https://github.com/FifthTry/images
 
 -- end: ds.page.layout-bar
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.sections.slides.streamline-slides.png
-cta-url: https://fifthtry.github.io/streamline-slides/
+image: $fastn-assets.files.images.featured.sections.image-card-1.png
+cta-url: https://fifthtry.github.io/images/
 cta-text: Demo
+width.fixed.px if {ftd.device == "desktop"}: 800
 
--- ft-ui.grid-view: Featured Slides / Presentations
+-- ft-ui.grid-view: Featured Cards
 if: { show-grid }
-templates: $slides
+templates: $cards
 more-link-text: View more
-more-link: /featured/sections/slides/
+more-link: /featured/sections/cards/
 
 
 -- end: ds.page
@@ -70,18 +71,10 @@ more-link: /featured/sections/slides/
 
 
 
--- ft-ui.template list slides:
+-- ft-ui.template list cards:
 
--- ft-ui.template: Crispy Presentation Theme
-template-url: /featured/sections/slides/crispy-presentation-theme/
-screenshot: $fastn-assets.files.images.featured.sections.slides.crispy-presentation-theme.png
+-- ft-ui.template: Card - 1
+template-url: /featured/sections/cards/card-1/
+screenshot: $fastn-assets.files.images.featured.sections.card-1.png
 
--- ft-ui.template: Giggle Presentation Template
-template-url: /featured/sections/slides/giggle-presentation-template/
-screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
-
--- ft-ui.template: Rotary Presentation Template
-template-url: /featured/sections/slides/rotary-presentation-template/
-screenshot: $fastn-assets.files.images.featured.sections.slides.rotary-presentation-template.png
-
--- end: slides
+-- end: cards

@@ -520,11 +520,17 @@ favicon: /-/fastn.com/images/favicon.svg
     - Key Value Table 1: /featured/sections/kvt/kvt-1/
       skip: true
   - Slides / Presentations: /featured/sections/slides/
+    - Crispy Presentation Theme: /featured/sections/slides/crispy-presentation-theme/
+      skip: true
+    - Giggle Presentation Template: /featured/sections/slides/giggle-presentation-template/
+      skip: true
     - Simple Dark Slides: /featured/sections/slides/simple-dark-slides/
       skip: true
     - Simple Light Slides: /featured/sections/slides/simple-light-slides/
       skip: true
     - Streamline Slides: /featured/sections/slides/streamline-slides/
+      skip: true
+    - Rotary Presentation Template: /featured/sections/slides/rotary-presentation-template/
       skip: true
 - Component Library: /featured/components-library/
   - Admonitions: /featured/components/admonitions/

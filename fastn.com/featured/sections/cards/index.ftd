@@ -47,4 +47,8 @@ templates: $cards
 template-url: /featured/sections/cards/card-1/
 screenshot: $fastn-assets.files.images.featured.sections.card-1.png
 
+-- ft-ui.template: Image Card - 1
+template-url: /featured/sections/cards/image-card-1/
+screenshot: $fastn-assets.files.images.featured.sections.image-card-1.png
+
 -- end: cards

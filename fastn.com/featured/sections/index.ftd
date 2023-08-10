@@ -120,15 +120,15 @@ screenshot: $fastn-assets.files.images.featured.sections.kvt-1.png
 
 -- ft-ui.template: Simple Dark Slides
 template-url: /featured/sections/slides/simple-dark-slides/
-screenshot: $fastn-assets.files.images.featured.sections.simple-dark-slides.png
+screenshot: $fastn-assets.files.images.featured.sections.slides.simple-dark-slides.png
 
 -- ft-ui.template: Simple Light Slides
 template-url: /featured/sections/slides/simple-light-slides/
-screenshot: $fastn-assets.files.images.featured.sections.simple-light-slides.png
+screenshot: $fastn-assets.files.images.featured.sections.slides.simple-light-slides.png
 
 -- ft-ui.template: Streamline Slides
 template-url: /featured/sections/slides/streamline-slides/
-screenshot: $fastn-assets.files.images.featured.sections.streamline-slides.png
+screenshot: $fastn-assets.files.images.featured.sections.slides.streamline-slides.png
 -- end: slides
 
 

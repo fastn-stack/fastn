@@ -48,7 +48,7 @@ github-url: https://github.com/FifthTry/simple-light-slides
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.sections.simple-light-slides.png
+image: $fastn-assets.files.images.featured.sections.slides.simple-light-slides.png
 cta-url: https://fifthtry.github.io/simple-light-slides/sample/
 cta-text: Demo
 
@@ -72,12 +72,16 @@ more-link: /featured/sections/slides/
 
 -- ft-ui.template list slides:
 
--- ft-ui.template: Simple Dark Slides
-template-url: /featured/sections/slides/simple-dark-slides/
-screenshot: $fastn-assets.files.images.featured.sections.simple-dark-slides.png
+-- ft-ui.template: Crispy Presentation Theme
+template-url: /featured/sections/slides/crispy-presentation-theme/
+screenshot: $fastn-assets.files.images.featured.sections.slides.crispy-presentation-theme.png
 
--- ft-ui.template: Streamline Slides
-template-url: /featured/sections/slides/streamline-slides/
-screenshot: $fastn-assets.files.images.featured.sections.streamline-slides.png
+-- ft-ui.template: Giggle Presentation Template
+template-url: /featured/sections/slides/giggle-presentation-template/
+screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
+
+-- ft-ui.template: Rotary Presentation Template
+template-url: /featured/sections/slides/rotary-presentation-template/
+screenshot: $fastn-assets.files.images.featured.sections.slides.rotary-presentation-template.png
 
 -- end: slides
