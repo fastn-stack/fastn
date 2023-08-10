@@ -91,8 +91,6 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
     let js_ast_data = ftd::js::document_into_js_ast(i);
     let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), true);
     let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), false);
-    let ssr_body =
-        fastn_js::ssr_with_js_string(format!("{js_ftd_script}\n{js_document_script}").as_str());
 
     let html_str = {
         if script {
@@ -112,6 +110,10 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                 js_document_script = js_document_script
             )
         } else {
+            let ssr_body = fastn_js::ssr_with_js_string(
+                format!("{js_ftd_script}\n{js_document_script}").as_str(),
+            );
+
             ftd::ftd_js_html()
                 .replace(
                     "__js_script__",
