@@ -63,42 +63,63 @@ pub async fn process(
     // for now they wil be ordered
     // select * from users where
 
-    result_to_value(
-        execute_query(
-            &sqlite_database_path,
-            query.as_str(),
-            doc.name,
-            value.line_number(),
-        )
-        .await?,
-        kind,
-        doc,
-        &value,
+    let query_response = execute_query(
+        &sqlite_database_path,
+        query.as_str(),
+        doc.name,
+        value.line_number(),
     )
+    .await;
+
+    match query_response {
+        Ok(result) => result_to_value(Ok(result), kind, doc, &value, super::sql::STATUS_OK),
+        Err(e) => result_to_value(
+            Err(e.to_string()),
+            kind,
+            doc,
+            &value,
+            super::sql::STATUS_ERROR,
+        ),
+    }
 }
 
 pub(crate) fn result_to_value(
-    result: Vec<Vec<serde_json::Value>>,
+    result: Result<Vec<Vec<serde_json::Value>>, String>,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     value: &ftd::ast::VariableValue,
+    status: usize,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    if kind.is_list() {
-        doc.rows_to_value(result.as_slice(), &kind, value)
-    } else {
-        match result.len() {
-            1 => doc.row_to_value(&result[0], &kind, value),
-            0 => ftd::interpreter::utils::e2(
-                "Query returned no result, expected one row".to_string(),
-                doc.name,
-                value.line_number(),
-            ),
-            len => ftd::interpreter::utils::e2(
-                format!("Query returned {} rows, expected one row", len),
-                doc.name,
-                value.line_number(),
-            ),
+    match result {
+        Ok(result) => {
+            if kind.is_list() {
+                doc.rows_to_value(result.as_slice(), &kind, value)
+            } else {
+                match result.len() {
+                    1 => doc.row_to_value(&result[0], &kind, value),
+                    0 if kind.is_integer() => Ok(ftd::interpreter::Value::Integer {
+                        value: status as i64,
+                    }),
+                    0 => ftd::interpreter::utils::e2(
+                        "Query returned no result, expected one row".to_string(),
+                        doc.name,
+                        value.line_number(),
+                    ),
+                    len => ftd::interpreter::utils::e2(
+                        format!("Query returned {} rows, expected one row", len),
+                        doc.name,
+                        value.line_number(),
+                    ),
+                }
+            }
         }
+        Err(e) => match kind.get_name().as_str() {
+            "integer" => Ok(ftd::interpreter::Value::Integer {
+                value: status as i64,
+            }),
+            "string" => Ok(ftd::interpreter::Value::String { text: (e) }),
+            &_ => todo!(),
+        },
     }
 }
 

@@ -1,3 +1,7 @@
+pub const STATUS_OK: usize = 0;
+
+pub const STATUS_ERROR: usize = 1;
+
 const BACKSLASH: char = '\\';
 
 const SPECIAL_CHARS: [char; 9] = [BACKSLASH, '$', '/', ':', '"', ',', '\'', ';', ' '];
