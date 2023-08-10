@@ -467,8 +467,6 @@ impl ftd::interpreter::Component {
         rdata: &ftd::js::ResolverData,
         should_return: bool,
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
-        use itertools::Itertools;
-
         if let Some(arguments) =
             ftd::js::utils::get_set_property_values_for_provided_component_properties(
                 doc,
@@ -523,11 +521,7 @@ impl ftd::interpreter::Component {
             self.line_number,
         );
 
-        let remaining = if let Some(remaining) = remaining {
-            remaining
-        } else {
-            return None;
-        };
+        let remaining = remaining?;
 
         match rdata.component_definition_name {
             Some(ref component_definition_name) if component_name.eq(component_definition_name) => {
@@ -565,7 +559,7 @@ impl ftd::interpreter::Component {
         component_statements.extend(self.events.iter().filter_map(|event| {
             event
                 .to_event_handler_js(&instantiate_component_var_name, doc, rdata)
-                .map(|event_handler| fastn_js::ComponentStatement::AddEventHandler(event_handler))
+                .map(fastn_js::ComponentStatement::AddEventHandler)
         }));
 
         Some(component_statements)
