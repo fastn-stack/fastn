@@ -1,4 +1,4 @@
--- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds as lib
 -- import: fastn-community.github.io/footer
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
@@ -10,7 +10,7 @@
 
 
 
--- ds.page: Featured Templates
+-- ds.page: 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -20,6 +20,8 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
+sidebar: false
+full-width: true
 
 -- ds.page.footer:
 
@@ -33,12 +35,6 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.body:
-
-We have designed and developed below templates using `fastn`. 
-
-These templates can be used inside your personal web sites or organizational
-static web sites developed using `fastn` package.
 
 -- grid-view: Documentation Sites
 if: { show-grid }
@@ -139,6 +135,7 @@ optional body body:
 width: fill-container
 padding-top.px: 8
 spacing.fixed.px if { ftd.device == "mobile" }: 24
+padding-horizontal.px: 24
 
 -- ftd.row:
 width: fill-container

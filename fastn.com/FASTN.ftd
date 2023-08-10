@@ -81,9 +81,18 @@ favicon: /-/fastn.com/images/favicon.svg
 - Student Ambassador Program: /ambassador/
   document: /student-programs/ambassador.ftd
   skip: true
-- Champion Program: /champions-program/
+- Champion Program: /champion-program/
   document: /student-programs/champion.ftd
   skip: true
+  - Champions: /champion-program/champions/
+    document: /student-programs/all-champions.ftd
+    skip: true
+- Ambassador Program: /ambassador-program/
+  document: /student-programs/ambassador.ftd
+  skip: true
+  - Ambassadors: /ambassador-program/ambassadors/
+    document: /student-programs/all-ambassadors.ftd
+    skip: true
   
 ## Features: /features/
 
