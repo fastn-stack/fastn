@@ -4,7 +4,11 @@ ftd.ui ui:
 -- ftd.column:
 width: fill-container
 
+-- ftd.text: Hello World
+
 -- single-ui.ui:
+
+-- ftd.text: Hello World down
 
 -- end: ftd.column
 
@@ -13,7 +17,7 @@ width: fill-container
 
 -- ftd.ui list uis:
 
--- ftd.text: Hello World
+-- ftd.text: Hello World 3
 
 -- ftd.text: Hello World 2
 
@@ -21,4 +25,10 @@ width: fill-container
 
 -- single-ui:
 ui: $uis.0
+
+
+;; After this:
+;; -- object:
+;; for: $object in $uis
+
 

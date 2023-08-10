@@ -218,7 +218,11 @@ impl fastn_js::InstantiateComponent {
         pretty::RcDoc::text(format!(
             "let {} = {}(",
             self.var_name,
-            fastn_js::utils::name_to_js(self.component_name.as_str())
+            if !self.already_formatted {
+                fastn_js::utils::name_to_js(self.component_name.as_str())
+            } else {
+                self.component_name.to_owned()
+            }
         ))
         .append(pretty::RcDoc::text(self.parent.clone()))
         .append(comma().append(space()))

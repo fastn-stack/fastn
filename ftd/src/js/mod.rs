@@ -438,6 +438,7 @@ impl ftd::interpreter::Component {
                 rdata.inherited_variable_name,
                 should_return,
                 index,
+                false,
             );
 
             let instantiate_component_var_name = instantiate_component.var_name.clone();
@@ -456,6 +457,67 @@ impl ftd::interpreter::Component {
 
             component_statements
         } else {
+            if let Some(ref component_definition_name) = rdata.component_definition_name {
+                let (component_name, remaining) =
+                    ftd::interpreter::utils::get_doc_name_and_remaining(
+                        self.name.as_str(),
+                        doc.name,
+                        self.line_number,
+                    );
+
+                if component_name.eq(component_definition_name) {
+                    let component_thing = doc
+                        .get_component(component_name.as_str(), self.line_number)
+                        .unwrap();
+                    let arguments = &component_thing.arguments;
+                    if let Some(ref remaining) = remaining {
+                        let ui_argument_found = arguments
+                            .iter()
+                            .any(|a| a.name.eq(remaining) && a.kind.is_ui());
+                        if ui_argument_found {
+                            let instantiate_component = fastn_js::InstantiateComponent::new(
+                                format!(
+                                    "fastn_utils.getStaticValue({}.{})",
+                                    fastn_js::LOCAL_VARIABLE_MAP,
+                                    remaining
+                                )
+                                .as_str(),
+                                vec![],
+                                parent,
+                                rdata.inherited_variable_name,
+                                should_return,
+                                index,
+                                true,
+                            );
+
+                            let mut component_statements = vec![];
+                            let instantiate_component_var_name =
+                                instantiate_component.var_name.clone();
+
+                            component_statements.push(
+                                fastn_js::ComponentStatement::InstantiateComponent(
+                                    instantiate_component,
+                                ),
+                            );
+
+                            component_statements.extend(self.events.iter().filter_map(|event| {
+                                event
+                                    .to_event_handler_js(
+                                        instantiate_component_var_name.as_str(),
+                                        doc,
+                                        rdata,
+                                    )
+                                    .map(|event_handler| {
+                                        fastn_js::ComponentStatement::AddEventHandler(event_handler)
+                                    })
+                            }));
+
+                            return component_statements;
+                        }
+                    }
+                }
+            }
+
             panic!("Can't find, {}", self.name)
         }
     }
