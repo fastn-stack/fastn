@@ -5,3 +5,4 @@ pub const INHERITED_VARIABLE: &str = "inherited";
 pub const MAIN_FUNCTION: &str = "main";
 pub const FUNCTION_PARENT: &str = "root";
 pub const COMPONENT_PARENT: &str = "parent";
+pub const GET_STATIC_VALUE: &str = "fastn_utils.getStaticValue";
