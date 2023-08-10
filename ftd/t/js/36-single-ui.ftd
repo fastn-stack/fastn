@@ -1,0 +1,24 @@
+-- component single-ui:
+ftd.ui ui:
+
+-- ftd.column:
+width: fill-container
+
+-- single-ui.ui:
+
+-- end: ftd.column
+
+-- end: single-ui
+
+
+-- ftd.ui list uis:
+
+-- ftd.text: Hello World
+
+-- ftd.text: Hello World 2
+
+-- end: uis
+
+-- single-ui:
+ui: $uis.0
+
