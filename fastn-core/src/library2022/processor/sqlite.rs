@@ -118,7 +118,7 @@ pub(crate) fn result_to_value(
                 value: status as i64,
             }),
             "string" => Ok(ftd::interpreter::Value::String { text: (e) }),
-            &_ => todo!(),
+            _ => unimplemented!(),
         },
     }
 }

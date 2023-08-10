@@ -268,11 +268,8 @@ async fn execute_query(
     let (query, query_args) = super::sql::extract_arguments(query)?;
 
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
-
     let stmt = client.prepare_cached(query.as_str()).await.unwrap();
-
     let args = prepare_args(query_args, stmt.params(), doc, line_number, headers)?;
-
     let rows = client.query(&stmt, &args.pg_args()).await.unwrap();
     let mut result: Vec<Vec<serde_json::Value>> = vec![];
 
