@@ -10,7 +10,7 @@ pub(crate) mod pg;
 pub(crate) mod query;
 pub(crate) mod request_data;
 pub(crate) mod sitemap;
-mod sql;
+pub mod sql;
 pub(crate) mod sqlite;
 pub(crate) mod toc;
 pub(crate) mod user_details;

@@ -48,6 +48,7 @@ pub struct InstantiateComponent {
     pub inherited: String,
     pub should_return: bool,
     pub var_name: String,
+    pub already_formatted: bool,
 }
 
 impl InstantiateComponent {
@@ -58,6 +59,7 @@ impl InstantiateComponent {
         inherited: &str,
         should_return: bool,
         index: usize,
+        already_formatted: bool,
     ) -> InstantiateComponent {
         InstantiateComponent {
             component_name: component_name.to_string(),
@@ -66,6 +68,7 @@ impl InstantiateComponent {
             inherited: inherited.to_string(),
             should_return,
             var_name: component_declaration_variable_name(parent, index),
+            already_formatted,
         }
     }
 }

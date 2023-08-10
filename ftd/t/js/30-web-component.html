@@ -1,6 +1,6 @@
 <html>
 <head>
-    <base href="/">
+    
     <script src="ftd/ftd/t/assets/todo.js" type="module"></script><script src="fastn-js.js"></script>
 
     <style>
@@ -294,7 +294,7 @@ let foo__ftd_world = function (parent, inherited, args) {
     ftd.device,
     inherited.get("types").get("heading_small")], function () {
       if (function () {
-        return (fastn_utils.getter(ftd.device) != "mobile");
+        return (fastn_utils.getter(ftd.device) !== "mobile");
       }()) {
         return inherited.get("types").get("heading_medium");
       } else {
@@ -343,7 +343,7 @@ let foo__demo = function (parent, inherited, args) {
   parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
   parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn.formula([ftd.device], function () {
     if (function () {
-      return (fastn_utils.getter(ftd.device) != "mobile");
+      return (fastn_utils.getter(ftd.device) !== "mobile");
     }()) {
       return fastn_dom.Length.Px(40);
     } else {
@@ -397,8 +397,8 @@ let foo__demo = function (parent, inherited, args) {
   ]), inherited);
   return parenti0;
 }
-fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "ftd/ftd/theme_css/fastn-theme.dark.css";
-fastn_dom.codeData.availableThemes["fastn-theme.light"] = "ftd/ftd/theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
         fastn_virtual.hydrate(main);
         ftd.post_init();
     })();
