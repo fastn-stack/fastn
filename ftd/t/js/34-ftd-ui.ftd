@@ -61,7 +61,7 @@ integer $is-active: 0
 -- box:
 if: { switcher.is-active == $LOOP.COUNTER }
 uis: $obj.elements
-$loop$: $switcher.s as $obj
+for: obj in $switcher.s
 
 -- end: ftd.column
 
