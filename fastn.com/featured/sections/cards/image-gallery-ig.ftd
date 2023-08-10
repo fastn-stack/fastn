@@ -40,16 +40,16 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Cards - Card 1
+-- ds.layout: Cards - Image Gallery IG
 previous-url: /featured/sections/cards/
-github-url: https://github.com/FifthTry/cards
+github-url: https://github.com/FifthTry/imago-gallery-ig
 
 -- end: ds.page.layout-bar
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.sections.card-1.png
-cta-url: https://fifthtry.github.io/cards/index.html
+image: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
+cta-url: https://fifthtry.github.io/imago-gallery-ig/
 cta-text: Demo
 width.fixed.px if {ftd.device == "desktop"}: 800
 
@@ -77,9 +77,9 @@ more-link: /featured/sections/cards/
 template-url: /featured/sections/cards/card-1/
 screenshot: $fastn-assets.files.images.featured.sections.card-1.png
 
--- ft-ui.template: Image Gallery IG
-template-url: /featured/sections/cards/image-gallery-ig/
-screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
+-- ft-ui.template: Image Card - 1
+template-url: /featured/sections/cards/image-card-1/
+screenshot: $fastn-assets.files.images.featured.sections.image-card-1.png
 
 -- ft-ui.template: Imagen IG
 template-url: /featured/sections/cards/imagen-ig/
