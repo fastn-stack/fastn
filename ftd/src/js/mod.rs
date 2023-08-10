@@ -541,7 +541,8 @@ impl ftd::interpreter::Component {
 
         let instantiate_component = fastn_js::InstantiateComponent::new(
             format!(
-                "fastn_utils.getStaticValue({}.{})",
+                "{}({}.{})",
+                fastn_js::GET_STATIC_VALUE,
                 fastn_js::LOCAL_VARIABLE_MAP,
                 remaining
             )
