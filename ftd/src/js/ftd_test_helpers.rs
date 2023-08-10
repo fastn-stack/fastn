@@ -166,8 +166,30 @@ fn fastn_js_test_all() {
     let fix = cli_args.iter().any(|v| v.eq("fix=true"));
     let manual = cli_args.iter().any(|v| v.eq("manual=true"));
     let script = cli_args.iter().any(|v| v.eq("script=true"));
+    let clear = cli_args.iter().any(|v| v.eq("clear"));
     let path = cli_args.iter().find_map(|v| v.strip_prefix("path="));
     for (files, html_file_location) in find_file_groups(manual, script) {
+        if clear {
+            for f in &files {
+                match path {
+                    Some(path) if !f.to_str().unwrap().contains(path) => continue,
+                    _ => {}
+                }
+                let script =
+                    filename_with_second_last_extension_replaced_with_json(&f, false, true);
+
+                if std::fs::remove_file(&script).is_ok() {
+                    println!("Removed {}", script.display());
+                }
+                let manual =
+                    filename_with_second_last_extension_replaced_with_json(&f, true, false);
+                if std::fs::remove_file(&manual).is_ok() {
+                    println!("Removed {}", manual.display());
+                }
+            }
+            continue;
+        }
+
         let t = if fix || manual || script {
             "".to_string()
         } else {
