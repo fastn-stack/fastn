@@ -180,7 +180,7 @@ let fastn_utils = {
         const properties = path.split('.');
 
         for (let i = 0; i < properties.length - 1; i++) {
-            const property = properties[i];
+            let property = fastn_utils.private.addUnderscoreToStart(properties[i]);
             if (currentObject instanceof fastn.recordInstanceClass) {
                 if (currentObject.get(property) === undefined) {
                     currentObject.set(property, fastn.recordInstance({}));
@@ -437,6 +437,13 @@ fastn_utils.private = {
         }
 
         return mergedRanges.join(',');
+    },
+
+    addUnderscoreToStart(text) {
+        if (/^\d/.test(text)) {
+            return '_' + text;
+        }
+        return text;
     }
 }
 
