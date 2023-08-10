@@ -517,60 +517,57 @@ impl ftd::interpreter::Component {
         rdata: &ftd::js::ResolverData,
         should_return: bool,
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
-        if let Some(ref component_definition_name) = rdata.component_definition_name {
-            let (component_name, remaining) = ftd::interpreter::utils::get_doc_name_and_remaining(
-                self.name.as_str(),
-                doc.name,
-                self.line_number,
-            );
+        let (component_name, remaining) = ftd::interpreter::utils::get_doc_name_and_remaining(
+            self.name.as_str(),
+            doc.name,
+            self.line_number,
+        );
 
-            if component_name.eq(component_definition_name) {
-                if let Some(remaining) = remaining {
-                    if ftd::js::utils::is_ui_argument(
-                        component_name.as_str(),
-                        remaining.as_str(),
-                        doc,
-                        self,
-                    ) {
-                        let instantiate_component = fastn_js::InstantiateComponent::new(
-                            format!(
-                                "fastn_utils.getStaticValue({}.{})",
-                                fastn_js::LOCAL_VARIABLE_MAP,
-                                remaining
-                            )
-                            .as_str(),
-                            vec![],
-                            parent,
-                            rdata.inherited_variable_name,
-                            should_return,
-                            index,
-                            true,
-                        );
+        let remaining = if let Some(remaining) = remaining {
+            remaining
+        } else {
+            return None;
+        };
 
-                        let mut component_statements = vec![];
-                        let instantiate_component_var_name = instantiate_component.var_name.clone();
-
-                        component_statements.push(
-                            fastn_js::ComponentStatement::InstantiateComponent(
-                                instantiate_component,
-                            ),
-                        );
-
-                        component_statements.extend(self.events.iter().filter_map(|event| {
-                            event
-                                .to_event_handler_js(&instantiate_component_var_name, doc, rdata)
-                                .map(|event_handler| {
-                                    fastn_js::ComponentStatement::AddEventHandler(event_handler)
-                                })
-                        }));
-
-                        return Some(component_statements);
-                    }
-                }
+        match rdata.component_definition_name {
+            Some(ref component_definition_name) if component_name.eq(component_definition_name) => {
             }
+            _ => return None,
         }
 
-        None
+        if !ftd::js::utils::is_ui_argument(component_name.as_str(), remaining.as_str(), doc, self) {
+            return None;
+        }
+
+        let instantiate_component = fastn_js::InstantiateComponent::new(
+            format!(
+                "fastn_utils.getStaticValue({}.{})",
+                fastn_js::LOCAL_VARIABLE_MAP,
+                remaining
+            )
+            .as_str(),
+            vec![],
+            parent,
+            rdata.inherited_variable_name,
+            should_return,
+            index,
+            true,
+        );
+
+        let mut component_statements = vec![];
+        let instantiate_component_var_name = instantiate_component.var_name.clone();
+
+        component_statements.push(fastn_js::ComponentStatement::InstantiateComponent(
+            instantiate_component,
+        ));
+
+        component_statements.extend(self.events.iter().filter_map(|event| {
+            event
+                .to_event_handler_js(&instantiate_component_var_name, doc, rdata)
+                .map(|event_handler| fastn_js::ComponentStatement::AddEventHandler(event_handler))
+        }));
+
+        Some(component_statements)
     }
 }
 
