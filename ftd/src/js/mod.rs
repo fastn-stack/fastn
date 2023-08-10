@@ -469,20 +469,15 @@ impl ftd::interpreter::Component {
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
         use itertools::Itertools;
 
-        if let Ok(arguments) = doc
-            .get_component(self.name.as_str(), self.line_number)
-            .map(|v| v.arguments)
-            .or(doc
-                .get_web_component(self.name.as_str(), self.line_number)
-                .map(|v| v.arguments))
+        if let Some(arguments) =
+            ftd::js::utils::get_set_property_values_for_provided_component_properties(
+                doc,
+                rdata,
+                self.name.as_str(),
+                self.properties.as_slice(),
+                self.line_number,
+            )
         {
-            let arguments = arguments
-                .iter()
-                .filter_map(|v| {
-                    v.get_optional_value(self.properties.as_slice())
-                        .map(|val| (v.name.to_string(), val.to_set_property_value(doc, rdata)))
-                })
-                .collect_vec();
             let mut component_statements = vec![];
             let instantiate_component = fastn_js::InstantiateComponent::new(
                 self.name.as_str(),
@@ -531,7 +526,12 @@ impl ftd::interpreter::Component {
 
             if component_name.eq(component_definition_name) {
                 if let Some(remaining) = remaining {
-                    if is_ui_argument(component_name.as_str(), remaining.as_str(), doc, self) {
+                    if ftd::js::utils::is_ui_argument(
+                        component_name.as_str(),
+                        remaining.as_str(),
+                        doc,
+                        self,
+                    ) {
                         let instantiate_component = fastn_js::InstantiateComponent::new(
                             format!(
                                 "fastn_utils.getStaticValue({}.{})",
@@ -571,22 +571,6 @@ impl ftd::interpreter::Component {
         }
 
         None
-    }
-}
-
-fn is_ui_argument(
-    component_name: &str,
-    remaining: &str,
-    doc: &ftd::interpreter::TDoc,
-    component: &ftd::interpreter::Component,
-) -> bool {
-    if let Ok(component_thing) = doc.get_component(component_name, component.line_number) {
-        let arguments = &component_thing.arguments;
-        arguments
-            .iter()
-            .any(|a| a.name.eq(remaining) && a.kind.is_ui())
-    } else {
-        false
     }
 }
 

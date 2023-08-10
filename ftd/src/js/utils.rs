@@ -201,3 +201,67 @@ pub(crate) fn function_call_to_js_formula(
         type_: fastn_js::FormulaType::FunctionCall(function_call.to_js_function(doc, rdata)),
     }
 }
+
+pub(crate) fn is_ui_argument(
+    component_name: &str,
+    remaining: &str,
+    doc: &ftd::interpreter::TDoc,
+    component: &ftd::interpreter::Component,
+) -> bool {
+    if let Ok(component_thing) = doc.get_component(component_name, component.line_number) {
+        let arguments = &component_thing.arguments;
+        arguments
+            .iter()
+            .any(|a| a.name.eq(remaining) && a.kind.is_ui())
+    } else {
+        false
+    }
+}
+
+/// Retrieves `fastn_js::SetPropertyValue` for user provided component properties only not the
+/// arguments with default.
+///
+/// This function attempts to retrieve component or web component arguments based on the provided
+/// component name. It then filters out valid arguments whose value is provided by user. The
+/// function returns argument name and the corresponding `fastn_js::SetPropertyValue` as a vector
+/// of tuples.
+///
+/// # Arguments
+///
+/// * `doc` - A reference to the TDoc object containing the document's data.
+/// * `component_name` - The name of the component or web component to retrieve arguments for.
+/// * `component_properties` - The list of component properties to match against arguments.
+/// * `line_number` - The line number associated with the component.
+///
+/// # Returns
+///
+/// An `Option` containing a vector of tuples where the first element is the argument name and the
+/// second element is the corresponding set property value. Returns `None` if any retrieval or
+/// conversion operation fails.
+pub(crate) fn get_set_property_values_for_provided_component_properties(
+    doc: &ftd::interpreter::TDoc,
+    rdata: &ftd::js::ResolverData,
+    component_name: &str,
+    component_properties: &[ftd::interpreter::Property],
+    line_number: usize,
+) -> Option<Vec<(String, fastn_js::SetPropertyValue)>> {
+    use itertools::Itertools;
+
+    // Attempt to retrieve component or web component arguments
+    doc.get_component(component_name, line_number)
+        .map(|v| v.arguments)
+        .or(doc
+            .get_web_component(component_name, line_number)
+            .map(|v| v.arguments))
+        .map(|arguments| {
+            // Collect valid arguments matching the provided properties and their set property values
+            arguments
+                .iter()
+                .filter_map(|v| {
+                    v.get_optional_value(component_properties)
+                        .map(|val| (v.name.to_string(), val.to_set_property_value(doc, rdata)))
+                })
+                .collect_vec()
+        })
+        .ok()
+}
