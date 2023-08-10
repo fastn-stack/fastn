@@ -403,20 +403,73 @@ impl ftd::interpreter::Component {
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
-        use itertools::Itertools;
-        if ftd::js::element::is_kernel(self.name.as_str()) {
-            if !*has_rive_components {
-                *has_rive_components = ftd::js::element::is_rive_component(self.name.as_str())
-            }
-            ftd::js::Element::from_interpreter_component(self, doc).to_component_statements(
+        if let Some(kernel_component_statements) = self.kernel_to_component_statements(
+            parent,
+            index,
+            doc,
+            rdata,
+            should_return,
+            has_rive_components,
+        ) {
+            kernel_component_statements
+        } else if let Some(defined_component_statements) =
+            self.defined_component_to_component_statements(parent, index, doc, rdata, should_return)
+        {
+            defined_component_statements
+        } else if let Some(header_defined_component_statements) = self
+            .header_defined_component_to_component_statements(
                 parent,
                 index,
                 doc,
                 rdata,
                 should_return,
-                has_rive_components,
             )
-        } else if let Ok(arguments) = doc
+        {
+            header_defined_component_statements
+        } else {
+            panic!("Can't find, {}", self.name)
+        }
+    }
+
+    fn kernel_to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        rdata: &ftd::js::ResolverData,
+        should_return: bool,
+        has_rive_components: &mut bool,
+    ) -> Option<Vec<fastn_js::ComponentStatement>> {
+        if ftd::js::element::is_kernel(self.name.as_str()) {
+            if !*has_rive_components {
+                *has_rive_components = ftd::js::element::is_rive_component(self.name.as_str())
+            }
+            Some(
+                ftd::js::Element::from_interpreter_component(self, doc).to_component_statements(
+                    parent,
+                    index,
+                    doc,
+                    rdata,
+                    should_return,
+                    has_rive_components,
+                ),
+            )
+        } else {
+            None
+        }
+    }
+
+    fn defined_component_to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        rdata: &ftd::js::ResolverData,
+        should_return: bool,
+    ) -> Option<Vec<fastn_js::ComponentStatement>> {
+        use itertools::Itertools;
+
+        if let Ok(arguments) = doc
             .get_component(self.name.as_str(), self.line_number)
             .map(|v| v.arguments)
             .or(doc
@@ -455,64 +508,69 @@ impl ftd::interpreter::Component {
                     })
             }));
 
-            component_statements
+            Some(component_statements)
         } else {
-            if let Some(ref component_definition_name) = rdata.component_definition_name {
-                let (component_name, remaining) =
-                    ftd::interpreter::utils::get_doc_name_and_remaining(
-                        self.name.as_str(),
-                        doc.name,
-                        self.line_number,
-                    );
+            None
+        }
+    }
 
-                if component_name.eq(component_definition_name) {
-                    if let Some(remaining) = remaining {
-                        if is_ui_argument(component_name.as_str(), remaining.as_str(), &doc, self) {
-                            let instantiate_component = fastn_js::InstantiateComponent::new(
-                                format!(
-                                    "fastn_utils.getStaticValue({}.{})",
-                                    fastn_js::LOCAL_VARIABLE_MAP,
-                                    remaining
-                                )
-                                .as_str(),
-                                vec![],
-                                parent,
-                                rdata.inherited_variable_name,
-                                should_return,
-                                index,
-                                true,
-                            );
+    fn header_defined_component_to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        rdata: &ftd::js::ResolverData,
+        should_return: bool,
+    ) -> Option<Vec<fastn_js::ComponentStatement>> {
+        if let Some(ref component_definition_name) = rdata.component_definition_name {
+            let (component_name, remaining) = ftd::interpreter::utils::get_doc_name_and_remaining(
+                self.name.as_str(),
+                doc.name,
+                self.line_number,
+            );
 
-                            let mut component_statements = vec![];
-                            let instantiate_component_var_name =
-                                instantiate_component.var_name.clone();
+            if component_name.eq(component_definition_name) {
+                if let Some(remaining) = remaining {
+                    if is_ui_argument(component_name.as_str(), remaining.as_str(), &doc, self) {
+                        let instantiate_component = fastn_js::InstantiateComponent::new(
+                            format!(
+                                "fastn_utils.getStaticValue({}.{})",
+                                fastn_js::LOCAL_VARIABLE_MAP,
+                                remaining
+                            )
+                            .as_str(),
+                            vec![],
+                            parent,
+                            rdata.inherited_variable_name,
+                            should_return,
+                            index,
+                            true,
+                        );
 
-                            component_statements.push(
-                                fastn_js::ComponentStatement::InstantiateComponent(
-                                    instantiate_component,
-                                ),
-                            );
+                        let mut component_statements = vec![];
+                        let instantiate_component_var_name = instantiate_component.var_name.clone();
 
-                            component_statements.extend(self.events.iter().filter_map(|event| {
-                                event
-                                    .to_event_handler_js(
-                                        &instantiate_component_var_name,
-                                        doc,
-                                        rdata,
-                                    )
-                                    .map(|event_handler| {
-                                        fastn_js::ComponentStatement::AddEventHandler(event_handler)
-                                    })
-                            }));
+                        component_statements.push(
+                            fastn_js::ComponentStatement::InstantiateComponent(
+                                instantiate_component,
+                            ),
+                        );
 
-                            return component_statements;
-                        }
+                        component_statements.extend(self.events.iter().filter_map(|event| {
+                            event
+                                .to_event_handler_js(&instantiate_component_var_name, doc, rdata)
+                                .map(|event_handler| {
+                                    fastn_js::ComponentStatement::AddEventHandler(event_handler)
+                                })
+                        }));
+
+                        return Some(component_statements);
                     }
                 }
             }
-
-            panic!("Can't find, {}", self.name)
         }
+
+        None
     }
 }
 
