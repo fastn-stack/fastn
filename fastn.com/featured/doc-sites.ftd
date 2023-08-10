@@ -90,7 +90,7 @@ wip: true
 
 -- ft-ui.template: Framework DS
 template-url: featured/ds/framework/
-screenshot: $fastn-assets.files.images.featured.ds-framework.png
+screenshot: $fastn-assets.files.images.featured.doc-sites.ds-framework.png
 wip: true
 
 -- ft-ui.template: Spider Book DS
