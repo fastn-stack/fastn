@@ -442,6 +442,7 @@ impl ftd::interpreter::Component {
         {
             variable_defined_component_to_component_statements
         } else {
+            dbg!(&rdata);
             panic!("Can't find, {}", self.name)
         }
     }
@@ -589,6 +590,9 @@ impl ftd::interpreter::Component {
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
+        /*
+        Todo: Check if the `self.name` is a loop-alias of `ftd.ui list` variable and then
+         uncomment the bellow code which checks for `self.name` as variable of `ftd.ui` type
         if !doc
             .get_variable(self.name.as_str(), self.line_number)
             .ok()?
@@ -596,7 +600,9 @@ impl ftd::interpreter::Component {
             .is_ui()
         {
             return None;
-        }
+        }*/
+
+        // The reference `self.name` is either the ftd.ui type variable or the loop-alias
         let value = ftd::js::Value::Reference(self.name.to_owned()).to_set_property_value_with_ui(
             doc,
             rdata,
