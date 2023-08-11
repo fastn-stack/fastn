@@ -23,7 +23,7 @@ width: fill-container
 
 -- end: uis
 
-/-- single-ui:
+-- single-ui:
 ui: $uis.0
 
 
