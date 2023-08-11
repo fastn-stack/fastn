@@ -81,23 +81,23 @@ favicon: /-/fastn.com/images/favicon.svg
 - Student Ambassador Program: /ambassador/
   document: /student-programs/ambassador.ftd
   skip: true
-- Champion Program: /student-programs/champion-program/
+- Champion Program: /champion-program/
   document: /student-programs/champion.ftd
-  - Champions: /student-programs/champion-program/champions/
+  - Champions: /champions/
     document: /student-programs/champions/all-champions.ftd
-    - Ajit Garg: /student-programs/champion-program/champions/ajit-garg/
+    - Ajit Garg: /champions/ajit-garg/
     document: /student-programs/champions/ajit-garg.ftd
-      skip: true
-    - Ayush Soni: /student-programs/champion-program/champions/ayush-soni/
+    skip: true
+    - Ayush Soni: /champions/ayush-soni/
     document: /student-programs/champions/ayush-soni.ftd
-      skip: true
-- Ambassador Program: /student-programs/ambassador-program/
+    skip: true
+- Ambassador Program: /ambassador-program/
   document: /student-programs/ambassador.ftd
-  - Ambassadors: /student-programs/ambassador-program/ambassadors/
+  - Ambassadors: /ambassadors/
   document: /student-programs/ambassadors/all-ambassadors.ftd
-    - Ayush Soni: /student-programs/ambassador-program/ambassadors/ayush-soni/
+    - Ayush Soni: /ambassadors/ayush-soni/
     document: /student-programs/ambassadors/ayush-soni.ftd
-      skip: true
+    skip: true
   
 ## Features: /features/
 
@@ -827,5 +827,9 @@ document: /featured/contributors/developers/ganesh-salunke/index.ftd
 /rfcs/rfc-process/: /rfc/rfc-process/
 /rfcs/fastn-update/: /rfc/fastn-update/
 /rfcs/variable-interpolation/: /rfc/variable-interpolation/
-/champion-program/: /student-programs/champion-program/
-/ambassador-program/: /student-programs/ambassador-program/
+/student-programs/champion-program/: /champion-program/
+/student-programs/ambassador-program/: /ambassador-program/
+/student-programs/champion-program/champions/ajit-garg/: /champions/ajit-garg/
+/student-programs/champion-program/champions/ayush-soni/: /champions/ayush-soni/
+/student-programs/ambassador-program/ambassadors/ayush-soni/: /ambassadors/ayush-soni/
+
