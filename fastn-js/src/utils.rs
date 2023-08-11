@@ -15,17 +15,21 @@ pub fn reference_to_js(s: &str) -> String {
     let (mut p1, mut p2) = get_doc_name_and_remaining(s.as_str());
     p1 = fastn_js::utils::name_to_js_(p1.as_str());
     let mut wrapper_function = None;
-    while let Some(remaining) = p2 {
-        let (p21, p22) = get_doc_name_and_remaining(remaining.as_str());
-        if let Ok(num) = p21.parse::<i64>() {
-            p1 = format!("{}.get({})", p1, num);
-            wrapper_function = Some("fastn_utils.getListItem");
-        } else {
-            p1 = format!(
-                "{}.get(\"{}\")",
-                p1,
-                fastn_js::utils::name_to_js_(p21.as_str())
-            );
+    while let Some(ref remaining) = p2 {
+        let (p21, p22) = get_doc_name_and_remaining(remaining);
+        match p21.parse::<i64>() {
+            Ok(num) if p2.is_none() => {
+                p1 = format!("{}.get({})", p1, num);
+                wrapper_function = Some("fastn_utils.getListItem");
+            }
+            _ => {
+                p1 = format!(
+                    "{}.get(\"{}\")",
+                    p1,
+                    fastn_js::utils::name_to_js_(p21.as_str())
+                );
+                wrapper_function = None;
+            }
         }
         p2 = p22;
     }
