@@ -37,7 +37,7 @@ profile: Designer
 owners: $owner-govind
 connect: $social-links
 
--- ft-ui.grid-view: Components
+-- ft-ui.grid-view: Hero Components
 templates: $components
 show-large: true
 
