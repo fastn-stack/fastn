@@ -827,3 +827,5 @@ document: /featured/contributors/developers/ganesh-salunke/index.ftd
 /rfcs/rfc-process/: /rfc/rfc-process/
 /rfcs/fastn-update/: /rfc/fastn-update/
 /rfcs/variable-interpolation/: /rfc/variable-interpolation/
+/champion-program/: /student-programs/champion-program/
+/ambassador-program/: /student-programs/ambassador-program/
