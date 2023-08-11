@@ -4,11 +4,7 @@
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
 
-
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -24,7 +20,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -51,16 +48,36 @@ cta-text-1: User Manual
 
 -- end: ds.page.layout-bar
 
+-- ds.page.abstract-bar:
+
+-- ds.distributors: Midnight Storm
+owners: $owner-fastn
+license-url: https://github.com/fastn-community/midnight-storm/blob/main/LICENSE
+license: Creative Commons
+published-date: 21-May-2023
+
+-- end: ds.page.abstract-bar
+
+
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured SPA / Landing Pages
+templates: $landing
+more-link-text: View more
+more-link: /featured/landing-pages/
+show-large: true
+
+-- end: ds.page.full-width-wrap
+
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
 cta-url: https://fastn-community.github.io/midnight-storm/landing/
 cta-text: Demo
-
--- ft-ui.grid-view: Featured SPA / Landing Pages
-if: { show-grid }
-templates: $landing
-more-link-text: View more
-more-link: /featured/landing-pages/
+cta-3-url: https://github.com/fastn-community/midnight-storm-template/generate/
+cta-3-text: Use this templates
+github-url: https://github.com/fastn-community/midnight-storm
+cta-2-url: https://fastn-community.github.io/midnight-storm/
+cta-2-text: User Manual
 
 -- end: ds.page
 
@@ -86,3 +103,16 @@ wip: true
 
 -- end: landing
 
+-- common.owner list owner-fastn:
+
+-- common.owner: Muskan Verma
+profile: featured/contributors/designers/muskan-verma/
+avatar: $fastn-assets.files.featured.contributors.designers.muskan-verma.muskan-verma.jpg
+role: Designer
+
+-- common.owner: Meenu Kumari
+profile: featured/contributors/developers/meenu-kumari/
+avatar: $fastn-assets.files.featured.contributors.developers.meenu-kumari.meenu.jpg
+role: Developer
+
+-- end: owner-fastn

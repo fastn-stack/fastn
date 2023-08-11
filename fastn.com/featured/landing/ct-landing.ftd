@@ -4,11 +4,8 @@
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -24,7 +21,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,25 +36,33 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
 
--- ds.layout: SPA / Landing Pages - CT Landing Page
-previous-url: /featured/landing-pages/
-github-url: https://github.com/saurabh-lohiya/ct-landing-page/
+-- ds.page.abstract-bar:
 
--- end: ds.page.layout-bar
+-- ds.distributors: Studious Couscous
+owners: $owner-fastn
+license-url: https://github.com/saurabh-lohiya/ct-landing-page/
+license: Creative Commons
+published-date: 20-June-2023
 
+-- end: ds.page.abstract-bar
+
+
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured SPA / Landing Pages
+templates: $landing
+more-link-text: View more
+more-link: /featured/landing-pages/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.landing.ct-landing-page.png
 cta-url: https://saurabh-lohiya.github.io/ct-landing-page/
 cta-text: Demo
-
--- ft-ui.grid-view: Featured SPA / Landing Pages
-if: { show-grid }
-templates: $landing
-more-link-text: View more
-more-link: /featured/landing-pages/
+github-url: https://github.com/saurabh-lohiya/ct-landing-page/
 
 -- end: ds.page
 
@@ -78,3 +84,21 @@ template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 
 -- end: landing
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Yashveer Mehra
+profile: featured/contributors/designers/yashveer-mehra/
+avatar: $fastn-assets.files.featured.contributors.designers.yashveer-mehra.yashveer-mehra.jpg
+role: Designer
+
+-- common.owner: Saurabh Lohiya
+profile: featured/contributors/developers/saurabh-lohiya/
+avatar: $fastn-assets.files.featured.contributors.developers.saurabh-lohiya.saurabh-lohiya.jpg
+role: Developer
+
+-- end: owner-fastn
+

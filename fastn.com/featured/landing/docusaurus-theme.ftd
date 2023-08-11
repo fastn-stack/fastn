@@ -4,11 +4,7 @@
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
 
-
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -24,7 +20,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,25 +35,31 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: SPA / Landing Pages - Docusaurus Theme
-previous-url: /featured/landing-pages/
-github-url: https://github.com/FifthTry/Docusaurus-theme
+-- ds.distributors: Docusaurus Theme
+owners: $owner-saurabh
+license-url: https://github.com/FifthTry/Docusaurus-theme/blob/main/LICENSE
+license: Creative Commons
+published-date: 30-Dec-2021
 
--- end: ds.page.layout-bar
+-- end: ds.page.abstract-bar
 
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured Documentation Sites
+templates: $landing
+more-link-text: View more
+more-link: /featured/doc-sites/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.landing.docusaurus-theme.png
 cta-url: https://fifthtry.github.io/Docusaurus-theme/
 cta-text: Demo
-
--- ft-ui.grid-view: Featured SPA / Landing Pages
-if: { show-grid }
-templates: $landing
-more-link-text: View more
-more-link: /featured/landing-pages/
+github-url: https://github.com/FifthTry/Docusaurus-theme
 
 -- end: ds.page
 
@@ -78,3 +81,20 @@ template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 
 -- end: landing
+
+
+
+
+-- common.owner list owner-saurabh:
+
+-- common.owner: Saurabh Garg
+profile: featured/contributors/developers/saurabh-garg/
+role: Developer
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- end: owner-saurabh
+

@@ -35,18 +35,6 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
-
--- ds.layout: Documentation Sites - Midnight Rush
-cta-text: Use this template
-cta-url: https://github.com/fastn-community/midnight-rush-template/generate
-previous-url: /featured/doc-sites/
-github-url: https://github.com/fastn-community/midnight-rush
-cta-url-1: https://fastn-community.github.io/midnight-rush/
-cta-text-1: User Manual
-
--- end: ds.page.layout-bar
-
 -- ds.page.abstract-bar:
 
 -- ds.distributors: Midnight Rush
