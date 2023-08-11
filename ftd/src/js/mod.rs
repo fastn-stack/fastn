@@ -430,6 +430,17 @@ impl ftd::interpreter::Component {
             )
         {
             header_defined_component_statements
+        } else if let Some(variable_defined_component_to_component_statements) = self
+            .variable_defined_component_to_component_statements(
+                parent,
+                index,
+                doc,
+                rdata,
+                should_return,
+                has_rive_components,
+            )
+        {
+            variable_defined_component_to_component_statements
         } else {
             panic!("Can't find, {}", self.name)
         }
@@ -545,6 +556,56 @@ impl ftd::interpreter::Component {
                 remaining
             )
             .as_str(),
+            vec![],
+            parent,
+            rdata.inherited_variable_name,
+            should_return,
+            index,
+            true,
+        );
+
+        let mut component_statements = vec![];
+        let instantiate_component_var_name = instantiate_component.var_name.clone();
+
+        component_statements.push(fastn_js::ComponentStatement::InstantiateComponent(
+            instantiate_component,
+        ));
+
+        component_statements.extend(self.events.iter().filter_map(|event| {
+            event
+                .to_event_handler_js(&instantiate_component_var_name, doc, rdata)
+                .map(fastn_js::ComponentStatement::AddEventHandler)
+        }));
+
+        Some(component_statements)
+    }
+
+    fn variable_defined_component_to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        rdata: &ftd::js::ResolverData,
+        should_return: bool,
+        has_rive_components: &mut bool,
+    ) -> Option<Vec<fastn_js::ComponentStatement>> {
+        if !doc
+            .get_variable(self.name.as_str(), self.line_number)
+            .ok()?
+            .kind
+            .is_ui()
+        {
+            return None;
+        }
+        let value = ftd::js::Value::Reference(self.name.to_owned()).to_set_property_value_with_ui(
+            doc,
+            rdata,
+            has_rive_components,
+            should_return,
+        );
+
+        let instantiate_component = fastn_js::InstantiateComponent::new_with_definition(
+            value,
             vec![],
             parent,
             rdata.inherited_variable_name,
