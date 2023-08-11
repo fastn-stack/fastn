@@ -211,7 +211,7 @@ ftd.toggle_dark_mode = function () {
 
 const len = ftd.len;
 
-ftd.storage = {
+ftd.local_storage = {
     set(key, value) {
         key = key instanceof fastn.mutableClass ? key.get() : key;
 
