@@ -441,6 +441,8 @@ document: /featured/contributors/designers/muskan-verma/index.ftd
   skip: true
   - Jay Kumar: /featured/contributors/designers/jay-kumar/
   skip: true
+  - Govindaraman S: /featured/contributors/designers/govindaraman-s/
+  skip: true
 - Developer: /featured/developers/
 skip: true
 document: /featured/contributors/developers/ganesh-salunke/index.ftd
@@ -455,6 +457,8 @@ document: /featured/contributors/developers/ganesh-salunke/index.ftd
   - Saurabh Lohiya: /featured/contributors/developers/saurabh-lohiya/
   skip: true
   - Saurabh Garg: /featured/contributors/developers/saurabh-garg/
+  skip: true
+  - Shaheen Senpai: /featured/contributors/developers/shaheen-senpai/
   skip: true
 - Website Categories: /featured/website-categories/
   - Documentation Sites: /featured/doc-sites/

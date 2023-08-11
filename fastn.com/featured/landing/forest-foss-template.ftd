@@ -47,7 +47,7 @@ previous-url: /featured/landing-pages/
 -- ds.distributors: Forest FOSS Template
 owners: $owner-arpita
 license-url: https://github.com/FifthTry/Docusaurus-theme/blob/main/LICENSE
-license: CC BY
+license: Creative Commons
 published-date: 30-Dec-2021
 
 -- end: ds.page.abstract-bar

@@ -53,7 +53,7 @@ cta-text-1: User Manual
 -- ds.distributors: Midnight Storm
 owners: $owner-fastn
 license-url: https://github.com/fastn-community/midnight-storm/blob/main/LICENSE
-license: CC BY
+license: Creative Commons
 published-date: 21-May-2023
 
 -- end: ds.page.abstract-bar
