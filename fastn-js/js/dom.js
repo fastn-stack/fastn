@@ -1430,7 +1430,7 @@ class Node2 {
                 this.attachAttribute("target", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextStyle) {
-            let styles = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            let styles = staticValue?.map(obj => fastn_utils.getStaticValue(obj.item));
             this.attachTextStyles(styles);
         } else if (kind === fastn_dom.PropertyKind.Region) {
             this.updateTagName(staticValue);
