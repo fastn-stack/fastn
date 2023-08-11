@@ -53,6 +53,24 @@ let fastn_utils = {
         }
     },
 
+    removeNonFastnClasses(element) {
+        let classList = element.classList;
+        if (ssr) {
+            classList = classList.getClasses();
+        }
+        const classesToRemove = [];
+
+        for (const className of classList) {
+            if (!className.startsWith('__')) {
+                classesToRemove.push(className);
+            }
+        }
+
+        for (const classNameToRemove of classesToRemove) {
+            classList.remove(classNameToRemove);
+        }
+    },
+
     staticToMutables(obj) {
         if (!(obj instanceof fastn.mutableClass) &&
             !(obj instanceof fastn.mutableListClass) &&

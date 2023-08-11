@@ -103,6 +103,7 @@ pub fn name_to_js(s: &str) -> String {
 
 pub fn name_to_js_(s: &str) -> String {
     let mut s = s.to_string();
+    //todo: remove this
     if s.as_bytes()[0].is_ascii_digit() {
         s = format!("_{}", s);
     }

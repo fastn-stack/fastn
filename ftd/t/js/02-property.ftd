@@ -9,3 +9,11 @@ width.fixed.px: 20
 
 -- ftd.text: fill-container
 width: fill-container
+
+-- ftd.text: Click me
+width.fixed.px: 10
+width.fixed.percent if { flag }: 40
+$on-click$: $ftd.toggle($a = $flag)
+background.solid: yellow
+
+-- boolean $flag: true
