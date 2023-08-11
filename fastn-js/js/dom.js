@@ -1581,6 +1581,7 @@ class Node2 {
     addEventHandler(event, func) {
         if (event === fastn_dom.Event.Click) {
             let onclickEvents = this.mergeFnCalls(this.#node.onclick, func);
+            if (fastn_utils.isNull(this.#node.onclick)) this.attachCss("cursor", "pointer");
             this.#node.onclick = onclickEvents;
         } else if (event === fastn_dom.Event.MouseEnter) {
             let mouseEnterEvents = this.mergeFnCalls(this.#node.onmouseenter, func);
