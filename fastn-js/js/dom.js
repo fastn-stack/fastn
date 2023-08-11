@@ -950,7 +950,7 @@ class Node2 {
         let position = fastn_utils.getStaticValue(value.get("position"));
         let positionX = null;
         let positionY = null;
-        if (position !== null) {
+        if (position !== null && position instanceof Object) {
             positionX = fastn_utils.getStaticValue(position.get("x"));
             positionY = fastn_utils.getStaticValue(position.get("y"));
 
@@ -964,7 +964,7 @@ class Node2 {
         let size = fastn_utils.getStaticValue(value.get("size"));
         let sizeX = null;
         let sizeY = null;
-        if (size !== null) {
+        if (size !== null && size instanceof Object) {
             sizeX = fastn_utils.getStaticValue(size.get("x"));
             sizeY = fastn_utils.getStaticValue(size.get("y"));
 
