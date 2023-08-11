@@ -18,7 +18,7 @@ With the promise - `If you can type, you can code`, let's begin!
 
 - Sign Up or Sign In on `GitHub`
 
-
+- Create repository using `doc-site` template
 
 
 
@@ -39,23 +39,33 @@ With the promise - `If you can type, you can code`, let's begin!
 
 Let's see how to edit the content and utilise various components.
 
+- Show small changes in the `index.ftd` document over the default content.
+
 -- ds.h3: `doc-site` components
 
 `doc-site` has a lot of powerful components that can be used. Check out the 
 following link to read about the components.
 
--- ftd.text: Markdown in doc-site 
-link: https://fastn-community.github.io/doc-site/components/
-open-in-new-tab: true
 
 -- ds.h3: Markdown
 
 Let's see how to use markdown in `fastn`.
 
+Checkout the following video to understand all about markdown.
+
 -- ftd.text: Markdown in doc-site 
 link: https://fastn.com/markdown/
 open-in-new-tab: true
 
+
+-- ds.markdown:
+
+`doc-site` has a lot many components that you can use and create exciting 
+websites. Click here to checkout all `doc-site` components.
+
+-- ftd.text: Doc-Site Components
+link: https://fastn-community.github.io/doc-site/components/
+open-in-new-tab: true
 
 
 
@@ -177,6 +187,69 @@ open-in-new-tab: true
 
 
 -- ds.h1: Comments
+
+In `fastn` you can comment a single line or an entire element.
+
+-- ds.rendered: Single line comment
+
+-- ds.rendered.input:
+
+\;; This line will be commented out.  ;; <hl>
+
+This line will be displayed
+So to comment out a line in `fastn`, we use double semi-colons `;;`.
+
+
+-- ds.rendered.output:
+
+-- ds.markdown: 
+
+;; This line will not be displayed.
+
+This line will be displayed.
+So to comment out a line in `fastn`, we use double semi-colons `;;`.
+
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.rendered: Comment an entire Section 
+
+-- ds.rendered.input:
+
+\-- ds.markdown:
+
+The body text in `first` markdown element will be displayed.
+
+\/-- ds.markdown:
+
+The body text of `second` markdown element will be commented out.
+
+\-- ds.markdown:
+
+So to comment an entire section, we use forward slash `/`.
+
+
+-- ds.rendered.output:
+
+
+-- ds.markdown:
+
+The body text in `first` markdown element will be displayed.
+
+/-- ds.markdown:
+
+The body text of `second` markdown element will be commented out.
+
+-- ds.markdown:
+
+So to comment an entire section, we use forward slash `/`.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
 
 -- ds.h1: Image
 
