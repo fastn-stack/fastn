@@ -213,7 +213,7 @@ if: { header.show-link }
 -- web-component todo-list-display:
 string name:
 todo-item list $todo_list:
-js: ftd/ftd/t/assets/todo.js
+js: ../../t/assets/todo.js
 
 -- end: todo-list-display
 

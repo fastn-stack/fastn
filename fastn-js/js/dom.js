@@ -779,7 +779,8 @@ class Node2 {
     }
     // dynamic-class-css
     attachCss(property, value, createClass, className) {
-        const propertyShort = fastn_dom.propertyMap[property] || property;
+        let propertyShort = fastn_dom.propertyMap[property] || property;
+        propertyShort = `__${propertyShort}`;
         let cls = `${propertyShort}-${JSON.stringify(value)}`;
         if (!!className) {
            cls = className;
@@ -1223,10 +1224,13 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Shadow) {
             this.attachShadow(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Classes) {
-            let cls = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
-            cls.forEach((c) => {
-               this.#node.classList.add(c);
-            });
+            fastn_utils.removeNonFastnClasses(this.#node);
+            if (!fastn_utils.isNull(staticValue)) {
+                let cls = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+                cls.forEach((c) => {
+                    this.#node.classList.add(c);
+                });
+            }
         } else if (kind === fastn_dom.PropertyKind.Anchor) {
             // todo: this needs fixed for anchor.id = v
             // need to change position of element with id = v to relative
