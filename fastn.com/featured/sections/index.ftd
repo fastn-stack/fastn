@@ -37,6 +37,10 @@ more-link: /featured/sections/slides/
 
 -- ft-ui.template list heros:
 
+-- ft-ui.template: Hero with two CTA - Design 5
+template-url: featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
+
 -- ft-ui.template: Hero with social - Design 1
 template-url: featured/sections/heros/hero-6/
 screenshot: $fastn-assets.files.images.featured.components.hero-6.png
@@ -44,10 +48,6 @@ screenshot: $fastn-assets.files.images.featured.components.hero-6.png
 -- ft-ui.template: Hero with two CTA - Design 2
 template-url: featured/sections/heros/hero-2/
 screenshot: $fastn-assets.files.images.featured.components.hero-2.png
-
--- ft-ui.template: Hero with two CTA - Design 5
-template-url: featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/
-screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
 
 -- end: heros
 
