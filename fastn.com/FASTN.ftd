@@ -470,7 +470,7 @@ document: /featured/contributors/developers/ganesh-salunke/index.ftd
     skip: true
     - API DS: /featured/ds/api-ds/
     skip: true
-    - Simple Book DS: /featured/ds/spider-book-ds/
+    - Spider Book DS: /featured/ds/spider-book-ds/
     skip: true
     - Framework DS: /featured/ds/framework/
     skip: true
