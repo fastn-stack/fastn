@@ -384,6 +384,7 @@ impl ftd::interpreter::Value {
                             )
                         })
                         .collect_vec(),
+                    other_references: vec![],
                 })
             }
             ftd::interpreter::Value::UI { component, .. } => {

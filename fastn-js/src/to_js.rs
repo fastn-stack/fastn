@@ -192,8 +192,12 @@ impl fastn_js::ElementKind {
 impl fastn_js::ComponentStatement {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         match self {
-            fastn_js::ComponentStatement::StaticVariable(f) => f.to_js(),
-            fastn_js::ComponentStatement::MutableVariable(f) => f.to_js(),
+            fastn_js::ComponentStatement::StaticVariable(static_variable) => {
+                static_variable.to_js()
+            }
+            fastn_js::ComponentStatement::MutableVariable(mutable_variable) => {
+                mutable_variable.to_js()
+            }
             fastn_js::ComponentStatement::CreateKernel(kernel) => kernel.to_js(),
             fastn_js::ComponentStatement::SetProperty(set_property) => set_property.to_js(),
             fastn_js::ComponentStatement::InstantiateComponent(i) => i.to_js(),

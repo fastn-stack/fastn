@@ -63,6 +63,7 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
                     ),
                 ),
             ],
+            other_references: vec![],
         }),
         prefix: None,
     }));
@@ -203,7 +204,10 @@ impl ftd::interpreter::Variable {
                 }
                 return fastn_js::Ast::RecordInstance(fastn_js::RecordInstance {
                     name: self.name.to_string(),
-                    fields: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record { fields }),
+                    fields: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
+                        fields,
+                        other_references: vec![],
+                    }),
                     prefix,
                 });
             } else if self.kind.is_list() {
