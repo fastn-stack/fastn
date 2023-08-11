@@ -21,7 +21,9 @@ pub mod utils;
 
 pub use ast::Ast;
 pub use component::{component0, component1, component2, component_with_params, Component};
-pub use component_invocation::{ElementKind, InstantiateComponent, Kernel};
+pub use component_invocation::{
+    ElementKind, InstantiateComponent, InstantiateComponentData, Kernel,
+};
 pub use component_statement::ComponentStatement;
 pub use conditional_component::ConditionalComponent;
 pub use constants::*;

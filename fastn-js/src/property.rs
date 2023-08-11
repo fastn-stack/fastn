@@ -200,6 +200,7 @@ pub enum Value {
     },
     Record {
         fields: Vec<(String, SetPropertyValue)>,
+        other_references: Vec<String>,
     },
     UI {
         value: Vec<fastn_js::ComponentStatement>,
@@ -234,8 +235,23 @@ impl Value {
                     .map(|v| v.to_js_with_element_name(element_name))
                     .join(", ")
             ),
-            Value::Record { fields } => format!(
-                "fastn.recordInstance({{{}}})",
+            Value::Record {
+                fields,
+                other_references,
+            } => format!(
+                "fastn.recordInstance({{{}{}}})",
+                if other_references.is_empty() {
+                    "".to_string()
+                } else {
+                    format!(
+                        "{}, ",
+                        other_references
+                            .iter()
+                            .map(|v| format!("...{v}.getAllFields()"))
+                            .collect_vec()
+                            .join(", ")
+                    )
+                },
                 fields
                     .iter()
                     .map(|(k, v)| format!(
@@ -270,7 +286,7 @@ impl Value {
                 .map(|v| v.is_local_value_dependent())
                 .unwrap_or_default(),
             Value::List { value } => value.iter().any(|v| v.is_local_value_dependent()),
-            Value::Record { fields } => fields.iter().any(|v| v.1.is_local_value_dependent()),
+            Value::Record { fields, .. } => fields.iter().any(|v| v.1.is_local_value_dependent()),
             Value::UI { .. } => {
                 //Todo: Check for UI
                 false

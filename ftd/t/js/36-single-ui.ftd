@@ -1,0 +1,35 @@
+-- component single-ui:
+ftd.ui ui:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: Hello World
+
+-- single-ui.ui:
+
+-- ftd.text: Hello World down
+
+-- end: ftd.column
+
+-- end: single-ui
+
+
+-- ftd.ui list uis:
+
+-- ftd.text: Hello World 3
+
+-- ftd.text: Hello World 2
+
+-- end: uis
+
+-- single-ui:
+ui: $uis.0
+
+
+-- uis.0:
+
+
+;; After this:
+;; -- object:
+;; for: $object in $uis

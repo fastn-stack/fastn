@@ -577,12 +577,19 @@ fastn_dom.Length = {
         }
         return `${value}vmax`;
     },
-    Responsive: (desktop, mobile) => {
-        if (ftd.device.get() === "desktop") {
-            return desktop;
-        } else {
-            return mobile ? mobile: desktop;
-        }
+    Responsive: (length) => {
+        return new PropertyValueAsClosure(
+            () => {
+                if (ftd.device.get() === "desktop") {
+                    return length.get("desktop");
+                } else {
+                    let mobile = length.get("mobile");
+                    let desktop = length.get("desktop");
+                    return mobile ? mobile: desktop;
+                }
+            },
+            [ftd.device, length]
+        );
     }
 }
 
@@ -599,6 +606,15 @@ fastn_dom.Event = {
     Change: 7,
     Blur: 8,
     Focus: 9,
+}
+
+class PropertyValueAsClosure {
+    closureFunction;
+    deps;
+    constructor(closureFunction, deps) {
+        this.closureFunction = closureFunction;
+        this.deps = deps;
+    }
 }
 
 // Node2 -> Intermediate node
@@ -628,6 +644,9 @@ class Node2 {
 
         if (parentOrSibiling instanceof ParentNodeWithSibiling) {
             this.#parent = parentOrSibiling.getParent();
+            while(this.#parent instanceof ParentNodeWithSibiling) {
+                this.#parent = this.#parent.getParent();
+            }
             sibiling = parentOrSibiling.getSibiling();
         }
 
@@ -1411,7 +1430,7 @@ class Node2 {
                 this.attachAttribute("target", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextStyle) {
-            let styles = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            let styles = staticValue?.map(obj => fastn_utils.getStaticValue(obj.item));
             this.attachTextStyles(styles);
         } else if (kind === fastn_dom.PropertyKind.Region) {
             this.updateTagName(staticValue);
@@ -1527,7 +1546,9 @@ class Node2 {
     }
     setProperty(kind, value, inherited) {
         if (value instanceof fastn.mutableClass) {
-            this.setDynamicProperty(kind, [value], () => { return value.get(); });
+            this.setDynamicProperty(kind, [value], () => { return value.get(); }, inherited);
+        } else if (value instanceof PropertyValueAsClosure) {
+            this.setDynamicProperty(kind, value.deps, value.closureFunction, inherited);
         } else {
             this.setStaticProperty(kind, value, inherited);
         }
@@ -1560,6 +1581,7 @@ class Node2 {
     addEventHandler(event, func) {
         if (event === fastn_dom.Event.Click) {
             let onclickEvents = this.mergeFnCalls(this.#node.onclick, func);
+            if (fastn_utils.isNull(this.#node.onclick)) this.attachCss("cursor", "pointer");
             this.#node.onclick = onclickEvents;
         } else if (event === fastn_dom.Event.MouseEnter) {
             let mouseEnterEvents = this.mergeFnCalls(this.#node.onmouseenter, func);

@@ -14,19 +14,29 @@ pub fn reference_to_js(s: &str) -> String {
 
     let (mut p1, mut p2) = get_doc_name_and_remaining(s.as_str());
     p1 = fastn_js::utils::name_to_js_(p1.as_str());
+    let mut wrapper_function = None;
     while let Some(remaining) = p2 {
         let (p21, p22) = get_doc_name_and_remaining(remaining.as_str());
-        p1 = format!(
-            "{}.get(\"{}\")",
-            p1,
-            fastn_js::utils::name_to_js_(p21.as_str())
-        );
+        if let Ok(num) = p21.parse::<i64>() {
+            p1 = format!("{}.get({})", p1, num);
+            wrapper_function = Some("fastn_utils.getListItem");
+        } else {
+            p1 = format!(
+                "{}.get(\"{}\")",
+                p1,
+                fastn_js::utils::name_to_js_(p21.as_str())
+            );
+        }
         p2 = p22;
     }
-    format!(
+    let p1 = format!(
         "{}{p1}",
         prefix.map(|v| format!("{v}.")).unwrap_or_default()
-    )
+    );
+    if let Some(func) = wrapper_function {
+        return format!("{}({})", func, p1);
+    }
+    p1
 }
 
 pub fn clone_to_js(s: &str) -> String {

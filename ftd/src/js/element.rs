@@ -898,6 +898,7 @@ impl InheritedProperties {
                 name: format!("{}{}", fastn_js::INHERITED_PREFIX, component_name),
                 value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
                     fields: inherited_fields,
+                    other_references: vec![rdata.inherited_variable_name.to_string()],
                 }),
                 prefix: None,
             })
@@ -1860,7 +1861,7 @@ impl Rive {
                 extraData.rive = new rive.Rive({{
                     src: fastn_utils.getFlattenStaticValue({src}),
                     canvas: {canvas}.getNode(),
-                    autoplay: fastn_utils.getStaticValue({autoplay}),
+                    autoplay: {get_static_value}({autoplay}),
                     stateMachines: fastn_utils.getFlattenStaticValue({state_machines}),
                     artboard: {artboard},
                     onLoad: (_) => {{
@@ -1872,6 +1873,7 @@ impl Rive {
             "},
             src = self.src.to_set_property_value(doc, rdata).to_js(),
             canvas = kernel.name,
+            get_static_value = fastn_js::GET_STATIC_VALUE,
             autoplay = self.autoplay.to_set_property_value(doc, rdata).to_js(),
             state_machines = self
                 .state_machines

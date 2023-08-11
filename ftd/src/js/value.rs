@@ -384,6 +384,7 @@ impl ftd::interpreter::Value {
                             )
                         })
                         .collect_vec(),
+                    other_references: vec![],
                 })
             }
             ftd::interpreter::Value::UI { component, .. } => {
@@ -543,6 +544,7 @@ fn length_variants(name: &str) -> &'static str {
         "vmin" => "Vmin",
         "vmax" => "Vmax",
         "calc" => "Calc",
+        "responsive" => "Responsive",
         t => todo!("invalid length variant {}", t),
     }
 }

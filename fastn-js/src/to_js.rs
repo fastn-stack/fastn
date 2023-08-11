@@ -192,8 +192,12 @@ impl fastn_js::ElementKind {
 impl fastn_js::ComponentStatement {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         match self {
-            fastn_js::ComponentStatement::StaticVariable(f) => f.to_js(),
-            fastn_js::ComponentStatement::MutableVariable(f) => f.to_js(),
+            fastn_js::ComponentStatement::StaticVariable(static_variable) => {
+                static_variable.to_js()
+            }
+            fastn_js::ComponentStatement::MutableVariable(mutable_variable) => {
+                mutable_variable.to_js()
+            }
             fastn_js::ComponentStatement::CreateKernel(kernel) => kernel.to_js(),
             fastn_js::ComponentStatement::SetProperty(set_property) => set_property.to_js(),
             fastn_js::ComponentStatement::InstantiateComponent(i) => i.to_js(),
@@ -213,12 +217,27 @@ impl fastn_js::ComponentStatement {
     }
 }
 
+impl fastn_js::InstantiateComponentData {
+    fn to_js(&self) -> String {
+        match self {
+            fastn_js::InstantiateComponentData::Definition(definition) => {
+                format!("{}({})", fastn_js::GET_STATIC_VALUE, definition.to_js())
+            }
+            fastn_js::InstantiateComponentData::Name(name) => name.to_owned(),
+        }
+    }
+}
+
 impl fastn_js::InstantiateComponent {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         pretty::RcDoc::text(format!(
             "let {} = {}(",
             self.var_name,
-            fastn_js::utils::name_to_js(self.component_name.as_str())
+            if !self.already_formatted {
+                fastn_js::utils::name_to_js(self.component.to_js().as_str())
+            } else {
+                self.component.to_js().to_owned()
+            }
         ))
         .append(pretty::RcDoc::text(self.parent.clone()))
         .append(comma().append(space()))
@@ -899,13 +918,17 @@ impl ExpressionGenerator {
             .join("");
         }
 
-        if let Some(operator) = self.has_operator(node.operator()) {
+        if let Some(mut operator) = self.has_operator(node.operator()) {
             // Todo: if node.children().len() != 2 {throw error}
             let first = node.children().first().unwrap(); //todo remove unwrap()
             if matches!(node.operator(), fastn_grammar::evalexpr::Operator::Not)
                 || matches!(node.operator(), fastn_grammar::evalexpr::Operator::Neg)
             {
                 return vec![operator, self.to_js_(first, false, arguments, false)].join("");
+            }
+            if matches!(node.operator(), fastn_grammar::evalexpr::Operator::Neq) {
+                // For js conversion
+                operator = "!==".to_string();
             }
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
             return vec![

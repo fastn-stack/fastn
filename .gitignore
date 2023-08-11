@@ -3,6 +3,7 @@
 **/.DS_Store
 
 ftd/t/js/**.manual.html
+ftd/t/js/**.script.html
 
 # Rust stuff
 target

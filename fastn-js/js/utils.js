@@ -149,11 +149,22 @@ let fastn_utils = {
         if (value === null || value === undefined) {
             return value;
         }
-        if (value instanceof Mutable) {
-            let cloned_value = value.getClone();
-            return cloned_value;
+        if (value instanceof fastn.mutableClass ||
+            value instanceof fastn.mutableListClass )
+        {
+            return value.getClone();
+        }
+           if (value instanceof fastn.recordInstanceClass) {
+            return value.getClone();
         }
         return value;
+    },
+
+    getListItem(value) {
+        if (value === undefined){
+            return null;
+        }
+        return value.item;
     },
   
     getEventKey(event) {
@@ -169,7 +180,7 @@ let fastn_utils = {
         const properties = path.split('.');
 
         for (let i = 0; i < properties.length - 1; i++) {
-            const property = properties[i];
+            let property = fastn_utils.private.addUnderscoreToStart(properties[i]);
             if (currentObject instanceof fastn.recordInstanceClass) {
                 if (currentObject.get(property) === undefined) {
                     currentObject.set(property, fastn.recordInstance({}));
@@ -426,6 +437,13 @@ fastn_utils.private = {
         }
 
         return mergedRanges.join(',');
+    },
+
+    addUnderscoreToStart(text) {
+        if (/^\d/.test(text)) {
+            return '_' + text;
+        }
+        return text;
     }
 }
 

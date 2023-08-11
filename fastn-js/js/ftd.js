@@ -6,6 +6,18 @@ let ftd = {
         return fastn_utils.isNull(value) || value.length === 0;
     },
 
+    len(data) {
+        if (!!data && data instanceof fastn.mutableListClass) {
+            if (data.getLength)
+                return data.getLength();
+            return -1;
+        }
+        if (!!data && data.length) {
+            return data.length;
+        }
+        return -2;
+    },
+
     copy_to_clipboard(args) {
         let text = args.a;
         if (text.startsWith("\\", 0)) {
@@ -136,95 +148,59 @@ ftd.delete_at = function (list, index) { list.deleteAt(index) }
 ftd.clear_all = function (list) { list.clearAll() }
 ftd.set_list = function (list, value) { list.set(value) }
 
-ftd.http = function (url, method, ...request_data) {
-    if (url instanceof Mutable) url = url.get();
-    if (method instanceof Mutable) method = method.get();
+ftd.http = function (url, method, body, headers) {
+    if (url instanceof fastn.mutableClass) url = url.get();
+    if (method instanceof fastn.mutableClass) method = method.get();
+    method = method.trim().toUpperCase();
+    const init = {
+        method,
+        headers: {}
+    };
+    if(headers && headers instanceof fastn.recordInstanceClass) {
+        Object.assign(init.headers, headers.toObject());
+    }
+    if(method !== 'GET') {
+        init.headers['Content-Type'] = 'application/json';
+    }
+    if(body && body instanceof fastn.recordInstanceClass && method !== 'GET') {
+        init.body = JSON.stringify(body.toObject());
+    }
+    fetch(url, init)
+    .then(res => {
+        if(!res.ok) {
+            return new Error("[http]: Request failed", res)
+        }
 
-    let method_name = method.trim().toUpperCase();
-    if (method_name == "GET") {
-        let query_parameters = new URLSearchParams();
+        return res.json();
+    })
+    .then(json => {
+        console.log("[http]: Response OK", json);
+    })
+    .catch(console.error);
+}
+
+ftd.navigate = function(url, request_data) {
+    let query_parameters = new URLSearchParams();
+    if(request_data instanceof RecordInstance) {
         // @ts-ignore
-        for (let [header, value] of Object.entries(request_data)) {
+        for (let [header, value] of Object.entries(request_data.toObject())) {
             if (header != "url" && header != "function" && header != "method") {
                 let [key, val] = value.length == 2 ? value : [header, value];
                 query_parameters.set(key, val);
             }
         }
-        let query_string = query_parameters.toString();
-        if (query_string) {
-            let get_url = url + "?" + query_parameters.toString();
-            window.location.href = get_url;
-        }
-        else {
-            window.location.href = url;
-        }
-        return;
     }
-    let json = request_data[0];
-    if (request_data.length !== 1 || (request_data[0].length === 2 && Array.isArray(request_data[0]))) {
-        let new_json = {};
-        // @ts-ignore
-        for (let [header, value] of Object.entries(request_data)) {
-            let [key, val] = value.length == 2 ? value : [header, value];
-            new_json[key] = val;
-        }
-        json = new_json;
+    let query_string = query_parameters.toString();
+    if (query_string) {
+        let get_url = url + "?" + query_parameters.toString();
+        window.location.href = get_url;
     }
-    let xhr = new XMLHttpRequest();
-    xhr.open(method_name, url);
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState !== 4) {
-            // this means request is still underway
-            // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
-            return;
-        }
-        if (xhr.status > 500) {
-            console.log("Error in calling url: ", request_data.url, xhr.responseText);
-            return;
-        }
-        let response = JSON.parse(xhr.response);
-        if (!!response && !!response.redirect) {
-            // Warning: we don't handle header location redirect
-            window.location.href = response.redirect;
-        }
-        else if (!!response && !!response.reload) {
-            window.location.reload();
-        }
-        else {
-            let data = {};
-            if (!!response.errors) {
-                for (let key of Object.keys(response.errors)) {
-                    let value = response.errors[key];
-                    if (Array.isArray(value)) {
-                        // django returns a list of strings
-                        value = value.join(" ");
-                        // also django does not append `-error`
-                        key = key + "-error";
-                    }
-                    // @ts-ignore
-                    data[key] = value;
-                }
-            }
-            if (!!response.data) {
-                if (!!data) {
-                    console_log("both .errrors and .data are present in response, ignoring .data");
-                }
-                else {
-                    data = response.data;
-                }
-            }
-            for (let ftd_variable of Object.keys(data)) {
-                // @ts-ignore
-                window.ftd.set_value(ftd_variable, data[ftd_variable]);
-            }
-        }
-    };
-    xhr.send(JSON.stringify(json));
-};
+    else {
+        window.location.href = url;
+    }
+}
 
-ftd.toggle_mode = function () {
+ftd.toggle_dark_mode = function () {
     const is_dark_mode = ftd.get(ftd.dark_mode);
     if(is_dark_mode) {
         enable_light_mode();
@@ -232,6 +208,8 @@ ftd.toggle_mode = function () {
         enable_dark_mode();
     }
 };
+
+const len = ftd.len;
 
 ftd.storage = {
     set(key, value) {

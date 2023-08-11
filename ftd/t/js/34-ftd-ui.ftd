@@ -1,0 +1,90 @@
+-- switcher:
+s: $c
+
+
+
+
+
+
+
+
+
+-- record switches:
+caption name:
+ftd.ui list elements:
+
+
+
+
+
+
+
+
+-- switches list c:
+
+-- switches: me
+-- switches.elements:
+
+-- ftd.text: Me component
+color: $inherited.colors.text-strong
+
+-- ftd.text: Me component 2
+
+-- end: switches.elements
+
+
+-- switches: me22
+-- switches.elements:
+
+-- ftd.text: Me component22
+
+-- ftd.text: Me component22 2
+
+-- end: switches.elements
+
+-- end: c
+
+
+
+
+
+
+
+
+
+-- component switcher:
+switches list s:
+integer $is-active: 0
+
+-- ftd.column:
+
+-- box:
+if: { switcher.is-active == $LOOP.COUNTER }
+uis: $obj.elements
+for: obj in $switcher.s
+
+-- end: ftd.column
+
+-- end: switcher
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component box:
+ftd.ui list uis:
+
+-- ftd.column:
+children: $box.uis
+
+-- end: box
+
+
