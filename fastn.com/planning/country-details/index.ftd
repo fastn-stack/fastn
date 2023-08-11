@@ -1,0 +1,71 @@
+-- ds.page: A hands-on guide to Dynamic UI using REST API
+
+
+This guide provides step-by-step instructions to deploy the `country-details-ui`
+project, which consists of two packages, `country-details-http`
+(backend) and "country-details-ui" (UI). The deployment will be on Heroku using
+the fastn buildpack, which requires the fastn 2023 edition for building the
+project.
+
+
+We are going to create a project in `fastn` that will create a Dynamic UI to 
+display the countries along with their Population, Region and Capital.
+
+
+
+
+\;; Walkthrough video will come after we have created the entire project.
+
+
+**VIDEO 0: Walkthrough, showcasing final UI**
+
+\;; more content
+
+
+
+-- ds.h1: Basics of http and Data modelling
+
+
+Before that, let's take another example where the json data will only have 
+country-name and capital.
+
+
+**VIDEO 1: Basics of http and Data modelling**
+- name-capital
+- concept narration + project output
+
+*Start:*
+
+- Created API: json to show data (i will share the link)
+- Model (ftd file - record)
+- http request and apply it to the model
+- UI and outcome 
+
+\;; api (json) -> records(concept) ftd file, data display
+
+
+-- ds.h1: Nested Model System
+
+**VIDEO 2: (explanation of nested model system)**
+ 
+- api (json)
+
+
+-- ds.h1: Frontend design & making the design interactive
+
+**VIDEO 3: some frontend concept will come** 
+
+- section
+- use component card, UI elements (badge, back button) 
+- making the card interactive (component along with text properties and on-click)
+
+
+-- ds.h1: Deploying on Heroku
+
+**VIDEO 4: HEROKU deployment**
+
+
+
+
+
+-- end: ds.page

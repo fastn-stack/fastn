@@ -1,0 +1,26 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page: 
+full-width: true
+sidebar: false
+
+-- ft-ui.grid-view: Resumes
+templates: $resumes
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template list resumes:
+
+-- ft-ui.template: Caffeine
+template-url: featured/resumes/caffiene/
+screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
+
+-- ft-ui.template: Resume 1
+template-url: featured/resumes/resume-1/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
+
+-- end: resumes

@@ -4,16 +4,12 @@
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
-
-
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
 
--- ds.page: Featured components
+
+-- ds.page: 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -23,7 +19,9 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
+full-width: true
 distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -37,50 +35,35 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
-
--- ds.layout: Documentation Sites - Midnight Rush
-previous-url: /featured/
-
--- end: ds.page.layout-bar
-
 -- ds.page.abstract-bar:
 
--- ds.distributors: 
+-- ds.distributors: Midnight Rush
 owners: $owner-fastn
 license-url: https://github.com/fastn-community/midnight-rush/blob/main/LICENSE
 license: Creative Commons
-published-date: 05-June-2023
-used-by: 1 +
-likes: 1 Stars
-connect: $social-links
+published-date: 21-May-2023
 
 -- end: ds.page.abstract-bar
 
+-- ds.page.full-width-wrap:
 
--- ds.page.body:
+-- ft-ui.grid-view: Featured Documentation Sites
+templates: $doc-sites
+more-link-text: View more
+more-link: /featured/doc-sites/
+show-large: true
 
-⚡️ Midnight Rush will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
-
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
-cta-url: https://fastn-community.github.io/midnight-rush/
-wip: true
-
--- ft-ui.grid-view: Documentation Sites
-if: { show-grid }
-templates: $ft-ui.doc-sites
-more-link-text: View all
-more-link: /featured/doc-sites/
-
-`doc-sites` will help you create a beautiful documentation site in no time. 
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
+cta-url: https://gsalunke.github.io/midnight-rush-demo/
+cta-text: Demo
+github-url: https://github.com/fastn-community/midnight-rush
+cta-3-url: https://github.com/fastn-community/midnight-rush-template/generate/
+cta-3-text: Use this templates
+cta-2-url: https://fastn-community.github.io/midnight-rush/
+cta-2-text: User Manual
 
 -- end: ds.page
 
@@ -93,35 +76,39 @@ kind of site(personal website, blog, etc).
 
 
 
--- common.social-media list social-links:
-
--- common.social-media: 
-link: https://discord.gg/bucrdvptYd
-src: $assets.files.images.discord.svg
-
--- common.social-media: 
-link: https://twitter.com/fastn_stack
-src: $assets.files.images.twitter.svg
-
--- common.social-media: 
-link: https://www.linkedin.com/company/fifthtry/
-src: $assets.files.images.linkedin.svg
-
--- end: social-links
-
-
-
-
-
-
-
-
-
 -- common.owner list owner-fastn:
 
--- common.owner: Fastn Community
-profile: https://github.com/fastn-community
-avatar: $assets.files.images.fastn.svg
+-- common.owner: Muskan Verma
+profile: featured/contributors/designers/muskan-verma/
+avatar: $fastn-assets.files.featured.contributors.designers.muskan-verma.muskan-verma.jpg
+role: Designer
+
+-- common.owner: Priyanka Yadav
+profile: featured/contributors/developers/priyanka-yadav/
+avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+role: Developer
 
 -- end: owner-fastn
 
+
+
+
+
+
+-- ft-ui.template list doc-sites:
+
+-- ft-ui.template: Midnight Storm
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
+
+-- ft-ui.template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+
+-- ft-ui.template: Dash Dash DS
+template-url: featured/ds/dash-dash-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.dash-dash-ds.png
+wip: true
+
+
+-- end: doc-sites

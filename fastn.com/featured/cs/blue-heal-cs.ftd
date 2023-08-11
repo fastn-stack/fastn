@@ -13,7 +13,7 @@
 
 
 
--- ds.page: Color schemes - Blue Heal CS
+-- ds.page:
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -23,7 +23,9 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
-distribution-bar: true
+distribution-bar: false
+show-layout-bar: true
+full-width: true
 
 -- ds.page.footer:
 
@@ -43,6 +45,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 cta-url: https://fastn-community.github.io/blue-heal-cs/
 previous-url: /featured/cs/
 cta-text: Use this color scheme
+github-url: https://github.com/fastn-community/blue-heal-cs
 
 -- end: ds.page.layout-bar
 
@@ -60,24 +63,18 @@ connect: $social-links
 -- end: ds.page.abstract-bar
 
 
--- ds.page.body:
-
-We have designed and developed below color schemes. You can use them
-to change your `FTD` web site color scheme. 
-
 
 -- ds.preview-card: 
 image: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
 cta-url: https://fastn-community.github.io/blue-heal-cs/
+cta-text: Demo
+width.fixed.px if { ftd.device == "desktop" }: 800
 
 -- ft-ui.grid-view: Similar Color schemes
 if: { show-grid }
 templates: $similar-schemes
 more-link-text: View all
 more-link: /featured/cs/
-
-Add warmth and energy to your fastn web site designs with our fastn Color
-Schemes.
 
 -- end: ds.page
 
@@ -136,9 +133,5 @@ avatar: $assets.files.images.fastn.svg
 -- ft-ui.template: Winter CS
 template-url: featured/cs/winter-cs/
 screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
-licence-url: https://github.com/fastn-community/winter-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/winter-cs
-
-Add warmth and energy to your designs with the `winter-cs`.
 
 -- end: similar-schemes

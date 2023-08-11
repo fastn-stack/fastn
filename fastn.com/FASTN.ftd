@@ -81,9 +81,20 @@ favicon: /-/fastn.com/images/favicon.svg
 - Student Ambassador Program: /ambassador/
   document: /student-programs/ambassador.ftd
   skip: true
-- Champion Program: /champion/
+- Champion Program: /champion-program/
   document: /student-programs/champion.ftd
   skip: true
+  - Champions: /student-programs/champions/all-champions/
+    skip: true
+    - Ajit Garg: /student-programs/champions/ajit-garg/
+      skip: true
+- Ambassador Program: /ambassador-program/
+  document: /student-programs/ambassador.ftd
+  skip: true
+  - Ambassadors: /student-programs/ambassadors/all-ambassadors/
+    skip: true
+    - Ayush Soni: /student-programs/ambassadors/ayush-soni/
+      skip: true
   
 ## Features: /features/
 
@@ -384,11 +395,11 @@ favicon: /-/fastn.com/images/favicon.svg
   document: backend/ftd-redirect.ftd
 
 
-# Create Website: /install/-/build/
+# Create Website: /create-website/
   document: author/how-to/install.ftd
   source: build
   
-## Create Website: /install/-/build/
+## Create Website: /create-website/
   document: author/how-to/install.ftd
 
 - Install: /install/-/build/
@@ -422,42 +433,238 @@ favicon: /-/fastn.com/images/favicon.svg
 - Redirects: /redirects/
   document: backend/redirects.ftd
 
-## Featured Components: /featured/
-
-- Website Categories: /featured/doc-sites/
+## Featured Templates: /featured/
+- Designer: /featured/designers/
+skip: true
+document: /featured/contributors/designers/muskan-verma/index.ftd
+  - Muskan Verma: /featured/contributors/designers/muskan-verma/
+  skip: true
+  - Jay Kumar: /featured/contributors/designers/jay-kumar/
+  skip: true
+- Developer: /featured/developers/
+skip: true
+document: /featured/contributors/developers/ganesh-salunke/index.ftd
+  - Arpita Jaiswal: /featured/contributors/developers/arpita-jaiswal/
+  skip: true
+  - Ganesh Salunke: /featured/contributors/developers/ganesh-salunke/
+  skip: true
+  - Meenu Kumari: /featured/contributors/developers/meenu-kumari/
+  skip: true
+  - Priyanka Yadav: /featured/contributors/developers/priyanka-yadav/
+  skip: true
+  - Saurabh Lohiya: /featured/contributors/developers/saurabh-lohiya/
+  skip: true
+  - Saurabh Garg: /featured/contributors/developers/saurabh-garg/
+  skip: true
+- Website Categories: /featured/website-categories/
   - Documentation Sites: /featured/doc-sites/
-    - Doc Site: /featured/ds/doc-site/
-      skip: true
+    - Simple Site: /featured/ds/doc-site/
+    skip: true
     - Midnight Rush: /featured/ds/mr-ds/
-      skip: true
+    skip: true
     - Midnight Storm: /featured/ds/midnight-storm/
-      skip: true
+    skip: true
     - Misty Gray: /featured/ds/misty-gray/
-      skip: true
-    - Doc Site Blog: /featured/blogs/doc-site/
-      skip: true
-    - Doc Site Blog: /featured/blogs/mr-blog/
-      skip: true
-    - Midnight Storm Blog: /featured/blogs/set-2-blog/
-      skip: true
-    - Misty Gray Blog: /featured/blogs/set-3-blog/
-      skip: true
-    - Midnight Rush Landing: /featured/landing/mr-landing/
-      skip: true
-    - Midnight Storm Landing: /featured/landing/midnight-storm-landing/
-      skip: true
+    skip: true
+    - Dash Dash DS: /featured/ds/dash-dash-ds/
+    skip: true
+    - API DS: /featured/ds/api-ds/
+    skip: true
+    - Spider Book DS: /featured/ds/spider-book-ds/
+    skip: true
+    - Framework DS: /featured/ds/framework/
+    skip: true
+    - Blue Sapphire Template: /featured/ds/blue-sapphire-template/
+    skip: true
+    - Forest Template DS: /featured/ds/forest-template/
+    skip: true
+    - Docusaurus Theme: /featured/ds/docusaurus-theme/
+    skip: true
   - SPA / Landing Pages: /featured/landing-pages/
-  - Blog Templates: /featured/blog-templates/
+    - Midnight Rush: /featured/landing/mr-landing/
+    skip: true
+    - Midnight Storm: /featured/landing/midnight-storm-landing/
+    skip: true
+    - Misty Gray: /featured/landing/misty-gray-landing/
+    skip: true
+    - CT Landing Page: /featured/landing/ct-landing/
+    skip: true
+    - Docusaurus Theme: /featured/landing/docusaurus-theme/
+    skip: true
+    - Forest FOSS Template: /featured/landing/forest-foss-template/
+    skip: true
+    - Studious Couscous: /featured/landing/studious-couscous/
+    skip: true
+  - Blogs: /featured/blog-templates/
+    - Doc Site: /featured/blogs/doc-site/
+    skip: true  
+    - Midnight Rush: /featured/blogs/mr-blog/
+    skip: true  
+    - Midnight Rush: /featured/blogs/mr-blog/
+    skip: true  
+    - Midnight Storm: /featured/blogs/ms-blog/
+    skip: true  
+    - Misty Gray: /featured/blogs/mg-blog/
+    skip: true  
+    - Pink Tree: /featured/blogs/pink-tree/
+    skip: true  
+    - Yellow Lily: /featured/blogs/yellow-lily/
+    skip: true  
+    - Blue Wave: /featured/blogs/blue-wave/
+    skip: true  
+    - Navy Nebula: /featured/blogs/navy-nebula/
+    skip: true  
+    - Blog Template 1: /featured/blogs/blog-template-1/
+    skip: true  
+    - Galaxia: /featured/blogs/galaxia/
+    skip: true  
+    - Little Blue: /featured/blogs/little-blue/
+    skip: true  
+    - Dash Dash DS: /featured/blogs/dash-dash-ds/
+    skip: true  
+    - Simple Blog: /featured/blogs/simple-blog/
+    skip: true  
+    - Rocky: /featured/blogs/rocky/
+    skip: true  
+    - Blog Components: /featured/blogs/blog-components/
+    skip: true  
+  - Portfolios / Personal Sites: /featured/portfolios/
+    - Texty PS: /featured/portfolios/texty-ps/
+    skip: true  
+    - Johny PS: /featured/portfolios/johny-ps/
+    skip: true  
+    - Portfolio: /featured/portfolios/portfolio/
+    skip: true  
+  - Resumes: /featured/resumes/
+    - Caffiene: /featured/resumes/caffiene/
+    skip: true  
+    - Resume 1: /featured/resumes/resume-1/
+    skip: true  
+  - Workshop Pages: /featured/workshops/
+    - Workshop 1: /featured/workshops/workshop-1/
+    skip: true
+    - Event 1: /featured/workshops/event-1/
+    skip: true
+- Section Library: /featured/sections/
+  - Cards: /featured/sections/cards/
+    - Card 1: /featured/sections/cards/card-1/
+    skip: true  
+    - Image Card 1: /featured/sections/cards/image-card-1/
+    skip: true  
+    - Image Gallery IG: /featured/sections/cards/image-gallery-ig/
+    skip: true  
+    - Imagen IG: /featured/sections/cards/imagen-ig/
+    skip: true
+  - Hero Components: /featured/sections/heros/
+    - Hero with two CTA: /featured/sections/heros/hero-with-2-cta/
+    skip: true
+    - Hero 1: /featured/sections/heros/hero-1/
+    skip: true  
+    - Hero 2: /featured/sections/heros/hero-2/
+    skip: true  
+    - Hero 3: /featured/sections/heros/hero-3/
+    skip: true  
+    - Hero 5: /featured/sections/heros/hero-5/
+    skip: true  
+    - Hero with Search: /featured/sections/heros/hero-with-search/
+    skip: true
+    - Hero 4: /featured/sections/heros/hero-4/
+    skip: true  
+    - Hero with social icons: /featured/sections/heros/hero-with-social/
+    skip: true
+    - Hero 6: /featured/sections/heros/hero-6/
+    skip: true  
+  - Key Value Tables: /featured/sections/kvt/
+    - Key Value Table 1: /featured/sections/kvt/kvt-1/
+      skip: true
+  - Slides / Presentations: /featured/sections/slides/
+    - Crispy Presentation Theme: /featured/sections/slides/crispy-presentation-theme/
+      skip: true
+    - Giggle Presentation Template: /featured/sections/slides/giggle-presentation-template/
+      skip: true
+    - Simple Dark Slides: /featured/sections/slides/simple-dark-slides/
+      skip: true
+    - Simple Light Slides: /featured/sections/slides/simple-light-slides/
+      skip: true
+    - Streamline Slides: /featured/sections/slides/streamline-slides/
+      skip: true
+    - Rotary Presentation Template: /featured/sections/slides/rotary-presentation-template/
+      skip: true
 - Component Library: /featured/components-library/
-  - Business Cards: /featured/components/cards/
+  - Admonitions: /featured/components/admonitions/
+    skip: true
   - Bling Components: /featured/components/bling/
-  - Modal / Dialog: /featured/components/dialogs/
-  - Headers: /featured/components/headers/
-  - Footers: /featured/components/footers/
-  - Hero Components: /featured/components/hero/
   - Buttons: /featured/components/buttons/
+  - Business Cards: /featured/components/business-cards/
+    - Business Card: /featured/components/business-cards/card-1/
+    skip: true  
+    - Gradient Business Card: /featured/components/business-cards/gradient-card/
+    skip: true  
+    - Midnight Business Card: /featured/components/business-cards/midnight-card/
+    skip: true  
+    - Pattern Business Card: /featured/components/business-cards/pattern-card/
+    skip: true  
+    - Sunset Business Card: /featured/components/business-cards/sunset-card/
+    skip: true  
+  - Language Switcher: /featured/components/language-switcher/
+    skip: true
+  - Subscription Form: /featured/components/subscription-form/
+    skip: true
+  - Code Block: /featured/components/code-block/
+    skip: true
+  - Header / Navbar: /featured/components/headers/
+    - Header: /featured/components/headers/header/
+    skip: true  
+    - Header 1: /featured/components/headers/header-1/
+    skip: true  
+    - Header 2: /featured/components/headers/header-2/
+    skip: true  
+  - Footers: /featured/components/footers/
+    - Footer: /featured/components/footers/footer/
+    skip: true  
+    - Footer 1: /featured/components/footers/footer-1/
+    skip: true  
+    - Footer 2: /featured/components/footers/footer-2/
+    skip: true  
+    - Footer 3: /featured/components/footers/footer-3/
+    skip: true  
+  - Modal / Dialog: /featured/components/modals/
+    - Dialog 1: /featured/components/modals/dialog-1/
+    skip: true  
+    - Dialog 2: /featured/components/modals/dialog-2/
+    skip: true  
+    - Alert Dialog: /featured/components/modals/alert-1/
+    skip: true  
+    - Modal 1: /featured/components/modals/modal-1/
+    skip: true  
+    - Modal 2: /featured/components/modals/modal-2/
+    skip: true  
 - Design Elements: /featured/cs/
   - Color Schemes: /featured/cs/
+    - Blog Template CS: /featured/cs/blog-template-cs/
+    skip: true  
+    - Blue Heal CS: /featured/cs/blue-heal-cs/
+    skip: true  
+    - Dark Flame CS: /featured/cs/dark-flame-cs/
+    skip: true  
+    - Forest CS: /featured/cs/forest-cs/
+    skip: true  
+    - Midnight Storm CS: /featured/cs/midnight-storm-cs/
+    skip: true  
+    - Misty Gray CS: /featured/cs/misty-gray-cs/
+    skip: true  
+    - Navy Nebula CS: /featured/cs/navy-nebula-cs/
+    skip: true  
+    - Pretty CS: /featured/cs/pretty-cs/
+    skip: true  
+    - Saturated Sunset CS: /featured/cs/saturated-sunset-cs/
+    skip: true  
+    - Winter CS: /featured/cs/winter-cs/
+    skip: true  
+    - Little Blue CS: /featured/cs/little-blue-cs/
+    skip: true  
+    - Blog Template 1 CS: /featured/cs/blog-template-1-cs/
+    skip: true
   - Font Typographies: /featured/fonts-typography/
 
 ## Deploy: /deploy/
@@ -475,8 +682,10 @@ favicon: /-/fastn.com/images/favicon.svg
 
 
 # Blog: /blog/
-  document: blog/prove-you-wrong.ftd
+  document: blog/writer-journey.ftd
 
+- A Content Writer’s Journey with fastn: /blog/writer-journey/
+  document: blog/writer-journey.ftd
 - fastn might prove you wrong: /blog/prove-you-wrong/
   document: blog/prove-you-wrong.ftd 
 - The Intimidation of Programming: /blog/intimidation-of-programming/
@@ -535,6 +744,14 @@ favicon: /-/fastn.com/images/favicon.svg
   show-planning: true
 
 - Overview: /planning/
+- dynamic UI planning: /dynamic-ui/-/planning/
+  document: /planning/country-details/index.ftd
+- Page Nomenclature: /page-nomenclature/
+  document: /planning/page-nomenclature.ftd
+- Create website planning: /create-website-planning/
+  document: /users/index.ftd
+- Orientation video planning: /orientation-planning/
+  document: /planning/orientation-planning-video.ftd
 - Documentation Systems: /documentation/
   document: /planning/documentation-systems.ftd
 - Adding color-scheme: /color-scheme/-/planning/

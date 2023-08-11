@@ -1,0 +1,31 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page: 
+full-width: true
+sidebar: false
+
+-- ft-ui.grid-view: Header / Navbar
+templates: $headers
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template list headers:
+
+-- ft-ui.template: Header
+template-url: /featured/components/headers/header/
+screenshot: $fastn-assets.files.images.featured.components.header.jpg
+
+-- ft-ui.template: Header 1
+template-url: /featured/components/headers/header-1/
+screenshot: $fastn-assets.files.images.featured.components.header-1.png
+
+-- ft-ui.template: Header 2
+template-url: /featured/components/headers/header-2/
+screenshot: $fastn-assets.files.images.featured.components.header-2.png
+
+-- end: headers
+

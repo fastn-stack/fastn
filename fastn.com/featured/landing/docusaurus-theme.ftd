@@ -1,0 +1,100 @@
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn-community.github.io/footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fastn.com/featured as ft-ui
+
+
+
+
+
+-- ds.page: 
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
+full-width: true
+distribution-bar: true
+full-width-bar: true
+
+-- ds.page.footer:
+
+-- footer.social-sideline-footer:
+social: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-url: /
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+-- end: ds.page.footer
+
+-- ds.page.abstract-bar:
+
+-- ds.distributors: Docusaurus Theme
+owners: $owner-saurabh
+license-url: https://github.com/FifthTry/Docusaurus-theme/blob/main/LICENSE
+license: Creative Commons
+published-date: 30-Dec-2021
+
+-- end: ds.page.abstract-bar
+
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured Documentation Sites
+templates: $landing
+more-link-text: View more
+more-link: /featured/doc-sites/
+show-large: true
+
+-- end: ds.page.full-width-wrap
+
+-- ds.preview-card:
+image: $fastn-assets.files.images.featured.landing.docusaurus-theme.png
+cta-url: https://fifthtry.github.io/Docusaurus-theme/
+cta-text: Demo
+github-url: https://github.com/FifthTry/Docusaurus-theme
+
+-- end: ds.page
+
+
+
+
+-- ft-ui.template list landing:
+
+-- ft-ui.template: Midnight Storm
+template-url: featured/landing/midnight-storm-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
+
+-- ft-ui.template: Misty Gray
+template-url: featured/landing/misty-gray-landing/
+screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/landing/mr-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
+
+-- end: landing
+
+
+
+
+-- common.owner list owner-saurabh:
+
+-- common.owner: Saurabh Garg
+profile: featured/contributors/developers/saurabh-garg/
+role: Developer
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- end: owner-saurabh
+

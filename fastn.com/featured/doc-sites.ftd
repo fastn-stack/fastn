@@ -1,52 +1,10 @@
 -- import: fastn.com/featured as ft-ui
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
 
+-- ds.page: 
+sidebar: false
+full-width: true
 
-
-
-
--- boolean show-grid: true
--- boolean show-list: false
-
-
-
-
-
--- ds.page: Documentation site themes
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-
--- ds.page.footer:
-
--- footer.social-sideline-footer:
-social: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
-
-
--- end: ds.page.footer
-
--- ds.page.body:
-
-We have designed and developed below documentation site themes. You can use them
-for writing books, blog, technical documentation etc. These themes can be used 
-as personal web sites or organizational static web sites.
-
--- ft-ui.grid-view:
-if: { show-grid }
+-- ft-ui.grid-view: Documentation Sites
 templates: $doc-sites
 
 -- end: ds.page
@@ -65,49 +23,52 @@ templates: $doc-sites
 -- ft-ui.template: Doc-site
 template-url: featured/ds/doc-site/
 screenshot: $fastn-assets.files.images.featured.doc-site.jpg
-licence-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
-github-url: https://github.com/fastn-community/doc-site
-
-⚡️ doc-site will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
 
 -- ft-ui.template: Midnight Rush
 template-url: featured/ds/mr-ds/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
-licence-url: https://github.com/fastn-community/midnight-rush/blob/main/LICENSE
-github-url: https://github.com/fastn-community/midnight-rush
-wip: true
-
-⚡️ Midnight Rush will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
 
 -- ft-ui.template: Midnight Storm
 template-url: featured/ds/midnight-storm/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
-licence-url: https://github.com/fastn-community/midnight-storm/blob/master/LICENSE
-github-url: https://github.com/fastn-community/midnight-storm
-is-last: true
-wip: true
-
-⚡️ Set 2 DS will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
 
 -- ft-ui.template: Misty Gray
 template-url: featured/ds/misty-gray/
 screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
-licence-url: https://github.com/fastn-community/misty-gray/blob/master/LICENSE
-github-url: https://github.com/fastn-community/misty-gray
+
+-- ft-ui.template: Dash Dash DS
+template-url: featured/ds/dash-dash-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.dash-dash-ds.png
 wip: true
 
-⚡️ Misty Gray will help you create a beautiful documentation site in no time.
+-- ft-ui.template: API DS
+template-url: featured/ds/api-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.api-ds.png
+wip: true
 
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
+-- ft-ui.template: Framework DS
+template-url: featured/ds/framework/
+screenshot: $fastn-assets.files.images.featured.doc-sites.ds-framework.png
+wip: true
+
+-- ft-ui.template: Blue Sapphire Template
+template-url: featured/ds/blue-sapphire-template/
+screenshot: $fastn-assets.files.images.featured.doc-sites.blue-sapphire-template.png
+wip: true
+
+-- ft-ui.template: Forest Template
+template-url: featured/ds/forest-template/
+screenshot: $fastn-assets.files.images.featured.doc-sites.forest-template.png
+wip: true
+
+-- ft-ui.template: Docusaurus Theme
+template-url: featured/ds/docusaurus-theme/
+screenshot: $fastn-assets.files.images.featured.doc-sites.docusaurus-theme.png
+wip: true
+
+-- ft-ui.template: Spider Book DS
+template-url: featured/ds/spider-book-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.spider-book-ds.png
+wip: true
 
 -- end: doc-sites

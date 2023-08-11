@@ -1,0 +1,94 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page: 
+full-width: true
+sidebar: false
+
+-- ft-ui.grid-view: Cards
+templates: $cards
+;;more-link-text: View more
+;;more-link: /featured/sections/cards/
+
+-- ft-ui.grid-view: Heros
+templates: $heros
+more-link-text: View more
+more-link: /featured/sections/heros/
+
+-- ft-ui.grid-view: Key Value Tables
+templates: $kvt
+;;more-link-text: View more
+;;more-link: /featured/sections/kvt/
+
+-- ft-ui.grid-view: Slides / Presentations
+templates: $slides
+more-link-text: View more
+more-link: /featured/sections/slides/
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list heros:
+
+-- ft-ui.template: Hero - 1
+template-url: featured/sections/heros/hero-1/
+screenshot: $fastn-assets.files.images.featured.components.hero-1.png
+
+-- ft-ui.template: Hero - 4
+template-url: featured/sections/heros/hero-4/
+screenshot: $fastn-assets.files.images.featured.components.hero-4.png
+
+-- ft-ui.template: Hero - 6
+template-url: featured/sections/heros/hero-6/
+screenshot: $fastn-assets.files.images.featured.components.hero-6.png
+
+-- end: heros
+
+
+
+
+-- ft-ui.template list cards:
+
+-- ft-ui.template: Card - 1
+template-url: /featured/sections/cards/card-1/
+screenshot: $fastn-assets.files.images.featured.sections.card-1.png
+
+-- end: cards
+
+
+
+
+-- ft-ui.template list kvt:
+
+-- ft-ui.template: Key Value Table 1
+template-url: /featured/sections/kvt/kvt-1/
+screenshot: $fastn-assets.files.images.featured.sections.kvt-1.png
+
+-- end: kvt
+
+
+
+-- ft-ui.template list slides:
+
+-- ft-ui.template: Simple Dark Slides
+template-url: /featured/sections/slides/simple-dark-slides/
+screenshot: $fastn-assets.files.images.featured.sections.slides.simple-dark-slides.png
+
+-- ft-ui.template: Simple Light Slides
+template-url: /featured/sections/slides/simple-light-slides/
+screenshot: $fastn-assets.files.images.featured.sections.slides.simple-light-slides.png
+
+-- ft-ui.template: Streamline Slides
+template-url: /featured/sections/slides/streamline-slides/
+screenshot: $fastn-assets.files.images.featured.sections.slides.streamline-slides.png
+-- end: slides
+
+
+

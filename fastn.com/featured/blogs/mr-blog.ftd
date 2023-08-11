@@ -13,7 +13,7 @@
 
 
 
--- ds.page: Featured components - Blog Templates - Midnight Rush Blog
+-- ds.page:
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -23,7 +23,8 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
-distribution-bar: true
+full-width: true
+show-layout-bar: true
 
 -- ds.page.footer:
 
@@ -40,45 +41,26 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- ds.page.layout-bar:
 
 -- ds.layout: Blog Templates - Midnight Rush Blog
-previous-url: /featured/
+cta-text: Use this template
+cta-url: https://github.com/fastn-community/midnight-rush-template/generate
+previous-url: /featured/blog-templates/
+github-url: https://github.com/fastn-community/midnight-rush/
+cta-url-1: https://fastn-community.github.io/midnight-rush/
+cta-text-1: User Manual
 
 -- end: ds.page.layout-bar
-
--- ds.page.abstract-bar:
-
--- ds.distributors: 
-owners: $owner-fastn
-license-url: https://github.com/fastn-community/midnight-rush/blob/main/LICENSE
-license: Creative Commons
-published-date: 05-June-2023
-used-by: 1 +
-likes: 1 Stars
-connect: $social-links
-
--- end: ds.page.abstract-bar
-
-
--- ds.page.body:
-
-We have designed and developed below blog site themes. You can use them for
-writing books, blog. These themes can be used as personal web or blog sites or
-organizational blog sites.
 
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
 cta-url: https://fastn-community.github.io/midnight-rush/blog/
-wip: true
+cta-text: Demo
 
--- ft-ui.grid-view: Blog Templates
+-- ft-ui.grid-view: Featured Blog Templates
 if: { show-grid }
-templates: $ft-ui.blog-sites-2
-more-link-text: View all
+templates: $blog-sites
+more-link-text: View more
 more-link: /featured/blog-templates/
-
-We have designed and developed below blog site themes. You can use them for
-writing books, blog. These themes can be used as personal web or blog sites or
-organizational blog sites.
 
 -- end: ds.page
 
@@ -86,40 +68,19 @@ organizational blog sites.
 
 
 
+-- ft-ui.template list blog-sites:
 
+-- ft-ui.template: Doc-site
+template-url: featured/blogs/doc-site/
+screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.png
 
+-- ft-ui.template: Midnight Storm
+template-url: featured/blogs/ms-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
 
+-- ft-ui.template: Misty Gray
+template-url: featured/blogs/mg-blog/
+screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
-
--- common.social-media list social-links:
-
--- common.social-media: 
-link: https://discord.gg/bucrdvptYd
-src: $assets.files.images.discord.svg
-
--- common.social-media: 
-link: https://twitter.com/fastn_stack
-src: $assets.files.images.twitter.svg
-
--- common.social-media: 
-link: https://www.linkedin.com/company/fifthtry/
-src: $assets.files.images.linkedin.svg
-
--- end: social-links
-
-
-
-
-
-
-
-
-
--- common.owner list owner-fastn:
-
--- common.owner: Fastn Community
-profile: https://github.com/fastn-community
-avatar: $assets.files.images.fastn.svg
-
--- end: owner-fastn
+-- end: blog-sites
 

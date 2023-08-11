@@ -4,16 +4,12 @@
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
-
-
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
 
--- ds.page: SPA / Landing Pages - Midnight Storm 
+
+-- ds.page: 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -23,7 +19,9 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
+full-width: true
 distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -40,83 +38,81 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- ds.page.layout-bar:
 
 -- ds.layout: SPA / Landing Pages - Midnight Storm 
-previous-url: /featured/
+cta-text: Use this template
+cta-url: https://github.com/fastn-community/midnight-storm-template/generate
+previous-url: /featured/landing-pages/
+github-url: https://github.com/fastn-community/midnight-storm
+cta-url-1: https://fastn-community.github.io/midnight-storm/
+cta-text-1: User Manual
+
 
 -- end: ds.page.layout-bar
 
 -- ds.page.abstract-bar:
 
--- ds.distributors: 
+-- ds.distributors: Midnight Storm
 owners: $owner-fastn
 license-url: https://github.com/fastn-community/midnight-storm/blob/main/LICENSE
 license: Creative Commons
-published-date: 02-June-2023
-used-by: 1 +
-likes: 1 Stars
-connect: $social-links
+published-date: 21-May-2023
 
 -- end: ds.page.abstract-bar
 
 
--- ds.page.body:
+-- ds.page.full-width-wrap:
 
-We have designed and developed below landing pages site themes. You can use them
-for creating SPA(Single Page Application or websites) etc. 
+-- ft-ui.grid-view: Featured SPA / Landing Pages
+templates: $landing
+more-link-text: View more
+more-link: /featured/landing-pages/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
 cta-url: https://fastn-community.github.io/midnight-storm/landing/
-wip: true
-
--- ft-ui.grid-view: SPA / Landing Pages
-if: { show-grid }
-templates: $ft-ui.landing-pages-2
-more-link-text: View all
-more-link: /featured/landing-pages/
-
-We have designed and developed below landing pages site themes. You can use them
-for creating SPA(Single Page Application or websites) etc. 
+cta-text: Demo
+cta-3-url: https://github.com/fastn-community/midnight-storm-template/generate/
+cta-3-text: Use this templates
+github-url: https://github.com/fastn-community/midnight-storm
+cta-2-url: https://fastn-community.github.io/midnight-storm/
+cta-2-text: User Manual
 
 -- end: ds.page
 
 
 
 
+-- ft-ui.template list landing:
 
+-- ft-ui.template: Midnight Rush
+template-url: featured/landing/mr-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 
+-- ft-ui.template: Misty Gray
+template-url: featured/landing/misty-gray-landing/
+screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
+-- ft-ui.template: CT Landing Page
+template-url: featured/landing-pages/
+screenshot: $fastn-assets.files.images.featured.landing.ct-landing-page.png
+licence-url: https://github.com/saurabh-lohiya/ct-landing-page/
+github-url: https://github.com/saurabh-lohiya/ct-landing-page/
+wip: true
 
-
-
--- common.social-media list social-links:
-
--- common.social-media: 
-link: https://discord.gg/bucrdvptYd
-src: $assets.files.images.discord.svg
-
--- common.social-media: 
-link: https://twitter.com/fastn_stack
-src: $assets.files.images.twitter.svg
-
--- common.social-media: 
-link: https://www.linkedin.com/company/fifthtry/
-src: $assets.files.images.linkedin.svg
-
--- end: social-links
-
-
-
-
-
-
-
-
+-- end: landing
 
 -- common.owner list owner-fastn:
 
--- common.owner: Fastn Community
-profile: https://github.com/fastn-community
-avatar: $assets.files.images.fastn.svg
+-- common.owner: Muskan Verma
+profile: featured/contributors/designers/muskan-verma/
+avatar: $fastn-assets.files.featured.contributors.designers.muskan-verma.muskan-verma.jpg
+role: Designer
+
+-- common.owner: Meenu Kumari
+profile: featured/contributors/developers/meenu-kumari/
+avatar: $fastn-assets.files.featured.contributors.developers.meenu-kumari.meenu.jpg
+role: Developer
 
 -- end: owner-fastn
-
