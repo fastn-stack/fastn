@@ -164,7 +164,10 @@ let fastn_utils = {
         if (value === undefined){
             return null;
         }
-        return value.item;
+        if (value instanceof Object && value.hasOwnProperty("item")) {
+            value = value.item;
+        }
+        return value;
     },
   
     getEventKey(event) {

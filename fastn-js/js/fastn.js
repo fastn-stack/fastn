@@ -59,7 +59,7 @@ class Mutable {
         this.set(val);
     }
     get(key) {
-        if (!!key && (this.#value instanceof RecordInstance || this.#value instanceof MutableList || this.#value instanceof Mutable)) {
+        if (!fastn_utils.isNull(key) && (this.#value instanceof RecordInstance || this.#value instanceof MutableList || this.#value instanceof Mutable)) {
             return this.#value.get(key)
         }
         return this.#value;
