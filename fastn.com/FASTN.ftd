@@ -81,19 +81,22 @@ favicon: /-/fastn.com/images/favicon.svg
 - Student Ambassador Program: /ambassador/
   document: /student-programs/ambassador.ftd
   skip: true
-- Champion Program: /champion-program/
+- Champion Program: /student-programs/champion-program/
   document: /student-programs/champion.ftd
-  skip: true
-  - Champions: /student-programs/champions/all-champions/
-    skip: true
-    - Ajit Garg: /student-programs/champions/ajit-garg/
+  - Champions: /student-programs/champion-program/champions/
+    document: /student-programs/champions/all-champions.ftd
+    - Ajit Garg: /student-programs/champion-program/champions/ajit-garg/
+    document: /student-programs/champions/ajit-garg.ftd
       skip: true
-- Ambassador Program: /ambassador-program/
+    - Ayush Soni: /student-programs/champion-program/champions/ayush-soni/
+    document: /student-programs/champions/ayush-soni.ftd
+      skip: true
+- Ambassador Program: /student-programs/ambassador-program/
   document: /student-programs/ambassador.ftd
-  skip: true
-  - Ambassadors: /student-programs/ambassadors/all-ambassadors/
-    skip: true
-    - Ayush Soni: /student-programs/ambassadors/ayush-soni/
+  - Ambassadors: /student-programs/ambassador-program/ambassadors/
+  document: /student-programs/ambassadors/all-ambassadors.ftd
+    - Ayush Soni: /student-programs/ambassador-program/ambassadors/ayush-soni/
+    document: /student-programs/ambassadors/ayush-soni.ftd
       skip: true
   
 ## Features: /features/

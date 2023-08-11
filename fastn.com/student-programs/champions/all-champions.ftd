@@ -36,9 +36,15 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- lib.member: Ajit Garg
 photo: $fastn-assets.files.images.students-program.champions.ajit.jpg
 photo-grey: $fastn-assets.files.images.students-program.champions.ajit-greyscale.jpg
-link: /student-programs/champions/ajit-garg/
+link: /student-programs/champion-program/champions/ajit-garg/
 designation: DevRel Engineer
 
+
+-- lib.member: Ayush Soni
+photo: $fastn-assets.files.images.students-program.ambassadors.ayush-soni.jpg
+photo-grey: $fastn-assets.files.images.students-program.ambassadors.ayush-soni-greyscale.jpg
+link: /student-programs/champion-program/champions/ayush-soni/
+designation: DevRel Engineer
 
 -- end: lib.team
 
