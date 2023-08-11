@@ -55,12 +55,13 @@ let fastn_utils = {
 
     removeNonFastnClasses(element) {
         let classList = element.classList;
+        let iterativeClassList = classList;
         if (ssr) {
-            classList = classList.getClasses();
+            iterativeClassList = iterativeClassList.getClasses();
         }
         const classesToRemove = [];
 
-        for (const className of classList) {
+        for (const className of iterativeClassList) {
             if (!className.startsWith('__')) {
                 classesToRemove.push(className);
             }
