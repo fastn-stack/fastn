@@ -4,11 +4,7 @@
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
 
-
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -22,9 +18,10 @@ logo-width: 120
 colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
-github-url: https://github.com/fastn-stack/fastn
+github-url: https://github.com/fastn-community/doc-site
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -49,17 +46,31 @@ github-url: https://github.com/Trizwit/FastnUI/
 -- end: ds.page.layout-bar
 
 
+-- ds.page.abstract-bar:
+
+-- ds.distributors: Hero with two CTA - Design 1
+owners: $owner-fastn
+license-url: https://github.com/Trizwit/FastnUI/
+license: Creative Commons
+published-date: 15-Jul-2023
+
+-- end: ds.page.abstract-bar
+
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured Hero Components
+templates: $heros
+more-link-text: View more
+more-link: /featured/sections/heros/
+show-large: true
+
+-- end: ds.page.full-width-wrap
+
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.components.hero-1.png
 cta-url: https://fastnui.trizwit.com/UI-Components/Hero/hero-1/
 cta-text: Demo
-
--- ft-ui.grid-view: Featured Heros
-if: { show-grid }
-templates: $heros
-more-link-text: View more
-more-link: /featured/sections/heros/
-
+github-url: https://github.com/Trizwit/FastnUI/
 
 -- end: ds.page
 
@@ -72,19 +83,32 @@ more-link: /featured/sections/heros/
 
 
 
+-- common.owner list owner-fastn:
+
+-- common.owner: Govindaraman S
+profile: featured/contributors/designers/govindaraman-s/
+role: Designer
+
+-- common.owner: Shaheen Senpai
+profile: featured/contributors/developers/shaheen-senpai/
+role: Developer
+
+-- end: owner-fastn
+
+
 -- ft-ui.template list heros:
 
--- ft-ui.template: Hero - 2
+-- ft-ui.template: Hero with two CTA - Design 2
 template-url: featured/sections/heros/hero-2/
 screenshot: $fastn-assets.files.images.featured.components.hero-2.png
 
--- ft-ui.template: Hero - 3
+-- ft-ui.template: Hero with two CTA - Design 3
 template-url: featured/sections/heros/hero-3/
 screenshot: $fastn-assets.files.images.featured.components.hero-3.png
 
--- ft-ui.template: Hero - 4
-template-url: featured/sections/heros/hero-4/
-screenshot: $fastn-assets.files.images.featured.components.hero-4.png
+-- ft-ui.template: Hero with two CTA - Design 4
+template-url: featured/sections/heros/hero-5/
+screenshot: $fastn-assets.files.images.featured.components.hero-5.png
 
 -- end: heros
 

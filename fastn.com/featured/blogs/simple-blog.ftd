@@ -66,7 +66,7 @@ more-link: /featured/blog-templates/
 
 -- ft-ui.template list blog-sites:
 
--- ft-ui.template: Doc-site
+-- ft-ui.template: Simple Site
 template-url: featured/blogs/doc-site/
 screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.png
 

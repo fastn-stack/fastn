@@ -17,7 +17,7 @@ templates: $hero-with-social
 
 -- ft-ui.template list hero-with-social:
 
--- ft-ui.template: Hero - 6
+-- ft-ui.template: Hero with social - Design 1
 template-url: featured/sections/heros/hero-6/
 screenshot: $fastn-assets.files.images.featured.components.hero-6.png
 

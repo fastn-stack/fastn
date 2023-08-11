@@ -64,7 +64,7 @@ github-url: https://github.com/fastn-community/misty-gray
 cta-2-url: https://fastn-community.github.io/misty-gray/
 cta-2-text: User Manual
 cta-3-url: https://github.com/fastn-community/misty-gray-template/generate
-cta-3-text: Use this templates
+cta-3-text: Use this template
 
 -- end: ds.page
 
@@ -93,7 +93,7 @@ role: Developer
 
 -- ft-ui.template list doc-sites:
 
--- ft-ui.template: Doc-site
+-- ft-ui.template: Simple Site
 template-url: featured/ds/doc-site/
 screenshot: $fastn-assets.files.images.featured.doc-site.jpg
 

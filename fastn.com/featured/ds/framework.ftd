@@ -67,7 +67,7 @@ github-url: https://github.com/FifthTry/df
 
 -- ft-ui.template list doc-sites:
 
--- ft-ui.template: Doc-site
+-- ft-ui.template: Simple Site
 template-url: featured/ds/doc-site/
 screenshot: $fastn-assets.files.images.featured.doc-site.jpg
 
