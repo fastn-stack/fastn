@@ -51,7 +51,7 @@ github-url: https://github.com/Trizwit/FastnUI/
 -- ds.distributors: Hero with two CTA - Design 2
 owners: $owner-fastn
 license-url: https://github.com/Trizwit/FastnUI/
-license: Creative Commons
+license: CC BY
 published-date: 15-Jul-2023
 
 -- end: ds.page.abstract-bar
