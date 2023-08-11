@@ -35,17 +35,9 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
-
--- ds.layout: Documentation Sites - Framework DS
-previous-url: /featured/doc-sites/
-github-url: https://github.com/FifthTry/df
-
--- end: ds.page.layout-bar
-
 -- ds.page.abstract-bar:
 
--- ds.distributors: 
+-- ds.distributors: Framework DS
 owners: $owner-fastn
 license-url: https://github.com/FifthTry/df/blob/main/LICENSE
 license: Creative Commons
@@ -67,6 +59,7 @@ show-large: true
 image: $fastn-assets.files.images.featured.doc-sites.ds-framework.png
 cta-url: https://df.fifthtry.com/web/product/
 cta-text: Demo
+github-url: https://github.com/FifthTry/df
 
 -- end: ds.page
 
