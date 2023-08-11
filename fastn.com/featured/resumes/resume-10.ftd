@@ -40,17 +40,17 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Resume 1 
+-- ds.layout: Resume 10
 previous-url: /featured/resumes/
-github-url: https://github.com/priyanka9634/resume-1
+github-url: https://github.com/priyanka9634/resume-10
 
 
 -- end: ds.page.layout-bar
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.resumes.resume-1.png
-cta-url: https://priyanka9634.github.io/resume-1/
+image: $fastn-assets.files.images.featured.resumes.resume-10.png
+cta-url: https://priyanka9634.github.io/resume-10/
 cta-text: Demo
 
 -- ft-ui.grid-view: Featured Resumes
@@ -77,9 +77,9 @@ more-link: /featured/resumes/
 template-url: featured/resumes/caffiene/
 screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
 
--- ft-ui.template: Resume 10
-template-url: featured/resumes/resume-10/
-screenshot: $fastn-assets.files.images.featured.resumes.resume-10.png
+-- ft-ui.template: Resume 1
+template-url: featured/resumes/resume-1/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
 
 -- end: resumes
 

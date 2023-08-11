@@ -35,24 +35,13 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
-
--- ds.layout: Hero 1
-cta-text: User Manual
-cta-url: https://fastnui.trizwit.com/UI-Components/Hero/hero-5/
-previous-url: /featured/sections/heros/
-github-url: https://github.com/Trizwit/FastnUI/
-
--- end: ds.page.layout-bar
-
-
 -- ds.page.abstract-bar:
 
--- ds.distributors: Hero with two CTA - Design 4
+-- ds.distributors: Hero with two CTA - Design 5
 owners: $owner-fastn
-license-url: https://github.com/Trizwit/FastnUI/
+license-url: https://github.com/saurabh-lohiya/hero
 license: Creative Commons
-published-date: 15-Jul-2023
+published-date: 02-Aug-2023
 
 -- end: ds.page.abstract-bar
 
@@ -67,10 +56,10 @@ show-large: true
 -- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.components.hero-5.png
-cta-url: https://fastnui.trizwit.com/UI-Components/Hero/hero-5/
+image: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
+cta-url: https://saurabh-lohiya.github.io/hero/docs/hero-primary/
 cta-text: Demo
-github-url: https://github.com/Trizwit/FastnUI/
+github-url: https://github.com/saurabh-lohiya/hero
 
 -- end: ds.page
 
@@ -85,22 +74,20 @@ github-url: https://github.com/Trizwit/FastnUI/
 
 -- common.owner list owner-fastn:
 
--- common.owner: Govindaraman S
-profile: featured/contributors/designers/govindaraman-s/
+-- common.owner: Muskan Verma
+profile: featured/contributors/designers/muskan-verma/
+avatar: $fastn-assets.files.featured.contributors.designers.muskan-verma.muskan-verma.jpg
 role: Designer
 
--- common.owner: Shaheen Senpai
-profile: featured/contributors/developers/shaheen-senpai/
+-- common.owner: Saurabh Lohiya
+profile: featured/contributors/developers/saurabh-lohiya/
+avatar: $fastn-assets.files.featured.contributors.developers.saurabh-lohiya.saurabh-lohiya.jpg
 role: Developer
 
 -- end: owner-fastn
 
 
 -- ft-ui.template list heros:
-
--- ft-ui.template: Hero with two CTA - Design 1
-template-url: featured/sections/heros/hero-1/
-screenshot: $fastn-assets.files.images.featured.components.hero-1.png
 
 -- ft-ui.template: Hero with two CTA - Design 2
 template-url: featured/sections/heros/hero-2/
@@ -109,6 +96,10 @@ screenshot: $fastn-assets.files.images.featured.components.hero-2.png
 -- ft-ui.template: Hero with two CTA - Design 3
 template-url: featured/sections/heros/hero-3/
 screenshot: $fastn-assets.files.images.featured.components.hero-3.png
+
+-- ft-ui.template: Hero with two CTA - Design 4
+template-url: featured/sections/heros/hero-5/
+screenshot: $fastn-assets.files.images.featured.components.hero-5.png
 
 -- end: heros
 

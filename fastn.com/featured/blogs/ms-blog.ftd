@@ -4,16 +4,11 @@
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
-
-
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
 
--- ds.page:
+-- ds.page: 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -24,7 +19,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,29 +34,35 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Blog Templates - Midnight Storm Blog
-cta-text: Use this template
-cta-url: https://github.com/fastn-community/midnight-storm-template/generate
-previous-url: /featured/blog-templates/
-github-url: https://github.com/fastn-community/midnight-storm/
-cta-url-1: https://fastn-community.github.io/midnight-storm/
-cta-text-1: User Manual
+-- ds.distributors: Midnight Storm
+owners: $owner-fastn
+license-url: https://github.com/fastn-community/midnight-storm/blob/main/LICENSE
+license: Creative Commons
+published-date: 02-June-2023
 
--- end: ds.page.layout-bar
+-- end: ds.page.abstract-bar
 
+-- ds.page.full-width-wrap:
 
--- ds.preview-card:
-image: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
-cta-url: https://fastn-community.github.io/midnight-storm/blog/
-cta-text: Demo
-
--- ft-ui.grid-view: Featured Blog Templates
-if: { show-grid }
+-- ft-ui.grid-view: Featured Blogs
 templates: $blog-sites
 more-link-text: View more
 more-link: /featured/blog-templates/
+show-large: true
+
+-- end: ds.page.full-width-wrap
+
+-- ds.preview-card:
+image: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
+cta-url: https://fastn-community.github.io/midnight-storm/blog/
+cta-text: Demo
+cta-3-url: https://github.com/fastn-community/midnight-storm-template/generate/
+cta-3-text: Use this template
+github-url: https://github.com/fastn-community/midnight-storm
+cta-2-url: https://fastn-community.github.io/midnight-storm/
+cta-2-text: User Manual
 
 -- end: ds.page
 
@@ -68,9 +70,32 @@ more-link: /featured/blog-templates/
 
 
 
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Muskan Verma
+profile: featured/contributors/designers/muskan-verma/
+avatar: $fastn-assets.files.featured.contributors.designers.muskan-verma.muskan-verma.jpg
+role: Designer
+
+-- common.owner: Meenu Kumari
+profile: featured/contributors/developers/meenu-kumari/
+avatar: $fastn-assets.files.featured.contributors.developers.meenu-kumari.meenu.jpg
+role: Developer
+
+-- end: owner-fastn
+
+
+
+
+
 -- ft-ui.template list blog-sites:
 
--- ft-ui.template: Doc-site
+-- ft-ui.template: Simple Site
 template-url: featured/blogs/doc-site/
 screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.png
 

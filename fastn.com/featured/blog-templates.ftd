@@ -20,7 +20,7 @@ templates: $blogs
 
 -- ft-ui.template list blogs:
 
--- ft-ui.template: Doc-site
+-- ft-ui.template: Simple Site Blog
 template-url: featured/blogs/doc-site/
 screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.png
 

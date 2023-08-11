@@ -496,7 +496,7 @@ document: /featured/contributors/developers/ganesh-salunke/index.ftd
     - Studious Couscous: /featured/landing/studious-couscous/
     skip: true
   - Blogs: /featured/blog-templates/
-    - Doc Site: /featured/blogs/doc-site/
+    - Simple Site: /featured/blogs/doc-site/
     skip: true  
     - Midnight Rush: /featured/blogs/mr-blog/
     skip: true  
@@ -540,6 +540,8 @@ document: /featured/contributors/developers/ganesh-salunke/index.ftd
     skip: true  
     - Resume 1: /featured/resumes/resume-1/
     skip: true  
+    - Resume 10: /featured/resumes/resume-10/
+    skip: true  
   - Workshop Pages: /featured/workshops/
     - Workshop 1: /featured/workshops/workshop-1/
     skip: true
@@ -558,22 +560,23 @@ document: /featured/contributors/developers/ganesh-salunke/index.ftd
   - Hero Components: /featured/sections/heros/
     - Hero with two CTA: /featured/sections/heros/hero-with-2-cta/
     skip: true
-    - Hero 1: /featured/sections/heros/hero-1/
-    skip: true  
-    - Hero 2: /featured/sections/heros/hero-2/
-    skip: true  
-    - Hero 3: /featured/sections/heros/hero-3/
-    skip: true  
-    - Hero 5: /featured/sections/heros/hero-5/
-    skip: true  
+      - Hero with two CTA - Design 1: /featured/sections/heros/hero-1/
+      skip: true  
+      - Hero with two CTA - Design 2: /featured/sections/heros/hero-2/
+      skip: true  
+      - Hero with two CTA - Design 3: /featured/sections/heros/hero-3/
+      skip: true  
+      - Hero with two CTA - Design 4: /featured/sections/heros/hero-5/
+      skip: true
+      - Hero with two CTA - Design 5: /featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/  
     - Hero with Search: /featured/sections/heros/hero-with-search/
     skip: true
-    - Hero 4: /featured/sections/heros/hero-4/
-    skip: true  
+      - Hero with search - Design 1: /featured/sections/heros/hero-4/
+      skip: true  
     - Hero with social icons: /featured/sections/heros/hero-with-social/
     skip: true
-    - Hero 6: /featured/sections/heros/hero-6/
-    skip: true  
+      - Hero with social - Design 1: /featured/sections/heros/hero-6/
+      skip: true  
   - Key Value Tables: /featured/sections/kvt/
     - Key Value Table 1: /featured/sections/kvt/kvt-1/
       skip: true
