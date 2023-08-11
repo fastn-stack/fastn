@@ -38,7 +38,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.abstract-bar:
 
--- ds.distributors: 
+-- ds.distributors: Docusaurus Theme
 owners: $owner-saurabh
 license-url: https://github.com/FifthTry/Docusaurus-theme/blob/main/LICENSE
 license: Creative Commons

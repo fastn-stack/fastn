@@ -493,6 +493,8 @@ document: /featured/contributors/developers/ganesh-salunke/index.ftd
     skip: true
     - Forest FOSS Template: /featured/landing/forest-foss-template/
     skip: true
+    - Studious Couscous: /featured/landing/studious-couscous/
+    skip: true
   - Blogs: /featured/blog-templates/
     - Doc Site: /featured/blogs/doc-site/
     skip: true  
