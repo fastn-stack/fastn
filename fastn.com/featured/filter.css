@@ -14,7 +14,15 @@
 
 .wrapper {
   display: grid;
-  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, minmax(320px, 1fr));
+  grid-auto-flow: dense;
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+.wrapper-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
   grid-auto-flow: dense;
   margin-top: 60px;
   margin-bottom: 60px;

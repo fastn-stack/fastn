@@ -1,43 +1,10 @@
 -- import: fastn.com/featured as ft-ui
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
 
+-- ds.page: 
+full-width: true
+sidebar: false
 
-
-
-
--- ds.page: Header / Navbar
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-
--- ds.page.footer:
-
--- footer.social-sideline-footer:
-social: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
-
-
--- end: ds.page.footer
-
--- ds.page.body:
-
-We have designed and developed below header / navbar packages. You can use them
-on your `fastn` web site. 
-
--- ft-ui.grid-view:
+-- ft-ui.grid-view: Header / Navbar
 templates: $headers
 
 -- end: ds.page
