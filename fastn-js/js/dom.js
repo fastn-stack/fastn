@@ -1466,7 +1466,12 @@ class Node2 {
             }
             const id_pattern = "^([a-zA-Z0-9_-]{11})$";
             let id = staticValue.match(id_pattern);
-            this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
+            if (!fastn_utils.isNull(id)) {
+                this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
+            } else {
+                this.attachAttribute("src", staticValue);
+            }
+
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Code) {
