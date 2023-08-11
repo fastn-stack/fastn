@@ -217,15 +217,26 @@ impl fastn_js::ComponentStatement {
     }
 }
 
+impl fastn_js::InstantiateComponentData {
+    fn to_js(&self) -> String {
+        match self {
+            fastn_js::InstantiateComponentData::Definition(definition) => {
+                format!("{}({})", fastn_js::GET_STATIC_VALUE, definition.to_js())
+            }
+            fastn_js::InstantiateComponentData::Name(name) => name.to_owned(),
+        }
+    }
+}
+
 impl fastn_js::InstantiateComponent {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         pretty::RcDoc::text(format!(
             "let {} = {}(",
             self.var_name,
             if !self.already_formatted {
-                fastn_js::utils::name_to_js(self.component_name.as_str())
+                fastn_js::utils::name_to_js(self.component.to_js().as_str())
             } else {
-                self.component_name.to_owned()
+                self.component.to_js().to_owned()
             }
         ))
         .append(pretty::RcDoc::text(self.parent.clone()))
