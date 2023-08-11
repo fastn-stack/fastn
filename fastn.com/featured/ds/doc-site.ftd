@@ -4,11 +4,7 @@
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
 
-
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -23,9 +19,9 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-community/doc-site
-show-layout-bar: true
 full-width: true
-distribution-bar: false
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -39,41 +35,36 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
-
--- ds.layout: Documentation Sites - Doc Site
-cta-text: Use this template
-cta-url: https://github.com/fastn-stack/fastn-template/generate
-previous-url: /featured/doc-sites/
-github-url: https://github.com/fastn-community/doc-site
-cta-url-1: https://fastn-community.github.io/doc-site/
-cta-text-1: User Manual
-
--- end: ds.page.layout-bar
 
 -- ds.page.abstract-bar:
 
--- ds.distributors: 
+-- ds.distributors: Simple Site
 owners: $owner-fastn
 license-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
 license: Creative Commons
 published-date: 24-May-2023
-used-by: 12 +
-likes: 1 Stars
-connect: $social-links
 
 -- end: ds.page.abstract-bar
+
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured Documentation Sites
+templates: $doc-sites
+more-link-text: View more
+more-link: /featured/doc-sites/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
 cta-url: https://gsalunke.github.io/doc-site-demo/
 cta-text: Demo
-
--- ft-ui.grid-view: Featured Documentation Sites
-if: { show-grid }
-templates: $ft-ui.doc-sites-3
-more-link-text: View more
-more-link: /featured/doc-sites/
+github-url: https://github.com/fastn-community/doc-site
+cta-3-url: https://github.com/fastn-stack/fastn-template/generate
+cta-3-text: Use this templates
+cta-2-url: https://fastn-community.github.io/doc-site/
+cta-2-text: User Manual
 
 -- end: ds.page
 
@@ -81,34 +72,39 @@ more-link: /featured/doc-sites/
 
 
 
--- common.social-media list social-links:
-
--- common.social-media: 
-link: https://discord.gg/bucrdvptYd
-src: $assets.files.images.discord.svg
-
--- common.social-media: 
-link: https://twitter.com/fastn_stack
-src: $assets.files.images.twitter.svg
-
--- common.social-media: 
-link: https://www.linkedin.com/company/fifthtry/
-src: $assets.files.images.linkedin.svg
-
--- end: social-links
-
-
-
-
-
-
-
-
-
 -- common.owner list owner-fastn:
 
--- common.owner: Fastn Community
-profile: https://github.com/fastn-community
-avatar: $assets.files.images.fastn.svg
+-- common.owner: Muskan Verma
+profile: featured/contributors/designers/muskan-verma/
+avatar: $fastn-assets.files.featured.contributors.designers.muskan-verma.muskan-verma.jpg
+role: Designer
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
 
 -- end: owner-fastn
+
+
+
+
+-- ft-ui.template list doc-sites:
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/ds/mr-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
+
+-- ft-ui.template: Midnight Storm
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
+
+-- ft-ui.template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+
+-- end: doc-sites
+
+
+
+

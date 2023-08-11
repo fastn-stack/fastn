@@ -81,9 +81,20 @@ favicon: /-/fastn.com/images/favicon.svg
 - Student Ambassador Program: /ambassador/
   document: /student-programs/ambassador.ftd
   skip: true
-- Champion Program: /champions-program/
+- Champion Program: /champion-program/
   document: /student-programs/champion.ftd
   skip: true
+  - Champions: /student-programs/champions/all-champions/
+    skip: true
+    - Ajit Garg: /student-programs/champions/ajit-garg/
+      skip: true
+- Ambassador Program: /ambassador-program/
+  document: /student-programs/ambassador.ftd
+  skip: true
+  - Ambassadors: /student-programs/ambassadors/all-ambassadors/
+    skip: true
+    - Ayush Soni: /student-programs/ambassadors/ayush-soni/
+      skip: true
   
 ## Features: /features/
 
@@ -423,10 +434,31 @@ favicon: /-/fastn.com/images/favicon.svg
   document: backend/redirects.ftd
 
 ## Featured Templates: /featured/
-
-- Website Categories: /featured/doc-sites/
+- Designer: /featured/designers/
+skip: true
+document: /featured/contributors/designers/muskan-verma/index.ftd
+  - Muskan Verma: /featured/contributors/designers/muskan-verma/
+  skip: true
+  - Jay Kumar: /featured/contributors/designers/jay-kumar/
+  skip: true
+- Developer: /featured/developers/
+skip: true
+document: /featured/contributors/developers/ganesh-salunke/index.ftd
+  - Arpita Jaiswal: /featured/contributors/developers/arpita-jaiswal/
+  skip: true
+  - Ganesh Salunke: /featured/contributors/developers/ganesh-salunke/
+  skip: true
+  - Meenu Kumari: /featured/contributors/developers/meenu-kumari/
+  skip: true
+  - Priyanka Yadav: /featured/contributors/developers/priyanka-yadav/
+  skip: true
+  - Saurabh Lohiya: /featured/contributors/developers/saurabh-lohiya/
+  skip: true
+  - Saurabh Garg: /featured/contributors/developers/saurabh-garg/
+  skip: true
+- Website Categories: /featured/website-categories/
   - Documentation Sites: /featured/doc-sites/
-    - Doc Site: /featured/ds/doc-site/
+    - Simple Site: /featured/ds/doc-site/
     skip: true
     - Midnight Rush: /featured/ds/mr-ds/
     skip: true
@@ -522,16 +554,22 @@ favicon: /-/fastn.com/images/favicon.svg
     - Imagen IG: /featured/sections/cards/imagen-ig/
     skip: true
   - Hero Components: /featured/sections/heros/
+    - Hero with two CTA: /featured/sections/heros/hero-with-2-cta/
+    skip: true
     - Hero 1: /featured/sections/heros/hero-1/
     skip: true  
     - Hero 2: /featured/sections/heros/hero-2/
     skip: true  
     - Hero 3: /featured/sections/heros/hero-3/
     skip: true  
-    - Hero 4: /featured/sections/heros/hero-4/
-    skip: true  
     - Hero 5: /featured/sections/heros/hero-5/
     skip: true  
+    - Hero with Search: /featured/sections/heros/hero-with-search/
+    skip: true
+    - Hero 4: /featured/sections/heros/hero-4/
+    skip: true  
+    - Hero with social icons: /featured/sections/heros/hero-with-social/
+    skip: true
     - Hero 6: /featured/sections/heros/hero-6/
     skip: true  
   - Key Value Tables: /featured/sections/kvt/

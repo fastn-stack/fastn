@@ -1,8 +1,3 @@
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
-
 
 -- boolean show-grid: true
 -- boolean show-list: false
@@ -10,35 +5,9 @@
 
 
 
--- ds.page: Featured Templates
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-
--- ds.page.footer:
-
--- footer.social-sideline-footer:
-social: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
-
--- end: ds.page.footer
-
--- ds.page.body:
-
-We have designed and developed below templates using `fastn`. 
-
-These templates can be used inside your personal web sites or organizational
-static web sites developed using `fastn` package.
+-- ds.page: 
+full-width: true
+sidebar: false
 
 -- grid-view: Documentation Sites
 if: { show-grid }
@@ -46,21 +15,11 @@ templates: $doc-sites
 more-link-text: View all
 more-link: /featured/doc-sites/
 
-`doc-sites` will help you create a beautiful documentation site in no time. 
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
-
-
 -- grid-view: SPA / Landing Pages
 if: { show-grid }
 templates: $landing-pages
 more-link-text: View all
 more-link: /featured/landing-pages/
-
-We have designed and developed below landing pages site themes. You can use them
-for creating SPA(Single Page Application or websites) etc. 
-
 
 -- grid-view: Blog Templates
 if: { show-grid }
@@ -68,18 +27,11 @@ templates: $blog-sites
 more-link-text: View all
 more-link: /featured/blog-templates/
 
-We have designed and developed below landing pages site themes. You can use them
-for creating SPA(Single Page Application or websites) etc. 
-
-
 -- grid-view: Section Library
 if: { show-grid }
 templates: $sections
 more-link-text: View all
 more-link: /featured/sections/
-
-We have designed and developed below sections. You can use them for inside you
-fastn projects.
 
 -- grid-view: Resumes
 if: { show-grid }
@@ -93,28 +45,17 @@ templates: $bling
 more-link-text: View all
 more-link: /featured/components-library/
 
-Fastn components library is typically includes a variety of components such as
-buttons, input fields, dropdown menus, modals, tabs, and more, each with their
-own styles, behavior, and functionality. 
-
 -- grid-view: Color Schemes
 if: { show-grid }
 templates: $schemes
 more-link-text: View all
 more-link: /featured/cs/
 
-Add warmth and energy to your fastn web site designs with our fastn Color
-Schemes.
-
-
 -- grid-view: Font Typographies
 if: { show-grid }
 templates: $fonts
 more-link-text: View all 
 more-link: /featured/fonts-typography/
-
-We have converted few Google Fonts to fastn typography packages, which are ready
-to use as our fastn default inherited-types for your fastn web projects.
 
 -- end: ds.page
 
@@ -134,11 +75,15 @@ optional string more-link:
 optional string more-link-text: 
 boolean $hover: false
 optional body body:
+boolean push-top: false
+boolean show-four: false
+boolean show-large: false
 
 -- ftd.column:
 width: fill-container
 padding-top.px: 8
 spacing.fixed.px if { ftd.device == "mobile" }: 24
+margin-top.px if { grid-view.push-top }: -90
 
 -- ftd.row:
 width: fill-container
@@ -206,6 +151,7 @@ $grid-view.body
 width: fill-container
 spacing.fixed.px: 32
 classes: wrapper
+classes if { grid-view.show-four }: wrapper-4
 
 -- grid-of-items: $obj.title
 $loop$: $grid-view.templates as $obj
@@ -217,6 +163,7 @@ body: $obj.body
 is-last: $obj.is-last
 wip: $obj.wip
 two-fold: $obj.two-fold
+show-large: $grid-view.show-large
 
 -- end: ftd.row
 
@@ -269,6 +216,7 @@ optional ftd.image-src screenshot:
 boolean wip: false
 boolean two-fold: false
 boolean $mouse-in: false
+boolean show-large: false
 
 -- ftd.column:
 width if { ftd.device == "mobile" }: fill-container
@@ -277,7 +225,8 @@ spacing.fixed.px: 16
 classes if {grid-of-items.two-fold}: two-folded
 $on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
-height.fixed.px if {!grid-of-items.two-fold}: 220
+height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 220
+height.fixed.px if { grid-of-items.show-large}: 400
 
 -- ftd.column:
 width: fill-container
@@ -380,7 +329,8 @@ color: #d9d9d9
 if: { $grid-of-items.screenshot != NULL }
 src: $grid-of-items.screenshot
 width: fill-container
-height.fixed.px if {!grid-of-items.two-fold}: 230
+height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 220
+height.fixed.px if { grid-of-items.show-large}: 320
 border-radius.px: 10
 $on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
 $on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
@@ -469,65 +419,6 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 
 -- end: doc-sites
 
-
-
-
-
--- template list doc-sites-1:
-
--- template: Doc-site
-template-url: featured/ds/doc-site/
-screenshot: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
-
--- template: Midnight Rush
-template-url: featured/ds/mr-ds/
-screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
-
--- template: Misty Gray
-template-url: featured/ds/misty-gray/
-screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
-
--- end: doc-sites-1
-
-
-
-
-
--- template list doc-sites-2:
-
--- template: Doc-site
-template-url: featured/ds/doc-site/
-screenshot: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
-
--- template: Misty Gray
-template-url: featured/ds/misty-gray/
-screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
-
--- template: Midnight Storm
-template-url: featured/ds/midnight-storm/
-screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
-
--- end: doc-sites-2
-
-
-
-
-
--- template list doc-sites-3:
-
--- template: Midnight Rush
-template-url: featured/ds/mr-ds/
-screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
-
--- template: Midnight Storm
-template-url: featured/ds/midnight-storm/
-screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
-
--- template: Misty Gray
-template-url: featured/ds/misty-gray/
-screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
-
--- end: doc-sites-3
 
 
 

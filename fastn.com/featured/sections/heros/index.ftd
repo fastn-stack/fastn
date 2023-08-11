@@ -1,44 +1,23 @@
 -- import: fastn.com/featured as ft-ui
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
 
+-- ds.page: 
+full-width: true
+sidebar: false
 
+-- ft-ui.grid-view: Hero with two CTA
+templates: $hero-with-2-cta
+more-link-text: View more
+more-link: /featured/sections/heros/hero-with-2-cta/
 
+-- ft-ui.grid-view: Hero with Search
+templates: $hero-with-search
+more-link-text: View more
+more-link: /featured/sections/heros/hero-with-search/
 
-
--- ds.page: Hero Components
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-
--- ds.page.footer:
-
--- footer.social-sideline-footer:
-social: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
-
-
--- end: ds.page.footer
-
--- ds.page.body:
-
-We have designed and developed below hero components. You can use them on your
-`fastn` web site. 
-
--- ft-ui.grid-view:
-templates: $heros
+-- ft-ui.grid-view: Hero with social icons
+templates: $hero-with-social
+more-link-text: View more
+more-link: /featured/sections/heros/hero-with-social/
 
 -- end: ds.page
 
@@ -46,7 +25,7 @@ templates: $heros
 
 
 
--- ft-ui.template list heros:
+-- ft-ui.template list hero-with-2-cta:
 
 -- ft-ui.template: Hero - 1
 template-url: featured/sections/heros/hero-1/
@@ -60,16 +39,20 @@ screenshot: $fastn-assets.files.images.featured.components.hero-2.png
 template-url: featured/sections/heros/hero-3/
 screenshot: $fastn-assets.files.images.featured.components.hero-3.png
 
+-- end: hero-with-2-cta
+
+-- ft-ui.template list hero-with-search:
+
 -- ft-ui.template: Hero - 4
 template-url: featured/sections/heros/hero-4/
 screenshot: $fastn-assets.files.images.featured.components.hero-4.png
 
--- ft-ui.template: Hero - 5
-template-url: featured/sections/heros/hero-5/
-screenshot: $fastn-assets.files.images.featured.components.hero-5.png
+-- end: hero-with-search
+
+-- ft-ui.template list hero-with-social:
 
 -- ft-ui.template: Hero - 6
 template-url: featured/sections/heros/hero-6/
 screenshot: $fastn-assets.files.images.featured.components.hero-6.png
 
--- end: heros
+-- end: hero-with-social

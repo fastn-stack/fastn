@@ -1,44 +1,11 @@
 -- import: fastn.com/featured as ft-ui
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
 
+-- ds.page: 
+full-width: true
+sidebar: false
 
-
-
-
--- ds.page: Portfolio / Personal Sites
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-
--- ds.page.footer:
-
--- footer.social-sideline-footer:
-social: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
-
-
--- end: ds.page.footer
-
--- ds.page.body:
-
-We have designed and developed below portfolio / personal website themes. You
-can use them on your `fastn` web site. 
-
--- ft-ui.grid-view:
-templates: $text-ps
+-- ft-ui.grid-view: Portfolio / Personal Sites
+templates: $portfolios
 
 -- end: ds.page
 
@@ -46,7 +13,7 @@ templates: $text-ps
 
 
 
--- ft-ui.template list text-ps:
+-- ft-ui.template list portfolios:
 
 -- ft-ui.template: Texty PS
 template-url: featured/portfolios/texty-ps/
@@ -60,4 +27,4 @@ screenshot: $fastn-assets.files.images.featured.portfolios.johny-ps.png
 template-url: featured/portfolios/portfolio/
 screenshot: $fastn-assets.files.images.featured.portfolios.portfolio.png
 
--- end: text-ps
+-- end: portfolios
