@@ -894,9 +894,8 @@ impl InheritedProperties {
         }
 
         if !inherited_fields.is_empty() {
-            dbg!(&rdata.inherited_variable_name);
             Some(fastn_js::StaticVariable {
-                name: dbg!(format!("{}{}", fastn_js::INHERITED_PREFIX, component_name)),
+                name: format!("{}{}", fastn_js::INHERITED_PREFIX, component_name),
                 value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
                     fields: inherited_fields,
                     other_references: vec![rdata.inherited_variable_name.to_string()],
