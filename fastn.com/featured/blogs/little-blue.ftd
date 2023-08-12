@@ -4,11 +4,6 @@
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
-
-
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -24,7 +19,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,25 +34,33 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Blog Templates - Little Blue
-previous-url: /featured/blog-templates/
-github-url: https://github.com/meenukumari28/little-blue/
+-- ds.distributors: Little Blue
+owners: $owner-fastn
+license-url: https://github.com/meenukumari28/little-blue/
+license: Creative Commons
+published-date: 01-Aug-2023
 
--- end: ds.page.layout-bar
+-- end: ds.page.abstract-bar
+
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured Blog Templates
+templates: $blog-sites
+more-link-text: View more
+more-link: /featured/blog-templates/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.blog.little-blue.png
 cta-url: https://meenukumari28.github.io/little-blue/
 cta-text: Demo
+github-url: https://github.com/meenukumari28/little-blue/
 
--- ft-ui.grid-view: Featured Blog Templates
-if: { show-grid }
-templates: $blog-sites
-more-link-text: View more
-more-link: /featured/blog-templates/
 
 -- end: ds.page
 
@@ -80,3 +84,18 @@ screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
 -- end: blog-sites
 
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Muskan Verma
+profile: featured/contributors/designers/muskan-verma/
+avatar: $fastn-assets.files.featured.contributors.designers.muskan-verma.muskan-verma.jpg
+role: Designer
+
+-- common.owner: Meenu Kumari
+profile: featured/contributors/developers/meenu-kumari/
+avatar: $fastn-assets.files.featured.contributors.developers.meenu-kumari.meenu.jpg
+role: Developer
+
+-- end: owner-fastn

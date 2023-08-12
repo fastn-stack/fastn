@@ -60,9 +60,7 @@ show-large: true
 image: $fastn-assets.files.images.featured.blog.doc-site-blog.png
 cta-url: https://fastn-community.github.io/doc-site/blog/
 cta-text: Demo
-github-url: https://github.com/fastn-community/doc-site
-cta-3-url: https://github.com/fastn-stack/fastn-template/generate
-cta-3-text: Use this template
+github-url: https://github.com/fastn-stack/fastn-template/
 cta-2-url: https://fastn-community.github.io/doc-site/
 cta-2-text: User Manual
 
