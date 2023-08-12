@@ -60,11 +60,9 @@ show-large: true
 image: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
 cta-url: https://gsalunke.github.io/misty-gray-demo/
 cta-text: Demo
-github-url: https://github.com/fastn-community/misty-gray
+github-url: https://github.com/fastn-community/misty-gray-template/
 cta-2-url: https://fastn-community.github.io/misty-gray/
 cta-2-text: User Manual
-cta-3-url: https://github.com/fastn-community/misty-gray-template/generate
-cta-3-text: Use this template
 
 -- end: ds.page
 

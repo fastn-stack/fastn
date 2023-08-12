@@ -38,19 +38,6 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
-
--- ds.layout: Texty PS
-cta-text: Use this template
-cta-url: https://github.com/fastn-community/texty-ps-template/generate
-previous-url: /featured/portfolios/
-github-url: https://github.com/FifthTry/texty-ps
-cta-url-1: https://fifthtry.github.io/texty-ps/docs/
-cta-text-1: User Manual
-
-
--- end: ds.page.layout-bar
-
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.portfolios.texty-ps.png

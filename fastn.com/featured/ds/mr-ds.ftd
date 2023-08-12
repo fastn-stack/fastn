@@ -59,9 +59,7 @@ show-large: true
 image: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 cta-url: https://gsalunke.github.io/midnight-rush-demo/
 cta-text: Demo
-github-url: https://github.com/fastn-community/midnight-rush
-cta-3-url: https://github.com/fastn-community/midnight-rush-template/generate/
-cta-3-text: Use this template
+github-url: https://github.com/fastn-community/midnight-rush-template/
 cta-2-url: https://fastn-community.github.io/midnight-rush/
 cta-2-text: User Manual
 
