@@ -86,10 +86,12 @@ github-url: https://github.com/Trizwit/FastnUI/
 -- common.owner list owner-fastn:
 
 -- common.owner: Govindaraman S
+avatar: $fastn-assets.files.featured.contributors.designers.govindaraman-s.govindaraman-s.jpg
 profile: featured/contributors/designers/govindaraman-s/
 role: Designer
 
 -- common.owner: Shaheen Senpai
+avatar: $fastn-assets.files.featured.contributors.developers.shaheen-senpai.shaheen-senpai.jpeg
 profile: featured/contributors/developers/shaheen-senpai/
 role: Developer
 

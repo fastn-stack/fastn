@@ -31,17 +31,50 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.contributor: Yashveer Mehra
-avatar: $fastn-assets.files.featured.contributors.designers.yashveer-mehra.yashveer-mehra.jpg
-profile: Designer
-owners: $owner-yashveer
-connect: $social-links
+-- ftd.column:
+width: fill-container
+align-content: center
+
+-- profile: Yashveer Mehra
+
+-- end: ftd.column
 
 -- ft-ui.grid-view: SPA / Landing Pages
 templates: $landing
 show-large: true
 
 -- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- component profile:
+caption title: 
+optional string link:
+
+-- ftd.column:
+
+-- ftd.column:
+align-content: center
+link: $profile.link
+
+-- ds.contributor: $profile.title
+avatar: $fastn-assets.files.featured.contributors.designers.yashveer-mehra.yashveer-mehra.jpg
+profile: Designer
+owners: $owner-yashveer
+connect: $social-links
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: profile
 
 
 

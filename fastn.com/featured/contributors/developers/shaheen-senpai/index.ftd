@@ -32,16 +32,49 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.contributor: Shaheen Senpai
-profile: Developer
-owners: $owner-shaheen
-connect: $social-links
+-- ftd.column:
+width: fill-container
+align-content: center
+
+-- profile: Shaheen Senpai
+
+-- end: ftd.column
 
 -- ft-ui.grid-view: Components
 templates: $components
 show-large: true
 
 -- end: ds.page
+
+
+
+
+
+
+
+
+
+-- component profile:
+caption title: 
+optional string link:
+
+-- ftd.column:
+
+-- ftd.column:
+align-content: center
+link: $profile.link
+
+-- ds.contributor: $profile.title
+avatar: $fastn-assets.files.featured.contributors.developers.shaheen-senpai.shaheen-senpai.jpeg
+profile: Developer
+owners: $owner-shaheen
+connect: $social-links
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: profile
 
 
 
@@ -83,6 +116,7 @@ screenshot: $fastn-assets.files.images.featured.components.hero-6.png
 -- common.owner list owner-shaheen:
 
 -- common.owner: Shaheen Senpai
+avatar: $fastn-assets.files.featured.contributors.developers.shaheen-senpai.shaheen-senpai.jpg
 profile: featured/contributors/designers/shaheen-senpai/
 role: Designer
 

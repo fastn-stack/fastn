@@ -437,18 +437,18 @@ favicon: /-/fastn.com/images/favicon.svg
   document: backend/redirects.ftd
 
 ## Featured Templates: /featured/
-- Designer: /featured/designers/
+- Designers: /featured/contributors/designers/
 skip: true
-document: /featured/contributors/designers/muskan-verma/index.ftd
   - Muskan Verma: /featured/contributors/designers/muskan-verma/
   skip: true
   - Jay Kumar: /featured/contributors/designers/jay-kumar/
   skip: true
   - Govindaraman S: /featured/contributors/designers/govindaraman-s/
   skip: true
-- Developer: /featured/developers/
+  - Yashveer Mehra: /featured/contributors/designers/yashveer-mehra/
+  skip: true
+- Developers: /featured/contributors/developers/
 skip: true
-document: /featured/contributors/developers/ganesh-salunke/index.ftd
   - Arpita Jaiswal: /featured/contributors/developers/arpita-jaiswal/
   skip: true
   - Ganesh Salunke: /featured/contributors/developers/ganesh-salunke/

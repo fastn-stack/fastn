@@ -32,16 +32,51 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.contributor: Jay Kumar
-profile: Designer
-owners: $owner-jay
-connect: $social-links
+-- ftd.column:
+width: fill-container
+align-content: center
+
+-- profile: Jay Kumar
+
+-- end: ftd.column
 
 -- ft-ui.grid-view: Documentation Sites
 templates: $doc-sites
 show-large: true
 
+
 -- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- component profile:
+caption title: 
+optional string link:
+
+-- ftd.column:
+
+-- ftd.column:
+align-content: center
+link: $profile.link
+
+-- ds.contributor: $profile.title
+profile: Designer
+owners: $owner-jay
+connect: $social-links
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: profile
+
 
 
 
