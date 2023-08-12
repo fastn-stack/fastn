@@ -507,8 +507,6 @@ document: /featured/contributors/developers/ganesh-salunke/index.ftd
     skip: true  
     - Midnight Rush: /featured/blogs/mr-blog/
     skip: true  
-    - Midnight Rush: /featured/blogs/mr-blog/
-    skip: true  
     - Midnight Storm: /featured/blogs/ms-blog/
     skip: true  
     - Misty Gray: /featured/blogs/mg-blog/

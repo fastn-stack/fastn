@@ -35,19 +35,6 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
-
--- ds.layout: SPA / Landing Pages - Midnight Storm 
-cta-text: Use this template
-cta-url: https://github.com/fastn-community/midnight-storm-template/generate
-previous-url: /featured/landing-pages/
-github-url: https://github.com/fastn-community/midnight-storm
-cta-url-1: https://fastn-community.github.io/midnight-storm/
-cta-text-1: User Manual
-
-
--- end: ds.page.layout-bar
-
 -- ds.page.abstract-bar:
 
 -- ds.distributors: Midnight Storm
@@ -73,9 +60,7 @@ show-large: true
 image: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
 cta-url: https://fastn-community.github.io/midnight-storm/landing/
 cta-text: Demo
-cta-3-url: https://github.com/fastn-community/midnight-storm-template/generate/
-cta-3-text: Use this template
-github-url: https://github.com/fastn-community/midnight-storm
+github-url: https://github.com/fastn-community/midnight-storm-template/
 cta-2-url: https://fastn-community.github.io/midnight-storm/
 cta-2-text: User Manual
 
