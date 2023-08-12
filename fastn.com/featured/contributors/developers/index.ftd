@@ -1,0 +1,78 @@
+-- import: fastn.com/featured as ft-ui
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fastn.com/featured/contributors/developers/shaheen-senpai
+-- import: fastn.com/featured/contributors/developers/saurabh-lohiya
+-- import: fastn.com/featured/contributors/developers/priyanka-yadav
+-- import: fastn.com/featured/contributors/developers/meenu-kumari
+-- import: fastn.com/featured/contributors/developers/saurabh-garg
+-- import: fastn.com/featured/contributors/developers/arpita-jaiswal
+-- import: fastn.com/featured/contributors/developers/ganesh-salunke
+
+
+-- ds.page: 
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/muskan1verma
+full-width: true
+
+-- ds.page.footer:
+
+-- footer.social-sideline-footer:
+social: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-url: /
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+-- end: ds.page.footer
+
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 48
+
+-- ftd.row:
+width: fill-container
+align-content: center
+spacing.fixed.px: 64
+wrap: true
+
+-- shaheen-senpai.profile: Shaheen Senpai
+link: /featured/contributors/developers/shaheen-senpai/
+
+-- saurabh-lohiya.profile: Saurabh Lohiya
+link: /featured/contributors/developers/saurabh-lohiya/
+
+-- priyanka-yadav.profile: Priyanka Yadav
+link: /featured/contributors/developers/priyanka-yadav/
+
+-- meenu-kumari.profile: Meenu Kumari
+link: /featured/contributors/developers/meenu-kumari/
+
+-- saurabh-garg.profile: Saurabh Garg
+link: /featured/contributors/developers/saurabh-garg/
+
+-- arpita-jaiswal.profile: Arpita Jaiswal
+link: /featured/contributors/developers/arpita-jaiswal/
+
+-- ganesh-salunke.profile: Ganesh Salunke
+link: /featured/contributors/developers/ganesh-salunke/
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ds.page
+
+
+

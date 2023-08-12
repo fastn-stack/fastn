@@ -32,17 +32,51 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.contributor: Govindaraman S
-profile: Designer
-owners: $owner-govind
-connect: $social-links
+-- ftd.column:
+width: fill-container
+align-content: center
+
+-- profile: Govindaraman S
 
 -- ft-ui.grid-view: Hero Components
 templates: $components
 show-large: true
 
+
+-- end: ftd.column
+
 -- end: ds.page
 
+
+
+
+
+
+
+
+
+
+-- component profile:
+caption title: 
+optional string link:
+
+-- ftd.column:
+
+-- ftd.column:
+align-content: center
+link: $profile.link
+
+-- ds.contributor: $profile.title
+avatar: $fastn-assets.files.featured.contributors.designers.govindaraman-s.govindaraman-s.jpg
+profile: Designer
+owners: $owner-govind
+connect: $social-links
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: profile
 
 
 
@@ -99,5 +133,12 @@ link: https://github.com/Sarvom
 src: $fastn-assets.files.images.github-grey.svg
 hover-src: $fastn-assets.files.images.github-grey-hover.svg
 
+-- common.social-media: 
+link: https://www.linkedin.com/in/govindaraman-s/
+src: $fastn-assets.files.images.linkedin.svg
+hover-src: $fastn-assets.files.images.linkedin-hover.svg
+
 -- end: social-links
+
+
 

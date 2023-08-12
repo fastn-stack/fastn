@@ -31,11 +31,13 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.contributor: Muskan Verma
-avatar: $fastn-assets.files.featured.contributors.designers.muskan-verma.muskan-verma.jpg
-profile: Designer
-owners: $owner-muskan
-connect: $social-links
+-- ftd.column:
+width: fill-container
+align-content: center
+
+-- profile: Muskan Verma
+
+-- end: ftd.column
 
 -- ft-ui.grid-view: Documentation Sites
 templates: $doc-sites
@@ -49,7 +51,27 @@ show-large: true
 
 
 
+-- component profile:
+caption title: 
+optional string link:
 
+-- ftd.column:
+
+-- ftd.column:
+align-content: center
+link: $profile.link
+
+-- ds.contributor: $profile.title
+avatar: $fastn-assets.files.featured.contributors.designers.muskan-verma.muskan-verma.jpg
+profile: Designer
+owners: $owner-muskan
+connect: $social-links
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: profile
 
 
 
