@@ -4,11 +4,6 @@
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
-
-
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -24,7 +19,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,27 +34,34 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
 
--- ds.layout: Blog Templates - Navy Nebula
-previous-url: /featured/blog-templates/
-github-url: https://github.com/fastn-community/navy-nebula/
-cta-text: User Manual
-cta-url: https://fastn-community.github.io/navy-nebula/components/
+-- ds.page.abstract-bar:
 
--- end: ds.page.layout-bar
+-- ds.distributors: Navy Nebula
+owners: $owner-fastn
+license-url: https://github.com/fastn-community/navy-nebula/
+license: Creative Commons
+published-date: 24-Jul-2023
+
+-- end: ds.page.abstract-bar
+
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured Blog Templates
+templates: $blog-sites
+more-link-text: View more
+more-link: /featured/blog-templates/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.blog.navy-nebula.png
-cta-url: https://fastn-community.github.io/navy-nebula/
+cta-url: https://fastn-community.github.io/navy-nebula/components/
 cta-text: Demo
+github-url: https://github.com/fastn-community/navy-nebula/
 
--- ft-ui.grid-view: Featured Blog Templates
-if: { show-grid }
-templates: $blog-sites
-more-link-text: View more
-more-link: /featured/blog-templates/
 
 -- end: ds.page
 
@@ -82,3 +85,19 @@ screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
 -- end: blog-sites
 
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Yashveer Mehra
+profile: featured/contributors/designers/yashveer-mehra/
+avatar: $fastn-assets.files.featured.contributors.designers.yashveer-mehra.yashveer-mehra.jpg
+role: Designer
+
+-- common.owner: Priyanka Yadav
+profile: featured/contributors/developers/priyanka-yadav/
+avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+role: Developer
+
+-- end: owner-fastn
