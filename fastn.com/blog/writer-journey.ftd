@@ -72,10 +72,8 @@ changes to life without delay or intermediaries.
 Ever tried to convey your creative vision to another person and felt the words 
 fall short? We've all been there. This video might trigger a familiar struggle. 
 
--- ftd.iframe:
-src: https://www.youtube.com/embed/tAxY8D1TRTo
-width.fixed.px: 747
-height.fixed.px: 420
+-- ds.youtube:
+v: tAxY8D1TRTo
 
 -- ds.markdown:
 
