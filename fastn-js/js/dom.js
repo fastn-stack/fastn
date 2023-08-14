@@ -1045,7 +1045,6 @@ class Node2 {
             this.attachCss("role", fastn_utils.getRoleValues(mobileValue), true, `body.mobile .${desktopClass}`);
         }
     }
-
     attachTextStyles(styles) {
         if (fastn_utils.isNull(styles)) {
             this.attachCss('font-style', styles);
