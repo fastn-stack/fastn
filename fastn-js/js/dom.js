@@ -1076,16 +1076,19 @@ class Node2 {
                 case 'top-left':
                 case 'left':
                 case 'bottom-left':
+                    this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "start");
                     break;
                 case 'top-center':
                 case 'center':
                 case 'bottom-center':
+                    this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "center");
                     break;
                 case 'top-right':
                 case 'right':
                 case 'bottom-right':
+                    this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "end");
                     break;
             }
@@ -1096,16 +1099,19 @@ class Node2 {
                 case 'top-left':
                 case 'top-center':
                 case 'top-right':
+                    this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "start");
                     break;
                 case 'left':
                 case 'center':
                 case 'right':
+                    this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "center");
                     break;
                 case 'bottom-left':
                 case 'bottom-center':
                 case 'bottom-right':
+                    this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "end");
                     break;
             }
