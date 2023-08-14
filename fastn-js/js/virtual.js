@@ -16,6 +16,9 @@ class ClassList {
     toString() {
         return this.#classes.join(' ');
     }
+    getClasses() {
+        return this.#classes;
+    }
 }
 
 class Node {

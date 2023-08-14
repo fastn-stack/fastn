@@ -779,7 +779,8 @@ class Node2 {
     }
     // dynamic-class-css
     attachCss(property, value, createClass, className) {
-        const propertyShort = fastn_dom.propertyMap[property] || property;
+        let propertyShort = fastn_dom.propertyMap[property] || property;
+        propertyShort = `__${propertyShort}`;
         let cls = `${propertyShort}-${JSON.stringify(value)}`;
         if (!!className) {
            cls = className;
@@ -950,7 +951,7 @@ class Node2 {
         let position = fastn_utils.getStaticValue(value.get("position"));
         let positionX = null;
         let positionY = null;
-        if (position !== null) {
+        if (position !== null && position instanceof Object) {
             positionX = fastn_utils.getStaticValue(position.get("x"));
             positionY = fastn_utils.getStaticValue(position.get("y"));
 
@@ -964,7 +965,7 @@ class Node2 {
         let size = fastn_utils.getStaticValue(value.get("size"));
         let sizeX = null;
         let sizeY = null;
-        if (size !== null) {
+        if (size !== null && size instanceof Object) {
             sizeX = fastn_utils.getStaticValue(size.get("x"));
             sizeY = fastn_utils.getStaticValue(size.get("y"));
 
@@ -1075,16 +1076,19 @@ class Node2 {
                 case 'top-left':
                 case 'left':
                 case 'bottom-left':
+                    this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "start");
                     break;
                 case 'top-center':
                 case 'center':
                 case 'bottom-center':
+                    this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "center");
                     break;
                 case 'top-right':
                 case 'right':
                 case 'bottom-right':
+                    this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "end");
                     break;
             }
@@ -1095,16 +1099,19 @@ class Node2 {
                 case 'top-left':
                 case 'top-center':
                 case 'top-right':
+                    this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "start");
                     break;
                 case 'left':
                 case 'center':
                 case 'right':
+                    this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "center");
                     break;
                 case 'bottom-left':
                 case 'bottom-center':
                 case 'bottom-right':
+                    this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "end");
                     break;
             }
@@ -1223,10 +1230,13 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Shadow) {
             this.attachShadow(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Classes) {
-            let cls = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
-            cls.forEach((c) => {
-               this.#node.classList.add(c);
-            });
+            fastn_utils.removeNonFastnClasses(this.#node);
+            if (!fastn_utils.isNull(staticValue)) {
+                let cls = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+                cls.forEach((c) => {
+                    this.#node.classList.add(c);
+                });
+            }
         } else if (kind === fastn_dom.PropertyKind.Anchor) {
             // todo: this needs fixed for anchor.id = v
             // need to change position of element with id = v to relative
@@ -1466,7 +1476,12 @@ class Node2 {
             }
             const id_pattern = "^([a-zA-Z0-9_-]{11})$";
             let id = staticValue.match(id_pattern);
-            this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
+            if (!fastn_utils.isNull(id)) {
+                this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
+            } else {
+                this.attachAttribute("src", staticValue);
+            }
+
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Code) {

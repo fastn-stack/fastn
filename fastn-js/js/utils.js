@@ -53,6 +53,25 @@ let fastn_utils = {
         }
     },
 
+    removeNonFastnClasses(element) {
+        let classList = element.classList;
+        let iterativeClassList = classList;
+        if (ssr) {
+            iterativeClassList = iterativeClassList.getClasses();
+        }
+        const classesToRemove = [];
+
+        for (const className of iterativeClassList) {
+            if (!className.startsWith('__')) {
+                classesToRemove.push(className);
+            }
+        }
+
+        for (const classNameToRemove of classesToRemove) {
+            classList.remove(classNameToRemove);
+        }
+    },
+
     staticToMutables(obj) {
         if (!(obj instanceof fastn.mutableClass) &&
             !(obj instanceof fastn.mutableListClass) &&
@@ -164,7 +183,10 @@ let fastn_utils = {
         if (value === undefined){
             return null;
         }
-        return value.item;
+        if (value instanceof Object && value.hasOwnProperty("item")) {
+            value = value.item;
+        }
+        return value;
     },
   
     getEventKey(event) {
