@@ -26,9 +26,10 @@ async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::Cre
 static POOL_RESULT: tokio::sync::OnceCell<
     Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError>,
 > = tokio::sync::OnceCell::const_new();
+
 static PREPARED_STATEMENT: once_cell::sync::Lazy<
-    tokio::sync::Mutex<std::collections::HashSet<String>>,
-> = once_cell::sync::Lazy::new(|| tokio::sync::Mutex::new(std::collections::HashSet::new()));
+    tokio::sync::RwLock<std::collections::HashSet<String>>,
+> = once_cell::sync::Lazy::new(|| tokio::sync::RwLock::new(std::collections::HashSet::new()));
 
 async fn pool() -> &'static Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
     POOL_RESULT.get_or_init(create_pool).await
@@ -269,17 +270,15 @@ async fn execute_query(
     headers: ftd::ast::HeaderValues,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let (query, query_args) = super::sql::extract_arguments(query)?;
-    let stmt_key = query.to_string();
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
 
-    // Use a Mutex to ensure only one thread prepares the same statement
-    let mut prepared_statements = PREPARED_STATEMENT.lock().await;
-    let stmt = if !prepared_statements.contains(&stmt_key) {
-        let stmt = client.prepare_cached(query.as_str()).await.unwrap();
-        prepared_statements.insert(stmt_key);
-        stmt
-    } else {
+    let mut prepared_statements = PREPARED_STATEMENT.write().await;
+    let stmt = if prepared_statements.contains(&query) {
         client.prepare_cached(query.as_str()).await.unwrap()
+    } else {
+        let stmt = client.prepare_cached(query.as_str()).await.unwrap();
+        prepared_statements.insert(query);
+        stmt
     };
 
     let args = prepare_args(query_args, stmt.params(), doc, line_number, headers)?;
