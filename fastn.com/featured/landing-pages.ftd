@@ -26,7 +26,7 @@ screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jp
 
 -- ft-ui.template: Midnight Storm
 template-url: featured/landing/midnight-storm-landing/
-screenshot: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
+screenshot: $fastn-assets.files.images.featured.landing.ms-landing-demo.png
 
 -- ft-ui.template: Misty Gray
 template-url: featured/landing/misty-gray-landing/
