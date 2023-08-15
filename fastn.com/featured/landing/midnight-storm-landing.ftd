@@ -57,11 +57,11 @@ show-large: true
 -- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.landing.midnight-storm-landing.jpg
-cta-url: https://fastn-community.github.io/midnight-storm/landing/
+image: $fastn-assets.files.images.featured.landing.ms-landing-demo.png
+cta-url: https://gsalunke.github.io/ms-landing-demo/
 cta-text: Demo
-github-url: https://github.com/fastn-community/midnight-storm-template/
-cta-2-url: https://fastn-community.github.io/midnight-storm/
+github-url: https://github.com/fastn-community/ms-landing-template/
+cta-2-url: https://fastn-community.github.io/midnight-storm/components/
 cta-2-text: User Manual
 
 -- end: ds.page
