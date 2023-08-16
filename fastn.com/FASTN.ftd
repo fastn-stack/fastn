@@ -91,12 +91,16 @@ favicon: /-/fastn.com/images/favicon.svg
     - Ayush Soni: /champions/ayush-soni/
     document: /student-programs/champions/ayush-soni.ftd
     skip: true
+    - Govindaraman S: /champions/govindaraman-s/
+    skip: true
 - Ambassador Program: /ambassador-program/
   document: /student-programs/ambassador.ftd
   - Ambassadors: /ambassadors/
   document: /student-programs/ambassadors/all-ambassadors.ftd
     - Ayush Soni: /ambassadors/ayush-soni/
     document: /student-programs/ambassadors/ayush-soni.ftd
+    skip: true
+    - Govindaraman S: /ambassadors/govindaraman-s/
     skip: true
   
 ## Features: /features/

@@ -39,6 +39,11 @@ photo-grey: $fastn-assets.files.images.students-program.ambassadors.ayush-soni-g
 link: /student-programs/ambassador-program/ambassadors/ayush-soni/
 designation: DevRel Engineer
 
+-- lib.member: Govindaraman S
+photo: $fastn-assets.files.images.students-program.ambassadors.govindaraman.jpg
+photo-grey: $fastn-assets.files.images.students-program.ambassadors.govindaraman-grayscale.jpg
+link: /student-programs/ambassadors/govindaraman/
+designation: Front End Developer, Trizwit Labs
 
 -- end: lib.team
 
