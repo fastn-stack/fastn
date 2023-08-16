@@ -27,9 +27,8 @@ static POOL_RESULT: tokio::sync::OnceCell<
     Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError>,
 > = tokio::sync::OnceCell::const_new();
 
-static PREPARED_STATEMENT: once_cell::sync::Lazy<
-    tokio::sync::RwLock<std::collections::HashSet<String>>,
-> = once_cell::sync::Lazy::new(|| tokio::sync::RwLock::new(std::collections::HashSet::new()));
+static EXECUTE_QUERY_LOCK: once_cell::sync::Lazy<tokio::sync::Mutex<()>> =
+    once_cell::sync::Lazy::new(|| tokio::sync::Mutex::new(()));
 
 async fn pool() -> &'static Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
     POOL_RESULT.get_or_init(create_pool).await
@@ -263,14 +262,10 @@ fn prepare_args(
     Ok(QueryArgs { args })
 }
 
-async fn execute_query(
-    query: &str,
-    doc: &ftd::interpreter::TDoc<'_>,
-    line_number: usize,
-    headers: ftd::ast::HeaderValues,
-) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
-    let (query, query_args) = super::sql::extract_arguments(query)?;
-    let client = pool().await.as_ref().unwrap().get().await.unwrap();
+async fn get_statemetn(query: &str) -> tokio_postgres::Statement {
+    if let Some(s) = PREPARED_STATEMENT.read().await.get(query) {
+        return s.clone();
+    }
 
     let mut prepared_statements = PREPARED_STATEMENT.write().await;
     let stmt = if prepared_statements.contains(&query) {
@@ -280,6 +275,21 @@ async fn execute_query(
         prepared_statements.insert(query);
         stmt
     };
+    stmt
+}
+
+async fn execute_query(
+    query: &str,
+    doc: &ftd::interpreter::TDoc<'_>,
+    line_number: usize,
+    headers: ftd::ast::HeaderValues,
+) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
+    let _lock = EXECUTE_QUERY_LOCK.lock().await;
+
+    let (query, query_args) = super::sql::extract_arguments(query)?;
+    let client = pool().await.as_ref().unwrap().get().await.unwrap();
+
+    let stmt = client.prepare_cached(query.as_str()).await.unwrap();
 
     let args = prepare_args(query_args, stmt.params(), doc, line_number, headers)?;
     let rows = client.query(&stmt, &args.pg_args()).await.unwrap();
