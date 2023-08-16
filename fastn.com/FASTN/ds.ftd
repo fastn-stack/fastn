@@ -16,7 +16,7 @@ optional body body:
 boolean sidebar: true
 optional string document-title:
 optional string document-description:
-optional ftd.raw-image-src document-image: $fastn-assets.files.images.fastn.svg.light
+optional ftd.raw-image-src document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png.light
 optional string site-name: NULL
 optional ftd.image-src site-logo: $fastn-assets.files.images.fastn.svg
 boolean github-icon: true
