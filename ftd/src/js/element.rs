@@ -758,11 +758,6 @@ impl ContainerProperties {
         rdata: &ftd::js::ResolverData,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        if let Some(ref spacing) = self.spacing {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                spacing.to_set_property(fastn_js::PropertyKind::Spacing, doc, element_name, rdata),
-            ));
-        }
         if let Some(ref wrap) = self.wrap {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 wrap.to_set_property(fastn_js::PropertyKind::Wrap, doc, element_name, rdata),
@@ -776,6 +771,12 @@ impl ContainerProperties {
                     element_name,
                     rdata,
                 ),
+            ));
+        }
+        // prioritizing spacing > align-content for justify-content
+        if let Some(ref spacing) = self.spacing {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                spacing.to_set_property(fastn_js::PropertyKind::Spacing, doc, element_name, rdata),
             ));
         }
         component_statements
