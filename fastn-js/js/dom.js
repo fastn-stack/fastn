@@ -1069,6 +1069,7 @@ class Node2 {
     attachAlignContent(value, node_kind) {
         if (fastn_utils.isNull(value)) {
             this.attachCss('align-items', value);
+            this.attachCss("justify-content", value);
             return;
         }
         if (node_kind === fastn_dom.ElementKind.Row) {
@@ -1746,20 +1747,17 @@ class ForLoop {
         this.#nodes.splice(index, 0, node);
         return node;
     }
-
     createAllNode() {
         this.deleteAllNode();
         for (let idx in this.#list.getList()) {
             this.createNode(idx);
         }
     }
-
     deleteAllNode() {
         while (this.#nodes.length > 0) {
             this.#nodes.pop().destroy();
         }
     }
-
     getWrapper() {
         return this.#wrapper;
     }
@@ -1767,7 +1765,6 @@ class ForLoop {
        let node = this.#nodes.splice(index, 1)[0];
         node.destroy();
     }
-
     getParent() {
         return this.#parent;
     }
