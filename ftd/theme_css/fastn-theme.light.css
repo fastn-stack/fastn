@@ -46,7 +46,6 @@ pre[class*=language-]::selection {
 
 pre[class*=language-] {
 	padding: 1em;
-	margin: .5em 0;
 	overflow: auto
 }
 
