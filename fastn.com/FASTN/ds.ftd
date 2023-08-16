@@ -137,7 +137,11 @@ document-title: $page.document-title
 document-description: $page.document-description
 document-image: $page.document-image
 
+-- doc-site.page.header-logo-ui:
+
 -- car-component:
+
+-- end: doc-site.page.header-logo-ui
 
 -- ftd.column:
 spacing.fixed.em: 0.8
@@ -244,14 +248,10 @@ canvas-width: 100
 canvas-height: 100
 state-machine: Driving
 width.fixed.px: 200
-width.fixed.px if { ftd.device == "mobile" }: 170
 height.fixed.px: 150
-height.fixed.px if { ftd.device == "mobile" }: 75
+top.px: -70
+left.px: -37
 anchor: parent
-top.px: -30
-top.px if { ftd.device == "mobile" }: -152
-left.px: 125
-left.px if { ftd.device == "mobile" }: 139
 $on-click$: $http-call()
 $on-mouse-enter$: $ftd.set-rive-boolean(rive = car, input = drive, value = true)
 $on-mouse-leave$: $ftd.set-rive-boolean(rive = car, input = drive, value = false)
