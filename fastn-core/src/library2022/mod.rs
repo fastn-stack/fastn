@@ -154,7 +154,8 @@ impl Library2022 {
             let packages = lib.config.all_packages.borrow();
             let package = packages.get(package.name.as_str()).unwrap_or(package);
             // Explicit check for the current package.
-            if !name.starts_with(package.name.as_str()) {
+            let name = format!("{}/", name.trim_end_matches('/'));
+            if !name.starts_with(format!("{}/", package.name.as_str()).as_str()) {
                 return None;
             }
             let new_name = name.replacen(package.name.as_str(), "", 1);
@@ -166,7 +167,8 @@ impl Library2022 {
                 return None;
             }
             String::from_utf8(data).ok().map(|body| {
-                let body_with_prefix = package.get_prefixed_body(body.as_str(), name, true);
+                let body_with_prefix =
+                    package.get_prefixed_body(body.as_str(), name.as_str(), true);
                 let line_number = body_with_prefix.split('\n').count() - body.split('\n').count();
                 (body_with_prefix, line_number)
             })
