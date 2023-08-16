@@ -41,6 +41,9 @@ favicon: /-/fastn.com/images/favicon.svg
 
 -- fastn.sitemap:
 
+# Examples: /examples/
+  skip: true
+  
 # Overview: /home/
 
 ## Overview: /home/
