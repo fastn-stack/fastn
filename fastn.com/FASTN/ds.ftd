@@ -250,7 +250,9 @@ state-machine: Driving
 width.fixed.px: 200
 height.fixed.px: 150
 top.px: -70
+top.px if { ftd.device == "mobile" }: -33
 left.px: -37
+left.px if { ftd.device == "mobile" }: 149
 anchor: parent
 $on-click$: $http-call()
 $on-mouse-enter$: $ftd.set-rive-boolean(rive = car, input = drive, value = true)
