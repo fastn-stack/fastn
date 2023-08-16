@@ -262,22 +262,6 @@ fn prepare_args(
     Ok(QueryArgs { args })
 }
 
-async fn get_statemetn(query: &str) -> tokio_postgres::Statement {
-    if let Some(s) = PREPARED_STATEMENT.read().await.get(query) {
-        return s.clone();
-    }
-
-    let mut prepared_statements = PREPARED_STATEMENT.write().await;
-    let stmt = if prepared_statements.contains(&query) {
-        client.prepare_cached(query.as_str()).await.unwrap()
-    } else {
-        let stmt = client.prepare_cached(query.as_str()).await.unwrap();
-        prepared_statements.insert(query);
-        stmt
-    };
-    stmt
-}
-
 async fn execute_query(
     query: &str,
     doc: &ftd::interpreter::TDoc<'_>,
