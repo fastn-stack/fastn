@@ -1,4 +1,4 @@
--- ftd.column:
+/-- ftd.column:
 width: hug-content
 background.solid: #0d260d
 
@@ -81,3 +81,82 @@ universe.
 \-- end: ftd.column
 
 -- end: ftd.column
+
+
+
+-- code:
+
+\-- ftd.text:
+color: red
+
+Hello World
+
+
+
+-- ftd.text: Dark Mode
+$on-click$: $set-dark()
+
+-- ftd.text: Light Mode
+$on-click$: $set-light()
+
+-- ftd.text: System Mode
+$on-click$: $set-system()
+
+
+
+
+
+
+
+
+
+
+
+-- void set-dark():
+
+enable_dark_mode()
+
+
+-- void set-light():
+
+enable_light_mode()
+
+
+-- void set-system():
+
+enable_system_mode()
+
+
+
+
+
+
+
+
+
+
+
+-- component code:
+body text:
+
+-- ftd.column:
+
+-- ftd.code:
+lang: ftd
+width: fill-container
+theme: fastn-theme.light
+if: { !ftd.dark-mode }
+
+$code.text
+
+-- ftd.code:
+lang: ftd
+width: fill-container
+theme: fastn-theme.dark
+if: { ftd.dark-mode }
+
+$code.text
+
+-- end: ftd.column
+
+-- end: code
