@@ -10,7 +10,7 @@ margin.px: 20
 
 -- end: ftd.column
 
-;; ----------------------- NO-FOLLOW LINK -----------------------
+;; ----------------------- LINK REL -----------------------
 
 -- ftd.column:
 width: fill-container
@@ -18,7 +18,7 @@ align-content: center
 
 -- ftd.text: No follow link
 link: https://www.fastn.com
-no-follow: true
+rel: no-follow, sponsored
 
 -- end: ftd.column
 
