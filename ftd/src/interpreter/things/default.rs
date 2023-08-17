@@ -10110,6 +10110,12 @@ fn common_arguments() -> Vec<ftd::interpreter::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter::Argument::default(
+            "no-follow",
+            ftd::interpreter::Kind::boolean()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter::Argument::default(
             "id",
             ftd::interpreter::Kind::string()
                 .into_optional()
