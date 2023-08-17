@@ -9,13 +9,14 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="__w-1">Hello</div><div data-id="3" class="__w-2">Hello 30</div><div data-id="4" class="__w-1">Hello 20</div><div data-id="5" class="__w-3">fill-container</div><div data-id="6" class="__cur-4 __w-5 __bgc-6">Click me</div></body><style id="styles">
-    .__w-1 { width: 20px; }
-	.__w-2 { width: 30px; }
-	.__w-3 { width: 100%; }
-	.__cur-4 { cursor: pointer; }
-	.__w-5 { width: 40%; }
-	.__bgc-6 { background-color: yellow; }
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="__w-3">Hello</div><div data-id="4" class="__w-4">Hello 30</div><div data-id="5" class="__w-3">Hello 20</div><div data-id="6" class="__w-1">fill-container</div><div data-id="7" class="__cur-5 __w-6 __bgc-7">Click me</div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__w-3 { width: 20px; }
+	.__w-4 { width: 30px; }
+	.__cur-5 { cursor: pointer; }
+	.__w-6 { width: 40%; }
+	.__bgc-7 { background-color: yellow; }
     </style>
 <script>
     (function() {
@@ -59,7 +60,14 @@ let main = function (parent) {
 fastn_utils.createNestedObject(global, "foo__flag", fastn.mutable(true));
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
-        fastn_virtual.hydrate(main);
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
 </script>

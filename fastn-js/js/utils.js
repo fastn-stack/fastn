@@ -354,6 +354,17 @@ let fastn_utils = {
 
     getNodeValue(node) {
         return node.getNode().value;
+    },
+
+    setFullHeight() {
+        if(!ssr) {
+            document.body.style.height = `max(${document.documentElement.scrollHeight}px, 100%)`;
+        }
+    },
+    resetFullHeight() {
+        if(!ssr) {
+            document.body.style.height = `100%`;
+        }
     }
 }
 

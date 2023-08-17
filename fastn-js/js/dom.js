@@ -1159,7 +1159,9 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Width) {
             this.attachCss("width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Height) {
+            fastn_utils.resetFullHeight();
             this.attachCss("height", staticValue);
+            fastn_utils.setFullHeight();
         } else if (kind === fastn_dom.PropertyKind.Padding) {
             this.attachCss("padding", staticValue);
         } else if (kind === fastn_dom.PropertyKind.PaddingHorizontal) {
@@ -1661,6 +1663,7 @@ class ConditionalDom {
 
         this.#conditionUI = null;
         let closure = fastn.closure(() => {
+            fastn_utils.resetFullHeight();
             if (condition()) {
                 if (this.#conditionUI) {
                     if (Array.isArray(this.#conditionUI)) {
@@ -1687,6 +1690,7 @@ class ConditionalDom {
                 }
                 this.#conditionUI = null;
             }
+            fastn_utils.setFullHeight();
         })
         deps.forEach(dep => {
             if (!fastn_utils.isNull(dep) && dep.addClosure) {
@@ -1744,11 +1748,16 @@ class ForLoop {
         this.#list = list;
         this.#nodes = [];
 
+        fastn_utils.resetFullHeight();
         for (let idx in list.getList()) {
-            this.createNode(idx);
+            this.createNode(idx, false);
         }
+        fastn_utils.setFullHeight();
     }
-    createNode(index) {
+    createNode(index, resizeBodyHeight= true) {
+        if (resizeBodyHeight) {
+            fastn_utils.resetFullHeight();
+        }
         let parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#wrapper);
         if (index !== 0) {
             parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#nodes[index-1]);
@@ -1756,25 +1765,38 @@ class ForLoop {
         let v = this.#list.get(index);
         let node = this.#node_constructor(parentWithSibiling, v.item, v.index);
         this.#nodes.splice(index, 0, node);
+        if (resizeBodyHeight) {
+            fastn_utils.setFullHeight();
+        }
         return node;
     }
     createAllNode() {
-        this.deleteAllNode();
+        fastn_utils.resetFullHeight();
+        this.deleteAllNode(false);
         for (let idx in this.#list.getList()) {
-            this.createNode(idx);
+            this.createNode(idx, false);
         }
+        fastn_utils.setFullHeight();
     }
-    deleteAllNode() {
+    deleteAllNode(resizeBodyHeight= true) {
+        if (resizeBodyHeight) {
+            fastn_utils.resetFullHeight();
+        }
         while (this.#nodes.length > 0) {
             this.#nodes.pop().destroy();
+        }
+        if (resizeBodyHeight) {
+            fastn_utils.setFullHeight();
         }
     }
     getWrapper() {
         return this.#wrapper;
     }
     deleteNode(index) {
-       let node = this.#nodes.splice(index, 1)[0];
+        fastn_utils.resetFullHeight();
+        let node = this.#nodes.splice(index, 1)[0];
         node.destroy();
+        fastn_utils.setFullHeight();
     }
     getParent() {
         return this.#parent;

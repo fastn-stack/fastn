@@ -216,5 +216,6 @@ ftd.post_init = function () {
     initialise_dark_mode();
     initialise_device();
     initialise_click_outside_events();
-    initialise_global_key_events()
+    initialise_global_key_events();
+    fastn_utils.setFullHeight();
 }

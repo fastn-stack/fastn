@@ -24,7 +24,13 @@ pub fn ssr_str(js: &str) -> String {
 }
 
 pub fn ssr(ast: &[fastn_js::Ast]) -> String {
-    let js = format!("{}\nfastn_virtual.ssr(main)", fastn_js::to_js(ast, false));
+    let js = format!("{}\nlet main_wrapper = function (parent) {{
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }};
+        fastn_virtual.ssr(main_wrapper);", fastn_js::to_js(ast, false));
     ssr_str(&js)
 }
 

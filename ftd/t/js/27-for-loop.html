@@ -9,8 +9,9 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><comment data-id="2"></comment><comment data-id="3"></comment><comment data-id="4"></comment><comment data-id="5"></comment><div data-id="6">undefined Tuesday</div><comment data-id="7"></comment><div data-id="8">undefined Wednesday</div><comment data-id="9"></comment><div data-id="10">undefined Thursday</div><comment data-id="11"></comment><div data-id="12">undefined Friday</div><comment data-id="13"></comment><div data-id="14">undefined Saturday</div></body><style id="styles">
-    
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><comment data-id="3"></comment><comment data-id="4"></comment><comment data-id="5"></comment><comment data-id="6"></comment><div data-id="7">undefined Tuesday</div><comment data-id="8"></comment><div data-id="9">undefined Wednesday</div><comment data-id="10"></comment><div data-id="11">undefined Thursday</div><comment data-id="12"></comment><div data-id="13">undefined Friday</div><comment data-id="14"></comment><div data-id="15">undefined Saturday</div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
     </style>
 <script>
     (function() {
@@ -49,7 +50,14 @@ let foo__join = function (args)
 }
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
-        fastn_virtual.hydrate(main);
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
 </script>

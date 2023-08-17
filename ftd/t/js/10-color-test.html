@@ -9,7 +9,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __bgc-2"><div data-id="3" class="__cur-3 __p-4 __c-5 __rl-6">Lorem ipsum dolor sit amet. Quo aliquam natus id cumque Quis quo eligendi quia
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-1 __bgc-3"><div data-id="4" class="__cur-4 __p-5 __c-6 __rl-7">Lorem ipsum dolor sit amet. Quo aliquam natus id cumque Quis quo eligendi quia
 qui aliquid dolores. Qui atque delectus quo maxime numquam qui architecto
 delectus. Qui maxime galisum sit magni placeat sed illum sunt. Ut illo excepturi
 aut nulla molestiae et excepturi voluptas aut voluptatem obcaecati id harum quia.
@@ -23,18 +23,19 @@ quisquam ab repellat molestiae qui quia repudiandae ut doloribus impedit.
 
 A repellendus sapiente id Quis doloremque qui Quis omnis in blanditiis tenetur
 quo esse dolor. 33 vitae modi ut voluptates distinctio est dicta temporibus est
-consectetur voluptatum et Quis inventore ab dignissimos amet?</div></div></body><style id="styles">
+consectetur voluptatum et Quis inventore ab dignissimos amet?</div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
-	.__bgc-2 { background-color: #170d03; }
-	body.dark .__bgc-2 { background-color: #edfce8; }
-	.__cur-3 { cursor: pointer; }
-	.__p-4 { padding: 40px; }
-	.__c-5 { color: orange; }
-	body.dark .__c-5 { color: green; }
-	.__c-5:visited { color: orange; }
-	body.dark  .__c-5:visited { color: green; }
-	.__rl-6 {  font-family: cursive; letter-spacing: 5px; font-size: 36px; font-weight: 700; line-height: 40px; }
-	body.mobile .__rl-6 {  font-family: fantasy; letter-spacing: 3px; font-size: 20px; font-weight: 100; line-height: 35px; }
+	.__h-2 { height: 100%; }
+	.__bgc-3 { background-color: #170d03; }
+	body.dark .__bgc-3 { background-color: #edfce8; }
+	.__cur-4 { cursor: pointer; }
+	.__p-5 { padding: 40px; }
+	.__c-6 { color: orange; }
+	body.dark .__c-6 { color: green; }
+	.__c-6:visited { color: orange; }
+	body.dark  .__c-6:visited { color: green; }
+	.__rl-7 {  font-family: cursive; letter-spacing: 5px; font-size: 36px; font-weight: 700; line-height: 40px; }
+	body.mobile .__rl-7 {  font-family: fantasy; letter-spacing: 3px; font-size: 20px; font-weight: 100; line-height: 35px; }
     </style>
 <script>
     (function() {
@@ -139,7 +140,14 @@ fastn_utils.createNestedObject(global, "foo__bg_bp", fastn.recordInstance({
 }));
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
-        fastn_virtual.hydrate(main);
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
 </script>
