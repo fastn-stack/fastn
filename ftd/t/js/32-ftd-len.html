@@ -9,25 +9,26 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __p-2 __m-3 __bgc-4 __g-5"><comment data-id="3"></comment><div data-id="4" class="__c-6">January</div><div data-id="5" class="__c-7">February</div><div data-id="6" class="__c-8">March</div><div data-id="7" class="__c-6">April</div><div data-id="8" class="__c-7">May</div><div data-id="9" class="__c-8">June</div><div data-id="10" class="__c-6">July</div><div data-id="11" class="__c-7">August</div><div data-id="12" class="__c-8">September</div><div data-id="13" class="__c-6">October</div></div><div data-id="14" class="ft_column __w-9 __m-3 __g-10"><div data-id="15" class="ft_row __bw-11 __bc-12 __g-10"><div data-id="16" class="__rl-13">Month</div><input data-id="17" placeholder="Enter your month name" class="__w-14 __rl-15"></input><comment data-id="18"></comment></div><div data-id="19" class="__cur-16 __bw-11 __bc-12">Append</div></div></body><style id="styles">
-    .__w-1 { width: 300px; }
-	.__p-2 { padding: 10px; }
-	.__m-3 { margin: 10px; }
-	.__bgc-4 { background-color: black; }
-	.__g-5 { gap: 5px; }
-	.__c-6 { color: orange; }
-	.__c-7 { color: white; }
-	.__c-8 { color: green; }
-	.__w-9 { width: 500px; }
-	.__g-10 { gap: 10px; }
-	.__bw-11 { border-width: 2px; }
-	.__bc-12 { border-color: black; }
-	.__rl-13 {  font-family: sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; }
-	body.mobile .__rl-13 {  font-family: sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; }
-	.__w-14 { width: 100%; }
-	.__rl-15 {  font-family: sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; }
-	body.mobile .__rl-15 {  font-family: sans-serif; font-size: 12px; font-weight: 400; line-height: 16px; }
-	.__cur-16 { cursor: pointer; }
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __p-4 __m-5 __bgc-6 __g-7"><comment data-id="4"></comment><div data-id="5" class="__c-8">January</div><div data-id="6" class="__c-9">February</div><div data-id="7" class="__c-10">March</div><div data-id="8" class="__c-8">April</div><div data-id="9" class="__c-9">May</div><div data-id="10" class="__c-10">June</div><div data-id="11" class="__c-8">July</div><div data-id="12" class="__c-9">August</div><div data-id="13" class="__c-10">September</div><div data-id="14" class="__c-8">October</div></div><div data-id="15" class="ft_column __w-11 __m-5 __g-12"><div data-id="16" class="ft_row __bw-13 __bc-14 __g-12"><div data-id="17" class="__rl-15">Month</div><input data-id="18" placeholder="Enter your month name" class="__w-1 __rl-16"></input><comment data-id="19"></comment></div><div data-id="20" class="__cur-17 __bw-13 __bc-14">Append</div></div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__w-3 { width: 300px; }
+	.__p-4 { padding: 10px; }
+	.__m-5 { margin: 10px; }
+	.__bgc-6 { background-color: black; }
+	.__g-7 { gap: 5px; }
+	.__c-8 { color: orange; }
+	.__c-9 { color: white; }
+	.__c-10 { color: green; }
+	.__w-11 { width: 500px; }
+	.__g-12 { gap: 10px; }
+	.__bw-13 { border-width: 2px; }
+	.__bc-14 { border-color: black; }
+	.__rl-15 {  font-family: sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; }
+	body.mobile .__rl-15 {  font-family: sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; }
+	.__rl-16 {  font-family: sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; }
+	body.mobile .__rl-16 {  font-family: sans-serif; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__cur-17 { cursor: pointer; }
     </style>
 <script>
     (function() {
@@ -174,7 +175,14 @@ let foo__mbox = function (parent, inherited, args) {
 }
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
-        fastn_virtual.hydrate(main);
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
 </script>

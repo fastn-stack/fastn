@@ -133,6 +133,11 @@ pre code {
     justify-content: start
 }
 
+.full {
+    width: 100%;
+    height: 100%;
+}
+
 .ft_row {
     display: flex;
     align-items: start;

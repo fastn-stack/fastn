@@ -9,14 +9,15 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __jc-2 __ali-3"><a data-id="3" href="https://www.fastn.com" class="__m-4">This is a link</a></div><div data-id="4" class="ft_column __w-1 __jc-2 __ali-3"><a data-id="5" href="https://www.fastn.com" rel="nofollow sponsored">No follow link</a></div><div data-id="6" class="ft_column __w-1 __jc-2 __ali-3"><a data-id="7" href="https://www.fastn.com" target="_blank" class="__m-4">This is a link (will open in new tab)</a></div><div data-id="8" class="ft_column __w-1 __mt-5 __mb-6"><input data-id="9" type="checkbox" checked></input><input data-id="10" type="checkbox" checked="false" disabled></input></div><div data-id="11" class="ft_column __w-1 __mt-5 __mb-6"><input data-id="12" placeholder="Enter some text"></input><textarea data-id="13" placeholder="Multiline input"></textarea><input data-id="14" type="password"></input><input data-id="15" placeholder="This would be disabled" disabled></input><input data-id="16" value="This is default text"></input></div><iframe data-id="17" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik"></iframe><pre data-id="18" class="language-ftd fastn-theme-dark"><code data-id="19" class="language-ftd fastn-theme-dark">-- ftd.text: Hello World
-</code></pre></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-1 __jc-3 __ali-4"><a data-id="4" href="https://www.fastn.com" class="__m-5">This is a link</a></div><div data-id="5" class="ft_column __w-1 __jc-3 __ali-4"><a data-id="6" href="https://www.fastn.com" rel="nofollow sponsored">No follow link</a></div><div data-id="7" class="ft_column __w-1 __jc-3 __ali-4"><a data-id="8" href="https://www.fastn.com" target="_blank" class="__m-5">This is a link (will open in new tab)</a></div><div data-id="9" class="ft_column __w-1 __mt-6 __mb-7"><input data-id="10" type="checkbox" checked></input><input data-id="11" type="checkbox" checked="false" disabled></input></div><div data-id="12" class="ft_column __w-1 __mt-6 __mb-7"><input data-id="13" placeholder="Enter some text"></input><textarea data-id="14" placeholder="Multiline input"></textarea><input data-id="15" type="password"></input><input data-id="16" placeholder="This would be disabled" disabled></input><input data-id="17" value="This is default text"></input></div><iframe data-id="18" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik"></iframe><pre data-id="19" class="language-ftd fastn-theme-dark"><code data-id="20" class="language-ftd fastn-theme-dark">-- ftd.text: Hello World
+</code></pre></div></body><style id="styles">
     .__w-1 { width: 100%; }
-	.__jc-2 { justify-content: center; }
-	.__ali-3 { align-items: center; }
-	.__m-4 { margin: 20px; }
-	.__mt-5 { margin-top: 30px; }
-	.__mb-6 { margin-bottom: 30px; }
+	.__h-2 { height: 100%; }
+	.__jc-3 { justify-content: center; }
+	.__ali-4 { align-items: center; }
+	.__m-5 { margin: 20px; }
+	.__mt-6 { margin-top: 30px; }
+	.__mb-7 { margin-bottom: 30px; }
     </style>
 <script>
     (function() {
@@ -105,7 +106,14 @@ let main = function (parent) {
 }
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
-        fastn_virtual.hydrate(main);
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
 </script>

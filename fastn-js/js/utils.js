@@ -3,9 +3,11 @@ let fastn_utils = {
         let node = "div";
         let css = [];
         let attributes = {};
-        if (kind === fastn_dom.ElementKind.Column ||
-            kind === fastn_dom.ElementKind.Document) {
+        if (kind === fastn_dom.ElementKind.Column) {
             css.push("ft_column");
+        } else if (kind === fastn_dom.ElementKind.Document) {
+            css.push("ft_column");
+            css.push("full");
         } else if (kind === fastn_dom.ElementKind.Row) {
             css.push("ft_row");
         } else if (kind === fastn_dom.ElementKind.IFrame) {
@@ -352,6 +354,17 @@ let fastn_utils = {
 
     getNodeValue(node) {
         return node.getNode().value;
+    },
+
+    setFullHeight() {
+        if(!ssr) {
+            document.body.style.height = `max(${document.documentElement.scrollHeight}px, 100%)`;
+        }
+    },
+    resetFullHeight() {
+        if(!ssr) {
+            document.body.style.height = `100%`;
+        }
     }
 }
 
