@@ -338,7 +338,7 @@ favicon: /-/fastn.com/images/favicon.svg
   - **g** Hosting 🚧: /book/hosting/
     document: book/appendix/g-hosting.ftd
 
-## Learn: /learn/
+## Learn: /frontend/learn/
   document: /expander/index.ftd
    
 - Expander Crash Course: /expander/
@@ -382,6 +382,8 @@ favicon: /-/fastn.com/images/favicon.svg
 
 # Fullstack: /backend/
 
+## Overview: /backend/
+
 - Overview: /backend/
 - Endpoint Guide 🚧: /endpoint/
   document: backend/endpoint.ftd
@@ -407,6 +409,13 @@ favicon: /-/fastn.com/images/favicon.svg
 - Dynamic Redirect: /ftd/redirect/
   document: backend/ftd-redirect.ftd
 
+## Learn: /backend/learn/
+  document: /backend/country-details/index.ftd
+
+- Country Details: /country-details/
+  document: /backend/country-details/index.ftd
+  - Basic of `http`, `data modelling`: /country-details/basics/
+    document: /backend/country-details/http-data-modelling.ftd
 
 # Create Website: /create-website/
   document: author/how-to/install.ftd
