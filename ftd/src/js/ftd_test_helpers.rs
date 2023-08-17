@@ -133,6 +133,10 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                             <script src="../../prism/prism.js"></script>
                             <script src="../../prism/prism-line-highlight.js"></script>
                             <script src="../../prism/prism-line-numbers.js"></script>
+                            <script src="../../prism/prism-rust.js"></script>
+                            <script src="../../prism/prism-json.js"></script>
+                            <script src="../../prism/prism-python.js"></script>
+                            <script src="../../prism/prism-markdown.js"></script>
                             <link rel="stylesheet" href="../../prism/prism-line-highlight.css">
                             <link rel="stylesheet" href="../../prism/prism-line-numbers.css">
                             <script>{}</script>

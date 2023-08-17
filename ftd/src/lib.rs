@@ -78,7 +78,13 @@ pub fn prism_js() -> String {
     let prism = include_str!("../prism/prism.js");
     let prism_line_highlight = include_str!("../prism/prism-line-highlight.js");
     let prism_line_numbers = include_str!("../prism/prism-line-numbers.js");
-    format!("{prism}{prism_line_highlight}{prism_line_numbers}")
+    let prism_rust = include_str!("../prism/prism-rust.js");
+    let prism_json = include_str!("../prism/prism-json.js");
+    let prism_python = include_str!("../prism/prism-python.js");
+    let prism_markdown = include_str!("../prism/prism-markdown.js");
+    format!(
+        "{prism}{prism_line_highlight}{prism_line_numbers}{prism_rust}{prism_json}{prism_python}{prism_markdown}"
+    )
 }
 
 pub fn terminal() -> &'static str {
