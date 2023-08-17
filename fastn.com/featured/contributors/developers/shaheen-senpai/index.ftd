@@ -116,7 +116,7 @@ screenshot: $fastn-assets.files.images.featured.components.hero-6.png
 -- common.owner list owner-shaheen:
 
 -- common.owner: Shaheen Senpai
-avatar: $fastn-assets.files.featured.contributors.developers.shaheen-senpai.shaheen-senpai.jpg
+avatar: $fastn-assets.files.featured.contributors.developers.shaheen-senpai.shaheen-senpai.jpeg
 profile: featured/contributors/designers/shaheen-senpai/
 role: Designer
 

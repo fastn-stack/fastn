@@ -125,7 +125,7 @@ screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 
 -- common.owner: Ganesh Salunke
 profile: featured/contributors/developers/ganesh-salunke/
-avatar: $fastn-assets.files.featured.contributors.developers.ganeshsalunke.ganeshs.jpg
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
 role: Developer
 
 -- end: owner-ganesh
