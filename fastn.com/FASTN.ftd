@@ -123,6 +123,15 @@ favicon: /-/fastn.com/images/favicon.svg
 - Sitemap: /sitemap/
   document: features/sitemap.ftd
 
+## Compare: /compare/
+  document: /compare/react.ftd
+
+   
+- fastn vs React: /react/
+  document: /compare/react.ftd
+- fastn vs Webflow: /webflow/
+  document: /compare/webflow.ftd
+
 
 ## Events: /events/webdev-with-ftd/
    document: webdev-with-ftd.ftd
@@ -729,8 +738,8 @@ skip: true
   document: /blog/web-components.ftd
 - Color Scheme: /colors/
   document: blog/show-cs.ftd
-
-
+ 
+  
 
 # dev: /d/
   skip: true
