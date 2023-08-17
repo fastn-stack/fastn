@@ -412,6 +412,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = resizing_variants(variant);
             (format!("fastn_dom.Resizing.{}", js_variant.0), js_variant.1)
         }
+        "ftd#link-rel" => {
+            let js_variant = link_rel_variants(variant);
+            (format!("fastn_dom.LinkRel.{}", js_variant), false)
+        }
         "ftd#length" => {
             let js_variant = length_variants(variant);
             (format!("fastn_dom.Length.{}", js_variant), true)
@@ -530,6 +534,15 @@ fn resizing_variants(name: &str) -> (&'static str, bool) {
         "hug-content" => ("HugContent", false),
         "auto" => ("Auto", false),
         t => panic!("invalid resizing variant {}", t),
+    }
+}
+
+fn link_rel_variants(name: &str) -> &'static str {
+    match name {
+        "no-follow" => "NoFollow",
+        "sponsored" => "Sponsored",
+        "ugc" => "Ugc",
+        t => panic!("invalid link rel variant {}", t),
     }
 }
 

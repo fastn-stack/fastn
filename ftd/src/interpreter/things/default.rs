@@ -2500,6 +2500,45 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
+            ftd::interpreter::FTD_LINK_REL.to_string(),
+            ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                name: ftd::interpreter::FTD_LINK_REL.to_string(),
+                variants: vec![
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINK_REL_NO_FOLLOW,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("no-follow")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINK_REL_SPONSORED,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("sponsored")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINK_REL_UGC,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("ugc")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter::FTD_RESIZING.to_string(),
             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
                 name: ftd::interpreter::FTD_RESIZING.to_string(),
@@ -10110,9 +10149,9 @@ fn common_arguments() -> Vec<ftd::interpreter::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter::Argument::default(
-            "no-follow",
-            ftd::interpreter::Kind::boolean()
-                .into_optional()
+            "rel",
+            ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LINK_REL)
+                .into_list()
                 .into_kind_data(),
         ),
         ftd::interpreter::Argument::default(
