@@ -1244,7 +1244,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Shadow) {
             this.attachShadow(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Classes) {
-            fastn_utils.removeNonFastnClasses(this.#node);
+            fastn_utils.removeNonFastnClasses(this);
             if (!fastn_utils.isNull(staticValue)) {
                 let cls = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
                 cls.forEach((c) => {
@@ -1515,7 +1515,10 @@ class Node2 {
                 }
                 staticValue = modifiedText;
             }
-            this.#children[0].getNode().innerHTML= staticValue;
+            let codeNode = this.#children[0].getNode();
+            codeNode.innerHTML= staticValue;
+            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
+            fastn_utils.highlightCode(codeNode, this.#extraData.code);
         }  else if (kind === fastn_dom.PropertyKind.CodeShowLineNumber) {
             if (staticValue) {
                 this.#node.classList.add("line-numbers");
@@ -1527,12 +1530,26 @@ class Node2 {
                 fastn_utils.addCodeTheme(staticValue);
             }
             let theme = staticValue.replace("\.", "-");
+            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
+            if (this.#extraData.code.theme) {
+                this.#node.classList.remove(theme);
+            }
+            this.#extraData.code.theme = theme;
             this.#node.classList.add(theme);
-            this.#children[0].getNode().classList.add(theme);
+            let codeNode = this.#children[0].getNode();
+            codeNode.classList.add(theme);
+            fastn_utils.highlightCode(codeNode, this.#extraData.code);
         } else if (kind === fastn_dom.PropertyKind.CodeLanguage) {
             let language = `language-${staticValue}`;
+            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
+            if (this.#extraData.code.language) {
+                this.#node.classList.remove(language);
+            }
+            this.#extraData.code.language = language;
             this.#node.classList.add(language);
-            this.#children[0].getNode().classList.add(language);
+            let codeNode = this.#children[0].getNode();
+            codeNode.classList.add(language);
+            fastn_utils.highlightCode(codeNode, this.#extraData.code);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle) {
             this.updateMetaTitle(staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle) {
