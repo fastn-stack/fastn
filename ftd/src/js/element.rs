@@ -1909,6 +1909,7 @@ pub struct Common {
     pub id: Option<ftd::js::Value>,
     pub region: Option<ftd::js::Value>,
     pub link: Option<ftd::js::Value>,
+    pub no_follow: Option<ftd::js::Value>,
     pub open_in_new_tab: Option<ftd::js::Value>,
     pub align_self: Option<ftd::js::Value>,
     pub width: Option<ftd::js::Value>,
@@ -1989,6 +1990,7 @@ impl Common {
             js: ftd::js::value::get_optional_js_value("js", properties, arguments),
             region: ftd::js::value::get_optional_js_value("region", properties, arguments),
             link: ftd::js::value::get_optional_js_value("link", properties, arguments),
+            no_follow: ftd::js::value::get_optional_js_value("no-follow", properties, arguments),
             open_in_new_tab: ftd::js::value::get_optional_js_value(
                 "open-in-new-tab",
                 properties,
@@ -2228,6 +2230,16 @@ impl Common {
         if let Some(ref link) = self.link {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 link.to_set_property(fastn_js::PropertyKind::Link, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref no_follow) = self.no_follow {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                no_follow.to_set_property(
+                    fastn_js::PropertyKind::NoFollow,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
             ));
         }
         if let Some(ref open_in_new_tab) = self.open_in_new_tab {

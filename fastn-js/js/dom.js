@@ -259,6 +259,7 @@ fastn_dom.PropertyKind = {
     CodeShowLineNumber: 103,
     Css: 104,
     Js: 105,
+    NoFollow: 106,
 };
 
 
@@ -694,6 +695,7 @@ class Node2 {
     attachAttribute(property, value) {
         if (fastn_utils.isNull(value)) {
             this.#node.removeAttribute(property);
+            return;
         }
         this.#node.setAttribute(property, value);
     }
@@ -1430,6 +1432,15 @@ class Node2 {
             // todo: needs fix for image links
             this.updateToAnchor();
             this.attachAttribute("href", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.NoFollow) {
+            switch (staticValue) {
+                case true:
+                case "true":
+                    this.attachAttribute("rel", "nofollow");
+                    break;
+                default:
+                    this.attachAttribute("rel", undefined);
+            }
         } else if (kind === fastn_dom.PropertyKind.OpenInNewTab) {
             // open_in_new_tab is boolean type
             switch (staticValue) {

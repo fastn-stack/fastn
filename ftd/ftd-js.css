@@ -241,7 +241,7 @@ a:hover {
     text-decoration: none;
 }
 
-.ft_md code {
+code {
     padding: 0.1rem 0.25rem;
     border-radius: 4px;
     background-color: #0000000d;
@@ -262,7 +262,7 @@ body.fpm-dark .ft_md a {
 }
 
 
-body.fpm-dark .ft_md code {
+body.dark code {
     padding: 0.1rem 0.25rem;
     border-radius: 4px;
     background-color: #ffffff1f;
