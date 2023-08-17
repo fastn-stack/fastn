@@ -1,6 +1,6 @@
 -- ds.page: Common Kernel Attributes
 
-These attributes are available to all `ftd kernel` components.
+These attributes are available to all `fastn kernel` components.
 
 
 
@@ -2719,7 +2719,7 @@ Far out in the uncharted backwaters of the unfashionable end of the western
 spiral arm of the Galaxy lies a small unregarded blue planet.
 Orbiting this at a distance of roughly ninety-two million miles is an
 utterly insignificant little planet whose ape-descended life
-forms are so amazingly primitive that they still think ftd code written
+forms are so amazingly primitive that they still think `fastn` code written
 by humans are still a pretty neat idea of escalating knowledge throughout the
 universe.
 
@@ -3425,8 +3425,9 @@ color: $inherited.colors.text
 id: css
 
 This property will let you specify any external css files which you might want
-to use with your ftd components. This takes value as a list of strings which
-will be the names of all css files you want to include in your ftd document.
+to use with your `fastn` components. This takes value as a list of strings
+which will be the names of all css files you want to include in your `fastn`
+document.
 
 -- ds.code: Sample code using `css`
 lang: ftd
@@ -3448,7 +3449,7 @@ classes: custom-text, custom-shadow
 id: js
 
 This property lets you include any external javascript files which you might
-want to use inside your ftd document. This takes value as a list of string
+want to use inside your `fastn` document. This takes value as a list of string
 which will be the names of all js files which needs to be included.
 
 -- ds.code: Sample code using `js`
@@ -4867,7 +4868,7 @@ Far out in the uncharted backwaters of the unfashionable end of the western
 spiral arm of the Galaxy lies a small unregarded blue planet.
 Orbiting this at a distance of roughly ninety-two million miles is an
 utterly insignificant little planet whose ape-descended life
-forms are so amazingly primitive that they still think ftd code written
+forms are so amazingly primitive that they still think `fastn` code written
 by humans are still a pretty neat idea of escalating knowledge throughout the
 universe.
 

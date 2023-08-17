@@ -1,9 +1,9 @@
 -- ds.page: Functions
 
-FTD supports functions which users can create to execute their own logic
-in their ftd documents. It also provides various
+`fastn` supports functions which users can create to execute their own logic
+in their `fastn` documents. It also provides various
 [`built-in-functions`](/built-in-functions/)
-which users can use anywhere in their ftd document.
+which users can use anywhere in their `fastn` document.
 
 
 -- ds.h1: How to create functions ?
@@ -81,7 +81,7 @@ color: $inherited.colors.text
 -- ds.h1: Some frequently used functions
 
 Below mentioned are some of the most frequently used functions which can be
-created as per the requirement and are not part of ftd.
+created as per the requirement and are not part of `fastn`.
 
 -- ds.h2: Clamp
 

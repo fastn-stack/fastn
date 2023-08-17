@@ -172,10 +172,10 @@ width: fill-container
 
 -- ds.markdown:
 
-After doing such color modifications, you might
-want to save your color-scheme as a fastn color-scheme package.
-For this, we can convert this json generated from this color-scheme
-to FTD code which we can use in our fastn color-scheme package.
+After doing such color modifications, you might want to save your color-scheme
+as a fastn color-scheme package. For this, we can convert this json generated
+from this color-scheme to `fastn` code which we can use in our fastn
+color-scheme package.
 
 -- ds.h1: Let's convert json to FTD
 
@@ -208,7 +208,7 @@ And paste this merged json in the text-box below.
 
 -- ds.markdown:
 
-You will see the generated FTD code. Copy this FTD code by clicking
+You will see the generated `fastn` code. Copy this `fastn` code by clicking
 on the copy icon at the top of the code-block above.
 
 -- ds.h1: Go to the `sailing-shark-cs` github repository
@@ -300,7 +300,7 @@ width: fill-container
 
 -- ds.h1: Modify colors.ftd
 
-Go to your colors.ftd file in your repo and click on the edit button
+Go to your `colors.ftd` file in your repo and click on the edit button
 
 -- ftd.image:
 src: $fastn-assets.files.images.figma.b2.35.png
@@ -308,7 +308,7 @@ width: fill-container
 
 -- ds.markdown:
 
-Then Paste your copied FTD code.
+Then Paste your copied `fastn` code.
 
 Scroll down and commit directly to the main branch by
 press on Commit changes button as shown below.
@@ -335,9 +335,8 @@ width: fill-container
 
 -- ds.markdown:
 
-Then select the Source to `Deploy from the branch`
-and select the branch to `gh-pages`, then hit Save
-as shown below.
+Then select the Source to `Deploy from the branch` and select the branch to
+`gh-pages`, then hit Save as shown below.
 
 -- ftd.image:
 src: $fastn-assets.files.images.figma.b2.33.png
@@ -345,8 +344,8 @@ width: fill-container
 
 -- ds.h1: Preview your color-scheme in action
 
-Go to your (`<github-username>.github.io/<repo>`) page to see your
-color-scheme in action.
+Go to your (`<github-username>.github.io/<repo>`) page to see your color-scheme
+in action.
 
 In my case, my color-scheme will be deployed at
 `heulitig.github.io/my-color-scheme` as shown below

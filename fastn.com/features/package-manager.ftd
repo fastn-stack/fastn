@@ -45,7 +45,7 @@ Here `fastn.com` has a dependency on
 [`fifthtry.github.io/doc-site`](https://fifthtry.github.io/doc-site).
 
 We have also used "alias" feature to bind the name of this dependency to `ds`,
-so FTD files can write `-- import: ds` instead of having to use the full path,
+so `.ftd` files can write `-- import: ds` instead of having to use the full path,
 e.g. `-- import: fifthtry.github.io/doc-site`.
 
 

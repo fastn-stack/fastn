@@ -2,20 +2,20 @@
 
 -- ds.page: Kernel Components
 
-`ftd` comes with a few "kernel" components, these components are the building 
+`fastn` comes with a few `kernel` components, these components are the building 
 blocks for building all other components.
 
 -- cbox.info: import
 
-`ftd` supports `import`ing one document from another, and the imported
+`fastn` supports `import`ing one document from another, and the imported
 documents act as a namespace.
 
 -- ds.markdown:
 
-All ftd components are defined in a "virtual document", named `ftd`, and every
-`ftd` file implicitly imports ftd:
+All `kernel` components are defined in a `virtual document`, named `ftd`, and
+every `.ftd` file implicitly imports ftd:
 
--- ds.code: ftd hello world using `ftd.text`
+-- ds.code: hello world using `ftd.text`
 lang: ftd
 
 \-- import: ftd
@@ -24,14 +24,14 @@ lang: ftd
 
 -- ds.markdown:
 
-The `import` line is not needed as it's automatically imported. This line defines 
-namespace `ftd`, so all `ftd` kernels components are referred as `ftd.text` and 
-so on.
+The `import` line is not needed as it's automatically imported. This line
+defines namespace `ftd`, so all `kernel` components are referred as `ftd.text`
+and so on.
 
 We are then using a component named [`ftd.text`](ftd/text/) to render
 the text "hello world" in the UI.
 
--- ds.h1: List of `ftd` kernel components
+-- ds.h1: List of `kernel` components
 
 - [`ftd.column`](ftd/column/)
 - [`ftd.row`](ftd/row/)

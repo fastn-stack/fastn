@@ -1,6 +1,6 @@
 -- ds.page: Web Component
 
-The `ftd` allows for the integration of custom web components created using
+The `fastn` allows for the integration of custom web components created using
 JavaScript (or other languages that compile to JavaScript).
 
 Like [`component`](/ftd/component/), `web-component`s are independent and
@@ -9,7 +9,7 @@ reusable bits of code and they have arguments.
 
 -- ds.h1: Create Your Web Component
 
-A "web-component" in `ftd` can be created using `web-component` keyword.
+A `web-component` in `fastn` can be created using `web-component` keyword.
 Here's an example of how to integrate a web component created using the standard
 Web Components API.
 
@@ -51,9 +51,9 @@ js: web-component.js
 
 -- ds.markdown:
 
-In above code we have create a web component `hello-world` in
-`web-component.js`. Then, we've included the web component in the ftd using the
-`web-component` , and used it in the ftd component tree using the
+In above code we have created a web component `hello-world` in
+`web-component.js`. Then, we've included the web component in `fastn` using
+the `web-component` , and used it in the `fastn` component tree using the
 hello-world element. used it in `index.ftd`.
 
 -- ds.output:
@@ -64,23 +64,23 @@ hello-world element. used it in `index.ftd`.
 
 
 
--- ds.h1: Data Across JS and `ftd` Worlds
+-- ds.h1: Data Across JS and `fastn` Worlds
 
 
 When working with web components, it is possible to share the data between the
-JS and `ftd` worlds, which can be managed and updated efficiently, reflecting
+JS and `fastn` worlds, which can be managed and updated efficiently, reflecting
 the changes in both worlds.
 
-`ftd` provides a function `component_data` which exposes data arguments, passed
-from `ftd` world, and it's access methods. There are three access methods
-provided by `ftd`, against an argument:
+`fastn` provides a function `component_data` which exposes data arguments,
+passed from `fastn` world, and it's access methods. There are three access
+methods provided by `fastn`, against an argument:
 
-- `get`: To get the value of the variable in `ftd`. This method is present for
+- `get`: To get the value of the variable in `fastn`. This method is present for
   both mutable and immutable variables.
-- `set`: To set the value of the variable in `ftd`. The value set using this
-  method will reflect it's changes in `ftd` world. This method is present for
+- `set`: To set the value of the variable in `fastn`. The value set using this
+  method will reflect it's changes in `fastn` world. This method is present for
   mutable variables only.
-- `on-change`: To listen for any change in variable value in `ftd` world. This
+- `on-change`: To listen for any change in variable value in `fastn` world. This
   method is present for both mutable and immutable variables.
 
 
@@ -151,7 +151,7 @@ Now lets call this component and pass a data.
 
 -- ds.markdown:
 
-We have seen how data can be passed from `ftd` and consumed by `js`.
+We have seen how data can be passed from `fastn` and consumed by `js`.
 
 
 -- ds.h1: Working with mutable data
@@ -204,7 +204,7 @@ class NumToWords extends HTMLElement {
 -- ds.markdown:
 
 In above example, we have added a mutable variable `num`, whose value can be
-changed by an event in `ftd`. This changes is then listen using `on-change`
+changed by an event in `fastn`. This changes is then listen using `on-change`
 function which do the necessary changes in `js` world.
 
 -- ds.output:

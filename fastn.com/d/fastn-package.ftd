@@ -18,16 +18,16 @@ operations use the in memory structures instead of doing file IO.
 
 We are using `sqlite` for storing the data in memory. The tables are described
 below. We will also use a HashMap to store the ParsedData corresponding to each
-ftd file.
+`fastn` file.
 
-The in-memory representation should not store the content of non ftd files, eg
-image files, as ideally images should be only read when we are serving the
+The in-memory representation should not store the content of non `fastn` files,
+eg image files, as ideally images should be only read when we are serving the
 request or when we are copying the file during `fastn build`.
 
 `.ftd` files are special as they may be read more than once, say if a file is a
-dependency of many files in the package. So all ftd files are kept in p1 parsed
-state in memory. Our p1 parser is faster than the full interpreter. So we only
-do the p1 level parsing for all FTD file, at startup once.
+dependency of many files in the package. So all `fastn` files are kept in p1
+parsed state in memory. Our p1 parser is faster than the full interpreter. So
+we only do the p1 level parsing for all `fastn` file, at startup once.
 
 -- ds.h2: `fastn build`
 
@@ -156,7 +156,7 @@ class Dependency():  # DAG with single source
 
 -- ds.h2: Document Table
 
-This table contains information about all FTD files across all packages.
+This table contains information about all `fastn` files across all packages.
 
 -- ds.code:
 lang: py
@@ -202,7 +202,7 @@ class File():
 
 All the URLs that our server can serve. This is computed by analysing sitemap,
 content of main package, and dynamic urls, and content of markdown section of
-each ftd file.
+each `fastn` file.
 
 -- ds.code:
 lang: py
@@ -210,8 +210,8 @@ lang: py
 class URL():
     path = models.TextField()
     # we do not serve html files present in the current package as
-    # text/html text/html is reserved for ftd files. html files get
-    # 404. for non ftd file mostly this will contain images, maybe
+    # text/html text/html is reserved for `fastn` files. html files get
+    # 404. for non `fastn` file mostly this will contain images, maybe
     # PDF, font files etc. We also do not serve JS/CSS files.
     document = models.ForeignKey(Document)
     kind = models.TextField(

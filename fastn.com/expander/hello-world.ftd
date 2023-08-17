@@ -5,16 +5,18 @@
 -- ds.page: Hello World
 
 In this part we will install `fastn` on your machine and create a hello world
-FTD program.
+`fastn` program.
 
 -- ds.youtube:
 v: _NsLKtGrzdU
 
 -- ds.markdown:
 
-The name of package manager for FTD language is [`fastn`](https://fastn.com).
+The name of package manager for `fastn` language is 
+[`fastn`](https://fastn.com).
 
-We will begin by installing `fastn` on your machine. [`Install fastn`](https://fastn.com/install/).
+We will begin by installing `fastn` on your machine. 
+[`Install fastn`](https://fastn.com/install/).
 
 You can open installation page in a new tab, and follow the instructions.
 You can continue this course after installing `fastn`.
@@ -33,7 +35,7 @@ Let's create a `fastn` package and start coding Hello World.
 - FASTN.ftd
 - index.ftd
 
-There can be any number of .ftd file but these two files are essential.
+There can be any number of `.ftd` file but these two files are essential.
 
 -- ds.markdown:
 

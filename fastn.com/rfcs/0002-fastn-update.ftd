@@ -64,7 +64,7 @@ lang: ftd
 
 \-- record package:
 string name:             \;; full package name
-document list documents: \;; all the ftd files
+document list documents: \;; all the `fastn` files
 file list assets:        \;; all the images etc assets
 file list fonts:         \;; if the package is a font package
 

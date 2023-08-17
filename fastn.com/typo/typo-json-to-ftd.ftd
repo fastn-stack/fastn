@@ -21,21 +21,21 @@ value = typo_to_ftd(json);
 store_at = value[0];
 formatted_string = value[1];
 
--- ds.page: Typography json to FTD
+-- ds.page: Typography json to `fastn`
 
-fastn allows you to generate typography FTD code from its equivalent json.
-To generate FTD code, you will need to include `typo.js` from `fastn-js` repo
+`fastn` allows you to generate typography code from its equivalent json. To
+generate `fastn` code, you will need to include `typo.js` from `fastn-js` repo
 and use its `typo_to_ftd(json)` JS function.
 
 This function `typo_to_ftd(json)` takes json string as input and returns
-two strings - ftd source code, styled ftd code.
+two strings - `fastn` source code, styled `fastn` code.
 
 -- ds.h1: Example
 
-Below mentioned code shows how we can generate equivalent FTD code for
+Below mentioned code shows how we can generate equivalent `fastn` code for
 `fastn-io-typography` from its json.
 
--- ds.rendered: Using `typo_to_ftd(json)` to generate FTD code
+-- ds.rendered: Using `typo_to_ftd(json)` to generate `fastn` code
 
 -- ds.rendered.input:
 
@@ -61,7 +61,7 @@ value = typo_to_ftd(json);
 store_at = value[0];
 formatted_string = value[1];
 
-\-- ftd.text: Generate FTD code
+\-- ftd.text: Generate `fastn` code
 $on-click$: $typo-to-ftd(json = $fastn-typo-json, $store_at = $code, $formatted_string = $formatted-code)
 color: $inherited.colors.text
 role: $inherited.types.copy-regular
@@ -76,7 +76,7 @@ max-height.fixed.px: 300
 
 -- ds.rendered.output:
 
--- ftd.text: Generate FTD code
+-- ftd.text: Generate `fastn` code
 $on-click$: $typo-to-ftd(json = $fastn-typo-json, $store_at = $code, $formatted_string = $formatted-code)
 color: $inherited.colors.text
 role: $inherited.types.copy-regular
@@ -96,7 +96,7 @@ download: types.ftd
 
 -- ds.h1: Exporter
 
-Paste any typography json below and generate its FTD equivalent code.
+Paste any typography json below and generate its `fastn` equivalent code.
 
 -- t.json-exporter:
 

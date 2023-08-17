@@ -4,7 +4,8 @@
 
 -- ds.markdown: 
 
-`ftd` supports `record` types. These are also called `struct` in some languages.
+`fastn` supports `record` types. These are also called `struct` in some
+languages.
 
 -- ds.h1: Declaring a `record`
 
@@ -142,11 +143,11 @@ string list alias:
 
 -- ds.h1: Reading A Record From Rust
 
-A `record` in `ftd` is equivalent of a `struct` in Rust.
+A `record` in `fastn` is equivalent of a `struct` in Rust.
 
 -- ds.h2: Rust Type
 
-To read the above `ftd` file from Rust you will have to first create a `struct`
+To read the above `.ftd` file from Rust you will have to first create a `struct`
 in Rust that is compatible with our `person` definition:
 
 -- ds.code:
@@ -165,15 +166,15 @@ For each field in `person` record, we have a corresponding field in our `Person`
 `struct`.
 
 Note that we used `age` as i32, but it could have been any type that can be
-deserialised from [JSON
-Number](https://docs.serde.rs/serde_json/struct.Number.html) since `ftd` `integer`
-is converted to `JSON Number`.
+deserialised from 
+[JSON Number](https://docs.serde.rs/serde_json/struct.Number.html) since 
+`fastn` integer is converted to `JSON Number`.
 
 ;; Todo:
-/-- ds.h2: Getting Data From FTD File
+/-- ds.h2: Getting Data From `.ftd` File
 
-Once the mapping is in place, we can use the `ftd` crate to parse an `ftd` file,
-and get data out of it:
+Once the mapping is in place, we can use the `fastn` crate to parse a `.ftd`
+file, and get data out of it:
 
 /-- ds.code:
 lang: rs
@@ -183,8 +184,8 @@ let amitu: Person = doc.get("amitu")?;
 
 /-- ds.markdown:
 
-You can read more details of reading `ftd` files ["Reading FTD
-Files"](reading-data/) guide.
+You can read more details of reading `.ftd` files 
+[`Reading .ftd Files`](reading-data/) guide.
 
 
 -- end: ds.page

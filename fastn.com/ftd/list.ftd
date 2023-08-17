@@ -2,9 +2,9 @@
 
 -- ds.page: `list`
 
-In ftd, the `list` keyword can be used to create an array or list of values. The
-`list` keyword is followed by the data type of the values that the list will
-contain.
+In `fastn`, the `list` keyword can be used to create an array or list of values.
+The `list` keyword is followed by the data type of the values that the list
+will contain.
 
 -- ds.h1: Declaring a `list`
 
@@ -50,9 +50,9 @@ lang: ftd
 This creates a new variable called `weekdays`, which is a list of `string`s. The
 list is initialized with seven strings representing the days of the week.
 
-By default, lists in `ftd` are immutable, which means that their contents cannot
-be changed after they are initialized. However, you can make a list mutable by
-prefixing it with a `$` symbol, like this:
+By default, lists in `fastn` are immutable, which means that their contents
+cannot be changed after they are initialized. However, you can make a list
+mutable by prefixing it with a `$` symbol, like this:
 
 -- ds.code: Mutable Variable
 lang: ftd
@@ -101,7 +101,7 @@ lang: ftd
 \-- ftd.ui list uis:
 
 \-- ftd.text: Hello World!
-\-- ftd.text: I love `ftd`.
+\-- ftd.text: I love `fastn`.
 
 \-- end: uis
 
@@ -114,7 +114,7 @@ lang: ftd
 \-- foo:
 
 \-- ftd.text: Hello World!
-\-- ftd.text: I love `ftd`.
+\-- ftd.text: I love `fastn`.
 
 \-- end: foo
 
@@ -133,12 +133,12 @@ Once you have created a list, you can access its elements using indexing or
 looping.
 
 Once you have created a list, you can access its items using their index. In
-`ftd`, indexing starts at 0. Or you can use
+`fastn`, indexing starts at 0. Or you can use
 
 
 -- ds.h2: Using `loop`
 
-You can also access the elements of a list using a loop. In `ftd`, you can use
+You can also access the elements of a list using a loop. In `fastn`, you can use
 the `$loop$` keyword to iterate over a list. Here's an example:
 
 -- ds.code:
@@ -177,7 +177,7 @@ $loop$: $uis as $obj
 
 -- ds.h2: Using index
 
-You can access an element of a list by its index. In `ftd`, list indexing is
+You can access an element of a list by its index. In `fastn`, list indexing is
 zero-based, which means the first element of a list has an index of 0, the
 second element has an index of 1, and so on. You can use the `.` operator to
 access an element of a list by its index.
@@ -247,7 +247,7 @@ $processor$: some-list
 
 -- ds.markdown: 
 
-`list` keyword can be used to create a list or an array in `ftd`.
+`list` keyword can be used to create a list or an array in `fastn`.
 
 -- ds.h1: Declaring a `list`
 
@@ -357,8 +357,8 @@ let people: Vec<Person> = doc.get("people")?;
 
 -- ds.markdown:
 
-You can read more details of reading `ftd` files ["Reading FTD Files"](/reading-data/)
-guide.
+You can read more details of reading `.ftd` files 
+[`Reading .ftd Files`](/reading-data/) guide.
 
 
 -- end: ds.page
@@ -382,6 +382,6 @@ guide.
 -- ftd.ui list uis:
 
 -- ftd.text: Hello World!
--- ftd.text: I love `ftd`.
+-- ftd.text: I love `fastn`.
 
 -- end: uis

@@ -1,6 +1,6 @@
 -- import: fastn.com/best-practices/utils as appendix
 
--- ds.page: FTD Code Best Practices
+-- ds.page: `fastn` Code Best Practices
 
 The FifthTry team follows standard coding `best practices`. These `best
 practices` are imporant for several reasons:

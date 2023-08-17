@@ -26,8 +26,8 @@ early 2000s, and it makes me a little sad.
 -- ds.markdown:
 
 The language to author content and the language to build the components is the
-same and one can gradually learn ftd by first only using ready made components,
-and then slowly learning to build components.
+same and one can gradually learn `fastn` by first only using ready made
+components, and then slowly learning to build components.
 
 -- ds.code:
 lang: ftd

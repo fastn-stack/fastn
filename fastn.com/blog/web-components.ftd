@@ -104,13 +104,13 @@ rendered.
 
 A web-component that takes no parameters is not very useful. You would want to
 pass data to web-component. You would also want to possibly mutate the data from
-the web-component or JS world, and want ftd world to see the mutations. You
-may also want to continue to mutate the data in FTD world after web component
+the web-component or JS world, and want fastn world to see the mutations. You
+may also want to continue to mutate the data in fastn world after web component
 have been rendered, and have web-component respond to those changes.
 
 All this are possible, the way to think about it is that data that you want to
-share between the two worlds is "managed" / "owned" by FTD, and from your JS you
-use `ftd` APIs to mutate the ftd owned data.
+share between the two worlds is "managed" / "owned" by fastn, and from your JS
+you use `fastn` APIs to mutate the fastn owned data.
 
 Let's take a look at the web component of this demo:
 
@@ -149,11 +149,11 @@ class Todo extends HTMLElement {
 
 -- ds.markdown:
 
-Now you have access to component data, and you can now use `data.<var>.get()`,
-`.set()` functions to manage data from the JS world. You can listen for changes
-in data on FTD side by using `.on_change(function(){ \* some code here *\ })`.
-Checkout the full [source code of our
-demo](https://github.com/fastn-stack/ftd-web-component-example/blob/main/todo.js)
+Now you have access to component data, and you can now use `data.<var>.get
+()`, `.set()` functions to manage data from the JS world. You can listen for
+changes in data on `fastn` side by using `.on_change(function(){ \* some code
+here *\ })`. Checkout the full [source code of our demo]
+(https://github.com/fastn-stack/ftd-web-component-example/blob/main/todo.js)
 for more detailed usage.
 
 Go ahead and give it a shot, and come over to [Discord](https://discord.gg/a7eBUeutWD)

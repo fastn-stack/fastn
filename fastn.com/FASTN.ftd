@@ -49,7 +49,8 @@ favicon: /-/fastn.com/images/favicon.svg
 ## Overview: /home/
 
 - `fastn` Overview: /home/
-- The `fastn` Language: /ftd/
+- The `fastn` Language: /lang/
+  document: /ftd/index.ftd
 - Why?:
   - `fastn` is Easy To Learn: /easy/
     document: why/easy.ftd
@@ -291,7 +292,7 @@ favicon: /-/fastn.com/images/favicon.svg
 
 ## Book 🚧: /book/
 
-- The Book Of `fastn` and `ftd`: /book/
+- The Book Of `fastn`: /book/
 - `i` Foreword 🚧: /book/foreword/
   document: book/1-foreword.ftd
 - `ii` Preface: /book/preface/
@@ -799,6 +800,7 @@ skip: true
 
 -- fastn.redirects:
 
+/ftd/: /lang/
 /ftd/kernel/: /kernel/
 /ftd/list/: /list/
 /discord/: https://discord.gg/eNXVBMq4xt
@@ -841,3 +843,4 @@ skip: true
 /student-programs/ambassador-program/ambassadors/ayush-soni/: /ambassadors/ayush-soni/
 /ambassadors-program/: /ambassador-program/
 /champions-program/: /champion-program/
+

@@ -25,17 +25,17 @@ avatar: $fastn-assets.files.images.female-avatar.svg
 -- end: chat-female-avatar
 
 
--- ds.page: `ftd` Programming Language
+-- ds.page: `fastn` Programming Language
 
-`ftd` is designed for everyone, not just programmers.
+`fastn` is designed for everyone, not just programmers.
 
 [Getting Started](/setup/) | [Watch Course](/expander/)
 
 [Star us on Github](https://github.com/fastn-stack/ftd)
 
--- ds.h1: `ftd` for authoring prose
+-- ds.h1: `fastn` for authoring prose
 
-`ftd` is a DSL for authoring long for text, and have access to
+`fastn` is a DSL for authoring long for text, and have access to
 rich collection of ready made components.
 
 
@@ -73,10 +73,10 @@ no quotes. and **markdown** is *supported*.
 
 -- ds.markdown:
 
-Note: These are not built in components of ftd, but are using [open source
-component libraries](/featured/), eg
-[fastn-community.github.io/bling/quote](https://fastn-community.github.io/bling/chat/). Learn
-how to [build your own](/expander/).
+Note: These are not built in components of `fastn`, but are using 
+[open source component libraries](/featured/), eg
+[fastn-community.github.io/bling/quote](https://fastn-community.github.io/bling/chat/). 
+Learn how to [build your own](/expander/).
 
 -- ds.code: using little more complex components
 lang: ftd
@@ -85,7 +85,7 @@ lang: ftd
 \-- import: fastn-community.github.io/bling/quote
 
 \-- quote.charcoal: Amit Upadhyay
-label: Creator of FTD
+label: Creator of `fastn`
 avatar: $fastn-assets.files.images.amitu.jpg
 logo: $fastn-assets.files.images.logo-fifthtry.svg
 
@@ -94,7 +94,7 @@ early 2000s, and it makes me a little sad.
 
 
 -- quote.charcoal: Amit Upadhyay
-label: Creator of FTD
+label: Creator of `fastn`
 avatar: $fastn-assets.files.images.amitu.jpg
 logo: $fastn-assets.files.images.logo-fifthtry.svg
 
@@ -103,13 +103,13 @@ early 2000s, and it makes me a little sad.
 
 -- ds.markdown:
 
-There are [many components to chose
-from](https://fastn-community.github.io/bling/quote/), and you can create your own
-with ease.
+There are 
+[many components to chose from](https://fastn-community.github.io/bling/quote/), 
+and you can create your own with ease.
 
 -- ds.h1: A language for building UI
 
-`ftd` comes with basic building blocks like text, images and containers using
+`fastn` comes with basic building blocks like text, images and containers using
 with other UI can be constructed.
 
 -- ds.code: Creating a custom component
@@ -143,12 +143,12 @@ border-radius.px: 5
 -- ds.markdown:
 
 
-With `ftd`, you can express your ideas and bring them to a compilation with
+With `fastn`, you can express your ideas and bring them to a compilation with
 ease.
 
-Take a look at this simple `ftd` document:
+Take a look at this simple `fastn` document:
 
--- ds.code: `ftd` Hello World!
+-- ds.code: `fastn` Hello World!
 lang: ftd
 
 \-- ftd.text: Hello World!
@@ -161,12 +161,13 @@ With just a few lines of code, you can create a visually appealing and impactful
 document. It is a language that is easy to read and understand. It is not
 verbose like HTML, and not simplistic like Markdown.
 
-`ftd` can be compared with Markdown, but with `ftd`, you can define variables,
-perform event handling, abstract out logic into custom components etc.
+`fastn` can be compared with Markdown, but with `fastn`, you can define
+variables, perform event handling, abstract out logic into custom components
+etc.
 
--- ds.h2: How to use `ftd`?
+-- ds.h2: How to use `fastn`?
 
-`ftd` can be used using [`fastn`](/) which provides interface for `ftd`.
+`fastn` can be used using [`fastn`](/) which provides interface for `fastn`.
 You need to install fastn to get started.
 
 Here are some of the important `fastn` related links.
@@ -177,7 +178,7 @@ Here are some of the important `fastn` related links.
 
 -- ds.h2: Declaring Variable
 
-In `ftd`, you can create variables with specific types. `ftd` is a
+In `fastn`, you can create variables with specific types. `fastn` is a
 strongly-typed language, so the type of each variable must be declared.
 
 Here's an example of how you can define a boolean type variable:
@@ -208,7 +209,7 @@ To know more about variables checkout [variables](/variables/).
 
 -- ds.h2: Event handling
 
-`ftd` makes it easy to add events to your element. Let's take a look at the
+`fastn` makes it easy to add events to your element. Let's take a look at the
 following example:
 
 
@@ -237,13 +238,13 @@ $on-click$: $ftd.toggle($a = $current)
 
 -- ds.markdown:
 
-Since the target audience for `ftd` is human beings, it includes many "default
+Since the target audience for `fastn` is human beings, it includes many "default
 functions" that are commonly used, like the `toggle` function which can be used
 to create simple event handling.
 
 -- ds.h2: Creating a custom component
 
-In `ftd`, you can create custom components to abstract out logic and improve
+In `fastn`, you can create custom components to abstract out logic and improve
 code organization. For example:
 
 -- ftd.row:
@@ -283,14 +284,14 @@ writing without "polluting" the prose with noise.
 
 -- ds.h2: Import
 
-`ftd` allows you to separate component and variable definitions into different
+`fastn` allows you to separate component and variable definitions into different
 modules, and then use them in any module by using the `import` keyword. This
 helps to logically organize your code and avoid complexity, leading to cleaner
 and easier to understand code.
 
 Consider the below example:
 
--- ds.code: `ftd` Hello World!
+-- ds.code: `fastn` Hello World!
 lang: ftd
 
 \-- import: lib
@@ -299,15 +300,16 @@ lang: ftd
 
 -- ds.markdown:
 
-The code above shows a `ftd` document that imports a library named "`lib`" and
+The code above shows a `fastn` document that imports a library named "`lib`" and
 has a level 1 heading of "Hello World".
 
 
 -- ds.h2: Data Modelling
 
-`ftd` is also a good first class data language. You can define and use records:
+`fastn` language is also a good first class data language. You can define and use 
+records:
 
--- ds.code: Data Modelling in `ftd`
+-- ds.code: Data Modelling in `fastn`
 lang: ftd
 
 \-- record person:
@@ -317,10 +319,10 @@ optional body bio:
 
 -- ds.markdown:
 
-Each field has a type. `caption` is an alias for `string`, and tells ftd that
-the value can come in the "caption" position, after the `:` of the "section line",
-eg: lines that start with `--`. If a field is optional, it must be marked as
-such.
+Each field has a type. `caption` is an alias for `string`, and tells `fastn`
+that the value can come in the "caption" position, after the `:` of
+the "section line", eg: lines that start with `--`. If a field is optional, it
+must be marked as such.
 
 -- ds.code: Creating a variable
 lang: ftd
@@ -348,13 +350,13 @@ location: Ranchi, India
 \-- person: Arpita Jaiswal
 location: Lucknow, India
 
-Arpita is the primary author of `ftd` language.
+Arpita is the primary author of `fastn` language.
 
 \-- end: employees
 
 -- ds.markdown:
 
-`ftd` provides a way to create a component that can render records and loop
+`fastn` provides a way to create a component that can render records and loop
 through lists to display all members of the list:
 
 -- ds.code: Looping over a list
@@ -367,9 +369,9 @@ $loop$: $employees as $p
 -- ds.markdown:
 
 This way we can have clean separation of data from presentation. The data
-defined in `ftd` documents can be easily read from say Rust:
+defined in `fastn` documents can be easily read from say Rust:
 
--- ds.code: Reading Data from `ftd` files
+-- ds.code: Reading Data from `.ftd` files
 lang: rs
 
 #[derive(serde::Deserialize)]
@@ -386,13 +388,14 @@ let employees: Vec<Employee> = doc.get("employees")?;
 
 -- ds.markdown:
 
-As mentioned earlier, `ftd` is a first-class data language that provides a
-better alternative to sharing data through CSV or JSON files. Unlike CSV/JSON,
-in `ftd`, data is type-checked, and it offers a proper presentation of the data
-with the option to define components that can render the data, which can be
-viewed in a browser.
+As mentioned earlier, `fastn` language is a first-class data language that
+provides a better alternative to sharing data through CSV or JSON files. Unlike
+CSV/JSON, in `fastn`, data is type-checked, and it offers a proper presentation
+of the data with the option to define components that can render the data,
+which can be viewed in a browser.
 
-Furthermore, `ftd` can also serve as a language for configuration purposes.
+Furthermore, `fastn` language can also serve as a language for configuration
+purposes.
 
 
 -- ds.h1: Getting Involved
@@ -402,7 +405,7 @@ would be possible without your support. We would love to hear from you.
 
 Github: https://github.com/FifthTry/ftd
 
-Discord: Join our [`ftd` channel](https://discord.gg/xN3uD8P7WA).
+Discord: Join our [`fastn` channel](https://discord.gg/xN3uD8P7WA).
 
 License: BSD
 
@@ -411,7 +414,7 @@ License: BSD
 
 /-- ds.h1: Videos
 
-We have recorded some videos explaining `ftd` in detail for our internal team.
+We have recorded some videos explaining `fastn` in detail for our internal team.
 You may benefit from them as well.
 
 

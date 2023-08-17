@@ -2,7 +2,7 @@
 
 -- ds.page: Attributes
 
-The attributes in ftd are classified into several different groups:
+The attributes in `fastn` are classified into several different groups:
 
 - [Common attributes](/common-attributes/) - Attributes common to all kernel
 components.

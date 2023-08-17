@@ -12,32 +12,32 @@ tool:
 - `fastn` for Distributing Static Assets
 
 
--- ds.h1: Supports `ftd`
+-- ds.h1: Supports `fastn` language
 
-[`ftd`](/ftd/) is a language to create web pages or documents for publishing on
-the web. `fastn` takes markdown, and adds features to create full page layouts,
-lets you create reusable "ftd components", and has first class support for data
-modelling, so the `ftd` document can be used as an data exchange format as well
-(as a replacement of JSON/CSV etc).
+[`fastn` language](/ftd/) is a language to create web pages or documents for
+publishing on the web. `fastn` takes markdown, and adds features to create full
+page layouts, lets you create reusable `fastn components`, and has first class
+support for data modelling, so the `fastn` document can be used as an data
+exchange format as well(as a replacement of JSON/CSV etc).
 
 [Learn more about `ftd`](/ftd/).
 
 
 -- ds.h1: `fastn`: Package Manager
 
-`fastn` is "`ftd` package manager", defines a package format for packaging `ftd`
-files. `fastn` packages can depend on other `fastn` packages, and `fastn` can
-install all the dependencies of a package.
+`fastn` is the package manager for `fastn` language, which defines a package
+format for packaging `.ftd` files. `fastn` packages can depend on other `fastn`
+packages, and `fastn` can install all the dependencies of a package.
 
 [Learn more](/package-manager/).
 
 
 -- ds.h1: `fastn`: Static Site Generator
 
-`fastn` can also convert `ftd` files to static HTML files, so you can use it as
-a static site generator, and publish FTD files on [Github
-Pages](/github-pages/), [Vercel](/vercel/), S3 etc static site
-hosting sites.
+`fastn` can also convert `.ftd` files to static HTML files, so you can use it as
+a static site generator, and publish `.ftd` files on 
+[Github Pages](/github-pages/), [Vercel](/vercel/), S3 etc static site hosting 
+sites.
 
 [Learn more about `fastn` as static site generator](/static/).
 

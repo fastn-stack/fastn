@@ -58,7 +58,7 @@ to read about it. The link is shared in the discription.
 
 
 All the files with `.ftd` extensions in your package are called `documents`. 
-FASTN.ftd and index.ftd documents makes for a complete package.
+`FASTN.ftd` and `index.ftd` documents makes for a complete package.
 But a package can have `n` number of other documents as well.
 
 

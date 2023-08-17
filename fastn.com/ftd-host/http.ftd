@@ -3,7 +3,7 @@
 
 -- ds.page: Fetching Data Using `http`
 
-This processor is used to initialise some FTD variable with content of JSON
+This processor is used to initialise some `fastn` variable with content of JSON
 fetched from HTTP.
 
 -- processor.static-vs-dynamic:

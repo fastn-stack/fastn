@@ -12,10 +12,10 @@ v: EKeCM75zrkY
 
 -- ds.markdown:
 
-Welcome to the FTD Crash Course, my name is Ajit Garg.
+Welcome to the `fastn` Crash Course, my name is Ajit Garg.
 
-In this crash course I will help you create an FTD project called `expander`
-from scratch. You will FTD language, and how to create / publish packages.
+In this crash course I will help you create an `fastn` project called `expander`
+from scratch.
 
 We will see how to make the following UI component:
 

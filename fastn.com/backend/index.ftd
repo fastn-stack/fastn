@@ -26,7 +26,7 @@ Read more about it in our [Dynamic URLs Guide](/dynamic-urls/).
 
 -- ds.h1: HTTP Request Data
 
-When rendering any `ftd document` you can use `request data processor` to
+When rendering any `fastn document` you can use `request data processor` to
 extract request data like URL, query parameter etc, and use it with your APIs
 or queries.
 

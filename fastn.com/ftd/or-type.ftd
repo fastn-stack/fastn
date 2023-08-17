@@ -3,7 +3,7 @@
 
 -- ds.page: `or-type`
 
-In `ftd` there is a concept of `or-type` can be used when give you a way of
+In `fastn` there is a concept of `or-type` can be used when give you a way of
 saying a value is one of a possible set of values. Consider we are defining
 shapes, and a shape can be either a rectangle, a circle or a triangle.
 
@@ -248,7 +248,7 @@ as variant.
 -- ds.h1: Conclusion
 
 
-In conclusion, `or-type` is a way to create an enumeration of variants in FTD
+In conclusion, `or-type` is a way to create an enumeration of variants in `fastn`
 programming. It allows you to define a list of possible variants, each with its
 own set of fields, and then use those variants in your code. `or-type` variants
 can be of three types: Anonymous Record, Regular, and Constant.
@@ -285,7 +285,7 @@ Some benefits of using `or-type` include:
     
 -- ds.markdown: 
 
-`ftd` supports `or-type`, which is loosely equivalent of `enum` in Rust, and is 
+`fastn` supports `or-type`, which is loosely equivalent of `enum` in Rust, and is 
 otherwise known as ["algebraic data 
 type"](https://en.wikipedia.org/wiki/Algebraic_data_type).
 
@@ -342,11 +342,11 @@ Note that in the `type` we have included the `or-type` as well as the exact
 
 -- ds.h1: Reading An `or-type` From Rust
 
-An `or-type` in `ftd` is equivalent of a `enum` in Rust.
+An `or-type` in `fastn` is equivalent of a `enum` in Rust.
 
 -- ds.h2: Rust Type
 
-To read the above `ftd` file from Rust we have to first create an `enum` in Rust
+To read the above `fastn` file from Rust we have to first create an `enum` in Rust
 that is compatible with our `lead` definition:
 
 -- ds.code:
@@ -365,17 +365,17 @@ enum Lead {
 For each variant in `lead` `or-type`, we have a corresponding clause in `Lead`
 `enum`.
 
-Note: We have to match the case of enum variant with the one used in `ftd`, `ftd`
-has a naming convention with lower case, where as Rust prefers CamelCase, so we
-have used `#[allow(non_camel_case_types)]`.
+Note: We have to match the case of enum variant with the one used in `fastn`.
+`fastn` has a naming convention with lower case, where as Rust prefers
+CamelCase, so we have used `#[allow(non_camel_case_types)]`.
 
 Note: Each `enum` must have `#[serde(tag = "type")]` as this is how we track which
 variant is represented in data.
 
--- ds.h2: Getting Data From FTD File
+-- ds.h2: Getting Data From `.ftd` File
 
-Once the mapping is in place, we can use the `ftd` crate to parse an `ftd` file,
-and get data out of it:
+Once the mapping is in place, we can use the `fastn` crate to parse a `.ftd`
+file, and get data out of it:
 
 -- ds.code:
 lang: rs
@@ -385,8 +385,8 @@ let amitu: Lead = doc.get("amitu")?;
 
 -- ds.markdown:
 
-You can read more details of reading `ftd` files ["Reading FTD 
-Files"](reading-data/) guide.
+You can read more details of reading `.ftd` files [`Reading .ftd 
+Files`](reading-data/) guide.
 
 
 -- end: ds.page

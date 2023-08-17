@@ -2,9 +2,9 @@
 
 The importance of color in a website's overall look and feel is well known. The
 right color scheme can evoke emotions, create visual interest, and direct a
-user's attention to specific elements on a page. That's why the ftd color scheme
-framework provides an easy and powerful way to define color schemes and apply
-them to your website.
+user's attention to specific elements on a page. That's why the `fastn` color
+scheme framework provides an easy and powerful way to define color schemes and
+apply them to your website.
 
 To start, you can choose from existing [color scheme packages](featured/cs/) or
 create your own custom color scheme. To apply a color scheme package on top of
@@ -50,7 +50,7 @@ Once you have imported the color scheme package and created a new component
 component.
 
 With just a few lines of code, you can dramatically change the look and feel of
-your website using the ftd color scheme framework.
+your website using the `fastn` color scheme framework.
 
 
 -- end: ds.page

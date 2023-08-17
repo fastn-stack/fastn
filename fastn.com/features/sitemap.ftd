@@ -179,14 +179,14 @@ now. All documents that are part of sitemap are built in a special way.
 not part of it, and then in another pass build all the ones that are in it.
 
 A document can appear in multiple places in sitemap, in that case `fastn`
-builds one HTML file for each time a ftd document appears in sitemap.
+builds one HTML file for each time a `fastn` document appears in sitemap.
 
 Note: A document can appear only once in a single TOC?
 
 
 -- ds.h1: Canonical URL
 
-If a ftd document appears multiple times in sitemap, one of them would
+If a `fastn` document appears multiple times in sitemap, one of them would
 be the canonical, the "main" URL.
 
 Consider the following example:

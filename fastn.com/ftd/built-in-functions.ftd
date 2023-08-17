@@ -47,7 +47,7 @@ color: $inherited.colors.text
 
 Return type: `void`
 
-This is a default ftd function that will append a value `v` of any type
+This is a default `fastn` function that will append a value `v` of any type
 to the end of the given mutable list `a` of same type as `v`.
 
 -- ds.rendered: Sample code using `append()`
@@ -90,7 +90,7 @@ $loop$: $some-list as $val
 
 -- ds.h2: `ftd.insert_at($a: <any> list, v: <any>, num: integer)`
 
-This is a default ftd function that will insert a value `v` of any type
+This is a default `fastn` function that will insert a value `v` of any type
 at the index `num` in the given mutable list `a` of same type as `v`.
 
 -- ds.rendered: Sample code using `insert_at()`
@@ -137,8 +137,8 @@ $loop$: $alphabets as $val
 
 -- ds.h2: `ftd.delete_at($a: <any> list, v: integer)`
 
-This is a default ftd function that will delete the value
-from index `num` from the given mutable list `a`.
+This is a default `fastn` function that will delete the value from index `num`
+from the given mutable list `a`.
 
 -- ds.rendered: Sample code using `delete_at()`
 
@@ -185,8 +185,7 @@ $loop$: $places as $val
 
 -- ds.h2: `ftd.clear($a: <any> list)`
 
-This is a default ftd function that will clear the given
-mutable list `a`.
+This is a default `fastn` function that will clear the given mutable list `a`.
 
 -- ds.rendered: Sample code using `clear()`
 
@@ -235,7 +234,8 @@ $loop$: $palindromes as $val
 
 -- ds.h2: `enable_dark_mode()`
 
-This is FScript as well as a standard ftd function. This function enables the dark mode.
+This is FScript as well as a standard `fastn` function. This function enables
+the dark mode.
 
 -- ds.rendered: Sample code using `enable_dark_mode()`
 
@@ -271,8 +271,8 @@ $on-click$: $ftd.enable-dark-mode() ;; <hl>
 
 -- ds.h2: `enable_light_mode()`
 
-This is FScript as well as a standard ftd function. This function enables the
-light mode.
+This is FScript as well as a standard `fastn` function. This function enables
+the light mode.
 
 -- ds.rendered: Sample code using `enable_light_mode()`
 
@@ -306,8 +306,8 @@ $on-click$: $ftd.enable-light-mode() ;; <hl>
 
 -- ds.h2: `enable_system_mode()`
 
-This is FScript as well as a standard ftd function. This function enables the
-system mode.
+This is FScript as well as a standard `fastn` function. This function enables
+the system mode.
 
 -- ds.rendered: Sample code using `enable_system_mode()`
 
@@ -340,8 +340,8 @@ $on-click$: $ftd.enable-system-mode() ;; <hl>
 
 -- ds.h2: `copy-to-clipboard(text: string)`
 
-This is FScript as well as a standard ftd function.
-This function enables copy content in clipboard.
+This is FScript as well as a standard `fastn` function. This function enables
+copy content in clipboard.
 
 -- ds.rendered: Sample code using `copy-to-clipboard()`
 
@@ -421,8 +421,8 @@ $on-click$: $ftd.toggle($a = $b) ;; <hl>
 
 -- ds.h2: `increment($a: integer)`
 
-This is FScript function. It will increment the integer variable by 1 which is passed
-as argument `a` to this function.
+This is FScript function. It will increment the integer variable by 1 which is
+passed as argument `a` to this function.
 
 
 -- ds.rendered: Sample code using `increment()`
@@ -463,8 +463,8 @@ $on-click$: $ftd.increment($a = $x) ;; <hl>
 
 -- ds.h2: `increment-by($a: integer, v: integer)️`
 
-This is FScript function. It will increment the integer variable by value `v` which is passed
-as argument `a` to this function.
+This is FScript function. It will increment the integer variable by value `v`
+which is passed as argument `a` to this function.
 
 -- ds.rendered: Sample code using `increment-by()`
 
@@ -504,8 +504,8 @@ $on-click$: $ftd.increment-by($a = $z, v = 5) ;; <hl>
 
 -- ds.h2: `set-bool($a: bool, v: bool)`
 
-This is FScript function. It will set the boolean variable by value `v` which is passed
-as argument `a` to this function.
+This is FScript function. It will set the boolean variable by value `v` which 
+is passed as argument `a` to this function.
 
 -- ds.rendered: Sample code using `set-bool()`
 
@@ -543,8 +543,8 @@ $on-click$: $ftd.set-bool($a = $b1, v = true) ;; <hl>
 
 -- ds.h2: `set-string($a: string, v: string)`
 
-This is FScript function. It will set the string variable by value `v` which is passed
-as argument `a` to this function.
+This is FScript function. It will set the string variable by value `v` which is
+passed as argument `a` to this function.
 
 -- ds.rendered: Sample code using `set-string()`
 
@@ -582,8 +582,8 @@ $on-click$: $ftd.set-string($a = $s, v = World) ;; <hl>
 
 -- ds.h2: `set-integer($a: integer, v: integer)`
 
-This is FScript function. It will set the integer variable by value `v` which is passed
-as argument `a` to this function.
+This is FScript function. It will set the integer variable by value `v` which is
+passed as argument `a` to this function.
 
 -- ds.rendered: Sample code using `set-integer()`
 
@@ -622,7 +622,8 @@ $on-click$: $ftd.set-integer($a = $y, v = 100) ;; <hl>
 
 -- ds.h2: `is_empty(a: any)`
 
-This is FScript function. It gives if the value passed to argument `a` is null or empty.
+This is FScript function. It gives if the value passed to argument `a` is null
+or empty.
 
 -- ds.rendered: Sample code using `is_empty()`
 

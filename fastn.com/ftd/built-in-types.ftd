@@ -268,8 +268,8 @@ caption or body integer number:
 
 -- ds.h2: `ftd.ui`
 
-`ftd.ui` is a data type in the ftd language that represents a user interface
-component.
+`ftd.ui` is a data type in the `fastn` language that represents a user 
+interface component.
 
 -- ds.code:
 lang: ftd

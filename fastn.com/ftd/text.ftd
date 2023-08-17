@@ -1,12 +1,12 @@
 -- ds.page: `ftd.text`
 
-`ftd.text` is a [kernel component](/ftd/kernel/) used to render text in an `ftd`
-document.
+`ftd.text` is a [kernel component](/ftd/kernel/) used to render text in an 
+`fastn` document.
 
 
 -- ds.h1: Usage
 
-To use `ftd.text`, simply add it to your `ftd` document with your desired text
+To use `ftd.text`, simply add it to your `fastn` document with your desired text
 to display.
 
 -- ds.rendered: Sample usage
@@ -44,12 +44,12 @@ There are three ways to pass text to `ftd.text` as `caption`, as a `text`
 
 -- ds.rendered.input:
 
-\-- ftd.text: FTD example ;; <hl>
+\-- ftd.text: `fastn` example ;; <hl>
 color: $inherited.colors.text-strong
 
 -- ds.rendered.output:
 
--- ftd.text: FTD example
+-- ftd.text: `fastn` example
 color: $inherited.colors.text-strong
 
 -- end: ds.rendered.output
@@ -119,12 +119,11 @@ padding.px: 5
 width.fixed.px: 100
 line-clamp: 3 ;; <hl>
 
-Writing long text can often feel like a tedious and daunting task,
-especially when faced with a blank page and a blinking cursor.
-It can be easy to feel overwhelmed by the thought of having to fill
-page after page with coherent thoughts and ideas.
-However, there are many reasons why writing long text can be a
-valuable and rewarding experience.
+Writing long text can often feel like a tedious and daunting task, especially
+when faced with a blank page and a blinking cursor. It can be easy to feel
+overwhelmed by the thought of having to fill page after page with coherent
+thoughts and ideas. However, there are many reasons why writing long text can
+be a valuable and rewarding experience.
 
 -- ds.rendered.output:
 

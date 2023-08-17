@@ -1,21 +1,29 @@
 -- ds.page: `fastn` for Website Builders
 
-`ftd` is a programming language designed for ease of content authoring.
+`fastn` language is a programming language designed for ease of content
+authoring.
 
--- ds.code: `ftd` source code of the page you are reading
-lang: ftd
 
-\-- import: fastn-community.github.io/bling/quote
+
+-- ds.code: `fastn` source code of the page you are reading
 
 \-- ds.page: `fastn` for Website Builders
 
-`ftd` is a programming language for building user interfaces and content centric
-websites. `ftd` is easy to learn, especially for non programmers, but does not
-compromise on what you can build with it.
+`fastn` language is a programming language designed for ease of content
+authoring.
+
+\-- ds.markdown:
+
+`fastn` is a good alternative for content websites like blogs, 
+knowledge bases, portfolio websites, project and marketing websites etc. 
+It is cheap, fast, and requires little maintenance.
+
+\-- end: ds.page
+
 
 -- ds.markdown:
 
-`ftd` is a good alternative for content websites like blogs, knowledge bases,
+`fastn` is a good alternative for content websites like blogs, knowledge bases,
 portfolio websites, project and marketing websites etc. It is cheap, fast, and
 requires little maintenance.
 

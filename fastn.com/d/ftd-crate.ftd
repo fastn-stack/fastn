@@ -74,21 +74,21 @@ path, and return the document's content by calling,
 `Interpreter::continue_after_import()`, and passing it `ParsedDocument`, which
 we will look later in this document.
 
-The document that is being imported may have "foreign variables" and "foreign
-functions", it is the job of the "ftd host" to manage these, and inform `ftd`
-that the document contains these, so ftd can type check things, and yeild
-control back to host when the foreign variables or functions are evaluated. The
-list of foreign variables and functions are also passed to
+The document that is being imported may have `foreign variables` and `foreign
+functions`, it is the job of the `fastn host` to manage these, and inform
+`fastn` that the document contains these, so `fastn` can type check things, and
+yield control back to host when the foreign variables or functions are
+evaluated. The list of foreign variables and functions are also passed to
 `Interpreter::continue_after_import()`.
 
 -- ds.h2: `StuckOnProcessor`
 
-The idea of processor is to take the current "section", you will read about them
-in the P1 Parser below, and return a "Value".
+The idea of processor is to take the current `section`, you will read about them
+in the P1 Parser below, and return a `Value`.
 
 -- ds.h1: Variables, Things And Bag
 
-When the interpreter starts, it creates a "bag"
+When the interpreter starts, it creates a `bag`
 (`ftd::interpreter::InterpreterState::bag` field), of type
 `ftd::Map<ftd::interpreter::Thing>`. `ftd::Map<T>` is an alias to
 `std::collections::BTreeMap<String, T>`;
@@ -112,8 +112,8 @@ pub enum Thing {
 
 -- ds.markdown:
 
-Everything that the ftd interpreter has been able to parse successfully is
-added to the "bag". The key in the bag is the full name of the module, and then
+Everything that the fastn interpreter has been able to parse successfully is
+added to the `bag`. The key in the bag is the full name of the module, and then
 name of the thing, with `#` as the concatenation character.
 
 -- ds.h1: Types In FTD
@@ -122,7 +122,7 @@ name of the thing, with `#` as the concatenation character.
 
 -- ds.h1: P1 Parser
 
-When a string containing `ftd` code is first encountered, we use the
+When a string containing `fastn` code is first encountered, we use the
 `ftd::p1::parse()` function to parse it to `ftd::p1::Section` struct:
 
 -- ds.code: `ftd::p1::Section`

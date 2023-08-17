@@ -205,8 +205,8 @@ It accepts value of type [`ftd.display`](ftd/built-in-types/#ftd-display)
 and is optional.
 
 `Note`: This attribute can only be used within [`ftd.container`](ftd/container)
-and won't work from within any other ftd containers like [`ftd.row`](ftd/row)
-and [`ftd.column`](ftd/column).
+and won't work from within any other `fastn` containers like 
+[`ftd.row`](ftd/row) and [`ftd.column`](ftd/column).
 
 -- ds.rendered: Sample code using `display`
 
