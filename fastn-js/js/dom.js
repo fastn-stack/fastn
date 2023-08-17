@@ -259,7 +259,7 @@ fastn_dom.PropertyKind = {
     CodeShowLineNumber: 103,
     Css: 104,
     Js: 105,
-    NoFollow: 106,
+    LinkRel: 106,
 };
 
 
@@ -267,6 +267,12 @@ fastn_dom.PropertyKind = {
 fastn_dom.Loading = {
     Lazy: "lazy",
     Eager: "eager",
+}
+
+fastn_dom.LinkRel = {
+    NoFollow: "nofollow",
+    Sponsored: "sponsored",
+    Ugc: "ugc",
 }
 
 fastn_dom.TextInputType = {
@@ -698,6 +704,9 @@ class Node2 {
             return;
         }
         this.#node.setAttribute(property, value);
+    }
+    removeAttribute(property) {
+        this.#node.removeAttribute(property);
     }
     updateTagName(name) {
         if (ssr) {
@@ -1434,15 +1443,12 @@ class Node2 {
             // todo: needs fix for image links
             this.updateToAnchor();
             this.attachAttribute("href", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.NoFollow) {
-            switch (staticValue) {
-                case true:
-                case "true":
-                    this.attachAttribute("rel", "nofollow");
-                    break;
-                default:
-                    this.attachAttribute("rel", undefined);
+        } else if (kind === fastn_dom.PropertyKind.LinkRel) {
+            if (fastn_utils.isNull(staticValue)) {
+                this.removeAttribute("rel");
             }
+            let rel_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            this.attachAttribute("rel", rel_list.join(" "));
         } else if (kind === fastn_dom.PropertyKind.OpenInNewTab) {
             // open_in_new_tab is boolean type
             switch (staticValue) {
