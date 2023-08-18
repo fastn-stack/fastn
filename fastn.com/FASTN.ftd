@@ -852,4 +852,5 @@ skip: true
 /student-programs/ambassador-program/ambassadors/ayush-soni/: /ambassadors/ayush-soni/
 /ambassadors-program/: /ambassador-program/
 /champions-program/: /champion-program/
+/learn/: /frontend/learn/
 
