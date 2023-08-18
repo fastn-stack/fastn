@@ -98,6 +98,92 @@ This is Coldark Theme Dark
 
 -- ftd.code:
 lang: ftd
+theme: duotone-theme.light
+
+\-- ftd.text:
+padding.px: 10
+
+This is Duotone Theme Light
+
+
+
+
+
+-- ftd.code:
+lang: ftd
+theme: duotone-theme.dark
+
+\-- ftd.text:
+padding.px: 10
+
+This is Duotone Theme Dark
+
+
+
+
+
+-- ftd.code:
+lang: ftd
+theme: duotone-theme.earth
+
+\-- ftd.text:
+padding.px: 10
+
+This is Duotone Theme Earth
+
+
+
+
+
+
+
+-- ftd.code:
+lang: ftd
+theme: duotone-theme.forest
+
+\-- ftd.text:
+padding.px: 10
+
+This is Duotone Theme Forest
+
+
+
+
+
+
+
+-- ftd.code:
+lang: ftd
+theme: duotone-theme.sea
+
+\-- ftd.text:
+padding.px: 10
+
+This is Duotone Theme Sea
+
+
+
+
+
+
+-- ftd.code:
+lang: ftd
+theme: duotone-theme.space
+
+\-- ftd.text:
+padding.px: 10
+
+This is Duotone Theme Space
+
+
+
+
+
+
+
+
+-- ftd.code:
+lang: ftd
 theme: dracula-theme
 
 \-- ftd.text:
