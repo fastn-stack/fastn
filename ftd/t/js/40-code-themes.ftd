@@ -1,0 +1,160 @@
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 10
+
+
+
+-- ftd.code:
+lang: ftd
+theme: material-theme.dark
+
+\-- ftd.text:
+padding.px: 10
+
+This is Material Theme Dark
+
+
+-- ftd.code:
+lang: ftd
+theme: material-theme.light
+
+\-- ftd.text:
+padding.px: 10
+
+This is Material Theme Light
+
+
+
+-- ftd.code:
+lang: ftd
+theme: one-theme.dark
+
+\-- ftd.text:
+padding.px: 10
+
+This is One Theme Dark
+
+
+-- ftd.code:
+lang: ftd
+theme: one-theme.light
+
+\-- ftd.text:
+padding.px: 10
+
+This is One Theme Light
+
+
+
+
+-- ftd.code:
+lang: ftd
+theme: gruvbox-theme.dark
+
+\-- ftd.text:
+padding.px: 10
+
+This is Gruvbox Theme Dark
+
+
+
+-- ftd.code:
+lang: ftd
+theme: gruvbox-theme.light
+
+\-- ftd.text:
+padding.px: 10
+
+This is Gruvbox Theme Light
+
+
+
+
+-- ftd.code:
+lang: ftd
+theme: coldark-theme.light
+
+\-- ftd.text:
+padding.px: 10
+
+This is Coldark Theme Light
+
+
+
+
+
+-- ftd.code:
+lang: ftd
+theme: coldark-theme.dark
+
+\-- ftd.text:
+padding.px: 10
+
+This is Coldark Theme Dark
+
+
+
+
+
+-- ftd.code:
+lang: ftd
+theme: dracula-theme
+
+\-- ftd.text:
+padding.px: 10
+
+This is Dracula Theme
+
+
+-- ftd.code:
+lang: ftd
+theme: coy-theme
+
+\-- ftd.text:
+padding.px: 10
+
+This is Coy Theme
+
+
+
+-- ftd.code:
+lang: ftd
+theme: laserwave-theme
+
+\-- ftd.text:
+padding.px: 10
+
+This is Laserwave Theme
+
+
+
+
+
+-- ftd.code:
+lang: ftd
+theme: nightowl-theme
+
+\-- ftd.text:
+padding.px: 10
+
+This is NightOwl Theme
+
+
+
+
+-- ftd.code:
+lang: ftd
+theme: ztouch-theme
+
+\-- ftd.text:
+padding.px: 10
+
+This is ZTouch Theme
+
+
+-- end: ftd.column
+
+
+
+
+

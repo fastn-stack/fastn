@@ -1,0 +1,158 @@
+/**
+ * MIT License
+ * Copyright (c) 2018 Sarah Drasner
+ * Sarah Drasner's[@sdras] Night Owl
+ * Ported by Sara vieria [@SaraVieira]
+ * Added by Souvik Mandal [@SimpleIndian]
+ */
+
+code[class*="language-"].nightowl-theme,
+pre[class*="language-"].nightowl-theme {
+	color: #d6deeb;
+	font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+	font-size: 1em;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre[class*="language-"].nightowl-theme::-moz-selection,
+pre[class*="language-"].nightowl-theme::-moz-selection,
+code[class*="language-"].nightowl-theme::-moz-selection,
+code[class*="language-"].nightowl-theme::-moz-selection {
+	text-shadow: none;
+	background: rgba(29, 59, 83, 0.99);
+}
+
+pre[class*="language-"].nightowl-theme::selection,
+pre[class*="language-"].nightowl-theme ::selection,
+code[class*="language-"].nightowl-theme::selection,
+code[class*="language-"].nightowl-theme ::selection {
+	text-shadow: none;
+	background: rgba(29, 59, 83, 0.99);
+}
+
+@media print {
+	code[class*="language-"].nightowl-theme,
+	pre[class*="language-"].nightowl-theme {
+		text-shadow: none;
+	}
+}
+
+/* Code blocks */
+pre[class*="language-"].nightowl-theme {
+	padding: 1em;
+	margin: 0.5em 0;
+	overflow: auto;
+}
+
+:not(pre) > code[class*="language-"].nightowl-theme,
+pre[class*="language-"].nightowl-theme {
+	color: white;
+	background: #011627;
+}
+
+:not(pre) > code[class*="language-"].nightowl-theme {
+	padding: 0.1em;
+	border-radius: 0.3em;
+	white-space: normal;
+}
+
+.nightowl-theme .token.comment,
+.nightowl-theme .token.prolog,
+.nightowl-theme .token.cdata {
+	color: rgb(99, 119, 119);
+	font-style: italic;
+}
+
+.nightowl-theme .token.punctuation {
+	color: rgb(199, 146, 234);
+}
+
+.namespace {
+	color: rgb(178, 204, 214);
+}
+
+.nightowl-theme .token.deleted {
+	color: rgba(239, 83, 80, 0.56);
+	font-style: italic;
+}
+
+.nightowl-theme .token.symbol,
+.nightowl-theme .token.property {
+	color: rgb(128, 203, 196);
+}
+
+.nightowl-theme .token.tag,
+.nightowl-theme .token.operator,
+.nightowl-theme .token.keyword {
+	color: rgb(127, 219, 202);
+}
+
+.nightowl-theme .token.boolean {
+	color: rgb(255, 88, 116);
+}
+
+.nightowl-theme .token.number {
+	color: rgb(247, 140, 108);
+}
+
+.nightowl-theme .token.constant,
+.nightowl-theme .token.function,
+.nightowl-theme .token.builtin,
+.nightowl-theme .token.char {
+	color: rgb(130, 170, 255);
+}
+
+.nightowl-theme .token.selector,
+.nightowl-theme .token.doctype {
+	color: rgb(199, 146, 234);
+	font-style: italic;
+}
+
+.nightowl-theme .token.attr-name,
+.nightowl-theme .token.inserted {
+	color: rgb(173, 219, 103);
+	font-style: italic;
+}
+
+.nightowl-theme .token.string,
+.nightowl-theme .token.url,
+.nightowl-theme .token.entity,
+.language-css .nightowl-theme .token.string,
+.style .nightowl-theme .token.string {
+	color: rgb(173, 219, 103);
+}
+
+.nightowl-theme .token.class-name,
+.nightowl-theme .token.atrule,
+.nightowl-theme .token.attr-value {
+	color: rgb(255, 203, 139);
+}
+
+.nightowl-theme .token.regex,
+.nightowl-theme .token.important,
+.nightowl-theme .token.variable {
+	color: rgb(214, 222, 235);
+}
+
+.nightowl-theme .token.important,
+.nightowl-theme .token.bold {
+	font-weight: bold;
+}
+
+.nightowl-theme .token.italic {
+	font-style: italic;
+}
