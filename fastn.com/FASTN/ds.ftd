@@ -9,6 +9,7 @@
 export: markdown,h0,h1,h2,h3,code,rendered,output,image,iframe,youtube,compact-text,post,posts,featured-post,image-first,image-in-between,without-image,author-bio,tip,not-found-1,not-found-2,link,link-group
 
 
+
 -- component page:
 children wrapper:
 optional caption title:
@@ -150,6 +151,26 @@ children: $page.wrapper
 
 
 
+
+
+
+
+
+
+
+-- component page-with-no-right-sidebar:
+children uis:
+optional caption title:
+optional body body:
+
+-- page: fastn vs React, Angular and Javascript
+sidebar: false
+right-sidebar: []
+wrapper: $page-with-no-right-sidebar.uis
+
+-- end: page
+
+-- end: page-with-no-right-sidebar
 
 
 
