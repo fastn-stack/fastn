@@ -280,6 +280,69 @@ $on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
 
 
 
+-- component webflow-vs-fastn-readymade-components:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+
+-- ds.h1: Rich collection of readymade components
+
+fastn's versatility accommodates a wide range of projects, from landing pages to
+complex web applications, giving startups the agility they need to adapt and
+evolve.
+
+You can choose from numerous components that suit your needs.
+There are [doc-sites](https://fastn.com/featured/doc-sites/),
+[blogs](https://fastn.com/featured/blog-templates/),
+[landing pages](https://fastn.com/featured/landing-pages/)
+to individual component library like [bling](https://fastn-community.github.io/bling/),
+[hero sections](https://fastn.com/featured/sections/heros/), and more.
+
+The best part? All components in the ecosystem adhere to a unified design
+system. This ensures that every component blends seamlessly with others,
+creating a cohesive look and feel across your entire site.
+
+-- ds.h2: Content Components
+
+In fastn, you can create custom content components for recurring information.
+This ensures a consistent user experience throughout your website while saving
+your time.
+
+-- ds.h2: Open source Advantage
+
+While Webflow offers templates and pre-designed elements, they are limited to
+their developers.
+
+Whereas our [design community portal](https://fastn.com/featured/) serves as a
+hub for designers and frontend developers to submit their fastn packages for end
+users to discover and use.
+
+Currently we have a community of 1000 developers and designers on our
+[Discord Channel](https://discord.gg/xs4FM8UZB5) with active participants
+contributing to fastn.
+
+-- ds.image: Our Discord Server
+src: $fastn-assets.files.compare.discord.png
+width.fixed.percent: 95
+
+
+
+-- end: ftd.column
+
+-- end: webflow-vs-fastn-readymade-components
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 -- component fullstack-framework:
@@ -479,6 +542,27 @@ Preview and test your website's appearance and functionality before deployment.
 src: $fastn-assets.files.compare.vercel.png
 width.fixed.percent: 95
 
+-- end: ftd.column
+
+-- end: visualize-with-vercel
+
+
+
+
+
+
+
+
+
+
+
+
+-- component fastn-best-choice-for-startup:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+
 -- ds.h1: Why fastn is the best choice for your startup
 
 -- ds.h2: Stability Guarantee
@@ -511,7 +595,153 @@ developers of varying levels to efficiently create and manage your web presence.
 
 -- end: ftd.column
 
--- end: visualize-with-vercel
+-- end: fastn-best-choice-for-startup
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component webflow-vs-fastn-best-choice-for-startup:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+
+
+-- ds.h1: Why fastn is the best choice for your startup
+
+-- ds.h2: Full Control
+
+Relying heavily on a single platform can introduce risks, especially if that
+platform undergoes changes or disruptions.Websites built on Webflow are tightly
+linked to the platform. Users who later wish to migrate their sites to other
+platforms or hosting services might encounter compatibility issues and data
+transfer challenges.
+
+With fastn, you retain full control and ownership. Your content and audience
+always belongs to you. fastn being open-source, ensures your content lives
+forever.
+
+-- ds.h2: Cost of Onwership
+
+Webflow's pricing model could become costly as users add more features or their
+business scales. Over time, the cumulative costs might not be feasible for
+startups or small businesses with limited budgets.
+
+fastn is free forever.
+
+-- ds.h2: Self-hosting
+
+Self-hosting reduces dependency on third-party platforms and hosting services.
+This not only lowers costs associated with subscription fees but also minimizes
+the risk of service disruptions or policy changes by external providers.
+
+fastn's allows you to deploy your website on your server. The freedom to
+self-host provides control, customization, privacy, scalability,
+and reduced reliance on external platforms.
+
+
+-- end: ftd.column
+
+-- end: webflow-vs-fastn-best-choice-for-startup
+
+
+
+
+
+
+
+
+
+
+
+
+-- component webflow-vs-fastn-separation-of-content-and-design:
+
+-- ds.h1: Separation of content and design
+
+In Webflow, making changes to the content can inadvertently disrupt the
+design layout. This can result in constant adjustments and compromises,
+making the maintenance process cumbersome.
+
+In fastn, you can effortlessly modify the content without impacting the design.
+
+-- end: webflow-vs-fastn-separation-of-content-and-design
+
+
+
+
+
+
+
+
+
+
+-- component github-integration:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+
+-- ds.h1: GitHub Integration
+
+fastn's version control is made possible through its integration with GitHub.
+Online website builders like Webflow, Wix, and Framer often lack version control
+features. (Webflow offers review product only in Enterprise Edition)
+
+Without version control, users might find themselves in a predicament
+if they accidentally delete or overwrite a crucial information in their
+website.
+
+-- ds.h2: Easy Collaboration
+
+fastn's integration with GitHub streamlines teamwork by enabling multiple
+contributors to work simultaneously on different branches, making collaboration
+smooth and efficient.
+
+-- ds.image: Multiple Contributors Can Work Simultaneously
+src: $fastn-assets.files.compare.multiple-users.png
+width.fixed.percent: 95
+
+-- ds.h2: Reverting Changes
+
+When errors or undesirable changes occur, you can revert to a previous working
+version quickly.
+
+-- ds.h2: Review and Approval
+
+The integration with GitHub facilitates a streamlined review process. Users can
+create pull requests, allowing designated reviewers to assess the proposed
+changes.
+
+-- ds.image: Reviewers can catch errors, recommend improvements, and suggest optimizations
+src: $fastn-assets.files.compare.reviewer.png
+width.fixed.percent: 95
+
+-- ds.h2: Merge in one-go
+
+With a single click, users can merge the changes into the live website, thanks
+to GitHub integration in fastn.
+
+-- end: ftd.column
+
+-- end: github-integration
+
+
+
+
+
+
 
 
 
