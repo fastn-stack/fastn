@@ -118,6 +118,7 @@ favicon: /-/fastn.com/images/favicon.svg
       skip: true
     - Saurabh lohia: /champions/saurabh-lohiya/
       document: /student-programs/champions/saurabh-lohiya.ftd
+      skip: true
     
 
 
