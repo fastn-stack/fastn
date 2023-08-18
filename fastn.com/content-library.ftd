@@ -498,18 +498,34 @@ how your web pages appear in search engine results and increase your site's
 discoverability. You can also add OG-Image to your page and control the
 preview of your page link when shared across social platforms.
 
--- ds.image: Adding meta title, description and image
-src: $fastn-assets.files.compare.meta.png
-width.fixed.percent: 95
+
+-- ds.code: Adding meta title, description and image
+lang: ftd
+copy: false
+
+\-- ds.page: This is page title
+document-title: Welcome!
+document-description: Learn how to do SEO! document-image: https://gargajit.github.io/optimization/images/seo-meta.png ;; <hl>
+
 
 -- ds.h2: URL Redirection
 
 Effortlessly create URL redirections to improve navigation and link consistency,
 ensuring that your users always find the right content, even when URLs change.
 
--- ds.image: URL Redirection
-src: $fastn-assets.files.compare.redirect.png
-width.fixed.percent: 95
+
+-- ds.code: URL Redirection: `FASTN.ftd` example that uses `fastn.redirects`
+lang: ftd
+copy: false
+
+\-- import: fastn
+
+\-- fastn.package: redirect-example
+
+\-- fastn.redirects: ;; <hl>
+
+/ftd/kernel/: /kernel/
+/discord/: https://discord.gg/eNXVBMa4xt
 
 
 -- end: ftd.column
