@@ -1,4 +1,4 @@
--- import: fastn.com/content-library as cl
+-- import: fastn.com/content-library/compare as cl
 
 
 -- ds.page-with-no-right-sidebar: fastn vs React, Angular and Javascript

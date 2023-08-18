@@ -1,0 +1,1344 @@
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography/inter as typo
+-- import: fifthtry.github.io/fastn-io-typography as doc-typo
+-- import: fastn.com/ftd as ftd-index
+-- import: fifthtry.github.io/fastn-ui/assets as fastn-ui-assets
+-- import: fastn-community.github.io/footer
+-- import: fastn/processors as pr
+
+-- integer width: 1220
+
+-- component hero-content:
+
+-- hero-section: Build your next landing page, blog, or webapp
+preposition: with
+
+-- ftd.text: Easy to learn
+display: inline
+margin-right.em: 0.25
+color: $inherited.colors.custom.ten
+
+-- ftd.text:
+display: inline
+margin-right.em: 0.25
+
+full-stack open source framework designed for creating good looking content centric or API
+and database driven websites.
+
+-- end: hero-section
+
+-- end: hero-content
+
+
+-- component column-layout:
+
+;; ------------------------ Build anything, faster ----------------------------
+
+-- two-column-layout: Build anything, faster.
+
+-- two-column-layout.subtitle:
+
+fastn language is designed for building user interfaces and content centric
+websites.
+
+
+-- two-column-layout.right-side-ui:
+
+-- code:
+
+\-- chat-female-avatar: Hello World! 😀
+
+\-- chat-female-avatar:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+-- ftd-index.chat-female-avatar: Hello World! 😀
+
+-- ftd-index.chat-female-avatar:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+-- end: two-column-layout.right-side-ui
+
+
+-- ftd.text: **1**. Everything in one place
+role: $inherited.types.heading-small
+margin-bottom.em: 0.5
+
+-- ftd.text:
+margin-bottom.em: 0.5
+
+;; With `fastn` you can build anything starting from designing to full web app
+;; creation.
+
+With `fastn` you can design your website, create the frontend, integrate with
+backend, write content, and deploy your websites.
+
+-- ftd.text: This website is made using fastn!
+role: $inherited.types.heading-tiny
+color: $inherited.colors.cta-primary.base
+margin-bottom.em: 1.5
+
+-- ftd.text: **2**. Easy to learn
+role: $inherited.types.heading-small
+margin-bottom.em: 0.5
+
+-- ftd.text:
+
+fastn language is easy to learn, especially for non programmers, but does not
+compromise on what you can build with it.
+
+-- end: two-column-layout
+
+-- end: column-layout
+
+
+
+
+-- component home-page:
+children wrapper:
+optional string seo-title:
+optional string seo-description:
+optional ftd.raw-image-src seo-image:
+ftd.ui list footer:
+
+-- ds.page:
+site-logo: $fastn-assets.files.images.fastn.svg
+colors: $dark-flame-cs.main
+full-width: true
+types: $doc-typo.types
+document-title: $home-page.seo-title
+document-description: $home-page.seo-description
+document-image: $home-page.seo-image
+site-name: NULL
+logo-height: 38
+logo-width: 120
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
+
+-- ds.page.wrapper:
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+types: $typo.types
+children: $home-page.wrapper
+
+-- end: ftd.column
+
+-- end: ds.page.wrapper
+
+-- ds.page.footer:
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+types: $typo.types
+children: $home-page.footer
+
+-- end: ftd.column
+
+-- end: ds.page.footer
+
+-- end: ds.page
+
+-- end: home-page
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component hero-section:
+caption title:
+optional string preposition:
+children subtitle:
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+color: $inherited.colors.text-strong
+background.image: $fastn-assets.files.assets.background.svg
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 600
+padding-top.em: 3
+padding-top.em if { ftd.device == "mobile" }: 0
+padding-bottom.em if { ftd.device == "desktop" }: 7
+align-self: center
+align-content: center
+
+-- github-star-cta:
+link: https://github.com/fastn-stack/fastn/
+
+Support us by becoming a stargazer! 🚀
+
+-- ftd.text: $hero-section.title
+role: $inherited.types.heading-hero
+role if { ftd.device == "mobile" }: $inherited.types.heading-medium
+text-align: center
+
+-- ftd.text: $hero-section.preposition
+if: { hero-section.preposition != NULL }
+text-align: center
+color: $inherited.colors.text
+role: $inherited.types.heading-medium
+role if { ftd.device == "mobile" }: $inherited.types.copy-large
+margin-top.px: 24
+
+-- ftd.text: fastn
+text-align: center
+role: $inherited.types.heading-hero
+role if { ftd.device == "mobile" }: $inherited.types.heading-large
+classes: fastn, text-color
+
+-- ftd.text.css:
+
+-- string: $fastn-assets.files.design.css
+
+-- end: ftd.text.css
+
+-- ftd.container:
+role: $inherited.types.heading-tiny
+margin-top.em if { ftd.device == "desktop"}: 2
+margin-top.em: 0.5
+color: $inherited.colors.text
+children: $hero-section.subtitle
+display: inline
+classes: text-align-center
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: hero-section
+
+
+
+
+
+
+
+
+
+
+-- component hero-section-mobile:
+caption title:
+body subtitle:
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+color: $inherited.colors.text-strong
+background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 600
+padding-top.em: 8
+spacing.fixed.em: 1
+align-self: center
+align-content: center
+
+-- ftd.text: $hero-section-mobile.title
+text-align: center
+role: $inherited.types.heading-medium
+
+-- ftd.text: with
+text-align: center
+color: $inherited.colors.text
+role: $inherited.types.copy-large
+
+-- ftd.text: fastn
+text-align: center
+role: $inherited.types.heading-large
+classes: fastn, text-color
+
+-- ftd.text.css:
+
+-- string: $fastn-assets.files.design.css
+
+-- end: ftd.text.css
+
+-- ftd.text: $hero-section-mobile.subtitle
+role: $inherited.types.heading-tiny
+text-align: center
+margin-top.em: 2
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: hero-section-mobile
+
+
+
+
+
+
+
+
+
+
+-- component two-column-layout:
+caption title:
+body subtitle:
+children ui-data:
+ftd.ui list right-side-ui:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- two-column-layout-desktop:
+title: $two-column-layout.title
+subtitle: $two-column-layout.subtitle
+ui-data: $two-column-layout.ui-data
+right-side-ui: $two-column-layout.right-side-ui
+
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
+-- two-column-layout-mobile:
+title: $two-column-layout.title
+subtitle: $two-column-layout.subtitle
+ui-data: $two-column-layout.ui-data
+right-side-ui: $two-column-layout.right-side-ui
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: two-column-layout
+
+
+
+
+
+
+
+
+
+
+-- component two-column-layout-desktop:
+caption title:
+body subtitle:
+children ui-data:
+ftd.ui list right-side-ui:
+
+-- ftd.column:
+width: fill-container
+padding.em: 3
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $width
+align-self: center
+
+-- ftd.image:
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+width.fixed.em: 4
+height.fixed.em: 4
+margin-bottom.em: 1
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.em: 2
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $two-column-layout-desktop.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+padding-bottom.em: 0.5
+
+-- ftd.text: $two-column-layout-desktop.subtitle
+margin-bottom.em: 1.5
+
+-- ftd.column:
+width: fill-container
+children: $two-column-layout-desktop.ui-data
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 1.5
+children: $two-column-layout-desktop.right-side-ui
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: two-column-layout-desktop
+
+
+
+
+
+
+
+
+
+
+-- component two-column-layout-mobile:
+caption title:
+body subtitle:
+children ui-data:
+ftd.ui list right-side-ui:
+
+-- ftd.column:
+width: fill-container
+padding-top.em: 2
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.image:
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+width.fixed.em: 4
+height.fixed.em: 4
+margin-bottom.em: 1
+
+-- ftd.text: $two-column-layout-mobile.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+padding-bottom.em: 0.5
+text-align : center
+
+-- ftd.text: $two-column-layout-mobile.subtitle
+margin-bottom.em: 1.5
+
+-- ftd.column:
+width: fill-container
+children: $two-column-layout-mobile.ui-data
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 1.5
+children: $two-column-layout-mobile.right-side-ui
+margin-top.em: 2
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: two-column-layout-mobile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component summary-cards:
+caption title:
+string number:
+string subtitle:
+body description:
+children cards:
+optional ftd.background bg-color:
+string list color-css:
+string list title-css:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-horizontal.em if { ftd.device == "desktop" }: 3
+padding-vertical.em: 3
+color: $inherited.colors.text-strong
+background if { ftd.device == "desktop" }: $summary-cards.bg-color
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $width
+align-content: center
+spacing.fixed.em: 0.5
+
+-- ftd.text: $summary-cards.number
+height.fixed.em: 2
+width.fixed.em: 2
+border-radius.percent: 50
+padding-top.em: 0.3
+text-align: center
+role: $inherited.types.heading-medium
+color: white
+classes: $summary-cards.color-css
+
+-- ftd.text.css:
+
+-- string: $fastn-assets.files.design.css
+
+-- end: ftd.text.css
+
+-- ftd.text: $summary-cards.title
+role: $inherited.types.heading-large
+classes: $summary-cards.title-css
+
+-- ftd.text: $summary-cards.subtitle
+role: $inherited.types.heading-large
+text-align: center
+
+-- ftd.text: $summary-cards.description
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align: center
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing.fixed.em: 2
+padding-top.em: 2
+children: $summary-cards.cards
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: summary-cards
+
+
+
+
+
+
+
+
+
+
+-- component design-chakra:
+
+-- summary-cards: Design
+number: 1
+subtitle: Create your design system
+color-css: color-1
+title-css: color-1, text-color
+
+fastn comes with opinionated design system which can instantly switch up your
+website's appearance with one line of code.
+
+-- card: Colors and Typography
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
+cta-link: /featured/cs/
+cta-text: Check out the full library ->
+min-height.fixed.em: 21
+
+fastn has well defined structure to define color schema and typography. This can
+change your website look and feel just with **one line**. You can create your
+own scheme or use them from library provided by fastn.
+
+-- card: Figma Token With fastn Color Scheme
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: /figma/
+cta-text: Using figma token guides ->
+min-height.fixed.em: 21
+
+You can use figma token with fastn color scheme. You also can create your own
+fastn color scheme from figma json.
+
+-- end: summary-cards
+
+-- end: design-chakra
+
+
+
+
+
+
+-- component frontend-chakra:
+
+-- summary-cards: Frontend
+number: 2
+subtitle: Write your entire web app using fastn language
+color-css: color-2
+title-css: color-2, text-color
+bg-color.solid: $inherited.colors.background.step-1
+
+fastn provides an easy-to-learn programming language and framework. Use one
+language for your entire app.
+
+-- card: Built-in UI Components
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
+cta-link: /featured/
+cta-text: Check out the full library ->
+min-height.fixed.em: 21
+
+fastn comes with a library of ready to use UI components. These components are
+fully customizable. Change the property values of the component to match your
+project.
+
+-- card: Custom Components
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+cta-link: /components/
+cta-text: Create component guide ->
+min-height.fixed.em: 21
+
+Create your own components in a few lines of code. Use them in rest of your app
+package or in totally different package.
+
+-- end: summary-cards
+
+-- end: frontend-chakra
+
+
+
+
+
+
+
+
+
+
+-- component fullstack-chakra:
+
+-- summary-cards: Fullstack
+number: 3
+subtitle: fastn for building dynamic websites
+color-css: color-3
+title-css: color-3, text-color
+
+fastn can be used for building dynamic websites as well. With features already
+built and planned fastn aspires to be a full stack framework.
+
+-- card: Existing Backend Integration
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
+cta-link: /endpoint/
+cta-text: Endpoint guide ->
+min-height.fixed.em: 22
+
+Interact with backend APIs and create dynamic web pages using fastn. Check out
+our [http processor](/http/) for more details
+
+Plus, with endpoint definitions support, communicate with APIs without
+cross-origin policy concerns.
+
+-- card: Dynamic URLs
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: /dynamic-urls/
+cta-text: Dynamic URLs guide ->
+min-height.fixed.em: 22
+
+Create beautiful, custom URLs independent of file organization, or serve
+documents based on specific URL patterns.
+
+-- card: HTTP Request Data
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+cta-link: /request-data/
+cta-text: Request Data Processor ->
+min-height.fixed.em: 22
+
+Extract and use request data like URL, query parameter etc in your web pages,
+APIs or queries.
+
+-- card: SQLite Data
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
+cta-link: /package-query/
+cta-text: Package query processor ->
+min-height.fixed.em: 22
+
+Query data from sqlite database to generate dynamic websites.
+
+-- card: Reading JSON
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/feature-icon-1.svg
+cta-link: /get-data/
+cta-text: Reading JSON ->
+min-height.fixed.em: 22
+
+Read data in JSON files and create data visualisation websites.
+
+-- end: card
+
+-- card: Upcoming WASM Support
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/uses/image1.svg
+min-height.fixed.em: 22
+
+We are working on wasm support so developers can extend fastn's standard
+libraries and offer access to more backend functionalities.
+
+-- end: summary-cards
+
+-- end: fullstack-chakra
+
+
+
+
+
+
+
+
+
+
+-- component deploy-chakra:
+
+-- summary-cards: Deploy
+number: 4
+subtitle: Deploy your app in seconds.
+color-css: color-4
+title-css: color-4, text-color
+bg-color.solid: $inherited.colors.background.step-1
+
+Simplify the process of deploying your app with fastn. fastn can be deployed in
+two main modes, static and dynamic.
+
+-- card: Static Mode
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/projects-icon.svg
+min-height.fixed.em: 20
+
+fastn websites can be compiled into static html, js, css etc, and can be
+deployed on any static hosting providers eg [Github Pages](/github-pages/),
+[Vercel](/vercel/) etc.
+
+-- card: Dynamic Mode
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: https://github.com/fastn-stack/fastn/releases/latest
+cta-text: fastn binary ->
+min-height.fixed.em: 20
+
+Deploy fastn in Dynamic Mode to create a fully featured web application with
+authentication, data collection, and real-time updates. fastn binary can run on
+Linux, Windows and Mac.
+
+-- end: summary-cards
+
+-- end: deploy-chakra
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component install:
+caption title:
+body subtitle:
+string cta-text:
+string cta-link:
+string code-lang:
+string code:
+
+-- ftd.column:
+width: fill-container
+padding-vertical.em: 2
+padding-horizontal.em: 1
+background.solid if { ftd.device == "desktop" }: $inherited.colors.background.step-2
+
+-- ftd.column:
+background.image if { ftd.device == "desktop" }: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
+width: fill-container
+align-content: center
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $width
+align-content: center
+
+-- ftd.text: $install.title
+role if { ftd.device == "desktop" }: $inherited.types.heading-medium
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+text-align: center
+
+-- ftd.text: $install.subtitle
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+margin-bottom.em if { ftd.device == "desktop" }: 4
+margin-bottom.em: 1.5
+text-align: center
+
+-- ftd.column:
+align-content: center
+role: $inherited.types.copy-large
+
+-- ds.code:
+lang: $install.code-lang
+
+$install.code
+
+-- end: ftd.column
+
+-- ftd.text: $install.cta-text
+link: $install.cta-link
+background.solid: $inherited.colors.cta-primary.base
+color: $inherited.colors.cta-primary.text
+border-radius.em: 0.375
+padding-vertical.em: 1
+padding-horizontal.em: 2
+margin-top.em: 2
+role: $inherited.types.button-medium
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: install
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component card:
+ftd.image-src image:
+caption title:
+body description:
+optional string cta-link:
+optional string cta-text:
+optional ftd.resizing width:
+optional ftd.resizing min-height:
+
+-- ftd.column:
+min-height.fixed.em if { card.width == NULL && card.min-height == NULL && ftd.device == "desktop" }: 25
+min-height if { ftd.device == "desktop" }: $card.min-height
+padding.em if { ftd.device == "desktop" }: 2
+spacing.fixed.em: 1
+shadow: $s
+border-radius.em: 1
+width.fixed.percent: 48
+width if { ftd.device == "mobile" }: fill-container
+width if { card.width != NULL }: $card.width
+background.solid: $inherited.colors.background.base
+align-content if { ftd.device == "mobile" }: center
+
+-- ftd.image:
+src: $card.image
+height.fixed.em: 3
+width.fixed.em: 3
+max-width: fill-container
+
+-- ftd.text: $card.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+padding-bottom.em: 0.5
+text-align if { ftd.device == "mobile" }: center
+
+-- ftd.text: $card.description
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align if { ftd.device == "mobile" }: center
+classes: anchor-link
+
+-- ftd.text: $card.cta-text
+if: { card.cta-text != NULL }
+role: $inherited.types.copy-regular
+link: $card.cta-link
+text-align if { ftd.device == "mobile" }: center
+classes: link
+css: [$fastn-assets.files.assets.links.css]
+
+
+-- end: ftd.column
+
+-- end: card
+
+
+
+
+
+
+
+
+
+
+-- ftd.shadow s:
+color: $shadow-color
+x-offset.px: 0
+y-offset.px: 2
+blur.px: 8
+
+-- ftd.color shadow-color:
+light: #00000026
+dark: #f6f5f557
+
+
+
+
+
+
+
+
+
+-- component code:
+body text:
+optional ftd.resizing width:
+optional ftd.responsive-type role:
+string lang: ftd
+
+-- ftd.column:
+width if { code.width == NULL }: fill-container
+width: $code.width
+role if { code.role == NULL }: $inherited.types.source-code
+role: $code.role
+
+-- ftd.code:
+lang: $code.lang
+shadow: $s
+width: fill-container
+background.solid: $inherited.colors.background.base
+if: { ftd.dark-mode }
+
+$code.text
+
+-- ftd.code:
+lang: $code.lang
+shadow: $s
+width: fill-container
+background.solid: $inherited.colors.background.base
+theme: fastn-theme.light
+if: { !ftd.dark-mode }
+
+$code.text
+
+-- end: ftd.column
+
+-- end: code
+
+
+
+
+
+
+
+
+
+
+-- component github-star-cta:
+body body:
+string link:
+boolean $hide: false
+boolean $mousein: false
+boolean $btn-mousein: false
+
+-- ftd.column:
+if: { !github-star-cta.hide }
+align-self: center
+margin-bottom.px: 34
+background.linear-gradient: $star-gradient
+border-radius.px: 80
+padding.px: 2
+width if { $ftd.device == "mobile" }: fill-container
+
+-- ftd.column:
+align-content: center
+background.solid: $inherited.colors.background.base
+border-radius.px: 80
+width if { $ftd.device == "mobile" }: fill-container
+
+-- ftd.row:
+width if { $ftd.device == "mobile" }: fill-container
+
+-- ftd.row:
+background.linear-gradient if { github-star-cta.mousein }: $star-gradient
+$on-mouse-enter$: $ftd.set-bool($a = $github-star-cta.mousein, v = true )
+$on-mouse-leave$: $ftd.set-bool($a = $github-star-cta.mousein, v = false )
+link: $github-star-cta.link
+align-content: center
+padding-horizontal.px if { $ftd.device == "mobile" }: 16
+padding-horizontal.px if { $ftd.device == "desktop" }: 30
+padding-vertical.px: 10
+border-radius.px: 80
+width if { $ftd.device == "mobile" }: fill-container
+
+-- ftd.text:
+text: $github-star-cta.body
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong
+color if { github-star-cta.mousein }: $inherited.colors.cta-primary.base
+text-align: center
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: github-star-cta
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.linear-gradient star-gradient:
+direction: right
+colors: $color-values
+
+
+-- ftd.linear-gradient-color list color-values:
+
+-- ftd.linear-gradient-color: red
+stop-position.percent: 20
+
+-- ftd.linear-gradient-color: yellow
+
+-- end: color-values
+
+
+
+
+
+
+
+
+
+
+-- component team:
+caption title:
+optional body body:
+children team-wrap:
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 48
+align-content: center
+padding-horizontal.px: 24
+
+-- ftd.column:
+width: fill-container
+align-content: center
+margin-bottom.px: 100
+spacing.fixed.px: 16
+
+-- ftd.text: $team.title
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+text-align: center
+
+-- ftd.text:
+if: { team.body != NULL }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align: center
+
+$team.body
+
+-- end: ftd.column
+
+-- ftd.desktop:
+
+-- ftd.row:
+width: fill-container
+align-self: center
+wrap: true
+children: $team.team-wrap
+align-content: center
+spacing.fixed.px: 64
+
+-- end: ftd.row
+
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
+-- ftd.column:
+width: fill-container
+children: $team.team-wrap
+align-self: center
+align-content: center
+
+-- end: ftd.column
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: team
+
+
+
+
+
+
+
+
+
+
+-- component member:
+caption title:
+optional ftd.image-src photo:
+optional ftd.image-src photo-grey:
+optional string link:
+optional string designation:
+boolean $mouse-in: false
+
+-- ftd.column:
+spacing: space-between
+align-content: center
+link: $member.link
+width.fixed.px: 200
+margin-bottom.px: 80
+z-index: 0
+$on-mouse-enter$: $ftd.set-bool($a = $member.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $member.mouse-in, v = false)
+
+-- ftd.mobile:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 24
+align-content: center
+
+-- ftd.column:
+if: { member.mouse-in }
+width: fill-container
+height.fixed.px: 200
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+anchor: parent
+border-radius.px: 10
+border-width.px: 5
+border-color: $inherited.colors.accent.primary
+top.px: -18
+right.px: -18
+z-index: -1
+
+-- end: ftd.column
+
+-- ftd.image:
+if: { member.photo != NULL }
+src: $member.photo
+max-width.fixed.percent: 100
+min-width.fixed.px: 200
+border-radius.px: 10
+
+-- ftd.column:
+if: { member.photo == NULL }
+width: fill-container
+background.solid: $inherited.colors.background.code
+border-radius.px: 10
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { !member.mouse-in }
+width: fill-container
+height.fixed.px: 300
+
+-- ftd.image:
+if: { member.photo-grey != NULL }
+src: $member.photo-grey
+max-width.fixed.percent: 100
+min-width.fixed.px: 200
+border-radius.px: 10
+
+-- ftd.column:
+if: { member.photo-grey == NULL }
+width: fill-container
+background.solid: $inherited.colors.background.code
+border-radius.px: 10
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $member.title
+role: $inherited.types.heading-tiny
+color: $inherited.colors.text-strong
+
+-- ftd.text: $member.designation
+role: $inherited.types.copy-small
+color: $inherited.colors.text-strong
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.mobile
+
+
+-- ftd.desktop:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 24
+align-content: center
+
+-- ftd.column:
+if: { member.mouse-in }
+width: fill-container
+height.fixed.px: 200
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+anchor: parent
+border-radius.px: 10
+border-width.px: 5
+border-color: $inherited.colors.accent.primary
+top.px: -18
+right.px: -18
+z-index: -1
+
+-- end: ftd.column
+
+-- ftd.image:
+if: { member.photo != NULL }
+src: $member.photo
+max-width.fixed.percent: 100
+min-width.fixed.px: 200
+border-radius.px: 10
+
+-- ftd.column:
+if: { member.photo == NULL }
+width: fill-container
+background.solid: $inherited.colors.background.code
+border-radius.px: 10
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { !member.mouse-in }
+width: fill-container
+height.fixed.px: 200
+
+-- ftd.image:
+if: { member.photo-grey != NULL }
+src: $member.photo-grey
+max-width.fixed.percent: 100
+min-width.fixed.px: 200
+border-radius.px: 10
+
+-- ftd.column:
+if: { member.photo-grey == NULL }
+width: fill-container
+background.solid: $inherited.colors.background.code
+border-radius.px: 10
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $member.title
+role: $inherited.types.heading-tiny
+color: $inherited.colors.text-strong
+
+-- ftd.text: $member.designation
+role: $inherited.types.copy-small
+color: $inherited.colors.text-strong
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.desktop
+
+-- end: ftd.column
+
+-- end: member
+
+
+
+
+
+
+-- component footer-content:
+
+-- ftd.column:
+width: fill-container
+
+-- install: Get Started with fastn
+code-lang: sh
+code: curl -fsSL https://fastn.com/install.sh | bash
+cta-text: Learn More
+cta-link: /install/
+
+Install fastn with a Single Command
+
+
+-- footer.social-sideline-footer:
+social: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-url: /
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+-- end: ftd.column
+
+-- end: footer-content
