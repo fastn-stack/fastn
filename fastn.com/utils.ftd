@@ -354,3 +354,318 @@ width: fill-container
 -- end: ftd.column
 
 -- end: tippy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component install:
+caption title:
+body subtitle:
+string cta-text:
+string cta-link:
+string code-lang:
+string code:
+
+-- ftd.column:
+width: fill-container
+padding-vertical.em: 2
+padding-horizontal.em: 1
+background.solid if { ftd.device == "desktop" }: $inherited.colors.background.step-2
+
+-- ftd.column:
+background.image if { ftd.device == "desktop" }: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
+width: fill-container
+align-content: center
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $width
+align-content: center
+
+-- ftd.text: $install.title
+role if { ftd.device == "desktop" }: $inherited.types.heading-medium
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+text-align: center
+
+-- ftd.text: $install.subtitle
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+margin-bottom.em if { ftd.device == "desktop" }: 4
+margin-bottom.em: 1.5
+text-align: center
+
+-- ftd.column:
+align-content: center
+role: $inherited.types.copy-large
+
+-- ds.code:
+lang: $install.code-lang
+
+$install.code
+
+-- end: ftd.column
+
+-- ftd.text: $install.cta-text
+link: $install.cta-link
+background.solid: $inherited.colors.cta-primary.base
+color: $inherited.colors.cta-primary.text
+border-radius.em: 0.375
+padding-vertical.em: 1
+padding-horizontal.em: 2
+margin-top.em: 2
+role: $inherited.types.button-medium
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: install
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component two-column-layout-desktop:
+caption title:
+body subtitle:
+children ui-data:
+ftd.ui list right-side-ui:
+
+-- ftd.column:
+width: fill-container
+padding.em: 3
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $width
+align-self: center
+
+-- ftd.image:
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+width.fixed.em: 4
+height.fixed.em: 4
+margin-bottom.em: 1
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.em: 2
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $two-column-layout-desktop.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+padding-bottom.em: 0.5
+
+-- ftd.text: $two-column-layout-desktop.subtitle
+margin-bottom.em: 1.5
+
+-- ftd.column:
+width: fill-container
+children: $two-column-layout-desktop.ui-data
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 1.5
+children: $two-column-layout-desktop.right-side-ui
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: two-column-layout-desktop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component two-column-layout-mobile:
+caption title:
+body subtitle:
+children ui-data:
+ftd.ui list right-side-ui:
+
+-- ftd.column:
+width: fill-container
+padding-top.em: 2
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.image:
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+width.fixed.em: 4
+height.fixed.em: 4
+margin-bottom.em: 1
+
+-- ftd.text: $two-column-layout-mobile.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+padding-bottom.em: 0.5
+text-align : center
+
+-- ftd.text: $two-column-layout-mobile.subtitle
+margin-bottom.em: 1.5
+
+-- ftd.column:
+width: fill-container
+children: $two-column-layout-mobile.ui-data
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 1.5
+children: $two-column-layout-mobile.right-side-ui
+margin-top.em: 2
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: two-column-layout-mobile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component summary-cards:
+caption title:
+string number:
+string subtitle:
+body description:
+children cards:
+optional ftd.background bg-color:
+string list color-css:
+string list title-css:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-horizontal.em if { ftd.device == "desktop" }: 3
+padding-vertical.em: 3
+color: $inherited.colors.text-strong
+background if { ftd.device == "desktop" }: $summary-cards.bg-color
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $width
+align-content: center
+spacing.fixed.em: 0.5
+
+-- ftd.text: $summary-cards.number
+height.fixed.em: 2
+width.fixed.em: 2
+border-radius.percent: 50
+padding-top.em: 0.3
+text-align: center
+role: $inherited.types.heading-medium
+color: white
+classes: $summary-cards.color-css
+
+-- ftd.text.css:
+
+-- string: $fastn-assets.files.design.css
+
+-- end: ftd.text.css
+
+-- ftd.text: $summary-cards.title
+role: $inherited.types.heading-large
+classes: $summary-cards.title-css
+
+-- ftd.text: $summary-cards.subtitle
+role: $inherited.types.heading-large
+text-align: center
+
+-- ftd.text: $summary-cards.description
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align: center
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing.fixed.em: 2
+padding-top.em: 2
+children: $summary-cards.cards
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: summary-cards
+
+
+
+
+
+
+
+
+
+-- integer width: 1220

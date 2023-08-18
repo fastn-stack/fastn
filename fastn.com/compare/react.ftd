@@ -1,7 +1,7 @@
 -- import: fastn.com/content-library/compare as cl
 
 
--- ds.page-with-no-right-sidebar: fastn vs React, Angular and Javascript
+-- ds.page-with-get-started-and-no-right-sidebar: fastn vs React, Angular and Javascript
 
 fastn is a no-fuss alternative to the complexities of React, Angular, and 
 JavaScript. Here is a quick glance.
@@ -22,4 +22,4 @@ JavaScript. Here is a quick glance.
 -- cl.fastn-best-choice-for-startup:
 
 
--- end: ds.page-with-no-right-sidebar
+-- end: ds.page-with-get-started-and-no-right-sidebar

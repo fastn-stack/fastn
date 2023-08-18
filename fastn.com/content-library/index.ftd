@@ -5,8 +5,8 @@
 -- import: fifthtry.github.io/fastn-ui/assets as fastn-ui-assets
 -- import: fastn-community.github.io/footer
 -- import: fastn/processors as pr
+-- import: fastn.com/utils
 
--- integer width: 1220
 
 -- component hero-content:
 
@@ -307,7 +307,7 @@ width: fill-container
 
 -- ftd.desktop:
 
--- two-column-layout-desktop:
+-- utils.two-column-layout-desktop:
 title: $two-column-layout.title
 subtitle: $two-column-layout.subtitle
 ui-data: $two-column-layout.ui-data
@@ -318,7 +318,7 @@ right-side-ui: $two-column-layout.right-side-ui
 
 -- ftd.mobile:
 
--- two-column-layout-mobile:
+-- utils.two-column-layout-mobile:
 title: $two-column-layout.title
 subtitle: $two-column-layout.subtitle
 ui-data: $two-column-layout.ui-data
@@ -339,67 +339,22 @@ right-side-ui: $two-column-layout.right-side-ui
 
 
 
--- component two-column-layout-desktop:
-caption title:
-body subtitle:
-children ui-data:
-ftd.ui list right-side-ui:
 
--- ftd.column:
-width: fill-container
-padding.em: 3
-background.solid: $inherited.colors.background.step-1
 
--- ftd.column:
-width: fill-container
-max-width.fixed.px: $width
-align-self: center
 
--- ftd.image:
-src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
-width.fixed.em: 4
-height.fixed.em: 4
-margin-bottom.em: 1
 
--- ftd.row:
-width: fill-container
-spacing.fixed.em: 2
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
 
--- ftd.column:
-width: fill-container
 
--- ftd.text: $two-column-layout-desktop.title
-role: $inherited.types.heading-medium
-color: $inherited.colors.text-strong
-padding-bottom.em: 0.5
 
--- ftd.text: $two-column-layout-desktop.subtitle
-margin-bottom.em: 1.5
 
--- ftd.column:
-width: fill-container
-children: $two-column-layout-desktop.ui-data
 
--- end: ftd.column
 
--- end: ftd.column
 
--- ftd.column:
-width: fill-container
-spacing.fixed.em: 1.5
-children: $two-column-layout-desktop.right-side-ui
 
--- end: ftd.column
 
--- end: ftd.row
 
--- end: ftd.column
 
--- end: ftd.column
 
--- end: two-column-layout-desktop
 
 
 
@@ -410,135 +365,10 @@ children: $two-column-layout-desktop.right-side-ui
 
 
 
--- component two-column-layout-mobile:
-caption title:
-body subtitle:
-children ui-data:
-ftd.ui list right-side-ui:
 
--- ftd.column:
-width: fill-container
-padding-top.em: 2
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
 
--- ftd.image:
-src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
-width.fixed.em: 4
-height.fixed.em: 4
-margin-bottom.em: 1
 
--- ftd.text: $two-column-layout-mobile.title
-role: $inherited.types.heading-medium
-color: $inherited.colors.text-strong
-padding-bottom.em: 0.5
-text-align : center
 
--- ftd.text: $two-column-layout-mobile.subtitle
-margin-bottom.em: 1.5
-
--- ftd.column:
-width: fill-container
-children: $two-column-layout-mobile.ui-data
-
--- end: ftd.column
-
--- ftd.column:
-width: fill-container
-spacing.fixed.em: 1.5
-children: $two-column-layout-mobile.right-side-ui
-margin-top.em: 2
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: two-column-layout-mobile
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- component summary-cards:
-caption title:
-string number:
-string subtitle:
-body description:
-children cards:
-optional ftd.background bg-color:
-string list color-css:
-string list title-css:
-
--- ftd.column:
-width: fill-container
-align-content: center
-padding-horizontal.em if { ftd.device == "desktop" }: 3
-padding-vertical.em: 3
-color: $inherited.colors.text-strong
-background if { ftd.device == "desktop" }: $summary-cards.bg-color
-
--- ftd.column:
-width: fill-container
-max-width.fixed.px: $width
-align-content: center
-spacing.fixed.em: 0.5
-
--- ftd.text: $summary-cards.number
-height.fixed.em: 2
-width.fixed.em: 2
-border-radius.percent: 50
-padding-top.em: 0.3
-text-align: center
-role: $inherited.types.heading-medium
-color: white
-classes: $summary-cards.color-css
-
--- ftd.text.css:
-
--- string: $fastn-assets.files.design.css
-
--- end: ftd.text.css
-
--- ftd.text: $summary-cards.title
-role: $inherited.types.heading-large
-classes: $summary-cards.title-css
-
--- ftd.text: $summary-cards.subtitle
-role: $inherited.types.heading-large
-text-align: center
-
--- ftd.text: $summary-cards.description
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-text-align: center
-
--- ftd.row:
-width: fill-container
-wrap: true
-spacing.fixed.em: 2
-padding-top.em: 2
-children: $summary-cards.cards
-
--- end: ftd.row
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: summary-cards
 
 
 
@@ -551,7 +381,7 @@ children: $summary-cards.cards
 
 -- component design-chakra:
 
--- summary-cards: Design
+-- utils.summary-cards: Design
 number: 1
 subtitle: Create your design system
 color-css: color-1
@@ -579,7 +409,7 @@ min-height.fixed.em: 21
 You can use figma token with fastn color scheme. You also can create your own
 fastn color scheme from figma json.
 
--- end: summary-cards
+-- end: utils.summary-cards
 
 -- end: design-chakra
 
@@ -590,7 +420,7 @@ fastn color scheme from figma json.
 
 -- component frontend-chakra:
 
--- summary-cards: Frontend
+-- utils.summary-cards: Frontend
 number: 2
 subtitle: Write your entire web app using fastn language
 color-css: color-2
@@ -619,7 +449,7 @@ min-height.fixed.em: 21
 Create your own components in a few lines of code. Use them in rest of your app
 package or in totally different package.
 
--- end: summary-cards
+-- end: utils.summary-cards
 
 -- end: frontend-chakra
 
@@ -634,7 +464,7 @@ package or in totally different package.
 
 -- component fullstack-chakra:
 
--- summary-cards: Fullstack
+-- utils.summary-cards: Fullstack
 number: 3
 subtitle: fastn for building dynamic websites
 color-css: color-3
@@ -698,7 +528,7 @@ min-height.fixed.em: 22
 We are working on wasm support so developers can extend fastn's standard
 libraries and offer access to more backend functionalities.
 
--- end: summary-cards
+-- end: utils.summary-cards
 
 -- end: fullstack-chakra
 
@@ -713,7 +543,7 @@ libraries and offer access to more backend functionalities.
 
 -- component deploy-chakra:
 
--- summary-cards: Deploy
+-- utils.summary-cards: Deploy
 number: 4
 subtitle: Deploy your app in seconds.
 color-css: color-4
@@ -741,7 +571,7 @@ Deploy fastn in Dynamic Mode to create a fully featured web application with
 authentication, data collection, and real-time updates. fastn binary can run on
 Linux, Windows and Mac.
 
--- end: summary-cards
+-- end: utils.summary-cards
 
 -- end: deploy-chakra
 
@@ -760,71 +590,6 @@ Linux, Windows and Mac.
 
 
 
--- component install:
-caption title:
-body subtitle:
-string cta-text:
-string cta-link:
-string code-lang:
-string code:
-
--- ftd.column:
-width: fill-container
-padding-vertical.em: 2
-padding-horizontal.em: 1
-background.solid if { ftd.device == "desktop" }: $inherited.colors.background.step-2
-
--- ftd.column:
-background.image if { ftd.device == "desktop" }: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
-width: fill-container
-align-content: center
-
--- ftd.column:
-width: fill-container
-max-width.fixed.px: $width
-align-content: center
-
--- ftd.text: $install.title
-role if { ftd.device == "desktop" }: $inherited.types.heading-medium
-role: $inherited.types.heading-large
-color: $inherited.colors.text-strong
-text-align: center
-
--- ftd.text: $install.subtitle
-role: $inherited.types.copy-large
-color: $inherited.colors.text
-margin-bottom.em if { ftd.device == "desktop" }: 4
-margin-bottom.em: 1.5
-text-align: center
-
--- ftd.column:
-align-content: center
-role: $inherited.types.copy-large
-
--- ds.code:
-lang: $install.code-lang
-
-$install.code
-
--- end: ftd.column
-
--- ftd.text: $install.cta-text
-link: $install.cta-link
-background.solid: $inherited.colors.cta-primary.base
-color: $inherited.colors.cta-primary.text
-border-radius.em: 0.375
-padding-vertical.em: 1
-padding-horizontal.em: 2
-margin-top.em: 2
-role: $inherited.types.button-medium
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: install
 
 
 
@@ -1322,7 +1087,23 @@ color: $inherited.colors.text-strong
 -- ftd.column:
 width: fill-container
 
--- install: Get Started with fastn
+-- get-started:
+-- social-sideline-footer:
+
+-- end: ftd.column
+
+-- end: footer-content
+
+
+
+
+
+
+
+
+-- component get-started:
+
+-- utils.install: Get Started with fastn
 code-lang: sh
 code: curl -fsSL https://fastn.com/install.sh | bash
 cta-text: Learn More
@@ -1330,6 +1111,15 @@ cta-link: /install/
 
 Install fastn with a Single Command
 
+-- end: get-started
+
+
+
+
+
+
+
+-- component social-sideline-footer:
 
 -- footer.social-sideline-footer:
 social: true
@@ -1339,6 +1129,5 @@ twitter-url: https://twitter.com/FifthTryHQ
 discord-url: https://discord.gg/bucrdvptYd
 copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
--- end: ftd.column
 
--- end: footer-content
+-- end: social-sideline-footer

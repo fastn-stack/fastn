@@ -4,6 +4,7 @@
 -- import: fifthtry.github.io/banner
 -- import: fastn-community.github.io/footer
 -- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/content-library as cl
 
 -- import: fastn-community.github.io/doc-site
 export: markdown,h0,h1,h2,h3,code,rendered,output,image,iframe,youtube,compact-text,post,posts,featured-post,image-first,image-in-between,without-image,author-bio,tip,not-found-1,not-found-2,link,link-group
@@ -158,7 +159,7 @@ children: $page.wrapper
 
 
 
--- component page-with-no-right-sidebar:
+-- component page-with-get-started-and-no-right-sidebar:
 children uis:
 optional caption title:
 optional body body:
@@ -166,11 +167,22 @@ optional body body:
 -- page: fastn vs React, Angular and Javascript
 sidebar: false
 right-sidebar: []
-wrapper: $page-with-no-right-sidebar.uis
+
+
+-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+
+-- obj:
+$loop$: $page-with-get-started-and-no-right-sidebar.uis as $obj
+
+-- cl.get-started:
+
+-- end: ftd.column
 
 -- end: page
 
--- end: page-with-no-right-sidebar
+-- end: page-with-get-started-and-no-right-sidebar
 
 
 
