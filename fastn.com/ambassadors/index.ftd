@@ -2,7 +2,7 @@
 -- import: fastn-community.github.io/footer
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
--- import: fastn.com as lib
+-- import: fastn.com/content-library as lib
 
 
 -- ds.page: 
@@ -1256,4 +1256,3 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque molestie ante
 in luctus rutrum.
 
 -- end: list-of-faqs
-
