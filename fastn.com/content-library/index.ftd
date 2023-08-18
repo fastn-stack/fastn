@@ -859,7 +859,6 @@ width: fill-container
 align-self: center
 wrap: true
 children: $team.team-wrap
-align-content: center
 spacing.fixed.px: 64
 
 -- end: ftd.row
