@@ -178,6 +178,30 @@ This is Duotone Theme Space
 
 
 
+-- ftd.code:
+lang: ftd
+theme: vs-theme.light
+
+\-- ftd.text:
+padding.px: 10
+
+This is VS Theme Light
+
+
+
+
+
+
+-- ftd.code:
+lang: ftd
+theme: vs-theme.dark
+
+\-- ftd.text:
+padding.px: 10
+
+This is VS Theme Dark
+
+
 
 
 

@@ -1,0 +1,168 @@
+/**
+ * VS theme by Andrew Lock (https://andrewlock.net)
+ * Inspired by Visual Studio syntax coloring
+ */
+
+code[class*="language-"].vs-theme-light,
+pre[class*="language-"].vs-theme-light {
+	color: #393A34;
+	font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	font-size: .9em;
+	line-height: 1.2em;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre > code[class*="language-"].vs-theme-light {
+	font-size: 1em;
+}
+
+pre[class*="language-"].vs-theme-light::-moz-selection, pre[class*="language-"].vs-theme-light ::-moz-selection,
+code[class*="language-"].vs-theme-light::-moz-selection, code[class*="language-"].vs-theme-light ::-moz-selection {
+	background: #C1DEF1;
+}
+
+pre[class*="language-"].vs-theme-light::selection, pre[class*="language-"].vs-theme-light ::selection,
+code[class*="language-"].vs-theme-light::selection, code[class*="language-"].vs-theme-light ::selection {
+	background: #C1DEF1;
+}
+
+/* Code blocks */
+pre[class*="language-"].vs-theme-light {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border: 1px solid #dddddd;
+	background-color: white;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"].vs-theme-light {
+	padding: .2em;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	background: #f8f8f8;
+	border: 1px solid #dddddd;
+}
+
+.vs-theme-light .token.comment,
+.vs-theme-light .token.prolog,
+.vs-theme-light .token.doctype,
+.vs-theme-light .token.cdata {
+	color: #008000;
+	font-style: italic;
+}
+
+.vs-theme-light .token.namespace {
+	opacity: .7;
+}
+
+.vs-theme-light .token.string {
+	color: #A31515;
+}
+
+.vs-theme-light .token.punctuation,
+.vs-theme-light .token.operator {
+	color: #393A34; /* no highlight */
+}
+
+.vs-theme-light .token.url,
+.vs-theme-light .token.symbol,
+.vs-theme-light .token.number,
+.vs-theme-light .token.boolean,
+.vs-theme-light .token.variable,
+.vs-theme-light .token.constant,
+.vs-theme-light .token.inserted {
+	color: #36acaa;
+}
+
+.vs-theme-light .token.atrule,
+.vs-theme-light .token.keyword,
+.vs-theme-light .token.attr-value,
+.language-autohotkey .vs-theme-light .token.selector,
+.language-json .vs-theme-light .token.boolean,
+.language-json .vs-theme-light .token.number,
+code[class*="language-css"] {
+	color: #0000ff;
+}
+
+.vs-theme-light .token.function {
+	color: #393A34;
+}
+
+.vs-theme-light .token.deleted,
+.language-autohotkey .vs-theme-light .token.tag {
+	color: #9a050f;
+}
+
+.vs-theme-light .token.selector,
+.language-autohotkey .vs-theme-light .token.keyword {
+	color: #00009f;
+}
+
+.vs-theme-light .token.important {
+	color: #e90;
+}
+
+.vs-theme-light .token.important,
+.vs-theme-light .token.bold {
+	font-weight: bold;
+}
+
+.vs-theme-light .token.italic {
+	font-style: italic;
+}
+
+.vs-theme-light .token.class-name,
+.language-json .vs-theme-light .token.property {
+	color: #2B91AF;
+}
+
+.vs-theme-light .token.tag,
+.vs-theme-light .token.selector {
+	color: #800000;
+}
+
+.vs-theme-light .token.attr-name,
+.vs-theme-light .token.property,
+.vs-theme-light .token.regex,
+.vs-theme-light .token.entity {
+	color: #ff0000;
+}
+
+.vs-theme-light .token.directive.tag .tag {
+	background: #ffff00;
+	color: #393A34;
+}
+
+/* overrides color-values for the Line Numbers plugin
+ * http://prismjs.com/plugins/line-numbers/
+ */
+.line-numbers.line-numbers .line-numbers-rows {
+	border-right-color: #a5a5a5;
+}
+
+.line-numbers .line-numbers-rows > span:before {
+	color: #2B91AF;
+}
+
+/* overrides color-values for the Line Highlight plugin
+* http://prismjs.com/plugins/line-highlight/
+*/
+.line-highlight.line-highlight {
+	background: rgba(193, 222, 241, 0.2);
+	background: -webkit-linear-gradient(left, rgba(193, 222, 241, 0.2) 70%, rgba(221, 222, 241, 0));
+	background: linear-gradient(to right, rgba(193, 222, 241, 0.2) 70%, rgba(221, 222, 241, 0));
+}
