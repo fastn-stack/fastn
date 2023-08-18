@@ -121,12 +121,13 @@ caption title:
 
 \-- ftd.text: $toggle-text.title
 align-self: center
-text-align: center
-color if { toggle-text.current }: #D42D42
+color if { toggle-text.current }: $inherited.colors.cta-primary.disabled
 color: $inherited.colors.cta-primary.text
+role: $inherited.types.heading-tiny
 background.solid: $inherited.colors.cta-primary.base
-$on-click$: $ftd.toggle($a = $toggle-text.current)
+padding.px: 20
 border-radius.px: 5
+$on-click$: $ftd.toggle($a = $toggle-text.current)
 
 \-- end: toggle-text
 
@@ -260,10 +261,12 @@ caption title:
 
 \-- ftd.text: $toggle-text.title
 align-self: center
-text-align: center
-color if { toggle-text.current }: #D42D42
+color if { toggle-text.current }: $inherited.colors.cta-primary.disabled
 color: $inherited.colors.cta-primary.text
+role: $inherited.types.heading-tiny
 background.solid: $inherited.colors.cta-primary.base
+padding.px: 20
+border-radius.px: 5
 $on-click$: $ftd.toggle($a = $toggle-text.current)
 
 \-- end: toggle-text
@@ -452,13 +455,12 @@ caption title:
 
 -- ftd.text: $toggle-text.title
 align-self: center
-text-align: center 
-$on-click$: $ftd.toggle($a = $toggle-text.current)
-color if { toggle-text.current }: #D42D42
+color if { toggle-text.current }: $inherited.colors.cta-primary.disabled
 color: $inherited.colors.cta-primary.text
+role: $inherited.types.heading-tiny
 background.solid: $inherited.colors.cta-primary.base
 padding.px: 20
-white-space: nowrap
 border-radius.px: 5
+$on-click$: $ftd.toggle($a = $toggle-text.current)
 
 -- end: toggle-text

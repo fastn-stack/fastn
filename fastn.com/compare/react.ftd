@@ -6,6 +6,7 @@
 
 -- ds.page: fastn vs React, Angular and Javascript
 sidebar: false
+right-sidebar: []
 
 fastn is a no-fuss alternative to the complexities of React, Angular, and 
 JavaScript. Here is a quick glance.
@@ -18,8 +19,8 @@ fastn simplifies programming making it accessible to everyone.
 Developers, designers, and non-programmers alike can easily learn fastn to build 
 stunning web projects. 
 
-Its `user-friendly interface and minimal syntax` allow even those with no prior 
-programming experience to grasp its functionalities swiftly. 
+Its **user-friendly interface and minimal syntax** allow even those with no
+prior programming experience to grasp its functionalities swiftly.
 
 Take the below examples for instance.
 
@@ -81,6 +82,8 @@ changes to life without delay or intermediaries.
 -- ds.code: 
 lang: ftd
 
+\-- boolean $show-modal: false
+
 \-- modal-cover.button: Click to Open
 $on-click$: $ftd.toggle($a = $show-modal)
 disable-link: true
@@ -109,7 +112,7 @@ ultimately boosting the efficiency of the entire project.
 
 -- ds.h1: Rich collection of readymade components
 
-fastn's versatility accommodates a wide range of projects, from landing pages to 
+fastn's versatility accommodates a wide range of projects, from landing pages to
 complex web applications, giving startups the agility they need to adapt and 
 evolve.
 
@@ -132,27 +135,30 @@ engage users, fastn makes component creation intuitive and efficient.
 -- ds.code: Creating a custom component
 lang: ftd
 
+\-- toggle-text: fastn is cool!
+
+
 \-- component toggle-text:
 boolean $current: false
 caption title:
 
 \-- ftd.text: $toggle-text.title
 align-self: center
-text-align: center
-color if { toggle-text.current }: #D42D42
+color if { toggle-text.current }: $inherited.colors.cta-primary.disabled
 color: $inherited.colors.cta-primary.text
+role: $inherited.types.heading-tiny
 background.solid: $inherited.colors.cta-primary.base
-$on-click$: $ftd.toggle($a = $toggle-text.current)
+padding.px: 20
 border-radius.px: 5
+$on-click$: $ftd.toggle($a = $toggle-text.current)
 
 \-- end: toggle-text
 
-\-- toggle-text: `fastn` is cool!
 
 
 -- ds.output:
 
--- ftd-index.toggle-text: `fastn` is cool!
+-- ftd-index.toggle-text: fastn is cool!
 
 -- end: ds.output
 
@@ -171,8 +177,8 @@ and retain customer interest.
 -- ds.h3: Event Handling Made Simple
 
 We've got a range of built-in events in fastn. Handle clicks, mouse actions, 
-and more. fastn’s event handling capabilities can be used for form validation, 
-ajax requests etc, to create fully functional frontend applications.
+and more. fastn’s event handling capabilities can be used to create fully
+functional frontend applications.
 
 
 -- ds.rendered:
@@ -238,15 +244,17 @@ $on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
 
 -- ds.h1: Full stack framework
 
-Along with [building frontends](https://fastn.com/frontend/)`fastn` can be used 
-for building data driven websites and dashboards. 
+Along with [building frontends](https://fastn.com/frontend/), `fastn` can be
+used for building data driven websites and dashboards.
 
 -- ds.h2: Seamless API Integration
 
-If backend APIs are already available, you can interact with them, and include 
-the API responses and create dynamic web pages. 
+You can interact with backend APIs, and use the API responses to
+- Create dynamic web pages,
+- Display and render the response data
+- Conditional Rendering. etc.
 
-Checkout the [http processor](https://fastn.com/http/) about how to do this.
+Checkout the [http processor](https://fastn.com/http/) to know more.
 
 -- ds.code: fetching data from API
 lang: ftd
@@ -285,15 +293,14 @@ $loop$: $people as $p
 
 -- ds.h1: Opinionated Design System
 
-fastn comes with integrated design system. We've pre-made many design choices 
-for you so you can build your website quickly. 
+fastn comes with integrated design system. We've many pre-made design choices
+so you can build your website quickly.
 
 -- ds.h2: Unified Color and Typography
 
-Instead of specifying font sizes or colors, you specify typography and color 
-roles to UI elements. A lot of color scheme and typography packages are 
-available, which you can install and change the entire typography or color 
-scheme in a few lines of code. 
+A lot of [color scheme](/featured/cs/) and
+[typography](featured/fonts-typography/) packages are available, which you can
+import and change the entire typography or color scheme in a few lines of code.
 
 You can manage color palettes and typography centrally to save time and ensure 
 consistent usage across your website. 
@@ -318,7 +325,7 @@ width: fill-container
 
 -- ds.h2: Responsive Ready
 
-fastn has built in support for reponsive design. Your creations automatically 
+fastn has built in support for responsive design. Your creations automatically
 adapt to the perfect size, whether your users are on mobile or desktop devices. 
 
 
@@ -326,14 +333,14 @@ adapt to the perfect size, whether your users are on mobile or desktop devices.
 
 -- ds.h2: Custom and Clean URLs
 
-fastn allows you to map documents to any URL you like allowing you to make all 
+fastn allows you to map documents to any URL you like, allowing you to make all
 your URLs clean, and folders organised! You can also create dynamic URLs in 
 fastn.
 
 
 -- ds.h2: Optimized Meta Information
 
-Easily manage meta tags and descriptions with fastn. You can fine-tune 
+Easily manage meta tags and descriptions with fastn. You can fine-tune
 how your web pages appear in search engine results and increase your site's 
 discoverability. You can also add OG-Image to your page and control the
 preview of your page link when shared across social platforms.
@@ -431,7 +438,7 @@ color: $inherited.colors.text
 -- ftd.text: $on-rive-play-pause-event.idle
 
 -- ftd.rive:
-id: vehicle-play-1
+id: jeep-play
 src: https://cdn.rive.app/animations/vehicles.riv
 autoplay: false
 artboard: Jeep
@@ -439,12 +446,8 @@ $on-rive-play[idle]$: $ftd.set-string($a = $on-rive-play-pause-event.idle, v = P
 $on-rive-pause[idle]$: $ftd.set-string($a = $on-rive-play-pause-event.idle, v = Pausing Idle)
 
 -- ftd.text: Idle/Run
-$on-click$: $ftd.toggle-play-rive(rive = vehicle-play, input = idle)
+$on-click$: $ftd.toggle-play-rive(rive = jeep-play, input = idle)
 
 -- end: ftd.column
 
 -- end: on-rive-play-pause-event
-
-
-
-
