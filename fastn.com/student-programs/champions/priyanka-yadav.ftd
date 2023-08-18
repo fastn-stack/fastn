@@ -32,8 +32,8 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.contributor: Ajit Garg
-avatar: $fastn-assets.files.images.students-program.champions.ajit.jpg
+-- ds.contributor: Priyanka Yadav
+avatar: $fastn-assets.files.images.students-program.champions.priyanka.jpg
 profile: Champion
 connect: $social-links
 
@@ -57,23 +57,19 @@ connect: $social-links
 
 -- common.social-media list social-links:
 
--- common.social-media: 
-link: https://discord.gg/the90skid
-src: $fastn-assets.files.images.discord.svg
-hover-src: $fastn-assets.files.images.discord-hover.svg
 
 -- common.social-media: 
-link: https://github.com/gargajit
+link: https://github.com/priyanka9634
 src: $fastn-assets.files.images.github-grey.svg
 hover-src: $fastn-assets.files.images.github-grey-hover.svg
 
 -- common.social-media: 
-link: https://twitter.com/imAjitGarg
+link: https://twitter.com/Priyanka9628
 src: $fastn-assets.files.images.twitter.svg
 hover-src: $fastn-assets.files.images.twitter-hover.svg
 
 -- common.social-media: 
-link: https://www.linkedin.com/in/ajit-garg-319167190/
+link: https://www.linkedin.com/in/priyanka-yadav 
 src: $fastn-assets.files.images.linkedin.svg
 hover-src: $fastn-assets.files.images.linkedin-hover.svg
 

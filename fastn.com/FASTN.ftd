@@ -98,6 +98,29 @@ favicon: /-/fastn.com/images/favicon.svg
     - Govindaraman S: /champions/govindaraman-s/
       document: /student-programs/champions/govindaraman.ftd
       skip: true
+    - Aprita Jaiseal: /champions/arpita-jaiswal/
+      document: /student-programs/champions/arpita-jaiswal.ftd
+      skip: true
+    - Rithik Seth:  /champions/rithik-seth/
+      document: /student-programs/champions/rithik-seth.ftd
+      skip: true
+    - Harsh Singh: /champions/harsh-singh/
+      document: /student-programs/champions/harsh-singh.ftd
+      skip: true
+    - Ganesh Salunke: /champions/ganesh-salunke/
+      document: /student-programs/champions/ganesh-salunke.ftd
+      skip: true
+    - Priyanka Yadav: /champions/priyanka-yadav/
+      document: /student-programs/champions/priyanka-yadav.ftd
+      skip: true
+    - Meenu Kumari: /champions/meenu-kumari/
+      document: /student-programs/champions/meenu-kumari.ftd
+      skip: true
+    - Saurabh lohia: /champions/saurabh-lohiya/
+      document: /student-programs/champions/saurabh-lohiya.ftd
+    
+
+
 - Ambassador Program: /ambassador-program/
   document: /student-programs/ambassador.ftd
   - Ambassadors: /ambassadors/

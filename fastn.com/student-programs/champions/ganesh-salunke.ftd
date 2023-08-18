@@ -32,8 +32,8 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.contributor: Ajit Garg
-avatar: $fastn-assets.files.images.students-program.champions.ajit.jpg
+-- ds.contributor: Ganesh Salunke
+avatar: $fastn-assets.files.images.students-program.champions.ganeshs.jpg
 profile: Champion
 connect: $social-links
 
@@ -58,22 +58,22 @@ connect: $social-links
 -- common.social-media list social-links:
 
 -- common.social-media: 
-link: https://discord.gg/the90skid
+link: https://discord.com/users/ganeshsalunke
 src: $fastn-assets.files.images.discord.svg
 hover-src: $fastn-assets.files.images.discord-hover.svg
 
 -- common.social-media: 
-link: https://github.com/gargajit
+link:  https://github.com/gsalunke
 src: $fastn-assets.files.images.github-grey.svg
 hover-src: $fastn-assets.files.images.github-grey-hover.svg
 
 -- common.social-media: 
-link: https://twitter.com/imAjitGarg
+link: https://twitter.com/GaneshS05739912
 src: $fastn-assets.files.images.twitter.svg
 hover-src: $fastn-assets.files.images.twitter-hover.svg
 
 -- common.social-media: 
-link: https://www.linkedin.com/in/ajit-garg-319167190/
+link: https://www.linkedin.com/in/ganesh-s-891174ab/
 src: $fastn-assets.files.images.linkedin.svg
 hover-src: $fastn-assets.files.images.linkedin-hover.svg
 
