@@ -60,6 +60,9 @@ pub enum Error {
     #[error("APIResponseError: {}", _0)]
     APIResponseError(String),
 
+    #[error("NotFoundError: {}", _0)]
+    NotFound(String),
+
     #[error("PackageError: {message}")]
     PackageError { message: String },
 
