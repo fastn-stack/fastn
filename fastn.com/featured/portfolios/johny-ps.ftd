@@ -24,7 +24,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,26 +39,31 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Johny PS
-previous-url: /featured/portfolios/
-github-url: https://github.com/FifthTry/jony-ps
+-- ds.distributors: Johny PS
+owners: $owner-fastn
+license-url: https://github.com/FifthTry/jony-ps/blob/main/LICENSE
+license: Creative Commons
+published-date: 23-Nov-2022
 
-
--- end: ds.page.layout-bar
-
+-- end: ds.page.abstract-bar
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.portfolios.johny-ps.png
 cta-url: https://fifthtry.github.io/jony-ps/
 cta-text: Demo
+github-url: https://fifthtry.github.io/jony-ps/
+;;cta-2-url: https://fifthtry.github.io/jony-ps/
+;;cta-2-text: User Manual
 
 -- ft-ui.grid-view: Featured Portfolio / Personal Sites
 if: { show-grid }
 templates: $text-ps
 more-link-text: View more
 more-link: /featured/portfolios/
+
+
 
 
 -- end: ds.page
@@ -83,3 +89,21 @@ screenshot: $fastn-assets.files.images.featured.portfolios.portfolio.png
 
 -- end: text-ps
 
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Meenu Kumari
+profile: featured/contributors/developers/meenu-kumari/
+avatar: $fastn-assets.files.featured.contributors.developers.meenu-kumari.meenu.jpg
+role: Developer
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- end: owner-fastn
