@@ -278,6 +278,6 @@ p {
     margin-block-end: 1em;
 }
 
-h1 {
+h1:only-child {
     margin-block-end: 0.67em
 }
