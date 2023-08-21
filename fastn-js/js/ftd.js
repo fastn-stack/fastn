@@ -20,6 +20,7 @@ let ftd = {
 
     copy_to_clipboard(args) {
         let text = args.a;
+        if (text instanceof fastn.mutableClass) text = text.get();
         if (text.startsWith("\\", 0)) {
             text = text.substring(1);
         }
