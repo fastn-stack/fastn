@@ -121,7 +121,6 @@ favicon: /-/fastn.com/images/favicon.svg
       skip: true
 
 
-
 - Ambassador Program: /ambassador-program/
   document: /student-programs/ambassador.ftd
   - Ambassadors: /ambassadors/
