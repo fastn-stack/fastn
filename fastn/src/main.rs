@@ -234,6 +234,10 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::mark_upto_date(&config, source, target).await;
     }
 
+    if matches.subcommand_matches("check").is_some() {
+        return fastn_core::post_build_check(&config).await;
+    }
+
     unreachable!("No subcommand matched");
 }
 
