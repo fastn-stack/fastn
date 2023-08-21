@@ -36,7 +36,7 @@ async fn check_index_in_folders(
         while let Some(current_entry) = entries.next_entry().await? {
             let current_entry_path = current_entry.path();
             let entry_path = camino::Utf8PathBuf::from_path_buf(current_entry_path)
-                .expect(format!("failed to read path: {:?}", current_entry.path()).as_str());
+                .unwrap_or_else(|_| panic!("failed to read path: {:?}", current_entry.path()));
 
             let is_ignored_directory = entry_path.is_dir() && is_ignored_directory(&entry_path);
 
