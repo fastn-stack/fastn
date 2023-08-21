@@ -1,3 +1,5 @@
+-- import: fastn-stack.github.io/fastn-js/utils as js-utils
+
 -- ds.page:
 
 -- switcher:
@@ -660,6 +662,139 @@ children: $summary-cards.cards
 
 -- end: summary-cards
 
+
+
+
+
+
+
+
+
+
+-- component logo-card:
+optional ftd.image-src logo:
+optional string id: logo-card
+optional string link:
+boolean $mouse-enter: false
+optional ftd.image-src logo:
+
+-- ftd.column:
+width if { ftd.device == "mobile" }: fill-container
+
+-- ftd.column:
+width if { ftd.device == "mobile" }: fill-container
+width.fixed.px: 316
+padding-bottom.px: 12
+border-width.px: 1
+border-radius.px: 8
+border-color: $inherited.colors.border-strong
+
+-- ftd.column:
+width: fill-container
+id: $logo-card.id
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+
+-- ftd.image:
+src: $logo-card.logo
+border-radius.px: 8
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.row:
+width: fill-container
+align-content: center
+align-self: center
+border-top-width.px: 1
+border-color: $inherited.colors.border-strong
+padding-top.px: 18
+
+-- ftd.row:
+width.fixed.px: 250
+spacing: space-between
+
+-- file-format: PNG
+$boolean: $logo-card.mouse-enter
+element-id: $logo-card.id
+file-name: fastn-logo.png
+
+-- ftd.row:
+height.fixed.px: 24
+border-right-width.px: 1
+border-color: $inherited.colors.border-strong
+
+-- end: ftd.row
+
+-- file-format: JPG
+$boolean: $logo-card.mouse-enter
+element-id: $logo-card.id
+file-name: fastn-logo.jpg
+
+-- ftd.row:
+height.fixed.px: 24
+border-right-width.px: 1
+border-color: $inherited.colors.border-strong
+
+-- end: ftd.row
+
+-- file-format: SVG
+$boolean: $logo-card.mouse-enter
+element-id: $logo-card.id
+link: $logo-card.link
+file-name: fastn-logo.svg
+open: true
+
+-- end: ftd.row
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: logo-card
+
+
+
+
+
+
+
+
+
+
+-- component file-format: 
+caption title: 
+boolean $boolean: false
+string element-id: file-format
+string file-name:
+boolean $mouse-enter: false
+optional string link:
+optional boolean open: false
+
+-- ftd.row:
+spacing.fixed.px: 12
+
+-- ftd.image:
+src: $fastn-assets.files.images.download.svg
+src if { file-format.mouse-enter }: $fastn-assets.files.images.download-hover.svg
+width.fixed.px: 16
+$on-click$: $js-utils.download-as-image(element_id = $file-format.element-id, filename = $file-format.file-name)
+$on-mouse-enter$: $ftd.set-bool($a = $file-format.mouse-enter, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $file-format.mouse-enter, v = false)
+link: $file-format.link
+open-in-new-tab: $file-format.open
+
+-- ftd.text: $file-format.title
+color: $inherited.colors.text-strong
+role: $inherited.types.copy-small
+
+-- end: ftd.row
+
+-- end: file-format
 
 
 
