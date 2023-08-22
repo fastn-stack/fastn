@@ -630,6 +630,7 @@ pub fn replace_markers_2023(
     font_style: &str,
     default_css: &str,
     base_url: &str,
+    config: &mut fastn_core::Config,
 ) -> String {
     ftd::html::utils::trim_all_lines(
         s.replace(
@@ -639,6 +640,16 @@ pub fn replace_markers_2023(
         .replace(
             "__html_body__",
             format!("{}{}", ssr_body, font_style).as_str(),
+        )
+        .replace(
+            "__favicon_html_tag__",
+            resolve_favicon(
+                config.root.as_str(),
+                config.package.name.as_str(),
+                &config.package.favicon,
+            )
+            .unwrap_or_default()
+            .as_str(),
         )
         .replace(
             "__script_file__",
