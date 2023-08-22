@@ -1,6 +1,6 @@
 -- import: fastn.com/utils
 
--- ds.page:
+-- ds.page: Brand Guidelines
 full-width: true
 sidebar: false
 
@@ -55,6 +55,7 @@ width: fill-container
 spacing.fixed.px: 24
 wrap: true
 padding-vertical.px: 24
+align-content: center
 
 -- utils.logo-card:
 logo: $fastn-assets.files.images.brand-guidelines.logo-dark.svg
