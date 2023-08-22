@@ -779,14 +779,23 @@ optional boolean open: false
 spacing.fixed.px: 12
 
 -- ftd.image:
+if: { file-format.title != "SVG" }
 src: $fastn-assets.files.images.download.svg
 src if { file-format.mouse-enter }: $fastn-assets.files.images.download-hover.svg
 width.fixed.px: 16
 $on-click$: $js-utils.download-as-image(element_id = $file-format.element-id, filename = $file-format.file-name)
 $on-mouse-enter$: $ftd.set-bool($a = $file-format.mouse-enter, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $file-format.mouse-enter, v = false)
+
+-- ftd.image:
+if: { file-format.title == "SVG" }
+src: $fastn-assets.files.images.download.svg
+src if { file-format.mouse-enter }: $fastn-assets.files.images.download-hover.svg
+width.fixed.px: 16
+$on-mouse-enter$: $ftd.set-bool($a = $file-format.mouse-enter, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $file-format.mouse-enter, v = false)
 link: $file-format.link
-open-in-new-tab: $file-format.open
+open-in-new-tab: true
 
 -- ftd.text: $file-format.title
 color: $inherited.colors.text-strong

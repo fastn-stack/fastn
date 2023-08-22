@@ -59,22 +59,22 @@ padding-vertical.px: 24
 -- utils.logo-card:
 logo: $fastn-assets.files.images.brand-guidelines.logo-dark.svg
 id: logo-card-1
-link: http://fastn-community.github.io/bling/static/logo-dark-img.svg
+link: https://fastn.com/images/brand-guidelines/logo-dark-img.svg
 
 -- utils.logo-card:
 logo: $fastn-assets.files.images.brand-guidelines.logo-light.svg
 id: logo-card-2
-link: http://fastn-community.github.io/bling/static/logo-light-img.svg
+link: https://fastn.com/images/brand-guidelines/logo-light-img.svg
 
 -- utils.logo-card:
 logo: $fastn-assets.files.images.brand-guidelines.logo-without-bg.svg
 id: logo-card-3
-link: http://fastn-community.github.io/bling/static/logo-without-bg-img.svg
+link: https://fastn.com/images/brand-guidelines/logo-without-bg-img.svg
 
 -- utils.logo-card:
 logo: $fastn-assets.files.images.brand-guidelines.logo-without-bg-white.svg
 id: logo-card-4
-link: http://fastn-community.github.io/bling/static/logo-without-bg-white-img.svg
+link: https://fastn.com/images/brand-guidelines/logo-without-bg-white-img.svg
 
 -- end: ftd.row
 
