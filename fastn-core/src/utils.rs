@@ -49,6 +49,21 @@ pub fn print_end(msg: &str, start: std::time::Instant) {
     }
 }
 
+pub fn print_error(msg: &str, start: std::time::Instant) {
+    use colored::Colorize;
+
+    if fastn_core::utils::is_test() {
+        println!("done in <omitted>");
+    } else {
+        eprintln!(
+            "\r{:?} {} in {:?}.                          ",
+            std::time::Instant::now(),
+            msg.red(),
+            start.elapsed(),
+        );
+    }
+}
+
 pub fn value_to_colored_string(value: &serde_json::Value, indent_level: u32) -> String {
     use colored::Colorize;
 

@@ -5,6 +5,7 @@ pub async fn build(
     base_url: &str,
     ignore_failed: bool,
     test: bool,
+    check_build: bool,
 ) -> fastn_core::Result<()> {
     tokio::fs::create_dir_all(config.build_dir()).await?;
     let documents = get_documents_for_current_package(config).await?;
@@ -47,7 +48,12 @@ pub async fn build(
         handle_file(document, config, base_url, ignore_failed, test, false).await?;
     }
 
-    config.download_fonts().await
+    config.download_fonts().await?;
+
+    if check_build {
+        return fastn_core::post_build_check(config).await;
+    }
+    Ok(())
 }
 
 #[tracing::instrument(skip(config, documents))]
@@ -80,10 +86,14 @@ async fn handle_file(
     test: bool,
     no_static: bool,
 ) -> fastn_core::Result<()> {
+    dbg!(document.get_id());
     let start = std::time::Instant::now();
     print!("Processing {} ... ", document.get_id_with_package());
 
-    if let Ok(()) = handle_file_(document, config, base_url, ignore_failed, test, no_static).await {
+    let process_status =
+        handle_file_(document, config, base_url, ignore_failed, test, no_static).await;
+
+    if process_status.is_ok() {
         fastn_core::utils::print_end(
             format!(
                 "Processed {}/{}",
@@ -94,7 +104,18 @@ async fn handle_file(
             start,
         );
     }
-
+    if process_status.is_err() {
+        fastn_core::utils::print_error(
+            format!(
+                "Failed {}/{}",
+                config.package.name.as_str(),
+                document.get_id()
+            )
+            .as_str(),
+            start,
+        );
+        return process_status;
+    }
     Ok(())
 }
 

@@ -1,6 +1,6 @@
 pub const INDEX_FILE: &str = "index.html";
 pub const BUILD_FOLDER: &str = ".build";
-pub const IGNORED_DIRECTORIES: [&str; 3] = ["-", "images", "static"];
+pub const IGNORED_DIRECTORIES: [&str; 4] = ["-", "images", "static", "assets"];
 
 pub async fn post_build_check(config: &fastn_core::Config) -> fastn_core::Result<()> {
     let build_path = config.root.join(BUILD_FOLDER);
@@ -65,10 +65,8 @@ async fn check_index_in_folders(
 }
 
 fn is_ignored_directory(path: &camino::Utf8PathBuf) -> bool {
-    for dir in IGNORED_DIRECTORIES {
-        if path.ends_with(dir) {
-            return true;
-        }
-    }
-    false
+    IGNORED_DIRECTORIES
+        .iter()
+        .find(|dir| path.ends_with(dir))
+        .is_some()
 }
