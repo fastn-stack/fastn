@@ -260,6 +260,7 @@ fastn_dom.PropertyKind = {
     Css: 104,
     Js: 105,
     LinkRel: 106,
+    InputMaxLength: 107,
 };
 
 
@@ -1425,6 +1426,8 @@ class Node2 {
             this.attachAttribute("type", staticValue);
         } else if (kind === fastn_dom.PropertyKind.DefaultTextInputValue) {
             this.attachAttribute("value", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.InputMaxLength) {
+            this.attachAttribute("maxlength", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Placeholder) {
             this.attachAttribute("placeholder", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Multiline) {

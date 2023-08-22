@@ -219,6 +219,7 @@ impl CheckBox {
 pub struct TextInput {
     pub placeholder: Option<ftd::js::Value>,
     pub multiline: Option<ftd::js::Value>,
+    pub max_length: Option<ftd::js::Value>,
     pub _type: Option<ftd::js::Value>,
     pub default_value: Option<ftd::js::Value>,
     pub enabled: Option<ftd::js::Value>,
@@ -257,6 +258,11 @@ impl TextInput {
             ),
             enabled: ftd::js::value::get_optional_js_value(
                 "enabled",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            max_length: ftd::js::value::get_optional_js_value(
+                "max-length",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
@@ -329,6 +335,16 @@ impl TextInput {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 default_value.to_set_property(
                     fastn_js::PropertyKind::DefaultTextInputValue,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
+        }
+        if let Some(ref max_length) = self.max_length {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                max_length.to_set_property(
+                    fastn_js::PropertyKind::InputMaxLength,
                     doc,
                     kernel.name.as_str(),
                     rdata,

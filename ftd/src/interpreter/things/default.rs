@@ -9587,6 +9587,12 @@ pub fn text_input_function() -> ftd::interpreter::ComponentDefinition {
                         .into_kind_data(),
                 ),
                 ftd::interpreter::Argument::default(
+                    "max-length",
+                    ftd::interpreter::Kind::integer()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter::Argument::default(
                     "type",
                     ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_TEXT_INPUT_TYPE)
                         .into_optional()

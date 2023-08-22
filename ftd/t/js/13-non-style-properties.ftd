@@ -76,6 +76,10 @@ enabled: false
 -- ftd.text-input:
 default-value: This is default text
 
+-- ftd.text-input:
+placeholder: Max input length 10
+max-length: 10
+
 -- end: ftd.column
 
 ;; ---------------------- KERNEL(ftd.iframe) --------------------
