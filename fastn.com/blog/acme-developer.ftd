@@ -1,0 +1,507 @@
+-- import: fastn.com/ftd as ftd-index
+-- import: fastn-community.github.io/bling/chat
+
+
+-- ds.page: Tales from ACME's Developer - Case Study
+
+ACME Inc, an award-winning startup that provides consultancy services, has 
+chosen `fastn` as the foundation for its 
+[official website](https://acme-inc-git-new-landing-page-fifthtry.vercel.app/index.html). 
+
+Following an intensive quarterly review, ACME's Design, SEO, Marketing, and 
+Business teams generated a plethora of modifications for their official website. 
+
+The dedicated developer, Ganesh is the key figure responsible for implementing 
+the changes to the website. Each of Ganesh's tasks is presented as distinct 
+scenes, showcasing his adeptness and fastn's agility in handling requests from 
+the different teams. 
+
+
+-- ds.h1: Scene 1: Revamping ACME's Look in a Blink
+
+The Design Team requests Ganesh to Revamp the ACME website's theme layout, 
+colour scheme, and typography to improve user experience. 
+
+
+-- ds.h2: - Before
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.package: fastn-community.github.io/acme-inc
+
+\-- fastn.dependency: fastn-community.github.io/midnight-storm as theme
+\-- fastn.dependency: fastn-community.github.io/midnight-storm-cs as cs
+\-- fastn.dependency: fastn-community.github.io/midnight-storm-typography as typo
+
+
+-- ds.image:
+src: $fastn-assets.files.images.blog.old-layout.png
+width.fixed.percent: 95
+
+
+-- ds.h2: - Ganesh's Solution
+
+With a single line of code, he transformed the website. By removing the 
+`midnight storm` and introducing the `midnight rush` package as a fastn dependency 
+in the `fastn.ftd` file, he updated the layout, colour scheme, and typography 
+seamlessly.
+
+-- ds.image: [PR for New layout, color scheme and font](https://github.com/fastn-community/acme-inc/pull/9)
+src: $fastn-assets.files.images.blog.layout-pr.png
+width.fixed.percent: 95
+
+
+-- ds.h2: - After
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.package: fastn-community.github.io/acme-inc
+
+\-- fastn.dependency: fastn-community.github.io/midnight-rush as theme
+\-- fastn.dependency: fastn-community.github.io/midnight-rush-cs as cs
+\-- fastn.dependency: fastn-community.github.io/midnight-rush-typography as typo
+
+-- ds.image: 
+src: $fastn-assets.files.images.blog.new-layout.png
+width.fixed.percent: 95
+
+
+-- ds.h1: Scene 2: Post-Lunch Price Updates
+
+In the midst of the afternoon buzz, Ganesh's screen illuminates with a new 
+message. The Business Team's insights from the recent meeting have prompted to 
+modify the Basic Pricing Plan values to enhance conversions.
+
+-- ds.h2: - Before
+
+-- ds.code:
+lang: ftd
+
+\-- pricing.pricing-card: Startup Plan
+active: true 
+price: 99
+currency: \$
+subscription: monthly
+feature-list: $pricing.startup-feature-list
+
+
+\-- pricing.pricing-card: Enterprise Plan
+active: false 
+price: 153
+currency: \$
+subscription: monthly
+feature-list: $pricing.enterprise-feature-list
+
+-- ds.image: 
+src: $fastn-assets.files.images.blog.old-price.png
+width.fixed.percent: 95
+
+-- ds.h2: - Ganesh's Solution
+
+By editing the `pricing.ftd` and updating the existing prices with the new 
+figures, he swiftly implemented the change. As the pricing plan is a 
+**component-based design**, he only needed to adjust the relevant values.
+
+-- ds.image: [PR for Pricing Page Edit](https://github.com/fastn-community/acme-inc/pull/5)
+src: $fastn-assets.files.images.blog.layout-pr.png
+width.fixed.percent: 95
+
+-- ds.h2: - After
+
+-- ds.code:
+lang: ftd
+
+\-- pricing.pricing-card: Startup Plan
+active: true 
+price: 89
+currency: \$
+subscription: monthly
+feature-list: $pricing.startup-feature-list
+
+
+\-- pricing.pricing-card: Enterprise Plan
+active: false 
+price: 135
+currency: \$
+subscription: monthly
+feature-list: $pricing.enterprise-feature-list
+
+-- ds.image: 
+src: $fastn-assets.files.images.blog.new-price.png
+width.fixed.percent: 95
+
+
+-- ds.h1: Scene 3: The Official Whatsapp Group
+
+-- ds.output:
+
+-- message-left: Hey Team, Please welcome Ayush Soni, our newly joined VP of Product. 
+
+-- end: message-left
+
+-- message-right: Welcome to the ACME team, Ayush.
+
+-- end: message-right
+
+-- message-left: Hey Ganesh, add "Ayush Soni" to our team's page. 
+
+-- end: message-left
+
+-- message-right: Done. Here is the link: https://acme-inc-git-adding-team-member-fifthtry.vercel.app/team/
+
+-- end: message-right
+
+-- end: ds.output
+
+-- ds.h2: - Before
+
+-- ds.code:
+lang: ftd
+
+\-- team.team.members:
+
+\-- team.member: Nandhini Devi
+profile: CEO & Founder
+image: $assets.files.assets.nandhini-devi.jpg
+
+Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
+
+\-- team.member: Ajit Garg
+profile: VP of Marketing
+image: $assets.files.assets.ajit-garg.jpg
+
+Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
+
+-- ds.image: 
+src: $fastn-assets.files.images.blog.old-team.png
+width.fixed.percent: 95
+
+-- ds.h2: - Ganesh's Solution
+
+He leveraged the **component-based design** once-again for team member details. 
+He added a new team member component, including Ayush Soni's details - name, 
+designation, profile image, and description.
+
+-- ds.image: [PR for Adding New Team Member](https://github.com/fastn-community/acme-inc/pull/4)
+src: $fastn-assets.files.images.blog.team-pr.png
+width.fixed.percent: 95
+
+-- ds.h2: - After
+
+-- ds.code:
+lang: ftd 
+
+
+\-- team.team.members:
+
+\-- team.member: Nandhini Devi
+profile: CEO & Founder
+image: $assets.files.assets.nandhini-devi.jpg
+
+Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
+
+\-- team.member: Ajit Garg
+profile: VP of Marketing
+image: $assets.files.assets.ajit-garg.jpg
+
+Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
+
+\-- team.member: Ayush Soni
+profile: VP of Product
+image: $assets.files.assets.ayush-soni.jpg
+
+Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
+
+-- ds.image: 
+src: $fastn-assets.files.images.blog.new-team.png
+width.fixed.percent: 95
+
+
+-- ds.h1: Scene 4: A Rapid Diwali Offer Page Creation
+
+Answering the Marketing team's call, Ganesh's new task is to Create and publish 
+a new Diwali offer landing page.
+
+-- ds.h2: Ganesh's Implementation
+
+He created a new `offers.ftd` page and built a landing page featuring an image, 
+title, and CTA. 
+
+-- ds.image: [PR for New Offer Page](https://github.com/fastn-community/acme-inc/pull/11)
+src: $fastn-assets.files.images.blog.offer-pr.png
+width.fixed.percent: 95
+
+-- ds.h3: Input
+
+-- ds.code:
+lang: ftd 
+
+
+\-- ws.page:
+
+
+\-- ws.hero-image-left: Diwali Dhamaka Offer 2023
+cta-primary: Claim Now
+cta-primary-link: /pricing/
+image: $assets.files.assets.diwali-2023.png
+
+Avail 20% flat discount on our premium package this Diwali. 
+
+Offer valid till 30th Nov 2023.
+
+\-- end: ws.page
+
+-- ds.h3: Output
+
+-- ds.image: 
+src: $fastn-assets.files.images.blog.offer.png
+width.fixed.percent: 95
+
+-- ds.h1: Scene 5: The Impromptu Email Notification
+
+As the digital sunsets, Ganesh receives an email notification from the SEO Team. 
+The Requirement: URL Redirection. Based on Google Analytics data, the SEO team 
+recommends, redirect `/launching-color-support/` to `/color-support/`.
+
+-- ds.h2: Ganesh's Implementation
+
+Opening the fastn.ftd file, in one line, he introduced fastn.redirect from 
+`/launching-color-support/` to `/color-support/`. 
+
+-- ds.image: [PR for URL Redirect](https://github.com/fastn-community/acme-inc/pull/8)
+src: $fastn-assets.files.images.blog.offer-pr.png
+width.fixed.percent: 95
+
+-- ds.code:
+lang: ftd 
+
+\-- fastn.redirects:
+/launching-color-support/: /color-support/
+
+-- ds.h1: Conclusion
+
+The ACME case study is a testament to the capabilities of a 
+website powered by `fastn`. It illuminates how fastnempowers developers to swiftly 
+implement changes and cater to the ever-evolving needs of a startup. 
+
+Stay tuned for more tales from ACME Inc. 
+
+
+
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component message-left:
+optional caption title:
+ftd.image-src avatar: $fastn-assets.files.images.blog.nandy.png
+boolean round-avatar: true
+children container:
+
+-- ftd.column:
+margin-bottom.px: 24
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.image:
+if: { !$message-left.round-avatar }
+src: $message-left.avatar
+width.fixed.px: 32
+height: auto
+margin-right.px: 20
+
+-- ftd.image:
+if: { $message-left.round-avatar }
+src: $message-left.avatar
+width.fixed.px: 32
+height: auto
+margin-right.px: 20
+border-radius.px: 32
+
+-- ftd.column:
+width.fixed.px: 8
+height.fixed.px: 8
+background.solid: #FFF
+border-top-width.px: 18
+border-left-width.px: 34
+border-right-width.px: 0
+border-top-color: $inherited.colors.cta-secondary.border
+border-bottom-color: $inherited.colors.cta-secondary.border
+border-left-color: $inherited.colors.background.base
+border-right-color: $inherited.colors.cta-secondary.border
+anchor: parent
+left.px: 38
+z-index: 0
+top.px: 12
+
+-- end: ftd.column
+
+-- ftd.column:
+border-width.px: 1
+border-color: $inherited.colors.cta-secondary.border
+background.solid: $inherited.colors.background.step-1
+padding-vertical.px: 12
+padding-horizontal.px: 22
+border-radius.px: 10
+width: fill-container
+z-index: 1
+margin-top.px: 6
+
+-- ftd.text: $message-left.title
+color: $inherited.colors.text
+role: $inherited.types.label-large
+width: fill-container
+text-align: start
+
+-- ftd.column:
+children: $message-left.container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: message-left
+
+
+
+
+
+
+
+
+
+
+-- component message-right:
+optional caption title:
+ftd.image-src avatar: $fastn-assets.files.images.blog.nandy.png
+boolean round-avatar: true
+children container:
+
+-- ftd.column:
+margin-bottom.px: 24
+align-content: right
+width: fill-container
+
+-- ftd.column:
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.column:
+border-width.px: 1
+border-color: $inherited.colors.cta-secondary.border
+background.solid: $inherited.colors.background.step-1
+padding-vertical.px: 12
+padding-horizontal.px: 22
+border-radius.px: 10
+z-index: 1
+margin-top.px: 6
+
+-- ftd.text: $message-right.title
+color: $inherited.colors.text
+role: $inherited.types.label-large
+width: fill-container
+text-align: end
+
+-- ftd.column:
+children: $message-right.container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width.fixed.px: 8
+height.fixed.px: 8
+background.solid: #FFF
+border-top-width.px: 0
+border-bottom-width.px: 18
+border-left-width.px: 34
+border-right-width.px: 0
+border-bottom-color: $inherited.colors.background.base
+border-left-color:  $inherited.colors.cta-secondary.border
+border-right-color: $inherited.colors.cta-secondary.border
+anchor: parent
+right.px: 38
+z-index: 0
+top.px: 12
+
+-- end: ftd.column
+
+-- ftd.image:
+if: { !$message-right.round-avatar }
+src: $message-right.avatar
+width.fixed.px: 32
+height: auto
+margin-left.px: 26
+
+-- ftd.image:
+if: { $message-right.round-avatar }
+src: $message-right.avatar
+width.fixed.px: 32
+height: auto
+margin-left.px: 20
+border-radius.px: 32
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: message-right
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
