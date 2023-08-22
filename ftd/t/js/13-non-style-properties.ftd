@@ -8,6 +8,10 @@ align-content: center
 link: https://www.fastn.com
 margin.px: 20
 
+-- ftd.image:
+src: https://picsum.photos/200/300
+link: https://www.fastn.com
+
 -- end: ftd.column
 
 ;; ----------------------- LINK REL -----------------------

@@ -2243,26 +2243,6 @@ impl Common {
                 region.to_set_property(fastn_js::PropertyKind::Region, doc, element_name, rdata),
             ));
         }
-        if let Some(ref link) = self.link {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                link.to_set_property(fastn_js::PropertyKind::Link, doc, element_name, rdata),
-            ));
-        }
-        if let Some(ref link_rel) = self.link_rel {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                link_rel.to_set_property(fastn_js::PropertyKind::LinkRel, doc, element_name, rdata),
-            ));
-        }
-        if let Some(ref open_in_new_tab) = self.open_in_new_tab {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                open_in_new_tab.to_set_property(
-                    fastn_js::PropertyKind::OpenInNewTab,
-                    doc,
-                    element_name,
-                    rdata,
-                ),
-            ));
-        }
         if let Some(ref align_self) = self.align_self {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 align_self.to_set_property(
@@ -2791,6 +2771,26 @@ impl Common {
         if let Some(ref shadow) = self.shadow {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 shadow.to_set_property(fastn_js::PropertyKind::Shadow, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref link) = self.link {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                link.to_set_property(fastn_js::PropertyKind::Link, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref link_rel) = self.link_rel {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                link_rel.to_set_property(fastn_js::PropertyKind::LinkRel, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref open_in_new_tab) = self.open_in_new_tab {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                open_in_new_tab.to_set_property(
+                    fastn_js::PropertyKind::OpenInNewTab,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
             ));
         }
         component_statements
