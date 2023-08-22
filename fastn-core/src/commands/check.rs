@@ -65,8 +65,5 @@ async fn check_index_in_folders(
 }
 
 fn is_ignored_directory(path: &camino::Utf8PathBuf) -> bool {
-    IGNORED_DIRECTORIES
-        .iter()
-        .find(|dir| path.ends_with(dir))
-        .is_some()
+    IGNORED_DIRECTORIES.iter().any(|dir| path.ends_with(dir))
 }
