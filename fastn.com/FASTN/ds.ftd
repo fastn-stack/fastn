@@ -167,10 +167,11 @@ children uis:
 optional caption title:
 optional body body:
 
--- page: fastn vs React, Angular and Javascript
+-- page: $page-with-get-started-and-no-right-sidebar.title
 sidebar: false
 right-sidebar: []
 
+$page-with-get-started-and-no-right-sidebar.body
 
 -- ftd.column:
 spacing.fixed.em: 0.8
