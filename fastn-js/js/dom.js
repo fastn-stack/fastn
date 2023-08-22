@@ -714,10 +714,21 @@ class Node2 {
             this.#node.updateTagName(name);
         }
     }
-    updateToAnchor() {
+    updateToAnchor(url) {
         let node_kind = this.#kind;
         if (ssr) {
-            if (node_kind !== fastn_dom.ElementKind.Image) this.updateTagName('a');
+            if (node_kind !== fastn_dom.ElementKind.Image) {
+                this.updateTagName('a');
+                this.attachAttribute("href", url);
+            }
+        }
+        if (hydrating) {
+            if (node_kind === fastn_dom.ElementKind.Image) {
+                let anchor_element = document.createElement("a");
+                anchor_element.href = url;
+                anchor_element.appendChild(this.#node);
+                this.#parent.appendChild(anchor_element);
+            }
         }
     }
     updatePositionForNodeById(node_id, value) {
@@ -738,7 +749,7 @@ class Node2 {
     }
     updateMetaTitle(value) {
         if (!ssr && hydrating) {
-            window.document.title = value;
+            if (!fastn_utils.isNull(value)) window.document.title = value;
         }
     }
     addMetaTagByName(name, value) {
@@ -1444,8 +1455,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
-            this.updateToAnchor();
-            this.attachAttribute("href", staticValue);
+            this.updateToAnchor(staticValue);
         } else if (kind === fastn_dom.PropertyKind.LinkRel) {
             if (fastn_utils.isNull(staticValue)) {
                 this.removeAttribute("rel");

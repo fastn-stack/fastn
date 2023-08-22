@@ -10,7 +10,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-1 __jc-3 __ali-4"><a data-id="4" href="https://www.fastn.com" class="__m-5">This is a link</a></div><div data-id="5" class="ft_column __w-1 __jc-3 __ali-4"><a data-id="6" href="https://www.fastn.com" rel="nofollow sponsored">No follow link</a></div><div data-id="7" class="ft_column __w-1 __jc-3 __ali-4"><a data-id="8" href="https://www.fastn.com" target="_blank" class="__m-5">This is a link (will open in new tab)</a></div><div data-id="9" class="ft_column __w-1 __mt-6 __mb-7"><input data-id="10" type="checkbox" checked></input><input data-id="11" type="checkbox" checked="false" disabled></input></div><div data-id="12" class="ft_column __w-1 __mt-6 __mb-7"><input data-id="13" placeholder="Enter some text"></input><textarea data-id="14" placeholder="Multiline input"></textarea><input data-id="15" type="password"></input><input data-id="16" placeholder="This would be disabled" disabled></input><input data-id="17" value="This is default text"></input><input data-id="18" placeholder="Max input length 10" maxlength="10"></input></div><iframe data-id="19" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik"></iframe><pre data-id="20" class="language-ftd fastn-theme-dark"><code data-id="21" class="language-ftd fastn-theme-dark">-- ftd.text: Hello World
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-1 __jc-3 __ali-4"><a data-id="4" href="https://www.fastn.com" class="__m-5">This is a link</a><img data-id="5" src="https://picsum.photos/200/300"></img></div><div data-id="6" class="ft_column __w-1 __jc-3 __ali-4"><a data-id="7" href="https://www.fastn.com" rel="nofollow sponsored">No follow link</a></div><div data-id="8" class="ft_column __w-1 __jc-3 __ali-4"><a data-id="9" href="https://www.fastn.com" target="_blank" class="__m-5">This is a link (will open in new tab)</a></div><div data-id="10" class="ft_column __w-1 __mt-6 __mb-7"><input data-id="11" type="checkbox" checked></input><input data-id="12" type="checkbox" checked="false" disabled></input></div><div data-id="13" class="ft_column __w-1 __mt-6 __mb-7"><input data-id="14" placeholder="Enter some text"></input><textarea data-id="15" placeholder="Multiline input"></textarea><input data-id="16" type="password"></input><input data-id="17" placeholder="This would be disabled" disabled></input><input data-id="18" value="This is default text"></input><input data-id="19" placeholder="Max input length 10" maxlength="10"></input></div><iframe data-id="20" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik"></iframe><pre data-id="21" class="language-ftd fastn-theme-dark"><code data-id="22" class="language-ftd fastn-theme-dark">-- ftd.text: Hello World
 </code></pre></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
@@ -31,8 +31,16 @@ let main = function (parent) {
   parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is a link", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
+  },
+  function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Image);
+    rooti0.setProperty(fastn_dom.PropertyKind.ImageSrc, fastn.recordInstance({
+      dark: "https://picsum.photos/200/300",
+      light: "https://picsum.photos/200/300"
+    }), inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
   }
   ]), inherited);
   let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
@@ -52,9 +60,9 @@ let main = function (parent) {
   parenti2.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is a link (will open in new tab)", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.OpenInNewTab, true, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
   }
   ]), inherited);
   let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
