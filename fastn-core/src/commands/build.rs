@@ -19,7 +19,7 @@ pub async fn build(
                 return handle_only_id(id, config, base_url, ignore_failed, test, documents).await
             }
             None => {
-                incremental_build(config, documents, base_url, ignore_failed, test).await?;
+                incremental_build(config, &documents, base_url, ignore_failed, test).await?;
             }
         }
     }
@@ -164,10 +164,20 @@ mod cache {
     }
 }
 
+fn get_dependency_name_without_package_name(package_name: &str, dependency_name: &str) -> String {
+    if let Some(remaining) = dependency_name.strip_prefix(&format!("{}/", package_name)) {
+        remaining.to_string()
+    } else {
+        dependency_name.to_string()
+    }
+    .trim_end_matches('/')
+    .to_string()
+}
+
 #[tracing::instrument(skip(config, documents))]
 async fn incremental_build(
     config: &mut fastn_core::Config,
-    documents: std::collections::BTreeMap<String, fastn_core::File>,
+    documents: &std::collections::BTreeMap<String, fastn_core::File>,
     base_url: &str,
     ignore_failed: bool,
     test: bool,
@@ -176,17 +186,96 @@ async fn incremental_build(
 
     let mut c = dbg!(cache::get()?);
 
-    for document in documents.values() {
-        handle_file(
-            document,
-            config,
-            base_url,
-            ignore_failed,
-            test,
-            true,
-            Some(&mut c),
-        )
-        .await?;
+    let mut unresolved_dependencies: Vec<String> = vec!["index".to_string()];
+
+    let mut resolved_dependencies: Vec<String> = vec![];
+
+    let mut resolving_dependencies: Vec<String> = vec![];
+
+    while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
+        dbg!(unresolved_dependency.as_str());
+
+        dbg!(&unresolved_dependencies);
+
+        if let Some(doc) = dbg!(c.documents.get(
+            get_dependency_name_without_package_name(
+                config.package.name.as_str(),
+                unresolved_dependency.as_str()
+            )
+            .as_str()
+        )) {
+            let mut own_resolved_dependencies: Vec<String> = vec![];
+
+            for dep in &doc.dependencies {
+                if resolved_dependencies.contains(dep) {
+                    own_resolved_dependencies.push(dep.to_string());
+                    continue;
+                }
+
+                unresolved_dependencies.push(dep.to_string());
+            }
+
+            dbg!(
+                &own_resolved_dependencies,
+                &doc.dependencies,
+                &unresolved_dependency
+            );
+
+            if own_resolved_dependencies.eq(&doc.dependencies) {
+                dbg!(
+                    &own_resolved_dependencies,
+                    &doc.dependencies,
+                    &unresolved_dependency
+                );
+                for (doc_id, doc) in documents {
+                    if dbg!(doc_id.eq(format!(
+                        "{}.ftd",
+                        get_dependency_name_without_package_name(
+                            config.package.name.as_str(),
+                            unresolved_dependency.as_str()
+                        )
+                    )
+                    .as_str()))
+                    {
+                        handle_file(
+                            doc,
+                            config,
+                            base_url,
+                            ignore_failed,
+                            test,
+                            true,
+                            Some(&mut c),
+                        )
+                        .await?;
+
+                        break;
+                    }
+                }
+
+                resolved_dependencies.push(unresolved_dependency.to_string());
+                if unresolved_dependencies.is_empty() {
+                    if let Some(resolving_dependency) = resolving_dependencies.pop() {
+                        unresolved_dependencies.push(resolving_dependency);
+                    }
+                }
+            } else {
+                resolving_dependencies.push(unresolved_dependency.to_string());
+            }
+        } else {
+            unresolved_dependencies.push(unresolved_dependency.to_string());
+            for doc in documents.values() {
+                handle_file(
+                    doc,
+                    config,
+                    base_url,
+                    ignore_failed,
+                    test,
+                    true,
+                    Some(&mut c),
+                )
+                .await?;
+            }
+        }
     }
 
     // TODO: Handle deleted files (files present in cache/.build but not in documents)
@@ -195,6 +284,62 @@ async fn incremental_build(
 
     Ok(())
 }
+
+/**
+
+for (doc_id, document) in c.documents.clone() {
+            if doc_id.eq(unresolved_document.as_str()) {
+                unresolved_documents.push(unresolved_document.to_string());
+
+                if document.dependencies.is_empty() {
+                    for doc in documents.values() {
+                        if doc.get_id_with_package().eq(unresolved_document.as_str()) {
+                            handle_file(
+                                doc,
+                                config,
+                                base_url,
+                                ignore_failed,
+                                test,
+                                true,
+                                Some(&mut c),
+                            )
+                            .await?;
+
+                            resolved_dependencies.push(unresolved_document.to_string());
+                        }
+                    }
+                }
+
+                for dep in &document.dependencies {
+                    if resolved_dependencies.contains(&dep) {
+                        continue;
+                    }
+
+                    unresolved_documents.push(dep.to_string());
+                }
+
+                break;
+            }
+        }
+
+        for doc in documents.values() {
+            if doc.get_id_with_package().eq(unresolved_document.as_str()) {
+                handle_file(
+                    doc,
+                    config,
+                    base_url,
+                    ignore_failed,
+                    test,
+                    true,
+                    Some(&mut c),
+                )
+                .await?;
+
+                resolved_dependencies.push(unresolved_document.to_string());
+            }
+        }
+
+ */
 
 #[tracing::instrument(skip(config, documents))]
 async fn handle_only_id(
