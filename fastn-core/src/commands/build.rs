@@ -86,7 +86,6 @@ async fn handle_file(
     test: bool,
     no_static: bool,
 ) -> fastn_core::Result<()> {
-    dbg!(document.get_id());
     let start = std::time::Instant::now();
     print!("Processing {} ... ", document.get_id_with_package());
 
