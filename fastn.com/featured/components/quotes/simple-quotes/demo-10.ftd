@@ -1,0 +1,108 @@
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn-community.github.io/footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fastn.com/featured as ft-ui
+
+
+
+
+
+-- ds.page: 
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/fastn-community/doc-site
+full-width: true
+distribution-bar: true
+full-width-bar: true
+
+-- ds.page.footer:
+
+-- footer.social-sideline-footer:
+social: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-url: /
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+-- end: ds.page.footer
+
+-- ds.page.abstract-bar:
+
+-- ds.distributors: Scorpion
+owners: $owner-fastn
+license-url: https://github.com/fastn-community/bling/blob/main/LICENSE
+license: Creative Commons
+published-date: 17-Jun-2022
+
+-- end: ds.page.abstract-bar
+
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured Quote Components
+templates: $quotes
+more-link-text: View more
+more-link: /featured/components/quotes/
+show-large: true
+
+-- end: ds.page.full-width-wrap
+
+-- ds.preview-card:
+image: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-10.png
+cta-url: https://fastn-community.github.io/bling/quote/
+cta-text: Demo
+github-url: https://github.com/fastn-community/bling/
+cta-2-url: https://fastn-community.github.io/bling/quote/
+cta-2-text: User Manual
+
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- common.owner: Priyanka Yadav
+profile: featured/contributors/developers/priyanka-yadav/
+avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+role: Developer
+
+-- end: owner-fastn
+
+
+-- ft-ui.template list quotes:
+
+-- ft-ui.template: Matte
+template-url: /featured/components/quotes/simple-quotes/demo-9/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-9.png
+
+-- ft-ui.template: Silver
+template-url: /featured/components/quotes/simple-quotes/demo-11/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-11.png
+
+-- ft-ui.template: Storm Cloud
+template-url: /featured/components/quotes/simple-quotes/demo-12/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-12.png
+
+-- end: quotes
+

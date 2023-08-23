@@ -698,7 +698,42 @@ skip: true
     - Modal 1: /featured/components/modals/modal-1/
     skip: true  
     - Modal 2: /featured/components/modals/modal-2/
-    skip: true  
+    skip: true
+  - Quotes: /featured/components/quotes/
+    - Simple Quotes: /featured/components/quotes/simple-quotes/
+    skip: true
+      - Chalice: /featured/components/quotes/simple-quotes/demo-1/
+      skip: true
+      - Rustic: /featured/components/quotes/simple-quotes/demo-2/
+      skip: true
+      - Echo: /featured/components/quotes/simple-quotes/demo-3/
+      skip: true
+      - Onyx: /featured/components/quotes/simple-quotes/demo-4/
+      skip: true
+      - Marengo: /featured/components/quotes/simple-quotes/demo-5/
+      skip: true
+      - Chrome: /featured/components/quotes/simple-quotes/demo-6/
+      skip: true
+      - Dorian: /featured/components/quotes/simple-quotes/demo-7/
+      skip: true
+      - Marengo Hug: /featured/components/quotes/simple-quotes/demo-8/
+      skip: true
+      - Matte: /featured/components/quotes/simple-quotes/demo-9/
+      skip: true
+      - Scorpion: /featured/components/quotes/simple-quotes/demo-10/
+      skip: true
+      - Silver: /featured/components/quotes/simple-quotes/demo-11/
+      skip: true
+      - Storm Cloud: /featured/components/quotes/simple-quotes/demo-12/
+      skip: true
+    - Quotes with author icon: /featured/components/quotes/author-icon-quotes/
+    skip: true
+      - Charcoal: /featured/components/quotes/author-icon-quotes/demo-1/
+      skip: true
+    - Quotes with images: /featured/components/quotes/quotes-with-images/
+    skip: true
+      Electric: /featured/components/quotes/quotes-with-images/demo-1/
+      skip: true
 - Design Elements: /featured/cs/
   - Color Schemes: /featured/cs/
     - Blog Template CS: /featured/cs/blog-template-cs/
