@@ -15,7 +15,7 @@ templates: $doc-sites
 more-link-text: View all
 more-link: /featured/doc-sites/
 
--- grid-view: SPA / Landing Pages
+-- grid-view: Landing Pages
 if: { show-grid }
 templates: $landing-pages
 more-link-text: View all

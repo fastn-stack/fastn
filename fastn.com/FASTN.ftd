@@ -539,7 +539,7 @@ skip: true
     skip: true
     - Docusaurus Theme: /featured/ds/docusaurus-theme/
     skip: true
-  - SPA / Landing Pages: /featured/landing-pages/
+  - Landing Pages: /featured/landing-pages/
     - Midnight Rush: /featured/landing/mr-landing/
     skip: true
     - Midnight Storm: /featured/landing/midnight-storm-landing/
@@ -777,8 +777,11 @@ skip: true
 
 
 # Blog: /blog/
-  document: blog/writer-journey.ftd
+  document: blog/acme-developer.ftd 
 
+
+- Tales from ACME's Developer - Case Study: /blog/acme-developer/ 
+  document: blog/acme-developer.ftd 
 - A Content Writer’s Journey with fastn: /blog/writer-journey/
   document: blog/writer-journey.ftd
 - fastn might prove you wrong: /blog/prove-you-wrong/
