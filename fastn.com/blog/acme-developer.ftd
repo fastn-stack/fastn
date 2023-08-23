@@ -1,4 +1,3 @@
--- import: fastn.com/ftd as ftd-index
 -- import: fastn-community.github.io/bling/chat
 
 
@@ -22,58 +21,24 @@ the different teams.
 The Design Team requests Ganesh to Revamp the ACME website's theme layout, 
 colour scheme, and typography to improve user experience. 
 
-
--- ds.h2: - Before
-
--- ds.code:
-lang: ftd
-
-\-- fastn.package: fastn-community.github.io/acme-inc
-
-\-- fastn.dependency: fastn-community.github.io/midnight-storm as theme  ;;<hl>
-\-- fastn.dependency: fastn-community.github.io/midnight-storm-cs as cs  ;;<hl>
-\-- fastn.dependency: fastn-community.github.io/midnight-storm-typography as typo  ;;<hl>
-
-
--- ds.image:
-src: $fastn-assets.files.images.blog.old-layout.png
-width.fixed.percent: 95
-
-
--- ds.h2: - Ganesh's Solution
+-- ds.h2: Ganesh's Solution
 
 With a single line of code, he transformed the website. By removing the 
 `midnight storm` and introducing the `midnight rush` package as a fastn dependency 
 in the `fastn.ftd` file, he updated the layout, colour scheme, and typography 
 seamlessly.
 
--- ds.image: [PR for New layout, color scheme and font](https://github.com/fastn-community/acme-inc/pull/9)
-src: $fastn-assets.files.images.blog.layout-pr.png
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/9/files)
+src: $fastn-assets.files.images.blog.layout-fc.png
 width.fixed.percent: 95
 
+-- ds.image: [Before Changes](https://acme.fastn.com/)
+src: $fastn-assets.files.images.blog.old-layout.png
+width.fixed.percent: 95
 
--- ds.h2: - After
-
--- ds.code:
-lang: ftd
-
-\-- fastn.package: fastn-community.github.io/acme-inc
-
-\-- fastn.dependency: fastn-community.github.io/midnight-rush as theme  ;;<hl>
-\-- fastn.dependency: fastn-community.github.io/midnight-rush-cs as cs  ;;<hl>
-\-- fastn.dependency: fastn-community.github.io/midnight-rush-typography as typo  ;;<hl>
-
--- ds.image: 
+-- ds.image: [After Changes](https://acme-inc-git-design-change-fifthtry.vercel.app/)
 src: $fastn-assets.files.images.blog.new-layout.png
 width.fixed.percent: 95
-
-;; -- ds.output:
-
-;; -- on-mouse-leave-event:
-
-;; -- end: ds.output
-
-
 
 -- ds.h1: Scene 2: Post-Lunch Price Updates
 
@@ -81,61 +46,21 @@ In the midst of the afternoon buzz, Ganesh's screen illuminates with a new
 message. The Business Team's insights from the recent meeting have prompted to 
 modify the Basic Pricing Plan values to enhance conversions.
 
--- ds.h2: - Before
-
--- ds.code:
-lang: ftd
-
-\-- pricing.pricing-card: Startup Plan
-active: true 
-price: 99  ;;<hl>
-currency: \$
-subscription: monthly
-feature-list: $pricing.startup-feature-list
-
-
-\-- pricing.pricing-card: Enterprise Plan
-active: false 
-price: 153  ;;<hl>
-currency: \$
-subscription: monthly
-feature-list: $pricing.enterprise-feature-list
-
--- ds.image: 
-src: $fastn-assets.files.images.blog.old-price.png
-width.fixed.percent: 95
-
--- ds.h2: - Ganesh's Solution
+-- ds.h2: Ganesh's Solution
 
 By editing the `pricing.ftd` and updating the existing prices with the new 
 figures, he swiftly implemented the change. As the pricing plan is a 
 **component-based design**, he only needed to adjust the relevant values.
 
--- ds.image: [PR for Pricing Page Edit](https://github.com/fastn-community/acme-inc/pull/5)
-src: $fastn-assets.files.images.blog.layout-pr.png
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/5/files)
+src: $fastn-assets.files.images.blog.price-fc.png
 width.fixed.percent: 95
 
--- ds.h2: - After
+-- ds.image: [Before Changes](https://acme.fastn.com/pricing/)
+src: $fastn-assets.files.images.blog.old-price.png
+width.fixed.percent: 95
 
--- ds.code:
-lang: ftd
-
-\-- pricing.pricing-card: Startup Plan
-active: true 
-price: 89  ;;<hl>
-currency: \$
-subscription: monthly
-feature-list: $pricing.startup-feature-list
-
-
-\-- pricing.pricing-card: Enterprise Plan
-active: false 
-price: 135  ;;<hl>
-currency: \$
-subscription: monthly
-feature-list: $pricing.enterprise-feature-list
-
--- ds.image: 
+-- ds.image: [After Changes](https://acme-inc-git-updating-pricing-page-fifthtry.vercel.app/pricing/)
 src: $fastn-assets.files.images.blog.new-price.png
 width.fixed.percent: 95
 
@@ -158,67 +83,21 @@ avatar: $fastn-assets.files.images.blog.nandy.jpg
 avatar: $fastn-assets.files.images.blog.ganeshs.jpg
 
 
+-- ds.h2: Ganesh's Solution
 
--- ds.h2: - Before
+He leveraged the **component-based design** once-again for the teams page. 
+He added the new team member Ayush Soni's details by simply using the 
+**team member** component.
 
--- ds.code:
-lang: ftd
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/4/files)
+src: $fastn-assets.files.images.blog.team-fc.png
+width.fixed.percent: 95
 
-\-- team.team.members:
-
-\-- team.member: Nandhini Devi
-profile: CEO & Founder
-image: $assets.files.assets.nandhini-devi.jpg
-
-Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
-
-\-- team.member: Ajit Garg
-profile: VP of Marketing
-image: $assets.files.assets.ajit-garg.jpg
-
-Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
-
--- ds.image: 
+-- ds.image: [Before Changes](https://acme.fastn.com/team/)
 src: $fastn-assets.files.images.blog.old-team.png
 width.fixed.percent: 95
 
--- ds.h2: - Ganesh's Solution
-
-He leveraged the **component-based design** once-again for team member details. 
-He added a new team member component, including Ayush Soni's details - name, 
-designation, profile image, and description.
-
--- ds.image: [PR for Adding New Team Member](https://github.com/fastn-community/acme-inc/pull/4)
-src: $fastn-assets.files.images.blog.team-pr.png
-width.fixed.percent: 95
-
--- ds.h2: - After
-
--- ds.code:
-lang: ftd 
-
-
-\-- team.team.members:
-
-\-- team.member: Nandhini Devi
-profile: CEO & Founder
-image: $assets.files.assets.nandhini-devi.jpg
-
-Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
-
-\-- team.member: Ajit Garg
-profile: VP of Marketing
-image: $assets.files.assets.ajit-garg.jpg
-
-Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
-
-\-- team.member: Ayush Soni  ;;<hl>
-profile: VP of Product  ;;<hl>
-image: $assets.files.assets.ayush-soni.jpg  ;;<hl>
-
-Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.  ;;<hl>
-
--- ds.image: 
+-- ds.image: [After Changes](https://acme-inc-git-adding-team-member-fifthtry.vercel.app/team/)
 src: $fastn-assets.files.images.blog.new-team.png
 width.fixed.percent: 95
 
@@ -233,33 +112,11 @@ a new Diwali offer landing page.
 He created a new `offers.ftd` page and built a landing page featuring an image, 
 title, and CTA. 
 
--- ds.image: [PR for New Offer Page](https://github.com/fastn-community/acme-inc/pull/11)
-src: $fastn-assets.files.images.blog.offer-pr.png
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/11/files)
+src: $fastn-assets.files.images.blog.offer-fc.png
 width.fixed.percent: 95
 
--- ds.h3: Input
-
--- ds.code:
-lang: ftd 
-
-
-\-- ws.page:
-
-
-\-- ws.hero-image-left: Diwali Dhamaka Offer 2023
-cta-primary: Claim Now
-cta-primary-link: /pricing/
-image: $assets.files.assets.diwali-2023.png
-
-Avail 20% flat discount on our premium package this Diwali. 
-
-Offer valid till 30th Nov 2023.
-
-\-- end: ws.page
-
--- ds.h3: Output
-
--- ds.image: 
+-- ds.image: [New Offer Page](https://acme-inc-git-new-landing-page-fifthtry.vercel.app/offers/)
 src: $fastn-assets.files.images.blog.offer.png
 width.fixed.percent: 95
 
@@ -274,21 +131,15 @@ recommends, redirect `/launching-color-support/` to `/color-support/`.
 Opening the fastn.ftd file, in one line, he introduced fastn.redirect from 
 `/launching-color-support/` to `/color-support/`. 
 
--- ds.image: [PR for URL Redirect](https://github.com/fastn-community/acme-inc/pull/8)
-src: $fastn-assets.files.images.blog.offer-pr.png
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/8/files)
+src: $fastn-assets.files.images.blog.redirect-fc.png
 width.fixed.percent: 95
-
--- ds.code:
-lang: ftd 
-
-\-- fastn.redirects:
-/launching-color-support/: /color-support/  ;;<hl>
 
 -- ds.h1: Conclusion
 
 The ACME case study is a testament to the capabilities of a 
-website powered by `fastn`. It illuminates how fastnempowers developers to swiftly 
-implement changes and cater to the ever-evolving needs of a startup. 
+website powered by `fastn`. It illuminates how fastn empowers developers to 
+swiftly implement changes and cater to the ever-evolving needs of a startup. 
 
 Stay tuned for more tales from ACME Inc. 
 
@@ -313,28 +164,6 @@ Stay tuned for more tales from ACME Inc.
 
 
 
-
-
-
-
--- component on-mouse-leave-event:
-boolean $show: false
-
--- ftd.column:
-color: $inherited.colors.text
-
--- ds.image: Before
-src: $fastn-assets.files.images.blog.old-layout.png
-$on-mouse-enter$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = true)
-$on-mouse-leave$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = false)
-
--- ds.image: After
-src: $fastn-assets.files.images.blog.new-layout.png
-if: { on-mouse-leave-event.show }
-
--- end: ftd.column
-
--- end: on-mouse-leave-event
 
 
 
