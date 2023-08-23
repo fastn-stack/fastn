@@ -274,6 +274,7 @@ src: $assets.files.images.events.live-recording.svg
 spacing.fixed.px: 8
 
 -- title-name: $event-desktop.event-type
+if: { event-desktop.event-type != NULL }
 
 -- title-name: Join now
 url: $event-desktop.event-link
@@ -478,6 +479,7 @@ src: $assets.files.images.events.live-recording.svg
 spacing.fixed.px: 8
 
 -- title-name: $event-mobile.event-type
+if: { event-mobile.event-type != NULL }
 
 -- title-name: Join now
 url: $event-mobile.event-link
