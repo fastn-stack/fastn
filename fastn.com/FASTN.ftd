@@ -539,7 +539,7 @@ skip: true
     skip: true
     - Docusaurus Theme: /featured/ds/docusaurus-theme/
     skip: true
-  - SPA / Landing Pages: /featured/landing-pages/
+  - Landing Pages: /featured/landing-pages/
     - Midnight Rush: /featured/landing/mr-landing/
     skip: true
     - Midnight Storm: /featured/landing/midnight-storm-landing/
