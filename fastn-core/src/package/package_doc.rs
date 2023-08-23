@@ -548,7 +548,7 @@ pub(crate) async fn process_ftd(
     file_path: &str,
 ) -> fastn_core::Result<FTDResult> {
     let response = read_ftd(config, main, base_url, build_static_files, test).await?;
-    fastn_core::utils::write(&config.build_dir(), file_path, &response.html()).await?;
+    fastn_core::utils::overwrite(&config.build_dir(), file_path, &response.html()).await?;
 
     Ok(response)
 }

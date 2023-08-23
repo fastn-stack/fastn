@@ -765,6 +765,14 @@ pub(crate) async fn write(
     update1(root, file_path, data).await
 }
 
+pub(crate) async fn overwrite(
+    root: &camino::Utf8PathBuf,
+    file_path: &str,
+    data: &[u8],
+) -> fastn_core::Result<()> {
+    update1(root, file_path, data).await
+}
+
 // TODO: remove this function use update instead
 pub(crate) async fn update1(
     root: &camino::Utf8PathBuf,

@@ -193,17 +193,13 @@ async fn incremental_build(
     let mut resolving_dependencies: Vec<String> = vec![];
 
     while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
-        dbg!(unresolved_dependency.as_str());
-
-        dbg!(&unresolved_dependencies);
-
-        if let Some(doc) = dbg!(c.documents.get(
+        if let Some(doc) = c.documents.get(
             get_dependency_name_without_package_name(
                 config.package.name.as_str(),
-                unresolved_dependency.as_str()
+                unresolved_dependency.as_str(),
             )
-            .as_str()
-        )) {
+            .as_str(),
+        ) {
             let mut own_resolved_dependencies: Vec<String> = vec![];
 
             for dep in &doc.dependencies {
@@ -215,27 +211,16 @@ async fn incremental_build(
                 unresolved_dependencies.push(dep.to_string());
             }
 
-            dbg!(
-                &own_resolved_dependencies,
-                &doc.dependencies,
-                &unresolved_dependency
-            );
-
             if own_resolved_dependencies.eq(&doc.dependencies) {
-                dbg!(
-                    &own_resolved_dependencies,
-                    &doc.dependencies,
-                    &unresolved_dependency
-                );
                 for (doc_id, doc) in documents {
-                    if dbg!(doc_id.eq(format!(
+                    if doc_id.eq(format!(
                         "{}.ftd",
                         get_dependency_name_without_package_name(
                             config.package.name.as_str(),
                             unresolved_dependency.as_str()
                         )
                     )
-                    .as_str()))
+                    .as_str())
                     {
                         handle_file(
                             doc,
