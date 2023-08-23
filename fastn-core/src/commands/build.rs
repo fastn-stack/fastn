@@ -193,6 +193,8 @@ async fn incremental_build(
     let mut resolving_dependencies: Vec<String> = vec![];
 
     while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
+        dbg!(&unresolved_dependencies, &unresolved_dependency);
+
         if let Some(doc) = c.documents.get(
             get_dependency_name_without_package_name(
                 config.package.name.as_str(),
@@ -212,30 +214,14 @@ async fn incremental_build(
             }
 
             if own_resolved_dependencies.eq(&doc.dependencies) {
-                for (doc_id, doc) in documents {
-                    if doc_id.eq(format!(
-                        "{}.ftd",
-                        get_dependency_name_without_package_name(
-                            config.package.name.as_str(),
-                            unresolved_dependency.as_str()
-                        )
-                    )
-                    .as_str())
-                    {
-                        handle_file(
-                            doc,
-                            config,
-                            base_url,
-                            ignore_failed,
-                            test,
-                            true,
-                            Some(&mut c),
-                        )
-                        .await?;
-
-                        break;
-                    }
-                }
+                handle_only_id(
+                    unresolved_dependency.as_str(),
+                    config,
+                    base_url,
+                    ignore_failed,
+                    test,
+                    documents.clone(),
+                ).await?;
 
                 resolved_dependencies.push(unresolved_dependency.to_string());
                 if unresolved_dependencies.is_empty() {
@@ -247,7 +233,6 @@ async fn incremental_build(
                 resolving_dependencies.push(unresolved_dependency.to_string());
             }
         } else {
-            unresolved_dependencies.push(unresolved_dependency.to_string());
             for doc in documents.values() {
                 handle_file(
                     doc,
@@ -270,62 +255,6 @@ async fn incremental_build(
     Ok(())
 }
 
-/**
-
-for (doc_id, document) in c.documents.clone() {
-            if doc_id.eq(unresolved_document.as_str()) {
-                unresolved_documents.push(unresolved_document.to_string());
-
-                if document.dependencies.is_empty() {
-                    for doc in documents.values() {
-                        if doc.get_id_with_package().eq(unresolved_document.as_str()) {
-                            handle_file(
-                                doc,
-                                config,
-                                base_url,
-                                ignore_failed,
-                                test,
-                                true,
-                                Some(&mut c),
-                            )
-                            .await?;
-
-                            resolved_dependencies.push(unresolved_document.to_string());
-                        }
-                    }
-                }
-
-                for dep in &document.dependencies {
-                    if resolved_dependencies.contains(&dep) {
-                        continue;
-                    }
-
-                    unresolved_documents.push(dep.to_string());
-                }
-
-                break;
-            }
-        }
-
-        for doc in documents.values() {
-            if doc.get_id_with_package().eq(unresolved_document.as_str()) {
-                handle_file(
-                    doc,
-                    config,
-                    base_url,
-                    ignore_failed,
-                    test,
-                    true,
-                    Some(&mut c),
-                )
-                .await?;
-
-                resolved_dependencies.push(unresolved_document.to_string());
-            }
-        }
-
- */
-
 #[tracing::instrument(skip(config, documents))]
 async fn handle_only_id(
     id: &str,
@@ -336,7 +265,7 @@ async fn handle_only_id(
     documents: std::collections::BTreeMap<String, fastn_core::File>,
 ) -> fastn_core::Result<()> {
     for doc in documents.values() {
-        if doc.get_id().eq(id) || doc.get_id_with_package().eq(id) {
+        if dbg!(doc.get_id().eq(id) || doc.get_id_with_package().eq(id)) {
             return handle_file(doc, config, base_url, ignore_failed, test, false, None).await;
         }
     }
