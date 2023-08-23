@@ -261,6 +261,7 @@ fastn_dom.PropertyKind = {
     Js: 105,
     LinkRel: 106,
     InputMaxLength: 107,
+    Favicon: 108,
 };
 
 
@@ -697,6 +698,26 @@ class Node2 {
     }
     getParent() {
         return this.#parent;
+    }
+    removeAllFaviconLinks() {
+        if (hydrating) {
+            const links = document.head.querySelectorAll('link[rel="shortcut icon"]');
+            links.forEach( link => {
+                link.parentNode.removeChild(link);
+            });
+        }
+    }
+
+    setFavicon(url) {
+        if (hydrating) {
+            if (url instanceof fastn.recordInstanceClass) url = url.get('src').get();
+            let link_element = document.createElement("link");
+            link_element.rel = "shortcut icon";
+            link_element.href = url;
+
+            this.removeAllFaviconLinks();
+            document.head.appendChild(link_element);
+        }
     }
     // for attaching inline attributes
     attachAttribute(property, value) {
@@ -1563,6 +1584,8 @@ class Node2 {
             let codeNode = this.#children[0].getNode();
             codeNode.classList.add(language);
             fastn_utils.highlightCode(codeNode, this.#extraData.code);
+        } else if (kind === fastn_dom.PropertyKind.Favicon) {
+            this.setFavicon(staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle) {
             this.updateMetaTitle(staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle) {

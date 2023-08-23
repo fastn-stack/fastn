@@ -406,6 +406,7 @@ pub enum PropertyKind {
     MetaOGImage,
     MetaTwitterImage,
     MetaThemeColor,
+    Favicon,
 }
 
 impl PropertyKind {
@@ -533,6 +534,7 @@ impl PropertyKind {
             PropertyKind::MetaThemeColor => {
                 "fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor"
             }
+            PropertyKind::Favicon => "fastn_dom.PropertyKind.Favicon",
         }
     }
 }
