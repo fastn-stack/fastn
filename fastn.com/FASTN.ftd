@@ -745,7 +745,7 @@ skip: true
   document: blog/acme-developer.ftd 
 
 
-- Tales from ACME's fastn Developer - Case Study: /blog/acme-developer/ 
+- Tales from ACME's Developer - Case Study: /blog/acme-developer/ 
   document: blog/acme-developer.ftd 
 - A Content Writer’s Journey with fastn: /blog/writer-journey/
   document: blog/writer-journey.ftd
