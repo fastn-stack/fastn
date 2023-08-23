@@ -9942,6 +9942,12 @@ pub fn document_function() -> ftd::interpreter::ComponentDefinition {
         name: "ftd#document".to_string(),
         arguments: [vec![
             ftd::interpreter::Argument::default(
+                "favicon",
+                ftd::interpreter::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
+                    .into_optional()
+                    .into_kind_data(),
+            ),
+            ftd::interpreter::Argument::default(
                 "breakpoint",
                 ftd::interpreter::Kind::record(ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA)
                     .into_optional()

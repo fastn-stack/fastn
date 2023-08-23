@@ -119,6 +119,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                     "__js_script__",
                     format!("{js_document_script}{}", test_available_code_themes()).as_str(),
                 )
+                .replace("__favicon_html_tag__", "")
                 .replace("__html_body__", ssr_body.as_str())
                 .replace("<base href=\"__base_url__\">", "")
                 .replace(

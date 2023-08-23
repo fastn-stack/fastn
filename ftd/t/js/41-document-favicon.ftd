@@ -1,0 +1,10 @@
+-- ftd.document:
+title: Testing favicon
+favicon: https://fastn.com/-/fastn.com/images/favicon.svg
+
+-- ftd.text: This is some text
+color: red
+margin.px: 20
+
+
+-- end: ftd.document

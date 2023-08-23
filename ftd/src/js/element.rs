@@ -721,6 +721,7 @@ pub struct Document {
 #[derive(Debug)]
 pub struct DocumentMeta {
     pub title: Option<ftd::js::Value>,
+    pub favicon: Option<ftd::js::Value>,
     pub og_title: Option<ftd::js::Value>,
     pub twitter_title: Option<ftd::js::Value>,
     pub description: Option<ftd::js::Value>,
@@ -1253,6 +1254,7 @@ impl DocumentMeta {
         arguments: &[ftd::interpreter::Argument],
     ) -> DocumentMeta {
         DocumentMeta {
+            favicon: ftd::js::value::get_optional_js_value("favicon", properties, arguments),
             title: ftd::js::value::get_optional_js_value("title", properties, arguments),
             og_title: ftd::js::value::get_optional_js_value("og-title", properties, arguments),
             twitter_title: ftd::js::value::get_optional_js_value(
@@ -1326,6 +1328,12 @@ impl DocumentMeta {
         element_name: &str,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
+
+        if let Some(ref favicon) = self.favicon {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                favicon.to_set_property(fastn_js::PropertyKind::Favicon, doc, element_name, rdata),
+            ));
+        }
 
         if let Some(ref title) = self.title {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
