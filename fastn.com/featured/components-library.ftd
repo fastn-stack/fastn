@@ -78,6 +78,11 @@ templates: $forms
 ;;more-link-text: View all
 ;;more-link: /featured/components-library/
 
+-- ft-ui.grid-view: Quotes
+templates: $quotes
+more-link-text: View all
+more-link: /featured/components/quotes/
+
 -- end: ds.page
 
 
@@ -235,3 +240,24 @@ template-url: featured/components/modals/modal-2/
 screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 
 -- end: dialogs
+
+
+
+
+-- ft-ui.template list quotes:
+
+-- ft-ui.template: Charcoal
+template-url: /featured/components/quotes/author-icon-quotes/demo-1/
+screenshot: $fastn-assets.files.images.featured.components.quotes.author-icon-quotes.demo-1.png
+
+-- ft-ui.template: Electric
+template-url: /featured/components/quotes/quotes-with-images/demo-1/
+screenshot: $fastn-assets.files.images.featured.components.quotes.quotes-with-images.demo-1.png
+
+-- ft-ui.template: Chalice
+template-url: /featured/components/quotes/simple-quotes/demo-1/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-1.png
+
+-- end: quotes
+
+
