@@ -47,10 +47,10 @@ published-date: 30-Dec-2021
 
 -- ds.page.full-width-wrap:
 
--- ft-ui.grid-view: Featured Documentation Sites
+-- ft-ui.grid-view: Featured Landing Pages
 templates: $landing
 more-link-text: View more
-more-link: /featured/doc-sites/
+more-link: /featured/landing-pages/
 show-large: true
 
 -- end: ds.page.full-width-wrap

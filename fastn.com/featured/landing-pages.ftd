@@ -4,7 +4,7 @@
 full-width: true
 sidebar: false
 
--- ft-ui.grid-view: SPA / Landing pages
+-- ft-ui.grid-view: Landing pages
 templates: $landing
 
 -- end: ds.page
