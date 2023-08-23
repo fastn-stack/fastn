@@ -1,4 +1,3 @@
--- import: fastn.com/ftd as ftd-index
 -- import: fastn-community.github.io/bling/chat
 
 
@@ -25,16 +24,6 @@ colour scheme, and typography to improve user experience.
 
 -- ds.h2: - Before
 
--- ds.code:
-lang: ftd
-
-\-- fastn.package: fastn-community.github.io/acme-inc
-
-\-- fastn.dependency: fastn-community.github.io/midnight-storm as theme  ;;<hl>
-\-- fastn.dependency: fastn-community.github.io/midnight-storm-cs as cs  ;;<hl>
-\-- fastn.dependency: fastn-community.github.io/midnight-storm-typography as typo  ;;<hl>
-
-
 -- ds.image:
 src: $fastn-assets.files.images.blog.old-layout.png
 width.fixed.percent: 95
@@ -54,25 +43,9 @@ width.fixed.percent: 95
 
 -- ds.h2: - After
 
--- ds.code:
-lang: ftd
-
-\-- fastn.package: fastn-community.github.io/acme-inc
-
-\-- fastn.dependency: fastn-community.github.io/midnight-rush as theme  ;;<hl>
-\-- fastn.dependency: fastn-community.github.io/midnight-rush-cs as cs  ;;<hl>
-\-- fastn.dependency: fastn-community.github.io/midnight-rush-typography as typo  ;;<hl>
-
 -- ds.image: 
 src: $fastn-assets.files.images.blog.new-layout.png
 width.fixed.percent: 95
-
-;; -- ds.output:
-
-;; -- on-mouse-leave-event:
-
-;; -- end: ds.output
-
 
 
 -- ds.h1: Scene 2: Post-Lunch Price Updates
@@ -82,24 +55,6 @@ message. The Business Team's insights from the recent meeting have prompted to
 modify the Basic Pricing Plan values to enhance conversions.
 
 -- ds.h2: - Before
-
--- ds.code:
-lang: ftd
-
-\-- pricing.pricing-card: Startup Plan
-active: true 
-price: 99  ;;<hl>
-currency: \$
-subscription: monthly
-feature-list: $pricing.startup-feature-list
-
-
-\-- pricing.pricing-card: Enterprise Plan
-active: false 
-price: 153  ;;<hl>
-currency: \$
-subscription: monthly
-feature-list: $pricing.enterprise-feature-list
 
 -- ds.image: 
 src: $fastn-assets.files.images.blog.old-price.png
@@ -116,24 +71,6 @@ src: $fastn-assets.files.images.blog.layout-pr.png
 width.fixed.percent: 95
 
 -- ds.h2: - After
-
--- ds.code:
-lang: ftd
-
-\-- pricing.pricing-card: Startup Plan
-active: true 
-price: 89  ;;<hl>
-currency: \$
-subscription: monthly
-feature-list: $pricing.startup-feature-list
-
-
-\-- pricing.pricing-card: Enterprise Plan
-active: false 
-price: 135  ;;<hl>
-currency: \$
-subscription: monthly
-feature-list: $pricing.enterprise-feature-list
 
 -- ds.image: 
 src: $fastn-assets.files.images.blog.new-price.png
@@ -161,23 +98,6 @@ avatar: $fastn-assets.files.images.blog.ganeshs.jpg
 
 -- ds.h2: - Before
 
--- ds.code:
-lang: ftd
-
-\-- team.team.members:
-
-\-- team.member: Nandhini Devi
-profile: CEO & Founder
-image: $assets.files.assets.nandhini-devi.jpg
-
-Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
-
-\-- team.member: Ajit Garg
-profile: VP of Marketing
-image: $assets.files.assets.ajit-garg.jpg
-
-Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
-
 -- ds.image: 
 src: $fastn-assets.files.images.blog.old-team.png
 width.fixed.percent: 95
@@ -193,30 +113,6 @@ src: $fastn-assets.files.images.blog.team-pr.png
 width.fixed.percent: 95
 
 -- ds.h2: - After
-
--- ds.code:
-lang: ftd 
-
-
-\-- team.team.members:
-
-\-- team.member: Nandhini Devi
-profile: CEO & Founder
-image: $assets.files.assets.nandhini-devi.jpg
-
-Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
-
-\-- team.member: Ajit Garg
-profile: VP of Marketing
-image: $assets.files.assets.ajit-garg.jpg
-
-Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
-
-\-- team.member: Ayush Soni  ;;<hl>
-profile: VP of Product  ;;<hl>
-image: $assets.files.assets.ayush-soni.jpg  ;;<hl>
-
-Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.  ;;<hl>
 
 -- ds.image: 
 src: $fastn-assets.files.images.blog.new-team.png
@@ -237,28 +133,6 @@ title, and CTA.
 src: $fastn-assets.files.images.blog.offer-pr.png
 width.fixed.percent: 95
 
--- ds.h3: Input
-
--- ds.code:
-lang: ftd 
-
-
-\-- ws.page:
-
-
-\-- ws.hero-image-left: Diwali Dhamaka Offer 2023
-cta-primary: Claim Now
-cta-primary-link: /pricing/
-image: $assets.files.assets.diwali-2023.png
-
-Avail 20% flat discount on our premium package this Diwali. 
-
-Offer valid till 30th Nov 2023.
-
-\-- end: ws.page
-
--- ds.h3: Output
-
 -- ds.image: 
 src: $fastn-assets.files.images.blog.offer.png
 width.fixed.percent: 95
@@ -278,17 +152,12 @@ Opening the fastn.ftd file, in one line, he introduced fastn.redirect from
 src: $fastn-assets.files.images.blog.offer-pr.png
 width.fixed.percent: 95
 
--- ds.code:
-lang: ftd 
-
-\-- fastn.redirects:
-/launching-color-support/: /color-support/  ;;<hl>
 
 -- ds.h1: Conclusion
 
 The ACME case study is a testament to the capabilities of a 
-website powered by `fastn`. It illuminates how fastnempowers developers to swiftly 
-implement changes and cater to the ever-evolving needs of a startup. 
+website powered by `fastn`. It illuminates how fastn empowers developers to 
+swiftly implement changes and cater to the ever-evolving needs of a startup. 
 
 Stay tuned for more tales from ACME Inc. 
 
@@ -313,28 +182,6 @@ Stay tuned for more tales from ACME Inc.
 
 
 
-
-
-
-
--- component on-mouse-leave-event:
-boolean $show: false
-
--- ftd.column:
-color: $inherited.colors.text
-
--- ds.image: Before
-src: $fastn-assets.files.images.blog.old-layout.png
-$on-mouse-enter$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = true)
-$on-mouse-leave$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = false)
-
--- ds.image: After
-src: $fastn-assets.files.images.blog.new-layout.png
-if: { on-mouse-leave-event.show }
-
--- end: ftd.column
-
--- end: on-mouse-leave-event
 
 
 
