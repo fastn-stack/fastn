@@ -30,9 +30,9 @@ lang: ftd
 
 \-- fastn.package: fastn-community.github.io/acme-inc
 
-\-- fastn.dependency: fastn-community.github.io/midnight-storm as theme
-\-- fastn.dependency: fastn-community.github.io/midnight-storm-cs as cs
-\-- fastn.dependency: fastn-community.github.io/midnight-storm-typography as typo
+\-- fastn.dependency: fastn-community.github.io/midnight-storm as theme  ;;<hl>
+\-- fastn.dependency: fastn-community.github.io/midnight-storm-cs as cs  ;;<hl>
+\-- fastn.dependency: fastn-community.github.io/midnight-storm-typography as typo  ;;<hl>
 
 
 -- ds.image:
@@ -59,13 +59,20 @@ lang: ftd
 
 \-- fastn.package: fastn-community.github.io/acme-inc
 
-\-- fastn.dependency: fastn-community.github.io/midnight-rush as theme
-\-- fastn.dependency: fastn-community.github.io/midnight-rush-cs as cs
-\-- fastn.dependency: fastn-community.github.io/midnight-rush-typography as typo
+\-- fastn.dependency: fastn-community.github.io/midnight-rush as theme  ;;<hl>
+\-- fastn.dependency: fastn-community.github.io/midnight-rush-cs as cs  ;;<hl>
+\-- fastn.dependency: fastn-community.github.io/midnight-rush-typography as typo  ;;<hl>
 
 -- ds.image: 
 src: $fastn-assets.files.images.blog.new-layout.png
 width.fixed.percent: 95
+
+;; -- ds.output:
+
+;; -- on-mouse-leave-event:
+
+;; -- end: ds.output
+
 
 
 -- ds.h1: Scene 2: Post-Lunch Price Updates
@@ -81,7 +88,7 @@ lang: ftd
 
 \-- pricing.pricing-card: Startup Plan
 active: true 
-price: 99
+price: 99  ;;<hl>
 currency: \$
 subscription: monthly
 feature-list: $pricing.startup-feature-list
@@ -89,7 +96,7 @@ feature-list: $pricing.startup-feature-list
 
 \-- pricing.pricing-card: Enterprise Plan
 active: false 
-price: 153
+price: 153  ;;<hl>
 currency: \$
 subscription: monthly
 feature-list: $pricing.enterprise-feature-list
@@ -115,7 +122,7 @@ lang: ftd
 
 \-- pricing.pricing-card: Startup Plan
 active: true 
-price: 89
+price: 89  ;;<hl>
 currency: \$
 subscription: monthly
 feature-list: $pricing.startup-feature-list
@@ -123,7 +130,7 @@ feature-list: $pricing.startup-feature-list
 
 \-- pricing.pricing-card: Enterprise Plan
 active: false 
-price: 135
+price: 135  ;;<hl>
 currency: \$
 subscription: monthly
 feature-list: $pricing.enterprise-feature-list
@@ -137,7 +144,7 @@ width.fixed.percent: 95
 
 -- ds.output:
 
--- message-left: Hey Team, Please welcome Ayush Soni, our newly joined VP of Product. 
+-- message-left: Hey Team, Please welcome Ayush Soni, our newly joined VP of Product.
 
 -- end: message-left
 
@@ -208,11 +215,11 @@ image: $assets.files.assets.ajit-garg.jpg
 
 Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
 
-\-- team.member: Ayush Soni
-profile: VP of Product
-image: $assets.files.assets.ayush-soni.jpg
+\-- team.member: Ayush Soni  ;;<hl>
+profile: VP of Product  ;;<hl>
+image: $assets.files.assets.ayush-soni.jpg  ;;<hl>
 
-Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.
+Lorem ipsum dolor sit amet consectetur dolorili adipiscing elit.  ;;<hl>
 
 -- ds.image: 
 src: $fastn-assets.files.images.blog.new-team.png
@@ -278,7 +285,7 @@ width.fixed.percent: 95
 lang: ftd 
 
 \-- fastn.redirects:
-/launching-color-support/: /color-support/
+/launching-color-support/: /color-support/  ;;<hl>
 
 -- ds.h1: Conclusion
 
@@ -324,7 +331,7 @@ Stay tuned for more tales from ACME Inc.
 
 -- component message-left:
 optional caption title:
-ftd.image-src avatar: $fastn-assets.files.images.blog.nandy.png
+ftd.image-src avatar: $fastn-assets.files.images.blog.nandy.jpg
 boolean round-avatar: true
 children container:
 
@@ -413,7 +420,7 @@ children: $message-left.container
 
 -- component message-right:
 optional caption title:
-ftd.image-src avatar: $fastn-assets.files.images.blog.nandy.png
+ftd.image-src avatar: $fastn-assets.files.images.blog.nandy.jpg
 boolean round-avatar: true
 children container:
 
@@ -495,6 +502,25 @@ border-radius.px: 32
 
 
 
+
+-- component on-mouse-leave-event:
+boolean $show: false
+
+-- ftd.column:
+color: $inherited.colors.text
+
+-- ds.image: Before
+src: $fastn-assets.files.images.blog.old-layout.png
+$on-mouse-enter$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = false)
+
+-- ds.image: After
+src: $fastn-assets.files.images.blog.new-layout.png
+if: { on-mouse-leave-event.show }
+
+-- end: ftd.column
+
+-- end: on-mouse-leave-event
 
 
 
