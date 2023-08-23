@@ -142,7 +142,7 @@ width.fixed.percent: 95
 
 -- ds.h1: Scene 3: The Official Whatsapp Group
 
--- chat.message-left: Hey Team, Please welcome Ayush Soni, our newly joined VP of Product.
+-- chat.message-left: Hey Team, please welcome Ayush Soni, our newly joined VP of Product.
 avatar: $fastn-assets.files.images.blog.nandy.jpg
 
 -- chat.message-left: Hi, guys. Excited to be part of ACME Inc!!!
@@ -151,7 +151,7 @@ avatar: $fastn-assets.files.images.blog.ayush-soni.jpg
 -- chat.message-right: Welcome to the ACME team, Ayush.
 avatar: $fastn-assets.files.images.blog.ajit.jpg
 
--- chat.message-left: Hey Ganesh, add "Ayush Soni" to our team's page. 
+-- chat.message-left: Hey Ganesh, add Ayush Soni to our team's page. 
 avatar: $fastn-assets.files.images.blog.nandy.jpg
 
 -- chat.message-right: Done. Here is the link: https://acme-inc-git-adding-team-member-fifthtry.vercel.app/team/
