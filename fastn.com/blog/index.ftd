@@ -1,4 +1,7 @@
 -- import: fastn.com/blog/acme-developer as fp
+-- import: fastn.com/blog/writer-journey as p9
+-- import: fastn.com/blog/prove-you-wrong as p8
+-- import: fastn.com/blog/the-intimidation-of-programming as p7
 
 -- ds.page-with-no-right-sidebar:
 
@@ -6,6 +9,16 @@
 
 -- ds.featured-post:
 post-data: $fp.meta
+
+-- ds.without-image-half:
+post-data: $p9.meta
+
+-- ds.without-image-half:
+post-data: $p8.meta
+
+-- ds.without-image:
+post-data: $p7.meta
+
 
 -- end: ds.posts
 

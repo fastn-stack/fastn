@@ -1,17 +1,23 @@
 -- import: fastn.com/ftd as ftd-index
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
 
--- ds.page: The Intimidation of Programming
-document-title: Overcome the Intimidation of Programming with fastn
-document-description: fastn aims to eliminate the intimidation associated with programming by simplifying it. 
-document-image: $fastn-assets.files.images.blog.intimidated-child.png.light
+-- common.post-meta meta: The Intimidation of Programming
+published-on: July 28, 2023
+post-url: /blog/intimidation-of-programming/
+author: $authors.nandini
 
-Nandhini, 28 July 2023
-
-With every passing day, new innovations and breakthroughs are 
-changing the way we interact with the world. Behind these cutting-edge 
-technologies lies the world of `programming languages`, the building blocks 
-that bring these innovations to life. However, for many, the prospect of delving 
+With every passing day, new innovations and breakthroughs are
+changing the way we interact with the world. Behind these cutting-edge
+technologies lies the world of `programming languages`, the building blocks
+that bring these innovations to life. However, for many, the prospect of delving
 into programming can be quite `scary`.
+
+
+
+-- ds.blog-page:
+meta: $meta
+
 
 -- ds.h1: Navigating the Complex Maze of Programming
 
@@ -119,5 +125,4 @@ packages for end users to discover and use.
 Learn more about [`fastn`](https://fastn.com/home/) here.
 
 
--- end: ds.page
-
+-- end: ds.blog-page
