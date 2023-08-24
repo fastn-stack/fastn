@@ -52,7 +52,7 @@ impl fastn_js::Kernel {
             .append(text("fastn_dom.createKernel("))
             .append(text(&format!("{},", self.parent.clone())))
             .append(space())
-            .append(text(self.element_kind.to_js()))
+            .append(text(self.element_kind.to_js().as_str()))
             .append(text(");"))
     }
 }
@@ -154,23 +154,37 @@ impl fastn_js::Function {
 }
 
 impl fastn_js::ElementKind {
-    pub fn to_js(&self) -> &'static str {
+    pub fn to_js(&self) -> String {
         match self {
-            fastn_js::ElementKind::Row => "fastn_dom.ElementKind.Row",
-            fastn_js::ElementKind::ContainerElement => "fastn_dom.ElementKind.ContainerElement",
-            fastn_js::ElementKind::Column => "fastn_dom.ElementKind.Column",
-            fastn_js::ElementKind::Integer => "fastn_dom.ElementKind.Integer",
-            fastn_js::ElementKind::Decimal => "fastn_dom.ElementKind.Decimal",
-            fastn_js::ElementKind::Boolean => "fastn_dom.ElementKind.Boolean",
-            fastn_js::ElementKind::Text => "fastn_dom.ElementKind.Text",
-            fastn_js::ElementKind::Image => "fastn_dom.ElementKind.Image",
-            fastn_js::ElementKind::IFrame => "fastn_dom.ElementKind.IFrame",
-            fastn_js::ElementKind::Device => "fastn_dom.ElementKind.Wrapper",
-            fastn_js::ElementKind::CheckBox => "fastn_dom.ElementKind.CheckBox",
-            fastn_js::ElementKind::TextInput => "fastn_dom.ElementKind.TextInput",
-            fastn_js::ElementKind::Rive => "fastn_dom.ElementKind.Rive",
-            fastn_js::ElementKind::Document => "fastn_dom.ElementKind.Document",
-            fastn_js::ElementKind::Code => "fastn_dom.ElementKind.Code",
+            fastn_js::ElementKind::Row => "fastn_dom.ElementKind.Row".to_string(),
+            fastn_js::ElementKind::ContainerElement => {
+                "fastn_dom.ElementKind.ContainerElement".to_string()
+            }
+            fastn_js::ElementKind::Column => "fastn_dom.ElementKind.Column".to_string(),
+            fastn_js::ElementKind::Integer => "fastn_dom.ElementKind.Integer".to_string(),
+            fastn_js::ElementKind::Decimal => "fastn_dom.ElementKind.Decimal".to_string(),
+            fastn_js::ElementKind::Boolean => "fastn_dom.ElementKind.Boolean".to_string(),
+            fastn_js::ElementKind::Text => "fastn_dom.ElementKind.Text".to_string(),
+            fastn_js::ElementKind::Image => "fastn_dom.ElementKind.Image".to_string(),
+            fastn_js::ElementKind::IFrame => "fastn_dom.ElementKind.IFrame".to_string(),
+            fastn_js::ElementKind::Device => "fastn_dom.ElementKind.Wrapper".to_string(),
+            fastn_js::ElementKind::CheckBox => "fastn_dom.ElementKind.CheckBox".to_string(),
+            fastn_js::ElementKind::TextInput => "fastn_dom.ElementKind.TextInput".to_string(),
+            fastn_js::ElementKind::Rive => "fastn_dom.ElementKind.Rive".to_string(),
+            fastn_js::ElementKind::Document => "fastn_dom.ElementKind.Document".to_string(),
+            fastn_js::ElementKind::Code => "fastn_dom.ElementKind.Code".to_string(),
+            fastn_js::ElementKind::WebComponent(web_component_name) => {
+                let name = if let Some((_, name)) = web_component_name.split_once('#') {
+                    name.to_string()
+                } else {
+                    web_component_name.to_string()
+                };
+
+                format!(
+                    "fastn_dom.ElementKind.WebComponent(\"{name}\", {})",
+                    fastn_js::LOCAL_VARIABLE_MAP
+                )
+            }
         }
     }
 }
@@ -178,8 +192,12 @@ impl fastn_js::ElementKind {
 impl fastn_js::ComponentStatement {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         match self {
-            fastn_js::ComponentStatement::StaticVariable(f) => f.to_js(),
-            fastn_js::ComponentStatement::MutableVariable(f) => f.to_js(),
+            fastn_js::ComponentStatement::StaticVariable(static_variable) => {
+                static_variable.to_js()
+            }
+            fastn_js::ComponentStatement::MutableVariable(mutable_variable) => {
+                mutable_variable.to_js()
+            }
             fastn_js::ComponentStatement::CreateKernel(kernel) => kernel.to_js(),
             fastn_js::ComponentStatement::SetProperty(set_property) => set_property.to_js(),
             fastn_js::ComponentStatement::InstantiateComponent(i) => i.to_js(),
@@ -199,12 +217,27 @@ impl fastn_js::ComponentStatement {
     }
 }
 
+impl fastn_js::InstantiateComponentData {
+    fn to_js(&self) -> String {
+        match self {
+            fastn_js::InstantiateComponentData::Definition(definition) => {
+                format!("{}({})", fastn_js::GET_STATIC_VALUE, definition.to_js())
+            }
+            fastn_js::InstantiateComponentData::Name(name) => name.to_owned(),
+        }
+    }
+}
+
 impl fastn_js::InstantiateComponent {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         pretty::RcDoc::text(format!(
             "let {} = {}(",
             self.var_name,
-            fastn_js::utils::name_to_js(self.component_name.as_str())
+            if !self.already_formatted {
+                fastn_js::utils::name_to_js(self.component.to_js().as_str())
+            } else {
+                self.component.to_js().to_owned()
+            }
         ))
         .append(pretty::RcDoc::text(self.parent.clone()))
         .append(comma().append(space()))
@@ -414,7 +447,7 @@ impl fastn_js::Component {
             let mut local_arguments = vec![];
             let mut local_arguments_dependent = vec![];
             let mut arguments = vec![];
-            for (argument_name, value) in self.args.iter() {
+            for (argument_name, value, is_mutable) in self.args.iter() {
                 if value.is_local_value() {
                     // Todo: Fix order
                     // -- component show-name:
@@ -426,7 +459,13 @@ impl fastn_js::Component {
                     // Todo: Fix order
                     local_arguments_dependent.push((argument_name.to_owned(), value.to_owned()));
                 } else {
-                    arguments.push((argument_name.to_owned(), value.to_owned()));
+                    let value = if *is_mutable {
+                        format!("fastn.mutable({})", value.to_js())
+                    } else {
+                        value.to_js()
+                    };
+
+                    arguments.push((argument_name.to_owned(), value));
                 }
             }
 
@@ -438,9 +477,9 @@ impl fastn_js::Component {
                 .append(space())
                 .append(text("{"))
                 .append(pretty::RcDoc::intersperse(
-                    arguments.iter().map(|(k, v)| {
-                        format!("{}: {},", fastn_js::utils::name_to_js_(k), v.to_js())
-                    }),
+                    arguments
+                        .iter()
+                        .map(|(k, v)| format!("{}: {},", fastn_js::utils::name_to_js_(k), v)),
                     pretty::RcDoc::softline(),
                 ))
                 .append(text("};"))
@@ -861,7 +900,7 @@ impl ExpressionGenerator {
                 let val = self.to_js_(second, false, arguments, true);
                 return format!(
                     indoc::indoc! {
-                        "let fastn_utils_val_{refined_var} = {val};
+                        "let fastn_utils_val_{refined_var} = fastn_utils.clone({val});
                         if (!fastn_utils.setter({var}, fastn_utils_val_{refined_var})) {{
                             {var} = fastn_utils_val_{refined_var};
                         }}"
@@ -879,13 +918,17 @@ impl ExpressionGenerator {
             .join("");
         }
 
-        if let Some(operator) = self.has_operator(node.operator()) {
+        if let Some(mut operator) = self.has_operator(node.operator()) {
             // Todo: if node.children().len() != 2 {throw error}
             let first = node.children().first().unwrap(); //todo remove unwrap()
             if matches!(node.operator(), fastn_grammar::evalexpr::Operator::Not)
                 || matches!(node.operator(), fastn_grammar::evalexpr::Operator::Neg)
             {
                 return vec![operator, self.to_js_(first, false, arguments, false)].join("");
+            }
+            if matches!(node.operator(), fastn_grammar::evalexpr::Operator::Neq) {
+                // For js conversion
+                operator = "!==".to_string();
             }
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
             return vec![

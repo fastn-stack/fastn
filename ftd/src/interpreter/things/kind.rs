@@ -232,6 +232,11 @@ impl Kind {
         matches!(self, Kind::Record { name, .. } if name.eq(ftd::interpreter::FTD_FONT_SIZE))
     }
 
+    pub fn is_ftd_background_color(&self) -> bool {
+        matches!(self, Kind::OrType { name, variant, .. } if name.eq(ftd::interpreter::FTD_BACKGROUND) &&
+            variant.is_some() && variant.as_ref().unwrap().starts_with(ftd::interpreter::FTD_BACKGROUND_SOLID))
+    }
+
     pub fn is_ftd_length(&self) -> bool {
         matches!(self, Kind::OrType { name, .. } if name.eq(ftd::interpreter::FTD_LENGTH))
     }

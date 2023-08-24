@@ -3,9 +3,11 @@ let fastn_utils = {
         let node = "div";
         let css = [];
         let attributes = {};
-        if (kind === fastn_dom.ElementKind.Column ||
-            kind === fastn_dom.ElementKind.Document) {
+        if (kind === fastn_dom.ElementKind.Column) {
             css.push("ft_column");
+        } else if (kind === fastn_dom.ElementKind.Document) {
+            css.push("ft_column");
+            css.push("full");
         } else if (kind === fastn_dom.ElementKind.Row) {
             css.push("ft_row");
         } else if (kind === fastn_dom.ElementKind.IFrame) {
@@ -30,10 +32,14 @@ let fastn_utils = {
            node = "pre";
         } else if (kind === fastn_dom.ElementKind.CodeChild) {
             node = "code";
+        } else if (kind[0] === fastn_dom.ElementKind.WebComponent()[0]) {
+            let {webcomponent, arguments} = kind[1];
+            node = `${webcomponent}`;
+            fastn_dom.webComponent.push(arguments);
+            attributes[fastn_dom.webComponentArgument] = fastn_dom.webComponent.length - 1;
         }
         return [node, css, attributes];
     },
-
     getStaticValue(obj) {
         if (obj instanceof fastn.mutableClass) {
            return this.getStaticValue(obj.get());
@@ -47,7 +53,52 @@ let fastn_utils = {
            return obj;
         }
     },
+    removeNonFastnClasses(node) {
+        let classList = node.getNode().classList;
+        let extraCodeData = node.getExtraData().code;
+        let iterativeClassList = classList;
+        if (ssr) {
+            iterativeClassList = iterativeClassList.getClasses();
+        }
+        const classesToRemove = [];
 
+        for (const className of iterativeClassList) {
+            if (!className.startsWith('__') &&
+                className !== extraCodeData?.language &&
+                className !== extraCodeData?.theme
+            ) {
+                classesToRemove.push(className);
+            }
+        }
+
+        for (const classNameToRemove of classesToRemove) {
+            classList.remove(classNameToRemove);
+        }
+    },
+    staticToMutables(obj) {
+        if (!(obj instanceof fastn.mutableClass) &&
+            !(obj instanceof fastn.mutableListClass) &&
+            !(obj instanceof fastn.recordInstanceClass))
+        {
+            if (Array.isArray(obj)) {
+                let list = [];
+                for (let index in obj) {
+                    list.push(fastn_utils.staticToMutables(obj[index]));
+                }
+                return fastn.mutableList(list);
+            } else if (obj instanceof Object) {
+                let fields = {};
+                for (let objKey in obj) {
+                    fields[objKey] = fastn_utils.staticToMutables(obj[objKey]);
+                }
+                return fastn.recordInstance(fields);
+            } else {
+                return fastn.mutable(obj);
+            }
+        } else {
+            return obj;
+        }
+    },
     getFlattenStaticValue(obj) {
         let staticValue = fastn_utils.getStaticValue(obj);
         if (Array.isArray(staticValue)) {
@@ -64,7 +115,6 @@ let fastn_utils = {
         }*/
         return staticValue;
     },
-
     getter(value) {
         if (value instanceof fastn.mutableClass) {
             return value.get();
@@ -72,7 +122,6 @@ let fastn_utils = {
             return value;
         }
     },
-
     // Todo: Merge getterByKey with getter
     getterByKey(value, index) {
         if (value instanceof fastn.mutableClass
@@ -84,7 +133,6 @@ let fastn_utils = {
             return value;
         }
     },
-
     setter(variable, value) {
         if (!fastn_utils.isNull(variable) && variable.set) {
            variable.set(value);
@@ -92,19 +140,16 @@ let fastn_utils = {
         }
         return false;
     },
-
     defaultPropertyValue(_propertyValue) {
         return null;
     },
-
     sameResponsiveRole(desktop, mobile) {
-       return (desktop.get("font_family") ==  mobile.get("font_family")) &&
-       (desktop.get("letter_spacing") ==  mobile.get("letter_spacing")) &&
-       (desktop.get("line_height") ==  mobile.get("line_height")) &&
-       (desktop.get("size") ==  mobile.get("size")) &&
-       (desktop.get("weight") ==  mobile.get("weight"));
+       return (desktop.get("font_family") ===  mobile.get("font_family")) &&
+       (desktop.get("letter_spacing") ===  mobile.get("letter_spacing")) &&
+       (desktop.get("line_height") ===  mobile.get("line_height")) &&
+       (desktop.get("size") ===  mobile.get("size")) &&
+       (desktop.get("weight") ===  mobile.get("weight"));
     },
-
     getRoleValues(value) {
         return {
             "font-family": fastn_utils.getStaticValue(value.get("font_family")),
@@ -114,18 +159,29 @@ let fastn_utils = {
             "line-height": fastn_utils.getStaticValue(value.get("line_height")),
         };
     },
-
     clone(value) {
         if (value === null || value === undefined) {
             return value;
         }
-        if (value instanceof Mutable) {
-            let cloned_value = value.getClone();
-            return cloned_value;
+        if (value instanceof fastn.mutableClass ||
+            value instanceof fastn.mutableListClass )
+        {
+            return value.getClone();
+        }
+           if (value instanceof fastn.recordInstanceClass) {
+            return value.getClone();
         }
         return value;
     },
-  
+    getListItem(value) {
+        if (value === undefined){
+            return null;
+        }
+        if (value instanceof Object && value.hasOwnProperty("item")) {
+            value = value.item;
+        }
+        return value;
+    },
     getEventKey(event) {
         if (65 <= event.keyCode && event.keyCode <= 90) {
             return String.fromCharCode(event.keyCode).toLowerCase();
@@ -134,12 +190,11 @@ let fastn_utils = {
             return event.key;
         }
     },
-
     createNestedObject(currentObject, path, value) {
         const properties = path.split('.');
 
         for (let i = 0; i < properties.length - 1; i++) {
-            const property = properties[i];
+            let property = fastn_utils.private.addUnderscoreToStart(properties[i]);
             if (currentObject instanceof fastn.recordInstanceClass) {
                 if (currentObject.get(property) === undefined) {
                     currentObject.set(property, fastn.recordInstance({}));
@@ -160,7 +215,6 @@ let fastn_utils = {
             currentObject[innermostProperty] = value;
         }
     },
-
     /**
      * Takes an input string and processes it as inline markdown using the
      * 'marked' library. The function removes the last occurrence of
@@ -179,19 +233,15 @@ let fastn_utils = {
         })();
         return `${fastn_utils.private.repeated_space(space_before)}${o}${fastn_utils.private.repeated_space(space_after)}`;
     },
-
     isNull(a) {
         return a === null || a === undefined;
     },
-
     isCommentNode(node) {
       return node === fastn_dom.commentNode;
     },
-
     isWrapperNode(node) {
         return node === fastn_dom.wrapperNode;
     },
-
     nextSibling(node, parent) {
         // For Conditional DOM
         if (Array.isArray(node)) {
@@ -205,7 +255,6 @@ let fastn_utils = {
         }
         return parent.getChildren().indexOf(node.getNode()) + 1;
     },
-
     createNodeHelper(node, classes, attributes) {
         let tagName = node;
         let element = fastn_virtual.document.createElement(node);
@@ -218,7 +267,6 @@ let fastn_utils = {
 
         return [tagName, element];
     },
-
     addCssFile(url) {
         // Create a new link element
         const linkElement = document.createElement("link");
@@ -230,7 +278,6 @@ let fastn_utils = {
         // Append the link element to the head section of the document
         document.head.appendChild(linkElement);
     },
-
     addCodeTheme(theme) {
         if (!fastn_dom.codeData.addedCssFile.includes(theme)) {
             let themeCssUrl = fastn_dom.codeData.availableThemes[theme];
@@ -238,7 +285,6 @@ let fastn_utils = {
             fastn_dom.codeData.addedCssFile.push(theme);
         }
     },
-
     /**
      * Searches for highlighter occurrences in the text, removes them,
      * and returns the modified text along with highlighted line numbers.
@@ -286,8 +332,24 @@ let fastn_utils = {
 
         return result;
     },
-
-
+    getNodeValue(node) {
+        return node.getNode().value;
+    },
+    setFullHeight() {
+        if(!ssr) {
+            document.body.style.height = `max(${document.documentElement.scrollHeight}px, 100%)`;
+        }
+    },
+    resetFullHeight() {
+        if(!ssr) {
+            document.body.style.height = `100%`;
+        }
+    },
+    highlightCode(codeElement, extraCodeData) {
+        if (!ssr && !fastn_utils.isNull(extraCodeData.language) && !fastn_utils.isNull(extraCodeData.theme)) {
+            Prism.highlightElement(codeElement);
+        }
+    }
 }
 
 
@@ -324,7 +386,6 @@ fastn_utils.private = {
 
         return { space_before, space_after };
     },
-
     /**
      * Helper function for `fastn_utils.markdown_inline` to replace the last
      * occurrence of a substring in a string.
@@ -342,7 +403,6 @@ fastn_utils.private = {
         const idx = s.lastIndexOf(old_word);
         return s.slice(0, idx) + new_word + s.slice(idx + old_word.length);
     },
-
     /**
      * Helper function for `fastn_utils.markdown_inline` to generate a string
      * containing a specified number of spaces.
@@ -353,7 +413,6 @@ fastn_utils.private = {
     repeated_space(n) {
         return Array.from({ length: n }, () => ' ').join('');
     },
-
     /**
      * Merges consecutive numbers in a comma-separated list into ranges.
      *
@@ -394,6 +453,12 @@ fastn_utils.private = {
         }
 
         return mergedRanges.join(',');
+    },
+    addUnderscoreToStart(text) {
+        if (/^\d/.test(text)) {
+            return '_' + text;
+        }
+        return text;
     }
 }
 

@@ -2500,6 +2500,45 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
+            ftd::interpreter::FTD_LINK_REL.to_string(),
+            ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                name: ftd::interpreter::FTD_LINK_REL.to_string(),
+                variants: vec![
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINK_REL_NO_FOLLOW,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("no-follow")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINK_REL_SPONSORED,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("sponsored")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINK_REL_UGC,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("ugc")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter::FTD_RESIZING.to_string(),
             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
                 name: ftd::interpreter::FTD_RESIZING.to_string(),
@@ -3428,6 +3467,70 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 value: ftd::interpreter::PropertyValue::Value {
                     value: ftd::interpreter::Value::Boolean { value: false },
                     is_mutable: true,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
+        (
+            "ftd#empty".to_string(),
+            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                name: "ftd#empty".to_string(),
+                kind: ftd::interpreter::Kind::string().into_kind_data(),
+                mutable: false,
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::String { text: "".to_string() },
+                    is_mutable: false,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
+        (
+            "ftd#space".to_string(),
+            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                name: "ftd#space".to_string(),
+                kind: ftd::interpreter::Kind::string().into_kind_data(),
+                mutable: false,
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::String { text: " ".to_string() },
+                    is_mutable: false,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
+        (
+            "ftd#nbsp".to_string(),
+            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                name: "ftd#nbsp".to_string(),
+                kind: ftd::interpreter::Kind::string().into_kind_data(),
+                mutable: false,
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::String { text: "&nbsp;".to_string() },
+                    is_mutable: false,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
+        (
+            "ftd#non-breaking-space".to_string(),
+            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                name: "ftd#non-breaking-space".to_string(),
+                kind: ftd::interpreter::Kind::string().into_kind_data(),
+                mutable: false,
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::String { text: "&nbsp;".to_string() },
+                    is_mutable: false,
                     line_number: 0,
                 },
                 conditional_value: vec![],
@@ -9484,6 +9587,12 @@ pub fn text_input_function() -> ftd::interpreter::ComponentDefinition {
                         .into_kind_data(),
                 ),
                 ftd::interpreter::Argument::default(
+                    "max-length",
+                    ftd::interpreter::Kind::integer()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter::Argument::default(
                     "type",
                     ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_TEXT_INPUT_TYPE)
                         .into_optional()
@@ -9833,6 +9942,12 @@ pub fn document_function() -> ftd::interpreter::ComponentDefinition {
         name: "ftd#document".to_string(),
         arguments: [vec![
             ftd::interpreter::Argument::default(
+                "favicon",
+                ftd::interpreter::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
+                    .into_optional()
+                    .into_kind_data(),
+            ),
+            ftd::interpreter::Argument::default(
                 "breakpoint",
                 ftd::interpreter::Kind::record(ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA)
                     .into_optional()
@@ -10043,6 +10158,12 @@ fn common_arguments() -> Vec<ftd::interpreter::Argument> {
             "sticky",
             ftd::interpreter::Kind::boolean()
                 .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter::Argument::default(
+            "rel",
+            ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LINK_REL)
+                .into_list()
                 .into_kind_data(),
         ),
         ftd::interpreter::Argument::default(

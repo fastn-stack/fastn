@@ -57,24 +57,25 @@ impl Element {
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
+        let mut rdata = rdata.clone();
         match self {
             Element::Text(text) => {
-                text.to_component_statements(parent, index, doc, rdata, should_return)
+                text.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::Integer(integer) => {
-                integer.to_component_statements(parent, index, doc, rdata, should_return)
+                integer.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::Decimal(decimal) => {
-                decimal.to_component_statements(parent, index, doc, rdata, should_return)
+                decimal.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::Boolean(boolean) => {
-                boolean.to_component_statements(parent, index, doc, rdata, should_return)
+                boolean.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::Column(column) => column.to_component_statements(
                 parent,
                 index,
                 doc,
-                rdata,
+                &mut rdata,
                 should_return,
                 has_rive_components,
             ),
@@ -82,7 +83,7 @@ impl Element {
                 parent,
                 index,
                 doc,
-                rdata,
+                &mut rdata,
                 should_return,
                 has_rive_components,
             ),
@@ -90,7 +91,7 @@ impl Element {
                 parent,
                 index,
                 doc,
-                rdata,
+                &mut rdata,
                 should_return,
                 has_rive_components,
             ),
@@ -98,33 +99,35 @@ impl Element {
                 parent,
                 index,
                 doc,
-                rdata,
+                &mut rdata,
                 should_return,
                 has_rive_components,
             ),
             Element::Image(image) => {
-                image.to_component_statements(parent, index, doc, rdata, should_return)
+                image.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::Device(d) => d.to_component_statements(
                 parent,
                 index,
                 doc,
-                rdata,
+                &mut rdata,
                 should_return,
                 has_rive_components,
             ),
             Element::CheckBox(c) => {
-                c.to_component_statements(parent, index, doc, rdata, should_return)
+                c.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::TextInput(t) => {
-                t.to_component_statements(parent, index, doc, rdata, should_return)
+                t.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::Iframe(i) => {
-                i.to_component_statements(parent, index, doc, rdata, should_return)
+                i.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
-            Element::Code(c) => c.to_component_statements(parent, index, doc, rdata, should_return),
+            Element::Code(c) => {
+                c.to_component_statements(parent, index, doc, &mut rdata, should_return)
+            }
             Element::Rive(rive) => {
-                rive.to_component_statements(parent, index, doc, rdata, should_return)
+                rive.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
         }
     }
@@ -170,12 +173,11 @@ impl CheckBox {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel =
-            fastn_js::Kernel::from_component(fastn_js::ElementKind::CheckBox, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::CheckBox, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.extend(self.common.to_set_properties(
             kernel.name.as_str(),
@@ -217,6 +219,7 @@ impl CheckBox {
 pub struct TextInput {
     pub placeholder: Option<ftd::js::Value>,
     pub multiline: Option<ftd::js::Value>,
+    pub max_length: Option<ftd::js::Value>,
     pub _type: Option<ftd::js::Value>,
     pub default_value: Option<ftd::js::Value>,
     pub enabled: Option<ftd::js::Value>,
@@ -258,6 +261,11 @@ impl TextInput {
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
+            max_length: ftd::js::value::get_optional_js_value(
+                "max-length",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
             common: Common::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -271,12 +279,11 @@ impl TextInput {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel =
-            fastn_js::Kernel::from_component(fastn_js::ElementKind::TextInput, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::TextInput, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.extend(self.common.to_set_properties(
             kernel.name.as_str(),
@@ -328,6 +335,16 @@ impl TextInput {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 default_value.to_set_property(
                     fastn_js::PropertyKind::DefaultTextInputValue,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
+        }
+        if let Some(ref max_length) = self.max_length {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                max_length.to_set_property(
+                    fastn_js::PropertyKind::InputMaxLength,
                     doc,
                     kernel.name.as_str(),
                     rdata,
@@ -396,11 +413,11 @@ impl Iframe {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::IFrame, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::IFrame, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.extend(self.common.to_set_properties(
             kernel.name.as_str(),
@@ -523,11 +540,11 @@ impl Code {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Code, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Code, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
@@ -627,11 +644,11 @@ impl Image {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Image, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Image, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -704,6 +721,7 @@ pub struct Document {
 #[derive(Debug)]
 pub struct DocumentMeta {
     pub title: Option<ftd::js::Value>,
+    pub favicon: Option<ftd::js::Value>,
     pub og_title: Option<ftd::js::Value>,
     pub twitter_title: Option<ftd::js::Value>,
     pub description: Option<ftd::js::Value>,
@@ -757,11 +775,6 @@ impl ContainerProperties {
         rdata: &ftd::js::ResolverData,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        if let Some(ref spacing) = self.spacing {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                spacing.to_set_property(fastn_js::PropertyKind::Spacing, doc, element_name, rdata),
-            ));
-        }
         if let Some(ref wrap) = self.wrap {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 wrap.to_set_property(fastn_js::PropertyKind::Wrap, doc, element_name, rdata),
@@ -775,6 +788,12 @@ impl ContainerProperties {
                     element_name,
                     rdata,
                 ),
+            ));
+        }
+        // prioritizing spacing > align-content for justify-content
+        if let Some(ref spacing) = self.spacing {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                spacing.to_set_property(fastn_js::PropertyKind::Spacing, doc, element_name, rdata),
             ));
         }
         component_statements
@@ -805,15 +824,17 @@ impl Container {
         &self,
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
-        component_name: &str,
         has_rive_components: &mut bool,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
 
+        // rdata will have component_name
+        let component_name = rdata.component_name.clone().unwrap().to_string();
+
         let inherited_variables =
             self.inherited
-                .get_inherited_variables(doc, rdata, component_name);
+                .get_inherited_variables(doc, rdata, component_name.as_str());
 
         let inherited_variable_name = inherited_variables
             .as_ref()
@@ -895,6 +916,7 @@ impl InheritedProperties {
                 name: format!("{}{}", fastn_js::INHERITED_PREFIX, component_name),
                 value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
                     fields: inherited_fields,
+                    other_references: vec![rdata.inherited_variable_name.to_string()],
                 }),
                 prefix: None,
             })
@@ -936,11 +958,11 @@ impl Text {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Text, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Text, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -1002,12 +1024,11 @@ impl Integer {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel =
-            fastn_js::Kernel::from_component(fastn_js::ElementKind::Integer, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Integer, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -1068,12 +1089,11 @@ impl Decimal {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel =
-            fastn_js::Kernel::from_component(fastn_js::ElementKind::Decimal, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Decimal, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -1134,12 +1154,11 @@ impl Boolean {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel =
-            fastn_js::Kernel::from_component(fastn_js::ElementKind::Boolean, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Boolean, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -1199,19 +1218,17 @@ impl Document {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel =
-            fastn_js::Kernel::from_component(fastn_js::ElementKind::Document, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Document, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         component_statements.extend(self.container.to_component_statements(
             doc,
             rdata,
-            kernel.name.as_str(),
             has_rive_components,
             false,
         ));
@@ -1237,6 +1254,7 @@ impl DocumentMeta {
         arguments: &[ftd::interpreter::Argument],
     ) -> DocumentMeta {
         DocumentMeta {
+            favicon: ftd::js::value::get_optional_js_value("favicon", properties, arguments),
             title: ftd::js::value::get_optional_js_value("title", properties, arguments),
             og_title: ftd::js::value::get_optional_js_value("og-title", properties, arguments),
             twitter_title: ftd::js::value::get_optional_js_value(
@@ -1310,6 +1328,12 @@ impl DocumentMeta {
         element_name: &str,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
+
+        if let Some(ref favicon) = self.favicon {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                favicon.to_set_property(fastn_js::PropertyKind::Favicon, doc, element_name, rdata),
+            ));
+        }
 
         if let Some(ref title) = self.title {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
@@ -1445,12 +1469,12 @@ impl Column {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Column, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Column, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.extend(self.common.to_set_properties(
             kernel.name.as_str(),
@@ -1467,7 +1491,6 @@ impl Column {
         component_statements.extend(self.container.to_component_statements(
             doc,
             rdata,
-            kernel.name.as_str(),
             has_rive_components,
             false,
         ));
@@ -1511,12 +1534,12 @@ impl Row {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Row, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Row, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         component_statements.extend(self.common.to_set_properties(
@@ -1534,7 +1557,6 @@ impl Row {
         component_statements.extend(self.container.to_component_statements(
             doc,
             rdata,
-            kernel.name.as_str(),
             has_rive_components,
             false,
         ));
@@ -1575,15 +1597,16 @@ impl ContainerElement {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(
+        let kernel = create_element(
             fastn_js::ElementKind::ContainerElement,
             parent,
             index,
+            rdata,
         );
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
@@ -1596,7 +1619,6 @@ impl ContainerElement {
         component_statements.extend(self.container.to_component_statements(
             doc,
             rdata,
-            kernel.name.as_str(),
             has_rive_components,
             false,
         ));
@@ -1638,7 +1660,7 @@ impl Device {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -1649,17 +1671,17 @@ impl Device {
             }
         }
 
-        let kernel = fastn_js::Kernel::from_component(
+        let kernel = create_element(
             fastn_js::ElementKind::Device,
             fastn_js::FUNCTION_PARENT,
             index,
+            rdata,
         );
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         component_statements.extend(self.container.to_component_statements(
             doc,
             &rdata.clone_with_new_device(&Some(self.device.clone())),
-            kernel.name.as_str(),
             has_rive_components,
             true,
         ));
@@ -1829,11 +1851,11 @@ impl Rive {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
+        rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Rive, parent, index);
+        let kernel = create_element(fastn_js::ElementKind::Rive, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         let rive_name = self
@@ -1864,7 +1886,7 @@ impl Rive {
                 extraData.rive = new rive.Rive({{
                     src: fastn_utils.getFlattenStaticValue({src}),
                     canvas: {canvas}.getNode(),
-                    autoplay: fastn_utils.getStaticValue({autoplay}),
+                    autoplay: {get_static_value}({autoplay}),
                     stateMachines: fastn_utils.getFlattenStaticValue({state_machines}),
                     artboard: {artboard},
                     onLoad: (_) => {{
@@ -1876,6 +1898,7 @@ impl Rive {
             "},
             src = self.src.to_set_property_value(doc, rdata).to_js(),
             canvas = kernel.name,
+            get_static_value = fastn_js::GET_STATIC_VALUE,
             autoplay = self.autoplay.to_set_property_value(doc, rdata).to_js(),
             state_machines = self
                 .state_machines
@@ -1910,6 +1933,7 @@ pub struct Common {
     pub id: Option<ftd::js::Value>,
     pub region: Option<ftd::js::Value>,
     pub link: Option<ftd::js::Value>,
+    pub link_rel: Option<ftd::js::Value>,
     pub open_in_new_tab: Option<ftd::js::Value>,
     pub align_self: Option<ftd::js::Value>,
     pub width: Option<ftd::js::Value>,
@@ -1973,6 +1997,8 @@ pub struct Common {
     pub classes: Option<ftd::js::Value>,
     pub anchor: Option<ftd::js::Value>,
     pub shadow: Option<ftd::js::Value>,
+    pub css: Option<ftd::js::Value>,
+    pub js: Option<ftd::js::Value>,
     pub events: Vec<ftd::interpreter::Event>,
 }
 
@@ -1984,8 +2010,11 @@ impl Common {
     ) -> Common {
         Common {
             id: ftd::js::value::get_optional_js_value("id", properties, arguments),
+            css: ftd::js::value::get_optional_js_value("css", properties, arguments),
+            js: ftd::js::value::get_optional_js_value("js", properties, arguments),
             region: ftd::js::value::get_optional_js_value("region", properties, arguments),
             link: ftd::js::value::get_optional_js_value("link", properties, arguments),
+            link_rel: ftd::js::value::get_optional_js_value("rel", properties, arguments),
             open_in_new_tab: ftd::js::value::get_optional_js_value(
                 "open-in-new-tab",
                 properties,
@@ -2207,24 +2236,19 @@ impl Common {
                 id.to_set_property(fastn_js::PropertyKind::Id, doc, element_name, rdata),
             ));
         }
+        if let Some(ref external_css) = self.css {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                external_css.to_set_property(fastn_js::PropertyKind::Css, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref external_js) = self.js {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                external_js.to_set_property(fastn_js::PropertyKind::Js, doc, element_name, rdata),
+            ));
+        }
         if let Some(ref region) = self.region {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 region.to_set_property(fastn_js::PropertyKind::Region, doc, element_name, rdata),
-            ));
-        }
-        if let Some(ref link) = self.link {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                link.to_set_property(fastn_js::PropertyKind::Link, doc, element_name, rdata),
-            ));
-        }
-        if let Some(ref open_in_new_tab) = self.open_in_new_tab {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                open_in_new_tab.to_set_property(
-                    fastn_js::PropertyKind::OpenInNewTab,
-                    doc,
-                    element_name,
-                    rdata,
-                ),
             ));
         }
         if let Some(ref align_self) = self.align_self {
@@ -2757,6 +2781,26 @@ impl Common {
                 shadow.to_set_property(fastn_js::PropertyKind::Shadow, doc, element_name, rdata),
             ));
         }
+        if let Some(ref link) = self.link {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                link.to_set_property(fastn_js::PropertyKind::Link, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref link_rel) = self.link_rel {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                link_rel.to_set_property(fastn_js::PropertyKind::LinkRel, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref open_in_new_tab) = self.open_in_new_tab {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                open_in_new_tab.to_set_property(
+                    fastn_js::PropertyKind::OpenInNewTab,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
+            ));
+        }
         component_statements
     }
 }
@@ -2855,4 +2899,15 @@ pub fn is_kernel(s: &str) -> bool {
 
 pub(crate) fn is_rive_component(s: &str) -> bool {
     "ftd#rive".eq(s)
+}
+
+pub(crate) fn create_element(
+    element_kind: fastn_js::ElementKind,
+    parent: &str,
+    index: usize,
+    rdata: &mut ftd::js::ResolverData,
+) -> fastn_js::Kernel {
+    let kernel = fastn_js::Kernel::from_component(element_kind, parent, index);
+    *rdata = rdata.clone_with_new_component_name(Some(kernel.name.to_string()));
+    kernel
 }

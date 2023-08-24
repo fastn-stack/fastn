@@ -1,0 +1,51 @@
+-- ftd.text: ===================
+
+-- single-ui:
+ui: $uis.0
+
+-- ftd.text: ===================
+
+-- uis.0:
+
+-- ftd.text: ===================
+
+-- object:
+for: $object in $uis
+
+-- ftd.text: ===================
+
+
+
+
+-- component single-ui:
+ftd.ui ui:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: Hello World up
+
+-- single-ui.ui:
+
+-- ftd.text: Hello World down
+
+-- end: ftd.column
+
+-- end: single-ui
+
+
+
+
+
+
+
+
+
+
+-- ftd.ui list uis:
+
+-- ftd.text: Hello World 3
+
+-- ftd.text: Hello World 2
+
+-- end: uis

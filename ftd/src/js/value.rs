@@ -384,6 +384,7 @@ impl ftd::interpreter::Value {
                             )
                         })
                         .collect_vec(),
+                    other_references: vec![],
                 })
             }
             ftd::interpreter::Value::UI { component, .. } => {
@@ -410,6 +411,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
         "ftd#resizing" => {
             let js_variant = resizing_variants(variant);
             (format!("fastn_dom.Resizing.{}", js_variant.0), js_variant.1)
+        }
+        "ftd#link-rel" => {
+            let js_variant = link_rel_variants(variant);
+            (format!("fastn_dom.LinkRel.{}", js_variant), false)
         }
         "ftd#length" => {
             let js_variant = length_variants(variant);
@@ -490,7 +495,7 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
         }
         "ftd#anchor" => {
             let js_variant = anchor_variants(variant);
-            (format!("fastn_dom.Anchor.{}", js_variant), false)
+            (format!("fastn_dom.Anchor.{}", js_variant.0), js_variant.1)
         }
         "ftd#device-data" => {
             let js_variant = device_data_variants(variant);
@@ -532,6 +537,15 @@ fn resizing_variants(name: &str) -> (&'static str, bool) {
     }
 }
 
+fn link_rel_variants(name: &str) -> &'static str {
+    match name {
+        "no-follow" => "NoFollow",
+        "sponsored" => "Sponsored",
+        "ugc" => "Ugc",
+        t => panic!("invalid link rel variant {}", t),
+    }
+}
+
 fn length_variants(name: &str) -> &'static str {
     match name {
         "px" => "Px",
@@ -543,6 +557,7 @@ fn length_variants(name: &str) -> &'static str {
         "vmin" => "Vmin",
         "vmax" => "Vmax",
         "calc" => "Calc",
+        "responsive" => "Responsive",
         t => todo!("invalid length variant {}", t),
     }
 }
@@ -757,11 +772,11 @@ fn align_self_variants(name: &str) -> &'static str {
     }
 }
 
-fn anchor_variants(name: &str) -> &'static str {
+fn anchor_variants(name: &str) -> (&'static str, bool) {
     match name {
-        "window" => "Window",
-        "parent" => "Parent",
-        "id" => "Id",
+        "window" => ("Window", false),
+        "parent" => ("Parent", false),
+        "id" => ("Id", true),
         t => todo!("invalid anchor variant {}", t),
     }
 }

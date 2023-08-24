@@ -200,6 +200,7 @@ pub enum Value {
     },
     Record {
         fields: Vec<(String, SetPropertyValue)>,
+        other_references: Vec<String>,
     },
     UI {
         value: Vec<fastn_js::ComponentStatement>,
@@ -234,8 +235,23 @@ impl Value {
                     .map(|v| v.to_js_with_element_name(element_name))
                     .join(", ")
             ),
-            Value::Record { fields } => format!(
-                "fastn.recordInstance({{{}}})",
+            Value::Record {
+                fields,
+                other_references,
+            } => format!(
+                "fastn.recordInstance({{{}{}}})",
+                if other_references.is_empty() {
+                    "".to_string()
+                } else {
+                    format!(
+                        "{}, ",
+                        other_references
+                            .iter()
+                            .map(|v| format!("...{v}.getAllFields()"))
+                            .collect_vec()
+                            .join(", ")
+                    )
+                },
                 fields
                     .iter()
                     .map(|(k, v)| format!(
@@ -270,7 +286,7 @@ impl Value {
                 .map(|v| v.is_local_value_dependent())
                 .unwrap_or_default(),
             Value::List { value } => value.iter().any(|v| v.is_local_value_dependent()),
-            Value::Record { fields } => fields.iter().any(|v| v.1.is_local_value_dependent()),
+            Value::Record { fields, .. } => fields.iter().any(|v| v.1.is_local_value_dependent()),
             Value::UI { .. } => {
                 //Todo: Check for UI
                 false
@@ -288,9 +304,12 @@ pub enum PropertyKind {
     DecimalValue,
     BooleanValue,
     Id,
+    Css,
+    Js,
     Region,
     OpenInNewTab,
     Link,
+    LinkRel,
     Anchor,
     Classes,
     AlignSelf,
@@ -366,6 +385,7 @@ pub enum PropertyKind {
     Placeholder,
     Multiline,
     TextInputType,
+    InputMaxLength,
     DefaultTextInputValue,
     Loading,
     Alt,
@@ -386,6 +406,7 @@ pub enum PropertyKind {
     MetaOGImage,
     MetaTwitterImage,
     MetaThemeColor,
+    Favicon,
 }
 
 impl PropertyKind {
@@ -393,6 +414,9 @@ impl PropertyKind {
         match self {
             PropertyKind::Children => "fastn_dom.PropertyKind.Children",
             PropertyKind::Id => "fastn_dom.PropertyKind.Id",
+            PropertyKind::Css => "fastn_dom.PropertyKind.Css",
+            PropertyKind::Js => "fastn_dom.PropertyKind.Js",
+            PropertyKind::LinkRel => "fastn_dom.PropertyKind.LinkRel",
             PropertyKind::AlignSelf => "fastn_dom.PropertyKind.AlignSelf",
             PropertyKind::Anchor => "fastn_dom.PropertyKind.Anchor",
             PropertyKind::StringValue => "fastn_dom.PropertyKind.StringValue",
@@ -477,6 +501,7 @@ impl PropertyKind {
             PropertyKind::Placeholder => "fastn_dom.PropertyKind.Placeholder",
             PropertyKind::Multiline => "fastn_dom.PropertyKind.Multiline",
             PropertyKind::TextInputType => "fastn_dom.PropertyKind.TextInputType",
+            PropertyKind::InputMaxLength => "fastn_dom.PropertyKind.InputMaxLength",
             PropertyKind::DefaultTextInputValue => "fastn_dom.PropertyKind.DefaultTextInputValue",
             PropertyKind::Loading => "fastn_dom.PropertyKind.Loading",
             PropertyKind::Src => "fastn_dom.PropertyKind.Src",
@@ -509,6 +534,7 @@ impl PropertyKind {
             PropertyKind::MetaThemeColor => {
                 "fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor"
             }
+            PropertyKind::Favicon => "fastn_dom.PropertyKind.Favicon",
         }
     }
 }

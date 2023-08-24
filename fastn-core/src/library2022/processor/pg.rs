@@ -27,6 +27,9 @@ static POOL_RESULT: tokio::sync::OnceCell<
     Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError>,
 > = tokio::sync::OnceCell::const_new();
 
+static EXECUTE_QUERY_LOCK: once_cell::sync::Lazy<tokio::sync::Mutex<()>> =
+    once_cell::sync::Lazy::new(|| tokio::sync::Mutex::new(()));
+
 async fn pool() -> &'static Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
     POOL_RESULT.get_or_init(create_pool).await
 }
@@ -38,12 +41,20 @@ pub async fn process(
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = super::sqlite::get_p1_data("pg", &value, doc.name)?;
 
-    super::sqlite::result_to_value(
-        execute_query(query.as_str(), doc, value.line_number(), headers).await?,
-        kind,
-        doc,
-        &value,
-    )
+    let query_response = execute_query(query.as_str(), doc, value.line_number(), headers).await;
+
+    match query_response {
+        Ok(result) => {
+            super::sqlite::result_to_value(Ok(result), kind, doc, &value, super::sql::STATUS_OK)
+        }
+        Err(e) => super::sqlite::result_to_value(
+            Err(e.to_string()),
+            kind,
+            doc,
+            &value,
+            super::sql::STATUS_ERROR,
+        ),
+    }
 }
 
 type PGData = dyn postgres_types::ToSql + Sync;
@@ -84,6 +95,9 @@ fn resolve_variable_from_doc(
 
     Ok(match (e, thing) {
         (&postgres_types::Type::TEXT, ftd::interpreter::Value::String { text, .. }) => {
+            Box::new(text)
+        }
+        (&postgres_types::Type::VARCHAR, ftd::interpreter::Value::String { text, .. }) => {
             Box::new(text)
         }
         (&postgres_types::Type::INT4, ftd::interpreter::Value::Integer { value, .. }) => {
@@ -153,6 +167,9 @@ fn resolve_variable_from_headers(
 
     Ok(match (e, &header.value) {
         (&postgres_types::Type::TEXT, ftd::ast::VariableValue::String { value, .. }) => {
+            Some(Box::new(value.to_string()))
+        }
+        (&postgres_types::Type::VARCHAR, ftd::ast::VariableValue::String { value, .. }) => {
             Some(Box::new(value.to_string()))
         }
         (&postgres_types::Type::INT4, ftd::ast::VariableValue::String { value, .. }) => {
@@ -251,12 +268,14 @@ async fn execute_query(
     line_number: usize,
     headers: ftd::ast::HeaderValues,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
+    let _lock = EXECUTE_QUERY_LOCK.lock().await;
+
     let (query, query_args) = super::sql::extract_arguments(query)?;
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
 
     let stmt = client.prepare_cached(query.as_str()).await.unwrap();
-    let args = prepare_args(query_args, stmt.params(), doc, line_number, headers)?;
 
+    let args = prepare_args(query_args, stmt.params(), doc, line_number, headers)?;
     let rows = client.query(&stmt, &args.pg_args()).await.unwrap();
     let mut result: Vec<Vec<serde_json::Value>> = vec![];
 

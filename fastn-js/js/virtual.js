@@ -16,6 +16,9 @@ class ClassList {
     toString() {
         return this.#classes.join(' ');
     }
+    getClasses() {
+        return this.#classes;
+    }
 }
 
 class Node {
@@ -47,6 +50,10 @@ class Node {
 
     setAttribute(attribute, value) {
         this.#attributes[attribute] = value;
+    }
+
+    getAttribute(attribute) {
+        return this.#attributes[attribute];
     }
 
     removeAttribute(attribute) {

@@ -210,6 +210,15 @@ pub(crate) fn dependencies_from_property_value(
         result
     } else if property_value.is_value() && property_value.kind().is_ftd_length() {
         dependencies_from_length_property_value(property_value, doc)
+    } else if property_value.is_value() && property_value.kind().is_ftd_background_color() {
+        let mut values = vec![];
+        let value = property_value.value("", 0).unwrap();
+        let property_value = value
+            .get_or_type(doc.name, property_value.line_number())
+            .unwrap()
+            .2;
+        values.extend(dependencies_from_property_value(property_value, doc));
+        values
     } else if property_value.is_value() && property_value.kind().is_ftd_resizing_fixed() {
         let value = property_value.value("", 0).unwrap();
         let property_value = value

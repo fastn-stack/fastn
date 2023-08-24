@@ -568,10 +568,14 @@
 }
 },
 "ftd#device": "desktop",
+"ftd#empty": "",
 "ftd#follow-system-dark-mode": true,
 "ftd#font-code": "sans-serif",
 "ftd#font-copy": "sans-serif",
 "ftd#font-display": "sans-serif",
+"ftd#nbsp": "&nbsp;",
+"ftd#non-breaking-space": "&nbsp;",
+"ftd#space": " ",
 "ftd#system-dark-mode": false
 }
 </script>
@@ -2115,6 +2119,18 @@ else {document.querySelector(`[data-id="1:main"]`).style["justify-content"] = ev
 `.format(JSON.stringify(`{0}px`.format(JSON.stringify(50)))));}
 }
 window.set_value_main = {};
+window.set_value_main["foo#green"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#green", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#green", "main");
+window.ftd.call_immutable_value_changes("foo#green", "main");
+window.ftd.utils.node_change_call("main","1:main__background-color", data);
+window.ftd.utils.node_change_call("main","1:main__background-image", data);
+window.ftd.utils.node_change_call("main","1:main__background-position", data);
+window.ftd.utils.node_change_call("main","1:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","1:main__background-size", data);
+};
+
 window.set_value_main["foo#num"] = function (data, new_value, remaining) {
 window.ftd.utils.set_value_helper(data, "foo#num", remaining, new_value);
 

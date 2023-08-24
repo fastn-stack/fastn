@@ -1,0 +1,133 @@
+/*
+ * Laserwave Theme originally by Jared Jones for Visual Studio Code
+ * https://github.com/Jaredk3nt/laserwave
+ *
+ * Ported for PrismJS by Simon Jespersen [https://github.com/simjes]
+ */
+
+code[class*="language-"].laserwave-theme,
+pre[class*="language-"].laserwave-theme {
+	background: #27212e;
+	color: #ffffff;
+	font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace; /* this is the default */
+	/* The following properties are standard, please leave them as they are */
+	font-size: 1em;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	line-height: 1.5;
+	-moz-tab-size: 2;
+	-o-tab-size: 2;
+	tab-size: 2;
+	/* The following properties are also standard */
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+code[class*="language-"].laserwave-theme::-moz-selection,
+code[class*="language-"].laserwave-theme ::-moz-selection,
+pre[class*="language-"].laserwave-theme::-moz-selection,
+pre[class*="language-"].laserwave-theme ::-moz-selection {
+	background: #eb64b927;
+	color: inherit;
+}
+
+code[class*="language-"].laserwave-theme::selection,
+code[class*="language-"].laserwave-theme ::selection,
+pre[class*="language-"].laserwave-theme::selection,
+pre[class*="language-"].laserwave-theme ::selection {
+	background: #eb64b927;
+	color: inherit;
+}
+
+/* Properties specific to code blocks */
+pre[class*="language-"].laserwave-theme {
+	padding: 1em; /* this is standard */
+	margin: 0.5em 0; /* this is the default */
+	overflow: auto; /* this is standard */
+	border-radius: 0.5em;
+}
+
+/* Properties specific to inline code */
+:not(pre) > code[class*="language-"].laserwave-theme {
+	padding: 0.2em 0.3em;
+	border-radius: 0.5rem;
+	white-space: normal; /* this is standard */
+}
+
+.laserwave-theme .token.comment,
+.laserwave-theme .token.prolog,
+.laserwave-theme .token.cdata {
+	color: #91889b;
+}
+
+.laserwave-theme .token.punctuation {
+	color: #7b6995;
+}
+
+.laserwave-theme .token.builtin,
+.laserwave-theme .token.constant,
+.laserwave-theme .token.boolean {
+	color: #ffe261;
+}
+
+.laserwave-theme .token.number {
+	color: #b381c5;
+}
+
+.laserwave-theme .token.important,
+.laserwave-theme .token.atrule,
+.laserwave-theme .token.property,
+.laserwave-theme .token.keyword {
+	color: #40b4c4;
+}
+
+.laserwave-theme .token.doctype,
+.laserwave-theme .token.operator,
+.laserwave-theme .token.inserted,
+.laserwave-theme .token.tag,
+.laserwave-theme .token.class-name,
+.laserwave-theme .token.symbol {
+	color: #74dfc4;
+}
+
+.laserwave-theme .token.attr-name,
+.laserwave-theme .token.function,
+.laserwave-theme .token.deleted,
+.laserwave-theme .token.selector {
+	color: #eb64b9;
+}
+
+.laserwave-theme .token.attr-value,
+.laserwave-theme .token.regex,
+.laserwave-theme .token.char,
+.laserwave-theme .token.string {
+	color: #b4dce7;
+}
+
+.laserwave-theme .token.entity,
+.laserwave-theme .token.url,
+.laserwave-theme .token.variable {
+	color: #ffffff;
+}
+
+/* The following rules are pretty similar across themes, but feel free to adjust them */
+.laserwave-theme .token.bold {
+	font-weight: bold;
+}
+
+.laserwave-theme .token.italic {
+	font-style: italic;
+}
+
+.laserwave-theme .token.entity {
+	cursor: help;
+}
+
+.laserwave-theme .token.namespace {
+	opacity: 0.7;
+}
