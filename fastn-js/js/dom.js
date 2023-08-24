@@ -742,14 +742,26 @@ class Node2 {
                 this.updateTagName('a');
                 this.attachAttribute("href", url);
             }
+            return;
         }
-        if (hydrating) {
-            if (node_kind === fastn_dom.ElementKind.Image) {
-                let anchor_element = document.createElement("a");
-                anchor_element.href = url;
-                anchor_element.appendChild(this.#node);
-                this.#parent.appendChild(anchor_element);
+        if (node_kind === fastn_dom.ElementKind.Image) {
+            let anchorElement = document.createElement("a");
+            anchorElement.href = url;
+            anchorElement.appendChild(this.#node);
+            this.#parent.appendChild(anchorElement);
+            this.#node = anchorElement;
+        } else {
+            let anchorElement = document.createElement("a");
+            anchorElement.href = url;
+            anchorElement.innerHTML = this.#node.innerHTML;
+            anchorElement.className = this.#node.className;
+            anchorElement.style = this.#node.style;
+            for (var i = 0; i < this.#node.attributes.length; i++) {
+                var attr = this.#node.attributes[i];
+                anchorElement.setAttribute(attr.name, attr.value);
             }
+            this.#parent.replaceChild(anchorElement, this.#node);
+            this.#node = anchorElement;
         }
     }
     updatePositionForNodeById(node_id, value) {

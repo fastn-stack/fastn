@@ -1,0 +1,8 @@
+-- ftd.text: Hello from mobile
+link: fastn.com
+if: { ftd.device == "mobile" }
+
+
+-- ftd.text: Hello from desktop
+link: fastn.com
+if: { ftd.device == "desktop" }
