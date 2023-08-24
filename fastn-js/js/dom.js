@@ -765,15 +765,15 @@ class Node2 {
         }
     }
     updatePositionForNodeById(node_id, value) {
-        if (hydrating) {
+        if (!ssr) {
             const target_node = document.querySelector(`[id="${node_id}"]`);
-            if (target_node !== null && target_node !== undefined)
+            if (!fastn_utils.isNull(target_node))
                 target_node.style['position'] = value;
         }
     }
     updateParentPosition(value) {
-        if (hydrating) {
-            let current_node = document.querySelector(`[data-id="${id_counter}"]`);
+        if (!ssr) {
+            let current_node = this.#node;
             if (current_node) {
                 let parent_node = current_node.parentNode;
                 parent_node.style['position'] = value;

@@ -1,8 +1,10 @@
 -- ftd.text: Hello from mobile
 link: fastn.com
+background.solid: yellow
 if: { ftd.device == "mobile" }
 
 
 -- ftd.text: Hello from desktop
 link: fastn.com
+background.solid: yellow
 if: { ftd.device == "desktop" }
