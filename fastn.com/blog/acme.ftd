@@ -1,32 +1,28 @@
 -- import: fastn-community.github.io/bling/chat
 
 
--- ds.page: Tales from ACME's Developer - Case Study
+-- ds.page: Tales from ACME Inc - Case Study
 
-ACME Inc, an award-winning startup that provides consultancy services, has 
-chosen `fastn` as the foundation for its 
-[official website](https://acme-inc-git-new-landing-page-fifthtry.vercel.app/index.html). 
+Imagine ACME Inc., an illustrious startup, as the protagonist of our narrative. 
+With its [official website](https://acme.fastn.com/) powered by `fastn`, this 
+case study sheds light on how the entire ACME team evolved from decision-makers 
+to proactive implementers.
 
-Following an intensive quarterly review, ACME's Design, SEO, Marketing, and 
-Business teams generated a plethora of modifications for their official website. 
+The tale begins with the ACME team engaged in a brief 30-minute training session 
+to learn how to maintain a fastn-powered website.
 
-The dedicated developer, Ganesh is the key figure responsible for implementing 
-the changes to the website. Each of Ganesh's tasks is presented as distinct 
-scenes, showcasing his adeptness and fastn's agility in handling requests from 
-the different teams. 
+Let's explore individual tasks executed by the team members.
 
 
--- ds.h1: Scene 1: Revamping ACME's Look in a Blink
+-- ds.h1: Revamping ACME's Look in a Blink
 
-The Design Team requests Ganesh to Revamp the ACME website's theme layout, 
-colour scheme, and typography to improve user experience. 
+Ganesh, the Design Head, decided to give a fresh look for ACME's website to 
+enhance the user experience. With newfound skills after the training session, 
+he revamped the website with a **single line of code**. By
+removing the `midnight storm` and introducing the `midnight rush` package as a 
+fastn dependency in the `fastn.ftd` file, he updated the layout, colour scheme, 
+and typography of the website.
 
--- ds.h2: Ganesh's Solution
-
-With a single line of code, he transformed the website. By removing the 
-`midnight storm` and introducing the `midnight rush` package as a fastn dependency 
-in the `fastn.ftd` file, he updated the layout, colour scheme, and typography 
-seamlessly.
 
 -- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/9/files)
 src: $fastn-assets.files.images.blog.layout-fc.png
@@ -40,14 +36,11 @@ width.fixed.percent: 95
 src: $fastn-assets.files.images.blog.new-layout.png
 width.fixed.percent: 95
 
--- ds.h1: Scene 2: Post-Lunch Price Updates
+-- ds.h1: Price Updates
 
-In the midst of the afternoon buzz, Ganesh's screen illuminates with a new 
-message. The Business Team's insights from the recent meeting have prompted to 
-modify the Basic Pricing Plan values to enhance conversions.
-
--- ds.h2: Ganesh's Solution
-
+The Business Team's insights from a recent meeting have prompted to modify the 
+Pricing Plan values to enhance conversions. As a result, Harish, the Product
+Manager, decided to bring down the price of the startup and Enterprise Plan. 
 By editing the `pricing.ftd` and updating the existing prices with the new 
 figures, he swiftly implemented the change. As the pricing plan is a 
 **component-based design**, he only needed to adjust the relevant values.
@@ -65,7 +58,7 @@ src: $fastn-assets.files.images.blog.new-price.png
 width.fixed.percent: 95
 
 
--- ds.h1: Scene 3: The Official Whatsapp Group
+-- ds.h1: A New Team Member
 
 -- chat.message-left: Hey Team, please welcome Ayush Soni, our newly joined VP of Product.
 avatar: $fastn-assets.files.images.blog.nandy.jpg
@@ -74,20 +67,19 @@ avatar: $fastn-assets.files.images.blog.nandy.jpg
 avatar: $fastn-assets.files.images.blog.ayush-soni.jpg
 
 -- chat.message-right: Welcome to the ACME team, Ayush.
-avatar: $fastn-assets.files.images.blog.ajit.jpg
+avatar: $fastn-assets.files.images.blog.meenu.jpg
 
--- chat.message-left: Hey Ganesh, add Ayush Soni to our team's page. 
+-- chat.message-left: Hey Meenu, add Ayush Soni to our team's page. 
 avatar: $fastn-assets.files.images.blog.nandy.jpg
 
 -- chat.message-right: Done. Here is the link: https://acme-inc-git-adding-team-member-fifthtry.vercel.app/team/
-avatar: $fastn-assets.files.images.blog.ganeshs.jpg
+avatar: $fastn-assets.files.images.blog.meenu.jpg
 
+-- ds.markdown:
 
--- ds.h2: Ganesh's Solution
-
-He leveraged the **component-based design** once-again for the teams page. 
-He added the new team member Ayush Soni's details by simply using the 
-**team member** component.
+Meenu, ACME's HR Lead, leveraged fastn’s **component-based design** for the 
+teams page. She added the new team member Ayush Soni's details by simply 
+using the team member component.
 
 -- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/4/files)
 src: $fastn-assets.files.images.blog.team-fc.png
@@ -102,15 +94,11 @@ src: $fastn-assets.files.images.blog.new-team.png
 width.fixed.percent: 95
 
 
--- ds.h1: Scene 4: A Rapid Diwali Offer Page Creation
+-- ds.h1: A Rapid Diwali Offer Page Creation
 
-Answering the Marketing team's call, Ganesh's new task is to Create and publish 
-a new Diwali offer landing page.
-
--- ds.h2: Ganesh's Implementation
-
-He created a new `offers.ftd` page and built a landing page featuring an image, 
-title, and CTA. 
+Rithik, the Marketing Dynamo, seized the festive spirit. With fastn, he promptly 
+crafted a captivating Diwali offer landing page, complete with an image, title, 
+and call-to-action.
 
 -- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/11/files)
 src: $fastn-assets.files.images.blog.offer-fc.png
@@ -120,15 +108,10 @@ width.fixed.percent: 95
 src: $fastn-assets.files.images.blog.offer.png
 width.fixed.percent: 95
 
--- ds.h1: Scene 5: The Impromptu Email Notification
+-- ds.h1: Scene 5: The Content Head in Action
 
-As the digital sunsets, Ganesh receives an email notification from the SEO Team. 
-The Requirement: URL Redirection. Based on Google Analytics data, the SEO team 
-recommends, redirect `/launching-color-support/` to `/color-support/`.
-
--- ds.h2: Ganesh's Implementation
-
-Opening the fastn.ftd file, in one line, he introduced fastn.redirect from 
+Priyanka, the Content Head, identified a URL redirection for enhanced SEO 
+impact. Leveraging fastn, she swiftly introduced the necessary redirection from
 `/launching-color-support/` to `/color-support/`. 
 
 -- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/8/files)
@@ -137,11 +120,11 @@ width.fixed.percent: 95
 
 -- ds.h1: Conclusion
 
-The ACME case study is a testament to the capabilities of a 
-website powered by `fastn`. It illuminates how fastn empowers developers to 
-swiftly implement changes and cater to the ever-evolving needs of a startup. 
+The ACME case study is a testament to how fastn enables every team member to 
+wield change. The ACME team is no longer reliant solely on developers. They 
+seamlessly implement changes, saving time and boosting productivity. 
 
-Stay tuned for more tales from ACME Inc. 
+Stay tuned for more tales from ACME Inc.
 
 
 
