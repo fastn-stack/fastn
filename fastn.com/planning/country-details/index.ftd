@@ -402,7 +402,7 @@ The JSON data is structured in a way, that some properties are nested within
 another property. Let's visualise it with the help of an illustration:
 
 -- ftd.image: 
-src: $fastn-assets.files.images.backend.tree-structure.svg
+src: $fastn-assets.files.images.backend.tree-structure-ppt.jpg
 max-width: fill-container
 
 -- ds.markdown:
@@ -410,7 +410,6 @@ max-width: fill-container
 So the country has name, capital, region, population, and flags properties at
 one level. `common` and `official` names of a country are grouped under the
 `name` property.
-
 
 
 
@@ -452,6 +451,7 @@ string official:
 \-- record country-flag:
 caption svg:
 
+So we are done with the data-modelling part.
 
 -- ds.h3: Second Part: create a `card` component
 
