@@ -197,6 +197,14 @@ async fn incremental_build(
         let mut resolving_dependencies: Vec<String> = vec![];
 
         while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
+            let name_with_extension = format!(
+                "{}.ftd",
+                get_dependency_name_without_package_name(
+                    config.package.name.as_str(),
+                    unresolved_dependency.as_str()
+                )
+            );
+
             if let Some(doc) = c.documents.get(
                 get_dependency_name_without_package_name(
                     config.package.name.as_str(),
@@ -221,14 +229,6 @@ async fn incremental_build(
                 }
 
                 if own_resolved_dependencies.eq(&doc.dependencies) {
-                    let name_with_extension = format!(
-                        "{}.ftd",
-                        get_dependency_name_without_package_name(
-                            config.package.name.as_str(),
-                            unresolved_dependency.as_str()
-                        )
-                    );
-
                     for document in documents.values() {
                         if document.get_id().eq(name_with_extension.as_str())
                             || document
@@ -259,6 +259,52 @@ async fn incremental_build(
                     resolving_dependencies.push(unresolved_dependency.to_string());
                 }
             } else {
+                if unresolved_dependency.starts_with("$fastn$/")
+                    || unresolved_dependency.ends_with("/-/fonts.ftd")
+                    || unresolved_dependency.ends_with("/-/assets.ftd")
+                {
+                    println!(
+                        "[INCREMENTAL BUILD][NEW][VIRTUAL] Processing: {}",
+                        &unresolved_dependency
+                    );
+                    resolved_dependencies.push(unresolved_dependency);
+                    continue;
+                }
+
+                println!(
+                    "[INCREMENTAL BUILD][NEW] Processing: {}",
+                    &unresolved_dependency
+                );
+                for document in documents.values() {
+                    if document.get_id().eq(name_with_extension.as_str())
+                        || document
+                            .get_id_with_package()
+                            .eq(&name_with_extension.as_str())
+                    {
+                        println!(
+                            "[INCREMENTAL BUILD][NEW][FOUND] Processing: {}",
+                            &unresolved_dependency
+                        );
+                        handle_file(
+                            document,
+                            config,
+                            base_url,
+                            ignore_failed,
+                            test,
+                            true,
+                            Some(&mut c),
+                        )
+                        .await?;
+                        break;
+                    }
+                }
+
+                println!(
+                    "[INCREMENTAL BUILD][NEW][NOT FOUND] Processing: {} {}",
+                    &unresolved_dependency.to_string(),
+                    &name_with_extension
+                );
+
                 resolved_dependencies.push(unresolved_dependency);
             }
         }
