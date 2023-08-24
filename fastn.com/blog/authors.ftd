@@ -1,0 +1,18 @@
+-- import: fastn-community.github.io/doc-site/common
+
+-- common.author-meta nandini: Nandhini Devi
+profile: Digital Marketer and Copywriter
+bio-url: https://github.com/nandhinidevie
+image: $fastn-assets.files.images.blog.nandy.jpg
+company: Freelance, FifthTry
+
+If Kermit thought it's not easy being green, he hasn't met me yet.
+
+
+-- common.author-meta arpita: Arpita Jaiswal
+profile: Senior Software Developer
+bio-url: https://github.com/Arpita-Jaiswal
+image: $fastn-assets.files.images.blog.arpita.jpg
+company: FifthTry
+
+I am building `fastn`.

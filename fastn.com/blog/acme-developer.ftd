@@ -1,20 +1,28 @@
 -- import: fastn-community.github.io/bling/chat
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+
+-- common.post-meta meta: Tales from ACME's Developer - Case Study
+published-on: August 23, 2023 at 12:26 am
+post-url: /blog/acme-developer/
+author: $authors.nandini
+
+ACME Inc, an award-winning startup that provides consultancy services, has
+chosen `fastn` as the foundation for its
+[official website](https://acme-inc-git-new-landing-page-fifthtry.vercel.app/index.html).
+
+Following an intensive quarterly review, ACME's Design, SEO, Marketing, and
+Business teams generated a plethora of modifications for their official website.
+
+The dedicated developer, Ganesh is the key figure responsible for implementing
+the changes to the website. Each of Ganesh's tasks is presented as distinct
+scenes, showcasing his adeptness and fastn's agility in handling requests from
+the different teams.
 
 
--- ds.page: Tales from ACME's Developer - Case Study
 
-ACME Inc, an award-winning startup that provides consultancy services, has 
-chosen `fastn` as the foundation for its 
-[official website](https://acme-inc-git-new-landing-page-fifthtry.vercel.app/index.html). 
-
-Following an intensive quarterly review, ACME's Design, SEO, Marketing, and 
-Business teams generated a plethora of modifications for their official website. 
-
-The dedicated developer, Ganesh is the key figure responsible for implementing 
-the changes to the website. Each of Ganesh's tasks is presented as distinct 
-scenes, showcasing his adeptness and fastn's agility in handling requests from 
-the different teams. 
-
+-- ds.blog-page:
+meta: $meta
 
 -- ds.h1: Scene 1: Revamping ACME's Look in a Blink
 
@@ -146,31 +154,4 @@ Stay tuned for more tales from ACME Inc.
 
 
 
--- end: ds.page
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- end: ds.blog-page

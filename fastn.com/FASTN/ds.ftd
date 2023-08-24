@@ -193,6 +193,78 @@ $loop$: $page-with-get-started-and-no-right-sidebar.uis as $obj
 
 
 
+-- component page-with-no-right-sidebar:
+children uis:
+optional caption title:
+optional body body:
+
+-- page: $page-with-no-right-sidebar.title
+sidebar: false
+right-sidebar: []
+
+$page-with-no-right-sidebar.body
+
+-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+
+-- obj:
+$loop$: $page-with-no-right-sidebar.uis as $obj
+
+-- end: ftd.column
+
+-- end: page
+
+-- end: page-with-no-right-sidebar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component blog-page:
+children uis:
+common.post-meta meta:
+
+-- page:
+sidebar: false
+right-sidebar: []
+
+-- doc-site.post:
+meta: $blog-page.meta
+
+-- doc-site.markdown:
+if: { blog-page.meta.body != NULL }
+
+$blog-page.meta.body
+
+-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+
+-- obj:
+$loop$: $blog-page.uis as $obj
+
+-- end: ftd.column
+
+-- end: page
+
+-- end: blog-page
+
+
+
+
 
 -- component star-component:
 boolean $show: false

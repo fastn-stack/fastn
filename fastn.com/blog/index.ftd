@@ -1,0 +1,13 @@
+-- import: fastn.com/blog/acme-developer as fp
+
+-- ds.page-with-no-right-sidebar:
+
+-- ds.posts:
+
+-- ds.featured-post:
+post-data: $fp.meta
+
+-- end: ds.posts
+
+
+-- end: ds.page-with-no-right-sidebar

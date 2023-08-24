@@ -777,8 +777,6 @@ skip: true
 
 
 # Blog: /blog/
-  document: blog/acme-developer.ftd 
-
 
 - Tales from ACME's Developer - Case Study: /blog/acme-developer/ 
   document: blog/acme-developer.ftd 
@@ -924,4 +922,3 @@ skip: true
 /ambassadors-program/: /ambassador-program/
 /champions-program/: /champion-program/
 /learn/: /frontend/learn/
-
