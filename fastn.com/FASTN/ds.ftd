@@ -30,6 +30,7 @@ integer logo-width: 120
 integer logo-height: 38
 boolean show-footer: true
 boolean show-banner: true
+optional ftd.raw-image-src favicon:
 
 -- ftd.ui list page.footer:
 
@@ -135,6 +136,7 @@ banner: $page.banner
 document-title: $page.document-title
 document-description: $page.document-description
 document-image: $page.document-image
+favicon: $page.favicon
 
 -- doc-site.page.header-logo-ui:
 
