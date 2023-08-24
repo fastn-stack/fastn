@@ -1,9 +1,12 @@
 -- import: fastn-stack.github.io/ftd-web-component-example
 -- import: fastn-community.github.io/bling/quote
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
 
--- ds.page: Ahoy, Web Components!
-
-AmitU, Saturday, 25th Feb 2023
+-- common.post-meta meta: Ahoy, Web Components!
+published-on: February 25, 2023
+post-url: /web-components/
+author: $authors.amitu
 
 `ftd` is a great language to build UI components in. `fastn` is easy to learn
 and author. `fastn` has a design system, dark mode support. `fastn` websites are
@@ -14,6 +17,11 @@ And yet JS ecosystem is *huge*. There are far too many ready made components
 available that we do not want to miss out on them when using `fastn-stack`.
 
 Today we are pleased to announce support for web components!
+
+
+
+-- ds.blog-page:
+meta: $meta
 
 -- quote.window: [MDN: Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
 
@@ -159,4 +167,4 @@ for more detailed usage.
 Go ahead and give it a shot, and come over to [Discord](https://discord.gg/a7eBUeutWD)
 in case you face any issues, we would love to hear from you!
 
--- end: ds.page
+-- end: ds.blog-page

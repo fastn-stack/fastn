@@ -4,6 +4,10 @@
 -- import: fastn.com/blog/the-intimidation-of-programming as p7
 -- import: fastn.com/blog/meta-data-blog as p6
 -- import: fastn.com/blog/trizwitlabs as p5
+-- import: fastn.com/blog/philippines as p4
+-- import: fastn.com/blog/wittyhacks as p3
+-- import: fastn.com/blog/web-components as p2
+-- import: fastn.com/blog/show-cs as p1
 
 -- ds.page-with-no-right-sidebar:
 
@@ -26,6 +30,18 @@ post-data: $p6.meta
 
 -- ds.without-image-half:
 post-data: $p5.meta
+
+-- ds.without-image:
+post-data: $p4.meta
+
+-- ds.image-in-between:
+post-data: $p3.meta
+
+-- ds.without-image-half:
+post-data: $p2.meta
+
+-- ds.without-image:
+post-data: $p1.meta
 
 
 -- end: ds.posts
