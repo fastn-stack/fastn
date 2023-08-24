@@ -50,7 +50,7 @@ published-date: 17-Jun-2022
 -- ft-ui.grid-view: Featured Quote Components
 templates: $quotes
 more-link-text: View more
-more-link: /featured/components/quotes/
+more-link: /quotes/
 show-large: true
 
 -- end: ds.page.full-width-wrap

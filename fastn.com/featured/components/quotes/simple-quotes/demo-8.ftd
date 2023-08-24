@@ -50,7 +50,7 @@ published-date: 17-Jun-2022
 -- ft-ui.grid-view: Featured Quote Components
 templates: $quotes
 more-link-text: View more
-more-link: /featured/components/quotes/
+more-link: /quotes/simple-quotes/
 show-large: true
 
 -- end: ds.page.full-width-wrap
@@ -93,15 +93,15 @@ role: Developer
 -- ft-ui.template list quotes:
 
 -- ft-ui.template: Scorpion
-template-url: /featured/components/quotes/simple-quotes/demo-10/
+template-url: /quotes/scorpion/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-10.png
 
 -- ft-ui.template: Silver
-template-url: /featured/components/quotes/simple-quotes/demo-11/
+template-url: /quotes/silver/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-11.png
 
 -- ft-ui.template: Storm Cloud
-template-url: /featured/components/quotes/simple-quotes/demo-12/
+template-url: /quotes/storm-cloud/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-12.png
 
 -- end: quotes

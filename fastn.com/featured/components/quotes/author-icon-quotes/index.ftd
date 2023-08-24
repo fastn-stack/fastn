@@ -7,7 +7,7 @@ sidebar: false
 -- ft-ui.grid-view: Quote with author avatar and info
 templates: $author-avatar-quotes
 more-link-text: View all
-more-link: /featured/components/quotes/
+more-link: /quotes/
 
 -- end: ds.page
 
@@ -18,7 +18,7 @@ more-link: /featured/components/quotes/
 -- ft-ui.template list author-avatar-quotes:
 
 -- ft-ui.template: Charcoal
-template-url: /featured/components/quotes/author-icon-quotes/demo-1/
+template-url: /quotes/charcoal/
 screenshot: $fastn-assets.files.images.featured.components.quotes.author-icon-quotes.demo-1.png
 
 -- end: author-avatar-quotes
