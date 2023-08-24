@@ -88,24 +88,27 @@ mod build_dir {
 mod cache {
     const FILE_NAME: &str = "fastn.cache";
 
-    pub(crate) fn get() -> std::io::Result<Cache> {
-        let mut v = match fastn_core::utils::get_cached(FILE_NAME) {
+    pub(crate) fn get() -> std::io::Result<(bool, Cache)> {
+        let (cache_hit, mut v) = match fastn_core::utils::get_cached(FILE_NAME) {
             Some(v) => {
                 tracing::debug!("cached hit");
-                v
+                (true, v)
             }
             None => {
                 tracing::debug!("cached miss");
-                Cache {
-                    build_content: std::collections::BTreeMap::new(),
-                    ftd_cache: std::collections::BTreeMap::new(),
-                    documents: std::collections::BTreeMap::new(),
-                    file_checksum: std::collections::BTreeMap::new(),
-                }
+                (
+                    false,
+                    Cache {
+                        build_content: std::collections::BTreeMap::new(),
+                        ftd_cache: std::collections::BTreeMap::new(),
+                        documents: std::collections::BTreeMap::new(),
+                        file_checksum: std::collections::BTreeMap::new(),
+                    },
+                )
             }
         };
         v.build_content = super::build_dir::get_build_content()?;
-        Ok(v)
+        Ok((cache_hit, v))
     }
 
     #[derive(serde::Serialize, serde::Deserialize, Debug)]
@@ -184,73 +187,93 @@ async fn incremental_build(
 ) -> fastn_core::Result<()> {
     // https://fastn.com/rfc/incremental-build/
 
-    let mut c = dbg!(cache::get()?);
+    let (cache_hit, mut c) = dbg!(cache::get()?);
 
-    let mut unresolved_dependencies: Vec<String> = vec!["index".to_string()];
+    if cache_hit {
+        let mut unresolved_dependencies: Vec<String> = vec!["index".to_string()];
 
-    let mut resolved_dependencies: Vec<String> = vec![];
+        let mut resolved_dependencies: Vec<String> = vec![];
 
-    let mut resolving_dependencies: Vec<String> = vec![];
+        let mut resolving_dependencies: Vec<String> = vec![];
 
-    while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
-        if let Some(doc) = c.documents.get(
-            get_dependency_name_without_package_name(
-                config.package.name.as_str(),
-                unresolved_dependency.as_str(),
-            )
-            .as_str(),
-        ) {
-            let mut own_resolved_dependencies: Vec<String> = vec![];
-
-            for dep in &doc.dependencies {
-                if resolved_dependencies.contains(dep) {
-                    own_resolved_dependencies.push(dep.to_string());
-                    continue;
-                }
-
-                unresolved_dependencies.push(dep.to_string());
-            }
-
-            if own_resolved_dependencies.eq(&doc.dependencies) {
-                let name_with_extension = format!(
-                    "{}.ftd",
-                    get_dependency_name_without_package_name(
-                        config.package.name.as_str(),
-                        unresolved_dependency.as_str()
-                    )
+        while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
+            if let Some(doc) = c.documents.get(
+                get_dependency_name_without_package_name(
+                    config.package.name.as_str(),
+                    unresolved_dependency.as_str(),
+                )
+                .as_str(),
+            ) {
+                println!(
+                    "[INCREMENTAL BUILD][CACHE FOUND] Processing: {}",
+                    &unresolved_dependency
                 );
 
-                for document in documents.values() {
-                    if document.get_id().eq(name_with_extension.as_str())
-                        || document
-                            .get_id_with_package()
-                            .eq(name_with_extension.as_str())
-                    {
-                        handle_file(
-                            document,
-                            config,
-                            base_url,
-                            ignore_failed,
-                            test,
-                            true,
-                            Some(&mut c),
-                        )
-                        .await?;
-                        break;
+                let mut own_resolved_dependencies: Vec<String> = vec![];
+
+                for dep in &doc.dependencies {
+                    if resolved_dependencies.contains(dep) {
+                        own_resolved_dependencies.push(dep.to_string());
+                        continue;
                     }
+
+                    unresolved_dependencies.push(dep.to_string());
                 }
 
-                resolved_dependencies.push(unresolved_dependency.to_string());
-                if unresolved_dependencies.is_empty() {
-                    if let Some(resolving_dependency) = resolving_dependencies.pop() {
-                        unresolved_dependencies.push(resolving_dependency);
+                if own_resolved_dependencies.eq(&doc.dependencies) {
+                    let name_with_extension = format!(
+                        "{}.ftd",
+                        get_dependency_name_without_package_name(
+                            config.package.name.as_str(),
+                            unresolved_dependency.as_str()
+                        )
+                    );
+
+                    for document in documents.values() {
+                        if document.get_id().eq(name_with_extension.as_str())
+                            || document
+                                .get_id_with_package()
+                                .eq(name_with_extension.as_str())
+                        {
+                            handle_file(
+                                document,
+                                config,
+                                base_url,
+                                ignore_failed,
+                                test,
+                                true,
+                                Some(&mut c),
+                            )
+                            .await?;
+                            break;
+                        }
                     }
+
+                    resolved_dependencies.push(unresolved_dependency.to_string());
+                    if unresolved_dependencies.is_empty() {
+                        if let Some(resolving_dependency) = resolving_dependencies.pop() {
+                            unresolved_dependencies.push(resolving_dependency);
+                        }
+                    }
+                } else {
+                    resolving_dependencies.push(unresolved_dependency.to_string());
                 }
             } else {
-                resolving_dependencies.push(unresolved_dependency.to_string());
+                resolved_dependencies.push(unresolved_dependency);
             }
-        } else {
-            resolved_dependencies.push(unresolved_dependency);
+        }
+    } else {
+        for document in documents.values() {
+            handle_file(
+                document,
+                config,
+                base_url,
+                ignore_failed,
+                test,
+                true,
+                Some(&mut c),
+            )
+            .await?;
         }
     }
 
@@ -345,7 +368,7 @@ fn is_cached<'a>(
 
     // if it exists, check if the checksums match
     // if they do, return
-    // dbg!(&cached_doc);
+    dbg!(&cached_doc);
     let doc_hash = match cache.build_content.get(file_path) {
         Some(doc_hash) => doc_hash,
         None => {
@@ -354,7 +377,7 @@ fn is_cached<'a>(
         }
     };
 
-    // dbg!(doc_hash);
+    dbg!(doc_hash);
 
     if doc_hash != &cached_doc.html_checksum {
         println!("cache miss: html file checksums don't match");
