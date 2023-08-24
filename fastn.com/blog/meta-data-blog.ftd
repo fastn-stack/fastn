@@ -1,15 +1,23 @@
--- ds.page: Optimizing website through meta-data
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
 
-Ajit Garg, 22 May 2023
+-- common.post-meta meta: Optimizing website through meta-data
+published-on: May 22, 2023
+post-url: /blog/seo-meta/
+author: $authors.ajit
 
 In today's digital landscape, where online presence plays a pivotal role in
 reaching a wider audience, ensuring that your website or webpage attracts
 attention and appears prominently on search engine results pages is crucial.
 This is where the power of Search Engine Optimization (SEO) comes into play.
 
-Optimizing a website by adding meta-data is one way to do SEO, but let's first 
+Optimizing a website by adding meta-data is one way to do SEO, but let's first
 understand what SEO is.
 
+
+
+-- ds.blog-page:
+meta: $meta
 
 -- ds.h1: What is SEO
 
@@ -152,7 +160,17 @@ potential users or customers, harnessing the potential of SEO is an essential
 step toward achieving your goals.
 
 
--- end: ds.page
+-- end: ds.blog-page
+
+
+
+
+
+
+
+
+
+
 
 
 

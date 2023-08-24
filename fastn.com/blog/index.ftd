@@ -2,6 +2,8 @@
 -- import: fastn.com/blog/writer-journey as p9
 -- import: fastn.com/blog/prove-you-wrong as p8
 -- import: fastn.com/blog/the-intimidation-of-programming as p7
+-- import: fastn.com/blog/meta-data-blog as p6
+-- import: fastn.com/blog/trizwitlabs as p5
 
 -- ds.page-with-no-right-sidebar:
 
@@ -18,6 +20,12 @@ post-data: $p8.meta
 
 -- ds.without-image:
 post-data: $p7.meta
+
+-- ds.without-image-half:
+post-data: $p6.meta
+
+-- ds.without-image-half:
+post-data: $p5.meta
 
 
 -- end: ds.posts

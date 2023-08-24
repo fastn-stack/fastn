@@ -16,3 +16,13 @@ image: $fastn-assets.files.images.blog.arpita.jpg
 company: FifthTry
 
 I am building `fastn`.
+
+
+
+-- common.author-meta ajit: Ajit Garg
+profile: DevRel
+bio-url: https://github.com/gargajit
+image: $fastn-assets.files.images.blog.ajit.jpg
+company: FifthTry
+
+Working in FifthTry
