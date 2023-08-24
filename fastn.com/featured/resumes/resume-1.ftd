@@ -24,7 +24,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,20 +39,24 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Resume 1 
-previous-url: /featured/resumes/
-github-url: https://github.com/priyanka9634/resume-1
+-- ds.distributors: Resume 1
+owners: $owner-fastn
+license-url: https://github.com/priyanka9634/resume-1
+license: Creative Commons
+published-date: 26-Jul-2022
 
-
--- end: ds.page.layout-bar
-
+-- end: ds.page.abstract-bar
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.resumes.resume-1.png
 cta-url: https://priyanka9634.github.io/resume-1/
 cta-text: Demo
+github-url: https://github.com/priyanka9634/resume-1
+cta-2-url: https://priyanka9634.github.io/resume-1/components/
+cta-2-text: User Manual
+
 
 -- ft-ui.grid-view: Featured Resumes
 if: { show-grid }
@@ -82,4 +87,23 @@ template-url: featured/resumes/resume-10/
 screenshot: $fastn-assets.files.images.featured.resumes.resume-10.png
 
 -- end: resumes
+
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Priyanka Yadav
+profile: featured/contributors/developers/priyanka-yadav/
+avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+role: Developer
+
+-- common.owner: Yashveer Mehra
+profile: featured/contributors/designers/yashveer-mehra/
+avatar: $fastn-assets.files.featured.contributors.designers.yashveer-mehra.yashveer-mehra.jpg
+role: Designer
+
+-- end: owner-fastn
 

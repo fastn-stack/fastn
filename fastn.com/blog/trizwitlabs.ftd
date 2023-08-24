@@ -1,8 +1,11 @@
 -- import: fastn.com/assets
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
 
--- ds.page: Trizwit Labs Web Event
-
-17th April
+-- common.post-meta meta: Trizwit Labs Web Event
+published-on: April 17, 2023 at 8:00 pm
+post-url: /trizwitlabs/
+author: $authors.ajit
 
 Web development has come a long way in recent years, and with the new
 technologies emerging every day, it can be hard to keep up. But if you’re a web
@@ -10,8 +13,13 @@ developer looking to simplify your development process, then we have some great
 news for you.
 
 Our partner, Trizwit Labs, in collaboration with GoogleDeveloper Student Club |
-MACE, is conducting a technical session on decoding web development using 
-`ftd` language.
+MACE, is conducting a technical session on decoding web development using
+`fastn` language.
+
+
+
+-- ds.blog-page:
+meta: $meta
 
 -- ds.h1: Why `ftd`
 
@@ -61,4 +69,4 @@ your web development skills to the next level. Register now and secure your
 spot!
 
 
--- end: ds.page
+-- end: ds.blog-page

@@ -4,10 +4,13 @@
 -- import: fastn-community.github.io/saturated-sunset-cs as sunset-cs
 -- import: fifthtry.github.io/button
 -- import: fastn.dev/assets
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
 
--- ds.page: Showcase Color Scheme
-
-Arpita, 20th Feb 2023
+-- common.post-meta meta: Showcase Color Scheme
+published-on: February 20, 2023
+post-url: /blog/acme-developer/
+author: $authors.arpita
 
 Color is an integral part of web design, and choosing the right color scheme can
 greatly impact the look and feel of a website. It is a powerful tool in web
@@ -21,6 +24,11 @@ changes are required to switch from one color scheme to another. Hence achieve
 the impact the colors have on the website's design and the emotion they evoke.
 
 Take a look at the following color scheme cards:
+
+
+
+-- ds.blog-page:
+meta: $meta
 
 -- color-schemes:
 
@@ -308,7 +316,7 @@ provides a simple and effective approach for defining and implementing color
 schemes, making it a valuable tool for designers to have in their arsenal.
 
 
--- end: ds.page
+-- end: ds.blog-page
 
 
 

@@ -1,18 +1,24 @@
 -- import: fastn-community.github.io/bling/chat
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
 
+-- common.post-meta meta: Tales from ACME Inc - Case Study
+published-on: August 23, 2023 at 12:26 am
+post-url: /blog/acme-developer/
+author: $authors.nandini
 
--- ds.page: Tales from ACME Inc - Case Study
-
-Imagine ACME Inc., an illustrious startup, as the protagonist of our narrative. 
-With its [official website](https://acme.fastn.com/) powered by `fastn`, this 
-case study sheds light on how the entire ACME team evolved from decision-makers 
+Imagine ACME Inc., an illustrious startup, as the protagonist of our narrative.
+With its [official website](https://acme.fastn.com/) powered by `fastn`, this
+case study sheds light on how the entire ACME team evolved from decision-makers
 to proactive implementers.
 
-The tale begins with the ACME team engaged in a brief 30-minute training session 
+The tale begins with the ACME team engaged in a brief 30-minute training session
 to learn how to maintain a fastn-powered website.
 
 Let's explore individual tasks executed by the team members.
 
+-- ds.blog-page:
+meta: $meta
 
 -- ds.h1: Revamping ACME's Look in a Blink
 
@@ -127,33 +133,4 @@ seamlessly implement changes, saving time and boosting productivity.
 Stay tuned for more tales from ACME Inc.
 
 
-
-
--- end: ds.page
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- end: ds.blog-page

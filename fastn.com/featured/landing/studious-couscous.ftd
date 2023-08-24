@@ -48,7 +48,7 @@ published-date: 21-June-2023
 
 -- ds.page.full-width-wrap:
 
--- ft-ui.grid-view: Featured SPA / Landing Pages
+-- ft-ui.grid-view: Featured Landing Pages
 templates: $landing
 more-link-text: View more
 more-link: /featured/landing-pages/
