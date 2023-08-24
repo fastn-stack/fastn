@@ -812,4 +812,67 @@ role: $inherited.types.copy-small
 
 
 
+
+
+-- component before-after:
+optional caption title: 
+boolean $show: false
+ftd.image-src before-image: 
+ftd.image-src after-image: 
+optional string before-caption:
+optional string after-caption:
+optional ftd.resizing width:
+optional ftd.resizing height:
+
+-- ftd.column:
+color: $inherited.colors.text
+$on-mouse-enter$: $ftd.set-bool($a = $before-after.show, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $before-after.show, v = false)
+
+-- ftd.column:
+if: { !before-after.show }
+width: fill-container
+
+-- ftd.text: $before-after.title
+if: { before-after.title != NULL}
+role: $inherited.types.heading-small
+color: white
+if: { !before-after.show }
+anchor: parent
+top.percent: 50
+align-self: center
+background.solid: rgba(0,0, 0, 0.63)
+padding-vertical.px: 8
+padding-horizontal.px: 16
+border-radius.px: 4
+
+-- ds.image: $before-after.before-caption
+src: $before-after.before-image
+width: $before-after.width
+height: $before-after.height
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { before-after.show }
+
+-- ds.image: $before-after.after-caption
+src: $before-after.after-image
+width: $before-after.width
+height: $before-after.height
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: before-after
+
+
+
+
+
+
+
+
+
 -- integer width: 1220

@@ -1,6 +1,7 @@
 -- import: fastn-community.github.io/bling/chat
 -- import: fastn.com/blog/authors
 -- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/utils
 
 -- common.post-meta meta: Tales from ACME Inc - Case Study
 published-on: August 23, 2023 at 12:26 am
@@ -33,6 +34,14 @@ and typography of the website.
 -- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/9/files)
 src: $fastn-assets.files.images.blog.layout-fc.png
 width.fixed.percent: 95
+
+-- utils.before-after: Mouse over me to see after effect
+before-image: $fastn-assets.files.images.blog.old-layout.png
+before-caption: [Before Changes](https://acme.fastn.com/)
+after-image: $fastn-assets.files.images.blog.new-layout.png
+after-caption: [After Changes](https://acme-inc-git-design-change-fifthtry.vercel.app/)
+width.fixed.percent: 95
+
 
 -- ds.image: [Before Changes](https://acme.fastn.com/)
 src: $fastn-assets.files.images.blog.old-layout.png
