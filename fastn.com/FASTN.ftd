@@ -778,8 +778,8 @@ skip: true
 
 # Blog: /blog/
 
-- Tales from ACME's Developer - Case Study: /blog/acme-developer/ 
-  document: blog/acme-developer.ftd 
+- Tales from ACME Inc - Case Study: /acme/
+  document: blog/acme.ftd 
 - A Content Writer’s Journey with fastn: /blog/writer-journey/
   document: blog/writer-journey.ftd
 - fastn might prove you wrong: /blog/prove-you-wrong/

@@ -1,4 +1,4 @@
--- import: fastn.com/blog/acme-developer as fp
+-- import: fastn.com/blog/acme as fp
 -- import: fastn.com/blog/writer-journey as p9
 -- import: fastn.com/blog/prove-you-wrong as p8
 -- import: fastn.com/blog/the-intimidation-of-programming as p7
