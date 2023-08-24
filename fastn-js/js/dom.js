@@ -710,7 +710,12 @@ class Node2 {
 
     setFavicon(url) {
         if (hydrating) {
-            if (url instanceof fastn.recordInstanceClass) url = url.get('src').get();
+            if (url instanceof fastn.recordInstanceClass) url = url.get('src');
+            while (true) {
+                if (url instanceof fastn.mutableClass) url = url.get();
+                else break;
+            }
+
             let link_element = document.createElement("link");
             link_element.rel = "shortcut icon";
             link_element.href = url;
