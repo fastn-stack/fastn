@@ -193,8 +193,6 @@ async fn incremental_build(
     let mut resolving_dependencies: Vec<String> = vec![];
 
     while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
-        dbg!(&unresolved_dependencies, &unresolved_dependency);
-
         if let Some(doc) = c.documents.get(
             get_dependency_name_without_package_name(
                 config.package.name.as_str(),
@@ -214,14 +212,33 @@ async fn incremental_build(
             }
 
             if own_resolved_dependencies.eq(&doc.dependencies) {
-                handle_only_id(
-                    unresolved_dependency.as_str(),
-                    config,
-                    base_url,
-                    ignore_failed,
-                    test,
-                    documents.clone(),
-                ).await?;
+                let name_with_extension = format!(
+                    "{}.ftd",
+                    get_dependency_name_without_package_name(
+                        config.package.name.as_str(),
+                        unresolved_dependency.as_str()
+                    )
+                );
+
+                for document in documents.values() {
+                    if document.get_id().eq(name_with_extension.as_str())
+                        || document
+                            .get_id_with_package()
+                            .eq(name_with_extension.as_str())
+                    {
+                        handle_file(
+                            document,
+                            config,
+                            base_url,
+                            ignore_failed,
+                            test,
+                            true,
+                            Some(&mut c),
+                        )
+                        .await?;
+                        break;
+                    }
+                }
 
                 resolved_dependencies.push(unresolved_dependency.to_string());
                 if unresolved_dependencies.is_empty() {
@@ -233,18 +250,7 @@ async fn incremental_build(
                 resolving_dependencies.push(unresolved_dependency.to_string());
             }
         } else {
-            for doc in documents.values() {
-                handle_file(
-                    doc,
-                    config,
-                    base_url,
-                    ignore_failed,
-                    test,
-                    true,
-                    Some(&mut c),
-                )
-                .await?;
-            }
+            resolved_dependencies.push(unresolved_dependency);
         }
     }
 
@@ -265,7 +271,7 @@ async fn handle_only_id(
     documents: std::collections::BTreeMap<String, fastn_core::File>,
 ) -> fastn_core::Result<()> {
     for doc in documents.values() {
-        if dbg!(doc.get_id().eq(id) || doc.get_id_with_package().eq(id)) {
+        if doc.get_id().eq(id) || doc.get_id_with_package().eq(id) {
             return handle_file(doc, config, base_url, ignore_failed, test, false, None).await;
         }
     }
@@ -339,7 +345,7 @@ fn is_cached<'a>(
 
     // if it exists, check if the checksums match
     // if they do, return
-    dbg!(&cached_doc);
+    // dbg!(&cached_doc);
     let doc_hash = match cache.build_content.get(file_path) {
         Some(doc_hash) => doc_hash,
         None => {
@@ -348,7 +354,7 @@ fn is_cached<'a>(
         }
     };
 
-    dbg!(doc_hash);
+    // dbg!(doc_hash);
 
     if doc_hash != &cached_doc.html_checksum {
         println!("cache miss: html file checksums don't match");
