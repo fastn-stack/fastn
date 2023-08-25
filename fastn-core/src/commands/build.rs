@@ -237,6 +237,8 @@ async fn incremental_build(
                     unresolved_dependencies.push(dep.to_string());
                 }
 
+                dbg!( &own_resolved_dependencies, &doc.dependencies);
+
                 if own_resolved_dependencies.eq(&doc.dependencies) {
                     let name_with_extension = format!(
                         "{}.ftd",
@@ -269,6 +271,10 @@ async fn incremental_build(
                     resolved_dependencies.push(unresolved_dependency.to_string());
                     if unresolved_dependencies.is_empty() {
                         if let Some(resolving_dependency) = resolving_dependencies.pop() {
+                            dbg!(&unresolved_dependency);
+                            if resolving_dependency.ne(&unresolved_dependency.as_str()) {
+                                break;
+                            }
                             unresolved_dependencies.push(resolving_dependency);
                         }
                     }
@@ -281,13 +287,15 @@ async fn incremental_build(
         }
     } else {
         for document in documents.values() {
+            dbg!(&document.get_id());
+
             handle_file(
                 document,
                 config,
                 base_url,
                 ignore_failed,
                 test,
-                true,
+                false,
                 Some(&mut c),
             )
             .await?;
@@ -488,12 +496,14 @@ async fn handle_file_(
                 return Ok(());
             }
 
-            fastn_core::utils::copy(
+            println!("[HF][CACHED]{}", document.get_id());
+
+            dbg!(fastn_core::utils::copy(
                 config.root.join(doc.id.as_str()),
                 config.root.join(".build").join(doc.id.as_str()),
             )
             .await
-            .ok();
+            .ok());
 
             if doc.id.eq("FASTN.ftd") {
                 return Ok(());
