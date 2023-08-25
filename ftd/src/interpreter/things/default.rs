@@ -1928,6 +1928,66 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
+            ftd::interpreter::FTD_IMAGE_FIT.to_string(),
+            ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                name: ftd::interpreter::FTD_IMAGE_FIT.to_string(),
+                variants: vec![
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_IMAGE_FIT_NONE,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("none")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_IMAGE_FIT_COVER,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("cover")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_IMAGE_FIT_CONTAIN,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("contain")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_IMAGE_FIT_FILL,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("fill")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_IMAGE_FIT_SCALE_DOWN,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("scale-down")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter::FTD_ANCHOR.to_string(),
             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
                 name: ftd::interpreter::FTD_ANCHOR.to_string(),
@@ -9458,6 +9518,12 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
                 ftd::interpreter::Argument::default(
                     "src",
                     ftd::interpreter::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
+                        .into_kind_data()
+                        .caption(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "fit",
+                    ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_IMAGE_FIT)
                         .into_kind_data()
                         .caption(),
                 ),
