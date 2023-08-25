@@ -1,0 +1,136 @@
+-- import: fastn-community.github.io/bling/chat
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+
+-- common.post-meta meta: Tales from ACME Inc - Case Study
+published-on: August 23, 2023 at 12:26 am
+post-url: /acme/
+author: $authors.nandini
+
+Imagine ACME Inc., an illustrious startup, as the protagonist of our narrative.
+With its [official website](https://acme.fastn.com/) powered by `fastn`, this
+case study sheds light on how the entire ACME team evolved from decision-makers
+to proactive implementers.
+
+The tale begins with the ACME team engaged in a brief 30-minute training session
+to learn how to maintain a fastn-powered website.
+
+Let's explore individual tasks executed by the team members.
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.h1: Revamping ACME's Look in a Blink
+
+Ganesh, the Design Head, decided to give a fresh look for ACME's website to 
+enhance the user experience. With newfound skills after the training session, 
+he revamped the website with a **single line of code**. By
+removing the `midnight storm` and introducing the `midnight rush` package as a 
+fastn dependency in the `fastn.ftd` file, he updated the layout, colour scheme, 
+and typography of the website.
+
+
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/9/files)
+src: $fastn-assets.files.images.blog.layout-fc.png
+width.fixed.percent: 95
+
+-- ds.image: [Before Changes](https://acme.fastn.com/)
+src: $fastn-assets.files.images.blog.old-layout.png
+width.fixed.percent: 95
+
+-- ds.image: [After Changes](https://acme-inc-git-design-change-fifthtry.vercel.app/)
+src: $fastn-assets.files.images.blog.new-layout.png
+width.fixed.percent: 95
+
+-- ds.h1: Price Updates
+
+The Business Team's insights from a recent meeting have prompted to modify the 
+Pricing Plan values to enhance conversions. As a result, Harish, the Product
+Manager, decided to bring down the price of the startup and Enterprise Plan. 
+By editing the `pricing.ftd` and updating the existing prices with the new 
+figures, he swiftly implemented the change. As the pricing plan is a 
+**component-based design**, he only needed to adjust the relevant values.
+
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/5/files)
+src: $fastn-assets.files.images.blog.price-fc.png
+width.fixed.percent: 95
+
+-- ds.image: [Before Changes](https://acme.fastn.com/pricing/)
+src: $fastn-assets.files.images.blog.old-price.png
+width.fixed.percent: 95
+
+-- ds.image: [After Changes](https://acme-inc-git-updating-pricing-page-fifthtry.vercel.app/pricing/)
+src: $fastn-assets.files.images.blog.new-price.png
+width.fixed.percent: 95
+
+
+-- ds.h1: A New Team Member
+
+-- chat.message-left: Hey Team, please welcome Ayush Soni, our newly joined VP of Product.
+avatar: $fastn-assets.files.images.blog.nandy.jpg
+
+-- chat.message-left: Hi, guys. Excited to be part of ACME Inc!!!
+avatar: $fastn-assets.files.images.blog.ayush-soni.jpg
+
+-- chat.message-right: Welcome to the ACME team, Ayush.
+avatar: $fastn-assets.files.images.blog.meenu.jpg
+
+-- chat.message-left: Hey Meenu, add Ayush Soni to our team's page. 
+avatar: $fastn-assets.files.images.blog.nandy.jpg
+
+-- chat.message-right: Done. Here is the link: https://acme-inc-git-adding-team-member-fifthtry.vercel.app/team/
+avatar: $fastn-assets.files.images.blog.meenu.jpg
+
+-- ds.markdown:
+
+Meenu, ACME's HR Lead, leveraged fastn’s **component-based design** for the 
+teams page. She added the new team member Ayush Soni's details by simply 
+using the team member component.
+
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/4/files)
+src: $fastn-assets.files.images.blog.team-fc.png
+width.fixed.percent: 95
+
+-- ds.image: [Before Changes](https://acme.fastn.com/team/)
+src: $fastn-assets.files.images.blog.old-team.png
+width.fixed.percent: 95
+
+-- ds.image: [After Changes](https://acme-inc-git-adding-team-member-fifthtry.vercel.app/team/)
+src: $fastn-assets.files.images.blog.new-team.png
+width.fixed.percent: 95
+
+
+-- ds.h1: A Rapid Diwali Offer Page Creation
+
+Rithik, the Marketing Dynamo, seized the festive spirit. With fastn, he promptly 
+crafted a captivating Diwali offer landing page, complete with an image, title, 
+and call-to-action.
+
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/11/files)
+src: $fastn-assets.files.images.blog.offer-fc.png
+width.fixed.percent: 95
+
+-- ds.image: [New Offer Page](https://acme-inc-git-new-landing-page-fifthtry.vercel.app/offers/)
+src: $fastn-assets.files.images.blog.offer.png
+width.fixed.percent: 95
+
+-- ds.h1: Scene 5: The Content Head in Action
+
+Priyanka, the Content Head, identified a URL redirection for enhanced SEO 
+impact. Leveraging fastn, she swiftly introduced the necessary redirection from
+`/launching-color-support/` to `/color-support/`. 
+
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/8/files)
+src: $fastn-assets.files.images.blog.redirect-fc.png
+width.fixed.percent: 95
+
+-- ds.h1: Conclusion
+
+The ACME case study is a testament to how fastn enables every team member to 
+wield change. The ACME team is no longer reliant solely on developers. They 
+seamlessly implement changes, saving time and boosting productivity. 
+
+Stay tuned for more tales from ACME Inc.
+
+
+-- end: ds.blog-page

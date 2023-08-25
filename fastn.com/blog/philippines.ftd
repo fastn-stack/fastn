@@ -1,24 +1,31 @@
 -- import: fastn.com/blog/lib
 -- import: fastn-community.github.io/bling/quote
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
 
--- ds.page: `fastn` goes to Philippines 
-
-13th April, 2023
+-- common.post-meta meta: `fastn` goes to Philippines
+published-on: April 13, 2023
+post-url: /namaste-philippines/
+author: $authors.ajit
 
 **maligayang pagdating! Kumusta kayo?**
 
 `fastn` has been moving with pace, and has been recently introduced to the
 bunch of talented interns from the Philippines. One of AmitU's collegue, Jay
 has facilitated this opportunity for all of us to grow. A tech company, `The
-BLOKC`, situated in Philippines helps young minds to complete their 500-hours 
-of internship program. 
+BLOKC`, situated in Philippines helps young minds to complete their 500-hours
+of internship program.
 
 Jay, pitched the idea to a team of 5, to adopt our `fastn`technology for their
 company projects. We connected with this team and introduced our langauge to
 them.
 
-I would love to share the message the team from Philippines have shared with 
+I would love to share the message the team from Philippines have shared with
 us:
+
+
+-- ds.blog-page:
+meta: $meta
 
 -- quote.onyx: Team
 
@@ -71,8 +78,4 @@ member: $lib.zyle
 -- lib.tab-component: 
 
 
-
-
-
-
--- end: ds.page
+-- end: ds.blog-page

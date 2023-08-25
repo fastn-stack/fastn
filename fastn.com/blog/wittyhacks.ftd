@@ -1,12 +1,20 @@
 -- import: fastn.com/assets
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
 
--- ds.page: Witty-Hacks!
-
-7th April, 2023
+-- common.post-meta meta: Witty-Hacks!
+published-on: April 07, 2023
+post-url: /wittyhacks/
+author: $authors.amitu
+post-image: $assets.files.images.wittyhacks.jpeg
 
 So we, at FifthTry, are Silver sponsors of [WittyHacks
 2023](https://wittyhacks.in). Super excited, first hackathon where people are
 using `fastn` to build websites and webapps!
+
+
+-- ds.blog-page:
+meta: $meta
 
 -- ds.image:
 src: $assets.files.images.wittyhacks.jpeg
@@ -67,7 +75,16 @@ so.
 
 
 
--- end: ds.page
+-- end: ds.blog-page
+
+
+
+
+
+
+
+
+
 
 
 -- component wittyhacker:

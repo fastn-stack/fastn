@@ -4,17 +4,24 @@
 
 -- boolean $show-modal: false
 
+-- import: fastn-community.github.io/bling/chat
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
 
--- ds.page: A Content Writer’s Journey with fastn
+-- common.post-meta meta: A Content Writer’s Journey with fastn
+published-on: August 10, 2023
+post-url: /blog/writer-journey/
+author: $authors.nandini
 
-Nandhini, 10 August 2023
-
-The thought of programming usually remains miles away from a writer's realm. 
-After all, why would a writer delve into lines of code when words are our forte? 
-But imagine a world where the two realms converge. A corner where I, as a 
-content writer, can seamlessly wield both skills. This newfound ability has not 
-only transformed my approach to work but has also sparked a journey that is 
+The thought of programming usually remains miles away from a writer's realm.
+After all, why would a writer delve into lines of code when words are our forte?
+But imagine a world where the two realms converge. A corner where I, as a
+content writer, can seamlessly wield both skills. This newfound ability has not
+only transformed my approach to work but has also sparked a journey that is
 reshaping my creative landscape.
+
+-- ds.blog-page:
+meta: $meta
 
 -- ds.h1: A Personal Journey
 
@@ -131,7 +138,4 @@ $open: $show-modal
 **`If you can type, you can code!`**
 
 
-
-
--- end: ds.page
-
+-- end: ds.blog-page

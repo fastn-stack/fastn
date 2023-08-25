@@ -1,40 +1,45 @@
--- ds.page: `fastn` might prove you wrong in the best possible way
-document-title: `fastn` might prove you wrong in the best possible way
-document-description: fastn is built for those who have never encountered a line of code before. 
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
 
-
-Nandhini, 03 August 2023
+-- common.post-meta meta: `fastn` might prove you wrong in the best possible way
+published-on: August 03, 2023
+post-url: /blog/prove-you-wrong/
+author: $authors.nandini
 
 Sometimes, the best surprises come when we let go of our preconceived notions.
 
-It's easy to believe that programming is hard and to some extent, that 
-perception is not entirely wrong. 
+It's easy to believe that programming is hard and to some extent, that
+perception is not entirely wrong.
 
-But imagine if creating your website is as simple as typing a few lines of text. 
-Just like our 
-[`business card`](https://fastn-community.github.io/business-card/create/) 
+But imagine if creating your website is as simple as typing a few lines of text.
+Just like our
+[`business card`](https://fastn-community.github.io/business-card/create/)
 
-Every line you write translates into a meaningful piece of your 
-creation. It feels a lot like writing in English, but with a simple markup. 
-Within minutes, you'll have a website with a personalized card, made with the 
+Every line you write translates into a meaningful piece of your
+creation. It feels a lot like writing in English, but with a simple markup.
+Within minutes, you'll have a website with a personalized card, made with the
 power of programming.
 
-Now, you might wonder, what if you've never coded before? 
+Now, you might wonder, what if you've never coded before?
 
-What if you're unfamiliar with the technicalities? 
+What if you're unfamiliar with the technicalities?
 
-These concerns are not uncommon. 
+These concerns are not uncommon.
 
-Navigating a new programming language can raise doubts. The fear of dedicating 
-time and effort to something that seems out of your grasp is a feeling many can 
-relate to. We understand your hesitation. 
+Navigating a new programming language can raise doubts. The fear of dedicating
+time and effort to something that seems out of your grasp is a feeling many can
+relate to. We understand your hesitation.
 
-That’s why we are building [`fastn`](https://fastn.com/) for people like you - 
-for those who've never encountered a line of code before, for those who fear 
-programming, and for those looking for a more straightforward way to start. 
+That’s why we are building [`fastn`](https://fastn.com/) for people like you -
+for those who've never encountered a line of code before, for those who fear
+programming, and for those looking for a more straightforward way to start.
 
-Syntaxes and techincal jargon won't confound you here; you only need the 
+Syntaxes and techincal jargon won't confound you here; you only need the
 willingness to try something new.
+
+
+-- ds.blog-page:
+meta: $meta
 
 -- ds.h1: Meet Mayur and Tushar 
 
@@ -78,12 +83,4 @@ It might prove you wrong—in the best possible way!
 
 
 
--- end: ds.page
-
-
-
-
-
-
-
-
+-- end: ds.blog-page

@@ -1,4 +1,5 @@
 -- ds.page: `ftd.document` 🚧
+favicon: $fastn-assets.files.images.doc-icon.svg.light
 
 `ftd.document` is a kernel component that provides root-level configuration to
 the document. In addition to the usual document attributes like title,
@@ -254,6 +255,20 @@ title: My page title
 breakpoint: 800
 
 
+-- ds.h2: `favicon: optional ftd.raw-image-src`
 
+This attribute defines the favicon used on the document. In the scenario, where
+you want to use different favicons for different pages, defining this attribute
+will let you define it for individual pages.
+
+**Note:** This value will overwrite the favicon defined at the package
+level inside `FASTN.ftd`
+
+-- ds.code: Sample usage of favicon
+lang: ftd
+
+\-- ftd.document:
+title: My page title
+favicon: $assets.files.doc-icon.svg.light
 
 -- end: ds.page
