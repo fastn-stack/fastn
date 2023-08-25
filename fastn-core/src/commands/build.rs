@@ -196,7 +196,7 @@ async fn incremental_build(
 ) -> fastn_core::Result<()> {
     // https://fastn.com/rfc/incremental-build/
 
-    let (cache_hit, mut c) = dbg!(cache::get()?);
+    let (cache_hit, mut c) = cache::get()?;
 
     if cache_hit {
         let mut unresolved_dependencies: Vec<String> = documents
@@ -208,6 +208,7 @@ async fn incremental_build(
         let mut resolving_dependencies: Vec<String> = vec![];
 
         while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
+            // println!("Current UR: {}", unresolved_dependency.as_str());
             if let Some(doc) = c.documents.get(
                 get_dependency_name_without_package_name(
                     config.package.name.as_str(),
@@ -215,29 +216,27 @@ async fn incremental_build(
                 )
                 .as_str(),
             ) {
-                println!(
-                    "[INCREMENTAL BUILD][CACHE FOUND] Processing: {}",
-                    &unresolved_dependency
-                );
+                // println!(
+                //     "[INCREMENTAL BUILD][CACHE FOUND] Processing: {}",
+                //     &unresolved_dependency
+                // );
 
                 let mut own_resolved_dependencies: Vec<String> = vec![];
-
                 for dep in &doc.dependencies {
                     if resolved_dependencies.contains(dep) || dep.eq(&unresolved_dependency) {
                         own_resolved_dependencies.push(dep.to_string());
                         continue;
                     }
-
                     unresolved_dependencies.push(dep.to_string());
                 }
 
-                println!(
-                    "[INCREMENTAL] [R]: {} [RV]: {} [UR]: {} [RM]: {}",
-                    &resolved_dependencies.len(),
-                    &resolving_dependencies.len(),
-                    &unresolved_dependencies.len(),
-                    unresolved_dependencies.len() - resolved_dependencies.len()
-                );
+                // println!(
+                //     "[INCREMENTAL] [R]: {} [RV]: {} [UR]: {} [ORD]: {}",
+                //     &resolved_dependencies.len(),
+                //     &resolving_dependencies.len(),
+                //     &unresolved_dependencies.len(),
+                //     own_resolved_dependencies.len(),
+                // );
 
                 if own_resolved_dependencies.eq(&doc.dependencies) {
                     let name_with_extension = format!(
@@ -271,25 +270,67 @@ async fn incremental_build(
                     resolved_dependencies.push(unresolved_dependency.to_string());
                     if unresolved_dependencies.is_empty() {
                         if let Some(resolving_dependency) = resolving_dependencies.pop() {
-                            dbg!(&unresolved_dependency);
                             if resolving_dependency.eq(&unresolved_dependency.as_str()) {
-                                println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
+                                // println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
                                 continue;
                             }
                             unresolved_dependencies.push(resolving_dependency);
                         }
                     }
-                } else if !resolving_dependencies.contains(&unresolved_dependency.to_string()) {
+                } else {
+                    // println!("Adding to RD: {}", unresolved_dependency.as_str());
                     resolving_dependencies.push(unresolved_dependency.to_string());
                 }
             } else {
-                resolved_dependencies.push(unresolved_dependency);
+                if unresolved_dependency.starts_with("$fastn$/")
+                    || unresolved_dependency.ends_with("/-/fonts.ftd")
+                    || unresolved_dependency.ends_with("/-/assets.ftd")
+                {
+                    resolved_dependencies.push(unresolved_dependency.clone());
+                } else {
+                    // println!("Not found in cache UR: {}", unresolved_dependency.as_str());
+                    let name_with_extension = format!(
+                        "{}.ftd",
+                        get_dependency_name_without_package_name(
+                            config.package.name.as_str(),
+                            unresolved_dependency.as_str()
+                        )
+                    );
+
+                    for document in documents.values() {
+                        if document.get_id().eq(name_with_extension.as_str())
+                            || document
+                                .get_id_with_package()
+                                .eq(name_with_extension.as_str())
+                        {
+                            handle_file(
+                                document,
+                                config,
+                                base_url,
+                                ignore_failed,
+                                test,
+                                true,
+                                Some(&mut c),
+                            )
+                            .await?;
+                            break;
+                        }
+                    }
+                    resolved_dependencies.push(unresolved_dependency.clone());
+                }
+                if unresolved_dependencies.is_empty() {
+                    if let Some(resolving_dependency) = resolving_dependencies.pop() {
+                        if resolving_dependency.eq(&unresolved_dependency.as_str()) {
+                            // println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
+                            continue;
+                        }
+                        unresolved_dependencies.push(resolving_dependency);
+                    }
+                }
             }
         }
     } else {
         for document in documents.values() {
-            dbg!(&document.get_id());
-
             handle_file(
                 document,
                 config,
@@ -305,7 +346,7 @@ async fn incremental_build(
 
     // TODO: Handle deleted files (files present in cache/.build but not in documents)
 
-    dbg!(c).cache_it()?;
+    c.cache_it()?;
 
     Ok(())
 }
@@ -388,7 +429,7 @@ fn is_cached<'a>(
     let cache: &mut cache::Cache = match cache {
         Some(c) => c,
         None => {
-            println!("cache miss: no have cache");
+            // println!("cache miss: no have cache");
             return (cache, false);
         }
     };
@@ -398,7 +439,7 @@ fn is_cached<'a>(
     let cached_doc: cache::Document = match cache.documents.get(id.as_str()).cloned() {
         Some(cached_doc) => cached_doc,
         None => {
-            println!("cache miss: no cache entry for {}", id.as_str());
+            // println!("cache miss: no cache entry for {}", id.as_str());
             return (Some(cache), false);
         }
     };
@@ -409,35 +450,35 @@ fn is_cached<'a>(
     let doc_hash = match cache.build_content.get(file_path) {
         Some(doc_hash) => doc_hash,
         None => {
-            println!("cache miss: document not present in .build: {}", file_path);
+            // println!("cache miss: document not present in .build: {}", file_path);
             return (Some(cache), false);
         }
     };
 
-    dbg!(doc_hash);
+    // dbg!(doc_hash);
 
     if doc_hash != &cached_doc.html_checksum {
-        println!("cache miss: html file checksums don't match");
+        // println!("cache miss: html file checksums don't match");
         return (Some(cache), false);
     }
 
     let file_checksum = match cache.file_checksum.get(id.as_str()).cloned() {
         Some(file_checksum) => file_checksum,
         None => {
-            println!("cache miss: no cache entry for {}", id.as_str());
+            // println!("cache miss: no cache entry for {}", id.as_str());
             return (Some(cache), false);
         }
     };
 
     if file_checksum != fastn_core::utils::generate_hash(doc.content.as_str()) {
-        println!("cache miss: ftd file checksums don't match");
+        // println!("cache miss: ftd file checksums don't match");
         return (Some(cache), false);
     }
 
     for dep in &cached_doc.dependencies {
         let file_checksum = match cache.file_checksum.get(dep) {
             None => {
-                println!("cache miss: file {} not present in cache", dep);
+                // println!("cache miss: file {} not present in cache", dep);
                 return (Some(cache), false);
             }
             Some(file_checksum) => file_checksum.clone(),
@@ -446,18 +487,18 @@ fn is_cached<'a>(
         let current_hash = match cache.get_file_hash(dep.as_str()) {
             Ok(hash) => hash,
             Err(_) => {
-                println!("cache miss: dependency {} not present current folder", dep);
+                // println!("cache miss: dependency {} not present current folder", dep);
                 return (Some(cache), false);
             }
         };
 
         if file_checksum != current_hash {
-            println!("cache miss: dependency {} checksums don't match", dep);
+            // println!("cache miss: dependency {} checksums don't match", dep);
             return (Some(cache), false);
         }
     }
 
-    println!("cache hit");
+    // println!("cache hit");
     (Some(cache), true)
 }
 
@@ -499,12 +540,12 @@ async fn handle_file_(
 
             println!("[HF][CACHED]{}", document.get_id());
 
-            dbg!(fastn_core::utils::copy(
+            fastn_core::utils::copy(
                 config.root.join(doc.id.as_str()),
                 config.root.join(".build").join(doc.id.as_str()),
             )
             .await
-            .ok());
+            .ok();
 
             if doc.id.eq("FASTN.ftd") {
                 return Ok(());
@@ -523,9 +564,9 @@ async fn handle_file_(
                 (Ok(r), _) => {
                     if let Some(cache) = cache {
                         cache.documents.insert(
-                            dbg!(remove_extension(doc.id.as_str())),
+                            remove_extension(doc.id.as_str()),
                             cache::Document {
-                                html_checksum: dbg!(r.checksum()),
+                                html_checksum: r.checksum(),
                                 dependencies: config.dependencies_during_render.clone(),
                             },
                         );
