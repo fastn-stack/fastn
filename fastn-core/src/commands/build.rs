@@ -272,8 +272,8 @@ async fn incremental_build(
                     if unresolved_dependencies.is_empty() {
                         if let Some(resolving_dependency) = resolving_dependencies.pop() {
                             dbg!(&unresolved_dependency);
-                            if resolving_dependency.ne(&unresolved_dependency.as_str()) {
-                                break;
+                            if resolving_dependency.eq(&unresolved_dependency.as_str()) {
+                                continue;
                             }
                             unresolved_dependencies.push(resolving_dependency);
                         }
