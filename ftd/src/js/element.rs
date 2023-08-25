@@ -607,6 +607,7 @@ impl Code {
 #[derive(Debug)]
 pub struct Image {
     pub src: ftd::js::Value,
+    pub fit: Option<ftd::js::Value>,
     pub alt: Option<ftd::js::Value>,
     pub common: Common,
 }
@@ -626,6 +627,11 @@ impl Image {
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
+            fit: ftd::js::value::get_optional_js_value(
+                "fit",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
             alt: ftd::js::value::get_optional_js_value(
                 "alt",
                 component.properties.as_slice(),
@@ -662,6 +668,16 @@ impl Image {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 alt.to_set_property(
                     fastn_js::PropertyKind::Alt,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
+        }
+        if let Some(ref fit) = self.fit {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                fit.to_set_property(
+                    fastn_js::PropertyKind::Fit,
                     doc,
                     kernel.name.as_str(),
                     rdata,

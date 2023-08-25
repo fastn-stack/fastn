@@ -521,6 +521,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = loading_variants(variant);
             (format!("fastn_dom.Loading.{}", js_variant), false)
         }
+        "ftd#image-fit" => {
+            let js_variant = object_fit_variants(variant);
+            (format!("fastn_dom.Fit.{}", js_variant), false)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -856,5 +860,16 @@ fn loading_variants(name: &str) -> &'static str {
         "lazy" => "Lazy",
         "eager" => "Eager",
         t => todo!("invalid loading variant {}", t),
+    }
+}
+
+fn object_fit_variants(name: &str) -> &'static str {
+    match name {
+        "none" => "none",
+        "fill" => "fill",
+        "contain" => "contain",
+        "cover" => "cover",
+        "scale-down" => "scaleDown",
+        t => todo!("invalid object fit variant {}", t),
     }
 }

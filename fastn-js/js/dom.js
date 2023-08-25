@@ -75,6 +75,7 @@ fastn_dom.propertyMap = {
     "overflow": "o",
     "overflow-x": "ox",
     "overflow-y": "oy",
+    "object-fit": "of",
     "padding": "p",
     "padding-bottom": "pb",
     "padding-horizontal": "ph",
@@ -262,6 +263,7 @@ fastn_dom.PropertyKind = {
     LinkRel: 106,
     InputMaxLength: 107,
     Favicon: 108,
+    Fit: 109,
 };
 
 
@@ -362,6 +364,14 @@ fastn_dom.BorderStyle = {
     Groove: "groove",
     Inset: "inset",
     Outset: "outset",
+}
+
+fastn_dom.Fit = {
+    none: "none",
+    fill: "fill",
+    contain: "contain",
+    cover: "cover",
+    scaleDown: "scale-down",
 }
 
 fastn_dom.Overflow = {
@@ -1548,6 +1558,8 @@ class Node2 {
             this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Alt) {
             this.attachAttribute("alt", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Fit) {
+            this.attachCss("object-fit", staticValue);
         } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
             if (fastn_utils.isNull(staticValue)) {
                 this.attachAttribute("src", staticValue);
