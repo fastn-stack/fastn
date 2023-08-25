@@ -30,11 +30,14 @@ let main = function (parent) {
     name: "Arpita"
   });
 }
+global["main"] = main;
 let _01_basic__append = function (args) {
   let __args__ = args;
   return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
 }
-let _01_basic__print = function (parent, inherited, args) {
+global["_01_basic__append"] = _01_basic__append;
+let _01_basic__print = function (parent, inherited, args)
+{
   let __args__ = {
   };
   inherited = fastn.recordInstance({
@@ -50,6 +53,7 @@ let _01_basic__print = function (parent, inherited, args) {
   parenti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
   return parenti0;
 }
+global["_01_basic__print"] = _01_basic__print;
 let foo__append = _01_basic__append;
 let _24_re_export__append = _01_basic__append;
 let _24_re_export__print = _01_basic__print;

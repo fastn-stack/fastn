@@ -46,6 +46,7 @@ let main = function (parent) {
     }, parenti3);
   });
 }
+global["main"] = main;
 let foo__code = function (parent, inherited, args) {
   let __args__ = {
   };
@@ -92,18 +93,23 @@ let foo__code = function (parent, inherited, args) {
   ]), inherited);
   return parenti0;
 }
+global["foo__code"] = foo__code;
 let foo__set_dark = function (args) {
   let __args__ = args;
   return (enable_dark_mode());
 }
+global["foo__set_dark"] = foo__set_dark;
 let foo__set_light = function (args) {
   let __args__ = args;
   return (enable_light_mode());
 }
-let foo__set_system = function (args) {
+global["foo__set_light"] = foo__set_light;
+let foo__set_system = function (args)
+{
   let __args__ = args;
   return (enable_system_mode());
 }
+global["foo__set_system"] = foo__set_system;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
