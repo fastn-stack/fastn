@@ -223,7 +223,7 @@ async fn incremental_build(
                 let mut own_resolved_dependencies: Vec<String> = vec![];
 
                 for dep in &doc.dependencies {
-                    if resolved_dependencies.contains(dep) {
+                    if resolved_dependencies.contains(dep) || dep.eq(&unresolved_dependency) {
                         own_resolved_dependencies.push(dep.to_string());
                         continue;
                     }
