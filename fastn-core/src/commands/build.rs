@@ -186,6 +186,37 @@ fn get_dependency_name_without_package_name(package_name: &str, dependency_name:
     .to_string()
 }
 
+async fn handle_dependency_file(
+    config: &mut fastn_core::Config,
+    cache: &mut cache::Cache,
+    documents: &std::collections::BTreeMap<String, fastn_core::File>,
+    base_url: &str,
+    ignore_failed: bool,
+    test: bool,
+    name_with_extension: String,
+) -> fastn_core::Result<()> {
+    for document in documents.values() {
+        if document.get_id().eq(name_with_extension.as_str())
+            || document
+                .get_id_with_package()
+                .eq(name_with_extension.as_str())
+        {
+            handle_file(
+                document,
+                config,
+                base_url,
+                ignore_failed,
+                test,
+                true,
+                Some(cache),
+            )
+            .await?;
+        }
+    }
+
+    Ok(())
+}
+
 #[tracing::instrument(skip(config, documents))]
 async fn incremental_build(
     config: &mut fastn_core::Config,
@@ -247,25 +278,16 @@ async fn incremental_build(
                         )
                     );
 
-                    for document in documents.values() {
-                        if document.get_id().eq(name_with_extension.as_str())
-                            || document
-                                .get_id_with_package()
-                                .eq(name_with_extension.as_str())
-                        {
-                            handle_file(
-                                document,
-                                config,
-                                base_url,
-                                ignore_failed,
-                                test,
-                                true,
-                                Some(&mut c),
-                            )
-                            .await?;
-                            break;
-                        }
-                    }
+                    handle_dependency_file(
+                        config,
+                        &mut c,
+                        documents,
+                        base_url,
+                        ignore_failed,
+                        test,
+                        name_with_extension,
+                    )
+                    .await?;
 
                     resolved_dependencies.push(unresolved_dependency.to_string());
                     if unresolved_dependencies.is_empty() {
@@ -297,25 +319,17 @@ async fn incremental_build(
                         )
                     );
 
-                    for document in documents.values() {
-                        if document.get_id().eq(name_with_extension.as_str())
-                            || document
-                                .get_id_with_package()
-                                .eq(name_with_extension.as_str())
-                        {
-                            handle_file(
-                                document,
-                                config,
-                                base_url,
-                                ignore_failed,
-                                test,
-                                true,
-                                Some(&mut c),
-                            )
-                            .await?;
-                            break;
-                        }
-                    }
+                    handle_dependency_file(
+                        config,
+                        &mut c,
+                        documents,
+                        base_url,
+                        ignore_failed,
+                        test,
+                        name_with_extension,
+                    )
+                    .await?;
+
                     resolved_dependencies.push(unresolved_dependency.clone());
                 }
                 if unresolved_dependencies.is_empty() {
