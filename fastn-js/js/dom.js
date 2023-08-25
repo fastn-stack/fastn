@@ -1610,6 +1610,7 @@ class Node2 {
             codeNode.classList.add(language);
             fastn_utils.highlightCode(codeNode, this.#extraData.code);
         } else if (kind === fastn_dom.PropertyKind.Favicon) {
+            if (fastn_utils.isNull(staticValue)) return;
             this.setFavicon(staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle) {
             this.updateMetaTitle(staticValue);
