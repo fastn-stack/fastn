@@ -1459,6 +1459,10 @@ class Node2 {
                 case true:
                     this.attachAttribute("checked", "");
                     break;
+                case "false":
+                case false:
+                    this.removeAttribute("checked");
+                    break;
                 default:
                     this.attachAttribute("checked", staticValue);
             }
@@ -1467,6 +1471,10 @@ class Node2 {
                 case "false":
                 case false:
                     this.attachAttribute("disabled", "");
+                    break;
+                case "true":
+                case true:
+                    this.removeAttribute("disabled");
                     break;
                 default:
                     this.attachAttribute("disabled", staticValue);
