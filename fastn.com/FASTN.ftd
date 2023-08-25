@@ -777,7 +777,11 @@ skip: true
 
 
 # Blog: /blog/
+  document: /events/weekly-contest/week-1-quote.ftd
 
+- Quote contest :/quote-contest/
+  document: /events/weekly-contest/week-1-quote.ftd
+- A Content Writer’s Journey with fastn: /blog/writer-journey/
 - Tales from ACME Inc - Case Study: /acme/
   document: blog/acme.ftd 
 - A Content Writer’s Journey with fastn: /writer/
