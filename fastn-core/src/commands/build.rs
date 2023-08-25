@@ -208,12 +208,6 @@ async fn incremental_build(
         let mut resolving_dependencies: Vec<String> = vec![];
 
         while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
-            dbg!(
-                &unresolved_dependencies,
-                &resolving_dependencies,
-                &resolved_dependencies
-            );
-
             if let Some(doc) = c.documents.get(
                 get_dependency_name_without_package_name(
                     config.package.name.as_str(),
@@ -237,7 +231,13 @@ async fn incremental_build(
                     unresolved_dependencies.push(dep.to_string());
                 }
 
-                dbg!(&own_resolved_dependencies, &doc.dependencies);
+                println!(
+                    "[INCREMENTAL] [R]: {} [RV]: {} [UR]: {} [RM]: {}",
+                    &resolved_dependencies.len(),
+                    &resolving_dependencies.len(),
+                    &unresolved_dependencies.len(),
+                    unresolved_dependencies.len() - resolved_dependencies.len()
+                );
 
                 if own_resolved_dependencies.eq(&doc.dependencies) {
                     let name_with_extension = format!(
@@ -273,12 +273,13 @@ async fn incremental_build(
                         if let Some(resolving_dependency) = resolving_dependencies.pop() {
                             dbg!(&unresolved_dependency);
                             if resolving_dependency.eq(&unresolved_dependency.as_str()) {
+                                println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
                                 continue;
                             }
                             unresolved_dependencies.push(resolving_dependency);
                         }
                     }
-                } else {
+                } else if !resolving_dependencies.contains(&unresolved_dependency.to_string()) {
                     resolving_dependencies.push(unresolved_dependency.to_string());
                 }
             } else {
@@ -404,7 +405,7 @@ fn is_cached<'a>(
 
     // if it exists, check if the checksums match
     // if they do, return
-    dbg!(&cached_doc);
+    // dbg!(&cached_doc);
     let doc_hash = match cache.build_content.get(file_path) {
         Some(doc_hash) => doc_hash,
         None => {
