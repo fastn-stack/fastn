@@ -198,9 +198,7 @@ async fn incremental_build(
 
     if cache_hit {
         let mut unresolved_dependencies: Vec<String> = vec!["index".to_string()];
-
         let mut resolved_dependencies: Vec<String> = vec![];
-
         let mut resolving_dependencies: Vec<String> = vec![];
 
         while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
@@ -729,8 +727,18 @@ async fn process_static(
             .join("-")
             .join(package.name.as_str());
 
-        std::fs::create_dir_all(&build_path)?;
-        std::fs::write(build_path.join(sa.id.as_str()), &sa.content)?;
+        let full_file_path = build_path.join(sa.id.as_str());
+        let (file_root, _file_name) =
+            if let Some((file_root, file_name)) = full_file_path.as_str().rsplit_once('/') {
+                (file_root.to_string(), file_name.to_string())
+            } else {
+                ("".to_string(), full_file_path.to_string())
+            };
+
+        if !base_path.join(&file_root).exists() {
+            std::fs::create_dir_all(base_path.join(&file_root))?;
+        }
+        std::fs::write(full_file_path, &sa.content)?;
         Ok(())
     }
 }
