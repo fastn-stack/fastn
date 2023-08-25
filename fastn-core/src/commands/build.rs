@@ -552,8 +552,6 @@ async fn handle_file_(
                 return Ok(());
             }
 
-            println!("[HF][CACHED]{}", document.get_id());
-
             fastn_core::utils::copy(
                 config.root.join(doc.id.as_str()),
                 config.root.join(".build").join(doc.id.as_str()),
