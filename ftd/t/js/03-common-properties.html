@@ -1378,6 +1378,7 @@ let main = function (parent) {
   parenti21.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
   parenti21.setProperty(fastn_dom.PropertyKind.Shadow, global.foo__s, inherited);
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__ylg", fastn.recordInstance({
   light: "yellow",
   dark: "lightgreen"
@@ -1394,6 +1395,7 @@ let foo__increment = function (args)
     __args__.a = fastn_utils_val___args___a;
   };
 }
+global["foo__increment"] = foo__increment;
 fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));
 fastn_utils.createNestedObject(global, "foo__og", fastn.recordInstance({
   light: "orange",

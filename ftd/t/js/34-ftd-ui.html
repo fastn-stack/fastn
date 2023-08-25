@@ -27,6 +27,7 @@ let main = function (parent) {
     s: global.foo__c
   });
 }
+global["main"] = main;
 let foo__box = function (parent, inherited, args) {
   let __args__ = {
     uis: fastn.mutableList([]),
@@ -44,7 +45,9 @@ let foo__box = function (parent, inherited, args) {
   parenti0.setProperty(fastn_dom.PropertyKind.Children, __args__.uis, inherited);
   return parenti0;
 }
-let foo__switcher = function (parent, inherited, args) {
+global["foo__box"] = foo__box;
+let foo__switcher = function (parent, inherited, args)
+{
   let __args__ = {
     s: fastn.mutableList([]),
     is_active: fastn.mutable(0),
@@ -77,6 +80,7 @@ let foo__switcher = function (parent, inherited, args) {
   ]), inherited);
   return parenti0;
 }
+global["foo__switcher"] = foo__switcher;
 fastn_utils.createNestedObject(global, "foo__c", fastn.mutableList([fastn.recordInstance({
   elements: fastn.mutableList([function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);

@@ -32,6 +32,7 @@ let main = function (parent) {
   parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
   parenti2.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(global.foo__bg_og), inherited);
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__bg_og", fastn.recordInstance({
   light: "yellow",
   dark: "green"

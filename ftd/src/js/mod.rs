@@ -407,7 +407,6 @@ impl ftd::interpreter::Component {
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
-        dbg!(&self);
         if let Some(kernel_component_statements) = self.kernel_to_component_statements(
             parent,
             index,

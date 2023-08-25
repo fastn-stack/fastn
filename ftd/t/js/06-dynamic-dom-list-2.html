@@ -44,6 +44,7 @@ let main = function (parent) {
     return rooti0;
   });
 }
+global["main"] = main;
 let foo__append_string = function (args) {
   let __args__ = {
     a: fastn.mutableList([]),
@@ -51,6 +52,7 @@ let foo__append_string = function (args) {
   };
   return (ftd.append(__args__.a, __args__.v));
 }
+global["foo__append_string"] = foo__append_string;
 fastn_utils.createNestedObject(global, "foo__first", fastn.mutable("hello"));
 fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([global.foo__first,
 "world"]));
@@ -62,7 +64,9 @@ let foo__set_string = function (args)
     __args__.a = fastn_utils_val___args___a;
   };
 }
-let foo__show_person = function (parent, inherited, args) {
+global["foo__set_string"] = foo__set_string;
+let foo__show_person = function (parent, inherited, args)
+{
   let __args__ = {
   };
   inherited = fastn.recordInstance({
@@ -86,6 +90,7 @@ let foo__show_person = function (parent, inherited, args) {
   ]), inherited);
   return parenti0;
 }
+global["foo__show_person"] = foo__show_person;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

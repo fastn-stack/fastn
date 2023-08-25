@@ -40,6 +40,7 @@ let main = function (parent) {
   }
   ]), inherited);
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__names", fastn.mutableList(["A",
 "B",
 "C",

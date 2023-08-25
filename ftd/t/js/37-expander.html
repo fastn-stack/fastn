@@ -58,6 +58,7 @@ let main = function (parent) {
   }
   ]), inherited);
 }
+global["main"] = main;
 let foo__box = function (parent, inherited, args) {
   let __args__ = {
     title: "default header",
@@ -131,6 +132,7 @@ let foo__box = function (parent, inherited, args) {
   ]), inherited);
   return parenti0;
 }
+global["foo__box"] = foo__box;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

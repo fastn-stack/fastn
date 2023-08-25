@@ -40,6 +40,7 @@ let main = function (parent) {
     light: "white"
   }), inherited);
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__fastn_image", fastn.recordInstance({
   light: "https://fastn.io/-/fastn.io/images/fastn.svg",
   dark: "https://fastn.io/-/fastn.io/images/fastn-dark.svg"

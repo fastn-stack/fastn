@@ -79,6 +79,7 @@ let main = function (parent) {
   ]), inherited);
   let parenti1 = foo__mbox(parent, inherited);
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__months", fastn.mutableList(["January",
 "February",
 "March",
@@ -97,7 +98,9 @@ let foo__append = function (args)
   };
   return (ftd.append(__args__.a, __args__.v));
 }
-let foo__mbox = function (parent, inherited, args) {
+global["foo__append"] = foo__append;
+let foo__mbox = function (parent, inherited, args)
+{
   let __args__ = {
     current_value: fastn.mutable(null),
   };
@@ -174,6 +177,7 @@ let foo__mbox = function (parent, inherited, args) {
   ]), inherited);
   return parenti0;
 }
+global["foo__mbox"] = foo__mbox;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
