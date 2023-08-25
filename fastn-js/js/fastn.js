@@ -398,6 +398,19 @@ class RecordInstance {
     }
 }
 
+class Module {
+    #name;
+    #global;
+    constructor(name, global) {
+        this.#name = name;
+        this.#global = global;
+    }
+
+    get(function_name) {
+        return this.#global[`${this.#name}__${function_name}`];
+    }
+}
+
 fastn.recordInstance = function (obj) {
     return new RecordInstance(obj);
 }
@@ -409,3 +422,6 @@ fastn.color = function (r, g, b) {
 fastn.mutableClass = Mutable;
 fastn.mutableListClass = MutableList;
 fastn.recordInstanceClass = RecordInstance;
+fastn.module = function (name, global) {
+    return new Module(name, global);
+}

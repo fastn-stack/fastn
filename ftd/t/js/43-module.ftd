@@ -1,0 +1,11 @@
+-- bar:
+m: 01-basic
+
+
+-- component bar:
+module m: 01-basic
+caption title: default header again
+
+-- bar.m.print: $bar.title
+
+-- end: bar

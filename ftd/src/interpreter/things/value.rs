@@ -168,6 +168,10 @@ impl PropertyValue {
         }
     }
 
+    pub(crate) fn value_optional(&self) -> Option<&ftd::interpreter::Value> {
+        self.value("", 0).ok()
+    }
+
     pub(crate) fn reference_name(&self) -> Option<&String> {
         match self {
             PropertyValue::Reference { name, .. } => Some(name),
@@ -1868,6 +1872,13 @@ impl Value {
                 doc_id,
                 line_number,
             ),
+        }
+    }
+
+    pub fn module_name_optional(&self) -> Option<String> {
+        match self {
+            ftd::interpreter::Value::Module { name, .. } => Some(name.to_string()),
+            _ => None,
         }
     }
 
