@@ -205,6 +205,9 @@ pub enum Value {
     UI {
         value: Vec<fastn_js::ComponentStatement>,
     },
+    Module {
+        name: String,
+    },
     Null,
     Undefined,
 }
@@ -276,6 +279,12 @@ impl Value {
             ),
             Value::Null => "null".to_string(),
             Value::Undefined => "undefined".to_string(),
+            Value::Module { name } => {
+                format!(
+                    "fastn.module(\"{}\", global)",
+                    fastn_js::utils::name_to_js(name)
+                )
+            }
         }
     }
 
