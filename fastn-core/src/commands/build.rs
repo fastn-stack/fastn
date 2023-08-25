@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 // #[tracing::instrument(skip(config))]
 pub async fn build(
     config: &mut fastn_core::Config,
@@ -197,11 +199,21 @@ async fn incremental_build(
     let (cache_hit, mut c) = dbg!(cache::get()?);
 
     if cache_hit {
-        let mut unresolved_dependencies: Vec<String> = vec!["index".to_string()];
+        let mut unresolved_dependencies: Vec<String> = documents
+            .iter()
+            .filter(|(_, f)| f.is_ftd())
+            .map(|(_, f)| f.get_id().trim_end_matches(".ftd").to_string())
+            .collect_vec();
         let mut resolved_dependencies: Vec<String> = vec![];
         let mut resolving_dependencies: Vec<String> = vec![];
 
         while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
+            dbg!(
+                &unresolved_dependencies,
+                &resolving_dependencies,
+                &resolved_dependencies
+            );
+
             if let Some(doc) = c.documents.get(
                 get_dependency_name_without_package_name(
                     config.package.name.as_str(),
