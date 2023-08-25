@@ -237,7 +237,7 @@ async fn incremental_build(
                     unresolved_dependencies.push(dep.to_string());
                 }
 
-                dbg!( &own_resolved_dependencies, &doc.dependencies);
+                dbg!(&own_resolved_dependencies, &doc.dependencies);
 
                 if own_resolved_dependencies.eq(&doc.dependencies) {
                     let name_with_extension = format!(
