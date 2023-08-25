@@ -226,6 +226,7 @@ $on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
 height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 244
 height.fixed.px if {grid-of-items.two-fold}: 520
+height.fixed.px if {grid-of-items.show-large}: 324
 align-content: center
 border-color: $inherited.colors.border
 border-width.px: 1
