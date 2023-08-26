@@ -218,7 +218,27 @@ value: Hello
 
 -- end: ds.output
 
+-- ds.h2: `max-length: optional integer`
 
+This attribute will define the maximum length of characters that user is allowed
+to type inside `ftd.text-input`. It accepts integer value and is optional.
+
+-- ds.code: `max-length: optional integer`
+lang: ftd
+
+\-- ftd.text-input:
+placeholder: Max 10 characters
+type: text
+max-length: 10
+
+-- ds.output: Output: `max-length` is set to 10 characters
+
+-- ftd.text-input:
+placeholder: Max 10 characters
+type: text
+max-length: 10
+
+-- end: ds.output
 
 -- ds.h2: `type: optional ftd.text-input-type`
 

@@ -449,6 +449,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /backend/country-details/index.ftd
   - Basic of `http`, `data modelling`: /country-details/basics/
     document: /backend/country-details/http-data-modelling.ftd
+  - Building dynamic country list page: /country-list/
+    document: /backend/country-details/dynamic-country-list-page.ftd
 
 # Create Website: /create-website/
   document: author/how-to/install.ftd
@@ -800,7 +802,11 @@ skip: true
 
 
 # Blog: /blog/
+  document: /events/weekly-contest/week-1-quote.ftd
 
+- Quote contest :/quote-contest/
+  document: /events/weekly-contest/week-1-quote.ftd
+- A Content Writer’s Journey with fastn: /blog/writer-journey/
 - Tales from ACME Inc - Case Study: /acme/
   document: blog/acme.ftd 
 - A Content Writer’s Journey with fastn: /writer/

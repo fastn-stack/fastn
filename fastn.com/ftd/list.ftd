@@ -13,14 +13,14 @@ To declare a new list variable, you can use the following syntax:
 -- ds.code: Declaring a `list`
 lang: ftd
 
-\-- <data-type> list <list-name>:
+\-- &lt;data-type&gt; list &lt;list-name&gt;:
 
-\-- <value>
-\-- <value>
-\-- <value>
+\-- &lt;value&gt;
+\-- &lt;value&gt;
+\-- &lt;value&gt;
 \-- ...
 
-\-- end: <list-name>
+\-- end: &lt;list-name&gt;
 
 -- ds.markdown:
 
@@ -101,7 +101,10 @@ lang: ftd
 \-- ftd.ui list uis:
 
 \-- ftd.text: Hello World!
+color: $inherited.colors.text-strong
+
 \-- ftd.text: I love `fastn`.
+color: $inherited.colors.text-strong
 
 \-- end: uis
 
@@ -114,7 +117,10 @@ lang: ftd
 \-- foo:
 
 \-- ftd.text: Hello World!
+color: $inherited.colors.text-strong
+
 \-- ftd.text: I love `fastn`.
+color: $inherited.colors.text-strong
 
 \-- end: foo
 
@@ -189,10 +195,12 @@ following syntax:
 lang: ftd
 
 \-- ftd.text: $weekdays.0
+color: $inherited.colors.text-strong
 
 -- ds.output:
 
 -- ftd.text: $weekdays.0
+color: $inherited.colors.text-strong
 
 -- end: ds.output
 
@@ -382,6 +390,9 @@ You can read more details of reading `.ftd` files
 -- ftd.ui list uis:
 
 -- ftd.text: Hello World!
+color: $inherited.colors.text-strong
+
 -- ftd.text: I love `fastn`.
+color: $inherited.colors.text-strong
 
 -- end: uis

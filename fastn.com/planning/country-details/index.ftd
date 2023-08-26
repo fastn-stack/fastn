@@ -367,7 +367,12 @@ our fastn community on Discord.
 
 
 
--- ds.h2: Country list page - Script
+-- ds.h2: Dynamic country list page - Script
+
+-- ds.image:
+src: $fastn-assets.files.images.backend.dynamic-country-list-page.jpg
+
+-- ds.markdown:
 
 Hi Guys, welcome to the video.
 
@@ -378,6 +383,11 @@ flag and country's `common` name and also display values of `population`,
 `region` and `capital`.
 
 We will do this in three parts. 
+
+-- ds.image:
+src: $fastn-assets.files.images.backend.three-stages.jpg
+
+-- ds.markdown:
 
 - First, **data modelling** - declare all the `records` in a document.
 
