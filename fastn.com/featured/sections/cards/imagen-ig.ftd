@@ -58,6 +58,7 @@ if: { show-grid }
 templates: $cards
 more-link-text: View more
 more-link: /featured/sections/cards/
+show-large: true
 
 
 -- end: ds.page

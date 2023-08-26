@@ -221,21 +221,18 @@ boolean show-large: false
 -- ftd.column:
 width if { ftd.device == "mobile" }: fill-container
 spacing.fixed.px: 16
-;;open-in-new-tab: true
 classes if {grid-of-items.two-fold}: two-folded
 $on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
-height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 220
-height.fixed.px if { grid-of-items.show-large}: 400
-
--- ftd.column:
-width: fill-container
+height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 244
+height.fixed.px if {grid-of-items.two-fold}: 520
+height.fixed.px if {grid-of-items.show-large}: 324
 align-content: center
-border-width.px: 1
 border-color: $inherited.colors.border
-overflow: hidden
+border-width.px: 1
+padding.px: 16
 border-radius.px: 8
-link: $grid-of-items.template-url
+overflow: hidden
 
 -- ftd.desktop:
 
@@ -245,7 +242,7 @@ spacing.fixed.px: 12
 padding.px: 20
 anchor: parent
 bottom.px if { grid-of-items.mouse-in }: 0
-bottom.px if { !grid-of-items.mouse-in }: -60
+bottom.px if { !grid-of-items.mouse-in }: -64
 left.px: 0
 z-index: 999
 background.solid: #222222cc
@@ -297,13 +294,17 @@ width.fixed.px: 22
 -- end: ftd.mobile
 
 -- ftd.column:
+width: fill-container
+align-content: center
+link: $grid-of-items.template-url
+
+-- ftd.column:
 if: { grid-of-items.wip }
 width.fixed.px: 190
 height.fixed.px: 166
 anchor: parent
 background.solid: $overlay-bg
 overflow: hidden
-border-radius.px: 8
 align-content: center
 z-index: 99
 
@@ -329,13 +330,11 @@ color: #d9d9d9
 if: { $grid-of-items.screenshot != NULL }
 src: $grid-of-items.screenshot
 width: fill-container
-height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 220
-height.fixed.px if { grid-of-items.show-large}: 320
-border-radius.px: 10
 $on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
 $on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
 classes if { grid-of-items.wip }: filter-1px
 css: [$fastn-assets.files.featured.filter.css]
+align-self: center
 
 -- end: ftd.column
 
