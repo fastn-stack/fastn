@@ -205,7 +205,7 @@ SELECT * FROM user;
 
 
 \-- show-person: $p
-$loop$: $people as $p
+for: $p in $people
 
 -- ds.markdown:
 
