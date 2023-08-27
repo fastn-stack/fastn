@@ -13,6 +13,7 @@ members = [
     # "fastn-runtime",
 ]
 exclude = ["fastn-runtime", "fastn-wasm"]
+resolver = "2"
 
 [workspace.package]
 version = "0.3.0"
