@@ -186,7 +186,7 @@ align-content: center
 -- github-star-cta:
 link: https://github.com/fastn-stack/fastn/
 
-Support us by becoming a stargazer! 🚀
+Star us on Github 🚀
 
 -- ftd.text: $hero-section.title
 role: $inherited.types.heading-hero
