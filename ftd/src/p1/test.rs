@@ -454,15 +454,15 @@ fn with_dash_dash() {
         "#
         ),
         &ftd::p1::Section::with_name("hello")
-            .add_sub_section(
-                ftd::p1::Section::with_name("realm.rr.step.body").and_body(r#"
+            .add_sub_section(ftd::p1::Section::with_name("realm.rr.step.body").and_body(
+                r#"
                         {
                           "body": "-- h0: Hello World\n\n-- markup:\n\ndemo cr 1\n",
                           "kind": "content",
                           "track": "amitu/index",
                           "version": "2020-11-16T04:13:14.642892+00:00"
-                        }"#),
-            )
+                        }"#,
+            ))
             .list(),
     );
 }
