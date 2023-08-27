@@ -575,16 +575,14 @@ impl Document {
 
     pub fn title(&self) -> Option<ftd::ftd2021::Rendered> {
         // find the text of first primary heading
-        for i in vec![
-            ftd::Region::H0,
+        for i in [ftd::Region::H0,
             ftd::Region::H1,
             ftd::Region::H2,
             ftd::Region::H3,
             ftd::Region::H4,
             ftd::Region::H5,
             ftd::Region::H6,
-            ftd::Region::H7,
-        ] {
+            ftd::Region::H7] {
             if let Some(t) = Self::get_heading(
                 &self.main.container.children,
                 &|r| matches!(r, r if r == &i),
