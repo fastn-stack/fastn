@@ -735,7 +735,7 @@ impl PropertyValue {
             Ok(match &expected_kind.kind.clone() {
                 ftd::interpreter::Kind::Optional { kind } => {
                     let kind = kind.clone().into_kind_data();
-                    if value.is_null() {}
+                    value.is_null();
                     match value {
                         ftd::ast::VariableValue::Optional {
                             value: ref ivalue, ..

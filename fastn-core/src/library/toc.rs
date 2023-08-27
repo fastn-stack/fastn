@@ -279,7 +279,7 @@ impl TocParser {
                     _ => {
                         // The URL can have its own colons. So match the URL first
                         let url_regex = regex::Regex::new(
-                            r#":[ ]?(?P<url>(?:https?)?://(?:[a-zA-Z0-9]+\.)?(?:[A-z0-9]+\.)(?:[A-z0-9]+)(?:[/A-Za-z0-9\?:\&%]+))"#
+                            r":[ ]?(?P<url>(?:https?)?://(?:[a-zA-Z0-9]+\.)?(?:[A-z0-9]+\.)(?:[A-z0-9]+)(?:[/A-Za-z0-9\?:\&%]+))"
                         ).unwrap();
                         if let Some(regex_match) = url_regex.find(current_title.as_str()) {
                             let curr_title = current_title.as_str();

@@ -888,12 +888,10 @@ impl ExpressionGenerator {
             let first = node.children().first().unwrap(); //todo remove unwrap()
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
             if !arguments.iter().any(|v| first.to_string().eq(&v.0)) {
-                return vec![
-                    "let ".to_string(),
+                return ["let ".to_string(),
                     self.to_js_(first, false, arguments, false),
                     node.operator().to_string(),
-                    self.to_js_(second, false, arguments, false),
-                ]
+                    self.to_js_(second, false, arguments, false)]
                 .join("");
             } else if first.operator().get_variable_identifier_write().is_some() {
                 let var = self.to_js_(first, false, arguments, false);
@@ -910,11 +908,9 @@ impl ExpressionGenerator {
                     refined_var = fastn_js::utils::name_to_js_(var.as_str())
                 );
             };
-            return vec![
-                self.to_js_(first, false, arguments, false),
+            return [self.to_js_(first, false, arguments, false),
                 node.operator().to_string(),
-                self.to_js_(second, false, arguments, false),
-            ]
+                self.to_js_(second, false, arguments, false)]
             .join("");
         }
 
@@ -924,18 +920,16 @@ impl ExpressionGenerator {
             if matches!(node.operator(), fastn_grammar::evalexpr::Operator::Not)
                 || matches!(node.operator(), fastn_grammar::evalexpr::Operator::Neg)
             {
-                return vec![operator, self.to_js_(first, false, arguments, false)].join("");
+                return [operator, self.to_js_(first, false, arguments, false)].join("");
             }
             if matches!(node.operator(), fastn_grammar::evalexpr::Operator::Neq) {
                 // For js conversion
                 operator = "!==".to_string();
             }
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
-            return vec![
-                self.to_js_(first, false, arguments, false),
+            return [self.to_js_(first, false, arguments, false),
                 operator,
-                self.to_js_(second, false, arguments, false),
-            ]
+                self.to_js_(second, false, arguments, false)]
             .join("");
         }
 
