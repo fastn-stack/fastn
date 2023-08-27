@@ -72,7 +72,7 @@ lang: ftd
 \-- import: fastn-community.github.io/bling/quote
 
 \-- quote.charcoal: Amit Upadhyay
-label: Creator of FTD
+label: Creator of `fastn`
 avatar: $fastn-assets.files.images.amitu.jpg
 logo: $fastn-assets.files.images.logo-fifthtry.svg
 
@@ -81,7 +81,7 @@ early 2000s, and it makes me a little sad.
 
 
 -- quote.charcoal: Amit Upadhyay
-label: Creator of FTD
+label: Creator of `fastn`
 avatar: $fastn-assets.files.images.amitu.jpg
 logo: $fastn-assets.files.images.logo-fifthtry.svg
 
