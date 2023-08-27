@@ -10,8 +10,6 @@ background.solid: $bg-og
 light: yellow
 dark: green
 
--- string hello: Hello
-
 -- string append(a,b):
 string a:
 string b:

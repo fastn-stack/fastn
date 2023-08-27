@@ -6,10 +6,6 @@ m: 01-basic
 module m: 01-basic
 caption title: default header again
 
--- ftd.column:
-/-- bar.m.print: $bar.title
-/-- ftd.text: $bar.m.append(a = FifthTry, b = Click here)
--- ftd.text: $bar.m.hello
--- end: ftd.column
+-- bar.m.print: $bar.title
 
 -- end: bar
