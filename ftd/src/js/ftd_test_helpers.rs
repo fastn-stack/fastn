@@ -89,7 +89,7 @@ fn test_available_code_themes() -> String {
 fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &std::path::PathBuf) {
     let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let js_ast_data = ftd::js::document_into_js_ast(i);
-    let js_document_script = fastn_js::to_js(dbg!(js_ast_data.asts.as_slice()), true);
+    let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), true);
     let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), false);
 
     let html_str = {
