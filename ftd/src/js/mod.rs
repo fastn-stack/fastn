@@ -541,14 +541,6 @@ impl ftd::interpreter::Component {
 
         let remaining = remaining?;
 
-        dbg!(
-            "header_defined_component_to_component_statements",
-            &self,
-            &component_name,
-            &remaining,
-            &rdata.component_name
-        );
-
         match rdata.component_definition_name {
             Some(ref component_definition_name) if component_name.eq(component_definition_name) => {
             }
@@ -571,14 +563,12 @@ impl ftd::interpreter::Component {
                 self.properties.as_slice(),
                 self.line_number,
             )?;
-            dbg!(&arguments);
         } else if !ftd::js::utils::is_ui_argument(
             component.arguments.as_slice(),
             remaining.as_str(),
         ) {
             return None;
         }
-        dbg!(&rdata.component_definition_name);
 
         let value = ftd::js::Value::Reference(self.name.to_owned()).to_set_property_value_with_ui(
             doc,
