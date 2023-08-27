@@ -47,9 +47,11 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ftd.ui list page.banner:
 
-/-- banner.cta-banner:
-cta-text: Jumpstart your Web Development with FTD!
-cta-link: /events/webdev-with-ftd/
+-- banner.cta-banner:
+cta-text: star on Github 🚀
+cta-link: https://github.com/fastn-stack/fastn/
+
+Support us by giving us a
 
 -- end: page.banner
 
