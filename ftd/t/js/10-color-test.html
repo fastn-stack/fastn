@@ -96,6 +96,7 @@ let main = function (parent) {
   }
   ]), inherited);
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__bg_og", fastn.recordInstance({
   light: "#170d03",
   dark: "#edfce8"
@@ -109,6 +110,7 @@ let foo__increment = function (args)
     __args__.a = fastn_utils_val___args___a;
   };
 }
+global["foo__increment"] = foo__increment;
 fastn_utils.createNestedObject(global, "foo__og", fastn.recordInstance({
   light: "orange",
   dark: "green"

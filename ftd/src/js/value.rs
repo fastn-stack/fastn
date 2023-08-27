@@ -221,7 +221,10 @@ impl ftd::interpreter::Argument {
             properties,
         );
 
-        ftd::js::utils::get_js_value_from_properties(properties.as_slice())
+        ftd::js::utils::get_js_value_from_properties(properties.as_slice()) /* .map(|v|
+                                                                            if let Some(ftd::interpreter::Value::Module {}) = self.value.and_then(|v| v.value_optional()) {
+
+                                                                             }*/
     }
 }
 
@@ -397,6 +400,11 @@ impl ftd::interpreter::Value {
                         should_return,
                         has_rive_components,
                     ),
+                })
+            }
+            ftd::interpreter::Value::Module { name, .. } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::Module {
+                    name: name.to_string(),
                 })
             }
             t => todo!("{:?}", t),

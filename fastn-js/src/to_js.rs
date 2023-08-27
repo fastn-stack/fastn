@@ -437,6 +437,13 @@ fn func(name: &str, params: &[String], body: pretty::RcDoc<'static>) -> pretty::
             .append(text("}"))
             .group(),
     )
+    .append(if name.contains('.') {
+        pretty::RcDoc::nil()
+    } else {
+        pretty::RcDoc::softline().append(text(
+            format!("{}[\"{name}\"] = {name};", fastn_js::GLOBAL_VARIABLE_MAP).as_str(),
+        ))
+    })
 }
 
 impl fastn_js::Component {

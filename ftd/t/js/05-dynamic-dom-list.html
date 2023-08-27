@@ -51,6 +51,7 @@ let main = function (parent) {
     }).getParent();
   });
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));
 let foo__clamp = function (args)
 {
@@ -60,6 +61,7 @@ let foo__clamp = function (args)
     __args__.a = fastn_utils_val___args___a;
   }
 }
+global["foo__clamp"] = foo__clamp;
 let foo__append_integer = function (args) {
   let __args__ = {
     a: fastn.mutableList([]),
@@ -67,6 +69,7 @@ let foo__append_integer = function (args) {
   };
   return (ftd.append(__args__.a, __args__.v));
 }
+global["foo__append_integer"] = foo__append_integer;
 fastn_utils.createNestedObject(global, "foo__counters", fastn.mutableList([]));
 let foo__increment = function (args)
 {
@@ -76,7 +79,9 @@ let foo__increment = function (args)
     __args__.a = fastn_utils_val___args___a;
   };
 }
-let foo__counter_list = function (parent, inherited, args) {
+global["foo__increment"] = foo__increment;
+let foo__counter_list = function (parent, inherited, args)
+{
   let __args__ = {
   };
   inherited = fastn.recordInstance({
@@ -97,6 +102,7 @@ let foo__counter_list = function (parent, inherited, args) {
   });
   return parenti0;
 }
+global["foo__counter_list"] = foo__counter_list;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

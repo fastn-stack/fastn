@@ -427,6 +427,7 @@ impl ftd::interpreter::Component {
                 doc,
                 rdata,
                 should_return,
+                has_rive_components,
             )
         {
             header_defined_component_statements
@@ -442,7 +443,6 @@ impl ftd::interpreter::Component {
         {
             variable_defined_component_to_component_statements
         } else {
-            dbg!(&rdata);
             panic!("Can't find, {}", self.name)
         }
     }
@@ -523,6 +523,7 @@ impl ftd::interpreter::Component {
         }
     }
 
+    // ftd.ui type header
     fn header_defined_component_to_component_statements(
         &self,
         parent: &str,
@@ -530,6 +531,7 @@ impl ftd::interpreter::Component {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
+        has_rive_components: &mut bool,
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
         let (component_name, remaining) = ftd::interpreter::utils::get_doc_name_and_remaining(
             self.name.as_str(),
@@ -545,19 +547,38 @@ impl ftd::interpreter::Component {
             _ => return None,
         }
 
-        if !ftd::js::utils::is_ui_argument(component_name.as_str(), remaining.as_str(), doc, self) {
+        let component = doc
+            .get_component(component_name.as_str(), self.line_number)
+            .ok()?;
+
+        let mut arguments = vec![];
+
+        if let Some(component_name) =
+            ftd::js::utils::is_module_argument(component.arguments.as_slice(), remaining.as_str())
+        {
+            arguments = ftd::js::utils::get_set_property_values_for_provided_component_properties(
+                doc,
+                rdata,
+                component_name.as_str(),
+                self.properties.as_slice(),
+                self.line_number,
+            )?;
+        } else if !ftd::js::utils::is_ui_argument(
+            component.arguments.as_slice(),
+            remaining.as_str(),
+        ) {
             return None;
         }
 
-        let instantiate_component = fastn_js::InstantiateComponent::new(
-            format!(
-                "{}({}.{})",
-                fastn_js::GET_STATIC_VALUE,
-                fastn_js::LOCAL_VARIABLE_MAP,
-                remaining
-            )
-            .as_str(),
-            vec![],
+        let value = ftd::js::Value::Reference(self.name.to_owned()).to_set_property_value_with_ui(
+            doc,
+            rdata,
+            has_rive_components,
+            should_return,
+        );
+        let instantiate_component = fastn_js::InstantiateComponent::new_with_definition(
+            value,
+            arguments,
             parent,
             rdata.inherited_variable_name,
             should_return,
@@ -608,6 +629,10 @@ impl ftd::interpreter::Component {
             rdata,
             has_rive_components,
             should_return,
+        );
+        dbg!(
+            "variable_defined_component_to_component_statements",
+            &self.name
         );
 
         let instantiate_component = fastn_js::InstantiateComponent::new_with_definition(

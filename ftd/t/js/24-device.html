@@ -23,6 +23,7 @@ let main = function (parent) {
     name: "Ritesh"
   });
 }
+global["main"] = main;
 let foo__show_name = function (parent, inherited, args) {
   let __args__ = {
   };
@@ -39,7 +40,9 @@ let foo__show_name = function (parent, inherited, args) {
   parenti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
   return parenti0;
 }
-let foo__footer = function (parent, inherited, args) {
+global["foo__show_name"] = foo__show_name;
+let foo__footer = function (parent, inherited, args)
+{
   let __args__ = {
   };
   inherited = fastn.recordInstance({
@@ -73,6 +76,7 @@ let foo__footer = function (parent, inherited, args) {
   ]), inherited);
   return parenti0;
 }
+global["foo__footer"] = foo__footer;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

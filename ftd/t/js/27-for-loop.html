@@ -37,6 +37,7 @@ let main = function (parent) {
     }).getParent();
   });
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__weekdays", fastn.mutableList(["Sunday",
 "Monday",
 "Tuesday",
@@ -49,6 +50,7 @@ let foo__join = function (args)
   let __args__ = args;
   return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
 }
+global["foo__join"] = foo__join;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

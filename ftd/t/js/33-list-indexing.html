@@ -53,13 +53,16 @@ let main = function (parent) {
     return rooti0;
   });
 }
-let foo__append = function (args) {
+global["main"] = main;
+let foo__append = function (args)
+{
   let __args__ = {
     a: fastn.mutableList([]),
     ...args
   };
   return (ftd.append(__args__.a, __args__.v));
 }
+global["foo__append"] = foo__append;
 fastn_utils.createNestedObject(global, "foo__names", fastn.mutableList(["Rithik",
 "Ritesh",
 "Heulitig"]));
