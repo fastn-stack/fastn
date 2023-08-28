@@ -779,7 +779,6 @@ skip: true
 
 
 # Blog: /blog/
-  document: /events/weekly-contest/week-1-quote.ftd
 
 - Quote contest :/quote-contest/
   document: /events/weekly-contest/week-1-quote.ftd
