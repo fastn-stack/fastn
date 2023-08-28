@@ -1251,6 +1251,8 @@ impl PropertyValue {
                     loop_object_name_and_kind,
                 )?);
 
+                dbg!(&found_kind);
+
                 match expected_kind {
                     _ if found_kind.is_module() => {}
                     Some(ekind)
@@ -1312,14 +1314,16 @@ impl PropertyValue {
                 let kind = get_kind(expected_kind, &found_kind);
 
                 if found_kind.is_module() {
+                    dbg!("before", &definition_name_with_arguments);
                     ftd::interpreter::utils::insert_module_thing(
                         &kind,
-                        reference.as_str(),
-                        reference_full_name.as_str(),
+                        dbg!(reference.as_str()),
+                        dbg!(reference_full_name.as_str()),
                         definition_name_with_arguments,
                         value.line_number(),
                         doc,
                     )?;
+                    dbg!("after", &definition_name_with_arguments);
                 }
 
                 Ok(ftd::interpreter::StateWithThing::new_thing(Some(

@@ -317,12 +317,47 @@ impl FunctionCall {
             .trim_start_matches(ftd::interpreter::utils::REFERENCE)
             .to_string();
 
-        let (function_name, properties) =
+        let (mut function_name, properties) =
             ftd::interpreter::utils::get_function_name_and_properties(
                 expression.as_str(),
                 doc.name,
                 line_number,
             )?;
+        let initial_kind_with_remaining_and_source =
+            ftd::interpreter::utils::get_argument_for_reference_and_remaining(
+                function_name.as_str(),
+                doc,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+                line_number,
+            )?;
+
+        if let Some((ref argument, ref function, _)) = initial_kind_with_remaining_and_source {
+            if argument.kind.is_module() {
+                if let Some(ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::Module { ref name, .. },
+                    ..
+                }) = argument.value
+                {
+                    if let Some(function) = function {
+                        function_name = format!("{name}#{function}");
+                    } else {
+                        return ftd::interpreter::utils::e2(
+                            format!("No function found: {}", expression),
+                            doc.name,
+                            argument.line_number,
+                        );
+                    }
+                } else {
+                    return ftd::interpreter::utils::e2(
+                        format!("Default value not found for module {}", argument.name),
+                        doc.name,
+                        argument.line_number,
+                    );
+                }
+            }
+        }
+
         let function = try_ok_state!(doc.search_function(function_name.as_str(), line_number)?);
         let mut values: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
         let mut order = vec![];
