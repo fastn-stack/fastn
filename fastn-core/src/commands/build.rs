@@ -351,7 +351,7 @@ async fn incremental_build(
                 base_url,
                 ignore_failed,
                 test,
-                false,
+                true,
                 Some(&mut c),
             )
             .await?;
