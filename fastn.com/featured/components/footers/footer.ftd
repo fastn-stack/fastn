@@ -37,15 +37,15 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Footer
-cta-text: User Manual
-cta-url: https://fastn-community.github.io/footer/
-previous-url: /featured/components/footers/
-github-url: https://github.com/fastn-community/footer
+-- ds.distributors: Footer 3
+owners: $owner-fastn
+license-url: https://github.com/Trizwit/FastnUI
+license: Creative Commons
+published-date: 23-June-2023
 
--- end: ds.page.layout-bar
+-- end: ds.page.abstract-bar
 
 -- ds.page.full-width-wrap:
 
@@ -73,9 +73,6 @@ cta-2-text: User Manual
 
 
 
-
-
-
 -- ft-ui.template list footers:
 
 -- ft-ui.template: Footer - 3
@@ -90,9 +87,9 @@ screenshot: $fastn-assets.files.images.featured.components.footer-3.png
 
 -- common.owner list owner-fastn:
 
--- common.owner: Shaheen Senpai
-avatar: $fastn-assets.files.featured.contributors.developers.shaheen-senpai.shaheen-senpai.jpeg
-profile: featured/contributors/designers/shaheen-senpai/
-role: Designer
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
 
 -- end: owner-fastn
