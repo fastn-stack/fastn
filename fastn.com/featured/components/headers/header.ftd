@@ -47,16 +47,6 @@ published-date: 21-Aug-2023
 
 -- end: ds.page.abstract-bar
 
--- ds.page.full-width-wrap:
-
--- ft-ui.grid-view: Featured Headers
-templates: $headers
-more-link-text: View more
-more-link: /featured/components/headers/
-show-large: true
-
--- end: ds.page.full-width-wrap
-
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.components.header.jpg
 cta-url: https://fastn-community.github.io/header/
@@ -69,24 +59,6 @@ cta-2-text: User Manual
 
 
 
-
-
-
-
-
-
-
--- ft-ui.template list headers:
-
--- ft-ui.template: Header 1
-template-url: /featured/components/headers/header-1/
-screenshot: $fastn-assets.files.images.featured.components.header-1.png
-
--- ft-ui.template: Header 2
-template-url: /featured/components/headers/header-2/
-screenshot: $fastn-assets.files.images.featured.components.header-2.png
-
--- end: headers
 
 
 
