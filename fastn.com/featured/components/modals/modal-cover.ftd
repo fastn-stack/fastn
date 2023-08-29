@@ -61,7 +61,7 @@ show-large: true
 image: $fastn-assets.files.images.featured.components.modal-cover.png
 cta-url: https://fastn-community.github.io/bling/modal-cover/
 cta-text: Demo
-github-url: https://github.com/Trizwit/FastnUI/
+github-url: https://github.com/fastn-community/bling
 cta-2-url: https://fastn-community.github.io/bling/modal-cover/
 cta-2-text: User Manual
 

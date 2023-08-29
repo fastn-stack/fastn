@@ -48,16 +48,6 @@ published-date: 17-June-2023
 
 -- end: ds.page.abstract-bar
 
--- ds.page.layout-bar:
-
--- ds.layout: Modal 1
-cta-text: User Manual
-cta-url: https://fastnui.trizwit.com/UI-Components/Modal/modal/
-previous-url: /featured/components/modals
-github-url: https://github.com/Trizwit/FastnUI/
-
--- end: ds.page.layout-bar
-
 -- ds.page.full-width-wrap:
 
 -- ft-ui.grid-view: Featured Modals
