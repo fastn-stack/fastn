@@ -1535,11 +1535,8 @@ class Node2 {
             this.updateTagName(staticValue);
             if (this.#node.innerHTML) {
                 // todo: need to slugify this id
-                // console.log(this.#node.innerHTML);
                 let innerText = fastn_utils.removeHtmlTags(this.#node.innerHTML);
-                // console.log(innerText);
                 let slugified_id = fastn_utils.slugify(innerText);
-                // console.log(slugified_id);
                 this.#node.id = slugified_id;
             }
         } else if (kind === fastn_dom.PropertyKind.AlignContent) {
