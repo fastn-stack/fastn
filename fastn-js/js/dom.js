@@ -643,6 +643,7 @@ class Node2 {
     #kind;
     #parent;
     #tagName;
+    #rawInnerValue;
     /**
      * This is where we store all the attached closures, so we can free them
      * when we are done.
@@ -659,6 +660,8 @@ class Node2 {
         this.#kind = kind;
         this.#parent = parentOrSibiling;
         this.#children = [];
+        this.#rawInnerValue = null;
+
         let sibiling = undefined;
 
         if (parentOrSibiling instanceof ParentNodeWithSibiling) {
@@ -1535,7 +1538,7 @@ class Node2 {
             this.updateTagName(staticValue);
             if (this.#node.innerHTML) {
                 // todo: need to slugify this id
-                this.#node.id = this.#node.innerHTML;
+                this.#node.id = fastn_utils.slugify(this.#rawInnerValue);
             }
         } else if (kind === fastn_dom.PropertyKind.AlignContent) {
             let node_kind = this.#kind;
@@ -1661,7 +1664,9 @@ class Node2 {
             || kind === fastn_dom.PropertyKind.DecimalValue
             || kind === fastn_dom.PropertyKind.BooleanValue) {
             this.#node.innerHTML = staticValue;
+            this.#rawInnerValue = staticValue;
         } else if (kind === fastn_dom.PropertyKind.StringValue) {
+            this.#rawInnerValue = staticValue;
             if (!ssr) {
                 staticValue = fastn_utils.markdown_inline(staticValue);
             }

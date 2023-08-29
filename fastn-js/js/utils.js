@@ -349,6 +349,19 @@ let fastn_utils = {
         if (!ssr && !fastn_utils.isNull(extraCodeData.language) && !fastn_utils.isNull(extraCodeData.theme)) {
             Prism.highlightElement(codeElement);
         }
+    },
+
+    //Taken from: https://byby.dev/js-slugify-string
+    slugify(str) {
+        return String(str)
+            .normalize('NFKD') // split accented characters into their base characters and diacritical marks
+            .replace('.', '-')
+            .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
+            .trim() // trim leading or trailing whitespace
+            .toLowerCase() // convert to lowercase
+            .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
+            .replace(/\s+/g, '-') // replace spaces with hyphens
+            .replace(/-+/g, '-'); // remove consecutive hyphens
     }
 }
 

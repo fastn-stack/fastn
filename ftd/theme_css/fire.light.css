@@ -91,12 +91,7 @@ pre[class*=language-].fastn-theme-light {
 .fastn-theme-light .token.inserted,
 .fastn-theme-light .token.selector,
 .fastn-theme-light .token.string {
-	color: #36464e
-}
-
-.fastn-theme-light .token.important,
-.fastn-theme-light .token.deliminator {
-	color: #1c7d4d;
+	color: #690
 }
 
 .language-css .fastn-theme-light .token.string,
@@ -116,13 +111,13 @@ pre[class*=language-].fastn-theme-light {
 
 .fastn-theme-light .token.class-name,
 .fastn-theme-light .token.function {
-	color: #3f6ec6
+	color: #dd4a68
 }
 
 .fastn-theme-light .token.important,
 .fastn-theme-light .token.regex,
 .fastn-theme-light .token.variable {
-	color: #a846b9
+	color: #e90
 }
 
 .fastn-theme-light .token.bold,
@@ -136,19 +131,4 @@ pre[class*=language-].fastn-theme-light {
 
 .fastn-theme-light .token.entity {
 	cursor: help
-}
-
-
-/* Line highlight plugin */
-.fastn-theme-light .line-highlight.line-highlight {
-	background-color: #87afff33;
-	box-shadow: inset 2px 0 0 #4387ff
-}
-
-.fastn-theme-light .line-highlight.line-highlight:before,
-.fastn-theme-light .line-highlight.line-highlight[data-end]:after {
-	top: auto;
-	background-color: #4387ff;
-	color: #fff;
-	border-radius: 50%;
 }

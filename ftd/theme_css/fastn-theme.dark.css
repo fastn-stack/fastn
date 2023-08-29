@@ -54,7 +54,7 @@ pre[class*=language-].fastn-theme-dark {
     line-height: 1;
 }
 
-// Fastn Lang tokens --------------------------------------------------
+/*Fastn Lang tokens --------------------------------------------------*/
 
 .fastn-theme-dark .token.section-identifier {
     color: #cecfd2;
@@ -64,7 +64,7 @@ pre[class*=language-].fastn-theme-dark {
     color: #cecfd2;
 }
 
-// END -----------------------------------------------------------------
+/*END -----------------------------------------------------------------*/
 
 
 .fastn-theme-dark .token.comment,
@@ -132,14 +132,16 @@ pre[class*=language-].fastn-theme-dark {
 
 /* Line highlight plugin */
 .fastn-theme-dark .line-highlight.line-highlight {
-    background: rgba(255, 255, 255, .2);
+    background-color: #0734a533;
+    box-shadow: inset 2px 0 0 #2a77ff
 }
 
 .fastn-theme-dark .line-highlight.line-highlight:before,
 .fastn-theme-dark .line-highlight.line-highlight[data-end]:after {
     top: auto;
-    background-color: rgba(255, 255, 255, .3);
+    background-color: #2a77ff;
     color: #fff;
+    border-radius: 50%;
 }
 
 /* for line numbers */

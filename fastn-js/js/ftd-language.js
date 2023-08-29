@@ -40,7 +40,7 @@ Prism.languages.ftd = {
                 'pattern': /^(.*):/g,
                 'inside': {
                     "comment": /:/g,
-                    'tag': /^\b(component|record|end|or-type)\b/g,
+                    'tag': /^\b(component|record|end|or-type|import)\b/g,
                     "function": /^\s*\S+/g,
                 }
             },
@@ -49,8 +49,7 @@ Prism.languages.ftd = {
                 'pattern': /\b(?!--\s+)(.*?)(?=:)/g,
             },
             // header value
-            'deliminator': /^[ \n\t]+(.*)(\n)/g,
+            'deliminator': /^[ ]+(.*)(\n)/g,
         },
     },
 };
-
