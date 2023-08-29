@@ -62,6 +62,8 @@ image: $fastn-assets.files.images.featured.business-cards.pattern-business-card-
 cta-url: https://gsalunke.github.io/pattern-card-demo/
 cta-text: Demo
 github-url: https://github.com/fastn-community/pattern-business-card
+cta-2-url: https://fastn-community.github.io/pattern-business-card
+cta-2-text: Pattern Business Card
 
 -- end: ds.page
 
