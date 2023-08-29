@@ -213,15 +213,20 @@ ftd.toggle_dark_mode = function () {
 const len = ftd.len;
 
 ftd.local_storage = {
-    set(key, value) {
+    _get_key(key) {
         key = key instanceof fastn.mutableClass ? key.get() : key;
+
+        return `${window.fastn_package_name}_${fastn_utils.toSnakeCase(key)}`;
+    },
+    set(key, value) {
+        key = this._get_key(key);
 
         value = fastn_utils.getFlattenStaticValue(value);
 
         localStorage.setItem(key, value && typeof value === 'object' ? JSON.stringify(value) : value);
     },
     get(key) {
-        key = key instanceof fastn.mutableClass ? key.get() : key;
+        key = this._get_key(key);
 
         if(ssr && !hydrating) {
             return;
@@ -242,7 +247,7 @@ ftd.local_storage = {
         }
     },
     delete(key) {
-        key = key instanceof fastn.mutableClass ? key.get() : key;
+        key = this._get_key(key);
 
         localStorage.removeItem(key);
     }

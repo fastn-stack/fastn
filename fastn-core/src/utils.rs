@@ -649,6 +649,14 @@ pub fn replace_markers_2023(
 ) -> String {
     ftd::html::utils::trim_all_lines(
         s.replace(
+            "__fastn_package__",
+            format!(
+                r#"<script>window.fastn_package_name = "{}";</script>"#,
+                config.package.name.as_str()
+            )
+            .as_str(),
+        )
+        .replace(
             "__js_script__",
             format!("{js_script}{}", fastn_core::utils::available_code_themes()).as_str(),
         )

@@ -98,6 +98,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                 indoc::indoc! {"
                         <html>
                         <script>
+                        window.fastn_package_name = \"foo\";
                         {all_js}
                         {js_ftd_script}
                         {js_document_script}
