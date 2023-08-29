@@ -233,6 +233,14 @@ let fastn_utils = {
         })();
         return `${fastn_utils.private.repeated_space(space_before)}${o}${fastn_utils.private.repeated_space(space_after)}`;
     },
+    slugify(s) {
+      return s.toLowerCase().trim()
+        .replace(/[\s_.-]/g, '-')
+        .replace(/[^\w-]/g, '');
+    },
+    removeHtmlTags(s) {
+        return s.replace(/<[\/]?\w+>/g, '');
+    },
     isNull(a) {
         return a === null || a === undefined;
     },

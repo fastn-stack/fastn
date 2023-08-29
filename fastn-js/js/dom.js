@@ -1534,8 +1534,9 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Region) {
             this.updateTagName(staticValue);
             if (this.#node.innerHTML) {
-                // todo: need to slugify this id
-                this.#node.id = this.#node.innerHTML;
+                let innerText = fastn_utils.removeHtmlTags(this.#node.innerHTML);
+                let slugified_id = fastn_utils.slugify(innerText);
+                this.#node.id = slugified_id;
             }
         } else if (kind === fastn_dom.PropertyKind.AlignContent) {
             let node_kind = this.#kind;
