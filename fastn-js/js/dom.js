@@ -119,11 +119,11 @@ function getClassAsString(className, obj) {
             if (obj.value[key] === undefined || obj.value[key] === null) {
                 continue
             }
-            value = `${value} ${key}: ${obj.value[key]};`
+            value = `${value} ${key}: ${obj.value[key]}${key === "color" ? " !important": ""};`
         }
         return `${className} { ${value} }`
     } else {
-        return `${className} { ${obj.property}: ${obj.value}; }`;
+        return `${className} { ${obj.property}: ${obj.value}${obj.property === "color" ? " !important": ""}; }`;
     }
 }
 
@@ -778,6 +778,10 @@ class Node2 {
                 var attr = this.#node.attributes[i];
                 anchorElement.setAttribute(attr.name, attr.value);
             }
+            var eventListeners = fastn_utils.getEventListeners(this.#node);
+            for (var eventType in eventListeners) {
+                anchorElement[eventType] = eventListeners[eventType];
+            }
             this.#parent.replaceChild(anchorElement, this.#node);
             this.#node = anchorElement;
         }
@@ -875,6 +879,7 @@ class Node2 {
                         this.#node.classList.remove(className);
                     }
                 }
+                this.#node.style[property] = null;
             }
             return cls;
         }

@@ -362,6 +362,17 @@ let fastn_utils = {
             .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
             .replace(/\s+/g, '-') // replace spaces with hyphens
             .replace(/-+/g, '-'); // remove consecutive hyphens
+    },
+
+    getEventListeners(node) {
+        return {
+            onclick: node.onclick,
+            onmouseleave: node.onmouseleave,
+            onmouseenter: node.onmouseenter,
+            oninput: node.oninput,
+            onblur: node.onblur,
+            onfocus: node.onfocus
+        }
     }
 }
 
