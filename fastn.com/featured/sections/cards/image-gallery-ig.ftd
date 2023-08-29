@@ -37,21 +37,13 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
-
--- ds.layout: Cards - Image Gallery IG
-previous-url: /featured/sections/cards/
-github-url: https://github.com/FifthTry/imago-gallery-ig
-
--- end: ds.page.layout-bar
-
 -- ds.page.abstract-bar:
 
 -- ds.distributors: Image Gallery IG
 owners: $owner-fastn
 license-url: https://github.com/FifthTry/imago-gallery-ig/blob/main/LICENSE
 license: Creative Commons
-published-date: 03-Sep-2022
+published-date: 14-Dec-2022
 
 -- end: ds.page.abstract-bar
 
