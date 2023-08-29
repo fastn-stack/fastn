@@ -96,6 +96,11 @@ screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-
 
 -- common.owner list owner-fastn:
 
+-- common.owner: Priyanka Yadav
+profile: featured/contributors/developers/priyanka-yadav/
+avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+role: Developer
+
 -- common.owner: Ganesh Salunke
 profile: featured/contributors/developers/ganesh-salunke/
 avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
