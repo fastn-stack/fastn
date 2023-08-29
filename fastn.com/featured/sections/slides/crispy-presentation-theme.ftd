@@ -62,8 +62,6 @@ image: $fastn-assets.files.images.featured.sections.slides.crispy-presentation-t
 cta-url: https://fifthtry.github.io/Crispy-Presentation-Theme/sample/
 cta-text: Demo
 github-url: https://github.com/fifthtry/Crispy-Presentation-Theme/
-cta-2-url: https://fifthtry.github.io/Crispy-Presentation-Theme/
-cta-2-text: User Manual
 
 -- end: ds.page
 
