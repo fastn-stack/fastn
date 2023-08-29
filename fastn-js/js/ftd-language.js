@@ -13,7 +13,7 @@ Prism.languages.ftd = {
             "alias": "header-comment"
         },
         {
-            'pattern': /(;;)[\w\s]*\n/g,
+            'pattern': /(;;).*\n/g,
             'greedy': true,
             'alias': "inline-or-line-comment",
         }

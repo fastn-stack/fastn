@@ -1537,7 +1537,6 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Region) {
             this.updateTagName(staticValue);
             if (this.#node.innerHTML) {
-                // todo: need to slugify this id
                 this.#node.id = fastn_utils.slugify(this.#rawInnerValue);
             }
         } else if (kind === fastn_dom.PropertyKind.AlignContent) {
