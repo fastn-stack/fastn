@@ -61,7 +61,7 @@ show-large: true
 image: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
 cta-url: https://fifthtry.github.io/imago-gallery-ig/
 cta-text: Demo
-github-url: https://github.com/FifthTry/cards
+github-url: https://github.com/FifthTry/imago-gallery-ig
 
 -- end: ds.page
 
