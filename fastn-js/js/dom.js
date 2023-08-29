@@ -1588,7 +1588,8 @@ class Node2 {
                 staticValue = modifiedText;
             }
             let codeNode = this.#children[0].getNode();
-            codeNode.innerHTML= staticValue;
+            let codeText = fastn_utils.private.escapeSpecialCharacters(staticValue);
+            codeNode.innerHTML= codeText;
             this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
             fastn_utils.highlightCode(codeNode, this.#extraData.code);
         }  else if (kind === fastn_dom.PropertyKind.CodeShowLineNumber) {
