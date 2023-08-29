@@ -7,8 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -25,6 +23,8 @@ github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
 show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,29 +38,33 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Business Card
-cta-text: User Manual
-cta-url: https://fastn-community.github.io/business-card/
-previous-url: featured/components/business-cards/
-github-url: https://github.com/fastn-community/business-card
+-- ds.distributors: Business Card
+owners: $owner-fastn
+license-url: https://github.com/fastn-community/business-card/blob/main/LICENSE
+license: Creative Commons
+published-date: 28-Jul-2023
 
--- end: ds.page.layout-bar
+-- end: ds.page.abstract-bar
 
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured from Components Library
+templates: $cards
+more-link-text: View more
+more-link: /featured/components-library/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.components.business-card.png
-cta-url: https://hsfastn.github.io/1strepo/
+cta-url: https://fastn-community.github.io/business-card/
 cta-text: Demo
-width.fixed.px if {ftd.device == "desktop"}: 600
-
--- ft-ui.grid-view: Featured Business Cards
-if: { show-grid }
-templates: $cards
-more-link-text: View more
-more-link: /featured/components/business-cards/
-
+github-url: https://github.com/fastn-community/business-card
+cta-2-url: https://fastn-community.github.io/business-card/create/
+cta-2-text: User Manual
 
 -- end: ds.page
 
@@ -88,3 +92,23 @@ template-url: featured/components/business-cards/pattern-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
 
 -- end: cards
+
+
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Yashveer Mehra
+profile: featured/contributors/designers/yashveer-mehra/
+avatar: $fastn-assets.files.featured.contributors.designers.yashveer-mehra.yashveer-mehra.jpg
+role: Designer
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- end: owner-fastn
