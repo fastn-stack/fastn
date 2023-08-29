@@ -63,7 +63,7 @@ image: $fastn-assets.files.images.featured.business-cards.midnight-business-card
 cta-url: https://fastn-community.github.io/midnight-business-card/index.html
 cta-text: Demo
 github-url: https://github.com/fastn-community/midnight-business-card
-cta-2-url: https://fastn-community.github.io/midnight-business-card/create/
+cta-2-url: https://fastn-community.github.io/midnight-business-card
 cta-2-text: User Manual
 
 -- end: ds.page

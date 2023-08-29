@@ -63,7 +63,7 @@ image: $fastn-assets.files.images.featured.components.business-card.png
 cta-url: https://fastn-community.github.io/business-card/
 cta-text: Demo
 github-url: https://github.com/fastn-community/business-card
-cta-2-url: https://fastn-community.github.io/business-card/create/
+cta-2-url: https://fastn-community.github.io/business-card
 cta-2-text: User Manual
 
 -- end: ds.page

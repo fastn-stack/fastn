@@ -59,10 +59,10 @@ show-large: true
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
-cta-url: https://gsalunke.github.io/gradient-card-demo/
+cta-url: https://fastn-community.github.io/gradient-business-card
 cta-text: Demo
 github-url: https://github.com/fastn-community/gradient-business-card
-cta-2-url: https://fastn-community.github.io/gradient-business-card/create/
+cta-2-url: https://fastn-community.github.io/gradient-business-card
 cta-2-text: User Manual
 
 -- end: ds.page
