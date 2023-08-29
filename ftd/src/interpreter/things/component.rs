@@ -228,7 +228,11 @@ impl Component {
     ) -> ftd::interpreter::Result<()> {
         Property::scan_ast_children(ast_component.children, definition_name_with_arguments, doc)?;
         match definition_name_with_arguments {
-            Some((definition, _)) if ast_component.name.eq(definition) => {}
+            Some((definition, _))
+                if ast_component.name.eq(definition)
+                    || ast_component
+                        .name
+                        .starts_with(format!("{definition}.").as_str()) => {}
             _ => doc.scan_thing(ast_component.name.as_str(), ast_component.line_number)?,
         }
 

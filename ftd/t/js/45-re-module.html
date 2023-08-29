@@ -10,7 +10,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __p-3 __mb-4 __bw-5"><div data-id="4">default header again</div></div><div data-id="5" class="ft_column __p-3 __mb-4 __bw-5"><div data-id="6" class="__c-6">default header again</div></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __p-3 __mb-4 __bw-5"><div data-id="4" class="__c-6">default header again</div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__p-3 { padding: 10px; }
@@ -23,8 +23,7 @@
         let global = {
 };
 let main = function (parent) {
-  let parenti0 = foo__bar(parent, inherited);
-  let parenti1 = foo__bar(parent, inherited, {
+  let parenti0 = _44_module__bar(parent, inherited, {
     m: fastn.module("_01_basic_module", global)
   });
 }
@@ -47,7 +46,7 @@ let _01_basic__print = function (parent, inherited, args)
   return parenti0;
 }
 global["_01_basic__print"] = _01_basic__print;
-let foo__bar = function (parent, inherited, args)
+let _44_module__bar = function (parent, inherited, args)
 {
   let __args__ = {
     m: fastn.module("_01_basic", global),
@@ -74,7 +73,7 @@ let foo__bar = function (parent, inherited, args)
   ]), inherited);
   return parenti0;
 }
-global["foo__bar"] = foo__bar;
+global["_44_module__bar"] = _44_module__bar;
 let _01_basic_module__print = function (parent, inherited, args)
 {
   let __args__ = {
