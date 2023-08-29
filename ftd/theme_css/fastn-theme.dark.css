@@ -54,11 +54,24 @@ pre[class*=language-].fastn-theme-dark {
     line-height: 1;
 }
 
+// Fastn Lang tokens --------------------------------------------------
+
+.fastn-theme-dark .token.section-identifier {
+    color: #cecfd2;
+}
+
+.fastn-theme-dark .token.semi-colon {
+    color: #cecfd2;
+}
+
+// END -----------------------------------------------------------------
+
+
 .fastn-theme-dark .token.comment,
 .fastn-theme-dark .token.prolog,
 .fastn-theme-dark .token.doctype,
 .fastn-theme-dark .token.cdata {
-    color: #797979;
+    color: #c0c5ce;
 }
 
 .fastn-theme-dark .token.selector,
@@ -73,14 +86,14 @@ pre[class*=language-].fastn-theme-dark {
 
 .fastn-theme-dark .token.tag,
 .fastn-theme-dark .token.boolean {
-    color: #ffd893;
+    color: #ff5cac;
 }
 
 .fastn-theme-dark .token.atrule,
 .fastn-theme-dark .token.attr-value,
 .fastn-theme-dark .token.hex,
 .fastn-theme-dark .token.string {
-    color: #B0C975;
+    color: #d5d7e2;
 }
 
 .fastn-theme-dark .token.property,
@@ -92,7 +105,7 @@ pre[class*=language-].fastn-theme-dark {
 }
 
 .fastn-theme-dark .token.regex {
-    color: #9B71C6;
+    color: #c973d9;
 }
 
 .fastn-theme-dark .token.entity {
@@ -101,7 +114,7 @@ pre[class*=language-].fastn-theme-dark {
 
 .fastn-theme-dark .token.function,
 .fastn-theme-dark .token.constant {
-    color: #e5a638;
+    color: #6791e0;
 }
 
 .fastn-theme-dark .token.variable {
@@ -114,7 +127,7 @@ pre[class*=language-].fastn-theme-dark {
 
 .fastn-theme-dark .token.important,
 .fastn-theme-dark .token.deliminator {
-    color: #E45734;
+    color: #2fb170;
 }
 
 /* Line highlight plugin */
