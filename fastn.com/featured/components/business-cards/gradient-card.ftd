@@ -49,10 +49,10 @@ published-date: 03-Aug-2023
 
 -- ds.page.full-width-wrap:
 
--- ft-ui.grid-view: Featured from Components Library
+-- ft-ui.grid-view: Featured Business Cards
 templates: $cards
 more-link-text: View more
-more-link: /featured/components-library/
+more-link: /featured/components/business-cards/
 show-large: true
 
 -- end: ds.page.full-width-wrap
