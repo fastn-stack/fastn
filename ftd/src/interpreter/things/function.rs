@@ -293,7 +293,17 @@ impl FunctionCall {
                 line_number,
             )?;
 
-        doc.scan_initial_thing(function_name.as_str(), line_number)?;
+        let initial_kind_with_remaining_and_source =
+            ftd::interpreter::utils::is_argument_in_component_or_loop(
+                function_name.as_str(),
+                doc,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+            );
+
+        if !initial_kind_with_remaining_and_source {
+            doc.scan_initial_thing(function_name.as_str(), line_number)?;
+        }
 
         for (_, value) in properties.iter() {
             ftd::interpreter::PropertyValue::scan_string_with_argument(

@@ -2852,7 +2852,10 @@ impl ftd::interpreter::FunctionCall {
                 fastn_js::FunctionData::Definition(fastn_js::SetPropertyValue::Reference(
                     ftd::js::utils::update_reference(name.as_str(), rdata),
                 ));
-            name = name.replace(module_variable_name, default_module);
+            name = name.replace(
+                format!("{module_variable_name}.").as_str(),
+                format!("{default_module}#").as_str(),
+            );
         }
         let function = doc.get_function(name.as_str(), self.line_number).unwrap();
         for argument in function.arguments {
