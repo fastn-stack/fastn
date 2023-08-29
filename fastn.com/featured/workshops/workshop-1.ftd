@@ -7,8 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -24,6 +22,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
+distribution-bar: true
+full-width-bar: true
 show-layout-bar: true
 
 -- ds.page.footer:
@@ -38,27 +38,33 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Workshop 1 
-previous-url: /featured/workshops/
-github-url: https://github.com/FifthTry/workshop-page
+-- ds.distributors: Workshop 1
+owners: $owner-fastn
+license-url: https://github.com/FifthTry/workshop-page/blob/main/LICENSE
+license: Creative Commons
+published-date: 12-Jan-2023
 
+-- end: ds.page.abstract-bar
 
--- end: ds.page.layout-bar
-
-
--- ds.preview-card:
-image: $fastn-assets.files.images.featured.workshops.workshop-1.png
-cta-url: https://fifthtry.github.io/workshop-page/hello-world/
-cta-text: Demo
+-- ds.page.full-width-wrap:
 
 -- ft-ui.grid-view: Featured Website Categories
-if: { show-grid }
 templates: $websites
 more-link-text: View more
 more-link: /featured/workshops/
+show-large: true
 
+-- end: ds.page.full-width-wrap
+
+-- ds.preview-card:
+image: $fastn-assets.files.images.featured.workshops.workshop-1.png
+cta-url: https://fifthtry.github.io/workshop-page/
+cta-text: Demo
+github-url: https://github.com/FifthTry/workshop-page/
+cta-2-url: https://fifthtry.github.io/workshop-page/ws-chapter/
+cta-2-text: User Manual
 
 -- end: ds.page
 
@@ -79,3 +85,20 @@ screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
 
 -- end: websites
 
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- common.owner: Priyanka Yadav
+profile: featured/contributors/developers/priyanka-yadav/
+avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+role: Developer
+
+-- end: owner-fastn
