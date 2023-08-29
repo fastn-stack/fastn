@@ -24,7 +24,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,27 +39,23 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.full-width-wrap:
 
--- ds.layout: Modal 2
-cta-text: User Manual
-cta-url: https://fastn-community.github.io/bling/modal-cover/
-previous-url: /featured/components/modals
-github-url: https://github.com/fastn-community/bling
+-- ft-ui.grid-view: Featured Modal / Dialog Box
+templates: $dialogs
+more-link-text: View more
+more-link: /featured/components/modals/
+show-large: true
 
--- end: ds.page.layout-bar
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.components.modal-cover.png
 cta-url: https://fastn-community.github.io/bling/modal-cover/
 cta-text: Demo
-
--- ft-ui.grid-view: Featured Modal / Dialog Box
-if: { show-grid }
-templates: $dialogs
-more-link-text: View more
-more-link: /featured/components/modals/
-
+github-url: https://github.com/Trizwit/FastnUI/
+cta-2-url: https://fastn-community.github.io/bling/modal-cover/
+cta-2-text: User Manual
 
 -- end: ds.page
 
