@@ -10,17 +10,22 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column"><div data-id="4">FifthTry Hello World!!</div><div data-id="5">Hello World!!</div><div data-id="6">default header again</div></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __p-3 __mb-4 __bw-5"><div data-id="4">FifthTry Hello World!!</div><div data-id="5">Hello World!!</div><div data-id="6">default header again</div></div><div data-id="7" class="ft_column __p-3 __mb-4 __bw-5"><div data-id="8">FifthTry ++++ Hello World from 01-basic-module!!</div><div data-id="9">Hello World from 01-basic-module!!</div><div data-id="10" class="__c-6">default header again</div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
+	.__p-3 { padding: 10px; }
+	.__mb-4 { margin-bottom: 5px; }
+	.__bw-5 { border-width: 1px; }
+	.__c-6 { color: orange; }
     </style>
 <script>
     (function() {
         let global = {
 };
 let main = function (parent) {
-  let parenti0 = foo__bar(parent, inherited, {
-    m: fastn.module("_01_basic", global)
+  let parenti0 = foo__bar(parent, inherited);
+  let parenti1 = foo__bar(parent, inherited, {
+    m: fastn.module("_01_basic_module", global)
   });
 }
 global["main"] = main;
@@ -63,10 +68,13 @@ let foo__bar = function (parent, inherited, args)
     ...args
   };
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.MarginBottom, fastn_dom.Length.Px(5), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1), inherited);
   parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([__args__.m.get("hello")], function () {
-      return _01_basic__append({
+      return fastn_utils.getStaticValue(__args__.m.get("append")) ({
         a: "FifthTry",
         b: __args__.m.get("hello"),
       }, rooti0);
@@ -86,6 +94,35 @@ let foo__bar = function (parent, inherited, args)
 }
 global["foo__bar"] = foo__bar;
 fastn_utils.createNestedObject(global, "_01_basic__hello", "Hello World!!");
+let _01_basic_module__append = function (args)
+{
+  let __args__ = args;
+  return (fastn_utils.getter(__args__.a) + " ++++ " + fastn_utils.getter(__args__.b));
+}
+global["_01_basic_module__append"] = _01_basic_module__append;
+fastn_utils.createNestedObject(global, "_01_basic_module__hello", "Hello World from 01-basic-module!!");
+let _01_basic_module__print = function (parent, inherited, args)
+{
+  let __args__ = {
+  };
+  inherited = fastn.recordInstance({
+    ...__args__,
+    ...inherited.getAllFields(),
+    ...args
+  });
+  __args__ = {
+    ...__args__,
+    ...args
+  };
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+    dark: "orange",
+    light: "orange"
+  }), inherited);
+  return parenti0;
+}
+global["_01_basic_module__print"] = _01_basic_module__print;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

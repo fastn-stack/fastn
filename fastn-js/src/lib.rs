@@ -28,7 +28,7 @@ pub use component_statement::ComponentStatement;
 pub use conditional_component::ConditionalComponent;
 pub use constants::*;
 pub use device::{DeviceBlock, DeviceType};
-pub use event::{Event, EventHandler, Function};
+pub use event::{Event, EventHandler, Function, FunctionData};
 pub use loop_component::ForLoop;
 pub use mutable_variable::{mutable_integer, mutable_string, MutableList, MutableVariable};
 pub use property::{

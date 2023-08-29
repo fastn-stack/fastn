@@ -1256,6 +1256,23 @@ impl Event {
             ast_event.line_number,
         )?);
 
+        if action.module_name.is_some() {
+            let (function_name, _) = ftd::interpreter::utils::get_function_name_and_properties(
+                ast_event.action.as_str(),
+                doc.name,
+                ast_event.line_number,
+            )?;
+
+            ftd::interpreter::utils::insert_module_thing(
+                &action.kind,
+                function_name.as_str(),
+                action.name.as_str(),
+                definition_name_with_arguments,
+                ast_event.line_number,
+                doc,
+            )?;
+        }
+
         let event_name = ftd::interpreter::EventName::from_string(
             ast_event.name.as_str(),
             doc.name,
