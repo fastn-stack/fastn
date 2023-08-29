@@ -1,5 +1,7 @@
 <html>
 <head>
+    <meta charset="UTF-8">
+    
     
     <script src="fastn-js.js"></script>
 
@@ -8,28 +10,28 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="c-1 bgc-2">Hello from foo</div><div data-id="3" class="c-1 bgc-2">ftd.text says Hello</div><div data-id="4" class="ft_column w-3 h-4"><div data-id="5" class="ft_column w-3 h-5 bgc-6"><div data-id="6" class="c-7">Hello</div><div data-id="7" class="c-8 bgc-9">Hello from foo</div></div></div></body><style id="styles">
-    .c-1 { color: #141414; }
-	body.dark .c-1 { color: #ffffff; }
-	.c-1:visited { color: #141414; }
-	body.dark  .c-1:visited { color: #ffffff; }
-	.bgc-2 { background-color: #e7e7e4; }
-	body.dark .bgc-2 { background-color: #18181b; }
-	.w-3 { width: 100%; }
-	.h-4 { height: 200px; }
-	.h-5 { height: 100%; }
-	.bgc-6 { background-color: #FDFAF1; }
-	body.dark .bgc-6 { background-color: #111111; }
-	.c-7 { color: #707070; }
-	body.dark .c-7 { color: #D9D9D9; }
-	.c-7:visited { color: #707070; }
-	body.dark  .c-7:visited { color: #D9D9D9; }
-	.c-8 { color: #333333; }
-	body.dark .c-8 { color: #FFFFFF; }
-	.c-8:visited { color: #333333; }
-	body.dark  .c-8:visited { color: #FFFFFF; }
-	.bgc-9 { background-color: #FFFFFF; }
-	body.dark .bgc-9 { background-color: #000000; }
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="__c-3 __bgc-4">Hello from foo</div><div data-id="4" class="__c-3 __bgc-4">ftd.text says Hello</div><div data-id="5" class="ft_column __w-1 __h-5"><div data-id="6" class="ft_column __w-1 __h-2 __bgc-6"><div data-id="7" class="__c-7">Hello</div><div data-id="8" class="__c-8 __bgc-9">Hello from foo</div></div></div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__c-3 { color: #141414; }
+	body.dark .__c-3 { color: #ffffff; }
+	.__c-3:visited { color: #141414; }
+	body.dark  .__c-3:visited { color: #ffffff; }
+	.__bgc-4 { background-color: #e7e7e4; }
+	body.dark .__bgc-4 { background-color: #18181b; }
+	.__h-5 { height: 200px; }
+	.__bgc-6 { background-color: #FDFAF1; }
+	body.dark .__bgc-6 { background-color: #111111; }
+	.__c-7 { color: #707070; }
+	body.dark .__c-7 { color: #D9D9D9; }
+	.__c-7:visited { color: #707070; }
+	body.dark  .__c-7:visited { color: #D9D9D9; }
+	.__c-8 { color: #333333; }
+	body.dark .__c-8 { color: #FFFFFF; }
+	.__c-8:visited { color: #333333; }
+	body.dark  .__c-8:visited { color: #FFFFFF; }
+	.__bgc-9 { background-color: #FFFFFF; }
+	body.dark .__bgc-9 { background-color: #000000; }
     </style>
 <script>
     (function() {
@@ -65,6 +67,7 @@ let main = function (parent) {
   }
   ]), __$$inherited$$__parenti2);
 }
+global["main"] = main;
 let foo__foo = function (parent, inherited, args) {
   let __args__ = {
   };
@@ -83,6 +86,7 @@ let foo__foo = function (parent, inherited, args) {
   parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(inherited.get("colors").get("background").get("base")), inherited);
   return parenti0;
 }
+global["foo__foo"] = foo__foo;
 fastn_utils.createNestedObject(global, "foo__base_", fastn.recordInstance({
   light: "#FFFFFF",
   dark: "#000000"
@@ -478,9 +482,37 @@ fastn_utils.createNestedObject(global, "foo__colors", fastn.recordInstance({
   warning: global.foo__warning_btb_,
   custom: global.foo__custom_
 }));
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
-        fastn_virtual.hydrate(main);
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
 </script>

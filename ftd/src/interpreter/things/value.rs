@@ -168,6 +168,10 @@ impl PropertyValue {
         }
     }
 
+    pub(crate) fn value_optional(&self) -> Option<&ftd::interpreter::Value> {
+        self.value("", 0).ok()
+    }
+
     pub(crate) fn reference_name(&self) -> Option<&String> {
         match self {
             PropertyValue::Reference { name, .. } => Some(name),
@@ -735,7 +739,7 @@ impl PropertyValue {
             Ok(match &expected_kind.kind.clone() {
                 ftd::interpreter::Kind::Optional { kind } => {
                     let kind = kind.clone().into_kind_data();
-                    if value.is_null() {}
+                    value.is_null();
                     match value {
                         ftd::ast::VariableValue::Optional {
                             value: ref ivalue, ..
@@ -1868,6 +1872,13 @@ impl Value {
                 doc_id,
                 line_number,
             ),
+        }
+    }
+
+    pub fn module_name_optional(&self) -> Option<String> {
+        match self {
+            ftd::interpreter::Value::Module { name, .. } => Some(name.to_string()),
+            _ => None,
         }
     }
 

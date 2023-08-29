@@ -462,7 +462,7 @@ fn with_dash_dash() {
                           "kind": "content",
                           "track": "amitu/index",
                           "version": "2020-11-16T04:13:14.642892+00:00"
-                        }"#
+                        }"#,
                 )),
             )
             .list(),

@@ -219,6 +219,7 @@ impl CheckBox {
 pub struct TextInput {
     pub placeholder: Option<ftd::js::Value>,
     pub multiline: Option<ftd::js::Value>,
+    pub max_length: Option<ftd::js::Value>,
     pub _type: Option<ftd::js::Value>,
     pub default_value: Option<ftd::js::Value>,
     pub enabled: Option<ftd::js::Value>,
@@ -257,6 +258,11 @@ impl TextInput {
             ),
             enabled: ftd::js::value::get_optional_js_value(
                 "enabled",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            max_length: ftd::js::value::get_optional_js_value(
+                "max-length",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
@@ -329,6 +335,16 @@ impl TextInput {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 default_value.to_set_property(
                     fastn_js::PropertyKind::DefaultTextInputValue,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
+        }
+        if let Some(ref max_length) = self.max_length {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                max_length.to_set_property(
+                    fastn_js::PropertyKind::InputMaxLength,
                     doc,
                     kernel.name.as_str(),
                     rdata,
@@ -591,6 +607,7 @@ impl Code {
 #[derive(Debug)]
 pub struct Image {
     pub src: ftd::js::Value,
+    pub fit: Option<ftd::js::Value>,
     pub alt: Option<ftd::js::Value>,
     pub common: Common,
 }
@@ -610,6 +627,11 @@ impl Image {
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
+            fit: ftd::js::value::get_optional_js_value(
+                "fit",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
             alt: ftd::js::value::get_optional_js_value(
                 "alt",
                 component.properties.as_slice(),
@@ -646,6 +668,16 @@ impl Image {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 alt.to_set_property(
                     fastn_js::PropertyKind::Alt,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
+        }
+        if let Some(ref fit) = self.fit {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                fit.to_set_property(
+                    fastn_js::PropertyKind::Fit,
                     doc,
                     kernel.name.as_str(),
                     rdata,
@@ -705,6 +737,7 @@ pub struct Document {
 #[derive(Debug)]
 pub struct DocumentMeta {
     pub title: Option<ftd::js::Value>,
+    pub favicon: Option<ftd::js::Value>,
     pub og_title: Option<ftd::js::Value>,
     pub twitter_title: Option<ftd::js::Value>,
     pub description: Option<ftd::js::Value>,
@@ -758,11 +791,6 @@ impl ContainerProperties {
         rdata: &ftd::js::ResolverData,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        if let Some(ref spacing) = self.spacing {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                spacing.to_set_property(fastn_js::PropertyKind::Spacing, doc, element_name, rdata),
-            ));
-        }
         if let Some(ref wrap) = self.wrap {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 wrap.to_set_property(fastn_js::PropertyKind::Wrap, doc, element_name, rdata),
@@ -776,6 +804,12 @@ impl ContainerProperties {
                     element_name,
                     rdata,
                 ),
+            ));
+        }
+        // prioritizing spacing > align-content for justify-content
+        if let Some(ref spacing) = self.spacing {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                spacing.to_set_property(fastn_js::PropertyKind::Spacing, doc, element_name, rdata),
             ));
         }
         component_statements
@@ -1236,6 +1270,7 @@ impl DocumentMeta {
         arguments: &[ftd::interpreter::Argument],
     ) -> DocumentMeta {
         DocumentMeta {
+            favicon: ftd::js::value::get_optional_js_value("favicon", properties, arguments),
             title: ftd::js::value::get_optional_js_value("title", properties, arguments),
             og_title: ftd::js::value::get_optional_js_value("og-title", properties, arguments),
             twitter_title: ftd::js::value::get_optional_js_value(
@@ -1309,6 +1344,12 @@ impl DocumentMeta {
         element_name: &str,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
+
+        if let Some(ref favicon) = self.favicon {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                favicon.to_set_property(fastn_js::PropertyKind::Favicon, doc, element_name, rdata),
+            ));
+        }
 
         if let Some(ref title) = self.title {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
@@ -1908,6 +1949,7 @@ pub struct Common {
     pub id: Option<ftd::js::Value>,
     pub region: Option<ftd::js::Value>,
     pub link: Option<ftd::js::Value>,
+    pub link_rel: Option<ftd::js::Value>,
     pub open_in_new_tab: Option<ftd::js::Value>,
     pub align_self: Option<ftd::js::Value>,
     pub width: Option<ftd::js::Value>,
@@ -1988,6 +2030,7 @@ impl Common {
             js: ftd::js::value::get_optional_js_value("js", properties, arguments),
             region: ftd::js::value::get_optional_js_value("region", properties, arguments),
             link: ftd::js::value::get_optional_js_value("link", properties, arguments),
+            link_rel: ftd::js::value::get_optional_js_value("rel", properties, arguments),
             open_in_new_tab: ftd::js::value::get_optional_js_value(
                 "open-in-new-tab",
                 properties,
@@ -2222,21 +2265,6 @@ impl Common {
         if let Some(ref region) = self.region {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 region.to_set_property(fastn_js::PropertyKind::Region, doc, element_name, rdata),
-            ));
-        }
-        if let Some(ref link) = self.link {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                link.to_set_property(fastn_js::PropertyKind::Link, doc, element_name, rdata),
-            ));
-        }
-        if let Some(ref open_in_new_tab) = self.open_in_new_tab {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                open_in_new_tab.to_set_property(
-                    fastn_js::PropertyKind::OpenInNewTab,
-                    doc,
-                    element_name,
-                    rdata,
-                ),
             ));
         }
         if let Some(ref align_self) = self.align_self {
@@ -2767,6 +2795,26 @@ impl Common {
         if let Some(ref shadow) = self.shadow {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 shadow.to_set_property(fastn_js::PropertyKind::Shadow, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref link) = self.link {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                link.to_set_property(fastn_js::PropertyKind::Link, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref link_rel) = self.link_rel {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                link_rel.to_set_property(fastn_js::PropertyKind::LinkRel, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref open_in_new_tab) = self.open_in_new_tab {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                open_in_new_tab.to_set_property(
+                    fastn_js::PropertyKind::OpenInNewTab,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
             ));
         }
         component_statements

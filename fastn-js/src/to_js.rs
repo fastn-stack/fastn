@@ -437,6 +437,13 @@ fn func(name: &str, params: &[String], body: pretty::RcDoc<'static>) -> pretty::
             .append(text("}"))
             .group(),
     )
+    .append(if name.contains('.') {
+        pretty::RcDoc::nil()
+    } else {
+        pretty::RcDoc::softline().append(text(
+            format!("{}[\"{name}\"] = {name};", fastn_js::GLOBAL_VARIABLE_MAP).as_str(),
+        ))
+    })
 }
 
 impl fastn_js::Component {
@@ -888,7 +895,7 @@ impl ExpressionGenerator {
             let first = node.children().first().unwrap(); //todo remove unwrap()
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
             if !arguments.iter().any(|v| first.to_string().eq(&v.0)) {
-                return vec![
+                return [
                     "let ".to_string(),
                     self.to_js_(first, false, arguments, false),
                     node.operator().to_string(),
@@ -910,7 +917,7 @@ impl ExpressionGenerator {
                     refined_var = fastn_js::utils::name_to_js_(var.as_str())
                 );
             };
-            return vec![
+            return [
                 self.to_js_(first, false, arguments, false),
                 node.operator().to_string(),
                 self.to_js_(second, false, arguments, false),
@@ -924,14 +931,14 @@ impl ExpressionGenerator {
             if matches!(node.operator(), fastn_grammar::evalexpr::Operator::Not)
                 || matches!(node.operator(), fastn_grammar::evalexpr::Operator::Neg)
             {
-                return vec![operator, self.to_js_(first, false, arguments, false)].join("");
+                return [operator, self.to_js_(first, false, arguments, false)].join("");
             }
             if matches!(node.operator(), fastn_grammar::evalexpr::Operator::Neq) {
                 // For js conversion
                 operator = "!==".to_string();
             }
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
-            return vec![
+            return [
                 self.to_js_(first, false, arguments, false),
                 operator,
                 self.to_js_(second, false, arguments, false),

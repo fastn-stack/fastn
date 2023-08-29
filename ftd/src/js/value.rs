@@ -221,7 +221,10 @@ impl ftd::interpreter::Argument {
             properties,
         );
 
-        ftd::js::utils::get_js_value_from_properties(properties.as_slice())
+        ftd::js::utils::get_js_value_from_properties(properties.as_slice()) /* .map(|v|
+                                                                            if let Some(ftd::interpreter::Value::Module {}) = self.value.and_then(|v| v.value_optional()) {
+
+                                                                             }*/
     }
 }
 
@@ -399,6 +402,11 @@ impl ftd::interpreter::Value {
                     ),
                 })
             }
+            ftd::interpreter::Value::Module { name, .. } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::Module {
+                    name: name.to_string(),
+                })
+            }
             t => todo!("{:?}", t),
         }
     }
@@ -411,6 +419,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
         "ftd#resizing" => {
             let js_variant = resizing_variants(variant);
             (format!("fastn_dom.Resizing.{}", js_variant.0), js_variant.1)
+        }
+        "ftd#link-rel" => {
+            let js_variant = link_rel_variants(variant);
+            (format!("fastn_dom.LinkRel.{}", js_variant), false)
         }
         "ftd#length" => {
             let js_variant = length_variants(variant);
@@ -517,6 +529,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = loading_variants(variant);
             (format!("fastn_dom.Loading.{}", js_variant), false)
         }
+        "ftd#image-fit" => {
+            let js_variant = object_fit_variants(variant);
+            (format!("fastn_dom.Fit.{}", js_variant), false)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -530,6 +546,15 @@ fn resizing_variants(name: &str) -> (&'static str, bool) {
         "hug-content" => ("HugContent", false),
         "auto" => ("Auto", false),
         t => panic!("invalid resizing variant {}", t),
+    }
+}
+
+fn link_rel_variants(name: &str) -> &'static str {
+    match name {
+        "no-follow" => "NoFollow",
+        "sponsored" => "Sponsored",
+        "ugc" => "Ugc",
+        t => panic!("invalid link rel variant {}", t),
     }
 }
 
@@ -843,5 +868,16 @@ fn loading_variants(name: &str) -> &'static str {
         "lazy" => "Lazy",
         "eager" => "Eager",
         t => todo!("invalid loading variant {}", t),
+    }
+}
+
+fn object_fit_variants(name: &str) -> &'static str {
+    match name {
+        "none" => "none",
+        "fill" => "fill",
+        "contain" => "contain",
+        "cover" => "cover",
+        "scale-down" => "scaleDown",
+        t => todo!("invalid object fit variant {}", t),
     }
 }

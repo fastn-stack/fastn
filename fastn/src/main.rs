@@ -155,6 +155,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             build.value_of_("base").unwrap_or("/"),
             build.get_flag("ignore-failed"),
             build.get_flag("test"),
+            build.get_flag("check-build"),
         )
         .await;
     }
@@ -234,6 +235,10 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::mark_upto_date(&config, source, target).await;
     }
 
+    if matches.subcommand_matches("check").is_some() {
+        return fastn_core::post_build_check(&config).await;
+    }
+
     unreachable!("No subcommand matched");
 }
 
@@ -261,6 +266,7 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(file: [FILE]... "The file to build (if specified only these are built, else entire package is built)"))
                 .arg(clap::arg!(-b --base [BASE] "The base path.").default_value("/"))
                 .arg(clap::arg!(--"ignore-failed" "Ignore failed files."))
+                .arg(clap::arg!(--"check-build" "Checks .build for index files validation."))
                 .arg(clap::arg!(--"test" "Use for test"))
                 .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
                     .action(clap::ArgAction::Append))

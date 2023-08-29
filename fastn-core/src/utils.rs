@@ -49,6 +49,21 @@ pub fn print_end(msg: &str, start: std::time::Instant) {
     }
 }
 
+pub fn print_error(msg: &str, start: std::time::Instant) {
+    use colored::Colorize;
+
+    if fastn_core::utils::is_test() {
+        println!("done in <omitted>");
+    } else {
+        eprintln!(
+            "\r{:?} {} in {:?}.                          ",
+            std::time::Instant::now(),
+            msg.red(),
+            start.elapsed(),
+        );
+    }
+}
+
 pub fn value_to_colored_string(value: &serde_json::Value, indent_level: u32) -> String {
     use colored::Colorize;
 
@@ -630,6 +645,7 @@ pub fn replace_markers_2023(
     font_style: &str,
     default_css: &str,
     base_url: &str,
+    config: &mut fastn_core::Config,
 ) -> String {
     ftd::html::utils::trim_all_lines(
         s.replace(
@@ -639,6 +655,16 @@ pub fn replace_markers_2023(
         .replace(
             "__html_body__",
             format!("{}{}", ssr_body, font_style).as_str(),
+        )
+        .replace(
+            "__favicon_html_tag__",
+            resolve_favicon(
+                config.root.as_str(),
+                config.package.name.as_str(),
+                &config.package.favicon,
+            )
+            .unwrap_or_default()
+            .as_str(),
         )
         .replace(
             "__script_file__",

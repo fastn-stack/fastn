@@ -119,6 +119,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                     "__js_script__",
                     format!("{js_document_script}{}", test_available_code_themes()).as_str(),
                 )
+                .replace("__favicon_html_tag__", "")
                 .replace("__html_body__", ssr_body.as_str())
                 .replace("<base href=\"__base_url__\">", "")
                 .replace(
@@ -133,6 +134,10 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                             <script src="../../prism/prism.js"></script>
                             <script src="../../prism/prism-line-highlight.js"></script>
                             <script src="../../prism/prism-line-numbers.js"></script>
+                            <script src="../../prism/prism-rust.js"></script>
+                            <script src="../../prism/prism-json.js"></script>
+                            <script src="../../prism/prism-python.js"></script>
+                            <script src="../../prism/prism-markdown.js"></script>
                             <link rel="stylesheet" href="../../prism/prism-line-highlight.css">
                             <link rel="stylesheet" href="../../prism/prism-line-numbers.css">
                             <script>{}</script>
@@ -147,7 +152,9 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                 )
                 .replace(
                     "__default_css__",
-                    format!("{}", if manual { ftd::ftd_js_css() } else { "" }).as_str(),
+                    (if manual { ftd::ftd_js_css() } else { "" })
+                        .to_string()
+                        .as_str(),
                 )
         }
     };
@@ -175,14 +182,12 @@ fn fastn_js_test_all() {
                     Some(path) if !f.to_str().unwrap().contains(path) => continue,
                     _ => {}
                 }
-                let script =
-                    filename_with_second_last_extension_replaced_with_json(&f, false, true);
+                let script = filename_with_second_last_extension_replaced_with_json(f, false, true);
 
                 if std::fs::remove_file(&script).is_ok() {
                     println!("Removed {}", script.display());
                 }
-                let manual =
-                    filename_with_second_last_extension_replaced_with_json(&f, true, false);
+                let manual = filename_with_second_last_extension_replaced_with_json(f, true, false);
                 if std::fs::remove_file(&manual).is_ok() {
                     println!("Removed {}", manual.display());
                 }

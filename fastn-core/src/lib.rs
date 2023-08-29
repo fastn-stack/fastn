@@ -36,10 +36,10 @@ mod workspace;
 
 pub(crate) use auto_import::AutoImport;
 pub use commands::{
-    abort_merge::abort_merge, add::add, build::build, clone::clone, close_cr::close_cr,
-    create_cr::create_cr, create_package::create_package, diff::diff, edit::edit,
-    mark_resolved::mark_resolved, mark_upto_date::mark_upto_date, merge::merge, query::query,
-    resolve_conflict::resolve_conflict, revert::revert, rm::rm, serve::listen,
+    abort_merge::abort_merge, add::add, build::build, check::post_build_check, clone::clone,
+    close_cr::close_cr, create_cr::create_cr, create_package::create_package, diff::diff,
+    edit::edit, mark_resolved::mark_resolved, mark_upto_date::mark_upto_date, merge::merge,
+    query::query, resolve_conflict::resolve_conflict, revert::revert, rm::rm, serve::listen,
     start_tracking::start_tracking, status::status, sync2::sync2,
     translation_status::translation_status, update::update,
 };
@@ -431,7 +431,7 @@ fn get_messages(
 pub fn get_env_ftd_file() -> String {
     std::env::vars()
         .filter(|(key, val)| {
-            vec!["CARGO", "VERGEN", "FASTN"]
+            ["CARGO", "VERGEN", "FASTN"]
                 .iter()
                 .any(|prefix| !key.is_empty() && key.starts_with(prefix) && !val.is_empty())
         })
@@ -443,7 +443,7 @@ pub fn get_env_ftd_file() -> String {
 pub fn debug_env_vars() -> String {
     std::env::vars()
         .filter(|(key, _)| {
-            vec!["CARGO", "VERGEN", "FASTN"]
+            ["CARGO", "VERGEN", "FASTN"]
                 .iter()
                 .any(|prefix| key.starts_with(prefix))
         })

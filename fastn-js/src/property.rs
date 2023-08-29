@@ -205,6 +205,9 @@ pub enum Value {
     UI {
         value: Vec<fastn_js::ComponentStatement>,
     },
+    Module {
+        name: String,
+    },
     Null,
     Undefined,
 }
@@ -276,6 +279,12 @@ impl Value {
             ),
             Value::Null => "null".to_string(),
             Value::Undefined => "undefined".to_string(),
+            Value::Module { name } => {
+                format!(
+                    "fastn.module(\"{}\", global)",
+                    fastn_js::utils::name_to_js(name)
+                )
+            }
         }
     }
 
@@ -309,6 +318,7 @@ pub enum PropertyKind {
     Region,
     OpenInNewTab,
     Link,
+    LinkRel,
     Anchor,
     Classes,
     AlignSelf,
@@ -384,10 +394,12 @@ pub enum PropertyKind {
     Placeholder,
     Multiline,
     TextInputType,
+    InputMaxLength,
     DefaultTextInputValue,
     Loading,
     Alt,
     Src,
+    Fit,
     ImageSrc,
     YoutubeSrc,
     Shadow,
@@ -404,6 +416,7 @@ pub enum PropertyKind {
     MetaOGImage,
     MetaTwitterImage,
     MetaThemeColor,
+    Favicon,
 }
 
 impl PropertyKind {
@@ -413,6 +426,7 @@ impl PropertyKind {
             PropertyKind::Id => "fastn_dom.PropertyKind.Id",
             PropertyKind::Css => "fastn_dom.PropertyKind.Css",
             PropertyKind::Js => "fastn_dom.PropertyKind.Js",
+            PropertyKind::LinkRel => "fastn_dom.PropertyKind.LinkRel",
             PropertyKind::AlignSelf => "fastn_dom.PropertyKind.AlignSelf",
             PropertyKind::Anchor => "fastn_dom.PropertyKind.Anchor",
             PropertyKind::StringValue => "fastn_dom.PropertyKind.StringValue",
@@ -497,11 +511,13 @@ impl PropertyKind {
             PropertyKind::Placeholder => "fastn_dom.PropertyKind.Placeholder",
             PropertyKind::Multiline => "fastn_dom.PropertyKind.Multiline",
             PropertyKind::TextInputType => "fastn_dom.PropertyKind.TextInputType",
+            PropertyKind::InputMaxLength => "fastn_dom.PropertyKind.InputMaxLength",
             PropertyKind::DefaultTextInputValue => "fastn_dom.PropertyKind.DefaultTextInputValue",
             PropertyKind::Loading => "fastn_dom.PropertyKind.Loading",
             PropertyKind::Src => "fastn_dom.PropertyKind.Src",
             PropertyKind::ImageSrc => "fastn_dom.PropertyKind.ImageSrc",
             PropertyKind::Alt => "fastn_dom.PropertyKind.Alt",
+            PropertyKind::Fit => "fastn_dom.PropertyKind.Fit",
             PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
             PropertyKind::Shadow => "fastn_dom.PropertyKind.Shadow",
             PropertyKind::Code => "fastn_dom.PropertyKind.Code",
@@ -529,6 +545,7 @@ impl PropertyKind {
             PropertyKind::MetaThemeColor => {
                 "fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor"
             }
+            PropertyKind::Favicon => "fastn_dom.PropertyKind.Favicon",
         }
     }
 }

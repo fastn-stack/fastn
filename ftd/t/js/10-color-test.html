@@ -1,5 +1,7 @@
 <html>
 <head>
+    <meta charset="UTF-8">
+    
     
     <script src="fastn-js.js"></script>
 
@@ -8,7 +10,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column w-1 bgc-2"><div data-id="3" class="cur-3 p-4 c-5 rl-6">Lorem ipsum dolor sit amet. Quo aliquam natus id cumque Quis quo eligendi quia
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-1 __bgc-3"><div data-id="4" class="__cur-4 __p-5 __c-6 __rl-7">Lorem ipsum dolor sit amet. Quo aliquam natus id cumque Quis quo eligendi quia
 qui aliquid dolores. Qui atque delectus quo maxime numquam qui architecto
 delectus. Qui maxime galisum sit magni placeat sed illum sunt. Ut illo excepturi
 aut nulla molestiae et excepturi voluptas aut voluptatem obcaecati id harum quia.
@@ -22,18 +24,19 @@ quisquam ab repellat molestiae qui quia repudiandae ut doloribus impedit.
 
 A repellendus sapiente id Quis doloremque qui Quis omnis in blanditiis tenetur
 quo esse dolor. 33 vitae modi ut voluptates distinctio est dicta temporibus est
-consectetur voluptatum et Quis inventore ab dignissimos amet?</div></div></body><style id="styles">
-    .w-1 { width: 100%; }
-	.bgc-2 { background-color: #170d03; }
-	body.dark .bgc-2 { background-color: #edfce8; }
-	.cur-3 { cursor: pointer; }
-	.p-4 { padding: 40px; }
-	.c-5 { color: orange; }
-	body.dark .c-5 { color: green; }
-	.c-5:visited { color: orange; }
-	body.dark  .c-5:visited { color: green; }
-	.rl-6 {  font-family: cursive; letter-spacing: 5px; font-size: 36px; font-weight: 700; line-height: 40px; }
-	body.mobile .rl-6 {  font-family: fantasy; letter-spacing: 3px; font-size: 20px; font-weight: 100; line-height: 35px; }
+consectetur voluptatum et Quis inventore ab dignissimos amet?</div></div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__bgc-3 { background-color: #170d03; }
+	body.dark .__bgc-3 { background-color: #edfce8; }
+	.__cur-4 { cursor: pointer; }
+	.__p-5 { padding: 40px; }
+	.__c-6 { color: orange; }
+	body.dark .__c-6 { color: green; }
+	.__c-6:visited { color: orange; }
+	body.dark  .__c-6:visited { color: green; }
+	.__rl-7 {  font-family: cursive; letter-spacing: 5px; font-size: 36px; font-weight: 700; line-height: 40px; }
+	body.mobile .__rl-7 {  font-family: fantasy; letter-spacing: 3px; font-size: 20px; font-weight: 100; line-height: 35px; }
     </style>
 <script>
     (function() {
@@ -93,6 +96,7 @@ let main = function (parent) {
   }
   ]), inherited);
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__bg_og", fastn.recordInstance({
   light: "#170d03",
   dark: "#edfce8"
@@ -106,6 +110,7 @@ let foo__increment = function (args)
     __args__.a = fastn_utils_val___args___a;
   };
 }
+global["foo__increment"] = foo__increment;
 fastn_utils.createNestedObject(global, "foo__og", fastn.recordInstance({
   light: "orange",
   dark: "green"
@@ -136,9 +141,37 @@ fastn_utils.createNestedObject(global, "foo__bg_bp", fastn.recordInstance({
   light: "#e8eafc",
   dark: "#f4e8fc"
 }));
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
-        fastn_virtual.hydrate(main);
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
 </script>

@@ -27,6 +27,9 @@ static POOL_RESULT: tokio::sync::OnceCell<
     Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError>,
 > = tokio::sync::OnceCell::const_new();
 
+static EXECUTE_QUERY_LOCK: once_cell::sync::Lazy<tokio::sync::Mutex<()>> =
+    once_cell::sync::Lazy::new(|| tokio::sync::Mutex::new(()));
+
 async fn pool() -> &'static Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
     POOL_RESULT.get_or_init(create_pool).await
 }
@@ -265,10 +268,13 @@ async fn execute_query(
     line_number: usize,
     headers: ftd::ast::HeaderValues,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
-    let (query, query_args) = super::sql::extract_arguments(query)?;
+    let _lock = EXECUTE_QUERY_LOCK.lock().await;
 
+    let (query, query_args) = super::sql::extract_arguments(query)?;
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
+
     let stmt = client.prepare_cached(query.as_str()).await.unwrap();
+
     let args = prepare_args(query_args, stmt.params(), doc, line_number, headers)?;
     let rows = client.query(&stmt, &args.pg_args()).await.unwrap();
     let mut result: Vec<Vec<serde_json::Value>> = vec![];

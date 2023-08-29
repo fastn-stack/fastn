@@ -75,6 +75,7 @@ fastn_dom.propertyMap = {
     "overflow": "o",
     "overflow-x": "ox",
     "overflow-y": "oy",
+    "object-fit": "of",
     "padding": "p",
     "padding-bottom": "pb",
     "padding-horizontal": "ph",
@@ -259,6 +260,10 @@ fastn_dom.PropertyKind = {
     CodeShowLineNumber: 103,
     Css: 104,
     Js: 105,
+    LinkRel: 106,
+    InputMaxLength: 107,
+    Favicon: 108,
+    Fit: 109,
 };
 
 
@@ -266,6 +271,12 @@ fastn_dom.PropertyKind = {
 fastn_dom.Loading = {
     Lazy: "lazy",
     Eager: "eager",
+}
+
+fastn_dom.LinkRel = {
+    NoFollow: "nofollow",
+    Sponsored: "sponsored",
+    Ugc: "ugc",
 }
 
 fastn_dom.TextInputType = {
@@ -353,6 +364,14 @@ fastn_dom.BorderStyle = {
     Groove: "groove",
     Inset: "inset",
     Outset: "outset",
+}
+
+fastn_dom.Fit = {
+    none: "none",
+    fill: "fill",
+    contain: "contain",
+    cover: "cover",
+    scaleDown: "scale-down",
 }
 
 fastn_dom.Overflow = {
@@ -690,34 +709,86 @@ class Node2 {
     getParent() {
         return this.#parent;
     }
+    removeAllFaviconLinks() {
+        if (hydrating) {
+            const links = document.head.querySelectorAll('link[rel="shortcut icon"]');
+            links.forEach( link => {
+                link.parentNode.removeChild(link);
+            });
+        }
+    }
+
+    setFavicon(url) {
+        if (hydrating) {
+            if (url instanceof fastn.recordInstanceClass) url = url.get('src');
+            while (true) {
+                if (url instanceof fastn.mutableClass) url = url.get();
+                else break;
+            }
+
+            let link_element = document.createElement("link");
+            link_element.rel = "shortcut icon";
+            link_element.href = url;
+
+            this.removeAllFaviconLinks();
+            document.head.appendChild(link_element);
+        }
+    }
     // for attaching inline attributes
     attachAttribute(property, value) {
         if (fastn_utils.isNull(value)) {
             this.#node.removeAttribute(property);
+            return;
         }
         this.#node.setAttribute(property, value);
+    }
+    removeAttribute(property) {
+        this.#node.removeAttribute(property);
     }
     updateTagName(name) {
         if (ssr) {
             this.#node.updateTagName(name);
         }
     }
-    updateToAnchor() {
+    updateToAnchor(url) {
         let node_kind = this.#kind;
         if (ssr) {
-            if (node_kind !== fastn_dom.ElementKind.Image) this.updateTagName('a');
+            if (node_kind !== fastn_dom.ElementKind.Image) {
+                this.updateTagName('a');
+                this.attachAttribute("href", url);
+            }
+            return;
+        }
+        if (node_kind === fastn_dom.ElementKind.Image) {
+            let anchorElement = document.createElement("a");
+            anchorElement.href = url;
+            anchorElement.appendChild(this.#node);
+            this.#parent.appendChild(anchorElement);
+            this.#node = anchorElement;
+        } else {
+            let anchorElement = document.createElement("a");
+            anchorElement.href = url;
+            anchorElement.innerHTML = this.#node.innerHTML;
+            anchorElement.className = this.#node.className;
+            anchorElement.style = this.#node.style;
+            for (var i = 0; i < this.#node.attributes.length; i++) {
+                var attr = this.#node.attributes[i];
+                anchorElement.setAttribute(attr.name, attr.value);
+            }
+            this.#parent.replaceChild(anchorElement, this.#node);
+            this.#node = anchorElement;
         }
     }
     updatePositionForNodeById(node_id, value) {
-        if (hydrating) {
+        if (!ssr) {
             const target_node = document.querySelector(`[id="${node_id}"]`);
-            if (target_node !== null && target_node !== undefined)
+            if (!fastn_utils.isNull(target_node))
                 target_node.style['position'] = value;
         }
     }
     updateParentPosition(value) {
-        if (hydrating) {
-            let current_node = document.querySelector(`[data-id="${id_counter}"]`);
+        if (!ssr) {
+            let current_node = this.#node;
             if (current_node) {
                 let parent_node = current_node.parentNode;
                 parent_node.style['position'] = value;
@@ -726,7 +797,7 @@ class Node2 {
     }
     updateMetaTitle(value) {
         if (!ssr && hydrating) {
-            window.document.title = value;
+            if (!fastn_utils.isNull(value)) window.document.title = value;
         }
     }
     addMetaTagByName(name, value) {
@@ -779,7 +850,8 @@ class Node2 {
     }
     // dynamic-class-css
     attachCss(property, value, createClass, className) {
-        const propertyShort = fastn_dom.propertyMap[property] || property;
+        let propertyShort = fastn_dom.propertyMap[property] || property;
+        propertyShort = `__${propertyShort}`;
         let cls = `${propertyShort}-${JSON.stringify(value)}`;
         if (!!className) {
            cls = className;
@@ -950,7 +1022,7 @@ class Node2 {
         let position = fastn_utils.getStaticValue(value.get("position"));
         let positionX = null;
         let positionY = null;
-        if (position !== null) {
+        if (position !== null && position instanceof Object) {
             positionX = fastn_utils.getStaticValue(position.get("x"));
             positionY = fastn_utils.getStaticValue(position.get("y"));
 
@@ -964,7 +1036,7 @@ class Node2 {
         let size = fastn_utils.getStaticValue(value.get("size"));
         let sizeX = null;
         let sizeY = null;
-        if (size !== null) {
+        if (size !== null && size instanceof Object) {
             sizeX = fastn_utils.getStaticValue(size.get("x"));
             sizeY = fastn_utils.getStaticValue(size.get("y"));
 
@@ -1068,6 +1140,7 @@ class Node2 {
     attachAlignContent(value, node_kind) {
         if (fastn_utils.isNull(value)) {
             this.attachCss('align-items', value);
+            this.attachCss("justify-content", value);
             return;
         }
         if (node_kind === fastn_dom.ElementKind.Row) {
@@ -1075,16 +1148,19 @@ class Node2 {
                 case 'top-left':
                 case 'left':
                 case 'bottom-left':
+                    this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "start");
                     break;
                 case 'top-center':
                 case 'center':
                 case 'bottom-center':
+                    this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "center");
                     break;
                 case 'top-right':
                 case 'right':
                 case 'bottom-right':
+                    this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "end");
                     break;
             }
@@ -1095,16 +1171,19 @@ class Node2 {
                 case 'top-left':
                 case 'top-center':
                 case 'top-right':
+                    this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "start");
                     break;
                 case 'left':
                 case 'center':
                 case 'right':
+                    this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "center");
                     break;
                 case 'bottom-left':
                 case 'bottom-center':
                 case 'bottom-right':
+                    this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "end");
                     break;
             }
@@ -1149,7 +1228,9 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Width) {
             this.attachCss("width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Height) {
+            fastn_utils.resetFullHeight();
             this.attachCss("height", staticValue);
+            fastn_utils.setFullHeight();
         } else if (kind === fastn_dom.PropertyKind.Padding) {
             this.attachCss("padding", staticValue);
         } else if (kind === fastn_dom.PropertyKind.PaddingHorizontal) {
@@ -1223,10 +1304,13 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Shadow) {
             this.attachShadow(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Classes) {
-            let cls = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
-            cls.forEach((c) => {
-               this.#node.classList.add(c);
-            });
+            fastn_utils.removeNonFastnClasses(this);
+            if (!fastn_utils.isNull(staticValue)) {
+                let cls = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+                cls.forEach((c) => {
+                    this.#node.classList.add(c);
+                });
+            }
         } else if (kind === fastn_dom.PropertyKind.Anchor) {
             // todo: this needs fixed for anchor.id = v
             // need to change position of element with id = v to relative
@@ -1385,6 +1469,10 @@ class Node2 {
                 case true:
                     this.attachAttribute("checked", "");
                     break;
+                case "false":
+                case false:
+                    this.removeAttribute("checked");
+                    break;
                 default:
                     this.attachAttribute("checked", staticValue);
             }
@@ -1394,6 +1482,10 @@ class Node2 {
                 case false:
                     this.attachAttribute("disabled", "");
                     break;
+                case "true":
+                case true:
+                    this.removeAttribute("disabled");
+                    break;
                 default:
                     this.attachAttribute("disabled", staticValue);
             }
@@ -1401,6 +1493,8 @@ class Node2 {
             this.attachAttribute("type", staticValue);
         } else if (kind === fastn_dom.PropertyKind.DefaultTextInputValue) {
             this.attachAttribute("value", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.InputMaxLength) {
+            this.attachAttribute("maxlength", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Placeholder) {
             this.attachAttribute("placeholder", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Multiline) {
@@ -1417,8 +1511,13 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
-            this.updateToAnchor();
-            this.attachAttribute("href", staticValue);
+            this.updateToAnchor(staticValue);
+        } else if (kind === fastn_dom.PropertyKind.LinkRel) {
+            if (fastn_utils.isNull(staticValue)) {
+                this.removeAttribute("rel");
+            }
+            let rel_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            this.attachAttribute("rel", rel_list.join(" "));
         } else if (kind === fastn_dom.PropertyKind.OpenInNewTab) {
             // open_in_new_tab is boolean type
             switch (staticValue) {
@@ -1459,6 +1558,8 @@ class Node2 {
             this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Alt) {
             this.attachAttribute("alt", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Fit) {
+            this.attachCss("object-fit", staticValue);
         } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
             if (fastn_utils.isNull(staticValue)) {
                 this.attachAttribute("src", staticValue);
@@ -1466,7 +1567,12 @@ class Node2 {
             }
             const id_pattern = "^([a-zA-Z0-9_-]{11})$";
             let id = staticValue.match(id_pattern);
-            this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
+            if (!fastn_utils.isNull(id)) {
+                this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
+            } else {
+                this.attachAttribute("src", staticValue);
+            }
+
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Code) {
@@ -1480,7 +1586,10 @@ class Node2 {
                 }
                 staticValue = modifiedText;
             }
-            this.#children[0].getNode().innerHTML= staticValue;
+            let codeNode = this.#children[0].getNode();
+            codeNode.innerHTML= staticValue;
+            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
+            fastn_utils.highlightCode(codeNode, this.#extraData.code);
         }  else if (kind === fastn_dom.PropertyKind.CodeShowLineNumber) {
             if (staticValue) {
                 this.#node.classList.add("line-numbers");
@@ -1492,12 +1601,29 @@ class Node2 {
                 fastn_utils.addCodeTheme(staticValue);
             }
             let theme = staticValue.replace("\.", "-");
+            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
+            if (this.#extraData.code.theme) {
+                this.#node.classList.remove(theme);
+            }
+            this.#extraData.code.theme = theme;
             this.#node.classList.add(theme);
-            this.#children[0].getNode().classList.add(theme);
+            let codeNode = this.#children[0].getNode();
+            codeNode.classList.add(theme);
+            fastn_utils.highlightCode(codeNode, this.#extraData.code);
         } else if (kind === fastn_dom.PropertyKind.CodeLanguage) {
             let language = `language-${staticValue}`;
+            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
+            if (this.#extraData.code.language) {
+                this.#node.classList.remove(language);
+            }
+            this.#extraData.code.language = language;
             this.#node.classList.add(language);
-            this.#children[0].getNode().classList.add(language);
+            let codeNode = this.#children[0].getNode();
+            codeNode.classList.add(language);
+            fastn_utils.highlightCode(codeNode, this.#extraData.code);
+        } else if (kind === fastn_dom.PropertyKind.Favicon) {
+            if (fastn_utils.isNull(staticValue)) return;
+            this.setFavicon(staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle) {
             this.updateMetaTitle(staticValue);
         } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle) {
@@ -1634,6 +1760,7 @@ class ConditionalDom {
 
         this.#conditionUI = null;
         let closure = fastn.closure(() => {
+            fastn_utils.resetFullHeight();
             if (condition()) {
                 if (this.#conditionUI) {
                     if (Array.isArray(this.#conditionUI)) {
@@ -1660,6 +1787,7 @@ class ConditionalDom {
                 }
                 this.#conditionUI = null;
             }
+            fastn_utils.setFullHeight();
         })
         deps.forEach(dep => {
             if (!fastn_utils.isNull(dep) && dep.addClosure) {
@@ -1717,11 +1845,16 @@ class ForLoop {
         this.#list = list;
         this.#nodes = [];
 
+        fastn_utils.resetFullHeight();
         for (let idx in list.getList()) {
-            this.createNode(idx);
+            this.createNode(idx, false);
         }
+        fastn_utils.setFullHeight();
     }
-    createNode(index) {
+    createNode(index, resizeBodyHeight= true) {
+        if (resizeBodyHeight) {
+            fastn_utils.resetFullHeight();
+        }
         let parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#wrapper);
         if (index !== 0) {
             parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#nodes[index-1]);
@@ -1729,30 +1862,39 @@ class ForLoop {
         let v = this.#list.get(index);
         let node = this.#node_constructor(parentWithSibiling, v.item, v.index);
         this.#nodes.splice(index, 0, node);
+        if (resizeBodyHeight) {
+            fastn_utils.setFullHeight();
+        }
         return node;
     }
-
     createAllNode() {
-        this.deleteAllNode();
+        fastn_utils.resetFullHeight();
+        this.deleteAllNode(false);
         for (let idx in this.#list.getList()) {
-            this.createNode(idx);
+            this.createNode(idx, false);
         }
+        fastn_utils.setFullHeight();
     }
-
-    deleteAllNode() {
+    deleteAllNode(resizeBodyHeight= true) {
+        if (resizeBodyHeight) {
+            fastn_utils.resetFullHeight();
+        }
         while (this.#nodes.length > 0) {
             this.#nodes.pop().destroy();
         }
+        if (resizeBodyHeight) {
+            fastn_utils.setFullHeight();
+        }
     }
-
     getWrapper() {
         return this.#wrapper;
     }
     deleteNode(index) {
-       let node = this.#nodes.splice(index, 1)[0];
+        fastn_utils.resetFullHeight();
+        let node = this.#nodes.splice(index, 1)[0];
         node.destroy();
+        fastn_utils.setFullHeight();
     }
-
     getParent() {
         return this.#parent;
     }

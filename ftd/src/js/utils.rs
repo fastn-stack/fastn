@@ -203,19 +203,31 @@ pub(crate) fn function_call_to_js_formula(
 }
 
 pub(crate) fn is_ui_argument(
-    component_name: &str,
+    component_arguments: &[ftd::interpreter::Argument],
     remaining: &str,
-    doc: &ftd::interpreter::TDoc,
-    component: &ftd::interpreter::Component,
 ) -> bool {
-    if let Ok(component_thing) = doc.get_component(component_name, component.line_number) {
-        let arguments = &component_thing.arguments;
-        arguments
-            .iter()
-            .any(|a| a.name.eq(remaining) && a.kind.is_ui())
-    } else {
-        false
-    }
+    component_arguments
+        .iter()
+        .any(|a| a.name.eq(remaining) && a.kind.is_ui())
+}
+
+pub(crate) fn is_module_argument(
+    component_arguments: &[ftd::interpreter::Argument],
+    remaining: &str,
+) -> Option<String> {
+    let (module_name, component_name) = remaining.split_once('.')?;
+    component_arguments.iter().find_map(|v| {
+        if v.name.eq(module_name) && v.kind.is_module() {
+            let module = v
+                .value
+                .as_ref()
+                .and_then(|v| v.value_optional())
+                .and_then(|v| v.module_name_optional())?;
+            Some(format!("{module}#{component_name}"))
+        } else {
+            None
+        }
+    })
 }
 
 /// Retrieves `fastn_js::SetPropertyValue` for user provided component properties only not the

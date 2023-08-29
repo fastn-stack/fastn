@@ -117,6 +117,13 @@ pub const FTD_IMAGE_SRC: &str = "ftd#image-src";
 pub const FTD_IMAGE_SRC_LIGHT: &str = "ftd#image-src.light";
 pub const FTD_IMAGE_SRC_DARK: &str = "ftd#image-src.dark";
 
+pub const FTD_IMAGE_FIT: &str = "ftd#image-fit";
+pub const FTD_IMAGE_FIT_NONE: &str = "ftd#image-fit.none";
+pub const FTD_IMAGE_FIT_COVER: &str = "ftd#image-fit.cover";
+pub const FTD_IMAGE_FIT_CONTAIN: &str = "ftd#image-fit.contain";
+pub const FTD_IMAGE_FIT_FILL: &str = "ftd#image-fit.fill";
+pub const FTD_IMAGE_FIT_SCALE_DOWN: &str = "ftd#image-fit.scale-down";
+
 pub const FTD_SPACING: &str = "ftd#spacing";
 pub const FTD_SPACING_FIXED: &str = "ftd#spacing.fixed";
 pub const FTD_SPACING_SPACE_BETWEEN: &str = "ftd#spacing.space-between";
@@ -293,3 +300,8 @@ pub const FTD_TEXT_STYLE_WEIGHT_REGULAR: &str = "ftd#text-style.regular";
 pub const FTD_TEXT_STYLE_WEIGHT_LIGHT: &str = "ftd#text-style.light";
 pub const FTD_TEXT_STYLE_WEIGHT_EXTRA_LIGHT: &str = "ftd#text-style.extra-light";
 pub const FTD_TEXT_STYLE_WEIGHT_HAIRLINE: &str = "ftd#text-style.hairline";
+
+pub const FTD_LINK_REL: &str = "ftd#link-rel";
+pub const FTD_LINK_REL_NO_FOLLOW: &str = "ftd#link-rel.no-follow";
+pub const FTD_LINK_REL_SPONSORED: &str = "ftd#link-rel.sponsored";
+pub const FTD_LINK_REL_UGC: &str = "ftd#link-rel.ugc";
