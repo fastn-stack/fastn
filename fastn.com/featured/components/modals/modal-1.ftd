@@ -89,14 +89,6 @@ cta-2-text: User Manual
 
 -- ft-ui.template list dialogs:
 
--- ft-ui.template: Alert Dialog
-template-url: featured/components/modals/alert-1/
-screenshot: $fastn-assets.files.images.featured.components.dialog-3.png
-
--- ft-ui.template: Dialog - 1
-template-url: featured/components/modals/dialog-1/
-screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
-
 -- ft-ui.template: Modal Cover
 template-url: featured/components/modals/modal-2/
 screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
