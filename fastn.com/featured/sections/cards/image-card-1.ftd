@@ -7,8 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -24,7 +22,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,31 +37,29 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Cards - Image Card 1
-previous-url: /featured/sections/cards/
-github-url: https://github.com/FifthTry/images
+-- ds.distributors: Simple Site
+owners: $owner-fastn
+license-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
+license: Creative Commons
+published-date: 24-May-2023
 
--- end: ds.page.layout-bar
-
+-- end: ds.page.abstract-bar
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.sections.image-card-1.png
 cta-url: https://fifthtry.github.io/images/
 cta-text: Demo
-width.fixed.px if {ftd.device == "desktop"}: 800
+github-url: https://github.com/fifthtry/images
 
 -- ft-ui.grid-view: Featured Cards
-if: { show-grid }
 templates: $cards
 more-link-text: View more
 more-link: /featured/sections/cards/
 show-large: true
 
 -- end: ds.page
-
-
 
 
 
@@ -86,3 +83,16 @@ template-url: /featured/sections/cards/imagen-ig/
 screenshot: $fastn-assets.files.images.featured.sections.imagen-ig.png
 
 -- end: cards
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- end: owner-fastn
