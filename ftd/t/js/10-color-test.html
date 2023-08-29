@@ -101,7 +101,6 @@ fastn_utils.createNestedObject(global, "foo__bg_og", fastn.recordInstance({
   light: "#170d03",
   dark: "#edfce8"
 }));
-fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));
 let foo__increment = function (args)
 {
   let __args__ = args;
@@ -111,6 +110,7 @@ let foo__increment = function (args)
   };
 }
 global["foo__increment"] = foo__increment;
+fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));
 fastn_utils.createNestedObject(global, "foo__og", fastn.recordInstance({
   light: "orange",
   dark: "green"

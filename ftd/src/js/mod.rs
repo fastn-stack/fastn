@@ -72,6 +72,7 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
     ftd_asts
 }
 
+#[derive(Debug)]
 pub struct JSAstData {
     /// This contains asts of things (other than `ftd`) and instructions/tree
     pub asts: Vec<fastn_js::Ast>,

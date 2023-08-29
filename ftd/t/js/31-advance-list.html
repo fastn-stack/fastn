@@ -75,12 +75,7 @@ let main = function (parent) {
   ]), inherited);
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "foo__ns", fastn.recordInstance({
-  name: ftd.empty,
-  score: 0
-}));
-let foo__insert = function (args)
-{
+let foo__insert = function (args) {
   let __args__ = {
     a: fastn.mutableList([]),
     ...args
@@ -99,6 +94,10 @@ fastn.recordInstance({
 fastn_utils.createNestedObject(global, "foo__width", fastn.recordInstance({
   desktop: fastn_dom.Length.Px(500),
   mobile: fastn_dom.Length.Percent(40)
+}));
+fastn_utils.createNestedObject(global, "foo__ns", fastn.recordInstance({
+  name: ftd.empty,
+  score: 0
 }));
 let foo__form = function (parent, inherited, args)
 {

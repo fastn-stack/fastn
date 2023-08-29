@@ -521,6 +521,7 @@ impl InterpreterState {
     pub fn resolve_pending_imports<T>(
         &mut self,
     ) -> ftd::interpreter::Result<Option<StateWithThing<T>>> {
+        let mut any_pending_import = false;
         while let Some(ftd::interpreter::PendingImportItem {
             module,
             thing_name,
@@ -537,6 +538,7 @@ impl InterpreterState {
                     caller.as_str(),
                     exports.as_slice(),
                 )?;
+                any_pending_import = true;
                 if state.is_continue() {
                     continue;
                 } else {
@@ -551,7 +553,11 @@ impl InterpreterState {
             )));
         }
 
-        Ok(None)
+        if any_pending_import {
+            Ok(Some(StateWithThing::new_continue()))
+        } else {
+            Ok(None)
+        }
     }
 
     pub fn resolve_import_things<T>(
