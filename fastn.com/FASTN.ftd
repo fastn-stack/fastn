@@ -699,7 +699,7 @@ skip: true
     skip: true  
     - Modal 1: /featured/components/modals/modal-1/
     skip: true  
-    - Modal 2: /featured/components/modals/modal-2/
+    - Modal 2: /featured/components/modals/modal-cover/
     skip: true
   - Quotes: /featured/components/quotes/
     - Simple Quotes: /featured/components/quotes/simple-quotes/
