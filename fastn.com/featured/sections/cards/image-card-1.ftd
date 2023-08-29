@@ -41,9 +41,9 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.distributors: Image Card 1
 owners: $owner-fastn
-license-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
+license-url: https://github.com/fastn-community/images/blob/main/LICENSE
 license: Creative Commons
-published-date: 24-May-2023
+published-date: 27-July-2022
 
 -- end: ds.page.abstract-bar
 
@@ -61,7 +61,7 @@ show-large: true
 image: $fastn-assets.files.images.featured.sections.image-card-1.png
 cta-url: https://fifthtry.github.io/images/
 cta-text: Demo
-github-url: https://github.com/fifthtry/images
+github-url: https://github.com/FifthTry/images
 
 -- end: ds.page
 
