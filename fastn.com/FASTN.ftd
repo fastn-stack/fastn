@@ -782,6 +782,7 @@ skip: true
 
 - Quote contest :/quote-contest/
   document: /events/weekly-contest/week-1-quote.ftd
+- Tales from ACME Inc - Case Study: /acme/
   document: blog/acme.ftd 
 - A Content Writer’s Journey with fastn: /writer/
   document: blog/writer-journey.ftd
