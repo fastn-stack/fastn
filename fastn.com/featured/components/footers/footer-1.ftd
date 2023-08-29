@@ -78,10 +78,6 @@ cta-2-text: User Manual
 
 -- ft-ui.template list footers:
 
--- ft-ui.template: Footer - 1
-template-url: /featured/components/footers/footer-1/
-screenshot: $fastn-assets.files.images.featured.components.footer-1.png
-
 -- ft-ui.template: Footer - 2
 template-url: /featured/components/footers/footer-2/
 screenshot: $fastn-assets.files.images.featured.components.footer-2.png
@@ -102,20 +98,5 @@ screenshot: $fastn-assets.files.images.featured.components.footer-3.png
 avatar: $fastn-assets.files.featured.contributors.developers.shaheen-senpai.shaheen-senpai.jpeg
 profile: featured/contributors/designers/shaheen-senpai/
 role: Designer
-
--- common.owner: Meenu Kumari
-profile: featured/contributors/developers/meenu-kumari/
-avatar: $fastn-assets.files.featured.contributors.developers.meenu-kumari.meenu.jpg
-role: Developer
-
--- common.owner: Priyanka Yadav
-profile: featured/contributors/developers/priyanka-yadav/
-avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
-role: Developer
-
--- common.owner: Ganesh Salunke
-profile: featured/contributors/developers/ganesh-salunke/
-avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
-role: Developer
 
 -- end: owner-fastn
