@@ -13,23 +13,23 @@
 <body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="__c-3 __bgc-4">Hello from foo</div><div data-id="4" class="__c-3 __bgc-4">ftd.text says Hello</div><div data-id="5" class="ft_column __w-1 __h-5"><div data-id="6" class="ft_column __w-1 __h-2 __bgc-6"><div data-id="7" class="__c-7">Hello</div><div data-id="8" class="__c-8 __bgc-9">Hello from foo</div></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
-	.__c-3 { color: #141414; }
-	body.dark .__c-3 { color: #ffffff; }
-	.__c-3:visited { color: #141414; }
-	body.dark  .__c-3:visited { color: #ffffff; }
+	.__c-3 { color: #141414 !important; }
+	body.dark .__c-3 { color: #ffffff !important; }
+	.__c-3:visited { color: #141414 !important; }
+	body.dark  .__c-3:visited { color: #ffffff !important; }
 	.__bgc-4 { background-color: #e7e7e4; }
 	body.dark .__bgc-4 { background-color: #18181b; }
 	.__h-5 { height: 200px; }
 	.__bgc-6 { background-color: #FDFAF1; }
 	body.dark .__bgc-6 { background-color: #111111; }
-	.__c-7 { color: #707070; }
-	body.dark .__c-7 { color: #D9D9D9; }
-	.__c-7:visited { color: #707070; }
-	body.dark  .__c-7:visited { color: #D9D9D9; }
-	.__c-8 { color: #333333; }
-	body.dark .__c-8 { color: #FFFFFF; }
-	.__c-8:visited { color: #333333; }
-	body.dark  .__c-8:visited { color: #FFFFFF; }
+	.__c-7 { color: #707070 !important; }
+	body.dark .__c-7 { color: #D9D9D9 !important; }
+	.__c-7:visited { color: #707070 !important; }
+	body.dark  .__c-7:visited { color: #D9D9D9 !important; }
+	.__c-8 { color: #333333 !important; }
+	body.dark .__c-8 { color: #FFFFFF !important; }
+	.__c-8:visited { color: #333333 !important; }
+	body.dark  .__c-8:visited { color: #FFFFFF !important; }
 	.__bgc-9 { background-color: #FFFFFF; }
 	body.dark .__bgc-9 { background-color: #000000; }
     </style>
@@ -494,6 +494,7 @@ fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duoto
 fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
 fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
@@ -515,5 +516,11 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
         fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+    };
+
 </script>
 </html>

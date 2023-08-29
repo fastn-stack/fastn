@@ -119,11 +119,11 @@ function getClassAsString(className, obj) {
             if (obj.value[key] === undefined || obj.value[key] === null) {
                 continue
             }
-            value = `${value} ${key}: ${obj.value[key]};`
+            value = `${value} ${key}: ${obj.value[key]}${key === "color" ? " !important": ""};`
         }
         return `${className} { ${value} }`
     } else {
-        return `${className} { ${obj.property}: ${obj.value}; }`;
+        return `${className} { ${obj.property}: ${obj.value}${obj.property === "color" ? " !important": ""}; }`;
     }
 }
 
@@ -643,6 +643,7 @@ class Node2 {
     #kind;
     #parent;
     #tagName;
+    #rawInnerValue;
     /**
      * This is where we store all the attached closures, so we can free them
      * when we are done.
@@ -659,6 +660,8 @@ class Node2 {
         this.#kind = kind;
         this.#parent = parentOrSibiling;
         this.#children = [];
+        this.#rawInnerValue = null;
+
         let sibiling = undefined;
 
         if (parentOrSibiling instanceof ParentNodeWithSibiling) {
@@ -775,6 +778,10 @@ class Node2 {
                 var attr = this.#node.attributes[i];
                 anchorElement.setAttribute(attr.name, attr.value);
             }
+            var eventListeners = fastn_utils.getEventListeners(this.#node);
+            for (var eventType in eventListeners) {
+                anchorElement[eventType] = eventListeners[eventType];
+            }
             this.#parent.replaceChild(anchorElement, this.#node);
             this.#node = anchorElement;
         }
@@ -872,6 +879,7 @@ class Node2 {
                         this.#node.classList.remove(className);
                     }
                 }
+                this.#node.style[property] = null;
             }
             return cls;
         }
@@ -1534,9 +1542,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Region) {
             this.updateTagName(staticValue);
             if (this.#node.innerHTML) {
-                let innerText = fastn_utils.removeHtmlTags(this.#node.innerHTML);
-                let slugified_id = fastn_utils.slugify(innerText);
-                this.#node.id = slugified_id;
+                this.#node.id = fastn_utils.slugify(this.#rawInnerValue);
             }
         } else if (kind === fastn_dom.PropertyKind.AlignContent) {
             let node_kind = this.#kind;
@@ -1662,7 +1668,9 @@ class Node2 {
             || kind === fastn_dom.PropertyKind.DecimalValue
             || kind === fastn_dom.PropertyKind.BooleanValue) {
             this.#node.innerHTML = staticValue;
+            this.#rawInnerValue = staticValue;
         } else if (kind === fastn_dom.PropertyKind.StringValue) {
+            this.#rawInnerValue = staticValue;
             if (!ssr) {
                 staticValue = fastn_utils.markdown_inline(staticValue);
             }
