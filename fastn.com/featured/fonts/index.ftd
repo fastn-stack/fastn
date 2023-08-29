@@ -1,0 +1,92 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page: 
+full-width: true
+sidebar: false
+
+-- ft-ui.grid-view: Font Typography
+templates: $fonts
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list fonts:
+
+-- ft-ui.template: Arya
+template-url: featured/fonts/arya/
+screenshot: $fastn-assets.files.images.featured.font.arya-font.jpg
+
+`arya-font` font is available and can be used inside `fastn` web packages.
+
+-- ft-ui.template: Blaka
+template-url: featured/fonts/blaka-font/
+screenshot: $fastn-assets.files.images.featured.font.blaka-font.jpg
+
+`blaka-font` font is available and can be used inside `fastn` web packages.
+
+-- ft-ui.template: Karma
+template-url: featured/fonts/karma-font/
+screenshot: $fastn-assets.files.images.featured.font.karma-font.jpg
+
+`karma-font` font is available and can be used inside `fastn` web packages.
+
+-- ft-ui.template: Khand
+template-url: featured/fonts/khand-font/
+screenshot: $fastn-assets.files.images.featured.font.khand-font.jpg
+
+`khand-font` font is available and can be used inside `fastn` web packages.
+
+-- ft-ui.template: Lato
+template-url: featured/fonts/lato-font/
+screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
+
+`lato-font` font is available and can be used inside `fastn` web packages.
+
+-- ft-ui.template: Lobster
+template-url: featured/fonts/lobster-font/
+screenshot: $fastn-assets.files.images.featured.font.lobster-font.jpg
+
+`lobster-font` font is available and can be used inside `fastn` web packages.
+
+-- ft-ui.template: Opensans
+template-url: featured/fonts/opensans-font/
+screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
+
+`opensans-font` font is available and can be used inside `fastn` web packages.
+
+
+-- ft-ui.template: Pragati Narrow
+template-url: featured/fonts/pragati-narrow-font/
+screenshot: $fastn-assets.files.images.featured.font.pragati-narrow-font.jpg
+
+`pragati-narrow-font` font is available and can be used inside `fastn` web
+packages.
+
+-- ft-ui.template: Roboto
+template-url: featured/fonts/roboto-font/
+screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
+
+`roboto-font` font is available and can be used inside `fastn` web packages.
+
+-- ft-ui.template: Roboto Mono
+template-url: featured/fonts/roboto-mono-font/
+screenshot: $fastn-assets.files.images.featured.font.roboto-mono-font.jpg
+
+`roboto-mono-font` font is available and can be used inside `fastn` web
+packages.
+
+-- ft-ui.template: Tiro
+template-url: featured/fonts/tiro-font/
+screenshot: $fastn-assets.files.images.featured.font.tiro-font.jpg
+
+`tiro-font` font is available and can be used inside `fastn` web packages.
+
+-- end: fonts

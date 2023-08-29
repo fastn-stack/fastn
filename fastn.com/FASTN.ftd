@@ -773,6 +773,32 @@ skip: true
     - Blog Template 1 CS: /featured/cs/blog-template-1-cs/
     skip: true
   - Font Typographies: /featured/fonts-typography/
+- Fonts: /featured/fonts/
+  - Font Typography: /featured/fonts/
+    - Arya Typography: /featured/fonts/arya/
+    skip: true
+    - Blaka Typography: /featured/fonts/blaka-typography/
+    skip: true
+    - Lobster Typography: /featured/fonts/lobster-typography/
+    skip: true
+    - Opensans Typography: /featured/fonts/opensans-typography/
+    skip: true
+    - Pragati Narrow Typography: /featured/fonts/pragati-narrow-typography/
+    skip: true
+    - Roboto Mono Typography: /featured/fonts/roboto-mono-typography/
+    skip: true
+    - Roboto Typography: /featured/fonts/roboto-typography/
+    skip: true
+    - Tiro Typography: /featured/fonts/tiro-typography/
+    skip: true
+    - Inter Typography: /featured/fonts/Inter-typography/
+    skip: true
+    - Karma Typography: /featured/fonts/karma-typography/
+    skip: true
+    - Khand Typography: /featured/fonts/khand-typography/
+    skip: true
+    - lato Typography: /featured/fonts/lato-typography/
+    skip: true
 
 ## Deploy: /deploy/
 
