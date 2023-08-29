@@ -79,11 +79,11 @@ cta-2-text: User Manual
 -- ft-ui.template list footers:
 
 -- ft-ui.template: Footer - 1
-template-url: /featured/components/footers/footer-3/
+template-url: /featured/components/footers/footer-1/
 screenshot: $fastn-assets.files.images.featured.components.footer-3.png
 
 -- ft-ui.template: Footer - 2
-template-url: /featured/components/footers/footer-3/
+template-url: /featured/components/footers/footer-2/
 screenshot: $fastn-assets.files.images.featured.components.footer-3.png
 
 -- end: footers
