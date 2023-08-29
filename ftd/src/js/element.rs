@@ -2845,9 +2845,16 @@ impl ftd::interpreter::FunctionCall {
         rdata: &ftd::js::ResolverData,
     ) -> fastn_js::Function {
         let mut parameters = vec![];
-        let function = doc
-            .get_function(self.name.as_str(), self.line_number)
-            .unwrap();
+        let mut name = self.name.to_string();
+        let mut function_name = fastn_js::FunctionData::Name(self.name.to_string());
+        if let Some((default_module, module_variable_name)) = &self.module_name {
+            function_name =
+                fastn_js::FunctionData::Definition(fastn_js::SetPropertyValue::Reference(
+                    ftd::js::utils::update_reference(name.as_str(), rdata),
+                ));
+            name = name.replace(module_variable_name, default_module);
+        }
+        let function = doc.get_function(name.as_str(), self.line_number).unwrap();
         for argument in function.arguments {
             if let Some(value) = self.values.get(argument.name.as_str()) {
                 parameters.push((
@@ -2859,7 +2866,7 @@ impl ftd::interpreter::FunctionCall {
             }
         }
         fastn_js::Function {
-            name: self.name.to_string(),
+            name: Box::from(function_name),
             parameters,
         }
     }

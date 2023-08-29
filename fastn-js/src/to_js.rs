@@ -126,9 +126,22 @@ impl fastn_js::Event {
     }
 }
 
+impl fastn_js::FunctionData {
+    fn to_js(&self) -> String {
+        match self {
+            fastn_js::FunctionData::Definition(definition) => {
+                format!("{}({})", fastn_js::GET_STATIC_VALUE, definition.to_js())
+            }
+            fastn_js::FunctionData::Name(name) => {
+                format!("{}", fastn_js::utils::name_to_js(name.as_str()))
+            }
+        }
+    }
+}
+
 impl fastn_js::Function {
     pub fn to_js(&self, element_name: &Option<String>) -> pretty::RcDoc<'static> {
-        text(format!("{}(", fastn_js::utils::name_to_js(self.name.as_str())).as_str())
+        text(format!("{}(", self.name.to_js()).as_str())
             .append(text("{"))
             .append(pretty::RcDoc::intersperse(
                 self.parameters.iter().map(|(k, v)| {

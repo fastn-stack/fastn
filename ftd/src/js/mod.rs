@@ -630,10 +630,6 @@ impl ftd::interpreter::Component {
             has_rive_components,
             should_return,
         );
-        dbg!(
-            "variable_defined_component_to_component_statements",
-            &self.name
-        );
 
         let instantiate_component = fastn_js::InstantiateComponent::new_with_definition(
             value,
