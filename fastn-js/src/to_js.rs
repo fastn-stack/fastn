@@ -133,7 +133,7 @@ impl fastn_js::FunctionData {
                 format!("{}({})", fastn_js::GET_STATIC_VALUE, definition.to_js())
             }
             fastn_js::FunctionData::Name(name) => {
-                format!("{}", fastn_js::utils::name_to_js(name.as_str()))
+                fastn_js::utils::name_to_js(name.as_str()).to_string()
             }
         }
     }

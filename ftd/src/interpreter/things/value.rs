@@ -1170,7 +1170,7 @@ impl PropertyValue {
                     _ => {}
                 }
 
-                function_call.kind = get_kind(expected_kind, &found_kind);
+                function_call.kind = get_kind(expected_kind, found_kind);
                 if function_call.module_name.is_some() {
                     let (function_name, _) =
                         ftd::interpreter::utils::get_function_name_and_properties(
