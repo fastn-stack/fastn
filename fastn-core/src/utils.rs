@@ -636,6 +636,16 @@ pub fn replace_markers_2022(
     )
 }
 
+pub fn get_fastn_package_data(package: &fastn_core::Package) -> String {
+    format!(
+        indoc::indoc! {"
+        window.fastn_package = {{}};
+        window.fastn_package.name = \"{package_name}\";
+    "},
+        package_name = package.name
+    )
+}
+
 #[allow(clippy::too_many_arguments)]
 pub fn replace_markers_2023(
     s: &str,
@@ -650,11 +660,7 @@ pub fn replace_markers_2023(
     ftd::html::utils::trim_all_lines(
         s.replace(
             "__fastn_package__",
-            format!(
-                r#"<script>window.fastn_package_name = "{}";</script>"#,
-                config.package.name.as_str()
-            )
-            .as_str(),
+            get_fastn_package_data(&config.package).as_str(),
         )
         .replace(
             "__js_script__",

@@ -216,7 +216,7 @@ ftd.local_storage = {
     _get_key(key) {
         key = key instanceof fastn.mutableClass ? key.get() : key;
 
-        return `${window.fastn_package_name}_${fastn_utils.toSnakeCase(key)}`;
+        return `${window.fastn_package.name}_${fastn_utils.toSnakeCase(key)}`;
     },
     set(key, value) {
         key = this._get_key(key);

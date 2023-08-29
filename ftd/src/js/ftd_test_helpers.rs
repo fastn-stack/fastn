@@ -85,12 +85,24 @@ fn test_available_code_themes() -> String {
     result.join("\n")
 }
 
+fn get_dummy_package_data() -> String {
+    return indoc::indoc! {
+        "
+        window.fastn_package = {};
+        window.fastn_package.name = \"foo\";
+        "
+    }
+    .trim()
+    .to_string();
+}
+
 #[track_caller]
 fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &std::path::PathBuf) {
     let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let js_ast_data = ftd::js::document_into_js_ast(i);
     let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), true);
     let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), false);
+    let dummy_package_data = get_dummy_package_data();
 
     let html_str = {
         if script {
@@ -98,7 +110,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                 indoc::indoc! {"
                         <html>
                         <script>
-                        window.fastn_package_name = \"foo\";
+                        {dummy_package_data}
                         {all_js}
                         {js_ftd_script}
                         {js_document_script}
@@ -106,6 +118,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                         </script>
                         </html>
                     "},
+                dummy_package_data = dummy_package_data,
                 all_js = fastn_js::all_js_with_test(),
                 js_ftd_script = js_ftd_script,
                 js_document_script = js_document_script
@@ -116,6 +129,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
             );
 
             ftd::ftd_js_html()
+                .replace("__fastn_package__", dummy_package_data.as_str())
                 .replace(
                     "__js_script__",
                     format!("{js_document_script}{}", test_available_code_themes()).as_str(),
