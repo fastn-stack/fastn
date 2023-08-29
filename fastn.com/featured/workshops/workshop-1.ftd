@@ -50,7 +50,7 @@ published-date: 12-Jan-2023
 
 -- ds.page.full-width-wrap:
 
--- ft-ui.grid-view: Featured Website Categories
+-- ft-ui.grid-view: Featured Workshop Themes
 templates: $websites
 more-link-text: View more
 more-link: /featured/workshops/
@@ -79,9 +79,9 @@ cta-2-text: User Manual
 
 -- ft-ui.template list websites:
 
--- ft-ui.template: Workshop 1
-template-url: featured/workshops/workshop-1/
-screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
+-- ft-ui.template: Event 1
+template-url: featured/workshops/event-1/
+screenshot: $fastn-assets.files.images.featured.workshops.event-1.png
 
 -- end: websites
 
