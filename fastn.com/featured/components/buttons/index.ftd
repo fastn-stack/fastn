@@ -7,8 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -24,6 +22,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
+distribution-bar: true
+full-width-bar: true
 show-layout-bar: true
 
 -- ds.page.footer:
@@ -38,28 +38,34 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Buttons
-cta-text: User Manual
-cta-url: https://fifthtry.github.io/button/
-previous-url: featured/components-library/
-github-url: https://github.com/fifthtry/button
+-- ds.distributors: Buttons
+owners: $owner-fastn
+license-url: https://github.com/fifthtry/button/blob/main/LICENSE
+license: Creative Commons
+published-date: 02-Aug-2023
 
--- end: ds.page.layout-bar
+-- end: ds.page.abstract-bar
 
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured from Components Library
+templates: $components
+more-link-text: View more
+more-link: /featured/components-library/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.components.button-1.png
 cta-url: https://fifthtry.github.io/button/
 cta-text: Demo
-width.fixed.px if { ftd.device == "desktop" }: 800
+github-url: https://github.com/fifthtry/button
+cta-2-url: https://fifthtry.github.io/button/primary/
+cta-2-text: User Manual
 
--- ft-ui.grid-view: Featured from Components Library
-if: { show-grid }
-templates: $components
-more-link-text: View more
-more-link: /featured/components-library/
 
 
 -- end: ds.page
@@ -88,3 +94,24 @@ template-url: featured/components/business-cards/pattern-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
 
 -- end: components
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- common.owner: Priyanka Yadav
+profile: featured/contributors/developers/priyanka-yadav/
+avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+role: Developer
+
+-- common.owner: Meenu Kumari
+profile: featured/contributors/developers/meenu-kumari/
+avatar: $fastn-assets.files.featured.contributors.developers.meenu-kumari.meenu.jpg
+role: Developer
+
+-- end: owner-fastn
