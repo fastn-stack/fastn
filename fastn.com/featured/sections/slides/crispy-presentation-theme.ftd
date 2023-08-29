@@ -39,7 +39,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.abstract-bar:
 
--- ds.distributors: Slides / Presentations - Crispy Presentation Theme
+-- ds.distributors: Crispy Presentation Theme
 owners: $owner-fastn
 license-url: https://github.com/FifthTry/Crispy-Presentation-Theme/blob/main/LICENSE
 license: Creative Commons
@@ -62,8 +62,6 @@ image: $fastn-assets.files.images.featured.sections.slides.crispy-presentation-t
 cta-url: https://fifthtry.github.io/Crispy-Presentation-Theme/sample/
 cta-text: Demo
 github-url: https://github.com/fifthtry/Crispy-Presentation-Theme/
-cta-2-url: https://fifthtry.github.io/Crispy-Presentation-Theme/
-cta-2-text: User Manual
 
 -- end: ds.page
 

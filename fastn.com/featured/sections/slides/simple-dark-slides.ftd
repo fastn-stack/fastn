@@ -39,13 +39,15 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.abstract-bar:
 
--- ds.distributors: Slides / Presentations - Simple Dark Slides
+-- ds.distributors: Simple Dark Slides
 owners: $owner-fastn
 license-url: https://github.com/FifthTry/simple-dark-slides/blob/main/LICENSE
 license: Creative Commons
 published-date: 10-Jan-2022
 
 -- end: ds.page.abstract-bar
+
+-- ds.page.full-width-wrap:
 
 -- ft-ui.grid-view: Featured Slides / Presentations
 templates: $slides
@@ -61,7 +63,6 @@ cta-url: https://fifthtry.github.io/simple-dark-slides/sample/
 cta-text: Demo
 github-url: https://github.com/fifthtry/simple-dark-slides/
 
--- ds.page.full-width-wrap:
 
 -- end: ds.page
 
