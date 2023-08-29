@@ -7,8 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -84,3 +82,16 @@ screenshot: $fastn-assets.files.images.featured.components.modal-1.png
 
 -- end: dialogs
 
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- end: owner-fastn
