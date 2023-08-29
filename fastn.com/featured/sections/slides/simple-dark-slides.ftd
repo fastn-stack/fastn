@@ -59,7 +59,7 @@ show-large: true
 image: $fastn-assets.files.images.featured.sections.slides.simple-dark-slides.png
 cta-url: https://fifthtry.github.io/simple-dark-slides/sample/
 cta-text: Demo
-github-url: https://github.com/fifthtry/Giggle-Presentation-Template/
+github-url: https://github.com/fifthtry/simple-dark-slides/
 
 -- ds.page.full-width-wrap:
 
