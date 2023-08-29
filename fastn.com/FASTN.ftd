@@ -738,6 +738,16 @@ skip: true
       skip: true
 - Design Elements: /featured/cs/
   - Color Schemes: /featured/cs/
+    - Shades Of Red: /featured/cs/red-shades
+    skip: true
+    - Shades Of Blue: /featured/cs/blue-shades
+    skip: true
+    - Shades Of Green: /featured/cs/green-shades
+    skip: true
+    - Shades Of Orange: /featured/cs/orange-shades
+    skip: true
+    - Shades Of Violet: /featured/cs/violet-shades
+    skip: true
     - Blog Template CS: /featured/cs/blog-template-cs/
     skip: true  
     - Blue Heal CS: /featured/cs/blue-heal-cs/
