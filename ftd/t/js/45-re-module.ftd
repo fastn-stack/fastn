@@ -4,3 +4,23 @@
 
 -- 44-module.bar:
 m: 01-basic-module
+
+
+-- c-hello:
+
+
+
+
+-- component hello:
+
+-- ftd.text: hello world
+
+-- end: hello
+
+
+-- component c-hello:
+module category: 45-re-module
+
+-- c-hello.category.hello:
+
+-- end: c-hello
