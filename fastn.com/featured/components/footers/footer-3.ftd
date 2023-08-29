@@ -7,8 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -24,7 +22,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,29 +37,33 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Footer 3
-cta-text: User Manual
-cta-url: https://fastnui.trizwit.com/UI-Components/Footer/footer-3/
-previous-url: /featured/components/footers/
-github-url: https://github.com/Trizwit/FastnUI
+-- ds.distributors: Footer 3
+owners: $owner-fastn
+license-url: https://github.com/Trizwit/FastnUI
+license: Creative Commons
+published-date: 23-June-2023
 
--- end: ds.page.layout-bar
+-- end: ds.page.abstract-bar
 
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured Footers
+templates: $footers
+more-link-text: View more
+more-link: /featured/components/footers/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.components.footer-3.png
 cta-url: https://fastnui.trizwit.com/UI-Components/Footer/footer-3/
 cta-text: Demo
-width.fixed.px if {ftd.device == "desktop"}: 800
-
--- ft-ui.grid-view: Featured Footers
-if: { show-grid }
-templates: $footers
-more-link-text: View more
-more-link: /featured/components/footers/
-
+github-url: https://github.com/Trizwit/FastnUI/tree/main/UI-Components/Footer
+cta-2-url: https://fastnui.trizwit.com/UI-Components/Footer/
+cta-2-text: User Manual
 
 -- end: ds.page
 
@@ -72,18 +75,28 @@ more-link: /featured/components/footers/
 
 
 
+
 -- ft-ui.template list footers:
 
--- ft-ui.template: Footers
-template-url: /featured/components/footers/footer/
-screenshot: $fastn-assets.files.images.featured.components.footer.png
-
 -- ft-ui.template: Footer - 1
-template-url: /featured/components/footers/footer-1/
-screenshot: $fastn-assets.files.images.featured.components.footer-1.png
+template-url: /featured/components/footers/footer-3/
+screenshot: $fastn-assets.files.images.featured.components.footer-3.png
 
 -- ft-ui.template: Footer - 2
-template-url: /featured/components/footers/footer-2/
-screenshot: $fastn-assets.files.images.featured.components.footer-2.png
+template-url: /featured/components/footers/footer-3/
+screenshot: $fastn-assets.files.images.featured.components.footer-3.png
 
 -- end: footers
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Shaheen Senpai
+avatar: $fastn-assets.files.featured.contributors.developers.shaheen-senpai.shaheen-senpai.jpeg
+profile: featured/contributors/designers/shaheen-senpai/
+role: Designer
+
+-- end: owner-fastn
