@@ -75,6 +75,16 @@ border-width.px: 2
 
 -- ftd.code:
 lang: ftd
+theme: fire.light
+
+\-- ftd.text:
+padding.px: 10
+
+This is fire Theme Light
+
+
+-- ftd.code:
+lang: ftd
 theme: material-theme.dark
 
 \-- ftd.text:
