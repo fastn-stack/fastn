@@ -41,7 +41,7 @@ Prism.languages.ftd = {
                 'inside': {
                     "semi-colon": /:/g,
                     'keyword': /^(component|record|end|or-type)/g,
-                    "value-type": /(integer|boolean|decimal|string)/g,
+                    "value-type": /^(integer|boolean|decimal|string)/g,
                     'type-modifier': {
                         'pattern': /(\s)*list/g,
                         'lookbehind': true,
