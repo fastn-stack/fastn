@@ -677,26 +677,12 @@ skip: true
   - Header / Navbar: /featured/components/headers/
     - Header: /featured/components/headers/header/
     skip: true  
-    - Header 1: /featured/components/headers/header-1/
-    skip: true  
-    - Header 2: /featured/components/headers/header-2/
-    skip: true  
   - Footers: /featured/components/footers/
     - Footer: /featured/components/footers/footer/
-    skip: true  
-    - Footer 1: /featured/components/footers/footer-1/
-    skip: true  
-    - Footer 2: /featured/components/footers/footer-2/
     skip: true  
     - Footer 3: /featured/components/footers/footer-3/
     skip: true  
   - Modal / Dialog: /featured/components/modals/
-    - Dialog 1: /featured/components/modals/dialog-1/
-    skip: true  
-    - Dialog 2: /featured/components/modals/dialog-2/
-    skip: true  
-    - Alert Dialog: /featured/components/modals/alert-1/
-    skip: true  
     - Modal 1: /featured/components/modals/modal-1/
     skip: true  
     - Modal Cover: /featured/components/modals/modal-cover/
