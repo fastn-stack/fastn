@@ -765,6 +765,8 @@ skip: true
     - Pretty CS: /featured/cs/pretty-cs/
     skip: true  
     - Saturated Sunset CS: /featured/cs/saturated-sunset-cs/
+    skip: true
+    - Pink Tree Cs: /featured/cs/pink-tree-cs/
     skip: true  
     - Winter CS: /featured/cs/winter-cs/
     skip: true  
