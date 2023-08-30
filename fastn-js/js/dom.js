@@ -1594,7 +1594,7 @@ class Node2 {
                 staticValue = modifiedText;
             }
             let codeNode = this.#children[0].getNode();
-            let codeText = fastn_utils.private.escapeSpecialCharacters(staticValue);
+            let codeText = fastn_utils.escapeSpecialHtmlCharacters(staticValue);
             codeNode.innerHTML= codeText;
             this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
             fastn_utils.highlightCode(codeNode, this.#extraData.code);
@@ -1673,7 +1673,8 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.StringValue) {
             this.#rawInnerValue = staticValue;
             if (!ssr) {
-                staticValue = fastn_utils.markdown_inline(staticValue);
+                let escapedHtmlValue = fastn_utils.escapeSpecialHtmlCharacters(staticValue);
+                staticValue = fastn_utils.markdown_inline(escapedHtmlValue);
             }
             this.#node.innerHTML = staticValue;
         }else {
