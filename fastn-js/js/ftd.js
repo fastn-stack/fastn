@@ -12,6 +12,10 @@ let ftd = {
                 return data.getLength();
             return -1;
         }
+        if (!!data && data instanceof fastn.mutableClass) {
+            let inner_data = data.get();
+            return ftd.len(inner_data);
+        }
         if (!!data && data.length) {
             return data.length;
         }

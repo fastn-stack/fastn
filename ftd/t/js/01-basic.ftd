@@ -23,3 +23,6 @@ caption name:
 -- ftd.text: $print.name
 
 -- end: print
+
+
+-- string hello: Hello World!!

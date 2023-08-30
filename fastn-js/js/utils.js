@@ -225,6 +225,7 @@ let fastn_utils = {
      * @returns {string} - The processed string with inline markdown.
      */
     markdown_inline(i) {
+        if (fastn_utils.isNull(i)) return;
         const { space_before, space_after } = fastn_utils.private.spaces(i);
         const o = (() => {
             let g = fastn_utils.private.replace_last_occurrence(marked.parse(i), "<p>", "");
@@ -350,6 +351,34 @@ let fastn_utils = {
             Prism.highlightElement(codeElement);
         }
     },
+
+    //Taken from: https://byby.dev/js-slugify-string
+    slugify(str) {
+        return String(str)
+            .normalize('NFKD') // split accented characters into their base characters and diacritical marks
+            .replace('.', '-')
+            .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
+            .trim() // trim leading or trailing whitespace
+            .toLowerCase() // convert to lowercase
+            .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
+            .replace(/\s+/g, '-') // replace spaces with hyphens
+            .replace(/-+/g, '-'); // remove consecutive hyphens
+    },
+
+    getEventListeners(node) {
+        return {
+            onclick: node.onclick,
+            onmouseleave: node.onmouseleave,
+            onmouseenter: node.onmouseenter,
+            oninput: node.oninput,
+            onblur: node.onblur,
+            onfocus: node.onfocus
+        }
+    },
+
+    flattenArray(arr) {
+        return fastn_utils.private.flattenArray([arr]);
+    },
     toSnakeCase(value) {
         return value.trim().split('').map((v, i) => {
             const lowercased = v.toLowerCase();
@@ -366,6 +395,11 @@ let fastn_utils = {
 
 
 fastn_utils.private = {
+    flattenArray(arr) {
+        return arr.reduce((acc, item) => {
+            return acc.concat(Array.isArray(item) ? fastn_utils.private.flattenArray(item) : item);
+        }, []);
+    },
     /**
      * Helper function for `fastn_utils.markdown_inline` to find the number of
      * spaces before and after the content.
@@ -471,6 +505,9 @@ fastn_utils.private = {
             return '_' + text;
         }
         return text;
+    },
+    escapeSpecialCharacters(text) {
+        return text.replaceAll("<", "&lt;");
     }
 }
 

@@ -1,0 +1,42 @@
+;; This is made for purpose to be used as a module in 44-module. This is a
+;; replica of 01-basic.ftd
+
+
+-- boolean $hover: false
+
+-- ftd.text: fastn
+link: https://fastn.com/
+role: $inherited.types.copy-small
+background.solid if { hover }: #eaaaff
+color: red
+$on-mouse-enter$: $ftd.set-bool($a = $hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $hover, v = false)
+
+-- ftd.text: Hello
+color: $inherited.colors.text
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.text: Hello
+background.solid: $bg-og
+
+-- ftd.color bg-og:
+light: yellow
+dark: green
+
+-- string append(a,b):
+string a:
+string b:
+
+a + " ++++ " + b
+
+
+-- component print:
+caption name:
+
+-- ftd.text: $print.name
+color: orange
+
+-- end: print
+
+
+-- string hello: Hello World from 01-basic-module!!

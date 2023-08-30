@@ -1143,6 +1143,7 @@ impl PropertyValue {
                 let found_kind = &function_call.kind;
 
                 match expected_kind {
+                    _ if function_call.module_name.is_some() => {}
                     Some(ekind)
                         if !ekind.kind.is_same_as(&found_kind.kind)
                             && (ekind.kind.ref_inner().is_record()
@@ -1170,6 +1171,23 @@ impl PropertyValue {
                 }
 
                 function_call.kind = get_kind(expected_kind, found_kind);
+                if function_call.module_name.is_some() {
+                    let (function_name, _) =
+                        ftd::interpreter::utils::get_function_name_and_properties(
+                            expression.as_str(),
+                            doc.name,
+                            value.line_number(),
+                        )?;
+
+                    ftd::interpreter::utils::insert_module_thing(
+                        &function_call.kind,
+                        function_name.as_str(),
+                        function_call.name.as_str(),
+                        definition_name_with_arguments,
+                        value.line_number(),
+                        doc,
+                    )?;
+                }
 
                 Ok(ftd::interpreter::StateWithThing::new_thing(Some(
                     ftd::interpreter::PropertyValue::FunctionCall(function_call),
@@ -1373,6 +1391,13 @@ impl PropertyValueSource {
 
     pub fn is_local(&self, name: &str) -> bool {
         matches!(self, PropertyValueSource::Local(l_name) if l_name.eq(name))
+    }
+
+    pub fn get_name(&self) -> Option<String> {
+        match self {
+            PropertyValueSource::Local(s) | PropertyValueSource::Loop(s) => Some(s.to_owned()),
+            _ => None,
+        }
     }
 
     pub fn get_reference_name(&self, name: &str, doc: &ftd::interpreter::TDoc) -> String {

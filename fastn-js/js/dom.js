@@ -119,11 +119,11 @@ function getClassAsString(className, obj) {
             if (obj.value[key] === undefined || obj.value[key] === null) {
                 continue
             }
-            value = `${value} ${key}: ${obj.value[key]};`
+            value = `${value} ${key}: ${obj.value[key]}${key === "color" ? " !important": ""};`
         }
         return `${className} { ${value} }`
     } else {
-        return `${className} { ${obj.property}: ${obj.value}; }`;
+        return `${className} { ${obj.property}: ${obj.value}${obj.property === "color" ? " !important": ""}; }`;
     }
 }
 
@@ -643,6 +643,7 @@ class Node2 {
     #kind;
     #parent;
     #tagName;
+    #rawInnerValue;
     /**
      * This is where we store all the attached closures, so we can free them
      * when we are done.
@@ -659,6 +660,8 @@ class Node2 {
         this.#kind = kind;
         this.#parent = parentOrSibiling;
         this.#children = [];
+        this.#rawInnerValue = null;
+
         let sibiling = undefined;
 
         if (parentOrSibiling instanceof ParentNodeWithSibiling) {
@@ -775,6 +778,10 @@ class Node2 {
                 var attr = this.#node.attributes[i];
                 anchorElement.setAttribute(attr.name, attr.value);
             }
+            var eventListeners = fastn_utils.getEventListeners(this.#node);
+            for (var eventType in eventListeners) {
+                anchorElement[eventType] = eventListeners[eventType];
+            }
             this.#parent.replaceChild(anchorElement, this.#node);
             this.#node = anchorElement;
         }
@@ -872,6 +879,7 @@ class Node2 {
                         this.#node.classList.remove(className);
                     }
                 }
+                this.#node.style[property] = null;
             }
             return cls;
         }
@@ -1534,8 +1542,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Region) {
             this.updateTagName(staticValue);
             if (this.#node.innerHTML) {
-                // todo: need to slugify this id
-                this.#node.id = this.#node.innerHTML;
+                this.#node.id = fastn_utils.slugify(this.#rawInnerValue);
             }
         } else if (kind === fastn_dom.PropertyKind.AlignContent) {
             let node_kind = this.#kind;
@@ -1587,7 +1594,8 @@ class Node2 {
                 staticValue = modifiedText;
             }
             let codeNode = this.#children[0].getNode();
-            codeNode.innerHTML= staticValue;
+            let codeText = fastn_utils.private.escapeSpecialCharacters(staticValue);
+            codeNode.innerHTML= codeText;
             this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
             fastn_utils.highlightCode(codeNode, this.#extraData.code);
         }  else if (kind === fastn_dom.PropertyKind.CodeShowLineNumber) {
@@ -1661,7 +1669,9 @@ class Node2 {
             || kind === fastn_dom.PropertyKind.DecimalValue
             || kind === fastn_dom.PropertyKind.BooleanValue) {
             this.#node.innerHTML = staticValue;
+            this.#rawInnerValue = staticValue;
         } else if (kind === fastn_dom.PropertyKind.StringValue) {
+            this.#rawInnerValue = staticValue;
             if (!ssr) {
                 staticValue = fastn_utils.markdown_inline(staticValue);
             }
@@ -1739,8 +1749,13 @@ class Node2 {
         for (let i = 0; i < this.#mutables.length; i++) {
             this.#mutables[i].unlinkNode(this);
         }
-        this.#node.remove();
-        this.#mutables = null;
+        // Todo: We don't need this condition as after destroying this node
+        //  ConditionalDom reset this.#conditionUI to null or some different
+        //  value. Not sure why this is still needed.
+        if (!fastn_utils.isNull(this.#node)) {
+            this.#node.remove();
+        }
+        this.#mutables = [];
         this.#parent = null;
         this.#node = null;
     }
@@ -1763,27 +1778,21 @@ class ConditionalDom {
             fastn_utils.resetFullHeight();
             if (condition()) {
                 if (this.#conditionUI) {
-                    if (Array.isArray(this.#conditionUI)) {
-                        while (this.#conditionUI.length > 0) {
-                            let poppedElement = this.#conditionUI.pop();
-                            poppedElement.destroy();
-                        }
-                    } else {
-                        this.#conditionUI.destroy();
+                    let conditionUI = fastn_utils.flattenArray(this.#conditionUI);
+                    while (conditionUI.length > 0) {
+                        let poppedElement = conditionUI.pop();
+                        poppedElement.destroy();
                     }
                 }
                 this.#conditionUI = node_constructor(new ParentNodeWithSibiling(this.#parent, this.#marker));
-                if (fastn_utils.isWrapperNode(this.#conditionUI.getTagName())) {
+                if (!Array.isArray(this.#conditionUI) && fastn_utils.isWrapperNode(this.#conditionUI.getTagName())) {
                     this.#conditionUI = this.#conditionUI.getChildren();
                 }
             } else if (this.#conditionUI) {
-                if (Array.isArray(this.#conditionUI)) {
-                    while (this.#conditionUI.length > 0) {
-                        let poppedElement = this.#conditionUI.pop();
-                        poppedElement.destroy();
-                    }
-                } else {
-                    this.#conditionUI.destroy();
+                let conditionUI = fastn_utils.flattenArray(this.#conditionUI);
+                while (conditionUI.length > 0) {
+                    let poppedElement = conditionUI.pop();
+                    poppedElement.destroy();
                 }
                 this.#conditionUI = null;
             }
@@ -1805,7 +1814,7 @@ class ConditionalDom {
         if (this.#conditionUI) {
             nodes.push(this.#conditionUI);
         }
-        nodes
+        return nodes;
     }
 }
 

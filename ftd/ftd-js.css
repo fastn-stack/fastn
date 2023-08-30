@@ -262,15 +262,20 @@ code {
     margin: 0;
 }
 
-body.fpm-dark .ft_md a {
-    text-decoration: none;
-}
-
 
 body.dark code {
     padding: 0.1rem 0.25rem;
     border-radius: 4px;
     background-color: #ffffff1f;
+}
+
+
+body.dark a {
+    color: #6498ff
+}
+
+body.dark a:visited {
+    color: #b793fb;
 }
 
 

@@ -29,5 +29,11 @@ __html_body__
         fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+    };
+
 </script>
 </html>

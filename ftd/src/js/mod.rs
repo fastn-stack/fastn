@@ -72,6 +72,7 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
     ftd_asts
 }
 
+#[derive(Debug)]
 pub struct JSAstData {
     /// This contains asts of things (other than `ftd`) and instructions/tree
     pub asts: Vec<fastn_js::Ast>,
@@ -629,10 +630,6 @@ impl ftd::interpreter::Component {
             rdata,
             has_rive_components,
             should_return,
-        );
-        dbg!(
-            "variable_defined_component_to_component_statements",
-            &self.name
         );
 
         let instantiate_component = fastn_js::InstantiateComponent::new_with_definition(
