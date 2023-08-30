@@ -146,10 +146,11 @@ $grid-view.body
 -- ftd.desktop:
 
 -- ftd.row:
-width: fill-container
+width.fixed.vw: 70
 spacing.fixed.px: 32
-classes: wrapper
+overflow-x: auto
 classes if { grid-view.show-four }: wrapper-4
+margin-vertical.px: 40
 
 -- grid-of-items: $obj.title
 $loop$: $grid-view.templates as $obj
@@ -219,6 +220,7 @@ boolean show-large: false
 -- ftd.column:
 width if { ftd.device == "mobile" }: fill-container
 spacing.fixed.px: 16
+min-width.fixed.px: 324
 classes if {grid-of-items.two-fold}: two-folded
 $on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
