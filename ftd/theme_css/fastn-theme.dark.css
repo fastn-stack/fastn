@@ -72,6 +72,14 @@ pre[class*=language-].fastn-theme-dark {
     color: #cecfd2;
 }
 
+.fastn-theme-dark .token.event {
+    color: #6ae2ff;
+}
+
+.fastn-theme-dark .token.processor {
+    color: #6ae2ff;
+}
+
 .fastn-theme-dark .token.type-modifier {
     color: #54b59e;
 }

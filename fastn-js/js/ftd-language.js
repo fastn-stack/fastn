@@ -43,7 +43,7 @@ Prism.languages.ftd = {
                     'keyword': /^(component|record|end|or-type)/g,
                     "value-type": /^(integer|boolean|decimal|string)/g,
                     'type-modifier': {
-                        'pattern': /(\s)*list/g,
+                        'pattern': /(\s)+list(?=\s)/g,
                         'lookbehind': true,
                     },
                     "section-name": {
@@ -61,6 +61,8 @@ Prism.languages.ftd = {
                     // if condition on component
                     'header-condition': /\s*if\s*:(.)+/g,
                     // header name => [header-type] <name> [header-condition]
+                    'event': /\s*\$on(.)+\$(?=:)/g,
+                    'processor': /\s*\$[^:]+\$(?=:)/g,
                     'regex': {
                         'pattern': /[^:]+(?=:)/g,
                         'inside': {
@@ -73,7 +75,7 @@ Prism.languages.ftd = {
                                     'kernel-type': /^\s*ftd[\S]+/g,
                                     'header-type': /^(record|caption|body|caption or body|body or caption|integer|boolean|decimal|string)/g,
                                     'type-modifier': {
-                                        'pattern': /(\s)*list/g,
+                                        'pattern': /(\s)+list(?=\s)/g,
                                         'lookbehind': true,
                                     },
                                     'header-name': {
