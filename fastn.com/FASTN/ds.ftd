@@ -147,6 +147,7 @@ favicon: $page.favicon
 -- end: doc-site.page.header-logo-ui
 
 -- ftd.column:
+margin-top.em if { ftd.device == "mobile" }: 0.5
 spacing.fixed.em: 0.8
 width: fill-container
 children: $page.wrapper
