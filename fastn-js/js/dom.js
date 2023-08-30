@@ -1772,27 +1772,21 @@ class ConditionalDom {
             fastn_utils.resetFullHeight();
             if (condition()) {
                 if (this.#conditionUI) {
-                    if (Array.isArray(this.#conditionUI)) {
-                        while (this.#conditionUI.length > 0) {
-                            let poppedElement = this.#conditionUI.pop();
-                            poppedElement?.destroy();
-                        }
-                    } else {
-                        this.#conditionUI.destroy();
+                    let conditionUI = fastn_utils.flattenArray(this.#conditionUI);
+                    while (conditionUI.length > 0) {
+                        let poppedElement = conditionUI.pop();
+                        poppedElement.destroy();
                     }
                 }
                 this.#conditionUI = node_constructor(new ParentNodeWithSibiling(this.#parent, this.#marker));
-                if (fastn_utils.isWrapperNode(this.#conditionUI?.getTagName())) {
+                if (fastn_utils.isWrapperNode(this.#conditionUI.getTagName())) {
                     this.#conditionUI = this.#conditionUI.getChildren();
                 }
             } else if (this.#conditionUI) {
-                if (Array.isArray(this.#conditionUI)) {
-                    while (this.#conditionUI.length > 0) {
-                        let poppedElement = this.#conditionUI.pop();
-                        poppedElement?.destroy();
-                    }
-                } else {
-                    this.#conditionUI.destroy();
+                let conditionUI = fastn_utils.flattenArray(this.#conditionUI);
+                while (conditionUI.length > 0) {
+                    let poppedElement = conditionUI.pop();
+                    poppedElement.destroy();
                 }
                 this.#conditionUI = null;
             }
@@ -1814,7 +1808,7 @@ class ConditionalDom {
         if (this.#conditionUI) {
             nodes.push(this.#conditionUI);
         }
-        nodes
+        return nodes;
     }
 }
 

@@ -373,11 +373,20 @@ let fastn_utils = {
             onblur: node.onblur,
             onfocus: node.onfocus
         }
+    },
+
+    flattenArray(arr) {
+        return fastn_utils.private.flattenArray([arr]);
     }
 }
 
 
 fastn_utils.private = {
+    flattenArray(arr) {
+        return arr.reduce((acc, item) => {
+            return acc.concat(Array.isArray(item) ? fastn_utils.private.flattenArray(item) : item);
+        }, []);
+    },
     /**
      * Helper function for `fastn_utils.markdown_inline` to find the number of
      * spaces before and after the content.
