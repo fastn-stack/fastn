@@ -621,7 +621,7 @@ optional ftd.resizing min-height:
 -- ftd.column:
 min-height.fixed.em if { card.width == NULL && card.min-height == NULL && ftd.device == "desktop" }: 25
 min-height if { ftd.device == "desktop" }: $card.min-height
-padding.em if { ftd.device == "desktop" }: 2
+padding.em: 2
 spacing.fixed.em: 1
 shadow: $s
 border-radius.em: 1
@@ -630,6 +630,7 @@ width if { ftd.device == "mobile" }: fill-container
 width if { card.width != NULL }: $card.width
 background.solid: $inherited.colors.background.base
 align-content if { ftd.device == "mobile" }: center
+padding.px if { ftd.device == "mobile" }: 24 
 
 -- ftd.image:
 src: $card.image
