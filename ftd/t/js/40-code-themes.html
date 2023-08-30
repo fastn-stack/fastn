@@ -180,6 +180,29 @@ let main = function (parent) {
     parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Code);
+      rooti0.setProperty(fastn_dom.PropertyKind.Code, "-- import: foo\n\n-- component bar:\n\n-- ftd.text: Hello\npadding.px: 10 ;; <hl>\n\nThis is One Theme Dark ;; <hl>\n\n-- end: bar\n\n-- amitu: Hello World! 😀\n\n-- amitu:\n\nyou can also write multiline messages easily!\n\nno quotes. and **markdown** is *supported*.\n\n\n-- ftd.column:\npadding.px: 10 ;; <hl>\nspacing.fixed.px: 50 ;; <hl>\nheight.fixed.px: 200 ;; <hl>\nwidth.fixed.px: 300 ;; <hl>\noverflow-y: scroll\nborder-color: $red-yellow\nborder-style: solid\nborder-width.px: 2", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeTheme, "fastn-theme.light", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_small"), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Code);
+      rooti0.setProperty(fastn_dom.PropertyKind.Code, "-- import: foo\n\n-- component bar:\n\n-- ftd.text: Hello\npadding.px: 10 ;; <hl>\n\nThis is One Theme Dark ;; <hl>\n\n-- end: bar\n\n-- amitu: Hello World! 😀\n\n-- amitu:\n\nyou can also write multiline messages easily!\n\nno quotes. and **markdown** is *supported*.\n\n-- ftd.column:\npadding.px: 10 ;; <hl>\nspacing.fixed.px: 50 ;; <hl>\nheight.fixed.px: 200 ;; <hl>\nwidth.fixed.px: 300 ;; <hl>\noverflow-y: scroll\nborder-color: $red-yellow\nborder-style: solid\nborder-width.px: 2", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeTheme, "fastn-theme.dark", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_small"), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Code);
+      rooti0.setProperty(fastn_dom.PropertyKind.Code, "-- ftd.text:\npadding.px: 10\n\nThis is fire Theme Light", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeTheme, "fire.light", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Code);
       rooti0.setProperty(fastn_dom.PropertyKind.Code, "-- ftd.text:\npadding.px: 10\n\nThis is Material Theme Dark", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.CodeTheme, "material-theme.dark", inherited);

@@ -37,13 +37,7 @@ let main = function (parent) {
     }, function (root) {
       let rooti1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Wrapper);
       rooti1.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop", inherited);
-        return rooti0;
-      },
-      function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello again from desktop", inherited);
+        let rooti0 = foo__desktop_view(root, inherited);
         return rooti0;
       }
       ]), inherited);
@@ -79,40 +73,46 @@ let main = function (parent) {
 global["main"] = main;
 let foo__desktop_view = function (parent, inherited, args)
 {
-  let __args__ = {
-    show: fastn.mutable(true),
-  };
-  inherited = fastn.recordInstance({
-    ...__args__,
-    ...inherited.getAllFields(),
-    ...args
-  });
-  __args__ = {
-    ...__args__,
-    ...args
-  };
-  return fastn_dom.conditionalDom(parent, [
-    __args__.show
-  ], function () {
-    return fastn_utils.getter(__args__.show);
-  }, function (root) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-    rooti0.addEventHandler(fastn_dom.Event.Click, function () {
-      ftd.toggle({
-        a: __args__.show,
-      }, rooti0);
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+      show: fastn.mutable(true),
+    };
+    inherited = fastn.recordInstance({
+      ...__args__,
+      ...inherited.getAllFields(),
+      ...args
     });
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop", inherited);
-    },
-    function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello again from desktop", inherited);
-    }
-    ]), inherited);
-    return rooti0;
-  }).getParent();
+    __args__ = {
+      ...__args__,
+      ...args
+    };
+    return fastn_dom.conditionalDom(parent, [
+      __args__.show
+    ], function () {
+      return fastn_utils.getter(__args__.show);
+    }, function (root) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+        ftd.toggle({
+          a: __args__.show,
+        }, rooti0);
+      });
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop", inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello again from desktop", inherited);
+      }
+      ]), inherited);
+      return rooti0;
+    }).getParent();
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["foo__desktop_view"] = foo__desktop_view;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
