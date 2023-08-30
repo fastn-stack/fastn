@@ -7,9 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
-
 
 
 
@@ -25,6 +22,8 @@ github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
 show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,29 +37,23 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Header
-cta-text: User Manual
-cta-url: https://fastn-community.github.io/header/
-previous-url: /featured/components/headers/
-github-url: https://github.com/fastn-community/header/
+-- ds.distributors: Header
+owners: $owner-fastn
+license-url: https://github.com/fastn-community/header/blob/main/LICENSE
+license: Creative Commons
+published-date: 21-Aug-2023
 
--- end: ds.page.layout-bar
-
+-- end: ds.page.abstract-bar
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.components.header.jpg
-cta-url: https://fastn-community.github.io/header/docs/examples/
+cta-url: https://fastn-community.github.io/header/
 cta-text: Demo
-width.fixed.px if {ftd.device == "desktop"}: 800
-
--- ft-ui.grid-view: Featured Headers
-if: { show-grid }
-templates: $headers
-more-link-text: View more
-more-link: /featured/components/headers/
-
+github-url: https://github.com/fastn-community/header/
+cta-2-url: https://fastn-community.github.io/header/docs/
+cta-2-text: User Manual
 
 -- end: ds.page
 
@@ -70,21 +63,16 @@ more-link: /featured/components/headers/
 
 
 
+-- common.owner list owner-fastn:
 
+-- common.owner: Priyanka Yadav
+profile: featured/contributors/developers/priyanka-yadav/
+avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+role: Developer
 
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
 
--- ft-ui.template list headers:
-
--- ft-ui.template: Header
-template-url: /featured/components/headers/header/
-screenshot: $fastn-assets.files.images.featured.components.header.jpg
-
--- ft-ui.template: Header 1
-template-url: /featured/components/headers/header-1/
-screenshot: $fastn-assets.files.images.featured.components.header-1.png
-
--- ft-ui.template: Header 2
-template-url: /featured/components/headers/header-2/
-screenshot: $fastn-assets.files.images.featured.components.header-2.png
-
--- end: headers
+-- end: owner-fastn

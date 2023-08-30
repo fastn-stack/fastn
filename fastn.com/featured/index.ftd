@@ -43,7 +43,7 @@ more-link: /featured/resumes/
 if: { show-grid }
 templates: $bling
 more-link-text: View all
-more-link: /featured/components-library/
+more-link: /featured/components/
 
 -- grid-view: Color Schemes
 if: { show-grid }
@@ -55,7 +55,7 @@ more-link: /featured/cs/
 if: { show-grid }
 templates: $fonts
 more-link-text: View all 
-more-link: /featured/fonts-typography/
+more-link: /featured/fonts/
 
 -- end: ds.page
 
@@ -495,29 +495,17 @@ screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
 
 -- template list schemes:
 
--- template: Dark Flame CS
-template-url: featured/cs/dark-flame-cs/
-screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
-licence-url: https://github.com/fastn-community/dark-flame-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/dark-flame-cs/
-
-Add warmth and energy to your designs with the `dark-flame-cs`.
-
 -- template: Saturated Sunset CS
 template-url: featured/cs/saturated-sunset-cs/
 screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
-licence-url: https://github.com/fastn-community/saturated-sunset-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/saturated-sunset-cs
 
-Add warmth and energy to your designs with the `saturated-sunset-cs`.
+-- template: Midnight Rush CS
+template-url: featured/cs/midnight-rush-cs/
+screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 
--- template: Winter CS
-template-url: featured/cs/winter-cs/
-screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
-licence-url: https://github.com/fastn-community/winter-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/winter-cs
-
-Add warmth and energy to your designs with the `winter-cs`.
+-- template: Blog Template 1 CS
+template-url: featured/cs/blog-template-1-cs/
+screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
 -- end: schemes
 
@@ -536,9 +524,9 @@ Add warmth and energy to your designs with the `winter-cs`.
 template-url: /featured/components/business-cards/
 screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
 
--- template: Modal / Dialog
-template-url: /featured/components/modals/
-screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
+-- template: Modal Cover
+template-url: featured/components/modals/modal-cover/
+screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 
 -- template: Header / Navbars
 template-url: https://fastn-community.github.io/header/
@@ -561,32 +549,17 @@ depending on the programming language.
 
 -- template list fonts:
 
--- template: Lato Typography
-template-url: https://fastn-community.github.io/lato-typography/
-licence-url: https://github.com/fastn-community/lato-typography/blob/main/LICENSE.md
-github-url: https://github.com/fastn-community/lato-typography
-screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
-
-`lato-font` typography is available and can be used inside `fastn` web
-packages.
+-- template: Inter Typography
+template-url: featured/fonts/inter/
+screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
 -- template: Opensans Typography
-template-url: https://fastn-community.github.io/opensans-typography/
-licence-url: https://github.com/fastn-community/opensans-typography/blob/main/LICENSE.md
-github-url: https://github.com/fastn-community/opensans-typography
+template-url: featured/fonts/opensans/
 screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 
-`opensans-font` typography is available and can be used inside `fastn` web
-packages.
-
 -- template: Roboto Typography
-template-url: https://fastn-community.github.io/roboto-typography/
-licence-url: https://github.com/fastn-community/roboto-typography/blob/main/LICENSE.md
-github-url: https://github.com/fastn-community/roboto-typography
+template-url: featured/fonts/roboto/
 screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
-
-`roboto-font` typography is available and can be used inside `fastn` web
-packages.
 
 -- end: fonts
 
@@ -594,17 +567,17 @@ packages.
 
 -- template list sections:
 
--- template: Hero - 1
-template-url: featured/sections/heros/hero-1/
-screenshot: $fastn-assets.files.images.featured.components.hero-1.png
+-- template: Giggle Presentation Template
+template-url: /featured/sections/slides/giggle-presentation-template/
+screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
 
--- template: Hero - 2
-template-url: featured/sections/heros/hero-2/
-screenshot: $fastn-assets.files.images.featured.components.hero-2.png
+-- template: Hero with two CTA - Design 5
+template-url: featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
 
--- template: Hero - 3
-template-url: featured/sections/heros/hero-3/
-screenshot: $fastn-assets.files.images.featured.components.hero-3.png
+-- template: Image Gallery IG
+template-url: /featured/sections/cards/image-gallery-ig/
+screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
 
 
 -- end: sections

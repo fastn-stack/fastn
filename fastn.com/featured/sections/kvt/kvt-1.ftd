@@ -7,8 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -24,6 +22,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
+distribution-bar: true
+full-width-bar: true
 show-layout-bar: true
 
 -- ds.page.footer:
@@ -38,27 +38,21 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: KVT - Key Value Table 1
-previous-url: /featured/sections/kvt/
-github-url: https://github.com/FifthTry/key-value-table
+-- ds.distributors: Key Value Table 1
+owners: $owner-fastn
+license-url: https://github.com/FifthTry/key-value-table/blob/main/LICENSE
+license: Creative Commons
+published-date: 25-Aug-2022
 
--- end: ds.page.layout-bar
-
+-- end: ds.page.abstract-bar
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.sections.kvt-1.png
 cta-url: https://fifthtry.github.io/key-value-table/
 cta-text: Demo
-width.fixed.px if {ftd.device == "desktop"}: 800
-
--- ft-ui.grid-view: Featured Key Value Tables
-if: { show-grid }
-templates: $kvt
-more-link-text: View more
-more-link: /featured/sections/kvt/
-
+github-url: https://github.com/FifthTry/key-value-table
 
 -- end: ds.page
 
@@ -66,15 +60,16 @@ more-link: /featured/sections/kvt/
 
 
 
+-- common.owner list owner-fastn:
 
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
 
+-- common.owner: Priyanka Yadav
+profile: featured/contributors/developers/priyanka-yadav/
+avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+role: Developer
 
-
-
--- ft-ui.template list kvt:
-
--- ft-ui.template: Key Value Table 1
-template-url: /featured/sections/kvt/kvt-1/
-screenshot: $fastn-assets.files.images.featured.sections.kvt-1.png
-
--- end: kvt
+-- end: owner-fastn

@@ -19,14 +19,6 @@ templates: $footers
 template-url: /featured/components/footers/footer/
 screenshot: $fastn-assets.files.images.featured.components.footer.png
 
--- ft-ui.template: Footer - 1
-template-url: /featured/components/footers/footer-1/
-screenshot: $fastn-assets.files.images.featured.components.footer-1.png
-
--- ft-ui.template: Footer - 2
-template-url: /featured/components/footers/footer-2/
-screenshot: $fastn-assets.files.images.featured.components.footer-2.png
-
 -- ft-ui.template: Footer - 3
 template-url: /featured/components/footers/footer-3/
 screenshot: $fastn-assets.files.images.featured.components.footer-3.png
