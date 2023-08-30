@@ -51,7 +51,7 @@ published-date: 26-March-2023
 -- ft-ui.grid-view: Featured Documentation Sites
 templates: $typographies
 more-link-text: View more
-more-link: /featured/doc-sites/
+more-link: /featured/fonts/
 show-large: true
 
 -- end: ds.page.full-width-wrap
@@ -86,15 +86,15 @@ role: Developer
 
 
 -- ft-ui.template: Blaka Typography
-template-url: featured/fonts/blaka-typography/
+template-url: featured/fonts/blaka/
 screenshot: $fastn-assets.files.images.featured.font.blaka-font.jpg
 
 -- ft-ui.template: Inter Typography
-template-url: featured/fonts/inter-typography/
+template-url: featured/fonts/inter/
 screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
 -- ft-ui.template: Karma Typography
-template-url: featured/fonts/karma-typography/
+template-url: featured/fonts/karma/
 screenshot: $fastn-assets.files.images.featured.font.karma-font.jpg
 
 -- end: typographies

@@ -57,7 +57,7 @@ show-large: true
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.font.inter-font.jpg
-cta-url: https://fastn-community.github.io/inter-typography/
+cta-url: https://fastn-community.github.io/inter-typography/fastn-typography/
 cta-text: Demo
 github-url: https://github.com/fastn-community/inter-typography
 cta-2-url: https://fastn-community.github.io/inter-typography/
@@ -90,15 +90,15 @@ role: Developer
 
 
 -- ft-ui.template: Arya Typography
-template-url: featured/fonts/inter-typography/
+template-url: featured/fonts/inter/
 screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
 -- ft-ui.template: Blaka Typography
-template-url: featured/fonts/inter-typography/
+template-url: featured/fonts/inter/
 screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
 -- ft-ui.template: Karma Typography
-template-url: featured/fonts/karma-typography/
+template-url: featured/fonts/karma/
 screenshot: $fastn-assets.files.images.featured.font.karma-font.jpg
 
 -- end: typographies
