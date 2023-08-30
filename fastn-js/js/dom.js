@@ -1779,7 +1779,7 @@ class ConditionalDom {
                     }
                 }
                 this.#conditionUI = node_constructor(new ParentNodeWithSibiling(this.#parent, this.#marker));
-                if (fastn_utils.isWrapperNode(this.#conditionUI.getTagName())) {
+                if (!Array.isArray(this.#conditionUI) && fastn_utils.isWrapperNode(this.#conditionUI.getTagName())) {
                     this.#conditionUI = this.#conditionUI.getChildren();
                 }
             } else if (this.#conditionUI) {
