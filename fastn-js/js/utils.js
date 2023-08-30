@@ -245,8 +245,8 @@ let fastn_utils = {
     },
     nextSibling(node, parent) {
         // For Conditional DOM
-        if (Array.isArray(node)) {
-            node = node[node.length - 1];
+        while (Array.isArray(node)) {
+            node = node[node.length-1];
         }
         if (node.nextSibling) {
           return node.nextSibling;
