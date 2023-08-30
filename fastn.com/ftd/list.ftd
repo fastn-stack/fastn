@@ -13,14 +13,14 @@ To declare a new list variable, you can use the following syntax:
 -- ds.code: Declaring a `list`
 lang: ftd
 
-\-- &lt;data-type&gt; list &lt;list-name&gt;:
+\-- <data-type> list <list-name>:
 
-\-- &lt;value&gt;
-\-- &lt;value&gt;
-\-- &lt;value&gt;
+\-- <value>
+\-- <value>
+\-- <value>
 \-- ...
 
-\-- end: &lt;list-name&gt;
+\-- end: <list-name>
 
 -- ds.markdown:
 
