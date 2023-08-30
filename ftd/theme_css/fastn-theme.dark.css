@@ -101,7 +101,7 @@ pre[class*=language-].fastn-theme-dark {
 }
 
 .fastn-theme-dark .token.header-condition {
-    color: #ff9e74;
+    color: #9871ff;
 }
 
 .fastn-theme-dark .token.header-value {
@@ -144,7 +144,7 @@ pre[class*=language-].fastn-theme-dark {
 .fastn-theme-dark .token.url,
 .fastn-theme-dark .token.attr-name,
 .fastn-theme-dark .token.keyword {
-    color: #ff5cac;
+    color: #ffa05c;
 }
 
 .fastn-theme-dark .token.regex {

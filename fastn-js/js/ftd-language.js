@@ -3,7 +3,7 @@
 Prism.languages.ftd = {
     'comment': [
         {
-            'pattern': /\/--[\s]*.+/g,
+            'pattern': /\/--\s*([\S\s]*?)(?=\s*--)/g,
             'greedy': true,
             'alias': "section-comment",
         },
@@ -60,9 +60,11 @@ Prism.languages.ftd = {
                 'inside': {
                     // if condition on component
                     'header-condition': /\s*if\s*:(.)+/g,
-                    // header name => [header-type] <name> [header-condition]
+                    // header event
                     'event': /\s*\$on(.)+\$(?=:)/g,
+                    // header processor
                     'processor': /\s*\$[^:]+\$(?=:)/g,
+                    // header name => [header-type] <name> [header-condition]
                     'regex': {
                         'pattern': /[^:]+(?=:)/g,
                         'inside': {
