@@ -225,6 +225,7 @@ let fastn_utils = {
      * @returns {string} - The processed string with inline markdown.
      */
     markdown_inline(i) {
+        if (fastn_utils.isNull(i)) return;
         const { space_before, space_after } = fastn_utils.private.spaces(i);
         const o = (() => {
             let g = fastn_utils.private.replace_last_occurrence(marked.parse(i), "<p>", "");
@@ -492,6 +493,9 @@ fastn_utils.private = {
             return '_' + text;
         }
         return text;
+    },
+    escapeSpecialCharacters(text) {
+        return text.replaceAll("<", "&lt;");
     }
 }
 
