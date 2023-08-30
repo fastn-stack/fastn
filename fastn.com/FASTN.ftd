@@ -752,6 +752,8 @@ skip: true
     skip: true  
     - Blue Heal CS: /featured/cs/blue-heal-cs/
     skip: true  
+    - Midnight Rush CS: /featured/cs/midnight-rush-cs/
+    skip: true  
     - Dark Flame CS: /featured/cs/dark-flame-cs/
     skip: true  
     - Forest CS: /featured/cs/forest-cs/

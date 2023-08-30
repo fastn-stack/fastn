@@ -129,4 +129,13 @@ role: Developer
 template-url: featured/cs/blue-heal-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
 
+-- ft-ui.template: Dark Flame CS
+template-url: featured/cs/dark-flame-cs/
+screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
+
+-- ft-ui.template: Forest CS
+template-url: featured/cs/forest-cs/
+screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
+
 -- end: similar-schemes
+
