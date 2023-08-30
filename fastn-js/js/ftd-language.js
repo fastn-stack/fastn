@@ -10,7 +10,7 @@ Prism.languages.ftd = {
         {
             "pattern": /[\s]*\/[\w]+(:).*\n/g,
             "greedy": true,
-            "alias": "header-comment"
+            "alias": "header-comment",
         },
         {
             'pattern': /(;;).*\n/g,
@@ -34,22 +34,65 @@ Prism.languages.ftd = {
         'pattern': /^[ \t\n]*--\s+(.*)(\n(?![ \n\t]*--).*)*/g,
         'inside': {
             // section-identifier
-            'comment': /^[ \t\n]*--\s+/g,
+            'section-identifier': /([ \t\n])*--\s+/g,
             // [section type] <section name>:
             'punctuation': {
                 'pattern': /^(.*):/g,
                 'inside': {
-                    "comment": /:/g,
-                    'tag': /^\b(component|record|end|or-type|import)\b/g,
-                    "function": /^\s*\S+/g,
+                    "semi-colon": /:/g,
+                    'keyword': /^(component|record|end|or-type)/g,
+                    "value-type": /(integer|boolean|decimal|string)/g,
+                    'type-modifier': {
+                        'pattern': /(\s)*list/g,
+                        'lookbehind': true,
+                    },
+                    "section-name": {
+                        'pattern': /(\s)*.+/g,
+                        'lookbehind': true,
+                    },
                 }
             },
-            // header name
+            // section caption
+            'section-caption': /^.+(?=\n)*/g,
+            // header name: header value
             'regex': {
-                'pattern': /\b(?!--\s+)(.*?)(?=:)/g,
+                'pattern': /(?!--\s*).*[:]\s*(.*)(\n)*/g,
+                'inside': {
+                    // if condition on component
+                    'header-condition': /\s*if\s*:(.)+/g,
+                    // header name => [header-type] <name> [header-condition]
+                    'regex': {
+                        'pattern': /[^:]+(?=:)/g,
+                        'inside': {
+                            // [header-condition]
+                            'header-condition': /if\s*{.+}/g,
+                            // [header-type] <name>
+                            'tag': {
+                                'pattern': /(.)+(?=if)?/g,
+                                'inside': {
+                                    'kernel-type': /^\s*ftd[\S]+/g,
+                                    'header-type': /^(record|caption|body|caption or body|body or caption|integer|boolean|decimal|string)/g,
+                                    'type-modifier': {
+                                        'pattern': /(\s)*list/g,
+                                        'lookbehind': true,
+                                    },
+                                    'header-name': {
+                                        'pattern': /(\s)*(.)+/g,
+                                        'lookbehind': true,
+                                    },
+                                }
+                            }
+                        }
+                    },
+                    // semicolon
+                    "semi-colon": /:/g,
+                    // header value (if any)
+                    'header-value': {
+                        'pattern': /(\s)*(.+)/g,
+                        'lookbehind': true,
+                    }
+                }
             },
-            // header value
-            'deliminator': /^[ ]+(.*)(\n)/g,
         },
     },
 };
