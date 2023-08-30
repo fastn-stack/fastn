@@ -149,7 +149,6 @@ $grid-view.body
 width.fixed.vw: 70
 spacing.fixed.px: 32
 overflow-x: auto
-classes if { grid-view.show-four }: wrapper-4
 margin-vertical.px: 40
 
 -- grid-of-items: $obj.title
@@ -249,7 +248,7 @@ background.solid: #222222cc
 border-bottom-left-radius.px: 8
 border-bottom-right-radius.px: 8
 align-content: center
-classes: mouse-over
+
 
 -- ftd.text: $grid-of-items.title
 role: $inherited.types.label-large
