@@ -652,7 +652,7 @@ skip: true
       skip: true
     - Rotary Presentation Template: /featured/sections/slides/rotary-presentation-template/
       skip: true
-- Component Library: /featured/components-library/
+- Component Library: /featured/components/
   - Admonitions: /featured/components/admonitions/
     skip: true
   - Bling Components: /featured/components/bling/
@@ -736,7 +736,7 @@ skip: true
     skip: true
       Electric: /featured/components/quotes/quotes-with-images/demo-1/
       skip: true
-- Design Elements: /featured/cs/
+- Design Elements: /featured/design/
   - Color Schemes: /featured/cs/
     - Shades Of Red: /featured/cs/red-shades
     skip: true
