@@ -148,7 +148,8 @@ fastn_dom.ElementKind = {
     // Note: This is called internally, it gives `code` as tagName. This is used
     // along with the Code: 15.
     CodeChild: 16,
-    WebComponent: (webcomponent, arguments) => { return [17, {webcomponent, arguments}]; }
+    WebComponent: (webcomponent, arguments) => { return [17, {webcomponent, arguments}]; },
+    Video: 18,
 };
 
 fastn_dom.PropertyKind = {
@@ -264,6 +265,12 @@ fastn_dom.PropertyKind = {
     InputMaxLength: 107,
     Favicon: 108,
     Fit: 109,
+    VideoSrc: 110,
+    Autoplay: 111,
+    Poster: 112,
+    LoopVideo: 113,
+    Controls: 114,
+    Muted: 115,
 };
 
 
@@ -739,7 +746,9 @@ class Node2 {
     }
     // for attaching inline attributes
     attachAttribute(property, value) {
-        if (fastn_utils.isNull(value)) {
+        // If the value is null, undefined, or false, the attribute will be removed.
+        // For example, if attributes like checked, muted, or autoplay have been assigned a "false" value.
+        if (fastn_utils.isNull(value) || value === false) {
             this.#node.removeAttribute(property);
             return;
         }
@@ -747,6 +756,13 @@ class Node2 {
     }
     removeAttribute(property) {
         this.#node.removeAttribute(property);
+    }
+    toggleAttribute(property) {
+        if(this.hasAttribute(property)) {
+            this.removeAttribute(property);
+            return;
+        }
+        this.attachAttribute(property, true);
     }
     updateTagName(name) {
         if (ssr) {
@@ -1565,6 +1581,38 @@ class Node2 {
             this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Alt) {
             this.attachAttribute("alt", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.VideoSrc) {
+            ftd.dark_mode.addClosure(fastn.closure(() => {
+                if (fastn_utils.isNull(staticValue)) {
+                    this.attachAttribute("src", staticValue);
+                    return;
+                }
+                const is_dark_mode = ftd.dark_mode.get();
+                const src = staticValue.get(is_dark_mode ? 'dark' : 'light');
+
+                this.attachAttribute("src", fastn_utils.getStaticValue(src));
+            }).addNodeProperty(this, null, inherited));
+            this.#mutables.push(ftd.dark_mode);
+        } else if (kind === fastn_dom.PropertyKind.Autoplay) {
+            this.attachAttribute("autoplay", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Muted) {
+            this.attachAttribute("muted", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Controls) {
+            this.attachAttribute("controls", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.LoopVideo) {
+            this.attachAttribute("loop", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Poster) {
+            ftd.dark_mode.addClosure(fastn.closure(() => {
+                if (fastn_utils.isNull(staticValue)) {
+                    this.attachAttribute("poster", staticValue);
+                    return;
+                }
+                const is_dark_mode = ftd.dark_mode.get();
+                const posterSrc = staticValue.get(is_dark_mode ? 'dark' : 'light');
+
+                this.attachAttribute("poster", fastn_utils.getStaticValue(posterSrc));
+            }).addNodeProperty(this, null, inherited));
+            this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Fit) {
             this.attachCss("object-fit", staticValue);
         } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {

@@ -14,6 +14,8 @@ let fastn_utils = {
             node = "iframe";
         } else if (kind === fastn_dom.ElementKind.Image) {
             node = "img";
+        } else if (kind === fastn_dom.ElementKind.Video) {
+            node = "video";
         } else if (kind === fastn_dom.ElementKind.ContainerElement ||
             kind === fastn_dom.ElementKind.Text) {
             node = "div";

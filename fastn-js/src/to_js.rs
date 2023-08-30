@@ -179,6 +179,7 @@ impl fastn_js::ElementKind {
             fastn_js::ElementKind::Boolean => "fastn_dom.ElementKind.Boolean".to_string(),
             fastn_js::ElementKind::Text => "fastn_dom.ElementKind.Text".to_string(),
             fastn_js::ElementKind::Image => "fastn_dom.ElementKind.Image".to_string(),
+            fastn_js::ElementKind::Video => "fastn_dom.ElementKind.Video".to_string(),
             fastn_js::ElementKind::IFrame => "fastn_dom.ElementKind.IFrame".to_string(),
             fastn_js::ElementKind::Device => "fastn_dom.ElementKind.Wrapper".to_string(),
             fastn_js::ElementKind::CheckBox => "fastn_dom.ElementKind.CheckBox".to_string(),

@@ -66,6 +66,8 @@ pub const NUMBER_OF_CRS_TO_RESERVE: usize = 5;
 
 pub const IMAGE_EXT: &[&str] = &["jpg", "png", "svg"];
 
+pub const VIDEO_EXT: &[&str] = &["mp4", "ogg", "webm"];
+
 pub fn ftd_html() -> &'static str {
     include_str!("../ftd_2022.html")
 }
