@@ -1750,7 +1750,7 @@ class Node2 {
         }
         // Todo: We don't need this condition as after destroying this node
         //  ConditionalDom reset this.#conditionUI to null or some different
-        //  value. Not sure why this is needed still.
+        //  value. Not sure why this is still needed.
         if (!fastn_utils.isNull(this.#node)) {
             this.#node.remove();
         }
