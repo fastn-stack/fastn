@@ -29,7 +29,7 @@ ftd.color-scheme colors: $dark-flame-cs.main
 integer logo-width: 120
 integer logo-height: 38
 boolean show-footer: true
-boolean show-banner: false
+boolean show-banner: true
 optional ftd.raw-image-src favicon:
 
 -- ftd.ui list page.footer:
@@ -47,6 +47,11 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ftd.ui list page.banner:
 
+-- banner.cta-banner:
+cta-text: star on Github 🚀
+cta-link: https://github.com/fastn-stack/fastn/
+
+Support us by giving us a
 
 -- end: page.banner
 
