@@ -44,150 +44,386 @@ favicon: /-/fastn.com/images/favicon.svg
 # Examples: /examples/
   skip: true
   
-# Overview: /home/
+# Explore: /frontend/
 
-## Overview: /home/
+## Features: /frontend/
 
-- `fastn` Overview: /home/
-- The `fastn` Language: /lang/
-  document: /ftd/index.ftd
-- Why?:
-  - `fastn` is Easy To Learn: /easy/
-    document: why/easy.ftd
-    skip: true
-  - Optimised For Content Focused Sites: /content-focused/
-    document: why/content.ftd
-    skip: true
-  - Stable Architecture: /stable/
-    document: why/stable.ftd
-    skip: true
-  - Design System: /why/design/
-    skip: true
-  - FullStack Apps: /fullstack/
-    skip: true
-    document: why/fullstack.ftd
-  - Why Use `fastn` for Your Next Frontend?: /frontend/why/-/learn/
-- Install `fastn`: /install/
-  document: author/how-to/install.ftd
-  - On MacOS/Linux: /macos/
-    document: author/setup/macos.ftd
-  - On Windows: /windows/
-    document: author/setup/windows.ftd
-  - Open terminal: /open-terminal/
-    document: author/how-to/open-terminal.ftd
-    skip: true
-- Syntax Highlighting For SublimeText: /sublime/
-  document: author/how-to/sublime.ftd
-- Syntax Highlighting For Visual Studio Code: /vscode/
-  document: author/how-to/vscode.ftd
-- `fastn` Community: /community/
-- Docs: /docs/
-- Student Ambassador Program: /ambassador/
-  document: /student-programs/ambassador.ftd
-  skip: true
-- Champion Program: /champion-program/
-  document: /student-programs/champion.ftd
-  - Champions: /champions/
-    document: /student-programs/champions/all-champions.ftd
-    - Ajit Garg: /champions/ajit-garg/
-      document: /student-programs/champions/ajit-garg.ftd
-      skip: true
-    - Ayush Soni: /champions/ayush-soni/
-      document: /student-programs/champions/ayush-soni.ftd
-      skip: true
-    - Govindaraman S: /champions/govindaraman-s/
-      document: /student-programs/champions/govindaraman.ftd
-      skip: true
-    - Aprita Jaiseal: /champions/arpita-jaiswal/
-      document: /student-programs/champions/arpita-jaiswal.ftd
-      skip: true
-    - Rithik Seth:  /champions/rithik-seth/
-      document: /student-programs/champions/rithik-seth.ftd
-      skip: true
-    - Harsh Singh: /champions/harsh-singh/
-      document: /student-programs/champions/harsh-singh.ftd
-      skip: true
-    - Ganesh Salunke: /champions/ganesh-salunke/
-      document: /student-programs/champions/ganesh-salunke.ftd
-      skip: true
-    - Priyanka Yadav: /champions/priyanka-yadav/
-      document: /student-programs/champions/priyanka-yadav.ftd
-      skip: true
-    - Meenu Kumari: /champions/meenu-kumari/
-      document: /student-programs/champions/meenu-kumari.ftd
-      skip: true
-    - Saurabh lohia: /champions/saurabh-lohiya/
-      document: /student-programs/champions/saurabh-lohiya.ftd
-      skip: true
-    
+- Frontend: /frontend/
+- Full-stack: /backend/
+- Deploy: /deploy/
+- Design: /design/
+  document: /features/design.ftd
+- Community: /community/
+  document: /features/community.ftd
 
-
-- Ambassador Program: /ambassador-program/
-  document: /student-programs/ambassador.ftd
-  - Ambassadors: /ambassadors/
-    document: /student-programs/ambassadors/all-ambassadors.ftd
-    - Ayush Soni: /ambassadors/ayush-soni/
-      document: /student-programs/ambassadors/ayush-soni.ftd
-      skip: true
-    - Govindaraman S: /ambassadors/govindaraman-s/
-      document: /student-programs/ambassadors/govindaraman.ftd
-      skip: true
-  
-## Features: /features/
-
-- Overview: /features/
-- Package Manager: /package-manager/
-  document: features/package-manager.ftd
-- Static Site Generator: /static/
-  document: features/static.ftd
-- `fastn` Server: /server/
-  document: features/server.ftd
-- Color Scheme: /cs/
-  document: features/cs.ftd
-- Sitemap: /sitemap/
-  document: features/sitemap.ftd
-
-## Compare: /compare/
+## Compare: /react/
   document: /compare/react.ftd
-
-   
 - fastn vs React: /react/
   document: /compare/react.ftd
 - fastn vs Webflow: /webflow/
   document: /compare/webflow.ftd
-
-
-## Events: /events/webdev-with-ftd/
-   document: webdev-with-ftd.ftd
    
-# Design: /figma/
-  document: cs/ftd-to-figma.ftd
+## Case study: /acme/
 
-- Use Figma Tokens with fastn color schemes: /figma/
-  document: cs/ftd-to-figma.ftd
-- Create your own fastn color scheme from Figma json: /figma-to-fastn-cs/
-  document: cs/figma-to-ftd.ftd
-- Modify color scheme package: /modify-cs/
-  document: cs/modify-cs.ftd
-- Create `font` package: /create-font-package/
-  document: author/how-to/create-font-package.ftd
-- Export typography as json: /typo-to-json/
-  document: typo/typo-to-json.ftd
-- Typography json to FTD: /typo-json-to-ftd/
-  document: typo/typo-json-to-ftd
+- Acme: /acme/
+- To-do: /todo/
+  document: /case-study/todo.ftd
+- Country: /backend/learn/
 
-# Frontend: /frontend/why/
+# Get Started: /quick-build/
+  document: /get-started/browse-pick.ftd
 
-## Docs: /frontend/why/
+## Create Website: /quick-build/
+document: /get-started/browse-pick.ftd
+- Browse, Pick, Follow User Manual: /quick-build/
+  document: /get-started/browse-pick.ftd
+- fastn basics: /markdown/-/frontend/
+  document: /expander/ds/markdown.ftd
+  - Markdown: /markdown/-/frontend/
+  document: /expander/ds/markdown.ftd
+  - Change Color Scheme: /color-scheme/
+  document: /expander/ds/ds-cs.ftd
+  - Change Typography: /typography/
+  document: /expander/ds/ds-typography.ftd
+  - Change Theme: /theme/
+  document: /get-started/theme.ftd
+  - Sitemap: /understanding-sitemap/-/build/
+  document: /expander/ds/understanding-sitemap.ftd
+  - SEO: /seo-meta/
+  document: /expander/ds/meta-data.ftd
+    - Meta Data: /seo-meta/
+  document: /expander/ds/meta-data.ftd
+    - Redirects: /redirects/
+  document: backend/redirects.ftd 
+    - URL: /clean-urls/-/build/
+  document: /expander/sitemap-document.ftd 
 
-- Overview 🚧: /frontend/
+
+## Learn: /install/
+  document: author/how-to/install.ftd
+- Setup: /install/
+  document: author/how-to/install.ftd
+  - Install fastn: /install/
+  document: author/how-to/install.ftd
+  - Install GitHub: /github/
+    document: /get-started/github.ftd
+  - Install Text Editor: /editor/
+    document: /get-started/editor.ftd
+    - Syntax Highlighting Sublime: /sublime/
+    document: author/how-to/sublime.ftd
+    - Syntax Highlighting VS Code: /vscode/
+    document: author/how-to/vscode.ftd
+- Exapander Crash Course: /expander/
+  - Part 1. Hello World: /expander/hello-world/
+  - Part 2. Basic UI: /expander/basic-ui/
+  - Part 3. Components: /expander/components/
+  - Part 4. Event Handling: /expander/events/
+  - Part 5. Publish a package: /expander/publish/
+  - Part 6. Polishing UI: /expander/polish/
+
+## Featured Components: /featured/
+   document: /get-started/learn.ftd
+- Designers: /featured/contributors/designers/
   skip: true
-- Why Use `fastn` for Your Next Frontend?: /frontend/why/
-- Design System 🚧: /design-system/
-  document: frontend/design-system.ftd
+  - Muskan Verma: /featured/contributors/designers/muskan-verma/
+    skip: true
+  - Jay Kumar: /featured/contributors/designers/jay-kumar/
+    skip: true
+  - Govindaraman S: /featured/contributors/designers/govindaraman-s/
+    skip: true
+  - Yashveer Mehra: /featured/contributors/designers/yashveer-mehra/
+    skip: true
+- Developers: /featured/contributors/developers/
   skip: true
-- Getting Started: /setup/
-  document: ftd/setup.ftd
+  - Arpita Jaiswal: /featured/contributors/developers/arpita-jaiswal/
+    skip: true
+  - Ganesh Salunke: /featured/contributors/developers/ganesh-salunke/
+    skip: true
+  - Meenu Kumari: /featured/contributors/developers/meenu-kumari/
+    skip: true
+  - Priyanka Yadav: /featured/contributors/developers/priyanka-yadav/
+    skip: true
+  - Saurabh Lohiya: /featured/contributors/developers/saurabh-lohiya/
+    skip: true
+  - Saurabh Garg: /featured/contributors/developers/saurabh-garg/
+    skip: true
+  - Shaheen Senpai: /featured/contributors/developers/shaheen-senpai/
+    skip: true
+- Website Categories: /featured/website-categories/
+  - Documentation Sites: /featured/doc-sites/
+    - Simple Site: /featured/ds/doc-site/
+      skip: true
+    - Midnight Rush: /featured/ds/mr-ds/
+      skip: true
+    - Midnight Storm: /featured/ds/midnight-storm/
+      skip: true
+    - Misty Gray: /featured/ds/misty-gray/
+      skip: true
+    - Dash Dash DS: /featured/ds/dash-dash-ds/
+      skip: true
+    - API DS: /featured/ds/api-ds/
+      skip: true
+    - Spider Book DS: /featured/ds/spider-book-ds/
+      skip: true
+    - Framework DS: /featured/ds/framework/
+      skip: true
+    - Blue Sapphire Template: /featured/ds/blue-sapphire-template/
+      skip: true
+    - Forest Template DS: /featured/ds/forest-template/
+      skip: true
+    - Docusaurus Theme: /featured/ds/docusaurus-theme/
+      skip: true
+  - Landing Pages: /featured/landing-pages/
+    - Midnight Rush: /featured/landing/mr-landing/
+      skip: true
+    - Midnight Storm: /featured/landing/midnight-storm-landing/
+      skip: true
+    - Misty Gray: /featured/landing/misty-gray-landing/
+      skip: true
+    - CT Landing Page: /featured/landing/ct-landing/
+      skip: true
+    - Docusaurus Theme: /featured/landing/docusaurus-theme/
+      skip: true
+    - Forest FOSS Template: /featured/landing/forest-foss-template/
+      skip: true
+    - Studious Couscous: /featured/landing/studious-couscous/
+      skip: true
+  - Blogs: /featured/blog-templates/
+    - Simple Site: /featured/blogs/doc-site/
+      skip: true  
+    - Midnight Rush: /featured/blogs/mr-blog/
+      skip: true  
+    - Midnight Storm: /featured/blogs/ms-blog/
+      skip: true  
+    - Misty Gray: /featured/blogs/mg-blog/
+      skip: true  
+    - Pink Tree: /featured/blogs/pink-tree/
+      skip: true  
+    - Yellow Lily: /featured/blogs/yellow-lily/
+      skip: true  
+    - Blue Wave: /featured/blogs/blue-wave/
+      skip: true  
+    - Navy Nebula: /featured/blogs/navy-nebula/
+      skip: true  
+    - Blog Template 1: /featured/blogs/blog-template-1/
+      skip: true  
+    - Galaxia: /featured/blogs/galaxia/
+      skip: true  
+    - Little Blue: /featured/blogs/little-blue/
+      skip: true  
+    - Dash Dash DS: /featured/blogs/dash-dash-ds/
+      skip: true  
+    - Simple Blog: /featured/blogs/simple-blog/
+      skip: true  
+    - Rocky: /featured/blogs/rocky/
+      skip: true  
+    - Blog Components: /featured/blogs/blog-components/
+      skip: true  
+  - Portfolios / Personal Sites: /featured/portfolios/
+    - Texty PS: /featured/portfolios/texty-ps/
+      skip: true  
+    - Johny PS: /featured/portfolios/johny-ps/
+      skip: true  
+    - Portfolio: /featured/portfolios/portfolio/
+      skip: true  
+  - Resumes: /featured/resumes/
+    - Caffiene: /featured/resumes/caffiene/
+      skip: true  
+    - Resume 1: /featured/resumes/resume-1/
+      skip: true  
+    - Resume 10: /featured/resumes/resume-10/
+      skip: true  
+  - Workshop Pages: /featured/workshops/
+    - Workshop 1: /featured/workshops/workshop-1/
+      skip: true
+    - Event 1: /featured/workshops/event-1/
+      skip: true
+- Section Library: /featured/sections/
+  - Cards: /featured/sections/cards/
+    - Card 1: /featured/sections/cards/card-1/
+      skip: true  
+    - Image Card 1: /featured/sections/cards/image-card-1/
+      skip: true  
+    - Image Gallery IG: /featured/sections/cards/image-gallery-ig/
+      skip: true  
+    - Imagen IG: /featured/sections/cards/imagen-ig/
+      skip: true
+  - Hero Components: /featured/sections/heros/
+    - Hero with two CTA: /featured/sections/heros/hero-with-2-cta/
+      skip: true
+      - Hero with two CTA - Design 1: /featured/sections/heros/hero-1/
+        skip: true  
+      - Hero with two CTA - Design 2: /featured/sections/heros/hero-2/
+        skip: true  
+      - Hero with two CTA - Design 3: /featured/sections/heros/hero-3/
+        skip: true  
+      - Hero with two CTA - Design 4: /featured/sections/heros/hero-5/
+        skip: true
+      - Hero with two CTA - Design 5: /featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/  
+    - Hero with Search: /featured/sections/heros/hero-with-search/
+      skip: true
+      - Hero with search - Design 1: /featured/sections/heros/hero-4/
+        skip: true  
+    - Hero with social icons: /featured/sections/heros/hero-with-social/
+      skip: true
+      - Hero with social - Design 1: /featured/sections/heros/hero-6/
+        skip: true  
+  - Key Value Tables: /featured/sections/kvt/
+    - Key Value Table 1: /featured/sections/kvt/kvt-1/
+      skip: true
+  - Slides / Presentations: /featured/sections/slides/
+    - Crispy Presentation Theme: /featured/sections/slides/crispy-presentation-theme/
+      skip: true
+    - Giggle Presentation Template: /featured/sections/slides/giggle-presentation-template/
+      skip: true
+    - Simple Dark Slides: /featured/sections/slides/simple-dark-slides/
+      skip: true
+    - Simple Light Slides: /featured/sections/slides/simple-light-slides/
+      skip: true
+    - Streamline Slides: /featured/sections/slides/streamline-slides/
+      skip: true
+    - Rotary Presentation Template: /featured/sections/slides/rotary-presentation-template/
+      skip: true
+- Component Library: /featured/components/
+  - Admonitions: /featured/components/admonitions/
+    skip: true
+  - Bling Components: /featured/components/bling/
+  - Buttons: /featured/components/buttons/
+  - Business Cards: /featured/components/business-cards/
+    - Business Card: /featured/components/business-cards/card-1/
+      skip: true  
+    - Gradient Business Card: /featured/components/business-cards/gradient-card/
+      skip: true  
+    - Midnight Business Card: /featured/components/business-cards/midnight-card/
+      skip: true  
+    - Pattern Business Card: /featured/components/business-cards/pattern-card/
+      skip: true  
+    - Sunset Business Card: /featured/components/business-cards/sunset-card/
+      skip: true  
+  - Language Switcher: /featured/components/language-switcher/
+      skip: true
+  - Subscription Form: /featured/components/subscription-form/
+      skip: true
+  - Code Block: /featured/components/code-block/
+      skip: true
+  - Header / Navbar: /featured/components/headers/
+    - Header: /featured/components/headers/header/
+      skip: true  
+  - Footers: /featured/components/footers/
+    - Footer: /featured/components/footers/footer/
+      skip: true  
+    - Footer 3: /featured/components/footers/footer-3/
+      skip: true  
+  - Modal / Dialog: /featured/components/modals/
+    - Modal 1: /featured/components/modals/modal-1/
+      skip: true  
+    - Modal Cover: /featured/components/modals/modal-cover/
+      skip: true
+  - Quotes: /featured/components/quotes/
+    - Simple Quotes: /featured/components/quotes/simple-quotes/
+      skip: true
+      - Chalice: /featured/components/quotes/simple-quotes/demo-1/
+        skip: true
+      - Rustic: /featured/components/quotes/simple-quotes/demo-2/
+        skip: true
+      - Echo: /featured/components/quotes/simple-quotes/demo-3/
+        skip: true
+      - Onyx: /featured/components/quotes/simple-quotes/demo-4/
+        skip: true
+      - Marengo: /featured/components/quotes/simple-quotes/demo-5/
+        skip: true
+      - Chrome: /featured/components/quotes/simple-quotes/demo-6/
+        skip: true
+      - Dorian: /featured/components/quotes/simple-quotes/demo-7/
+        skip: true
+      - Marengo Hug: /featured/components/quotes/simple-quotes/demo-8/
+        skip: true
+      - Matte: /featured/components/quotes/simple-quotes/demo-9/
+        skip: true
+      - Scorpion: /featured/components/quotes/simple-quotes/demo-10/
+        skip: true
+      - Silver: /featured/components/quotes/simple-quotes/demo-11/
+        skip: true
+      - Storm Cloud: /featured/components/quotes/simple-quotes/demo-12/
+        skip: true
+    - Quotes with author icon: /featured/components/quotes/author-icon-quotes/
+      skip: true
+      - Charcoal: /featured/components/quotes/author-icon-quotes/demo-1/
+        skip: true
+    - Quotes with images: /featured/components/quotes/quotes-with-images/
+      skip: true
+      Electric: /featured/components/quotes/quotes-with-images/demo-1/
+      skip: true
+- Design Elements: /featured/design/
+  - Color Schemes: /featured/cs/
+    - Shades Of Red: /featured/cs/red-shades
+      skip: true
+    - Shades Of Blue: /featured/cs/blue-shades
+      skip: true
+    - Shades Of Green: /featured/cs/green-shades
+      skip: true
+    - Shades Of Orange: /featured/cs/orange-shades
+      skip: true
+    - Shades Of Violet: /featured/cs/violet-shades
+      skip: true
+    - Blog Template CS: /featured/cs/blog-template-cs/
+      skip: true  
+    - Blue Heal CS: /featured/cs/blue-heal-cs/
+      skip: true  
+    - Midnight Rush CS: /featured/cs/midnight-rush-cs/
+      skip: true  
+    - Dark Flame CS: /featured/cs/dark-flame-cs/
+      skip: true  
+    - Forest CS: /featured/cs/forest-cs/
+      skip: true  
+    - Midnight Storm CS: /featured/cs/midnight-storm-cs/
+      skip: true  
+    - Misty Gray CS: /featured/cs/misty-gray-cs/
+      skip: true  
+    - Navy Nebula CS: /featured/cs/navy-nebula-cs/
+      skip: true  
+    - Pretty CS: /featured/cs/pretty-cs/
+      skip: true  
+    - Saturated Sunset CS: /featured/cs/saturated-sunset-cs/
+      skip: true
+    - Pink Tree Cs: /featured/cs/pink-tree-cs/
+      skip: true  
+    - Winter CS: /featured/cs/winter-cs/
+      skip: true  
+    - Little Blue CS: /featured/cs/little-blue-cs/
+      skip: true  
+    - Blog Template 1 CS: /featured/cs/blog-template-1-cs/
+      skip: true
+  - Font Typographies: /featured/fonts/
+    - Arya Typography: /featured/fonts/arya/
+      skip: true
+    - Blaka Typography: /featured/fonts/blaka/
+      skip: true
+    - Lobster Typography: /featured/fonts/lobster/
+      skip: true
+    - Opensans Typography: /featured/fonts/opensans/
+      skip: true
+    - Pragati Narrow Typography: /featured/fonts/pragati-narrow/
+      skip: true
+    - Roboto Mono Typography: /featured/fonts/roboto-mono/
+      skip: true
+    - Roboto Typography: /featured/fonts/roboto/
+      skip: true
+    - Tiro Typography: /featured/fonts/tiro/
+      skip: true
+    - Inter Typography: /featured/fonts/inter/
+      skip: true
+    - Karma Typography: /featured/fonts/karma/
+      skip: true
+    - Khand Typography: /featured/fonts/khand/
+      skip: true
+    - lato Typography: /featured/fonts/lato/
+      skip: true
+
+# Docs: /ftd/data-modelling/
+
+## Frontend: /ftd/data-modelling/
+
 - Data Modelling: /ftd/data-modelling/
   - Variables: /variables/
     document: /ftd/variables.ftd
@@ -322,102 +558,25 @@ favicon: /-/fastn.com/images/favicon.svg
   - Property: /property-guidelines/
     document: best-practices/property-guidelines.ftd
 
+## Design: /figma/
+  document: cs/ftd-to-figma.ftd
 
-## Book 🚧: /book/
+- Use Figma Tokens with fastn color schemes: /figma/
+  document: cs/ftd-to-figma.ftd
+- Create your own fastn color scheme from Figma json: /figma-to-fastn-cs/
+  document: cs/figma-to-ftd.ftd
+- Modify color scheme package: /modify-cs/
+  document: cs/modify-cs.ftd
+- Create `font` package: /create-font-package/
+  document: author/how-to/create-font-package.ftd
+- Export typography as json: /typo-to-json/
+  document: typo/typo-to-json.ftd
+- Typography json to FTD: /typo-json-to-ftd/
+  document: typo/typo-json-to-ftd
 
-- The Book Of `fastn`: /book/
-- `i` Foreword 🚧: /book/foreword/
-  document: book/1-foreword.ftd
-- `ii` Preface: /book/preface/
-  document: book/2-preface.ftd
-- `iii` Introduction: /book/intro/
-  document: book/3-intro.ftd
-- **1.** Getting Started 🚧: /book/getting-started/
-  document: book/01-getting-started/00-getting-started.ftd
-  - `1.1` Hello, Github!: /book/github/
-    document: book/01-getting-started/01-github.ftd
-  - `1.2` Let's Create A Repo: /book/repo/
-    document: book/01-getting-started/02-repo.ftd
-  - `1.3` Publish Your Site: /book/gh-pages/
-    document: book/01-getting-started/03-gh-pages.ftd
-  - `1.4` Online Editor: /book/codespaces/
-    document: book/01-getting-started/04-codespaces.ftd
-  - `1.5` Edit Your Site 🚧: /book/first-edit/
-    document: book/01-getting-started/05-first-edit.ftd
-- **2.** Modules  🚧: /book/modules/
-  document: book/02-modules/01-intro.ftd
-- Appendix: /book/appendix/
-  - **a** HTTP 🚧: /book/http/
-    document: book/appendix/a-http.ftd
-  - **b** URL 🚧: /book/url/
-    document: book/appendix/b-url.ftd
-  - **c** Terminal: /book/terminal/
-    document: book/appendix/c-terminal.ftd
-    - Open Terminal: /open-terminal/-/book/
-      document: author/how-to/open-terminal.ftd
-      skip: true
-  - **d** Common Commands 🚧: /cmds/
-    document: book/appendix/d-common-commands.ftd
-  - **e** Install `fastn`: /book/install/
-    document: book/appendix/e-install.ftd
-    - Intall On Windows: /windows/-/book/
-      document: author/setup/windows.ftd
-      skip: true
-  - **f** A Programming Editor: /book/editor/
-    document: book/appendix/f-editor.ftd
-    - SublimeText Syntax Highlighting 🚧: /sublime/-/book/
-      document: author/how-to/sublime.ftd
-      skip: true
-  - **g** Hosting 🚧: /book/hosting/
-    document: book/appendix/g-hosting.ftd
+## Fullstack: /dynamic-urls/
+document: backend/dynamic-urls.ftd
 
-## Learn: /frontend/learn/
-  document: /expander/index.ftd
-   
-- Expander Crash Course: /expander/
-  - Part 1. Hello World: /expander/hello-world/
-    - Install `fastn`: /install/-/expander/
-      document: author/how-to/install.ftd
-      - On Windows: /windows/-/expander/
-        document: author/setup/windows.ftd
-      - On MacOS/Linux: /macos/-/expander/
-        document: author/setup/macos.ftd
-  - Part 2. Basic UI: /expander/basic-ui/
-  - Part 3. Components: /expander/components/
-  - Part 4. Event Handling: /expander/events/
-  - Part 5. Publish a package: /expander/publish/
-  - Part 6. Polishing UI: /expander/polish/
-- Button with shadow: /button/
-  document: /expander/button.ftd
-- Create rounded border: /rounded-border/
-  document: /expander/border-radius.ftd
-- Create holy-grail layout: /holy-grail/
-  document: /expander/layout/index.ftd
-- Understanding sitemap: /understanding-sitemap/
-  document: /expander/ds/understanding-sitemap.ftd
-- Create clean URLs: /clean-urls/
-  document: /expander/sitemap-document.ftd
-- Using images in documents: /using-images/
-  document: /expander/imagemodule/index.ftd
-- Add meta data: /seo-meta/-/frontend/
-  document: /expander/ds/meta-data.ftd
-- Markdown: /markdown/-/frontend/
-  document: /expander/ds/markdown.ftd
-- Adding typography: /typography/-/frontend/
-  document: /expander/ds/ds-typography.ftd
-- Adding color scheme: /color-scheme/-/frontend/
-  document: /expander/ds/ds-cs.ftd
-- Using `ds.page` component: /ds-page/-/frontend/
-  document: /expander/ds/ds-page.ftd
-  skip: true
-
-
-
-# Fullstack: /backend/
-
-## Overview: /backend/
-
-- Overview: /backend/
 - Endpoint Guide 🚧: /endpoint/
   document: backend/endpoint.ftd
   skip: true
@@ -442,355 +601,9 @@ favicon: /-/fastn.com/images/favicon.svg
 - Dynamic Redirect: /ftd/redirect/
   document: backend/ftd-redirect.ftd
 
-## Learn: /backend/learn/
-  document: /backend/country-details/index.ftd
+## Deploy: /github-pages/
+document: author/how-to/github-pages.ftd
 
-- Country Details: /country-details/
-  document: /backend/country-details/index.ftd
-  - Basic of `http`, `data modelling`: /country-details/basics/
-    document: /backend/country-details/http-data-modelling.ftd
-  - Building dynamic country list page: /country-list/
-    document: /backend/country-details/dynamic-country-list-page.ftd
-
-# Create Website: /create-website/
-  document: author/how-to/install.ftd
-  source: build
-  
-## Create Website: /create-website/
-  document: author/how-to/install.ftd
-
-- Install: /install/-/build/
-  document: author/how-to/install.ftd
-  - On Windows: /build-windows/-/expander/
-    document: author/setup/windows.ftd
-  - On MacOS/Linux: /build-macos/-/expander/
-    document: author/setup/macos.ftd
-- Hello World: /expander/hello-world/-/build/
-- Basic UI: /expander/basic-ui/-/build/
-- Publish a package: /expander/publish/-/build/
-- Understanding sitemap: /understanding-sitemap/-/build/
-  document: /expander/ds/understanding-sitemap.ftd
-- Create clean URLs: /clean-urls/-/build/
-  document: /expander/sitemap-document.ftd 
-- Create rounded border: /rounded-border/-/build/
-  document: /expander/border-radius.ftd
-- Using images in documents: /using-images/-/build/
-  document: /expander/imagemodule/index.ftd
-- Add meta-data: /seo-meta/
-  document: /expander/ds/meta-data.ftd
-- Markdown in doc-site: /markdown/
-  document: /expander/ds/markdown.ftd
-- Adding typography: /typography/
-  document: /expander/ds/ds-typography.ftd
-- Adding color scheme: /color-scheme/
-  document: /expander/ds/ds-cs.ftd
-- Using page component: /ds-page/
-  document: /expander/ds/ds-page.ftd
-  skip: true
-- Redirects: /redirects/
-  document: backend/redirects.ftd
-
-## Featured Templates: /featured/
-- Designers: /featured/contributors/designers/
-skip: true
-  - Muskan Verma: /featured/contributors/designers/muskan-verma/
-  skip: true
-  - Jay Kumar: /featured/contributors/designers/jay-kumar/
-  skip: true
-  - Govindaraman S: /featured/contributors/designers/govindaraman-s/
-  skip: true
-  - Yashveer Mehra: /featured/contributors/designers/yashveer-mehra/
-  skip: true
-- Developers: /featured/contributors/developers/
-skip: true
-  - Arpita Jaiswal: /featured/contributors/developers/arpita-jaiswal/
-  skip: true
-  - Ganesh Salunke: /featured/contributors/developers/ganesh-salunke/
-  skip: true
-  - Meenu Kumari: /featured/contributors/developers/meenu-kumari/
-  skip: true
-  - Priyanka Yadav: /featured/contributors/developers/priyanka-yadav/
-  skip: true
-  - Saurabh Lohiya: /featured/contributors/developers/saurabh-lohiya/
-  skip: true
-  - Saurabh Garg: /featured/contributors/developers/saurabh-garg/
-  skip: true
-  - Shaheen Senpai: /featured/contributors/developers/shaheen-senpai/
-  skip: true
-- Website Categories: /featured/website-categories/
-  - Documentation Sites: /featured/doc-sites/
-    - Simple Site: /featured/ds/doc-site/
-    skip: true
-    - Midnight Rush: /featured/ds/mr-ds/
-    skip: true
-    - Midnight Storm: /featured/ds/midnight-storm/
-    skip: true
-    - Misty Gray: /featured/ds/misty-gray/
-    skip: true
-    - Dash Dash DS: /featured/ds/dash-dash-ds/
-    skip: true
-    - API DS: /featured/ds/api-ds/
-    skip: true
-    - Spider Book DS: /featured/ds/spider-book-ds/
-    skip: true
-    - Framework DS: /featured/ds/framework/
-    skip: true
-    - Blue Sapphire Template: /featured/ds/blue-sapphire-template/
-    skip: true
-    - Forest Template DS: /featured/ds/forest-template/
-    skip: true
-    - Docusaurus Theme: /featured/ds/docusaurus-theme/
-    skip: true
-  - Landing Pages: /featured/landing-pages/
-    - Midnight Rush: /featured/landing/mr-landing/
-    skip: true
-    - Midnight Storm: /featured/landing/midnight-storm-landing/
-    skip: true
-    - Misty Gray: /featured/landing/misty-gray-landing/
-    skip: true
-    - CT Landing Page: /featured/landing/ct-landing/
-    skip: true
-    - Docusaurus Theme: /featured/landing/docusaurus-theme/
-    skip: true
-    - Forest FOSS Template: /featured/landing/forest-foss-template/
-    skip: true
-    - Studious Couscous: /featured/landing/studious-couscous/
-    skip: true
-  - Blogs: /featured/blog-templates/
-    - Simple Site: /featured/blogs/doc-site/
-    skip: true  
-    - Midnight Rush: /featured/blogs/mr-blog/
-    skip: true  
-    - Midnight Storm: /featured/blogs/ms-blog/
-    skip: true  
-    - Misty Gray: /featured/blogs/mg-blog/
-    skip: true  
-    - Pink Tree: /featured/blogs/pink-tree/
-    skip: true  
-    - Yellow Lily: /featured/blogs/yellow-lily/
-    skip: true  
-    - Blue Wave: /featured/blogs/blue-wave/
-    skip: true  
-    - Navy Nebula: /featured/blogs/navy-nebula/
-    skip: true  
-    - Blog Template 1: /featured/blogs/blog-template-1/
-    skip: true  
-    - Galaxia: /featured/blogs/galaxia/
-    skip: true  
-    - Little Blue: /featured/blogs/little-blue/
-    skip: true  
-    - Dash Dash DS: /featured/blogs/dash-dash-ds/
-    skip: true  
-    - Simple Blog: /featured/blogs/simple-blog/
-    skip: true  
-    - Rocky: /featured/blogs/rocky/
-    skip: true  
-    - Blog Components: /featured/blogs/blog-components/
-    skip: true  
-  - Portfolios / Personal Sites: /featured/portfolios/
-    - Texty PS: /featured/portfolios/texty-ps/
-    skip: true  
-    - Johny PS: /featured/portfolios/johny-ps/
-    skip: true  
-    - Portfolio: /featured/portfolios/portfolio/
-    skip: true  
-  - Resumes: /featured/resumes/
-    - Caffiene: /featured/resumes/caffiene/
-    skip: true  
-    - Resume 1: /featured/resumes/resume-1/
-    skip: true  
-    - Resume 10: /featured/resumes/resume-10/
-    skip: true  
-  - Workshop Pages: /featured/workshops/
-    - Workshop 1: /featured/workshops/workshop-1/
-    skip: true
-    - Event 1: /featured/workshops/event-1/
-    skip: true
-- Section Library: /featured/sections/
-  - Cards: /featured/sections/cards/
-    - Card 1: /featured/sections/cards/card-1/
-    skip: true  
-    - Image Card 1: /featured/sections/cards/image-card-1/
-    skip: true  
-    - Image Gallery IG: /featured/sections/cards/image-gallery-ig/
-    skip: true  
-    - Imagen IG: /featured/sections/cards/imagen-ig/
-    skip: true
-  - Hero Components: /featured/sections/heros/
-    - Hero with two CTA: /featured/sections/heros/hero-with-2-cta/
-    skip: true
-      - Hero with two CTA - Design 1: /featured/sections/heros/hero-1/
-      skip: true  
-      - Hero with two CTA - Design 2: /featured/sections/heros/hero-2/
-      skip: true  
-      - Hero with two CTA - Design 3: /featured/sections/heros/hero-3/
-      skip: true  
-      - Hero with two CTA - Design 4: /featured/sections/heros/hero-5/
-      skip: true
-      - Hero with two CTA - Design 5: /featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/  
-    - Hero with Search: /featured/sections/heros/hero-with-search/
-    skip: true
-      - Hero with search - Design 1: /featured/sections/heros/hero-4/
-      skip: true  
-    - Hero with social icons: /featured/sections/heros/hero-with-social/
-    skip: true
-      - Hero with social - Design 1: /featured/sections/heros/hero-6/
-      skip: true  
-  - Key Value Tables: /featured/sections/kvt/
-    - Key Value Table 1: /featured/sections/kvt/kvt-1/
-      skip: true
-  - Slides / Presentations: /featured/sections/slides/
-    - Crispy Presentation Theme: /featured/sections/slides/crispy-presentation-theme/
-      skip: true
-    - Giggle Presentation Template: /featured/sections/slides/giggle-presentation-template/
-      skip: true
-    - Simple Dark Slides: /featured/sections/slides/simple-dark-slides/
-      skip: true
-    - Simple Light Slides: /featured/sections/slides/simple-light-slides/
-      skip: true
-    - Streamline Slides: /featured/sections/slides/streamline-slides/
-      skip: true
-    - Rotary Presentation Template: /featured/sections/slides/rotary-presentation-template/
-      skip: true
-- Component Library: /featured/components/
-  - Admonitions: /featured/components/admonitions/
-    skip: true
-  - Bling Components: /featured/components/bling/
-  - Buttons: /featured/components/buttons/
-  - Business Cards: /featured/components/business-cards/
-    - Business Card: /featured/components/business-cards/card-1/
-    skip: true  
-    - Gradient Business Card: /featured/components/business-cards/gradient-card/
-    skip: true  
-    - Midnight Business Card: /featured/components/business-cards/midnight-card/
-    skip: true  
-    - Pattern Business Card: /featured/components/business-cards/pattern-card/
-    skip: true  
-    - Sunset Business Card: /featured/components/business-cards/sunset-card/
-    skip: true  
-  - Language Switcher: /featured/components/language-switcher/
-    skip: true
-  - Subscription Form: /featured/components/subscription-form/
-    skip: true
-  - Code Block: /featured/components/code-block/
-    skip: true
-  - Header / Navbar: /featured/components/headers/
-    - Header: /featured/components/headers/header/
-    skip: true  
-  - Footers: /featured/components/footers/
-    - Footer: /featured/components/footers/footer/
-    skip: true  
-    - Footer 3: /featured/components/footers/footer-3/
-    skip: true  
-  - Modal / Dialog: /featured/components/modals/
-    - Modal 1: /featured/components/modals/modal-1/
-    skip: true  
-    - Modal Cover: /featured/components/modals/modal-cover/
-    skip: true
-  - Quotes: /featured/components/quotes/
-    - Simple Quotes: /featured/components/quotes/simple-quotes/
-    skip: true
-      - Chalice: /featured/components/quotes/simple-quotes/demo-1/
-      skip: true
-      - Rustic: /featured/components/quotes/simple-quotes/demo-2/
-      skip: true
-      - Echo: /featured/components/quotes/simple-quotes/demo-3/
-      skip: true
-      - Onyx: /featured/components/quotes/simple-quotes/demo-4/
-      skip: true
-      - Marengo: /featured/components/quotes/simple-quotes/demo-5/
-      skip: true
-      - Chrome: /featured/components/quotes/simple-quotes/demo-6/
-      skip: true
-      - Dorian: /featured/components/quotes/simple-quotes/demo-7/
-      skip: true
-      - Marengo Hug: /featured/components/quotes/simple-quotes/demo-8/
-      skip: true
-      - Matte: /featured/components/quotes/simple-quotes/demo-9/
-      skip: true
-      - Scorpion: /featured/components/quotes/simple-quotes/demo-10/
-      skip: true
-      - Silver: /featured/components/quotes/simple-quotes/demo-11/
-      skip: true
-      - Storm Cloud: /featured/components/quotes/simple-quotes/demo-12/
-      skip: true
-    - Quotes with author icon: /featured/components/quotes/author-icon-quotes/
-    skip: true
-      - Charcoal: /featured/components/quotes/author-icon-quotes/demo-1/
-      skip: true
-    - Quotes with images: /featured/components/quotes/quotes-with-images/
-    skip: true
-      Electric: /featured/components/quotes/quotes-with-images/demo-1/
-      skip: true
-- Design Elements: /featured/design/
-  - Color Schemes: /featured/cs/
-    - Shades Of Red: /featured/cs/red-shades
-    skip: true
-    - Shades Of Blue: /featured/cs/blue-shades
-    skip: true
-    - Shades Of Green: /featured/cs/green-shades
-    skip: true
-    - Shades Of Orange: /featured/cs/orange-shades
-    skip: true
-    - Shades Of Violet: /featured/cs/violet-shades
-    skip: true
-    - Blog Template CS: /featured/cs/blog-template-cs/
-    skip: true  
-    - Blue Heal CS: /featured/cs/blue-heal-cs/
-    skip: true  
-    - Midnight Rush CS: /featured/cs/midnight-rush-cs/
-    skip: true  
-    - Dark Flame CS: /featured/cs/dark-flame-cs/
-    skip: true  
-    - Forest CS: /featured/cs/forest-cs/
-    skip: true  
-    - Midnight Storm CS: /featured/cs/midnight-storm-cs/
-    skip: true  
-    - Misty Gray CS: /featured/cs/misty-gray-cs/
-    skip: true  
-    - Navy Nebula CS: /featured/cs/navy-nebula-cs/
-    skip: true  
-    - Pretty CS: /featured/cs/pretty-cs/
-    skip: true  
-    - Saturated Sunset CS: /featured/cs/saturated-sunset-cs/
-    skip: true
-    - Pink Tree Cs: /featured/cs/pink-tree-cs/
-    skip: true  
-    - Winter CS: /featured/cs/winter-cs/
-    skip: true  
-    - Little Blue CS: /featured/cs/little-blue-cs/
-    skip: true  
-    - Blog Template 1 CS: /featured/cs/blog-template-1-cs/
-    skip: true
-  - Font Typographies: /featured/fonts/
-    - Arya Typography: /featured/fonts/arya/
-    skip: true
-    - Blaka Typography: /featured/fonts/blaka/
-    skip: true
-    - Lobster Typography: /featured/fonts/lobster/
-    skip: true
-    - Opensans Typography: /featured/fonts/opensans/
-    skip: true
-    - Pragati Narrow Typography: /featured/fonts/pragati-narrow/
-    skip: true
-    - Roboto Mono Typography: /featured/fonts/roboto-mono/
-    skip: true
-    - Roboto Typography: /featured/fonts/roboto/
-    skip: true
-    - Tiro Typography: /featured/fonts/tiro/
-    skip: true
-    - Inter Typography: /featured/fonts/inter/
-    skip: true
-    - Karma Typography: /featured/fonts/karma/
-    skip: true
-    - Khand Typography: /featured/fonts/khand/
-    skip: true
-    - lato Typography: /featured/fonts/lato/
-    skip: true
-
-## Deploy: /deploy/
-
-- Overview: /deploy/
 - Static Hosting:
   - Github pages: /github-pages/
     document: author/how-to/github-pages.ftd
@@ -800,11 +613,106 @@ skip: true
   - Heroku: /heroku/
     document: deploy/heroku.ftd
 
+# Community: /champion-program/
+document: /student-programs/champion.ftd
+
+## Programs: /champion-program/
+document: /student-programs/champion.ftd
+
+- Student Ambassador Program: /ambassador/
+  document: /student-programs/ambassador.ftd
+  skip: true
+- Champion Program: /champion-program/
+  document: /student-programs/champion.ftd
+  - Champions: /champions/
+    document: /student-programs/champions/all-champions.ftd
+    - Ajit Garg: /champions/ajit-garg/
+      document: /student-programs/champions/ajit-garg.ftd
+      skip: true
+    - Ayush Soni: /champions/ayush-soni/
+      document: /student-programs/champions/ayush-soni.ftd
+      skip: true
+    - Govindaraman S: /champions/govindaraman-s/
+      document: /student-programs/champions/govindaraman.ftd
+      skip: true
+    - Aprita Jaiseal: /champions/arpita-jaiswal/
+      document: /student-programs/champions/arpita-jaiswal.ftd
+      skip: true
+    - Rithik Seth:  /champions/rithik-seth/
+      document: /student-programs/champions/rithik-seth.ftd
+      skip: true
+    - Harsh Singh: /champions/harsh-singh/
+      document: /student-programs/champions/harsh-singh.ftd
+      skip: true
+    - Ganesh Salunke: /champions/ganesh-salunke/
+      document: /student-programs/champions/ganesh-salunke.ftd
+      skip: true
+    - Priyanka Yadav: /champions/priyanka-yadav/
+      document: /student-programs/champions/priyanka-yadav.ftd
+      skip: true
+    - Meenu Kumari: /champions/meenu-kumari/
+      document: /student-programs/champions/meenu-kumari.ftd
+      skip: true
+    - Saurabh lohia: /champions/saurabh-lohiya/
+      document: /student-programs/champions/saurabh-lohiya.ftd
+      skip: true
+    
+
+
+- Ambassador Program: /ambassador-program/
+  document: /student-programs/ambassador.ftd
+  - Ambassadors: /ambassadors/
+    document: /student-programs/ambassadors/all-ambassadors.ftd
+    - Ayush Soni: /ambassadors/ayush-soni/
+      document: /student-programs/ambassadors/ayush-soni.ftd
+      skip: true
+    - Govindaraman S: /ambassadors/govindaraman-s/
+      document: /student-programs/ambassadors/govindaraman.ftd
+      skip: true
+
+## Contest: /weekly-contest/
+document: /community/weekly-contest.ftd 
+
+- Weekly Contest: /weekly-contest/
+document: /community/weekly-contest.ftd
+  - Quote contest : /quote-contest/
+  document: /events/weekly-contest/week-1-quote.ftd
+
+## Events: /roadshow/
+document: /community/events/roadshow.ftd
+
+- Fastn Roadshow: /roadshow/
+document: /community/events/roadshow.ftd
+
+  - Indore: /indore/
+  document: /community/events/roadshows/indore.ftd
+  - Bhopal: /bhopal/
+  document: /community/events/roadshows/bhopal.ftd
+  - Lucknow: /lucknow/
+  document: /community/events/roadshows/lucknow.ftd
+  - Ujjain: /ujjain/
+  document: /community/events/roadshows/ujjain.ftd
+  - Hyderabad: /hyderabad/
+  document: /community/events/roadshows/hyderabad.ftd
+  - Ahemedabad: /ahemedabad/
+  document: /community/events/roadshows/ahemedabad.ftd
+  - Jaipur: /jaipur/
+  document: /community/events/roadshows/jaipur.ftd
+  - Mumbai: /mumbai/
+  document: /community/events/roadshows/mumbai.ftd
+  - Nagpur: /nagpur/
+  document: /community/events/roadshows/nagpur.ftd
+  - Delhi: /delhi/
+  document: /community/events/roadshows/delhi.ftd
+  - Kolkata: /kolkata/
+  document: /community/events/roadshows/kolkata.ftd
+  - Bangalore: /bangalore/
+  document: /community/events/roadshows/bangalore.ftd
 
 
 # Blog: /blog/
 
-- Quote contest :/quote-contest/
+- Quote contest : /quote-contest/
   document: /events/weekly-contest/week-1-quote.ftd
 - Tales from ACME Inc - Case Study: /acme/
   document: blog/acme.ftd 
@@ -949,7 +857,8 @@ skip: true
 /student-programs/ambassador-program/ambassadors/ayush-soni/: /ambassadors/ayush-soni/
 /ambassadors-program/: /ambassador-program/
 /champions-program/: /champion-program/
-/learn/: /frontend/learn/
+;;/learn/: /frontend/learn/
 /blog/writer-journey/: /writer/
 /blog/prove-you-wrong/: /prove/
 /blog/intimidation-of-programming/: /intimidation/
+/frontend/why/: /frontend/
