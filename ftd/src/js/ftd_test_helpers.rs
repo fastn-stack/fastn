@@ -88,8 +88,7 @@ fn test_available_code_themes() -> String {
 fn get_dummy_package_data() -> String {
     return indoc::indoc! {
         "
-        window.fastn_package = {};
-        window.fastn_package.name = \"foo\";
+        let __fastn_package_name__ = \"foo\";
         "
     }
     .trim()
@@ -125,6 +124,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
             )
         } else {
             let ssr_body = fastn_js::ssr_with_js_string(
+                "foo",
                 format!("{js_ftd_script}\n{js_document_script}").as_str(),
             );
 

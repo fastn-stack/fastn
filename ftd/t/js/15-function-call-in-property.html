@@ -5,8 +5,7 @@
     
     
     <script>
-        window.fastn_package = {};
-window.fastn_package.name = "foo";
+        let __fastn_package_name__ = "foo";
     </script>
 
     <script src="fastn-js.js"></script>
@@ -27,33 +26,51 @@ window.fastn_package.name = "foo";
         let global = {
 };
 let main = function (parent) {
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
-  parenti0.addEventHandler(fastn_dom.Event.Click, function () {
-    foo__increment({
-      a: global.foo__num,
-    }, parenti0);
-  });
-  parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Em(fastn.formula([global.foo__num], function () {
-    return foo__multiply_by_two({
-      a: global.foo__num,
-    }, parenti0);
-  })), inherited);
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "";
+  try {
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
+    parenti0.addEventHandler(fastn_dom.Event.Click, function () {
+      foo__increment({
+        a: global.foo__num,
+      }, parenti0);
+    });
+    parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Em(fastn.formula([global.foo__num], function () {
+      return foo__multiply_by_two({
+        a: global.foo__num,
+      }, parenti0);
+    })), inherited);
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["main"] = main;
 let foo__increment = function (args) {
-  let __args__ = args;
-  let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
-  if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
-    __args__.a = fastn_utils_val___args___a;
-  };
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = args;
+    let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
+    if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
+      __args__.a = fastn_utils_val___args___a;
+    };
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["foo__increment"] = foo__increment;
 fastn_utils.createNestedObject(global, "foo__num", fastn.mutable(2));
 let foo__multiply_by_two = function (args)
 {
-  let __args__ = args;
-  return (fastn_utils.getter(__args__.a) * 2);
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = args;
+    return (fastn_utils.getter(__args__.a) * 2);
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["foo__multiply_by_two"] = foo__multiply_by_two;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";

@@ -214,9 +214,14 @@ const len = ftd.len;
 
 ftd.local_storage = {
     _get_key(key) {
-        key = key instanceof fastn.mutableClass ? key.get() : key;
-
-        return `${window.fastn_package.name}_${fastn_utils.toSnakeCase(key)}`;
+        if (key instanceof fastn.mutableClass) {
+            key = key.get();
+        }
+    
+        const packageNamePrefix = __fastn_package_name__ ? `${__fastn_package_name__}_` : "";
+        const snakeCaseKey = fastn_utils.toSnakeCase(key);
+    
+        return `${packageNamePrefix}${snakeCaseKey}`;
     },
     set(key, value) {
         key = this._get_key(key);

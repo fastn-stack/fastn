@@ -639,8 +639,7 @@ pub fn replace_markers_2022(
 pub fn get_fastn_package_data(package: &fastn_core::Package) -> String {
     format!(
         indoc::indoc! {"
-        window.fastn_package = {{}};
-        window.fastn_package.name = \"{package_name}\";
+        let __fastn_package_name__ = \"{package_name}\";
     "},
         package_name = package.name
     )

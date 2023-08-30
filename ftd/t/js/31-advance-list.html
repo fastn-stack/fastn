@@ -5,8 +5,7 @@
     
     
     <script>
-        window.fastn_package = {};
-window.fastn_package.name = "foo";
+        let __fastn_package_name__ = "foo";
     </script>
 
     <script src="fastn-js.js"></script>
@@ -42,43 +41,49 @@ window.fastn_package.name = "foo";
         let global = {
 };
 let main = function (parent) {
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "fastn", inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, ftd.nbsp, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "language", inherited);
-  }
-  ]), inherited);
-  let parenti1 = foo__form(parent, inherited);
-  fastn_utils.getter(global.foo__name_scores).forLoop(parent, function (root, item, index) {
-    let rooti0 = foo__show_name_score(root, inherited, {
-      item: item,
-      index: index
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "";
+  try {
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "fastn", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, ftd.nbsp, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "language", inherited);
+    }
+    ]), inherited);
+    let parenti1 = foo__form(parent, inherited);
+    fastn_utils.getter(global.foo__name_scores).forLoop(parent, function (root, item, index) {
+      let rooti0 = foo__show_name_score(root, inherited, {
+        item: item,
+        index: index
+      });
+      return rooti0;
     });
-    return rooti0;
-  });
-  let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti3.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(2)), inherited);
-  parenti3.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Total items are:", inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-    rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, fastn.formula([global.foo__name_scores], function () {
-      return foo__length({
-        a: global.foo__name_scores,
-      }, rooti0);
-    }), inherited);
+    let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti3.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(2)), inherited);
+    parenti3.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Total items are:", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+      rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, fastn.formula([global.foo__name_scores], function () {
+        return foo__length({
+          a: global.foo__name_scores,
+        }, rooti0);
+      }), inherited);
+    }
+    ]), inherited);
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
   }
-  ]), inherited);
 }
 global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__ns", fastn.recordInstance({
@@ -87,11 +92,17 @@ fastn_utils.createNestedObject(global, "foo__ns", fastn.recordInstance({
 }));
 let foo__insert = function (args)
 {
-  let __args__ = {
-    a: fastn.mutableList([]),
-    ...args
-  };
-  return (ftd.append(__args__.a, __args__.v));
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+      a: fastn.mutableList([]),
+      ...args
+    };
+    return (ftd.append(__args__.a, __args__.v));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["foo__insert"] = foo__insert;
 fastn_utils.createNestedObject(global, "foo__name_scores", fastn.mutableList([fastn.recordInstance({
@@ -108,179 +119,209 @@ fastn_utils.createNestedObject(global, "foo__width", fastn.recordInstance({
 }));
 let foo__form = function (parent, inherited, args)
 {
-  let __args__ = {
-    ns: fastn.mutable(fastn_utils.clone(global.foo__ns)),
-  };
-  inherited = fastn.recordInstance({
-    ...__args__,
-    ...inherited.getAllFields(),
-    ...args
-  });
-  __args__ = {
-    ...__args__,
-    ...args
-  };
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Responsive(global.foo__width)), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(40), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.MarginBottom, fastn_dom.Length.Px(40), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.BorderRadius, fastn_dom.Length.Px(5), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-    dark: "#f2f2f2",
-    light: "#f2f2f2"
-  })), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_large"), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Enter name:", inherited);
-    },
-    function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
-      rooti0.addEventHandler(fastn_dom.Event.Input, function () {
-        ftd.set_string({
-          a: __args__.ns.get("name"),
-          v: fastn_utils.getNodeValue(rooti0),
-        }, rooti0);
-      });
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_small"), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "Enter your name here...", inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Enter score:", inherited);
-    },
-    function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
-      rooti0.addEventHandler(fastn_dom.Event.Input, function () {
-        ftd.set_integer({
-          a: __args__.ns.get("score"),
-          v: fastn_utils.getNodeValue(rooti0),
-        }, rooti0);
-      });
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_small"), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "Enter your score here...", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.DefaultTextInputValue, "0", inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    fastn_dom.conditionalDom(root, [
-      __args__.ns.get("name"),
-      __args__.ns.get("score"),
-      ftd.empty
-    ], function () {
-      return (fastn_utils.getter(__args__.ns.get("name")) !== fastn_utils.getter(ftd.empty) && fastn_utils.getter(__args__.ns.get("score")) !== fastn_utils.getter(ftd.empty));
-    }, function (root) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Submit", inherited);
-      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
-        foo__insert({
-          a: global.foo__name_scores,
-          v: fastn_utils.clone(__args__.ns),
-        }, rooti0);
-      });
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.MarginTop, fastn_dom.Length.Px(20), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "white",
-        light: "white"
-      }), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "#4CAF50",
-        light: "#4CAF50"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
-      return rooti0;
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+      ns: fastn.mutable(fastn_utils.clone(global.foo__ns)),
+    };
+    inherited = fastn.recordInstance({
+      ...__args__,
+      ...inherited.getAllFields(),
+      ...args
     });
+    __args__ = {
+      ...__args__,
+      ...args
+    };
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Responsive(global.foo__width)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(40), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.MarginBottom, fastn_dom.Length.Px(40), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.BorderRadius, fastn_dom.Length.Px(5), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+      dark: "#f2f2f2",
+      light: "#f2f2f2"
+    })), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_large"), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Enter name:", inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+        rooti0.addEventHandler(fastn_dom.Event.Input, function () {
+          ftd.set_string({
+            a: __args__.ns.get("name"),
+            v: fastn_utils.getNodeValue(rooti0),
+          }, rooti0);
+        });
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_small"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "Enter your name here...", inherited);
+      }
+      ]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Enter score:", inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+        rooti0.addEventHandler(fastn_dom.Event.Input, function () {
+          ftd.set_integer({
+            a: __args__.ns.get("score"),
+            v: fastn_utils.getNodeValue(rooti0),
+          }, rooti0);
+        });
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_small"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "Enter your score here...", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.DefaultTextInputValue, "0", inherited);
+      }
+      ]), inherited);
+    },
+    function (root, inherited) {
+      fastn_dom.conditionalDom(root, [
+        __args__.ns.get("name"),
+        __args__.ns.get("score"),
+        ftd.empty
+      ], function () {
+        return (fastn_utils.getter(__args__.ns.get("name")) !== fastn_utils.getter(ftd.empty) && fastn_utils.getter(__args__.ns.get("score")) !== fastn_utils.getter(ftd.empty));
+      }, function (root) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Submit", inherited);
+        rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+          foo__insert({
+            a: global.foo__name_scores,
+            v: fastn_utils.clone(__args__.ns),
+          }, rooti0);
+        });
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.MarginTop, fastn_dom.Length.Px(20), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+          dark: "white",
+          light: "white"
+        }), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "#4CAF50",
+          light: "#4CAF50"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
+        return rooti0;
+      });
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
   }
-  ]), inherited);
-  return parenti0;
 }
 global["foo__form"] = foo__form;
 let foo__delete = function (args) {
-  let __args__ = {
-    a: fastn.mutableList([]),
-    ...args
-  };
-  return (ftd.delete_at(__args__.a, __args__.i));
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+      a: fastn.mutableList([]),
+      ...args
+    };
+    return (ftd.delete_at(__args__.a, __args__.i));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["foo__delete"] = foo__delete;
 let foo__plus_one = function (args) {
-  let __args__ = args;
-  return (fastn_utils.getter(__args__.a) + 1);
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = args;
+    return (fastn_utils.getter(__args__.a) + 1);
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["foo__plus_one"] = foo__plus_one;
 let foo__show_name_score = function (parent, inherited, args)
 {
-  let __args__ = {
-  };
-  inherited = fastn.recordInstance({
-    ...__args__,
-    ...inherited.getAllFields(),
-    ...args
-  });
-  __args__ = {
-    ...__args__,
-    ...args
-  };
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Responsive(global.foo__width)), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.MarginBottom, fastn_dom.Length.Px(10), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-    dark: "yellow",
-    light: "yellow"
-  })), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween, inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(5)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-      rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, fastn.formula([__args__.index], function () {
-        return foo__plus_one({
-          a: __args__.index,
-        }, rooti0);
-      }), inherited);
-      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
-        foo__delete({
-          a: global.foo__name_scores,
-          i: __args__.index,
-        }, rooti0);
-      });
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+    };
+    inherited = fastn.recordInstance({
+      ...__args__,
+      ...inherited.getAllFields(),
+      ...args
+    });
+    __args__ = {
+      ...__args__,
+      ...args
+    };
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Responsive(global.foo__width)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.MarginBottom, fastn_dom.Length.Px(10), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+      dark: "yellow",
+      light: "yellow"
+    })), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(5)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+        rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, fastn.formula([__args__.index], function () {
+          return foo__plus_one({
+            a: __args__.index,
+          }, rooti0);
+        }), inherited);
+        rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+          foo__delete({
+            a: global.foo__name_scores,
+            i: __args__.index,
+          }, rooti0);
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.item.get("name"), inherited);
+      }
+      ]), inherited);
     },
     function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.item.get("name"), inherited);
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+      rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, __args__.item.get("score"), inherited);
     }
     ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-    rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, __args__.item.get("score"), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
   }
-  ]), inherited);
-  return parenti0;
 }
 global["foo__show_name_score"] = foo__show_name_score;
 let foo__length = function (args)
 {
-  let __args__ = {
-    a: fastn.mutableList([]),
-    ...args
-  };
-  return (ftd.len(__args__.a));
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+      a: fastn.mutableList([]),
+      ...args
+    };
+    return (ftd.len(__args__.a));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["foo__length"] = foo__length;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";

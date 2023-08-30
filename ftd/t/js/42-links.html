@@ -5,8 +5,7 @@
     
     
     <script>
-        window.fastn_package = {};
-window.fastn_package.name = "foo";
+        let __fastn_package_name__ = "foo";
     </script>
 
     <script src="fastn-js.js"></script>
@@ -26,34 +25,40 @@ window.fastn_package.name = "foo";
         let global = {
 };
 let main = function (parent) {
-  fastn_dom.conditionalDom(parent, [
-    ftd.device
-  ], function () {
-    return (fastn_utils.getter(ftd.device) == "mobile");
-  }, function (root) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from mobile", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "yellow",
-      light: "yellow"
-    })), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Link, "fastn.com", inherited);
-    return rooti0;
-  });
-  fastn_dom.conditionalDom(parent, [
-    ftd.device
-  ], function () {
-    return (fastn_utils.getter(ftd.device) == "desktop");
-  }, function (root) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "yellow",
-      light: "yellow"
-    })), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Link, "fastn.com", inherited);
-    return rooti0;
-  });
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "";
+  try {
+    fastn_dom.conditionalDom(parent, [
+      ftd.device
+    ], function () {
+      return (fastn_utils.getter(ftd.device) == "mobile");
+    }, function (root) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from mobile", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+        dark: "yellow",
+        light: "yellow"
+      })), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Link, "fastn.com", inherited);
+      return rooti0;
+    });
+    fastn_dom.conditionalDom(parent, [
+      ftd.device
+    ], function () {
+      return (fastn_utils.getter(ftd.device) == "desktop");
+    }, function (root) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+        dark: "yellow",
+        light: "yellow"
+      })), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Link, "fastn.com", inherited);
+      return rooti0;
+    });
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["main"] = main;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";

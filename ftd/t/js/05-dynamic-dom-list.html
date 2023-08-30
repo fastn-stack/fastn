@@ -5,8 +5,7 @@
     
     
     <script>
-        window.fastn_package = {};
-window.fastn_package.name = "foo";
+        let __fastn_package_name__ = "foo";
     </script>
 
     <script src="fastn-js.js"></script>
@@ -26,87 +25,117 @@ window.fastn_package.name = "foo";
         let global = {
 };
 let main = function (parent) {
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Integer);
-  parenti0.setProperty(fastn_dom.PropertyKind.IntegerValue, global.foo__value, inherited);
-  let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "Click to change value", inherited);
-  parenti1.addEventHandler(fastn_dom.Event.Click, function () {
-    foo__clamp({
-      a: global.foo__value,
-    }, parenti1);
-  });
-  let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Click to add one", inherited);
-  parenti2.addEventHandler(fastn_dom.Event.Click, function () {
-    foo__append_integer({
-      a: global.foo__counters,
-      v: 1,
-    }, parenti2);
-  });
-  fastn_utils.getter(global.foo__counters).forLoop(parent, function (root, item, index) {
-    return fastn_dom.conditionalDom(parent, [
-      index,
-      global.foo__value
-    ], function () {
-      return (fastn_utils.getter(index) % 2 == fastn_utils.getter(global.foo__value));
-    }, function (root) {
-      let rooti0 = foo__counter_list(root, inherited, {
-        counter: item
-      });
-      return rooti0;
-    }).getParent();
-  });
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "";
+  try {
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Integer);
+    parenti0.setProperty(fastn_dom.PropertyKind.IntegerValue, global.foo__value, inherited);
+    let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "Click to change value", inherited);
+    parenti1.addEventHandler(fastn_dom.Event.Click, function () {
+      foo__clamp({
+        a: global.foo__value,
+      }, parenti1);
+    });
+    let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Click to add one", inherited);
+    parenti2.addEventHandler(fastn_dom.Event.Click, function () {
+      foo__append_integer({
+        a: global.foo__counters,
+        v: 1,
+      }, parenti2);
+    });
+    fastn_utils.getter(global.foo__counters).forLoop(parent, function (root, item, index) {
+      return fastn_dom.conditionalDom(parent, [
+        index,
+        global.foo__value
+      ], function () {
+        return (fastn_utils.getter(index) % 2 == fastn_utils.getter(global.foo__value));
+      }, function (root) {
+        let rooti0 = foo__counter_list(root, inherited, {
+          counter: item
+        });
+        return rooti0;
+      }).getParent();
+    });
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));
 let foo__clamp = function (args)
 {
-  let __args__ = args;
-  let fastn_utils_val___args___a = fastn_utils.clone((fastn_utils.getter(__args__.a) + 1) % 2);
-  if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
-    __args__.a = fastn_utils_val___args___a;
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = args;
+    let fastn_utils_val___args___a = fastn_utils.clone((fastn_utils.getter(__args__.a) + 1) % 2);
+    if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
+      __args__.a = fastn_utils_val___args___a;
+    }
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 global["foo__clamp"] = foo__clamp;
 let foo__append_integer = function (args) {
-  let __args__ = {
-    a: fastn.mutableList([]),
-    ...args
-  };
-  return (ftd.append(__args__.a, __args__.v));
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+      a: fastn.mutableList([]),
+      ...args
+    };
+    return (ftd.append(__args__.a, __args__.v));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["foo__append_integer"] = foo__append_integer;
 fastn_utils.createNestedObject(global, "foo__counters", fastn.mutableList([]));
 let foo__increment = function (args)
 {
-  let __args__ = args;
-  let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
-  if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
-    __args__.a = fastn_utils_val___args___a;
-  };
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = args;
+    let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
+    if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
+      __args__.a = fastn_utils_val___args___a;
+    };
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["foo__increment"] = foo__increment;
 let foo__counter_list = function (parent, inherited, args)
 {
-  let __args__ = {
-  };
-  inherited = fastn.recordInstance({
-    ...__args__,
-    ...inherited.getAllFields(),
-    ...args
-  });
-  __args__ = {
-    ...__args__,
-    ...args
-  };
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Integer);
-  parenti0.setProperty(fastn_dom.PropertyKind.IntegerValue, __args__.counter, inherited);
-  parenti0.addEventHandler(fastn_dom.Event.Click, function () {
-    foo__increment({
-      a: __args__.counter,
-    }, parenti0);
-  });
-  return parenti0;
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+    };
+    inherited = fastn.recordInstance({
+      ...__args__,
+      ...inherited.getAllFields(),
+      ...args
+    });
+    __args__ = {
+      ...__args__,
+      ...args
+    };
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Integer);
+    parenti0.setProperty(fastn_dom.PropertyKind.IntegerValue, __args__.counter, inherited);
+    parenti0.addEventHandler(fastn_dom.Event.Click, function () {
+      foo__increment({
+        a: __args__.counter,
+      }, parenti0);
+    });
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["foo__counter_list"] = foo__counter_list;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";

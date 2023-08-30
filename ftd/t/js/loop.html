@@ -5,8 +5,7 @@
     
     
     <script>
-        window.fastn_package = {};
-window.fastn_package.name = "foo";
+        let __fastn_package_name__ = "foo";
     </script>
 
     <script src="fastn-js.js"></script>
@@ -25,11 +24,17 @@ window.fastn_package.name = "foo";
         let global = {
 };
 let main = function (parent) {
-  fastn_utils.getter(global.foo__names).forLoop(parent, function (root, item, index) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
-    return rooti0;
-  });
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "";
+  try {
+    fastn_utils.getter(global.foo__names).forLoop(parent, function (root, item, index) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
+      return rooti0;
+    });
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__names", fastn.mutableList(["Arpita",

@@ -5,8 +5,7 @@
     
     
     <script>
-        window.fastn_package = {};
-window.fastn_package.name = "foo";
+        let __fastn_package_name__ = "foo";
     </script>
 
     <script src="fastn-js.js"></script>
@@ -245,1144 +244,1150 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
         let global = {
 };
 let main = function (parent) {
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(global.foo__ylg), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "px Padding", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "percent Padding", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Percent(20), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "rem Padding", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Rem(1), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vh Padding", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Vh(2), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vw Padding", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Vw(3), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vmin Padding", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Vmin(3), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vmax Padding", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Vmax(3), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "calc Padding", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Calc("100% - 95%"), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Fill-container height", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hug Content Height", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.HugContent, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "px Height", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(30)), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "percent Height", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(20)), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "rem Height", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Rem(1)), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vh Height", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vh(5)), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vw Height", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vw(10)), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vmin Height", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vmin(10)), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vmax Height", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vmax(10)), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "calc Height", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Calc("100% - 90%")), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Id Test", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Id, "id-123", inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Solid Border", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Double Border", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderLeftStyle, fastn_dom.BorderStyle.Double, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Dashed Border", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderRightStyle, fastn_dom.BorderStyle.Dashed, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Dotted Border", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderTopStyle, fastn_dom.BorderStyle.Dotted, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Groove Border", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomStyle, fastn_dom.BorderStyle.Groove, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Ridge Border", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Ridge, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Left Border Width", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderLeftWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Right Border Width", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderRightWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Top Border Width", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderTopWidth, fastn_dom.Length.Px(6), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Bottom Border Width", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomWidth, fastn_dom.Length.Px(8), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Border Radius", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderRadius, fastn_dom.Length.Px(15), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Top Left Border Radius", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderTopLeftRadius, fastn_dom.Length.Px(15), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Top Right Border Radius", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderTopRightRadius, fastn_dom.Length.Px(15), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Bottom Left Border Radius", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomLeftRadius, fastn_dom.Length.Px(15), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Bottom Right Border Radius", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomRightRadius, fastn_dom.Length.Px(15), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Border Color", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Border Left Color", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderLeftColor, global.foo__red_yellow, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Border Right Color", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderRightColor, global.foo__red_yellow, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Border Top Color", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderTopColor, global.foo__red_yellow, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Border Bottom Color", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomColor, global.foo__red_yellow, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Red Color", inherited);
-    rooti0.addEventHandler(fastn_dom.Event.Click, function () {
-      foo__increment({
-        a: global.foo__value,
-      }, rooti0);
-    });
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([global.foo__og,
-    global.foo__value,
-    global.foo__bp,
-    global.foo__value], function () {
-      if (function () {
-        return (fastn_utils.getter(global.foo__value) % 3 == 0);
-      }()) {
-        return global.foo__og;
-      } else if (function () {
-        return (fastn_utils.getter(global.foo__value) % 3 == 1);
-      }()) {
-        return global.foo__bp;
-      } else {
-        return fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        });
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "";
+  try {
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(global.foo__ylg), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "px Padding", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "percent Padding", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Percent(20), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "rem Padding", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Rem(1), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vh Padding", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Vh(2), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vw Padding", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Vw(3), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vmin Padding", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Vmin(3), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vmax Padding", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Vmax(3), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "calc Padding", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Calc("100% - 95%"), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Fill-container height", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hug Content Height", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.HugContent, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "px Height", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(30)), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "percent Height", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(20)), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "rem Height", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Rem(1)), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vh Height", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vh(5)), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vw Height", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vw(10)), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vmin Height", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vmin(10)), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "vmax Height", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vmax(10)), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "calc Height", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Calc("100% - 90%")), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Id Test", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Id, "id-123", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Solid Border", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Double Border", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderLeftStyle, fastn_dom.BorderStyle.Double, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Dashed Border", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderRightStyle, fastn_dom.BorderStyle.Dashed, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Dotted Border", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderTopStyle, fastn_dom.BorderStyle.Dotted, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Groove Border", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomStyle, fastn_dom.BorderStyle.Groove, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Ridge Border", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Ridge, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Left Border Width", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderLeftWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Right Border Width", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderRightWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Top Border Width", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderTopWidth, fastn_dom.Length.Px(6), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Bottom Border Width", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomWidth, fastn_dom.Length.Px(8), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Border Radius", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderRadius, fastn_dom.Length.Px(15), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Top Left Border Radius", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderTopLeftRadius, fastn_dom.Length.Px(15), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Top Right Border Radius", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderTopRightRadius, fastn_dom.Length.Px(15), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Bottom Left Border Radius", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomLeftRadius, fastn_dom.Length.Px(15), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Bottom Right Border Radius", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomRightRadius, fastn_dom.Length.Px(15), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Border Color", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Border Left Color", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderLeftColor, global.foo__red_yellow, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Border Right Color", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderRightColor, global.foo__red_yellow, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Border Top Color", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderTopColor, global.foo__red_yellow, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Border Bottom Color", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomColor, global.foo__red_yellow, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Red Color", inherited);
+      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+        foo__increment({
+          a: global.foo__value,
+        }, rooti0);
+      });
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([global.foo__og,
+      global.foo__value,
+      global.foo__bp,
+      global.foo__value], function () {
+        if (function () {
+          return (fastn_utils.getter(global.foo__value) % 3 == 0);
+        }()) {
+          return global.foo__og;
+        } else if (function () {
+          return (fastn_utils.getter(global.foo__value) % 3 == 1);
+        }()) {
+          return global.foo__bp;
+        } else {
+          return fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          });
+        }
       }
+      ), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Role", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, global.foo__rtype, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Padding Horizontal", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingHorizontal, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Padding Vertical", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Padding Left", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingLeft, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Padding Right", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingRight, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Padding Top", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingTop, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Padding Bottom", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingBottom, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Margin Horizontal", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MarginHorizontal, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Margin Vertical", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Margin Left", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MarginLeft, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Margin Right", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MarginRight, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Margin Top", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MarginTop, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Margin Bottom", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MarginBottom, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
     }
-    ), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Role", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, global.foo__rtype, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Padding Horizontal", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingHorizontal, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Padding Vertical", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Padding Left", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingLeft, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Padding Right", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingRight, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Padding Top", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingTop, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Padding Bottom", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingBottom, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Margin Horizontal", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.MarginHorizontal, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Margin Vertical", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Margin Left", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.MarginLeft, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Margin Right", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.MarginRight, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Margin Top", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.MarginTop, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Margin Bottom", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.MarginBottom, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  }
-  ]), inherited);
-  let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti1.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(180)), inherited);
-  parenti1.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "z-index = 3", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_blue, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(20), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(50), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.ZIndex, 3, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "deepskyblue",
-      light: "deepskyblue"
+    ]), inherited);
+    let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti1.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(180)), inherited);
+    parenti1.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "z-index = 3", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_blue, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(20), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(50), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.ZIndex, 3, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+        dark: "deepskyblue",
+        light: "deepskyblue"
+      })), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "z-index = 2", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_blue, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Bottom, fastn_dom.Length.Px(70), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Right, fastn_dom.Length.Px(60), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.ZIndex, 2, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+        dark: "deepskyblue",
+        light: "deepskyblue"
+      })), inherited);
+    }
+    ]), inherited);
+    let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.OverflowY, fastn_dom.Overflow.Scroll, inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(50)), inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "The blue planet below is sticky", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Blue planet", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(120)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(0), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(50), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Sticky, true, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "black",
+        light: "black"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+        dark: "deepskyblue",
+        light: "deepskyblue"
+      })), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Far out in the uncharted backwaters of the unfashionable end of the western\nspiral arm of the Galaxy lies a small unregarded blue planet.\nOrbiting this at a distance of roughly ninety-two million miles is an\nutterly insignificant little planet whose ape-descended life\nforms are so amazingly primitive that they still think fastn code written\nby humans is still a pretty neat idea of escalating knowledge throughout the\nuniverse.", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+    }
+    ]), inherited);
+    let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti3.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(50), inherited);
+    parenti3.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+      dark: "red",
+      light: "red"
     })), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "z-index = 2", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_blue, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Bottom, fastn_dom.Length.Px(70), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Right, fastn_dom.Length.Px(60), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.ZIndex, 2, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "deepskyblue",
-      light: "deepskyblue"
-    })), inherited);
-  }
-  ]), inherited);
-  let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
-  parenti2.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-  parenti2.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-  parenti2.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-  parenti2.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  parenti2.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-  parenti2.setProperty(fastn_dom.PropertyKind.OverflowY, fastn_dom.Overflow.Scroll, inherited);
-  parenti2.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(50)), inherited);
-  parenti2.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "The blue planet below is sticky", inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Blue planet", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(120)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(0), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(50), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Sticky, true, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "black",
-      light: "black"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "deepskyblue",
-      light: "deepskyblue"
-    })), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Far out in the uncharted backwaters of the unfashionable end of the western\nspiral arm of the Galaxy lies a small unregarded blue planet.\nOrbiting this at a distance of roughly ninety-two million miles is an\nutterly insignificant little planet whose ape-descended life\nforms are so amazingly primitive that they still think fastn code written\nby humans is still a pretty neat idea of escalating knowledge throughout the\nuniverse.", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-  }
-  ]), inherited);
-  let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti3.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(50), inherited);
-  parenti3.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-    dark: "red",
-    light: "red"
-  })), inherited);
-  parenti3.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceEvenly, inherited);
-  parenti3.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow = Visible\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Overflow, fastn_dom.Overflow.Visible, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow = Scroll\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Overflow, fastn_dom.Overflow.Scroll, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow = Auto\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Overflow, fastn_dom.Overflow.Auto, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow = Hidden\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Overflow, fastn_dom.Overflow.Hidden, inherited);
-  }
-  ]), inherited);
-  let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti4.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti4.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(50), inherited);
-  parenti4.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-    dark: "green",
-    light: "green"
-  })), inherited);
-  parenti4.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceEvenly, inherited);
-  parenti4.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-x = Visible\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.OverflowX, fastn_dom.Overflow.Visible, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-x = Scroll\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.OverflowX, fastn_dom.Overflow.Scroll, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-x = Auto\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.OverflowX, fastn_dom.Overflow.Auto, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-x = Hidden\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.OverflowX, fastn_dom.Overflow.Hidden, inherited);
-  }
-  ]), inherited);
-  let parenti5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti5.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti5.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(50), inherited);
-  parenti5.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-    dark: "deepskyblue",
-    light: "deepskyblue"
-  })), inherited);
-  parenti5.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceEvenly, inherited);
-  parenti5.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-y = Visible\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.OverflowY, fastn_dom.Overflow.Visible, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-y = Scroll\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.OverflowY, fastn_dom.Overflow.Scroll, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-y = Auto\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.OverflowY, fastn_dom.Overflow.Auto, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-y = Hidden\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.OverflowY, fastn_dom.Overflow.Hidden, inherited);
-  }
-  ]), inherited);
-  let parenti6 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti6.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti6.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
-  parenti6.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
-  parenti6.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Space Between", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, global.foo__rtype, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    parenti3.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceEvenly, inherited);
+    parenti3.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "One", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow = Visible\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Overflow, fastn_dom.Overflow.Visible, inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Two", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow = Scroll\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Overflow, fastn_dom.Overflow.Scroll, inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Three", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow = Auto\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Space Evenly", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, global.foo__rtype, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceEvenly, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "One", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Overflow, fastn_dom.Overflow.Auto, inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Two", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow = Hidden\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    },
-    function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Three", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Overflow, fastn_dom.Overflow.Hidden, inherited);
     }
     ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Space Around", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, global.foo__rtype, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "One", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    },
-    function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Two", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    },
-    function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Three", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    }
-    ]), inherited);
-  }
-  ]), inherited);
-  let parenti7 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti7.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-  parenti7.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5), inherited);
-  parenti7.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-  parenti7.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  parenti7.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-  parenti7.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-    dark: "blue",
-    light: "blue"
-  }), inherited);
-  parenti7.setProperty(fastn_dom.PropertyKind.Wrap, true, inherited);
-  parenti7.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
-  parenti7.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "One", inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Two", inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Three", inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Four", inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Five", inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Six", inherited);
-  }
-  ]), inherited);
-  let parenti8 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti8.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti8.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-    dark: "#963770",
-    light: "#963770"
-  })), inherited);
-  parenti8.setProperty(fastn_dom.PropertyKind.Opacity, 0.6, inherited);
-  parenti8.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "white",
-      light: "white"
-    }), inherited);
-  }
-  ]), inherited);
-  let parenti9 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti9.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti9.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-  parenti9.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(5), inherited);
-  parenti9.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
-  parenti9.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show pointer cursor on hover", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.Pointer, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show progress cursor on hover", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.Progress, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show zoom-in cursor on hover", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.ZoomIn, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show help cursor on hover", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.Help, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show cross-hair cursor on hover", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.CrossHair, inherited);
-  }
-  ]), inherited);
-  let parenti10 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti10.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(50)), inherited);
-  parenti10.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(10), inherited);
-  parenti10.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
-  parenti10.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Resize, fastn_dom.Resize.Both, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This row is resizable both directions", inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Resize, fastn_dom.Resize.Horizontal, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This row is resizable only horizontally", inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Resize, fastn_dom.Resize.Vertical, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This row is resizable only vertically", inherited);
-    }
-    ]), inherited);
-  }
-  ]), inherited);
-  let parenti11 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti11.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti11.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
-  parenti11.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
-  parenti11.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.MaxHeight, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(50)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.MaxWidth, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Max Height of this container is 50px.\nIf you add more text than it can accommodate, then it will overflow.", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.MinHeight, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Min Height of this container is 100px", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    },
-    function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "If more text are added inside this container, the text might overflow\nif it can't be accommodated.", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.MaxWidth, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Max Width of this container is 300px.\nIf you add more text than it can accommodate, then it will overflow.", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.MinWidth, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Min Width of this container is 400px", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    }
-    ]), inherited);
-  }
-  ]), inherited);
-  let parenti12 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti12.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
-  parenti12.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text2, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.WhiteSpace, fastn_dom.WhiteSpace.Normal, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text2, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.WhiteSpace, fastn_dom.WhiteSpace.NoWrap, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text2, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.WhiteSpace, fastn_dom.WhiteSpace.Pre, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text2, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.WhiteSpace, fastn_dom.WhiteSpace.BreakSpaces, inherited);
-  }
-  ]), inherited);
-  let parenti13 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti13.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-  parenti13.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Start", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.Start, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, global.foo__red_yellow, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Center", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.Center, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, global.foo__red_yellow, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "End", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.End, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, global.foo__red_yellow, inherited);
-  }
-  ]), inherited);
-  let parenti14 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti14.setProperty(fastn_dom.PropertyKind.StringValue, "This is text with class", inherited);
-  parenti14.setProperty(fastn_dom.PropertyKind.Classes, fastn.mutableList(["a",
-  "b",
-  "c",
-  "d"]), inherited);
-  parenti14.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-    dark: "red",
-    light: "red"
-  }), inherited);
-  let parenti15 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti15.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(600)), inherited);
-  parenti15.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
-  parenti15.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(10), inherited);
-  parenti15.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-  parenti15.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  parenti15.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-  parenti15.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-    rooti0.setProperty(fastn_dom.PropertyKind.Id, "c1", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+    let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti4.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti4.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(50), inherited);
+    parenti4.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
       dark: "green",
       light: "green"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    })), inherited);
+    parenti4.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceEvenly, inherited);
+    parenti4.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Inside Inner Container", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Anchor, fastn_dom.Anchor.Id("c1"), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(0), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(0), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "green",
-        light: "green"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-x = Visible\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.OverflowX, fastn_dom.Overflow.Visible, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-x = Scroll\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.OverflowX, fastn_dom.Overflow.Scroll, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-x = Auto\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.OverflowX, fastn_dom.Overflow.Auto, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-x = Hidden\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.OverflowX, fastn_dom.Overflow.Hidden, inherited);
     }
     ]), inherited);
-  }
-  ]), inherited);
-  let parenti16 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti16.setProperty(fastn_dom.PropertyKind.Id, "c2", inherited);
-  parenti16.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(600)), inherited);
-  parenti16.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
-  parenti16.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(10), inherited);
-  parenti16.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-  parenti16.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  parenti16.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-  parenti16.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+    let parenti5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti5.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti5.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(50), inherited);
+    parenti5.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+      dark: "deepskyblue",
+      light: "deepskyblue"
+    })), inherited);
+    parenti5.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceEvenly, inherited);
+    parenti5.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-y = Visible\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.OverflowY, fastn_dom.Overflow.Visible, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-y = Scroll\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.OverflowY, fastn_dom.Overflow.Scroll, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-y = Auto\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.OverflowY, fastn_dom.Overflow.Auto, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "overflow-y = Hidden\n\nThe quick, brown fox jumps over a lazy dog.\nDJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(150)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.OverflowY, fastn_dom.Overflow.Hidden, inherited);
+    }
+    ]), inherited);
+    let parenti6 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti6.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti6.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
+    parenti6.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
+    parenti6.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Space Between", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, global.foo__rtype, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "One", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Two", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Three", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      }
+      ]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Space Evenly", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, global.foo__rtype, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceEvenly, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "One", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Two", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Three", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      }
+      ]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Space Around", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, global.foo__rtype, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "One", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Two", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Three", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      }
+      ]), inherited);
+    }
+    ]), inherited);
+    let parenti7 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti7.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+    parenti7.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5), inherited);
+    parenti7.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+    parenti7.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    parenti7.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+    parenti7.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
       dark: "blue",
       light: "blue"
     }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    parenti7.setProperty(fastn_dom.PropertyKind.Wrap, true, inherited);
+    parenti7.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
+    parenti7.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Inside Outer Container", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Anchor, fastn_dom.Anchor.Id("c2"), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(0), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(0), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "One", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Two", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Three", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Four", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Five", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Six", inherited);
+    }
+    ]), inherited);
+    let parenti8 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti8.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti8.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+      dark: "#963770",
+      light: "#963770"
+    })), inherited);
+    parenti8.setProperty(fastn_dom.PropertyKind.Opacity, 0.6, inherited);
+    parenti8.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "white",
+        light: "white"
+      }), inherited);
+    }
+    ]), inherited);
+    let parenti9 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti9.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti9.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+    parenti9.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(5), inherited);
+    parenti9.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
+    parenti9.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show pointer cursor on hover", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.Pointer, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show progress cursor on hover", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.Progress, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show zoom-in cursor on hover", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.ZoomIn, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show help cursor on hover", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.Help, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show cross-hair cursor on hover", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.CrossHair, inherited);
+    }
+    ]), inherited);
+    let parenti10 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti10.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(50)), inherited);
+    parenti10.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(10), inherited);
+    parenti10.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
+    parenti10.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Resize, fastn_dom.Resize.Both, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This row is resizable both directions", inherited);
+      }
+      ]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Resize, fastn_dom.Resize.Horizontal, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This row is resizable only horizontally", inherited);
+      }
+      ]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Resize, fastn_dom.Resize.Vertical, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This row is resizable only vertically", inherited);
+      }
+      ]), inherited);
+    }
+    ]), inherited);
+    let parenti11 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti11.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti11.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+    parenti11.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
+    parenti11.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MaxHeight, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(50)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MaxWidth, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Max Height of this container is 50px.\nIf you add more text than it can accommodate, then it will overflow.", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      }
+      ]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MinHeight, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Min Height of this container is 100px", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "If more text are added inside this container, the text might overflow\nif it can't be accommodated.", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      }
+      ]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MaxWidth, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Max Width of this container is 300px.\nIf you add more text than it can accommodate, then it will overflow.", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      }
+      ]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MinWidth, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Min Width of this container is 400px", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      }
+      ]), inherited);
+    }
+    ]), inherited);
+    let parenti12 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti12.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
+    parenti12.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text2, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.WhiteSpace, fastn_dom.WhiteSpace.Normal, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text2, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.WhiteSpace, fastn_dom.WhiteSpace.NoWrap, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text2, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.WhiteSpace, fastn_dom.WhiteSpace.Pre, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text2, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.WhiteSpace, fastn_dom.WhiteSpace.BreakSpaces, inherited);
+    }
+    ]), inherited);
+    let parenti13 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti13.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+    parenti13.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Start", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.Start, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, global.foo__red_yellow, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Center", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.Center, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, global.foo__red_yellow, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "End", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.End, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, global.foo__red_yellow, inherited);
+    }
+    ]), inherited);
+    let parenti14 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti14.setProperty(fastn_dom.PropertyKind.StringValue, "This is text with class", inherited);
+    parenti14.setProperty(fastn_dom.PropertyKind.Classes, fastn.mutableList(["a",
+    "b",
+    "c",
+    "d"]), inherited);
+    parenti14.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+      dark: "red",
+      light: "red"
+    }), inherited);
+    let parenti15 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti15.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(600)), inherited);
+    parenti15.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
+    parenti15.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(10), inherited);
+    parenti15.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+    parenti15.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    parenti15.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+    parenti15.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.Id, "c1", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+        dark: "green",
+        light: "green"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Inside Inner Container", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Anchor, fastn_dom.Anchor.Id("c1"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(0), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(0), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+          dark: "green",
+          light: "green"
+        }), inherited);
+      }
+      ]), inherited);
+    }
+    ]), inherited);
+    let parenti16 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti16.setProperty(fastn_dom.PropertyKind.Id, "c2", inherited);
+    parenti16.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(600)), inherited);
+    parenti16.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
+    parenti16.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(10), inherited);
+    parenti16.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+    parenti16.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    parenti16.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+    parenti16.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+        dark: "blue",
+        light: "blue"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Inside Outer Container", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Anchor, fastn_dom.Anchor.Id("c2"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(0), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(0), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+          dark: "blue",
+          light: "blue"
+        }), inherited);
+      }
+      ]), inherited);
+    }
+    ]), inherited);
+    let parenti17 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti17.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti17.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween, inherited);
+    parenti17.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+      rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, 32, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Decimal);
+      rooti0.setProperty(fastn_dom.PropertyKind.DecimalValue, 1.123, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Boolean);
+      rooti0.setProperty(fastn_dom.PropertyKind.BooleanValue, true, inherited);
+    }
+    ]), inherited);
+    let parenti18 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti18.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti18.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+      dark: "blue:",
+      light: "blue:"
+    })), inherited);
+    parenti18.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "These are stylized values", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "red",
+        light: "red"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.TextStyle, fastn.mutableList([fastn_dom.TextStyle.Italic,
+      fastn_dom.TextStyle.Regular]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+      rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, 1234, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "red",
+        light: "red"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.TextStyle, fastn.mutableList([fastn_dom.TextStyle.Bold]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Decimal);
+      rooti0.setProperty(fastn_dom.PropertyKind.DecimalValue, 3.142, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "red",
+        light: "red"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.TextStyle, fastn.mutableList([fastn_dom.TextStyle.Underline,
+      fastn_dom.TextStyle.Italic]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Boolean);
+      rooti0.setProperty(fastn_dom.PropertyKind.BooleanValue, true, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "red",
+        light: "red"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.TextStyle, fastn.mutableList([fastn_dom.TextStyle.Heavy]), inherited);
+    }
+    ]), inherited);
+    let parenti19 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti19.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti19.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
+    parenti19.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello World", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Region, fastn_dom.Region.H1, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
         dark: "blue",
         light: "blue"
       }), inherited);
     }
     ]), inherited);
-  }
-  ]), inherited);
-  let parenti17 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti17.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti17.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween, inherited);
-  parenti17.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-    rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, 32, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Decimal);
-    rooti0.setProperty(fastn_dom.PropertyKind.DecimalValue, 1.123, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Boolean);
-    rooti0.setProperty(fastn_dom.PropertyKind.BooleanValue, true, inherited);
-  }
-  ]), inherited);
-  let parenti18 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti18.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti18.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-    dark: "blue:",
-    light: "blue:"
-  })), inherited);
-  parenti18.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "These are stylized values", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "red",
-      light: "red"
+    let parenti20 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti20.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
+    parenti20.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
+    parenti20.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+    parenti20.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
+    parenti20.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
+    parenti20.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+      dark: "green",
+      light: "green"
     }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.TextStyle, fastn.mutableList([fastn_dom.TextStyle.Italic,
-    fastn_dom.TextStyle.Regular]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-    rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, 1234, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "red",
-      light: "red"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.TextStyle, fastn.mutableList([fastn_dom.TextStyle.Bold]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Decimal);
-    rooti0.setProperty(fastn_dom.PropertyKind.DecimalValue, 3.142, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "red",
-      light: "red"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.TextStyle, fastn.mutableList([fastn_dom.TextStyle.Underline,
-    fastn_dom.TextStyle.Italic]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Boolean);
-    rooti0.setProperty(fastn_dom.PropertyKind.BooleanValue, true, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "red",
-      light: "red"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.TextStyle, fastn.mutableList([fastn_dom.TextStyle.Heavy]), inherited);
+    parenti20.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+    parenti20.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "One", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Two", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Three", inherited);
+    }
+    ]), inherited);
+    let parenti21 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti21.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+    parenti21.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+    parenti21.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
+    parenti21.setProperty(fastn_dom.PropertyKind.Shadow, global.foo__s, inherited);
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
   }
-  ]), inherited);
-  let parenti19 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti19.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti19.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
-  parenti19.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello World", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Region, fastn_dom.Region.H1, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "blue",
-      light: "blue"
-    }), inherited);
-  }
-  ]), inherited);
-  let parenti20 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti20.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
-  parenti20.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
-  parenti20.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-  parenti20.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-  parenti20.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-  parenti20.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-    dark: "green",
-    light: "green"
-  }), inherited);
-  parenti20.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
-  parenti20.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "One", inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Two", inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Three", inherited);
-  }
-  ]), inherited);
-  let parenti21 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti21.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-  parenti21.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-  parenti21.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
-  parenti21.setProperty(fastn_dom.PropertyKind.Shadow, global.foo__s, inherited);
 }
 global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__ylg", fastn.recordInstance({
@@ -1395,11 +1400,17 @@ fastn_utils.createNestedObject(global, "foo__red_yellow", fastn.recordInstance({
 }));
 let foo__increment = function (args)
 {
-  let __args__ = args;
-  let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
-  if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
-    __args__.a = fastn_utils_val___args___a;
-  };
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = args;
+    let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
+    if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
+      __args__.a = fastn_utils_val___args___a;
+    };
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["foo__increment"] = foo__increment;
 fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));

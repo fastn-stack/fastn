@@ -403,6 +403,15 @@ impl fastn_js::ForLoop {
 }
 
 fn func(name: &str, params: &[String], body: pretty::RcDoc<'static>) -> pretty::RcDoc<'static> {
+    let package_name = if let Some((pkg_name, _)) = name.split_once('#') {
+        if let Some((first_part, _)) = pkg_name.split_once('/') {
+            first_part
+        } else {
+            pkg_name
+        }
+    } else {
+        ""
+    };
     let name = fastn_js::utils::name_to_js(name);
     // `.` means the function is placed in object so no need of `let`
     // e.g. ftd.toggle
@@ -432,7 +441,22 @@ fn func(name: &str, params: &[String], body: pretty::RcDoc<'static>) -> pretty::
         pretty::RcDoc::softline()
             .append(text("{"))
             .append(pretty::RcDoc::softline_())
+            .append(text(
+                "let __fastn_super_package_name__ = __fastn_package_name__;",
+            ))
+            .append(pretty::RcDoc::softline_())
+            .append(text(&format!(
+                "__fastn_package_name__ = \"{}\";",
+                package_name
+            )))
+            .append(pretty::RcDoc::softline_())
+            .append(text("try {"))
+            .append(pretty::RcDoc::softline_())
             .append(body.nest(4))
+            .append(pretty::RcDoc::softline_())
+            .append(text(
+                "} finally { __fastn_package_name__ = __fastn_super_package_name__; }",
+            ))
             .append(pretty::RcDoc::softline_())
             .append(text("}"))
             .group(),
