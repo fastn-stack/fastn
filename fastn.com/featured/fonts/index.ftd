@@ -36,6 +36,10 @@ screenshot: $fastn-assets.files.images.featured.font.karma-font.jpg
 template-url: featured/fonts/khand/
 screenshot: $fastn-assets.files.images.featured.font.khand-font.jpg
 
+-- ft-ui.template: Inter Typography
+template-url: featured/fonts/inter/
+screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
+
 -- ft-ui.template: Lato Typography
 template-url: featured/fonts/lato/
 screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg

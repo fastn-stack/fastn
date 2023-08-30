@@ -55,7 +55,7 @@ more-link: /featured/cs/
 if: { show-grid }
 templates: $fonts
 more-link-text: View all 
-more-link: /featured/fonts-typography/
+more-link: /featured/fonts/
 
 -- end: ds.page
 
@@ -561,32 +561,17 @@ depending on the programming language.
 
 -- template list fonts:
 
--- template: Lato Typography
-template-url: https://fastn-community.github.io/lato-typography/
-licence-url: https://github.com/fastn-community/lato-typography/blob/main/LICENSE.md
-github-url: https://github.com/fastn-community/lato-typography
-screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
-
-`lato-font` typography is available and can be used inside `fastn` web
-packages.
+-- template: Inter Typography
+template-url: featured/fonts/inter/
+screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
 -- template: Opensans Typography
-template-url: https://fastn-community.github.io/opensans-typography/
-licence-url: https://github.com/fastn-community/opensans-typography/blob/main/LICENSE.md
-github-url: https://github.com/fastn-community/opensans-typography
+template-url: featured/fonts/opensans/
 screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 
-`opensans-font` typography is available and can be used inside `fastn` web
-packages.
-
 -- template: Roboto Typography
-template-url: https://fastn-community.github.io/roboto-typography/
-licence-url: https://github.com/fastn-community/roboto-typography/blob/main/LICENSE.md
-github-url: https://github.com/fastn-community/roboto-typography
+template-url: featured/fonts/roboto/
 screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
-
-`roboto-font` typography is available and can be used inside `fastn` web
-packages.
 
 -- end: fonts
 
