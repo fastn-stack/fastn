@@ -1,6 +1,6 @@
 [package]
 name = "fastn"
-version = "0.3.31"
+version = "0.3.32"
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
