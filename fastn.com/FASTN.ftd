@@ -772,32 +772,30 @@ skip: true
     skip: true  
     - Blog Template 1 CS: /featured/cs/blog-template-1-cs/
     skip: true
-  - Font Typographies: /featured/fonts-typography/
-- Fonts: /featured/fonts/
-  - Font Typography: /featured/fonts/
+  - Font Typographies: /featured/fonts/
     - Arya Typography: /featured/fonts/arya/
     skip: true
-    - Blaka Typography: /featured/fonts/blaka-typography/
+    - Blaka Typography: /featured/fonts/blaka/
     skip: true
-    - Lobster Typography: /featured/fonts/lobster-typography/
+    - Lobster Typography: /featured/fonts/lobster/
     skip: true
-    - Opensans Typography: /featured/fonts/opensans-typography/
+    - Opensans Typography: /featured/fonts/opensans/
     skip: true
-    - Pragati Narrow Typography: /featured/fonts/pragati-narrow-typography/
+    - Pragati Narrow Typography: /featured/fonts/pragati-narrow/
     skip: true
-    - Roboto Mono Typography: /featured/fonts/roboto-mono-typography/
+    - Roboto Mono Typography: /featured/fonts/roboto-mono/
     skip: true
-    - Roboto Typography: /featured/fonts/roboto-typography/
+    - Roboto Typography: /featured/fonts/roboto/
     skip: true
-    - Tiro Typography: /featured/fonts/tiro-typography/
+    - Tiro Typography: /featured/fonts/tiro/
     skip: true
-    - Inter Typography: /featured/fonts/Inter-typography/
+    - Inter Typography: /featured/fonts/inter/
     skip: true
-    - Karma Typography: /featured/fonts/karma-typography/
+    - Karma Typography: /featured/fonts/karma/
     skip: true
-    - Khand Typography: /featured/fonts/khand-typography/
+    - Khand Typography: /featured/fonts/khand/
     skip: true
-    - lato Typography: /featured/fonts/lato-typography/
+    - lato Typography: /featured/fonts/lato/
     skip: true
 
 ## Deploy: /deploy/

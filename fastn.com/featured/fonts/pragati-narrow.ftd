@@ -58,7 +58,7 @@ show-large: true
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.font.pragati-narrow-font.jpg
-cta-url: https://fastn-community.github.io/pragati-narrow-typography/
+cta-url: https://fastn-community.github.io/pragati-narrow-typography/fastn-typography/
 cta-text: Demo
 github-url: https://github.com/fastn-community/pragati-narrow-typography
 cta-2-url: https://fastn-community.github.io/pragati-narrow-typography/
@@ -84,17 +84,16 @@ role: Developer
 
 -- ft-ui.template list typographies:
 
+-- ft-ui.template: Lato Typography
+template-url: featured/fonts/lato/
+screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
 
--- ft-ui.template: Blaka Typography
-template-url: featured/fonts/blaka-typography/
-screenshot: $fastn-assets.files.images.featured.font.blaka-font.jpg
+-- ft-ui.template: Lobster Typography
+template-url: featured/fonts/lobster/
+screenshot: $fastn-assets.files.images.featured.font.lobster-font.jpg
 
--- ft-ui.template: Inter Typography
-template-url: featured/fonts/inter-typography/
-screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
-
--- ft-ui.template: Karma Typography
-template-url: featured/fonts/karma-typography/
-screenshot: $fastn-assets.files.images.featured.font.karma-font.jpg
+-- ft-ui.template: Opensans Typography
+template-url: featured/fonts/opensans/
+screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 
 -- end: typographies
