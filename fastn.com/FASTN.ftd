@@ -64,11 +64,18 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /compare/webflow.ftd
    
 ## Case study: /acme/
+document: blog/acme.ftd 
 
 - Acme: /acme/
+document: blog/acme.ftd 
 - To-do: /todo/
   document: /case-study/todo.ftd
 - Country: /backend/learn/
+  document: /backend/country-details/index.ftd
+  - Basic of `http`, `data modelling`: /country-details/basics/
+    document: /backend/country-details/http-data-modelling.ftd
+  - Building dynamic country list page: /country-list/
+    document: /backend/country-details/dynamic-country-list-page.ftd
 
 # Get Started: /quick-build/
   document: /get-started/browse-pick.ftd
