@@ -1748,8 +1748,13 @@ class Node2 {
         for (let i = 0; i < this.#mutables.length; i++) {
             this.#mutables[i].unlinkNode(this);
         }
-        this.#node.remove();
-        this.#mutables = null;
+        // Todo: We don't need this condition as after destroying this node
+        //  ConditionalDom reset this.#conditionUI to null or some different
+        //  value. Not sure why this is needed still.
+        if (!fastn_utils.isNull(this.#node)) {
+            this.#node.remove();
+        }
+        this.#mutables = [];
         this.#parent = null;
         this.#node = null;
     }
