@@ -390,7 +390,28 @@ let fastn_utils = {
             }
             return lowercased;
         }).join('');
-    }
+    },
+
+    escapeSpecialHtmlCharacters(str) {
+        return str.replace(/[&<>"'/]/g, function (match) {
+            switch (match) {
+                case "&":
+                    return "&amp;";
+                case "<":
+                    return "&lt;";
+                case ">":
+                    return "&gt;";
+                case '"':
+                    return "&quot;";
+                case "'":
+                    return "&#39;";
+                case "/":
+                    return "&#x2F;";
+                default:
+                    return match;
+            }
+        });
+    },
 }
 
 
@@ -506,9 +527,6 @@ fastn_utils.private = {
         }
         return text;
     },
-    escapeSpecialCharacters(text) {
-        return text.replaceAll("<", "&lt;");
-    }
 }
 
 
