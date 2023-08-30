@@ -6,7 +6,6 @@
 
 
 -- ds.page: 
-full-width: true
 sidebar: false
 
 -- grid-view: Documentation Sites
@@ -81,7 +80,6 @@ boolean show-large: false
 
 -- ftd.column:
 width: fill-container
-padding-top.px: 8
 spacing.fixed.px if { ftd.device == "mobile" }: 24
 margin-top.px if { grid-view.push-top }: -90
 
