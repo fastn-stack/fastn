@@ -1775,21 +1775,21 @@ class ConditionalDom {
                     if (Array.isArray(this.#conditionUI)) {
                         while (this.#conditionUI.length > 0) {
                             let poppedElement = this.#conditionUI.pop();
-                            poppedElement.destroy();
+                            poppedElement?.destroy();
                         }
                     } else {
                         this.#conditionUI.destroy();
                     }
                 }
                 this.#conditionUI = node_constructor(new ParentNodeWithSibiling(this.#parent, this.#marker));
-                if (fastn_utils.isWrapperNode(this.#conditionUI.getTagName())) {
+                if (fastn_utils.isWrapperNode(this.#conditionUI?.getTagName())) {
                     this.#conditionUI = this.#conditionUI.getChildren();
                 }
             } else if (this.#conditionUI) {
                 if (Array.isArray(this.#conditionUI)) {
                     while (this.#conditionUI.length > 0) {
                         let poppedElement = this.#conditionUI.pop();
-                        poppedElement.destroy();
+                        poppedElement?.destroy();
                     }
                 } else {
                     this.#conditionUI.destroy();
