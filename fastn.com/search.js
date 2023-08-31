@@ -1,5 +1,6 @@
 function findNow(search, sitemap, appendIn, limit) {
     let sectionList = fastn_utils.getStaticValue(sitemap.get("sections"));
+    console.log(sectionList);
     let searchValue = fastn_utils.getStaticValue(search).toLowerCase();
     appendIn.clearAll();
     if (searchValue.length === 0) {
@@ -19,6 +20,8 @@ function findInSections(sectionList, search, appendIn, limit) {
         let description = fastn_utils.getStaticValue(tocItem.get("description"));
         let url = fastn_utils.getStaticValue(tocItem.get("url"));
         if (fastn_utils.isNull(url) || url == "") {
+            let children = fastn_utils.getStaticValue(tocItem.get("children"));
+            findInSections(children, search, appendIn, limit);
             continue;
         }
         let alreadyInList =  appendIn.getList().some(
@@ -42,7 +45,7 @@ function findInSections(sectionList, search, appendIn, limit) {
                 }));
         }
         let children = fastn_utils.getStaticValue(tocItem.get("children"));
-        findInSections(children, search, appendIn, limit)
+        findInSections(children, search, appendIn, limit);
     }
 }
 
@@ -52,6 +55,8 @@ function goBack() {
     let nextPage = currentURL.searchParams.get("next");
     if (nextPage !== null) {
         window.location.href = nextPage;
+    } else {
+        window.location.href = "/";
     }
 }
 

@@ -5,10 +5,9 @@
 -- ds.page-with-no-right-sidebar:
 
 -- ftd.text: 🔙 (Go Back)
-if: { next != NULL }
-link: $next
+$on-click$: $go-back()
 role: $inherited.types.body-regular
-
+color: $inherited.colors.text
 
 
 -- ds.h1: Search
@@ -160,8 +159,6 @@ line-clamp: 3
 $processor$: pr.full-sitemap
 
 
--- optional string next:
-$processor$: pr.request-data
 
 
 -- string $search: Home ;; todo: use ftd.empty
