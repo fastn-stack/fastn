@@ -1,7 +1,6 @@
 -- import: fastn.com/featured as ft-ui
 
 -- ds.page: 
-full-width: true
 sidebar: false
 
 -- ft-ui.grid-view: Hero with two CTA

@@ -275,7 +275,6 @@ z-index: 999
 background.solid: #222222cc
 border-bottom-left-radius.px: 8
 border-bottom-right-radius.px: 8
-align-content: center
 classes: mouse-over
 
 -- ftd.text: $grid-of-items.title
@@ -328,6 +327,8 @@ color: #d9d9d9
 if: { $grid-of-items.screenshot != NULL }
 src: $grid-of-items.screenshot
 width: fill-container
+height: fill-container
+fit: cover
 $on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
 $on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
 classes if { grid-of-items.wip }: filter-1px
