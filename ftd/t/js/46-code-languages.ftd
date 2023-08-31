@@ -45,11 +45,6 @@ lang: ftd
 
 \-- ftd.text: Hello World
 
-/-- ftd.code:
-lang: sql
-
-SELECT first_name, last_name, age FROM customers WHERE age >= 18;
-
 -- ftd.code:
 lang: js
 
