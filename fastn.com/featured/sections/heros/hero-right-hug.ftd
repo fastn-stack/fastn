@@ -40,7 +40,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.distributors: Hero Right Hug Expanded Search
 owners: $owner-fastn
-license-url: https://github.com/Trizwit/FastnUI/
+license-url: https://github.com/saurabh-lohiya/hero
 license: Creative Commons
 published-date: 31-Aug-2023
 
@@ -59,11 +59,11 @@ show-large: true
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.components.hero-with-social.png
-cta-url: https://fastnui.trizwit.com/UI-Components/Hero/hero-6/
+image: $fastn-assets.files.images.featured.components.hero-right-hug.jpg
+cta-url: https://saurabh-lohiya.github.io/hero/docs/hero-right-hug/
 cta-text: Demo
-github-url: https://github.com/Trizwit/FastnUI/
-cta-2-url: https://fastnui.trizwit.com/UI-Components/Hero/hero-6/
+github-url: https://github.com/saurabh-lohiya/hero
+cta-2-url: https://saurabh-lohiya.github.io/hero/docs/hero-right-hug/
 cta-2-text: User Manual
 
 -- end: ds.page
@@ -79,15 +79,15 @@ cta-2-text: User Manual
 
 -- common.owner list owner-fastn:
 
--- common.owner: Govindaraman S
-avatar: $fastn-assets.files.featured.contributors.designers.govindaraman-s.govindaraman-s.jpg
-profile: featured/contributors/designers/govindaraman-s/
-role: Designer
-
--- common.owner: Shaheen Senpai
-avatar: $fastn-assets.files.featured.contributors.developers.shaheen-senpai.shaheen-senpai.jpeg
-profile: featured/contributors/developers/shaheen-senpai/
+-- common.owner: Saurabh Lohiya
+profile: featured/contributors/developers/saurabh-lohiya/
+avatar: $fastn-assets.files.featured.contributors.developers.saurabh-lohiya.saurabh-lohiya.jpg
 role: Developer
+
+-- common.owner: Yashveer Mehra
+profile: featured/contributors/designers/yashveer-mehra/
+avatar: $fastn-assets.files.featured.contributors.designers.yashveer-mehra.yashveer-mehra.jpg
+role: Designer
 
 -- end: owner-fastn
 
