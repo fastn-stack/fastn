@@ -78,12 +78,20 @@ pub fn prism_js() -> String {
     let prism = include_str!("../prism/prism.js");
     let prism_line_highlight = include_str!("../prism/prism-line-highlight.js");
     let prism_line_numbers = include_str!("../prism/prism-line-numbers.js");
+
+    // Languages supported
+    // Rust, Json, Python, Markdown, SQL, Bash, JavaScript
     let prism_rust = include_str!("../prism/prism-rust.js");
     let prism_json = include_str!("../prism/prism-json.js");
     let prism_python = include_str!("../prism/prism-python.js");
     let prism_markdown = include_str!("../prism/prism-markdown.js");
+    let prism_sql = include_str!("../prism/prism-sql.js");
+    let prism_bash = include_str!("../prism/prism-bash.js");
+    let prism_javascript = include_str!("../prism/prism-javascript.js");
+
     format!(
-        "{prism}{prism_line_highlight}{prism_line_numbers}{prism_rust}{prism_json}{prism_python}{prism_markdown}"
+        "{prism}{prism_line_highlight}{prism_line_numbers}{prism_rust}{prism_json}{prism_python\
+        }{prism_markdown}{prism_sql}{prism_bash}{prism_javascript}"
     )
 }
 
