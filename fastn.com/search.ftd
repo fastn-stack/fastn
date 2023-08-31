@@ -1,0 +1,141 @@
+-- import: fastn/processors as pr
+
+-- ds.page-with-no-right-sidebar:
+
+-- search-ui:
+
+-- display-search-result:
+
+-- end: ds.page-with-no-right-sidebar
+
+
+
+
+
+
+
+
+
+
+-- component search-ui:
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 10
+
+-- ftd.text-input:
+value: $search
+$on-input$: $ftd.set-string($a = $search, v=$VALUE)
+role: $inherited.types.fine-print
+background.solid: $inherited.colors.background.step-2
+color: $inherited.colors.text
+width: fill-container
+border-radius.px: 4
+padding-vertical.px: 7
+padding-horizontal.px: 12
+
+-- ftd.text: Search
+$on-click$: $search-func($a = $search, s = $sitemap, $uis = $uis)
+background.solid: $inherited.colors.cta-primary.base
+color: $inherited.colors.cta-primary.text
+padding-vertical.px: 6
+padding-horizontal.px: 15
+border-radius.px: 4
+
+-- end: ftd.row
+
+-- end: search-ui
+
+
+
+
+
+
+
+
+
+
+
+-- component display-search-result:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 10
+
+-- display-search-item: $ui
+for: ui in $uis
+
+-- end: ftd.column
+
+-- end: display-search-result
+
+
+
+
+
+-- component display-search-item:
+caption text-link ui:
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 10
+link: $display-search-item.ui.url
+border-width.px: 1
+border-radius.px: 4
+border-color: $inherited.colors.border
+
+-- ftd.column:
+width: fill-container
+padding.px: 5
+border-right-width.px: 1
+border-color: $inherited.colors.border
+
+-- ds.h2: $display-search-item.ui.title
+if: { display-search-item.ui.title != NULL }
+
+-- ds.markdown:
+if: { display-search-item.ui.description != NULL }
+
+$display-search-item.ui.description
+
+-- end: ftd.column
+
+-- ftd.text: $display-search-item.ui.url
+link: $display-search-item.ui.url
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+align-self: center
+padding.px: 5
+
+
+-- end: ftd.row
+
+-- end: display-search-item
+
+
+
+
+
+-- pr.sitemap-data sitemap:
+$processor$: pr.full-sitemap
+
+-- string $search: Home
+
+-- text-link list $uis:
+
+
+
+-- record text-link:
+optional caption title:
+string url:
+optional string description:
+
+
+
+-- void search-func(a,s,uis):
+string $a:
+pr.sitemap-data s:
+text-link list $uis:
+js: [$fastn-assets.files.jsfunction.js]
+
+findnow(a, s, uis)
