@@ -3,7 +3,7 @@
 -- ds.page: 
 sidebar: false
 
--- ft-ui.grid-view: Blogs
+-- ft-ui.view-all: Blogs
 templates: $blogs
 
 -- end: ds.page

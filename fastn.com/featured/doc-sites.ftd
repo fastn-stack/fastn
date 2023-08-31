@@ -3,7 +3,7 @@
 -- ds.page: 
 sidebar: false
 
--- ft-ui.grid-view: Documentation Sites
+-- ft-ui.view-all: Documentation Sites
 templates: $doc-sites
 
 -- end: ds.page

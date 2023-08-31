@@ -3,7 +3,7 @@
 -- ds.page: 
 sidebar: false
 
--- ft-ui.grid-view: Font Typographies
+-- ft-ui.view-all: Font Typographies
 templates: $fonts
 
 -- end: ds.page

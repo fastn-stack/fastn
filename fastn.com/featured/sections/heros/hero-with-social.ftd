@@ -3,7 +3,7 @@
 -- ds.page: 
 sidebar: false
 
--- ft-ui.grid-view: Hero with social icons
+-- ft-ui.view-all Hero with social icons
 templates: $hero-with-social
 
 -- end: ds.page
