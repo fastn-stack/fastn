@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     
+    <meta content="fastn" name="generator">
     
     <script src="fastn-js.js"></script>
 
@@ -31,10 +32,10 @@ consectetur voluptatum et Quis inventore ab dignissimos amet?</div></div></div><
 	body.dark .__bgc-3 { background-color: #edfce8; }
 	.__cur-4 { cursor: pointer; }
 	.__p-5 { padding: 40px; }
-	.__c-6 { color: orange; }
-	body.dark .__c-6 { color: green; }
-	.__c-6:visited { color: orange; }
-	body.dark  .__c-6:visited { color: green; }
+	.__c-6 { color: orange !important; }
+	body.dark .__c-6 { color: green !important; }
+	.__c-6:visited { color: orange !important; }
+	body.dark  .__c-6:visited { color: green !important; }
 	.__rl-7 {  font-family: cursive; letter-spacing: 5px; font-size: 36px; font-weight: 700; line-height: 40px; }
 	body.mobile .__rl-7 {  font-family: fantasy; letter-spacing: 3px; font-size: 20px; font-weight: 100; line-height: 35px; }
     </style>
@@ -96,11 +97,11 @@ let main = function (parent) {
   }
   ]), inherited);
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__bg_og", fastn.recordInstance({
   light: "#170d03",
   dark: "#edfce8"
 }));
-fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));
 let foo__increment = function (args)
 {
   let __args__ = args;
@@ -109,6 +110,8 @@ let foo__increment = function (args)
     __args__.a = fastn_utils_val___args___a;
   };
 }
+global["foo__increment"] = foo__increment;
+fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));
 fastn_utils.createNestedObject(global, "foo__og", fastn.recordInstance({
   light: "orange",
   dark: "green"
@@ -151,6 +154,7 @@ fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duoto
 fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
 fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
@@ -172,5 +176,11 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
         fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+    };
+
 </script>
 </html>

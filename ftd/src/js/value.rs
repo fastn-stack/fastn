@@ -221,7 +221,10 @@ impl ftd::interpreter::Argument {
             properties,
         );
 
-        ftd::js::utils::get_js_value_from_properties(properties.as_slice())
+        ftd::js::utils::get_js_value_from_properties(properties.as_slice()) /* .map(|v|
+                                                                            if let Some(ftd::interpreter::Value::Module {}) = self.value.and_then(|v| v.value_optional()) {
+
+                                                                             }*/
     }
 }
 
@@ -399,6 +402,11 @@ impl ftd::interpreter::Value {
                     ),
                 })
             }
+            ftd::interpreter::Value::Module { name, .. } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::Module {
+                    name: name.to_string(),
+                })
+            }
             t => todo!("{:?}", t),
         }
     }
@@ -520,6 +528,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
         "ftd#loading" => {
             let js_variant = loading_variants(variant);
             (format!("fastn_dom.Loading.{}", js_variant), false)
+        }
+        "ftd#image-fit" => {
+            let js_variant = object_fit_variants(variant);
+            (format!("fastn_dom.Fit.{}", js_variant), false)
         }
         t => todo!("{} {}", t, variant),
     }
@@ -856,5 +868,16 @@ fn loading_variants(name: &str) -> &'static str {
         "lazy" => "Lazy",
         "eager" => "Eager",
         t => todo!("invalid loading variant {}", t),
+    }
+}
+
+fn object_fit_variants(name: &str) -> &'static str {
+    match name {
+        "none" => "none",
+        "fill" => "fill",
+        "contain" => "contain",
+        "cover" => "cover",
+        "scale-down" => "scaleDown",
+        t => todo!("invalid object fit variant {}", t),
     }
 }

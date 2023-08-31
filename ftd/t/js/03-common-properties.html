@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     
+    <meta content="fastn" name="generator">
     
     <script src="fastn-js.js"></script>
 
@@ -127,10 +128,10 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
 	.__bbc-44 { border-bottom-color: red; }
 	body.dark .__bbc-44 { border-bottom-color: yellow; }
 	.__cur-45 { cursor: pointer; }
-	.__c-46 { color: orange; }
-	body.dark .__c-46 { color: green; }
-	.__c-46:visited { color: orange; }
-	body.dark  .__c-46:visited { color: green; }
+	.__c-46 { color: orange !important; }
+	body.dark .__c-46 { color: green !important; }
+	.__c-46:visited { color: orange !important; }
+	body.dark  .__c-46:visited { color: green !important; }
 	.__rl-47 {  font-family: cursive; letter-spacing: 5px; font-size: 40px; font-weight: 700; line-height: 65px; }
 	body.mobile .__rl-47 {  font-family: fantasy; letter-spacing: 3px; font-size: 20px; font-weight: 100; line-height: 35px; }
 	.__pl-48 { padding-left: 10px; }
@@ -159,7 +160,7 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
 	.__w-71 { width: 120px; }
 	.__t-72 { top: 0px; }
 	.__pos-73 { position: sticky; }
-	.__c-74 { color: black; }
+	.__c-74 { color: black !important; }
 	.__ta-75 { text-align: center; }
 	.__mt-76 { margin-top: 50px; }
 	.__mb-77 { margin-bottom: 50px; }
@@ -184,11 +185,11 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
 	.__jc-96 { justify-content: space-around; }
 	.__w-97 { width: 100px; }
 	.__p-98 { padding: 5px; }
-	.__c-99 { color: blue; }
+	.__c-99 { color: blue !important; }
 	.__fw-100 { flex-wrap: wrap; }
 	.__bgc-101 { background-color: #963770; }
 	.__op-102 { opacity: 0.6; }
-	.__c-103 { color: white; }
+	.__c-103 { color: white !important; }
 	.__m-104 { margin: 5px; }
 	.__cur-105 { cursor: progress; }
 	.__cur-106 { cursor: zoom-in; }
@@ -212,17 +213,17 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
 	.__white-space-124 { white-space: pre; }
 	.__white-space-125 { white-space: break-spaces; }
 	.__as-126 { align-self: start; }
-	.__c-127 { color: red; }
-	body.dark .__c-127 { color: yellow; }
-	.__c-127:visited { color: red; }
-	body.dark  .__c-127:visited { color: yellow; }
+	.__c-127 { color: red !important; }
+	body.dark .__c-127 { color: yellow !important; }
+	.__c-127:visited { color: red !important; }
+	body.dark  .__c-127:visited { color: yellow !important; }
 	.__as-128 { align-self: center; }
 	.__as-129 { align-self: end; }
 	.__w-130 { width: 600px; }
 	.__bc-131 { border-color: green; }
 	.__pos-132 { position: absolute; }
 	.__l-133 { left: 0px; }
-	.__c-134 { color: green; }
+	.__c-134 { color: green !important; }
 	.__bc-135 { border-color: blue; }
 	.__bgc-136 { background-color: blue:; }
 	.__fst-137 { font-style: italic; }
@@ -1378,6 +1379,7 @@ let main = function (parent) {
   parenti21.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
   parenti21.setProperty(fastn_dom.PropertyKind.Shadow, global.foo__s, inherited);
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__ylg", fastn.recordInstance({
   light: "yellow",
   dark: "lightgreen"
@@ -1394,6 +1396,7 @@ let foo__increment = function (args)
     __args__.a = fastn_utils_val___args___a;
   };
 }
+global["foo__increment"] = foo__increment;
 fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));
 fastn_utils.createNestedObject(global, "foo__og", fastn.recordInstance({
   light: "orange",
@@ -1451,6 +1454,7 @@ fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duoto
 fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
 fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
@@ -1472,5 +1476,11 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
         fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+    };
+
 </script>
 </html>

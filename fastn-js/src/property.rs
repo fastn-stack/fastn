@@ -205,6 +205,9 @@ pub enum Value {
     UI {
         value: Vec<fastn_js::ComponentStatement>,
     },
+    Module {
+        name: String,
+    },
     Null,
     Undefined,
 }
@@ -276,6 +279,12 @@ impl Value {
             ),
             Value::Null => "null".to_string(),
             Value::Undefined => "undefined".to_string(),
+            Value::Module { name } => {
+                format!(
+                    "fastn.module(\"{}\", global)",
+                    fastn_js::utils::name_to_js(name)
+                )
+            }
         }
     }
 
@@ -390,6 +399,7 @@ pub enum PropertyKind {
     Loading,
     Alt,
     Src,
+    Fit,
     ImageSrc,
     YoutubeSrc,
     Shadow,
@@ -507,6 +517,7 @@ impl PropertyKind {
             PropertyKind::Src => "fastn_dom.PropertyKind.Src",
             PropertyKind::ImageSrc => "fastn_dom.PropertyKind.ImageSrc",
             PropertyKind::Alt => "fastn_dom.PropertyKind.Alt",
+            PropertyKind::Fit => "fastn_dom.PropertyKind.Fit",
             PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
             PropertyKind::Shadow => "fastn_dom.PropertyKind.Shadow",
             PropertyKind::Code => "fastn_dom.PropertyKind.Code",

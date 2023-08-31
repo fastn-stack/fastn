@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     
+    <meta content="fastn" name="generator">
     
     <script src="fastn-js.js"></script>
 
@@ -26,6 +27,7 @@ let main = function (parent) {
   parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
   parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(115)), inherited);
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__my_images", fastn.recordInstance({
   light: "https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg",
   dark: "https://fastn.com/-/fastn.com/images/cs/show-cs-1-dark.jpg"
@@ -42,6 +44,7 @@ fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duoto
 fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
 fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
@@ -63,5 +66,11 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
         fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+    };
+
 </script>
 </html>

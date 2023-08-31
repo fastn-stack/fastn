@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     
+    <meta content="fastn" name="generator">
     
     <script src="fastn-js.js"></script>
 
@@ -72,6 +73,7 @@ let main = function (parent) {
     return rooti0;
   });
 }
+global["main"] = main;
 let foo__append_integer = function (args) {
   let __args__ = {
     a: fastn.mutableList([]),
@@ -79,6 +81,7 @@ let foo__append_integer = function (args) {
   };
   return (ftd.append(__args__.a, __args__.v));
 }
+global["foo__append_integer"] = foo__append_integer;
 fastn_utils.createNestedObject(global, "foo__counters", fastn.mutableList([]));
 let foo__insert_integer = function (args)
 {
@@ -88,28 +91,36 @@ let foo__insert_integer = function (args)
   };
   return (ftd.insert_at(__args__.a, 0, __args__.v));
 }
-let foo__pop_integer = function (args) {
+global["foo__insert_integer"] = foo__insert_integer;
+let foo__pop_integer = function (args)
+{
   let __args__ = {
     a: fastn.mutableList([]),
     ...args
   };
   return (ftd.pop(__args__.a));
 }
-let foo__delete_integer = function (args) {
+global["foo__pop_integer"] = foo__pop_integer;
+let foo__delete_integer = function (args)
+{
   let __args__ = {
     a: fastn.mutableList([]),
     ...args
   };
   return (ftd.delete_at(__args__.a, 0));
 }
-let foo__clear_integer = function (args) {
+global["foo__delete_integer"] = foo__delete_integer;
+let foo__clear_integer = function (args)
+{
   let __args__ = {
     a: fastn.mutableList([]),
     ...args
   };
   return (ftd.clear_all(__args__.a));
 }
-let foo__set_integer = function (args) {
+global["foo__clear_integer"] = foo__clear_integer;
+let foo__set_integer = function (args)
+{
   let __args__ = {
     a: fastn.mutableList([]),
     other: fastn.mutableList([]),
@@ -117,6 +128,7 @@ let foo__set_integer = function (args) {
   };
   return (ftd.set_list(__args__.a, __args__.other));
 }
+global["foo__set_integer"] = foo__set_integer;
 fastn_utils.createNestedObject(global, "foo__c", fastn.mutableList([10,
 11,
 12]));
@@ -128,7 +140,9 @@ let foo__increment = function (args)
     __args__.a = fastn_utils_val___args___a;
   };
 }
-let foo__counter_list = function (parent, inherited, args) {
+global["foo__increment"] = foo__increment;
+let foo__counter_list = function (parent, inherited, args)
+{
   let __args__ = {
   };
   inherited = fastn.recordInstance({
@@ -149,6 +163,7 @@ let foo__counter_list = function (parent, inherited, args) {
   });
   return parenti0;
 }
+global["foo__counter_list"] = foo__counter_list;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
@@ -161,6 +176,7 @@ fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duoto
 fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
 fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
@@ -182,5 +198,11 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
         fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+    };
+
 </script>
 </html>

@@ -176,7 +176,7 @@ impl ExpressionGenerator {
             } else {
                 ""
             };
-            return vec![
+            return [
                 prefix.to_string(),
                 self.to_string_(first, false, arguments, extra_args),
                 node.operator().to_string(),
@@ -191,14 +191,14 @@ impl ExpressionGenerator {
             if matches!(node.operator(), fastn_grammar::evalexpr::Operator::Not)
                 || matches!(node.operator(), fastn_grammar::evalexpr::Operator::Neg)
             {
-                return vec![
+                return [
                     operator,
                     self.to_string_(first, false, arguments, extra_args),
                 ]
                 .join("");
             }
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
-            return vec![
+            return [
                 self.to_string_(first, false, arguments, extra_args),
                 operator,
                 self.to_string_(second, false, arguments, extra_args),

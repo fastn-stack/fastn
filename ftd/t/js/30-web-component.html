@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     
+    <meta content="fastn" name="generator">
     
     <script src="../../t/assets/todo.js" type="module"></script><script src="fastn-js.js"></script>
 
@@ -56,6 +57,7 @@
 let main = function (parent) {
   let parenti0 = foo__demo(parent, inherited);
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__task", fastn.mutable(null));
 let foo__demo_link = function (parent, inherited, args)
 {
@@ -87,7 +89,9 @@ let foo__demo_link = function (parent, inherited, args)
   ]), inherited);
   return parenti0;
 }
-let foo__header = function (parent, inherited, args) {
+global["foo__demo_link"] = foo__demo_link;
+let foo__header = function (parent, inherited, args)
+{
   let __args__ = {
     show_link: false,
     mouse_in: fastn.mutable(false),
@@ -206,7 +210,9 @@ let foo__header = function (parent, inherited, args) {
   ]), inherited);
   return parenti0;
 }
-let foo__todo_list_display = function (parent, inherited, args) {
+global["foo__header"] = foo__header;
+let foo__todo_list_display = function (parent, inherited, args)
+{
   let __args__ = {
     todo_list: fastn.mutable(fastn.mutableList([])),
   };
@@ -222,6 +228,7 @@ let foo__todo_list_display = function (parent, inherited, args) {
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.WebComponent("todo-list-display", __args__));
   return parenti0;
 }
+global["foo__todo_list_display"] = foo__todo_list_display;
 fastn_utils.createNestedObject(global, "foo__todo_list", fastn.mutableList([]));
 let foo__ftd_todo_display = function (parent, inherited, args)
 {
@@ -262,7 +269,9 @@ let foo__ftd_todo_display = function (parent, inherited, args)
   ]), inherited);
   return parenti0;
 }
-let foo__ftd_world = function (parent, inherited, args) {
+global["foo__ftd_todo_display"] = foo__ftd_todo_display;
+let foo__ftd_world = function (parent, inherited, args)
+{
   let __args__ = {
   };
   inherited = fastn.recordInstance({
@@ -331,7 +340,9 @@ let foo__ftd_world = function (parent, inherited, args) {
   ]), inherited);
   return parenti0;
 }
-let foo__demo = function (parent, inherited, args) {
+global["foo__ftd_world"] = foo__ftd_world;
+let foo__demo = function (parent, inherited, args)
+{
   let __args__ = {
     show_link: true,
   };
@@ -402,6 +413,7 @@ let foo__demo = function (parent, inherited, args) {
   ]), inherited);
   return parenti0;
 }
+global["foo__demo"] = foo__demo;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
@@ -414,6 +426,7 @@ fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duoto
 fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
 fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
@@ -435,5 +448,11 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
         fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+    };
+
 </script>
 </html>

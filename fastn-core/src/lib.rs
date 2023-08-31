@@ -282,7 +282,7 @@ fn get_messages(
 pub fn get_env_ftd_file() -> String {
     std::env::vars()
         .filter(|(key, val)| {
-            vec!["CARGO", "VERGEN", "FASTN"]
+            ["CARGO", "VERGEN", "FASTN"]
                 .iter()
                 .any(|prefix| !key.is_empty() && key.starts_with(prefix) && !val.is_empty())
         })
@@ -294,7 +294,7 @@ pub fn get_env_ftd_file() -> String {
 pub fn debug_env_vars() -> String {
     std::env::vars()
         .filter(|(key, _)| {
-            vec!["CARGO", "VERGEN", "FASTN"]
+            ["CARGO", "VERGEN", "FASTN"]
                 .iter()
                 .any(|prefix| key.starts_with(prefix))
         })

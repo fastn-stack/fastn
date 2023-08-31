@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <base href="__base_url__">
+    <meta content="fastn" name="generator">
     __favicon_html_tag__
     __script_file__
 
@@ -24,5 +25,11 @@ __html_body__
         fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+    };
+
 </script>
 </html>

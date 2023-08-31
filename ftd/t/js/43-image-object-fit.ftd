@@ -1,0 +1,58 @@
+-- ftd.column:
+margin.rem: 2
+width: fill-container
+spacing.fixed.rem: 2
+
+-- ftd.text: Original
+
+-- ftd.image:
+src: https://picsum.photos/536/354
+
+-- ftd.text: Without fit
+
+-- ftd.image:
+src: https://picsum.photos/536/354
+width.fixed.px: 200
+height.fixed.px: 300
+
+-- ftd.text: Fit = None
+
+-- ftd.image:
+src: https://picsum.photos/536/354
+width.fixed.px: 200
+height.fixed.px: 300
+fit: none
+
+-- ftd.text: Fit = Cover
+
+-- ftd.image:
+src: https://picsum.photos/536/354
+width.fixed.px: 200
+height.fixed.px: 300
+fit: cover
+
+-- ftd.text: Fit = Contain
+
+-- ftd.image:
+src: https://picsum.photos/536/354
+width.fixed.px: 200
+height.fixed.px: 300
+fit: contain
+
+-- ftd.text: Fit = Fill
+
+-- ftd.image:
+src: https://picsum.photos/536/354
+width.fixed.px: 200
+height.fixed.px: 300
+fit: fill
+
+-- ftd.text: Fit = Scale Down
+
+-- ftd.image:
+src: https://picsum.photos/536/354
+width.fixed.px: 200
+height.fixed.px: 300
+fit: scale-down
+
+-- end: ftd.column

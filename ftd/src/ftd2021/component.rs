@@ -1300,7 +1300,7 @@ fn get_conditional_attributes(
             "line-height",
         ];
 
-        let style_length = vec![
+        let style_length = [
             "width",
             "min-width",
             "max-width",
@@ -1309,9 +1309,9 @@ fn get_conditional_attributes(
             "max-height",
         ];
 
-        let style_color = vec!["background-color", "color", "border-color", "shadow-color"];
+        let style_color = ["background-color", "color", "border-color", "shadow-color"];
 
-        let style_integer_important = vec![
+        let style_integer_important = [
             "border-left-width",
             "border-right-width",
             "border-top-width",
@@ -1322,7 +1322,7 @@ fn get_conditional_attributes(
             "border-bottom-right-radius",
         ];
 
-        let style_string = vec![
+        let style_string = [
             "cursor",
             "position",
             "align",
@@ -1332,9 +1332,9 @@ fn get_conditional_attributes(
             "grid-area",
         ];
 
-        let style_overflow = vec!["overflow-x", "overflow-y"];
+        let style_overflow = ["overflow-x", "overflow-y"];
 
-        let style_boolean = vec!["background-repeat"];
+        let style_boolean = ["background-repeat"];
 
         Ok(if style_integer.contains(&name) {
             match value {

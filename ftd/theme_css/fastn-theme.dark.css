@@ -54,11 +54,67 @@ pre[class*=language-].fastn-theme-dark {
     line-height: 1;
 }
 
+// Fastn Language tokens --------------------------------------------------
+
+.fastn-theme-dark .token.section-identifier {
+    color: #cecfd2;
+}
+
+.fastn-theme-dark .token.section-name {
+    color: #6791e0;
+}
+
+.fastn-theme-dark .token.section-caption {
+    color: #2fb170;
+}
+
+.fastn-theme-dark .token.semi-colon {
+    color: #cecfd2;
+}
+
+.fastn-theme-dark .token.event {
+    color: #6ae2ff;
+}
+
+.fastn-theme-dark .token.processor {
+    color: #6ae2ff;
+}
+
+.fastn-theme-dark .token.type-modifier {
+    color: #54b59e;
+}
+
+.fastn-theme-dark .token.value-type {
+    color: #54b59e;
+}
+
+.fastn-theme-dark .token.kernel-type {
+    color: #54b59e;
+}
+
+.fastn-theme-dark .token.header-type {
+    color: #54b59e;
+}
+
+.fastn-theme-dark .token.header-name {
+    color: #c973d9;
+}
+
+.fastn-theme-dark .token.header-condition {
+    color: #9871ff;
+}
+
+.fastn-theme-dark .token.header-value {
+    color: #d5d7e2;
+}
+
+// END -----------------------------------------------------------------
+
 .fastn-theme-dark .token.comment,
 .fastn-theme-dark .token.prolog,
 .fastn-theme-dark .token.doctype,
 .fastn-theme-dark .token.cdata {
-    color: #797979;
+    color: #c0c5ce;
 }
 
 .fastn-theme-dark .token.selector,
@@ -73,14 +129,14 @@ pre[class*=language-].fastn-theme-dark {
 
 .fastn-theme-dark .token.tag,
 .fastn-theme-dark .token.boolean {
-    color: #ffd893;
+    color: #ff5cac;
 }
 
 .fastn-theme-dark .token.atrule,
 .fastn-theme-dark .token.attr-value,
 .fastn-theme-dark .token.hex,
 .fastn-theme-dark .token.string {
-    color: #B0C975;
+    color: #d5d7e2;
 }
 
 .fastn-theme-dark .token.property,
@@ -88,11 +144,11 @@ pre[class*=language-].fastn-theme-dark {
 .fastn-theme-dark .token.url,
 .fastn-theme-dark .token.attr-name,
 .fastn-theme-dark .token.keyword {
-    color: #c27628;
+    color: #ffa05c;
 }
 
 .fastn-theme-dark .token.regex {
-    color: #9B71C6;
+    color: #c973d9;
 }
 
 .fastn-theme-dark .token.entity {
@@ -101,7 +157,7 @@ pre[class*=language-].fastn-theme-dark {
 
 .fastn-theme-dark .token.function,
 .fastn-theme-dark .token.constant {
-    color: #e5a638;
+    color: #6791e0;
 }
 
 .fastn-theme-dark .token.variable {
@@ -114,19 +170,21 @@ pre[class*=language-].fastn-theme-dark {
 
 .fastn-theme-dark .token.important,
 .fastn-theme-dark .token.deliminator {
-    color: #E45734;
+    color: #2fb170;
 }
 
 /* Line highlight plugin */
 .fastn-theme-dark .line-highlight.line-highlight {
-    background: rgba(255, 255, 255, .2);
+    background-color: #0734a533;
+    box-shadow: inset 2px 0 0 #2a77ff
 }
 
 .fastn-theme-dark .line-highlight.line-highlight:before,
 .fastn-theme-dark .line-highlight.line-highlight[data-end]:after {
     top: auto;
-    background-color: rgba(255, 255, 255, .3);
+    background-color: #2a77ff;
     color: #fff;
+    border-radius: 50%;
 }
 
 /* for line numbers */

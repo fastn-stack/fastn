@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     
+    <meta content="fastn" name="generator">
     
     <script src="fastn-js.js"></script>
 
@@ -81,6 +82,7 @@ let main = function (parent) {
     }).getParent();
   });
 }
+global["main"] = main;
 let foo__increment = function (args) {
   let __args__ = args;
   let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
@@ -88,6 +90,7 @@ let foo__increment = function (args) {
     __args__.a = fastn_utils_val___args___a;
   };
 }
+global["foo__increment"] = foo__increment;
 fastn_utils.createNestedObject(global, "foo__i", fastn.mutable(9));
 fastn_utils.createNestedObject(global, "foo__name", "Arpita");
 let foo__foo = function (parent, inherited, args)
@@ -116,6 +119,7 @@ let foo__foo = function (parent, inherited, args)
   ]), inherited);
   return parenti0;
 }
+global["foo__foo"] = foo__foo;
 let foo__append_string = function (args) {
   let __args__ = {
     a: fastn.mutableList([]),
@@ -123,6 +127,7 @@ let foo__append_string = function (args) {
   };
   return (ftd.append(__args__.a, __args__.v));
 }
+global["foo__append_string"] = foo__append_string;
 fastn_utils.createNestedObject(global, "foo__names", fastn.mutableList([]));
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
@@ -136,6 +141,7 @@ fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duoto
 fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
 fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
@@ -157,5 +163,11 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
         fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+    };
+
 </script>
 </html>

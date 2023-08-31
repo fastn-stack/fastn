@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     
+    <meta content="fastn" name="generator">
     
     <script src="fastn-js.js"></script>
 
@@ -30,11 +31,14 @@ let main = function (parent) {
     name: "Arpita"
   });
 }
+global["main"] = main;
 let _01_basic__append = function (args) {
   let __args__ = args;
   return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
 }
-let _01_basic__print = function (parent, inherited, args) {
+global["_01_basic__append"] = _01_basic__append;
+let _01_basic__print = function (parent, inherited, args)
+{
   let __args__ = {
   };
   inherited = fastn.recordInstance({
@@ -50,6 +54,7 @@ let _01_basic__print = function (parent, inherited, args) {
   parenti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
   return parenti0;
 }
+global["_01_basic__print"] = _01_basic__print;
 let foo__append = _01_basic__append;
 let _24_re_export__append = _01_basic__append;
 let _24_re_export__print = _01_basic__print;
@@ -65,6 +70,7 @@ fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duoto
 fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
 fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
@@ -86,5 +92,11 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
         fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+    };
+
 </script>
 </html>

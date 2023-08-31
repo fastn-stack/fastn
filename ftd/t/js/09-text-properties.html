@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     
+    <meta content="fastn" name="generator">
     
     <script src="fastn-js.js"></script>
 
@@ -27,7 +28,7 @@ like Aldus PageMaker including versions of Lorem Ipsum.</div></div><div data-id=
 	.__bw-3 { border-width: 2px; }
 	.__bs-4 { border-style: double; }
 	.__bc-5 { border-color: blue; }
-	.__c-6 { color: red; }
+	.__c-6 { color: red !important; }
 	.__g-7 { gap: 10px; }
 	.__tt-8 { text-transform: capitalize; }
 	.__tt-9 { text-transform: lowercase; }
@@ -36,9 +37,9 @@ like Aldus PageMaker including versions of Lorem Ipsum.</div></div><div data-id=
 	.__mt-12 { margin-top: 5px; }
 	.__mb-13 { margin-bottom: 5px; }
 	.__bgc-14 { background-color: black; }
-	.__c-15 { color: yellow; }
+	.__c-15 { color: yellow !important; }
 	.__text-indent-16 { text-indent: 30px; }
-	.__c-17 { color: blue; }
+	.__c-17 { color: blue !important; }
 	.__w-18 { width: 30%; }
 	.__p-19 { padding: 5px; }
 	.__bw-20 { border-width: 1px; }
@@ -166,6 +167,7 @@ let main = function (parent) {
   parenti4.setProperty(fastn_dom.PropertyKind.StringValue, "This has block display", inherited);
   parenti4.setProperty(fastn_dom.PropertyKind.Display, fastn_dom.Display.Block, inherited);
 }
+global["main"] = main;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
@@ -178,6 +180,7 @@ fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duoto
 fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
 fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
 fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
 fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
 fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
@@ -199,5 +202,11 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
         fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+    };
+
 </script>
 </html>

@@ -225,6 +225,7 @@ let fastn_utils = {
      * @returns {string} - The processed string with inline markdown.
      */
     markdown_inline(i) {
+        if (fastn_utils.isNull(i)) return;
         const { space_before, space_after } = fastn_utils.private.spaces(i);
         const o = (() => {
             let g = fastn_utils.private.replace_last_occurrence(marked.parse(i), "<p>", "");
@@ -244,8 +245,8 @@ let fastn_utils = {
     },
     nextSibling(node, parent) {
         // For Conditional DOM
-        if (Array.isArray(node)) {
-            node = node[node.length - 1];
+        while (Array.isArray(node)) {
+            node = node[node.length-1];
         }
         if (node.nextSibling) {
           return node.nextSibling;
@@ -349,11 +350,68 @@ let fastn_utils = {
         if (!ssr && !fastn_utils.isNull(extraCodeData.language) && !fastn_utils.isNull(extraCodeData.theme)) {
             Prism.highlightElement(codeElement);
         }
-    }
+    },
+
+    //Taken from: https://byby.dev/js-slugify-string
+    slugify(str) {
+        return String(str)
+            .normalize('NFKD') // split accented characters into their base characters and diacritical marks
+            .replace('.', '-')
+            .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
+            .trim() // trim leading or trailing whitespace
+            .toLowerCase() // convert to lowercase
+            .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
+            .replace(/\s+/g, '-') // replace spaces with hyphens
+            .replace(/-+/g, '-'); // remove consecutive hyphens
+    },
+
+    getEventListeners(node) {
+        return {
+            onclick: node.onclick,
+            onmouseleave: node.onmouseleave,
+            onmouseenter: node.onmouseenter,
+            oninput: node.oninput,
+            onblur: node.onblur,
+            onfocus: node.onfocus
+        }
+    },
+
+    flattenArray(arr) {
+        return fastn_utils.private.flattenArray([arr]);
+    },
+
+    escapeHtmlInCode(str) {
+        return str.replace(/[<]/g, "&lt;");
+    },
+
+    escapeHtmlInMarkdown(str) {
+        let result = "";
+        let ch_map = {
+            '<': "&lt;"
+        };
+        // To avoid replacing html characters inside <code> body
+        let backtick_found = false;
+        for (var i = 0; i < str.length; i++) {
+            let current = str[i];
+            if (current === '`') backtick_found = !backtick_found;
+            if (ch_map[current] !== undefined && !backtick_found) {
+                result += ch_map[current];
+            }
+            else {
+                result += current;
+            }
+        }
+        return result;
+    },
 }
 
 
 fastn_utils.private = {
+    flattenArray(arr) {
+        return arr.reduce((acc, item) => {
+            return acc.concat(Array.isArray(item) ? fastn_utils.private.flattenArray(item) : item);
+        }, []);
+    },
     /**
      * Helper function for `fastn_utils.markdown_inline` to find the number of
      * spaces before and after the content.
@@ -459,7 +517,7 @@ fastn_utils.private = {
             return '_' + text;
         }
         return text;
-    }
+    },
 }
 
 

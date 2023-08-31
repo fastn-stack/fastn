@@ -152,7 +152,9 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                 )
                 .replace(
                     "__default_css__",
-                    format!("{}", if manual { ftd::ftd_js_css() } else { "" }).as_str(),
+                    (if manual { ftd::ftd_js_css() } else { "" })
+                        .to_string()
+                        .as_str(),
                 )
         }
     };
@@ -180,14 +182,12 @@ fn fastn_js_test_all() {
                     Some(path) if !f.to_str().unwrap().contains(path) => continue,
                     _ => {}
                 }
-                let script =
-                    filename_with_second_last_extension_replaced_with_json(&f, false, true);
+                let script = filename_with_second_last_extension_replaced_with_json(f, false, true);
 
                 if std::fs::remove_file(&script).is_ok() {
                     println!("Removed {}", script.display());
                 }
-                let manual =
-                    filename_with_second_last_extension_replaced_with_json(&f, true, false);
+                let manual = filename_with_second_last_extension_replaced_with_json(f, true, false);
                 if std::fs::remove_file(&manual).is_ok() {
                     println!("Removed {}", manual.display());
                 }

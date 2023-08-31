@@ -217,5 +217,6 @@ ftd.post_init = function () {
     initialise_device();
     initialise_click_outside_events();
     initialise_global_key_events();
+    fastn_utils.resetFullHeight();
     fastn_utils.setFullHeight();
 }
