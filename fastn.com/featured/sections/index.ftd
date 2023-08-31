@@ -60,6 +60,14 @@ screenshot: $fastn-assets.files.images.featured.components.hero-2.png
 template-url: /featured/sections/cards/card-1/
 screenshot: $fastn-assets.files.images.featured.sections.card-1.png
 
+-- ft-ui.template: Image Card - 1
+template-url: /featured/sections/cards/image-card-1/
+screenshot: $fastn-assets.files.images.featured.sections.image-card-1.png
+
+-- ft-ui.template: Image Gallery IG
+template-url: /featured/sections/cards/image-gallery-ig/
+screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
+
 -- end: cards
 
 
@@ -77,17 +85,18 @@ screenshot: $fastn-assets.files.images.featured.sections.kvt-1.png
 
 -- ft-ui.template list slides:
 
--- ft-ui.template: Simple Dark Slides
-template-url: /featured/sections/slides/simple-dark-slides/
-screenshot: $fastn-assets.files.images.featured.sections.slides.simple-dark-slides.png
+-- ft-ui.template: Crispy Presentation Theme
+template-url: /featured/sections/slides/crispy-presentation-theme/
+screenshot: $fastn-assets.files.images.featured.sections.slides.crispy-presentation-theme.png
 
--- ft-ui.template: Simple Light Slides
-template-url: /featured/sections/slides/simple-light-slides/
-screenshot: $fastn-assets.files.images.featured.sections.slides.simple-light-slides.png
+-- ft-ui.template: Giggle Presentation Template
+template-url: /featured/sections/slides/giggle-presentation-template/
+screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
 
--- ft-ui.template: Streamline Slides
-template-url: /featured/sections/slides/streamline-slides/
-screenshot: $fastn-assets.files.images.featured.sections.slides.streamline-slides.png
+-- ft-ui.template: Rotary Presentation Template
+template-url: /featured/sections/slides/rotary-presentation-template/
+screenshot: $fastn-assets.files.images.featured.sections.slides.rotary-presentation-template.png
+
 -- end: slides
 
 

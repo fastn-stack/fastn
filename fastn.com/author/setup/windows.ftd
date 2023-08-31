@@ -7,7 +7,6 @@ For Windows machine, there are three ways to install `fastn`.
 
 1. [`fastn` using `installer`](windows/#fastn-using-installer) (Recommended)
 2. [`fastn` through `pre-built binary`](windows/#fastn-through-pre-built-binary)
-3. [`fastn` using `cargo`](windows/#fastn-using-cargo)
 4. [`fastn` from `source`](windows/#fastn-from-source)
 
 
@@ -28,9 +27,8 @@ src: $fastn-assets.files.images.setup.windows-setup-process.gif
 -- ds.markdown: 
 
 `fastn` is written using `rust` language, if you are familiar with it and want
-to use `fastn` for your project or for experimentation, you can do it with
-other two options, i.e, by installing it using `cargo` or by building the
-`source`.
+to use `fastn` for your project or for experimentation, you can do it by
+building the `source`.
 
 Based on your machine and your choice of installation, you can select one of the
 following options:
@@ -129,21 +127,6 @@ Checkout the [Command Prompt documentation](https://fastn.com/open-terminal/).
 
 -- end: cbox.tip
 
-
-
-
--- ds.h1: `fastn` using `cargo`
-
-If you have cargo installed in your system, you can run the following command to
-install `fastn`.
-
-For more details on `how to install cargo` is given
-[here](https://doc.rust-lang.org/cargo/getting-started/installation.html).
-
--- ds.code:
-lang: sh
-
-cargo install fastn
 
 
 

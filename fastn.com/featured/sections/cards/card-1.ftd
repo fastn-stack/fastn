@@ -7,9 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
-
 
 
 
@@ -24,6 +21,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
+distribution-bar: true
+full-width-bar: true
 show-layout-bar: true
 
 -- ds.page.footer:
@@ -38,27 +37,31 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Cards - Card 1
-previous-url: /featured/sections/cards/
-github-url: https://github.com/FifthTry/cards
+-- ds.distributors: Card 1
+owners: $owner-fastn
+license-url: https://github.com/FifthTry/cards/blob/main/LICENSE
+license: Creative Commons
+published-date: 14-Dec-2022
 
--- end: ds.page.layout-bar
+-- end: ds.page.abstract-bar
 
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured Cards
+templates: $cards
+more-link-text: View more
+more-link: /featured/sections/cards/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.sections.card-1.png
 cta-url: https://fifthtry.github.io/cards/index.html
 cta-text: Demo
-width.fixed.px if {ftd.device == "desktop"}: 800
-
--- ft-ui.grid-view: Featured Cards
-if: { show-grid }
-templates: $cards
-more-link-text: View more
-more-link: /featured/sections/cards/
-
+github-url: https://github.com/FifthTry/cards
 
 -- end: ds.page
 
@@ -73,9 +76,9 @@ more-link: /featured/sections/cards/
 
 -- ft-ui.template list cards:
 
--- ft-ui.template: Card - 1
-template-url: /featured/sections/cards/card-1/
-screenshot: $fastn-assets.files.images.featured.sections.card-1.png
+-- ft-ui.template: Image Card - 1
+template-url: /featured/sections/cards/image-card-1/
+screenshot: $fastn-assets.files.images.featured.sections.image-card-1.png
 
 -- ft-ui.template: Image Gallery IG
 template-url: /featured/sections/cards/image-gallery-ig/
@@ -86,3 +89,21 @@ template-url: /featured/sections/cards/imagen-ig/
 screenshot: $fastn-assets.files.images.featured.sections.imagen-ig.png
 
 -- end: cards
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- common.owner: Priyanka Yadav
+profile: featured/contributors/developers/priyanka-yadav/
+avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+role: Developer
+
+-- end: owner-fastn

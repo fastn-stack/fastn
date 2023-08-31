@@ -1,7 +1,16 @@
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/utils
 
--- ds.page: Week 1 Contest - Quote
+-- common.post-meta meta: Week 1 Contest - Quote
+published-on: August 25, 2023
+post-url: /quote-contest/
+author: $authors.harish
 
 Dive into the Week 1 Challenge and create your own quote component.
+
+-- ds.blog-page:
+meta: $meta
 
 -- ds.h1: Key Dates
 
@@ -68,4 +77,4 @@ Ready to build your quote component? Join the Challenge Now!
 
 
 
--- end: ds.page
+-- end: ds.blog-page

@@ -104,7 +104,7 @@ it using the [`$loop$`](/list/#using-loop):
 lang: ftd
 
 \-- show-person: $p
-$loop$: $people as $p
+for: $p in $people
 
 
 -- ds.markdown:
@@ -113,7 +113,7 @@ Which will look something like this:
 
 
 -- show-person: $p
-$loop$: $people as $p
+for: $p in $people
 
 -- end: ds.page
 

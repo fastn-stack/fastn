@@ -30,9 +30,8 @@ curl -fsSL https://fastn.com/install.sh | bash
 -- ds.markdown: 
 
 `fastn` is written using `rust` language, if you are familiar with it and want
-to use `fastn` for your project or for experimentation, you can do it with
-other two options, i.e, by installing it using `cargo` or by building the
-`source`.
+to use `fastn` for your project or for experimentation, you can do it by
+building the `source`.
 
 Based on your machine and your choice of installation, you can select one of the
 following options:
@@ -41,8 +40,7 @@ following options:
 
 1. [`fastn` using `installer`](windows/#fastn-using-installer) (Recommended)
 2. [`fastn` through `pre-built binary`](windows/#fastn-through-pre-built-binary)
-3. [`fastn` using `cargo`](windows/#fastn-using-cargo)
-4. [`fastn` from `source`](windows/#fastn-from-source)
+3. [`fastn` from `source`](windows/#fastn-from-source)
 
 
 
@@ -50,8 +48,7 @@ following options:
 
 1. [`fastn` through `pre-built binary`](macos/#fastn-through-pre-built-binary)
  (Recommended)
-2. [`fastn` using `cargo`](macos/#fastn-using-cargo)
-3. [`fastn` from `source`](macos/#fastn-from-source)
+2. [`fastn` from `source`](macos/#fastn-from-source)
 
 
 -- end: ds.page

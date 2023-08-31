@@ -7,8 +7,7 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
+
 
 
 
@@ -24,7 +23,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,28 +38,33 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Modal 1
-cta-text: User Manual
-cta-url: https://fastnui.trizwit.com/UI-Components/Modal/modal/
-previous-url: /featured/components/modals
-github-url: https://github.com/Trizwit/FastnUI/
+-- ds.distributors: Modal 1
+owners: $owner-fastn
+license-url: https://github.com/Trizwit/FastnUI/
+license: Creative Commons
+published-date: 17-June-2023
 
--- end: ds.page.layout-bar
+-- end: ds.page.abstract-bar
+
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured Modals
+templates: $dialogs
+more-link-text: View more
+more-link: /featured/components/modals/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.components.modal-1.png
 cta-url: https://fastnui.trizwit.com/UI-Components/Modal/modal/
 cta-text: Demo
-width.fixed.px if {ftd.device == "desktop"}: 800
-
--- ft-ui.grid-view: Featured Modal / Dialog Box
-if: { show-grid }
-templates: $dialogs
-more-link-text: View more
-more-link: /featured/components/modals/
-
+github-url: https://github.com/Trizwit/FastnUI/
+cta-2-url: https://fastnui.trizwit.com/UI-Components/Modal/modal
+cta-2-text: User Manual
 
 -- end: ds.page
 
@@ -74,17 +79,21 @@ more-link: /featured/components/modals/
 
 -- ft-ui.template list dialogs:
 
--- ft-ui.template: Alert Dialog
-template-url: featured/components/modals/alert-1/
-screenshot: $fastn-assets.files.images.featured.components.dialog-3.png
-
--- ft-ui.template: Dialog - 1
-template-url: featured/components/modals/dialog-1/
-screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
-
 -- ft-ui.template: Modal Cover
-template-url: featured/components/modals/modal-2/
+template-url: featured/components/modals/modal-cover/
 screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 
 -- end: dialogs
 
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- end: owner-fastn

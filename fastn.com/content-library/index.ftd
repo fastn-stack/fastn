@@ -186,7 +186,7 @@ align-content: center
 -- github-star-cta:
 link: https://github.com/fastn-stack/fastn/
 
-Support us by becoming a stargazer! 🚀
+Star us on Github 🚀
 
 -- ftd.text: $hero-section.title
 role: $inherited.types.heading-hero
@@ -1124,9 +1124,10 @@ Install fastn with a Single Command
 social: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+twitter-url: /twitter/
+discord-url: /discord/
+instagram-url: /instagram/
+copyright: Copyright © 2023 - fastn.com
 
 
 -- end: social-sideline-footer

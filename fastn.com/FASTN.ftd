@@ -652,7 +652,7 @@ skip: true
       skip: true
     - Rotary Presentation Template: /featured/sections/slides/rotary-presentation-template/
       skip: true
-- Component Library: /featured/components-library/
+- Component Library: /featured/components/
   - Admonitions: /featured/components/admonitions/
     skip: true
   - Bling Components: /featured/components/bling/
@@ -677,29 +677,15 @@ skip: true
   - Header / Navbar: /featured/components/headers/
     - Header: /featured/components/headers/header/
     skip: true  
-    - Header 1: /featured/components/headers/header-1/
-    skip: true  
-    - Header 2: /featured/components/headers/header-2/
-    skip: true  
   - Footers: /featured/components/footers/
     - Footer: /featured/components/footers/footer/
-    skip: true  
-    - Footer 1: /featured/components/footers/footer-1/
-    skip: true  
-    - Footer 2: /featured/components/footers/footer-2/
     skip: true  
     - Footer 3: /featured/components/footers/footer-3/
     skip: true  
   - Modal / Dialog: /featured/components/modals/
-    - Dialog 1: /featured/components/modals/dialog-1/
-    skip: true  
-    - Dialog 2: /featured/components/modals/dialog-2/
-    skip: true  
-    - Alert Dialog: /featured/components/modals/alert-1/
-    skip: true  
     - Modal 1: /featured/components/modals/modal-1/
     skip: true  
-    - Modal 2: /featured/components/modals/modal-2/
+    - Modal Cover: /featured/components/modals/modal-cover/
     skip: true
 
   - Quotes: /quotes/
@@ -759,11 +745,23 @@ skip: true
         skip: true
         document: /featured/components/quotes/quotes-with-images/demo-1.ftd
 
-- Design Elements: /featured/cs/
+- Design Elements: /featured/design/
   - Color Schemes: /featured/cs/
+    - Shades Of Red: /featured/cs/red-shades
+    skip: true
+    - Shades Of Blue: /featured/cs/blue-shades
+    skip: true
+    - Shades Of Green: /featured/cs/green-shades
+    skip: true
+    - Shades Of Orange: /featured/cs/orange-shades
+    skip: true
+    - Shades Of Violet: /featured/cs/violet-shades
+    skip: true
     - Blog Template CS: /featured/cs/blog-template-cs/
     skip: true  
     - Blue Heal CS: /featured/cs/blue-heal-cs/
+    skip: true  
+    - Midnight Rush CS: /featured/cs/midnight-rush-cs/
     skip: true  
     - Dark Flame CS: /featured/cs/dark-flame-cs/
     skip: true  
@@ -778,6 +776,8 @@ skip: true
     - Pretty CS: /featured/cs/pretty-cs/
     skip: true  
     - Saturated Sunset CS: /featured/cs/saturated-sunset-cs/
+    skip: true
+    - Pink Tree Cs: /featured/cs/pink-tree-cs/
     skip: true  
     - Winter CS: /featured/cs/winter-cs/
     skip: true  
@@ -785,7 +785,31 @@ skip: true
     skip: true  
     - Blog Template 1 CS: /featured/cs/blog-template-1-cs/
     skip: true
-  - Font Typographies: /featured/fonts-typography/
+  - Font Typographies: /featured/fonts/
+    - Arya Typography: /featured/fonts/arya/
+    skip: true
+    - Blaka Typography: /featured/fonts/blaka/
+    skip: true
+    - Lobster Typography: /featured/fonts/lobster/
+    skip: true
+    - Opensans Typography: /featured/fonts/opensans/
+    skip: true
+    - Pragati Narrow Typography: /featured/fonts/pragati-narrow/
+    skip: true
+    - Roboto Mono Typography: /featured/fonts/roboto-mono/
+    skip: true
+    - Roboto Typography: /featured/fonts/roboto/
+    skip: true
+    - Tiro Typography: /featured/fonts/tiro/
+    skip: true
+    - Inter Typography: /featured/fonts/inter/
+    skip: true
+    - Karma Typography: /featured/fonts/karma/
+    skip: true
+    - Khand Typography: /featured/fonts/khand/
+    skip: true
+    - lato Typography: /featured/fonts/lato/
+    skip: true
 
 ## Deploy: /deploy/
 
@@ -802,11 +826,9 @@ skip: true
 
 
 # Blog: /blog/
-  document: /events/weekly-contest/week-1-quote.ftd
 
 - Quote contest :/quote-contest/
   document: /events/weekly-contest/week-1-quote.ftd
-- A Content Writer’s Journey with fastn: /blog/writer-journey/
 - Tales from ACME Inc - Case Study: /acme/
   document: blog/acme.ftd 
 - A Content Writer’s Journey with fastn: /writer/
@@ -954,3 +976,6 @@ skip: true
 /blog/writer-journey/: /writer/
 /blog/prove-you-wrong/: /prove/
 /blog/intimidation-of-programming/: /intimidation/
+/twitter/: https://twitter.com/fastn_stack
+/discord/: https://discord.gg/bucrdvptYd
+/instagram/: https://www.instagram.com/fastn_stack/
