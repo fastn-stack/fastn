@@ -36,3 +36,29 @@ function findInSections(sectionList, search, appendIn) {
         findInSections(children, search, appendIn)
     }
 }
+
+
+function goBack() {
+    const currentURL = new URL(window.location.href);
+    let nextPage = currentURL.searchParams.get("next");
+    if (nextPage !== null) {
+        window.location.href = nextPage;
+    }
+}
+
+
+
+function openSearch() {
+    const currentURL = document.location.pathname + document.location.search;
+    window.location.href = `/search/?next=${encodeURIComponent(currentURL)}`
+}
+
+
+function goToUrl(a, l) {
+    let index = fastn_utils.getStaticValue(a);
+    let list = fastn_utils.getStaticValue(l);
+    if (list.length === 0 || index >= list.length) {
+        return;
+    }
+    window.location.href = fastn_utils.getStaticValue(list[index].item.get("url"));
+}
