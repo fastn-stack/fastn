@@ -1,30 +1,39 @@
-function findnow(search, sitemap, appendIn) {
-    console.log(search, sitemap, appendIn);
+function findNow(search, sitemap, appendIn, limit) {
     let sectionList = fastn_utils.getStaticValue(sitemap.get("sections"));
     let searchValue = fastn_utils.getStaticValue(search).toLowerCase();
     appendIn.clearAll();
     if (searchValue.length === 0) {
         return;
     }
-    findInSections(sectionList, searchValue, appendIn);
+    findInSections(sectionList, searchValue, appendIn, limit);
 }
 
-function findInSections(sectionList, search, appendIn) {
+function findInSections(sectionList, search, appendIn, limit) {
+    if (appendIn.getList().length >= limit) {
+        return;
+    }
+
     for(let item of sectionList) {
         let tocItem = item.item;
         let title = fastn_utils.getStaticValue(tocItem.get("title"));
         let description = fastn_utils.getStaticValue(tocItem.get("description"));
         let url = fastn_utils.getStaticValue(tocItem.get("url"));
-        if (fastn_utils.isNull(url)) {
+        if (fastn_utils.isNull(url) || url == "") {
             continue;
         }
         let alreadyInList =  appendIn.getList().some(
             existingItem =>
-                existingItem.item.get() === url
+                fastn_utils.getStaticValue(existingItem.item.get("url")) === url
         );
-        if ((!fastn_utils.isNull(title) && title.toLowerCase().includes(search)) ||
-            (!fastn_utils.isNull(description) && description.toLowerCase().includes(search))
-            && !alreadyInList) {
+        if (
+            (!fastn_utils.isNull(title) && title.toLowerCase().includes(search))
+            || (!fastn_utils.isNull(description) && description.toLowerCase().includes(search))
+            || url.toLowerCase().includes(search)
+            && !alreadyInList
+        ) {
+            if (appendIn.getList().length >= limit) {
+                return;
+            }
             appendIn.push(
                 fastn.recordInstance({
                     title: title,
@@ -33,7 +42,7 @@ function findInSections(sectionList, search, appendIn) {
                 }));
         }
         let children = fastn_utils.getStaticValue(tocItem.get("children"));
-        findInSections(children, search, appendIn)
+        findInSections(children, search, appendIn, limit)
     }
 }
 

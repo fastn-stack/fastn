@@ -400,6 +400,6 @@ ftd.http("/", "get")
 
 
 -- void open-search():
-js: [$fastn-assets.files.jsfunction.js]
+js: [$fastn-assets.files.search.js]
 
 openSearch()

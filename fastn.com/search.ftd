@@ -4,7 +4,16 @@
 
 -- ds.page-with-no-right-sidebar:
 
+-- ftd.text: 🔙 (Go Back)
+if: { next != NULL }
+link: $next
+role: $inherited.types.body-regular
+
+
+
 -- ds.h1: Search
+
+
 -- search-ui:
 -- display-search-result:
 
@@ -36,8 +45,9 @@ align-self: end
 role: $inherited.types.fine-print
 color: $inherited.colors.text
 spacing.fixed.px: 2
+if: { len > 0 }
 
--- ftd.text: Total:
+-- ftd.text: Showing:
 -- ftd.integer: $len
 
 -- end: ftd.row
@@ -45,8 +55,9 @@ spacing.fixed.px: 2
 
 -- ftd.text-input:
 value: $search
+placeholder: Enter search query...
 $on-input$: $ftd.set-string($a = $search, v = $VALUE)
-$on-input$: $search-func($a = $search, s = $sitemap, $uis = $uis)
+$on-input$: $update-search-result($a = $search, s = $sitemap, $uis = $uis)
 role: $inherited.types.fine-print
 background.solid: $inherited.colors.background.step-2
 color: $inherited.colors.text
@@ -57,6 +68,8 @@ padding-horizontal.px: 12
 $on-global-key[esc]$: $go-back()
 $on-global-key[down]$: $increment($a=$selected, n=$len)
 $on-global-key[up]$: $decrement($a=$selected, n=$len)
+$on-global-key[j]$: $increment($a=$selected, n=$len)
+$on-global-key[k]$: $decrement($a=$selected, n=$len)
 $on-global-key[Enter]$: $go-to-url(a=$selected, l=$uis)
 
 -- end: ftd.column
@@ -99,16 +112,21 @@ integer idx:
 
 -- ftd.column:
 width: fill-container
-padding.px: 5
+padding-horizontal.px: 10
 link: $display-search-item.ui.url
 border-width.px: 1
 border-radius.px: 4
 border-color: $inherited.colors.border
 background.solid if { display-search-item.idx == selected }: $inherited.colors.background.step-2
-
+padding-bottom.px: 7
 
 -- ds.h2: $display-search-item.ui.title
 if: { display-search-item.ui.title != NULL }
+
+-- ftd.text: $display-search-item.ui.url
+role: $inherited.types.fine-print
+color: $inherited.colors.cta-primary.base
+padding-bottom.px: 7
 
 -- ftd.text: $display-search-item.ui.description
 role: $inherited.types.copy-regular
@@ -130,9 +148,11 @@ line-clamp: 3
 $processor$: pr.full-sitemap
 
 
+-- optional string next:
+$processor$: pr.request-data
 
 
--- string $search: Home
+-- string $search: Home ;; todo: use ftd.empty
 
 
 
@@ -148,13 +168,13 @@ optional string description:
 
 
 
--- void search-func(a,s,uis):
+-- void update-search-result(a,s,uis):
 string $a:
 pr.sitemap-data s:
 text-link list $uis:
-js: [$fastn-assets.files.jsfunction.js]
+js: [$fastn-assets.files.search.js]
 
-findnow(a, s, uis)
+findNow(a, s, uis, 10)
 
 
 
@@ -191,7 +211,7 @@ a = (a + 1) % n
 -- void decrement(a,n):
 integer $a:
 integer n:
-js: [$fastn-assets.files.jsfunction.js]
+js: [$fastn-assets.files.search.js]
 
 clampDecrement(a,n)
 
