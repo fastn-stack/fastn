@@ -6,7 +6,8 @@
 -- import: fastn-community.github.io/footer
 -- import: fastn/processors as pr
 -- import: fastn.com/utils
-
+-- import: fastn.com/ambassadors
+export: testimonial-cards, testimonial-card, hero-with-4-images
 
 -- component hero-content:
 
@@ -616,7 +617,7 @@ min-height.fixed.em if { card.width == NULL && card.min-height == NULL && ftd.de
 min-height if { ftd.device == "desktop" }: $card.min-height
 padding.em if { ftd.device == "desktop" }: 2
 spacing.fixed.em: 1
-shadow: $s
+;;shadow: $s
 border-radius.em: 1
 width.fixed.percent: 48
 width if { ftd.device == "mobile" }: fill-container
@@ -1139,18 +1140,21 @@ optional ftd.image-src icon:
 caption title:
 optional string feature:
 body body:
-string code:
+optional string code:
 optional string cta-text:
 optional string cta-link:
 optional ftd.image-src image:
 boolean move-left: false
+boolean transparent: false
+children cards:
 
 -- ftd.column:
 width: fill-container
-background.solid: $inherited.colors.background.step-1
+background.solid if { !feature-card.transparent }: $inherited.colors.background.step-1
 padding.px: 24
 color: $inherited.colors.text-strong
 margin-bottom.px: 48
+border-radius.px: 16
 
 -- ftd.image:
 src: $feature-card.icon
@@ -1178,6 +1182,7 @@ $feature-card.body
 link: $feature-card.cta-link
 
 -- ftd.row:
+if: { feature-card.code != NULL }
 width: fill-container
 spacing: space-between
 align-content: center
@@ -1216,6 +1221,15 @@ height.fixed.px: 300
 fit: cover
 
 -- end: ftd.column
+
+-- end: ftd.row
+
+-- ftd.row:
+width: fill-container
+children: $feature-card.cards
+spacing: space-between
+align-content: center
+margin-top.px: 24
 
 -- end: ftd.row
 
@@ -1325,3 +1339,393 @@ role: $inherited.types.button-medium
 -- end: ftd.row
 
 -- end: cta-outline-medium
+
+
+
+
+
+
+
+
+
+-- component cards-section:
+optional caption title:
+children cards:
+boolean transparent: false
+
+-- ftd.column:
+width: fill-container
+background.solid if { !cards-section.transparent }: $inherited.colors.background.step-1
+padding.px if { !cards-section.transparent }: 24
+margin-bottom.px: 48
+border-radius.px: 16
+
+-- ftd.text: $cards-section.title
+width: fill-container
+role: $inherited.types.heading-large
+text-align: center
+color: $inherited.colors.text-strong
+if: { cards-section.title != NULL }
+margin-bottom.px: 48
+margin-top.px: 48
+
+-- ftd.row:
+width: fill-container
+children: $cards-section.cards
+spacing.fixed.px: 48
+align-content: center
+margin-top.px: 24
+wrap: true
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: cards-section
+
+
+
+
+
+
+
+
+
+
+-- component heart-line-title-card:
+optional caption title:
+optional body body:
+boolean show-arrow: true
+children wrapper:
+optional string cta-url:
+optional string cta-text:
+boolean cta: false
+integer spacing: 24
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- heart-line-title-card-desktop: $heart-line-title-card.title
+body: $heart-line-title-card.body
+show-arrow: $heart-line-title-card.show-arrow
+wrapper: $heart-line-title-card.wrapper
+cta: $heart-line-title-card.cta
+cta-url: $heart-line-title-card.cta-url
+cta-text: $heart-line-title-card.cta-text
+spacing: $heart-line-title-card.spacing
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- heart-line-title-card-mobile: $heart-line-title-card.title
+body: $heart-line-title-card.body
+show-arrow: $heart-line-title-card.show-arrow
+wrapper: $heart-line-title-card.wrapper
+cta: $heart-line-title-card.cta
+cta-url: $heart-line-title-card.cta-url
+cta-text: $heart-line-title-card.cta-text
+spacing: $heart-line-title-card.spacing
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: heart-line-title-card
+
+
+
+
+
+
+
+
+
+
+-- component heart-line-title-card-desktop:
+optional caption title:
+optional body body:
+boolean show-arrow:
+children wrapper:
+optional string cta-url:
+optional string cta-text:
+boolean cta: 
+integer spacing: 
+
+-- ftd.column:
+width: fill-container
+z-index: 0
+align-self: center
+padding-bottom.px: 80
+
+-- ftd.row:
+width: fill-container
+align-self: center
+align-content: center
+spacing.fixed.px: $heart-line-title-card-desktop.spacing
+
+-- ftd.image:
+src: $fastn-assets.files.images.landing.chart-line-type-1.svg
+width: auto
+width if { heart-line-title-card-desktop.cta-text != NULL }: fill-container
+height: auto
+align-self: center
+
+-- ftd.text: $heart-line-title-card-desktop.title
+if: { heart-line-title-card-desktop.title != NULL }
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+align-self: center
+width: fill-container
+margin-top.px: 24
+text-align: center
+white-space: nowrap
+
+-- cta-outline-small: $heart-line-title-card-desktop.cta-text
+if: { heart-line-title-card-desktop.cta-text != NULL }
+link: $heart-line-title-card-desktop.cta-url
+
+-- ftd.image:
+src: $fastn-assets.files.images.landing.chart-line-type-2.svg
+width: auto
+height: auto
+align-self: center
+
+-- end: ftd.row
+
+-- ftd.column:
+width: fill-container
+align-content: center
+align-self: center
+spacing.fixed.px: 16
+
+-- ftd.image:
+if: { heart-line-title-card-desktop.show-arrow }
+src: $fastn-assets.files.images.landing.arrow-zigzag.svg
+width: auto
+height: auto
+
+-- ftd.text:
+if: { heart-line-title-card-desktop.body != NULL }
+color: $inherited.colors.text
+role: $inherited.types.copy-large
+text-align: center
+
+$heart-line-title-card-desktop.body
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+align-content: center
+align-self: center
+children: $heart-line-title-card-desktop.wrapper
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: heart-line-title-card-desktop
+
+
+
+
+
+
+
+
+
+
+-- component heart-line-title-card-mobile:
+optional caption title:
+optional body body:
+boolean show-arrow:
+children wrapper:
+optional string cta-url:
+optional string cta-text:
+boolean cta: 
+integer spacing: 
+
+-- ftd.column:
+width: fill-container
+z-index: 0
+align-self: center
+align-content: center
+padding-bottom.px: 24
+padding-horizontal.px if { heart-line-title-card-mobile.title != NULL }: 12
+
+-- ftd.column:
+margin-bottom.px if { heart-line-title-card-mobile.cta-text != NULL }: 33
+
+-- cta-outline-small: $heart-line-title-card-mobile.cta-text
+if: { heart-line-title-card-mobile.cta-text != NULL }
+link: $heart-line-title-card-mobile.cta-url
+
+-- end: ftd.column
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px if { heart-line-title-card-mobile.cta-text != NULL }: 50
+
+-- ftd.image:
+src: $fastn-assets.files.images.landing.chart-line-type-2.svg
+width: fill-container
+width.fixed.px if { heart-line-title-card-mobile.cta-text != NULL }: 160
+height: auto
+
+-- ftd.image:
+if: { heart-line-title-card-mobile.cta-text != NULL }
+src: $fastn-assets.files.images.landing.chart-line-type-2.svg
+width.fixed.px: 160
+height: auto
+
+-- end: ftd.row
+
+-- ftd.row:
+align-self: center
+align-content: center
+spacing.fixed.px: 24
+width.fixed.px: 345
+
+-- ftd.text: $heart-line-title-card-mobile.title
+if: { heart-line-title-card-mobile.title != NULL }
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+align-self: center
+width: fill-container
+margin-top.px: 24
+text-align: center
+
+-- end: ftd.row
+
+-- ftd.column:
+width: fill-container
+align-content: center
+align-self: center
+spacing.fixed.px: 16
+
+-- ftd.image:
+if: { heart-line-title-card-mobile.show-arrow }
+src: $fastn-assets.files.images.landing.arrow-zigzag.svg
+width.fixed.px: 132
+height.fixed.px: 20
+align-self: end
+
+-- ftd.text:
+if: { heart-line-title-card-mobile.body != NULL }
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+text-align: center
+
+$heart-line-title-card-mobile.body
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+align-content: center
+align-self: center
+children: $heart-line-title-card-mobile.wrapper
+padding-horizontal.px: 12
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: heart-line-title-card-mobile
+
+
+
+
+
+
+
+
+
+-- component title-with-body-card:
+optional caption title:
+optional ftd.image-src logo:
+optional body body:
+optional ftd.color body-color: $inherited.colors.border.dark
+integer width: 400
+children card:
+
+-- ftd.column:
+width: fill-container
+align-self: center
+align-content: center
+spacing.fixed.px: 32
+max-width.fixed.px: $title-with-body-card.width
+min-height.fixed.px: 450
+min-height.fixed.px if { ftd.device == "mobile" }: 430
+
+-- ftd.image:
+if: { title-with-body-card.logo != NULL }
+src: $title-with-body-card.logo
+width: auto
+height.fixed.px: 70
+
+-- ftd.text: $title-with-body-card.title
+if: { title-with-body-card.title != NULL }
+role: $inherited.types.heading-small
+color: $title-with-body-card.body-color
+
+-- ftd.text:
+color: $title-with-body-card.body-color
+role: $inherited.types.copy-regular
+
+$title-with-body-card.body
+
+-- end: ftd.column
+
+-- end: title-with-body-card
+
+
+
+
+
+
+
+
+
+
+-- component rectangle-card:
+boolean show-border: true
+integer width: 400
+children wrapper:
+optional ftd.color bgcolor: $inherited.colors.accent.primary
+
+-- ftd.column:
+min-width.fixed.px: $rectangle-card.width
+max-width.fixed.px: $rectangle-card.width
+
+-- ftd.column:
+if: { rectangle-card.show-border }
+width: fill-container
+height: fill-container
+border-width.px: 1
+border-color: $inherited.colors.border
+border-radius.px: 30
+z-index: 11
+anchor: parent
+right.px: -15
+bottom.px: -15
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+children: $rectangle-card.wrapper
+background.solid: $rectangle-card.bgcolor
+border-radius.px: 30
+padding-vertical.px: 48
+padding-horizontal.px: 34
+z-index: 0
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: rectangle-card

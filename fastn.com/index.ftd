@@ -113,6 +113,7 @@ cta-text: Learn more
 cta-link: /acme/
 image: https://fastn.com/-/fastn.com/images/blog/offer.png
 feature: Performance
+move-left: true
 
 -- cl.feature-card.code:
 
@@ -144,21 +145,286 @@ link: /acme/
 
 -- end: ftd.row
 
--- cl.design-chakra:
 
--- cl.frontend-chakra:
+-- cl.feature-card: Design
+icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
+cta-text: Learn more
+cta-link: /acme/
+image: https://fastn.com/-/fastn.com/images/blog/offer.png
+feature: Beautify
 
--- cl.fullstack-chakra:
+full-stack open source framework designed for creating good looking content
+centric or API and database driven websites.
 
--- cl.deploy-chakra:
+-- cl.card: Colors
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
+cta-link: /featured/cs/
+cta-text: Check out the full library ->
+min-height.fixed.em: 21
+
+fastn has well defined structure to define color schema and typography. This can
+change your website look and feel just with **one line**. You can create your
+own scheme or use them from library provided by fastn.
+
+-- cl.card: Figma Token With fastn Color Scheme
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: /figma/
+cta-text: Using figma token guides ->
+min-height.fixed.em: 21
+
+You can use figma token with fastn color scheme. You also can create your own
+fastn color scheme from figma json.
+
+-- end: cl.feature-card
+
+-- cl.feature-card: Typography
+icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-text: Learn more
+cta-link: /acme/
+image: https://fastn.com/-/fastn.com/images/blog/offer.png
+feature: Beautify
+
+full-stack open source framework designed for creating good looking content
+centric or API and database driven websites.
+
+-- cl.card: Typography
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
+cta-link: /featured/cs/
+cta-text: Check out the full library ->
+min-height.fixed.em: 21
+
+fastn has well defined structure to define color schema and typography. This can
+change your website look and feel just with **one line**. You can create your
+own scheme or use them from library provided by fastn.
+
+-- cl.card: Figma Token With fastn Typography
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: /figma/
+cta-text: Using figma token guides ->
+min-height.fixed.em: 21
+
+You can use figma token with fastn color scheme. You also can create your own
+fastn color scheme from figma json.
+
+-- end: cl.feature-card
+
+-- cl.feature-card: Readymade Components
+icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-text: Learn more
+cta-link: /acme/
+image: https://fastn.com/-/fastn.com/images/featured/sections/heros/hero-with-2-cta/hero-with-two-cta-5.png
+feature: Use it as is
+
+-- cl.feature-card.code:
+
+\-- ds.hero-right-hug:  We Transform ideas into digital outcomes.
+image: $assets.files.assets.hero-img.jpg
+primary-cta: Button
+primary-cta-link: index.html
+primary-cta-icon: $assets.files.assets.check-solid.svg
+secondary-cta: Button
+secondary-cta-link: index.html
+secondary-cta-icon: $assets.files.assets.check-solid.svg
+
+We are an award-winning strategic design company that provides
+consultancy services and help you create outstanding digital products.
+
+-- cl.feature-card.body:
+
+full-stack open source framework designed for creating good looking content
+centric or API and database driven websites.
+
+-- end: cl.feature-card
+
+-- cl.cards-section:
+
+-- cl.card: Responsive
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: /figma/
+cta-text: Using figma token guides ->
+min-height.fixed.em: 21
+
+You can use figma token with fastn color scheme. You also can create your own
+fastn color scheme from figma json.
+
+-- cl.card: Dark Mode
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: /figma/
+cta-text: Using figma token guides ->
+min-height.fixed.em: 21
+
+You can use figma token with fastn color scheme. You also can create your own
+fastn color scheme from figma json.
+
+-- cl.card: SEO
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: /figma/
+cta-text: Using figma token guides ->
+min-height.fixed.em: 21
+
+You can use figma token with fastn color scheme. You also can create your own
+fastn color scheme from figma json.
+
+-- cl.card: Markdown
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: /figma/
+cta-text: Using figma token guides ->
+min-height.fixed.em: 21
+
+You can use figma token with fastn color scheme. You also can create your own
+fastn color scheme from figma json.
+
+-- cl.card: Data-driven
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: /figma/
+cta-text: Using figma token guides ->
+min-height.fixed.em: 21
+
+You can use figma token with fastn color scheme. You also can create your own
+fastn color scheme from figma json.
+
+-- cl.card: Deploy
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: /figma/
+cta-text: Using figma token guides ->
+min-height.fixed.em: 21
+
+You can use figma token with fastn color scheme. You also can create your own
+fastn color scheme from figma json.
+
+-- end: cl.cards-section
+
+-- cl.cards-section:
+transparent: true
+
+-- cl.heart-line-title-card: Loved by 1M+folks
+
+What peoples say about fastn? 
+
+-- cl.testimonial-card: Jenny Wilson
+avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-1.svg
+bgcolor: $inherited.colors.custom.two
+bg-color: $inherited.colors.background.step-2
+label: CEO, ABC Company
+width: 500
+
+At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+pellentesque  egestas nulla .
+
+-- cl.testimonial-card: Jenny Wilson
+avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-2.svg
+bgcolor: $inherited.colors.custom.nine
+bg-color: $inherited.colors.background.step-2
+label: CEO, ABC Company
+width: 500
+
+At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+pellentesque  egestas nulla .
+
+-- cl.testimonial-card: Jenny Wilson
+avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-3.svg
+bgcolor: $inherited.colors.custom.three
+bg-color: $inherited.colors.background.step-2
+label: CEO, ABC Company
+width: 500
+
+At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+pellentesque  egestas nulla .
+
+-- cl.testimonial-card: Jenny Wilson
+avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-4.svg
+bgcolor: $inherited.colors.custom.one
+bg-color: $inherited.colors.background.step-2
+label: CEO, ABC Company
+width: 500
+
+At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+pellentesque  egestas nulla .
+
+-- end: cl.cards-section
+
+
+-- cl.cards-section: Compare
+transparent: true
+
+-- cl.rectangle-card:
+
+-- cl.title-with-body-card: Fastn
+logo: $fastn-assets.files.images.landing.fastn-slider-logo.svg
+width: 325
+
+At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+pellentesque egestas nulla .
+
+At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+pellentesque egestas nulla .
+
+At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+pellentesque egestas nulla .
+
+At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+pellentesque egestas nulla .
+
+-- end: cl.rectangle-card
+
+-- cl.rectangle-card:
+bgcolor: $inherited.colors.background.step-2
+
+-- cl.title-with-body-card: React JS
+logo: $fastn-assets.files.images.landing.react-js-logo.svg
+body-color: $inherited.colors.text
+width: 325
+
+At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+pellentesque egestas nulla .
+
+At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+pellentesque egestas nulla .
+
+At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+pellentesque egestas nulla .
+
+At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+pellentesque egestas nulla .
+
+-- end: cl.rectangle-card
+
+-- end: cl.cards-section
+
+-- ftd.row:
+align-self: center
+padding-bottom.px: 48
+
+-- cl.cta-outline-medium: Read more
+link: /acme/
+
+-- end: ftd.row
+
+-- cl.cards-section:
+transparent: true
+
+-- cl.hero-with-4-images: fastn ambassadors program
+image-1: $fastn-assets.files.images.ambassadors.event-image-1.jpg
+image-2: $fastn-assets.files.images.ambassadors.event-image-2.jpg
+image-3: $fastn-assets.files.images.ambassadors.event-image-3.jpg
+image-4: $fastn-assets.files.images.ambassadors.event-image-4.jpg
+cta-text: Join our discord
+cta-link: ambassadors/how-it-works/
+
+You might find yourself helping fellow students build their coding skills online
+with Microsoft Learn, organizing a virtual hackathon to solve real-world
+challenges,
+
+-- end: cl.cards-section
+
+;;-- cl.frontend-chakra:
+
+;;-- cl.fullstack-chakra:
+
+;;-- cl.deploy-chakra:
 
 -- end: ds.page.wrapper
 
--- ds.page.footer:
-
--- cl.footer-content:
-
--- end: ds.page.footer
 
 -- end: ds.page
 

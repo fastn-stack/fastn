@@ -201,7 +201,7 @@ spacing: space-between
 max-width.fixed.px: 1440
 
 -- ftd.column:
-width.fixed.percent: 55
+width.fixed.percent: 40
 color: $inherited.colors.text-strong
 spacing.fixed.px: 44
 
@@ -234,7 +234,7 @@ show-arrow: true
 -- end: ftd.column
 
 -- ftd.column:
-width.fixed.percent: 45
+width.fixed.percent: 55
 
 -- ftd.row:
 width: fill-container
