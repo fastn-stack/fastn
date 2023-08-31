@@ -11,19 +11,13 @@
 -- component hero-content:
 
 -- hero-section: Build your next landing page, blog, or webapp
-preposition: with
+primary-cta: Get Started
+primary-cta-link: index.html
+secondary-cta: Docs
+secondary-cta-link: index.html
 
--- ftd.text: Easy to learn
-display: inline
-margin-right.em: 0.25
-color: $inherited.colors.custom.ten
-
--- ftd.text:
-display: inline
-margin-right.em: 0.25
-
-full-stack open source framework designed for creating good looking content centric or API
-and database driven websites.
+full-stack open source framework designed for creating good looking content
+centric or API and database driven websites.
 
 -- end: hero-section
 
@@ -165,8 +159,13 @@ children: $home-page.footer
 
 -- component hero-section:
 caption title:
-optional string preposition:
-children subtitle:
+body body:
+boolean $mouse-in: false
+boolean $hover: false
+optional string primary-cta-link:
+optional string primary-cta:
+optional string secondary-cta-link:
+optional string secondary-cta:
 
 -- ftd.column:
 width: fill-container
@@ -183,44 +182,38 @@ padding-bottom.em if { ftd.device == "desktop" }: 7
 align-self: center
 align-content: center
 
--- github-star-cta:
-link: https://github.com/fastn-stack/fastn/
-
-Star us on Github 🚀
-
 -- ftd.text: $hero-section.title
 role: $inherited.types.heading-hero
 role if { ftd.device == "mobile" }: $inherited.types.heading-medium
 text-align: center
 
--- ftd.text: $hero-section.preposition
-if: { hero-section.preposition != NULL }
+-- ftd.text: 
 text-align: center
-color: $inherited.colors.text
-role: $inherited.types.heading-medium
-role if { ftd.device == "mobile" }: $inherited.types.copy-large
-margin-top.px: 24
+role: $inherited.types.copy-regular
+margin-top.px: 48
 
--- ftd.text: fastn
-text-align: center
-role: $inherited.types.heading-hero
-role if { ftd.device == "mobile" }: $inherited.types.heading-large
-classes: fastn, text-color
+$hero-section.body
 
--- ftd.text.css:
+-- ftd.row:
+align-self: center
+margin-top.px: 48
+spacing.fixed.px: 64
 
--- string: $fastn-assets.files.design.css
+-- cta-primary-large: $hero-section.primary-cta
+link: $hero-section.primary-cta-link
 
--- end: ftd.text.css
+-- ftd.text: $hero-section.secondary-cta
+link: $hero-section.secondary-cta-link
+role: $inherited.types.button-large
+color: $inherited.colors.cta-secondary.text
+color if { hero-section.hover }: $inherited.colors.custom.nine
+;;background.solid if { hero-section.mouse-in }: $inherited.colors.cta-secondary.hover
+$on-mouse-leave$: $ftd.set-bool($a = $hero-section.hover, v = false)
+$on-mouse-enter$: $ftd.set-bool($a = $hero-section.hover, v = true)
+padding-vertical.px: 12
+border-radius.px: 6
 
--- ftd.container:
-role: $inherited.types.heading-tiny
-margin-top.em if { ftd.device == "desktop"}: 2
-margin-top.em: 0.5
-color: $inherited.colors.text
-children: $hero-section.subtitle
-display: inline
-classes: text-align-center
+-- end: ftd.row
 
 -- end: ftd.column
 
@@ -1131,3 +1124,204 @@ copyright: Copyright © 2023 - fastn.com
 
 
 -- end: social-sideline-footer
+
+
+
+
+
+
+
+
+
+
+-- component feature-card:
+optional ftd.image-src icon:
+caption title:
+optional string feature:
+body body:
+string code:
+optional string cta-text:
+optional string cta-link:
+optional ftd.image-src image:
+boolean move-left: false
+
+-- ftd.column:
+width: fill-container
+background.solid: $inherited.colors.background.step-1
+padding.px: 24
+color: $inherited.colors.text-strong
+margin-bottom.px: 48
+
+-- ftd.image:
+src: $feature-card.icon
+width.fixed.px: 48
+
+-- ftd.text: $feature-card.feature
+role: $inherited.types.fine-print
+color: $inherited.colors.info.text
+padding-top.px: 24
+
+-- ftd.text: $feature-card.title
+role: $inherited.types.heading-large
+padding-top.px: 8
+
+-- ftd.text: 
+role: $inherited.types.copy-regular
+padding-top.px: 24
+width.fixed.percent: 60
+color: $inherited.colors.accent.secondary
+margin-bottom.px: 24
+
+$feature-card.body
+
+-- cta-outline-small: $feature-card.cta-text
+link: $feature-card.cta-link
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
+align-content: center
+margin-top.px: 24
+
+-- ftd.column:
+if: { feature-card.move-left }
+width.fixed.percent: 48
+
+-- ftd.image:
+src: $feature-card.image
+width: fill-container
+height.fixed.px: 300
+fit: cover
+
+-- end: ftd.column
+
+-- ftd.column:
+width.fixed.percent: 48
+
+-- ds.code:
+max-height.fixed.px: 300
+
+$feature-card.code
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { !feature-card.move-left }
+width.fixed.percent: 48
+
+-- ftd.image:
+src: $feature-card.image
+width: fill-container
+height.fixed.px: 300
+fit: cover
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: feature-card
+
+
+
+
+
+
+
+
+
+
+
+-- component cta-primary-large:
+caption title:
+string link: 
+boolean $mouse-in: false
+
+-- ftd.text: $cta-primary-large.title
+link: $cta-primary-large.link
+role: $inherited.types.button-large
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+background.solid if { cta-primary-large.mouse-in }: $inherited.colors.cta-primary.hover
+$on-mouse-leave$: $ftd.set-bool($a = $cta-primary-large.mouse-in, v = false)
+$on-mouse-enter$: $ftd.set-bool($a = $cta-primary-large.mouse-in, v = true)
+padding-vertical.px: 12
+padding-horizontal.px: 32
+border-radius.px: 6
+
+-- end: cta-primary-large
+
+
+
+
+
+
+
+
+
+
+-- component cta-outline-small:
+caption title:
+string link: 
+boolean $mouse-in: false
+
+-- ftd.row:
+align-content: center
+border-width.px: 1
+border-color: $inherited.colors.cta-primary.hover
+border-color if { cta-outline-small.mouse-in }: $inherited.colors.cta-primary.border
+$on-mouse-leave$: $ftd.set-bool($a = $cta-outline-small.mouse-in, v = false)
+$on-mouse-enter$: $ftd.set-bool($a = $cta-outline-small.mouse-in, v = true)
+padding-vertical.px: 10
+padding-horizontal.px: 22
+border-radius.px: 32
+spacing.fixed.px: 8
+link: $cta-outline-small.link
+color: $inherited.colors.text
+role: $inherited.types.button-small
+
+-- ftd.text: $cta-outline-small.title
+
+-- ftd.text: ->
+role: $inherited.types.fine-print
+
+-- end: ftd.row
+
+-- end: cta-outline-small
+
+
+
+
+
+
+
+
+
+-- component cta-outline-medium:
+caption title:
+string link: 
+boolean $mouse-in: false
+
+-- ftd.row:
+align-content: center
+border-width.px: 1
+border-color: $inherited.colors.cta-primary.hover
+border-color if { cta-outline-medium.mouse-in }: $inherited.colors.cta-primary.border
+$on-mouse-leave$: $ftd.set-bool($a = $cta-outline-medium.mouse-in, v = false)
+$on-mouse-enter$: $ftd.set-bool($a = $cta-outline-medium.mouse-in, v = true)
+padding-vertical.px: 10
+padding-horizontal.px: 22
+border-radius.px: 32
+spacing.fixed.px: 8
+link: $cta-outline-medium.link
+color: $inherited.colors.text
+role: $inherited.types.button-medium
+
+-- ftd.text: $cta-outline-medium.title
+
+-- ftd.text: ->
+
+-- end: ftd.row
+
+-- end: cta-outline-medium

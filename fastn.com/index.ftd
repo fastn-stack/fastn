@@ -19,7 +19,130 @@ sidebar: false
 
 -- cl.hero-content:
 
--- cl.column-layout:
+-- cl.feature-card: Easy to learn
+icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+cta-text: Learn more
+cta-link: /acme/
+image: https://fastn.com/-/fastn.com/images/blog/offer.png
+feature: User-friendly syntax
+
+-- cl.feature-card.code:
+
+\-- ws.page:
+
+\-- ws.hero-image-left: Diwali Dhamaka Offer 2023
+cta-primary: Claim Now
+cta-primary-link: /pricing/
+image: $assets.files.assets.diwali-2023.png
+
+Avail 20% flat discount on our premium package this Diwali. 
+Offer valid till 30th Nov 2023.
+
+\-- end: ws.page
+
+-- cl.feature-card.body:
+
+full-stack open source framework designed for creating good looking content
+centric or API and database driven websites.
+
+-- end: cl.feature-card
+
+-- cl.feature-card: Easy to build 
+icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
+cta-text: Learn more
+cta-link: /acme/
+image: https://fastn.com/-/fastn.com/images/blog/offer.png
+feature: Rapidly assemble webpages
+move-left: true
+
+-- cl.feature-card.code:
+
+\-- ws.page:
+
+\-- ws.hero-image-left: Diwali Dhamaka Offer 2023
+cta-primary: Claim Now
+cta-primary-link: /pricing/
+image: $assets.files.assets.diwali-2023.png
+
+Avail 20% flat discount on our premium package this Diwali. 
+
+Offer valid till 30th Nov 2023.
+
+\-- end: ws.page
+
+-- cl.feature-card.body:
+
+full-stack open source framework designed for creating good looking content
+centric or API and database driven websites.
+
+-- end: cl.feature-card
+
+
+-- cl.feature-card: Easy to Edit
+icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/feature-icon-1.svg
+cta-text: Learn more
+cta-link: /acme/
+image: https://fastn.com/-/fastn.com/images/blog/offer.png
+feature: Performance
+
+-- cl.feature-card.code:
+
+\-- ws.page: ;; <hl>
+
+\-- ws.hero-image-left: Diwali Dhamaka Offer 2023
+cta-primary: Claim Now
+cta-primary-link: /pricing/
+image: $assets.files.assets.diwali-2023.png
+
+Avail 20% flat discount on our premium package this Diwali. 
+Offer valid till 30th Nov 2023.
+
+\-- end: ws.page
+
+-- cl.feature-card.body:
+
+full-stack open source framework designed for creating good looking content
+centric or API and database driven websites.
+
+-- end: cl.feature-card
+
+
+-- cl.feature-card: Easy to Deploy
+icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-text: Learn more
+cta-link: /acme/
+image: https://fastn.com/-/fastn.com/images/blog/offer.png
+feature: Performance
+
+-- cl.feature-card.code:
+
+\-- ws.page:
+
+\-- ws.hero-image-left: Diwali Dhamaka Offer 2023
+cta-primary: Claim Now
+cta-primary-link: /pricing/
+image: $assets.files.assets.diwali-2023.png
+
+Avail 20% flat discount on our premium package this Diwali. 
+Offer valid till 30th Nov 2023.
+
+\-- end: ws.page
+
+-- cl.feature-card.body:
+
+full-stack open source framework designed for creating good looking content
+centric or API and database driven websites.
+
+-- end: cl.feature-card
+
+-- ftd.row:
+align-self: center
+padding-bottom.px: 48
+
+-- cl.cta-outline-medium: Read the ACME Case study to learn more
+link: /acme/
+
+-- end: ftd.row
 
 -- cl.design-chakra:
 

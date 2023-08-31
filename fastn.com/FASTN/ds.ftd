@@ -141,12 +141,6 @@ document-description: $page.document-description
 document-image: $page.document-image
 favicon: $page.favicon
 
--- doc-site.page.header-logo-ui:
-
--- car-component:
-
--- end: doc-site.page.header-logo-ui
-
 -- ftd.column:
 spacing.fixed.em: 0.8
 width: fill-container
