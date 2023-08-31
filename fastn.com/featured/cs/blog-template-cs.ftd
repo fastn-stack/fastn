@@ -7,8 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -23,9 +21,10 @@ colors: $dark-flame-cs.main
 types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
-distribution-bar: false
 show-layout-bar: true
 full-width: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -39,42 +38,33 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
-
--- ds.layout: Color schemes - Blog Template CS
-cta-url: https://fastn-community.github.io/blog-template-cs/
-previous-url: /featured/cs/
-cta-text: Use this color scheme
-github-url: https://github.com/fastn-community/blog-template-cs
-
--- end: ds.page.layout-bar
-
 -- ds.page.abstract-bar:
 
--- ds.distributors: 
+-- ds.distributors: Blog Template CS
 owners: $owner-fastn
 license-url: https://github.com/fastn-community/blog-template-cs/blob/main/LICENSE
 license: Creative Commons
-published-date: 16-June-2023
-used-by: 2 +
-likes: 1 Stars
-connect: $social-links
+published-date: 19-Jul-2023
 
 -- end: ds.page.abstract-bar
 
+-- ds.page.full-width-wrap:
 
-
--- ds.preview-card: 
-image: $fastn-assets.files.images.featured.cs.blog-template-cs.png
-cta-url: https://fastn-community.github.io/blog-template-cs/
-cta-text: Demo
-width.fixed.px if { ftd.device == "desktop" }: 800
-
--- ft-ui.grid-view: Similar Color schemes
-if: { show-grid }
+-- ft-ui.grid-view: Featured Color Scheme
 templates: $similar-schemes
 more-link-text: View all
 more-link: /featured/cs/
+show-large: true
+
+-- end: ds.page.full-width-wrap
+
+-- ds.preview-card:
+image: $fastn-assets.files.images.featured.cs.blog-template-cs.png
+cta-url: https://fastn-community.github.io/blog-template-cs/
+cta-text: Demo
+github-url: https://fastn-community.github.io/blog-template-cs/
+cta-2-url: https://fastn-community.github.io/blog-template-cs/
+cta-2-text: User Manual
 
 -- end: ds.page
 
@@ -113,9 +103,15 @@ src: $assets.files.images.linkedin.svg
 
 -- common.owner list owner-fastn:
 
--- common.owner: Fastn Community
-profile: https://github.com/fastn-community
-avatar: $assets.files.images.fastn.svg
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- common.owner: Meenu Kumari
+profile: featured/contributors/developers/meenu-kumari/
+avatar: $fastn-assets.files.featured.contributors.developers.meenu-kumari.meenu.jpg
+role: Developer
 
 -- end: owner-fastn
 
@@ -133,25 +129,13 @@ avatar: $assets.files.images.fastn.svg
 -- ft-ui.template: Blue Heal CS
 template-url: featured/cs/blue-heal-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
-licence-url: https://github.com/fastn-community/blue-heal-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/blue-heal-cs
-
-Add warmth and energy to your designs with the `blue-heal-cs`.
 
 -- ft-ui.template: Dark Flame CS
 template-url: featured/cs/dark-flame-cs/
 screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
-licence-url: https://github.com/fastn-community/dark-flame-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/dark-flame-cs/
-
-Add warmth and energy to your designs with the `dark-flame-cs`.
 
 -- ft-ui.template: Forest CS
 template-url: featured/cs/forest-cs/
 screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
-licence-url: https://github.com/fastn-community/forest-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/forest-cs
-
-Add warmth and energy to your designs with the `forest-cs`.
 
 -- end: similar-schemes

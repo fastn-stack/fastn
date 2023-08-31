@@ -7,8 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -54,15 +52,14 @@ image: $fastn-assets.files.images.featured.resumes.resume-10.png
 cta-url: https://priyanka9634.github.io/resume-10/
 cta-text: Demo
 github-url: https://github.com/priyanka9634/resume-10
-cta-2-url: https://priyanka9634.github.io/resume-10//components/
+cta-2-url: https://priyanka9634.github.io/resume-10/components/
 cta-2-text: User Manual
 
 -- ft-ui.grid-view: Featured Resumes
-if: { show-grid }
 templates: $resumes
 more-link-text: View more
 more-link: /featured/resumes/
-
+show-large: true
 
 -- end: ds.page
 

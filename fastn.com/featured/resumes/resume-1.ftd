@@ -7,8 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -49,6 +47,16 @@ published-date: 26-Jul-2022
 
 -- end: ds.page.abstract-bar
 
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured Resumes
+templates: $resumes
+more-link-text: View more
+more-link: /featured/resumes/
+show-large: true
+
+-- end: ds.page.full-width-wrap
+
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.resumes.resume-1.png
 cta-url: https://priyanka9634.github.io/resume-1/
@@ -56,14 +64,6 @@ cta-text: Demo
 github-url: https://github.com/priyanka9634/resume-1
 cta-2-url: https://priyanka9634.github.io/resume-1/components/
 cta-2-text: User Manual
-
-
--- ft-ui.grid-view: Featured Resumes
-if: { show-grid }
-templates: $resumes
-more-link-text: View more
-more-link: /featured/resumes/
-
 
 -- end: ds.page
 

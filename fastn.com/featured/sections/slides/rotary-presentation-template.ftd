@@ -7,8 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -24,6 +22,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
+distribution-bar: true
+full-width-bar: true
 show-layout-bar: true
 
 -- ds.page.footer:
@@ -38,26 +38,31 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Slides / Presentations - Rotary Presentation Template
-previous-url: /featured/sections/slides/
-github-url: https://github.com/FifthTry/Rotary-Presentation-Template
+-- ds.distributors: Rotary Presentation Template
+owners: $owner-fastn
+license-url: https://github.com/FifthTry/Rotary-Presentation-Template/blob/main/LICENSE
+license: Creative Commons
+published-date: 08-Jul-2022
 
--- end: ds.page.layout-bar
+-- end: ds.page.abstract-bar
 
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured Slides / Presentations
+templates: $slides
+more-link-text: View more
+more-link: /featured/sections/slides/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.sections.slides.rotary-presentation-template.png
 cta-url: https://fifthtry.github.io/Rotary-Presentation-Template/
 cta-text: Demo
-
--- ft-ui.grid-view: Featured Slides / Presentations
-if: { show-grid }
-templates: $slides
-more-link-text: View more
-more-link: /featured/sections/slides/
-
+github-url: https://github.com/FifthTry/Rotary-Presentation-Template
 
 -- end: ds.page
 
@@ -85,3 +90,21 @@ template-url: /featured/sections/slides/streamline-slides/
 screenshot: $fastn-assets.files.images.featured.sections.slides.streamline-slides.png
 
 -- end: slides
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- common.owner: Priyanka Yadav
+profile: featured/contributors/developers/priyanka-yadav/
+avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+role: Developer
+
+-- end: owner-fastn
