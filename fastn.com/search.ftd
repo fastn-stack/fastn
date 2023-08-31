@@ -4,6 +4,7 @@
 
 -- ds.page-with-no-right-sidebar:
 
+-- ds.h1: Search
 -- search-ui:
 -- display-search-result:
 
@@ -26,6 +27,22 @@
 
 -- component search-ui:
 
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 10
+
+-- ftd.row:
+align-self: end
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+spacing.fixed.px: 2
+
+-- ftd.text: Total:
+-- ftd.integer: $len
+
+-- end: ftd.row
+
+
 -- ftd.text-input:
 value: $search
 $on-input$: $ftd.set-string($a = $search, v = $VALUE)
@@ -41,6 +58,8 @@ $on-global-key[esc]$: $go-back()
 $on-global-key[down]$: $increment($a=$selected, n=$len)
 $on-global-key[up]$: $decrement($a=$selected, n=$len)
 $on-global-key[Enter]$: $go-to-url(a=$selected, l=$uis)
+
+-- end: ftd.column
 
 -- end: search-ui
 
@@ -91,10 +110,12 @@ background.solid if { display-search-item.idx == selected }: $inherited.colors.b
 -- ds.h2: $display-search-item.ui.title
 if: { display-search-item.ui.title != NULL }
 
--- ds.markdown:
+-- ftd.text: $display-search-item.ui.description
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
 if: { display-search-item.ui.description != NULL }
+line-clamp: 3
 
-$display-search-item.ui.description
 
 -- end: ftd.column
 
@@ -164,11 +185,15 @@ integer n:
 
 a = (a + 1) % n
 
+
+
+
 -- void decrement(a,n):
 integer $a:
 integer n:
+js: [$fastn-assets.files.jsfunction.js]
 
-a = (a - 1) % n
+clampDecrement(a,n)
 
 
 
