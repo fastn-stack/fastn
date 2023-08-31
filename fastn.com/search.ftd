@@ -40,18 +40,16 @@ role: $inherited.types.body-regular
 width: fill-container
 spacing.fixed.px: 10
 
+
+
 -- ftd.row:
-align-self: end
 role: $inherited.types.fine-print
 color: $inherited.colors.text
-spacing.fixed.px: 2
-if: { len > 0 }
+width: fill-container
+spacing.fixed.px: 7
 
--- ftd.text: Showing:
--- ftd.integer: $len
-
--- end: ftd.row
-
+-- ftd.text: 🔍
+align-self: center
 
 -- ftd.text-input:
 value: $search
@@ -71,6 +69,20 @@ $on-global-key[up]$: $decrement($a=$selected, n=$len)
 $on-global-key[j]$: $increment($a=$selected, n=$len)
 $on-global-key[k]$: $decrement($a=$selected, n=$len)
 $on-global-key[Enter]$: $go-to-url(a=$selected, l=$uis)
+
+-- end: ftd.row
+
+-- ftd.row:
+align-self: end
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+spacing.fixed.px: 2
+if: { len > 0 }
+
+-- ftd.text: Showing:
+-- ftd.integer: $len
+
+-- end: ftd.row
 
 -- end: ftd.column
 
