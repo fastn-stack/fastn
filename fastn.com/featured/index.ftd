@@ -326,13 +326,12 @@ width.fixed.px: 324
 classes if {grid-of-items.two-fold}: two-folded
 $on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
-height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 244
+height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 224
 height.fixed.px if {grid-of-items.two-fold}: 520
 height.fixed.px if {grid-of-items.show-large}: 324
 align-content: center
 border-color: $inherited.colors.border
 border-width.px: 1
-padding.px: 16
 border-radius.px: 8
 overflow: hidden
 
@@ -428,14 +427,39 @@ color: #d9d9d9
 
 -- end: ftd.column
 
+/-- ftd.image:
+if: { $grid-of-items.screenshot != NULL }
+src: $grid-of-items.screenshot
+$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
+fit: contain
+width.fixed.px: 324
+height.fixed.px: 224
+
 -- ftd.image:
 if: { $grid-of-items.screenshot != NULL }
 src: $grid-of-items.screenshot
-width: fill-container
 $on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
 $on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
-classes if { grid-of-items.wip }: filter-1px
-css: [$fastn-assets.files.featured.filter.css]
+fit: cover
+width.fixed.px: 324
+height.fixed.px: 224
+
+/-- ftd.image:
+if: { $grid-of-items.screenshot != NULL }
+src: $grid-of-items.screenshot
+$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
+max-width: fill-container
+height: auto
+
+/-- ftd.image:
+if: { $grid-of-items.screenshot != NULL }
+src: $grid-of-items.screenshot
+$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
+width: fill-container
+height: auto
 align-self: center
 
 -- end: ftd.column
