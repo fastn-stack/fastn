@@ -1,4 +1,3 @@
-
 -- boolean show-grid: true
 -- boolean show-list: false
 
@@ -6,7 +5,6 @@
 
 
 -- ds.page: 
-full-width: true
 sidebar: false
 
 -- grid-view: Documentation Sites
@@ -81,7 +79,6 @@ boolean show-large: false
 
 -- ftd.column:
 width: fill-container
-padding-top.px: 8
 spacing.fixed.px if { ftd.device == "mobile" }: 24
 margin-top.px if { grid-view.push-top }: -90
 
@@ -148,10 +145,10 @@ $grid-view.body
 -- ftd.desktop:
 
 -- ftd.row:
-width: fill-container
+width.fixed.vw: 70
 spacing.fixed.px: 32
-classes: wrapper
-classes if { grid-view.show-four }: wrapper-4
+overflow-x: auto
+margin-vertical.px: 40
 
 -- grid-of-items: $obj.title
 $loop$: $grid-view.templates as $obj
@@ -203,6 +200,108 @@ two-fold: $obj.two-fold
 
 
 
+-- component view-all:
+optional caption title:
+template list templates:
+boolean $hover: false
+optional body body:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px if { ftd.device == "mobile" }: 24
+
+-- ftd.row:
+width: fill-container
+align-content: center
+margin-top.px if { ftd.device == "mobile" }: 24
+
+-- ftd.desktop:
+
+-- ftd.text: $view-all.title
+if: { view-all.title != NULL }
+role: $inherited.types.heading-medium
+color: $inherited.colors.accent.primary
+width: fill-container
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- ftd.text: $view-all.title
+if: { view-all.title != NULL }
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+width: fill-container
+align-self: center
+
+-- end: ftd.mobile
+
+-- end: ftd.row
+
+-- ftd.text:
+if: { view-all.body != NULL }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+margin-top.px: 16
+margin-bottom.px if { ftd.device == "mobile" }: 24
+
+$view-all.body
+
+-- ftd.desktop:
+
+-- ftd.row:
+width.fixed.vw: 70
+spacing.fixed.px: 32
+wrap: true
+margin-vertical.px: 40
+
+-- grid-of-items: $obj.title
+$loop$: $view-all.templates as $obj
+template-url: $obj.template-url
+licence-url: $obj.licence-url
+github-url: $obj.github-url
+screenshot: $obj.screenshot
+body: $obj.body
+is-last: $obj.is-last
+wip: $obj.wip
+two-fold: $obj.two-fold
+
+-- end: ftd.row
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 32
+
+-- grid-of-items: $obj.title
+$loop$: $view-all.templates as $obj
+template-url: $obj.template-url
+licence-url: $obj.licence-url
+github-url: $obj.github-url
+screenshot: $obj.screenshot
+body: $obj.body
+is-last: $obj.is-last
+wip: $obj.wip
+two-fold: $obj.two-fold
+
+-- end: ftd.column
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: view-all
+
+
+
+
+
+
+
+
 -- component grid-of-items:
 caption title: 
 string template-url:
@@ -221,16 +320,17 @@ boolean show-large: false
 -- ftd.column:
 width if { ftd.device == "mobile" }: fill-container
 spacing.fixed.px: 16
+min-width.fixed.px: 324
+width.fixed.px: 324
 classes if {grid-of-items.two-fold}: two-folded
 $on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
-height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 244
+height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 224
 height.fixed.px if {grid-of-items.two-fold}: 520
 height.fixed.px if {grid-of-items.show-large}: 324
 align-content: center
 border-color: $inherited.colors.border
 border-width.px: 1
-padding.px: 16
 border-radius.px: 8
 overflow: hidden
 
@@ -241,15 +341,15 @@ width: fill-container
 spacing.fixed.px: 12
 padding.px: 20
 anchor: parent
-bottom.px if { grid-of-items.mouse-in }: 0
-bottom.px if { !grid-of-items.mouse-in }: -64
+bottom.px: 0
+;; bottom.px if { !grid-of-items.mouse-in }: -64
 left.px: 0
 z-index: 999
 background.solid: #222222cc
 border-bottom-left-radius.px: 8
 border-bottom-right-radius.px: 8
 align-content: center
-classes: mouse-over
+
 
 -- ftd.text: $grid-of-items.title
 role: $inherited.types.label-large
@@ -277,7 +377,6 @@ z-index: 999
 background.solid: #222222cc
 border-bottom-left-radius.px: 8
 border-bottom-right-radius.px: 8
-align-content: center
 classes: mouse-over
 
 -- ftd.text: $grid-of-items.title
@@ -326,14 +425,39 @@ color: #d9d9d9
 
 -- end: ftd.column
 
+/-- ftd.image:
+if: { $grid-of-items.screenshot != NULL }
+src: $grid-of-items.screenshot
+$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
+fit: contain
+width.fixed.px: 324
+height.fixed.px: 224
+
 -- ftd.image:
 if: { $grid-of-items.screenshot != NULL }
 src: $grid-of-items.screenshot
-width: fill-container
 $on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
 $on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
-classes if { grid-of-items.wip }: filter-1px
-css: [$fastn-assets.files.featured.filter.css]
+fit: cover
+width.fixed.px: 324
+height.fixed.px: 224
+
+/-- ftd.image:
+if: { $grid-of-items.screenshot != NULL }
+src: $grid-of-items.screenshot
+$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
+max-width: fill-container
+height: auto
+
+/-- ftd.image:
+if: { $grid-of-items.screenshot != NULL }
+src: $grid-of-items.screenshot
+$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
+width: fill-container
+height: auto
 align-self: center
 
 -- end: ftd.column

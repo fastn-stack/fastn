@@ -5,7 +5,6 @@
 
 
 -- ds.page: 
-full-width: true
 sidebar: false
 
 -- ft-ui.grid-view: Documentation Sites

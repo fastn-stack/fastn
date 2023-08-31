@@ -1,10 +1,9 @@
 -- import: fastn.com/featured as ft-ui
 
 -- ds.page: 
-full-width: true
 sidebar: false
 
--- ft-ui.grid-view: Font Typographies
+-- ft-ui.view-all: Font Typographies
 templates: $fonts-typography
 
 -- end: ds.page
