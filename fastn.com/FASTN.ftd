@@ -608,9 +608,9 @@ skip: true
     skip: true
 - Section Library: /featured/sections/
   - Cards: /featured/sections/cards/
-    - Card 1: /featured/sections/cards/card-1/
+    - Person Cards: /featured/sections/cards/card-1/
     skip: true  
-    - Image Card 1: /featured/sections/cards/image-card-1/
+    - Image Card: /featured/sections/cards/image-card-1/
     skip: true  
     - Image Gallery IG: /featured/sections/cards/image-gallery-ig/
     skip: true  
