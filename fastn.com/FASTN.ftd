@@ -904,6 +904,7 @@ skip: true
 - Rive Video: /planning/rive/
 - Developer Course: /planning/developer-course/
 
+# 🔍: /search/?next=/
 
 -- fastn.redirects:
 
