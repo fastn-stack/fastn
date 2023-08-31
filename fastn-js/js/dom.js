@@ -1677,7 +1677,7 @@ class Node2 {
                 staticValue = fastn_utils.markdown_inline(escapedHtmlValue);
             }
             this.#node.innerHTML = staticValue;
-        }else {
+        } else {
             throw ("invalid fastn_dom.PropertyKind: " + kind);
         }
     }
