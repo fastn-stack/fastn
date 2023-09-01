@@ -59,7 +59,7 @@ show-large: true
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.components.hero-bottom-hug.jpg
+image: $fastn-assets.files.images.featured.components.hero-bottom-hug.png
 cta-url: https://saurabh-lohiya.github.io/hero/docs/hero-bottom-hug/
 cta-text: Demo
 github-url: https://github.com/saurabh-lohiya/hero
@@ -98,7 +98,7 @@ role: Designer
 
 -- ft-ui.template: Hero Bottom Hug
 template-url: featured/sections/heros/hero-bottom-hug/
-screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug.jpg
+screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug.png
 
 -- ft-ui.template: Hero Left Hug Expanded
 template-url: featured/sections/heros/hero-left-hug-expanded/

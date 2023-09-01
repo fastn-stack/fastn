@@ -18,11 +18,11 @@ more-link: /featured/heros/
 
 -- ft-ui.template: Hero Bottom Hug
 template-url: /hero-bottom-hug/
-screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug.jpg
+screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug.png
 
 -- ft-ui.template: Hero Bottom Hug Search
 template-url: /hero-bottom-hug-search/
-screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug-search.jpg
+screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug-search.png
 
 -- ft-ui.template: Hero Left Hug Expanded Search
 template-url: /hero-left-hug-expanded-search/
