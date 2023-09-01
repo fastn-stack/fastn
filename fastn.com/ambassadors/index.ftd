@@ -189,6 +189,11 @@ body body:
 
 -- ftd.column:
 width: fill-container
+
+-- ftd.desktop:
+
+-- ftd.column:
+width: fill-container
 background.solid: $inherited.colors.background.step-2
 padding-vertical.px: 60
 padding-left.px: 60
@@ -259,6 +264,86 @@ src: $hero-with-4-images.image-4
 -- end: ftd.column
 
 -- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
+-- ftd.column:
+width: fill-container
+background.solid: $inherited.colors.background.step-2
+align-content: center
+padding-top.px: 60
+padding-bottom.px: 24
+padding-horizontal.px: 24
+
+-- ftd.column:
+width: fill-container
+align-content: center
+spacing.fixed.px: 24
+max-width.fixed.px: 1440
+
+-- ftd.column:
+width: fill-container
+color: $inherited.colors.text-strong
+spacing.fixed.px: 24
+
+-- ftd.image:
+src: $fastn-assets.files.images.ambassadors.paper-plane.svg
+anchor: parent
+left.px: -24
+top.px: -58
+
+-- ftd.image:
+src: $fastn-assets.files.images.ambassadors.book-icon.svg
+anchor: parent
+right.px: -10
+top.px: -48
+
+-- ftd.text: $hero-with-4-images.title
+role: $inherited.types.heading-hero
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+
+$hero-with-4-images.body
+
+-- cta-button: $hero-with-4-images.cta-text
+if: { hero-with-4-images.cta-text != NULL }
+role: primary
+link: $hero-with-4-images.cta-link
+show-arrow: true
+new-tab: true
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 18
+align-content: center
+
+-- ftd.image:
+src: $hero-with-4-images.image-1
+
+-- ftd.image:
+src: $hero-with-4-images.image-2
+
+-- ftd.image:
+src: $hero-with-4-images.image-3
+
+-- ftd.image:
+src: $hero-with-4-images.image-4
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.mobile
 
 -- end: ftd.column
 

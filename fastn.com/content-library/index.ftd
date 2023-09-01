@@ -206,9 +206,8 @@ link: $hero-section.primary-cta-link
 -- ftd.text: $hero-section.secondary-cta
 link: $hero-section.secondary-cta-link
 role: $inherited.types.button-large
-color: $inherited.colors.cta-secondary.text
-color if { hero-section.hover }: $inherited.colors.custom.nine
-;;background.solid if { hero-section.mouse-in }: $inherited.colors.cta-secondary.hover
+color: $inherited.colors.custom.nine
+background.solid if { hero-section.mouse-in }: $inherited.colors.cta-secondary.hover
 $on-mouse-leave$: $ftd.set-bool($a = $hero-section.hover, v = false)
 $on-mouse-enter$: $ftd.set-bool($a = $hero-section.hover, v = true)
 padding-vertical.px: 12
@@ -615,7 +614,8 @@ optional ftd.resizing min-height:
 -- ftd.column:
 min-height.fixed.em if { card.width == NULL && card.min-height == NULL && ftd.device == "desktop" }: 25
 min-height if { ftd.device == "desktop" }: $card.min-height
-padding.em if { ftd.device == "desktop" }: 2
+padding.em: 2
+padding.px if { ftd.device == "mobile" }: 16
 spacing.fixed.em: 1
 ;;shadow: $s
 border-radius.em: 1
@@ -1150,6 +1150,11 @@ children cards:
 
 -- ftd.column:
 width: fill-container
+
+-- ftd.desktop:
+
+-- ftd.column:
+width: fill-container
 background.solid if { !feature-card.transparent }: $inherited.colors.background.step-1
 padding.px: 24
 color: $inherited.colors.text-strong
@@ -1196,7 +1201,7 @@ width.fixed.percent: 48
 src: $feature-card.image
 width: fill-container
 height.fixed.px: 300
-fit: cover
+;;fit: cover
 
 -- end: ftd.column
 
@@ -1205,7 +1210,7 @@ width.fixed.percent: 48
 
 -- ds.code:
 max-height.fixed.px: 300
-line-numbers: true
+;;line-numbers: true
 
 $feature-card.code
 
@@ -1219,7 +1224,7 @@ width.fixed.percent: 48
 src: $feature-card.image
 width: fill-container
 height.fixed.px: 300
-fit: cover
+;;fit: cover
 
 -- end: ftd.column
 
@@ -1233,6 +1238,102 @@ align-content: center
 margin-top.px: 24
 
 -- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- ftd.column:
+width: fill-container
+background.solid if { !feature-card.transparent }: $inherited.colors.background.step-1
+padding.px: 24
+color: $inherited.colors.text-strong
+margin-bottom.px: 48
+border-radius.px: 16
+
+-- ftd.image:
+src: $feature-card.icon
+width.fixed.px: 48
+
+-- ftd.text: $feature-card.feature
+role: $inherited.types.fine-print
+color: $inherited.colors.info.text
+padding-top.px: 24
+
+-- ftd.text: $feature-card.title
+role: $inherited.types.heading-large
+padding-top.px: 8
+
+-- ftd.text: 
+role: $inherited.types.copy-regular
+padding-top.px: 24
+width: fill-container
+color: $inherited.colors.accent.secondary
+margin-bottom.px: 24
+
+$feature-card.body
+
+-- cta-outline-small: $feature-card.cta-text
+link: $feature-card.cta-link
+
+-- ftd.column:
+if: { feature-card.code != NULL }
+width: fill-container
+align-content: center
+margin-top.px: 24
+spacing.fixed.px: 24
+
+-- ftd.column:
+if: { feature-card.move-left }
+width: fill-container
+
+-- ftd.image:
+src: $feature-card.image
+width: fill-container
+height.fixed.px: 300
+;;fit: cover
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+
+-- ds.code:
+max-height.fixed.px: 300
+;;line-numbers: true
+
+$feature-card.code
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { !feature-card.move-left }
+width: fill-container
+
+-- ftd.image:
+src: $feature-card.image
+width: fill-container
+height.fixed.px: 300
+;;fit: cover
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+children: $feature-card.cards
+spacing.fixed.px: 24
+align-content: center
+margin-top.px: 24
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.mobile
 
 -- end: ftd.column
 
@@ -1374,6 +1475,7 @@ margin-top.px: 48
 width: fill-container
 children: $cards-section.cards
 spacing.fixed.px: 48
+spacing.fixed.px if { ftd.device == "mobile" }: 24
 align-content: center
 margin-top.px: 24
 wrap: true
@@ -1699,7 +1801,7 @@ children wrapper:
 optional ftd.color bgcolor: $inherited.colors.accent.primary
 
 -- ftd.column:
-min-width.fixed.px: $rectangle-card.width
+min-width.fixed.px if { ftd.device == "desktop"}: $rectangle-card.width
 max-width.fixed.px: $rectangle-card.width
 
 -- ftd.column:
