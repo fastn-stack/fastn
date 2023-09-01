@@ -6,7 +6,7 @@ sidebar: false
 -- ft-ui.grid-view: Hero
 templates: $hero
 more-link-text: View more
-more-link: /featured/sections/heros/hero/
+more-link: /featured/sections/heros/
 
 -- end: ds.page
 
