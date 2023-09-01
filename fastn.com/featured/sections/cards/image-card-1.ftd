@@ -39,7 +39,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.abstract-bar:
 
--- ds.distributors: Image Card 1
+-- ds.distributors: Image Card
 owners: $owner-fastn
 license-url: https://github.com/fastn-community/images/blob/main/LICENSE
 license: Creative Commons
@@ -74,7 +74,7 @@ github-url: https://github.com/FifthTry/images
 
 -- ft-ui.template list cards:
 
--- ft-ui.template: Card - 1
+-- ft-ui.template: Person Cards
 template-url: /featured/sections/cards/card-1/
 screenshot: $fastn-assets.files.images.featured.sections.card-1.png
 
