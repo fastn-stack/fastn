@@ -347,13 +347,8 @@ copy content in clipboard.
 
 -- ds.rendered.input:
 
-\-- void copy-me-call(text): ;; <hl>
-string text: ;; <hl>
-\;; <hl>
-ftd.copy_to_clipboard(text) ;; <hl>
-
 \-- ftd.text: Click to Copy ⭐️
-$on-click$: $copy-me-call(text = ⭐) ;; <hl>
+$on-click$: $ftd.copy-to-clipboard(a = ⭐) ;; <hl>
 color: $inherited.colors.text
 border-color: $red-yellow
 border-width.px: 2
@@ -779,13 +774,7 @@ string list $a:
 string v:
 integer num:
 
-ftd.insert_at(a, v, num);
-
-
--- void copy-me-call(text):
-string text:
-
-ftd.copy_to_clipboard(text)
+ftd.insert_at(a, num, v);
 
 
 -- void set-dark():
@@ -1151,16 +1140,14 @@ $on-click$: $ftd.enable-system-mode()
 
 
 
-
-
 -- component copy-clipboard-sample:
 
 -- ftd.text: Click to Copy ⭐️
-$on-click$: $copy-me-call(text = ⭐)
 color: $inherited.colors.text
 border-color: $red-yellow
 border-width.px: 2
 padding.px: 10
+$on-click$: $ftd.copy-to-clipboard(a = ⭐)
 
 -- end: copy-clipboard-sample
 
