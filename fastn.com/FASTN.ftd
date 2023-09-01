@@ -248,10 +248,13 @@ favicon: /-/fastn.com/images/favicon.svg
   document: ftd/attributes.ftd
   - Common Attributes: /common-attributes/
     document: ftd/common.ftd
+    description: boolean, integer, decimal, string, caption, body, caption or body, ftd.ui, children, ftd.align-self, ftd.align, ftd.anchor, ftd.linear-gradient, ftd.linear-gradient-color, ftd.breakpoint-width-data, ftd.linear-gradient-directions, ftd.background-image, ftd.background-position, ftd.background-repeat, ftd.background-size, ftd.background, ftd.border-style, ftd.color, ftd.display, ftd.color-scheme, ftd.cursor, ftd.image-src, ftd.length, ftd.length-pair, ftd.loading, ftd.overflow, ftd.region, ftd.resize, ftd.resizing, ftd.responsive-type, ftd.shadow, ftd.spacing, ftd.text-align, ftd.text-input-type, ftd.text-style, ftd.text-transform, ftd.type, ftd.white-space, ftd.type-data
   - Text Attributes: /text-attributes/
     document: ftd/text-attributes.ftd
+    description: style: (underline, strike, italic, heavy, extra-bold, semi-bold, bold, regular, medium, light, extra-light, hairline), text-align, text-indent
   - Container Attributes: /container-attributes/
     document: ftd/container-attributes.ftd
+    description: wrap, align-content, spacing
   - Container Root Attributes: /container-root-attributes/
     document: ftd/container-root-attributes.ftd
 - `import`: /import/
@@ -870,6 +873,12 @@ skip: true
 - Overview: /planning/
 - dynamic UI planning: /dynamic-ui/-/planning/
   document: /planning/country-details/index.ftd
+  - Script 1: /dynamic-ui/-/planning/script1/
+    document: /planning/country-details/script1.ftd
+  - Script 2: /dynamic-ui/-/planning/script2/
+    document: /planning/country-details/script2.ftd
+  - Script 3: /dynamic-ui/-/planning/script3/
+    document: /planning/country-details/script3.ftd
 - Page Nomenclature: /page-nomenclature/
   document: /planning/page-nomenclature.ftd
 - Create website planning: /create-website-planning/
@@ -903,6 +912,7 @@ skip: true
 - Rive Video: /planning/rive/
 - Developer Course: /planning/developer-course/
 
+# 🔍: /search/
 
 -- fastn.redirects:
 

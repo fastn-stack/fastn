@@ -141,6 +141,7 @@ document-description: $page.document-description
 document-image: $page.document-image
 favicon: $page.favicon
 
+
 -- doc-site.page.header-logo-ui:
 
 -- car-component:
@@ -151,6 +152,7 @@ favicon: $page.favicon
 spacing.fixed.em: 0.8
 width: fill-container
 children: $page.wrapper
+$on-global-key[f]$: $open-search()
 
 -- end: ftd.column
 
@@ -394,3 +396,10 @@ height.fixed.px: 150
 -- void http-call():
 
 ftd.http("/", "get")
+
+
+
+-- void open-search():
+js: [$fastn-assets.files.search.js]
+
+openSearch()
