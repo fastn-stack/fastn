@@ -60,11 +60,67 @@ pre[class*=language-].fastn-theme-light {
 	white-space: normal
 }
 
+/* Fastn Language tokens -------------------------------------------------- */
+
+.fastn-theme-light .token.section-identifier {
+    color: #36464e;
+}
+
+.fastn-theme-light .token.section-name {
+    color: #07a;
+}
+
+.fastn-theme-light .token.section-caption {
+    color: #1c7d4d;
+}
+
+.fastn-theme-light .token.semi-colon {
+    color: #696b70;
+}
+
+.fastn-theme-light .token.event {
+    color: #c46262;
+}
+
+.fastn-theme-light .token.processor {
+    color: #c46262;
+}
+
+.fastn-theme-light .token.type-modifier {
+    color: #5c43bd;
+}
+
+.fastn-theme-light .token.value-type {
+    color: #5c43bd;
+}
+
+.fastn-theme-light .token.kernel-type {
+    color: #5c43bd;
+}
+
+.fastn-theme-light .token.header-type {
+    color: #5c43bd;
+}
+
+.fastn-theme-light .token.header-name {
+    color: #a846b9;
+}
+
+.fastn-theme-light .token.header-condition {
+    color: #8b3b3b;
+}
+
+.fastn-theme-light .token.header-value {
+    color: #36464e;
+}
+
+/* END ----------------------------------------------------------------- */
+
 .fastn-theme-light .token.cdata,
 .fastn-theme-light .token.comment,
 .fastn-theme-light .token.doctype,
 .fastn-theme-light .token.prolog {
-	color: #708090
+	color: #7f93a8
 }
 
 .fastn-theme-light .token.punctuation {
