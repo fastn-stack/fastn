@@ -28,7 +28,7 @@ feature: User-friendly syntax
 
 -- cl.feature-card.code:
 
-\-- ws.page:
+\-- ws.page: ;; <hl>
 
 \-- ws.hero-image-left: Diwali Dhamaka Offer 2023
 cta-primary: Claim Now

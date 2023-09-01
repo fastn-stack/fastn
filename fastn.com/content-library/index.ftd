@@ -1205,6 +1205,7 @@ width.fixed.percent: 48
 
 -- ds.code:
 max-height.fixed.px: 300
+line-numbers: true
 
 $feature-card.code
 
