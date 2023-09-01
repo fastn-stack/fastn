@@ -233,7 +233,7 @@ async fn incremental_build(
         let mut unresolved_dependencies: Vec<String> = documents
             .iter()
             .filter(|(_, f)| f.is_ftd())
-            .map(|(_, f)| f.get_id().trim_end_matches(".ftd").to_string())
+            .map(|(_, f)| remove_extension(f.get_id()))
             .collect_vec();
         let mut resolved_dependencies: Vec<String> = vec![];
         let mut resolving_dependencies: Vec<String> = vec![];
@@ -358,7 +358,26 @@ async fn incremental_build(
         }
     }
 
-    // TODO: Handle deleted files (files present in cache/.build but not in documents)
+    let mut removed_documents: Vec<String> = vec![];
+
+    for cached_document_id in c.documents.keys() {
+        if !documents.contains_key(format!("{}.ftd", &cached_document_id).as_str()) {
+            let folder_path = format!("{}/{}", config.build_dir(), &cached_document_id);
+            let file_path = format!("{}.ftd", &folder_path);
+
+            // println!("Removing file: {}", &file_path);
+            std::fs::remove_file(file_path)?;
+
+            // println!("Removing dir: {}", &folder_path);
+            std::fs::remove_dir_all(folder_path)?;
+
+            removed_documents.push(cached_document_id.to_string());
+        }
+    }
+
+    for removed_doc_id in &removed_documents {
+        c.documents.remove(removed_doc_id);
+    }
 
     c.cache_it()?;
 
