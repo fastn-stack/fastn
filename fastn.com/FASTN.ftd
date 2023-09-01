@@ -632,28 +632,39 @@ skip: true
     - Imagen IG: /featured/sections/cards/imagen-ig/
     skip: true
   - Hero Components: /featured/sections/heros/
-    - Hero Right Hug Expanded Search: /featured/sections/heros/hero-right-hug-expanded-search/
+    - Hero Right Hug Expanded Search: /hero-right-hug-expanded-search/
     skip: true
-    - Hero Right Hug Expanded: /featured/sections/heros/hero-right-hug-expanded/
+    document: /featured/sections/heros/hero-right-hug-expanded-search.ftd
+    - Hero Right Hug Expanded: /hero-right-hug-expanded/
     skip: true
-    - Hero Right Hug Large: /featured/sections/heros/hero-right-hug-large/
+    document: /featured/sections/heros/hero-right-hug-expanded.ftd
+    - Hero Right Hug Large: /hero-right-hug-large/
     skip: true
-    - Hero Right Hug Search Label: /featured/sections/heros/hero-right-hug-search-label/
+    document: /featured/sections/heros/hero-right-hug-large.ftd
+    - Hero Right Hug Search Label: /hero-right-hug-search-label/
     skip: true
-    - Hero Right Hug Search: /featured/sections/heros/hero-right-hug-search/
+    document: /featured/sections/heros/hero-right-hug-search-label.ftd
+    - Hero Right Hug Search: /hero-right-hug-search/
     skip: true
-    - Hero Right Hug: /featured/sections/heros/hero-right-hug/
+    document: /featured/sections/heros/hero-right-hug-search.ftd
+    - Hero Right Hug: /hero-right-hug/
     skip: true
-    - Hero Bottom Hug: /featured/sections/heros/hero-bottom-hug/
+    document: /featured/sections/heros/hero-right-hug.ftd
+    - Hero Bottom Hug: /hero-bottom-hug/
     skip: true
-    - Hero Bottom Hug Search: /featured/sections/heros/hero-bottom-hug-search/
+    document: /featured/sections/heros/hero-bottom-hug.ftd
+    - Hero Bottom Hug Search: /heros/hero-bottom-hug-search/
     skip: true
-    - Hero Left Hug Expanded Search: /featured/sections/heros/hero-left-hug-expanded-search/
+    document: /featured/sections/heros/hero-bottom-hug-search.ftd
+    - Hero Left Hug Expanded Search: /hero-left-hug-expanded-search/
     skip: true
-    - Hero Left Hug Expanded: /featured/sections/heros/hero-left-hug-expanded/
+    document: /featured/sections/heros/hero-left-hug-expanded-search.ftd
+    - Hero Left Hug Expanded: /hero-left-hug-expanded/
     skip: true
-    - Hero with social icons: /featured/sections/heros/hero-with-social/
+    document: /featured/sections/heros/hero-left-hug-expanded.ftd
+    - Hero with social icons: /hero-with-social/
     skip: true
+    document: /featured/sections/heros/hero-with-social.ftd
   - Key Value Tables: /featured/sections/kvt/
     - Key Value Table 1: /featured/sections/kvt/kvt-1/
       skip: true
