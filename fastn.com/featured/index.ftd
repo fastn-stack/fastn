@@ -621,7 +621,7 @@ screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
 -- template: Business Cards
 template-url: /featured/components/business-cards/
-screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
+screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-front.jpg
 
 -- template: Modal Cover
 template-url: featured/components/modals/modal-cover/

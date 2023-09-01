@@ -818,6 +818,7 @@ skip: true
 
 # Blog: /blog/
 
+- Search Feature in fastn.com: /blog/search/
 - Quote contest :/quote-contest/
   document: /events/weekly-contest/week-1-quote.ftd
 - Tales from ACME Inc - Case Study: /acme/
