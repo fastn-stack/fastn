@@ -203,8 +203,8 @@ two-fold: $obj.two-fold
 -- component view-all:
 optional caption title:
 template list templates:
-boolean $hover: false
 optional body body:
+boolean $hover: false
 
 -- ftd.column:
 width: fill-container
@@ -378,6 +378,7 @@ background.solid: #222222cc
 border-bottom-left-radius.px: 8
 border-bottom-right-radius.px: 8
 classes: mouse-over
+align-content: center
 
 -- ftd.text: $grid-of-items.title
 role: $inherited.types.label-large
@@ -442,23 +443,6 @@ $on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
 fit: cover
 width.fixed.px: 324
 height.fixed.px: 224
-
-/-- ftd.image:
-if: { $grid-of-items.screenshot != NULL }
-src: $grid-of-items.screenshot
-$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
-$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
-max-width: fill-container
-height: auto
-
-/-- ftd.image:
-if: { $grid-of-items.screenshot != NULL }
-src: $grid-of-items.screenshot
-$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
-$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
-width: fill-container
-height: auto
-align-self: center
 
 -- end: ftd.column
 
@@ -815,5 +799,3 @@ github: https://github.com/FifthTry/roboto
 -- ftd.color overlay-bg:
 light: #00000066
 dark:  #00000066
-
-
