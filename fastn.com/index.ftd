@@ -409,7 +409,7 @@ image-2: $fastn-assets.files.images.ambassadors.event-image-2.jpg
 image-3: $fastn-assets.files.images.ambassadors.event-image-3.jpg
 image-4: $fastn-assets.files.images.ambassadors.event-image-4.jpg
 cta-text: Join our discord
-cta-link: ambassadors/how-it-works/
+cta-link: /discord/
 
 You might find yourself helping fellow students build their coding skills online
 with Microsoft Learn, organizing a virtual hackathon to solve real-world

@@ -230,6 +230,7 @@ if: { hero-with-4-images.cta-text != NULL }
 role: primary
 link: $hero-with-4-images.cta-link
 show-arrow: true
+new-tab: true
 
 -- end: ftd.column
 
@@ -280,6 +281,7 @@ boolean medium: false
 boolean show-arrow: false
 optional integer width:
 boolean align-center: false
+boolean new-tab: false
 
 -- ftd.column:
 align-self if { cta-button.align-center }: center
@@ -290,6 +292,7 @@ if: { !cta-button.medium }
 width.fixed.px if { cta-button.width != NULL }: $cta-button.width
 spacing.fixed.px: 10
 link if { cta-button.link != NULL }: $cta-button.link
+open-in-new-tab if { cta-button.new-tab }: true
 background.solid if { cta-button.role == "primary" }: $inherited.colors.cta-primary.base
 background.solid if { cta-button.role == "secondary" }: $inherited.colors.cta-secondary.base
 border-radius.px: 30
