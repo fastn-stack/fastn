@@ -168,7 +168,7 @@ pub fn to_sitemap_compat(
     ) -> fastn_core::sitemap::toc::TocItemCompat {
         let mut is_child_active: bool = false;
         let mut children: Vec<fastn_core::sitemap::toc::TocItemCompat> = vec![];
-        for child in subsection.toc.iter() {
+        for child in subsection.toc.iter().filter(|t| !t.skip) {
             let child_to_toc_compat = to_toc_compat(child, current_document);
             if child_to_toc_compat.is_active {
                 is_child_active = true;
@@ -213,7 +213,7 @@ pub fn to_sitemap_compat(
     ) -> fastn_core::sitemap::toc::TocItemCompat {
         let mut is_child_active: bool = false;
         let mut children: Vec<fastn_core::sitemap::toc::TocItemCompat> = vec![];
-        for child in section.subsections.iter().filter(|t| !t.skip && t.visible) {
+        for child in section.subsections.iter().filter(|t| !t.skip) {
             let child_to_subsection_compat = to_subsection_compat(child, current_document);
             if child_to_subsection_compat.is_active {
                 is_child_active = true;

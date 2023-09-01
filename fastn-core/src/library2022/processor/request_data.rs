@@ -6,6 +6,12 @@ pub fn process(
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let req = match config.request.as_ref() {
         Some(v) => v,
+        None if kind.is_optional() => {
+            return Ok(ftd::interpreter::Value::Optional {
+                data: Box::new(None),
+                kind: kind.into_kind_data(),
+            });
+        }
         None => {
             return ftd::interpreter::utils::e2(
                 "config does not contain http-request object",
