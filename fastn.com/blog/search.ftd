@@ -46,8 +46,8 @@ ready to start searching.
 -- ds.h2: Navigating Search Results
 
 Once you've initiated the search, you can move up and down the search results
-list quickly by using your keyboard's arrow keys (Arrow Up and Arrow Down keys).
-You can use mouse pointer to achieve the same.
+list quickly by using your keyboard's arrow keys (Arrow Up and Arrow Down keys)
+or `j` and `k` keys. You can use mouse pointer to achieve the same.
 
 -- ds.h2: Selecting a Result
 
@@ -68,24 +68,6 @@ previous page, simply look for the 'Go Back' button, represented by a
 But wait, there's another handy keyboard shortcut – the 'Esc' key. Pressing
 'Esc' will take you back to  our previous browsing state, just like clicking the
 'Go Back' button.
-
-
--- ds.h1: Benefits of fastn.com's Search Feature
-
-fastn.com's search feature offers several advantages to users:
-
-- **Efficiency**: Finding content is faster and more convenient, improving
-overall user experience.
-
-- **Accessibility**: Keyboard shortcuts and navigation options make the feature
-accessible to a wide range of users.
-
-- **Intuitiveness**: The search process is user-friendly, ensuring that even
-less tech-savvy individuals can use it effectively.
-
-- **Reduced Frustration**: Users no longer need to sift through numerous pages
-to find what they're looking for, reducing frustration and improving
-satisfaction.
 
 
 -- ds.h1: Conclusion

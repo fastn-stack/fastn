@@ -153,7 +153,7 @@ margin-top.em if { ftd.device == "mobile" }: 0.5
 spacing.fixed.em: 0.8
 width: fill-container
 children: $page.wrapper
-$on-global-key[f]$: $open-search()
+$on-global-key[/]$: $open-search()
 
 -- end: ftd.column
 
