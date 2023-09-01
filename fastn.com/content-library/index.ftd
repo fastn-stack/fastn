@@ -11,9 +11,8 @@ export: testimonial-cards, testimonial-card, hero-with-4-images
 
 -- component hero-content:
 
--- hero-section: Build your next landing
-inline-title-1:  page, blog, or webapp with
-inline-title-2: fastn
+-- hero-section: Build your next web project
+inline-title-1: faster with fastn 
 primary-cta: Get Started
 primary-cta-link: index.html
 secondary-cta: Read Docs
@@ -24,7 +23,7 @@ secondary-cta-link: index.html
 -- ftd.container:
 role: $inherited.types.copy-large
 
--- ftd.text: Easy to learn
+-- ftd.text: Easy to learn,
 display: inline
 color: $inherited.colors.cta-primary.base
 
@@ -32,8 +31,8 @@ color: $inherited.colors.cta-primary.base
 display: inline
 color: $inherited.colors.text-strong
 
-full-stack open source framework designed for creating good looking content
-centric or API and database driven websites.
+open source full-stack framework for building modern content-centric and API /
+database-driven websites.
 
 -- end: ftd.container
 
@@ -207,20 +206,9 @@ role if { ftd.device == "mobile" }: $inherited.types.heading-medium
 -- ftd.text: $hero-section.title
 text-align: center
 
--- ftd.container:
-width: fill-container
-align-self: center
-
 -- ftd.text: $hero-section.inline-title-1
-display: inline
+if: { hero-section.inline-title-1 != NULL }
 text-align: center
-
-
--- ftd.text: $hero-section.inline-title-2
-color: $inherited.colors.cta-primary.base
-display: inline
-
--- end: ftd.container
 
 -- ftd.text: 
 if: { hero-section.body != NULL }
@@ -1184,6 +1172,7 @@ optional string code:
 optional string cta-text:
 optional string cta-link:
 optional ftd.image-src image:
+optional ftd.image-src code-image:
 boolean move-left: false
 boolean transparent: false
 children cards:
@@ -1241,7 +1230,7 @@ width.fixed.percent: 48
 src: $feature-card.image
 width: fill-container
 height.fixed.px: 300
-;;fit: cover
+fit: contain
 
 -- end: ftd.column
 
@@ -1249,10 +1238,18 @@ height.fixed.px: 300
 width.fixed.percent: 48
 
 -- ds.code:
+if: { $feature-card.code-image == NULL }
 max-height.fixed.px: 300
-;;line-numbers: true
+line-numbers: true
 
 $feature-card.code
+
+-- ftd.image:
+if: { $feature-card.code-image != NULL }
+src: $feature-card.code-image
+width: fill-container
+height.fixed.px: 300
+fit: contain
 
 -- end: ftd.column
 
@@ -1264,7 +1261,7 @@ width.fixed.percent: 48
 src: $feature-card.image
 width: fill-container
 height.fixed.px: 300
-;;fit: cover
+fit: contain
 
 -- end: ftd.column
 
@@ -1333,7 +1330,7 @@ width: fill-container
 src: $feature-card.image
 width: fill-container
 height.fixed.px: 300
-;;fit: cover
+fit: contain
 
 -- end: ftd.column
 
@@ -1341,10 +1338,18 @@ height.fixed.px: 300
 width: fill-container
 
 -- ds.code:
+if: { $feature-card.code-image == NULL }
 max-height.fixed.px: 300
-;;line-numbers: true
+line-numbers: true
 
 $feature-card.code
+
+-- ftd.image:
+if: { $feature-card.code-image != NULL }
+src: $feature-card.code-image
+width: fill-container
+height.fixed.px: 300
+fit: contain
 
 -- end: ftd.column
 
@@ -1356,7 +1361,7 @@ width: fill-container
 src: $feature-card.image
 width: fill-container
 height.fixed.px: 300
-;;fit: cover
+fit: contain
 
 -- end: ftd.column
 
@@ -1852,6 +1857,7 @@ spacing.fixed.px: 32
 max-width.fixed.px: $title-with-body-card.width
 min-height.fixed.px: 450
 min-height.fixed.px if { ftd.device == "mobile" }: 430
+z-index: 1000
 
 -- ftd.image:
 if: { title-with-body-card.logo != NULL }
@@ -1898,7 +1904,7 @@ if: { rectangle-card.show-border }
 width: fill-container
 height: fill-container
 border-width.px: 1
-border-color: $inherited.colors.border
+border-color: $inherited.colors.text
 border-radius.px: 30
 z-index: 11
 anchor: parent

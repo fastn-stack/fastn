@@ -50,10 +50,9 @@ copyright: Copyright © 2023 - fastn.com
 -- ftd.ui list page.banner:
 
 -- banner.cta-banner:
-cta-text: star on Github 🌟
+cta-text: Star Us on Github 🌟
 cta-link: https://github.com/fastn-stack/fastn/
-
-Support us by giving us a
+bgcolor: $inherited.colors.cta-primary.base
 
 -- end: page.banner
 

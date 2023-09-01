@@ -223,7 +223,7 @@ right.px: 40
 top.px: -48
 
 -- ftd.text: $hero-with-4-images.title
-role: $inherited.types.heading-hero
+role: $inherited.types.heading-large
 
 -- ftd.text:
 role: $inherited.types.copy-regular

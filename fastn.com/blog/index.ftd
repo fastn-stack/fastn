@@ -47,8 +47,6 @@ post-data: $p2.meta
 -- ds.without-image:
 post-data: $p1.meta
 
-
 -- end: ds.posts
-
 
 -- end: ds.page-with-no-right-sidebar
