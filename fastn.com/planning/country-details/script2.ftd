@@ -7,11 +7,13 @@ src: $fastn-assets.files.images.backend.dynamic-country-list-page.jpg
 
 Hi Guys, welcome to the video.
 
-In this video we will request the JSON data using `http processor` and store it
-in `fastn` records. Later in the video, we will create a country list page that
-will display the list of countries in form of cards that will display country's
-flag and country's `common` name and also display values of `population`,
-`region` and `capital`.
+In this video we will build a dynamic country list page. 
+
+For this, we will request the JSON data using `http processor` and store it in
+`fastn` records and later in the video, we will create a country list page that
+will display the list of countries in form of cards. Each country card will
+display country's flag and country's `common` name and also display values of
+`population`, `region` and `capital`.
 
 We will do this in three parts. 
 
@@ -20,18 +22,17 @@ src: $fastn-assets.files.images.backend.three-stages.jpg
 
 -- ds.markdown:
 
-- First, **data modelling** - declare all the `records` in a document.
+- In the first part, we will do **data modelling** by declaring all the `records` in
+  a separate document.
 
-- Second, **UI** - we will create a `card` component that will contain the
+- In the second part, we will create a `card` component that will contain the
   data.
 
-- Third, **display** - we will make use of `http processor` to request the data
-  and store in a list and display the data by calling the component.
+- And in the third part of the video, we will make use of `http processor` to
+  request the data and store in a list and display the data by calling the
+  component.
 
-So I have this package `country-details` in my machine.
 
-I will create a document called `models.ftd` where we will do the data 
-modelling using `records`.
 
 -- ftd.image: 
 src: $fastn-assets.files.images.backend.pretty-json.png
@@ -52,11 +53,21 @@ So the country has name, capital, region, population, and flags properties at
 one level. `common` and `official` names of a country are grouped under the
 `name` property.
 
+Some countries have more than one capital, so we will create a list for capital
+property.
+
+Also, flags have nested properties "svg" and "png" in the JSON data. We will
+utilize the "svg" property.
 
 
 -- ds.h1: First Part: data modelling 
 
-So let's create a `record`.
+So I have this package country-details in my machine.
+
+I will create a separate document called `models.ftd` where we will do the data 
+modelling using `records`.
+
+So let's create the first `record`.
 
 -- ds.code:
 
@@ -92,13 +103,22 @@ string official:
 \-- record country-flag:
 caption svg:
 
-So we are done with the data-modelling part.
+-- ds.markdown:
+
+The `country-name` record has two properties `common` and `official`, both of 
+string type.
+
+And the `country-flag` record has svg property which can be passed as caption.
+
+So this way we are done with the data-modelling part.
 
 -- ds.h1: Second Part: create a `card` component
 
 Moving to the second part of the video, we will create a `card` component. 
 
-I have created a `card.ftd` document where I will create this component.
+I will put all the components inside a components folder.
+
+In this folder, I have created a `card.ftd` document.
 
 Since we are going to display the value of properties declared in the records 
 in `models.ftd` hence at the top of the `card.ftd` we will import that document.
@@ -108,6 +128,9 @@ in `models.ftd` hence at the top of the `card.ftd` we will import that document.
 \-- import: country-details/models
 
 -- ds.markdown:
+
+In the import line we will write the package name, slash, and the document name 
+we are importing, that is, models
 
 Now, create a component let's say `country-card`.
 
@@ -119,15 +142,19 @@ Now, create a component let's say `country-card`.
 
 -- ds.markdown:
 
-Now let's add a property country and the data type will be `record country` of
-models document.  We will mark it as `caption` to make easy for users of this
-component.
+Now let’s add a property country and the data type will be record country that
+we created in the models document. We have also marked it as caption, to make
+easy for users of this component.
 
 -- ds.code:
 
 caption models.country country:
 
 -- ds.markdown:
+
+And structure the card in a way that I showed at the start using columns and 
+row and putting the flag, common name, population, region and capital. And 
+apply fastn properties approprately.
 
 Main column
 
@@ -227,7 +254,9 @@ for: $capital-name, $index in $country-card.country.capital
 
 -- ds.markdown:
 
-Add shadow
+We can also apply default shadow and on-hover shadow to the card component to 
+make the component look good. 
+
 
 -- ds.code:
 
@@ -244,7 +273,10 @@ spread.rem: 0.2
 
 -- ds.markdown:
 
-shadow properties
+So, we will add shadow property to the component, and create a mutable boolean 
+variable.
+
+\;; shadow properties
 
 -- ds.code:
 
@@ -256,7 +288,8 @@ boolean $is-hovered: false       ;;<hl>
 
 -- ds.markdown:
 
-add these to main column
+And do the event-handling.
+\;; add these to main column
 
 -- ds.code:
 
@@ -268,11 +301,12 @@ shadow if { country-card.is-hovered }: $hovered-card-shadow
 
 -- ds.h1: Third Part: display the output
 
-Everything is ready. Let's assemble everything. We will request the JSON data 
-and display the data in the card using the component.
+We are done with the second part. Everything needed to display the data is
+ready. Now, We will request the JSON data, and display the data in the card
+using the component.
 
-We will need the two documents and processors so import the `processors` and the
-two documents.
+In the index.ftd document , We will need the two documents and processors so
+import the `processors` and the two documents.
 
 -- ds.code:
 
@@ -295,6 +329,9 @@ url: https://restcountries.com/v3.1/all
 
 -- ds.markdown:
 
+The data will be stored using processors by doing http request to the endpoint 
+we will give as URL.
+
 Now we will call the component `country-card` from `card` document and we will 
 wrap it inside the row container component.
 
@@ -311,6 +348,13 @@ for: $country in $countries
 
 \-- end: ftd.row
 
+-- ds.markdown:
+
+We have passed the reference value of property country of the country-card
+component in the caption.
+
+And, applied for loop.
+
 
 -- ds.h1: Closing remarks
 
@@ -324,5 +368,11 @@ the `fastn` website.
 
 Support us by clicking on this link and give us a star ⭐ on GitHub and join 
 our fastn community on Discord.
+
+
+-- ds.h1: Final Video
+
+-- ds.youtube:
+v: lUdLNCEKZts
 
 -- end: ds.page
