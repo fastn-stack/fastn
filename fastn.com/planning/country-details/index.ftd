@@ -1,55 +1,31 @@
 -- ds.page: A hands-on guide to Dynamic UI using REST API
 
 
-This guide provides step-by-step instructions to deploy the `country-details-ui`
-project, which consists of two packages, `country-details-http`
-(backend) and "country-details-ui" (UI). The deployment will be on Heroku using
-the fastn buildpack, which requires the fastn 2023 edition for building the
-project.
-
+This guide provides step-by-step instructions to deploy the `country-details`
+project. The deployment will be on Heroku using
+the fastn buildpack.
 
 We are going to create a project in `fastn` that will create a Dynamic UI to 
-display the countries along with their Population, Region and Capital.
-
-
-
-
-\;; Walkthrough video will come after we have created the entire project.
-
+display the countries along with their Population, Region and Capital among 
+other data.
 
 **VIDEO 0: Walkthrough, showcasing final UI**
 
-\;; more content
+\;; Walkthrough video will come after we have created the entire project.
 
 
 
 -- ds.h1: Basics of http and Data modelling
 
-
 Before that, let's take another example where the json data will only have 
 country-name and capital.
 
-
-**VIDEO 1: Basics of http and Data modelling**
+**VIDEO 1: Basics of http and Data modelling though an example**
 - name-capital
 - concept narration + project output
 
-*Start:*
 
-- Created API: json to show data (i will share the link)
-- Model (ftd file - record)
-- http request and apply it to the model
-- UI and outcome 
-
-\;; api (json) -> records(concept) ftd file, data display
-
-
-
-/-- ds.code:
-
-
-
--- ds.code:
+-- ds.code: Final Code
 
 \-- import: fastn/processors as pr
 
@@ -85,599 +61,46 @@ role: $inherited.types.copy-regular
 
 
 
--- ds.h1: Nested Data Modelling 
+-- ds.h1: Building dynamic country list page 
 
-**VIDEO 2: (explanation of nested model system)**
+**VIDEO 2: explanation of nested model system and fetching and displaying the
+  data that is needed for the index page that will have country list**
  
-- api (json)
+- Create a `models.ftd` to do all the data modelling
+
+- Create `card.ftd` document that will have the UI component that will display
+  the countries and its data in form of a card. 
+
+- In `index.ftd` we will do `http-processor` and call the UI component and 
+apply `for` loop.
 
 
--- ds.h1: Frontend design & making the design interactive
 
-**VIDEO 3: some frontend concept will come** 
+-- ds.h1: Building country details page
 
-- section
-- use component card, UI elements (badge, back button) 
-- making the card interactive (component along with text properties and on-click)
+**VIDEO 3: focuses on country details page** 
+
+- Firstly, we will move the header part in a separate document `header.ftd` 
+inside the `components` folder
+
+- Create a `details.ftd` document that will define 2 string variables `cca2` 
+and `url`.
+  - `cca2` string will store the value through the request-data processor 
+  - the `url` string will use the function that appends value of `cca2` to the 
+  base url.
+
+- Create `utility.ftd` to write the functions
+  - join function
+  - go-back function
+
+- Create `country-details` document under the `components` folder that will have
+  all the components required to display the data in the country details page
+
 
 
 -- ds.h1: Deploying on Heroku
 
 **VIDEO 4: HEROKU deployment**
 
-
-
--- ds.h1: SCRIPT
-
-Script for all the videos:
-
--- ds.h2: Basics of http and Data modelling - Script
-
--- ds.image:
-src: $fastn-assets.files.images.backend.pr-http.png
-
--- ds.markdown:
-
-Hi Guys, welcome to the video. In this video I will help you understand how 
-using `fastn`, REST APIs can seemlessly connect the backend with the frontend.
-
--- ds.image:
-src: $fastn-assets.files.images.backend.sketch-ppt.png
-
-`fastn` has its own `http processor` which we will use to get the data and use 
-the concepts of data modelling to store the data in form of records. Then we 
-will display the data in a tabular form.
-
--- ds.image:
-src: $fastn-assets.files.images.backend.sketch.svg
-
--- ds.markdown:
-
-Let's start by creating a `fastn` package.
-
-I like to repeat this line in my videos that a `fastn` package essentially 
-needs two documents.
-
-- One is `FASTN.ftd`, and remember FASTN here is in upper case.
-- The second is, `index.ftd`
-
-In `FASTN.ftd` document we import `fastn`.
-
--- ds.code:
-
-\-- import: fastn
-
--- ds.markdown: 
-
-After a line space, we use a package variable of fastn and assign a package 
-name to it.
-
--- ds.code:
-
-\-- fastn.package: country-details
-
-
--- ds.markdown: 
-
-In this example, we are going to fetch a JSON data from this URL:
-
-```
-https://famous-loincloth-ox.cyclic.app/
-```
-
-This JSON data is in the form of array list, and each data has two fields, one 
-is the name of the country and another is the capital.
-
-We are going to call this data through `http` processor and save each data as a 
-record. Since this is a list of data so we will use `for` loop to display the 
-data. 
-
--- ds.markdown:
-
-In the `index.ftd`, let's declare a `record`. These are also called `struct` in
-some languages. `record` is used to create a custom structured data type with
-named fields and specified data types for each field.
-
--- ds.code:
-
-\-- record country-data:
-string name:
-string capital:
-
-
-
--- ds.markdown:
-
-Now, to use the `http` processor first we will import `fastn/processors` which
-is a library provided by `fastn` and we will give an alias as `pr` 
-
--- ds.code:
-
-\-- import: fastn/processors as pr
-
-
--- ds.markdown:
-
-Since the JSON data is a list of records, therefore, we will create a list and
-use the `country-data` record as the type.
-
--- ds.code:
-
-\-- country-data list countries:
-
-
--- ds.markdown:
-
-Now, we will use `http` processor to fetch the data from the URL I mentioned
-earlier. So we will pass the URL.
-
--- ds.code: 
-
-\-- country-data list countries:
-$processor$: pr.http
-url: https://famous-loincloth-ox.cyclic.app/
-
-
--- ds.markdown:
-
-Now, we want to display. To do that let's create a component called
-`country-detail`.
-
--- ds.code: Create component `country-detail`
-
-\-- component country-detail:
-
-
-\-- end: country-detail
-
--- ds.markdown:
-
-This component will have a property `country`. We will mark it as `caption` to
-make easy for users of this component.
-
--- ds.code:
-
-\-- component country-detail:
-caption country-data country:  ;; <hl>
-
-\-- end: country-detail
-
--- ds.markdown:
-
-Let's show the country name.
-
--- ds.code:
-
-\-- component country-detail:
-caption country-data country:  
-
-\-- ftd.text: $country-detail.country.name  ;; <hl>
-
-\-- end: country-detail
-
-
--- ds.markdown:
-
-Now, we can call the component and use a `for` loop to display the data.
-
-
--- ds.code:
-
-\-- country-detail: $country
-for: $country in $countries
-
--- ds.markdown:
-
-There you go, we have displayed the list of the names of the countries that 
-are there in the JSON data.
-
-Now wrap the two texts for country name and capital in `row` container.
-
--- ds.code: 
-
-\-- ftd.row:
-width.fixed.percent: 20
-
-\-- ftd.text: $country-detail.country.name
-
-\-- ftd.text: $country-detail.country.capital
-
-\-- end: ftd.row
-
--- ds.markdown:
-
-So you have successfully fetched and displayed the values of JSON data from the
-external website using the `http` processor and one of the data modelling type, 
-`record`.
-
-But I promised that we will display this data in tabular form. So, for that we
-will use various `fastn` properties and display the data in a table.
-
--- ds.code:
-
-\-- ftd.column:
-width: fill-container
-padding.px: 40
-align-content: center
-
-\-- ftd.row:
-width.fixed.percent: 40
-role: $inherited.types.copy-regular
-border-bottom-width.px: 1
-background.solid: $inherited.colors.background.base
-
-\-- ftd.text: Country
-style: bold
-width.fixed.percent: 50
-border-style-horizontal: dashed
-padding-left.px: 10
-border-width.px: 1
-
-\-- ftd.text: Capital
-style: bold
-width.fixed.percent: 50
-border-style-horizontal: dashed
-padding-left.px: 10
-border-width.px: 1
-
-\-- end: ftd.row
-
-\-- end: ftd.column
-
--- ds.code:
-
-\-- ftd.row:
-width.fixed.percent: 40
-role: $inherited.types.copy-regular
-
-\-- ftd.text: $country-detail.country.name
-width.fixed.percent: 50
-border-width.px: 1
-border-style-horizontal: dashed
-padding-left.px: 10
-
-\-- ftd.text: $country-detail.country.capital
-width.fixed.percent: 50
-border-width.px: 1
-border-style-horizontal: dashed
-padding-left.px: 10
-
-\-- end: ftd.row
-
--- ds.markdown:
-
-There you go, we have the data in the tabular form.
-
-
--- ds.h2: Closing remarks
-
-I hope you have learnt with me and found this video easy to follow.
-
-Join us on Discord, and share your package which you will create following this
-video. You can share it on the dicord's `show-and-tell` channel.
-
-Thank you guys, keep watching these videos to learn more about fastn. Checkout
-the `fastn` website. 
-
-Support us by clicking on this link and give us a star ⭐ on GitHub and join 
-our fastn community on Discord.
-
-
-
-
-
-
--- ds.h2: Dynamic country list page - Script
-
--- ds.image:
-src: $fastn-assets.files.images.backend.dynamic-country-list-page.jpg
-
--- ds.markdown:
-
-Hi Guys, welcome to the video.
-
-In this video we will request the JSON data using `http processor` and store it
-in `fastn` records. Later in the video, we will create a country list page that
-will display the list of countries in form of cards that will display country's
-flag and country's `common` name and also display values of `population`,
-`region` and `capital`.
-
-We will do this in three parts. 
-
--- ds.image:
-src: $fastn-assets.files.images.backend.three-stages.jpg
-
--- ds.markdown:
-
-- First, **data modelling** - declare all the `records` in a document.
-
-- Second, **UI** - we will create a `card` component that will contain the
-  data.
-
-- Third, **display** - we will make use of `http processor` to request the data
-  and store in a list and display the data by calling the component.
-
-So I have this package `country-details` in my machine.
-
-I will create a document called `models.ftd` where we will do the data 
-modelling using `records`.
-
--- ftd.image: 
-src: $fastn-assets.files.images.backend.pretty-json.png
-max-width: fill-container
-
--- ds.markdown:
-
-The JSON data is structured in a way, that some properties are nested within 
-another property. Let's visualise it with the help of an illustration:
-
--- ftd.image: 
-src: $fastn-assets.files.images.backend.tree-structure-ppt.jpg
-max-width: fill-container
-
--- ds.markdown:
-
-So the country has name, capital, region, population, and flags properties at
-one level. `common` and `official` names of a country are grouped under the
-`name` property.
-
-
-
--- ds.h3: First Part: data modelling 
-
-So let's create a `record`.
-
--- ds.code:
-
-\-- record country:
-country-name name:
-integer population:
-string region:
-string list capital:
-country-flag flags:
-
--- ds.markdown:
-
-`name` property has a type that itself is a `record` which we will create in a 
-bit.
-
-`population` is an integer while `region` and `capital` are of string type. 
-Also, some countries have more than one capital hence we will create the list 
-of `capital`.
-
-Last but not the least, `flags` also has a `record` datatype.
-
-Let's declare the `country-name` and `country-flag` records too.
-
--- ds.code: 
-
-\-- record country-name:
-optional string common:
-string official:
-
-
--- ds.code:
-
-\-- record country-flag:
-caption svg:
-
-So we are done with the data-modelling part.
-
--- ds.h3: Second Part: create a `card` component
-
-Moving to the second part of the video, we will create a `card` component. 
-
-I have created a `card.ftd` document where I will create this component.
-
-Since we are going to display the value of properties declared in the records 
-in `models.ftd` hence at the top of the `card.ftd` we will import that document.
-
--- ds.code:
-
-\-- import: country-details/models
-
--- ds.markdown:
-
-Now, create a component let's say `country-card`.
-
--- ds.code:
-
-\-- component country-card:
-
-\-- end: country-card
-
--- ds.markdown:
-
-Now let's add a property country and the data type will be `record country` of
-models document.  We will mark it as `caption` to make easy for users of this
-component.
-
--- ds.code:
-
-caption models.country country:
-
--- ds.markdown:
-
-Main column
-
--- ds.code:
-
-\-- ftd.column:
-width.fixed.px: 260
-height.fixed.px: 375
-overflow: auto
-border-radius.rem: 0.5
-margin.rem: 2
-cursor: pointer
-border-width.px: 1
-border-color: #dedede
-
-
--- ds.markdown:
-
-Image
-
--- ds.code:
-
-\-- ftd.image:
-src: $country-card.country.flags.svg
-width: fill-container
-height.fixed.percent: 50
-
--- ds.markdown:
-
-Field column
-
--- ds.code:
-
-\-- ftd.column:
-padding.rem: 1
-spacing.fixed.rem: 0.5
-width: fill-container
-border-color: #dedede
-height: hug-content
-border-top-width.px: 1
-
-\-- ftd.text: $country-card.country.name.common
-style: bold
-role: $inherited.types.copy-regular
-
-\-- ftd.row:
-spacing.fixed.rem: 1
-
-\-- ftd.column:
-spacing.fixed.rem: 0.5
-
-\-- ftd.text: Population:
-role: $inherited.types.label-large
-style: semi-bold
-
-\-- ftd.text: Region:
-role: $inherited.types.label-large
-style: semi-bold
-
-\-- ftd.text: Capital:
-if: { len(country-card.country.capital) > 0 }
-style: semi-bold
-role: $inherited.types.label-large
-
-\-- end: ftd.column
-
--- ds.markdown:
-
-values column
-
--- ds.code:
-
-\-- ftd.column:
-spacing.fixed.rem: 0.5
-
-\-- ftd.integer: $country-card.country.population
-role: $inherited.types.label-large
-
-\-- ftd.text: $country-card.country.region
-role: $inherited.types.label-large
-
-\-- ftd.text: $capital-name
-style: bold
-role: $inherited.types.label-large
-for: $capital-name, $index in $country-card.country.capital
-
-\-- end: ftd.column
-
-\-- end: ftd.row
-
-\-- end: ftd.column
-
-\-- end: ftd.column
-
-\-- end: country-card
-
-
--- ds.markdown:
-
-Add shadow
-
--- ds.code:
-
-\-- ftd.shadow default-card-shadow:
-color: #efefef
-blur.px: 5
-spread.rem: 0.2
-
-\-- ftd.shadow hovered-card-shadow:
-color: #d5e3db
-blur.px: 5
-spread.rem: 0.2
-
-
--- ds.markdown:
-
-shadow properties
-
--- ds.code:
-
-\-- component country-card:
-caption models.country country:
-optional ftd.shadow shadow:      ;;<hl>
-boolean $is-hovered: false       ;;<hl>
-
-
--- ds.markdown:
-
-add these to main column
-
--- ds.code:
-
-shadow: $default-card-shadow
-shadow if { country-card.is-hovered }: $hovered-card-shadow
-\$on-mouse-enter$: $ftd.set-bool( $a = $country-card.is-hovered, v = true )
-\$on-mouse-leave$: $ftd.set-bool( $a = $country-card.is-hovered, v = false )
-
-
--- ds.h3: Third Part: display the output
-
-Everything is ready. Let's assemble everything. We will request the JSON data 
-and display the data in the card using the component.
-
-We will need the two documents and processors so import the `processors` and the
-two documents.
-
--- ds.code:
-
-\-- import: fastn/processors as pr
-\-- import: backend/models
-\-- import: backend/components/card
-
-
--- ds.markdown:
-
-We will create a list of `countries` and the datatype will be `record country` 
-that we created in `models` document.
-
--- ds.code:
-
-\-- models.country list countries:
-$processor$: pr.http
-url: https://restcountries.com/v3.1/all
-
-
--- ds.markdown:
-
-Now we will call the component `country-card` from `card` document and we will 
-wrap it inside the row container component.
-
--- ds.code:
-
-\-- ftd.row:
-wrap: true
-spacing: space-around
-padding.rem: 2
-border-radius.rem: 1
-
-\-- card.country-card: $country
-for: $country in $countries 
-
-\-- end: ftd.row
 
 -- end: ds.page

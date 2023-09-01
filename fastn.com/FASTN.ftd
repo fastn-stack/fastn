@@ -873,6 +873,12 @@ skip: true
 - Overview: /planning/
 - dynamic UI planning: /dynamic-ui/-/planning/
   document: /planning/country-details/index.ftd
+  - Script 1: /dynamic-ui/-/planning/script1/
+    document: /planning/country-details/script1.ftd
+  - Script 2: /dynamic-ui/-/planning/script2/
+    document: /planning/country-details/script2.ftd
+  - Script 3: /dynamic-ui/-/planning/script3/
+    document: /planning/country-details/script3.ftd
 - Page Nomenclature: /page-nomenclature/
   document: /planning/page-nomenclature.ftd
 - Create website planning: /create-website-planning/
