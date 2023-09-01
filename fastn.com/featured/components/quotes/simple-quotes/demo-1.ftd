@@ -50,7 +50,7 @@ published-date: 17-Jun-2022
 -- ft-ui.grid-view: Featured Quote Components
 templates: $quotes
 more-link-text: View more
-more-link: /featured/components/quotes/
+more-link: /quotes/simple-quotes/
 show-large: true
 
 -- end: ds.page.full-width-wrap
@@ -92,17 +92,17 @@ role: Developer
 
 -- ft-ui.template list quotes:
 
--- ft-ui.template: Matte
-template-url: /featured/components/quotes/simple-quotes/demo-9/
-screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-9.png
+-- ft-ui.template: Onyx
+template-url: /quotes/onyx/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-4.png
 
--- ft-ui.template: Silver
-template-url: /featured/components/quotes/simple-quotes/demo-11/
-screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-11.png
+-- ft-ui.template: Marengo
+template-url: /quotes/marengo/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
 
--- ft-ui.template: Storm Cloud
-template-url: /featured/components/quotes/simple-quotes/demo-12/
-screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-12.png
+-- ft-ui.template: Chrome
+template-url: /quotes/chrome/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
 
 -- end: quotes
 

@@ -50,7 +50,7 @@ published-date: 17-Jun-2022
 -- ft-ui.grid-view: Featured Quote Components
 templates: $quotes
 more-link-text: View more
-more-link: /featured/components/quotes/
+more-link: /quotes/simple-quotes/
 show-large: true
 
 -- end: ds.page.full-width-wrap
@@ -92,16 +92,16 @@ role: Developer
 
 -- ft-ui.template list quotes:
 
--- ft-ui.template: Simple Quote - Chalice
-template-url: /featured/components/quotes/simple-quotes/demo-1/
+-- ft-ui.template: Chalice
+template-url: /quotes/chalice/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-1.png
 
--- ft-ui.template: Quote - Rustic
-template-url: /featured/components/quotes/simple-quotes/demo-2/
+-- ft-ui.template: Rustic
+template-url: /quotes/rustic/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-2.png
 
--- ft-ui.template: Quote - Echo
-template-url: /featured/components/quotes/simple-quotes/demo-3/
+-- ft-ui.template: Echo
+template-url: /quotes/echo/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-3.png
 
 -- end: quotes
