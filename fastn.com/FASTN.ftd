@@ -576,22 +576,6 @@ document: /get-started/browse-pick.ftd
   - Property: /property-guidelines/
     document: best-practices/property-guidelines.ftd
 
-## Design: /figma/
-  document: cs/ftd-to-figma.ftd
-
-- Use Figma Tokens with fastn color schemes: /figma/
-  document: cs/ftd-to-figma.ftd
-- Create your own fastn color scheme from Figma json: /figma-to-fastn-cs/
-  document: cs/figma-to-ftd.ftd
-- Modify color scheme package: /modify-cs/
-  document: cs/modify-cs.ftd
-- Create `font` package: /create-font-package/
-  document: author/how-to/create-font-package.ftd
-- Export typography as json: /typo-to-json/
-  document: typo/typo-to-json.ftd
-- Typography json to FTD: /typo-json-to-ftd/
-  document: typo/typo-json-to-ftd
-
 ## Fullstack: /dynamic-urls/
 document: backend/dynamic-urls.ftd
 
@@ -631,6 +615,22 @@ document: author/how-to/github-pages.ftd
 - Dynamic Hosting:
   - Heroku: /heroku/
     document: deploy/heroku.ftd
+
+## Design: /figma/
+  document: cs/ftd-to-figma.ftd
+
+- Use Figma Tokens with fastn color schemes: /figma/
+  document: cs/ftd-to-figma.ftd
+- Create your own fastn color scheme from Figma json: /figma-to-fastn-cs/
+  document: cs/figma-to-ftd.ftd
+- Modify color scheme package: /modify-cs/
+  document: cs/modify-cs.ftd
+- Create `font` package: /create-font-package/
+  document: author/how-to/create-font-package.ftd
+- Export typography as json: /typo-to-json/
+  document: typo/typo-to-json.ftd
+- Typography json to FTD: /typo-json-to-ftd/
+  document: typo/typo-json-to-ftd
 
 # Community: /champion-program/
 document: /student-programs/champion.ftd
