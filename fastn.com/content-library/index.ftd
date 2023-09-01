@@ -11,14 +11,33 @@ export: testimonial-cards, testimonial-card, hero-with-4-images
 
 -- component hero-content:
 
--- hero-section: Build your next landing page, blog, or webapp
+-- hero-section: Build your next landing
+inline-title-1:  page, blog, or webapp with
+inline-title-2: fastn
 primary-cta: Get Started
 primary-cta-link: index.html
-secondary-cta: Docs
+secondary-cta: Read Docs
 secondary-cta-link: index.html
+
+-- hero-section.content-wrap:
+
+-- ftd.container:
+role: $inherited.types.copy-large
+
+-- ftd.text: Easy to learn
+display: inline
+color: $inherited.colors.cta-primary.base
+
+-- ftd.text: 
+display: inline
+color: $inherited.colors.text-strong
 
 full-stack open source framework designed for creating good looking content
 centric or API and database driven websites.
+
+-- end: ftd.container
+
+-- end: hero-section.content-wrap
 
 -- end: hero-section
 
@@ -160,13 +179,16 @@ children: $home-page.footer
 
 -- component hero-section:
 caption title:
-body body:
+optional body body:
 boolean $mouse-in: false
 boolean $hover: false
 optional string primary-cta-link:
 optional string primary-cta:
 optional string secondary-cta-link:
 optional string secondary-cta:
+optional string inline-title-1:
+optional string inline-title-2:
+children content-wrap:
 
 -- ftd.column:
 width: fill-container
@@ -176,42 +198,57 @@ background.image: $fastn-assets.files.assets.background.svg
 
 -- ftd.column:
 width: fill-container
-max-width.fixed.px: 600
-padding-top.em: 3
-padding-top.em if { ftd.device == "mobile" }: 0
-padding-bottom.em if { ftd.device == "desktop" }: 7
+max-width.fixed.px: 800
 align-self: center
 align-content: center
-
--- ftd.text: $hero-section.title
 role: $inherited.types.heading-hero
 role if { ftd.device == "mobile" }: $inherited.types.heading-medium
+
+-- ftd.text: $hero-section.title
 text-align: center
 
+-- ftd.container:
+width: fill-container
+align-self: center
+
+-- ftd.text: $hero-section.inline-title-1
+display: inline
+text-align: center
+
+
+-- ftd.text: $hero-section.inline-title-2
+color: $inherited.colors.cta-primary.base
+display: inline
+
+-- end: ftd.container
+
 -- ftd.text: 
+if: { hero-section.body != NULL }
 text-align: center
 role: $inherited.types.copy-regular
 margin-top.px: 48
 
 $hero-section.body
 
+-- ftd.column:
+width: fill-container
+align-content: center
+children: $hero-section.content-wrap
+max-width.fixed.px: 700
+margin-top.px: 42
+
+-- end: ftd.column
+
 -- ftd.row:
 align-self: center
-margin-top.px: 48
-spacing.fixed.px: 64
+margin-top.px: 64
+spacing.fixed.px: 16
+
+-- cta-secondary-large: $hero-section.secondary-cta
+link: $hero-section.secondary-cta-link
 
 -- cta-primary-large: $hero-section.primary-cta
 link: $hero-section.primary-cta-link
-
--- ftd.text: $hero-section.secondary-cta
-link: $hero-section.secondary-cta-link
-role: $inherited.types.button-large
-color: $inherited.colors.custom.nine
-background.solid if { hero-section.mouse-in }: $inherited.colors.cta-secondary.hover
-$on-mouse-leave$: $ftd.set-bool($a = $hero-section.hover, v = false)
-$on-mouse-enter$: $ftd.set-bool($a = $hero-section.hover, v = true)
-padding-vertical.px: 12
-border-radius.px: 6
 
 -- end: ftd.row
 
@@ -1354,19 +1391,68 @@ caption title:
 string link: 
 boolean $mouse-in: false
 
--- ftd.text: $cta-primary-large.title
-link: $cta-primary-large.link
-role: $inherited.types.button-large
-color: $inherited.colors.cta-primary.text
+-- ftd.row:
 background.solid: $inherited.colors.cta-primary.base
 background.solid if { cta-primary-large.mouse-in }: $inherited.colors.cta-primary.hover
 $on-mouse-leave$: $ftd.set-bool($a = $cta-primary-large.mouse-in, v = false)
 $on-mouse-enter$: $ftd.set-bool($a = $cta-primary-large.mouse-in, v = true)
-padding-vertical.px: 12
+padding-vertical.px: 18
 padding-horizontal.px: 32
-border-radius.px: 6
+border-radius.px: 58
+spacing.fixed.px: 8
+link: $cta-primary-large.link
+align-content: center
+
+-- ftd.text: $cta-primary-large.title
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong
+
+-- ftd.image:
+src: $fastn-assets.files.images.right-arrow.svg
+
+
+-- end: ftd.row
 
 -- end: cta-primary-large
+
+
+
+
+
+
+
+
+
+
+-- component cta-secondary-large:
+caption title:
+string link: 
+boolean $mouse-in: false
+
+-- ftd.row:
+border-width.px: 1
+border-color: $inherited.colors.cta-secondary.border
+border-color if { cta-secondary-large.mouse-in }: $inherited.colors.cta-primary.border
+$on-mouse-leave$: $ftd.set-bool($a = $cta-secondary-large.mouse-in, v = false)
+$on-mouse-enter$: $ftd.set-bool($a = $cta-secondary-large.mouse-in, v = true)
+padding-vertical.px: 18
+padding-horizontal.px: 32
+border-radius.px: 58
+spacing.fixed.px: 8
+link: $cta-secondary-large.link
+align-content: center
+
+-- ftd.image:
+src: $fastn-assets.files.images.docs-icon.svg
+
+-- ftd.text: $cta-secondary-large.title
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong
+
+-- end: ftd.row
+
+-- end: cta-secondary-large
+
 
 
 
