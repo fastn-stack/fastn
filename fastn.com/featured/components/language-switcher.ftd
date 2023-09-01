@@ -74,7 +74,7 @@ more-link: /featured/components-library/
 
 -- ft-ui.template: Gradient Business Card
 template-url: featured/components/business-cards/gradient-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
+screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-front.jpg
 
 -- ft-ui.template: Modal Cover
 template-url: featured/components/modals/modal-cover/
@@ -85,4 +85,3 @@ template-url: featured/components/business-cards/pattern-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
 
 -- end: components
-
