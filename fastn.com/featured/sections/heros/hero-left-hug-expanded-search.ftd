@@ -98,7 +98,7 @@ role: Designer
 
 -- ft-ui.template: Hero Bottom Hug
 template-url: featured/sections/heros/hero-bottom-hug/
-screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug.jpg
+screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug.png
 
 -- ft-ui.template: Hero Left Hug Expanded
 template-url: featured/sections/heros/hero-left-hug-expanded/
