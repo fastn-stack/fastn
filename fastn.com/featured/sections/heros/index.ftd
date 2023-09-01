@@ -6,7 +6,7 @@ sidebar: false
 -- ft-ui.grid-view: Hero
 templates: $hero
 more-link-text: View more
-more-link: /featured/sections/heros/
+more-link: /featured/heros/
 
 -- end: ds.page
 
@@ -17,47 +17,47 @@ more-link: /featured/sections/heros/
 -- ft-ui.template list hero:
 
 -- ft-ui.template: Hero Bottom Hug
-template-url: featured/sections/heros/hero-bottom-hug/
+template-url: /hero-bottom-hug/
 screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug.jpg
 
 -- ft-ui.template: Hero Bottom Hug Search
-template-url: featured/sections/heros/hero-bottom-hug-search/
+template-url: /hero-bottom-hug-search/
 screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug-search.jpg
 
 -- ft-ui.template: Hero Left Hug Expanded Search
-template-url: featured/sections/heros/hero-left-hug-expanded-search/
+template-url: /hero-left-hug-expanded-search/
 screenshot: $fastn-assets.files.images.featured.components.hero-left-hug-expanded-search.jpg
 
 -- ft-ui.template: Hero Left Hug Expanded
-template-url: featured/sections/heros/hero-left-hug-expanded/
+template-url: /hero-left-hug-expanded/
 screenshot: $fastn-assets.files.images.featured.components.hero-left-hug-expanded.jpg
 
 -- ft-ui.template: Hero Right Hug Expanded Search
-template-url: featured/sections/heros/hero-right-hug-expanded-search/
+template-url: /hero-right-hug-expanded-search/
 screenshot: $fastn-assets.files.images.featured.components.hero-right-hug-expanded-search.jpg
 
 -- ft-ui.template: Hero Right Hug Expanded
-template-url: featured/sections/heros/hero-right-hug-expanded/
+template-url: /hero-right-hug-expanded/
 screenshot: $fastn-assets.files.images.featured.components.hero-right-hug-expanded.jpg
 
 -- ft-ui.template: Hero Right Hug Large
-template-url: featured/sections/heros/hero-right-hug-large/
+template-url: /hero-right-hug-large/
 screenshot: $fastn-assets.files.images.featured.components.hero-right-hug-large.jpg
 
 -- ft-ui.template: Hero Right Hug Search Label
-template-url: featured/sections/heros/hero-right-hug-search-label/
+template-url: /hero-right-hug-search-label/
 screenshot: $fastn-assets.files.images.featured.components.hero-right-hug-search-label.jpg
 
 -- ft-ui.template: Hero Right Hug Search
-template-url: featured/sections/heros/hero-right-hug-search/
+template-url: /hero-right-hug-search/
 screenshot: $fastn-assets.files.images.featured.components.hero-right-hug-search.jpg
 
 -- ft-ui.template: Hero Right Hug
-template-url: featured/sections/heros/hero-right-hug/
+template-url: /hero-right-hug/
 screenshot: $fastn-assets.files.images.featured.components.hero-right-hug.jpg
 
 -- ft-ui.template: Hero with social
-template-url: featured/sections/heros/hero-with-social/
+template-url: /hero-with-social/
 screenshot: $fastn-assets.files.images.featured.components.hero-with-social.png
 
 -- end: hero
