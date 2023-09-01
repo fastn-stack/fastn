@@ -71,8 +71,10 @@ favicon: /-/fastn.com/images/favicon.svg
   document: author/how-to/install.ftd
   - On MacOS/Linux: /macos/
     document: author/setup/macos.ftd
+    description: Install on MacOS/Linux
   - On Windows: /windows/
     document: author/setup/windows.ftd
+    description: Install on Windows
   - Open terminal: /open-terminal/
     document: author/how-to/open-terminal.ftd
     skip: true
@@ -82,6 +84,7 @@ favicon: /-/fastn.com/images/favicon.svg
   document: author/how-to/vscode.ftd
 - `fastn` Community: /community/
 - Docs: /docs/
+  description: First Steps, Getting Help, Discord, How the documentation is organized
 - Student Ambassador Program: /ambassador/
   document: /student-programs/ambassador.ftd
   skip: true
@@ -193,6 +196,7 @@ favicon: /-/fastn.com/images/favicon.svg
     document: /ftd/variables.ftd
   - Built-in Types: /built-in-types/
     document: /ftd/built-in-types.ftd
+    description: boolean, integer, decimal, string, caption, body, caption or body, ftd.ui, children, ftd.align-self, ftd.align, ftd.anchor, ftd.linear-gradient, ftd.linear-gradient-color, ftd.breakpoint-width-data, ftd.linear-gradient-directions, ftd.background-image, ftd.background-position, ftd.background-repeat, ftd.background-size, ftd.background, ftd.border-style, ftd.color, ftd.display, ftd.color-scheme, ftd.cursor, ftd.image-src, ftd.length, ftd.length-pair, ftd.loading, ftd.overflow, ftd.region, ftd.resize, ftd.resizing, ftd.responsive-type, ftd.shadow, ftd.spacing, ftd.text-align, ftd.text-input-type, ftd.text-style, ftd.text-transform, ftd.type, ftd.white-space, ftd.type-data
   - `record`: /record/
     document: /ftd/record.ftd
   - `or-type`: /or-type/
@@ -226,6 +230,7 @@ favicon: /-/fastn.com/images/favicon.svg
     document: /ftd/image.ftd
   - `ftd.rive`: /rive/
     document: ftd/rive.ftd
+    description: animation
   - `ftd.iframe`: /iframe/
     document: /ftd/iframe.ftd
   - `ftd.integer`: /integer/
@@ -248,28 +253,38 @@ favicon: /-/fastn.com/images/favicon.svg
   document: ftd/attributes.ftd
   - Common Attributes: /common-attributes/
     document: ftd/common.ftd
+    description: id, padding, padding-vertical, padding-horizontal, padding-left, padding-right, padding-top, padding-bottom, margin, margin-vertical, margin-horizontal, margin-left, margin-right, margin-top, margin-bottom, align-self, color, width, min-width, max-width, height, min-height, max-height, background, border-width, border-left-width, border-right-width, border-top-width, border-bottom-width, border-radius, border-top-left-radius, border-top-right-radius, border-bottom-left-radius, border-bottom-right-radius, border-color, border-left-color, border-right-color, border-top-color, border-bottom-color, border-style, border-style-left, border-style-right, border-style-top, border-style-bottom, border-style-horizontal, border-style-vertical, overflow, overflow-x, overflow-y, cursor, region, link, open-in-new-tab, role, resize, sticky, shadow, anchor, opacity, whitespace, text-transform, classes, top, bottom, left, right, css, js, z-index, border-radius.px, border-top-left-radius.px, border-top-right-radius.px, border-bottom-left-radius.px, border-bottom-right-radius.px, width.fixed.px, min-width, max-width, height, min-height, max-height, overflow-x, overflow-y, cursor, region, border-width.px, border-top-width.px, border-bottom-width.px, border-left-width.px, border-right-width.px, submit, background-gradient, background-image, background-repeat, background-parallax, sticky, anchor, z-index, white-space, text-transform
   - Text Attributes: /text-attributes/
     document: ftd/text-attributes.ftd
+    description: style: (underline, strike, italic, heavy, extra-bold, semi-bold, bold, regular, medium, light, extra-light, hairline), text-align, text-indent
   - Container Attributes: /container-attributes/
     document: ftd/container-attributes.ftd
+    description: wrap, align-content, spacing
   - Container Root Attributes: /container-root-attributes/
     document: ftd/container-root-attributes.ftd
+    description: children, colors, types
 - `import`: /import/
   document: ftd-host/import.ftd
 - Using export/exposing: /using-export-exposing/
   document: ftd/export-exposing.ftd
 - Functions: /functions/
-  document: ftd/functions/
+  document: ftd/functions.ftd
+  description: clamp
 - Built-in Functions: /built-in-functions/
   document: ftd/built-in-functions.ftd
+  description: len, length, ftd.append, ftd.insert_at, ftd.delete_at, ftd.clear, enable_dark_mode, enable_light_mode, enable_system_mode, copy-to-clipboard, toggle, increment, increment-by, set-bool, set-string, set-integer, is_empty, light mode, dark mode, system mode
 - Built-in Rive Functions: /built-in-rive-functions/
   document: ftd/built-in-rive-functions.ftd
+  description: animation, ftd.toggle-play-rive, ftd.play-rive, ftd.pause-rive, ftd.fire-rive, ftd.set-rive-integer, ftd.toggle-rive-boolean, ftd.set-rive-boolean
 - Built-in Variables: /built-in-variables/
   document: ftd/built-in-variables.ftd
+  description: ftd.dark-mode, ftd.system-dark-mode, ftd.follow-system-dark-mode, ftd.device, ftd.mobile-breakpoint, light mode, dark mode, system mode
 - `ftd` Events: /events/
   document: ftd/events.ftd
+  description: on-click, on-click-outside, on-mouse-enter, on-mouse-leave, on-input, on-change, on-blur, on-focus, on-global-key, on-global-key-seq
 - Rive Events: /rive-events/
   document: ftd/rive-events.ftd
+  decription: animation, on-rive-play, on-rive-pause, on-rive-state-change
 - Use color scheme package: /use-cs/
   document: cs/use-color-package.ftd
 - `processor`: /processor/
@@ -360,7 +375,7 @@ favicon: /-/fastn.com/images/favicon.svg
     document: book/appendix/d-common-commands.ftd
   - **e** Install `fastn`: /book/install/
     document: book/appendix/e-install.ftd
-    - Intall On Windows: /windows/-/book/
+    - Install On Windows: /windows/-/book/
       document: author/setup/windows.ftd
       skip: true
   - **f** A Programming Editor: /book/editor/
@@ -873,6 +888,12 @@ skip: true
 - Overview: /planning/
 - dynamic UI planning: /dynamic-ui/-/planning/
   document: /planning/country-details/index.ftd
+  - Script 1: /dynamic-ui/-/planning/script1/
+    document: /planning/country-details/script1.ftd
+  - Script 2: /dynamic-ui/-/planning/script2/
+    document: /planning/country-details/script2.ftd
+  - Script 3: /dynamic-ui/-/planning/script3/
+    document: /planning/country-details/script3.ftd
 - Page Nomenclature: /page-nomenclature/
   document: /planning/page-nomenclature.ftd
 - Create website planning: /create-website-planning/
@@ -906,6 +927,7 @@ skip: true
 - Rive Video: /planning/rive/
 - Developer Course: /planning/developer-course/
 
+# 🔍: /search/
 
 -- fastn.redirects:
 
