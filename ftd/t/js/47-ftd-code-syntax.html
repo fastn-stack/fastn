@@ -1,0 +1,151 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <meta content="fastn" name="generator">
+    
+    <script src="fastn-js.js"></script>
+
+    <style>
+       
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><pre data-id="3" class="language-ftd fastn-theme-dark"><code data-id="4" class="language-ftd fastn-theme-dark">/-- ftd.text:
+color: red
+
+This is body part of ftd.text
+
+;; Inline comment as line comment
+
+-- ftd.text: Hello ;; This is inline comment
+
+-- import: fastn-community.github.io/bling/quote
+
+-- quote.charcoal: Amit Upadhyay
+label: Creator of `fastn`
+avatar: $fastn-assets.files.images.amitu.jpg
+logo: $fastn-assets.files.images.logo-fifthtry.svg
+
+The web has lost some of the exuberance from the
+early 2000s, and it makes me a little sad.
+
+-- component toggle-text:
+boolean $current: false
+caption title:
+
+-- ftd.text: $toggle-text.title
+align-self: center
+text-align: center
+color if { toggle-text.current }: #D42D42
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+$on-click$: $ftd.toggle($a = $toggle-text.current
+border-radius.px: 5
+border-radius.px: 5
+
+-- end: toggle-text
+
+-- component toggle-text:
+ftd.ui list $current: false
+ftd.image-src img:
+caption title:
+
+-- end: toggle-text
+
+-- toggle-text:
+if: { key == 1 }
+color: red
+padding.px: 10
+
+
+
+-- foo:
+-- ftd.text: I love `ftd`!
+-- end: foo
+
+
+-- foo:
+
+-- ftd.text: Hello World!
+color: $inherited.colors.text-strong
+
+-- ftd.text: I love `fastn`.
+color: $inherited.colors.text-strong
+
+-- end: foo
+</code></pre></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+    </style>
+<script>
+    (function() {
+        let global = {
+};
+let main = function (parent) {
+  let parenti0 = foo__ftd_code_test(parent, inherited);
+}
+global["main"] = main;
+let foo__ftd_code_test = function (parent, inherited, args)
+{
+  let __args__ = {
+  };
+  inherited = fastn.recordInstance({
+    ...__args__,
+    ...inherited.getAllFields(),
+    ...args
+  });
+  __args__ = {
+    ...__args__,
+    ...args
+  };
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Code);
+  parenti0.setProperty(fastn_dom.PropertyKind.Code, "/-- ftd.text:\ncolor: red\n\nThis is body part of ftd.text\n\n;; Inline comment as line comment\n\n-- ftd.text: Hello ;; This is inline comment\n\n-- import: fastn-community.github.io/bling/quote\n\n-- quote.charcoal: Amit Upadhyay\nlabel: Creator of `fastn`\navatar: $fastn-assets.files.images.amitu.jpg\nlogo: $fastn-assets.files.images.logo-fifthtry.svg\n\nThe web has lost some of the exuberance from the\nearly 2000s, and it makes me a little sad.\n\n-- component toggle-text:\nboolean $current: false\ncaption title:\n\n-- ftd.text: $toggle-text.title\nalign-self: center\ntext-align: center\ncolor if { toggle-text.current }: #D42D42\ncolor: $inherited.colors.cta-primary.text\nbackground.solid: $inherited.colors.cta-primary.base\n$on-click$: $ftd.toggle($a = $toggle-text.current\nborder-radius.px: 5\nborder-radius.px: 5\n\n-- end: toggle-text\n\n-- component toggle-text:\nftd.ui list $current: false\nftd.image-src img:\ncaption title:\n\n-- end: toggle-text\n\n-- toggle-text:\nif: { key == 1 }\ncolor: red\npadding.px: 10\n\n\n\n-- foo:\n-- ftd.text: I love `ftd`!\n-- end: foo\n\n\n-- foo:\n\n-- ftd.text: Hello World!\ncolor: $inherited.colors.text-strong\n\n-- ftd.text: I love `fastn`.\ncolor: $inherited.colors.text-strong\n\n-- end: foo", inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.CodeTheme, "fastn-theme.dark", inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
+  return parenti0;
+}
+global["foo__ftd_code_test"] = foo__ftd_code_test;
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastn_virtual.hydrate(main_wrapper);
+        ftd.post_init();
+    })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+    };
+
+</script>
+</html>

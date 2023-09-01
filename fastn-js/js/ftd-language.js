@@ -1,9 +1,9 @@
-// ftd-language.js
+/* ftd-language.js */
 
 Prism.languages.ftd = {
     'comment': [
         {
-            'pattern': /\/--\s*([\S\s]*?)(?=\s*--)/g,
+            'pattern': /\/--\s*((?!--)[\S\s])*/g,
             'greedy': true,
             'alias': "section-comment",
         },
@@ -33,15 +33,16 @@ Prism.languages.ftd = {
     'string': {
         'pattern': /^[ \t\n]*--\s+(.*)(\n(?![ \n\t]*--).*)*/g,
         'inside': {
-            // section-identifier
+            /* section-identifier */
             'section-identifier': /([ \t\n])*--\s+/g,
-            // [section type] <section name>:
+            /* [section type] <section name>: */
             'punctuation': {
                 'pattern': /^(.*):/g,
                 'inside': {
                     "semi-colon": /:/g,
                     'keyword': /^(component|record|end|or-type)/g,
                     "value-type": /^(integer|boolean|decimal|string)/g,
+                    "kernel-type": /\s*ftd[\S]+/g,
                     'type-modifier': {
                         'pattern': /(\s)+list(?=\s)/g,
                         'lookbehind': true,
@@ -52,25 +53,25 @@ Prism.languages.ftd = {
                     },
                 }
             },
-            // section caption
+            /* section caption */
             'section-caption': /^.+(?=\n)*/g,
-            // header name: header value
+            /* header name: header value */
             'regex': {
                 'pattern': /(?!--\s*).*[:]\s*(.*)(\n)*/g,
                 'inside': {
-                    // if condition on component
+                    /* if condition on component */
                     'header-condition': /\s*if\s*:(.)+/g,
-                    // header event
+                    /* header event */
                     'event': /\s*\$on(.)+\$(?=:)/g,
-                    // header processor
+                    /* header processor */
                     'processor': /\s*\$[^:]+\$(?=:)/g,
-                    // header name => [header-type] <name> [header-condition]
+                    /* header name => [header-type] <name> [header-condition] */
                     'regex': {
                         'pattern': /[^:]+(?=:)/g,
                         'inside': {
-                            // [header-condition]
+                            /* [header-condition]  */
                             'header-condition': /if\s*{.+}/g,
-                            // [header-type] <name>
+                            /* [header-type] <name> */
                             'tag': {
                                 'pattern': /(.)+(?=if)?/g,
                                 'inside': {
@@ -88,9 +89,9 @@ Prism.languages.ftd = {
                             }
                         }
                     },
-                    // semicolon
+                    /* semicolon */
                     "semi-colon": /:/g,
-                    // header value (if any)
+                    /* header value (if any) */
                     'header-value': {
                         'pattern': /(\s)*(.+)/g,
                         'lookbehind': true,
