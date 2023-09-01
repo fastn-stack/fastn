@@ -617,25 +617,28 @@ skip: true
     - Imagen IG: /featured/sections/cards/imagen-ig/
     skip: true
   - Hero Components: /featured/sections/heros/
-    - Hero with two CTA: /featured/sections/heros/hero-with-2-cta/
+    - Hero Right Hug Expanded Search: /featured/sections/heros/hero-right-hug-expanded-search/
     skip: true
-      - Hero with two CTA - Design 1: /featured/sections/heros/hero-1/
-      skip: true  
-      - Hero with two CTA - Design 2: /featured/sections/heros/hero-2/
-      skip: true  
-      - Hero with two CTA - Design 3: /featured/sections/heros/hero-3/
-      skip: true  
-      - Hero with two CTA - Design 4: /featured/sections/heros/hero-5/
-      skip: true
-      - Hero with two CTA - Design 5: /featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/  
-    - Hero with Search: /featured/sections/heros/hero-with-search/
+    - Hero Right Hug Expanded: /featured/sections/heros/hero-right-hug-expanded/
     skip: true
-      - Hero with search - Design 1: /featured/sections/heros/hero-4/
-      skip: true  
+    - Hero Right Hug Large: /featured/sections/heros/hero-right-hug-large/
+    skip: true
+    - Hero Right Hug Search Label: /featured/sections/heros/hero-right-hug-search-label/
+    skip: true
+    - Hero Right Hug Search: /featured/sections/heros/hero-right-hug-search/
+    skip: true
+    - Hero Right Hug: /featured/sections/heros/hero-right-hug/
+    skip: true
+    - Hero Bottom Hug: /featured/sections/heros/hero-bottom-hug/
+    skip: true
+    - Hero Bottom Hug Search: /featured/sections/heros/hero-bottom-hug-search/
+    skip: true
+    - Hero Left Hug Expanded Search: /featured/sections/heros/hero-left-hug-expanded-search/
+    skip: true
+    - Hero Left Hug Expanded: /featured/sections/heros/hero-left-hug-expanded/
+    skip: true
     - Hero with social icons: /featured/sections/heros/hero-with-social/
     skip: true
-      - Hero with social - Design 1: /featured/sections/heros/hero-6/
-      skip: true  
   - Key Value Tables: /featured/sections/kvt/
     - Key Value Table 1: /featured/sections/kvt/kvt-1/
       skip: true
