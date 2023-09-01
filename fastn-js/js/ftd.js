@@ -24,7 +24,7 @@ let ftd = {
 
     copy_to_clipboard(args) {
         let text = args.a;
-        if (text instanceof fastn.mutableClass) text = text.get();
+        if (text instanceof fastn.mutableClass) text = fastn_utils.getStaticValue(text);
         if (text.startsWith("\\", 0)) {
             text = text.substring(1);
         }
@@ -151,6 +151,7 @@ ftd.pop = function (list) { list.pop() }
 ftd.insert_at = function (list, index, item) { list.insertAt(index, item) }
 ftd.delete_at = function (list, index) { list.deleteAt(index) }
 ftd.clear_all = function (list) { list.clearAll() }
+ftd.clear = ftd.clear_all;
 ftd.set_list = function (list, value) { list.set(value) }
 
 ftd.http = function (url, method, body, headers) {

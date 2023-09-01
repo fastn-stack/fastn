@@ -245,8 +245,8 @@ let fastn_utils = {
     },
     nextSibling(node, parent) {
         // For Conditional DOM
-        if (Array.isArray(node)) {
-            node = node[node.length - 1];
+        while (Array.isArray(node)) {
+            node = node[node.length-1];
         }
         if (node.nextSibling) {
           return node.nextSibling;
@@ -392,25 +392,28 @@ let fastn_utils = {
         }).join('');
     },
 
-    escapeSpecialHtmlCharacters(str) {
-        return str.replace(/[&<>"'/]/g, function (match) {
-            switch (match) {
-                case "&":
-                    return "&amp;";
-                case "<":
-                    return "&lt;";
-                case ">":
-                    return "&gt;";
-                case '"':
-                    return "&quot;";
-                case "'":
-                    return "&#39;";
-                case "/":
-                    return "&#x2F;";
-                default:
-                    return match;
+    escapeHtmlInCode(str) {
+        return str.replace(/[<]/g, "&lt;");
+    },
+
+    escapeHtmlInMarkdown(str) {
+        let result = "";
+        let ch_map = {
+            '<': "&lt;"
+        };
+        // To avoid replacing html characters inside <code> body
+        let backtick_found = false;
+        for (var i = 0; i < str.length; i++) {
+            let current = str[i];
+            if (current === '`') backtick_found = !backtick_found;
+            if (ch_map[current] !== undefined && !backtick_found) {
+                result += ch_map[current];
             }
-        });
+            else {
+                result += current;
+            }
+        }
+        return result;
     },
 }
 
