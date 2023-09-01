@@ -6,16 +6,7 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#todo-list": [
-{
-"address": "Some address",
-"is-selected": true
-},
-{
-"address": "Some address 1",
-"is-selected": true
-}
-],
+"foo#current-theme": "fastn-theme.light",
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -794,7 +785,79 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="border-radius: 5px; gap: 10px; padding: 10px" class="ft_common ft_row"><div data-id="0,0:main" style="" class="ft_common ft_md">true</div><input checked data-id="0,1:main" type="checkbox" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#todo-list.0.is-selected&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;CHECKED&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md"></input><div data-id="0,2:main" style="color: rgba(0,0,0,1); font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px; margin-bottom: 5px" class="ft_common ft_md">Some address</div></div><div data-id="1:main" style="border-radius: 5px; gap: 10px; padding: 10px" class="ft_common ft_row"><div data-id="1,0:main" style="" class="ft_common ft_md">true</div><input checked data-id="1,1:main" type="checkbox" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#todo-list.1.is-selected&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;CHECKED&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md"></input><div data-id="1,2:main" style="color: rgba(0,0,0,1); font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px; margin-bottom: 5px" class="ft_common ft_md">Some address 1</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#4f5b66;">;; Section Comment
+</span><span style="color:#4f5b66;">
+</span><span style="color:#a846b9;">\/-- ftd.text</span><span style="color:#696b70;">:
+</span><span style="color:#a846b9;">color</span><span style="color:#696b70;">: </span><span style="color:#36464e;">red
+</span><span style="color:#4f5b66;">
+</span><span style="color:#4f5b66;">This is body part of ftd.text
+</span><span style="color:#4f5b66;">
+</span><span style="color:#4f5b66;">;; Inline comment as line comment
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">ftd.text</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">Hello ;; This is inline comment
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">import</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">fastn-community.github.io/bling/quote
+</span><span style="color:#4f5b66;">
+</span><span style="color:#4f5b66;">;; Component invocation
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">quote.charcoal</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">Amit Upadhyay
+</span><span style="color:#a846b9;">label</span><span style="color:#696b70;">: </span><span style="color:#36464e;">Creator of `fastn`
+</span><span style="color:#a846b9;">avatar</span><span style="color:#696b70;">: </span><span style="color:#36464e;">$fastn-assets.files.images.amitu.jpg
+</span><span style="color:#a846b9;">logo</span><span style="color:#696b70;">: </span><span style="color:#36464e;">$fastn-assets.files.images.logo-fifthtry.svg
+</span><span style="color:#4f5b66;">
+</span><span style="color:#4f5b66;">The web has lost some of the exuberance from the
+</span><span style="color:#4f5b66;">early 2000s, and it makes me a little sad.
+</span><span style="color:#4f5b66;">
+</span><span style="color:#4f5b66;">;; Component Definition
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">component toggle-text</span><span style="color:#696b70;">:
+</span><span style="color:#a846b9;">boolean $current</span><span style="color:#696b70;">: </span><span style="color:#36464e;">false
+</span><span style="color:#a846b9;">caption title</span><span style="color:#696b70;">:
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">ftd.text</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">$toggle-text.title
+</span><span style="color:#a846b9;">align-self</span><span style="color:#696b70;">: </span><span style="color:#36464e;">center
+</span><span style="color:#a846b9;">text-align</span><span style="color:#696b70;">: </span><span style="color:#36464e;">center
+</span><span style="color:#a846b9;">color if { toggle-text.current }</span><span style="color:#696b70;">: </span><span style="color:#36464e;">#D42D42
+</span><span style="color:#a846b9;">color</span><span style="color:#696b70;">: </span><span style="color:#36464e;">$inherited.colors.cta-primary.text
+</span><span style="color:#a846b9;">background.solid</span><span style="color:#696b70;">: </span><span style="color:#36464e;">$inherited.colors.cta-primary.base
+</span><span style="color:#a846b9;">$on-click$</span><span style="color:#696b70;">: </span><span style="color:#36464e;">$ftd.toggle($a = $toggle-text.current)
+</span><span style="color:#a846b9;">border-radius.px</span><span style="color:#696b70;">: </span><span style="color:#36464e;">5
+</span><span style="color:#a846b9;">border-radius.px</span><span style="color:#696b70;">: </span><span style="color:#36464e;">5
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">end</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">toggle-text
+</span><span style="color:#4f5b66;">
+</span><span style="color:#4f5b66;">;; Record definition
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">record Person</span><span style="color:#696b70;">:
+</span><span style="color:#a846b9;">caption name</span><span style="color:#696b70;">:
+</span><span style="color:#a846b9;">body description</span><span style="color:#696b70;">:
+</span><span style="color:#a846b9;">string id</span><span style="color:#696b70;">:
+</span><span style="color:#a846b9;">integer age</span><span style="color:#696b70;">:
+</span><span style="color:#4f5b66;">
+</span><span style="color:#4f5b66;">;; Variable definition
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">integer key</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">1
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">ftd.text</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">Key is one
+</span><span style="color:#a846b9;">if</span><span style="color:#696b70;">: </span><span style="color:#36464e;">{ key == 1 }
+</span><span style="color:#a846b9;">color</span><span style="color:#696b70;">: </span><span style="color:#36464e;">red
+</span><span style="color:#a846b9;">padding.px</span><span style="color:#696b70;">: </span><span style="color:#36464e;">10
+</span><span style="color:#4f5b66;">
+</span><span style="color:#4f5b66;">;; List and list initialization
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">ftd.ui list foo</span><span style="color:#696b70;">:
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">foo</span><span style="color:#696b70;">:
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">ftd.text</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">Hello World!
+</span><span style="color:#a846b9;">color</span><span style="color:#696b70;">: </span><span style="color:#36464e;">$inherited.colors.text-strong
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">ftd.text</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">I love `fastn`.
+</span><span style="color:#a846b9;">color</span><span style="color:#696b70;">: </span><span style="color:#36464e;">$inherited.colors.text-strong
+</span><span style="color:#4f5b66;">
+</span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">end</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">foo
+</span></pre>
+</div></div>
 
 
 <script>
@@ -2007,144 +2070,7 @@ a.value = v
 }
 
 
-window.node_change_main = {};
-window.node_change_main["0,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#todo-list.0.is-selected", data);
-}
-window.node_change_main["0,1:main__checked"] = function(data) {
-if (document.querySelector(`[data-id="0,1:main"]`).getAttribute("checked") == "REMOVE-KEY"){
-document.querySelector(`[data-id="0,1:main"]`).removeAttribute("checked");
-}
-}
-window.node_change_main["0,2:main__text"] = function(data) {
-document.querySelector(`[data-id="0,2:main"]`).innerHTML = resolve_reference("foo#todo-list.0.address", data);
-}
 
-window.node_change_main["0,2:main__font-family"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
-}
-else {document.querySelector(`[data-id="0,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
-}
-
-window.node_change_main["0,2:main__font-size"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
-}
-else {document.querySelector(`[data-id="0,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
-}
-
-window.node_change_main["0,2:main__font-weight"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
-}
-else {document.querySelector(`[data-id="0,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
-}
-
-window.node_change_main["0,2:main__letter-spacing"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
-}
-else {document.querySelector(`[data-id="0,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
-}
-
-window.node_change_main["0,2:main__line-height"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
-}
-else {document.querySelector(`[data-id="0,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
-}
-window.node_change_main["1,0:main__text"] = function(data) {
-document.querySelector(`[data-id="1,0:main"]`).innerHTML = resolve_reference("foo#todo-list.1.is-selected", data);
-}
-window.node_change_main["1,1:main__checked"] = function(data) {
-if (document.querySelector(`[data-id="1,1:main"]`).getAttribute("checked") == "REMOVE-KEY"){
-document.querySelector(`[data-id="1,1:main"]`).removeAttribute("checked");
-}
-}
-window.node_change_main["1,2:main__text"] = function(data) {
-document.querySelector(`[data-id="1,2:main"]`).innerHTML = resolve_reference("foo#todo-list.1.address", data);
-}
-
-window.node_change_main["1,2:main__font-family"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
-}
-else {document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
-}
-
-window.node_change_main["1,2:main__font-size"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
-}
-else {document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
-}
-
-window.node_change_main["1,2:main__font-weight"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
-}
-else {document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
-}
-
-window.node_change_main["1,2:main__letter-spacing"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
-}
-else {document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
-}
-
-window.node_change_main["1,2:main__line-height"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
-}
-else {document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
-}
-window.set_value_main = {};
-window.set_value_main["foo#todo-list"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#todo-list", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("foo#todo-list", "main");
-window.ftd.call_immutable_value_changes("foo#todo-list", "main");
-window.ftd.utils.node_change_call("main","1,0:main__text", data);
-window.ftd.utils.node_change_call("main","0,2:main__text", data);
-window.ftd.utils.node_change_call("main","1,2:main__text", data);
-window.ftd.utils.node_change_call("main","0,0:main__text", data);
-};
-
-window.set_value_main["ftd#default-types"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "ftd#default-types", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("ftd#default-types", "main");
-window.ftd.call_immutable_value_changes("ftd#default-types", "main");
-window.ftd.utils.node_change_call("main","0,2:main__font-family", data);
-window.ftd.utils.node_change_call("main","0,2:main__font-weight", data);
-window.ftd.utils.node_change_call("main","1,2:main__font-weight", data);
-window.ftd.utils.node_change_call("main","1,2:main__line-height", data);
-window.ftd.utils.node_change_call("main","0,2:main__letter-spacing", data);
-window.ftd.utils.node_change_call("main","1,2:main__font-family", data);
-window.ftd.utils.node_change_call("main","1,2:main__font-size", data);
-window.ftd.utils.node_change_call("main","1,2:main__letter-spacing", data);
-window.ftd.utils.node_change_call("main","0,2:main__font-size", data);
-window.ftd.utils.node_change_call("main","0,2:main__line-height", data);
-};
-
-window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("ftd#device", "main");
-window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","0,2:main__font-size", data);
-window.ftd.utils.node_change_call("main","0,2:main__letter-spacing", data);
-window.ftd.utils.node_change_call("main","1,2:main__font-size", data);
-window.ftd.utils.node_change_call("main","1,2:main__letter-spacing", data);
-window.ftd.utils.node_change_call("main","1,2:main__font-family", data);
-window.ftd.utils.node_change_call("main","0,2:main__line-height", data);
-window.ftd.utils.node_change_call("main","1,2:main__font-weight", data);
-window.ftd.utils.node_change_call("main","0,2:main__font-weight", data);
-window.ftd.utils.node_change_call("main","1,2:main__line-height", data);
-window.ftd.utils.node_change_call("main","0,2:main__font-family", data);
-};
 
 
 
