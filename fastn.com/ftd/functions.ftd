@@ -6,7 +6,7 @@ in their `fastn` documents. It also provides various
 which users can use anywhere in their `fastn` document.
 
 
--- ds.h1: How to create functions ?
+-- ds.h1: How to create functions?
 
 To create a function, you need to follow the function declaration syntax which
 is as follows:
