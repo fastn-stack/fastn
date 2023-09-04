@@ -38,7 +38,10 @@ ftd.post_init = function () {
                 buffer = [];
             }
             lastKeyTime = currentTime;
-            if (event.target.nodeName === "INPUT" || event.target.nodeName === "TEXTAREA") {
+            if ((event.target.nodeName === "INPUT" || event.target.nodeName === "TEXTAREA")
+            && (eventKey !== "ArrowDown" && eventKey !== "ArrowUp" &&
+                    eventKey !== "ArrowRight" && eventKey !== "ArrowLeft")
+             && (event.target.nodeName === "INPUT" && eventKey !== "Enter")) {
                 return;
             }
             buffer.push(eventKey);
