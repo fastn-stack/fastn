@@ -187,7 +187,7 @@ of your website in a few lines of code.
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
 cta-text: Learn more
 cta-link: /featured/
-image: https://fastn.com/-/fastn.com/images/featured/sections/heros/hero-with-2-cta/hero-with-two-cta-5.png
+image: https://fastn.com/-/fastn.com/images/featured/components/hero-right-hug.jpg
 feature: Use it as is
 
 You can choose from numerous components that suit your needs. There are
@@ -207,7 +207,7 @@ components in the ecosystem adhere to a unified design system. This ensures that
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
 cta-text: Learn more
 cta-link: /backend/
-image: https://fastn.com/-/fastn.com/images/featured/sections/heros/hero-with-2-cta/hero-with-two-cta-5.png
+image: https://fastn.com/-/fastn.com/images/featured/components/hero-right-hug.jpg
 feature: Use it as is
 
 Along with building frontends, fastn can be used for building data driven 

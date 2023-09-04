@@ -87,25 +87,25 @@ connect: $social-links
 
 -- ft-ui.template list components:
 
--- ft-ui.template: Hero with two CTA - Design 1
-template-url: featured/sections/heros/hero-1/
-screenshot: $fastn-assets.files.images.featured.components.hero-1.png
+-- ft-ui.template: Hero Bottom Hug
+template-url: /hero-bottom-hug/
+screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug.png
 
--- ft-ui.template: Hero with two CTA - Design 2
-template-url: featured/sections/heros/hero-2/
-screenshot: $fastn-assets.files.images.featured.components.hero-2.png
+-- ft-ui.template: Hero Bottom Hug Search
+template-url: /hero-bottom-hug-search/
+screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug-search.png
 
--- ft-ui.template: Hero with two CTA - Design 3
-template-url: featured/sections/heros/hero-3/
-screenshot: $fastn-assets.files.images.featured.components.hero-3.png
+-- ft-ui.template: Hero Left Hug Expanded Search
+template-url: /hero-left-hug-expanded-search/
+screenshot: $fastn-assets.files.images.featured.components.hero-left-hug-expanded-search.jpg
 
--- ft-ui.template: Hero with search - Design 1
-template-url: featured/sections/heros/hero-4/
-screenshot: $fastn-assets.files.images.featured.components.hero-4.png
+-- ft-ui.template: Hero Left Hug Expanded
+template-url: /hero-left-hug-expanded/
+screenshot: $fastn-assets.files.images.featured.components.hero-left-hug-expanded.jpg
 
--- ft-ui.template: Hero with social - Design 1
-template-url: featured/sections/heros/hero-6/
-screenshot: $fastn-assets.files.images.featured.components.hero-6.png
+-- ft-ui.template: Hero Right Hug Expanded Search
+template-url: /hero-right-hug-expanded-search/
+screenshot: $fastn-assets.files.images.featured.components.hero-right-hug-expanded-search.jpg
 
 
 -- end: components

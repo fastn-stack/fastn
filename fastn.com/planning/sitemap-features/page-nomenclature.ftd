@@ -89,7 +89,7 @@ subtitle, and CTAs are aligned at the top of the section, followed by the
 image. For the second, the hero section showcases the same elements but with a 
 distinct alignment—headings, subtitles, and CTAs are right-aligned, while the 
 image is positioned to the left. To facilitate clear identification, we 
-designate these sections as `1-hero-with-2-cta` and `2-hero-with-2-cta` 
+designate these sections as `hero-right-hug` and `hero-left-hug`, 
 respectively. This approach ensures an intuitive and organized system for 
 referencing.
 
