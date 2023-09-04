@@ -81,7 +81,7 @@ cta-2-text: User Manual
 
 -- ft-ui.template: Gradient Business Card
 template-url: featured/components/business-cards/gradient-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
+screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-front.jpg
 
 -- ft-ui.template: Pattern Business Card
 template-url: featured/components/business-cards/pattern-card/
