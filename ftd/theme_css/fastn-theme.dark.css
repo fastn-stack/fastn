@@ -54,10 +54,10 @@ pre[class*=language-].fastn-theme-dark {
     line-height: 1;
 }
 
-// Fastn Language tokens --------------------------------------------------
+/* Fastn Language tokens -------------------------------------------------- */
 
 .fastn-theme-dark .token.section-identifier {
-    color: #cecfd2;
+    color: #d5d7e2;
 }
 
 .fastn-theme-dark .token.section-name {
@@ -108,13 +108,13 @@ pre[class*=language-].fastn-theme-dark {
     color: #d5d7e2;
 }
 
-// END -----------------------------------------------------------------
+/* END ----------------------------------------------------------------- */
 
 .fastn-theme-dark .token.comment,
 .fastn-theme-dark .token.prolog,
 .fastn-theme-dark .token.doctype,
 .fastn-theme-dark .token.cdata {
-    color: #c0c5ce;
+    color: #d4c8c896;
 }
 
 .fastn-theme-dark .token.selector,

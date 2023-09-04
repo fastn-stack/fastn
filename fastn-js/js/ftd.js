@@ -22,8 +22,9 @@ let ftd = {
         return -2;
     },
 
-    copy_to_clipboard(text) {
-        if (text instanceof fastn.mutableClass) text = text.get();
+    copy_to_clipboard(args) {
+        let text = args.a;
+        if (text instanceof fastn.mutableClass) text = fastn_utils.getStaticValue(text);
         if (text.startsWith("\\", 0)) {
             text = text.substring(1);
         }
