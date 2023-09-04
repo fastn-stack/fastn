@@ -193,13 +193,12 @@ async fn handle_dependency_file(
     base_url: &str,
     ignore_failed: bool,
     test: bool,
-    name_with_extension: String,
+    name_without_package_name: String,
 ) -> fastn_core::Result<()> {
     for document in documents.values() {
-        if document.get_id().eq(name_with_extension.as_str())
-            || document
-                .get_id_with_package()
-                .eq(name_with_extension.as_str())
+        if remove_extension(document.get_id()).eq(name_without_package_name.as_str())
+            || remove_extension(&document.get_id_with_package())
+                .eq(name_without_package_name.as_str())
         {
             handle_file(
                 document,
@@ -239,7 +238,7 @@ async fn incremental_build(
         let mut resolving_dependencies: Vec<String> = vec![];
 
         while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
-            // println!("Current UR: {}", unresolved_dependency.as_str());
+            println!("Current UR: {}", unresolved_dependency.as_str());
             if let Some(doc) = c.documents.get(
                 get_dependency_name_without_package_name(
                     config.package.name.as_str(),
@@ -270,13 +269,11 @@ async fn incremental_build(
                 // );
 
                 if own_resolved_dependencies.eq(&doc.dependencies) {
-                    let name_with_extension = format!(
-                        "{}.ftd",
+                    let name_without_package_name: String =
                         get_dependency_name_without_package_name(
                             config.package.name.as_str(),
-                            unresolved_dependency.as_str()
-                        )
-                    );
+                            unresolved_dependency.as_str(),
+                        );
 
                     handle_dependency_file(
                         config,
@@ -285,7 +282,7 @@ async fn incremental_build(
                         base_url,
                         ignore_failed,
                         test,
-                        name_with_extension,
+                        name_without_package_name,
                     )
                     .await?;
 
@@ -311,12 +308,9 @@ async fn incremental_build(
                     resolved_dependencies.push(unresolved_dependency.clone());
                 } else {
                     // println!("Not found in cache UR: {}", unresolved_dependency.as_str());
-                    let name_with_extension = format!(
-                        "{}.ftd",
-                        get_dependency_name_without_package_name(
-                            config.package.name.as_str(),
-                            unresolved_dependency.as_str()
-                        )
+                    let name_without_package_name = get_dependency_name_without_package_name(
+                        config.package.name.as_str(),
+                        unresolved_dependency.as_str(),
                     );
 
                     handle_dependency_file(
@@ -326,7 +320,7 @@ async fn incremental_build(
                         base_url,
                         ignore_failed,
                         test,
-                        name_with_extension,
+                        name_without_package_name,
                     )
                     .await?;
 
