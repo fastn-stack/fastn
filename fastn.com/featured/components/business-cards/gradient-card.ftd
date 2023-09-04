@@ -58,7 +58,7 @@ show-large: true
 -- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
+image: $fastn-assets.files.images.featured.business-cards.gradient-business-card-front.jpg
 cta-url: https://fastn-community.github.io/gradient-business-card
 cta-text: Demo
 github-url: https://github.com/fastn-community/gradient-business-card
