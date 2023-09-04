@@ -1,29 +1,13 @@
--- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn.com/u/yashveer-mehra
+-- import: fastn.com/u/ganesh-salunke
 
 
 
 -- ds.featured-business: Midnight Business Card
 image: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
-owners: $midnight-owners
+owners: [$yashveer-mehra.owner, $ganesh-salunke.owner]
 license-url: https://github.com/fastn-community/midnight-business-card/blob/main/LICENSE
 license: Creative Commons
 published-date: 03-Aug-2023
 github-url: https://github.com/fastn-community/midnight-business-card
 demo-link: https://fastn-community.github.io/midnight-business-card/
-
-
-
-
--- common.owner list midnight-owners:
-
--- common.owner: Yashveer Mehra
-profile: featured/contributors/designers/yashveer-mehra/
-avatar: $fastn-assets.files.featured.contributors.designers.yashveer-mehra.yashveer-mehra.jpg
-role: Designer
-
--- common.owner: Ganesh Salunke
-profile: featured/contributors/developers/ganesh-salunke/
-avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
-role: Developer
-
--- end: midnight-owners
