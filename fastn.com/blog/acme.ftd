@@ -2,7 +2,7 @@
 -- import: fastn.com/blog/authors
 -- import: fastn-community.github.io/doc-site/common
 
--- common.post-meta meta: Tales from ACME Inc - Case Study
+-- common.post-meta meta: ACME Inc Case Study
 published-on: August 23, 2023 at 12:26 am
 post-url: /acme/
 author: $authors.nandini
