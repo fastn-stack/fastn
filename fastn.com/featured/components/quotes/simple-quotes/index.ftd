@@ -3,10 +3,8 @@
 -- ds.page: 
 sidebar: false
 
--- ft-ui.grid-view: Simple Quotes
+-- ft-ui.view-all: Simple Quotes
 templates: $simple-quotes
-more-link-text: View all
-more-link: /quotes/
 
 -- end: ds.page
 

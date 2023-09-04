@@ -3,10 +3,8 @@
 -- ds.page: 
 sidebar: false
 
--- ft-ui.grid-view: Quote with author avatar and info
+-- ft-ui.view-all: Quote with author avatar and info
 templates: $author-avatar-quotes
-more-link-text: View all
-more-link: /quotes/
 
 -- end: ds.page
 

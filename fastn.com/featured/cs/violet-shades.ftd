@@ -3,7 +3,7 @@
 -- ds.page: 
 sidebar: false
 
--- ft-ui.grid-view: Violet Color Scheme
+-- ft-ui.view-all: Violet Color Scheme
 templates: $violet-scheme
 
 -- end: ds.page

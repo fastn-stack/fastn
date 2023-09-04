@@ -3,10 +3,8 @@
 -- ds.page: 
 sidebar: false
 
--- ft-ui.grid-view: Hero
+-- ft-ui.view-all: Hero
 templates: $hero
-more-link-text: View more
-more-link: /featured/sections/heros/
 
 -- end: ds.page
 

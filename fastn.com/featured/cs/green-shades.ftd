@@ -3,7 +3,7 @@
 -- ds.page: 
 sidebar: false
 
--- ft-ui.grid-view: Green Color Scheme
+-- ft-ui.view-all: Green Color Scheme
 templates: $green-scheme
 
 -- end: ds.page

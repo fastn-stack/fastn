@@ -3,7 +3,7 @@
 -- ds.page: 
 sidebar: false
 
--- ft-ui.grid-view: Business Cards
+-- ft-ui.view-all: Business Cards
 templates: $cards
 
 -- end: ds.page

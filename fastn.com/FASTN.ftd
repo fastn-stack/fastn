@@ -254,40 +254,40 @@ document: /get-started/browse-pick.ftd
       skip: true  
     - Imagen IG: /featured/sections/cards/imagen-ig/
       skip: true
-   - Hero Components: /featured/sections/heros/
-     - Hero Right Hug Expanded Search: /hero-right-hug-expanded-search/
-     skip: true
-     document: /featured/sections/heros/hero-right-hug-expanded-search.ftd
-     - Hero Right Hug Expanded: /hero-right-hug-expanded/
-     skip: true
-     document: /featured/sections/heros/hero-right-hug-expanded.ftd
-     - Hero Right Hug Large: /hero-right-hug-large/
-     skip: true
-     document: /featured/sections/heros/hero-right-hug-large.ftd
-     - Hero Right Hug Search Label: /hero-right-hug-search-label/
-     skip: true
-     document: /featured/sections/heros/hero-right-hug-search-label.ftd
-     - Hero Right Hug Search: /hero-right-hug-search/
-     skip: true
-     document: /featured/sections/heros/hero-right-hug-search.ftd
-     - Hero Right Hug: /hero-right-hug/
-     skip: true
-     document: /featured/sections/heros/hero-right-hug.ftd
-     - Hero Bottom Hug: /hero-bottom-hug/
-     skip: true
-     document: /featured/sections/heros/hero-bottom-hug.ftd
-     - Hero Bottom Hug Search: /heros/hero-bottom-hug-search/
-     skip: true
-     document: /featured/sections/heros/hero-bottom-hug-search.ftd
-     - Hero Left Hug Expanded Search: /hero-left-hug-expanded-search/
-     skip: true
-     document: /featured/sections/heros/hero-left-hug-expanded-search.ftd
-     - Hero Left Hug Expanded: /hero-left-hug-expanded/
-     skip: true
-     document: /featured/sections/heros/hero-left-hug-expanded.ftd
-     - Hero with social icons: /hero-with-social/
-     skip: true
-     document: /featured/sections/heros/hero-with-social.ftd
+  - Hero Components: /featured/sections/heros/
+    - Hero Right Hug Expanded Search: /hero-right-hug-expanded-search/
+      skip: true
+      document: /featured/sections/heros/hero-right-hug-expanded-search.ftd
+    - Hero Right Hug Expanded: /hero-right-hug-expanded/
+      skip: true
+      document: /featured/sections/heros/hero-right-hug-expanded.ftd
+    - Hero Right Hug Large: /hero-right-hug-large/
+      skip: true
+      document: /featured/sections/heros/hero-right-hug-large.ftd
+    - Hero Right Hug Search Label: /hero-right-hug-search-label/
+      skip: true
+      document: /featured/sections/heros/hero-right-hug-search-label.ftd
+    - Hero Right Hug Search: /hero-right-hug-search/
+      skip: true
+      document: /featured/sections/heros/hero-right-hug-search.ftd
+    - Hero Right Hug: /hero-right-hug/
+      skip: true
+      document: /featured/sections/heros/hero-right-hug.ftd
+    - Hero Bottom Hug: /hero-bottom-hug/
+      skip: true
+      document: /featured/sections/heros/hero-bottom-hug.ftd
+    - Hero Bottom Hug Search: /heros/hero-bottom-hug-search/
+      skip: true
+      document: /featured/sections/heros/hero-bottom-hug-search.ftd
+    - Hero Left Hug Expanded Search: /hero-left-hug-expanded-search/
+      skip: true
+      document: /featured/sections/heros/hero-left-hug-expanded-search.ftd
+    - Hero Left Hug Expanded: /hero-left-hug-expanded/
+      skip: true
+      document: /featured/sections/heros/hero-left-hug-expanded.ftd
+    - Hero with social icons: /hero-with-social/
+      skip: true
+      document: /featured/sections/heros/hero-with-social.ftd
   - Key Value Tables: /featured/sections/kvt/
     - Key Value Table 1: /featured/sections/kvt/kvt-1/
       skip: true
@@ -340,8 +340,9 @@ document: /get-started/browse-pick.ftd
     - Modal Cover: /featured/components/modals/modal-cover/
       skip: true
   - Quotes: /featured/components/quotes/
-    - Simple Quotes: /featured/components/quotes/simple-quotes/
+    - Simple Quotes: /quotes/simple/
       skip: true
+      document: /featured/components/quotes/simple-quotes/
       - Chalice: /featured/components/quotes/simple-quotes/demo-1/
         skip: true
       - Rustic: /featured/components/quotes/simple-quotes/demo-2/
@@ -366,79 +367,112 @@ document: /get-started/browse-pick.ftd
         skip: true
       - Storm Cloud: /featured/components/quotes/simple-quotes/demo-12/
         skip: true
-    - Quotes with author icon: /featured/components/quotes/author-icon-quotes/
+    - Quotes with author icon: /quotes/quotes-with-author/
       skip: true
+      document: /featured/components/quotes/author-icon-quotes/index.ftd
       - Charcoal: /featured/components/quotes/author-icon-quotes/demo-1/
         skip: true
-    - Quotes with images: /featured/components/quotes/quotes-with-images/
+    - Quotes with images: /quotes/quotes-with-images/
       skip: true
-      Electric: /featured/components/quotes/quotes-with-images/demo-1/
-      skip: true
+      document: /featured/components/quotes/quotes-with-images/
+      - Electric: /featured/components/quotes/quotes-with-images/demo-1/
+        skip: true
 - Design Elements: /featured/design/
   - Color Schemes: /featured/cs/
-    - Shades Of Red: /featured/cs/red-shades
+    - Shades Of Red: /cs/red-shades
       skip: true
-    - Shades Of Blue: /featured/cs/blue-shades
+      document: /featured/cs/red-shades/
+    - Shades Of Blue: /cs/blue-shades
       skip: true
-    - Shades Of Green: /featured/cs/green-shades
+      document: /featured/cs/blue-shades/
+    - Shades Of Green: /cs/green-shades
       skip: true
-    - Shades Of Orange: /featured/cs/orange-shades
+      document: /featured/cs/green-shades/
+    - Shades Of Orange: /cs/orange-shades
       skip: true
-    - Shades Of Violet: /featured/cs/violet-shades
+      document: /featured/cs/orange-shades/
+    - Shades Of Violet: /cs/violet-shades
       skip: true
-    - Blog Template CS: /featured/cs/blog-template-cs/
-      skip: true  
-    - Blue Heal CS: /featured/cs/blue-heal-cs/
-      skip: true  
-    - Midnight Rush CS: /featured/cs/midnight-rush-cs/
-      skip: true  
-    - Dark Flame CS: /featured/cs/dark-flame-cs/
-      skip: true  
-    - Forest CS: /featured/cs/forest-cs/
-      skip: true  
-    - Midnight Storm CS: /featured/cs/midnight-storm-cs/
-      skip: true  
-    - Misty Gray CS: /featured/cs/misty-gray-cs/
-      skip: true  
-    - Navy Nebula CS: /featured/cs/navy-nebula-cs/
-      skip: true  
-    - Pretty CS: /featured/cs/pretty-cs/
-      skip: true  
-    - Saturated Sunset CS: /featured/cs/saturated-sunset-cs/
+      document: /featured/cs/violet-shades/
+    - Blog Template CS: /cs/blog-template-cs/
       skip: true
-    - Pink Tree Cs: /featured/cs/pink-tree-cs/
-      skip: true  
-    - Winter CS: /featured/cs/winter-cs/
-      skip: true  
-    - Little Blue CS: /featured/cs/little-blue-cs/
-      skip: true  
-    - Blog Template 1 CS: /featured/cs/blog-template-1-cs/
+      document: /featured/cs/blog-template-cs/
+    - Blue Heal CS: /cs/blue-heal-cs/
       skip: true
+      document: /featured/cs/blue-heal-cs/
+    - Midnight Rush CS: /cs/midnight-rush-cs/
+      skip: true
+      document: /featured/cs/midnight-rush-cs/
+    - Dark Flame CS: /cs/dark-flame-cs/
+      skip: true
+      document: /featured/cs/dark-flame-cs/
+    - Forest CS: /cs/forest-cs/
+      skip: true
+      document: /featured/cs/forest-cs/
+    - Midnight Storm CS: /cs/midnight-storm-cs/
+      skip: true
+      document: /featured/cs/midnight-storm-cs/
+    - Misty Gray CS: /cs/misty-gray-cs/
+      skip: true
+      document: /featured/cs/misty-gray-cs/
+    - Navy Nebula CS: /cs/navy-nebula-cs/
+      skip: true
+      document: /featured/cs/navy-nebula-cs/
+    - Pretty CS: /cs/pretty-cs/
+      skip: true
+      document: /featured/cs/pretty-cs/
+    - Saturated Sunset CS: /cs/saturated-sunset-cs/
+      skip: true
+      document: /featured/cs/saturated-sunset-cs/
+    - Pink Tree Cs: /cs/pink-tree-cs/
+      skip: true
+      document: /featured/cs/pink-tree-cs/
+    - Winter CS: /cs/winter-cs/
+      skip: true
+      document: /featured/cs/winter-cs/
+    - Little Blue CS: /cs/little-blue-cs/
+      skip: true
+      document: /featured/cs/little-blue-cs/
+    - Blog Template 1 CS: /cs/blog-template-1-cs/
+      skip: true
+      document: /featured/cs/blog-template-1-cs/
   - Font Typographies: /featured/fonts/
-    - Arya Typography: /featured/fonts/arya/
+    - Arya Typography: /fonts/arya/
       skip: true
-    - Blaka Typography: /featured/fonts/blaka/
+      document: /featured/fonts/arya/
+    - Blaka Typography: /fonts/blaka/
       skip: true
-    - Lobster Typography: /featured/fonts/lobster/
+      document: /featured/fonts/blaka/
+    - Lobster Typography: /fonts/lobster/
       skip: true
-    - Opensans Typography: /featured/fonts/opensans/
+      document: /featured/fonts/lobster/
+    - Opensans Typography: /fonts/opensans/
       skip: true
-    - Pragati Narrow Typography: /featured/fonts/pragati-narrow/
+      document: /featured/fonts/opensans/
+    - Pragati Narrow Typography: /fonts/pragati-narrow/
       skip: true
-    - Roboto Mono Typography: /featured/fonts/roboto-mono/
+      document: /featured/fonts/pragati-narrow/
+    - Roboto Mono Typography: /fonts/roboto-mono/
       skip: true
-    - Roboto Typography: /featured/fonts/roboto/
+      document: /featured/fonts/roboto-mono/
+    - Roboto Typography: /fonts/roboto/
       skip: true
-    - Tiro Typography: /featured/fonts/tiro/
+      document: /featured/fonts/roboto/
+    - Tiro Typography: /fonts/tiro/
       skip: true
-    - Inter Typography: /featured/fonts/inter/
+      document: /featured/fonts/tiro/
+    - Inter Typography: /fonts/inter/
       skip: true
-    - Karma Typography: /featured/fonts/karma/
+      document: /featured/fonts/inter/
+    - Karma Typography: /fonts/karma/
       skip: true
-    - Khand Typography: /featured/fonts/khand/
+      document: /featured/fonts/karma/
+    - Khand Typography: /fonts/khand/
       skip: true
-    - lato Typography: /featured/fonts/lato/
+      document: /featured/fonts/khand/
+    - lato Typography: /fonts/lato/
       skip: true
+      document: /featured/fonts/lato/
 
 # Docs: /ftd/data-modelling/
 
