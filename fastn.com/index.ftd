@@ -1,4 +1,5 @@
 -- import: fastn.com/content-library as cl
+-- import: fastn.com/content-library/lib as lib
 
 ;; Create rich user interfaces, integrate with
 ;; Domain specific language for writing content and creating rich user interfaces,
@@ -15,18 +16,21 @@ document-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
 full-width: true
 sidebar: false
 
--- ds.page.wrapper:
+-- lib.hero-content:
 
--- cl.hero-content:
-
--- cl.feature-card: Easy to learn
+/-- cl.feature-card: Easy to learn
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
 cta-text: Learn more
 cta-link: /language/
 image: $fastn-assets.files.images.landing.quote-example.png
 feature: User-friendly syntax
 
--- cl.feature-card.code:
+-- lib.feature-card: Easy to learn
+cta-text: Learn more
+cta-link: /acme/
+image: https://fastn.com/-/fastn.com/images/blog/offer.png
+
+-- lib.feature-card.code:
 
 \-- quote.rustic: Nandhini
 
@@ -35,17 +39,16 @@ changes to life without delay or intermediaries.
 
 \-- end: ws.page
 
--- cl.feature-card.body:
+-- lib.feature-card.body:
 
 fastn’s user-friendly interface and minimal syntax allow even those with no 
 prior programming experience to grasp its functionalities swiftly. This also 
 creates a cleaner and more maintainable code. There's no need for 
 quotes around strings and you can write multiline content easily.
 
+-- end: lib.feature-card
 
--- end: cl.feature-card
-
--- cl.feature-card: Easy to build 
+-- lib.feature-card: Easy to build 
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
 cta-text: Learn more
 cta-link: /acme/
@@ -53,7 +56,7 @@ image: https://fastn.com/-/fastn.com/images/blog/offer.png
 feature: Rapidly assemble webpages
 move-left: true
 
--- cl.feature-card.code:
+-- lib.feature-card.code:
 
 \-- ws.page:
 
@@ -68,25 +71,24 @@ Offer valid till 30th Nov 2023.
 
 \-- end: ws.page
 
--- cl.feature-card.body:
+-- lib.feature-card.body:
 
 fastn is a Domain Specific Language for authoring long-for-text content. It 
 offers access to a rich collection of 
 [ready-made components](https://fastn.com/featured/) and allows the 
 creation of custom components.
 
--- end: cl.feature-card
+-- end: lib.feature-card
 
-
--- cl.feature-card: Easy to Edit
+-- lib.feature-card: Easy to Edit
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/feature-icon-1.svg
 cta-text: Learn more
 cta-link: /acme/
 image: https://fastn.com/-/fastn.com/images/blog/new-price.png
-code-image: $fastn-assets.files.images.landing.pr-pricing.png
+;;code-image: $fastn-assets.files.images.landing.pr-pricing.png
 feature: Performance
 
--- cl.feature-card.code:
+-- lib.feature-card.code:
 
 \-- pricing.pricing-card: Startup Plan
 active: true 
@@ -102,25 +104,25 @@ currency: \$
 subscription: monthly
 feature-list: $pricing.enterprise-feature-list
 
--- cl.feature-card.body:
+-- lib.feature-card.body:
 
 With fastn's user-friendly syntax and modular components, you can focus solely 
 on updating the content. It's as easy as changing a few lines of text. This 
 allows anyone to contribute, reducing dependency on developers.
 
--- end: cl.feature-card
+-- end: lib.feature-card
 
 
--- cl.feature-card: Easy to Deploy
+-- lib.feature-card: Easy to Deploy
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
 cta-text: Learn more
 cta-link: /deploy/
 image: $fastn-assets.files.images.landing.deploy-yml.png
-code-image: $fastn-assets.files.images.landing.build-deployed.png
+;;code-image: $fastn-assets.files.images.landing.build-deployed.png
 feature: Performance
 move-left: true
 
--- cl.feature-card.code:
+-- lib.feature-card.code:
 
 \-- ws.page:
 
@@ -134,7 +136,7 @@ Offer valid till 30th Nov 2023.
 
 \-- end: ws.page
 
--- cl.feature-card.body:
+-- lib.feature-card.body:
 
 fastn offers deployment for static sites using `deploy.yml` from [fastn-template](https://github.com/fastn-stack/fastn-template) 
 on platforms like [GitHub](https://fastn.com/github-pages/) and 
@@ -143,145 +145,68 @@ on platforms like [GitHub](https://fastn.com/github-pages/) and
 supports dynamic sites, with deployment options across Linux, Windows, and Mac, 
 providing flexibility for your hosting needs.
 
--- end: cl.feature-card
+-- end: lib.feature-card
 
--- ftd.row:
-align-self: center
-padding-bottom.px: 48
+-- lib.promo-card: Browse dozens of professionaly designed templates. Easily change structure,style,and graphics -then host instantly.
+cta-text: Learn More
+cta-link: index.html
 
--- cl.cta-outline-medium: Read the ACME Case study to learn more
-link: /acme/
+-- lib.promo-card: Heading
 
--- end: ftd.row
+Browse dozens of professionaly designed templates. Easily change
+structure,style,and graphics -then host instantly.
 
-
--- cl.feature-card: Design
-icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
-cta-text: Learn more
-cta-link: /figma/
+-- lib.hero-right-hug: Design system
+cta-text: Get Started
+cta-link: /
 image: https://fastn.com/-/fastn.com/images/blog/offer.png
-feature: Beautify
-
-fastn comes with an opinionated design system. We've pre-defined many design
-choices spanning from styles to components, so you can build your website
-quickly.
-
--- end: cl.feature-card
-
--- cl.feature-card: Color Scheme and Typography
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-cta-text: Learn more
-cta-link: /color-scheme/
+
+Fastn is powered by a one of a kind design system guiding the overarching
+framework. It has been carefully constructed to imbibe & maintain design
+considerations right through development & implementation. 
+
+-- lib.hero-left-hug: Colour schemes
+cta-text: Get Started
+cta-link: /
 image: https://fastn.com/-/fastn.com/images/blog/offer.png
-feature: Beautify
-
-fastn has well defined structure to define color schema and typography. A lot of 
-[color scheme](https://fastn.com/featured/cs/) and 
-[typography](https://fastn.com/featured/fonts-typography/) 
-packages are available, which you can import and change the look and feel 
-of your website in a few lines of code.
-
--- end: cl.feature-card
-
--- cl.feature-card: Readymade Components
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-cta-text: Learn more
-cta-link: /featured/
-image: https://fastn.com/-/fastn.com/images/featured/sections/heros/hero-with-2-cta/hero-with-two-cta-5.png
-feature: Use it as is
 
-You can choose from numerous components that suit your needs. There are
-[doc-sites](https://fastn.com/featured/doc-sites/),
-[blogs](https://fastn.com/featured/blog-templates/),
-[landing pages](https://fastn.com/featured/landing-pages/) to individual 
-component library like [bling](https://fastn-community.github.io/bling/),
-[hero sections](https://fastn.com/featured/sections/heros/), and more. All 
-components in the ecosystem adhere to a unified design system. This ensures that
- every component blends seamlessly with others, creating a cohesive look and 
- feel across your entire site.
+FastN has an expansive ever-growing color library. It places no restriction when
+it comes to color palettes or color combinations unlike some design systems.
+Because it has been incrementally built by designers for developers, FastN
+color. 
 
--- end: cl.feature-card
-
-
--- cl.feature-card: Data-driven Websites 
+-- lib.hero-right-hug: Typography
+cta-text: Get Started
+cta-link: /
+image: https://fastn.com/-/fastn.com/images/blog/offer.png
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-cta-text: Learn more
-cta-link: /backend/
-image: https://fastn.com/-/fastn.com/images/featured/sections/heros/hero-with-2-cta/hero-with-two-cta-5.png
-feature: Use it as is
 
-Along with building frontends, fastn can be used for building data driven 
-websites and dashboards. You can interact with backend APIs, and use the API 
-responses to create dynamic web pages, display and render the response data, 
-conditional Rendering, etc.
-Checkout the [http processor](https://fastn.com/http/) to know more. 
-fastn can be used to query data from SQLite database to generate dynamic websites.
-Read more about our [package query processor](https://fastn.com/package-query/).
+Fastn is powered by a one of a kind design system guiding the overarching
+framework. It has been carefully constructed to imbibe & maintain design
+considerations right through development & implementation.  
 
+-- lib.hero-left-hug: Readymade components
+cta-text: Get Started
+cta-link: /
+image: https://fastn.com/-/fastn.com/images/blog/offer.png
+icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
 
--- end: cl.feature-card
+FastN has an expansive ever-growing color library. It places no restriction when
+it comes to color palettes or color combinations unlike some design systems.
+Because it has been incrementally built by designers for developers, FastN
+color. 
 
--- cl.cards-section:
-
--- cl.card: Custom Components
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-cta-link: /frontend/
-cta-text: Learn more
-min-height.fixed.em: 21
-
-fastn comes with building blocks like text, images, and containers, enabling 
-custom UI creation from buttons to interactive elements and more. This also 
-makes crafting custom content components for recurring information easier.
-
--- cl.card: Markdown
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-cta-link: /markdown/
-cta-text: Learn more
-min-height.fixed.em: 21
-
-fastn converts markup text into HTML and other formats. You can create 
-content-heavy websites using plain text without missing out on formatting.
-
--- cl.card: Responsive Ready
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-min-height.fixed.em: 16
-
-fastn has built-in support for responsive design. Your creations automatically 
-adapt to the perfect size, whether your users are on mobile or desktop devices.
-
--- cl.card: SEO
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-min-height.fixed.em: 16
-
-fastn provides custom [URL customization](https://fastn.com/custom-url/), from 
-clean and organized links to [dynamic](https://fastn.com/dynamic-urls/) options. 
-You can also fine-tune [meta information](https://fastn.com/seo-meta/), add 
-OG-image, and manage [URL redirection](https://fastn.com/redirects/).
-
--- cl.card: Dark Mode
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-min-height.fixed.em: 16
-
-fastn offers inherent support for both dark mode and light mode. This enhances 
-user accessibility and visual presentation of your website.
-
--- cl.card: Upcoming WASM Support
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-min-height.fixed.em: 16
-
-We are working on WASM support so developers can extend fastn's standard
-libraries and offer access to more backend functionalities.
-
--- end: cl.cards-section
-
--- cl.cards-section:
+-- lib.cards-section:
 transparent: true
 
--- cl.heart-line-title-card: Loved by 1000+ devs
+-- lib.heart-line-title-card: Loved by 1M+folks
 
-Hear from the community
+Browse dozens of professionaly designed templates. Easily change
+structure,style,and graphics -then host instantly.
 
--- cl.testimonial-card: Jenny Wilson
+-- lib.testimonial-card: Jenny Wilson
 avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-1.svg
 bgcolor: $inherited.colors.custom.two
 bg-color: $inherited.colors.background.step-2
@@ -291,7 +216,7 @@ width: 500
 At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
 pellentesque  egestas nulla .
 
--- cl.testimonial-card: Jenny Wilson
+-- lib.testimonial-card: Jenny Wilson
 avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-2.svg
 bgcolor: $inherited.colors.custom.nine
 bg-color: $inherited.colors.background.step-2
@@ -301,7 +226,7 @@ width: 500
 At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
 pellentesque  egestas nulla .
 
--- cl.testimonial-card: Jenny Wilson
+-- lib.testimonial-card: Jenny Wilson
 avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-3.svg
 bgcolor: $inherited.colors.custom.three
 bg-color: $inherited.colors.background.step-2
@@ -311,7 +236,7 @@ width: 500
 At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
 pellentesque  egestas nulla .
 
--- cl.testimonial-card: Jenny Wilson
+-- lib.testimonial-card: Jenny Wilson
 avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-4.svg
 bgcolor: $inherited.colors.custom.one
 bg-color: $inherited.colors.background.step-2
@@ -321,16 +246,17 @@ width: 500
 At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
 pellentesque  egestas nulla .
 
--- end: cl.cards-section
+-- end: lib.cards-section
 
 
--- cl.cards-section: What makes fastn better
+-- lib.cards-section: Compare
 transparent: true
 
--- cl.rectangle-card:
+-- lib.rectangle-card:
 
--- cl.title-with-body-card: fastn
-logo: $fastn-assets.files.images.fastn.svg
+
+-- lib.title-with-body-card: Fastn
+logo: $fastn-assets.files.images.landing.fastn-slider-logo.svg
 width: 325
 
 - Minimalistic syntax and beginner-friendly. Even non-programmers can learn and 
@@ -346,14 +272,14 @@ create websites easily.
 
 - Includes built-in dark mode
 
--- end: cl.rectangle-card
+-- end: lib.rectangle-card
 
--- cl.rectangle-card:
-bgcolor: $inherited.colors.background.step-2
+-- lib.rectangle-card:
+bgcolor: $inherited.colors.cta-secondary.base
 
--- cl.title-with-body-card: React JS
+-- lib.title-with-body-card: React JS
 logo: $fastn-assets.files.images.landing.react-js-logo.svg
-body-color: $inherited.colors.text
+body-color: $inherited.colors.cta-secondary.text
 width: 325
 
 - JSX syntax and JavaScript fundamentals may challenge beginners.
@@ -368,29 +294,48 @@ tools.
 - Implementing dark mode in React often involves custom CSS or CSS variables.
 
 
--- end: cl.rectangle-card
+-- end: lib.rectangle-card
 
--- end: cl.cards-section
+-- end: lib.cards-section
 
--- ftd.row:
-align-self: center
-padding-bottom.px: 48
+-- lib.logo-slider-1:
 
--- cl.cta-outline-medium: Read more
-link: /compare/
 
--- end: ftd.row
+-- lib.slider-item: 
+icon: $fastn-assets.files.images.landing.react-js-logo.svg
+$active-item: true
+index: 1
 
--- cl.cards-section:
-transparent: true
+-- lib.slider-item: 
+icon: $fastn-assets.files.images.landing.react-js-logo.svg
+index: 5
 
--- cl.hero-with-4-images: Explore fastn community
+-- lib.slider-item: 
+icon: $fastn-assets.files.images.landing.react-js-logo.svg
+index: 3
+
+-- lib.slider-item: 
+icon: $fastn-assets.files.images.landing.react-js-logo.svg
+index: 1
+
+-- lib.slider-item: 
+icon: $fastn-assets.files.images.landing.react-js-logo.svg
+index: 2
+
+-- lib.slider-item: 
+icon: $fastn-assets.files.images.landing.react-js-logo.svg: 3
+index: 3
+
+-- end: lib.logo-slider-1
+
+-- lib.hero-with-4-images: fastn ambassadors program
 image-1: $fastn-assets.files.images.ambassadors.event-image-1.jpg
 image-2: $fastn-assets.files.images.ambassadors.event-image-2.jpg
 image-3: $fastn-assets.files.images.ambassadors.event-image-3.jpg
 image-4: $fastn-assets.files.images.ambassadors.event-image-4.jpg
-cta-text: Join our discord
-cta-link: /discord/
+cta-text: Apply now
+cta-link: ambassadors/how-it-works/
+communities: $lib.communities
 
 fastn’s [featured components portal](https://fastn.com/featured/) serves as a 
 hub for designers and frontend developers to submit their designs for end users 
@@ -398,19 +343,10 @@ to discover and use. We conduct
 various [programs](https://fastn.com/champion-program/) for designers 
 and developers to learn, contribute and become fastn experts.
 
--- end: cl.cards-section
-
 ;;-- cl.frontend-chakra:
 
 ;;-- cl.fullstack-chakra:
 
 ;;-- cl.deploy-chakra:
 
--- end: ds.page.wrapper
-
-
 -- end: ds.page
-
-
-
-
