@@ -1,0 +1,9 @@
+-- import: video-player/assets
+
+
+-- ftd.video:
+src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+autoplay: true
+loop: true
+muted: true
+controls: true

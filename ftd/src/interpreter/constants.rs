@@ -124,6 +124,19 @@ pub const FTD_IMAGE_FIT_CONTAIN: &str = "ftd#image-fit.contain";
 pub const FTD_IMAGE_FIT_FILL: &str = "ftd#image-fit.fill";
 pub const FTD_IMAGE_FIT_SCALE_DOWN: &str = "ftd#image-fit.scale-down";
 
+pub const FTD_VIDEO_SRC: &str = "ftd#video-src";
+pub const FTD_VIDEO_SRC_LIGHT: &str = "ftd#video-src.light";
+pub const FTD_VIDEO_SRC_DARK: &str = "ftd#video-src.dark";
+
+pub const FTD_VIDEO_POSTER: &str = "ftd#video-poster";
+pub const FTD_VIDEO_POSTER_LIGHT: &str = "ftd#video-poster.light";
+pub const FTD_VIDEO_POSTER_DARK: &str = "ftd#video-poster.dark";
+
+pub const FTD_VIDEO_AUTOPLAY: &str = "ftd#video-autoplay";
+pub const FTD_VIDEO_MUTED: &str = "ftd#muted";
+pub const FTD_VIDEO_CONTROLS: &str = "ftd#video-controls";
+pub const FTD_VIDEO_LOOP: &str = "ftd#video-loop";
+
 pub const FTD_SPACING: &str = "ftd#spacing";
 pub const FTD_SPACING_FIXED: &str = "ftd#spacing.fixed";
 pub const FTD_SPACING_SPACE_BETWEEN: &str = "ftd#spacing.space-between";

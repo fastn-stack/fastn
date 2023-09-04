@@ -214,6 +214,10 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             ftd::interpreter::Thing::Component(image_function()),
         ),
         (
+            "ftd#video".to_string(),
+            ftd::interpreter::Thing::Component(video_function()),
+        ),
+        (
             "ftd#set-rive-boolean".to_string(),
             ftd::interpreter::Thing::Function(ftd::interpreter::Function {
                 name: "ftd#set-rive-boolean".to_string(),
@@ -961,6 +965,40 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                             kind: ftd::interpreter::Kind::string().into_kind_data(),
                             source: ftd::interpreter::PropertyValueSource::Local(
                                 ftd::interpreter::FTD_IMAGE_SRC.to_string(),
+                            ),
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ])
+                .collect(),
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter::FTD_VIDEO_SRC.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FTD_VIDEO_SRC.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "light".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data().caption(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "dark".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Reference {
+                            name: ftd::interpreter::FTD_VIDEO_SRC_LIGHT.to_string(),
+                            kind: ftd::interpreter::Kind::string().into_kind_data(),
+                            source: ftd::interpreter::PropertyValueSource::Local(
+                                ftd::interpreter::FTD_VIDEO_SRC.to_string(),
                             ),
                             is_mutable: false,
                             line_number: 0,
@@ -9525,10 +9563,69 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
                     "fit",
                     ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_IMAGE_FIT)
                         .into_kind_data()
-                        .caption(),
+                        .into_optional(),
                 ),
                 ftd::interpreter::Argument::default(
                     "alt",
+                    ftd::interpreter::Kind::string()
+                        .into_kind_data()
+                        .into_optional(),
+                ),
+            ],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
+pub fn video_function() -> ftd::interpreter::ComponentDefinition {
+    ftd::interpreter::ComponentDefinition {
+        name: "ftd#video".to_string(),
+        arguments: [
+            common_arguments(),
+            vec![
+                ftd::interpreter::Argument::default(
+                    "src",
+                    ftd::interpreter::Kind::record(ftd::interpreter::FTD_VIDEO_SRC)
+                        .into_kind_data()
+                        .caption(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "fit",
+                    ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_IMAGE_FIT)
+                        .into_kind_data()
+                        .into_optional(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "controls",
+                    ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "loop",
+                    ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "autoplay",
+                    ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "muted",
+                    ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "poster",
                     ftd::interpreter::Kind::string()
                         .into_kind_data()
                         .into_optional(),

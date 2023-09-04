@@ -30,6 +30,7 @@ pub enum ElementKind {
     Boolean,
     Text,
     Image,
+    Video,
     IFrame,
     Device,
     CheckBox,
