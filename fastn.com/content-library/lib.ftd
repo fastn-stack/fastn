@@ -93,10 +93,11 @@ if: { feature-card.move-left }
 width.fixed.percent: 48
 
 -- ftd.image:
+if: { feature-card.image != NULL }
 src: $feature-card.image
 width: fill-container
 height.fixed.px: 300
-;;fit: cover
+;; fit: cover
 
 -- end: ftd.column
 
@@ -115,10 +116,11 @@ if: { !feature-card.move-left }
 width.fixed.percent: 48
 
 -- ftd.image:
+if: { feature-card.image != NULL }
 src: $feature-card.image
 width: fill-container
 height.fixed.px: 300
-;;fit: cover
+;; fit: cover
 
 -- end: ftd.column
 
@@ -176,6 +178,7 @@ if: { feature-card.move-left }
 width: fill-container
 
 -- ftd.image:
+if: { feature-card.image != NULL }
 src: $feature-card.image
 width: fill-container
 height.fixed.px: 300
@@ -202,6 +205,7 @@ if: { !feature-card.move-left }
 width: fill-container
 
 -- ftd.image:
+if: { feature-card.image != NULL }
 src: $feature-card.image
 width: fill-container
 height.fixed.px: 300
@@ -1677,6 +1681,7 @@ $on-mouse-enter$: $ftd.set-bool( $a = $slider-item.mouse-in, v = true )
 $on-mouse-leave$: $ftd.set-bool( $a = $slider-item.mouse-in, v = false )
 
 -- ftd.image:
+if: { slider-item.icon != NULL }
 src: $slider-item.icon
 width: auto
 height.fixed.px: 58
@@ -1761,15 +1766,19 @@ wrap: true
 spacing.fixed.px: 24
 
 -- ftd.image:
+if: { hero-with-4-images.image-1 != NULL}
 src: $hero-with-4-images.image-1
 
 -- ftd.image:
+if: { hero-with-4-images.image-2 != NULL}
 src: $hero-with-4-images.image-2
 
 -- ftd.image:
+if: { hero-with-4-images.image-3 != NULL}
 src: $hero-with-4-images.image-3
 
 -- ftd.image:
+if: { hero-with-4-images.image-4 != NULL}
 src: $hero-with-4-images.image-4
 
 -- end: ftd.row
@@ -1834,15 +1843,19 @@ spacing.fixed.px: 18
 align-self: center
 
 -- ftd.image:
+if: { hero-with-4-images.image-1 != NULL}
 src: $hero-with-4-images.image-1
 
 -- ftd.image:
+if: { hero-with-4-images.image-2 != NULL}
 src: $hero-with-4-images.image-2
 
 -- ftd.image:
+if: { hero-with-4-images.image-3 != NULL}
 src: $hero-with-4-images.image-3
 
 -- ftd.image:
+if: { hero-with-4-images.image-4 != NULL}
 src: $hero-with-4-images.image-4
 
 -- end: ftd.column
