@@ -9938,18 +9938,6 @@ pub fn rive_function() -> ftd::interpreter::ComponentDefinition {
                     access_modifier: Default::default(),
                     line_number: 0,
                 },
-                ftd::interpreter::Argument {
-                    name: "muted".to_string(),
-                    kind: ftd::interpreter::Kind::boolean().into_kind_data(),
-                    mutable: false,
-                    value: Some(ftd::interpreter::PropertyValue::Value {
-                        value: ftd::interpreter::Value::Boolean { value: true },
-                        is_mutable: false,
-                        line_number: 0,
-                    }),
-                    access_modifier: Default::default(),
-                    line_number: 0,
-                },
                 ftd::interpreter::Argument::default(
                     "artboard",
                     ftd::interpreter::Kind::string()
