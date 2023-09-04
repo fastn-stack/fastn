@@ -28,12 +28,11 @@ feature: User-friendly syntax
 
 -- cl.feature-card.code:
 
+\-- import: fastn-community.github.io/bling/quote
 \-- quote.rustic: Nandhini
 
 It's liberating to control the outcome as the creator. I can swiftly bring
 changes to life without delay or intermediaries.
-
-\-- end: ws.page
 
 -- cl.feature-card.body:
 
@@ -41,6 +40,7 @@ fastn’s user-friendly interface and minimal syntax allow even those with no
 prior programming experience to grasp its functionalities swiftly. This also 
 creates a cleaner and more maintainable code. There's no need for 
 quotes around strings and you can write multiline content easily.
+
 
 
 -- end: cl.feature-card
