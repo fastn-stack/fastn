@@ -748,7 +748,7 @@ class Node2 {
     attachAttribute(property, value) {
         // If the value is null, undefined, or false, the attribute will be removed.
         // For example, if attributes like checked, muted, or autoplay have been assigned a "false" value.
-        if (fastn_utils.isNull(value) || value === false) {
+        if (fastn_utils.isNull(value)) {
             this.#node.removeAttribute(property);
             return;
         }
@@ -756,13 +756,6 @@ class Node2 {
     }
     removeAttribute(property) {
         this.#node.removeAttribute(property);
-    }
-    toggleAttribute(property) {
-        if(this.hasAttribute(property)) {
-            this.removeAttribute(property);
-            return;
-        }
-        this.attachAttribute(property, true);
     }
     updateTagName(name) {
         if (ssr) {
@@ -1594,13 +1587,29 @@ class Node2 {
             }).addNodeProperty(this, null, inherited));
             this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Autoplay) {
-            this.attachAttribute("autoplay", staticValue);
+            if(staticValue) {
+                this.attachAttribute("autoplay", staticValue);
+            } else {
+                this.removeAttribute("autoplay");
+            }
         } else if (kind === fastn_dom.PropertyKind.Muted) {
-            this.attachAttribute("muted", staticValue);
+            if(staticValue) {
+                this.attachAttribute("muted", staticValue);
+            } else {
+                this.removeAttribute("muted");
+            }
         } else if (kind === fastn_dom.PropertyKind.Controls) {
-            this.attachAttribute("controls", staticValue);
+            if(staticValue) {
+                this.attachAttribute("controls", staticValue);
+            } else {
+                this.removeAttribute("controls");
+            }
         } else if (kind === fastn_dom.PropertyKind.LoopVideo) {
-            this.attachAttribute("loop", staticValue);
+            if(staticValue) {
+                this.attachAttribute("loop", staticValue);
+            } else {
+                this.removeAttribute("loop");
+            }
         } else if (kind === fastn_dom.PropertyKind.Poster) {
             ftd.dark_mode.addClosure(fastn.closure(() => {
                 if (fastn_utils.isNull(staticValue)) {

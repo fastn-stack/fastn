@@ -782,7 +782,7 @@ impl Video {
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
-                kind: fastn_js::PropertyKind::ImageSrc,
+                kind: fastn_js::PropertyKind::VideoSrc,
                 value: self.src.to_set_property_value(doc, rdata),
                 element_name: kernel.name.to_string(),
                 inherited: rdata.inherited_variable_name.to_string(),
