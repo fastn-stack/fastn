@@ -99,8 +99,9 @@ fn get_dummy_package_data() -> String {
 fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &std::path::PathBuf) {
     let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let js_ast_data = ftd::js::document_into_js_ast(i);
-    let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), true);
-    let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), false);
+    let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), true, "foo");
+    let js_ftd_script =
+        fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), false, "foo");
     let dummy_package_data = get_dummy_package_data();
 
     let html_str = {
@@ -160,7 +161,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                             <link rel="stylesheet" href="../../prism/prism-line-numbers.css">
                             <script>{}</script>
                         "#,
-                                ftd::js::all_js_without_test()
+                                ftd::js::all_js_without_test("foo")
                             )
                         } else {
                             "<script src=\"fastn-js.js\"></script>".to_string()

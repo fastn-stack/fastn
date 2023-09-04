@@ -63,6 +63,14 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::create_package(name, path, download_base_url).await;
     }
 
+    if let Some(clone) = matches.subcommand_matches("clone") {
+        return fastn_core::clone(clone.value_of_("source").unwrap()).await;
+    }
+
+    let mut config = fastn_core::Config::read(None, true, None).await?;
+
+    let package_name = config.package.name.clone();
+
     if let Some(serve) = matches.subcommand_matches("serve") {
         let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
             Ok(v) => v,
@@ -89,15 +97,10 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             inline_js,
             external_css,
             inline_css,
+            package_name,
         )
         .await;
     }
-
-    if let Some(clone) = matches.subcommand_matches("clone") {
-        return fastn_core::clone(clone.value_of_("source").unwrap()).await;
-    }
-
-    let mut config = fastn_core::Config::read(None, true, None).await?;
 
     if matches.subcommand_matches("update").is_some() {
         return fastn_core::update(&config).await;
