@@ -30,7 +30,7 @@
 };
 let main = function (parent) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "";
+  __fastn_package_name__ = "foo";
   try {
     let parenti0 = foo__bar(parent, inherited);
     let parenti1 = foo__bar(parent, inherited, {
@@ -43,7 +43,7 @@ let main = function (parent) {
 global["main"] = main;
 let _01_basic__append = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "01-basic";
+  __fastn_package_name__ = "foo";
   try {
     let __args__ = args;
     return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
@@ -55,7 +55,7 @@ global["_01_basic__append"] = _01_basic__append;
 let _01_basic__print = function (parent, inherited, args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "01-basic";
+  __fastn_package_name__ = "foo";
   try {
     let __args__ = {
     };
@@ -127,7 +127,7 @@ fastn_utils.createNestedObject(global, "_01_basic__hello", "Hello World!!");
 let _01_basic_module__append = function (args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "01-basic-module";
+  __fastn_package_name__ = "foo";
   try {
     let __args__ = args;
     return (fastn_utils.getter(__args__.a) + " ++++ " + fastn_utils.getter(__args__.b));
@@ -140,7 +140,7 @@ fastn_utils.createNestedObject(global, "_01_basic_module__hello", "Hello World f
 let _01_basic_module__print = function (parent, inherited, args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "01-basic-module";
+  __fastn_package_name__ = "foo";
   try {
     let __args__ = {
     };
