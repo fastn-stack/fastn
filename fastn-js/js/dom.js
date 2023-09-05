@@ -148,7 +148,9 @@ fastn_dom.ElementKind = {
     // Note: This is called internally, it gives `code` as tagName. This is used
     // along with the Code: 15.
     CodeChild: 16,
-    WebComponent: (webcomponent, arguments) => { return [17, {webcomponent, arguments}]; },
+    // Note: 'arguments' cant be used as function parameter name bcoz it has
+    // internal usage in js functions.
+    WebComponent: (webcomponent, args) => { return [17, [webcomponent, args]]; },
     Video: 18,
 };
 
