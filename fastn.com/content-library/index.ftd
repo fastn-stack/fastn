@@ -2505,6 +2505,336 @@ icon: $fastn-assets.files.images.landing.cta-arrow.svg
 
 
 
+
+
+-- component card:
+ftd.image-src image:
+caption title:
+body description:
+optional string cta-link:
+optional string cta-text:
+optional ftd.resizing width:
+optional ftd.resizing min-height:
+
+-- ftd.column:
+min-height.fixed.em if { card.width == NULL && card.min-height == NULL && ftd.device == "desktop" }: 25
+min-height if { ftd.device == "desktop" }: $card.min-height
+padding.em: 2
+spacing.fixed.em: 1
+shadow: $s
+border-radius.em: 1
+width.fixed.percent: 48
+width if { ftd.device == "mobile" }: fill-container
+width if { card.width != NULL }: $card.width
+background.solid: $inherited.colors.background.base
+align-content if { ftd.device == "mobile" }: center
+padding.px if { ftd.device == "mobile" }: 24 
+
+-- ftd.image:
+src: $card.image
+height.fixed.em: 3
+width.fixed.em: 3
+max-width: fill-container
+
+-- ftd.text: $card.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+padding-bottom.em: 0.5
+text-align if { ftd.device == "mobile" }: center
+
+-- ftd.text: $card.description
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align if { ftd.device == "mobile" }: center
+classes: anchor-link
+
+-- ftd.text: $card.cta-text
+if: { card.cta-text != NULL }
+role: $inherited.types.copy-regular
+link: $card.cta-link
+text-align if { ftd.device == "mobile" }: center
+classes: link
+css: [$fastn-assets.files.assets.links.css]
+
+
+-- end: ftd.column
+
+-- end: card
+
+
+
+
+
+
+
+
+
+
+-- component team:
+caption title:
+optional body body:
+children team-wrap:
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 48
+align-content: center
+padding-horizontal.px: 24
+
+-- ftd.column:
+width: fill-container
+align-content: center
+margin-bottom.px: 100
+spacing.fixed.px: 16
+
+-- ftd.text: $team.title
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+text-align: center
+
+-- ftd.text:
+if: { team.body != NULL }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align: center
+
+$team.body
+
+-- end: ftd.column
+
+-- ftd.desktop:
+
+-- ftd.row:
+width: fill-container
+align-self: center
+wrap: true
+children: $team.team-wrap
+spacing.fixed.px: 64
+
+-- end: ftd.row
+
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
+-- ftd.column:
+width: fill-container
+children: $team.team-wrap
+align-self: center
+align-content: center
+
+-- end: ftd.column
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: team
+
+
+
+
+
+
+
+
+
+
+-- component member:
+caption title:
+optional ftd.image-src photo:
+optional ftd.image-src photo-grey:
+optional string link:
+optional string designation:
+boolean $mouse-in: false
+
+-- ftd.column:
+spacing: space-between
+align-content: center
+link: $member.link
+width.fixed.px: 200
+margin-bottom.px: 80
+z-index: 0
+$on-mouse-enter$: $ftd.set-bool($a = $member.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $member.mouse-in, v = false)
+
+-- ftd.mobile:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 24
+align-content: center
+
+-- ftd.column:
+if: { member.mouse-in }
+width: fill-container
+height.fixed.px: 200
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+anchor: parent
+border-radius.px: 10
+border-width.px: 5
+border-color: $inherited.colors.accent.primary
+top.px: -18
+right.px: -18
+z-index: -1
+
+-- end: ftd.column
+
+-- ftd.image:
+if: { member.photo != NULL }
+src: $member.photo
+max-width.fixed.percent: 100
+min-width.fixed.px: 200
+border-radius.px: 10
+
+-- ftd.column:
+if: { member.photo == NULL }
+width: fill-container
+background.solid: $inherited.colors.background.code
+border-radius.px: 10
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { !member.mouse-in }
+width: fill-container
+height.fixed.px: 300
+
+-- ftd.image:
+if: { member.photo-grey != NULL }
+src: $member.photo-grey
+max-width.fixed.percent: 100
+min-width.fixed.px: 200
+border-radius.px: 10
+
+-- ftd.column:
+if: { member.photo-grey == NULL }
+width: fill-container
+background.solid: $inherited.colors.background.code
+border-radius.px: 10
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $member.title
+role: $inherited.types.heading-tiny
+color: $inherited.colors.text-strong
+
+-- ftd.text: $member.designation
+role: $inherited.types.copy-small
+color: $inherited.colors.text-strong
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.mobile
+
+
+-- ftd.desktop:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 24
+align-content: center
+
+-- ftd.column:
+if: { member.mouse-in }
+width: fill-container
+height.fixed.px: 200
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+anchor: parent
+border-radius.px: 10
+border-width.px: 5
+border-color: $inherited.colors.accent.primary
+top.px: -18
+right.px: -18
+z-index: -1
+
+-- end: ftd.column
+
+-- ftd.image:
+if: { member.photo != NULL }
+src: $member.photo
+max-width.fixed.percent: 100
+min-width.fixed.px: 200
+border-radius.px: 10
+
+-- ftd.column:
+if: { member.photo == NULL }
+width: fill-container
+background.solid: $inherited.colors.background.code
+border-radius.px: 10
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { !member.mouse-in }
+width: fill-container
+height.fixed.px: 200
+
+-- ftd.image:
+if: { member.photo-grey != NULL }
+src: $member.photo-grey
+max-width.fixed.percent: 100
+min-width.fixed.px: 200
+border-radius.px: 10
+
+-- ftd.column:
+if: { member.photo-grey == NULL }
+width: fill-container
+background.solid: $inherited.colors.background.code
+border-radius.px: 10
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $member.title
+role: $inherited.types.heading-tiny
+color: $inherited.colors.text-strong
+
+-- ftd.text: $member.designation
+role: $inherited.types.copy-small
+color: $inherited.colors.text-strong
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.desktop
+
+-- end: ftd.column
+
+-- end: member
+
+
+
+
+
+
+
+
+
+
 -- record article-record:
 caption title:
 ftd.image-src image:
