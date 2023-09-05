@@ -374,7 +374,7 @@ width: fill-container
 background.solid: $code-block-system.bgcolor
 border-radius.px: 15
 max-width.fixed.px: 650
-height.fixed.px: 300
+max-height.fixed.px: 300
 align-self: center
 
 -- ftd.column:
@@ -441,7 +441,7 @@ color: $inherited.colors.text-strong
 -- ftd.column:
 width: fill-container
 white-space: break-spaces
-overflow-x: auto
+overflow-y: auto
 
 -- code:
 body: $code-block-system.body
@@ -460,7 +460,7 @@ code-bg: $code-block-system.code-bg
 width: fill-container
 background.solid: $code-block-system.bgcolor
 border-radius.px: 15
-height.fixed.px: 300
+max-height.fixed.px: 300
 align-self: center
 
 -- ftd.column:
@@ -523,7 +523,7 @@ margin-left.px: 14
 -- ftd.column:
 width: fill-container
 white-space: break-spaces
-overflow-x: auto
+overflow-y: auto
 
 -- code:
 body: $code-block-system.body
@@ -633,36 +633,32 @@ width: fill-container
 
 -- ftd.code:
 if: { ftd.dark-mode }
-min-height.fixed.px: 360
+min-height.fixed.px: 245
 text: $code.body
 lang: $code.lang
 width: fill-container
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
-padding-top.px: 10
-padding-left.px: 20
-padding-bottom.px: 10
 padding-right.px: 20
 background.solid if { code.code-bg != NULL }: $code.code-bg
-overflow-x: auto
 white-space: break-spaces
+show-line-number: true
+margin-top.px: -10
 
 -- ftd.code:
 if: { !ftd.dark-mode }
 text: $code.body
 lang: $code.lang
-min-height.fixed.px: 360
+min-height.fixed.px: 245
 width: fill-container
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
-padding-top.px: 10
-padding-left.px: 20
-padding-bottom.px: 10
 padding-right.px: 20
 background.solid if { code.code-bg != NULL }: $code.code-bg
-overflow-x: auto
 white-space: break-spaces
 theme: base16-ocean.light
+show-line-number: true
+margin-top.px: -10
 
 -- end: ftd.column
 
