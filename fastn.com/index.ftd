@@ -1,5 +1,4 @@
--- import: fastn.com/content-library as cl
--- import: fastn.com/content-library/lib as lib
+-- import: fastn.com/content-library as lib
 
 ;; Create rich user interfaces, integrate with
 ;; Domain specific language for writing content and creating rich user interfaces,
@@ -195,7 +194,7 @@ articles: $lib.articles
 Browse dozens of professionaly designed templates. 
 Easily change structure,style,and graphics -then host instantly.
 
--- cl.feature-card: Data-driven Websites 
+-- lib.feature-card: Data-driven Websites 
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
 cta-text: Learn more
 cta-link: /backend/
@@ -211,62 +210,7 @@ fastn can be used to query data from SQLite database to generate dynamic website
 Read more about our [package query processor](https://fastn.com/package-query/).
 
 
--- end: cl.feature-card
-
--- cl.cards-section:
-
--- cl.card: Custom Components
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-cta-link: /frontend/
-cta-text: Learn more
-min-height.fixed.em: 21
-
-fastn comes with building blocks like text, images, and containers, enabling 
-custom UI creation from buttons to interactive elements and more. This also 
-makes crafting custom content components for recurring information easier.
-
--- cl.card: Markdown
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-cta-link: /markdown/
-cta-text: Learn more
-min-height.fixed.em: 21
-
-fastn converts markup text into HTML and other formats. You can create 
-content-heavy websites using plain text without missing out on formatting.
-
--- cl.card: Responsive Ready
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-min-height.fixed.em: 16
-
-fastn has built-in support for responsive design. Your creations automatically 
-adapt to the perfect size, whether your users are on mobile or desktop devices.
-
--- cl.card: SEO
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-min-height.fixed.em: 16
-
-fastn provides custom [URL customization](https://fastn.com/custom-url/), from 
-clean and organized links to [dynamic](https://fastn.com/dynamic-urls/) options. 
-You can also fine-tune [meta information](https://fastn.com/seo-meta/), add 
-OG-image, and manage [URL redirection](https://fastn.com/redirects/).
-
--- cl.card: Dark Mode
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-min-height.fixed.em: 16
-
-fastn offers inherent support for both dark mode and light mode. This enhances 
-user accessibility and visual presentation of your website.
-
--- cl.card: Upcoming WASM Support
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-min-height.fixed.em: 16
-
-We are working on WASM support so developers can extend fastn's standard
-libraries and offer access to more backend functionalities.
-
--- end: cl.cards-section
-
--- cl.cards-section:
+-- end: lib.feature-card
 
 -- lib.cards-section:
 transparent: true
@@ -406,11 +350,5 @@ hub for designers and frontend developers to submit their designs for end users
 to discover and use. We conduct 
 various [programs](https://fastn.com/champion-program/) for designers 
 and developers to learn, contribute and become fastn experts.
-
-;;-- cl.frontend-chakra:
-
-;;-- cl.fullstack-chakra:
-
-;;-- cl.deploy-chakra:
 
 -- end: ds.page
