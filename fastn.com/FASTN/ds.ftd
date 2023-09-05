@@ -2,7 +2,7 @@
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/utils
 -- import: fastn-community.github.io/banner
--- import: fastn-community.github.io/footer
+-- import: fastn.com/content-library as footer
 -- import: fastn-community.github.io/doc-site/common
 -- import: fastn.com/content-library as cl
 -- import: fastn.com/FASTN/featured-ds
@@ -36,14 +36,10 @@ optional ftd.raw-image-src favicon:
 
 -- ftd.ui list page.footer:
 
--- footer.social-sideline-footer:
-social: true
+-- footer.footer:
 site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: /twitter/
-twitter-logo: 
-discord-url: /discord/
-instagram-url: /instagram/
+site-url: index.html
+social-links: $footer.social-links
 copyright: Copyright © 2023 - fastn.com
 
 -- end: page.footer

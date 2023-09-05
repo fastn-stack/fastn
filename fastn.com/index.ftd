@@ -19,7 +19,7 @@ sidebar: false
 
 -- lib.footer:
 site-logo: $fastn-assets.files.images.fastn.svg
-site-url: $lib.site-url
+site-url: index.html
 social-links: $lib.social-links
 copyright: Copyright © 2023 - fastn.com
 

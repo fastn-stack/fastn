@@ -4,6 +4,7 @@
 -- import: fastn.com/ftd as ftd-index
 -- import: fifthtry.github.io/fastn-ui/assets as fastn-ui-assets
 -- import: fastn/processors as pr
+-- import: fastn.com/utils
 
 -- pr.sitemap-data footer-toc:
 $processor$: pr.full-sitemap
@@ -11,8 +12,6 @@ $processor$: pr.full-sitemap
 -- integer logo-width: 100
 
 -- integer logo-height: 50
-
--- string site-url: index.html
 
 -- integer $current-slide: 1
 
@@ -2878,7 +2877,7 @@ color: $inherited.colors.text-strong
 optional ftd.image-src site-logo:
 integer logo-width: $logo-width
 integer logo-height: $logo-height
-optional string site-url: $site-url
+optional string site-url: 
 optional string site-name:
 optional body bio:
 boolean social: false
