@@ -362,9 +362,8 @@ async fn incremental_build(
             .collect_vec();
 
         for removed_doc_id in &removed_documents {
-            let folder_path = format!("{}/{}", config.build_dir(), &removed_doc_id);
-            let file_path_str = format!("{}.ftd", &folder_path);
-            let file_path = std::path::Path::new(&file_path_str);
+            let folder_path = config.build_dir().join( &removed_doc_id);
+            let file_path = &folder_path.with_extension("ftd");
 
             if file_path.exists() {
                 std::fs::remove_file(file_path)?;
