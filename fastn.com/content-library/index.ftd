@@ -3557,15 +3557,15 @@ string link: /
 
 -- social-media:
 link: /
-src: $assets.files.dotcom.assets.discord-icon.svg
+src: $fastn-assets.files.images.landing.discord-icon.svg
 
 -- social-media: 
 link: /
-src: $assets.files.dotcom.assets.linkedin-icon.svg
+src: $fastn-assets.files.images.landing.linkedin-icon.svg
 
 -- social-media:
 link: /
-src: $assets.files.dotcom.assets.tweeter-icon.svg
+src: $fastn-assets.files.images.landing.tweeter-icon.svg
 
 -- end: social-links
 
