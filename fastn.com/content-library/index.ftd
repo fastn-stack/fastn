@@ -3537,3 +3537,60 @@ cta-text: Explore more
 cta-link: /discord/
 
 -- end: communities
+
+
+
+
+
+-- record social-media:
+ftd.image-src src:
+string link: /
+
+-- social-media list share:
+
+-- social-media list social-links:
+
+-- social-media:
+link: /
+src: $assets.files.dotcom.assets.discord-icon.svg
+
+-- social-media: 
+link: /
+src: $assets.files.dotcom.assets.linkedin-icon.svg
+
+-- social-media:
+link: /
+src: $assets.files.dotcom.assets.tweeter-icon.svg
+
+-- end: social-links
+
+-- pr.toc-item list empty-toc:
+$processor$: pr.toc
+
+-- pr.toc-item list footer-links:
+$processor$: pr.toc
+
+- Why Fastn: /
+  - Fastn: /
+  - How to use Fastn: /
+  - Feature listing : /
+- Use Case: /
+  - Landing Page: /
+  - Microsite: /
+  - Documentation Page: /
+  - Blog Page: /
+- Learn: /
+  - Contributors: /
+  - Authoring: /
+  - Learning FTD: /
+  - Open Source: /
+  - Internet OS: /
+- Design: /
+  - Template list: /
+  - Component list: /
+  - Font list: /
+  - Icons /Illustrations: /
+  - Design Theory: /
+  - Color Library: /
+- Build: /
+
