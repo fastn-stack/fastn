@@ -267,22 +267,22 @@ transparent: true
 
 -- lib.rectangle-card:
 
--- lib.title-with-body-card: Fastn
+-- lib.title-with-body-card: fastn
 logo: $fastn-assets.files.images.landing.fastn-slider-logo.svg
 width: 325
 
-Minimalistic syntax and beginner-friendly. Even non-programmers can learn and 
+- Minimalistic syntax and beginner-friendly. Even non-programmers can learn and 
 create websites easily. 
 
-No coding knowledge is required.
+- No coding knowledge is required.
 
-Covers both frontend and backend. 
+- Covers both frontend and backend. 
 
-Comes with integrated design system with pre-defined styles and UI elements. 
+- Comes with integrated design system with pre-defined styles and UI elements. 
 
-Supports Markdown, making it effortless to combine text with code.
+- Supports Markdown, making it effortless to combine text with code.
 
-Includes built-in dark mode
+- Includes built-in dark mode
 
 -- end: lib.rectangle-card
 
@@ -294,16 +294,16 @@ logo: $fastn-assets.files.images.landing.react-js-logo.svg
 body-color: $inherited.colors.cta-secondary.text
 width: 325
 
-JSX syntax and JavaScript fundamentals may challenge beginners.
+- JSX syntax and JavaScript fundamentals may challenge beginners.
 
-React primarily caters to front-end development, requiring additional backend
+- React primarily caters to front-end development, requiring additional backend
 tools.
 
-Lacks an integrated design system, often relying on third-party libraries.
+- Lacks an integrated design system, often relying on third-party libraries.
 
-No native support for Markdown, necessitating extra steps or libraries.
+- No native support for Markdown, necessitating extra steps or libraries.
 
-Implementing dark mode in React often involves custom CSS or CSS variables.
+- Implementing dark mode in React often involves custom CSS or CSS variables.
 
 -- end: lib.rectangle-card
 
