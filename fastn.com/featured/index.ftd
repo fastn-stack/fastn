@@ -84,6 +84,7 @@ margin-top.px if { grid-view.push-top }: -90
 
 -- ftd.row:
 width: fill-container
+;; max-width.fixed.calc: (100% - 340px)
 align-content: center
 margin-top.px if { ftd.device == "mobile" }: 24
 
@@ -145,7 +146,8 @@ $grid-view.body
 -- ftd.desktop:
 
 -- ftd.row:
-width.fixed.vw: 70
+;; width.fixed.calc: (100% - 350px)
+width.fixed.px: 1050
 spacing.fixed.px: 32
 overflow-x: auto
 margin-vertical.px: 40
@@ -250,7 +252,7 @@ $view-all.body
 -- ftd.desktop:
 
 -- ftd.row:
-width.fixed.vw: 70
+width: fill-container
 spacing.fixed.px: 32
 wrap: true
 margin-vertical.px: 40
@@ -320,8 +322,8 @@ boolean show-large: false
 -- ftd.column:
 width if { ftd.device == "mobile" }: fill-container
 spacing.fixed.px: 16
-min-width.fixed.px: 324
-width.fixed.px: 324
+min-width.fixed.px: 302
+width.fixed.px: 302
 classes if {grid-of-items.two-fold}: two-folded
 $on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
@@ -511,6 +513,18 @@ boolean wip: false
 boolean two-fold: false
 
 -- template list doc-sites:
+
+-- template: Doc-site
+template-url: featured/ds/doc-site/
+screenshot: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
+
+-- template: Midnight Rush
+template-url: featured/ds/mr-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
+
+-- template: Midnight Storm
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 
 -- template: Doc-site
 template-url: featured/ds/doc-site/
