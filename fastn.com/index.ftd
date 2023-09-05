@@ -15,6 +15,16 @@ document-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
 full-width: true
 sidebar: false
 
+-- ds.page.footer:
+
+-- lib.footer:
+site-logo: $fastn-assets.files.images.fastn.svg
+site-url: $lib.site-url
+social-links: $lib.social-links
+copyright: Copyright © 2023 - fastn.com
+
+-- end: ds.page.footer
+
 -- lib.hero-content:
 
 -- lib.feature-card: Easy to learn
@@ -350,13 +360,5 @@ hub for designers and frontend developers to submit their designs for end users
 to discover and use. We conduct 
 various [programs](https://fastn.com/champion-program/) for designers 
 and developers to learn, contribute and become fastn experts.
-
--- lib.footer:
-site-logo: $lib.site-logo
-site-url: $lib.site-url
-logo-width: $lib.logo-width
-logo-height: $lib.logo-height
-footer-links: $lib.footer-links
-social-links: $lib.social-links
 
 -- end: ds.page

@@ -14,8 +14,6 @@ $processor$: pr.full-sitemap
 
 -- string site-url: index.html
 
--- ftd.image-src site-logo: $fastn-assets.files.images.landing.fastn-logo.svg
-
 -- integer $current-slide: 1
 
 -- integer $current-tab: 1
@@ -545,14 +543,15 @@ code-bg: $code-block-system.code-bg
 
 
 
--- ftd.background-position.length bg-position:
+/-- ftd.background-position.length bg-position:
 y.px: -64
-x.px: 0
+x.responsive: auto
 
 -- ftd.background-image background:
 src: $fastn-assets.files.images.landing.background.svg
 size: cover
-position: $bg-position
+;;position: top-center
+repeat: no-repeat
 
 
 
@@ -2883,7 +2882,7 @@ optional string site-url: $site-url
 optional string site-name:
 optional body bio:
 boolean social: false
-pr.toc-item list footer-list:
+pr.toc-item list footer-list: $footer-toc.subsections
 pr.toc-item list footer-links: $footer-toc.sections
 social-media list social-links: $social-links
 string copyright: ©2022 Fastn Inc.
@@ -2954,6 +2953,7 @@ spacing.fixed.px: 7
 width: fill-container
 spacing: space-between
 padding-vertical.px: 50
+padding-horizontal.px: 48
 
 -- ftd.row:
 link: $footer-desktop.site-url
@@ -2964,7 +2964,6 @@ if: { footer-desktop.site-logo != NULL }
 src: $footer-desktop.site-logo
 width.fixed.px: $footer-desktop.logo-width
 height.fixed.px: $footer-desktop.logo-height
-align-self: center
 
 -- ftd.text: $footer-desktop.site-name
 if: { footer-desktop.site-name != NULL }
@@ -2992,17 +2991,18 @@ $loop$: $footer-desktop.footer-links as $obj
 width: fill-container
 margin-bottom.px: 16
 
--- dropdown:
+/-- dropdown:
 
 -- end: ftd.column
 
 -- ftd.row:
 align-content: center
-padding-top.px: 24
+padding-vertical.px: 24
 width: fill-container
 spacing: space-between
 border-top-width.px: 1
 border-color: $inherited.colors.border
+padding-horizontal.px: 48
 
 -- ftd.row:
 spacing.fixed.px: 24
@@ -3013,6 +3013,7 @@ src: $obj.src
 cursor: pointer
 link: $obj.link
 width.fixed.px: 49
+open-in-new-tab: true
 
 -- end: ftd.row
 
@@ -3122,6 +3123,7 @@ boolean is-active: false
 pr.toc-item list children: 
 
 -- ftd.column:
+if: { footer-mobile-list.url != "/search/" }
 width: fill-container
 spacing.fixed.px: 14
 
@@ -3142,14 +3144,14 @@ color: $inherited.colors.text-strong
 link: $footer-mobile-list.url
 
 -- ftd.image:
-if: { footer-mobile-list.shows-data }
+if: { footer-mobile-list.shows-data && footer-mobile-list.title != "Blog" }
 src: $fastn-assets.files.images.landing.toggle-up.svg
 width.fixed.px: 12
 $on-click$: $ftd.toggle($a= $footer-mobile-list.shows-data)
 align-self: center
 
 -- ftd.image:
-if: { !footer-mobile-list.shows-data }
+if: { !footer-mobile-list.shows-data && footer-mobile-list.title != "Blog" }
 src: $fastn-assets.files.images.landing.toggle-down.svg
 width.fixed.px: 12
 $on-click$: $ftd.toggle($a= $footer-mobile-list.shows-data)
@@ -3197,7 +3199,7 @@ boolean show-subsections: false
 -- ftd.column:
 
 -- ftd.text: $footer-list-toc.title
-if: { footer-list-toc.show-subsections }
+if: { footer-list-toc.show-subsections && footer-list-toc.title != NULL }
 color: $inherited.colors.text
 role: $inherited.types.copy-regular
 link: $footer-list-toc.url
@@ -3206,7 +3208,7 @@ white-space: nowrap
 margin-bottom.px if { ftd.device != "mobile" }: 12
 
 -- ftd.text: $footer-list-toc.title
-if: { !footer-list-toc.show-subsections }
+if: { !footer-list-toc.show-subsections && footer-list-toc.title != NULL }
 color: $inherited.colors.text
 role: $inherited.types.copy-regular
 link: $footer-list-toc.url
@@ -3235,6 +3237,7 @@ pr.toc-item list children:
 spacing.fixed.px: 16
 
 -- ftd.text: $footer-list.title
+if: { footer-list.url != "/search/" }
 role: $inherited.types.copy-large
 color: $inherited.colors.text-strong
 link: $footer-list.url
@@ -3270,12 +3273,13 @@ pr.toc-item list children:
 -- ftd.column:
 
 -- ftd.text: $footer-list-child.title
+if: { footer-list-child.url != NULL }
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
 link: $footer-list-child.url
 width: fill-container
-
--- footer-list-child: $obj.title
+	
+/-- footer-list-child: $obj.title
 if: { !ftd.is_empty(footer-list-child.children) }
 url: $obj.url
 is-active: $obj.is-active
@@ -3556,15 +3560,15 @@ string link: /
 -- social-media list social-links:
 
 -- social-media:
-link: /
+link: /discord/
 src: $fastn-assets.files.images.landing.discord-icon.svg
 
 -- social-media: 
-link: /
+link: /linkedin/
 src: $fastn-assets.files.images.landing.linkedin-icon.svg
 
 -- social-media:
-link: /
+link: /twitter/
 src: $fastn-assets.files.images.landing.tweeter-icon.svg
 
 -- end: social-links
@@ -3572,30 +3576,6 @@ src: $fastn-assets.files.images.landing.tweeter-icon.svg
 -- pr.toc-item list empty-toc:
 $processor$: pr.toc
 
--- pr.toc-item list footer-links:
-$processor$: pr.toc
-
-- Why Fastn: /
-  - Fastn: /
-  - How to use Fastn: /
-  - Feature listing : /
-- Use Case: /
-  - Landing Page: /
-  - Microsite: /
-  - Documentation Page: /
-  - Blog Page: /
-- Learn: /
-  - Contributors: /
-  - Authoring: /
-  - Learning FTD: /
-  - Open Source: /
-  - Internet OS: /
-- Design: /
-  - Template list: /
-  - Component list: /
-  - Font list: /
-  - Icons /Illustrations: /
-  - Design Theory: /
-  - Color Library: /
-- Build: /
+-- pr.sitemap-data footer-links:
+$processor$: fastn.sitemap
 
