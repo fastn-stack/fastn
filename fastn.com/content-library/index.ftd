@@ -545,9 +545,14 @@ code-bg: $code-block-system.code-bg
 
 
 
+-- ftd.background-position.length bg-position:
+y.px: -64
+x.px: 0
 
-
-
+-- ftd.background-image background:
+src: $fastn-assets.files.images.landing.background.svg
+size: cover
+position: $bg-position
 
 
 
@@ -566,7 +571,7 @@ optional string secondary-cta:
 width: fill-container
 height: fill-container
 color: $inherited.colors.text-strong
-background.image: $fastn-assets.files.images.landing.background.svg
+background.image: $background
 padding-bottom.px: 32
 
 -- ftd.column:
