@@ -338,24 +338,37 @@ async fn incremental_build(
             }
         }
 
-        let mut removed_documents: Vec<String> = vec![];
+        let removed_documents = c
+            .documents
+            .keys()
+            .filter(|cached_document_id| {
+                let name_without_package_name = get_dependency_name_without_package_name(
+                    config.package.name.as_str(),
+                    cached_document_id.as_str(),
+                );
 
-        for cached_document_id in c.documents.keys() {
-            if !documents.contains_key(format!("{}.ftd", &cached_document_id).as_str()) {
-                let folder_path = format!("{}/{}", config.build_dir(), &cached_document_id);
-                let file_path = format!("{}.ftd", &folder_path);
+                for document in documents.values() {
+                    if remove_extension(document.get_id()).eq(name_without_package_name.as_str())
+                        || remove_extension(&document.get_id_with_package())
+                            .eq(name_without_package_name.as_str())
+                    {
+                        return false;
+                    }
+                }
 
-                // println!("Removing file: {}", &file_path);
-                std::fs::remove_file(file_path)?;
-
-                // println!("Removing dir: {}", &folder_path);
-                std::fs::remove_dir_all(folder_path)?;
-
-                removed_documents.push(cached_document_id.to_string());
-            }
-        }
+                true
+            })
+            .map(|id| id.to_string())
+            .collect_vec();
 
         for removed_doc_id in &removed_documents {
+            let folder_path = format!("{}/{}", config.build_dir(), &removed_doc_id);
+            let file_path = format!("{}.ftd", &folder_path);
+
+            std::fs::remove_file(file_path)?;
+
+            std::fs::remove_dir_all(folder_path)?;
+
             c.documents.remove(removed_doc_id);
         }
     } else {
