@@ -35,9 +35,9 @@ let fastn_utils = {
         } else if (kind === fastn_dom.ElementKind.CodeChild) {
             node = "code";
         } else if (kind[0] === fastn_dom.ElementKind.WebComponent()[0]) {
-            let {webcomponent, arguments} = kind[1];
+            let [webcomponent, args] = kind[1];
             node = `${webcomponent}`;
-            fastn_dom.webComponent.push(arguments);
+            fastn_dom.webComponent.push(args);
             attributes[fastn_dom.webComponentArgument] = fastn_dom.webComponent.length - 1;
         }
         return [node, css, attributes];
