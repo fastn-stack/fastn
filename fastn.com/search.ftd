@@ -6,7 +6,7 @@
 
 -- ftd.text: 🔙 (Go Back)
 $on-click$: $go-back()
-role: $inherited.types.body-regular
+role: $inherited.types.heading-small
 color: $inherited.colors.text
 
 

@@ -25,7 +25,7 @@ $on-click$: $call-js-fn(a = FifthTry Alert)
 
 \-- void call-js-fn(a):
 string a:
-js: functions.ftd ;; <hl>
+js: functions.js ;; <hl>
 
 show_alert(a) ;; <hl>
 
