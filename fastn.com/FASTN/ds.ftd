@@ -5,6 +5,8 @@
 -- import: fastn-community.github.io/footer
 -- import: fastn-community.github.io/doc-site/common
 -- import: fastn.com/content-library as cl
+-- import: fastn.com/FASTN/featured-ds
+export: featured-business
 
 -- import: fastn-community.github.io/doc-site
 export: markdown,h0,h1,h2,h3,code,rendered,output,image,iframe,youtube,compact-text,post,posts,featured-post,image-first,image-in-between,without-image,author-bio,tip,not-found-1,not-found-2,link,link-group,without-image-half
@@ -151,7 +153,7 @@ margin-top.em if { ftd.device == "mobile" }: 0.5
 spacing.fixed.em: 0.8
 width: fill-container
 children: $page.wrapper
-$on-global-key[f]$: $open-search()
+$on-global-key[/]$: $open-search()
 
 -- end: ftd.column
 

@@ -146,6 +146,7 @@ $grid-view.body
 
 -- ftd.row:
 width.fixed.vw: 70
+width if {grid-view.show-large}: fill-container
 spacing.fixed.px: 32
 overflow-x: auto
 margin-vertical.px: 40
