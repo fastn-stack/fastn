@@ -357,10 +357,11 @@ border-color: $inherited.colors.border
 -- ftd.row:
 spacing.fixed.px: 10
 padding-horizontal.px: 18
-padding-vertical.px: 14
-border-right-width.px: 1
-border-color: $inherited.colors.border
 align-content: center
+
+-- ftd.row:
+spacing.fixed.px: 10
+padding-vertical.px: 14
 
 -- ftd.column:
 width.fixed.px: 14
@@ -386,21 +387,24 @@ border-radius.px: 100
 
 -- end: ftd.column
 
--- ftd.column:
-anchor: parent
-top.px: 0
-left.px: 104
-height.fixed.px: 48
-border-right-width.px: 1
-border-color: $inherited.colors.border
+-- end: ftd.row
 
--- end: ftd.column
+-- ftd.column:
+border-color: $inherited.colors.border
+border-left-width.px: 1
+border-right-width.px: 1
+padding-vertical.px: 14
+padding-horizontal.px: 14
+border-bottom-width.px: 1
+border-bottom-color: $inherited.colors.background.code
+margin-bottom.px: -1
 
 -- ftd.text: $code-block-system.title
 if: { code-block-system.title != NULL }
 role: $inherited.types.label-large
 color: $inherited.colors.text-strong
-margin-left.px: 22
+
+-- end: ftd.column
 
 -- end: ftd.row
 
