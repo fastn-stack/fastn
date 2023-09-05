@@ -50,6 +50,23 @@ content-centric and API / database-driven websites.
 
 
 
+-- component get-started:
+
+-- utils.install: Get Started with fastn
+code-lang: sh
+code: curl -fsSL https://fastn.com/install.sh | bash
+cta-text: Learn More
+cta-link: /install/
+
+Install fastn with a Single Command
+
+-- end: get-started
+
+
+
+
+
+
 
 
 
