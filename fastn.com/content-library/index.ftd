@@ -3220,6 +3220,7 @@ margin-bottom.px if { ftd.device != "mobile" }: 12
 caption title:
 optional string url:
 boolean is-active:
+boolean $mouse-in: false
 pr.toc-item list children:
 
 -- ftd.column:
@@ -3229,6 +3230,9 @@ spacing.fixed.px: 16
 if: { footer-list.url != "/search/" }
 role: $inherited.types.copy-large
 color: $inherited.colors.text-strong
+color if { footer-list.mouse-in }: $inherited.colors.accent.primary
+$on-mouse-leave$: $ftd.set-bool($a = $footer-list.mouse-in, v = false)
+$on-mouse-enter$: $ftd.set-bool($a = $footer-list.mouse-in, v = true)
 link: $footer-list.url
 width: fill-container
 style: bold
@@ -3257,6 +3261,7 @@ $loop$: $footer-list.children as $obj
 caption title:
 optional string url:
 boolean is-active:
+boolean $mouse-in: false
 pr.toc-item list children:
 
 -- ftd.column:
@@ -3264,6 +3269,9 @@ pr.toc-item list children:
 -- ftd.text: $footer-list-child.title
 if: { footer-list-child.url != NULL }
 role: $inherited.types.copy-regular
+color if { footer-list-child.mouse-in }: $inherited.colors.accent.primary
+$on-mouse-leave$: $ftd.set-bool($a = $footer-list-child.mouse-in, v = false)
+$on-mouse-enter$: $ftd.set-bool($a = $footer-list-child.mouse-in, v = true)
 color: $inherited.colors.text
 link: $footer-list-child.url
 width: fill-container
