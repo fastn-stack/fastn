@@ -32,9 +32,9 @@ $processor$: pr.full-sitemap
 
 -- hero-section: Build your next web project faster with fastn
 primary-cta: Read Docs
-primary-cta-link: index.html
+primary-cta-link: /ftd/data-modelling/
 secondary-cta: Get started
-secondary-cta-link: index.html
+secondary-cta-link: /quick-build/
 
 Easy to learn, open source full-stack framework for building modern
 content-centric and API / database-driven websites.
@@ -130,6 +130,7 @@ width.fixed.percent: 48
 border-width.px: 1
 border-color: $inherited.colors.border-strong
 border-radius.px: 8
+max-height.fixed.px: 344
 
 -- ftd.image:
 if: { feature-card.image != NULL }
@@ -137,7 +138,7 @@ src: $feature-card.image
 width: fill-container
 height.fixed.px: 300
 border-radius.px: 8
-;;fit: cover
+fit: contain
 
 -- end: ftd.column
 
@@ -157,6 +158,8 @@ width.fixed.percent: 48
 border-width.px: 1
 border-color: $inherited.colors.border-strong
 border-radius.px: 8
+padding-horizontal.px: 14
+max-height.fixed.px: 344
 
 -- ftd.image:
 if: { feature-card.image != NULL }
@@ -164,7 +167,7 @@ src: $feature-card.image
 width: fill-container
 height.fixed.px: 300
 border-radius.px: 8
-;;fit: cover
+fit: contain
 
 -- end: ftd.column
 
@@ -232,6 +235,7 @@ height.fixed.px: 300
 
 -- ftd.column:
 width: fill-container
+max-height.fixed.px: 344
 
 -- code-block-system: Fastn.com
 lang: ftd
@@ -357,7 +361,7 @@ role: $inherited.types.button-small
 
 -- component code-block-system:
 optional caption title:
-optional ftd.color bgcolor: $inherited.colors.background.code
+optional ftd.color bgcolor: $inherited.colors.background.base
 optional ftd.color code-bg: $inherited.colors.background.code
 optional body body:
 optional string lang:
@@ -372,10 +376,12 @@ width: fill-container
 -- ftd.column:
 width: fill-container
 background.solid: $code-block-system.bgcolor
-border-radius.px: 15
+border-radius.px: 8
 max-width.fixed.px: 650
-max-height.fixed.px: 300
+max-height.fixed.px: 344
 align-self: center
+border-width.px: 1
+border-color: $inherited.colors.border
 
 -- ftd.column:
 width: fill-container
@@ -630,10 +636,11 @@ optional string lang:
 
 -- ftd.column:
 width: fill-container
+border-radius.px: 12
 
 -- ftd.code:
-if: { ftd.dark-mode }
-min-height.fixed.px: 245
+min-height.fixed.px: 258
+max-height.fixed.px: 258
 text: $code.body
 lang: $code.lang
 width: fill-container
@@ -644,21 +651,8 @@ background.solid if { code.code-bg != NULL }: $code.code-bg
 white-space: break-spaces
 show-line-number: true
 margin-top.px: -10
-
--- ftd.code:
-if: { !ftd.dark-mode }
-text: $code.body
-lang: $code.lang
-min-height.fixed.px: 245
-width: fill-container
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-padding-right.px: 20
-background.solid if { code.code-bg != NULL }: $code.code-bg
-white-space: break-spaces
-theme: base16-ocean.light
-show-line-number: true
-margin-top.px: -10
+border-bottom-left-radius.px: 8
+border-bottom-right-radius.px: 8
 
 -- end: ftd.column
 
@@ -2506,7 +2500,7 @@ padding.px: 16
 border-radius.px: 16
 spacing.fixed.px: 16
 width.fixed.px: 392
-min-height.fixed.px: 492
+min-height.fixed.px: 402
 width if {ftd.device == "mobile"}: fill-container
 
 -- ftd.image:
@@ -3503,7 +3497,7 @@ image: $fastn-assets.files.images.landing.article-card.png
 You can package your components as fastn packages to share with 
 community and access community shared ones.
 
--- article-record: data driven
+-- article-record: Data driven
 image: $fastn-assets.files.images.landing.article-card.png
 
 You can package your components as fastn packages to share with 

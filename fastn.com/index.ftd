@@ -30,7 +30,7 @@ copyright: Copyright © 2023 - fastn.com
 -- lib.feature-card: Easy to learn
 cta-text: Learn more
 cta-link: /language/
-image: https://fastn.com/-/fastn.com/images/blog/offer.png
+image: $fastn-assets.files.images.landing.quote-example.png
 
 -- lib.feature-card.code:
 
@@ -53,7 +53,7 @@ strings and you can write multiline content easily.
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
 cta-text: Learn more
 cta-link: /acme/
-image: https://fastn.com/-/fastn.com/images/blog/offer.png
+image: $fastn-assets.files.images.landing.diwali-offer.png
 feature: Rapidly assemble webpages
 move-left: true
 
@@ -80,8 +80,7 @@ offers access to a rich collection of[ready-made components]
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/feature-icon-1.svg
 cta-text: Learn more
 cta-link: /acme/
-image: https://fastn.com/-/fastn.com/images/blog/new-price.png
-;;code-image: $fastn-assets.files.images.landing.pr-pricing.png
+image: $fastn-assets.files.images.landing.pricing-pr.png
 feature: Performance
 
 -- lib.feature-card.code:
@@ -120,13 +119,38 @@ move-left: true
 
 -- lib.feature-card.code:
 
-\-- ws.hero-image-left: Diwali Dhamaka Offer 2023
-cta-primary: Claim Now
-cta-primary-link: /pricing/
-image: $assets.files.assets.diwali-2023.png
+\ name: Deploy Site
+\ 
+\ on:
+\   push:
+\     branches: [ main ]
+\   workflow_dispatch:
+\   workflow_call:    
+\ 
+\ jobs:
+\   build:
+\     permissions: write-all
+\     runs-on: ubuntu-latest
+\     steps:
+\       - uses: actions/checkout@v2
+\       - uses: FranzDiebold/github-env-vars-action@v2
+\       - run: sh -c "$(curl -fsSL https://fastn.com/install.sh)"
+\       - name: Build the pages with fastn
+\         run: |
+\           echo "Using '$CI_REPOSITORY_NAME_SLUG/' as the base while building"
+\           # To deploy the website using GitHub Pages, use the below command
+\           fastn build --base=/$CI_REPOSITORY_NAME/
+\           # To deploy the website using Custom Domain, use the below command and comment
+\           #out the above command when deploying through GitHub Pages 
+\           #fastn build --base=/
+\       - name: copy CNAME if found
+\         run: '(test -f CNAME && cp CNAME .build) || echo "CNAME does not exist, skipping step"'
+\       - uses: peaceiris/actions-gh-pages@v3
+\         with:
+\           github_token: ${{ secrets.GITHUB_TOKEN }}
+\           publish_dir: ./.build
 
-Avail 20% flat discount on our premium package this Diwali. 
-Offer valid till 30th Nov 2023.
+
 
 -- lib.feature-card.body:
 
