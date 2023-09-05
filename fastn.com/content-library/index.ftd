@@ -3,6 +3,7 @@
 -- import: fifthtry.github.io/fastn-io-typography as doc-typo
 -- import: fastn.com/ftd as ftd-index
 -- import: fifthtry.github.io/fastn-ui/assets as fastn-ui-assets
+-- import: fastn.com/utils
 
 -- integer $current-slide: 1
 
@@ -31,6 +32,23 @@ content-centric and API / database-driven websites.
 -- end: hero-section
 
 -- end: hero-content
+
+
+
+
+
+-- component get-started:
+
+-- utils.install: Get Started with fastn
+code-lang: sh
+code: curl -fsSL https://fastn.com/install.sh | bash
+cta-text: Learn More
+cta-link: /install/
+
+Install fastn with a Single Command
+
+-- end: get-started
+
 
 
 
