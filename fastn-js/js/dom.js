@@ -1160,22 +1160,40 @@ class Node2 {
             this.attachCss("justify-content", value);
             return;
         }
-        if (node_kind === fastn_dom.ElementKind.Row) {
+        if (node_kind === fastn_dom.ElementKind.Column) {
             switch (value) {
                 case 'top-left':
-                case 'left':
-                case 'bottom-left':
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "start");
                     break;
                 case 'top-center':
-                case 'center':
-                case 'bottom-center':
-                    this.attachCss("justify-content", "center");
+                    this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "center");
                     break;
                 case 'top-right':
+                    this.attachCss("justify-content", "start");
+                    this.attachCss("align-items", "end");
+                    break;
+                case 'left':
+                    this.attachCss("justify-content", "center");
+                    this.attachCss("align-items", "start");
+                    break;
+                case 'center':
+                    this.attachCss("justify-content", "center");
+                    this.attachCss("align-items", "center");
+                    break;
                 case 'right':
+                    this.attachCss("justify-content", "center");
+                    this.attachCss("align-items", "end");
+                    break;
+                case 'bottom-left':
+                    this.attachCss("justify-content", "end");
+                    this.attachCss("align-items", "left");
+                    break;
+                case 'bottom-center':
+                    this.attachCss("justify-content", "end");
+                    this.attachCss("align-items", "center");
+                    break;
                 case 'bottom-right':
                     this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "end");
@@ -1183,22 +1201,40 @@ class Node2 {
             }
         }
 
-        if (node_kind === fastn_dom.ElementKind.Column) {
+        if (node_kind === fastn_dom.ElementKind.Row) {
             switch (value) {
                 case 'top-left':
-                case 'top-center':
-                case 'top-right':
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "start");
                     break;
+                case 'top-center':
+                    this.attachCss("justify-content", "center");
+                    this.attachCss("align-items", "start");
+                    break;
+                case 'top-right':
+                    this.attachCss("justify-content", "end");
+                    this.attachCss("align-items", "start");
+                    break;
                 case 'left':
+                    this.attachCss("justify-content", "start");
+                    this.attachCss("align-items", "center");
+                    break;
                 case 'center':
-                case 'right':
                     this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "center");
                     break;
+                case 'right':
+                    this.attachCss("justify-content", "right");
+                    this.attachCss("align-items", "center");
+                    break;
                 case 'bottom-left':
+                    this.attachCss("justify-content", "start");
+                    this.attachCss("align-items", "end");
+                    break;
                 case 'bottom-center':
+                    this.attachCss("justify-content", "start");
+                    this.attachCss("align-items", "end");
+                    break;
                 case 'bottom-right':
                     this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "end");
