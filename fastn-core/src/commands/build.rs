@@ -238,7 +238,7 @@ async fn incremental_build(
         let mut resolving_dependencies: Vec<String> = vec![];
 
         while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
-            println!("Current UR: {}", unresolved_dependency.as_str());
+            // println!("Current UR: {}", unresolved_dependency.as_str());
             if let Some(doc) = c.documents.get(
                 get_dependency_name_without_package_name(
                     config.package.name.as_str(),
@@ -363,9 +363,12 @@ async fn incremental_build(
 
         for removed_doc_id in &removed_documents {
             let folder_path = format!("{}/{}", config.build_dir(), &removed_doc_id);
-            let file_path = format!("{}.ftd", &folder_path);
+            let file_path_str = format!("{}.ftd", &folder_path);
+            let file_path = std::path::Path::new(&file_path_str);
 
-            std::fs::remove_file(file_path)?;
+            if file_path.exists() {
+                std::fs::remove_file(file_path)?;
+            }
 
             std::fs::remove_dir_all(folder_path)?;
 
