@@ -3,10 +3,24 @@
 -- import: fifthtry.github.io/fastn-io-typography as doc-typo
 -- import: fastn.com/ftd as ftd-index
 -- import: fifthtry.github.io/fastn-ui/assets as fastn-ui-assets
+-- import: fastn/processors as pr
+
+-- pr.sitemap-data footer-toc:
+$processor$: pr.full-sitemap
+
+-- integer logo-width: 100
+
+-- integer logo-height: 50
+
+-- string site-url: index.html
+
+-- ftd.image-src site-logo: $fastn-assets.files.images.landing.fastn-logo.svg
 
 -- integer $current-slide: 1
 
 -- integer $current-tab: 1
+
+-- string $selected-item: System
 
 
 
@@ -2829,6 +2843,601 @@ color: $inherited.colors.text-strong
 -- end: ftd.column
 
 -- end: member
+
+
+
+
+
+
+
+
+
+
+-- component footer:
+optional ftd.image-src site-logo:
+integer logo-width: $logo-width
+integer logo-height: $logo-height
+optional string site-url: $site-url
+optional string site-name:
+optional body bio:
+boolean social: false
+pr.toc-item list footer-list:
+pr.toc-item list footer-links: $footer-toc.sections
+social-media list social-links: $social-links
+string copyright: ©2022 Fastn Inc.
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- footer-desktop:
+copyright: $footer.copyright
+site-logo: $footer.site-logo
+logo-width: $footer.logo-width
+logo-height: $footer.logo-height
+site-url: $footer.site-url
+site-name: $footer.site-name
+footer-links: $footer.footer-links
+social-links: $footer.social-links
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- footer-mobile:
+copyright: $footer.copyright
+site-logo: $footer.site-logo
+site-url: $footer.site-url
+site-name: $footer.site-name
+footer-links: $footer.footer-links
+social-links: $footer.social-links
+logo-width: $footer.logo-width
+logo-height: $footer.logo-height
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: footer
+
+
+
+
+
+
+
+
+
+
+-- component footer-desktop:
+string copyright:
+optional ftd.image-src site-logo: 
+optional string site-url: 
+optional string site-name:
+integer logo-width: 
+integer logo-height: 
+pr.toc-item list footer-links: 
+social-media list social-links: 
+
+-- ftd.column:
+background.solid: $inherited.colors.background.base
+width: fill-container
+padding-top.px: 42
+align-content: center
+align-self: center
+spacing.fixed.px: 7
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
+padding-vertical.px: 50
+
+-- ftd.row:
+link: $footer-desktop.site-url
+align-content: center
+
+-- ftd.image:
+if: { footer-desktop.site-logo != NULL }
+src: $footer-desktop.site-logo
+width.fixed.px: $footer-desktop.logo-width
+height.fixed.px: $footer-desktop.logo-height
+align-self: center
+
+-- ftd.text: $footer-desktop.site-name
+if: { footer-desktop.site-name != NULL }
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+margin-left.px if { footer-desktop.site-logo != NULL }: 16
+white-space: nowrap
+align-self: center
+
+-- fallback-title:
+if: { footer-desktop.site-logo == NULL }
+site-name: $footer-desktop.site-name
+
+-- end: ftd.row
+
+-- footer-list: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+children: $obj.children
+$loop$: $footer-desktop.footer-links as $obj
+
+-- end: ftd.row
+
+/-- ftd.column:
+width: fill-container
+margin-bottom.px: 16
+
+-- dropdown:
+
+-- end: ftd.column
+
+-- ftd.row:
+align-content: center
+padding-top.px: 24
+width: fill-container
+spacing: space-between
+border-top-width.px: 1
+border-color: $inherited.colors.border
+
+-- ftd.row:
+spacing.fixed.px: 24
+
+-- ftd.image:
+$loop$: $footer-desktop.social-links as $obj
+src: $obj.src
+cursor: pointer
+link: $obj.link
+width.fixed.px: 49
+
+-- end: ftd.row
+
+-- ftd.text: $footer-desktop.copyright
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: footer-desktop
+
+
+
+
+
+
+
+
+
+
+-- component footer-mobile:
+string copyright: 
+optional ftd.image-src site-logo: 
+optional string site-url: 
+integer logo-width: 
+integer logo-height:
+optional string site-name: 
+pr.toc-item list footer-links: 
+social-media list social-links: 
+
+-- ftd.column:
+width: fill-container
+padding-top.px: 64
+padding-bottom.px: 64
+color: $inherited.colors.text
+align-content: center
+padding-horizontal.px: 24
+
+-- footer-mobile-list: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+children: $obj.children
+$loop$: $footer-mobile.footer-links as $obj
+
+-- ftd.row:
+link: $footer-mobile.site-url
+align-content: center
+margin-vertical.px: 24
+
+-- ftd.image:
+if: { footer-mobile.site-logo != NULL }
+src: $footer-mobile.site-logo
+width.fixed.px: $footer-mobile.logo-width
+height.fixed.px: $footer-mobile.logo-height
+align-self: center
+
+-- ftd.text: $footer-mobile.site-name
+if: { footer-mobile.site-name != NULL }
+role: $inherited.types.heading-medium
+color: $inherited.colors.text
+white-space: nowrap
+align-self: center
+
+-- fallback-title:
+if: { footer-mobile.site-logo == NULL }
+site-name: $footer-mobile.site-name
+
+-- end: ftd.row
+
+-- ftd.row:
+margin-bottom.px: 24
+spacing.fixed.px: 24
+
+-- ftd.image:
+$loop$: $footer-mobile.social-links as $obj
+src: $obj.src
+cursor: pointer
+link: $obj.link
+
+-- end: ftd.row
+
+-- ftd.text: $footer-mobile.copyright
+role: $inherited.types.fine-print
+width: fill-container
+text-align: center
+
+-- end: ftd.column
+
+-- end: footer-mobile
+
+
+
+
+
+
+
+
+
+
+-- component footer-mobile-list:
+caption title:
+string url:
+boolean $shows-data: false
+boolean is-active: false
+pr.toc-item list children: 
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 14
+
+-- ftd.column:
+border-color: $inherited.colors.border-strong
+border-bottom-width.px: 1
+width: fill-container
+padding-vertical.px: 16
+padding-horizontal.px: 16
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.text: $footer-mobile-list.title
+role: $inherited.types.heading-tiny
+width: fill-container
+color: $inherited.colors.text-strong
+link: $footer-mobile-list.url
+
+-- ftd.image:
+if: { footer-mobile-list.shows-data }
+src: $fastn-assets.files.images.landing.toggle-up.svg
+width.fixed.px: 12
+$on-click$: $ftd.toggle($a= $footer-mobile-list.shows-data)
+align-self: center
+
+-- ftd.image:
+if: { !footer-mobile-list.shows-data }
+src: $fastn-assets.files.images.landing.toggle-down.svg
+width.fixed.px: 12
+$on-click$: $ftd.toggle($a= $footer-mobile-list.shows-data)
+align-self: center
+
+-- end: ftd.row
+
+-- ftd.column:
+if: { footer-mobile-list.shows-data }
+spacing.fixed.px: 14
+margin-top.px if { $footer-mobile-list.shows-data }: 12
+
+-- footer-list-toc: 
+title: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+children: $obj.children
+$loop$: $footer-mobile-list.children as $obj
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: footer-mobile-list
+
+
+
+
+
+
+
+
+
+
+-- component footer-list-toc:
+caption title:
+optional string url: /
+boolean is-active: false
+children wrap:
+pr.toc-item list children: 
+boolean show-subsections: false
+
+-- ftd.column:
+
+-- ftd.text: $footer-list-toc.title
+if: { footer-list-toc.show-subsections }
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+link: $footer-list-toc.url
+width: fill-container
+white-space: nowrap
+margin-bottom.px if { ftd.device != "mobile" }: 12
+
+-- ftd.text: $footer-list-toc.title
+if: { !footer-list-toc.show-subsections }
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+link: $footer-list-toc.url
+width: fill-container
+white-space: nowrap
+margin-bottom.px if { ftd.device != "mobile" }: 12
+
+-- end: ftd.column
+
+-- end: footer-list-toc
+
+
+
+
+
+
+
+
+-- component footer-list:
+caption title:
+optional string url:
+boolean is-active:
+pr.toc-item list children:
+
+-- ftd.column:
+spacing.fixed.px: 16
+
+-- ftd.text: $footer-list.title
+role: $inherited.types.copy-large
+color: $inherited.colors.text-strong
+link: $footer-list.url
+width: fill-container
+style: bold
+
+-- footer-list-child: $obj.title
+if: { !ftd.is_empty(footer-list.children) }
+url: $obj.url
+is-active: $obj.is-active
+children: $obj.children
+$loop$: $footer-list.children as $obj
+
+-- end: ftd.column
+
+-- end: footer-list
+
+
+
+
+
+
+
+
+
+
+-- component footer-list-child:
+caption title:
+optional string url:
+boolean is-active:
+pr.toc-item list children:
+
+-- ftd.column:
+
+-- ftd.text: $footer-list-child.title
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+link: $footer-list-child.url
+width: fill-container
+
+-- footer-list-child: $obj.title
+if: { !ftd.is_empty(footer-list-child.children) }
+url: $obj.url
+is-active: $obj.is-active
+children: $obj.children
+$loop$: $footer-list-child.children as $obj
+
+-- end: ftd.column
+
+-- end: footer-list-child
+
+
+
+
+
+
+
+
+-- component fallback-title:
+optional string site-name:
+
+-- ftd.row:
+
+-- ftd.text: LOGO
+if: { fallback-title.site-name == NULL }
+role: $inherited.types.heading-large
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: fallback-title
+
+
+
+
+
+
+
+
+
+
+-- component dropdown:
+caption title: $selected-item
+ftd.color theme-color: $inherited.colors.border-strong
+boolean $show-options: false
+
+-- ftd.column:
+width: fill-container
+z-index: 0
+
+-- ftd.row:
+background.solid: $inherited.colors.background.base
+padding-vertical.px: 11
+padding-horizontal.px: 14
+border-radius.px: 30
+anchor: parent
+bottom.px: 0
+right.px: 0
+bottom.px if { ftd.device == "mobile" }: -65
+right.px if { ftd.device == "mobile" }: 104
+min-width.fixed.px: 152
+$on-click$: $ftd.toggle( $a = $dropdown.show-options )
+border-color: $inherited.colors.border
+border-width.px: 1
+
+-- ftd.text: $selected-item
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+padding-right.px: 52
+min-width.fixed.px: 112
+
+-- ftd.image:
+src: $fastn-assets.files.images.landing.toggle-down.svg
+width.fixed.px: 12
+height: auto
+align-self: center
+
+-- ftd.column:
+if: { $dropdown.show-options }
+
+-- mode-changer: $dropdown.title
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: dropdown
+
+
+
+
+
+
+
+
+
+
+-- component mode-changer:
+caption title:
+string $mode-1: Dark
+string $mode-2: Light
+string $mode-3: System
+boolean $mouse-in: false
+
+-- ftd.column:
+background.solid: $inherited.colors.background.base
+padding-vertical.px: 11
+padding-horizontal.px: 14
+anchor: parent
+top.px: 38
+left.px: -136
+min-width.fixed.px: 152
+spacing.fixed.px: 20
+border-color: $inherited.colors.border
+border-width.px: 1
+border-radius.px: 10
+
+-- ftd.column:
+if: { mode-changer.title == "System" }
+spacing.fixed.px: 24
+
+-- ftd.text: $mode-changer.mode-1
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+padding-right.px: 52
+min-width.fixed.px: 112
+$on-click$: $ftd.set-string( $a = $selected-item, v = $mode-changer.mode-1 )
+$on-click$: $ftd.enable-dark-mode()
+
+-- ftd.text: $mode-changer.mode-2
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+padding-right.px: 52
+width.fixed.px: 112
+$on-click$: $ftd.set-string( $a = $selected-item, v = $mode-changer.mode-2 )
+$on-click$: $ftd.enable-light-mode()
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { mode-changer.title == "Dark" }
+spacing.fixed.px: 12
+
+-- ftd.text: $mode-changer.mode-2
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+$on-click$: $ftd.set-string( $a = $selected-item, v = $mode-changer.mode-2 )
+$on-click$: $ftd.enable-light-mode()
+min-width.fixed.px: 112
+
+-- ftd.text: $mode-changer.mode-3
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+$on-click$: $ftd.set-string( $a = $selected-item, v = $mode-changer.mode-3 )
+$on-click$: $ftd.enable-system-mode()
+min-width.fixed.px: 112
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { mode-changer.title == "Light" }
+spacing.fixed.px: 12
+
+-- ftd.text: $mode-changer.mode-1
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+$on-click$: $ftd.set-string( $a = $selected-item, v = $mode-changer.mode-1 )
+$on-click$: $ftd.enable-dark-mode()
+min-width.fixed.px: 112
+
+-- ftd.text: $mode-changer.mode-3
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+$on-click$: $ftd.set-string( $a = $selected-item, v = $mode-changer.mode-3 )
+$on-click$: $ftd.enable-system-mode()
+min-width.fixed.px: 112
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: mode-changer
+
 
 
 
