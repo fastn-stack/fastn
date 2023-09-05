@@ -301,7 +301,7 @@ bgcolor: $inherited.colors.cta-secondary.base
 
 -- lib.title-with-body-card: React JS
 logo: $fastn-assets.files.images.landing.react-js-logo.svg
-body-color: $inherited.colors.cta-secondary.text
+body-color: $inherited.colors.step-1
 width: 325
 
 - JSX syntax and JavaScript fundamentals may challenge beginners.
