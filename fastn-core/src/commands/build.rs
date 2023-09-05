@@ -362,7 +362,7 @@ async fn incremental_build(
             .collect_vec();
 
         for removed_doc_id in &removed_documents {
-            let folder_path = config.build_dir().join( &removed_doc_id);
+            let folder_path = config.build_dir().join(removed_doc_id);
             let file_path = &folder_path.with_extension("ftd");
 
             if file_path.exists() {
