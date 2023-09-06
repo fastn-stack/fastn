@@ -1789,7 +1789,7 @@ align-self: center
 optional caption title:
 optional ftd.image-src logo:
 optional body body:
-optional ftd.color body-color: $inherited.colors.border.dark
+optional ftd.color body-color: $inherited.colors.text
 integer width: 400
 children card:
 
