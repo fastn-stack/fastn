@@ -332,15 +332,10 @@ async fn incremental_build(
             .documents
             .keys()
             .filter(|cached_document_id| {
-                let name_without_package_name = get_dependency_name_without_package_name(
-                    config.package.name.as_str(),
-                    cached_document_id.as_str(),
-                );
-
                 for document in documents.values() {
-                    if remove_extension(document.get_id()).eq(name_without_package_name.as_str())
+                    if remove_extension(document.get_id()).eq(cached_document_id.as_str())
                         || remove_extension(&document.get_id_with_package())
-                            .eq(name_without_package_name.as_str())
+                            .eq(cached_document_id.as_str())
                     {
                         return false;
                     }
