@@ -4,6 +4,11 @@
     
     <meta content="fastn" name="generator">
     
+    
+    <script>
+        let __fastn_package_name__ = "foo";
+    </script>
+
     <script src="fastn-js.js"></script>
 
     <style>
@@ -42,631 +47,637 @@
         let global = {
 };
 let main = function (parent) {
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "TOP LEFT", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "black",
-      light: "black"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-      dark: "green",
-      light: "green"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopLeft, inherited);
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "TOP LEFT", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "black",
+        light: "black"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+        dark: "green",
+        light: "green"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopLeft, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopLeft, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
       }
       ]), inherited);
     },
     function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "TOP CENTER", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "black",
+        light: "black"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
+    },
+    function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopLeft, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+        dark: "green",
+        light: "green"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-      }
-      ]), inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "TOP CENTER", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "black",
-      light: "black"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-      dark: "green",
-      light: "green"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopCenter, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopCenter, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopCenter, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
       }
       ]), inherited);
     },
     function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "TOP RIGHT", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "black",
+        light: "black"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
+    },
+    function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopCenter, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+        dark: "green",
+        light: "green"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-      }
-      ]), inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "TOP RIGHT", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "black",
-      light: "black"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-      dark: "green",
-      light: "green"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopRight, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopRight, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopRight, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
       }
       ]), inherited);
     },
     function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "LEFT", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "black",
+        light: "black"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
+    },
+    function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopRight, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+        dark: "green",
+        light: "green"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-      }
-      ]), inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "LEFT", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "black",
-      light: "black"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-      dark: "green",
-      light: "green"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Left, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Left, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Left, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
       }
       ]), inherited);
     },
     function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "CENTER", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "black",
+        light: "black"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
+    },
+    function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Left, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+        dark: "green",
+        light: "green"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-      }
-      ]), inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "CENTER", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "black",
-      light: "black"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-      dark: "green",
-      light: "green"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
       }
       ]), inherited);
     },
     function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "RIGHT", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "black",
+        light: "black"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
+    },
+    function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+        dark: "green",
+        light: "green"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-      }
-      ]), inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "RIGHT", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "black",
-      light: "black"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-      dark: "green",
-      light: "green"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Right, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Right, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Right, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
       }
       ]), inherited);
     },
     function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "BOTTOM LEFT", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "black",
+        light: "black"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
+    },
+    function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Right, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+        dark: "green",
+        light: "green"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-      }
-      ]), inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "BOTTOM LEFT", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "black",
-      light: "black"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-      dark: "green",
-      light: "green"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.BottomLeft, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.BottomLeft, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.BottomLeft, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
       }
       ]), inherited);
     },
     function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "BOTTOM CENTER", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "black",
+        light: "black"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
+    },
+    function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.BottomLeft, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+        dark: "green",
+        light: "green"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-      }
-      ]), inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "BOTTOM CENTER", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "black",
-      light: "black"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-      dark: "green",
-      light: "green"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.BottomCenter, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.BottomCenter, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.BottomCenter, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
       }
       ]), inherited);
     },
     function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.BottomCenter, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-      }
-      ]), inherited);
-    }
-    ]), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "BOTTOM RIGHT", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "black",
-      light: "black"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-      dark: "green",
-      light: "green"
-    }), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.BottomRight, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-      }
-      ]), inherited);
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "BOTTOM RIGHT", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "black",
+        light: "black"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_medium"), inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
-      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.BottomRight, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+        dark: "green",
+        light: "green"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        }), inherited);
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.BottomRight, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Column", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.BottomRight, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Row", inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "red",
+            light: "red"
+          }), inherited);
+        }
+        ]), inherited);
       }
       ]), inherited);
     }
     ]), inherited);
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
   }
-  ]), inherited);
 }
 global["main"] = main;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
