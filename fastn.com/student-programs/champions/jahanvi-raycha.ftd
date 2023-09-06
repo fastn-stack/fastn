@@ -67,7 +67,6 @@ link: https://github.com/jahanvir
 src: $fastn-assets.files.images.github-grey.svg
 hover-src: $fastn-assets.files.images.github-grey-hover.svg
 
-
 -- common.social-media: 
 link: https://www.linkedin.com/in/jahanviraycha/
 src: $fastn-assets.files.images.linkedin.svg
