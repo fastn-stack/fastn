@@ -48,6 +48,14 @@ screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug-searc
 template-url: /hero-left-hug-expanded-search/
 screenshot: $fastn-assets.files.images.featured.components.hero-left-hug-expanded-search.jpg
 
+-- ft-ui.template: Hero Bottom Hug Search
+template-url: /hero-bottom-hug-search/
+screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug-search.png
+
+-- ft-ui.template: Hero Left Hug Expanded Search
+template-url: /hero-left-hug-expanded-search/
+screenshot: $fastn-assets.files.images.featured.components.hero-left-hug-expanded-search.jpg
+
 -- end: heros
 
 

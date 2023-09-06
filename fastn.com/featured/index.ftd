@@ -81,12 +81,13 @@ boolean show-large: false
 width: fill-container
 spacing.fixed.px if { ftd.device == "mobile" }: 24
 margin-top.px if { grid-view.push-top }: -90
+max-width.fixed.px: 1140
 
 -- ftd.row:
 width: fill-container
-max-width.fixed.calc: (100% - 340px)
 align-content: center
 margin-top.px if { ftd.device == "mobile" }: 24
+spacing: space-between
 
 -- ftd.desktop:
 
@@ -94,7 +95,6 @@ margin-top.px if { ftd.device == "mobile" }: 24
 if: { grid-view.title != NULL }
 role: $inherited.types.heading-medium
 color: $inherited.colors.accent.primary
-width: fill-container
 
 -- end: ftd.desktop
 
@@ -146,8 +146,7 @@ $grid-view.body
 -- ftd.desktop:
 
 -- ftd.row:
-width.fixed.px: 1050
-max-width.fixed.calc: (100% - 350px)
+width: fill-container
 spacing.fixed.px: 32
 overflow-x: auto
 margin-vertical.px: 40
