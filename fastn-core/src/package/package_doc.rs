@@ -512,10 +512,20 @@ pub(crate) async fn read_ftd_2023(
     }
 
     let js_ast_data = ftd::js::document_into_js_ast(main_ftd_doc);
-    let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), true);
-    let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), false);
-    let ssr_body =
-        fastn_js::ssr_with_js_string(format!("{js_ftd_script}\n{js_document_script}").as_str());
+    let js_document_script = fastn_js::to_js(
+        js_ast_data.asts.as_slice(),
+        true,
+        config.package.name.as_str(),
+    );
+    let js_ftd_script = fastn_js::to_js(
+        ftd::js::default_bag_into_js_ast().as_slice(),
+        false,
+        config.package.name.as_str(),
+    );
+    let ssr_body = fastn_js::ssr_with_js_string(
+        &config.package.name,
+        format!("{js_ftd_script}\n{js_document_script}").as_str(),
+    );
 
     all_packages.extend(lib.config.all_packages.into_inner());
     drop(all_packages);
