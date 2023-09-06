@@ -12,6 +12,9 @@ let fastn_utils = {
             css.push("ft_row");
         } else if (kind === fastn_dom.ElementKind.IFrame) {
             node = "iframe";
+            // To allow fullscreen support
+            // Reference: https://stackoverflow.com/questions/27723423/youtube-iframe-embed-full-screen
+            attributes["allowfullscreen"] = "";
         } else if (kind === fastn_dom.ElementKind.Image) {
             node = "img";
         } else if (kind === fastn_dom.ElementKind.Video) {
