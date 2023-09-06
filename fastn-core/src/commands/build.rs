@@ -243,43 +243,32 @@ async fn incremental_build(
         let mut resolving_dependencies: Vec<String> = vec![];
 
         while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
-            // println!("Current UR: {}", unresolved_dependency.as_str());
-            if let Some(doc) = c.documents.get(
-                get_dependency_name_without_package_name(
-                    config.package.name.as_str(),
-                    unresolved_dependency.as_str(),
-                )
-                .as_str(),
-            ) {
-                // println!(
-                //     "[INCREMENTAL BUILD][CACHE FOUND] Processing: {}",
-                //     &unresolved_dependency
-                // );
+            println!("Current UR: {}", unresolved_dependency.as_str());
+            if let Some(doc) = c.documents.get(unresolved_dependency.as_str()) {
+                println!(
+                    "[INCREMENTAL BUILD][CACHE FOUND] Processing: {}",
+                    &unresolved_dependency
+                );
 
                 let mut own_resolved_dependencies: Vec<String> = vec![];
                 for dep in &doc.dependencies {
-                    if resolved_dependencies.contains(dep) || dep.eq(&unresolved_dependency) {
+                    let dep = get_dependency_name_without_package_name(&config.package.name, dep);
+                    if resolved_dependencies.contains(&dep) || dep.eq(&unresolved_dependency) {
                         own_resolved_dependencies.push(dep.to_string());
                         continue;
                     }
                     unresolved_dependencies.push(dep.to_string());
                 }
 
-                // println!(
-                //     "[INCREMENTAL] [R]: {} [RV]: {} [UR]: {} [ORD]: {}",
-                //     &resolved_dependencies.len(),
-                //     &resolving_dependencies.len(),
-                //     &unresolved_dependencies.len(),
-                //     own_resolved_dependencies.len(),
-                // );
+                println!(
+                    "[INCREMENTAL] [R]: {} [RV]: {} [UR]: {} [ORD]: {}",
+                    &resolved_dependencies.len(),
+                    &resolving_dependencies.len(),
+                    &unresolved_dependencies.len(),
+                    own_resolved_dependencies.len(),
+                );
 
                 if own_resolved_dependencies.eq(&doc.dependencies) {
-                    let name_without_package_name: String =
-                        get_dependency_name_without_package_name(
-                            config.package.name.as_str(),
-                            unresolved_dependency.as_str(),
-                        );
-
                     handle_dependency_file(
                         config,
                         &mut c,
@@ -287,7 +276,7 @@ async fn incremental_build(
                         base_url,
                         ignore_failed,
                         test,
-                        name_without_package_name,
+                        unresolved_dependency.to_string(),
                     )
                     .await?;
 
@@ -295,14 +284,14 @@ async fn incremental_build(
                     if unresolved_dependencies.is_empty() {
                         if let Some(resolving_dependency) = resolving_dependencies.pop() {
                             if resolving_dependency.eq(&unresolved_dependency.as_str()) {
-                                // println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
+                                println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
                                 continue;
                             }
                             unresolved_dependencies.push(resolving_dependency);
                         }
                     }
                 } else {
-                    // println!("Adding to RD: {}", unresolved_dependency.as_str());
+                    println!("Adding to RD: {}", unresolved_dependency.as_str());
                     resolving_dependencies.push(unresolved_dependency.to_string());
                 }
             } else {
@@ -312,11 +301,7 @@ async fn incremental_build(
                 {
                     resolved_dependencies.push(unresolved_dependency.clone());
                 } else {
-                    // println!("Not found in cache UR: {}", unresolved_dependency.as_str());
-                    let name_without_package_name = get_dependency_name_without_package_name(
-                        config.package.name.as_str(),
-                        unresolved_dependency.as_str(),
-                    );
+                    println!("Not found in cache UR: {}", unresolved_dependency.as_str());
 
                     handle_dependency_file(
                         config,
@@ -325,7 +310,7 @@ async fn incremental_build(
                         base_url,
                         ignore_failed,
                         test,
-                        name_without_package_name,
+                        unresolved_dependency.to_string(),
                     )
                     .await?;
 
@@ -334,7 +319,7 @@ async fn incremental_build(
                 if unresolved_dependencies.is_empty() {
                     if let Some(resolving_dependency) = resolving_dependencies.pop() {
                         if resolving_dependency.eq(&unresolved_dependency.as_str()) {
-                            // println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
+                            println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
                             continue;
                         }
                         unresolved_dependencies.push(resolving_dependency);
