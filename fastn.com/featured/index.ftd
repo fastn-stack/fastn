@@ -84,7 +84,7 @@ margin-top.px if { grid-view.push-top }: -90
 
 -- ftd.row:
 width: fill-container
-;; max-width.fixed.calc: (100% - 340px)
+max-width.fixed.calc: (100% - 340px)
 align-content: center
 margin-top.px if { ftd.device == "mobile" }: 24
 
@@ -146,8 +146,8 @@ $grid-view.body
 -- ftd.desktop:
 
 -- ftd.row:
-;; width.fixed.calc: (100% - 350px)
 width.fixed.px: 1050
+max-width.fixed.calc: (100% - 350px)
 spacing.fixed.px: 32
 overflow-x: auto
 margin-vertical.px: 40
