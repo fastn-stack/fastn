@@ -153,8 +153,8 @@ for building websites.
 
 `fastn` websites can be compiled into static html, js, css etc, and can be
 deployed on any static hosting providers eg [Github
-Pages](https://fastn.com/how-to/github-pages/),
-[Vercel](https://fastn.com/how-to/vercel/) etc.
+Pages](/github-pages/),
+[Vercel](/vercel/) etc.
 
 -- ds.code: `fastn` source code of the page you are reading
 lang: ftd

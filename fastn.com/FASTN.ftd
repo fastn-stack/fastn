@@ -50,7 +50,8 @@ favicon: /-/fastn.com/images/favicon.svg
 - `fastn` Overview: /home/
 - The `fastn` Language: /lang/
   document: /ftd/index.ftd
-- Why?:
+- Why?: /frontend/why/-/learn/
+  document: /frontend/why.ftd
   - `fastn` is Easy To Learn: /easy/
     document: why/easy.ftd
     skip: true
@@ -66,6 +67,7 @@ favicon: /-/fastn.com/images/favicon.svg
     skip: true
     document: why/fullstack.ftd
   - Why Use `fastn` for Your Next Frontend?: /frontend/why/-/learn/
+    skip: true
 - Install `fastn`: /install/
   document: author/how-to/install.ftd
   - On MacOS/Linux: /macos/
