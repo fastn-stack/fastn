@@ -941,7 +941,6 @@ z-index: -1
 -- ftd.image:
 if: { member.photo != NULL }
 src: $member.photo
-;;width.fixed.percent: 100
 width: fill-container
 height.fixed.px: 200
 border-radius.px: 10
