@@ -10,7 +10,7 @@ fn comma() -> pretty::RcDoc<'static> {
     pretty::RcDoc::text(",".to_string())
 }
 
-pub fn to_js(ast: &[fastn_js::Ast], is_global_need: bool) -> String {
+pub fn to_js(ast: &[fastn_js::Ast], is_global_need: bool, package_name: &str) -> String {
     let mut w = Vec::new();
     let o = if is_global_need {
         get_variable_declaration("global")
@@ -18,7 +18,7 @@ pub fn to_js(ast: &[fastn_js::Ast], is_global_need: bool) -> String {
         pretty::RcDoc::nil()
     }
     .append(pretty::RcDoc::intersperse(
-        ast.iter().map(|f| f.to_js()),
+        ast.iter().map(|f| f.to_js(package_name)),
         space(),
     ));
     o.render(80, &mut w).unwrap();
@@ -26,10 +26,10 @@ pub fn to_js(ast: &[fastn_js::Ast], is_global_need: bool) -> String {
 }
 
 impl fastn_js::Ast {
-    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+    pub fn to_js(&self, package_name: &str) -> pretty::RcDoc<'static> {
         match self {
-            fastn_js::Ast::Component(f) => f.to_js(),
-            fastn_js::Ast::UDF(f) => f.to_js(),
+            fastn_js::Ast::Component(f) => f.to_js(package_name),
+            fastn_js::Ast::UDF(f) => f.to_js(package_name),
             fastn_js::Ast::StaticVariable(s) => s.to_js(),
             fastn_js::Ast::MutableVariable(m) => m.to_js(),
             fastn_js::Ast::MutableList(ml) => ml.to_js(),
@@ -416,7 +416,13 @@ impl fastn_js::ForLoop {
     }
 }
 
-fn func(name: &str, params: &[String], body: pretty::RcDoc<'static>) -> pretty::RcDoc<'static> {
+fn func(
+    name: &str,
+    params: &[String],
+    body: pretty::RcDoc<'static>,
+    package_name: &str,
+) -> pretty::RcDoc<'static> {
+    let package_name = fastn_js::utils::name_to_js_(package_name);
     let name = fastn_js::utils::name_to_js(name);
     // `.` means the function is placed in object so no need of `let`
     // e.g. ftd.toggle
@@ -446,7 +452,22 @@ fn func(name: &str, params: &[String], body: pretty::RcDoc<'static>) -> pretty::
         pretty::RcDoc::softline()
             .append(text("{"))
             .append(pretty::RcDoc::softline_())
+            .append(text(
+                "let __fastn_super_package_name__ = __fastn_package_name__;",
+            ))
+            .append(pretty::RcDoc::softline_())
+            .append(text(&format!(
+                "__fastn_package_name__ = \"{}\";",
+                package_name
+            )))
+            .append(pretty::RcDoc::softline_())
+            .append(text("try {"))
+            .append(pretty::RcDoc::softline_())
             .append(body.nest(4))
+            .append(pretty::RcDoc::softline_())
+            .append(text(
+                "} finally { __fastn_package_name__ = __fastn_super_package_name__; }",
+            ))
             .append(pretty::RcDoc::softline_())
             .append(text("}"))
             .group(),
@@ -461,7 +482,7 @@ fn func(name: &str, params: &[String], body: pretty::RcDoc<'static>) -> pretty::
 }
 
 impl fastn_js::Component {
-    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+    pub fn to_js(&self, package_name: &str) -> pretty::RcDoc<'static> {
         let body = if self.name.eq(fastn_js::MAIN_FUNCTION) {
             pretty::RcDoc::nil()
         } else {
@@ -574,7 +595,7 @@ impl fastn_js::Component {
             .group(),
         );
 
-        func(self.name.as_str(), &self.params, body)
+        func(self.name.as_str(), &self.params, body, package_name)
     }
 }
 
@@ -669,7 +690,7 @@ impl fastn_js::DeviceType {
 }
 
 impl fastn_js::UDF {
-    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+    pub fn to_js(&self, package_name: &str) -> pretty::RcDoc<'static> {
         use itertools::Itertools;
 
         let body = text("let")
@@ -722,7 +743,7 @@ impl fastn_js::UDF {
                 pretty::RcDoc::softline(),
             ));
 
-        func(self.name.as_str(), &self.params, body)
+        func(self.name.as_str(), &self.params, body, package_name)
     }
 }
 
@@ -1076,7 +1097,7 @@ pub(crate) fn get_variable_declaration(variable: &str) -> pretty::RcDoc<'static>
 #[cfg(test)]
 #[track_caller]
 pub fn e(f: fastn_js::Ast, s: &str) {
-    let g = to_js(&[f], false);
+    let g = to_js(&[f], false, "foo");
     println!("got: {}", g);
     println!("expected: {}", s);
     assert_eq!(g, s);

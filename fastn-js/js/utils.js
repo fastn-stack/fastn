@@ -381,6 +381,18 @@ let fastn_utils = {
     flattenArray(arr) {
         return fastn_utils.private.flattenArray([arr]);
     },
+    toSnakeCase(value) {
+        return value.trim().split('').map((v, i) => {
+            const lowercased = v.toLowerCase();
+            if(v == " ") {
+              return "_";
+            }
+            if(v != lowercased && i > 0) {
+                return `_${lowercased}`
+            }
+            return lowercased;
+        }).join('');
+    },
 
     escapeHtmlInCode(str) {
         return str.replace(/[<]/g, "&lt;");

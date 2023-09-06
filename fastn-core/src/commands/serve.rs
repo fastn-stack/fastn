@@ -543,9 +543,13 @@ struct AppData {
     inline_js: Vec<String>,
     external_css: Vec<String>,
     inline_css: Vec<String>,
+    package_name: String,
 }
 
-fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http::Response> {
+fn handle_default_route(
+    req: &actix_web::HttpRequest,
+    package_name: &str,
+) -> Option<fastn_core::http::Response> {
     if req
         .path()
         .ends_with(fastn_core::utils::hashed_default_css_name())
@@ -570,12 +574,12 @@ fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http
         );
     } else if req
         .path()
-        .ends_with(fastn_core::utils::hashed_default_ftd_js())
+        .ends_with(fastn_core::utils::hashed_default_ftd_js(package_name))
     {
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
-                .body(ftd::js::all_js_without_test()),
+                .body(ftd::js::all_js_without_test(package_name)),
         );
     } else if req
         .path()
@@ -640,7 +644,9 @@ async fn route(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     tracing::info!(method = req.method().as_str(), uri = req.path());
 
-    if let Some(default_response) = handle_default_route(&req) {
+    let package_name = &app_data.package_name;
+
+    if let Some(default_response) = handle_default_route(&req, package_name.as_str()) {
         return Ok(default_response);
     }
 
@@ -695,6 +701,7 @@ pub async fn listen(
     inline_js: Vec<String>,
     external_css: Vec<String>,
     inline_css: Vec<String>,
+    package_name: String,
 ) -> fastn_core::Result<()> {
     use colored::Colorize;
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
@@ -745,6 +752,7 @@ You can try without providing port, it will automatically pick unused port."#,
                 inline_js: inline_js.clone(),
                 external_css: external_css.clone(),
                 inline_css: inline_css.clone(),
+                package_name: package_name.clone(),
             }))
             .wrap(
                 actix_web::middleware::Logger::new(

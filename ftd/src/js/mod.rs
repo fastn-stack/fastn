@@ -14,9 +14,9 @@ pub use value::Value;
 
 pub const CODE_DEFAULT_THEME: &str = "fastn-theme.dark";
 
-pub fn all_js_without_test() -> String {
+pub fn all_js_without_test(package_name: &str) -> String {
     let all_js = fastn_js::all_js_without_test();
-    let default_bag_js = fastn_js::to_js(default_bag_into_js_ast().as_slice(), false);
+    let default_bag_js = fastn_js::to_js(default_bag_into_js_ast().as_slice(), false, package_name);
     format!("{all_js}\n{default_bag_js}")
 }
 

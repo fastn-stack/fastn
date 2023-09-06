@@ -4,6 +4,11 @@
     
     <meta content="fastn" name="generator">
     
+    
+    <script>
+        let __fastn_package_name__ = "foo";
+    </script>
+
     <script src="fastn-js.js"></script>
 
     <style>
@@ -20,23 +25,29 @@
         let global = {
 };
 let main = function (parent) {
-  fastn_utils.getter(global.foo__weekdays).forLoop(parent, function (root, item, index) {
-    return fastn_dom.conditionalDom(parent, [
-      index
-    ], function () {
-      return (fastn_utils.getter(index) >= 2);
-    }, function (root) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([global.foo__key,
-      item], function () {
-        return foo__join({
-          a: global.foo__key,
-          b: item,
-        }, rooti0);
-      }), inherited);
-      return rooti0;
-    }).getParent();
-  });
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    fastn_utils.getter(global.foo__weekdays).forLoop(parent, function (root, item, index) {
+      return fastn_dom.conditionalDom(parent, [
+        index
+      ], function () {
+        return (fastn_utils.getter(index) >= 2);
+      }, function (root) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([global.foo__key,
+        item], function () {
+          return foo__join({
+            a: global.foo__key,
+            b: item,
+          }, rooti0);
+        }), inherited);
+        return rooti0;
+      }).getParent();
+    });
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__weekdays", fastn.mutableList(["Sunday",
@@ -48,8 +59,14 @@ fastn_utils.createNestedObject(global, "foo__weekdays", fastn.mutableList(["Sund
 "Saturday"]));
 let foo__join = function (args)
 {
-  let __args__ = args;
-  return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = args;
+    return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
 global["foo__join"] = foo__join;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";

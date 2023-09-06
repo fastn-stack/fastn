@@ -636,6 +636,15 @@ pub fn replace_markers_2022(
     )
 }
 
+pub fn get_fastn_package_data(package: &fastn_core::Package) -> String {
+    format!(
+        indoc::indoc! {"
+        let __fastn_package_name__ = \"{package_name}\";
+    "},
+        package_name = package.name
+    )
+}
+
 #[allow(clippy::too_many_arguments)]
 pub fn replace_markers_2023(
     s: &str,
@@ -649,6 +658,10 @@ pub fn replace_markers_2023(
 ) -> String {
     ftd::html::utils::trim_all_lines(
         s.replace(
+            "__fastn_package__",
+            get_fastn_package_data(&config.package).as_str(),
+        )
+        .replace(
             "__js_script__",
             format!("{js_script}{}", fastn_core::utils::available_code_themes()).as_str(),
         )
@@ -678,9 +691,9 @@ pub fn replace_markers_2023(
                 "#,
                 hashed_markdown_js(),
                 hashed_prism_js(),
-                hashed_default_ftd_js(),
+                hashed_default_ftd_js(config.package.name.as_str()),
                 hashed_prism_css(),
-                scripts
+                scripts,
             )
             .as_str(),
         )
@@ -879,15 +892,15 @@ pub fn hashed_default_js_name() -> &'static str {
     &JS_HASH
 }
 
-static FTD_JS_HASH: once_cell::sync::Lazy<String> = once_cell::sync::Lazy::new(|| {
-    format!(
-        "default-{}.js",
-        generate_hash(ftd::js::all_js_without_test().as_str())
-    )
-});
+static FTD_JS_HASH: once_cell::sync::OnceCell<String> = once_cell::sync::OnceCell::new();
 
-pub fn hashed_default_ftd_js() -> &'static str {
-    &FTD_JS_HASH
+pub fn hashed_default_ftd_js(package_name: &str) -> &'static str {
+    FTD_JS_HASH.get_or_init(|| {
+        format!(
+            "default-{}.js",
+            generate_hash(ftd::js::all_js_without_test(package_name).as_str())
+        )
+    })
 }
 
 static MARKDOWN_HASH: once_cell::sync::Lazy<String> =

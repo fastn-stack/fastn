@@ -11,7 +11,12 @@ pub async fn build(
     let documents = get_documents_for_current_package(config).await?;
 
     // Default css and js
-    default_build_files(config.root.join(".build"), &config.ftd_edition).await?;
+    default_build_files(
+        config.root.join(".build"),
+        &config.ftd_edition,
+        &config.package.name,
+    )
+    .await?;
 
     if let Some(id) = only_id {
         handle_only_id(id, config, base_url, ignore_failed, test, documents).await?;
@@ -248,10 +253,11 @@ async fn handle_file_(
 pub async fn default_build_files(
     base_path: camino::Utf8PathBuf,
     ftd_edition: &fastn_core::FTDEdition,
+    package_name: &str,
 ) -> fastn_core::Result<()> {
     if ftd_edition.is_2023() {
-        let default_ftd_js_content = ftd::js::all_js_without_test();
-        let hashed_ftd_js_name = fastn_core::utils::hashed_default_ftd_js();
+        let default_ftd_js_content = ftd::js::all_js_without_test(package_name);
+        let hashed_ftd_js_name = fastn_core::utils::hashed_default_ftd_js(package_name);
         let save_default_ftd_js = base_path.join(hashed_ftd_js_name);
         fastn_core::utils::update(save_default_ftd_js, default_ftd_js_content.as_bytes())
             .await
