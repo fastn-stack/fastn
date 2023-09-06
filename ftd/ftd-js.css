@@ -286,3 +286,7 @@ p {
 h1:only-child {
     margin-block-end: 0.67em
 }
+
+table, td, th {
+  border: 1px solid;
+}
