@@ -239,6 +239,25 @@ let fastn_utils = {
         })();
         return `${fastn_utils.private.repeated_space(space_before)}${o}${fastn_utils.private.repeated_space(space_after)}`;
     },
+
+    process_post_markdown(node, body) {
+        if (!ssr) {
+            const divElement = document.createElement("div");
+            divElement.innerHTML = body;
+
+            const current_node = node;
+            const colorClasses = Array.from(current_node.classList).filter(className => className.startsWith('__c'));
+            const tableElements = Array.from(divElement.getElementsByTagName('table'));
+
+            tableElements.forEach(table => {
+                colorClasses.forEach(colorClass => {
+                    table.classList.add(colorClass);
+                });
+            });
+            body = divElement.innerHTML;
+        }
+        return body;
+    },
     isNull(a) {
         return a === null || a === undefined;
     },
