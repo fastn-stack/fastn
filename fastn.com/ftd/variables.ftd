@@ -1,6 +1,6 @@
 -- ds.page: Variables
 
-`fastn` has support for [rich data modelling](data-modelling/), and it supports
+`fastn` has support for [rich data modelling](/ftd/data-modelling/), and it supports
 declaring variables.
 
 A variable is a named storage that programs can manipulate.
