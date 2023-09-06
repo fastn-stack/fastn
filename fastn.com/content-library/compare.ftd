@@ -211,7 +211,7 @@ functional frontend applications.
 
 -- ds.rendered.input:
 
-\-- boolean $show: true
+\-- boolean $show: false
 
 \-- ftd.text: Enter mouse cursor over me
 $on-mouse-enter$: $ftd.set-bool($a = $show, v = true)

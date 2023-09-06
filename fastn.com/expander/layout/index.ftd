@@ -21,8 +21,7 @@ understanding of holy-grail layout
 
 -- ds.youtube:
 if: { source == "default" }
-v: https://youtu.be/tSX0io_zw18
-
+v: tSX0io_zw18
 
 
 
@@ -382,7 +381,7 @@ if: { source == "planning" }
 
 -- ds.youtube:
 if: { source == "planning" }
-v: https://youtu.be/tSX0io_zw18
+v: tSX0io_zw18
 
 
 

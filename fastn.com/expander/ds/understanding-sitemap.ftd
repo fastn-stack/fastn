@@ -331,7 +331,7 @@ lang: ftd
 -- ds.markdown:
 
 To know all about this feature you can checkout the video about
-[`How to create clean URLs`](/expander/sitemap-document).
+[`How to create clean URLs`](/clean-urls/).
 
 -- ds.markdown:
 if: { show-planning }

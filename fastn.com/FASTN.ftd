@@ -515,6 +515,8 @@ document: /get-started/browse-pick.ftd
     document: /ftd/text.ftd
   - `ftd.image`: /image/
     document: /ftd/image.ftd
+  - `ftd.video`: /video/
+    document: /ftd/video.ftd
   - `ftd.rive`: /rive/
     document: ftd/rive.ftd
     description: animation
@@ -941,3 +943,4 @@ document: /community/events/roadshow.ftd
 /discord/: https://discord.gg/bucrdvptYd
 /instagram/: https://www.instagram.com/fastn_stack/
 /linkedin/: https://www.linkedin.com/company/fastn-stack/
+/overview/: /home/
