@@ -9626,9 +9626,9 @@ pub fn video_function() -> ftd::interpreter::ComponentDefinition {
                 ),
                 ftd::interpreter::Argument::default(
                     "poster",
-                    ftd::interpreter::Kind::string()
-                        .into_kind_data()
-                        .into_optional(),
+                    ftd::interpreter::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
+                        .into_optional()
+                        .into_kind_data(),
                 ),
             ],
         ]
