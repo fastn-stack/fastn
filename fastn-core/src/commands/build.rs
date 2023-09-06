@@ -251,9 +251,15 @@ async fn incremental_build(
                 // );
 
                 let mut own_resolved_dependencies: Vec<String> = vec![];
-                for dep in &doc.dependencies {
-                    let dep = get_dependency_name_without_package_name(&config.package.name, dep);
-                    if resolved_dependencies.contains(&dep) || dep.eq(&unresolved_dependency) {
+
+                let dependencies: Vec<String> = doc
+                    .dependencies
+                    .iter()
+                    .map(|dep| get_dependency_name_without_package_name(&config.package.name, dep))
+                    .collect_vec();
+
+                for dep in &dependencies {
+                    if resolved_dependencies.contains(dep) || dep.eq(&unresolved_dependency) {
                         own_resolved_dependencies.push(dep.to_string());
                         continue;
                     }
@@ -268,7 +274,7 @@ async fn incremental_build(
                 //     own_resolved_dependencies.len(),
                 // );
 
-                if own_resolved_dependencies.eq(&doc.dependencies) {
+                if own_resolved_dependencies.eq(&dependencies) {
                     handle_dependency_file(
                         config,
                         &mut c,
