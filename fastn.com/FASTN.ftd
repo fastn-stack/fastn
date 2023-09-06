@@ -111,6 +111,9 @@ favicon: /-/fastn.com/images/favicon.svg
     - Harsh Singh: /champions/harsh-singh/
       document: /student-programs/champions/harsh-singh.ftd
       skip: true
+    - Jahanvi Raycha: /u/jahanvi/
+      document: /student-programs/champions/jahanvi-raycha.ftd
+      skip: true
     - Ganesh Salunke: /champions/ganesh-salunke/
       document: /student-programs/champions/ganesh-salunke.ftd
       skip: true

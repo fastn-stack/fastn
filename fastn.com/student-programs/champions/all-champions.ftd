@@ -39,7 +39,6 @@ photo-grey: $fastn-assets.files.images.students-program.champions.ajit-greyscale
 link: /student-programs/champions/ajit-garg/
 designation: DevRel
 
-
 -- lib.member: Ayush Soni
 photo: $fastn-assets.files.images.students-program.ambassadors.ayush-soni.jpg
 photo-grey: $fastn-assets.files.images.students-program.ambassadors.ayush-soni-greyscale.jpg
@@ -69,6 +68,12 @@ photo: $fastn-assets.files.images.students-program.champions.harsh.jpg
 photo-grey: $fastn-assets.files.images.students-program.champions.harsh-grayscale.jpg
 link: /student-programs/champions/harsh-singh/
 designation: Software Engineer - Intern
+
+-- lib.member: Jahanvi Raycha
+photo: $fastn-assets.files.images.students-program.champions.jahanvi-raycha.jpg
+photo-grey: $fastn-assets.files.images.students-program.champions.jahanvi-raycha-grayscale.jpg
+link: /u/jahanvi/
+designation: Fastn Champion
 
 -- lib.member: Meenu Kumari
 photo: $fastn-assets.files.images.students-program.champions.meenu.jpg
