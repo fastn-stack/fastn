@@ -229,6 +229,8 @@ favicon: /-/fastn.com/images/favicon.svg
     document: /ftd/text.ftd
   - `ftd.image`: /image/
     document: /ftd/image.ftd
+  - `ftd.video`: /video/
+    document: /ftd/video.ftd
   - `ftd.rive`: /rive/
     document: ftd/rive.ftd
     description: animation
