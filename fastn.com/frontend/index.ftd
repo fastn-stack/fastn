@@ -521,8 +521,24 @@ also serve as a language for configuration purposes.
 
 -- ds.h1: Next
 
-`fastn` also supports a bunch of features that helps you create dynamic websites.
-Checkout our [backend guide](/backend/) to learn more.
+- **Get Started with fastn**:
+  We provide a [step-by-step guide](https://fastn.com/quick-build/) to help you 
+  build your first fastn-powered website. You can also read the 
+  [set up process](/install/) which will walk you through the 
+  installation process and provide you with a sample project to tinker with.
+
+
+- **Read the docs**:
+  Our [docs](/ftd/data-modelling/) is the go-to resource for mastering fastn. 
+  It provides valuable resources from in-depth explanations to best practices. 
+
+
+- **Backend with fastn**:
+  `fastn` also supports a bunch of features that helps you create dynamic websites.
+  Click [here](/backend/) to learn more.
+
+
+
 
 -- end: ds.page
 
