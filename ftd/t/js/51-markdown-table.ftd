@@ -1,0 +1,27 @@
+-- boolean $flag: false
+
+-- ftd.boolean: $flag
+color: blue
+
+-- ftd.column:
+width: fill-container
+margin.px: 40
+spacing.fixed.px: 10
+
+-- ftd.text:
+color: red
+color if { flag }: green
+
+This is a markdown table below:
+
+| Elements     |  Components  |
+| :----------  |  :---------  |
+| heading      |  `ds.h1`     |
+| image        |  `ds.image`  |
+| code-block   |  `ds.code`   |
+| code-block   |  `ds.code`   |
+
+-- ftd.text: Click
+$on-click$: $ftd.toggle($a = $flag)
+
+-- end: ftd.column
