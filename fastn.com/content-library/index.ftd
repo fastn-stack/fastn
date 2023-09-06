@@ -941,9 +941,11 @@ z-index: -1
 -- ftd.image:
 if: { member.photo != NULL }
 src: $member.photo
-max-width.fixed.percent: 100
-min-width.fixed.px: 200
+;;width.fixed.percent: 100
+width: fill-container
+height.fixed.px: 200
 border-radius.px: 10
+fit: cover
 
 -- ftd.column:
 if: { member.photo == NULL }
@@ -958,14 +960,15 @@ border-radius.px: 10
 -- ftd.column:
 if: { !member.mouse-in }
 width: fill-container
-height.fixed.px: 300
+height.fixed.px: 200
 
 -- ftd.image:
 if: { member.photo-grey != NULL }
 src: $member.photo-grey
-max-width.fixed.percent: 100
-min-width.fixed.px: 200
+width: fill-container
+height.fixed.px: 200
 border-radius.px: 10
+fit: cover
 
 -- ftd.column:
 if: { member.photo-grey == NULL }
@@ -1023,9 +1026,10 @@ z-index: -1
 -- ftd.image:
 if: { member.photo != NULL }
 src: $member.photo
-max-width.fixed.percent: 100
-min-width.fixed.px: 200
+width.fixed.px: 200
+height.fixed.px: 200
 border-radius.px: 10
+fit: cover
 
 -- ftd.column:
 if: { member.photo == NULL }
@@ -1045,9 +1049,10 @@ height.fixed.px: 200
 -- ftd.image:
 if: { member.photo-grey != NULL }
 src: $member.photo-grey
-max-width.fixed.percent: 100
-min-width.fixed.px: 200
+width.fixed.px: 200
+height.fixed.px: 200
 border-radius.px: 10
+fit: cover
 
 -- ftd.column:
 if: { member.photo-grey == NULL }
