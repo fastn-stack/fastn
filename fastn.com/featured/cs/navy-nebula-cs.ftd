@@ -52,7 +52,7 @@ published-date: 01-Aug-2023
 -- ft-ui.grid-view: Featured Color Scheme
 templates: $similar-schemes
 more-link-text: View all
-more-link: /featured/cs/
+more-link: /template-url: /cs/
 show-large: true
 
 -- end: ds.page.full-width-wrap
@@ -126,11 +126,11 @@ role: Developer
 -- ft-ui.template list similar-schemes:
 
 -- ft-ui.template: Dark Flame CS
-template-url: featured/cs/dark-flame-cs/
+template-url: /cs/dark-flame-cs/
 screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
 
 -- ft-ui.template: Saturated Sunset CS
-template-url: featured/cs/saturated-sunset-cs/
+template-url: /cs/saturated-sunset-cs/
 screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 
 -- end: similar-schemes

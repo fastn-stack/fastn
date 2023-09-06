@@ -18,19 +18,19 @@ templates: $blue-scheme
 -- ft-ui.template list blue-scheme:
 
 -- ft-ui.template: Blog Template CS
-template-url: featured/cs/blog-template-cs/
+template-url: /cs/blog-template-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-cs.png
 
 -- ft-ui.template: Blue Heal CS
-template-url: featured/cs/blue-heal-cs/
+template-url: /cs/blue-heal-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
 
 -- ft-ui.template: Midnight Rush CS
-template-url: featured/cs/midnight-rush-cs/
+template-url: /cs/midnight-rush-cs/
 screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 
 -- ft-ui.template: Winter CS
-template-url: featured/cs/winter-cs/
+template-url: /cs/winter-cs/
 screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
 
 -- end: blue-scheme

@@ -617,15 +617,15 @@ screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
 -- template list schemes:
 
 -- template: Saturated Sunset CS
-template-url: featured/cs/saturated-sunset-cs/
+template-url: /cs/saturated-sunset-cs/
 screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 
 -- template: Midnight Rush CS
-template-url: featured/cs/midnight-rush-cs/
+template-url: /cs/midnight-rush-cs/
 screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 
 -- template: Blog Template 1 CS
-template-url: featured/cs/blog-template-1-cs/
+template-url: /cs/blog-template-1-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
 -- end: schemes

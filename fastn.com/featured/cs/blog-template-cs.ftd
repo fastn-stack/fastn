@@ -53,7 +53,7 @@ published-date: 19-Jul-2023
 -- ft-ui.grid-view: Featured Color Scheme
 templates: $similar-schemes
 more-link-text: View all
-more-link: /featured/cs/
+more-link: /template-url: /cs/
 show-large: true
 
 -- end: ds.page.full-width-wrap
@@ -127,15 +127,15 @@ role: Developer
 -- ft-ui.template list similar-schemes:
 
 -- ft-ui.template: Blue Heal CS
-template-url: featured/cs/blue-heal-cs/
+template-url: /cs/blue-heal-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
 
 -- ft-ui.template: Dark Flame CS
-template-url: featured/cs/dark-flame-cs/
+template-url: /cs/dark-flame-cs/
 screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
 
 -- ft-ui.template: Forest CS
-template-url: featured/cs/forest-cs/
+template-url: /cs/forest-cs/
 screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
 
 -- end: similar-schemes

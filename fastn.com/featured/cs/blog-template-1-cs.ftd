@@ -52,7 +52,7 @@ published-date: 01-Aug-2023
 -- ft-ui.grid-view: Featured Color Scheme
 templates: $similar-schemes
 more-link-text: View all
-more-link: /featured/cs/
+more-link: /cs/blue-shades/
 show-large: true
 
 -- end: ds.page.full-width-wrap
@@ -126,7 +126,7 @@ role: Developer
 -- ft-ui.template list similar-schemes:
 
 -- ft-ui.template: Blue Heal CS
-template-url: featured/cs/blue-heal-cs/
+template-url: /cs/blue-heal-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
 
 -- end: similar-schemes

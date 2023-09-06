@@ -52,7 +52,7 @@ published-date: 15-Jun-2023
 -- ft-ui.grid-view: Featured Color Scheme
 templates: $similar-schemes
 more-link-text: View all
-more-link: /featured/cs/
+more-link: /template-url: /cs/
 show-large: true
 
 -- end: ds.page.full-width-wrap
@@ -131,15 +131,15 @@ role: Developer
 -- ft-ui.template list similar-schemes:
 
 -- ft-ui.template: Forest CS
-template-url: featured/cs/forest-cs/
+template-url: /cs/forest-cs/
 screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
 
 -- ft-ui.template: Misty Gray CS
-template-url: featured/cs/misty-gray-cs/
+template-url: /cs/misty-gray-cs/
 screenshot: $fastn-assets.files.images.featured.cs.misty-gray-cs.png
 
 -- ft-ui.template: Pretty CS
-template-url: featured/cs/pretty-cs/
+template-url: /cs/pretty-cs/
 screenshot: $fastn-assets.files.images.featured.cs.pretty-cs.png
 
 -- end: similar-schemes
