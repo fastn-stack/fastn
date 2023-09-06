@@ -222,7 +222,6 @@ ftd.local_storage = {
         if (key instanceof fastn.mutableClass) {
             key = key.get();
         }
-    
         const packageNamePrefix = __fastn_package_name__ ? `${__fastn_package_name__}_` : "";
         const snakeCaseKey = fastn_utils.toSnakeCase(key);
     
@@ -230,24 +229,18 @@ ftd.local_storage = {
     },
     set(key, value) {
         key = this._get_key(key);
-
         value = fastn_utils.getFlattenStaticValue(value);
-
         localStorage.setItem(key, value && typeof value === 'object' ? JSON.stringify(value) : value);
     },
     get(key) {
         key = this._get_key(key);
-
         if(ssr && !hydrating) {
             return;
         }
-
         const item = localStorage.getItem(key);
-
         if(!item) {
             return;
         }
-
         try {
             const obj = JSON.parse(item);
 
@@ -258,7 +251,6 @@ ftd.local_storage = {
     },
     delete(key) {
         key = this._get_key(key);
-
         localStorage.removeItem(key);
     }
 }
