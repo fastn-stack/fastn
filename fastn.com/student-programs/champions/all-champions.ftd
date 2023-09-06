@@ -45,23 +45,17 @@ photo-grey: $fastn-assets.files.images.students-program.ambassadors.ayush-soni-g
 link: /student-programs/champions/ayush-soni/
 designation: DevRel Engineer
 
--- lib.member: Govindaraman S
-photo: $fastn-assets.files.images.students-program.ambassadors.govindaraman.jpg
-photo-grey: $fastn-assets.files.images.students-program.ambassadors.govindaraman-grayscale.jpg
-link: /student-programs/champions/govindaraman/
-designation: Front End Developer, Trizwit Labs
-
 -- lib.member: Arpita Jaiswal
 photo: $fastn-assets.files.images.students-program.champions.arpita.jpg
 photo-grey: $fastn-assets.files.images.students-program.champions.arpita-greyscale.jpg
 link: /student-programs/champions/arpita-jaiswal/
 designation: Senior Software Engineer
 
--- lib.member: Rithik Seth
-photo: $fastn-assets.files.images.students-program.champions.rithik.jpg
-photo-grey: $fastn-assets.files.images.students-program.champions.rithik-greyscale.jpg
-link: /student-programs/champions/rithik-seth/
-designation: Software Engineer
+-- lib.member: Govindaraman S
+photo: $fastn-assets.files.images.students-program.ambassadors.govindaraman.jpg
+photo-grey: $fastn-assets.files.images.students-program.ambassadors.govindaraman-grayscale.jpg
+link: /student-programs/champions/govindaraman/
+designation: Front End Developer, Trizwit Labs
 
 -- lib.member: Harsh Singh
 photo: $fastn-assets.files.images.students-program.champions.harsh.jpg
@@ -86,6 +80,12 @@ photo: $fastn-assets.files.images.students-program.champions.priyanka.jpg
 photo-grey: $fastn-assets.files.images.students-program.champions.priyanka-greyscale.jpg
 link: /student-programs/champions/priyanka-yadav/
 designation: fastn builder
+
+-- lib.member: Rithik Seth
+photo: $fastn-assets.files.images.students-program.champions.rithik.jpg
+photo-grey: $fastn-assets.files.images.students-program.champions.rithik-greyscale.jpg
+link: /student-programs/champions/rithik-seth/
+designation: Software Engineer
 
 -- lib.member: Saurabh Lohia
 photo: $fastn-assets.files.images.students-program.champions.saurabh-lohiya.jpg
