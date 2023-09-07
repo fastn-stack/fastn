@@ -221,6 +221,10 @@ pre code {
     background: #c1c8ce;
 }
 
+ul {
+    padding-left: 20px;
+}
+
 a {
     color: #2952a3;
 }
