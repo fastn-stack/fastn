@@ -87,7 +87,6 @@ body {
 
 input, code {
     vertical-align: middle;
-    font: inherit;
 }
 pre {
     white-space: break-spaces;
@@ -289,4 +288,12 @@ h1:only-child {
 
 table, td, th {
   border: 1px solid;
+}
+
+th {
+    padding: 6px;
+}
+
+td {
+    padding-left: 6px;
 }
