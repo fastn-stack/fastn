@@ -19,6 +19,7 @@ The 'value' can be of any 'fastn' [data type](/built-in-types/), including 'fast
 -- ds.rendered.input:
 
 \-- ftd.text: Save name
+color: $inherited.colors.text-strong
 $on-click$: save-data()
 
 \-- void save-data():
@@ -28,6 +29,7 @@ ftd.local_storage.set("name", "Universe")
 -- ds.rendered.output:
 
 -- ftd.text: Save name
+color: $inherited.colors.text-strong
 $on-click$: save-data()
 
 -- end: ds.rendered.output
@@ -50,8 +52,10 @@ Access stored information with ftd.local_storage.get(key). It's a simple way to 
 \-- string $name: World
 
 \-- ftd.text: $name
+color: $inherited.colors.text
 
 \-- ftd.text: Get name
+color: $inherited.colors.text-strong
 $on-click$: get-data($a = $name)
 
 \-- void get-data(a):
@@ -63,8 +67,10 @@ __args__.a.set(name || "Empty");
 -- ds.rendered.output:
 
 -- ftd.text: $name
+color: $inherited.colors.text
 
 -- ftd.text: Get name
+color: $inherited.colors.text-strong
 $on-click$: get-data($a = $name)
 
 -- end: ds.rendered.output
@@ -92,11 +98,14 @@ Now, if you click on the 'Delete name' button and then click on the 'Get name' b
 \-- string $name: World
 
 \-- ftd.text: $name
+color: $inherited.colors.text
 
 \-- ftd.text: Get name
+color: $inherited.colors.text-strong
 $on-click$: get-data($a = $name)
 
 \-- ftd.text: Delete name
+color: $inherited.colors.text-strong
 $on-click$: $delete-data()
 
 \-- void get-data(a):
@@ -113,11 +122,14 @@ ftd.local_storage.delete("name")
 -- ds.rendered.output:
 
 -- ftd.text: $name
+color: $inherited.colors.text
 
 -- ftd.text: Get name
+color: $inherited.colors.text-strong
 $on-click$: get-data($a = $name)
 
 -- ftd.text: Delete name
+color: $inherited.colors.text-strong
 $on-click$: $delete-data()
 
 -- end: ds.rendered.output
