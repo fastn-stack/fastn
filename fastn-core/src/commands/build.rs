@@ -354,13 +354,21 @@ async fn incremental_build(
 
         for removed_doc_id in &removed_documents {
             let folder_path = config.build_dir().join(removed_doc_id);
+            let folder_parent = folder_path.parent();
             let file_path = &folder_path.with_extension("ftd");
 
             if file_path.exists() {
                 std::fs::remove_file(file_path)?;
             }
 
-            std::fs::remove_dir_all(folder_path)?;
+            std::fs::remove_dir_all(&folder_path)?;
+
+            // If the parent folder of the file's output folder is also empty, delete it as well.
+            if let Some(folder_parent) = folder_parent {
+                if folder_parent.read_dir()?.count().eq(&0) {
+                    std::fs::remove_dir_all(folder_parent)?;
+                }
+            }
 
             c.documents.remove(removed_doc_id);
         }
