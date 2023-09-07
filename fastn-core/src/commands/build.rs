@@ -100,6 +100,8 @@ mod build_dir {
 }
 
 mod cache {
+    use super::is_virtual_dep;
+
     const FILE_NAME: &str = "fastn.cache";
 
     pub(crate) fn get() -> std::io::Result<(bool, Cache)> {
@@ -142,10 +144,7 @@ mod cache {
             Ok(())
         }
         pub(crate) fn get_file_hash(&mut self, path: &str) -> fastn_core::Result<String> {
-            if path.starts_with("$fastn$/")
-                || path.ends_with("/-/fonts.ftd")
-                || path.ends_with("/-/assets.ftd")
-            {
+            if is_virtual_dep(path) {
                 // these are virtual file, they don't exist on disk, and hash only changes when
                 // fastn source changes
                 return Ok("hello".to_string());
@@ -189,6 +188,14 @@ fn get_dependency_name_without_package_name(package_name: &str, dependency_name:
     }
     .trim_end_matches('/')
     .to_string()
+}
+
+fn is_virtual_dep(path: &str) -> bool {
+    let path = std::path::Path::new(path);
+
+    path.starts_with("$fastn$/")
+        || path.ends_with("/-/fonts.ftd")
+        || path.ends_with("/-/assets.ftd")
 }
 
 async fn handle_dependency_file(
@@ -301,10 +308,7 @@ async fn incremental_build(
                     resolving_dependencies.push(unresolved_dependency.to_string());
                 }
             } else {
-                if unresolved_dependency.starts_with("$fastn$/")
-                    || unresolved_dependency.ends_with("/-/fonts.ftd")
-                    || unresolved_dependency.ends_with("/-/assets.ftd")
-                {
+                if is_virtual_dep(&unresolved_dependency) {
                     resolved_dependencies.push(unresolved_dependency.clone());
                 } else {
                     // println!("Not found in cache UR: {}", unresolved_dependency.as_str());
