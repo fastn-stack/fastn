@@ -164,8 +164,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /compare/webflow.ftd
 
 
-## Events: /events/webdev-with-ftd/
-   document: webdev-with-ftd.ftd
+## Events: /hackodisha/
+  document: /events/hackodisha.ftd
    
 # Design: /figma/
   document: cs/ftd-to-figma.ftd

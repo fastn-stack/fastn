@@ -1,0 +1,220 @@
+-- import: fastn.com/events as event
+-- import: fastn.com/assets
+-- import: fastn-community.github.io/bling/chat
+
+-- common.host webwiz: Webwiz with `fastn`
+
+-- common.venue venue:
+name: Online
+link: https://lu.ma/ftdwebmace
+
+
+-- ds.page:
+full-width: true
+sidebar: false
+
+
+-- event.event: `fastn` Gold Sponsor - HackOdisha 3.0
+banner-src: $assets.files.images.events.hack-odisha-banner.jpg
+;; start-time: 8:00 PM
+;; end-time: 10:00 PM (IST)
+start-day: Saturday
+end-day: Sunday
+start-month: Sep
+end-month: Sep 
+start-date: 9th, 2023
+end-date: 10th, 2023
+share-link: https://hackodisha3.devfolio.co/
+host: $webwiz
+venue: $venue
+share-button-text: Register Now
+
+**HackOdisha 3.0**, a student-run hackathon that aims to bring creatives and
+developers together to solve some of the most pressing problems faced by
+communities all over the world. This 36-hour-long event will bring together
+technocrats from across countries. 🌐💻
+
+
+-- ds.h3: `fastn` is the Gold Sponsor
+
+[`fastn`](https://fastn.com) being the modern and innovative full-stack 
+framework has tied up with the `HackOdisha` team and opted for the 
+`Gold` category sponsorship. Here are the following perks:
+
+- Logo on Website + Devfolio (including external links)
+- Special Discord channel on our server
+- Workshop + Dedicated email for the Workshop
+- fastn Track
+- Post about the Product on Instagram 
+- Logo on Certificate
+- Judgment for the fastn Track winners
+- Logos on Certificates
+- Sponsor mention in opening and closing Ceremonies 
+
+
+-- ftd.image:
+src: $assets.files.images.events.fastn-as-sponsor.png
+width: fill-container
+height.fixed.px: 1000
+border-radius.px: 15
+margin-bottom.px: 10
+
+-- ds.h3: `fastn` track: Bringing next billion humans Online
+
+This is something we believe in. Guiding people towards creating a website with
+full ownership and all customizable rights without a fuzz, for the next billion
+human beings. Be it a small scale business like kirana shops, early
+startups, freelancers, individuals from all walks of life like, authors, artists,
+designers, young entrepreneurs or web-developers to a large-scale enterprises,
+e-commerce giants or worldwide governments. 
+
+Hence, we decided this track - **Bringing next billion humans Online**, i.e., 
+increasing the digital presence of ever-growing web.
+
+The following graph shows internet users in India are growing rapidly:
+
+-- ftd.image:
+src: $assets.files.images.events.number-of-internet-users-in-India.png 
+width: fill-container
+border-radius.px: 15
+margin-vertical.px: 10
+
+-- ds.h3: `fastn` Tutorial - 1 hour Workshop
+
+-- ftd.image:
+src: $assets.files.images.events.tutoral-session.png
+border-radius.px: 15
+width: fill-container
+border-width.px: 1
+margin-vertical.px: 10
+
+-- ds.markdown:
+
+On demand, `Webwiz` has given us a prime slot for 1 hour online Workshop that
+was conducted on September, 6th from 8:00PM - 9:00PM.
+
+This gave us the opportunity to introduce `fastn` stack to the participants 
+of the upcoming hakathon.   
+
+Topics that were covered in the meeting:
+
+- Introducion of `fastn`
+- What makes `fastn` cool?
+- Why choose `fastn`?
+- Showcase of the Case Study: acme-inc
+- Walkthrough of fastn.com
+- Student Programs
+- Discord Server
+
+The response we got from this workshop was amazing. On top of it, the organizing
+team have also informed about reaching a milestone through a following
+message:
+
+-- ftd.column:
+margin-top.px: 15
+width: fill-container
+
+-- chat.message-left: Hey... 
+username: Anushrey
+time: 21.07
+
+My team just notified me that your session was one of the highest live viewed
+session in Hackodisha...
+
+-- chat.message-right: That's amazing
+username: Ajit
+;; avatar: $assets.files.images.blog.ajit.jpg 
+time: 21.40
+
+-- ds.markdown:
+
+You can find the entire workshop here:
+
+-- ds.youtube:
+v: qoi6J_PZ86M
+
+-- end: ftd.column
+ 
+
+
+-- end: event.event
+
+
+
+/-- event.row-container: Subscribe now
+mobile-spacing: 40
+desktop-spacing: 90
+switch-to-column: false
+padding-vertical: 80
+title-medium: true
+
+/-- event.social-card: DISCORD
+link: https://discord.gg/a7eBUeutWD
+icon: $assets.files.images.discord.svg
+
+/-- event.social-card: TWITTER
+link: https://twitter.com/FifthTryHQ
+icon: $assets.files.images.twitter.svg
+
+/-- event.social-card: LINKEDIN
+link: https://www.linkedin.com/company/69613898/
+icon: $assets.files.images.linkedin.svg
+
+/-- end: event.row-container
+
+-- end: ds.page
+
+
+
+
+-- component event-details:
+optional string event-date:
+optional string mode:
+optional string host:
+optional string cta-text:
+optional string cta-link:
+
+-- ftd.column:
+width: fill-container
+padding.px: 32
+border-radius.px:5
+spacing.fixed.px: 12
+
+-- image-with-text: $event-details.host
+image: $assets.files.images.events.host.svg
+
+-- image-with-text: $event-details.mode
+image: $assets.files.images.events.venue.svg
+
+-- image-with-text: $event-details.event-date
+image: $assets.files.images.events.clock.svg
+
+-- image-with-text: $event-details.cta-text
+image: $assets.files.images.events.share.svg
+link: $event-details.cta-link
+
+
+
+-- end: ftd.column
+
+-- end: event-details
+
+
+-- component image-with-text:
+optional caption title:
+ftd.image-src image:
+optional string link:
+
+-- ftd.row:
+if: { image-with-text.title != NULL }
+width: fill-container
+spacing: space-between
+link if { image-with-text.link != NULL }: $image-with-text.link
+
+-- ftd.image: $image-with-text.image
+
+-- ftd.text: $image-with-text.title
+
+-- end: ftd.row
+
+-- end: image-with-text
