@@ -12,6 +12,9 @@ let fastn_utils = {
             css.push("ft_row");
         } else if (kind === fastn_dom.ElementKind.IFrame) {
             node = "iframe";
+            // To allow fullscreen support
+            // Reference: https://stackoverflow.com/questions/27723423/youtube-iframe-embed-full-screen
+            attributes["allowfullscreen"] = "";
         } else if (kind === fastn_dom.ElementKind.Image) {
             node = "img";
         } else if (kind === fastn_dom.ElementKind.Video) {
@@ -235,6 +238,25 @@ let fastn_utils = {
             return g;
         })();
         return `${fastn_utils.private.repeated_space(space_before)}${o}${fastn_utils.private.repeated_space(space_after)}`;
+    },
+
+    process_post_markdown(node, body) {
+        if (!ssr) {
+            const divElement = document.createElement("div");
+            divElement.innerHTML = body;
+
+            const current_node = node;
+            const colorClasses = Array.from(current_node.classList).filter(className => className.startsWith('__c'));
+            const tableElements = Array.from(divElement.getElementsByTagName('table'));
+
+            tableElements.forEach(table => {
+                colorClasses.forEach(colorClass => {
+                    table.classList.add(colorClass);
+                });
+            });
+            body = divElement.innerHTML;
+        }
+        return body;
     },
     isNull(a) {
         return a === null || a === undefined;

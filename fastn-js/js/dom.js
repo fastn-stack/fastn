@@ -1770,6 +1770,7 @@ class Node2 {
             if (!ssr) {
                 let escapedHtmlValue = fastn_utils.escapeHtmlInMarkdown(staticValue);
                 staticValue = fastn_utils.markdown_inline(escapedHtmlValue);
+                staticValue = fastn_utils.process_post_markdown(this.#node, staticValue);
             }
             this.#node.innerHTML = staticValue;
         } else {
