@@ -222,6 +222,7 @@ pre code {
 }
 
 ul {
+    /* Added padding to the left to move the bullet marker to the right */
     padding-left: 20px;
 }
 
