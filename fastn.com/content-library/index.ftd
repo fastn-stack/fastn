@@ -3504,13 +3504,13 @@ fastn has built-in support for responsive design. Your creations automatically
 adapt to the perfect size, whether your users are on mobile or desktop devices.
 
 -- article-record: Dark mode
-image: $fastn-assets.files.images.landing.article-card.png
+image: $fastn-assets.files.images.landing.dark-mode.png
 
 fastn offers inherent support for both dark mode and light mode. This enhances 
 user accessibility and visual presentation of your website.
 
 -- article-record: SEO
-image: $fastn-assets.files.images.landing.article-card.png
+image: $fastn-assets.files.images.landing.seo.png
 
 fastn provides custom [URL customization](https://fastn.com/custom-url/), from 
 clean and organized links to [dynamic](https://fastn.com/dynamic-urls/) options. 
