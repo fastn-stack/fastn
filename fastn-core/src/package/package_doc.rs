@@ -429,7 +429,7 @@ pub(crate) async fn read_ftd_2022(
             });
         }
     };
-    if let Some((url, code)) = main_ftd_doc.get_redirect() {
+    if let Some((url, code)) = main_ftd_doc.get_redirect()? {
         return Ok(FTDResult::Redirect { url, code });
     }
     let executor = ftd::executor::ExecuteDoc::from_interpreter(main_ftd_doc)?;
@@ -505,7 +505,7 @@ pub(crate) async fn read_ftd_2023(
         }
     };
 
-    if let Some((url, code)) = main_ftd_doc.get_redirect() {
+    if let Some((url, code)) = main_ftd_doc.get_redirect()? {
         return Ok(FTDResult::Redirect { url, code });
     }
 
