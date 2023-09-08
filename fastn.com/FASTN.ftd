@@ -741,15 +741,16 @@ document: /student-programs/champion.ftd
       skip: true
 
 ## Contest: /weekly-contest/
-document: /community/weekly-contest.ftd 
+document: /events/weekly-contest/index.ftd
 
 - Weekly Contest: /weekly-contest/
-document: /community/weekly-contest.ftd
+document: /events/weekly-contest/index.ftd
   - Quote contest : /quote-contest/
   document: /events/weekly-contest/week-1-quote.ftd
 
 ## Events: /roadshow/
 document: /community/events/roadshow.ftd
+skip: true
 
 - Fastn Roadshow: /roadshow/
 document: /community/events/roadshow.ftd
@@ -943,3 +944,4 @@ document: /community/events/roadshow.ftd
 /discord/ -> https://discord.gg/eNXVBMq4xt
 /linkedin/ -> https://www.linkedin.com/company/fastn-stack/
 /overview/ -> /home/
+/events/weekly-contest/ -> /weekly-contest/
