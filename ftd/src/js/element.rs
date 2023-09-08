@@ -866,7 +866,6 @@ impl Video {
 #[derive(Debug)]
 pub struct Text {
     pub text: ftd::js::Value,
-    pub link_color: Option<ftd::js::Value>,
     pub common: Common,
     pub text_common: TextCommon,
 }
@@ -1122,11 +1121,6 @@ impl Text {
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
-            link_color: ftd::js::value::get_optional_js_value(
-                "link-color",
-                component.properties.as_slice(),
-                component_definition.arguments.as_slice(),
-            ),
             common: Common::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1158,16 +1152,6 @@ impl Text {
                 inherited: rdata.inherited_variable_name.to_string(),
             },
         ));
-        if let Some(ref link_color) = self.link_color {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                link_color.to_set_property(
-                    fastn_js::PropertyKind::LinkColor,
-                    doc,
-                    kernel.name.as_str(),
-                    rdata,
-                ),
-            ));
-        }
         component_statements.extend(self.common.to_set_properties(
             kernel.name.as_str(),
             doc,
@@ -1904,6 +1888,7 @@ pub struct TextCommon {
     pub line_clamp: Option<ftd::js::Value>,
     pub style: Option<ftd::js::Value>,
     pub display: Option<ftd::js::Value>,
+    pub link_color: Option<ftd::js::Value>,
 }
 
 impl TextCommon {
@@ -1926,6 +1911,7 @@ impl TextCommon {
             line_clamp: ftd::js::value::get_optional_js_value("line-clamp", properties, arguments),
             style: ftd::js::value::get_optional_js_value("style", properties, arguments),
             display: ftd::js::value::get_optional_js_value("display", properties, arguments),
+            link_color: ftd::js::value::get_optional_js_value("link-color", properties, arguments),
         }
     }
 
@@ -1974,6 +1960,16 @@ impl TextCommon {
         if let Some(ref display) = self.display {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 display.to_set_property(fastn_js::PropertyKind::Display, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref link_color) = self.link_color {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                link_color.to_set_property(
+                    fastn_js::PropertyKind::LinkColor,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
             ));
         }
         component_statements
