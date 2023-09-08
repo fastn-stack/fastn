@@ -44,7 +44,8 @@ required attribute. `src` stores video URLs for both light and dark mode.
 lang: ftd
 
 \-- ftd.video:
-src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 ;; <hl>
+controls: true
 width.fixed.px: 400
 height.fixed.px: 300
 
@@ -74,7 +75,8 @@ lang: ftd
 \-- import: fastn.com/assets
 
 \-- ftd.video:
-src: $assets.files.videos.bunny.mp4
+src: $assets.files.videos.bunny.mp4 ;; <hl>
+controls: true
 width.fixed.px: 400
 height.fixed.px: 300
 
@@ -93,16 +95,23 @@ Type: `optional` [`boolean`](ftd/built-in-types/#boolean)
 
 Required: False
 
-Default: False
+If this attribute value is set to `true`, the browser will offer controls to allow the user to control video playback, including volume, seeking, and pause/resume playback.
 
-If this attribute is present, the browser will offer controls to allow the user to control video playback, including volume, seeking, and pause/resume playback.
+In the first example below, the controls attribute has been set to true, which is why the controls are being shown. However, in the second example below, the controls attribute has been set to false, which is why the controls are not being shown on that video.
 
 -- ds.rendered: Sample code using `controls`
 
 -- ds.rendered.input:
 
 \-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-controls: true
+controls: true ;; <hl>
+width.fixed.px: 400
+height.fixed.px: 300
+
+\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+controls: false ;; <hl>
+muted: true
+autoplay: true
 width.fixed.px: 400
 height.fixed.px: 300
 
@@ -110,6 +119,13 @@ height.fixed.px: 300
 
 -- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
 controls: true
+width.fixed.px: 400
+height.fixed.px: 300
+
+-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+controls: false
+muted: true
+autoplay: true
 width.fixed.px: 400
 height.fixed.px: 300
 
@@ -128,17 +144,16 @@ Type: `optional` [`boolean`](ftd/built-in-types/#boolean)
 
 Required: False
 
-Default: False
-
-A Boolean attribute that indicates the default setting of the audio contained in the video. If set, the audio will be initially silenced.
+A Boolean attribute that indicates the default setting of the audio contained in the video. If set to `true`, the audio will be initially silenced.
 
 -- ds.rendered: Sample code using `muted`
 
 -- ds.rendered.input:
 
 \-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-muted: true
+muted: true ;; <hl>
 controls: true
+autoplay: true
 width.fixed.px: 400
 height.fixed.px: 300
 
@@ -165,9 +180,7 @@ Type: `optional` [`boolean`](ftd/built-in-types/#boolean)
 
 Required: False
 
-Default: False
-
-A Boolean attribute; if specified, the video automatically begins to play back as soon as it can do so without stopping to finish loading the data.
+A Boolean attribute; if set to `true`, the video automatically begins to play back as soon as it can do so without stopping to finish loading the data.
 
 -- ds.markdown:
 
@@ -178,7 +191,7 @@ A Boolean attribute; if specified, the video automatically begins to play back a
 -- ds.rendered.input:
 
 \-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-autoplay: true
+autoplay: true ;; <hl>
 muted: true
 width.fixed.px: 400
 height.fixed.px: 300
@@ -213,7 +226,8 @@ A URL for an image to be shown while the video is downloading. If this attribute
 -- ds.rendered.input:
 
 \-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg
+poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg ;; <hl>
+controls: true
 width.fixed.px: 400
 height.fixed.px: 300
 
