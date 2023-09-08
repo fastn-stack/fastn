@@ -226,8 +226,8 @@ This property offers various options for the content to adapt to the container, 
 
 \-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
 fit: cover ;; <hl>
-width: 400
-height: 300
+width.fixed.px: 400
+height.fixed.px: 300
 color: $inherited.colors.text
 padding.px: 10
 
@@ -235,8 +235,8 @@ padding.px: 10
 
 -- ftd.image: $assets.files.images.cs.show-cs-1.jpg
 fit: cover
-width: 400
-height: 300
+width.fixed.px: 400
+height.fixed.px: 300
 color: $inherited.colors.text
 padding.px: 10
 
