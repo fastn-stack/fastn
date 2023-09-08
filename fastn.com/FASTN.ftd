@@ -112,13 +112,18 @@ document: /get-started/browse-pick.ftd
   document: author/how-to/install.ftd
   - Install fastn: /install/
   document: author/how-to/install.ftd
-    - On MacOS/ Linux: https://fastn.com/macos/
-    - On Windows: https://fastn.com/windows/
+  - On MacOS/Linux: /macos/
+    document: author/setup/macos.ftd
+    description: Install on MacOS/Linux
+  - On Windows: /windows/
+    document: author/setup/windows.ftd
+    description: Install on Windows
   - Install GitHub: /github/
     document: /get-started/github.ftd
     skip: true
   - Install Text Editor: /editor/
     document: /get-started/editor.ftd
+    skip: true
     - Syntax Highlighting Sublime: /sublime/
     document: author/how-to/sublime.ftd
     - Syntax Highlighting VS Code: /vscode/
