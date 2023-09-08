@@ -547,4 +547,45 @@ also serve as a language for configuration purposes.
   Click [here](/backend/) to learn more.
 
 
+
 -- end: ds.page
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component on-mouse-leave-event:
+boolean $show: false
+
+-- ftd.column:
+color: $inherited.colors.text
+
+-- ftd.text: Enter mouse cursor over me
+$on-mouse-enter$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = false)
+
+-- ftd.text: Hide and Seek
+if: { on-mouse-leave-event.show }
+
+-- end: ftd.column
+
+-- end: on-mouse-leave-event
+
+
+
+-- component amitu:
+caption or body message:
+
+-- chat.message-left: $amitu.message
+
+-- end: chat.message-left
+
+-- end: amitu
