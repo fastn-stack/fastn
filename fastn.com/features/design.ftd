@@ -11,10 +11,54 @@ starting from scratch.
 
 fastn is built upon an opinionated design system, which means we have pre-made 
 many design choices from styles and components, enabling you to build your website quickly.
+
 Every component within the fastn ecosystem adheres to this unified design system, 
-ensuring a harmonious look and feel across your entire site.
+ensuring a harmonious look and feel across your entire site. That means you 
+don't have to mention the colour or font of every UI element. And Every fastn 
+component supports responsive design, dark mode, and themability.
 
+-- ds.h2: Unified Color and Typography
 
+We provide a range of color scheme and typography packages that can be 
+imported with just a few lines of code, transforming your website's 
+appearance in an instant.
+
+You can craft custom content components for recurring information, 
+guaranteeing a consistent user experience across your website. 
+This fosters the creation of interchangeable components, promoting 
+collaboration between teams, that means components designed by one team can 
+be used by another. 
+
+Integrate Figma tokens with fastn's color scheme or create your own scheme from 
+Figma JSON.
+
+-- ds.h2: Customizable color schemes
+
+You can create a `fastn` package that defines a color scheme. In your main
+package, you can import one of the [color schemes](/featured/cs/) and use it as 
+it is or [modify the colors as needed](/modify-cs/). 
+
+[Learn more about customizable color schemes](/figma/).
+
+You can also create your own color scheme from [Figma Json](/figma-to-fastn-cs/)
+
+-- ds.h2: Customizable Typography
+
+You can create a `fastn` package that defines a typography. In your main 
+package, you can import one of the typography and use it as it is or 
+create your own 
+
+[Learn more about customizable color schemes](/figma/).
+
+-- ds.h1: Seperation of Content and Design
+
+With fastn, you can modify content without being concerned about design 
+repercussions. Unlike traditional website builders where altering themes or 
+layouts can be arduous and require meticulous adjustments, fastn simplifies 
+the process. A single line of code allows you to change themes, layouts, 
+color schemes, and typography, maintaining design consistency effortlessly. 
+This separation of design and content allows for quick adjustments and 
+minimizes inconsistencies.
 
 
 
@@ -99,16 +143,6 @@ about design and vice versa
 
 
 - Color Scheme - Readymade Packages and Seamless Figma Integration
-Integrate Figma tokens with fastn's color scheme or create your own scheme from 
-Figma JSON.
-
--- ds.h1: Customizable color schemes
-
-You can create a `fastn` package that defines a color scheme. In your main
-package, you can then import one of the [color schemes](/featured/cs/) and use
-or modify the colors as needed.
-
-[Learn more about customizable color schemes](/cs/).
 
 -- ds.h1: Separation of design and content
 
