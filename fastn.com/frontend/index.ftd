@@ -46,7 +46,7 @@ Here is an example:
 
 \-- amitu:
 
-Writing single or multi line text is easy in fastn!
+Writing single or multiline text is easy in fastn!
 
 No quotes required. 
 
@@ -57,7 +57,7 @@ No quotes required.
 
 -- amitu:
 
-Writing single or multi line text is easy in fastn!
+Writing single or multiline text is easy in fastn!
 
 No quotes required. 
 
@@ -68,9 +68,9 @@ No quotes required.
 
 -- ds.markdown:
 
-These are not built in components of `fastn`, but are using 
+These are not built-in components of `fastn`, but are using 
 [open source component libraries](/featured/). Click here to view the 
-[chat component]((https://fastn-community.github.io/bling/chat/)) 
+[chat component](https://fastn-community.github.io/bling/chat/).
 
 Using a little more complex component:
 
@@ -244,7 +244,7 @@ or colors, you specify typography and color roles to UI elements. The roles
 are well defined, so within the `fastn` ecosystem they are well known, and a 
 lot of [color scheme](https://fastn.com/featured/cs/) and 
 [typography](https://fastn.com/featured/fonts/) packages available, 
-which you can install and you can then change entire typography or color scheme 
+which you can install and change the entire typography or color scheme 
 in a few lines of code. 
 
 Learn more about [fastn design system](/design-system/).
@@ -361,7 +361,7 @@ $on-click$: $ftd.toggle($a = $toggle-text.current)
 -- ds.markdown:
 
 Here we have created a new component called `toggle-text`, and then instantiated
-it instead. This way you can create custom component library and use them in our
+it instead. This way you can create custom component library and use them in your
 writing without "polluting" the prose with noise.
 
 
@@ -516,7 +516,7 @@ As mentioned earlier, `fastn` language is a first-class data language that
 provides a better alternative to sharing data through CSV or JSON files. 
 Unlike CSV/JSON, in `fastn`, data is type-checked, and it offers a proper 
 presentation of the data with the option to define components that can render 
-the data, which can be viewed in a browser. Furthermore, `fastn` language can 
+the data and can be viewed in a browser. Furthermore, `fastn` language can 
 also serve as a language for configuration purposes.
 
 -- ds.h1: Next
