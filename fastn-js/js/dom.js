@@ -1254,7 +1254,7 @@ class Node2 {
                     : Array.from(this.#node.querySelectorAll("a"));
                 let propertyShort = `__${fastn_dom.propertyMap["link-color"]}`;
 
-                if(!value) {
+                if(fastn_utils.isNull(value)) {
                     anchors.forEach(a => {
                         a.classList.values().forEach(className => {
                             if(className.startsWith(`${propertyShort}-`)) {
