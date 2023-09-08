@@ -15,18 +15,23 @@ lang: ftd
 
 \-- fastn.redirects: ;; <hl>
 
-/ftd/kernel/: /kernel/
-/discord/: https://discord.gg/eNXVBMq4xt
+/ftd/kernel/ -> /kernel/
+/discord/ -> https://discord.gg/eNXVBMq4xt
 
 -- ds.markdown:
 
 The links which needs to be redirected somewhere has to be listed down in the
 body section of `fastn.redirects` as `key-value` tuples in the format
-`<REDIRECT-FROM>: <REDIRECT-TO>`.
+`<FROM> -> <TO>`.
 
 In the above example, the url `/ftd/kernel/` will be redirected to `/kernel/`.
 Similarly, visiting `/discord/` will redirect to the official `fastn` discord
 server [https://discord.gg/eNXVBMq4xt](https://discord.gg/eNXVBMq4xt).
+
+-- ds.h2: **Deprecation warning**
+
+`<FROM>: <TO>` old syntax will be deprecated soon, so we recommend the usage of
+the latest redirect syntax `<FROM> -> <TO>`.
 
 -- ds.h1: Dynamic Redirect
 
