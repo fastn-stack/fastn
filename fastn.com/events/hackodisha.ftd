@@ -55,9 +55,9 @@ framework has tied up with the `HackOdisha` team and opted for the
 -- ftd.image:
 src: $assets.files.images.events.fastn-as-sponsor.png
 width: fill-container
-height.fixed.px: 1000
 border-radius.px: 15
 margin-bottom.px: 10
+border-width.px: 1
 
 -- ds.h3: `fastn` track: Bringing next billion humans Online
 
