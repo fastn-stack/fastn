@@ -81,7 +81,7 @@ document: blog/acme.ftd
 
 ## Create Website: /quick-build/
 document: /get-started/browse-pick.ftd
-- Browse, Pick, Follow User Manual: /quick-build/
+- Quick Build: /quick-build/
   document: /get-started/browse-pick.ftd
 - fastn basics: /markdown/-/frontend/
   document: /expander/ds/markdown.ftd
@@ -112,8 +112,11 @@ document: /get-started/browse-pick.ftd
   document: author/how-to/install.ftd
   - Install fastn: /install/
   document: author/how-to/install.ftd
+    - On MacOS/ Linux: https://fastn.com/macos/
+    - On Windows: https://fastn.com/windows/
   - Install GitHub: /github/
     document: /get-started/github.ftd
+    skip: true
   - Install Text Editor: /editor/
     document: /get-started/editor.ftd
     - Syntax Highlighting Sublime: /sublime/
