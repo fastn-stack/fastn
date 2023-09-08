@@ -21,7 +21,6 @@ favicon: /-/fastn.com/images/favicon.svg
 -- fastn.dependency: fifthtry.github.io/fastn-ui
 -- fastn.dependency: fifthtry.github.io/virgil-font-typography
 -- fastn.dependency: fifthtry.github.io/dark-mode-switcher
--- fastn.dependency: fifthtry.github.io/banner
 -- fastn.dependency: fastn-stack.github.io/media
 -- fastn.dependency: fastn-stack.github.io/fastn-js
 -- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
@@ -71,8 +70,10 @@ favicon: /-/fastn.com/images/favicon.svg
   document: author/how-to/install.ftd
   - On MacOS/Linux: /macos/
     document: author/setup/macos.ftd
+    description: Install on MacOS/Linux
   - On Windows: /windows/
     document: author/setup/windows.ftd
+    description: Install on Windows
   - Open terminal: /open-terminal/
     document: author/how-to/open-terminal.ftd
     skip: true
@@ -82,6 +83,7 @@ favicon: /-/fastn.com/images/favicon.svg
   document: author/how-to/vscode.ftd
 - `fastn` Community: /community/
 - Docs: /docs/
+  description: First Steps, Getting Help, Discord, How the documentation is organized
 - Student Ambassador Program: /ambassador/
   document: /student-programs/ambassador.ftd
   skip: true
@@ -193,6 +195,7 @@ favicon: /-/fastn.com/images/favicon.svg
     document: /ftd/variables.ftd
   - Built-in Types: /built-in-types/
     document: /ftd/built-in-types.ftd
+    description: boolean, integer, decimal, string, caption, body, caption or body, ftd.ui, children, ftd.align-self, ftd.align, ftd.anchor, ftd.linear-gradient, ftd.linear-gradient-color, ftd.breakpoint-width-data, ftd.linear-gradient-directions, ftd.background-image, ftd.background-position, ftd.background-repeat, ftd.background-size, ftd.background, ftd.border-style, ftd.color, ftd.display, ftd.color-scheme, ftd.cursor, ftd.image-src, ftd.length, ftd.length-pair, ftd.loading, ftd.overflow, ftd.region, ftd.resize, ftd.resizing, ftd.responsive-type, ftd.shadow, ftd.spacing, ftd.text-align, ftd.text-input-type, ftd.text-style, ftd.text-transform, ftd.type, ftd.white-space, ftd.type-data
   - `record`: /record/
     document: /ftd/record.ftd
   - `or-type`: /or-type/
@@ -226,6 +229,7 @@ favicon: /-/fastn.com/images/favicon.svg
     document: /ftd/image.ftd
   - `ftd.rive`: /rive/
     document: ftd/rive.ftd
+    description: animation
   - `ftd.iframe`: /iframe/
     document: /ftd/iframe.ftd
   - `ftd.integer`: /integer/
@@ -248,28 +252,38 @@ favicon: /-/fastn.com/images/favicon.svg
   document: ftd/attributes.ftd
   - Common Attributes: /common-attributes/
     document: ftd/common.ftd
+    description: id, padding, padding-vertical, padding-horizontal, padding-left, padding-right, padding-top, padding-bottom, margin, margin-vertical, margin-horizontal, margin-left, margin-right, margin-top, margin-bottom, align-self, color, width, min-width, max-width, height, min-height, max-height, background, border-width, border-left-width, border-right-width, border-top-width, border-bottom-width, border-radius, border-top-left-radius, border-top-right-radius, border-bottom-left-radius, border-bottom-right-radius, border-color, border-left-color, border-right-color, border-top-color, border-bottom-color, border-style, border-style-left, border-style-right, border-style-top, border-style-bottom, border-style-horizontal, border-style-vertical, overflow, overflow-x, overflow-y, cursor, region, link, open-in-new-tab, role, resize, sticky, shadow, anchor, opacity, whitespace, text-transform, classes, top, bottom, left, right, css, js, z-index, border-radius.px, border-top-left-radius.px, border-top-right-radius.px, border-bottom-left-radius.px, border-bottom-right-radius.px, width.fixed.px, min-width, max-width, height, min-height, max-height, overflow-x, overflow-y, cursor, region, border-width.px, border-top-width.px, border-bottom-width.px, border-left-width.px, border-right-width.px, submit, background-gradient, background-image, background-repeat, background-parallax, sticky, anchor, z-index, white-space, text-transform
   - Text Attributes: /text-attributes/
     document: ftd/text-attributes.ftd
+    description: style: (underline, strike, italic, heavy, extra-bold, semi-bold, bold, regular, medium, light, extra-light, hairline), text-align, text-indent
   - Container Attributes: /container-attributes/
     document: ftd/container-attributes.ftd
+    description: wrap, align-content, spacing
   - Container Root Attributes: /container-root-attributes/
     document: ftd/container-root-attributes.ftd
+    description: children, colors, types
 - `import`: /import/
   document: ftd-host/import.ftd
 - Using export/exposing: /using-export-exposing/
   document: ftd/export-exposing.ftd
 - Functions: /functions/
-  document: ftd/functions/
+  document: ftd/functions.ftd
+  description: clamp
 - Built-in Functions: /built-in-functions/
   document: ftd/built-in-functions.ftd
+  description: len, length, ftd.append, ftd.insert_at, ftd.delete_at, ftd.clear, enable_dark_mode, enable_light_mode, enable_system_mode, copy-to-clipboard, toggle, increment, increment-by, set-bool, set-string, set-integer, is_empty, light mode, dark mode, system mode
 - Built-in Rive Functions: /built-in-rive-functions/
   document: ftd/built-in-rive-functions.ftd
+  description: animation, ftd.toggle-play-rive, ftd.play-rive, ftd.pause-rive, ftd.fire-rive, ftd.set-rive-integer, ftd.toggle-rive-boolean, ftd.set-rive-boolean
 - Built-in Variables: /built-in-variables/
   document: ftd/built-in-variables.ftd
+  description: ftd.dark-mode, ftd.system-dark-mode, ftd.follow-system-dark-mode, ftd.device, ftd.mobile-breakpoint, light mode, dark mode, system mode
 - `ftd` Events: /events/
   document: ftd/events.ftd
+  description: on-click, on-click-outside, on-mouse-enter, on-mouse-leave, on-input, on-change, on-blur, on-focus, on-global-key, on-global-key-seq
 - Rive Events: /rive-events/
   document: ftd/rive-events.ftd
+  decription: animation, on-rive-play, on-rive-pause, on-rive-state-change
 - Use color scheme package: /use-cs/
   document: cs/use-color-package.ftd
 - `processor`: /processor/
@@ -360,7 +374,7 @@ favicon: /-/fastn.com/images/favicon.svg
     document: book/appendix/d-common-commands.ftd
   - **e** Install `fastn`: /book/install/
     document: book/appendix/e-install.ftd
-    - Intall On Windows: /windows/-/book/
+    - Install On Windows: /windows/-/book/
       document: author/setup/windows.ftd
       skip: true
   - **f** A Programming Editor: /book/editor/
@@ -449,6 +463,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /backend/country-details/index.ftd
   - Basic of `http`, `data modelling`: /country-details/basics/
     document: /backend/country-details/http-data-modelling.ftd
+  - Building dynamic country list page: /country-list/
+    document: /backend/country-details/dynamic-country-list-page.ftd
 
 # Create Website: /create-website/
   document: author/how-to/install.ftd
@@ -650,7 +666,7 @@ skip: true
       skip: true
     - Rotary Presentation Template: /featured/sections/slides/rotary-presentation-template/
       skip: true
-- Component Library: /featured/components-library/
+- Component Library: /featured/components/
   - Admonitions: /featured/components/admonitions/
     skip: true
   - Bling Components: /featured/components/bling/
@@ -675,29 +691,15 @@ skip: true
   - Header / Navbar: /featured/components/headers/
     - Header: /featured/components/headers/header/
     skip: true  
-    - Header 1: /featured/components/headers/header-1/
-    skip: true  
-    - Header 2: /featured/components/headers/header-2/
-    skip: true  
   - Footers: /featured/components/footers/
     - Footer: /featured/components/footers/footer/
-    skip: true  
-    - Footer 1: /featured/components/footers/footer-1/
-    skip: true  
-    - Footer 2: /featured/components/footers/footer-2/
     skip: true  
     - Footer 3: /featured/components/footers/footer-3/
     skip: true  
   - Modal / Dialog: /featured/components/modals/
-    - Dialog 1: /featured/components/modals/dialog-1/
-    skip: true  
-    - Dialog 2: /featured/components/modals/dialog-2/
-    skip: true  
-    - Alert Dialog: /featured/components/modals/alert-1/
-    skip: true  
     - Modal 1: /featured/components/modals/modal-1/
     skip: true  
-    - Modal 2: /featured/components/modals/modal-2/
+    - Modal Cover: /featured/components/modals/modal-cover/
     skip: true
   - Quotes: /featured/components/quotes/
     - Simple Quotes: /featured/components/quotes/simple-quotes/
@@ -734,11 +736,23 @@ skip: true
     skip: true
       Electric: /featured/components/quotes/quotes-with-images/demo-1/
       skip: true
-- Design Elements: /featured/cs/
+- Design Elements: /featured/design/
   - Color Schemes: /featured/cs/
+    - Shades Of Red: /featured/cs/red-shades
+    skip: true
+    - Shades Of Blue: /featured/cs/blue-shades
+    skip: true
+    - Shades Of Green: /featured/cs/green-shades
+    skip: true
+    - Shades Of Orange: /featured/cs/orange-shades
+    skip: true
+    - Shades Of Violet: /featured/cs/violet-shades
+    skip: true
     - Blog Template CS: /featured/cs/blog-template-cs/
     skip: true  
     - Blue Heal CS: /featured/cs/blue-heal-cs/
+    skip: true  
+    - Midnight Rush CS: /featured/cs/midnight-rush-cs/
     skip: true  
     - Dark Flame CS: /featured/cs/dark-flame-cs/
     skip: true  
@@ -753,6 +767,8 @@ skip: true
     - Pretty CS: /featured/cs/pretty-cs/
     skip: true  
     - Saturated Sunset CS: /featured/cs/saturated-sunset-cs/
+    skip: true
+    - Pink Tree Cs: /featured/cs/pink-tree-cs/
     skip: true  
     - Winter CS: /featured/cs/winter-cs/
     skip: true  
@@ -760,7 +776,31 @@ skip: true
     skip: true  
     - Blog Template 1 CS: /featured/cs/blog-template-1-cs/
     skip: true
-  - Font Typographies: /featured/fonts-typography/
+  - Font Typographies: /featured/fonts/
+    - Arya Typography: /featured/fonts/arya/
+    skip: true
+    - Blaka Typography: /featured/fonts/blaka/
+    skip: true
+    - Lobster Typography: /featured/fonts/lobster/
+    skip: true
+    - Opensans Typography: /featured/fonts/opensans/
+    skip: true
+    - Pragati Narrow Typography: /featured/fonts/pragati-narrow/
+    skip: true
+    - Roboto Mono Typography: /featured/fonts/roboto-mono/
+    skip: true
+    - Roboto Typography: /featured/fonts/roboto/
+    skip: true
+    - Tiro Typography: /featured/fonts/tiro/
+    skip: true
+    - Inter Typography: /featured/fonts/inter/
+    skip: true
+    - Karma Typography: /featured/fonts/karma/
+    skip: true
+    - Khand Typography: /featured/fonts/khand/
+    skip: true
+    - lato Typography: /featured/fonts/lato/
+    skip: true
 
 ## Deploy: /deploy/
 
@@ -778,13 +818,15 @@ skip: true
 
 # Blog: /blog/
 
+- Quote contest :/quote-contest/
+  document: /events/weekly-contest/week-1-quote.ftd
 - Tales from ACME Inc - Case Study: /acme/
   document: blog/acme.ftd 
-- A Content Writer’s Journey with fastn: /blog/writer-journey/
+- A Content Writer’s Journey with fastn: /writer/
   document: blog/writer-journey.ftd
-- fastn might prove you wrong: /blog/prove-you-wrong/
+- fastn might prove you wrong: /prove/
   document: blog/prove-you-wrong.ftd 
-- The Intimidation of Programming: /blog/intimidation-of-programming/
+- The Intimidation of Programming: /intimidation/
   document: blog/the-intimidation-of-programming.ftd
 - Optimize your website: /blog/seo-meta/
   document: blog/meta-data-blog.ftd
@@ -842,6 +884,12 @@ skip: true
 - Overview: /planning/
 - dynamic UI planning: /dynamic-ui/-/planning/
   document: /planning/country-details/index.ftd
+  - Script 1: /dynamic-ui/-/planning/script1/
+    document: /planning/country-details/script1.ftd
+  - Script 2: /dynamic-ui/-/planning/script2/
+    document: /planning/country-details/script2.ftd
+  - Script 3: /dynamic-ui/-/planning/script3/
+    document: /planning/country-details/script3.ftd
 - Page Nomenclature: /page-nomenclature/
   document: /planning/page-nomenclature.ftd
 - Create website planning: /create-website-planning/
@@ -875,6 +923,7 @@ skip: true
 - Rive Video: /planning/rive/
 - Developer Course: /planning/developer-course/
 
+# 🔍: /search/
 
 -- fastn.redirects:
 
@@ -922,3 +971,9 @@ skip: true
 /ambassadors-program/: /ambassador-program/
 /champions-program/: /champion-program/
 /learn/: /frontend/learn/
+/blog/writer-journey/: /writer/
+/blog/prove-you-wrong/: /prove/
+/blog/intimidation-of-programming/: /intimidation/
+/twitter/: https://twitter.com/fastn_stack
+/discord/: https://discord.gg/bucrdvptYd
+/instagram/: https://www.instagram.com/fastn_stack/

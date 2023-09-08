@@ -7,9 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
-
 
 
 
@@ -24,6 +21,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
+distribution-bar: true
+full-width-bar: true
 show-layout-bar: true
 
 -- ds.page.footer:
@@ -38,29 +37,33 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Bling Componets
-cta-text: User Manual
-cta-url: https://fastn-community.github.io/bling/
-previous-url: featured/components-library/
-github-url: https://github.com/fastn-community/bling
+-- ds.distributors: Bling Componets
+owners: $owner-fastn
+license-url: https://github.com/fastn-community/bling/blob/main/LICENSE
+license: Creative Commons
+published-date: 21-Aug-2023
 
--- end: ds.page.layout-bar
+-- end: ds.page.abstract-bar
 
+-- ds.page.full-width-wrap:
+
+-- ft-ui.grid-view: Featured from Components Library
+templates: $components
+more-link-text: View more
+more-link: /featured/components-library/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.components.bling.jpg
 cta-url: https://fastn-community.github.io/bling/
 cta-text: Demo
-width.fixed.px if { ftd.device == "desktop" }: 800
-
--- ft-ui.grid-view: Featured from Components Library
-if: { show-grid }
-templates: $components
-more-link-text: View more
-more-link: /featured/components-library/
-
+github-url: https://github.com/fastn-community/bling
+cta-2-url: https://fastn-community.github.io/bling/badge/
+cta-2-text: User Manual
 
 -- end: ds.page
 
@@ -80,7 +83,7 @@ template-url: featured/components/business-cards/gradient-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
 
 -- ft-ui.template: Modal Cover
-template-url: featured/components/modals/modal-2/
+template-url: featured/components/modals/modal-cover/
 screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 
 -- ft-ui.template: Pattern Business Card
@@ -88,3 +91,24 @@ template-url: featured/components/business-cards/pattern-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
 
 -- end: components
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Priyanka Yadav
+profile: featured/contributors/developers/priyanka-yadav/
+avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+role: Developer
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- common.owner: Meenu Kumari
+profile: featured/contributors/developers/meenu-kumari/
+avatar: $fastn-assets.files.featured.contributors.developers.meenu-kumari.meenu.jpg
+role: Developer
+
+-- end: owner-fastn

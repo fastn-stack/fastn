@@ -101,7 +101,10 @@ lang: ftd
 \-- ftd.ui list uis:
 
 \-- ftd.text: Hello World!
+color: $inherited.colors.text-strong
+
 \-- ftd.text: I love `fastn`.
+color: $inherited.colors.text-strong
 
 \-- end: uis
 
@@ -114,7 +117,10 @@ lang: ftd
 \-- foo:
 
 \-- ftd.text: Hello World!
+color: $inherited.colors.text-strong
+
 \-- ftd.text: I love `fastn`.
+color: $inherited.colors.text-strong
 
 \-- end: foo
 
@@ -189,10 +195,12 @@ following syntax:
 lang: ftd
 
 \-- ftd.text: $weekdays.0
+color: $inherited.colors.text-strong
 
 -- ds.output:
 
 -- ftd.text: $weekdays.0
+color: $inherited.colors.text-strong
 
 -- end: ds.output
 
@@ -382,6 +390,9 @@ You can read more details of reading `.ftd` files
 -- ftd.ui list uis:
 
 -- ftd.text: Hello World!
+color: $inherited.colors.text-strong
+
 -- ftd.text: I love `fastn`.
+color: $inherited.colors.text-strong
 
 -- end: uis

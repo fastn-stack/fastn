@@ -211,11 +211,11 @@ And paste this merged json in the text-box below.
 You will see the generated `fastn` code. Copy this `fastn` code by clicking
 on the copy icon at the top of the code-block above.
 
--- ds.h1: Go to the `sailing-shark-cs` github repository
+-- ds.h1: Go to the `color-scheme-template` github repository
 
 This repo is a template repo for fastn color-schemes, we will create
 our own color-scheme repo using this. To visit this repo,
-[click here](https://github.com/fastn-community/sailing-shark-cs)
+[click here](https://github.com/fastn-stack/color-scheme-template)
 
 To do that, click on the `Use this template` button then `Create a new repository`
 as shown below
@@ -226,8 +226,8 @@ width: fill-container
 
 -- ds.markdown:
 
-Fill your repository details as shown below, then click on `Create repository
-from template` button.
+Fill your repository details as shown below, then click on `Create repository`
+button.
 
 -- ftd.image:
 src: $fastn-assets.files.images.figma.b2.23.png

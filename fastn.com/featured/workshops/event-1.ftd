@@ -7,8 +7,6 @@
 -- import: fastn.com/assets
 
 
--- boolean show-grid: true
--- boolean show-list: false
 
 
 
@@ -24,7 +22,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 full-width: true
-show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
 
 -- ds.page.footer:
 
@@ -38,26 +37,33 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- end: ds.page.footer
 
--- ds.page.layout-bar:
+-- ds.page.abstract-bar:
 
--- ds.layout: Event 1 
-previous-url: /featured/workshops/
-github-url: https://github.com/FifthTry/event
+-- ds.distributors: Event 1
+owners: $owner-fastn
+license-url: https://github.com/FifthTry/event/blob/main/LICENSE
+license: Creative Commons
+published-date: 17-Oct-2022
 
+-- end: ds.page.abstract-bar
 
--- end: ds.page.layout-bar
+-- ds.page.full-width-wrap:
 
+-- ft-ui.grid-view: Featured Workshop Themes
+templates: $websites
+more-link-text: View more
+more-link: /featured/workshops/
+show-large: true
+
+-- end: ds.page.full-width-wrap
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.workshops.event-1.png
 cta-url: https://fifthtry.github.io/event/demo/
 cta-text: Demo
-
--- ft-ui.grid-view: Featured Website Categories
-if: { show-grid }
-templates: $websites
-more-link-text: View more
-more-link: /featured/workshops/
+github-url: https://github.com/FifthTry/event
+cta-2-url: https://fifthtry.github.io/event/
+cta-2-text: User Manual
 
 
 -- end: ds.page
@@ -77,9 +83,24 @@ more-link: /featured/workshops/
 template-url: featured/workshops/workshop-1/
 screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
 
--- ft-ui.template: Event 1
-template-url: featured/workshops/event-1/
-screenshot: $fastn-assets.files.images.featured.workshops.event-1.png
 
 -- end: websites
 
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Meenu Kumari
+profile: featured/contributors/developers/meenu-kumari/
+avatar: $fastn-assets.files.featured.contributors.developers.meenu-kumari.meenu.jpg
+role: Developer
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+role: Developer
+
+-- end: owner-fastn

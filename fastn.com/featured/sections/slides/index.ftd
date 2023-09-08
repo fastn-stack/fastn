@@ -4,7 +4,7 @@
 full-width: true
 sidebar: false
 
--- ft-ui.grid-view: Slides / Presentations
+-- ft-ui.view-all: Slides / Presentations
 templates: $slides
 
 -- end: ds.page

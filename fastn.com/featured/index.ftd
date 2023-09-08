@@ -6,7 +6,6 @@
 
 
 -- ds.page: 
-full-width: true
 sidebar: false
 
 -- grid-view: Documentation Sites
@@ -43,7 +42,7 @@ more-link: /featured/resumes/
 if: { show-grid }
 templates: $bling
 more-link-text: View all
-more-link: /featured/components-library/
+more-link: /featured/components/
 
 -- grid-view: Color Schemes
 if: { show-grid }
@@ -55,7 +54,7 @@ more-link: /featured/cs/
 if: { show-grid }
 templates: $fonts
 more-link-text: View all 
-more-link: /featured/fonts-typography/
+more-link: /featured/fonts/
 
 -- end: ds.page
 
@@ -81,7 +80,6 @@ boolean show-large: false
 
 -- ftd.column:
 width: fill-container
-padding-top.px: 8
 spacing.fixed.px if { ftd.device == "mobile" }: 24
 margin-top.px if { grid-view.push-top }: -90
 
@@ -148,10 +146,10 @@ $grid-view.body
 -- ftd.desktop:
 
 -- ftd.row:
-width: fill-container
+width.fixed.vw: 70
 spacing.fixed.px: 32
-classes: wrapper
-classes if { grid-view.show-four }: wrapper-4
+overflow-x: auto
+margin-vertical.px: 40
 
 -- grid-of-items: $obj.title
 $loop$: $grid-view.templates as $obj
@@ -203,6 +201,108 @@ two-fold: $obj.two-fold
 
 
 
+-- component view-all:
+optional caption title:
+template list templates:
+optional body body:
+boolean $hover: false
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px if { ftd.device == "mobile" }: 24
+
+-- ftd.row:
+width: fill-container
+align-content: center
+margin-top.px if { ftd.device == "mobile" }: 24
+
+-- ftd.desktop:
+
+-- ftd.text: $view-all.title
+if: { view-all.title != NULL }
+role: $inherited.types.heading-medium
+color: $inherited.colors.accent.primary
+width: fill-container
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- ftd.text: $view-all.title
+if: { view-all.title != NULL }
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+width: fill-container
+align-self: center
+
+-- end: ftd.mobile
+
+-- end: ftd.row
+
+-- ftd.text:
+if: { view-all.body != NULL }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+margin-top.px: 16
+margin-bottom.px if { ftd.device == "mobile" }: 24
+
+$view-all.body
+
+-- ftd.desktop:
+
+-- ftd.row:
+width.fixed.vw: 70
+spacing.fixed.px: 32
+wrap: true
+margin-vertical.px: 40
+
+-- grid-of-items: $obj.title
+$loop$: $view-all.templates as $obj
+template-url: $obj.template-url
+licence-url: $obj.licence-url
+github-url: $obj.github-url
+screenshot: $obj.screenshot
+body: $obj.body
+is-last: $obj.is-last
+wip: $obj.wip
+two-fold: $obj.two-fold
+
+-- end: ftd.row
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 32
+
+-- grid-of-items: $obj.title
+$loop$: $view-all.templates as $obj
+template-url: $obj.template-url
+licence-url: $obj.licence-url
+github-url: $obj.github-url
+screenshot: $obj.screenshot
+body: $obj.body
+is-last: $obj.is-last
+wip: $obj.wip
+two-fold: $obj.two-fold
+
+-- end: ftd.column
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: view-all
+
+
+
+
+
+
+
+
 -- component grid-of-items:
 caption title: 
 string template-url:
@@ -221,21 +321,19 @@ boolean show-large: false
 -- ftd.column:
 width if { ftd.device == "mobile" }: fill-container
 spacing.fixed.px: 16
-;;open-in-new-tab: true
+min-width.fixed.px: 324
+width.fixed.px: 324
 classes if {grid-of-items.two-fold}: two-folded
 $on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
-height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 220
-height.fixed.px if { grid-of-items.show-large}: 400
-
--- ftd.column:
-width: fill-container
+height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 224
+height.fixed.px if {grid-of-items.two-fold}: 520
+height.fixed.px if {grid-of-items.show-large}: 324
 align-content: center
-border-width.px: 1
 border-color: $inherited.colors.border
-overflow: hidden
+border-width.px: 1
 border-radius.px: 8
-link: $grid-of-items.template-url
+overflow: hidden
 
 -- ftd.desktop:
 
@@ -245,14 +343,14 @@ spacing.fixed.px: 12
 padding.px: 20
 anchor: parent
 bottom.px if { grid-of-items.mouse-in }: 0
-bottom.px if { !grid-of-items.mouse-in }: -60
+bottom.px if { !grid-of-items.mouse-in }: -64
 left.px: 0
 z-index: 999
 background.solid: #222222cc
 border-bottom-left-radius.px: 8
 border-bottom-right-radius.px: 8
 align-content: center
-classes: mouse-over
+
 
 -- ftd.text: $grid-of-items.title
 role: $inherited.types.label-large
@@ -281,7 +379,6 @@ background.solid: #222222cc
 border-bottom-left-radius.px: 8
 border-bottom-right-radius.px: 8
 align-content: center
-classes: mouse-over
 
 -- ftd.text: $grid-of-items.title
 role: $inherited.types.label-large
@@ -297,13 +394,17 @@ width.fixed.px: 22
 -- end: ftd.mobile
 
 -- ftd.column:
+width: fill-container
+align-content: center
+link: $grid-of-items.template-url
+
+-- ftd.column:
 if: { grid-of-items.wip }
 width.fixed.px: 190
 height.fixed.px: 166
 anchor: parent
 background.solid: $overlay-bg
 overflow: hidden
-border-radius.px: 8
 align-content: center
 z-index: 99
 
@@ -328,14 +429,11 @@ color: #d9d9d9
 -- ftd.image:
 if: { $grid-of-items.screenshot != NULL }
 src: $grid-of-items.screenshot
-width: fill-container
-height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 220
-height.fixed.px if { grid-of-items.show-large}: 320
-border-radius.px: 10
 $on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
 $on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
-classes if { grid-of-items.wip }: filter-1px
-css: [$fastn-assets.files.featured.filter.css]
+fit: cover
+width.fixed.px: 324
+height.fixed.px: 224
 
 -- end: ftd.column
 
@@ -496,29 +594,17 @@ screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
 
 -- template list schemes:
 
--- template: Dark Flame CS
-template-url: featured/cs/dark-flame-cs/
-screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
-licence-url: https://github.com/fastn-community/dark-flame-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/dark-flame-cs/
-
-Add warmth and energy to your designs with the `dark-flame-cs`.
-
 -- template: Saturated Sunset CS
 template-url: featured/cs/saturated-sunset-cs/
 screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
-licence-url: https://github.com/fastn-community/saturated-sunset-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/saturated-sunset-cs
 
-Add warmth and energy to your designs with the `saturated-sunset-cs`.
+-- template: Midnight Rush CS
+template-url: featured/cs/midnight-rush-cs/
+screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 
--- template: Winter CS
-template-url: featured/cs/winter-cs/
-screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
-licence-url: https://github.com/fastn-community/winter-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/winter-cs
-
-Add warmth and energy to your designs with the `winter-cs`.
+-- template: Blog Template 1 CS
+template-url: featured/cs/blog-template-1-cs/
+screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
 -- end: schemes
 
@@ -537,9 +623,9 @@ Add warmth and energy to your designs with the `winter-cs`.
 template-url: /featured/components/business-cards/
 screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-ftont.jpg
 
--- template: Modal / Dialog
-template-url: /featured/components/modals/
-screenshot: $fastn-assets.files.images.featured.components.dialog-2.png
+-- template: Modal Cover
+template-url: featured/components/modals/modal-cover/
+screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 
 -- template: Header / Navbars
 template-url: https://fastn-community.github.io/header/
@@ -562,32 +648,17 @@ depending on the programming language.
 
 -- template list fonts:
 
--- template: Lato Typography
-template-url: https://fastn-community.github.io/lato-typography/
-licence-url: https://github.com/fastn-community/lato-typography/blob/main/LICENSE.md
-github-url: https://github.com/fastn-community/lato-typography
-screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
-
-`lato-font` typography is available and can be used inside `fastn` web
-packages.
+-- template: Inter Typography
+template-url: featured/fonts/inter/
+screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
 -- template: Opensans Typography
-template-url: https://fastn-community.github.io/opensans-typography/
-licence-url: https://github.com/fastn-community/opensans-typography/blob/main/LICENSE.md
-github-url: https://github.com/fastn-community/opensans-typography
+template-url: featured/fonts/opensans/
 screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 
-`opensans-font` typography is available and can be used inside `fastn` web
-packages.
-
 -- template: Roboto Typography
-template-url: https://fastn-community.github.io/roboto-typography/
-licence-url: https://github.com/fastn-community/roboto-typography/blob/main/LICENSE.md
-github-url: https://github.com/fastn-community/roboto-typography
+template-url: featured/fonts/roboto/
 screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
-
-`roboto-font` typography is available and can be used inside `fastn` web
-packages.
 
 -- end: fonts
 
@@ -595,17 +666,17 @@ packages.
 
 -- template list sections:
 
--- template: Hero - 1
-template-url: featured/sections/heros/hero-1/
-screenshot: $fastn-assets.files.images.featured.components.hero-1.png
+-- template: Giggle Presentation Template
+template-url: /featured/sections/slides/giggle-presentation-template/
+screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
 
--- template: Hero - 2
-template-url: featured/sections/heros/hero-2/
-screenshot: $fastn-assets.files.images.featured.components.hero-2.png
+-- template: Hero with two CTA - Design 5
+template-url: featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
 
--- template: Hero - 3
-template-url: featured/sections/heros/hero-3/
-screenshot: $fastn-assets.files.images.featured.components.hero-3.png
+-- template: Image Gallery IG
+template-url: /featured/sections/cards/image-gallery-ig/
+screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
 
 
 -- end: sections
@@ -719,5 +790,3 @@ github: https://github.com/FifthTry/roboto
 -- ftd.color overlay-bg:
 light: #00000066
 dark:  #00000066
-
-

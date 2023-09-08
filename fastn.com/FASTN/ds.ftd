@@ -1,7 +1,7 @@
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/utils
--- import: fifthtry.github.io/banner
+-- import: fastn-community.github.io/banner
 -- import: fastn-community.github.io/footer
 -- import: fastn-community.github.io/doc-site/common
 -- import: fastn.com/content-library as cl
@@ -30,6 +30,7 @@ integer logo-width: 120
 integer logo-height: 38
 boolean show-footer: true
 boolean show-banner: true
+optional ftd.raw-image-src favicon:
 
 -- ftd.ui list page.footer:
 
@@ -37,18 +38,21 @@ boolean show-banner: true
 social: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+twitter-url: /twitter/
+discord-url: /discord/
+instagram-url: /instagram/
+copyright: Copyright © 2023 - fastn.com
 
 -- end: page.footer
 
 
 -- ftd.ui list page.banner:
 
-/-- banner.cta-banner:
-cta-text: Jumpstart your Web Development with FTD!
-cta-link: /events/webdev-with-ftd/
+-- banner.cta-banner:
+cta-text: star on Github 🚀
+cta-link: https://github.com/fastn-stack/fastn/
+
+Support us by giving us a
 
 -- end: page.banner
 
@@ -135,6 +139,8 @@ banner: $page.banner
 document-title: $page.document-title
 document-description: $page.document-description
 document-image: $page.document-image
+favicon: $page.favicon
+
 
 -- doc-site.page.header-logo-ui:
 
@@ -143,9 +149,11 @@ document-image: $page.document-image
 -- end: doc-site.page.header-logo-ui
 
 -- ftd.column:
+margin-top.em if { ftd.device == "mobile" }: 0.5
 spacing.fixed.em: 0.8
 width: fill-container
 children: $page.wrapper
+$on-global-key[f]$: $open-search()
 
 -- end: ftd.column
 
@@ -389,3 +397,10 @@ height.fixed.px: 150
 -- void http-call():
 
 ftd.http("/", "get")
+
+
+
+-- void open-search():
+js: [$fastn-assets.files.search.js]
+
+openSearch()

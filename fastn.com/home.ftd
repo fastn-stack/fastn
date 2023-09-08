@@ -72,7 +72,7 @@ lang: ftd
 \-- import: fastn-community.github.io/bling/quote
 
 \-- quote.charcoal: Amit Upadhyay
-label: Creator of FTD
+label: Creator of `fastn`
 avatar: $fastn-assets.files.images.amitu.jpg
 logo: $fastn-assets.files.images.logo-fifthtry.svg
 
@@ -81,7 +81,7 @@ early 2000s, and it makes me a little sad.
 
 
 -- quote.charcoal: Amit Upadhyay
-label: Creator of FTD
+label: Creator of `fastn`
 avatar: $fastn-assets.files.images.amitu.jpg
 logo: $fastn-assets.files.images.logo-fifthtry.svg
 
@@ -100,7 +100,7 @@ caption title:
 \-- ftd.text: $toggle-text.title
 align-self: center
 text-align: center
-color if { toggle-text.current }: #D42D42
+color if { toggle-text.current }: $inherited.colors.cta-primary.disabled
 color: $inherited.colors.cta-primary.text
 background.solid: $inherited.colors.cta-primary.base
 $on-click$: $ftd.toggle($a = $toggle-text.current)
@@ -159,8 +159,7 @@ Pages](https://fastn.com/how-to/github-pages/),
 -- ds.code: `fastn` source code of the page you are reading
 lang: ftd
 
-\-- import: fastn-community.github.io/bling/quote
-\-- import: fastn.com/ftd as ftd-index
+\-- import: fastn-community.github.io/doc-site as ds
 
 \-- ds.page: Overview of `fastn` and its language
 
@@ -206,7 +205,7 @@ SELECT * FROM user;
 
 
 \-- show-person: $p
-$loop$: $people as $p
+for: $p in $people
 
 -- ds.markdown:
 

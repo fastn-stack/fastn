@@ -1,6 +1,7 @@
 -- import: fastn-community.github.io/bling/chat
 -- import: fastn.com/blog/authors
 -- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/utils
 
 -- common.post-meta meta: ACME Inc Case Study
 published-on: August 23, 2023 at 12:26 am
@@ -152,20 +153,39 @@ width.fixed.percent: 95
 
 -- ds.h2: Adding a New Team Member
 
+-- ftd.column:
+width.fixed.px if { ftd.device != "mobile" }: 500
+width: fill-container
+padding.px if { ftd.device != "mobile" }: 24
+padding.px if { ftd.device == "mobile" }: 16
+align-content: center
+align-self: center
+
 -- chat.message-left: Hey Team, please welcome Ayush Soni, our newly joined VP of Product.
 avatar: $fastn-assets.files.images.blog.nandy.jpg
+username: Nandhini Dive
+time: 12.37 pm
+
 
 -- chat.message-left: Hi, guys. Excited to be part of ACME Inc!!!
 avatar: $fastn-assets.files.images.blog.ayush-soni.jpg
+username: Ayush Soni
+time: 12.38 pm
 
 -- chat.message-right: Welcome to the ACME team, Ayush.
 avatar: $fastn-assets.files.images.blog.meenu.jpg
+time: 12.38 pm
 
 -- chat.message-left: Hey Meenu, add Ayush Soni to our team's page. 
 avatar: $fastn-assets.files.images.blog.nandy.jpg
+username: Nandhini Dive
+time: 12.38 pm
 
 -- chat.message-right: Done. Here is the link: https://acme-inc-git-adding-team-member-fifthtry.vercel.app/team/
 avatar: $fastn-assets.files.images.blog.meenu.jpg
+time: 12.43 pm
+
+-- end: ftd.column
 
 -- ds.markdown:
 

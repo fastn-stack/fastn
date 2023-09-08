@@ -186,7 +186,7 @@ align-content: center
 -- github-star-cta:
 link: https://github.com/fastn-stack/fastn/
 
-Support us by becoming a stargazer! 🚀
+Star us on Github 🚀
 
 -- ftd.text: $hero-section.title
 role: $inherited.types.heading-hero
@@ -245,12 +245,13 @@ body subtitle:
 width: fill-container
 height: fill-container
 color: $inherited.colors.text-strong
+padding-top.px: 64
 background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
 
 -- ftd.column:
 width: fill-container
 max-width.fixed.px: 600
-padding-top.em: 8
+padding-top.em: 12
 spacing.fixed.em: 1
 align-self: center
 align-content: center
@@ -621,7 +622,7 @@ optional ftd.resizing min-height:
 -- ftd.column:
 min-height.fixed.em if { card.width == NULL && card.min-height == NULL && ftd.device == "desktop" }: 25
 min-height if { ftd.device == "desktop" }: $card.min-height
-padding.em if { ftd.device == "desktop" }: 2
+padding.em: 2
 spacing.fixed.em: 1
 shadow: $s
 border-radius.em: 1
@@ -630,6 +631,7 @@ width if { ftd.device == "mobile" }: fill-container
 width if { card.width != NULL }: $card.width
 background.solid: $inherited.colors.background.base
 align-content if { ftd.device == "mobile" }: center
+padding.px if { ftd.device == "mobile" }: 24 
 
 -- ftd.image:
 src: $card.image
@@ -744,6 +746,8 @@ boolean $btn-mousein: false
 if: { !github-star-cta.hide }
 align-self: center
 margin-bottom.px: 34
+margin-bottom.px if { $ftd.device == "mobile" }: 100
+margin-top.px if { $ftd.device == "mobile" }: -24
 background.linear-gradient: $star-gradient
 border-radius.px: 80
 padding.px: 2
@@ -1124,9 +1128,10 @@ Install fastn with a Single Command
 social: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+twitter-url: /twitter/
+discord-url: /discord/
+instagram-url: /instagram/
+copyright: Copyright © 2023 - fastn.com
 
 
 -- end: social-sideline-footer
