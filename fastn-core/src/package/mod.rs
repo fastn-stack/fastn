@@ -597,7 +597,14 @@ impl Package {
         package.redirects = {
             let redirects_temp: Option<redirects::RedirectsTemp> =
                 fastn_doc.get("fastn#redirects")?;
-            redirects_temp.map(|r| r.redirects_from_body())
+            if let Some(redirects) = redirects_temp {
+                let result = redirects
+                    .redirects_from_body()
+                    .map_err(|e| fastn_core::Error::GenericError(e.to_string()))?;
+                Some(result)
+            } else {
+                None
+            }
         };
 
         package.auto_import = fastn_doc
