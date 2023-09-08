@@ -943,6 +943,9 @@ impl ExpressionGenerator {
                 return format!(
                     indoc::indoc! {
                         "let fastn_utils_val_{refined_var} = fastn_utils.clone({val});
+                        if (fastn_utils_val_{refined_var} instanceof fastn.mutableClass) {{
+                            fastn_utils_val_{refined_var} = fastn_utils_val_{refined_var}.get();
+                        }}
                         if (!fastn_utils.setter({var}, fastn_utils_val_{refined_var})) {{
                             {var} = fastn_utils_val_{refined_var};
                         }}"
