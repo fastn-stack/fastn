@@ -743,7 +743,7 @@ width.fixed.px: 22
 
 
 -- component promo-card:
-caption title:
+optional caption title:
 optional body body:
 optional string cta-text:
 optional string cta-link:
@@ -777,6 +777,7 @@ align-content: center
 spacing.fixed.px: 24
 
 -- ftd.text: $promo-card.title
+if: { promo-card.title }
 role: $inherited.types.heading-medium
 color: $inherited.colors.text-strong
 text-align: center
@@ -3496,41 +3497,44 @@ optional body body:
 
 -- article-record list articles:
 
--- article-record: Responsive
+-- article-record: Responsive Ready
 image: $fastn-assets.files.images.landing.article-card.png
 
-You can package your components as fastn packages to share with 
-community and access community shared ones.
+fastn has built-in support for responsive design. Your creations automatically 
+adapt to the perfect size, whether your users are on mobile or desktop devices.
 
 -- article-record: Dark mode
 image: $fastn-assets.files.images.landing.article-card.png
 
-You can package your components as fastn packages to share with 
-community and access community shared ones.
+fastn offers inherent support for both dark mode and light mode. This enhances 
+user accessibility and visual presentation of your website.
 
 -- article-record: SEO
 image: $fastn-assets.files.images.landing.article-card.png
 
-You can package your components as fastn packages to share with 
-community and access community shared ones.
+fastn provides custom [URL customization](https://fastn.com/custom-url/), from 
+clean and organized links to [dynamic](https://fastn.com/dynamic-urls/) options. 
+You can also fine-tune [meta information](https://fastn.com/seo-meta/), add 
+OG-image, and manage [URL redirection](https://fastn.com/redirects/).
 
--- article-record: Mark down
+-- article-record: Markdown
 image: $fastn-assets.files.images.landing.article-card.png
 
-You can package your components as fastn packages to share with 
-community and access community shared ones.
+fastn converts markup text into HTML and other formats. You can create 
+content-heavy websites using plain text without missing out on formatting.
 
--- article-record: Data driven
+-- article-record: Upcoming WASM Support
 image: $fastn-assets.files.images.landing.article-card.png
 
-You can package your components as fastn packages to share with 
-community and access community shared ones.
+We are working on WASM support so developers can extend fastn's standard
+libraries and offer access to more backend functionalities.
 
--- article-record: Deploy
+-- article-record: Custom Components
 image: $fastn-assets.files.images.landing.article-card.png
 
-You can package your components as fastn packages to share with 
-community and access community shared ones.
+fastn comes with building blocks like text, images, and containers, enabling 
+custom UI creation from buttons to interactive elements and more. This also 
+makes crafting custom content components for recurring information easier.
 
 -- end: articles
 
@@ -3582,6 +3586,10 @@ src: $fastn-assets.files.images.landing.linkedin-icon.svg
 -- social-media:
 link: /twitter/
 src: $fastn-assets.files.images.landing.tweeter-icon.svg
+
+-- social-media:
+link: /instagram/
+src: $fastn-assets.files.images.landing.instagram.svg
 
 -- end: social-links
 

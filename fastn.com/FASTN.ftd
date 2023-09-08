@@ -892,56 +892,54 @@ document: /community/events/roadshow.ftd
 
 -- fastn.redirects:
 
-/ftd/: /lang/
-/ftd/kernel/: /kernel/
-/ftd/list/: /list/
-/discord/: https://discord.gg/eNXVBMq4xt
-/package-query/: /sql/
-/images-in-modules/: /using-images/
-/images-in-modules/-/planning/: /using-images/-/planning/
-/ftd/variables/: /variables/
-/ftd/built-in-types/: /built-in-types/
-/ftd/record/: /record/
-/ftd/or-type/: /or-type/
-/ftd/row/: /row/
-/ftd/column/: /column/
-/ftd/container/: /container/
-/ftd/text/: /text/
-/ftd/image/: /image/
-/ftd/iframe/: /iframe/
-/ftd/integer/: /integer/
-/ftd/decimal/: /decimal/
-/ftd/boolean/: /boolean/
-/ftd/text-input/: /text-input/
-/blog/web-components/: /web-components/
-/ftd/document/: /document/
-/website-optimization/: /blog/seo/
-/seo/: /seo-meta-data/
-/seo/-/planning: /seo-meta-data/-/planning/
-/blog/seo/: /blog/seo-meta-data/
-/seo-meta-data/: /seo-meta/
-/seo-meta-data/-/planning/: /seo-meta/-/planning/
-/seo-meta-data/-/frontend/: /seo-meta/-/frontend/
-/blog/seo-meta-data/: /blog/seo-meta/
-/markdown-in-doc-site/-/planning/: /markdown/-/planning/
-/create-page/-/planning/: /ds-page/-/planning/
-/rfcs/rfc-process/: /rfc/rfc-process/
-/rfcs/fastn-update/: /rfc/fastn-update/
-/rfcs/variable-interpolation/: /rfc/variable-interpolation/
-/student-programs/champion-program/: /champion-program/
-/student-programs/ambassador-program/: /ambassador-program/
-/student-programs/champion-program/champions/ajit-garg/: /champions/ajit-garg/
-/student-programs/champion-program/champions/ayush-soni/: /champions/ayush-soni/
-/student-programs/ambassador-program/ambassadors/ayush-soni/: /ambassadors/ayush-soni/
-/ambassadors-program/: /ambassador-program/
-/champions-program/: /champion-program/
-;;/learn/: /frontend/learn/
-/blog/writer-journey/: /writer/
-/blog/prove-you-wrong/: /prove/
-/blog/intimidation-of-programming/: /intimidation/
-/frontend/why/: /frontend/
-/twitter/: https://twitter.com/fastn_stack
-/discord/: https://discord.gg/bucrdvptYd
-/instagram/: https://www.instagram.com/fastn_stack/
-/linkedin/: https://www.linkedin.com/company/fastn-stack/
-/overview/: /home/
+/ftd/ -> /lang/
+/ftd/kernel/ -> /kernel/
+/ftd/list/ -> /list/
+/package-query/ -> /sql/
+/images-in-modules/ -> /using-images/
+/images-in-modules/-/planning/ -> /using-images/-/planning/
+/ftd/variables/ -> /variables/
+/ftd/built-in-types/ -> /built-in-types/
+/ftd/record/ -> /record/
+/ftd/or-type/ -> /or-type/
+/ftd/row/ -> /row/
+/ftd/column/ -> /column/
+/ftd/container/ -> /container/
+/ftd/text/ -> /text/
+/ftd/image/ -> /image/
+/ftd/iframe/ -> /iframe/
+/ftd/integer/ -> /integer/
+/ftd/decimal/ -> /decimal/
+/ftd/boolean/ -> /boolean/
+/ftd/text-input/ -> /text-input/
+/blog/web-components/ -> /web-components/
+/ftd/document/ -> /document/
+/website-optimization/ -> /blog/seo/
+/seo/ -> /seo-meta-data/
+/seo/-/planning -> /seo-meta-data/-/planning/
+/blog/seo/ -> /blog/seo-meta-data/
+/seo-meta-data/ -> /seo-meta/
+/seo-meta-data/-/planning/ -> /seo-meta/-/planning/
+/seo-meta-data/-/frontend/ -> /seo-meta/-/frontend/
+/blog/seo-meta-data/ -> /blog/seo-meta/
+/markdown-in-doc-site/-/planning/ -> /markdown/-/planning/
+/create-page/-/planning/ -> /ds-page/-/planning/
+/rfcs/rfc-process/ -> /rfc/rfc-process/
+/rfcs/fastn-update/ -> /rfc/fastn-update/
+/rfcs/variable-interpolation/ -> /rfc/variable-interpolation/
+/student-programs/champion-program/ -> /champion-program/
+/student-programs/ambassador-program/ -> /ambassador-program/
+/student-programs/champion-program/champions/ajit-garg/ -> /champions/ajit-garg/
+/student-programs/champion-program/champions/ayush-soni/ -> /champions/ayush-soni/
+/student-programs/ambassador-program/ambassadors/ayush-soni/ -> /ambassadors/ayush-soni/
+/ambassadors-program/ -> /ambassador-program/
+/champions-program/ -> /champion-program/
+/learn/ -> /frontend/learn/
+/blog/writer-journey/ -> /writer/
+/blog/prove-you-wrong/ -> /prove/
+/blog/intimidation-of-programming/ -> /intimidation/
+/twitter/ -> https://twitter.com/fastn_stack
+/instagram/ -> https://www.instagram.com/fastn_stack/
+/discord/ -> https://discord.gg/eNXVBMq4xt
+/linkedin/ -> https://www.linkedin.com/company/fastn-stack/
+/overview/ -> /home/
