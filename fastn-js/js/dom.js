@@ -1246,6 +1246,62 @@ class Node2 {
             }
         }
     }
+    attachLinkColor(value) {
+        ftd.dark_mode.addClosure(fastn.closure(() => {
+            if (!ssr) {
+                const anchors = this.#node.tagName.toLowerCase() === 'a'
+                    ? [this.#node]
+                    : Array.from(this.#node.querySelectorAll("a"));
+                let propertyShort = `__${fastn_dom.propertyMap["link-color"]}`;
+
+                if(!value) {
+                    anchors.forEach(a => {
+                        a.classList.values().forEach(className => {
+                            if(className.startsWith(`${propertyShort}-`)) {
+                                a.classList.remove(className);
+                            }
+                        });
+                        a.style.color = null;
+                    });
+                } else {
+                    const lightValue = fastn_utils.getStaticValue(value.get("light"));
+                    const darkValue = fastn_utils.getStaticValue(value.get("dark"));
+                    let cls = `${propertyShort}-${JSON.stringify(lightValue)}`;
+                    
+                    if (!fastn_dom.unsanitised_classes[cls]) {
+                        fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
+                    }
+
+                    cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
+
+                    const cssClass = `.${cls}`;
+
+                    if (!fastn_dom.classes[cssClass]) {
+                        const obj = { property: "color", value: lightValue };
+                        fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
+                        let styles = document.getElementById('styles');
+                        styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
+                    }
+
+                    if(lightValue !== darkValue) {
+                        const obj = { property: "color", value: darkValue };
+                        let darkCls = `body.dark ${cssClass}`;
+                        if (!fastn_dom.classes[darkCls]) {
+                            fastn_dom.classes[darkCls] = fastn_dom.classes[darkCls] || obj;
+                            let styles = document.getElementById('styles');
+                            styles.innerHTML = `${styles.innerHTML}${getClassAsString(darkCls, obj)}\n`;
+                        }
+                    }
+
+                    anchors.forEach(a => {
+                        a.style.removeProperty("color");
+                        a.classList.add(cls);
+                    });
+                }
+            }
+        }).addNodeProperty(this, null, inherited));
+        this.#mutables.push(ftd.dark_mode);
+    }
     setStaticProperty(kind, value, inherited) {
         // value can be either static or mutable
         let staticValue = fastn_utils.getStaticValue(value);
@@ -1497,60 +1553,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.BorderBottomColor) {
             this.attachColorCss("border-bottom-color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.LinkColor) {
-            ftd.dark_mode.addClosure(fastn.closure(() => {
-                if (!ssr) {
-                    const anchors = this.#node.tagName.toLowerCase() === 'a'
-                        ? [this.#node]
-                        : Array.from(this.#node.querySelectorAll("a"));
-                    let propertyShort = `__${fastn_dom.propertyMap["link-color"]}`;
-
-                    if(!staticValue) {
-                        anchors.forEach(a => {
-                            a.classList.values().forEach(className => {
-                                if(className.startsWith(`${propertyShort}-`)) {
-                                    a.classList.remove(className);
-                                }
-                            });
-                            a.style.color = null;
-                        });
-                    } else {
-                        const lightValue = fastn_utils.getStaticValue(staticValue.get("light"));
-                        const darkValue = fastn_utils.getStaticValue(staticValue.get("dark"));
-                        let cls = `${propertyShort}-${JSON.stringify(lightValue)}`;
-                        
-                        if (!fastn_dom.unsanitised_classes[cls]) {
-                            fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
-                        }
-
-                        cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
-
-                        const cssClass = `.${cls}`;
-
-                        if (!fastn_dom.classes[cssClass]) {
-                            const obj = { property: "color", value: lightValue };
-                            fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
-                            let styles = document.getElementById('styles');
-                            styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
-                        }
-
-                        if(lightValue !== darkValue) {
-                            const obj = { property: "color", value: darkValue };
-                            let darkCls = `body.dark ${cssClass}`;
-                            if (!fastn_dom.classes[darkCls]) {
-                                fastn_dom.classes[darkCls] = fastn_dom.classes[darkCls] || obj;
-                                let styles = document.getElementById('styles');
-                                styles.innerHTML = `${styles.innerHTML}${getClassAsString(darkCls, obj)}\n`;
-                            }
-                        }
-
-                        anchors.forEach(a => {
-                            a.style.removeProperty("color");
-                            a.classList.add(cls);
-                        });
-                    }
-                }
-            }).addNodeProperty(this, null, inherited));
-            this.#mutables.push(ftd.dark_mode);
+            this.attachLinkColor(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue, true);
         } else if (kind === fastn_dom.PropertyKind.Background) {
