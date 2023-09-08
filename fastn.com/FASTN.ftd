@@ -941,7 +941,6 @@ skip: true
 /ftd/ -> /lang/
 /ftd/kernel/ -> /kernel/
 /ftd/list/ -> /list/
-/discord/ -> https ->//discord.gg/eNXVBMq4xt
 /package-query/ -> /sql/
 /images-in-modules/ -> /using-images/
 /images-in-modules/-/planning/ -> /using-images/-/planning/
@@ -987,4 +986,5 @@ skip: true
 /blog/intimidation-of-programming/ -> /intimidation/
 /twitter/ -> https://twitter.com/fastn_stack
 /instagram/ -> https://www.instagram.com/fastn_stack/
+/discord/ -> https ->//discord.gg/eNXVBMq4xt
 /overview/ -> /home/
