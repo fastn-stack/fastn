@@ -17,6 +17,10 @@ impl RedirectsTemp {
             // <some link> -> <link to redirect>
 
             if let Some((key, value)) = line.split_once(':') {
+                fastn_core::warning!(
+                    "Redirect syntax: '{key}: {value}' will be deprecated\nPlease use the '{key} \
+                    -> {value}' redirect syntax instead."
+                );
                 Self::assert_and_insert_redirect(key, value, &mut redirects)?;
             }
 
