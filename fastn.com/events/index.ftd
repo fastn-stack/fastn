@@ -17,6 +17,7 @@ optional string end-day:
 optional string end-month:
 optional string end-date:
 optional string event-link:
+optional string share-link:
 optional string event-type:
 optional string presence:
 optional body body:
@@ -47,6 +48,7 @@ wrap: $event.wrap
 venue: $event.venue
 host: $event.host
 share-button-text: $event.share-button-text
+share-link: $event.share-link
 
 -- event-mobile: $event.title
 if: {ftd.device == "mobile"}
@@ -67,6 +69,7 @@ wrap: $event.wrap
 venue: $event.venue
 host: $event.host
 share-button-text: $event.share-button-text
+share-link: $event.share-link
 
 
 -- end: ftd.column
@@ -94,6 +97,7 @@ optional string end-day:
 optional string end-month:
 optional string end-date:
 optional string event-link:
+optional string share-link:
 optional string event-type:
 optional string presence:
 optional body body:
@@ -215,6 +219,7 @@ wrap: true
 spacing.fixed.px: 10
 
 -- ftd.row:
+if: { event-desktop.start-day != NULL }
 
 -- title-name: $event-desktop.start-day
 
@@ -229,19 +234,26 @@ color: $inherited.colors.text
 -- title-name: $event-desktop.start-date
 
 -- title-name: from
+if: { event-desktop.start-time != NULL }
 
 -- title-name: $event-desktop.start-time
 
 -- title-name: to
+if: { event-desktop.end-time != NULL }
+
+-- title-name: \- 
+if: { event-desktop.end-time == NULL }
+
+
+-- ftd.row:
+spacing.fixed.px: 10
 
 -- ftd.row:
 if: { event-desktop.end-day != NULL}
 
--- ftd.row:
-
 -- title-name: $event-desktop.end-day
 
--- ftd.text: ,
+-- ftd.text: , 
 role: $inherited.types.button-medium
 color: $inherited.colors.text
 
@@ -252,10 +264,10 @@ color: $inherited.colors.text
 -- title-name: $event-desktop.end-date
 
 -- title-name: at
+if: { event-desktop.end-time != NULL } 
 
 -- title-name: $event-desktop.end-time
 
--- end: ftd.row
 
 -- title-name: $event-desktop.end-time
 if: { event-desktop.end-day == NULL}
@@ -264,7 +276,10 @@ if: { event-desktop.end-day == NULL}
 
 -- end: ftd.row
 
+-- end: ftd.row
+
 -- ftd.row:
+if: { event-desktop.event-type != NULL || event-desktop.event-link != NULL }
 spacing.fixed.px: 24
 
 -- ftd.image:
@@ -274,7 +289,6 @@ src: $assets.files.images.events.live-recording.svg
 spacing.fixed.px: 8
 
 -- title-name: $event-desktop.event-type
-if: { event-desktop.event-type != NULL }
 
 -- title-name: Join now
 url: $event-desktop.event-link
@@ -291,7 +305,7 @@ align-content: center
 src: $assets.files.images.events.share.svg
 
 -- title-name: $event-desktop.share-button-text
-url: $event-desktop.event-link
+url: $event-desktop.share-link
 text-color: $inherited.colors.accent.primary
 
 -- end: ftd.row
@@ -325,6 +339,7 @@ optional string end-day:
 optional string end-month:
 optional string end-date:
 optional string event-link:
+optional string share-link:
 optional string event-type:
 optional string presence:
 optional body body:
@@ -497,7 +512,7 @@ align-content: center
 src: $assets.files.images.events.share.svg
 
 -- title-name: $event-mobile.share-button-text
-url: $event-mobile.event-link
+url: $event-mobile.share-link
 text-color: $inherited.colors.accent.primary
 
 -- end: ftd.row
@@ -761,22 +776,18 @@ color: $inherited.colors.text
 
 
 -- component title-name:
-caption title:
+optional caption title:
 ftd.color text-color: $inherited.colors.text
 optional string url:
 
 -- ftd.column:
 
 -- ftd.text: $title-name.title
-if: {title-name.url != NULL}
+if: { title-name.title != NULL }
 role: $inherited.types.button-medium
 color: $title-name.text-color
-link: $title-name.url
+link if {title-name.url != NULL}: $title-name.url
 
--- ftd.text: $title-name.title
-if: {title-name.url == NULL}
-role: $inherited.types.button-medium
-color: $title-name.text-color
 
 -- end: ftd.column
 

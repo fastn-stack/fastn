@@ -1,109 +1,13 @@
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn-community.github.io/footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
--- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
+-- import: fastn.com/u/yashveer-mehra
+-- import: fastn.com/u/ganesh-salunke
 
 
 
-
-
-
--- ds.page: 
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-full-width: true
-distribution-bar: true
-full-width-bar: true
-
--- ds.page.footer:
-
--- footer.social-sideline-footer:
-social: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
-
--- end: ds.page.footer
-
--- ds.page.abstract-bar:
-
--- ds.distributors: Pattern Business Card
-owners: $owner-fastn
+-- ds.featured-business: Pattern Business Card
+image: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
+owners: [$yashveer-mehra.owner, $ganesh-salunke.owner]
 license-url: https://github.com/fastn-community/pattern-business-card/blob/main/LICENSE
 license: Creative Commons
 published-date: 23-June-2023
-
--- end: ds.page.abstract-bar
-
--- ds.page.full-width-wrap:
-
--- ft-ui.grid-view: Featured Business Cards
-templates: $cards
-more-link-text: View more
-more-link: /featured/components/business-cards/
-show-large: true
-
--- end: ds.page.full-width-wrap
-
--- ds.preview-card:
-image: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
-cta-url: https://gsalunke.github.io/pattern-card-demo/
-cta-text: Demo
 github-url: https://github.com/fastn-community/pattern-business-card
-cta-2-url: https://fastn-community.github.io/pattern-business-card
-cta-2-text: Pattern Business Card
-
--- end: ds.page
-
-
-
-
-
-
-
-
-
-
--- ft-ui.template list cards:
-
--- ft-ui.template: Gradient Business Card
-template-url: featured/components/business-cards/gradient-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-front.jpg
-
--- ft-ui.template: Midnight Business Card
-template-url: featured/components/business-cards/midnight-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
-
--- ft-ui.template: Sunset Business Card
-template-url: featured/components/business-cards/sunset-card/
-screenshot: $fastn-assets.files.images.featured.business-cards.sunset-business-card-front.jpg
-
--- end: cards
-
-
-
-
-
-
-
-
--- common.owner list owner-fastn:
-
--- common.owner: Ganesh Salunke
-profile: featured/contributors/developers/ganesh-salunke/
-avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
-role: Developer
-
--- end: owner-fastn
+demo-link: https://fastn-community.github.io/pattern-business-card/
