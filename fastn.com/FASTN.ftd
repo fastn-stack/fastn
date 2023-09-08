@@ -93,6 +93,7 @@ document: /get-started/browse-pick.ftd
   document: /expander/ds/ds-typography.ftd
   - Change Theme: /theme/
   document: /get-started/theme.ftd
+  skip: true
   - Sitemap: /understanding-sitemap/-/build/
   document: /expander/ds/understanding-sitemap.ftd
   - SEO: /seo-meta/

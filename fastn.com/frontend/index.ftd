@@ -70,7 +70,7 @@ No quotes required.
 
 -- ds.markdown:
 
-These are not built-in components of `fastn`, but are using 
+These are not built-in components of fastn, but are using 
 [open source component libraries](/featured/) built with fastn. Click here to 
 view the 
 [chat component](https://fastn-community.github.io/bling/chat/).
@@ -248,9 +248,9 @@ component.
 
 -- ds.h2: Integrated Design System
 
-`fastn` comes with integrated design system. Instead of specifying font sizes 
+fastn comes with integrated design system. Instead of specifying font sizes 
 or colors, you specify typography and color roles to UI elements. The roles 
-are well defined, so within the `fastn` ecosystem they are well known, and a 
+are well defined, so within the fastn ecosystem they are well known, and a 
 lot of [color scheme](https://fastn.com/featured/cs/) and 
 [typography](https://fastn.com/featured/fonts/) packages available, 
 which you can install and change the entire typography or color scheme 
@@ -269,7 +269,7 @@ perform event handling, abstract out logic into custom components etc.
 
 -- ds.h2: Declare Variables 
 
-In `fastn`, you can create variables with specific types. `fastn` is a
+In fastn, you can create variables with specific types. fastn is a
 strongly-typed language, so the type of each variable must be declared.
 
 Here's an example of how you can define a boolean type variable:
@@ -300,7 +300,7 @@ To know more about variables click [here](/variables/).
 
 -- ds.h2: Perform Event handling
 
-`fastn` makes it easy to add events to your element. 
+fastn makes it easy to add events to your element. 
 
 fastn includes many default functions that are commonly used, like the 
 `toggle` function which can be used to create simple event handling. 
@@ -334,7 +334,7 @@ if: { show }
 
 -- ds.h2: Create Custom Components
 
-In `fastn`, you can create custom components to abstract out logic and improve
+In fastn, you can create custom components to abstract out logic and improve
 code organization. For example:
 
 -- ds.code: `ftd.text` kernel component
@@ -376,7 +376,7 @@ writing without "polluting" the prose with noise.
 
 -- ds.h2: Import
 
-`fastn` allows you to separate component and variable definitions into different
+fastn allows you to separate component and variable definitions into different
 modules, and then use them in any module by using the `import` keyword. This
 helps to logically organize your code and avoid complexity, leading to cleaner
 and easier to understand code.
@@ -392,12 +392,12 @@ lang: ftd
 
 -- ds.markdown:
 
-The code above shows a `fastn` document that imports a library named "`lib`" and
+The code above shows a fastn document that imports a library named "`lib`" and
 has a level 1 heading of "Hello World".
 
 -- ds.h2: Data Driven
 
-The data in the `fastn` files can be trivially extracted, converted to JSON,
+The data in the fastn files can be trivially extracted, converted to JSON,
 whereas in case of markdown you have to write fragile parser to extract the
 data locked in markdown text blobs.
 
@@ -419,7 +419,7 @@ let members: Vec<Member> = doc.invocations("lib.member")?;
 
 -- ds.markdown:
 
-Soon we will support json conversion on `fastn` CLI as well, `fastn json-dump
+Soon we will support json conversion on fastn CLI as well, `fastn json-dump
 team.ftd --invocations=lib.member` will return:
 
 -- ds.code: json returned by `fastn json-dump`
@@ -438,7 +438,7 @@ lang: json
 
 -- ds.h2: Data Modelling
 
-`fastn` language is also a good first class data language. You can define and use 
+fastn language is also a good first class data language. You can define and use 
 records:
 
 -- ds.code: Data Modelling in `fastn`
@@ -451,7 +451,7 @@ optional body bio:
 
 -- ds.markdown:
 
-Each field has a type. `caption` is an alias for `string`, and tells `fastn`
+Each field has a type. `caption` is an alias for `string`, and tells fastn
 that the value can come in the "caption" position, after the `:` of
 the "section line", eg: lines that start with `--`. If a field is optional, it
 must be marked as such.
@@ -488,7 +488,7 @@ Arpita is the primary author of `fastn` language.
 
 -- ds.markdown:
 
-`fastn` provides a way to create a component that can render records and loop
+fastn provides a way to create a component that can render records and loop
 through lists to display all members of the list:
 
 -- ds.code: Looping over a list
@@ -501,7 +501,7 @@ $loop$: $employees as $p
 -- ds.markdown:
 
 This way we can have clean separation of data from presentation. The data
-defined in `fastn` documents can be easily read from say Rust:
+defined in fastn documents can be easily read from say Rust:
 
 -- ds.code: Reading Data from `.ftd` files
 lang: rs
@@ -521,11 +521,11 @@ let employees: Vec<Employee> = doc.get("employees")?;
 
 -- ds.markdown:
 
-As mentioned earlier, `fastn` language is a first-class data language that 
+As mentioned earlier, fastn language is a first-class data language that 
 provides a better alternative to sharing data through CSV or JSON files. 
-Unlike CSV/JSON, in `fastn`, data is type-checked, and it offers a proper 
+Unlike CSV/JSON, in fastn, data is type-checked, and it offers a proper 
 presentation of the data with the option to define components that can render 
-the data and can be viewed in a browser. Furthermore, `fastn` language can 
+the data and can be viewed in a browser. Furthermore, fastn language can 
 also serve as a language for configuration purposes.
 
 -- ds.h1: Next
@@ -543,7 +543,7 @@ also serve as a language for configuration purposes.
 
 
 - **Backend with fastn**:
-  `fastn` also supports a bunch of features that helps you create dynamic websites.
+  fastn also supports a bunch of features that helps you create dynamic websites.
   Click [here](/backend/) to learn more.
 
 

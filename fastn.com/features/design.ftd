@@ -3,163 +3,93 @@
 With an opinionated design system, clear separation of content and design, 
 and many other powerful features, fastn simplifies the web design process. 
 Whether you're a seasoned designer or a beginner, fastn ensures a quicker, more 
-cohesive, and user-friendly design experience. And with our readymade 
-components, you can quickly build modern websites and user interfaces without 
-starting from scratch. 
+cohesive, and user-friendly design experience. Plus, our library of 
+[readymade components](/featured/) allows you to quickly build modern websites 
+and user interfaces without starting from scratch. 
+
+Join our [Discord Community](https://discord.com/invite/a7eBUeutWD) with over 
+1000 developers building fastn components for you to use. 
 
 -- ds.h1: Opinionated Design System
 
-fastn is built upon an opinionated design system, which means we have pre-made 
-many design choices from styles and components, enabling you to build your website quickly.
+fastn comes with integrated design system with pre-defined styles and 
+UI elements, enabling you to build your website quickly.
 
-Every component within the fastn ecosystem adheres to this unified design system, 
-ensuring a harmonious look and feel across your entire site. That means you 
-don't have to mention the colour or font of every UI element. And Every fastn 
-component supports responsive design, dark mode, and themability.
+Every component within the fastn ecosystem adheres to this unified [design 
+system](/design-system/), ensuring a consistent look and feel across your 
+entire site. You don't have to specify colour or font of every UI element. 
 
--- ds.h2: Unified Color and Typography
+Additionally, every fastn component supports responsive design, dark mode, and 
+themability. This fosters the creation of interchangeable components, promoting 
+collaboration between teams. 
 
-We provide a range of color scheme and typography packages that can be 
-imported with just a few lines of code, transforming your website's 
-appearance in an instant.
+Another advantage of our design system is components designed by one team can 
+seamlessly integrate with the work of another. 
 
-You can craft custom content components for recurring information, 
-guaranteeing a consistent user experience across your website. 
-This fosters the creation of interchangeable components, promoting 
-collaboration between teams, that means components designed by one team can 
-be used by another. 
+You can also build custom content components for recurring information, ensuring 
+a consistent user experience throughout your website. Learn how to 
+[build custom components using fastn](/expander/). 
 
-Integrate Figma tokens with fastn's color scheme or create your own scheme from 
-Figma JSON.
 
--- ds.h2: Customizable color schemes
+-- ds.h1: Unified Color and Typography
 
-You can create a `fastn` package that defines a color scheme. In your main
-package, you can import one of the [color schemes](/featured/cs/) and use it as 
-it is or [modify the colors as needed](/modify-cs/). 
+You can manage color palettes and typography centrally to save time and ensure 
+consistent usage across your website. We provide a range of 
+[color scheme](https://fastn.com/featured/cs/) and 
+[typography](https://fastn.com/featured/fonts/) packages that can be imported 
+with just a few lines of code, transforming your website's appearance 
+in an instant.
 
-[Learn more about customizable color schemes](/figma/).
 
-You can also create your own color scheme from [Figma Json](/figma-to-fastn-cs/)
+-- ds.h2: Color schemes
 
--- ds.h2: Customizable Typography
+Create a fastn package defining a color scheme, then import one of the color 
+schemes for use as-is or [customize the colors](/modify-cs/) as needed. 
+You can also integrate [Figma tokens](/figma/) with fastn's color scheme or 
+create your scheme from [Figma Json](/figma-to-fastn-cs/).
 
-You can create a `fastn` package that defines a typography. In your main 
-package, you can import one of the typography and use it as it is or 
-create your own 
+-- ds.h2: Typography
 
-[Learn more about customizable color schemes](/figma/).
+Define a typography fastn package and import one of the typography styles or 
+create your own using Google Fonts and make a fastn font package on GitHub. 
+Learn how to [create your font package](/create-font-package/). Export fastn 
+[typography to JSON](/typo-to-json/) or generate 
+[fastn code from any typography JSON](/typo-json-to-ftd/).
 
 -- ds.h1: Seperation of Content and Design
 
 With fastn, you can modify content without being concerned about design 
-repercussions. Unlike traditional website builders where altering themes or 
-layouts can be arduous and require meticulous adjustments, fastn simplifies 
-the process. A single line of code allows you to change themes, layouts, 
-color schemes, and typography, maintaining design consistency effortlessly. 
-This separation of design and content allows for quick adjustments and 
-minimizes inconsistencies.
+repercussions.  Unlike traditional website builders, where altering themes or 
+layouts can be arduous and require meticulous adjustments, fastn simplifies the 
+process. A single line of code lets you change themes, layouts, color schemes, 
+and typography, ensuring design consistency with ease. This separation of design 
+and content allows for quick adjustments while minimizing inconsistencies.
+
+Read [ACME Case study](/acme/) to best understand the potential of fastn. 
+
+-- ds.h1: Next
+
+- **Get Started with fastn**:
+  We provide a [step-by-step guide](https://fastn.com/quick-build/) to help you 
+  build your first fastn-powered website. You can also read the 
+  [set up process](/install/) which will walk you through the 
+  installation process and provide you with a sample project to tinker with.
+
+
+- **Read the docs**:
+  Our [docs](/ftd/data-modelling/) is the go-to resource for mastering fastn. 
+  It provides valuable resources from in-depth explanations to best practices. 
+
+- **Frontend with fastn**:
+  fastn is a versatile and user-friendly solution for all your frontend 
+  development needs. Click [here](/frontend/) to learn more.
+
+- **Backend with fastn**:
+  fastn also supports a bunch of features that helps you create dynamic websites.
+  Click [here](/backend/) to learn more.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-- Opinionated Design System
-fastn comes with an opinionated design system. We've pre-defined many design 
-choices spanning from styles to components, so you can build your website quickly.
-All components in the ecosystem adhere to a unified design system. This ensures
-that every component blends seamlessly with others, creating a cohesive look 
-and feel across your entire site.
-
-fastn comes with integrated design system. We've many pre-made design choices 
-so you can build your website quickly.
-
-Unified Color and Typography
-fastn has well defined structure to define color schema and typography. 
-A lot of color scheme and typography packages are available, which you can 
-import and change the look and feel of your website in a few lines of code.
-
-A lot of color scheme and typography packages are available, which you can 
-import and change the entire typography or color scheme in a few lines of code.
-
-You can manage color palettes and typography centrally to save time and ensure 
-consistent usage across your website.
-
-Comes with integrated design system with pre-defined styles and UI elements.
-
-Choose from the numerous colour schemes created by 100s of designers. 
-
-Every component supports responsive design, dark mode, themability.
-Responsive Ready
-fastn has built in support for responsive design. Your creations automatically 
-adapt to the perfect size, whether your users are on mobile or desktop devices.
-
-1000+ developers are building fastn components. 
-
-- Typography - Packages, json integration
-
-- Reusable Components - The Uniform Design System allows components created by 
-different teams to be usable by each other. In fastn, you can create custom 
-content components for recurring information. This ensures a consistent user 
-experience throughout your website while saving your time. this Allows us to 
-create interchangeable components etc. Components created by one team can be 
-used by another.
-
-- Modify Content without worrying 
-about design and vice versa
-
-
-
-
-- Color Scheme - Readymade Packages and Seamless Figma Integration
-
--- ds.h1: Separation of design and content
-
-In webflow and other CMS and onlin ewebsite builders, Once you select the theme 
-and add content, it is hard to change the overall 
-design of the site, leaidng to constant adjustments. Design changes may 
-necessitate adjusting multiple templates and pages 
-individually, increasing the risk of inconsistencies.
-
-But in fastn that is not the case. Can modify the content 
-without impacting the design.
-
-Can change themes, layouts, color schemes, and typography with a single 
-line of code.
-
-Instead of font sizes and colours you specify the font typography and colour 
-scheme. 
 
 
 
