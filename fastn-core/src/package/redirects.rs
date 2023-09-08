@@ -9,11 +9,18 @@ impl RedirectsTemp {
         let body = self.body.as_str();
         let mut redirects: ftd::Map<String> = ftd::Map::new();
         for line in body.lines() {
-            if line.trim_start().starts_with(';') {
+            if line.is_empty() || line.trim_start().starts_with(';') {
                 continue;
             }
+            // Supported Redirects Syntax under fastn.redirects
+            // <some link>: <link to redirect>
+            // <some link> -> <link to redirect>
 
             if let Some((key, value)) = line.split_once(':') {
+                redirects.insert(key.trim().to_owned(), value.trim().to_owned());
+            }
+
+            if let Some((key, value)) = line.split_once("->") {
                 redirects.insert(key.trim().to_owned(), value.trim().to_owned());
             }
         }
