@@ -9857,6 +9857,12 @@ pub fn markup_function() -> ftd::interpreter::ComponentDefinition {
             text_arguments(),
             common_arguments(),
             vec![ftd::interpreter::Argument::default(
+                    "link-color",
+                    ftd::interpreter::Kind::record(ftd::interpreter::FTD_COLOR)
+                        .into_optional()
+                        .into_kind_data(),
+                )],
+            vec![ftd::interpreter::Argument::default(
                 "text",
                 ftd::interpreter::Kind::string()
                     .into_kind_data()
