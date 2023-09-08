@@ -266,7 +266,7 @@ class MutableList {
         let current_list = this.#list;
         let new_list = [];
         for (let idx in current_list) {
-            new_list.push( { item: fastn_utils.clone(current_list[idx].item), index: new Mutable(parseInt(idx)) });
+            new_list.push(fastn_utils.clone(current_list[idx].item));
         }
         return new MutableList(new_list);
     }
