@@ -1102,7 +1102,17 @@ impl Document {
 
     pub fn get_redirect(&self) -> Option<(String, i32)> {
         let components = self.get_instructions("ftd#redirect");
-        let c = match components.first() {
+        let c = match components.iter().find(|v| {
+            if let Some(expr) = &v.condition.as_ref() {
+                if let Ok(b) = expr.eval(&self.tdoc()) {
+                    b
+                } else {
+                    false
+                }
+            } else {
+                true
+            }
+        }) {
             Some(v) => v,
             None => return None,
         };
