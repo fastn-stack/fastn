@@ -1261,7 +1261,6 @@ class Node2 {
                                 a.classList.remove(className);
                             }
                         });
-                        a.style.color = null;
                     });
                 } else {
                     const lightValue = fastn_utils.getStaticValue(value.get("light"));
@@ -1293,10 +1292,7 @@ class Node2 {
                         }
                     }
 
-                    anchors.forEach(a => {
-                        a.style.removeProperty("color");
-                        a.classList.add(cls);
-                    });
+                    anchors.forEach(a => a.classList.add(cls));
                 }
             }
         }).addNodeProperty(this, null, inherited));
