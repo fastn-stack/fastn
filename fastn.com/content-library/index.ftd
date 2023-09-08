@@ -3518,19 +3518,19 @@ You can also fine-tune [meta information](https://fastn.com/seo-meta/), add
 OG-image, and manage [URL redirection](https://fastn.com/redirects/).
 
 -- article-record: Markdown
-image: $fastn-assets.files.images.landing.article-card.png
+image: $fastn-assets.files.images.landing.markdown-support.png
 
 fastn converts markup text into HTML and other formats. You can create 
 content-heavy websites using plain text without missing out on formatting.
 
 -- article-record: Upcoming WASM Support
-image: $fastn-assets.files.images.landing.article-card.png
+image: $fastn-assets.files.images.landing.wasm-support.png
 
 We are working on WASM support so developers can extend fastn's standard
 libraries and offer access to more backend functionalities.
 
 -- article-record: Custom Components
-image: $fastn-assets.files.images.landing.article-card.png
+image: https://fastn.com/-/fastn.com/images/featured/cs/forest-cs-dark.png
 
 fastn comes with building blocks like text, images, and containers, enabling 
 custom UI creation from buttons to interactive elements and more. This also 
