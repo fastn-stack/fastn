@@ -202,6 +202,48 @@ padding.px: 10
 
 -- end: ds.rendered
 
+
+
+
+
+
+
+-- ds.h2: `fit`
+
+Type: `optional` `string`
+
+Required: False
+
+The `fit` property determines how a `ftd.image` element should be adjusted to match its container size. It is similar to the [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) CSS property.
+
+This property offers various options for the content to adapt to the container, such as "maintaining the aspect ratio" or "expanding to occupy the available space fully.".
+
+-- ds.rendered: Sample code using `fit`
+
+-- ds.rendered.input:
+
+\-- import: fastn.com/assets
+
+\-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
+fit: cover ;; <hl>
+width: 400
+height: 300
+color: $inherited.colors.text
+padding.px: 10
+
+-- ds.rendered.output:
+
+-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
+fit: cover
+width: 400
+height: 300
+color: $inherited.colors.text
+padding.px: 10
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
 -- end: ds.page
 
 
