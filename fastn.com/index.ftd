@@ -15,16 +15,6 @@ document-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
 full-width: true
 sidebar: false
 
--- ds.page.footer:
-
--- lib.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $lib.social-links
-copyright: Copyright © 2023 - fastn.com
-
--- end: ds.page.footer
-
 -- lib.hero-content:
 
 -- lib.feature-card: Easy to learn
@@ -228,7 +218,7 @@ articles: $lib.articles
 Browse dozens of professionaly designed templates. 
 Easily change structure,style,and graphics -then host instantly.
 
--- lib.feature-card: Data-driven Websites 
+/-- lib.feature-card: Data-driven Websites 
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
 cta-text: Learn more
 cta-link: /backend/

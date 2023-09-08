@@ -84,18 +84,20 @@ children cards:
 
 -- ftd.column:
 width: fill-container
+background.solid if { !feature-card.transparent }: $inherited.colors.background.step-1
+padding-top.px: 60
+padding-horizontal.px: 24
+padding-bottom.px: 50
+margin-bottom.px: 48
+align-content: center
 
 -- ftd.desktop:
 
 -- ftd.column:
 width: fill-container
-background.solid if { !feature-card.transparent }: $inherited.colors.background.step-1
-padding-top.px: 60
-padding-horizontal.px: 24
-padding-bottom.px: 50
 color: $inherited.colors.text-strong
-margin-bottom.px: 48
 spacing.fixed.px: 40
+max-width.fixed.px: 1440
 
 -- ftd.column:
 spacing.fixed.px: 16
@@ -1215,6 +1217,9 @@ background.solid if { !cards-section.transparent }: $inherited.colors.background
 padding.px if { !cards-section.transparent }: 24
 margin-bottom.px: 48
 border-radius.px: 16
+max-width.fixed.px: 1440
+align-content: center
+align-self: center
 
 -- ftd.text: $cards-section.title
 width: fill-container
@@ -2100,15 +2105,17 @@ community-record list communities:
 
 -- ftd.column:
 width: fill-container
+background.solid: $inherited.colors.background.step-1
+padding-vertical.px: 50
+padding-horizontal.px: 24
+align-content: center
 
 -- ftd.desktop:
 
 -- ftd.column:
 width: fill-container
-background.solid: $inherited.colors.background.step-1
-padding-vertical.px: 50
-padding-horizontal.px: 24
-align-content: center
+max-width.fixed.px: 1440
+align-self: center
 
 -- ftd.row:
 width: fill-container
@@ -2117,9 +2124,10 @@ spacing: space-between
 max-width.fixed.px: 1440
 
 -- ftd.column:
-width.fixed.percent: 40
+width.fixed.percent: 50
 color: $inherited.colors.text-strong
 spacing.fixed.px: 24
+align-self: start
 
 -- ftd.image:
 src: $fastn-assets.files.images.landing.triangle-icon.svg
@@ -2138,7 +2146,8 @@ cta-link: $obj.cta-link
 -- end: ftd.column
 
 -- ftd.column:
-width.fixed.percent: 55
+width.fixed.px: 630
+align-self: end
 
 -- ftd.row:
 width: fill-container
@@ -2415,6 +2424,8 @@ article-record list articles:
 -- ftd.column:
 width: fill-container
 align-content: center
+max-width.fixed.px: 1440
+align-self: center
 
 -- ftd.column:
 width: fill-container
