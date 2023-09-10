@@ -1,0 +1,792 @@
+-- import: fastn.com/ftd as ftd-index
+-- import: fastn.com/assets
+
+-- ds.page: `fastn` for geeks
+
+Hello there! I am Amit Upadhyay, and I have built a programming language called
+`fastn`. The `fastn` language is designed for people who are new to programming,
+or people who do not know programming, a really simple programming language, to
+make programming accessible to everyone.
+
+-- ds.code:
+lang: ftd
+
+\-- import: amitu.com/lib
+
+
+\-- lib.amitu: Hello World! 😀
+
+\-- lib.amitu:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+-- ds.markdown:
+
+Which produces:
+
+-- ftd-index.amitu: Hello World! 😀
+
+-- ftd-index.amitu:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+-- ds.markdown:
+
+As you can see this is a language with really simple syntax. It almost looks
+like plain text, with some tiny amount of markup, and the `-- <something>:` etc.
+
+-- ds.h1: Minimal Syntax
+
+As you can see in the above example, the syntax to import a library, and the
+syntax to instantiate a component defined in the library is really the same.
+
+This is a very concious decision, we want people to learn as little syntax, and
+keep the semantics as minimal as possible.
+
+If this was [`mdx`](https://mdxjs.com), it would have looked something like
+this:
+
+-- ds.code:
+lang: js
+
+import {amitu} from './lib.js'
+
+<amitu>Hello World! 😀</amitu>
+
+<amitu>
+
+  you can also write multiline messages easily!
+
+  no quotes. and **markdown** is *supported*.
+
+</amitu>
+
+
+-- ds.markdown:
+
+As you can see this is a lot of syntax. Notice the import syntax is rather
+cumbersome, expecially for someone new to programming. And also notice how the
+syntax for creating a component vs importing the component is wildly different.
+
+And there lies the problem. Today we have to learn a lot to create a simple
+webpage. HTML, CSS and JavaScript at least, and then Markdown, and possibly JSX.
+
+This is if you chose to use `mdx`. The source of most web pages are written by
+developers and is much more complex than I have shown in these examples.
+
+Compare that with the [source
+code](https://github.com/fastn-community/acme-inc/blob/main/index.ftd) of `fastn`
+powered [`acme.fastn.com`](https://acme.fastn.com/) for example:
+
+-- ds.code: `index.ftd` of `acme.fastn.com`
+lang: ftd
+
+\-- ws.page:
+
+\-- ws.hero-with-image: We transform ideas into digital outcomes.
+cta-primary: Learn More
+cta-primary-link: #about
+image: $assets.files.assets.landing.png
+
+We are an award-winning strategic design company that provides consultancy
+services and help you create outstanding digital products.
+
+... rest of code omitted ...
+
+\-- end: ws.page
+
+-- ds.image:
+src: $assets.files.images.acme.png
+
+-- ds.markdown:
+
+As you see the code that is written matches really one on one with the UI that
+is produced.
+
+
+
+
+
+-- ds.h2: `caption` And `body`
+
+Let's look at how a component is defined in `fastn`. BTW this is another thing
+we have done, when using say `mdx`, the language to *use* a component is
+different from the syntax you use to *define* the component. Similarly if you
+are using [markdoc](https://markdoc.dev) by Stripe, if you want to [create your
+own "custom tag"](https://markdoc.dev/docs/tags#create-a-custom-tag), you have
+to jump to JavaScript world. But we will get to it later on, bottom line you can
+create components and use them in same file (if you want, we recommend putting
+component definitions in separate file of course), with the similar looking
+syntax.
+
+Let's see how a component is defined:
+
+-- ds.code:
+lang: ftd
+
+;; here we are using a component called foo
+\-- foo:
+
+;; this is the definition of the component
+\-- component foo:
+
+.. body omitted ..
+
+\-- end: foo
+
+-- ds.markdown:
+
+As you see you use very similar syntax for both using and creating components.
+
+So components are not too great if they do not take arguments or properties, so
+let's see how we do that:
+
+-- ds.code: our component has a title now!
+lang: ftd
+
+;; here we are using a component called foo
+\-- foo:
+title: hello ;; <hl>
+
+;; this is the definition of the component
+\-- component foo:
+string title: ;; <hl>
+
+.. body omitted ..
+
+\-- end: foo
+
+-- ds.markdown:
+
+`fastn` is strongly typed language, so you have to decide what is the type of
+variables. Here we have declared a variable `title` or type `string` (read about
+all the [built in types](http://fastn.com/built-in-types/) we support), which is
+a component variable, or component argument. We also see how it is passed.
+
+Now I do not quite like this. Instead of writing:
+
+-- ds.code:
+lang: ftd
+
+\-- foo:
+title: hello
+
+-- ds.markdown:
+
+What if we can write:
+
+-- ds.code:
+lang: ftd
+
+\-- foo: hello
+
+-- ds.markdown:
+
+One less line! So how do we do it? We call this location, the part that comes
+after `:` in the "section line" (section is what starts with `-- `), the
+`caption` of the section.
+
+-- ds.code:
+lang: ftd
+
+\-- component foo:
+caption title: ;; <hl>
+
+.. body omitted ..
+
+\-- end: foo
+
+-- ds.markdown:
+
+Yes, we have a type called [`caption`](https://fastn.com/built-in-types/#caption)
+(check out the [section grammar](/p1-grammar/) here). With that type both of
+the following are allowed:
+
+-- ds.code:
+lang: ftd
+
+\-- foo:
+title: hello
+
+\-- foo: hello
+
+-- ds.markdown:
+
+Of course you will probably prefer the later one. You can only have one argument
+of type `caption`, you should use it wisely, it should aid in the readability,
+it almost feels like the name of the section, so it should be used as such.
+
+Let me give you another example:
+
+-- ds.code:
+lang: ftd
+
+\-- record person:
+caption name:
+string location:
+optional body bio:
+
+-- ds.markdown:
+
+We are declaring a new [`record`](/record/), which is like a struct or a class,
+with three fields, `name`, which is a `caption`, `location`, which is a
+`string`, and `bio`, which is an `optional body`.
+
+Now let's create a variable of type `person`:
+
+-- ds.code:
+lang: ftd
+
+\-- person amitu: Amit Upadhyay
+location: Bangalore, India
+
+Amit is the founder and CEO of FifthTry.
+
+He loves to code, and is pursuing his childhood goal of
+becoming a professional starer of the trees.
+
+-- ds.markdown:
+
+We are creating a new variable named `amitu`. As you see `caption` and `body`
+types help in the readablity and cleanliness of syntax.
+
+
+-- ds.h2: Context Dependent `end`
+
+Some component may have "children", they are delcared with the type `children`:
+
+-- ds.code:
+lang: ftd
+
+\-- component bar:
+children c: ;; <hl>
+
+.. body omitted ..
+
+\-- end: bar
+
+-- ds.markdown:
+
+To call such a component we have to use an `end` statement as well:
+
+-- ds.code:
+lang: ftd
+
+\-- bar:
+
+\-- foo: hello
+
+this is the "body of foo"
+
+\-- end: bar
+
+
+
+-- ds.markdown:
+
+
+Since `bar` accepts `children`, `bar` needs an `end` statement clause. A
+component can accept both `body` and `children`.
+
+
+-- ds.code:
+lang: ftd
+
+\-- component page:
+optional body b:
+children c:
+
+.. body omitted ..
+
+\-- end: bar
+
+\-- page:
+
+this is the "body of page"
+
+\;; children of page
+\-- foo: hello
+
+this is the "body of foo"
+
+\-- end: page
+
+-- ds.markdown:
+
+We will usually have the definition of `page` in another file, so end user would
+write something like:
+
+-- ds.code:
+lang: ftd
+
+\-- import: lib
+exposing: pricing-page, pricing-card
+
+\-- pricing-page: Our Startup Offers Excellent Prices
+annual-discout: 10%
+
+Thousands of customers trust us for their daily image
+manipulation needs, you can join them by selecting one
+of the plans we offer.
+
+\-- pricing-plan: Free Plan
+price: 0
+
+You can use free plan forever, but there would be a
+water mark.
+
+\-- pricing-plan: Pro Plan
+price: 10
+
+Pro plan offers you a water mark free version.
+
+\-- end: pricing-page
+
+-- ds.markdown:
+
+We can even get rid of the `import` statement from top if you so like.
+
+-- ds.h2: Auto Imports
+
+If you look back at the `index.ftd` listed a bit above, you may be wondering
+where does `ws` come from? We have no import statements in the `index.ftd`
+after all.
+
+We have a feature called [`auto-import`](/auto-import/). Let's take a look at
+[`FASTN.ftd` for the `acme`
+project](https://github.com/fastn-community/acme-inc/blob/main/FASTN.ftd):
+
+-- ds.code: `FASTN.ftd`
+lang: ftd
+
+\-- import: fastn
+
+\-- fastn.package: acme.fastn.com
+favicon: /-/acme.fastn.com/favicon.ico
+
+\-- fastn.dependency: fastn-community.github.io/midnight-storm as theme
+
+.. other dependencies snipped ..
+
+\-- fastn.auto-import: acme.fastn.com/FASTN/ws ;; <hl>
+
+.. rest of file omitted ..
+
+-- ds.markdown:
+
+We are using `fastn.auto-import` to tell `fastn` that the module,
+`acme.fastn.com/FASTN/ws` is auto imported in all files (`fastn module` to be
+technically precise).
+
+Tiny feature to remove boilerplate that bit.
+
+-- ds.h2: Domain Drive Documentation
+
+One of the dificiencies of using markdown is over reliance on headings to
+structure the document. Everything is a blob of text, where heading levels
+function only as visual cues. There is no semantics to `h1`, `h2` etc, beyond
+`h1` is usually displayed larger than `h2`, or h2 is meant to be child of `h1`.
+
+We have given up on `#` to represent `h1`, `##` for `h2` and so on. We are
+markdown without `heading`, and we instead recommend the `-- h1:` syntax. Why?
+So people have to learn one less syntax, but more importantly that you start
+considering using more meaningful symbols when needed.
+
+Consider our [RFCs documents](/rfcs/), let's look at the source one of our RFCs:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn.com/rfcs/lib
+
+\-- lib.rfc: RFC-4: Incremental Build
+id: 0004-incremental-build
+status: accepted
+
+In this RFC we propose persisting build metadata on every
+`fastn build`. This will enable as to only rebuild only
+the minimum number of files needed in the output directory,
+and will significantly cut down build time.
+
+
+\-- lib.motivation:
+
+Current we rebuild every document present in current package,
+and recreate entire `.build` folder. If we have cache metadata
+about the previous, we can do incremental build, and achieve
+much faster builds.
+
+
+\-- lib.detailed-design:
+
+We will create a new cache data, `build-cache.json`, which will
+contain the following information:
+
+.. rest of detailed design omitted ..
+
+\-- lib.teaching-notes:
+
+The feature itself requires no training as this is an internal
+optimisation.
+
+Confiruing CI systems to preserve build cache across builds is
+required. We will be updating our fastn-template Github Action
+to include build caching. We will also have to write blog post
+on how to enable build caching on Vercel, and other hosting
+providers who give caching.
+
+
+\-- lib.unresolved-questions:
+
+There are no known unresolved questions right now.
+
+
+\-- end: lib.rfc
+
+-- ds.markdown:
+
+If you see a similar RFC in Rust, say [default private
+visibility](https://raw.githubusercontent.com/rust-lang/rfcs/master/text/0001-private-fields.md),
+
+-- ds.code:
+lang: md
+
+- Start Date: 2014-03-11
+- RFC PR: [rust-lang/rfcs#1](https://github.com/rust-lang/rfcs/pull/1)
+- Rust Issue: [rust-lang/rust#8122](https://github.com/rust-lang/rust/issues/8122)
+
+# Summary
+
+This is an RFC to make all struct fields private by default.
+This includes both tuple structs and structural structs.
+
+# Motivation
+
+Reasons for default private visibility..
+
+-- ds.markdown:
+
+Everything is a heading.
+
+It is rather hard to extract information out of markdown, you will have to write
+code to make sense of the headings, you will have to hope people are using the
+headings correctly etc.
+
+When using `fastn` you can create components eg `lib.motivation`, and you know
+that this must be the motivation.
+
+Further if you look at [rendered version of RFC](/rfc/incremental-build/) you
+will see it contains more text than what is written in the rfc source code, this
+is because `lib.rfc`
+
+-- ds.code:
+lang: ftd
+
+\-- lib.rfc: RFC-4: Incremental Build
+id: 0004-incremental-build
+status: accepted
+
+In this RFC we propose persisting build metadata on every
+`fastn build`. This will enable as to only rebuild only
+the minimum number of files needed in the output directory,
+and will significantly cut down build time.
+
+
+-- ds.markdown:
+
+Is not just a symantically clearer replacement for `#`, [`lib.rfc` is a
+component](https://github.com/fastn-stack/fastn.com/blob/main/rfcs/lib.ftd#L3-L52).
+
+This is how it looks when rendered:
+
+-- ds.image:
+src: $assets.files.images.rfc.png
+
+-- ds.markdown:
+
+Notice how the "This is a RFC document" note is not in the source listed above,
+it is added by the "component":
+
+-- ds.code:
+lang: ftd
+
+\-- component rfc:
+\;; the title of the RFC
+caption title:
+\;; each rfc should have a unique slug
+string id:
+\;; short summary of the RFC
+body short:
+\;; possible values: proposal, accepted, rejected and
+\;; open-questions. `open-questions` means RFC has been
+\;; reviewed, but some open questions have been found
+\;; and RFC has to be updated. Once RFC has been updated
+\;; it can go back to `proposal` state.
+string status: proposal
+children c:
+
+\-- ds.page: $rfc.title
+
+$rfc.short
+
+\-- note.note: This is a RFC document
+
+This document exists to describe a proposal for enhancing the
+`fastn` language. This is a Request For Comment. Please share
+your comments by posting them in the pull request for this RFC
+if this RFC is not merged yet. If the RFC is merged, you can
+post comment on our [official
+Discord](https://fastn.com/discord/), or open a [discussion on
+Github](https://github.com/orgs/fastn-stack/discussions).
+
+.. snip ..
+
+\-- ds.h2: Status
+
+$rfc.status
+
+
+
+\-- ftd.column:
+width: fill-container
+children: $rfc.c
+
+\-- end: ftd.column
+
+\-- end: ds.page
+
+\-- end: rfc
+
+
+-- ds.markdown:
+
+This allowed us to show the information in a better way than what markdown would
+have allowed. As you can see we have created a component and used other ready
+made components, eg `ds.page`, `ds.h2`, `note.note` etc.
+
+This is really powerful, and we believe non developers can learn to write such
+components with a short amount of training, and create really rich, domain
+driven documents. If you would have used most other tools it would have required
+intervention from developers. Using the same (and a really easy) language to
+author content and create components makes this possible for non developers to
+do it themselves.
+
+-- ds.h2: Indentation?
+
+One of the things we have tried to do is to make sure syntax is such that most
+of the documents do not require indentation. Programming is hard enough, but
+trying to program on an editor that is not designed for programming, an
+indentation aware editor, is almost complete torture.
+
+We are on a mission to make programming accessible to billions of people, and
+we see liberal use of indentation as a hurdle.
+
+A note: fastn language has two "modes", p-script and f-script, what you have
+seen so far is `p-script`, and `f-script` is used in function bodies. We have
+not seen user defined functions yet. Trivial `f-script` too you can write
+without indentation, but inside `if` blocks etc, indentation is un-avoidable,
+and is allowed, rather recommended.
+
+
+-- ds.h1: Variables, Mutability and Bindings
+
+So we have done some work on making the syntax easy on eyes. The other notable
+thing we are trying to do is making data flows managed by the compiler. Let's
+take an example:
+
+-- ds.code: `foo.ftd`
+lang: ftd
+
+\-- integer x: 10
+
+\-- ftd.integer: $x
+
+
+-- ds.markdown:
+
+In this example we have created a new variable `x` or type
+[`integer`](/built-in-types/#integer), with the value `10`. We have then used
+[`ftd.integer`](/integer/), a ["kernel component"](/kernel/), to display it's
+value in the document.
+
+The variable `x` is a module global variable. Module is a single `ftd` file.
+You can access this variable in current module using `$x` syntax. You can access
+this variable from other modules by importing this module and using
+`$<module-alias>.x` syntax.
+
+-- ds.h2: Variables Are Only "Created" If Accessed
+
+In most languages if you define a variable, it is always created. In `fastn` we
+do an analysis of the program and create a variable only when it is accessed
+somewhere by the UI.
+
+-- ds.h2: The "main" Module
+
+The `ftd.integer` is a UI component, and it is being created in module context.
+
+At any time one of the modules is being rendered, and that module is considered
+the "main module".
+
+If we are rendering `foo.ftd`, e.g. by accessing `/foo/` we do folder based
+routing (we also do [dynamic routing](/dynamic-urls/) and [custom
+routes](/custom-url/) etc btw), the "module level UI" `ftd.integer` would be
+constructed, and since that is the only module level UI, that is only UI user
+will see on `/foo/`.
+
+If we import `foo` from another module, say `bar.ftd`, the `ftd.integer` being
+a module level UI would not be visible (we will not evaluate it at all), and
+`foo.x` may or may not be created, depending if module level UI of `bar` used
+`foo.x` or not.
+
+-- ds.code: `bar`
+lang: ftd
+
+\-- import: <package-name>/foo
+
+\-- ftd.text: hello world
+padding.px: $foo.x ;; <hl>
+
+-- ds.markdown:
+
+In this example we have used `foo.x` so `foo.x` would be constructed. If
+we comment out the highlighted line, `foo.x` would not be.
+
+Also since `foo` is not the "main module", the module level UI, `ftd.integer` in
+line number 3 of `foo.ftd` would also not be constructed.
+
+-- ds.h2: Mutable Variables
+
+All variables in `fastn` are "static" variables by default, they can not be
+changed.
+
+But a prelude on lifecycle of a page first.
+
+-- ds.h2: Lifecycle Of A Page
+
+`fastn` runs in either dynamic mode, where you run `fastn serve` on your server,
+or your laptop, which is usually what you will do during development, in this
+mode, every time a route is accessed, it will be rendered. We can also use
+`fastn` in static mode, we run `fastn build` and it generates a folder `.build`
+containing HTML/CSS/JS files you can deploy on any static hosting service.
+
+You are recommended to use static mode if your application allows as it is
+usually faster, requires lesser maintenance, is cheaper to host etc. But if
+you are [fetching dynamic data from external APIs](/http/), [database](/sql/)
+etc when rendering the page, you will want to host in dynamic mode.
+
+Anyways, coming back to lifecycle, in either mode, HTML/CSS/JS is prepared from
+`ftd` files, and handed over to browser, and once a page is loaded, event
+handlers are registered, and users can start interacting with the document, and
+those event handlers can modify the module variables.
+
+But they can not mutate a varible unless the variable is defined as mutable.
+
+-- ds.h2: Declaring a mutable variable
+
+-- ds.code:
+lang: ftd
+
+\;; non mutable variable
+\-- integer x: 10
+
+\;; mutable variable: $ prefix in declaration =>  mutable
+\-- integer $y: 20
+
+-- ds.markdown:
+
+
+
+asd
+
+
+
+
+
+------
+
+
+
+`fastn` is a programming language designed for non programmers, to help people
+create web sites.
+
+-- ds.h1: What is `fastn`?
+
+`fastn` is a bit like Markdown, it allows you to author web content, and `fastn`
+CLI can let you convert `fastn` files (they have `.ftd` extension, `FasTn
+Document`) to HTML/CSS/JavaScript files. Actually the language was part of a
+startup called `FifthTry`, and it was `FifthTry Document`, and originally
+called "ftd language", but since we have extracted it out as an independent
+open source project.
+
+`fastn` cli can work as a server, `fastn serve`, which starts a HTTP server, and
+you can deploy `fastn` server on your Linux machine. `fastn` cli can also work
+as a "static site generator", `fastn build`, which creates a folder `.build`
+that you can deploy on any static host.
+
+We will talk about when to deploy using `fastn serve` and when to prefer `fastn
+build` later on.
+
+-- ds.h1: `fastn` Is Designed For Non Programmers
+
+`fastn` is designed with absolutely minimal syntax so people who have never
+programmed can easily pick it up.
+
+Consider the hello world for example:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: Hello, World!
+
+-- ds.markdown:
+
+In this example we are using a component called `ftd.text` to show some text.
+Notice we have no double quotes aroune `Hello, World!`. If you have to write
+longer text, you can use:
+
+-- ds.code: Multiline Text
+lang: ftd
+
+\-- ftd.text:
+
+Hello, World! This is a longer text, which spans multiple lines.
+
+See how easy this is.
+
+-- ds.markdown:
+
+We actually handle this by creating type called `caption` and `body`, and a type
+called `caption or body`.
+
+We will talk about types in more detail later.
+
+Similarly look at this example:
+
+-- ds.code:
+lang: ftd
+
+\-- import: foo
+
+\-- foo.button: Hello
+
+-- ds.markdown:
+
+Here we are `import`ing a module `foo`, and notice how the syntax to import,
+and syntax to call a component is very similar. We use
+`-- <something>: <optional caption>` for virtually everything, other than the
+body of functions.
+
+-- ds.h1: Markdown ++
+
+Markdown is great, but it is only good for "body" of the page. You can not
+create full page layouts with markdown. Markdown generated content is wrapped
+around a page template, which provides header, footer, sidebar etc, and markdown
+itself can not create these kind of page layout stuff.
+
+This means what you can do with `markdown` is quite limited, and if you want
+
+-- end: ds.page

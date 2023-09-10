@@ -50,6 +50,8 @@ favicon: /-/fastn.com/images/favicon.svg
 - `fastn` Overview: /home/
 - The `fastn` Language: /lang/
   document: /ftd/index.ftd
+- `fastn` for geeks: /geeks/
+  document: why/geeks.ftd
 - Why?: /frontend/why/-/learn/
   document: /frontend/why.ftd
   - `fastn` is Easy To Learn: /easy/
