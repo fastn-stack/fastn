@@ -249,6 +249,7 @@ document: /get-started/browse-pick.ftd
     - Resume 10: /featured/resumes/resume-10/
       skip: true  
   - Workshop Pages: /featured/workshops/
+  skip: true
     - Workshop 1: /featured/workshops/workshop-1/
       skip: true
     - Event 1: /featured/workshops/event-1/
