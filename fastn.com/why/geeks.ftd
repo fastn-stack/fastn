@@ -679,9 +679,10 @@ you are [fetching dynamic data from external APIs](/http/), [database](/sql/)
 etc when rendering the page, you will want to host in dynamic mode.
 
 Anyways, coming back to lifecycle, in either mode, HTML/CSS/JS is prepared from
-`ftd` files, and handed over to browser, and once a page is loaded, event
-handlers are registered, and users can start interacting with the document, and
-those event handlers can modify the module variables.
+`ftd` files, you can call it server side rendering, and handed over to browser,
+and once a page is loaded, event handlers are registered (they "hydration"
+phase), and then users can start interacting with the document, and those event
+handlers can modify variables.
 
 But they can not mutate a varible unless the variable is defined as mutable.
 
@@ -867,6 +868,471 @@ the minimum (hopefull, wip, etc) amount of DOM modifications as possible.
 It is not possible in `fastn` to query or access UI in any way. Document
 contains variables. Components also contains variables. You can mutate or read
 variables, but not UI. UI just exits and responds to data in variables.
+
+In future we will make data about the components heirarchy queryable, e.g. how
+many instances of component `foo` exists in current page, or in a given DOM tree
+branch etc. For now we are thinking about it, not yet sure if it is a good idea.
+
+-- ds.h2: Conditionals And Loops
+
+When invoking a component we can do it conditionally as well:
+
+-- ds.code:
+lang: ftd
+
+\-- boolean $show: false
+
+\-- ftd.text: hello
+if: $show
+
+.. some other UI that toggles `show`
+
+-- ds.markdown:
+
+`fastn` will watch for when the condition, and when it changes the `ftd.text`
+node will added or removed from the DOM. Similarly if we have a list:
+
+-- ds.code:
+lang: ftd
+
+\-- person list $people:
+
+\-- person: Amit Upadhyay
+title: CEO
+
+\-- person: Arpita Jaiswal
+title: Senior Software Engineer
+
+\-- end: people
+
+-- ds.markdown:
+
+We can loop over this loop using:
+
+-- ds.code:
+lang: ftd
+
+\-- show-person: $p
+for: $people as $p
+
+.. some UI that mutates $peope
+
+-- ds.markdown:
+
+Here too we will auto update the DOM if `$people` changes, if an element is
+added or remove, it's corresponding DOM will be added or removed.
+
+
+-- ds.h2: Processors
+
+So, to recap, the initial value of variables comes from server, during server
+side rendering phase, and after page load mostly the variables are mutated for
+UI reasons. In the examples we have seen so far, the values of those variables
+were hard coded in the program, we can fetch those variables using functions
+as well, and those functions can internally call http requests or database
+queries.
+
+Processors are syntax sugar on top of function calls to make them look slightly
+better:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors
+
+\-- string username:
+$processor$: processors.request-data
+
+\-- repo list repos:
+$processor$: processors.pg ;; postgresql processor
+limit: 20
+
+SELECT
+    *
+FROM
+    repos
+WHERE
+    username = $username::TEXT
+LIMIT $limit::INTEGER;
+
+-- ds.markdown:
+
+Which looks slightly better than:
+
+-- ds.code:
+lang: ftd
+
+\-- string username: $fastn.request-data("username")
+\-- repo list repos: $fastn.pg(query="multi line query", limit=20, username=$username)
+
+-- ds.markdown:
+
+The above is not yet supported, we are going to provide these functions soon,
+currently only the `$processor$` form is supported.
+
+In fact in future we will make the later syntax slightly better by supporting
+`{}`:
+
+
+-- ds.code:
+lang: ftd
+
+\-- string username: $fastn.request-data("username")
+\-- repo list repos: {
+    fastn.pg(
+        "multi line query",
+        limit=20,
+        username=$username
+    )
+}
+
+-- ds.markdown:
+
+We will also allow you to remove the name of the first argument by allowing
+`caption` in function body. But processor syntax still wins.
+
+So that is processor, when it works it cleans up your code, that bit, else you
+can jump to the `f-script`, the "function mode", and write arbitrary code.
+
+The function mode is up for major overhaul in next release.
+
+-- ds.h1: A Note On Backward Compatibility
+
+`fastn` is built with long support in mind. We want to be the web native
+language for authoring content. For this to happen we have to make freeze on a
+minimal set.
+
+But changes are possible, so we are planning "edition" support to take care of
+that. In any "fastn package", you can pick an edition, or even on a per ftd
+module basis you can select the edition. Each new release of `fastn` will
+support all past editions, and modules of one edition can co-exist and user
+modules of other editions.
+
+This is on drawing board stage only, though we have created edition=2021,
+edition=2022 and edition=2023 so far. Till now we only supported edition on
+entire server level, (hopefully) in `fastn` 0.5 or 0.6 we will add edition
+support.
+
+-- ds.h1: Types
+
+`fastn` is built with strong type support. We have basic types like `integer`,
+`decimal`, `boolean`, `string`. We are going to add mode basic types like
+`ftd.datetime`, `ftd.timestamp` etc.
+
+We also have `record` syntax to create custom types as we saw above. We also
+have `or-type`, which is basically algebric data type in other languages.
+
+-- ds.h2: `or-type`
+
+You create a new `or-type` like this:
+
+-- ds.code:
+lang: ftd
+
+
+\-- or-type lead:
+
+;; the first person is type, which refers to person
+;; record we created earlier
+\-- person person:
+
+;; here we are creating a record
+\-- record company:
+caption name:
+string contact:
+string fax:
+
+\-- end: lead
+
+
+-- ds.markdown:
+
+In this example we have a created a new type called `lead`, which can be either
+a `person`, a type we created in earlier example, or a `company`, here we
+are creating a new record, `lead.company`.
+
+You can create an instance of the `or-type` using:
+
+-- ds.code:
+lang: ftd
+
+\-- lead.person l: $amitu
+
+-- ds.markdown:
+
+We have created a new `lead`, called `l`, using the `person` clause of the
+`lead` `or-type`, and assigned the `$amitu` variable of type `person` we created
+earlier.
+
+You can also create the instance here:
+
+-- ds.code:
+lang: ftd
+
+\-- lead list leads:
+
+\-- lead.person: John Doe
+title: Senior Designer
+
+John loves to design.
+
+\-- lean.company: Acme, Inc.
+contact: Bugs Bunny
+fax: +1 (555) 12333123
+
+\-- end: leads
+
+-- ds.markdown:
+
+When creating an instance of the record you chose the "variant" you want to use.
+
+You can also have records with constants in them:
+
+-- ds.code:
+lang: ftd
+
+\-- or-type length:
+
+\-- integer px:
+
+\-- constant string fill-parent: Fill Parent
+
+\-- end: length
+
+-- ds.markdown:
+
+The `type` of the `constant`, `fill-parent` is `string`, and it's value is
+`Fill Parent`. The `type` and `value` for constant is under review right now,
+they kind of only help for documentation purpose. We may switch to
+`-- constant fill-parent:` in future.
+
+We can construct the a value of type `length` using:
+
+-- ds.code:
+lang: ftd
+
+\-- length.px l1: 20
+
+\-- length l2: fill-parent
+
+-- ds.markdown:
+
+Currently the `or-type`s can be only constructed in user code, and consumed by
+kernel components, but soon the following would be possible:
+
+-- ds.code:
+lang: ftd
+
+\-- match: l1
+;; by default match is exhaustive, but you can disable this, in this case
+;; for non px we will not show anything
+exhaustive: false
+
+\-- ftd.integer: $v
+case: length.px as $v
+
+\-- end: match
+
+-- ds.markdown:
+
+`case: default` as catch all for everything else is also being considered.
+
+-- ds.h2: `ftd.color`, `ftd.responsive-length` and `ftd.image-src`
+
+These types have special handling in `fastn`, as they support light/dark mode,
+or mobile/desktop responsive. Any kernel component which accepts properties of
+these kinds automatically swtiches their value in DOM based on dark mode
+preference or the device of the user.
+
+This way you do not have to litter your code with a bunch of `if` conditions and
+further `fastn` can convert them to CSS and avoid JS handling altogether.
+
+-- ds.h1: Design System
+
+One of the interesting (controversial?) thing `fastn` has done is trying to
+create a universal design system.
+
+-- ds.h2: Frontend Component Inter-operability Is Broken
+
+If you look at component designed in say React by one team, it is quite likely
+not compatible with component designed by another team, still using React. React
+is just an example, same is true for Angular, Svelte etc as well.
+
+One of the reasons components can not co-operate with each others is each
+component may be written with different set of NPM packages as a dependency,
+frontend ecosystem is quite fragmented, and this alone can cause many components
+to not be compatible with many other components out there.
+
+But beyond framework and dependency incompatibilities, there is another bigger
+problem, the design system incompatibilities. Even if two teams use exactly the
+same set of dependencies, they may chose to use different design systems,
+different class naming conventions, different CSS variable names and so on.
+
+-- ds.h2: Universal Design System
+
+`fastn` comes with a universal design system, in fact our hope is that it is so
+universal it can also be used in non `fastn` frontend code also, like you can
+import it in React, Angular etc as well.
+
+Standards are hard, but this is why we are trying to create a language level
+design system. This is definitely a compromise, maybe some design can not be
+represented using `fastn` design system, but by having a universal design system
+used by entire package ecosystem of `fastn` means any package created any team
+using `fastn` is compatible with any other package by any other team. And this
+may be a huge win as this allows a big ecosystem of packages to chose from.\
+
+-- ds.h2: Elements Of `fastn` Design System
+
+`fastn` design system limits itself to only colors and typography. In future we
+plan to add `icons` as well. For colors and typography, we have types:
+
+-- ds.code:
+lang: ftd
+
+\-- record type-data:
+ftd.responsive-type heading-large:
+ftd.responsive-type heading-medium:
+ftd.responsive-type heading-small:
+ftd.responsive-type heading-hero:
+ftd.responsive-type heading-tiny:
+ftd.responsive-type copy-small:
+ftd.responsive-type copy-regular:
+ftd.responsive-type copy-large:
+ftd.responsive-type fine-print:
+ftd.responsive-type blockquote:
+ftd.responsive-type source-code:
+ftd.responsive-type button-small:
+ftd.responsive-type button-medium:
+ftd.responsive-type button-large:
+ftd.responsive-type link:
+ftd.responsive-type label-large:
+ftd.responsive-type label-small:
+
+-- ds.markdown:
+
+Here is our `ftd.type-data`, which contains `ftd.responsive-types`, which
+themselves are defined as:
+
+-- ds.code:
+lang: ftd
+
+\-- record responsive-type: ;; ftd.responsive-type
+caption ftd.type desktop:
+ftd.type mobile: $responsive-type.desktop
+
+\-- record type:  ;; ftd.type
+optional ftd.font-size size:
+optional ftd.font-size line-height:
+optional ftd.font-size letter-spacing:
+optional integer weight:
+optional string font-family:
+
+-- ds.markdown:
+
+`reponsive-type` allows you to have `desktop` and `mobile` versions of
+`ftd.type`.
+
+So you can specify all the font related properties, e.g. `size`, `line-height`
+etc, and have two version of them, one for `mobile` and another for `desktop`,
+and when you are creating any component you use the variables that are part of
+`ftd.type-data`, as we saw in our earlier example:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.integer: $x
+role: $inherited.types.heading-medium
+
+-- ds.markdown:
+
+We are using the `heading-medium` "role" for our `ftd.integer` type, and this
+is "plucked" from "inherited" properties. Inerited stuff are inherited from
+parent to child, a bit like CSS inheritance. At near the top level of your DOM
+tree you set the `ftd.type-data` for your application, or you can even do it for
+a branch in your UI tree, and you do not have to pass the property around, and
+everything just works. We also convert everything down to CSS, so there is
+runtime JS involved in all this.
+
+It might sound like a very round about way to re-implement CSS, but it gives you
+the best of CSS world, without having to worry about css classes, you can chose
+to use any property in any component, eg you can create a new `ftd.type` or even
+make the elements of `ftd.type` e.g. `size` be a "formula" on your variable and
+it all just works (it should, please report issues).
+
+Similarly we have colors:
+
+-- ds.code:
+lang: ftd
+
+\-- record color-scheme:
+ftd.background-colors background:
+ftd.color border:
+ftd.color border-strong:
+ftd.color text:
+ftd.color text-strong:
+ftd.color shadow:
+ftd.color scrim:
+ftd.cta-colors cta-primary:
+ftd.cta-colors cta-secondary:
+ftd.cta-colors cta-tertiary:
+ftd.cta-colors cta-danger:
+ftd.pst accent:
+ftd.btb error:
+ftd.btb success:
+ftd.btb info:
+ftd.btb warning:
+ftd.custom-colors custom:
+
+\-- record background-colors:
+ftd.color base:
+ftd.color step-1:
+ftd.color step-2:
+ftd.color overlay:
+ftd.color code:
+
+.. and so on ..
+
+-- ds.markdown:
+
+Which we can use like:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.integer: $x
+role: $inherited.types.heading-medium
+color: $inherited.colors.text ;; <hl>
+
+-- ds.markdown:
+
+In `fastn` ecosystem, everyone is using these names, and people can distribute
+color schemes and typography data using color scheme and typography packages,
+which means you can add color scheme created by any team in your project by
+adding it as a dependency, and assinging it at the top level:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/dark-flame-cs
+\-- import: fifthtry.github.io/fastn-io-typography as ft-typogrphy
+
+;; the top level document is usually `ftd.document`
+
+\-- ftd.document:
+ftd.type-data types: $ft-typogrphy.types
+ftd.color-scheme colors: $dark-flame-cs.main
+
+.. rest of your document ..
+
+\-- end: ftd.document
+
+-- ds.markdown:
+
+There you go, you have imported a color scheme.
+
+Since these schemes are standardised we are creating Figma support, so these
+color and typography data can be [imported in Figma](/figma/), and
+[re-exported back](/figma-to-fastn-cs/) to `fastn` files.
 
 -- ds.h1: OLD STUFF TO BE DELETED
 
