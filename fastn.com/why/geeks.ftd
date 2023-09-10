@@ -698,15 +698,177 @@ lang: ftd
 
 -- ds.markdown:
 
+So this is how you declare a mutable variable. We are quite skimpy about syntax,
+since we already introduced `$x`, overloading it's meaning in syntax declaration
+allowed us to not have to teach more syntax, just more semantics. Not sure if
+it's necessarily a good idea, but this is how we are thinking right now, use as
+little syntax to let you do as much as possible.
+
+-- ds.h2: `static` variables
+
+Now that just because you declare a variable as mutable does not mean it is
+acutally going to get mutated during the life cycle of the page. A variable can
+currently only be mutated using event handlers attached to UI (soon we will
+support other event handlers like interval/time based, or browser resize/scroll
+etc, or maybe even web-socket/server-sent-events etc), so if you have no UI that
+mutates a mutable variable, effectively the variable is a `static variable`. So
+it's useful in thinking about variables in terms of `static` vs `dynamic`
+variables.
+
+-- ds.h2: Compiler Decides Based On Program
+
+Based on the program the compiler decides if a variable is static or not, and
+for dynamic variables the data about the variable is sent to browser as well.
+The data we send for a variable is the value of that variable, if the variable
+was static, we do not need it's value as the value would have been used in the
+server rendered HTML already. Along with value we also send the component
+definitions. Say a variable is a list, and for every element of the list a
+component is invoked, we have to send the definition of the component to browser
+only if the list is not static, for static list the HTML is suffecient.
+
+Please note that some of we are saying here is work in progress, this is more of
+how we want the language to be in `1.0`, and not necessarily how it is in
+`0.3.x`.
+
+-- ds.h2: Defining A Function
+
+To modify some variable we can use user defined functions, this is how you
+define a function:
+
+-- ds.code:
+lang: ftd
+
+\-- void incr(a,by):
+integer $a:
+integer by: 1
+
+a = a + by
 
 
-asd
+-- ds.markdown:
+
+We are defining a function `incr`, which is a `void` function, means it does
+not return anything. `void` functions only make sense for event handlers as we
+will see later.
+
+Our function takes two arguments, `a`, which is an integer, and is mutable, and
+`by`, which is also integer, and it has a default value of `1`, so `incr()` can
+be called by omitting the value of `by` as well.
+
+-- ds.h2: How Is A Variable Mutated And Used
+
+Enough theory, let's look at some usage:
+
+-- ds.code:
+lang: ftd
+
+\-- integer $x: 10
+
+\-- ftd.integer: $x
+role: $inherited.types.heading-medium
+$on-click$: $incr($a=$x)
 
 
+-- ds.markdown:
+
+This is what is produces:
+
+-- ftd.integer: $x
+role: $inherited.types.heading-medium
+$on-click$: $incr($a=$x)
+
+-- ds.markdown:
+
+Go on, click on the number above.
+
+A lot is happening in this example, so let's talk about a few of them.
+
+`x` is declared as mutable. We have also used `incr($a=$x)` when calling
+`incr()` to tell we are passing mutable reference to `$x`. If we wanted to pass
+non mutable `by` as well, say we had another module variable `-- integer by: 1`,
+we would have called `incr($a=$x, by=$by)`, without `$` before `by`.
+
+We are using `$on-click$` to register a callback to be executed when a click
+event happens on the corresponding UI. Since we attached a click handler we
+automatically change the `cursor` to `pointer`.
+
+-- ds.h2: Conditional Properties
+
+Let's change the color of `x` based on value of `x`.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.integer: $x
+role: $inherited.types.heading-medium
+$on-click$: $incr($a=$x, by=3)
+color: red
+color if { x % 2 == 0 }: green
+
+-- ds.markdown:
+
+This is what is produces:
+
+-- ftd.integer: $x
+role: $inherited.types.heading-medium
+$on-click$: $incr($a=$x, by=3)
+color: red
+color if { x % 2 == 0 }: green
 
 
+-- ds.h2: Formulas
 
-------
+We can also do:
+
+-- ds.code:
+lang: ftd
+
+\-- integer add(a,b):
+integer a:
+integer b:
+
+a + b
+
+\;; y is defined in terms of `x` and is a "formula"
+\-- integer y: $add(a=$x, b=1) ;; <hl>
+
+\-- ftd.integer: $x
+role: $inherited.types.heading-medium
+$on-click$: $incr($a=$x)
+color: orange
+color if { y % 2 == 0 }: purple
+
+
+-- ftd.integer: $x
+role: $inherited.types.heading-medium
+$on-click$: $incr($a=$x)
+color: orange
+color if { y % 2 == 0 }: purple
+
+-- ds.markdown:
+
+As you see, we have defined `y` based on `x`. Every time `x` changes, `y` is
+re-evaluated (effectively, compiler tries to figure out the minimum number of
+updates), and every bit of UI dependent on `y` is updated.
+
+-- ds.h2: Back To Compiler Analysis
+
+`fastn` is declarative in nature, and compiler figures out most things for you
+(at least it aspires to, we are in early stages, feel free to report bugs and
+join us in fixing them).
+
+If you try to mutate a non mutable variable, or a formula you get a compiler
+error. Otherwise the variable get's mutated and UI get's auto updated, doing
+the minimum (hopefull, wip, etc) amount of DOM modifications as possible.
+
+
+-- ds.h2: It's Only Variables
+
+It is not possible in `fastn` to query or access UI in any way. Document
+contains variables. Components also contains variables. You can mutate or read
+variables, but not UI. UI just exits and responds to data in variables.
+
+-- ds.h1: OLD STUFF TO BE DELETED
 
 
 
@@ -790,3 +952,21 @@ itself can not create these kind of page layout stuff.
 This means what you can do with `markdown` is quite limited, and if you want
 
 -- end: ds.page
+
+
+-- integer $x: 10
+-- integer y: $add(a=$x, b=1)
+
+
+-- void incr(a,by):
+integer $a:
+integer by: 1
+
+a = a + by
+
+
+-- integer add(a,b):
+integer a:
+integer b:
+
+a + b
