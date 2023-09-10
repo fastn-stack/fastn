@@ -1179,7 +1179,7 @@ design system. This is definitely a compromise, maybe some design can not be
 represented using `fastn` design system, but by having a universal design system
 used by entire package ecosystem of `fastn` means any package created any team
 using `fastn` is compatible with any other package by any other team. And this
-may be a huge win as this allows a big ecosystem of packages to chose from.\
+may be a huge win as this allows a big ecosystem of packages to chose from.
 
 -- ds.h2: Elements Of `fastn` Design System
 
@@ -1334,88 +1334,62 @@ Since these schemes are standardised we are creating Figma support, so these
 color and typography data can be [imported in Figma](/figma/), and
 [re-exported back](/figma-to-fastn-cs/) to `fastn` files.
 
--- ds.h1: OLD STUFF TO BE DELETED
+-- ds.h2: Module Interaces
 
+One goal we had since day one was to be able to completely change look and feel
+of a website by chaning only a few lines of code. Let's see what I mean, look
+at this site powered by `fastn`, [`acme.fastn.com`](https://acme.fastn.com).
+And then someone sends this pull request:
 
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/9/files)
+src: $fastn-assets.files.images.blog.layout-fc.png
+width.fixed.percent: 95
 
-`fastn` is a programming language designed for non programmers, to help people
-create web sites.
+-- ds.image: [Before Changes](https://acme.fastn.com/)
+src: $fastn-assets.files.images.blog.old-layout.png
+width.fixed.percent: 95
 
--- ds.h1: What is `fastn`?
+-- ds.image: [After Changes](https://acme-inc-git-design-change-fifthtry.vercel.app/)
+src: $fastn-assets.files.images.blog.new-layout.png
+width.fixed.percent: 95
 
-`fastn` is a bit like Markdown, it allows you to author web content, and `fastn`
-CLI can let you convert `fastn` files (they have `.ftd` extension, `FasTn
-Document`) to HTML/CSS/JavaScript files. Actually the language was part of a
-startup called `FifthTry`, and it was `FifthTry Document`, and originally
-called "ftd language", but since we have extracted it out as an independent
-open source project.
+Go ahead, click on the dark mode floating buttom on the bottom right to switch
+modes to see how they look in light and dark mode. Look at how much the design
+has changed, the color schemes, the typography, and the design/layout of
+components themselves, with just three lines of code change.
 
-`fastn` cli can work as a server, `fastn serve`, which starts a HTTP server, and
-you can deploy `fastn` server on your Linux machine. `fastn` cli can also work
-as a "static site generator", `fastn build`, which creates a folder `.build`
-that you can deploy on any static host.
+-- ds.h2: Module Interface
 
-We will talk about when to deploy using `fastn serve` and when to prefer `fastn
-build` later on.
+The color and typgraphy change happened because well they are using our
+universal design system. But how did the component layout etc change?
 
--- ds.h1: `fastn` Is Designed For Non Programmers
+This is achievable by CSS to some extent, but at one time [CSS Zen
+Garden](http://www.csszengarden.com) was a go to for people to learn to do this
+kind of drastic changes to websites by just modifying CSS.
 
-`fastn` is designed with absolutely minimal syntax so people who have never
-programmed can easily pick it up.
+But that was a sort of not scalable. First of all not all design changes can
+be done by the CSS, without also modifying the HTML structure. But that is only
+visual, components in `fastn` come with event handling etc, are full blown
+components, what is in one design you wanted to some information as carosal and
+in another design using tabs? This is not possible with just CSS.
 
-Consider the hello world for example:
+We can do this by swapping our the component libraries. But while doing so how
+do we make sure that the authored content of your website does not change?
 
--- ds.code:
-lang: ftd
+We do this using a feature called "module interface". One of the types in `fastn`
+is a `module` type. A module represents a fastn document, the module interface
+for any module is the set of types, variables, functions and components defined
+in that module.
 
-\-- ftd.text: Hello, World!
+And you can create a module which acts as a module interface that other modules
+implement. To implement the interface of another module you have to ensure exact
+same types, variables, functions and components are defined, or else it is a
+compiler error.
 
--- ds.markdown:
+If two modules implement same module interface, they are interchangable. And
+this is the last trick to achieve the drastic design change without modifying
+anything else in the site.
 
-In this example we are using a component called `ftd.text` to show some text.
-Notice we have no double quotes aroune `Hello, World!`. If you have to write
-longer text, you can use:
-
--- ds.code: Multiline Text
-lang: ftd
-
-\-- ftd.text:
-
-Hello, World! This is a longer text, which spans multiple lines.
-
-See how easy this is.
-
--- ds.markdown:
-
-We actually handle this by creating type called `caption` and `body`, and a type
-called `caption or body`.
-
-We will talk about types in more detail later.
-
-Similarly look at this example:
-
--- ds.code:
-lang: ftd
-
-\-- import: foo
-
-\-- foo.button: Hello
-
--- ds.markdown:
-
-Here we are `import`ing a module `foo`, and notice how the syntax to import,
-and syntax to call a component is very similar. We use
-`-- <something>: <optional caption>` for virtually everything, other than the
-body of functions.
-
--- ds.h1: Markdown ++
-
-Markdown is great, but it is only good for "body" of the page. You can not
-create full page layouts with markdown. Markdown generated content is wrapped
-around a page template, which provides header, footer, sidebar etc, and markdown
-itself can not create these kind of page layout stuff.
-
-This means what you can do with `markdown` is quite limited, and if you want
 
 -- end: ds.page
 
