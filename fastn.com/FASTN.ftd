@@ -196,9 +196,10 @@ favicon: /-/fastn.com/images/favicon.svg
 - SEO meta: /workshop/seo/
   document: /workshop/13-seo-meta.ftd
 - clean the urls: /workshop/clean-url
-  document: /workshop/14=redirect.ftd
-- Redirect: /workshop/redirect/
   document: /workshop/15-clean-url.ftd
+- Redirect: /workshop/redirect/
+  document: /workshop/14-redirect.ftd
+  
 
    
 # Design: /figma/
