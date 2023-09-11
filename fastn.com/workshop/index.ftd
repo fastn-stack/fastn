@@ -26,14 +26,16 @@ The code for this workshop can be found on Github:
   learning-template)
 - [Basics Of Markdown](/workshop/basics-of-markdown/) (link, bold, italic, lists)
 - [Add A New Page](/workshop/add-new-page/) (Add a new file, hyperlink each other)
+- [Add sitemap](/workshop/add-sitemap)
 - [Add an image, youtube video](/workshop/add-image-and-video/)
 - Using More [sections](/workshop/more-sections/) To create a realistic website
 - [Change color scheme, typography](/workshop/change-cs-and-typo/)
 - [Change theme](/workshop/change-theme/)
 - [ds.ftd](/workshop/ds/)
 - [SEO meta](/workshop/seo/)
-- [redirect](/workshop/redirect/)
 - `document` key for [clean urls](/workshop/clean-url)
+- [redirect](/workshop/redirect/)
+
 
 
 
