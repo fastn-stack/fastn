@@ -1,0 +1,30 @@
+-- ftd.cookie user: user-name
+value: Harsh Singh
+secure: true
+
+-- ftd.cookie user-2: user-name
+value: Rithik Seth
+secure: true
+
+-- string $user-name: *$user.value
+
+-- ftd.text: $user-name
+
+-- ftd.text: Save User Cookie
+$on-click$: $save-user(a = $user)
+
+-- ftd.text: Update User Cookie
+$on-click$: $save-user(a = $user-2)
+
+-- ftd.text: Get User
+$on-click$: $get-user($a = $user-name)
+
+-- void save-user(a):
+ftd.cookie a:
+
+ftd.cookie.set(a)
+
+-- void get-user(a):
+string $a:
+
+__args__.a.set(ftd.cookie.get("user-name"))

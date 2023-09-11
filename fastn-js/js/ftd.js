@@ -273,15 +273,16 @@ ftd.cookie = {
         let cookieString = `${cookieKey}=${encodeURIComponent(cookieValue)}`;
 
         if (expires) {
-            cookieString += `; expires=${expires.toUTCString()}`;
+            cookieString += `; expires=${fastn_utils.getStaticValue(expires)}`;
+            // cookieString += `; expires=${fastn_utils.getStaticValue(expires).toUTCString()}`;
         }
         if (path) {
-            cookieString += `; path=${path}`;
+            cookieString += `; path=${fastn_utils.getStaticValue(path)}`;
         }
         if (domain) {
-            cookieString += `; domain=${domain}`;
+            cookieString += `; domain=${fastn_utils.getStaticValue(domain)}`;
         }
-        if (secure) {
+        if (secure && fastn_utils.getStaticValue(secure)) {
             cookieString += '; secure';
         }
 
