@@ -1104,27 +1104,32 @@ impl Document {
         let components = self.get_instructions("ftd#redirect");
 
         for v in &components {
+            let url = v
+                .get_interpreter_value_of_argument("url", &self.tdoc())
+                .and_then(|v| v.string(self.name.as_str(), 0).ok());
+            let code = v
+                .get_interpreter_value_of_argument("code", &self.tdoc())
+                .and_then(|v| v.integer(self.name.as_str(), 0).ok());
+
+            if v.condition.is_none() {
+                if let Some(url) = url.clone() {
+                    if let Some(code) = code {
+                        return Ok(Some((url, code as i32)));
+                    }
+                }
+            }
+
             if let Some(expr) = &v.condition.as_ref() {
                 match expr.eval(&self.tdoc()) {
-                    Ok(b) => {
-                        if b {
-                            let url = v
-                                .get_interpreter_value_of_argument("url", &self.tdoc())
-                                .and_then(|v| v.string(self.name.as_str(), 0).ok());
-                            let code = v
-                                .get_interpreter_value_of_argument("code", &self.tdoc())
-                                .and_then(|v| v.integer(self.name.as_str(), 0).ok());
-
-                            if let Some(url) = url {
-                                if let Some(code) = code {
-                                    return Ok(Some((url, code as i32)));
-                                }
+                    Ok(b) if b => {
+                        if let Some(url) = url {
+                            if let Some(code) = code {
+                                return Ok(Some((url, code as i32)));
                             }
                         }
                     }
-                    Err(e) => {
-                        return Err(e);
-                    }
+                    Err(e) => return Err(e),
+                    _ => {}
                 }
             }
         }
