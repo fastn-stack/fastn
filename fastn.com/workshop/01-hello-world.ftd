@@ -1,0 +1,13 @@
+-- ds.page: Hello World - `fastn` Hands-On Workshop
+
+THis is first step in the [`fastn` Hands On Workshop](/workshop/). In this we
+will install fastn on your machine, and run `fastn`.
+
+-- ds.h1: Install `fastn`
+
+-- ds.h1: Run `fastn`
+
+-- ds.h1: Update `index.ftd`
+
+
+-- end: ds.page

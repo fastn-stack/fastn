@@ -1,0 +1,37 @@
+-- ds.page: `fastn` Hands-On Workshop
+
+Welcome to the official Hands-On workshop to learn `fastn`.
+
+Once you finish this workshop, check out the [Workshop For
+Developers](/workshop/devs/) to learn `fastn` in more details.
+
+Please join our [Discord to ask any questions](https://fastn.com/discord/)
+related to this workshop!
+
+Or just meet the others who are learning `fastn` like you :-)
+
+The code for this workshop can be found on Github:
+[fastn-stack/workshop](https://github.com/fastn-stack/workshop).
+
+
+-- ds.h1: Start Here
+
+- [Hello World fastn](/workshop/hello-world/) (emtpy FASTN.ftd file with comments, missing index.ftd)
+- Add Quote (Add dependency in FASTN.ftd, and add it in index.ftd)
+- Add doc-site (website) (add depdenency in FASTN.ftd and use ds.page in index.ftd)
+- publish on Github Pages (lets create a new template, learning-template)
+- Basics Of Markdown (link, bold, italic, lists)
+- Add A New Page (Add a new file, hyperlink each other)
+- Add an image, youtube video
+- Using More sections To create a realistic website
+- Change color scheme, typography
+- change theme
+- ds.ftd
+- SEO meta
+- redirect
+- document key for clean urls
+
+
+
+
+-- end: ds.page
