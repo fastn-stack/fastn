@@ -1100,7 +1100,7 @@ impl Document {
             .collect_vec()
     }
 
-    pub fn get_redirect(&self) -> Result<Option<(String, i32)>, super::Error> {
+    pub fn get_redirect(&self) -> ftd::interpreter::Result<Option<(String, i32)>> {
         let components = self.get_instructions("ftd#redirect");
 
         for v in &components {
