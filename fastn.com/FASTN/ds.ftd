@@ -33,6 +33,8 @@ integer logo-height: 38
 boolean show-footer: true
 boolean show-banner: true
 optional ftd.raw-image-src favicon:
+boolean search: true
+optional string search-url: /search/
 
 -- ftd.ui list page.footer:
 
@@ -143,7 +145,8 @@ document-title: $page.document-title
 document-description: $page.document-description
 document-image: $page.document-image
 favicon: $page.favicon
-
+search: $page.search
+search-url: $page.search-url
 
 -- doc-site.page.header-logo-ui:
 
