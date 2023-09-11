@@ -10761,6 +10761,12 @@ fn text_arguments() -> Vec<ftd::interpreter::Argument> {
                 .into_optional()
                 .into_kind_data(),
         ),
+        ftd::interpreter::Argument::default(
+            "link-color",
+            ftd::interpreter::Kind::record(ftd::interpreter::FTD_COLOR)
+                .into_optional()
+                .into_kind_data(),
+        ),
     ]
 }
 

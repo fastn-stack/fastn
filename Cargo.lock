@@ -1519,7 +1519,7 @@ dependencies = [
 
 [[package]]
 name = "fastn"
-version = "0.3.42"
+version = "0.3.49"
 dependencies = [
  "clap",
  "colored",

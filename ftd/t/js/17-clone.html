@@ -16,12 +16,14 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-1 __p-3 __g-4"><div data-id="4">Ritesh</div><div data-id="5">Ritesh</div><div data-id="6">Ritesh</div><div data-id="7" class="__cur-5">Change name 1</div><div data-id="8" class="__cur-5">Change name 2</div></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __p-4 __g-5"><div data-id="4">Ritesh</div><div data-id="5">Ritesh</div><div data-id="6">Ritesh</div><div data-id="7" class="__cur-6">Change name 1</div><div data-id="8" class="__cur-7">Change name 2</div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
-	.__p-3 { padding: 10px; }
-	.__g-4 { gap: 5px; }
-	.__cur-5 { cursor: pointer; }
+	.__w-3 { width: 100%; }
+	.__p-4 { padding: 10px; }
+	.__g-5 { gap: 5px; }
+	.__cur-6 { cursor: pointer; }
+	.__cur-7 { cursor: pointer; }
     </style>
 <script>
     (function() {
@@ -81,6 +83,9 @@ let foo__append_yo = function (args)
   try {
     let __args__ = args;
     let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + " yo ");
+    if (fastn_utils_val___args___a instanceof fastn.mutableClass) {
+      fastn_utils_val___args___a = fastn_utils_val___args___a.get();
+    }
     if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
       __args__.a = fastn_utils_val___args___a;
     }
