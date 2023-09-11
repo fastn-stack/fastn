@@ -715,8 +715,8 @@ template-url: /featured/sections/slides/giggle-presentation-template/
 screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
 
 -- template: Hero with two CTA - Design 5
-template-url: featured/sections/heros/hero-right-hug
-screenshot: $fastn-assets.files.images.featured.components.hero-right-hug.jpg
+template-url: featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
 
 -- template: Image Gallery IG
 template-url: /featured/sections/cards/image-gallery-ig/
