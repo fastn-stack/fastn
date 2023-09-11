@@ -466,13 +466,8 @@ impl ftd::interpreter::Component {
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
         if ftd::js::element::is_kernel(self.name.as_str()) {
             if !*has_rive_components {
-                println!("Found component: {}", self.name.as_str());
                 *has_rive_components = ftd::js::element::is_rive_component(self.name.as_str());
-                println!("After changing");
-                dbg!(&has_rive_components);
             }
-            println!("Just after changing if false");
-            dbg!(&has_rive_components);
             Some(
                 ftd::js::Element::from_interpreter_component(self, doc).to_component_statements(
                     parent,
