@@ -1,9 +1,10 @@
 -- import: fastn.com/featured as ft-ui
 
--- ds.page: 
+
+-- ds.page:
 sidebar: false
 
--- ft-ui.grid-view: Resumes
+-- ft-ui.view-all: Resumes
 templates: $resumes
 
 -- end: ds.page

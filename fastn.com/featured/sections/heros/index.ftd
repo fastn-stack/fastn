@@ -1,6 +1,7 @@
 -- import: fastn.com/featured as ft-ui
 
--- ds.page: 
+
+-- ds.page:
 sidebar: false
 
 -- ft-ui.view-all: Hero

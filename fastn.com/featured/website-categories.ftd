@@ -4,7 +4,8 @@
 
 
 
--- ds.page: 
+
+-- ds.page:
 sidebar: false
 
 -- ft-ui.grid-view: Documentation Sites
