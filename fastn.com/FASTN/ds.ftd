@@ -72,12 +72,6 @@ Support us by giving us a
 Enjoying `fastn`? Please consider giving us a star ⭐️ on
 [GitHub](https://github.com/fastn-stack/fastn) to show your support!
 
--- utils.compact-text.inner:
-
--- star-component:
-
--- end: utils.compact-text.inner
-
 -- end: utils.compact-text
 
 -- utils.compact-text: Getting Help
@@ -93,12 +87,6 @@ Join our [Discord](https://discord.gg/a7eBUeutWD) channel and share your
 thoughts, suggestion, question etc.
 
 Connect with our [community](/community/)!
-
--- utils.compact-text.inner:
-
--- chronica-component:
-
--- end: utils.compact-text.inner
 
 -- end: utils.compact-text
 
@@ -147,12 +135,6 @@ document-image: $page.document-image
 favicon: $page.favicon
 search: $page.search
 search-url: $page.search-url
-
--- doc-site.page.header-logo-ui:
-
--- car-component:
-
--- end: doc-site.page.header-logo-ui
 
 -- ftd.column:
 margin-top.em if { ftd.device == "mobile" }: 0.5
