@@ -429,6 +429,10 @@ let fastn_utils = {
         let ch_map = {
             '<': "&lt;",
             '>': "&gt;",
+            '&': "&amp;",
+            '"': "&quot;",
+            "'": "&#39;",
+            '/': "&#47;",
         };
         for (var i = 0; i < str.length; i++) {
             let current = str[i];
