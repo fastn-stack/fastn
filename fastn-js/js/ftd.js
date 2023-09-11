@@ -254,3 +254,66 @@ ftd.local_storage = {
         localStorage.removeItem(key);
     }
 }
+
+ftd.cookie = {
+    _get_key(key) {
+        if (key instanceof fastn.mutableClass) {
+            key = key.get();
+        }
+        const packageNamePrefix = __fastn_package_name__ ? `${__fastn_package_name__}_` : "";
+        const snakeCaseKey = fastn_utils.toSnakeCase(key);
+    
+        return `${packageNamePrefix}${snakeCaseKey}`;
+    },
+    set(cookieData) {
+        const { key, value, expires, path, domain, secure } = cookieData.toObject();
+        const cookieKey = this._get_key(key);
+        const cookieValue = fastn_utils.getFlattenStaticValue(value);
+        
+        let cookieString = `${cookieKey}=${encodeURIComponent(cookieValue)}`;
+
+        if (expires) {
+            cookieString += `; expires=${expires.toUTCString()}`;
+        }
+        if (path) {
+            cookieString += `; path=${path}`;
+        }
+        if (domain) {
+            cookieString += `; domain=${domain}`;
+        }
+        if (secure) {
+            cookieString += '; secure';
+        }
+
+        document.cookie = cookieString;
+    },
+    get(key) {
+        key = this._get_key(key);
+        if (ssr && !hydrating) {
+            return;
+        }
+        const cookies = Object.fromEntries(
+            document.cookie.split("; ").map(cookie => {
+                const [cookieName, cookieValue] = cookie.split("=");
+                return [cookieName, decodeURIComponent(cookieValue)];
+            })
+        );
+
+        const item = cookies[key];
+
+        if (!item) {
+            return;
+        }
+
+        try {
+            const obj = JSON.parse(item);
+            return fastn_utils.staticToMutables(obj);
+        } catch {
+            return item;
+        }
+    },
+    delete(key) {
+        key = this._get_key(key);
+        document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    }
+}
