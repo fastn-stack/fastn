@@ -166,22 +166,6 @@ favicon: /-/fastn.com/images/favicon.svg
 
 ## Events: /hackodisha/
   document: /events/hackodisha.ftd
-   
-# Design: /figma/
-  document: cs/ftd-to-figma.ftd
-
-- Use Figma Tokens with fastn color schemes: /figma/
-  document: cs/ftd-to-figma.ftd
-- Create your own fastn color scheme from Figma json: /figma-to-fastn-cs/
-  document: cs/figma-to-ftd.ftd
-- Modify color scheme package: /modify-cs/
-  document: cs/modify-cs.ftd
-- Create `font` package: /create-font-package/
-  document: author/how-to/create-font-package.ftd
-- Export typography as json: /typo-to-json/
-  document: typo/typo-to-json.ftd
-- Typography json to FTD: /typo-json-to-ftd/
-  document: typo/typo-json-to-ftd
 
 ## Workshop: /workshop/
 
@@ -215,6 +199,23 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /workshop/14=redirect.ftd
 - Redirect: /workshop/redirect/
   document: /workshop/15-clean-url.ftd
+
+   
+# Design: /figma/
+  document: cs/ftd-to-figma.ftd
+
+- Use Figma Tokens with fastn color schemes: /figma/
+  document: cs/ftd-to-figma.ftd
+- Create your own fastn color scheme from Figma json: /figma-to-fastn-cs/
+  document: cs/figma-to-ftd.ftd
+- Modify color scheme package: /modify-cs/
+  document: cs/modify-cs.ftd
+- Create `font` package: /create-font-package/
+  document: author/how-to/create-font-package.ftd
+- Export typography as json: /typo-to-json/
+  document: typo/typo-to-json.ftd
+- Typography json to FTD: /typo-json-to-ftd/
+  document: typo/typo-json-to-ftd
 
 
 # Frontend: /frontend/why/

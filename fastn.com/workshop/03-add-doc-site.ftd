@@ -7,10 +7,35 @@ documentation site i.e., `doc-site`.
 
 -- ds.h1: Add the dependency 
 
+As we did for the `quote` component, we will add the dependency of doc-site 
+package.
+
+Follow the steps mentioned in the `FASTN.ftd` file
+
+-- ds.code:
+
+\-- fastn.dependency: fastn-community.github.io/doc-site
+
 -- ds.h1: Import `doc-site`
+
+Follow the steps mentioned in the `index.ftd` file
+
+-- ds.code:
+
+\-- import: fastn-community.github.io/doc-site as ds
 
 -- ds.h1: Use the doc-site component: `page`
 
+Follow the steps to remove the comment and use the `page` component.
+
+-- ds.code:
+
+\-- ds.page: Page Title
+site-name: My Site 
+
 -- ds.h1: Give title and body
+
+Give a personlised title and body to the page component and save and 
+render the output.
 
 -- end: ds.page

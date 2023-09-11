@@ -17,15 +17,17 @@ The code for this workshop can be found on Github:
 -- ds.h1: Start Here
 
 - [Hello World fastn](/workshop/hello-world/) (empty FASTN.ftd file with
-  comments, missing index.ftd)
+  comments, comment index.ftd)
 - [Add Quote](/workshop/add-quote/) (Add dependency in FASTN.ftd, and add it in
   index.ftd)
-- [Add doc-site](/workshop/add-doc-site/) (website) (add depdenency in FASTN.ftd
-  and use ds.page in index.ftd)
+- [Add doc-site](/workshop/add-doc-site/) (website) (add dependency in
+  FASTN.ftd and use ds.page in index.ftd)
 - [Publish on Github Pages](/workshop/publish/) (lets create a new template,
   learning-template)
-- [Basics Of Markdown](/workshop/basics-of-markdown/) (link, bold, italic, lists)
-- [Add A New Page](/workshop/add-new-page/) (Add a new file, hyperlink each other)
+- [Basics Of Markdown](/workshop/basics-of-markdown/) (link, bold, italic,
+  lists)
+- [Add A New Page](/workshop/add-new-page/) (Add a new file, hyperlink each
+  other)
 - [Add sitemap](/workshop/add-sitemap/)
 - [Add an image, youtube video](/workshop/add-image-and-video/)
 - Using More [sections](/workshop/more-sections/) To create a realistic website

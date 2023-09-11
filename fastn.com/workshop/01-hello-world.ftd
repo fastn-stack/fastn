@@ -1,3 +1,5 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
 -- ds.page: Hello World - `fastn` Hands-On Workshop
 
 This is first step in the [`fastn` Hands On Workshop](/workshop/). In this we
@@ -5,12 +7,80 @@ will install fastn on your machine, and run `fastn`.
 
 -- ds.h1: Install `fastn`
 
--- ds.h1: Run `fastn`
+`fastn` can be quickly installed on MacOS, Linux and Windows.
 
--- ds.h1: Update `index.ftd`
+-- ds.h2: On Mac/Linux
+
+-- ds.code: Installer Script for Mac/Linux
+lang: sh
+
+curl -fsSL https://fastn.com/install.sh | bash
 
 -- ds.markdown:
 
-You have seen how just in one line of code you can print a text in the browser.
+If you see the Help text of the fastn command, it confirms that `fastn` is
+successfully installed.
+
+-- ds.h2: On Windows
+
+- Download the setup named `fastn.setup.exe`
+from the [Releases](https://github.com/fastn-stack/fastn/releases) page
+
+- Run the setup and follow the installation steps
+
+- Once the setup is complete, you will have `fastn` installed in your system
+
+To verify, open command prompt and execute the command, `fastn`
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.fastn-terminal-windows.png
+width: fill-container
+
+-- ds.markdown:
+
+If you see the Help text of the fastn command, it confirms that `fastn` is
+successfully installed.
+
+
+-- ds.h1: Run `fastn`
+
+Create a `fastn package`.
+
+-- cbox.info: What is `fastn` package?
+
+`fastn` package is a folder that requires atleast two files
+
+- FASTN.ftd
+- index.ftd
+
+There can be any number of `.ftd` file but these two files are essential.
+
+-- ds.markdown: 
+
+- Create a folder on your desktop and open the folder through a text editor.
+  Create the `fastn` package.
+
+- Copy the code in `FASTN.ftd` and `index.ftd` from the following URL:
+  [Click Here](https://github.com/fastn-stack/workshop/tree/main/01-hello-world)
+
+- Follow the steps that are written in the code
+
+-- ds.h2: Run fastn in local server
+
+To see the output, open the command prompt/terminal, and run the following 
+command:
+
+-- ds.code:
+
+fastn serve
+
+-- ds.h1: Update `index.ftd`
+
+Try to update the text and save the file and refresh the browser and the 
+updated output will be displayed.
+
+-- ds.markdown:
+
+With just one line of code in `fastn` you can print a text in the browser.
 
 -- end: ds.page

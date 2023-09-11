@@ -4,10 +4,30 @@ In the second step, we will learn how to add a
 [`quote`](https://fastn-community.github.io/bling/quote/) component that is 
 [featured](/featured/) in our official website. 
 
+`Quote` is a component of `bling` dependency package. 
+
 -- ds.h1: Add the dependency 
+
+Here we are adding a dependency of package `fastn-community.github.io/bling`
+
+Checkout `https://fastn-community.github.io/bling/` in browser to check the
+components offered by this package.
+
+Follow the steps mentioned in the `FASTN.ftd` file
+
+-- ds.code:
+
+\-- fastn.dependency: fastn-community.github.io/bling
 
 -- ds.h1: Import the package 
 
--- ds.h1: Add a different quote example
+In the `index.ftd` document we import the `quote` component from bling package.
+
+Follow the steps mentioned in the `index.ftd` file
+
+-- ds.code:
+
+\-- import: fastn-community.github.io/bling/quote
+
 
 -- end: ds.page
