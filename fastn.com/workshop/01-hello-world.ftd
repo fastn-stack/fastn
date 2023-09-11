@@ -1,6 +1,6 @@
 -- ds.page: Hello World - `fastn` Hands-On Workshop
 
-THis is first step in the [`fastn` Hands On Workshop](/workshop/). In this we
+This is first step in the [`fastn` Hands On Workshop](/workshop/). In this we
 will install fastn on your machine, and run `fastn`.
 
 -- ds.h1: Install `fastn`
@@ -9,5 +9,8 @@ will install fastn on your machine, and run `fastn`.
 
 -- ds.h1: Update `index.ftd`
 
+-- ds.markdown:
+
+You have seen how just in one line of code you can print a text in the browser.
 
 -- end: ds.page

@@ -1,0 +1,13 @@
+-- ds.page: Add quote - `fastn` Hands-On Workshop
+
+In the second step, we will learn how to add a 
+[`quote`](https://fastn-community.github.io/bling/quote/) component that is 
+[featured](/featured/) in our official website. 
+
+-- ds.h1: Add the dependency 
+
+-- ds.h1: Import the package 
+
+-- ds.h1: Add a different quote example
+
+-- end: ds.page

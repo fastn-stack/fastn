@@ -1,0 +1,16 @@
+-- ds.page: Publish on GitHub Pages - `fastn` Hands-On Workshop
+
+Let's use a template and put the work on GitHub by publishing it on GitHub 
+Pages. 
+
+-- ds.h1: Sign Up or Sign In on GitHub
+
+-- ds.h1: Create a repository using the fastn template: learning-template
+
+-- ds.h1: Edit the files and Save the changes
+
+-- ds.h1: Select the `gh-pages` to publish on GitHub pages
+
+-- ds.h1: Visit the site
+
+-- end: ds.page

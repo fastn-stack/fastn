@@ -1,0 +1,16 @@
+-- ds.page: Add doc-site - `fastn` Hands-On Workshop
+
+In the second step, we added a component. Now, in the third step, we will add a 
+documentation site i.e., `doc-site`.
+
+;; brief about doc-site (website)
+
+-- ds.h1: Add the dependency 
+
+-- ds.h1: Import `doc-site`
+
+-- ds.h1: Use the doc-site component: `page`
+
+-- ds.h1: Give title and body
+
+-- end: ds.page

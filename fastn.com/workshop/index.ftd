@@ -16,20 +16,24 @@ The code for this workshop can be found on Github:
 
 -- ds.h1: Start Here
 
-- [Hello World fastn](/workshop/hello-world/) (emtpy FASTN.ftd file with comments, missing index.ftd)
-- Add Quote (Add dependency in FASTN.ftd, and add it in index.ftd)
-- Add doc-site (website) (add depdenency in FASTN.ftd and use ds.page in index.ftd)
-- publish on Github Pages (lets create a new template, learning-template)
-- Basics Of Markdown (link, bold, italic, lists)
-- Add A New Page (Add a new file, hyperlink each other)
-- Add an image, youtube video
-- Using More sections To create a realistic website
-- Change color scheme, typography
-- change theme
-- ds.ftd
-- SEO meta
-- redirect
-- document key for clean urls
+- [Hello World fastn](/workshop/hello-world/) (empty FASTN.ftd file with
+  comments, missing index.ftd)
+- [Add Quote](/workshop/add-quote/) (Add dependency in FASTN.ftd, and add it in
+  index.ftd)
+- [Add doc-site](/workshop/add-doc-site/) (website) (add depdenency in FASTN.ftd
+  and use ds.page in index.ftd)
+- [publish on Github Pages](/workshop/publish/) (lets create a new template,
+  learning-template)
+- [Basics Of Markdown](/workshop/basics-of-markdown/) (link, bold, italic, lists)
+- [Add A New Page](/workshop/add-new-page/) (Add a new file, hyperlink each other)
+- [Add an image, youtube video](/workshop/add-image-and-video/)
+- Using More [sections](/workshop/more-sections/) To create a realistic website
+- [Change color scheme, typography](/workshop/change-cs-and-typo/)
+- [Change theme](/workshop/change-theme/)
+- [ds.ftd](/workshop/ds/)
+- [SEO meta](/workshop/seo/)
+- [redirect](/workshop/redirect/)
+- `document` key for [clean urls](/workshop/clean-url)
 
 
 

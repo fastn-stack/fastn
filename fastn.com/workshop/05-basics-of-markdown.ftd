@@ -1,0 +1,21 @@
+-- ds.page: Basics of Markdown - `fastn` Hands-On Workshop
+
+In the fifth part of the workshop, we will learn how to basic `markdown`
+styling. 
+
+`fastn` supports Markdown. Hence, instead of learning tags, one can still create
+content-heavy and powerful website using plain text without missing out on
+formatting.
+
+
+-- ds.h1: Inline styles - bold, italic
+
+-- ds.h1: Inline links
+
+-- ds.h1: Markdown List
+
+- ordered list
+
+- unordered list
+
+-- end: ds.page
