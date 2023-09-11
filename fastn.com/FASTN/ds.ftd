@@ -51,10 +51,10 @@ copyright: Copyright © 2023 - fastn.com
 -- ftd.ui list page.banner:
 
 -- banner.cta-banner:
-cta-text: HackOdisha 3.0 🚀
-cta-link: https://fastn.com/hackodisha/
+cta-text: star on Github 🚀
+cta-link: https://github.com/fastn-stack/fastn/
 
-Happening Now: 
+Support us by giving us a
 
 
 -- end: page.banner
