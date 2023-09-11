@@ -1112,21 +1112,13 @@ impl Document {
                 .and_then(|v| v.integer(self.name.as_str(), 0).ok());
 
             if v.condition.is_none() {
-                if let Some(url) = url.clone() {
-                    if let Some(code) = code {
-                        return Ok(Some((url, code as i32)));
-                    }
-                }
+                return Ok(url.and_then(|url| code.map(|code| (url, code as i32))));
             }
 
             if let Some(expr) = &v.condition.as_ref() {
                 match expr.eval(&self.tdoc()) {
                     Ok(b) if b => {
-                        if let Some(url) = url {
-                            if let Some(code) = code {
-                                return Ok(Some((url, code as i32)));
-                            }
-                        }
+                        return Ok(url.and_then(|url| code.map(|code| (url, code as i32))))
                     }
                     Err(e) => return Err(e),
                     _ => {}
