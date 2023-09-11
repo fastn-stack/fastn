@@ -1,10 +1,9 @@
 -- import: fastn.com/featured as ft-ui
 
--- ds.page: 
-full-width: true
+-- ds.page:
 sidebar: false
 
--- ft-ui.grid-view: Hero with Search
+-- ft-ui.view-all: Hero with Search
 templates: $hero-with-search
 
 -- end: ds.page

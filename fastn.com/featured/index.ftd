@@ -1,4 +1,3 @@
-
 -- boolean show-grid: true
 -- boolean show-list: false
 
@@ -87,11 +86,13 @@ boolean show-large: false
 width: fill-container
 spacing.fixed.px if { ftd.device == "mobile" }: 24
 margin-top.px if { grid-view.push-top }: -90
+max-width.fixed.px: 980
 
 -- ftd.row:
 width: fill-container
 align-content: center
 margin-top.px if { ftd.device == "mobile" }: 24
+spacing: space-between
 
 -- ftd.desktop:
 
@@ -99,7 +100,6 @@ margin-top.px if { ftd.device == "mobile" }: 24
 if: { grid-view.title != NULL }
 role: $inherited.types.heading-medium
 color: $inherited.colors.accent.primary
-width: fill-container
 
 -- end: ftd.desktop
 
@@ -151,8 +151,7 @@ $grid-view.body
 -- ftd.desktop:
 
 -- ftd.row:
-width.fixed.vw: 70
-width if {grid-view.show-large}: fill-container
+width: fill-container
 spacing.fixed.px: 32
 overflow-x: auto
 margin-vertical.px: 40
@@ -257,7 +256,7 @@ $view-all.body
 -- ftd.desktop:
 
 -- ftd.row:
-width.fixed.vw: 70
+width: fill-container
 spacing.fixed.px: 32
 wrap: true
 margin-vertical.px: 40
@@ -327,8 +326,8 @@ boolean show-large: false
 -- ftd.column:
 width if { ftd.device == "mobile" }: fill-container
 spacing.fixed.px: 16
-min-width.fixed.px: 324
-width.fixed.px: 324
+min-width.fixed.px: 302
+width.fixed.px: 302
 classes if {grid-of-items.two-fold}: two-folded
 $on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
@@ -348,8 +347,8 @@ width: fill-container
 spacing.fixed.px: 12
 padding.px: 20
 anchor: parent
-bottom.px if { grid-of-items.mouse-in }: 0
-bottom.px if { !grid-of-items.mouse-in }: -64
+bottom.px: 0
+;; bottom.px if { !grid-of-items.mouse-in }: -64
 left.px: 0
 z-index: 999
 background.solid: #222222cc
@@ -384,6 +383,7 @@ z-index: 999
 background.solid: #222222cc
 border-bottom-left-radius.px: 8
 border-bottom-right-radius.px: 8
+classes: mouse-over
 align-content: center
 
 -- ftd.text: $grid-of-items.title
@@ -431,6 +431,15 @@ color: #d9d9d9
 -- end: ftd.column
 
 -- end: ftd.column
+
+/-- ftd.image:
+if: { $grid-of-items.screenshot != NULL }
+src: $grid-of-items.screenshot
+$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
+fit: contain
+width.fixed.px: 324
+height.fixed.px: 224
 
 -- ftd.image:
 if: { $grid-of-items.screenshot != NULL }
@@ -508,6 +517,18 @@ boolean wip: false
 boolean two-fold: false
 
 -- template list doc-sites:
+
+-- template: Doc-site
+template-url: featured/ds/doc-site/
+screenshot: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
+
+-- template: Midnight Rush
+template-url: featured/ds/mr-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
+
+-- template: Midnight Storm
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 
 -- template: Doc-site
 template-url: featured/ds/doc-site/
@@ -618,15 +639,15 @@ screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
 -- template list schemes:
 
 -- template: Saturated Sunset CS
-template-url: featured/cs/saturated-sunset-cs/
+template-url: /cs/saturated-sunset-cs/
 screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 
 -- template: Midnight Rush CS
-template-url: featured/cs/midnight-rush-cs/
+template-url: /cs/midnight-rush-cs/
 screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 
 -- template: Blog Template 1 CS
-template-url: featured/cs/blog-template-1-cs/
+template-url: /cs/blog-template-1-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
 -- end: schemes
@@ -694,8 +715,8 @@ template-url: /featured/sections/slides/giggle-presentation-template/
 screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
 
 -- template: Hero with two CTA - Design 5
-template-url: featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/
-screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
+template-url: featured/sections/heros/hero-right-hug
+screenshot: $fastn-assets.files.images.featured.components.hero-right-hug.jpg
 
 -- template: Image Gallery IG
 template-url: /featured/sections/cards/image-gallery-ig/
