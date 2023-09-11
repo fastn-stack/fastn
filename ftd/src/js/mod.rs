@@ -91,6 +91,8 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         &doc,
         &mut has_rive_components,
     )];
+    println!("AFTER from tree");
+    dbg!(&has_rive_components);
     let default_thing_name = ftd::interpreter::default::default_bag()
         .into_iter()
         .map(|v| v.0)
@@ -290,6 +292,7 @@ pub fn from_tree(
 ) -> fastn_js::Ast {
     let mut statements = vec![];
     for (index, component) in tree.iter().enumerate() {
+        println!("bool check: {}", has_rive_components);
         statements.extend(component.to_component_statements(
             fastn_js::COMPONENT_PARENT,
             index,
@@ -299,6 +302,8 @@ pub fn from_tree(
             has_rive_components,
         ))
     }
+    println!("bool check (after): {}", has_rive_components);
+    dbg!(&has_rive_components);
     fastn_js::component0(fastn_js::MAIN_FUNCTION, statements)
 }
 
@@ -328,6 +333,7 @@ impl ftd::interpreter::Component {
             None
         });
         let mut component_statements = if self.is_loop() || self.condition.is_some() {
+            println!("CASE 1");
             self.to_component_statements_(
                 fastn_js::FUNCTION_PARENT,
                 0,
@@ -341,6 +347,7 @@ impl ftd::interpreter::Component {
                 has_rive_components,
             )
         } else {
+            println!("CASE 2");
             self.to_component_statements_(
                 parent,
                 index,
@@ -350,6 +357,9 @@ impl ftd::interpreter::Component {
                 has_rive_components,
             )
         };
+
+        println!("OUTSIDE");
+        dbg!(&has_rive_components);
 
         if let Some(condition) = self.condition.as_ref() {
             component_statements = vec![fastn_js::ComponentStatement::ConditionalComponent(
@@ -416,10 +426,21 @@ impl ftd::interpreter::Component {
             should_return,
             has_rive_components,
         ) {
+            println!("Just after changing");
+            dbg!(&has_rive_components);
             kernel_component_statements
-        } else if let Some(defined_component_statements) =
-            self.defined_component_to_component_statements(parent, index, doc, rdata, should_return)
+        } else if let Some(defined_component_statements) = self
+            .defined_component_to_component_statements(
+                parent,
+                index,
+                doc,
+                rdata,
+                should_return,
+                has_rive_components,
+            )
         {
+            println!("Defined component");
+            dbg!(&has_rive_components);
             defined_component_statements
         } else if let Some(header_defined_component_statements) = self
             .header_defined_component_to_component_statements(
@@ -431,6 +452,8 @@ impl ftd::interpreter::Component {
                 has_rive_components,
             )
         {
+            println!("Header Defined component");
+            dbg!(&has_rive_components);
             header_defined_component_statements
         } else if let Some(variable_defined_component_to_component_statements) = self
             .variable_defined_component_to_component_statements(
@@ -442,6 +465,7 @@ impl ftd::interpreter::Component {
                 has_rive_components,
             )
         {
+            println!("Variable Defined component");
             variable_defined_component_to_component_statements
         } else {
             panic!("Can't find, {}", self.name)
@@ -459,8 +483,13 @@ impl ftd::interpreter::Component {
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
         if ftd::js::element::is_kernel(self.name.as_str()) {
             if !*has_rive_components {
-                *has_rive_components = ftd::js::element::is_rive_component(self.name.as_str())
+                println!("Found component: {}", self.name.as_str());
+                *has_rive_components = ftd::js::element::is_rive_component(self.name.as_str());
+                println!("After changing");
+                dbg!(&has_rive_components);
             }
+            println!("Just after changing if false");
+            dbg!(&has_rive_components);
             Some(
                 ftd::js::Element::from_interpreter_component(self, doc).to_component_statements(
                     parent,
@@ -483,6 +512,7 @@ impl ftd::interpreter::Component {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
+        has_rive_components: &mut bool,
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
         if let Some(arguments) =
             ftd::js::utils::get_set_property_values_for_provided_component_properties(
@@ -491,6 +521,7 @@ impl ftd::interpreter::Component {
                 self.name.as_str(),
                 self.properties.as_slice(),
                 self.line_number,
+                has_rive_components,
             )
         {
             let mut component_statements = vec![];
@@ -563,6 +594,7 @@ impl ftd::interpreter::Component {
                 component_name.as_str(),
                 self.properties.as_slice(),
                 self.line_number,
+                has_rive_components,
             )?;
         } else if !ftd::js::utils::is_ui_argument(
             component.arguments.as_slice(),

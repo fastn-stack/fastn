@@ -509,6 +509,7 @@ pub(crate) async fn read_ftd_2023(
         return Ok(FTDResult::Redirect { url, code });
     }
 
+    println!("START --------- ");
     let js_ast_data = ftd::js::document_into_js_ast(main_ftd_doc);
     let js_document_script = fastn_js::to_js(
         js_ast_data.asts.as_slice(),
