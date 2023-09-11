@@ -256,6 +256,7 @@ pub(crate) fn get_set_property_values_for_provided_component_properties(
     component_name: &str,
     component_properties: &[ftd::interpreter::Property],
     line_number: usize,
+    has_rive_components: &mut bool,
 ) -> Option<Vec<(String, fastn_js::SetPropertyValue)>> {
     use itertools::Itertools;
 
@@ -270,8 +271,17 @@ pub(crate) fn get_set_property_values_for_provided_component_properties(
             arguments
                 .iter()
                 .filter_map(|v| {
-                    v.get_optional_value(component_properties)
-                        .map(|val| (v.name.to_string(), val.to_set_property_value(doc, rdata)))
+                    v.get_optional_value(component_properties).map(|val| {
+                        (
+                            v.name.to_string(),
+                            val.to_set_property_value_with_ui(
+                                doc,
+                                rdata,
+                                has_rive_components,
+                                false,
+                            ),
+                        )
+                    })
                 })
                 .collect_vec()
         })
