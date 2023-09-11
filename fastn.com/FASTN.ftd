@@ -898,8 +898,6 @@ document: /community/events/roadshow.ftd
 - Rive Video: /planning/rive/
 - Developer Course: /planning/developer-course/
 
-# 🔍: /search/
-
 -- fastn.redirects:
 
 /ftd/ -> /lang/
