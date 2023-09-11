@@ -872,7 +872,7 @@ class Node2 {
     attachCss(property, value, createClass, className) {
         let propertyShort = fastn_dom.propertyMap[property] || property;
         propertyShort = `__${propertyShort}`;
-        let cls = `${propertyShort}-${JSON.stringify(value)}`;
+        let cls = `${propertyShort}-${JSON.stringify(fastn_dom.class_count)}`;
         if (!!className) {
            cls = className;
         } else {
@@ -1236,7 +1236,7 @@ class Node2 {
                     this.attachCss("align-items", "end");
                     break;
                 case 'bottom-center':
-                    this.attachCss("justify-content", "start");
+                    this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "end");
                     break;
                 case 'bottom-right':
