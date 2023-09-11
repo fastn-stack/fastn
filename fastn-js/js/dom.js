@@ -1836,8 +1836,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.StringValue) {
             this.#rawInnerValue = staticValue;
             if (!ssr) {
-                let escapedHtmlValue = fastn_utils.escapeHtmlInMarkdown(staticValue);
-                staticValue = fastn_utils.markdown_inline(escapedHtmlValue);
+                staticValue = fastn_utils.markdown_inline(staticValue);
                 staticValue = fastn_utils.process_post_markdown(this.#node, staticValue);
             }
             this.#node.innerHTML = staticValue;
