@@ -1390,6 +1390,17 @@ If two modules implement same module interface, they are interchangable. And
 this is the last trick to achieve the drastic design change without modifying
 anything else in the site.
 
+-- ds.h1: Dynamic Websites
+
+Everything we discussed so far makes `fastn` a decent alternative for static
+websites, you do not have to worry about CMS or tweak things in WYSWYG editors
+like Webflow/Wix, use Github (or whatever you prefer) to colaborate with your
+team, use your favorite editor, use your favorite hosting provider, use CI, etc
+etc.
+
+But from day one we have wanted to make `fastn` a full stack application server.
+
+
 
 -- end: ds.page
 
