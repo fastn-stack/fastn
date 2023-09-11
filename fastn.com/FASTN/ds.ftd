@@ -52,6 +52,8 @@ cta-text: Star Us on Github 🌟
 cta-link: https://github.com/fastn-stack/fastn/
 bgcolor: $inherited.colors.cta-primary.base
 
+Support us by giving us a
+
 -- end: page.banner
 
 
