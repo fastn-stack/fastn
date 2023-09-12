@@ -68,12 +68,6 @@ Support us by giving us a
 Enjoying `fastn`? Please consider giving us a star ⭐️ on
 [GitHub](https://github.com/fastn-stack/fastn) to show your support!
 
--- utils.compact-text.inner:
-
--- star-component:
-
--- end: utils.compact-text.inner
-
 -- end: utils.compact-text
 
 -- utils.compact-text: Getting Help
@@ -89,12 +83,6 @@ Join our [Discord](https://discord.gg/a7eBUeutWD) channel and share your
 thoughts, suggestion, question etc.
 
 Connect with our [community](/community/)!
-
--- utils.compact-text.inner:
-
--- chronica-component:
-
--- end: utils.compact-text.inner
 
 -- end: utils.compact-text
 

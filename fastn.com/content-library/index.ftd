@@ -3133,6 +3133,20 @@ logo-height: $footer.logo-height
 
 
 
+-- utils.install: Get Started with fastn
+code-lang: sh
+code: source <(curl -fsSL https://fastn.com/install.sh)
+cta-text: Learn More
+cta-link: /install/
+
+
+
+
+
+
+
+
+
 
 -- component footer-desktop:
 string copyright:
@@ -3345,16 +3359,17 @@ role: $inherited.types.heading-tiny
 width: fill-container
 color: $inherited.colors.text-strong
 link: $footer-mobile-list.url
+color if { footer-mobile-list.is-active }: $inherited.colors.accent.primary
 
 -- ftd.image:
-if: { footer-mobile-list.shows-data && footer-mobile-list.title != "Blog" }
+if: { footer-mobile-list.shows-data && footer-mobile-list.title != "Blog" || footer-mobile-list.is-active }
 src: $fastn-assets.files.images.landing.toggle-up.svg
 width.fixed.px: 12
 $on-click$: $ftd.toggle($a= $footer-mobile-list.shows-data)
 align-self: center
 
 -- ftd.image:
-if: { !footer-mobile-list.shows-data && footer-mobile-list.title != "Blog" }
+if: { !footer-mobile-list.shows-data && footer-mobile-list.title != "Blog" && !footer-mobile-list.is-active}
 src: $fastn-assets.files.images.landing.toggle-down.svg
 width.fixed.px: 12
 $on-click$: $ftd.toggle($a= $footer-mobile-list.shows-data)
@@ -3363,9 +3378,9 @@ align-self: center
 -- end: ftd.row
 
 -- ftd.column:
-if: { footer-mobile-list.shows-data }
+if: { footer-mobile-list.shows-data || footer-mobile-list.is-active }
 spacing.fixed.px: 14
-margin-top.px if { $footer-mobile-list.shows-data }: 12
+margin-top.px: 12
 
 -- footer-list-toc: 
 title: $obj.title
@@ -3404,6 +3419,7 @@ boolean show-subsections: false
 -- ftd.text: $footer-list-toc.title
 if: { footer-list-toc.show-subsections && footer-list-toc.title != NULL }
 color: $inherited.colors.text
+color if { footer-list-toc.is-active }: $inherited.colors.accent.primary
 role: $inherited.types.copy-regular
 link: $footer-list-toc.url
 width: fill-container
@@ -3413,6 +3429,7 @@ margin-bottom.px if { ftd.device != "mobile" }: 12
 -- ftd.text: $footer-list-toc.title
 if: { !footer-list-toc.show-subsections && footer-list-toc.title != NULL }
 color: $inherited.colors.text
+color if { footer-list-toc.is-active }: $inherited.colors.accent.primary
 role: $inherited.types.copy-regular
 link: $footer-list-toc.url
 width: fill-container
@@ -3445,6 +3462,7 @@ if: { footer-list.url != "/search/" }
 role: $inherited.types.copy-large
 color: $inherited.colors.text-strong
 color if { footer-list.mouse-in }: $inherited.colors.accent.primary
+color if { footer-list.is-active }: $inherited.colors.accent.primary
 $on-mouse-leave$: $ftd.set-bool($a = $footer-list.mouse-in, v = false)
 $on-mouse-enter$: $ftd.set-bool($a = $footer-list.mouse-in, v = true)
 link: $footer-list.url
@@ -3484,6 +3502,7 @@ pr.toc-item list children:
 if: { footer-list-child.url != NULL }
 role: $inherited.types.copy-regular
 color if { footer-list-child.mouse-in }: $inherited.colors.accent.primary
+color if { footer-list-child.is-active }: $inherited.colors.accent.primary
 $on-mouse-leave$: $ftd.set-bool($a = $footer-list-child.mouse-in, v = false)
 $on-mouse-enter$: $ftd.set-bool($a = $footer-list-child.mouse-in, v = true)
 color: $inherited.colors.text
