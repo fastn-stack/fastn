@@ -179,26 +179,37 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /workshop/04-publish-on-github.ftd
 - Basics Of Markdown: /workshop/basics-of-markdown/
   document: /workshop/05-basics-of-markdown.ftd
+  skip: true
 - Add A New Page: /workshop/add-new-page/
   document: /workshop/06-create-new-page.ftd
+  skip: true
 - Add sitemap: /workshop/add-sitemap/
   document: /workshop/07-add-sitemap.ftd
+  skip: true
 - Add an image, youtube video: /workshop/add-image-and-video/
   document: /workshop/08-add-image-and-video.ftd
+  skip: true
 - Using more sections: /workshop/more-sections/
   document: /workshop/09-more-sections.ftd
+  skip: true
 - Change color scheme, typography: /workshop/change-cs-and-typo/
   document: /workshop/10-change-cs-typo.ftd
+  skip: true
 - Change theme: /workshop/change-theme/
   document: /workshop/11-change-theme.ftd
+  skip: true
 - Creating ds.ftd: /workshop/ds/
   document: /workshop/12-creating-ds.ftd
+  skip: true
 - SEO meta: /workshop/seo/
   document: /workshop/13-seo-meta.ftd
+  skip: true
 - clean the urls: /workshop/clean-url
   document: /workshop/15-clean-url.ftd
+  skip: true
 - Redirect: /workshop/redirect/
   document: /workshop/14-redirect.ftd
+  skip: true
   
 
    
