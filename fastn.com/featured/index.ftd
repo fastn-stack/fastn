@@ -530,18 +530,6 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 template-url: featured/ds/midnight-storm/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 
--- template: Doc-site
-template-url: featured/ds/doc-site/
-screenshot: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
-
--- template: Midnight Rush
-template-url: featured/ds/mr-ds/
-screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
-
--- template: Midnight Storm
-template-url: featured/ds/midnight-storm/
-screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
-
 -- end: doc-sites
 
 
@@ -715,8 +703,8 @@ template-url: /featured/sections/slides/giggle-presentation-template/
 screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
 
 -- template: Hero with two CTA - Design 5
-template-url: featured/sections/heros/hero-right-hug
-screenshot: $fastn-assets.files.images.featured.components.hero-right-hug.jpg
+template-url: featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
 
 -- template: Image Gallery IG
 template-url: /featured/sections/cards/image-gallery-ig/
