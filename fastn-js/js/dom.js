@@ -1771,6 +1771,7 @@ class Node2 {
             if (!ssr) {
                 fastn_utils.addCodeTheme(staticValue);
             }
+            staticValue = fastn_utils.getStaticValue(staticValue);
             let theme = staticValue.replace("\.", "-");
             this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
             if (this.#extraData.code.theme !== theme) {
