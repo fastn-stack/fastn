@@ -575,6 +575,9 @@ document: /get-started/browse-pick.ftd
 - Built-in Rive Functions: /built-in-rive-functions/
   document: ftd/built-in-rive-functions.ftd
   description: animation, ftd.toggle-play-rive, ftd.play-rive, ftd.pause-rive, ftd.fire-rive, ftd.set-rive-integer, ftd.toggle-rive-boolean, ftd.set-rive-boolean
+- Built-in Local Storage Functions: /local-storage/
+  document: ftd/local-storage.ftd
+  description: ftd.local_storage.set, ftd.local_storage.get, ftd.local_storage.delete
 - Built-in Variables: /built-in-variables/
   document: ftd/built-in-variables.ftd
   description: ftd.dark-mode, ftd.system-dark-mode, ftd.follow-system-dark-mode, ftd.device, ftd.mobile-breakpoint, light mode, dark mode, system mode
