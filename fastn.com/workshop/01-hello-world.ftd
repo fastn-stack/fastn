@@ -23,8 +23,8 @@ successfully installed.
 
 -- ds.h2: On Windows
 
-- Download the setup named `fastn.setup.exe`
-from the [Releases](https://github.com/fastn-stack/fastn/releases) page
+- Download the setup named `fastn_setup.exe`
+from the [Releases](https://github.com/fastn-stack/fastn/releases/latest) page
 
 - Run the setup and follow the installation steps
 
@@ -44,43 +44,54 @@ successfully installed.
 
 -- ds.h1: Run `fastn`
 
-Create a `fastn package`.
+**Clone the [`workshop`](https://github.com/fastn-stack/workshop) repository**
 
--- cbox.info: What is `fastn` package?
+-- ds.image:
+src: $fastn-assets.files.images.workshop.clone-workshop-repo.png
+width: fill-container
 
-`fastn` package is a folder that requires atleast two files
+-- ds.markdown:
 
-- FASTN.ftd
-- index.ftd
+- On GitHub, click on the `Code` and copy the HTTPS `.git` URL 
+- Open Terminal/command prompt and change the directory to desktop, for easy 
+access
+- Paste or type the below code to clone the repository
 
-There can be any number of `.ftd` file but these two files are essential.
+-- ds.code:
 
--- ds.markdown: 
+git clone https://github.com/fastn-stack/workshop.git
 
-- Create a folder on your desktop and open the folder through a text editor.
-  Create the `fastn` package.
+-- ds.markdown:
 
-- Copy the code in `FASTN.ftd` and `index.ftd` from the following URL:
-  [Click Here](https://github.com/fastn-stack/workshop/tree/main/01-hello-world)
+Now, change the directory to the first folder `01-hello-world` through terminal.
 
-- Follow the steps that are written in the code
-
--- ds.h2: Run fastn in local server
-
-To see the output, open the command prompt/terminal, and run the following 
-command:
+Run the following command to run a local server:
 
 -- ds.code:
 
 fastn serve
 
--- ds.h1: Update `index.ftd`
-
-Try to update the text and save the file and refresh the browser and the 
-updated output will be displayed.
-
 -- ds.markdown:
 
+- Copy the URL and run it on your web-browser.
+
+An empty page will be opened as the `index.ftd` is commented out.
+
+-- ds.h1: Update `index.ftd`
+
+- In the [`index.ftd`](https://github.com/fastn-stack/workshop/blob/main/01-hello-world/index.ftd) file, uncomment the line #9
+
+-- ds.image:
+src: $fastn-assets.files.images.workshop.uncommented-index.png
+width: fill-container
+
+-- ds.mardown:
+
+- Save the file and refresh the browser. You will see the text `Hello World`
+  displayed.
+
 With just one line of code in `fastn` you can print a text in the browser.
+
+Go to the [second step](/workshop/add-quote/).
 
 -- end: ds.page

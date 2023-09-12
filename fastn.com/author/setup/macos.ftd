@@ -45,7 +45,7 @@ Copy the following command:
 -- ds.code: Installer Script
 lang: ftd
 
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/fastn-stack/fastn/main/install.sh)"
+source <(curl -fsSL https://fastn.com/install.sh)
 
 -- ds.h3: Second Step: Open the Terminal
 

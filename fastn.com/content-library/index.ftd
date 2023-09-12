@@ -1112,7 +1112,7 @@ width: fill-container
 
 -- utils.install: Get Started with fastn
 code-lang: sh
-code: curl -fsSL https://fastn.com/install.sh | bash
+code: source <(curl -fsSL https://fastn.com/install.sh)
 cta-text: Learn More
 cta-link: /install/
 

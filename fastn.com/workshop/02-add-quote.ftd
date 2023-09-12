@@ -1,4 +1,24 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
 -- ds.page: Add quote - `fastn` Hands-On Workshop
+
+In the [first step](/workshop/hello-world/) we were able to display the text in 
+our local server.
+
+-- cbox.info: Take a note
+
+Before we start with the second step. Make sure to close the server created for 
+`01-hello-world` then restart the new server for `02-add-quote`.
+
+- Close the server by using `Ctrl + c`
+- Change the directory to `02-add-quote` path
+- Run `fastn serve` command
+
+Note: Make sure to check the port. If it is same as previous, just refresh the 
+browser else copy the new URL with different port and run in the browser.
+
+
+-- ds.h1: Second step
 
 In the second step, we will learn how to add a 
 [`quote`](https://fastn-community.github.io/bling/quote/) component that is 
@@ -10,24 +30,24 @@ In the second step, we will learn how to add a
 
 Here we are adding a dependency of package `fastn-community.github.io/bling`
 
-Checkout `https://fastn-community.github.io/bling/` in browser to check the
-components offered by this package.
+Uncomment line # 16 in the [`FASTN.ftd`](https://github.com/fastn-stack/workshop/blob/main/02-add-quote/FASTN.ftd) file
 
-Follow the steps mentioned in the `FASTN.ftd` file
-
--- ds.code:
-
-\-- fastn.dependency: fastn-community.github.io/bling
+-- ftd.image:
+src: $fastn-assets.files.images.workshop.02-FASTN.png
+width: fill-container
 
 -- ds.h1: Import the package 
 
 In the `index.ftd` document we import the `quote` component from bling package.
 
-Follow the steps mentioned in the `index.ftd` file
+Uncomment the following lines in the [`index.ftd`](https://github.com/fastn-stack/workshop/blob/main/02-add-quote/index.ftd) file: 
 
--- ds.code:
+- line #13 i.e., the import line.
 
-\-- import: fastn-community.github.io/bling/quote
+- lins 21-24, where the component `quote-chalice` has been called.
 
+Now, save the file and refresh the borwser.
+
+Go to the [third step](/workshop/add-doc-site/).
 
 -- end: ds.page

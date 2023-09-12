@@ -1,8 +1,24 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
 -- ds.page: Add doc-site - `fastn` Hands-On Workshop
 
+In the [second step](/workshop/add-quote/), we added a component. Now, in the
+third step, we will add a documentation site i.e., `doc-site`.
 
-In the previous step, we added a component. Now, in the third step, we will add
-a documentation site i.e., `doc-site`.
+-- cbox.info: Take a note
+
+Before we start with the second step. Make sure to close the server created for 
+`01-hello-world` then restart the new server for `02-add-quote`.
+
+- Close the server by using `Ctrl + c`
+- Change the directory to `02-add-quote` path
+- Run `fastn serve` command
+
+Note: Make sure to check the port. If it is same as previous, just refresh the 
+browser else copy the new URL with different port and run in the browser.
+
+
+-- ds.markdown:
 
 This particular dependency is equipped with components that grant your project a
 documentation site-like appearance and functionality.
