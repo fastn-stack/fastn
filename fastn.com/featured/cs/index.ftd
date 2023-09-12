@@ -1,33 +1,32 @@
 -- import: fastn.com/featured as ft-ui
 
--- ds.page: 
-full-width: true
+-- ds.page:
 sidebar: false
 
 -- ft-ui.grid-view: Shades Of Red
 templates: $red-scheme
-more-link-text: View more
-more-link: /featured/cs/red-shades
+;;more-link-text: View more
+;;more-link: /featured/cs/red-shades
 
 -- ft-ui.grid-view: Shades Of Orange
 templates: $orange-scheme
-more-link-text: View more
-more-link: /featured/cs/orange-shades
+;;more-link-text: View more
+;;more-link: /featured/cs/orange-shades
 
 -- ft-ui.grid-view: Shades Of Green
 templates: $green-scheme
-more-link-text: View more
-more-link: /featured/cs/green-shades
+;;more-link-text: View more
+;;more-link: /featured/cs/green-shades
 
 -- ft-ui.grid-view: Shades Of Blue
 templates: $blue-scheme
-more-link-text: View more
-more-link: /featured/cs/blue-shades
+;;more-link-text: View more
+;;more-link: /featured/cs/blue-shades
 
 -- ft-ui.grid-view: Shades Of Violet
 templates: $violet-scheme
-more-link-text: View more
-more-link: /featured/cs/violet-shades
+;;more-link-text: View more
+;;more-link: /featured/cs/violet-shades
 
 -- end: ds.page
 
