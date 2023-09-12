@@ -530,17 +530,9 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 template-url: featured/ds/midnight-storm/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 
--- template: Doc-site
-template-url: featured/ds/doc-site/
-screenshot: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
-
--- template: Midnight Rush
-template-url: featured/ds/mr-ds/
-screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
-
--- template: Midnight Storm
-template-url: featured/ds/midnight-storm/
-screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
+-- template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
 
 -- end: doc-sites
 
@@ -581,6 +573,10 @@ screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
 template-url: featured/blogs/mg-blog/
 screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
+-- template: Simple Site Blog
+template-url: featured/blogs/doc-site/
+screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.png
+
 -- end: blog-sites
 
 
@@ -596,6 +592,10 @@ screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
 -- template: Resume 1
 template-url: featured/resumes/resume-1/
 screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
+
+-- template: Resume 10
+template-url: featured/resumes/resume-10/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-10.png
 
 -- end: resumes
 
@@ -650,6 +650,14 @@ screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 template-url: /cs/blog-template-1-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
+-- template: Dark Flame CS
+template-url: featured/cs/dark-flame-cs/
+screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
+
+-- template: Navy Nebula CS
+template-url: featured/cs/navy-nebula-cs/
+screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
+
 -- end: schemes
 
 
@@ -678,6 +686,10 @@ screenshot: $fastn-assets.files.images.featured.components.header.jpg
 Code blocks are typically defined by using specific syntax or indentation rules,
 depending on the programming language.
 
+-- template: Charcoal
+template-url: /featured/components/quotes/author-icon-quotes/demo-1/
+screenshot: $fastn-assets.files.images.featured.components.quotes.author-icon-quotes.demo-1.png
+
 
 -- end: bling
 
@@ -703,6 +715,10 @@ screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 -- template: Roboto Typography
 template-url: featured/fonts/roboto/
 screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
+
+-- template: Lato Typography
+template-url: https://fastn-community.github.io/lato-typography/
+screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
 
 -- end: fonts
 
