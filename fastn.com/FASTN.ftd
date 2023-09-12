@@ -264,7 +264,8 @@ document: /get-started/browse-pick.ftd
       skip: true  
     - Imagen IG: /featured/sections/cards/imagen-ig/
       skip: true
-  - Hero Components: /featured/sections/heros/
+  - Hero Components: /heros/
+    document: /featured/sections/heros/index.ftd
     - Hero Right Hug Expanded Search: /hero-right-hug-expanded-search/
       skip: true
       document: /featured/sections/heros/hero-right-hug-expanded-search.ftd
@@ -286,7 +287,7 @@ document: /get-started/browse-pick.ftd
     - Hero Bottom Hug: /hero-bottom-hug/
       skip: true
       document: /featured/sections/heros/hero-bottom-hug.ftd
-    - Hero Bottom Hug Search: /heros/hero-bottom-hug-search/
+    - Hero Bottom Hug Search: /hero-bottom-hug-search/
       skip: true
       document: /featured/sections/heros/hero-bottom-hug-search.ftd
     - Hero Left Hug Expanded Search: /hero-left-hug-expanded-search/
