@@ -14,8 +14,8 @@ Before we start with the second step. Make sure to close the server created for
 - Change the directory to `02-add-quote` path
 - Run `fastn serve` command
 
-Note: Make sure to check the port. If it is same as previous, just refresh the 
-browser else copy the new URL with different port and run in the browser.
+**Note:** Make sure to check the port. If it is same as previous, just refresh
+the browser else copy the new URL with different port and run in the browser.
 
 
 -- ds.h1: Second step

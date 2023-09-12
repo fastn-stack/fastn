@@ -8,14 +8,14 @@ third step, we will add a documentation site i.e., `doc-site`.
 -- cbox.info: Take a note
 
 Before we start with the second step. Make sure to close the server created for 
-`01-hello-world` then restart the new server for `02-add-quote`.
+`01-hello-world` then restart the new server for `03-add-doc-site`.
 
 - Close the server by using `Ctrl + c`
-- Change the directory to `02-add-quote` path
+- Change the directory to `03-add-doc-site` path
 - Run `fastn serve` command
 
-Note: Make sure to check the port. If it is same as previous, just refresh the 
-browser else copy the new URL with different port and run in the browser.
+**Note:** Make sure to check the port. If it is same as previous, just refresh
+the browser else copy the new URL with different port and run in the browser.
 
 
 -- ds.markdown:

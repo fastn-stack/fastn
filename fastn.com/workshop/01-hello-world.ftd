@@ -85,7 +85,7 @@ An empty page will be opened as the `index.ftd` is commented out.
 src: $fastn-assets.files.images.workshop.uncommented-index.png
 width: fill-container
 
--- ds.mardown:
+-- ds.markdown:
 
 - Save the file and refresh the browser. You will see the text `Hello World`
   displayed.
