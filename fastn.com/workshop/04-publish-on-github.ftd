@@ -22,7 +22,7 @@ and follow the instructions.
 We have created a basic fastn-template that will create a fastn repository
 
 -- ftd.text: Click to create a repository
-link:
+link: https://github.com/new?template_name=learning-template&template_owner=fastn-community
 open-in-new-tab: true
 role: $inherited.types.copy-regular
 margin-vertical.px: 6
@@ -51,5 +51,12 @@ margin-vertical.px: 6
 - Click on the `Visit site` and you will see the same output but on the live
   site that you can share with others.
 
+-- ds.h1: Adding the live site url in Github `About` section
+
+You can add your live site in Github `About` section. This gives you easy
+accessibility to your live site.
+
+Click on the setting icon in About section. Then select `Use your GitHub Pages
+website` checkbox. Now you can see your site url in About section.
 
 -- end: ds.page
