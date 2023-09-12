@@ -14,7 +14,7 @@ will install fastn on your machine, and run `fastn`.
 -- ds.code: Installer Script for Mac/Linux
 lang: sh
 
-curl -fsSL https://fastn.com/install.sh | bash
+source <(curl -fsSL https://fastn.com/install.sh)
 
 -- ds.markdown:
 
