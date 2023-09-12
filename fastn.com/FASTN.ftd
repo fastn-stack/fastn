@@ -762,6 +762,7 @@ document: /events/weekly-contest/index.ftd
 
 - Fastn Roadshow: /roadshow/
 document: /community/events/roadshow.ftd
+skip: true
 
   - Indore: /indore/
   document: /community/events/roadshows/indore.ftd
@@ -831,7 +832,7 @@ document: /community/events/roadshow.ftd
 - Redirect: /workshop/redirect/
   document: /workshop/14-redirect.ftd
   skip: true
-  
+
 # Blog: /blog/
 
 - Search Feature in fastn.com: /blog/search/
