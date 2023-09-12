@@ -1769,8 +1769,10 @@ class Node2 {
             }
         } else if (kind === fastn_dom.PropertyKind.CodeTheme) {
             this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
-            if(fastn_utils.isNull(staticValue) && !fastn_utils.isNull(this.#extraData.code.theme)) {
-                this.#node.classList.remove(this.#extraData.code.theme);
+            if(fastn_utils.isNull(staticValue)) {
+                if(!fastn_utils.isNull(this.#extraData.code.theme)) {
+                    this.#node.classList.remove(this.#extraData.code.theme);
+                }
                 return;
             }
             if (!ssr) {
