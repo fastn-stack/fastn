@@ -1773,14 +1773,15 @@ class Node2 {
             }
             let theme = staticValue.replace("\.", "-");
             this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
-            if (this.#extraData.code.theme) {
-                this.#node.classList.remove(theme);
+            if (this.#extraData.code.theme !== theme) {
+                let codeNode = this.#children[0].getNode();
+                this.#node.classList.remove(this.#extraData.code.theme);
+                codeNode.classList.remove(this.#extraData.code.theme);
+                this.#extraData.code.theme = theme;
+                this.#node.classList.add(theme);
+                codeNode.classList.add(theme);
+                fastn_utils.highlightCode(codeNode, this.#extraData.code);
             }
-            this.#extraData.code.theme = theme;
-            this.#node.classList.add(theme);
-            let codeNode = this.#children[0].getNode();
-            codeNode.classList.add(theme);
-            fastn_utils.highlightCode(codeNode, this.#extraData.code);
         } else if (kind === fastn_dom.PropertyKind.CodeLanguage) {
             let language = `language-${staticValue}`;
             this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
