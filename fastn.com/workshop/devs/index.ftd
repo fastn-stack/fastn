@@ -1,0 +1,156 @@
+/-- cbox.info: About This Workshop
+
+{ds.highlight: FTD language is a possible replacement for JavaScript/React to
+build web front-ends}. In this workshop you will learn the basics of FTD and
+build a web app that talks to existing web services. We will build an application
+for managing to-do lists from scratch.
+
+You will need basic knowledge of HTTP API, but *no prior knowledge of front-end
+is required*.
+
+The creators of FTD are conducting the workshop, and you will learn about the
+motivation and design decisions that shaped FTD as well.
+
+**In this hands-on workshop we will go through a series of exercises
+in stages and write code to get the application working**. Participants are
+required to have a decent computer, but there is no need to install any software
+before hand (other than your favorite editor).
+
+
+/-- ft.markdown:
+
+This workshop is a 3 part workshop, where in each part we will learn a different
+aspect of programming with FTD. In first two parts we will interact with HTTP API
+and create side data driven server rendered pages. In the third part we will
+create client side event handling and interact with HTTP APIs (ajax and form
+submissions).
+
+
+/-- cbox.note: Basic Instruction
+id: ws-basics
+
+Clone [this repository](https://github.com/ftd-lang/ftd-workshop):
+`git clone https://github.com/ftd-lang/ftd-workshop.git`.
+
+Get on the [discord channel for this workshop](https://discord.gg/d2MgKBybEQ)
+and interact with the instructors and others going through the workshop to show
+progress and ask for help.
+
+For each step there is a folder, eg the first step is `01-data/01-hello-world`.
+`cd` into this folder, and follow run the commands from that folder.
+
+You will be running `fastn serve` in each folder, so do remember to kill the fastn
+server when you are done with a step and moving to another step.
+
+Each step is organized as a series of tasks. Do give a shout out to everyone
+when you are done with a task. Or feel free to ask for help in Chat or view
+by speaking out during the workshop.
+
+{ds.highlight: Have fun, you are among friends.}
+
+
+/-- ft.h1: Part 1: Working With Data In FTD
+
+In this part we will install [fastn](https://fastn.dev) and learn about data
+modelling capabilities of FTD.
+
+- [Data-1: Hello World](/workshop/hello-world/)
+- [Data-2: Boolean Variables](/workshop/booleans/)
+- [Data-3: Numbers And Strings](/workshop/numbers-and-strings/)
+- [Data-4: Records](/workshop/records/)
+- [Data-5: Optionals](/workshop/optionals/)
+- [Data-6: Lists](/workshop/lists/)
+- [Data-7: HTTP Processor](/workshop/http/)
+
+
+
+/-- ft.h1: Part 2: Building UI
+
+In this part we will learn how to create re-usable, server-rendered, UI
+components.
+
+- [UI-1: Basic Styling](/workshop/basic-styling/)
+- [UI-2: Dark Mode Support](/workshop/dark-mode/)
+- [UI-3: Row And Columns: Layouting In FTD](/workshop/layouts/)
+- [UI-4: Creating Custom Components](/workshop/components/)
+- UI-5: Loop
+- [UI-6: Images In FTD](/workshop/images/)
+- [UI-7: Import: Splitting FTD Into Modules](/workshop/imports/)
+- [UI-8: Using Reusable FTD Component Libraries: Dependencies](/workshop/dependencies/)
+- [UI-9: Auto Imports](/workshop/auto-imports/)
+
+
+/-- ft.h1: Part 3: Front-end Event Handling And HTTP APIs
+
+In this we will learn how to do event handling and to work with HTTP APIs.
+
+
+
+/-- ftd.column lesson:
+caption title:
+optional body content:
+boolean $understood:
+ftd.ui button:
+border-width: 2
+border-radius: 5
+border-color: $fastn.color.main.background.step-2
+width: fill
+append-at: inner
+open: true
+
+
+/--  ftd.row:
+background-color: $fastn.color.main.background.step-2
+width: fill
+padding-horizontal: 20
+padding-vertical: 10
+spacing: 15
+
+/--  ftd.text: DONE
+role: $fastn.type.heading-medium
+color: $fastn.color.main.text
+if: $understood
+
+/--  ftd.text: LESSON
+role: $fastn.type.heading-medium
+color: $fastn.color.main.text
+if: not $understood
+
+/--  ftd.text: $title
+role: $fastn.type.heading-medium
+color: $fastn.color.main.text-strong
+width: fill
+
+/--  container: ftd.main
+
+/--  ftd.column:
+width: fill
+padding-horizontal: 20
+padding-bottom: 10
+id: inner
+
+/--  ds.markdown:
+
+$content
+
+
+/--  container: ftd.main
+
+/--  ftd.row:
+width: fill
+padding: 20
+
+/--  button:
+
+
+/-- ftd.text understood: Understood
+padding: 10
+border-radius: 5
+background-color: $fastn.color.main.cta-primary.hover
+background-color if $MOUSE-IN: $fastn.color.main.cta-primary.base
+role: $fastn.type.label-big
+color: $fastn.color.main.text-strong
+
+/-- container: workshop.wrapper.right-sidebar
+
+/-- sidebar:

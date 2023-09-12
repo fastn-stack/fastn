@@ -183,11 +183,6 @@ padding-bottom.em if { ftd.device == "desktop" }: 7
 align-self: center
 align-content: center
 
--- github-star-cta:
-link: https://github.com/fastn-stack/fastn/
-
-Star us on Github 🚀
-
 -- ftd.text: $hero-section.title
 role: $inherited.types.heading-hero
 role if { ftd.device == "mobile" }: $inherited.types.heading-medium
@@ -1112,7 +1107,7 @@ width: fill-container
 
 -- utils.install: Get Started with fastn
 code-lang: sh
-code: curl -fsSL https://fastn.com/install.sh | bash
+code: source <(curl -fsSL https://fastn.com/install.sh)
 cta-text: Learn More
 cta-link: /install/
 

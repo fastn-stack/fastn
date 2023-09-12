@@ -10,6 +10,7 @@ boolean $show-modal: false
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 0.8
+max-width.fixed.px: 980
 
 -- ds.h1: Very Easy Syntax
 
@@ -135,6 +136,7 @@ ultimately boosting the efficiency of the entire project.
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 0.8
+max-width.fixed.px: 980
 
 -- ds.h1: Rich collection of readymade components
 
@@ -285,6 +287,7 @@ $on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 0.8
+max-width.fixed.px: 980
 
 -- ds.h1: Rich collection of readymade components
 
@@ -350,6 +353,7 @@ width.fixed.percent: 95
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 0.8
+max-width.fixed.px: 980
 
 -- ds.h1: Full stack framework
 
@@ -422,7 +426,7 @@ for: $p in $people
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 0.8
-
+max-width.fixed.px: 980
 
 -- ds.h1: Opinionated Design System
 
@@ -481,6 +485,7 @@ adapt to the perfect size, whether your users are on mobile or desktop devices.
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 0.8
+max-width.fixed.px: 980
 
 -- ds.h1: Search Engine Optimization
 
@@ -549,6 +554,7 @@ copy: false
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 0.8
+max-width.fixed.px: 980
 
 -- ds.h1: Visualize with Vercel
 
@@ -578,6 +584,7 @@ width.fixed.percent: 95
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 0.8
+max-width.fixed.px: 980
 
 -- ds.h1: Why fastn is the best choice for your startup
 
@@ -632,7 +639,7 @@ developers of varying levels to efficiently create and manage your web presence.
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 0.8
-
+max-width.fixed.px: 980
 
 -- ds.h1: Why fastn is the best choice for your startup
 
@@ -708,6 +715,7 @@ In fastn, you can effortlessly modify the content without impacting the design.
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 0.8
+max-width.fixed.px: 980
 
 -- ds.h1: GitHub Integration
 

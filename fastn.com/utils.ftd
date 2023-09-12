@@ -412,7 +412,7 @@ margin-bottom.em: 1.5
 text-align: center
 
 -- ftd.column:
-width.fixed.percent if { ftd.device == "desktop" }: 45
+width.fixed.percent if { ftd.device == "desktop" }: 55
 width if { ftd.device == "mobile" }: fill-container
 align-content: center
 role: $inherited.types.copy-large
