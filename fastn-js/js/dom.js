@@ -1768,12 +1768,16 @@ class Node2 {
                 this.#node.classList.remove("line-numbers");
             }
         } else if (kind === fastn_dom.PropertyKind.CodeTheme) {
+            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
+            if(fastn_utils.isNull(staticValue) && !fastn_utils.isNull(this.#extraData.code.theme)) {
+                this.#node.classList.remove(this.#extraData.code.theme);
+                return;
+            }
             if (!ssr) {
                 fastn_utils.addCodeTheme(staticValue);
             }
             staticValue = fastn_utils.getStaticValue(staticValue);
             let theme = staticValue.replace("\.", "-");
-            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
             if (this.#extraData.code.theme !== theme) {
                 let codeNode = this.#children[0].getNode();
                 this.#node.classList.remove(this.#extraData.code.theme);
