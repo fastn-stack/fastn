@@ -12,7 +12,9 @@ documentation site-like appearance and functionality.
 Similar to how we added the `quote` package, we will now include the `doc-site`
 package as a dependency in our project.
 
-You can observe the following code added at line number 10:
+You can observe the following code added at [line number 10 in
+`FASTN.ftd`](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/FASTN.ftd#L10)
+file:
 
 -- ds.code:
 
@@ -21,7 +23,9 @@ You can observe the following code added at line number 10:
 -- ds.h1: Import `doc-site`
 
 To make use of the `doc-site` dependency, we need to import it into our
-`index.ftd` file. So, go to `index.ftd` file and uncomment the line number 10.
+[`index.ftd`](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/index.ftd)
+file. So, go to `index.ftd` file and uncomment the [line number
+10](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/index.ftd#L10).
 
 -- ds.code:
 
@@ -31,8 +35,9 @@ To make use of the `doc-site` dependency, we need to import it into our
 
 Now that we've imported `doc-site`, let's use the `page` component.
 
-Follow these steps to remove the comments at line numbers 24 and 25 and
-integrate the `page` component into your project.
+Follow these steps to remove the comments at [line numbers 24 and
+25](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/index.ftd#L24-L25)
+and integrate the `page` component into your project.
 
 -- ds.code:
 
@@ -48,10 +53,12 @@ render the output.
 
 Since `page` is the container type component. You can add any number of
 components in its subsection. Like in our case, we have added `quote.chalice`
-component (in line number 28 - 31).
+component (in [line number 28 -
+31](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/index.ftd#L28-L31)).
 
 The container type component needs an `end` statement to mark the end of this
-container component. So, remove the comment at line number 40.
+container component. So, remove the comment at [line number
+40](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/index.ftd#L40).
 
 -- ds.code:
 
