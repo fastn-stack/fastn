@@ -3133,6 +3133,11 @@ logo-height: $footer.logo-height
 
 
 
+-- utils.install: Get Started with fastn
+code-lang: sh
+code: source <(curl -fsSL https://fastn.com/install.sh)
+cta-text: Learn More
+cta-link: /install/
 
 -- component footer-desktop:
 string copyright:
