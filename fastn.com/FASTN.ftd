@@ -796,44 +796,63 @@ skip: true
       skip: true
 - Design Elements: /featured/design/
   - Color Schemes: /featured/cs/
-    - Shades Of Red: /featured/cs/red-shades
-    skip: true
-    - Shades Of Blue: /featured/cs/blue-shades
-    skip: true
-    - Shades Of Green: /featured/cs/green-shades
-    skip: true
-    - Shades Of Orange: /featured/cs/orange-shades
-    skip: true
-    - Shades Of Violet: /featured/cs/violet-shades
-    skip: true
-    - Blog Template CS: /featured/cs/blog-template-cs/
-    skip: true  
-    - Blue Heal CS: /featured/cs/blue-heal-cs/
-    skip: true  
-    - Midnight Rush CS: /featured/cs/midnight-rush-cs/
-    skip: true  
-    - Dark Flame CS: /featured/cs/dark-flame-cs/
-    skip: true  
-    - Forest CS: /featured/cs/forest-cs/
-    skip: true  
-    - Midnight Storm CS: /featured/cs/midnight-storm-cs/
-    skip: true  
-    - Misty Gray CS: /featured/cs/misty-gray-cs/
-    skip: true  
-    - Navy Nebula CS: /featured/cs/navy-nebula-cs/
-    skip: true  
-    - Pretty CS: /featured/cs/pretty-cs/
-    skip: true  
-    - Saturated Sunset CS: /featured/cs/saturated-sunset-cs/
-    skip: true
-    - Pink Tree Cs: /featured/cs/pink-tree-cs/
-    skip: true  
-    - Winter CS: /featured/cs/winter-cs/
-    skip: true  
-    - Little Blue CS: /featured/cs/little-blue-cs/
-    skip: true  
-    - Blog Template 1 CS: /featured/cs/blog-template-1-cs/
-    skip: true
+    - Shades Of Red: /cs/red-shades
+      skip: true
+      document: /featured/cs/red-shades/
+    - Shades Of Blue: /cs/blue-shades
+      skip: true
+      document: /featured/cs/blue-shades/
+    - Shades Of Green: /cs/green-shades
+      skip: true
+      document: /featured/cs/green-shades/
+    - Shades Of Orange: /cs/orange-shades
+      skip: true
+      document: /featured/cs/orange-shades/
+    - Shades Of Violet: /cs/violet-shades
+      skip: true
+      document: /featured/cs/violet-shades/
+    - Blog Template CS: /cs/blog-template-cs/
+      skip: true
+      document: /featured/cs/blog-template-cs/
+    - Blue Heal CS: /cs/blue-heal-cs/
+      skip: true
+      document: /featured/cs/blue-heal-cs/
+    - Midnight Rush CS: /cs/midnight-rush-cs/
+      skip: true
+      document: /featured/cs/midnight-rush-cs/
+    - Dark Flame CS: /cs/dark-flame-cs/
+      skip: true
+      document: /featured/cs/dark-flame-cs/
+    - Forest CS: /cs/forest-cs/
+      skip: true
+      document: /featured/cs/forest-cs/
+    - Midnight Storm CS: /cs/midnight-storm-cs/
+      skip: true
+      document: /featured/cs/midnight-storm-cs/
+    - Misty Gray CS: /cs/misty-gray-cs/
+      skip: true
+      document: /featured/cs/misty-gray-cs/
+    - Navy Nebula CS: /cs/navy-nebula-cs/
+      skip: true
+      document: /featured/cs/navy-nebula-cs/
+    - Pretty CS: /cs/pretty-cs/
+      skip: true
+      document: /featured/cs/pretty-cs/
+    - Saturated Sunset CS: /cs/saturated-sunset-cs/
+      skip: true
+      document: /featured/cs/saturated-sunset-cs/
+    - Pink Tree Cs: /cs/pink-tree-cs/
+      skip: true
+      document: /featured/cs/pink-tree-cs/
+    - Winter CS: /cs/winter-cs/
+      skip: true
+      document: /featured/cs/winter-cs/
+    - Little Blue CS: /cs/little-blue-cs/
+      skip: true
+      document: /featured/cs/little-blue-cs/
+    - Blog Template 1 CS: /cs/blog-template-1-cs/
+      skip: true
+      document: /featured/cs/blog-template-1-cs/
   - Font Typographies: /featured/fonts/
     - Arya Typography: /featured/fonts/arya/
     skip: true
