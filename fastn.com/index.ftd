@@ -168,9 +168,9 @@ other platform you prefer. You maintain full control over your content,
 infrastructure, and tools.
 
 -- lib.image-featured:
-image-1: $fastn-assets.files.images.landing.image-placeholder.png
-image-2: $fastn-assets.files.images.landing.image-placeholder.png
-image-3: $fastn-assets.files.images.landing.image-placeholder.png
+image-1: $fastn-assets.files.images.landing.image-placeholder-1.png
+image-2: $fastn-assets.files.images.landing.image-placeholder-2.png
+image-3: $fastn-assets.files.images.landing.image-placeholder-3.png
 icon-1: $fastn-assets.files.images.landing.cube.svg
 info-1: fastn offers deployment for static sites using deploy.yml from fastn-template on platforms like GitHub and Vercel.
 icon-2: $fastn-assets.files.images.landing.arrow-up.svg

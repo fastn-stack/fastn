@@ -643,12 +643,13 @@ border-radius.px: 16
 
 -- ftd.image:
 src: $image-featured.image-3
-height.fixed.px: 440
-width: fill-container
+height.fixed.px: 377
+width.fixed.px: 544
 fit: cover
 border-width.px: 1
 border-color: $inherited.colors.border
 border-radius.px: 16
+align-self: center
 
 -- ftd.row:
 width: fill-container
