@@ -421,21 +421,22 @@ let fastn_utils = {
     },
 
     escapeHtmlInMarkdown(str) {
+        if(typeof str !== 'string') {
+            return str;
+        }
+
         let result = "";
         let ch_map = {
-            '<': "&lt;"
+            '<': "&lt;",
+            '>': "&gt;",
+            '&': "&amp;",
+            '"': "&quot;",
+            "'": "&#39;",
+            '/': "&#47;",
         };
-        // To avoid replacing html characters inside <code> body
-        let backtick_found = false;
         for (var i = 0; i < str.length; i++) {
             let current = str[i];
-            if (current === '`') backtick_found = !backtick_found;
-            if (ch_map[current] !== undefined && !backtick_found) {
-                result += ch_map[current];
-            }
-            else {
-                result += current;
-            }
+            result += ch_map[current] ?? current;
         }
         return result;
     },

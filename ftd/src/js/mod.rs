@@ -417,8 +417,15 @@ impl ftd::interpreter::Component {
             has_rive_components,
         ) {
             kernel_component_statements
-        } else if let Some(defined_component_statements) =
-            self.defined_component_to_component_statements(parent, index, doc, rdata, should_return)
+        } else if let Some(defined_component_statements) = self
+            .defined_component_to_component_statements(
+                parent,
+                index,
+                doc,
+                rdata,
+                should_return,
+                has_rive_components,
+            )
         {
             defined_component_statements
         } else if let Some(header_defined_component_statements) = self
@@ -459,7 +466,7 @@ impl ftd::interpreter::Component {
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
         if ftd::js::element::is_kernel(self.name.as_str()) {
             if !*has_rive_components {
-                *has_rive_components = ftd::js::element::is_rive_component(self.name.as_str())
+                *has_rive_components = ftd::js::element::is_rive_component(self.name.as_str());
             }
             Some(
                 ftd::js::Element::from_interpreter_component(self, doc).to_component_statements(
@@ -483,6 +490,7 @@ impl ftd::interpreter::Component {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
+        has_rive_components: &mut bool,
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
         if let Some(arguments) =
             ftd::js::utils::get_set_property_values_for_provided_component_properties(
@@ -491,6 +499,7 @@ impl ftd::interpreter::Component {
                 self.name.as_str(),
                 self.properties.as_slice(),
                 self.line_number,
+                has_rive_components,
             )
         {
             let mut component_statements = vec![];
@@ -563,6 +572,7 @@ impl ftd::interpreter::Component {
                 component_name.as_str(),
                 self.properties.as_slice(),
                 self.line_number,
+                has_rive_components,
             )?;
         } else if !ftd::js::utils::is_ui_argument(
             component.arguments.as_slice(),
