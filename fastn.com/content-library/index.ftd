@@ -100,7 +100,7 @@ align-content: center
 width: fill-container
 color: $inherited.colors.text-strong
 spacing.fixed.px: 40
-max-width.fixed.px: 1440
+max-width.fixed.px: $max-width
 
 -- ftd.column:
 width.fixed.px: 266
@@ -1141,6 +1141,12 @@ color: $inherited.colors.text
 
 -- end: ftd.column
 
+-- ftd.column:
+align-self: end
+border-width.px: 2
+border-radius.px: 8
+border-color: $inherited.colors.border
+
 -- ftd.video:
 src: $fastn-assets.files.images.landing.right-video.mov
 controls: true
@@ -1148,6 +1154,8 @@ width.fixed.px: 700
 height.fixed.px: 474
 fit: contain
 border-radius.px: 8
+
+-- end: ftd.column
 
 -- end: ftd.row
 
@@ -1243,13 +1251,19 @@ color: $inherited.colors.text
 
 -- end: ftd.column
 
+-- ftd.column:
+border-width.px: 2
+border-radius.px: 8
+border-color: $inherited.colors.border
+
 -- ftd.video:
 src: $fastn-assets.files.images.landing.right-video.mov
 controls: true
-width.fixed.px: 400
-height.fixed.px: 343
+width: fill-container
 fit: contain
 border-radius.px: 8
+
+-- end: ftd.column
 
 -- end: ftd.column
 
@@ -2246,6 +2260,7 @@ optional ftd.image-src image-3:
 
 -- ftd.column:
 width: fill-container
+align-content: center
 
 -- ftd.desktop:
 
@@ -3082,6 +3097,7 @@ children card:
 
 -- ftd.column:
 width: fill-container
+align-content: center
 
 -- ftd.desktop:
 
@@ -3741,6 +3757,9 @@ icon: $fastn-assets.files.images.landing.arrow-icon.svg
 
 -- ftd.column:
 align-self: end
+border-width.px: 2
+border-radius.px: 8
+border-color: $inherited.colors.border
 
 -- ftd.video:
 src: $fastn-assets.files.images.landing.community.mov
@@ -3791,12 +3810,19 @@ icon: $fastn-assets.files.images.landing.arrow-icon.svg
 
 -- end: ftd.column
 
+-- ftd.column:
+border-width.px: 2
+border-radius.px: 8
+border-color: $inherited.colors.border
+
 -- ftd.video:
 src: $fastn-assets.files.images.landing.community.mov
 controls: true
-width.fixed.px: 400
-height.fixed.px: 300
+width: fill-container
 fit: contain
+border-radius.px: 8
+
+-- end: ftd.column
 
 -- end: ftd.column
 
@@ -3929,138 +3955,6 @@ repeat: no-repeat
 
 
 
-
--- component articles-container:
-optional caption title:
-optional body body:
-children container:
-article-record list articles: 
-
--- ftd.column:
-width: fill-container
-align-content: center
-max-width.fixed.px: 1440
-align-self: center
-
--- ftd.column:
-width: fill-container
-spacing.fixed.px: 16
-align-content: center
-padding-top.px: 32
-padding-bottom.px if {ftd.device == "mobile" }: 32
-
--- ftd.text: $articles-container.title
-if: { articles-container.title != NULL }
-role: $inherited.types.heading-medium
-color: $inherited.colors.text-strong
-text-align: center
-
--- ftd.text:
-if: { articles-container.body != NULL }
-role: $inherited.types.copy-large
-color: $inherited.colors.text
-text-align: center
-
-$articles-container.body
-
--- end: ftd.column
-
--- ftd.desktop:
-
--- ftd.row:
-width: fill-container
-spacing.fixed.px: 24
-align-content: center
-margin-top.px: 48
-wrap: true
-
--- article-card: $article.title
-$loop$: $articles-container.articles as $article
-image: $article.image
-
-$article.body
-
--- end: ftd.row
-
--- end: ftd.desktop
-
--- ftd.mobile:
-
--- ftd.column:
-spacing.fixed.px: 16
-
--- article-card: $article.title
-$loop$: $articles-container.articles as $article
-image: $article.image
-
-$article.body
-
--- end: ftd.column
-
--- end: ftd.mobile
-
--- end: ftd.column
-
--- end: articles-container
-
-
-
-
-
-
-
-
-
-
--- component article-card:
-optional caption title:
-ftd.image-src image:
-optional string cta-text: Explore more
-optional string cta-link: index.html
-optional body body:
-
--- ftd.column:
-color: $inherited.colors.text
-background.solid: $inherited.colors.background.step-1
-padding.px: 16
-border-radius.px: 16
-spacing.fixed.px: 16
-width.fixed.px: 392
-min-height.fixed.px: 402
-width if {ftd.device == "mobile"}: fill-container
-
--- ftd.image:
-src: $article-card.image
-width: fill-container
-
--- ftd.text: $article-card.title
-if: { article-card.title != NULL }
-role: $inherited.types.copy-regular
-color: $inherited.colors.text-strong
-style: bold
-
--- ftd.text: $article-card.body
-if: { article-card.body != NULL }
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-
--- cta-primary-button: $article-card.cta-text
-link: $article-card.cta-link
-icon: $fastn-assets.files.images.landing.cta-arrow.svg
-
--- end: ftd.column
-
--- end: article-card
-
-
-
-
-
-
-
-
-
-
 -- component card:
 optional ftd.image-src icon:
 caption title:
@@ -4166,6 +4060,7 @@ align-content: center
 width: fill-container
 wrap if { ftd.device == "mobile" }: true
 margin-vertical.px if { ftd.device == "mobile" }: 60
+max-width.fixed.px: $max-width
 
 -- end: ftd.row
 
