@@ -86,7 +86,8 @@ boolean show-large: false
 width: fill-container
 spacing.fixed.px if { ftd.device == "mobile" }: 24
 margin-top.px if { grid-view.push-top }: -90
-max-width.fixed.px: 980
+max-width.fixed.px if { !grid-view.show-large } : 980
+max-width.fixed.px if { grid-view.show-large } : 1344
 
 -- ftd.row:
 width: fill-container
@@ -331,9 +332,8 @@ width.fixed.px: 302
 classes if {grid-of-items.two-fold}: two-folded
 $on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
-height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 224
-height.fixed.px if {grid-of-items.two-fold}: 520
-height.fixed.px if {grid-of-items.show-large}: 324
+height.fixed.px if { !grid-of-items.two-fold }: 224
+height.fixed.px if { grid-of-items.two-fold }: 520
 align-content: center
 border-color: $inherited.colors.border
 border-width.px: 1
@@ -530,6 +530,10 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 template-url: featured/ds/midnight-storm/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 
+-- template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+
 -- end: doc-sites
 
 
@@ -569,6 +573,10 @@ screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
 template-url: featured/blogs/mg-blog/
 screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
+-- template: Simple Site Blog
+template-url: featured/blogs/doc-site/
+screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.png
+
 -- end: blog-sites
 
 
@@ -584,6 +592,10 @@ screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
 -- template: Resume 1
 template-url: featured/resumes/resume-1/
 screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
+
+-- template: Resume 10
+template-url: featured/resumes/resume-10/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-10.png
 
 -- end: resumes
 
@@ -638,6 +650,14 @@ screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 template-url: /cs/blog-template-1-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
+-- template: Dark Flame CS
+template-url: /cs/dark-flame-cs/
+screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
+
+-- template: Navy Nebula CS
+template-url: /cs/navy-nebula-cs/
+screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
+
 -- end: schemes
 
 
@@ -666,6 +686,10 @@ screenshot: $fastn-assets.files.images.featured.components.header.jpg
 Code blocks are typically defined by using specific syntax or indentation rules,
 depending on the programming language.
 
+-- template: Charcoal
+template-url: /featured/components/quotes/author-icon-quotes/demo-1/
+screenshot: $fastn-assets.files.images.featured.components.quotes.author-icon-quotes.demo-1.png
+
 
 -- end: bling
 
@@ -681,16 +705,20 @@ depending on the programming language.
 -- template list fonts:
 
 -- template: Inter Typography
-template-url: featured/fonts/inter/
+template-url: /fonts/inter/
 screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
 -- template: Opensans Typography
-template-url: featured/fonts/opensans/
+template-url: /fonts/opensans/
 screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 
 -- template: Roboto Typography
-template-url: featured/fonts/roboto/
+template-url: /fonts/roboto/
 screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
+
+-- template: Lato Typography
+template-url: /fonts/lato/
+screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
 
 -- end: fonts
 
@@ -702,14 +730,17 @@ screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
 template-url: /featured/sections/slides/giggle-presentation-template/
 screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
 
--- template: Hero with two CTA - Design 5
-template-url: featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/
-screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
+-- template: Hero Right Hug Expanded
+template-url: /hero-right-hug-expanded/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded.jpg
 
 -- template: Image Gallery IG
 template-url: /featured/sections/cards/image-gallery-ig/
 screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
 
+-- template: Hero Bottom Hug
+template-url: /hero-bottom-hug/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-bottom-hug.png
 
 -- end: sections
 

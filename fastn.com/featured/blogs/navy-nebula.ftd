@@ -1,6 +1,6 @@
 -- import: fastn-community.github.io/spectrum-ds as ds
 -- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn-community.github.io/footer
+-- import: fastn.com/content-library as footer
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/featured as ft-ui
@@ -24,16 +24,13 @@ full-width-bar: true
 
 -- ds.page.footer:
 
--- footer.social-sideline-footer:
-social: true
+-- footer.footer:
 site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+site-url: index.html
+social-links: $footer.social-links
+copyright: Copyright © 2023 - fastn.com
 
 -- end: ds.page.footer
-
 
 -- ds.page.abstract-bar:
 

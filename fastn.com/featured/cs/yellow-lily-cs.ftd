@@ -1,6 +1,6 @@
 -- import: fastn-community.github.io/spectrum-ds as ds
 -- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn-community.github.io/footer
+-- import: fastn.com/content-library as footer
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/featured as ft-ui
@@ -29,16 +29,13 @@ full-width: true
 
 -- ds.page.footer:
 
--- footer.social-sideline-footer:
-social: true
+-- footer.footer:
 site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+site-url: index.html
+social-links: $footer.social-links
+copyright: Copyright © 2023 - fastn.com
 
 -- end: ds.page.footer
-
 -- ds.page.layout-bar:
 
 -- ds.layout: Color schemes - Yellow Lily CS
@@ -129,6 +126,10 @@ avatar: $assets.files.images.fastn.svg
 
 -- ft-ui.template list similar-schemes:
 
+-- ft-ui.template: Dark Flame CS
+template-url: /cs/dark-flame-cs/
+screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
+
 -- ft-ui.template: Navy Nebula CS
 template-url: /cs/navy-nebula-cs/
 screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
@@ -136,5 +137,21 @@ screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
 -- ft-ui.template: Saturated Sunset CS
 template-url: /cs/saturated-sunset-cs/
 screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
+
+-- ft-ui.template: Forest CS
+template-url: /cs/forest-cs/
+screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
+
+-- ft-ui.template: Midnight Storm CS
+template-url: /cs/midnight-storm-cs/
+screenshot: $fastn-assets.files.images.featured.cs.midnight-storm-cs.png
+
+-- ft-ui.template: Misty Gray CS
+template-url: /cs/misty-gray-cs/
+screenshot: $fastn-assets.files.images.featured.cs.misty-gray-cs.png
+
+-- ft-ui.template: Pretty CS
+template-url: /cs/pretty-cs/
+screenshot: $fastn-assets.files.images.featured.cs.pretty-cs.png
 
 -- end: similar-schemes
