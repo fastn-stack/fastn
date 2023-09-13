@@ -119,6 +119,7 @@ cta-text: Learn more
 cta-link: /language/
 icon: $fastn-assets.files.images.landing.smile-icon.svg
 transparent: true
+is-child: true
 
 -- lib.feature-card.body:
 
@@ -128,7 +129,7 @@ the dozens of professionally created templates, customize layout, style, and
 graphics, and deploy instantly.  
 
 -- lib.right-video:
-;;image: $fastn-assets.files.images.landing.video-image.png
+;;video: $fastn-assets.files.images.landing.right-video.mov
 icon-1: $fastn-assets.files.images.landing.cube.svg
 info-1: The Uniform Design System allows components created by different teams to be usable by each other.
 icon-2: $fastn-assets.files.images.landing.arrow-up.svg
@@ -302,7 +303,7 @@ modify the colors and content in a matter of minutes.
 -- end: lib.cards-section
 
 -- lib.our-community: fastn Community
-;;image: $fastn-assets.files.images.landing.video-image.png
+;;video: $fastn-assets.files.images.landing.community.mov
 cta-primary-text: Join Discord
 cta-primary-url: https://discord.gg/uhTZQQV9
 

@@ -84,6 +84,7 @@ boolean move-left: false
 boolean transparent: false
 children cards:
 ftd.ui list additional-cards:
+boolean is-child: false
 
 -- ftd.column:
 width: fill-container
@@ -230,6 +231,7 @@ padding.px if { !feature-card.transparent }: 24
 color: $inherited.colors.text-strong
 border-radius.px: 16
 spacing.fixed.px: 32
+padding-horizontal.px if { !feature-card.is-child }: 24
 
 -- ftd.column:
 spacing.fixed.px: 16
@@ -311,6 +313,14 @@ if: { feature-card.cards != NULL }
 width: fill-container
 children: $feature-card.cards
 spacing.fixed.px: 24
+align-content: center
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+children: $feature-card.additional-cards
+spacing: space-between
 align-content: center
 
 -- end: ftd.column
@@ -1047,6 +1057,7 @@ optional ftd.image-src icon-3:
 optional string info-1:
 optional string info-2:
 optional string info-3:
+optional ftd.video-src video:
 
 -- ftd.column:
 width: fill-container
@@ -1057,7 +1068,7 @@ width: fill-container
 width: fill-container
 spacing.fixed.px: 32
 margin-vertical.px: 42
-max-width.fixed.px: 1140
+max-width.fixed.px: $max-width
 align-self: center
 
 -- ftd.column:
@@ -1148,7 +1159,7 @@ border-radius.px: 8
 border-color: $inherited.colors.border
 
 -- ftd.video:
-src: $fastn-assets.files.images.landing.right-video.mov
+src: $right-video.video
 controls: true
 width.fixed.px: 700
 height.fixed.px: 474
@@ -1167,7 +1178,6 @@ border-radius.px: 8
 width: fill-container
 spacing.fixed.px: 32
 margin-vertical.px: 42
-max-width.fixed.px: 1140
 align-self: center
 
 -- ftd.column:
@@ -1252,12 +1262,13 @@ color: $inherited.colors.text
 -- end: ftd.column
 
 -- ftd.column:
+width: fill-container
 border-width.px: 2
 border-radius.px: 8
 border-color: $inherited.colors.border
 
 -- ftd.video:
-src: $fastn-assets.files.images.landing.right-video.mov
+src: $right-video.video
 controls: true
 width: fill-container
 fit: contain
@@ -1675,6 +1686,7 @@ width: fill-container
 height: fill-container
 color: $inherited.colors.text-strong
 background.image: $background
+padding-horizontal.px: 24
 
 -- ftd.column:
 width: fill-container
@@ -1699,7 +1711,7 @@ $hero-section.body
 -- ftd.column:
 align-self: center
 align-content: center
-spacing.fixed.px: 16
+spacing.fixed.px: 34
 width.fixed.px: 225
 
 -- cta-secondary-medium: $hero-section.primary-cta
@@ -3703,6 +3715,7 @@ optional caption title:
 optional body body:
 optional string cta-primary-text:
 optional string cta-primary-url:
+optional ftd.video-src video: 
 
 -- ftd.column:
 width: fill-container
@@ -3762,7 +3775,7 @@ border-radius.px: 8
 border-color: $inherited.colors.border
 
 -- ftd.video:
-src: $fastn-assets.files.images.landing.community.mov
+src: $our-community.video
 controls: true
 width.fixed.px: 700
 height.fixed.px: 474
@@ -3811,12 +3824,13 @@ icon: $fastn-assets.files.images.landing.arrow-icon.svg
 -- end: ftd.column
 
 -- ftd.column:
+width: fill-container
 border-width.px: 2
 border-radius.px: 8
 border-color: $inherited.colors.border
 
 -- ftd.video:
-src: $fastn-assets.files.images.landing.community.mov
+src: $our-community.video
 controls: true
 width: fill-container
 fit: contain
