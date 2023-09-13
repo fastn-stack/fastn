@@ -846,6 +846,21 @@ fn colon_separated_values(
 }
 
 fn get_name_and_kind(name_with_kind: &str) -> (String, Option<String>) {
+    let mut name_with_kind = name_with_kind.to_owned();
+
+    // Fix spacing for functional parameters inside parenthesis (if user provides)
+    if let (Some(si), Some(ei)) = (name_with_kind.find('('), name_with_kind.find(')')) {
+        if si < ei {
+            // All Content before start ( bracket
+            let before_brackets = &name_with_kind[..si];
+            // All content after start ( bracket and all inner content excluding ) bracket
+            let mut bracket_content_and_beyond = name_with_kind[si..ei].replace(' ', "");
+            // Push any remaining characters including ) and after end bracket
+            bracket_content_and_beyond.push_str(&name_with_kind[ei..]);
+            name_with_kind = format!("{}{}", before_brackets, bracket_content_and_beyond);
+        }
+    }
+
     if let Some((kind, name)) = name_with_kind.rsplit_once(' ') {
         return (name.to_string(), Some(kind.to_string()));
     }
