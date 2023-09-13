@@ -86,7 +86,8 @@ boolean show-large: false
 width: fill-container
 spacing.fixed.px if { ftd.device == "mobile" }: 24
 margin-top.px if { grid-view.push-top }: -90
-max-width.fixed.px: 980
+max-width.fixed.px if { !grid-view.show-large } : 980
+max-width.fixed.px if { grid-view.show-large } : 1344
 
 -- ftd.row:
 width: fill-container
@@ -331,9 +332,8 @@ width.fixed.px: 302
 classes if {grid-of-items.two-fold}: two-folded
 $on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
-height.fixed.px if {!grid-of-items.two-fold && !grid-of-items.show-large}: 224
-height.fixed.px if {grid-of-items.two-fold}: 520
-height.fixed.px if {grid-of-items.show-large}: 324
+height.fixed.px if { !grid-of-items.two-fold }: 224
+height.fixed.px if { grid-of-items.two-fold }: 520
 align-content: center
 border-color: $inherited.colors.border
 border-width.px: 1
@@ -651,11 +651,11 @@ template-url: /cs/blog-template-1-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
 -- template: Dark Flame CS
-template-url: featured/cs/dark-flame-cs/
+template-url: /cs/dark-flame-cs/
 screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
 
 -- template: Navy Nebula CS
-template-url: featured/cs/navy-nebula-cs/
+template-url: /cs/navy-nebula-cs/
 screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
 
 -- end: schemes
