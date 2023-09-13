@@ -688,6 +688,15 @@ impl Image {
                     rdata,
                 ),
             ));
+        } else if self.common.width.is_some() && self.common.height.is_some() {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                ftd::js::Value::from_str_value("cover").to_set_property(
+                    fastn_js::PropertyKind::Fit,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
         }
         component_statements.extend(self.common.to_set_properties(
             kernel.name.as_str(),

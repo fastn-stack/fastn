@@ -16,29 +16,30 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __m-4 __g-5"><div data-id="4">Original</div><img data-id="5" src="https://picsum.photos/536/354"></img><div data-id="6">Without fit</div><img data-id="7" src="https://picsum.photos/536/354" class="__w-6 __h-7"></img><div data-id="8">Fit = None</div><img data-id="9" src="https://picsum.photos/536/354" class="__of-8 __w-9 __h-10"></img><div data-id="10">Fit = Cover</div><img data-id="11" src="https://picsum.photos/536/354" class="__of-11 __w-12 __h-13"></img><div data-id="12">Fit = Contain</div><img data-id="13" src="https://picsum.photos/536/354" class="__of-14 __w-15 __h-16"></img><div data-id="14">Fit = Fill</div><img data-id="15" src="https://picsum.photos/536/354" class="__of-17 __w-18 __h-19"></img><div data-id="16">Fit = Scale Down</div><img data-id="17" src="https://picsum.photos/536/354" class="__of-20 __w-21 __h-22"></img></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __m-4 __g-5"><div data-id="4">Original</div><img data-id="5" src="https://picsum.photos/536/354"></img><div data-id="6">Without fit</div><img data-id="7" src="https://picsum.photos/536/354" class="__of-6 __w-7 __h-8"></img><div data-id="8">Fit = None</div><img data-id="9" src="https://picsum.photos/536/354" class="__of-9 __w-10 __h-11"></img><div data-id="10">Fit = Cover</div><img data-id="11" src="https://picsum.photos/536/354" class="__of-12 __w-13 __h-14"></img><div data-id="12">Fit = Contain</div><img data-id="13" src="https://picsum.photos/536/354" class="__of-15 __w-16 __h-17"></img><div data-id="14">Fit = Fill</div><img data-id="15" src="https://picsum.photos/536/354" class="__of-18 __w-19 __h-20"></img><div data-id="16">Fit = Scale Down</div><img data-id="17" src="https://picsum.photos/536/354" class="__of-21 __w-22 __h-23"></img></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
 	.__m-4 { margin: 2rem; }
 	.__g-5 { gap: 2rem; }
-	.__w-6 { width: 200px; }
-	.__h-7 { height: 300px; }
-	.__of-8 { object-fit: none; }
-	.__w-9 { width: 200px; }
-	.__h-10 { height: 300px; }
-	.__of-11 { object-fit: cover; }
-	.__w-12 { width: 200px; }
-	.__h-13 { height: 300px; }
-	.__of-14 { object-fit: contain; }
-	.__w-15 { width: 200px; }
-	.__h-16 { height: 300px; }
-	.__of-17 { object-fit: fill; }
-	.__w-18 { width: 200px; }
-	.__h-19 { height: 300px; }
-	.__of-20 { object-fit: scale-down; }
-	.__w-21 { width: 200px; }
-	.__h-22 { height: 300px; }
+	.__of-6 { object-fit: cover; }
+	.__w-7 { width: 200px; }
+	.__h-8 { height: 300px; }
+	.__of-9 { object-fit: none; }
+	.__w-10 { width: 200px; }
+	.__h-11 { height: 300px; }
+	.__of-12 { object-fit: cover; }
+	.__w-13 { width: 200px; }
+	.__h-14 { height: 300px; }
+	.__of-15 { object-fit: contain; }
+	.__w-16 { width: 200px; }
+	.__h-17 { height: 300px; }
+	.__of-18 { object-fit: fill; }
+	.__w-19 { width: 200px; }
+	.__h-20 { height: 300px; }
+	.__of-21 { object-fit: scale-down; }
+	.__w-22 { width: 200px; }
+	.__h-23 { height: 300px; }
     </style>
 <script>
     (function() {
@@ -73,6 +74,7 @@ let main = function (parent) {
         dark: "https://picsum.photos/536/354",
         light: "https://picsum.photos/536/354"
       }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Fit, "cover", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
     },
