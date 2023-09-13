@@ -143,7 +143,7 @@ color: $inherited.colors.text
 -- ftd.column:
 children: $event-desktop.wrap
 width: fill-container
-spacing.fixed.px: 0
+spacing.fixed.px: 24
 padding-bottom.px: 48
 
 -- end: ftd.column

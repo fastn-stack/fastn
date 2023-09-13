@@ -1606,7 +1606,7 @@ background.image: $background
 width: fill-container
 max-width.fixed.px: 600
 padding-top.em: 3
-padding-bottom.em: 7
+padding-bottom.em: 8
 align-self: center
 align-content: center
 spacing.fixed.px: 40
@@ -1651,7 +1651,6 @@ width: fill-container
 align-content: center
 spacing.fixed.px: 8
 padding-bottom.px: 98
-padding-top.px: 180
 
 -- ftd.text: $hero-section.subtitle
 role: $inherited.types.heading-medium
@@ -2912,13 +2911,32 @@ if: { !testimonial-card.right }
 width: fill-container
 spacing.fixed.px: 26
 
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 6
+min-width.fixed.px: 160
+
 -- ftd.image:
 if: { testimonial-card.avatar != NULL }
 src: $testimonial-card.avatar
-width.fixed.px: 104
-height.fixed.px: 96
-border-radius.px: 30
-align-self: center
+width.fixed.px: 100
+height.fixed.px: 100
+border-radius.px: 16
+fit: cover
+
+-- ftd.text: $testimonial-card.title
+if: { !testimonial-card.right }
+role: $inherited.types.blockquote
+color: $inherited.colors.text-strong
+margin-top.px: 24
+
+-- ftd.text:
+if: { testimonial-card.label != NULL } 
+text: $testimonial-card.label
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- end: ftd.column
 
 -- ftd.text:
 if: { testimonial-card.body != NULL }
@@ -2929,23 +2947,6 @@ align-self: center
 $testimonial-card.body
 
 -- end: ftd.row
-
--- ftd.column:
-width: fill-container
-spacing.fixed.px: 6
-
--- ftd.text: $testimonial-card.title
-if: { !testimonial-card.right }
-role: $inherited.types.blockquote
-color: $inherited.colors.text-strong
-
--- ftd.text:
-if: { testimonial-card.label != NULL } 
-text: $testimonial-card.label
-role: $inherited.types.fine-print
-color: $inherited.colors.text
-
--- end: ftd.column
 
 -- end: ftd.column
 
