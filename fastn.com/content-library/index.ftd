@@ -20,7 +20,7 @@ $processor$: pr.full-sitemap
 -- string $selected-item: System
 
 
-
+-- integer max-width: 1120
 
 
 
@@ -83,33 +83,34 @@ optional ftd.image-src image:
 boolean move-left: false
 boolean transparent: false
 children cards:
+ftd.ui list additional-cards:
 
 -- ftd.column:
 width: fill-container
 background.solid if { !feature-card.transparent }: $inherited.colors.background.step-1
 padding-top.px if { ftd.device == "desktop" }: 80
 padding-horizontal.px if { ftd.device == "desktop" }: 24
-padding-bottom.px if { ftd.device == "desktop" }: 50
+padding-bottom.px if { ftd.device == "desktop" }: 57
 margin-bottom.px: 24
 align-content: center
 
 -- ftd.desktop:
 
 -- ftd.column:
-width: fill-container
-color: $inherited.colors.text-strong
-spacing.fixed.px: 40
-max-width.fixed.px: 1440
-
--- ftd.column:
 width.fixed.px: 266
 height.fixed.px: 220
 background.image: $background-img
 anchor: parent
-right.px: 0
-top.px: 0
+right.px: 24
+top.px: 65
 
 -- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+color: $inherited.colors.text-strong
+spacing.fixed.px: 40
+max-width.fixed.px: $max-width
 
 -- ftd.column:
 spacing.fixed.px: 24
@@ -150,6 +151,7 @@ border-width.px: 1
 border-color: $inherited.colors.border-strong
 border-radius.px: 8
 max-height.fixed.px: 344
+padding.px: 41
 
 -- ftd.image:
 if: { feature-card.image != NULL }
@@ -177,8 +179,8 @@ width.fixed.percent: 48
 border-width.px: 1
 border-color: $inherited.colors.border-strong
 border-radius.px: 8
-padding-horizontal.px: 14
-max-height.fixed.px: 344
+max-height.fixed.px: 354
+padding.px: 41
 
 -- ftd.image:
 if: { feature-card.image != NULL }
@@ -200,6 +202,14 @@ spacing: space-between
 align-content: center
 
 -- end: ftd.row
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+children: $feature-card.additional-cards
+spacing: space-between
+align-content: center
 
 -- end: ftd.column
 
@@ -319,9 +329,8 @@ optional string link:
 
 -- ftd.column:
 width: fill-container
-background.solid: $inherited.colors.background.step-1
-border-radius.px: 15
-margin-bottom.px: 84
+align-content: center
+margin-bottom.px: 64
 
 -- ftd.column:
 padding-top.px: 35
@@ -329,8 +338,10 @@ padding-horizontal.px: 38
 padding-bottom.px: 50
 spacing.fixed.px: 62
 width: fill-container
-max-width.fixed.px: 1140
+max-width.fixed.px: $max-width
 align-self: center
+background.solid: $inherited.colors.background.step-1
+border-radius.px: 15
 
 -- ftd.column:
 width.fixed.px: 139
@@ -836,7 +847,7 @@ boolean $mouse-in: false
 -- ftd.row:
 align-content: center
 background.solid: $inherited.colors.cta-primary.base
-border-color if { cta-primary-small.mouse-in }: $inherited.colors.cta-primary.hover
+background.solid if { cta-primary-small.mouse-in }: $inherited.colors.cta-primary.hover
 $on-mouse-leave$: $ftd.set-bool($a = $cta-primary-small.mouse-in, v = false)
 $on-mouse-enter$: $ftd.set-bool($a = $cta-primary-small.mouse-in, v = true)
 padding-vertical.px: 12
@@ -875,7 +886,7 @@ boolean $mouse-in: false
 -- ftd.row:
 align-content: center
 background.solid: $inherited.colors.cta-secondary.base
-border-color if { cta-fill.mouse-in }: $inherited.colors.cta-primary.border
+background.solid if { cta-fill.mouse-in }: $inherited.colors.cta-primary.border
 $on-mouse-leave$: $ftd.set-bool($a = $cta-fill.mouse-in, v = false)
 $on-mouse-enter$: $ftd.set-bool($a = $cta-fill.mouse-in, v = true)
 padding-vertical.px: 20
@@ -920,7 +931,8 @@ width: fill-container
 background.solid: $code-block-system.bgcolor
 border-radius.px: 12
 max-width.fixed.px: 650
-max-height.fixed.px: 344
+max-height.fixed.px: 354
+min-height.fixed.px: 354
 align-self: center
 border-width.px: 1
 border-color: $inherited.colors.border
@@ -988,8 +1000,6 @@ color: $inherited.colors.text-strong
 
 -- ftd.column:
 width: fill-container
-white-space: break-spaces
-overflow-y: auto
 
 -- code:
 body: $code-block-system.body
@@ -1230,8 +1240,8 @@ width: fill-container
 border-radius.px: 12
 
 -- ftd.code:
-min-height.fixed.px: 258
-max-height.fixed.px: 258
+min-height.fixed.px: 310
+max-height.fixed.px: 310
 text: $code.body
 lang: $code.lang
 width: fill-container
@@ -1302,6 +1312,7 @@ optional string cta-link:
 
 -- ftd.column:
 width: fill-container
+align-content: center
 
 -- ftd.desktop:
 
@@ -1312,6 +1323,7 @@ padding.px: 38
 border-radius.px: 16
 align-content: center
 margin-vertical.px: 64
+max-width.fixed.px: $max-width
 
 -- ftd.column:
 if: { promo-card.cta-text != NULL }
@@ -1331,7 +1343,7 @@ spacing.fixed.px: 24
 
 -- ftd.text: $promo-card.title
 if: { promo-card.title }
-role: $inherited.types.heading-large
+role: $inherited.types.heading-medium
 color: $inherited.colors.text-strong
 text-align: center
 style: semi-bold
@@ -1719,6 +1731,8 @@ optional ftd.image-src image-3:
 width: fill-container
 spacing.fixed.px: 40
 margin-bottom.px: 80
+max-width.fixed.px: $max-width
+margin-top.px: 66
 
 -- ftd.column:
 spacing.fixed.px: 16
@@ -1740,6 +1754,7 @@ width: fill-container
 border-radius.px: 16
 border-width.px: 1
 border-color: $inherited.colors.border
+height.fixed.px: 440
 fit: cover
 
 -- ftd.row:
@@ -1751,17 +1766,14 @@ if: { hero-bottom-hug.image-2 != NULL}
 src: $hero-bottom-hug.image-2
 width: fill-container
 fit: cover
-border-radius.px: 16
-border-width.px: 1
 border-color: $inherited.colors.border
+
 
 -- ftd.image:
 if: { hero-bottom-hug.image-3 != NULL}
 src: $hero-bottom-hug.image-3
 width: fill-container
 fit: cover
-border-radius.px: 16
-border-width.px: 1
 border-color: $inherited.colors.border
 
 -- end: ftd.row
@@ -2494,7 +2506,7 @@ children card:
 
 -- ftd.column:
 width: fill-container
-margin-vertical.px: 64
+margin-vertical.px: 164
 spacing.fixed.px: 24
 align-content: center
 
@@ -2503,8 +2515,18 @@ width.fixed.px: 150
 height.fixed.px: 262
 background.image: $bg-image-1
 anchor: parent
-left.px: -72
+left.px: 0
 bottom.px: -70
+
+-- end: ftd.column
+
+-- ftd.column:
+width.fixed.px: 176
+height.fixed.px: 190
+background.image: $bg-image-2
+anchor: parent
+right.px: 0
+top.px: -70
 
 -- end: ftd.column
 
@@ -2576,16 +2598,6 @@ opacity: 0.7
 -- end: ftd.column
 
 -- end: ftd.row
-
--- ftd.column:
-width.fixed.px: 176
-height.fixed.px: 190
-background.image: $bg-image-2
-anchor: parent
-right.px: -64
-top.px: -70
-
--- end: ftd.column
 
 -- end: ftd.column
 
@@ -3019,7 +3031,7 @@ margin-top.px: 80
 
 -- ftd.column:
 width: fill-container
-max-width.fixed.px: 1440
+max-width.fixed.px: $max-width
 align-self: center
 
 -- ftd.row:
@@ -3340,11 +3352,11 @@ ftd.background-image bg-image:
 optional ftd.resizing width:
 
 -- ftd.column:
-margin-vertical.px: 84
+margin-top.px: 84
 height.fixed.px: 346
 width.fixed.px: 540
 width if { card.width != NULL }: $card.width
-padding.px: 32
+padding-horizontal.px: 32
 background.image: $card.bg-image
 spacing.fixed.px: 32
 border-width.px: 1
