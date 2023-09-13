@@ -38,8 +38,8 @@ secondary-cta-link: /quick-build/
 subtitle: fastn is the best choice to build your company’s website
 know-more: Scroll to know why
 
-Easy to learn, open source full-stack framework for building modern
-content-centric and API / database-driven websites.
+An easy-to-learn, open-source solution for building modern 
+content-centric and database-driven websites.
 
 -- end: hero-section
 
@@ -1564,7 +1564,7 @@ x.responsive: auto
 -- ftd.background-image background:
 src: $fastn-assets.files.images.landing.background.png
 size: cover
-;;position: top-center
+position: center-top
 repeat: no-repeat
 
 -- ftd.background-image background-img:
@@ -1605,8 +1605,8 @@ background.image: $background
 -- ftd.column:
 width: fill-container
 max-width.fixed.px: 600
-padding-top.em: 3
-padding-bottom.em: 8
+padding-top.em: 6
+padding-bottom.em: 11.43
 align-self: center
 align-content: center
 spacing.fixed.px: 40
@@ -1619,7 +1619,7 @@ text-align: center
 src: $fastn-assets.files.images.landing.zig-zag.png
 width.fixed.px: 162
 anchor: parent
-top.px: 148
+top.px: 194
 left.px: 192
 
 -- ftd.text: 
@@ -4463,7 +4463,7 @@ max-width.fixed.px if { !footer-desktop.full-width }: $footer-desktop.max-width
 width: fill-container
 spacing: space-between
 padding-vertical.px: 50
-padding-horizontal.px: 48
+padding-right.px: 48
 
 -- ftd.row:
 link: $footer-desktop.site-url
