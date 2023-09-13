@@ -117,7 +117,7 @@ the dozens of professionally created templates, customize layout, style, and
 graphics, and deploy instantly.  
 
 -- lib.right-video:
-image: $fastn-assets.files.images.landing.video-image.png
+;;image: $fastn-assets.files.images.landing.video-image.png
 icon-1: $fastn-assets.files.images.landing.cube.svg
 info-1: The Uniform Design System allows components created by different teams to be usable by each other.
 icon-2: $fastn-assets.files.images.landing.arrow-up.svg
@@ -277,7 +277,7 @@ pellentesque  egestas nulla .
 -- end: lib.cards-section
 
 -- lib.our-community: fastn Community
-image: $fastn-assets.files.images.landing.video-image.png
+;;image: $fastn-assets.files.images.landing.video-image.png
 cta-primary-text: Join Discord
 cta-primary-url: https://discord.gg/uhTZQQV9
 
