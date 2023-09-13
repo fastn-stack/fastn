@@ -1381,10 +1381,61 @@ is a `module` type. A module represents a fastn document, the module interface
 for any module is the set of types, variables, functions and components defined
 in that module.
 
-And you can create a module which acts as a module interface that other modules
-implement. To implement the interface of another module you have to ensure exact
-same types, variables, functions and components are defined, or else it is a
-compiler error.
+-- ds.code:
+lang: ftd
+
+\-- import: package.that/is-interface as the-interface
+
+\-- component foo:
+module theme: the-interface
+
+\-- foo.theme.yo: this is yo
+
+`the-interface` defined a component called `yo` that
+we are calling.
+
+\-- end: foo
+
+-- ds.markdown:
+
+So say we have a `module`: `package.that/is-interface`, which contains some
+components, types, variables etc, say a component called `yo`. If we would have
+written our code like this:
+
+-- ds.code:
+lang: ftd
+
+\-- import: package.that/is-interface as the-interface
+
+\-- component foo:
+
+\-- the-interface.yo: this is yo
+
+`the-interface` defined a component called `yo` that
+we are calling.
+
+\-- end: foo
+
+-- ds.markdown:
+
+`foo` would have always used the `yo` defined in `the-interface`, but we want
+different packages to be called, so we define like how did, and with the
+original definition we can call `foo` like this, passing our own `module` that
+implements the interface `foo` is looking for:
+
+-- ds.code:
+lang: ftd
+
+\-- import: some-package/the-interface as implementer
+
+\-- foo:
+theme: implementer
+
+-- ds.markdown:
+
+Now we are using our implementer of the module interface, and passing the module
+itself as a parameter to `foo`. Now when `foo` calls `foo.theme.yo`, the
+`implementer.yo` get's called.
 
 If two modules implement same module interface, they are interchangable. And
 this is the last trick to achieve the drastic design change without modifying
