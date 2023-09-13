@@ -24,6 +24,8 @@ types: $typo.types
 github-icon: true
 github-url: https://github.com/muskan1verma
 full-width: true
+fluid-width: false
+max-width.fixed.px: 1120
 
 -- ds.page.footer:
 
@@ -32,6 +34,8 @@ site-logo: $fastn-assets.files.images.fastn.svg
 site-url: index.html
 social-links: $footer.social-links
 copyright: Copyright © 2023 - fastn.com
+full-width: false
+max-width.fixed.px: 1120
 
 -- end: ds.page.footer
 -- ftd.column:

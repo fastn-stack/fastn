@@ -43,6 +43,8 @@ site-logo: $fastn-assets.files.images.fastn.svg
 site-url: index.html
 social-links: $footer.social-links
 copyright: Copyright © 2023 - fastn.com
+full-width: false
+max-width.fixed.px: 1120
 
 -- end: page.footer
 
@@ -131,6 +133,8 @@ document-image: $page.document-image
 favicon: $page.favicon
 search: $page.search
 search-url: $page.search-url
+fluid-width: false
+max-width.fixed.px: 1120
 
 -- doc-site.page.header-logo-ui:
 

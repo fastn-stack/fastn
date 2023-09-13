@@ -7,7 +7,7 @@
 
 
 
--- ds.page:
+-- ds.page: 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -20,6 +20,8 @@ github-url: https://github.com/fastn-stack/fastn
 full-width: true
 distribution-bar: true
 full-width-bar: true
+fluid-width: false
+max-width.fixed.px: 1120
 
 -- ds.page.footer:
 
@@ -28,6 +30,8 @@ site-logo: $fastn-assets.files.images.fastn.svg
 site-url: index.html
 social-links: $footer.social-links
 copyright: Copyright © 2023 - fastn.com
+full-width: false
+max-width.fixed.px: 1120
 
 -- end: ds.page.footer
 -- ds.page.abstract-bar:

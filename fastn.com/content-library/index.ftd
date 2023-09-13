@@ -3688,6 +3688,8 @@ pr.toc-item list footer-list: $footer-toc.subsections
 pr.toc-item list footer-links: $footer-toc.sections
 social-media list social-links: $social-links
 string copyright: ©2022 Fastn Inc.
+boolean full-width: true
+optional ftd.resizing max-width:
 
 -- ftd.column:
 width: fill-container
@@ -3703,6 +3705,8 @@ site-url: $footer.site-url
 site-name: $footer.site-name
 footer-links: $footer.footer-links
 social-links: $footer.social-links
+full-width: $footer.full-width
+max-width: $footer.max-width
 
 -- end: ftd.desktop
 
@@ -3756,6 +3760,8 @@ integer logo-width:
 integer logo-height: 
 pr.toc-item list footer-links: 
 social-media list social-links: 
+boolean full-width: true
+optional ftd.resizing max-width:
 
 -- ftd.column:
 background.solid: $inherited.colors.background.base
@@ -3764,6 +3770,10 @@ padding-top.px: 42
 align-content: center
 align-self: center
 spacing.fixed.px: 7
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px if { !footer-desktop.full-width }: $footer-desktop.max-width
 
 -- ftd.row:
 width: fill-container
@@ -3838,6 +3848,8 @@ role: $inherited.types.copy-regular
 color: $inherited.colors.text
 
 -- end: ftd.row
+
+-- end: ftd.column
 
 -- end: ftd.column
 
