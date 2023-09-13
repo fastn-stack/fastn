@@ -1,6 +1,6 @@
 -- import: fastn-community.github.io/spectrum-ds as ds
 -- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn-community.github.io/footer
+-- import: fastn.com/content-library as footer
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/featured as ft-ui
@@ -25,16 +25,13 @@ full-width-bar: true
 
 -- ds.page.footer:
 
--- footer.social-sideline-footer:
-social: true
+-- footer.footer:
 site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+site-url: index.html
+social-links: $footer.social-links
+copyright: Copyright © 2023 - fastn.com
 
 -- end: ds.page.footer
-
 
 -- ds.page.abstract-bar:
 
@@ -52,13 +49,14 @@ published-date: 31-Aug-2023
 -- ft-ui.grid-view: Featured Hero Components
 templates: $heros
 more-link-text: View more
-more-link: /featured/sections/heros/
+more-link: /heros/
+show-large: true
 
 -- end: ds.page.full-width-wrap
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.components.hero-right-hug-expanded-search.jpg
+image: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded-search.jpg
 cta-url: https://saurabh-lohiya.github.io/hero/docs/hero-right-hug-expanded-search/
 cta-text: Demo
 github-url: https://github.com/saurabh-lohiya/hero
@@ -97,14 +95,14 @@ role: Designer
 
 -- ft-ui.template: Hero Bottom Hug
 template-url: featured/sections/heros/hero-bottom-hug/
-screenshot: $fastn-assets.files.images.featured.components.hero-bottom-hug.png
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-bottom-hug.png
 
 -- ft-ui.template: Hero Left Hug Expanded
 template-url: featured/sections/heros/hero-left-hug-expanded/
-screenshot: $fastn-assets.files.images.featured.components.hero-left-hug-expanded.jpg
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-left-hug-expanded.jpg
 
 -- ft-ui.template: Hero Right Hug Expanded
 template-url: featured/sections/heros/hero-right-hug-expanded/
-screenshot: $fastn-assets.files.images.featured.components.hero-right-hug-expanded.jpg
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded.jpg
 
 -- end: heros
