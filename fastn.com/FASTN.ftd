@@ -718,7 +718,7 @@ document: /student-programs/champion.ftd
     - Govindaraman S: /champions/govindaraman-s/
       document: /student-programs/champions/govindaraman.ftd
       skip: true
-    - Aprita Jaiseal: /champions/arpita-jaiswal/
+    - Aprita Jaiswal: /champions/arpita-jaiswal/
       document: /student-programs/champions/arpita-jaiswal.ftd
       skip: true
     - Rithik Seth:  /champions/rithik-seth/
@@ -739,7 +739,9 @@ document: /student-programs/champion.ftd
     - Saurabh lohia: /champions/saurabh-lohiya/
       document: /student-programs/champions/saurabh-lohiya.ftd
       skip: true
-    
+    - Jahanvi Raycha: /u/jahanvi/
+      skip: true
+      document: /student-programs/champions/jahanvi-raycha.ftd
 
 
 - Ambassador Program: /ambassador-program/
@@ -748,6 +750,9 @@ document: /student-programs/champion.ftd
     document: /student-programs/ambassadors/all-ambassadors.ftd
     - Ayush Soni: /ambassadors/ayush-soni/
       document: /student-programs/ambassadors/ayush-soni.ftd
+      skip: true
+    - Ajit Garg: /ambassadors/ajit-garg/
+      document: /student-programs/ambassadors/ajit-garg.ftd
       skip: true
     - Govindaraman S: /ambassadors/govindaraman-s/
       document: /student-programs/ambassadors/govindaraman.ftd

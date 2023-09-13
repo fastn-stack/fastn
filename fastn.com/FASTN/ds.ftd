@@ -53,7 +53,7 @@ max-width.fixed.px: 1120
 -- ftd.ui list page.banner:
 
 -- banner.cta-banner:
-cta-text: Star Us on Github 🌟
+cta-text: Star us on Github 🌟
 cta-link: https://github.com/fastn-stack/fastn/
 
 Support us by giving us a
@@ -209,6 +209,7 @@ $page-with-no-right-sidebar.body
 -- ftd.column:
 spacing.fixed.em: 0.8
 width: fill-container
+min-height.fixed.calc: 100vh
 
 -- obj:
 $loop$: $page-with-no-right-sidebar.uis as $obj

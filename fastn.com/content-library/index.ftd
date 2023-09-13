@@ -36,7 +36,7 @@ primary-cta-link: /ftd/data-modelling/
 secondary-cta: Get started
 secondary-cta-link: /quick-build/
 subtitle: fastn is the best choice to build your company’s website
-know-more: Scroll to know how
+know-more: Scroll to know why
 
 Easy to learn, open source full-stack framework for building modern
 content-centric and API / database-driven websites.
@@ -1341,7 +1341,7 @@ boolean $mouse-in: false
 -- ftd.row:
 align-content: center
 background.solid: $inherited.colors.cta-secondary.base
-background.solid if { cta-fill.mouse-in }: $inherited.colors.cta-primary.border
+background.solid if { cta-fill.mouse-in }: $inherited.colors.cta-secondary.hover
 $on-mouse-leave$: $ftd.set-bool($a = $cta-fill.mouse-in, v = false)
 $on-mouse-enter$: $ftd.set-bool($a = $cta-fill.mouse-in, v = true)
 padding-vertical.px: 20
