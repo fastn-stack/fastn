@@ -528,7 +528,7 @@ document: /get-started/browse-pick.ftd
     document: /ftd/image.ftd
   - `ftd.video`: /video/
     document: /ftd/video.ftd
-  - `ftd.rive`: /rive/
+  - `ftd.rive` (animation): /rive/
     document: ftd/rive.ftd
     description: animation
   - `ftd.iframe`: /iframe/

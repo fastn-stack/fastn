@@ -33,14 +33,6 @@ screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 template-url: /cs/blog-template-1-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
--- ft-ui.template: Dark Flame CS
-template-url: /cs/dark-flame-cs/
-screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
-
--- ft-ui.template: Navy Nebula CS
-template-url: /cs/navy-nebula-cs/
-screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
-
 -- ft-ui.template: Forest CS
 template-url: /cs/forest-cs/
 screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png

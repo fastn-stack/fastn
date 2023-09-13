@@ -651,11 +651,11 @@ template-url: /cs/blog-template-1-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
 -- template: Dark Flame CS
-template-url: featured/cs/dark-flame-cs/
+template-url: /cs/dark-flame-cs/
 screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
 
 -- template: Navy Nebula CS
-template-url: featured/cs/navy-nebula-cs/
+template-url: /cs/navy-nebula-cs/
 screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
 
 -- end: schemes
