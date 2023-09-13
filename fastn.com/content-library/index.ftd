@@ -103,7 +103,7 @@ spacing.fixed.px: 40
 max-width.fixed.px: 1440
 
 -- ftd.column:
-width.fixed.px: 212
+width.fixed.px: 266
 height.fixed.px: 220
 background.image: $background-img
 anchor: parent
@@ -356,7 +356,8 @@ width: fill-container
 width: fill-container
 background.solid: $inherited.colors.background.step-1
 border-radius.px: 15
-margin-bottom.px: 84
+align-content: center
+margin-bottom.px: 64
 
 -- ftd.column:
 padding-top.px: 35
@@ -1274,8 +1275,8 @@ boolean $mouse-in: false
 
 -- ftd.row:
 align-content: center
-background.solid: $inherited.colors.cta-tertiary.text
-border-color if { cta-primary-small.mouse-in }: $inherited.colors.cta-primary.hover
+background.solid: $inherited.colors.cta-primary.base
+background.solid if { cta-primary-small.mouse-in }: $inherited.colors.cta-primary.hover
 $on-mouse-leave$: $ftd.set-bool($a = $cta-primary-small.mouse-in, v = false)
 $on-mouse-enter$: $ftd.set-bool($a = $cta-primary-small.mouse-in, v = true)
 padding-vertical.px: 12
@@ -2460,7 +2461,7 @@ background.solid if { !cards-section.transparent }: $inherited.colors.background
 padding.px if { !cards-section.transparent }: 24
 margin-bottom.px: 48
 border-radius.px: 16
-max-width.fixed.px: $max-width
+max-width.fixed.px: 1440
 align-content: center
 align-self: center
 
@@ -2883,32 +2884,13 @@ if: { !testimonial-card.right }
 width: fill-container
 spacing.fixed.px: 26
 
--- ftd.column:
-width: fill-container
-spacing.fixed.px: 6
-min-width.fixed.px: 170
-
 -- ftd.image:
 if: { testimonial-card.avatar != NULL }
 src: $testimonial-card.avatar
 width.fixed.px: 104
 height.fixed.px: 96
-border-radius.px: 16
-
--- ftd.text: $testimonial-card.title
-if: { !testimonial-card.right }
-role: $inherited.types.copy-small
-color: $inherited.colors.text-strong
-margin-top.px: 24
-style: semi-bold
-
--- ftd.text:
-if: { testimonial-card.label != NULL } 
-text: $testimonial-card.label
-role: $inherited.types.fine-print
-color: $inherited.colors.text
-
--- end: ftd.column
+border-radius.px: 30
+align-self: center
 
 -- ftd.text:
 if: { testimonial-card.body != NULL }
@@ -2919,6 +2901,23 @@ align-self: center
 $testimonial-card.body
 
 -- end: ftd.row
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 6
+
+-- ftd.text: $testimonial-card.title
+if: { !testimonial-card.right }
+role: $inherited.types.blockquote
+color: $inherited.colors.text-strong
+
+-- ftd.text:
+if: { testimonial-card.label != NULL } 
+text: $testimonial-card.label
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- end: ftd.column
 
 -- end: ftd.column
 
@@ -3088,7 +3087,7 @@ width: fill-container
 
 -- ftd.column:
 width: fill-container
-margin-vertical.px: 64
+margin-vertical.px: 164
 spacing.fixed.px: 24
 align-content: center
 
@@ -3701,6 +3700,8 @@ padding-vertical.px: 50
 padding-horizontal.px: 24
 align-content: center
 margin-top.px: 80
+max-width.fixed.px: $max-width
+align-self: center
 
 -- ftd.row:
 width: fill-container
