@@ -68,9 +68,11 @@ fastn.
 -- lib.card: 2 hr
 icon: $fastn-assets.files.images.landing.two-triangle.svg
 bg-image: $fastn-assets.files.images.landing.card-bg.png
+cta-text: Get Started!
+cta-link: /quick-build/
 
 Build your first fastn-powered website in just 2 hours. 
-Get Started!
+
 
 -- end: lib.card-wrap
 

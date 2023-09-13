@@ -3978,6 +3978,7 @@ body description:
 optional string cta-link:
 optional string cta-text:
 ftd.background-image bg-image:
+boolean $mouse-in: false
 
 -- ftd.column:
 width: fill-container
@@ -4008,9 +4009,25 @@ spacing.fixed.px: 16
 role: $inherited.types.heading-large
 color: $inherited.colors.text-strong
 
+-- ftd.column:
+
 -- ftd.text: $card.description
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
+
+-- ftd.text: $card.cta-text
+if: { card.cta-text != NULL }
+role: $inherited.types.copy-regular
+color: $inherited.colors.cta-primary.base
+color if { card.mouse-in }: $inherited.colors.cta-primary.hover
+link: $card.cta-link
+border-bottom-width.px: 1
+border-color: $inherited.colors.cta-primary.base
+border-color if { card.mouse-in }: $inherited.colors.cta-primary.hover
+$on-mouse-enter$: $ftd.set-bool($a = $card.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $card.mouse-in, v = false)
+
+-- end: ftd.column
 
 -- end: ftd.column
 
@@ -4042,9 +4059,25 @@ spacing.fixed.px: 16
 role: $inherited.types.heading-large
 color: $inherited.colors.text-strong
 
+-- ftd.column:
+
 -- ftd.text: $card.description
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
+
+-- ftd.text: $card.cta-text
+if: { card.cta-text != NULL }
+role: $inherited.types.copy-regular
+color: $inherited.colors.cta-primary.base
+color if { card.mouse-in }: $inherited.colors.cta-primary.hover
+link: $card.cta-link
+border-bottom-width.px: 1
+border-color: $inherited.colors.cta-primary.base
+border-color if { card.mouse-in }: $inherited.colors.cta-primary.hover
+$on-mouse-enter$: $ftd.set-bool($a = $card.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $card.mouse-in, v = false)
+
+-- end: ftd.column
 
 -- end: ftd.column
 
