@@ -16,7 +16,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __jc-4 __ali-5"><a data-id="4" href="https://www.fastn.com" class="__m-6">This is a link</a><img data-id="5" src="https://picsum.photos/200/300"></img></div><div data-id="6" class="ft_column __w-7 __jc-8 __ali-9"><a data-id="7" href="https://www.fastn.com" rel="nofollow sponsored">No follow link</a></div><div data-id="8" class="ft_column __w-10 __jc-11 __ali-12"><a data-id="9" href="https://www.fastn.com" target="_blank" class="__m-13">This is a link (will open in new tab)</a></div><div data-id="10" class="ft_column __w-14 __mt-15 __mb-16"><input data-id="11" type="checkbox" checked></input><input data-id="12" type="checkbox" disabled></input></div><div data-id="13" class="ft_column __w-17 __mt-18 __mb-19"><input data-id="14" placeholder="Enter some text"></input><textarea data-id="15" placeholder="Multiline input"></textarea><input data-id="16" type="password"></input><input data-id="17" placeholder="This would be disabled" disabled></input><input data-id="18" value="This is default text"></input><input data-id="19" placeholder="Max input length 10" maxlength="10"></input></div><iframe data-id="20" allowfullscreen loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik"></iframe><pre data-id="21" class="language-ftd fastn-theme-dark"><code data-id="22" class="language-ftd fastn-theme-dark">-- ftd.text: Hello World
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __jc-4 __ali-5"><a data-id="4" href="https://www.fastn.com" class="__m-6">This is a link</a><img data-id="5" src="https://picsum.photos/200/300" class="__of-7"></img></div><div data-id="6" class="ft_column __w-8 __jc-9 __ali-10"><a data-id="7" href="https://www.fastn.com" rel="nofollow sponsored">No follow link</a></div><div data-id="8" class="ft_column __w-11 __jc-12 __ali-13"><a data-id="9" href="https://www.fastn.com" target="_blank" class="__m-14">This is a link (will open in new tab)</a></div><div data-id="10" class="ft_column __w-15 __mt-16 __mb-17"><input data-id="11" type="checkbox" checked></input><input data-id="12" type="checkbox" disabled></input></div><div data-id="13" class="ft_column __w-18 __mt-19 __mb-20"><input data-id="14" placeholder="Enter some text"></input><textarea data-id="15" placeholder="Multiline input"></textarea><input data-id="16" type="password"></input><input data-id="17" placeholder="This would be disabled" disabled></input><input data-id="18" value="This is default text"></input><input data-id="19" placeholder="Max input length 10" maxlength="10"></input></div><iframe data-id="20" allowfullscreen loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik"></iframe><pre data-id="21" class="language-ftd fastn-theme-dark"><code data-id="22" class="language-ftd fastn-theme-dark">-- ftd.text: Hello World
 </code></pre></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
@@ -24,19 +24,20 @@
 	.__jc-4 { justify-content: center; }
 	.__ali-5 { align-items: center; }
 	.__m-6 { margin: 20px; }
-	.__w-7 { width: 100%; }
-	.__jc-8 { justify-content: center; }
-	.__ali-9 { align-items: center; }
-	.__w-10 { width: 100%; }
-	.__jc-11 { justify-content: center; }
-	.__ali-12 { align-items: center; }
-	.__m-13 { margin: 20px; }
-	.__w-14 { width: 100%; }
-	.__mt-15 { margin-top: 30px; }
-	.__mb-16 { margin-bottom: 30px; }
-	.__w-17 { width: 100%; }
-	.__mt-18 { margin-top: 30px; }
-	.__mb-19 { margin-bottom: 30px; }
+	.__of-7 { object-fit: cover; }
+	.__w-8 { width: 100%; }
+	.__jc-9 { justify-content: center; }
+	.__ali-10 { align-items: center; }
+	.__w-11 { width: 100%; }
+	.__jc-12 { justify-content: center; }
+	.__ali-13 { align-items: center; }
+	.__m-14 { margin: 20px; }
+	.__w-15 { width: 100%; }
+	.__mt-16 { margin-top: 30px; }
+	.__mb-17 { margin-bottom: 30px; }
+	.__w-18 { width: 100%; }
+	.__mt-19 { margin-top: 30px; }
+	.__mb-20 { margin-bottom: 30px; }
     </style>
 <script>
     (function() {
@@ -61,6 +62,7 @@ let main = function (parent) {
         dark: "https://picsum.photos/200/300",
         light: "https://picsum.photos/200/300"
       }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Fit, "cover", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
     }
     ]), inherited);

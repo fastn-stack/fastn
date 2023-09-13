@@ -9562,8 +9562,7 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
                 ftd::interpreter::Argument::default(
                     "fit",
                     ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_IMAGE_FIT)
-                        .into_kind_data()
-                        .into_optional(),
+                        .into_kind_data(),
                 ),
                 ftd::interpreter::Argument::default(
                     "alt",
