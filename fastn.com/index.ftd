@@ -245,49 +245,59 @@ workflow.
 -- lib.cards-section:
 transparent: true
 
--- lib.heart-line-title-card: Loved by 1M+folks
+-- lib.heart-line-title-card: Loved by 1000+ creators
 
-Hear from the community.
+Testimonials from members of the fastn community.
 
--- lib.testimonial-card: Jenny Wilson
-avatar: $fastn-assets.files.images.landing.avatar-1.svg
-bgcolor: $inherited.colors.custom.two
-bg-color: $inherited.colors.background.step-1
-label: CEO, ABC Company
-width: 500
-
-At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
-pellentesque  egestas nulla .
-
--- lib.testimonial-card: Jenny Wilson
-avatar: $fastn-assets.files.images.landing.avatar-2.svg
-bgcolor: $inherited.colors.custom.nine
-bg-color: $inherited.colors.background.step-1
-label: CEO, ABC Company
-width: 500
-
-At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
-pellentesque  egestas nulla .
-
--- lib.testimonial-card: Jenny Wilson
-avatar: $fastn-assets.files.images.landing.avatar-3.svg
+-- lib.testimonial-card: Rutuja Kapate
+avatar: $fastn-assets.files.images.landing.rutuja-kapate.png
 bgcolor: $inherited.colors.custom.three
 bg-color: $inherited.colors.background.step-1
-label: CEO, ABC Company
+label: Web Developer
 width: 500
 
-At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
-pellentesque  egestas nulla .
+As a web developer, I've found fastn to be a game-changer. Its user-friendly ftd
+language makes building beautiful websites a breeze. With ready-made UI
+components and easy deployment options, fastn streamlines web development.
+Highly recommend!
 
--- lib.testimonial-card: Jenny Wilson
-avatar: $fastn-assets.files.images.landing.avatar-4.svg
+-- lib.testimonial-card: Swapnendu Banerjee
+avatar: $fastn-assets.files.images.landing.swapnendu-banerjee.png
 bgcolor: $inherited.colors.custom.one
 bg-color: $inherited.colors.background.step-1
-label: CEO, ABC Company
+label: Co-founder & PR Lead at NoobCode
 width: 500
+margin-top: 74
 
-At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
-pellentesque  egestas nulla .
+Learning and working with fastn is really fun because here we get frontend and
+backend under the umbrella and the syntax is really very much user friendly. I
+am learning and enjoying fastn.
+
+-- lib.testimonial-card: Jahanvi Raycha
+avatar: $fastn-assets.files.images.students-program.champions.jahanvi-raycha.jpg
+bgcolor: $inherited.colors.custom.two
+bg-color: $inherited.colors.background.step-1
+label: Software Developer
+width: 500
+margin-top: -74
+
+**fastn** made web development a breeze for me. I launched my portfolio website on
+GitHub Pages within 30 minutes, thanks to its intuitive language and the
+ever-helpful community on Discord. It's my go-to framework for a seamless
+coding experience.
+
+-- lib.testimonial-card: Govindaraman S 
+avatar: $fastn-assets.files.images.landing.govindaraman_lab.png
+bgcolor: $inherited.colors.custom.nine
+bg-color: $inherited.colors.background.step-1
+label: Front End Developer, Trizwit Labs
+width: 500
+margin-top: 54
+
+**fastn** web framework, tailored for someone with a design background and zero
+coding experience like me, has revolutionized website creation. Building
+websites is a walk in the park, and what's truly impressive is how easily I can
+modify the colors and content in a matter of minutes.
 
 -- end: lib.cards-section
 
