@@ -3706,12 +3706,12 @@ optional string cta-primary-url:
 
 -- ftd.column:
 width: fill-container
+background.solid: $inherited.colors.background.step-1
 
 -- ftd.desktop:
 
 -- ftd.column:
 width: fill-container
-background.solid: $inherited.colors.background.step-1
 padding-vertical.px: 50
 padding-horizontal.px: 24
 align-content: center
