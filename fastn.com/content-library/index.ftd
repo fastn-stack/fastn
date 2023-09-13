@@ -35,6 +35,8 @@ primary-cta: Read Docs
 primary-cta-link: /ftd/data-modelling/
 secondary-cta: Get started
 secondary-cta-link: /quick-build/
+subtitle: fastn is the best choice to build your company’s website
+know-more: Scroll to know how
 
 Easy to learn, open source full-stack framework for building modern
 content-centric and API / database-driven websites.
@@ -85,10 +87,10 @@ children cards:
 -- ftd.column:
 width: fill-container
 background.solid if { !feature-card.transparent }: $inherited.colors.background.step-1
-padding-top.px if { ftd.device == "desktop" }: 60
+padding-top.px if { ftd.device == "desktop" }: 80
 padding-horizontal.px if { ftd.device == "desktop" }: 24
 padding-bottom.px if { ftd.device == "desktop" }: 50
-margin-bottom.px: 48
+margin-bottom.px: 24
 align-content: center
 
 -- ftd.desktop:
@@ -100,7 +102,22 @@ spacing.fixed.px: 40
 max-width.fixed.px: 1440
 
 -- ftd.column:
-spacing.fixed.px: 16
+width.fixed.px: 266
+height.fixed.px: 220
+background.image: $background-img
+anchor: parent
+right.px: 0
+top.px: 0
+
+-- end: ftd.column
+
+-- ftd.column:
+spacing.fixed.px: 24
+width.fixed.px: 888
+
+-- ftd.image:
+src: $feature-card.icon
+width.fixed.px: 70
 
 -- ftd.text: $feature-card.title
 role: $inherited.types.heading-large
@@ -116,7 +133,7 @@ $feature-card.body
 
 -- end: ftd.column
 
--- cta-outline-small: $feature-card.cta-text
+-- cta-primary-small: $feature-card.cta-text
 link: $feature-card.cta-link
 icon: $fastn-assets.files.images.landing.arrow-icon.svg
 
@@ -181,6 +198,7 @@ width: fill-container
 children: $feature-card.cards
 spacing: space-between
 align-content: center
+max-width.fixed.px: 1140
 
 -- end: ftd.row
 
@@ -214,7 +232,7 @@ $feature-card.body
 
 -- end: ftd.column
 
--- cta-outline-small: $feature-card.cta-text
+-- cta-primary-small: $feature-card.cta-text
 link: $feature-card.cta-link
 
 -- ftd.column:
@@ -285,7 +303,316 @@ fit: contain
 
 
 
--- component cta-outline-small:
+-- component featured-theme:
+caption title:
+optional body body:
+optional string cta-primary-text:
+optional string cta-primary-url:
+optional string cta-secondary-text:
+optional string cta-secondary-url:
+optional ftd.image-src image-1:
+optional ftd.image-src image-2:
+optional ftd.image-src image-3:
+optional string image-title-1:
+optional string image-title-2:
+optional string image-title-3:
+optional string link:
+
+-- ftd.column:
+width: fill-container
+background.solid: $inherited.colors.background.step-1
+border-radius.px: 15
+margin-bottom.px: 84
+
+-- ftd.column:
+padding-top.px: 35
+padding-horizontal.px: 38
+padding-bottom.px: 50
+spacing.fixed.px: 62
+width: fill-container
+max-width.fixed.px: 1140
+align-self: center
+
+-- ftd.column:
+width.fixed.px: 139
+height.fixed.px: 154
+background.image: $group-img
+anchor: parent
+right.px: 19
+top.px: 28
+
+-- end: ftd.column
+
+-- ftd.column:
+width.fixed.px: 890
+spacing.fixed.px: 24
+
+-- ftd.text: $featured-theme.title
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+
+-- ftd.text: 
+if: { featured-theme.body != NULL }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+$featured-theme.body
+
+-- ftd.row:
+spacing.fixed.px: 22
+width.fixed.px: 520
+
+-- cta-primary-large: $featured-theme.cta-primary-text
+link: $featured-theme.cta-primary-url
+
+-- cta-secondary-medium: $featured-theme.cta-secondary-text
+link: $featured-theme.cta-secondary-url
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
+align-content: center
+
+-- ftd.column:
+spacing.fixed.px: 15
+align-content: center
+
+-- ftd.image:
+src: $featured-theme.image-1
+fit: cover
+link: https://fastn-community.github.io/winter-cs/
+
+-- ftd.text: $featured-theme.image-title-1
+role: $inherited.types.label-large
+style: bold
+color: $inherited.colors.text-strong
+
+-- end: ftd.column
+
+-- ftd.column:
+spacing.fixed.px: 15
+align-content: center
+
+-- ftd.image:
+src: $featured-theme.image-2
+fit: cover
+
+-- ftd.text: $featured-theme.image-title-2
+role: $inherited.types.label-large
+style: bold
+color: $inherited.colors.text-strong
+link: https://fastn-community.github.io/forest-cs/
+
+-- end: ftd.column
+
+-- ftd.column:
+spacing.fixed.px: 15
+align-content: center
+
+-- ftd.image:
+src: $featured-theme.image-3
+fit: cover
+link: https://fastn-community.github.io/saturated-sunset-cs/
+
+-- ftd.text: $featured-theme.image-title-3
+role: $inherited.types.label-large
+style: bold
+color: $inherited.colors.text-strong
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: featured-theme
+
+
+
+
+
+
+
+
+
+
+-- component image-featured:
+ftd.image-src image-1:
+ftd.image-src image-2:
+ftd.image-src image-3:
+optional ftd.image-src icon-1:
+optional ftd.image-src icon-2:
+optional ftd.image-src icon-3:
+optional string info-1:
+optional string info-2:
+optional string info-3:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 56
+
+-- ftd.row:
+spacing.fixed.px: 32
+
+-- ftd.image:
+src: $image-featured.image-1
+width.fixed.px: 544
+fit: cover
+border-width.px: 1
+border-color: $inherited.colors.border
+border-radius.px: 16
+
+-- ftd.image:
+src: $image-featured.image-2
+width.fixed.px: 544
+fit: cover
+border-width.px: 1
+border-color: $inherited.colors.border
+border-radius.px: 16
+
+-- end: ftd.row
+
+-- ftd.image:
+src: $image-featured.image-3
+width: fill-container
+fit: cover
+border-width.px: 1
+border-color: $inherited.colors.border
+border-radius.px: 16
+
+
+
+-- end: ftd.column
+
+-- end: image-featured
+
+
+
+
+
+
+
+-- component right-video:
+ftd.image-src image:
+optional ftd.image-src icon-1:
+optional ftd.image-src icon-2:
+optional ftd.image-src icon-3:
+optional string info-1:
+optional string info-2:
+optional string info-3:
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 32
+margin-vertical.px: 42
+max-width.fixed.px: 1140
+align-self: center
+
+-- ftd.column:
+spacing.fixed.px: 32
+width.fixed.px: 316
+
+-- ftd.row:
+spacing.fixed.px: 8
+
+-- ftd.column:
+border-left-width.px: 2
+height.fixed.px: 53
+border-color: $inherited.colors.accent.primary
+
+-- end: ftd.column
+
+-- ftd.column:
+spacing.fixed.px: 8
+
+-- ftd.image:
+src: $right-video.icon-1
+width.fixed.px: 24
+
+-- ftd.text: $right-video.info-1
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- ftd.row:
+spacing.fixed.px: 8
+
+-- ftd.column:
+border-left-width.px: 2
+height.fixed.px: 53
+border-color: $inherited.colors.accent.primary
+
+-- end: ftd.column
+
+-- ftd.column:
+spacing.fixed.px: 8
+
+-- ftd.image:
+src: $right-video.icon-2
+width.fixed.px: 24
+
+-- ftd.text: $right-video.info-2
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- ftd.row:
+spacing.fixed.px: 8
+
+-- ftd.column:
+border-left-width.px: 2
+height.fixed.px: 53
+border-color: $inherited.colors.accent.primary
+
+-- end: ftd.column
+
+-- ftd.column:
+spacing.fixed.px: 8
+
+-- ftd.image:
+src: $right-video.icon-3
+width.fixed.px: 24
+
+-- ftd.text: $right-video.info-3
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- ftd.image:
+src: $right-video.image
+width.fixed.px: 778
+align-self: end
+
+-- end: ftd.row
+
+-- end: right-video
+
+
+
+
+
+
+
+
+
+-- component cta-primary-small:
 caption title:
 string link: 
 optional ftd.image-src icon:
@@ -293,28 +620,28 @@ boolean $mouse-in: false
 
 -- ftd.row:
 align-content: center
-background.solid: $inherited.colors.border
-border-color if { cta-outline-small.mouse-in }: $inherited.colors.cta-primary.border
-$on-mouse-leave$: $ftd.set-bool($a = $cta-outline-small.mouse-in, v = false)
-$on-mouse-enter$: $ftd.set-bool($a = $cta-outline-small.mouse-in, v = true)
-padding-vertical.px: 16
-padding-horizontal.px: 48
+background.solid: $inherited.colors.cta-primary.base
+border-color if { cta-primary-small.mouse-in }: $inherited.colors.cta-primary.hover
+$on-mouse-leave$: $ftd.set-bool($a = $cta-primary-small.mouse-in, v = false)
+$on-mouse-enter$: $ftd.set-bool($a = $cta-primary-small.mouse-in, v = true)
+padding-vertical.px: 12
+padding-horizontal.px: 24
 border-radius.px: 58
-spacing.fixed.px: 8
-link: $cta-outline-small.link
+spacing.fixed.px: 4
+link: $cta-primary-small.link
 color: $inherited.colors.text-strong
 role: $inherited.types.button-medium
 
--- ftd.text: $cta-outline-small.title
+-- ftd.text: $cta-primary-small.title
 
 -- ftd.image:
-if: { cta-outline-small.icon != NULL }
-src: $cta-outline-small.icon
+if: { cta-primary-small.icon != NULL }
+src: $cta-primary-small.icon
 width.fixed.px: 24
 
 -- end: ftd.row
 
--- end: cta-outline-small
+-- end: cta-primary-small
 
 
 
@@ -336,13 +663,13 @@ background.solid: $inherited.colors.cta-secondary.base
 border-color if { cta-fill.mouse-in }: $inherited.colors.cta-primary.border
 $on-mouse-leave$: $ftd.set-bool($a = $cta-fill.mouse-in, v = false)
 $on-mouse-enter$: $ftd.set-bool($a = $cta-fill.mouse-in, v = true)
-padding-vertical.px: 16
-padding-horizontal.px: 48
-border-radius.px: 58
+padding-vertical.px: 20
+border-radius.px: 30
 spacing.fixed.px: 8
 link: $cta-fill.link
 color: $inherited.colors.cta-primary.text
-role: $inherited.types.button-small
+role: $inherited.types.button-medium
+width.fixed.px: 221
 
 -- ftd.text: $cta-fill.title
 
@@ -376,7 +703,7 @@ width: fill-container
 -- ftd.column:
 width: fill-container
 background.solid: $code-block-system.bgcolor
-border-radius.px: 8
+border-radius.px: 12
 max-width.fixed.px: 650
 max-height.fixed.px: 344
 align-self: center
@@ -555,9 +882,22 @@ y.px: -64
 x.responsive: auto
 
 -- ftd.background-image background:
-src: $fastn-assets.files.images.landing.background.svg
+src: $fastn-assets.files.images.landing.background.png
 size: cover
 ;;position: top-center
+repeat: no-repeat
+
+-- ftd.background-image background-img:
+src: $fastn-assets.files.images.landing.back-group-image.png
+;;position: top-center
+repeat: no-repeat
+
+-- ftd.background-image card-bg:
+src: $fastn-assets.files.images.landing.card-bg.png
+repeat: no-repeat
+
+-- ftd.background-image group-img:
+src: $fastn-assets.files.images.landing.group-img.svg
 repeat: no-repeat
 
 
@@ -566,6 +906,8 @@ repeat: no-repeat
 -- component hero-section:
 caption title:
 body body:
+optional string subtitle:
+optional string know-more:
 boolean $mouse-in: false
 boolean $hover: false
 optional string primary-cta-link:
@@ -578,7 +920,6 @@ width: fill-container
 height: fill-container
 color: $inherited.colors.text-strong
 background.image: $background
-padding-bottom.px: 32
 
 -- ftd.column:
 width: fill-container
@@ -588,32 +929,69 @@ padding-top.em if { ftd.device == "mobile" }: 0
 padding-bottom.em if { ftd.device == "desktop" }: 7
 align-self: center
 align-content: center
+spacing.fixed.px: 40
+padding-bottom.px: 189
 
 -- ftd.text: $hero-section.title
 role: $inherited.types.heading-hero
 role if { ftd.device == "mobile" }: $inherited.types.heading-medium
 text-align: center
 
+-- ftd.image:
+src: $fastn-assets.files.images.landing.zig-zag.png
+width.fixed.px: 162
+anchor: parent
+top.px: 148
+left.px: 192
+
 -- ftd.text: 
 text-align: center
 role: $inherited.types.copy-regular
-margin-top.px: 48
 
 $hero-section.body
 
 -- ftd.row:
 align-self: center
 align-content: center
-margin-top.px: 48
 spacing.fixed.px: 16
+width.fixed.px: 420
 
--- cta-outline-medium: $hero-section.primary-cta
+-- cta-secondary-medium: $hero-section.primary-cta
 link: $hero-section.primary-cta-link
 icon: $fastn-assets.files.images.landing.doc-icon.svg
 
 -- cta-primary-large: $hero-section.secondary-cta
 link: $hero-section.secondary-cta-link
 icon: $fastn-assets.files.images.landing.arrow-icon.svg
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+align-content: center
+spacing.fixed.px: 8
+padding-bottom.px: 98
+
+-- ftd.text: $hero-section.subtitle
+role: $inherited.types.heading-medium
+color: $inherited.colors.text
+style: semi-bold
+
+-- ftd.row:
+spacing.fixed.px: 4
+padding-vertical.px: 8
+padding-horizontal.px: 24
+align-content: center
+
+-- ftd.image:
+src: $fastn-assets.files.images.landing.mouse-icon.svg
+width.fixed.px: 24
+
+-- ftd.text: $hero-section.know-more
+role: $inherited.types.copy-small
+color: $inherited.colors.text
 
 -- end: ftd.row
 
@@ -667,75 +1045,37 @@ border-bottom-right-radius.px: 8
 
 
 
--- component cta-outline-medium:
+-- component cta-secondary-medium:
 caption title:
 string link: 
 optional ftd.image-src icon:
 boolean $mouse-in: false
 
--- ftd.column:
-width: fill-container
-
--- ftd.desktop:
-
 -- ftd.row:
 align-content: center
-border-width.px: 1
-border-color: $inherited.colors.cta-secondary.base
-border-color if { cta-outline-medium.mouse-in }: $inherited.colors.cta-primary.border
-$on-mouse-leave$: $ftd.set-bool($a = $cta-outline-medium.mouse-in, v = false)
-$on-mouse-enter$: $ftd.set-bool($a = $cta-outline-medium.mouse-in, v = true)
-padding-vertical.px: 18
-padding-horizontal.px: 32
+width: fill-container
+background.solid: $inherited.colors.border
+background.solid if { cta-secondary-medium.mouse-in }: $inherited.colors.border-strong
+$on-mouse-leave$: $ftd.set-bool($a = $cta-secondary-medium.mouse-in, v = false)
+$on-mouse-enter$: $ftd.set-bool($a = $cta-secondary-medium.mouse-in, v = true)
+padding-vertical.px: 12
+padding-horizontal.px: 24
 border-radius.px: 58
-spacing.fixed.px: 8
-link: $cta-outline-medium.link
+spacing.fixed.px: 4
+link: $cta-secondary-medium.link
 color: $inherited.colors.text-strong
 role: $inherited.types.button-medium
 
 -- ftd.image:
-if: { cta-outline-medium.icon != NULL }
-src: $cta-outline-medium.icon
+if: { cta-secondary-medium.icon != NULL }
+src: $cta-secondary-medium.icon
 width.fixed.px: 24
 
--- ftd.text: $cta-outline-medium.title
+-- ftd.text: $cta-secondary-medium.title
 
 -- end: ftd.row
 
--- end: ftd.desktop
-
--- ftd.mobile:
-
--- ftd.row:
-align-content: center
-border-width.px: 1
-border-color: $inherited.colors.cta-secondary.base
-border-color if { cta-outline-medium.mouse-in }: $inherited.colors.cta-primary.border
-$on-mouse-leave$: $ftd.set-bool($a = $cta-outline-medium.mouse-in, v = false)
-$on-mouse-enter$: $ftd.set-bool($a = $cta-outline-medium.mouse-in, v = true)
-padding-vertical.px: 10
-padding-horizontal.px: 22
-width.fixed.px: 156
-border-radius.px: 58
-spacing.fixed.px: 8
-link: $cta-outline-medium.link
-color: $inherited.colors.text-strong
-role: $inherited.types.button-small
-
--- ftd.image:
-if: { cta-outline-medium.icon != NULL }
-src: $cta-outline-medium.icon
-width.fixed.px: 22
-
--- ftd.text: $cta-outline-medium.title
-
--- end: ftd.row
-
--- end: ftd.mobile
-
--- end: ftd.column
-
--- end: cta-outline-medium
+-- end: cta-secondary-medium
 
 
 
@@ -760,12 +1100,12 @@ background.solid if {promo-card.body == NULL}: $inherited.colors.accent.primary
 padding.px: 38
 border-radius.px: 16
 align-content: center
-margin-bottom.px: 64
+margin-vertical.px: 64
 
 -- ftd.column:
 if: { promo-card.cta-text != NULL }
 width.fixed.px: 188
-height.fixed.px: 134
+height.fixed.px: 188
 background.image: $bg-image
 anchor: parent
 left.px: 42
@@ -774,15 +1114,16 @@ bottom.px: 0
 -- end: ftd.column
 
 -- ftd.column:
-width.fixed.px: 942
+padding-horizontal.px: 60
 align-content: center
 spacing.fixed.px: 24
 
 -- ftd.text: $promo-card.title
 if: { promo-card.title }
-role: $inherited.types.heading-medium
+role: $inherited.types.heading-large
 color: $inherited.colors.text-strong
 text-align: center
+style: semi-bold
 
 -- ftd.text:
 if: { promo-card.body != NULL }
@@ -1155,6 +1496,81 @@ border-radius.px: 12
 
 
 
+-- component hero-bottom-hug:
+ftd.image-src icon:
+caption title:
+optional body body:
+optional ftd.image-src image-1:
+optional ftd.image-src image-2:
+optional ftd.image-src image-3:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 40
+margin-bottom.px: 80
+
+-- ftd.column:
+spacing.fixed.px: 16
+
+-- ftd.image:
+src: $hero-bottom-hug.icon
+width.fixed.px: 77
+
+-- ftd.text: $hero-bottom-hug.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+
+-- end: ftd.column
+
+-- ftd.image:
+if: { hero-bottom-hug.image-1 != NULL}
+src: $hero-bottom-hug.image-1
+width: fill-container
+border-radius.px: 16
+border-width.px: 1
+border-color: $inherited.colors.border
+fit: cover
+
+-- ftd.row:
+spacing.fixed.px: 40
+width: fill-container
+
+-- ftd.image:
+if: { hero-bottom-hug.image-2 != NULL}
+src: $hero-bottom-hug.image-2
+width: fill-container
+fit: cover
+border-radius.px: 16
+border-width.px: 1
+border-color: $inherited.colors.border
+
+-- ftd.image:
+if: { hero-bottom-hug.image-3 != NULL}
+src: $hero-bottom-hug.image-3
+width: fill-container
+fit: cover
+border-radius.px: 16
+border-width.px: 1
+border-color: $inherited.colors.border
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: hero-bottom-hug
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- component cta-primary-large:
 caption title:
@@ -1162,24 +1578,20 @@ string link:
 optional ftd.image-src icon:
 boolean $mouse-in: false
 
--- ftd.column:
-width: fill-container
-
--- ftd.desktop:
 
 -- ftd.row: 
 link: $cta-primary-large.link
+width: fill-container
 role: $inherited.types.button-medium
 color: $inherited.colors.text-strong
 background.solid: $inherited.colors.cta-primary.base
 background.solid if { cta-primary-large.mouse-in }: $inherited.colors.cta-primary.hover
 $on-mouse-leave$: $ftd.set-bool($a = $cta-primary-large.mouse-in, v = false)
 $on-mouse-enter$: $ftd.set-bool($a = $cta-primary-large.mouse-in, v = true)
-padding-vertical.px: 18
-padding-horizontal.px: 32
-width.fixed.px: 195
+padding-vertical.px: 12
+padding-horizontal.px: 24
 border-radius.px: 58
-spacing.fixed.px: 8
+spacing.fixed.px: 4
 align-content: center
 
 -- ftd.text: $cta-primary-large.title
@@ -1190,38 +1602,6 @@ src: $cta-primary-large.icon
 width.fixed.px: 24
 
 -- end: ftd.row
-
--- end: ftd.desktop
-
--- ftd.mobile:
-
--- ftd.row: 
-link: $cta-primary-large.link
-role: $inherited.types.button-small
-color: $inherited.colors.text-strong
-width.fixed.px: 195
-background.solid: $inherited.colors.cta-primary.base
-background.solid if { cta-primary-large.mouse-in }: $inherited.colors.cta-primary.hover
-$on-mouse-leave$: $ftd.set-bool($a = $cta-primary-large.mouse-in, v = false)
-$on-mouse-enter$: $ftd.set-bool($a = $cta-primary-large.mouse-in, v = true)
-padding-vertical.px: 10
-padding-horizontal.px: 18
-border-radius.px: 58
-spacing.fixed.px: 8
-align-content: center
-
--- ftd.text: $cta-primary-large.title
-
--- ftd.image:
-if: { cta-primary-large.icon != NULL }
-src: $cta-primary-large.icon
-width.fixed.px: 18
-
--- end: ftd.row
-
--- end: ftd.mobile
-
--- end: ftd.column
 
 -- end: cta-primary-large
 
@@ -1410,7 +1790,7 @@ margin-top.px: 24
 text-align: center
 white-space: nowrap
 
--- cta-outline-small: $heart-line-title-card-desktop.cta-text
+-- cta-primary-small: $heart-line-title-card-desktop.cta-text
 if: { heart-line-title-card-desktop.cta-text != NULL }
 link: $heart-line-title-card-desktop.cta-url
 
@@ -1487,7 +1867,7 @@ padding-horizontal.px if { heart-line-title-card-mobile.title != NULL }: 12
 -- ftd.column:
 margin-bottom.px if { heart-line-title-card-mobile.cta-text != NULL }: 33
 
--- cta-outline-small: $heart-line-title-card-mobile.cta-text
+-- cta-primary-small: $heart-line-title-card-mobile.cta-text
 if: { heart-line-title-card-mobile.cta-text != NULL }
 link: $heart-line-title-card-mobile.cta-url
 
@@ -1881,6 +2261,125 @@ $testimonial-card.body
 -- end: ftd.column
 
 -- end: testimonial-card
+
+
+
+
+
+
+
+
+
+
+-- component testimonial:
+caption title:
+optional body body:
+optional string label:
+optional string author-title:
+optional ftd.image-src avatar:
+optional string cta-text:
+optional string cta-link:
+children card:
+
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 64
+spacing.fixed.px: 24
+align-content: center
+
+-- ftd.column:
+width.fixed.px: 150
+height.fixed.px: 262
+background.image: $bg-image-1
+anchor: parent
+left.px: -72
+bottom.px: -70
+
+-- end: ftd.column
+
+-- ftd.text: $testimonial.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+
+-- ftd.column:
+spacing.fixed.px: 7
+width.fixed.px: 966
+
+-- ftd.column:
+background.image: $fastn-assets.files.images.landing.quote-left.svg
+width.fixed.px: 38
+height.fixed.px: 29
+anchor: parent
+top.px: -28
+left.px: -44
+
+-- end: ftd.column
+
+-- ftd.text:
+if: { testimonial.body != NULL }
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+text-align: center
+
+$testimonial.body
+
+-- ftd.column:
+background.image: $fastn-assets.files.images.landing.quote-right.svg
+width.fixed.px: 38
+height.fixed.px: 29
+anchor: parent
+bottom.px: -28
+right.px: -42
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.row:
+spacing.fixed.px: 24
+align-content: center
+
+-- ftd.image:
+if: { testimonial.avatar != NULL }
+src: $testimonial.avatar
+width.fixed.px: 75
+height.fixed.px: 75
+border-radius.px: 100
+fit: cover
+
+-- ftd.column:
+spacing.fixed.px: 8
+width: fill-container
+
+-- ftd.text: $testimonial.author-title
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+
+-- ftd.text:
+if: { testimonial.label != NULL } 
+text: $testimonial.label
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+opacity: 0.7
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- ftd.column:
+width.fixed.px: 176
+height.fixed.px: 190
+background.image: $bg-image-2
+anchor: parent
+right.px: -64
+top.px: -70
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: testimonial
+
 
 
 
@@ -2555,6 +3054,14 @@ align-self: center
 src: $fastn-assets.files.images.landing.graphics.svg
 repeat: no-repeat
 
+-- ftd.background-image bg-image-1: 
+src: $fastn-assets.files.images.landing.bg-1.png
+repeat: no-repeat
+
+-- ftd.background-image bg-image-2: 
+src: $fastn-assets.files.images.landing.bg-2.png
+repeat: no-repeat
+
 
 
 
@@ -2746,58 +3253,68 @@ icon: $fastn-assets.files.images.landing.cta-arrow.svg
 
 
 -- component card:
-ftd.image-src image:
+ftd.image-src icon:
 caption title:
 body description:
 optional string cta-link:
-optional string cta-text:
-optional ftd.resizing width:
-optional ftd.resizing min-height:
+optional string cta-text::
 
 -- ftd.column:
-min-height.fixed.em if { card.width == NULL && card.min-height == NULL && ftd.device == "desktop" }: 25
-min-height if { ftd.device == "desktop" }: $card.min-height
-padding.em: 2
-spacing.fixed.em: 1
-shadow: $s
-border-radius.em: 1
-width.fixed.percent: 48
-width if { ftd.device == "mobile" }: fill-container
-width if { card.width != NULL }: $card.width
-background.solid: $inherited.colors.background.base
-align-content if { ftd.device == "mobile" }: center
-padding.px if { ftd.device == "mobile" }: 24 
+margin-vertical.px: 84
+height.fixed.px: 346
+width.fixed.px: 540
+padding.px: 32
+background.image: $card-bg
+spacing.fixed.px: 32
+border-width.px: 1
+border-color: $inherited.colors.border
+border-radius.px: 12
 
 -- ftd.image:
-src: $card.image
-height.fixed.em: 3
-width.fixed.em: 3
-max-width: fill-container
+src: $card.icon
+height.fixed.px: 64
+width.fixed.px: 64
+
+-- ftd.column:
+spacing.fixed.px: 16
 
 -- ftd.text: $card.title
-role: $inherited.types.heading-medium
+role: $inherited.types.heading-large
 color: $inherited.colors.text-strong
-padding-bottom.em: 0.5
-text-align if { ftd.device == "mobile" }: center
 
 -- ftd.text: $card.description
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
 text-align if { ftd.device == "mobile" }: center
-classes: anchor-link
 
--- ftd.text: $card.cta-text
-if: { card.cta-text != NULL }
-role: $inherited.types.copy-regular
-link: $card.cta-link
-text-align if { ftd.device == "mobile" }: center
-classes: link
-css: [$fastn-assets.files.assets.links.css]
-
+-- end: ftd.column
 
 -- end: ftd.column
 
 -- end: card
+
+
+
+
+
+
+
+
+
+
+-- component card-wrap:
+children wrapper:
+
+-- ftd.row:
+children: $card-wrap.wrapper
+wrap: true
+spacing.fixed.px: 40
+align-content: center
+width: fill-container
+
+-- end: ftd.row
+
+-- end: card-wrap
 
 
 
