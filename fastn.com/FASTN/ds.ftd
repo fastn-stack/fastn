@@ -35,6 +35,7 @@ boolean show-banner: true
 optional ftd.raw-image-src favicon:
 boolean search: true
 optional string search-url: /search/
+ftd.ui list fluid-wrap:
 
 -- ftd.ui list page.footer:
 
@@ -135,6 +136,7 @@ search: $page.search
 search-url: $page.search-url
 fluid-width: false
 max-width.fixed.px: 1120
+fluid-wrap: $page.fluid-wrap
 
 -- doc-site.page.header-logo-ui:
 

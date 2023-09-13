@@ -15,12 +15,14 @@ document-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
 full-width: true
 sidebar: false
 
+-- ds.page.fluid-wrap:
+
 -- lib.hero-content:
 
 -- lib.feature-card: Everyone in your team can learn fastn in a day!
 cta-text: Learn more
 cta-link: /language/
-image: $fastn-assets.files.images.landing.chat.png
+image: $fastn-assets.files.images.landing.chat-group.png
 icon: $fastn-assets.files.images.landing.face-icon.svg
 
 -- lib.feature-card.code:
@@ -29,16 +31,18 @@ icon: $fastn-assets.files.images.landing.face-icon.svg
 
 \-- chat.message-left: Hello World! 😀
 
-\-- chat.message-left: I'm Nandhini, a freelance content writer.
+\-- chat.message-left: I'm Nandhini, a freelance 
+content writer.
 
-\-- chat.message-left: Fun fact: I built this entire page with fastn! 🚀 It's that easy!
+\-- chat.message-left: Fun fact: I built this 
+entire page with fastn! 🚀 It's that easy!
 
 -- lib.feature-card.body:
 
 fastn's user-friendly interface and minimal syntax make it accessible even to
 those with no prior programming experience.
 
--- end: lib.feature-card
+-- lib.feature-card.additional-cards:
 
 -- lib.testimonial: From skeptic to web developer in an afternoon!
 author-title: Nandini Devi
@@ -70,6 +74,12 @@ Get Started!
 
 -- end: lib.card-wrap
 
+-- end: lib.feature-card.additional-cards
+
+-- end: lib.feature-card
+
+
+
 -- lib.feature-card: Anyone in your team can contribute to or modify the website
 cta-text: Learn more
 cta-link: /language/
@@ -81,22 +91,23 @@ transparent: true
 Updating content with fastn is as easy as changing a few lines of code. This
 means anyone can contribute, reducing your dependency on developers. 
 
--- end: lib.feature-card
+
+-- lib.feature-card.additional-cards:
 
 -- lib.hero-bottom-hug: Instant theme, color & typography changes
 icon: $fastn-assets.files.images.landing.icon.svg
-image-1: $fastn-assets.files.images.landing.hero-image-1.png
+image-1: $fastn-assets.files.images.landing.hero-image-1.svg
 image-2: $fastn-assets.files.images.landing.hero-image-2.png
 image-3: $fastn-assets.files.images.landing.hero-image-3.png
 
 -- lib.hero-bottom-hug: Modify content effortlessly
 icon: $fastn-assets.files.images.landing.triangle-three-icon.svg
-image-2: $fastn-assets.files.images.landing.hero-image-4.png
-image-3: $fastn-assets.files.images.landing.hero-image-5.png
+image-2: $fastn-assets.files.images.landing.hero-image-4.svg
+image-3: $fastn-assets.files.images.landing.hero-image-5.svg
 
 -- lib.hero-bottom-hug: Adding new components is easy
 icon: $fastn-assets.files.images.landing.icon.svg
-image-2: $fastn-assets.files.images.landing.hero-image-6.png
+image-2: $fastn-assets.files.images.landing.hero-image-6.svg
 image-3: $fastn-assets.files.images.landing.hero-image-7.png
 
 -- lib.promo-card: After evaluating web development frameworks & online website builders, startups prefer fastn for building their website.
@@ -138,6 +149,10 @@ image-2: $fastn-assets.files.images.landing.forest-cs.png
 image-title-2: Forest CS
 image-3: $fastn-assets.files.images.landing.saturated-cs.png
 image-title-3: Saturated Sunset CS
+
+-- end: lib.feature-card.additional-cards
+
+-- end: lib.feature-card
 
 -- lib.feature-card: Your team can collaborate & deploy on your preferred infrastructure
 cta-text: Learn more
@@ -284,5 +299,6 @@ cta-primary-url: https://discord.gg/uhTZQQV9
 Join a vibrant community of 1000+ developers and designers who are actively
 building fastn components for you. 
 
+-- end: ds.page.fluid-wrap
 
 -- end: ds.page
