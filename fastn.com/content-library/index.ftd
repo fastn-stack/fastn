@@ -198,7 +198,6 @@ width: fill-container
 children: $feature-card.cards
 spacing: space-between
 align-content: center
-max-width.fixed.px: 1140
 
 -- end: ftd.row
 
@@ -459,6 +458,8 @@ spacing.fixed.px: 56
 
 -- ftd.row:
 spacing.fixed.px: 32
+align-content: center
+width: fill-container
 
 -- ftd.image:
 src: $image-featured.image-1
@@ -480,17 +481,231 @@ border-radius.px: 16
 
 -- ftd.image:
 src: $image-featured.image-3
+height.fixed.px: 440
 width: fill-container
 fit: cover
 border-width.px: 1
 border-color: $inherited.colors.border
 border-radius.px: 16
 
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 32
 
+-- ftd.row:
+spacing.fixed.px: 8
+width.fixed.px: 352
+
+-- ftd.column:
+border-left-width.px: 2
+height.fixed.px: 53
+border-color: $inherited.colors.accent.primary
+
+-- end: ftd.column
+
+-- ftd.column:
+spacing.fixed.px: 8
+
+-- ftd.image:
+src: $image-featured.icon-1
+width.fixed.px: 24
+
+-- ftd.text: $image-featured.info-1
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- ftd.row:
+width.fixed.px: 352
+spacing.fixed.px: 8
+
+-- ftd.column:
+border-left-width.px: 2
+height.fixed.px: 53
+border-color: $inherited.colors.accent.primary
+
+-- end: ftd.column
+
+-- ftd.column:
+spacing.fixed.px: 8
+
+-- ftd.image:
+src: $image-featured.icon-2
+width.fixed.px: 24
+
+-- ftd.text: $image-featured.info-2
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- ftd.row:
+spacing.fixed.px: 8
+width.fixed.px: 352
+
+-- ftd.column:
+border-left-width.px: 2
+height.fixed.px: 53
+border-color: $inherited.colors.accent.primary
+
+-- end: ftd.column
+
+-- ftd.column:
+spacing.fixed.px: 8
+
+-- ftd.image:
+src: $image-featured.icon-3
+width.fixed.px: 24
+
+-- ftd.text: $image-featured.info-3
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.row
 
 -- end: ftd.column
 
 -- end: image-featured
+
+
+
+
+
+
+
+
+
+
+-- component compare:
+caption title:
+body body:
+children wrapper:
+string cta-primary-text:
+string cta-primary-url:
+boolean transparent: false
+
+-- ftd.column:
+width: fill-container
+background.solid if { !compare.transparent }: $inherited.colors.background.step-1
+padding-vertical.px: 80
+align-content: center
+
+-- ftd.column:
+width.fixed.px: 975
+align-content: center
+spacing.fixed.px: 24
+
+-- ftd.text: $compare.title
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+text-align: center
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align: center
+
+$compare.body
+
+-- end: ftd.column
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 16
+wrap: true
+children: $compare.wrapper
+align-content: center
+
+-- end: ftd.row
+
+-- ftd.column:
+width.fixed.px: 220
+align-content: center
+
+-- cta-primary-large: $compare.cta-primary-text
+link: $compare.cta-primary-url
+icon: $fastn-assets.files.images.landing.arrow-icon.svg
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: compare
+
+
+
+
+
+
+
+
+
+
+-- component compare-card:
+optional ftd.image-src icon:
+optional ftd.image-src image:
+caption title:
+body description:
+
+-- ftd.column:
+margin-vertical.px: 42
+width.fixed.px: 363
+padding.px: 16
+spacing.fixed.px: 24
+border-width.px: 1
+border-color: $inherited.colors.border
+border-radius.px: 16
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
+
+-- ftd.image:
+if: { compare-card.icon != NULL}
+src: $compare-card.icon
+width.fixed.px: 60
+
+-- ftd.image:
+if: { compare-card.image != NULL}
+src: $compare-card.image
+anchor: parent
+right.px: 0
+top.px: 0
+align-self: end
+
+-- end: ftd.row
+
+-- ftd.column:
+spacing.fixed.px: 12
+
+-- ftd.text: $compare-card.title
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+
+-- ftd.text: $compare-card.description
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align if { ftd.device == "mobile" }: center
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: compare-card
+
+
+
+
+
 
 
 
@@ -890,10 +1105,6 @@ repeat: no-repeat
 -- ftd.background-image background-img:
 src: $fastn-assets.files.images.landing.back-group-image.png
 ;;position: top-center
-repeat: no-repeat
-
--- ftd.background-image card-bg:
-src: $fastn-assets.files.images.landing.card-bg.png
 repeat: no-repeat
 
 -- ftd.background-image group-img:
@@ -2791,14 +3002,12 @@ color if { $slider-item.mouse-in }: $inherited.colors.shadow
 
 
 
--- component hero-with-4-images:
+-- component our-community:
 optional caption title:
 optional body body:
-optional ftd.image-src image-1:
-optional ftd.image-src image-2:
-optional ftd.image-src image-3:
-optional ftd.image-src image-4:
-community-record list communities:
+optional ftd.image-src image:
+optional string cta-primary-text:
+optional string cta-primary-url:
 
 -- ftd.column:
 width: fill-container
@@ -2806,8 +3015,7 @@ background.solid: $inherited.colors.background.step-1
 padding-vertical.px if { ftd.device == "desktop" }: 50
 padding-horizontal.px: 24
 align-content: center
-
--- ftd.desktop:
+margin-top.px: 80
 
 -- ftd.column:
 width: fill-container
@@ -2817,11 +3025,10 @@ align-self: center
 -- ftd.row:
 width: fill-container
 align-content: center
-spacing: space-between
-max-width.fixed.px: 1440
+spacing.fixed.px: 32
 
 -- ftd.column:
-width.fixed.percent: 50
+width.fixed.px: 340
 color: $inherited.colors.text-strong
 spacing.fixed.px: 24
 align-self: start
@@ -2830,44 +3037,33 @@ align-self: start
 src: $fastn-assets.files.images.landing.triangle-icon.svg
 width.fixed.px: 99
 
--- ftd.text: $hero-with-4-images.title
-if: { $hero-with-4-images.title != NULL }
+-- ftd.text: $our-community.title
+if: { $our-community.title != NULL }
 role: $inherited.types.heading-large
 
--- community: $obj.title
-$loop$: $hero-with-4-images.communities as $obj
-icon: $obj.icon
-cta-text: $obj.cta-text
-cta-link: $obj.cta-link
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+$our-community.body
+
+-- ftd.column:
+width.fixed.px: 174
+
+-- cta-primary-large: $our-community.cta-primary-text
+link: $our-community.cta-primary-url
+icon: $fastn-assets.files.images.landing.arrow-icon.svg
+
+-- end: ftd.column
 
 -- end: ftd.column
 
 -- ftd.column:
-width.fixed.px: 630
 align-self: end
 
--- ftd.row:
-width: fill-container
-wrap: true
-spacing.fixed.px: 24
-
 -- ftd.image:
-if: { hero-with-4-images.image-1 != NULL}
-src: $hero-with-4-images.image-1
-
--- ftd.image:
-if: { hero-with-4-images.image-2 != NULL}
-src: $hero-with-4-images.image-2
-
--- ftd.image:
-if: { hero-with-4-images.image-3 != NULL}
-src: $hero-with-4-images.image-3
-
--- ftd.image:
-if: { hero-with-4-images.image-4 != NULL}
-src: $hero-with-4-images.image-4
-
--- end: ftd.row
+if: { our-community.image != NULL}
+src: $our-community.image
 
 -- end: ftd.column
 
@@ -2875,78 +3071,9 @@ src: $hero-with-4-images.image-4
 
 -- end: ftd.column
 
--- end: ftd.desktop
-
--- ftd.mobile:
-
--- ftd.column:
-width: fill-container
-align-content: center
-padding-vertical.px: 24
-
--- ftd.column:
-width: fill-container
-align-content: center
-spacing.fixed.px: 24
-max-width.fixed.px: 1440
-
--- ftd.column:
-width: fill-container
-color: $inherited.colors.text-strong
-spacing.fixed.px: 24
-
--- ftd.image:
-src: $fastn-assets.files.images.landing.triangle-icon.svg
-width.fixed.px: 44
-
--- ftd.text: $hero-with-4-images.title
-if: { $hero-with-4-images.title != NULL }
-role: $inherited.types.heading-hero
-
--- ftd.text:
-if: { $hero-with-4-images.body != NULL }
-role: $inherited.types.copy-regular
-
-$hero-with-4-images.body
-
 -- end: ftd.column
 
--- ftd.column:
-width: fill-container
-spacing.fixed.px: 18
-align-self: center
-
--- ftd.image:
-if: { hero-with-4-images.image-1 != NULL}
-src: $hero-with-4-images.image-1
-width.fixed.px: 316
-
--- ftd.image:
-if: { hero-with-4-images.image-2 != NULL}
-src: $hero-with-4-images.image-2
-width.fixed.px: 316
-
--- ftd.image:
-if: { hero-with-4-images.image-3 != NULL}
-src: $hero-with-4-images.image-3
-width.fixed.px: 316
-
--- ftd.image:
-if: { hero-with-4-images.image-4 != NULL}
-src: $hero-with-4-images.image-4
-width.fixed.px: 316
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: ftd.mobile
-
--- end: ftd.column
-
--- end: hero-with-4-images
+-- end: our-community
 
 
 
@@ -3062,55 +3189,6 @@ repeat: no-repeat
 src: $fastn-assets.files.images.landing.bg-2.png
 repeat: no-repeat
 
-
-
-
-
-
-
-
--- component community:
-caption title:
-optional string cta-text: Explore more
-optional string cta-link: index.html
-ftd.image-src icon:
-
--- ftd.row:
-spacing.fixed.px: 20
-width.fixed.px: 420
-
--- ftd.column:
-padding-horizontal.px: 24
-padding-vertical.px: 16
-border-width.px: 1
-border-radius.px: 12
-border-color: $inherited.colors.border
-
--- ftd.image:
-src: $community.icon
-width.fixed.px: 48
-height.fixed.px: 38
-
--- end: ftd.column
-
--- ftd.column:
-spacing.fixed.px: 10
-align-self: center
-
--- ftd.text: $community.title
-role: $inherited.types.copy-regular
-color: $inherited.colors.text-strong
-
--- cta-primary-button: $community.cta-text
-link: $community.cta-link
-icon: $fastn-assets.files.images.landing.cta-arrow.svg
-new-tab: true
-
--- end: ftd.column
-
--- end: ftd.row
-
--- end: community
 
 
 
@@ -3253,24 +3331,28 @@ icon: $fastn-assets.files.images.landing.cta-arrow.svg
 
 
 -- component card:
-ftd.image-src icon:
+optional ftd.image-src icon:
 caption title:
 body description:
 optional string cta-link:
-optional string cta-text::
+optional string cta-text:
+ftd.background-image bg-image:
+optional ftd.resizing width:
 
 -- ftd.column:
 margin-vertical.px: 84
 height.fixed.px: 346
 width.fixed.px: 540
+width if { card.width != NULL }: $card.width
 padding.px: 32
-background.image: $card-bg
+background.image: $card.bg-image
 spacing.fixed.px: 32
 border-width.px: 1
 border-color: $inherited.colors.border
 border-radius.px: 12
 
 -- ftd.image:
+if: { card.icon != NULL}
 src: $card.icon
 height.fixed.px: 64
 width.fixed.px: 64
@@ -4276,26 +4358,6 @@ makes crafting custom content components for recurring information easier.
 
 
 
-
--- record community-record:
-caption title:
-optional string cta-text:
-optional string cta-link:
-ftd.image-src icon:
-
--- community-record list communities:
-
--- community-record: We have a youtube channel filled with plethora of content about fastn.
-icon: $fastn-assets.files.images.landing.youtube.svg
-cta-text: Explore more
-cta-link: https://www.youtube.com/@fifthtrygithubfordocuments4522
-
--- community-record: Meet folks who are learning FTD like you!
-icon: $fastn-assets.files.images.landing.discord.svg
-cta-text: Explore more
-cta-link: /discord/
-
--- end: communities
 
 
 
