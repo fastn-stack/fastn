@@ -80,6 +80,11 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 template-url: featured/ds/midnight-storm/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 
+-- ft-ui.template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+
+
 -- end: doc-sites
 
 -- common.owner list owner-fastn:

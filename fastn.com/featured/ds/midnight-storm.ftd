@@ -90,6 +90,10 @@ role: Developer
 
 -- ft-ui.template list doc-sites:
 
+-- ft-ui.template: Simple Site
+template-url: featured/ds/doc-site/
+screenshot: $fastn-assets.files.images.featured.doc-site.jpg
+
 -- ft-ui.template: Midnight Rush
 template-url: featured/ds/midnight-rush/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
