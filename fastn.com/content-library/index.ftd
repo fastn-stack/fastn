@@ -1621,7 +1621,7 @@ left.px: 192
 
 -- ftd.text: 
 text-align: center
-role: $inherited.types.copy-regular
+role: $inherited.types.copy-large
 
 $hero-section.body
 
@@ -1650,7 +1650,7 @@ spacing.fixed.px: 8
 padding-bottom.px: 98
 
 -- ftd.text: $hero-section.subtitle
-role: $inherited.types.heading-medium
+role: $inherited.types.heading-small
 color: $inherited.colors.text
 style: semi-bold
 
@@ -1825,7 +1825,7 @@ border-radius.px: 58
 spacing.fixed.px: 4
 link: $cta-secondary-medium.link
 color: $inherited.colors.text-strong
-role: $inherited.types.button-medium
+role: $inherited.types.button-small
 
 -- ftd.image:
 if: { cta-secondary-medium.icon != NULL }
@@ -2405,7 +2405,7 @@ boolean $mouse-in: false
 -- ftd.row: 
 link: $cta-primary-large.link
 width: fill-container
-role: $inherited.types.button-medium
+role: $inherited.types.button-small
 color: $inherited.colors.cta-tertiary.text
 background.solid: $inherited.colors.cta-primary.base
 background.solid if { cta-primary-large.mouse-in }: $inherited.colors.cta-primary.hover
@@ -4003,7 +4003,7 @@ width.fixed.px: 64
 spacing.fixed.px: 16
 
 -- ftd.text: $card.title
-role: $inherited.types.heading-large
+role: $inherited.types.heading-hero
 color: $inherited.colors.text-strong
 
 -- ftd.column:
