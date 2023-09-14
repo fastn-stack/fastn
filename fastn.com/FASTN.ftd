@@ -246,12 +246,6 @@ document: /get-started/browse-pick.ftd
       skip: true  
     - Resume 10: /featured/resumes/resume-10/
       skip: true  
-  - Workshop Pages: /featured/workshops/
-  skip: true
-    - Workshop 1: /featured/workshops/workshop-1/
-      skip: true
-    - Event 1: /featured/workshops/event-1/
-      skip: true
 - Section Library: /featured/sections/
   - Cards: /featured/sections/cards/
     - Card 1: /featured/sections/cards/card-1/
@@ -992,7 +986,6 @@ skip: true
 /student-programs/ambassador-program/ambassadors/ayush-soni/ -> /ambassadors/ayush-soni/
 /ambassadors-program/ -> /ambassador-program/
 /champions-program/ -> /champion-program/
-/learn/ -> /frontend/learn/
 /blog/writer-journey/ -> /writer/
 /blog/prove-you-wrong/ -> /prove/
 /blog/intimidation-of-programming/ -> /intimidation/
