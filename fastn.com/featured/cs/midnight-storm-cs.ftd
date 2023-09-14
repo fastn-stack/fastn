@@ -2,7 +2,7 @@
 -- import: fastn-community.github.io/spectrum-ds/common
 -- import: fastn.com/content-library as footer
 -- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fifthtry.github.io/fastn-typography as typo
 -- import: fastn.com/featured as ft-ui
 -- import: fastn.com/assets
 
@@ -33,7 +33,7 @@ site-url: index.html
 social-links: $footer.social-links
 copyright: Copyright © 2023 - fastn.com
 full-width: false
-max-width.fixed.px: 1120
+max-width.fixed.px: 1340
 
 -- end: ds.page.footer
 -- ds.page.abstract-bar:

@@ -3,7 +3,7 @@
 -- import: fastn-community.github.io/spectrum-ds as ds
 -- import: fastn.com/content-library as footer
 -- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fifthtry.github.io/fastn-typography as typo
 -- import: fastn.com/featured/contributors/developers/shaheen-senpai
 -- import: fastn.com/featured/contributors/developers/saurabh-lohiya
 -- import: fastn.com/featured/contributors/developers/priyanka-yadav
@@ -25,7 +25,7 @@ github-icon: true
 github-url: https://github.com/muskan1verma
 full-width: true
 fluid-width: false
-max-width.fixed.px: 1120
+max-width.fixed.px: 1340
 
 -- ds.page.footer:
 
@@ -35,7 +35,7 @@ site-url: index.html
 social-links: $footer.social-links
 copyright: Copyright © 2023 - fastn.com
 full-width: false
-max-width.fixed.px: 1120
+max-width.fixed.px: 1340
 
 -- end: ds.page.footer
 -- ftd.column:

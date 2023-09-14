@@ -86,7 +86,7 @@ boolean show-large: false
 width: fill-container
 spacing.fixed.px if { ftd.device == "mobile" }: 24
 margin-top.px if { grid-view.push-top }: -90
-max-width.fixed.px if { !grid-view.show-large } : 870
+max-width.fixed.px if { !grid-view.show-large } : 980
 max-width.fixed.px if { grid-view.show-large } : 1344
 
 -- ftd.row:

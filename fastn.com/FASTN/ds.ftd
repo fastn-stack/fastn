@@ -1,5 +1,5 @@
 -- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fifthtry.github.io/fastn-typography as typo
 -- import: fastn.com/utils
 -- import: fastn-community.github.io/banner
 -- import: fastn.com/content-library as footer
@@ -17,7 +17,7 @@ export: markdown,h0,h1,h2,h3,code,rendered,output,image,iframe,youtube,compact-t
 children wrapper:
 optional caption title:
 optional body body:
-boolean sidebar: true
+boolean sidebar: false
 optional string document-title:
 optional string document-description:
 optional ftd.raw-image-src document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
@@ -45,7 +45,7 @@ site-url: index.html
 social-links: $footer.social-links
 copyright: Copyright © 2023 - fastn.com
 full-width: false
-max-width.fixed.px: 1120
+max-width.fixed.px: 1340
 
 -- end: page.footer
 
@@ -135,7 +135,7 @@ favicon: $page.favicon
 search: $page.search
 search-url: $page.search-url
 fluid-width: false
-max-width.fixed.px: 1120
+max-width.fixed.px: 1340
 fluid-wrap: $page.fluid-wrap
 
 -- doc-site.page.header-logo-ui:
