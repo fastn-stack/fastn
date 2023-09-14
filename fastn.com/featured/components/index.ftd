@@ -1,5 +1,6 @@
 -- import: fastn.com/featured as ft-ui
 
+
 -- ds.page:
 sidebar: false
 
@@ -80,7 +81,7 @@ templates: $forms
 -- ft-ui.grid-view: Quotes
 templates: $quotes
 more-link-text: View all
-more-link: /featured/components/quotes/
+more-link: /quotes/
 
 -- end: ds.page
 
@@ -245,16 +246,16 @@ screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 
 -- ft-ui.template list quotes:
 
--- ft-ui.template: Charcoal
-template-url: /featured/components/quotes/author-icon-quotes/demo-1/
-screenshot: $fastn-assets.files.images.featured.components.quotes.author-icon-quotes.demo-1.png
+-- ft-ui.template: Marengo
+template-url: /quotes/marengo/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
 
--- ft-ui.template: Electric
-template-url: /featured/components/quotes/quotes-with-images/demo-1/
-screenshot: $fastn-assets.files.images.featured.components.quotes.quotes-with-images.demo-1.png
+-- ft-ui.template: Chrome
+template-url: /quotes/chrome/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
 
--- ft-ui.template: Chalice
-template-url: /featured/components/quotes/simple-quotes/demo-1/
-screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-1.png
+-- ft-ui.template: Dorian
+template-url: /quotes/dorian/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-7.png
 
 -- end: quotes

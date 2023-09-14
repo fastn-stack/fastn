@@ -1,8 +1,8 @@
 -- import: fastn-community.github.io/spectrum-ds as ds
 -- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn-community.github.io/footer
+-- import: fastn.com/content-library as footer
 -- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fifthtry.github.io/fastn-typography as typo
 -- import: fastn.com/featured as ft-ui
 -- import: fastn.com/assets
 
@@ -29,21 +29,20 @@ full-width: true
 
 -- ds.page.footer:
 
--- footer.social-sideline-footer:
-social: true
+-- footer.footer:
 site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+site-url: index.html
+social-links: $footer.social-links
+copyright: Copyright © 2023 - fastn.com
+full-width: false
+max-width.fixed.px: 1340
 
 -- end: ds.page.footer
-
 -- ds.page.layout-bar:
 
 -- ds.layout: Color schemes - Yellow Lily CS
 cta-url: https://meenukumari28.github.io/yellow-lily-cs/
-previous-url: /featured/cs/
+previous-url: /template-url: /cs/
 cta-text: Use this color scheme
 github-url: https://github.com/MeenuKumari28/yellow-lily-cs/
 
@@ -73,7 +72,7 @@ width.fixed.px if { ftd.device == "desktop" }: 800
 if: { show-grid }
 templates: $similar-schemes
 more-link-text: View all
-more-link: /featured/cs/
+more-link: /template-url: /cs/
 
 -- end: ds.page
 
@@ -136,6 +135,10 @@ screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
 -- ft-ui.template: Navy Nebula CS
 template-url: /cs/navy-nebula-cs/
 screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
+
+-- ft-ui.template: Saturated Sunset CS
+template-url: /cs/saturated-sunset-cs/
+screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 
 -- ft-ui.template: Forest CS
 template-url: /cs/forest-cs/

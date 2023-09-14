@@ -1,5 +1,6 @@
 -- import: fastn.com/featured as ft-ui
 
+
 -- ds.page:
 sidebar: false
 
@@ -58,16 +59,20 @@ screenshot: $fastn-assets.files.images.featured.cs.pretty-cs.png
 -- ft-ui.template list fonts:
 
 -- ft-ui.template: Inter Typography
-template-url: featured/fonts/inter/
+template-url: /fonts/inter/
 screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
 -- ft-ui.template: Opensans Typography
-template-url: featured/fonts/opensans/
+template-url: /fonts/opensans/
 screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 
 -- ft-ui.template: Roboto Typography
-template-url: featured/fonts/roboto/
+template-url: /fonts/roboto/
 screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
+
+-- ft-ui.template: Lato Typography
+template-url: /fonts/lato/
+screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
 
 -- end: fonts
 

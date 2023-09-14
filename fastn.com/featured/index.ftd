@@ -705,19 +705,19 @@ screenshot: $fastn-assets.files.images.featured.components.quotes.author-icon-qu
 -- template list fonts:
 
 -- template: Inter Typography
-template-url: featured/fonts/inter/
+template-url: /fonts/inter/
 screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
 -- template: Opensans Typography
-template-url: featured/fonts/opensans/
+template-url: /fonts/opensans/
 screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 
 -- template: Roboto Typography
-template-url: featured/fonts/roboto/
+template-url: /fonts/roboto/
 screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
 
 -- template: Lato Typography
-template-url: https://fastn-community.github.io/lato-typography/
+template-url: /fonts/lato/
 screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
 
 -- end: fonts
@@ -730,14 +730,17 @@ screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
 template-url: /featured/sections/slides/giggle-presentation-template/
 screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
 
--- template: Hero with two CTA - Design 5
-template-url: featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/
-screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
+-- template: Hero Right Hug Expanded
+template-url: /hero-right-hug-expanded/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded.jpg
 
 -- template: Image Gallery IG
 template-url: /featured/sections/cards/image-gallery-ig/
 screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
 
+-- template: Hero Bottom Hug
+template-url: /hero-bottom-hug/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-bottom-hug.png
 
 -- end: sections
 

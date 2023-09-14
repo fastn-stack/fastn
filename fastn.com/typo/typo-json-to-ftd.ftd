@@ -1,4 +1,4 @@
--- import: fifthtry.github.io/fastn-io-typography as fastn-typo
+-- import: fifthtry.github.io/fastn-typography as fastn-typo
 -- import: fastn-stack.github.io/fastn-js/assets as js-assets
 -- import: fastn-stack.github.io/fastn-js/typo-exporter as t
 -- import: fastn/processors as pr
@@ -41,7 +41,7 @@ Below mentioned code shows how we can generate equivalent `fastn` code for
 
 \-- import: fastn-stack.github.io/fastn-js/assets as js-assets
 \-- import: fastn-community.github.io/doc-site as ds
-\-- import: fifthtry.github.io/fastn-io-typography as fastn-typo
+\-- import: fifthtry.github.io/fastn-typography as fastn-typo
 
 \-- optional string $code:
 \-- optional string $formatted-code:
