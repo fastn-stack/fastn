@@ -82,6 +82,10 @@ screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 
+-- ft-ui.template: CT Landing Page
+template-url: featured/landing-pages/
+screenshot: $fastn-assets.files.images.featured.landing.ct-landing-page.png
+
 -- end: landing
 
 

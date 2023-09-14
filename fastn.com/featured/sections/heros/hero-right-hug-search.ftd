@@ -113,8 +113,4 @@ screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-la
 template-url: /hero-right-hug-search-label/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-search-label.jpg
 
--- ft-ui.template: Hero Right Hug Search
-template-url: /hero-right-hug-search/
-screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-search.jpg
-
 -- end: heros

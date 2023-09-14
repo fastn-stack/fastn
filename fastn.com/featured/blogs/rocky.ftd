@@ -82,7 +82,15 @@ screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
 template-url: featured/blogs/mg-blog/
 screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
+-- ft-ui.template: Midnight Storm
+template-url: featured/blogs/ms-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
+
 -- end: blog-sites
+
+
+
+
 
 -- common.owner list owner-fastn:
 

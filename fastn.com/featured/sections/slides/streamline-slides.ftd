@@ -90,6 +90,10 @@ screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentat
 template-url: /featured/sections/slides/rotary-presentation-template/
 screenshot: $fastn-assets.files.images.featured.sections.slides.rotary-presentation-template.png
 
+-- ft-ui.template: Simple Dark Slides
+template-url: /featured/sections/slides/simple-dark-slides/
+screenshot: $fastn-assets.files.images.featured.sections.slides.simple-dark-slides.png
+
 -- end: slides
 
 

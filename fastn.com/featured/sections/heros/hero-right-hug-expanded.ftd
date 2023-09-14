@@ -101,10 +101,6 @@ role: Designer
 template-url: /hero-right-hug-expanded-search/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded-search.jpg
 
--- ft-ui.template: Hero Right Hug Expanded
-template-url: /hero-right-hug-expanded/
-screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded.jpg
-
 -- ft-ui.template: Hero Right Hug Large
 template-url: /hero-right-hug-large/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-large.jpg

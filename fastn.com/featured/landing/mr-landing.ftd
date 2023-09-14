@@ -85,9 +85,10 @@ screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 -- ft-ui.template: CT Landing Page
 template-url: featured/landing-pages/
 screenshot: $fastn-assets.files.images.featured.landing.ct-landing-page.png
-licence-url: https://github.com/saurabh-lohiya/ct-landing-page/
-github-url: https://github.com/saurabh-lohiya/ct-landing-page/
-wip: true
+
+-- ft-ui.template: Studious Couscous
+template-url: featured/landing/studious-couscous/
+screenshot: $fastn-assets.files.images.featured.landing.studious-couscous.png
 
 -- end: landing
 
