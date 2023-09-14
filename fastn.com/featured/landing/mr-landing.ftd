@@ -23,8 +23,8 @@ full-width: true
 distribution-bar: true
 full-width-bar: true
 fluid-width: false
-max-width.fixed.px: 1340fluid-width: false
 max-width.fixed.px: 1340
+fluid-width: false
 
 -- ds.page.footer:
 

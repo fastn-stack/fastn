@@ -1,5 +1,5 @@
 -- import: fastn-community.github.io/saturated-sunset-cs as cs
--- import: fifthtry.github.io/virgil-font-typography as typo
+-- import: fastn-community.github.io/virgil-typography as typo
 
 -- ds.page: Container Root Attributes
 
@@ -110,7 +110,7 @@ and is optional.
 
 -- ds.rendered.input:
 
-\-- import: fifthtry.github.io/virgil-font-typography as typo
+\-- import: fastn-community.github.io/virgil-typography as typo
 
 \-- ftd.column:
 types: $typo.types
