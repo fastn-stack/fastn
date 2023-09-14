@@ -31,7 +31,7 @@ macro_rules! warning {
 
 fn id_to_cache_key(id: &str) -> String {
     // TODO: use MAIN_SEPARATOR here
-    id.replace("/", "_").replace("\\", "_")
+    id.replace(['/', '\\'], "_")
 }
 
 pub fn get_ftd_hash(path: &str) -> fastn_core::Result<String> {
