@@ -797,6 +797,7 @@ skip: true
   document: /community/events/roadshows/bangalore.ftd
 
 ## Workshop: /workshop/
+skip: true
 
 - Hello World: /workshop/hello-world/
   document: /workshop/01-hello-world.ftd
