@@ -87,7 +87,6 @@ body {
 
 input, code {
     vertical-align: middle;
-    font: inherit;
 }
 pre {
     white-space: break-spaces;
@@ -222,6 +221,11 @@ pre code {
     background: #c1c8ce;
 }
 
+ul {
+    /* Added padding to the left to move the bullet marker to the right */
+    padding-left: 20px;
+}
+
 a {
     color: #2952a3;
 }
@@ -289,4 +293,12 @@ h1:only-child {
 
 table, td, th {
   border: 1px solid;
+}
+
+th {
+    padding: 6px;
+}
+
+td {
+    padding-left: 6px;
 }

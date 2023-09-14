@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 // #[tracing::instrument(skip(config))]
 pub async fn build(
     config: &mut fastn_core::Config,
@@ -237,6 +235,7 @@ async fn incremental_build(
     test: bool,
 ) -> fastn_core::Result<()> {
     // https://fastn.com/rfc/incremental-build/
+    use itertools::Itertools;
 
     let (cache_hit, mut c) = cache::get()?;
 

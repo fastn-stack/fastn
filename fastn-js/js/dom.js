@@ -1662,8 +1662,20 @@ class Node2 {
                 }
                 const is_dark_mode = ftd.dark_mode.get();
                 const src = staticValue.get(is_dark_mode ? 'dark' : 'light');
-
-                this.attachAttribute("src", fastn_utils.getStaticValue(src));
+                if (!ssr) {
+                    let image_node = this.#node;
+                    if( image_node.nodeName.toLowerCase() === "a" ) {
+                        let childNodes = image_node.childNodes;
+                        childNodes.forEach(function(child) {
+                            if (child.nodeName.toLowerCase() === "img")
+                                image_node = child;
+                        });
+                    }
+                    image_node.setAttribute("src", fastn_utils.getStaticValue(src));
+                }
+                else {
+                    this.attachAttribute("src", fastn_utils.getStaticValue(src));
+                }
             }).addNodeProperty(this, null, inherited));
             this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Alt) {
