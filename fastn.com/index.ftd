@@ -21,7 +21,7 @@ sidebar: false
 
 -- lib.feature-card: Everyone in your team can learn fastn in a day!
 cta-text: Learn more
-cta-link: /language/
+cta-link: /install/
 image: $fastn-assets.files.images.landing.chat-group.png
 icon: $fastn-assets.files.images.landing.face-icon.svg
 
@@ -84,7 +84,7 @@ Build your first fastn-powered website in just 2 hours.
 
 -- lib.feature-card: Anyone in your team can contribute to or modify the website
 cta-text: Learn more
-cta-link: /language/
+cta-link: /acme/
 icon: $fastn-assets.files.images.landing.face-icon.svg
 transparent: true
 
@@ -114,11 +114,11 @@ image-3: $fastn-assets.files.images.landing.hero-image-7.png
 
 -- lib.promo-card: After evaluating web development frameworks & online website builders, startups prefer fastn for building their website.
 cta-text: Read case study
-cta-link: index.html
+cta-link: /acme/
 
 -- lib.feature-card: Rich Library
 cta-text: Learn more
-cta-link: /language/
+cta-link: /featured/
 icon: $fastn-assets.files.images.landing.smile-icon.svg
 transparent: true
 is-child: true
@@ -131,7 +131,7 @@ the dozens of professionally created templates, customize layout, style, and
 graphics, and deploy instantly.  
 
 -- lib.right-video:
-;;video: $fastn-assets.files.images.landing.right-video.mov
+image: $fastn-assets.files.images.landing.right-video.png
 icon-1: $fastn-assets.files.images.landing.cube.svg
 info-1: The Uniform Design System allows components created by different teams to be usable by each other.
 icon-2: $fastn-assets.files.images.landing.arrow-up.svg
@@ -143,9 +143,9 @@ info-3: 1000+ developers are building fastn components.
 
 -- lib.featured-theme: Choose from the numerous color schemes created by 100s of designers.
 cta-primary-text: View all color themes
-cta-primary-url: index.html
+cta-primary-url: /featured/cs/
 cta-secondary-text: View all typography
-cta-secondary-url: index.html
+cta-secondary-url: /featured/fonts/
 image-1: $fastn-assets.files.images.landing.winter-cs.png
 image-title-1: Winter CS
 image-2: $fastn-assets.files.images.landing.forest-cs.png
@@ -159,7 +159,7 @@ image-title-3: Saturated Sunset CS
 
 -- lib.feature-card: Your team can collaborate & deploy on your preferred infrastructure
 cta-text: Learn more
-cta-link: /language/
+cta-link: /deploy/
 icon: $fastn-assets.files.images.landing.face-icon.svg
 
 -- lib.feature-card.body:
@@ -171,8 +171,8 @@ infrastructure, and tools.
 
 -- lib.image-featured:
 image-1: $fastn-assets.files.images.landing.image-placeholder-1.png
-image-2: $fastn-assets.files.images.landing.image-placeholder-2.png
-image-3: $fastn-assets.files.images.landing.image-placeholder-3.png
+image-2: $fastn-assets.files.images.landing.image-placeholder-2.svg
+image-3: $fastn-assets.files.images.landing.image-placeholder-3.svg
 icon-1: $fastn-assets.files.images.landing.cube.svg
 info-1: fastn offers deployment for static sites using deploy.yml from fastn-template on platforms like GitHub and Vercel.
 icon-2: $fastn-assets.files.images.landing.arrow-up.svg
@@ -184,12 +184,12 @@ info-3: fastn also supports dynamic sites with deployment options across Linux, 
 
 -- lib.compare: What makes fastn better than react
 cta-primary-text: Learn More
-cta-primary-url: index.html
+cta-primary-url: /react/
 transparent: true
 
 Why waste your developers' time on building landing pages? With fastn, anyone in
-your team can build a www.foo.com, leaving your development bandwidth available
-for app.foo.com.
+your team can build a `www.foo.com`, leaving your development bandwidth available
+for `app.foo.com`.
 
 -- lib.compare-card: Learning Curve
 icon: $fastn-assets.files.images.landing.triangle-1.svg
@@ -216,7 +216,7 @@ into the projects of another.
 
 -- lib.compare: What makes fastn better than Webflow 
 cta-primary-text: Learn More
-cta-primary-url: index.html
+cta-primary-url: /webflow/
 
 Tired of being locked into a theme in Webflow?  Try fastn for easy editing,
 better customization and full control.  
@@ -305,9 +305,9 @@ modify the colors and content in a matter of minutes.
 -- end: lib.cards-section
 
 -- lib.our-community: fastn Community
-;;video: $fastn-assets.files.images.landing.community.mov
+image: $fastn-assets.files.images.landing.community.png
 cta-primary-text: Join Discord
-cta-primary-url: https://discord.gg/uhTZQQV9
+cta-primary-url: /discord/
 
 Join a vibrant community of 1000+ developers and designers who are actively
 building fastn components for you. 

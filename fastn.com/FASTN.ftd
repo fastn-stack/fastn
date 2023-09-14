@@ -944,7 +944,6 @@ skip: true
 
 -- fastn.redirects:
 
-/ftd/ -> /lang/
 /ftd/kernel/ -> /kernel/
 /ftd/list/ -> /list/
 /package-query/ -> /sql/

@@ -35,8 +35,8 @@ secondary-cta-link: /quick-build/
 subtitle: fastn is the best choice to build your company’s website
 know-more: Scroll to know why
 
-An easy-to-learn, open-source solution for building modern 
-content-centric and database-driven websites.
+An easy-to-learn, open-source solution for building 
+modern content-centric and database-driven websites.
 
 -- end: hero-section
 
@@ -640,8 +640,8 @@ border-radius.px: 16
 
 -- ftd.image:
 src: $image-featured.image-3
-height.fixed.px: 377
-width.fixed.px: 544
+height.fixed.px: 454
+width.fixed.px: 1120
 fit: cover
 border-width.px: 1
 border-color: $inherited.colors.border
@@ -1056,6 +1056,7 @@ optional string info-1:
 optional string info-2:
 optional string info-3:
 optional ftd.video-src video:
+optional ftd.image-src image:
 
 -- ftd.column:
 width: fill-container
@@ -1157,6 +1158,7 @@ border-radius.px: 8
 border-color: $inherited.colors.border
 
 -- ftd.video:
+if: { right-video.video != NULL }
 src: $right-video.video
 controls: true
 width.fixed.px: 700
@@ -1164,6 +1166,13 @@ height.fixed.px: 474
 fit: contain
 autoplay: false
 border-radius.px: 8
+
+-- ftd.image:
+if: { right-video.image != NULL }
+src: $right-video.image
+width.fixed.px: 700
+height.fixed.px: 474
+fit: cover
 
 -- end: ftd.column
 
@@ -1262,17 +1271,23 @@ color: $inherited.colors.text
 
 -- ftd.column:
 width: fill-container
-border-width.px: 2
+border-width.px if { right-video.video != NULL }: 2
 border-radius.px: 8
 border-color: $inherited.colors.border
 
 -- ftd.video:
+if: { right-video.video != NULL }
 src: $right-video.video
 controls: true
 autoplay: false
 width: fill-container
 fit: contain
 border-radius.px: 8
+
+-- ftd.image:
+if: { right-video.image != NULL }
+src: $right-video.image
+width: fill-container
 
 -- end: ftd.column
 
@@ -1603,9 +1618,8 @@ background.image: $background
 
 -- ftd.column:
 width: fill-container
-max-width.fixed.px: 600
-padding-top.em: 6
-padding-bottom.em: 11.43
+max-width.fixed.px: 700
+padding-bottom.em: 5
 align-self: center
 align-content: center
 spacing.fixed.px: 40
@@ -1618,12 +1632,14 @@ text-align: center
 src: $fastn-assets.files.images.landing.zig-zag.png
 width.fixed.px: 162
 anchor: parent
-top.px: 194
-left.px: 192
+top.px: 145
+left.px: 242
 
 -- ftd.text: 
 text-align: center
 role: $inherited.types.copy-large
+width.fixed.percent: 60
+color: $inherited.colors.text
 
 $hero-section.body
 
@@ -1885,7 +1901,7 @@ spacing.fixed.px: 24
 
 -- ftd.text: $promo-card.title
 if: { promo-card.title }
-role: $inherited.types.heading-medium
+role: $inherited.types.heading-small
 color: $inherited.colors.text-strong
 text-align: center
 
@@ -3716,6 +3732,7 @@ optional body body:
 optional string cta-primary-text:
 optional string cta-primary-url:
 optional ftd.video-src video: 
+optional ftd.image-src image: 
 
 -- ftd.column:
 width: fill-container
@@ -3770,11 +3787,12 @@ icon: $fastn-assets.files.images.landing.arrow-icon.svg
 
 -- ftd.column:
 align-self: end
-border-width.px: 2
+border-width.px if { our-community.video != NULL }: 2
 border-radius.px: 8
 border-color: $inherited.colors.border
 
 -- ftd.video:
+if: { our-community.video != NULL }
 src: $our-community.video
 controls: true
 width.fixed.px: 700
@@ -3782,6 +3800,13 @@ height.fixed.px: 474
 fit: contain
 autoplay: false
 border-radius.px: 8
+
+-- ftd.image:
+if: { our-community.image != NULL }
+src: $our-community.image
+width.fixed.px: 700
+height.fixed.px: 474
+fit: cover
 
 -- end: ftd.column
 
@@ -3831,12 +3856,18 @@ border-radius.px: 8
 border-color: $inherited.colors.border
 
 -- ftd.video:
+if: { our-community.video != NULL }
 src: $our-community.video
 controls: true
 width: fill-container
 fit: contain
 border-radius.px: 8
 autoplay: false
+
+-- ftd.image:
+if: { our-community.image != NULL }
+src: $our-community.image
+width: fill-container
 
 -- end: ftd.column
 

@@ -55,8 +55,7 @@ max-width.fixed.px: 1340
 -- banner.cta-banner:
 cta-text: Star us on Github 🌟
 cta-link: https://github.com/fastn-stack/fastn/
-
-Support us by giving us a
+bgcolor: $inherited.colors.cta-primary.base
 
 -- end: page.banner
 
