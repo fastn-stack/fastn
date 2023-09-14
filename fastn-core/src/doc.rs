@@ -11,7 +11,7 @@ fn cached_parse(
 
     let hash = fastn_core::utils::generate_hash(source);
 
-    if let Some(c) = get_cached::<C>(id) {
+    if let Some(c) = fastn_core::utils::get_cached::<C>(id) {
         if c.hash == hash {
             tracing::debug!("cache hit");
             return Ok(c.doc);
@@ -22,50 +22,7 @@ fn cached_parse(
     }
 
     let doc = ftd::interpreter::ParsedDocument::parse_with_line_number(id, source, line_number)?;
-    cache_it(id, C { doc, hash }).map(|v| v.doc)
-}
-
-fn id_to_cache_key(id: &str) -> String {
-    id.replace('/', "_")
-}
-
-fn get_cached<T>(id: &str) -> Option<T>
-where
-    T: serde::de::DeserializeOwned,
-{
-    let cache_file = dirs::cache_dir()?
-        .join("fastn.com/ast-cache/")
-        .join(id_to_cache_key(id));
-    serde_json::from_str(
-        &std::fs::read_to_string(cache_file)
-            .map_err(|e| {
-                tracing::debug!("file read error: {}", e.to_string());
-                e
-            })
-            .ok()?,
-    )
-    .map_err(|e| {
-        tracing::debug!("not valid json: {}", e.to_string());
-        e
-    })
-    .ok()
-}
-
-fn cache_it<T>(id: &str, d: T) -> ftd::interpreter::Result<T>
-where
-    T: serde::ser::Serialize,
-{
-    let cache_file = dirs::cache_dir()
-        .ok_or_else(|| ftd::interpreter::Error::OtherError("cache dir not found".to_string()))?
-        .join("fastn.com/ast-cache/")
-        .join(id_to_cache_key(id));
-    std::fs::create_dir_all(cache_file.parent().unwrap()).map_err(|e| {
-        ftd::interpreter::Error::OtherError(format!("failed to create cache dir: {}", e))
-    })?;
-    std::fs::write(cache_file, serde_json::to_string(&d)?).map_err(|e| {
-        ftd::interpreter::Error::OtherError(format!("failed to write cache file: {}", e))
-    })?;
-    Ok(d)
+    fastn_core::utils::cache_it(id, C { doc, hash }).map(|v| v.doc)
 }
 
 #[tracing::instrument(skip_all)]
@@ -96,9 +53,10 @@ pub async fn interpret_helper<'a>(
                 state: mut st,
                 caller_module,
             } => {
-                let (source, foreign_variable, foreign_function, ignore_line_numbers) =
+                let (source, path, foreign_variable, foreign_function, ignore_line_numbers) =
                     resolve_import_2022(lib, &mut st, module.as_str(), caller_module.as_str())
                         .await?;
+                lib.config.dependencies_during_render.push(path);
                 let doc = cached_parse(module.as_str(), source.as_str(), ignore_line_numbers)?;
                 s = st.continue_after_import(
                     module.as_str(),
@@ -205,13 +163,20 @@ pub async fn resolve_import_2022<'a>(
     _state: &mut ftd::interpreter::InterpreterState,
     module: &str,
     caller_module: &str,
-) -> ftd::interpreter::Result<(String, Vec<String>, Vec<String>, usize)> {
+) -> ftd::interpreter::Result<(String, String, Vec<String>, Vec<String>, usize)> {
     let current_package = lib.get_current_package(caller_module)?;
     let source = if module.eq("fastn/time") {
-        ("".to_string(), vec!["time".to_string()], vec![], 0)
+        (
+            "".to_string(),
+            "$fastn$/time.ftd".to_string(),
+            vec!["time".to_string()],
+            vec![],
+            0,
+        )
     } else if module.eq("fastn/processors") {
         (
             fastn_core::processor_ftd().to_string(),
+            "$fastn$/processors.ftd".to_string(),
             vec![],
             vec![
                 "figma-typo-token".to_string(),
@@ -249,12 +214,14 @@ pub async fn resolve_import_2022<'a>(
         if module.starts_with(current_package.name.as_str()) {
             (
                 current_package.get_font_ftd().unwrap_or_default(),
+                format!("{name}/-/assets.ftd", name = current_package.name),
                 foreign_variable,
                 vec![],
                 0,
             )
         } else {
             let mut font_ftd = "".to_string();
+            let mut path = "".to_string();
             for (alias, package) in current_package.aliases() {
                 if module.starts_with(alias) {
                     lib.push_package_under_process(module, package).await?;
@@ -266,16 +233,18 @@ pub async fn resolve_import_2022<'a>(
                         .unwrap()
                         .get_font_ftd()
                         .unwrap_or_default();
+                    path = format!("{name}/-/fonts.ftd", name = package.name);
                     break;
                 }
             }
-            (font_ftd, foreign_variable, vec![], 0)
+            (font_ftd, path, foreign_variable, vec![], 0)
         }
     } else {
-        let (content, ignore_line_numbers) = lib.get_with_result(module, caller_module).await?;
-
+        let (content, path, ignore_line_numbers) =
+            lib.get_with_result(module, caller_module).await?;
         (
             content,
+            path,
             vec![],
             vec![
                 "figma-typo-token".to_string(),

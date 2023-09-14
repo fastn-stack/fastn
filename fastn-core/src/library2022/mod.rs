@@ -30,7 +30,7 @@ impl Library2022 {
         &mut self,
         name: &str,
         current_processing_module: &str,
-    ) -> ftd::p1::Result<(String, usize)> {
+    ) -> ftd::p1::Result<(String, String, usize)> {
         match self.get(name, current_processing_module).await {
             Some(v) => Ok(v),
             None => ftd::p1::utils::parse_error(format!("library not found 1: {}", name), "", 0),
@@ -67,9 +67,13 @@ impl Library2022 {
         &mut self,
         name: &str,
         current_processing_module: &str,
-    ) -> Option<(String, usize)> {
+    ) -> Option<(String, String, usize)> {
         if name == "fastn" {
-            return Some((fastn_core::library::fastn_dot_ftd::get2022(self).await, 0));
+            return Some((
+                fastn_core::library::fastn_dot_ftd::get2022(self).await,
+                "$fastn$/fastn.ftd".to_string(),
+                0,
+            ));
         }
 
         return get_for_package(
@@ -83,33 +87,31 @@ impl Library2022 {
             name: &str,
             lib: &mut fastn_core::Library2022,
             current_processing_module: &str,
-        ) -> Option<(String, usize)> {
+        ) -> Option<(String, String, usize)> {
             let package = lib.get_current_package(current_processing_module).ok()?;
             if name.starts_with(package.name.as_str()) {
-                if let Some(r) = get_data_from_package(name, &package, lib).await {
-                    return Some(r);
+                if let Some((content, size)) = get_data_from_package(name, &package, lib).await {
+                    return Some((content, name.to_string(), size));
                 }
             }
             // Self package referencing
             if package.name.ends_with(name.trim_end_matches('/')) {
                 let package_index = format!("{}/", package.name.as_str());
-                if let Some(r) = get_data_from_package(package_index.as_str(), &package, lib).await
+                if let Some((content, size)) =
+                    get_data_from_package(package_index.as_str(), &package, lib).await
                 {
-                    return Some(r);
+                    return Some((content, format!("{package_index}index.ftd"), size));
                 }
             }
 
             for (alias, package) in package.aliases() {
                 lib.push_package_under_process(name, package).await.ok()?;
                 if name.starts_with(alias) {
-                    if let Some(r) = get_data_from_package(
-                        name.replacen(alias, &package.name, 1).as_str(),
-                        package,
-                        lib,
-                    )
-                    .await
+                    let name = name.replacen(alias, &package.name, 1);
+                    if let Some((content, size)) =
+                        get_data_from_package(name.as_str(), package, lib).await
                     {
-                        return Some(r);
+                        return Some((content, name.to_string(), size));
                     }
                 }
             }
@@ -121,21 +123,20 @@ impl Library2022 {
 
             let name = name.replacen(package.name.as_str(), translation_of.name.as_str(), 1);
             if name.starts_with(translation_of.name.as_str()) {
-                if let Some(r) = get_data_from_package(name.as_str(), &translation_of, lib).await {
-                    return Some(r);
+                if let Some((content, size)) =
+                    get_data_from_package(name.as_str(), &translation_of, lib).await
+                {
+                    return Some((content, name.to_string(), size));
                 }
             }
 
             for (alias, package) in translation_of.aliases() {
                 if name.starts_with(alias) {
-                    if let Some(r) = get_data_from_package(
-                        name.replacen(alias, &package.name, 1).as_str(),
-                        package,
-                        lib,
-                    )
-                    .await
+                    let name = name.replacen(alias, &package.name, 1);
+                    if let Some((content, size)) =
+                        get_data_from_package(name.as_str(), package, lib).await
                     {
-                        return Some(r);
+                        return Some((content, name.to_string(), size));
                     }
                 }
             }

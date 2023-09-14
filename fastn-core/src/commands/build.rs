@@ -8,7 +8,6 @@ pub async fn build(
     check_build: bool,
 ) -> fastn_core::Result<()> {
     tokio::fs::create_dir_all(config.build_dir()).await?;
-    let documents = get_documents_for_current_package(config).await?;
 
     // Default css and js
     default_build_files(
@@ -18,9 +17,17 @@ pub async fn build(
     )
     .await?;
 
-    if let Some(id) = only_id {
-        handle_only_id(id, config, base_url, ignore_failed, test, documents).await?;
-        return Ok(());
+    {
+        let documents = get_documents_for_current_package(config).await?;
+
+        match only_id {
+            Some(id) => {
+                return handle_only_id(id, config, base_url, ignore_failed, test, documents).await
+            }
+            None => {
+                incremental_build(config, &documents, base_url, ignore_failed, test).await?;
+            }
+        }
     }
 
     // All redirect html files under .build
@@ -49,15 +56,355 @@ pub async fn build(
         }
     }
 
-    for document in documents.values() {
-        handle_file(document, config, base_url, ignore_failed, test, false).await?;
-    }
-
     config.download_fonts().await?;
 
     if check_build {
         return fastn_core::post_build_check(config).await;
     }
+
+    Ok(())
+}
+
+mod build_dir {
+    pub(crate) fn get_build_content() -> std::io::Result<std::collections::BTreeMap<String, String>>
+    {
+        let mut b = std::collections::BTreeMap::new();
+
+        for f in find_all_files_recursively(".build") {
+            b.insert(
+                f.to_string_lossy().to_string().replacen(".build/", "", 1),
+                fastn_core::utils::generate_hash(std::fs::read(&f)?),
+            );
+        }
+
+        Ok(b)
+    }
+
+    fn find_all_files_recursively(
+        dir: impl AsRef<std::path::Path> + std::fmt::Debug,
+    ) -> Vec<std::path::PathBuf> {
+        let mut files = vec![];
+        for entry in std::fs::read_dir(dir).unwrap() {
+            let entry = entry.unwrap();
+            let path = entry.path();
+            if path.is_dir() {
+                files.extend(find_all_files_recursively(&path));
+            } else {
+                files.push(path)
+            }
+        }
+        files
+    }
+}
+
+mod cache {
+    use super::is_virtual_dep;
+
+    const FILE_NAME: &str = "fastn.cache";
+
+    pub(crate) fn get() -> std::io::Result<(bool, Cache)> {
+        let (cache_hit, mut v) = match fastn_core::utils::get_cached(FILE_NAME) {
+            Some(v) => {
+                tracing::debug!("cached hit");
+                (true, v)
+            }
+            None => {
+                tracing::debug!("cached miss");
+                (
+                    false,
+                    Cache {
+                        build_content: std::collections::BTreeMap::new(),
+                        ftd_cache: std::collections::BTreeMap::new(),
+                        documents: std::collections::BTreeMap::new(),
+                        file_checksum: std::collections::BTreeMap::new(),
+                    },
+                )
+            }
+        };
+        v.build_content = super::build_dir::get_build_content()?;
+        Ok((cache_hit, v))
+    }
+
+    #[derive(serde::Serialize, serde::Deserialize, Debug)]
+    pub(crate) struct Cache {
+        // fastn_version: String, // TODO
+        #[serde(skip)]
+        pub(crate) build_content: std::collections::BTreeMap<String, String>,
+        #[serde(skip)]
+        pub(crate) ftd_cache: std::collections::BTreeMap<String, Option<String>>,
+        pub(crate) documents: std::collections::BTreeMap<String, Document>,
+        pub(crate) file_checksum: std::collections::BTreeMap<String, String>,
+    }
+
+    impl Cache {
+        pub(crate) fn cache_it(&self) -> fastn_core::Result<()> {
+            fastn_core::utils::cache_it(FILE_NAME, self)?;
+            Ok(())
+        }
+        pub(crate) fn get_file_hash(&mut self, path: &str) -> fastn_core::Result<String> {
+            if is_virtual_dep(path) {
+                // these are virtual file, they don't exist on disk, and hash only changes when
+                // fastn source changes
+                return Ok("hello".to_string());
+            }
+            match self.ftd_cache.get(path) {
+                Some(Some(v)) => Ok(v.to_owned()),
+                Some(None) => Err(fastn_core::Error::GenericError(path.to_string())),
+                None => {
+                    let hash = match fastn_core::utils::get_ftd_hash(path) {
+                        Ok(v) => v,
+                        Err(e) => {
+                            self.ftd_cache.insert(path.to_string(), None);
+                            return Err(e);
+                        }
+                    };
+                    self.ftd_cache.insert(path.to_string(), Some(hash.clone()));
+                    Ok(hash)
+                }
+            }
+        }
+    }
+
+    #[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
+    pub(crate) struct File {
+        pub(crate) path: String,
+        pub(crate) checksum: String,
+    }
+
+    #[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
+    pub(crate) struct Document {
+        pub(crate) html_checksum: String,
+        pub(crate) dependencies: Vec<String>,
+    }
+}
+
+fn get_dependency_name_without_package_name(package_name: &str, dependency_name: &str) -> String {
+    if let Some(remaining) = dependency_name.strip_prefix(&format!("{}/", package_name)) {
+        remaining.to_string()
+    } else {
+        dependency_name.to_string()
+    }
+    .trim_end_matches('/')
+    .to_string()
+}
+
+fn is_virtual_dep(path: &str) -> bool {
+    let path = std::path::Path::new(path);
+
+    path.starts_with("$fastn$/")
+        || path.ends_with("/-/fonts.ftd")
+        || path.ends_with("/-/assets.ftd")
+}
+
+async fn handle_dependency_file(
+    config: &mut fastn_core::Config,
+    cache: &mut cache::Cache,
+    documents: &std::collections::BTreeMap<String, fastn_core::File>,
+    base_url: &str,
+    ignore_failed: bool,
+    test: bool,
+    name_without_package_name: String,
+) -> fastn_core::Result<()> {
+    for document in documents.values() {
+        if remove_extension(document.get_id()).eq(name_without_package_name.as_str())
+            || remove_extension(&document.get_id_with_package())
+                .eq(name_without_package_name.as_str())
+        {
+            handle_file(
+                document,
+                config,
+                base_url,
+                ignore_failed,
+                test,
+                true,
+                Some(cache),
+            )
+            .await?;
+        }
+    }
+
+    Ok(())
+}
+
+// removes deleted documents from cache and build folder
+fn remove_deleted_documents(
+    config: &mut fastn_core::Config,
+    c: &mut cache::Cache,
+    documents: &std::collections::BTreeMap<String, fastn_core::File>,
+) -> fastn_core::Result<()> {
+    use itertools::Itertools;
+
+    let removed_documents = c
+        .documents
+        .keys()
+        .filter(|cached_document_id| {
+            for document in documents.values() {
+                if remove_extension(document.get_id()).eq(cached_document_id.as_str())
+                    || remove_extension(&document.get_id_with_package())
+                        .eq(cached_document_id.as_str())
+                {
+                    return false;
+                }
+            }
+
+            true
+        })
+        .map(|id| id.to_string())
+        .collect_vec();
+
+    for removed_doc_id in &removed_documents {
+        let folder_path = config.build_dir().join(removed_doc_id);
+        let folder_parent = folder_path.parent();
+        let file_path = &folder_path.with_extension("ftd");
+
+        if file_path.exists() {
+            std::fs::remove_file(file_path)?;
+        }
+
+        std::fs::remove_dir_all(&folder_path)?;
+
+        // If the parent folder of the file's output folder is also empty, delete it as well.
+        if let Some(folder_parent) = folder_parent {
+            if folder_parent.read_dir()?.count().eq(&0) {
+                std::fs::remove_dir_all(folder_parent)?;
+            }
+        }
+
+        c.documents.remove(removed_doc_id);
+    }
+
+    Ok(())
+}
+
+#[tracing::instrument(skip(config, documents))]
+async fn incremental_build(
+    config: &mut fastn_core::Config,
+    documents: &std::collections::BTreeMap<String, fastn_core::File>,
+    base_url: &str,
+    ignore_failed: bool,
+    test: bool,
+) -> fastn_core::Result<()> {
+    // https://fastn.com/rfc/incremental-build/
+    use itertools::Itertools;
+
+    let (cache_hit, mut c) = cache::get()?;
+
+    if cache_hit {
+        let mut unresolved_dependencies: Vec<String> = documents
+            .iter()
+            .filter(|(_, f)| f.is_ftd())
+            .map(|(_, f)| remove_extension(f.get_id()))
+            .collect_vec();
+        let mut resolved_dependencies: Vec<String> = vec![];
+        let mut resolving_dependencies: Vec<String> = vec![];
+
+        while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
+            // println!("Current UR: {}", unresolved_dependency.as_str());
+            if let Some(doc) = c.documents.get(unresolved_dependency.as_str()) {
+                // println!(
+                //     "[INCREMENTAL BUILD][CACHE FOUND] Processing: {}",
+                //     &unresolved_dependency
+                // );
+
+                let mut own_resolved_dependencies: Vec<String> = vec![];
+
+                let dependencies: Vec<String> = doc
+                    .dependencies
+                    .iter()
+                    .map(|dep| get_dependency_name_without_package_name(&config.package.name, dep))
+                    .collect_vec();
+
+                for dep in &dependencies {
+                    if resolved_dependencies.contains(dep) || dep.eq(&unresolved_dependency) {
+                        own_resolved_dependencies.push(dep.to_string());
+                        continue;
+                    }
+                    unresolved_dependencies.push(dep.to_string());
+                }
+
+                // println!(
+                //     "[INCREMENTAL] [R]: {} [RV]: {} [UR]: {} [ORD]: {}",
+                //     &resolved_dependencies.len(),
+                //     &resolving_dependencies.len(),
+                //     &unresolved_dependencies.len(),
+                //     own_resolved_dependencies.len(),
+                // );
+
+                if own_resolved_dependencies.eq(&dependencies) {
+                    handle_dependency_file(
+                        config,
+                        &mut c,
+                        documents,
+                        base_url,
+                        ignore_failed,
+                        test,
+                        unresolved_dependency.to_string(),
+                    )
+                    .await?;
+
+                    resolved_dependencies.push(unresolved_dependency.to_string());
+                    if unresolved_dependencies.is_empty() {
+                        if let Some(resolving_dependency) = resolving_dependencies.pop() {
+                            if resolving_dependency.eq(&unresolved_dependency.as_str()) {
+                                // println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
+                                continue;
+                            }
+                            unresolved_dependencies.push(resolving_dependency);
+                        }
+                    }
+                } else {
+                    // println!("Adding to RD: {}", unresolved_dependency.as_str());
+                    resolving_dependencies.push(unresolved_dependency.to_string());
+                }
+            } else {
+                if is_virtual_dep(&unresolved_dependency) {
+                    resolved_dependencies.push(unresolved_dependency.clone());
+                } else {
+                    // println!("Not found in cache UR: {}", unresolved_dependency.as_str());
+
+                    handle_dependency_file(
+                        config,
+                        &mut c,
+                        documents,
+                        base_url,
+                        ignore_failed,
+                        test,
+                        unresolved_dependency.to_string(),
+                    )
+                    .await?;
+
+                    resolved_dependencies.push(unresolved_dependency.clone());
+                }
+                if unresolved_dependencies.is_empty() {
+                    if let Some(resolving_dependency) = resolving_dependencies.pop() {
+                        if resolving_dependency.eq(&unresolved_dependency.as_str()) {
+                            // println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
+                            continue;
+                        }
+                        unresolved_dependencies.push(resolving_dependency);
+                    }
+                }
+            }
+        }
+
+        remove_deleted_documents(config, &mut c, documents)?;
+    } else {
+        for document in documents.values() {
+            handle_file(
+                document,
+                config,
+                base_url,
+                ignore_failed,
+                test,
+                true,
+                Some(&mut c),
+            )
+            .await?;
+        }
+    }
+
+    c.cache_it()?;
+
     Ok(())
 }
 
@@ -72,7 +419,7 @@ async fn handle_only_id(
 ) -> fastn_core::Result<()> {
     for doc in documents.values() {
         if doc.get_id().eq(id) || doc.get_id_with_package().eq(id) {
-            return handle_file(doc, config, base_url, ignore_failed, test, true).await;
+            return handle_file(doc, config, base_url, ignore_failed, test, false, None).await;
         }
     }
 
@@ -89,14 +436,22 @@ async fn handle_file(
     base_url: &str,
     ignore_failed: bool,
     test: bool,
-    no_static: bool,
+    build_static_files: bool,
+    cache: Option<&mut cache::Cache>,
 ) -> fastn_core::Result<()> {
     let start = std::time::Instant::now();
     print!("Processing {} ... ", document.get_id_with_package());
 
-    let process_status =
-        handle_file_(document, config, base_url, ignore_failed, test, no_static).await;
-
+    let process_status = handle_file_(
+        document,
+        config,
+        base_url,
+        ignore_failed,
+        test,
+        build_static_files,
+        cache,
+    )
+    .await;
     if process_status.is_ok() {
         fastn_core::utils::print_end(
             format!(
@@ -123,48 +478,159 @@ async fn handle_file(
     Ok(())
 }
 
-#[tracing::instrument(skip(document, config))]
+fn is_cached<'a>(
+    cache: Option<&'a mut cache::Cache>,
+    doc: &fastn_core::Document,
+    file_path: &str,
+) -> (Option<&'a mut cache::Cache>, bool) {
+    let cache: &mut cache::Cache = match cache {
+        Some(c) => c,
+        None => {
+            // println!("cache miss: no have cache");
+            return (cache, false);
+        }
+    };
+
+    let id = remove_extension(doc.id.as_str());
+
+    let cached_doc: cache::Document = match cache.documents.get(id.as_str()).cloned() {
+        Some(cached_doc) => cached_doc,
+        None => {
+            // println!("cache miss: no cache entry for {}", id.as_str());
+            return (Some(cache), false);
+        }
+    };
+
+    // if it exists, check if the checksums match
+    // if they do, return
+    // dbg!(&cached_doc);
+    let doc_hash = match cache.build_content.get(file_path) {
+        Some(doc_hash) => doc_hash,
+        None => {
+            // println!("cache miss: document not present in .build: {}", file_path);
+            return (Some(cache), false);
+        }
+    };
+
+    // dbg!(doc_hash);
+
+    if doc_hash != &cached_doc.html_checksum {
+        // println!("cache miss: html file checksums don't match");
+        return (Some(cache), false);
+    }
+
+    let file_checksum = match cache.file_checksum.get(id.as_str()).cloned() {
+        Some(file_checksum) => file_checksum,
+        None => {
+            // println!("cache miss: no cache entry for {}", id.as_str());
+            return (Some(cache), false);
+        }
+    };
+
+    if file_checksum != fastn_core::utils::generate_hash(doc.content.as_str()) {
+        // println!("cache miss: ftd file checksums don't match");
+        return (Some(cache), false);
+    }
+
+    for dep in &cached_doc.dependencies {
+        let file_checksum = match cache.file_checksum.get(dep) {
+            None => {
+                // println!("cache miss: file {} not present in cache", dep);
+                return (Some(cache), false);
+            }
+            Some(file_checksum) => file_checksum.clone(),
+        };
+
+        let current_hash = match cache.get_file_hash(dep.as_str()) {
+            Ok(hash) => hash,
+            Err(_) => {
+                // println!("cache miss: dependency {} not present current folder", dep);
+                return (Some(cache), false);
+            }
+        };
+
+        if file_checksum != current_hash {
+            // println!("cache miss: dependency {} checksums don't match", dep);
+            return (Some(cache), false);
+        }
+    }
+
+    // println!("cache hit");
+    (Some(cache), true)
+}
+
+fn remove_extension(id: &str) -> String {
+    if id.ends_with("/index.ftd") {
+        fastn_core::utils::replace_last_n(id, 1, "/index.ftd", "")
+    } else {
+        fastn_core::utils::replace_last_n(id, 1, ".ftd", "")
+    }
+}
+
+#[tracing::instrument(skip(document, config, cache))]
 async fn handle_file_(
     document: &fastn_core::File,
     config: &mut fastn_core::Config,
     base_url: &str,
     ignore_failed: bool,
     test: bool,
-    no_static: bool,
+    build_static_files: bool,
+    cache: Option<&mut cache::Cache>,
 ) -> fastn_core::Result<()> {
     config.current_document = Some(document.get_id().to_string());
+    config.dependencies_during_render = vec![];
 
     match document {
         fastn_core::File::Ftd(doc) => {
-            if !config
-                .ftd_edition
-                .eq(&fastn_core::config::FTDEdition::FTD2021)
-            {
-                // Ignore redirect paths
-                if let Some(r) = config.package.redirects.as_ref() {
-                    if fastn_core::package::redirects::find_redirect(r, doc.id.as_str()).is_some() {
-                        println!("Ignored by redirect {}", doc.id.as_str());
-                        return Ok(());
-                    }
-                }
+            let file_path = if doc.id.eq("404.ftd") {
+                "404.html".to_string()
+            } else if doc.id.ends_with("index.ftd") {
+                fastn_core::utils::replace_last_n(doc.id.as_str(), 1, "index.ftd", "index.html")
+            } else {
+                fastn_core::utils::replace_last_n(doc.id.as_str(), 1, ".ftd", "/index.html")
+            };
 
-                fastn_core::utils::copy(
-                    config.root.join(doc.id.as_str()),
-                    config.root.join(".build").join(doc.id.as_str()),
-                )
-                .await
-                .ok();
-
-                if doc.id.eq("FASTN.ftd") {
-                    return Ok(());
-                }
+            let (cache, is_cached) = is_cached(cache, doc, file_path.as_str());
+            if is_cached {
+                return Ok(());
             }
+
+            fastn_core::utils::copy(
+                config.root.join(doc.id.as_str()),
+                config.root.join(".build").join(doc.id.as_str()),
+            )
+            .await
+            .ok();
+
+            if doc.id.eq("FASTN.ftd") {
+                return Ok(());
+            }
+
             let resp = fastn_core::package::package_doc::process_ftd(
-                config, doc, base_url, no_static, test,
+                config,
+                doc,
+                base_url,
+                build_static_files,
+                test,
+                file_path.as_str(),
             )
             .await;
             match (resp, ignore_failed) {
-                (Ok(_), _) => (),
+                (Ok(r), _) => {
+                    if let Some(cache) = cache {
+                        cache.documents.insert(
+                            remove_extension(doc.id.as_str()),
+                            cache::Document {
+                                html_checksum: r.checksum(),
+                                dependencies: config.dependencies_during_render.clone(),
+                            },
+                        );
+                        cache.file_checksum.insert(
+                            remove_extension(doc.id.as_str()),
+                            fastn_core::utils::generate_hash(doc.content.as_str()),
+                        );
+                    }
+                }
                 (_, true) => {
                     print!("Failed ");
                     return Ok(());
@@ -175,74 +641,26 @@ async fn handle_file_(
             }
         }
         fastn_core::File::Static(sa) => process_static(sa, &config.root, &config.package).await?,
-        fastn_core::File::Markdown(doc) => {
-            if !config
-                .ftd_edition
-                .eq(&fastn_core::config::FTDEdition::FTD2021)
-            {
-                // TODO: bring this feature back
-                print!("Skipped ");
-                return Ok(());
-            }
-            let resp = process_markdown(config, doc, base_url, no_static, test).await;
-            match (resp, ignore_failed) {
-                (Ok(r), _) => r,
-                (_, true) => {
-                    print!("Failed ");
-                    return Ok(());
-                }
-                (e, _) => {
-                    return e;
-                }
-            }
+        fastn_core::File::Markdown(_doc) => {
+            // TODO: bring this feature back
+            print!("Skipped ");
+            return Ok(());
         }
         fastn_core::File::Image(main_doc) => {
             process_static(main_doc, &config.root, &config.package).await?;
-            if config
-                .ftd_edition
-                .eq(&fastn_core::config::FTDEdition::FTD2021)
-            {
-                let resp = process_image(config, main_doc, base_url, no_static, test).await;
-                match (resp, ignore_failed) {
-                    (Ok(r), _) => r,
-                    (_, true) => {
-                        print!("Failed ");
-                        return Ok(());
-                    }
-                    (e, _) => {
-                        return e;
-                    }
-                }
-            }
         }
         fastn_core::File::Code(doc) => {
             process_static(
                 &fastn_core::Static {
                     package_name: config.package.name.to_string(),
                     id: doc.id.to_string(),
-                    content: vec![],
+                    content: doc.content.clone().into_bytes(),
                     base_path: camino::Utf8PathBuf::from(doc.parent_path.as_str()),
                 },
                 &config.root,
                 &config.package,
             )
             .await?;
-            if config
-                .ftd_edition
-                .eq(&fastn_core::config::FTDEdition::FTD2021)
-            {
-                let resp = process_code(config, doc, base_url, no_static, test).await;
-                match (resp, ignore_failed) {
-                    (Ok(r), _) => r,
-                    (_, true) => {
-                        print!("Failed ");
-                        return Ok(());
-                    }
-                    (e, _) => {
-                        return e;
-                    }
-                }
-            }
         }
     }
 
@@ -383,165 +801,20 @@ async fn process_static(
             .join("-")
             .join(package.name.as_str());
 
-        std::fs::create_dir_all(&build_path)?;
-        if let Some((dir, _)) = sa.id.rsplit_once('/') {
-            std::fs::create_dir_all(build_path.join(dir))?;
-        }
-        std::fs::copy(
-            sa.base_path.join(sa.id.as_str()),
-            build_path.join(sa.id.as_str()),
-        )?;
-
+        let full_file_path = build_path.join(sa.id.as_str());
+        let (file_root, _file_name) = if let Some((file_root, file_name)) = full_file_path
+            .as_str()
+            .rsplit_once(std::path::MAIN_SEPARATOR)
         {
-            // TODO: need to remove this once download_base_url is removed
-            std::fs::create_dir_all(base_path.join(".build"))?;
-            if let Some((dir, _)) = sa.id.rsplit_once('/') {
-                std::fs::create_dir_all(base_path.join(".build").join(dir))?;
-            }
+            (file_root.to_string(), file_name.to_string())
+        } else {
+            ("".to_string(), full_file_path.to_string())
+        };
 
-            std::fs::copy(
-                sa.base_path.join(sa.id.as_str()),
-                base_path.join(".build").join(sa.id.as_str()),
-            )?;
+        if !base_path.join(&file_root).exists() {
+            std::fs::create_dir_all(base_path.join(&file_root))?;
         }
+        std::fs::write(full_file_path, &sa.content)?;
         Ok(())
-    }
-}
-
-async fn process_image(
-    config: &mut fastn_core::Config,
-    main: &fastn_core::Static,
-    base_url: &str,
-    no_static: bool,
-    test: bool,
-) -> fastn_core::Result<()> {
-    let main = convert_to_ftd(config, main)?;
-
-    fastn_core::package::package_doc::process_ftd(config, &main, base_url, no_static, test).await?;
-    return Ok(());
-
-    fn convert_to_ftd(
-        config: &fastn_core::Config,
-        doc: &fastn_core::Static,
-    ) -> fastn_core::Result<fastn_core::Document> {
-        Ok(fastn_core::Document {
-            package_name: config.package.name.to_string(),
-            id: convert_to_ftd_extension(doc.id.as_str())?,
-            content: fastn_core::package_info_image(config, doc, &config.package)?,
-            parent_path: doc.base_path.to_string(),
-        })
-    }
-
-    fn convert_to_ftd_extension(name: &str) -> fastn_core::Result<String> {
-        Ok(format!("{}.ftd", name))
-    }
-}
-
-async fn process_code(
-    config: &mut fastn_core::Config,
-    main: &fastn_core::Document,
-    base_url: &str,
-    no_static: bool,
-    test: bool,
-) -> fastn_core::Result<()> {
-    let main = if let Some(main) = convert_to_ftd(config, main)? {
-        main
-    } else {
-        return Ok(());
-    };
-
-    fastn_core::package::package_doc::process_ftd(config, &main, base_url, no_static, test).await?;
-    return Ok(());
-
-    fn convert_to_ftd(
-        config: &fastn_core::Config,
-        doc: &fastn_core::Document,
-    ) -> fastn_core::Result<Option<fastn_core::Document>> {
-        let id = convert_to_ftd_extension(doc.id.as_str())?;
-        let ext = fastn_core::utils::get_extension(doc.id.as_str())?;
-        let new_content =
-            fastn_core::package_info_code(config, id.as_str(), doc.content.as_str(), ext.as_str())?;
-
-        let new_doc = {
-            let mut new_doc = doc.to_owned();
-            new_doc.content = new_content;
-            new_doc.id = id;
-            new_doc
-        };
-
-        Ok(Some(new_doc))
-    }
-
-    fn convert_to_ftd_extension(name: &str) -> fastn_core::Result<String> {
-        Ok(format!("{}.ftd", name))
-    }
-}
-
-async fn process_markdown(
-    config: &mut fastn_core::Config,
-    main: &fastn_core::Document,
-    base_url: &str,
-    no_static: bool,
-    test: bool,
-) -> fastn_core::Result<()> {
-    let main = if let Some(main) = convert_md_to_ftd(config, main)? {
-        main
-    } else {
-        return Ok(());
-    };
-    fastn_core::package::package_doc::process_ftd(config, &main, base_url, no_static, test).await?;
-    return Ok(());
-
-    fn convert_md_to_ftd(
-        config: &fastn_core::Config,
-        doc: &fastn_core::Document,
-    ) -> fastn_core::Result<Option<fastn_core::Document>> {
-        let doc_id = if doc.id == "README.md"
-            && !(camino::Utf8Path::new(format!(".{}index.ftd", std::path::MAIN_SEPARATOR).as_str())
-                .exists()
-                || camino::Utf8Path::new(
-                    format!(".{}index.md", std::path::MAIN_SEPARATOR).as_str(),
-                )
-                .exists())
-        {
-            "index.md".to_string()
-        } else if !camino::Utf8Path::new(
-            format!(
-                ".{}{}",
-                std::path::MAIN_SEPARATOR,
-                convert_md_to_ftd_extension(doc.id.as_str())?
-            )
-            .as_str(),
-        )
-        .exists()
-        {
-            doc.id.to_string()
-        } else {
-            return Ok(None);
-        };
-        let id = convert_md_to_ftd_extension(doc_id.as_str())?;
-        let new_content =
-            fastn_core::package_info_markdown(config, id.as_str(), doc.content.as_str())?;
-
-        let new_doc = {
-            let mut new_doc = doc.to_owned();
-            new_doc.content = new_content;
-            new_doc.id = id;
-            new_doc
-        };
-
-        Ok(Some(new_doc))
-    }
-
-    fn convert_md_to_ftd_extension(name: &str) -> fastn_core::Result<String> {
-        let file_name = if let Some(p1) = name.strip_suffix(".md") {
-            p1
-        } else {
-            return Err(fastn_core::Error::UsageError {
-                message: format!("expected md file found: `{}`", name),
-            });
-        };
-
-        Ok(format!("{}.ftd", file_name))
     }
 }

@@ -345,6 +345,10 @@ impl FTDResult {
             }
         }
     }
+
+    pub fn checksum(&self) -> String {
+        fastn_core::utils::generate_hash(self.html())
+    }
 }
 
 impl From<FTDResult> for fastn_core::http::Response {
@@ -380,7 +384,6 @@ pub(crate) async fn read_ftd(
     }
 }
 
-#[allow(clippy::await_holding_refcell_ref)]
 #[tracing::instrument(name = "read_ftd_2022", skip_all)]
 pub(crate) async fn read_ftd_2022(
     config: &mut fastn_core::Config,
@@ -390,7 +393,7 @@ pub(crate) async fn read_ftd_2022(
     test: bool,
 ) -> fastn_core::Result<FTDResult> {
     let lib_config = config.clone();
-    let mut all_packages = config.all_packages.borrow_mut();
+    let all_packages = config.all_packages.borrow();
     let current_package = all_packages
         .get(main.package_name.as_str())
         .unwrap_or(&config.package);
@@ -409,6 +412,7 @@ pub(crate) async fn read_ftd_2022(
         current_package.get_prefixed_body(main.content.as_str(), main.id.as_str(), true);
     // Fix aliased imports to full path (if any)
     doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
+    drop(all_packages);
 
     let line_number = doc_content.split('\n').count() - main.content.split('\n').count();
     let main_ftd_doc = match fastn_core::doc::interpret_helper(
@@ -429,15 +433,13 @@ pub(crate) async fn read_ftd_2022(
             });
         }
     };
+    config.dependencies_during_render = lib.config.dependencies_during_render;
     if let Some((url, code)) = main_ftd_doc.get_redirect()? {
         return Ok(FTDResult::Redirect { url, code });
     }
     let executor = ftd::executor::ExecuteDoc::from_interpreter(main_ftd_doc)?;
     let node = ftd::node::NodeData::from_rt(executor);
     let html_ui = ftd::html::HtmlUI::from_node_data(node, "main", test)?;
-
-    all_packages.extend(lib.config.all_packages.into_inner());
-    drop(all_packages);
 
     config
         .downloaded_assets
@@ -504,7 +506,7 @@ pub(crate) async fn read_ftd_2023(
             });
         }
     };
-
+    config.dependencies_during_render = lib.config.dependencies_during_render;
     if let Some((url, code)) = main_ftd_doc.get_redirect()? {
         return Ok(FTDResult::Redirect { url, code });
     }
@@ -551,49 +553,12 @@ pub(crate) async fn process_ftd(
     config: &mut fastn_core::Config,
     main: &fastn_core::Document,
     base_url: &str,
-    no_static: bool,
+    build_static_files: bool,
     test: bool,
+    file_path: &str,
 ) -> fastn_core::Result<FTDResult> {
-    if main.id.eq("FASTN.ftd") {
-        tokio::fs::copy(
-            config.root.join(main.id.as_str()),
-            config.root.join(".build").join(main.id.as_str()),
-        )
-        .await?;
-    }
-
-    let main = {
-        let mut main = main.to_owned();
-        if main.id.eq("FASTN.ftd") {
-            main.id = "-.ftd".to_string();
-            let path = config.root.join("fastn").join("info.ftd");
-            main.content = if path.is_file() {
-                std::fs::read_to_string(path)?
-            } else {
-                format!(
-                    "-- import: {}/package-info as pi\n\n-- pi.package-info-page:",
-                    config.package_info_package()
-                )
-            }
-        }
-        main
-    };
-
-    let file_rel_path = if main.id.eq("404.ftd") {
-        "404.html".to_string()
-    } else if main.id.contains("index.ftd") {
-        main.id.replace("index.ftd", "index.html")
-    } else {
-        main.id.replace(".ftd", "/index.html")
-    };
-
-    let response = read_ftd(config, &main, base_url, !no_static, test).await?;
-    fastn_core::utils::write(
-        &config.build_dir(),
-        file_rel_path.as_str(),
-        &response.html(),
-    )
-    .await?;
+    let response = read_ftd(config, main, base_url, build_static_files, test).await?;
+    fastn_core::utils::overwrite(&config.build_dir(), file_path, &response.html()).await?;
 
     Ok(response)
 }

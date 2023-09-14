@@ -29,6 +29,76 @@ macro_rules! warning {
     }};
 }
 
+fn id_to_cache_key(id: &str) -> String {
+    // TODO: use MAIN_SEPARATOR here
+    id.replace(['/', '\\'], "_")
+}
+
+pub fn get_ftd_hash(path: &str) -> fastn_core::Result<String> {
+    let path = fastn_core::utils::replace_last_n(path, 1, "/", "");
+    Ok(fastn_core::utils::generate_hash(
+        std::fs::read(format!("{path}.ftd"))
+            .or_else(|_| std::fs::read(format!("{path}/index.ftd")))?,
+    ))
+}
+
+pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
+    let cache_dir = dirs::cache_dir()?;
+    let base_path = cache_dir.join("fastn.com");
+
+    if !base_path.exists() {
+        if let Err(err) = std::fs::create_dir_all(&base_path) {
+            eprintln!("Failed to create cache directory: {}", err);
+            return None;
+        }
+    }
+
+    Some(
+        base_path
+            .join(id_to_cache_key(
+                &std::env::current_dir()
+                    .expect("cant read current dir")
+                    .to_string_lossy(),
+            ))
+            .join(id_to_cache_key(id)),
+    )
+}
+
+pub fn get_cached<T>(id: &str) -> Option<T>
+where
+    T: serde::de::DeserializeOwned,
+{
+    let cache_file = get_cache_file(id)?;
+    serde_json::from_str(
+        &std::fs::read_to_string(cache_file)
+            .map_err(|e| {
+                tracing::debug!("file read error: {}", e.to_string());
+                e
+            })
+            .ok()?,
+    )
+    .map_err(|e| {
+        tracing::debug!("not valid json: {}", e.to_string());
+        e
+    })
+    .ok()
+}
+
+pub fn cache_it<T>(id: &str, d: T) -> ftd::interpreter::Result<T>
+where
+    T: serde::ser::Serialize,
+{
+    let cache_file = get_cache_file(id)
+        .ok_or_else(|| ftd::interpreter::Error::OtherError("cache dir not found".to_string()))?;
+    std::fs::create_dir_all(cache_file.parent().unwrap()).map_err(|e| {
+        ftd::interpreter::Error::OtherError(format!("failed to create cache dir: {}", e))
+    })?;
+    std::fs::write(cache_file, serde_json::to_string(&d)?).map_err(|e| {
+        ftd::interpreter::Error::OtherError(format!("failed to write cache file: {}", e))
+    })?;
+    Ok(d)
+}
+
 pub fn redirect_page_html(url: &str) -> String {
     include_str!("../redirect.html").replace("__REDIRECT_URL__", url)
 }
@@ -45,6 +115,41 @@ pub fn print_end(msg: &str, start: std::time::Instant) {
             std::time::Instant::now(),
             msg.green(),
             start.elapsed()
+        );
+    }
+}
+
+/// replace_last_n("a.b.c.d.e.f", 2, ".", "/") => "a.b.c.d/e/f"
+pub fn replace_last_n(s: &str, n: usize, pattern: &str, replacement: &str) -> String {
+    use itertools::Itertools;
+
+    s.rsplitn(n + 1, pattern)
+        .collect_vec()
+        .into_iter()
+        .rev()
+        .join(replacement)
+}
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn replace_last_n() {
+        assert_eq!(
+            super::replace_last_n("a.b.c.d.e.f", 2, ".", "/"),
+            "a.b.c.d/e/f"
+        );
+        assert_eq!(
+            super::replace_last_n("a.b.c.d.e.", 2, ".", "/"),
+            "a.b.c.d/e/"
+        );
+        assert_eq!(super::replace_last_n("d-e.f", 2, ".", "/"), "d-e/f");
+        assert_eq!(
+            super::replace_last_n("a.ftd/b.ftd", 1, ".ftd", "/index.html"),
+            "a.ftd/b/index.html"
+        );
+        assert_eq!(
+            super::replace_last_n("index.ftd/b/index.ftd", 1, "index.ftd", "index.html"),
+            "index.ftd/b/index.html"
         );
     }
 }
@@ -253,15 +358,6 @@ pub(crate) async fn get_number_of_documents(
         no_of_docs = format!("{} / {}", no_of_docs, no_of_original_docs);
     }
     Ok(no_of_docs)
-}
-
-pub(crate) fn get_extension(file_name: &str) -> fastn_core::Result<String> {
-    if let Some((_, ext)) = file_name.rsplit_once('.') {
-        return Ok(ext.to_string());
-    }
-    Err(fastn_core::Error::UsageError {
-        message: format!("extension not found, `{}`", file_name),
-    })
 }
 
 pub(crate) async fn get_current_document_last_modified_on(
@@ -718,6 +814,14 @@ pub(crate) async fn write(
     update1(root, file_path, data).await
 }
 
+pub(crate) async fn overwrite(
+    root: &camino::Utf8PathBuf,
+    file_path: &str,
+    data: &[u8],
+) -> fastn_core::Result<()> {
+    update1(root, file_path, data).await
+}
+
 // TODO: remove this function use update instead
 pub(crate) async fn update1(
     root: &camino::Utf8PathBuf,
@@ -866,7 +970,7 @@ pub fn query(uri: &str) -> fastn_core::Result<Vec<(String, String)>> {
             .collect_vec(),
     )
 }
-pub fn generate_hash(content: &str) -> String {
+pub fn generate_hash(content: impl AsRef<[u8]>) -> String {
     use sha2::digest::FixedOutput;
     use sha2::Digest;
     let mut hasher = sha2::Sha256::new();
