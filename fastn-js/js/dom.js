@@ -807,6 +807,10 @@ class Node2 {
         }
     }
     updateParentPosition(value) {
+        if (ssr) {
+            let parent = this.#parent;
+            if (parent.style) parent.style["position"] = value;
+        }
         if (!ssr) {
             let current_node = this.#node;
             if (current_node) {
