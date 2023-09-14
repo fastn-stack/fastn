@@ -136,9 +136,6 @@ document: /get-started/browse-pick.ftd
 - Learning Resources: /learn/
   document: /workshop/learn.ftd
   skip: true
-- Markdown in doc-site: /markdown/
-  document: /expander/ds/markdown.ftd
-  skip: true
 
 
 ## Sections: /sections/
