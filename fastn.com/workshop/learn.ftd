@@ -1,0 +1,34 @@
+-- ds.page-with-no-right-sidebar: Learn Resources
+
+Here are some important links which helps you to create your `fastn` websites
+and dynamic apps. 
+
+-- ds.h1: Create website
+
+- Nandini’s [blog post](/writer/)
+- [acme case study](/acme/) 
+- [fastn template](https://github.com/fastn-stack/fastn-template) 
+- Learn [markdown](/markdown/) 
+- [workshop](https://github.com/fastn-stack/workshop)
+
+-- ds.h1: Learn how to customise design of your `fastn` site
+
+- how to add [color scheme](/color-scheme/) 
+- how to add [typography](/typography/)
+- [figma tokens with fastn](/figma/)
+- how to [create font](/create-font-package/)
+
+-- ds.h1: Learn how to build reusable components with `fastn` 
+
+- [expander](/expander/)
+- workshop 🚧
+
+-- ds.h1: Learn how to build full stack application
+
+- [full stack](/backend/) 
+- [todo app](https://github.com/fastn-community/todo-app)
+- [basics of http processor and data modelling](/country-details/basics/)
+- [building dynamic country list page](/country-list/)
+- workshop 🚧
+
+-- end: ds.page-with-no-right-sidebar
