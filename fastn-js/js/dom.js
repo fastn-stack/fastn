@@ -697,6 +697,7 @@ class Node2 {
         }
 
         if (fastn_utils.isWrapperNode(this.#tagName)) {
+            console.log("Wrapper node currently");
             this.#parent = parentOrSibiling;
             return;
         }
@@ -807,6 +808,10 @@ class Node2 {
         }
     }
     updateParentPosition(value) {
+        if (ssr) {
+            let parent = this.#parent;
+            if (parent.style) parent.style["position"] = value;
+        }
         if (!ssr) {
             let current_node = this.#node;
             if (current_node) {
@@ -1435,6 +1440,7 @@ class Node2 {
                 break;
               case 2:
                 this.attachCss("position", staticValue[1]);
+                console.log("Anchor -> Parent");
                 this.updateParentPosition("relative");
                 break;
               case 3:
