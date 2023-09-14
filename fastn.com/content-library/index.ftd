@@ -1332,7 +1332,7 @@ role: $inherited.types.button-medium
 -- ftd.image:
 if: { cta-primary-small.icon != NULL }
 src: $cta-primary-small.icon
-width.fixed.px: 24
+width.fixed.px: 18
 
 -- end: ftd.row
 
@@ -2422,7 +2422,7 @@ boolean $mouse-in: false
 -- ftd.row: 
 link: $cta-primary-large.link
 width: fill-container
-role: $inherited.types.button-small
+role: $inherited.types.button-medium
 color: $inherited.colors.cta-tertiary.text
 background.solid: $inherited.colors.cta-primary.base
 background.solid if { cta-primary-large.mouse-in }: $inherited.colors.cta-primary.hover
@@ -2439,7 +2439,7 @@ align-content: center
 -- ftd.image:
 if: { cta-primary-large.icon != NULL }
 src: $cta-primary-large.icon
-width.fixed.px: 24
+width.fixed.px: 18
 
 -- end: ftd.row
 
@@ -2475,7 +2475,7 @@ open-in-new-tab if { cta-primary-button.new-tab }: true
 -- ftd.image:
 if: { cta-primary-button.icon != NULL }
 src: $cta-primary-button.icon
-width.fixed.px: 24
+width.fixed.px: 18
 
 -- end: ftd.row
 
