@@ -1444,14 +1444,184 @@ anything else in the site.
 -- ds.h1: Dynamic Websites
 
 Everything we discussed so far makes `fastn` a decent alternative for static
-websites, you do not have to worry about CMS or tweak things in WYSWYG editors
-like Webflow/Wix, use Github (or whatever you prefer) to colaborate with your
-team, use your favorite editor, use your favorite hosting provider, use CI, etc
-etc.
+websites, your non tech team can easily update the website unlike if it was
+built with React etc, you do not have to worry about CMS or tweak things in
+WYSWYG editors like Webflow/Wix. If you use `fastn` you can use Github (or
+whatever you prefer) to colaborate with your team, use your favorite editor,
+use your favorite hosting provider, use CI, etc etc.
 
 But from day one we have wanted to make `fastn` a full stack application server.
 
+For static websites you run `fastn build` and it creates a folder `.build` with
+HTML/CSS/JS for your website that you can publish on static hosting providers
+like [Github Pages](/github/) or [Vercel](/vercel/).
 
+`fastn` also comes with `fastn serve`, which runs a web server, converting
+`.ftd` files to `HTML` on every HTTP request. `fastn serve` can be [deployed on
+say Heroku](/heroku/).
+
+This mode can unlock dynamic features of `fastn`. Let's go through some of them.
+
+-- ds.h1: Dynamic URLs
+
+`fastn` by default does folder based routing, the path of a `.ftd` file decides
+it's URL, eg `index.ftd` -> `/`, `a.ftd` -> `/a/`, `a/b.ftd` -> `/a/b/` and so
+on. But say if you are building your own Twitter, now X, you would want URLs
+like `https://twitter.com/amitu`, which follows the pattern
+`twitter.com/<username>` to all be handled by same logic.
+
+You can do something like this by using `fastn`'s [`dynmaic-url`](/dynamic-urls/)
+feature.
+
+In your `FASTN.ftd` you add something like this:
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.dynamic-urls:
+
+# User Profile Page
+  url: /<string:username>/
+  document: profile.ftd
+
+-- ds.markdown:
+
+With this any URL that matches the pattern `/<string:username>/`, eg `/amitu/`
+will be served by the `document`, which is `profile.ftd` in this example.
+
+So how do we get the `username` in the `profile.ftd`? We can use
+[`request-data`](/request-data/) ["processor"](/processor/-/backend/).
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- string username:
+$processor$: pr.request-data
+
+\-- ftd.text: $data.message
+
+-- ds.markdown:
+
+We read the `username` using the `processor`, the type of variable and name must
+match as specified in the `fastn.dynamic-urls` section shown above. You can also
+pass an optional default value for the variable.
+
+-- ds.h2: HTTP and SQL Processors
+
+We ship HTTP and SQL processors for postgresql and sqlite.
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- person people:
+$processor$: pr.pg
+
+SELECT * FROM users where username = $username::TEXT;
+
+-- ds.markdown:
+
+We have fetched the user data from `users` table using `pg` processor, which is
+used to query postgresql database.
+
+-- ds.h2: Redirects
+
+You can also return non 200 responses, like do a conditional redirect:
+
+-- ds.code:
+lang: ftd
+
+\;; let's say the person object we got has a `is-blocked`
+\;; field, these user's should not be shown
+\-- ftd.redirect: /
+if: { person.is-blocked }
+
+-- ds.h2: An Example
+
+The data you have fetched, you can pass to UI:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- string username:
+$processor$: pr.request-data
+
+\-- person p:
+$processor$: pr.pg
+
+SELECT * FROM users where username = $username::TEXT;
+
+\;; let's say the person object we got has a `is-blocked`
+\;; field, these user's should not be shown
+\-- ftd.redirect: /
+if: { p.is-blocked }
+
+\-- show-person: $p
+
+\;; must match `users` table definition
+\-- record person:
+integer id:
+string username:
+string name:
+boolean is-blocked:
+optional string bio:
+
+\-- component show-person:
+person caption $p:
+
+.. body omitted ..
+
+\-- end: show-person
+
+-- ds.markdown:
+
+You can also create custom functions to do more data manipulation. We plan to
+make a rich standard library for helping you do a lot of things.
+
+You can checkout our [todo application built using
+`fastn`](https://github.com/fastn-community/todo-app).
+
+-- ds.h2: Upcoming WASM Support
+
+We are also working on WebAssembly support, which will allow you to write custom
+functions in any language that compiles to WebAssembly, and run your functions
+on both server side and client side (in the browser), compiler figuring out
+where it is needed.
+
+-- ds.h1: Special Features For Website Creators
+
+-- ds.h2: Sitemap
+-- ds.h2: Multile Entries In Sitemap
+-- ds.h2: Redirects
+-- ds.h2: Document Meta Data
+
+- canonical url
+- favicon
+- social media data
+
+-- ds.h1: Not Just For Web Pages
+
+-- ds.h2: Documentation Use Case
+
+
+-- ds.h2: Greeting Cards
+
+- download as image feature
+
+-- ds.h2: Presentation
+
+-- ds.h2: Visualisation
+
+-- ds.h2: Font Handling
+
+-- ds.h2: Source Code Syntax Highlighting
+
+-- ds.h2: Distributing Images
 
 -- end: ds.page
 
