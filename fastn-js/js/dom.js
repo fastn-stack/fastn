@@ -697,7 +697,6 @@ class Node2 {
         }
 
         if (fastn_utils.isWrapperNode(this.#tagName)) {
-            console.log("Wrapper node currently");
             this.#parent = parentOrSibiling;
             return;
         }
