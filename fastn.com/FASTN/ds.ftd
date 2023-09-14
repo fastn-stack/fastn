@@ -1,10 +1,10 @@
 -- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-typography as typo
 -- import: fastn.com/utils
 -- import: fastn-community.github.io/banner
 -- import: fastn.com/content-library as footer
 -- import: fastn-community.github.io/doc-site/common
 -- import: fastn.com/content-library as cl
+-- import: fifthtry.github.io/fastn-typography as typo
 -- import: fastn.com/FASTN/featured-ds
 export: featured-business
 

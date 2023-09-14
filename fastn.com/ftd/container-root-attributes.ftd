@@ -1,5 +1,5 @@
 -- import: fastn-community.github.io/saturated-sunset-cs as cs
--- import: fifthtry.github.io/virgil-font-typography as typo
+-- import: fastn-community.github.io/virgil-font-typography as typo
 
 -- ds.page: Container Root Attributes
 
@@ -8,7 +8,7 @@ These attributes are available to all `container` components in ftd.
 
 
 
--- ds.h1: `children: ftd.ui list`
+-- ds.h1: `children: ftd.ui list
 id: children
 
 This property is used to provide child elements for `container`.
@@ -110,7 +110,7 @@ and is optional.
 
 -- ds.rendered.input:
 
-\-- import: fifthtry.github.io/virgil-font-typography as typo
+\-- import: fastn-community.github.io/virgil-font-typography as typo
 
 \-- ftd.column:
 types: $typo.types
