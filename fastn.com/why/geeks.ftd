@@ -1593,6 +1593,42 @@ functions in any language that compiles to WebAssembly, and run your functions
 on both server side and client side (in the browser), compiler figuring out
 where it is needed.
 
+-- ds.h2: Reusable Backend Apps
+
+We have created universal design system so more and more UI component, color
+schemes, typography configurations can be shared between teams. We want to do
+the same for backend apps as well.
+
+Currently installing full stack apps is really hard, each app is written with
+its own frontend library, its own backend technology, it's own choice on
+database, it's own choice about the way databases are structured, authentication,
+permissions, access control etc is implemented.
+
+This means if you want to install 5 apps on your server, you have to fiddle with
+a lot of devops stuff, how is each app db going to be backed up? How are
+dependencies going to be kept up to date? How much RAM and CPU is needed? We have
+to worry about Docker and Kubernetes, or fiddle with plathora of choices made
+available to us by cloud providers.
+
+This is a setup where casually installing a app is almost beyond reach of most
+of humanity. Even developers are going to have hard time managing all this.
+
+This is where fastn's emphasis on standardising comes up. We are not only
+standardising user interface roles, but aslo that you should use Postgresql,
+that your tables should live in a separate schema for your application, you
+should rely on fastn to take care of authentication and basic access control,
+and so on.
+
+This standard is not yet ready, we are working on it, but if apps are written
+with such standards, do not have dependency beyond fastn and postgresql, they
+can be deployed completely by fastn.
+
+This may not be what you use to build the core of your next tech startup, but
+you can use all this to power your personal or even intranet applications for
+your company, society, educational institute etc. If you want a ready made todo
+app for your comapny, a payroll management app.
+
+
 -- ds.h1: Special Features For Website Creators
 
 -- ds.h2: Sitemap
