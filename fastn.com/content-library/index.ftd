@@ -1162,6 +1162,7 @@ controls: true
 width.fixed.px: 700
 height.fixed.px: 474
 fit: contain
+autoplay: false
 border-radius.px: 8
 
 -- end: ftd.column
@@ -1268,6 +1269,7 @@ border-color: $inherited.colors.border
 -- ftd.video:
 src: $right-video.video
 controls: true
+autoplay: false
 width: fill-container
 fit: contain
 border-radius.px: 8
@@ -1886,7 +1888,6 @@ if: { promo-card.title }
 role: $inherited.types.heading-medium
 color: $inherited.colors.text-strong
 text-align: center
-style: semi-bold
 
 -- ftd.text:
 if: { promo-card.body != NULL }
@@ -3779,6 +3780,7 @@ controls: true
 width.fixed.px: 700
 height.fixed.px: 474
 fit: contain
+autoplay: false
 border-radius.px: 8
 
 -- end: ftd.column
@@ -3834,6 +3836,7 @@ controls: true
 width: fill-container
 fit: contain
 border-radius.px: 8
+autoplay: false
 
 -- end: ftd.column
 
