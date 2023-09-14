@@ -32,8 +32,47 @@
       ],
       "line_number": 1,
       "definition": {
-        "line_number": 5,
+        "line_number": 6,
         "value": "a + b"
+      },
+      "js": null
+    }
+  },
+  {
+    "FunctionDefinition": {
+      "name": "join",
+      "kind": {
+        "modifier": null,
+        "kind": "string"
+      },
+      "arguments": [
+        {
+          "name": "a",
+          "kind": {
+            "modifier": null,
+            "kind": "string"
+          },
+          "mutable": false,
+          "value": null,
+          "line_number": 8,
+          "access_modifier": "Public"
+        },
+        {
+          "name": "b",
+          "kind": {
+            "modifier": null,
+            "kind": "string"
+          },
+          "mutable": false,
+          "value": null,
+          "line_number": 9,
+          "access_modifier": "Public"
+        }
+      ],
+      "line_number": 7,
+      "definition": {
+        "line_number": 11,
+        "value": "a + \" \" + b"
       },
       "js": null
     }
