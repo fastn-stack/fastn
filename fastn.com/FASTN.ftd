@@ -140,6 +140,11 @@ document: /get-started/browse-pick.ftd
   document: /expander/ds/markdown.ftd
   skip: true
 
+
+## Sections: /sections/
+document: /featured/new-sections.ftd
+skip: true
+
 ## Featured Components: /featured/
    document: /get-started/learn.ftd
 - Designers: /featured/contributors/designers/

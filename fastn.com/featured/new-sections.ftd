@@ -1,0 +1,27 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page: 
+full-width: true
+sidebar: false
+
+-- ft-ui.grid-view: Heros
+templates: $heros
+;;more-link-text: View more
+;;more-link: /featured/sections
+
+-- end: ds.page
+
+
+
+-- ft-ui.template list heros:
+
+-- ft-ui.template: Midnight-rush-hero
+template-url: https://fastn-community.github.io/midnight-rush-hero/
+screenshot: $fastn-assets.files.images.featured.new-sections.midnight-rush.jpg
+
+-- ft-ui.template: Midnight-storm-hero
+template-url: https://fastn-community.github.io/midnight-storm-hero/
+screenshot: $fastn-assets.files.images.featured.new-sections.midnight-storm.jpg
+
+
+-- end: heros
