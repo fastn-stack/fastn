@@ -18,7 +18,7 @@ favicon: /-/fastn.com/images/favicon.svg
 -- fastn.dependency: fifthtry.github.io/common
 -- fastn.dependency: fifthtry.github.io/fastn-typography
 -- fastn.dependency: fifthtry.github.io/fastn-ui
--- fastn.dependency: fastn-community.github.io/virgil-font-typography
+-- fastn.dependency: fifthtry.github.io/virgil-font-typography
 -- fastn.dependency: fifthtry.github.io/dark-mode-switcher
 -- fastn.dependency: fastn-stack.github.io/media
 -- fastn.dependency: fastn-stack.github.io/fastn-js
