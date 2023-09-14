@@ -1618,7 +1618,7 @@ background.image: $background
 
 -- ftd.column:
 width: fill-container
-max-width.fixed.px: 700
+max-width.fixed.px: 730
 padding-bottom.em: 5
 align-self: center
 align-content: center
@@ -1638,7 +1638,7 @@ left.px: 242
 -- ftd.text: 
 text-align: center
 role: $inherited.types.copy-large
-width.fixed.percent: 60
+width.fixed.percent: 65
 color: $inherited.colors.text
 
 $hero-section.body
@@ -3806,7 +3806,7 @@ if: { our-community.image != NULL }
 src: $our-community.image
 width.fixed.px: 700
 height.fixed.px: 474
-fit: cover
+fit: contain
 
 -- end: ftd.column
 
