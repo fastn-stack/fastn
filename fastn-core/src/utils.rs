@@ -30,7 +30,8 @@ macro_rules! warning {
 }
 
 fn id_to_cache_key(id: &str) -> String {
-    id.replace(std::path::MAIN_SEPARATOR, "_")
+    // TODO: use MAIN_SEPARATOR here
+    id.replace("/", "_").replace("\\", "_")
 }
 
 pub fn get_ftd_hash(path: &str) -> fastn_core::Result<String> {
