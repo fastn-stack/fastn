@@ -1439,7 +1439,6 @@ class Node2 {
                 break;
               case 2:
                 this.attachCss("position", staticValue[1]);
-                console.log("Anchor -> Parent");
                 this.updateParentPosition("relative");
                 break;
               case 3:
