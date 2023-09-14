@@ -226,6 +226,56 @@ async fn handle_dependency_file(
     Ok(())
 }
 
+// removes deleted documents from cache and build folder
+fn remove_deleted_documents(
+    config: &mut fastn_core::Config,
+    c: &mut cache::Cache,
+    documents: &std::collections::BTreeMap<String, fastn_core::File>,
+) -> fastn_core::Result<()> {
+    use itertools::Itertools;
+
+    let removed_documents = c
+        .documents
+        .keys()
+        .filter(|cached_document_id| {
+            for document in documents.values() {
+                if remove_extension(document.get_id()).eq(cached_document_id.as_str())
+                    || remove_extension(&document.get_id_with_package())
+                        .eq(cached_document_id.as_str())
+                {
+                    return false;
+                }
+            }
+
+            true
+        })
+        .map(|id| id.to_string())
+        .collect_vec();
+
+    for removed_doc_id in &removed_documents {
+        let folder_path = config.build_dir().join(removed_doc_id);
+        let folder_parent = folder_path.parent();
+        let file_path = &folder_path.with_extension("ftd");
+
+        if file_path.exists() {
+            std::fs::remove_file(file_path)?;
+        }
+
+        std::fs::remove_dir_all(&folder_path)?;
+
+        // If the parent folder of the file's output folder is also empty, delete it as well.
+        if let Some(folder_parent) = folder_parent {
+            if folder_parent.read_dir()?.count().eq(&0) {
+                std::fs::remove_dir_all(folder_parent)?;
+            }
+        }
+
+        c.documents.remove(removed_doc_id);
+    }
+
+    Ok(())
+}
+
 #[tracing::instrument(skip(config, documents))]
 async fn incremental_build(
     config: &mut fastn_core::Config,
@@ -337,44 +387,7 @@ async fn incremental_build(
             }
         }
 
-        let removed_documents = c
-            .documents
-            .keys()
-            .filter(|cached_document_id| {
-                for document in documents.values() {
-                    if remove_extension(document.get_id()).eq(cached_document_id.as_str())
-                        || remove_extension(&document.get_id_with_package())
-                            .eq(cached_document_id.as_str())
-                    {
-                        return false;
-                    }
-                }
-
-                true
-            })
-            .map(|id| id.to_string())
-            .collect_vec();
-
-        for removed_doc_id in &removed_documents {
-            let folder_path = config.build_dir().join(removed_doc_id);
-            let folder_parent = folder_path.parent();
-            let file_path = &folder_path.with_extension("ftd");
-
-            if file_path.exists() {
-                std::fs::remove_file(file_path)?;
-            }
-
-            std::fs::remove_dir_all(&folder_path)?;
-
-            // If the parent folder of the file's output folder is also empty, delete it as well.
-            if let Some(folder_parent) = folder_parent {
-                if folder_parent.read_dir()?.count().eq(&0) {
-                    std::fs::remove_dir_all(folder_parent)?;
-                }
-            }
-
-            c.documents.remove(removed_doc_id);
-        }
+        remove_deleted_documents(config, &mut c, documents)?;
     } else {
         for document in documents.values() {
             handle_file(
