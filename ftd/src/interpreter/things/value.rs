@@ -1262,6 +1262,13 @@ impl PropertyValue {
                     .trim_start_matches(ftd::interpreter::utils::REFERENCE)
                     .to_string();
 
+                if expected_kind
+                    .map(|ekind| ekind.kind.is_list() && reference.contains(","))
+                    .unwrap_or(false)
+                {
+                    return Ok(ftd::interpreter::StateWithThing::new_thing(None));
+                }
+
                 let (source, found_kind, _) = try_ok_state!(doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
