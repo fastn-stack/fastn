@@ -3883,6 +3883,7 @@
             "iteration": {
               "on": "$render-toc.toc-obj",
               "alias": "obj",
+              "loop_counter_alias": null,
               "line-number": 478
             },
             "condition": null,
@@ -4445,6 +4446,7 @@
                 "iteration": {
                   "on": "$toc-instance.toc.children",
                   "alias": "obj",
+                  "loop_counter_alias": null,
                   "line-number": 550
                 },
                 "condition": {
@@ -4960,6 +4962,7 @@
             "iteration": {
               "on": "$childrens.toc.children",
               "alias": "obj",
+              "loop_counter_alias": null,
               "line-number": 618
             },
             "condition": {
@@ -6636,6 +6639,7 @@
             "iteration": {
               "on": "$render-toc-mobile.toc-obj",
               "alias": "obj",
+              "loop_counter_alias": null,
               "line-number": 817
             },
             "condition": null,

@@ -1,0 +1,9 @@
+-- string s1: a
+
+-- string list s2: a, b, c
+
+-- string list s3: $s1, b, c, d
+
+-- string list s4: $s2
+
+-- string list s5: a, b, $s1

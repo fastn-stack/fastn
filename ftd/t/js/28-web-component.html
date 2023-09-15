@@ -46,6 +46,7 @@ let main = function (parent) {
 }
 global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__count", fastn.mutable(0));
+fastn_utils.createNestedObject(global, "foo__js_s", "ftd/ftd/t/assets/web_component.js");
 let foo__word_count = function (parent, inherited, args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;

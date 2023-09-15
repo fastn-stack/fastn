@@ -18,7 +18,7 @@ This, is, the, body.
 body body:
 integer $count:
 string separator: ,
-js: &js-s
+js: $js-s
 
 -- end: word-count
 
