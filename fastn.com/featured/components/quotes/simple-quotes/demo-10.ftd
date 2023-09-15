@@ -105,5 +105,9 @@ screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.
 template-url: /quotes/chrome/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
 
+-- ft-ui.template: Dorian
+template-url: /quotes/dorian/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-7.png
+
 -- end: quotes
 
