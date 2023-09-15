@@ -434,6 +434,7 @@ link: https://fastn-community.github.io/winter-cs/
 role: $inherited.types.label-large
 style: bold
 color: $inherited.colors.text-strong
+link: https://fastn-community.github.io/winter-cs/
 
 -- end: ftd.column
 
@@ -444,6 +445,7 @@ align-content: center
 -- ftd.image:
 src: $featured-theme.image-2
 fit: cover
+link: https://fastn-community.github.io/forest-cs/
 
 -- ftd.text: $featured-theme.image-title-2
 role: $inherited.types.label-large
@@ -466,6 +468,7 @@ link: https://fastn-community.github.io/saturated-sunset-cs/
 role: $inherited.types.label-large
 style: bold
 color: $inherited.colors.text-strong
+link: https://fastn-community.github.io/saturated-sunset-cs/
 
 -- end: ftd.column
 
