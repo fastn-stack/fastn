@@ -39,7 +39,7 @@ creating websites to building dynamic apps.
 - **Todo App Example:** Explore a complete `fastn` Todo app example on GitHub.
     [View the code.](https://github.com/fastn-community/todo-app)
 - **HTTP Processing and Data Modeling Basics:** Understand the essentials of HTTP processing and data modeling. [Learn the basics.](/country-details/basics/)
-- **Dynamic Country List Page:** Build a dynamic country list page with `fastn`.[Start building/)
+- **Dynamic Country List Page:** Build a dynamic country list page with `fastn`.[Start building](/country-list/)
 - **Workshop** (Coming Soon): Stay tuned for an upcoming workshop.
 
 -- end: ds.page-with-no-right-sidebar
