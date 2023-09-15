@@ -4,3 +4,19 @@ exposing: append
 -- ftd.text: $append(a = FifthTry, b = Click here)
 
 -- h.print: Arpita
+
+
+
+-- h.person list people:
+
+-- h.person: Ritesh
+-- h.person: Rithik
+
+-- end: people
+
+
+
+
+
+-- h.display-persons:
+p: $people

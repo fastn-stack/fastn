@@ -26,3 +26,9 @@ caption name:
 
 
 -- string hello: Hello World!!
+
+
+
+-- record person:
+caption name:
+optional string address:
