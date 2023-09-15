@@ -5,41 +5,35 @@ creating websites to building dynamic apps.
 
 -- ds.h1: Learn How to Create a Website
 
-- **Nandini’s Blog Post:** Get started with creating websites using `fastn`.
-    [Read it here.](/writer/)
-- **Acme Case Study:** Learn from a practical case study on building with 
-    `fastn`. [Check it out.](/acme/) 
-- **Fastn Template:** Explore the official fastn template on GitHub. 
-    [Access it here.](https://github.com/fastn-stack/fastn-template) 
-- **Markdown Guide:** Learn Markdown, an essential skill for web development. 
-    [Begin your markdown journey.](/markdown/-/frontend/) 
-- **Workshop:** Dive deeper into fastn with hands-on workshops. 
-    [Start here.](https://github.com/fastn-stack/workshop)
+- **Blog:** [A content writer's experience with fastn.](/writer/)
+- **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/) 
+- **Template:** Explore the official [fastn template.](https://github.com/fastn-stack/fastn-template) 
+- **Markdown Guide:** Learn using [markdown](/markdown/-/frontend/) in `fastn`.
+- **Workshop** to [create website.](https://github.com/fastn-stack/workshop)
 
 -- ds.h1: Customize the Design of Your fastn Site
 
-- **Color Scheme:** Discover how to add custom color schemes to your fastn site.
-    [Learn more.](/color-scheme/) 
-- **Typography:** Master typography customization with fastn.
-    [Explore typography options.](/typography/)
-- **Figma Tokens Integration:** Integrate Figma tokens seamlessly into your
-    `fastn` projects. [Find out how.](/figma/)
-- **Create Fonts:** Learn the art of creating custom fonts for your web projects
-    [Start font customization.](/create-font-package/)
+- **Color Scheme:** Discover how to add custom [color schemes.](/color-scheme/) 
+- **Typography:** Discover how to add [typography.](/typography/)
+- **Figma Tokens Integration:** Seamlessly [Integrate Figma tokens.](/figma/)
+- **Create Fonts:** Learn to [create font package](/create-font-package/) in 
+	`fastn`.
 
 -- ds.h1: Build Reusable Components with `fastn`
 
-- **Expander Course:** Learn to create reusable components with this course.[Explore it.](/expander/)
-- **Workshop:** Learn to create Image gallery by building reusable components [Start here.](https://github.com/fastn-stack/workshop/tree/main/b-section)
+- **Expander Course:** Learn to create reusable components with 
+    [Expander Crash Course.](/expander/)
+- **Workshop:** By building reusable components, learn to create an [Image gallery](https://github.com/fastn-stack/workshop/tree/main/b-section) 
+	section.
 
 -- ds.h1: Build Full-Stack Applications
 
-- **Full Stack Development:** Learn the fundamentals of backend integration for
-    full-stack development with `fastn`. [full stack](/backend/) 
-- **Todo App Example:** Explore a complete `fastn` Todo app example on GitHub.
-    [View the code.](https://github.com/fastn-community/todo-app)
-- **HTTP Processing and Data Modeling Basics:** Understand the essentials of HTTP processing and data modeling. [Learn the basics.](/country-details/basics/)
-- **Dynamic Country List Page:** Build a dynamic country list page with `fastn`.[Start building](/country-list/)
+- **Full Stack Development:** Learn the fundamentals of [backend](/backend/) integration for full-stack development with `fastn`.
+- **Todo App Example:** Explore a complete `fastn` [Todo](https://github.com/fastn-community/todo-app) app.
+- **Backend basics:** Learn the 
+    [basics of HTTP Processor and data modelling.](/country-details/basics/)
+- **Dynamic Country List Page:** Build a 
+	[dynamic country list page](/country-list/) with `fastn`.
 - **Workshop** (Coming Soon): Stay tuned for an upcoming workshop.
 
 -- end: ds.page-with-no-right-sidebar
