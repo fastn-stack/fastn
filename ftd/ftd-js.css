@@ -221,8 +221,8 @@ pre code {
     background: #c1c8ce;
 }
 
-ul {
-    /* Added padding to the left to move the bullet marker to the right */
+ul, ol {
+    /* Added padding to the left to move the ol number/ ul bullet to the right */
     padding-left: 20px;
 }
 
@@ -301,4 +301,7 @@ th {
 
 td {
     padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
