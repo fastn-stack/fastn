@@ -69,9 +69,9 @@ github-url: https://github.com/FifthTry/simple-blog
 
 -- ft-ui.template list blog-sites:
 
--- ft-ui.template: Simple Site
-template-url: featured/blogs/doc-site/
-screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.png
+-- ft-ui.template: Midnight Storm
+template-url: featured/blogs/ms-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
 
 -- ft-ui.template: Midnight Rush
 template-url: featured/blogs/mr-blog/
@@ -80,6 +80,10 @@ screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
 -- ft-ui.template: Misty Gray
 template-url: featured/blogs/mg-blog/
 screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
+
+-- ft-ui.template: Rocky
+template-url: featured/blogs/rocky/
+screenshot: $fastn-assets.files.images.featured.blog.rocky.png
 
 -- end: blog-sites
 

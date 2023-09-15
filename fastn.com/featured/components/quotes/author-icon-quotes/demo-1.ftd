@@ -97,5 +97,17 @@ role: Developer
 template-url: /featured/components/quotes/quotes-with-images/demo-1/
 screenshot: $fastn-assets.files.images.featured.components.quotes.quotes-with-images.demo-1.png
 
+-- ft-ui.template: Marengo
+template-url: /quotes/marengo/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
+
+-- ft-ui.template: Chrome
+template-url: /quotes/chrome/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
+
+-- ft-ui.template: Dorian
+template-url: /quotes/dorian/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-7.png
+
 -- end: quotes
 

@@ -91,6 +91,10 @@ screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 template-url: featured/components/business-cards/pattern-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
 
+-- ft-ui.template: Sunset Business Card
+template-url: featured/components/business-cards/sunset-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.sunset-business-card-front.jpg
+
 -- end: components
 
 

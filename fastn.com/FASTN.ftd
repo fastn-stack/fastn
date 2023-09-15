@@ -350,43 +350,58 @@ skip: true
       skip: true  
     - Modal Cover: /featured/components/modals/modal-cover/
       skip: true
-  - Quotes: /featured/components/quotes/
+  - Quotes: /featured/quotes/
+    document: /featured/components/quotes/index.ftd
     - Simple Quotes: /quotes/simple/
       skip: true
       document: /featured/components/quotes/simple-quotes/
-      - Chalice: /featured/components/quotes/simple-quotes/demo-1/
+      - Chalice: /quotes/chalice/
+        document: /featured/components/quotes/simple-quotes/demo-1.ftd
         skip: true
-      - Rustic: /featured/components/quotes/simple-quotes/demo-2/
+      - Rustic: /quotes/rustic/ 
+        document: /featured/components/quotes/simple-quotes/demo-2.ftd
         skip: true
-      - Echo: /featured/components/quotes/simple-quotes/demo-3/
+      - Echo: /quotes/echo/
+        document: /featured/components/quotes/simple-quotes/demo-3.ftd
         skip: true
-      - Onyx: /featured/components/quotes/simple-quotes/demo-4/
+      - Onyx: /quotes/onyx/
+        document: /featured/components/quotes/simple-quotes/demo-4.ftd
         skip: true
-      - Marengo: /featured/components/quotes/simple-quotes/demo-5/
+      - Marengo: /quotes/marengo/
+        document: /featured/components/quotes/simple-quotes/demo-5.ftd
         skip: true
-      - Chrome: /featured/components/quotes/simple-quotes/demo-6/
+      - Chrome: /quotes/chrome/
+        document: /featured/components/quotes/simple-quotes/demo-6.ftd
         skip: true
-      - Dorian: /featured/components/quotes/simple-quotes/demo-7/
+      - Dorian: /quotes/dorian/
+        document: /featured/components/quotes/simple-quotes/demo-7.ftd
         skip: true
-      - Marengo Hug: /featured/components/quotes/simple-quotes/demo-8/
+      - Marengo Hug: /quotes/marengo-hug/
+        document: /featured/components/quotes/simple-quotes/demo-8.ftd
         skip: true
-      - Matte: /featured/components/quotes/simple-quotes/demo-9/
+      - Matte: /quotes/matte/
+        document: /featured/components/quotes/simple-quotes/demo-9.ftd
         skip: true
-      - Scorpion: /featured/components/quotes/simple-quotes/demo-10/
+      - Scorpion: /quotes/scorpion/
+        document: /featured/components/quotes/simple-quotes/demo-10.ftd
         skip: true
-      - Silver: /featured/components/quotes/simple-quotes/demo-11/
+      - Silver: /quotes/silver/
+        document: /featured/components/quotes/simple-quotes/demo-11.ftd
         skip: true
-      - Storm Cloud: /featured/components/quotes/simple-quotes/demo-12/
+      - Storm Cloud: /quotes/storm-cloud/
+        document: /featured/components/quotes/simple-quotes/demo-12.ftd
         skip: true
     - Quotes with author icon: /quotes/quotes-with-author/
       skip: true
       document: /featured/components/quotes/author-icon-quotes/index.ftd
-      - Charcoal: /featured/components/quotes/author-icon-quotes/demo-1/
+      - Charcoal: /quotes/charcoal/
+        document: /featured/components/quotes/author-icon-quotes/demo-1.ftd
         skip: true
     - Quotes with images: /quotes/quotes-with-images/
       skip: true
       document: /featured/components/quotes/quotes-with-images/
-      - Electric: /featured/components/quotes/quotes-with-images/demo-1/
+      - Electric: /quotes/electric/ 
+        document: /featured/components/quotes/quotes-with-images/demo-1.ftd
         skip: true
 - Design Elements: /featured/design/
   - Color Schemes: /featured/cs/

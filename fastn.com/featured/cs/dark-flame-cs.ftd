@@ -26,6 +26,7 @@ show-layout-bar: true
 full-width: true
 distribution-bar: true
 full-width-bar: true
+max-width.fixed.px: 1340
 
 -- ds.page.footer:
 
@@ -126,18 +127,6 @@ role: Developer
 
 
 -- ft-ui.template list similar-schemes:
-
--- ft-ui.template: Dark Flame CS
-template-url: /cs/dark-flame-cs/
-screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
-
--- ft-ui.template: Navy Nebula CS
-template-url: /cs/navy-nebula-cs/
-screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
-
--- ft-ui.template: Saturated Sunset CS
-template-url: /cs/saturated-sunset-cs/
-screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 
 -- ft-ui.template: Forest CS
 template-url: /cs/forest-cs/

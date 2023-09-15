@@ -85,6 +85,10 @@ screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
 template-url: featured/blogs/mg-blog/
 screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
+-- ft-ui.template: Rocky
+template-url: featured/blogs/rocky/
+screenshot: $fastn-assets.files.images.featured.blog.rocky.png
+
 -- end: blog-sites
 
 

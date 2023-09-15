@@ -105,5 +105,9 @@ screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.
 template-url: /quotes/storm-cloud/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-12.png
 
+-- ft-ui.template: Chrome
+template-url: /quotes/chrome/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
+
 -- end: quotes
 

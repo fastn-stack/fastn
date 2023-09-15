@@ -84,6 +84,10 @@ screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 
+-- ft-ui.template: Studious Couscous
+template-url: featured/landing/studious-couscous/
+screenshot: $fastn-assets.files.images.featured.landing.studious-couscous.png
+
 -- end: landing
 
 

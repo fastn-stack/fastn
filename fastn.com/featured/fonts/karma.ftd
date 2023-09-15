@@ -100,8 +100,4 @@ screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
 template-url: /fonts/lato/
 screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
 
--- ft-ui.template: Roboto Mono Typography
-template-url: /fonts/roboto-mono/
-screenshot: $fastn-assets.files.images.featured.font.roboto-mono-font.jpg
-
 -- end: typographies

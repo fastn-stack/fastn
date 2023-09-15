@@ -105,17 +105,13 @@ screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-ex
 template-url: /hero-right-hug-expanded/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded.jpg
 
--- ft-ui.template: Hero Right Hug Large
-template-url: /hero-right-hug-large/
-screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-large.jpg
+-- ft-ui.template: Hero Right Hug Search
+template-url: /hero-right-hug-search/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-search.jpg
 
 -- ft-ui.template: Hero Right Hug Search Label
 template-url: /hero-right-hug-search-label/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-search-label.jpg
-
--- ft-ui.template: Hero Right Hug Search
-template-url: /hero-right-hug-search/
-screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-search.jpg
 
 -- end: heros
 

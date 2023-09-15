@@ -89,6 +89,10 @@ screenshot: $fastn-assets.files.images.featured.sections.slides.rotary-presentat
 template-url: /featured/sections/slides/streamline-slides/
 screenshot: $fastn-assets.files.images.featured.sections.slides.streamline-slides.png
 
+-- ft-ui.template: Simple Dark Slides
+template-url: /featured/sections/slides/simple-dark-slides/
+screenshot: $fastn-assets.files.images.featured.sections.slides.simple-dark-slides.png
+
 -- end: slides
 
 
