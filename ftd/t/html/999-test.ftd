@@ -1,0 +1,18 @@
+-- string s1: a
+
+-- string js-s: ftd/ftd/t/assets/test.js
+
+-- string list s6: $js-s, ftd/ftd/t/assets/test.js
+
+-- string list s2: a, b, c
+
+-- string list s3: $s1, b, c, d
+
+-- string list s4: $s2
+
+-- string list s5: a, b, $s1
+
+
+-- ftd.text: $obj
+$loop$: $s6 as $obj
+color: red

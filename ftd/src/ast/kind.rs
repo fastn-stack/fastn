@@ -504,7 +504,7 @@ impl VariableValue {
                     // todo: check if `end` exists
                     Ok(self)
                 } else if let VariableValue::String { ref value, .. } = self {
-                    if value.starts_with('$') {
+                    if value.starts_with('$') && !value.contains(',') {
                         Ok(self)
                     } else {
                         Ok(VariableValue::from_string_bracket_list(

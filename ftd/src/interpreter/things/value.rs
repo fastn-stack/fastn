@@ -1263,7 +1263,7 @@ impl PropertyValue {
                     .to_string();
 
                 if expected_kind
-                    .map(|ekind| ekind.kind.is_list() && reference.contains(","))
+                    .map(|ekind| ekind.kind.is_list() && reference.contains(','))
                     .unwrap_or(false)
                 {
                     return Ok(ftd::interpreter::StateWithThing::new_thing(None));
