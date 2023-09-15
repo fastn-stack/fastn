@@ -65,12 +65,12 @@ let fastn_utils = {
         }
         Object.assign(record_fields, default_args);
         let fields = {};
-        if (inherited instanceof fastn.recordInstance) {
+        if (inherited instanceof fastn.recordInstanceClass) {
             fields = inherited.getAllFields();
-            if (fields.get("colors").get("is-root")) {
+            if (fields["colors"].get("is-root")) {
                delete fields.colors;
             }
-            if (fields.get("types").get("is-root")) {
+            if (fields["types"].get("is-root")) {
                delete fields.types;
             }
         }
