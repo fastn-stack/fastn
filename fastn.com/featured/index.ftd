@@ -329,7 +329,7 @@ width if { ftd.device == "mobile" }: fill-container
 spacing.fixed.px: 16
 min-width.fixed.px: 302
 width.fixed.px: 302
-classes if {grid-of-items.two-fold}: two-folded
+classes if { grid-of-items.two-fold }: two-folded
 $on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
 height.fixed.px if { !grid-of-items.two-fold }: 224
@@ -339,6 +339,7 @@ border-color: $inherited.colors.border
 border-width.px: 1
 border-radius.px: 8
 overflow: hidden
+link: $grid-of-items.template-url
 
 -- ftd.desktop:
 
@@ -348,7 +349,7 @@ spacing.fixed.px: 12
 padding.px: 20
 anchor: parent
 bottom.px: 0
-;; bottom.px if { !grid-of-items.mouse-in }: -64
+bottom.px if { !grid-of-items.mouse-in }: -64
 left.px: 0
 z-index: 999
 background.solid: #222222cc
@@ -402,7 +403,6 @@ width.fixed.px: 22
 -- ftd.column:
 width: fill-container
 align-content: center
-link: $grid-of-items.template-url
 
 -- ftd.column:
 if: { grid-of-items.wip }
@@ -432,16 +432,16 @@ color: #d9d9d9
 
 -- end: ftd.column
 
-/-- ftd.image:
+-- ftd.image:
 if: { $grid-of-items.screenshot != NULL }
 src: $grid-of-items.screenshot
 $on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
 $on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
 fit: contain
-width.fixed.px: 324
+width: fill-container
 height.fixed.px: 224
 
--- ftd.image:
+/-- ftd.image:
 if: { $grid-of-items.screenshot != NULL }
 src: $grid-of-items.screenshot
 $on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
