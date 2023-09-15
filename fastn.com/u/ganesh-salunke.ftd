@@ -3,7 +3,7 @@
 
 
 -- ds.user-info: Ganesh Salunke
-avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+avatar: $fastn-assets.files.images.u.ganeshs.jpg
 social-links: $social-links
 profile: Developer
 
@@ -30,9 +30,9 @@ show-large: true
 
 
 
--- common.owner ganesh: Ganesh Salunke
+-- common.owner info: Ganesh Salunke
 profile: featured/contributors/developers/ganesh-salunke/
-avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+avatar: $fastn-assets.files.images.u.ganeshs.jpg
 role: Developer
 
 
