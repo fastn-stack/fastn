@@ -26,6 +26,7 @@ github-url: https://github.com/fastn-stack/fastn
 distribution-bar: false
 show-layout-bar: true
 full-width: true
+max-width.fixed.px: 1340
 
 -- ds.page.footer:
 
