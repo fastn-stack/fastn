@@ -11,14 +11,14 @@ This, is, the, body.
 
 
 
-
+-- string js-s: ftd/ftd/t/assets/web_component.js
 
 
 -- web-component word-count:
 body body:
 integer $count:
 string separator: ,
-js: ftd/ftd/t/assets/web_component.js
+js: &js-s
 
 -- end: word-count
 
