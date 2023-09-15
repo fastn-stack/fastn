@@ -122,6 +122,9 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         } else if let ftd::interpreter::Thing::Function(f) = thing {
             document_asts.push(f.to_ast(&doc));
         } else if let ftd::interpreter::Thing::Export { from, to, .. } = thing {
+            if doc.get_record(from, 0).is_ok() {
+                continue;
+            }
             export_asts.push(fastn_js::Ast::Export {
                 from: from.to_string(),
                 to: to.to_string(),
