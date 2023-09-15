@@ -158,8 +158,6 @@ skip: true
   skip: true
   - Arpita Jaiswal: /featured/contributors/developers/arpita-jaiswal/
     skip: true
-  - Ganesh Salunke: /featured/contributors/developers/ganesh-salunke/
-    skip: true
   - Meenu Kumari: /featured/contributors/developers/meenu-kumari/
     skip: true
   - Priyanka Yadav: /featured/contributors/developers/priyanka-yadav/
@@ -857,6 +855,19 @@ skip: true
 - Redirect: /workshop/redirect/
   document: /workshop/14-redirect.ftd
   skip: true
+
+## Contributors: /u/developers/
+document: /featured/contributors/developers/index.ftd
+skip: true
+
+- Designers: /u/designers/
+document: /featured/contributors/designers/index.ftd
+
+- Developers: /u/developers/
+document: /featured/contributors/developers/index.ftd
+
+  - Ganesh Salunke: /u/ganesh-salunke/
+    skip: true
 
 # Blog: /blog/
 
