@@ -58,20 +58,6 @@ let fastn_utils = {
            return obj;
         }
     },
-    /*
-                      ...default_args,
-                      ...{
-                           let fields = inherited.getAllFields();
-                           if (fields.get("colors").get("is-root")) {
-                               delete fields.colors;
-                           }
-                           if (fields.get("types").get("is-root")) {
-                               delete fields.types;
-                           }
-                           return fields;
-                      },
-                      ...function_args
-    */
     getInheritedValues(default_args, inherited, function_args) {
         let record_fields = {
             "colors": ftd.default_colors.getClone().setAndReturn("is-root", true),

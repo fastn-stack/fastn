@@ -511,14 +511,6 @@ impl fastn_js::Component {
                 }
             }
 
-            /*
-            fastn.recordInstance({
-              ...__args__,
-              ...inherited.getAllFields(),
-              ...args
-            });
-
-             */
             text("let")
                 .append(space())
                 .append(text(fastn_js::LOCAL_VARIABLE_MAP))
@@ -663,7 +655,6 @@ fn variable_to_js(
             .append(value)
             .append(text(");"))
     } else {
-        // dbg!(&name, &value);
         if name.contains('.') {
             // `.` means the variable is placed in object so no need of `let`.
             // e.g: ftd.device
