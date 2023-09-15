@@ -58,6 +58,28 @@ let fastn_utils = {
            return obj;
         }
     },
+    getInheritedValues(default_args, inherited, function_args) {
+        let record_fields = {
+            "colors": ftd.default_colors.getClone().setAndReturn("is-root", true),
+            "types": ftd.default_types.getClone().setAndReturn("is-root", true)
+        }
+        Object.assign(record_fields, default_args);
+        let fields = {};
+        if (inherited instanceof fastn.recordInstance) {
+            fields = inherited.getAllFields();
+            if (fields.get("colors").get("is-root")) {
+               delete fields.colors;
+            }
+            if (fields.get("types").get("is-root")) {
+               delete fields.types;
+            }
+        }
+        Object.assign(record_fields, fields);
+        Object.assign(record_fields, function_args);
+        return fastn.recordInstance({
+              ...record_fields
+        });
+    },
     removeNonFastnClasses(node) {
         let classList = node.getNode().classList;
         let extraCodeData = node.getExtraData().code;

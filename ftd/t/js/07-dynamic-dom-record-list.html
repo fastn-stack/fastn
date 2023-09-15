@@ -79,11 +79,7 @@ let foo__show_person = function (parent, inherited, args)
   try {
     let __args__ = {
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args

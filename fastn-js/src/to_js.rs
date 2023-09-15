@@ -530,19 +530,12 @@ impl fastn_js::Component {
                         .append(space())
                         .append(text("="))
                         .append(space())
-                        .append(text("fastn.recordInstance({"))
-                        .append(text(
-                            format!("...{}", fastn_js::LOCAL_VARIABLE_MAP).as_str(),
+                        .append(format!(
+                            "fastn_utils.getInheritedValues({}, {}, {});",
+                            fastn_js::LOCAL_VARIABLE_MAP,
+                            fastn_js::INHERITED_VARIABLE,
+                            fastn_js::FUNCTION_ARGS
                         ))
-                        .append(comma())
-                        .append(space())
-                        .append(text(
-                            format!("...{}.getAllFields()", fastn_js::INHERITED_VARIABLE).as_str(),
-                        ))
-                        .append(comma())
-                        .append(space())
-                        .append(text("...args"))
-                        .append(text("});"))
                         .append(pretty::RcDoc::softline())
                         .append(text(fastn_js::LOCAL_VARIABLE_MAP))
                         .append(space())
@@ -633,11 +626,9 @@ impl fastn_js::RecordInstance {
 
 impl fastn_js::StaticVariable {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        variable_to_js(
-            self.name.as_str(),
-            &self.prefix,
-            text(self.value.to_js().as_str()),
-        )
+        let mut value = self.value.to_js();
+        value = value.replace("__DOT__", ".").replace("__COMMA__", ",");
+        variable_to_js(self.name.as_str(), &self.prefix, text(value.as_str()))
     }
 }
 

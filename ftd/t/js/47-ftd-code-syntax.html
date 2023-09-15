@@ -213,11 +213,7 @@ let foo__debug_test = function (parent, inherited, args)
     let __args__ = {
       theme: "fastn-theme.light",
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
@@ -241,11 +237,7 @@ let foo__ftd_code_test = function (parent, inherited, args)
     let __args__ = {
       theme: "fastn-theme.light",
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args

@@ -94,11 +94,7 @@ let foo__demo_link = function (parent, inherited, args)
   try {
     let __args__ = {
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
@@ -134,11 +130,7 @@ let foo__header = function (parent, inherited, args)
       mouse_in: fastn.mutable(false),
       input_value: fastn.mutable(null),
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
@@ -259,11 +251,7 @@ let foo__todo_list_display = function (parent, inherited, args)
     let __args__ = {
       todo_list: fastn.mutable(fastn.mutableList([])),
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
@@ -283,11 +271,7 @@ let foo__ftd_todo_display = function (parent, inherited, args)
   try {
     let __args__ = {
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
@@ -329,11 +313,7 @@ let foo__ftd_world = function (parent, inherited, args)
   try {
     let __args__ = {
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
@@ -407,11 +387,7 @@ let foo__demo = function (parent, inherited, args)
     let __args__ = {
       show_link: true,
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args

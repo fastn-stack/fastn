@@ -62,11 +62,7 @@ let _01_basic__print = function (parent, inherited, args)
   try {
     let __args__ = {
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
@@ -88,11 +84,7 @@ let foo__bar = function (parent, inherited, args)
       m: fastn.module("_01_basic", global),
       title: "default header again",
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
@@ -147,11 +139,7 @@ let _01_basic_module__print = function (parent, inherited, args)
   try {
     let __args__ = {
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args

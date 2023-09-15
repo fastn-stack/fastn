@@ -58,11 +58,7 @@ let foo__display_name = function (parent, inherited, args)
   try {
     let __args__ = {
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
@@ -138,11 +134,7 @@ let foo__display_names = function (parent, inherited, args)
       names: fastn.mutableList([]),
       selected: fastn.mutable(0),
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args

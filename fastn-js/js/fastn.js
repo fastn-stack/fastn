@@ -369,6 +369,10 @@ class RecordInstance {
         }
         this.#closures.forEach((closure) => closure.update());
     }
+    setAndReturn(key, value) {
+        this.set(key, value);
+        return this;
+    }
     replace(obj) {
         for (let key in this.#fields) {
             if (!(key in obj.#fields)) {

@@ -139,11 +139,7 @@ let foo__form = function (parent, inherited, args)
     let __args__ = {
       ns: fastn.mutable(fastn_utils.clone(global.foo__ns)),
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
@@ -271,11 +267,7 @@ let foo__show_name_score = function (parent, inherited, args)
   try {
     let __args__ = {
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
