@@ -434,6 +434,7 @@ link: https://fastn-community.github.io/winter-cs/
 role: $inherited.types.label-large
 style: bold
 color: $inherited.colors.text-strong
+link: https://fastn-community.github.io/winter-cs/
 
 -- end: ftd.column
 
@@ -444,6 +445,7 @@ align-content: center
 -- ftd.image:
 src: $featured-theme.image-2
 fit: cover
+link: https://fastn-community.github.io/forest-cs/
 
 -- ftd.text: $featured-theme.image-title-2
 role: $inherited.types.label-large
@@ -466,6 +468,7 @@ link: https://fastn-community.github.io/saturated-sunset-cs/
 role: $inherited.types.label-large
 style: bold
 color: $inherited.colors.text-strong
+link: https://fastn-community.github.io/saturated-sunset-cs/
 
 -- end: ftd.column
 
@@ -1332,7 +1335,7 @@ role: $inherited.types.button-medium
 -- ftd.image:
 if: { cta-primary-small.icon != NULL }
 src: $cta-primary-small.icon
-width.fixed.px: 24
+width.fixed.px: 18
 
 -- end: ftd.row
 
@@ -1618,7 +1621,7 @@ background.image: $background
 
 -- ftd.column:
 width: fill-container
-max-width.fixed.px: 700
+max-width.fixed.px: 730
 padding-bottom.em: 5
 align-self: center
 align-content: center
@@ -1638,7 +1641,7 @@ left.px: 242
 -- ftd.text: 
 text-align: center
 role: $inherited.types.copy-large
-width.fixed.percent: 60
+width.fixed.percent: 65
 color: $inherited.colors.text
 
 $hero-section.body
@@ -2422,7 +2425,7 @@ boolean $mouse-in: false
 -- ftd.row: 
 link: $cta-primary-large.link
 width: fill-container
-role: $inherited.types.button-small
+role: $inherited.types.button-medium
 color: $inherited.colors.cta-tertiary.text
 background.solid: $inherited.colors.cta-primary.base
 background.solid if { cta-primary-large.mouse-in }: $inherited.colors.cta-primary.hover
@@ -2439,7 +2442,7 @@ align-content: center
 -- ftd.image:
 if: { cta-primary-large.icon != NULL }
 src: $cta-primary-large.icon
-width.fixed.px: 24
+width.fixed.px: 18
 
 -- end: ftd.row
 
@@ -2475,7 +2478,7 @@ open-in-new-tab if { cta-primary-button.new-tab }: true
 -- ftd.image:
 if: { cta-primary-button.icon != NULL }
 src: $cta-primary-button.icon
-width.fixed.px: 24
+width.fixed.px: 18
 
 -- end: ftd.row
 
@@ -3806,7 +3809,7 @@ if: { our-community.image != NULL }
 src: $our-community.image
 width.fixed.px: 700
 height.fixed.px: 474
-fit: cover
+fit: contain
 
 -- end: ftd.column
 

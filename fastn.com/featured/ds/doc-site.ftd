@@ -102,6 +102,11 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 template-url: featured/ds/misty-gray/
 screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
 
+-- ft-ui.template: Dash Dash DS
+template-url: featured/ds/dash-dash-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.dash-dash-ds.png
+wip: true
+
 -- end: doc-sites
 
 

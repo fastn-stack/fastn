@@ -133,6 +133,14 @@ document: /get-started/browse-pick.ftd
   - Part 4. Event Handling: /expander/events/
   - Part 5. Publish a package: /expander/publish/
   - Part 6. Polishing UI: /expander/polish/
+- Learning Resources: /learn/
+  document: /workshop/learn.ftd
+  skip: true
+
+
+## Sections: /sections/
+document: /featured/new-sections.ftd
+skip: true
 
 ## Featured Components: /featured/
    document: /get-started/learn.ftd
@@ -806,6 +814,7 @@ skip: true
   document: /community/events/roadshows/bangalore.ftd
 
 ## Workshop: /workshop/
+skip: true
 
 - Hello World: /workshop/hello-world/
   document: /workshop/01-hello-world.ftd

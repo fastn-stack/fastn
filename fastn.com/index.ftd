@@ -305,7 +305,7 @@ modify the colors and content in a matter of minutes.
 -- end: lib.cards-section
 
 -- lib.our-community: fastn Community
-image: $fastn-assets.files.images.landing.community.png
+image: $fastn-assets.files.images.landing.discord-community.svg
 cta-primary-text: Join Discord
 cta-primary-url: /discord/
 
