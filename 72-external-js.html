@@ -785,7 +785,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__external_fun___main&quot;,&quot;values&quot;:[]}]', this)" style="cursor: pointer" class="ft_common ft_md">Hello</div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__external_fun___main&quot;,&quot;values&quot;:[]},{&quot;name&quot;:&quot;foo__external_fun_1___main&quot;,&quot;values&quot;:[]}]', this)" style="cursor: pointer" class="ft_common ft_md">Hello</div></div>
 
 
 <script>
@@ -2001,6 +2001,12 @@ a.value = v
 
 function foo__external_fun___main(args,data,id){
 return (show("Hello World!",args,data,id));
+}
+
+
+
+function foo__external_fun_1___main(args,data,id){
+return (show("Hello World Again!",args,data,id));
 }
 
 
