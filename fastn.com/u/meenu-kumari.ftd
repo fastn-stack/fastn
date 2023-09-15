@@ -30,7 +30,7 @@ show-large: true
 
 
 -- common.owner info: Meenu Kumari
-profile: featured/contributors/developers/meenu-kumari/
+profile: /u/meenu-kumari/
 avatar: $fastn-assets.files.images.u.meenu.jpg
 role: Developer
 

@@ -30,7 +30,7 @@ show-large: true
 
 
 -- common.owner info: Arpita Jaiswal
-profile: featured/contributors/developers/arpita-jaiswal/
+profile: /u/arpita-jaiswal/
 avatar: $fastn-assets.files.images.u.arpita.jpg
 role: Developer
 

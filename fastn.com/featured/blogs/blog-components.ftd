@@ -1,10 +1,18 @@
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn.com/content-library as footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/u/yashveer-mehra
+-- import: fastn.com/u/ganesh-salunke
 -- import: fastn.com/featured as ft-ui
 
+-- ds.featured-category: Blog Components
+featured-link: /featured/blog-templates/
+category: Blogs
+image: $fastn-assets.files.images.featured.blog.blog-components.png
+owners: [$yashveer-mehra.owner, $ganesh-salunke.owner]
+license-url: https://github.com/fastn-community/blog-template-1-cs/blob/main/LICENSE
+license: Creative Commons
+published-date: 01-Aug-2023
+cards: $similar-schemes
+github-url: https://github.com/fastn-community/blog-template-1-cs
+demo-link: https://fastn-community.github.io/blog-template-1-cs/
 
 
 
@@ -37,7 +45,7 @@ max-width.fixed.px: 1340
 -- end: ds.page.footer
 -- ds.page.abstract-bar:
 
--- ds.distributors: Blog Components
+-- ds.distributors: 
 owners: $owner-fastn
 license-url: https://github.com/FifthTry/blog-components/blob/main/LICENSE
 license: Creative Commons
@@ -50,14 +58,14 @@ published-date: 15-May-2022
 -- ft-ui.grid-view: Featured Blog Templates
 templates: $blog-sites
 more-link-text: View more
-more-link: /featured/blog-templates/
+more-link: 
 show-large: true
 
 -- end: ds.page.full-width-wrap
 
 
 -- ds.preview-card:
-image: $fastn-assets.files.images.featured.blog.blog-components.png
+image: 
 cta-url: https://fifthtry.github.io/blog-components/
 cta-text: Demo
 github-url: https://github.com/FifthTry/blog-components

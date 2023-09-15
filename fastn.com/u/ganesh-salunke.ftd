@@ -31,7 +31,7 @@ show-large: true
 
 
 -- common.owner info: Ganesh Salunke
-profile: featured/contributors/developers/ganesh-salunke/
+profile: /u/ganesh-salunke/
 avatar: $fastn-assets.files.images.u.ganeshs.jpg
 role: Developer
 

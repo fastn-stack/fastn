@@ -31,7 +31,7 @@ show-large: true
 
 
 -- common.owner info: Saurabh Lohiya
-profile: featured/contributors/developers/saurabh-lohiya/
+profile: /u/saurabh-lohiya/
 avatar: $fastn-assets.files.images.u.saurabh-lohiya.jpg
 role: Developer
 

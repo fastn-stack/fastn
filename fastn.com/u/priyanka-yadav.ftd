@@ -30,7 +30,7 @@ show-large: true
 
 
 -- common.owner info: Priyanka Yadav
-profile: featured/contributors/developers/priyanka-yadav/
+profile: /u/priyanka-yadav/
 avatar: $fastn-assets.files.images.u.priyanka.jpg
 role: Developer
 

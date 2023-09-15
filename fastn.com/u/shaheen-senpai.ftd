@@ -27,7 +27,7 @@ show-large: true
 
 -- common.owner info: Shaheen Senpai
 avatar: $fastn-assets.files.images.u.shaheen-senpai.jpeg
-profile: featured/contributors/designers/shaheen-senpai/
+profile: /u/shaheen-senpai/
 role: Designer
 
 

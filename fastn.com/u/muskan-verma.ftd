@@ -30,7 +30,7 @@ show-large: true
 
 
 -- common.owner info: Muskan Verma
-profile: featured/contributors/developers/muskan-verma/
+profile: /u/muskan-verma/
 avatar: $fastn-assets.files.images.u.muskan-verma.jpg
 role: Designer
 
