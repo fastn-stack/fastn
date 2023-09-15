@@ -23,7 +23,7 @@ more-link: /featured/landing-pages/
 if: { show-grid }
 templates: $blog-sites
 more-link-text: View all
-more-link: /featured/blog-templates/
+more-link: /featured/blogs/
 
 -- grid-view: Portfolio / Personal Sites
 templates: $portfolios

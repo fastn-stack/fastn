@@ -207,7 +207,8 @@ skip: true
       skip: true
     - Studious Couscous: /featured/landing/studious-couscous/
       skip: true
-  - Blogs: /featured/blog-templates/
+  - Blogs: /featured/blogs/
+  document: /featured/blog-templates.ftd
     - Simple Site: /featured/blogs/doc-site/
       skip: true  
     - Midnight Rush: /featured/blogs/mr-blog/
