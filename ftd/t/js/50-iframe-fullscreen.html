@@ -59,11 +59,7 @@ let foo__youtube = function (parent, inherited, args) {
       width: fastn_dom.Resizing.FillContainer,
       height: null,
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args

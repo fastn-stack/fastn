@@ -54,11 +54,7 @@ let foo__show_children = function (parent, inherited, args)
     let __args__ = {
       uis: fastn.mutableList([]),
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
@@ -83,11 +79,7 @@ let foo__page = function (parent, inherited, args)
     let __args__ = {
       uis: fastn.mutableList([]),
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args

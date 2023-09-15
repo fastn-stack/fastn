@@ -80,11 +80,7 @@ let foo__desktop_view = function (parent, inherited, args)
     let __args__ = {
       show: fastn.mutable(true),
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args

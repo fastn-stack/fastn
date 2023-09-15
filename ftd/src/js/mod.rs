@@ -46,6 +46,7 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
         }
     }
 
+    // Global default inherited variable
     ftd_asts.push(fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
         name: "inherited".to_string(),
         value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
@@ -53,13 +54,19 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
                 (
                     "colors".to_string(),
                     fastn_js::SetPropertyValue::Reference(
-                        ftd::js::utils::update_reference_with_none("ftd#default-colors"),
+                        "ftd#default-colors__DOT__getClone()__DOT__setAndReturn\
+                        (\"is-root\"__COMMA__\
+                         true)"
+                            .to_string(),
                     ),
                 ),
                 (
                     "types".to_string(),
                     fastn_js::SetPropertyValue::Reference(
-                        ftd::js::utils::update_reference_with_none("ftd#default-types"),
+                        "ftd#default-types__DOT__getClone()__DOT__setAndReturn\
+                        (\"is-root\"__COMMA__\
+                         true)"
+                            .to_string(),
                     ),
                 ),
             ],

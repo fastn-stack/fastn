@@ -46,11 +46,7 @@ let foo__foo = function (parent, inherited, args) {
       a: fastn.mutable(1),
       clicked: fastn.mutable(false),
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args

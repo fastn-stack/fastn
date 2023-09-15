@@ -47,11 +47,7 @@ let foo__box = function (parent, inherited, args) {
     let __args__ = {
       uis: fastn.mutableList([]),
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
@@ -73,11 +69,7 @@ let foo__switcher = function (parent, inherited, args)
       s: fastn.mutableList([]),
       is_active: fastn.mutable(0),
     };
-    inherited = fastn.recordInstance({
-      ...__args__,
-      ...inherited.getAllFields(),
-      ...args
-    });
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = {
       ...__args__,
       ...args
