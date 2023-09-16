@@ -16,7 +16,43 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __p-3 __mb-4 __bw-5"><div data-id="4">FifthTry Hello World!!</div><div data-id="5">Hello World!!</div><div data-id="6">default header again</div></div><div data-id="7" class="ft_column __p-6 __mb-7 __bw-8"><div data-id="8">FifthTry ++++ Hello World from 01-basic-module!!</div><div data-id="9">Hello World from 01-basic-module!!</div><div data-id="10" class="__c-9">default header again</div></div><div data-id="11">hello world</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __p-3 __mb-4 __bw-5"><div data-id="4">FifthTry Hello World!!</div><div data-id="5">Hello World!!</div><div data-id="6">default header again</div></div><div data-id="7" class="ft_column __p-6 __mb-7 __bw-8"><div data-id="8">FifthTry ++++ Hello World from 01-basic-module!!</div><div data-id="9">Hello World from 01-basic-module!!</div><div data-id="10" class="__c-9">default header again</div></div><div data-id="11" class="ft_column __p-10 __mb-11 __bw-12"><div data-id="12">FifthTry ****** function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = &quot;foo&quot;;
+  try {
+    let __args__ = {
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = {
+      ...__args__,
+      ...args
+    };
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, &quot;hello world&quot;, inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}</div><div data-id="13">function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = {
+      ...__args__,
+      ...args
+    };
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "hello world", inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}</div><div data-id="14" class="__c-13">default header again</div></div><div data-id="15">hello world</div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__p-3 { padding: 10px; }
@@ -26,6 +62,10 @@
 	.__mb-7 { margin-bottom: 5px; }
 	.__bw-8 { border-width: 1px; }
 	.__c-9 { color: orange !important; }
+	.__p-10 { padding: 10px; }
+	.__mb-11 { margin-bottom: 5px; }
+	.__bw-12 { border-width: 1px; }
+	.__c-13 { color: orange !important; }
     </style>
 <script>
     (function() {
@@ -39,7 +79,10 @@ let main = function (parent) {
     let parenti1 = _44_module__bar(parent, inherited, {
       m: fastn.module("_01_basic_module", global)
     });
-    let parenti2 = foo__c_hello(parent, inherited);
+    let parenti2 = _44_module__bar(parent, inherited, {
+      m: fastn.module("_45_re_module", global)
+    });
+    let parenti3 = foo__c_hello(parent, inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -157,6 +200,18 @@ let _01_basic_module__print = function (parent, inherited, args)
   }
 }
 global["_01_basic_module__print"] = _01_basic_module__print;
+let _45_re_module__append = function (args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = args;
+    return (fastn_utils.getter(__args__.a) + " ****** " + fastn_utils.getter(__args__.b));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["_45_re_module__append"] = _45_re_module__append;
 let _45_re_module__hello = function (parent, inherited, args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
@@ -197,6 +252,8 @@ let foo__c_hello = function (parent, inherited, args)
   }
 }
 global["foo__c_hello"] = foo__c_hello;
+let _45_re_module__print = _01_basic_module__print;
+global["_45_re_module__print"] = _45_re_module__print;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

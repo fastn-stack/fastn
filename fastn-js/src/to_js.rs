@@ -34,9 +34,12 @@ impl fastn_js::Ast {
             fastn_js::Ast::MutableVariable(m) => m.to_js(),
             fastn_js::Ast::MutableList(ml) => ml.to_js(),
             fastn_js::Ast::RecordInstance(ri) => ri.to_js(),
-            fastn_js::Ast::Export { from, to } => {
-                variable_to_js(to, &None, text(fastn_js::utils::name_to_js(from).as_str()))
-            }
+            fastn_js::Ast::Export { from, to } => variable_to_js(
+                to,
+                &None,
+                text(fastn_js::utils::name_to_js(from).as_str()),
+                true,
+            ),
         }
     }
 }
@@ -600,6 +603,7 @@ impl fastn_js::MutableVariable {
             text("fastn.mutable(")
                 .append(text(&self.value.to_js()))
                 .append(text(")")),
+            false,
         )
     }
 }
@@ -610,6 +614,7 @@ impl fastn_js::MutableList {
             self.name.as_str(),
             &self.prefix,
             text(self.value.to_js().as_str()),
+            false,
         )
     }
 }
@@ -620,6 +625,7 @@ impl fastn_js::RecordInstance {
             self.name.as_str(),
             &self.prefix,
             text(self.fields.to_js().as_str()),
+            false,
         )
     }
 }
@@ -628,7 +634,12 @@ impl fastn_js::StaticVariable {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         let mut value = self.value.to_js();
         value = value.replace("__DOT__", ".").replace("__COMMA__", ",");
-        variable_to_js(self.name.as_str(), &self.prefix, text(value.as_str()))
+        variable_to_js(
+            self.name.as_str(),
+            &self.prefix,
+            text(value.as_str()),
+            false,
+        )
     }
 }
 
@@ -636,6 +647,7 @@ fn variable_to_js(
     variable_name: &str,
     prefix: &Option<String>,
     value: pretty::RcDoc<'static>,
+    add_global: bool,
 ) -> pretty::RcDoc<'static> {
     let name = {
         let (doc_name, remaining) = fastn_js::utils::get_doc_name_and_remaining(variable_name);
@@ -668,6 +680,13 @@ fn variable_to_js(
         .append(space())
         .append(value)
         .append(text(";"))
+        .append(if add_global {
+            pretty::RcDoc::softline().append(text(
+                format!("{}[\"{name}\"] = {name};", fastn_js::GLOBAL_VARIABLE_MAP).as_str(),
+            ))
+        } else {
+            pretty::RcDoc::nil()
+        })
     }
 }
 
