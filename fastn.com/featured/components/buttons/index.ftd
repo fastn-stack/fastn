@@ -1,75 +1,19 @@
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn.com/content-library as footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/u/priyanka-yadav
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
 
-
-
-
-
-
--- ds.page: 
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-full-width: true
-distribution-bar: true
-full-width-bar: true
-fluid-width: false
-max-width.fixed.px: 1340
-show-layout-bar: true
-
--- ds.page.footer:
-
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
--- end: ds.page.footer
--- ds.page.abstract-bar:
-
--- ds.distributors: Buttons
-owners: $owner-fastn
-license-url: https://github.com/fifthtry/button/blob/main/LICENSE
+-- ds.featured-category: Buttons
+featured-link: /featured/components-library/
+category: Featured Components
+image: $fastn-assets.files.images.featured.components.button-1.png
+owners: [$priyanka-yadav.info, $ganesh-salunke.info, $meenu-kumari.info]
+license-url: https://github.com/fifthtry/buttons/blob/main/LICENSE
 license: Creative Commons
 published-date: 02-Aug-2023
-
--- end: ds.page.abstract-bar
-
--- ds.page.full-width-wrap:
-
--- ft-ui.grid-view: Featured from Components Library
-templates: $components
-more-link-text: View more
-more-link: /featured/components-library/
-show-large: true
-
--- end: ds.page.full-width-wrap
-
--- ds.preview-card:
-image: $fastn-assets.files.images.featured.components.button-1.png
-cta-url: https://fifthtry.github.io/button/
-cta-text: Demo
-github-url: https://github.com/fifthtry/button
-cta-2-url: https://fifthtry.github.io/button/primary/
-cta-2-text: User Manual
-
-
-
--- end: ds.page
+cards: $components
+github-url: https://github.com/fifthtry/buttons
+demo-link: https://fifthtry.github.io/buttons
 
 
 
@@ -99,24 +43,3 @@ template-url: featured/components/business-cards/sunset-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.sunset-business-card-front.jpg
 
 -- end: components
-
-
-
--- common.owner list owner-fastn:
-
--- common.owner: Ganesh Salunke
-profile: featured/contributors/developers/ganesh-salunke/
-avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
-role: Developer
-
--- common.owner: Priyanka Yadav
-profile: featured/contributors/developers/priyanka-yadav/
-avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
-role: Developer
-
--- common.owner: Meenu Kumari
-profile: featured/contributors/developers/meenu-kumari/
-avatar: $fastn-assets.files.featured.contributors.developers.meenu-kumari.meenu.jpg
-role: Developer
-
--- end: owner-fastn
