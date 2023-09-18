@@ -1,83 +1,21 @@
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn.com/content-library as footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/u/ganesh-salunke
 -- import: fastn.com/featured as ft-ui
 
-
-
-
-
--- ds.page: 
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-full-width: true
-distribution-bar: true
-full-width-bar: true
-fluid-width: false
-max-width.fixed.px: 1340
-
--- ds.page.footer:
-
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
--- end: ds.page.footer
--- ds.page.abstract-bar:
-
--- ds.distributors: Lato Typography
-owners: $owner-fastn
-license-url: https://github.com/fastn-community/lato-typography/blob/main/LICENSE
-license: Creative Commons
-published-date: 01-Apr-2023
-
--- end: ds.page.abstract-bar
-
--- ds.page.full-width-wrap:
-
--- ft-ui.grid-view: Featured Typographies
-templates: $typographies
-more-link-text: View more
-more-link: /featured/fonts/
-show-large: true
-
--- end: ds.page.full-width-wrap
-
--- ds.preview-card:
+-- ds.featured-category: Lato Typography
+featured-link: /featured/fonts/
+category: Font Typography
 image: $fastn-assets.files.images.featured.font.lato-font.jpg
-cta-url: https://fastn-community.github.io/lato-typography/fastn-typography/
-cta-text: Demo
+owners: [$ganesh-salunke.info]
+license-url: https://github.com/fastn-community/lato-typography/blob/main/LICENSE.md
+license: Creative Commons
+published-date: 26-March-2023
+cards: $typographies
 github-url: https://github.com/fastn-community/lato-typography
-cta-2-url: https://fastn-community.github.io/lato-typography/
-cta-2-text: User Manual
-
--- end: ds.page
+demo-link: https://fastn-community.github.io/lato-typography/
 
 
 
 
-
--- common.owner list owner-fastn:
-
--- common.owner: Ganesh Salunke
-profile: featured/contributors/developers/ganesh-salunke/
-avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
-role: Developer
-
--- end: owner-fastn
 
 
 
@@ -96,12 +34,8 @@ screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 template-url: /fonts/roboto/
 screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
 
--- ft-ui.template: Roboto Mono Typography
-template-url: /fonts/roboto-mono/
-screenshot: $fastn-assets.files.images.featured.font.roboto-mono-font.jpg
-
--- ft-ui.template: Tiro Typography
-template-url: /fonts/tiro/
-screenshot: $fastn-assets.files.images.featured.font.tiro-font.jpg
+-- ft-ui.template: Lato Typography
+template-url: /fonts/lato/
+screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
 
 -- end: typographies
