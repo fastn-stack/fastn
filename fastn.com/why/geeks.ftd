@@ -1631,7 +1631,27 @@ app for your comapny, a payroll management app.
 
 -- ds.h1: Special Features For Website Creators
 
+Not only is `fastn` a great, or at least, hopes to be great framework for your
+frontend and backend, it's a great tool to build your next website. If you use
+Webflow or Wix to quickly build a website because current open source solutions
+require far too much development and devops exertise to install and run on your
+own server, you get started soon, and have some control over website, but you
+are forever bound by whatever the website builder you have picked. They can
+change their prices, go out of business, change the feature you rely on etc, and
+you are beholden to them. They may or may not provide all the site data that you
+expect, and you have to work with their proprietory technologies and APIs.
+
+`fastn` aims to help website creators simplify the development process to such
+an extent they can deploy their sites, install ready made themese and even
+fully functional apps on their own, as easily as one can install apps on their
+mobile phone.
+
+We have some features particularly for website creators, lets look at some of
+them.
+
 -- ds.h2: Sitemap
+
+
 -- ds.h2: Multile Entries In Sitemap
 -- ds.h2: Redirects
 -- ds.h2: Document Meta Data
