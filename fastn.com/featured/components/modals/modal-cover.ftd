@@ -1,72 +1,18 @@
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn.com/content-library as footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/u/ganesh-salunke
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
 
 
-
-
-
-
--- ds.page: 
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-full-width: true
-distribution-bar: true
-full-width-bar: true
-fluid-width: false
-max-width.fixed.px: 1340
-
--- ds.page.footer:
-
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
--- end: ds.page.footer
--- ds.page.abstract-bar:
-
--- ds.distributors: Modal Cover
-owners: $owner-fastn
-license-url: https://github.com/fastn-community/bling/blob/main/LICENSE
+-- ds.featured-category: Modal Cover
+featured-link: /featured/components-library/
+category: Featured Components
+image: $fastn-assets.files.images.featured.components.modal-cover.png
+owners: [$ganesh-salunke.info]
+license-url: https://github.com/Trizwit/FastnUI/
 license: Creative Commons
 published-date: 17-June-2023
-
--- end: ds.page.abstract-bar
-
--- ds.page.full-width-wrap:
-
--- ft-ui.grid-view: Featured Modal / Dialog Box
-templates: $dialogs
-more-link-text: View more
-more-link: /featured/components/modals/
-show-large: true
-
--- end: ds.page.full-width-wrap
-
--- ds.preview-card:
-image: $fastn-assets.files.images.featured.components.modal-cover.png
-cta-url: https://fastn-community.github.io/bling/modal-cover/
-cta-text: Demo
-github-url: https://github.com/fastn-community/bling
-cta-2-url: https://fastn-community.github.io/bling/modal-cover/
-cta-2-text: User Manual
-
--- end: ds.page
+cards: $dialogs
+github-url: https://github.com/Trizwit/FastnUI/
+demo-link: https://fastnui.trizwit.com/UI-Components/Modal/modal-cover
 
 
 
@@ -79,22 +25,8 @@ cta-2-text: User Manual
 
 -- ft-ui.template list dialogs:
 
--- ft-ui.template: Modal
+-- ft-ui.template: Modal 1
 template-url: featured/components/modals/modal-1/
 screenshot: $fastn-assets.files.images.featured.components.modal-1.png
 
 -- end: dialogs
-
-
-
-
-
-
--- common.owner list owner-fastn:
-
--- common.owner: Ganesh Salunke
-profile: featured/contributors/developers/ganesh-salunke/
-avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
-role: Developer
-
--- end: owner-fastn
