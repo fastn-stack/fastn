@@ -1,72 +1,18 @@
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn.com/content-library as footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/u/shaheen-senpai
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
 
 
-
-
-
-
--- ds.page: 
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-full-width: true
-distribution-bar: true
-full-width-bar: true
-fluid-width: false
-max-width.fixed.px: 1340
-
--- ds.page.footer:
-
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
--- end: ds.page.footer
--- ds.page.abstract-bar:
-
--- ds.distributors: Footer 3
-owners: $owner-fastn
+-- ds.featured-category: Footer 3
+featured-link: /featured/components-library/
+category: Featured Components
+image: $fastn-assets.files.images.featured.components.footer-3.png
+owners: [$shaheen-senpai.info]
 license-url: https://github.com/Trizwit/FastnUI
 license: Creative Commons
 published-date: 23-June-2023
-
--- end: ds.page.abstract-bar
-
--- ds.page.full-width-wrap:
-
--- ft-ui.grid-view: Featured Footers
-templates: $footers
-more-link-text: View more
-more-link: /featured/components/footers/
-show-large: true
-
--- end: ds.page.full-width-wrap
-
--- ds.preview-card:
-image: $fastn-assets.files.images.featured.components.footer-3.png
-cta-url: https://fastnui.trizwit.com/UI-Components/Footer/footer-3/
-cta-text: Demo
+cards: $footers
 github-url: https://github.com/Trizwit/FastnUI/tree/main/UI-Components/Footer
-cta-2-url: https://fastnui.trizwit.com/UI-Components/Footer/
-cta-2-text: User Manual
-
--- end: ds.page
+demo-link: https://fastnui.trizwit.com/UI-Components/Footer/footer-3/
 
 
 
@@ -84,16 +30,3 @@ template-url: /featured/components/footers/footer/
 screenshot: $fastn-assets.files.images.featured.components.footer.png
 
 -- end: footers
-
-
-
-
-
--- common.owner list owner-fastn:
-
--- common.owner: Shaheen Senpai
-avatar: $fastn-assets.files.featured.contributors.developers.shaheen-senpai.shaheen-senpai.jpeg
-profile: featured/contributors/designers/shaheen-senpai/
-role: Designer
-
--- end: owner-fastn
