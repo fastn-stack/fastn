@@ -4,7 +4,7 @@
 -- import: fastn.com/featured as ft-ui
 
 -- ds.featured-category: Bling Components
-featured-link: /featured/components-library/
+featured-link: /featured/components/
 category: Font Typography
 image: $fastn-assets.files.images.featured.components.bling.jpg
 owners: [$priyanka-yadav.info, $ganesh-salunke.info, $meenu-kumari.info]

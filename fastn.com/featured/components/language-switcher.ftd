@@ -58,7 +58,7 @@ cta-text: Demo
 if: { show-grid }
 templates: $components
 more-link-text: View more
-more-link: /featured/components-library/
+more-link: /featured/components/
 
 
 -- end: ds.page

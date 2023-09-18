@@ -4,7 +4,7 @@
 
 
 -- ds.featured-category: Marengo
-featured-link: /featured/components-library/
+featured-link: /featured/quotes/
 category: Featured Quote Components
 image: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
 owners: [$ganesh-salunke.info, $priyanka-yadav.info]
@@ -30,9 +30,9 @@ demo-link: https://fastn-community.github.io/bling/quote/
 template-url: /quotes/onyx/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-4.png
 
--- ft-ui.template: Marengo
-template-url: /quotes/marengo/
-screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
+-- ft-ui.template: Dorian
+template-url: /quotes/dorian/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-7.png
 
 -- ft-ui.template: Chrome
 template-url: /quotes/chrome/

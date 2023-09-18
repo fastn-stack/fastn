@@ -4,7 +4,7 @@
 
 
 -- ds.featured-category: Chrome
-featured-link: /featured/components-library/
+featured-link: /featured/quotes/
 category: Featured Quote Components
 image: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
 owners: [$ganesh-salunke.info, $priyanka-yadav.info]
@@ -34,9 +34,9 @@ screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.
 template-url: /quotes/marengo/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
 
--- ft-ui.template: Chrome
-template-url: /quotes/chrome/
-screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
+-- ft-ui.template: Dorian
+template-url: /quotes/dorian/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-7.png
 
 -- ft-ui.template: Scorpion
 template-url: /quotes/scorpion/

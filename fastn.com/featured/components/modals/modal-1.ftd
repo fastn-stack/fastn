@@ -3,7 +3,7 @@
 
 
 -- ds.featured-category: Modal 1
-featured-link: /featured/components-library/
+featured-link: /components/modals/
 category: Featured Components
 image: $fastn-assets.files.images.featured.components.modal-1.png
 owners: [$ganesh-salunke.info]

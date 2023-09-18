@@ -3,7 +3,7 @@
 
 
 -- ds.featured-category: Modal Cover
-featured-link: /featured/components-library/
+featured-link: /components/modals/
 category: Featured Components
 image: $fastn-assets.files.images.featured.components.modal-cover.png
 owners: [$ganesh-salunke.info]

@@ -4,7 +4,7 @@
 -- import: fastn.com/featured as ft-ui
 
 -- ds.featured-category: Buttons
-featured-link: /featured/components-library/
+featured-link: /featured/components/
 category: Featured Components
 image: $fastn-assets.files.images.featured.components.button-1.png
 owners: [$priyanka-yadav.info, $ganesh-salunke.info, $meenu-kumari.info]

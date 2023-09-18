@@ -4,7 +4,7 @@
 
 
 -- ds.featured-category: Onyx
-featured-link: /featured/components-library/
+featured-link: /featured/quotes/
 category: Featured Quote Components
 image: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-4.png
 owners: [$ganesh-salunke.info, $priyanka-yadav.info]
@@ -26,9 +26,9 @@ demo-link: https://fastn-community.github.io/bling/quote/
 
 -- ft-ui.template list quotes:
 
--- ft-ui.template: Onyx
-template-url: /quotes/onyx/
-screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-4.png
+-- ft-ui.template: Chalice
+template-url: /quotes/chalice/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-1.png
 
 -- ft-ui.template: Marengo
 template-url: /quotes/marengo/
