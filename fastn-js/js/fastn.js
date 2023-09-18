@@ -425,6 +425,7 @@ fastn.color = function (r, g, b) {
 
 fastn.mutableClass = Mutable;
 fastn.mutableListClass = MutableList;
+fastn.moduleClass = Module;
 fastn.recordInstanceClass = RecordInstance;
 fastn.module = function (name, global) {
     return new Module(name, global);

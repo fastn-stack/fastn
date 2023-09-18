@@ -9,6 +9,17 @@ pub fn is_kernel(s: &str) -> bool {
     .contains(&s)
 }
 
+pub fn generate_dot_notation_getter(s: &str) -> Option<String> {
+    if let Some((name, notation)) = s.split_once('.') {
+        return Some(format!(
+            "fastn_utils.getValueByDotNotation({}, \"{}\")",
+            name, notation,
+        ));
+    }
+
+    None
+}
+
 pub fn reference_to_js(s: &str) -> String {
     let (prefix, s) = get_prefix(s);
 

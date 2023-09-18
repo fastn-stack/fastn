@@ -92,7 +92,7 @@ let foo__append_integer = function (args) {
       a: fastn.mutableList([]),
       ...args
     };
-    return (ftd.append(__args__.a, __args__.v));
+    return (ftd.append(fastn_utils.getValueByDotNotation(__args__, "a"), fastn_utils.getValueByDotNotation(__args__, "v")));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

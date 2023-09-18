@@ -1024,6 +1024,16 @@ impl ExpressionGenerator {
         if node.operator().get_variable_identifier_read().is_some() && !no_getter {
             format!("fastn_utils.getter({})", value)
         } else {
+            if no_getter {
+                if value.starts_with('"') || value.starts_with('\'') {
+                    return value;
+                }
+    
+                if let Some(getter) = fastn_js::utils::generate_dot_notation_getter(&value) {
+                    return getter;
+                }
+            }
+
             value
         }
     }

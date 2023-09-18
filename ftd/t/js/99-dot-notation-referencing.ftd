@@ -1,0 +1,38 @@
+-- record user-links:
+string gh:
+
+-- record user:
+caption name:
+user-links links:
+
+-- user-links my-links:
+gh: harshdoesdev
+
+-- user harsh: Harsh
+links: $my-links
+
+-- string list days: Sun, Mon
+
+-- ftd.text: Log first day
+$on-click$: $get-first(a = $days)
+
+-- ftd.text: Log github link
+$on-click$: $log-gh-link(a = $harsh)
+
+-- ftd.text: Log user name
+$on-click$: $log-user-name(a = $harsh)
+
+-- void log-user-name(a):
+user a:
+
+console.log(a.name)
+
+-- string get-first(a):
+string list a:
+
+console.log(a.0)
+
+-- void log-gh-link(a):
+user a:
+
+console.log(a.links)

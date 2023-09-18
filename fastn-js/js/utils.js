@@ -160,6 +160,17 @@ let fastn_utils = {
             return value;
         }
     },
+    getValueByDotNotation(value, notation) {
+        const parts = notation.split('.');
+        return parts
+            .reduce((obj, key) => {
+                obj = fastn_utils.getFlattenStaticValue(obj);
+                if(obj instanceof fastn.recordInstanceClass || obj instanceof fastn.moduleClass) {
+                    return obj.get(key);
+                }
+                return obj[key];
+            }, value);
+    },
     setter(variable, value) {
         if (!fastn_utils.isNull(variable) && variable.set) {
            variable.set(value);

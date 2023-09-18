@@ -38,7 +38,7 @@ let main = function (parent) {
         return fastn_dom.conditionalDom(root, [
           global.foo__names
         ], function () {
-          return (ftd.len(global.foo__names) > 2);
+          return (ftd.len(fastn_utils.getValueByDotNotation(global, "foo__names")) > 2);
         }, function (root) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
           rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);

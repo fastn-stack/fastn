@@ -45,7 +45,7 @@ let foo__length = function (args) {
       a: fastn.mutableList([]),
       ...args
     };
-    return (len(__args__.a));
+    return (len(fastn_utils.getValueByDotNotation(__args__, "a")));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

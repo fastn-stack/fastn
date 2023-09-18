@@ -133,7 +133,7 @@ let foo__get_first_person = function (args)
       a: fastn.mutableList([]),
       ...args
     };
-    return (ftd.get(__args__.a, 0));
+    return (ftd.get(fastn_utils.getValueByDotNotation(__args__, "a"), 0));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
