@@ -1,0 +1,10 @@
+-- import: 44-module
+
+-- goo:
+
+-- component goo:
+module c: 44-module
+
+-- goo.c.bar:
+
+-- end: goo

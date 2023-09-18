@@ -1068,9 +1068,15 @@ fn search_things_for_module(
         let mut unresolved_thing = None;
 
         for (thing, _expected_kind) in things {
-            let (_, module_component_name) = component_name
-                .rsplit_once('.')
-                .unwrap_or(("", component_name));
+            let mut module_component_name = component_name
+                .split_once('#')
+                .map(|v| v.1)
+                .unwrap_or(component_name)
+                .to_string();
+            if let Some(mc_name) = module_component_name.rsplit_once('.').map(|v| v.1) {
+                module_component_name = mc_name.to_string();
+            }
+
             let thing_real_name = if let Some((_doc_name, element)) = thing.split_once('#') {
                 format!(
                     "{}#{}",
