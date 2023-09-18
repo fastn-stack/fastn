@@ -227,10 +227,6 @@ screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business
 
 -- ft-ui.template list dialogs:
 
--- ft-ui.template: Alert Dialog
-template-url: featured/components/modals/alert-1/
-screenshot: $fastn-assets.files.images.featured.components.dialog-3.png
-
 -- ft-ui.template: Modal
 template-url: featured/components/modals/modal-1/
 screenshot: $fastn-assets.files.images.featured.components.modal-1.png
