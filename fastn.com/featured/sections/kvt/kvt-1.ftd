@@ -1,76 +1,43 @@
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn.com/content-library as footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/priyanka-yadav
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
 
-
-
-
-
-
--- ds.page: 
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-full-width: true
-distribution-bar: true
-full-width-bar: true
-fluid-width: false
-max-width.fixed.px: 1340
-show-layout-bar: true
-
--- ds.page.footer:
-
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
--- end: ds.page.footer
--- ds.page.abstract-bar:
-
--- ds.distributors: Key Value Table 1
-owners: $owner-fastn
+-- ds.featured-category: Key Value Table 1
+featured-link: /featured/sections/cards/
+category: Featured Cards
+image: $fastn-assets.files.images.featured.sections.kvt-1.png
+owners: [$priyanka-yadav.info, $ganesh-salunke.info]
 license-url: https://github.com/FifthTry/key-value-table/blob/main/LICENSE
 license: Creative Commons
 published-date: 25-Aug-2022
-
--- end: ds.page.abstract-bar
-
--- ds.preview-card:
-image: $fastn-assets.files.images.featured.sections.kvt-1.png
-cta-url: https://fifthtry.github.io/key-value-table/
-cta-text: Demo
-github-url: https://github.com/FifthTry/key-value-table
-
--- end: ds.page
+cards: $cards
+github-url: hhttps://github.com/FifthTry/key-value-table
+demo-link: https://fifthtry.github.io/key-value-table
 
 
 
 
 
--- common.owner list owner-fastn:
 
--- common.owner: Ganesh Salunke
-profile: featured/contributors/developers/ganesh-salunke/
-avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
-role: Developer
 
--- common.owner: Priyanka Yadav
-profile: featured/contributors/developers/priyanka-yadav/
-avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
-role: Developer
 
--- end: owner-fastn
+
+-- ft-ui.template list cards:
+
+-- ft-ui.template: Card - 1
+template-url: /featured/sections/cards/card-1/
+screenshot: $fastn-assets.files.images.featured.sections.card-1.png
+
+-- ft-ui.template: Image Card - 1
+template-url: /featured/sections/cards/image-card-1/
+screenshot: $fastn-assets.files.images.featured.sections.image-card-1.png
+
+-- ft-ui.template: Image Card
+template-url: /featured/sections/cards/image-card-1/
+screenshot: $fastn-assets.files.images.featured.sections.image-card-1.png
+
+-- ft-ui.template: Image Gallery IG
+template-url: /featured/sections/cards/image-gallery-ig/
+screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
+
+-- end: cards
