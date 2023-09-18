@@ -1,7 +1,7 @@
 -- import: fastn.com/featured as ft-ui
 
--- ds.page: 
-full-width: true
+
+-- ds.page:
 sidebar: false
 
 -- ft-ui.grid-view: Cards
@@ -9,10 +9,10 @@ templates: $cards
 ;;more-link-text: View more
 ;;more-link: /featured/sections/cards/
 
--- ft-ui.grid-view: Heros
+-- ft-ui.grid-view: Hero Components
 templates: $heros
 more-link-text: View more
-more-link: /featured/sections/heros/
+more-link: /heros/
 
 -- ft-ui.grid-view: Key Value Tables
 templates: $kvt
@@ -37,17 +37,17 @@ more-link: /featured/sections/slides/
 
 -- ft-ui.template list heros:
 
--- ft-ui.template: Hero with two CTA - Design 5
-template-url: featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/
+-- ft-ui.template: Hero Right Hug Expanded Search
+template-url: /hero-right-hug-expanded-search/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
 
--- ft-ui.template: Hero with social - Design 1
-template-url: featured/sections/heros/hero-6/
-screenshot: $fastn-assets.files.images.featured.components.hero-6.png
+-- ft-ui.template: Hero Right Hug Expanded
+template-url: /hero-right-hug-expanded/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-6.png
 
--- ft-ui.template: Hero with two CTA - Design 2
-template-url: featured/sections/heros/hero-2/
-screenshot: $fastn-assets.files.images.featured.components.hero-2.png
+-- ft-ui.template: Hero Right Hug Large
+template-url: /hero-right-hug-large/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-2.png
 
 -- end: heros
 

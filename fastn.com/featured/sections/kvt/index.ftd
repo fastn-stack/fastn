@@ -1,10 +1,10 @@
 -- import: fastn.com/featured as ft-ui
 
--- ds.page: 
-full-width: true
+
+-- ds.page:
 sidebar: false
 
--- ft-ui.grid-view: Key Value Tables
+-- ft-ui.view-all: Key Value Tables
 templates: $kvt
 
 -- end: ds.page

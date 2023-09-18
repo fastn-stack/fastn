@@ -1,10 +1,10 @@
 -- import: fastn.com/featured as ft-ui
 
--- ds.page: 
-full-width: true
+
+-- ds.page:
 sidebar: false
 
--- ft-ui.grid-view: Red Color Scheme
+-- ft-ui.view-all: Red Color Scheme
 templates: $red-scheme
 
 -- end: ds.page
@@ -19,11 +19,11 @@ templates: $red-scheme
 -- ft-ui.template list red-scheme:
 
 -- ft-ui.template: Saturated Sunset CS
-template-url: featured/cs/saturated-sunset-cs/
+template-url: /cs/saturated-sunset-cs/
 screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 
 -- ft-ui.template: Pink Tree CS
-template-url: featured/cs/pink-tree-cs/
+template-url: /cs/pink-tree-cs/
 screenshot: $fastn-assets.files.images.featured.cs.pink-tree-cs.png
 
 -- end: red-scheme

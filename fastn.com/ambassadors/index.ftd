@@ -1,7 +1,7 @@
 -- import: fastn-community.github.io/spectrum-ds/common
 -- import: fastn-community.github.io/footer
 -- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fifthtry.github.io/fastn-typography as typo
 -- import: fastn.com/content-library as lib
 
 
@@ -189,6 +189,11 @@ body body:
 
 -- ftd.column:
 width: fill-container
+
+-- ftd.desktop:
+
+-- ftd.column:
+width: fill-container
 background.solid: $inherited.colors.background.step-2
 padding-vertical.px: 60
 padding-left.px: 60
@@ -201,7 +206,7 @@ spacing: space-between
 max-width.fixed.px: 1440
 
 -- ftd.column:
-width.fixed.percent: 55
+width.fixed.percent: 40
 color: $inherited.colors.text-strong
 spacing.fixed.px: 44
 
@@ -218,7 +223,7 @@ right.px: 40
 top.px: -48
 
 -- ftd.text: $hero-with-4-images.title
-role: $inherited.types.heading-hero
+role: $inherited.types.heading-large
 
 -- ftd.text:
 role: $inherited.types.copy-regular
@@ -230,11 +235,12 @@ if: { hero-with-4-images.cta-text != NULL }
 role: primary
 link: $hero-with-4-images.cta-link
 show-arrow: true
+new-tab: true
 
 -- end: ftd.column
 
 -- ftd.column:
-width.fixed.percent: 45
+width.fixed.percent: 55
 
 -- ftd.row:
 width: fill-container
@@ -261,6 +267,86 @@ src: $hero-with-4-images.image-4
 
 -- end: ftd.column
 
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
+-- ftd.column:
+width: fill-container
+background.solid: $inherited.colors.background.step-2
+align-content: center
+padding-top.px: 60
+padding-bottom.px: 24
+padding-horizontal.px: 24
+
+-- ftd.column:
+width: fill-container
+align-content: center
+spacing.fixed.px: 24
+max-width.fixed.px: 1440
+
+-- ftd.column:
+width: fill-container
+color: $inherited.colors.text-strong
+spacing.fixed.px: 24
+
+-- ftd.image:
+src: $fastn-assets.files.images.ambassadors.paper-plane.svg
+anchor: parent
+left.px: -24
+top.px: -58
+
+-- ftd.image:
+src: $fastn-assets.files.images.ambassadors.book-icon.svg
+anchor: parent
+right.px: -10
+top.px: -48
+
+-- ftd.text: $hero-with-4-images.title
+role: $inherited.types.heading-hero
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+
+$hero-with-4-images.body
+
+-- cta-button: $hero-with-4-images.cta-text
+if: { hero-with-4-images.cta-text != NULL }
+role: primary
+link: $hero-with-4-images.cta-link
+show-arrow: true
+new-tab: true
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 18
+align-content: center
+
+-- ftd.image:
+src: $hero-with-4-images.image-1
+
+-- ftd.image:
+src: $hero-with-4-images.image-2
+
+-- ftd.image:
+src: $hero-with-4-images.image-3
+
+-- ftd.image:
+src: $hero-with-4-images.image-4
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
 -- end: hero-with-4-images
 
 
@@ -280,6 +366,7 @@ boolean medium: false
 boolean show-arrow: false
 optional integer width:
 boolean align-center: false
+boolean new-tab: false
 
 -- ftd.column:
 align-self if { cta-button.align-center }: center
@@ -290,6 +377,7 @@ if: { !cta-button.medium }
 width.fixed.px if { cta-button.width != NULL }: $cta-button.width
 spacing.fixed.px: 10
 link if { cta-button.link != NULL }: $cta-button.link
+open-in-new-tab if { cta-button.new-tab }: true
 background.solid if { cta-button.role == "primary" }: $inherited.colors.cta-primary.base
 background.solid if { cta-button.role == "secondary" }: $inherited.colors.cta-secondary.base
 border-radius.px: 30

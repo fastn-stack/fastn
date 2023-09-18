@@ -1,10 +1,10 @@
 -- import: fastn.com/featured as ft-ui
 
--- ds.page: 
-full-width: true
+
+-- ds.page:
 sidebar: false
 
--- ft-ui.grid-view: Orange Color Scheme
+-- ft-ui.view-all: Orange Color Scheme
 templates: $orange-scheme
 
 -- end: ds.page
@@ -19,11 +19,11 @@ templates: $orange-scheme
 -- ft-ui.template list orange-scheme:
 
 -- ft-ui.template: Dark Flame CS
-template-url: featured/cs/dark-flame-cs/
+template-url: /cs/dark-flame-cs/
 screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
 
 -- ft-ui.template: Navy Nebula CS
-template-url: featured/cs/navy-nebula-cs/
+template-url: /cs/navy-nebula-cs/
 screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
 
 -- end: orange-scheme

@@ -1,7 +1,7 @@
 -- import: fastn.com/featured as ft-ui
 
--- ds.page: 
-full-width: true
+
+-- ds.page:
 sidebar: false
 
 -- ft-ui.view-all: Font Typographies
@@ -21,51 +21,51 @@ templates: $fonts
 -- ft-ui.template list fonts:
 
 -- ft-ui.template: Arya Typography
-template-url: featured/fonts/arya/
+template-url: /fonts/arya/
 screenshot: $fastn-assets.files.images.featured.font.arya-font.jpg
 
 -- ft-ui.template: Blaka Typography
-template-url: featured/fonts/blaka/
+template-url: /fonts/blaka/
 screenshot: $fastn-assets.files.images.featured.font.blaka-font.jpg
 
 -- ft-ui.template: Karma Typography
-template-url: featured/fonts/karma/
+template-url: /fonts/karma/
 screenshot: $fastn-assets.files.images.featured.font.karma-font.jpg
 
 -- ft-ui.template: Khand Typography
-template-url: featured/fonts/khand/
+template-url: /fonts/khand/
 screenshot: $fastn-assets.files.images.featured.font.khand-font.jpg
 
 -- ft-ui.template: Inter Typography
-template-url: featured/fonts/inter/
+template-url: /fonts/inter/
 screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
 -- ft-ui.template: Lato Typography
-template-url: featured/fonts/lato/
+template-url: /fonts/lato/
 screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
 
 -- ft-ui.template: Lobster Typography
-template-url: featured/fonts/lobster/
+template-url: /fonts/lobster/
 screenshot: $fastn-assets.files.images.featured.font.lobster-font.jpg
 
 -- ft-ui.template: Opensans Typography
-template-url: featured/fonts/opensans/
+template-url: /fonts/opensans/
 screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 
 -- ft-ui.template: Pragati Narrow Typography
-template-url: featured/fonts/pragati-narrow/
+template-url: /fonts/pragati-narrow/
 screenshot: $fastn-assets.files.images.featured.font.pragati-narrow-font.jpg
 
 -- ft-ui.template: Roboto Typography
-template-url: featured/fonts/roboto/
+template-url: /fonts/roboto/
 screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
 
 -- ft-ui.template: Roboto Mono Typography
-template-url: featured/fonts/roboto-mono/
+template-url: /fonts/roboto-mono/
 screenshot: $fastn-assets.files.images.featured.font.roboto-mono-font.jpg
 
 -- ft-ui.template: Tiro Typography
-template-url: featured/fonts/tiro/
+template-url: /fonts/tiro/
 screenshot: $fastn-assets.files.images.featured.font.tiro-font.jpg
 
 -- end: fonts

@@ -1,12 +1,12 @@
 -- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fifthtry.github.io/fastn-typography as typo
 -- import: fastn.com/utils
 -- import: fastn-community.github.io/banner
--- import: fastn-community.github.io/footer
+-- import: fastn.com/content-library as footer
 -- import: fastn-community.github.io/doc-site/common
 -- import: fastn.com/content-library as cl
 -- import: fastn.com/FASTN/featured-ds
-export: featured-business
+export: featured-business,featured-category
 
 -- import: fastn-community.github.io/doc-site
 export: markdown,h0,h1,h2,h3,code,rendered,output,image,iframe,youtube,compact-text,post,posts,featured-post,image-first,image-in-between,without-image,author-bio,tip,not-found-1,not-found-2,link,link-group,without-image-half
@@ -17,7 +17,7 @@ export: markdown,h0,h1,h2,h3,code,rendered,output,image,iframe,youtube,compact-t
 children wrapper:
 optional caption title:
 optional body body:
-boolean sidebar: true
+boolean sidebar: false
 optional string document-title:
 optional string document-description:
 optional ftd.raw-image-src document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
@@ -33,17 +33,19 @@ integer logo-height: 38
 boolean show-footer: true
 boolean show-banner: true
 optional ftd.raw-image-src favicon:
+boolean search: true
+optional string search-url: /search/
+ftd.ui list fluid-wrap:
 
 -- ftd.ui list page.footer:
 
--- footer.social-sideline-footer:
-social: true
+-- footer.footer:
 site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: /twitter/
-discord-url: /discord/
-instagram-url: /instagram/
+site-url: index.html
+social-links: $footer.social-links
 copyright: Copyright © 2023 - fastn.com
+full-width: false
+max-width.fixed.px: 1340
 
 -- end: page.footer
 
@@ -51,11 +53,9 @@ copyright: Copyright © 2023 - fastn.com
 -- ftd.ui list page.banner:
 
 -- banner.cta-banner:
-cta-text: HackOdisha 3.0 🚀
-cta-link: https://fastn.com/hackodisha/
-
-Happening Now: 
-
+cta-text: Star us on Github 🌟
+cta-link: https://github.com/fastn-stack/fastn/
+bgcolor: $inherited.colors.cta-primary.base
 
 -- end: page.banner
 
@@ -69,12 +69,6 @@ Happening Now:
 
 Enjoying `fastn`? Please consider giving us a star ⭐️ on
 [GitHub](https://github.com/fastn-stack/fastn) to show your support!
-
--- utils.compact-text.inner:
-
--- star-component:
-
--- end: utils.compact-text.inner
 
 -- end: utils.compact-text
 
@@ -91,12 +85,6 @@ Join our [Discord](https://discord.gg/a7eBUeutWD) channel and share your
 thoughts, suggestion, question etc.
 
 Connect with our [community](/community/)!
-
--- utils.compact-text.inner:
-
--- chronica-component:
-
--- end: utils.compact-text.inner
 
 -- end: utils.compact-text
 
@@ -143,11 +131,13 @@ document-title: $page.document-title
 document-description: $page.document-description
 document-image: $page.document-image
 favicon: $page.favicon
-
+search: $page.search
+search-url: $page.search-url
+fluid-width: false
+max-width.fixed.px: 1340
+fluid-wrap: $page.fluid-wrap
 
 -- doc-site.page.header-logo-ui:
-
--- car-component:
 
 -- end: doc-site.page.header-logo-ui
 
@@ -218,6 +208,7 @@ $page-with-no-right-sidebar.body
 -- ftd.column:
 spacing.fixed.em: 0.8
 width: fill-container
+min-height.fixed.calc: 100vh
 
 -- obj:
 $loop$: $page-with-no-right-sidebar.uis as $obj

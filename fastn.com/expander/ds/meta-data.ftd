@@ -155,13 +155,13 @@ When we add the `document-title` property, the page title can have custom
 title, which is better for SEO.
 
 The custom title given in this property is added as the meta-data into the 
-tags `og-title` and `twitter-title` as well as the `title` tag.
+tags `og-title` and `twitter-title` as well as the `<title>` tag.
 
 -- ds.code: custom document title
 lang: ftd
 
 \-- ds.page: This is page title
-document-title: Welcome!	 		;;<hl>
+document-title: Welcome!	 		;; <hl>
 
 
 -- ds.markdown:

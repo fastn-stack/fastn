@@ -1,0 +1,38 @@
+-- ds.page-with-no-right-sidebar: Learning Resources
+
+Discover a wealth of resources to help you master `fastn` web development, from
+creating websites to building dynamic apps.
+
+-- ds.h1: Learn How to Create a Website
+
+- **Blog:** [A content writer's experience with fastn.](/writer/)
+- **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/) 
+- **Template:** Explore the official [fastn template.](https://github.com/fastn-stack/fastn-template) 
+- **Markdown Guide:** Learn using [markdown](/markdown/-/frontend/) in `fastn`.
+- **Workshop** to [create website.](https://github.com/fastn-stack/workshop)
+
+-- ds.h1: Customize the Design of Your fastn Site
+
+- **Color Scheme:** Discover how to create [color schemes.](/color-scheme/)
+- **Create Fonts:** Learn to [create font package](/create-font-package/) 
+- **Typography:** Discover how to create [typography.](/typography/)
+- **Figma Tokens Integration:** Seamlessly [Integrate Figma tokens.](/figma/)
+
+-- ds.h1: Build Reusable Components with `fastn`
+
+- **Expander Course:** Learn to create reusable components with 
+    [Expander Crash Course.](/expander/)
+- **Workshop:** By building reusable components, learn to create an [Image gallery](https://github.com/fastn-stack/workshop/tree/main/b-section) 
+	section.
+
+-- ds.h1: Build Full-Stack Applications
+
+- **Full Stack Development:** Learn the fundamentals of [backend](/backend/) integration for full-stack development with `fastn`.
+- **Todo App Example:** Explore a complete `fastn` [Todo](https://github.com/fastn-community/todo-app) app.
+- **Backend basics:** Learn the 
+    [basics of HTTP Processor and data modelling.](/country-details/basics/)
+- **Dynamic Country List Page:** Build a 
+	[dynamic country list page](/country-list/) with `fastn`.
+- **Workshop** (Coming Soon): Stay tuned for an upcoming workshop.
+
+-- end: ds.page-with-no-right-sidebar

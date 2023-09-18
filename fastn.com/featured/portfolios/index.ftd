@@ -1,7 +1,7 @@
 -- import: fastn.com/featured as ft-ui
 
--- ds.page: 
-full-width: true
+
+-- ds.page:
 sidebar: false
 
 -- ft-ui.grid-view: Portfolio / Personal Sites

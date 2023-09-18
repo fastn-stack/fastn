@@ -1,11 +1,9 @@
-.filter-1px
-{
-	 filter: blur(1px);
+.filter-1px {
+  filter: blur(1px);
 }
 
-.filter-2px
-{
-	 filter: blur(2px);
+.filter-2px {
+  filter: blur(2px);
 }
 
 
@@ -31,10 +29,10 @@
   grid-column-end: span 2;
   grid-row-end: span 2;
 }
- 
-.mouse-over{
-	-webkit-transition: all 0.2s linear;
-    -moz-transition: all 0.2s linear;
-    -o-transition: all 0.2s linear;
-    transition: all 0.2s linear;
+
+.mouse-over {
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
 }

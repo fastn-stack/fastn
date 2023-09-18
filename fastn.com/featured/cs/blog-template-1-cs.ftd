@@ -1,132 +1,37 @@
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn-community.github.io/footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fastn.com/u/yashveer-mehra
+-- import: fastn.com/u/ganesh-salunke
 -- import: fastn.com/featured as ft-ui
--- import: fastn.com/assets
 
-
-
-
-
--- ds.page:
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-show-layout-bar: true
-full-width: true
-distribution-bar: true
-full-width-bar: true
-
--- ds.page.footer:
-
--- footer.social-sideline-footer:
-social: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
-
--- end: ds.page.footer
-
--- ds.page.abstract-bar:
-
--- ds.distributors: Blog Template 1 CS
-owners: $owner-fastn
+-- ds.featured-category: Blog Template 1 CS
+featured-link: /cs/blue-shades/
+category: Color Schemes
+image: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
+owners: [$yashveer-mehra.owner, $ganesh-salunke.owner]
 license-url: https://github.com/fastn-community/blog-template-1-cs/blob/main/LICENSE
 license: Creative Commons
 published-date: 01-Aug-2023
-
--- end: ds.page.abstract-bar
-
--- ds.page.full-width-wrap:
-
--- ft-ui.grid-view: Featured Color Scheme
-templates: $similar-schemes
-more-link-text: View all
-more-link: /featured/cs/
-show-large: true
-
--- end: ds.page.full-width-wrap
-
--- ds.preview-card:
-image: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
-cta-url: https://fastn-community.github.io/blog-template-1-cs/
-cta-text: Demo
+cards: $similar-schemes
 github-url: https://github.com/fastn-community/blog-template-1-cs
-cta-2-url: https://fastn-community.github.io/blog-template-1-cs/
-cta-2-text: User Manual
-
--- end: ds.page
-
-
-
-
-
-
-
-
-
-
--- common.social-media list social-links:
-
--- common.social-media: 
-link: https://discord.gg/bucrdvptYd
-src: $assets.files.images.discord.svg
-
--- common.social-media: 
-link: https://twitter.com/fastn_stack
-src: $assets.files.images.twitter.svg
-
--- common.social-media: 
-link: https://www.linkedin.com/company/fifthtry/
-src: $assets.files.images.linkedin.svg
-
--- end: social-links
-
-
-
-
-
-
-
-
-
--- common.owner list owner-fastn:
-
--- common.owner: Ganesh Salunke
-profile: featured/contributors/developers/ganesh-salunke/
-avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
-role: Developer
-
--- common.owner: Priyanka Yadav
-profile: featured/contributors/developers/priyanka-yadav/
-avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
-role: Developer
-
--- end: owner-fastn
-
-
-
-
-
-
-
+demo-link: https://fastn-community.github.io/blog-template-1-cs/
 
 
 
 -- ft-ui.template list similar-schemes:
 
 -- ft-ui.template: Blue Heal CS
-template-url: featured/cs/blue-heal-cs/
+template-url: /cs/blue-heal-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
+
+-- ft-ui.template: Dark Flame CS
+template-url: /cs/dark-flame-cs/
+screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
+
+-- ft-ui.template: Navy Nebula CS
+template-url: /cs/navy-nebula-cs/
+screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
+
+-- ft-ui.template: Forest CS
+template-url: /cs/forest-cs/
+screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
 
 -- end: similar-schemes

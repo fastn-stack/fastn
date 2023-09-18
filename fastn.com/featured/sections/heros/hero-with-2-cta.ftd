@@ -1,10 +1,9 @@
 -- import: fastn.com/featured as ft-ui
 
--- ds.page: 
-full-width: true
+-- ds.page:
 sidebar: false
 
--- ft-ui.grid-view: Hero with two CTA
+-- ft-ui.view-all: Hero with two CTA
 templates: $hero-with-2-cta
 
 -- end: ds.page
@@ -17,22 +16,22 @@ templates: $hero-with-2-cta
 
 -- ft-ui.template: Hero with two CTA - Design 1
 template-url: featured/sections/heros/hero-1/
-screenshot: $fastn-assets.files.images.featured.components.hero-1.png
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-1.png
 
 -- ft-ui.template: Hero with two CTA - Design 2
 template-url: featured/sections/heros/hero-2/
-screenshot: $fastn-assets.files.images.featured.components.hero-2.png
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-2.png
 
 -- ft-ui.template: Hero with two CTA - Design 3
 template-url: featured/sections/heros/hero-3/
-screenshot: $fastn-assets.files.images.featured.components.hero-3.png
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-3.png
 
 -- ft-ui.template: Hero with two CTA - Design 4
 template-url: featured/sections/heros/hero-5/
-screenshot: $fastn-assets.files.images.featured.components.hero-5.png
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-5.png
 
 -- ft-ui.template: Hero with two CTA - Design 5
-template-url: featured/sections/heros/hero-with-2-cta/hero-with-2-cta-5/
+template-url: heros/hero-with-2-cta/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
 
 -- end: hero-with-2-cta
