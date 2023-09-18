@@ -1,96 +1,22 @@
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn.com/content-library as footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/u/saurabh-lohiya
+-- import: fastn.com/u/yashveer-mehra
 -- import: fastn.com/featured as ft-ui
 
-
-
-
-
--- ds.page:
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-community/doc-site
-full-width: true
-distribution-bar: true
-full-width-bar: true
-fluid-width: false
-max-width.fixed.px: 1340
-
--- ds.page.footer:
-
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
--- end: ds.page.footer
-
--- ds.page.abstract-bar:
-
--- ds.distributors: Hero Right Hug Search
-owners: $owner-fastn
+-- ds.featured-category: Hero Right Hug Search
+featured-link: /heros/
+category: Featured Hero Components
+image: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-search.jpg
+owners: [$yashveer-mehra.info, $saurabh-lohiya.info]
 license-url: https://github.com/saurabh-lohiya/hero
 license: Creative Commons
 published-date: 31-Aug-2023
-
--- end: ds.page.abstract-bar
-
-
--- ds.page.full-width-wrap:
-
--- ft-ui.grid-view: Featured Hero Components
-templates: $heros
-more-link-text: View more
-more-link: /featured/sections/heros/
-show-large: true
-
--- end: ds.page.full-width-wrap
-
-
--- ds.preview-card:
-image: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-search.jpg
-cta-url: https://saurabh-lohiya.github.io/hero/docs/hero-right-hug-search/
-cta-text: Demo
+cards: $heros
 github-url: https://github.com/saurabh-lohiya/hero
-cta-2-url: https://saurabh-lohiya.github.io/hero/docs/hero-right-hug-search/
-cta-2-text: User Manual
-
--- end: ds.page
+demo-link: https://saurabh-lohiya.github.io/hero/docs/hero-right-hug-search/
 
 
 
 
-
-
-
-
-
-
--- common.owner list owner-fastn:
-
--- common.owner: Saurabh Lohiya
-profile: featured/contributors/developers/saurabh-lohiya/
-avatar: $fastn-assets.files.featured.contributors.developers.saurabh-lohiya.saurabh-lohiya.jpg
-role: Developer
-
--- common.owner: Yashveer Mehra
-profile: featured/contributors/designers/yashveer-mehra/
-avatar: $fastn-assets.files.featured.contributors.designers.yashveer-mehra.yashveer-mehra.jpg
-role: Designer
-
--- end: owner-fastn
 
 
 
