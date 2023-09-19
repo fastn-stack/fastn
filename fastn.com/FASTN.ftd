@@ -29,13 +29,6 @@ favicon: /-/fastn.com/images/favicon.svg
 -- fastn.auto-import: fifthtry.github.io/common as common
 
 
--- fastn.dynamic-urls:
-
-# RD Test:
-  url: /rd-test/<string:message>/
-  document: ftd-host/r.ftd
-
-
 -- fastn.sitemap:
 
 # Examples: /examples/
@@ -49,61 +42,61 @@ favicon: /-/fastn.com/images/favicon.svg
 - Full-stack: /backend/
 - Deploy: /deploy/
 - Design: /design/
-  document: /features/design.ftd
+  document: features/design.ftd
 - Community: /community/
-  document: /features/community.ftd
+  document: features/community.ftd
 - `fastn` for Geeks: /geeks/
   document: why/geeks.ftd
 
 ## Compare: /react/
-  document: /compare/react.ftd
+  document: compare/react.ftd
 - fastn vs React: /react/
-  document: /compare/react.ftd
+  document: compare/react.ftd
 - fastn vs Webflow: /webflow/
-  document: /compare/webflow.ftd
+  document: compare/webflow.ftd
 
 ## Case study: /acme/
-document: blog/acme.ftd
+  document: blog/acme.ftd
 
 - Acme: /acme/
-document: blog/acme.ftd
+  document: blog/acme.ftd
 - To-do: /todo/
-  document: /case-study/todo.ftd
+  document: case-study/todo.ftd
 - Country: /backend/learn/
   document: /backend/country-details/index.ftd
   - Basic of `http`, `data modelling`: /country-details/basics/
-    document: /backend/country-details/http-data-modelling.ftd
+    document: backend/country-details/http-data-modelling.ftd
   - Building dynamic country list page: /country-list/
-    document: /backend/country-details/dynamic-country-list-page.ftd
+    document: backend/country-details/dynamic-country-list-page.ftd
 
 # Get Started: /quick-build/
-  document: /get-started/browse-pick.ftd
+  document: get-started/browse-pick.ftd
 
 ## Create Website: /quick-build/
-document: /get-started/browse-pick.ftd
+  document: get-started/browse-pick.ftd
 - Quick Build: /quick-build/
-  document: /get-started/browse-pick.ftd
+  document: get-started/browse-pick.ftd
 - fastn basics: /markdown/-/frontend/
-  document: /expander/ds/markdown.ftd
+  document: expander/ds/markdown.ftd
   - Markdown: /markdown/-/frontend/
-  document: /expander/ds/markdown.ftd
+    document: expander/ds/markdown.ftd
   - Change Color Scheme: /color-scheme/
-  document: /expander/ds/ds-cs.ftd
+    document: expander/ds/ds-cs.ftd
   - Change Typography: /typography/
-  document: /expander/ds/ds-typography.ftd
+    document: expander/ds/ds-typography.ftd
   - Change Theme: /theme/
-  document: /get-started/theme.ftd
-  skip: true
+    document: get-started/theme.ftd
+    skip: true
   - Sitemap: /understanding-sitemap/-/build/
-  document: /expander/ds/understanding-sitemap.ftd
+    document: expander/ds/understanding-sitemap.ftd
   - SEO: /seo-meta/
-  document: /expander/ds/meta-data.ftd
+    document: expander/ds/meta-data.ftd
     - Meta Data: /seo-meta/
-  document: /expander/ds/meta-data.ftd
+      document: expander/ds/meta-data.ftd
     - Redirects: /redirects/
-  document: backend/redirects.ftd
+      document: backend/redirects.ftd
     - URL: /clean-urls/-/build/
-  document: /expander/sitemap-document.ftd
+      document: expander/sitemap-document.ftd
 
 
 ## Learn: /install/
@@ -125,9 +118,9 @@ document: /get-started/browse-pick.ftd
     document: /get-started/editor.ftd
     skip: true
     - Syntax Highlighting Sublime: /sublime/
-    document: author/how-to/sublime.ftd
+      document: author/how-to/sublime.ftd
     - Syntax Highlighting VS Code: /vscode/
-    document: author/how-to/vscode.ftd
+      document: author/how-to/vscode.ftd
 - Exapander Crash Course: /expander/
   - Part 1. Hello World: /expander/hello-world/
   - Part 2. Basic UI: /expander/basic-ui/
@@ -141,11 +134,11 @@ document: /get-started/browse-pick.ftd
 
 
 ## Sections: /sections/
-document: /featured/new-sections.ftd
-skip: true
+  document: featured/new-sections.ftd
+  skip: true
 
 ## Featured Components: /featured/
-   document: /get-started/learn.ftd
+   document: get-started/learn.ftd
 - Designers: /featured/contributors/designers/
   skip: true
   - Muskan Verma: /featured/contributors/designers/muskan-verma/
@@ -334,11 +327,11 @@ skip: true
     - Sunset Business Card: /featured/components/business-cards/sunset-card/
       skip: true
   - Language Switcher: /featured/components/language-switcher/
-      skip: true
+    skip: true
   - Subscription Form: /featured/components/subscription-form/
-      skip: true
+    skip: true
   - Code Block: /featured/components/code-block/
-      skip: true
+    skip: true
   - Header / Navbar: /featured/components/headers/
     - Header: /featured/components/headers/header/
       skip: true
@@ -353,154 +346,154 @@ skip: true
     - Modal Cover: /featured/components/modals/modal-cover/
       skip: true
   - Quotes: /featured/quotes/
-    document: /featured/components/quotes/index.ftd
+    document: featured/components/quotes/index.ftd
     - Simple Quotes: /quotes/simple/
       skip: true
-      document: /featured/components/quotes/simple-quotes/
+      document: featured/components/quotes/simple-quotes/
       - Chalice: /quotes/chalice/
-        document: /featured/components/quotes/simple-quotes/demo-1.ftd
+        document: featured/components/quotes/simple-quotes/demo-1.ftd
         skip: true
       - Rustic: /quotes/rustic/
-        document: /featured/components/quotes/simple-quotes/demo-2.ftd
+        document: featured/components/quotes/simple-quotes/demo-2.ftd
         skip: true
       - Echo: /quotes/echo/
-        document: /featured/components/quotes/simple-quotes/demo-3.ftd
+        document: featured/components/quotes/simple-quotes/demo-3.ftd
         skip: true
       - Onyx: /quotes/onyx/
-        document: /featured/components/quotes/simple-quotes/demo-4.ftd
+        document: featured/components/quotes/simple-quotes/demo-4.ftd
         skip: true
       - Marengo: /quotes/marengo/
-        document: /featured/components/quotes/simple-quotes/demo-5.ftd
+        document: featured/components/quotes/simple-quotes/demo-5.ftd
         skip: true
       - Chrome: /quotes/chrome/
-        document: /featured/components/quotes/simple-quotes/demo-6.ftd
+        document: featured/components/quotes/simple-quotes/demo-6.ftd
         skip: true
       - Dorian: /quotes/dorian/
-        document: /featured/components/quotes/simple-quotes/demo-7.ftd
+        document: featured/components/quotes/simple-quotes/demo-7.ftd
         skip: true
       - Marengo Hug: /quotes/marengo-hug/
-        document: /featured/components/quotes/simple-quotes/demo-8.ftd
+        document: featured/components/quotes/simple-quotes/demo-8.ftd
         skip: true
       - Matte: /quotes/matte/
-        document: /featured/components/quotes/simple-quotes/demo-9.ftd
+        document: featured/components/quotes/simple-quotes/demo-9.ftd
         skip: true
       - Scorpion: /quotes/scorpion/
-        document: /featured/components/quotes/simple-quotes/demo-10.ftd
+        document: featured/components/quotes/simple-quotes/demo-10.ftd
         skip: true
       - Silver: /quotes/silver/
-        document: /featured/components/quotes/simple-quotes/demo-11.ftd
+        document: featured/components/quotes/simple-quotes/demo-11.ftd
         skip: true
       - Storm Cloud: /quotes/storm-cloud/
-        document: /featured/components/quotes/simple-quotes/demo-12.ftd
+        document: featured/components/quotes/simple-quotes/demo-12.ftd
         skip: true
     - Quotes with author icon: /quotes/quotes-with-author/
       skip: true
-      document: /featured/components/quotes/author-icon-quotes/index.ftd
+      document: featured/components/quotes/author-icon-quotes/index.ftd
       - Charcoal: /quotes/charcoal/
-        document: /featured/components/quotes/author-icon-quotes/demo-1.ftd
+        document: featured/components/quotes/author-icon-quotes/demo-1.ftd
         skip: true
     - Quotes with images: /quotes/quotes-with-images/
       skip: true
-      document: /featured/components/quotes/quotes-with-images/
+      document: featured/components/quotes/quotes-with-images.ftd
       - Electric: /quotes/electric/
-        document: /featured/components/quotes/quotes-with-images/demo-1.ftd
+        document: featured/components/quotes/quotes-with-images/demo-1.ftd
         skip: true
 - Design Elements: /featured/design/
   - Color Schemes: /featured/cs/
     - Shades Of Red: /cs/red-shades
       skip: true
-      document: /featured/cs/red-shades/
+      document: featured/cs/red-shades.ftd
     - Shades Of Blue: /cs/blue-shades
       skip: true
-      document: /featured/cs/blue-shades/
+      document: featured/cs/blue-shades.ftd
     - Shades Of Green: /cs/green-shades
       skip: true
-      document: /featured/cs/green-shades/
+      document: featured/cs/green-shades.ftd
     - Shades Of Orange: /cs/orange-shades
       skip: true
-      document: /featured/cs/orange-shades/
+      document: featured/cs/orange-shades.ftd
     - Shades Of Violet: /cs/violet-shades
       skip: true
-      document: /featured/cs/violet-shades/
+      document: featured/cs/violet-shades.ftd
     - Blog Template CS: /cs/blog-template-cs/
       skip: true
-      document: /featured/cs/blog-template-cs/
+      document: featured/cs/blog-template-cs.ftd
     - Blue Heal CS: /cs/blue-heal-cs/
       skip: true
       document: /featured/cs/blue-heal-cs/
     - Midnight Rush CS: /cs/midnight-rush-cs/
       skip: true
-      document: /featured/cs/midnight-rush-cs/
+      document: featured/cs/midnight-rush-cs.ftd
     - Dark Flame CS: /cs/dark-flame-cs/
       skip: true
-      document: /featured/cs/dark-flame-cs/
+      document: featured/cs/dark-flame-cs.ftd
     - Forest CS: /cs/forest-cs/
       skip: true
-      document: /featured/cs/forest-cs/
+      document: featured/cs/forest-cs.ftd
     - Midnight Storm CS: /cs/midnight-storm-cs/
       skip: true
-      document: /featured/cs/midnight-storm-cs/
+      document: featured/cs/midnight-storm-cs.ftd
     - Misty Gray CS: /cs/misty-gray-cs/
       skip: true
-      document: /featured/cs/misty-gray-cs/
+      document: featured/cs/misty-gray-cs.ftd
     - Navy Nebula CS: /cs/navy-nebula-cs/
       skip: true
-      document: /featured/cs/navy-nebula-cs/
+      document: featured/cs/navy-nebula-cs.ftd
     - Pretty CS: /cs/pretty-cs/
       skip: true
-      document: /featured/cs/pretty-cs/
+      document: featured/cs/pretty-cs.ftd
     - Saturated Sunset CS: /cs/saturated-sunset-cs/
       skip: true
-      document: /featured/cs/saturated-sunset-cs/
+      document: featured/cs/saturated-sunset-cs.ftd
     - Pink Tree Cs: /cs/pink-tree-cs/
       skip: true
-      document: /featured/cs/pink-tree-cs/
+      document: featured/cs/pink-tree-cs.ftd
     - Winter CS: /cs/winter-cs/
       skip: true
-      document: /featured/cs/winter-cs/
+      document: featured/cs/winter-cs.ftd
     - Little Blue CS: /cs/little-blue-cs/
       skip: true
-      document: /featured/cs/little-blue-cs/
+      document: featured/cs/little-blue-cs.ftd
     - Blog Template 1 CS: /cs/blog-template-1-cs/
       skip: true
-      document: /featured/cs/blog-template-1-cs/
+      document: featured/cs/blog-template-1-cs.ftd
   - Font Typographies: /featured/fonts/
     - Arya Typography: /fonts/arya/
       skip: true
-      document: /featured/fonts/arya/
+      document: featured/fonts/arya.ftd
     - Blaka Typography: /fonts/blaka/
       skip: true
-      document: /featured/fonts/blaka/
+      document: featured/fonts/blaka.ftd
     - Lobster Typography: /fonts/lobster/
       skip: true
-      document: /featured/fonts/lobster/
+      document: featured/fonts/lobster.ftd
     - Opensans Typography: /fonts/opensans/
       skip: true
-      document: /featured/fonts/opensans/
+      document: featured/fonts/opensans.ftd
     - Pragati Narrow Typography: /fonts/pragati-narrow/
       skip: true
-      document: /featured/fonts/pragati-narrow/
+      document: featured/fonts/pragati-narrow.ftd
     - Roboto Mono Typography: /fonts/roboto-mono/
       skip: true
-      document: /featured/fonts/roboto-mono/
+      document: featured/fonts/roboto-mono.ftd
     - Roboto Typography: /fonts/roboto/
       skip: true
-      document: /featured/fonts/roboto/
+      document: featured/fonts/roboto.ftd
     - Tiro Typography: /fonts/tiro/
       skip: true
-      document: /featured/fonts/tiro/
+      document: featured/fonts/tiro.ftd
     - Inter Typography: /fonts/inter/
       skip: true
-      document: /featured/fonts/inter/
+      document: featured/fonts/inter.ftd
     - Karma Typography: /fonts/karma/
       skip: true
-      document: /featured/fonts/karma/
+      document: featured/fonts/karma.ftd
     - Khand Typography: /fonts/khand/
       skip: true
-      document: /featured/fonts/khand/
+      document: featured/fonts/khand.ftd
     - lato Typography: /fonts/lato/
       skip: true
-      document: /featured/fonts/lato/
+      document: featured/fonts/lato.ftd
 
 # Docs: /ftd/data-modelling/
 
@@ -508,58 +501,58 @@ skip: true
 
 - Data Modelling: /ftd/data-modelling/
   - Variables: /variables/
-    document: /ftd/variables.ftd
+    document: ftd/variables.ftd
   - Built-in Types: /built-in-types/
-    document: /ftd/built-in-types.ftd
+    document: ftd/built-in-types.ftd
     description: boolean, integer, decimal, string, caption, body, caption or body, ftd.ui, children, ftd.align-self, ftd.align, ftd.anchor, ftd.linear-gradient, ftd.linear-gradient-color, ftd.breakpoint-width-data, ftd.linear-gradient-directions, ftd.background-image, ftd.background-position, ftd.background-repeat, ftd.background-size, ftd.background, ftd.border-style, ftd.color, ftd.display, ftd.color-scheme, ftd.cursor, ftd.image-src, ftd.length, ftd.length-pair, ftd.loading, ftd.overflow, ftd.region, ftd.resize, ftd.resizing, ftd.responsive-type, ftd.shadow, ftd.spacing, ftd.text-align, ftd.text-input-type, ftd.text-style, ftd.text-transform, ftd.type, ftd.white-space, ftd.type-data
   - `record`: /record/
-    document: /ftd/record.ftd
+    document: ftd/record.ftd
   - `or-type`: /or-type/
-    document: /ftd/or-type.ftd
+    document: ftd/or-type.ftd
   - `list`: /list/
-    document: /ftd/list.ftd
+    document: ftd/list.ftd
 - `component`: /components/
-  document: /ftd/components.ftd
+  document: ftd/components.ftd
 - Headers: /headers/
   document: ftd/headers.ftd
 - Visibility: /visibility/
-  document: /ftd/visibility.ftd
+  document: ftd/visibility.ftd
 - Module: /module/
-  document: /ftd/module.ftd
+  document: ftd/module.ftd
   skip: true
 - Commenting: /comments/
   document: ftd/comments.ftd
 - Kernel Components: /kernel/
-  document: /ftd/kernel.ftd
+  document: ftd/kernel.ftd
   - `ftd.document` 🚧: /document/
-    document: /ftd/document.ftd
+    document: ftd/document.ftd
   - `ftd.row`: /row/
-    document: /ftd/row.ftd
+    document: ftd/row.ftd
   - `ftd.column`: /column/
-    document: /ftd/column.ftd
+    document: ftd/column.ftd
   - `ftd.container`: /container/
-    document: /ftd/container.ftd
+    document: ftd/container.ftd
   - `ftd.text`: /text/
-    document: /ftd/text.ftd
+    document: ftd/text.ftd
   - `ftd.image`: /image/
-    document: /ftd/image.ftd
+    document: ftd/image.ftd
   - `ftd.video`: /video/
-    document: /ftd/video.ftd
+    document: ftd/video.ftd
   - `ftd.rive` (animation): /rive/
     document: ftd/rive.ftd
     description: animation
   - `ftd.iframe`: /iframe/
-    document: /ftd/iframe.ftd
+    document: ftd/iframe.ftd
   - `ftd.integer`: /integer/
-    document: /ftd/integer.ftd
+    document: ftd/integer.ftd
   - `ftd.decimal`: /decimal/
-    document: /ftd/decimal.ftd
+    document: ftd/decimal.ftd
   - `ftd.boolean`: /boolean/
-    document: /ftd/boolean.ftd
+    document: ftd/boolean.ftd
   - `ftd.code`: /code/
-    document: /ftd/code.ftd
+    document: ftd/code.ftd
   - `ftd.text-input`: /text-input/
-    document: /ftd/text-input.ftd
+    document: ftd/text-input.ftd
   - `ftd.checkbox`: /checkbox/
     document: ftd/checkbox.ftd
   - `ftd.desktop`: /desktop/
@@ -629,25 +622,25 @@ skip: true
   document: author/how-to/create-fastn-package.ftd
 - Best Practices: /best-practices/
   - Formatting: /formatting/
-    document: /best-practices/formatting.ftd
+    document: best-practices/formatting.ftd
   - Import: /importing-packages/
-    document: /best-practices/import.ftd
+    document: best-practices/import.ftd
   - Auto-import: /auto-import/
-    document: /best-practices/auto-import.ftd
+    document: best-practices/auto-import.ftd
   - Device: /device-guidelines/
-    document: /best-practices/device.ftd
+    document: best-practices/device.ftd
   - Conditions: /how-to-use-conditions/
-    document: /best-practices/use-conditions.ftd
+    document: best-practices/use-conditions.ftd
   - Container: /container-guidelines/
-    document: /best-practices/container-guidelines.ftd
+    document: best-practices/container-guidelines.ftd
   - Same argument & attribute types: /same-argument-attribute-type/
-    document: /best-practices/same-argument-attribute-type.ftd
+    document: best-practices/same-argument-attribute-type.ftd
   - FScript: /fscript-guidelines/
-    document: /best-practices/fscript-guidelines.ftd
+    document: best-practices/fscript-guidelines.ftd
   - Inherited Types: /inherited-guidelines/
-    document: /best-practices/inherited-types.ftd
+    document: best-practices/inherited-types.ftd
   - Variable & it's Type: /variable-type-guidelines/
-    document: /best-practices/variable-type.ftd
+    document: best-practices/variable-type.ftd
   - Optional Arguments: /optional-argument-guidelines/
     document: best-practices/optional-arg-not-null.ftd
   - Commenting: /commenting-guidelines/
@@ -658,8 +651,7 @@ skip: true
     document: best-practices/property-guidelines.ftd
 
 ## Fullstack: /dynamic-urls/
-document: backend/dynamic-urls.ftd
-
+  document: backend/dynamic-urls.ftd
 
 - Endpoint Guide 🚧: /endpoint/
   document: backend/endpoint.ftd
@@ -686,7 +678,7 @@ document: backend/dynamic-urls.ftd
   document: backend/ftd-redirect.ftd
 
 ## Deploy: /github-pages/
-document: author/how-to/github-pages.ftd
+  document: author/how-to/github-pages.ftd
 
 - Static Hosting:
   - Github pages: /github-pages/
@@ -714,157 +706,157 @@ document: author/how-to/github-pages.ftd
   document: typo/typo-json-to-ftd
 
 # Community: /champion-program/
-document: /student-programs/champion.ftd
+  document: student-programs/champion.ftd
 
 ## Programs: /champion-program/
-document: /student-programs/champion.ftd
+  document: student-programs/champion.ftd
 
 - Student Ambassador Program: /ambassador/
-  document: /student-programs/ambassador.ftd
+  document: student-programs/ambassador.ftd
   skip: true
 - Champion Program: /champion-program/
-  document: /student-programs/champion.ftd
+  document: student-programs/champion.ftd
   - Champions: /champions/
-    document: /student-programs/champions/all-champions.ftd
+    document: student-programs/champions/all-champions.ftd
     - Ajit Garg: /champions/ajit-garg/
-      document: /student-programs/champions/ajit-garg.ftd
+      document: student-programs/champions/ajit-garg.ftd
       skip: true
     - Ayush Soni: /champions/ayush-soni/
-      document: /student-programs/champions/ayush-soni.ftd
+      document: student-programs/champions/ayush-soni.ftd
       skip: true
     - Govindaraman S: /champions/govindaraman-s/
-      document: /student-programs/champions/govindaraman.ftd
+      document: student-programs/champions/govindaraman.ftd
       skip: true
     - Aprita Jaiswal: /champions/arpita-jaiswal/
-      document: /student-programs/champions/arpita-jaiswal.ftd
+      document: student-programs/champions/arpita-jaiswal.ftd
       skip: true
-    - Rithik Seth:  /champions/rithik-seth/
-      document: /student-programs/champions/rithik-seth.ftd
+    - Rithik Seth: /champions/rithik-seth/
+      document: student-programs/champions/rithik-seth.ftd
       skip: true
     - Harsh Singh: /champions/harsh-singh/
-      document: /student-programs/champions/harsh-singh.ftd
+      document: student-programs/champions/harsh-singh.ftd
       skip: true
     - Ganesh Salunke: /champions/ganesh-salunke/
-      document: /student-programs/champions/ganesh-salunke.ftd
+      document: student-programs/champions/ganesh-salunke.ftd
       skip: true
     - Priyanka Yadav: /champions/priyanka-yadav/
-      document: /student-programs/champions/priyanka-yadav.ftd
+      document: student-programs/champions/priyanka-yadav.ftd
       skip: true
     - Meenu Kumari: /champions/meenu-kumari/
-      document: /student-programs/champions/meenu-kumari.ftd
+      document: student-programs/champions/meenu-kumari.ftd
       skip: true
     - Saurabh lohia: /champions/saurabh-lohiya/
-      document: /student-programs/champions/saurabh-lohiya.ftd
+      document: student-programs/champions/saurabh-lohiya.ftd
       skip: true
     - Jahanvi Raycha: /u/jahanvi/
       skip: true
-      document: /student-programs/champions/jahanvi-raycha.ftd
+      document: student-programs/champions/jahanvi-raycha.ftd
 
 
 - Ambassador Program: /ambassador-program/
-  document: /student-programs/ambassador.ftd
+  document: student-programs/ambassador.ftd
   - Ambassadors: /ambassadors/
-    document: /student-programs/ambassadors/all-ambassadors.ftd
+    document: student-programs/ambassadors/all-ambassadors.ftd
     - Ayush Soni: /ambassadors/ayush-soni/
-      document: /student-programs/ambassadors/ayush-soni.ftd
+      document: student-programs/ambassadors/ayush-soni.ftd
       skip: true
     - Ajit Garg: /ambassadors/ajit-garg/
-      document: /student-programs/ambassadors/ajit-garg.ftd
+      document: student-programs/ambassadors/ajit-garg.ftd
       skip: true
     - Govindaraman S: /ambassadors/govindaraman-s/
-      document: /student-programs/ambassadors/govindaraman.ftd
+      document: student-programs/ambassadors/govindaraman.ftd
       skip: true
 
 ## Contest: /weekly-contest/
-document: /events/weekly-contest/index.ftd
+  document: events/weekly-contest/index.ftd
 
 - Weekly Contest: /weekly-contest/
-document: /events/weekly-contest/index.ftd
+  document: events/weekly-contest/index.ftd
   - Quote contest : /quote-contest/
-  document: /events/weekly-contest/week-1-quote.ftd
+    document: events/weekly-contest/week-1-quote.ftd
 
 ## Events: /hackodisha/
-  document: /events/hackodisha.ftd
+  document: events/hackodisha.ftd
 
 - Fastn Roadshow: /roadshow/
-document: /community/events/roadshow.ftd
-skip: true
+  document: community/events/roadshow.ftd
+  skip: true
 
   - Indore: /indore/
-  document: /community/events/roadshows/indore.ftd
+    document: community/events/roadshows/indore.ftd
   - Bhopal: /bhopal/
-  document: /community/events/roadshows/bhopal.ftd
+    document: community/events/roadshows/bhopal.ftd
   - Lucknow: /lucknow/
-  document: /community/events/roadshows/lucknow.ftd
+    document: community/events/roadshows/lucknow.ftd
   - Ujjain: /ujjain/
-  document: /community/events/roadshows/ujjain.ftd
+    document: community/events/roadshows/ujjain.ftd
   - Hyderabad: /hyderabad/
-  document: /community/events/roadshows/hyderabad.ftd
+    document: community/events/roadshows/hyderabad.ftd
   - Ahemedabad: /ahemedabad/
-  document: /community/events/roadshows/ahemedabad.ftd
+    document: community/events/roadshows/ahemedabad.ftd
   - Jaipur: /jaipur/
-  document: /community/events/roadshows/jaipur.ftd
+    document: community/events/roadshows/jaipur.ftd
   - Mumbai: /mumbai/
-  document: /community/events/roadshows/mumbai.ftd
+    document: community/events/roadshows/mumbai.ftd
   - Nagpur: /nagpur/
-  document: /community/events/roadshows/nagpur.ftd
+    document: community/events/roadshows/nagpur.ftd
   - Delhi: /delhi/
-  document: /community/events/roadshows/delhi.ftd
+    document: community/events/roadshows/delhi.ftd
   - Kolkata: /kolkata/
-  document: /community/events/roadshows/kolkata.ftd
+    document: community/events/roadshows/kolkata.ftd
   - Bangalore: /bangalore/
-  document: /community/events/roadshows/bangalore.ftd
+    document: community/events/roadshows/bangalore.ftd
 
 ## Workshop: /workshop/
-skip: true
+  skip: true
 
 - Hello World: /workshop/hello-world/
-  document: /workshop/01-hello-world.ftd
+  document: workshop/01-hello-world.ftd
 - Add quote: /workshop/add-quote/
-  document: /workshop/02-add-quote.ftd
+  document: workshop/02-add-quote.ftd
 - Add doc-site: /workshop/add-doc-site/
-  document: /workshop/03-add-doc-site.ftd
+  document: workshop/03-add-doc-site.ftd
 - Publish on Github Pages: /workshop/publish/
-  document: /workshop/04-publish-on-github.ftd
+  document: workshop/04-publish-on-github.ftd
 - Basics Of Markdown: /workshop/basics-of-markdown/
-  document: /workshop/05-basics-of-markdown.ftd
+  document: workshop/05-basics-of-markdown.ftd
   skip: true
 - Add A New Page: /workshop/add-new-page/
-  document: /workshop/06-create-new-page.ftd
+  document: workshop/06-create-new-page.ftd
   skip: true
 - Add sitemap: /workshop/add-sitemap/
-  document: /workshop/07-add-sitemap.ftd
+  document: workshop/07-add-sitemap.ftd
   skip: true
 - Add an image, youtube video: /workshop/add-image-and-video/
-  document: /workshop/08-add-image-and-video.ftd
+  document: workshop/08-add-image-and-video.ftd
   skip: true
 - Using more sections: /workshop/more-sections/
-  document: /workshop/09-more-sections.ftd
+  document: workshop/09-more-sections.ftd
   skip: true
 - Change color scheme, typography: /workshop/change-cs-and-typo/
-  document: /workshop/10-change-cs-typo.ftd
+  document: workshop/10-change-cs-typo.ftd
   skip: true
 - Change theme: /workshop/change-theme/
-  document: /workshop/11-change-theme.ftd
+  document: workshop/11-change-theme.ftd
   skip: true
 - Creating ds.ftd: /workshop/ds/
-  document: /workshop/12-creating-ds.ftd
+  document: workshop/12-creating-ds.ftd
   skip: true
 - SEO meta: /workshop/seo/
-  document: /workshop/13-seo-meta.ftd
+  document: workshop/13-seo-meta.ftd
   skip: true
 - clean the urls: /workshop/clean-url
-  document: /workshop/15-clean-url.ftd
+  document: workshop/15-clean-url.ftd
   skip: true
 - Redirect: /workshop/redirect/
-  document: /workshop/14-redirect.ftd
+  document: workshop/14-redirect.ftd
   skip: true
 
 # Blog: /blog/
 
 - Search Feature in fastn.com: /blog/search/
-- Quote contest :/quote-contest/
-  document: /events/weekly-contest/week-1-quote.ftd
+- Quote contest: /quote-contest/
+  document: events/weekly-contest/week-1-quote.ftd
 ;; - Tales from ACME Inc - Case Study: /acme/
 ;;  document: blog/acme.ftd
 - A Content Writer’s Journey with fastn: /writer/
@@ -882,7 +874,7 @@ skip: true
 - Witty Hacks!: /wittyhacks/
   document: blog/wittyhacks.ftd
 - Ahoy, Web Components!: /web-components/
-  document: /blog/web-components.ftd
+  document: blog/web-components.ftd
 - Color Scheme: /colors/
   document: blog/show-cs.ftd
  
@@ -928,39 +920,39 @@ skip: true
 
 - Overview: /planning/
 - dynamic UI planning: /dynamic-ui/-/planning/
-  document: /planning/country-details/index.ftd
+  document: planning/country-details/index.ftd
   - Script 1: /dynamic-ui/-/planning/script1/
-    document: /planning/country-details/script1.ftd
+    document: planning/country-details/script1.ftd
   - Script 2: /dynamic-ui/-/planning/script2/
-    document: /planning/country-details/script2.ftd
+    document: planning/country-details/script2.ftd
   - Script 3: /dynamic-ui/-/planning/script3/
-    document: /planning/country-details/script3.ftd
+    document: planning/country-details/script3.ftd
 - Page Nomenclature: /page-nomenclature/
-  document: /planning/page-nomenclature.ftd
+  document: planning/page-nomenclature.ftd
 - Create website planning: /create-website-planning/
-  document: /users/index.ftd
+  document: users/index.ftd
 - Orientation video planning: /orientation-planning/
-  document: /planning/orientation-planning-video.ftd
+  document: planning/orientation-planning-video.ftd
 - Documentation Systems: /documentation/
-  document: /planning/documentation-systems.ftd
+  document: planning/documentation-systems.ftd
 - Adding color-scheme: /color-scheme/-/planning/
-  document: /expander/ds/ds-cs.ftd
+  document: expander/ds/ds-cs.ftd
 - Adding typography: /typography/-/planning/
-  document: /expander/ds/ds-typography.ftd
+  document: expander/ds/ds-typography.ftd
 - Using page component: /ds-page/-/planning/
-  document: /expander/ds/ds-page.ftd
+  document: expander/ds/ds-page.ftd
 - Markdown: /markdown/-/planning/
-  document: /expander/ds/markdown.ftd
+  document: expander/ds/markdown.ftd
 - SEO: /seo-meta/-/planning/
-  document: /expander/ds/meta-data.ftd
+  document: expander/ds/meta-data.ftd
 - Understanding sitemap: /understanding-sitemap/-/planning/
-  document: /expander/ds/understanding-sitemap.ftd
+  document: expander/ds/understanding-sitemap.ftd
 - Using images in documents: /using-images/-/planning/
   document: expander/imagemodule/index.ftd
 - Holy grail layout: /holy-grail/-/planning/
-  document: /expander/layout/index.ftd
+  document: expander/layout/index.ftd
 - sitemap - document: /planning/sitemap-document/
-  document: /planning/sitemap-features/document.ftd
+  document: planning/sitemap-features/document.ftd
 - border-radius video: /planning/border-radius/
 - Postcard Video: /planning/post-card/
   skip: true
