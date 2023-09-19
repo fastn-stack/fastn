@@ -394,7 +394,7 @@ favicon: /-/fastn.com/images/favicon.svg
         skip: true
     - Quotes with images: /quotes/quotes-with-images/
       skip: true
-      document: featured/components/quotes/quotes-with-images.ftd
+      document: featured/components/quotes/quotes-with-images/index.ftd
       - Electric: /quotes/electric/
         document: featured/components/quotes/quotes-with-images/demo-1.ftd
         skip: true
