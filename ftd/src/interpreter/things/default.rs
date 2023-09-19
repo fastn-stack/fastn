@@ -10767,6 +10767,12 @@ fn text_arguments() -> Vec<ftd::interpreter::Argument> {
                 .into_optional()
                 .into_kind_data(),
         ),
+        ftd::interpreter::Argument::default(
+            "text-shadow",
+            ftd::interpreter::Kind::record(ftd::interpreter::FTD_SHADOW)
+                .into_optional()
+                .into_kind_data(),
+        ),
     ]
 }
 
