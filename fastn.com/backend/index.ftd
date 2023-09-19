@@ -46,4 +46,30 @@ you create data visualisation websites.
 
 Read more about [reading JSON](/get-data/).
 
+
+-- ds.h1: Next
+
+- **Get Started with fastn**:
+  We provide a [step-by-step guide](https://fastn.com/quick-build/) to help you 
+  build your first fastn-powered website. You can also 
+  [install fastn](/install/) and learn to [build UI Components](/expander/) 
+  using fastn.
+
+
+- **Frontend with fastn**:
+  fastn is a versatile and user-friendly solution for all your 
+  [frontend development](/frontend/) needs.
+
+
+- **Read the docs**:
+  Our [docs](/ftd/data-modelling/) is the go-to resource for mastering fastn. 
+  It provides valuable resources from in-depth explanations to best practices. 
+
+
+- **Web Designing with fastn**:
+  Check out our [design features](/design/) to see how we can enhance your web 
+  development process.
+
+
+
 -- end: ds.page
