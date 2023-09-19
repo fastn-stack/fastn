@@ -66,7 +66,6 @@ lang: ftd
 
 \-- person list people:
 $processor$: pr.pg
-db: db.sqlite
 
 SELECT * FROM users;
 
