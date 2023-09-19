@@ -52,6 +52,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /features/design.ftd
 - Community: /community/
   document: /features/community.ftd
+- `fastn` for Geeks: /geeks/
+  document: why/geeks.ftd
 
 ## Compare: /react/
   document: /compare/react.ftd
@@ -59,12 +61,12 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /compare/react.ftd
 - fastn vs Webflow: /webflow/
   document: /compare/webflow.ftd
-   
+
 ## Case study: /acme/
-document: blog/acme.ftd 
+document: blog/acme.ftd
 
 - Acme: /acme/
-document: blog/acme.ftd 
+document: blog/acme.ftd
 - To-do: /todo/
   document: /case-study/todo.ftd
 - Country: /backend/learn/
@@ -99,9 +101,9 @@ document: /get-started/browse-pick.ftd
     - Meta Data: /seo-meta/
   document: /expander/ds/meta-data.ftd
     - Redirects: /redirects/
-  document: backend/redirects.ftd 
+  document: backend/redirects.ftd
     - URL: /clean-urls/-/build/
-  document: /expander/sitemap-document.ftd 
+  document: /expander/sitemap-document.ftd
 
 
 ## Learn: /install/
@@ -211,57 +213,57 @@ skip: true
       skip: true
   - Blogs: /featured/blog-templates/
     - Simple Site: /featured/blogs/doc-site/
-      skip: true  
+      skip: true
     - Midnight Rush: /featured/blogs/mr-blog/
-      skip: true  
+      skip: true
     - Midnight Storm: /featured/blogs/ms-blog/
-      skip: true  
+      skip: true
     - Misty Gray: /featured/blogs/mg-blog/
-      skip: true  
+      skip: true
     - Pink Tree: /featured/blogs/pink-tree/
-      skip: true  
+      skip: true
     - Yellow Lily: /featured/blogs/yellow-lily/
-      skip: true  
+      skip: true
     - Blue Wave: /featured/blogs/blue-wave/
-      skip: true  
+      skip: true
     - Navy Nebula: /featured/blogs/navy-nebula/
-      skip: true  
+      skip: true
     - Blog Template 1: /featured/blogs/blog-template-1/
-      skip: true  
+      skip: true
     - Galaxia: /featured/blogs/galaxia/
-      skip: true  
+      skip: true
     - Little Blue: /featured/blogs/little-blue/
-      skip: true  
+      skip: true
     - Dash Dash DS: /featured/blogs/dash-dash-ds/
-      skip: true  
+      skip: true
     - Simple Blog: /featured/blogs/simple-blog/
-      skip: true  
+      skip: true
     - Rocky: /featured/blogs/rocky/
-      skip: true  
+      skip: true
     - Blog Components: /featured/blogs/blog-components/
-      skip: true  
+      skip: true
   - Portfolios / Personal Sites: /featured/portfolios/
     - Texty PS: /featured/portfolios/texty-ps/
-      skip: true  
+      skip: true
     - Johny PS: /featured/portfolios/johny-ps/
-      skip: true  
+      skip: true
     - Portfolio: /featured/portfolios/portfolio/
-      skip: true  
+      skip: true
   - Resumes: /featured/resumes/
     - Caffiene: /featured/resumes/caffiene/
-      skip: true  
+      skip: true
     - Resume 1: /featured/resumes/resume-1/
-      skip: true  
+      skip: true
     - Resume 10: /featured/resumes/resume-10/
-      skip: true  
+      skip: true
 - Section Library: /featured/sections/
   - Cards: /featured/sections/cards/
     - Card 1: /featured/sections/cards/card-1/
-      skip: true  
+      skip: true
     - Image Card 1: /featured/sections/cards/image-card-1/
-      skip: true  
+      skip: true
     - Image Gallery IG: /featured/sections/cards/image-gallery-ig/
-      skip: true  
+      skip: true
     - Imagen IG: /featured/sections/cards/imagen-ig/
       skip: true
   - Hero Components: /heros/
@@ -322,15 +324,15 @@ skip: true
   - Buttons: /featured/components/buttons/
   - Business Cards: /featured/components/business-cards/
     - Business Card: /featured/components/business-cards/card-1/
-      skip: true  
+      skip: true
     - Gradient Business Card: /featured/components/business-cards/gradient-card/
-      skip: true  
+      skip: true
     - Midnight Business Card: /featured/components/business-cards/midnight-card/
-      skip: true  
+      skip: true
     - Pattern Business Card: /featured/components/business-cards/pattern-card/
-      skip: true  
+      skip: true
     - Sunset Business Card: /featured/components/business-cards/sunset-card/
-      skip: true  
+      skip: true
   - Language Switcher: /featured/components/language-switcher/
       skip: true
   - Subscription Form: /featured/components/subscription-form/
@@ -339,15 +341,15 @@ skip: true
       skip: true
   - Header / Navbar: /featured/components/headers/
     - Header: /featured/components/headers/header/
-      skip: true  
+      skip: true
   - Footers: /featured/components/footers/
     - Footer: /featured/components/footers/footer/
-      skip: true  
+      skip: true
     - Footer 3: /featured/components/footers/footer-3/
-      skip: true  
+      skip: true
   - Modal / Dialog: /featured/components/modals/
     - Modal 1: /featured/components/modals/modal-1/
-      skip: true  
+      skip: true
     - Modal Cover: /featured/components/modals/modal-cover/
       skip: true
   - Quotes: /featured/quotes/
@@ -358,7 +360,7 @@ skip: true
       - Chalice: /quotes/chalice/
         document: /featured/components/quotes/simple-quotes/demo-1.ftd
         skip: true
-      - Rustic: /quotes/rustic/ 
+      - Rustic: /quotes/rustic/
         document: /featured/components/quotes/simple-quotes/demo-2.ftd
         skip: true
       - Echo: /quotes/echo/
@@ -400,7 +402,7 @@ skip: true
     - Quotes with images: /quotes/quotes-with-images/
       skip: true
       document: /featured/components/quotes/quotes-with-images/
-      - Electric: /quotes/electric/ 
+      - Electric: /quotes/electric/
         document: /featured/components/quotes/quotes-with-images/demo-1.ftd
         skip: true
 - Design Elements: /featured/design/
@@ -864,7 +866,7 @@ skip: true
 - Quote contest :/quote-contest/
   document: /events/weekly-contest/week-1-quote.ftd
 ;; - Tales from ACME Inc - Case Study: /acme/
-;;  document: blog/acme.ftd 
+;;  document: blog/acme.ftd
 - A Content Writer’s Journey with fastn: /writer/
   document: blog/writer-journey.ftd
 - fastn might prove you wrong: /prove/
