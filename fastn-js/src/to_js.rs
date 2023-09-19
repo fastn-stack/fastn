@@ -1028,7 +1028,7 @@ impl ExpressionGenerator {
                 if value.starts_with('"') || value.starts_with('\'') {
                     return value;
                 }
-    
+
                 if let Some(getter) = fastn_js::utils::generate_dot_notation_getter(&value) {
                     return getter;
                 }
