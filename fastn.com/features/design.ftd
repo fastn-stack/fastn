@@ -51,8 +51,8 @@ create your scheme from [Figma Json](/figma-to-fastn-cs/).
 -- ds.h2: Typography
 
 Define a typography fastn package and import one of the typography styles or 
-create your own using Google Fonts and make a fastn font package on GitHub. 
-Learn how to [create your font package](/create-font-package/). Export fastn 
+create your own using Google Fonts and make a 
+[fastn font package](/create-font-package/) on GitHub. Export fastn 
 [typography to JSON](/typo-to-json/) or generate 
 [fastn code from any typography JSON](/typo-json-to-ftd/).
 
@@ -71,22 +71,25 @@ Read [ACME Case study](/acme/) to best understand the potential of fastn.
 
 - **Get Started with fastn**:
   We provide a [step-by-step guide](https://fastn.com/quick-build/) to help you 
-  build your first fastn-powered website. You can also read the 
-  [set up process](/install/) which will walk you through the 
-  installation process and provide you with a sample project to tinker with.
+  build your first fastn-powered website. You can also 
+  [install fastn](/install/) and learn to [build UI Components](/expander/) 
+  using fastn.
 
 
 - **Read the docs**:
   Our [docs](/ftd/data-modelling/) is the go-to resource for mastering fastn. 
   It provides valuable resources from in-depth explanations to best practices. 
 
+
 - **Frontend with fastn**:
-  fastn is a versatile and user-friendly solution for all your frontend 
-  development needs. Click [here](/frontend/) to learn more.
+  fastn is a versatile and user-friendly solution for all your 
+  [frontend development](/frontend/) needs.
+
 
 - **Backend with fastn**:
-  fastn also supports a bunch of features that helps you create dynamic websites.
-  Click [here](/backend/) to learn more.
+  fastn also supports a bunch of [backend features](/backend/) that helps you 
+  create dynamic websites.
+  
 
 
 

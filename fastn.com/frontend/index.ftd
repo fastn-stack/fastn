@@ -111,11 +111,10 @@ Check out our rich library of readymade components including
 
 The language used to author content and build components in fastn is the same. 
 This means you can start by using [readymade components](https://fastn.com/featured/) 
-and gradually transition to creating your own, making the learning 
+and gradually transition to [creating your own](/expander/), making the learning 
 process smoother. fastn comes with basic building blocks like text, images and 
 containers using which other UI can be constructed. 
 
-Click [here](/expander/) to learn how to build your own component. 
 
 
 -- ds.h2: Markdown Support
@@ -270,7 +269,8 @@ perform event handling, abstract out logic into custom components etc.
 -- ds.h2: Declare Variables 
 
 In fastn, you can create variables with specific types. fastn is a
-strongly-typed language, so the type of each variable must be declared.
+strongly-typed language, so the type of each [variable](/variables/) must be 
+declared.
 
 Here's an example of how you can define a boolean type variable:
 
@@ -284,7 +284,7 @@ lang: ftd
 In this code, we're creating a variable named `flag` of `boolean` type. The
 variable is defined as immutable, meaning its value cannot be altered. If you
 want to define a mutable variable, simply add a `$` symbol before the variable
-name.
+name. 
 
 Consider this example which has a mutable variable declaration `flag`.
 
@@ -293,9 +293,6 @@ lang: ftd
 
 \-- boolean $flag: true
 
--- ds.markdown:
-
-To know more about variables click [here](/variables/).
 
 
 -- ds.h2: Perform Event handling
@@ -532,9 +529,9 @@ also serve as a language for configuration purposes.
 
 - **Get Started with fastn**:
   We provide a [step-by-step guide](https://fastn.com/quick-build/) to help you 
-  build your first fastn-powered website. You can also read the 
-  [set up process](/install/) which will walk you through the 
-  installation process and provide you with a sample project to tinker with.
+  build your first fastn-powered website. You can also 
+  [install fastn](/install/) and learn to [build UI Components](/expander/) 
+  using fastn.
 
 
 - **Read the docs**:
@@ -543,9 +540,13 @@ also serve as a language for configuration purposes.
 
 
 - **Backend with fastn**:
-  fastn also supports a bunch of features that helps you create dynamic websites.
-  Click [here](/backend/) to learn more.
+  fastn also supports a bunch of [backend features](/backend/) that helps you 
+  create dynamic websites.
+  
 
+- **Web Designing with fastn**:
+  Check out our [design features](/design/) to see how we can enhance your web 
+  development process.
 
 
 -- end: ds.page
