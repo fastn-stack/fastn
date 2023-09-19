@@ -676,6 +676,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: backend/redirects.ftd
 - Dynamic Redirect: /ftd/redirect/
   document: backend/ftd-redirect.ftd
+- Using `fastn` With Django Or Other Backends: /django/
+  document: backend/django.ftd
 
 ## Deploy: /github-pages/
   document: author/how-to/github-pages.ftd
