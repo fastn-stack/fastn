@@ -684,7 +684,7 @@ and once a page is loaded, event handlers are registered (they "hydration"
 phase), and then users can start interacting with the document, and those event
 handlers can modify variables.
 
-But they can not mutate a varible unless the variable is defined as mutable.
+But they can not mutate a variable unless the variable is defined as mutable.
 
 -- ds.h2: Declaring a mutable variable
 
@@ -694,7 +694,7 @@ lang: ftd
 \;; non mutable variable
 \-- integer x: 10
 
-\;; mutable variable: $ prefix in declaration =>  mutable
+\;; mutable variable: $ prefix in declaration => mutable
 \-- integer $y: 20
 
 -- ds.markdown:
@@ -725,7 +725,7 @@ was static, we do not need it's value as the value would have been used in the
 server rendered HTML already. Along with value we also send the component
 definitions. Say a variable is a list, and for every element of the list a
 component is invoked, we have to send the definition of the component to browser
-only if the list is not static, for static list the HTML is suffecient.
+only if the list is not static, for static list the HTML is sufficient.
 
 Please note that some of we are saying here is work in progress, this is more of
 how we want the language to be in `1.0`, and not necessarily how it is in
@@ -859,17 +859,17 @@ updates), and every bit of UI dependent on `y` is updated.
 join us in fixing them).
 
 If you try to mutate a non mutable variable, or a formula you get a compiler
-error. Otherwise the variable get's mutated and UI get's auto updated, doing
-the minimum (hopefull, wip, etc) amount of DOM modifications as possible.
+error. Otherwise the variable gets mutated and UI gets auto updated, doing
+the minimum (hopefully, wip, etc) amount of DOM modifications as possible.
 
 
 -- ds.h2: It's Only Variables
 
 It is not possible in `fastn` to query or access UI in any way. Document
 contains variables. Components also contains variables. You can mutate or read
-variables, but not UI. UI just exits and responds to data in variables.
+variables, but not UI. UI just exists and responds to data in variables.
 
-In future we will make data about the components heirarchy queryable, e.g. how
+In future we will make data about the components hierarchy queryable, e.g. how
 many instances of component `foo` exists in current page, or in a given DOM tree
 branch etc. For now we are thinking about it, not yet sure if it is a good idea.
 
@@ -883,14 +883,14 @@ lang: ftd
 \-- boolean $show: false
 
 \-- ftd.text: hello
-if: $show
+if: { show }
 
 .. some other UI that toggles `show`
 
 -- ds.markdown:
 
-`fastn` will watch for when the condition, and when it changes the `ftd.text`
-node will added or removed from the DOM. Similarly if we have a list:
+`fastn` will watch for when the condition gets changed, and when it changes the
+`ftd.text` node will added or removed from the DOM. Similarly if we have a list:
 
 -- ds.code:
 lang: ftd
@@ -913,14 +913,14 @@ We can loop over this loop using:
 lang: ftd
 
 \-- show-person: $p
-for: $people as $p
+for: p in $people
 
-.. some UI that mutates $peope
+.. some UI that mutates $people
 
 -- ds.markdown:
 
 Here too we will auto update the DOM if `$people` changes, if an element is
-added or remove, it's corresponding DOM will be added or removed.
+added or removed, it's corresponding DOM will be added or removed.
 
 
 -- ds.h2: Processors
@@ -1246,7 +1246,7 @@ role: $inherited.types.heading-medium
 -- ds.markdown:
 
 We are using the `heading-medium` "role" for our `ftd.integer` type, and this
-is "plucked" from "inherited" properties. Inerited stuff are inherited from
+is "plucked" from "inherited" properties. Inherited stuff are inherited from
 parent to child, a bit like CSS inheritance. At near the top level of your DOM
 tree you set the `ftd.type-data` for your application, or you can even do it for
 a branch in your UI tree, and you do not have to pass the property around, and
@@ -1314,12 +1314,12 @@ adding it as a dependency, and assinging it at the top level:
 lang: ftd
 
 \-- import: fastn-community.github.io/dark-flame-cs
-\-- import: fifthtry.github.io/fastn-io-typography as ft-typogrphy
+\-- import: fifthtry.github.io/fastn-io-typography as ft-typography
 
-;; the top level document is usually `ftd.document`
+\;; the top level document is usually `ftd.document`
 
 \-- ftd.document:
-ftd.type-data types: $ft-typogrphy.types
+ftd.type-data types: $ft-typography.types
 ftd.color-scheme colors: $dark-flame-cs.main
 
 .. rest of your document ..
@@ -1360,7 +1360,7 @@ components themselves, with just three lines of code change.
 
 -- ds.h2: Module Interface
 
-The color and typgraphy change happened because well they are using our
+The color and typography change happened because well they are using our
 universal design system. But how did the component layout etc change?
 
 This is achievable by CSS to some extent, but at one time [CSS Zen
@@ -1370,7 +1370,7 @@ kind of drastic changes to websites by just modifying CSS.
 But that was a sort of not scalable. First of all not all design changes can
 be done by the CSS, without also modifying the HTML structure. But that is only
 visual, components in `fastn` come with event handling etc, are full blown
-components, what is in one design you wanted to some information as carosal and
+components, what is in one design you wanted to some information as carousal and
 in another design using tabs? This is not possible with just CSS.
 
 We can do this by swapping our the component libraries. But while doing so how
@@ -1435,7 +1435,7 @@ theme: implementer
 
 Now we are using our implementer of the module interface, and passing the module
 itself as a parameter to `foo`. Now when `foo` calls `foo.theme.yo`, the
-`implementer.yo` get's called.
+`implementer.yo` gets called.
 
 If two modules implement same module interface, they are interchangable. And
 this is the last trick to achieve the drastic design change without modifying
@@ -1447,7 +1447,7 @@ Everything we discussed so far makes `fastn` a decent alternative for static
 websites, your non tech team can easily update the website unlike if it was
 built with React etc, you do not have to worry about CMS or tweak things in
 WYSWYG editors like Webflow/Wix. If you use `fastn` you can use Github (or
-whatever you prefer) to colaborate with your team, use your favorite editor,
+whatever you prefer) to collaborate with your team, use your favorite editor,
 use your favorite hosting provider, use CI, etc etc.
 
 But from day one we have wanted to make `fastn` a full stack application server.
@@ -1470,7 +1470,7 @@ on. But say if you are building your own Twitter, now X, you would want URLs
 like `https://twitter.com/amitu`, which follows the pattern
 `twitter.com/<username>` to all be handled by same logic.
 
-You can do something like this by using `fastn`'s [`dynmaic-url`](/dynamic-urls/)
+You can do something like this by using `fastn`'s [`dynamic-url`](/dynamic-urls/)
 feature.
 
 In your `FASTN.ftd` you add something like this:
@@ -1607,7 +1607,7 @@ permissions, access control etc is implemented.
 This means if you want to install 5 apps on your server, you have to fiddle with
 a lot of devops stuff, how is each app db going to be backed up? How are
 dependencies going to be kept up to date? How much RAM and CPU is needed? We have
-to worry about Docker and Kubernetes, or fiddle with plathora of choices made
+to worry about Docker and Kubernetes, or fiddle with plethora of choices made
 available to us by cloud providers.
 
 This is a setup where casually installing a app is almost beyond reach of most
@@ -1634,15 +1634,15 @@ app for your comapny, a payroll management app.
 Not only is `fastn` a great, or at least, hopes to be great framework for your
 frontend and backend, it's a great tool to build your next website. If you use
 Webflow or Wix to quickly build a website because current open source solutions
-require far too much development and devops exertise to install and run on your
+require far too much development and devops expertise to install and run on your
 own server, you get started soon, and have some control over website, but you
 are forever bound by whatever the website builder you have picked. They can
 change their prices, go out of business, change the feature you rely on etc, and
 you are beholden to them. They may or may not provide all the site data that you
-expect, and you have to work with their proprietory technologies and APIs.
+expect, and you have to work with their proprietary technologies and APIs.
 
 `fastn` aims to help website creators simplify the development process to such
-an extent they can deploy their sites, install ready made themese and even
+an extent they can deploy their sites, install ready made themes and even
 fully functional apps on their own, as easily as one can install apps on their
 mobile phone.
 
@@ -1652,7 +1652,7 @@ them.
 -- ds.h2: Sitemap
 
 
--- ds.h2: Multile Entries In Sitemap
+-- ds.h2: Multiple Entries In Sitemap
 -- ds.h2: Redirects
 -- ds.h2: Document Meta Data
 
