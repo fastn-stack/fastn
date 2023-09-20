@@ -1050,7 +1050,6 @@ fn search_things_for_module(
             } else {
                 return doc.err("not found", m_name, "search_thing", line_number);
             };
-            dbg!(&m_name);
             let (module, alias) = ftd::ast::utils::get_import_alias(m_name.as_str());
             if !current_parsed_document
                 .doc_aliases
@@ -1080,15 +1079,6 @@ fn search_things_for_module(
 
             let module_name = thing.split_once('#').map(|v| v.0);
 
-            dbg!(
-                "1",
-                &thing,
-                &module_name,
-                &component_name,
-                &module_component_name,
-                &m_alias
-            );
-
             let mut new_doc_name = doc.name.to_string();
             let mut new_doc_aliases = doc.aliases.clone();
 
@@ -1115,7 +1105,6 @@ fn search_things_for_module(
             }
 
             let thing_real_name = if let Some((_doc_name, element)) = thing.split_once('#') {
-                dbg!(&element, &argument);
                 format!(
                     "{}#{}",
                     m_alias,
@@ -1133,10 +1122,6 @@ fn search_things_for_module(
                 )
             };
 
-            dbg!(&unresolved_thing, &thing_real_name, &doc.aliases, &doc.name);
-
-            dbg!(&new_doc.name, &new_doc.aliases);
-
             if unresolved_thing.is_some() {
                 new_doc.scan_thing(&thing_real_name, line_number)?;
             } else {
@@ -1148,8 +1133,6 @@ fn search_things_for_module(
                     try_ok_state!(result);
                 }
             }
-
-            dbg!(1);
         }
 
         if let Some(unresolved_thing) = unresolved_thing {

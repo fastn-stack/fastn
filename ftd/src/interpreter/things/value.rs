@@ -989,7 +989,7 @@ impl PropertyValue {
                 ftd::interpreter::Kind::Module => {
                     ftd::interpreter::StateWithThing::new_thing(PropertyValue::Value {
                         value: Value::Module {
-                            name: value.string(doc.name)?,
+                            name: doc.resolve_module_name(value.string(doc.name)?.as_str()),
                             things: Default::default(),
                         },
                         is_mutable,
