@@ -1,0 +1,57 @@
+-- ftd.color text-:
+light: white
+dark: white
+
+-- ftd.color bg:
+light: yellow
+dark: yellow
+
+-- ftd.color accent-primary-:
+light: blue
+dark: green
+
+
+-- ftd.linear-gradient lg:
+direction: bottom-left
+colors: $color-values-2
+
+-- ftd.linear-gradient-color list color-values-2:
+
+-- ftd.linear-gradient-color: #6F59E9
+
+-- ftd.linear-gradient-color: #D12EEF
+
+-- end: color-values-2
+
+
+
+-- component navbar-desktop:
+caption cta-button-1: Hello
+boolean $is-active: false
+
+-- ftd.column:
+background.solid: black
+width: fill-container
+height.fixed.px: 100
+margin.px: 50
+padding.px: 50
+
+-- ftd.boolean: $navbar-desktop.is-active
+color: red
+
+-- ftd.text: $navbar-desktop.cta-button-1
+role: $inherited.types.label-large
+background.linear-gradient: $lg
+background.solid if { navbar-desktop.is-active }: $bg
+border-color: $accent-primary-
+$on-mouse-enter$: $ftd.set-bool($a = $navbar-desktop.is-active, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $navbar-desktop.is-active, v = false)
+color if { navbar-desktop.is-active }: $accent-primary-
+color: $text-
+
+-- end: ftd.column
+
+-- end: navbar-desktop
+
+
+-- navbar-desktop:

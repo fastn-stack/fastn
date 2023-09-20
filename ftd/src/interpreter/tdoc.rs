@@ -1002,7 +1002,6 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::interpreter::Result<(ftd::interpreter::Variable, Option<String>)> {
-        dbg!(1);
         let (initial_thing, remaining) =
             self.get_initial_thing_with_inherited(name, line_number, inherited_variables)?;
         Ok((initial_thing.variable(self.name, line_number)?, remaining))
