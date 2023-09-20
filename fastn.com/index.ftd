@@ -182,6 +182,7 @@ info-3: fastn also supports dynamic sites with deployment options across Linux, 
 
 -- end: lib.feature-card
 
+
 -- lib.compare: What makes fastn better than react
 cta-primary-text: Learn More
 cta-primary-url: /react/
@@ -259,7 +260,7 @@ bg-color: $inherited.colors.background.step-1
 label: Web Developer
 width: 500
 
-As a web developer, I've found fastn to be a game-changer. Its user-friendly ftd
+As a web developer, I've found fastn to be a game-changer. Its a user-friendly
 language makes building beautiful websites a breeze. With ready-made UI
 components and easy deployment options, fastn streamlines web development.
 Highly recommend!

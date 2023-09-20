@@ -13,11 +13,10 @@ creating websites to building dynamic apps.
 
 -- ds.h1: Customize the Design of Your fastn Site
 
-- **Color Scheme:** Discover how to add custom [color schemes.](/color-scheme/) 
-- **Typography:** Discover how to add [typography.](/typography/)
+- **Color Scheme:** Discover how to create [color schemes.](/color-scheme/)
+- **Create Fonts:** Learn to [create font package](/create-font-package/) 
+- **Typography:** Discover how to create [typography.](/typography/)
 - **Figma Tokens Integration:** Seamlessly [Integrate Figma tokens.](/figma/)
-- **Create Fonts:** Learn to [create font package](/create-font-package/) in 
-	`fastn`.
 
 -- ds.h1: Build Reusable Components with `fastn`
 

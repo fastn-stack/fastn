@@ -2554,6 +2554,7 @@ integer spacing: 24
 
 -- ftd.column:
 width: fill-container
+overflow-x: hidden
 
 -- ftd.desktop:
 

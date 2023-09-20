@@ -26,20 +26,21 @@ timelines.
 
 Here's why: ACME, like many growing startups, was a team fueled by fresh 
 perspectives and included newcomers in their domain. Therefore React's JSX 
-syntax and the need for in-depth JavaScript knowledge posed a significant 
+syntax and the **need for in-depth JavaScript knowledge** posed a significant 
 challenge for these newcomers.
 
 React, while powerful, primarily focused on the frontend, 
 necessitating ACME in search of additional tools and languages for a 
 complete solution. 
-The absence of native Markdown support in React complicated content integration, 
-while the lack of an integrated design system forced ACME to lean on 
+
+The **absence of native Markdown support** in React complicated content integration, 
+while the **lack of an integrated design system** forced ACME to lean on 
 third-party libraries and delve into custom styling solutions. Even simple 
 features like dark mode implementation often entailed wrestling with 
 intricate custom CSS.
 
 
-These challenges culminated in project delays, underscoring the rigid pace of 
+These challenges culminated in **project delays**, underscoring the rigid pace of 
 their development cycle. A substantial portion of these delays resulted from 
 an over-reliance on developers.
 
@@ -50,23 +51,23 @@ In search of efficiency, ACME turned to Webflow, enticed by its reputation for
 rapid setup. While content management became a breeze, design and functionality 
 aspirations were consistently hampered,  leading to constant battles to align 
 either their design or content with Webflow’s rigid framework. For instance, 
-content edits in Webflow could disrupt design layouts, requiring multiple 
+**content edits in Webflow could disrupt design layouts**, requiring multiple 
 template and page adjustments, increasing the risk of inconsistencies. 
 
 Webflow's focus on visual web design, although beneficial, sometimes 
-constrained full-stack control and customization options. Furthermore, 
-hosting on Webflow's platform meant potential dependency on the platform's 
-policies and pricing.
+**constrained full-stack control and customization options**. Furthermore, 
+hosting on Webflow's platform meant potential **dependency on the platform's 
+policies and pricing**.
 
 
 -- ds.h1: Building the ACME Website with fastn
 
-Fueled by a desire for a more practical solution, ACME decided to give fastn a 
-chance. Their journey began with a 30-minute training session for the
-entire ACME team on how to build and manage a fastn powered website.  
+Fueled by a desire for a more practical solution, ACME decided to give `fastn` a 
+chance. Their journey began with a `30-minute training session` for the
+entire ACME team on how to build and manage a fastn-powered website.  
 
 The spotlight then fell on Pooja, ACME’s UX designer, who possessed a deep 
-understanding of the brand and its target audience took up the task to build 
+understanding of the brand and its target audience, took up the task to build 
 the ACME website. 
 
 She explored fastn's [featured page](https://fastn.com/featured/) and selected 
@@ -80,8 +81,8 @@ This [guide](https://fastn.com/github-pages/) facilitated the process further.
 As you can see in the image below, within the 
 [fastn.ftd](https://github.com/fastn-community/acme-inc/blob/main/FASTN.ftd) 
 file, the requisite dependencies like color scheme and typography are already 
-added. This eliminates the need to specify font sizes and colors for individual 
-UI elements and ensures a consistent look and feel across the website.
+added. This **eliminates the need to specify font sizes and colors** for individual 
+UI elements and ensures a **consistent look and feel** across the website.
 
 This also streamlines future changes, as all it requires is modifying a few 
 lines of code to add the new 
@@ -105,11 +106,11 @@ width.fixed.percent: 50
 -- ds.markdown:
 
 Simultaneously, Priyanka from the content team proceeded to populate the ACME 
-website with content. The native [Markdown support](https://fastn.com/markdown/) 
-transformed content into code effortlessly. 
+website with content. The **native [Markdown support](https://fastn.com/markdown/) 
+transformed content into code effortlessly**. 
 
 Compare the following source code versus live page to appreciate how 
-fastn's user-friendly and minimal syntax enables individuals with no prior 
+fastn's **user-friendly and minimal syntax** enables individuals with no prior 
 programming experience to code effortlessly. 
 
 Homepage: [Code](https://github.com/fastn-community/acme-inc/blob/main/index.ftd) vs [Live Page](https://acme.fastn.com/)
@@ -123,7 +124,7 @@ Pricing Page: [Code](https://github.com/fastn-community/acme-inc/blob/main/prici
 Blog Page: [Code](https://acme.fastn.com/blog/) vs [Live Page](https://github.com/fastn-community/acme-inc/blob/main/blog.ftd)
 
 
-ACME's transition to fastn allowed every team member to contribute to the website 
+ACME's transition to fastn allowed **every team member to contribute to the website** 
 without solely relying on the developers.
 
 Here are few scenarios that highlights how each team member implemented a change.  
@@ -134,6 +135,7 @@ Here are few scenarios that highlights how each team member implemented a change
 The Business Team's insights from a recent meeting have prompted to modify the 
 Pricing Plan values to enhance conversions. As a result, Harish, the Product
 Manager, decided to bring down the price of the startup and Enterprise Plan. 
+
 By editing the `pricing.ftd` and updating the existing prices with the new 
 figures, he swiftly implemented the change. As the pricing plan is a 
 **component-based design**, he only needed to adjust the relevant values.
@@ -234,6 +236,7 @@ width.fixed.percent: 95
 
 Ganesh, the Design Head, decided to give a fresh look for ACME's website. 
 He revamped the website with a **single line of code**. 
+
 By removing the `midnight storm` and introducing the `midnight rush` package as a 
 fastn dependency in the `fastn.ftd` file, he updated the layout, colour scheme, 
 and typography of the website.
@@ -253,18 +256,18 @@ width.fixed.percent: 95
 
 -- ds.h1: What did ACME gain?
 
-Since all components in the fastn ecosystem adhere to a unified design system, 
+Since all components in the fastn ecosystem adhere to a **unified design system**, 
 this eliminated the need for extensive design deliberations and quick 
 development cycle.
 
-The integration of fastn's built-in dark mode and responsive design
+The integration of fastn's **built-in dark mode and responsive design**
 improved user accessibility efforlessly. The most significant 
-advantage was that modifying content no longer disrupted design, enabling swift 
+advantage was that **modifying content no longer disrupted design**, enabling swift 
 website development.
 
 Furthermore, ACME could now [deploy](https://fastn.com/deploy/) their website 
-on their server, securing control, privacy, scalability, and reduced reliance on 
-external platforms. 
+on their server, securing control, privacy, scalability, and **reduced reliance on 
+external platforms**. 
 
 
 
