@@ -1699,7 +1699,10 @@ impl<'a> TDoc<'a> {
             );
         }
 
+        dbg!(&name);
+        dbg!(&self.aliases, &self.name);
         let name = self.resolve_name(name);
+        dbg!("after", &name);
 
         return get_reexport_thing(self, &name, line_number);
 
