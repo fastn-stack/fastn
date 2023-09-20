@@ -313,7 +313,7 @@ window.ftd.dependencies.eval_background_image = function(bg: any, data: any) {
         else {
             return null;
         }
-    } else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+    } else if (typeof bg === 'object' && !!bg && "colors" in bg && Object.keys(bg.colors).length) {
        let colors = "";
        // if the bg direction is provided by the user, use it, otherwise default
        let direction = bg.direction ?? "to bottom";
@@ -342,8 +342,7 @@ window.ftd.dependencies.eval_background_image = function(bg: any, data: any) {
             }
        }
 
-       let res = `linear-gradient("${direction}, ${colors}")`;
-
+       let res = `linear-gradient(${direction}, ${colors})`;
        return res;
    }
     else {
