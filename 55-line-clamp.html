@@ -1784,7 +1784,7 @@ else {
 return null;
 }
 }
-else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+else if (typeof bg === 'object' && !!bg && "colors" in bg && Object.keys(bg.colors).length) {
 let colors = "";
 // if the bg direction is provided by the user, use it, otherwise default
 let direction = (_a = bg.direction) !== null && _a !== void 0 ? _a : "to bottom";
@@ -1808,7 +1808,7 @@ colors = `${colors}, ${c["stop-position"]}`;
 }
 }
 }
-let res = `linear-gradient("${direction}, ${colors}")`;
+let res = `linear-gradient(${direction}, ${colors})`;
 return res;
 }
 else {
@@ -2080,10 +2080,10 @@ window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","0:main__display", data);
-window.ftd.utils.node_change_call("main","0:main__-webkit-line-clamp", data);
-window.ftd.utils.node_change_call("main","0:main__overflow", data);
 window.ftd.utils.node_change_call("main","0:main__-webkit-box-orient", data);
+window.ftd.utils.node_change_call("main","0:main__display", data);
+window.ftd.utils.node_change_call("main","0:main__overflow", data);
+window.ftd.utils.node_change_call("main","0:main__-webkit-line-clamp", data);
 };
 
 window.set_value_main["foo#flag_2"] = function (data, new_value, remaining) {
@@ -2091,8 +2091,8 @@ window.ftd.utils.set_value_helper(data, "foo#flag_2", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag_2", "main");
 window.ftd.call_immutable_value_changes("foo#flag_2", "main");
-window.ftd.utils.node_change_call("main","1:main__-webkit-line-clamp", data);
 window.ftd.utils.node_change_call("main","1:main__overflow", data);
+window.ftd.utils.node_change_call("main","1:main__-webkit-line-clamp", data);
 window.ftd.utils.node_change_call("main","1:main__display", data);
 window.ftd.utils.node_change_call("main","1:main__-webkit-box-orient", data);
 };

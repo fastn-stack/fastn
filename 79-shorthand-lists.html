@@ -1789,7 +1789,7 @@ else {
 return null;
 }
 }
-else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+else if (typeof bg === 'object' && !!bg && "colors" in bg && Object.keys(bg.colors).length) {
 let colors = "";
 // if the bg direction is provided by the user, use it, otherwise default
 let direction = (_a = bg.direction) !== null && _a !== void 0 ? _a : "to bottom";
@@ -1813,7 +1813,7 @@ colors = `${colors}, ${c["stop-position"]}`;
 }
 }
 }
-let res = `linear-gradient("${direction}, ${colors}")`;
+let res = `linear-gradient(${direction}, ${colors})`;
 return res;
 }
 else {
@@ -2037,9 +2037,9 @@ window.ftd.utils.set_value_helper(data, "foo#ages", remaining, new_value);
 window.ftd.call_mutable_value_changes("foo#ages", "main");
 window.ftd.call_immutable_value_changes("foo#ages", "main");
 window.ftd.utils.node_change_call("main","3:main__text", data);
-window.ftd.utils.node_change_call("main","6:main__text", data);
 window.ftd.utils.node_change_call("main","4:main__text", data);
 window.ftd.utils.node_change_call("main","5:main__text", data);
+window.ftd.utils.node_change_call("main","6:main__text", data);
 };
 
 window.set_value_main["foo#new-persons"] = function (data, new_value, remaining) {
@@ -2048,8 +2048,8 @@ window.ftd.utils.set_value_helper(data, "foo#new-persons", remaining, new_value)
 window.ftd.call_mutable_value_changes("foo#new-persons", "main");
 window.ftd.call_immutable_value_changes("foo#new-persons", "main");
 window.ftd.utils.node_change_call("main","2:main__text", data);
-window.ftd.utils.node_change_call("main","0:main__text", data);
 window.ftd.utils.node_change_call("main","1:main__text", data);
+window.ftd.utils.node_change_call("main","0:main__text", data);
 };
 
 

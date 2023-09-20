@@ -1824,7 +1824,7 @@ else {
 return null;
 }
 }
-else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+else if (typeof bg === 'object' && !!bg && "colors" in bg && Object.keys(bg.colors).length) {
 let colors = "";
 // if the bg direction is provided by the user, use it, otherwise default
 let direction = (_a = bg.direction) !== null && _a !== void 0 ? _a : "to bottom";
@@ -1848,7 +1848,7 @@ colors = `${colors}, ${c["stop-position"]}`;
 }
 }
 }
-let res = `linear-gradient("${direction}, ${colors}")`;
+let res = `linear-gradient(${direction}, ${colors})`;
 return res;
 }
 else {
@@ -2172,10 +2172,10 @@ window.ftd.utils.set_value_helper(data, "foo#button:color:1,0", remaining, new_v
 
 window.ftd.call_mutable_value_changes("foo#button:color:1,0", "main");
 window.ftd.call_immutable_value_changes("foo#button:color:1,0", "main");
-window.ftd.utils.node_change_call("main","1,0:main__background-repeat", data);
 window.ftd.utils.node_change_call("main","1,0:main__background-color", data);
-window.ftd.utils.node_change_call("main","1,0:main__background-position", data);
 window.ftd.utils.node_change_call("main","1,0:main__background-image", data);
+window.ftd.utils.node_change_call("main","1,0:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","1,0:main__background-position", data);
 window.ftd.utils.node_change_call("main","1,0:main__background-size", data);
 };
 
@@ -2184,10 +2184,10 @@ window.ftd.utils.set_value_helper(data, "foo#button:color:1,1", remaining, new_v
 
 window.ftd.call_mutable_value_changes("foo#button:color:1,1", "main");
 window.ftd.call_immutable_value_changes("foo#button:color:1,1", "main");
-window.ftd.utils.node_change_call("main","1,1:main__background-color", data);
-window.ftd.utils.node_change_call("main","1,1:main__background-size", data);
-window.ftd.utils.node_change_call("main","1,1:main__background-position", data);
 window.ftd.utils.node_change_call("main","1,1:main__background-image", data);
+window.ftd.utils.node_change_call("main","1,1:main__background-size", data);
+window.ftd.utils.node_change_call("main","1,1:main__background-color", data);
+window.ftd.utils.node_change_call("main","1,1:main__background-position", data);
 window.ftd.utils.node_change_call("main","1,1:main__background-repeat", data);
 };
 
@@ -2196,11 +2196,11 @@ window.ftd.utils.set_value_helper(data, "foo#button:color:1,2", remaining, new_v
 
 window.ftd.call_mutable_value_changes("foo#button:color:1,2", "main");
 window.ftd.call_immutable_value_changes("foo#button:color:1,2", "main");
-window.ftd.utils.node_change_call("main","1,2:main__background-image", data);
 window.ftd.utils.node_change_call("main","1,2:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","1,2:main__background-color", data);
 window.ftd.utils.node_change_call("main","1,2:main__background-size", data);
+window.ftd.utils.node_change_call("main","1,2:main__background-image", data);
 window.ftd.utils.node_change_call("main","1,2:main__background-position", data);
+window.ftd.utils.node_change_call("main","1,2:main__background-color", data);
 };
 
 window.set_value_main["foo#button:cta:1,0"] = function (data, new_value, remaining) {
@@ -2256,21 +2256,21 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","1,0:main__background-size", data);
-window.ftd.utils.node_change_call("main","1,2:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","1,0:main__background-position", data);
-window.ftd.utils.node_change_call("main","1,2:main__background-position", data);
-window.ftd.utils.node_change_call("main","1,2:main__background-color", data);
-window.ftd.utils.node_change_call("main","1,1:main__background-color", data);
-window.ftd.utils.node_change_call("main","1,1:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","1,0:main__background-image", data);
-window.ftd.utils.node_change_call("main","1,2:main__background-size", data);
-window.ftd.utils.node_change_call("main","1,0:main__background-color", data);
-window.ftd.utils.node_change_call("main","1,1:main__background-image", data);
-window.ftd.utils.node_change_call("main","1,1:main__background-size", data);
-window.ftd.utils.node_change_call("main","1,2:main__background-image", data);
-window.ftd.utils.node_change_call("main","1,1:main__background-position", data);
 window.ftd.utils.node_change_call("main","1,0:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","1,1:main__background-color", data);
+window.ftd.utils.node_change_call("main","1,0:main__background-position", data);
+window.ftd.utils.node_change_call("main","1,0:main__background-size", data);
+window.ftd.utils.node_change_call("main","1,1:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","1,0:main__background-color", data);
+window.ftd.utils.node_change_call("main","1,1:main__background-position", data);
+window.ftd.utils.node_change_call("main","1,2:main__background-image", data);
+window.ftd.utils.node_change_call("main","1,2:main__background-color", data);
+window.ftd.utils.node_change_call("main","1,0:main__background-image", data);
+window.ftd.utils.node_change_call("main","1,1:main__background-image", data);
+window.ftd.utils.node_change_call("main","1,2:main__background-position", data);
+window.ftd.utils.node_change_call("main","1,2:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","1,1:main__background-size", data);
+window.ftd.utils.node_change_call("main","1,2:main__background-size", data);
 };
 
 

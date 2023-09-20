@@ -1782,7 +1782,7 @@ else {
 return null;
 }
 }
-else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+else if (typeof bg === 'object' && !!bg && "colors" in bg && Object.keys(bg.colors).length) {
 let colors = "";
 // if the bg direction is provided by the user, use it, otherwise default
 let direction = (_a = bg.direction) !== null && _a !== void 0 ? _a : "to bottom";
@@ -1806,7 +1806,7 @@ colors = `${colors}, ${c["stop-position"]}`;
 }
 }
 }
-let res = `linear-gradient("${direction}, ${colors}")`;
+let res = `linear-gradient(${direction}, ${colors})`;
 return res;
 }
 else {
@@ -2046,10 +2046,10 @@ window.ftd.utils.set_value_helper(data, "foo#yellow-red", remaining, new_value);
 window.ftd.call_mutable_value_changes("foo#yellow-red", "main");
 window.ftd.call_immutable_value_changes("foo#yellow-red", "main");
 window.ftd.utils.node_change_call("main","0,0:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,1:main__border-color", data);
 window.ftd.utils.node_change_call("main","0,2:main__border-color", data);
 window.ftd.utils.node_change_call("main","0,3:main__border-color", data);
 window.ftd.utils.node_change_call("main","0,4:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,1:main__border-color", data);
 };
 
 window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
@@ -2058,11 +2058,11 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
 window.ftd.utils.node_change_call("main","0:main__color", data);
-window.ftd.utils.node_change_call("main","0,0:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,4:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,2:main__border-color", data);
 window.ftd.utils.node_change_call("main","0,1:main__border-color", data);
 window.ftd.utils.node_change_call("main","0,3:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,4:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,0:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,2:main__border-color", data);
 };
 
 window.set_value_main["ftd#default-colors"] = function (data, new_value, remaining) {
