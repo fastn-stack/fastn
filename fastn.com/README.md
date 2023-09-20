@@ -10,45 +10,30 @@
 </div>
 
 
-# `fastn`
+# `fastn.com`
 
-Introducing Fastn, a powerful command line tool written in Rust that offers a 
-seamless experience for [`ftd`](https://ftd.dev) package management and static 
-site generation. With Fastn, you can easily convert your `.ftd` files 
-into `.html` files that can be ship on popular platforms such as 
-[Github Pages](https://fastn.com/how-to/github-pages/), 
-[Vercel](https://fastn.com/how-to/vercel/) etc.
+This repository contains the source code of [fastn.com](https://fastn.com).
 
+# Running It Locally
 
-[`ftd`](https://ftd.dev) is a revolutionary language designed for creating web 
-pages and documents for publishing on the web. It starts with the simplicity of 
-Markdown, but takes it to the next level by adding features to create full page 
-layouts, reusable `"ftd components"`, and first-class support for data modeling. 
-This makes `ftd` a replacement for traditional data exchange formats like JSON, 
-CSV etc.
+Install fastn using:
 
-Here are some key [features of `fastn`](https://fastn.com/features/) that makes it 
-a must-have tool:
+```sh
+source <(curl -fsSL https://fastn.com/install.sh)
+```
 
+On Mac/Linux, or learn how to [install fastn on
+windows](https://fastn.com/windows/).
 
-- Supports [ftd](https://ftd.dev)
-- [`ftd` package manager](https://fastn.com/package-manager/)
-- [Static site generator](https://fastn.com/static/)
-- [`fastn` Server](https://fastn.com/server/)
-- [Customizable color schemes](https://fastn.com/cs/)
+Once you have `fastn` installed, run:
 
+```sh
+fastn serve --edition=2023
+### Server Started ###
+Go to: http://127.0.0.1:8000
+```
 
-## How to install `fastn`?
-
-So, how do you get started with Fastn? 
-
-Installing `fastn` is easy and can be done on multiple operating systems.
-Check out the ["How to Install"](https://fastn.com/install/) section for more 
-information. Additionally, an editor is required to use `fastn`, and we 
-recommend using [Sublime Text](https://www.sublimetext.com/3).
-
-
-Get ready to experience the power of Fastn!
+And go the HTTP url reported.
 
 
 ## Contributors

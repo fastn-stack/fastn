@@ -1,3 +1,5 @@
+-- import: fastn.com/ftd-host/processor
+
 -- ds.page: Dynamic URLs Guide
 
 `fastn` can be used for creating dynamic websites. By default `fastn` maps the
@@ -5,6 +7,10 @@ URL's path to file system to decide which `ftd` document to serve. This
 behaviour can be changed as described in [custom URLs guide](/custom-urls/). In
 this guide we will see how we can map any URL matching a given pattern to a
 `ftd` document.
+
+-- processor.static-vs-dynamic:
+
+-- ds.markdown:
 
 Dynamic URLs are specified in `FASTN.ftd` file under the `fastn.dynamic-urls`
 section:

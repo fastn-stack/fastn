@@ -1,4 +1,5 @@
 -- import: fastn.com/assets
+-- import: fastn.com/ftd-host/processor
 
 -- ds.page: Using `fastn` With Django ..
 
@@ -9,6 +10,8 @@ can use `fastn` to power the frontend of your application.
 
 -- ds.image:
 src: $assets.files.images.backend.django.png
+
+-- processor.static-vs-dynamic:
 
 -- ds.h1: `fastn` In The Front
 
@@ -57,6 +60,12 @@ served by `fastn serve`, you can make an API request to `example.com/api/get-use
 and the request will go to `fastn` first, and `fastn` will forward the request
 to your backend, and return the response returned by backend to the browser.
 
-
+This also helps in local development, as if you run your frontend server on
+one port, and your API server on another server, the API urls etc has to include
+full path, and cross origin issues may happen depending on how things are setup.
+In most production environment the domain for frontend and API is the same, and
+we usually use Nginx or some other proxy server to route to different servers
+depending on PATH based rules. With `fastn` acting as router, Nginx like proxy
+is not needed when doing local development.
 
 -- end: ds.page
