@@ -21,6 +21,24 @@ pub fn resolve_name(name: &str, doc_name: &str, aliases: &ftd::Map<String>) -> S
     }
 }
 
+pub fn resolve_module_name(name: &str, doc_name: &str, aliases: &ftd::Map<String>) -> String {
+    let name = name
+        .trim_start_matches(ftd::interpreter::utils::CLONE)
+        .trim_start_matches(ftd::interpreter::utils::REFERENCE)
+        .to_string();
+
+    match aliases.get(name.as_str()) {
+        Some(v) => return v.to_string(),
+        None => {
+            if aliases.values().any(|v| v.eq(name.as_str())) || doc_name.eq(name.as_str()) {
+                return name;
+            }
+        }
+    }
+
+    name
+}
+
 pub fn split_module(id: &str) -> (Option<&str>, &str, Option<&str>) {
     match id.split_once('.') {
         Some((p1, p2)) => match p2.split_once('.') {

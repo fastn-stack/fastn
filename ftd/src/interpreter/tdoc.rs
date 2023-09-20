@@ -43,6 +43,10 @@ impl<'a> TDoc<'a> {
         }
     }
 
+    pub fn resolve_module_name(&self, name: &str) -> String {
+        ftd::interpreter::utils::resolve_module_name(name, self.name, self.aliases)
+    }
+
     pub fn resolve_name(&self, name: &str) -> String {
         ftd::interpreter::utils::resolve_name(name, self.name, self.aliases)
     }
@@ -998,6 +1002,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::interpreter::Result<(ftd::interpreter::Variable, Option<String>)> {
+        dbg!(1);
         let (initial_thing, remaining) =
             self.get_initial_thing_with_inherited(name, line_number, inherited_variables)?;
         Ok((initial_thing.variable(self.name, line_number)?, remaining))
@@ -1699,10 +1704,7 @@ impl<'a> TDoc<'a> {
             );
         }
 
-        dbg!(&name);
-        dbg!(&self.aliases, &self.name);
         let name = self.resolve_name(name);
-        dbg!("after", &name);
 
         return get_reexport_thing(self, &name, line_number);
 
