@@ -11,10 +11,10 @@ gh: harshdoesdev
 -- user harsh: Harsh
 links: $my-links
 
--- string list days: Sun, Mon
+;; -- string list days: Sun, Mon
 
--- ftd.text: Log first day
-$on-click$: $get-first(a = $days)
+;; -- ftd.text: Log first day
+;; $on-click$: $get-first(a = $days)
 
 -- ftd.text: Log github link
 $on-click$: $log-gh-link(a = $harsh)
@@ -27,10 +27,10 @@ user a:
 
 console.log(a.name)
 
--- string get-first(a):
-string list a:
+;; -- string get-first(a):
+;; string list a:
 
-console.log(a.0)
+;; console.log(a.0)
 
 -- void log-gh-link(a):
 user a:

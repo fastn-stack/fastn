@@ -927,7 +927,22 @@ impl ExpressionGenerator {
                 for children in child.children() {
                     let mut value = self.to_js_(children, false, arguments, true);
                     if self.is_tuple(children.operator()) {
-                        value = value[1..value.len() - 1].to_string();
+                        value = value[1..value.len() - 1]
+                            .split(',')
+                            .map(|s| {
+                                if let Some(getter) =
+                                    fastn_js::utils::generate_dot_notation_getter(s)
+                                {
+                                    getter
+                                } else {
+                                    s.to_string()
+                                }
+                            })
+                            .join(",");
+                    } else if let Some(getter) =
+                        fastn_js::utils::generate_dot_notation_getter(&value)
+                    {
+                        value = getter;
                     }
                     result.push(value);
                 }
@@ -1024,16 +1039,6 @@ impl ExpressionGenerator {
         if node.operator().get_variable_identifier_read().is_some() && !no_getter {
             format!("fastn_utils.getter({})", value)
         } else {
-            if no_getter {
-                if value.starts_with('"') || value.starts_with('\'') {
-                    return value;
-                }
-
-                if let Some(getter) = fastn_js::utils::generate_dot_notation_getter(&value) {
-                    return getter;
-                }
-            }
-
             value
         }
     }
