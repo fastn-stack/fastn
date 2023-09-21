@@ -66,7 +66,7 @@ align-content: center
 link: $profile.link
 
 -- ds.contributor: $profile.title
-avatar: $fastn-assets.files.featured.contributors.designers.yashveer-mehra.yashveer-mehra.jpg
+avatar: $fastn-assets.files.images.u.yashveer-mehra.jpg
 profile: Designer
 owners: $owner-yashveer
 connect: $social-links
@@ -106,7 +106,7 @@ wip: true
 
 -- common.owner: Yashveer Mehra
 profile: featured/contributors/designers/yashveer-mehra/
-avatar: $fastn-assets.files.featured.contributors.designers.yashveer-mehra.yashveer-mehra.jpg
+avatar: $fastn-assets.files.images.u.yashveer-mehra.jpg
 role: Designer
 
 -- end: owner-yashveer

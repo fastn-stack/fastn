@@ -72,7 +72,7 @@ align-content: center
 link: $profile.link
 
 -- ds.contributor: $profile.title
-avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+avatar: $fastn-assets.files.images.u.priyanka.jpg
 profile: Developer
 owners: $owner-priyanka
 connect: $social-links
@@ -116,7 +116,7 @@ screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 
 -- common.owner: Priyanka Yadav
 profile: featured/contributors/developers/priyanka-yadav/
-avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+avatar: $fastn-assets.files.images.u.priyanka.jpg
 role: Developer
 
 -- end: owner-priyanka

@@ -66,7 +66,7 @@ align-content: center
 link: $profile.link
 
 -- ds.contributor: $profile.title
-avatar: $fastn-assets.files.featured.contributors.developers.shaheen-senpai.shaheen-senpai.jpeg
+avatar: $fastn-assets.files.images.u.shaheen-senpai.jpeg
 profile: Developer
 owners: $owner-shaheen
 connect: $social-links
@@ -117,7 +117,7 @@ screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-ex
 -- common.owner list owner-shaheen:
 
 -- common.owner: Shaheen Senpai
-avatar: $fastn-assets.files.featured.contributors.developers.shaheen-senpai.shaheen-senpai.jpeg
+avatar: $fastn-assets.files.images.u.shaheen-senpai.jpeg
 profile: featured/contributors/designers/shaheen-senpai/
 role: Designer
 

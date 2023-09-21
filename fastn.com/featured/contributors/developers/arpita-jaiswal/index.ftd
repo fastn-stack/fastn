@@ -71,7 +71,7 @@ align-content: center
 link: $profile.link
 
 -- ds.contributor: $profile.title
-avatar: $fastn-assets.files.featured.contributors.developers.arpita-jaiswal.arpita.jpg
+avatar: $fastn-assets.files.images.u.arpita.jpg
 profile: Developer
 owners: $owner-arpita
 connect: $social-links
@@ -120,7 +120,7 @@ screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 
 -- common.owner: Arpita Jaiswal
 profile: featured/contributors/developers/arpita-jaiswal/
-avatar: $fastn-assets.files.featured.contributors.developers.arpita-jaiswal.arpita.jpg
+avatar: $fastn-assets.files.images.u.arpita.jpg
 role: Developer
 
 -- end: owner-arpita
