@@ -1,94 +1,23 @@
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn.com/content-library as footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/u/saurabh-lohiya
+-- import: fastn.com/u/muskan-verma
 -- import: fastn.com/featured as ft-ui
 
-
-
-
-
--- ds.page: 
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-full-width: true
-distribution-bar: true
-full-width-bar: true
-fluid-width: false
-max-width.fixed.px: 1340
-
--- ds.page.footer:
-
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
--- end: ds.page.footer
--- ds.page.abstract-bar:
-
--- ds.distributors: Misty Gray
-owners: $owner-fastn
+-- ds.featured-category: Misty Gray
+featured-link: /featured/doc-sites/
+category: Documentation Sites
+image: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+owners: [$muskan-verma.info, $saurabh-lohiya.info]
 license-url: https://github.com/fastn-community/misty-gray/blob/main/LICENSE
 license: Creative Commons
 published-date: 20-June-2023
-
--- end: ds.page.abstract-bar
-
-
--- ds.page.full-width-wrap:
-
--- ft-ui.grid-view: Featured Documentation Sites
-templates: $doc-sites
-more-link-text: View more
-more-link: /featured/doc-sites/
-show-large: true
-
--- end: ds.page.full-width-wrap
-
--- ds.preview-card:
-image: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
-cta-url: https://gsalunke.github.io/misty-gray-demo/
-cta-text: Demo
+cards: $doc-sites
 github-url: https://github.com/fastn-community/misty-gray-template/
-cta-2-url: https://fastn-community.github.io/misty-gray/
-cta-2-text: User Manual
-
--- end: ds.page
+demo-link: https://fastn-community.github.io/misty-gray/
 
 
 
 
 
-
-
-
-
-
--- common.owner list owner-fastn:
-
--- common.owner: Muskan Verma
-profile: featured/contributors/designers/muskan-verma/
-avatar: $fastn-assets.files.featured.contributors.designers.muskan-verma.muskan-verma.jpg
-role: Designer
-
--- common.owner: Saurabh Lohiya
-profile: featured/contributors/developers/saurabh-lohiya/
-avatar: $fastn-assets.files.featured.contributors.developers.saurabh-lohiya.saurabh-lohiya.jpg
-role: Developer
-
--- end: owner-fastn
 
 -- ft-ui.template list doc-sites:
 

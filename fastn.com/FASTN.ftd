@@ -153,8 +153,6 @@ favicon: /-/fastn.com/images/favicon.svg
   skip: true
   - Arpita Jaiswal: /featured/contributors/developers/arpita-jaiswal/
     skip: true
-  - Ganesh Salunke: /featured/contributors/developers/ganesh-salunke/
-    skip: true
   - Meenu Kumari: /featured/contributors/developers/meenu-kumari/
     skip: true
   - Priyanka Yadav: /featured/contributors/developers/priyanka-yadav/
@@ -204,7 +202,8 @@ favicon: /-/fastn.com/images/favicon.svg
       skip: true
     - Studious Couscous: /featured/landing/studious-couscous/
       skip: true
-  - Blogs: /featured/blog-templates/
+  - Blogs: /featured/blogs/
+  document: /featured/blog-templates.ftd
     - Simple Site: /featured/blogs/doc-site/
       skip: true
     - Midnight Rush: /featured/blogs/mr-blog/
@@ -709,6 +708,34 @@ favicon: /-/fastn.com/images/favicon.svg
 
 # Community: /champion-program/
   document: student-programs/champion.ftd
+
+## Contributors: /contributors/
+;;document: /u/index.ftd
+document: /featured/contributors/developers/index.ftd
+skip: true
+
+- Ganesh Salunke: /u/ganesh-salunke/
+  skip: true
+- Muskan Verma: /u/muskan-verma/
+  skip: true
+- Jay Kumar: /u/jay-kumar/
+  skip: true
+- Govindaraman S: /u/govindaraman-s/
+  skip: true
+- Yashveer Mehra: /u/yashveer-mehra/
+  skip: true
+- Arpita Jaiswal: /u/arpita-jaiswal/
+  skip: true
+- Meenu Kumari: /u/meenu-kumari/
+  skip: true
+- Priyanka Yadav: /u/priyanka-yadav/
+  skip: true
+- Saurabh Lohiya: /u/saurabh-lohiya/
+  skip: true
+- Saurabh Garg: /u/saurabh-garg/
+  skip: true
+- Shaheen Senpai: /u/shaheen-senpai/
+  skip: true
 
 ## Programs: /champion-program/
   document: student-programs/champion.ftd

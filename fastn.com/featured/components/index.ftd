@@ -23,7 +23,7 @@ We have designed and developed below bling components. You can use them on your
 -- ft-ui.grid-view: Buttons
 templates: $buttons
 ;;more-link-text: View all
-;;more-link: /featured/components-library/
+;;more-link: /featured/components/
 
 We have designed and developed below button components package. You can use them
 on your `fastn` web site. 
@@ -39,7 +39,7 @@ We have designed and developed below business-cards. You can use them on your
 -- ft-ui.grid-view: Code Block
 templates: $code-block
 ;;more-link-text: View all
-;;more-link: /featured/components-library/
+;;more-link: /featured/components/
 
 We have designed and developed below code block and button components package.
 You can use them on your `fastn` web site. 
@@ -71,17 +71,17 @@ We have designed and developed below footer packages. You can use them on your
 -- ft-ui.grid-view: Language Switcher
 templates: $language-switcher
 ;;more-link-text: View all
-;;more-link: /featured/components-library/
+;;more-link: /featured/components/
 
 -- ft-ui.grid-view: Forms
 templates: $forms
 ;;more-link-text: View all
-;;more-link: /featured/components-library/
+;;more-link: /featured/components/
 
 -- ft-ui.grid-view: Quotes
 templates: $quotes
 more-link-text: View all
-more-link: /quotes/
+more-link: /featured/quotes/
 
 -- end: ds.page
 
@@ -226,10 +226,6 @@ screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business
 
 
 -- ft-ui.template list dialogs:
-
--- ft-ui.template: Alert Dialog
-template-url: featured/components/modals/alert-1/
-screenshot: $fastn-assets.files.images.featured.components.dialog-3.png
 
 -- ft-ui.template: Modal
 template-url: featured/components/modals/modal-1/

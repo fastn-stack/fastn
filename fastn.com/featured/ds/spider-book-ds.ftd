@@ -1,69 +1,21 @@
--- import: fastn-community.github.io/spectrum-ds as ds
--- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn.com/content-library as footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/priyanka-yadav
 -- import: fastn.com/featured as ft-ui
 
-
-
-
-
--- ds.page: 
-show-footer: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-name: NULL
-logo-height: 38
-logo-width: 120
-colors: $dark-flame-cs.main
-types: $typo.types
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-full-width: true
-distribution-bar: true
-full-width-bar: true
-fluid-width: false
-max-width.fixed.px: 1340
-
--- ds.page.footer:
-
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
--- end: ds.page.footer
--- ds.page.abstract-bar:
-
--- ds.distributors: Spider Book DS
-owners: $owner-fastn
+-- ds.featured-category: Spider Book DS
+featured-link: /featured/doc-sites/
+category: Documentation Sites
+image: $fastn-assets.files.images.featured.doc-sites.spider-book-ds.png
+owners: [$priyanka-yadav.info, $ganesh-salunke.info]
 license-url: https://github.com/FifthTry/spider-book-ds/blob/main/LICENSE
 license: Creative Commons
 published-date: 20-Sep-2022
-
--- end: ds.page.abstract-bar
-
--- ds.page.full-width-wrap:
-
--- ft-ui.grid-view: Featured Documentation Sites
-templates: $doc-sites
-more-link-text: View more
-more-link: /featured/doc-sites/
-show-large: true
-
--- end: ds.page.full-width-wrap
-
--- ds.preview-card:
-image: $fastn-assets.files.images.featured.doc-sites.spider-book-ds.png
-cta-url: https://fifthtry.github.io/spider-book-ds/docs/doc/
-cta-text: Demo
+cards: $doc-sites
 github-url: https://github.com/FifthTry/spider-book-ds
+demo-link: https://fifthtry.github.io/spider-book-ds/
 
 
--- end: ds.page
+
 
 
 

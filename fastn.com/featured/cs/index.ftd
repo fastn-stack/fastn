@@ -84,7 +84,7 @@ screenshot: $fastn-assets.files.images.featured.cs.midnight-storm-cs.png
 template-url: /cs/misty-gray-cs/
 screenshot: $fastn-assets.files.images.featured.cs.misty-gray-cs.png
 
--- ft-ui.template: Pretty CS
+/-- ft-ui.template: Pretty CS
 template-url: /cs/pretty-cs/
 screenshot: $fastn-assets.files.images.featured.cs.pretty-cs.png
 
@@ -109,7 +109,7 @@ screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
 template-url: /cs/midnight-rush-cs/
 screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 
--- ft-ui.template: Winter CS
+/-- ft-ui.template: Winter CS
 template-url: /cs/winter-cs/
 screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
 

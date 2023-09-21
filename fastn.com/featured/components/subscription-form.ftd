@@ -59,7 +59,7 @@ width.fixed.px if { ftd.device == "desktop" }: 400
 if: { show-grid }
 templates: $components
 more-link-text: View more
-more-link: /featured/components-library/
+more-link: /featured/components/
 
 
 -- end: ds.page
