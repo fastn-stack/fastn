@@ -6,6 +6,10 @@ implement these changes we have to add edition support as well.
 
 ;; add content here in reverse chronological fashion, latest content on the top
 
+-- ds.h1: Default value for `fit` property set to `cover`
+
+Context: https://github.com/fastn-stack/fastn/pull/1304#issuecomment-1727372364
+
 -- ds.h1: Remove `classes`
 
 -- ds.code:

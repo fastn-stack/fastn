@@ -1,7 +1,11 @@
+-- import: fastn.com/ftd-host/processor
+
 -- ds.page: Getting Request Data
 
 `request-data` processor can be used to find the data from the HTTP request.
 Query string and [named-path parameters](/dynamic-urls/) or from request body.
+
+-- processor.static-vs-dynamic:
 
 -- ds.h1: Reading Individual Fields
 
