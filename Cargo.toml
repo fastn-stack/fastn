@@ -136,6 +136,7 @@ wgpu = "0.16"
 winit = "0.28"
 zip = "0.6"
 prettify-js = "0.1.0"
+atty = "0.2"
 indexmap = { version = "2", features = ["serde"] }
 
 [workspace.dependencies.rusqlite]

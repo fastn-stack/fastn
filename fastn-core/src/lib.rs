@@ -32,6 +32,7 @@ mod translation;
 mod version;
 // mod wasm;
 mod library2022;
+pub mod vercel;
 mod workspace;
 
 pub(crate) use auto_import::AutoImport;

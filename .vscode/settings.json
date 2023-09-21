@@ -1,0 +1,6 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "./fastn-core/Cargo.toml"
+    ],
+    "rust-analyzer.showUnlinkedFileNotification": false
+}
