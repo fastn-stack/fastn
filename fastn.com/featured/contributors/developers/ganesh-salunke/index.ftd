@@ -72,7 +72,7 @@ align-content: center
 link: $profile.link
 
 -- ds.contributor: $profile.title
-avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+avatar: $fastn-assets.files.images.u.ganeshs.jpg
 profile: Developer
 owners: $owner-ganesh
 connect: $social-links

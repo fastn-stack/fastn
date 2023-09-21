@@ -72,7 +72,7 @@ align-content: center
 link: $profile.link
 
 -- ds.contributor: $profile.title
-avatar: $fastn-assets.files.featured.contributors.developers.meenu-kumari.meenu.jpg
+avatar: $fastn-assets.files.images.u.meenu.jpg
 profile: Developer
 owners: $owner-meenu
 connect: $social-links

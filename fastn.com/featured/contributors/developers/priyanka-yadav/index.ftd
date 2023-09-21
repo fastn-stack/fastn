@@ -72,7 +72,7 @@ align-content: center
 link: $profile.link
 
 -- ds.contributor: $profile.title
-avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+avatar: $fastn-assets.files.images.u.priyanka.jpg
 profile: Developer
 owners: $owner-priyanka
 connect: $social-links

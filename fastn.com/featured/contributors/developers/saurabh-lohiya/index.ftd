@@ -71,7 +71,7 @@ align-content: center
 link: $profile.link
 
 -- ds.contributor: $profile.title
-avatar: $fastn-assets.files.featured.contributors.developers.saurabh-lohiya.saurabh-lohiya.jpg
+avatar: $fastn-assets.files.images.u.saurabh-lohiya.jpg
 profile: Developer
 owners: $owner-saurabh
 connect: $social-links
