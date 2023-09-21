@@ -95,12 +95,12 @@ screenshot: $fastn-assets.files.images.featured.workshops.event-1.png
 
 -- common.owner: Ganesh Salunke
 profile: featured/contributors/developers/ganesh-salunke/
-avatar: $fastn-assets.files.featured.contributors.developers.ganesh-salunke.ganeshs.jpg
+avatar: $fastn-assets.files.images.u.ganeshs.jpg
 role: Developer
 
 -- common.owner: Priyanka Yadav
 profile: featured/contributors/developers/priyanka-yadav/
-avatar: $fastn-assets.files.featured.contributors.developers.priyanka-yadav.priyanka.jpg
+avatar: $fastn-assets.files.images.u.priyanka.jpg
 role: Developer
 
 -- end: owner-fastn

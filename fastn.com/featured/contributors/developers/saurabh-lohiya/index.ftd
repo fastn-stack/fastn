@@ -115,7 +115,7 @@ screenshot: $fastn-assets.files.images.featured.cs.misty-gray-cs.png
 
 -- common.owner: Saurabh Lohiya
 profile: featured/contributors/developers/saurabh-lohiya/
-avatar: $fastn-assets.files.featured.contributors.developers.saurabh-lohiya.saurabh-lohiya.jpg
+avatar: $fastn-assets.files.images.u.saurabh-lohiya.jpg
 role: Developer
 
 -- end: owner-saurabh

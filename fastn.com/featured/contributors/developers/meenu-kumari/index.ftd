@@ -116,7 +116,7 @@ screenshot: $fastn-assets.files.images.featured.cs.midnight-storm-cs.png
 
 -- common.owner: Meenu Kumari
 profile: featured/contributors/developers/meenu-kumari/
-avatar: $fastn-assets.files.featured.contributors.developers.meenu-kumari.meenu.jpg
+avatar: $fastn-assets.files.images.u.meenu.jpg
 role: Developer
 
 -- end: owner-meenu
