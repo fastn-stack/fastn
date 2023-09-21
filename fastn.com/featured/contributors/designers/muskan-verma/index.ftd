@@ -144,7 +144,7 @@ screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 
 -- common.owner: Muskan Verma
 profile: featured/contributors/designers/muskan-verma/
-avatar: $fastn-assets.files.featured.contributors.designers.muskan-verma.muskan-verma.jpg
+avatar: $fastn-assets.files.images.u.muskan-verma.jpg
 role: Designer
 
 -- end: owner-muskan
