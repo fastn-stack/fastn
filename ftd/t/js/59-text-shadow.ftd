@@ -1,0 +1,11 @@
+-- ftd.shadow s:
+x-offset.px: 1
+y-offset.px: 1
+color: #000000
+blur.px: 4
+;; text-shadow does not excepts any value for spread
+;; so it will safely ignore `spread` even if it is defined.
+
+-- ftd.text: Hello World
+align-self: center
+text-shadow: $s

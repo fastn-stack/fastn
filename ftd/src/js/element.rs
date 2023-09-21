@@ -1889,6 +1889,7 @@ pub struct TextCommon {
     pub style: Option<ftd::js::Value>,
     pub display: Option<ftd::js::Value>,
     pub link_color: Option<ftd::js::Value>,
+    pub text_shadow: Option<ftd::js::Value>,
 }
 
 impl TextCommon {
@@ -1912,6 +1913,11 @@ impl TextCommon {
             style: ftd::js::value::get_optional_js_value("style", properties, arguments),
             display: ftd::js::value::get_optional_js_value("display", properties, arguments),
             link_color: ftd::js::value::get_optional_js_value("link-color", properties, arguments),
+            text_shadow: ftd::js::value::get_optional_js_value(
+                "text-shadow",
+                properties,
+                arguments,
+            ),
         }
     }
 
@@ -1966,6 +1972,16 @@ impl TextCommon {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 link_color.to_set_property(
                     fastn_js::PropertyKind::LinkColor,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
+            ));
+        }
+        if let Some(ref text_shadow) = self.text_shadow {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                text_shadow.to_set_property(
+                    fastn_js::PropertyKind::TextShadow,
                     doc,
                     element_name,
                     rdata,
