@@ -4068,6 +4068,84 @@ impl BorderStyle {
     }
 }
 
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum ImageFit {
+    NONE,
+    FILL,
+    COVER,
+    CONTAIN,
+    SCALEDOWN,
+}
+
+impl ImageFit {
+    fn from_optional_values(
+        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            return Ok(Some(ImageFit::from_values(value, doc, line_number)?));
+        }
+        Ok(None)
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter::FTD_IMAGE_FIT_NONE => Ok(ImageFit::NONE),
+            ftd::interpreter::FTD_IMAGE_FIT_COVER => Ok(ImageFit::COVER),
+            ftd::interpreter::FTD_IMAGE_FIT_CONTAIN => Ok(ImageFit::CONTAIN),
+            ftd::interpreter::FTD_IMAGE_FIT_FILL => Ok(ImageFit::FILL),
+            ftd::interpreter::FTD_IMAGE_FIT_SCALE_DOWN => Ok(ImageFit::SCALEDOWN),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.image-fit`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn optional_image_fit(
+        properties: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+        component_name: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<ImageFit>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter::FTD_IMAGE_FIT,
+            inherited_variables,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            ImageFit::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            ImageFit::NONE => "none".to_string(),
+            ImageFit::COVER => "cover".to_string(),
+            ImageFit::CONTAIN => "contain".to_string(),
+            ImageFit::FILL => "fill".to_string(),
+            ImageFit::SCALEDOWN => "scale-down".to_string(),
+        }
+    }
+}
+
 /// https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]

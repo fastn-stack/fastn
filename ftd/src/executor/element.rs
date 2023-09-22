@@ -198,6 +198,7 @@ pub struct Rendered {
 pub struct Image {
     pub src: ftd::executor::Value<ImageSrc>,
     pub alt: ftd::executor::Value<Option<String>>,
+    pub fit: ftd::executor::Value<Option<ftd::executor::ImageFit>>,
     pub common: Common,
 }
 
@@ -1185,6 +1186,16 @@ pub fn image_from_properties(
         line_number,
     )?;
 
+    let fit = ftd::executor::ImageFit::optional_image_fit(
+        properties,
+        arguments,
+        doc,
+        line_number,
+        "fit",
+        inherited_variables,
+        "ftd#image",
+    )?;
+
     let common = common_from_properties(
         properties,
         events,
@@ -1197,7 +1208,12 @@ pub fn image_from_properties(
         "ftd#image",
         device,
     )?;
-    Ok(Image { src, alt, common })
+    Ok(Image {
+        src,
+        alt,
+        fit,
+        common,
+    })
 }
 
 #[allow(clippy::too_many_arguments)]
