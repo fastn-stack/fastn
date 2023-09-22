@@ -89,7 +89,7 @@ background.solid if { !feature-card.transparent }: $inherited.colors.background.
 padding-top.px if { ftd.device == "desktop" }: 80
 padding-horizontal.px if { ftd.device == "desktop" }: 24
 padding-bottom.px if { ftd.device == "desktop" }: 57
-margin-bottom.px: 24
+;;margin-bottom.px: 24
 align-content: center
 
 -- ftd.desktop:
@@ -329,6 +329,60 @@ align-content: center
 -- end: ftd.column
 
 -- end: feature-card
+
+
+
+
+
+
+
+
+-- component learn-fastn:
+caption title:
+optional string cta-primary-text:
+optional string cta-primary-link:
+ftd.image-src image:
+
+-- ftd.row:
+width: fill-container
+background.solid: $inherited.colors.custom.two
+align-content: center
+margin-bottom.px if { ftd.device == "mobile"}: 40
+padding-vertical.px: 40
+
+-- ftd.row:
+padding-vertical.px: 36
+max-width.fixed.px: 1120
+width: fill-container
+align-content: center
+spacing: space-between
+
+-- ftd.column:
+width: fill-container
+width.fixed.percent if { ftd.device != "mobile"}: 70
+spacing.fixed.px:36
+padding-horizontal.px if { ftd.device == "mobile"}: 24
+
+-- ftd.text: $learn-fastn.title
+color: #FFFFFF
+role: $inherited.types.heading-medium
+
+-- cta-secondary: $learn-fastn.cta-primary-text
+link: $learn-fastn.cta-primary-link
+icon: $fastn-assets.files.images.landing.right-arrow.svg
+
+-- end: ftd.column
+
+-- ftd.image:
+if: { ftd.device != "mobile"}
+src: $learn-fastn.image
+width.fixed.percent: 20
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: learn-fastn
 
 
 
@@ -1860,6 +1914,42 @@ width.fixed.px: 24
 -- end: cta-secondary-medium
 
 
+
+
+
+
+
+-- component cta-secondary:
+caption title:
+string link: 
+optional ftd.image-src icon:
+boolean $mouse-in: false
+
+-- ftd.row:
+background.solid: $inherited.colors.cta-secondary.base
+background.solid if { cta-secondary.mouse-in }: $inherited.colors.cta-secondary.hover
+$on-mouse-leave$: $ftd.set-bool($a = $cta-secondary.mouse-in, v = false)
+$on-mouse-enter$: $ftd.set-bool($a = $cta-secondary.mouse-in, v = true)
+padding-vertical.px: 12
+padding-horizontal.px: 24
+border-radius.px: 58
+spacing.fixed.px: 4
+link: $cta-secondary.link
+color: #333333
+role: $inherited.types.button-small
+
+-- ftd.text: $cta-secondary.title
+
+
+-- ftd.image:
+if: { cta-secondary.icon != NULL }
+src: $cta-secondary.icon
+width.fixed.px: 24
+
+
+-- end: ftd.row
+
+-- end: cta-secondary
 
 
 
