@@ -2,6 +2,7 @@
 -- import: fastn.com/blog/authors
 -- import: fastn-community.github.io/doc-site/common
 -- import: fastn.com/utils
+-- import: fastn.com/content-library as lib
 
 -- common.post-meta meta: ACME Inc Case Study
 published-on: August 23, 2023 at 12:26 am
@@ -269,6 +270,6 @@ Furthermore, ACME could now [deploy](https://fastn.com/deploy/) their website
 on their server, securing control, privacy, scalability, and **reduced reliance on 
 external platforms**. 
 
-
+-- lib.get-started:
 
 -- end: ds.blog-page

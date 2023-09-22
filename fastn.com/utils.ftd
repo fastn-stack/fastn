@@ -387,6 +387,7 @@ width: fill-container
 padding-vertical.em: 2
 padding-horizontal.em: 1
 background.solid if { ftd.device == "desktop" }: $inherited.colors.background.step-2
+margin-top.px: 30
 
 -- ftd.column:
 background.image if { ftd.device == "desktop" }: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
