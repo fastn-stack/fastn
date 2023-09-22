@@ -50,6 +50,7 @@ fastn_dom.propertyMap = {
     "bottom": "b",
     "color": "c",
     "shadow": "sh",
+    "text-shadow": "tsh",
     "cursor": "cur",
     "display": "d",
     "flex-wrap": "fw",
@@ -275,6 +276,7 @@ fastn_dom.PropertyKind = {
     Controls: 114,
     Muted: 115,
     LinkColor: 116,
+    TextShadow: 117,
 };
 
 
@@ -978,6 +980,32 @@ class Node2 {
             this.attachCss("box-shadow", darkShadowCss, true, `body.dark .${lightClass}`);
         }
     }
+    attachTextShadow(value) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss("text-shadow", value);
+            return;
+        }
+
+        const color = value.get("color");
+
+        const lightColor = fastn_utils.getStaticValue(color.get("light"));
+        const darkColor = fastn_utils.getStaticValue(color.get("dark"));
+
+        const blur = fastn_utils.getStaticValue(value.get("blur"));
+        const xOffset = fastn_utils.getStaticValue(value.get("x_offset"));
+        const yOffset = fastn_utils.getStaticValue(value.get("y_offset"));
+
+        const shadowCommonCss = `${xOffset} ${yOffset} ${blur}`;
+        const lightShadowCss =  `${shadowCommonCss} ${lightColor}`;
+        const darkShadowCss = `${shadowCommonCss} ${darkColor}`;
+
+        if (lightShadowCss === darkShadowCss) {
+            this.attachCss("text-shadow", lightShadowCss, false);
+        } else {
+            let lightClass = this.attachCss("box-shadow", lightShadowCss, true);
+            this.attachCss("text-shadow", darkShadowCss, true, `body.dark .${lightClass}`);
+        }
+    }
     attachLinearGradientCss(value) {
         if (fastn_utils.isNull(value)) {
             this.attachCss("background-image", value);
@@ -1416,6 +1444,8 @@ class Node2 {
             this.attachCss("z-index", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Shadow) {
             this.attachShadow(staticValue);
+        } else if (kind === fastn_dom.PropertyKind.TextShadow) {
+            this.attachTextShadow(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Classes) {
             fastn_utils.removeNonFastnClasses(this);
             if (!fastn_utils.isNull(staticValue)) {
