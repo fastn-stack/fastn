@@ -350,6 +350,14 @@ align-content: center
 margin-bottom.px if { ftd.device == "mobile"}: 40
 padding-vertical.px: 40
 
+-- ftd.image:
+if: { ftd.device != "mobile"}
+src: $learn-fastn.image
+width.fixed.percent: 20
+anchor: parent
+right.percent: 10
+top.px: 30
+
 -- ftd.row:
 padding-vertical.px: 36
 max-width.fixed.px: 1120
@@ -372,11 +380,6 @@ link: $learn-fastn.cta-primary-link
 icon: $fastn-assets.files.images.landing.right-arrow.svg
 
 -- end: ftd.column
-
--- ftd.image:
-if: { ftd.device != "mobile"}
-src: $learn-fastn.image
-width.fixed.percent: 20
 
 -- end: ftd.row
 
