@@ -347,7 +347,8 @@ ftd.image-src image:
 width: fill-container
 background.solid: $inherited.colors.custom.two
 align-content: center
-margin-bottom.px if { ftd.device == "mobile"}: 24
+margin-bottom.px if { ftd.device == "mobile"}: 40
+padding-vertical.px: 40
 
 -- ftd.row:
 padding-vertical.px: 36
