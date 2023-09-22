@@ -33,6 +33,10 @@ developers together to solve some of the most pressing problems faced by
 communities all over the world. This 36-hour-long event will bring together
 technocrats from across countries. 🌐💻
 
+HackOdisha 3.0, powered by the innovative spirit of `fastn`, `poised to inspire
+and redefine the boundaries of technological innovation. Join us as we embark
+on this journey to solve real-world problems and shape the future of
+technology. 🚀🏆 #hackodisha3
 
 -- end: event.event
 
@@ -43,7 +47,7 @@ spacing.fixed.px: 18
 
 -- ds.h3: `fastn` is the Gold Sponsor
 
--- ftd.image:
+/-- ftd.image:
 src: $assets.files.images.events.fastn-as-sponsor.png
 width.fixed.percent: 60
 border-radius.px: 15
@@ -73,15 +77,13 @@ Here are the following perks:
 
 -- ds.h3: `fastn` track: [Bringing next billion humans Online](https://hackodisha3.devfolio.co/prizes?partner=fastn)
 
-This is something we believe in. Guiding people towards creating a website with
-full ownership and all customizable rights without a fuzz, for the next billion
-human beings. Be it a small scale business like kirana shops, early
-startups, freelancers, individuals from all walks of life like, authors, artists,
-designers, young entrepreneurs or web-developers to a large-scale enterprises,
-e-commerce giants or worldwide governments. 
+Our mission is simple: Empower the next billion individuals with full website
+ownership and customization rights. Whether you're a small-scale business
+owner, budding entrepreneur, freelancer, artist, or government entity, `fastn` 
+is here to enhance your digital presence.
 
-Hence, we decided this track - **Bringing next billion humans Online**, i.e., 
-increasing the digital presence of ever-growing web.
+We've curated the `Bringing the Next Billion Humans Online` track, dedicated to
+expanding the digital footprint of an ever-growing online community.
 
 The following graph shows internet users in India are growing rapidly:
 
@@ -92,11 +94,6 @@ border-radius.px: 15
 margin-vertical.px: 10
 align-self: center
 
-/-- ds.h3: `fastn` Tutorial - 1 hour Workshop
-
-`Webwiz` has given us a prime slot for 1 hour online Workshop that was conducted
-on September, 6th from 8:00PM - 9:00PM.
-
 
 -- ftd.row:
 width: fill-container
@@ -104,9 +101,10 @@ spacing.fixed.px: 24
 
 -- ds.h3: `fastn` Tutorial - 1 hour Workshop
 
-`Webwiz` has given us a prime slot for 1 hour online Workshop that was conducted
-on September, 6th from 8:00PM - 9:00PM. This gave us the opportunity to
-introduce `fastn` stack to the participants of the upcoming hakathon.   
+Webwiz generously provided us with a prime 1-hour slot for an online workshop on
+September 6th, from 8:00 PM to 9:00 PM. This was an excellent opportunity to
+introduce `fastn` to the upcoming hackathon participants. Topics covered during
+the workshop included:  
 
 Topics that were covered in the meeting:
 
