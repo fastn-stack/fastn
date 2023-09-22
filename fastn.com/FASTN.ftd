@@ -167,7 +167,7 @@ favicon: /-/fastn.com/images/favicon.svg
   - Documentation Sites: /featured/doc-sites/
     - Simple Site: /featured/ds/doc-site/
       skip: true
-    - Midnight Rush: /featured/ds/mr-ds/
+    - Midnight Rush: /featured/ds/midnight-rush/
       skip: true
     - Midnight Storm: /featured/ds/midnight-storm/
       skip: true
