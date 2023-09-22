@@ -82,7 +82,7 @@ Build your first fastn-powered website in just 2 hours.
 
 -- lib.learn-fastn: Learn to build stunning UI components with our crash course
 cta-primary-text: Start Learning
-cta-primary-link: index.html
+cta-primary-link: /expander/
 image: $fastn-assets.files.images.landing.crash-course.svg
 
 -- lib.feature-card: Anyone in your team can contribute to or modify the website
