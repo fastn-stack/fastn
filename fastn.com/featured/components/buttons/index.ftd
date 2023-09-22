@@ -8,12 +8,12 @@ featured-link: /featured/components/
 category: Featured Components
 image: $fastn-assets.files.images.featured.components.button-1.png
 owners: [$priyanka-yadav.info, $ganesh-salunke.info, $meenu-kumari.info]
-license-url: https://github.com/fifthtry/buttons/blob/main/LICENSE
+license-url: https://github.com/fastn-community/button/blob/main/LICENSE
 license: Creative Commons
 published-date: 02-Aug-2023
 cards: $components
-github-url: https://github.com/fifthtry/buttons
-demo-link: https://fifthtry.github.io/buttons
+github-url: https://github.com/fastn-community/button
+demo-link: https://fastn-community.github.io/button
 
 
 
