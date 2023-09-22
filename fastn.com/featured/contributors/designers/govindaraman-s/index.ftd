@@ -68,7 +68,7 @@ align-content: center
 link: $profile.link
 
 -- ds.contributor: $profile.title
-avatar: $fastn-assets.files.featured.contributors.designers.govindaraman-s.govindaraman-s.jpg
+avatar: $fastn-assets.files.images.u.govindaraman-s.jpg
 profile: Designer
 owners: $owner-govind
 connect: $social-links
