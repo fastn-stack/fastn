@@ -1031,6 +1031,20 @@ impl ftd::executor::Image {
                     doc_id,
                 ),
             );
+            n.style.insert(
+                s("object-fit"),
+                ftd::node::Value::from_executor_value(
+                    image
+                        .fit
+                        .to_owned()
+                        .value
+                        .as_ref()
+                        .map(|v| v.to_css_string()),
+                    image.fit.to_owned(),
+                    None,
+                    doc_id,
+                ),
+            );
             n.attrs.insert(
                 s("alt"),
                 ftd::node::Value::from_executor_value(
