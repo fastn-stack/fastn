@@ -64,9 +64,9 @@ their own custom processors, which will allow much more functionalities.
 -- cbox.warning: Static Vs Dynamic
 
 This feature works better with dynamic hosting. If you are using `fastn` in
-[static site mode](/static/), then how the page looked when `fastn build` was
+[static site mode](/deploy/), then how the page looked when `fastn build` was
 called will be shown to everyone. But if you are using [dynamic
-mode](/server/) then this page would be regenerated on every page load.
+mode](/deploy/) then this page would be regenerated on every page load.
 
 -- read-more.read-more: Learn More
 link: /deploy/

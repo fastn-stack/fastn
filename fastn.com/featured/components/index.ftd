@@ -169,14 +169,6 @@ screenshot: $fastn-assets.files.images.featured.components.button-1.png
 template-url: /featured/components/headers/header/
 screenshot: $fastn-assets.files.images.featured.components.header.jpg
 
--- ft-ui.template: Header 1
-template-url: /featured/components/headers/header-1/
-screenshot: $fastn-assets.files.images.featured.components.header-1.png
-
--- ft-ui.template: Header 2
-template-url: /featured/components/headers/header-2/
-screenshot: $fastn-assets.files.images.featured.components.header-2.png
-
 -- end: headers
 
 
@@ -188,10 +180,6 @@ screenshot: $fastn-assets.files.images.featured.components.header-2.png
 -- ft-ui.template: Footers
 template-url: /featured/components/footers/footer/
 screenshot: $fastn-assets.files.images.featured.components.footer.png
-
--- ft-ui.template: Footer - 1
-template-url: /featured/components/footers/footer-1/
-screenshot: $fastn-assets.files.images.featured.components.footer-1.png
 
 -- ft-ui.template: Footer - 3
 template-url: /featured/components/footers/footer-3/

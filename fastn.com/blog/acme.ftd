@@ -107,7 +107,7 @@ width.fixed.percent: 50
 -- ds.markdown:
 
 Simultaneously, Priyanka from the content team proceeded to populate the ACME 
-website with content. The **native [Markdown support](https://fastn.com/markdown/) 
+website with content. The **native [Markdown support](https://fastn.com/markdown/-/frontend/) 
 transformed content into code effortlessly**. 
 
 Compare the following source code versus live page to appreciate how 
@@ -122,7 +122,7 @@ About Us Page: [Code](https://github.com/fastn-community/acme-inc/blob/main/team
 
 Pricing Page: [Code](https://github.com/fastn-community/acme-inc/blob/main/pricing.ftd) vs [Live Page](https://acme.fastn.com/pricing/)
 
-Blog Page: [Code](https://acme.fastn.com/blog/) vs [Live Page](https://github.com/fastn-community/acme-inc/blob/main/blog.ftd)
+Blog Page: [Code](https://github.com/fastn-community/acme-inc/blob/main/blog.ftd) vs [Live Page](https://acme.fastn.com/blog/)
 
 
 ACME's transition to fastn allowed **every team member to contribute to the website** 
