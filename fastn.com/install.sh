@@ -84,6 +84,12 @@ update_path() {
     fi
 
     echo ""
+    
+    # Create the shell config file if it doesn't exist
+    if [ ! -e "$shell_config_file" ]; then
+        log_message "✔ Created shell config file since it didn't already exist"
+        touch "$shell_config_file"
+    fi
 
     # Check if the path is already added to the shell config file
     if ! grep -qF "export PATH=\"\$PATH:${DESTINATION_PATH}\"" "$shell_config_file"; then
@@ -100,6 +106,11 @@ update_path() {
         log_message "✔ Path is already added to the shell config file: $shell_config_file"
         return 0
     fi
+}
+
+remove_temp_files() {
+    rm -f fastn_macos_x86_64 fastn_linux_musl_x86_64 fastn_controller_linux_musl_x86_64
+    log_message "✔ Removed temporary files"
 }
 
 setup() {
@@ -136,12 +147,10 @@ setup() {
         mkdir -p "$DESTINATION_PATH"
     fi
 
-    # Remove temporary files from previous install attempts
-    rm -f fastn_macos_x86_64 fastn_linux_musl_x86_64 fastn_controller_linux_musl_x86_64
-
     echo ""
 
-    log_message "✔ Removed temporary files"
+    # Remove temporary files from previous install attempts
+    remove_temp_files
 
     echo ""
 
@@ -184,6 +193,13 @@ setup() {
     else
         log_error "Installation failed. Please check if you have sufficient permissions to install in $DESTINATION_PATH."
     fi
+
+    echo ""
+
+    # Remove temporary files from this install attempt
+    remove_temp_files
+
+    echo ""
 }
 
 main() {
