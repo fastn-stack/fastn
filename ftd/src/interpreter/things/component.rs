@@ -1020,14 +1020,14 @@ fn search_things_for_module(
                 line_number,
             );
         }
-        let module_property = property
-            .first()
-            .unwrap()
+        let module_property = property.first().unwrap();
+        // TODO: Remove unwrap()
+
+        let (m_name, things) = match module_property
             .resolve(doc, &Default::default())?
             // TODO: Remove unwrap()
-            .unwrap();
-
-        let (m_name, things) = match module_property {
+            .unwrap()
+        {
             ftd::interpreter::Value::Module { name, things } => (name, things),
             t => {
                 return ftd::interpreter::utils::e2(
@@ -1065,6 +1065,7 @@ fn search_things_for_module(
         if let Some(m) = doc.aliases.get(m_alias.as_str()) {
             m_alias = m.to_string();
         }
+
         let mut unresolved_thing = None;
 
         for (thing, _expected_kind) in things {
@@ -1082,11 +1083,16 @@ fn search_things_for_module(
             let mut new_doc_name = doc.name.to_string();
             let mut new_doc_aliases = doc.aliases.clone();
 
-            if let Some(module_name) = module_name {
-                if let Some(state) = doc.state() {
-                    let parsed_document = state.parsed_libs.get(module_name).unwrap();
-                    new_doc_name = parsed_document.name.to_string();
-                    new_doc_aliases = parsed_document.doc_aliases.clone();
+            // If the module name (value) is coming from the argument of the component then we
+            // need to change doc to the new-doc, else if it's coming from property then no need
+            // to change the doc.
+            if module_property.source.is_default() {
+                if let Some(module_name) = module_name {
+                    if let Some(state) = doc.state() {
+                        let parsed_document = state.parsed_libs.get(module_name).unwrap();
+                        new_doc_name = parsed_document.name.to_string();
+                        new_doc_aliases = parsed_document.doc_aliases.clone();
+                    }
                 }
             }
 
@@ -1134,6 +1140,8 @@ fn search_things_for_module(
                 }
             }
         }
+
+        dbg!("end search_things_for_module***");
 
         if let Some(unresolved_thing) = unresolved_thing {
             try_ok_state!(unresolved_thing);
