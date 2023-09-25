@@ -343,6 +343,7 @@ impl Component {
             return Ok(ftd::interpreter::StateWithThing::new_thing(component));
         }
 
+        dbg!("1*** properties");
         let properties = try_ok_state!(Property::from_ast_properties_and_children(
             ast_component.properties,
             ast_component.children,
@@ -352,6 +353,7 @@ impl Component {
             doc,
             ast_component.line_number,
         )?);
+        dbg!("end: 1*** properties");
 
         if let Some((_name, arguments)) = definition_name_with_arguments {
             Self::assert_no_private_properties_while_invocation(&properties, arguments)?;
@@ -817,6 +819,7 @@ impl Property {
             line_number,
         )?);
         for property in ast_properties {
+            dbg!("start", &property.value);
             properties.push(try_ok_state!(Property::from_ast_property(
                 property,
                 component_name,
@@ -825,13 +828,21 @@ impl Property {
                 loop_object_name_and_kind,
                 doc,
             )?));
+            dbg!("end");
         }
 
+        dbg!(
+            &properties,
+            &component_arguments,
+            &component_name,
+            &definition_name_with_arguments
+        );
         try_ok_state!(search_things_for_module(
             component_name,
             properties.as_slice(),
             doc,
             component_arguments.as_slice(),
+            definition_name_with_arguments,
             line_number,
         )?);
 
@@ -995,6 +1006,7 @@ fn search_things_for_module(
     properties: &[ftd::interpreter::Property],
     doc: &mut ftd::interpreter::TDoc,
     arguments: &[ftd::interpreter::Argument],
+    definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
     line_number: usize,
 ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<()>> {
     for argument in arguments.iter() {
@@ -1022,21 +1034,21 @@ fn search_things_for_module(
         }
         let module_property = property.first().unwrap();
         // TODO: Remove unwrap()
+        dbg!(
+            &module_property,
+            &argument,
+            &definition_name_with_arguments,
+            &component_name
+        );
 
-        let (m_name, things) = match module_property
-            .resolve(doc, &Default::default())?
-            // TODO: Remove unwrap()
-            .unwrap()
-        {
-            ftd::interpreter::Value::Module { name, things } => (name, things),
-            t => {
-                return ftd::interpreter::utils::e2(
-                    format!("Expected module, found: {:?}", t),
-                    doc.name,
-                    line_number,
-                )
-            }
-        };
+        let (m_name, things) = get_module_name_and_thing(
+            &module_property,
+            doc,
+            definition_name_with_arguments,
+            argument,
+        )?;
+
+        dbg!("end::::", &definition_name_with_arguments);
 
         let mut m_alias;
         {
@@ -1141,13 +1153,108 @@ fn search_things_for_module(
             }
         }
 
-        dbg!("end search_things_for_module***");
-
         if let Some(unresolved_thing) = unresolved_thing {
             try_ok_state!(unresolved_thing);
         }
     }
     Ok(ftd::interpreter::StateWithThing::new_thing(()))
+}
+
+fn get_module_name_and_thing(
+    module_property: &ftd::interpreter::Property,
+    doc: &mut ftd::interpreter::TDoc,
+    definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
+    component_argument: &ftd::interpreter::Argument,
+) -> ftd::interpreter::Result<(String, ftd::Map<ftd::interpreter::ModuleThing>)> {
+    let (default_argument, default_things) = {
+        let value = if let Some(ref value) = component_argument.value {
+            value.clone().resolve(doc, module_property.line_number)?
+        } else {
+            return ftd::interpreter::utils::e2(
+                "Cannot find component argument value for module",
+                doc.name,
+                component_argument.line_number,
+            );
+        };
+
+        if let Some(thing) = value.module_thing_optional() {
+            (component_argument.name.to_string(), thing.clone())
+        } else {
+            return ftd::interpreter::utils::e2(
+                "Cannot find component argument value for module",
+                doc.name,
+                component_argument.line_number,
+            );
+        }
+    };
+    if let Some(module_name) = module_property.value.get_reference_or_clone() {
+        if let Some((argument, _, source)) =
+            ftd::interpreter::utils::get_component_argument_for_reference_and_remaining(
+                module_name,
+                doc.name,
+                definition_name_with_arguments,
+                module_property.line_number,
+            )?
+        {
+            if let Some(ref mut property_value) = argument.value {
+                if let ftd::interpreter::PropertyValue::Value { value, .. } = property_value {
+                    if let Some((name, thing)) = value.mut_module_optional() {
+                        thing.extend(default_things.into_iter().map(|(name, thing)| {
+                            (
+                                name.split_once(&format!(".{}.", default_argument))
+                                    .map(|v| {
+                                        format!(
+                                            "{}#{}.{}.{}",
+                                            doc.name,
+                                            source.get_name().unwrap(),
+                                            argument.name,
+                                            v.1.to_string()
+                                        )
+                                    })
+                                    .unwrap_or(name.to_string()),
+                                thing,
+                            )
+                        }));
+                        return Ok((name.to_string(), thing.clone()));
+                    } else {
+                        return ftd::interpreter::utils::e2(
+                            format!("Expected module, found: {:?}", property_value),
+                            doc.name,
+                            module_property.line_number,
+                        );
+                    }
+                }
+                match property_value
+                    .clone()
+                    .resolve(doc, module_property.line_number)?
+                {
+                    ftd::interpreter::Value::Module { name, things } => return Ok((name, things)),
+                    t => {
+                        return ftd::interpreter::utils::e2(
+                            format!("Expected module, found: {:?}", t),
+                            doc.name,
+                            module_property.line_number,
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    match module_property
+        .resolve(doc, &Default::default())?
+        // TODO: Remove unwrap()
+        .unwrap()
+    {
+        ftd::interpreter::Value::Module { name, things } => Ok((name, things)),
+        t => {
+            return ftd::interpreter::utils::e2(
+                format!("Expected module, found: {:?}", t),
+                doc.name,
+                module_property.line_number,
+            )
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
