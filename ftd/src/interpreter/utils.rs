@@ -165,6 +165,10 @@ pub fn get_doc_name_and_thing_name_and_remaining(
     }
 }
 
+pub fn get_doc_name(s: &str, doc_id: &str) -> String {
+    get_doc_name_and_thing_name_and_remaining(s, doc_id, 0).0
+}
+
 pub fn split(
     name: &str,
     split_at: &str,
@@ -244,7 +248,7 @@ pub fn get_mut_argument_for_reference<'a>(
         &mut [ftd::interpreter::Argument],
     )>,
     line_number: usize,
-) -> ftd::interpreter::Result<Option<&'a mut ftd::interpreter::Argument>> {
+) -> ftd::interpreter::Result<Option<(String, &'a mut ftd::interpreter::Argument)>> {
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
             .strip_prefix(format!("{}.", component_name).as_str())
@@ -252,7 +256,7 @@ pub fn get_mut_argument_for_reference<'a>(
         {
             let (p1, _) = ftd::interpreter::utils::split_at(referenced_argument, ".");
             return if let Some(argument) = arguments.iter_mut().find(|v| v.name.eq(p1.as_str())) {
-                Ok(Some(argument))
+                Ok(Some((component_name.to_string(), argument)))
             } else {
                 ftd::interpreter::utils::e2(
                     format!("{} is not the argument in {}", p1, component_name),
@@ -684,7 +688,7 @@ pub(crate) fn insert_module_thing(
     line_number: usize,
     doc: &mut ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
-    let arg = get_mut_argument_for_reference(
+    let (component_name, arg) = get_mut_argument_for_reference(
         reference,
         doc.name,
         definition_name_with_arguments,
@@ -713,29 +717,24 @@ pub(crate) fn insert_module_thing(
             .get(module_name.as_str())
             .cloned()
             .unwrap_or(module_name.to_string());
-        let mut reference_parts = reference.split('.');
-        if let (Some(_), Some(_), Some(third)) = (
-            reference_parts.next(),
-            reference_parts.next(),
-            reference_parts.next(),
-        ) {
-            let module_component_name = format!("{}#{}", module_name, third);
+        if let Some(reference) =
+            reference.strip_prefix(&format!("{}.{}.", component_name, arg.name))
+        {
+            let module_component_name = format!("{}#{}", module_name, reference);
             if let Ok(module_component_definition) =
                 doc.get_component(module_component_name.as_str(), 0)
             {
                 let component_module_thing = ftd::interpreter::ModuleThing::component(
-                    reference_full_name.to_string(),
+                    reference.to_string(),
                     ftd::interpreter::Kind::ui_with_name(reference_full_name).into_kind_data(),
                     module_component_definition.arguments,
                 );
 
-                things.insert(reference_full_name.to_string(), component_module_thing);
+                things.insert(reference.to_string(), component_module_thing);
             } else {
-                let variable_module_thing = ftd::interpreter::ModuleThing::variable(
-                    reference_full_name.to_string(),
-                    kind.clone(),
-                );
-                things.insert(reference_full_name.to_string(), variable_module_thing);
+                let variable_module_thing =
+                    ftd::interpreter::ModuleThing::variable(reference.to_string(), kind.clone());
+                things.insert(reference.to_string(), variable_module_thing);
             }
         }
     }
