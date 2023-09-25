@@ -393,7 +393,7 @@ pub(crate) async fn read_ftd_2022(
     test: bool,
 ) -> fastn_core::Result<FTDResult> {
     let lib_config = config.clone();
-    let all_packages = config.all_packages.borrow();
+    let mut all_packages = config.all_packages.borrow_mut();
     let current_package = all_packages
         .get(main.package_name.as_str())
         .unwrap_or(&config.package);
@@ -412,7 +412,6 @@ pub(crate) async fn read_ftd_2022(
         current_package.get_prefixed_body(main.content.as_str(), main.id.as_str(), true);
     // Fix aliased imports to full path (if any)
     doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
-    drop(all_packages);
 
     let line_number = doc_content.split('\n').count() - main.content.split('\n').count();
     let main_ftd_doc = match fastn_core::doc::interpret_helper(
@@ -444,6 +443,9 @@ pub(crate) async fn read_ftd_2022(
     config
         .downloaded_assets
         .extend(lib.config.downloaded_assets);
+
+    all_packages.extend(lib.config.all_packages.into_inner());
+    drop(all_packages);
 
     let font_style = config.get_font_style();
     let file_content = fastn_core::utils::replace_markers_2022(
