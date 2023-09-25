@@ -343,7 +343,7 @@ impl Component {
             return Ok(ftd::interpreter::StateWithThing::new_thing(component));
         }
 
-        dbg!("1*** properties");
+        dbg!("111122");
         let properties = try_ok_state!(Property::from_ast_properties_and_children(
             ast_component.properties,
             ast_component.children,
@@ -353,7 +353,6 @@ impl Component {
             doc,
             ast_component.line_number,
         )?);
-        dbg!("end: 1*** properties");
 
         if let Some((_name, arguments)) = definition_name_with_arguments {
             Self::assert_no_private_properties_while_invocation(&properties, arguments)?;
@@ -483,6 +482,7 @@ impl Component {
                             )
                         };
 
+                        dbg!("1111");
                         properties = try_ok_state!(Property::from_ast_properties_and_children(
                             ast_properties.to_owned(),
                             ast_children.to_owned(),
@@ -819,7 +819,6 @@ impl Property {
             line_number,
         )?);
         for property in ast_properties {
-            dbg!("start", &property.value);
             properties.push(try_ok_state!(Property::from_ast_property(
                 property,
                 component_name,
@@ -828,15 +827,7 @@ impl Property {
                 loop_object_name_and_kind,
                 doc,
             )?));
-            dbg!("end");
         }
-
-        dbg!(
-            &properties,
-            &component_arguments,
-            &component_name,
-            &definition_name_with_arguments
-        );
         try_ok_state!(search_things_for_module(
             component_name,
             properties.as_slice(),
@@ -1034,12 +1025,6 @@ fn search_things_for_module(
         }
         let module_property = property.first().unwrap();
         // TODO: Remove unwrap()
-        dbg!(
-            &module_property,
-            &argument,
-            &definition_name_with_arguments,
-            &component_name
-        );
 
         let (m_name, things) = get_module_name_and_thing(
             &module_property,
@@ -1047,8 +1032,6 @@ fn search_things_for_module(
             definition_name_with_arguments,
             argument,
         )?;
-
-        dbg!("end::::", &definition_name_with_arguments);
 
         let mut m_alias;
         {
@@ -1081,17 +1064,6 @@ fn search_things_for_module(
         let mut unresolved_thing = None;
 
         for (thing, _expected_kind) in things {
-            let mut module_component_name = component_name
-                .split_once('#')
-                .map(|v| v.1)
-                .unwrap_or(component_name)
-                .to_string();
-            if let Some(mc_name) = module_component_name.rsplit_once('.').map(|v| v.1) {
-                module_component_name = mc_name.to_string();
-            }
-
-            let module_name = thing.split_once('#').map(|v| v.0);
-
             let mut new_doc_name = doc.name.to_string();
             let mut new_doc_aliases = doc.aliases.clone();
 
@@ -1099,12 +1071,24 @@ fn search_things_for_module(
             // need to change doc to the new-doc, else if it's coming from property then no need
             // to change the doc.
             if module_property.source.is_default() {
-                if let Some(module_name) = module_name {
-                    if let Some(state) = doc.state() {
-                        let parsed_document = state.parsed_libs.get(module_name).unwrap();
-                        new_doc_name = parsed_document.name.to_string();
-                        new_doc_aliases = parsed_document.doc_aliases.clone();
-                    }
+                // This is needed because the component can be exported from some other module
+                // so, we need to fetch this module name in module_name
+                // -- import: foo
+                // export: bar
+                //
+                // So the bar component is actually present in foo module and we need foo as
+                // value of module_name.
+                let component_name = doc
+                    .get_thing(component_name, line_number)
+                    .map(|v| v.name())
+                    .unwrap_or(component_name.to_string());
+                let module_name =
+                    ftd::interpreter::utils::get_doc_name(component_name.as_str(), doc.name);
+
+                if let Some(state) = doc.state() {
+                    let parsed_document = state.parsed_libs.get(module_name.as_str()).unwrap();
+                    new_doc_name = parsed_document.name.to_string();
+                    new_doc_aliases = parsed_document.doc_aliases.clone();
                 }
             }
 
@@ -1122,23 +1106,7 @@ fn search_things_for_module(
                 m_alias = m.to_string();
             }
 
-            let thing_real_name = if let Some((_doc_name, element)) = thing.split_once('#') {
-                format!(
-                    "{}#{}",
-                    m_alias,
-                    element.trim_start_matches(
-                        format!("{}.{}.", module_component_name, argument.name).as_str(),
-                    )
-                )
-            } else {
-                format!(
-                    "{}#{}",
-                    m_alias,
-                    thing.trim_start_matches(
-                        format!("{}.{}.", module_component_name, argument.name).as_str(),
-                    )
-                )
-            };
+            let thing_real_name = format!("{}#{}", m_alias, thing);
 
             if unresolved_thing.is_some() {
                 new_doc.scan_thing(&thing_real_name, line_number)?;
@@ -1166,7 +1134,7 @@ fn get_module_name_and_thing(
     definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
     component_argument: &ftd::interpreter::Argument,
 ) -> ftd::interpreter::Result<(String, ftd::Map<ftd::interpreter::ModuleThing>)> {
-    let (default_argument, default_things) = {
+    let default_things = {
         let value = if let Some(ref value) = component_argument.value {
             value.clone().resolve(doc, module_property.line_number)?
         } else {
@@ -1178,7 +1146,7 @@ fn get_module_name_and_thing(
         };
 
         if let Some(thing) = value.module_thing_optional() {
-            (component_argument.name.to_string(), thing.clone())
+            thing.clone()
         } else {
             return ftd::interpreter::utils::e2(
                 "Cannot find component argument value for module",
@@ -1188,7 +1156,7 @@ fn get_module_name_and_thing(
         }
     };
     if let Some(module_name) = module_property.value.get_reference_or_clone() {
-        if let Some((argument, _, source)) =
+        if let Some((argument, ..)) =
             ftd::interpreter::utils::get_component_argument_for_reference_and_remaining(
                 module_name,
                 doc.name,
@@ -1199,22 +1167,7 @@ fn get_module_name_and_thing(
             if let Some(ref mut property_value) = argument.value {
                 if let ftd::interpreter::PropertyValue::Value { value, .. } = property_value {
                     if let Some((name, thing)) = value.mut_module_optional() {
-                        thing.extend(default_things.into_iter().map(|(name, thing)| {
-                            (
-                                name.split_once(&format!(".{}.", default_argument))
-                                    .map(|v| {
-                                        format!(
-                                            "{}#{}.{}.{}",
-                                            doc.name,
-                                            source.get_name().unwrap(),
-                                            argument.name,
-                                            v.1.to_string()
-                                        )
-                                    })
-                                    .unwrap_or(name.to_string()),
-                                thing,
-                            )
-                        }));
+                        thing.extend(default_things);
                         return Ok((name.to_string(), thing.clone()));
                     } else {
                         return ftd::interpreter::utils::e2(
