@@ -393,7 +393,7 @@ pub(crate) async fn read_ftd_2022(
     test: bool,
 ) -> fastn_core::Result<FTDResult> {
     let lib_config = config.clone();
-    let all_packages = config.all_packages.borrow();
+    let mut all_packages = config.all_packages.borrow_mut();
     let current_package = all_packages
         .get(main.package_name.as_str())
         .unwrap_or(&config.package);
@@ -444,6 +444,7 @@ pub(crate) async fn read_ftd_2022(
         .downloaded_assets
         .extend(lib.config.downloaded_assets);
 
+    all_packages.extend(lib.config.all_packages.into_inner());
     drop(all_packages);
 
     let font_style = config.get_font_style();
