@@ -98,7 +98,6 @@ impl PropertyValue {
             ftd::interpreter::PropertyValue::Value { value, .. } => Ok(value),
             ftd::interpreter::PropertyValue::Reference { name, kind, .. }
             | ftd::interpreter::PropertyValue::Clone { name, kind, .. } => {
-                dbg!("1 resolve_with_inherited");
                 doc.resolve_with_inherited(name.as_str(), &kind, line_number, inherited_variables)
             }
             ftd::interpreter::PropertyValue::FunctionCall(ftd::interpreter::FunctionCall {
