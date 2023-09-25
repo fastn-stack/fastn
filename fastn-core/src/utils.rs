@@ -661,6 +661,7 @@ pub fn replace_markers_2022(
     font_style: &str,
     base_url: &str,
 ) -> String {
+    dbg!(font_style);
     ftd::html::utils::trim_all_lines(
         s.replace(
             "__ftd_meta_data__",

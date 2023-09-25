@@ -412,7 +412,6 @@ pub(crate) async fn read_ftd_2022(
         current_package.get_prefixed_body(main.content.as_str(), main.id.as_str(), true);
     // Fix aliased imports to full path (if any)
     doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
-    drop(all_packages);
 
     let line_number = doc_content.split('\n').count() - main.content.split('\n').count();
     let main_ftd_doc = match fastn_core::doc::interpret_helper(
@@ -444,6 +443,8 @@ pub(crate) async fn read_ftd_2022(
     config
         .downloaded_assets
         .extend(lib.config.downloaded_assets);
+
+    drop(all_packages);
 
     let font_style = config.get_font_style();
     let file_content = fastn_core::utils::replace_markers_2022(
@@ -534,7 +535,12 @@ pub(crate) async fn read_ftd_2023(
         .downloaded_assets
         .extend(lib.config.downloaded_assets);
 
+    println!("Fonts 0.4");
     let font_style = config.get_font_style();
+    if font_style.is_empty() {
+        println!("No Font style found <<<<<<<<<----------");
+    }
+
     let file_content = fastn_core::utils::replace_markers_2023(
         ftd::ftd_js_html(),
         js_document_script.as_str(),
