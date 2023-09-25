@@ -343,7 +343,6 @@ impl Component {
             return Ok(ftd::interpreter::StateWithThing::new_thing(component));
         }
 
-        dbg!("111122");
         let properties = try_ok_state!(Property::from_ast_properties_and_children(
             ast_component.properties,
             ast_component.children,
@@ -482,7 +481,6 @@ impl Component {
                             )
                         };
 
-                        dbg!("1111");
                         properties = try_ok_state!(Property::from_ast_properties_and_children(
                             ast_properties.to_owned(),
                             ast_children.to_owned(),
