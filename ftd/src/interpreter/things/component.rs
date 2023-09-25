@@ -1025,7 +1025,7 @@ fn search_things_for_module(
         // TODO: Remove unwrap()
 
         let (m_name, things) = get_module_name_and_thing(
-            &module_property,
+            module_property,
             doc,
             definition_name_with_arguments,
             argument,
@@ -1198,13 +1198,11 @@ fn get_module_name_and_thing(
         .unwrap()
     {
         ftd::interpreter::Value::Module { name, things } => Ok((name, things)),
-        t => {
-            return ftd::interpreter::utils::e2(
-                format!("Expected module, found: {:?}", t),
-                doc.name,
-                module_property.line_number,
-            )
-        }
+        t => ftd::interpreter::utils::e2(
+            format!("Expected module, found: {:?}", t),
+            doc.name,
+            module_property.line_number,
+        ),
     }
 }
 
