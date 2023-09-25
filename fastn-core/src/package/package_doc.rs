@@ -536,12 +536,7 @@ pub(crate) async fn read_ftd_2023(
         .downloaded_assets
         .extend(lib.config.downloaded_assets);
 
-    println!("Fonts 0.4");
     let font_style = config.get_font_style();
-    if font_style.is_empty() {
-        println!("No Font style found <<<<<<<<<----------");
-    }
-
     let file_content = fastn_core::utils::replace_markers_2023(
         ftd::ftd_js_html(),
         js_document_script.as_str(),
