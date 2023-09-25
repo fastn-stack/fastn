@@ -213,7 +213,7 @@ impl<'a> TDoc<'a> {
             )
         } else {
             return ftd::interpreter::utils::e2(
-                format!("Cannot find {} in get_thing", name),
+                format!("Cannot find 111 {} in get_thing", name),
                 self.name,
                 line_number,
             );

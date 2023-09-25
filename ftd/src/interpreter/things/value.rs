@@ -98,6 +98,7 @@ impl PropertyValue {
             ftd::interpreter::PropertyValue::Value { value, .. } => Ok(value),
             ftd::interpreter::PropertyValue::Reference { name, kind, .. }
             | ftd::interpreter::PropertyValue::Clone { name, kind, .. } => {
+                dbg!("1 resolve_with_inherited");
                 doc.resolve_with_inherited(name.as_str(), &kind, line_number, inherited_variables)
             }
             ftd::interpreter::PropertyValue::FunctionCall(ftd::interpreter::FunctionCall {
@@ -1198,6 +1199,13 @@ impl PropertyValue {
                     .trim_start_matches(ftd::interpreter::utils::CLONE)
                     .to_string();
 
+                if expected_kind
+                    .map(|ekind| ekind.kind.is_list() && reference.contains(','))
+                    .unwrap_or(false)
+                {
+                    return Ok(ftd::interpreter::StateWithThing::new_thing(None));
+                }
+
                 let (source, found_kind, _) = try_ok_state!(doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
@@ -1916,6 +1924,22 @@ impl Value {
     pub fn module_name_optional(&self) -> Option<String> {
         match self {
             ftd::interpreter::Value::Module { name, .. } => Some(name.to_string()),
+            _ => None,
+        }
+    }
+
+    pub fn module_thing_optional(&self) -> Option<&ftd::Map<ftd::interpreter::ModuleThing>> {
+        match self {
+            ftd::interpreter::Value::Module { things, .. } => Some(things),
+            _ => None,
+        }
+    }
+
+    pub fn mut_module_optional(
+        &mut self,
+    ) -> Option<(&str, &mut ftd::Map<ftd::interpreter::ModuleThing>)> {
+        match self {
+            ftd::interpreter::Value::Module { name, things } => Some((name, things)),
             _ => None,
         }
     }

@@ -265,6 +265,53 @@ pub fn get_mut_argument_for_reference<'a>(
     Ok(None)
 }
 
+pub fn get_component_argument_for_reference_and_remaining<'a>(
+    name: &str,
+    doc_name: &str,
+    component_definition_name_with_arguments: &'a mut Option<(
+        &str,
+        &mut [ftd::interpreter::Argument],
+    )>,
+    line_number: usize,
+) -> ftd::interpreter::Result<
+    Option<(
+        &'a mut ftd::interpreter::Argument,
+        Option<String>,
+        ftd::interpreter::PropertyValueSource,
+    )>,
+> {
+    let (component_name, arguments) =
+        if let Some((component_name, arguments)) = component_definition_name_with_arguments {
+            (component_name, arguments)
+        } else {
+            return Ok(None);
+        };
+
+    let referenced_argument = if let Some(referenced_argument) = name
+        .strip_prefix(format!("{}.", component_name).as_str())
+        .or_else(|| name.strip_prefix(format!("{}#{}.", doc_name, component_name).as_str()))
+    {
+        referenced_argument
+    } else {
+        return Ok(None);
+    };
+
+    let (p1, p2) = ftd::interpreter::utils::split_at(referenced_argument, ".");
+    if let Some(argument) = arguments.iter_mut().find(|v| v.name.eq(p1.as_str())) {
+        Ok(Some((
+            argument,
+            p2,
+            ftd::interpreter::PropertyValueSource::Local(component_name.to_string()),
+        )))
+    } else {
+        ftd::interpreter::utils::e2(
+            format!("{} is not the argument in {}", p1, component_name),
+            doc_name,
+            line_number,
+        )
+    }
+}
+
 pub fn get_argument_for_reference_and_remaining(
     name: &str,
     doc: &ftd::interpreter::TDoc,
