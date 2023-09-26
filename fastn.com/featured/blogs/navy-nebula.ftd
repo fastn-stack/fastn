@@ -7,7 +7,7 @@ featured-link: /featured/blogs/
 category: Blogs
 image: $fastn-assets.files.images.featured.blog.navy-nebula.png
 owners: [$yashveer-mehra.info, $priyanka-yadav.info]
-license-url: https://github.com/fastn-community/navy-nebula/
+license-url: https://github.com/fastn-community/navy-nebula/blob/main/LICENSE
 license: Creative Commons
 published-date: 24-Jul-2023
 cards: $blog-sites
