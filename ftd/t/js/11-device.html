@@ -81,10 +81,7 @@ let foo__desktop_view = function (parent, inherited, args)
       show: fastn.mutable(true),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = {
-      ...__args__,
-      ...args
-    };
+    __args__ = fastn_utils.getArgs(__args__, args);
     return fastn_dom.conditionalDom(parent, [
       __args__.show
     ], function () {

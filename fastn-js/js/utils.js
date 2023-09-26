@@ -462,6 +462,21 @@ let fastn_utils = {
         }
         return result;
     },
+
+    // Used to initialize __args__ inside component js functions
+    getArgs(default_args, passed_args) {
+        let arguments = default_args;
+        for (var arg in passed_args) {
+            if (!default_args.hasOwnProperty(arg)) {
+                arguments[arg] = passed_args[arg];
+                continue;
+            }
+            if (default_args.hasOwnProperty(arg) && fastn_utils.getStaticValue(passed_args[arg]) !== undefined) {
+                arguments[arg] = passed_args[arg];
+            }
+        }
+        return arguments;
+    },
 }
 
 

@@ -95,10 +95,7 @@ let foo__demo_link = function (parent, inherited, args)
     let __args__ = {
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = {
-      ...__args__,
-      ...args
-    };
+    __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
     parenti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.Center, inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
@@ -131,10 +128,7 @@ let foo__header = function (parent, inherited, args)
       input_value: fastn.mutable(null),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = {
-      ...__args__,
-      ...args
-    };
+    __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
     parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
@@ -252,10 +246,7 @@ let foo__todo_list_display = function (parent, inherited, args)
       todo_list: fastn.mutable(fastn.mutableList([])),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = {
-      ...__args__,
-      ...args
-    };
+    __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.WebComponent("todo-list-display", __args__));
     return parenti0;
   } finally {
@@ -272,10 +263,7 @@ let foo__ftd_todo_display = function (parent, inherited, args)
     let __args__ = {
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = {
-      ...__args__,
-      ...args
-    };
+    __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
     parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.PaddingHorizontal, fastn_dom.Length.Px(5), inherited);
@@ -314,10 +302,7 @@ let foo__ftd_world = function (parent, inherited, args)
     let __args__ = {
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = {
-      ...__args__,
-      ...args
-    };
+    __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
     parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([ftd.device], function () {
       if (function () {
@@ -388,10 +373,7 @@ let foo__demo = function (parent, inherited, args)
       show_link: true,
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = {
-      ...__args__,
-      ...args
-    };
+    __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
     parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn.formula([ftd.device], function () {
