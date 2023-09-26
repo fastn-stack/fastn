@@ -71,7 +71,8 @@ let foo__clamp = function (args)
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = args;
+    let __args__ = fastn_utils.getArgs({
+    }, args);
     let fastn_utils_val___args___a = fastn_utils.clone((fastn_utils.getter(__args__.a) + 1) % 2);
     if (fastn_utils_val___args___a instanceof fastn.mutableClass) {
       fastn_utils_val___args___a = fastn_utils_val___args___a.get();
@@ -88,10 +89,9 @@ let foo__append_integer = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = {
+    let __args__ = fastn_utils.getArgs({
       a: fastn.mutableList([]),
-      ...args
-    };
+    }, args);
     return (ftd.append(__args__.a, __args__.v));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
@@ -104,7 +104,8 @@ let foo__increment = function (args)
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = args;
+    let __args__ = fastn_utils.getArgs({
+    }, args);
     let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
     if (fastn_utils_val___args___a instanceof fastn.mutableClass) {
       fastn_utils_val___args___a = fastn_utils_val___args___a.get();

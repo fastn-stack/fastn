@@ -53,10 +53,9 @@ let foo__append_person = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = {
+    let __args__ = fastn_utils.getArgs({
       a: fastn.mutableList([]),
-      ...args
-    };
+    }, args);
     return (ftd.append(__args__.a, __args__.v));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;

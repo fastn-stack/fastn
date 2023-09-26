@@ -1,0 +1,28 @@
+-- string foo(a,b):
+string a: Ritesh
+string b: Rithik
+
+a + " " + b
+
+-- component bar:
+caption title: This is default title
+integer num: 10
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $bar.title
+role: $inherited.types.heading-large
+color: red
+
+-- ftd.integer: $bar.num
+margin.px: 10
+
+-- end: ftd.column
+
+-- end: bar
+
+-- bar:
+
+-- ftd.text: $foo(a = Hello, b = World)
+color: red

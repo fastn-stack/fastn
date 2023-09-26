@@ -706,27 +706,24 @@ impl fastn_js::UDF {
             .append(space())
             .append(text("="))
             .append(space())
-            .append(if self.args.iter().all(|(_, v)| v.is_undefined()) {
-                text("args;")
-            } else {
-                text("{")
-                    .append(pretty::RcDoc::intersperse(
-                        self.args.iter().filter_map(|(k, v)| {
-                            if !v.is_undefined() {
-                                Some(format!(
-                                    "{}: {},",
-                                    fastn_js::utils::name_to_js_(k),
-                                    v.to_js()
-                                ))
-                            } else {
-                                None
-                            }
-                        }),
-                        pretty::RcDoc::softline(),
-                    ))
-                    .append(text("...args"))
-                    .append(text("};"))
-            })
+            .append(text("fastn_utils.getArgs("))
+            .append(text("{"))
+            .append(pretty::RcDoc::intersperse(
+                self.args.iter().filter_map(|(k, v)| {
+                    if !v.is_undefined() {
+                        Some(format!(
+                            "{}: {},",
+                            fastn_js::utils::name_to_js_(k),
+                            v.to_js()
+                        ))
+                    } else {
+                        None
+                    }
+                }),
+                pretty::RcDoc::softline(),
+            ))
+            .append(text("}"))
+            .append(format!(", {});", fastn_js::FUNCTION_ARGS))
             .append(pretty::RcDoc::intersperse(
                 self.body.iter().map(|f| {
                     pretty::RcDoc::text(

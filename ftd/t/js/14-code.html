@@ -204,7 +204,8 @@ let foo__set_dark = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = args;
+    let __args__ = fastn_utils.getArgs({
+    }, args);
     return (enable_dark_mode());
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
@@ -215,7 +216,8 @@ let foo__set_light = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = args;
+    let __args__ = fastn_utils.getArgs({
+    }, args);
     return (enable_light_mode());
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
@@ -227,7 +229,8 @@ let foo__set_system = function (args)
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = args;
+    let __args__ = fastn_utils.getArgs({
+    }, args);
     return (enable_system_mode());
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
