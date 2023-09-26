@@ -463,7 +463,7 @@ let fastn_utils = {
         return result;
     },
 
-    // Used to initialize __args__ inside component js functions
+    // Used to initialize __args__ inside component and UDF js functions
     getArgs(default_args, passed_args) {
         let arguments = default_args;
         for (var arg in passed_args) {
