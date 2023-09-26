@@ -6,7 +6,7 @@ featured-link: /featured/fonts/
 category: Font Typography
 image: $fastn-assets.files.images.featured.font.lobster-font.jpg
 owners: [$ganesh-salunke.info]
-license-url: https://github.com/fastn-community/lobster-typography/blob/main/LICENSE
+license-url: https://github.com/fastn-community/lobster-typography
 license: Creative Commons
 published-date: 26-March-2023
 cards: $typographies
