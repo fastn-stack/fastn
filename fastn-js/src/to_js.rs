@@ -549,14 +549,6 @@ impl fastn_js::Component {
                             fastn_js::LOCAL_VARIABLE_MAP,
                             fastn_js::FUNCTION_ARGS,
                         ))
-                        // .append(text("{"))
-                        // .append(text(
-                        //     format!("...{}", fastn_js::LOCAL_VARIABLE_MAP).as_str(),
-                        // ))
-                        // .append(comma())
-                        // .append(space())
-                        // .append(text("...args"))
-                        // .append(text("};"))
                         .append(pretty::RcDoc::softline())
                         .append(pretty::RcDoc::intersperse(
                             local_arguments.iter().map(|(k, v)| {
