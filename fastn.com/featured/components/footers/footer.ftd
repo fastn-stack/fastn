@@ -5,7 +5,7 @@
 -- ds.featured-category: Footer
 featured-link: /components/footers/
 category: Featured Components
-image: $fastn-assets.files.images.featured.components.footer-3.png
+image: $fastn-assets.files.images.featured.components.footer.png
 owners: [$ganesh-salunke.info]
 license-url: https://github.com/fastn-community/footer/blob/main/LICENSE
 license: Creative Commons
