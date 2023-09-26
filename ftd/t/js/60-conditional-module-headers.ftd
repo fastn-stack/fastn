@@ -1,0 +1,19 @@
+-- bar:
+
+-- bar:
+c: 01-basic-module
+title if { !flag }: $title
+
+
+-- component bar:
+module c: 01-basic
+caption title: This is default
+
+-- ftd.text: $bar.title
+color: red
+
+-- end: bar
+
+
+-- boolean flag: true
+-- string title: This is some value

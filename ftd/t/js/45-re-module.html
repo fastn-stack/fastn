@@ -24,10 +24,7 @@
     let __args__ = {
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = {
-      ...__args__,
-      ...args
-    };
+    __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
     parenti0.setProperty(fastn_dom.PropertyKind.StringValue, &quot;hello world&quot;, inherited);
     return parenti0;
@@ -42,10 +39,7 @@
     let __args__ = {
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = {
-      ...__args__,
-      ...args
-    };
+    __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
     parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "hello world", inherited);
     return parenti0;
@@ -108,10 +102,7 @@ let _01_basic_module__print = function (parent, inherited, args)
     let __args__ = {
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = {
-      ...__args__,
-      ...args
-    };
+    __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
     parenti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
@@ -134,10 +125,7 @@ let _44_module__bar = function (parent, inherited, args)
       title: "default header again",
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = {
-      ...__args__,
-      ...args
-    };
+    __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
     parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.MarginBottom, fastn_dom.Length.Px(5), inherited);
@@ -201,10 +189,7 @@ let _45_re_module__hello = function (parent, inherited, args)
     let __args__ = {
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = {
-      ...__args__,
-      ...args
-    };
+    __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
     parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "hello world", inherited);
     return parenti0;
@@ -222,10 +207,7 @@ let foo__c_hello = function (parent, inherited, args)
       category: fastn.module("_45_re_module", global),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = {
-      ...__args__,
-      ...args
-    };
+    __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_utils.getStaticValue(__args__.category.get("hello")) (parent, inherited);
     return parenti0;
   } finally {
