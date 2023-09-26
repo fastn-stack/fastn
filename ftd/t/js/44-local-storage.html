@@ -54,7 +54,8 @@ let foo__save = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = args;
+    let __args__ = fastn_utils.getArgs({
+    }, args);
     return (ftd.local_storage.set("name", "Universe"));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
@@ -67,7 +68,8 @@ let foo__load = function (args)
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = args;
+    let __args__ = fastn_utils.getArgs({
+    }, args);
     let loaded_name = ftd.local_storage.get("name");
     return (__args__.a.set(loaded_name));
   } finally {

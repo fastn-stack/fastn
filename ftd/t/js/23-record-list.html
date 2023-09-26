@@ -123,10 +123,9 @@ let foo__get_first_person = function (args)
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = {
+    let __args__ = fastn_utils.getArgs({
       a: fastn.mutableList([]),
-      ...args
-    };
+    }, args);
     return (ftd.get(__args__.a, 0));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;

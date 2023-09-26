@@ -105,10 +105,9 @@ let foo__insert = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = {
+    let __args__ = fastn_utils.getArgs({
       a: fastn.mutableList([]),
-      ...args
-    };
+    }, args);
     return (ftd.append(__args__.a, __args__.v));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
@@ -236,10 +235,9 @@ let foo__delete = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = {
+    let __args__ = fastn_utils.getArgs({
       a: fastn.mutableList([]),
-      ...args
-    };
+    }, args);
     return (ftd.delete_at(__args__.a, __args__.i));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
@@ -250,7 +248,8 @@ let foo__plus_one = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = args;
+    let __args__ = fastn_utils.getArgs({
+    }, args);
     return (fastn_utils.getter(__args__.a) + 1);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
@@ -314,10 +313,9 @@ let foo__length = function (args)
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let __args__ = {
+    let __args__ = fastn_utils.getArgs({
       a: fastn.mutableList([]),
-      ...args
-    };
+    }, args);
     return (ftd.len(__args__.a));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
