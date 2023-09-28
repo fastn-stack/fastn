@@ -7,7 +7,9 @@
 <script type="ftd" id="ftd-data">
 {
 "foo#dtype": {
-"font-family": "cursive",
+"font-family": [
+"cursive"
+],
 "letter-spacing": "5px",
 "line-height": "65px",
 "size": "40px",
@@ -15,7 +17,9 @@
 },
 "foo#flag": true,
 "foo#mtype": {
-"font-family": "fantasy",
+"font-family": [
+"fantasy"
+],
 "letter-spacing": "3px",
 "line-height": "35px",
 "size": "20px",
@@ -23,14 +27,18 @@
 },
 "foo#rrtype": {
 "desktop": {
-"font-family": "fantasy",
+"font-family": [
+"fantasy"
+],
 "letter-spacing": "3px",
 "line-height": "35px",
 "size": "20px",
 "weight": 100
 },
 "mobile": {
-"font-family": "cursive",
+"font-family": [
+"cursive"
+],
 "letter-spacing": "5px",
 "line-height": "65px",
 "size": "40px",
@@ -39,14 +47,18 @@
 },
 "foo#rtype": {
 "desktop": {
-"font-family": "cursive",
+"font-family": [
+"cursive"
+],
 "letter-spacing": "5px",
 "line-height": "65px",
 "size": "40px",
 "weight": 900
 },
 "mobile": {
-"font-family": "fantasy",
+"font-family": [
+"fantasy"
+],
 "letter-spacing": "3px",
 "line-height": "35px",
 "size": "20px",
@@ -2112,11 +2124,11 @@ window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
 };
 
 window.set_value_main["foo#rrtype"] = function (data, new_value, remaining) {
@@ -2124,10 +2136,10 @@ window.ftd.utils.set_value_helper(data, "foo#rrtype", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#rrtype", "main");
 window.ftd.call_immutable_value_changes("foo#rrtype", "main");
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
 };
 
@@ -2136,11 +2148,11 @@ window.ftd.utils.set_value_helper(data, "foo#rtype", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#rtype", "main");
 window.ftd.call_immutable_value_changes("foo#rtype", "main");
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
 };
 
 window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
@@ -2148,13 +2160,13 @@ window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
-window.ftd.utils.node_change_call("main","0,1:main__display", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
-window.ftd.utils.node_change_call("main","0,0:main__display", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
+window.ftd.utils.node_change_call("main","0,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
+window.ftd.utils.node_change_call("main","0,1:main__display", data);
 };
 
 
