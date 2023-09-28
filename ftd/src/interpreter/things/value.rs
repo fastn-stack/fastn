@@ -1842,6 +1842,7 @@ impl Value {
                 }
                 Ok(values)
             }
+            ftd::interpreter::Value::String { text } => Ok(vec![text.to_string()]),
             t => ftd::interpreter::utils::e2(
                 format!("Expected String list, found: `{:?}`", t),
                 doc.name,

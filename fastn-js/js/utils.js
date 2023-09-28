@@ -178,8 +178,11 @@ let fastn_utils = {
        (desktop.get("weight") ===  mobile.get("weight"));
     },
     getRoleValues(value) {
+        let font_families = fastn_utils.getStaticValue(value.get("font_family"));
+        if (Array.isArray(font_families))
+            font_families = font_families.map(obj => fastn_utils.getStaticValue(obj.item)).join(', ');
         return {
-            "font-family": fastn_utils.getStaticValue(value.get("font_family")),
+            "font-family": font_families,
             "letter-spacing": fastn_utils.getStaticValue(value.get("letter_spacing")),
             "font-size": fastn_utils.getStaticValue(value.get("size")),
             "font-weight": fastn_utils.getStaticValue(value.get("weight")),

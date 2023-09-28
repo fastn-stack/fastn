@@ -1810,14 +1810,14 @@ fastn_utils.createNestedObject(global, "foo__dtype", fastn.recordInstance({
   line_height: fastn_dom.FontSize.Px(65),
   letter_spacing: fastn_dom.FontSize.Px(5),
   weight: 700,
-  font_family: "cursive"
+  font_family: fastn.mutableList(["cursive"])
 }));
 fastn_utils.createNestedObject(global, "foo__mtype", fastn.recordInstance({
   size: fastn_dom.FontSize.Px(20),
   line_height: fastn_dom.FontSize.Px(35),
   letter_spacing: fastn_dom.FontSize.Px(3),
   weight: 100,
-  font_family: "fantasy"
+  font_family: fastn.mutableList(["fantasy"])
 }));
 fastn_utils.createNestedObject(global, "foo__rtype", fastn.recordInstance({
   desktop: global.foo__dtype,

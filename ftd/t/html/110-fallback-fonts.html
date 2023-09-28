@@ -6,18 +6,35 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#ages": [
-1,
-2,
-3,
-4
+"foo#f-type": {
+"font-family": [
+"sans-serif"
+]
+},
+"foo#f-type-2": {
+"font-family": [
+"Arial"
+]
+},
+"foo#f-type-3": {
+"font-family": [
+"Arial",
+"cursive"
+]
+},
+"foo#f-type-4": {
+"font-family": [
+"Aria",
+"cursive"
+]
+},
+"foo#flag": 0,
+"foo#font": "Arial",
+"foo#font-2": "cursive",
+"foo#fonts": [
+"Aria",
+"cursive"
 ],
-"foo#new-persons": [
-"Rithik",
-"Middle man",
-"Amitu"
-],
-"foo#s": "Middle man",
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -796,7 +813,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md">Rithik</div><div data-id="1:main" style="" class="ft_common ft_md">Middle man</div><div data-id="2:main" style="" class="ft_common ft_md">Amitu</div><div data-id="3:main" style="" class="ft_common ft_md">1</div><div data-id="4:main" style="" class="ft_common ft_md">2</div><div data-id="5:main" style="" class="ft_common ft_md">3</div><div data-id="6:main" style="" class="ft_common ft_md">4</div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="color: rgba(0,128,0,1); cursor: pointer; font-family: sans-serif" class="ft_common ft_md">Hello World</div></div>
 
 
 <script>
@@ -2011,46 +2028,126 @@ a.value = v
 
 window.node_change_main = {};
 window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#new-persons.0", data);
+document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#flag", data);
 }
-window.node_change_main["1:main__text"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).innerHTML = resolve_reference("foo#new-persons.1", data);
+window.node_change_main["1:main__font-family"] = function(data) {
+if(function(){
+return (resolve_reference("foo#flag", data)%4==1);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("foo#f-type-2", data))));
 }
-window.node_change_main["2:main__text"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#new-persons.2", data);
+else if(function(){
+return (resolve_reference("foo#flag", data)%4==2);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("foo#f-type-3", data))));
 }
-window.node_change_main["3:main__text"] = function(data) {
-document.querySelector(`[data-id="3:main"]`).innerHTML = resolve_reference("foo#ages.0", data);
+else if(function(){
+return (resolve_reference("foo#flag", data)%4==3);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("foo#f-type-4", data))));
 }
-window.node_change_main["4:main__text"] = function(data) {
-document.querySelector(`[data-id="4:main"]`).innerHTML = resolve_reference("foo#ages.1", data);
+else {document.querySelector(`[data-id="1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("foo#f-type", data))));}
 }
-window.node_change_main["5:main__text"] = function(data) {
-document.querySelector(`[data-id="5:main"]`).innerHTML = resolve_reference("foo#ages.2", data);
+
+window.node_change_main["1:main__font-size"] = function(data) {
+if(function(){
+return (resolve_reference("foo#flag", data)%4==1);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("foo#f-type-2", data))));
 }
-window.node_change_main["6:main__text"] = function(data) {
-document.querySelector(`[data-id="6:main"]`).innerHTML = resolve_reference("foo#ages.3", data);
+else if(function(){
+return (resolve_reference("foo#flag", data)%4==2);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("foo#f-type-3", data))));
+}
+else if(function(){
+return (resolve_reference("foo#flag", data)%4==3);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("foo#f-type-4", data))));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("foo#f-type", data))));}
+}
+
+window.node_change_main["1:main__font-weight"] = function(data) {
+if(function(){
+return (resolve_reference("foo#flag", data)%4==1);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("foo#f-type-2", data))));
+}
+else if(function(){
+return (resolve_reference("foo#flag", data)%4==2);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("foo#f-type-3", data))));
+}
+else if(function(){
+return (resolve_reference("foo#flag", data)%4==3);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("foo#f-type-4", data))));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("foo#f-type", data))));}
+}
+
+window.node_change_main["1:main__letter-spacing"] = function(data) {
+if(function(){
+return (resolve_reference("foo#flag", data)%4==1);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("foo#f-type-2", data))));
+}
+else if(function(){
+return (resolve_reference("foo#flag", data)%4==2);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("foo#f-type-3", data))));
+}
+else if(function(){
+return (resolve_reference("foo#flag", data)%4==3);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("foo#f-type-4", data))));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("foo#f-type", data))));}
+}
+
+window.node_change_main["1:main__line-height"] = function(data) {
+if(function(){
+return (resolve_reference("foo#flag", data)%4==1);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("foo#f-type-2", data))));
+}
+else if(function(){
+return (resolve_reference("foo#flag", data)%4==2);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("foo#f-type-3", data))));
+}
+else if(function(){
+return (resolve_reference("foo#flag", data)%4==3);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("foo#f-type-4", data))));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("foo#f-type", data))));}
 }
 window.set_value_main = {};
-window.set_value_main["foo#ages"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#ages", remaining, new_value);
+window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
 
-window.ftd.call_mutable_value_changes("foo#ages", "main");
-window.ftd.call_immutable_value_changes("foo#ages", "main");
-window.ftd.utils.node_change_call("main","3:main__text", data);
-window.ftd.utils.node_change_call("main","4:main__text", data);
-window.ftd.utils.node_change_call("main","5:main__text", data);
-window.ftd.utils.node_change_call("main","6:main__text", data);
+window.ftd.call_mutable_value_changes("foo#flag", "main");
+window.ftd.call_immutable_value_changes("foo#flag", "main");
+window.ftd.utils.node_change_call("main","0:main__text", data);
+window.ftd.utils.node_change_call("main","1:main__font-family", data);
+window.ftd.utils.node_change_call("main","1:main__font-size", data);
+window.ftd.utils.node_change_call("main","1:main__font-weight", data);
+window.ftd.utils.node_change_call("main","1:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","1:main__line-height", data);
 };
 
-window.set_value_main["foo#new-persons"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#new-persons", remaining, new_value);
+window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
-window.ftd.call_mutable_value_changes("foo#new-persons", "main");
-window.ftd.call_immutable_value_changes("foo#new-persons", "main");
-window.ftd.utils.node_change_call("main","0:main__text", data);
-window.ftd.utils.node_change_call("main","1:main__text", data);
-window.ftd.utils.node_change_call("main","2:main__text", data);
+window.ftd.call_mutable_value_changes("ftd#device", "main");
+window.ftd.call_immutable_value_changes("ftd#device", "main");
+window.ftd.utils.node_change_call("main","1:main__font-family", data);
+window.ftd.utils.node_change_call("main","1:main__font-size", data);
+window.ftd.utils.node_change_call("main","1:main__font-weight", data);
+window.ftd.utils.node_change_call("main","1:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","1:main__line-height", data);
 };
 
 

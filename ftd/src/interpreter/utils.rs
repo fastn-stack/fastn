@@ -512,12 +512,20 @@ pub(crate) fn get_value(
 ) -> ftd::interpreter::Result<Option<serde_json::Value>> {
     if let ftd::interpreter::Value::List { data, .. } = value {
         let mut list_data = vec![];
-        for val in data {
+        for val in data.iter() {
             let value = match val {
-                ftd::interpreter::PropertyValue::Value { value, .. } => value,
+                ftd::interpreter::PropertyValue::Value { value, .. } => value.to_owned(),
+                ftd::interpreter::PropertyValue::Reference { name, kind, .. } => doc
+                    .resolve_with_inherited(
+                        name.as_str(),
+                        kind,
+                        val.line_number(),
+                        &Default::default(),
+                    )?,
                 _ => continue, //todo
             };
-            if let Some(val) = get_value(doc, value)? {
+
+            if let Some(val) = get_value(doc, &value)? {
                 list_data.push(val);
             }
         }

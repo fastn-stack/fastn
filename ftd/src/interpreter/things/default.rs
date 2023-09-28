@@ -3507,7 +3507,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     ftd::interpreter::Field {
                         name: "font-family".to_string(),
                         kind: ftd::interpreter::Kind::string()
-                            .into_optional()
+                            .into_list()
                             .into_kind_data(),
                         mutable: false,
                         value: None,
