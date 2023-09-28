@@ -518,7 +518,7 @@ pub(crate) fn get_value(
                 ftd::interpreter::PropertyValue::Reference { name, kind, .. } => doc
                     .resolve_with_inherited(
                         name.as_str(),
-                        &kind,
+                        kind,
                         val.line_number(),
                         &Default::default(),
                     )?,
