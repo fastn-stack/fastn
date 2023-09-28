@@ -1,0 +1,29 @@
+-- string font: Arial
+-- string font-2: cursive
+-- string list fonts: Aria, $font-2
+
+-- integer $flag: 0
+
+-- ftd.integer: $flag
+color: red
+
+-- ftd.type f-type:
+font-family: sans-serif
+
+-- ftd.type f-type-2:
+font-family: $font
+
+-- ftd.type f-type-3:
+font-family: $font, $font-2
+
+-- ftd.type f-type-4:
+font-family: $fonts
+
+
+-- ftd.text: Hello World
+role: $f-type
+role if { flag % 4 == 1 }: $f-type-2
+role if { flag % 4 == 2 }: $f-type-3
+role if { flag % 4 == 3 }: $f-type-4
+color: green
+$on-click$: $ftd.increment($a = $flag)

@@ -2867,7 +2867,7 @@ pub struct Type {
     pub line_height: Option<FontSize>,
     pub letter_spacing: Option<FontSize>,
     pub weight: Option<i64>,
-    pub font_family: Option<String>,
+    pub font_family: Option<Vec<String>>,
 }
 
 impl Type {
@@ -2876,7 +2876,7 @@ impl Type {
         line_height: Option<FontSize>,
         letter_spacing: Option<FontSize>,
         weight: Option<i64>,
-        font_family: Option<String>,
+        font_family: Option<Vec<String>>,
     ) -> Type {
         Type {
             size,
@@ -2956,10 +2956,12 @@ impl Type {
 
         let font_family = {
             if let Some(value) = values.get("font-family") {
-                value
-                    .clone()
-                    .resolve(&doc.itdoc(), line_number)?
-                    .optional_string(doc.name, line_number)?
+                Some(
+                    value
+                        .clone()
+                        .resolve(&doc.itdoc(), line_number)?
+                        .string_list(&doc.itdoc(), line_number)?,
+                )
             } else {
                 None
             }
@@ -3107,7 +3109,10 @@ impl ResponsiveType {
     }
 
     pub fn to_css_font_family(&self) -> Option<String> {
-        self.desktop.font_family.to_owned()
+        if let Some(font_family) = self.desktop.font_family.as_ref() {
+            return Some(font_family.join(", "));
+        }
+        None
     }
 
     pub fn font_family_pattern() -> (String, bool) {
