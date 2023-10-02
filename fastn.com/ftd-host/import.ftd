@@ -2,7 +2,7 @@
 
 -- ds.page: `import`
 
-In `ftd`, one module/component can access code from another component by
+In `fastn`, one module/component can access code from another component by
 importing it. To import a module, use the following syntax:
 
 
@@ -20,7 +20,8 @@ You can do following imports:
 - [Import module from dependency package](import/#import-module-from-dependency-package)
 - [Import special modules](import/#import-special-modules)
 
-`ftd` also provides a way to define [import alias](import/#understanding-alias).
+`fastn` also provides a way to define 
+[import alias](import/#understanding-alias).
 
 
 -- ds.h1: Import `fastn`
@@ -95,13 +96,13 @@ For more information, please visit [assets](assets).
 
 -- ds.h1: Understanding Alias
 
-In `ftd`, an alias is an alternative name that can be used to refer to an
+In `fastn`, an alias is an alternative name that can be used to refer to an
 imported module. Aliases can be helpful in making the code more concise and
 readable.
 
 -- ds.h2: Defining Alias
 
-To define an alias in ftd, we can use the as keyword when importing a module.
+To define an alias in fastn, we can use the as keyword when importing a module.
 For example, to create an alias `mn` for a module called `module-name`, we can
 write:
 
@@ -114,9 +115,9 @@ lang: ftd
 
 This allows us to refer to the imported module as `mn` instead of `module-name`.
 
--- ds.h2: `ftd` defined alias
+-- ds.h2: `fastn` defined alias
 
-`ftd` also defines aliases by itself, when we import a module without specifying
+`fastn` also defines aliases by itself, when we import a module without specifying
 an alias using the `as` keyword. In this case, the word after the last slash in
 the module path becomes the alias. For example:
 
