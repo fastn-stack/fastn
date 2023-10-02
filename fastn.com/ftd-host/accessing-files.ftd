@@ -11,10 +11,10 @@ code:
 -- ds.code:
 lang: ftd
 
-\-- import: other-package/assets
+\-- import: other-package/assets 	;; <hl>
 
 \-- ftd.text: Link to foo.ftd
-link: $assets.files.folder-1.folder-2.foo.ftd
+link: $assets.files.folder-1.folder-2.foo.ftd  ;; <hl>
 
 -- ds.markdown:
 

@@ -118,7 +118,7 @@ This allows us to refer to the imported module as `mn` instead of `module-name`.
 
 -- ds.h2: `fastn` defined alias
 
-`fastn` also defines aliases by itself, when we import a module *without*
+`fastn` also defines aliases by itself, when we import a module *without* 
 specifying an alias using the `as` keyword. In this case, the word after the
 last slash in the module path becomes the alias. For example:
 

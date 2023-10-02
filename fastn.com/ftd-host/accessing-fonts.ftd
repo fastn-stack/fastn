@@ -17,14 +17,13 @@ use it in our module. We can import the `assets` module of `roboto-font` package
 to access its fonts.
 
 -- ds.code:
-lang: ftd
 
-\-- import: fifthtry.github.io/roboto-font/assets
+\-- import: fifthtry.github.io/roboto-font/assets  ;; <hl>
 
 \-- ftd.type dtype:
 size.px: 40
 weight: 900
-font-family: $assets.fonts.Roboto
+font-family: $assets.fonts.Roboto  		;; <hl>
 line-height.px: 65
 letter-spacing.px: 5
 
