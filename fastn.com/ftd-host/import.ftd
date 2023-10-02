@@ -102,14 +102,15 @@ readable.
 
 -- ds.h2: Defining Alias
 
-To define an alias in fastn, we can use the as keyword when importing a module.
+To define an alias in `fastn`, we can use the **`as`** keyword when importing a 
+module.
 For example, to create an alias `mn` for a module called `module-name`, we can
 write:
 
 -- ds.code:
 lang: ftd
 
-\-- import: module-name as alias
+\-- import: module-name as mn
 
 -- ds.markdown:
 
@@ -117,9 +118,9 @@ This allows us to refer to the imported module as `mn` instead of `module-name`.
 
 -- ds.h2: `fastn` defined alias
 
-`fastn` also defines aliases by itself, when we import a module without specifying
-an alias using the `as` keyword. In this case, the word after the last slash in
-the module path becomes the alias. For example:
+`fastn` also defines aliases by itself, when we import a module *without*
+specifying an alias using the `as` keyword. In this case, the word after the
+last slash in the module path becomes the alias. For example:
 
 -- ds.code:
 lang: ftd
