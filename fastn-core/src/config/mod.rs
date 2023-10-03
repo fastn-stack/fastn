@@ -31,6 +31,7 @@ pub struct Config {
     // Global Information
     pub package: fastn_core::Package,
     pub root: camino::Utf8PathBuf,
+    pub output_dir: camino::Utf8PathBuf,
     pub packages_root: camino::Utf8PathBuf,
     pub original_directory: camino::Utf8PathBuf,
     pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, fastn_core::Package>>,
@@ -52,7 +53,7 @@ impl Config {
     /// `build_dir` is where the static built files are stored. `fastn build` command creates this
     /// folder and stores its output here.
     pub fn build_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".build")
+        self.output_dir.join("build")
     }
 
     pub fn clone_dir(&self) -> camino::Utf8PathBuf {
@@ -1273,12 +1274,14 @@ impl Config {
                 )
             }
         };
+        let output_dir = root.join(".output");
         let fastn_doc = utils::fastn_doc(&root.join("FASTN.ftd")).await?;
         let package = fastn_core::Package::from_fastn_doc(&root, &fastn_doc)?;
         let mut config = Config {
             package: package.clone(),
             packages_root: root.clone().join(".packages"),
             root,
+            output_dir,
             original_directory,
             current_document: None,
             all_packages: Default::default(),

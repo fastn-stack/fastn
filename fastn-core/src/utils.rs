@@ -43,25 +43,18 @@ pub fn get_ftd_hash(path: &str) -> fastn_core::Result<String> {
 }
 
 pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
-    let cache_dir = dirs::cache_dir()?;
-    let base_path = cache_dir.join("fastn.com");
+    let current_dir = std::env::current_dir().expect("cant read current dir");
+    let output_dir = current_dir.join(".output");
+    let cache_dir = output_dir.join("cache");
 
-    if !base_path.exists() {
-        if let Err(err) = std::fs::create_dir_all(&base_path) {
+    if !cache_dir.exists() {
+        if let Err(err) = std::fs::create_dir_all(&cache_dir) {
             eprintln!("Failed to create cache directory: {}", err);
             return None;
         }
     }
 
-    Some(
-        base_path
-            .join(id_to_cache_key(
-                &std::env::current_dir()
-                    .expect("cant read current dir")
-                    .to_string_lossy(),
-            ))
-            .join(id_to_cache_key(id)),
-    )
+    Some(cache_dir.join(id_to_cache_key(id)))
 }
 
 pub fn get_cached<T>(id: &str) -> Option<T>

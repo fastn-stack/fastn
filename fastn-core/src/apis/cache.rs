@@ -97,7 +97,7 @@ pub async fn clear_(
     for package in query.package.iter() {
         if package.eq("main") {
             // TODO: List directories and files other than main
-            fastn_core::utils::remove_except(&config.root, &[".packages", ".build"]).await?;
+            fastn_core::utils::remove_except(&config.root, &[".packages", ".output"]).await?;
         } else {
             let path = tokio::fs::canonicalize(config.packages_root.join(package)).await?;
             if path.starts_with(&config.packages_root) {

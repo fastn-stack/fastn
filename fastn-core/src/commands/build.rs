@@ -11,7 +11,7 @@ pub async fn build(
 
     // Default css and js
     default_build_files(
-        config.root.join(".build"),
+        config.output_dir.join("build"),
         &config.ftd_edition,
         &config.package.name,
     )
@@ -49,7 +49,7 @@ pub async fn build(
                 format!("{}/index.html", redirect_from.trim_matches('/'))
             };
 
-            let save_path = config.root.join(".build").join(save_file.as_str());
+            let save_path = config.output_dir.join("build").join(save_file.as_str());
             fastn_core::utils::update(save_path, content.as_bytes())
                 .await
                 .ok();
@@ -70,9 +70,11 @@ mod build_dir {
     {
         let mut b = std::collections::BTreeMap::new();
 
-        for f in find_all_files_recursively(".build") {
+        for f in find_all_files_recursively(".output/build") {
             b.insert(
-                f.to_string_lossy().to_string().replacen(".build/", "", 1),
+                f.to_string_lossy()
+                    .to_string()
+                    .replacen(".output/build/", "", 1),
                 fastn_core::utils::generate_hash(std::fs::read(&f)?),
             );
         }
@@ -597,7 +599,7 @@ async fn handle_file_(
 
             fastn_core::utils::copy(
                 config.root.join(doc.id.as_str()),
-                config.root.join(".build").join(doc.id.as_str()),
+                config.output_dir.join("build").join(doc.id.as_str()),
             )
             .await
             .ok();
@@ -797,7 +799,8 @@ async fn process_static(
         package: &fastn_core::Package,
     ) -> fastn_core::Result<()> {
         let build_path = base_path
-            .join(".build")
+            .join(".output")
+            .join("build")
             .join("-")
             .join(package.name.as_str());
 
@@ -818,14 +821,14 @@ async fn process_static(
 
         {
             // TODO: need to remove this once download_base_url is removed
-            std::fs::create_dir_all(base_path.join(".build"))?;
+            std::fs::create_dir_all(base_path.join(".output").join("build"))?;
             if let Some((dir, _)) = sa.id.rsplit_once(std::path::MAIN_SEPARATOR) {
-                std::fs::create_dir_all(base_path.join(".build").join(dir))?;
+                std::fs::create_dir_all(base_path.join(".output").join("build").join(dir))?;
             }
 
             std::fs::copy(
                 sa.base_path.join(sa.id.as_str()),
-                base_path.join(".build").join(sa.id.as_str()),
+                base_path.join(".output").join("build").join(sa.id.as_str()),
             )?;
         }
         Ok(())
