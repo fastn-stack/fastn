@@ -468,17 +468,18 @@ let fastn_utils = {
 
     // Used to initialize __args__ inside component and UDF js functions
     getArgs(default_args, passed_args) {
-        let arguments = default_args;
+        // Note: arguments as variable name not allowed in strict mode
+        let args = default_args;
         for (var arg in passed_args) {
             if (!default_args.hasOwnProperty(arg)) {
-                arguments[arg] = passed_args[arg];
+                args[arg] = passed_args[arg];
                 continue;
             }
             if (default_args.hasOwnProperty(arg) && fastn_utils.getStaticValue(passed_args[arg]) !== undefined) {
-                arguments[arg] = passed_args[arg];
+                args[arg] = passed_args[arg];
             }
         }
-        return arguments;
+        return args;
     },
 }
 
