@@ -756,7 +756,7 @@ skip: true
     - Govindaraman S: /champions/govindaraman-s/
       document: student-programs/champions/govindaraman.ftd
       skip: true
-    - Aprita Jaiswal: /champions/arpita-jaiswal/
+    - Arpita Jaiswal: /champions/arpita-jaiswal/
       document: student-programs/champions/arpita-jaiswal.ftd
       skip: true
     - Rithik Seth: /champions/rithik-seth/
@@ -795,6 +795,9 @@ skip: true
     - Govindaraman S: /ambassadors/govindaraman-s/
       document: student-programs/ambassadors/govindaraman.ftd
       skip: true
+
+- `fastn` Leads Program: /lead-program/
+  document: student-programs/lead.ftd
 
 ## Contest: /weekly-contest/
   document: events/weekly-contest/index.ftd
