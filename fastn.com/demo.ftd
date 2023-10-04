@@ -26,6 +26,10 @@ padding.px: 20
 -- ftd.text: fastn demo
 role: $inherited.types.heading-hero
 
+-- ftd.text:
+
+Source: [demo.ftd](https://github.com/fastn-stack/fastn.com/blob/main/demo.ftd)
+
 -- counter: $c
 for: $c, $i in $counters
 index: $i
