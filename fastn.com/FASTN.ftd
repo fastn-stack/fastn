@@ -1044,3 +1044,4 @@ skip: true
 /linkedin/ -> https://www.linkedin.com/company/fastn-stack/
 /overview/ -> /home/
 /events/weekly-contest/ -> /weekly-contest/
+/setup.exe/ -> https://github.com/fastn-stack/fastn/releases/latest/download/fastn_setup.exe
