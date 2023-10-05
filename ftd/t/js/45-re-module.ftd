@@ -19,17 +19,20 @@ m: 45-re-module
 
 
 
--- component hello:
+-- string hello: 45-re-module hello world
 
--- ftd.text: hello world
 
--- end: hello
+-- component hello-component:
+
+-- ftd.text: $hello
+
+-- end: hello-component
 
 
 -- component c-hello:
 module category: 45-re-module
 
--- c-hello.category.hello:
+-- c-hello.category.hello-component:
 
 -- end: c-hello
 
