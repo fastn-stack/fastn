@@ -1879,10 +1879,10 @@ class Node2 {
             this.#rawInnerValue = staticValue;
             if (!hydrating || this.#node.innerHTML === "undefined") {
                 staticValue = fastn_utils.markdown_inline(fastn_utils.escapeHtmlInMarkdown(staticValue));
-                staticValue = fastn_utils.process_post_markdown(this.#node, staticValue);
             } else {
                 staticValue = this.#node.innerHTML;
             }
+            staticValue = fastn_utils.process_post_markdown(this.#node, staticValue);
             this.#node.innerHTML = staticValue;
         } else {
             throw ("invalid fastn_dom.PropertyKind: " + kind);
