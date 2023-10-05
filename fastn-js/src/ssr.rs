@@ -24,19 +24,19 @@ pub fn ssr_str(js: &str) -> String {
 }
 
 pub fn ssr(ast: &[fastn_js::Ast]) -> String {
-    let js = format!("{}\n{}\nlet main_wrapper = function (parent) {{
+    let js = format!("{}\nlet main_wrapper = function (parent) {{
             let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
             parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
             parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
             main(parenti0);
         }};
-        fastn_virtual.ssr(main_wrapper);", fastn_js::markdown_js(), fastn_js::to_js(ast, false,
+        fastn_virtual.ssr(main_wrapper);", fastn_js::to_js(ast, false,
                                                                                     "foo"));
     ssr_str(&js)
 }
 
 pub fn ssr_with_js_string(package_name: &str, js: &str) -> String {
-    let js = format!("{}\n\
+    let js = format!("
         let __fastn_package_name__ = \"{}\";\n{}
         let main_wrapper = function(parent) {{
             let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
@@ -44,7 +44,7 @@ pub fn ssr_with_js_string(package_name: &str, js: &str) -> String {
             parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
             main(parenti0);
         }};
-        fastn_virtual.ssr(main_wrapper);", fastn_js::markdown_js(), package_name, js);
+        fastn_virtual.ssr(main_wrapper);", package_name, js);
 
     ssr_str(&js)
 }
