@@ -127,6 +127,10 @@ let foo__get_first_person = function (args)
       a: fastn.mutableList([]),
     }, args);
     return (ftd.get(__args__.a, 0));
+  } catch (e) {
+    if (!ssr) {
+      throw e;
+    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

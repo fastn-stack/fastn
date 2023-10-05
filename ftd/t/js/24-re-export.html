@@ -52,6 +52,10 @@ let _01_basic__append = function (args) {
     let __args__ = fastn_utils.getArgs({
     }, args);
     return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
+  } catch (e) {
+    if (!ssr) {
+      throw e;
+    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

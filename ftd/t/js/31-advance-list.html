@@ -109,6 +109,10 @@ let foo__insert = function (args) {
       a: fastn.mutableList([]),
     }, args);
     return (ftd.append(__args__.a, __args__.v));
+  } catch (e) {
+    if (!ssr) {
+      throw e;
+    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -239,6 +243,10 @@ let foo__delete = function (args) {
       a: fastn.mutableList([]),
     }, args);
     return (ftd.delete_at(__args__.a, __args__.i));
+  } catch (e) {
+    if (!ssr) {
+      throw e;
+    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -251,6 +259,10 @@ let foo__plus_one = function (args) {
     let __args__ = fastn_utils.getArgs({
     }, args);
     return (fastn_utils.getter(__args__.a) + 1);
+  } catch (e) {
+    if (!ssr) {
+      throw e;
+    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -317,6 +329,10 @@ let foo__length = function (args)
       a: fastn.mutableList([]),
     }, args);
     return (ftd.len(__args__.a));
+  } catch (e) {
+    if (!ssr) {
+      throw e;
+    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
