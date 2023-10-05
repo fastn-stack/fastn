@@ -43,9 +43,20 @@ v: cWdivkyoOTA
 Copy the following command:
 
 -- ds.code: Installer Script
-lang: ftd
+lang: sh
 
 source <(curl -fsSL https://fastn.com/install.sh)
+
+-- cbox.info: Installing specific version of fastn
+
+If you want to install any specific version of fastn besides the latest one,
+you can use the version flag when installing using the above command.
+
+-- ds.code: Installer Script (for installing specific fastn version)
+lang: sh
+
+# Let's say you want to install fastn version 0.3.45
+source <(curl -fsSL https://fastn.com/install.sh) --version=0.3.45
 
 -- ds.h3: Second Step: Open the Terminal
 
