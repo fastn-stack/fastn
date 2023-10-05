@@ -118,21 +118,31 @@ setup() {
 
     PRE_RELEASE=""
     CONTROLLER=""
+    VERSION=""
 
     # Parse arguments
     while [ $# -gt 0 ]; do
         case $1 in
             --pre-release) PRE_RELEASE=true ;;
             --controller) CONTROLLER=true ;;
+            --version=*) VERSION="${1#*=}" ;;
+            *) echo "Unknown CLI argument: $1"; exit 1 ;;
         esac
     shift
     done
+
+    if [ -n "$VERSION" ]; then
+        echo "Installing fastn version: $VERSION"
+    fi
 
     echo ""
 
     if [ -n "$PRE_RELEASE" ]; then
         URL="https://api.github.com/repos/fastn-stack/fastn/releases"
         log_message "Downloading the latest pre-release binaries"
+    elif [ -n "$VERSION" ]; then
+        URL="https://api.github.com/repos/fastn-stack/fastn/releases/tags/$VERSION"
+        log_message "Downloading fastn release $VERSION binaries"
     else
         URL="https://api.github.com/repos/fastn-stack/fastn/releases/latest"
         log_message "Downloading the latest production-ready binaries"
