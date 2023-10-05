@@ -123,10 +123,6 @@ let foo__append = function (args)
       a: fastn.mutableList([]),
     }, args);
     return (ftd.append(__args__.a, __args__.v));
-  } catch (e) {
-    if (!ssr) {
-      throw e;
-    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

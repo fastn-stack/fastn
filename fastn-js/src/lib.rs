@@ -38,7 +38,7 @@ pub use record::RecordInstance;
 pub use ssr::{ssr, ssr_str, ssr_with_js_string};
 pub use static_variable::{static_integer, static_string, StaticVariable};
 pub use to_js::to_js;
-pub use udf::{udf0, udf1, udf2, udf_with_arguments, UDF};
+pub use udf::{udf_with_arguments, UDF};
 pub use udf_statement::UDFStatement;
 
 pub fn all_js_without_test_and_ftd_langugage_js() -> String {

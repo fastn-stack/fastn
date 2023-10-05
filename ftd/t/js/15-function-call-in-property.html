@@ -60,10 +60,6 @@ let foo__increment = function (args) {
     if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
       __args__.a = fastn_utils_val___args___a;
     };
-  } catch (e) {
-    if (!ssr) {
-      throw e;
-    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -78,10 +74,6 @@ let foo__multiply_by_two = function (args)
     let __args__ = fastn_utils.getArgs({
     }, args);
     return (fastn_utils.getter(__args__.a) * 2);
-  } catch (e) {
-    if (!ssr) {
-      throw e;
-    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
