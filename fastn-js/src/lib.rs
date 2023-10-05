@@ -66,5 +66,5 @@ pub fn all_js_with_test() -> String {
 }
 
 pub fn markdown_js() -> &'static str {
-    include_str!("../markdown.js")
+    include_str!("../marked.js")
 }
