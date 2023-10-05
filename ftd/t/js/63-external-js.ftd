@@ -1,0 +1,25 @@
+-- ftd.text: Hello
+$on-click$: $external-fun()
+$on-click$: $external-fun-1()
+
+-- ftd.text: $greeting-fn()
+
+-- string js-s: ../../t/assets/test.js
+
+
+-- void external-fun():
+js: $js-s, ../../t/assets/test.js
+
+show("Hello World!");
+
+
+-- void external-fun-1():
+js: $js-s
+
+show("Hello World Again!");
+
+
+-- string greeting-fn():
+js: $js-s
+
+greeting()

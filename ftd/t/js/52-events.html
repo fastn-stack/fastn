@@ -45,6 +45,10 @@ let foo__length = function (args) {
       a: fastn.mutableList([]),
     }, args);
     return (len(__args__.a));
+  } catch (e) {
+    if (!ssr) {
+      throw e;
+    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -99,6 +103,10 @@ let foo__increment = function (args)
     if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
       __args__.a = fastn_utils_val___args___a;
     }
+  } catch (e) {
+    if (!ssr) {
+      throw e;
+    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -117,6 +125,10 @@ let foo__decrement = function (args)
     }
     if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
       __args__.a = fastn_utils_val___args___a;
+    }
+  } catch (e) {
+    if (!ssr) {
+      throw e;
     }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;

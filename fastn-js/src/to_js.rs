@@ -424,6 +424,7 @@ fn func(
     params: &[String],
     body: pretty::RcDoc<'static>,
     package_name: &str,
+    add_catch_statement: bool,
 ) -> pretty::RcDoc<'static> {
     let package_name = fastn_js::utils::name_to_js_(package_name);
     let name = fastn_js::utils::name_to_js(name);
@@ -469,7 +470,15 @@ fn func(
             .append(body.nest(4))
             .append(pretty::RcDoc::softline_())
             .append(text(
-                "} finally { __fastn_package_name__ = __fastn_super_package_name__; }",
+                format!(
+                    "}} {} finally {{ __fastn_package_name__ = __fastn_super_package_name__;}}",
+                    if add_catch_statement {
+                        "catch (e) {if(!ssr){throw e;}}"
+                    } else {
+                        ""
+                    }
+                )
+                .as_str(),
             ))
             .append(pretty::RcDoc::softline_())
             .append(text("}"))
@@ -588,7 +597,7 @@ impl fastn_js::Component {
             .group(),
         );
 
-        func(self.name.as_str(), &self.params, body, package_name)
+        func(self.name.as_str(), &self.params, body, package_name, false)
     }
 }
 
@@ -747,7 +756,7 @@ impl fastn_js::UDF {
                 pretty::RcDoc::softline(),
             ));
 
-        func(self.name.as_str(), &self.params, body, package_name)
+        func(self.name.as_str(), &self.params, body, package_name, true)
     }
 }
 

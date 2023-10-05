@@ -207,18 +207,27 @@ let foo__set_dark = function (args) {
     let __args__ = fastn_utils.getArgs({
     }, args);
     return (enable_dark_mode());
+  } catch (e) {
+    if (!ssr) {
+      throw e;
+    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 global["foo__set_dark"] = foo__set_dark;
-let foo__set_light = function (args) {
+let foo__set_light = function (args)
+{
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
     return (enable_light_mode());
+  } catch (e) {
+    if (!ssr) {
+      throw e;
+    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -232,6 +241,10 @@ let foo__set_system = function (args)
     let __args__ = fastn_utils.getArgs({
     }, args);
     return (enable_system_mode());
+  } catch (e) {
+    if (!ssr) {
+      throw e;
+    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
