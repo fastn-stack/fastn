@@ -65,7 +65,7 @@ pub fn ftd_js_css() -> &'static str {
 }
 
 pub fn markdown_js() -> &'static str {
-    include_str!("../markdown.js")
+    fastn_js::markdown_js()
 }
 
 pub fn prism_css() -> String {

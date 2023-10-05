@@ -68,7 +68,7 @@ class Node {
     toHtmlAsString() {
         const openingTag = `<${this.#tagName}${this.getDataIdString()}${this.getAttributesString()}${this.getClassString()}${this.getStyleString()}>`;
         const closingTag = `</${this.#tagName}>`;
-        const innerHTML = fastn_utils.escapeHtmlInMarkdown(this.innerHTML);
+        const innerHTML = this.innerHTML;
         const childNodes = this.#children.map(child => child.toHtmlAsString()).join('');
 
         return `${openingTag}${innerHTML}${childNodes}${closingTag}`;
