@@ -262,7 +262,7 @@ let fastn_utils = {
             g = fastn_utils.private.replace_last_occurrence(g, "</p>", "");
             return g;
         })();
-        return `${fastn_utils.private.repeated_space(space_before)}${o}${fastn_utils.private.repeated_space(space_after)}`;
+        return `${fastn_utils.private.repeated_space(space_before)}${o}${fastn_utils.private.repeated_space(space_after)}`.replace(/\n+$/, '');
     },
 
     process_post_markdown(node, body) {
