@@ -63,3 +63,7 @@ pub fn all_js_with_test() -> String {
     let all_js = all_js_without_test_and_ftd_langugage_js();
     format!("{all_js}{test_js}")
 }
+
+pub fn markdown_js() -> &'static str {
+    include_str!("../markdown.js")
+}

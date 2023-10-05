@@ -461,6 +461,10 @@ let fastn_utils = {
         };
         for (var i = 0; i < str.length; i++) {
             let current = str[i];
+            if (current === '/' && !(i > 0 && str[i-1] === "<")) {
+                result += current;
+                continue;
+            }
             result += ch_map[current] ?? current;
         }
         return result;

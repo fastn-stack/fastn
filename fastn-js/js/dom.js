@@ -1877,9 +1877,11 @@ class Node2 {
             this.#rawInnerValue = staticValue;
         } else if (kind === fastn_dom.PropertyKind.StringValue) {
             this.#rawInnerValue = staticValue;
-            if (!ssr) {
-                staticValue = fastn_utils.markdown_inline(staticValue);
+            if (!hydrating) {
+                staticValue = fastn_utils.markdown_inline(fastn_utils.escapeHtmlInMarkdown(staticValue));
                 staticValue = fastn_utils.process_post_markdown(this.#node, staticValue);
+            } else {
+                staticValue = this.#node.innerHTML;
             }
             this.#node.innerHTML = staticValue;
         } else {
