@@ -272,13 +272,22 @@ let fastn_utils = {
 
             const current_node = node;
             const colorClasses = Array.from(current_node.classList).filter(className => className.startsWith('__c'));
+            const roleClasses = Array.from(current_node.classList).filter(className => className.startsWith('__rl'));
             const tableElements = Array.from(divElement.getElementsByTagName('table'));
+            const codeElements = Array.from(divElement.getElementsByTagName('code'));
 
             tableElements.forEach(table => {
                 colorClasses.forEach(colorClass => {
                     table.classList.add(colorClass);
                 });
             });
+
+            codeElements.forEach(code => {
+                roleClasses.forEach(roleClass => {
+                    code.classList.add(roleClass);
+                });
+            });
+
             body = divElement.innerHTML;
         }
         return body;
