@@ -85,7 +85,7 @@ body {
     width: 100%;
 }
 
-input, code {
+input {
     vertical-align: middle;
 }
 pre {
