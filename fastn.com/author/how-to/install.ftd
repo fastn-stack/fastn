@@ -5,21 +5,10 @@
 `fastn` is compatible with various operating systems, including Windows, MacOS,
 and Linux.
 
+-- cbox.info: For Mac/Linux (Recommended) 
 
--- cbox.info: Our Recommendation
-
-If you are using Windows, we recommend you to install `fastn` through fastn
-installer which can be found under the 
-[releases](https://github.com/fastn-stack/fastn/releases/) 
-section of the official [fastn](https://github.com/fastn-stack/fastn) 
-github repository.
-
-This is the preferred method as it only requires downloading the setup and
-installing it on your local system.
-
-If you are using Mac/Linux, we recommend you to install `fastn` using the installer
-script by running the below mentioned command in your terminal.
-
+We recommend installing `fastn` using the installer script. You can do this by
+running the below command in your terminal. This is the preferred method.
 
 -- ds.code: Installer Script
 lang: sh
@@ -27,11 +16,19 @@ lang: sh
 source <(curl -fsSL https://fastn.com/install.sh)
 
 
--- ds.markdown: 
+-- cbox.info: For Windows (Recommended) 
 
-`fastn` is written using `rust` language, if you are familiar with it and want
-to use `fastn` for your project or for experimentation, you can do it by
-building the `source`.
+We recommend you to install `fastn` through fastn
+installer. This is the preferred method as it only requires downloading the
+setup and installing it on your local system.
+
+-- ds.code: Download the `fastn` installer using this URL
+lang: txt
+ 
+fastn.com/setup.exe
+
+
+-- ds.markdown: 
 
 Based on your machine and your choice of installation, you can select one of the
 following options:

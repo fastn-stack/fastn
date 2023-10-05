@@ -111,6 +111,10 @@ Checkout the [Terminal documentation](https://fastn.com/open-terminal/).
 
 -- ds.h1: `fastn` from `source`
 
+`fastn` is written using rust language, if you are familiar with it and want to
+use `fastn` for your project or for experimentation, you can do it by building
+the source.
+
 `fastn` is open source project. You can clone the `fastn` github repository:
 
 

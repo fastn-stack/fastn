@@ -121,7 +121,7 @@ favicon: /-/fastn.com/images/favicon.svg
       document: author/how-to/sublime.ftd
     - Syntax Highlighting VS Code: /vscode/
       document: author/how-to/vscode.ftd
-- Exapander Crash Course: /expander/
+- Expander Crash Course: /expander/
   - Part 1. Hello World: /expander/hello-world/
   - Part 2. Basic UI: /expander/basic-ui/
   - Part 3. Components: /expander/components/

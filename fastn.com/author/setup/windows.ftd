@@ -47,9 +47,14 @@ v: hCnDjhSPJLg
 
 To verify, open command prompt and execute the command, `fastn`
 
--- ds.image:
+-- ftd.image:
 src: $fastn-assets.files.images.setup.fastn-terminal-windows.png
 width: fill-container
+border-radius.px: 8
+border-width.px: 2
+shadow: $s
+margin-bottom.px: 30
+
 
 -- ds.markdown:
 
@@ -101,9 +106,13 @@ Installation of `fastn` is complete.
 
 To verify, open a fresh command prompt window and execute the command, `fastn`
 
--- ds.image:
+-- ftd.image:
 src: $fastn-assets.files.images.setup.fastn-terminal-windows.png
 width: fill-container
+border-radius.px: 8
+border-width.px: 2
+shadow: $s
+margin-bottom.px: 30
 
 -- ds.markdown:
 
@@ -128,9 +137,11 @@ Checkout the [Command Prompt documentation](https://fastn.com/open-terminal/).
 
 
 
-
-
 -- ds.h1: `fastn` from `source`
+
+`fastn` is written using rust language, if you are familiar with it and want to
+use `fastn` for your project or for experimentation, you can do it by building
+the source.
 
 `fastn` is open source project. You can clone the `fastn` github repository:
 
@@ -163,3 +174,16 @@ Happy building.
 
 
 -- end: ds.page
+
+
+
+-- ftd.color shadow-color:
+light: #707070
+dark: #1b1a1a
+
+-- ftd.shadow s:
+color: $shadow-color
+x-offset.px: 0
+y-offset.px: 20
+blur.px: 40
+spread.px: 2
