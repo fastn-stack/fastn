@@ -255,6 +255,7 @@ let fastn_utils = {
      * @returns {string} - The processed string with inline markdown.
      */
     markdown_inline(i) {
+        console.log("Before markdown_inline", i);
         if (fastn_utils.isNull(i)) return;
         const { space_before, space_after } = fastn_utils.private.spaces(i);
         const o = (() => {
@@ -468,9 +469,20 @@ let fastn_utils = {
             "'": "&#39;",
             '/': "&#47;",
         };
+        let foundBackTick = false;
         for (var i = 0; i < str.length; i++) {
             let current = str[i];
-            if (current === '/' && !(i > 0 && str[i-1] === "<")) {
+            if (current === "`") {
+                foundBackTick = !foundBackTick;
+            }
+            // Ignore escaping html inside backtick (as marked function
+            // escape html for backtick content):
+            // For instance: In `hello <title>`, `<` and `>` should not be
+            // escaped. (`foundBackTick`)
+            // Also the `/` which is followed by `<` should be escaped.
+            // For instance: `</` should be escaped but `http://` should not
+            // be escaped. (`(current === '/' && !(i > 0 && str[i-1] === "<"))`)
+            if (foundBackTick || (current === '/' && !(i > 0 && str[i-1] === "<"))) {
                 result += current;
                 continue;
             }

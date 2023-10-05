@@ -1878,8 +1878,11 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.StringValue) {
             this.#rawInnerValue = staticValue;
             if (!hydrating) {
+                console.log("Before staticValue", staticValue);
                 staticValue = fastn_utils.markdown_inline(fastn_utils.escapeHtmlInMarkdown(staticValue));
+                console.log("After staticValue", staticValue);
                 staticValue = fastn_utils.process_post_markdown(this.#node, staticValue);
+                console.log("More After staticValue", staticValue);
             } else {
                 staticValue = this.#node.innerHTML;
             }
