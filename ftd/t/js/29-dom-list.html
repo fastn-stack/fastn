@@ -98,10 +98,6 @@ let foo__append_integer = function (args) {
       a: fastn.mutableList([]),
     }, args);
     return (ftd.append(__args__.a, __args__.v));
-  } catch (e) {
-    if (!ssr) {
-      throw e;
-    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -117,10 +113,6 @@ let foo__insert_integer = function (args)
       a: fastn.mutableList([]),
     }, args);
     return (ftd.insert_at(__args__.a, 0, __args__.v));
-  } catch (e) {
-    if (!ssr) {
-      throw e;
-    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -135,10 +127,6 @@ let foo__pop_integer = function (args)
       a: fastn.mutableList([]),
     }, args);
     return (ftd.pop(__args__.a));
-  } catch (e) {
-    if (!ssr) {
-      throw e;
-    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -153,10 +141,6 @@ let foo__delete_integer = function (args)
       a: fastn.mutableList([]),
     }, args);
     return (ftd.delete_at(__args__.a, 0));
-  } catch (e) {
-    if (!ssr) {
-      throw e;
-    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -171,10 +155,6 @@ let foo__clear_integer = function (args)
       a: fastn.mutableList([]),
     }, args);
     return (ftd.clear_all(__args__.a));
-  } catch (e) {
-    if (!ssr) {
-      throw e;
-    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -190,10 +170,6 @@ let foo__set_integer = function (args)
       other: fastn.mutableList([]),
     }, args);
     return (ftd.set_list(__args__.a, __args__.other));
-  } catch (e) {
-    if (!ssr) {
-      throw e;
-    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -216,10 +192,6 @@ let foo__increment = function (args)
     if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
       __args__.a = fastn_utils_val___args___a;
     };
-  } catch (e) {
-    if (!ssr) {
-      throw e;
-    }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

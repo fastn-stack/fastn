@@ -179,6 +179,7 @@ impl ftd::interpreter::Function {
                         })
                 })
                 .collect_vec(),
+            self.js.is_some(),
         )
     }
 }

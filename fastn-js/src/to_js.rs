@@ -756,7 +756,13 @@ impl fastn_js::UDF {
                 pretty::RcDoc::softline(),
             ));
 
-        func(self.name.as_str(), &self.params, body, package_name, true)
+        func(
+            self.name.as_str(),
+            &self.params,
+            body,
+            package_name,
+            self.is_external_js_present,
+        )
     }
 }
 
