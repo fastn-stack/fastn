@@ -279,11 +279,13 @@ impl ftd::interpreter::ComponentDefinition {
                     v.get_default_value().map(|val| {
                         (
                             v.name.to_string(),
-                            val.to_set_property_value(
+                            val.to_set_property_value_with_ui(
                                 doc,
                                 &ftd::js::ResolverData::new_with_component_definition_name(&Some(
                                     self.name.to_string(),
                                 )),
+                                has_rive_components,
+                                false,
                             ),
                             v.mutable.to_owned(),
                         )
