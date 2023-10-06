@@ -46,6 +46,7 @@ impl TocItem {
         TocItemCompat {
             url: self.url.clone(),
             number: Some(self.number.iter().fold(String::new(), |mut output, x| {
+                use std::fmt::Write;
                 let _ = write!(output, "{x}.");
                 output
             })),
