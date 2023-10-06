@@ -107,6 +107,9 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
 
     for (key, thing) in document.data.iter() {
         if default_thing_name.contains(key) {
+            if !has_rive_components {
+                has_rive_components = ftd::js::element::is_rive_component(key);
+            }
             continue;
         }
         if let ftd::interpreter::Thing::Component(c) = thing {
