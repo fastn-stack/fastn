@@ -45,7 +45,10 @@ impl TocItem {
         // TODO: num converting to ol and li in ftd.???
         TocItemCompat {
             url: self.url.clone(),
-            number: Some(self.number.iter().map(|x| format!("{}.", x)).collect()),
+            number: Some(self.number.iter().fold(String::new(), |mut output, x| {
+                let _ = write!(output, "{x}.");
+                output
+            })),
             title: self.title.clone(),
             path: self.path.clone(),
             description: self.description.clone(),

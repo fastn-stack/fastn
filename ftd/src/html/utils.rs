@@ -312,9 +312,7 @@ impl ftd::interpreter::PropertyValue {
             ftd::interpreter::PropertyValue::Reference { name, .. } => Some(format!(
                 "resolve_reference(\"{}\", data){}",
                 js_reference_name(name),
-                field
-                    .map(|v| format!(".{}", v))
-                    .unwrap_or_else(|| "".to_string())
+                field.map(|v| format!(".{}", v)).unwrap_or_default()
             )),
             ftd::interpreter::PropertyValue::FunctionCall(function_call) => {
                 let action = serde_json::to_string(&ftd::html::Action::from_function_call(
