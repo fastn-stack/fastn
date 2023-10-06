@@ -46,7 +46,7 @@ lang: ftd
 \-- web-component hello-world:
 js: web-component.js
 
-\-- end: word-count
+\-- end: hello-world
 
 
 -- ds.markdown:
