@@ -120,7 +120,6 @@ skip: true
     skip: true
   - Install Text Editor: /editor/
     document: /get-started/editor.ftd
-    skip: true
     - Syntax Highlighting Sublime: /sublime/
       document: author/how-to/sublime.ftd
     - Syntax Highlighting VS Code: /vscode/
