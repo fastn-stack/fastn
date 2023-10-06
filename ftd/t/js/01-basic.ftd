@@ -2,6 +2,7 @@
 export: print
 
 -- ftd.text: "Hello"
+id: hello-id
 
 -- ftd.text: Hello
 background.solid: $inherited.colors.background.step-1
