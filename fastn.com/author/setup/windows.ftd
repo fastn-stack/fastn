@@ -15,7 +15,7 @@ For Windows machine, there are three ways to install `fastn`.
 On Windows, we recommend you to install `fastn` through fastn installer:
 
 To install `fastn_setup.exe`, on your browser, use the URL:  
-[fastn.com/setup.exe](/setup.exe/)
+[fastn.com/setup.exe](/setup.exe)
 
 This is the preferred method as it only requires downloading the setup and
 installing it on your local system.
@@ -39,7 +39,7 @@ v: hCnDjhSPJLg
 
 -- ds.markdown:
 
-- Download the setup named [`fastn_setup.exe`](/setup.exe/)
+- Download the setup named [`fastn_setup.exe`](/setup.exe)
 
 - Run the setup and follow the installation steps
 

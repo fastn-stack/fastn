@@ -3,9 +3,12 @@
 -- ds.page: Install `fastn`
 
 `fastn` is compatible with various operating systems, including Windows, MacOS,
-and Linux.
+and Linux. Based on your machine and your choice of installation, you can
+select one of the following options:
 
--- cbox.info: For Mac/Linux (Recommended) 
+-- ds.h1:  For MacOS/Linux
+
+-- cbox.info: Recommended 
 
 We recommend installing `fastn` using the installer script. You can do this by
 running the below command in your terminal. This is the preferred method.
@@ -16,36 +19,36 @@ lang: sh
 source <(curl -fsSL https://fastn.com/install.sh)
 
 
+-- ds.markdown:
+
+1. [`fastn` through `pre-built binary`](macos/#fastn-through-pre-built-binary)
+ (Recommended)
+2. [`fastn` from `source`](macos/#fastn-from-source)
+
+
+-- ds.h1:  For Windows
+
 -- cbox.info: For Windows (Recommended) 
 
 We recommend you to install `fastn` through fastn
 installer. This is the preferred method as it only requires downloading the
 setup and installing it on your local system.
 
--- ds.code: Download the `fastn` installer using this URL
-lang: txt
- 
-fastn.com/setup.exe
+-- ftd.text: Download `fastn-setup`
+link: fastn.com/setup.exe
+color: $inherited.colors.cta-primary.base 
+;; link-color: $inherited.colors.cta-primary.base
+margin-top.px: 5
+
+-- end: cbox.info
 
 
 -- ds.markdown: 
-
-Based on your machine and your choice of installation, you can select one of the
-following options:
-
--- ds.h2:  For Windows
 
 1. [`fastn` using `installer`](windows/#fastn-using-installer) (Recommended)
 2. [`fastn` through `pre-built binary`](windows/#fastn-through-pre-built-binary)
 3. [`fastn` from `source`](windows/#fastn-from-source)
 
-
-
--- ds.h2:  For MacOS/Linux
-
-1. [`fastn` through `pre-built binary`](macos/#fastn-through-pre-built-binary)
- (Recommended)
-2. [`fastn` from `source`](macos/#fastn-from-source)
 
 
 -- end: ds.page
