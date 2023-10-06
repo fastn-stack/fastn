@@ -69,6 +69,10 @@ favicon: /-/fastn.com/images/favicon.svg
   - Building dynamic country list page: /country-list/
     document: backend/country-details/dynamic-country-list-page.ftd
 
+## QR Codes: /qr-codes/
+skip: true
+
+
 # Get Started: /quick-build/
   document: get-started/browse-pick.ftd
 
