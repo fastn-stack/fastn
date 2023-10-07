@@ -96,8 +96,8 @@ width.fixed.percent: 95
 
 -- ds.markdown:
 
-She then added a [sitemap](https://fastn.com/understanding-sitemap/-/build/) 
-and created [custom and clean URLs](https://fastn.com/clean-urls/-/build/) for 
+She then added a [sitemap](/understanding-sitemap/-/build/) 
+and created [custom and clean URLs](/clean-urls/) for 
 enhanced user experience.
 
 -- ds.image: [Adding Sitemap in the fastn.ftd file](https://github.com/fastn-community/acme-inc/blob/main/FASTN.ftd)
