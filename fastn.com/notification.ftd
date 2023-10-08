@@ -32,9 +32,11 @@ to make the most of it.
 notification-data list notifications: $notifications
 boolean $show: false
 boolean $show-number: true
+integer length: $length(notifications = $display-notifications.notifications)
 integer call-count-notification: $count-notification(notifications = $display-notifications.notifications)
 
 -- ftd.container:
+if: { display-notifications.length != 0 }
 
 -- ftd.row:
 
@@ -194,3 +196,9 @@ notification-data list notifications:
 js: $fastn-assets.files.notification.js
 
 setNotification(notifications)
+
+
+-- integer length(notifications):
+notification-data list notifications:
+
+len(notifications)
