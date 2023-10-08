@@ -1,0 +1,196 @@
+-- record notification-data:
+caption title:
+optional string link:
+string published-on:
+optional body description:
+optional ftd.image-src image:
+children uis:
+
+
+
+-- notification-data list notifications:
+
+-- notification-data: Exploring the Search Feature in fastn.com
+link: /blog/search/
+published-on: 2023-09-01
+
+With the vast amount of content available online, users can often find
+themselves lost in a sea of information. Without a search tool, finding what
+you're looking for can be a time-consuming and frustrating task. fastn.com
+recognizes this challenge and has implemented a search feature to help users
+discover content quickly and effortlessly. This is one of the most requested
+feature in fastn.com.
+
+In this blog post, we'll explore the ins and outs of this tool and show you how
+to make the most of it.
+
+-- end: notifications
+
+
+
+-- component display-notifications:
+notification-data list notifications: $notifications
+boolean $show: false
+boolean $show-number: true
+integer call-count-notification: $count-notification(notifications = $display-notifications.notifications)
+
+-- ftd.container:
+
+-- ftd.row:
+
+-- ftd.image:
+src: $fastn-assets.files.assets.notification.svg
+width.fixed.px: 30
+margin-left.px: 10
+$on-click$: $ftd.set-boolean($a = $display-notifications.show, v = true)
+$on-click$: $set-notification-read(notifications = $display-notifications.notifications)
+
+
+-- ftd.integer: $display-notifications.call-count-notification
+;; if: { display-notifications.call-count-notification != 0 }
+id: notification-number
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+border-radius.percent: 50
+role: $inherited.types.fine-print
+padding-horizontal.px: 5
+margin-left.px: -7
+margin-top.px: -4
+
+-- end: ftd.row
+
+-- ds.overlay:
+if: { display-notifications.show }
+
+-- ftd.column:
+anchor: window
+shadow: $s
+top.px: 0
+right.px: 0
+max-width.fixed.rem: 42
+height: fill-container
+border-radius.rem: 0.25
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.column:
+width: fill-container
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+
+-- ftd.image:
+src: $fastn-assets.files.assets.cross.svg
+width.fixed.px: 30
+$on-click$: $ftd.set-boolean($a=$display-notifications.show, v = false)
+
+-- end: ftd.column
+
+-- ftd.column:
+height: fill-container
+padding.rem: 1.5
+overflow: scroll
+
+-- display-notification: $o
+for: $o in $display-notifications.notifications
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ds.overlay
+
+-- end: ftd.container
+
+
+-- end: display-notifications
+
+
+
+
+
+
+
+
+
+
+
+-- component display-notification:
+caption notification-data notification:
+
+-- ftd.column:
+color: $inherited.colors.text
+padding-vertical.rem: 1
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+
+-- ftd.text: $display-notification.notification.title
+if: { display-notification.notification.link != NULL }
+link: $display-notification.notification.link
+style: underline
+role: $inherited.types.heading-small
+padding-bottom.rem: 0.75
+
+-- ftd.text: $display-notification.notification.title
+if: { display-notification.notification.link == NULL }
+style: underline
+role: $inherited.types.heading-small
+padding-bottom.rem: 0.75
+
+-- ftd.text: $calculate-date(date = $display-notification.notification.published-on)
+role: $inherited.types.fine-print
+padding-bottom.rem: 1.25
+
+-- ftd.image:
+src: $display-notification.notification.image
+width: fill-container
+if: { display-notification.notification.image != NULL }
+padding-bottom.rem: 1.25
+
+-- ftd.text: $display-notification.notification.description
+role: $inherited.types.copy-regular
+if: { display-notification.notification.description != NULL }
+
+-- end: ftd.column
+
+-- end: display-notification
+
+
+
+
+
+
+
+
+-- ftd.shadow s:
+color: #b0b8be1a
+x-offset.px: 10
+y-offset.px: 2
+blur.px: 12
+
+
+
+
+
+
+
+
+-- string calculate-date(date):
+string date:
+js: $fastn-assets.files.notification.js
+
+calculateDate(date)
+
+
+
+
+-- integer count-notification(notifications):
+notification-data list notifications:
+js: $fastn-assets.files.notification.js
+
+checkNotification(notifications)
+
+
+-- void set-notification-read(notifications,show):
+notification-data list notifications:
+js: $fastn-assets.files.notification.js
+
+setNotification(notifications)

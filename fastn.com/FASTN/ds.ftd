@@ -1,6 +1,7 @@
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-typography as typo
 -- import: fastn.com/utils
+-- import: fastn.com/notification
 -- import: fastn-community.github.io/banner
 -- import: fastn.com/content-library as footer
 -- import: fastn-community.github.io/doc-site/common
@@ -10,6 +11,30 @@ export: featured-business,featured-category,user-info
 
 -- import: fastn-community.github.io/doc-site
 export: markdown,h0,h1,h2,h3,code,rendered,output,image,iframe,youtube,compact-text,post,posts,featured-post,image-first,image-in-between,without-image,author-bio,tip,not-found-1,not-found-2,link,link-group,without-image-half
+
+
+
+-- component overlay:
+ftd.type-data types: $typo.types
+ftd.color-scheme colors: $dark-flame-cs.main
+children uis:
+
+-- ftd.column:
+types: $overlay.types
+colors: $overlay.colors
+z-index: 9999
+background.solid: #000000b3
+anchor: window
+top.px: 0
+right.px: 0
+bottom.px: 0
+left.px: 0
+overflow: auto
+children: $overlay.uis
+
+-- end: ftd.column
+
+-- end: overlay
 
 
 
@@ -140,6 +165,9 @@ max-width.fixed.px: 1340
 fluid-wrap: $page.fluid-wrap
 
 -- doc-site.page.header-logo-ui:
+
+-- notification.display-notifications:
+if: { ftd.device == "desktop" }
 
 -- end: doc-site.page.header-logo-ui
 
