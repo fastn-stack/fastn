@@ -107,6 +107,7 @@ background.image: $background-img
 anchor: parent
 right.px: 24
 top.px: 65
+z-index: 1
 
 -- end: ftd.column
 
@@ -115,6 +116,7 @@ width: fill-container
 color: $inherited.colors.text-strong
 spacing.fixed.px: 40
 max-width.fixed.px: $max-width
+z-index: 5
 
 -- ftd.column:
 spacing.fixed.px: 24
@@ -3258,7 +3260,8 @@ color: $inherited.colors.text-strong
 
 -- ftd.column:
 spacing.fixed.px: 7
-width.fixed.px: 966
+width.fixed.px: 860
+align-content: center
 
 -- ftd.column:
 background.image: $fastn-assets.files.images.landing.quote-left.svg
@@ -3266,7 +3269,7 @@ width.fixed.px: 38
 height.fixed.px: 29
 anchor: parent
 top.px: -28
-left.px: -44
+left.px: 10
 
 -- end: ftd.column
 
@@ -3275,6 +3278,7 @@ if: { testimonial.body != NULL }
 color: $inherited.colors.text
 role: $inherited.types.copy-regular
 text-align: center
+width.fixed.px: 707
 
 $testimonial.body
 
@@ -3283,8 +3287,8 @@ background.image: $fastn-assets.files.images.landing.quote-right.svg
 width.fixed.px: 38
 height.fixed.px: 29
 anchor: parent
-bottom.px: -28
-right.px: -42
+bottom.px: -5
+right.px: 40
 
 -- end: ftd.column
 
