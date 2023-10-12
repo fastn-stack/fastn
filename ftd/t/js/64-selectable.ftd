@@ -1,0 +1,4 @@
+-- ftd.text: You can select this value
+
+-- ftd.text: You cannot select this value
+selectable: false

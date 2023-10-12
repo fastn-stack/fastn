@@ -277,6 +277,7 @@ fastn_dom.PropertyKind = {
     Muted: 115,
     LinkColor: 116,
     TextShadow: 117,
+    Selectable: 118,
 };
 
 
@@ -1560,6 +1561,12 @@ class Node2 {
             // overflow: auto, resize: staticValue
             this.attachCss("resize", staticValue);
             this.attachCss("overflow", "auto");
+        } else if (kind === fastn_dom.PropertyKind.Selectable) {
+            if(staticValue === false) {
+                this.attachCss("user-select", "none");
+            } else {
+                this.attachCss("user-select", null);
+            }
         } else if (kind === fastn_dom.PropertyKind.MinHeight) {
             this.attachCss("min-height", staticValue);
         } else if (kind === fastn_dom.PropertyKind.MaxHeight) {
