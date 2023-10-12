@@ -1,0 +1,6 @@
+-- ftd.text: Update Value
+$on-click$: $update-value()
+
+-- void update-value():
+
+ftd.set_value()

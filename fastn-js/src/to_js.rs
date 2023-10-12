@@ -13,7 +13,12 @@ fn comma() -> pretty::RcDoc<'static> {
 pub fn to_js(ast: &[fastn_js::Ast], is_global_need: bool, package_name: &str) -> String {
     let mut w = Vec::new();
     let o = if is_global_need {
-        get_variable_declaration("global")
+        get_variable_declaration(fastn_js::constants::GLOBAL_VARIABLE_MAP).append(
+            generate_legacy_global_ref_update(
+                fastn_js::constants::LEGACY_GLOBAL_MAP_REF_VARIABLE,
+                fastn_js::constants::GLOBAL_VARIABLE_MAP,
+            ),
+        )
     } else {
         pretty::RcDoc::nil()
     }
@@ -1114,6 +1119,16 @@ pub(crate) fn get_variable_declaration(variable: &str) -> pretty::RcDoc<'static>
         .append(space())
         .append(text("{}"))
         .append(text(";"))
+}
+
+pub(crate) fn generate_legacy_global_ref_update(
+    legacy_ref_variable: &str,
+    variable: &str,
+) -> pretty::RcDoc<'static> {
+    text(legacy_ref_variable)
+        .append(text(".set("))
+        .append(text(variable))
+        .append(text(");"))
 }
 
 #[cfg(test)]
