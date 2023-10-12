@@ -1049,3 +1049,4 @@ skip: true
 /events/weekly-contest/ -> /weekly-contest/
 /setup.exe -> https://github.com/fastn-stack/fastn/releases/latest/download/fastn_setup.exe
 /clean-urls/-/build/ -> /clean-urls/
+/cet/ -> https://chat.whatsapp.com/Iiv1klM3c2G3e6eb8kCDhJ
