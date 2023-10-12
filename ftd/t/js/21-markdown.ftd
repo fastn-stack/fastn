@@ -3,3 +3,16 @@
 # Marked in the browser
 
 Rendered by **marked**.
+
+-- component markdown:
+body string text:
+
+-- ftd.text:
+text: $markdown.text
+
+-- end: markdown
+
+-- markdown:
+
+;; COMMENT NEXT LINE
+;; Go to the [new page](/new-page/).

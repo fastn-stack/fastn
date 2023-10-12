@@ -1883,7 +1883,9 @@ class Node2 {
                 staticValue = this.#node.innerHTML;
             }
             staticValue = fastn_utils.process_post_markdown(this.#node, staticValue);
-            this.#node.innerHTML = staticValue;
+            if(!fastn_utils.isNull(staticValue)) {
+                this.#node.innerHTML = staticValue;
+            }
         } else {
             throw ("invalid fastn_dom.PropertyKind: " + kind);
         }
