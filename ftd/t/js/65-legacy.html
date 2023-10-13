@@ -16,7 +16,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="__cur-3">Update Value</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="__cur-3">Update Value</div><div data-id="4">Harsh Singh</div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__cur-3 { cursor: pointer; }
@@ -37,6 +37,8 @@ let main = function (parent)
       foo__update_value({
       }, parenti0);
     });
+    let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti1.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name, inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -48,12 +50,13 @@ let foo__update_value = function (args) {
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    return (ftd.set_value());
+    return (ftd.set_value("foo#_name", "test"));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 global["foo__update_value"] = foo__update_value;
+fastn_utils.createNestedObject(global, "foo__name", fastn.mutable("Harsh Singh"));
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

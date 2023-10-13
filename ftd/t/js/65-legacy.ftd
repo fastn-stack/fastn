@@ -1,6 +1,10 @@
 -- ftd.text: Update Value
 $on-click$: $update-value()
 
+-- string $name: Harsh Singh
+
+-- ftd.text: $name
+
 -- void update-value():
 
-ftd.set_value()
+ftd.set_value("foo#_name", "test")
