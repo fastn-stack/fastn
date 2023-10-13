@@ -3013,7 +3013,12 @@ impl Common {
         }
         if let Some(ref selectable) = self.selectable {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                selectable.to_set_property(fastn_js::PropertyKind::Selectable, doc, element_name, rdata),
+                selectable.to_set_property(
+                    fastn_js::PropertyKind::Selectable,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
             ));
         }
         component_statements
