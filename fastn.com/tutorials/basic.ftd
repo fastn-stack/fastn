@@ -1,0 +1,47 @@
+-- ds.page: `fastn` Tutorial
+
+Hello, and welcome to `fastn` first tutorial! In this tutorial we will be
+building [this demo app](/demo/). You can see the source of the final
+[demo.ftd](https://github.com/fastn-stack/fastn.com/blob/main/demo.ftd).
+
+-- ds.h1: First Steps
+
+`fastn` is a programming language, and a fullstack web framework. You can read
+more about `fastn` philosophy etc in [`fastn` for geeks](/geeks/) page.
+
+-- ds.h2: Installing `fastn`
+
+`fastn` compiler and the web server comes a single installable binary. We
+support Windows, Mac and Linux.
+
+You can install `fastn` by following the instructions on our [installation
+page](/install/).
+
+-- ds.code: for `bash` and `zsh` on Linux or Mac
+lang: sh
+
+source <(curl -fsSL https://fastn.com/install.sh)
+
+-- ds.markdown:
+
+For windows you can download our installer:
+[fastn.com/setup.exe](https://fastn.com/setup.exe).
+
+-- ds.h2: Your First `fastn` project
+
+Once you have `fastn` you can start `fastn` server using `fastn serve` command:
+
+-- ds.code:
+lang: sh
+
+fastn serve --edition=2023
+### Server Started ###
+Go to: http://127.0.0.1:8000
+
+-- ds.markdown:
+
+We are using `--edition=2023` as currently `fastn` supports two editions, `2022`
+and `2023`, and `2022` is the current default one.
+
+
+-- end: ds.page

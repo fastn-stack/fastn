@@ -30,6 +30,8 @@ role: $inherited.types.heading-hero
 
 Source: [demo.ftd](https://github.com/fastn-stack/fastn.com/blob/main/demo.ftd)
 
+[Tutorial](/tutorials/basic/).
+
 -- counter: $c
 for: $c, $i in $counters
 index: $i

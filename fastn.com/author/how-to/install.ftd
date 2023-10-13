@@ -30,15 +30,10 @@ source <(curl -fsSL https://fastn.com/install.sh)
 
 -- cbox.info: For Windows (Recommended) 
 
-We recommend you to install `fastn` through fastn
-installer. This is the preferred method as it only requires downloading the
-setup and installing it on your local system.
+We recommend you to install `fastn` through fastn installer:
+[fastn.com/setup.exe](https://fastn.com/setup.exe). This is the preferred method
+as it only requires downloading the setup and installing it on your local system.
 
--- ftd.text: Download `fastn-setup`
-link: fastn.com/setup.exe
-color: $inherited.colors.cta-primary.base 
-;; link-color: $inherited.colors.cta-primary.base
-margin-top.px: 5
 
 -- end: cbox.info
 
