@@ -1,7 +1,16 @@
 async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
     let mut cfg = deadpool_postgres::Config::new();
-    cfg.libpq_style_connection_string = Some(std::env::var("FASTN_PG_URL").unwrap());
+    cfg.libpq_style_connection_string = match std::env::var("FASTN_PG_URL") {
+        Ok(v) => Some(v),
+        Err(_) => {
+            fastn_core::warning!(
+                "FASTN_PG_URL is not set, using default postgres://postgres@localhost:5432"
+            );
+            Some("postgres://postgres@localhost:5432".to_string())
+        }
+    };
     cfg.manager = Some(deadpool_postgres::ManagerConfig {
+        // TODO: make this configurable
         recycling_method: deadpool_postgres::RecyclingMethod::Verified,
     });
     let runtime = Some(deadpool_postgres::Runtime::Tokio1);
