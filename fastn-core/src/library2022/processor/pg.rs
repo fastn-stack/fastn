@@ -5,30 +5,33 @@ async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::Cre
         recycling_method: deadpool_postgres::RecyclingMethod::Verified,
     });
     let runtime = Some(deadpool_postgres::Runtime::Tokio1);
-    match std::env::var("FASTN_PG_CERTIFICATE") {
-        Ok(cert) => {
-            let cert = tokio::fs::read(cert).await.unwrap();
-            let cert = native_tls::Certificate::from_pem(&cert).unwrap();
-            let connector = native_tls::TlsConnector::builder()
-                .add_root_certificate(cert)
-                .build()
-                .unwrap();
-            let tls = postgres_native_tls::MakeTlsConnector::new(connector);
-            cfg.create_pool(runtime, tls)
-        }
-        _ => {
-            if std::env::var("FASTN_PG_ALLOW_UNVERIFIED_CERTIFICATE").is_ok() {
-                let connector = native_tls::TlsConnector::builder()
-                    .danger_accept_invalid_certs(true)
-                    .build()
-                    .unwrap();
-                let tls = postgres_native_tls::MakeTlsConnector::new(connector);
-                cfg.create_pool(runtime, tls)
-            } else {
-                cfg.create_pool(runtime, tokio_postgres::NoTls)
-            }
-        }
+
+    if std::env::var("FASTN_PG_REQUIRE_SSL") == Ok("false".to_string()) {
+        fastn_core::warning!(
+            "FASTN_PG_REQUIRE_SSL is set to false, this is not recommended for production use",
+        );
+        cfg.ssl_mode = Some(deadpool_postgres::SslMode::Disable);
+        return cfg.create_pool(runtime, tokio_postgres::NoTls);
     }
+
+    let mut connector = native_tls::TlsConnector::builder();
+
+    if std::env::var("FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE") == Ok("true".to_string()) {
+        fastn_core::warning!(
+            "FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE is set to true, this is not \
+            recommended for production use",
+        );
+        connector.danger_accept_invalid_certs(true);
+    }
+
+    if let Ok(cert) = std::env::var("FASTN_PG_CERTIFICATE") {
+        let cert = tokio::fs::read(cert).await.unwrap();
+        let cert = native_tls::Certificate::from_pem(&cert).unwrap();
+        connector.add_root_certificate(cert);
+    }
+
+    let tls = postgres_native_tls::MakeTlsConnector::new(connector.build().unwrap());
+    cfg.create_pool(runtime, tls)
 }
 
 // TODO: I am a little confused about the use of `tokio::sync` here, both sides are async, so why
