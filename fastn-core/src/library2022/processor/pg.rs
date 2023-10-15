@@ -6,15 +6,38 @@ async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::Cre
     });
     let runtime = Some(deadpool_postgres::Runtime::Tokio1);
 
-    if std::env::var("FASTN_PG_REQUIRE_SSL") == Ok("false".to_string()) {
+    if std::env::var("FASTN_PG_DANGER_DISABLE_SSL") == Ok("false".to_string()) {
         fastn_core::warning!(
-            "FASTN_PG_REQUIRE_SSL is set to false, this is not recommended for production use",
+            "FASTN_PG_DANGER_DISABLE_SSL is set to false, this is not recommended for production use",
         );
         cfg.ssl_mode = Some(deadpool_postgres::SslMode::Disable);
         return cfg.create_pool(runtime, tokio_postgres::NoTls);
     }
 
     let mut connector = native_tls::TlsConnector::builder();
+
+    match std::env::var("FASTN_PG_SSL_MODE").as_deref() {
+        Err(_) | Ok("require") => {
+            cfg.ssl_mode = Some(deadpool_postgres::SslMode::Require);
+        }
+        Ok("prefer") => {
+            fastn_core::warning!(
+                "FASTN_PG_SSL_MODE is set to prefer, which means roughly \"I don't care about \
+                encryption, but I wish to pay the overhead of encryption if the server supports it.\"\
+                and is not recommended for production use",
+            );
+            cfg.ssl_mode = Some(deadpool_postgres::SslMode::Prefer);
+        }
+        Ok(v) => {
+            fastn_core::warning!(
+                "FASTN_PG_SSL_MODE is set to {}, which is invalid, only values are prefer and require",
+                v,
+            );
+            return Err(deadpool_postgres::CreatePoolError::Config(
+                deadpool_postgres::ConfigError::ConnectionStringInvalid,
+            ));
+        }
+    }
 
     if std::env::var("FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE") == Ok("true".to_string()) {
         fastn_core::warning!(
@@ -25,7 +48,9 @@ async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::Cre
     }
 
     if let Ok(cert) = std::env::var("FASTN_PG_CERTIFICATE") {
+        // TODO: This does not work with Heroku certificate.
         let cert = tokio::fs::read(cert).await.unwrap();
+        // TODO: We should allow DER formatted certificates too, maybe based on file extension?
         let cert = native_tls::Certificate::from_pem(&cert).unwrap();
         connector.add_root_certificate(cert);
     }
