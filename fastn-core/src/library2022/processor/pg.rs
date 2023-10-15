@@ -31,15 +31,16 @@ async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::Cre
         }
         Ok("prefer") => {
             fastn_core::warning!(
-                "FASTN_PG_SSL_MODE is set to prefer, which means roughly \"I don't care about \
+                "FASTN_PG_SSL_MODE is set to prefer, which roughly means \"I don't care about \
                 encryption, but I wish to pay the overhead of encryption if the server supports it.\"\
                 and is not recommended for production use",
             );
             cfg.ssl_mode = Some(deadpool_postgres::SslMode::Prefer);
         }
         Ok(v) => {
+            // TODO: openssl also allows `verify-ca` and `verify-full` but native_tls does not
             fastn_core::warning!(
-                "FASTN_PG_SSL_MODE is set to {}, which is invalid, only values are prefer and require",
+                "FASTN_PG_SSL_MODE is set to {}, which is invalid, only allowed values are prefer and require",
                 v,
             );
             return Err(deadpool_postgres::CreatePoolError::Config(
