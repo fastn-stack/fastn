@@ -16,7 +16,18 @@ async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::Cre
             let tls = postgres_native_tls::MakeTlsConnector::new(connector);
             cfg.create_pool(runtime, tls)
         }
-        _ => cfg.create_pool(runtime, tokio_postgres::NoTls),
+        _ => {
+            if std::env::var("FASTN_PG_ALLOW_UNVERIFIED_CERTIFICATE").is_ok() {
+                let connector = native_tls::TlsConnector::builder()
+                    .danger_accept_invalid_certs(true)
+                    .build()
+                    .unwrap();
+                let tls = postgres_native_tls::MakeTlsConnector::new(connector);
+                cfg.create_pool(runtime, tls)
+            } else {
+                cfg.create_pool(runtime, tokio_postgres::NoTls)
+            }
+        }
     }
 }
 
