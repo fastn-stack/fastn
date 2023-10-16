@@ -7,4 +7,4 @@ $on-click$: $update-value()
 
 -- void update-value():
 
-ftd.set_value("foo#_name", "test")
+ftd.set_value("foo#name", "test")

@@ -30,7 +30,7 @@ pub fn ssr(ast: &[fastn_js::Ast]) -> String {
             parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
             main(parenti0);
         }};
-        fastn_virtual.ssr(main_wrapper);", fastn_js::to_js(ast, false,
+        fastn_virtual.ssr(main_wrapper);", fastn_js::to_js(ast,
                                                                                     "foo"));
     ssr_str(&js)
 }
