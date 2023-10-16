@@ -425,6 +425,7 @@ pub enum PropertyKind {
     MetaTwitterImage,
     MetaThemeColor,
     Favicon,
+    Selectable,
 }
 
 impl PropertyKind {
@@ -562,6 +563,7 @@ impl PropertyKind {
                 "fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor"
             }
             PropertyKind::Favicon => "fastn_dom.PropertyKind.Favicon",
+            PropertyKind::Selectable => "fastn_dom.PropertyKind.Selectable",
         }
     }
 }

@@ -754,6 +754,7 @@ You can try without providing port, it will automatically pick unused port."#,
                 inline_css: inline_css.clone(),
                 package_name: package_name.clone(),
             }))
+            .wrap(actix_web_lab::middleware::CatchPanic::default())
             .wrap(
                 actix_web::middleware::Logger::new(
                     r#""%r" %Ts %s %b %a "%{Referer}i" "%{User-Agent}i""#,

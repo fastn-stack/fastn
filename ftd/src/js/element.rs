@@ -2208,6 +2208,7 @@ pub struct Common {
     pub css: Option<ftd::js::Value>,
     pub js: Option<ftd::js::Value>,
     pub events: Vec<ftd::interpreter::Event>,
+    pub selectable: Option<ftd::js::Value>,
 }
 
 impl Common {
@@ -2423,6 +2424,7 @@ impl Common {
             whitespace: ftd::js::value::get_optional_js_value("white-space", properties, arguments),
             shadow: ftd::js::value::get_optional_js_value("shadow", properties, arguments),
             events: events.to_vec(),
+            selectable: ftd::js::value::get_optional_js_value("selectable", properties, arguments),
         }
     }
 
@@ -3003,6 +3005,16 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 open_in_new_tab.to_set_property(
                     fastn_js::PropertyKind::OpenInNewTab,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
+            ));
+        }
+        if let Some(ref selectable) = self.selectable {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                selectable.to_set_property(
+                    fastn_js::PropertyKind::Selectable,
                     doc,
                     element_name,
                     rdata,

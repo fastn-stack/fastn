@@ -10725,6 +10725,12 @@ fn common_arguments() -> Vec<ftd::interpreter::Argument> {
                 .into_optional()
                 .into_kind_data(),
         ),
+        ftd::interpreter::Argument::default(
+            "selectable",
+            ftd::interpreter::Kind::boolean()
+                .into_optional()
+                .into_kind_data(),
+        ),
     ]
 }
 
