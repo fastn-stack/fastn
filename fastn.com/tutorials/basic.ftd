@@ -1,4 +1,4 @@
--- ds.page: `fastn` Tutorial
+-- ds.page: Writing your first `fastn` App
 
 Hello, and welcome to `fastn` first tutorial! In this tutorial we will be
 building [this demo app](/demo/). You can see the source of the final

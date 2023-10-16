@@ -2,6 +2,8 @@
 
 -- ds.page: Install `fastn`
 
+Before you can use `fastn` you'll need to get it installed.
+
 `fastn` is compatible with various operating systems, including Windows, MacOS,
 and Linux. Based on your machine and your choice of installation, you can
 select one of the following options:
