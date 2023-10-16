@@ -65,6 +65,7 @@ postgres-types = "0.2"
 async-lock = "2"
 async-recursion = "1"
 async-trait = "0.1"
+actix-web-lab = "0.19"
 bitflags = "2"
 bytemuck = { version = "1", features = [ "derive" ] }
 camino = "1"
