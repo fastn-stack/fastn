@@ -3,10 +3,10 @@ async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::Cre
     cfg.libpq_style_connection_string = match std::env::var("FASTN_PG_URL") {
         Ok(v) => Some(v),
         Err(_) => {
-            fastn_core::warning!(
-                "FASTN_PG_URL is not set, using default postgres://postgres@localhost:5432"
-            );
-            Some("postgres://postgres@localhost:5432".to_string())
+            fastn_core::warning!("FASTN_PG_URL is not set");
+            return Err(deadpool_postgres::CreatePoolError::Config(
+                deadpool_postgres::ConfigError::ConnectionStringInvalid,
+            ));
         }
     };
     cfg.manager = Some(deadpool_postgres::ManagerConfig {
