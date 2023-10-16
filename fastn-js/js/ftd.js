@@ -1,11 +1,13 @@
 const ftd = (function() {
     const exports = {};
+    
+    const riveNodes = {};
 
     const global = {};
 
     exports.global = global;
 
-    exports.riveNodes = {};
+    exports.riveNodes = riveNodes;
 
     exports.is_empty = value => {
         value = fastn_utils.getFlattenStaticValue(value);
@@ -50,7 +52,7 @@ const ftd = (function() {
 
     exports.set_rive_boolean = (args, node) => {
         if (!!args.rive) {
-            let riveNode = exports.riveNodes[`${args.rive}__${exports.device.get()}`];
+            let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
             node = riveNode ? riveNode: node;
         }
         let riveConst = node.getExtraData().rive;
@@ -62,7 +64,7 @@ const ftd = (function() {
 
     exports.toggle_rive_boolean = (args, node) => {
         if (!!args.rive) {
-            let riveNode = exports.riveNodes[`${args.rive}__${exports.device.get()}`];
+            let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
             node = riveNode ? riveNode: node;
         }
         let riveConst = node.getExtraData().rive;
@@ -74,7 +76,7 @@ const ftd = (function() {
 
     exports.set_rive_integer = (args, node) => {
         if (!!args.rive) {
-            let riveNode = exports.riveNodes[`${args.rive}__${exports.device.get()}`];
+            let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
             node = riveNode ? riveNode: node;
         }
         let riveConst = node.getExtraData().rive;
@@ -86,7 +88,7 @@ const ftd = (function() {
 
     exports.fire_rive = (args, node) => {
         if (!!args.rive) {
-            let riveNode = exports.riveNodes[`${args.rive}__${exports.device.get()}`];
+            let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
             node = riveNode ? riveNode: node;
         }
         let riveConst = node.getExtraData().rive;
@@ -98,7 +100,7 @@ const ftd = (function() {
 
     exports.play_rive = (args, node) => {
         if (!!args.rive) {
-            let riveNode = exports.riveNodes[`${args.rive}__${exports.device.get()}`];
+            let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
             node = riveNode ? riveNode: node;
         }
         node.getExtraData().rive.play(args.input);
@@ -106,7 +108,7 @@ const ftd = (function() {
 
     exports.pause_rive = (args, node) => {
         if (!!args.rive) {
-            let riveNode = exports.riveNodes[`${args.rive}__${exports.device.get()}`];
+            let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
             node = riveNode ? riveNode: node;
         }
         node.getExtraData().rive.pause(args.input);
@@ -114,7 +116,7 @@ const ftd = (function() {
 
     exports.toggle_play_rive = (args, node) => {
         if (!!args.rive) {
-            let riveNode = exports.riveNodes[`${args.rive}__${exports.device.get()}`];
+            let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
             node = riveNode ? riveNode: node;
         }
         let riveConst = node.getExtraData().rive
@@ -301,9 +303,6 @@ const ftd = (function() {
     exports.set_value = function(variable, value) {
         const [var_name, remaining] = getDocNameAndRemaining(variable);
         let name = legacyNameToJS(var_name);
-        if(remaining) {
-            name = `${name}.${remaining}`;
-        }
         if(global[name] === undefined) {
             console.log(`[ftd-legacy]: ${variable} is not in global map, ignoring`);
             return;
@@ -319,6 +318,25 @@ const ftd = (function() {
             mutable.set(value);
         }
     }    
+
+    exports.get_value = function(variable) {
+        const [var_name, remaining] = getDocNameAndRemaining(variable);
+        let name = legacyNameToJS(var_name);
+        if(global[name] === undefined) {
+            console.log(`[ftd-legacy]: ${variable} is not in global map, ignoring`);
+            return;
+        }
+        const value = global[name];
+        if(isMutable(value)) {
+            if(remaining) {
+                return value.get(remaining);
+            } else {
+                return value.get();
+            }
+        } else {
+            return value;
+        }
+    }
 
     return exports;
 })();
