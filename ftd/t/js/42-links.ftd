@@ -8,3 +8,8 @@ if: { ftd.device == "mobile" }
 link: fastn.com
 background.solid: yellow
 if: { ftd.device == "desktop" }
+
+;; Should not update element to anchor if link is null
+
+-- ftd.text: Link
+link: NULL
