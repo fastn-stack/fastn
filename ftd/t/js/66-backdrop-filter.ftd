@@ -1,0 +1,35 @@
+-- ftd.backdrop-filter bdf:
+blur.px: 10
+;; brightness.percent: 50
+;; contrast.percent: 40
+;; grayscale.percent: 40
+;; invert.percent: 70
+;; opacity.percent: 20
+;; sepia.percent: 90
+;; saturate.percent: 80
+
+
+;; All of the above properties (which have been commented) are supported
+
+
+
+-- boolean $blur-image: true
+
+
+
+-- ftd.image: https://picsum.photos/200
+id: test
+width.fixed.px: 300
+height.fixed.px: 300
+
+
+
+-- ftd.row:
+anchor.id: test
+width.fixed.px: 300
+height.fixed.px: 300
+backdrop-filter if { blur-image }: $bdf
+
+
+-- ftd.text: >> Blur/Unblur Image <<
+$on-click$: $ftd.toggle($a = $blur-image)

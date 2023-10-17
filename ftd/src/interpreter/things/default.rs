@@ -1218,6 +1218,200 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 line_number: 0,
             }),
         ),
+        // TODO: Instead of default value, make the integer optional
+        (
+            ftd::interpreter::FTD_BACKDROP_FILTER.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FTD_BACKDROP_FILTER.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "blur".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::OrType {
+                                name: ftd::interpreter::FTD_LENGTH.to_string(),
+                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                value: Box::new
+                                    (ftd::interpreter::PropertyValue::Value {
+                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
+                                        is_mutable: false,
+                                        line_number: 0
+                                    }),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "brightness".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::OrType {
+                                name: ftd::interpreter::FTD_LENGTH.to_string(),
+                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                value: Box::new
+                                    (ftd::interpreter::PropertyValue::Value {
+                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
+                                        is_mutable: false,
+                                        line_number: 0
+                                    }),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "contrast".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::OrType {
+                                name: ftd::interpreter::FTD_LENGTH.to_string(),
+                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                value: Box::new
+                                    (ftd::interpreter::PropertyValue::Value {
+                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
+                                        is_mutable: false,
+                                        line_number: 0
+                                    }),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "grayscale".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::OrType {
+                                name: ftd::interpreter::FTD_LENGTH.to_string(),
+                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                value: Box::new
+                                    (ftd::interpreter::PropertyValue::Value {
+                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
+                                        is_mutable: false,
+                                        line_number: 0
+                                    }),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "invert".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::OrType {
+                                name: ftd::interpreter::FTD_LENGTH.to_string(),
+                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                value: Box::new
+                                    (ftd::interpreter::PropertyValue::Value {
+                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
+                                        is_mutable: false,
+                                        line_number: 0
+                                    }),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "opacity".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::OrType {
+                                name: ftd::interpreter::FTD_LENGTH.to_string(),
+                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                value: Box::new
+                                    (ftd::interpreter::PropertyValue::Value {
+                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
+                                        is_mutable: false,
+                                        line_number: 0
+                                    }),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "sepia".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::OrType {
+                                name: ftd::interpreter::FTD_LENGTH.to_string(),
+                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                value: Box::new
+                                    (ftd::interpreter::PropertyValue::Value {
+                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
+                                        is_mutable: false,
+                                        line_number: 0
+                                    }),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "saturate".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::OrType {
+                                name: ftd::interpreter::FTD_LENGTH.to_string(),
+                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                value: Box::new
+                                    (ftd::interpreter::PropertyValue::Value {
+                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
+                                        is_mutable: false,
+                                        line_number: 0
+                                    }),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
         (
             ftd::interpreter::FTD_LENGTH_PAIR.to_string(),
             ftd::interpreter::Thing::Record(ftd::interpreter::Record {
@@ -10297,6 +10491,12 @@ fn container_arguments() -> Vec<ftd::interpreter::Argument> {
         ftd::interpreter::Argument::default(
             "spacing",
             ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_SPACING)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter::Argument::default(
+            "backdrop-filter",
+            ftd::interpreter::Kind::record(ftd::interpreter::FTD_BACKDROP_FILTER)
                 .into_optional()
                 .into_kind_data(),
         ),

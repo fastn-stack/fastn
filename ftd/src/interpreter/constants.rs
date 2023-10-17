@@ -318,3 +318,5 @@ pub const FTD_LINK_REL: &str = "ftd#link-rel";
 pub const FTD_LINK_REL_NO_FOLLOW: &str = "ftd#link-rel.no-follow";
 pub const FTD_LINK_REL_SPONSORED: &str = "ftd#link-rel.sponsored";
 pub const FTD_LINK_REL_UGC: &str = "ftd#link-rel.ugc";
+
+pub const FTD_BACKDROP_FILTER: &str = "ftd#backdrop-filter";

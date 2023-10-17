@@ -930,6 +930,7 @@ pub struct ContainerProperties {
     pub spacing: Option<ftd::js::Value>,
     pub wrap: Option<ftd::js::Value>,
     pub align_content: Option<ftd::js::Value>,
+    pub backdrop_filter: Option<ftd::js::Value>,
 }
 
 impl ContainerProperties {
@@ -942,6 +943,11 @@ impl ContainerProperties {
             wrap: ftd::js::value::get_optional_js_value("wrap", properties, arguments),
             align_content: ftd::js::value::get_optional_js_value(
                 "align-content",
+                properties,
+                arguments,
+            ),
+            backdrop_filter: ftd::js::value::get_optional_js_value(
+                "backdrop-filter",
                 properties,
                 arguments,
             ),
@@ -974,6 +980,16 @@ impl ContainerProperties {
         if let Some(ref spacing) = self.spacing {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 spacing.to_set_property(fastn_js::PropertyKind::Spacing, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref backdrop_filter) = self.backdrop_filter {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                backdrop_filter.to_set_property(
+                    fastn_js::PropertyKind::BackdropFilter,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
             ));
         }
         component_statements
