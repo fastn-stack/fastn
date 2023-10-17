@@ -1663,6 +1663,9 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
+            if(fastn_utils.isNull(staticValue)) {
+                return;
+            }
             this.updateToAnchor(staticValue);
         } else if (kind === fastn_dom.PropertyKind.LinkRel) {
             if (fastn_utils.isNull(staticValue)) {
