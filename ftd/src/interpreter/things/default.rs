@@ -1218,32 +1218,99 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 line_number: 0,
             }),
         ),
-        // TODO: Instead of default value, make the integer optional
         (
             ftd::interpreter::FTD_BACKDROP_FILTER.to_string(),
-            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+            ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
                 name: ftd::interpreter::FTD_BACKDROP_FILTER.to_string(),
+                variants: vec![
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_BACKDROP_FILTER_BLUR,
+                        ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_BACKDROP_FILTER_BRIGHTNESS,
+                        ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_BACKDROP_FILTER_CONTRAST,
+                        ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_BACKDROP_FILTER_GRAYSCALE,
+                        ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_BACKDROP_FILTER_INVERT,
+                        ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_BACKDROP_FILTER_OPACITY,
+                        ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_BACKDROP_FILTER_SEPIA,
+                        ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_BACKDROP_FILTER_SATURATE,
+                        ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_BACKDROP_FILTER_MULTI,
+                        ftd::interpreter::Kind::record(ftd::interpreter::FTD_BACKDROP_MULTI)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        // TODO: Instead of default value, make the integer optional
+        (
+            ftd::interpreter::FTD_BACKDROP_MULTI.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FTD_BACKDROP_MULTI.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     ftd::interpreter::Field {
                         name: "blur".to_string(),
                         kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        value: Some(ftd::interpreter::PropertyValue::Value {
-                            value: ftd::interpreter::Value::OrType {
-                                name: ftd::interpreter::FTD_LENGTH.to_string(),
-                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                value: Box::new
-                                    (ftd::interpreter::PropertyValue::Value {
-                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
-                                        is_mutable: false,
-                                        line_number: 0
-                                    }),
-                            },
-                            is_mutable: false,
-                            line_number: 0,
-                        }),
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1252,21 +1319,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        value: Some(ftd::interpreter::PropertyValue::Value {
-                            value: ftd::interpreter::Value::OrType {
-                                name: ftd::interpreter::FTD_LENGTH.to_string(),
-                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                value: Box::new
-                                    (ftd::interpreter::PropertyValue::Value {
-                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
-                                        is_mutable: false,
-                                        line_number: 0
-                                    }),
-                            },
-                            is_mutable: false,
-                            line_number: 0,
-                        }),
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1275,21 +1328,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        value: Some(ftd::interpreter::PropertyValue::Value {
-                            value: ftd::interpreter::Value::OrType {
-                                name: ftd::interpreter::FTD_LENGTH.to_string(),
-                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                value: Box::new
-                                    (ftd::interpreter::PropertyValue::Value {
-                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
-                                        is_mutable: false,
-                                        line_number: 0
-                                    }),
-                            },
-                            is_mutable: false,
-                            line_number: 0,
-                        }),
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1298,21 +1337,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        value: Some(ftd::interpreter::PropertyValue::Value {
-                            value: ftd::interpreter::Value::OrType {
-                                name: ftd::interpreter::FTD_LENGTH.to_string(),
-                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                value: Box::new
-                                    (ftd::interpreter::PropertyValue::Value {
-                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
-                                        is_mutable: false,
-                                        line_number: 0
-                                    }),
-                            },
-                            is_mutable: false,
-                            line_number: 0,
-                        }),
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1321,21 +1346,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        value: Some(ftd::interpreter::PropertyValue::Value {
-                            value: ftd::interpreter::Value::OrType {
-                                name: ftd::interpreter::FTD_LENGTH.to_string(),
-                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                value: Box::new
-                                    (ftd::interpreter::PropertyValue::Value {
-                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
-                                        is_mutable: false,
-                                        line_number: 0
-                                    }),
-                            },
-                            is_mutable: false,
-                            line_number: 0,
-                        }),
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1344,21 +1355,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        value: Some(ftd::interpreter::PropertyValue::Value {
-                            value: ftd::interpreter::Value::OrType {
-                                name: ftd::interpreter::FTD_LENGTH.to_string(),
-                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                value: Box::new
-                                    (ftd::interpreter::PropertyValue::Value {
-                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
-                                        is_mutable: false,
-                                        line_number: 0
-                                    }),
-                            },
-                            is_mutable: false,
-                            line_number: 0,
-                        }),
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1367,21 +1364,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        value: Some(ftd::interpreter::PropertyValue::Value {
-                            value: ftd::interpreter::Value::OrType {
-                                name: ftd::interpreter::FTD_LENGTH.to_string(),
-                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                value: Box::new
-                                    (ftd::interpreter::PropertyValue::Value {
-                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
-                                        is_mutable: false,
-                                        line_number: 0
-                                    }),
-                            },
-                            is_mutable: false,
-                            line_number: 0,
-                        }),
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1390,21 +1373,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        value: Some(ftd::interpreter::PropertyValue::Value {
-                            value: ftd::interpreter::Value::OrType {
-                                name: ftd::interpreter::FTD_LENGTH.to_string(),
-                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                value: Box::new
-                                    (ftd::interpreter::PropertyValue::Value {
-                                        value: ftd::interpreter::Value::Optional { data: Box::new(None), kind: ftd::interpreter::KindData::new(ftd::interpreter::Kind::Integer), },
-                                        is_mutable: false,
-                                        line_number: 0
-                                    }),
-                            },
-                            is_mutable: false,
-                            line_number: 0,
-                        }),
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10496,7 +10465,7 @@ fn container_arguments() -> Vec<ftd::interpreter::Argument> {
         ),
         ftd::interpreter::Argument::default(
             "backdrop-filter",
-            ftd::interpreter::Kind::record(ftd::interpreter::FTD_BACKDROP_FILTER)
+            ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_BACKDROP_FILTER)
                 .into_optional()
                 .into_kind_data(),
         ),

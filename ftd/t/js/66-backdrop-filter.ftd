@@ -1,20 +1,21 @@
--- ftd.backdrop-filter bdf:
+-- ftd.backdrop-multi bdf:
 blur.px: 10
-;; brightness.percent: 50
-;; contrast.percent: 40
-;; grayscale.percent: 40
-;; invert.percent: 70
-;; opacity.percent: 20
-;; sepia.percent: 90
-;; saturate.percent: 80
+brightness.percent: 50
+contrast.percent: 40
+grayscale.percent: 40
+invert.percent: 70
+opacity.percent: 20
+sepia.percent: 90
+saturate.percent: 80
 
 
 ;; All of the above properties (which have been commented) are supported
 
 
 
--- boolean $blur-image: true
-
+-- boolean $blur-image: false
+-- boolean $contrast-image: false
+-- boolean $set-multi-filters: false
 
 
 -- ftd.image: https://picsum.photos/200
@@ -28,8 +29,17 @@ height.fixed.px: 300
 anchor.id: test
 width.fixed.px: 300
 height.fixed.px: 300
-backdrop-filter if { blur-image }: $bdf
+backdrop-filter.blur.px if { blur-image }: 10
+backdrop-filter.contrast.percent if { contrast-image }: 30
+backdrop-filter.multi if { set-multi-filters }: $bdf
+
 
 
 -- ftd.text: >> Blur/Unblur Image <<
 $on-click$: $ftd.toggle($a = $blur-image)
+
+-- ftd.text: >> Set/Unset Contrast on Image <<
+$on-click$: $ftd.toggle($a = $contrast-image)
+
+-- ftd.text: >> Set/Unset Multi <<
+$on-click$: $ftd.toggle($a = $set-multi-filters)

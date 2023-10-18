@@ -16,7 +16,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><img data-id="3" id="test" src="https://picsum.photos/200" class="__w-3 __h-4"></img><div data-id="4" class="ft_row __pos-5 __w-6 __h-7 __bdf-8"></div><div data-id="5" class="__cur-9">&gt;&gt; Blur/Unblur Image &lt;&lt;</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><img data-id="3" id="test" src="https://picsum.photos/200" class="__w-3 __h-4"></img><div data-id="4" class="ft_row __pos-5 __w-6 __h-7"></div><div data-id="5" class="__cur-9">&gt;&gt; Blur/Unblur Image &lt;&lt;</div><div data-id="6" class="__cur-10">&gt;&gt; Set/Unset Contrast on Image &lt;&lt;</div><div data-id="7" class="__cur-11">&gt;&gt; Set/Unset Multi &lt;&lt;</div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 300px; }
@@ -24,8 +24,9 @@
 	.__pos-5 { position: absolute; }
 	.__w-6 { width: 300px; }
 	.__h-7 { height: 300px; }
-	.__bdf-8 { backdrop-filter: blur(10px); }
 	.__cur-9 { cursor: pointer; }
+	.__cur-10 { cursor: pointer; }
+	.__cur-11 { cursor: pointer; }
     </style>
 <script>
     (function() {
@@ -47,12 +48,21 @@ let main = function (parent) {
     parenti1.setProperty(fastn_dom.PropertyKind.Anchor, fastn_dom.Anchor.Id("test"), inherited);
     parenti1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
     parenti1.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
-    parenti1.setProperty(fastn_dom.PropertyKind.BackdropFilter, fastn.formula([global.foo__bdf,
-    global.foo__blur_image], function () {
+    parenti1.setProperty(fastn_dom.PropertyKind.BackdropFilter, fastn.formula([global.foo__blur_image,
+    global.foo__contrast_image,
+    global.foo__set_multi_filters], function () {
       if (function () {
         return fastn_utils.getter(global.foo__blur_image);
       }()) {
-        return global.foo__bdf;
+        return fastn_dom.BackdropFilter.Blur(fastn_dom.Length.Px(10));
+      } else if (function () {
+        return fastn_utils.getter(global.foo__contrast_image);
+      }()) {
+        return fastn_dom.BackdropFilter.Contrast(fastn_dom.Length.Percent(30));
+      } else if (function () {
+        return fastn_utils.getter(global.foo__set_multi_filters);
+      }()) {
+        return fastn_dom.BackdropFilter.Multi(global.foo__bdf);
       }
     }
     ), inherited);
@@ -63,22 +73,38 @@ let main = function (parent) {
         a: global.foo__blur_image,
       }, parenti2);
     });
+    let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti3.setProperty(fastn_dom.PropertyKind.StringValue, ">> Set/Unset Contrast on Image <<", inherited);
+    parenti3.addEventHandler(fastn_dom.Event.Click, function () {
+      ftd.toggle({
+        a: global.foo__contrast_image,
+      }, parenti3);
+    });
+    let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti4.setProperty(fastn_dom.PropertyKind.StringValue, ">> Set/Unset Multi <<", inherited);
+    parenti4.addEventHandler(fastn_dom.Event.Click, function () {
+      ftd.toggle({
+        a: global.foo__set_multi_filters,
+      }, parenti4);
+    });
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 global["main"] = main;
+fastn_utils.createNestedObject(global, "foo__blur_image", fastn.mutable(false));
+fastn_utils.createNestedObject(global, "foo__contrast_image", fastn.mutable(false));
 fastn_utils.createNestedObject(global, "foo__bdf", fastn.recordInstance({
   blur: fastn_dom.Length.Px(10),
-  brightness: null,
-  contrast: null,
-  grayscale: null,
-  invert: null,
-  opacity: null,
-  sepia: null,
-  saturate: null
+  brightness: fastn_dom.Length.Percent(50),
+  contrast: fastn_dom.Length.Percent(40),
+  grayscale: fastn_dom.Length.Percent(40),
+  invert: fastn_dom.Length.Percent(70),
+  opacity: fastn_dom.Length.Percent(20),
+  sepia: fastn_dom.Length.Percent(90),
+  saturate: fastn_dom.Length.Percent(80)
 }));
-fastn_utils.createNestedObject(global, "foo__blur_image", fastn.mutable(true));
+fastn_utils.createNestedObject(global, "foo__set_multi_filters", fastn.mutable(false));
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
