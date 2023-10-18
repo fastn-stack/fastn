@@ -16,12 +16,11 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="__bgc-3">Hello</div><div data-id="4" class="__bgc-4">hello</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="__cur-3">Update Value</div><div data-id="4">Harsh Singh</div><div data-id="5" class="__cur-4">Get value</div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
-	.__bgc-3 { background-color: yellow; }
-	body.dark .__bgc-3 { background-color: green; }
-	.__bgc-4 { background-color: yellow; }
+	.__cur-3 { cursor: pointer; }
+	.__cur-4 { cursor: pointer; }
     </style>
 <script>
     (function() {
@@ -30,23 +29,50 @@
   __fastn_package_name__ = "foo";
   try {
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(global.foo__bg_yg), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "Update Value", inherited);
+    parenti0.addEventHandler(fastn_dom.Event.Click, function () {
+      foo__update_value({
+      }, parenti0);
+    });
     let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "hello", inherited);
-    parenti1.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "yellow",
-      light: "yellow"
-    })), inherited);
+    parenti1.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name, inherited);
+    let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Get value", inherited);
+    parenti2.addEventHandler(fastn_dom.Event.Click, function () {
+      foo__get_value({
+      }, parenti2);
+    });
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "foo__bg_yg", fastn.recordInstance({
-  light: "yellow",
-  dark: "green"
-}));
+let foo__update_value = function (args) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return (ftd.set_value("foo#name", "test"));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__update_value"] = foo__update_value;
+fastn_utils.createNestedObject(global, "foo__name", fastn.mutable("Harsh Singh"));
+let foo__get_value = function (args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return (console.log(ftd.get_value("foo#name")));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__get_value"] = foo__get_value;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

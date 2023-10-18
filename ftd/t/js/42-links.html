@@ -16,16 +16,14 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><comment data-id="3"></comment><comment data-id="4"></comment><a data-id="5" href="fastn.com" class="__bgc-3">Hello from desktop</a></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><comment data-id="3"></comment><comment data-id="4"></comment><a data-id="5" href="fastn.com" class="__bgc-3">Hello from desktop</a><div data-id="6">Link</div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__bgc-3 { background-color: yellow; }
     </style>
 <script>
     (function() {
-        let global = {
-};
-let main = function (parent) {
+        let main = function (parent) {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
@@ -57,6 +55,9 @@ let main = function (parent) {
       rooti0.setProperty(fastn_dom.PropertyKind.Link, "fastn.com", inherited);
       return rooti0;
     });
+    let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Link", inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.Link, null, inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
