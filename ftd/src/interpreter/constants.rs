@@ -319,17 +319,7 @@ pub const FTD_LINK_REL_NO_FOLLOW: &str = "ftd#link-rel.no-follow";
 pub const FTD_LINK_REL_SPONSORED: &str = "ftd#link-rel.sponsored";
 pub const FTD_LINK_REL_UGC: &str = "ftd#link-rel.ugc";
 
-// blur.px: 10
-// ;; brightness.percent: 50
-// ;; contrast.percent: 40
-// ;; grayscale.percent: 40
-// ;; invert.percent: 70
-// ;; opacity.percent: 20
-// ;; sepia.percent: 90
-// ;; saturate.percent: 80
-
 pub const FTD_BACKDROP_MULTI: &str = "ftd#backdrop-multi";
-
 pub const FTD_BACKDROP_FILTER: &str = "ftd#backdrop-filter";
 pub const FTD_BACKDROP_FILTER_BLUR: &str = "ftd#backdrop-filter.blur";
 pub const FTD_BACKDROP_FILTER_BRIGHTNESS: &str = "ftd#backdrop-filter.brightness";
