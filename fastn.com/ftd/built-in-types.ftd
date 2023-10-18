@@ -3,8 +3,9 @@
 -- ds.page: Built-in Types
 
 
-`ftd` comes with some built-in types. These can be used to define properties of
-components or fields of [`record`](ftd/record/) and [`or-type`](ftd/or-type/).
+`fastn` comes with some built-in types. These can be used to define properties 
+of components or fields of [`record`](ftd/record/) and 
+[`or-type`](ftd/or-type/).
 These types can be categorized into two main groups: **Primitive** and
 **Derived**.
 
