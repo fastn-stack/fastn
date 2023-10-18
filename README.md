@@ -204,7 +204,7 @@ We are working on `wasm` support so developers can extend `ftd's` standard
 libraries and offer access to more backend functionalities.
 
 
-<a href="https://fastn.com/#upcoming-wasm-support" rel="nofollow"><img src="wasm.png" alt="wasm.png" style="max-width: 100%; width: 450px;"></a>
+<a href="https://fastn.com/#upcoming-wasm-support" rel="nofollow"><img src="assets/wasm.png" alt="wasm.png" style="max-width: 100%; width: 450px;"></a>
 
 
 ## Hosting Dynamic Sites
