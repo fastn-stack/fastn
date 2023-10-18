@@ -98,6 +98,7 @@ fastn_dom.propertyMap = {
     "z-index": "z",
     "-webkit-box-orient": "wbo",
     "-webkit-line-clamp": "wlc",
+    "backdrop-filter": "bdf",
 };
 
 // dynamic-class-css.md
@@ -278,6 +279,7 @@ fastn_dom.PropertyKind = {
     LinkColor: 116,
     TextShadow: 117,
     Selectable: 118,
+    BackdropFilter: 119,
 };
 
 
@@ -475,7 +477,35 @@ fastn_dom.WhiteSpace = {
     BreakSpaces: "break-spaces",
 }
 
-
+fastn_dom.BackdropFilter = {
+    Blur: (value) => {
+        return [1, value];
+    },
+    Brightness: (value) => {
+        return [2, value];
+    },
+    Contrast: (value) => {
+        return [3, value];
+    },
+    Grayscale: (value) => {
+        return [4, value];
+    },
+    Invert: (value) => {
+        return [5, value];
+    },
+    Opacity: (value) => {
+        return [6, value];
+    },
+    Sepia: (value) => {
+        return [7, value];
+    },
+    Saturate: (value) => {
+        return [8, value];
+    },
+    Multi: (value) => {
+        return [9, value];
+    },
+}
 
 fastn_dom.BackgroundStyle = {
     Solid: (value) => {
@@ -981,6 +1011,25 @@ class Node2 {
             this.attachCss("box-shadow", darkShadowCss, true, `body.dark .${lightClass}`);
         }
     }
+    attachBackdropMultiFilter(value) {
+        const filters = {
+            blur: fastn_utils.getStaticValue(value.get("blur")),
+            brightness: fastn_utils.getStaticValue(value.get("brightness")),
+            contrast: fastn_utils.getStaticValue(value.get("contrast")),
+            grayscale: fastn_utils.getStaticValue(value.get("grayscale")),
+            invert: fastn_utils.getStaticValue(value.get("invert")),
+            opacity: fastn_utils.getStaticValue(value.get("opacity")),
+            sepia: fastn_utils.getStaticValue(value.get("sepia")),
+            saturate: fastn_utils.getStaticValue(value.get("saturate")),
+        };
+
+        const filterString = Object.entries(filters)
+            .filter(([_, value]) => !fastn_utils.isNull(value))
+            .map(([name, value]) => `${name}(${value})`)
+            .join(" ");
+
+        this.attachCss("backdrop-filter", filterString, false);
+    }
     attachTextShadow(value) {
         if (fastn_utils.isNull(value)) {
             this.attachCss("text-shadow", value);
@@ -1447,6 +1496,43 @@ class Node2 {
             this.attachShadow(staticValue);
         } else if (kind === fastn_dom.PropertyKind.TextShadow) {
             this.attachTextShadow(staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BackdropFilter) {
+            if (fastn_utils.isNull(value)) {
+                this.attachCss("backdrop-filter", value);
+                return;
+            }
+
+            let backdropType = staticValue[0];
+            switch (backdropType) {
+                case 1:
+                    this.attachCss("backdrop-filter", `blur(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    break;
+                case 2:
+                    this.attachCss("backdrop-filter", `brightness(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    break;
+                case 3:
+                    this.attachCss("backdrop-filter", `contrast(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    break;
+                case 4:
+                    this.attachCss("backdrop-filter", `greyscale(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    break;
+                case 5:
+                    this.attachCss("backdrop-filter", `invert(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    break;
+                case 6:
+                    this.attachCss("backdrop-filter", `opacity(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    break;
+                case 7:
+                    this.attachCss("backdrop-filter", `sepia(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    break;
+                case 8:
+                    this.attachCss("backdrop-filter", `saturate(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    break;
+                case 9:
+                    console.log("Here");
+                    this.attachBackdropMultiFilter(staticValue[1]);
+                    break;
+            }
         } else if (kind === fastn_dom.PropertyKind.Classes) {
             fastn_utils.removeNonFastnClasses(this);
             if (!fastn_utils.isNull(staticValue)) {

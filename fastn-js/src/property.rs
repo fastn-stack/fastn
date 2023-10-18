@@ -426,6 +426,7 @@ pub enum PropertyKind {
     MetaThemeColor,
     Favicon,
     Selectable,
+    BackdropFilter,
 }
 
 impl PropertyKind {
@@ -564,6 +565,7 @@ impl PropertyKind {
             }
             PropertyKind::Favicon => "fastn_dom.PropertyKind.Favicon",
             PropertyKind::Selectable => "fastn_dom.PropertyKind.Selectable",
+            PropertyKind::BackdropFilter => "fastn_dom.PropertyKind.BackdropFilter",
         }
     }
 }

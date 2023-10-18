@@ -533,6 +533,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = object_fit_variants(variant);
             (format!("fastn_dom.Fit.{}", js_variant), false)
         }
+        "ftd#backdrop-filter" => {
+            let js_variant = backdrop_filter_variants(variant);
+            (format!("fastn_dom.BackdropFilter.{}", js_variant), true)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -879,5 +883,20 @@ fn object_fit_variants(name: &str) -> &'static str {
         "cover" => "cover",
         "scale-down" => "scaleDown",
         t => todo!("invalid object fit variant {}", t),
+    }
+}
+
+fn backdrop_filter_variants(name: &str) -> &'static str {
+    match name {
+        "blur" => "Blur",
+        "brightness" => "Brightness",
+        "contrast" => "Contrast",
+        "grayscale" => "Grayscale",
+        "invert" => "Invert",
+        "opacity" => "Opacity",
+        "sepia" => "Sepia",
+        "saturate" => "Saturate",
+        "multi" => "Multi",
+        t => unimplemented!("invalid backdrop filter variant {}", t),
     }
 }

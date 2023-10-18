@@ -318,3 +318,15 @@ pub const FTD_LINK_REL: &str = "ftd#link-rel";
 pub const FTD_LINK_REL_NO_FOLLOW: &str = "ftd#link-rel.no-follow";
 pub const FTD_LINK_REL_SPONSORED: &str = "ftd#link-rel.sponsored";
 pub const FTD_LINK_REL_UGC: &str = "ftd#link-rel.ugc";
+
+pub const FTD_BACKDROP_MULTI: &str = "ftd#backdrop-multi";
+pub const FTD_BACKDROP_FILTER: &str = "ftd#backdrop-filter";
+pub const FTD_BACKDROP_FILTER_BLUR: &str = "ftd#backdrop-filter.blur";
+pub const FTD_BACKDROP_FILTER_BRIGHTNESS: &str = "ftd#backdrop-filter.brightness";
+pub const FTD_BACKDROP_FILTER_CONTRAST: &str = "ftd#backdrop-filter.contrast";
+pub const FTD_BACKDROP_FILTER_GRAYSCALE: &str = "ftd#backdrop-filter.grayscale";
+pub const FTD_BACKDROP_FILTER_INVERT: &str = "ftd#backdrop-filter.invert";
+pub const FTD_BACKDROP_FILTER_OPACITY: &str = "ftd#backdrop-filter.opacity";
+pub const FTD_BACKDROP_FILTER_SEPIA: &str = "ftd#backdrop-filter.sepia";
+pub const FTD_BACKDROP_FILTER_SATURATE: &str = "ftd#backdrop-filter.saturate";
+pub const FTD_BACKDROP_FILTER_MULTI: &str = "ftd#backdrop-filter.multi";
