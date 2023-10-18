@@ -27,10 +27,6 @@ pub async fn login(
     };
     match query.platform.as_str() {
         "github" => fastn_core::auth::github::login(req).await,
-        // "telegram" => fastn_core::auth::telegram::login(req).await,
-        // "discord" => fastn_core::auth::discord::login(req).await,
-        // "twitter" => fastn_core::auth::twitter::login(req).await,
-        // TODO: Remove this after demo
         _ => {
             let mut req = fastn_core::http::Request::from_actix(req, actix_web::web::Bytes::new());
             req.path = "/sorry/".to_string();
