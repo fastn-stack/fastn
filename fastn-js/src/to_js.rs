@@ -10,14 +10,9 @@ fn comma() -> pretty::RcDoc<'static> {
     pretty::RcDoc::text(",".to_string())
 }
 
-pub fn to_js(ast: &[fastn_js::Ast], is_global_need: bool, package_name: &str) -> String {
+pub fn to_js(ast: &[fastn_js::Ast], package_name: &str) -> String {
     let mut w = Vec::new();
-    let o = if is_global_need {
-        get_variable_declaration("global")
-    } else {
-        pretty::RcDoc::nil()
-    }
-    .append(pretty::RcDoc::intersperse(
+    let o = pretty::RcDoc::nil().append(pretty::RcDoc::intersperse(
         ast.iter().map(|f| f.to_js(package_name)),
         space(),
     ));
@@ -1105,21 +1100,10 @@ impl ExpressionGenerator {
     }
 }
 
-pub(crate) fn get_variable_declaration(variable: &str) -> pretty::RcDoc<'static> {
-    text("let")
-        .append(space())
-        .append(text(variable))
-        .append(space())
-        .append(text("="))
-        .append(space())
-        .append(text("{}"))
-        .append(text(";"))
-}
-
 #[cfg(test)]
 #[track_caller]
 pub fn e(f: fastn_js::Ast, s: &str) {
-    let g = to_js(&[f], false, "foo");
+    let g = to_js(&[f], "foo");
     println!("got: {}", g);
     println!("expected: {}", s);
     assert_eq!(g, s);
