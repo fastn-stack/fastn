@@ -1041,10 +1041,6 @@ skip: true
 /blog/writer-journey/ -> /writer/
 /blog/prove-you-wrong/ -> /prove/
 /blog/intimidation-of-programming/ -> /intimidation/
-/twitter/ -> https://twitter.com/fastn_stack
-/instagram/ -> https://www.instagram.com/fastn_stack/
-/discord/ -> https://discord.gg/eNXVBMq4xt
-/linkedin/ -> https://www.linkedin.com/company/fastn-stack/
 /overview/ -> /home/
 /events/weekly-contest/ -> /weekly-contest/
 /setup.exe -> https://github.com/fastn-stack/fastn/releases/latest/download/fastn_setup.exe
@@ -1052,7 +1048,8 @@ skip: true
 /cet/ -> https://chat.whatsapp.com/Iiv1klM3c2G3e6eb8kCDhJ
 /aieee-vizag/ -> https://chat.whatsapp.com/HigWcqIijQj63xCNAWJmLS
 /github/ -> https://github.com/fastn-stack/
-/linkedin/ -> https://www.linkedin.com/company/fastn-stack/
-/twitter/ -> https://twitter.com/fastn_stack/
-/instagram/ -> https://instagram.com/fastn_stack/
 /whatsapp/ -> https://www.whatsapp.com/channel/0029Va6XNHZ9WtCCkv3KvC0X/
+/twitter/ -> https://twitter.com/fastn_stack/
+/instagram/ -> https://www.instagram.com/fastn_stack/
+/discord/ -> https://discord.gg/eNXVBMq4xt
+/linkedin/ -> https://www.linkedin.com/company/fastn-stack/
