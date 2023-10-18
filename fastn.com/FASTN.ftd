@@ -73,8 +73,8 @@ favicon: /-/fastn.com/images/favicon.svg
 skip: true
 
 
-# Get Started: /quick-build/
-  document: get-started/browse-pick.ftd
+# Learn: /learn/
+  document: /workshop/learn.ftd
 
 ## Create Website: /quick-build/
   document: get-started/browse-pick.ftd

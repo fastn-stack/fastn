@@ -80,9 +80,9 @@ Build your first fastn-powered website in just 2 hours.
 
 -- end: lib.feature-card
 
--- lib.learn-fastn: Learn to build stunning UI components with our crash course
-cta-primary-text: Start Learning
-cta-primary-link: /expander/
+-- lib.learn-fastn: Learn full-stack web development using fastn in a week
+cta-primary-text: Learn Now
+cta-primary-link: /learn/
 image: $fastn-assets.files.images.landing.crash-course.svg
 
 -- lib.feature-card: Anyone in your team can contribute to or modify the website

@@ -78,11 +78,11 @@ max-width.fixed.px: 1340
 -- ftd.ui list page.banner:
 
 -- banner.cta-banner:
-cta-text: Book a Demo
-cta-link: https://calendly.com/amitu-fifthtry/30min
+cta-text: Learn Now
+cta-link: /learn/
 bgcolor: $inherited.colors.cta-primary.base
 
-Want to try fastn for your company's website? 
+Learn full-stack web development using fastn in a week
 
 -- end: page.banner
 
