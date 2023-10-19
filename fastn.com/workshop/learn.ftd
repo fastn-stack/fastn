@@ -1,31 +1,62 @@
 -- ds.page-with-no-right-sidebar: Learning Resources
 
-Discover a wealth of resources to help you master `fastn` web development, from
-creating websites to building full-stack web applications.
+Master fastn web development with our curated resources, from creating websites 
+to building dynamic apps.
 
 These learning resources will help you to ace the challenges of the
 [`fastn` Champion Program](/champion-program/) which is a part of the students
 programs. This program is an official **`certification program`** 
 offered to the students to acknowledge their competance in `fastn-stack`.   
 
-The resources are distributed in the following categories. 
+;;The resources are distributed in the following categories.
 
--- ds.h1: Build Reusable Components with `fastn`
+-- ds.h1: Create a website
 
-- **Expander Course:** Learn to create reusable components with 
-    [Expander Crash Course.](/expander/)
-- **Workshop:** By building reusable components, learn to create an [Image gallery](https://github.com/fastn-stack/workshop/tree/main/b-section) 
-	section.
+- **Start with a readymade template:** Create a doc-site with a [fastn Template](https://github.com/fastn-stack/fastn-template).
+- **Quick Build Guide:** Learn how to [build websites using fastn Templates](/quick-build/) in 4 simple steps. 
+- **fastn Basics:** Discover beginner level tutorials like using markdown to updating SEO of your website. Check out [fastn Basics](https://fastn.com/markdown/-/frontend/).
 
--- ds.h1: Build Full-Stack Applications
+;; - **Workshop** to [create website.](https://github.com/fastn-stack/workshop)
+
+-- ds.h1: Customize your design
+
+- **Color Scheme:** Discover how to add [color scheme](/color-scheme/) and [modify color scheme](https://fastn.com/modify-cs/)
+- **Figma Tokens Integration:** Seamlessly [Integrate Figma tokens.](/figma/)
+- **Figma to fastn Color Scheme:** Create your own [fastn Color Scheme from Figma JSON](https://fastn.com/figma-to-fastn-cs/)
+- **Create Fonts:** Learn to [create font package](/create-font-package/) 
+- **Typography:** Discover how to create [typography.](/typography/)
+- **Typography JSON to ftd:** Learn to generate [typography code from JSON](https://fastn.com/typo-json-to-ftd/)
+- **Export Typography as JSON:** Learn to export [`ftd.type-data` variables as JSON](https://fastn.com/typo-to-json/)
+
+
+
+-- ds.h1: Build and customize UI components
+
+- **Crash Course:** Learn to create reusable components with [Expander Crash Course.](/expander/)
+- **Workshop:** Follow the docs in the workshop and learn to build an [Image gallery section](https://github.com/fastn-stack/workshop/tree/main/b-section) using fastn.
+;; - **Create buttons:** Learn [how to create a button using fastn](/button/)
+;; - **Create rounded border:** Learn [how to make rounded corners](/rounded-border/) for texts, containers and images in fastn. 
+;; - **Create holy-grail layout:** Learn to [create a holy-grail layout](/holy-grail/) using fastn
+
+-- ds.h1: Build full-stack applications
 
 - **Full Stack Development:** Learn the fundamentals of [backend](/backend/) integration for full-stack development with `fastn`.
+- **Backend basics:** Learn the [basics of HTTP Processor and data modelling.](/country-details/basics/)
+- **Dynamic URL Guide:** Learn to [create dynamic URLs using fastn](/dynamic-urls/)
 - **Todo App Example:** Explore a complete `fastn` [Todo](https://github.com/fastn-community/todo-app) app.
-- **Backend basics:** Learn the 
-    [basics of HTTP Processor and data modelling.](/country-details/basics/)
-- **Dynamic Country List Page:** Build a 
-	[dynamic country list page](/country-list/) with `fastn`.
-- **Workshop** (Coming Soon): Stay tuned for an upcoming workshop.
+- **Dynamic Country List Page:** Build a [dynamic country list page](/country-list/) with `fastn`.
+;; - **Workshop** (Coming Soon): Stay tuned for an upcoming workshop.
+
+-- ds.h1: Deploy your site
+
+- **Static hosting on GitHub pages:** Learn to [publish static site on GitHub Pages](/github-pages/)
+- **Static hosting on Vercel:** Learn to [publish static site On Vercel](/vercel/)
+- **Dynamic hosting:** Learn [deploying on Heroku](/heroku/)
+
+-- ds.h1: Other Resources
+
+- **Blog:** [A content writer's experience with fastn.](/writer/)
+- **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/) 
 
 
 -- ds.h1: Customize the Design of Your fastn Site
