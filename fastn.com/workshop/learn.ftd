@@ -3,6 +3,13 @@
 Master fastn web development with our curated resources, from creating websites 
 to building dynamic apps.
 
+These learning resources will help you to ace the challenges of the
+[`fastn` Champion Program](/champion-program/) which is a part of the students
+programs. This program is an official **`certification program`** 
+offered to the students to acknowledge their competance in `fastn-stack`.   
+
+;;The resources are distributed in the following categories.
+
 -- ds.h1: Create a website
 
 - **Start with a readymade template:** Create a doc-site with a [fastn Template](https://github.com/fastn-stack/fastn-template).
@@ -20,6 +27,8 @@ to building dynamic apps.
 - **Typography:** Discover how to create [typography.](/typography/)
 - **Typography JSON to ftd:** Learn to generate [typography code from JSON](https://fastn.com/typo-json-to-ftd/)
 - **Export Typography as JSON:** Learn to export [`ftd.type-data` variables as JSON](https://fastn.com/typo-to-json/)
+
+
 
 -- ds.h1: Build and customize UI components
 
@@ -48,5 +57,35 @@ to building dynamic apps.
 
 - **Blog:** [A content writer's experience with fastn.](/writer/)
 - **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/) 
+
+
+-- ds.h1: Customize the Design of Your fastn Site
+
+- **Color Scheme:** Discover how to create [color schemes.](/color-scheme/)
+- **Create Fonts:** Learn to [create font package](/create-font-package/) 
+- **Typography:** Discover how to create [typography.](/typography/)
+- **Figma Tokens Integration:** Seamlessly [Integrate Figma tokens.](/figma/)
+
+
+-- ds.h1: Learn How to Create a Website
+
+- **Blog:** [A content writer's experience with fastn.](/writer/)
+- **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/) 
+- **Template:** Explore the official [fastn template.](https://github.com/fastn-stack/fastn-template) 
+- **Markdown Guide:** Learn using [markdown](/markdown/-/frontend/) in `fastn`.
+- **Workshop** to [create website.](https://github.com/fastn-stack/workshop)
+
+
+-- ds.h1: Get Help
+
+Join 3000+ developers learning `fastn` on 
+[our Discord server](https://fastn.com/discord/), since we are a new language 
+and there is not much material on Google/StackOverflow, our Discord is the best 
+place to ask questions, get help etc.  
+
+You can also join 
+[`fastn` WhatsApp channel](https://whatsapp.com/channel/0029Va6XNHZ9WtCCkv3KvC0X) 
+to stay up to date about fastn. 
+
 
 -- end: ds.page-with-no-right-sidebar

@@ -36,8 +36,8 @@ instructions on how to deploy and host your website instantly.
 -- ds.h1: Next Steps
 
 If you are a complete beginner to programming, explore our 
-[fastn basics page](/markdown/-/frontend/) to help you get up to speed and 
-create stunning websites in no time.
+[fastn basics page](/markdown/-/frontend/). Go through all the sections to 
+accelerate your fastn journey.
 
 You can also [install fastn](/install/) and learn to [build UI Components](/expander/) 
 using fastn.
@@ -46,21 +46,22 @@ Check out all our [Learning Resources](/learn/) to master fastn.
 
 -- ds.h1: Keep Exploring
 
-- **Frontend with fastn**:
+- **Frontend**:
   fastn is a versatile and user-friendly solution for all your 
   [frontend development](/frontend/) needs.
 
-- **Read the docs**:
+- **Docs**:
   Our [docs](/ftd/data-modelling/) is the go-to resource for mastering fastn. 
   It provides valuable resources from in-depth explanations to best practices.
 
-- **Backend with fastn**:
+- **Backend**:
   fastn also supports a bunch of [backend features](/backend/) that helps you 
   create dynamic websites.
 
-- **Web Designing with fastn**:
+- **Web Designing**:
   Check out our [design features](/design/) to see how we can enhance your web 
-  development process.
+  design.
+
 
 
 
