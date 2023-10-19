@@ -355,3 +355,11 @@ pub const FTD_MASK_COMPOSITE_INTERSECT: &str = "ftd#mask-composite.intersect";
 pub const FTD_MASK_COMPOSITE_EXCLUDE: &str = "ftd#mask-composite.exclude";
 pub const FTD_MASK_COMPOSITE_REVERT: &str = "ftd#mask-composite.revert";
 pub const FTD_MASK_COMPOSITE_REVERT_LAYER: &str = "ftd#mask-composite.revert-layer";
+
+pub const FTD_MASK_MODE: &str = "ftd#mask-mode";
+pub const FTD_MASK_MODE_ALPHA: &str = "ftd#mask-mode.alpha";
+pub const FTD_MASK_MODE_LUMINANCE: &str = "ftd#mask-mode.luminance";
+pub const FTD_MASK_MODE_MATCH_SOURCE: &str = "ftd#mask-mode.match-source";
+pub const FTD_MASK_MODE_MULTI_VALUES: &str = "ftd#mask-mode.multi";
+
+pub const FTD_MASK_MODE_MULTI: &str = "ftd#mask-mode-multi";

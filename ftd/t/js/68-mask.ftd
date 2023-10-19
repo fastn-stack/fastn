@@ -2,6 +2,7 @@
 image.src: ../assets/fastn.svg
 clip: padding-box
 composite: add
+mode: alpha
 
 -- ftd.row:
 mask: $m

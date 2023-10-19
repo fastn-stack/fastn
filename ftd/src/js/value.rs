@@ -549,6 +549,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = mask_composite_variants(variant);
             (format!("fastn_dom.MaskComposite.{}", js_variant), true)
         }
+        "ftd#mask-mode" => {
+            let js_variant = mask_mode_variants(variant);
+            (format!("fastn_dom.MaskMode.{}", js_variant), true)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -944,5 +948,15 @@ fn mask_composite_variants(name: &str) -> &'static str {
         "revert" => "Revert",
         "revert-layer" => "RevertLayer",
         t => unimplemented!("invalid mask composite variant {}", t),
+    }
+}
+
+fn mask_mode_variants(name: &str) -> &'static str {
+    match name {
+        "alpha" => "Alpha",
+        "luminance" => "Luminance",
+        "match-source" => "MatchSource",
+        "multi" => "Multi",
+        t => unimplemented!("invalid mask mode variant {}", t),
     }
 }

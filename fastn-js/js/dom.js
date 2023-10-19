@@ -715,6 +715,20 @@ fastn_dom.MaskComposite = {
     },
 }
 
+fastn_dom.MaskMode = {
+    Alpha: (value) => {
+        return [1, value];
+    },
+    Luminance: (value) => {
+        return [2, value];
+    },
+    MatchSource: (value) => {
+        return [3, value];
+    },
+    Multi: (value) => {
+        return [4, value];
+    },
+}
 
 fastn_dom.Event = {
     Click: 0,
