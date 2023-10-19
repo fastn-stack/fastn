@@ -88,6 +88,8 @@ skip: true
     document: expander/ds/ds-cs.ftd
   - Change Typography: /typography/
     document: expander/ds/ds-typography.ftd
+  - Using images in documents: /using-images/
+    document: /expander/imagemodule/index.ftd
   - Change Theme: /theme/
     document: get-started/theme.ftd
     skip: true
@@ -103,8 +105,10 @@ skip: true
       document: expander/sitemap-document.ftd
 
 
-## Learn: /install/
-  document: author/how-to/install.ftd
+## Learn: /learn/
+  document: /workshop/learn.ftd
+- Learning Resources: /learn/
+  document: /workshop/learn.ftd
 - Setup: /install/
   document: author/how-to/install.ftd
   - Install fastn: /install/
@@ -131,9 +135,12 @@ skip: true
   - Part 4. Event Handling: /expander/events/
   - Part 5. Publish a package: /expander/publish/
   - Part 6. Polishing UI: /expander/polish/
-- Learning Resources: /learn/
-  document: /workshop/learn.ftd
-  skip: true
+- Create button with shadow: /button/
+  document: /expander/button.ftd
+- Create rounded border: /rounded-border/
+  document: /expander/border-radius.ftd
+- Create holy-grail layout: /holy-grail/
+  document: /expander/layout/index.ftd
 
 
 ## Sections: /sections/

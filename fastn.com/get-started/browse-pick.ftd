@@ -33,7 +33,7 @@ Visit our [Deployment Page](/github-pages/)
 to learn more about the deployment process. You'll find step-by-step 
 instructions on how to deploy and host your website instantly.
 
--- ds.h1: Next
+-- ds.h1: Next Steps
 
 If you are a complete beginner to programming, explore our 
 [fastn basics page](/markdown/-/frontend/) to help you get up to speed and 
@@ -42,7 +42,9 @@ create stunning websites in no time.
 You can also [install fastn](/install/) and learn to [build UI Components](/expander/) 
 using fastn.
 
--- ds.h1: Keep Learning 
+Check out all our [Learning Resources](/learn/) to master fastn. 
+
+-- ds.h1: Keep Exploring
 
 - **Frontend with fastn**:
   fastn is a versatile and user-friendly solution for all your 
