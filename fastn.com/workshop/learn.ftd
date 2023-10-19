@@ -64,21 +64,21 @@ offered to the students to acknowledge their competance in `fastn-stack`.
 - **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/) 
 
 
--- ds.h1: Customize the Design of Your fastn Site
+;; -- ds.h1: Customize the Design of Your fastn Site
 
-- **Color Scheme:** Discover how to create [color schemes.](/color-scheme/)
-- **Create Fonts:** Learn to [create font package](/create-font-package/) 
-- **Typography:** Discover how to create [typography.](/typography/)
-- **Figma Tokens Integration:** Seamlessly [Integrate Figma tokens.](/figma/)
+;; - **Color Scheme:** Discover how to create [color schemes.](/color-scheme/)
+;; - **Create Fonts:** Learn to [create font package](/create-font-package/) 
+;; - **Typography:** Discover how to create [typography.](/typography/)
+;; - **Figma Tokens Integration:** Seamlessly [Integrate Figma tokens.](/figma/)
 
 
--- ds.h1: Learn How to Create a Website
+;; -- ds.h1: Learn How to Create a Website
 
-- **Blog:** [A content writer's experience with fastn.](/writer/)
-- **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/) 
-- **Template:** Explore the official [fastn template.](https://github.com/fastn-stack/fastn-template) 
-- **Markdown Guide:** Learn using [markdown](/markdown/-/frontend/) in `fastn`.
-- **Workshop** to [create website.](https://github.com/fastn-stack/workshop)
+;; - **Blog:** [A content writer's experience with fastn.](/writer/)
+;; - **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/) 
+;; - **Template:** Explore the official [fastn template.](https://github.com/fastn-stack/fastn-template) 
+;; - **Markdown Guide:** Learn using [markdown](/markdown/-/frontend/) in `fastn`.
+;; - **Workshop** to [create website.](https://github.com/fastn-stack/workshop)
 
 
 -- ds.h1: Get Help
