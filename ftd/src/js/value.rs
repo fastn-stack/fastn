@@ -545,6 +545,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = mask_clip_variants(variant);
             (format!("fastn_dom.MaskClip.{}", js_variant), true)
         }
+        "ftd#mask-composite" => {
+            let js_variant = mask_composite_variants(variant);
+            (format!("fastn_dom.MaskComposite.{}", js_variant), true)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -928,5 +932,17 @@ fn mask_clip_variants(name: &str) -> &'static str {
         "no-clip" => "NoClip",
         "multi" => "Multi",
         t => unimplemented!("invalid mask clip variant {}", t),
+    }
+}
+
+fn mask_composite_variants(name: &str) -> &'static str {
+    match name {
+        "add" => "Add",
+        "subtract" => "Subtract",
+        "intersect" => "Intersect",
+        "exclude" => "Exclude",
+        "revert" => "Revert",
+        "revert-layer" => "RevertLayer",
+        t => unimplemented!("invalid mask composite variant {}", t),
     }
 }

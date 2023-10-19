@@ -694,6 +694,27 @@ fastn_dom.MaskClip = {
     },
 }
 
+fastn_dom.MaskComposite = {
+    Add: (value) => {
+        return [1, value];
+    },
+    Subtract: (value) => {
+        return [2, value];
+    },
+    Intersect: (value) => {
+        return [3, value];
+    },
+    Exclude: (value) => {
+        return [4, value];
+    },
+    Revert: (value) => {
+        return [5, value];
+    },
+    RevertLayer: (value) => {
+        return [6, value];
+    },
+}
+
 
 fastn_dom.Event = {
     Click: 0,

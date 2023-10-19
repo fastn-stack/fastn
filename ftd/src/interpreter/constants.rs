@@ -347,3 +347,11 @@ pub const FTD_MASK_CLIP_NO_CLIP: &str = "ftd#mask-clip.no-clip";
 pub const FTD_MASK_CLIP_MULTI_VALUES: &str = "ftd#mask-clip.multi";
 
 pub const FTD_MASK_CLIP_MULTI: &str = "ftd#mask-clip-multi";
+
+pub const FTD_MASK_COMPOSITE: &str = "ftd#mask-composite";
+pub const FTD_MASK_COMPOSITE_ADD: &str = "ftd#mask-composite.add";
+pub const FTD_MASK_COMPOSITE_SUBTRACT: &str = "ftd#mask-composite.subtract";
+pub const FTD_MASK_COMPOSITE_INTERSECT: &str = "ftd#mask-composite.intersect";
+pub const FTD_MASK_COMPOSITE_EXCLUDE: &str = "ftd#mask-composite.exclude";
+pub const FTD_MASK_COMPOSITE_REVERT: &str = "ftd#mask-composite.revert";
+pub const FTD_MASK_COMPOSITE_REVERT_LAYER: &str = "ftd#mask-composite.revert-layer";

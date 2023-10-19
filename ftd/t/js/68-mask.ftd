@@ -1,5 +1,7 @@
 -- ftd.mask m:
 image.src: ../assets/fastn.svg
+clip: padding-box
+composite: add
 
 -- ftd.row:
 mask: $m
