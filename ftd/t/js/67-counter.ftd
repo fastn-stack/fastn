@@ -1,7 +1,7 @@
 -- counter:
 $count: 10
 
-/-- counter: 10
+-- counter: 10
 
 -- component counter:
 caption integer $count: 20

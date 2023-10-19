@@ -36,17 +36,15 @@
     </style>
 <script>
     (function() {
-        let global = {
-};
-let main = function (parent) {
+        let main = function (parent) {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
     let parenti0 = foo__counter(parent, inherited, {
-      count: 10
+      count: fastn.mutable(10)
     });
     let parenti1 = foo__counter(parent, inherited, {
-      count: 10
+      count: fastn.mutable(10)
     });
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
@@ -58,7 +56,7 @@ let foo__counter = function (parent, inherited, args) {
   __fastn_package_name__ = "foo";
   try {
     let __args__ = {
-      count: fastn.mutable(10),
+      count: fastn.mutable(20),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);
