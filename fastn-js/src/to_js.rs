@@ -259,8 +259,16 @@ impl fastn_js::InstantiateComponent {
                 text("{")
                     .append(
                         pretty::RcDoc::intersperse(
-                            self.arguments.iter().map(|(k, v)| {
-                                format!("{}: {}", fastn_js::utils::name_to_js_(k), v.to_js())
+                            self.arguments.iter().map(|(k, value, is_mutable)| {
+                                format!(
+                                    "{}: {}",
+                                    fastn_js::utils::name_to_js_(k),
+                                    if *is_mutable {
+                                        format!("fastn.mutable({})", value.to_js())
+                                    } else {
+                                        value.to_js()
+                                    }
+                                )
                             }),
                             comma().append(space()),
                         )
