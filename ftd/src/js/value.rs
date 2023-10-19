@@ -537,6 +537,14 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = backdrop_filter_variants(variant);
             (format!("fastn_dom.BackdropFilter.{}", js_variant), true)
         }
+        "ftd#mask-image" => {
+            let js_variant = mask_image_variants(variant);
+            (format!("fastn_dom.MaskImage.{}", js_variant), true)
+        }
+        "ftd#mask-clip" => {
+            let js_variant = mask_clip_variants(variant);
+            (format!("fastn_dom.MaskClip.{}", js_variant), true)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -898,5 +906,27 @@ fn backdrop_filter_variants(name: &str) -> &'static str {
         "saturate" => "Saturate",
         "multi" => "Multi",
         t => unimplemented!("invalid backdrop filter variant {}", t),
+    }
+}
+
+fn mask_image_variants(name: &str) -> &'static str {
+    match name {
+        "src" => "Src",
+        "linear-gradient" => "LinearGradient",
+        t => todo!("invalid mask image variant {}", t),
+    }
+}
+
+fn mask_clip_variants(name: &str) -> &'static str {
+    match name {
+        "border-box" => "BorderBox",
+        "content-box" => "ContentBox",
+        "padding-box" => "PaddingBox",
+        "fill-box" => "FillBox",
+        "stroke-box" => "StrokeBox",
+        "view-box" => "ViewBox",
+        "no-clip" => "NoClip",
+        "multi" => "Multi",
+        t => unimplemented!("invalid mask clip variant {}", t),
     }
 }

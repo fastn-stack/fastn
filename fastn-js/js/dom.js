@@ -99,6 +99,7 @@ fastn_dom.propertyMap = {
     "-webkit-box-orient": "wbo",
     "-webkit-line-clamp": "wlc",
     "backdrop-filter": "bdf",
+    "mask": "mask",
 };
 
 // dynamic-class-css.md
@@ -280,6 +281,7 @@ fastn_dom.PropertyKind = {
     TextShadow: 117,
     Selectable: 118,
     BackdropFilter: 119,
+    Mask: 120,
 };
 
 
@@ -656,6 +658,41 @@ fastn_dom.Length = {
     }
 }
 
+fastn_dom.MaskImage = {
+    Src: (value) => {
+        return [1, value];
+    },
+    LinearGradient: (value) => {
+        return [2, value];
+    },
+}
+
+fastn_dom.MaskClip = {
+    BorderBox: (value) => {
+        return [1, value];
+    },
+    ContentBox: (value) => {
+        return [2, value];
+    },
+    PaddingBox: (value) => {
+        return [3, value];
+    },
+    FillBox: (value) => {
+        return [4, value];
+    },
+    StrokeBox: (value) => {
+        return [5, value];
+    },
+    ViewBox: (value) => {
+        return [6, value];
+    },
+    NoClip: (value) => {
+        return [7, value];
+    },
+    Multi: (value) => {
+        return [8, value];
+    },
+}
 
 
 fastn_dom.Event = {
@@ -1497,8 +1534,8 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.TextShadow) {
             this.attachTextShadow(staticValue);
         } else if (kind === fastn_dom.PropertyKind.BackdropFilter) {
-            if (fastn_utils.isNull(value)) {
-                this.attachCss("backdrop-filter", value);
+            if (fastn_utils.isNull(staticValue)) {
+                this.attachCss("backdrop-filter", staticValue);
                 return;
             }
 
@@ -1533,6 +1570,13 @@ class Node2 {
                     this.attachBackdropMultiFilter(staticValue[1]);
                     break;
             }
+        } else if (kind === fastn_dom.PropertyKind.Mask) {
+            if (fastn_utils.isNull(staticValue)) {
+                this.attachCss("backdrop-filter", staticValue);
+                return;
+            }
+
+            // todo
         } else if (kind === fastn_dom.PropertyKind.Classes) {
             fastn_utils.removeNonFastnClasses(this);
             if (!fastn_utils.isNull(staticValue)) {

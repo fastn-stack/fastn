@@ -1299,7 +1299,6 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 line_number: 0,
             }),
         ),
-        // TODO: Instead of default value, make the integer optional
         (
             ftd::interpreter::FTD_BACKDROP_MULTI.to_string(),
             ftd::interpreter::Thing::Record(ftd::interpreter::Record {
@@ -9705,7 +9704,216 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 line_number: 0,
                 is_static: false
             })
-        )
+        ),
+        (
+            ftd::interpreter::FTD_MASK_IMAGE.to_string(),
+            ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                name: ftd::interpreter::FTD_MASK_IMAGE.to_string(),
+                variants: vec![
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_IMAGE_SRC,
+                        ftd::interpreter::Kind::record(ftd::interpreter::FTD_BG_IMAGE)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_IMAGE_LINEAR_GRADIENT,
+                        ftd::interpreter::Kind::record(ftd::interpreter::FTD_LINEAR_GRADIENT)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter::FTD_MASK_CLIP_MULTI.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FTD_MASK_CLIP_MULTI.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "content-box".to_string(),
+                        kind: ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "padding-box".to_string(),
+                        kind: ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "border-box".to_string(),
+                        kind: ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "fill-box".to_string(),
+                        kind: ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "stroke-box".to_string(),
+                        kind: ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "view-box".to_string(),
+                        kind: ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "no-clip".to_string(),
+                        kind: ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter::FTD_MASK_CLIP.to_string(),
+            ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                name: ftd::interpreter::FTD_MASK_IMAGE.to_string(),
+                variants: vec![
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_CLIP_BORDER_BOX,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("border-box")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_CLIP_CONTENT_BOX,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("content-box")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_CLIP_FILL_BOX,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("fill-box")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_CLIP_PADDING_BOX,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("padding-box")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_CLIP_VIEW_BOX,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("view-box")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_CLIP_NO_CLIP,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("no-clip")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_CLIP_MULTI_VALUES,
+                        ftd::interpreter::Kind::record(ftd::interpreter::FTD_MASK_CLIP_MULTI)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter::FTD_MASK.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FTD_MASK.to_string(),
+                fields: vec![
+                    ftd::interpreter::Field {
+                        name: "image".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_IMAGE)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0
+                    },
+                    ftd::interpreter::Field {
+                        name: "clip".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_CLIP)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0
+                    }
+                ],
+                line_number: 0
+            })
+        ),
     ])
     .collect()
 }
@@ -10897,6 +11105,12 @@ fn common_arguments() -> Vec<ftd::interpreter::Argument> {
         ftd::interpreter::Argument::default(
             "selectable",
             ftd::interpreter::Kind::boolean()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter::Argument::default(
+            "mask",
+            ftd::interpreter::Kind::record(ftd::interpreter::FTD_MASK)
                 .into_optional()
                 .into_kind_data(),
         ),

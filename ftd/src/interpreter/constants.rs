@@ -330,3 +330,20 @@ pub const FTD_BACKDROP_FILTER_OPACITY: &str = "ftd#backdrop-filter.opacity";
 pub const FTD_BACKDROP_FILTER_SEPIA: &str = "ftd#backdrop-filter.sepia";
 pub const FTD_BACKDROP_FILTER_SATURATE: &str = "ftd#backdrop-filter.saturate";
 pub const FTD_BACKDROP_FILTER_MULTI: &str = "ftd#backdrop-filter.multi";
+
+pub const FTD_MASK: &str = "ftd#mask";
+pub const FTD_MASK_IMAGE: &str = "ftd#mask-image";
+pub const FTD_MASK_IMAGE_SRC: &str = "ftd#mask-image.src";
+pub const FTD_MASK_IMAGE_LINEAR_GRADIENT: &str = "ftd#mask-image.linear-gradient";
+
+pub const FTD_MASK_CLIP: &str = "ftd#mask-clip";
+pub const FTD_MASK_CLIP_CONTENT_BOX: &str = "ftd#mask-clip.content-box";
+pub const FTD_MASK_CLIP_PADDING_BOX: &str = "ftd#mask-clip.padding-box";
+pub const FTD_MASK_CLIP_BORDER_BOX: &str = "ftd#mask-clip.border-box";
+pub const FTD_MASK_CLIP_FILL_BOX: &str = "ftd#mask-clip.fill-box";
+pub const FTD_MASK_CLIP_STROKE_BOX: &str = "ftd#mask-clip.stroke-box";
+pub const FTD_MASK_CLIP_VIEW_BOX: &str = "ftd#mask-clip.view-box";
+pub const FTD_MASK_CLIP_NO_CLIP: &str = "ftd#mask-clip.no-clip";
+pub const FTD_MASK_CLIP_MULTI_VALUES: &str = "ftd#mask-clip.multi";
+
+pub const FTD_MASK_CLIP_MULTI: &str = "ftd#mask-clip-multi";

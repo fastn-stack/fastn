@@ -1,0 +1,9 @@
+-- ftd.mask m:
+image.src: ../assets/fastn.svg
+
+-- ftd.row:
+mask: $m
+
+-- ftd.text: Hello World
+
+-- end: ftd.row
