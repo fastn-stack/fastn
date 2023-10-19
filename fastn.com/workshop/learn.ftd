@@ -1,22 +1,14 @@
 -- ds.page-with-no-right-sidebar: Learning Resources
 
 Discover a wealth of resources to help you master `fastn` web development, from
-creating websites to building dynamic apps.
+creating websites to building full-stack web applications.
 
--- ds.h1: Learn How to Create a Website
+These learning resources will help you to ace the challenges of the
+[`fastn` Champion Program](/champion-program/) which is a part of the students
+programs. This program is an official **`certification program`** 
+offered to the students to acknowledge their competance in `fastn-stack`.   
 
-- **Blog:** [A content writer's experience with fastn.](/writer/)
-- **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/) 
-- **Template:** Explore the official [fastn template.](https://github.com/fastn-stack/fastn-template) 
-- **Markdown Guide:** Learn using [markdown](/markdown/-/frontend/) in `fastn`.
-- **Workshop** to [create website.](https://github.com/fastn-stack/workshop)
-
--- ds.h1: Customize the Design of Your fastn Site
-
-- **Color Scheme:** Discover how to create [color schemes.](/color-scheme/)
-- **Create Fonts:** Learn to [create font package](/create-font-package/) 
-- **Typography:** Discover how to create [typography.](/typography/)
-- **Figma Tokens Integration:** Seamlessly [Integrate Figma tokens.](/figma/)
+The resources are distributed in the following categories. 
 
 -- ds.h1: Build Reusable Components with `fastn`
 
@@ -34,5 +26,35 @@ creating websites to building dynamic apps.
 - **Dynamic Country List Page:** Build a 
 	[dynamic country list page](/country-list/) with `fastn`.
 - **Workshop** (Coming Soon): Stay tuned for an upcoming workshop.
+
+
+-- ds.h1: Customize the Design of Your fastn Site
+
+- **Color Scheme:** Discover how to create [color schemes.](/color-scheme/)
+- **Create Fonts:** Learn to [create font package](/create-font-package/) 
+- **Typography:** Discover how to create [typography.](/typography/)
+- **Figma Tokens Integration:** Seamlessly [Integrate Figma tokens.](/figma/)
+
+
+-- ds.h1: Learn How to Create a Website
+
+- **Blog:** [A content writer's experience with fastn.](/writer/)
+- **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/) 
+- **Template:** Explore the official [fastn template.](https://github.com/fastn-stack/fastn-template) 
+- **Markdown Guide:** Learn using [markdown](/markdown/-/frontend/) in `fastn`.
+- **Workshop** to [create website.](https://github.com/fastn-stack/workshop)
+
+
+-- ds.h1: Get Help
+
+Join 3000+ developers learning `fastn` on 
+[our Discord server](https://fastn.com/discord/), since we are a new language 
+and there is not much material on Google/StackOverflow, our Discord is the best 
+place to ask questions, get help etc.  
+
+You can also join 
+[`fastn` WhatsApp channel](https://whatsapp.com/channel/0029Va6XNHZ9WtCCkv3KvC0X) 
+to stay up to date about fastn. 
+
 
 -- end: ds.page-with-no-right-sidebar
