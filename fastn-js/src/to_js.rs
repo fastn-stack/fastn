@@ -264,7 +264,7 @@ impl fastn_js::InstantiateComponent {
                                     "{}: {}",
                                     fastn_js::utils::name_to_js_(k),
                                     if *is_mutable {
-                                        format!("fastn.mutable({})", value.to_js())
+                                        format!("fastn.wrapMutable({})", value.to_js())
                                     } else {
                                         value.to_js()
                                     }
@@ -517,7 +517,7 @@ impl fastn_js::Component {
                     local_arguments_dependent.push((argument_name.to_owned(), value.to_owned()));
                 } else {
                     let value = if *is_mutable {
-                        format!("fastn.mutable({})", value.to_js())
+                        format!("fastn.wrapMutable({})", value.to_js())
                     } else {
                         value.to_js()
                     };
