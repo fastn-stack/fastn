@@ -28,8 +28,8 @@ $processor$: pr.full-sitemap
 -- component hero-content:
 
 -- hero-section: Build your next web project faster with fastn
-primary-cta: Read Docs
-primary-cta-link: /ftd/data-modelling/
+primary-cta: Try
+primary-cta-link: /r/acme/
 secondary-cta: Get started
 secondary-cta-link: /quick-build/
 subtitle: fastn is the best choice to build your company’s website
@@ -5254,4 +5254,3 @@ $processor$: pr.toc
 
 -- pr.sitemap-data footer-links:
 $processor$: fastn.sitemap
-

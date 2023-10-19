@@ -8,7 +8,12 @@ These learning resources will help you to ace the challenges of the
 programs. This program is an official **`certification program`** 
 offered to the students to acknowledge their competance in `fastn-stack`.   
 
-;;The resources are distributed in the following categories.
+;; The resources are distributed in the following categories.
+
+-- ds.h1: Try some demo
+
+- **Acme:** A [website](/r/acme) created using fastn.
+- **Counter:** Create a [counter component](/r/counter/) using fastn.
 
 -- ds.h1: Create a website
 

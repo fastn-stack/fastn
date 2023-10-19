@@ -26,6 +26,16 @@ padding.px: 20
 -- ftd.text: fastn demo
 role: $inherited.types.heading-hero
 
+-- ftd.text: Try it!
+role: $inherited.types.copy-regular
+background.solid: $inherited.colors.cta-primary.base
+color: $inherited.colors.cta-primary.text
+border-color: $inherited.colors.cta-primary.border
+border-width.px: 1
+padding-vertical.px: 5
+padding-horizontal.px: 10
+link: /r/counter/
+
 -- ftd.text:
 
 Source: [demo.ftd](https://github.com/fastn-stack/fastn.com/blob/main/demo.ftd)
@@ -136,4 +146,3 @@ integer list $c:
 integer index:
 
 ftd.delete_at(c, index)
-
