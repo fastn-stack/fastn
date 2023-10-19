@@ -1,0 +1,26 @@
+-- counter:
+$count: 10
+
+/-- counter: 10
+
+-- component counter:
+caption integer $count: 20
+
+-- ftd.row:
+border-width.px: 2
+padding.px: 20
+spacing.fixed.px: 20
+background.solid if { counter.count % 2 == 0 }: yellow
+border-radius.px: 5
+
+-- ftd.text: ➕
+$on-click$: $ftd.increment-by($a=$counter.count, v=1)
+
+-- ftd.integer: $counter.count
+
+-- ftd.text: ➖
+$on-click$: $ftd.increment-by($a=$counter.count, v=-1)
+
+-- end: ftd.row
+
+-- end: counter
