@@ -122,8 +122,8 @@ let foo__header = function (parent, inherited, args)
   try {
     let __args__ = {
       show_link: false,
-      mouse_in: fastn.mutable(false),
-      input_value: fastn.mutable(null),
+      mouse_in: fastn.wrapMutable(false),
+      input_value: fastn.wrapMutable(null),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);
@@ -241,7 +241,7 @@ let foo__todo_list_display = function (parent, inherited, args)
   __fastn_package_name__ = "foo";
   try {
     let __args__ = {
-      todo_list: fastn.mutable(fastn.mutableList([])),
+      todo_list: fastn.wrapMutable(fastn.mutableList([])),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);
@@ -417,7 +417,7 @@ let foo__demo = function (parent, inherited, args)
         rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
           let rooti0 = foo__todo_list_display(root, inherited, {
             name: global.foo__task,
-            todo_list: global.foo__todo_list
+            todo_list: fastn.wrapMutable(global.foo__todo_list)
           });
         }
         ]), inherited);

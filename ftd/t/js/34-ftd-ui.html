@@ -62,7 +62,7 @@ let foo__switcher = function (parent, inherited, args)
   try {
     let __args__ = {
       s: fastn.mutableList([]),
-      is_active: fastn.mutable(0),
+      is_active: fastn.wrapMutable(0),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);

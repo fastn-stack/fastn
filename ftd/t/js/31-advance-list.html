@@ -134,7 +134,7 @@ let foo__form = function (parent, inherited, args)
   __fastn_package_name__ = "foo";
   try {
     let __args__ = {
-      ns: fastn.mutable(fastn_utils.clone(global.foo__ns)),
+      ns: fastn.wrapMutable(fastn_utils.clone(global.foo__ns)),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);

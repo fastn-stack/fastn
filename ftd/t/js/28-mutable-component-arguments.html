@@ -41,8 +41,8 @@ let foo__foo = function (parent, inherited, args) {
   __fastn_package_name__ = "foo";
   try {
     let __args__ = {
-      a: fastn.mutable(1),
-      clicked: fastn.mutable(false),
+      a: fastn.wrapMutable(1),
+      clicked: fastn.wrapMutable(false),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);

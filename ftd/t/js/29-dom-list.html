@@ -79,7 +79,7 @@
     });
     fastn_utils.getter(global.foo__counters).forLoop(parent, function (root, item, index) {
       let rooti0 = foo__counter_list(root, inherited, {
-        counter: item
+        counter: fastn.wrapMutable(item)
       });
       return rooti0;
     });
