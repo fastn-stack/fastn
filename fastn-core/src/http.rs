@@ -331,10 +331,8 @@ where
 {
     if url[1..].contains("://") || url.starts_with("//") {
         f(url).await
-    } else if let Ok(response) = f(format!("https://{}", url)).await {
-        Ok(response)
     } else {
-        f(format!("http://{}", url)).await
+        f(format!("https://{}", url)).await
     }
 }
 
