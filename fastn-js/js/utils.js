@@ -288,9 +288,6 @@ let fastn_utils = {
                     let role = fastn_dom.classes[roleCls];
                     let roleValue = role['value'];
                     let fontFamily = roleValue['font-family'];
-
-                    console.log(code.style);
-
                     code.style.fontFamily = fontFamily;
                 });
             });

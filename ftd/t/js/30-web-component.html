@@ -105,8 +105,8 @@ let foo__demo_link = function (parent, inherited, args)
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "blog post to learn more", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://fastn.io/blog/web-components/", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "blog post to learn more", inherited);
     }
     ]), inherited);
     return parenti0;
@@ -137,8 +137,8 @@ let foo__header = function (parent, inherited, args)
     parenti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Web Component Demo", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_large"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Web Component Demo", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
     },
     function (root, inherited) {
@@ -156,8 +156,8 @@ let foo__header = function (parent, inherited, args)
       rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Task:", inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("button_large"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Task:", inherited);
       },
       function (root, inherited) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
@@ -177,7 +177,6 @@ let foo__header = function (parent, inherited, args)
       },
       function (root, inherited) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Create", inherited);
         rooti0.addEventHandler(fastn_dom.Event.Click, function () {
           ftd.set_string({
             a: global.foo__task,
@@ -215,6 +214,7 @@ let foo__header = function (parent, inherited, args)
           }
         }
         ), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Create", inherited);
       }
       ]), inherited);
     },
@@ -272,18 +272,18 @@ let foo__ftd_todo_display = function (parent, inherited, args)
     parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween, inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.item.get("name"), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("button_large"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.item.get("name"), inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.item.get("status"), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.Center, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
         dark: "blue",
         light: "blue"
       }), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("button_large"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.item.get("status"), inherited);
     }
     ]), inherited);
     return parenti0;
@@ -321,7 +321,6 @@ let foo__ftd_world = function (parent, inherited, args)
     parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "FTD World", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Role, fastn.formula([inherited.get("types").get("heading_medium"),
       ftd.device,
       inherited.get("types").get("heading_small")], function () {
@@ -334,6 +333,7 @@ let foo__ftd_world = function (parent, inherited, args)
         }
       }
       ), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "FTD World", inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
