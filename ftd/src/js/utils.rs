@@ -257,7 +257,7 @@ pub(crate) fn get_set_property_values_for_provided_component_properties(
     component_properties: &[ftd::interpreter::Property],
     line_number: usize,
     has_rive_components: &mut bool,
-) -> Option<Vec<(String, fastn_js::SetPropertyValue)>> {
+) -> Option<Vec<(String, fastn_js::SetPropertyValue, bool)>> {
     use itertools::Itertools;
 
     // Attempt to retrieve component or web component arguments
@@ -280,6 +280,7 @@ pub(crate) fn get_set_property_values_for_provided_component_properties(
                                 has_rive_components,
                                 false,
                             ),
+                            v.mutable,
                         )
                     })
                 })

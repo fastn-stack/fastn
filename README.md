@@ -219,6 +219,34 @@ We also offer our own hosting solution for your static and dynamic sites. Using
 managed hosting solution, that a non programmers can use with ease.
 
 
+## Usage with Nix
+
+```sh
+nix run github:fastn-stack/fastn
+```
+
+In a `flake.nix` file:
+
+```Nix
+{
+  inputs = {
+    flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    fastn.url = "github:fastn-stack/fastn";
+  };
+
+  outputs = { self, flake-utils, nixpkgs, fastn }:
+    flake-utils.lib.eachDefaultSystem (system:
+      rec {
+        # nix develop
+        devShell = pkgs.mkShell {
+          nativeBuildInputs = [ fastn ];
+        };
+      }
+    );
+}
+```
+
 
 ## Contributors
 

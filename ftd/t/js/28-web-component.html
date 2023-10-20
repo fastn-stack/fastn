@@ -36,7 +36,7 @@
     });
     let parenti1 = foo__word_count(parent, inherited, {
       body: "This, is, the, body.",
-      count: global.foo__count
+      count: fastn.wrapMutable(global.foo__count)
     });
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;

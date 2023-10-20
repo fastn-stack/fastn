@@ -49,21 +49,21 @@
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Change name 1", inherited);
       rooti0.addEventHandler(fastn_dom.Event.Click, function () {
         foo__append_yo({
           a: global.foo__name,
         }, rooti0);
       });
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Change name 1", inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Change name 2", inherited);
       rooti0.addEventHandler(fastn_dom.Event.Click, function () {
         foo__append_yo({
           a: global.foo__name2,
         }, rooti0);
       });
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Change name 2", inherited);
     }
     ]), inherited);
   } finally {

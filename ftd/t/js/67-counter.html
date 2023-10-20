@@ -16,15 +16,23 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3"><div data-id="4" class="__c-4 __rl-5">This is default title</div><div data-id="5" class="__m-6">10</div></div><div data-id="6" class="__c-7">Hello World</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_row __p-3 __bw-4 __br-5 __bgc-6 __g-7"><div data-id="4" class="__cur-8">➕</div><div data-id="5">10</div><div data-id="6" class="__cur-9">➖</div></div><div data-id="7" class="ft_row __p-10 __bw-11 __br-12 __bgc-13 __g-14"><div data-id="8" class="__cur-15">➕</div><div data-id="9">10</div><div data-id="10" class="__cur-16">➖</div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
-	.__w-3 { width: 100%; }
-	.__c-4 { color: red !important; }
-	.__rl-5 {  font-family: sans-serif; font-size: 50px; font-weight: 400; line-height: 65px; }
-	body.mobile .__rl-5 {  font-family: sans-serif; font-size: 36px; font-weight: 400; line-height: 54px; }
-	.__m-6 { margin: 10px; }
-	.__c-7 { color: red !important; }
+	.__p-3 { padding: 20px; }
+	.__bw-4 { border-width: 2px; }
+	.__br-5 { border-radius: 5px; }
+	.__bgc-6 { background-color: yellow; }
+	.__g-7 { gap: 20px; }
+	.__cur-8 { cursor: pointer; }
+	.__cur-9 { cursor: pointer; }
+	.__p-10 { padding: 20px; }
+	.__bw-11 { border-width: 2px; }
+	.__br-12 { border-radius: 5px; }
+	.__bgc-13 { background-color: yellow; }
+	.__g-14 { gap: 20px; }
+	.__cur-15 { cursor: pointer; }
+	.__cur-16 { cursor: pointer; }
     </style>
 <script>
     (function() {
@@ -32,48 +40,65 @@
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let parenti0 = foo__bar(parent, inherited);
-    let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti1.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "red",
-      light: "red"
-    }), inherited);
-    parenti1.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([], function () {
-      return foo__foo({
-        a: "Hello",
-        b: "World",
-      }, parenti1);
-    }), inherited);
+    let parenti0 = foo__counter(parent, inherited, {
+      count: fastn.wrapMutable(10)
+    });
+    let parenti1 = foo__counter(parent, inherited, {
+      count: fastn.wrapMutable(10)
+    });
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 global["main"] = main;
-let foo__bar = function (parent, inherited, args) {
+let foo__counter = function (parent, inherited, args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
     let __args__ = {
-      title: "This is default title",
-      num: 10,
+      count: fastn.wrapMutable(20),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);
-    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.BorderRadius, fastn_dom.Length.Px(5), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn.formula([__args__.count], function () {
+      if (function () {
+        return (fastn_utils.getter(__args__.count) % 2 == 0);
+      }()) {
+        return fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        }));
+      }
+    }
+    ), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(20)), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "red",
-        light: "red"
-      }), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_large"), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.title, inherited);
+      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+        ftd.increment_by({
+          a: __args__.count,
+          v: 1,
+        }, rooti0);
+      });
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "➕", inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-      rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, __args__.num, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, __args__.count, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+        ftd.increment_by({
+          a: __args__.count,
+          v: - 1,
+        }, rooti0);
+      });
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "➖", inherited);
     }
     ]), inherited);
     return parenti0;
@@ -81,21 +106,7 @@ let foo__bar = function (parent, inherited, args) {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
-global["foo__bar"] = foo__bar;
-let foo__foo = function (args) {
-  let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "foo";
-  try {
-    let __args__ = fastn_utils.getArgs({
-      a: "Ritesh",
-      b: "Rithik",
-    }, args);
-    return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
-  } finally {
-    __fastn_package_name__ = __fastn_super_package_name__;
-  }
-}
-global["foo__foo"] = foo__foo;
+global["foo__counter"] = foo__counter;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

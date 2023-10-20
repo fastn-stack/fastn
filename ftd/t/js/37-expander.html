@@ -94,7 +94,7 @@ let foo__box = function (parent, inherited, args) {
     let __args__ = {
       title: "default header",
       body: "default body",
-      open: fastn.mutable(false),
+      open: fastn.wrapMutable(false),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);
@@ -147,9 +147,9 @@ let foo__box = function (parent, inherited, args) {
         return fastn_utils.getter(__args__.open);
       }, function (root) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.body, inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.HugContent, inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.body, inherited);
         return rooti0;
       });
     }
