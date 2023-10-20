@@ -119,6 +119,9 @@ skip: true
   - On Windows: /windows/
     document: author/setup/windows.ftd
     description: Install on Windows
+  - Uninstall fastn: /uninstall/
+    document: author/setup/uninstall.ftd
+    decription: Uninstall fastn
   - Install GitHub: /github/
     document: /get-started/github.ftd
     skip: true

@@ -1,0 +1,40 @@
+-- ds.page: Uninstall `fastn`
+
+Uninstalling `fastn` is as easy as installation. When you download the
+executable file to install, it comes with `uninstall.exe` executable file.
+
+-- ftd.image:
+src: $fastn-assets.files.images.setup.uninstall-1.png
+border-width.px: 1
+border-radius.px: 5
+border-color: $inherited.colors.border
+align-self: center
+
+-- ds.h1: Steps to Uninstall `fastn`
+
+- Open the `fastn` folder, which you will find in the Program Files in C drive
+- Double click on the `uninstall.exe` file 
+- On the `User Account Control`, click `Yes` to start the process of
+  `uninstall.exe`. (This will uninstall fastn)
+- Click on `Close` button to close the `Fastn Uninstall` window 
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.uninstall-2.png
+
+-- ds.markdown: 
+
+To verify if `fastn` is uninstalled:
+
+- Open `command prompt`
+- Write `fastn` and hit enter
+
+It will show a message: 
+
+'fastn' is not recognized as an internal or external command, operable program
+ or batch file."
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.uninstall-3.png
+
+
+-- end: ds.page
