@@ -201,7 +201,6 @@ let foo__form = function (parent, inherited, args)
         return (fastn_utils.getter(__args__.ns.get("name")) !== fastn_utils.getter(ftd.empty) && fastn_utils.getter(__args__.ns.get("score")) !== fastn_utils.getter(ftd.empty));
       }, function (root) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Submit", inherited);
         rooti0.addEventHandler(fastn_dom.Event.Click, function () {
           foo__insert({
             a: global.foo__name_scores,
@@ -218,6 +217,7 @@ let foo__form = function (parent, inherited, args)
           dark: "#4CAF50",
           light: "#4CAF50"
         })), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Submit", inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
         return rooti0;
       });
