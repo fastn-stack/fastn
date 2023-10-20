@@ -149,6 +149,7 @@ features = [
     # sqlite dynamic library is installed on everyone's machine. We can chose to give two
     # binaries, one with bundled, one without, but it is not worth the tradeoff right now.
     "bundled",
+    "column_decltype",
 ]
 
 
