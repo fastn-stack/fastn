@@ -284,7 +284,14 @@ let fastn_utils = {
 
             codeElements.forEach(code => {
                 roleClasses.forEach(roleClass => {
-                    code.classList.add(roleClass);
+                    var roleCls = '.' + roleClass;
+                    let role = fastn_dom.classes[roleCls];
+                    let roleValue = role['value'];
+                    let fontFamily = roleValue['font-family'];
+
+                    console.log(code.style);
+
+                    code.style.fontFamily = fontFamily;
                 });
             });
 
