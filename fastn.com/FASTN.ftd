@@ -863,39 +863,43 @@ skip: true
   document: workshop/03-add-doc-site.ftd
 - Publish on Github Pages: /workshop/publish/
   document: workshop/04-publish-on-github.ftd
-- Basics Of Markdown: /workshop/basics-of-markdown/
-  document: workshop/05-basics-of-markdown.ftd
-  skip: true
-- Add A New Page: /workshop/add-new-page/
-  document: workshop/06-create-new-page.ftd
+- Basics Of text: /workshop/basics-of-text/
+  document: workshop/05-basics-of-text.ftd
+- Add an image, youtube video: /workshop/add-image-and-video/
+  document: workshop/06-add-image-and-video.ftd
+- Create A New Page: /workshop/add-new-page/
+  document: workshop/07-create-new-page.ftd
+- Creating `ds.ftd`: /workshop/ds/
+  document: workshop/08-creating-ds.ftd
   skip: true
 - Add sitemap: /workshop/add-sitemap/
-  document: workshop/07-add-sitemap.ftd
-  skip: true
-- Add an image, youtube video: /workshop/add-image-and-video/
-  document: workshop/08-add-image-and-video.ftd
-  skip: true
-- Using more sections: /workshop/more-sections/
-  document: workshop/09-more-sections.ftd
-  skip: true
-- Change color scheme, typography: /workshop/change-cs-and-typo/
-  document: workshop/10-change-cs-typo.ftd
+  document: workshop/09-add-sitemap.ftd
   skip: true
 - Change theme: /workshop/change-theme/
-  document: workshop/11-change-theme.ftd
+  document: workshop/10-change-theme.ftd
   skip: true
-- Creating ds.ftd: /workshop/ds/
-  document: workshop/12-creating-ds.ftd
+- Change color scheme, typography: /workshop/change-cs-and-typo/
+  document: workshop/11-change-cs-typo.ftd
   skip: true
-- SEO meta: /workshop/seo/
-  document: workshop/13-seo-meta.ftd
+- Clean the urls: /workshop/clean-url
+  document: workshop/12-document.ftd
   skip: true
-- clean the urls: /workshop/clean-url
-  document: workshop/15-clean-url.ftd
+- Use redirect: /workshop/use-redirect/
+  document: workshop/13-use-redirect.ftd
   skip: true
-- Redirect: /workshop/redirect/
-  document: workshop/14-redirect.ftd
+- SEO meta: /workshop/seo-meta/
+  document: workshop/14-seo-meta.ftd
   skip: true
+- Add banner: /workshop/add-banner/
+  document: workshop/15-add-banner.ftd
+  skip: true
+- Add sidebar: /workshop/add-sidebar/
+  document: workshop/16-add-sidebar.ftd
+  skip: true
+- Portfolio page: /workshop/portfolio/
+  document: workshop/17-portfolio.ftd
+  skip: true
+
 
 # Blog: /blog/
 
