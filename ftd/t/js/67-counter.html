@@ -78,13 +78,13 @@ let foo__counter = function (parent, inherited, args) {
     parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(20)), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "➕", inherited);
       rooti0.addEventHandler(fastn_dom.Event.Click, function () {
         ftd.increment_by({
           a: __args__.count,
           v: 1,
         }, rooti0);
       });
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "➕", inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
@@ -92,13 +92,13 @@ let foo__counter = function (parent, inherited, args) {
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "➖", inherited);
       rooti0.addEventHandler(fastn_dom.Event.Click, function () {
         ftd.increment_by({
           a: __args__.count,
           v: - 1,
         }, rooti0);
       });
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "➖", inherited);
     }
     ]), inherited);
     return parenti0;
