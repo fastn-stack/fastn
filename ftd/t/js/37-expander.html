@@ -94,7 +94,7 @@ let foo__box = function (parent, inherited, args) {
     let __args__ = {
       title: "default header",
       body: "default body",
-      open: fastn.mutable(false),
+      open: fastn.wrapMutable(false),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);

@@ -128,7 +128,7 @@ let foo__display_names = function (parent, inherited, args)
   try {
     let __args__ = {
       names: fastn.mutableList([]),
-      selected: fastn.mutable(0),
+      selected: fastn.wrapMutable(0),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);
@@ -155,7 +155,7 @@ let foo__display_names = function (parent, inherited, args)
         let rooti0 = foo__display_name(root, inherited, {
           name: item,
           idx: index,
-          selected: __args__.selected
+          selected: fastn.wrapMutable(__args__.selected)
         });
         return rooti0;
       });

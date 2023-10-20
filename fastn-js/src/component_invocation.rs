@@ -44,7 +44,7 @@ pub enum ElementKind {
 #[derive(Debug)]
 pub struct InstantiateComponent {
     pub component: InstantiateComponentData,
-    pub arguments: Vec<(String, fastn_js::SetPropertyValue)>,
+    pub arguments: Vec<(String, fastn_js::SetPropertyValue, bool)>,
     pub parent: String,
     pub inherited: String,
     pub should_return: bool,
@@ -66,7 +66,7 @@ pub enum InstantiateComponentData {
 impl InstantiateComponent {
     pub fn new(
         component_name: &str,
-        arguments: Vec<(String, fastn_js::SetPropertyValue)>,
+        arguments: Vec<(String, fastn_js::SetPropertyValue, bool)>,
         parent: &str,
         inherited: &str,
         should_return: bool,
@@ -86,7 +86,7 @@ impl InstantiateComponent {
 
     pub fn new_with_definition(
         component_definition: fastn_js::SetPropertyValue,
-        arguments: Vec<(String, fastn_js::SetPropertyValue)>,
+        arguments: Vec<(String, fastn_js::SetPropertyValue, bool)>,
         parent: &str,
         inherited: &str,
         should_return: bool,

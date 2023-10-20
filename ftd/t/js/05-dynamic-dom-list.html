@@ -53,7 +53,7 @@
         return (fastn_utils.getter(index) % 2 == fastn_utils.getter(global.foo__value));
       }, function (root) {
         let rooti0 = foo__counter_list(root, inherited, {
-          counter: item
+          counter: fastn.wrapMutable(item)
         });
         return rooti0;
       }).getParent();
