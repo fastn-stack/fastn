@@ -11,7 +11,7 @@ Name "Fastn"
 VIProductVersion "${VERSION}"
 
 ; Default installation directory
-InstallDir $PROGRAMFILES\fastn
+InstallDir $$PROGRAMFILES64\fastn
 
 !define PRODUCT_NAME "fastn"
 
