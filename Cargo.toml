@@ -8,7 +8,6 @@ members = [
     "fastn-issues",
     "fastn-js",
     "fastn-grammar",
-    "fastn-observer",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
@@ -84,7 +83,6 @@ fastn-core = { path = "fastn-core" }
 fastn-issues = { path = "fastn-issues" }
 fastn-package = { path = "fastn-package" }
 fastn-runtime = { path = "fastn-runtime" }
-fastn-observer = { path = "fastn-observer" }
 fastn-wasm = { path = "fastn-wasm" }
 fastn-grammar = { path = "fastn-grammar" }
 fluent = "0.16"
@@ -138,6 +136,10 @@ winit = "0.28"
 zip = "0.6"
 prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }
+
+[workspace.dependencies.fastn-observer]
+git = "https://github.com/fastn-stack/fastn-observer"
+rev = "47b29ea"
 
 [workspace.dependencies.rusqlite]
 version = "0.29.0"

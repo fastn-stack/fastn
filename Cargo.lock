@@ -1713,6 +1713,7 @@ dependencies = [
 [[package]]
 name = "fastn-observer"
 version = "0.1.0"
+source = "git+https://github.com/fastn-stack/fastn-observer?rev=47b29ea#47b29eacf78f2ec96a4932631282db9f262ce5a4"
 dependencies = [
  "ansi_term",
  "smallvec",
