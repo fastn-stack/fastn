@@ -66,7 +66,8 @@ pub async fn process(
     let query_response = execute_query(
         &sqlite_database_path,
         query.as_str(),
-        doc.name,
+        doc,
+        headers,
         value.line_number(),
     )
     .await;
@@ -123,15 +124,147 @@ pub(crate) fn result_to_value(
     }
 }
 
+fn resolve_variable_from_doc(
+    var: &str,
+    doc: &ftd::interpreter::TDoc,
+    line_number: usize,
+) -> ftd::interpreter::Result<Box<dyn rusqlite::ToSql>> {
+    let thing = match doc.get_thing(var, line_number) {
+        Ok(ftd::interpreter::Thing::Variable(v)) => v.value.resolve(doc, line_number)?,
+        Ok(v) => {
+            return ftd::interpreter::utils::e2(
+                format!("{var} is not a variable, it's a {v:?}"),
+                doc.name,
+                line_number,
+            )
+        }
+        Err(e) => {
+            return ftd::interpreter::utils::e2(
+                format!("${var} not found in the document: {e:?}"),
+                doc.name,
+                line_number,
+            )
+        }
+    };
+
+    let param_value: Box<dyn rusqlite::ToSql> = match thing {
+        ftd::interpreter::Value::String { text } => Box::new(text),
+        ftd::interpreter::Value::Integer { value } => Box::new(value as i32),
+        _ => unimplemented!(), // Handle other types as needed
+    };
+
+    Ok(param_value)
+}
+
+fn resolve_variable_from_headers(
+    var: &str,
+    param_type: &str,
+    doc: &ftd::interpreter::TDoc,
+    headers: &ftd::ast::HeaderValues,
+    line_number: usize,
+) -> ftd::interpreter::Result<Box<dyn rusqlite::ToSql>> {
+    let header = match headers.optional_header_by_name(var, doc.name, line_number)? {
+        Some(v) => v,
+        None => return Ok(Box::new(None::<Box<dyn rusqlite::ToSql>>)),
+    };
+
+    if let ftd::ast::VariableValue::String { value, .. } = &header.value {
+        if let Some(stripped) = value.strip_prefix('$') {
+            return Ok(Box::new(
+                resolve_variable_from_doc(stripped, doc, line_number).map(Some)?,
+            ));
+        }
+    }
+
+    let param_value: Box<dyn rusqlite::ToSql> = match (param_type, &header.value) {
+        ("TEXT", ftd::ast::VariableValue::String { value, .. }) => Box::new(value.clone()),
+        ("INTEGER", ftd::ast::VariableValue::String { value, .. }) => {
+            Box::new(value.parse::<i32>().unwrap())
+        }
+        ("REAL", ftd::ast::VariableValue::String { value, .. }) => {
+            Box::new(value.parse::<f32>().unwrap())
+        }
+        _ => unimplemented!(), // Handle other types as needed
+    };
+
+    Ok(param_value)
+}
+
+fn extract_named_parameters(
+    query: &str,
+    doc: &ftd::interpreter::TDoc,
+    headers: ftd::ast::HeaderValues,
+    line_number: usize,
+) -> ftd::interpreter::Result<Vec<Box<dyn rusqlite::ToSql>>> {
+    let mut params = Vec::new();
+    let mut param_name = String::new();
+    let mut param_type = String::new();
+    let mut inside_param = false;
+    let mut inside_type_hint = false;
+
+    for c in query.chars() {
+        if c == ':' && !inside_param {
+            inside_param = true;
+            param_name.clear();
+            param_type.clear();
+            inside_type_hint = false;
+        } else if c == ':' && inside_param {
+            inside_type_hint = true;
+        } else if c.is_alphanumeric() && inside_param && !inside_type_hint {
+            param_name.push(c);
+        } else if c.is_alphanumeric() && inside_param && inside_type_hint {
+            param_type.push(c);
+        } else if inside_param && (c == ',' || c.is_whitespace()) && !param_name.is_empty() {
+            inside_param = false;
+            inside_type_hint = false;
+
+            let param_value =
+                resolve_variable_from_headers(&param_name, &param_type, doc, &headers, line_number)
+                    .or_else(|_| resolve_variable_from_doc(&param_name, doc, line_number))
+                    .map(|v| Box::new(v) as Box<dyn rusqlite::ToSql>);
+
+            match param_value {
+                Ok(v) => params.push(v),
+                Err(_) => {
+                    // todo: Handle Error
+                }
+            }
+
+            // clear param_name and param_type
+            param_name.clear();
+            param_type.clear();
+        }
+    }
+
+    // handle the last param if there was no trailing comma or space
+    if !param_name.is_empty() {
+        let param_value =
+            resolve_variable_from_headers(&param_name, &param_type, doc, &headers, line_number)
+                .or_else(|_| resolve_variable_from_doc(&param_name, doc, line_number))
+                .map(|v| Box::new(v) as Box<dyn rusqlite::ToSql>);
+
+        match param_value {
+            Ok(v) => params.push(v),
+            Err(_) => {
+                // todo: handle the error
+            }
+        }
+    }
+
+    Ok(params)
+}
+
 async fn execute_query(
     database_path: &camino::Utf8Path,
     query: &str,
-    doc_name: &str,
+    doc: &ftd::interpreter::TDoc<'_>,
+    headers: ftd::ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
+    let doc_name = doc.name;
     let conn = match rusqlite::Connection::open_with_flags(
         database_path,
-        rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+        rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
     ) {
         Ok(conn) => conn,
         Err(e) => {
@@ -161,7 +294,7 @@ async fn execute_query(
 
     // let mut stmt = conn.prepare("SELECT * FROM test where name = ?")?;
     // let mut rows = stmt.query([name])?;
-    let params: Vec<String> = vec![];
+    let params = extract_named_parameters(query, doc, headers, line_number)?;
     let mut rows = match stmt.query(rusqlite::params_from_iter(params)) {
         Ok(v) => v,
         Err(e) => {

@@ -7,6 +7,7 @@ pub fn domain(host: &str) -> String {
         None => host.to_string(),
     }
 }
+
 pub async fn get_api<T: serde::de::DeserializeOwned>(
     url: &str,
     token: &str,
@@ -32,6 +33,7 @@ pub async fn get_api<T: serde::de::DeserializeOwned>(
 
     Ok(response.json().await?)
 }
+
 pub async fn encrypt_str(user_detail_str: &String) -> String {
     use magic_crypt::MagicCryptTrait;
     let secret_key = fastn_core::auth::secret_key();
@@ -41,12 +43,14 @@ pub async fn encrypt_str(user_detail_str: &String) -> String {
         .as_str()
         .to_owned()
 }
+
 pub async fn decrypt_str(encrypted_str: &String) -> Result<String, MagicCryptError> {
     use magic_crypt::MagicCryptTrait;
     let secret_key = fastn_core::auth::secret_key();
     let mc_obj = magic_crypt::new_magic_crypt!(&secret_key, 256);
     mc_obj.decrypt_base64_to_string(encrypted_str)
 }
+
 pub fn is_login(req: &actix_web::HttpRequest) -> bool {
     let mut found_cookie = false;
     for auth_provider in fastn_core::auth::AuthProviders::AUTH_ITER.iter() {

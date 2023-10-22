@@ -33,12 +33,12 @@
       return (fastn_utils.getter(ftd.device) == "mobile");
     }, function (root) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from mobile", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
         dark: "yellow",
         light: "yellow"
       })), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Link, "fastn.com", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from mobile", inherited);
       return rooti0;
     });
     fastn_dom.conditionalDom(parent, [
@@ -47,17 +47,17 @@
       return (fastn_utils.getter(ftd.device) == "desktop");
     }, function (root) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
         dark: "yellow",
         light: "yellow"
       })), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Link, "fastn.com", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop", inherited);
       return rooti0;
     });
     let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Link", inherited);
     parenti2.setProperty(fastn_dom.PropertyKind.Link, null, inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Link", inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
