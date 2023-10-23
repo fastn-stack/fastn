@@ -1,5 +1,3 @@
-// TODO: This has be set while creating the GitHub OAuth Application
-pub const CALLBACK_URL: &str = "/-/auth/github/callback/";
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct UserDetail {
     pub token: String,
@@ -9,25 +7,11 @@ pub struct UserDetail {
 pub async fn login(
     req: &fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    // GitHub will be redirect to this url after login process completed
-
-    let mut next_url = "/".to_string();
-    if let Ok(queries) =
-        actix_web::web::Query::<std::collections::HashMap<String, String>>::from_query(
-            req.query_string(),
-        )
-    {
-        if queries.get("next").is_some() {
-            next_url = queries.get("next").unwrap().to_string();
-        }
-    }
-
     let redirect_url: String = format!(
-        "{}://{}{}?next={}",
+        "{}://{}/-/auth/github/?next={}",
         req.connection_info.scheme(),
         req.connection_info.host(),
-        CALLBACK_URL,
-        next_url,
+        req.q("next", "/".to_string())?,
     );
 
     // Set up the config for the Github OAuth2 process.
@@ -50,9 +34,7 @@ pub async fn login(
     // let mut pairs: Vec<(&str, &str)> = vec![("response_type", self.response_type.as_ref())];
 
     // send redirect to /auth/github/callback/
-    Ok(actix_web::HttpResponse::Found()
-        .append_header((actix_web::http::header::LOCATION, authorize_url.to_string()))
-        .finish())
+    Ok(fastn_core::http::redirect(authorize_url.to_string()))
 }
 
 // route: /auth/github/callback/
@@ -69,10 +51,9 @@ pub async fn callback(
     }
     let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?.0;
     let auth_url = format!(
-        "{}://{}{}",
+        "{}://{}/-/auth/github/",
         req.connection_info.scheme(),
         req.connection_info.host(),
-        CALLBACK_URL
     );
     let client = utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(auth_url)?);
     match client
