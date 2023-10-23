@@ -38,9 +38,12 @@
       dark: "red",
       light: "red"
     })), inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.MaskImage, fastn_dom.MaskImage.Src(fastn.recordInstance({
-      dark: "https://mdn.github.io/css-examples/masking/star.svg",
-      light: "https://mdn.github.io/css-examples/masking/star.svg"
+    parenti0.setProperty(fastn_dom.PropertyKind.Mask, fastn_dom.Mask.Image(fastn.recordInstance({
+      linear_gradient: null,
+      src: fastn.recordInstance({
+        dark: "https://mdn.github.io/css-examples/masking/star.svg",
+        light: "https://mdn.github.io/css-examples/masking/star.svg"
+      })
     })), inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
