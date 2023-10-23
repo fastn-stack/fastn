@@ -1,22 +1,22 @@
 // route: /-/auth/login/
-pub async fn login(req: &fastn_core::http::Request) -> fastn_core::Result<actix_web::HttpResponse> {
+pub async fn login(
+    req: &fastn_core::http::Request,
+    next: String,
+) -> fastn_core::Result<fastn_core::http::Response> {
     if fastn_core::auth::utils::is_authenticated(req) {
-        return Ok(fastn_core::http::redirect("/".to_string()));
+        return Ok(fastn_core::http::redirect(next));
     }
 
-    let platform = req.q("platform", "github".to_string())?;
+    let provider = req.q("provider", "github".to_string())?;
 
-    match platform.as_str() {
-        "github" => fastn_core::auth::github::login(req).await,
-        _ => {
-            return Ok(actix_web::HttpResponse::BadRequest()
-                .body("Please select the platform, by which you want to login"));
-        } // _ => unreachable!(),
+    match provider.as_str() {
+        "github" => fastn_core::auth::github::login(req, next).await,
+        _ => Ok(fastn_core::not_found!("unknown provider: {}", provider)),
     }
 }
 
 // route: /-/auth/logout/
-pub fn logout() -> fastn_core::Result<actix_web::HttpResponse> {
+pub fn logout(next: String) -> fastn_core::Result<fastn_core::http::Response> {
     // TODO: Refactor, Not happy with this code, too much of repetition of similar code
     Ok(actix_web::HttpResponse::Found()
         .cookie(
@@ -24,7 +24,7 @@ pub fn logout() -> fastn_core::Result<actix_web::HttpResponse> {
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
-        .append_header((actix_web::http::header::LOCATION, "/".to_string()))
+        .append_header((actix_web::http::header::LOCATION, next))
         .finish())
 }
 
@@ -33,11 +33,13 @@ pub fn logout() -> fastn_core::Result<actix_web::HttpResponse> {
 pub async fn handle_auth(
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    let next = req.q("next", "/".to_string())?;
+
     match req.path() {
-        "/-/auth/login/" => login(&req).await,
+        "/-/auth/login/" => login(&req, next).await,
         // TODO: This has be set while creating the GitHub OAuth Application
-        "/-/auth/github/" => fastn_core::auth::github::callback(&req).await,
-        "/-/auth/logout/" => logout(),
+        "/-/auth/github/" => fastn_core::auth::github::callback(&req, next).await,
+        "/-/auth/logout/" => logout(next),
         _ => Ok(fastn_core::not_found!("route not found: {}", req.path())),
     }
 }
