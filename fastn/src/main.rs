@@ -41,7 +41,7 @@ async fn async_main() -> Result<(), Error> {
             if val == "1" && !matches.get_flag("check-for-updates") {
                 check_for_update().await?;
             }
-            return Ok(());
+            Ok(())
         }
         Err(_) => Ok(()),
     }
