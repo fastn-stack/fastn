@@ -39,7 +39,9 @@
             openssl.dev
           ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-          buildInput = with pkgs; lib.optionals stdenv.isDarwin [ darwin.Security ];
+          buildInputs = with pkgs; lib.optionals stdenv.isDarwin [
+            darwin.apple_sdk.frameworks.SystemConfiguration
+          ];
         };
       in
       rec {
@@ -52,7 +54,12 @@
 
         # nix develop
         devShell = pkgs.mkShell {
+          name = "fastn-shell";
           nativeBuildInputs = [ toolchain pkgs.pkg-config pkgs.openssl.dev ];
+
+          shellHook = ''
+            export PATH="$PATH:$HOME/.cargo/bin"
+          '';
         };
 
         formatter = pkgs.nixpkgs-fmt;
