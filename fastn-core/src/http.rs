@@ -231,6 +231,18 @@ impl Request {
         &self.query
     }
 
+    pub fn q<T>(&self, key: &str, default: T) -> fastn_core::Result<T>
+    where
+        T: serde::de::DeserializeOwned,
+    {
+        let value = match self.query.get(key) {
+            Some(v) => v,
+            None => return Ok(default),
+        };
+
+        Ok(serde_json::from_value(value.clone())?)
+    }
+
     pub fn get_ip(&self) -> Option<String> {
         self.ip.clone()
     }

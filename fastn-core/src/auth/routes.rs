@@ -4,20 +4,9 @@ pub async fn login(req: &fastn_core::http::Request) -> fastn_core::Result<actix_
         return Ok(fastn_core::http::redirect("/".to_string()));
     }
 
-    #[derive(serde::Deserialize)]
-    pub struct QueryParams {
-        pub platform: String,
-    }
+    let platform = req.q("platform", "github".to_string())?;
 
-    let query = match actix_web::web::Query::<QueryParams>::from_query(req.query_string()) {
-        Ok(q) => q,
-        Err(err) => {
-            dbg!(err);
-            return Ok(actix_web::HttpResponse::BadRequest()
-                .body("Please select the platform, by which you want to login"));
-        }
-    };
-    match query.platform.as_str() {
+    match platform.as_str() {
         "github" => fastn_core::auth::github::login(req).await,
         _ => {
             return Ok(actix_web::HttpResponse::BadRequest()
@@ -46,6 +35,7 @@ pub async fn handle_auth(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     match req.path() {
         "/-/auth/login/" => login(&req).await,
+        // TODO: This has be set while creating the GitHub OAuth Application
         "/-/auth/github/" => fastn_core::auth::github::callback(&req).await,
         "/-/auth/logout/" => logout(),
         _ => Ok(fastn_core::not_found!("route not found: {}", req.path())),
