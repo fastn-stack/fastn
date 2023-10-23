@@ -65,26 +65,26 @@
     }
     ), inherited);
     let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, ">> Blur/Unblur Image <<", inherited);
     parenti2.addEventHandler(fastn_dom.Event.Click, function () {
       ftd.toggle({
         a: global.foo__blur_image,
       }, parenti2);
     });
+    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, ">> Blur/Unblur Image <<", inherited);
     let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti3.setProperty(fastn_dom.PropertyKind.StringValue, ">> Set/Unset Contrast on Image <<", inherited);
     parenti3.addEventHandler(fastn_dom.Event.Click, function () {
       ftd.toggle({
         a: global.foo__contrast_image,
       }, parenti3);
     });
+    parenti3.setProperty(fastn_dom.PropertyKind.StringValue, ">> Set/Unset Contrast on Image <<", inherited);
     let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti4.setProperty(fastn_dom.PropertyKind.StringValue, ">> Set/Unset Multi <<", inherited);
     parenti4.addEventHandler(fastn_dom.Event.Click, function () {
       ftd.toggle({
         a: global.foo__set_multi_filters,
       }, parenti4);
     });
+    parenti4.setProperty(fastn_dom.PropertyKind.StringValue, ">> Set/Unset Multi <<", inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

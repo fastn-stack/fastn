@@ -204,7 +204,7 @@ We are working on `wasm` support so developers can extend `ftd's` standard
 libraries and offer access to more backend functionalities.
 
 
-<a href="https://fastn.com/#upcoming-wasm-support" rel="nofollow"><img src="wasm.png" alt="wasm.png" style="max-width: 100%; width: 450px;"></a>
+<a href="https://fastn.com/#upcoming-wasm-support" rel="nofollow"><img src="assets/wasm.png" alt="wasm.png" style="max-width: 100%; width: 450px;"></a>
 
 
 ## Hosting Dynamic Sites
@@ -218,6 +218,34 @@ We also offer our own hosting solution for your static and dynamic sites. Using
 `fastn` Cloud frees you from devops needs, and you get a fully integrated,
 managed hosting solution, that a non programmers can use with ease.
 
+
+## Usage with Nix
+
+```sh
+nix run github:fastn-stack/fastn
+```
+
+In a `flake.nix` file:
+
+```Nix
+{
+  inputs = {
+    flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    fastn.url = "github:fastn-stack/fastn";
+  };
+
+  outputs = { self, flake-utils, nixpkgs, fastn }:
+    flake-utils.lib.eachDefaultSystem (system:
+      rec {
+        # nix develop
+        devShell = pkgs.mkShell {
+          nativeBuildInputs = [ fastn ];
+        };
+      }
+    );
+}
+```
 
 
 ## Contributors

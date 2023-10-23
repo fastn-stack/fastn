@@ -38,7 +38,6 @@
   __fastn_package_name__ = "foo";
   try {
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "fastn", inherited);
     parenti0.addEventHandler(fastn_dom.Event.MouseEnter, function () {
       ftd.set_bool({
         a: global.foo__hover,
@@ -68,13 +67,14 @@
     ), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_small"), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Link, "https://fastn.com/", inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "fastn", inherited);
     let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
     parenti1.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text"), inherited);
     parenti1.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(inherited.get("colors").get("background").get("step_1")), inherited);
+    parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
     let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
     parenti2.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(global.foo__bg_og), inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

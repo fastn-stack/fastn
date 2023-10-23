@@ -1160,6 +1160,11 @@ impl Text {
         let mut component_statements = vec![];
         let kernel = create_element(fastn_js::ElementKind::Text, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+        component_statements.extend(self.common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            rdata,
+        ));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::StringValue,
@@ -1167,11 +1172,6 @@ impl Text {
                 element_name: kernel.name.to_string(),
                 inherited: rdata.inherited_variable_name.to_string(),
             },
-        ));
-        component_statements.extend(self.common.to_set_properties(
-            kernel.name.as_str(),
-            doc,
-            rdata,
         ));
         component_statements.extend(self.text_common.to_set_properties(
             kernel.name.as_str(),
