@@ -39,7 +39,7 @@ async fn async_main() -> Result<(), Error> {
     match std::env::var("FASTN_CHECK_FOR_UPDATES") {
         Ok(val) => {
             if val != "false" && !matches.get_flag("check-for-updates") {
-                check_for_update().await?;
+                check_for_update(false).await?;
             }
             Ok(())
         }
@@ -255,18 +255,22 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::post_build_check(&config).await;
     }
 
+    if matches.get_flag("check-for-updates") {
+        return check_for_update(true).await;
+    }
+
     unreachable!("No subcommand matched");
 }
 
 async fn check_for_update_cmd(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
     if matches.get_flag("check-for-updates") {
-        check_for_update().await?;
+        check_for_update(false).await?;
     }
 
     Ok(())
 }
 
-async fn check_for_update() -> fastn_core::Result<()> {
+async fn check_for_update(report: bool) -> fastn_core::Result<()> {
     #[derive(serde::Deserialize, Debug)]
     struct GithubRelease {
         tag_name: String,
@@ -289,6 +293,8 @@ async fn check_for_update() -> fastn_core::Result<()> {
                 "You are using fastn {}, and latest release is {}, visit https://fastn.com/install/ to learn how to upgrade.",
                 current_version, release.tag_name
             );
+    } else if report {
+        println!("You are using the latest release of fastn.");
     }
 
     Ok(())
