@@ -38,7 +38,7 @@ async fn async_main() -> Result<(), Error> {
 
     match std::env::var("FASTN_CHECK_FOR_UPDATES") {
         Ok(val) => {
-            if val == "1" && !matches.get_flag("check-for-updates") {
+            if val != "false" && !matches.get_flag("check-for-updates") {
                 check_for_update().await?;
             }
             Ok(())
@@ -286,7 +286,7 @@ async fn check_for_update() -> fastn_core::Result<()> {
 
     if release.tag_name != current_version {
         println!(
-                "You are using fastn {}, and latest release is {}, visit https://fastn.com/install to learn how to upgrade.",
+                "You are using fastn {}, and latest release is {}, visit https://fastn.com/install/ to learn how to upgrade.",
                 current_version, release.tag_name
             );
     }
