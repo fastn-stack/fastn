@@ -86,6 +86,7 @@ pub struct Request {
     ip: Option<String>,
     scheme: String,
     host: String,
+    pub connection_info: actix_web::dev::ConnectionInfo,
     // path_params: Vec<(String, )>
 }
 
@@ -107,6 +108,7 @@ impl Request {
             uri: req.uri().to_string(),
             path: req.path().to_string(),
             query_string: req.query_string().to_string(),
+            connection_info: req.connection_info().clone(),
             headers,
             query: {
                 actix_web::web::Query::<std::collections::HashMap<String, serde_json::Value>>::from_query(

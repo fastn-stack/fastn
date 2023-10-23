@@ -51,7 +51,7 @@ pub async fn decrypt_str(encrypted_str: &String) -> Result<String, MagicCryptErr
     mc_obj.decrypt_base64_to_string(encrypted_str)
 }
 
-pub fn is_login(req: &actix_web::HttpRequest) -> bool {
+pub fn is_authenticated(req: &fastn_core::http::Request) -> bool {
     let mut found_cookie = false;
     for auth_provider in fastn_core::auth::AuthProviders::AUTH_ITER.iter() {
         dbg!(&auth_provider);

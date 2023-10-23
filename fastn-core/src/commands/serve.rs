@@ -638,17 +638,6 @@ async fn route(
         return Ok(default_response);
     }
 
-    if req.path().starts_with("/auth/") {
-        return fastn_core::auth::routes::handle_auth(
-            req,
-            app_data.edition.clone(),
-            app_data.external_js.clone(),
-            app_data.inline_js.clone(),
-            app_data.external_css.clone(),
-            app_data.inline_css.clone(),
-        )
-        .await;
-    }
     let req = fastn_core::http::Request::from_actix(req, body);
     match (req.method().to_lowercase().as_str(), req.path()) {
         ("post", "/-/sync/") if cfg!(feature = "remote") => sync(req).await,
@@ -656,6 +645,7 @@ async fn route(
         ("get", "/-/clone/") if cfg!(feature = "remote") => clone(req).await,
         ("get", t) if t.starts_with("/-/view-src/") => view_source(req).await,
         ("get", t) if t.starts_with("/-/edit-src/") => edit_source(req).await,
+        ("get", t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
         ("post", "/-/edit/") => edit(req).await,
         ("post", "/-/revert/") => revert(req).await,
         ("get", "/-/editor-sync/") => editor_sync(req).await,
