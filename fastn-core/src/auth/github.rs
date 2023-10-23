@@ -1,25 +1,24 @@
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct UserDetail {
-    pub token: String,
-    pub user_name: String,
+    pub access_token: String,
+    pub username: String,
 }
 
 pub async fn login(
     req: &fastn_core::http::Request,
+    next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let redirect_url: String = format!(
         "{}://{}/-/auth/github/?next={}",
         req.connection_info.scheme(),
         req.connection_info.host(),
-        req.q("next", "/".to_string())?,
+        next, // TODO: we should url escape this
     );
 
-    // Set up the config for the Github OAuth2 process.
-    // https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest
-    let client = utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(redirect_url)?);
     // Note: public_repos user:email all these things are github resources
-    // So we have to tell client who is getting logged in what are we going to access
-    let (mut authorize_url, _token) = client
+    // So we have to tell oauth_client who is getting logged in what are we going to access
+    let (mut authorize_url, _token) = utils::github_client()
+        .set_redirect_uri(oauth2::RedirectUrl::new(redirect_url)?)
         .authorize_url(oauth2::CsrfToken::new_random)
         .add_scope(oauth2::Scope::new("public_repo".to_string()))
         .add_scope(oauth2::Scope::new("user:email".to_string()))
@@ -31,63 +30,52 @@ pub async fn login(
         .query_pairs_mut()
         .append_pair("prompt", "consent");
 
-    // let mut pairs: Vec<(&str, &str)> = vec![("response_type", self.response_type.as_ref())];
-
-    // send redirect to /auth/github/callback/
     Ok(fastn_core::http::redirect(authorize_url.to_string()))
 }
 
-// route: /auth/github/callback/
+// route: /-/auth/github/done/
 // In this API we are accessing
 // the token and setting it to cookies
 pub async fn callback(
     req: &fastn_core::http::Request,
-) -> fastn_core::Result<actix_web::HttpResponse> {
-    #[derive(serde::Deserialize)]
-    pub struct QueryParams {
-        pub code: String,
-        pub state: String,
-        pub next: String,
-    }
-    let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?.0;
-    let auth_url = format!(
-        "{}://{}/-/auth/github/",
-        req.connection_info.scheme(),
-        req.connection_info.host(),
-    );
-    let client = utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(auth_url)?);
-    match client
-        .exchange_code(oauth2::AuthorizationCode::new(query.code))
+    next: String,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    let code = req.q("code", "".to_string())?;
+    // TODO: CSRF check
+
+    let access_token = match utils::github_client()
+        .exchange_code(oauth2::AuthorizationCode::new(code))
         .request_async(oauth2::reqwest::async_http_client)
         .await
     {
-        Ok(access_token) => {
-            let token = oauth2::TokenResponse::access_token(&access_token).secret();
-            let user_name = apis::user_details(token).await?;
-            let user_detail_obj: UserDetail = UserDetail {
-                token: token.to_owned(),
-                user_name,
-            };
-            let user_detail_str = serde_json::to_string(&user_detail_obj)?;
-            return Ok(actix_web::HttpResponse::Found()
-                .cookie(
-                    actix_web::cookie::Cookie::build(
-                        fastn_core::auth::AuthProviders::GitHub.as_str(),
-                        fastn_core::auth::utils::encrypt_str(&user_detail_str).await,
-                    )
-                    .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
-                    .path("/")
-                    .permanent()
-                    // TODO: AbrarK is running on http,
-                    // will remove it later
-                    // .secure(true)
-                    .finish(),
-                )
-                .append_header((actix_web::http::header::LOCATION, query.next))
-                .finish());
-        }
-        Err(err) => Ok(actix_web::HttpResponse::InternalServerError().body(err.to_string())),
-    }
+        Ok(access_token) => oauth2::TokenResponse::access_token(&access_token)
+            .secret()
+            .to_string(),
+        Err(e) => return Ok(fastn_core::server_error!("{}", e.to_string())),
+    };
+
+    let ud = UserDetail {
+        username: apis::username(access_token.as_str()).await?,
+        access_token,
+    };
+
+    let user_detail_str = serde_json::to_string(&ud)?;
+    return Ok(actix_web::HttpResponse::Found()
+        .cookie(
+            actix_web::cookie::Cookie::build(
+                fastn_core::auth::AuthProviders::GitHub.as_str(),
+                fastn_core::auth::utils::encrypt_str(&user_detail_str).await,
+            )
+            .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+            .path("/")
+            .permanent()
+            // TODO: AbrarK is running on http,
+            // will remove it later
+            // .secure(true)
+            .finish(),
+        )
+        .append_header((actix_web::http::header::LOCATION, next))
+        .finish());
 }
 
 // it returns identities which matches to given input
@@ -143,7 +131,7 @@ pub async fn matched_starred_repos(
     if starred_repos.is_empty() {
         return Ok(vec![]);
     }
-    let user_starred_repos = apis::starred_repo(ud.token.as_str()).await?;
+    let user_starred_repos = apis::starred_repo(ud.access_token.as_str()).await?;
     // filter the user starred repos with input
     Ok(user_starred_repos
         .into_iter()
@@ -173,7 +161,7 @@ pub async fn matched_watched_repos(
     if watched_repos.is_empty() {
         return Ok(vec![]);
     }
-    let user_watched_repos = apis::watched_repo(ud.token.as_str()).await?;
+    let user_watched_repos = apis::watched_repo(ud.access_token.as_str()).await?;
     // filter the user watched repos with input
     Ok(user_watched_repos
         .into_iter()
@@ -203,7 +191,7 @@ pub async fn matched_followed_org(
     if followed_orgs.is_empty() {
         return Ok(vec![]);
     }
-    let user_followed_orgs = apis::followed_org(ud.token.as_str()).await?;
+    let user_followed_orgs = apis::followed_org(ud.access_token.as_str()).await?;
     // filter the user followed orgs with input
     Ok(user_followed_orgs
         .into_iter()
@@ -236,9 +224,9 @@ pub async fn matched_contributed_repos(
         return Ok(vec![]);
     }
     for repo in &contributed_repos {
-        let repo_contributors = apis::repo_contributors(ud.token.as_str(), repo).await?;
+        let repo_contributors = apis::repo_contributors(ud.access_token.as_str(), repo).await?;
 
-        if repo_contributors.contains(&ud.user_name) {
+        if repo_contributors.contains(&ud.username) {
             matched_repo_contributors_list.push(String::from(repo.to_owned()));
         }
     }
@@ -274,9 +262,9 @@ pub async fn matched_collaborated_repos(
         return Ok(vec![]);
     }
     for repo in &collaborated_repos {
-        let repo_collaborator = apis::repo_collaborators(ud.token.as_str(), repo).await?;
+        let repo_collaborator = apis::repo_collaborators(ud.access_token.as_str(), repo).await?;
 
-        if repo_collaborator.contains(&ud.user_name) {
+        if repo_collaborator.contains(&ud.username) {
             matched_repo_collaborator_list.push(String::from(repo.to_owned()));
         }
     }
@@ -315,8 +303,8 @@ pub async fn matched_org_teams(
     for org_team in org_teams.iter() {
         if let Some((org_name, team_name)) = org_team.split_once('/') {
             let team_members: Vec<String> =
-                apis::team_members(ud.token.as_str(), org_name, team_name).await?;
-            if team_members.contains(&ud.user_name) {
+                apis::team_members(ud.access_token.as_str(), org_name, team_name).await?;
+            if team_members.contains(&ud.username) {
                 matched_org_teams.push(org_team.to_string());
             }
         }
@@ -332,6 +320,7 @@ pub async fn matched_org_teams(
         })
         .collect())
 }
+
 pub async fn matched_sponsored_org(
     ud: &UserDetail,
     identities: &[&fastn_core::user_group::UserIdentity],
@@ -349,12 +338,18 @@ pub async fn matched_sponsored_org(
             }
         })
         .collect_vec();
+
     if sponsors_list.is_empty() {
         return Ok(vec![]);
     }
+
     for sponsor in sponsors_list.iter() {
-        if apis::is_user_sponsored(ud.token.as_str(), ud.user_name.as_str(), sponsor.to_owned())
-            .await?
+        if apis::is_user_sponsored(
+            ud.access_token.as_str(),
+            ud.username.as_str(),
+            sponsor.to_owned(),
+        )
+        .await?
         {
             sponsored_users_list.push(sponsor.to_string());
         }
@@ -373,10 +368,12 @@ pub mod apis {
     pub struct GraphQLResp {
         pub data: Data,
     }
+
     #[derive(Debug, serde::Deserialize)]
     pub struct Data {
         pub user: User,
     }
+
     #[derive(Debug, serde::Deserialize)]
     pub struct User {
         #[serde(rename = "isSponsoredBy")]
@@ -458,6 +455,7 @@ pub mod apis {
         .await?;
         Ok(watched_repo.into_iter().map(|x| x.full_name).collect())
     }
+
     pub async fn repo_contributors(
         token: &str,
         repo_name: &str,
@@ -479,6 +477,7 @@ pub mod apis {
         .await?;
         Ok(repo_contributor.into_iter().map(|x| x.login).collect())
     }
+
     pub async fn repo_collaborators(
         token: &str,
         repo_name: &str,
@@ -503,25 +502,14 @@ pub mod apis {
             .map(|x| x.login)
             .collect())
     }
+
     pub async fn is_user_sponsored(
         token: &str,
-        user_name: &str,
+        username: &str,
         sponsored_by: &str,
     ) -> fastn_core::Result<bool> {
-        // API Docs: https://docs.github.com/en/graphql/reference/queries#user
-        // TODO: Handle paginated response
-
         let query = format!(
-            "{}{}{}{}{}{}{}{}{}",
-            "query { user(login:",
-            r#"""#,
-            user_name,
-            r#"""#,
-            "){isSponsoredBy(accountLogin:",
-            r#"""#,
-            sponsored_by,
-            r#"""#,
-            ")}}"
+            "query {{ user(login: \"{username}\") {{ isSponsoredBy(accountLogin: \"{sponsored_by}\" )}} }}",
         );
         let sponsor_obj =
             graphql_sponsor_api("https://api.github.com/graphql", query.as_str(), token).await?;
@@ -531,17 +519,19 @@ pub mod apis {
             Ok(false)
         }
     }
+
     // TODO: It can be stored in the request cookies
-    pub async fn user_details(token: &str) -> fastn_core::Result<String> {
+    pub async fn username(access_token: &str) -> fastn_core::Result<String> {
         // API Docs: https://docs.github.com/en/rest/users/users#get-the-authenticated-user
         // TODO: Handle paginated response
         #[derive(Debug, serde::Deserialize)]
         struct UserDetails {
             login: String,
         }
+
         let user_obj: UserDetails = fastn_core::auth::utils::get_api(
             "https://api.github.com/user",
-            format!("{} {}", "Bearer", token).as_str(),
+            format!("{} {}", "Bearer", access_token).as_str(),
         )
         .await?;
 
@@ -583,7 +573,6 @@ pub mod apis {
 }
 
 pub mod utils {
-
     // Lazy means a value which initialize at the first time access
     // we have to access it before using it and make sure to use it while starting a server
     // TODO: they should be configured with auth feature flag
@@ -591,18 +580,18 @@ pub mod utils {
     // are set
     static GITHUB_CLIENT_ID: once_cell::sync::Lazy<oauth2::ClientId> = {
         once_cell::sync::Lazy::new(|| {
-            oauth2::ClientId::new(match std::env::var("GITHUB_CLIENT_ID") {
+            oauth2::ClientId::new(match std::env::var("FASTN_GITHUB_CLIENT_ID") {
                 Ok(val) => val,
-                Err(e) => format!("{}{}", "GITHUB_CLIENT_ID not set in env ", e),
+                Err(e) => format!("{}{}", "FASTN_GITHUB_CLIENT_ID not set in env ", e),
             })
         })
     };
 
     static GITHUB_CLIENT_SECRET: once_cell::sync::Lazy<oauth2::ClientSecret> = {
         once_cell::sync::Lazy::new(|| {
-            oauth2::ClientSecret::new(match std::env::var("GITHUB_CLIENT_SECRET") {
+            oauth2::ClientSecret::new(match std::env::var("FASTN_GITHUB_CLIENT_SECRET") {
                 Ok(val) => val,
-                Err(e) => format!("{}{}", "GITHUB_CLIENT_SECRET not set in env ", e),
+                Err(e) => format!("{}{}", "FASTN_GITHUB_CLIENT_SECRET not set in env ", e),
             })
         })
     };
