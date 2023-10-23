@@ -245,7 +245,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
 }
 
 fn app(version: &'static str) -> clap::Command {
-    clap::Command::new("fastn: FTD Package Manager")
+    clap::Command::new("fastn: Full-stack Web Development Made Easy")
         .version(version)
         .arg_required_else_help(true)
         .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
