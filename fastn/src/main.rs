@@ -26,11 +26,25 @@ pub enum Error {
 
 async fn async_main() -> Result<(), Error> {
     let matches = app(version()).get_matches();
+
     if cloud_commands(&matches).await? {
         return Ok(());
     }
-    fastn_core_commands(&matches).await?;
-    Ok(())
+
+    futures::try_join!(
+        fastn_core_commands(&matches),
+        check_for_update_cmd(&matches)
+    )?;
+
+    match std::env::var("FASTN_CHECK_FOR_UPDATES") {
+        Ok(val) => {
+            if val == "1" && !matches.get_flag("check-for-updates") {
+                check_for_update().await?;
+            }
+            return Ok(());
+        }
+        Err(_) => Ok(()),
+    }
 }
 
 async fn cloud_commands(matches: &clap::ArgMatches) -> Result<bool, commands::cloud::Error> {
@@ -244,9 +258,46 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     unreachable!("No subcommand matched");
 }
 
+async fn check_for_update_cmd(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
+    if matches.get_flag("check-for-updates") {
+        check_for_update().await?;
+    }
+
+    Ok(())
+}
+
+async fn check_for_update() -> fastn_core::Result<()> {
+    #[derive(serde::Deserialize, Debug)]
+    struct GithubRelease {
+        tag_name: String,
+    }
+
+    let url = "https://api.github.com/repos/fastn-stack/fastn/releases/latest";
+    let release: GithubRelease = reqwest::Client::new()
+        .get(url)
+        .header(reqwest::header::ACCEPT, "application/vnd.github+json")
+        .header(reqwest::header::USER_AGENT, "fastn")
+        .send()
+        .await?
+        .json()
+        .await?;
+
+    let current_version = version();
+
+    if release.tag_name != current_version {
+        println!(
+                "You are using fastn {}, and latest release is {}, visit https://fastn.com/install to learn how to upgrade.",
+                current_version, release.tag_name
+            );
+    }
+
+    Ok(())
+}
+
 fn app(version: &'static str) -> clap::Command {
     clap::Command::new("fastn: FTD Package Manager")
         .version(version)
+        .arg(clap::arg!(-c --"check-for-updates" "Check for updates"))
         .arg_required_else_help(true)
         .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
         .arg(clap::arg!(--test "Runs the command in test mode").hide(true))
