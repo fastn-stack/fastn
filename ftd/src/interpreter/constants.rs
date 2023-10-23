@@ -331,35 +331,6 @@ pub const FTD_BACKDROP_FILTER_SEPIA: &str = "ftd#backdrop-filter.sepia";
 pub const FTD_BACKDROP_FILTER_SATURATE: &str = "ftd#backdrop-filter.saturate";
 pub const FTD_BACKDROP_FILTER_MULTI: &str = "ftd#backdrop-filter.multi";
 
-pub const FTD_MASK: &str = "ftd#mask";
 pub const FTD_MASK_IMAGE: &str = "ftd#mask-image";
 pub const FTD_MASK_IMAGE_SRC: &str = "ftd#mask-image.src";
 pub const FTD_MASK_IMAGE_LINEAR_GRADIENT: &str = "ftd#mask-image.linear-gradient";
-
-pub const FTD_MASK_CLIP: &str = "ftd#mask-clip";
-pub const FTD_MASK_CLIP_CONTENT_BOX: &str = "ftd#mask-clip.content-box";
-pub const FTD_MASK_CLIP_PADDING_BOX: &str = "ftd#mask-clip.padding-box";
-pub const FTD_MASK_CLIP_BORDER_BOX: &str = "ftd#mask-clip.border-box";
-pub const FTD_MASK_CLIP_FILL_BOX: &str = "ftd#mask-clip.fill-box";
-pub const FTD_MASK_CLIP_STROKE_BOX: &str = "ftd#mask-clip.stroke-box";
-pub const FTD_MASK_CLIP_VIEW_BOX: &str = "ftd#mask-clip.view-box";
-pub const FTD_MASK_CLIP_NO_CLIP: &str = "ftd#mask-clip.no-clip";
-pub const FTD_MASK_CLIP_MULTI_VALUES: &str = "ftd#mask-clip.multi";
-
-pub const FTD_MASK_CLIP_MULTI: &str = "ftd#mask-clip-multi";
-
-pub const FTD_MASK_COMPOSITE: &str = "ftd#mask-composite";
-pub const FTD_MASK_COMPOSITE_ADD: &str = "ftd#mask-composite.add";
-pub const FTD_MASK_COMPOSITE_SUBTRACT: &str = "ftd#mask-composite.subtract";
-pub const FTD_MASK_COMPOSITE_INTERSECT: &str = "ftd#mask-composite.intersect";
-pub const FTD_MASK_COMPOSITE_EXCLUDE: &str = "ftd#mask-composite.exclude";
-pub const FTD_MASK_COMPOSITE_REVERT: &str = "ftd#mask-composite.revert";
-pub const FTD_MASK_COMPOSITE_REVERT_LAYER: &str = "ftd#mask-composite.revert-layer";
-
-pub const FTD_MASK_MODE: &str = "ftd#mask-mode";
-pub const FTD_MASK_MODE_ALPHA: &str = "ftd#mask-mode.alpha";
-pub const FTD_MASK_MODE_LUMINANCE: &str = "ftd#mask-mode.luminance";
-pub const FTD_MASK_MODE_MATCH_SOURCE: &str = "ftd#mask-mode.match-source";
-pub const FTD_MASK_MODE_MULTI_VALUES: &str = "ftd#mask-mode.multi";
-
-pub const FTD_MASK_MODE_MULTI: &str = "ftd#mask-mode-multi";

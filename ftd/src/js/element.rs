@@ -2225,7 +2225,7 @@ pub struct Common {
     pub js: Option<ftd::js::Value>,
     pub events: Vec<ftd::interpreter::Event>,
     pub selectable: Option<ftd::js::Value>,
-    pub mask: Option<ftd::js::Value>,
+    pub mask_image: Option<ftd::js::Value>,
 }
 
 impl Common {
@@ -2441,7 +2441,7 @@ impl Common {
             whitespace: ftd::js::value::get_optional_js_value("white-space", properties, arguments),
             shadow: ftd::js::value::get_optional_js_value("shadow", properties, arguments),
             selectable: ftd::js::value::get_optional_js_value("selectable", properties, arguments),
-            mask: ftd::js::value::get_optional_js_value("mask", properties, arguments),
+            mask_image: ftd::js::value::get_optional_js_value("mask-image", properties, arguments),
             events: events.to_vec(),
         }
     }
@@ -3039,9 +3039,14 @@ impl Common {
                 ),
             ));
         }
-        if let Some(ref mask) = self.mask {
+        if let Some(ref mask_image) = self.mask_image {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                mask.to_set_property(fastn_js::PropertyKind::Mask, doc, element_name, rdata),
+                mask_image.to_set_property(
+                    fastn_js::PropertyKind::MaskImage,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
             ));
         }
         component_statements

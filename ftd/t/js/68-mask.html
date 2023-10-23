@@ -16,9 +16,14 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_row"><div data-id="4">Hello World</div></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="__w-3 __h-4 __bgc-5 __mi-6 __wmi-7"></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
+	.__w-3 { width: 300px; }
+	.__h-4 { height: 300px; }
+	.__bgc-5 { background-color: red; }
+	.__mi-6 { mask-image: url(https://mdn.github.io/css-examples/masking/star.svg); }
+	.__wmi-7 { -webkit-mask-image: url(https://mdn.github.io/css-examples/masking/star.svg); }
     </style>
 <script>
     (function() {
@@ -26,32 +31,22 @@
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-    parenti0.setProperty(fastn_dom.PropertyKind.Mask, global.foo__m, inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello World", inherited);
-    }
-    ]), inherited);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.ContainerElement);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+      dark: "red",
+      light: "red"
+    })), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.MaskImage, fastn_dom.MaskImage.Src(fastn.recordInstance({
+      dark: "https://mdn.github.io/css-examples/masking/star.svg",
+      light: "https://mdn.github.io/css-examples/masking/star.svg"
+    })), inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "foo__m", fastn.recordInstance({
-  image: fastn_dom.MaskImage.Src(fastn.recordInstance({
-    position: null,
-    repeat: null,
-    size: null,
-    src: fastn.recordInstance({
-      dark: "../assets/fastn.svg",
-      light: "../assets/fastn.svg"
-    })
-  })),
-  clip: fastn_dom.MaskClip.PaddingBox("padding-box"),
-  composite: fastn_dom.MaskComposite.Add("add"),
-  mode: fastn_dom.MaskMode.Alpha("alpha")
-}));
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

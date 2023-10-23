@@ -1,12 +1,5 @@
--- ftd.mask m:
-image.src: ../assets/fastn.svg
-clip: padding-box
-composite: add
-mode: alpha
-
--- ftd.row:
-mask: $m
-
--- ftd.text: Hello World
-
--- end: ftd.row
+-- ftd.container:
+background.solid: red
+mask-image.src: https://mdn.github.io/css-examples/masking/star.svg
+width.fixed.px: 300
+height.fixed.px: 300

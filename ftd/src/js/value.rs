@@ -541,18 +541,6 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = mask_image_variants(variant);
             (format!("fastn_dom.MaskImage.{}", js_variant), true)
         }
-        "ftd#mask-clip" => {
-            let js_variant = mask_clip_variants(variant);
-            (format!("fastn_dom.MaskClip.{}", js_variant), true)
-        }
-        "ftd#mask-composite" => {
-            let js_variant = mask_composite_variants(variant);
-            (format!("fastn_dom.MaskComposite.{}", js_variant), true)
-        }
-        "ftd#mask-mode" => {
-            let js_variant = mask_mode_variants(variant);
-            (format!("fastn_dom.MaskMode.{}", js_variant), true)
-        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -922,41 +910,5 @@ fn mask_image_variants(name: &str) -> &'static str {
         "src" => "Src",
         "linear-gradient" => "LinearGradient",
         t => todo!("invalid mask image variant {}", t),
-    }
-}
-
-fn mask_clip_variants(name: &str) -> &'static str {
-    match name {
-        "border-box" => "BorderBox",
-        "content-box" => "ContentBox",
-        "padding-box" => "PaddingBox",
-        "fill-box" => "FillBox",
-        "stroke-box" => "StrokeBox",
-        "view-box" => "ViewBox",
-        "no-clip" => "NoClip",
-        "multi" => "Multi",
-        t => unimplemented!("invalid mask clip variant {}", t),
-    }
-}
-
-fn mask_composite_variants(name: &str) -> &'static str {
-    match name {
-        "add" => "Add",
-        "subtract" => "Subtract",
-        "intersect" => "Intersect",
-        "exclude" => "Exclude",
-        "revert" => "Revert",
-        "revert-layer" => "RevertLayer",
-        t => unimplemented!("invalid mask composite variant {}", t),
-    }
-}
-
-fn mask_mode_variants(name: &str) -> &'static str {
-    match name {
-        "alpha" => "Alpha",
-        "luminance" => "Luminance",
-        "match-source" => "MatchSource",
-        "multi" => "Multi",
-        t => unimplemented!("invalid mask mode variant {}", t),
     }
 }

@@ -99,7 +99,8 @@ fastn_dom.propertyMap = {
     "-webkit-box-orient": "wbo",
     "-webkit-line-clamp": "wlc",
     "backdrop-filter": "bdf",
-    "mask": "mask",
+    "mask-image": "mi",
+    "-webkit-mask-image": "wmi",
 };
 
 // dynamic-class-css.md
@@ -281,7 +282,7 @@ fastn_dom.PropertyKind = {
     TextShadow: 117,
     Selectable: 118,
     BackdropFilter: 119,
-    Mask: 120,
+    MaskImage: 120,
 };
 
 
@@ -664,69 +665,6 @@ fastn_dom.MaskImage = {
     },
     LinearGradient: (value) => {
         return [2, value];
-    },
-}
-
-fastn_dom.MaskClip = {
-    BorderBox: (value) => {
-        return [1, value];
-    },
-    ContentBox: (value) => {
-        return [2, value];
-    },
-    PaddingBox: (value) => {
-        return [3, value];
-    },
-    FillBox: (value) => {
-        return [4, value];
-    },
-    StrokeBox: (value) => {
-        return [5, value];
-    },
-    ViewBox: (value) => {
-        return [6, value];
-    },
-    NoClip: (value) => {
-        return [7, value];
-    },
-    Multi: (value) => {
-        return [8, value];
-    },
-}
-
-fastn_dom.MaskComposite = {
-    Add: (value) => {
-        return [1, value];
-    },
-    Subtract: (value) => {
-        return [2, value];
-    },
-    Intersect: (value) => {
-        return [3, value];
-    },
-    Exclude: (value) => {
-        return [4, value];
-    },
-    Revert: (value) => {
-        return [5, value];
-    },
-    RevertLayer: (value) => {
-        return [6, value];
-    },
-}
-
-fastn_dom.MaskMode = {
-    Alpha: (value) => {
-        return [1, value];
-    },
-    Luminance: (value) => {
-        return [2, value];
-    },
-    MatchSource: (value) => {
-        return [3, value];
-    },
-    Multi: (value) => {
-        return [4, value];
     },
 }
 
@@ -1128,9 +1066,9 @@ class Node2 {
             this.attachCss("text-shadow", darkShadowCss, true, `body.dark .${lightClass}`);
         }
     }
-    attachLinearGradientCss(value) {
+    attachLinearGradientCss(value, property = "background-image") {
         if (fastn_utils.isNull(value)) {
-            this.attachCss("background-image", value);
+            this.attachCss(property, value);
             return;
         }
         var lightGradientString = "";
@@ -1175,10 +1113,10 @@ class Node2 {
         darkGradientString = darkGradientString.trim().slice(0, -1);
 
         if (lightGradientString === darkGradientString) {
-            this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
+            this.attachCss(property, `linear-gradient(${direction}, ${lightGradientString})`, false);
         } else {
-            let lightClass = this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`,true);
-            this.attachCss("background-image", `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
+            let lightClass = this.attachCss(property, `linear-gradient(${direction}, ${lightGradientString})`,true);
+            this.attachCss(property, `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
         }
     }
     attachBackgroundImageCss(value) {
@@ -1231,6 +1169,23 @@ class Node2 {
         } else {
             let lightClass = this.attachCss("background-image", `url(${lightValue})`, true);
             this.attachCss("background-image", `url(${darkValue})`, true, `body.dark .${lightClass}`);
+        }
+    }
+    attachMaskImageCss(value, vendorPrefix) {
+        const propWithPrefix = vendorPrefix ? `${vendorPrefix}-mask-image` : "mask-image";
+        if (fastn_utils.isNull(value)) {
+            this.attachCss(propWithPrefix, value);
+            return;
+        }
+
+        let lightValue = fastn_utils.getStaticValue(value.get("light"));
+        let darkValue = fastn_utils.getStaticValue(value.get("dark"));
+
+        if (lightValue === darkValue) {
+            this.attachCss(propWithPrefix, `url(${lightValue})`, false);
+        } else {
+            let lightClass = this.attachCss(propWithPrefix, `url(${lightValue})`, true);
+            this.attachCss(propWithPrefix, `url(${darkValue})`, true, `body.dark .${lightClass}`);
         }
     }
     attachExternalCss(css) {
@@ -1605,13 +1560,24 @@ class Node2 {
                     this.attachBackdropMultiFilter(staticValue[1]);
                     break;
             }
-        } else if (kind === fastn_dom.PropertyKind.Mask) {
+        } else if (kind === fastn_dom.PropertyKind.MaskImage) {
             if (fastn_utils.isNull(staticValue)) {
-                this.attachCss("backdrop-filter", staticValue);
+                this.attachCss("mask-image", staticValue);
                 return;
             }
 
-            // todo
+            const [backgroundType, value] = staticValue;
+
+            switch (backgroundType) {
+                case fastn_dom.MaskImage.Src()[0]:
+                    this.attachMaskImageCss(value);
+                    this.attachMaskImageCss(value, "-webkit");
+                    break;
+                case fastn_dom.MaskImage.LinearGradient()[0]:
+                    this.attachMaskLinearGradientCss(value, "mask-image");
+                    this.attachMaskLinearGradientCss(value, "-webkit-mask-image");
+                    break;
+            }
         } else if (kind === fastn_dom.PropertyKind.Classes) {
             fastn_utils.removeNonFastnClasses(this);
             if (!fastn_utils.isNull(staticValue)) {
