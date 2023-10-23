@@ -5,6 +5,9 @@
 ftd/t/js/**.manual.html
 ftd/t/js/**.script.html
 
+# nix symlink to the build output
+result
+
 # Rust stuff
 target
 **/*.rs.bk
