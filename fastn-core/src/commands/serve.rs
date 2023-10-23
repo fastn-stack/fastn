@@ -427,18 +427,6 @@ pub async fn clear_cache(
         // TODO: Need refactor not happy with this
         req.cookie(fastn_core::auth::AuthProviders::GitHub.as_str())
             .is_some()
-            || req
-                .cookie(fastn_core::auth::AuthProviders::TeleGram.as_str())
-                .is_some()
-            || req
-                .cookie(fastn_core::auth::AuthProviders::Discord.as_str())
-                .is_some()
-            || req
-                .cookie(fastn_core::auth::AuthProviders::Slack.as_str())
-                .is_some()
-            || req
-                .cookie(fastn_core::auth::AuthProviders::Google.as_str())
-                .is_some()
     }
 
     // TODO: Remove After Demo, Need to think about refresh content from github

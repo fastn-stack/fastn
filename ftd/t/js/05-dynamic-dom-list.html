@@ -31,20 +31,20 @@
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Integer);
     parenti0.setProperty(fastn_dom.PropertyKind.IntegerValue, global.foo__value, inherited);
     let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "Click to change value", inherited);
     parenti1.addEventHandler(fastn_dom.Event.Click, function () {
       foo__clamp({
         a: global.foo__value,
       }, parenti1);
     });
+    parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "Click to change value", inherited);
     let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Click to add one", inherited);
     parenti2.addEventHandler(fastn_dom.Event.Click, function () {
       foo__append_integer({
         a: global.foo__counters,
         v: 1,
       }, parenti2);
     });
+    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Click to add one", inherited);
     fastn_utils.getter(global.foo__counters).forLoop(parent, function (root, item, index) {
       return fastn_dom.conditionalDom(parent, [
         index,

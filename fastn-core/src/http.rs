@@ -329,13 +329,17 @@ where
     F: FnOnce(String) -> T + Copy,
     T: futures::Future<Output = std::result::Result<D, fastn_core::Error>> + Send + 'static,
 {
-    if url[1..].contains("://") || url.starts_with("//") {
-        f(url).await
-    } else if let Ok(response) = f(format!("https://{}", url)).await {
-        Ok(response)
+    let mut url = if url[1..].contains("://") || url.starts_with("//") {
+        url
     } else {
-        f(format!("http://{}", url)).await
+        format!("https://{}", url)
+    };
+
+    if let Ok(package_proxy) = std::env::var("FASTN_PACKAGE_PROXY") {
+        url = format!("{}/proxy/?url={}", package_proxy, url);
     }
+
+    f(url).await
 }
 
 #[tracing::instrument]

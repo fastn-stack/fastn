@@ -68,11 +68,11 @@ let foo__show_person = function (parent, inherited, args)
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
         dark: "blue",
         light: "blue"
       }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
     }
     ]), inherited);
     return parenti0;
