@@ -337,3 +337,35 @@ pub const FTD_MASK_IMAGE_DATA_LINEAR_GRADIENT: &str = "ftd#mask-image.linear-gra
 
 pub const FTD_MASK: &str = "ftd#mask";
 pub const FTD_MASK_IMAGE: &str = "ftd#mask.image";
+pub const FTD_MASK_MULTI: &str = "ftd#mask.multi";
+
+pub const FTD_MASK_MULTI_DATA: &str = "ftd#mask-multi";
+
+pub const FTD_MASK_SIZE: &str = "ftd#mask-size";
+pub const FTD_MASK_SIZE_FIXED: &str = "ftd#mask-size.fixed";
+pub const FTD_MASK_SIZE_COVER: &str = "ftd#mask-size.cover";
+pub const FTD_MASK_SIZE_CONTAIN: &str = "ftd#mask-size.contain";
+pub const FTD_MASK_SIZE_AUTO: &str = "ftd#mask-size.auto";
+
+pub const FTD_MASK_REPEAT: &str = "ftd#mask-repeat";
+pub const FTD_MASK_REPEAT_BOTH_REPEAT: &str = "ftd#mask-repeat.repeat";
+pub const FTD_MASK_REPEAT_X_REPEAT: &str = "ftd#mask-repeat.repeat-x";
+pub const FTD_MASK_REPEAT_Y_REPEAT: &str = "ftd#mask-repeat.repeat-y";
+pub const FTD_MASK_REPEAT_NO_REPEAT: &str = "ftd#mask-repeat.no-repeat";
+pub const FTD_MASK_REPEAT_SPACE: &str = "ftd#mask-repeat.space";
+pub const FTD_MASK_REPEAT_ROUND: &str = "ftd#mask-repeat.round";
+
+pub const FTD_MASK_POSITION: &str = "ftd#mask-position";
+pub const FTD_MASK_POSITION_LEFT: &str = "ftd#mask-position.left";
+pub const FTD_MASK_POSITION_CENTER: &str = "ftd#mask-position.center";
+pub const FTD_MASK_POSITION_RIGHT: &str = "ftd#mask-position.right";
+pub const FTD_MASK_POSITION_LEFT_TOP: &str = "ftd#mask-position.left-top";
+pub const FTD_MASK_POSITION_LEFT_CENTER: &str = "ftd#mask-position.left-center";
+pub const FTD_MASK_POSITION_LEFT_BOTTOM: &str = "ftd#mask-position.left-bottom";
+pub const FTD_MASK_POSITION_CENTER_TOP: &str = "ftd#mask-position.center-top";
+pub const FTD_MASK_POSITION_CENTER_CENTER: &str = "ftd#mask-position.center-center";
+pub const FTD_MASK_POSITION_CENTER_BOTTOM: &str = "ftd#mask-position.center-bottom";
+pub const FTD_MASK_POSITION_RIGHT_TOP: &str = "ftd#mask-position.right-top";
+pub const FTD_MASK_POSITION_RIGHT_CENTER: &str = "ftd#mask-position.right-center";
+pub const FTD_MASK_POSITION_RIGHT_BOTTOM: &str = "ftd#mask-position.right-bottom";
+pub const FTD_MASK_POSITION_LENGTH: &str = "ftd#mask-position.length";

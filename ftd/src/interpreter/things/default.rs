@@ -9729,7 +9729,349 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
+                    ftd::interpreter::Field {
+                        name: "color".to_string(),
+                        kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_COLOR)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
                 ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter::FTD_MASK_SIZE.to_string(),
+            ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                name: ftd::interpreter::FTD_MASK_SIZE.to_string(),
+                variants: vec![
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_SIZE_FIXED,
+                        ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_SIZE_AUTO,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string(
+                                ftd::interpreter::FTD_MASK_SIZE_AUTO,
+                            )
+                            .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_SIZE_COVER,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string(
+                                ftd::interpreter::FTD_MASK_SIZE_CONTAIN,
+                            )
+                            .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        // mask-position
+        (
+            ftd::interpreter::FTD_MASK_MULTI_DATA.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FTD_MASK_MULTI_DATA.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "image".to_string(),
+                        kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_MASK_IMAGE_DATA)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "size".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_SIZE)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "size-x".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_SIZE)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "size-y".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_SIZE)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "repeat".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_REPEAT)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "position".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_POSITION)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter::FTD_MASK_REPEAT.to_string(),
+            ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                name: ftd::interpreter::FTD_MASK_REPEAT.to_string(),
+                variants: vec![
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_REPEAT_BOTH_REPEAT,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("repeat")
+                                 .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_REPEAT_X_REPEAT,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("repeat-x")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_REPEAT_Y_REPEAT,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("repeat-y")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_REPEAT_NO_REPEAT,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("no-repeat")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_REPEAT_SPACE,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("space")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_REPEAT_ROUND,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("round")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter::FTD_MASK_POSITION.to_string(),
+            ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                name: ftd::interpreter::FTD_MASK_POSITION.to_string(),
+                variants: vec![
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_POSITION_LEFT,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("left")
+                                 .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_POSITION_CENTER,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("center")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_POSITION_RIGHT,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("right")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_POSITION_LEFT_TOP,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("left-top")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_POSITION_LEFT_CENTER,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("left-center")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_POSITION_LEFT_BOTTOM,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("left-bottom")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_POSITION_CENTER_TOP,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("center-top")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_POSITION_CENTER_CENTER,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("center-center")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_POSITION_CENTER_BOTTOM,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("center-bottom")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_POSITION_RIGHT_TOP,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("right-top")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_POSITION_RIGHT_CENTER,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("right-center")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_POSITION_RIGHT_BOTTOM,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("right-bottom")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::AnonymousRecord(ftd::interpreter::Record {
+                        name: ftd::interpreter::FTD_MASK_POSITION_LENGTH.to_string(),
+                        fields: std::iter::IntoIterator::into_iter([
+                            ftd::interpreter::Field {
+                                name: "x".to_string(),
+                                kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                                    .into_kind_data(),
+                                mutable: false,
+                                value: None,
+                                access_modifier: Default::default(),
+                                line_number: 0,
+                            },
+                            ftd::interpreter::Field {
+                                name: "y".to_string(),
+                                kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                                    .into_kind_data(),
+                                mutable: false,
+                                value: None,
+                                access_modifier: Default::default(),
+                                line_number: 0,
+                            },
+                        ]).collect(),
+                        line_number: 0,
+                    }),
+                ],
                 line_number: 0,
             }),
         ),
@@ -9741,6 +10083,14 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
                         ftd::interpreter::FTD_MASK_IMAGE,
                         ftd::interpreter::Kind::record(ftd::interpreter::FTD_MASK_IMAGE_DATA)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_MASK_MULTI,
+                        ftd::interpreter::Kind::record(ftd::interpreter::FTD_MASK_MULTI_DATA)
                             .into_kind_data(),
                         false,
                         None,

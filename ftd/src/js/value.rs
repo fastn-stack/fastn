@@ -541,6 +541,21 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = mask_variants(variant);
             (format!("fastn_dom.Mask.{}", js_variant), true)
         }
+        "ftd#mask-size" => {
+            let js_variant = mask_size_variants(variant);
+            (format!("fastn_dom.MaskSize.{}", js_variant.0), js_variant.1)
+        }
+        "ftd#mask-repeat" => {
+            let js_variant = mask_repeat_variants(variant);
+            (format!("fastn_dom.MaskRepeat.{}", js_variant), false)
+        }
+        "ftd#mask-position" => {
+            let js_variant = mask_position_variants(variant);
+            (
+                format!("fastn_dom.MaskPosition.{}", js_variant.0),
+                js_variant.1,
+            )
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -908,6 +923,48 @@ fn backdrop_filter_variants(name: &str) -> &'static str {
 fn mask_variants(name: &str) -> &'static str {
     match name {
         "image" => "Image",
+        "multi" => "Multi",
         t => todo!("invalid mask variant {}", t),
+    }
+}
+
+fn mask_size_variants(name: &str) -> (&'static str, bool) {
+    match name {
+        "auto" => ("Auto", false),
+        "cover" => ("Cover", false),
+        "contain" => ("Contain", false),
+        "fixed" => ("Fixed", true),
+        t => todo!("invalid mask variant {}", t),
+    }
+}
+
+fn mask_repeat_variants(name: &str) -> &'static str {
+    match name {
+        "repeat" => "Repeat",
+        "repeat-x" => "RepeatX",
+        "repeat-y" => "RepeatY",
+        "no-repeat" => "NoRepeat",
+        "space" => "Space",
+        "round" => "Round",
+        t => todo!("invalid mask repeat variant {}", t),
+    }
+}
+
+fn mask_position_variants(name: &str) -> (&'static str, bool) {
+    match name {
+        "left" => ("Left", false),
+        "right" => ("Right", false),
+        "center" => ("Center", false),
+        "left-top" => ("LeftTop", false),
+        "left-center" => ("LeftCenter", false),
+        "left-bottom" => ("LeftBottom", false),
+        "center-top" => ("CenterTop", false),
+        "center-center" => ("CenterCenter", false),
+        "center-bottom" => ("CenterBottom", false),
+        "right-top" => ("RightTop", false),
+        "right-center" => ("RightCenter", false),
+        "right-bottom" => ("RightBottom", false),
+        "length" => ("Length", true),
+        t => todo!("invalid mask position variant {}", t),
     }
 }
