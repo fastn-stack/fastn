@@ -28,32 +28,9 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    config: &fastn_core::Config,
+    db_config: &fastn_core::library2022::processor::sql::DatabaseConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = get_p1_data("package-data", &value, doc.name)?;
-
-    let sqlite_database =
-        match headers.get_optional_string_by_key("db", doc.name, value.line_number())? {
-            Some(k) => k,
-            None => {
-                return ftd::interpreter::utils::e2(
-                    "`db` is not specified".to_string(),
-                    doc.name,
-                    value.line_number(),
-                )
-            }
-        };
-    let mut sqlite_database_path = camino::Utf8PathBuf::new().join(sqlite_database.as_str());
-    if !sqlite_database_path.exists() {
-        if !config.root.join(sqlite_database_path.as_path()).exists() {
-            return ftd::interpreter::utils::e2(
-                "`db` does not exists for package-query processor".to_string(),
-                doc.name,
-                value.line_number(),
-            );
-        }
-        sqlite_database_path = config.root.join(sqlite_database_path.as_path());
-    }
 
     // need the query params
     // question is they can be multiple
@@ -64,7 +41,7 @@ pub async fn process(
     // select * from users where
 
     let query_response = execute_query(
-        &sqlite_database_path,
+        db_config.db_url.as_str(),
         query.as_str(),
         doc,
         headers,
@@ -203,18 +180,24 @@ fn extract_named_parameters(
     let mut inside_type_hint = false;
 
     for c in query.chars() {
-        if c == ':' && !inside_param {
+        if c == '$' && !inside_param {
             inside_param = true;
             param_name.clear();
             param_type.clear();
             inside_type_hint = false;
         } else if c == ':' && inside_param {
-            inside_type_hint = true;
-        } else if c.is_alphanumeric() && inside_param && !inside_type_hint {
-            param_name.push(c);
-        } else if c.is_alphanumeric() && inside_param && inside_type_hint {
-            param_type.push(c);
-        } else if inside_param && (c == ',' || c.is_whitespace()) && !param_name.is_empty() {
+            if inside_type_hint {
+                param_type.push(c);
+            } else {
+                inside_type_hint = true;
+            }
+        } else if c.is_alphanumeric() && inside_param {
+            if inside_type_hint {
+                param_type.push(c);
+            } else {
+                param_name.push(c);
+            }
+        } else if c == ',' || c.is_whitespace() && !param_name.is_empty() {
             inside_param = false;
             inside_type_hint = false;
 
@@ -255,7 +238,7 @@ fn extract_named_parameters(
 }
 
 async fn execute_query(
-    database_path: &camino::Utf8Path,
+    database_path: &str,
     query: &str,
     doc: &ftd::interpreter::TDoc<'_>,
     headers: ftd::ast::HeaderValues,
