@@ -537,9 +537,9 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = backdrop_filter_variants(variant);
             (format!("fastn_dom.BackdropFilter.{}", js_variant), true)
         }
-        "ftd#mask-image" => {
-            let js_variant = mask_image_variants(variant);
-            (format!("fastn_dom.MaskImage.{}", js_variant), true)
+        "ftd#mask" => {
+            let js_variant = mask_variants(variant);
+            (format!("fastn_dom.Mask.{}", js_variant), true)
         }
         t => todo!("{} {}", t, variant),
     }
@@ -905,10 +905,9 @@ fn backdrop_filter_variants(name: &str) -> &'static str {
     }
 }
 
-fn mask_image_variants(name: &str) -> &'static str {
+fn mask_variants(name: &str) -> &'static str {
     match name {
-        "src" => "Src",
-        "linear-gradient" => "LinearGradient",
-        t => todo!("invalid mask image variant {}", t),
+        "image" => "Image",
+        t => todo!("invalid mask variant {}", t),
     }
 }

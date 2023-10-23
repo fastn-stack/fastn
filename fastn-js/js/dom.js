@@ -659,13 +659,11 @@ fastn_dom.Length = {
     }
 }
 
-fastn_dom.MaskImage = {
-    Src: (value) => {
+fastn_dom.Mask = {
+    Image: (value) => {
         return [1, value];
     },
-    LinearGradient: (value) => {
-        return [2, value];
-    },
+    // todo: mode, composite, etc.
 }
 
 fastn_dom.Event = {
@@ -1066,16 +1064,11 @@ class Node2 {
             this.attachCss("text-shadow", darkShadowCss, true, `body.dark .${lightClass}`);
         }
     }
-    attachLinearGradientCss(value, property = "background-image") {
-        if (fastn_utils.isNull(value)) {
-            this.attachCss(property, value);
-            return;
-        }
+    getLinearGradientString(value) {
         var lightGradientString = "";
         var darkGradientString = "";
 
         let colorsList = value.get("colors").get().getList();
-        let direction = fastn_utils.getStaticValue(value.get("direction"));
         colorsList.map(function (element) {
             // LinearGradient RecordInstance
             let lg_color = element.item;
@@ -1112,11 +1105,23 @@ class Node2 {
         lightGradientString = lightGradientString.trim().slice(0, -1);
         darkGradientString = darkGradientString.trim().slice(0, -1);
 
+        return [lightGradientString, darkGradientString];
+    }
+    attachLinearGradientCss(value) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss("background-image", value);
+            return;
+        }
+
+        let direction = fastn_utils.getStaticValue(value.get("direction"));
+
+        const [lightGradientString, darkGradientString] = this.getLinearGradientString(value);
+
         if (lightGradientString === darkGradientString) {
-            this.attachCss(property, `linear-gradient(${direction}, ${lightGradientString})`, false);
+            this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
         } else {
-            let lightClass = this.attachCss(property, `linear-gradient(${direction}, ${lightGradientString})`,true);
-            this.attachCss(property, `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
+            let lightClass = this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`,true);
+            this.attachCss("background-image", `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
         }
     }
     attachBackgroundImageCss(value) {
@@ -1172,20 +1177,50 @@ class Node2 {
         }
     }
     attachMaskImageCss(value, vendorPrefix) {
-        const propWithPrefix = vendorPrefix ? `${vendorPrefix}-mask-image` : "mask-image";
+        const propertyWithPrefix = vendorPrefix ? `${vendorPrefix}-mask-image` : "mask-image";
+
         if (fastn_utils.isNull(value)) {
-            this.attachCss(propWithPrefix, value);
+            this.attachCss(propertyWithPrefix, value);
             return;
         }
 
-        let lightValue = fastn_utils.getStaticValue(value.get("light"));
-        let darkValue = fastn_utils.getStaticValue(value.get("dark"));
+        let src = fastn_utils.getStaticValue(value.get("src"));
+        let linearGradient = fastn_utils.getStaticValue(value.get("linear-gradient"));
 
-        if (lightValue === darkValue) {
-            this.attachCss(propWithPrefix, `url(${lightValue})`, false);
+        const maskLightImageValues = [];
+        const maskDarkImageValues = [];
+
+        if(!fastn_utils.isNull(src)) {
+            let lightValue = fastn_utils.getStaticValue(src.get("light"));
+            let darkValue = fastn_utils.getStaticValue(src.get("dark"));
+
+            maskLightImageValues.push(`url(${lightValue})`);
+
+            if (lightValue !== darkValue) {
+                maskDarkImageValues.push(`url(${darkValue})`);
+            }
+        }
+        
+        if(!fastn_utils.isNull(linearGradient)) {
+            let direction = fastn_utils.getStaticValue(value.get("direction"));
+
+            const [lightGradientString, darkGradientString] = this.getLinearGradientString(value);
+
+            maskLightImageValues.push(`linear-gradient(${direction}, ${lightGradientString})`);
+
+            if (lightGradientString !== darkGradientString) {
+                maskDarkImageValues.push(`linear-gradient(${direction}, ${darkGradientString})`);
+            }
+        }
+
+        const maskLightImageString = maskLightImageValues.join(", ");
+        const maskDarkImageString = maskDarkImageValues.join(", ");
+
+        if(!maskDarkImageString || maskLightImageString === maskDarkImageString) {
+            this.attachCss(propertyWithPrefix, maskLightImageString, false);
         } else {
-            let lightClass = this.attachCss(propWithPrefix, `url(${lightValue})`, true);
-            this.attachCss(propWithPrefix, `url(${darkValue})`, true, `body.dark .${lightClass}`);
+            let lightClass = this.attachCss(propertyWithPrefix, maskLightImageString, true);
+            this.attachCss(propertyWithPrefix, maskDarkImageString, true, `body.dark .${lightClass}`);
         }
     }
     attachExternalCss(css) {
@@ -1560,7 +1595,7 @@ class Node2 {
                     this.attachBackdropMultiFilter(staticValue[1]);
                     break;
             }
-        } else if (kind === fastn_dom.PropertyKind.MaskImage) {
+        } else if (kind === fastn_dom.PropertyKind.Mask) {
             if (fastn_utils.isNull(staticValue)) {
                 this.attachCss("mask-image", staticValue);
                 return;
@@ -1569,13 +1604,9 @@ class Node2 {
             const [backgroundType, value] = staticValue;
 
             switch (backgroundType) {
-                case fastn_dom.MaskImage.Src()[0]:
+                case fastn_dom.Mask.Image()[0]:
                     this.attachMaskImageCss(value);
                     this.attachMaskImageCss(value, "-webkit");
-                    break;
-                case fastn_dom.MaskImage.LinearGradient()[0]:
-                    this.attachMaskLinearGradientCss(value, "mask-image");
-                    this.attachMaskLinearGradientCss(value, "-webkit-mask-image");
                     break;
             }
         } else if (kind === fastn_dom.PropertyKind.Classes) {

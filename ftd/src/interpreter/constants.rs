@@ -331,6 +331,9 @@ pub const FTD_BACKDROP_FILTER_SEPIA: &str = "ftd#backdrop-filter.sepia";
 pub const FTD_BACKDROP_FILTER_SATURATE: &str = "ftd#backdrop-filter.saturate";
 pub const FTD_BACKDROP_FILTER_MULTI: &str = "ftd#backdrop-filter.multi";
 
-pub const FTD_MASK_IMAGE: &str = "ftd#mask-image";
-pub const FTD_MASK_IMAGE_SRC: &str = "ftd#mask-image.src";
-pub const FTD_MASK_IMAGE_LINEAR_GRADIENT: &str = "ftd#mask-image.linear-gradient";
+pub const FTD_MASK_IMAGE_DATA: &str = "ftd#mask-image";
+pub const FTD_MASK_IMAGE_DATA_SRC: &str = "ftd#mask-image.src";
+pub const FTD_MASK_IMAGE_DATA_LINEAR_GRADIENT: &str = "ftd#mask-image.linear-gradient";
+
+pub const FTD_MASK: &str = "ftd#mask";
+pub const FTD_MASK_IMAGE: &str = "ftd#mask.image";

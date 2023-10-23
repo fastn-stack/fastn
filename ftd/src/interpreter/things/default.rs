@@ -9706,26 +9706,47 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             })
         ),
         (
-            ftd::interpreter::FTD_MASK_IMAGE.to_string(),
+            ftd::interpreter::FTD_MASK_IMAGE_DATA.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FTD_MASK_IMAGE_DATA.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "src".to_string(),
+                        kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
+                            .into_kind_data().caption().into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "linear-gradient".to_string(),
+                        kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_LINEAR_GRADIENT)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter::FTD_MASK.to_string(),
             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
-                name: ftd::interpreter::FTD_MASK_IMAGE.to_string(),
+                name: ftd::interpreter::FTD_MASK.to_string(),
                 variants: vec![
                     ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
-                        ftd::interpreter::FTD_MASK_IMAGE_SRC,
-                        ftd::interpreter::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
+                        ftd::interpreter::FTD_MASK_IMAGE,
+                        ftd::interpreter::Kind::record(ftd::interpreter::FTD_MASK_IMAGE_DATA)
                             .into_kind_data(),
                         false,
                         None,
                         0,
                     )),
-                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
-                        ftd::interpreter::FTD_MASK_IMAGE_LINEAR_GRADIENT,
-                        ftd::interpreter::Kind::record(ftd::interpreter::FTD_LINEAR_GRADIENT)
-                            .into_kind_data(),
-                        false,
-                        None,
-                        0,
-                    )),
+                    // todo: mode, position, composite, etc.
                 ],
                 line_number: 0,
             }),
@@ -10925,8 +10946,8 @@ fn common_arguments() -> Vec<ftd::interpreter::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter::Argument::default(
-            "mask-image",
-            ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_IMAGE)
+            "mask",
+            ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK)
                 .into_optional()
                 .into_kind_data(),
         ),

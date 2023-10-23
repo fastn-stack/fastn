@@ -1,5 +1,5 @@
 -- ftd.container:
 background.solid: red
-mask-image.src: https://mdn.github.io/css-examples/masking/star.svg
+mask.image: https://mdn.github.io/css-examples/masking/star.svg
 width.fixed.px: 300
 height.fixed.px: 300

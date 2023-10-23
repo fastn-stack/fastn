@@ -427,7 +427,7 @@ pub enum PropertyKind {
     Favicon,
     Selectable,
     BackdropFilter,
-    MaskImage,
+    Mask,
 }
 
 impl PropertyKind {
@@ -567,7 +567,7 @@ impl PropertyKind {
             PropertyKind::Favicon => "fastn_dom.PropertyKind.Favicon",
             PropertyKind::Selectable => "fastn_dom.PropertyKind.Selectable",
             PropertyKind::BackdropFilter => "fastn_dom.PropertyKind.BackdropFilter",
-            PropertyKind::MaskImage => "fastn_dom.PropertyKind.MaskImage",
+            PropertyKind::Mask => "fastn_dom.PropertyKind.Mask",
         }
     }
 }
