@@ -1,12 +1,14 @@
 // TODO: This has be set while creating the GitHub OAuth Application
-pub const CALLBACK_URL: &str = "/auth/github/callback/";
+pub const CALLBACK_URL: &str = "/-/auth/github/callback/";
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct UserDetail {
     pub token: String,
     pub user_name: String,
 }
-// route: /auth/login/
-pub async fn login(req: actix_web::HttpRequest) -> fastn_core::Result<fastn_core::http::Response> {
+
+pub async fn login(
+    req: &fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
     // GitHub will be redirect to this url after login process completed
 
     let mut next_url = "/".to_string();
@@ -22,8 +24,8 @@ pub async fn login(req: actix_web::HttpRequest) -> fastn_core::Result<fastn_core
 
     let redirect_url: String = format!(
         "{}://{}{}?next={}",
-        req.connection_info().scheme(),
-        req.connection_info().host(),
+        req.connection_info.scheme(),
+        req.connection_info.host(),
         CALLBACK_URL,
         next_url,
     );
@@ -56,7 +58,9 @@ pub async fn login(req: actix_web::HttpRequest) -> fastn_core::Result<fastn_core
 // route: /auth/github/callback/
 // In this API we are accessing
 // the token and setting it to cookies
-pub async fn callback(req: actix_web::HttpRequest) -> fastn_core::Result<actix_web::HttpResponse> {
+pub async fn callback(
+    req: &fastn_core::http::Request,
+) -> fastn_core::Result<actix_web::HttpResponse> {
     #[derive(serde::Deserialize)]
     pub struct QueryParams {
         pub code: String,
@@ -66,8 +70,8 @@ pub async fn callback(req: actix_web::HttpRequest) -> fastn_core::Result<actix_w
     let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?.0;
     let auth_url = format!(
         "{}://{}{}",
-        req.connection_info().scheme(),
-        req.connection_info().host(),
+        req.connection_info.scheme(),
+        req.connection_info.host(),
         CALLBACK_URL
     );
     let client = utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(auth_url)?);
@@ -90,9 +94,7 @@ pub async fn callback(req: actix_web::HttpRequest) -> fastn_core::Result<actix_w
                         fastn_core::auth::AuthProviders::GitHub.as_str(),
                         fastn_core::auth::utils::encrypt_str(&user_detail_str).await,
                     )
-                    .domain(fastn_core::auth::utils::domain(
-                        req.connection_info().host(),
-                    ))
+                    .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
                     .path("/")
                     .permanent()
                     // TODO: AbrarK is running on http,

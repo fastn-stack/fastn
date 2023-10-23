@@ -26,7 +26,7 @@ impl AuthProviders {
 }
 
 pub fn secret_key() -> String {
-    match std::env::var("SECRET_KEY") {
+    match std::env::var("FASTN_SECRET_KEY") {
         Ok(secret) => secret,
         Err(_e) => {
             println!("WARN: SECRET_KEY not set");
