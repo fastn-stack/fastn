@@ -26,32 +26,56 @@ pub async fn process(
         ));
     }
 
-    let state = match tokio::fs::read(
-        std::path::PathBuf::from(dirs::home_dir().unwrap())
-            .join(".fastn")
-            .join("tutor.json"),
-    )
-    .await
-    {
-        Ok(v) => serde_json::from_slice(&v)?,
-        Err(e) => match e.kind() {
-            std::io::ErrorKind::NotFound => TutorState::default(),
-            _ => {
-                return Err(ftd::interpreter::Error::OtherError(format!(
-                    "tutor error: {}",
-                    e.to_string()
-                )))
-            }
-        },
-    };
+    let state: TutorState =
+        match tokio::fs::read(dirs::home_dir().unwrap().join(".fastn").join("tutor.json")).await {
+            Ok(v) => serde_json::from_slice(&v)?,
+            Err(e) => match e.kind() {
+                std::io::ErrorKind::NotFound => TutorStateFS::default(),
+                _ => {
+                    return Err(ftd::interpreter::Error::OtherError(format!(
+                        "tutor error: {}",
+                        e
+                    )))
+                }
+            },
+        }
+        .into();
 
     doc.from_json(&state, &kind, &value)
 }
 
-#[derive(Debug, Default, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Default, serde::Deserialize)]
+struct TutorStateFS {
+    // done: Vec<String>,
+    // current: String,
+}
+
+#[derive(Debug, serde::Serialize)]
 struct TutorState {
-    done: Vec<String>,
-    current: String,
+    workshops: Vec<Workshop>,
+}
+
+impl From<TutorStateFS> for TutorState {
+    fn from(_s: TutorStateFS) -> Self {
+        todo!()
+    }
+}
+
+#[derive(Debug, serde::Serialize)]
+struct Workshop {
+    title: String,
+    about: String,
+    done: bool,
+    current: bool,
+    tutorials: Vec<Tutorial>,
+}
+
+#[derive(Debug, serde::Serialize)]
+struct Tutorial {
+    title: String,
+    about: String,
+    done: bool,
+    current: bool,
 }
 
 pub fn is_tutor() -> bool {
