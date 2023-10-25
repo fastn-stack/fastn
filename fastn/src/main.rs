@@ -479,7 +479,7 @@ fn app(version: &'static str) -> clap::Command {
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
-            clap::Command::new("tutor").about("Start fastn tutor")
+            clap::Command::new("tutor").about("Start fastn tutor").hide(true)
         )
         .subcommand(
             clap::Command::new("start-tracking")
