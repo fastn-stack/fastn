@@ -1,5 +1,7 @@
 let fastn_dom = {};
 
+fastn_dom.styleClasses = "";
+
 fastn_dom.codeData = {
     availableThemes: {},
     addedCssFile: []
@@ -937,14 +939,7 @@ class Node2 {
             if (!!className) {
                 if (!fastn_dom.classes[cssClass]) {
                     fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
-                    let styles = document.getElementById('styles');
-                    let newClasses = getClassAsString(cssClass, obj);
-                    let textNode = document.createTextNode(newClasses);
-                    if (styles.styleSheet) {
-                        styles.styleSheet.cssText = newClasses;
-                    } else {
-                        styles.appendChild(textNode);
-                    }
+                    fastn_utils.createStyle(cssClass, obj);
                 }
                 return cls;
             }
@@ -958,14 +953,7 @@ class Node2 {
             if (createClass) {
                 if (!fastn_dom.classes[cssClass]) {
                     fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
-                    let styles = document.getElementById('styles');
-                    let newClasses = getClassAsString(cssClass, obj);
-                    let textNode = document.createTextNode(newClasses);
-                    if (styles.styleSheet) {
-                        styles.styleSheet.cssText = newClasses;
-                    } else {
-                        styles.appendChild(textNode);
-                    }
+                    fastn_utils.createStyle(cssClass, obj);
                 }
                 this.#node.style.removeProperty(property);
                 this.#node.classList.add(cls);
