@@ -9,12 +9,15 @@ pub fn domain(host: &str) -> String {
 }
 
 pub async fn get_api<T: serde::de::DeserializeOwned>(
-    url: &str,
-    token: &str,
+    url: impl AsRef<str>,
+    bearer_token: &str,
 ) -> fastn_core::Result<T> {
     let response = reqwest::Client::new()
-        .get(url)
-        .header(reqwest::header::AUTHORIZATION, token)
+        .get(url.as_ref())
+        .header(
+            reqwest::header::AUTHORIZATION,
+            format!("{} {}", "Bearer", bearer_token),
+        )
         .header(reqwest::header::ACCEPT, "application/json")
         .header(
             reqwest::header::USER_AGENT,
@@ -26,7 +29,7 @@ pub async fn get_api<T: serde::de::DeserializeOwned>(
     if !response.status().eq(&reqwest::StatusCode::OK) {
         return Err(fastn_core::Error::APIResponseError(format!(
             "fastn-API-ERROR: {}, Error: {}",
-            url,
+            url.as_ref(),
             response.text().await?
         )));
     }
