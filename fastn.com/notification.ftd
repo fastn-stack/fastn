@@ -33,31 +33,23 @@ notification-data list notifications: $notifications
 boolean $show: false
 boolean $show-number: true
 integer length: $length(notifications = $display-notifications.notifications)
-integer call-count-notification: $count-notification(notifications = $display-notifications.notifications)
 
 -- ftd.container:
 if: { display-notifications.length != 0 }
 
 -- ftd.row:
+$on-click$: $ftd.set-boolean($a = $display-notifications.show, v = true)
 
 -- ftd.image:
 src: $fastn-assets.files.assets.notification.svg
 width.fixed.px: 30
 margin-left.px: 10
-$on-click$: $ftd.set-boolean($a = $display-notifications.show, v = true)
-$on-click$: $set-notification-read(notifications = $display-notifications.notifications)
 
-
--- ftd.integer: $display-notifications.call-count-notification
-;; if: { display-notifications.call-count-notification != 0 }
-id: notification-number
-color: $inherited.colors.cta-primary.text
-background.solid: $inherited.colors.cta-primary.base
-border-radius.percent: 50
-role: $inherited.types.fine-print
-padding-horizontal.px: 5
+-- notification-ui:
 margin-left.px: -7
 margin-top.px: -4
+notifications: $notifications
+remove: $display-notifications.show
 
 -- end: ftd.row
 
@@ -82,6 +74,7 @@ border-color: $inherited.colors.border
 -- ftd.image:
 src: $fastn-assets.files.assets.cross.svg
 width.fixed.px: 30
+align-self: end
 $on-click$: $ftd.set-boolean($a=$display-notifications.show, v = false)
 
 -- end: ftd.column
@@ -177,28 +170,29 @@ blur.px: 12
 
 -- string calculate-date(date):
 string date:
-js: $fastn-assets.files.notification.js
+js: $fastn-assets.files.functions.js
 
 calculateDate(date)
 
 
 
 
--- integer count-notification(notifications):
-notification-data list notifications:
-js: $fastn-assets.files.notification.js
-
-checkNotification(notifications)
 
 
--- void set-notification-read(notifications,show):
-notification-data list notifications:
-js: $fastn-assets.files.notification.js
-
-setNotification(notifications)
 
 
 -- integer length(notifications):
 notification-data list notifications:
 
 len(notifications)
+
+
+
+-- web-component notification-ui:
+ftd.length margin-left:
+ftd.length margin-top:
+notification-data list notifications:
+boolean remove:
+js: $fastn-assets.files.notification-ui.js
+
+-- end: notification-ui
