@@ -41,8 +41,8 @@ pub async fn process(
 
 #[derive(Debug, Default, serde::Deserialize)]
 struct TutorStateFS {
-    // done: Vec<String>,
-    // current: String,
+    done: Vec<String>,
+    current: String,
 }
 
 #[derive(Debug, serde::Serialize)]
@@ -53,7 +53,7 @@ struct TutorState {
 impl TryFrom<TutorStateFS> for TutorState {
     type Error = ftd::interpreter::Error;
 
-    fn try_from(_s: TutorStateFS) -> Result<Self, Self::Error> {
+    fn try_from(state: TutorStateFS) -> Result<Self, Self::Error> {
         // loop over all folders in current folder
         let mut workshops = vec![];
         static RE: once_cell::sync::Lazy<regex::Regex> =
@@ -70,7 +70,7 @@ impl TryFrom<TutorStateFS> for TutorState {
                 continue;
             }
 
-            workshops.push(Workshop::load(&path)?);
+            workshops.push(Workshop::load(&path, &state)?);
         }
 
         Ok(TutorState { workshops })
@@ -87,9 +87,44 @@ struct Workshop {
 }
 
 impl Workshop {
-    fn load(_path: &std::path::Path) -> ftd::interpreter::Result<Self> {
-        todo!()
+    fn load(path: &std::path::Path, state: &TutorStateFS) -> ftd::interpreter::Result<Self> {
+        let (title, about) = title_and_about_from_readme(path)?;
+        let mut tutorials = vec![];
+        let id = path.file_name().unwrap().to_string_lossy();
+
+        for entry in std::fs::read_dir(path)? {
+            let entry = entry?;
+            let path = entry.path();
+            if !path.is_dir() {
+                continue;
+            }
+
+            tutorials.push(Tutorial::load(&id, &path, state)?);
+        }
+
+        Ok(Workshop {
+            title: title.to_string(),
+            about: about.to_string(),
+            done: !tutorials.iter().any(|t| !t.done),
+            current: tutorials.iter().any(|t| t.current),
+            tutorials,
+        })
     }
+}
+
+fn title_and_about_from_readme(
+    folder: &std::path::Path,
+) -> ftd::interpreter::Result<(String, String)> {
+    let content = std::fs::read_to_string(folder.join("README.md"))?;
+    let (title, about) = match content.split_once("\n\n") {
+        Some(v) => v,
+        None => {
+            return Err(ftd::interpreter::Error::OtherError(
+                "invalid README.md".into(),
+            ))
+        }
+    };
+    Ok((title.to_string(), about.to_string()))
 }
 
 #[derive(Debug, serde::Serialize)]
@@ -99,6 +134,25 @@ struct Tutorial {
     about: String,
     done: bool,
     current: bool,
+}
+
+impl Tutorial {
+    fn load(
+        parent: &str,
+        path: &std::path::Path,
+        state: &TutorStateFS,
+    ) -> ftd::interpreter::Result<Self> {
+        let (title, about) = title_and_about_from_readme(path)?;
+        let id = format!("{parent}/{}", path.file_name().unwrap().to_string_lossy());
+
+        Ok(Tutorial {
+            title: title.to_string(),
+            about: about.to_string(),
+            done: state.done.contains(&id),
+            current: state.current == id,
+            id,
+        })
+    }
 }
 
 pub fn is_tutor() -> bool {
