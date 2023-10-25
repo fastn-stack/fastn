@@ -617,3 +617,35 @@ pub async fn get_api<T: serde::de::DeserializeOwned>(
 
     Ok(response.json().await?)
 }
+
+pub async fn github_graphql<T: serde::de::DeserializeOwned>(
+    query: &str,
+    token: &str,
+) -> fastn_core::Result<T> {
+    let mut map: std::collections::HashMap<&str, &str> = std::collections::HashMap::new();
+    map.insert("query", query);
+
+    let response = reqwest::Client::new()
+        .post("https://api.github.com/graphql")
+        .json(&map)
+        .header(
+            reqwest::header::AUTHORIZATION,
+            format!("{} {}", "Bearer", token),
+        )
+        .header(reqwest::header::ACCEPT, "application/json")
+        .header(
+            reqwest::header::USER_AGENT,
+            reqwest::header::HeaderValue::from_static("fastn"),
+        )
+        .send()
+        .await?;
+    if !response.status().eq(&reqwest::StatusCode::OK) {
+        return Err(fastn_core::Error::APIResponseError(format!(
+            "GitHub API ERROR: {}",
+            response.status()
+        )));
+    }
+    let return_obj = response.json::<T>().await?;
+
+    Ok(return_obj)
+}
