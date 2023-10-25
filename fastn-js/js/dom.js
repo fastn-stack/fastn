@@ -938,7 +938,13 @@ class Node2 {
                 if (!fastn_dom.classes[cssClass]) {
                     fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
                     let styles = document.getElementById('styles');
-                    styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
+                    let newClasses = getClassAsString(cssClass, obj);
+                    let textNode = document.createTextNode(newClasses);
+                    if (styles.styleSheet) {
+                        styles.styleSheet.cssText = newClasses;
+                    } else {
+                        styles.appendChild(textNode);
+                    }
                 }
                 return cls;
             }
@@ -953,7 +959,13 @@ class Node2 {
                 if (!fastn_dom.classes[cssClass]) {
                     fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
                     let styles = document.getElementById('styles');
-                    styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
+                    let newClasses = getClassAsString(cssClass, obj);
+                    let textNode = document.createTextNode(newClasses);
+                    if (styles.styleSheet) {
+                        styles.styleSheet.cssText = newClasses;
+                    } else {
+                        styles.appendChild(textNode);
+                    }
                 }
                 this.#node.style.removeProperty(property);
                 this.#node.classList.add(cls);
