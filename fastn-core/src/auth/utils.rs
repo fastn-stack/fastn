@@ -8,35 +8,6 @@ pub fn domain(host: &str) -> String {
     }
 }
 
-pub async fn get_api<T: serde::de::DeserializeOwned>(
-    url: impl AsRef<str>,
-    bearer_token: &str,
-) -> fastn_core::Result<T> {
-    let response = reqwest::Client::new()
-        .get(url.as_ref())
-        .header(
-            reqwest::header::AUTHORIZATION,
-            format!("{} {}", "Bearer", bearer_token),
-        )
-        .header(reqwest::header::ACCEPT, "application/json")
-        .header(
-            reqwest::header::USER_AGENT,
-            reqwest::header::HeaderValue::from_static("fastn"),
-        )
-        .send()
-        .await?;
-
-    if !response.status().eq(&reqwest::StatusCode::OK) {
-        return Err(fastn_core::Error::APIResponseError(format!(
-            "fastn-API-ERROR: {}, Error: {}",
-            url.as_ref(),
-            response.text().await?
-        )));
-    }
-
-    Ok(response.json().await?)
-}
-
 pub async fn encrypt_str(user_detail_str: &String) -> String {
     use magic_crypt::MagicCryptTrait;
     let secret_key = fastn_core::auth::secret_key();

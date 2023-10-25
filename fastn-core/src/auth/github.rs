@@ -391,11 +391,9 @@ pub mod apis {
         struct UserRepos {
             full_name: String,
         }
-        let starred_repo: Vec<UserRepos> = fastn_core::auth::utils::get_api(
-            "https://api.github.com/user/starred?per_page=100",
-            token,
-        )
-        .await?;
+        let starred_repo: Vec<UserRepos> =
+            fastn_core::http::get_api("https://api.github.com/user/starred?per_page=100", token)
+                .await?;
         Ok(starred_repo.into_iter().map(|x| x.full_name).collect())
     }
 
@@ -406,11 +404,9 @@ pub mod apis {
         struct FollowedOrg {
             login: String,
         }
-        let watched_repo: Vec<FollowedOrg> = fastn_core::auth::utils::get_api(
-            "https://api.github.com/user/following?per_page=100",
-            token,
-        )
-        .await?;
+        let watched_repo: Vec<FollowedOrg> =
+            fastn_core::http::get_api("https://api.github.com/user/following?per_page=100", token)
+                .await?;
         Ok(watched_repo.into_iter().map(|x| x.login).collect())
     }
 
@@ -426,7 +422,7 @@ pub mod apis {
             login: String,
         }
 
-        let user_orgs: Vec<TeamMembers> = fastn_core::auth::utils::get_api(
+        let user_orgs: Vec<TeamMembers> = fastn_core::http::get_api(
             format!(
                 "https://api.github.com/orgs/{org_title}/teams/{team_slug}/members?per_page=100",
             ),
@@ -443,7 +439,7 @@ pub mod apis {
         struct UserRepos {
             full_name: String,
         }
-        let watched_repo: Vec<UserRepos> = fastn_core::auth::utils::get_api(
+        let watched_repo: Vec<UserRepos> = fastn_core::http::get_api(
             "https://api.github.com/user/subscriptions?per_page=100",
             token,
         )
@@ -461,7 +457,7 @@ pub mod apis {
         struct RepoContributor {
             login: String,
         }
-        let repo_contributor: Vec<RepoContributor> = fastn_core::auth::utils::get_api(
+        let repo_contributor: Vec<RepoContributor> = fastn_core::http::get_api(
             format!("https://api.github.com/repos/{repo_name}/contributors?per_page=100",),
             token,
         )
@@ -479,7 +475,7 @@ pub mod apis {
         struct RepoCollaborator {
             login: String,
         }
-        let repo_collaborators_list: Vec<RepoCollaborator> = fastn_core::auth::utils::get_api(
+        let repo_collaborators_list: Vec<RepoCollaborator> = fastn_core::http::get_api(
             format!("https://api.github.com/repos/{repo_name}/collaborators?per_page=100"),
             token,
         )
@@ -517,7 +513,7 @@ pub mod apis {
         }
 
         let user_obj: UserDetails =
-            fastn_core::auth::utils::get_api("https://api.github.com/user", access_token).await?;
+            fastn_core::http::get_api("https://api.github.com/user", access_token).await?;
 
         Ok(String::from(&user_obj.login))
     }
