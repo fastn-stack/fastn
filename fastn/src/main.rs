@@ -479,6 +479,9 @@ fn app(version: &'static str) -> clap::Command {
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
+            clap::Command::new("tutor").about("Start fastn tutor")
+        )
+        .subcommand(
             clap::Command::new("start-tracking")
                 .about("Add a tracking relation between two files")
                 .arg(clap::arg!(source: <SOURCE> "The source file to start track"))
