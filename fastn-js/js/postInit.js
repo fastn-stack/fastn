@@ -37,7 +37,7 @@ ftd.post_init = function () {
     const COOKIE_DARK_MODE = "dark";
     const COOKIE_LIGHT_MODE = "light";
     const DARK_MODE_CLASS = "dark";
-    let last_device = "desktop";
+    let last_device = ftd.device.get();
 
     window.onresize = function () {
         initialise_device()
