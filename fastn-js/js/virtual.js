@@ -153,8 +153,8 @@ fastn_virtual.hydrate = function(main) {
     let found_device = ftd.device.get();
     if (current_device !== found_device) {
         ftd.device = fastn.mutable(current_device);
-        // let styles = document.getElementById("styles");
-        // styles.innerText = "";
+        let styles = document.getElementById("styles");
+        styles.innerText = "";
         var children = document.body.children;
         // Loop through the direct children and remove those with tagName 'div'
         for (var i = children.length - 1; i >= 0; i--) {
