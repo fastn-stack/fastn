@@ -631,6 +631,7 @@ async fn route(
     app_data: actix_web::web::Data<AppData>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     tracing::info!(method = req.method().as_str(), uri = req.path());
+    tracing::info!(tutor_mode = fastn_core::tutor::is_tutor());
 
     let package_name = &app_data.package_name;
 
@@ -655,6 +656,7 @@ async fn route(
         ("get", "/-/poll/") => fastn_core::watcher::poll().await,
         ("get", "/favicon.ico") => favicon().await,
         ("get", "/test/") => test().await,
+        ("get", "/-/pwd/") => fastn_core::tutor::pwd().await,
         (_, _) => {
             serve(
                 req,
@@ -669,6 +671,7 @@ async fn route(
     }
 }
 
+//noinspection HttpUrlsUsage
 #[allow(clippy::too_many_arguments)]
 pub async fn listen(
     bind_address: &str,
@@ -742,7 +745,11 @@ You can try without providing port, it will automatically pick unused port."#,
             .route("/{path:.*}", actix_web::web::route().to(route))
     };
 
-    println!("### Server Started ###");
+    if fastn_core::tutor::is_tutor() {
+        println!("### Server Started in TUTOR MODE ###");
+    } else {
+        println!("### Server Started ###");
+    }
     println!(
         "Go to: http://{}:{}",
         bind_address,

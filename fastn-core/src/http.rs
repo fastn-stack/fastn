@@ -15,7 +15,7 @@ macro_rules! unauthorised {
 #[macro_export]
 macro_rules! not_found {
     ($($t:tt)*) => {{
-        fastn_core::http::not_found_(format!($($t)*))
+        fastn_core::http::not_found_(format!($($t)*) + "\n")
     }};
 }
 
