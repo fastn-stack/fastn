@@ -48,8 +48,6 @@ lang: ftd
 \-- ftd.video:
 src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 ;; <hl>
 controls: true
-src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 ;; <hl>
-controls: true
 width.fixed.px: 400
 height.fixed.px: 300
 fit: contain
@@ -81,8 +79,6 @@ lang: ftd
 \-- import: fastn.com/assets
 
 \-- ftd.video:
-src: $assets.files.videos.bunny.mp4 ;; <hl>
-controls: true
 src: $assets.files.videos.bunny.mp4 ;; <hl>
 controls: true
 width.fixed.px: 400
@@ -170,7 +166,6 @@ A Boolean attribute that indicates the default setting of the audio contained in
 muted: true ;; <hl>
 controls: true
 autoplay: true
-autoplay: true
 width.fixed.px: 400
 height.fixed.px: 300
 fit: contain
@@ -211,7 +206,6 @@ A Boolean attribute; if set to `true`, the video automatically begins to play ba
 -- ds.rendered.input:
 
 \-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-autoplay: true ;; <hl>
 autoplay: true ;; <hl>
 muted: true
 width.fixed.px: 400
