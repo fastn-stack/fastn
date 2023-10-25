@@ -9693,9 +9693,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 value: ftd::interpreter::PropertyValue::Value {
                     value: ftd::interpreter::Value::OrType {
                         name: ftd::interpreter::FTD_DEVICE_DATA.to_string(),
-                        variant: ftd::interpreter::FTD_DEVICE_DATA_DESKTOP.to_string(),
-                        full_variant: ftd::interpreter::FTD_DEVICE_DATA_DESKTOP.to_string(),
-                        value: Box::new(ftd::interpreter::Value::new_string("desktop")
+                        variant: ftd::interpreter::FTD_DEVICE_DATA_MOBILE.to_string(),
+                        full_variant: ftd::interpreter::FTD_DEVICE_DATA_MOBILE.to_string(),
+                        value: Box::new(ftd::interpreter::Value::new_string("mobile")
                             .into_property_value(false, 0))
                     },
                     is_mutable: true,

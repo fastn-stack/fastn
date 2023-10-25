@@ -370,7 +370,6 @@ fastn_dom.Spacing = {
     Fixed: (value) => { return [4, value]; }
 }
 
-
 fastn_dom.BorderStyle = {
     Solid: "solid",
     Dashed: "dashed",

@@ -2,6 +2,34 @@ ftd.clickOutsideEvents = [];
 ftd.globalKeyEvents = [];
 ftd.globalKeySeqEvents = [];
 
+
+ftd.get_device = function () {
+    const MOBILE_CLASS = "mobile";
+    // not at all sure about this function logic.
+    let width = window.innerWidth;
+    // In the future, we may want to have more than one break points, and
+    // then we may also want the theme builders to decide where the
+    // breakpoints should go. we should be able to fetch fpm variables
+    // here, or maybe simply pass the width, user agent etc. to fpm and
+    // let people put the checks on width user agent etc., but it would
+    // be good if we can standardize few breakpoints. or maybe we should
+    // do both, some standard breakpoints and pass the raw data.
+    // we would then rename this function to detect_device() which will
+    // return one of "desktop", "mobile". and also maybe have another
+    // function detect_orientation(), "landscape" and "portrait" etc.,
+    // and instead of setting `ftd#mobile: boolean` we set `ftd#device`
+    // and `ftd#view-port-orientation` etc.
+    let mobile_breakpoint = fastn_utils.getStaticValue(ftd.breakpoint_width.get("mobile"));
+    if (width <= mobile_breakpoint) {
+        document.body.classList.add(MOBILE_CLASS);
+        return fastn_dom.DeviceData.Mobile;
+    }
+    if (document.body.classList.contains(MOBILE_CLASS)) {
+        document.body.classList.remove(MOBILE_CLASS);
+    }
+    return fastn_dom.DeviceData.Desktop;
+}
+
 ftd.post_init = function () {
     const DARK_MODE_COOKIE = "fastn-dark-mode";
     const COOKIE_SYSTEM_LIGHT = "system-light";
@@ -9,7 +37,6 @@ ftd.post_init = function () {
     const COOKIE_DARK_MODE = "dark";
     const COOKIE_LIGHT_MODE = "light";
     const DARK_MODE_CLASS = "dark";
-    const MOBILE_CLASS = "mobile";
     let last_device = "desktop";
 
     window.onresize = function () {
@@ -71,39 +98,13 @@ ftd.post_init = function () {
         })
     }
     function initialise_device() {
-        let current = get_device();
+        let current = ftd.get_device();
         if (current === last_device) {
             return;
         }
         console.log("last_device", last_device, "current_device", current);
         ftd.device.set(current);
         last_device = current;
-    }
-
-    function get_device() {
-        // not at all sure about this function logic.
-        let width = window.innerWidth;
-        // In the future, we may want to have more than one break points, and
-        // then we may also want the theme builders to decide where the
-        // breakpoints should go. we should be able to fetch fpm variables
-        // here, or maybe simply pass the width, user agent etc. to fpm and
-        // let people put the checks on width user agent etc., but it would
-        // be good if we can standardize few breakpoints. or maybe we should
-        // do both, some standard breakpoints and pass the raw data.
-        // we would then rename this function to detect_device() which will
-        // return one of "desktop", "mobile". and also maybe have another
-        // function detect_orientation(), "landscape" and "portrait" etc.,
-        // and instead of setting `ftd#mobile: boolean` we set `ftd#device`
-        // and `ftd#view-port-orientation` etc.
-        let mobile_breakpoint = fastn_utils.getStaticValue(ftd.breakpoint_width.get("mobile"));
-        if (width <= mobile_breakpoint) {
-            document.body.classList.add(MOBILE_CLASS);
-            return fastn_dom.DeviceData.Mobile;
-        }
-        if (document.body.classList.contains(MOBILE_CLASS)) {
-            document.body.classList.remove(MOBILE_CLASS);
-        }
-        return fastn_dom.DeviceData.Desktop;
     }
 
     /*
@@ -216,8 +217,8 @@ ftd.post_init = function () {
     function start_watching_dark_mode_system_preference() {
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener("change", update_dark_mode);
     }
-    initialise_dark_mode();
     initialise_device();
+    initialise_dark_mode();
     initialise_click_outside_events();
     initialise_global_key_events();
     fastn_utils.resetFullHeight();
