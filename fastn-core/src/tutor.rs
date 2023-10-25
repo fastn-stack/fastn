@@ -31,15 +31,10 @@ pub async fn process(
             Ok(v) => serde_json::from_slice(&v)?,
             Err(e) => match e.kind() {
                 std::io::ErrorKind::NotFound => TutorStateFS::default(),
-                _ => {
-                    return Err(ftd::interpreter::Error::OtherError(format!(
-                        "tutor error: {}",
-                        e
-                    )))
-                }
+                _ => return Err(e.into()),
             },
         }
-        .into();
+        .try_into()?;
 
     doc.from_json(&state, &kind, &value)
 }
@@ -55,9 +50,30 @@ struct TutorState {
     workshops: Vec<Workshop>,
 }
 
-impl From<TutorStateFS> for TutorState {
-    fn from(_s: TutorStateFS) -> Self {
-        todo!()
+impl TryFrom<TutorStateFS> for TutorState {
+    type Error = ftd::interpreter::Error;
+
+    fn try_from(_s: TutorStateFS) -> Result<Self, Self::Error> {
+        // loop over all folders in current folder
+        let mut workshops = vec![];
+        static RE: once_cell::sync::Lazy<regex::Regex> =
+            once_cell::sync::Lazy::new(|| regex::Regex::new(r"^[a-zA-Z]-[a-zA-Z]+.*$").unwrap());
+
+        for entry in std::fs::read_dir(std::env::current_dir()?)? {
+            let entry = entry?;
+            let path = entry.path();
+            if !path.is_dir() {
+                continue;
+            }
+
+            if !RE.is_match(&path.file_name().unwrap().to_string_lossy()) {
+                continue;
+            }
+
+            workshops.push(Workshop::load(&path)?);
+        }
+
+        Ok(TutorState { workshops })
     }
 }
 
@@ -70,8 +86,15 @@ struct Workshop {
     tutorials: Vec<Tutorial>,
 }
 
+impl Workshop {
+    fn load(_path: &std::path::Path) -> ftd::interpreter::Result<Self> {
+        todo!()
+    }
+}
+
 #[derive(Debug, serde::Serialize)]
 struct Tutorial {
+    id: String,
     title: String,
     about: String,
     done: bool,
