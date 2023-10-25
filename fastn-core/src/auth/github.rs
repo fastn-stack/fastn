@@ -363,6 +363,7 @@ pub async fn matched_sponsored_org(
         })
         .collect())
 }
+
 pub mod apis {
     #[derive(Debug, serde::Deserialize)]
     pub struct GraphQLResp {
@@ -379,9 +380,9 @@ pub mod apis {
         #[serde(rename = "isSponsoredBy")]
         pub is_sponsored_by: bool,
     }
+
     // TODO: API to starred a repo on behalf of the user
     // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
-
     pub async fn starred_repo(token: &str) -> fastn_core::Result<Vec<String>> {
         // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
         // TODO: Handle paginated response
@@ -391,8 +392,8 @@ pub mod apis {
             full_name: String,
         }
         let starred_repo: Vec<UserRepos> = fastn_core::auth::utils::get_api(
-            format!("{}?per_page=100", "https://api.github.com/user/starred").as_str(),
-            format!("{} {}", "Bearer", token).as_str(),
+            "https://api.github.com/user/starred?per_page=100",
+            token,
         )
         .await?;
         Ok(starred_repo.into_iter().map(|x| x.full_name).collect())
@@ -406,8 +407,8 @@ pub mod apis {
             login: String,
         }
         let watched_repo: Vec<FollowedOrg> = fastn_core::auth::utils::get_api(
-            format!("{}?per_page=100", "https://api.github.com/user/following").as_str(),
-            format!("{} {}", "Bearer", token).as_str(),
+            "https://api.github.com/user/following?per_page=100",
+            token,
         )
         .await?;
         Ok(watched_repo.into_iter().map(|x| x.login).collect())
@@ -427,11 +428,9 @@ pub mod apis {
 
         let user_orgs: Vec<TeamMembers> = fastn_core::auth::utils::get_api(
             format!(
-                "{}{}{}{}/members?per_page=100",
-                "https://api.github.com/orgs/", org_title, "/teams/", team_slug
-            )
-            .as_str(),
-            format!("{} {}", "Bearer", token).as_str(),
+                "https://api.github.com/orgs/{org_title}/teams/{team_slug}/members?per_page=100",
+            ),
+            token,
         )
         .await?;
         Ok(user_orgs.into_iter().map(|x| x.login).collect())
@@ -445,12 +444,8 @@ pub mod apis {
             full_name: String,
         }
         let watched_repo: Vec<UserRepos> = fastn_core::auth::utils::get_api(
-            format!(
-                "{}?per_page=100",
-                "https://api.github.com/user/subscriptions"
-            )
-            .as_str(),
-            format!("{} {}", "Bearer", token).as_str(),
+            "https://api.github.com/user/subscriptions?per_page=100",
+            token,
         )
         .await?;
         Ok(watched_repo.into_iter().map(|x| x.full_name).collect())
@@ -467,12 +462,8 @@ pub mod apis {
             login: String,
         }
         let repo_contributor: Vec<RepoContributor> = fastn_core::auth::utils::get_api(
-            format!(
-                "{}{}/contributors?per_page=100",
-                "https://api.github.com/repos/", repo_name
-            )
-            .as_str(),
-            format!("{} {}", "Bearer", token).as_str(),
+            format!("https://api.github.com/repos/{repo_name}/contributors?per_page=100",),
+            token,
         )
         .await?;
         Ok(repo_contributor.into_iter().map(|x| x.login).collect())
@@ -489,12 +480,8 @@ pub mod apis {
             login: String,
         }
         let repo_collaborators_list: Vec<RepoCollaborator> = fastn_core::auth::utils::get_api(
-            format!(
-                "{}{}/collaborators?per_page=100",
-                "https://api.github.com/repos/", repo_name
-            )
-            .as_str(),
-            format!("{} {}", "Bearer", token).as_str(),
+            format!("https://api.github.com/repos/{repo_name}/collaborators?per_page=100"),
+            token,
         )
         .await?;
         Ok(repo_collaborators_list
@@ -529,11 +516,8 @@ pub mod apis {
             login: String,
         }
 
-        let user_obj: UserDetails = fastn_core::auth::utils::get_api(
-            "https://api.github.com/user",
-            format!("{} {}", "Bearer", access_token).as_str(),
-        )
-        .await?;
+        let user_obj: UserDetails =
+            fastn_core::auth::utils::get_api("https://api.github.com/user", access_token).await?;
 
         Ok(String::from(&user_obj.login))
     }
