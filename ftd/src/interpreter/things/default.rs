@@ -7597,7 +7597,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                     value: ftd::interpreter::Value::Record {
                                         name: ftd::interpreter::FTD_COLOR.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([(
-                                            "light".to_string(),
+                                            "light".to_string().to_string(),
                                             ftd::interpreter::PropertyValue::Value {
                                                 value:
                                                 ftd::interpreter::Value::String {
@@ -7879,7 +7879,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 line_number: 0,
                                                             },
                                                         ), (
-                                                            "dark".to_string(),
+                                                            "dark".to_string().to_string(),
                                                             ftd::interpreter::PropertyValue::Value {
                                                                 value: ftd::interpreter::Value::String {
                                                                     text: "#65b693".to_string()
@@ -9784,75 +9784,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 line_number: 0,
             }),
         ),
-        // mask-position
-        (
-            ftd::interpreter::FTD_MASK_MULTI_DATA.to_string(),
-            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
-                name: ftd::interpreter::FTD_MASK_MULTI_DATA.to_string(),
-                fields: std::iter::IntoIterator::into_iter([
-                    ftd::interpreter::Field {
-                        name: "image".to_string(),
-                        kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_MASK_IMAGE_DATA)
-                            .into_kind_data(),
-                        mutable: false,
-                        value: None,
-                        access_modifier: Default::default(),
-                        line_number: 0,
-                    },
-                    ftd::interpreter::Field {
-                        name: "size".to_string(),
-                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_SIZE)
-                            .into_kind_data()
-                            .into_optional(),
-                        mutable: false,
-                        value: None,
-                        access_modifier: Default::default(),
-                        line_number: 0,
-                    },
-                    ftd::interpreter::Field {
-                        name: "size-x".to_string(),
-                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_SIZE)
-                            .into_kind_data()
-                            .into_optional(),
-                        mutable: false,
-                        value: None,
-                        access_modifier: Default::default(),
-                        line_number: 0,
-                    },
-                    ftd::interpreter::Field {
-                        name: "size-y".to_string(),
-                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_SIZE)
-                            .into_kind_data()
-                            .into_optional(),
-                        mutable: false,
-                        value: None,
-                        access_modifier: Default::default(),
-                        line_number: 0,
-                    },
-                    ftd::interpreter::Field {
-                        name: "repeat".to_string(),
-                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_REPEAT)
-                            .into_kind_data()
-                            .into_optional(),
-                        mutable: false,
-                        value: None,
-                        access_modifier: Default::default(),
-                        line_number: 0,
-                    },
-                    ftd::interpreter::Field {
-                        name: "position".to_string(),
-                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_POSITION)
-                            .into_kind_data()
-                            .into_optional(),
-                        mutable: false,
-                        value: None,
-                        access_modifier: Default::default(),
-                        line_number: 0,
-                    },
-                ]).collect(),
-                line_number: 0,
-            }),
-        ),
+
         (
             ftd::interpreter::FTD_MASK_REPEAT.to_string(),
             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
@@ -10076,6 +10008,74 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
+            ftd::interpreter::FTD_MASK_MULTI_DATA.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FTD_MASK_MULTI_DATA.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "image".to_string(),
+                        kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_MASK_IMAGE_DATA)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "size".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_SIZE)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "size-x".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_SIZE)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "size-y".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_SIZE)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "repeat".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_REPEAT)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "position".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_MASK_POSITION)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter::FTD_MASK.to_string(),
             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
                 name: ftd::interpreter::FTD_MASK.to_string(),
@@ -10096,13 +10096,20 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         None,
                         0,
                     )),
-                    // todo: mode, position, composite, etc.
                 ],
                 line_number: 0,
             }),
         ),
     ])
     .collect()
+}
+
+pub static DEFAULT_BAG: once_cell::sync::OnceCell<
+    indexmap::IndexMap<String, ftd::interpreter::things::Thing>,
+> = once_cell::sync::OnceCell::new();
+
+pub fn get_default_bag() -> &'static indexmap::IndexMap<String, ftd::interpreter::things::Thing> {
+    DEFAULT_BAG.get_or_init(ftd::interpreter::things::default::default_bag)
 }
 
 pub fn image_function() -> ftd::interpreter::ComponentDefinition {

@@ -147,7 +147,7 @@ pub struct CheckBox {
 
 impl CheckBox {
     pub fn from(component: &ftd::interpreter::Component) -> CheckBox {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#checkbox")
             .unwrap()
             .clone()
@@ -233,7 +233,7 @@ pub struct TextInput {
 
 impl TextInput {
     pub fn from(component: &ftd::interpreter::Component) -> TextInput {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#text-input")
             .unwrap()
             .clone()
@@ -377,7 +377,7 @@ pub struct Iframe {
 
 impl Iframe {
     pub fn from(component: &ftd::interpreter::Component) -> Iframe {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#iframe")
             .unwrap()
             .clone()
@@ -495,7 +495,7 @@ pub struct Code {
 
 impl Code {
     pub fn from(component: &ftd::interpreter::Component, _doc: &ftd::interpreter::TDoc) -> Code {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#code")
             .unwrap()
             .clone()
@@ -619,7 +619,7 @@ pub struct Image {
 
 impl Image {
     pub fn from(component: &ftd::interpreter::Component) -> Image {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#image")
             .unwrap()
             .clone()
@@ -718,7 +718,7 @@ pub struct Video {
 
 impl Video {
     pub fn from(component: &ftd::interpreter::Component) -> Video {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#video")
             .unwrap()
             .clone()
@@ -1124,7 +1124,7 @@ impl InheritedProperties {
 
 impl Text {
     pub fn from(component: &ftd::interpreter::Component) -> Text {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#text")
             .unwrap()
             .clone()
@@ -1190,7 +1190,7 @@ impl Text {
 
 impl Integer {
     pub fn from(component: &ftd::interpreter::Component) -> Integer {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#integer")
             .unwrap()
             .clone()
@@ -1255,7 +1255,7 @@ impl Integer {
 
 impl Decimal {
     pub fn from(component: &ftd::interpreter::Component) -> Decimal {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#decimal")
             .unwrap()
             .clone()
@@ -1320,7 +1320,7 @@ impl Decimal {
 
 impl Boolean {
     pub fn from(component: &ftd::interpreter::Component) -> Boolean {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#boolean")
             .unwrap()
             .clone()
@@ -1385,7 +1385,7 @@ impl Boolean {
 
 impl Document {
     pub fn from(component: &ftd::interpreter::Component) -> Document {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#document")
             .unwrap()
             .clone()
@@ -1636,7 +1636,7 @@ impl DocumentMeta {
 
 impl Column {
     pub fn from(component: &ftd::interpreter::Component) -> Column {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#column")
             .unwrap()
             .clone()
@@ -1702,7 +1702,7 @@ impl Column {
 
 impl Row {
     pub fn from(component: &ftd::interpreter::Component) -> Row {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#row")
             .unwrap()
             .clone()
@@ -1768,7 +1768,7 @@ impl Row {
 
 impl ContainerElement {
     pub fn from(component: &ftd::interpreter::Component) -> ContainerElement {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#container")
             .unwrap()
             .clone()
@@ -1836,7 +1836,7 @@ pub struct Device {
 
 impl Device {
     pub fn from(component: &ftd::interpreter::Component, device: &str) -> Device {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get(device)
             .unwrap()
             .clone()
@@ -2021,7 +2021,7 @@ pub struct Rive {
 
 impl Rive {
     pub fn from(component: &ftd::interpreter::Component) -> Rive {
-        let component_definition = ftd::interpreter::default::default_bag()
+        let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#rive")
             .unwrap()
             .clone()
