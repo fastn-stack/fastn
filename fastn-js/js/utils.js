@@ -45,6 +45,20 @@ let fastn_utils = {
         }
         return [node, css, attributes];
     },
+    createStyle(cssClass, obj) {
+        if (rerender) {
+            fastn_dom.styleClasses = `${fastn_dom.styleClasses}${getClassAsString(cssClass, obj)}\n`;
+        } else {
+            let styles = document.getElementById('styles');
+            let newClasses = getClassAsString(cssClass, obj);
+            let textNode = document.createTextNode(newClasses);
+            if (styles.styleSheet) {
+                styles.styleSheet.cssText = newClasses;
+            } else {
+                styles.appendChild(textNode);
+            }
+        }
+    },
     getStaticValue(obj) {
         if (obj instanceof fastn.mutableClass) {
            return this.getStaticValue(obj.get());

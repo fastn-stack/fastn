@@ -3,6 +3,7 @@ let fastn_virtual = {}
 let id_counter = 0;
 let hydrating = false;
 let ssr = false;
+let rerender = false;
 
 class ClassList {
     #classes = [];
@@ -152,6 +153,7 @@ fastn_virtual.hydrate = function(main) {
     let current_device = ftd.get_device();
     let found_device = ftd.device.get();
     if (current_device !== found_device) {
+        rerender = true
         ftd.device = fastn.mutable(current_device);
         let styles = document.getElementById("styles");
         styles.innerText = "";
@@ -165,6 +167,8 @@ fastn_virtual.hydrate = function(main) {
         }
 
         main(document.body);
+        rerender = false;
+        styles.innerHTML = fastn_dom.styleClasses;
         return;
     }
     hydrating = true;
