@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 pub async fn pwd() -> fastn_core::Result<fastn_core::http::Response> {
     if !is_tutor() {
         return Ok(fastn_core::not_found!("this only works in tutor mode"));
@@ -59,7 +61,7 @@ impl TutorStateFS {
         static RE: once_cell::sync::Lazy<regex::Regex> =
             once_cell::sync::Lazy::new(|| regex::Regex::new(r"^[a-zA-Z]-[a-zA-Z]+.*$").unwrap());
 
-        for entry in std::fs::read_dir(path)? {
+        for entry in std::fs::read_dir(path)?.sorted_by(sort_path) {
             let entry = entry?;
             let path = entry.path();
             if !path.is_dir() {
@@ -77,6 +79,12 @@ impl TutorStateFS {
     }
 }
 
+fn sort_path(
+    a: &std::result::Result<std::fs::DirEntry, std::io::Error>,
+    b: &std::result::Result<std::fs::DirEntry, std::io::Error>,
+) -> std::cmp::Ordering {
+    a.as_ref().unwrap().path().cmp(&b.as_ref().unwrap().path())
+}
 #[derive(Debug, serde::Serialize, PartialEq)]
 struct Workshop {
     title: String,
@@ -91,7 +99,7 @@ impl Workshop {
         let mut tutorials = vec![];
         let id = path.file_name().unwrap().to_string_lossy();
 
-        for entry in std::fs::read_dir(path)? {
+        for entry in std::fs::read_dir(path)?.sorted_by(sort_path) {
             let entry = entry?;
             let path = entry.path();
             if !path.is_dir() {
