@@ -23,6 +23,7 @@ favicon: /-/fastn.com/images/favicon.svg
 -- fastn.dependency: fastn-stack.github.io/fastn-js
 -- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
 -- fastn.dependency: gargajit.github.io/expander
+-- fastn.dependency: fastn-stack.github.io/certificates
 
 -- fastn.auto-import: fastn.com/FASTN/ds
 -- fastn.auto-import: fastn.com/assets as fastn-assets
