@@ -73,7 +73,7 @@ pub fn interpret_helper(
 #[track_caller]
 fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let mut i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
-    for thing in ftd::interpreter::default::default_bag().keys() {
+    for thing in ftd::interpreter::default::get_default_bag().keys() {
         i.data.remove(thing);
     }
     let expected_json = serde_json::to_string_pretty(&i).unwrap();

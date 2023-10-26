@@ -1,0 +1,39 @@
+-- ftd.container:
+background.solid: red
+mask.image: https://mdn.github.io/css-examples/masking/star.svg
+width.fixed.px: 300
+height.fixed.px: 300
+
+-- ftd.color red-orange:
+light: red
+dark: orange
+
+-- ftd.color yellow-blue:
+light: yellow
+dark: blue
+
+-- ftd.linear-gradient lg:
+direction: bottom-left
+colors: $color-values
+
+-- ftd.linear-gradient-color list color-values:
+
+-- ftd.linear-gradient-color: $red-orange
+stop-position.percent: 40
+
+-- ftd.linear-gradient-color: $yellow-blue
+
+-- end: color-values
+
+
+-- ftd.mask-multi mi:
+image: https://mdn.github.io/css-examples/masking/star.svg
+size.fixed.rem: 2
+repeat: no-repeat
+position: center
+
+-- ftd.container:
+background.solid: red
+mask.multi: $mi
+width.fixed.px: 300
+height.fixed.px: 300
