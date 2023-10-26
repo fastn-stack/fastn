@@ -547,7 +547,7 @@ pub fn version() -> &'static str {
     }
 }
 
-fn set_env_vars() -> () {
+fn set_env_vars() {
     let checked_in = {
         if let Ok(status) = std::process::Command::new("git")
             .arg("ls-files")
@@ -580,7 +580,7 @@ FASTN_DANGER_ACCEPT_CHECKED_IN_ENV set"
         std::process::exit(1);
     }
 
-    if let Ok(_) = dotenvy::dotenv() {
+    if dotenvy::dotenv().is_ok() {
         println!("INFO: loaded environment variables from .env file.");
     }
 }
