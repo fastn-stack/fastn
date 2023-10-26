@@ -163,43 +163,57 @@ mod test {
 
     #[test]
     fn test() {
+        let mut ts = super::TutorState {
+            workshops: vec![
+                super::Workshop {
+                    title: "Build Websites Using `fastn`".to_string(),
+                    url: "/a-website/".to_string(),
+                    done: false,
+                    current: false,
+                    tutorials: vec![super::Tutorial {
+                        id: "a-website/01-hello-world".to_string(),
+                        url: "/a-website/01-hello-world/".to_string(),
+                        title: "Install and start using `fastn`".to_string(),
+                        done: false,
+                        current: false,
+                    }],
+                },
+                super::Workshop {
+                    title: "Build User Interfaces Using `fastn`".to_string(),
+                    url: "/b-ui/".to_string(),
+                    done: false,
+                    current: false,
+                    tutorials: vec![super::Tutorial {
+                        id: "b-ui/01-hello-world".to_string(),
+                        url: "/b-ui/01-hello-world/".to_string(),
+                        title: "Install and start using `fastn`".to_string(),
+                        done: false,
+                        current: false,
+                    }],
+                },
+            ],
+        };
+
+        assert_eq!(
+            super::TutorStateFS::default()
+                .to_state("tutor-tests/one")
+                .unwrap(),
+            ts,
+        );
+
+        ts.workshops[0].tutorials[0].done = true;
+        ts.workshops[0].done = true;
+        ts.workshops[1].current = true;
+        ts.workshops[1].tutorials[0].current = true;
+
         assert_eq!(
             super::TutorStateFS {
-                done: vec![],
-                current: "".to_string(),
+                done: vec!["a-website/01-hello-world".to_string()],
+                current: "b-ui/01-hello-world".to_string(),
             }
             .to_state("tutor-tests/one")
             .unwrap(),
-            super::TutorState {
-                workshops: vec![
-                    super::Workshop {
-                        title: "Build Websites Using `fastn`".to_string(),
-                        url: "/a-website/".to_string(),
-                        done: false,
-                        current: false,
-                        tutorials: vec![super::Tutorial {
-                            id: "a-website/01-hello-world".to_string(),
-                            url: "/a-website/01-hello-world/".to_string(),
-                            title: "Install and start using `fastn`".to_string(),
-                            done: false,
-                            current: false,
-                        }],
-                    },
-                    super::Workshop {
-                        title: "Build User Interfaces Using `fastn`".to_string(),
-                        url: "/b-ui/".to_string(),
-                        done: false,
-                        current: false,
-                        tutorials: vec![super::Tutorial {
-                            id: "b-ui/01-hello-world".to_string(),
-                            url: "/b-ui/01-hello-world/".to_string(),
-                            title: "Install and start using `fastn`".to_string(),
-                            done: false,
-                            current: false,
-                        }],
-                    }
-                ]
-            }
-        )
+            ts,
+        );
     }
 }
