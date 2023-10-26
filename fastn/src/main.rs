@@ -1,4 +1,5 @@
 mod commands;
+
 pub fn main() {
     fastn_observer::observe();
 
@@ -26,6 +27,8 @@ pub enum Error {
 
 async fn async_main() -> Result<(), Error> {
     let matches = app(version()).get_matches();
+
+    set_env_vars();
 
     if cloud_commands(&matches).await? {
         return Ok(());
@@ -541,5 +544,43 @@ pub fn version() -> &'static str {
             }
             None => env!("CARGO_PKG_VERSION"),
         }
+    }
+}
+
+fn set_env_vars() -> () {
+    let checked_in = {
+        if let Ok(status) = std::process::Command::new("git")
+            .arg("ls-files")
+            .arg("--error-unmatch")
+            .arg(".env")
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .status()
+        {
+            status.success() // .env is checked in
+        } else {
+            false
+        }
+    };
+
+    let ignore = {
+        if let Ok(val) = std::env::var("FASTN_DANGER_ACCEPT_CHECKED_IN_ENV") {
+            val != "false"
+        } else {
+            false
+        }
+    };
+
+    if checked_in && !ignore {
+        eprintln!(
+            "ERROR: the .env file is checked in to version control! This is a security risk.
+Remove it from your version control system or run fastn again with
+FASTN_DANGER_ACCEPT_CHECKED_IN_ENV set"
+        );
+        std::process::exit(1);
+    }
+
+    if let Ok(_) = dotenvy::dotenv() {
+        println!("INFO: loaded environment variables from .env file.");
     }
 }
