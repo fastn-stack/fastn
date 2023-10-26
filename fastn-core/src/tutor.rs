@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 pub async fn pwd() -> fastn_core::Result<fastn_core::http::Response> {
     if !is_tutor() {
         return Ok(fastn_core::not_found!("this only works in tutor mode"));
@@ -57,6 +55,8 @@ impl TutorStateFS {
         self: TutorStateFS,
         path: T,
     ) -> ftd::interpreter::Result<TutorState> {
+        use itertools::Itertools;
+
         let mut workshops = vec![];
         static RE: once_cell::sync::Lazy<regex::Regex> =
             once_cell::sync::Lazy::new(|| regex::Regex::new(r"^[a-zA-Z]-[a-zA-Z]+.*$").unwrap());
@@ -64,10 +64,10 @@ impl TutorStateFS {
         for entry in std::fs::read_dir(path)?.sorted_by(sort_path) {
             let entry = entry?;
             let path = entry.path();
+
             if !path.is_dir() {
                 continue;
             }
-
             if !RE.is_match(&path.file_name().unwrap().to_string_lossy()) {
                 continue;
             }
@@ -80,11 +80,12 @@ impl TutorStateFS {
 }
 
 fn sort_path(
-    a: &std::result::Result<std::fs::DirEntry, std::io::Error>,
-    b: &std::result::Result<std::fs::DirEntry, std::io::Error>,
+    a: &std::io::Result<std::fs::DirEntry>,
+    b: &std::io::Result<std::fs::DirEntry>,
 ) -> std::cmp::Ordering {
     a.as_ref().unwrap().path().cmp(&b.as_ref().unwrap().path())
 }
+
 #[derive(Debug, serde::Serialize, PartialEq)]
 struct Workshop {
     title: String,
@@ -96,13 +97,22 @@ struct Workshop {
 
 impl Workshop {
     fn load(path: &std::path::Path, state: &TutorStateFS) -> ftd::interpreter::Result<Self> {
+        use itertools::Itertools;
+
         let mut tutorials = vec![];
         let id = path.file_name().unwrap().to_string_lossy();
+
+        static RE: once_cell::sync::Lazy<regex::Regex> =
+            once_cell::sync::Lazy::new(|| regex::Regex::new(r"^[0-9][0-9]-[a-zA-Z]+.*$").unwrap());
 
         for entry in std::fs::read_dir(path)?.sorted_by(sort_path) {
             let entry = entry?;
             let path = entry.path();
+
             if !path.is_dir() {
+                continue;
+            }
+            if !RE.is_match(&path.file_name().unwrap().to_string_lossy()) {
                 continue;
             }
 
