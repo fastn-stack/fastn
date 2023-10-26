@@ -26,7 +26,7 @@ pub async fn process(
         ));
     }
 
-    let state: TutorState =
+    let state =
         match tokio::fs::read(dirs::home_dir().unwrap().join(".fastn").join("tutor.json")).await {
             Ok(v) => serde_json::from_slice(&v)?,
             Err(e) => match e.kind() {
@@ -34,7 +34,7 @@ pub async fn process(
                 _ => return Err(e.into()),
             },
         }
-        .try_into()?;
+        .to_state(std::env::current_dir()?)?;
 
     doc.from_json(&state, &kind, &value)
 }
@@ -45,21 +45,21 @@ struct TutorStateFS {
     current: String,
 }
 
-#[derive(Debug, serde::Serialize)]
+#[derive(Debug, serde::Serialize, PartialEq)]
 struct TutorState {
     workshops: Vec<Workshop>,
 }
 
-impl TryFrom<TutorStateFS> for TutorState {
-    type Error = ftd::interpreter::Error;
-
-    fn try_from(state: TutorStateFS) -> Result<Self, Self::Error> {
-        // loop over all folders in current folder
+impl TutorStateFS {
+    fn to_state<T: AsRef<std::path::Path>>(
+        self: TutorStateFS,
+        path: T,
+    ) -> ftd::interpreter::Result<TutorState> {
         let mut workshops = vec![];
         static RE: once_cell::sync::Lazy<regex::Regex> =
             once_cell::sync::Lazy::new(|| regex::Regex::new(r"^[a-zA-Z]-[a-zA-Z]+.*$").unwrap());
 
-        for entry in std::fs::read_dir(std::env::current_dir()?)? {
+        for entry in std::fs::read_dir(path)? {
             let entry = entry?;
             let path = entry.path();
             if !path.is_dir() {
@@ -70,17 +70,17 @@ impl TryFrom<TutorStateFS> for TutorState {
                 continue;
             }
 
-            workshops.push(Workshop::load(&path, &state)?);
+            workshops.push(Workshop::load(&path, &self)?);
         }
 
         Ok(TutorState { workshops })
     }
 }
 
-#[derive(Debug, serde::Serialize)]
+#[derive(Debug, serde::Serialize, PartialEq)]
 struct Workshop {
     title: String,
-    about: String,
+    url: String,
     done: bool,
     current: bool,
     tutorials: Vec<Tutorial>,
@@ -88,7 +88,6 @@ struct Workshop {
 
 impl Workshop {
     fn load(path: &std::path::Path, state: &TutorStateFS) -> ftd::interpreter::Result<Self> {
-        let (title, about) = title_and_about_from_readme(path)?;
         let mut tutorials = vec![];
         let id = path.file_name().unwrap().to_string_lossy();
 
@@ -103,8 +102,8 @@ impl Workshop {
         }
 
         Ok(Workshop {
-            title: title.to_string(),
-            about: about.to_string(),
+            title: title_from_readme(path)?,
+            url: format!("/{id}/"),
             done: !tutorials.iter().any(|t| !t.done),
             current: tutorials.iter().any(|t| t.current),
             tutorials,
@@ -112,11 +111,9 @@ impl Workshop {
     }
 }
 
-fn title_and_about_from_readme(
-    folder: &std::path::Path,
-) -> ftd::interpreter::Result<(String, String)> {
+fn title_from_readme(folder: &std::path::Path) -> ftd::interpreter::Result<String> {
     let content = std::fs::read_to_string(folder.join("README.md"))?;
-    let (title, about) = match content.split_once("\n\n") {
+    let (title, _about) = match content.split_once("\n\n") {
         Some(v) => v,
         None => {
             return Err(ftd::interpreter::Error::OtherError(
@@ -124,14 +121,14 @@ fn title_and_about_from_readme(
             ))
         }
     };
-    Ok((title.to_string(), about.to_string()))
+    Ok(title.replacen("# ", "", 1))
 }
 
-#[derive(Debug, serde::Serialize)]
+#[derive(Debug, serde::Serialize, PartialEq)]
 struct Tutorial {
     id: String,
+    url: String,
     title: String,
-    about: String,
     done: bool,
     current: bool,
 }
@@ -142,14 +139,13 @@ impl Tutorial {
         path: &std::path::Path,
         state: &TutorStateFS,
     ) -> ftd::interpreter::Result<Self> {
-        let (title, about) = title_and_about_from_readme(path)?;
         let id = format!("{parent}/{}", path.file_name().unwrap().to_string_lossy());
 
         Ok(Tutorial {
-            title: title.to_string(),
-            about: about.to_string(),
+            title: title_from_readme(path)?,
             done: state.done.contains(&id),
             current: state.current == id,
+            url: format!("/{id}/"),
             id,
         })
     }
@@ -159,4 +155,51 @@ pub fn is_tutor() -> bool {
     // https://github.com/orgs/fastn-stack/discussions/1414
     // with either of these are passed we allow APIs like /-/shutdown/, `/-/start/` etc
     std::env::args().any(|e| e == "tutor" || e == "--tutor")
+}
+
+#[cfg(test)]
+mod test {
+    use pretty_assertions::assert_eq;
+
+    #[test]
+    fn test() {
+        assert_eq!(
+            super::TutorStateFS {
+                done: vec![],
+                current: "".to_string(),
+            }
+            .to_state("tutor-tests/one")
+            .unwrap(),
+            super::TutorState {
+                workshops: vec![
+                    super::Workshop {
+                        title: "Build Websites Using `fastn`".to_string(),
+                        url: "/a-website/".to_string(),
+                        done: false,
+                        current: false,
+                        tutorials: vec![super::Tutorial {
+                            id: "a-website/01-hello-world".to_string(),
+                            url: "/a-website/01-hello-world/".to_string(),
+                            title: "Install and start using `fastn`".to_string(),
+                            done: false,
+                            current: false,
+                        }],
+                    },
+                    super::Workshop {
+                        title: "Build User Interfaces Using `fastn`".to_string(),
+                        url: "/b-ui/".to_string(),
+                        done: false,
+                        current: false,
+                        tutorials: vec![super::Tutorial {
+                            id: "b-ui/01-hello-world".to_string(),
+                            url: "/b-ui/01-hello-world/".to_string(),
+                            title: "Install and start using `fastn`".to_string(),
+                            done: false,
+                            current: false,
+                        }],
+                    }
+                ]
+            }
+        )
+    }
 }
