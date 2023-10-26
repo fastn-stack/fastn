@@ -6,12 +6,33 @@ pub struct DatabaseConfig {
 
 pub(crate) fn get_db_config() -> ftd::interpreter::Result<DatabaseConfig> {
     let db_url = std::env::var("FASTN_DB_URL").expect("FASTN_DB_URL is not set");
-    let url = url::Url::parse(&db_url).expect("Invalid DB Url");
-    let db_type = url.scheme().to_string();
 
-    let config = DatabaseConfig { db_url, db_type };
+    if db_url.contains("://") {
+        let url = url::Url::parse(&db_url).expect("Invalid DB Url");
+        let db_type = url.scheme().to_string();
+        let config = DatabaseConfig { db_url, db_type };
+        Ok(config)
+    } else {
+        let config = if db_url == ":memory:" {
+            DatabaseConfig {
+                db_url,
+                db_type: "sqlite".to_string(),
+            }
+        } else if db_url.starts_with("file://") {
+            let path = &db_url[7..];
+            DatabaseConfig {
+                db_url: path.to_string(),
+                db_type: "sqlite".to_string(),
+            }
+        } else {
+            DatabaseConfig {
+                db_url,
+                db_type: "sqlite".to_string(),
+            }
+        };
 
-    Ok(config)
+        Ok(config)
+    }
 }
 
 pub async fn process(
