@@ -1,7 +1,7 @@
 async fn template_contents(
     project_name: &str,
     download_base_url: Option<&str>,
-) -> (String, String) {
+) -> (String, String, String) {
     let ftd = format!(
         r#"-- import: fastn
 
@@ -14,8 +14,12 @@ async fn template_contents(
             .unwrap_or_default()
     );
     let index = "-- ftd.text: Hello world".to_string();
+    let gitignore = r#".build/
+.env
+    "#
+    .to_string();
 
-    (ftd, index)
+    (ftd, index, gitignore)
 }
 
 pub async fn create_package(
@@ -53,12 +57,11 @@ pub async fn create_package(
     // Create all directories if not present
     tokio::fs::create_dir_all(final_dir.as_str()).await?;
 
-    let tmp_contents = template_contents(name, download_base_url).await;
-    let tmp_fastn = tmp_contents.0;
-    let tmp_index = tmp_contents.1;
+    let (tmp_fastn, tmp_index, tmp_gitignore) = template_contents(name, download_base_url).await;
 
     fastn_core::utils::update(&final_dir.join("FASTN.ftd"), tmp_fastn.as_bytes()).await?;
     fastn_core::utils::update(&final_dir.join("index.ftd"), tmp_index.as_bytes()).await?;
+    fastn_core::utils::update(&final_dir.join(".gitignore"), tmp_gitignore.as_bytes()).await?;
 
     // Note: Not required for now
     // let sync_message = "Initial sync".to_string();
