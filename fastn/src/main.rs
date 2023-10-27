@@ -578,9 +578,16 @@ Remove it from your version control system or run fastn again with
 FASTN_DANGER_ACCEPT_CHECKED_IN_ENV set"
         );
         std::process::exit(1);
-    }
+    } else {
+        if checked_in && ignore {
+            println!(
+                "WARN: your .env file has been detected in the version control system! This poses a
+significant security risk in case the source code becomes public."
+            );
+        }
 
-    if dotenvy::dotenv().is_ok() {
-        println!("INFO: loaded environment variables from .env file.");
+        if dotenvy::dotenv().is_ok() {
+            println!("INFO: loaded environment variables from .env file.");
+        }
     }
 }
