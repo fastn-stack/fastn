@@ -58,6 +58,7 @@ These types can be categorized into two main groups: **Primitive** and
   - [`ftd.resizing`](ftd/built-in-types/#ftd-resizing)
   - [`ftd.responsive-type`](ftd/built-in-types/#ftd-responsive-type)
   - [`ftd.shadow`](ftd/built-in-types/#ftd-shadow)
+  - [`ftd.mask`](ftd/built-in-types/#ftd-mask)
   - [`ftd.spacing`](ftd/built-in-types/#ftd-spacing)
   - [`ftd.text-align`](ftd/built-in-types/#ftd-text-align)
   - [`ftd.text-input-type`](ftd/built-in-types/#ftd-text-input-type)
@@ -2637,6 +2638,281 @@ be set to 0px if not specified.
 
 - `inset`: This field will make the shadow inset (if provided true). By default, outset
 shadow will be used if this value is not specified or is given false.
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.mask`
+
+It is or-type type with the following fields.
+
+-- ds.code: `ftd.mask` or-type
+lang: ftd
+
+\-- or-type mask:
+
+\-- ftd.mask-image image:
+
+\-- ftd.mask-multi multi:
+
+\-- end: mask
+
+-- ds.markdown:
+
+- `image`: This value will set the mask image and/or the linear gradient.
+It takes value of type `ftd.mask-image` which is of record type.
+- `multi`: This value will allow you to set multiple properties such as `image`, `size`, `position`, etc. at once.
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-image`
+
+It is record type with the following fields.
+
+-- ds.code: `ftd.mask-image` record
+lang: ftd
+
+\-- record mask-image:
+caption ftd.image-src src:
+optional ftd.linear-gradient linear-gradient:
+optional ftd.color color:
+
+-- ds.markdown:
+
+- `src`: This field of `ftd.mask-image` stores the source of mask image in
+both light and dark modes.
+
+- `linear-gradient`: This value will set a linear gradient as mask image. It takes value of type `ftd.linear-gradient`.
+
+- `color`: This field specifies the color for the mask image. It takes `ftd.color` value and is optional.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-multi`
+
+It is record type with the following fields.
+
+-- ds.code: `ftd.mask-multi` record
+lang: ftd
+
+\-- record mask-multi:
+ftd.mask-image image:
+optional ftd.mask-size size:
+optional ftd.mask-size size-x:
+optional ftd.mask-size size-y:
+optional ftd.mask-repeat repeat:
+optional ftd.mask-position position:
+
+
+
+-- ds.markdown:
+
+- `image`: This field of type `ftd.mask-image` sets the mask image to be used.
+
+- `size`: This field of type `ftd.mask-size` will set the size of the mask image.
+
+- `size-x`: This field of type `ftd.mask-size` will set the horizontal length of the mask image.
+
+- `size-y`: This field of type `ftd.mask-size` will set the vertical length of the mask image.
+
+- `repeat`: This field of type `ftd.mask-repeat` specifies how background images are repeated.
+
+- `position`: This field of type `ftd.mask-position` sets the position of the mask image.
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-repeat`
+
+The `ftd.mask-repeat` property is used to specify how mask
+images are repeated. It is an `or-type` which is used with
+`ftd.mask-multi` and is optional under it.
+
+-- ds.code: `ftd.mask-repeat`
+lang: ftd
+
+\-- or-type mask-repeat:
+
+\-- constant string repeat: repeat
+\-- constant string repeat-x: repeat-x
+\-- constant string repeat-y: repeat-y
+\-- constant string no-repeat: no-repeat
+\-- constant string space: space
+\-- constant string round: round
+
+\-- end: mask-repeat
+
+-- ds.markdown:
+
+As shown above, the `ftd.mask-repeat` has following variants:
+
+- `repeat`: This value will make the mask image repeat as much as possible in both
+directions to cover the whole container area. The last image will be clipped
+if it doesn't fit as per container dimensions.
+
+- `repeat-x`: This value will show similar behaviour as `repeat` except the fact that
+the images will be repeated only in x-direction (horizontal direction) and the
+last image will be clipped if it doesnt fit within the container area.
+
+- `repeat-y`: This value will show similar behaviour as `repeat` except the fact that
+the images will be repeated only in y-direction (vertical direction) and the last image will be clipped if
+it doesnt fit within the container area.
+
+- `no-repeat`: This value will make the image not repeat itself in any direction
+and hence container area might not get entirely covered in case if the container
+area is larger than the image itself.
+
+- `space`: This value will make the image repeat itself in both directions just like
+`repeat` except the fact that the last images wont be clipped and whitespace will be
+evenly distributed between the images. The only case where clipping will happen when
+there is not enough space for a single image.
+
+- `round`: This value will make the background image repeat itself
+and then are either squished or stretched to fill up the container space
+leaving no gaps.
+
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-position`
+
+The `ftd.mask-position` property is used to specify the
+positioning of the mask image. It is an `or-type` which is used with
+`ftd.mask-multi` and is optional under it.
+
+-- ds.code: `ftd.mask-position`
+lang: ftd
+
+\-- or-type mask-position:
+
+\-- constant string left: left
+\-- constant string center: center
+\-- constant string bottom: bottom
+\-- constant string left-top: left-top
+\-- constant string left-center: left-center
+\-- constant string left-bottom: left-bottom
+\-- constant string center-top: center-top
+\-- constant string center-center: center-center
+\-- constant string center-bottom: center-bottom
+\-- constant string right-top: right-top
+\-- constant string right-center: right-center
+\-- constant string right-bottom: right-bottom
+
+\-- anonymous record length:
+
+\-- ftd.length x:
+\-- ftd.length y:
+
+\-- end: length
+
+\-- end: mask-position
+
+-- ds.markdown:
+
+As shown above, the `ftd.mask-position` has following variants:
+
+- `left`- Positions the image to the left of the container.
+- `center`- Positions the image to the center of the container.
+- `right`- Positions the image to the right of the container.
+- `left-top` - Positions the image to the left in horizontal direction
+and top along the vertical direction of the container.
+- `left-center` - Positions the image to the left in horizontal direction
+and center along the vertical direction of the container.
+- `left-bottom` - Positions the image to the left in horizontal direction
+and bottom along the vertical direction of the container.
+- `center-top` - Positions the image to the center in horizontal direction
+and top along the vertical direction of the container.
+- `center-center` - Positions the image to the center in horizontal direction
+and center along the vertical direction of the container.
+- `center-bottom` - Positions the image to the center in horizontal direction
+and bottom along the vertical direction of the container.
+- `right-top` - Positions the image to the right in horizontal direction
+and top along the vertical direction of the container.
+- `right-center` - Positions the image to the right in horizontal direction
+and center along the vertical direction of the container.
+- `right-bottom` - Positions the image to the right in horizontal direction
+and bottom along the vertical direction of the container.
+- `length` - This anonymous record value will set the position value
+based on the specified x and y values.
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-size`
+
+The `ftd.mask-size` property is used to specify the
+dimensions of the mask image. It is an `or-type` which is used with
+`ftd.mask-multi` and is optional under it.
+
+-- ds.code: `ftd.mask-size`
+lang: ftd
+
+\-- or-type mask-size:
+
+\-- constant string auto: auto
+\-- constant string cover: cover
+\-- constant string contain: contain
+
+\-- anonymous record length:
+
+\-- ftd.length x:
+\-- ftd.length y:
+
+\-- end: length
+
+\-- end: mask-size
+
+-- ds.markdown:
+
+As shown above, the `ftd.mask-size` has following variants:
+
+- `auto`: This value will scale the mask image
+in the corresponding directions while maintaining the intrinsic proportions
+of the specified image.
+
+- `cover`: This value will scale the image to the smallest possible size
+to fill the container area leaving no empty space while preserving its ratio.
+Image will be cropped for either direction if the container dimensions differ
+from the image dimensions.
+
+- `contain`: This value will scale the mask image as large as possible
+within its container area without cropping or stretching the image.
+
+- `length`: This anonymous record value will set the dimensions of the
+background image based on the specified x and y values.
+
+
 
 
 
