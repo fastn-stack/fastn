@@ -1039,13 +1039,13 @@ impl ExpressionGenerator {
             // like person.name, person.meta.address
             if chain_dot_operator_count > 1 {
                 return format!(
-                    "fastn_utils.getStaticValue({})",
+                    "fastn_utils.getter({})",
                     get_chained_getter_string(value.as_str())
                 );
             }
 
             // When there is no chained dot operator value
-            format!("fastn_utils.getStaticValue(fastn_utils.getter({}))", value)
+            format!("fastn_utils.getter({})", value)
         } else {
             value
         }
@@ -1121,12 +1121,16 @@ impl ExpressionGenerator {
 
 pub fn get_chained_getter_string(value: &str) -> String {
     let chain_dot_operator_count = value.matches('.').count();
-    if chain_dot_operator_count >= 1 {
+    if chain_dot_operator_count > 1 {
         if let Some((variable, key)) = value.rsplit_once('.') {
+            // Ignore values which are already resolved with get()
+            if key.contains("get") {
+                return value.to_string();
+            }
             return format!(
                 "fastn_utils.getterByKey({}, \"{}\")",
                 get_chained_getter_string(variable),
-                key.replace('-', "_")
+                key.replace('-', "_") // record fields are stored in snake case
             );
         }
     }
