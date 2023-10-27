@@ -1,16 +1,16 @@
--- record Person:
+-- record person:
 caption name:
 integer age:
 
--- Person p: Sam Wan
+-- person p: Sam Wan
 age: 30
 
--- Person list people:
+-- person list people:
 
--- Person: Sam Ather
+-- person: Sam Ather
 age: 23
 
--- Person: $p
+-- person: $p
 
 -- end: people
 
