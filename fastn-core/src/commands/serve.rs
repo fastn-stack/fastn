@@ -657,6 +657,7 @@ async fn route(
         ("get", "/favicon.ico") => favicon().await,
         ("get", "/test/") => test().await,
         ("get", "/-/pwd/") => fastn_core::tutor::pwd().await,
+        ("get", "/-/tutor.js") => fastn_core::tutor::js().await,
         ("get", "/-/shutdown/") => fastn_core::tutor::shutdown().await,
         (_, _) => {
             serve(

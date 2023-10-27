@@ -793,6 +793,16 @@ pub fn replace_markers_2023(
             )
             .as_str(),
         )
+        .replace(
+            "__extra_js__",
+            get_extra_js(
+                config.ftd_external_js.as_slice(),
+                config.ftd_inline_js.as_slice(),
+                "",
+                "",
+            )
+            .as_str(),
+        )
         .replace("__default_css__", default_css)
         .replace("__base_url__", base_url)
         .as_str(),

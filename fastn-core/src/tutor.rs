@@ -6,6 +6,10 @@ pub async fn pwd() -> fastn_core::Result<fastn_core::http::Response> {
     fastn_core::http::api_ok(std::env::current_dir()?.to_string_lossy())
 }
 
+pub async fn js() -> fastn_core::Result<fastn_core::http::Response> {
+    Ok(actix_web::HttpResponse::Ok().body(include_bytes!("../tutor.js").to_vec()))
+}
+
 pub async fn shutdown() -> fastn_core::Result<fastn_core::http::Response> {
     if !is_tutor() {
         return Ok(fastn_core::not_found!("this only works in tutor mode"));
@@ -148,7 +152,10 @@ struct Tutorial {
     url: String,
     title: String,
     done: bool,
+    /// current means this is the tutorial the user is currently working on
     current: bool,
+    /// active means this is the page the user is seeing right now
+    active: bool,
 }
 
 impl Tutorial {
@@ -165,6 +172,7 @@ impl Tutorial {
             current: state.current == id,
             url: format!("/{id}/"),
             id,
+            active: false,
         })
     }
 }
@@ -194,6 +202,7 @@ mod test {
                         title: "Install and start using `fastn`".to_string(),
                         done: false,
                         current: false,
+                        active: false,
                     }],
                 },
                 super::Workshop {
@@ -207,6 +216,7 @@ mod test {
                         title: "Install and start using `fastn`".to_string(),
                         done: false,
                         current: false,
+                        active: false,
                     }],
                 },
             ],

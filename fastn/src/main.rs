@@ -94,7 +94,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             Some(2000),
             None,
             Some("2023".to_string()),
-            vec![],
+            vec!["/-/tutor.js".to_string()],
             vec![],
             vec![],
             vec![],
