@@ -22,6 +22,9 @@ pub fn reference_to_js(s: &str) -> String {
                 p1 = format!("{}.get({})", p1, num);
                 wrapper_function = Some("fastn_utils.getListItem");
             }
+            Ok(num) if p22.is_some() => {
+                p1 = format!("{}.get({}).item", p1, num);
+            }
             _ => {
                 p1 = format!(
                     "{}.get(\"{}\")",

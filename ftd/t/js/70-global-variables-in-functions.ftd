@@ -1,0 +1,42 @@
+-- record Person:
+caption name:
+integer age:
+
+-- Person p: Sam Wan
+age: 30
+
+-- Person list people:
+
+-- Person: Sam Ather
+age: 23
+
+-- Person: $p
+
+-- end: people
+
+
+
+
+
+
+-- ftd.text: $p.name
+color: green
+
+-- ftd.text: $people.0.name
+color: green
+
+-- ftd.text: $get-details(company = FifthTry)
+color: blue
+
+-- ftd.text: $get-first-person-details(company = FifthTry)
+color: blue
+
+-- string get-details(company):
+string company:
+
+"Person " + p.name + " works for " + company + " whose age is " + p.age
+
+-- string get-first-person-details(company):
+string company:
+
+"Person " + people.0.name + " works for " + company + " whose age is " + people.0.age
