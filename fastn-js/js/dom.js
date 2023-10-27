@@ -958,7 +958,7 @@ class Node2 {
     attachCss(property, value, createClass, className) {
         let propertyShort = fastn_dom.propertyMap[property] || property;
         propertyShort = `__${propertyShort}`;
-        let cls = `${propertyShort}-${JSON.stringify(fastn_dom.class_count)}`;
+        let cls = `${propertyShort}-${fastn_dom.class_count}`;
         if (!!className) {
            cls = className;
         } else {
