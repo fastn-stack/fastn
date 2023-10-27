@@ -1034,13 +1034,13 @@ impl ExpressionGenerator {
         };
 
         if node.operator().get_variable_identifier_read().is_some() && !no_getter {
-            let chain_dot_operator_count = value.matches(".").count();
+            let chain_dot_operator_count = value.matches('.').count();
             // When there are chained dot operator value
             // like person.name, person.meta.address
             if chain_dot_operator_count > 1 {
                 return format!(
                     "fastn_utils.getStaticValue({})",
-                    self.get_chained_getter_string(value.as_str())
+                    get_chained_getter_string(value.as_str())
                 );
             }
 
@@ -1049,22 +1049,6 @@ impl ExpressionGenerator {
         } else {
             value
         }
-    }
-
-    pub fn get_chained_getter_string(&self, value: &str) -> String {
-        let chain_dot_operator_count = value.matches(".").count();
-        if chain_dot_operator_count >= 1 {
-            while chain_dot_operator_count != 1 {
-                if let Some((variable, key)) = value.rsplit_once('.') {
-                    return format!(
-                        "fastn_utils.getterByKey({}, \"{}\")",
-                        self.get_chained_getter_string(variable),
-                        key.replace("-", "_")
-                    );
-                }
-            }
-        }
-        return value.to_string();
     }
 
     pub fn has_value(&self, operator: &fastn_grammar::evalexpr::Operator) -> Option<String> {
@@ -1133,6 +1117,20 @@ impl ExpressionGenerator {
     pub fn is_root(&self, operator: &fastn_grammar::evalexpr::Operator) -> bool {
         matches!(operator, fastn_grammar::evalexpr::Operator::RootNode)
     }
+}
+
+pub fn get_chained_getter_string(value: &str) -> String {
+    let chain_dot_operator_count = value.matches('.').count();
+    if chain_dot_operator_count >= 1 {
+        if let Some((variable, key)) = value.rsplit_once('.') {
+            return format!(
+                "fastn_utils.getterByKey({}, \"{}\")",
+                get_chained_getter_string(variable),
+                key.replace('-', "_")
+            );
+        }
+    }
+    value.to_string()
 }
 
 #[cfg(test)]
