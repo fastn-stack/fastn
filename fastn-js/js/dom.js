@@ -1269,7 +1269,7 @@ class Node2 {
         const maskDarkImageString = maskDarkImageValues.join(", ");
 
         if(maskLightImageString === maskDarkImageString) {
-            this.attachCss(propertyWithPrefix, maskLightImageString, false);
+            this.attachCss(propertyWithPrefix, maskLightImageString, true);
         } else {
             let lightClass = this.attachCss(propertyWithPrefix, maskLightImageString, true);
             this.attachCss(propertyWithPrefix, maskDarkImageString, true, `body.dark .${lightClass}`);
@@ -1306,19 +1306,19 @@ class Node2 {
         this.attachMaskSizeCss(value, vendorPrefix);
         const maskRepeatValue = fastn_utils.getStaticValue(value.get("repeat"));
         if(fastn_utils.isNull(maskRepeatValue)) {
-            this.attachCss("mask-repeat", maskRepeatValue);
-            this.attachCss("-webkit-mask-repeat", maskRepeatValue);
+            this.attachCss("mask-repeat", maskRepeatValue, true);
+            this.attachCss("-webkit-mask-repeat", maskRepeatValue, true);
         } else {
-            this.attachCss("mask-repeat", maskRepeatValue);
-            this.attachCss("-webkit-mask-repeat", maskRepeatValue);
+            this.attachCss("mask-repeat", maskRepeatValue, true);
+            this.attachCss("-webkit-mask-repeat", maskRepeatValue, true);
         }
         const maskPositionValue = fastn_utils.getStaticValue(value.get("position"));
         if(fastn_utils.isNull(maskPositionValue)) {
-            this.attachCss("mask-position", maskPositionValue);
-            this.attachCss("-webkit-mask-position", maskPositionValue);
+            this.attachCss("mask-position", maskPositionValue, true);
+            this.attachCss("-webkit-mask-position", maskPositionValue, true);
         } else {
-            this.attachCss("mask-position", maskPositionValue);
-            this.attachCss("-webkit-mask-position", maskPositionValue);
+            this.attachCss("mask-position", maskPositionValue, true);
+            this.attachCss("-webkit-mask-position", maskPositionValue, true);
         }
     }
     attachExternalCss(css) {
