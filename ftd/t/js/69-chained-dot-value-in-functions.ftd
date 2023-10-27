@@ -1,0 +1,55 @@
+-- record Person:
+caption name:
+integer age:
+Metadata meta:
+
+-- record Metadata:
+string address:
+string phone-number:
+
+-- string list places: Bangalore, Mumbai, Chennai, Kolkata
+
+-- Person list people:
+
+-- Person: Sam Ather
+age: 30
+
+-- Person.meta:
+address: Sam Ather City at Some Other House
+phone-number: +987-654321
+
+-- Person: $r
+
+-- end: people
+
+-- Metadata meta:
+address: Sam City in Some House
+phone-number: +1234-56789
+
+-- Person r: Sam Wan
+age: 23
+meta: $meta
+
+-- ftd.text: $some-details(person = $r, places = $places, date = 27th October)
+
+-- ftd.text: $more-details(p = $r)
+
+-- ftd.text: $first-person-details(people = $people)
+
+-- string more-details(p):
+Person p:
+
+"Person " + p.name + " lives at " + p.meta.address + ". His contact number is " + p.meta.phone-number
+
+-- string some-details(person, places):
+Person person:
+string list places:
+string date:
+
+"This person named " + person.name + " has first visited " + places.0 + " on " + date
+
+-- string first-person-details(people):
+Person list people:
+
+"First Person is " + people.0.name + " lives at " + people.0.meta.address + ". His contact number is " + people.0.meta.phone-number
+
