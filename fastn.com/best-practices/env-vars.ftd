@@ -1,0 +1,26 @@
+-- import: fastn-community.github.io/bling/note
+
+-- ds.page: Environment Variables
+
+Environment variables are automatically loaded from your `.env` file.
+
+-- ds.h3: Automatic Environment Variables Loading with `.env` Files
+
+By default, the fastn CLI is designed to automatically load environment
+variables from an `.env` file located in the current working directory (CWD).
+However, please note that this automatic loading will not function if your
+`.env` file is committed to a **Git repository**. In such cases, the CLI will
+fail issuing a warning message.
+
+To override this behavior and intentionally use an `.env` file checked into
+Git, you can do so by setting the `FASTN_DANGER_ACCEPT_CHECKED_IN_ENV`
+environment variable.
+
+-- ds.code: Override (not recommended)
+lang: sh
+
+FASTN_DANGER_ACCEPT_CHECKED_IN_ENV=true fastn serve
+
+
+-- end: ds.page
+

@@ -662,6 +662,8 @@ skip: true
     document: best-practices/self-referencing.ftd
   - Property: /property-guidelines/
     document: best-practices/property-guidelines.ftd
+  - Enviroment Variables: /best-practices/env-vars
+    document: best-practices/env-vars.ftd
 
 ## Fullstack: /dynamic-urls/
   document: backend/dynamic-urls.ftd
