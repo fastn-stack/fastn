@@ -1,4 +1,5 @@
 -- import: fastn.com/blog/search as fp
+-- import: fastn.com/blog/cli-check-for-updates as p12
 -- import: fastn.com/blog/acme as p11
 -- import: fastn.com/events/weekly-contest/week-1-quote as p10
 -- import: fastn.com/blog/writer-journey as p9
@@ -17,6 +18,9 @@
 
 -- ds.featured-post:
 post-data: $fp.meta
+
+-- ds.without-image-half:
+post-data: $p12.meta
 
 -- ds.without-image-half:
 post-data: $p11.meta

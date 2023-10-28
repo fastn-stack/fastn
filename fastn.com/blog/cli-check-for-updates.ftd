@@ -1,0 +1,41 @@
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/utils
+
+-- common.post-meta meta: The `fastn` cli can now check for updates!
+published-on: October 26, 2023
+post-url: /blog/cli-check-for-updates/
+author: $authors.siddhant
+
+We're thrilled to announce a game-changing addition to the fastn CLI tool that
+will make your developer life easier than ever! Say goodbye to the days of
+manually tracking updates because now, fastn has the power to check for updates
+automatically.
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.h1: How It Works
+
+When you run the fastn CLI, it will automatically check for updates in the
+background. If a new version is available, you'll receive a prompt informing
+you of the update and how to install it. You can choose to install it
+immediately or defer the update to a more convenient time. This ensures that
+your workflow remains uninterrupted.
+
+The automatic check only works when the `FASTN_CHECK_FOR_UPDATES` environment
+variable is set, it'll silently check for updates and will only log to the
+console if a new version is available.
+
+Additionaly, you can choose to manually check for updates using the `fastn -c`
+command.
+
+-- ds.h2: Getting Started
+
+To take advantage of the update check feature in fastn, make sure you have the
+latest version of fastn installed. Visit
+[https://fastn.com/install](https://fastn.com/install) to download the latest
+version.
+
+-- end: ds.blog-page
+
