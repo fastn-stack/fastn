@@ -3,19 +3,16 @@
 pub fn user_details(
     section: &ftd::ftd2021::p1::Section,
     doc: &ftd::ftd2021::p2::TDoc,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::ftd2021::p1::Result<ftd::Value> {
     let mut found_cookie = false;
-    let is_login = match &config.request {
-        Some(req) => {
-            for auth_provider in fastn_core::auth::AuthProviders::AUTH_ITER.iter() {
-                if req.cookie(auth_provider.as_str()).is_some() {
-                    found_cookie = true;
-                }
+    let is_login = {
+        for auth_provider in fastn_core::auth::AuthProviders::AUTH_ITER.iter() {
+            if req_config.request.cookie(auth_provider.as_str()).is_some() {
+                found_cookie = true;
             }
-            found_cookie
         }
-        None => false,
+        found_cookie
     };
 
     #[derive(Debug, serde::Serialize)]

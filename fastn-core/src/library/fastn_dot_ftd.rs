@@ -1,14 +1,14 @@
 use crate::utils::HasElements;
 
 async fn i18n_data(lib: &fastn_core::Library) -> String {
-    let lang = match lib.config.package.language {
+    let lang = match lib.config.config.package.language {
         Some(ref lang) => {
             realm_lang::Language::from_2_letter_code(lang).unwrap_or(realm_lang::Language::English)
         }
         None => realm_lang::Language::English,
     };
 
-    let primary_lang = match lib.config.package.translation_of.as_ref() {
+    let primary_lang = match lib.config.config.package.translation_of.as_ref() {
         Some(ref package) => match package.language {
             Some(ref lang) => realm_lang::Language::from_2_letter_code(lang)
                 .unwrap_or(realm_lang::Language::English),
@@ -19,7 +19,7 @@ async fn i18n_data(lib: &fastn_core::Library) -> String {
 
     let current_document_last_modified_on =
         fastn_core::utils::get_current_document_last_modified_on(
-            &lib.config,
+            &lib.config.config,
             lib.document_id.as_str(),
         )
         .await;
@@ -261,14 +261,14 @@ pub(crate) async fn get2022_(lib: &fastn_core::Library) -> String {
         capital_fastn = capital_fastn(lib),
         build_info = construct_fastn_cli_variables(lib),
         document_id = lib.document_id,
-        title = lib.config.package.name,
-        package_name = lib.config.package.name,
-        home_url = format!("https://{}", lib.config.package.name),
+        title = lib.config.config.package.name,
+        package_name = lib.config.config.package.name,
+        home_url = format!("https://{}", lib.config.config.package.name),
     );
 
-    if let Ok(number_of_documents) =
-        futures::executor::block_on(fastn_core::utils::get_number_of_documents(&lib.config))
-    {
+    if let Ok(number_of_documents) = futures::executor::block_on(
+        fastn_core::utils::get_number_of_documents(&lib.config.config),
+    ) {
         fastn_base = format!(
             indoc::indoc! {"
                 {fastn_base}
@@ -323,12 +323,12 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         i18n_data = i18n_data(lib).await,
         build_info = construct_fastn_cli_variables(lib),
         document_id = lib.document_id,
-        title = lib.config.package.name,
-        package_name = lib.config.package.name,
-        home_url = format!("https://{}", lib.config.package.name),
+        title = lib.config.config.package.name,
+        package_name = lib.config.config.package.name,
+        home_url = format!("https://{}", lib.config.config.package.name),
     );
 
-    if lib.config.package.translation_of.is_some() {
+    if lib.config.config.package.translation_of.is_some() {
         fastn_base = format!(
             indoc::indoc! {"
                 {fastn_base}
@@ -339,7 +339,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         );
     }
 
-    if lib.config.package.translations.has_elements() {
+    if lib.config.config.package.translations.has_elements() {
         fastn_base = format!(
             indoc::indoc! {"
                 {fastn_base}
@@ -350,7 +350,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         );
     }
 
-    if let Some(ref zip) = lib.config.package.zip {
+    if let Some(ref zip) = lib.config.config.package.zip {
         fastn_base = format!(
             indoc::indoc! {"
                 {fastn_base}
@@ -390,7 +390,8 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         );
     }
 
-    if lib.config.package.translation_of.is_some() || lib.config.package.translations.has_elements()
+    if lib.config.config.package.translation_of.is_some()
+        || lib.config.config.package.translations.has_elements()
     {
         fastn_base = format!(
             indoc::indoc! {"
@@ -400,13 +401,13 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
 
             "},
             fastn_base = fastn_base,
-            package_name = lib.config.package.name,
+            package_name = lib.config.config.package.name,
         );
     }
 
-    if let Ok(number_of_documents) =
-        futures::executor::block_on(fastn_core::utils::get_number_of_documents(&lib.config))
-    {
+    if let Ok(number_of_documents) = futures::executor::block_on(
+        fastn_core::utils::get_number_of_documents(&lib.config.config),
+    ) {
         fastn_base = format!(
             indoc::indoc! {"
                 {fastn_base}
@@ -418,9 +419,9 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         );
     }
 
-    if let Some(last_modified_on) =
-        futures::executor::block_on(fastn_core::utils::get_last_modified_on(&lib.config.root))
-    {
+    if let Some(last_modified_on) = futures::executor::block_on(
+        fastn_core::utils::get_last_modified_on(&lib.config.config.root),
+    ) {
         fastn_base = format!(
             indoc::indoc! {"
                 {fastn_base}
@@ -434,7 +435,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
 
     if let Some(last_modified_on) =
         futures::executor::block_on(fastn_core::utils::get_current_document_last_modified_on(
-            &lib.config,
+            &lib.config.config,
             lib.document_id.as_str(),
         ))
     {
@@ -449,7 +450,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         );
     }
 
-    if let Some(ref language) = lib.config.package.language {
+    if let Some(ref language) = lib.config.config.package.language {
         fastn_base = format!(
             indoc::indoc! {"
                 {fastn_base}
@@ -519,7 +520,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         );
     }
 
-    if let Ok(original_path) = lib.config.original_path() {
+    if let Ok(original_path) = lib.config.config.original_path() {
         let base_url = lib
             .base_url
             .as_str()
@@ -537,7 +538,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
             if let Ok(translation_status) =
                 fastn_core::commands::translation_status::get_translation_status(
                     &original_snapshots,
-                    &lib.config.root,
+                    &lib.config.config.root,
                 )
             {
                 let mut never_marked_files = "".to_string();
@@ -681,9 +682,9 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         }
     }
 
-    if lib.config.package.translations.has_elements() {
+    if lib.config.config.package.translations.has_elements() {
         let mut translation_status_list = "".to_string();
-        for translation in lib.config.package.translations.iter() {
+        for translation in lib.config.config.package.translations.iter() {
             if let Some(ref status) = translation.translation_status_summary {
                 if let Some(ref language) = translation.language {
                     let url = format!("https://{}/-/translation-status/", translation.name);
@@ -742,7 +743,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
     }
 
     let other_language_packages =
-        if let Some(translation_of) = lib.config.package.translation_of.as_ref() {
+        if let Some(translation_of) = lib.config.config.package.translation_of.as_ref() {
             let mut other_language_packages = translation_of
                 .translations
                 .iter()
@@ -751,6 +752,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
             other_language_packages
         } else {
             lib.config
+                .config
                 .package
                 .translations
                 .iter()
@@ -839,14 +841,14 @@ fn capital_fastn(lib: &fastn_core::Library) -> String {
         indoc::indoc! {"
             -- package-data package: {package_name}
         "},
-        package_name = lib.config.package.name,
+        package_name = lib.config.config.package.name,
     );
 
-    if let Some(ref zip) = lib.config.package.zip {
+    if let Some(ref zip) = lib.config.config.package.zip {
         s.push_str(format!("zip: {}", zip).as_str());
     }
 
-    if let Some(ref favicon) = lib.config.package.favicon {
+    if let Some(ref favicon) = lib.config.config.package.favicon {
         s.push_str(format!("\nfavicon: {}", favicon).as_str());
     }
 

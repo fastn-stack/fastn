@@ -2,10 +2,11 @@ pub fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     use itertools::Itertools;
-    let g = config
+    let g = req_config
+        .config
         .package
         .groups
         .values()
@@ -19,7 +20,7 @@ pub fn process_by_id(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let headers = match value.get_record(doc.name) {
         Ok(val) => val.2.to_owned(),
@@ -37,7 +38,8 @@ pub fn process_by_id(
         }
     };
 
-    let g = config
+    let g = req_config
+        .config
         .package
         .groups
         .get(group_id.as_str())
@@ -56,18 +58,20 @@ pub fn get_identities(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     use itertools::Itertools;
 
     let doc_id = fastn_core::library2022::utils::document_full_id(config, doc)?;
 
-    let identities = fastn_core::user_group::get_identities(config, doc_id.as_str(), true)
-        .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
-            message: e.to_string(),
-            doc_id,
-            line_number: value.line_number(),
-        })?;
+    let identities =
+        fastn_core::user_group::get_identities(req_config.config, doc_id.as_str(), true).map_err(
+            |e| ftd::ftd2021::p1::Error::ParseError {
+                message: e.to_string(),
+                doc_id,
+                line_number: value.line_number(),
+            },
+        )?;
 
     Ok(ftd::interpreter::Value::List {
         data: identities
@@ -93,17 +97,16 @@ pub async fn is_reader<'a>(
     value: ftd::ast::VariableValue,
     _kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'a>,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let doc_id = fastn_core::library2022::utils::document_full_id(config, doc)?;
-    let is_reader = config
-        .can_read(config.request.as_ref().unwrap(), &doc_id, false)
-        .await
-        .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
+    let is_reader = req_config.can_read(&doc_id, false).await.map_err(|e| {
+        ftd::ftd2021::p1::Error::ParseError {
             message: e.to_string(),
             doc_id,
             line_number: value.line_number(),
-        })?;
+        }
+    })?;
 
     Ok(ftd::interpreter::Value::Boolean { value: is_reader })
 }

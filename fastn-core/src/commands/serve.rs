@@ -3,7 +3,7 @@ static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
 
 #[tracing::instrument(skip_all)]
 fn handle_redirect(
-    config: &mut fastn_core::Config,
+    config: &fastn_core::Config,
     path: &camino::Utf8Path,
 ) -> Option<fastn_core::http::Response> {
     config
@@ -19,10 +19,10 @@ fn handle_redirect(
 ///
 #[tracing::instrument(skip_all)]
 async fn serve_file(
-    config: &mut fastn_core::Config,
+    config: &mut fastn_core::RequestConfig<'_>,
     path: &camino::Utf8Path,
 ) -> fastn_core::http::Response {
-    if let Some(r) = handle_redirect(config, path) {
+    if let Some(r) = handle_redirect(config.config, path) {
         return r;
     }
 
@@ -42,13 +42,7 @@ async fn serve_file(
 
     // Auth Stuff
     if !f.is_static() {
-        let req = if let Some(ref r) = config.request {
-            r
-        } else {
-            return fastn_core::server_error!("request not set");
-        };
-
-        match config.can_read(req, path.as_str(), true).await {
+        match config.can_read(path.as_str(), true).await {
             Ok(can_read) => {
                 if !can_read {
                     tracing::error!(
@@ -130,8 +124,7 @@ async fn serve_file(
 }
 
 async fn serve_cr_file(
-    req: &fastn_core::http::Request,
-    config: &mut fastn_core::Config,
+    req_config: &mut fastn_core::RequestConfig<'_>,
     path: &camino::Utf8Path,
     cr_number: usize,
 ) -> fastn_core::http::Response {
@@ -148,7 +141,7 @@ async fn serve_cr_file(
 
     // Auth Stuff
     if !f.is_static() {
-        match config.can_read(req, path.as_str(), true).await {
+        match req_config.can_read(path.as_str(), true).await {
             Ok(can_read) => {
                 if !can_read {
                     return fastn_core::unauthorised!("You are unauthorized to access: {}", path);
@@ -240,32 +233,22 @@ async fn static_file(file_path: camino::Utf8PathBuf) -> fastn_core::http::Respon
 
 #[tracing::instrument(skip_all)]
 pub async fn serve(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
-    edition: Option<String>,
-    external_js: Vec<String>,
-    inline_js: Vec<String>,
-    external_css: Vec<String>,
-    inline_css: Vec<String>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
 
+    let mut req_config = fastn_core::RequestConfig::new(config, &req);
+
     // TODO: remove unwrap
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
-    let mut config = fastn_core::Config::read(None, false, Some(&req))
-        .await
-        .unwrap()
-        .add_edition(edition)?
-        .add_external_js(external_js)
-        .add_inline_js(inline_js)
-        .add_external_css(external_css)
-        .add_inline_css(inline_css);
 
     Ok(if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
         serve_fastn_file(&config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
-        serve_file(&mut config, &path.join("/")).await
+        serve_file(&mut req_config, &path.join("/")).await
     } else if let Some(cr_number) = fastn_core::cr::get_cr_path_from_url(path.as_str()) {
-        serve_cr_file(&req, &mut config, &path, cr_number).await
+        serve_cr_file(&mut req_config, &path, cr_number).await
     } else {
         // url is present in config or not
         // If not present than proxy pass it
@@ -319,7 +302,7 @@ pub async fn serve(
 
         // if request goes with mount-point /todos/api/add-todo/
         // so it should say not found and pass it to proxy
-        let file_response = serve_file(&mut config, path.as_path()).await;
+        let file_response = serve_file(&mut req_config, path.as_path()).await;
         // If path is not present in sitemap then pass it to proxy
         // TODO: Need to handle other package URL as well, and that will start from `-`
         // and all the static files starts with `-`
@@ -345,12 +328,6 @@ pub async fn serve(
             } else {
                 format!("{}://{}", url.scheme(), url.host_str().unwrap())
             };
-            let req = if let Some(r) = config.request {
-                r
-            } else {
-                tracing::error!(msg = "request not set");
-                return Ok(fastn_core::server_error!("request not set"));
-            };
 
             // TODO: read app config and send them to service as header
             // Adjust x-fastn header from based on the platform and the requested field
@@ -360,7 +337,7 @@ pub async fn serve(
                         if let Some(user_data) = fastn_core::auth::get_user_data_from_cookies(
                             platform,
                             requested_field,
-                            req.cookies(),
+                            req_config.request.cookies(),
                         )
                         .await?
                         {
@@ -625,7 +602,8 @@ async fn test() -> fastn_core::Result<fastn_core::http::Response> {
 }
 
 #[tracing::instrument(skip_all)]
-async fn route(
+async fn actual_route(
+    config: &fastn_core::Config,
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
     app_data: actix_web::web::Data<AppData>,
@@ -659,18 +637,26 @@ async fn route(
         ("get", "/-/pwd/") => fastn_core::tutor::pwd().await,
         ("get", "/-/tutor.js") => fastn_core::tutor::js().await,
         ("get", "/-/shutdown/") => fastn_core::tutor::shutdown().await,
-        (_, _) => {
-            serve(
-                req,
-                app_data.edition.clone(),
-                app_data.external_js.clone(),
-                app_data.inline_js.clone(),
-                app_data.external_css.clone(),
-                app_data.inline_css.clone(),
-            )
-            .await
-        }
+        (_, _) => serve(config, req).await,
     }
+}
+
+#[tracing::instrument(skip_all)]
+async fn route(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
+    app_data: actix_web::web::Data<AppData>,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    let config = fastn_core::Config::read(None, false)
+        .await
+        .unwrap()
+        .add_edition(edition)?
+        .add_external_js(external_js)
+        .add_inline_js(inline_js)
+        .add_external_css(external_css)
+        .add_inline_css(inline_css);
+
+    actual_route(&config, req, body, app_data).await
 }
 
 //noinspection HttpUrlsUsage

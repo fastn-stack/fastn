@@ -364,14 +364,14 @@ impl From<FTDResult> for fastn_core::http::Response {
 
 #[tracing::instrument(skip_all)]
 pub(crate) async fn read_ftd(
-    config: &mut fastn_core::Config,
+    config: &mut fastn_core::RequestConfig,
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
     test: bool,
 ) -> fastn_core::Result<FTDResult> {
     tracing::info!(document = main.id);
-    match config.ftd_edition {
+    match config.config.ftd_edition {
         fastn_core::FTDEdition::FTD2021 => {
             unimplemented!()
         }
@@ -386,17 +386,17 @@ pub(crate) async fn read_ftd(
 
 #[tracing::instrument(name = "read_ftd_2022", skip_all)]
 pub(crate) async fn read_ftd_2022(
-    config: &mut fastn_core::Config,
+    config: &mut fastn_core::RequestConfig,
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
     test: bool,
 ) -> fastn_core::Result<FTDResult> {
     let lib_config = config.clone();
-    let mut all_packages = config.all_packages.borrow_mut();
+    let mut all_packages = config.config.all_packages.borrow_mut();
     let current_package = all_packages
         .get(main.package_name.as_str())
-        .unwrap_or(&config.package);
+        .unwrap_or(&config.config.package);
 
     let mut lib = fastn_core::Library2022 {
         config: lib_config,
@@ -444,10 +444,10 @@ pub(crate) async fn read_ftd_2022(
         .downloaded_assets
         .extend(lib.config.downloaded_assets);
 
-    all_packages.extend(lib.config.all_packages.into_inner());
+    all_packages.extend(lib.config.config.all_packages.into_inner());
     drop(all_packages);
 
-    let font_style = config.get_font_style();
+    let font_style = config.config.get_font_style();
     let file_content = fastn_core::utils::replace_markers_2022(
         fastn_core::ftd_html(),
         html_ui,
@@ -463,16 +463,16 @@ pub(crate) async fn read_ftd_2022(
 #[allow(clippy::await_holding_refcell_ref)]
 #[tracing::instrument(name = "read_ftd_2023", skip_all)]
 pub(crate) async fn read_ftd_2023(
-    config: &mut fastn_core::Config,
+    config: &mut fastn_core::RequestConfig,
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
 ) -> fastn_core::Result<FTDResult> {
     let lib_config = config.clone();
-    let mut all_packages = config.all_packages.borrow_mut();
+    let mut all_packages = config.config.all_packages.borrow_mut();
     let current_package = all_packages
         .get(main.package_name.as_str())
-        .unwrap_or(&config.package);
+        .unwrap_or(&config.config.package);
 
     let mut lib = fastn_core::Library2022 {
         config: lib_config,
@@ -514,25 +514,27 @@ pub(crate) async fn read_ftd_2023(
     }
 
     let js_ast_data = ftd::js::document_into_js_ast(main_ftd_doc);
-    let js_document_script =
-        fastn_js::to_js(js_ast_data.asts.as_slice(), config.package.name.as_str());
+    let js_document_script = fastn_js::to_js(
+        js_ast_data.asts.as_slice(),
+        config.config.package.name.as_str(),
+    );
     let js_ftd_script = fastn_js::to_js(
         ftd::js::default_bag_into_js_ast().as_slice(),
-        config.package.name.as_str(),
+        config.config.package.name.as_str(),
     );
     let ssr_body = fastn_js::ssr_with_js_string(
-        &config.package.name,
+        &config.config.package.name,
         format!("{js_ftd_script}\n{js_document_script}").as_str(),
     );
 
-    all_packages.extend(lib.config.all_packages.into_inner());
+    all_packages.extend(lib.config.config.all_packages.into_inner());
     drop(all_packages);
 
     config
         .downloaded_assets
         .extend(lib.config.downloaded_assets);
 
-    let font_style = config.get_font_style();
+    let font_style = config.config.get_font_style();
     let file_content = fastn_core::utils::replace_markers_2023(
         ftd::ftd_js_html(),
         js_document_script.as_str(),
@@ -548,7 +550,7 @@ pub(crate) async fn read_ftd_2023(
 }
 
 pub(crate) async fn process_ftd(
-    config: &mut fastn_core::Config,
+    config: &mut fastn_core::RequestConfig,
     main: &fastn_core::Document,
     base_url: &str,
     build_static_files: bool,
@@ -556,7 +558,7 @@ pub(crate) async fn process_ftd(
     file_path: &str,
 ) -> fastn_core::Result<FTDResult> {
     let response = read_ftd(config, main, base_url, build_static_files, test).await?;
-    fastn_core::utils::overwrite(&config.build_dir(), file_path, &response.html()).await?;
+    fastn_core::utils::overwrite(&config.config.build_dir(), file_path, &response.html()).await?;
 
     Ok(response)
 }

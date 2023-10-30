@@ -34,18 +34,238 @@ pub struct Config {
     pub packages_root: camino::Utf8PathBuf,
     pub original_directory: camino::Utf8PathBuf,
     pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, fastn_core::Package>>,
-    pub downloaded_assets: std::collections::BTreeMap<String, String>,
     pub global_ids: std::collections::HashMap<String, String>,
-    pub named_parameters: Vec<(String, ftd::Value)>,
-    pub extra_data: std::collections::BTreeMap<String, String>,
-    pub current_document: Option<String>,
-    pub dependencies_during_render: Vec<String>,
-    pub request: Option<fastn_core::http::Request>, // TODO: It should only contain reference
     pub ftd_edition: FTDEdition,
     pub ftd_external_js: Vec<String>,
     pub ftd_inline_js: Vec<String>,
     pub ftd_external_css: Vec<String>,
     pub ftd_inline_css: Vec<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct RequestConfig<'a> {
+    pub named_parameters: Vec<(String, ftd::Value)>,
+    pub extra_data: std::collections::BTreeMap<String, String>,
+    pub downloaded_assets: std::collections::BTreeMap<String, String>,
+    pub current_document: Option<String>,
+    pub dependencies_during_render: Vec<String>,
+    pub request: &'a fastn_core::http::Request,
+    pub config: &'a Config,
+}
+
+impl<'a> RequestConfig<'a> {
+    pub fn new(config: &Config, request: &fastn_core::http::Request) -> Self {
+        RequestConfig {
+            named_parameters: vec![],
+            extra_data: Default::default(),
+            downloaded_assets: Default::default(),
+            current_document: None,
+            dependencies_during_render: vec![],
+            request,
+            config,
+        }
+    }
+
+    pub fn doc_id(&self) -> Option<String> {
+        self.current_document
+            .clone()
+            .map(|v| fastn_core::utils::id_to_path(v.as_str()))
+            .map(|v| v.trim().replace(std::path::MAIN_SEPARATOR, "/"))
+    }
+
+    /// document_name_with_default("index.ftd") -> /
+    /// document_name_with_default("foo/index.ftd") -> /foo/
+    /// document_name_with_default("foo/abc") -> /foo/abc/
+    /// document_name_with_default("/foo/abc.ftd") -> /foo/abc/
+    pub(crate) fn document_name_with_default(&self, document_path: &str) -> String {
+        let name = self
+            .doc_id()
+            .unwrap_or_else(|| document_path.to_string())
+            .trim_matches('/')
+            .to_string();
+        if name.is_empty() {
+            "/".to_string()
+        } else {
+            format!("/{}/", name)
+        }
+    }
+
+    // -/kameri-app.herokuapp.com/
+    // .packages/kameri-app.heroku.com/index.ftd
+    #[tracing::instrument(skip_all)]
+    pub async fn get_file_and_package_by_id(
+        &mut self,
+        path: &str,
+    ) -> fastn_core::Result<fastn_core::File> {
+        tracing::info!(path = path);
+        // This function will return file and package by given path
+        // path can be mounted(mount-point) with other dependencies
+        //
+        // Sanitize the mountpoint request.
+        // Get the package and sanitized path
+        let package1;
+
+        // TODO: The shitty code written by me ever
+        let (path_with_package_name, document, path_params, extra_data) =
+            if !fastn_core::file::is_static(path)? {
+                let (path_with_package_name, sanitized_package, sanitized_path) = match self
+                    .config
+                    .get_mountpoint_sanitized_path(&self.config.package, path)
+                {
+                    Some((new_path, package, remaining_path, _)) => {
+                        // Update the sitemap of the package, if it does not contain the sitemap information
+                        if package.name != self.config.package.name {
+                            package1 = self.config.update_sitemap(package).await?;
+                            (new_path, &package1, remaining_path)
+                        } else {
+                            (new_path, package, remaining_path)
+                        }
+                    }
+                    None => (path.to_string(), &self.config.package, path.to_string()),
+                };
+
+                // Getting `document` with dynamic parameters, if exists
+                // It will first resolve in sitemap
+                // Then it will resolve in the dynamic urls
+                let (document, path_params, extra_data) =
+                    fastn_core::sitemap::resolve(sanitized_package, &sanitized_path)?;
+
+                // document with package-name prefix
+                let document = document.map(|doc| {
+                    format!(
+                        "-/{}/{}",
+                        sanitized_package.name.trim_matches('/'),
+                        doc.trim_matches('/')
+                    )
+                });
+                (path_with_package_name, document, path_params, extra_data)
+            } else {
+                (path.to_string(), None, vec![], Default::default())
+            };
+
+        let path = path_with_package_name.as_str();
+
+        if let Some(id) = document {
+            let file_name = self.config.get_file_path_and_resolve(id.as_str()).await?;
+            let package = self.config.find_package_by_id(id.as_str()).await?.1;
+            let file = fastn_core::get_file(
+                package.name.to_string(),
+                &self.config.root.join(file_name),
+                &self.config.get_root_for_package(&package),
+            )
+            .await?;
+            self.current_document = Some(path.to_string());
+            self.named_parameters = path_params;
+            self.extra_data = extra_data;
+            Ok(file)
+        } else {
+            // -/fifthtry.github.io/todos/add-todo/
+            // -/fifthtry.github.io/doc-site/add-todo/
+            let file_name = self.config.get_file_path_and_resolve(path).await?;
+            // .packages/todos/add-todo.ftd
+            // .packages/fifthtry.github.io/doc-site/add-todo.ftd
+
+            let package = self.config.find_package_by_id(path).await?.1;
+            let mut file = fastn_core::get_file(
+                package.name.to_string(),
+                &self.config.root.join(file_name.trim_start_matches('/')),
+                &self.config.get_root_for_package(&package),
+            )
+            .await?;
+
+            if path.contains("-/") {
+                let url = path.trim_end_matches("/index.html").trim_matches('/');
+                let extension = if matches!(file, fastn_core::File::Markdown(_)) {
+                    "/index.md".to_string()
+                } else if matches!(file, fastn_core::File::Ftd(_)) {
+                    "/index.ftd".to_string()
+                } else {
+                    "".to_string()
+                };
+                file.set_id(format!("{}{}", url, extension).as_str());
+            }
+            self.current_document = Some(file.get_id().to_string());
+            Ok(file)
+        }
+    }
+    #[tracing::instrument(skip(self))]
+    pub(crate) async fn can_read(
+        &self,
+        document_path: &str,
+        with_confidential: bool, // can read should use confidential property or not
+    ) -> fastn_core::Result<bool> {
+        // Function Docs
+        // If user can read the document based on readers, user will have read access to page
+        // If user cannot read the document based on readers, and if confidential is false so user
+        // can access the page, and if confidential is true user will not be able to access the
+        // document
+
+        // can_read: true, confidential: true => true (can access)
+        // can_read: true, confidential: false => true (can access)
+        // can_read: false, confidential: true => false (cannot access)
+        // can_read: false, confidential: false => true (can access)
+
+        use itertools::Itertools;
+        let document_name = self.document_name_with_default(document_path);
+        if let Some(sitemap) = &self.config.package.sitemap {
+            // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
+            let (document_readers, confidential) =
+                sitemap.readers(document_name.as_str(), &self.config.package.groups);
+
+            // TODO: Need to check the confidential logic, if readers are not defined in the sitemap
+            if document_readers.is_empty() {
+                return Ok(true);
+            }
+            let access_identities = fastn_core::user_group::access_identities(
+                self.config,
+                self.request,
+                &document_name,
+                true,
+            )
+            .await?;
+
+            let belongs_to = fastn_core::user_group::belongs_to(
+                self.config,
+                document_readers.as_slice(),
+                access_identities.iter().collect_vec().as_slice(),
+            )?;
+
+            if with_confidential {
+                if belongs_to {
+                    return Ok(true);
+                }
+                return Ok(!confidential);
+            }
+            return Ok(belongs_to);
+        }
+        Ok(true)
+    }
+
+    #[tracing::instrument(skip(self))]
+    pub(crate) async fn can_write(&self, document_path: &str) -> fastn_core::Result<bool> {
+        use itertools::Itertools;
+        let document_name = self.document_name_with_default(document_path);
+        if let Some(sitemap) = &self.config.package.sitemap {
+            // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
+            let document_writers =
+                sitemap.writers(document_name.as_str(), &self.config.package.groups);
+            let access_identities = fastn_core::user_group::access_identities(
+                self.config,
+                self.request,
+                &document_name,
+                false,
+            )
+            .await?;
+
+            return fastn_core::user_group::belongs_to(
+                self.config,
+                document_writers.as_slice(),
+                access_identities.iter().collect_vec().as_slice(),
+            );
+        }
+
+        Ok(false)
+    }
 }
 
 impl Config {
@@ -146,23 +366,6 @@ impl Config {
     pub(crate) fn history_path(&self, id: &str, version: i32) -> camino::Utf8PathBuf {
         let id_with_timestamp_extension = fastn_core::utils::snapshot_id(id, &(version as u128));
         self.remote_history_dir().join(id_with_timestamp_extension)
-    }
-
-    /// document_name_with_default("index.ftd") -> /
-    /// document_name_with_default("foo/index.ftd") -> /foo/
-    /// document_name_with_default("foo/abc") -> /foo/abc/
-    /// document_name_with_default("/foo/abc.ftd") -> /foo/abc/
-    pub(crate) fn document_name_with_default(&self, document_path: &str) -> String {
-        let name = self
-            .doc_id()
-            .unwrap_or_else(|| document_path.to_string())
-            .trim_matches('/')
-            .to_string();
-        if name.is_empty() {
-            "/".to_string()
-        } else {
-            format!("/{}/", name)
-        }
     }
 
     /// history of a fastn package is stored in `.history` folder.
@@ -706,110 +909,6 @@ impl Config {
         Ok(package)
     }
 
-    // -/kameri-app.herokuapp.com/
-    // .packages/kameri-app.heroku.com/index.ftd
-    #[tracing::instrument(skip_all)]
-    pub async fn get_file_and_package_by_id(
-        &mut self,
-        path: &str,
-    ) -> fastn_core::Result<fastn_core::File> {
-        tracing::info!(path = path);
-        // This function will return file and package by given path
-        // path can be mounted(mount-point) with other dependencies
-        //
-        // Sanitize the mountpoint request.
-        // Get the package and sanitized path
-        let package1;
-
-        // TODO: The shitty code written by me ever
-        let (path_with_package_name, document, path_params, extra_data) =
-            if !fastn_core::file::is_static(path)? {
-                let (path_with_package_name, sanitized_package, sanitized_path) =
-                    match self.get_mountpoint_sanitized_path(&self.package, path) {
-                        Some((new_path, package, remaining_path, _)) => {
-                            // Update the sitemap of the package, if it does not contain the sitemap information
-                            if package.name != self.package.name {
-                                package1 = self.update_sitemap(package).await?;
-                                (new_path, &package1, remaining_path)
-                            } else {
-                                (new_path, package, remaining_path)
-                            }
-                        }
-                        None => (path.to_string(), &self.package, path.to_string()),
-                    };
-
-                // Getting `document` with dynamic parameters, if exists
-                // It will first resolve in sitemap
-                // Then it will resolve in the dynamic urls
-                let (document, path_params, extra_data) =
-                    fastn_core::sitemap::resolve(sanitized_package, &sanitized_path)?;
-
-                // document with package-name prefix
-                let document = document.map(|doc| {
-                    format!(
-                        "-/{}/{}",
-                        sanitized_package.name.trim_matches('/'),
-                        doc.trim_matches('/')
-                    )
-                });
-                (path_with_package_name, document, path_params, extra_data)
-            } else {
-                (path.to_string(), None, vec![], Default::default())
-            };
-
-        let path = path_with_package_name.as_str();
-
-        if let Some(id) = document {
-            let file_name = self.get_file_path_and_resolve(id.as_str()).await?;
-            let package = self.find_package_by_id(id.as_str()).await?.1;
-            let file = fastn_core::get_file(
-                package.name.to_string(),
-                &self.root.join(file_name),
-                &self.get_root_for_package(&package),
-            )
-            .await?;
-            self.current_document = Some(path.to_string());
-            self.named_parameters = path_params;
-            self.extra_data = extra_data;
-            Ok(file)
-        } else {
-            // -/fifthtry.github.io/todos/add-todo/
-            // -/fifthtry.github.io/doc-site/add-todo/
-            let file_name = self.get_file_path_and_resolve(path).await?;
-            // .packages/todos/add-todo.ftd
-            // .packages/fifthtry.github.io/doc-site/add-todo.ftd
-
-            let package = self.find_package_by_id(path).await?.1;
-            let mut file = fastn_core::get_file(
-                package.name.to_string(),
-                &self.root.join(file_name.trim_start_matches('/')),
-                &self.get_root_for_package(&package),
-            )
-            .await?;
-
-            if path.contains("-/") {
-                let url = path.trim_end_matches("/index.html").trim_matches('/');
-                let extension = if matches!(file, fastn_core::File::Markdown(_)) {
-                    "/index.md".to_string()
-                } else if matches!(file, fastn_core::File::Ftd(_)) {
-                    "/index.ftd".to_string()
-                } else {
-                    "".to_string()
-                };
-                file.set_id(format!("{}{}", url, extension).as_str());
-            }
-            self.current_document = Some(file.get_id().to_string());
-            Ok(file)
-        }
-    }
-
-    pub fn doc_id(&self) -> Option<String> {
-        self.current_document
-            .clone()
-            .map(|v| fastn_core::utils::id_to_path(v.as_str()))
-            .map(|v| v.trim().replace(std::path::MAIN_SEPARATOR, "/"))
-    }
-
     pub async fn get_file_path(&self, id: &str) -> fastn_core::Result<String> {
         let (package_name, package) = self.find_package_by_id(id).await?;
         let mut id = id.to_string();
@@ -1251,7 +1350,6 @@ impl Config {
     pub async fn read(
         root: Option<String>,
         resolve_sitemap: bool,
-        req: Option<&fastn_core::http::Request>,
     ) -> fastn_core::Result<fastn_core::Config> {
         let (root, original_directory) = match root {
             Some(r) => {
@@ -1280,19 +1378,13 @@ impl Config {
             packages_root: root.clone().join(".packages"),
             root,
             original_directory,
-            current_document: None,
             all_packages: Default::default(),
-            downloaded_assets: Default::default(),
-            extra_data: Default::default(),
             global_ids: Default::default(),
-            request: req.map(ToOwned::to_owned),
-            named_parameters: vec![],
             ftd_edition: FTDEdition::default(),
             ftd_external_js: Default::default(),
             ftd_inline_js: Default::default(),
             ftd_external_css: Default::default(),
             ftd_inline_css: Default::default(),
-            dependencies_during_render: Default::default(),
         };
 
         // Update global_ids map from the current package files
@@ -1349,11 +1441,6 @@ impl Config {
         };
 
         Ok(config)
-    }
-
-    pub fn set_request(mut self, req: fastn_core::http::Request) -> Self {
-        self.request = Some(req);
-        self
     }
 
     pub(crate) async fn resolve_package(
@@ -1417,78 +1504,5 @@ impl Config {
         Ok(Vec::from_iter(
             (value - (number_of_crs_to_reserve as i32))..value,
         ))
-    }
-
-    #[tracing::instrument(skip(req, self))]
-    pub(crate) async fn can_read(
-        &self,
-        req: &fastn_core::http::Request,
-        document_path: &str,
-        with_confidential: bool, // can read should use confidential property or not
-    ) -> fastn_core::Result<bool> {
-        // Function Docs
-        // If user can read the document based on readers, user will have read access to page
-        // If user cannot read the document based on readers, and if confidential is false so user
-        // can access the page, and if confidential is true user will not be able to access the
-        // document
-
-        // can_read: true, confidential: true => true (can access)
-        // can_read: true, confidential: false => true (can access)
-        // can_read: false, confidential: true => false (cannot access)
-        // can_read: false, confidential: false => true (can access)
-
-        use itertools::Itertools;
-        let document_name = self.document_name_with_default(document_path);
-        if let Some(sitemap) = &self.package.sitemap {
-            // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
-            let (document_readers, confidential) =
-                sitemap.readers(document_name.as_str(), &self.package.groups);
-
-            // TODO: Need to check the confidential logic, if readers are not defined in the sitemap
-            if document_readers.is_empty() {
-                return Ok(true);
-            }
-            let access_identities =
-                fastn_core::user_group::access_identities(self, req, &document_name, true).await?;
-
-            let belongs_to = fastn_core::user_group::belongs_to(
-                self,
-                document_readers.as_slice(),
-                access_identities.iter().collect_vec().as_slice(),
-            )?;
-
-            if with_confidential {
-                if belongs_to {
-                    return Ok(true);
-                }
-                return Ok(!confidential);
-            }
-            return Ok(belongs_to);
-        }
-        Ok(true)
-    }
-
-    #[tracing::instrument(skip(req, self))]
-    pub(crate) async fn can_write(
-        &self,
-        req: &fastn_core::http::Request,
-        document_path: &str,
-    ) -> fastn_core::Result<bool> {
-        use itertools::Itertools;
-        let document_name = self.document_name_with_default(document_path);
-        if let Some(sitemap) = &self.package.sitemap {
-            // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
-            let document_writers = sitemap.writers(document_name.as_str(), &self.package.groups);
-            let access_identities =
-                fastn_core::user_group::access_identities(self, req, &document_name, false).await?;
-
-            return fastn_core::user_group::belongs_to(
-                self,
-                document_writers.as_slice(),
-                access_identities.iter().collect_vec().as_slice(),
-            );
-        }
-
-        Ok(false)
     }
 }

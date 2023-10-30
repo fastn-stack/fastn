@@ -90,6 +90,12 @@ pub struct Request {
     // path_params: Vec<(String, )>
 }
 
+impl Default for Request {
+    fn default() -> Self {
+        todo!()
+    }
+}
+
 impl Request {
     //pub fn get_named_params() -> {}
     pub fn from_actix(req: actix_web::HttpRequest, body: actix_web::web::Bytes) -> Self {

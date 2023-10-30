@@ -1,8 +1,8 @@
 pub fn document_full_id(
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::ftd2021::p1::Result<String> {
-    let full_document_id = config.doc_id().unwrap_or_else(|| {
+    let full_document_id = req_config.doc_id().unwrap_or_else(|| {
         doc.name
             .to_string()
             .replace(config.package.name.as_str(), "")

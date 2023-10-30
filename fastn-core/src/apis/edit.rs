@@ -28,13 +28,14 @@ pub async fn edit(
     req: &fastn_core::http::Request,
     req_data: EditRequest,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let mut config = match fastn_core::Config::read(None, false, Some(req)).await {
+    let mut config = match fastn_core::Config::read(None, false).await {
         Ok(config) => config,
         Err(err) => return fastn_core::http::api_error(err.to_string()),
     };
-    config.current_document = Some(req_data.path.to_string());
+    let mut req_config = fastn_core::RequestConfig::new(&config, &req);
+    req_config.current_document = Some(req_data.path.to_string());
 
-    match config.can_write(req, req_data.path.as_str()).await {
+    match req_config.can_write(req_data.path.as_str()).await {
         Ok(can_write) => {
             if !can_write {
                 return Ok(fastn_core::unauthorised!(
@@ -174,13 +175,12 @@ pub(crate) async fn edit_worker(
     })
 }
 
-pub async fn sync(
-    req: fastn_core::http::Request,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    let config = match fastn_core::Config::read(None, false, Some(&req)).await {
+pub async fn sync() -> fastn_core::Result<fastn_core::http::Response> {
+    let config = match fastn_core::Config::read(None, false).await {
         Ok(config) => config,
         Err(err) => return fastn_core::http::api_error(err.to_string()),
     };
+
     match fastn_core::commands::sync::sync(&config, None).await {
         Ok(_) => {
             #[derive(serde::Serialize)]

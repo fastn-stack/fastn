@@ -603,9 +603,9 @@ pub mod processor {
     pub fn get_identities(
         section: &ftd::ftd2021::p1::Section,
         doc: &ftd::ftd2021::p2::TDoc,
-        config: &fastn_core::Config,
+        req_config: &fastn_core::RequestConfig,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
-        let doc_id = fastn_core::library::document::document_full_id(config, doc)?;
+        let doc_id = fastn_core::library::document::document_full_id(req_config, doc)?;
         let identities = super::get_identities(config, doc_id.as_str(), true).map_err(|e| {
             ftd::ftd2021::p1::Error::ParseError {
                 message: e.to_string(),
@@ -641,11 +641,11 @@ pub mod processor {
     pub async fn is_reader<'a>(
         section: &ftd::ftd2021::p1::Section,
         doc: &'a ftd::ftd2021::p2::TDoc<'_>,
-        config: &fastn_core::Config,
+        req_config: &fastn_core::RequestConfig,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
-        let doc_id = fastn_core::library::document::document_full_id(config, doc)?;
+        let doc_id = fastn_core::library::document::document_full_id(req_config, doc)?;
         let is_reader = config
-            .can_read(config.request.as_ref().unwrap(), &doc_id, false)
+            .can_read(req_config.request, &doc_id, false)
             .await
             .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
                 message: e.to_string(),

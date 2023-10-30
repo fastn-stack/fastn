@@ -2,7 +2,7 @@ pub fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     use itertools::Itertools;
     #[derive(Debug, serde::Serialize)]
@@ -14,7 +14,8 @@ pub fn process(
         icon: Option<ftd::ImageSrc>,
     }
 
-    let apps = config
+    let apps = req_config
+        .config
         .package
         .apps
         .iter()

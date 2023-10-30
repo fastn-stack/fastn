@@ -6,7 +6,7 @@ pub async fn main(package_name: String) -> fastn_core::Result<()> {
         Some(2000),
         None,
         Some("2023".to_string()),
-        vec!["/-/tutor.js".to_string()],
+        vec![],
         vec![],
         vec![],
         vec![],

@@ -48,7 +48,8 @@ pub async fn create_cr_page(
 async fn create_cr_page_worker(
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let mut config = fastn_core::Config::read(None, false, Some(&req)).await?;
+    let config = fastn_core::Config::read(None, false).await?;
+    let mut req_config = fastn_core::RequestConfig::new(&config, &req);
     let create_cr_ftd = fastn_core::package_info_create_cr(&config)?;
 
     let main_document = fastn_core::Document {
@@ -58,7 +59,7 @@ async fn create_cr_page_worker(
         package_name: config.package.name.clone(),
     };
 
-    fastn_core::package::package_doc::read_ftd(&mut config, &main_document, "/", false, false)
+    fastn_core::package::package_doc::read_ftd(&mut req_config, &main_document, "/", false, false)
         .await
         .map(Into::into)
 }

@@ -2,7 +2,7 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    config: &mut fastn_core::Config,
+    req_config: &mut fastn_core::RequestConfig,
     document_id: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     // TODO: document key should be optional
@@ -20,7 +20,7 @@ pub async fn process(
         .get_optional_string_by_key("stage", doc.name, value.line_number())?
         .unwrap_or_else(|| "ast".to_string());
 
-    let file = config
+    let file = req_config
         .get_file_and_package_by_id(path.as_str())
         .await
         .map_err(|e| ftd::interpreter::Error::ParseError {

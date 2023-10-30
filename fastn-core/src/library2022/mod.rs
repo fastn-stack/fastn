@@ -14,8 +14,8 @@ impl KeyValueData {
 }
 
 #[derive(Debug)]
-pub struct Library2022 {
-    pub config: fastn_core::Config,
+pub struct Library2022<'a> {
+    pub config: fastn_core::RequestConfig<'a>,
     /// If the current module being parsed is a markdown file, `.markdown` contains the name and
     /// content of that file
     pub markdown: Option<(String, String)>,
@@ -52,6 +52,7 @@ impl Library2022 {
             })?;
 
         self.config
+            .config
             .all_packages
             .borrow()
             .get(current_package_name)
@@ -152,7 +153,7 @@ impl Library2022 {
             lib: &mut fastn_core::Library2022,
         ) -> Option<(String, usize)> {
             lib.push_package_under_process(name, package).await.ok()?;
-            let packages = lib.config.all_packages.borrow();
+            let packages = lib.config.config.all_packages.borrow();
             let package = packages.get(package.name.as_str()).unwrap_or(package);
             // Explicit check for the current package.
             let name = format!("{}/", name.trim_end_matches('/'));
@@ -161,7 +162,11 @@ impl Library2022 {
             }
             let new_name = name.replacen(package.name.as_str(), "", 1);
             let (file_path, data) = package
-                .resolve_by_id(new_name.as_str(), None, lib.config.package.name.as_str())
+                .resolve_by_id(
+                    new_name.as_str(),
+                    None,
+                    lib.config.config.package.name.as_str(),
+                )
                 .await
                 .ok()?;
             if !file_path.ends_with(".ftd") {
@@ -187,6 +192,7 @@ impl Library2022 {
         );
         if self
             .config
+            .config
             .all_packages
             .borrow()
             .contains_key(package.name.as_str())
@@ -194,15 +200,19 @@ impl Library2022 {
             return Ok(());
         }
 
-        let package = self.config.resolve_package(package).await.map_err(|_| {
-            ftd::ftd2021::p1::Error::ParseError {
+        let package = self
+            .config
+            .config
+            .resolve_package(package)
+            .await
+            .map_err(|_| ftd::ftd2021::p1::Error::ParseError {
                 message: format!("Cannot resolve the package: {}", package.name),
                 doc_id: self.document_id.to_string(),
                 line_number: 0,
-            }
-        })?;
+            })?;
 
         self.config
+            .config
             .all_packages
             .borrow_mut()
             .insert(package.name.to_string(), package);
@@ -229,15 +239,13 @@ impl Library2022 {
             "figma-typo-token" => {
                 processor::figma_typography_tokens::process_typography_tokens(value, kind, doc)
             }
-            "figma-cs-token" => {
-                processor::figma_tokens::process_figma_tokens(value, kind, doc, &self.config)
-            }
+            "figma-cs-token" => processor::figma_tokens::process_figma_tokens(value, kind, doc),
             "figma-cs-token-old" => {
-                processor::figma_tokens::process_figma_tokens_old(value, kind, doc, &self.config)
+                processor::figma_tokens::process_figma_tokens_old(value, kind, doc)
             }
             "http" => processor::http::process(value, kind, doc, &self.config).await,
             "tutor" => fastn_core::tutor::process(value, kind, doc).await,
-            "toc" => processor::toc::process(value, kind, doc, &self.config),
+            "toc" => processor::toc::process(value, kind, doc),
             "get-data" => processor::get_data::process(value, kind, doc, &self.config),
             "sitemap" => processor::sitemap::process(value, kind, doc, &self.config),
             "full-sitemap" => {
@@ -284,7 +292,7 @@ impl Library2022 {
             "package-query" => processor::sqlite::process(value, kind, doc, &self.config).await,
             "pg" => processor::pg::process(value, kind, doc).await,
             "package-tree" => {
-                processor::package_tree::process(value, kind, doc, &self.config).await
+                processor::package_tree::process(value, kind, doc, &self.config.config).await
             }
             "query" => {
                 processor::query::process(
