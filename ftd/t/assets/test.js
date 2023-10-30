@@ -5,3 +5,7 @@ function show(a) {
 function greeting(){
     return "Namaste!";
 }
+
+function number() {
+    return 12;
+}

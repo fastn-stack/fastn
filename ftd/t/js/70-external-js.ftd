@@ -1,0 +1,22 @@
+-- ftd.text: $greetingfn()
+
+-- integer num: $numberfn()
+
+-- ftd.integer: $num
+
+/-- ftd.text: Hello if >= 10
+js: ../../t/assets/test.js
+if: { num > 10 }
+
+
+
+-- string greetingfn():
+js: ../../t/assets/test.js
+
+greeting()
+
+
+-- integer numberfn():
+js: ../../t/assets/test.js
+
+numbers()
