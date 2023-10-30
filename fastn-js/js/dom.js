@@ -1,5 +1,7 @@
 let fastn_dom = {};
 
+fastn_dom.styleClasses = "";
+
 fastn_dom.codeData = {
     availableThemes: {},
     addedCssFile: []
@@ -99,6 +101,14 @@ fastn_dom.propertyMap = {
     "-webkit-box-orient": "wbo",
     "-webkit-line-clamp": "wlc",
     "backdrop-filter": "bdf",
+    "mask-image": "mi",
+    "-webkit-mask-image": "wmi",
+    "mask-size": "ms",
+    "-webkit-mask-size": "wms",
+    "mask-repeat": "mre",
+    "-webkit-mask-repeat": "wmre",
+    "mask-position": "mp",
+    "-webkit-mask-position": "wmp",
 };
 
 // dynamic-class-css.md
@@ -280,6 +290,7 @@ fastn_dom.PropertyKind = {
     TextShadow: 117,
     Selectable: 118,
     BackdropFilter: 119,
+    Mask: 120,
 };
 
 
@@ -369,7 +380,6 @@ fastn_dom.Spacing = {
     SpaceAround: [3, "space-around"],
     Fixed: (value) => { return [4, value]; }
 }
-
 
 fastn_dom.BorderStyle = {
     Solid: "solid",
@@ -656,7 +666,46 @@ fastn_dom.Length = {
     }
 }
 
+fastn_dom.Mask = {
+    Image: (value) => {
+        return [1, value];
+    },
+    Multi: (value) => {
+        return [2, value]
+    },
+}
 
+fastn_dom.MaskSize = {
+    Auto: "auto",
+    Cover: "cover",
+    Contain: "contain",
+    Fixed: (value) => { return value }
+}
+
+fastn_dom.MaskRepeat = {
+    Repeat: "repeat",
+    RepeatX: "repeat-x",
+    RepeatY: "repeat-y",
+    NoRepeat: "no-repeat",
+    Space: "space",
+    Round: "round",
+}
+
+fastn_dom.MaskPosition = {
+    Left: "left",
+    Right: "right",
+    Center: "center",
+    LeftTop: "left top",
+    LeftCenter: "left center",
+    LeftBottom: "left bottom",
+    CenterTop: "center top",
+    CenterCenter: "center center",
+    CenterBottom: "center bottom",
+    RightTop: "right top",
+    RightCenter: "right center",
+    RightBottom: "right bottom",
+    Length: (value) => { return value; },
+}
 
 fastn_dom.Event = {
     Click: 0,
@@ -757,7 +806,7 @@ class Node2 {
         return this.#parent;
     }
     removeAllFaviconLinks() {
-        if (hydrating) {
+        if (hydrating || rerender) {
             const links = document.head.querySelectorAll('link[rel="shortcut icon"]');
             links.forEach( link => {
                 link.parentNode.removeChild(link);
@@ -766,7 +815,7 @@ class Node2 {
     }
 
     setFavicon(url) {
-        if (hydrating) {
+        if (hydrating || rerender) {
             if (url instanceof fastn.recordInstanceClass) url = url.get('src');
             while (true) {
                 if (url instanceof fastn.mutableClass) url = url.get();
@@ -853,7 +902,7 @@ class Node2 {
         }
     }
     updateMetaTitle(value) {
-        if (!ssr && hydrating) {
+        if (!ssr && (hydrating || rerender)) {
             if (!fastn_utils.isNull(value)) window.document.title = value;
         }
     }
@@ -862,7 +911,7 @@ class Node2 {
             this.removeMetaTagByName(name);
             return;
         }
-        if (!ssr && hydrating) {
+        if (!ssr && (hydrating || rerender)) {
             const metaTag = window.document.createElement('meta');
             metaTag.setAttribute('name', name);
             metaTag.setAttribute('content', value);
@@ -874,7 +923,7 @@ class Node2 {
             this.removeMetaTagByProperty(property);
             return;
         }
-        if (!ssr && hydrating) {
+        if (!ssr && (hydrating || rerender)) {
             const metaTag = window.document.createElement('meta');
             metaTag.setAttribute('property', property);
             metaTag.setAttribute('content', value);
@@ -882,7 +931,7 @@ class Node2 {
         }
     }
     removeMetaTagByName(name) {
-        if (!ssr && hydrating) {
+        if (!ssr && (hydrating || rerender)) {
             const metaTags = document.getElementsByTagName('meta');
             for (let i = 0; i < metaTags.length; i++) {
                 const metaTag = metaTags[i];
@@ -894,7 +943,7 @@ class Node2 {
         }
     }
     removeMetaTagByProperty(property) {
-        if (!ssr && hydrating) {
+        if (!ssr && (hydrating || rerender)) {
             const metaTags = document.getElementsByTagName('meta');
             for (let i = 0; i < metaTags.length; i++) {
                 const metaTag = metaTags[i];
@@ -909,7 +958,7 @@ class Node2 {
     attachCss(property, value, createClass, className) {
         let propertyShort = fastn_dom.propertyMap[property] || property;
         propertyShort = `__${propertyShort}`;
-        let cls = `${propertyShort}-${JSON.stringify(fastn_dom.class_count)}`;
+        let cls = `${propertyShort}-${fastn_dom.class_count}`;
         if (!!className) {
            cls = className;
         } else {
@@ -938,8 +987,7 @@ class Node2 {
             if (!!className) {
                 if (!fastn_dom.classes[cssClass]) {
                     fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
-                    let styles = document.getElementById('styles');
-                    styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
+                    fastn_utils.createStyle(cssClass, obj);
                 }
                 return cls;
             }
@@ -953,8 +1001,7 @@ class Node2 {
             if (createClass) {
                 if (!fastn_dom.classes[cssClass]) {
                     fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
-                    let styles = document.getElementById('styles');
-                    styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
+                    fastn_utils.createStyle(cssClass, obj);
                 }
                 this.#node.style.removeProperty(property);
                 this.#node.classList.add(cls);
@@ -1056,16 +1103,11 @@ class Node2 {
             this.attachCss("text-shadow", darkShadowCss, true, `body.dark .${lightClass}`);
         }
     }
-    attachLinearGradientCss(value) {
-        if (fastn_utils.isNull(value)) {
-            this.attachCss("background-image", value);
-            return;
-        }
+    getLinearGradientString(value) {
         var lightGradientString = "";
         var darkGradientString = "";
 
         let colorsList = value.get("colors").get().getList();
-        let direction = fastn_utils.getStaticValue(value.get("direction"));
         colorsList.map(function (element) {
             // LinearGradient RecordInstance
             let lg_color = element.item;
@@ -1101,6 +1143,18 @@ class Node2 {
 
         lightGradientString = lightGradientString.trim().slice(0, -1);
         darkGradientString = darkGradientString.trim().slice(0, -1);
+
+        return [lightGradientString, darkGradientString];
+    }
+    attachLinearGradientCss(value) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss("background-image", value);
+            return;
+        }
+
+        let direction = fastn_utils.getStaticValue(value.get("direction"));
+
+        const [lightGradientString, darkGradientString] = this.getLinearGradientString(value);
 
         if (lightGradientString === darkGradientString) {
             this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
@@ -1161,8 +1215,114 @@ class Node2 {
             this.attachCss("background-image", `url(${darkValue})`, true, `body.dark .${lightClass}`);
         }
     }
+    attachMaskImageCss(value, vendorPrefix) {
+        const propertyWithPrefix = vendorPrefix ? `${vendorPrefix}-mask-image` : "mask-image";
+
+        if (fastn_utils.isNull(value)) {
+            this.attachCss(propertyWithPrefix, value);
+            return;
+        }
+
+        let src = fastn_utils.getStaticValue(value.get("src"));
+        let linearGradient = fastn_utils.getStaticValue(value.get("linear_gradient"));
+        let color = fastn_utils.getStaticValue(value.get("color"));
+
+        const maskLightImageValues = [];
+        const maskDarkImageValues = [];
+
+        if(!fastn_utils.isNull(src)) {
+            let lightValue = fastn_utils.getStaticValue(src.get("light"));
+            let darkValue = fastn_utils.getStaticValue(src.get("dark"));
+
+            const lightUrl = `url(${lightValue})`;
+            const darkUrl = `url(${darkValue})`;
+
+            if(!fastn_utils.isNull(linearGradient)) {
+                const lightImageValues = [lightUrl];
+                const darkImageValues = [darkUrl];
+
+                if(!fastn_utils.isNull(color)) {
+                    const lightColor = fastn_utils.getStaticValue(color.get("light"));
+                    const darkColor = fastn_utils.getStaticValue(color.get("dark"));
+
+                    lightImageValues.push(lightColor);
+                    darkImageValues.push(darkColor);
+                }
+                maskLightImageValues.push(`image(${lightImageValues.join(", ")})`);
+                maskDarkImageValues.push(`image(${darkImageValues.join(", ")})`);
+            } else {
+                maskLightImageValues.push(lightUrl);
+                maskDarkImageValues.push(darkUrl);
+            }
+        }
+        
+        if(!fastn_utils.isNull(linearGradient)) {
+            let direction = fastn_utils.getStaticValue(linearGradient.get("direction"));
+
+            const [lightGradientString, darkGradientString] = this.getLinearGradientString(linearGradient);
+
+            maskLightImageValues.push(`linear-gradient(${direction}, ${lightGradientString})`);
+            maskDarkImageValues.push(`linear-gradient(${direction}, ${darkGradientString})`);
+        }
+
+        const maskLightImageString = maskLightImageValues.join(", ");
+        const maskDarkImageString = maskDarkImageValues.join(", ");
+
+        if(maskLightImageString === maskDarkImageString) {
+            this.attachCss(propertyWithPrefix, maskLightImageString, true);
+        } else {
+            let lightClass = this.attachCss(propertyWithPrefix, maskLightImageString, true);
+            this.attachCss(propertyWithPrefix, maskDarkImageString, true, `body.dark .${lightClass}`);
+        }
+    }
+    attachMaskSizeCss(value, vendorPrefix) {
+        const propertyNameWithPrefix = vendorPrefix ? `${vendorPrefix}-mask-size` : "mask-size";
+        if(fastn_utils.isNull(value)) {
+            this.attachCss(propertyNameWithPrefix, value);
+        }
+        const [size, ...two_values] = ["size", "size_x", "size_y"]
+            .map(size => fastn_utils.getStaticValue(value.get(size)));
+        
+        if(!fastn_utils.isNull(size)) {
+            this.attachCss(propertyNameWithPrefix, size, true);
+        } else {
+            const [size_x, size_y] = two_values.map(value => value || "auto");
+            this.attachCss(propertyNameWithPrefix, `${size_x} ${size_y}`, true);
+        }
+    }
+    attachMaskMultiCss(value, vendorPrefix) {
+        if (fastn_utils.isNull(value)) {
+            this.attachCss("mask-repeat", value);
+            this.attachCss("mask-position", value);
+            this.attachCss("mask-size", value);
+            this.attachCss("mask-image", value);
+            return;
+        }
+        
+        const maskImage = fastn_utils.getStaticValue(value.get("image"));
+        this.attachMaskImageCss(maskImage);
+        this.attachMaskImageCss(maskImage, vendorPrefix);
+        this.attachMaskSizeCss(value);
+        this.attachMaskSizeCss(value, vendorPrefix);
+        const maskRepeatValue = fastn_utils.getStaticValue(value.get("repeat"));
+        if(fastn_utils.isNull(maskRepeatValue)) {
+            this.attachCss("mask-repeat", maskRepeatValue, true);
+            this.attachCss("-webkit-mask-repeat", maskRepeatValue, true);
+        } else {
+            this.attachCss("mask-repeat", maskRepeatValue, true);
+            this.attachCss("-webkit-mask-repeat", maskRepeatValue, true);
+        }
+        const maskPositionValue = fastn_utils.getStaticValue(value.get("position"));
+        if(fastn_utils.isNull(maskPositionValue)) {
+            this.attachCss("mask-position", maskPositionValue, true);
+            this.attachCss("-webkit-mask-position", maskPositionValue, true);
+        } else {
+            this.attachCss("mask-position", maskPositionValue, true);
+            this.attachCss("-webkit-mask-position", maskPositionValue, true);
+        }
+    }
     attachExternalCss(css) {
-        if (hydrating) {
+        if (hydrating || rerender) {
             let css_tag = document.createElement('link');
             css_tag.rel = 'stylesheet';
             css_tag.type = 'text/css';
@@ -1176,7 +1336,7 @@ class Node2 {
         }
     }
     attachExternalJs(js) {
-        if (hydrating) {
+        if (hydrating || rerender) {
             let js_tag = document.createElement('script');
             js_tag.src = js;
 
@@ -1497,8 +1657,8 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.TextShadow) {
             this.attachTextShadow(staticValue);
         } else if (kind === fastn_dom.PropertyKind.BackdropFilter) {
-            if (fastn_utils.isNull(value)) {
-                this.attachCss("backdrop-filter", value);
+            if (fastn_utils.isNull(staticValue)) {
+                this.attachCss("backdrop-filter", staticValue);
                 return;
             }
 
@@ -1529,8 +1689,25 @@ class Node2 {
                     this.attachCss("backdrop-filter", `saturate(${fastn_utils.getStaticValue(staticValue[1])})`);
                     break;
                 case 9:
-                    console.log("Here");
                     this.attachBackdropMultiFilter(staticValue[1]);
+                    break;
+            }
+        } else if (kind === fastn_dom.PropertyKind.Mask) {
+            if (fastn_utils.isNull(staticValue)) {
+                this.attachCss("mask-image", staticValue);
+                return;
+            }
+
+            const [backgroundType, value] = staticValue;
+
+            switch (backgroundType) {
+                case fastn_dom.Mask.Image()[0]:
+                    this.attachMaskImageCss(value);
+                    this.attachMaskImageCss(value, "-webkit");
+                    break;
+                case fastn_dom.Mask.Multi()[0]:
+                    this.attachMaskMultiCss(value);
+                    this.attachMaskMultiCss(value, "-webkit");
                     break;
             }
         } else if (kind === fastn_dom.PropertyKind.Classes) {

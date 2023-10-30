@@ -1,0 +1,28 @@
+-- ftd.mask-multi mi:
+image: https://s3-us-west-2.amazonaws.com/s.cdpn.io/18515/heart.svg
+repeat: no-repeat
+position: center
+size: cover
+
+-- component icon:
+caption ftd.color color: 
+
+-- ftd.container:
+background.solid: $icon.color
+mask.multi: $mi
+width.fixed.px: 48
+height.fixed.px: 48
+
+-- end: icon
+
+-- ftd.color list colors: red, orange, yellow, green, blue, indigo, violet, cyan, magenta, lime, olive, maroon, purple, white, #e5e5e5, #ccc, #b2b2b2, #999, #7f7f7f, #666, #4c4c4c, #333, #191919, black
+
+-- ftd.row:
+width: fill-container
+align-content: center
+wrap: true
+
+-- icon: $color
+for: $color in $colors
+
+-- end: ftd.row

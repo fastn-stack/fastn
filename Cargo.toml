@@ -8,7 +8,6 @@ members = [
     "fastn-issues",
     "fastn-js",
     "fastn-grammar",
-    "fastn-observer",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
@@ -71,7 +70,7 @@ bytemuck = { version = "1", features = [ "derive" ] }
 camino = "1"
 clap = "4"
 colored = "2.0.4"
-crossterm = "0.26"
+crossterm = "0.27"
 css-color-parser = "0.1"
 diffy = "0.3"
 dioxus-html = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
@@ -84,7 +83,6 @@ fastn-core = { path = "fastn-core" }
 fastn-issues = { path = "fastn-issues" }
 fastn-package = { path = "fastn-package" }
 fastn-runtime = { path = "fastn-runtime" }
-fastn-observer = { path = "fastn-observer" }
 fastn-wasm = { path = "fastn-wasm" }
 fastn-grammar = { path = "fastn-grammar" }
 fluent = "0.16"
@@ -97,7 +95,7 @@ ignore = "0.4"
 include_dir = "0.7"
 indoc = "2"
 intl-memoizer = "0.5"
-itertools = "0.10"
+itertools = "0.11"
 log = "0.4"
 magic-crypt = { version = "3", default-features = false }
 mime_guess = "2"
@@ -112,7 +110,7 @@ regex = "1"
 reqwest = { version = "0.11", features = ["json"] }
 rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 ron = "0.8"
-rquickjs = { version = "0.1", features = ["macro"] }
+rquickjs = { version = "0.3", features = ["macro"] }
 quick-js = "0.4.1"
 rustc-hash = "1"
 rusty-hook = "^0.11.2"
@@ -132,12 +130,16 @@ ansi_term = "0.12"
 walkdir = "2"
 smallvec = "1"
 wasm-bindgen = "0.2"
-wasmtime = "10"
-wgpu = "0.16"
+wasmtime = "13"
+wgpu = "0.17"
 winit = "0.28"
 zip = "0.6"
 prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }
+
+[workspace.dependencies.fastn-observer]
+git = "https://github.com/fastn-stack/fastn-observer"
+rev = "47b29ea"
 
 [workspace.dependencies.rusqlite]
 version = "0.29.0"
@@ -200,7 +202,7 @@ features = [
 [workspace.dependencies.comrak]
 # We use comrak for markup processing.
 
-version = "0.18"
+version = "0.19"
 # By default comrak ships with support for syntax highlighting using syntext for "fenced
 # code blocks". We have disabled that by not using default features. We did that because
 # we already have a way to show code in ftd, ftd.code. Further, comark requires syntect 4.6

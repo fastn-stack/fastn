@@ -631,6 +631,7 @@ async fn route(
     app_data: actix_web::web::Data<AppData>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     tracing::info!(method = req.method().as_str(), uri = req.path());
+    tracing::info!(tutor_mode = fastn_core::tutor::is_tutor());
 
     let package_name = &app_data.package_name;
 
@@ -638,17 +639,6 @@ async fn route(
         return Ok(default_response);
     }
 
-    if req.path().starts_with("/auth/") {
-        return fastn_core::auth::routes::handle_auth(
-            req,
-            app_data.edition.clone(),
-            app_data.external_js.clone(),
-            app_data.inline_js.clone(),
-            app_data.external_css.clone(),
-            app_data.inline_css.clone(),
-        )
-        .await;
-    }
     let req = fastn_core::http::Request::from_actix(req, body);
     match (req.method().to_lowercase().as_str(), req.path()) {
         ("post", "/-/sync/") if cfg!(feature = "remote") => sync(req).await,
@@ -656,6 +646,7 @@ async fn route(
         ("get", "/-/clone/") if cfg!(feature = "remote") => clone(req).await,
         ("get", t) if t.starts_with("/-/view-src/") => view_source(req).await,
         ("get", t) if t.starts_with("/-/edit-src/") => edit_source(req).await,
+        ("get", t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
         ("post", "/-/edit/") => edit(req).await,
         ("post", "/-/revert/") => revert(req).await,
         ("get", "/-/editor-sync/") => editor_sync(req).await,
@@ -665,6 +656,8 @@ async fn route(
         ("get", "/-/poll/") => fastn_core::watcher::poll().await,
         ("get", "/favicon.ico") => favicon().await,
         ("get", "/test/") => test().await,
+        ("get", "/-/pwd/") => fastn_core::tutor::pwd().await,
+        ("get", "/-/shutdown/") => fastn_core::tutor::shutdown().await,
         (_, _) => {
             serve(
                 req,
@@ -679,6 +672,7 @@ async fn route(
     }
 }
 
+//noinspection HttpUrlsUsage
 #[allow(clippy::too_many_arguments)]
 pub async fn listen(
     bind_address: &str,
@@ -752,7 +746,11 @@ You can try without providing port, it will automatically pick unused port."#,
             .route("/{path:.*}", actix_web::web::route().to(route))
     };
 
-    println!("### Server Started ###");
+    if fastn_core::tutor::is_tutor() {
+        println!("### Server Started in TUTOR MODE ###");
+    } else {
+        println!("### Server Started ###");
+    }
     println!(
         "Go to: http://{}:{}",
         bind_address,

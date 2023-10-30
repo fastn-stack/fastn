@@ -1,6 +1,6 @@
 [package]
 name = "fastn"
-version = "0.3.76"
+version = "0.3.79"
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -13,7 +13,11 @@ colored.workspace = true
 fastn-cloud.workspace = true
 fastn-observer.workspace = true
 fastn-core.workspace = true
+futures.workspace = true
+reqwest.workspace = true
+serde.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
+dotenvy = "0.15.7"

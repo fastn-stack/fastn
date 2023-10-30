@@ -4,55 +4,62 @@
 
     naersk.url = "github:nix-community/naersk";
 
-    nixpkgs-mozilla = {
-      url = "github:mozilla/nixpkgs-mozilla";
-      flake = false;
-    };
+    rust-overlay.url = "github:oxalica/rust-overlay";
 
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-
   };
 
-  outputs = { self, flake-utils, nixpkgs, nixpkgs-mozilla, naersk }:
+  outputs = { self, flake-utils, nixpkgs, rust-overlay, naersk }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = (import nixpkgs) {
           inherit system;
 
           overlays = [
-            (import nixpkgs-mozilla)
+            (import rust-overlay)
           ];
         };
 
-        toolchain = (pkgs.rustChannelOf {
-          rustToolchain = ./rust-toolchain;
-          sha256 = "sha256-rLP8+fTxnPHoR96ZJiCa/5Ans1OojI7MLsmSqR2ip8o=";
-        }).rust;
+        toolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain;
 
         naersk' = pkgs.callPackage naersk {
           cargo = toolchain;
           rustc = toolchain;
         };
 
-        fastnp = naersk'.buildPackage {
-          name = "fastn";
-          version = "0.3.0";
-          src = ./.;
+        cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
 
-          nativeBuildInputs = with pkgs; [ pkg-config openssl.dev ];
+        fastn = naersk'.buildPackage {
+          name = "fastn";
+          version = cargoToml.workspace.package.version;
+          src = pkgs.lib.cleanSource ./.;
+
+          nativeBuildInputs = with pkgs; [
+            pkg-config
+            openssl.dev
+          ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+
+          buildInputs = with pkgs; lib.optionals stdenv.isDarwin [
+            darwin.apple_sdk.frameworks.SystemConfiguration
+          ];
         };
       in
       rec {
         # For `nix build` & `nix run`:
-        defaultPackage = fastnp;
+        defaultPackage = fastn;
 
         packages = {
-          fastn = fastnp;
+          inherit fastn;
         };
 
         # nix develop
         devShell = pkgs.mkShell {
+          name = "fastn-shell";
           nativeBuildInputs = [ toolchain pkgs.pkg-config pkgs.openssl.dev ];
+
+          shellHook = ''
+            export PATH="$PATH:$HOME/.cargo/bin"
+          '';
         };
 
         formatter = pkgs.nixpkgs-fmt;

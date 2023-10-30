@@ -10,6 +10,7 @@ pub fn process(
             for auth_provider in fastn_core::auth::AuthProviders::AUTH_ITER.iter() {
                 if req.cookie(auth_provider.as_str()).is_some() {
                     found_cookie = true;
+                    break;
                 }
             }
             found_cookie

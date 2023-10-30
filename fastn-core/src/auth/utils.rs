@@ -8,32 +8,6 @@ pub fn domain(host: &str) -> String {
     }
 }
 
-pub async fn get_api<T: serde::de::DeserializeOwned>(
-    url: &str,
-    token: &str,
-) -> fastn_core::Result<T> {
-    let response = reqwest::Client::new()
-        .get(url)
-        .header(reqwest::header::AUTHORIZATION, token)
-        .header(reqwest::header::ACCEPT, "application/json")
-        .header(
-            reqwest::header::USER_AGENT,
-            reqwest::header::HeaderValue::from_static("fastn"),
-        )
-        .send()
-        .await?;
-
-    if !response.status().eq(&reqwest::StatusCode::OK) {
-        return Err(fastn_core::Error::APIResponseError(format!(
-            "fastn-API-ERROR: {}, Error: {}",
-            url,
-            response.text().await?
-        )));
-    }
-
-    Ok(response.json().await?)
-}
-
 pub async fn encrypt_str(user_detail_str: &String) -> String {
     use magic_crypt::MagicCryptTrait;
     let secret_key = fastn_core::auth::secret_key();
@@ -51,7 +25,7 @@ pub async fn decrypt_str(encrypted_str: &String) -> Result<String, MagicCryptErr
     mc_obj.decrypt_base64_to_string(encrypted_str)
 }
 
-pub fn is_login(req: &actix_web::HttpRequest) -> bool {
+pub fn is_authenticated(req: &fastn_core::http::Request) -> bool {
     let mut found_cookie = false;
     for auth_provider in fastn_core::auth::AuthProviders::AUTH_ITER.iter() {
         dbg!(&auth_provider);

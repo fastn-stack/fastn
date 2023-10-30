@@ -17,6 +17,7 @@ Commands:
   help            Print this message or the help of the given subcommand(s)
 
 Options:
-  -v             Sets the level of verbosity
-  -h, --help     Print help
-  -V, --version  Print version
+  -c, --check-for-updates  Check for updates
+  -v                       Sets the level of verbosity
+  -h, --help               Print help
+  -V, --version            Print version

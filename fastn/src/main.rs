@@ -1,4 +1,5 @@
 mod commands;
+
 pub fn main() {
     fastn_observer::observe();
 
@@ -26,11 +27,27 @@ pub enum Error {
 
 async fn async_main() -> Result<(), Error> {
     let matches = app(version()).get_matches();
+
+    set_env_vars();
+
     if cloud_commands(&matches).await? {
         return Ok(());
     }
-    fastn_core_commands(&matches).await?;
-    Ok(())
+
+    futures::try_join!(
+        fastn_core_commands(&matches),
+        check_for_update_cmd(&matches)
+    )?;
+
+    match std::env::var("FASTN_CHECK_FOR_UPDATES") {
+        Ok(val) => {
+            if val != "false" && !matches.get_flag("check-for-updates") {
+                check_for_update(false).await?;
+            }
+            Ok(())
+        }
+        Err(_) => Ok(()),
+    }
 }
 
 async fn cloud_commands(matches: &clap::ArgMatches) -> Result<bool, commands::cloud::Error> {
@@ -69,6 +86,22 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
 
     let mut config = fastn_core::Config::read(None, true, None).await?;
     let package_name = config.package.name.clone();
+
+    if let Some(_tutor) = matches.subcommand_matches("tutor") {
+        println!("starting TUTOR mode");
+        return fastn_core::listen(
+            "127.0.0.1",
+            Some(2000),
+            None,
+            Some("2023".to_string()),
+            vec![],
+            vec![],
+            vec![],
+            vec![],
+            package_name,
+        )
+        .await;
+    }
 
     if let Some(serve) = matches.subcommand_matches("serve") {
         let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
@@ -241,12 +274,55 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::post_build_check(&config).await;
     }
 
+    if matches.get_flag("check-for-updates") {
+        return check_for_update(true).await;
+    }
+
     unreachable!("No subcommand matched");
 }
 
+async fn check_for_update_cmd(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
+    if matches.get_flag("check-for-updates") {
+        check_for_update(false).await?;
+    }
+
+    Ok(())
+}
+
+async fn check_for_update(report: bool) -> fastn_core::Result<()> {
+    #[derive(serde::Deserialize, Debug)]
+    struct GithubRelease {
+        tag_name: String,
+    }
+
+    let url = "https://api.github.com/repos/fastn-stack/fastn/releases/latest";
+    let release: GithubRelease = reqwest::Client::new()
+        .get(url)
+        .header(reqwest::header::ACCEPT, "application/vnd.github+json")
+        .header(reqwest::header::USER_AGENT, "fastn")
+        .send()
+        .await?
+        .json()
+        .await?;
+
+    let current_version = version();
+
+    if release.tag_name != current_version {
+        println!(
+                "You are using fastn {}, and latest release is {}, visit https://fastn.com/install/ to learn how to upgrade.",
+                current_version, release.tag_name
+            );
+    } else if report {
+        println!("You are using the latest release of fastn.");
+    }
+
+    Ok(())
+}
+
 fn app(version: &'static str) -> clap::Command {
-    clap::Command::new("fastn: FTD Package Manager")
+    clap::Command::new("fastn: Full-stack Web Development Made Easy")
         .version(version)
+        .arg(clap::arg!(-c --"check-for-updates" "Check for updates"))
         .arg_required_else_help(true)
         .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
         .arg(clap::arg!(--test "Runs the command in test mode").hide(true))
@@ -406,6 +482,9 @@ fn app(version: &'static str) -> clap::Command {
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
+            clap::Command::new("tutor").about("Start fastn tutor").hide(true)
+        )
+        .subcommand(
             clap::Command::new("start-tracking")
                 .about("Add a tracking relation between two files")
                 .arg(clap::arg!(source: <SOURCE> "The source file to start track"))
@@ -435,6 +514,7 @@ mod sub_command {
                 .action(clap::ArgAction::Append))
             .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
                 .action(clap::ArgAction::Append))
+            .arg(clap::arg!(--"tutor" "Start the server in tutor mode").hide(true))
             .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"));
         if cfg!(feature = "remote") {
             serve
@@ -463,6 +543,51 @@ pub fn version() -> &'static str {
                 Box::leak(format!("{} [{}]", env!("CARGO_PKG_VERSION"), sha).into_boxed_str())
             }
             None => env!("CARGO_PKG_VERSION"),
+        }
+    }
+}
+
+fn set_env_vars() {
+    let checked_in = {
+        if let Ok(status) = std::process::Command::new("git")
+            .arg("ls-files")
+            .arg("--error-unmatch")
+            .arg(".env")
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .status()
+        {
+            status.success() // .env is checked in
+        } else {
+            false
+        }
+    };
+
+    let ignore = {
+        if let Ok(val) = std::env::var("FASTN_DANGER_ACCEPT_CHECKED_IN_ENV") {
+            val != "false"
+        } else {
+            false
+        }
+    };
+
+    if checked_in && !ignore {
+        eprintln!(
+            "ERROR: the .env file is checked in to version control! This is a security risk.
+Remove it from your version control system or run fastn again with
+FASTN_DANGER_ACCEPT_CHECKED_IN_ENV set"
+        );
+        std::process::exit(1);
+    } else {
+        if checked_in && ignore {
+            println!(
+                "WARN: your .env file has been detected in the version control system! This poses a
+significant security risk in case the source code becomes public."
+            );
+        }
+
+        if dotenvy::dotenv().is_ok() {
+            println!("INFO: loaded environment variables from .env file.");
         }
     }
 }

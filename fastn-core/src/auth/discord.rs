@@ -293,11 +293,8 @@ pub mod apis {
             username: String,
             id: String,
         }
-        let user_obj: UserDetails = fastn_core::auth::utils::get_api(
-            "https://discord.com/api/users/@me",
-            format!("{} {}", "Bearer", token).as_str(),
-        )
-        .await?;
+        let user_obj: UserDetails =
+            fastn_core::auth::utils::get_api("https://discord.com/api/users/@me", token).await?;
 
         Ok((user_obj.username, user_obj.id))
     }
@@ -353,7 +350,7 @@ pub mod apis {
         }
         let user_server_list: Vec<UserGuilds> = fastn_core::auth::utils::get_api(
             format!("{}?limit=100", "https://discord.com/api/users/@me/guilds").as_str(),
-            format!("{} {}", "Bearer", token).as_str(),
+            token,
         )
         .await?;
         Ok(user_server_list.into_iter().map(|x| x.name).collect())

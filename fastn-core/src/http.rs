@@ -15,7 +15,7 @@ macro_rules! unauthorised {
 #[macro_export]
 macro_rules! not_found {
     ($($t:tt)*) => {{
-        fastn_core::http::not_found_(format!($($t)*))
+        fastn_core::http::not_found_(format!($($t)*) + "\n")
     }};
 }
 
@@ -86,6 +86,7 @@ pub struct Request {
     ip: Option<String>,
     scheme: String,
     host: String,
+    pub connection_info: actix_web::dev::ConnectionInfo,
     // path_params: Vec<(String, )>
 }
 
@@ -107,6 +108,7 @@ impl Request {
             uri: req.uri().to_string(),
             path: req.path().to_string(),
             query_string: req.query_string().to_string(),
+            connection_info: req.connection_info().clone(),
             headers,
             query: {
                 actix_web::web::Query::<std::collections::HashMap<String, serde_json::Value>>::from_query(
@@ -229,6 +231,18 @@ impl Request {
         &self.query
     }
 
+    pub fn q<T>(&self, key: &str, default: T) -> fastn_core::Result<T>
+    where
+        T: serde::de::DeserializeOwned,
+    {
+        let value = match self.query.get(key) {
+            Some(v) => v,
+            None => return Ok(default),
+        };
+
+        Ok(serde_json::from_value(value.clone())?)
+    }
+
     pub fn get_ip(&self) -> Option<String> {
         self.ip.clone()
     }
@@ -329,11 +343,17 @@ where
     F: FnOnce(String) -> T + Copy,
     T: futures::Future<Output = std::result::Result<D, fastn_core::Error>> + Send + 'static,
 {
-    if url[1..].contains("://") || url.starts_with("//") {
-        f(url).await
+    let mut url = if url[1..].contains("://") || url.starts_with("//") {
+        url
     } else {
-        f(format!("https://{}", url)).await
+        format!("https://{}", url)
+    };
+
+    if let Ok(package_proxy) = std::env::var("FASTN_PACKAGE_PROXY") {
+        url = format!("{}/proxy/?url={}", package_proxy, url);
     }
+
+    f(url).await
 }
 
 #[tracing::instrument]
@@ -566,4 +586,66 @@ pub(crate) fn get_available_port(
         }
     }
     None
+}
+
+// TODO: move to fastn_core::http
+pub async fn get_api<T: serde::de::DeserializeOwned>(
+    url: impl AsRef<str>,
+    bearer_token: &str,
+) -> fastn_core::Result<T> {
+    let response = reqwest::Client::new()
+        .get(url.as_ref())
+        .header(
+            reqwest::header::AUTHORIZATION,
+            format!("{} {}", "Bearer", bearer_token),
+        )
+        .header(reqwest::header::ACCEPT, "application/json")
+        .header(
+            reqwest::header::USER_AGENT,
+            reqwest::header::HeaderValue::from_static("fastn"),
+        )
+        .send()
+        .await?;
+
+    if !response.status().eq(&reqwest::StatusCode::OK) {
+        return Err(fastn_core::Error::APIResponseError(format!(
+            "fastn-API-ERROR: {}, Error: {}",
+            url.as_ref(),
+            response.text().await?
+        )));
+    }
+
+    Ok(response.json().await?)
+}
+
+pub async fn github_graphql<T: serde::de::DeserializeOwned>(
+    query: &str,
+    token: &str,
+) -> fastn_core::Result<T> {
+    let mut map: std::collections::HashMap<&str, &str> = std::collections::HashMap::new();
+    map.insert("query", query);
+
+    let response = reqwest::Client::new()
+        .post("https://api.github.com/graphql")
+        .json(&map)
+        .header(
+            reqwest::header::AUTHORIZATION,
+            format!("{} {}", "Bearer", token),
+        )
+        .header(reqwest::header::ACCEPT, "application/json")
+        .header(
+            reqwest::header::USER_AGENT,
+            reqwest::header::HeaderValue::from_static("fastn"),
+        )
+        .send()
+        .await?;
+    if !response.status().eq(&reqwest::StatusCode::OK) {
+        return Err(fastn_core::Error::APIResponseError(format!(
+            "GitHub API ERROR: {}",
+            response.status()
+        )));
+    }
+    let return_obj = response.json::<T>().await?;
+
+    Ok(return_obj)
 }
