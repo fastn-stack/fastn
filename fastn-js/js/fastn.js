@@ -285,6 +285,8 @@ fastn.closureWithoutExecute = function (func) {
 }
 
 fastn.formula = function (deps, func) {
+    found_external_js = false;
+
     let closure = fastn.closure(func);
     let mutable = new Mutable(closure.get());
     for (let idx in deps) {
@@ -295,6 +297,10 @@ fastn.formula = function (deps, func) {
             closure.update();
             mutable.set(closure.get());
         }));
+    }
+
+    if (found_external_js) {
+        mutables_to_execute_after_hydrate.push([mutable, closure]);
     }
 
     return mutable;

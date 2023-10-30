@@ -112,6 +112,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                         {dummy_package_data}
                         {all_js}
                         ssr = true;
+                        hydrating = false;
                         {js_ftd_script}
                         {js_document_script}
                         fastn_virtual.ssr(main);

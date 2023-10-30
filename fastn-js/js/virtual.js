@@ -1,9 +1,11 @@
 let fastn_virtual = {}
 
 let id_counter = 0;
-let hydrating = false;
+let hydrating = true;
 let ssr = false;
 let rerender = false;
+let found_external_js = false;
+let mutables_to_execute_after_hydrate = [];
 
 class ClassList {
     #classes = [];
@@ -153,7 +155,8 @@ fastn_virtual.hydrate = function(main) {
     let current_device = ftd.get_device();
     let found_device = ftd.device.get();
     if (current_device !== found_device) {
-        rerender = true
+        hydrating = false;
+        rerender = true;
         ftd.device = fastn.mutable(current_device);
         let styles = document.getElementById("styles");
         styles.innerText = "";
@@ -176,6 +179,11 @@ fastn_virtual.hydrate = function(main) {
     main(body);
     id_counter = 0;
     hydrating = false;
+    for (mutable_with_closure of mutables_to_execute_after_hydrate) {
+        let [mutable, closure] = mutable_with_closure;
+        closure.update();
+        mutable.set(closure.get());
+    }
 }
 
 fastn_virtual.ssr = function(main) {

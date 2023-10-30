@@ -467,19 +467,25 @@ fn func(
                 "__fastn_package_name__ = \"{}\";",
                 package_name
             )))
+            .append(if add_catch_statement {
+                text("found_external_js = true;").append(pretty::RcDoc::softline_())
+            } else {
+                pretty::RcDoc::nil()
+            })
             .append(pretty::RcDoc::softline_())
             .append(text("try {"))
             .append(pretty::RcDoc::softline_())
+            .append(if add_catch_statement {
+                text("if (!ssr && !hydrating) {").append(pretty::RcDoc::softline_())
+            } else {
+                pretty::RcDoc::nil()
+            })
             .append(body.nest(4))
             .append(pretty::RcDoc::softline_())
             .append(text(
                 format!(
                     "}} {} finally {{ __fastn_package_name__ = __fastn_super_package_name__;}}",
-                    if add_catch_statement {
-                        "catch (e) {if(!ssr){throw e;}}"
-                    } else {
-                        ""
-                    }
+                    if add_catch_statement { "}" } else { "" }
                 )
                 .as_str(),
             ))

@@ -2198,6 +2198,7 @@ class Node2 {
         };
     }
     addEventHandler(event, func) {
+        found_external_js = false;
         if (event === fastn_dom.Event.Click) {
             let onclickEvents = this.mergeFnCalls(this.#node.onclick, func);
             if (fastn_utils.isNull(this.#node.onclick)) this.attachCss("cursor", "pointer");

@@ -36,7 +36,7 @@ pub fn ssr(ast: &[fastn_js::Ast]) -> String {
 
 pub fn ssr_with_js_string(package_name: &str, js: &str) -> String {
     let js = format!("
-        let __fastn_package_name__ = \"{}\";\nssr = true;\n{}
+        let __fastn_package_name__ = \"{}\";\nssr = true; hydrating = false;\n{}
         let main_wrapper = function(parent) {{
             let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
             parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);

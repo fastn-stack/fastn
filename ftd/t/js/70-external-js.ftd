@@ -4,9 +4,11 @@
 
 -- ftd.integer: $num
 
-/-- ftd.text: Hello if >= 10
+-- ftd.text: Hello if >= 10
 js: ../../t/assets/test.js
 if: { num > 10 }
+
+-- ftd.text: Hello
 
 
 
@@ -19,4 +21,4 @@ greeting()
 -- integer numberfn():
 js: ../../t/assets/test.js
 
-numbers()
+number()
