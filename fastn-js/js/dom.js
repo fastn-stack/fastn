@@ -1565,12 +1565,6 @@ class Node2 {
                 }
             }
         } else if (kind === fastn_dom.PropertyKind.Id) {
-            console.log(staticValue);
-            if (fastn_utils.isNull(staticValue)) {
-                this.#node.id = null;
-                return;
-            }
-
             this.#node.id = staticValue;
         } else if (kind === fastn_dom.PropertyKind.Css) {
             let css_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
@@ -1956,12 +1950,8 @@ class Node2 {
             let styles = staticValue?.map(obj => fastn_utils.getStaticValue(obj.item));
             this.attachTextStyles(styles);
         } else if (kind === fastn_dom.PropertyKind.Region) {
-            console.log(staticValue);
-            console.log(fastn_utils.slugify(this.#rawInnerValue));
-            console.log(this.#node.innerHTML);
             this.updateTagName(staticValue);
             if (this.#node.innerHTML) {
-                console.log("Setting new node id");
                 this.#node.id = fastn_utils.slugify(this.#rawInnerValue);
             }
         } else if (kind === fastn_dom.PropertyKind.AlignContent) {
