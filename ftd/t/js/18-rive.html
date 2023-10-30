@@ -136,69 +136,69 @@
     }
     parenti3.setProperty(fastn_dom.PropertyKind.Id, "vehicle", inherited);
     let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti4.setProperty(fastn_dom.PropertyKind.StringValue, "Idle/ \Run", inherited);
     parenti4.addEventHandler(fastn_dom.Event.Click, function () {
       ftd.toggle_play_rive({
         rive: "vehicle",
         input: "idle",
       }, parenti4);
     });
-    parenti4.setProperty(fastn_dom.PropertyKind.StringValue, "Idle/ \Run", inherited);
     let parenti5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti5.setProperty(fastn_dom.PropertyKind.StringValue, "Wiper On/Off", inherited);
     parenti5.addEventHandler(fastn_dom.Event.Click, function () {
       ftd.toggle_play_rive({
         rive: "vehicle",
         input: "windshield_wipers",
       }, parenti5);
     });
-    parenti5.setProperty(fastn_dom.PropertyKind.StringValue, "Wiper On/Off", inherited);
     let parenti6 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti6.setProperty(fastn_dom.PropertyKind.StringValue, "Rainy On/Off", inherited);
     parenti6.addEventHandler(fastn_dom.Event.Click, function () {
       ftd.toggle_play_rive({
         rive: "vehicle",
         input: "rainy",
       }, parenti6);
     });
-    parenti6.setProperty(fastn_dom.PropertyKind.StringValue, "Rainy On/Off", inherited);
     let parenti7 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti7.setProperty(fastn_dom.PropertyKind.StringValue, "No Wiper On/Off", inherited);
     parenti7.addEventHandler(fastn_dom.Event.Click, function () {
       ftd.toggle_play_rive({
         rive: "vehicle",
         input: "no_wipers",
       }, parenti7);
     });
-    parenti7.setProperty(fastn_dom.PropertyKind.StringValue, "No Wiper On/Off", inherited);
     let parenti8 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti8.setProperty(fastn_dom.PropertyKind.StringValue, "Sunny On/Off", inherited);
     parenti8.addEventHandler(fastn_dom.Event.Click, function () {
       ftd.toggle_play_rive({
         rive: "vehicle",
         input: "sunny",
       }, parenti8);
     });
-    parenti8.setProperty(fastn_dom.PropertyKind.StringValue, "Sunny On/Off", inherited);
     let parenti9 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti9.setProperty(fastn_dom.PropertyKind.StringValue, "Stationary On/Off", inherited);
     parenti9.addEventHandler(fastn_dom.Event.Click, function () {
       ftd.toggle_play_rive({
         rive: "vehicle",
         input: "stationary",
       }, parenti9);
     });
-    parenti9.setProperty(fastn_dom.PropertyKind.StringValue, "Stationary On/Off", inherited);
     let parenti10 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti10.setProperty(fastn_dom.PropertyKind.StringValue, "Bouncing On/Off", inherited);
     parenti10.addEventHandler(fastn_dom.Event.Click, function () {
       ftd.toggle_play_rive({
         rive: "vehicle",
         input: "bouncing",
       }, parenti10);
     });
-    parenti10.setProperty(fastn_dom.PropertyKind.StringValue, "Bouncing On/Off", inherited);
     let parenti11 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti11.setProperty(fastn_dom.PropertyKind.StringValue, "Broken On/Off", inherited);
     parenti11.addEventHandler(fastn_dom.Event.Click, function () {
       ftd.toggle_play_rive({
         rive: "vehicle",
         input: "broken",
       }, parenti11);
     });
-    parenti11.setProperty(fastn_dom.PropertyKind.StringValue, "Broken On/Off", inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

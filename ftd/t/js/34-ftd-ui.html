@@ -92,8 +92,8 @@ global["foo__switcher"] = foo__switcher;
 fastn_utils.createNestedObject(global, "foo__c", fastn.mutableList([fastn.recordInstance({
   elements: fastn.mutableList([function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text_strong"), inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Me component", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text_strong"), inherited);
   },
   function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
