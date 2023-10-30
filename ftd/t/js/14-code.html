@@ -130,23 +130,23 @@ Hello World
       text: "-- ftd.text:\ncolor: red\n\nHello World"
     });
     let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Dark Mode", inherited);
     parenti2.addEventHandler(fastn_dom.Event.Click, function () {
       foo__set_dark({
       }, parenti2);
     });
-    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Dark Mode", inherited);
     let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti3.setProperty(fastn_dom.PropertyKind.StringValue, "Light Mode", inherited);
     parenti3.addEventHandler(fastn_dom.Event.Click, function () {
       foo__set_light({
       }, parenti3);
     });
-    parenti3.setProperty(fastn_dom.PropertyKind.StringValue, "Light Mode", inherited);
     let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti4.setProperty(fastn_dom.PropertyKind.StringValue, "System Mode", inherited);
     parenti4.addEventHandler(fastn_dom.Event.Click, function () {
       foo__set_system({
       }, parenti4);
     });
-    parenti4.setProperty(fastn_dom.PropertyKind.StringValue, "System Mode", inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
