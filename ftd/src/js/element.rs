@@ -1160,18 +1160,16 @@ impl Text {
         let mut component_statements = vec![];
         let kernel = create_element(fastn_js::ElementKind::Text, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
-        component_statements.extend(self.common.to_set_properties(
+        component_statements.extend(self.common.to_set_properties_with_text(
             kernel.name.as_str(),
             doc,
             rdata,
-        ));
-        component_statements.push(fastn_js::ComponentStatement::SetProperty(
-            fastn_js::SetProperty {
+            fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::StringValue,
                 value: self.text.to_set_property_value(doc, rdata),
                 element_name: kernel.name.to_string(),
                 inherited: rdata.inherited_variable_name.to_string(),
-            },
+            }),
         ));
         component_statements.extend(self.text_common.to_set_properties(
             kernel.name.as_str(),
@@ -2446,7 +2444,7 @@ impl Common {
         }
     }
 
-    pub fn to_set_properties(
+    pub fn to_set_properties_without_role(
         &self,
         element_name: &str,
         doc: &ftd::interpreter::TDoc,
@@ -2934,11 +2932,6 @@ impl Common {
                 ),
             ));
         }
-        if let Some(ref role) = self.role {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                role.to_set_property(fastn_js::PropertyKind::Role, doc, element_name, rdata),
-            ));
-        }
         if let Some(ref opacity) = self.opacity {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 opacity.to_set_property(fastn_js::PropertyKind::Opacity, doc, element_name, rdata),
@@ -3042,6 +3035,42 @@ impl Common {
         if let Some(ref mask) = self.mask {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 mask.to_set_property(fastn_js::PropertyKind::Mask, doc, element_name, rdata),
+            ));
+        }
+        component_statements
+    }
+
+    pub fn to_set_properties_with_text(
+        &self,
+        element_name: &str,
+        doc: &ftd::interpreter::TDoc,
+        rdata: &ftd::js::ResolverData,
+        text_component_statement: fastn_js::ComponentStatement,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        // Property dependencies
+        // Role <- Text (Role for post_markdown_process) <- Region(Headings need text for auto ids)
+        let mut component_statements = vec![];
+        if let Some(ref role) = self.role {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                role.to_set_property(fastn_js::PropertyKind::Role, doc, element_name, rdata),
+            ));
+        }
+        component_statements.push(text_component_statement);
+        component_statements.extend(self.to_set_properties_without_role(element_name, doc, rdata));
+        component_statements
+    }
+
+    pub fn to_set_properties(
+        &self,
+        element_name: &str,
+        doc: &ftd::interpreter::TDoc,
+        rdata: &ftd::js::ResolverData,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        component_statements.extend(self.to_set_properties_without_role(element_name, doc, rdata));
+        if let Some(ref role) = self.role {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                role.to_set_property(fastn_js::PropertyKind::Role, doc, element_name, rdata),
             ));
         }
         component_statements
