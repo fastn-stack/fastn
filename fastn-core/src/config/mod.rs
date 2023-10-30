@@ -566,7 +566,7 @@ impl Config {
     }
 
     pub(crate) async fn get_file_and_package_by_cr_id(
-        &mut self,
+        &self,
         id: &str,
         cr_number: usize,
     ) -> fastn_core::Result<fastn_core::File> {
