@@ -14,7 +14,7 @@ mod file;
 mod font;
 mod history;
 mod package;
-pub(crate) mod tutor;
+pub mod tutor;
 pub(crate) mod watcher;
 #[macro_use]
 mod http;

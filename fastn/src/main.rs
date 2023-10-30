@@ -84,24 +84,12 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::clone(clone.value_of_("source").unwrap()).await;
     }
 
+    if let Some(_tutor) = matches.subcommand_matches("tutor") {
+        return fastn_core::tutor::main("the-tutor".to_string()).await;
+    }
+
     let mut config = fastn_core::Config::read(None, true, None).await?;
     let package_name = config.package.name.clone();
-
-    if let Some(_tutor) = matches.subcommand_matches("tutor") {
-        println!("starting TUTOR mode");
-        return fastn_core::listen(
-            "127.0.0.1",
-            Some(2000),
-            None,
-            Some("2023".to_string()),
-            vec!["/-/tutor.js".to_string()],
-            vec![],
-            vec![],
-            vec![],
-            package_name,
-        )
-        .await;
-    }
 
     if let Some(serve) = matches.subcommand_matches("serve") {
         let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
