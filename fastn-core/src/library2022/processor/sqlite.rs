@@ -167,6 +167,30 @@ fn resolve_variable_from_headers(
     Ok(param_value)
 }
 
+fn resolve_param(
+    param_name: &str,
+    param_type: &str,
+    doc: &ftd::interpreter::TDoc,
+    headers: &ftd::ast::HeaderValues,
+    line_number: usize,
+) -> ftd::interpreter::Result<Box<dyn rusqlite::ToSql>> {
+    resolve_variable_from_headers(param_name, param_type, doc, headers, line_number)
+        .or_else(|_| resolve_variable_from_doc(param_name, doc, line_number))
+        .map(|v| Box::new(v) as Box<dyn rusqlite::ToSql>)
+}
+
+#[derive(Debug)]
+enum State {
+    OutsideParam,
+    InsideParam,
+    InsideStringLiteral,
+    InsideEscapeSequence(usize),
+    StartTypeHint,
+    InsideTypeHint,
+    PushParam,
+    ParseError(String),
+}
+
 fn extract_named_parameters(
     query: &str,
     doc: &ftd::interpreter::TDoc,
@@ -176,61 +200,83 @@ fn extract_named_parameters(
     let mut params = Vec::new();
     let mut param_name = String::new();
     let mut param_type = String::new();
-    let mut inside_param = false;
-    let mut inside_type_hint = false;
+    let mut state = State::OutsideParam;
 
     for c in query.chars() {
-        if c == '$' && !inside_param {
-            inside_param = true;
-            param_name.clear();
-            param_type.clear();
-            inside_type_hint = false;
-        } else if c == ':' && inside_param {
-            if inside_type_hint {
-                param_type.push(c);
-            } else {
-                inside_type_hint = true;
-            }
-        } else if c.is_alphanumeric() && inside_param {
-            if inside_type_hint {
-                param_type.push(c);
-            } else {
-                param_name.push(c);
-            }
-        } else if c == ',' || c.is_whitespace() && !param_name.is_empty() {
-            inside_param = false;
-            inside_type_hint = false;
-
-            let param_value =
-                resolve_variable_from_headers(&param_name, &param_type, doc, &headers, line_number)
-                    .or_else(|_| resolve_variable_from_doc(&param_name, doc, line_number))
-                    .map(|v| Box::new(v) as Box<dyn rusqlite::ToSql>);
-
-            match param_value {
-                Ok(v) => params.push(v),
-                Err(_) => {
-                    // todo: Handle Error
+        match state {
+            State::OutsideParam => {
+                if c == '$' {
+                    state = State::InsideParam;
+                    param_name.clear();
+                    param_type.clear();
+                } else if c == '"' {
+                    state = State::InsideStringLiteral;
                 }
             }
+            State::InsideStringLiteral => {
+                if c == '"' {
+                    state = State::OutsideParam;
+                } else if c == '\\' {
+                    state = State::InsideEscapeSequence(0);
+                }
+            }
+            State::InsideEscapeSequence(escape_count) => {
+                if c == '\\' {
+                    state = State::InsideEscapeSequence(escape_count + 1);
+                } else {
+                    state = State::InsideStringLiteral;
+                }
+            }
+            State::StartTypeHint => {
+                if c == ':' {
+                    state = State::InsideTypeHint;
+                } else {
+                    state = State::ParseError("Type hint must start with `::`".to_string());
+                }
+            }
+            State::InsideParam => {
+                if c == ':' {
+                    state = State::StartTypeHint;
+                } else if c.is_alphanumeric() {
+                    param_name.push(c);
+                } else if c == ',' || c == ';' || c.is_whitespace() && !param_name.is_empty() {
+                    state = State::PushParam;
+                }
+            }
+            State::InsideTypeHint => {
+                if c.is_alphanumeric() {
+                    param_type.push(c);
+                } else {
+                    state = State::PushParam;
+                }
+            }
+            State::PushParam => {
+                state = State::OutsideParam;
 
-            // clear param_name and param_type
-            param_name.clear();
-            param_type.clear();
+                let param_value =
+                    resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
+
+                params.push(Box::new(param_value) as Box<dyn rusqlite::ToSql>);
+
+                param_name.clear();
+                param_type.clear();
+            }
+            State::ParseError(error) => {
+                return Err(ftd::interpreter::Error::ParseError {
+                    message: format!("Failed to parse SQL Query: {}", error),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                });
+            }
         }
     }
 
-    // handle the last param if there was no trailing comma or space
-    if !param_name.is_empty() {
-        let param_value =
-            resolve_variable_from_headers(&param_name, &param_type, doc, &headers, line_number)
-                .or_else(|_| resolve_variable_from_doc(&param_name, doc, line_number))
-                .map(|v| Box::new(v) as Box<dyn rusqlite::ToSql>);
-
-        match param_value {
-            Ok(v) => params.push(v),
-            Err(_) => {
-                // todo: handle the error
-            }
+    // Handle the last param if there was no trailing comma or space
+    if let State::PushParam = state {
+        println!("Here");
+        if !param_name.is_empty() {
+            let param_value = resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
+            params.push(Box::new(param_value) as Box<dyn rusqlite::ToSql>);
         }
     }
 
@@ -278,6 +324,7 @@ async fn execute_query(
     // let mut stmt = conn.prepare("SELECT * FROM test where name = ?")?;
     // let mut rows = stmt.query([name])?;
     let params = extract_named_parameters(query, doc, headers, line_number)?;
+
     let mut rows = match stmt.query(rusqlite::params_from_iter(params)) {
         Ok(v) => v,
         Err(e) => {

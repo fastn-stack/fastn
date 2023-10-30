@@ -18,8 +18,7 @@ pub(crate) fn get_db_config() -> ftd::interpreter::Result<DatabaseConfig> {
                 db_url,
                 db_type: "sqlite".to_string(),
             }
-        } else if db_url.starts_with("file://") {
-            let path = &db_url[7..];
+        } else if let Some(path) = db_url.strip_prefix("file://") {
             DatabaseConfig {
                 db_url: path.to_string(),
                 db_type: "sqlite".to_string(),
