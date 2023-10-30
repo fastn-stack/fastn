@@ -1,6 +1,6 @@
 pub async fn main(package_name: String) -> fastn_core::Result<()> {
     println!("starting TUTOR mode");
-    std::env::set_current_dir(&std::env::current_dir()?.join(".tutor"))?;
+    std::env::set_current_dir(std::env::current_dir()?.join(".tutor"))?;
     fastn_core::listen(
         "127.0.0.1",
         Some(2000),

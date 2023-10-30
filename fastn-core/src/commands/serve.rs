@@ -250,7 +250,7 @@ pub async fn serve(
     let _lock = LOCK.read().await;
 
     // TODO: remove unwrap
-    let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse().unwrap();
+    let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
     let mut config = fastn_core::Config::read(None, false, Some(&req))
         .await
         .unwrap()
