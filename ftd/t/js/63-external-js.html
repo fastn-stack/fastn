@@ -52,13 +52,12 @@ let foo__external_fun = function (args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
+  found_external_js = true;
   try {
-    let __args__ = fastn_utils.getArgs({
-    }, args);
-    return (show("Hello World!"));
-  } catch (e) {
-    if (!ssr) {
-      throw e;
+    if (!ssr && !hydrating) {
+      let __args__ = fastn_utils.getArgs({
+      }, args);
+      return (show("Hello World!"));
     }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
@@ -69,13 +68,12 @@ let foo__external_fun_1 = function (args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
+  found_external_js = true;
   try {
-    let __args__ = fastn_utils.getArgs({
-    }, args);
-    return (show("Hello World Again!"));
-  } catch (e) {
-    if (!ssr) {
-      throw e;
+    if (!ssr && !hydrating) {
+      let __args__ = fastn_utils.getArgs({
+      }, args);
+      return (show("Hello World Again!"));
     }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
@@ -86,13 +84,12 @@ let foo__greeting_fn = function (args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
+  found_external_js = true;
   try {
-    let __args__ = fastn_utils.getArgs({
-    }, args);
-    return (greeting());
-  } catch (e) {
-    if (!ssr) {
-      throw e;
+    if (!ssr && !hydrating) {
+      let __args__ = fastn_utils.getArgs({
+      }, args);
+      return (greeting());
     }
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
