@@ -39,11 +39,11 @@
           return (ftd.len(global.foo__names) > 2);
         }, function (root) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
           rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
             dark: "red",
             light: "red"
           }), inherited);
-          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
           return rooti0;
         }).getParent();
       });

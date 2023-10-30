@@ -68,6 +68,7 @@
     parenti1.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
     parenti1.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is a markdown table below:\n\n| Elements     |  Components  |\n| :----------  |  :---------  |\n| heading      |  `ds.h1`     |\n| image        |  `ds.image`  |\n| code-block   |  `ds.code`   |\n| code-block   |  `ds.code`   |", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([global.foo__flag], function () {
         if (function () {
           return fastn_utils.getter(global.foo__flag);
@@ -84,16 +85,15 @@
         }
       }
       ), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is a markdown table below:\n\n| Elements     |  Components  |\n| :----------  |  :---------  |\n| heading      |  `ds.h1`     |\n| image        |  `ds.image`  |\n| code-block   |  `ds.code`   |\n| code-block   |  `ds.code`   |", inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Click", inherited);
       rooti0.addEventHandler(fastn_dom.Event.Click, function () {
         ftd.toggle({
           a: global.foo__flag,
         }, rooti0);
       });
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Click", inherited);
     }
     ]), inherited);
   } finally {

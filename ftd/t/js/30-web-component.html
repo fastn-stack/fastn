@@ -107,8 +107,8 @@ let foo__demo_link = function (parent, inherited, args)
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://fastn.io/blog/web-components/", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "blog post to learn more", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://fastn.io/blog/web-components/", inherited);
     }
     ]), inherited);
     return parenti0;
@@ -179,6 +179,7 @@ let foo__header = function (parent, inherited, args)
       },
       function (root, inherited) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Create", inherited);
         rooti0.addEventHandler(fastn_dom.Event.Click, function () {
           ftd.set_string({
             a: global.foo__task,
@@ -216,7 +217,6 @@ let foo__header = function (parent, inherited, args)
           }
         }
         ), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Create", inherited);
       }
       ]), inherited);
     },
@@ -279,13 +279,13 @@ let foo__ftd_todo_display = function (parent, inherited, args)
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("button_large"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.item.get("status"), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.Center, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
         dark: "blue",
         light: "blue"
       }), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("button_large"), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.item.get("status"), inherited);
     }
     ]), inherited);
     return parenti0;
