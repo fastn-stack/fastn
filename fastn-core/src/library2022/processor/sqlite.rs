@@ -127,6 +127,8 @@ fn resolve_variable_from_doc(
     let param_value: Box<dyn rusqlite::ToSql> = match thing {
         ftd::interpreter::Value::String { text } => Box::new(text),
         ftd::interpreter::Value::Integer { value } => Box::new(value as i32),
+        ftd::interpreter::Value::Decimal { value } => Box::new(value as f32),
+        ftd::interpreter::Value::Boolean { value } => Box::new(value as i32),
         _ => unimplemented!(), // Handle other types as needed
     };
 
@@ -273,7 +275,6 @@ fn extract_named_parameters(
 
     // Handle the last param if there was no trailing comma or space
     if let State::PushParam = state {
-        println!("Here");
         if !param_name.is_empty() {
             let param_value = resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
             params.push(Box::new(param_value) as Box<dyn rusqlite::ToSql>);
