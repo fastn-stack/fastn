@@ -14,6 +14,7 @@ pub fn reference_to_js(s: &str) -> String {
 
     let (mut p1, mut p2) = get_doc_name_and_remaining(s.as_str());
     p1 = fastn_js::utils::name_to_js_(p1.as_str());
+    let mut prefix_attached = false;
     let mut wrapper_function = None;
     while let Some(ref remaining) = p2 {
         let (p21, p22) = get_doc_name_and_remaining(remaining);
@@ -22,8 +23,14 @@ pub fn reference_to_js(s: &str) -> String {
                 p1 = format!("{}.get({})", p1, num);
                 wrapper_function = Some("fastn_utils.getListItem");
             }
-            Ok(num) if p22.is_some() => {
-                p1 = format!("{}.get({}).item", p1, num);
+            Ok(num) if p22.is_some() && !prefix_attached => {
+                p1 = format!(
+                    "fastn_utils.getListItem({}{}.get({}))",
+                    prefix.map(|v| format!("{v}.")).unwrap_or_default(),
+                    p1,
+                    num
+                );
+                prefix_attached = true;
             }
             _ => {
                 p1 = format!(
@@ -36,10 +43,12 @@ pub fn reference_to_js(s: &str) -> String {
         }
         p2 = p22;
     }
-    let p1 = format!(
-        "{}{p1}",
-        prefix.map(|v| format!("{v}.")).unwrap_or_default()
-    );
+    if !prefix_attached {
+        p1 = format!(
+            "{}{p1}",
+            prefix.map(|v| format!("{v}.")).unwrap_or_default()
+        );
+    }
     if let Some(func) = wrapper_function {
         return format!("{}({})", func, p1);
     }

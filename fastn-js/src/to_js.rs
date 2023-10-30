@@ -1037,8 +1037,6 @@ impl ExpressionGenerator {
             let chain_dot_operator_count = value.matches('.').count();
             let is_local_argument = value.starts_with(fastn_js::LOCAL_VARIABLE_MAP);
             let is_global_value = value.contains(fastn_js::GLOBAL_VARIABLE_MAP);
-            // println!("START");
-            // dbg!(&is_global_value, &value);
 
             // If value is internal looping index variable or global value or ftd variable
             if value.eq("index") || is_global_value || value.starts_with("ftd") {
@@ -1069,11 +1067,6 @@ impl ExpressionGenerator {
                     global_variable_name =
                         format!("{}.foo__{}", fastn_js::GLOBAL_VARIABLE_MAP, value.as_str());
                 }
-
-                // dbg!(&is_global_value);
-                // dbg!(global_variable_name.as_str());
-                println!("Global variable dot referencing");
-                // dbg!(value.as_str());
                 return format!(
                     "fastn_utils.getter({})",
                     get_chained_getter_string(global_variable_name.as_str())
