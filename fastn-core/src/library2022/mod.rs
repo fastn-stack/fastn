@@ -280,12 +280,13 @@ impl Library2022 {
             "user-details" => processor::user_details::process(value, kind, doc, &self.config),
             "fastn-apps" => processor::apps::process(value, kind, doc, &self.config),
             "is-reader" => processor::user_group::is_reader(value, kind, doc, &self.config).await,
-            "sql" => processor::sql::process(value, kind, doc).await,
+            "sql" => processor::sql::process(value, kind, doc, &self.config).await,
             "package-query" => {
                 processor::sqlite::process(
                     value,
                     kind,
                     doc,
+                    &self.config,
                     &fastn_core::library2022::processor::sql::get_db_config()?,
                 )
                 .await

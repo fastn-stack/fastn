@@ -28,6 +28,7 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
+    config: &fastn_core::Config,
     db_config: &fastn_core::library2022::processor::sql::DatabaseConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = get_p1_data("package-data", &value, doc.name)?;
@@ -40,14 +41,9 @@ pub async fn process(
     // for now they wil be ordered
     // select * from users where
 
-    let query_response = execute_query(
-        db_config.db_url.as_str(),
-        query.as_str(),
-        doc,
-        headers,
-        value.line_number(),
-    )
-    .await;
+    let db_path = config.root.join(&db_config.db_url);
+    let query_response =
+        execute_query(&db_path, query.as_str(), doc, headers, value.line_number()).await;
 
     match query_response {
         Ok(result) => result_to_value(Ok(result), kind, doc, &value, super::sql::STATUS_OK),
@@ -181,12 +177,13 @@ fn resolve_param(
         .map(|v| Box::new(v) as Box<dyn rusqlite::ToSql>)
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 enum State {
     OutsideParam,
     InsideParam,
     InsideStringLiteral,
     InsideEscapeSequence(usize),
+    ConsumeEscapedChar,
     StartTypeHint,
     InsideTypeHint,
     PushParam,
@@ -226,8 +223,15 @@ fn extract_named_parameters(
                 if c == '\\' {
                     state = State::InsideEscapeSequence(escape_count + 1);
                 } else {
-                    state = State::InsideStringLiteral;
+                    state = if escape_count % 2 == 0 {
+                        State::InsideStringLiteral
+                    } else {
+                        State::ConsumeEscapedChar
+                    };
                 }
+            }
+            State::ConsumeEscapedChar => {
+                state = State::InsideStringLiteral;
             }
             State::StartTypeHint => {
                 if c == ':' {
@@ -274,24 +278,23 @@ fn extract_named_parameters(
     }
 
     // Handle the last param if there was no trailing comma or space
-    if let State::PushParam = state {
-        if !param_name.is_empty() {
-            let param_value = resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
-            params.push(Box::new(param_value) as Box<dyn rusqlite::ToSql>);
-        }
+    if state.eq(&State::PushParam) && !param_name.is_empty()  {
+        let param_value = resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
+        params.push(Box::new(param_value) as Box<dyn rusqlite::ToSql>);
     }
 
     Ok(params)
 }
 
 async fn execute_query(
-    database_path: &str,
+    database_path: &camino::Utf8PathBuf,
     query: &str,
     doc: &ftd::interpreter::TDoc<'_>,
     headers: ftd::ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let doc_name = doc.name;
+
     let conn = match rusqlite::Connection::open_with_flags(
         database_path,
         rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
