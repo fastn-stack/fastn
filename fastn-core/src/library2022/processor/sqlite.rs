@@ -28,7 +28,7 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    req_config: &fastn_core::RequestConfig,
+    req_config: &fastn_core::RequestConfig<'_>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = get_p1_data("package-data", &value, doc.name)?;
 
@@ -57,7 +57,7 @@ pub async fn process(
                 value.line_number(),
             );
         }
-        sqlite_database_path = config.root.join(sqlite_database_path.as_path());
+        sqlite_database_path = req_config.config.root.join(sqlite_database_path.as_path());
     }
 
     // need the query params

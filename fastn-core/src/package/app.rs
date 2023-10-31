@@ -94,7 +94,10 @@ impl AppTemp {
 }
 
 // Takes the path /-/<package-name>/<remaining>/ or /mount-point/<remaining>/
-pub async fn can_read(config: &fastn_core::RequestConfig, path: &str) -> fastn_core::Result<bool> {
+pub async fn can_read(
+    config: &fastn_core::RequestConfig<'_>,
+    path: &str,
+) -> fastn_core::Result<bool> {
     use itertools::Itertools;
     // first get the app
     let readers_groups = if let Some((_, _, _, Some(app))) = config

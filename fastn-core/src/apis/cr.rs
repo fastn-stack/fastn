@@ -21,10 +21,10 @@ pub async fn create_cr(
 }
 
 async fn create_cr_worker(
-    req: &fastn_core::http::Request,
+    _req: &fastn_core::http::Request,
     cr_request: CreateCRRequest,
 ) -> fastn_core::Result<usize> {
-    let config = fastn_core::Config::read(None, false, Some(req)).await?;
+    let config = fastn_core::Config::read(None, false).await?;
     let cr_number = config.extract_cr_number().await?;
     let default_title = format!("CR#{cr_number}");
     let cr_meta = fastn_core::cr::CRMeta {

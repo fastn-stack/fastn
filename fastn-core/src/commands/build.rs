@@ -663,7 +663,7 @@ async fn handle_file_(
             return Ok(());
         }
         fastn_core::File::Image(main_doc) => {
-            process_static(main_doc, &config.config.root, &config.package).await?;
+            process_static(main_doc, &config.config.root, &config.config.package).await?;
         }
         fastn_core::File::Code(doc) => {
             process_static(
@@ -753,7 +753,7 @@ async fn get_documents_for_current_package(
     let mut documents = std::collections::BTreeMap::from_iter(
         config
             .config
-            .get_files(&config.package)
+            .get_files(&config.config.package)
             .await?
             .into_iter()
             .map(|v| (v.get_id().to_string(), v)),
@@ -766,12 +766,13 @@ async fn get_documents_for_current_package(
         for (doc_path, _, url) in get_all_locations {
             let file = {
                 let package_name = if let Some(ref url) = url {
-                    new_config.find_package_by_id(url).await?.1.name
+                    new_config.config.find_package_by_id(url).await?.1.name
                 } else {
-                    config.package.name.to_string()
+                    config.config.package.name.to_string()
                 };
                 let mut file =
-                    fastn_core::get_file(package_name, doc_path, config.root.as_path()).await?;
+                    fastn_core::get_file(package_name, doc_path, config.config.root.as_path())
+                        .await?;
                 if let Some(ref url) = url {
                     let url = url.replace("/index.html", "");
                     let extension = if matches!(file, fastn_core::File::Markdown(_)) {
@@ -791,7 +792,7 @@ async fn get_documents_for_current_package(
             .config
             .all_packages
             .borrow_mut()
-            .extend(new_config.all_packages.into_inner());
+            .extend(new_config.config.all_packages.into_inner());
         documents.extend(files);
     }
 

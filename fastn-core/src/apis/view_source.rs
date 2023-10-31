@@ -21,9 +21,10 @@ async fn handle_view_source(
     req: &fastn_core::http::Request,
     path: &str,
 ) -> fastn_core::Result<Vec<u8>> {
-    let mut config = fastn_core::Config::read(None, false, Some(req)).await?;
+    let mut config = fastn_core::Config::read(None, false).await?;
+    let mut req_config = fastn_core::RequestConfig::new(&config, &req);
     let file_name = config.get_file_path_and_resolve(path).await?;
-    let file = config.get_file_and_package_by_id(path).await?;
+    let file = req_config.get_file_and_package_by_id(path).await?;
 
     match file {
         fastn_core::File::Ftd(_) | fastn_core::File::Markdown(_) | fastn_core::File::Code(_) => {
@@ -37,7 +38,7 @@ async fn handle_view_source(
                 package_name: config.package.name.clone(),
             };
             fastn_core::package::package_doc::read_ftd(
-                &mut config,
+                &mut req_config,
                 &main_document,
                 "/",
                 false,

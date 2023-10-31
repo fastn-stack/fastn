@@ -308,13 +308,13 @@ pub(crate) async fn do_sync(
 }
 
 pub(crate) async fn sync_worker(
-    req: &fastn_core::http::Request,
+    _req: &fastn_core::http::Request,
     request: SyncRequest,
 ) -> fastn_core::Result<SyncResponse> {
     use itertools::Itertools;
 
     // TODO: Need to call at once only
-    let config = fastn_core::Config::read(None, false, Some(req)).await?;
+    let config = fastn_core::Config::read(None, false).await?;
     let mut synced_files = do_sync(&config, request.files.as_slice()).await?;
     let remote_history = config.get_history().await?;
     let remote_manifest =

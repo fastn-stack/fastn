@@ -5,7 +5,7 @@ pub fn document_full_id(
     let full_document_id = req_config.doc_id().unwrap_or_else(|| {
         doc.name
             .to_string()
-            .replace(config.package.name.as_str(), "")
+            .replace(req_config.config.package.name.as_str(), "")
     });
 
     if full_document_id.trim_matches('/').is_empty() {

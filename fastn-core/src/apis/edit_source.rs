@@ -25,7 +25,7 @@ async fn handle_view_source(
     let mut req_config = fastn_core::RequestConfig::new(&config, &req);
 
     let file_name = config.get_file_path_and_resolve(path).await?;
-    let file = config.get_file_and_package_by_id(path).await?;
+    let file = req_config.get_file_and_package_by_id(path).await?;
 
     match file {
         fastn_core::File::Ftd(_) | fastn_core::File::Markdown(_) | fastn_core::File::Code(_) => {

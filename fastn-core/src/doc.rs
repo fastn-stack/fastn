@@ -635,7 +635,7 @@ pub async fn resolve_foreign_variable2(
     async fn get_assets_value(
         package: &fastn_core::Package,
         files: &str,
-        lib: &mut fastn_core::Library2,
+        lib: &mut fastn_core::Library2<'_>,
         base_url: &str,
         download_assets: bool, // true: in case of `fastn build`
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {

@@ -2,7 +2,7 @@ pub async fn fetch_files(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    req_config: &fastn_core::RequestConfig,
+    req_config: &fastn_core::RequestConfig<'_>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     if !kind.is_string() {
         return ftd::interpreter::utils::e2(

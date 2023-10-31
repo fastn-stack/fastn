@@ -19,7 +19,7 @@ pub struct Library<'a> {
     pub base_url: String,
 }
 
-impl Library {
+impl Library<'_> {
     pub async fn get_with_result(
         &self,
         name: &str,
@@ -46,7 +46,7 @@ impl Library {
         async fn get_for_package(
             name: &str,
             packages: &mut Vec<fastn_core::Package>,
-            lib: &fastn_core::Library,
+            lib: &fastn_core::Library<'_>,
         ) -> Option<String> {
             let package = packages.last()?;
             if name.starts_with(package.name.as_str()) {
@@ -120,7 +120,7 @@ impl Library {
         async fn get_data_from_package(
             name: &str,
             package: &fastn_core::Package,
-            lib: &Library,
+            lib: &Library<'_>,
         ) -> Option<String> {
             let path = lib.config.config.get_root_for_package(package);
             fastn_core::Config::download_required_file(&lib.config.config.root, name, package)
@@ -158,7 +158,7 @@ pub struct Library2<'a> {
     pub packages_under_process: Vec<String>,
 }
 
-impl Library2 {
+impl Library2<'_> {
     pub(crate) async fn push_package_under_process(
         &mut self,
         package: &fastn_core::Package,
@@ -236,7 +236,7 @@ impl Library2 {
 
         return get_for_package(format!("{}/", name.trim_end_matches('/')).as_str(), self).await;
 
-        async fn get_for_package(name: &str, lib: &mut fastn_core::Library2) -> Option<String> {
+        async fn get_for_package(name: &str, lib: &mut fastn_core::Library2<'_>) -> Option<String> {
             let package = lib.get_current_package().ok()?;
             if name.starts_with(package.name.as_str()) {
                 if let Some(r) = get_data_from_package(name, &package, lib).await {
@@ -291,7 +291,7 @@ impl Library2 {
         async fn get_data_from_package(
             name: &str,
             package: &fastn_core::Package,
-            lib: &mut Library2,
+            lib: &mut Library2<'_>,
         ) -> Option<String> {
             lib.push_package_under_process(package).await.ok()?;
             let packages = lib.config.config.all_packages.borrow();

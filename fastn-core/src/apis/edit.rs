@@ -28,7 +28,7 @@ pub async fn edit(
     req: &fastn_core::http::Request,
     req_data: EditRequest,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let mut config = match fastn_core::Config::read(None, false).await {
+    let config = match fastn_core::Config::read(None, false).await {
         Ok(config) => config,
         Err(err) => return fastn_core::http::api_error(err.to_string()),
     };
@@ -199,10 +199,10 @@ pub struct RevertRequest {
 }
 
 pub async fn revert(
-    req: &fastn_core::http::Request,
+    _req: &fastn_core::http::Request,
     rev: RevertRequest,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let config = match fastn_core::Config::read(None, false, Some(req)).await {
+    let config = match fastn_core::Config::read(None, false).await {
         Ok(config) => config,
         Err(err) => return fastn_core::http::api_error(err.to_string()),
     };

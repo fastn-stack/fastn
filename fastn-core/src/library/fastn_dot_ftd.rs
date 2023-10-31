@@ -1,6 +1,6 @@
 use crate::utils::HasElements;
 
-async fn i18n_data(lib: &fastn_core::Library) -> String {
+async fn i18n_data(lib: &fastn_core::Library<'_>) -> String {
     let lang = match lib.config.config.package.language {
         Some(ref lang) => {
             realm_lang::Language::from_2_letter_code(lang).unwrap_or(realm_lang::Language::English)
@@ -243,7 +243,7 @@ fn construct_fastn_cli_variables(_lib: &fastn_core::Library) -> String {
     )
 }
 
-pub(crate) async fn get2022_(lib: &fastn_core::Library) -> String {
+pub(crate) async fn get2022_(lib: &fastn_core::Library<'_>) -> String {
     #[allow(clippy::format_in_format_args)]
     let mut fastn_base = format!(
         indoc::indoc! {"
@@ -299,7 +299,7 @@ pub(crate) async fn get2022_(lib: &fastn_core::Library) -> String {
     fastn_base
 }
 
-pub(crate) async fn get(lib: &fastn_core::Library) -> String {
+pub(crate) async fn get(lib: &fastn_core::Library<'_>) -> String {
     #[allow(clippy::format_in_format_args)]
     let mut fastn_base = format!(
         indoc::indoc! {"
@@ -812,7 +812,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
     fastn_base
 }
 
-pub(crate) async fn get2(lib: &fastn_core::Library2) -> String {
+pub(crate) async fn get2(lib: &fastn_core::Library2<'_>) -> String {
     let lib = fastn_core::Library {
         config: lib.config.clone(),
         markdown: lib.markdown.clone(),
@@ -824,7 +824,7 @@ pub(crate) async fn get2(lib: &fastn_core::Library2) -> String {
     get(&lib).await
 }
 
-pub(crate) async fn get2022(lib: &fastn_core::Library2022) -> String {
+pub(crate) async fn get2022(lib: &fastn_core::Library2022<'_>) -> String {
     let lib = fastn_core::Library {
         config: lib.config.clone(),
         markdown: lib.markdown.clone(),

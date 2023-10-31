@@ -2,7 +2,7 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    req_config: &mut fastn_core::RequestConfig,
+    req_config: &mut fastn_core::RequestConfig<'_>,
     document_id: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     // TODO: document key should be optional

@@ -2,7 +2,7 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    req_config: &fastn_core::RequestConfig,
+    req_config: &fastn_core::RequestConfig<'_>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, line_number) = if let Ok(val) = value.get_record(doc.name) {
         (val.2.to_owned(), val.5.to_owned())

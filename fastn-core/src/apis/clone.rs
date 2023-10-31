@@ -15,10 +15,10 @@ pub async fn clone(
     }
 }
 
-async fn clone_worker(req: fastn_core::http::Request) -> fastn_core::Result<CloneResponse> {
+async fn clone_worker(_req: fastn_core::http::Request) -> fastn_core::Result<CloneResponse> {
     use itertools::Itertools;
 
-    let config = fastn_core::Config::read(None, false, Some(&req)).await?;
+    let config = fastn_core::Config::read(None, false).await?;
     let all_files = config
         .get_all_file_path(&config.package, Default::default())?
         .into_iter()

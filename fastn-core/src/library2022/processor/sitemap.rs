@@ -12,7 +12,7 @@ pub fn process(
             .unwrap_or_else(|| {
                 doc.name
                     .to_string()
-                    .replace(config.package.name.as_str(), "")
+                    .replace(req_config.config.package.name.as_str(), "")
             })
             .trim()
             .replace(std::path::MAIN_SEPARATOR, "/");
@@ -34,7 +34,7 @@ pub fn full_sitemap_process(
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    if let Some(ref sitemap) = config.package.sitemap {
+    if let Some(ref sitemap) = req_config.config.package.sitemap {
         let doc_id = req_config
             .current_document
             .clone()
@@ -42,7 +42,7 @@ pub fn full_sitemap_process(
             .unwrap_or_else(|| {
                 doc.name
                     .to_string()
-                    .replace(config.package.name.as_str(), "")
+                    .replace(req_config.config.package.name.as_str(), "")
             })
             .trim()
             .replace(std::path::MAIN_SEPARATOR, "/");

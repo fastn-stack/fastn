@@ -21,7 +21,7 @@ pub fn process_readers(
 
     let readers = match req_config.config.package.sitemap.as_ref() {
         Some(s) => s
-            .readers(document_name.as_str(), &config.package.groups)
+            .readers(document_name.as_str(), &req_config.config.package.groups)
             .0
             .into_iter()
             .map(|g| g.to_group_compat())
@@ -55,7 +55,7 @@ pub fn process_writers(
     let document_name = req_config.document_name_with_default(document.as_str());
     let writers = match req_config.config.package.sitemap.as_ref() {
         Some(s) => s
-            .writers(document_name.as_str(), &config.package.groups)
+            .writers(document_name.as_str(), &req_config.config.package.groups)
             .into_iter()
             .map(|g| g.to_group_compat())
             .collect_vec(),
@@ -114,7 +114,7 @@ pub fn document_suffix(
     let doc_id = req_config.doc_id().unwrap_or_else(|| {
         doc.name
             .to_string()
-            .replace(config.package.name.as_str(), "")
+            .replace(req_config.config.package.name.as_str(), "")
     });
 
     let value = doc_id
@@ -136,12 +136,12 @@ pub async fn document_name<'a>(
     value: ftd::ast::VariableValue,
     _kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'a>,
-    req_config: &fastn_core::RequestConfig,
+    req_config: &fastn_core::RequestConfig<'_>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let doc_id = req_config.doc_id().unwrap_or_else(|| {
         doc.name
             .to_string()
-            .replace(config.package.name.as_str(), "")
+            .replace(req_config.config.package.name.as_str(), "")
     });
 
     let file_path = req_config

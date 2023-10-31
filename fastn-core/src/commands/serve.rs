@@ -129,7 +129,8 @@ async fn serve_cr_file(
     cr_number: usize,
 ) -> fastn_core::http::Response {
     let _lock = LOCK.read().await;
-    let f = match config
+    let f = match req_config
+        .config
         .get_file_and_package_by_cr_id(path.as_str(), cr_number)
         .await
     {
@@ -153,11 +154,11 @@ async fn serve_cr_file(
         }
     }
 
-    config.current_document = Some(f.get_id().to_string());
+    req_config.current_document = Some(f.get_id().to_string());
     match f {
         fastn_core::File::Ftd(main_document) => {
             match fastn_core::package::package_doc::read_ftd(
-                config,
+                req_config,
                 &main_document,
                 "/",
                 false,
@@ -482,10 +483,10 @@ pub async fn revert(
 }
 
 pub async fn editor_sync(
-    req: fastn_core::http::Request,
+    _req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.write().await;
-    fastn_core::apis::edit::sync(req).await
+    fastn_core::apis::edit::sync().await
 }
 
 pub async fn create_cr(
@@ -650,11 +651,11 @@ async fn route(
     let config = fastn_core::Config::read(None, false)
         .await
         .unwrap()
-        .add_edition(edition)?
-        .add_external_js(external_js)
-        .add_inline_js(inline_js)
-        .add_external_css(external_css)
-        .add_inline_css(inline_css);
+        .add_edition(app_data.edition.clone())?
+        .add_external_js(app_data.external_js.clone())
+        .add_inline_js(app_data.inline_js.clone())
+        .add_external_css(app_data.external_css.clone())
+        .add_inline_css(app_data.inline_css.clone());
 
     actual_route(&config, req, body, app_data).await
 }

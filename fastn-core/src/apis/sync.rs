@@ -75,13 +75,13 @@ pub async fn sync(
 }
 
 pub(crate) async fn sync_worker(
-    req: &fastn_core::http::Request,
+    _req: &fastn_core::http::Request,
     request: SyncRequest,
 ) -> fastn_core::Result<SyncResponse> {
     use itertools::Itertools;
 
     // TODO: Need to call at once only
-    let config = fastn_core::Config::read(None, false, Some(req)).await?;
+    let config = fastn_core::Config::read(None, false).await?;
     let mut snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
     let client_snapshots = fastn_core::snapshot::resolve_snapshots(&request.latest_ftd).await?;
     // let latest_ftd = tokio::fs::read_to_string(config.history_dir().join(".latest.ftd")).await?;
