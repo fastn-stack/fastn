@@ -691,7 +691,8 @@ skip: true
   document: backend/ftd-redirect.ftd
 - Using `fastn` With Django Or Other Backends: /django/
   document: backend/django.ftd
-- Enviroment Variables: /backend/env-vars/
+- Enviroment Variables: /env/
+  document: backend/env-vars
 
 ## Deploy: /github-pages/
   document: author/how-to/github-pages.ftd
