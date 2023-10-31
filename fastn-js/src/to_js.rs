@@ -1062,7 +1062,7 @@ impl ExpressionGenerator {
             // If dot chaining on global variable
             // like person.name, places.0
             if chain_dot_operator_count > 0 {
-                let mut global_variable_name =
+                let global_variable_name =
                     format!("{}.foo__{}", fastn_js::GLOBAL_VARIABLE_MAP, value.as_str());
                 return format!(
                     "fastn_utils.getter({})",

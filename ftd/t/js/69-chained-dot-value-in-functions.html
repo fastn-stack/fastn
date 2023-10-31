@@ -16,7 +16,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3">This person named Sam Wan has first visited Bangalore on 27th October</div><div data-id="4">Person Sam Wan lives at Sam City in Some House. His contact number is +1234-56789</div><div data-id="5">First Person is Sam Ather lives at Sam Ather City at Some Other House. His contact number is +987-654321</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3">The person named Sam Wan has first visited Bangalore on 27th October</div><div data-id="4">Person Sam Wan lives at Sam City in Some House. His contact number is +1234-56789</div><div data-id="5">First person is Sam Ather lives at Sam Ather City at Some Other House. His contact number is +987-654321</div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
     </style>
@@ -59,7 +59,7 @@ let foo__some_details = function (args) {
     let __args__ = fastn_utils.getArgs({
       places: fastn.mutableList([]),
     }, args);
-    return ("This person named " + fastn_utils.getter(fastn_utils.getterByKey(__args__.person, "name")) + " has first visited " + fastn_utils.getter(fastn_utils.getterByKey(__args__.places, "0")) + " on " + fastn_utils.getter(__args__.date));
+    return ("The person named " + fastn_utils.getter(fastn_utils.getterByKey(__args__.person, "name")) + " has first visited " + fastn_utils.getter(fastn_utils.getterByKey(__args__.places, "0")) + " on " + fastn_utils.getter(__args__.date));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -99,7 +99,7 @@ let foo__first_person_details = function (args)
     let __args__ = fastn_utils.getArgs({
       people: fastn.mutableList([]),
     }, args);
-    return ("First Person is " + fastn_utils.getter(fastn_utils.getterByKey(fastn_utils.getterByKey(__args__.people, "0"), "name")) + " lives at " + fastn_utils.getter(fastn_utils.getterByKey(fastn_utils.getterByKey(fastn_utils.getterByKey(__args__.people, "0"), "meta"), "address")) + ". His contact number is " + fastn_utils.getter(fastn_utils.getterByKey(fastn_utils.getterByKey(fastn_utils.getterByKey(__args__.people, "0"), "meta"), "phone_number")));
+    return ("First person is " + fastn_utils.getter(fastn_utils.getterByKey(fastn_utils.getterByKey(__args__.people, "0"), "name")) + " lives at " + fastn_utils.getter(fastn_utils.getterByKey(fastn_utils.getterByKey(fastn_utils.getterByKey(__args__.people, "0"), "meta"), "address")) + ". His contact number is " + fastn_utils.getter(fastn_utils.getterByKey(fastn_utils.getterByKey(fastn_utils.getterByKey(__args__.people, "0"), "meta"), "phone_number")));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

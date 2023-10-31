@@ -21,7 +21,7 @@ pub fn ssr_str(js: &str, doc_name: &str) -> String {
             .unwrap();
         context
             .eval_as::<String>(js.as_str())
-            .map_err(|e| panic!("SSR Error: {}, doc_id: {}", e.to_string(), doc_name))
+            .map_err(|e| panic!("SSR Error: {}, doc_id: {}", e, doc_name))
             .unwrap()
     }
 }
