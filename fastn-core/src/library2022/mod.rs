@@ -15,7 +15,7 @@ impl KeyValueData {
 
 #[derive(Debug)]
 pub struct Library2022<'a> {
-    pub config: fastn_core::RequestConfig<'a>,
+    pub config: &'a mut fastn_core::RequestConfig<'a>,
     /// If the current module being parsed is a markdown file, `.markdown` contains the name and
     /// content of that file
     pub markdown: Option<(String, String)>,
