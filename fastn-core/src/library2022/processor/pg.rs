@@ -1,9 +1,9 @@
 async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
     let mut cfg = deadpool_postgres::Config::new();
-    cfg.libpq_style_connection_string = match std::env::var("FASTN_PG_URL") {
+    cfg.libpq_style_connection_string = match std::env::var("FASTN_DB_URL") {
         Ok(v) => Some(v),
         Err(_) => {
-            fastn_core::warning!("FASTN_PG_URL is not set");
+            fastn_core::warning!("FASTN_DB_URL is not set");
             return Err(deadpool_postgres::CreatePoolError::Config(
                 deadpool_postgres::ConfigError::ConnectionStringInvalid,
             ));

@@ -1,3 +1,43 @@
+#[derive(Debug)]
+pub struct DatabaseConfig {
+    pub db_url: String,
+    pub db_type: String,
+}
+
+pub(crate) fn get_db_config() -> ftd::interpreter::Result<DatabaseConfig> {
+    let db_url = std::env::var("FASTN_DB_URL").expect("FASTN_DB_URL is not set");
+
+    if let Some(db_url) = db_url.strip_prefix("sqlite:///") {
+        Ok(DatabaseConfig {
+            db_url: db_url.to_string(),
+            db_type: "sqlite".to_string(),
+        })
+    } else {
+        let url = url::Url::parse(&db_url).expect("Invalid DB Url");
+        let db_type = url.scheme().to_string();
+        Ok(DatabaseConfig { db_url, db_type })
+    }
+}
+
+pub async fn process(
+    value: ftd::ast::VariableValue,
+    kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc<'_>,
+    config: &fastn_core::Config,
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    let db_config = fastn_core::library2022::processor::sql::get_db_config()?;
+    let db_type = db_config.db_type.as_str();
+
+    match db_type {
+        "postgres" => Ok(fastn_core::library2022::processor::pg::process(value, kind, doc).await?),
+        "sqlite" => Ok(fastn_core::library2022::processor::sqlite::process(
+            value, kind, doc, config, &db_config,
+        )
+        .await?),
+        _ => unimplemented!("Database currently not supported."),
+    }
+}
+
 pub const STATUS_OK: usize = 0;
 pub const STATUS_ERROR: usize = 1;
 const BACKSLASH: char = '\\';
