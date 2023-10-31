@@ -645,15 +645,13 @@ pub mod processor {
         req_config: &fastn_core::RequestConfig<'_>,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let doc_id = fastn_core::library::document::document_full_id(req_config, doc)?;
-        let is_reader = req_config
-            .config
-            .can_read(req_config.request, &doc_id, false)
-            .await
-            .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
+        let is_reader = req_config.can_read(&doc_id, false).await.map_err(|e| {
+            ftd::ftd2021::p1::Error::ParseError {
                 message: e.to_string(),
                 doc_id,
                 line_number: section.line_number,
-            })?;
+            }
+        })?;
 
         Ok(ftd::Value::Boolean { value: is_reader })
     }
