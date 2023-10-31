@@ -523,6 +523,7 @@ pub(crate) async fn read_ftd_2023(
     let ssr_body = fastn_js::ssr_with_js_string(
         &config.package.name,
         format!("{js_ftd_script}\n{js_document_script}").as_str(),
+        main.id.as_str(),
     );
 
     all_packages.extend(lib.config.all_packages.into_inner());

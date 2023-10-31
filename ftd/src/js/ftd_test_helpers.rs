@@ -126,6 +126,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
             let ssr_body = fastn_js::ssr_with_js_string(
                 "foo",
                 format!("{js_ftd_script}\n{js_document_script}").as_str(),
+                i.name.as_str(),
             );
 
             ftd::ftd_js_html()

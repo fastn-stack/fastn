@@ -1044,7 +1044,7 @@ impl ExpressionGenerator {
             }
 
             // When there is dot chaining on local argument values
-            // like person.name, person.meta.address
+            // like __args__.person.name, __args__.person.meta.address
             if is_local_argument {
                 if chain_dot_operator_count > 1 {
                     return format!(
@@ -1054,19 +1054,16 @@ impl ExpressionGenerator {
                 }
 
                 // If the value is local argument variable with no dot chaining
-                if chain_dot_operator_count == 1 {
-                    return format!("fastn_utils.getter({})", value);
-                }
+                // like __args__.name, __args__.address
+                return format!("fastn_utils.getter({})", value);
             }
 
             // Otherwise consider the value as global variable
             // If dot chaining on global variable
+            // like person.name, places.0
             if chain_dot_operator_count > 0 {
-                let mut global_variable_name = value.clone();
-                if !is_global_value {
-                    global_variable_name =
-                        format!("{}.foo__{}", fastn_js::GLOBAL_VARIABLE_MAP, value.as_str());
-                }
+                let mut global_variable_name =
+                    format!("{}.foo__{}", fastn_js::GLOBAL_VARIABLE_MAP, value.as_str());
                 return format!(
                     "fastn_utils.getter({})",
                     get_chained_getter_string(global_variable_name.as_str())
@@ -1074,15 +1071,12 @@ impl ExpressionGenerator {
             }
 
             // If no dot chaining on global variable
-            if !is_global_value {
-                return format!(
-                    "fastn_utils.getter({}.foo__{})",
-                    fastn_js::GLOBAL_VARIABLE_MAP,
-                    value
-                );
-            }
-
-            format!("fastn_utils.getter({})", value)
+            // like x, y (globally defined)
+            format!(
+                "fastn_utils.getter({}.foo__{})",
+                fastn_js::GLOBAL_VARIABLE_MAP,
+                value
+            )
         } else {
             value
         }

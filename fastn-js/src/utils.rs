@@ -16,6 +16,7 @@ pub fn reference_to_js(s: &str) -> String {
     p1 = fastn_js::utils::name_to_js_(p1.as_str());
     let mut prefix_attached = false;
     let mut wrapper_function = None;
+    let is_asset_reference = p1.contains("assets");
     while let Some(ref remaining) = p2 {
         let (p21, p22) = get_doc_name_and_remaining(remaining);
         match p21.parse::<i64>() {
@@ -23,7 +24,7 @@ pub fn reference_to_js(s: &str) -> String {
                 p1 = format!("{}.get({})", p1, num);
                 wrapper_function = Some("fastn_utils.getListItem");
             }
-            Ok(num) if p22.is_some() && !prefix_attached => {
+            Ok(num) if p22.is_some() && !prefix_attached && !is_asset_reference => {
                 p1 = format!(
                     "fastn_utils.getListItem({}{}.get({}))",
                     prefix.map(|v| format!("{v}.")).unwrap_or_default(),
