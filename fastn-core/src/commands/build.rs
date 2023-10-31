@@ -208,8 +208,8 @@ fn is_virtual_dep(path: &str) -> bool {
         || path.ends_with("/-/assets.ftd")
 }
 
-async fn handle_dependency_file(
-    config: &mut fastn_core::RequestConfig<'_>,
+async fn handle_dependency_file<'a>(
+    config: &'a mut fastn_core::RequestConfig<'a>,
     cache: &mut cache::Cache,
     documents: &std::collections::BTreeMap<String, fastn_core::File>,
     base_url: &str,
@@ -289,8 +289,8 @@ fn remove_deleted_documents(
 }
 
 #[tracing::instrument(skip(config, documents))]
-async fn incremental_build(
-    config: &mut fastn_core::RequestConfig<'_>,
+async fn incremental_build<'a>(
+    config: &'a mut fastn_core::RequestConfig<'a>,
     documents: &std::collections::BTreeMap<String, fastn_core::File>,
     base_url: &str,
     ignore_failed: bool,
@@ -423,9 +423,9 @@ async fn incremental_build(
 }
 
 #[tracing::instrument(skip(config, documents))]
-async fn handle_only_id(
+async fn handle_only_id<'a>(
     id: &str,
-    config: &mut fastn_core::RequestConfig<'_>,
+    config: &'a mut fastn_core::RequestConfig<'a>,
     base_url: &str,
     ignore_failed: bool,
     test: bool,
@@ -444,9 +444,9 @@ async fn handle_only_id(
     )))
 }
 
-async fn handle_file(
+async fn handle_file<'a>(
     document: &fastn_core::File,
-    config: &mut fastn_core::RequestConfig<'_>,
+    config: &'a mut fastn_core::RequestConfig<'a>,
     base_url: &str,
     ignore_failed: bool,
     test: bool,
@@ -455,7 +455,7 @@ async fn handle_file(
 ) -> fastn_core::Result<()> {
     let start = std::time::Instant::now();
     print!("Processing {} ... ", document.get_id_with_package());
-
+    let package_name = config.config.package.name.to_string();
     let process_status = handle_file_(
         document,
         config,
@@ -468,23 +468,13 @@ async fn handle_file(
     .await;
     if process_status.is_ok() {
         fastn_core::utils::print_end(
-            format!(
-                "Processed {}/{}",
-                config.config.package.name.as_str(),
-                document.get_id()
-            )
-            .as_str(),
+            format!("Processed {}/{}", package_name.as_str(), document.get_id()).as_str(),
             start,
         );
     }
     if process_status.is_err() {
         fastn_core::utils::print_error(
-            format!(
-                "Failed {}/{}",
-                config.config.package.name.as_str(),
-                document.get_id()
-            )
-            .as_str(),
+            format!("Failed {}/{}", package_name.as_str(), document.get_id()).as_str(),
             start,
         );
         return process_status;
@@ -582,9 +572,9 @@ fn remove_extension(id: &str) -> String {
 }
 
 #[tracing::instrument(skip(document, config, cache))]
-async fn handle_file_(
+async fn handle_file_<'a>(
     document: &fastn_core::File,
-    config: &mut fastn_core::RequestConfig<'_>,
+    config: &'a mut fastn_core::RequestConfig<'a>,
     base_url: &str,
     ignore_failed: bool,
     test: bool,
@@ -760,13 +750,12 @@ async fn get_documents_for_current_package(
     );
 
     if let Some(ref sitemap) = config.config.package.sitemap {
-        let new_config = config.clone();
         let get_all_locations = sitemap.get_all_locations();
         let mut files: std::collections::HashMap<String, fastn_core::File> = Default::default();
         for (doc_path, _, url) in get_all_locations {
             let file = {
                 let package_name = if let Some(ref url) = url {
-                    new_config.config.find_package_by_id(url).await?.1.name
+                    config.config.find_package_by_id(url).await?.1.name
                 } else {
                     config.config.package.name.to_string()
                 };
@@ -788,11 +777,6 @@ async fn get_documents_for_current_package(
             files.insert(file.get_id().to_string(), file);
         }
 
-        config
-            .config
-            .all_packages
-            .borrow_mut()
-            .extend(new_config.config.all_packages.into_inner());
         documents.extend(files);
     }
 
