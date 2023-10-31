@@ -4,11 +4,23 @@
 
 Environment variables are automatically loaded from your `.env` file.
 
--- ds.h3: Automatic Environment Variables Loading with `.env` Files
+-- ds.h3: Automatic Environment Variables Loading with an `.env` File
 
 By default, the fastn CLI is designed to automatically load environment
 variables from an `.env` file located in the current working directory (CWD).
-However, please note that this automatic loading will not function if your
+
+Here's an example file:
+
+-- ds.code: .env
+lang: sh
+
+FASTN_CHECK_FOR_UPDATES=false
+FASTN_PG_URL=postgres://user:password@172.17.0.1:5432/db_name
+FASTN_GITHUB_CLIENT_ID=225b11ee49abca378769
+
+-- ds.markdown:
+
+Note that this automatic loading will not function if your
 `.env` file is committed to a **Git repository**. In such cases, the CLI will
 fail issuing a warning message.
 
@@ -20,7 +32,6 @@ environment variable.
 lang: sh
 
 FASTN_DANGER_ACCEPT_CHECKED_IN_ENV=true fastn serve
-
 
 -- end: ds.page
 
