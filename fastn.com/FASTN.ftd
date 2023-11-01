@@ -692,7 +692,7 @@ skip: true
 - Using `fastn` With Django Or Other Backends: /django/
   document: backend/django.ftd
 - Enviroment Variables: /env/
-  document: backend/env-vars
+  document: backend/env-vars.ftd
 
 ## Deploy: /github-pages/
   document: author/how-to/github-pages.ftd
