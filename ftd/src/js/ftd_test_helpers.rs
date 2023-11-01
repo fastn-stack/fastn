@@ -145,7 +145,6 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                         if manual {
                             format!(
                                 r#"
-                            <script src="../../markdown.js"></script>
                             <script src="../../prism/prism.js"></script>
                             <script src="../../prism/prism-line-highlight.js"></script>
                             <script src="../../prism/prism-line-numbers.js"></script>

@@ -283,26 +283,28 @@ impl Library2022<'_, '_> {
             "document-name" => {
                 processor::document::document_name(value, kind, doc, self.config).await
             }
-            "fetch-file" => {
-                processor::fetch_file::fetch_files(value, kind, doc, self.config).await
-            }
+            "fetch-file" => processor::fetch_file::fetch_files(value, kind, doc, self.config).await,
             "user-details" => processor::user_details::process(value, kind, doc, self.config),
             "fastn-apps" => processor::apps::process(value, kind, doc, self.config),
             "is-reader" => processor::user_group::is_reader(value, kind, doc, self.config).await,
-            "package-query" => processor::sqlite::process(value, kind, doc, self.config).await,
+            "sql" => processor::sql::process(value, kind, doc, self.config).await,
+            "package-query" => {
+                processor::sqlite::process(
+                    value,
+                    kind,
+                    doc,
+                    self.config,
+                    &fastn_core::library2022::processor::sql::get_db_config()?,
+                )
+                .await
+            }
             "pg" => processor::pg::process(value, kind, doc).await,
             "package-tree" => {
                 processor::package_tree::process(value, kind, doc, self.config.config).await
             }
             "query" => {
-                processor::query::process(
-                    value,
-                    kind,
-                    doc,
-                    self.config,
-                    self.document_id.as_str(),
-                )
-                .await
+                processor::query::process(value, kind, doc, self.config, self.document_id.as_str())
+                    .await
             }
             t => Err(ftd::interpreter::Error::ParseError {
                 doc_id: self.document_id.to_string(),

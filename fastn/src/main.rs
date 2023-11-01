@@ -39,15 +39,7 @@ async fn async_main() -> Result<(), Error> {
         check_for_update_cmd(&matches)
     )?;
 
-    match std::env::var("FASTN_CHECK_FOR_UPDATES") {
-        Ok(val) => {
-            if val != "false" && !matches.get_flag("check-for-updates") {
-                check_for_update(false).await?;
-            }
-            Ok(())
-        }
-        Err(_) => Ok(()),
-    }
+    Ok(())
 }
 
 async fn cloud_commands(matches: &clap::ArgMatches) -> Result<bool, commands::cloud::Error> {
@@ -60,6 +52,10 @@ async fn cloud_commands(matches: &clap::ArgMatches) -> Result<bool, commands::cl
 async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
     use colored::Colorize;
     use fastn_core::utils::ValueOf;
+
+    if matches.subcommand_name().is_none() {
+        return Ok(());
+    }
 
     match matches.subcommand() {
         Some((fastn_core::commands::stop_tracking::COMMAND, matches)) => {
@@ -262,16 +258,23 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::post_build_check(&config).await;
     }
 
-    if matches.get_flag("check-for-updates") {
-        return check_for_update(true).await;
-    }
-
-    unreachable!("No subcommand matched");
+    Ok(())
 }
 
 async fn check_for_update_cmd(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
-    if matches.get_flag("check-for-updates") {
-        check_for_update(false).await?;
+    let env_var_set = {
+        if let Ok(val) = std::env::var("FASTN_CHECK_FOR_UPDATES") {
+            val != "false"
+        } else {
+            false
+        }
+    };
+
+    let flag = matches.get_flag("check-for-updates");
+
+    // if the env var is set or the -c flag is passed then check for updates
+    if flag || env_var_set {
+        check_for_update(flag).await?;
     }
 
     Ok(())
@@ -301,6 +304,7 @@ async fn check_for_update(report: bool) -> fastn_core::Result<()> {
                 current_version, release.tag_name
             );
     } else if report {
+        // log only when -c is passed
         println!("You are using the latest release of fastn.");
     }
 

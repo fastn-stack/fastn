@@ -28,37 +28,10 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    req_config: &fastn_core::RequestConfig<'_>,
+    config: &fastn_core::RequestConfig<'_>,
+    db_config: &fastn_core::library2022::processor::sql::DatabaseConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = get_p1_data("package-data", &value, doc.name)?;
-
-    let sqlite_database =
-        match headers.get_optional_string_by_key("db", doc.name, value.line_number())? {
-            Some(k) => k,
-            None => {
-                return ftd::interpreter::utils::e2(
-                    "`db` is not specified".to_string(),
-                    doc.name,
-                    value.line_number(),
-                )
-            }
-        };
-    let mut sqlite_database_path = camino::Utf8PathBuf::new().join(sqlite_database.as_str());
-    if !sqlite_database_path.exists() {
-        if !req_config
-            .config
-            .root
-            .join(sqlite_database_path.as_path())
-            .exists()
-        {
-            return ftd::interpreter::utils::e2(
-                "`db` does not exists for package-query processor".to_string(),
-                doc.name,
-                value.line_number(),
-            );
-        }
-        sqlite_database_path = req_config.config.root.join(sqlite_database_path.as_path());
-    }
 
     // need the query params
     // question is they can be multiple
@@ -68,14 +41,9 @@ pub async fn process(
     // for now they wil be ordered
     // select * from users where
 
-    let query_response = execute_query(
-        &sqlite_database_path,
-        query.as_str(),
-        doc,
-        headers,
-        value.line_number(),
-    )
-    .await;
+    let db_path = config.config.root.join(&db_config.db_url);
+    let query_response =
+        execute_query(&db_path, query.as_str(), doc, headers, value.line_number()).await;
 
     match query_response {
         Ok(result) => result_to_value(Ok(result), kind, doc, &value, super::sql::STATUS_OK),
@@ -155,6 +123,8 @@ fn resolve_variable_from_doc(
     let param_value: Box<dyn rusqlite::ToSql> = match thing {
         ftd::interpreter::Value::String { text } => Box::new(text),
         ftd::interpreter::Value::Integer { value } => Box::new(value as i32),
+        ftd::interpreter::Value::Decimal { value } => Box::new(value as f32),
+        ftd::interpreter::Value::Boolean { value } => Box::new(value as i32),
         _ => unimplemented!(), // Handle other types as needed
     };
 
@@ -195,6 +165,31 @@ fn resolve_variable_from_headers(
     Ok(param_value)
 }
 
+fn resolve_param(
+    param_name: &str,
+    param_type: &str,
+    doc: &ftd::interpreter::TDoc,
+    headers: &ftd::ast::HeaderValues,
+    line_number: usize,
+) -> ftd::interpreter::Result<Box<dyn rusqlite::ToSql>> {
+    resolve_variable_from_headers(param_name, param_type, doc, headers, line_number)
+        .or_else(|_| resolve_variable_from_doc(param_name, doc, line_number))
+        .map(|v| Box::new(v) as Box<dyn rusqlite::ToSql>)
+}
+
+#[derive(Debug, PartialEq)]
+enum State {
+    OutsideParam,
+    InsideParam,
+    InsideStringLiteral,
+    InsideEscapeSequence(usize),
+    ConsumeEscapedChar,
+    StartTypeHint,
+    InsideTypeHint,
+    PushParam,
+    ParseError(String),
+}
+
 fn extract_named_parameters(
     query: &str,
     doc: &ftd::interpreter::TDoc,
@@ -204,69 +199,102 @@ fn extract_named_parameters(
     let mut params = Vec::new();
     let mut param_name = String::new();
     let mut param_type = String::new();
-    let mut inside_param = false;
-    let mut inside_type_hint = false;
+    let mut state = State::OutsideParam;
 
     for c in query.chars() {
-        if c == ':' && !inside_param {
-            inside_param = true;
-            param_name.clear();
-            param_type.clear();
-            inside_type_hint = false;
-        } else if c == ':' && inside_param {
-            inside_type_hint = true;
-        } else if c.is_alphanumeric() && inside_param && !inside_type_hint {
-            param_name.push(c);
-        } else if c.is_alphanumeric() && inside_param && inside_type_hint {
-            param_type.push(c);
-        } else if inside_param && (c == ',' || c.is_whitespace()) && !param_name.is_empty() {
-            inside_param = false;
-            inside_type_hint = false;
-
-            let param_value =
-                resolve_variable_from_headers(&param_name, &param_type, doc, &headers, line_number)
-                    .or_else(|_| resolve_variable_from_doc(&param_name, doc, line_number))
-                    .map(|v| Box::new(v) as Box<dyn rusqlite::ToSql>);
-
-            match param_value {
-                Ok(v) => params.push(v),
-                Err(_) => {
-                    // todo: Handle Error
+        match state {
+            State::OutsideParam => {
+                if c == '$' {
+                    state = State::InsideParam;
+                    param_name.clear();
+                    param_type.clear();
+                } else if c == '"' {
+                    state = State::InsideStringLiteral;
                 }
             }
+            State::InsideStringLiteral => {
+                if c == '"' {
+                    state = State::OutsideParam;
+                } else if c == '\\' {
+                    state = State::InsideEscapeSequence(0);
+                }
+            }
+            State::InsideEscapeSequence(escape_count) => {
+                if c == '\\' {
+                    state = State::InsideEscapeSequence(escape_count + 1);
+                } else {
+                    state = if escape_count % 2 == 0 {
+                        State::InsideStringLiteral
+                    } else {
+                        State::ConsumeEscapedChar
+                    };
+                }
+            }
+            State::ConsumeEscapedChar => {
+                state = State::InsideStringLiteral;
+            }
+            State::StartTypeHint => {
+                if c == ':' {
+                    state = State::InsideTypeHint;
+                } else {
+                    state = State::ParseError("Type hint must start with `::`".to_string());
+                }
+            }
+            State::InsideParam => {
+                if c == ':' {
+                    state = State::StartTypeHint;
+                } else if c.is_alphanumeric() {
+                    param_name.push(c);
+                } else if c == ',' || c == ';' || c.is_whitespace() && !param_name.is_empty() {
+                    state = State::PushParam;
+                }
+            }
+            State::InsideTypeHint => {
+                if c.is_alphanumeric() {
+                    param_type.push(c);
+                } else {
+                    state = State::PushParam;
+                }
+            }
+            State::PushParam => {
+                state = State::OutsideParam;
 
-            // clear param_name and param_type
-            param_name.clear();
-            param_type.clear();
+                let param_value =
+                    resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
+
+                params.push(Box::new(param_value) as Box<dyn rusqlite::ToSql>);
+
+                param_name.clear();
+                param_type.clear();
+            }
+            State::ParseError(error) => {
+                return Err(ftd::interpreter::Error::ParseError {
+                    message: format!("Failed to parse SQL Query: {}", error),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                });
+            }
         }
     }
 
-    // handle the last param if there was no trailing comma or space
-    if !param_name.is_empty() {
-        let param_value =
-            resolve_variable_from_headers(&param_name, &param_type, doc, &headers, line_number)
-                .or_else(|_| resolve_variable_from_doc(&param_name, doc, line_number))
-                .map(|v| Box::new(v) as Box<dyn rusqlite::ToSql>);
-
-        match param_value {
-            Ok(v) => params.push(v),
-            Err(_) => {
-                // todo: handle the error
-            }
-        }
+    // Handle the last param if there was no trailing comma or space
+    if state.eq(&State::PushParam) && !param_name.is_empty() {
+        let param_value = resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
+        params.push(Box::new(param_value) as Box<dyn rusqlite::ToSql>);
     }
 
     Ok(params)
 }
 
 async fn execute_query(
-    database_path: &camino::Utf8Path,
+    database_path: &camino::Utf8PathBuf,
     query: &str,
     doc: &ftd::interpreter::TDoc<'_>,
     headers: ftd::ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let doc_name = doc.name;
+
     let conn = match rusqlite::Connection::open_with_flags(
         database_path,
         rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
@@ -300,6 +328,7 @@ async fn execute_query(
     // let mut stmt = conn.prepare("SELECT * FROM test where name = ?")?;
     // let mut rows = stmt.query([name])?;
     let params = extract_named_parameters(query, doc, headers, line_number)?;
+
     let mut rows = match stmt.query(rusqlite::params_from_iter(params)) {
         Ok(v) => v,
         Err(e) => {
