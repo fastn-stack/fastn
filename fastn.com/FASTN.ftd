@@ -1070,3 +1070,4 @@ skip: true
 /linkedin/ -> https://www.linkedin.com/company/fastn-stack/
 /r/counter/ -> https://replit.com/@ajit6/counter/
 /r/acme/ -> https://replit.com/@ayushipujaa/acme/
+/custom-url/ -> /custom-urls/
