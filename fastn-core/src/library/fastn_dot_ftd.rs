@@ -19,7 +19,7 @@ async fn i18n_data(lib: &fastn_core::Library<'_>) -> String {
 
     let current_document_last_modified_on =
         fastn_core::utils::get_current_document_last_modified_on(
-            &lib.config.config,
+            lib.config.config,
             lib.document_id.as_str(),
         )
         .await;
@@ -267,7 +267,7 @@ pub(crate) async fn get2022_(lib: &fastn_core::Library<'_>) -> String {
     );
 
     if let Ok(number_of_documents) = futures::executor::block_on(
-        fastn_core::utils::get_number_of_documents(&lib.config.config),
+        fastn_core::utils::get_number_of_documents(lib.config.config),
     ) {
         fastn_base = format!(
             indoc::indoc! {"
@@ -406,7 +406,7 @@ pub(crate) async fn get(lib: &fastn_core::Library<'_>) -> String {
     }
 
     if let Ok(number_of_documents) = futures::executor::block_on(
-        fastn_core::utils::get_number_of_documents(&lib.config.config),
+        fastn_core::utils::get_number_of_documents(lib.config.config),
     ) {
         fastn_base = format!(
             indoc::indoc! {"
@@ -435,7 +435,7 @@ pub(crate) async fn get(lib: &fastn_core::Library<'_>) -> String {
 
     if let Some(last_modified_on) =
         futures::executor::block_on(fastn_core::utils::get_current_document_last_modified_on(
-            &lib.config.config,
+            lib.config.config,
             lib.document_id.as_str(),
         ))
     {

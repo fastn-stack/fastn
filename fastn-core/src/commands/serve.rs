@@ -245,7 +245,7 @@ pub async fn serve(
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
 
     Ok(if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
-        serve_fastn_file(&config).await
+        serve_fastn_file(config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
         serve_file(&mut req_config, &path.join("/")).await
     } else if let Some(cr_number) = fastn_core::cr::get_cr_path_from_url(path.as_str()) {
@@ -323,7 +323,7 @@ pub async fn serve(
             // Already checked in the above method serve_file
             tracing::info!("executing proxy: path: {}", &path);
             let (package_name, url, mut conf) =
-                fastn_core::config::utils::get_clean_url(&config, path.as_str())?;
+                fastn_core::config::utils::get_clean_url(config, path.as_str())?;
             let package_name = package_name.unwrap_or_else(|| config.package.name.to_string());
 
             let host = if let Some(port) = url.port() {

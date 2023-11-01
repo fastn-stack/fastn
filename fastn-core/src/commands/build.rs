@@ -594,7 +594,7 @@ async fn handle_file_(
             }
 
             let req = fastn_core::http::Request::default();
-            let mut req_config = fastn_core::RequestConfig::new(&config, &req);
+            let mut req_config = fastn_core::RequestConfig::new(config, &req);
             req_config.current_document = Some(document.get_id().to_string());
 
             async fn f<'a>(

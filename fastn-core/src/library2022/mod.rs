@@ -243,63 +243,63 @@ impl Library2022<'_, '_> {
             "figma-cs-token-old" => {
                 processor::figma_tokens::process_figma_tokens_old(value, kind, doc)
             }
-            "http" => processor::http::process(value, kind, doc, &self.config).await,
+            "http" => processor::http::process(value, kind, doc, self.config).await,
             "tutor" => fastn_core::tutor::process(value, kind, doc).await,
             "toc" => processor::toc::process(value, kind, doc),
-            "get-data" => processor::get_data::process(value, kind, doc, &self.config),
-            "sitemap" => processor::sitemap::process(value, kind, doc, &self.config),
+            "get-data" => processor::get_data::process(value, kind, doc, self.config),
+            "sitemap" => processor::sitemap::process(value, kind, doc, self.config),
             "full-sitemap" => {
-                processor::sitemap::full_sitemap_process(value, kind, doc, &self.config)
+                processor::sitemap::full_sitemap_process(value, kind, doc, self.config)
             }
-            "request-data" => processor::request_data::process(value, kind, doc, &self.config),
+            "request-data" => processor::request_data::process(value, kind, doc, self.config),
             "document-readers" => processor::document::process_readers(
                 value,
                 kind,
                 doc,
-                &self.config,
+                self.config,
                 self.document_id.as_str(),
             ),
             "document-writers" => processor::document::process_writers(
                 value,
                 kind,
                 doc,
-                &self.config,
+                self.config,
                 self.document_id.as_str(),
             ),
-            "user-groups" => processor::user_group::process(value, kind, doc, &self.config),
+            "user-groups" => processor::user_group::process(value, kind, doc, self.config),
             "user-group-by-id" => {
-                processor::user_group::process_by_id(value, kind, doc, &self.config)
+                processor::user_group::process_by_id(value, kind, doc, self.config)
             }
             "get-identities" => {
-                processor::user_group::get_identities(value, kind, doc, &self.config)
+                processor::user_group::get_identities(value, kind, doc, self.config)
             }
-            "document-id" => processor::document::document_id(value, kind, doc, &self.config),
+            "document-id" => processor::document::document_id(value, kind, doc, self.config),
             "document-full-id" => {
-                processor::document::document_full_id(value, kind, doc, &self.config)
+                processor::document::document_full_id(value, kind, doc, self.config)
             }
             "document-suffix" => {
-                processor::document::document_suffix(value, kind, doc, &self.config)
+                processor::document::document_suffix(value, kind, doc, self.config)
             }
             "document-name" => {
-                processor::document::document_name(value, kind, doc, &self.config).await
+                processor::document::document_name(value, kind, doc, self.config).await
             }
             "fetch-file" => {
-                processor::fetch_file::fetch_files(value, kind, doc, &self.config).await
+                processor::fetch_file::fetch_files(value, kind, doc, self.config).await
             }
-            "user-details" => processor::user_details::process(value, kind, doc, &self.config),
-            "fastn-apps" => processor::apps::process(value, kind, doc, &self.config),
-            "is-reader" => processor::user_group::is_reader(value, kind, doc, &self.config).await,
-            "package-query" => processor::sqlite::process(value, kind, doc, &self.config).await,
+            "user-details" => processor::user_details::process(value, kind, doc, self.config),
+            "fastn-apps" => processor::apps::process(value, kind, doc, self.config),
+            "is-reader" => processor::user_group::is_reader(value, kind, doc, self.config).await,
+            "package-query" => processor::sqlite::process(value, kind, doc, self.config).await,
             "pg" => processor::pg::process(value, kind, doc).await,
             "package-tree" => {
-                processor::package_tree::process(value, kind, doc, &self.config.config).await
+                processor::package_tree::process(value, kind, doc, self.config.config).await
             }
             "query" => {
                 processor::query::process(
                     value,
                     kind,
                     doc,
-                    &mut self.config,
+                    self.config,
                     self.document_id.as_str(),
                 )
                 .await
