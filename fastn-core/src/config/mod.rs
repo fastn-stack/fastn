@@ -54,7 +54,7 @@ pub struct RequestConfig<'a> {
 }
 
 impl<'a> RequestConfig<'a> {
-    pub fn new(config: &Config, request: &fastn_core::http::Request) -> Self {
+    pub fn new(config: &'a Config, request: &'a fastn_core::http::Request) -> Self {
         RequestConfig {
             named_parameters: vec![],
             extra_data: Default::default(),

@@ -824,7 +824,7 @@ pub(crate) async fn get2(lib: &fastn_core::Library2<'_>) -> String {
     get(&lib).await
 }
 
-pub(crate) async fn get2022(lib: &fastn_core::Library2022<'_>) -> String {
+pub(crate) async fn get2022(lib: &fastn_core::Library2022<'_, '_>) -> String {
     let lib = fastn_core::Library {
         config: lib.config.clone(),
         markdown: lib.markdown.clone(),

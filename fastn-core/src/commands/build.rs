@@ -593,24 +593,47 @@ async fn handle_file_(
                 return Ok(());
             }
 
-            let mut req_config =
-                fastn_core::RequestConfig::new(&config, &fastn_core::http::Request::default());
+            let req = fastn_core::http::Request::default();
+            let mut req_config = fastn_core::RequestConfig::new(&config, &req);
             req_config.current_document = Some(document.get_id().to_string());
 
-            let resp = fastn_core::package::package_doc::process_ftd(
-                &mut req_config,
-                doc,
+            async fn f<'a>(
+                mut req_config: fastn_core::RequestConfig<'a>,
+                base_url: &str,
+                test: bool,
+                doc: &fastn_core::Document,
+                file_path: &str,
+                build_static_files: bool,
+            ) -> (
+                fastn_core::RequestConfig<'a>,
+                fastn_core::Result<fastn_core::package::package_doc::FTDResult>,
+            ) {
+                let resp = fastn_core::package::package_doc::process_ftd(
+                    &mut req_config,
+                    doc,
+                    base_url,
+                    build_static_files,
+                    test,
+                    file_path,
+                )
+                .await;
+
+                (req_config, resp)
+            }
+
+            let (req_config, resp) = f(
+                req_config,
                 base_url,
-                build_static_files,
                 test,
+                doc,
                 file_path.as_str(),
+                build_static_files,
             )
             .await;
 
-            let dependencies = req_config.dependencies_during_render;
-
             match (resp, ignore_failed) {
                 (Ok(r), _) => {
+                    let dependencies = req_config.dependencies_during_render;
                     if let Some(cache) = cache {
                         cache.documents.insert(
                             remove_extension(doc.id.as_str()),

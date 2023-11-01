@@ -14,8 +14,8 @@ impl KeyValueData {
 }
 
 #[derive(Debug)]
-pub struct Library2022<'a> {
-    pub config: &'a mut fastn_core::RequestConfig<'a>,
+pub struct Library2022<'m, 'o: 'm> {
+    pub config: &'m mut fastn_core::RequestConfig<'o>,
     /// If the current module being parsed is a markdown file, `.markdown` contains the name and
     /// content of that file
     pub markdown: Option<(String, String)>,
@@ -25,7 +25,7 @@ pub struct Library2022<'a> {
     pub module_package_map: std::collections::BTreeMap<String, String>,
 }
 
-impl Library2022<'_> {
+impl Library2022<'_, '_> {
     pub async fn get_with_result(
         &mut self,
         name: &str,
@@ -86,7 +86,7 @@ impl Library2022<'_> {
 
         async fn get_for_package(
             name: &str,
-            lib: &mut fastn_core::Library2022<'_>,
+            lib: &mut fastn_core::Library2022<'_, '_>,
             current_processing_module: &str,
         ) -> Option<(String, String, usize)> {
             let package = lib.get_current_package(current_processing_module).ok()?;
@@ -150,7 +150,7 @@ impl Library2022<'_> {
         async fn get_data_from_package(
             name: &str,
             package: &fastn_core::Package,
-            lib: &mut fastn_core::Library2022<'_>,
+            lib: &mut fastn_core::Library2022<'_, '_>,
         ) -> Option<(String, usize)> {
             lib.push_package_under_process(name, package).await.ok()?;
             let packages = lib.config.config.all_packages.borrow();
