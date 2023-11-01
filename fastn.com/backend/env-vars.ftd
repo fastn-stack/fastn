@@ -33,5 +33,116 @@ lang: sh
 
 FASTN_DANGER_ACCEPT_CHECKED_IN_ENV=true fastn serve
 
+-- ds.h1: Supported Environment Variables
+
+`fastn` supports the following environment variables:
+
+-- ds.h2: Postrgres variables
+
+-- fastn-pg-url:
+-- fastn-pg-danger-disable-ssl:
+-- fastn-pg-ssl-mode:
+-- fastn-pg-danger-allow-unverified-certificate:
+-- fastn-pg-certificate:
+
+-- ds.h2: `fastn` cli variables
+
+-- fastn-check-for-updates:
+
 -- end: ds.page
 
+
+-- component fastn-check-for-updates:
+
+-- env-doc: `FASTN_CHECK_FOR_UPDATES`
+
+set this to true to check for updates in the background when the `fastn` cli
+runs. The cli will silently check for updates and will only log to the console
+if a new version is available.
+
+-- end: fastn-check-for-updates
+
+
+-- component fastn-pg-url:
+
+-- env-doc: `FASTN_PG_URL`
+
+The `FASTN_PG_URL` must contain a valid [connection
+string](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING).
+
+This processor will not work if this environment variable is not present.
+
+-- end: fastn-pg-url
+
+
+-- component fastn-pg-danger-disable-ssl:
+
+-- env-doc: `FASTN_PG_DANGER_DISABLE_SSL`
+
+By default `fastn` connects to PostgreSQL over a secure connection. You can set
+`FASTN_PG_DANGER_DISABLE_SSL` to `false` if you want to connect to a insecure
+connection.
+
+This is not recommended in production.
+
+-- end: fastn-pg-danger-disable-ssl
+
+
+-- component fastn-pg-ssl-mode:
+
+-- env-doc: `FASTN_PG_SSL_MODE`
+
+`fastn` can connect to a PostgreSQL in a few different secure mode. See
+PostgreSQL official documentation on [SSL Mode
+Descriptions](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-SSLMODE-STATEMENTS).
+
+`FASTN_PG_SSL_MODE=require` is default and recommended for production.
+
+`FASTN_PG_SSL_MODE=prefer` is allowed but not recommended for production as it
+offers no benefits of encryption (is suseptible to MITM attack).
+
+`verify-ca` and `verify-full` are both better than `require`, but we do not
+support them yet because the underlying we are using, [deadpool, does not support
+it yet](https://docs.rs/deadpool-postgres/0.11.0/deadpool_postgres/enum.SslMode.html).
+We have created a [tracking issue for
+this](https://github.com/bikeshedder/deadpool/issues/277).
+
+-- end: fastn-pg-ssl-mode
+
+
+-- component fastn-pg-danger-allow-unverified-certificate:
+
+-- env-doc: `FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE`
+
+`fastn` can ignore invalid ceritificates when connecting to PostgreSQL if you
+set `FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE` to `true`. This is not
+recommended for production.
+
+-- end: fastn-pg-danger-allow-unverified-certificate
+
+
+-- component fastn-pg-certificate:
+
+-- env-doc: `FASTN_PG_CERTIFICATE`
+
+If you have access to root certificate of the certificate authority who issued
+the certificate used by PostgreSQL.
+
+Note that this is [not working right now when tested with
+Supabase](https://github.com/fastn-stack/fastn/issues/1383).
+
+Since this is not working, the only way to connect is by using
+`FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE=true` right now.
+
+-- end: fastn-pg-certificate
+
+
+-- component env-doc:
+caption name:
+body content:
+
+-- ds.h3: $env-doc.name
+
+$env-doc.content
+
+-- end: env-doc
