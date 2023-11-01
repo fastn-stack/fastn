@@ -683,7 +683,7 @@ skip: true
     document: ftd-host/package-query.ftd
   - Reading JSON: /get-data/
     document: ftd-host/get-data.ftd
-- Custom URLs: /custom-url/
+- Custom URLs: /custom-urls/
   document: backend/custom-urls.ftd
 - Redirects: /redirects/-/backend/
   document: backend/redirects.ftd

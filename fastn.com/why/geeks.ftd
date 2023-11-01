@@ -633,7 +633,7 @@ the "main module".
 
 If we are rendering `foo.ftd`, e.g. by accessing `/foo/` we do folder based
 routing (we also do [dynamic routing](/dynamic-urls/) and [custom
-routes](/custom-url/) etc btw), the "module level UI" `ftd.integer` would be
+routes](/custom-urls/) etc btw), the "module level UI" `ftd.integer` would be
 constructed, and since that is the only module level UI, that is only UI user
 will see on `/foo/`.
 
