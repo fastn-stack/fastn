@@ -597,37 +597,13 @@ async fn handle_file_(
             let mut req_config = fastn_core::RequestConfig::new(config, &req);
             req_config.current_document = Some(document.get_id().to_string());
 
-            async fn f<'a>(
-                mut req_config: fastn_core::RequestConfig<'a>,
-                base_url: &str,
-                test: bool,
-                doc: &fastn_core::Document,
-                file_path: &str,
-                build_static_files: bool,
-            ) -> (
-                fastn_core::RequestConfig<'a>,
-                fastn_core::Result<fastn_core::package::package_doc::FTDResult>,
-            ) {
-                let resp = fastn_core::package::package_doc::process_ftd(
-                    &mut req_config,
-                    doc,
-                    base_url,
-                    build_static_files,
-                    test,
-                    file_path,
-                )
-                .await;
-
-                (req_config, resp)
-            }
-
-            let (req_config, resp) = f(
-                req_config,
-                base_url,
-                test,
+            let resp = fastn_core::package::package_doc::process_ftd(
+                &mut req_config,
                 doc,
-                file_path.as_str(),
+                base_url,
                 build_static_files,
+                test,
+                file_path.as_str(),
             )
             .await;
 
