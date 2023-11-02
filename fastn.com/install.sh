@@ -112,6 +112,8 @@ update_path() {
             return 0
         else
             log_error "Failed to add '${DESTINATION_PATH}' to PATH. Insufficient permissions for '$shell_config_file'."
+            log_message "The installer has successfully downloaded the \`fastn\` binary in '${DESTINATION_PATH}' but it failed to add it in your \$PATH variable."
+            log_message "Configure the \$PATH manually or run \`fastn\` binary from '${DESTINATION_PATH}/fastn'"
             return 1
         fi
     else
