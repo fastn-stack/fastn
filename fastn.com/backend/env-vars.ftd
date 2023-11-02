@@ -39,11 +39,7 @@ FASTN_DANGER_ACCEPT_CHECKED_IN_ENV=true fastn serve
 
 -- ds.h2: Postrgres variables
 
--- fastn-pg-url:
--- fastn-pg-danger-disable-ssl:
--- fastn-pg-ssl-mode:
--- fastn-pg-danger-allow-unverified-certificate:
--- fastn-pg-certificate:
+-- fastn-pg-variables:
 
 -- ds.h2: `fastn` cli variables
 
@@ -146,3 +142,15 @@ body content:
 $env-doc.content
 
 -- end: env-doc
+
+-- component fastn-pg-variables:
+
+-- ftd.column:
+-- fastn-pg-url:
+-- fastn-pg-danger-disable-ssl:
+-- fastn-pg-ssl-mode:
+-- fastn-pg-danger-allow-unverified-certificate:
+-- fastn-pg-certificate:
+-- end: ftd.column
+
+-- end: fastn-pg-variables

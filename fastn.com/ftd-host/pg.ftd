@@ -1,7 +1,7 @@
 -- import: fastn.com/ftd/built-in-variables as v
 -- import: fastn/processors as pr
 -- import: fastn.com/ftd-host/processor
--- import: fastn.com/backend/env-vars as env-vars
+-- import: fastn.com/backend/env-vars
 
 
 -- ds.page: Querying PostgreSQL Using `fastn`
@@ -119,11 +119,7 @@ for: $p in $people
 
 -- ds.h1: Environment Variables
 
--- env-vars.fastn-pg-url:
--- env-vars.fastn-pg-danger-disable-ssl:
--- env-vars.fastn-pg-ssl-mode:
--- env-vars.fastn-pg-danger-allow-unverified-certificate:
--- env-vars.fastn-pg-certificate:
+-- env-vars.fastn-pg-variables:
 
 -- end: ds.page
 
