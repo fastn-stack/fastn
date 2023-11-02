@@ -363,8 +363,8 @@ impl From<FTDResult> for fastn_core::http::Response {
 }
 
 #[tracing::instrument(skip_all)]
-pub(crate) async fn read_ftd(
-    config: &mut fastn_core::RequestConfig<'_>,
+pub(crate) async fn read_ftd<'o, 'm: 'o>(
+    config: &'m mut fastn_core::RequestConfig<'o>,
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
@@ -385,8 +385,8 @@ pub(crate) async fn read_ftd(
 }
 
 #[tracing::instrument(name = "read_ftd_2022", skip_all)]
-pub(crate) async fn read_ftd_2022(
-    config: &mut fastn_core::RequestConfig<'_>,
+pub(crate) async fn read_ftd_2022<'o, 'm: 'o>(
+    config: &'m mut fastn_core::RequestConfig<'o>,
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
@@ -460,8 +460,8 @@ pub(crate) async fn read_ftd_2022(
 
 #[allow(clippy::await_holding_refcell_ref)]
 #[tracing::instrument(name = "read_ftd_2023", skip_all)]
-pub(crate) async fn read_ftd_2023(
-    config: &mut fastn_core::RequestConfig<'_>,
+pub(crate) async fn read_ftd_2023<'o, 'm: 'o>(
+    config: &'m mut fastn_core::RequestConfig<'o>,
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
@@ -541,8 +541,8 @@ pub(crate) async fn read_ftd_2023(
     Ok(FTDResult::Html(file_content.into()))
 }
 
-pub(crate) async fn process_ftd(
-    config: &mut fastn_core::RequestConfig<'_>,
+pub(crate) async fn process_ftd<'o, 'm: 'o>(
+    config: &'m mut fastn_core::RequestConfig<'o>,
     main: &fastn_core::Document,
     base_url: &str,
     build_static_files: bool,

@@ -18,8 +18,8 @@ fn handle_redirect(
 /// path: /<file-name>/
 ///
 #[tracing::instrument(skip_all)]
-async fn serve_file(
-    config: &mut fastn_core::RequestConfig<'_>,
+async fn serve_file<'o, 'm: 'o>(
+    config: &'m mut fastn_core::RequestConfig<'o>,
     path: &camino::Utf8Path,
 ) -> fastn_core::http::Response {
     if let Some(r) = handle_redirect(config.config, path) {
@@ -123,8 +123,8 @@ async fn serve_file(
     }
 }
 
-async fn serve_cr_file(
-    req_config: &mut fastn_core::RequestConfig<'_>,
+async fn serve_cr_file<'o, 'm: 'o>(
+    req_config: &'m mut fastn_core::RequestConfig<'o>,
     path: &camino::Utf8Path,
     cr_number: usize,
 ) -> fastn_core::http::Response {
@@ -241,7 +241,6 @@ pub async fn serve(
 
     let mut req_config = fastn_core::RequestConfig::new(config, &req);
 
-    // TODO: remove unwrap
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
 
     Ok(if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
