@@ -277,7 +277,7 @@ fn remove_deleted_documents(
 }
 
 #[tracing::instrument(skip(config, documents))]
-async fn incremental_build<'a>(
+async fn incremental_build(
     config: &fastn_core::Config,
     documents: &std::collections::BTreeMap<String, fastn_core::File>,
     base_url: &str,
@@ -409,7 +409,7 @@ async fn incremental_build<'a>(
 }
 
 #[tracing::instrument(skip(config, documents))]
-async fn handle_only_id<'a>(
+async fn handle_only_id(
     id: &str,
     config: &fastn_core::Config,
     base_url: &str,
@@ -430,7 +430,7 @@ async fn handle_only_id<'a>(
     )))
 }
 
-async fn handle_file<'a>(
+async fn handle_file(
     document: &fastn_core::File,
     config: &fastn_core::Config,
     base_url: &str,

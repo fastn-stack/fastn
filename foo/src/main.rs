@@ -30,7 +30,8 @@ async fn yo(i: &mut P) {
     println!("yo: {}", i.x);
 }
 
-async fn bo<'m, 'o: 'm>(i: &'m mut Q<'o>) {
-    i.p.x = 30;
-    println!("bo: {}", i.p.x);
+async fn bo(q: &mut Q<'_>) {
+    // q.p = &mut P { x: 30 };
+    q.p.x = 30;
+    println!("bo: {}", q.p.x);
 }
