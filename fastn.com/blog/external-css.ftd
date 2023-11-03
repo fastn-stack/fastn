@@ -9,99 +9,167 @@ published-on: November 3, 2023 at 10:27 am
 post-url: /external-css/
 author: $authors.rithik
 
-External CSS using classes is a common technique in web development
-for applying styles to HTML elements. It involves creating a separate CSS
-(Cascading Style Sheets) file with a .css extension, and using classes
-to define specific styling rules for HTML elements.
-Here's a brief overview about the areas covered:
+In the ever-evolving world of web development, staying up-to-date with
+the latest CSS (Cascading Style Sheets) properties is crucial to make the most
+out of it. These CSS properties keeps on changing with time
+while certain properties become deprecated, newer, more advanced ones emerge.
+Some of these emerging properties are released in experimental stages, while
+some of them could be very newly released raising questions about their
+compatibility with fastn. In such scenarios, the importance of external CSS
+becomes evident. In this blog, we will see how we can make use of external CSS
+in fastn.
 
 - Creating an External CSS File
 - Defining CSS classes
 - Applying Classes to fastn Elements
-- Benefits of using external CSS
+- Crucial Takeaways
 
 -- common.post-meta meta: Using External CSS
 published-on: November 3, 2023 at 10:27 am
 post-url: /external-css/
 author: $authors.rithik
 
-External CSS using classes is a common technique in web development
-for applying styles to HTML elements. It involves creating a separate CSS
-(Cascading Style Sheets) file with a .css extension, and using classes
-to define specific styling rules for HTML elements.
-Here's a brief overview of how it works:
+In the ever-evolving world of web development, staying up-to-date with
+the latest CSS (Cascading Style Sheets) properties is crucial to make the most
+out of it. These CSS properties keeps on changing with time
+while certain properties become deprecated, newer, more advanced ones emerge.
+Some of these emerging properties are released in experimental stages, while
+some of them could be very newly released raising questions about their
+compatibility with fastn. In such scenarios, the importance of external CSS
+becomes evident. In this blog, we will see how we can make use of external CSS
+in fastn.
 
 -- ds.blog-page:
 meta: $meta
 
--- ds.h1: Creating an External CSS File
+-- ds.h1: Is external CSS supported ?
 
-You create a separate .css file that contains all the styling rules for
-your website. This file typically includes rules for various elements,
-such as headings, paragraphs, links, and more.
+Yes, fastn supports the use of external CSS which we will talk about in the
+later sections.
 
--- ds.h1: Defining CSS classes
+-- ds.h1: Why do we need external CSS ?
 
-In your external CSS file (lets say you name it as my-style.css),
-you define CSS classes by using a period (.) followed by the class name.
-For example:
+In cases, when we want to use any properties which are not yet supported
+by fastn or maybe we wish to use certain experimental properties
+which are recently released to test it out with fastn. In such cases, to use
+such properties external CSS could be used.
+
+Unless fastn supports the properties you need, using external CSS is not recommended
+Since there is a downside that the styles that are applied on the elements
+using external CSS wont support any native fastn events. So it is generally
+not recommended to use external CSS if you have to involve event handling
+on those styles.
+
+-- ds.h1: How can we use external CSS ?
+
+There are 2 main things we need to do in order to use external CSS:
+
+- Attaching the CSS file or use inline CSS in your fastn file
+- Specifying the CSS classes on your elements in fastn
+
+-- ds.h1: Attaching the CSS file
+
+We can attach the CSS file in two ways:
+- Either by using the css attribute (Recommended)
+- Using CLI flag (--external-css) when using fastn
+
+-- ds.h2: Attaching CSS file using css attribute
+
+This is pretty simple and is the recommended way of attaching any CSS file
+with your fastn document. Let's say we have created a CSS file like this:
 
 -- ds.code:
 lang: css
+download: my-style.css
+copy: true
 
-\// filename: my-style.css
 .my-class
 {
     color: blue;
     font-size: 16px;
 }
 
--- ds.h1: Applying Classes to fastn Elements
+-- ds.markdown:
 
-In fastn, you apply these CSS classes to specific elements
-using the [classes](common-attributes/#classes) and [css](common-attributes/#css) attributes. For example:
+;; LINK TO ASSETS
+
+And we want to attach the above CSS file in our fastn document.
+We just need to specify your CSS file path using assets to the
+css attribute through component definition or invocation.
+
+;; SHOW BOTH WAYS
 
 -- ds.code:
 lang: ftd
+download: index.ftd
+copy: true
 
 \-- import: <your-package-name>/assets
 
 \-- ftd.text: Hello World
-classes: my-class ;; <hl>
-css: $assets.files.my-style.css ;; <hl>
+css: $assets.files.my-style.css
 
 -- ds.markdown:
 
-By adding `classes: my-class` attribute on your ftd.text element,
-you're instructing the browser to apply the styling rules defined
-in the `my-class` class from the external CSS file `my-style.css`
-to this particular text element. You will also need to mention your
-external css file using the [css](common-attributes/#css) attribute
-whenever you are using any external css class on your elements.
+But hold on, wait a minute something ain't right. Here we have just attached
+the CSS file and we haven't specified the CSS class we want to use on our
+element. So there will be no change in style in the above case until we
+specify the CSS class on our text element.
 
-`Note`: Using [classes](common-attributes/#classes) attribute,
-you can assign multiple classes to your elements.
+-- ds.h1: Specifying CSS class on elements
 
--- ds.h1: Benefits of using external CSS
+;; LINK CLASSES WITH DOCS
 
-- **Reusability**: You can apply the same class to multiple elements,
-ensuring consistent styling across your website.
+Up until now, we have seen how to attach a CSS file with our fastn documents.
+We will now specify the class on our elements in order to use the CSS class
+styles from the external CSS file. To do that, we need to specify the CSS
+classes through the classes attribute during component invocation. For example
 
-- **Maintainability**: By keeping your styles in a separate CSS file,
-it's easier to make global changes to the design
-without editing each file.
+-- ds.code:
+lang: ftd
+download: index.ftd
+copy: true
 
-- **Efficiency**: External CSS files can be cached by browsers,
-improving page load times.
+\-- import: <your-package-name>/assets
 
--- ds.h1: Conclusion
+\-- ftd.text: Hello World
+css: $assets.files.my-style.css
+classes: my-class
 
-In conclusion, using external CSS is a fundamental
-and efficient practice in web development. By defining styles in a
-separate CSS file and applying them to HTML elements using classes,
-you achieve a more organized, reusable, and maintainable design for
-your website. Although we recommend using external CSS when the style
-which you wish to use is not supported natively by fastn. But overall,
-we do provide the flexibility to use such styles using external css.
+-- ds.markdown:
+
+In the above code, by adding `classes: my-class` attribute on your
+element, you're instructing the browser to apply the
+styling rules defined in the `my-class` class from the external
+CSS file `my-style.css` to this particular text element.
+And this is how we use external CSS in fastn. I hope you got the most of it.
+The later sections include alternative ways to certain steps.
+
+-- ds.h1: Attaching CSS file using CLI flags
+
+There is an alternative way of attaching CSS file through the use of
+certain CLI flags with fastn serve/build commands.
+
+- `--external-css=<FILE-PATH>`: Using this flag, we can attach an CSS
+file by providing its file path
+- [Inline css flag](/external-css/#attaching-inline-css)
+
+-- ds.h1: Attaching inline CSS
+
+There is a CLI flag which can be used to include inline CSS from a CSS file
+instead of attaching it using CSS script tags.
+
+- `--css=<FILE-PATH>`: Using this flag, we can include any CSS as inline CSS from
+the CSS file specified.
+
+-- ds.h1: Crucial takeaways
+
+- The most crucial benefit you can get from using external CSS is that
+you can use any styles which are not natively supported by fastn.
+
+- The downside is that the styles that are applied on the elements
+using external CSS wont support any fastn events. So it is generally
+not recommended to use external CSS if you have to involve event handling
+on those styles.
 
 -- end: ds.blog-page

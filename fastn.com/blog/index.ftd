@@ -11,10 +11,14 @@
 -- import: fastn.com/blog/web-components as p2
 -- import: fastn.com/blog/show-cs as p1
 -- import: fastn.com/blog/external-css as r1
+-- import: fastn.com/blog/breakpoint as r2
 
 -- ds.page-with-no-right-sidebar:
 
 -- ds.posts:
+
+-- ds.without-image-half:
+post-data: $r2.index-meta
 
 -- ds.without-image-half:
 post-data: $r1.index-meta
