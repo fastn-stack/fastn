@@ -360,8 +360,7 @@ class RecordInstance {
             }
 
             this.#fields = fields;
-        }
-        if (this.#fields[key] === undefined) {
+        }else if (this.#fields[key] === undefined) {
             this.#fields[key] = fastn.mutable(null);
             this.#fields[key].setWithoutUpdate(value);
         } else {
