@@ -73,7 +73,7 @@ pub fn ok_with_content_type(
         .body(data)
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct Request {
     method: String,
     uri: String,
@@ -88,12 +88,6 @@ pub struct Request {
     host: String,
     pub connection_info: actix_web::dev::ConnectionInfo,
     // path_params: Vec<(String, )>
-}
-
-impl Default for Request {
-    fn default() -> Self {
-        todo!()
-    }
 }
 
 impl Request {
