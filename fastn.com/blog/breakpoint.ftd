@@ -5,7 +5,7 @@
 -- import: fastn.com/content-library as lib
 
 -- common.post-meta index-meta: Using Custom Breakpoints
-published-on: November 3, 2023 at 10:40 am
+published-on: November 3, 2023 at 3:40 pm
 post-url: /breakpoint/
 author: $authors.rithik
 
@@ -21,7 +21,7 @@ on a variety of devices, such as desktop computers, smartphones etc.
 - Benefits of using custom breakpoint
 
 -- common.post-meta meta: Using Custom Breakpoints
-published-on: November 3, 2023 at 10:27 am
+published-on: November 3, 2023 at 3:40 pm
 post-url: /breakpoint/
 author: $authors.rithik
 
@@ -40,8 +40,9 @@ meta: $meta
 -- ds.h1: Are custom breakpoints supported ?
 
 Yes, fastn supports user-defined custom breakpoints. Although currently
-we can only modify the default breakpoint with the use of `breakpoint` attribute
-of `ftd.document`.
+we can only modify the default breakpoint with the use of
+[breakpoint](/document/#breakpoint-optional-ftd-breakpoint-width-data)
+attribute of `ftd.document`.
 
 -- ds.h1: How to Define a Custom Breakpoint ?
 
@@ -51,13 +52,16 @@ will render the contents in desktop/mobile mode.
 
 -- ds.h1: Defining Custom Breakpoint
 
-By default, fastn defines the breakpoint width to 768px in case of
-no user-defined breakpoint. Let's say you want to define a
+By default, fastn defines the breakpoint width to 768px in case
+no user-defined breakpoint is specified. Let's say you want to define a
 custom breakpoint (800px) for your page. You can do this using
-the breakpoint attribute of ftd.document. Here is how we define it .
+the [breakpoint](/document/#breakpoint-optional-ftd-breakpoint-width-data)
+attribute of ftd.document. Here is how we can define it.
 
 -- ds.code:
 lang: ftd
+download: index.ftd
+copy: true
 
 \-- ftd.document:
 breakpoint: 800
@@ -71,8 +75,8 @@ text if { ftd.device == "desktop" }: Desktop text
 
 -- ds.markdown:
 
-In the above example, the browser will show "Mobile text" when the browser width
-is below 800px and show "Desktop text" when the browser width is above 800px.
-And this is how we use custom breakpoints in our fastn documents.
+In the above example, the browser will show `Mobile text` when the browser width
+is equal or below 800px and show `Desktop text` when the browser width is above 800px.
+And this is how we can use custom breakpoints in our fastn documents.
 
 -- end: ds.blog-page

@@ -62,7 +62,7 @@ on those styles.
 
 -- ds.h1: How can we use external CSS ?
 
-There are 2 main things we need to do in order to use external CSS:
+There are 2 main steps we need to do in order to use external CSS:
 
 - Attaching the CSS file or use inline CSS in your fastn file
 - Specifying the CSS classes on your elements in fastn
@@ -70,8 +70,8 @@ There are 2 main things we need to do in order to use external CSS:
 -- ds.h1: Attaching the CSS file
 
 We can attach the CSS file in two ways:
-- Either by using the css attribute (Recommended)
-- Using CLI flag (--external-css) when using fastn
+- Either by using the [css](/common-attributes/#css) attribute (Recommended)
+- Using CLI flags (`--external-css`/`--css`) when using fastn
 
 -- ds.h2: Attaching CSS file using css attribute
 
@@ -91,15 +91,28 @@ copy: true
 
 -- ds.markdown:
 
-;; LINK TO ASSETS
-
 And we want to attach the above CSS file in our fastn document.
-We just need to specify your CSS file path using assets to the
-css attribute through component definition or invocation.
+We just need to specify your CSS file path using [assets](/assets/) to the
+[css](/common-attributes/#css) attribute through component
+definition or invocation.
 
 ;; SHOW BOTH WAYS
 
--- ds.code:
+-- ds.code: Attaching CSS file on Component Definition
+lang: ftd
+download: index.ftd
+copy: true
+
+\-- import: <your-package-name>/assets
+
+\-- component foo:
+css: $assets.files.my-style.css
+
+\;; <DEFINITION OMITTED>
+
+\-- end: foo
+
+-- ds.code: Attaching CSS file on Component Invocation
 lang: ftd
 download: index.ftd
 copy: true
@@ -114,16 +127,15 @@ css: $assets.files.my-style.css
 But hold on, wait a minute something ain't right. Here we have just attached
 the CSS file and we haven't specified the CSS class we want to use on our
 element. So there will be no change in style in the above case until we
-specify the CSS class on our text element.
+specify the CSS class on our elements.
 
 -- ds.h1: Specifying CSS class on elements
-
-;; LINK CLASSES WITH DOCS
 
 Up until now, we have seen how to attach a CSS file with our fastn documents.
 We will now specify the class on our elements in order to use the CSS class
 styles from the external CSS file. To do that, we need to specify the CSS
-classes through the classes attribute during component invocation. For example
+classes through the [classes](/common-attributes/#classes) attribute
+during component invocation. For example
 
 -- ds.code:
 lang: ftd
@@ -141,8 +153,8 @@ classes: my-class
 In the above code, by adding `classes: my-class` attribute on your
 element, you're instructing the browser to apply the
 styling rules defined in the `my-class` class from the external
-CSS file `my-style.css` to this particular text element.
-And this is how we use external CSS in fastn. I hope you got the most of it.
+CSS file `my-style.css` to this text element.
+And this is how we use external CSS in fastn.
 The later sections include alternative ways to certain steps.
 
 -- ds.h1: Attaching CSS file using CLI flags
@@ -159,8 +171,8 @@ file by providing its file path
 There is a CLI flag which can be used to include inline CSS from a CSS file
 instead of attaching it using CSS script tags.
 
-- `--css=<FILE-PATH>`: Using this flag, we can include any CSS as inline CSS from
-the CSS file specified.
+- `--css=<FILE-PATH>`: Using this flag, we can include any CSS as inline
+CSS from the CSS file specified.
 
 -- ds.h1: Crucial takeaways
 
