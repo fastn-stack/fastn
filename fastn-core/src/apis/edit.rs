@@ -32,7 +32,7 @@ pub async fn edit(
         Ok(config) => config,
         Err(err) => return fastn_core::http::api_error(err.to_string()),
     };
-    let mut req_config = fastn_core::RequestConfig::new(&config, req);
+    let mut req_config = fastn_core::RequestConfig::new(&config, req, "edit.ftd", "/");
     req_config.current_document = Some(req_data.path.to_string());
 
     match req_config.can_write(req_data.path.as_str()).await {

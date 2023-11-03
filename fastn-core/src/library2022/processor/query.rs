@@ -3,7 +3,6 @@ pub async fn process(
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &mut fastn_core::RequestConfig<'_>,
-    document_id: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     // TODO: document key should be optional
 
@@ -14,7 +13,7 @@ pub async fn process(
 
     let path = headers
         .get_optional_string_by_key("file", doc.name, value.line_number())?
-        .unwrap_or_else(|| document_id.to_string());
+        .unwrap_or_else(|| req_config.document_id.to_string());
 
     let stage = headers
         .get_optional_string_by_key("stage", doc.name, value.line_number())?
@@ -25,14 +24,14 @@ pub async fn process(
         .await
         .map_err(|e| ftd::interpreter::Error::ParseError {
             message: format!("Cannot get path: {} {:?}", path.as_str(), e),
-            doc_id: document_id.to_string(),
+            doc_id: req_config.document_id.to_string(),
             line_number: value.line_number(),
         })?;
     doc.from_json(
         &fastn_core::commands::query::get_ftd_json(&file, stage.as_str()).map_err(|e| {
             ftd::interpreter::Error::ParseError {
                 message: format!("Cannot resolve json for path: {} {:?}", path.as_str(), e),
-                doc_id: document_id.to_string(),
+                doc_id: req_config.document_id.to_string(),
                 line_number: value.line_number(),
             }
         })?,

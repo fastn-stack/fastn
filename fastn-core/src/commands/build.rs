@@ -594,7 +594,8 @@ async fn handle_file_(
             }
 
             let req = fastn_core::http::Request::default();
-            let mut req_config = fastn_core::RequestConfig::new(config, &req);
+            let mut req_config =
+                fastn_core::RequestConfig::new(config, &req, doc.id.as_str(), base_url);
             req_config.current_document = Some(document.get_id().to_string());
 
             let resp = fastn_core::package::package_doc::process_ftd(

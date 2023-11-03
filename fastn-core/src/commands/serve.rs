@@ -239,7 +239,7 @@ pub async fn serve(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
 
-    let mut req_config = fastn_core::RequestConfig::new(config, &req);
+    let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
 
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
 

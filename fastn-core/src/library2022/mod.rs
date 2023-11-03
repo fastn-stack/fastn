@@ -13,17 +13,7 @@ impl KeyValueData {
     }
 }
 
-#[derive(Debug)]
-pub struct Library2022<'m> {
-    pub config: &'m mut fastn_core::RequestConfig<'m>,
-    /// If the current module being parsed is a markdown file, `.markdown` contains the name and
-    /// content of that file
-    pub markdown: Option<(String, String)>,
-    pub document_id: String,
-    pub translated_data: fastn_core::TranslationData,
-    pub base_url: String,
-    pub module_package_map: std::collections::BTreeMap<String, String>,
-}
+pub type Library2022<'m> = fastn_core::RequestConfig<'m>;
 
 impl Library2022<'_> {
     pub async fn get_with_result(
@@ -52,7 +42,6 @@ impl Library2022<'_> {
             })?;
 
         self.config
-            .config
             .all_packages
             .borrow()
             .get(current_package_name)
@@ -153,7 +142,7 @@ impl Library2022<'_> {
             lib: &mut fastn_core::Library2022<'_>,
         ) -> Option<(String, usize)> {
             lib.push_package_under_process(name, package).await.ok()?;
-            let packages = lib.config.config.all_packages.borrow();
+            let packages = lib.config.all_packages.borrow();
             let package = packages.get(package.name.as_str()).unwrap_or(package);
             // Explicit check for the current package.
             let name = format!("{}/", name.trim_end_matches('/'));
@@ -162,11 +151,7 @@ impl Library2022<'_> {
             }
             let new_name = name.replacen(package.name.as_str(), "", 1);
             let (file_path, data) = package
-                .resolve_by_id(
-                    new_name.as_str(),
-                    None,
-                    lib.config.config.package.name.as_str(),
-                )
+                .resolve_by_id(new_name.as_str(), None, lib.config.package.name.as_str())
                 .await
                 .ok()?;
             if !file_path.ends_with(".ftd") {
@@ -192,7 +177,6 @@ impl Library2022<'_> {
         );
         if self
             .config
-            .config
             .all_packages
             .borrow()
             .contains_key(package.name.as_str())
@@ -200,19 +184,15 @@ impl Library2022<'_> {
             return Ok(());
         }
 
-        let package = self
-            .config
-            .config
-            .resolve_package(package)
-            .await
-            .map_err(|_| ftd::ftd2021::p1::Error::ParseError {
+        let package = self.config.resolve_package(package).await.map_err(|_| {
+            ftd::ftd2021::p1::Error::ParseError {
                 message: format!("Cannot resolve the package: {}", package.name),
                 doc_id: self.document_id.to_string(),
                 line_number: 0,
-            })?;
+            }
+        })?;
 
         self.config
-            .config
             .all_packages
             .borrow_mut()
             .insert(package.name.to_string(), package);
@@ -243,69 +223,52 @@ impl Library2022<'_> {
             "figma-cs-token-old" => {
                 processor::figma_tokens::process_figma_tokens_old(value, kind, doc)
             }
-            "http" => processor::http::process(value, kind, doc, self.config).await,
+            "http" => processor::http::process(value, kind, doc, self).await,
             "tutor" => fastn_core::tutor::process(value, kind, doc).await,
             "toc" => processor::toc::process(value, kind, doc),
-            "get-data" => processor::get_data::process(value, kind, doc, self.config),
-            "sitemap" => processor::sitemap::process(value, kind, doc, self.config),
-            "full-sitemap" => {
-                processor::sitemap::full_sitemap_process(value, kind, doc, self.config)
-            }
-            "request-data" => processor::request_data::process(value, kind, doc, self.config),
+            "get-data" => processor::get_data::process(value, kind, doc, self),
+            "sitemap" => processor::sitemap::process(value, kind, doc, self),
+            "full-sitemap" => processor::sitemap::full_sitemap_process(value, kind, doc, self),
+            "request-data" => processor::request_data::process(value, kind, doc, self),
             "document-readers" => processor::document::process_readers(
                 value,
                 kind,
                 doc,
-                self.config,
+                self,
                 self.document_id.as_str(),
             ),
             "document-writers" => processor::document::process_writers(
                 value,
                 kind,
                 doc,
-                self.config,
+                self,
                 self.document_id.as_str(),
             ),
-            "user-groups" => processor::user_group::process(value, kind, doc, self.config),
-            "user-group-by-id" => {
-                processor::user_group::process_by_id(value, kind, doc, self.config)
-            }
-            "get-identities" => {
-                processor::user_group::get_identities(value, kind, doc, self.config)
-            }
-            "document-id" => processor::document::document_id(value, kind, doc, self.config),
-            "document-full-id" => {
-                processor::document::document_full_id(value, kind, doc, self.config)
-            }
-            "document-suffix" => {
-                processor::document::document_suffix(value, kind, doc, self.config)
-            }
-            "document-name" => {
-                processor::document::document_name(value, kind, doc, self.config).await
-            }
-            "fetch-file" => processor::fetch_file::fetch_files(value, kind, doc, self.config).await,
-            "user-details" => processor::user_details::process(value, kind, doc, self.config),
-            "fastn-apps" => processor::apps::process(value, kind, doc, self.config),
-            "is-reader" => processor::user_group::is_reader(value, kind, doc, self.config).await,
-            "sql" => processor::sql::process(value, kind, doc, self.config).await,
+            "user-groups" => processor::user_group::process(value, kind, doc, self),
+            "user-group-by-id" => processor::user_group::process_by_id(value, kind, doc, self),
+            "get-identities" => processor::user_group::get_identities(value, kind, doc, self),
+            "document-id" => processor::document::document_id(value, kind, doc, self),
+            "document-full-id" => processor::document::document_full_id(value, kind, doc, self),
+            "document-suffix" => processor::document::document_suffix(value, kind, doc, self),
+            "document-name" => processor::document::document_name(value, kind, doc, self).await,
+            "fetch-file" => processor::fetch_file::fetch_files(value, kind, doc, self).await,
+            "user-details" => processor::user_details::process(value, kind, doc, self),
+            "fastn-apps" => processor::apps::process(value, kind, doc, self),
+            "is-reader" => processor::user_group::is_reader(value, kind, doc, self).await,
+            "sql" => processor::sql::process(value, kind, doc, self).await,
             "package-query" => {
                 processor::sqlite::process(
                     value,
                     kind,
                     doc,
-                    self.config,
+                    self,
                     &fastn_core::library2022::processor::sql::get_db_config()?,
                 )
                 .await
             }
             "pg" => processor::pg::process(value, kind, doc).await,
-            "package-tree" => {
-                processor::package_tree::process(value, kind, doc, self.config.config).await
-            }
-            "query" => {
-                processor::query::process(value, kind, doc, self.config, self.document_id.as_str())
-                    .await
-            }
+            "package-tree" => processor::package_tree::process(value, kind, doc, self.config).await,
+            "query" => processor::query::process(value, kind, doc, self).await,
             t => Err(ftd::interpreter::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,

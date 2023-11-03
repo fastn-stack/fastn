@@ -403,14 +403,8 @@ pub(crate) async fn read_ftd_2022<'o, 'm: 'o>(
         .unwrap_or(&config.config.package)
         .to_owned();
 
-    let mut lib = fastn_core::Library2022 {
-        config,
-        markdown: None,
-        document_id: main.id.clone(),
-        translated_data: Default::default(),
-        base_url: base_url.to_string(),
-        module_package_map: Default::default(),
-    };
+    config.document_id = main.id.clone();
+    config.base_url = base_url.to_string();
 
     // Get Prefix Body => [AutoImports + Actual Doc content]
     let mut doc_content =
@@ -422,7 +416,7 @@ pub(crate) async fn read_ftd_2022<'o, 'm: 'o>(
     let main_ftd_doc = match fastn_core::doc::interpret_helper(
         main.id_with_package().as_str(),
         doc_content.as_str(),
-        &mut lib,
+        config,
         base_url,
         download_assets,
         line_number,
@@ -478,14 +472,8 @@ pub(crate) async fn read_ftd_2023<'o, 'm: 'o>(
         .unwrap_or(&config.config.package)
         .to_owned();
 
-    let mut lib = fastn_core::Library2022 {
-        config,
-        markdown: None,
-        document_id: main.id.clone(),
-        translated_data: Default::default(),
-        base_url: base_url.to_string(),
-        module_package_map: Default::default(),
-    };
+    config.document_id = main.id.clone();
+    config.base_url = base_url.to_string();
 
     // Get Prefix Body => [AutoImports + Actual Doc content]
     let mut doc_content =
@@ -497,7 +485,7 @@ pub(crate) async fn read_ftd_2023<'o, 'm: 'o>(
     let main_ftd_doc = match fastn_core::doc::interpret_helper(
         main.id_with_package().as_str(),
         doc_content.as_str(),
-        &mut lib,
+        config,
         base_url,
         download_assets,
         line_number,

@@ -22,7 +22,7 @@ async fn handle_view_source(
     path: &str,
 ) -> fastn_core::Result<Vec<u8>> {
     let config = fastn_core::Config::read(None, false).await?;
-    let mut req_config = fastn_core::RequestConfig::new(&config, req);
+    let mut req_config = fastn_core::RequestConfig::new(&config, req, "editor.ftd", "/");
     let file_name = config.get_file_path_and_resolve(path).await?;
     let file = req_config.get_file_and_package_by_id(path).await?;
 

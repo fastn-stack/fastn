@@ -51,10 +51,22 @@ pub struct RequestConfig<'a> {
     pub dependencies_during_render: Vec<String>,
     pub request: &'a fastn_core::http::Request,
     pub config: &'a Config,
+    /// If the current module being parsed is a markdown file, `.markdown` contains the name and
+    /// content of that file
+    pub markdown: Option<(String, String)>,
+    pub document_id: String,
+    pub translated_data: fastn_core::TranslationData,
+    pub base_url: String,
+    pub module_package_map: std::collections::BTreeMap<String, String>,
 }
 
 impl<'a> RequestConfig<'a> {
-    pub fn new(config: &'a Config, request: &'a fastn_core::http::Request) -> Self {
+    pub fn new(
+        config: &'a Config,
+        request: &'a fastn_core::http::Request,
+        document_id: &str,
+        base_url: &str,
+    ) -> Self {
         RequestConfig {
             named_parameters: vec![],
             extra_data: Default::default(),
@@ -63,6 +75,11 @@ impl<'a> RequestConfig<'a> {
             dependencies_during_render: vec![],
             request,
             config,
+            markdown: None,
+            document_id: document_id.to_string(),
+            translated_data: Default::default(),
+            base_url: base_url.to_string(),
+            module_package_map: Default::default(),
         }
     }
 
