@@ -102,7 +102,7 @@ ftd.post_init = function () {
         if (current === last_device) {
             return;
         }
-        console.log("Initialize last_device", last_device, "current_device", current);
+        console.log("last_device", last_device, "current_device", current);
         ftd.device.set(current);
         last_device = current;
     }

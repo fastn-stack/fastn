@@ -154,7 +154,7 @@ function addClosureToBreakpointWidth() {
         if (current === lastDevice) {
             return;
         }
-        console.log("Closure - last_device", lastDevice, "current_device", current);
+        console.log("last_device", lastDevice, "current_device", current);
         ftd.device.set(current);
     });
 
