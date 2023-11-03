@@ -207,7 +207,6 @@ impl Library2022 {
         processor: String,
         doc: &'a mut ftd::interpreter::TDoc<'a>,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-        println!("process: {}", &processor);
         tracing::info!(
             msg = "stuck-on-processor",
             doc = doc.name,
