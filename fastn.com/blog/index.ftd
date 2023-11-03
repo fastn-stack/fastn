@@ -10,10 +10,14 @@
 -- import: fastn.com/blog/wittyhacks as p3
 -- import: fastn.com/blog/web-components as p2
 -- import: fastn.com/blog/show-cs as p1
+-- import: fastn.com/blog/external-css as r1
 
 -- ds.page-with-no-right-sidebar:
 
 -- ds.posts:
+
+-- ds.without-image-half:
+post-data: $r1.index-meta
 
 -- ds.featured-post:
 post-data: $fp.meta

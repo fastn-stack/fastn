@@ -1,0 +1,107 @@
+-- import: fastn-community.github.io/bling/chat
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/utils
+-- import: fastn.com/content-library as lib
+
+-- common.post-meta index-meta: Using External CSS
+published-on: November 3, 2023 at 10:27 am
+post-url: /external-css/
+author: $authors.rithik
+
+External CSS using classes is a common technique in web development
+for applying styles to HTML elements. It involves creating a separate CSS
+(Cascading Style Sheets) file with a .css extension, and using classes
+to define specific styling rules for HTML elements.
+Here's a brief overview about the areas covered:
+
+- Creating an External CSS File
+- Defining CSS classes
+- Applying Classes to fastn Elements
+- Benefits of using external CSS
+
+-- common.post-meta meta: Using External CSS
+published-on: November 3, 2023 at 10:27 am
+post-url: /external-css/
+author: $authors.rithik
+
+External CSS using classes is a common technique in web development
+for applying styles to HTML elements. It involves creating a separate CSS
+(Cascading Style Sheets) file with a .css extension, and using classes
+to define specific styling rules for HTML elements.
+Here's a brief overview of how it works:
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.h1: Creating an External CSS File
+
+You create a separate .css file that contains all the styling rules for
+your website. This file typically includes rules for various elements,
+such as headings, paragraphs, links, and more.
+
+-- ds.h1: Defining CSS classes
+
+In your external CSS file (lets say you name it as my-style.css),
+you define CSS classes by using a period (.) followed by the class name.
+For example:
+
+-- ds.code:
+lang: css
+
+\// filename: my-style.css
+.my-class
+{
+    color: blue;
+    font-size: 16px;
+}
+
+-- ds.h1: Applying Classes to fastn Elements
+
+In fastn, you apply these CSS classes to specific elements
+using the [classes](common-attributes/#classes) and [css](common-attributes/#css) attributes. For example:
+
+-- ds.code:
+lang: ftd
+
+\-- import: <your-package-name>/assets
+
+\-- ftd.text: Hello World
+classes: my-class ;; <hl>
+css: $assets.files.my-style.css ;; <hl>
+
+-- ds.markdown:
+
+By adding `classes: my-class` attribute on your ftd.text element,
+you're instructing the browser to apply the styling rules defined
+in the `my-class` class from the external CSS file `my-style.css`
+to this particular text element. You will also need to mention your
+external css file using the [css](common-attributes/#css) attribute
+whenever you are using any external css class on your elements.
+
+`Note`: Using [classes](common-attributes/#classes) attribute,
+you can assign multiple classes to your elements.
+
+-- ds.h1: Benefits of using external CSS
+
+- **Reusability**: You can apply the same class to multiple elements,
+ensuring consistent styling across your website.
+
+- **Maintainability**: By keeping your styles in a separate CSS file,
+it's easier to make global changes to the design
+without editing each file.
+
+- **Efficiency**: External CSS files can be cached by browsers,
+improving page load times.
+
+-- ds.h1: Conclusion
+
+In conclusion, using external CSS is a fundamental
+and efficient practice in web development. By defining styles in a
+separate CSS file and applying them to HTML elements using classes,
+you achieve a more organized, reusable, and maintainable design for
+your website. Although we recommend using external CSS when the style
+which you wish to use is not supported natively by fastn. But overall,
+we do provide the flexibility to use such styles using external css.
+
+-- end: ds.blog-page
