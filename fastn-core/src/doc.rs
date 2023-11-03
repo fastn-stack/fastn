@@ -29,7 +29,7 @@ fn cached_parse(
 pub async fn interpret_helper<'a>(
     name: &str,
     source: &str,
-    lib: &'a mut fastn_core::Library2022<'_>,
+    lib: &'a mut fastn_core::Library2022,
     base_url: &str,
     download_assets: bool,
     line_number: usize,
@@ -113,7 +113,7 @@ pub async fn interpret_helper<'a>(
 }
 
 pub async fn resolve_import<'a>(
-    lib: &'a mut fastn_core::Library2<'_>,
+    lib: &'a mut fastn_core::Library2,
     state: &mut ftd::ftd2021::InterpreterState,
     module: &str,
 ) -> ftd::ftd2021::p1::Result<String> {
@@ -160,7 +160,7 @@ pub async fn resolve_import<'a>(
 
 // source, foreign_variable, foreign_function
 pub async fn resolve_import_2022<'a>(
-    lib: &'a mut fastn_core::Library2022<'_>,
+    lib: &'a mut fastn_core::Library2022,
     _state: &mut ftd::interpreter::InterpreterState,
     module: &str,
     caller_module: &str,
@@ -292,7 +292,7 @@ pub async fn resolve_import_2022<'a>(
 pub async fn resolve_foreign_variable2022(
     variable: &str,
     doc_name: &str,
-    lib: &mut fastn_core::Library2022<'_>,
+    lib: &mut fastn_core::Library2022,
     base_url: &str,
     download_assets: bool,
     caller_module: &str,
@@ -353,7 +353,7 @@ pub async fn resolve_foreign_variable2022(
         module: &str,
         package: &fastn_core::Package,
         files: &str,
-        lib: &mut fastn_core::RequestConfig<'_>,
+        lib: &mut fastn_core::RequestConfig,
         base_url: &str,
         download_assets: bool, // true: in case of `fastn build`
     ) -> ftd::ftd2021::p1::Result<ftd::interpreter::Value> {
@@ -537,7 +537,7 @@ pub async fn resolve_foreign_variable2022(
 }
 
 async fn download(
-    lib: &mut fastn_core::Library2022<'_>,
+    lib: &mut fastn_core::Library2022,
     download_assets: bool,
     package: &fastn_core::Package,
     path: &str,
@@ -585,7 +585,7 @@ pub async fn resolve_foreign_variable2(
     variable: &str,
     doc_name: &str,
     state: &ftd::ftd2021::InterpreterState,
-    lib: &mut fastn_core::Library2<'_>,
+    lib: &mut fastn_core::Library2,
     base_url: &str,
     download_assets: bool,
 ) -> ftd::ftd2021::p1::Result<ftd::Value> {
@@ -620,7 +620,7 @@ pub async fn resolve_foreign_variable2(
     async fn get_assets_value(
         package: &fastn_core::Package,
         files: &str,
-        lib: &mut fastn_core::Library2<'_>,
+        lib: &mut fastn_core::Library2,
         base_url: &str,
         download_assets: bool, // true: in case of `fastn build`
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {

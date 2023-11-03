@@ -18,11 +18,11 @@ fn handle_redirect(
 /// path: /<file-name>/
 ///
 #[tracing::instrument(skip_all)]
-async fn serve_file<'o, 'm: 'o>(
-    config: &'m mut fastn_core::RequestConfig<'o>,
+async fn serve_file<'m>(
+    config: &'m mut fastn_core::RequestConfig,
     path: &camino::Utf8Path,
 ) -> fastn_core::http::Response {
-    if let Some(r) = handle_redirect(config.config, path) {
+    if let Some(r) = handle_redirect(&config.config, path) {
         return r;
     }
 
@@ -123,8 +123,8 @@ async fn serve_file<'o, 'm: 'o>(
     }
 }
 
-async fn serve_cr_file<'o, 'm: 'o>(
-    req_config: &'m mut fastn_core::RequestConfig<'o>,
+async fn serve_cr_file<'m>(
+    req_config: &'m mut fastn_core::RequestConfig,
     path: &camino::Utf8Path,
     cr_number: usize,
 ) -> fastn_core::http::Response {
@@ -302,7 +302,7 @@ pub async fn serve(
 
         // if request goes with mount-point /todos/api/add-todo/
         // so it should say not found and pass it to proxy
-        let cookies = req_config.request.cookies();
+        let cookies = req_config.request.cookies().clone();
 
         let file_response = serve_file(&mut req_config, path.as_path()).await;
         // If path is not present in sitemap then pass it to proxy
@@ -339,7 +339,7 @@ pub async fn serve(
                         if let Some(user_data) = fastn_core::auth::get_user_data_from_cookies(
                             platform,
                             requested_field,
-                            cookies,
+                            &cookies,
                         )
                         .await?
                         {

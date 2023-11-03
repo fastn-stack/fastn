@@ -65,7 +65,7 @@ pub fn get_identities(
     let doc_id = fastn_core::library2022::utils::document_full_id(req_config, doc)?;
 
     let identities =
-        fastn_core::user_group::get_identities(req_config.config, doc_id.as_str(), true).map_err(
+        fastn_core::user_group::get_identities(&req_config.config, doc_id.as_str(), true).map_err(
             |e| ftd::ftd2021::p1::Error::ParseError {
                 message: e.to_string(),
                 doc_id,
@@ -97,7 +97,7 @@ pub async fn is_reader<'a>(
     value: ftd::ast::VariableValue,
     _kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'a>,
-    req_config: &fastn_core::RequestConfig<'_>,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let doc_id = fastn_core::library2022::utils::document_full_id(req_config, doc)?;
     let is_reader = req_config.can_read(&doc_id, false).await.map_err(|e| {

@@ -94,10 +94,7 @@ impl AppTemp {
 }
 
 // Takes the path /-/<package-name>/<remaining>/ or /mount-point/<remaining>/
-pub async fn can_read(
-    config: &fastn_core::RequestConfig<'_>,
-    path: &str,
-) -> fastn_core::Result<bool> {
+pub async fn can_read(config: &fastn_core::RequestConfig, path: &str) -> fastn_core::Result<bool> {
     use itertools::Itertools;
     // first get the app
     let readers_groups = if let Some((_, _, _, Some(app))) = config
@@ -129,7 +126,7 @@ pub async fn can_read(
 
     let mut app_identities = vec![];
     for ug in user_groups.iter() {
-        app_identities.extend(ug.get_identities(config.config)?)
+        app_identities.extend(ug.get_identities(&config.config)?)
     }
 
     let auth_identities =
@@ -137,7 +134,7 @@ pub async fn can_read(
             .await?;
 
     return fastn_core::user_group::belongs_to(
-        config.config,
+        &config.config,
         user_groups.as_slice(),
         auth_identities.iter().collect_vec().as_slice(),
     );

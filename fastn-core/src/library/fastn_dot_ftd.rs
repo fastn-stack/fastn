@@ -1,6 +1,6 @@
 use crate::utils::HasElements;
 
-async fn i18n_data(lib: &fastn_core::Library<'_>) -> String {
+async fn i18n_data(lib: &fastn_core::Library) -> String {
     let lang = match lib.config.config.package.language {
         Some(ref lang) => {
             realm_lang::Language::from_2_letter_code(lang).unwrap_or(realm_lang::Language::English)
@@ -19,7 +19,7 @@ async fn i18n_data(lib: &fastn_core::Library<'_>) -> String {
 
     let current_document_last_modified_on =
         fastn_core::utils::get_current_document_last_modified_on(
-            lib.config.config,
+            &lib.config.config,
             lib.document_id.as_str(),
         )
         .await;
@@ -243,7 +243,7 @@ fn construct_fastn_cli_variables(_lib: &fastn_core::Library) -> String {
     )
 }
 
-pub(crate) async fn get2022_(lib: &fastn_core::Library<'_>) -> String {
+pub(crate) async fn get2022_(lib: &fastn_core::Library) -> String {
     #[allow(clippy::format_in_format_args)]
     let mut fastn_base = format!(
         indoc::indoc! {"
@@ -267,7 +267,7 @@ pub(crate) async fn get2022_(lib: &fastn_core::Library<'_>) -> String {
     );
 
     if let Ok(number_of_documents) = futures::executor::block_on(
-        fastn_core::utils::get_number_of_documents(lib.config.config),
+        fastn_core::utils::get_number_of_documents(&lib.config.config),
     ) {
         fastn_base = format!(
             indoc::indoc! {"
@@ -299,7 +299,7 @@ pub(crate) async fn get2022_(lib: &fastn_core::Library<'_>) -> String {
     fastn_base
 }
 
-pub(crate) async fn get(lib: &fastn_core::Library<'_>) -> String {
+pub(crate) async fn get(lib: &fastn_core::Library) -> String {
     #[allow(clippy::format_in_format_args)]
     let mut fastn_base = format!(
         indoc::indoc! {"
@@ -406,7 +406,7 @@ pub(crate) async fn get(lib: &fastn_core::Library<'_>) -> String {
     }
 
     if let Ok(number_of_documents) = futures::executor::block_on(
-        fastn_core::utils::get_number_of_documents(lib.config.config),
+        fastn_core::utils::get_number_of_documents(&lib.config.config),
     ) {
         fastn_base = format!(
             indoc::indoc! {"
@@ -435,7 +435,7 @@ pub(crate) async fn get(lib: &fastn_core::Library<'_>) -> String {
 
     if let Some(last_modified_on) =
         futures::executor::block_on(fastn_core::utils::get_current_document_last_modified_on(
-            lib.config.config,
+            &lib.config.config,
             lib.document_id.as_str(),
         ))
     {
@@ -812,7 +812,7 @@ pub(crate) async fn get(lib: &fastn_core::Library<'_>) -> String {
     fastn_base
 }
 
-pub(crate) async fn get2(lib: &fastn_core::Library2<'_>) -> String {
+pub(crate) async fn get2(lib: &fastn_core::Library2) -> String {
     let lib = fastn_core::Library {
         config: lib.config.clone(),
         markdown: lib.markdown.clone(),
@@ -824,7 +824,7 @@ pub(crate) async fn get2(lib: &fastn_core::Library2<'_>) -> String {
     get(&lib).await
 }
 
-pub(crate) async fn get2022(lib: &fastn_core::Library2022<'_>) -> String {
+pub(crate) async fn get2022(lib: &fastn_core::Library2022) -> String {
     let lib = fastn_core::Library {
         config: lib.clone(),
         markdown: lib.markdown.clone(),

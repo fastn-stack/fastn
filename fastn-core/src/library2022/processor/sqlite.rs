@@ -28,7 +28,7 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    config: &fastn_core::RequestConfig<'_>,
+    config: &fastn_core::RequestConfig,
     db_config: &fastn_core::library2022::processor::sql::DatabaseConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = get_p1_data("package-data", &value, doc.name)?;

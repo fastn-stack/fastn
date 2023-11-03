@@ -13,9 +13,9 @@ impl KeyValueData {
     }
 }
 
-pub type Library2022<'m> = fastn_core::RequestConfig<'m>;
+pub type Library2022 = fastn_core::RequestConfig;
 
-impl Library2022<'_> {
+impl Library2022 {
     pub async fn get_with_result(
         &mut self,
         name: &str,
@@ -75,7 +75,7 @@ impl Library2022<'_> {
 
         async fn get_for_package(
             name: &str,
-            lib: &mut fastn_core::Library2022<'_>,
+            lib: &mut fastn_core::Library2022,
             current_processing_module: &str,
         ) -> Option<(String, String, usize)> {
             let package = lib.get_current_package(current_processing_module).ok()?;
@@ -139,7 +139,7 @@ impl Library2022<'_> {
         async fn get_data_from_package(
             name: &str,
             package: &fastn_core::Package,
-            lib: &mut fastn_core::Library2022<'_>,
+            lib: &mut fastn_core::Library2022,
         ) -> Option<(String, usize)> {
             lib.push_package_under_process(name, package).await.ok()?;
             let packages = lib.config.all_packages.borrow();
@@ -267,7 +267,9 @@ impl Library2022<'_> {
                 .await
             }
             "pg" => processor::pg::process(value, kind, doc).await,
-            "package-tree" => processor::package_tree::process(value, kind, doc, self.config).await,
+            "package-tree" => {
+                processor::package_tree::process(value, kind, doc, &self.config).await
+            }
             "query" => processor::query::process(value, kind, doc, self).await,
             t => Err(ftd::interpreter::Error::ParseError {
                 doc_id: self.document_id.to_string(),

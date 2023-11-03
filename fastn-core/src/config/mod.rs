@@ -43,14 +43,14 @@ pub struct Config {
 }
 
 #[derive(Debug, Clone)]
-pub struct RequestConfig<'a> {
+pub struct RequestConfig {
     pub named_parameters: Vec<(String, ftd::Value)>,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
     pub current_document: Option<String>,
     pub dependencies_during_render: Vec<String>,
-    pub request: &'a fastn_core::http::Request,
-    pub config: &'a Config,
+    pub request: fastn_core::http::Request,
+    pub config: Config,
     /// If the current module being parsed is a markdown file, `.markdown` contains the name and
     /// content of that file
     pub markdown: Option<(String, String)>,
@@ -60,10 +60,10 @@ pub struct RequestConfig<'a> {
     pub module_package_map: std::collections::BTreeMap<String, String>,
 }
 
-impl<'a> RequestConfig<'a> {
+impl RequestConfig {
     pub fn new(
-        config: &'a Config,
-        request: &'a fastn_core::http::Request,
+        config: &Config,
+        request: &fastn_core::http::Request,
         document_id: &str,
         base_url: &str,
     ) -> Self {
@@ -73,8 +73,8 @@ impl<'a> RequestConfig<'a> {
             downloaded_assets: Default::default(),
             current_document: None,
             dependencies_during_render: vec![],
-            request,
-            config,
+            request: request.clone(),
+            config: config.clone(),
             markdown: None,
             document_id: document_id.to_string(),
             translated_data: Default::default(),
@@ -234,15 +234,15 @@ impl<'a> RequestConfig<'a> {
                 return Ok(true);
             }
             let access_identities = fastn_core::user_group::access_identities(
-                self.config,
-                self.request,
+                &self.config,
+                &self.request,
                 &document_name,
                 true,
             )
             .await?;
 
             let belongs_to = fastn_core::user_group::belongs_to(
-                self.config,
+                &self.config,
                 document_readers.as_slice(),
                 access_identities.iter().collect_vec().as_slice(),
             )?;
@@ -267,15 +267,15 @@ impl<'a> RequestConfig<'a> {
             let document_writers =
                 sitemap.writers(document_name.as_str(), &self.config.package.groups);
             let access_identities = fastn_core::user_group::access_identities(
-                self.config,
-                self.request,
+                &self.config,
+                &self.request,
                 &document_name,
                 false,
             )
             .await?;
 
             return fastn_core::user_group::belongs_to(
-                self.config,
+                &self.config,
                 document_writers.as_slice(),
                 access_identities.iter().collect_vec().as_slice(),
             );

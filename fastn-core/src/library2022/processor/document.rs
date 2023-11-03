@@ -136,7 +136,7 @@ pub async fn document_name<'a>(
     value: ftd::ast::VariableValue,
     _kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'a>,
-    req_config: &fastn_core::RequestConfig<'_>,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let doc_id = req_config.doc_id().unwrap_or_else(|| {
         doc.name

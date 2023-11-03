@@ -363,8 +363,8 @@ impl From<FTDResult> for fastn_core::http::Response {
 }
 
 #[tracing::instrument(skip_all)]
-pub(crate) async fn read_ftd<'o, 'm: 'o>(
-    config: &'m mut fastn_core::RequestConfig<'o>,
+pub(crate) async fn read_ftd<'m>(
+    config: &'m mut fastn_core::RequestConfig,
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
@@ -385,15 +385,15 @@ pub(crate) async fn read_ftd<'o, 'm: 'o>(
 }
 
 #[tracing::instrument(name = "read_ftd_2022", skip_all)]
-pub(crate) async fn read_ftd_2022<'o, 'm: 'o>(
-    config: &'m mut fastn_core::RequestConfig<'o>,
+pub(crate) async fn read_ftd_2022<'m>(
+    config: &'m mut fastn_core::RequestConfig,
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
     test: bool,
 ) -> fastn_core::Result<FTDResult> {
     let font_style = config.config.get_font_style();
-    let c = config.config;
+    let c = &config.config.clone();
 
     let current_package = config
         .config
@@ -454,15 +454,15 @@ pub(crate) async fn read_ftd_2022<'o, 'm: 'o>(
 
 #[allow(clippy::await_holding_refcell_ref)]
 #[tracing::instrument(name = "read_ftd_2023", skip_all)]
-pub(crate) async fn read_ftd_2023<'o, 'm: 'o>(
-    config: &'m mut fastn_core::RequestConfig<'o>,
+pub(crate) async fn read_ftd_2023<'m>(
+    config: &'m mut fastn_core::RequestConfig,
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
 ) -> fastn_core::Result<FTDResult> {
     let package_name = config.config.package.name.to_string();
     let font_style = config.config.get_font_style();
-    let c = config.config;
+    let c = &config.config.clone();
 
     let current_package = config
         .config
@@ -529,8 +529,8 @@ pub(crate) async fn read_ftd_2023<'o, 'm: 'o>(
     Ok(FTDResult::Html(file_content.into()))
 }
 
-pub(crate) async fn process_ftd<'o, 'm: 'o>(
-    config: &'m mut fastn_core::RequestConfig<'o>,
+pub(crate) async fn process_ftd<'m>(
+    config: &'m mut fastn_core::RequestConfig,
     main: &fastn_core::Document,
     base_url: &str,
     build_static_files: bool,

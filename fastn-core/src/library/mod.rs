@@ -6,8 +6,8 @@ pub(crate) mod toc;
 pub use fastn_core::Library2022;
 
 #[derive(Debug)]
-pub struct Library<'a> {
-    pub config: fastn_core::RequestConfig<'a>,
+pub struct Library {
+    pub config: fastn_core::RequestConfig,
     /// If the current module being parsed is a markdown file, `.markdown` contains the name and
     /// content of that file
     pub markdown: Option<(String, String)>,
@@ -19,7 +19,7 @@ pub struct Library<'a> {
     pub base_url: String,
 }
 
-impl Library<'_> {
+impl Library {
     pub async fn get_with_result(
         &self,
         name: &str,
@@ -46,7 +46,7 @@ impl Library<'_> {
         async fn get_for_package(
             name: &str,
             packages: &mut Vec<fastn_core::Package>,
-            lib: &fastn_core::Library<'_>,
+            lib: &fastn_core::Library,
         ) -> Option<String> {
             let package = packages.last()?;
             if name.starts_with(package.name.as_str()) {
@@ -120,7 +120,7 @@ impl Library<'_> {
         async fn get_data_from_package(
             name: &str,
             package: &fastn_core::Package,
-            lib: &Library<'_>,
+            lib: &Library,
         ) -> Option<String> {
             let path = lib.config.config.get_root_for_package(package);
             fastn_core::Config::download_required_file(&lib.config.config.root, name, package)
@@ -147,8 +147,8 @@ impl Library<'_> {
 }
 
 #[derive(Debug)]
-pub struct Library2<'a> {
-    pub config: fastn_core::RequestConfig<'a>,
+pub struct Library2 {
+    pub config: fastn_core::RequestConfig,
     /// If the current module being parsed is a markdown file, `.markdown` contains the name and
     /// content of that file
     pub markdown: Option<(String, String)>,
@@ -158,7 +158,7 @@ pub struct Library2<'a> {
     pub packages_under_process: Vec<String>,
 }
 
-impl Library2<'_> {
+impl Library2 {
     pub(crate) async fn push_package_under_process(
         &mut self,
         package: &fastn_core::Package,
@@ -236,7 +236,7 @@ impl Library2<'_> {
 
         return get_for_package(format!("{}/", name.trim_end_matches('/')).as_str(), self).await;
 
-        async fn get_for_package(name: &str, lib: &mut fastn_core::Library2<'_>) -> Option<String> {
+        async fn get_for_package(name: &str, lib: &mut fastn_core::Library2) -> Option<String> {
             let package = lib.get_current_package().ok()?;
             if name.starts_with(package.name.as_str()) {
                 if let Some(r) = get_data_from_package(name, &package, lib).await {
@@ -291,7 +291,7 @@ impl Library2<'_> {
         async fn get_data_from_package(
             name: &str,
             package: &fastn_core::Package,
-            lib: &mut Library2<'_>,
+            lib: &mut Library2,
         ) -> Option<String> {
             lib.push_package_under_process(package).await.ok()?;
             let packages = lib.config.config.all_packages.borrow();
