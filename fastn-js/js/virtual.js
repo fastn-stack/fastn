@@ -148,7 +148,7 @@ class Document2 {
 fastn_virtual.document = new Document2();
 
 function addClosureToBreakpointWidth() {
-    let closure = new Closure(function() {
+    let closure = fastn.closureWithoutExecute(function() {
         let current = ftd.get_device();
         let lastDevice = ftd.device.get();
         if (current === lastDevice) {
