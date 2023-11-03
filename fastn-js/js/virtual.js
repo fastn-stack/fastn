@@ -147,9 +147,22 @@ class Document2 {
 
 fastn_virtual.document = new Document2();
 
+function addClosureToBreakpointWidth() {
+    let closure = fastn.closureWithoutExecute(function() {
+        let current = ftd.get_device();
+        let lastDevice = ftd.device.get();
+        if (current === lastDevice) {
+            return;
+        }
+        console.log("last_device", lastDevice, "current_device", current);
+        ftd.device.set(current);
+    });
 
+    ftd.breakpoint_width.addClosure(closure);
+}
 
 fastn_virtual.hydrate = function(main) {
+    addClosureToBreakpointWidth();
     let current_device = ftd.get_device();
     let found_device = ftd.device.get();
     if (current_device !== found_device) {

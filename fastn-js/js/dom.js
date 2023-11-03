@@ -1570,7 +1570,7 @@ class Node2 {
             if (fastn_utils.isNull(staticValue)) {
                 return;
             }
-            ftd.breakpoint_width.set("mobile", fastn_utils.getStaticValue(staticValue));
+            ftd.breakpoint_width.set(fastn_utils.getStaticValue(staticValue));
         } else if (kind === fastn_dom.PropertyKind.Css) {
             let css_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
             css_list.forEach((css) => {
