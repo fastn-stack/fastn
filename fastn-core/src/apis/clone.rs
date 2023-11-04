@@ -5,20 +5,17 @@ pub struct CloneResponse {
     pub reserved_crs: Vec<i32>,
 }
 
-pub async fn clone(
-    req: fastn_core::http::Request,
-) -> fastn_core::Result<fastn_core::http::Response> {
+pub async fn clone(config: &fastn_core::Config) -> fastn_core::Result<fastn_core::http::Response> {
     // TODO: implement authentication
-    match clone_worker(req).await {
+    match clone_worker(config).await {
         Ok(data) => fastn_core::http::api_ok(data),
         Err(err) => fastn_core::http::api_error(err.to_string()),
     }
 }
 
-async fn clone_worker(_req: fastn_core::http::Request) -> fastn_core::Result<CloneResponse> {
+async fn clone_worker(config: &fastn_core::Config) -> fastn_core::Result<CloneResponse> {
     use itertools::Itertools;
 
-    let config = fastn_core::Config::read(None, false).await?;
     let all_files = config
         .get_all_file_path(&config.package, Default::default())?
         .into_iter()

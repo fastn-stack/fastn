@@ -383,9 +383,9 @@ pub async fn serve(
     })
 }
 
-pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Result<()> {
+pub(crate) async fn download_init_package(url: &Option<String>) -> std::io::Result<()> {
     let mut package = fastn_core::Package::new("unknown-package");
-    package.download_base_url = url;
+    package.download_base_url = url.to_owned();
     package
         .http_download_by_id(
             "FASTN.ftd",
@@ -400,6 +400,7 @@ pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Resul
 }
 
 pub async fn clear_cache(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     fn is_login(req: &fastn_core::http::Request) -> bool {
@@ -416,7 +417,7 @@ pub async fn clear_cache(
     let from = actix_web::web::Query::<Temp>::from_query(req.query_string())?;
     if from.from.eq(&Some("temp-github".to_string())) {
         let _lock = LOCK.write().await;
-        return Ok(fastn_core::apis::cache::clear(&req).await);
+        return Ok(fastn_core::apis::cache::clear(config, &req).await);
     }
     // TODO: Remove After Demo, till here
 
@@ -430,7 +431,7 @@ pub async fn clear_cache(
     }
 
     let _lock = LOCK.write().await;
-    fastn_core::apis::cache::clear(&req).await;
+    fastn_core::apis::cache::clear(config, &req).await;
     // TODO: Redirect to Referrer uri
     return Ok(actix_web::HttpResponse::Found()
         .append_header((actix_web::http::header::LOCATION, "/".to_string()))
@@ -438,70 +439,80 @@ pub async fn clear_cache(
 }
 
 // TODO: Move them to routes folder
-async fn sync(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.write().await;
-    fastn_core::apis::sync(&req, req.json()?).await
-}
-
-async fn sync2(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.write().await;
-    fastn_core::apis::sync2(&req, req.json()?).await
-}
-
-pub async fn clone(
+async fn sync(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    let _lock = LOCK.write().await;
+    fastn_core::apis::sync(config, req.json()?).await
+}
+
+async fn sync2(
+    config: &fastn_core::Config,
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    let _lock = LOCK.write().await;
+    fastn_core::apis::sync2(config, req.json()?).await
+}
+
+pub async fn clone(config: &fastn_core::Config) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
-    fastn_core::apis::clone(req).await
+    fastn_core::apis::clone(config).await
 }
 
 pub(crate) async fn view_source(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
-    Ok(fastn_core::apis::view_source(&req).await)
+    Ok(fastn_core::apis::view_source(config, &req).await)
 }
 
 pub(crate) async fn edit_source(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
-    Ok(fastn_core::apis::edit_source(&req).await)
+    Ok(fastn_core::apis::edit_source(config, &req).await)
 }
 
 pub async fn edit(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.write().await;
-    fastn_core::apis::edit(&req, req.json()?).await
+    fastn_core::apis::edit(config, &req, req.json()?).await
 }
 
 pub async fn revert(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.write().await;
-    fastn_core::apis::edit::revert(&req, req.json()?).await
+    fastn_core::apis::edit::revert(config, req.json()?).await
 }
 
 pub async fn editor_sync(
-    _req: fastn_core::http::Request,
+    config: &fastn_core::Config,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.write().await;
-    fastn_core::apis::edit::sync().await
+    fastn_core::apis::edit::sync(config).await
 }
 
 pub async fn create_cr(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.write().await;
-    fastn_core::apis::cr::create_cr(&req, req.json()?).await
+    fastn_core::apis::cr::create_cr(config, req.json()?).await
 }
 
 pub async fn create_cr_page(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
-    fastn_core::apis::cr::create_cr_page(req).await
+    fastn_core::apis::cr::create_cr_page(config, req).await
 }
 
 struct AppData {
@@ -621,18 +632,18 @@ async fn actual_route(
 
     let req = fastn_core::http::Request::from_actix(req, body);
     match (req.method().to_lowercase().as_str(), req.path()) {
-        ("post", "/-/sync/") if cfg!(feature = "remote") => sync(req).await,
-        ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(req).await,
-        ("get", "/-/clone/") if cfg!(feature = "remote") => clone(req).await,
-        ("get", t) if t.starts_with("/-/view-src/") => view_source(req).await,
-        ("get", t) if t.starts_with("/-/edit-src/") => edit_source(req).await,
+        ("post", "/-/sync/") if cfg!(feature = "remote") => sync(config, req).await,
+        ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(config, req).await,
+        ("get", "/-/clone/") if cfg!(feature = "remote") => clone(config).await,
+        ("get", t) if t.starts_with("/-/view-src/") => view_source(config, req).await,
+        ("get", t) if t.starts_with("/-/edit-src/") => edit_source(config, req).await,
         ("get", t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
-        ("post", "/-/edit/") => edit(req).await,
-        ("post", "/-/revert/") => revert(req).await,
-        ("get", "/-/editor-sync/") => editor_sync(req).await,
-        ("post", "/-/create-cr/") => create_cr(req).await,
-        ("get", "/-/create-cr-page/") => create_cr_page(req).await,
-        ("get", "/-/clear-cache/") => clear_cache(req).await,
+        ("post", "/-/edit/") => edit(config, req).await,
+        ("post", "/-/revert/") => revert(config, req).await,
+        ("get", "/-/editor-sync/") => editor_sync(config).await,
+        ("post", "/-/create-cr/") => create_cr(config, req).await,
+        ("get", "/-/create-cr-page/") => create_cr_page(config, req).await,
+        ("get", "/-/clear-cache/") => clear_cache(config, req).await,
         ("get", "/-/poll/") => fastn_core::watcher::poll().await,
         ("get", "/favicon.ico") => favicon().await,
         ("get", "/test/") => test().await,
@@ -678,7 +689,7 @@ pub async fn listen(
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
     if package_download_base_url.is_some() {
-        download_init_package(package_download_base_url).await?;
+        download_init_package(&package_download_base_url).await?;
     }
 
     if cfg!(feature = "controller") {

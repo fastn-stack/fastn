@@ -63,25 +63,24 @@ pub struct SyncRequest {
 /// If conflict occur, Then send back updated version in latest.ftd with conflicted content
 ///
 pub async fn sync(
-    req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
     sync_req: SyncRequest,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     dbg!("remote server call", &sync_req.package_name);
 
-    match sync_worker(req, sync_req).await {
+    match sync_worker(config, sync_req).await {
         Ok(data) => fastn_core::http::api_ok(data),
         Err(err) => fastn_core::http::api_error(err.to_string()),
     }
 }
 
 pub(crate) async fn sync_worker(
-    _req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
     request: SyncRequest,
 ) -> fastn_core::Result<SyncResponse> {
     use itertools::Itertools;
 
     // TODO: Need to call at once only
-    let config = fastn_core::Config::read(None, false).await?;
     let mut snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
     let client_snapshots = fastn_core::snapshot::resolve_snapshots(&request.latest_ftd).await?;
     // let latest_ftd = tokio::fs::read_to_string(config.history_dir().join(".latest.ftd")).await?;
@@ -229,12 +228,12 @@ pub(crate) async fn sync_worker(
         }
     }
 
-    client_current_files(&config, &snapshots, &client_snapshots, &mut synced_files).await?;
+    client_current_files(config, &snapshots, &client_snapshots, &mut synced_files).await?;
 
-    let history_files = clone_history_files(&config, &snapshots, &client_snapshots).await?;
+    let history_files = clone_history_files(config, &snapshots, &client_snapshots).await?;
 
     fastn_core::snapshot::create_latest_snapshots(
-        &config,
+        config,
         &snapshots
             .into_iter()
             .map(|(filename, timestamp)| fastn_core::Snapshot {

@@ -57,7 +57,7 @@ pub(crate) use package::Package;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};
-pub(crate) use utils::{copy_dir_all, time, timestamp_nanosecond};
+pub(crate) use utils::{copy_dir_all, timestamp_nanosecond};
 pub(crate) use version::Version;
 pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 
