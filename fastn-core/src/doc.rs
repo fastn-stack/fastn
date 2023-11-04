@@ -26,10 +26,10 @@ fn cached_parse(
 }
 
 #[tracing::instrument(skip_all)]
-pub async fn interpret_helper<'a>(
+pub async fn interpret_helper(
     name: &str,
     source: &str,
-    lib: &'a mut fastn_core::Library2022,
+    lib: &mut fastn_core::Library2022,
     base_url: &str,
     download_assets: bool,
     line_number: usize,
@@ -112,8 +112,8 @@ pub async fn interpret_helper<'a>(
     Ok(document)
 }
 
-pub async fn resolve_import<'a>(
-    lib: &'a mut fastn_core::Library2,
+pub async fn resolve_import(
+    lib: &mut fastn_core::Library2,
     state: &mut ftd::ftd2021::InterpreterState,
     module: &str,
 ) -> ftd::ftd2021::p1::Result<String> {
@@ -159,8 +159,8 @@ pub async fn resolve_import<'a>(
 }
 
 // source, foreign_variable, foreign_function
-pub async fn resolve_import_2022<'a>(
-    lib: &'a mut fastn_core::Library2022,
+pub async fn resolve_import_2022(
+    lib: &mut fastn_core::Library2022,
     _state: &mut ftd::interpreter::InterpreterState,
     module: &str,
     caller_module: &str,

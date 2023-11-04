@@ -10,7 +10,7 @@ pub struct TDoc<'a> {
     pub rive_data: &'a mut Vec<ftd::executor::RiveData>,
 }
 
-impl<'a> TDoc<'a> {
+impl TDoc<'_> {
     pub(crate) fn itdoc(&self) -> ftd::interpreter::TDoc {
         ftd::interpreter::TDoc::new(self.name, self.aliases, self.bag)
     }

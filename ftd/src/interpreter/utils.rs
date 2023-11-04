@@ -207,11 +207,11 @@ pub(crate) fn get_special_variable() -> Vec<&'static str> {
     ]
 }
 
-pub fn is_argument_in_component_or_loop<'a>(
-    name: &'a str,
-    doc: &'a ftd::interpreter::TDoc,
-    component_definition_name_with_arguments: Option<(&'a str, &'a [String])>,
-    loop_object_name_and_kind: &'a Option<String>,
+pub fn is_argument_in_component_or_loop(
+    name: &str,
+    doc: &ftd::interpreter::TDoc,
+    component_definition_name_with_arguments: Option<(&str, &[String])>,
+    loop_object_name_and_kind: &Option<String>,
 ) -> bool {
     use itertools::Itertools;
 

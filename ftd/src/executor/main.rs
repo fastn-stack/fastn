@@ -42,7 +42,7 @@ impl Default for RT {
     }
 }
 
-impl<'a> ExecuteDoc<'a> {
+impl ExecuteDoc<'_> {
     #[tracing::instrument(skip_all)]
     pub fn from_interpreter(document: ftd::interpreter::Document) -> ftd::executor::Result<RT> {
         let mut document = document;

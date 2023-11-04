@@ -5,7 +5,7 @@ pub struct TDoc<'a> {
     pub bag: &'a ftd::Map<ftd::ftd2021::interpreter::Thing>,
 }
 
-impl<'a> TDoc<'a> {
+impl TDoc<'_> {
     pub fn resolve_name(&self, name: &str) -> String {
         ftd::ftd2021::interpreter::utils::resolve_name(name, self.name, self.aliases)
     }

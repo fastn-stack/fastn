@@ -5,8 +5,8 @@ pub struct DependencyGenerator<'a> {
     pub doc: &'a ftd::interpreter::TDoc<'a>,
 }
 
-impl<'a> DependencyGenerator<'a> {
-    pub(crate) fn new(
+impl DependencyGenerator<'_> {
+    pub(crate) fn new<'a>(
         id: &'a str,
         node: &'a ftd::node::Node,
         html_data: &'a ftd::node::HTMLData,
