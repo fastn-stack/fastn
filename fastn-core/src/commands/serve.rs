@@ -18,8 +18,8 @@ fn handle_redirect(
 /// path: /<file-name>/
 ///
 #[tracing::instrument(skip_all)]
-async fn serve_file<'m>(
-    config: &'m mut fastn_core::RequestConfig,
+async fn serve_file(
+    config: &mut fastn_core::RequestConfig,
     path: &camino::Utf8Path,
 ) -> fastn_core::http::Response {
     if let Some(r) = handle_redirect(&config.config, path) {
@@ -123,8 +123,8 @@ async fn serve_file<'m>(
     }
 }
 
-async fn serve_cr_file<'m>(
-    req_config: &'m mut fastn_core::RequestConfig,
+async fn serve_cr_file(
+    req_config: &mut fastn_core::RequestConfig,
     path: &camino::Utf8Path,
     cr_number: usize,
 ) -> fastn_core::http::Response {
