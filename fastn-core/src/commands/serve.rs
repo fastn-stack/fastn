@@ -648,6 +648,7 @@ async fn actual_route(
         ("get", "/test/") => test().await,
         ("get", "/-/pwd/") => fastn_core::tutor::pwd().await,
         ("get", "/-/tutor.js") => fastn_core::tutor::js().await,
+        ("post", "/-/tutor/start/") => fastn_core::tutor::start(req.json()?).await,
         ("get", "/-/tutor/stop/") => fastn_core::tutor::stop().await,
         (_, _) => serve(config, req).await,
     }

@@ -14,6 +14,7 @@ pub async fn main(package_name: String) -> fastn_core::Result<()> {
     )
     .await
 }
+
 pub async fn pwd() -> fastn_core::Result<fastn_core::http::Response> {
     if !is_tutor() {
         return Ok(fastn_core::not_found!("this only works in tutor mode"));
@@ -26,12 +27,22 @@ pub async fn js() -> fastn_core::Result<fastn_core::http::Response> {
     Ok(actix_web::HttpResponse::Ok().body(include_bytes!("../tutor.js").to_vec()))
 }
 
+pub async fn start(t: Tutorial) -> fastn_core::Result<fastn_core::http::Response> {
+    if !is_tutor() {
+        return Ok(fastn_core::not_found!("this only works in tutor mode"));
+    }
+
+    println!("/-/start/ called");
+    *CURRENT_TUTORIAL.write().await = Some(t);
+    fastn_core::http::api_ok("done")
+}
+
 pub async fn stop() -> fastn_core::Result<fastn_core::http::Response> {
     if !is_tutor() {
         return Ok(fastn_core::not_found!("this only works in tutor mode"));
     }
 
-    println!("/-/shutdown/ called, shutting down");
+    println!("/-/stop/ called, shutting down");
     *CURRENT_TUTORIAL.write().await = None;
     fastn_core::http::api_ok("done")
 }
@@ -39,7 +50,8 @@ pub async fn stop() -> fastn_core::Result<fastn_core::http::Response> {
 static CURRENT_TUTORIAL: once_cell::sync::Lazy<async_lock::RwLock<Option<Tutorial>>> =
     once_cell::sync::Lazy::new(|| async_lock::RwLock::new(None));
 
-struct Tutorial {
+#[derive(serde::Deserialize)]
+pub struct Tutorial {
     path: String,
     data: fastn_core::commands::serve::AppData,
 }
