@@ -1,4 +1,4 @@
-pub async fn main(package_name: String) -> fastn_core::Result<()> {
+pub async fn main() -> fastn_core::Result<()> {
     println!("starting TUTOR mode");
     std::env::set_current_dir(std::env::current_dir()?.join(".tutor"))?;
     fastn_core::listen(
@@ -10,7 +10,7 @@ pub async fn main(package_name: String) -> fastn_core::Result<()> {
         vec![],
         vec![],
         vec![],
-        package_name,
+        "the-tutor".to_string(),
     )
     .await
 }
@@ -27,24 +27,21 @@ pub async fn js() -> fastn_core::Result<fastn_core::http::Response> {
     Ok(actix_web::HttpResponse::Ok().body(include_bytes!("../tutor.js").to_vec()))
 }
 
-pub async fn start(t: Tutorial) -> fastn_core::Result<fastn_core::http::Response> {
+async fn set_tutorial(t: Option<Tutorial>) -> fastn_core::Result<fastn_core::http::Response> {
     if !is_tutor() {
         return Ok(fastn_core::not_found!("this only works in tutor mode"));
     }
 
-    println!("/-/start/ called");
-    *CURRENT_TUTORIAL.write().await = Some(t);
+    *CURRENT_TUTORIAL.write().await = t;
     fastn_core::http::api_ok("done")
 }
 
-pub async fn stop() -> fastn_core::Result<fastn_core::http::Response> {
-    if !is_tutor() {
-        return Ok(fastn_core::not_found!("this only works in tutor mode"));
-    }
+pub async fn start(t: Tutorial) -> fastn_core::Result<fastn_core::http::Response> {
+    set_tutorial(Some(t)).await
+}
 
-    println!("/-/stop/ called, shutting down");
-    *CURRENT_TUTORIAL.write().await = None;
-    fastn_core::http::api_ok("done")
+pub async fn stop() -> fastn_core::Result<fastn_core::http::Response> {
+    set_tutorial(None).await
 }
 
 static CURRENT_TUTORIAL: once_cell::sync::Lazy<async_lock::RwLock<Option<Tutorial>>> =
@@ -76,6 +73,7 @@ pub(crate) async fn config(
     Ok((config, app_data.package_name))
 }
 
+/// tutor-data $processor$
 pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
@@ -87,7 +85,6 @@ pub async fn process(
         ));
     }
 
-    dbg!("tutor process called");
     let state =
         match tokio::fs::read(dirs::home_dir().unwrap().join(".fastn").join("tutor.json")).await {
             Ok(v) => serde_json::from_slice(&v)?,
@@ -102,7 +99,6 @@ pub async fn process(
                 }
             },
         };
-    dbg!(&state);
 
     doc.from_json(&state, &kind, &value)
 }
@@ -116,5 +112,5 @@ struct TutorState {
 pub fn is_tutor() -> bool {
     // https://github.com/orgs/fastn-stack/discussions/1414
     // with either of these are passed we allow APIs like /-/shutdown/, `/-/start/` etc
-    std::env::args().any(|e| e == "tutor" || e == "--tutor")
+    std::env::args().any(|e| e == "tutor")
 }

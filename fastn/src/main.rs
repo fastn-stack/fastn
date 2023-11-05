@@ -81,7 +81,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     }
 
     if let Some(_tutor) = matches.subcommand_matches("tutor") {
-        return fastn_core::tutor::main("the-tutor".to_string()).await;
+        return fastn_core::tutor::main().await;
     }
 
     let mut config = fastn_core::Config::read(None, true).await?;
@@ -506,7 +506,6 @@ mod sub_command {
                 .action(clap::ArgAction::Append))
             .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
                 .action(clap::ArgAction::Append))
-            .arg(clap::arg!(--"tutor" "Start the server in tutor mode").hide(true))
             .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"));
         if cfg!(feature = "remote") {
             serve

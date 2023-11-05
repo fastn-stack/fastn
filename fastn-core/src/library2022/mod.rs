@@ -223,7 +223,7 @@ impl Library2022 {
                 processor::figma_tokens::process_figma_tokens_old(value, kind, doc)
             }
             "http" => processor::http::process(value, kind, doc, self).await,
-            "tutor" => fastn_core::tutor::process(value, kind, doc).await,
+            "tutor-data" => fastn_core::tutor::process(value, kind, doc).await,
             "toc" => processor::toc::process(value, kind, doc),
             "get-data" => processor::get_data::process(value, kind, doc, self),
             "sitemap" => processor::sitemap::process(value, kind, doc, self),
