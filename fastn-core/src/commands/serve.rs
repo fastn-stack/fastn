@@ -515,13 +515,14 @@ pub async fn create_cr_page(
     fastn_core::apis::cr::create_cr_page(config, req).await
 }
 
-struct AppData {
-    edition: Option<String>,
-    external_js: Vec<String>,
-    inline_js: Vec<String>,
-    external_css: Vec<String>,
-    inline_css: Vec<String>,
-    package_name: String,
+#[derive(serde::Deserialize, Default, Clone)]
+pub(crate) struct AppData {
+    pub(crate) edition: Option<String>,
+    pub(crate) external_js: Vec<String>,
+    pub(crate) inline_js: Vec<String>,
+    pub(crate) external_css: Vec<String>,
+    pub(crate) inline_css: Vec<String>,
+    pub(crate) package_name: String,
 }
 
 fn handle_default_route(
@@ -619,14 +620,12 @@ async fn actual_route(
     config: &fastn_core::Config,
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
-    app_data: actix_web::web::Data<AppData>,
+    package_name: &str,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     tracing::info!(method = req.method().as_str(), uri = req.path());
     tracing::info!(tutor_mode = fastn_core::tutor::is_tutor());
 
-    let package_name = &app_data.package_name;
-
-    if let Some(default_response) = handle_default_route(&req, package_name.as_str()) {
+    if let Some(default_response) = handle_default_route(&req, package_name) {
         return Ok(default_response);
     }
 
@@ -649,7 +648,7 @@ async fn actual_route(
         ("get", "/test/") => test().await,
         ("get", "/-/pwd/") => fastn_core::tutor::pwd().await,
         ("get", "/-/tutor.js") => fastn_core::tutor::js().await,
-        ("get", "/-/shutdown/") => fastn_core::tutor::shutdown().await,
+        ("get", "/-/tutor/stop/") => fastn_core::tutor::stop().await,
         (_, _) => serve(config, req).await,
     }
 }
@@ -660,16 +659,8 @@ async fn route(
     body: actix_web::web::Bytes,
     app_data: actix_web::web::Data<AppData>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let config = fastn_core::Config::read(None, false)
-        .await
-        .unwrap()
-        .add_edition(app_data.edition.clone())?
-        .add_external_js(app_data.external_js.clone())
-        .add_inline_js(app_data.inline_js.clone())
-        .add_external_css(app_data.external_css.clone())
-        .add_inline_css(app_data.inline_css.clone());
-
-    actual_route(&config, req, body, app_data).await
+    let (config, package_name) = fastn_core::tutor::config(&app_data).await?;
+    actual_route(&config, req, body, package_name.as_str()).await
 }
 
 //noinspection HttpUrlsUsage
