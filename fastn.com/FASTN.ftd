@@ -840,8 +840,8 @@ skip: true
     document: community/events/roadshows/ujjain.ftd
   - Hyderabad: /hyderabad/
     document: community/events/roadshows/hyderabad.ftd
-  - Ahemedabad: /ahemedabad/
-    document: community/events/roadshows/ahemedabad.ftd
+  - Ahmedabad: /ahmedabad/
+    document: community/events/roadshows/ahmedabad.ftd
   - Jaipur: /jaipur/
     document: community/events/roadshows/jaipur.ftd
   - Mumbai: /mumbai/

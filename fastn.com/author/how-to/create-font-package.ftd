@@ -70,7 +70,7 @@ with -font. (eg: lato-font, make sure the name is in lowercase)
 
 -- ds.markdown:
 
-- Copy the the font repostory package name from the FASTN.ftd file
+- Copy the the font repository package name from the FASTN.ftd file
 
 -- ds.image:
 src: $fastn-assets.files.images.create-font.package-name-in-FASTN.png

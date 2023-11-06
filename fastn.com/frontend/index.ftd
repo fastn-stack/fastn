@@ -36,7 +36,7 @@ Hello World!
 -- ds.markdown:
 
 fastn is a DSL (Domain Specific Language) for authoring long for text, and have 
-access to rich collection of [readymade components](/featured/). 
+access to rich collection of [ready-made components](/featured/).
 
 Here is an example:
 

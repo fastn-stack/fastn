@@ -3,7 +3,7 @@
 -- ds.page: `fastn` Server
 
 `fastn` can act as an HTTP server as well. Using `fastn` server is an
-alterantive to using [`fastn` static site generator](/static/). If you want
+alternative to using [`fastn` static site generator](/static/). If you want
 your webpages to be dynamic, regenerated on every request, you will have to
 deploy `fastn` binary on a server.
 

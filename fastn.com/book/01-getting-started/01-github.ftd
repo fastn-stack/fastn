@@ -30,7 +30,7 @@ we will, very gradually, over the course of this book.
 
 A lot of early programmers ask this question. After all Google Docs, and Apple
 Notes, etc are great at collaboration. Of course Google Docs does not store
-program files, which are plain text files, but they have, a proprietory "rich
+program files, which are plain text files, but they have, a proprietary "rich
 text format", same with Apple Notes etc.
 
 But how about Dropbox, Google Cloud, iCloud etc? They let you store files,
@@ -148,7 +148,7 @@ lang: ftd
 
 And Jack and Jane both go looking for new speakers, and Jack gets Mahatma Gandhi
 to speak, but he decides Gandhi should come after Lincoln after studying the
-demography of the audiance, so he updates his `speakers.ftd`:
+demography of the audience, so he updates his `speakers.ftd`:
 
 -- ds.code: Jack's `speakers.ftd`
 lang: ftd
@@ -227,7 +227,7 @@ disgruntled, and looking for job elsewhere, because some product manager in
 Google Docs team decided **last change wins**?
 
 How about the event they were organising, if they are really lucky, the order
-in which the speakers peak does not matter to the audiance, but what if it
+in which the speakers peak does not matter to the audience, but what if it
 mattered? Would the event organising team be happy about the face that some
 spreadsheet software decided what the order should be? Of course you can say if
 the decision was so important, the event planning team should have double
@@ -288,7 +288,7 @@ conflict with right tools at hand, and some basic knowledge is easy most of the
 times.
 
 So if you like version control system, currently the most popular solution is
-`git`. `git` was built by Linus Tarvold, the same guy who created Linux! It's
+`git`. `git` was built by Linus Torvalds, the same guy who created Linux! It's
 pretty cool, but has a learning curve. There used to be others, `cvs`,
 `Subversion`, `Mercurial`, but they are largely overshadowed by `git` today and
 a lot of software companies are using `git`. Github and Gitlab have even `git`

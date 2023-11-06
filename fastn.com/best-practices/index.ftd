@@ -3,7 +3,7 @@
 -- ds.page: `fastn` Code Best Practices
 
 The FifthTry team follows standard coding `best practices`. These `best
-practices` are imporant for several reasons:
+practices` are important for several reasons:
 
 - **Readability**: Standard `best practices` help to ensure that `code is
     consistent` and `easy to read`. This can make it `easier for other
@@ -50,5 +50,3 @@ contents-v: $letter-contents-v
 
 
 -- end: ds.page
-
-

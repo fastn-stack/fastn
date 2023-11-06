@@ -47,7 +47,7 @@ width: $bar.text-width
 
 -- ds.markdown:
 
-If you see the `not recommened` section, the component `bar` accepts the
+If you see the `not recommended` section, the component `bar` accepts the
 argument `text-width` as integer and then it passes it to one of the variant,
 in this case `px`, of `ftd.resizing` type. This narrows down all the other
 possible values that can be accepted by `width`. 

@@ -408,7 +408,7 @@ link: /property-guidelines#optimize-container-props
 link: /property-guidelines#alignment-in-container
 
 -- letter-data: Propagating Child Properties to Parent Containers
-link: /property-guidelines#parent-propogation
+link: /property-guidelines#parent-propagation
 
 -- end: sub-categories-10
 
@@ -466,12 +466,3 @@ link: /variable-type-guidelines#singular-plural-naming
 
 -- end: sub-categories-13
 ;; --------------------------------------------------
-
-
-
-
-
-
-
-
-

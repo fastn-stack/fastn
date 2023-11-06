@@ -26,7 +26,7 @@ width: fill-container
 
 -- ds.h1: Part 1 - Data Modelling
 
-The JSON data is structred in a way, that some properties are nested within
+The JSON data is structured in a way, that some properties are nested within
 another property.
 
 -- ftd.image: 
@@ -242,7 +242,7 @@ details are displayed in form of a card.
 -- ds.h1: Join Us
 
 Join us on Discord, and share your package which you will create following this
-video. You can share it on the dicord's `show-and-tell` channel.
+video. You can share it on the discord's `show-and-tell` channel.
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
 the `fastn` website. 

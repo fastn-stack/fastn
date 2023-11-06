@@ -1,6 +1,6 @@
 -- ds.page: URL 🚧
 
-Before we create the repository let't take a look the URL I mentioned in the
+Before we create the repository let's take a look the URL I mentioned in the
 previous para: `https://github.com/fastn-stack/fastn-template`. These things
 are called URL, which is short of Uniform Resource Locator. Look at another
 URL, URL of this book `https://fastn.com/book/`. You should start paying
@@ -12,7 +12,7 @@ A URL has a "scheme", here the scheme is `https`. `https` stands for "secure
 HTTP", and HTTP is the "internet protocol" that your web-browser uses to
 communicate with the the "web-server" hosting the website. There is another
 internet protocol, identified by the scheme `http` which is very common. `http`
-and `https` are losly grouped into a single name, http, and very few people call
+and `https` are loosely grouped into a single name, http, and very few people call
 things https, e.g. typically a server would be called http server, and it
 supports https, instead of calling it https server. HTTPS is secure, so you
 should always be on a lookout for https URLs. But http is "simple", so when
@@ -20,7 +20,7 @@ doing local web development, you will often not use https and use http.
 
 Sometimes you will come across URLs without scheme, eg `google.com`. This is
 technically not a valid URL, but is common enough that a lot of applications,
-like your webbrowser understands that you mean `https://google.com` when you
+like your web-browser understands that you mean `https://google.com` when you
 type `google.com`.
 
 Since HTTPS, the secure version of http came out later, earlier when you saw
@@ -31,7 +31,7 @@ and applications prefer https by default now.
 You should be aware of the distinction though. And this may be your first
 lesson, if you want to become programmer, you have to pay a lot of attention
 to minute details. Programmers create "robust applications", means users of
-programs are sheilded from such minute details, but this has trained users to
+programs are shielded from such minute details, but this has trained users to
 not pay too much attention to details. But these details matter.
 
 

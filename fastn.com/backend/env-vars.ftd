@@ -95,7 +95,7 @@ Descriptions](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-S
 `FASTN_PG_SSL_MODE=require` is default and recommended for production.
 
 `FASTN_PG_SSL_MODE=prefer` is allowed but not recommended for production as it
-offers no benefits of encryption (is suseptible to MITM attack).
+offers no benefits of encryption (is susceptible to MITM attack).
 
 `verify-ca` and `verify-full` are both better than `require`, but we do not
 support them yet because the underlying we are using, [deadpool, does not support
@@ -110,7 +110,7 @@ this](https://github.com/bikeshedder/deadpool/issues/277).
 
 -- env-doc: `FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE`
 
-`fastn` can ignore invalid ceritificates when connecting to PostgreSQL if you
+`fastn` can ignore invalid certificates when connecting to PostgreSQL if you
 set `FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE` to `true`. This is not
 recommended for production.
 

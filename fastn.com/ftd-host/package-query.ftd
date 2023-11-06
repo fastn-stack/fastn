@@ -43,7 +43,7 @@ CREATE TABLE user (
 
 -- ds.markdown:
 
-And you have initilised it like this:
+And you have initialised it like this:
 
 -- ds.code: inserting data
 lang: sql
@@ -70,7 +70,7 @@ SELECT * FROM user;
 
 -- ds.markdown:
 
-For this to work you have to also create a record with same data as the result
+For this to work, you have to also create a record with same data as the result
 of your SQL query. In this query you are using `SELECT *`, which will fetch all
 three columns, `id`, `name` and `department`, so your record will look something
 like this:

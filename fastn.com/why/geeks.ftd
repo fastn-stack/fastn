@@ -44,7 +44,7 @@ like plain text, with some tiny amount of markup, and the `-- <something>:` etc.
 As you can see in the above example, the syntax to import a library, and the
 syntax to instantiate a component defined in the library is really the same.
 
-This is a very concious decision, we want people to learn as little syntax, and
+This is a very conscious decision, we want people to learn as little syntax, and
 keep the semantics as minimal as possible.
 
 If this was [`mdx`](https://mdxjs.com), it would have looked something like
@@ -69,7 +69,7 @@ import {amitu} from './lib.js'
 -- ds.markdown:
 
 As you can see this is a lot of syntax. Notice the import syntax is rather
-cumbersome, expecially for someone new to programming. And also notice how the
+cumbersome, especially for someone new to programming. And also notice how the
 syntax for creating a component vs importing the component is wildly different.
 
 And there lies the problem. Today we have to learn a lot to create a simple
@@ -252,12 +252,12 @@ becoming a professional starer of the trees.
 -- ds.markdown:
 
 We are creating a new variable named `amitu`. As you see `caption` and `body`
-types help in the readablity and cleanliness of syntax.
+types help in the readability and cleanliness of syntax.
 
 
 -- ds.h2: Context Dependent `end`
 
-Some component may have "children", they are delcared with the type `children`:
+Some component may have "children", they are declared with the type `children`:
 
 -- ds.code:
 lang: ftd
@@ -327,7 +327,7 @@ lang: ftd
 exposing: pricing-page, pricing-card
 
 \-- pricing-page: Our Startup Offers Excellent Prices
-annual-discout: 10%
+annual-discount: 10%
 
 Thousands of customers trust us for their daily image
 manipulation needs, you can join them by selecting one
@@ -386,7 +386,7 @@ Tiny feature to remove boilerplate that bit.
 
 -- ds.h2: Domain Drive Documentation
 
-One of the dificiencies of using markdown is over reliance on headings to
+One of the deficiencies of using markdown is over reliance on headings to
 structure the document. Everything is a blob of text, where heading levels
 function only as visual cues. There is no semantics to `h1`, `h2` etc, beyond
 `h1` is usually displayed larger than `h2`, or h2 is meant to be child of `h1`.
@@ -433,7 +433,7 @@ contain the following information:
 The feature itself requires no training as this is an internal
 optimisation.
 
-Confiruing CI systems to preserve build cache across builds is
+Configuring CI systems to preserve build cache across builds is
 required. We will be updating our fastn-template Github Action
 to include build caching. We will also have to write blog post
 on how to enable build caching on Vercel, and other hosting
@@ -498,7 +498,7 @@ and will significantly cut down build time.
 
 -- ds.markdown:
 
-Is not just a symantically clearer replacement for `#`, [`lib.rfc` is a
+Is not just a semantically clearer replacement for `#`, [`lib.rfc` is a
 component](https://github.com/fastn-stack/fastn.com/blob/main/rfcs/lib.ftd#L3-L52).
 
 This is how it looks when rendered:
@@ -708,7 +708,7 @@ little syntax to let you do as much as possible.
 -- ds.h2: `static` variables
 
 Now that just because you declare a variable as mutable does not mean it is
-acutally going to get mutated during the life cycle of the page. A variable can
+actually going to get mutated during the life cycle of the page. A variable can
 currently only be mutated using event handlers attached to UI (soon we will
 support other event handlers like interval/time based, or browser resize/scroll
 etc, or maybe even web-socket/server-sent-events etc), so if you have no UI that
@@ -1020,7 +1020,7 @@ support.
 `ftd.datetime`, `ftd.timestamp` etc.
 
 We also have `record` syntax to create custom types as we saw above. We also
-have `or-type`, which is basically algebric data type in other languages.
+have `or-type`, which is basically algebraic data type in other languages.
 
 -- ds.h2: `or-type`
 
@@ -1141,7 +1141,7 @@ case: length.px as $v
 
 These types have special handling in `fastn`, as they support light/dark mode,
 or mobile/desktop responsive. Any kernel component which accepts properties of
-these kinds automatically swtiches their value in DOM based on dark mode
+these kinds automatically switches their value in DOM based on dark mode
 preference or the device of the user.
 
 This way you do not have to litter your code with a bunch of `if` conditions and
@@ -1229,7 +1229,7 @@ optional string font-family:
 
 -- ds.markdown:
 
-`reponsive-type` allows you to have `desktop` and `mobile` versions of
+`responsive-type` allows you to have `desktop` and `mobile` versions of
 `ftd.type`.
 
 So you can specify all the font related properties, e.g. `size`, `line-height`
@@ -1308,7 +1308,7 @@ color: $inherited.colors.text ;; <hl>
 In `fastn` ecosystem, everyone is using these names, and people can distribute
 color schemes and typography data using color scheme and typography packages,
 which means you can add color scheme created by any team in your project by
-adding it as a dependency, and assinging it at the top level:
+adding it as a dependency, and assigning it at the top level:
 
 -- ds.code:
 lang: ftd
@@ -1334,10 +1334,10 @@ Since these schemes are standardised we are creating Figma support, so these
 color and typography data can be [imported in Figma](/figma/), and
 [re-exported back](/figma-to-fastn-cs/) to `fastn` files.
 
--- ds.h2: Module Interaces
+-- ds.h2: Module Interfaces
 
 One goal we had since day one was to be able to completely change look and feel
-of a website by chaning only a few lines of code. Let's see what I mean, look
+of a website by changing only a few lines of code. Let's see what I mean, look
 at this site powered by `fastn`, [`acme.fastn.com`](https://acme.fastn.com).
 And then someone sends this pull request:
 
@@ -1353,7 +1353,7 @@ width.fixed.percent: 95
 src: $fastn-assets.files.images.blog.new-layout.png
 width.fixed.percent: 95
 
-Go ahead, click on the dark mode floating buttom on the bottom right to switch
+Go ahead, click on the dark mode floating button on the bottom right to switch
 modes to see how they look in light and dark mode. Look at how much the design
 has changed, the color schemes, the typography, and the design/layout of
 components themselves, with just three lines of code change.
@@ -1437,7 +1437,7 @@ Now we are using our implementer of the module interface, and passing the module
 itself as a parameter to `foo`. Now when `foo` calls `foo.theme.yo`, the
 `implementer.yo` gets called.
 
-If two modules implement same module interface, they are interchangable. And
+If two modules implement same module interface, they are interchangeable. And
 this is the last trick to achieve the drastic design change without modifying
 anything else in the site.
 
@@ -1614,7 +1614,7 @@ This is a setup where casually installing a app is almost beyond reach of most
 of humanity. Even developers are going to have hard time managing all this.
 
 This is where fastn's emphasis on standardising comes up. We are not only
-standardising user interface roles, but aslo that you should use Postgresql,
+standardising user interface roles, but also that you should use Postgresql,
 that your tables should live in a separate schema for your application, you
 should rely on fastn to take care of authentication and basic access control,
 and so on.
@@ -1626,7 +1626,7 @@ can be deployed completely by fastn.
 This may not be what you use to build the core of your next tech startup, but
 you can use all this to power your personal or even intranet applications for
 your company, society, educational institute etc. If you want a ready made todo
-app for your comapny, a payroll management app.
+app for your company, a payroll management app.
 
 
 -- ds.h1: Special Features For Website Creators

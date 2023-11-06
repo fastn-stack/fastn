@@ -63,7 +63,7 @@ codespace. Codespace is a linux machine. It is actually a virtual machine, but
 you can ignore this detail. Imagine when you hit that button Github has
 allocated one machine from their pool of machines to you. This is why this
 feature is paid feature. They are giving you a machine with RAM, CPU and
-harddisc.
+hard disk.
 
 When the machine starts up, Github installs an operating system for you. The
 operating system contains a programming editor, a version of
@@ -101,7 +101,7 @@ file in repo, this is not the latest version, the latest version is in that
 codespace that only I have access to". What if you have more than one code
 spaces? What if you also sometimes download and edit content on your laptop?
 Where is the latest version of the file? Imagine you are working with 5 people,
-everyone has their codespace and latops, it starts to become a mess very soon.
+everyone has their codespace and laptops, it starts to become a mess very soon.
 Keeping repository as the single shared source of truth is a good practice that
 this book advocates.
 
@@ -220,4 +220,3 @@ browser. Congratulations, you are making good progress.
 You are going to [edit your website next ->](/book/first-edit/).
 
 -- end: ds.page
-

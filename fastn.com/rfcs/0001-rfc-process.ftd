@@ -5,13 +5,13 @@ id: rfc-process
 status: accepted
 
 The "RFC" (request for comments) process is intended to provide a consistent and
-controlled path for new features to enter the language, fasnt cli and tha
+controlled path for new features to enter the language, fastn cli and tha
 standard libraries, so that all stakeholders can be confident about the
 direction the language is evolving in.
 
 -- lib.motivation:
 
-Note: This RFC is heavly inspired by and borrows from the [Rust's RFC process
+Note: This RFC is heavily inspired by and borrows from the [Rust's RFC process
 document](https://rust-lang.github.io/rfcs/0002-rfc-process.html).
 
 The freewheeling way that we add new features to `fastn` has been good for early
@@ -103,7 +103,7 @@ removed from the Active RFC List; an RFC that fails after becoming active is
 We have to only teach `developers-of-fastn` about this new process, so teaching
 impact of this RFC is minimal. Even for `developers-of-fastn`, given `fastn` is
 implemented in Rust, so all developers of fastn are familiar with Rust, and also
-given we have heavily borrewed from Rust's RFC process, teaching this should not
+given we have heavily borrowed from Rust's RFC process, teaching this should not
 pose a challenge in terms of new concepts.
 
 People will be proposing ideas via Github Issues, and we will have to direct
@@ -143,5 +143,3 @@ designed to improve over the informal process in the following ways:
 
 
 -- end: lib.rfc
-
-

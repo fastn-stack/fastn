@@ -4,7 +4,7 @@ This is my second attempt at writing a book. [8 years ago, I started writing
 Python For Developers](https://www.reddit.com/r/Python/comments/3bqt1h/writing_book_on_python_python_for_developers_1st/).
 I managed to write 200 or so pages, and got some decent feedback from Reddit.
 I also managed to get 6000 or so subscribers on the mailing list for the book.
-It was a book to teach backend development, and it was rather laborius, it went
+It was a book to teach backend development, and it was rather laborious, it went
 in a great detail about a lot of small things, as it was trying to bridge the
 gap of beginners and seasoned Python developers.
 
@@ -22,7 +22,7 @@ from Dojo to many JavaScript frameworks, and eventually to Elm.
 But while Rust and Elm are much closer to my dream experience for programming,
 neither are really good for beginners. Not if you are starting from scratch, if
 you have no programming experience. My dream was, not just a book to teach
-programming from scratch, but also, and unlike many books targetted towards
+programming from scratch, but also, and unlike many books targeted towards
 beginners, to bring people to where I am after years of experience. A book that
 not only I give to beginners, but someone who will work with me on my next
 project.

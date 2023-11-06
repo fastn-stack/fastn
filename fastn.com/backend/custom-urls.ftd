@@ -9,24 +9,24 @@ why and how.
 corresponds to `index.ftd` and `/docs/` looks for both `docs.ftd` and
 `docs/index.ftd`.
 
-This ties URLs with folder heirarchy.
+This ties URLs with folder hierarchy.
 
 -- ds.h3: SEO Angle
 
 This can cause some issues with organisation, as SEO and clean URL people want
-URLs to not have meaningless information, like your folder heirarchy.
+URLs to not have meaningless information, like your folder hierarchy.
 
 -- ds.h3: Short URLs
 
 URLs are good, for example for `fastn.com`, we have a processor called
 [http processor](/http/) and we often want to link to it using `fastn.com/http/`
-which is short and easily memorisable. But the document we store is in
+which is short and easily memorable. But the document we store is in
 `ftd-host/http.ftd` based on our organisations guidelines.
 
 -- ds.h3: Folder Organization
 
 But you do not want to put all the documents on the top level, as without folder
-heirarchy it becomes hard to navigate.
+hierarchy it becomes hard to navigate.
 
 -- ds.h1: `document` attribute in `fastn.sitemap`
 

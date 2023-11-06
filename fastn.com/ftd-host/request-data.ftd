@@ -65,7 +65,7 @@ $processor$: pr.request-data
 -- ds.markdown:
 
 In this case we have provided a default value of `hello`, so if `message` is not
-found the HTTP request, the variable `message` be assiged the default value,
+found the HTTP request, the variable `message` be assigned the default value,
 `hello`.
 
 -- ds.h1: Reading Multiple Bits In One Go
@@ -136,7 +136,7 @@ If a field is present in more than one places, this is the order of preference:
 - data in `FASTN.ftd` is highest priority
 - then comes data in JSON body
 - then the data in the named parameter
-- and finally the GET query parameter is lowest priorty
+- and finally the GET query parameter is lowest priority
 
 
 -- end: ds.page

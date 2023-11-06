@@ -35,7 +35,7 @@ initialise string to it.
 
 -- ds.h2: Interpolation Creates Formula
 
-In `fastn` language, formula re-evalutes it's value whenever the underlying
+In `fastn` language, formula re-evaluates it's value whenever the underlying
 variable changes. This means if the variable used in any string interpolation
 changes, the string will automatically change as well.
 
@@ -79,7 +79,7 @@ string. The behaviour described here generalises this.
 -- lib.teaching-notes:
 
 It should be relatively easy to teach. A lot of people intuitively write that
-and get surpised that it already doesn't work.
+and get surprised that it already doesn't work.
 
 -- end: lib.teaching-notes
 
@@ -95,5 +95,3 @@ None we are aware of.
 
 
 -- end: lib.rfc
-
-

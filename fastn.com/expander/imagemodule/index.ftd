@@ -50,7 +50,7 @@ and web apps faster.
 
 `fastn` supports bunch of image file formats, checkout 
 [supported-image-formats](/built-in-types/#supported-image-formats) 
-to read about it. The link is shared in the discription.
+to read about it. The link is shared in the description.
 
 
 
@@ -225,7 +225,3 @@ v: _yM7y_Suaio
 -- string source: default
 $processor$: pr.get-data
 key: source
-
-
-
-

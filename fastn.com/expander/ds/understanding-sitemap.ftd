@@ -106,7 +106,7 @@ outlining the various pages or documents within the section or subsection.
 $on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
 
 Just like a college library needs to organise their shelves, books in an
-order based on cateogry or genre.
+order based on category or genre.
 Similarly, in a package, we want to organise the documents in different 
 sections, subsections and TOCs.
 

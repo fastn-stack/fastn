@@ -19,12 +19,12 @@ all published packages, like is the case in other ecosystems like NPM, PyPI,
 Crates.rs etc.
 
 Not having a central repository has some advantages, it can not go down, no one
-has to bear the cost of maintaining and running it. If it get's compromised it
+has to bear the cost of maintaining and running it. If it gets compromised it
 can potentially disrupt a lot of people. No one has to create account, and team
 eventually as future packages would be managed by more than a single individual,
-or would be owned by orgnaisations instead of individuals.
+or would be owned by organisations instead of individuals.
 
-But as demonstrated by [Left-pad indident](https://en.wikipedia.org/wiki/Npm#Left-pad_incident),
+But as demonstrated by [Left-pad incident](https://en.wikipedia.org/wiki/Npm#Left-pad_incident),
 letting popular packages in complete control of individuals has ecosystem risks
 as well. Individuals do not have to be hostile, they can lose their domain, or
 mis-configure or lose account at their hosting provider, leading to eco system
@@ -37,5 +37,3 @@ Further more, we are proposing.
 
 
 -- end: lib.rfc
-
-

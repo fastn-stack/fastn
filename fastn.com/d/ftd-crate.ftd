@@ -20,7 +20,7 @@ so `ftd` and (soon) `fastn-core` can be used in a variety of ways, like using
 acts as a state machine, yielding to the caller every time `ftd` can not make
 progress because it needs any IO operation, and lets the "host" perform the
 IO operation, and whenever the result is ready, the host calls "continue" on
-the interpter state machine.
+the interpreter state machine.
 
 You create the state machine by calling:
 

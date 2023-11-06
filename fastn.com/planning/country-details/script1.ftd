@@ -6,7 +6,7 @@ src: $fastn-assets.files.images.backend.pr-http.png
 -- ds.markdown:
 
 Hi Guys, welcome to the video. In this video I will help you understand how 
-using `fastn`, REST APIs can seemlessly connect the backend with the frontend.
+using `fastn`, REST APIs can seamlessly connect the backend with the frontend.
 
 -- ds.image:
 src: $fastn-assets.files.images.backend.sketch-ppt.png
@@ -241,7 +241,7 @@ There you go, we have the data in the tabular form.
 I hope you have learnt with me and found this video easy to follow.
 
 Join us on Discord, and share your package which you will create following this
-video. You can share it on the dicord's `show-and-tell` channel.
+video. You can share it on the discord's `show-and-tell` channel.
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
 the `fastn` website. 

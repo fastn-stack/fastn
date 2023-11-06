@@ -62,7 +62,7 @@ using doc-site.
 
 -- ds.image:
 if: { show-planning }
-src: $fastn-assets.files.expander.ds.img.makrdown-intro.png
+src: $fastn-assets.files.expander.ds.img.markdown-intro.png
 
 -- ds.h1: Markdown
 
@@ -84,7 +84,7 @@ We do not recommend you to style text elements such as `headings`, `images` and
 
 -- ds.h2: Benefits
 
-- Markdown's simplicity, readibility, and portability as plain texts can be
+- Markdown's simplicity, readability, and portability as plain texts can be
   easily shared and opened on any platform. Hence, using it in `doc-site` makes
   it a valuable tool for content creators and developers alike.
 

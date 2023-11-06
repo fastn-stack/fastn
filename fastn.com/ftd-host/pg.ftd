@@ -29,7 +29,7 @@ CREATE TABLE users (
 
 -- ds.markdown:
 
-And you have initilised it like this:
+And you have initialised it like this:
 
 -- ds.code: inserting data
 lang: sql

@@ -178,8 +178,8 @@ align-self: start
 
 
 
--- utils.code-display: `parent-propogation`: Propagating Child Properties to Parent Containers
-id: parent-propogation
+-- utils.code-display: `parent-propagation`: Propagating Child Properties to Parent Containers
+id: parent-propagation
 
 -- ds.code: Not recommended
 lang: ftd

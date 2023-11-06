@@ -17,7 +17,7 @@ string location:
 optional body bio:
 
 \-- person amitu: Amit Upadhyay
-location: Banglore, India
+location: Bangalore, India
 
 Amit is the founder and CEO of FifthTry.
 
@@ -29,7 +29,7 @@ like "heading of the data", `body`, which lets people write multiline strings
 without worrying about quoting or indentation etc.
 
 Read our [`ftd::p1` grammar guide](/p1-grammar/) to understand the low
-level grammer better.
+level grammar better.
 
 -- ds.h1: Rich Data Modelling
 

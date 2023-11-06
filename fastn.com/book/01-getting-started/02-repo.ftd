@@ -72,8 +72,8 @@ entered `hello`. The name of the repo is very important. If you select say
 in my case the qualified name of repo would be `amitu/hello`, and the URL of
 your repository would be `github.com/<username>/<repo-name>`, so in my case the
 name would be `github.com/amitu/hello`. The name will appear in a few more
-places. It is usually a good practice to follow either cabab-case or CamelCase
-for naming your repo, and we recommend cabab-case. Which means if you are using
+places. It is usually a good practice to follow either kebab-case or CamelCase
+for naming your repo, and we recommend kebab-case. Which means if you are using
 more than one words in the name, keep each word lower cased, and separate the
 words by a single `-` (dash) character.
 
@@ -195,7 +195,7 @@ count and it takes you to the following page:
 src: $assets.files.images.commits.png
 
 You can see the two commits, one made by me, the person who created the
-repository (acutally Github made the commit when we created the repo from
+repository (actually Github made the commit when we created the repo from
 `fastn-template`). The second commit was made by `github-actions[bot]`.
 
 Who is this `github-actions[bot]`? Why is it making commits to your repo? And

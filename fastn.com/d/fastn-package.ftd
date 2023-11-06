@@ -32,7 +32,7 @@ we only do the p1 level parsing for all `fastn` file, at startup once.
 -- ds.h2: `fastn build`
 
 All the files of the package are going to be read at least one during the build.
-Reading the entire package content can be used to gaurantee that we read things
+Reading the entire package content can be used to guarantee that we read things
 at most once.
 
 -- ds.h2: `fastn serve`
@@ -116,7 +116,7 @@ file again and get the same error.
 
 -- ds.h1: SQLite as the in-memory representation
 
-Instead of creating a strcut or some such datastructure, we can store the in
+Instead of creating a struct or some such datastructure, we can store the in
 memory representation in a global in-memory SQLite db. We can put the SQLite db
 handle behind a RWLock to ensure we do not do writes while reads are happening
 or we can rely on the SQLite to do the read-write lock stuff using transactions.
@@ -177,13 +177,13 @@ class AutoImport():
     document = models.ForeignKey(Document)
     # if alias is not specified, we compute the alias using the standard rules
     alias = models.TextField()
-    # alias specified by the user, if specied, it will be used instead
+    # alias specified by the user, if specified, it will be used instead
     alias_specified = models.TextField(null=True)
 
 
 -- ds.h2: File Table
 
-All files are stored in this table. Files are discoverd from on-disc as well
+All files are stored in this table. Files are discovered from on-disc as well
 as from Dependency list packages.
 
 -- ds.code:
@@ -306,7 +306,7 @@ build`.
 
 If one of the pages is open in local (or workspace) environment, and any of the
 files that are a dependency of that page is modified, we want to modify that
-page. Eventually we may do patch based relaod, where we will send precise
+page. Eventually we may do patch based reload, where we will send precise
 information from server to browser about what has changed. For now we will do a
 document.reload().
 
