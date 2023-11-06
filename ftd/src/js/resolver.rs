@@ -38,7 +38,7 @@ impl<'a> ResolverData<'a> {
             loop_counter_alias: self.loop_counter_alias,
             inherited_variable_name: fastn_js::INHERITED_VARIABLE,
             device: self.device,
-            doc_name: None,
+            doc_name: self.doc_name.clone(),
         }
     }
 
@@ -53,7 +53,7 @@ impl<'a> ResolverData<'a> {
             loop_counter_alias: self.loop_counter_alias,
             inherited_variable_name,
             device: self.device,
-            doc_name: None,
+            doc_name: self.doc_name.clone(),
         }
     }
 
@@ -68,7 +68,7 @@ impl<'a> ResolverData<'a> {
             loop_counter_alias: self.loop_counter_alias,
             inherited_variable_name: self.inherited_variable_name,
             device: self.device,
-            doc_name: None,
+            doc_name: self.doc_name.clone(),
         }
     }
 
@@ -83,7 +83,7 @@ impl<'a> ResolverData<'a> {
             loop_counter_alias: self.loop_counter_alias,
             inherited_variable_name: self.inherited_variable_name,
             device,
-            doc_name: None,
+            doc_name: self.doc_name.clone(),
         }
     }
 
