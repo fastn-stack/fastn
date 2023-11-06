@@ -42,12 +42,12 @@ in fastn.
 -- ds.blog-page:
 meta: $meta
 
--- ds.h1: Is external CSS supported ?
+-- ds.h1: Is external CSS supported?
 
 Yes, fastn supports the use of external CSS which we will talk about in the
 later sections.
 
--- ds.h1: Why do we need external CSS ?
+-- ds.h1: Why do we need external CSS?
 
 In cases, when we want to use any properties which are not yet supported
 by fastn or maybe we wish to use certain experimental properties
@@ -60,7 +60,7 @@ using external CSS wont support any native fastn events. So it is generally
 not recommended to use external CSS if you have to involve event handling
 on those styles.
 
--- ds.h1: How can we use external CSS ?
+-- ds.h1: How can we use external CSS?
 
 There are 2 main steps we need to do in order to use external CSS:
 
