@@ -461,7 +461,6 @@ pub(crate) async fn read_ftd_2023(
     download_assets: bool,
 ) -> fastn_core::Result<FTDResult> {
     let package_name = config.config.package.name.to_string();
-    let font_style = config.config.get_font_style();
     let c = &config.config.clone();
 
     let current_package = config
@@ -520,7 +519,7 @@ pub(crate) async fn read_ftd_2023(
         js_document_script.as_str(),
         js_ast_data.scripts.join("").as_str(),
         ssr_body.as_str(),
-        font_style.as_str(),
+        config.config.get_font_style().as_str(),
         ftd::ftd_js_css(),
         base_url,
         c,
