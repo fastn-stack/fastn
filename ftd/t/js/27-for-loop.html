@@ -16,7 +16,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><comment data-id="3"></comment><comment data-id="4"></comment><comment data-id="5"></comment><comment data-id="6"></comment><div data-id="7">undefined Tuesday</div><comment data-id="8"></comment><div data-id="9">undefined Wednesday</div><comment data-id="10"></comment><div data-id="11">undefined Thursday</div><comment data-id="12"></comment><div data-id="13">undefined Friday</div><comment data-id="14"></comment><div data-id="15">undefined Saturday</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><comment data-id="3"></comment><comment data-id="4"></comment><comment data-id="5"></comment><comment data-id="6"></comment><div data-id="7">2 Tuesday</div><comment data-id="8"></comment><div data-id="9">3 Wednesday</div><comment data-id="10"></comment><div data-id="11">4 Thursday</div><comment data-id="12"></comment><div data-id="13">5 Friday</div><comment data-id="14"></comment><div data-id="15">6 Saturday</div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
     </style>
@@ -33,10 +33,10 @@
         return (fastn_utils.getter(index) >= 2);
       }, function (root) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([global.foo__key,
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([index,
         item], function () {
           return foo__join({
-            a: global.foo__key,
+            a: index,
             b: item,
           }, rooti0);
         }), inherited);
