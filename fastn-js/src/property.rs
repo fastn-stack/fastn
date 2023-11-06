@@ -307,6 +307,7 @@ impl Value {
 
 #[derive(Debug)]
 pub enum PropertyKind {
+    BreakpointWidth,
     Children,
     StringValue,
     IntegerValue,
@@ -433,6 +434,7 @@ pub enum PropertyKind {
 impl PropertyKind {
     pub(crate) fn to_js(&self) -> &'static str {
         match self {
+            PropertyKind::BreakpointWidth => "fastn_dom.PropertyKind.BreakpointWidth",
             PropertyKind::Children => "fastn_dom.PropertyKind.Children",
             PropertyKind::Id => "fastn_dom.PropertyKind.Id",
             PropertyKind::Css => "fastn_dom.PropertyKind.Css",

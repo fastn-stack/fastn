@@ -1566,6 +1566,11 @@ class Node2 {
             }
         } else if (kind === fastn_dom.PropertyKind.Id) {
             this.#node.id = staticValue;
+        } else if (kind === fastn_dom.PropertyKind.BreakpointWidth) {
+            if (fastn_utils.isNull(staticValue)) {
+                return;
+            }
+            ftd.breakpoint_width.set(fastn_utils.getStaticValue(staticValue));
         } else if (kind === fastn_dom.PropertyKind.Css) {
             let css_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
             css_list.forEach((css) => {

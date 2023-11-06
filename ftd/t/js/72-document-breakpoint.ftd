@@ -1,0 +1,9 @@
+-- ftd.document:
+breakpoint: 800
+
+-- ftd.text:
+color: red
+text if { ftd.device == "mobile" }: Mobile text
+text if { ftd.device == "desktop" }: Desktop text
+
+-- end: ftd.document
