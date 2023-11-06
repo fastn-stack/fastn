@@ -162,7 +162,7 @@ certain CLI flags with fastn serve/build commands.
 
 - `--external-css=<FILE-PATH>`: Using this flag, we can attach an CSS
 file by providing its file path
-- [Inline css flag](/external-css/#attaching-inline-css)
+- [Inline css flag](external-css#attaching-inline-css)
 
 -- ds.h1: Attaching inline CSS
 

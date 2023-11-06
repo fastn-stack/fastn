@@ -41,7 +41,7 @@ meta: $meta
 
 Yes, fastn supports user-defined custom breakpoints. Although currently
 we can only modify the default breakpoint with the use of
-[breakpoint](/document/#breakpoint-optional-ftd-breakpoint-width-data)
+[breakpoint](/document#breakpoint-optional-ftd-breakpoint-width-data)
 attribute of `ftd.document`.
 
 -- ds.h1: How to Define a Custom Breakpoint?

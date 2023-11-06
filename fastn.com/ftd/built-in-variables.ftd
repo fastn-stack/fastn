@@ -4,11 +4,11 @@
 
 -- ds.h1: Contents
 
-- [ftd.dark-mode](/built-in-variables/#ftd-dark-mode)
-- [ftd.system-dark-mode](/built-in-variables/#ftd-system-dark-mode)
-- [ftd.follow-system-dark-mode](/built-in-variables/#ftd-follow-system-dark-mode)
-- [ftd.device](/built-in-variables/#ftd-device)
-- [ftd.mobile-breakpoint](/built-in-variables/#ftd-mobile-breakpoint)
+- [ftd.dark-mode](/built-in-variables#ftd-dark-mode)
+- [ftd.system-dark-mode](/built-in-variables#ftd-system-dark-mode)
+- [ftd.follow-system-dark-mode](/built-in-variables#ftd-follow-system-dark-mode)
+- [ftd.device](/built-in-variables#ftd-device)
+- [ftd.mobile-breakpoint](/built-in-variables#ftd-mobile-breakpoint)
 
 -- variable: `ftd.dark-mode`
 type: `boolean`
