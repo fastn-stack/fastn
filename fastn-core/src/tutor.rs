@@ -49,7 +49,7 @@ static CURRENT_TUTORIAL: once_cell::sync::Lazy<async_lock::RwLock<Option<Tutoria
 
 #[derive(serde::Deserialize)]
 pub struct Tutorial {
-    path: String,
+    id: String,
     data: fastn_core::commands::serve::AppData,
 }
 
@@ -57,7 +57,7 @@ pub(crate) async fn config(
     app_data: &fastn_core::commands::serve::AppData,
 ) -> fastn_core::Result<(fastn_core::Config, String)> {
     let (root, app_data) = match CURRENT_TUTORIAL.read().await.as_ref() {
-        Some(context) => (Some(context.path.clone()), context.data.clone()),
+        Some(context) => (Some(context.id.clone()), context.data.clone()),
         None => (None, app_data.clone()),
     };
 
@@ -85,13 +85,13 @@ pub async fn process(
         ));
     }
 
-    let state =
+    let fs_state: TutorStateFS =
         match tokio::fs::read(dirs::home_dir().unwrap().join(".fastn").join("tutor.json")).await {
             Ok(v) => serde_json::from_slice(&v)?,
             Err(e) => match dbg!(e.kind()) {
                 std::io::ErrorKind::NotFound => {
                     println!("not found, using default");
-                    TutorState::default()
+                    TutorStateFS::default()
                 }
                 _ => {
                     println!("error: {:?}, {:?}", e, e.kind());
@@ -100,13 +100,23 @@ pub async fn process(
             },
         };
 
+    let state = TutorState {
+        fs_state,
+        current: CURRENT_TUTORIAL.read().await.as_ref().map(|t| t.id.clone()),
+    };
+
     doc.from_json(&state, &kind, &value)
 }
 
-#[derive(Debug, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Default, serde::Serialize)]
 struct TutorState {
+    fs_state: TutorStateFS,
+    current: Option<String>,
+}
+
+#[derive(Debug, Default, serde::Serialize, serde::Deserialize)]
+struct TutorStateFS {
     done: Vec<String>,
-    current: String,
 }
 
 pub fn is_tutor() -> bool {
