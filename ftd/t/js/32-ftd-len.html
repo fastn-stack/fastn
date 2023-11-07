@@ -69,8 +69,8 @@
       fastn_utils.getter(global.foo__months).forLoop(root, function (root, item, index) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
         rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([global.foo__index,
-        global.foo__index], function () {
+        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([index,
+        index], function () {
           if (function () {
             return (fastn_utils.getter(index) % 3 == 1);
           }()) {
