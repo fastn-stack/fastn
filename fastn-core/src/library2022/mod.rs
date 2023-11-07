@@ -284,7 +284,7 @@ impl Library2022 {
             "package-query" => {
                 processor::package_query::process(value, kind, doc, &self.config).await
             }
-            "pg" => processor::pg::process(value, kind, doc, true).await,
+            "pg" => processor::pg::process(value, kind, doc).await,
             "package-tree" => {
                 processor::package_tree::process(value, kind, doc, &self.config).await
             }

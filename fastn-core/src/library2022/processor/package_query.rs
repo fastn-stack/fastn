@@ -11,39 +11,27 @@ pub async fn process(
         "`package-query` has been deprecated, use `sql` processor instead.",
     );
 
-    let use_db = match headers.get_optional_string_by_key("use", doc.name, value.line_number()) {
-        Ok(Some(k)) => Some(k),
-        _ => match headers
-            .get_optional_string_by_key("db", doc.name, value.line_number())
-            .ok()
-        {
-            Some(k) => {
-                fastn_core::library2022::utils::log_deprecation_warning(
-                    "`db` header is deprecated, use `use` instead.",
-                );
-                k
+    let sqlite_database =
+        match headers.get_optional_string_by_key("db", doc.name, value.line_number())? {
+            Some(k) => k,
+            None => {
+                return ftd::interpreter::utils::e2(
+                    "`db` is not specified".to_string(),
+                    doc.name,
+                    value.line_number(),
+                )
             }
-            None => None,
-        },
-    };
+        };
 
-    let sqlite_database_path = if let Some(db_path) = use_db {
-        let db_path = config.root.join(db_path.as_str());
-        if !db_path.exists() {
-            return ftd::interpreter::utils::e2(
-                "database file does not exist for package-query processor".to_string(),
-                doc.name,
-                value.line_number(),
-            );
-        }
-        db_path
-    } else {
+    let sqlite_database_path = config.root.join(sqlite_database.as_str());
+
+    if !sqlite_database_path.exists() {
         return ftd::interpreter::utils::e2(
-            "Neither `use` nor `db` is specified for package-query processor".to_string(),
+            "`db` does not exists for package-query processor".to_string(),
             doc.name,
             value.line_number(),
         );
-    };
+    }
 
     let query_response = fastn_core::library2022::processor::sqlite::execute_query(
         &sqlite_database_path,
