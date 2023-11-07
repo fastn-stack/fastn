@@ -87,8 +87,15 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
+    deprecated_usage: bool,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = super::sqlite::get_p1_data("pg", &value, doc.name)?;
+
+    if deprecated_usage {
+        fastn_core::library2022::utils::log_deprecation_warning(
+            "`pg` has been deprecated, use `sql` processor instead.",
+        );
+    }
 
     let query_response = execute_query(query.as_str(), doc, value.line_number(), headers).await;
 

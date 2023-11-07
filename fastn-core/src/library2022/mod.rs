@@ -282,19 +282,9 @@ impl Library2022 {
             "is-reader" => processor::user_group::is_reader(value, kind, doc, &self.config).await,
             "sql" => processor::sql::process(value, kind, doc, &self.config).await,
             "package-query" => {
-                processor::sqlite::process(
-                    value,
-                    kind,
-                    doc,
-                    &self.config,
-                    &fastn_core::library2022::processor::sql::DatabaseConfig {
-                        db_type: "sqlite".to_string(),
-                        db_url: "".to_string(),
-                    },
-                )
-                .await
+                processor::package_query::process(value, kind, doc, &self.config).await
             }
-            "pg" => processor::pg::process(value, kind, doc).await,
+            "pg" => processor::pg::process(value, kind, doc, true).await,
             "package-tree" => {
                 processor::package_tree::process(value, kind, doc, &self.config).await
             }

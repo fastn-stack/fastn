@@ -32,44 +32,7 @@ pub async fn process(
     db_config: &fastn_core::library2022::processor::sql::DatabaseConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = get_p1_data("package-data", &value, doc.name)?;
-
-    let use_db = match headers.get_optional_string_by_key("use", doc.name, value.line_number()) {
-        Ok(Some(k)) => Some(k),
-        _ => match headers
-            .get_optional_string_by_key("db", doc.name, value.line_number())
-            .ok()
-        {
-            Some(k) => {
-                println!("Warning: `db` header is deprecated, use `use` instead.");
-                k
-            }
-            None => None,
-        },
-    };
-
-    let sqlite_database_path = match use_db {
-        Some(k) => {
-            let mut db_path = camino::Utf8PathBuf::new().join(k.as_str());
-            if !db_path.exists() {
-                if !config.root.join(db_path.as_path()).exists() {
-                    return ftd::interpreter::utils::e2(
-                        "`use` does not exists for sql processor".to_string(),
-                        doc.name,
-                        value.line_number(),
-                    );
-                }
-                db_path = config.root.join(db_path.as_path());
-            }
-            db_path
-        }
-        None => {
-            assert!(
-                !db_config.db_url.is_empty(),
-                "Neither `use` or `db` is present."
-            );
-            config.root.join(&db_config.db_url)
-        }
-    };
+    let sqlite_database_path = config.root.join(&db_config.db_url);
 
     // need the query params
     // question is they can be multiple
@@ -329,7 +292,7 @@ fn extract_named_parameters(
     Ok(params)
 }
 
-async fn execute_query(
+pub(crate) async fn execute_query(
     database_path: &camino::Utf8PathBuf,
     query: &str,
     doc: &ftd::interpreter::TDoc<'_>,
