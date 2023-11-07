@@ -31,7 +31,7 @@ pub async fn process(
         let db_path = config.root.join(db_path.as_str());
         if !db_path.exists() {
             return ftd::interpreter::utils::e2(
-                "`use` does not exist for package-query processor".to_string(),
+                "database file does not exist for package-query processor".to_string(),
                 doc.name,
                 value.line_number(),
             );
