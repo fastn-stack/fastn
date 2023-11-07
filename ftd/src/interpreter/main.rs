@@ -825,7 +825,7 @@ impl InterpreterState {
     }
 }
 
-pub fn interpret<'a>(id: &'a str, source: &'a str) -> ftd::interpreter::Result<Interpreter> {
+pub fn interpret(id: &str, source: &str) -> ftd::interpreter::Result<Interpreter> {
     let doc = ParsedDocument::parse_with_line_number(id, source, 0)?;
     interpret_with_line_number(id, doc, 0)
 }

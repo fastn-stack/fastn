@@ -6,7 +6,7 @@ pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
         }
     };
 
-    let c = fastn_core::Config::read(None, false, None).await?;
+    let c = fastn_core::Config::read(None, false).await?;
     if c.package.dependencies.is_empty() {
         println!("No dependencies to update.")
     } else if c.package.dependencies.len() == 1 {

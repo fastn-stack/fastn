@@ -2,7 +2,7 @@ pub fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (section_name, headers, body, line_number) = match value.get_record(doc.name) {
         Ok(val) => (
@@ -30,7 +30,7 @@ pub fn process(
         });
     }
 
-    if let Some(data) = config.extra_data.get(key.as_str()) {
+    if let Some(data) = req_config.extra_data.get(key.as_str()) {
         return match kind {
             ftd::interpreter::Kind::Integer => {
                 let value2 =

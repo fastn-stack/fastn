@@ -25,16 +25,14 @@ pub struct EditResponse {
 }
 
 pub async fn edit(
+    config: &fastn_core::Config,
     req: &fastn_core::http::Request,
     req_data: EditRequest,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let mut config = match fastn_core::Config::read(None, false, Some(req)).await {
-        Ok(config) => config,
-        Err(err) => return fastn_core::http::api_error(err.to_string()),
-    };
-    config.current_document = Some(req_data.path.to_string());
+    let mut req_config = fastn_core::RequestConfig::new(config, req, "edit.ftd", "/");
+    req_config.current_document = Some(req_data.path.to_string());
 
-    match config.can_write(req, req_data.path.as_str()).await {
+    match req_config.can_write(req_data.path.as_str()).await {
         Ok(can_write) => {
             if !can_write {
                 return Ok(fastn_core::unauthorised!(
@@ -59,7 +57,7 @@ pub async fn edit(
 }
 
 pub(crate) async fn edit_worker(
-    config: fastn_core::Config,
+    config: &fastn_core::Config,
     request: EditRequest,
 ) -> fastn_core::Result<EditResponse> {
     if request.is_delete() {
@@ -110,7 +108,7 @@ pub(crate) async fn edit_worker(
         .await
     {
         let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
-        let workspaces = fastn_core::snapshot::get_workspace(&config).await?;
+        let workspaces = fastn_core::snapshot::get_workspace(config).await?;
 
         let file = fastn_core::get_file(
             config.package.name.to_string(),
@@ -149,7 +147,7 @@ pub(crate) async fn edit_worker(
 
     if let Some(before_update_status) = before_update_status {
         let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
-        let workspaces = fastn_core::snapshot::get_workspace(&config).await?;
+        let workspaces = fastn_core::snapshot::get_workspace(config).await?;
         let file = fastn_core::get_file(
             config.package.name.to_string(),
             &config.root.join(&file_name),
@@ -174,14 +172,8 @@ pub(crate) async fn edit_worker(
     })
 }
 
-pub async fn sync(
-    req: fastn_core::http::Request,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    let config = match fastn_core::Config::read(None, false, Some(&req)).await {
-        Ok(config) => config,
-        Err(err) => return fastn_core::http::api_error(err.to_string()),
-    };
-    match fastn_core::commands::sync::sync(&config, None).await {
+pub async fn sync(config: &fastn_core::Config) -> fastn_core::Result<fastn_core::http::Response> {
+    match fastn_core::commands::sync::sync(config, None).await {
         Ok(_) => {
             #[derive(serde::Serialize)]
             struct SyncResponse {
@@ -199,15 +191,10 @@ pub struct RevertRequest {
 }
 
 pub async fn revert(
-    req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
     rev: RevertRequest,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let config = match fastn_core::Config::read(None, false, Some(req)).await {
-        Ok(config) => config,
-        Err(err) => return fastn_core::http::api_error(err.to_string()),
-    };
-
-    match fastn_core::commands::revert::revert(&config, rev.path.as_str()).await {
+    match fastn_core::commands::revert::revert(config, rev.path.as_str()).await {
         Ok(_) => {
             #[derive(serde::Serialize)]
             struct RevertResponse {
