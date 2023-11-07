@@ -101,7 +101,7 @@ pub async fn process(
         };
 
     let state = TutorState {
-        fs_state,
+        done: fs_state.done,
         current: CURRENT_TUTORIAL.read().await.as_ref().map(|t| t.id.clone()),
     };
 
@@ -110,7 +110,7 @@ pub async fn process(
 
 #[derive(Debug, Default, serde::Serialize)]
 struct TutorState {
-    fs_state: TutorStateFS,
+    done: Vec<String>,
     current: Option<String>,
 }
 
