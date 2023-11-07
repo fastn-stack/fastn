@@ -45,14 +45,6 @@ pub async fn process(
         );
     };
 
-    // need the query params
-    // question is they can be multiple
-    // so lets say start with passing attributes from ftd file
-    // db-<param-name1>: value
-    // db-<param-name2>: value
-    // for now they wil be ordered
-    // select * from users where
-
     let query_response = fastn_core::library2022::processor::sqlite::execute_query(
         &sqlite_database_path,
         query.as_str(),
