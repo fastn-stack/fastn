@@ -32,6 +32,7 @@ mod tracker;
 mod translation;
 mod version;
 // mod wasm;
+pub(crate) mod catch_panic;
 mod library2022;
 mod workspace;
 
