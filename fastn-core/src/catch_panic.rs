@@ -23,7 +23,7 @@ use futures_util::FutureExt as _;
 ///
 /// # Examples
 ///
-/// ```
+/// ```no_run
 /// # use actix_web::App;
 /// use actix_web_lab::middleware::CatchPanic;
 ///
