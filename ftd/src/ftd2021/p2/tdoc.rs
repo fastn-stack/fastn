@@ -9,7 +9,7 @@ pub struct TDoc<'a> {
     pub referenced_local_variables: &'a mut ftd::Map<String>,
 }
 
-impl<'a> TDoc<'a> {
+impl TDoc<'_> {
     fn get_local_variable<'b>(
         &'b self,
         key: &'b str,
@@ -1147,7 +1147,7 @@ impl<'a> TDoc<'a> {
         }
     }
 
-    pub fn get_root(
+    pub fn get_root<'a>(
         &'a self,
         name: &'a str,
         line_number: usize,
@@ -1181,9 +1181,9 @@ impl<'a> TDoc<'a> {
     // name = foo | alias.foo | a/b#foo
 
     pub fn get_initial_thing(
-        &'a self,
+        &self,
         line_number: usize,
-        name: &'a str,
+        name: &str,
     ) -> ftd::ftd2021::p1::Result<(ftd::ftd2021::p2::Thing, Option<String>)> {
         if name.contains('#') {
             let (name, remaining_value) = {
@@ -1255,9 +1255,9 @@ impl<'a> TDoc<'a> {
     }
 
     pub fn set_value(
-        &'a self,
+        &self,
         line_number: usize,
-        name: &'a str,
+        name: &str,
         value: ftd::Variable,
     ) -> ftd::ftd2021::p1::Result<ftd::Variable> {
         let (initial_thing, remaining) = self.get_initial_thing(line_number, name)?;
@@ -1339,9 +1339,9 @@ impl<'a> TDoc<'a> {
     }
 
     pub fn get_thing(
-        &'a self,
+        &self,
         line_number: usize,
-        name: &'a str,
+        name: &str,
     ) -> ftd::ftd2021::p1::Result<ftd::ftd2021::p2::Thing> {
         let name = if let Some(name) = name.strip_prefix('$') {
             name

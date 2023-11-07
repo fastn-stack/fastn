@@ -110,12 +110,12 @@ pub struct File {
 }
 
 pub async fn sync2(
-    req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
     sync_req: SyncRequest,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     dbg!("remote server call", &sync_req.package_name);
 
-    match sync_worker(req, sync_req).await {
+    match sync_worker(config, sync_req).await {
         Ok(data) => fastn_core::http::api_ok(data),
         Err(err) => fastn_core::http::api_error(err.to_string()),
     }
@@ -308,14 +308,13 @@ pub(crate) async fn do_sync(
 }
 
 pub(crate) async fn sync_worker(
-    req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
     request: SyncRequest,
 ) -> fastn_core::Result<SyncResponse> {
     use itertools::Itertools;
 
     // TODO: Need to call at once only
-    let config = fastn_core::Config::read(None, false, Some(req)).await?;
-    let mut synced_files = do_sync(&config, request.files.as_slice()).await?;
+    let mut synced_files = do_sync(config, request.files.as_slice()).await?;
     let remote_history = config.get_history().await?;
     let remote_manifest =
         fastn_core::history::FileHistory::get_remote_manifest(remote_history.as_slice(), true)?;
@@ -324,9 +323,9 @@ pub(crate) async fn sync_worker(
     let client_latest =
         fastn_core::history::FileHistory::get_remote_manifest(clone_history.as_slice(), true)?;
 
-    client_current_files(&config, &remote_manifest, &client_latest, &mut synced_files).await?;
+    client_current_files(config, &remote_manifest, &client_latest, &mut synced_files).await?;
 
-    let history_files = clone_history_files(&config, &remote_manifest, &client_latest).await?;
+    let history_files = clone_history_files(config, &remote_manifest, &client_latest).await?;
 
     Ok(SyncResponse {
         files: synced_files.into_values().collect_vec(),

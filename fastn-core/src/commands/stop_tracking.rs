@@ -22,7 +22,7 @@ pub async fn handle_command(matches: &clap::ArgMatches) -> fastn_core::Result<()
     use fastn_core::utils::ValueOf;
 
     stop_tracking(
-        &fastn_core::Config::read(None, true, None).await?,
+        &fastn_core::Config::read(None, true).await?,
         matches.value_of_("source").unwrap(),
         matches.value_of_("target"),
     )

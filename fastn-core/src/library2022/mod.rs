@@ -13,17 +13,7 @@ impl KeyValueData {
     }
 }
 
-#[derive(Debug)]
-pub struct Library2022 {
-    pub config: fastn_core::Config,
-    /// If the current module being parsed is a markdown file, `.markdown` contains the name and
-    /// content of that file
-    pub markdown: Option<(String, String)>,
-    pub document_id: String,
-    pub translated_data: fastn_core::TranslationData,
-    pub base_url: String,
-    pub module_package_map: std::collections::BTreeMap<String, String>,
-}
+pub type Library2022 = fastn_core::RequestConfig;
 
 impl Library2022 {
     pub async fn get_with_result(
@@ -228,76 +218,49 @@ impl Library2022 {
             "figma-typo-token" => {
                 processor::figma_typography_tokens::process_typography_tokens(value, kind, doc)
             }
-            "figma-cs-token" => {
-                processor::figma_tokens::process_figma_tokens(value, kind, doc, &self.config)
-            }
+            "figma-cs-token" => processor::figma_tokens::process_figma_tokens(value, kind, doc),
             "figma-cs-token-old" => {
-                processor::figma_tokens::process_figma_tokens_old(value, kind, doc, &self.config)
+                processor::figma_tokens::process_figma_tokens_old(value, kind, doc)
             }
-            "http" => processor::http::process(value, kind, doc, &self.config).await,
-            "tutor" => fastn_core::tutor::process(value, kind, doc).await,
-            "toc" => processor::toc::process(value, kind, doc, &self.config),
-            "get-data" => processor::get_data::process(value, kind, doc, &self.config),
-            "sitemap" => processor::sitemap::process(value, kind, doc, &self.config),
-            "full-sitemap" => {
-                processor::sitemap::full_sitemap_process(value, kind, doc, &self.config)
-            }
-            "request-data" => processor::request_data::process(value, kind, doc, &self.config),
+            "http" => processor::http::process(value, kind, doc, self).await,
+            "tutor-data" => fastn_core::tutor::process(value, kind, doc).await,
+            "toc" => processor::toc::process(value, kind, doc),
+            "get-data" => processor::get_data::process(value, kind, doc, self),
+            "sitemap" => processor::sitemap::process(value, kind, doc, self),
+            "full-sitemap" => processor::sitemap::full_sitemap_process(value, kind, doc, self),
+            "request-data" => processor::request_data::process(value, kind, doc, self),
             "document-readers" => processor::document::process_readers(
                 value,
                 kind,
                 doc,
-                &self.config,
+                self,
                 self.document_id.as_str(),
             ),
             "document-writers" => processor::document::process_writers(
                 value,
                 kind,
                 doc,
-                &self.config,
+                self,
                 self.document_id.as_str(),
             ),
-            "user-groups" => processor::user_group::process(value, kind, doc, &self.config),
-            "user-group-by-id" => {
-                processor::user_group::process_by_id(value, kind, doc, &self.config)
-            }
-            "get-identities" => {
-                processor::user_group::get_identities(value, kind, doc, &self.config)
-            }
-            "document-id" => processor::document::document_id(value, kind, doc, &self.config),
-            "document-full-id" => {
-                processor::document::document_full_id(value, kind, doc, &self.config)
-            }
-            "document-suffix" => {
-                processor::document::document_suffix(value, kind, doc, &self.config)
-            }
-            "document-name" => {
-                processor::document::document_name(value, kind, doc, &self.config).await
-            }
-            "fetch-file" => {
-                processor::fetch_file::fetch_files(value, kind, doc, &self.config).await
-            }
-            "user-details" => processor::user_details::process(value, kind, doc, &self.config),
-            "fastn-apps" => processor::apps::process(value, kind, doc, &self.config),
-            "is-reader" => processor::user_group::is_reader(value, kind, doc, &self.config).await,
-            "sql" => processor::sql::process(value, kind, doc, &self.config).await,
-            "package-query" => {
-                processor::package_query::process(value, kind, doc, &self.config).await
-            }
+            "user-groups" => processor::user_group::process(value, kind, doc, self),
+            "user-group-by-id" => processor::user_group::process_by_id(value, kind, doc, self),
+            "get-identities" => processor::user_group::get_identities(value, kind, doc, self),
+            "document-id" => processor::document::document_id(value, kind, doc, self),
+            "document-full-id" => processor::document::document_full_id(value, kind, doc, self),
+            "document-suffix" => processor::document::document_suffix(value, kind, doc, self),
+            "document-name" => processor::document::document_name(value, kind, doc, self).await,
+            "fetch-file" => processor::fetch_file::fetch_files(value, kind, doc, self).await,
+            "user-details" => processor::user_details::process(value, kind, doc, self),
+            "fastn-apps" => processor::apps::process(value, kind, doc, self),
+            "is-reader" => processor::user_group::is_reader(value, kind, doc, self).await,
+            "sql" => processor::sql::process(value, kind, doc, self).await,
+            "package-query" => processor::package_query::process(value, kind, doc, self).await,
             "pg" => processor::pg::process(value, kind, doc).await,
             "package-tree" => {
                 processor::package_tree::process(value, kind, doc, &self.config).await
             }
-            "query" => {
-                processor::query::process(
-                    value,
-                    kind,
-                    doc,
-                    &mut self.config,
-                    self.document_id.as_str(),
-                )
-                .await
-            }
+            "query" => processor::query::process(value, kind, doc, self).await,
             t => Err(ftd::interpreter::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,

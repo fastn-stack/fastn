@@ -2,7 +2,7 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) =
         fastn_core::library2022::processor::sqlite::get_p1_data("package-data", &value, doc.name)?;
@@ -23,7 +23,7 @@ pub async fn process(
             }
         };
 
-    let sqlite_database_path = config.root.join(sqlite_database.as_str());
+    let sqlite_database_path = req_config.config.root.join(sqlite_database.as_str());
 
     if !sqlite_database_path.exists() {
         return ftd::interpreter::utils::e2(

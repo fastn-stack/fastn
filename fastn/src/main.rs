@@ -80,24 +80,12 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::clone(clone.value_of_("source").unwrap()).await;
     }
 
-    let mut config = fastn_core::Config::read(None, true, None).await?;
-    let package_name = config.package.name.clone();
-
     if let Some(_tutor) = matches.subcommand_matches("tutor") {
-        println!("starting TUTOR mode");
-        return fastn_core::listen(
-            "127.0.0.1",
-            Some(2000),
-            None,
-            Some("2023".to_string()),
-            vec![],
-            vec![],
-            vec![],
-            vec![],
-            package_name,
-        )
-        .await;
+        return fastn_core::tutor::main().await;
     }
+
+    let mut config = fastn_core::Config::read(None, true).await?;
+    let package_name = config.package.name.clone();
 
     if let Some(serve) = matches.subcommand_matches("serve") {
         let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
@@ -181,7 +169,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_inline_css(inline_css);
 
         return fastn_core::build(
-            &mut config,
+            &config,
             build.value_of_("file"), // TODO: handle more than one files
             build.value_of_("base").unwrap_or("/"),
             build.get_flag("ignore-failed"),
@@ -518,7 +506,6 @@ mod sub_command {
                 .action(clap::ArgAction::Append))
             .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
                 .action(clap::ArgAction::Append))
-            .arg(clap::arg!(--"tutor" "Start the server in tutor mode").hide(true))
             .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"));
         if cfg!(feature = "remote") {
             serve

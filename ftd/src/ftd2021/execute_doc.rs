@@ -8,7 +8,7 @@ pub struct ExecuteDoc<'a> {
     pub invocations: &'a mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
 }
 
-impl<'a> ExecuteDoc<'a> {
+impl ExecuteDoc<'_> {
     pub(crate) fn execute(
         &mut self,
         parent_container: &[usize],

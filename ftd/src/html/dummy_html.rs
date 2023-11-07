@@ -5,8 +5,8 @@ pub(crate) struct DummyHtmlGenerator<'a> {
     pub doc: &'a ftd::interpreter::TDoc<'a>,
 }
 
-impl<'a> DummyHtmlGenerator<'a> {
-    pub fn new(id: &str, doc: &'a ftd::interpreter::TDoc<'a>) -> DummyHtmlGenerator<'a> {
+impl DummyHtmlGenerator<'_> {
+    pub fn new<'a>(id: &str, doc: &'a ftd::interpreter::TDoc<'a>) -> DummyHtmlGenerator<'a> {
         DummyHtmlGenerator {
             id: id.to_string(),
             doc,
@@ -155,8 +155,8 @@ pub(crate) struct HelperHtmlGenerator<'a> {
     pub doc: &'a ftd::interpreter::TDoc<'a>,
 }
 
-impl<'a> HelperHtmlGenerator<'a> {
-    pub fn new(id: &str, doc: &'a ftd::interpreter::TDoc<'a>) -> HelperHtmlGenerator<'a> {
+impl HelperHtmlGenerator<'_> {
+    pub fn new<'a>(id: &str, doc: &'a ftd::interpreter::TDoc<'a>) -> HelperHtmlGenerator<'a> {
         HelperHtmlGenerator {
             id: id.to_string(),
             doc,

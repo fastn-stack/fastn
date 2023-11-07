@@ -89,7 +89,7 @@ impl ftd::html::Action {
     }
 }
 
-impl<'a> ftd::html::main::HtmlGenerator<'a> {
+impl ftd::html::main::HtmlGenerator<'_> {
     pub(crate) fn group_by_js_event(
         &self,
         evts: &[ftd::node::Event],

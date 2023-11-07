@@ -78,7 +78,7 @@ pub async fn resolve_dependencies(
         );
         // Resolve dependencies by reading the FASTN.ftd using config.read()
         // Assuming package_name and repo name are identical
-        fastn_core::Config::read(None, false, None).await?;
+        fastn_core::Config::read(None, false).await?;
     } else {
         return Err(fastn_core::Error::APIResponseError(format!(
             "Package {} Cloning failed: {}",

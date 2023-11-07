@@ -94,11 +94,12 @@ impl AppTemp {
 }
 
 // Takes the path /-/<package-name>/<remaining>/ or /mount-point/<remaining>/
-pub async fn can_read(config: &fastn_core::Config, path: &str) -> fastn_core::Result<bool> {
+pub async fn can_read(config: &fastn_core::RequestConfig, path: &str) -> fastn_core::Result<bool> {
     use itertools::Itertools;
     // first get the app
-    let readers_groups = if let Some((_, _, _, Some(app))) =
-        config.get_mountpoint_sanitized_path(&config.package, path)
+    let readers_groups = if let Some((_, _, _, Some(app))) = config
+        .config
+        .get_mountpoint_sanitized_path(&config.config.package, path)
     {
         app.readers.clone()
     } else {
@@ -110,6 +111,7 @@ pub async fn can_read(config: &fastn_core::Config, path: &str) -> fastn_core::Re
     }
 
     let user_groups = config
+        .config
         .package
         .groups
         .iter()
@@ -124,17 +126,15 @@ pub async fn can_read(config: &fastn_core::Config, path: &str) -> fastn_core::Re
 
     let mut app_identities = vec![];
     for ug in user_groups.iter() {
-        app_identities.extend(ug.get_identities(config)?)
+        app_identities.extend(ug.get_identities(&config.config)?)
     }
 
-    let auth_identities = fastn_core::auth::get_auth_identities(
-        config.request.as_ref().unwrap().cookies(),
-        app_identities.as_slice(),
-    )
-    .await?;
+    let auth_identities =
+        fastn_core::auth::get_auth_identities(config.request.cookies(), app_identities.as_slice())
+            .await?;
 
     return fastn_core::user_group::belongs_to(
-        config,
+        &config.config,
         user_groups.as_slice(),
         auth_identities.iter().collect_vec().as_slice(),
     );

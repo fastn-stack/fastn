@@ -2,7 +2,7 @@ pub async fn fetch_files(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     if !kind.is_string() {
         return ftd::interpreter::utils::e2(
@@ -24,7 +24,7 @@ pub async fn fetch_files(
         })?;
 
     Ok(ftd::interpreter::Value::String {
-        text: tokio::fs::read_to_string(config.root.join(path))
+        text: tokio::fs::read_to_string(req_config.config.root.join(path))
             .await
             .map_err(|v| ftd::interpreter::Error::ParseError {
                 message: v.to_string(),

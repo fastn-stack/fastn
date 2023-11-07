@@ -2,7 +2,7 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, line_number) = if let Ok(val) = value.get_record(doc.name) {
         (val.2.to_owned(), val.5.to_owned())
@@ -57,12 +57,14 @@ pub async fn process(
         }
     };
 
-    let (_, mut url, conf) = fastn_core::config::utils::get_clean_url(config, url.as_str())
-        .map_err(|e| ftd::interpreter::Error::ParseError {
-            message: format!("invalid url: {:?}", e),
-            doc_id: doc.name.to_string(),
-            line_number,
-        })?;
+    let (_, mut url, conf) =
+        fastn_core::config::utils::get_clean_url(&req_config.config, url.as_str()).map_err(
+            |e| ftd::interpreter::Error::ParseError {
+                message: format!("invalid url: {:?}", e),
+                doc_id: doc.name.to_string(),
+                line_number,
+            },
+        )?;
 
     let mut body = vec![];
     for header in headers.0 {
@@ -104,7 +106,7 @@ pub async fn process(
     let response = if method.as_str().eq("post") {
         fastn_core::http::http_post_with_cookie(
             url.as_str(),
-            config.request.as_ref().and_then(|v| v.cookies_string()),
+            req_config.request.cookies_string(),
             &conf,
             dbg!(format!("{{{}}}", body.join(","))).as_str(),
         )
@@ -112,7 +114,7 @@ pub async fn process(
     } else {
         fastn_core::http::http_get_with_cookie(
             url.as_str(),
-            config.request.as_ref().and_then(|v| v.cookies_string()),
+            req_config.request.cookies_string(),
             &conf,
         )
         .await

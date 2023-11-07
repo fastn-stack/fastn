@@ -3,8 +3,8 @@ pub struct VariableDependencyGenerator<'a> {
     pub doc: &'a ftd::interpreter::TDoc<'a>,
 }
 
-impl<'a> VariableDependencyGenerator<'a> {
-    pub(crate) fn new(
+impl VariableDependencyGenerator<'_> {
+    pub(crate) fn new<'a>(
         id: &'a str,
         doc: &'a ftd::interpreter::TDoc,
     ) -> VariableDependencyGenerator<'a> {
