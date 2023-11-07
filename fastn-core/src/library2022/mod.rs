@@ -287,7 +287,10 @@ impl Library2022 {
                     kind,
                     doc,
                     &self.config,
-                    &fastn_core::library2022::processor::sql::get_db_config()?,
+                    &fastn_core::library2022::processor::sql::DatabaseConfig {
+                        db_type: "sqlite".to_string(),
+                        db_url: "".to_string(),
+                    },
                 )
                 .await
             }

@@ -33,6 +33,44 @@ pub async fn process(
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = get_p1_data("package-data", &value, doc.name)?;
 
+    let use_db = match headers.get_optional_string_by_key("use", doc.name, value.line_number()) {
+        Ok(Some(k)) => Some(k),
+        _ => match headers
+            .get_optional_string_by_key("db", doc.name, value.line_number())
+            .ok()
+        {
+            Some(k) => {
+                println!("Warning: `db` header is deprecated, use `use` instead.");
+                k
+            }
+            None => None,
+        },
+    };
+
+    let sqlite_database_path = match use_db {
+        Some(k) => {
+            let mut db_path = camino::Utf8PathBuf::new().join(k.as_str());
+            if !db_path.exists() {
+                if !config.root.join(db_path.as_path()).exists() {
+                    return ftd::interpreter::utils::e2(
+                        "`use` does not exists for sql processor".to_string(),
+                        doc.name,
+                        value.line_number(),
+                    );
+                }
+                db_path = config.root.join(db_path.as_path());
+            }
+            db_path
+        }
+        None => {
+            assert!(
+                !db_config.db_url.is_empty(),
+                "Neither `use` or `db` is present."
+            );
+            config.root.join(&db_config.db_url)
+        }
+    };
+
     // need the query params
     // question is they can be multiple
     // so lets say start with passing attributes from ftd file
@@ -41,9 +79,14 @@ pub async fn process(
     // for now they wil be ordered
     // select * from users where
 
-    let db_path = config.root.join(&db_config.db_url);
-    let query_response =
-        execute_query(&db_path, query.as_str(), doc, headers, value.line_number()).await;
+    let query_response = execute_query(
+        &sqlite_database_path,
+        query.as_str(),
+        doc,
+        headers,
+        value.line_number(),
+    )
+    .await;
 
     match query_response {
         Ok(result) => result_to_value(Ok(result), kind, doc, &value, super::sql::STATUS_OK),
