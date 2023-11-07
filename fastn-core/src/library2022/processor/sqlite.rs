@@ -28,10 +28,11 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    config: &fastn_core::RequestConfig,
+    req_config: &fastn_core::RequestConfig,
     db_config: &fastn_core::library2022::processor::sql::DatabaseConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = get_p1_data("package-data", &value, doc.name)?;
+    let sqlite_database_path = req_config.config.root.join(&db_config.db_url);
 
     // need the query params
     // question is they can be multiple
@@ -41,9 +42,14 @@ pub async fn process(
     // for now they wil be ordered
     // select * from users where
 
-    let db_path = config.config.root.join(&db_config.db_url);
-    let query_response =
-        execute_query(&db_path, query.as_str(), doc, headers, value.line_number()).await;
+    let query_response = execute_query(
+        &sqlite_database_path,
+        query.as_str(),
+        doc,
+        headers,
+        value.line_number(),
+    )
+    .await;
 
     match query_response {
         Ok(result) => result_to_value(Ok(result), kind, doc, &value, super::sql::STATUS_OK),
@@ -286,7 +292,7 @@ fn extract_named_parameters(
     Ok(params)
 }
 
-async fn execute_query(
+pub(crate) async fn execute_query(
     database_path: &camino::Utf8PathBuf,
     query: &str,
     doc: &ftd::interpreter::TDoc<'_>,

@@ -14,3 +14,9 @@ pub fn document_full_id(
 
     Ok(format!("/{}/", full_document_id.trim_matches('/')))
 }
+
+pub fn log_deprecation_warning(message: &str) {
+    use colored::Colorize;
+
+    println!("{}", format!("Warning: {}", message).bright_yellow());
+}
