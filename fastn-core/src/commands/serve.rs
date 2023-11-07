@@ -93,10 +93,18 @@ async fn serve_file(
             if fastn_core::utils::is_ftd_path(path.as_str()) {
                 return fastn_core::http::ok(main_document.content.as_bytes().to_vec());
             }
+            let mut base_url = "/".to_string();
+            base_url.push_str(
+                path.as_str()
+                    .trim_end_matches("/")
+                    .trim_start_matches("/")
+                    .trim_start_matches("index.html")
+                    .trim_start_matches("index"),
+            );
             match fastn_core::package::package_doc::read_ftd(
                 config,
                 &main_document,
-                "/",
+                base_url.as_str(),
                 false,
                 false,
             )
