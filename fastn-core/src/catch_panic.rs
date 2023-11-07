@@ -23,7 +23,7 @@ use futures_util::FutureExt as _;
 ///
 /// # Examples
 ///
-/// ```no_run
+/// ```ignore
 /// # use actix_web::App;
 /// use actix_web_lab::middleware::CatchPanic;
 ///
@@ -31,7 +31,7 @@ use futures_util::FutureExt as _;
 ///     # ;
 /// ```
 ///
-/// ```no_run
+/// ```ignore
 /// # use actix_web::App;
 /// use actix_web::middleware::{Logger, NormalizePath};
 /// use actix_web_lab::middleware::CatchPanic;
