@@ -593,20 +593,32 @@ async fn handle_file_(
                 return Ok(());
             }
 
-            let req = fastn_core::http::Request::default();
-            let mut req_config =
-                fastn_core::RequestConfig::new(config, &req, doc.id.as_str(), base_url);
-            req_config.current_document = Some(document.get_id().to_string());
+            let resp = {
+                let req = fastn_core::http::Request::default();
+                let mut req_config =
+                    fastn_core::RequestConfig::new(config, &req, doc.id.as_str(), base_url);
+                req_config.current_document = Some(document.get_id().to_string());
 
-            let resp = fastn_core::package::package_doc::process_ftd(
-                &mut req_config,
-                doc,
-                base_url,
-                build_static_files,
-                test,
-                file_path.as_str(),
-            )
-            .await;
+                let resp = fastn_core::package::package_doc::process_ftd(
+                    &mut req_config,
+                    doc,
+                    base_url,
+                    build_static_files,
+                    test,
+                    file_path.as_str(),
+                )
+                .await;
+
+                config.all_packages.borrow_mut().extend(
+                    req_config
+                        .config
+                        .all_packages
+                        .borrow()
+                        .iter()
+                        .map(|(k, v)| (k.clone(), v.clone())),
+                );
+                resp
+            };
 
             match (resp, ignore_failed) {
                 (Ok(r), _) => {
