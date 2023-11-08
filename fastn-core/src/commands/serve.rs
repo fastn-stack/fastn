@@ -583,7 +583,7 @@ fn handle_default_route(
         let theme_css = ftd::theme_css();
         return theme_css.get(theme).cloned().map(|theme| {
             actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .content_type(mime_guess::mime::TEXT_CSS)
                 .body(theme)
         });
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_js()) {
@@ -595,7 +595,7 @@ fn handle_default_route(
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_css()) {
         return Some(
             actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .content_type(mime_guess::mime::TEXT_CSS)
                 .body(ftd::prism_css()),
         );
     }
