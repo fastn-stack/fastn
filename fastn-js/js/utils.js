@@ -7,7 +7,7 @@ let fastn_utils = {
             css.push(fastn_dom.InternalClass.FT_COLUMN);
         } else if (kind === fastn_dom.ElementKind.Document) {
             css.push(fastn_dom.InternalClass.FT_COLUMN);
-            css.push(fastn_dom.InternalClass.FULL);
+            css.push(fastn_dom.InternalClass.FT_FULL_SIZE);
         } else if (kind === fastn_dom.ElementKind.Row) {
             css.push(fastn_dom.InternalClass.FT_ROW);
         } else if (kind === fastn_dom.ElementKind.IFrame) {
