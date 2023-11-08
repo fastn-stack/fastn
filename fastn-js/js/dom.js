@@ -2,6 +2,12 @@ let fastn_dom = {};
 
 fastn_dom.styleClasses = "";
 
+fastn_dom.InternalClass = {
+    FT_COLUMN: 'ft_column',
+    FT_ROW: 'ft_row',
+    FULL: "full",
+};
+
 fastn_dom.codeData = {
     availableThemes: {},
     addedCssFile: []

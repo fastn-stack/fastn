@@ -1,16 +1,15 @@
 let fastn_utils = {
-    ftClassNames: ["ft_column", "ft_row"],
     htmlNode(kind) {
         let node = "div";
         let css = [];
         let attributes = {};
         if (kind === fastn_dom.ElementKind.Column) {
-            css.push("ft_column");
+            css.push(fastn_dom.InternalClass.FT_COLUMN);
         } else if (kind === fastn_dom.ElementKind.Document) {
-            css.push("ft_column");
-            css.push("full");
+            css.push(fastn_dom.InternalClass.FT_COLUMN);
+            css.push(fastn_dom.InternalClass.FULL);
         } else if (kind === fastn_dom.ElementKind.Row) {
-            css.push("ft_row");
+            css.push(fastn_dom.InternalClass.FT_ROW);
         } else if (kind === fastn_dom.ElementKind.IFrame) {
             node = "iframe";
             // To allow fullscreen support
@@ -102,11 +101,12 @@ let fastn_utils = {
         if (ssr) {
             iterativeClassList = iterativeClassList.getClasses();
         }
+        const internalClassNames = Object.values(fastn_dom.InternalClass);
         const classesToRemove = [];
 
         for (const className of iterativeClassList) {
             if (!className.startsWith('__') && 
-                !this.ftClassNames.includes(className) &&
+                !internalClassNames.includes(className) &&
                 className !== extraCodeData?.language &&
                 className !== extraCodeData?.theme
             ) {
