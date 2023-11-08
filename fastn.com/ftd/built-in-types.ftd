@@ -20,53 +20,53 @@ These types can be categorized into two main groups: **Primitive** and
 -- ds.h1: Contents
 
 
-- [Primitive Types](built-in-types#primitive-types)
-  - [`boolean`](built-in-types#boolean)
-  - [`integer`](built-in-types#integer)
-  - [`decimal`](built-in-types#decimal)
-  - [`string`](built-in-types#string)
-  - [`caption`](built-in-types#caption)
-  - [`body`](built-in-types#body)
-  - [`caption or body`](built-in-types#caption-or-body)
-  - [`ftd.ui`](built-in-types#ftd-ui)
-  - [`children`](built-in-types#children)
-- [Derived Types](built-in-types#derived-types)
-  - [`ftd.align-self`](built-in-types#ftd-align-self)
-  - [`ftd.align`](built-in-types#ftd-align)
-  - [`ftd.anchor`](built-in-types#ftd-anchor)
-  - [`ftd.linear-gradient`](built-in-types#ftd-linear-gradient)
-  - [`ftd.linear-gradient-color`](built-in-types#ftd-linear-gradient-color)
-  - [`ftd.breakpoint-width-data`](built-in-types#ftd-breakpoint-width-data)
-  - [`ftd.linear-gradient-directions`](built-in-types#ftd-linear-gradient-directions)
-  - [`ftd.background-image`](built-in-types#ftd-background-image)
-  - [`ftd.background-position`](built-in-types#ftd-background-position)
-  - [`ftd.background-repeat`](built-in-types#ftd-background-repeat)
-  - [`ftd.background-size`](built-in-types#ftd-background-size)
-  - [`ftd.background`](built-in-types#ftd-background)
-  - [`ftd.border-style`](built-in-types#ftd-border-style)
-  - [`ftd.color`](built-in-types#ftd-color)
-  - [`ftd.display`](built-in-types#ftd-display)
-  - [`ftd.color-scheme`](built-in-types#ftd-color-scheme)
-  - [`ftd.cursor`](built-in-types#ftd-cursor)
-  - [`ftd.image-src`](built-in-types#ftd-image-src)
-  - [`ftd.length`](built-in-types#ftd-length)
-  - [`ftd.length-pair`](built-in-types#ftd-length-pair)
-  - [`ftd.loading`](built-in-types#ftd-loading)
-  - [`ftd.overflow`](built-in-types#ftd-overflow)
-  - [`ftd.region`](built-in-types#ftd-region)
-  - [`ftd.resize`](built-in-types#ftd-resize)
-  - [`ftd.resizing`](built-in-types#ftd-resizing)
-  - [`ftd.responsive-type`](built-in-types#ftd-responsive-type)
-  - [`ftd.shadow`](built-in-types#ftd-shadow)
-  - [`ftd.mask`](built-in-types#ftd-mask)
-  - [`ftd.spacing`](built-in-types#ftd-spacing)
-  - [`ftd.text-align`](built-in-types#ftd-text-align)
-  - [`ftd.text-input-type`](built-in-types#ftd-text-input-type)
-  - [`ftd.text-style`](built-in-types#ftd-text-style)
-  - [`ftd.text-transform`](built-in-types#ftd-text-transform)
-  - [`ftd.type`](built-in-types#ftd-type)
-  - [`ftd.white-space`](built-in-types#ftd-white-space)
-  - [`ftd.type-data`](built-in-types#ftd-type-data)
+- [Primitive Types](/built-in-types#primitive-types)
+  - [`boolean`](/built-in-types#boolean)
+  - [`integer`](/built-in-types#integer)
+  - [`decimal`](/built-in-types#decimal)
+  - [`string`](/built-in-types#string)
+  - [`caption`](/built-in-types#caption)
+  - [`body`](/built-in-types#body)
+  - [`caption or body`](/built-in-types#caption-or-body)
+  - [`ftd.ui`](/built-in-types#ftd-ui)
+  - [`children`](/built-in-types#children)
+- [Derived Types](/built-in-types#derived-types)
+  - [`ftd.align-self`](/built-in-types#ftd-align-self)
+  - [`ftd.align`](/built-in-types#ftd-align)
+  - [`ftd.anchor`](/built-in-types#ftd-anchor)
+  - [`ftd.linear-gradient`](/built-in-types#ftd-linear-gradient)
+  - [`ftd.linear-gradient-color`](/built-in-types#ftd-linear-gradient-color)
+  - [`ftd.breakpoint-width-data`](/built-in-types#ftd-breakpoint-width-data)
+  - [`ftd.linear-gradient-directions`](/built-in-types#ftd-linear-gradient-directions)
+  - [`ftd.background-image`](/built-in-types#ftd-background-image)
+  - [`ftd.background-position`](/built-in-types#ftd-background-position)
+  - [`ftd.background-repeat`](/built-in-types#ftd-background-repeat)
+  - [`ftd.background-size`](/built-in-types#ftd-background-size)
+  - [`ftd.background`](/built-in-types#ftd-background)
+  - [`ftd.border-style`](/built-in-types#ftd-border-style)
+  - [`ftd.color`](/built-in-types#ftd-color)
+  - [`ftd.display`](/built-in-types#ftd-display)
+  - [`ftd.color-scheme`](/built-in-types#ftd-color-scheme)
+  - [`ftd.cursor`](/built-in-types#ftd-cursor)
+  - [`ftd.image-src`](/built-in-types#ftd-image-src)
+  - [`ftd.length`](/built-in-types#ftd-length)
+  - [`ftd.length-pair`](/built-in-types#ftd-length-pair)
+  - [`ftd.loading`](/built-in-types#ftd-loading)
+  - [`ftd.overflow`](/built-in-types#ftd-overflow)
+  - [`ftd.region`](/built-in-types#ftd-region)
+  - [`ftd.resize`](/built-in-types#ftd-resize)
+  - [`ftd.resizing`](/built-in-types#ftd-resizing)
+  - [`ftd.responsive-type`](/built-in-types#ftd-responsive-type)
+  - [`ftd.shadow`](/built-in-types#ftd-shadow)
+  - [`ftd.mask`](/built-in-types#ftd-mask)
+  - [`ftd.spacing`](/built-in-types#ftd-spacing)
+  - [`ftd.text-align`](/built-in-types#ftd-text-align)
+  - [`ftd.text-input-type`](/built-in-types#ftd-text-input-type)
+  - [`ftd.text-style`](/built-in-types#ftd-text-style)
+  - [`ftd.text-transform`](/built-in-types#ftd-text-transform)
+  - [`ftd.type`](/built-in-types#ftd-type)
+  - [`ftd.white-space`](/built-in-types#ftd-white-space)
+  - [`ftd.type-data`](/built-in-types#ftd-type-data)
 
 
 
@@ -445,7 +445,7 @@ derived types. Derived types comes in two types: [`record`](ftd/record/) and
 -- ds.h2: `ftd.linear-gradient`
 
 `ftd.linear-gradient` is a record. It accepts two values as fields: `direction`
-of type [`ftd.linear-gradient-directions`](built-in-types#ftd-linear-gradient-directions)
+of type [`ftd.linear-gradient-directions`](/built-in-types#ftd-linear-gradient-directions)
 and `colors` as list of `string` type.
 
 -- ds.code: `ftd.linear-gradient`
@@ -458,11 +458,11 @@ ftd.linear-gradient-color list colors:
 -- ds.markdown:
 
 - `direction`: This field defines the direction of gradient line. It takes
-value of type [`ftd.linear-gradient-directions`](built-in-types#ftd-linear-gradient-directions)
+value of type [`ftd.linear-gradient-directions`](/built-in-types#ftd-linear-gradient-directions)
 and is optional. By default, it takes `bottom`.
 
 - `colors`: This field takes a list of
-[`ftd.linear-gradient-color`](built-in-types#ftd-linear-gradient-color)
+[`ftd.linear-gradient-color`](/built-in-types#ftd-linear-gradient-color)
 which defines the colors used in the gradient.
 
 
@@ -513,17 +513,17 @@ optional ftd.length stop-position:
 -- ds.markdown:
 
 - `color`: This field takes the color value of type
-[`ftd.color`](built-in-types#ftd-color) and is of caption type.
+[`ftd.color`](/built-in-types#ftd-color) and is of caption type.
 
 - `start`: This field defines start position of the color and takes value
-of type [`ftd.length`](built-in-types#ftd-length) and is optional.
+of type [`ftd.length`](/built-in-types#ftd-length) and is optional.
 
 - `end`: This field defines the color end position and takes value
-of type [`ftd.length`](built-in-types#ftd-length) and is optional.
+of type [`ftd.length`](/built-in-types#ftd-length) and is optional.
 
 - `stop-position`: This field defines the color stop position from where the
 gradient mid occurs and takes value of type
-[`ftd.length`](built-in-types#ftd-length) and is optional.
+[`ftd.length`](/built-in-types#ftd-length) and is optional.
 
 
 
@@ -1018,7 +1018,7 @@ lang: ftd
 As shown above, the `ftd.resizing` has following variants:
 
 - `fixed`: The `fixed` variant of `ftd.resizing` is used to give a fixed
-  [length](built-in-types/#ftd-length) to an element. For example,
+  [length](/built-in-types/#ftd-length) to an element. For example,
   `width.fixed.px: 100` sets the width of an element to be 100 pixels. This
   variant is useful when a specific size is required for an element, regardless
   of the size of its parent or contents.
@@ -1221,7 +1221,7 @@ ftd.length y:
 -- ds.h2: `ftd.type`
 
 `ftd.type` is a `record`. It is not a direct type for any component property, but
-it has a derived type [`ftd.responsive-type`](built-in-types#ftd-responsive-type)
+it has a derived type [`ftd.responsive-type`](/built-in-types#ftd-responsive-type)
 which is a type `role`, a common property for component. It specifies the
 typography of the element.
 
@@ -1289,7 +1289,7 @@ letter-spacing.px: 5
 `ftd.responsive-type` is a record. It is a type for `role` property, a common
 property for component. It specifies the responsive typography of an element
 using fields for `desktop` and `mobile`, which are of type
-[`ftd.type`](built-in-types#ftd-type).
+[`ftd.type`](/built-in-types#ftd-type).
 
 
 -- ds.code: `ftd.responsive-type`
@@ -1533,7 +1533,7 @@ As shown above, the `ftd.spacing` has following variants:
 
 
 - `fixed`: A fixed distance between each item, specified in a specific unit of
-  measurement, as given by [`ftd.length`](built-in-types#ftd-length) such
+  measurement, as given by [`ftd.length`](/built-in-types#ftd-length) such
   as pixels, ems etc.
 
 - `space-between`: The space between items is evenly distributed. The first item

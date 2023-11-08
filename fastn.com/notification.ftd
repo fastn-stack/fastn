@@ -1,3 +1,6 @@
+-- import: fastn.com/blog/external-css as blog-1
+-- import: fastn.com/blog/breakpoint as blog-2
+
 -- record notification-data:
 caption title:
 optional string link:
@@ -9,6 +12,18 @@ children uis:
 
 
 -- notification-data list notifications:
+
+-- notification-data: $blog-2.index-meta.title
+link: $blog-2.index-meta.post-url
+published-on: 2023-11-03
+
+$blog-2.index-meta.body
+
+-- notification-data: $blog-1.index-meta.title
+link: $blog-1.index-meta.post-url
+published-on: 2023-11-03
+
+$blog-1.index-meta.body
 
 -- notification-data: Exploring the Search Feature in fastn.com
 link: /blog/search/
