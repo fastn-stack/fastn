@@ -1,4 +1,5 @@
 let fastn_utils = {
+    ftClassNames: ["ft_column", "ft_row"],
     htmlNode(kind) {
         let node = "div";
         let css = [];
@@ -104,7 +105,8 @@ let fastn_utils = {
         const classesToRemove = [];
 
         for (const className of iterativeClassList) {
-            if (!className.startsWith('__') &&
+            if (!className.startsWith('__') && 
+                !this.ftClassNames.includes(className) &&
                 className !== extraCodeData?.language &&
                 className !== extraCodeData?.theme
             ) {
