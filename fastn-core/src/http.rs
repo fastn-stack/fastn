@@ -73,7 +73,7 @@ pub fn ok_with_content_type(
         .body(data)
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct Request {
     method: String,
     uri: String,

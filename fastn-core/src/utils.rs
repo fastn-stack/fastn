@@ -656,7 +656,7 @@ fn get_extra_css(external_css: &[String], inline_css: &[String], css: &str) -> S
 pub fn replace_markers_2022(
     s: &str,
     html_ui: ftd::html::HtmlUI,
-    config: &mut fastn_core::Config,
+    config: &fastn_core::Config,
     main_id: &str,
     font_style: &str,
     base_url: &str,
@@ -750,7 +750,7 @@ pub fn replace_markers_2023(
     font_style: &str,
     default_css: &str,
     base_url: &str,
-    config: &mut fastn_core::Config,
+    config: &fastn_core::Config,
 ) -> String {
     ftd::html::utils::trim_all_lines(
         s.replace(
@@ -790,6 +790,16 @@ pub fn replace_markers_2023(
                 hashed_default_ftd_js(config.package.name.as_str()),
                 hashed_prism_css(),
                 scripts,
+            )
+            .as_str(),
+        )
+        .replace(
+            "__extra_js__",
+            get_extra_js(
+                config.ftd_external_js.as_slice(),
+                config.ftd_inline_js.as_slice(),
+                "",
+                "",
             )
             .as_str(),
         )

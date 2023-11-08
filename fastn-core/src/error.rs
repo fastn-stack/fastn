@@ -90,6 +90,12 @@ pub enum Error {
     TokioMPSCError2(#[from] tokio::sync::mpsc::error::SendError<usize>),
 }
 
+impl From<std::convert::Infallible> for Error {
+    fn from(_: std::convert::Infallible) -> Self {
+        unreachable!()
+    }
+}
+
 impl Error {
     pub fn generic<T: AsRef<str> + ToString>(error: T) -> Self {
         Self::GenericError(error.to_string())

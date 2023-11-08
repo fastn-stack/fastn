@@ -1420,6 +1420,16 @@ impl Document {
         let kernel = create_element(fastn_js::ElementKind::Document, parent, index, rdata);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
+        if let Some(ref breakpoint_width) = self.breakpoint_width {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                breakpoint_width.to_set_property(
+                    fastn_js::PropertyKind::BreakpointWidth,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
+        }
         component_statements.extend(self.container.to_component_statements(
             doc,
             rdata,

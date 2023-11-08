@@ -26,10 +26,10 @@ fn cached_parse(
 }
 
 #[tracing::instrument(skip_all)]
-pub async fn interpret_helper<'a>(
+pub async fn interpret_helper(
     name: &str,
     source: &str,
-    lib: &'a mut fastn_core::Library2022,
+    lib: &mut fastn_core::Library2022,
     base_url: &str,
     download_assets: bool,
     line_number: usize,
@@ -56,7 +56,7 @@ pub async fn interpret_helper<'a>(
                 let (source, path, foreign_variable, foreign_function, ignore_line_numbers) =
                     resolve_import_2022(lib, &mut st, module.as_str(), caller_module.as_str())
                         .await?;
-                lib.config.dependencies_during_render.push(path);
+                lib.dependencies_during_render.push(path);
                 let doc = cached_parse(module.as_str(), source.as_str(), ignore_line_numbers)?;
                 s = st.continue_after_import(
                     module.as_str(),
@@ -112,8 +112,8 @@ pub async fn interpret_helper<'a>(
     Ok(document)
 }
 
-pub async fn resolve_import<'a>(
-    lib: &'a mut fastn_core::Library2,
+pub async fn resolve_import(
+    lib: &mut fastn_core::Library2,
     state: &mut ftd::ftd2021::InterpreterState,
     module: &str,
 ) -> ftd::ftd2021::p1::Result<String> {
@@ -139,6 +139,7 @@ pub async fn resolve_import<'a>(
                     lib.push_package_under_process(package).await?;
                     font_ftd = lib
                         .config
+                        .config
                         .all_packages
                         .borrow()
                         .get(package.name.as_str())
@@ -158,8 +159,8 @@ pub async fn resolve_import<'a>(
 }
 
 // source, foreign_variable, foreign_function
-pub async fn resolve_import_2022<'a>(
-    lib: &'a mut fastn_core::Library2022,
+pub async fn resolve_import_2022(
+    lib: &mut fastn_core::Library2022,
     _state: &mut ftd::interpreter::InterpreterState,
     module: &str,
     caller_module: &str,
@@ -202,6 +203,7 @@ pub async fn resolve_import_2022<'a>(
                 "is-reader".to_string(),
                 "sql".to_string(),
                 "package-query".to_string(),
+                "tutor".to_string(),
                 "pg".to_string(),
                 "package-tree".to_string(),
                 "fetch-file".to_string(),
@@ -254,6 +256,7 @@ pub async fn resolve_import_2022<'a>(
                 "http".to_string(),
                 "sql".to_string(),
                 "package-query".to_string(),
+                "tutor".to_string(),
                 "pg".to_string(),
                 "toc".to_string(),
                 "include".to_string(),
@@ -350,7 +353,7 @@ pub async fn resolve_foreign_variable2022(
         module: &str,
         package: &fastn_core::Package,
         files: &str,
-        lib: &mut fastn_core::Library2022,
+        lib: &mut fastn_core::RequestConfig,
         base_url: &str,
         download_assets: bool, // true: in case of `fastn build`
     ) -> ftd::ftd2021::p1::Result<ftd::interpreter::Value> {
@@ -390,7 +393,6 @@ pub async fn resolve_foreign_variable2022(
                 let light_path = format!("{}.{}", file.replace('.', "/"), ext);
                 if download_assets
                     && !lib
-                        .config
                         .downloaded_assets
                         .contains_key(&format!("{}/{}", package.name, light_path))
                 {
@@ -415,7 +417,7 @@ pub async fn resolve_foreign_variable2022(
                         doc_id: lib.document_id.to_string(),
                         line_number: 0,
                     })?;
-                    lib.config.downloaded_assets.insert(
+                    lib.downloaded_assets.insert(
                         format!("{}/{}", package.name, light_path),
                         light_mode.to_string(),
                     );
@@ -448,7 +450,6 @@ pub async fn resolve_foreign_variable2022(
                 if download_assets && !file.ends_with("-dark") {
                     let start = std::time::Instant::now();
                     if let Some(dark) = lib
-                        .config
                         .downloaded_assets
                         .get(&format!("{}/{}", package.name, dark_path))
                     {
@@ -478,7 +479,7 @@ pub async fn resolve_foreign_variable2022(
                     } else {
                         dark_mode = light_mode.clone();
                     }
-                    lib.config.downloaded_assets.insert(
+                    lib.downloaded_assets.insert(
                         format!("{}/{}", package.name, dark_path),
                         dark_mode.to_string(),
                     );
@@ -543,7 +544,6 @@ async fn download(
 ) -> ftd::ftd2021::p1::Result<()> {
     if download_assets
         && !lib
-            .config
             .downloaded_assets
             .contains_key(&format!("{}/{}", package.name, path))
     {
@@ -568,7 +568,7 @@ async fn download(
             doc_id: lib.document_id.to_string(),
             line_number: 0,
         })?;
-        lib.config.downloaded_assets.insert(
+        lib.downloaded_assets.insert(
             format!("{}/{}", package.name, path),
             format!("-/{}/{}", package.name, path),
         );
@@ -680,7 +680,11 @@ pub async fn resolve_foreign_variable2(
                         })?;
                     print!("Processing {}/{} ... ", package.name.as_str(), light_path);
                     fastn_core::utils::write(
-                        &lib.config.build_dir().join("-").join(package.name.as_str()),
+                        &lib.config
+                            .config
+                            .build_dir()
+                            .join("-")
+                            .join(package.name.as_str()),
                         light_path.as_str(),
                         light.as_slice(),
                     )
@@ -735,7 +739,11 @@ pub async fn resolve_foreign_variable2(
                     {
                         print!("Processing {}/{} ... ", package.name.as_str(), dark_path);
                         fastn_core::utils::write(
-                            &lib.config.build_dir().join("-").join(package.name.as_str()),
+                            &lib.config
+                                .config
+                                .build_dir()
+                                .join("-")
+                                .join(package.name.as_str()),
                             dark_path.as_str(),
                             dark.as_slice(),
                         )

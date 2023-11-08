@@ -14,7 +14,7 @@ mod file;
 mod font;
 mod history;
 mod package;
-pub(crate) mod tutor;
+pub mod tutor;
 pub(crate) mod watcher;
 #[macro_use]
 mod http;
@@ -32,6 +32,7 @@ mod tracker;
 mod translation;
 mod version;
 // mod wasm;
+pub(crate) mod catch_panic;
 mod library2022;
 mod workspace;
 
@@ -44,7 +45,7 @@ pub use commands::{
     start_tracking::start_tracking, status::status, sync2::sync2,
     translation_status::translation_status, update::update,
 };
-pub use config::{Config, FTDEdition};
+pub use config::{Config, FTDEdition, RequestConfig};
 pub use error::Error;
 pub use file::File;
 pub(crate) use file::{get_file, paths_to_files, Document, Static};
@@ -57,7 +58,7 @@ pub(crate) use package::Package;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};
-pub(crate) use utils::{copy_dir_all, time, timestamp_nanosecond};
+pub(crate) use utils::{copy_dir_all, timestamp_nanosecond};
 pub(crate) use version::Version;
 pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 

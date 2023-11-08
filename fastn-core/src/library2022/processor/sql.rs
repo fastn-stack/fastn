@@ -23,7 +23,7 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    config: &fastn_core::Config,
+    config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let db_config = fastn_core::library2022::processor::sql::get_db_config()?;
     let db_type = db_config.db_type.as_str();

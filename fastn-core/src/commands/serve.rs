@@ -3,7 +3,7 @@ static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
 
 #[tracing::instrument(skip_all)]
 fn handle_redirect(
-    config: &mut fastn_core::Config,
+    config: &fastn_core::Config,
     path: &camino::Utf8Path,
 ) -> Option<fastn_core::http::Response> {
     config
@@ -19,10 +19,10 @@ fn handle_redirect(
 ///
 #[tracing::instrument(skip_all)]
 async fn serve_file(
-    config: &mut fastn_core::Config,
+    config: &mut fastn_core::RequestConfig,
     path: &camino::Utf8Path,
 ) -> fastn_core::http::Response {
-    if let Some(r) = handle_redirect(config, path) {
+    if let Some(r) = handle_redirect(&config.config, path) {
         return r;
     }
 
@@ -42,13 +42,7 @@ async fn serve_file(
 
     // Auth Stuff
     if !f.is_static() {
-        let req = if let Some(ref r) = config.request {
-            r
-        } else {
-            return fastn_core::server_error!("request not set");
-        };
-
-        match config.can_read(req, path.as_str(), true).await {
+        match config.can_read(path.as_str(), true).await {
             Ok(can_read) => {
                 if !can_read {
                     tracing::error!(
@@ -130,13 +124,13 @@ async fn serve_file(
 }
 
 async fn serve_cr_file(
-    req: &fastn_core::http::Request,
-    config: &mut fastn_core::Config,
+    req_config: &mut fastn_core::RequestConfig,
     path: &camino::Utf8Path,
     cr_number: usize,
 ) -> fastn_core::http::Response {
     let _lock = LOCK.read().await;
-    let f = match config
+    let f = match req_config
+        .config
         .get_file_and_package_by_cr_id(path.as_str(), cr_number)
         .await
     {
@@ -148,7 +142,7 @@ async fn serve_cr_file(
 
     // Auth Stuff
     if !f.is_static() {
-        match config.can_read(req, path.as_str(), true).await {
+        match req_config.can_read(path.as_str(), true).await {
             Ok(can_read) => {
                 if !can_read {
                     return fastn_core::unauthorised!("You are unauthorized to access: {}", path);
@@ -160,11 +154,11 @@ async fn serve_cr_file(
         }
     }
 
-    config.current_document = Some(f.get_id().to_string());
+    req_config.current_document = Some(f.get_id().to_string());
     match f {
         fastn_core::File::Ftd(main_document) => {
             match fastn_core::package::package_doc::read_ftd(
-                config,
+                req_config,
                 &main_document,
                 "/",
                 false,
@@ -240,32 +234,21 @@ async fn static_file(file_path: camino::Utf8PathBuf) -> fastn_core::http::Respon
 
 #[tracing::instrument(skip_all)]
 pub async fn serve(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
-    edition: Option<String>,
-    external_js: Vec<String>,
-    inline_js: Vec<String>,
-    external_css: Vec<String>,
-    inline_css: Vec<String>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
 
-    // TODO: remove unwrap
-    let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse().unwrap();
-    let mut config = fastn_core::Config::read(None, false, Some(&req))
-        .await
-        .unwrap()
-        .add_edition(edition)?
-        .add_external_js(external_js)
-        .add_inline_js(inline_js)
-        .add_external_css(external_css)
-        .add_inline_css(inline_css);
+    let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
+
+    let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
 
     Ok(if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
-        serve_fastn_file(&config).await
+        serve_fastn_file(config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
-        serve_file(&mut config, &path.join("/")).await
+        serve_file(&mut req_config, &path.join("/")).await
     } else if let Some(cr_number) = fastn_core::cr::get_cr_path_from_url(path.as_str()) {
-        serve_cr_file(&req, &mut config, &path, cr_number).await
+        serve_cr_file(&mut req_config, &path, cr_number).await
     } else {
         // url is present in config or not
         // If not present than proxy pass it
@@ -319,7 +302,9 @@ pub async fn serve(
 
         // if request goes with mount-point /todos/api/add-todo/
         // so it should say not found and pass it to proxy
-        let file_response = serve_file(&mut config, path.as_path()).await;
+        let cookies = req_config.request.cookies().clone();
+
+        let file_response = serve_file(&mut req_config, path.as_path()).await;
         // If path is not present in sitemap then pass it to proxy
         // TODO: Need to handle other package URL as well, and that will start from `-`
         // and all the static files starts with `-`
@@ -337,19 +322,13 @@ pub async fn serve(
             // Already checked in the above method serve_file
             tracing::info!("executing proxy: path: {}", &path);
             let (package_name, url, mut conf) =
-                fastn_core::config::utils::get_clean_url(&config, path.as_str())?;
+                fastn_core::config::utils::get_clean_url(config, path.as_str())?;
             let package_name = package_name.unwrap_or_else(|| config.package.name.to_string());
 
             let host = if let Some(port) = url.port() {
                 format!("{}://{}:{}", url.scheme(), url.host_str().unwrap(), port)
             } else {
                 format!("{}://{}", url.scheme(), url.host_str().unwrap())
-            };
-            let req = if let Some(r) = config.request {
-                r
-            } else {
-                tracing::error!(msg = "request not set");
-                return Ok(fastn_core::server_error!("request not set"));
             };
 
             // TODO: read app config and send them to service as header
@@ -360,7 +339,7 @@ pub async fn serve(
                         if let Some(user_data) = fastn_core::auth::get_user_data_from_cookies(
                             platform,
                             requested_field,
-                            req.cookies(),
+                            &cookies,
                         )
                         .await?
                         {
@@ -404,9 +383,9 @@ pub async fn serve(
     })
 }
 
-pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Result<()> {
+pub(crate) async fn download_init_package(url: &Option<String>) -> std::io::Result<()> {
     let mut package = fastn_core::Package::new("unknown-package");
-    package.download_base_url = url;
+    package.download_base_url = url.to_owned();
     package
         .http_download_by_id(
             "FASTN.ftd",
@@ -421,6 +400,7 @@ pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Resul
 }
 
 pub async fn clear_cache(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     fn is_login(req: &fastn_core::http::Request) -> bool {
@@ -437,7 +417,7 @@ pub async fn clear_cache(
     let from = actix_web::web::Query::<Temp>::from_query(req.query_string())?;
     if from.from.eq(&Some("temp-github".to_string())) {
         let _lock = LOCK.write().await;
-        return Ok(fastn_core::apis::cache::clear(&req).await);
+        return Ok(fastn_core::apis::cache::clear(config, &req).await);
     }
     // TODO: Remove After Demo, till here
 
@@ -451,7 +431,7 @@ pub async fn clear_cache(
     }
 
     let _lock = LOCK.write().await;
-    fastn_core::apis::cache::clear(&req).await;
+    fastn_core::apis::cache::clear(config, &req).await;
     // TODO: Redirect to Referrer uri
     return Ok(actix_web::HttpResponse::Found()
         .append_header((actix_web::http::header::LOCATION, "/".to_string()))
@@ -459,79 +439,90 @@ pub async fn clear_cache(
 }
 
 // TODO: Move them to routes folder
-async fn sync(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.write().await;
-    fastn_core::apis::sync(&req, req.json()?).await
-}
-
-async fn sync2(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.write().await;
-    fastn_core::apis::sync2(&req, req.json()?).await
-}
-
-pub async fn clone(
+async fn sync(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    let _lock = LOCK.write().await;
+    fastn_core::apis::sync(config, req.json()?).await
+}
+
+async fn sync2(
+    config: &fastn_core::Config,
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    let _lock = LOCK.write().await;
+    fastn_core::apis::sync2(config, req.json()?).await
+}
+
+pub async fn clone(config: &fastn_core::Config) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
-    fastn_core::apis::clone(req).await
+    fastn_core::apis::clone(config).await
 }
 
 pub(crate) async fn view_source(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
-    Ok(fastn_core::apis::view_source(&req).await)
+    Ok(fastn_core::apis::view_source(config, &req).await)
 }
 
 pub(crate) async fn edit_source(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
-    Ok(fastn_core::apis::edit_source(&req).await)
+    Ok(fastn_core::apis::edit_source(config, &req).await)
 }
 
 pub async fn edit(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.write().await;
-    fastn_core::apis::edit(&req, req.json()?).await
+    fastn_core::apis::edit(config, &req, req.json()?).await
 }
 
 pub async fn revert(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.write().await;
-    fastn_core::apis::edit::revert(&req, req.json()?).await
+    fastn_core::apis::edit::revert(config, req.json()?).await
 }
 
 pub async fn editor_sync(
-    req: fastn_core::http::Request,
+    config: &fastn_core::Config,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.write().await;
-    fastn_core::apis::edit::sync(req).await
+    fastn_core::apis::edit::sync(config).await
 }
 
 pub async fn create_cr(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.write().await;
-    fastn_core::apis::cr::create_cr(&req, req.json()?).await
+    fastn_core::apis::cr::create_cr(config, req.json()?).await
 }
 
 pub async fn create_cr_page(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
-    fastn_core::apis::cr::create_cr_page(req).await
+    fastn_core::apis::cr::create_cr_page(config, req).await
 }
 
-struct AppData {
-    edition: Option<String>,
-    external_js: Vec<String>,
-    inline_js: Vec<String>,
-    external_css: Vec<String>,
-    inline_css: Vec<String>,
-    package_name: String,
+#[derive(serde::Deserialize, Default, Clone)]
+pub(crate) struct AppData {
+    pub(crate) edition: Option<String>,
+    pub(crate) external_js: Vec<String>,
+    pub(crate) inline_js: Vec<String>,
+    pub(crate) external_css: Vec<String>,
+    pub(crate) inline_css: Vec<String>,
+    pub(crate) package_name: String,
 }
 
 fn handle_default_route(
@@ -592,7 +583,7 @@ fn handle_default_route(
         let theme_css = ftd::theme_css();
         return theme_css.get(theme).cloned().map(|theme| {
             actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .content_type(mime_guess::mime::TEXT_CSS)
                 .body(theme)
         });
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_js()) {
@@ -604,7 +595,7 @@ fn handle_default_route(
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_css()) {
         return Some(
             actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .content_type(mime_guess::mime::TEXT_CSS)
                 .body(ftd::prism_css()),
         );
     }
@@ -625,51 +616,52 @@ async fn test() -> fastn_core::Result<fastn_core::http::Response> {
 }
 
 #[tracing::instrument(skip_all)]
-async fn route(
+async fn actual_route(
+    config: &fastn_core::Config,
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
-    app_data: actix_web::web::Data<AppData>,
+    package_name: &str,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     tracing::info!(method = req.method().as_str(), uri = req.path());
     tracing::info!(tutor_mode = fastn_core::tutor::is_tutor());
 
-    let package_name = &app_data.package_name;
-
-    if let Some(default_response) = handle_default_route(&req, package_name.as_str()) {
+    if let Some(default_response) = handle_default_route(&req, package_name) {
         return Ok(default_response);
     }
 
     let req = fastn_core::http::Request::from_actix(req, body);
     match (req.method().to_lowercase().as_str(), req.path()) {
-        ("post", "/-/sync/") if cfg!(feature = "remote") => sync(req).await,
-        ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(req).await,
-        ("get", "/-/clone/") if cfg!(feature = "remote") => clone(req).await,
-        ("get", t) if t.starts_with("/-/view-src/") => view_source(req).await,
-        ("get", t) if t.starts_with("/-/edit-src/") => edit_source(req).await,
+        ("post", "/-/sync/") if cfg!(feature = "remote") => sync(config, req).await,
+        ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(config, req).await,
+        ("get", "/-/clone/") if cfg!(feature = "remote") => clone(config).await,
+        ("get", t) if t.starts_with("/-/view-src/") => view_source(config, req).await,
+        ("get", t) if t.starts_with("/-/edit-src/") => edit_source(config, req).await,
         ("get", t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
-        ("post", "/-/edit/") => edit(req).await,
-        ("post", "/-/revert/") => revert(req).await,
-        ("get", "/-/editor-sync/") => editor_sync(req).await,
-        ("post", "/-/create-cr/") => create_cr(req).await,
-        ("get", "/-/create-cr-page/") => create_cr_page(req).await,
-        ("get", "/-/clear-cache/") => clear_cache(req).await,
+        ("post", "/-/edit/") => edit(config, req).await,
+        ("post", "/-/revert/") => revert(config, req).await,
+        ("get", "/-/editor-sync/") => editor_sync(config).await,
+        ("post", "/-/create-cr/") => create_cr(config, req).await,
+        ("get", "/-/create-cr-page/") => create_cr_page(config, req).await,
+        ("get", "/-/clear-cache/") => clear_cache(config, req).await,
         ("get", "/-/poll/") => fastn_core::watcher::poll().await,
         ("get", "/favicon.ico") => favicon().await,
         ("get", "/test/") => test().await,
         ("get", "/-/pwd/") => fastn_core::tutor::pwd().await,
-        ("get", "/-/shutdown/") => fastn_core::tutor::shutdown().await,
-        (_, _) => {
-            serve(
-                req,
-                app_data.edition.clone(),
-                app_data.external_js.clone(),
-                app_data.inline_js.clone(),
-                app_data.external_css.clone(),
-                app_data.inline_css.clone(),
-            )
-            .await
-        }
+        ("get", "/-/tutor.js") => fastn_core::tutor::js().await,
+        ("post", "/-/tutor/start/") => fastn_core::tutor::start(req.json()?).await,
+        ("get", "/-/tutor/stop/") => fastn_core::tutor::stop().await,
+        (_, _) => serve(config, req).await,
     }
+}
+
+#[tracing::instrument(skip_all)]
+async fn route(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
+    app_data: actix_web::web::Data<AppData>,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    let (config, package_name) = fastn_core::tutor::config(&app_data).await?;
+    actual_route(&config, req, body, package_name.as_str()).await
 }
 
 //noinspection HttpUrlsUsage
@@ -689,7 +681,7 @@ pub async fn listen(
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
     if package_download_base_url.is_some() {
-        download_init_package(package_download_base_url).await?;
+        download_init_package(&package_download_base_url).await?;
     }
 
     if cfg!(feature = "controller") {
@@ -736,7 +728,7 @@ You can try without providing port, it will automatically pick unused port."#,
                 inline_css: inline_css.clone(),
                 package_name: package_name.clone(),
             }))
-            .wrap(actix_web_lab::middleware::CatchPanic::default())
+            .wrap(fastn_core::catch_panic::CatchPanic::default())
             .wrap(
                 actix_web::middleware::Logger::new(
                     r#""%r" %Ts %s %b %a "%{Referer}i" "%{User-Agent}i""#,

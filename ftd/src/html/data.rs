@@ -2,8 +2,8 @@ pub struct DataGenerator<'a> {
     pub doc: &'a ftd::interpreter::TDoc<'a>,
 }
 
-impl<'a> DataGenerator<'a> {
-    pub(crate) fn new(doc: &'a ftd::interpreter::TDoc<'a>) -> DataGenerator<'a> {
+impl DataGenerator<'_> {
+    pub(crate) fn new<'a>(doc: &'a ftd::interpreter::TDoc<'a>) -> DataGenerator<'a> {
         DataGenerator { doc }
     }
 

@@ -129,6 +129,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
             );
 
             ftd::ftd_js_html()
+                .replace("__extra_js__", "")
                 .replace("__fastn_package__", dummy_package_data.as_str())
                 .replace(
                     "__js_script__",
