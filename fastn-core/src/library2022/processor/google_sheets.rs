@@ -1,9 +1,10 @@
 const GOOGLE_SHEET_API_BASE_URL: &str = "https://docs.google.com/a/google.com/spreadsheets/d";
 
-pub fn extract_google_sheets_id(url: &str) -> Option<String> {
-    let re = regex::Regex::new(r"/spreadsheets/d/([a-zA-Z0-9-_]+)").unwrap();
+static GOOGLE_SHEETS_ID_REGEX: once_cell::sync::Lazy<regex::Regex> =
+    once_cell::sync::Lazy::new(|| regex::Regex::new(r"/spreadsheets/d/([a-zA-Z0-9-_]+)").unwrap());
 
-    if let Some(captures) = re.captures(url) {
+pub fn extract_google_sheets_id(url: &str) -> Option<String> {
+    if let Some(captures) = GOOGLE_SHEETS_ID_REGEX.captures(url) {
         if let Some(id) = captures.get(1) {
             return Some(id.as_str().to_string());
         }
@@ -43,7 +44,7 @@ pub fn parse_csv(
             }
             Err(e) => {
                 return ftd::interpreter::utils::e2(
-                    format!("Failed to execute query: {:?}", e),
+                    format!("Failed to parse result: {:?}", e),
                     doc_name,
                     line_number,
                 )
