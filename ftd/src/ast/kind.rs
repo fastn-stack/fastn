@@ -555,14 +555,14 @@ impl VariableValue {
             })
             .map(|header| {
                 let mut key = header.get_key();
-                if !key.eq(ftd::ast::utils::LOOP) {
+                if !key.eq(ftd::ast::utils::LOOP) && !key.eq(ftd::ast::utils::PROCESSOR) {
                     key = key
                         .trim_start_matches(ftd::ast::utils::REFERENCE)
                         .to_string();
                 }
                 HeaderValue::new(
                     key.as_str(),
-                    ftd::ast::utils::is_variable_mutable(key.as_str()),
+                    ftd::ast::utils::is_variable_mutable(header.get_key().as_str()),
                     VariableValue::from_p1_header(header, doc_id),
                     header.get_line_number(),
                     header.get_kind(),
