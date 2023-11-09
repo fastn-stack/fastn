@@ -78,6 +78,7 @@ url.workspace = true
 zip.workspace = true
 fastn-observer.workspace = true
 fastn-js.workspace = true
+csv.workspace = true
 
 [dev-dependencies]
 fbt-lib.workspace = true
