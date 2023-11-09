@@ -537,7 +537,7 @@ let fastn_utils = {
     replaceBodyStyleAndChildren(newChildrenWrapper) {
         // Update styles based on `fastn_dom.styleClasses`
         let styles = document.getElementById("styles");
-        styles.innerHTML = fastn_dom.styleClasses;
+        styles.innerHTML = fastn_dom.getClassesAsStringWithoutStyleTag();
 
         // Replace the children of document.body with the children from
         // newChildrenWrapper
