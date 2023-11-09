@@ -1,4 +1,4 @@
-let fastn_virtual = {}
+let fastnVirtual = {}
 
 let id_counter = 0;
 let ssr = false;
@@ -134,7 +134,7 @@ class Document2 {
     }
 }
 
-fastn_virtual.document = new Document2();
+fastnVirtual.document = new Document2();
 
 function addClosureToBreakpointWidth() {
     let closure = fastn.closureWithoutExecute(function() {
@@ -150,7 +150,7 @@ function addClosureToBreakpointWidth() {
     ftd.breakpoint_width.addClosure(closure);
 }
 
-fastn_virtual.doubleBuffer = function(main) {
+fastnVirtual.doubleBuffer = function(main) {
     addClosureToBreakpointWidth();
     let parent = document.createElement("div");
     let current_device = ftd.get_device();
@@ -162,9 +162,9 @@ fastn_virtual.doubleBuffer = function(main) {
     doubleBuffering = false;
 }
 
-fastn_virtual.ssr = function(main) {
+fastnVirtual.ssr = function(main) {
     ssr = true;
-    let body = fastn_virtual.document.createElement("body");
+    let body = fastnVirtual.document.createElement("body");
     main(body)
     ssr = false;
     id_counter = 0;

@@ -336,7 +336,7 @@ let fastn_utils = {
     },
     createNodeHelper(node, classes, attributes) {
         let tagName = node;
-        let element = fastn_virtual.document.createElement(node);
+        let element = fastnVirtual.document.createElement(node);
         for (let key in attributes) {
             element.setAttribute(key, attributes[key])
         }

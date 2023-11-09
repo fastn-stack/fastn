@@ -17,7 +17,7 @@ fn js() -> &'static str {
             i.done();
         }
 
-        fastn_virtual.ssr(main)
+        fastnVirtual.ssr(main)
     "#
 }
 
