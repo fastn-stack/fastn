@@ -150,7 +150,7 @@ function addClosureToBreakpointWidth() {
     ftd.breakpoint_width.addClosure(closure);
 }
 
-fastn_virtual.hydrate = function(main) {
+fastn_virtual.doubleBuffer = function(main) {
     addClosureToBreakpointWidth();
     let parent = document.createElement("div");
     let current_device = ftd.get_device();
