@@ -683,9 +683,11 @@ skip: true
     document: ftd-host/request-data.ftd
   - Fetching Data Using `http`: /http/
     document: ftd-host/http.ftd
-  - Querying PostgreSQL: /sql/
+  - Querying a SQL Database: /sql/
+    document: ftd-host/sql.ftd
+  - ⚠️ Querying PostgreSQL: /pg/
     document: ftd-host/pg.ftd
-  - Querying SQLite: /sqlite/
+  - ⚠️ Querying SQLite: /sqlite/
     document: ftd-host/package-query.ftd
   - Reading JSON: /get-data/
     document: ftd-host/get-data.ftd

@@ -76,3 +76,16 @@ Deploying `fastn` Sites
 -- end: cbox.warning
 
 -- end: static-vs-dynamic
+
+
+
+
+-- component deprecated-sql-procesor:
+
+-- cbox.warning: Deprecated
+
+This processor has been deprecated in favor of [`sql`](/sql/) processor.
+
+-- end: cbox.warning
+
+-- end: deprecated-sql-procesor

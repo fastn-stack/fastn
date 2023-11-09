@@ -1,0 +1,305 @@
+-- import: fastn.com/ftd-host/processor
+-- import: fastn.com/ftd/built-in-variables as v
+
+-- ds.page: Querying a SQL Database
+
+The `sql` processor allows you to execute SQL queries against a database. it supports the following databases:
+
+- [PostgreSQL](/sql/#postgresql)
+- [SQLite](/sql/#sqlite)
+
+
+-- processor.static-vs-dynamic:
+
+
+-- ds.h1: Telling fastn about your database
+
+-- ds.markdown:
+
+To connect to your database and determine the type of database you are using, fastn reads an environment variable called `FASTN_DB_URL`, which contains the connection string for your database. 
+You can define this variable in a .env file at the root of your folder, or you can define it directly in your shell environment. 
+If the platform where you are hosting this website supports setting environment variables, you can declare this variable there as well.
+
+
+
+-- ds.h1: Querying your database
+
+If `.env` file is properly setup you can start querying your database
+using the `sql` processor.
+
+-- ds.code: querying database and storing result in a list
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- person list people:
+$processor$: pr.sql
+
+SELECT * FROM users;
+
+-- ds.markdown:
+
+For this to work you have to also create a record with same data as the result
+of your SQL query. In this query you are using `SELECT *`, which will fetch all
+three columns, `id`, `name` and `department`, so your record will look something
+like this:
+
+-- ds.code: a record corresponding to your query result
+lang: ftd
+
+\-- record person:
+integer id:
+string name:
+string department:
+
+
+-- ds.markdown:
+
+Note that the type columns in query result must match the type of fields in the
+record. The order of fields of record must also match the order of columns in
+the query result.
+
+Also note that since the result of this query can be multiple rows (or one or
+none), we have to read the result in a `person list`, so all data can be stored
+in corresponding list.
+
+-- ds.markdown:
+
+Now that you have data in a variable, you can pass it to some component to view
+it using the [`for`](/list/#using-loop) loop:
+
+
+-- ds.code: show data in page
+lang: ftd
+
+\-- show-person: $p
+for: $p in $people
+
+
+-- ds.markdown:
+
+Which will look something like this:
+
+
+-- show-person: $p
+for: $p in $people
+
+
+
+
+
+-- ds.h1: Passing Named Parameters in Your Query
+
+The `sql` processor allows you to pass named parameters in your queries. 
+You can pass a named parameter by defining it as a header/property of the section where the query is executed. 
+To access the named parameter in your query, use the following syntax:
+
+-- ds.code: Syntax for Named Parameters
+lang: sql
+
+\$<PARAM_NAME>::<PARAM_TYPE>
+
+-- ds.markdown:
+
+In this syntax, the name following the `$` symbol represents the parameter's name, 
+and you can specify its type by appending `::<PARAM_TYPE>` to indicate the desired data type.
+
+You can find the list of the data types that are currently supported by fastn:
+- [Supported PostgreSQL Data Types](/sql/#supported-postgresql-data-types)
+- [Supported SQLite Data Types](/sql/#supported-sqlite-data-types)
+
+-- ds.markdown:
+
+Let's illustrate this with an example. Suppose you want to fetch a user from the `users` table by their `id`:
+
+-- ds.code: Retrieving User Data by User ID
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- integer id: 1
+
+\-- person jack:
+$processor$: pr.sql
+id: $id
+
+SELECT * FROM users WHERE id = $id::INTEGER;
+
+\-- show-person: $jack
+
+-- ds.markdown:
+
+The result will look something like this:
+
+-- show-person: $people.0
+
+-- ds.h2: Taking input from other processors
+
+-- ds.markdown:
+
+This approach also enables you to pass a value obtained from any other processor as an input for your SQL queries. For instance, you can utilize the [`request-data`](/request-data) processor and [Dynamic URLs](/dynamic-urls/) to dynamically create user profile pages, similar to Twitter and other social networks.
+
+-- ds.code: Retrieving User Data by Username
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- string username:
+$processor$: pr.request-data
+
+\-- user user-data:
+$processor$: pr.sql
+username: $username
+
+SELECT * FROM users WHERE username = $username::STRING;
+
+\-- user-profile: $user-data
+
+-- ds.markdown:
+
+Now, whenever a visitor accesses your dynamic page, such as `/user/<username>`, 
+fastn will retrieve the username from the URL using the `request-data` processor and pass it to your SQL query as a named parameter. 
+This allows you to retrieve the data of the user whose username matches the passed value.
+
+
+
+
+-- ds.h1: Manipulating Data and Handling Errors
+
+You can manipulate data by executing `INSERT`, `UPDATE`, and `DELETE` queries. Unlike the `SELECT` query, 
+these queries do not return a result. Instead, they return the query's `status` after execution. 
+This `status` informs you whether the query was successful or if it encountered an error. 
+The `status` can have either an `integer` or `string` data type.
+
+If the `status` is set as an `integer` data type, the query will return an exit code of 0 (indicating success) or 1, 
+which signifies that an error occurred during query execution.
+
+-- ds.code: Reading the Status Code Returned by an `INSERT` Query
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- integer status:
+$processor$: pr.sql  
+
+INSERT INTO users (name, department) VALUES ("Jack", "engineering")
+
+\-- ftd.text: The operation was successful!
+text if { status == 1 }: Something went wrong!
+
+-- ds.markdown:
+
+If you wish to retrieve the error message returned, you can set the status type as follows:
+
+-- ds.code: Reading the Error Message Returned by an `INSERT` Query
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- string error-message:
+$processor$: pr.sql  
+
+INSERT INTO users (name, department) VALUES ("Jack",)
+
+\-- ftd.text: $error-message
+
+-- ds.markdown:
+
+In the example above, we have intentionally omitted the value of the second parameter. 
+This should result in an `SqlInputError` and display an error message on the screen:
+
+`Failed to prepare query: SqlInputError { error: Error { code: Unknown, extended_code: 1 } }`
+
+
+-- ds.h1: PostgreSQL
+
+-- ds.code: PostgreSQL Connection Setup
+lang: bash
+
+FASTN_DB_URL=postgres://{user}:{password}@{hostname}:{port}/{database-name}
+
+-- ds.h2: Supported PostgreSQL Data Types
+
+-- ds.markdown:
+
+The following PostgreSQL Data Types are currently supported by the `sql` processor:
+
+- `TEXT`
+- `VARCHAR`
+- `INT4`
+- `INT8`
+- `FLOAT4`
+- `FLOAT8`
+- `BOOL`
+
+
+
+-- ds.h1: SQLite
+
+-- ds.code: SQLite Connection Setup
+lang: bash
+
+FASTN_DB_URL=sqlite:///db.sqlite
+
+-- ds.h2: Supported SQLite Data Types
+
+-- ds.markdown:
+
+The following SQLite Data Types are currently supported by the `sql` processor:
+
+- `TEXT`
+- `INTEGER`
+- `REAL`
+
+
+
+-- ds.h1: Further Reading
+
+1. `todo-app`
+    - You can explore the source code of this simple "todo-app" that utilizes the sql processor on [Github](https://github.com/fastn-stack/todo-app).
+
+
+
+-- end: ds.page
+
+
+
+
+-- record person:
+integer id:
+string name:
+string department:
+
+-- person list people:
+
+-- person:
+id: 101
+name: jack
+department: design
+
+-- person:
+id: 102
+name: jill
+department: engineering
+
+-- end: people
+
+
+
+-- component show-person:
+caption person p:
+
+-- ftd.column:
+spacing.fixed.px: 10
+
+-- ds.h2: Person
+
+-- v.label-text: Name
+value: $show-person.p.name
+
+-- v.label-text: Department
+value: $show-person.p.department
+
+-- end: ftd.column
+
+-- end: show-person
