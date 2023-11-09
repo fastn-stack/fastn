@@ -625,12 +625,14 @@ skip: true
   document: ftd-host/accessing-fonts.ftd
 - How to make page responsive: /making-responsive-pages/
   document: frontend/make-page-responsive.ftd
-- Using JS: /use-js/
-  document: ftd/use-js.ftd
+- Interoperability with JS/CSS: /use-js-css/
+  document: ftd/use-js-css.ftd
   - JS in function: /js-in-function/
     document: ftd/js-in-function.ftd
   - Web Component: /web-component/
     document: ftd/web-component.ftd
+  - Using External CSS: /external-css/
+    document: ftd/external-css.ftd
 - Create `fastn` package: /create-fastn-package/
   document: author/how-to/create-fastn-package.ftd
 - Best Practices: /best-practices/
@@ -929,8 +931,6 @@ skip: true
   document: blog/web-components.ftd
 - Color Scheme: /colors/
   document: blog/show-cs.ftd
-- Using External CSS: /external-css/
-  document: blog/external-css.ftd
 - Using Custom Breakpoints: /breakpoint/
   document: blog/breakpoint.ftd
  
@@ -1077,3 +1077,5 @@ skip: true
 /r/counter/ -> https://replit.com/@ajit6/counter/
 /r/acme/ -> https://replit.com/@ayushipujaa/acme/
 /custom-url/ -> /custom-urls/
+/use-js/ -> /use-js-css/
+/use-css/ -> /external-css/

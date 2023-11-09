@@ -1,35 +1,9 @@
--- import: fastn-community.github.io/bling/chat
--- import: fastn.com/blog/authors
--- import: fastn-community.github.io/doc-site/common
--- import: fastn.com/utils
--- import: fastn.com/content-library as lib
+-- ds.page: Using External CSS
 
--- common.post-meta index-meta: Using External CSS
-published-on: November 3, 2023 at 10:27 am
-post-url: /external-css/
-author: $authors.rithik
-
-In this blog, we have covered all the necessary details we
+Here, we will break down all the necessary details we
 need to know before using external CSS properties in fastn.
-
-- When should external CSS be used?
-- When should we avoid using it?
-- How to use External CSS
-    - Attaching CSS file
-    - Inline CSS
-    - Specifying CSS class to elements
-
--- common.post-meta meta: Using External CSS
-published-on: November 3, 2023 at 10:27am
-post-url: /external-css/
-author: $authors.rithik
-read-time: 5 mins
-
-In this blog, we will break down all the necessary details we
-need to know before using external CSS properties in fastn.
-
--- ds.blog-page:
-meta: $meta
+We'll also briefly explore some of the most intriguing questions
+that might cross our mind.
 
 -- ds.h3: When should external CSS be used?
 
@@ -175,4 +149,4 @@ styling rules defined in the `my-class` class from the external
 CSS file `my-style.css` to this text element. And this is how we use
 external CSS in fastn.
 
--- end: ds.blog-page
+-- end: ds.page
