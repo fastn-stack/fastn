@@ -1,7 +1,6 @@
 let fastn_virtual = {}
 
 let id_counter = 0;
-let hydrating = false;
 let ssr = false;
 let doubleBuffering = false;
 
@@ -124,20 +123,10 @@ class Document2 {
         if (fastn_utils.isWrapperNode(tagName)) {
             return window.document.createComment(fastn_dom.commentMessage);
         }
-        if (hydrating) {
-            let node = this.getElementByDataID(id_counter);
-            if (fastn_utils.isCommentNode(tagName)) {
-                let comment= window.document.createComment(fastn_dom.commentMessage);
-                node.parentNode.replaceChild(comment, node);
-                return comment;
-            }
-            return node;
-        } else {
-            if (fastn_utils.isCommentNode(tagName)) {
-                return window.document.createComment(fastn_dom.commentMessage);
-            }
-            return window.document.createElement(tagName);
+        if (fastn_utils.isCommentNode(tagName)) {
+            return window.document.createComment(fastn_dom.commentMessage);
         }
+        return window.document.createElement(tagName);
     }
 
     getElementByDataID(id) {
