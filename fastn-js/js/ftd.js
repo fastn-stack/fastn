@@ -236,7 +236,7 @@ const ftd = (function() {
         },
         get(key) {
             key = this._get_key(key);
-            if(ssr && !hydrating) {
+            if(ssr) {
                 return;
             }
             const item = localStorage.getItem(key);
