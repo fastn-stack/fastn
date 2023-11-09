@@ -525,8 +525,21 @@ let fastn_utils = {
         }
         return args;
     },
+
+    /**
+     * Replaces the children of `document.body` with the children from
+     * newChildrenWrapper and updates the styles based on the
+     * `fastn_dom.styleClasses`.
+     *
+     * @param {HTMLElement} newChildrenWrapper - The wrapper element
+     * containing the new children.
+     */
     replaceBodyStyleAndChildren(newChildrenWrapper) {
+        // Replace the children of document.body with the children from
+        // newChildrenWrapper
         fastn_utils.private.replaceChildren(document.body, newChildrenWrapper);
+
+        // Update styles based on `fastn_dom.styleClasses`
         let styles = document.getElementById("styles");
         styles.innerHTML = fastn_dom.styleClasses;
     },
@@ -646,6 +659,16 @@ fastn_utils.private = {
         return text;
     },
 
+    /**
+     * Replaces the children of a parent element with the children from a
+     * new children wrapper.
+     *
+     * @param {HTMLElement} parent - The parent element whose children will
+     * be replaced.
+     * @param {HTMLElement} newChildrenWrapper - The wrapper element
+     * containing the new children.
+     * @returns {void}
+     */
     replaceChildren(parent, newChildrenWrapper) {
         // Remove existing children of the parent
         var children = parent.children;
