@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <meta content="fastn" name="generator">
+    
+    
+    <script>
+        let __fastn_package_name__ = "foo";
+    </script>
+
+    <script src="fastn-js.js"></script>
+
+    <style>
+       
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column"><div data-id="4" class="__c-3">UI loop testing</div><comment data-id="5"></comment><comment data-id="6"></comment><div data-id="7" class="__c-4">Bangalore</div><div data-id="8" class="__c-5">Mumbai</div><div data-id="9" class="__c-6">Chennai</div><div data-id="10" class="__c-7">Kolkata</div><comment data-id="11"></comment><div data-id="12" class="__c-8">1</div><div data-id="13" class="__c-9">3</div><div data-id="14" class="__c-10">5</div><div data-id="15" class="__c-11">7</div><div data-id="16" class="__c-12">9</div><div data-id="17" class="__c-13">11</div><comment data-id="18"></comment><div data-id="19" class="__c-14">John Doe</div><div data-id="20" class="__c-15">Sam Wan</div><div data-id="21" class="__c-16">Sam Ather</div><comment data-id="22"></comment><div data-id="23" class="__c-17">0</div><div data-id="24" class="__c-18">1</div><div data-id="25" class="__c-19">2</div></div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__c-3 { color: red !important; }
+	.__c-4 { color: green !important; }
+	.__c-5 { color: green !important; }
+	.__c-6 { color: green !important; }
+	.__c-7 { color: green !important; }
+	.__c-8 { color: brown !important; }
+	.__c-9 { color: brown !important; }
+	.__c-10 { color: brown !important; }
+	.__c-11 { color: brown !important; }
+	.__c-12 { color: brown !important; }
+	.__c-13 { color: brown !important; }
+	.__c-14 { color: green !important; }
+	.__c-15 { color: green !important; }
+	.__c-16 { color: green !important; }
+	.__c-17 { color: blue !important; }
+	.__c-18 { color: blue !important; }
+	.__c-19 { color: blue !important; }
+    </style>
+<script>
+    (function() {
+        let main = function (parent) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let parenti0 = foo__test(parent, inherited, {
+      name: "UI loop testing",
+      uis: fastn.mutableList([function (root, inherited) {
+        fastn_utils.getter(global.foo__places).forLoop(root, function (root, item, index) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "green",
+            light: "green"
+          }), inherited);
+          return rooti0;
+        });
+      },
+      function (root, inherited) {
+        fastn_utils.getter(global.foo__odds).forLoop(root, function (root, item, index) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+          rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, item, inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "brown",
+            light: "brown"
+          }), inherited);
+          return rooti0;
+        });
+      },
+      function (root, inherited) {
+        fastn_utils.getter(global.foo__persons).forLoop(root, function (root, item, index) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item.get("name"), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "green",
+            light: "green"
+          }), inherited);
+          return rooti0;
+        });
+      },
+      function (root, inherited) {
+        fastn_utils.getter(global.foo__persons).forLoop(root, function (root, item, index) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+          rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, index, inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+            dark: "blue",
+            light: "blue"
+          }), inherited);
+          return rooti0;
+        });
+      }
+      ])
+    });
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["main"] = main;
+let foo__test = function (parent, inherited, args) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+      uis: fastn.mutableList([]),
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+        dark: "red",
+        light: "red"
+      }), inherited);
+    },
+    function (root, inherited) {
+      fastn_utils.getter(__args__.uis).forLoop(root, function (root, item, index) {
+        let rooti0 = fastn_utils.getStaticValue(item) (root, inherited);
+        return rooti0;
+      });
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__test"] = foo__test;
+fastn_utils.createNestedObject(global, "foo__places", fastn.mutableList(["Bangalore",
+"Mumbai",
+"Chennai",
+"Kolkata"]));
+fastn_utils.createNestedObject(global, "foo__odds", fastn.mutableList([1,
+3,
+5,
+7,
+9,
+11]));
+fastn_utils.createNestedObject(global, "foo__persons", fastn.mutableList([fastn.recordInstance({
+  age: 28,
+  name: "John Doe"
+}),
+fastn.recordInstance({
+  age: 24,
+  name: "Sam Wan"
+}),
+fastn.recordInstance({
+  age: 30,
+  name: "Sam Ather"
+})]));
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastn_virtual.hydrate(main_wrapper);
+        ftd.post_init();
+    })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+    };
+
+</script>
+</html>

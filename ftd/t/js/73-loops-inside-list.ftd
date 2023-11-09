@@ -1,0 +1,70 @@
+;; Loop based component invocation inside ftd.ui list
+;; for - WORKS NICE
+;; $loop$ - Fixed :)
+
+
+
+
+-- component test:
+caption name:
+ftd.ui list uis:
+
+-- ftd.column:
+
+-- ftd.text: $test.name
+color: red
+
+-- ui:
+$loop$: $test.uis as $ui
+
+-- end: ftd.column
+
+-- end: test
+
+
+
+-- test: UI loop testing
+
+-- test.uis:
+
+-- ftd.text: $t
+$loop$: $places as $t
+color: green
+
+-- ftd.integer: $n
+for: $n in $odds
+color: brown
+
+-- ftd.text: $p.name
+$loop$: $persons as $p
+color: green
+
+-- ftd.integer: $num
+for: p, num in $persons
+color: blue
+
+-- end: test.uis
+
+-- end: test
+
+
+
+-- record person:
+caption name:
+integer age:
+
+-- string list places: Bangalore, Mumbai, Chennai, Kolkata
+-- integer list odds: 1, 3, 5, 7, 9, 11
+
+-- person list persons:
+
+-- person: John Doe
+age: 28
+
+-- person: Sam Wan
+age: 24
+
+-- person: Sam Ather
+age: 30
+
+-- end: persons

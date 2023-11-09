@@ -554,9 +554,14 @@ impl VariableValue {
                     || ftd::ast::VariableFlags::from_header(v, doc_id).is_err()
             })
             .map(|header| {
-                let key = header.get_key();
+                let mut key = header.get_key();
+                if !key.eq(ftd::ast::utils::LOOP) {
+                    key = key
+                        .trim_start_matches(ftd::ast::utils::REFERENCE)
+                        .to_string();
+                }
                 HeaderValue::new(
-                    key.trim_start_matches(ftd::ast::utils::REFERENCE),
+                    key.as_str(),
                     ftd::ast::utils::is_variable_mutable(key.as_str()),
                     VariableValue::from_p1_header(header, doc_id),
                     header.get_line_number(),
