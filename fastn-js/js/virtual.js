@@ -128,10 +128,6 @@ class Document2 {
         }
         return window.document.createElement(tagName);
     }
-
-    getElementByDataID(id) {
-        return window.document.querySelector(`[data-id=\"${id}\"]`);
-    }
 }
 
 fastnVirtual.document = new Document2();
@@ -154,12 +150,13 @@ fastnVirtual.doubleBuffer = function(main) {
     addClosureToBreakpointWidth();
     let parent = document.createElement("div");
     let current_device = ftd.get_device();
-    let found_device = ftd.device.get();
     ftd.device = fastn.mutable(current_device);
     doubleBuffering = true;
+    fastnVirtual.root = parent;
     main(parent);
     fastn_utils.replaceBodyStyleAndChildren(parent)
     doubleBuffering = false;
+    fastnVirtual.root = document.body;
 }
 
 fastnVirtual.ssr = function(main) {

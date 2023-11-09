@@ -889,7 +889,7 @@ class Node2 {
     }
     updatePositionForNodeById(node_id, value) {
         if (!ssr) {
-            const target_node = document.querySelector(`[id="${node_id}"]`);
+            const target_node = fastnVirtual.root.querySelector(`[id="${node_id}"]`);
             if (!fastn_utils.isNull(target_node))
                 target_node.style['position'] = value;
         }
