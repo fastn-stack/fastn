@@ -25,7 +25,9 @@ pub fn get_import_alias(input: &str) -> (String, String) {
 }
 
 pub(crate) fn is_variable_mutable(name: &str) -> bool {
-    name.starts_with(REFERENCE) && !name.eq(ftd::ast::utils::PROCESSOR)
+    name.starts_with(REFERENCE)
+        && !name.eq(ftd::ast::utils::PROCESSOR)
+        && !name.eq(ftd::ast::utils::LOOP)
 }
 
 pub(crate) fn is_condition(value: &str, kind: &Option<String>) -> bool {
