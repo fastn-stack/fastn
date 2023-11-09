@@ -138,6 +138,7 @@ winit = "0.28"
 zip = "0.6"
 prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }
+csv = "1.3.0"
 
 [workspace.dependencies.fastn-observer]
 git = "https://github.com/fastn-stack/fastn-observer"
