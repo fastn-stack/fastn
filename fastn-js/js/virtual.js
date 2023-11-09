@@ -163,32 +163,14 @@ function addClosureToBreakpointWidth() {
 
 fastn_virtual.hydrate = function(main) {
     addClosureToBreakpointWidth();
+    let parent = document.createElement("div");
     let current_device = ftd.get_device();
     let found_device = ftd.device.get();
-    if (current_device !== found_device) {
-        rerender = true
-        ftd.device = fastn.mutable(current_device);
-        let styles = document.getElementById("styles");
-        styles.innerText = "";
-        var children = document.body.children;
-        // Loop through the direct children and remove those with tagName 'div'
-        for (var i = children.length - 1; i >= 0; i--) {
-            var child = children[i];
-            if (child.tagName === 'DIV') {
-                document.body.removeChild(child);
-            }
-        }
-
-        main(document.body);
-        rerender = false;
-        styles.innerHTML = fastn_dom.styleClasses;
-        return;
-    }
-    hydrating = true;
-    let body = fastn_virtual.document.createElement("body");
-    main(body);
-    id_counter = 0;
-    hydrating = false;
+    ftd.device = fastn.mutable(current_device);
+    rerender = true;
+    main(parent);
+    fastn_utils.replaceBodyStyleAndChildren(parent)
+    rerender = false;
 }
 
 fastn_virtual.ssr = function(main) {

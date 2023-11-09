@@ -525,6 +525,11 @@ let fastn_utils = {
         }
         return args;
     },
+    replaceBodyStyleAndChildren(newChildrenWrapper) {
+        fastn_utils.private.replaceChildren(document.body, newChildrenWrapper);
+        let styles = document.getElementById("styles");
+        styles.innerHTML = fastn_dom.styleClasses;
+    },
 }
 
 
@@ -640,6 +645,23 @@ fastn_utils.private = {
         }
         return text;
     },
+
+    replaceChildren(parent, newChildrenWrapper) {
+        // Remove existing children of the parent
+        var children = parent.children;
+        // Loop through the direct children and remove those with tagName 'div'
+        for (var i = children.length - 1; i >= 0; i--) {
+            var child = children[i];
+            if (child.tagName === 'DIV') {
+                parent.removeChild(child);
+            }
+        }
+
+        // Cut and append the children from newChildrenWrapper to the parent
+        while (newChildrenWrapper.firstChild) {
+            parent.appendChild(newChildrenWrapper.firstChild);
+        }
+    }
 }
 
 
