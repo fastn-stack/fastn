@@ -46,7 +46,7 @@ let fastn_utils = {
         return [node, css, attributes];
     },
     createStyle(cssClass, obj) {
-        if (rerender) {
+        if (doubleBuffering) {
             fastn_dom.styleClasses = `${fastn_dom.styleClasses}${getClassAsString(cssClass, obj)}\n`;
         } else {
             let styles = document.getElementById('styles');
@@ -535,13 +535,13 @@ let fastn_utils = {
      * containing the new children.
      */
     replaceBodyStyleAndChildren(newChildrenWrapper) {
-        // Replace the children of document.body with the children from
-        // newChildrenWrapper
-        fastn_utils.private.replaceChildren(document.body, newChildrenWrapper);
-
         // Update styles based on `fastn_dom.styleClasses`
         let styles = document.getElementById("styles");
         styles.innerHTML = fastn_dom.styleClasses;
+
+        // Replace the children of document.body with the children from
+        // newChildrenWrapper
+        fastn_utils.private.replaceChildren(document.body, newChildrenWrapper);
     },
 }
 

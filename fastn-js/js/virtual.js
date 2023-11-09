@@ -3,7 +3,7 @@ let fastn_virtual = {}
 let id_counter = 0;
 let hydrating = false;
 let ssr = false;
-let rerender = false;
+let doubleBuffering = false;
 
 class ClassList {
     #classes = [];
@@ -167,10 +167,10 @@ fastn_virtual.hydrate = function(main) {
     let current_device = ftd.get_device();
     let found_device = ftd.device.get();
     ftd.device = fastn.mutable(current_device);
-    rerender = true;
+    doubleBuffering = true;
     main(parent);
     fastn_utils.replaceBodyStyleAndChildren(parent)
-    rerender = false;
+    doubleBuffering = false;
 }
 
 fastn_virtual.ssr = function(main) {

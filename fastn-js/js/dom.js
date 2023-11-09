@@ -812,7 +812,7 @@ class Node2 {
         return this.#parent;
     }
     removeAllFaviconLinks() {
-        if (hydrating || rerender) {
+        if (hydrating || doubleBuffering) {
             const links = document.head.querySelectorAll('link[rel="shortcut icon"]');
             links.forEach( link => {
                 link.parentNode.removeChild(link);
@@ -821,7 +821,7 @@ class Node2 {
     }
 
     setFavicon(url) {
-        if (hydrating || rerender) {
+        if (hydrating || doubleBuffering) {
             if (url instanceof fastn.recordInstanceClass) url = url.get('src');
             while (true) {
                 if (url instanceof fastn.mutableClass) url = url.get();
@@ -908,7 +908,7 @@ class Node2 {
         }
     }
     updateMetaTitle(value) {
-        if (!ssr && (hydrating || rerender)) {
+        if (!ssr && (hydrating || doubleBuffering)) {
             if (!fastn_utils.isNull(value)) window.document.title = value;
         }
     }
@@ -917,7 +917,7 @@ class Node2 {
             this.removeMetaTagByName(name);
             return;
         }
-        if (!ssr && (hydrating || rerender)) {
+        if (!ssr && (hydrating || doubleBuffering)) {
             const metaTag = window.document.createElement('meta');
             metaTag.setAttribute('name', name);
             metaTag.setAttribute('content', value);
@@ -929,7 +929,7 @@ class Node2 {
             this.removeMetaTagByProperty(property);
             return;
         }
-        if (!ssr && (hydrating || rerender)) {
+        if (!ssr && (hydrating || doubleBuffering)) {
             const metaTag = window.document.createElement('meta');
             metaTag.setAttribute('property', property);
             metaTag.setAttribute('content', value);
@@ -937,7 +937,7 @@ class Node2 {
         }
     }
     removeMetaTagByName(name) {
-        if (!ssr && (hydrating || rerender)) {
+        if (!ssr && (hydrating || doubleBuffering)) {
             const metaTags = document.getElementsByTagName('meta');
             for (let i = 0; i < metaTags.length; i++) {
                 const metaTag = metaTags[i];
@@ -949,7 +949,7 @@ class Node2 {
         }
     }
     removeMetaTagByProperty(property) {
-        if (!ssr && (hydrating || rerender)) {
+        if (!ssr && (hydrating || doubleBuffering)) {
             const metaTags = document.getElementsByTagName('meta');
             for (let i = 0; i < metaTags.length; i++) {
                 const metaTag = metaTags[i];
@@ -1328,7 +1328,7 @@ class Node2 {
         }
     }
     attachExternalCss(css) {
-        if (hydrating || rerender) {
+        if (hydrating || doubleBuffering) {
             let css_tag = document.createElement('link');
             css_tag.rel = 'stylesheet';
             css_tag.type = 'text/css';
@@ -1342,7 +1342,7 @@ class Node2 {
         }
     }
     attachExternalJs(js) {
-        if (hydrating || rerender) {
+        if (hydrating || doubleBuffering) {
             let js_tag = document.createElement('script');
             js_tag.src = js;
 
