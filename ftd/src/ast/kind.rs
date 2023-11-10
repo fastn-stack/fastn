@@ -555,12 +555,11 @@ impl VariableValue {
             })
             .map(|header| {
                 let key = header.get_key();
-                let header_key =
-                    if !key.eq(ftd::ast::utils::LOOP) && !key.eq(ftd::ast::utils::PROCESSOR) {
-                        key.trim_start_matches(ftd::ast::utils::REFERENCE)
-                    } else {
-                        key.as_str()
-                    };
+                let header_key = if ftd::ast::utils::is_variable_mutable(key.as_str()) {
+                    key.trim_start_matches(ftd::ast::utils::REFERENCE)
+                } else {
+                    key.as_str()
+                };
 
                 HeaderValue::new(
                     header_key,
