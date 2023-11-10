@@ -119,6 +119,12 @@ fastn_dom.propertyMap = {
 
 // dynamic-class-css.md
 fastn_dom.getClassesAsString = function() {
+    return `<style id="styles">
+    ${fastn_dom.getClassesAsStringWithoutStyleTag()}
+    </style>`;
+}
+
+fastn_dom.getClassesAsStringWithoutStyleTag = function() {
     let classes = Object.entries(fastn_dom.classes).map(entry => {
         return getClassAsString(entry[0], entry[1]);
     });
@@ -126,9 +132,7 @@ fastn_dom.getClassesAsString = function() {
     /*.ft_text {
         padding: 0;
     }*/
-    return `<style id="styles">
-    ${classes.join("\n\t")}
-    </style>`;
+    return classes.join("\n\t");
 }
 
 function getClassAsString(className, obj) {
@@ -819,7 +823,6 @@ class Node2 {
             });
         }
     }
-
     setFavicon(url) {
         if (doubleBuffering) {
             if (url instanceof fastn.recordInstanceClass) url = url.get('src');
@@ -989,7 +992,7 @@ class Node2 {
             return cls;
         }
 
-        if (!ssr) {
+        if (!ssr && !doubleBuffering) {
             if (!!className) {
                 if (!fastn_dom.classes[cssClass]) {
                     fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
