@@ -17,7 +17,7 @@ The `sql` processor allows you to execute SQL queries against a database. it sup
 -- ds.markdown:
 
 To connect to your database and determine the type of database you are using, fastn reads an environment variable called `FASTN_DB_URL`, which contains the connection string for your database. 
-You can define this variable in a .env file at the root of your folder, or you can define it directly in your shell environment. 
+You can define this variable in a `.env` file at the root of your folder, or you can define it directly in your shell environment. 
 If the platform where you are hosting this website supports setting environment variables, you can declare this variable there as well.
 
 
@@ -56,7 +56,7 @@ string department:
 -- ds.markdown:
 
 Note that the type columns in query result must match the type of fields in the
-record. The order of fields of record must also match the order of columns in
+`record`. The order of fields of `record` must also match the order of columns in
 the query result.
 
 Also note that since the result of this query can be multiple rows (or one or
@@ -162,53 +162,6 @@ fastn will retrieve the username from the URL using the `request-data` processor
 This allows you to retrieve the data of the user whose username matches the passed value.
 
 
-
-
--- ds.h1: Manipulating Data and Handling Errors
-
-You can manipulate data by executing `INSERT`, `UPDATE`, and `DELETE` queries. Unlike the `SELECT` query, 
-these queries do not return a result. Instead, they return the query's `status` after execution. 
-This `status` informs you whether the query was successful or if it encountered an error. 
-The `status` can have either an `integer` or `string` data type.
-
-If the `status` is set as an `integer` data type, the query will return an exit code of 0 (indicating success) or 1, 
-which signifies that an error occurred during query execution.
-
--- ds.code: Reading the Status Code Returned by an `INSERT` Query
-lang: ftd
-
-\-- import: fastn/processors as pr
-
-\-- integer status:
-$processor$: pr.sql  
-
-INSERT INTO users (name, department) VALUES ("Jack", "engineering")
-
-\-- ftd.text: The operation was successful!
-text if { status == 1 }: Something went wrong!
-
--- ds.markdown:
-
-If you wish to retrieve the error message returned, you can set the status type as follows:
-
--- ds.code: Reading the Error Message Returned by an `INSERT` Query
-lang: ftd
-
-\-- import: fastn/processors as pr
-
-\-- string error-message:
-$processor$: pr.sql  
-
-INSERT INTO users (name, department) VALUES ("Jack",)
-
-\-- ftd.text: $error-message
-
--- ds.markdown:
-
-In the example above, we have intentionally omitted the value of the second parameter. 
-This should result in an `SqlInputError` and display an error message on the screen:
-
-`Failed to prepare query: SqlInputError { error: Error { code: Unknown, extended_code: 1 } }`
 
 
 -- ds.h1: PostgreSQL
