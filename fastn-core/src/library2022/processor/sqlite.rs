@@ -285,7 +285,7 @@ fn extract_named_parameters(
     }
 
     // Handle the last param if there was no trailing comma or space
-    if state.eq(&State::PushParam) && !param_name.is_empty() {
+    if [State::InsideParam, State::PushParam].contains(&state) && !param_name.is_empty() {
         let param_value = resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
         params.push(Box::new(param_value) as Box<dyn rusqlite::ToSql>);
     }
