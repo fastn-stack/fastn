@@ -54,6 +54,10 @@ pub(crate) fn parse_csv(
     Ok(result)
 }
 
+fn escape_string_value(value: &str) -> String {
+    format!("\"{}\"", value.replace('\"', "\\\""))
+}
+
 fn resolve_variable_from_doc(
     var: &str,
     doc: &ftd::interpreter::TDoc,
@@ -78,7 +82,7 @@ fn resolve_variable_from_doc(
     };
 
     let param_value: String = match thing {
-        ftd::interpreter::Value::String { text } => format!("\"{}\"", text),
+        ftd::interpreter::Value::String { text } => escape_string_value(text.as_str()),
         ftd::interpreter::Value::Integer { value } => value.to_string(),
         ftd::interpreter::Value::Decimal { value } => value.to_string(),
         ftd::interpreter::Value::Boolean { value } => value.to_string(),
@@ -107,7 +111,7 @@ fn resolve_variable_from_headers(
     }
 
     let param_value: String = match (param_type, &header.value) {
-        ("STRING", ftd::ast::VariableValue::String { value, .. }) => format!("\"{}\"", value),
+        ("STRING", ftd::ast::VariableValue::String { value, .. }) => escape_string_value(value),
         ("INTEGER", ftd::ast::VariableValue::String { value, .. }) => value.to_string(),
         ("DECIMAL", ftd::ast::VariableValue::String { value, .. }) => value.to_string(),
         ("BOOLEAN", ftd::ast::VariableValue::String { value, .. }) => value.to_string(),
