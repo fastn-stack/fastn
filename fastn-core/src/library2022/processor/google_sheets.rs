@@ -3,7 +3,7 @@ const GOOGLE_SHEET_API_BASE_URL: &str = "https://docs.google.com/a/google.com/sp
 static GOOGLE_SHEETS_ID_REGEX: once_cell::sync::Lazy<regex::Regex> =
     once_cell::sync::Lazy::new(|| regex::Regex::new(r"/spreadsheets/d/([a-zA-Z0-9-_]+)").unwrap());
 
-pub fn extract_google_sheets_id(url: &str) -> Option<String> {
+pub(crate) fn extract_google_sheets_id(url: &str) -> Option<String> {
     if let Some(captures) = GOOGLE_SHEETS_ID_REGEX.captures(url) {
         if let Some(id) = captures.get(1) {
             return Some(id.as_str().to_string());
@@ -13,20 +13,20 @@ pub fn extract_google_sheets_id(url: &str) -> Option<String> {
     None
 }
 
-pub fn generate_google_sheet_url(google_sheet_id: &str) -> String {
+pub(crate) fn generate_google_sheet_url(google_sheet_id: &str) -> String {
     format!(
         "{}/{}/gviz/tq?tqx=out:csv",
         GOOGLE_SHEET_API_BASE_URL, google_sheet_id,
     )
 }
 
-pub fn prepare_query_url(url: &str, query: &str) -> String {
+pub(crate) fn prepare_query_url(url: &str, query: &str) -> String {
     url::form_urlencoded::Serializer::new(url.to_string())
         .append_pair("tq", query)
         .finish()
 }
 
-pub fn parse_csv(
+pub(crate) fn parse_csv(
     csv: &str,
     doc_name: &str,
     line_number: usize,
@@ -250,7 +250,7 @@ fn parse_query(
     Ok(output)
 }
 
-pub async fn process(
+pub(crate) async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
