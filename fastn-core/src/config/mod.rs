@@ -6,8 +6,8 @@ pub(crate) mod utils;
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub enum FTDEdition {
     FTD2021,
-    #[default]
     FTD2022,
+    #[default]
     FTD2023,
 }
 
