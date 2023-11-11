@@ -148,3 +148,29 @@ jobs:
           tag: ${{ github.event.inputs.releaseTag }}
           prerelease: ${{ github.event.inputs.productionRelease && github.event.inputs.productionRelease == 'false' }}
           bodyFile: .github/RELEASE_TEMPLATE.md
+  publish-crate:
+    name: Publish our crate on crates.io
+    runs-on: ubuntu-latest
+    needs: [create-release]
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+            ftd/target
+            fifthtry_content/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: Publish
+        uses: gmiam/rust-musl-action@9e6a37bf27ecfffb6b92240ea276bea5487fa15d
+        continue-on-error: false
+        with:
+          args: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
