@@ -172,5 +172,7 @@ jobs:
       - name: Publish
         uses: gmiam/rust-musl-action@9e6a37bf27ecfffb6b92240ea276bea5487fa15d
         continue-on-error: false
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
         with:
-          args: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+          args: cargo publish
