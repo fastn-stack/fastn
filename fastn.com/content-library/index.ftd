@@ -4614,7 +4614,7 @@ optional ftd.resizing max-width:
 -- ftd.column:
 background.solid: $inherited.colors.background.base
 width: fill-container
-padding-top.px: 42
+/padding-top.px: 42
 align-content: center
 align-self: center
 spacing.fixed.px: 7
@@ -4625,7 +4625,7 @@ max-width.fixed.px if { !footer-desktop.full-width }: $footer-desktop.max-width
 
 -- ftd.row:
 width: fill-container
-spacing: space-between
+spacing: space-around
 padding-vertical.px: 50
 padding-right.px: 48
 
