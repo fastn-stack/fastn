@@ -267,14 +267,14 @@ impl HeaderValue {
 }
 
 impl VariableValue {
-    pub(crate) fn inner(&self) -> Option<VariableValue> {
+    pub fn inner(&self) -> Option<VariableValue> {
         match self {
             VariableValue::Optional { value, .. } => value.as_ref().as_ref().map(|v| v.to_owned()),
             t => Some(t.to_owned()),
         }
     }
 
-    pub(crate) fn record_name(&self) -> Option<String> {
+    pub fn record_name(&self) -> Option<String> {
         let mut name = None;
         let inner_value = self.inner();
         if let Some(ftd::ast::VariableValue::Record {
@@ -422,11 +422,11 @@ impl VariableValue {
         }
     }
 
-    pub(crate) fn is_record(&self) -> bool {
+    pub fn is_record(&self) -> bool {
         matches!(self, VariableValue::Record { .. })
     }
 
-    pub(crate) fn is_string(&self) -> bool {
+    pub fn is_string(&self) -> bool {
         matches!(self, VariableValue::String { .. })
     }
 
