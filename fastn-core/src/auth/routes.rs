@@ -16,11 +16,16 @@ pub async fn login(
 }
 
 // route: /-/auth/logout/
-pub fn logout(next: String) -> fastn_core::Result<fastn_core::http::Response> {
+pub fn logout(
+    req: &fastn_core::http::Request,
+    next: String,
+) -> fastn_core::Result<fastn_core::http::Response> {
     // TODO: Refactor, Not happy with this code, too much of repetition of similar code
     Ok(actix_web::HttpResponse::Found()
         .cookie(
             actix_web::cookie::Cookie::build(fastn_core::auth::AuthProviders::GitHub.as_str(), "")
+                .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+                .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
@@ -39,7 +44,7 @@ pub async fn handle_auth(
         "/-/auth/login/" => login(&req, next).await,
         // TODO: This has be set while creating the GitHub OAuth Application
         "/-/auth/github/" => fastn_core::auth::github::callback(&req, next).await,
-        "/-/auth/logout/" => logout(next),
+        "/-/auth/logout/" => logout(&req, next),
         _ => Ok(fastn_core::not_found!("route not found: {}", req.path())),
     }
 }
