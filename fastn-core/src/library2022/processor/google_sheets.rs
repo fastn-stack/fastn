@@ -3,6 +3,12 @@ const GOOGLE_SHEET_API_BASE_URL: &str = "https://docs.google.com/a/google.com/sp
 static GOOGLE_SHEETS_ID_REGEX: once_cell::sync::Lazy<regex::Regex> =
     once_cell::sync::Lazy::new(|| regex::Regex::new(r"/spreadsheets/d/([a-zA-Z0-9-_]+)").unwrap());
 
+static JSON_RESPONSE_REGEX: once_cell::sync::Lazy<regex::Regex> =
+    once_cell::sync::Lazy::new(|| {
+        regex::Regex::new(r"^/\*O_o\*/\s*google.visualization.Query.setResponse\((.*?)\);$")
+            .unwrap()
+    });
+
 pub(crate) fn extract_google_sheets_id(url: &str) -> Option<String> {
     if let Some(captures) = GOOGLE_SHEETS_ID_REGEX.captures(url) {
         if let Some(id) = captures.get(1) {
@@ -13,9 +19,20 @@ pub(crate) fn extract_google_sheets_id(url: &str) -> Option<String> {
     None
 }
 
+fn extract_json(input: &str) -> ftd::interpreter::Result<Option<String>> {
+    if let Some(captures) = JSON_RESPONSE_REGEX.captures(input) {
+        match captures.get(1) {
+            Some(m) => Ok(Some(m.as_str().to_string())),
+            None => Ok(None),
+        }
+    } else {
+        Ok(None)
+    }
+}
+
 pub(crate) fn generate_google_sheet_url(google_sheet_id: &str) -> String {
     format!(
-        "{}/{}/gviz/tq?tqx=out:csv",
+        "{}/{}/gviz/tq?tqx=out:json",
         GOOGLE_SHEET_API_BASE_URL, google_sheet_id,
     )
 }
@@ -26,32 +43,332 @@ pub(crate) fn prepare_query_url(url: &str, query: &str) -> String {
         .finish()
 }
 
-pub(crate) fn parse_csv(
-    csv: &str,
-    doc_name: &str,
-    line_number: usize,
-) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
-    let mut reader = csv::Reader::from_reader(csv.as_bytes());
-    let mut result: Vec<Vec<serde_json::Value>> = vec![];
-    for record in reader.records() {
-        match record {
-            Ok(r) => {
-                let mut row: Vec<serde_json::Value> = vec![];
-                for value in r.iter() {
-                    row.push(serde_json::Value::String(value.to_string()));
-                }
-                result.push(row);
+#[derive(Debug, serde::Deserialize, PartialEq)]
+pub(crate) struct DataColumn {
+    id: String,
+    label: String,
+    r#type: String,
+    pattern: Option<String>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub(crate) struct DataRow {
+    c: Vec<DataValue>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub(crate) struct DataValue {
+    v: serde_json::Value,
+    #[serde(default)]
+    f: Option<String>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub(crate) struct DataTable {
+    cols: Vec<DataColumn>,
+    rows: Vec<DataRow>,
+    // #[serde(rename = "parsedNumHeaders")]
+    // parsed_num_headers: usize,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub(crate) struct QueryResponse {
+    // version: String,
+    // #[serde(rename = "reqId")]
+    // req_id: String,
+    // status: String,
+    // sig: String,
+    table: DataTable,
+}
+
+pub(crate) fn rows_to_value(
+    doc: &ftd::interpreter::TDoc<'_>,
+    kind: &ftd::interpreter::Kind,
+    value: &ftd::ast::VariableValue,
+    rows: &[DataRow],
+    columns: &[DataColumn],
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    Ok(match kind {
+        ftd::interpreter::Kind::List { kind, .. } => {
+            let mut data = vec![];
+            for row in rows.iter() {
+                data.push(
+                    row_to_value(doc, kind, value, row, columns)?
+                        .into_property_value(false, value.line_number()),
+                );
             }
-            Err(e) => {
-                return ftd::interpreter::utils::e2(
-                    format!("Failed to parse result: {:?}", e),
-                    doc_name,
-                    line_number,
-                )
+
+            ftd::interpreter::Value::List {
+                data,
+                kind: kind.to_owned().into_kind_data(),
             }
         }
+        t => unimplemented!(
+            "{:?} not yet implemented, line number: {}, doc: {}",
+            t,
+            value.line_number(),
+            doc.name.to_string()
+        ),
+    })
+}
+
+fn row_to_record(
+    doc: &ftd::interpreter::TDoc<'_>,
+    name: &str,
+    value: &ftd::ast::VariableValue,
+    row: &DataRow,
+    columns: &[DataColumn],
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    let rec = doc.get_record(name, value.line_number())?;
+    let rec_fields = rec.fields;
+    let mut fields: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
+
+    for field in rec_fields.iter() {
+        let idx = match columns
+            .iter()
+            .position(|column| column.label.to_string().eq(&field.name))
+        {
+            Some(idx) => idx,
+            None => {
+                return ftd::interpreter::utils::e2(
+                    format!("key not found: {}", field.name.as_str()),
+                    doc.name,
+                    value.line_number(),
+                )
+            }
+        };
+
+        fields.insert(
+            field.name.to_string(),
+            to_interpreter_value(
+                doc,
+                &field.kind.kind,
+                &columns[idx],
+                &row.c[idx],
+                value.line_number(),
+            )?
+            .into_property_value(false, value.line_number()),
+        );
     }
-    Ok(result)
+
+    Ok(ftd::interpreter::Value::Record {
+        name: name.to_string(),
+        fields,
+    })
+}
+
+pub(crate) fn row_to_value(
+    doc: &ftd::interpreter::TDoc<'_>,
+    kind: &ftd::interpreter::Kind,
+    value: &ftd::ast::VariableValue,
+    row: &DataRow,
+    columns: &[DataColumn],
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    if let ftd::interpreter::Kind::Record { name } = kind {
+        return row_to_record(doc, name, value, row, columns);
+    }
+
+    if row.c.len() != 1 {
+        return ftd::interpreter::utils::e2(
+            format!("expected one column, found: {}", row.c.len()),
+            doc.name,
+            value.line_number(),
+        );
+    }
+
+    to_interpreter_value(doc, kind, &columns[0], &row.c[0], value.line_number())
+}
+
+fn to_interpreter_value(
+    doc: &ftd::interpreter::TDoc<'_>,
+    kind: &ftd::interpreter::Kind,
+    column: &DataColumn,
+    data_value: &DataValue,
+    line_number: usize,
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    Ok(match kind {
+        ftd::interpreter::Kind::String { .. } => ftd::interpreter::Value::String {
+            text: match column.r#type.as_str() {
+                "string" => match &data_value.v {
+                    serde_json::Value::String(v) => v.to_string(),
+                    _ => {
+                        return ftd::interpreter::utils::e2(
+                            format!("Can't parse to string, found: {}", &data_value.v),
+                            doc.name,
+                            line_number,
+                        )
+                    }
+                },
+                _ => match &data_value.f {
+                    Some(v) => v.to_string(),
+                    None => data_value.v.to_string(),
+                },
+            },
+        },
+        ftd::interpreter::Kind::Integer => ftd::interpreter::Value::Integer {
+            value: match column.r#type.as_str() {
+                "number" => match &data_value.v {
+                    serde_json::Value::Number(n) => {
+                        n.as_i64()
+                            .ok_or_else(|| ftd::interpreter::Error::ParseError {
+                                message: format!(
+                                    "Can't parse to integer, found: {}",
+                                    &data_value.v
+                                ),
+                                doc_id: doc.name.to_string(),
+                                line_number,
+                            })?
+                    }
+                    serde_json::Value::String(s) => {
+                        s.parse::<i64>()
+                            .map_err(|_| ftd::interpreter::Error::ParseError {
+                                message: format!(
+                                    "Can't parse to integer, found: {}",
+                                    &data_value.v
+                                ),
+                                doc_id: doc.name.to_string(),
+                                line_number,
+                            })?
+                    }
+                    _ => {
+                        return Err(ftd::interpreter::Error::ParseError {
+                            message: format!("Can't parse to integer, found: {}", &data_value.v),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        })
+                    }
+                },
+                "datetime" => match &data_value.v {
+                    serde_json::Value::String(s) => {
+                        let parsed_date =
+                            fastn_core::library2022::utils::ParsedDate::from_str(s.as_str())
+                                .ok_or_else(|| ftd::interpreter::Error::ParseError {
+                                    message: "Can't parse to datetime to integer".to_string(),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                })?;
+
+                        parsed_date.timestamp
+                    }
+                    t => {
+                        return Err(ftd::interpreter::Error::ParseError {
+                            message: format!("Can't parse to datetime to integer, found: {}", t),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        })
+                    }
+                },
+                t => {
+                    return Err(ftd::interpreter::Error::ParseError {
+                        message: format!("Can't parse to integer, found: {t}"),
+                        doc_id: doc.name.to_string(),
+                        line_number,
+                    })
+                }
+            },
+        },
+        ftd::interpreter::Kind::Decimal => ftd::interpreter::Value::Decimal {
+            value: match &data_value.v {
+                serde_json::Value::Number(n) => {
+                    n.as_f64()
+                        .ok_or_else(|| ftd::interpreter::Error::ParseError {
+                            message: format!("Can't parse to decimal, found: {}", &data_value.v),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        })?
+                }
+                serde_json::Value::String(s) => {
+                    s.parse::<f64>()
+                        .map_err(|_| ftd::interpreter::Error::ParseError {
+                            message: format!("Can't parse to decimal, found: {}", &data_value.v),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        })?
+                }
+                _ => {
+                    return Err(ftd::interpreter::Error::ParseError {
+                        message: format!("Can't parse to decimal, found: {}", &data_value.v),
+                        doc_id: doc.name.to_string(),
+                        line_number,
+                    })
+                }
+            },
+        },
+        ftd::interpreter::Kind::Boolean => ftd::interpreter::Value::Boolean {
+            value: match &data_value.v {
+                serde_json::Value::Bool(n) => *n,
+                serde_json::Value::String(s) => {
+                    s.parse::<bool>()
+                        .map_err(|_| ftd::interpreter::Error::ParseError {
+                            message: format!("Can't parse to boolean, found: {}", &data_value.v),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        })?
+                }
+                _ => {
+                    return Err(ftd::interpreter::Error::ParseError {
+                        message: format!("Can't parse to boolean, found: {}", &data_value.v),
+                        doc_id: doc.name.to_string(),
+                        line_number,
+                    })
+                }
+            },
+        },
+        _ => unimplemented!(),
+    })
+}
+
+pub(crate) fn result_to_value(
+    query_response: QueryResponse,
+    kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc<'_>,
+    value: &ftd::ast::VariableValue,
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    if kind.is_list() {
+        rows_to_value(
+            doc,
+            &kind,
+            value,
+            &query_response.table.rows,
+            &query_response.table.cols,
+        )
+    } else {
+        match query_response.table.rows.len() {
+            1 => row_to_value(
+                doc,
+                &kind,
+                value,
+                &query_response.table.rows[0],
+                &query_response.table.cols,
+            ),
+            0 => ftd::interpreter::utils::e2(
+                "Query returned no result, expected one row".to_string(),
+                doc.name,
+                value.line_number(),
+            ),
+            len => ftd::interpreter::utils::e2(
+                format!("Query returned {} rows, expected one row", len),
+                doc.name,
+                value.line_number(),
+            ),
+        }
+    }
+}
+
+pub(crate) fn parse_json(
+    json: &str,
+    doc_name: &str,
+    line_number: usize,
+    // ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
+) -> ftd::interpreter::Result<QueryResponse> {
+    match serde_json::from_str::<QueryResponse>(json) {
+        Ok(response) => Ok(response),
+        Err(e) => ftd::interpreter::utils::e2(
+            format!("Failed to parse query response: {:?}", e),
+            doc_name,
+            line_number,
+        ),
+    }
 }
 
 fn escape_string_value(value: &str) -> String {
@@ -277,22 +594,18 @@ pub(crate) async fn process(
         }
     };
 
-    let result = parse_csv(response.as_str(), doc.name, value.line_number());
+    let json = match extract_json(&response)? {
+        Some(json) => json,
+        None => {
+            return ftd::interpreter::utils::e2(
+                "Invalid Query Response".to_string(),
+                doc.name,
+                value.line_number(),
+            )
+        }
+    };
 
-    match result {
-        Ok(result) => fastn_core::library2022::processor::sqlite::result_to_value(
-            Ok(result),
-            kind,
-            doc,
-            &value,
-            fastn_core::library2022::processor::sql::STATUS_OK,
-        ),
-        Err(e) => fastn_core::library2022::processor::sqlite::result_to_value(
-            Err(e.to_string()),
-            kind,
-            doc,
-            &value,
-            fastn_core::library2022::processor::sql::STATUS_ERROR,
-        ),
-    }
+    let result = parse_json(json.as_str(), doc.name, value.line_number())?;
+
+    result_to_value(result, kind, doc, &value)
 }
