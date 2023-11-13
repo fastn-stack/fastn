@@ -64,7 +64,7 @@ pub(crate) struct DataValue {
 }
 
 #[derive(Debug, serde::Deserialize)]
-pub(crate) struct DataTable {
+pub(crate) struct DataSchema {
     cols: Vec<DataColumn>,
     rows: Vec<DataRow>,
     // #[serde(rename = "parsedNumHeaders")]
@@ -78,7 +78,7 @@ pub(crate) struct QueryResponse {
     // req_id: String,
     // status: String,
     // sig: String,
-    table: DataTable,
+    schema: DataSchema,
 }
 
 pub(crate) fn rows_to_value(
@@ -329,17 +329,17 @@ fn result_to_value(
             doc,
             &kind,
             value,
-            &query_response.table.rows,
-            &query_response.table.cols,
+            &query_response.schema.rows,
+            &query_response.schema.cols,
         )
     } else {
-        match query_response.table.rows.len() {
+        match query_response.schema.rows.len() {
             1 => row_to_value(
                 doc,
                 &kind,
                 value,
-                &query_response.table.rows[0],
-                &query_response.table.cols,
+                &query_response.schema.rows[0],
+                &query_response.schema.cols,
             ),
             0 => ftd::interpreter::utils::e2(
                 "Query returned no result, expected one row".to_string(),
