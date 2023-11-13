@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: `fastn` Discord
+    url: https://fastn.com/discord/
+    about: `fastn` developer discussion and community chat
+  - name: Feature Requests and Ideas
+    url: https://github.com/orgs/fastn-stack/discussions/categories/ideas-rfcs
+    about: Create a Discussion instead of issue for ideas and proposals
