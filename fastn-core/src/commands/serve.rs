@@ -16,7 +16,6 @@ fn handle_redirect(
 
 /// path: /-/<package-name>/<file-name>/
 /// path: /<file-name>/
-///
 #[tracing::instrument(skip_all)]
 async fn serve_file(
     config: &mut fastn_core::RequestConfig,
