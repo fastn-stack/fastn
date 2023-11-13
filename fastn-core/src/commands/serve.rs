@@ -535,6 +535,7 @@ fn handle_default_route(
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_CSS)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(ftd::css()),
         );
     } else if req
@@ -544,6 +545,7 @@ fn handle_default_route(
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(format!(
                     "{}\n\n{}",
                     ftd::build_js(),
@@ -557,6 +559,7 @@ fn handle_default_route(
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(ftd::js::all_js_without_test(package_name)),
         );
     } else if req
@@ -566,6 +569,7 @@ fn handle_default_route(
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(ftd::markdown_js()),
         );
     } else if let Some(theme) =
@@ -583,18 +587,21 @@ fn handle_default_route(
         return theme_css.get(theme).cloned().map(|theme| {
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_CSS)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(theme)
         });
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_js()) {
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(ftd::prism_js()),
         );
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_css()) {
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_CSS)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(ftd::prism_css()),
         );
     }
