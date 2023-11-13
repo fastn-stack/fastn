@@ -728,6 +728,7 @@ You can try without providing port, it will automatically pick unused port."#,
                 inline_css: inline_css.clone(),
                 package_name: package_name.clone(),
             }))
+            .wrap(actix_web::middleware::Compress::default())
             .wrap(fastn_core::catch_panic::CatchPanic::default())
             .wrap(
                 actix_web::middleware::Logger::new(
