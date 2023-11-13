@@ -1,52 +1,8 @@
-const GOOGLE_SHEET_API_BASE_URL: &str = "https://docs.google.com/a/google.com/spreadsheets/d";
-
-static GOOGLE_SHEETS_ID_REGEX: once_cell::sync::Lazy<regex::Regex> =
-    once_cell::sync::Lazy::new(|| regex::Regex::new(r"/spreadsheets/d/([a-zA-Z0-9-_]+)").unwrap());
-
-static JSON_RESPONSE_REGEX: once_cell::sync::Lazy<regex::Regex> =
-    once_cell::sync::Lazy::new(|| {
-        regex::Regex::new(r"^/\*O_o\*/\s*google.visualization.Query.setResponse\((.*?)\);$")
-            .unwrap()
-    });
-
-pub(crate) fn extract_google_sheets_id(url: &str) -> Option<String> {
-    if let Some(captures) = GOOGLE_SHEETS_ID_REGEX.captures(url) {
-        if let Some(id) = captures.get(1) {
-            return Some(id.as_str().to_string());
-        }
-    }
-
-    None
-}
-
-fn extract_json(input: &str) -> ftd::interpreter::Result<Option<String>> {
-    if let Some(captures) = JSON_RESPONSE_REGEX.captures(input) {
-        match captures.get(1) {
-            Some(m) => Ok(Some(m.as_str().to_string())),
-            None => Ok(None),
-        }
-    } else {
-        Ok(None)
-    }
-}
-
-pub(crate) fn generate_google_sheet_url(google_sheet_id: &str) -> String {
-    format!(
-        "{}/{}/gviz/tq?tqx=out:json",
-        GOOGLE_SHEET_API_BASE_URL, google_sheet_id,
-    )
-}
-
-pub(crate) fn prepare_query_url(url: &str, query: &str) -> String {
-    url::form_urlencoded::Serializer::new(url.to_string())
-        .append_pair("tq", query)
-        .finish()
-}
-
 #[derive(Debug, serde::Deserialize, PartialEq)]
 pub(crate) struct DataColumn {
     id: String,
     label: String,
+    // https://support.google.com/area120-tables/answer/9904372?hl=en
     r#type: String,
     pattern: Option<String>,
 }
@@ -104,12 +60,13 @@ pub(crate) fn rows_to_value(
                 kind: kind.to_owned().into_kind_data(),
             }
         }
-        t => unimplemented!(
-            "{:?} not yet implemented, line number: {}, doc: {}",
-            t,
-            value.line_number(),
-            doc.name.to_string()
-        ),
+        t => {
+            return ftd::interpreter::utils::e2(
+                format!("{:?} not yet implemented", t),
+                doc.name,
+                value.line_number(),
+            )
+        }
     })
 }
 
@@ -146,6 +103,8 @@ fn row_to_record(
                 &field.kind.kind,
                 &schema[idx],
                 &row.c[idx],
+                value.caption(),
+                value.record_name(),
                 value.line_number(),
             )?
             .into_property_value(false, value.line_number()),
@@ -177,7 +136,15 @@ fn row_to_value(
         );
     }
 
-    to_interpreter_value(doc, kind, &schema[0], &row.c[0], value.line_number())
+    to_interpreter_value(
+        doc,
+        kind,
+        &schema[0],
+        &row.c[0],
+        value.caption(),
+        value.record_name(),
+        value.line_number(),
+    )
 }
 
 fn to_interpreter_value(
@@ -185,9 +152,12 @@ fn to_interpreter_value(
     kind: &ftd::interpreter::Kind,
     column: &DataColumn,
     data_value: &DataValue,
+    _default_value: Option<String>,
+    _record_name: Option<String>,
     line_number: usize,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     Ok(match kind {
+        // Available kinds: https://support.google.com/area120-tables/answer/9904372?hl=en
         ftd::interpreter::Kind::String { .. } => ftd::interpreter::Value::String {
             text: match column.r#type.as_str() {
                 "string" => match &data_value.v {
@@ -234,26 +204,6 @@ fn to_interpreter_value(
                     _ => {
                         return Err(ftd::interpreter::Error::ParseError {
                             message: format!("Can't parse to integer, found: {}", &data_value.v),
-                            doc_id: doc.name.to_string(),
-                            line_number,
-                        })
-                    }
-                },
-                "datetime" => match &data_value.v {
-                    serde_json::Value::String(s) => {
-                        let parsed_date =
-                            fastn_core::library2022::utils::ParsedDate::from_str(s.as_str())
-                                .ok_or_else(|| ftd::interpreter::Error::ParseError {
-                                    message: "Can't parse to datetime to integer".to_string(),
-                                    doc_id: doc.name.to_string(),
-                                    line_number,
-                                })?;
-
-                        parsed_date.timestamp
-                    }
-                    t => {
-                        return Err(ftd::interpreter::Error::ParseError {
-                            message: format!("Can't parse to datetime to integer, found: {}", t),
                             doc_id: doc.name.to_string(),
                             line_number,
                         })
@@ -315,7 +265,31 @@ fn to_interpreter_value(
                 }
             },
         },
-        _ => unimplemented!(),
+        ftd::interpreter::Kind::Optional { kind, .. } => {
+            let kind = kind.as_ref();
+            match &data_value.v {
+                serde_json::Value::Null => ftd::interpreter::Value::Optional {
+                    kind: kind.clone().into_kind_data(),
+                    data: Box::new(None),
+                },
+                _ => to_interpreter_value(
+                    doc,
+                    kind,
+                    column,
+                    data_value,
+                    _default_value,
+                    _record_name,
+                    line_number,
+                )?,
+            }
+        }
+        kind => {
+            return ftd::interpreter::utils::e2(
+                format!("{:?} not supported yet", kind),
+                doc.name,
+                line_number,
+            )
+        }
     })
 }
 
@@ -371,6 +345,7 @@ fn parse_json(
     }
 }
 
+// Parser for processing the Google Visualization Query Language
 fn escape_string_value(value: &str) -> String {
     format!("\"{}\"", value.replace('\"', "\\\""))
 }
@@ -403,7 +378,13 @@ fn resolve_variable_from_doc(
         ftd::interpreter::Value::Integer { value } => value.to_string(),
         ftd::interpreter::Value::Decimal { value } => value.to_string(),
         ftd::interpreter::Value::Boolean { value } => value.to_string(),
-        _ => unimplemented!(), // Handle other types as needed
+        v => {
+            return ftd::interpreter::utils::e2(
+                format!("kind {:?} is not supported yet.", v),
+                doc.name,
+                line_number,
+            )
+        }
     };
 
     Ok(param_value)
@@ -432,7 +413,13 @@ fn resolve_variable_from_headers(
         ("INTEGER", ftd::ast::VariableValue::String { value, .. })
         | ("DECIMAL", ftd::ast::VariableValue::String { value, .. })
         | ("BOOLEAN", ftd::ast::VariableValue::String { value, .. }) => value.to_string(),
-        _ => unimplemented!(), // Handle other types as needed
+        _ => {
+            return ftd::interpreter::utils::e2(
+                format!("kind {} is not supported yet.", param_type),
+                doc.name,
+                line_number,
+            )
+        }
     };
 
     Ok(param_value)
@@ -462,10 +449,10 @@ enum State {
     ParseError(String),
 }
 
-fn parse_query(
+pub(crate) fn parse_query(
     query: &str,
     doc: &ftd::interpreter::TDoc,
-    headers: ftd::ast::HeaderValues,
+    headers: &ftd::ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<String> {
     let mut output = String::new();
@@ -532,7 +519,7 @@ fn parse_query(
                 state = State::OutsideParam;
 
                 let param_value =
-                    resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
+                    resolve_param(&param_name, &param_type, doc, headers, line_number)?;
 
                 output.push_str(&param_value);
 
@@ -564,7 +551,7 @@ fn parse_query(
     if [State::InsideParam, State::PushParam, State::InsideTypeHint].contains(&state)
         && !param_name.is_empty()
     {
-        let param_value = resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
+        let param_value = resolve_param(&param_name, &param_type, doc, headers, line_number)?;
         output.push_str(&param_value);
     }
 
@@ -579,9 +566,10 @@ pub(crate) async fn process(
     headers: ftd::ast::HeaderValues,
     query: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let query = parse_query(query, doc, headers, value.line_number())?;
-
-    let request_url = prepare_query_url(&db_config.db_url, query.as_str());
+    let query = parse_query(query, doc, &headers, value.line_number())?;
+    let sheet = &headers.get_optional_string_by_key("sheet", doc.name, value.line_number())?;
+    let request_url =
+        fastn_core::google_sheets::prepare_query_url(&db_config.db_url, query.as_str(), sheet);
 
     let response = match fastn_core::http::http_get_str(&request_url).await {
         Ok(v) => v,
@@ -594,7 +582,7 @@ pub(crate) async fn process(
         }
     };
 
-    let json = match extract_json(&response)? {
+    let json = match fastn_core::google_sheets::extract_json(&response)? {
         Some(json) => json,
         None => {
             return ftd::interpreter::utils::e2(

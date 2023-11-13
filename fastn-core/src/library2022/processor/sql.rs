@@ -34,17 +34,14 @@ pub async fn process(
     let (headers, query) = super::sqlite::get_p1_data("sql", &value, doc.name)?;
 
     let db_config = match headers.get_optional_string_by_key("db", doc.name, value.line_number())? {
-        Some(url) => {
-            match fastn_core::library2022::processor::google_sheets::extract_google_sheets_id(
-                url.as_str(),
-            ) {
-                Some(google_sheet_id) => {
-                    let db_url = fastn_core::library2022::processor::google_sheets::generate_google_sheet_url(google_sheet_id.as_str());
-                    DatabaseConfig::new(db_url, "google_sheets".to_string())
-                }
-                None => DatabaseConfig::new(url, "sqlite".to_string()),
+        Some(url) => match fastn_core::google_sheets::extract_google_sheets_id(url.as_str()) {
+            Some(google_sheet_id) => {
+                let db_url =
+                    fastn_core::google_sheets::generate_google_sheet_url(google_sheet_id.as_str());
+                DatabaseConfig::new(db_url, "google_sheets".to_string())
             }
-        }
+            None => DatabaseConfig::new(url, "sqlite".to_string()),
+        },
         None => fastn_core::library2022::processor::sql::get_db_config()?,
     };
 
