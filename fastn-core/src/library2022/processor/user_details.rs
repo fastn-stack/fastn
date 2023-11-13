@@ -1,25 +1,46 @@
-pub fn process(
+/// currently returns the github user details
+pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
-    doc: &ftd::interpreter::TDoc,
+    doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let mut found_cookie = false;
-    let is_login = {
-        for auth_provider in fastn_core::auth::AuthProviders::AUTH_ITER.iter() {
-            if req_config.request.cookie(auth_provider.as_str()).is_some() {
-                found_cookie = true;
-                break;
-            }
-        }
-        found_cookie
+    let mut ud = UserDetails {
+        is_login: false,
+        user: None,
     };
 
-    #[derive(Debug, serde::Serialize)]
-    struct UserDetails {
-        #[serde(rename = "is-login")]
-        is_login: bool,
+    if let Some(gh_cookie) = req_config.request.cookie("github") {
+        if let Ok(user_detail) = fastn_core::auth::utils::decrypt_str(&gh_cookie)
+            .await
+            .map_err(|e| eprintln!("Failed to decrypt cookie: {e}"))
+            .and_then(|decrypted_cookie| {
+                serde_json::from_str::<fastn_core::auth::github::UserDetail>(
+                    decrypted_cookie.as_str(),
+                )
+                .map_err(|e| eprintln!("Serde deserialization failed: {e}"))
+            })
+        {
+            match fastn_core::auth::github::apis::user_details(user_detail.access_token.as_str())
+                .await
+            {
+                Ok(user) => {
+                    ud = UserDetails {
+                        is_login: true,
+                        user: Some(user),
+                    }
+                }
+                Err(e) => eprintln!("Failed to get github user: {e}"),
+            }
+        }
     }
-    let ud = UserDetails { is_login };
+
     doc.from_json(&ud, &kind, &value)
+}
+
+#[derive(Debug, serde::Serialize)]
+struct UserDetails {
+    #[serde(rename = "is-login")]
+    is_login: bool,
+    user: Option<fastn_core::auth::github::apis::GhUserDetails>,
 }

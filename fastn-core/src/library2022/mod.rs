@@ -251,7 +251,7 @@ impl Library2022 {
             "document-suffix" => processor::document::document_suffix(value, kind, doc, self),
             "document-name" => processor::document::document_name(value, kind, doc, self).await,
             "fetch-file" => processor::fetch_file::fetch_files(value, kind, doc, self).await,
-            "user-details" => processor::user_details::process(value, kind, doc, self),
+            "user-details" => processor::user_details::process(value, kind, doc, self).await,
             "fastn-apps" => processor::apps::process(value, kind, doc, self),
             "is-reader" => processor::user_group::is_reader(value, kind, doc, self).await,
             "sql" => processor::sql::process(value, kind, doc, self).await,
