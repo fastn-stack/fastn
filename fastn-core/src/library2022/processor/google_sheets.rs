@@ -157,7 +157,7 @@ fn row_to_record(
     })
 }
 
-pub(crate) fn row_to_value(
+fn row_to_value(
     doc: &ftd::interpreter::TDoc<'_>,
     kind: &ftd::interpreter::Kind,
     value: &ftd::ast::VariableValue,
@@ -318,7 +318,7 @@ fn to_interpreter_value(
     })
 }
 
-pub(crate) fn result_to_value(
+fn result_to_value(
     query_response: QueryResponse,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
@@ -355,11 +355,10 @@ pub(crate) fn result_to_value(
     }
 }
 
-pub(crate) fn parse_json(
+fn parse_json(
     json: &str,
     doc_name: &str,
     line_number: usize,
-    // ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
 ) -> ftd::interpreter::Result<QueryResponse> {
     match serde_json::from_str::<QueryResponse>(json) {
         Ok(response) => Ok(response),
@@ -429,9 +428,9 @@ fn resolve_variable_from_headers(
 
     let param_value: String = match (param_type, &header.value) {
         ("STRING", ftd::ast::VariableValue::String { value, .. }) => escape_string_value(value),
-        ("INTEGER", ftd::ast::VariableValue::String { value, .. }) => value.to_string(),
-        ("DECIMAL", ftd::ast::VariableValue::String { value, .. }) => value.to_string(),
-        ("BOOLEAN", ftd::ast::VariableValue::String { value, .. }) => value.to_string(),
+        ("INTEGER", ftd::ast::VariableValue::String { value, .. })
+        | ("DECIMAL", ftd::ast::VariableValue::String { value, .. })
+        | ("BOOLEAN", ftd::ast::VariableValue::String { value, .. }) => value.to_string(),
         _ => unimplemented!(), // Handle other types as needed
     };
 
