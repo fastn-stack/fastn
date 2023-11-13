@@ -78,7 +78,6 @@ url.workspace = true
 zip.workspace = true
 fastn-observer.workspace = true
 fastn-js.workspace = true
-chrono.workspace = true
 
 [dev-dependencies]
 fbt-lib.workspace = true

@@ -11,7 +11,8 @@ impl DatabaseConfig {
 }
 
 pub(crate) fn get_db_config() -> ftd::interpreter::Result<DatabaseConfig> {
-    let db_url = std::env::var("FASTN_DB_URL").expect("FASTN_DB_URL is not set");
+    let db_url = std::env::var("FASTN_DB_URL")
+        .map_err(|_| ftd::interpreter::Error::OtherError("FASTN_DB_URL is not set".to_string()))?;
 
     if let Some(db_url) = db_url.strip_prefix("sqlite:///") {
         return Ok(DatabaseConfig::new(
@@ -20,7 +21,8 @@ pub(crate) fn get_db_config() -> ftd::interpreter::Result<DatabaseConfig> {
         ));
     }
 
-    let url = url::Url::parse(&db_url).expect("Invalid DB Url");
+    let url = url::Url::parse(&db_url)
+        .map_err(|_| ftd::interpreter::Error::OtherError("Invalid DB URL".to_string()))?;
 
     Ok(DatabaseConfig::new(db_url, url.scheme().to_string()))
 }

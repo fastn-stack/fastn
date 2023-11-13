@@ -1599,7 +1599,6 @@ dependencies = [
  "async-lock",
  "async-recursion",
  "camino",
- "chrono",
  "clap",
  "colored",
  "deadpool-postgres",
