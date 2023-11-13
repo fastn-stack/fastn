@@ -42,7 +42,7 @@ dark: brown
 
 Now use this modified color scheme in any of your fastn package by referring to
 the `main` variable. For more detail, visit [how to use the color scheme
-package](how-to/use-color-package/) page.
+package](/use-cs/) page.
 
 And voila! Your custom color scheme is ready.
 

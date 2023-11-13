@@ -524,6 +524,8 @@ skip: true
     document: ftd/or-type.ftd
   - `list`: /list/
     document: ftd/list.ftd
+- Understanding Loops: /loop/
+  document: ftd/loop.ftd
 - `component`: /components/
   document: ftd/components.ftd
 - Headers: /headers/
@@ -611,6 +613,8 @@ skip: true
 - Rive Events: /rive-events/
   document: ftd/rive-events.ftd
   decription: animation, on-rive-play, on-rive-pause, on-rive-state-change
+- How to create color-scheme: /create-cs/
+  document: cs/create-cs.ftd
 - Use color scheme package: /use-cs/
   document: cs/use-color-package.ftd
 - `processor`: /processor/
@@ -933,7 +937,6 @@ skip: true
   document: blog/show-cs.ftd
 - Using Custom Breakpoints: /breakpoint/
   document: blog/breakpoint.ftd
- 
   
 
 # dev: /d/
@@ -1077,5 +1080,6 @@ skip: true
 /r/counter/ -> https://replit.com/@ajit6/counter/
 /r/acme/ -> https://replit.com/@ayushipujaa/acme/
 /custom-url/ -> /custom-urls/
+/loops/ -> /loop/
 /use-js/ -> /use-js-css/
 /use-css/ -> /external-css/

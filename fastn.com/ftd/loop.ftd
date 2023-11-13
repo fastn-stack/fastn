@@ -1,0 +1,230 @@
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/utils
+-- import: fastn.com/content-library as lib
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: Understanding Loops
+
+Here, we will be exploring on how `fastn` uses loops and
+what cool stuff you can do with them. Let's kick things
+off by using some lists. We'll explore and learn about
+different interesting aspects while working with them.
+
+
+
+
+
+
+
+
+
+-- ds.h1: Sample Data
+
+Intuitively speaking, when we talk about looping, the first thing that comes to mind
+is where are we gonna loop. So to understand looping, we will need some lists.
+So for that, I'll be using these below mentioned lists to understand
+further sections.
+
+-- ds.code: Sample lists
+lang: ftd
+line-numbers: true
+
+\-- record person:
+caption name:
+integer age:
+
+\-- string list places: Bangalore, Mumbai, Chennai, Kolkata ;; <hl>
+\-- integer list odd-numbers: 1, 3, 5, 7, 9, 11 ;; <hl>
+
+\-- person list candidates: ;; <hl>
+\;; <hl>
+\-- person: John Doe ;; <hl>
+age: 28 ;; <hl>
+\;; <hl>
+\-- person: Sam Wan ;; <hl>
+age: 24 ;; <hl>
+\;; <hl>
+\-- person: Sam Ather ;; <hl>
+age: 30 ;; <hl>
+\;; <hl>
+\-- end: candidates ;; <hl>
+
+
+
+
+
+
+
+
+-- ds.h1: Let's start looping
+
+In fastn, there are currently two looping syntax that we can use to loop
+over lists. We can use either of them but its recommended to use the `for` syntax
+since the other one will be deprecated soon.
+
+- [Using for loop syntax](/loop#looping-using-for-loop-syntax)
+- [Using $loop$ syntax](/loop#looping-using-loop-syntax)
+
+
+
+
+
+
+
+
+-- ds.h2: Looping using `for` loop syntax
+
+Using for syntax is recommended for looping and has the following
+general syntax that we should keep in mind before using it.
+
+**General Syntax** - `for: <LIST-ITEM-NAME>, [<LOOP-INDEX>] in <LIST-NAME>`
+
+-- cbox.info: Note
+
+Here, specifying `<LOOP-INDEX>` variable name is optional and can be omitted
+if not required.
+
+-- ds.markdown:
+
+We will use this syntax as header during component invocation to invoke
+multiple components based on the list contents. Here are some examples
+where we have used certain lists defined [here](/loop#sample-data).
+
+-- ds.rendered: Sample usage (using `for` loop syntax)
+copy: true
+download: index.ftd
+
+-- ds.rendered.input:
+
+\;; This will print all the items from list places
+\-- ftd.text: $place
+for: $place in $places ;; <hl>
+color: $inherited.colors.text
+
+\;; This will print all the numbers from list odd-numbers
+\-- ftd.integer: $number
+for: $number in $odd-numbers ;; <hl>
+color: $inherited.colors.text
+
+-- ds.rendered.output:
+
+;; This will print all the items from list places
+-- ftd.text: $place
+for: $place in $places
+color: $inherited.colors.text
+
+;; This will print all the numbers from list odd-numbers
+-- ftd.integer: $number
+for: $number in $odd-numbers
+color: $inherited.colors.text
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+-- ds.h2: Looping using the `$loop$` syntax (Deprecated Syntax)
+
+This syntax will soon be deprecated but we can still use it. It has the
+following general syntax that we can find below.
+
+**General Syntax** - `$loop$: <LIST-NAME> as <LIST-ITEM-NAME>`
+
+-- ds.rendered: Sample usage (using `$loop$` syntax)
+copy: true
+download: index.ftd
+
+-- ds.rendered.input:
+
+\;; This will print all the items from list places
+\-- ftd.text: $place
+$loop$: $places as $place ;; <hl>
+color: $inherited.colors.text
+
+\;; This will print all the numbers from list odd-numbers
+\-- ftd.integer: $number
+$loop$: $odd-numbers as $number ;; <hl>
+color: $inherited.colors.text
+
+-- ds.rendered.output:
+
+-- ftd.text: $place
+$loop$: $places as $place
+color: $inherited.colors.text
+
+-- ftd.integer: $number
+$loop$: $odd-numbers as $number
+color: $inherited.colors.text
+
+;; This will print all the numbers from list odd-numbers
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+;; TODO: Conditional loops not working inside ftd.lists (needs fix)
+;; After proper fix this will be uncommented
+/-- ds.h1: Conditional Looping
+
+Let's say we dont want to use all values from the list but some of them
+based on certain condition. In that case, we can use the if header to specify
+a condition which the list item should satisfy.
+
+Consider the case where we have a list of persons (each having name and age)
+and we only want to print those persons whose age is below 25. This is how we
+will do it.
+
+/-- ds.rendered: Printing only persons with age < 25
+
+-- ds.rendered.input:
+
+\-- ftd.text: $person.name
+if: { person.age < 25 } ;; <hl>
+for: person in $persons
+color: $inherited.colors.text
+
+-- ds.rendered.output:
+
+-- ftd.text: $person.name
+$loop$: $persons as $person
+color: $inherited.colors.text
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- end: ds.page
+
+
+
+
+-- record person:
+caption name:
+integer age:
+
+-- string list places: Bangalore, Mumbai, Chennai, Kolkata
+-- integer list odd-numbers: 1, 3, 5, 7, 9, 11
+
+-- person list persons:
+
+-- person: John Doe
+age: 28
+
+-- person: Sam Wan
+age: 24
+
+-- person: Sam Ather
+age: 30
+
+-- end: persons
+
