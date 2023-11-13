@@ -64,8 +64,9 @@ pub(crate) struct DataValue {
 }
 
 #[derive(Debug, serde::Deserialize)]
-pub(crate) struct DataSchema {
-    cols: Vec<DataColumn>,
+pub(crate) struct DataTable {
+    #[serde(rename = "cols")]
+    schema: Vec<DataColumn>,
     rows: Vec<DataRow>,
     // #[serde(rename = "parsedNumHeaders")]
     // parsed_num_headers: usize,
@@ -78,7 +79,7 @@ pub(crate) struct QueryResponse {
     // req_id: String,
     // status: String,
     // sig: String,
-    schema: DataSchema,
+    table: DataTable,
 }
 
 pub(crate) fn rows_to_value(
@@ -86,14 +87,14 @@ pub(crate) fn rows_to_value(
     kind: &ftd::interpreter::Kind,
     value: &ftd::ast::VariableValue,
     rows: &[DataRow],
-    columns: &[DataColumn],
+    schema: &[DataColumn],
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     Ok(match kind {
         ftd::interpreter::Kind::List { kind, .. } => {
             let mut data = vec![];
             for row in rows.iter() {
                 data.push(
-                    row_to_value(doc, kind, value, row, columns)?
+                    row_to_value(doc, kind, value, row, schema)?
                         .into_property_value(false, value.line_number()),
                 );
             }
@@ -117,14 +118,14 @@ fn row_to_record(
     name: &str,
     value: &ftd::ast::VariableValue,
     row: &DataRow,
-    columns: &[DataColumn],
+    schema: &[DataColumn],
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let rec = doc.get_record(name, value.line_number())?;
     let rec_fields = rec.fields;
     let mut fields: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
 
     for field in rec_fields.iter() {
-        let idx = match columns
+        let idx = match schema
             .iter()
             .position(|column| column.label.to_string().eq(&field.name))
         {
@@ -143,7 +144,7 @@ fn row_to_record(
             to_interpreter_value(
                 doc,
                 &field.kind.kind,
-                &columns[idx],
+                &schema[idx],
                 &row.c[idx],
                 value.line_number(),
             )?
@@ -162,10 +163,10 @@ fn row_to_value(
     kind: &ftd::interpreter::Kind,
     value: &ftd::ast::VariableValue,
     row: &DataRow,
-    columns: &[DataColumn],
+    schema: &[DataColumn],
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     if let ftd::interpreter::Kind::Record { name } = kind {
-        return row_to_record(doc, name, value, row, columns);
+        return row_to_record(doc, name, value, row, schema);
     }
 
     if row.c.len() != 1 {
@@ -176,7 +177,7 @@ fn row_to_value(
         );
     }
 
-    to_interpreter_value(doc, kind, &columns[0], &row.c[0], value.line_number())
+    to_interpreter_value(doc, kind, &schema[0], &row.c[0], value.line_number())
 }
 
 fn to_interpreter_value(
@@ -329,17 +330,17 @@ fn result_to_value(
             doc,
             &kind,
             value,
-            &query_response.schema.rows,
-            &query_response.schema.cols,
+            &query_response.table.rows,
+            &query_response.table.schema,
         )
     } else {
-        match query_response.schema.rows.len() {
+        match query_response.table.rows.len() {
             1 => row_to_value(
                 doc,
                 &kind,
                 value,
-                &query_response.schema.rows[0],
-                &query_response.schema.cols,
+                &query_response.table.rows[0],
+                &query_response.table.schema,
             ),
             0 => ftd::interpreter::utils::e2(
                 "Query returned no result, expected one row".to_string(),
@@ -597,7 +598,8 @@ pub(crate) async fn process(
         Some(json) => json,
         None => {
             return ftd::interpreter::utils::e2(
-                "Invalid Query Response".to_string(),
+                "Invalid Query Response. Please ensure that your Google Sheet is public."
+                    .to_string(),
                 doc.name,
                 value.line_number(),
             )
