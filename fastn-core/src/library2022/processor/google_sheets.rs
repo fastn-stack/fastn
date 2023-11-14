@@ -9,7 +9,7 @@ pub(crate) struct DataColumn {
 
 #[derive(Debug, serde::Deserialize)]
 pub(crate) struct DataRow {
-    c: Vec<DataValue>,
+    c: Vec<Option<DataValue>>,
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -151,41 +151,56 @@ fn to_interpreter_value(
     doc: &ftd::interpreter::TDoc<'_>,
     kind: &ftd::interpreter::Kind,
     column: &DataColumn,
-    data_value: &DataValue,
+    data_value: &Option<DataValue>,
     _default_value: Option<String>,
     _record_name: Option<String>,
     line_number: usize,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    let val = match data_value {
+        Some(v) => v,
+        None => {
+            if !kind.is_optional() {
+                return ftd::interpreter::utils::e2(
+                    format!("value cannot be null, expected value of kind: {:?}", &kind),
+                    doc.name,
+                    line_number,
+                );
+            } else {
+                &DataValue {
+                    v: serde_json::Value::Null,
+                    f: None,
+                }
+            }
+        }
+    };
+
     Ok(match kind {
         // Available kinds: https://support.google.com/area120-tables/answer/9904372?hl=en
         ftd::interpreter::Kind::String { .. } => ftd::interpreter::Value::String {
             text: match column.r#type.as_str() {
-                "string" => match &data_value.v {
+                "string" => match &val.v {
                     serde_json::Value::String(v) => v.to_string(),
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't parse to string, found: {}", &data_value.v),
+                            format!("Can't parse to string, found: {}", &val.v),
                             doc.name,
                             line_number,
                         )
                     }
                 },
-                _ => match &data_value.f {
+                _ => match &val.f {
                     Some(v) => v.to_string(),
-                    None => data_value.v.to_string(),
+                    None => val.v.to_string(),
                 },
             },
         },
         ftd::interpreter::Kind::Integer => ftd::interpreter::Value::Integer {
             value: match column.r#type.as_str() {
-                "number" => match &data_value.v {
+                "number" => match &val.v {
                     serde_json::Value::Number(n) => {
                         n.as_i64()
                             .ok_or_else(|| ftd::interpreter::Error::ParseError {
-                                message: format!(
-                                    "Can't parse to integer, found: {}",
-                                    &data_value.v
-                                ),
+                                message: format!("Can't parse to integer, found: {}", &val.v),
                                 doc_id: doc.name.to_string(),
                                 line_number,
                             })?
@@ -193,17 +208,14 @@ fn to_interpreter_value(
                     serde_json::Value::String(s) => {
                         s.parse::<i64>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!(
-                                    "Can't parse to integer, found: {}",
-                                    &data_value.v
-                                ),
+                                message: format!("Can't parse to integer, found: {}", &val.v),
                                 doc_id: doc.name.to_string(),
                                 line_number,
                             })?
                     }
                     _ => {
                         return Err(ftd::interpreter::Error::ParseError {
-                            message: format!("Can't parse to integer, found: {}", &data_value.v),
+                            message: format!("Can't parse to integer, found: {}", &val.v),
                             doc_id: doc.name.to_string(),
                             line_number,
                         })
@@ -219,11 +231,11 @@ fn to_interpreter_value(
             },
         },
         ftd::interpreter::Kind::Decimal => ftd::interpreter::Value::Decimal {
-            value: match &data_value.v {
+            value: match &val.v {
                 serde_json::Value::Number(n) => {
                     n.as_f64()
                         .ok_or_else(|| ftd::interpreter::Error::ParseError {
-                            message: format!("Can't parse to decimal, found: {}", &data_value.v),
+                            message: format!("Can't parse to decimal, found: {}", &val.v),
                             doc_id: doc.name.to_string(),
                             line_number,
                         })?
@@ -231,14 +243,14 @@ fn to_interpreter_value(
                 serde_json::Value::String(s) => {
                     s.parse::<f64>()
                         .map_err(|_| ftd::interpreter::Error::ParseError {
-                            message: format!("Can't parse to decimal, found: {}", &data_value.v),
+                            message: format!("Can't parse to decimal, found: {}", &val.v),
                             doc_id: doc.name.to_string(),
                             line_number,
                         })?
                 }
                 _ => {
                     return Err(ftd::interpreter::Error::ParseError {
-                        message: format!("Can't parse to decimal, found: {}", &data_value.v),
+                        message: format!("Can't parse to decimal, found: {}", &val.v),
                         doc_id: doc.name.to_string(),
                         line_number,
                     })
@@ -246,19 +258,19 @@ fn to_interpreter_value(
             },
         },
         ftd::interpreter::Kind::Boolean => ftd::interpreter::Value::Boolean {
-            value: match &data_value.v {
+            value: match &val.v {
                 serde_json::Value::Bool(n) => *n,
                 serde_json::Value::String(s) => {
                     s.parse::<bool>()
                         .map_err(|_| ftd::interpreter::Error::ParseError {
-                            message: format!("Can't parse to boolean, found: {}", &data_value.v),
+                            message: format!("Can't parse to boolean, found: {}", &val.v),
                             doc_id: doc.name.to_string(),
                             line_number,
                         })?
                 }
                 _ => {
                     return Err(ftd::interpreter::Error::ParseError {
-                        message: format!("Can't parse to boolean, found: {}", &data_value.v),
+                        message: format!("Can't parse to boolean, found: {}", &val.v),
                         doc_id: doc.name.to_string(),
                         line_number,
                     })
@@ -267,7 +279,7 @@ fn to_interpreter_value(
         },
         ftd::interpreter::Kind::Optional { kind, .. } => {
             let kind = kind.as_ref();
-            match &data_value.v {
+            match &val.v {
                 serde_json::Value::Null => ftd::interpreter::Value::Optional {
                     kind: kind.clone().into_kind_data(),
                     data: Box::new(None),
