@@ -4,12 +4,12 @@ let fastn_utils = {
         let css = [];
         let attributes = {};
         if (kind === fastn_dom.ElementKind.Column) {
-            css.push("ft_column");
+            css.push(fastn_dom.InternalClass.FT_COLUMN);
         } else if (kind === fastn_dom.ElementKind.Document) {
-            css.push("ft_column");
-            css.push("full");
+            css.push(fastn_dom.InternalClass.FT_COLUMN);
+            css.push(fastn_dom.InternalClass.FT_FULL_SIZE);
         } else if (kind === fastn_dom.ElementKind.Row) {
-            css.push("ft_row");
+            css.push(fastn_dom.InternalClass.FT_ROW);
         } else if (kind === fastn_dom.ElementKind.IFrame) {
             node = "iframe";
             // To allow fullscreen support
@@ -46,7 +46,7 @@ let fastn_utils = {
         return [node, css, attributes];
     },
     createStyle(cssClass, obj) {
-        if (rerender) {
+        if (doubleBuffering) {
             fastn_dom.styleClasses = `${fastn_dom.styleClasses}${getClassAsString(cssClass, obj)}\n`;
         } else {
             let styles = document.getElementById('styles');
@@ -101,10 +101,12 @@ let fastn_utils = {
         if (ssr) {
             iterativeClassList = iterativeClassList.getClasses();
         }
+        const internalClassNames = Object.values(fastn_dom.InternalClass);
         const classesToRemove = [];
 
         for (const className of iterativeClassList) {
-            if (!className.startsWith('__') &&
+            if (!className.startsWith('__') && 
+                !internalClassNames.includes(className) &&
                 className !== extraCodeData?.language &&
                 className !== extraCodeData?.theme
             ) {
@@ -334,7 +336,7 @@ let fastn_utils = {
     },
     createNodeHelper(node, classes, attributes) {
         let tagName = node;
-        let element = fastn_virtual.document.createElement(node);
+        let element = fastnVirtual.document.createElement(node);
         for (let key in attributes) {
             element.setAttribute(key, attributes[key])
         }
@@ -523,6 +525,24 @@ let fastn_utils = {
         }
         return args;
     },
+
+    /**
+     * Replaces the children of `document.body` with the children from
+     * newChildrenWrapper and updates the styles based on the
+     * `fastn_dom.styleClasses`.
+     *
+     * @param {HTMLElement} newChildrenWrapper - The wrapper element
+     * containing the new children.
+     */
+    replaceBodyStyleAndChildren(newChildrenWrapper) {
+        // Update styles based on `fastn_dom.styleClasses`
+        let styles = document.getElementById("styles");
+        styles.innerHTML = fastn_dom.getClassesAsStringWithoutStyleTag();
+
+        // Replace the children of document.body with the children from
+        // newChildrenWrapper
+        fastn_utils.private.replaceChildren(document.body, newChildrenWrapper);
+    },
 }
 
 
@@ -638,6 +658,33 @@ fastn_utils.private = {
         }
         return text;
     },
+
+    /**
+     * Replaces the children of a parent element with the children from a
+     * new children wrapper.
+     *
+     * @param {HTMLElement} parent - The parent element whose children will
+     * be replaced.
+     * @param {HTMLElement} newChildrenWrapper - The wrapper element
+     * containing the new children.
+     * @returns {void}
+     */
+    replaceChildren(parent, newChildrenWrapper) {
+        // Remove existing children of the parent
+        var children = parent.children;
+        // Loop through the direct children and remove those with tagName 'div'
+        for (var i = children.length - 1; i >= 0; i--) {
+            var child = children[i];
+            if (child.tagName === 'DIV') {
+                parent.removeChild(child);
+            }
+        }
+
+        // Cut and append the children from newChildrenWrapper to the parent
+        while (newChildrenWrapper.firstChild) {
+            parent.appendChild(newChildrenWrapper.firstChild);
+        }
+    }
 }
 
 

@@ -1,9 +1,8 @@
-let fastn_virtual = {}
+let fastnVirtual = {}
 
 let id_counter = 0;
-let hydrating = false;
 let ssr = false;
-let rerender = false;
+let doubleBuffering = false;
 
 class ClassList {
     #classes = [];
@@ -124,28 +123,14 @@ class Document2 {
         if (fastn_utils.isWrapperNode(tagName)) {
             return window.document.createComment(fastn_dom.commentMessage);
         }
-        if (hydrating) {
-            let node = this.getElementByDataID(id_counter);
-            if (fastn_utils.isCommentNode(tagName)) {
-                let comment= window.document.createComment(fastn_dom.commentMessage);
-                node.parentNode.replaceChild(comment, node);
-                return comment;
-            }
-            return node;
-        } else {
-            if (fastn_utils.isCommentNode(tagName)) {
-                return window.document.createComment(fastn_dom.commentMessage);
-            }
-            return window.document.createElement(tagName);
+        if (fastn_utils.isCommentNode(tagName)) {
+            return window.document.createComment(fastn_dom.commentMessage);
         }
-    }
-
-    getElementByDataID(id) {
-        return window.document.querySelector(`[data-id=\"${id}\"]`);
+        return window.document.createElement(tagName);
     }
 }
 
-fastn_virtual.document = new Document2();
+fastnVirtual.document = new Document2();
 
 function addClosureToBreakpointWidth() {
     let closure = fastn.closureWithoutExecute(function() {
@@ -161,39 +146,22 @@ function addClosureToBreakpointWidth() {
     ftd.breakpoint_width.addClosure(closure);
 }
 
-fastn_virtual.hydrate = function(main) {
+fastnVirtual.doubleBuffer = function(main) {
     addClosureToBreakpointWidth();
+    let parent = document.createElement("div");
     let current_device = ftd.get_device();
-    let found_device = ftd.device.get();
-    if (current_device !== found_device) {
-        rerender = true
-        ftd.device = fastn.mutable(current_device);
-        let styles = document.getElementById("styles");
-        styles.innerText = "";
-        var children = document.body.children;
-        // Loop through the direct children and remove those with tagName 'div'
-        for (var i = children.length - 1; i >= 0; i--) {
-            var child = children[i];
-            if (child.tagName === 'DIV') {
-                document.body.removeChild(child);
-            }
-        }
-
-        main(document.body);
-        rerender = false;
-        styles.innerHTML = fastn_dom.styleClasses;
-        return;
-    }
-    hydrating = true;
-    let body = fastn_virtual.document.createElement("body");
-    main(body);
-    id_counter = 0;
-    hydrating = false;
+    ftd.device = fastn.mutable(current_device);
+    doubleBuffering = true;
+    fastnVirtual.root = parent;
+    main(parent);
+    fastn_utils.replaceBodyStyleAndChildren(parent)
+    doubleBuffering = false;
+    fastnVirtual.root = document.body;
 }
 
-fastn_virtual.ssr = function(main) {
+fastnVirtual.ssr = function(main) {
     ssr = true;
-    let body = fastn_virtual.document.createElement("body");
+    let body = fastnVirtual.document.createElement("body");
     main(body)
     ssr = false;
     id_counter = 0;

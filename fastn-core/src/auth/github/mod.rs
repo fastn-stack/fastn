@@ -1,4 +1,4 @@
-mod apis;
+pub mod apis;
 mod utils;
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
@@ -57,8 +57,10 @@ pub async fn callback(
         Err(e) => return Ok(fastn_core::server_error!("{}", e.to_string())),
     };
 
+    let gh_user = fastn_core::auth::github::apis::user_details(access_token.as_str()).await?;
+
     let ud = UserDetail {
-        username: fastn_core::auth::github::apis::username(access_token.as_str()).await?,
+        username: gh_user.login,
         access_token,
     };
 

@@ -17,7 +17,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column full"><div data-id="4" class="__m-3 __c-4">This is some text</div></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column ft_full_size"><div data-id="4" class="__m-3 __c-4">This is some text</div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__m-3 { margin: 20px; }
@@ -80,7 +80,7 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
             parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
             main(parenti0);
         }
-        fastn_virtual.hydrate(main_wrapper);
+        fastnVirtual.doubleBuffer(main_wrapper);
         ftd.post_init();
     })();
 

@@ -1,6 +1,5 @@
 pub(crate) mod config;
 pub(crate) mod github;
-pub(crate) mod processor;
 pub(crate) mod routes;
 
 pub mod utils;

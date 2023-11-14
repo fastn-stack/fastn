@@ -1,5 +1,5 @@
 -- fbt:
-cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test build --test
+cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test build
 output: amitu/.build
 skip: temporarily removed markdown support
 

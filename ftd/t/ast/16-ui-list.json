@@ -58,8 +58,8 @@
           "caption": null,
           "headers": [
             {
-              "key": "processor$",
-              "mutable": true,
+              "key": "$processor$",
+              "mutable": false,
               "value": {
                 "string-value": {
                   "value": "pr.sitemap",
@@ -142,8 +142,8 @@
           "caption": null,
           "headers": [
             {
-              "key": "processor$",
-              "mutable": true,
+              "key": "$processor$",
+              "mutable": false,
               "value": {
                 "string-value": {
                   "value": "sitemap",

@@ -23,7 +23,7 @@ use futures_util::FutureExt as _;
 ///
 /// # Examples
 ///
-/// ```
+/// ```ignore
 /// # use actix_web::App;
 /// use actix_web_lab::middleware::CatchPanic;
 ///
@@ -31,7 +31,7 @@ use futures_util::FutureExt as _;
 ///     # ;
 /// ```
 ///
-/// ```no_run
+/// ```ignore
 /// # use actix_web::App;
 /// use actix_web::middleware::{Logger, NormalizePath};
 /// use actix_web_lab::middleware::CatchPanic;
@@ -84,11 +84,15 @@ where
             .map(move |res| match res {
                 Ok(Ok(res)) => Ok(res),
                 Ok(Err(svc_err)) => Err(svc_err),
-                Err(_panic_err) => Err(error::ErrorInternalServerError("500 Server Error")),
+                Err(_panic_err) => Err(error::ErrorInternalServerError(
+                    INTERNAL_SERVER_ERROR_MESSAGE,
+                )),
             })
             .boxed_local()
     }
 }
+
+const INTERNAL_SERVER_ERROR_MESSAGE: &str = "500 Server Error";
 
 #[cfg(test)]
 mod tests {
@@ -146,6 +150,6 @@ mod tests {
         let res = err.error_response();
         assert_eq!(res.status(), StatusCode::INTERNAL_SERVER_ERROR);
         let body = to_bytes(res.into_body()).await.unwrap();
-        assert!(body.is_empty());
+        assert_eq!(body, INTERNAL_SERVER_ERROR_MESSAGE)
     }
 }

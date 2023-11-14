@@ -2,6 +2,12 @@ let fastn_dom = {};
 
 fastn_dom.styleClasses = "";
 
+fastn_dom.InternalClass = {
+    FT_COLUMN: 'ft_column',
+    FT_ROW: 'ft_row',
+    FT_FULL_SIZE: "ft_full_size",
+};
+
 fastn_dom.codeData = {
     availableThemes: {},
     addedCssFile: []
@@ -113,6 +119,12 @@ fastn_dom.propertyMap = {
 
 // dynamic-class-css.md
 fastn_dom.getClassesAsString = function() {
+    return `<style id="styles">
+    ${fastn_dom.getClassesAsStringWithoutStyleTag()}
+    </style>`;
+}
+
+fastn_dom.getClassesAsStringWithoutStyleTag = function() {
     let classes = Object.entries(fastn_dom.classes).map(entry => {
         return getClassAsString(entry[0], entry[1]);
     });
@@ -120,9 +132,7 @@ fastn_dom.getClassesAsString = function() {
     /*.ft_text {
         padding: 0;
     }*/
-    return `<style id="styles">
-    ${classes.join("\n\t")}
-    </style>`;
+    return classes.join("\n\t");
 }
 
 function getClassAsString(className, obj) {
@@ -806,16 +816,15 @@ class Node2 {
         return this.#parent;
     }
     removeAllFaviconLinks() {
-        if (hydrating || rerender) {
+        if (doubleBuffering) {
             const links = document.head.querySelectorAll('link[rel="shortcut icon"]');
             links.forEach( link => {
                 link.parentNode.removeChild(link);
             });
         }
     }
-
     setFavicon(url) {
-        if (hydrating || rerender) {
+        if (doubleBuffering) {
             if (url instanceof fastn.recordInstanceClass) url = url.get('src');
             while (true) {
                 if (url instanceof fastn.mutableClass) url = url.get();
@@ -883,7 +892,7 @@ class Node2 {
     }
     updatePositionForNodeById(node_id, value) {
         if (!ssr) {
-            const target_node = document.querySelector(`[id="${node_id}"]`);
+            const target_node = fastnVirtual.root.querySelector(`[id="${node_id}"]`);
             if (!fastn_utils.isNull(target_node))
                 target_node.style['position'] = value;
         }
@@ -902,7 +911,7 @@ class Node2 {
         }
     }
     updateMetaTitle(value) {
-        if (!ssr && (hydrating || rerender)) {
+        if (!ssr && doubleBuffering) {
             if (!fastn_utils.isNull(value)) window.document.title = value;
         }
     }
@@ -911,7 +920,7 @@ class Node2 {
             this.removeMetaTagByName(name);
             return;
         }
-        if (!ssr && (hydrating || rerender)) {
+        if (!ssr && doubleBuffering) {
             const metaTag = window.document.createElement('meta');
             metaTag.setAttribute('name', name);
             metaTag.setAttribute('content', value);
@@ -923,7 +932,7 @@ class Node2 {
             this.removeMetaTagByProperty(property);
             return;
         }
-        if (!ssr && (hydrating || rerender)) {
+        if (!ssr && doubleBuffering) {
             const metaTag = window.document.createElement('meta');
             metaTag.setAttribute('property', property);
             metaTag.setAttribute('content', value);
@@ -931,7 +940,7 @@ class Node2 {
         }
     }
     removeMetaTagByName(name) {
-        if (!ssr && (hydrating || rerender)) {
+        if (!ssr && doubleBuffering) {
             const metaTags = document.getElementsByTagName('meta');
             for (let i = 0; i < metaTags.length; i++) {
                 const metaTag = metaTags[i];
@@ -943,7 +952,7 @@ class Node2 {
         }
     }
     removeMetaTagByProperty(property) {
-        if (!ssr && (hydrating || rerender)) {
+        if (!ssr && doubleBuffering) {
             const metaTags = document.getElementsByTagName('meta');
             for (let i = 0; i < metaTags.length; i++) {
                 const metaTag = metaTags[i];
@@ -972,7 +981,7 @@ class Node2 {
         const obj = { property, value };
 
         if (value === undefined) {
-            if (!ssr && !hydrating) {
+            if (!ssr) {
                 for (const className of this.#node.classList.values()) {
                     if (className.startsWith(`${propertyShort}-`)) {
                         this.#node.classList.remove(className);
@@ -983,7 +992,7 @@ class Node2 {
             return cls;
         }
 
-        if (!ssr && !hydrating) {
+        if (!ssr && !doubleBuffering) {
             if (!!className) {
                 if (!fastn_dom.classes[cssClass]) {
                     fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
@@ -1322,7 +1331,7 @@ class Node2 {
         }
     }
     attachExternalCss(css) {
-        if (hydrating || rerender) {
+        if (doubleBuffering) {
             let css_tag = document.createElement('link');
             css_tag.rel = 'stylesheet';
             css_tag.type = 'text/css';
@@ -1336,7 +1345,7 @@ class Node2 {
         }
     }
     attachExternalJs(js) {
-        if (hydrating || rerender) {
+        if (doubleBuffering) {
             let js_tag = document.createElement('script');
             js_tag.src = js;
 
@@ -2155,14 +2164,12 @@ class Node2 {
             this.#rawInnerValue = staticValue;
         } else if (kind === fastn_dom.PropertyKind.StringValue) {
             this.#rawInnerValue = staticValue;
-            if (!hydrating || this.#node.innerHTML === "undefined") {
-                staticValue = fastn_utils.markdown_inline(fastn_utils.escapeHtmlInMarkdown(staticValue));
-            } else {
-                staticValue = this.#node.innerHTML;
-            }
+            staticValue = fastn_utils.markdown_inline(fastn_utils.escapeHtmlInMarkdown(staticValue));
             staticValue = fastn_utils.process_post_markdown(this.#node, staticValue);
             if(!fastn_utils.isNull(staticValue)) {
                 this.#node.innerHTML = staticValue;
+            } else {
+                this.#node.innerHTML = "";
             }
         } else {
             throw ("invalid fastn_dom.PropertyKind: " + kind);

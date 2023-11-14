@@ -173,7 +173,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             build.value_of_("file"), // TODO: handle more than one files
             build.value_of_("base").unwrap_or("/"),
             build.get_flag("ignore-failed"),
-            build.get_flag("test"),
+            matches.get_flag("test"),
             build.get_flag("check-build"),
         )
         .await;
@@ -337,7 +337,6 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(-b --base [BASE] "The base path.").default_value("/"))
                 .arg(clap::arg!(--"ignore-failed" "Ignore failed files."))
                 .arg(clap::arg!(--"check-build" "Checks .build for index files validation."))
-                .arg(clap::arg!(--"test" "Use for test"))
                 .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
                     .action(clap::ArgAction::Append))
                 .arg(clap::arg!(--"js" <URL> "Script text added in ftd files")

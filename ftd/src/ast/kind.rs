@@ -555,8 +555,14 @@ impl VariableValue {
             })
             .map(|header| {
                 let key = header.get_key();
+                let header_key = if ftd::ast::utils::is_variable_mutable(key.as_str()) {
+                    key.trim_start_matches(ftd::ast::utils::REFERENCE)
+                } else {
+                    key.as_str()
+                };
+
                 HeaderValue::new(
-                    key.trim_start_matches(ftd::ast::utils::REFERENCE),
+                    header_key,
                     ftd::ast::utils::is_variable_mutable(key.as_str()),
                     VariableValue::from_p1_header(header, doc_id),
                     header.get_line_number(),
