@@ -198,12 +198,13 @@ fn to_interpreter_value(
             value: match column.r#type.as_str() {
                 "number" => match &val.v {
                     serde_json::Value::Number(n) => {
-                        n.as_i64()
-                            .ok_or_else(|| ftd::interpreter::Error::ParseError {
+                        n.as_f64().map(|f| f as i64).ok_or_else(|| {
+                            ftd::interpreter::Error::ParseError {
                                 message: format!("Can't parse to integer, found: {}", &val.v),
                                 doc_id: doc.name.to_string(),
                                 line_number,
-                            })?
+                            }
+                        })?
                     }
                     serde_json::Value::String(s) => {
                         s.parse::<i64>()
