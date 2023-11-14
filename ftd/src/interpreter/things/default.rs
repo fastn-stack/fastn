@@ -148,7 +148,7 @@ themselves.
 pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
     let record = |n: &str, r: &str| (n.to_string(), ftd::interpreter::Kind::record(r));
     let _color = |n: &str| record(n, "ftd#color");
-    std::iter::IntoIterator::into_iter([
+    let things = vec![
         (
             "ftd#row".to_string(),
             ftd::interpreter::Thing::Component(row_function()),
@@ -10100,8 +10100,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 line_number: 0,
             }),
         ),
-    ])
-    .collect()
+    ];
+
+    things.into_iter().collect()
 }
 
 pub static DEFAULT_BAG: once_cell::sync::OnceCell<
