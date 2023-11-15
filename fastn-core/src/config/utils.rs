@@ -111,6 +111,21 @@ pub fn get_clean_url(
         }
     }
 
+    if let Some(endpoint) = config.package.endpoint.as_ref() {
+        return Ok((
+            Some(config.package.name.to_string()),
+            url::Url::parse(
+                format!(
+                    "{}/{}",
+                    endpoint.trim_end_matches('/'),
+                    url.trim_start_matches('/')
+                )
+                .as_str(),
+            )?,
+            std::collections::HashMap::new(),
+        ));
+    }
+
     let msg = format!("http-processor: end-point not found url: {}", url);
     tracing::error!(msg = msg);
     Err(fastn_core::Error::GenericError(msg))
