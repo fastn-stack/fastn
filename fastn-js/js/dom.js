@@ -839,6 +839,13 @@ class Node2 {
             document.head.appendChild(link_element);
         }
     }
+    updateTextInputValue() {
+        if (!ssr && this.#node.tagName.toLowerCase() === 'textarea') {
+            this.#node.innerHTML = this.#rawInnerValue;
+        } else {
+            this.attachAttribute("value", this.#rawInnerValue);
+        }
+    }
     // for attaching inline attributes
     attachAttribute(property, value) {
         // If the value is null, undefined, or false, the attribute will be removed.
@@ -855,6 +862,21 @@ class Node2 {
     updateTagName(name) {
         if (ssr) {
             this.#node.updateTagName(name);
+        } else {
+            let newElement = document.createElement(name);
+            newElement.innerHTML = this.#node.innerHTML;
+            newElement.className = this.#node.className;
+            newElement.style = this.#node.style;
+            for (var i = 0; i < this.#node.attributes.length; i++) {
+                var attr = this.#node.attributes[i];
+                newElement.setAttribute(attr.name, attr.value);
+            }
+            var eventListeners = fastn_utils.getEventListeners(this.#node);
+            for (var eventType in eventListeners) {
+                newElement[eventType] = eventListeners[eventType];
+            }
+            this.#parent.replaceChild(newElement, this.#node);
+            this.#node = newElement;
         }
     }
     updateToAnchor(url) {
@@ -873,21 +895,8 @@ class Node2 {
             this.#parent.appendChild(anchorElement);
             this.#node = anchorElement;
         } else {
-            let anchorElement = document.createElement("a");
-            anchorElement.href = url;
-            anchorElement.innerHTML = this.#node.innerHTML;
-            anchorElement.className = this.#node.className;
-            anchorElement.style = this.#node.style;
-            for (var i = 0; i < this.#node.attributes.length; i++) {
-                var attr = this.#node.attributes[i];
-                anchorElement.setAttribute(attr.name, attr.value);
-            }
-            var eventListeners = fastn_utils.getEventListeners(this.#node);
-            for (var eventType in eventListeners) {
-                anchorElement[eventType] = eventListeners[eventType];
-            }
-            this.#parent.replaceChild(anchorElement, this.#node);
-            this.#node = anchorElement;
+            this.updateTagName("a");
+            this.#node.href = url;
         }
     }
     updatePositionForNodeById(node_id, value) {
@@ -1921,7 +1930,8 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.TextInputType) {
             this.attachAttribute("type", staticValue);
         } else if (kind === fastn_dom.PropertyKind.DefaultTextInputValue) {
-            this.attachAttribute("value", staticValue);
+            this.#rawInnerValue = staticValue;
+            this.updateTextInputValue();
         } else if (kind === fastn_dom.PropertyKind.InputMaxLength) {
             this.attachAttribute("maxlength", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Placeholder) {
@@ -1937,6 +1947,7 @@ class Node2 {
                     this.updateTagName("input");
                     break;
             }
+            this.updateTextInputValue();
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
