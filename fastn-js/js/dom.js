@@ -840,7 +840,7 @@ class Node2 {
         }
     }
     updateTextInputValue() {
-        if (this.#node.tagName.toLowerCase() === 'textarea') {
+        if (!ssr && this.#node.tagName.toLowerCase() === 'textarea') {
             this.#node.innerHTML = this.#rawInnerValue;
         } else {
             this.attachAttribute("value", this.#rawInnerValue);
