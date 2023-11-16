@@ -839,6 +839,13 @@ class Node2 {
             document.head.appendChild(link_element);
         }
     }
+    updateTextInputValue() {
+        if (this.#node.tagName.toLowerCase() === 'textarea') {
+            this.#node.innerHTML = this.#rawInnerValue;
+        } else {
+            this.attachAttribute("value", this.#rawInnerValue);
+        }
+    }
     // for attaching inline attributes
     attachAttribute(property, value) {
         // If the value is null, undefined, or false, the attribute will be removed.
@@ -1923,11 +1930,8 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.TextInputType) {
             this.attachAttribute("type", staticValue);
         } else if (kind === fastn_dom.PropertyKind.DefaultTextInputValue) {
-            if (!ssr && this.#node.tagName === 'TEXTAREA') {
-                this.#node.innerHTML = staticValue;
-            } else {
-                this.attachAttribute("value", staticValue);
-            }
+            this.#rawInnerValue = staticValue;
+            this.updateTextInputValue();
         } else if (kind === fastn_dom.PropertyKind.InputMaxLength) {
             this.attachAttribute("maxlength", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Placeholder) {
@@ -1943,6 +1947,7 @@ class Node2 {
                     this.updateTagName("input");
                     break;
             }
+            this.updateTextInputValue();
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
