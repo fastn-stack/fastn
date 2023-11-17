@@ -778,7 +778,9 @@ impl ExecuteDoc<'_> {
                     instruction.properties.as_slice(),
                     component_definition
                         .arguments
-                        .iter().filter(|&k| k.name.eq("colors") || k.name.eq("types")).cloned()
+                        .iter()
+                        .filter(|&k| k.name.eq("colors") || k.name.eq("types"))
+                        .cloned()
                         .collect_vec()
                         .as_slice(),
                     local_container,
