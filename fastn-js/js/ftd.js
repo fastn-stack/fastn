@@ -5,6 +5,10 @@ const ftd = (function() {
 
     const global = {};
 
+    const onLoadListeners = new Set();
+
+    let fastnLoaded = false;
+
     exports.global = global;
 
     exports.riveNodes = riveNodes;
@@ -256,6 +260,24 @@ const ftd = (function() {
             localStorage.removeItem(key);
         }
     }
+
+    exports.on_load = listener => {
+        if(typeof listener !== 'function') {
+            throw new Error("listener must be a function");
+        }
+
+        if(fastnLoaded) {
+            listener();
+            return;
+        }
+        
+        onLoadListeners.add(listener);
+    };
+
+    exports.emit_on_load = () => {
+        fastnLoaded = true;
+        onLoadListeners.forEach(listener => listener());
+    };
 
     // LEGACY
 

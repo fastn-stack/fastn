@@ -272,6 +272,7 @@ let fastn_utils = {
      */
     markdown_inline(i) {
         if (fastn_utils.isNull(i)) return;
+        i = i.toString();
         const { space_before, space_after } = fastn_utils.private.spaces(i);
         const o = (() => {
             let g = fastn_utils.private.replace_last_occurrence(marked.parse(i), "<p>", "");
