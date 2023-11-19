@@ -275,6 +275,8 @@ const ftd = (function() {
     };
 
     exports.emit_on_load = () => {
+        if(fastnLoaded) return;
+        
         fastnLoaded = true;
         onLoadListeners.forEach(listener => listener());
     };
