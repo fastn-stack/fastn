@@ -54,7 +54,7 @@ lang: sh
 -- ds.code: Install Command
 lang: sh
 
-sh -c "<(curl -fsSL https://fastn.com/install.sh)"
+sh -c "$(curl -fsSL https://fastn.com/install.sh)"
 
 -- ds.image:
 src: $fastn-assets.files.images.setup.vercel-deploy-settings.png
