@@ -95,4 +95,8 @@ pub struct PackageTemp {
     pub backend_headers: Option<Vec<BackendHeader>>,
     #[serde(rename = "icon")]
     pub icon: Option<ftd::ImageSrc>,
+    /// pass authenticated user's id as x-fastn-user-id header to `endpoint` if
+    /// the user is authenticated
+    #[serde(rename = "user-id")]
+    pub user_id: bool,
 }

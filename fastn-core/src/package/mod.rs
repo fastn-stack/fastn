@@ -70,6 +70,10 @@ pub struct Package {
 
     /// Redirect URLs
     pub redirects: Option<ftd::Map<String>>,
+
+    /// pass authenticated user's id as x-fastn-user-id header to `endpoint` if
+    /// the user is authenticated
+    pub user_id: bool,
 }
 
 impl Package {
@@ -103,6 +107,7 @@ impl Package {
             apps: vec![],
             icon: None,
             redirects: None,
+            user_id: false,
         }
     }
 
@@ -730,6 +735,7 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             favicon: self.favicon,
             endpoint: self.endpoint,
             backend: self.backend,
+            user_id: self.user_id,
             backend_headers: self.backend_headers,
             apps: vec![],
             icon: self.icon,

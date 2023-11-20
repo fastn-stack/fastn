@@ -332,6 +332,7 @@ pub async fn serve(
 
             // TODO: read app config and send them to service as header
             // Adjust x-fastn header from based on the platform and the requested field
+            // this is for fastn.app
             if let Some(user_id) = conf.get("user-id") {
                 match user_id.split_once('-') {
                     Some((platform, requested_field)) => {
@@ -346,6 +347,32 @@ pub async fn serve(
                         }
                     }
                     _ => return Ok(fastn_core::unauthorised!("invalid user-id provided")),
+                }
+            }
+
+            if config.package.user_id {
+                let provider = "github";
+                if let Some(token) =
+                    fastn_core::auth::get_user_data_from_cookies(provider, "token", &cookies)
+                        .await
+                        .ok()
+                        .flatten()
+                {
+                    match fastn_core::auth::github::apis::user_details(token.as_str()).await {
+                        Ok(user) => {
+                            // x-fastn-user-id is github_id
+                            conf.insert("X-FASTN-USER-ID".to_string(), format!("{}", user.id));
+                        }
+                        Err(_) => {
+                            tracing::error!(
+                                "Failed to pass used-id to endpoint. Invalid github access_token"
+                            );
+                        }
+                    }
+                } else {
+                    tracing::error!(
+                        "Failed to get token from {provider} cookie. User is not authenticated"
+                    );
                 }
             }
 

@@ -16,6 +16,7 @@ string list translation:
 optional string canonical-url:
 boolean inherit-auto-imports-from-original: true
 optional string endpoint:
+boolean user-id: false
 boolean backend: false
 backend-header list backend-headers:
 
