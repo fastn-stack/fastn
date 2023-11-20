@@ -8,7 +8,7 @@ pub fn domain(host: &str) -> String {
     }
 }
 
-pub async fn encrypt_str(user_detail_str: &String) -> String {
+pub async fn encrypt(user_detail_str: &String) -> String {
     use magic_crypt::MagicCryptTrait;
     let secret_key = fastn_core::auth::secret_key();
     let mc_obj = magic_crypt::new_magic_crypt!(secret_key.as_str(), 256);
@@ -18,7 +18,7 @@ pub async fn encrypt_str(user_detail_str: &String) -> String {
         .to_owned()
 }
 
-pub async fn decrypt_str(encrypted_str: &String) -> Result<String, MagicCryptError> {
+pub async fn decrypt(encrypted_str: &String) -> Result<String, MagicCryptError> {
     use magic_crypt::MagicCryptTrait;
     let secret_key = fastn_core::auth::secret_key();
     let mc_obj = magic_crypt::new_magic_crypt!(&secret_key, 256);
