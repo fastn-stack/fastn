@@ -16,7 +16,6 @@ fn handle_redirect(
 
 /// path: /-/<package-name>/<file-name>/
 /// path: /<file-name>/
-///
 #[tracing::instrument(skip_all)]
 async fn serve_file(
     config: &mut fastn_core::RequestConfig,
@@ -536,6 +535,7 @@ fn handle_default_route(
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_CSS)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(ftd::css()),
         );
     } else if req
@@ -545,6 +545,7 @@ fn handle_default_route(
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(format!(
                     "{}\n\n{}",
                     ftd::build_js(),
@@ -558,6 +559,7 @@ fn handle_default_route(
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(ftd::js::all_js_without_test(package_name)),
         );
     } else if req
@@ -567,6 +569,7 @@ fn handle_default_route(
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(ftd::markdown_js()),
         );
     } else if let Some(theme) =
@@ -584,18 +587,21 @@ fn handle_default_route(
         return theme_css.get(theme).cloned().map(|theme| {
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_CSS)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(theme)
         });
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_js()) {
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(ftd::prism_js()),
         );
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_css()) {
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_CSS)
+                .append_header(("Cache-Control", "public, max-age=31536000"))
                 .body(ftd::prism_css()),
         );
     }
@@ -728,6 +734,7 @@ You can try without providing port, it will automatically pick unused port."#,
                 inline_css: inline_css.clone(),
                 package_name: package_name.clone(),
             }))
+            .wrap(actix_web::middleware::Compress::default())
             .wrap(fastn_core::catch_panic::CatchPanic::default())
             .wrap(
                 actix_web::middleware::Logger::new(

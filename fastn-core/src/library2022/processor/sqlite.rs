@@ -30,8 +30,9 @@ pub async fn process(
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
     db_config: &fastn_core::library2022::processor::sql::DatabaseConfig,
+    headers: ftd::ast::HeaderValues,
+    query: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let (headers, query) = get_p1_data("package-data", &value, doc.name)?;
     let sqlite_database_path = req_config.config.root.join(&db_config.db_url);
 
     // need the query params
@@ -44,7 +45,7 @@ pub async fn process(
 
     let query_response = execute_query(
         &sqlite_database_path,
-        query.as_str(),
+        query,
         doc,
         headers,
         value.line_number(),
@@ -284,7 +285,7 @@ fn extract_named_parameters(
     }
 
     // Handle the last param if there was no trailing comma or space
-    if state.eq(&State::PushParam) && !param_name.is_empty() {
+    if [State::InsideParam, State::PushParam].contains(&state) && !param_name.is_empty() {
         let param_value = resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
         params.push(Box::new(param_value) as Box<dyn rusqlite::ToSql>);
     }

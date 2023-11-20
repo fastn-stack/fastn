@@ -50,7 +50,7 @@ pub fn all_js_without_test_and_ftd_langugage_js() -> String {
     let ftd_js = include_str!("../js/ftd.js");
     let web_component_js = include_str!("../js/web-component.js");
     let post_init_js = include_str!("../js/postInit.js");
-    format!("{markdown_js}{fastn_js}{dom_js}{utils_js}{virtual_js}{ftd_js}{web_component_js}{post_init_js}")
+    format!("{markdown_js}{fastn_js}{dom_js}{utils_js}{virtual_js}{web_component_js}{ftd_js}{post_init_js}")
 }
 
 pub fn all_js_without_test() -> String {
