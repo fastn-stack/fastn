@@ -1,5 +1,7 @@
-pub mod apis;
+mod apis;
 mod utils;
+
+pub use apis::*;
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct UserDetail {
@@ -69,7 +71,7 @@ pub async fn callback(
         .cookie(
             actix_web::cookie::Cookie::build(
                 fastn_core::auth::AuthProviders::GitHub.as_str(),
-                fastn_core::auth::utils::encrypt_str(&user_detail_str).await,
+                fastn_core::auth::utils::encrypt(&user_detail_str).await,
             )
             .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
             .path("/")

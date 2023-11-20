@@ -2,7 +2,10 @@ pub(crate) mod config;
 pub(crate) mod github;
 pub(crate) mod routes;
 
-pub mod utils;
+mod utils;
+
+pub use utils::{decrypt, encrypt};
+
 #[derive(Debug)]
 pub(crate) enum AuthProviders {
     GitHub,
@@ -51,7 +54,7 @@ pub async fn get_user_data_from_cookies(
     });
     match ud_encrypted {
         Ok(encrypt_str) => {
-            if let Ok(ud_decrypted) = utils::decrypt_str(encrypt_str).await {
+            if let Ok(ud_decrypted) = utils::decrypt(encrypt_str).await {
                 return match fastn_core::auth::AuthProviders::from_str(platform) {
                     fastn_core::auth::AuthProviders::GitHub => {
                         let github_ud: github::UserDetail =
@@ -92,7 +95,7 @@ pub async fn get_auth_identities(
         });
     match github_ud_encrypted {
         Ok(encrypt_str) => {
-            if let Ok(github_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
+            if let Ok(github_ud_decrypted) = utils::decrypt(encrypt_str).await {
                 let github_ud: github::UserDetail =
                     serde_json::from_str(github_ud_decrypted.as_str())?;
                 matched_identities.extend(github::matched_identities(github_ud, identities).await?);
