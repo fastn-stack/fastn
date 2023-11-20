@@ -12,9 +12,10 @@ pub async fn process(
             .await
             .map_err(|e| tracing::info!("[user-details]: Failed to decrypt cookie: {e}"))
             .and_then(|decrypted_cookie| {
-                serde_json::from_str::<fastn_core::auth::github::UserDetail>(decrypted_cookie.as_str()).map_err(
-                    |e| tracing::info!("[user-details]: Serde deserialization failed {e}:"),
+                serde_json::from_str::<fastn_core::auth::github::UserDetail>(
+                    decrypted_cookie.as_str(),
                 )
+                .map_err(|e| tracing::info!("[user-details]: Serde deserialization failed {e}:"))
             })
         {
             match fastn_core::auth::github::user_details(user_detail.access_token.as_str()).await {
@@ -38,4 +39,3 @@ struct UserDetails {
     is_logged_in: bool,
     user: Option<fastn_core::auth::github::GhUserDetails>,
 }
-
