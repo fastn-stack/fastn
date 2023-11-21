@@ -30,7 +30,7 @@ pub fn logout(
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build("user_id", "")
+            actix_web::cookie::Cookie::build("github_user", "")
                 .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())

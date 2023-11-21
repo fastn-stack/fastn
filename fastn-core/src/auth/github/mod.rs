@@ -67,7 +67,17 @@ pub async fn callback(
     };
 
     let user_detail_str = serde_json::to_string(&ud)?;
-    let gh_user_str = serde_json::to_string(&gh_user)?;
+
+    #[derive(serde::Serialize)]
+    struct GhUserCookie {
+        login: String,
+        name: String,
+    }
+
+    let gh_user_str = serde_json::to_string(&GhUserCookie {
+        login: gh_user.login,
+        name: gh_user.name,
+    })?;
 
     return Ok(actix_web::HttpResponse::Found()
         .cookie(
@@ -82,7 +92,7 @@ pub async fn callback(
         )
         .cookie(
             actix_web::cookie::Cookie::build(
-                "user_id",
+                "github_user",
                 fastn_core::auth::utils::encrypt(&gh_user_str).await,
             )
             .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
