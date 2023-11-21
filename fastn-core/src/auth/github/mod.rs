@@ -60,16 +60,28 @@ pub async fn callback(
     let gh_user = fastn_core::auth::github::apis::user_details(access_token.as_str()).await?;
 
     let ud = UserDetail {
-        username: gh_user.login,
+        username: gh_user.login.clone(),
         access_token,
     };
 
     let user_detail_str = serde_json::to_string(&ud)?;
+    let gh_user_str = serde_json::to_string(&gh_user)?;
+
     return Ok(actix_web::HttpResponse::Found()
         .cookie(
             actix_web::cookie::Cookie::build(
                 fastn_core::auth::AuthProviders::GitHub.as_str(),
                 fastn_core::auth::utils::encrypt_str(&user_detail_str).await,
+            )
+            .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+            .path("/")
+            .permanent()
+            .finish(),
+        )
+        .cookie(
+            actix_web::cookie::Cookie::build(
+                "user_id",
+                fastn_core::auth::utils::encrypt_str(&gh_user_str).await,
             )
             .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
             .path("/")

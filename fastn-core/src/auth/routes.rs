@@ -29,6 +29,13 @@ pub fn logout(
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
+        .cookie(
+            actix_web::cookie::Cookie::build("user_id", "")
+                .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+                .path("/")
+                .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
+                .finish(),
+        )
         .append_header((actix_web::http::header::LOCATION, next))
         .finish())
 }
