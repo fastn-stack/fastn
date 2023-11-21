@@ -350,32 +350,6 @@ pub async fn serve(
                 }
             }
 
-            if config.package.user_id {
-                let provider = "github";
-                if let Some(token) =
-                    fastn_core::auth::get_user_data_from_cookies(provider, "token", &cookies)
-                        .await
-                        .ok()
-                        .flatten()
-                {
-                    match fastn_core::auth::github::apis::user_details(token.as_str()).await {
-                        Ok(user) => {
-                            // x-fastn-user-id is github_id
-                            conf.insert("X-FASTN-USER-ID".to_string(), format!("{}", user.id));
-                        }
-                        Err(_) => {
-                            tracing::error!(
-                                "Failed to pass used-id to endpoint. Invalid github access_token"
-                            );
-                        }
-                    }
-                } else {
-                    tracing::error!(
-                        "Failed to get token from {provider} cookie. User is not authenticated"
-                    );
-                }
-            }
-
             return fastn_core::proxy::get_out(
                 host.as_str(),
                 req,
