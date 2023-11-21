@@ -83,7 +83,7 @@ pub async fn callback(
         .cookie(
             actix_web::cookie::Cookie::build(
                 "user_id",
-                fastn_core::auth::utils::encrypt_str(&gh_user_str).await,
+                fastn_core::auth::utils::encrypt(&gh_user_str).await,
             )
             .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
             .path("/")
