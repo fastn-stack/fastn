@@ -332,6 +332,7 @@ pub async fn serve(
 
             // TODO: read app config and send them to service as header
             // Adjust x-fastn header from based on the platform and the requested field
+            // this is for fastn.app
             if let Some(user_id) = conf.get("user-id") {
                 match user_id.split_once('-') {
                     Some((platform, requested_field)) => {
