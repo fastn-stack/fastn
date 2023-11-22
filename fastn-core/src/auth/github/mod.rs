@@ -22,18 +22,13 @@ pub async fn login(
 
     // Note: public_repos user:email all these things are github resources
     // So we have to tell oauth_client who is getting logged in what are we going to access
-    let (mut authorize_url, _token) = fastn_core::auth::github::utils::github_client()
+    let (authorize_url, _token) = fastn_core::auth::github::utils::github_client()
         .set_redirect_uri(oauth2::RedirectUrl::new(redirect_url)?)
         .authorize_url(oauth2::CsrfToken::new_random)
         .add_scope(oauth2::Scope::new("public_repo".to_string()))
         .add_scope(oauth2::Scope::new("user:email".to_string()))
         .add_scope(oauth2::Scope::new("read:org".to_string()))
         .url();
-
-    // https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest:~:text=an%20appropriate%20display.-,prompt,-OPTIONAL.%20Space%20delimited
-    authorize_url
-        .query_pairs_mut()
-        .append_pair("prompt", "consent");
 
     Ok(fastn_core::http::redirect(authorize_url.to_string()))
 }
