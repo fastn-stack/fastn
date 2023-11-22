@@ -226,6 +226,7 @@ pub struct TextInput {
     pub multiline: Option<ftd::js::Value>,
     pub max_length: Option<ftd::js::Value>,
     pub _type: Option<ftd::js::Value>,
+    pub value: Option<ftd::js::Value>,
     pub default_value: Option<ftd::js::Value>,
     pub enabled: Option<ftd::js::Value>,
     pub common: Common,
@@ -253,6 +254,11 @@ impl TextInput {
             ),
             _type: ftd::js::value::get_optional_js_value(
                 "type",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            value: ftd::js::value::get_optional_js_value(
+                "value",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
@@ -330,6 +336,16 @@ impl TextInput {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 enabled.to_set_property(
                     fastn_js::PropertyKind::Enabled,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
+        }
+        if let Some(ref value) = self.value {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                value.to_set_property(
+                    fastn_js::PropertyKind::TextInputValue,
                     doc,
                     kernel.name.as_str(),
                     rdata,

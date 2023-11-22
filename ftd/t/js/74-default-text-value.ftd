@@ -1,0 +1,31 @@
+;; This should bring backwards compatibility with the `value` attribute 
+;; that existed in 0.3
+
+
+;; using default-value
+
+-- ftd.text-input:
+default-value: Default Value
+
+
+;; using value
+
+-- ftd.text-input:
+value: Value
+
+;; if both are being used, and if `value` is initially null, then the value of the `default-value` will be used
+;; otherwise if the `value` is initially not null, then the `default-value` will be ignored
+;; and later when the value of `value` becomes a non-null value, this value will be used instead
+
+-- optional string $v:
+
+-- ftd.text-input:
+placeholder: This will change the value
+$on-input$: $ftd.set-string($a = $v, v = $VALUE)
+
+
+
+
+-- ftd.text-input:
+default-value: No value set
+value: $v
