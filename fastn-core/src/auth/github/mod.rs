@@ -7,6 +7,7 @@ pub use apis::*;
 pub struct UserDetail {
     pub access_token: String,
     pub username: String,
+    pub name: String,
 }
 
 pub async fn login(
@@ -57,22 +58,12 @@ pub async fn callback(
     let gh_user = fastn_core::auth::github::apis::user_details(access_token.as_str()).await?;
 
     let ud = UserDetail {
-        username: gh_user.login.clone(),
+        username: gh_user.login,
+        name: gh_user.name,
         access_token,
     };
 
     let user_detail_str = serde_json::to_string(&ud)?;
-
-    #[derive(serde::Serialize)]
-    struct GhUserCookie {
-        login: String,
-        name: String,
-    }
-
-    let gh_user_str = serde_json::to_string(&GhUserCookie {
-        login: gh_user.login,
-        name: gh_user.name,
-    })?;
 
     return Ok(actix_web::HttpResponse::Found()
         .cookie(
@@ -83,19 +74,6 @@ pub async fn callback(
             .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
             .path("/")
             .permanent()
-            .finish(),
-        )
-        .cookie(
-            actix_web::cookie::Cookie::build(
-                "github_user",
-                fastn_core::auth::utils::encrypt(&gh_user_str).await,
-            )
-            .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
-            .path("/")
-            .permanent()
-            // TODO: AbrarK is running on http,
-            // will remove it later
-            // .secure(true)
             .finish(),
         )
         .append_header((actix_web::http::header::LOCATION, next))
