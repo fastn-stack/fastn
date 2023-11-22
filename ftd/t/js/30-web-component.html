@@ -177,6 +177,7 @@ let foo__header = function (parent, inherited, args)
         rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "Your task here...", inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.TextInputType, fastn_dom.TextInputType.Url, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.TextInputValue, global.foo__task, inherited);
       },
       function (root, inherited) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);

@@ -301,6 +301,7 @@ fastn_dom.PropertyKind = {
     Selectable: 118,
     BackdropFilter: 119,
     Mask: 120,
+    TextInputValue: 121,
 };
 
 
@@ -1929,7 +1930,13 @@ class Node2 {
             }
         } else if (kind === fastn_dom.PropertyKind.TextInputType) {
             this.attachAttribute("type", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DefaultTextInputValue) {
+        } else if (kind === fastn_dom.PropertyKind.TextInputValue) {
+            this.#rawInnerValue = staticValue;
+            this.updateTextInputValue();
+        } else if(kind === fastn_dom.PropertyKind.DefaultTextInputValue) {
+            if(!fastn_utils.isNull(this.#rawInnerValue)) {
+                return;
+            }
             this.#rawInnerValue = staticValue;
             this.updateTextInputValue();
         } else if (kind === fastn_dom.PropertyKind.InputMaxLength) {
