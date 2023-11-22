@@ -6,8 +6,7 @@ pub use apis::*;
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct UserDetail {
     pub access_token: String,
-    pub username: String,
-    pub name: String,
+    pub user: GhUserDetails,
 }
 
 pub async fn login(
@@ -58,8 +57,7 @@ pub async fn callback(
     let gh_user = fastn_core::auth::github::apis::user_details(access_token.as_str()).await?;
 
     let ud = UserDetail {
-        username: gh_user.login,
-        name: gh_user.name,
+        user: gh_user,
         access_token,
     };
 
@@ -233,7 +231,7 @@ pub async fn matched_contributed_repos(
             fastn_core::auth::github::apis::repo_contributors(ud.access_token.as_str(), repo)
                 .await?;
 
-        if repo_contributors.contains(&ud.username) {
+        if repo_contributors.contains(&ud.user.login) {
             matched_repo_contributors_list.push(String::from(repo.to_owned()));
         }
     }
@@ -273,7 +271,7 @@ pub async fn matched_collaborated_repos(
             fastn_core::auth::github::apis::repo_collaborators(ud.access_token.as_str(), repo)
                 .await?;
 
-        if repo_collaborator.contains(&ud.username) {
+        if repo_collaborator.contains(&ud.user.login) {
             matched_repo_collaborator_list.push(String::from(repo.to_owned()));
         }
     }
@@ -317,7 +315,7 @@ pub async fn matched_org_teams(
                 team_name,
             )
             .await?;
-            if team_members.contains(&ud.username) {
+            if team_members.contains(&ud.user.login) {
                 matched_org_teams.push(org_team.to_string());
             }
         }
@@ -359,7 +357,7 @@ pub async fn matched_sponsored_org(
     for sponsor in sponsors_list.iter() {
         if fastn_core::auth::github::apis::is_user_sponsored(
             ud.access_token.as_str(),
-            ud.username.as_str(),
+            ud.user.login.as_str(),
             sponsor.to_owned(),
         )
         .await?

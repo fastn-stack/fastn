@@ -18,7 +18,8 @@ pub struct User {
 pub struct GhUserDetails {
     pub login: String,
     pub id: usize,
-    pub name: String,
+    pub name: Option<String>,
+    pub email: Option<String>,
 }
 
 // TODO: API to starred a repo on behalf of the user

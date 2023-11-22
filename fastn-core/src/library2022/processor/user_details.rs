@@ -18,14 +18,9 @@ pub async fn process(
                 .map_err(|e| tracing::info!("[user-details]: Serde deserialization failed {e}:"))
             })
         {
-            match fastn_core::auth::github::user_details(user_detail.access_token.as_str()).await {
-                Ok(user) => {
-                    ud = UserDetails {
-                        is_logged_in: true,
-                        user: Some(user),
-                    }
-                }
-                Err(e) => tracing::info!("[user-details]: Failed to get github user: {e}"),
+            ud = UserDetails {
+                is_logged_in: true,
+                user: Some(user_detail.user),
             }
         }
     }
