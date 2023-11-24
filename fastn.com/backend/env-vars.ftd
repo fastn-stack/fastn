@@ -45,6 +45,10 @@ FASTN_DANGER_ACCEPT_CHECKED_IN_ENV=true fastn serve
 
 -- fastn-check-for-updates:
 
+-- ds.h2: Auth variables
+
+-- fastn-auth-variables:
+
 -- end: ds.page
 
 
@@ -154,3 +158,28 @@ $env-doc.content
 -- end: ftd.column
 
 -- end: fastn-pg-variables
+
+-- component fastn-auth-variables:
+
+-- ftd.column:
+-- fastn-github-client-id:
+-- fastn-github-client-secret:
+-- end: ftd.column
+
+-- end: fastn-auth-variables
+
+-- component fastn-github-client-id:
+
+-- env-doc: `FASTN_GITHUB_CLIENT_ID`
+
+Get this from [github.com/settings/developers](https://github.com/settings/developers)
+
+-- end: fastn-github-client-id
+
+-- component fastn-github-client-secret:
+
+-- env-doc: `FASTN_GITHUB_CLIENT_SECRET`
+
+Get this from [github.com/settings/developers](https://github.com/settings/developers)
+
+-- end: fastn-github-client-secret
