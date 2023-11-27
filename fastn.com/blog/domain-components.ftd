@@ -34,7 +34,7 @@ that every testimonial instance maintains a consistent layout and
 content format, erasing the headache of replicating or managing individual 
 testimonial sections across numerous pages. 
 
-Consider the below testimonial component and its code:
+Consider the below testimonial card component and its code:
 
 -- testimonial list testimonials:
 
@@ -154,7 +154,7 @@ the testimonial card's design, I can modify it at the component level,
 and this adjustment will seamlessly propagate across all instances. 
 
 
-For instance, if I wish to enlarge the image size from 120 to 200, I can 
+For instance, if I wish to enlarge the image size from 120 to 200 pixels, I can 
 easily achieve this by making a simple adjustment in the code. 
 
 -- ds.image:
@@ -194,26 +194,24 @@ src: $assets.files.assets.new-testimonial.png
 
 -- ds.h2: Structured Data
 
-Each domain component contains structured data pertinent to its specific domain, 
-like testimonials or team members. This organized approach ensures that essential 
-details (name, position, quotes, etc.) are consistently maintained for every 
-instance of that component.
+Each domain component contains structured data pertinent to its specific domain. 
+This organized approach ensures that essential details (name, position, quotes, etc.) 
+are consistently maintained for every instance of that component.
 
 -- ds.h2: Separation of Content and Presentation
 
-Creating domain components separates content (testimonial content, team member details) 
-from their visual presentation. This bifurcation allows for autonomous updates or 
-modifications to either the content or the design without impacting the other, 
-facilitating design evolution while preserving data integrity.
+Creating domain components separates content from their visual presentation. 
+This bifurcation allows for autonomous updates or modifications to either the 
+content or the design without impacting the other, facilitating design evolution 
+while preserving data integrity.
 
 -- ds.h2: Versatile Data Utilization
 
 The structured data within these components can be readily transformed into other 
 formats like JSON. This versatility allows for easy extraction and utilization of 
-the data for various purposes beyond the immediate rendering on a web page. For 
-instance, the testimonial data could be repurposed for marketing collaterals or presentations.
+the data for various purposes beyond the immediate rendering on a web page. 
 
-With fastn's domain components, streamline content creation and maintain design coherence. 
+With fastn's domain components, you can easily streamline content creation and maintain design coherence. 
 Embrace fastn to master the art of website creation! 
 
 -- ds.h3: Related Links
