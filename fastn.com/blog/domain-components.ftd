@@ -211,8 +211,12 @@ The structured data within these components can be readily transformed into othe
 formats like JSON. This versatility allows for easy extraction and utilization of 
 the data for various purposes beyond the immediate rendering on a web page. 
 
-With fastn's domain components, you can easily streamline content creation and maintain design coherence. 
-Embrace fastn to master the art of website creation! 
+With fastn's domain components, you can easily streamline content creation and maintain 
+design coherence. Embrace fastn to master the art of website creation! 
+
+In addition to domain-driven documentation, another valuable technique for swift webpage 
+creation is [creating a `-- content-library.ftd` for storing all recurring content components](/blog/content-library/). 
+
 
 -- ds.h3: Related Links
 
