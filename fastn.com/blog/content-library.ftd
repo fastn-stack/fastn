@@ -8,8 +8,7 @@ post-url: /blog/content-library/
 author: $authors.nandini
 
 Let's say you're developing a landing page for a specific campaign. Instead of recreating 
-similar content elements from scratch, you can reference these components from 
-a central repository.
+the page from scratch, you can reference the content components from a centralized repository.
 
 
 -- ds.blog-page: 
@@ -17,14 +16,13 @@ meta: $meta
 
 -- ds.h1: Understanding the `-- content-library.ftd` Approach
 
-The concept revolves around the creation of a `-- content-library.ftd`, acting as a 
-repository for content components. These components encompass various elements such as 
-titles, descriptions, banners, testimonials, or any other marketing content 
+At its core, the --content-library.ftd is a file that houses content components. These components encompass various elements such as 
+titles, descriptions, banners, testimonials, CTAs, or any other marketing content 
 pieces that are recurrently used across landing pages. They can be easily referenced and 
-reused across various landing pages, streamlining the process and ensuring content 
+reused across various landing pages, streamlining the process of webpage creation and ensuring content 
 consistency without duplicating efforts.
 
-For instance, consider a reusable Call-to-Action section component:
+For instance, consider a Call-to-Action component:
 
 -- ds.code:
 lang: ftd 
@@ -86,7 +84,7 @@ JavaScript. Here is a quick glance.
 
 Notice how clean and straightforward the code of this page appears. 
 By outlining each component utilized on this page separately within the 
-"-- content-library.ftd" file, generating new landing pages becomes remarkably effortless.
+"-- content-library.ftd" file, generating new landing pages becomes effortless.
 
 -- ds.h1: Advantages of `-- content-library.ftd" 
 
@@ -104,7 +102,8 @@ Instead of starting each page's content creation from scratch, developers
 can simply assemble various content components from the `-- content-library.ftd`, allowing 
 faster turnaround times for launching new campaigns or pages.
 
-
+Read about [domain-driven documentation](/blog/domain-components/), another valuable technique for swift webpage 
+creation. 
 
 -- ds.h3: Related Links
 
