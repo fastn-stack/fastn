@@ -1,7 +1,7 @@
 -- import: fastn.com/blog/authors
 -- import: fastn-community.github.io/doc-site/common
 
--- common.post-meta meta: Create domain driven documentation for recurring content components
+-- common.post-meta meta: Create domain-driven documentation for recurring content components
 published-on: November 24, 2023
 post-url: /blog/domain-components/
 author: $authors.nandini
