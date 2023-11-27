@@ -1,7 +1,7 @@
 -- import: fastn.com/blog/authors
 -- import: fastn-community.github.io/doc-site/common
 
--- common.post-meta meta: Enhancing Reusability in website creation with fastn
+-- common.post-meta meta: Create domain driven documentation for recurring content components
 published-on: November 24, 2023
 post-url: /blog/domain-components/
 author: $authors.nandini
@@ -23,7 +23,7 @@ avalanche of updates across all the pages. The Solution...
 -- ds.blog-page: 
 meta: $meta
 
--- ds.h1: Domain Driven components in fastn
+-- ds.h1: Domain driven documentation in fastn
 
 With components created at domain level, you get to build content-specific pieces, 
 keeping all the unique stuff about each content type neatly packed together. 
