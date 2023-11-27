@@ -2,14 +2,14 @@
 -- import: fastn-community.github.io/doc-site/common
 -- import: fastn.com/content-library/compare as cl
 
--- common.post-meta meta: Leveraging `-- content-library.ftd` for Marketing Landing Pages
+-- common.post-meta meta: Create `-- content-library.ftd` for recurring content components 
 published-on: November 25, 2023
 post-url: /blog/content-library/
 author: $authors.nandini
 
 Let's say you're developing a landing page for a specific campaign. Instead of recreating 
 similar content elements from scratch, you can reference these components from 
-the `-- content-library.ftd`.
+a central repository.
 
 
 -- ds.blog-page: 
@@ -84,7 +84,7 @@ JavaScript. Here is a quick glance.
 
 -- ds.markdown: 
 
-Take a look at how clean and straightforward the code of this page appears. 
+Notice how clean and straightforward the code of this page appears. 
 By outlining each component utilized on this page separately within the 
 "-- content-library.ftd" file, generating new landing pages becomes remarkably effortless.
 
@@ -103,6 +103,7 @@ Developing new landing pages becomes more straightforward.
 Instead of starting each page's content creation from scratch, developers 
 can simply assemble various content components from the `-- content-library.ftd`, allowing 
 faster turnaround times for launching new campaigns or pages.
+
 
 
 -- ds.h3: Related Links
