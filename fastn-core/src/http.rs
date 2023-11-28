@@ -279,7 +279,7 @@ impl ResponseBuilder {
         {
             response_builder.insert_header(header);
         }
-        if status == actix_web::http::StatusCode::FOUND {
+        if status == actix_web::http::StatusCode::FOUND && false {
             response_builder.status(actix_web::http::StatusCode::OK);
             if let Some(location) = response.headers().get(actix_web::http::header::LOCATION) {
                 let redirect = location.to_str().unwrap();
