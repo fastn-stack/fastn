@@ -279,24 +279,25 @@ impl ResponseBuilder {
         {
             response_builder.insert_header(header);
         }
-        if status == actix_web::http::StatusCode::FOUND && false {
-            response_builder.status(actix_web::http::StatusCode::OK);
-            if let Some(location) = response.headers().get(actix_web::http::header::LOCATION) {
-                let redirect = location.to_str().unwrap();
-                let path = if redirect.trim_matches('/').is_empty() {
-                    format!("/-/{}/", package_name)
-                } else {
-                    // if it contains query-params so url should not end with /
-                    if redirect.contains('?') {
-                        format!("/-/{}/{}", package_name, redirect.trim_matches('/'))
-                    } else {
-                        format!("/-/{}/{}/", package_name, redirect.trim_matches('/'))
-                    }
-                };
-                let t = serde_json::json!({"redirect": path.as_str()}).to_string();
-                return response_builder.body(t);
-            }
-        }
+
+        // if status == actix_web::http::StatusCode::FOUND && false {
+        //     response_builder.status(actix_web::http::StatusCode::OK);
+        //     if let Some(location) = response.headers().get(actix_web::http::header::LOCATION) {
+        //         let redirect = location.to_str().unwrap();
+        //         let path = if redirect.trim_matches('/').is_empty() {
+        //             format!("/-/{}/", package_name)
+        //         } else {
+        //             // if it contains query-params so url should not end with /
+        //             if redirect.contains('?') {
+        //                 format!("/-/{}/{}", package_name, redirect.trim_matches('/'))
+        //             } else {
+        //                 format!("/-/{}/{}/", package_name, redirect.trim_matches('/'))
+        //             }
+        //         };
+        //         let t = serde_json::json!({"redirect": path.as_str()}).to_string();
+        //         return response_builder.body(t);
+        //     }
+        // }
 
         let content = match response.bytes().await {
             Ok(b) => b,
