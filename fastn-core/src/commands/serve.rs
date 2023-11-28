@@ -319,6 +319,7 @@ pub async fn serve(
         if file_response.status() == actix_web::http::StatusCode::NOT_FOUND {
             // TODO: Check if path exists in dynamic urls also, otherwise pass to endpoint
             // Already checked in the above method serve_file
+
             tracing::info!("executing proxy: path: {}", &path);
             let (package_name, url, mut conf) =
                 fastn_core::config::utils::get_clean_url(config, path.as_str())?;
