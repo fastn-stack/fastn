@@ -841,6 +841,10 @@ class Node2 {
         }
     }
     updateTextInputValue() {
+        if(fastn_utils.isNull(this.#rawInnerValue)) {
+            this.attachAttribute("value");
+            return;
+        }
         if (!ssr && this.#node.tagName.toLowerCase() === 'textarea') {
             this.#node.innerHTML = this.#rawInnerValue;
         } else {
