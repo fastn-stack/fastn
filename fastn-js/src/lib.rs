@@ -43,14 +43,26 @@ pub use udf_statement::UDFStatement;
 
 pub fn all_js_without_test_and_ftd_langugage_js() -> String {
     let markdown_js = fastn_js::markdown_js();
-    let fastn_js = include_str!("../js/fastn.js");
-    let dom_js = include_str!("../js/dom.js");
-    let utils_js = include_str!("../js/utils.js");
-    let virtual_js = include_str!("../js/virtual.js");
-    let ftd_js = include_str!("../js/ftd.js");
-    let web_component_js = include_str!("../js/web-component.js");
-    let post_init_js = include_str!("../js/postInit.js");
+    let fastn_js = include_str_with_debug!("../js/fastn.js");
+    let dom_js = include_str_with_debug!("../js/dom.js");
+    let utils_js = include_str_with_debug!("../js/utils.js");
+    let virtual_js = include_str_with_debug!("../js/virtual.js");
+    let ftd_js = include_str_with_debug!("../js/ftd.js");
+    let web_component_js = include_str_with_debug!("../js/web-component.js");
+    let post_init_js = include_str_with_debug!("../js/postInit.js");
     format!("{markdown_js}{fastn_js}{dom_js}{utils_js}{virtual_js}{web_component_js}{ftd_js}{post_init_js}")
+}
+
+#[macro_export]
+macro_rules! include_str_with_debug {
+    ($name:expr) => {{
+        let default = include_str!($name);
+        if std::env::var("DEBUG").is_ok() {
+            std::fs::read_to_string($name).unwrap_or_else(|_| default.to_string())
+        } else {
+            default.to_string()
+        }
+    }};
 }
 
 pub fn all_js_without_test() -> String {
