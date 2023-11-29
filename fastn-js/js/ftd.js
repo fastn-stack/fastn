@@ -1,6 +1,6 @@
 const ftd = (function() {
     const exports = {};
-    
+
     const riveNodes = {};
 
     const global = {};
@@ -162,35 +162,87 @@ const ftd = (function() {
     exports.clear = exports.clear_all;
     exports.set_list = function (list, value) { list.set(value) }
 
-    exports.http = function (url, method, body, headers) {
+    /// Sample usage: ftd.http("/api/v1/...", "POST", ("a", 1), ("b", 2))
+    exports.http = function (url, method, fastn_module, ...body) {
         if (url instanceof fastn.mutableClass) url = url.get();
         if (method instanceof fastn.mutableClass) method = method.get();
         method = method.trim().toUpperCase();
+        let request_json = {};
         const init = {
             method,
-            headers: {}
+            headers: {'Content-Type': 'application/json'},
+            json: null,
         };
-        if(headers && headers instanceof fastn.recordInstanceClass) {
-            Object.assign(init.headers, headers.toObject());
-        }
-        if(method !== 'GET') {
-            init.headers['Content-Type'] = 'application/json';
-        }
-        if(body && body instanceof fastn.recordInstanceClass && method !== 'GET') {
-            init.body = JSON.stringify(body.toObject());
-        }
-        fetch(url, init)
-        .then(res => {
-            if(!res.ok) {
-                return new Error("[http]: Request failed", res)
+        if (body && method !== 'GET') {
+            if (body[0] instanceof fastn.recordInstanceClass) {
+                if (body.length !== 1) {
+                    console.warn("body is a record instance, but has more than 1 element, ignoring");
+                }
+                request_json = body[0].toObject();
+            } else {
+                let json = body[0];
+                if (body.length !== 1 || (body[0].length === 2 && Array.isArray(body[0]))) {
+                    let new_json = {};
+                    // @ts-ignore
+                    for (let [header, value] of Object.entries(body)) {
+                        let [key, val] = value.length === 2 ? value : [header, value];
+                        new_json[key] = fastn_utils.getStaticValue(val);
+                    }
+                    json = new_json;
+                }
+                request_json = json;
             }
+        }
 
-            return res.json();
-        })
-        .then(json => {
-            console.log("[http]: Response OK", json);
-        })
-        .catch(console.error);
+        init.body = JSON.stringify(request_json);
+
+        let json;
+        fetch(url, init)
+            .then(res => {
+                if (!res.ok) {
+                    return new Error("[http]: Request failed", res)
+                }
+
+                return res.json();
+            })
+            .then(response => {
+                console.log("[http]: Response OK", response);
+                if (response.redirect) {
+                    window.location.href = response.redirect;
+                }
+                else if (!!response && !!response.reload) {
+                    window.location.reload();
+                } else {
+                    let data = {};
+                    if (!!response.errors) {
+                        for (let key of Object.keys(response.errors)) {
+                            let value = response.errors[key];
+                            if (Array.isArray(value)) {
+                                // django returns a list of strings
+                                value = value.join(" ");
+                                // also django does not append `-error`
+                                key = key + "-error";
+                            }
+                            key = fastn_module + "#" + key;
+                            data[key] = value;
+                        }
+                    }
+                    if (!!response.data) {
+                        if (Object.keys(data).length !== 0) {
+                            console.log("both .errors and .data are present in response, ignoring .data");
+                        }
+                        else {
+                            data = response.data;
+                        }
+                    }
+                    for (let ftd_variable of Object.keys(data)) {
+                        // @ts-ignore
+                        window.ftd.set_value(ftd_variable, data[ftd_variable]);
+                    }
+                }
+            })
+            .catch(console.error);
+        return json;
     }
 
     exports.navigate = function(url, request_data) {
@@ -198,16 +250,15 @@ const ftd = (function() {
         if(request_data instanceof RecordInstance) {
             // @ts-ignore
             for (let [header, value] of Object.entries(request_data.toObject())) {
-                if (header != "url" && header != "function" && header != "method") {
-                    let [key, val] = value.length == 2 ? value : [header, value];
+                if (header !== "url" && header !== "function" && header !== "method") {
+                    let [key, val] = value.length === 2 ? value : [header, value];
                     query_parameters.set(key, val);
                 }
             }
         }
         let query_string = query_parameters.toString();
         if (query_string) {
-            let get_url = url + "?" + query_parameters.toString();
-            window.location.href = get_url;
+            window.location.href = url + "?" + query_parameters.toString();
         }
         else {
             window.location.href = url;
