@@ -265,7 +265,7 @@ impl ResponseBuilder {
 
     pub async fn from_reqwest(
         response: reqwest::Response,
-        package_name: &str,
+        _package_name: &str,
     ) -> fastn_core::http::Response {
         let status = response.status();
 
