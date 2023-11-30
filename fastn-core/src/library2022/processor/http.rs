@@ -2,7 +2,7 @@ pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    req_config: &fastn_core::RequestConfig,
+    req_config: &mut fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, line_number) = if let Ok(val) = value.get_record(doc.name) {
         (val.2.to_owned(), val.5.to_owned())
@@ -103,7 +103,7 @@ pub async fn process(
 
     println!("calling `http` processor with url: {}", &url);
 
-    let response = if method.as_str().eq("post") {
+    let resp = if method.as_str().eq("post") {
         fastn_core::http::http_post_with_cookie(
             url.as_str(),
             req_config.request.cookies_string(),
@@ -120,8 +120,19 @@ pub async fn process(
         .await
     };
 
-    let response = match response {
-        Ok(v) => v,
+    let response = match resp {
+        Ok((Ok(v), cookies)) => {
+            req_config.processor_set_cookies.extend(cookies);
+            v
+        }
+        Ok((Err(e), cookies)) => {
+            req_config.processor_set_cookies.extend(cookies);
+            return ftd::interpreter::utils::e2(
+                format!("HTTP::get failed: {:?}", e),
+                doc.name,
+                line_number,
+            );
+        }
         Err(e) => {
             return ftd::interpreter::utils::e2(
                 format!("HTTP::get failed: {:?}", e),

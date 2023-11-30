@@ -242,7 +242,7 @@ pub async fn serve(
 
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
 
-    Ok(if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
+    let mut resp = if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
         serve_fastn_file(config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
         serve_file(&mut req_config, &path.join("/")).await
@@ -381,7 +381,15 @@ pub async fn serve(
         // }
 
         file_response
-    })
+    };
+
+    for cookie in req_config.processor_set_cookies {
+        resp.headers_mut().append(
+            actix_web::http::header::SET_COOKIE,
+            actix_web::http::header::HeaderValue::from_str(cookie.as_str()).unwrap(),
+        );
+    }
+    Ok(resp)
 }
 
 pub(crate) async fn download_init_package(url: &Option<String>) -> std::io::Result<()> {
