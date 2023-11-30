@@ -8,7 +8,6 @@ pub async fn process(
     let mut ud = Default::default();
 
     if let Some(gh_cookie) = req_config.request.cookie("github") {
-        dbg!(&gh_cookie);
         if let Ok(user_detail) = fastn_core::auth::decrypt(&gh_cookie)
             .await
             .map_err(|e| tracing::info!("[user-details]: Failed to decrypt cookie: {e}"))
@@ -27,8 +26,6 @@ pub async fn process(
             }
         }
     }
-
-    dbg!("ud::", &ud);
 
     doc.from_json(&ud, &kind, &value)
 }
