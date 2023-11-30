@@ -2,7 +2,11 @@
 class HelloWorld extends HTMLElement {
     constructor() {
         super();
-        const shadow = this.attachShadow({ mode: 'open' });
+        this.attachShadow({ mode: 'open' });
+    }
+
+    connectedCallback() {
+        const shadow = this.shadowRoot;
         const div = document.createElement('div');
         div.classList.add('hello-world');
         div.textContent = 'Hello World!';
@@ -26,10 +30,14 @@ customElements.define('hello-world', HelloWorld);
 class NumToWords extends HTMLElement {
     constructor() {
         super();
+        this.attachShadow({ mode: 'open' });
+    }
+
+    connectedCallback() {
         let data = window.ftd.component_data(this);
         let num = data.num.get();
 
-        const shadow = this.attachShadow({ mode: 'open' });
+        const shadow = this.shadowRoot;
         const div = document.createElement('div');
         div.textContent = numberToWords(num);
         div.style.color = 'orange';
@@ -56,10 +64,14 @@ customElements.define('num-to-words', NumToWords);
 class MutNumToWords extends HTMLElement {
     constructor() {
         super();
+        this.attachShadow({ mode: 'open' });
+    }
+
+    connectedCallback() {
         let data = window.ftd.component_data(this);
         let num = data.num.get();
 
-        const shadow = this.attachShadow({ mode: 'open' });
+        const shadow = this.shadowRoot;
         const div = document.createElement('div');
         div.innerHTML = "Output is "
             + numberToWords(num)
