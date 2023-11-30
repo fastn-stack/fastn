@@ -128,7 +128,8 @@ impl Expression {
                 definition_name_with_arguments,
                 line_number,
                 doc,
-            )?;
+            )
+            .ok();
             result.insert(variable, value);
         }
         Ok(ftd::interpreter::StateWithThing::new_thing(result))
