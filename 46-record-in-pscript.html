@@ -2028,8 +2028,8 @@ window.ftd.utils.set_value_helper(data, "foo#arpita", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#arpita", "main");
 window.ftd.call_immutable_value_changes("foo#arpita", "main");
-window.ftd.utils.node_change_call("main","0,0:main__text", data);
 window.ftd.utils.node_change_call("main","0,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,0:main__text", data);
 };
 
 window.set_value_main["foo#show-person:person-instance:1"] = function (data, new_value, remaining) {
