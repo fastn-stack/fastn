@@ -7,6 +7,7 @@ The `sql` processor allows you to execute SQL queries against a database. it sup
 
 - [PostgreSQL](/sql/#postgresql)
 - [SQLite](/sql/#sqlite)
+- [Google Sheets](/sql/#google-sheets)
 
 
 -- processor.static-vs-dynamic:
@@ -117,11 +118,9 @@ lang: ftd
 
 \-- import: fastn/processors as pr
 
-\-- integer id: 1
-
 \-- person jack:
 $processor$: pr.sql
-id: $id
+id: 1
 
 SELECT * FROM users WHERE id = $id::INTEGER;
 
@@ -206,10 +205,69 @@ The following SQLite Data Types are currently supported by the `sql` processor:
 
 
 
--- ds.h1: Further Reading
 
-1. `todo-app`
-    - You can explore the source code of this simple "todo-app" that utilizes the sql processor on [Github](https://github.com/fastn-stack/todo-app).
+-- ds.h1: Google Sheets
+
+fastn allows you to query your Google Sheet like a SQL database. You just have to pass the link to your Google Sheet as `db` and `sheet` (optional, the name of the sheet you want to query) as arguments to the `sql` processor, and then you can query your Google Sheet by writing queries in the [Google Visualization API Query Language](https://developers.google.com/chart/interactive/docs/querylanguage/).
+
+-- ds.code: Google Sheets Connection Setup/Example
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- person list people:
+\$processor$: pr.sql
+\db: {{ YOUR GOOGLE SHEET URL }}
+\sheet: {{ NAME OF THE SHEET YOU WANT TO QUERY }}
+
+\;; Your Query
+SELECT * WHERE A = "John Doe"
+
+-- ds.h2: Supported Google Sheets Data Types
+
+-- ds.markdown:
+
+The following Google Sheets Data Types are currently supported by the `sql` processor:
+
+- `STRING`
+- `INTEGER`
+- `DECIMAL`
+- `BOOLEAN`
+
+-- ds.h2: Using `LABEL` Clause to Rename Header Names to Match Record Key
+
+It is possible that some header names in your Google Sheet contain spaces, or you want to use a different name in the model record for the result you retrieve using the `sql` processor. In that case, you can use the `LABEL` clause to rename that header/column in the retrieved response.
+
+For example, if you have a sheet with the following columns - `Full Name`, `Phone`, and `Blood Group`, since you will have to create a record for mapping the results of the `sql` processor, and record property names cannot contain spaces, you will have to use a property name that does not contain spaces. You can do this by setting your own label for that column by specifying it with the `LABEL` clause.
+
+-- ds.code: Using `LABEL` to rename headers "Full Name", "Phone" and "Blood Group" to match record keys
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- record donor:
+string full-name:
+string phone:
+string blood-group:
+
+\-- donor list donors:
+$processor$: pr.sql
+db: GOOGLE_SHEET_URL
+sheet: Blood Donors
+
+SELECT A, B, C LABEL A "full-name", B "phone", C "blood-group"
+
+\-- donor-card: $d
+for: $d in $donors
+
+
+
+-- ds.h1: Live Demos
+
+1. [`todo-app`](https://github.com/fastn-stack/todo-app)
+    - A simple "todo-app" that utilizes the sql processor.
+2. [`fastn-google-sheets-demo`](https://github.com/fastn-community/fastn-google-sheets-demo)
+    - A demo hackathon website that showcases the Google Sheets Query support in the `sql` processor.
 
 
 

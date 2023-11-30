@@ -84,7 +84,7 @@ Deploying `fastn` Sites
 
 -- cbox.warning: Deprecated
 
-This processor has been deprecated in favor of [`sql`](/sql/) processor.
+This processor has been deprecated in favor of [`sql`](/sql/) processor, starting from version **0.3.81**.
 
 -- end: cbox.warning
 

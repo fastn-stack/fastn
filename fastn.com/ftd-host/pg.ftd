@@ -12,6 +12,8 @@ SQLite using `fastn`](/sqlite/).
 
 `pg` processor allows you to execute SQL queries against a PostgreSQL database.
 
+-- processor.deprecated-sql-procesor:
+
 -- processor.static-vs-dynamic:
 
 -- ds.markdown:
