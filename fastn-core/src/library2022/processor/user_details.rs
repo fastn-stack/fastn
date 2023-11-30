@@ -8,6 +8,7 @@ pub async fn process(
     let mut ud = Default::default();
 
     if let Some(gh_cookie) = req_config.request.cookie("github") {
+        dbg!(&gh_cookie);
         if let Ok(user_detail) = fastn_core::auth::decrypt(&gh_cookie)
             .await
             .map_err(|e| tracing::info!("[user-details]: Failed to decrypt cookie: {e}"))
@@ -20,10 +21,14 @@ pub async fn process(
         {
             ud = UserDetails {
                 is_logged_in: true,
-                user: Some(user_detail.user),
+                username: user_detail.user.login,
+                name: user_detail.user.name.unwrap_or_default(),
+                email: user_detail.user.email.unwrap_or_default(),
             }
         }
     }
+
+    dbg!("ud::", &ud);
 
     doc.from_json(&ud, &kind, &value)
 }
@@ -32,5 +37,7 @@ pub async fn process(
 struct UserDetails {
     #[serde(rename = "is-logged-in")]
     is_logged_in: bool,
-    user: Option<fastn_core::auth::github::GhUserDetails>,
+    username: String,
+    name: String,
+    email: String,
 }
