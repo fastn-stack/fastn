@@ -54,7 +54,18 @@ pub async fn callback(
         Err(e) => return Ok(fastn_core::server_error!("{}", e.to_string())),
     };
 
-    let gh_user = fastn_core::auth::github::apis::user_details(access_token.as_str()).await?;
+    let mut gh_user = fastn_core::auth::github::apis::user_details(access_token.as_str()).await?;
+
+    if gh_user.email.is_none() {
+        // pick primary email
+        let emails = fastn_core::auth::github::apis::user_emails(access_token.as_str()).await?;
+        let primary = emails
+            .into_iter()
+            .find(|e| e.primary)
+            .expect("primary email must exist for a github account");
+
+        gh_user.email = Some(primary.email);
+    }
 
     let ud = UserDetail {
         user: gh_user,
