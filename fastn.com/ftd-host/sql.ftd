@@ -264,7 +264,7 @@ for: $d in $donors
 
 -- ds.h1: Live Demos
 
-1. [`todo-app`](https://github.com/fastn-stack/todo-app)
+1. [`todo-app`](https://github.com/fastn-community/todo-app)
     - A simple "todo-app" that utilizes the sql processor.
 2. [`fastn-google-sheets-demo`](https://github.com/fastn-community/fastn-google-sheets-demo)
     - A demo hackathon website that showcases the Google Sheets Query support in the `sql` processor.
