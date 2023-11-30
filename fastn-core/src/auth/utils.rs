@@ -24,9 +24,9 @@ pub async fn decrypt(encrypted_str: &String) -> Result<String, MagicCryptError> 
     let mc_obj = magic_crypt::new_magic_crypt!(&secret_key, 256);
     if encrypted_str.starts_with('"') {
         // django adds quotes to the cookie value
-        mc_obj.decrypt_base64_to_string(&encrypted_str[1..encrypted_str.len() - 1])
+        dbg!(mc_obj.decrypt_base64_to_string(&encrypted_str[1..encrypted_str.len() - 1]))
     } else {
-        mc_obj.decrypt_base64_to_string(encrypted_str)
+        dbg!(mc_obj.decrypt_base64_to_string(encrypted_str))
     }
 }
 
