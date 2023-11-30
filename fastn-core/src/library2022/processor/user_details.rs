@@ -20,7 +20,9 @@ pub async fn process(
         {
             ud = UserDetails {
                 is_logged_in: true,
-                user: Some(user_detail.user),
+                username: user_detail.user.login,
+                name: user_detail.user.name.unwrap_or_default(),
+                email: user_detail.user.email.unwrap_or_default(),
             }
         }
     }
@@ -32,5 +34,7 @@ pub async fn process(
 struct UserDetails {
     #[serde(rename = "is-logged-in")]
     is_logged_in: bool,
-    user: Option<fastn_core::auth::github::GhUserDetails>,
+    username: String,
+    name: String,
+    email: String,
 }

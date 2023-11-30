@@ -121,6 +121,15 @@ impl Expression {
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
             )?);
+            ftd::interpreter::utils::insert_module_thing(
+                &value.kind().into_kind_data(),
+                variable.as_str(),
+                full_variable_name.as_str(),
+                definition_name_with_arguments,
+                line_number,
+                doc,
+            )
+            .ok();
             result.insert(variable, value);
         }
         Ok(ftd::interpreter::StateWithThing::new_thing(result))
