@@ -58,6 +58,8 @@ pub struct RequestConfig {
     pub translated_data: fastn_core::TranslationData,
     pub base_url: String,
     pub module_package_map: std::collections::BTreeMap<String, String>,
+    /// each string is the value of Set-Cookie header
+    pub processor_set_cookies: Vec<String>,
 }
 
 impl RequestConfig {
@@ -80,6 +82,7 @@ impl RequestConfig {
             translated_data: Default::default(),
             base_url: base_url.to_string(),
             module_package_map: Default::default(),
+            processor_set_cookies: Default::default(),
         }
     }
 
