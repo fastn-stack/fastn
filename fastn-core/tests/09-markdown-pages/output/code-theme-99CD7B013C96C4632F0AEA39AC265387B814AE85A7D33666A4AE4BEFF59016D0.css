@@ -1,0 +1,318 @@
+/**
+ * Coldark Theme for Prism.js
+ * Theme variation: Cold
+ * Tested with HTML, CSS, JS, JSON, PHP, YAML, Bash script
+ * @author Armand Philippot <contact@armandphilippot.com>
+ * @homepage https://github.com/ArmandPhilippot/coldark-prism
+ * @license MIT
+ * NOTE: This theme is used as light theme
+ */
+code[class*="language-"].coldark-theme-light,
+pre[class*="language-"].coldark-theme-light {
+	color: #111b27;
+	background: none;
+	font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre[class*="language-"].coldark-theme-light::-moz-selection,
+pre[class*="language-"].coldark-theme-light ::-moz-selection,
+code[class*="language-"].coldark-theme-light::-moz-selection,
+code[class*="language-"].coldark-theme-light ::-moz-selection {
+	background: #8da1b9;
+}
+
+pre[class*="language-"].coldark-theme-light::selection,
+pre[class*="language-"].coldark-theme-light ::selection,
+code[class*="language-"].coldark-theme-light::selection,
+code[class*="language-"].coldark-theme-light ::selection {
+	background: #8da1b9;
+}
+
+/* Code blocks */
+pre[class*="language-"].coldark-theme-light {
+	padding: 1em;
+	margin: 0.5em 0;
+	overflow: auto;
+}
+
+:not(pre) > code[class*="language-"].coldark-theme-light,
+pre[class*="language-"].coldark-theme-light {
+	background: #e3eaf2;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"].coldark-theme-light {
+	padding: 0.1em 0.3em;
+	border-radius: 0.3em;
+	white-space: normal;
+}
+
+.coldark-theme-light .token.comment,
+.coldark-theme-light .token.prolog,
+.coldark-theme-light .token.doctype,
+.coldark-theme-light .token.cdata {
+	color: #3c526d;
+}
+
+.coldark-theme-light .token.punctuation {
+	color: #111b27;
+}
+
+.coldark-theme-light .token.delimiter.important,
+.coldark-theme-light .token.selector .parent,
+.coldark-theme-light .token.tag,
+.coldark-theme-light .token.tag .coldark-theme-light .token.punctuation {
+	color: #006d6d;
+}
+
+.coldark-theme-light .token.attr-name,
+.coldark-theme-light .token.boolean,
+.coldark-theme-light .token.boolean.important,
+.coldark-theme-light .token.number,
+.coldark-theme-light .token.constant,
+.coldark-theme-light .token.selector .coldark-theme-light .token.attribute {
+	color: #755f00;
+}
+
+.coldark-theme-light .token.class-name,
+.coldark-theme-light .token.key,
+.coldark-theme-light .token.parameter,
+.coldark-theme-light .token.property,
+.coldark-theme-light .token.property-access,
+.coldark-theme-light .token.variable {
+	color: #005a8e;
+}
+
+.coldark-theme-light .token.attr-value,
+.coldark-theme-light .token.inserted,
+.coldark-theme-light .token.color,
+.coldark-theme-light .token.selector .coldark-theme-light .token.value,
+.coldark-theme-light .token.string,
+.coldark-theme-light .token.string .coldark-theme-light .token.url-link {
+	color: #116b00;
+}
+
+.coldark-theme-light .token.builtin,
+.coldark-theme-light .token.keyword-array,
+.coldark-theme-light .token.package,
+.coldark-theme-light .token.regex {
+	color: #af00af;
+}
+
+.coldark-theme-light .token.function,
+.coldark-theme-light .token.selector .coldark-theme-light .token.class,
+.coldark-theme-light .token.selector .coldark-theme-light .token.id {
+	color: #7c00aa;
+}
+
+.coldark-theme-light .token.atrule .coldark-theme-light .token.rule,
+.coldark-theme-light .token.combinator,
+.coldark-theme-light .token.keyword,
+.coldark-theme-light .token.operator,
+.coldark-theme-light .token.pseudo-class,
+.coldark-theme-light .token.pseudo-element,
+.coldark-theme-light .token.selector,
+.coldark-theme-light .token.unit {
+	color: #a04900;
+}
+
+.coldark-theme-light .token.deleted,
+.coldark-theme-light .token.important {
+	color: #c22f2e;
+}
+
+.coldark-theme-light .token.keyword-this,
+.coldark-theme-light .token.this {
+	color: #005a8e;
+}
+
+.coldark-theme-light .token.important,
+.coldark-theme-light .token.keyword-this,
+.coldark-theme-light .token.this,
+.coldark-theme-light .token.bold {
+	font-weight: bold;
+}
+
+.coldark-theme-light .token.delimiter.important {
+	font-weight: inherit;
+}
+
+.coldark-theme-light .token.italic {
+	font-style: italic;
+}
+
+.coldark-theme-light .token.entity {
+	cursor: help;
+}
+
+.language-markdown .coldark-theme-light .token.title,
+.language-markdown .coldark-theme-light .token.title .coldark-theme-light .token.punctuation {
+	color: #005a8e;
+	font-weight: bold;
+}
+
+.language-markdown .coldark-theme-light .token.blockquote.punctuation {
+	color: #af00af;
+}
+
+.language-markdown .coldark-theme-light .token.code {
+	color: #006d6d;
+}
+
+.language-markdown .coldark-theme-light .token.hr.punctuation {
+	color: #005a8e;
+}
+
+.language-markdown .coldark-theme-light .token.url > .coldark-theme-light .token.content {
+	color: #116b00;
+}
+
+.language-markdown .coldark-theme-light .token.url-link {
+	color: #755f00;
+}
+
+.language-markdown .coldark-theme-light .token.list.punctuation {
+	color: #af00af;
+}
+
+.language-markdown .coldark-theme-light .token.table-header {
+	color: #111b27;
+}
+
+.language-json .coldark-theme-light .token.operator {
+	color: #111b27;
+}
+
+.language-scss .coldark-theme-light .token.variable {
+	color: #006d6d;
+}
+
+/* overrides color-values for the Show Invisibles plugin
+ * https://prismjs.com/plugins/show-invisibles/
+ */
+.coldark-theme-light .token.coldark-theme-light .token.tab:not(:empty):before,
+.coldark-theme-light .token.coldark-theme-light .token.cr:before,
+.coldark-theme-light .token.coldark-theme-light .token.lf:before,
+.coldark-theme-light .token.coldark-theme-light .token.space:before {
+	color: #3c526d;
+}
+
+/* overrides color-values for the Toolbar plugin
+ * https://prismjs.com/plugins/toolbar/
+ */
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > a,
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > button {
+	color: #e3eaf2;
+	background: #005a8e;
+}
+
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > a:hover,
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > a:focus,
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > button:hover,
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > button:focus {
+	color: #e3eaf2;
+	background: #005a8eda;
+	text-decoration: none;
+}
+
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > span,
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > span:hover,
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > span:focus {
+	color: #e3eaf2;
+	background: #3c526d;
+}
+
+/* overrides color-values for the Line Highlight plugin
+ * http://prismjs.com/plugins/line-highlight/
+ */
+.line-highlight.line-highlight {
+	background: #8da1b92f;
+	background: linear-gradient(to right, #8da1b92f 70%, #8da1b925);
+}
+
+.line-highlight.line-highlight:before,
+.line-highlight.line-highlight[data-end]:after {
+	background-color: #3c526d;
+	color: #e3eaf2;
+	box-shadow: 0 1px #8da1b9;
+}
+
+pre[id].linkable-line-numbers.linkable-line-numbers span.line-numbers-rows > span:hover:before {
+	background-color: #3c526d1f;
+}
+
+/* overrides color-values for the Line Numbers plugin
+ * http://prismjs.com/plugins/line-numbers/
+ */
+.line-numbers.line-numbers .line-numbers-rows {
+	border-right: 1px solid #8da1b97a;
+	background: #d0dae77a;
+}
+
+.line-numbers .line-numbers-rows > span:before {
+	color: #3c526dda;
+}
+
+/* overrides color-values for the Match Braces plugin
+ * https://prismjs.com/plugins/match-braces/
+ */
+.rainbow-braces .coldark-theme-light .token.coldark-theme-light .token.punctuation.brace-level-1,
+.rainbow-braces .coldark-theme-light .token.coldark-theme-light .token.punctuation.brace-level-5,
+.rainbow-braces .coldark-theme-light .token.coldark-theme-light .token.punctuation.brace-level-9 {
+	color: #755f00;
+}
+
+.rainbow-braces .coldark-theme-light .token.coldark-theme-light .token.punctuation.brace-level-2,
+.rainbow-braces .coldark-theme-light .token.coldark-theme-light .token.punctuation.brace-level-6,
+.rainbow-braces .coldark-theme-light .token.coldark-theme-light .token.punctuation.brace-level-10 {
+	color: #af00af;
+}
+
+.rainbow-braces .coldark-theme-light .token.coldark-theme-light .token.punctuation.brace-level-3,
+.rainbow-braces .coldark-theme-light .token.coldark-theme-light .token.punctuation.brace-level-7,
+.rainbow-braces .coldark-theme-light .token.coldark-theme-light .token.punctuation.brace-level-11 {
+	color: #005a8e;
+}
+
+.rainbow-braces .coldark-theme-light .token.coldark-theme-light .token.punctuation.brace-level-4,
+.rainbow-braces .coldark-theme-light .token.coldark-theme-light .token.punctuation.brace-level-8,
+.rainbow-braces .coldark-theme-light .token.coldark-theme-light .token.punctuation.brace-level-12 {
+	color: #7c00aa;
+}
+
+/* overrides color-values for the Diff Highlight plugin
+ * https://prismjs.com/plugins/diff-highlight/
+ */
+pre.diff-highlight > code .coldark-theme-light .token.coldark-theme-light .token.deleted:not(.prefix),
+pre > code.diff-highlight .coldark-theme-light .token.coldark-theme-light .token.deleted:not(.prefix) {
+	background-color: #c22f2e1f;
+}
+
+pre.diff-highlight > code .coldark-theme-light .token.coldark-theme-light .token.inserted:not(.prefix),
+pre > code.diff-highlight .coldark-theme-light .token.coldark-theme-light .token.inserted:not(.prefix) {
+	background-color: #116b001f;
+}
+
+/* overrides color-values for the Command Line plugin
+ * https://prismjs.com/plugins/command-line/
+ */
+.command-line .command-line-prompt {
+	border-right: 1px solid #8da1b97a;
+}
+
+.command-line .command-line-prompt > span:before {
+	color: #3c526dda;
+}
