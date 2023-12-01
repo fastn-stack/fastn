@@ -249,6 +249,7 @@ pub fn get_mut_argument_for_reference<'a>(
     )>,
     line_number: usize,
 ) -> ftd::interpreter::Result<Option<(String, &'a mut ftd::interpreter::Argument)>> {
+    dbg!(name, &component_definition_name_with_arguments);
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
             .strip_prefix(format!("{}.", component_name).as_str())
@@ -729,7 +730,19 @@ pub(crate) fn insert_module_thing(
             reference.strip_prefix(&format!("{}.{}.", component_name, arg.name))
         {
             let module_component_name = format!("{}#{}", module_name, reference);
-            if let Ok(module_component_definition) =
+            if let Ok(function_definition) =
+                doc.get_function(module_component_name.as_str(), line_number)
+            {
+                println!("Function module thing");
+                dbg!(function_definition.name.as_str());
+                dbg!(module_component_name.as_str());
+                dbg!(reference, reference_full_name);
+                let function_module_thing = ftd::interpreter::ModuleThing::function(
+                    reference.to_string(),
+                    function_definition.return_kind.clone(),
+                );
+                things.insert(reference.to_string(), function_module_thing);
+            } else if let Ok(module_component_definition) =
                 doc.get_component(module_component_name.as_str(), 0)
             {
                 let component_module_thing = ftd::interpreter::ModuleThing::component(
@@ -740,6 +753,9 @@ pub(crate) fn insert_module_thing(
 
                 things.insert(reference.to_string(), component_module_thing);
             } else {
+                println!("Variable module thing");
+                dbg!(module_component_name.as_str());
+                dbg!(reference, reference_full_name);
                 let variable_module_thing =
                     ftd::interpreter::ModuleThing::variable(reference.to_string(), kind.clone());
                 things.insert(reference.to_string(), variable_module_thing);
