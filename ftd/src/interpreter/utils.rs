@@ -733,10 +733,6 @@ pub(crate) fn insert_module_thing(
             if let Ok(function_definition) =
                 doc.get_function(module_component_name.as_str(), line_number)
             {
-                println!("Function module thing");
-                dbg!(function_definition.name.as_str());
-                dbg!(module_component_name.as_str());
-                dbg!(reference, reference_full_name);
                 let function_module_thing = ftd::interpreter::ModuleThing::function(
                     reference.to_string(),
                     function_definition.return_kind.clone(),
@@ -753,9 +749,6 @@ pub(crate) fn insert_module_thing(
 
                 things.insert(reference.to_string(), component_module_thing);
             } else {
-                println!("Variable module thing");
-                dbg!(module_component_name.as_str());
-                dbg!(reference, reference_full_name);
                 let variable_module_thing =
                     ftd::interpreter::ModuleThing::variable(reference.to_string(), kind.clone());
                 things.insert(reference.to_string(), variable_module_thing);
