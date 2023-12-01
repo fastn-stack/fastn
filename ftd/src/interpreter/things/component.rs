@@ -1365,10 +1365,13 @@ impl Event {
                 ast_event.line_number,
             )?;
 
+            let reference = function_name.as_str().trim_start_matches('$');
+            let reference_full_name = action.name.as_str();
+
             ftd::interpreter::utils::insert_module_thing(
                 &action.kind,
-                function_name.as_str(),
-                action.name.as_str(),
+                reference,
+                reference_full_name,
                 definition_name_with_arguments,
                 ast_event.line_number,
                 doc,

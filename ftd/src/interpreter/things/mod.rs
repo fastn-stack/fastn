@@ -13,6 +13,7 @@ pub(crate) mod web_component;
 pub enum ModuleThing {
     Component(ComponentModuleThing),
     Variable(VariableModuleThing),
+    Formula(FormulaModuleThing),
 }
 
 impl ModuleThing {
@@ -28,10 +29,15 @@ impl ModuleThing {
         ModuleThing::Variable(VariableModuleThing::new(name, kind))
     }
 
+    pub fn function(name: String, kind: ftd::interpreter::KindData) -> Self {
+        ModuleThing::Formula(FormulaModuleThing::new(name, kind))
+    }
+
     pub fn get_kind(&self) -> ftd::interpreter::KindData {
         match self {
             ftd::interpreter::ModuleThing::Component(c) => c.kind.clone(),
             ftd::interpreter::ModuleThing::Variable(v) => v.kind.clone(),
+            ftd::interpreter::ModuleThing::Formula(f) => f.kind.clone(),
         }
     }
 
@@ -39,6 +45,7 @@ impl ModuleThing {
         match self {
             ftd::interpreter::ModuleThing::Component(c) => c.name.clone(),
             ftd::interpreter::ModuleThing::Variable(v) => v.name.clone(),
+            ftd::interpreter::ModuleThing::Formula(f) => f.name.clone(),
         }
     }
 }
@@ -51,6 +58,18 @@ pub struct VariableModuleThing {
 impl VariableModuleThing {
     pub fn new(name: String, kind: ftd::interpreter::KindData) -> Self {
         VariableModuleThing { name, kind }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct FormulaModuleThing {
+    pub name: String,
+    pub kind: ftd::interpreter::KindData,
+}
+
+impl FormulaModuleThing {
+    pub fn new(name: String, kind: ftd::interpreter::KindData) -> Self {
+        FormulaModuleThing { name, kind }
     }
 }
 
