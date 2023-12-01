@@ -134,7 +134,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                 js_script =
                     format!("{js_document_script}{}", test_available_code_themes()).as_str(),
                 favicon_html_tag = "",
-                base_url = "",
+                base_url_tag = "",
                 extra_js = "",
                 default_css = (if manual { ftd::ftd_js_css() } else { "" })
                     .to_string()

@@ -753,7 +753,11 @@ pub fn replace_markers_2023(
     format!(
         include_str!("../../ftd/ftd-js.html"),
         fastn_package = get_fastn_package_data(&config.package).as_str(),
-        base_url = base_url,
+        base_url_tag = if !base_url.is_empty() {
+            format!("<base href=\"{}\">", base_url)
+        } else {
+            "".to_string()
+        },
         favicon_html_tag = resolve_favicon(
             config.root.as_str(),
             config.package.name.as_str(),
