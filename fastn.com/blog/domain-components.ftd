@@ -36,7 +36,6 @@ testimonial sections across numerous pages.
 
 Consider the below testimonial card component and its code:
 
--- testimonial list testimonials:
 
 -- testimonial: Nancy Bayers
 designation: Co-Founder
@@ -239,6 +238,15 @@ Read [docs](https://fastn.com/ftd/data-modelling/)
 
 
 
+
+
+
+
+-- record testimonial:
+caption title:
+body body:
+string designation:
+ftd.image-src src:
 
 
 
