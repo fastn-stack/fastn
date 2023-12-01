@@ -116,6 +116,7 @@ pub async fn process(
             url.as_str(),
             req_config.request.cookies_string(),
             &conf,
+            false, // disable cache
         )
         .await
     };

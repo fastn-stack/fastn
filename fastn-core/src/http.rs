@@ -445,7 +445,7 @@ pub(crate) async fn http_post_with_cookie(
 }
 
 pub(crate) async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
-    http_get_with_cookie(url, None, &std::collections::HashMap::new())
+    http_get_with_cookie(url, None, &std::collections::HashMap::new(), true)
         .await?
         .0
 }
@@ -458,10 +458,11 @@ pub(crate) async fn http_get_with_cookie(
     url: &str,
     cookie: Option<String>,
     headers: &std::collections::HashMap<String, String>,
+    use_cache: bool,
 ) -> fastn_core::Result<(fastn_core::Result<Vec<u8>>, Vec<String>)> {
     let mut cookies = vec![];
 
-    if NOT_FOUND_CACHE.read().contains(url) {
+    if use_cache && NOT_FOUND_CACHE.read().contains(url) {
         return Ok((
             Err(fastn_core::Error::APIResponseError(
                 "page not found, cached".to_string(),
@@ -513,7 +514,11 @@ pub(crate) async fn http_get_with_cookie(
             res.text().await
         );
         tracing::error!(url = url, msg = message);
-        NOT_FOUND_CACHE.write().insert(url.to_string());
+
+        if use_cache {
+            NOT_FOUND_CACHE.write().insert(url.to_string());
+        }
+
         return Ok((Err(fastn_core::Error::APIResponseError(message)), cookies));
     }
     tracing::info!(msg = "returning success", url = url);
