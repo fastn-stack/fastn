@@ -247,13 +247,11 @@ const ftd = (function() {
 
     exports.navigate = function(url, request_data) {
         let query_parameters = new URLSearchParams();
-        if(request_data instanceof RecordInstance) {
+        if(request_data instanceof fastn.recordInstanceClass) {
             // @ts-ignore
             for (let [header, value] of Object.entries(request_data.toObject())) {
-                if (header !== "url" && header !== "function" && header !== "method") {
-                    let [key, val] = value.length === 2 ? value : [header, value];
-                    query_parameters.set(key, val);
-                }
+                let [key, val] = value.length === 2 ? value : [header, value];
+                query_parameters.set(key, val);
             }
         }
         let query_string = query_parameters.toString();
