@@ -515,7 +515,6 @@ pub(crate) async fn read_ftd_2023(
     );
 
     let file_content = fastn_core::utils::replace_markers_2023(
-        ftd::ftd_js_html(),
         js_document_script.as_str(),
         js_ast_data.scripts.join("").as_str(),
         ssr_body.as_str(),
