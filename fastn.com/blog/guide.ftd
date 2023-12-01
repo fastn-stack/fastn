@@ -1,0 +1,300 @@
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+-- import: fastn-community.github.io/bling/note
+-- import: fastn.com/utils
+
+
+-- common.post-meta meta: Building Your Personal Website with fastn: A Step-by-Step Guide
+published-on: November 30, 2023
+post-url: /blog/guide/
+author: $authors.nandini
+
+Today, I’m excited to share my journey of creating my personal website using 
+`fastn`. I'm a freelance content writer, and [my existing website](https://www.canva.com/design/DAFbReZ9W-8/UC3KC6uGXfx_vRCnohjdFA/view?website#2), 
+built on Canva, felt more like scrolling through a series of slides than a 
+professional website. It lacked vital elements like a navigation bar, blog page, 
+and a contact form. 
+
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.h1: The Limitations of Canva and Notion
+
+Worse yet, my website on Canva took ages to load, forcing me to host 
+[my portfolio](https://nandhinidevi.notion.site/Hi-I-m-Nandhini-9f393b0846ad472c95529d94fb03d4b8) 
+separately on Notion, which, despite its functionality, couldn’t match my vision 
+due to limited design elements. 
+
+Honestly, my portfolio there looks more like school notes than a professional 
+showcase. If you've used Notion, you know what I mean—it’s not the vibe I’d want 
+to showcase to potential clients.
+
+Then came fastn! When I [first started exploring fastn](https://fastn.com/writer/) 
+I was eager to try it out for my website - one that has everything I'd like to 
+showcase to potential clients: details about me, my clients, projects, services, 
+blogs, and a user-friendly contact form. My goal was to achieve a clean, simple, 
+yet visually appealing design and layout.
+
+-- ds.h1: Finding the perfect template
+
+Browsing through the templates on the [featured components page](http://fastn.com/featured), 
+I found exactly what I needed. This single page [fastn template](https://fastn.com/featured/portfolios/portfolio/) 
+under the Portfolio/Personal Site category ticked all the boxes. 
+
+Its structure has a single-page site with a vertical navigation bar, allowing 
+users to swiftly navigate to specific sections. This feature is a must for a 
+lengthy landing page. You can easily view the code by clicking on the GitHub 
+icon if you’re logged into your GitHub account. 
+
+Discover my step-by-step process in building this website with fastn in the 
+video below:
+
+\-- ds.youtube:
+\v: 
+
+-- ds.h2: A walkthrough on the files and folders in this template
+
+-- ds.h3: [**`fastn.ftd`**](https://github.com/fastn-community/saurabh-portfolio/blob/main/FASTN.ftd) file
+
+This file contains all the website imports and its sitemap, outlining sections 
+and their corresponding URLs.
+
+- ds.code:
+lang: ftd 
+
+\-- fastn.sitemap:
+
+\# Home: index.html
+icon: assets/home.svg
+
+\# About Me: /#about-me
+icon: assets/info.svg
+
+\# Services: /#services
+icon: assets/service.png
+
+\# Portfolio: /#latest-works
+icon: assets/portfolio.png
+
+\# Blog: /#blogs
+icon: assets/blog.png
+
+\# Contact: /#contact
+icon: assets/contact.png
+
+
+-- note.note: Tip: Using `#` helps create sections on your website. 
+
+-- ds.code:
+lang: ftd 
+
+\-- fastn.sitemap:
+
+\# Section: <url>
+
+-- ds.markdown: 
+
+What precedes the colon becomes the section's title displayed on the webpage, 
+while what follows it forms the section's URL. For more info, check out the 
+[How to configure sitemap for your site](https://fastn.com/understanding-sitemap/-/build/) 
+document.
+
+-- ds.h3: [**`index.ftd`**](https://github.com/fastn-community/saurabh-portfolio/blob/main/index.ftd) file 
+
+This file holds the homepage content
+
+-- ds.code:
+lang: ftd 
+
+\-- page:
+
+\-- hero: John Doe
+tag: Hello there...
+designation: I Am Passionate Developer!
+avatar: $assets.files.assets.me.jpg
+cta-primary: My Work
+cta-primary-link: index.html
+cta-secondary: Hire Me
+cta-secondary-link: index.html
+
+The namics of how users interact with interactive elements within 
+a user interface flow chart based on container proportion.
+
+\-- about-me-container: ABOUT ME
+tag: A LEAD UX & UI DESIGNER BASED IN CANADA
+id: about-me
+ 
+[...]
+
+\-- contact-form: GET IN TOUCH
+sub-title: SAY SOMETHING
+cta-text: SEND MESSAGE
+link: index.html
+id: contact
+
+A LEAD UX & UI DESIGNER BASED IN CANADA
+
+\-- contact-info: Our Address
+info: 123 Stree New York City , United States Of America 750065.
+
+\-- end: contact-form
+
+\-- footer:
+socials: $common.socials
+copyright: © 2023 copyright all right reserved
+
+\-- end: footer
+
+\-- end: page
+
+-- ds.markdown:
+
+I appreciate the minimal syntax of fastn. Notice how clean and straightforward 
+the code of this page appears. Every content component used here is neatly 
+outlined within the `common` folder. Scroll down beyond `-- end: page`, and 
+you'll discover the code detailing the layout and design of each component.
+
+-- ds.h3: [**`assets`**](https://github.com/fastn-community/saurabh-portfolio/tree/main/assets) folder
+
+All graphics, including images, icons, and videos, are stored here for easy 
+organization and access.
+
+-- ds.h3: [**`blog-authors`**](https://github.com/fastn-community/saurabh-portfolio/tree/main/blog-authors) folder
+
+You can pop in more author details by creating individual `.ftd` files. This works 
+well if you've got a team of writers contributing to your blog.
+
+-- ds.h3: [**`blog-articles`**](https://github.com/fastn-community/saurabh-portfolio/tree/main/blog-articles) folder
+
+Each fresh blog post gets its own `.ftd` file saved right in this folder. 
+Keeps everything tidy and organized for your blog content.
+
+-- ds.h1: Getting Started with Customizing the Template
+
+Here are a few prerequisites to get started with a fastn template.
+
+-- ds.h2: Step 1: Setting Up Tools and Accounts
+
+[Set up your GitHub account](https://github.com/join) if you haven’t already.
+
+-- note.note: Since fastn is open-source, you can find the source code of all components and templates on the [fastn community on GitHub](https://github.com/fastn-community).
+
+-- ds.markdown:
+
+To create your copy of the template, click `fork repository`. If you are like 
+me and already have fastn, GitHub desktop, and a text editor installed, simply 
+copy the HTTPS URL of the template. Then, go to your GitHub desktop, clone the 
+repository, and choose where to save it on your local system.
+
+An alternative way to use the template is by utilizing GitHub Pages to host 
+your built assets. Follow the steps detailed in this guide 
+[Publishing Static Site On GitHub Pages](https://fastn.com/github-pages/).
+
+-- ds.h2: Step 2: Adding Assets
+
+Open the assets folder and start adding images, icons, and other graphical 
+elements intended for your website. 
+
+-- note.note: When saving graphics, remember to use small caps and hyphens between words for better organization and access. 
+
+Example: `profile-picture.png`
+
+-- ds.h2: Step 3: Editing the Template
+
+I opened the template folder on the text editor. Began by editing the `index.ftd` 
+file and moved to the `common.ftd` file.
+
+-- ds.h3: Editing the `index.ftd` file
+
+1) I removed sections or components I won’t be using on my website. 
+
+Example: 
+
+- `Docs` section
+- `-- info-list:` from the `-- about-me-info:` section.
+- `My Skills` section
+- Addresses in the contact form
+- Social Links like Facebook, Twitter and Instagram.
+- And other content elements wherever it is not needed.
+
+2) I modified the content elements like titles, tags, sub-titles, body text, 
+CTA button texts, links, and images. Here is my modified hero section:
+
+-- ds.code:
+lang: ftd 
+
+\-- hero: Are you in the business of saving the planet?
+tag: Copywriting for Sustainable Businesses
+avatar: $assets.files.assets.profile-picture.jpeg
+cta-primary: My Work
+cta-primary-link: /#latest-works
+cta-secondary: Book a Meeting
+cta-secondary-link: https://calendly.com/nandhini-copywriter/discovery-call/
+
+-- ds.markdown:
+
+If you're someone who doesn't just sell stuff but rallies behind 
+a cause, I'll whip up words that'll click with your audience and 
+turn them into full-on cheerleaders for the planet and your business.
+
+-- ds.h3: Editing the index.ftd file in the common folder
+
+I just replaced and edited text and graphics in the sections as required. 
+Removed any unnecessary sections and duplicated components if I wanted to add a 
+new item.
+
+Here is an example of adding a new testimonial:
+
+-- ds.code:
+lang: ftd 
+
+\-- testimonial list testimonials:
+
+\-- testimonial: Nancy Bayers
+designation: Co-Founder
+src: $assets.files.assets.testimonial-1.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint 
+
+\-- testimonial: Nancy Bayers
+designation: Co-Founder
+src: $assets.files.assets.testimonial-2.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+\-- testimonial: Daniya Roy
+designation: Co-Founder
+src: $assets.files.assets.testimonial-3.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+\-- end: testimonials
+
+-- ds.markdown:
+
+Once I made all the changes, I previewed my site locally. You can also 
+[publish it on GitHub](https://fastn.com/github-pages/)
+
+Now my website is ready to be hosted on a domain and make it live!
+
+-- ds.h1: Final Thoughts
+
+Working on the template was surprisingly smooth, giving me complete control over 
+every aspect of my website. This includes having a grip on both content and 
+design and creating neat URLs. I now boast a website I can confidently present 
+to my network and potential clients.
+
+In my next blog post, I’ll take you on a journey through further enhancements 
+to this website. Expect insights on integrating new components, fine-tuning 
+color schemes and typography, adding fresh blog content, optimizing metadata 
+for SEO and more.
+
+Stay tuned for more updates!
+
+
+
+-- end: ds.blog-page
