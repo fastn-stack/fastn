@@ -249,7 +249,6 @@ pub fn get_mut_argument_for_reference<'a>(
     )>,
     line_number: usize,
 ) -> ftd::interpreter::Result<Option<(String, &'a mut ftd::interpreter::Argument)>> {
-    dbg!(name, &component_definition_name_with_arguments);
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
             .strip_prefix(format!("{}.", component_name).as_str())
