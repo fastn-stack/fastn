@@ -128,52 +128,46 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
                 format!("{js_ftd_script}\n{js_document_script}").as_str(),
             );
 
-            ftd::ftd_js_html()
-                .replace("__extra_js__", "")
-                .replace("__fastn_package__", dummy_package_data.as_str())
-                .replace(
-                    "__js_script__",
+            format!(
+                include_str!("../../ftd-js.html"),
+                fastn_package = dummy_package_data.as_str(),
+                js_script =
                     format!("{js_document_script}{}", test_available_code_themes()).as_str(),
-                )
-                .replace("__favicon_html_tag__", "")
-                .replace("__html_body__", ssr_body.as_str())
-                .replace("<base href=\"__base_url__\">", "")
-                .replace(
-                    "__script_file__",
-                    format!(
-                        "{}{}",
-                        js_ast_data.scripts.join(""),
-                        if manual {
-                            format!(
-                                r#"
-                            <script src="../../prism/prism.js"></script>
-                            <script src="../../prism/prism-line-highlight.js"></script>
-                            <script src="../../prism/prism-line-numbers.js"></script>
-                            <script src="../../prism/prism-rust.js"></script>
-                            <script src="../../prism/prism-json.js"></script>
-                            <script src="../../prism/prism-python.js"></script>
-                            <script src="../../prism/prism-markdown.js"></script>
-                            <script src="../../prism/prism-bash.js"></script>
-                            <script src="../../prism/prism-sql.js"></script>
-                            <script src="../../prism/prism-javascript.js"></script>
-                            <link rel="stylesheet" href="../../prism/prism-line-highlight.css">
-                            <link rel="stylesheet" href="../../prism/prism-line-numbers.css">
-                            <script>{}</script>
-                        "#,
-                                ftd::js::all_js_without_test("foo")
-                            )
-                        } else {
-                            "<script src=\"fastn-js.js\"></script>".to_string()
-                        }
-                    )
+                favicon_html_tag = "",
+                base_url = "",
+                extra_js = "",
+                default_css = (if manual { ftd::ftd_js_css() } else { "" })
+                    .to_string()
                     .as_str(),
+                html_body = ssr_body.as_str(),
+                script_file = format!(
+                    "{}{}",
+                    js_ast_data.scripts.join(""),
+                    if manual {
+                        format!(
+                            r#"
+                        <script src="../../prism/prism.js"></script>
+                        <script src="../../prism/prism-line-highlight.js"></script>
+                        <script src="../../prism/prism-line-numbers.js"></script>
+                        <script src="../../prism/prism-rust.js"></script>
+                        <script src="../../prism/prism-json.js"></script>
+                        <script src="../../prism/prism-python.js"></script>
+                        <script src="../../prism/prism-markdown.js"></script>
+                        <script src="../../prism/prism-bash.js"></script>
+                        <script src="../../prism/prism-sql.js"></script>
+                        <script src="../../prism/prism-javascript.js"></script>
+                        <link rel="stylesheet" href="../../prism/prism-line-highlight.css">
+                        <link rel="stylesheet" href="../../prism/prism-line-numbers.css">
+                        <script>{}</script>
+                    "#,
+                            ftd::js::all_js_without_test("foo")
+                        )
+                    } else {
+                        "<script src=\"fastn-js.js\"></script>".to_string()
+                    }
                 )
-                .replace(
-                    "__default_css__",
-                    (if manual { ftd::ftd_js_css() } else { "" })
-                        .to_string()
-                        .as_str(),
-                )
+                .as_str(),
+            )
         }
     };
     if fix || manual || script {
