@@ -22,6 +22,8 @@ Note: This document is about querying SQLite Database that is part of your
 `package-query` processor allows you to execute SQL queries against SQLite 
 files that are part of your `fastn` package.
 
+-- processor.deprecated-sql-procesor:
+
 -- processor.static-vs-dynamic:
 
 -- ds.markdown:

@@ -20,7 +20,11 @@ lang: js
 class HelloWorld extends HTMLElement {
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback() {
+    const shadow = this.shadowRoot;
     const div = document.createElement('div');
     div.classList.add('hello-world');
     div.textContent = 'Hello World!';
@@ -104,6 +108,10 @@ lang: js
 class NumToWords extends HTMLElement {
     constructor() {
         super();
+        this.attachShadow({ mode: 'open' });
+    }
+
+    connectedCallback() {
         // `window.ftd.component_data` exposes the data
         // arguments passed from `ftd` world.
         let data = window.ftd.component_data(this);
@@ -112,7 +120,7 @@ class NumToWords extends HTMLElement {
         // passed.
         let num = data.num.get();
 
-        const shadow = this.attachShadow({ mode: 'open' });
+        const shadow = this.shadowRoot;
         const div = document.createElement('div');
         div.textContent = numberToWords(num);
         div.style.color = 'orange';
@@ -173,15 +181,19 @@ $on-click$: $ftd.increment($a = $num)
 
 
 -- ds.code:
-lang: ftd
+lang: js
 
 class NumToWords extends HTMLElement {
     constructor() {
         super();
+        this.attachShadow({ mode: 'open' });
+    }
+
+    connectedCallback() {
         let data = window.ftd.component_data(this);
         let num = data.num.get();
 
-        const shadow = this.attachShadow({ mode: 'open' });
+        const shadow = this.shadowRoot;
         const div = document.createElement('div');
         div.textContent = numberToWords(num);
         div.style.color = 'orange';
@@ -226,15 +238,19 @@ color: $inherited.colors.text
 Now let mutate the data from `js` world too.
 
 -- ds.code: `web-component.js`
-lang: ftd
+lang: js
 
 class NumToWords extends HTMLElement {
     constructor() {
         super();
+        this.attachShadow({ mode: 'open' });
+    }
+
+    connectedCallback() {
         let data = window.ftd.component_data(this);
         let num = data.num.get();
 
-        const shadow = this.attachShadow({ mode: 'open' });
+        const shadow = this.shadowRoot;
         const div = document.createElement('div');
         div.textContent = numberToWords(num);
         div.style.color = 'orange';
