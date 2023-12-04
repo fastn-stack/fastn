@@ -1,6 +1,6 @@
 -- import: fastn.com/blog/authors
 -- import: fastn-community.github.io/doc-site/common
--- import: fastn.com/content-library/compare as cl
+-- import: fastn.com/content-library as cl
 
 -- common.post-meta meta: Create `-- content-library.ftd` for recurring content components 
 published-on: November 25, 2023
