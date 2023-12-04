@@ -36,30 +36,8 @@ testimonial sections across numerous pages.
 
 Consider the below testimonial card component and its code:
 
-
--- testimonial: Nancy Bayers
-designation: Co-Founder
-src: $assets.files.assets.testimonial-1.jpeg
-
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-molestiae quas vel sint 
-
--- testimonial: Daniya Jacob
-designation: Co-Founder
-src: $assets.files.assets.testimonial-2.jpeg
-
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-molestiae quas vel sint
-
--- testimonial: Kavya Dominic
-designation: Owner
-src: $assets.files.assets.testimonial-3.jpeg
-
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-molestiae quas vel sint
-
--- end: testimonials
-
+-- testimonials:
+testimonials: $testimonials
 
 -- ds.code: 
 lang: ftd 
@@ -157,10 +135,10 @@ For instance, if I wish to enlarge the image size from 120 to 200 pixels, I can
 easily achieve this by making a simple adjustment in the code. 
 
 -- ds.image:
-src: $assets.files.assets.image-enlarge.png
+src: $fastn-assets.files.images.blog.image-enlarge.png
 
 -- ds.image: (use code instead of image)
-src: $assets.files.assets.big-profile.png
+src: $fastn-assets.files.images.blog.big-profile.png
 
 -- ds.markdown:
 
@@ -171,14 +149,14 @@ lang: ftd
 
 \-- testimonial: Daniya Jacob
 designation: Co-Founder
-src: $assets.files.assets.testimonial-2.jpeg
+src: $fastn-assets.files.images.blog.testimonial-2.jpeg
 
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
 molestiae quas vel sint
 
 \-- testimonial: Kavya Dominic
 designation: Owner
-src: $assets.files.assets.testimonial-3.jpeg
+src: $fastn-assets.files.images.blog.testimonial-3.jpeg
 
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
 molestiae quas vel sint
@@ -186,7 +164,7 @@ molestiae quas vel sint
 \-- end: testimonials
 
 -- ds.image: (use code instead of image)
-src: $assets.files.assets.new-testimonial.png
+src: $fastn-assets.files.images.blog.new-testimonial.png
 
 
 -- ds.h1: Benefits of Domain Components
@@ -247,6 +225,108 @@ caption title:
 body body:
 string designation:
 ftd.image-src src:
+
+-- testimonial list testimonials:
+
+-- testimonial: Nancy Bayers
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-1.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint 
+
+-- testimonial: Daniya Jacob
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-2.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+-- testimonial: Kavya Dominic
+designation: Owner
+src: $fastn-assets.files.images.blog.testimonial-3.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+-- end: testimonials
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component testimonials:
+optional caption title:
+optional body body:
+testimonial list testimonials:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-vertical.px: 100
+padding-horizontal.px if { ftd.device == "mobile" }: 20
+background.solid: $inherited.colors.background.step-2
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $common.max-width
+
+-- ftd.text: $testimonials.title
+if: { testimonials.title != NULL }
+role: $inherited.types.heading-large
+color: $inherited.colors.text
+style: bold
+
+-- ftd.column:
+width.fixed.px: 100
+height.fixed.px: 2
+background.solid: $inherited.colors.border
+margin-top.px: 10
+
+-- end: ftd.column
+
+-- ftd.text:
+if: { testimonials.body != NULL }
+role: $inherited.types.heading-tiny
+color: $inherited.colors.text
+margin-top.px: 20
+
+$testimonials.body
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing.fixed.px: 50
+margin-top.px: 50
+
+-- testimonial-card: $obj.title
+$loop$: $testimonials.testimonials as $obj
+designation: $obj.designation
+src: $obj.src
+
+$obj.body
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: testimonials
+
+
+
+
 
 
 
