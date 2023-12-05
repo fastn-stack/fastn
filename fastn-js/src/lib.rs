@@ -12,6 +12,7 @@ mod loop_component;
 mod mutable_variable;
 mod property;
 mod record;
+mod or_type;
 mod ssr;
 mod static_variable;
 mod to_js;
@@ -35,6 +36,7 @@ pub use property::{
     ConditionalValue, Formula, FormulaType, PropertyKind, SetProperty, SetPropertyValue, Value,
 };
 pub use record::RecordInstance;
+pub use or_type::OrType;
 pub use ssr::{ssr, ssr_str, ssr_with_js_string};
 pub use static_variable::{static_integer, static_string, StaticVariable};
 pub use to_js::to_js;

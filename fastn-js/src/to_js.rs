@@ -29,6 +29,7 @@ impl fastn_js::Ast {
             fastn_js::Ast::MutableVariable(m) => m.to_js(),
             fastn_js::Ast::MutableList(ml) => ml.to_js(),
             fastn_js::Ast::RecordInstance(ri) => ri.to_js(),
+            fastn_js::Ast::OrType(ot) => ot.to_js(),
             fastn_js::Ast::Export { from, to } => variable_to_js(
                 to,
                 &None,
@@ -221,6 +222,7 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::MutableList(ml) => ml.to_js(),
             fastn_js::ComponentStatement::ForLoop(fl) => fl.to_js(),
             fastn_js::ComponentStatement::RecordInstance(ri) => ri.to_js(),
+            fastn_js::ComponentStatement::OrType(ot) => ot.to_js(),
             fastn_js::ComponentStatement::DeviceBlock(db) => db.to_js(),
             fastn_js::ComponentStatement::AnyBlock(ab) => {
                 text(format!("if (!ssr) {{{}}}", ab).as_str())
@@ -634,6 +636,18 @@ impl fastn_js::RecordInstance {
             self.name.as_str(),
             &self.prefix,
             text(self.fields.to_js().as_str()),
+            false,
+        )
+    }
+}
+
+
+impl fastn_js::OrType {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        variable_to_js(
+            self.name.as_str(),
+            &self.prefix,
+            text(self.variants.to_js().as_str()),
             false,
         )
     }

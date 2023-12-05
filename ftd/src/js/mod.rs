@@ -231,6 +231,28 @@ impl ftd::interpreter::Variable {
                         .to_fastn_js_value_with_none(doc, has_rive_components),
                     prefix,
                 });
+            } else if let ftd::interpreter::Kind::OrType { name, .. } = &self.kind.kind {
+                let or_type = doc.get_or_type(name, self.line_number).unwrap();
+                let or_type_fields = value
+                    .or_type_fields(&doc, self.value.line_number())
+                    .unwrap();
+                let mut fields = vec![];
+                for variant in or_type.variants {
+                    if let Some(value) = or_type_fields.get(variant.name().as_str()) {
+                        fields.push((
+                            variant.name().to_string(),
+                            value.to_fastn_js_value_with_none(doc, has_rive_components),
+                        ));
+                    }
+                }
+                return fastn_js::Ast::OrType(fastn_js::OrType {
+                    name: self.name.to_string(),
+                    variants: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
+                        fields,
+                        other_references: vec![],
+                    }),
+                    prefix,
+                });
             } else if self.mutable {
                 return fastn_js::Ast::MutableVariable(fastn_js::MutableVariable {
                     name: self.name.to_string(),
