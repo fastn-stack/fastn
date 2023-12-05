@@ -198,7 +198,6 @@ elements intended for your website.
 
 -- note.note: When saving graphics, remember to use lower-cased file names, and use hyphens instead of space.
 
-
 Example: `Profile Picture.png` is incorrect, instead use `profile-picture.png`. 
 
 -- ds.h2: Step 3: Editing the Template
