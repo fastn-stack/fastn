@@ -12,14 +12,14 @@
 -- import: fastn.com/blog/web-components as p2
 -- import: fastn.com/blog/show-cs as p1
 -- import: fastn.com/blog/breakpoint as r1
--- import: fastn.com/blog/personal-website-1 as p15
+-- import: fastn.com/blog/personal-website-1
 
 -- ds.page-with-no-right-sidebar:
 
 -- ds.posts:
 
 -- ds.featured-post:
-post-data: $p15.meta
+post-data: $personal-website-1.meta
 
 -- ds.without-image-half:
 post-data: $r1.index-meta

@@ -51,7 +51,7 @@ Discover my step-by-step process in building this website with fastn in the
 video below:
 
 /-- ds.youtube:
-\v: 
+/v: 
 
 -- ds.h2: A walkthrough on the files and folders in this template
 
@@ -63,24 +63,24 @@ and their corresponding URLs.
 -- ds.code:
 lang: ftd 
 
-\-- fastn.sitemap:
+/-- fastn.sitemap:
 
-\# Home: index.html
+# Home: index.html
 icon: assets/home.svg
 
-\# About Me: /#about-me
+# About Me: /#about-me
 icon: assets/info.svg
 
-\# Services: /#services
+# Services: /#services
 icon: assets/service.png
 
-\# Portfolio: /#latest-works
+# Portfolio: /#latest-works
 icon: assets/portfolio.png
 
-\# Blog: /#blogs
+# Blog: /#blogs
 icon: assets/blog.png
 
-\# Contact: /#contact
+# Contact: /#contact
 icon: assets/contact.png
 
 
@@ -196,9 +196,10 @@ your built assets. Follow the steps detailed in this guide
 Open the assets folder and start adding images, icons, and other graphical 
 elements intended for your website. 
 
--- note.note: When saving graphics, remember to use small caps and hyphens between words for better organization and access. 
+-- note.note: When saving graphics, remember to use lower-cased file names, and use hyphens instead of space.
 
-Example: `profile-picture.png`
+
+Example: `Profile Picture.png` is incorrect, instead use `profile-picture.png`. 
 
 -- ds.h2: Step 3: Editing the Template
 
@@ -298,3 +299,5 @@ Stay tuned for more updates!
 
 
 -- end: ds.blog-page
+
+
