@@ -1600,9 +1600,7 @@ class Node2 {
                 this.attachExternalCss(css);
             });
         } else if (kind === fastn_dom.PropertyKind.Js) {
-            console.log("HERE, NOW U CAN SEE IT? =====>", staticValue);
             let js_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
-            console.log("HERE IS THE JS LIST ====> ", js_list);
             js_list.forEach((js) => {
                 this.attachExternalJs(js);
             });
