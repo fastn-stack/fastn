@@ -916,8 +916,8 @@ skip: true
 
 # Blog: /blog/
 
-- Guide - Building personal website using fastn: /blog/guide/
-  document: blog/guide.ftd 
+- Guide - Building personal website using fastn: /blog/personal-website-1/
+  document: blog/personal-website-1.ftd 
 - Search Feature in fastn.com: /blog/search/
 - Quote contest: /quote-contest/
   document: events/weekly-contest/week-1-quote.ftd
