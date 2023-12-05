@@ -773,6 +773,17 @@ impl PropertyValue {
                         )?,
                     }
                 }
+                ftd::interpreter::Kind::Constant { kind } => {
+                    let kind = kind.clone().into_kind_data();
+                    get_property_value(
+                        value,
+                        doc,
+                        is_mutable,
+                        &kind,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                    )?
+                }
                 ftd::interpreter::Kind::String => {
                     ftd::interpreter::StateWithThing::new_thing(PropertyValue::Value {
                         value: Value::String {

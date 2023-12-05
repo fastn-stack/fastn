@@ -634,6 +634,7 @@ impl<'a> TDoc<'a> {
         ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::KindData>>
         {
             let (v, remaining) = ftd::interpreter::utils::split_at(name, ".");
+            dbg!(&kind);
             match kind {
                 ftd::interpreter::Kind::Record { name: rec_name } => {
                     let record = try_ok_state!(doc.search_record(rec_name.as_str(), line_number)?);
@@ -653,6 +654,27 @@ impl<'a> TDoc<'a> {
                         ))
                     }
                 }
+                // ftd::interpreter::Kind::OrType { name, variant, .. } => {
+                //     let or_type = try_ok_state!(doc.search_or_type(name.as_str(), value.line_number())?);
+                //     let line_number = value.line_number();
+                //     if let Some(variant_name) = variant {
+                //         let variant = or_type
+                //             .variants
+                //             .into_iter()
+                //             .find(|v| {
+                //                 v.name().eq(variant_name.as_str())
+                //                     || variant_name.starts_with(format!("{}.", v.name()).as_str())
+                //             })
+                //             .ok_or(ftd::interpreter::Error::ParseError {
+                //                 message: format!(
+                //                     "Expected variant `{}` in or-type `{}`",
+                //                     variant_name, name
+                //                 ),
+                //                 doc_id: doc.name.to_string(),
+                //                 line_number: value.line_number(),
+                //             })?;
+                //     }
+                // }
                 ftd::interpreter::Kind::Optional { kind } => {
                     let state_with_thing = get_kind_(*kind, name, doc, line_number)?;
                     if let ftd::interpreter::StateWithThing::Thing(ref t) = state_with_thing {
@@ -1260,6 +1282,7 @@ impl<'a> TDoc<'a> {
             try_ok_state!(self.search_initial_thing(name, line_number)?);
 
         if let Some(remaining) = remaining {
+            dbg!(&remaining);
             return search_thing_(self, line_number, remaining.as_str(), initial_thing);
         }
         return Ok(ftd::interpreter::StateWithThing::new_thing(initial_thing));
@@ -1391,15 +1414,15 @@ impl<'a> TDoc<'a> {
                     variants,
                     ..
                 }) => {
+                    dbg!(&or_type_name, &name, &v, &variants);
                     if let Some(thing) = variants.into_iter().find(|or_type_variant| {
-                        or_type_variant
-                            .name()
-                            .trim_start_matches(format!("{}.", or_type_name).as_str())
+                        let variant_name = dbg!(or_type_variant.name());
+                        name.eq(&v) || variant_name.trim_start_matches(format!("{}.", or_type_name).as_str())
                             .eq(&v)
                     }) {
                         // Todo: Handle remaining
                         ftd::interpreter::Thing::OrTypeWithVariant {
-                            or_type: or_type_name.to_string(),
+                            or_type: or_type_name,
                             variant: thing,
                         }
                     } else {
@@ -1454,6 +1477,8 @@ impl<'a> TDoc<'a> {
                 .map(|v| format!(".{}", v))
                 .unwrap_or_default()
         );
+
+        dbg!(&thing_name, &name);
 
         let state = if let Some(state) = {
             match &mut self.bag {
