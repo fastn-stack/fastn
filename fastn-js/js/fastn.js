@@ -337,6 +337,21 @@
         getAllFields() {
             return this.#fields;
         }
+        getClonedFields() {
+            let clonedFields = {};
+            for (let key in this.#fields) {
+                let field_value = this.#fields[key];
+                if (field_value instanceof fastn.recordInstanceClass
+                    || field_value instanceof fastn.mutableClass
+                    || field_value instanceof fastn.mutableListClass) {
+                    clonedFields[key] = this.#fields[key].getClone();
+                }
+                else {
+                    clonedFields[key] = this.#fields[key];
+                }
+            }
+            return clonedFields;
+        }
         addClosure(closure) {
             this.#closures.push(closure);
         }
