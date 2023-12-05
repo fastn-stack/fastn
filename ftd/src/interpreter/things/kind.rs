@@ -140,11 +140,11 @@ impl Kind {
     }
 
     pub fn or_type_with_variant(name: &str, variant: &str, full_variant: &str) -> Kind {
-        Kind::OrType {
+        dbg!(Kind::OrType {
             name: name.to_string(),
             variant: Some(variant.to_string()),
             full_variant: Some(full_variant.to_string()),
-        }
+        })
     }
 
     pub fn into_list(self) -> Kind {
@@ -267,6 +267,10 @@ impl Kind {
 
     pub fn is_or_type(&self) -> bool {
         matches!(self, Kind::OrType { .. })
+    }
+
+    pub fn is_or_type_with_variant(&self, or_type_name: &str, variant_name: &str) -> bool {
+        matches!(self, Kind::OrType { name, variant, .. } if name.eq(or_type_name) && variant.is_some() && variant.as_ref().unwrap().eq(variant_name))
     }
 
     pub fn is_string(&self) -> bool {

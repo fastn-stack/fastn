@@ -74,6 +74,22 @@ impl<'a> TDoc<'a> {
         }
     }
 
+    pub fn get_or_type(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<ftd::interpreter::OrType> {
+        match self.get_thing(name, line_number)? {
+            ftd::interpreter::Thing::OrType(ot) => Ok(ot),
+            t => self.err(
+                format!("Expected OrType, found: `{:?}`", t).as_str(),
+                name,
+                "get_or_type",
+                line_number,
+            ),
+        }
+    }
+
     pub fn search_record(
         &mut self,
         name: &str,
@@ -564,12 +580,27 @@ impl<'a> TDoc<'a> {
                             .caption_or_body(),
                         false,
                     ),
-                    ftd::interpreter::Thing::OrType(o) => (
-                        ftd::interpreter::Kind::or_type(o.name.as_str())
-                            .into_kind_data()
-                            .caption_or_body(),
-                        false,
-                    ),
+                    ftd::interpreter::Thing::OrType(o) => {
+                        if let Some(remaining) = &remaining {
+                            (
+                                ftd::interpreter::Kind::or_type_with_variant(
+                                    &o.name.as_str(),
+                                    remaining.as_str(),
+                                    format!("{}.{}", &o.name, remaining).as_str(),
+                                )
+                                .into_kind_data()
+                                .caption_or_body(),
+                                false,
+                            )
+                        } else {
+                            (
+                                ftd::interpreter::Kind::or_type(o.name.as_str())
+                                    .into_kind_data()
+                                    .caption_or_body(),
+                                false,
+                            )
+                        }
+                    },
                     ftd::interpreter::Thing::OrTypeWithVariant { or_type, variant } => (
                         ftd::interpreter::Kind::or_type_with_variant(
                             or_type.as_str(),
@@ -606,7 +637,7 @@ impl<'a> TDoc<'a> {
             };
 
         if let Some(remaining) = remaining {
-            if !initial_kind.is_module() {
+            if !initial_kind.is_module() && !initial_kind.kind.is_or_type_with_variant(&initial_kind.kind.get_name(), remaining.as_str()) {
                 return Ok(ftd::interpreter::StateWithThing::new_thing((
                     source,
                     try_ok_state!(get_kind_(
