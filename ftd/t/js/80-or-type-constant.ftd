@@ -1,0 +1,15 @@
+-- or-type button-type:
+
+-- constant integer small: 1
+
+-- constant integer medium: 2
+
+-- constant integer large: 3
+
+-- end: button-type
+
+
+-- button-type b: small
+
+-- ftd.text: !Smol
+text if { b == button-type.small }: Smol

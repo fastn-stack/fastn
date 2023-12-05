@@ -147,7 +147,7 @@ impl OrTypeVariant {
                 )?);
                 validate_constant_variant(&variant, doc)?;
                 Ok(ftd::interpreter::StateWithThing::new_thing(
-                    ftd::interpreter::OrTypeVariant::new_regular(variant),
+                    ftd::interpreter::OrTypeVariant::new_constant(variant),
                 ))
             }
         }

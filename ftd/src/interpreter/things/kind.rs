@@ -366,6 +366,7 @@ impl KindData {
         match modifier {
             ftd::ast::VariableModifier::Optional => self.optional(),
             ftd::ast::VariableModifier::List => self.list(),
+            ftd::ast::VariableModifier::Constant => self.constant(),
         }
     }
 
@@ -442,6 +443,7 @@ impl KindData {
                 ftd::interpreter::Thing::Component(_) => Kind::ui(),
                 ftd::interpreter::Thing::OrType(o) => Kind::or_type(o.name.as_str()),
                 ftd::interpreter::Thing::OrTypeWithVariant { or_type, variant } => {
+                    dbg!(&or_type, &variant);
                     Kind::or_type_with_variant(
                         or_type.as_str(),
                         variant.name().as_str(),
@@ -485,6 +487,16 @@ impl KindData {
     fn list(self) -> KindData {
         KindData {
             kind: Kind::List {
+                kind: Box::new(self.kind),
+            },
+            caption: self.caption,
+            body: self.body,
+        }
+    }
+
+    fn constant(self) -> KindData {
+        KindData {
+            kind: Kind::Constant {
                 kind: Box::new(self.kind),
             },
             caption: self.caption,
