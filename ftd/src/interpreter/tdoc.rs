@@ -1417,8 +1417,10 @@ impl<'a> TDoc<'a> {
                     dbg!(&or_type_name, &name, &v, &variants);
                     if let Some(thing) = variants.into_iter().find(|or_type_variant| {
                         let variant_name = dbg!(or_type_variant.name());
-                        name.eq(&v) || variant_name.trim_start_matches(format!("{}.", or_type_name).as_str())
-                            .eq(&v)
+                        name.eq(&v)
+                            || variant_name
+                                .trim_start_matches(format!("{}.", or_type_name).as_str())
+                                .eq(&v)
                     }) {
                         // Todo: Handle remaining
                         ftd::interpreter::Thing::OrTypeWithVariant {
