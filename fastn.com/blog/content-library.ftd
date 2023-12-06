@@ -58,7 +58,7 @@ Suppose I want to incorporate this component into my landing page; I would use t
 -- ds.code:
 lang:ftd
 
-\-- import: fastn.com/content-library
+\-- import: fastn.com/content-library as cl
 
 \-- cl.get-started:
 
