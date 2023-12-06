@@ -51,7 +51,7 @@ Discover my step-by-step process in building this website with fastn in the
 video below:
 
 /-- ds.youtube:
-/v: 
+v: 
 
 -- ds.h2: A walkthrough on the files and folders in this template
 
@@ -63,7 +63,7 @@ and their corresponding URLs.
 -- ds.code:
 lang: ftd 
 
-/-- fastn.sitemap:
+\-- fastn.sitemap:
 
 # Home: index.html
 icon: assets/home.svg
@@ -91,7 +91,7 @@ lang: ftd
 
 \-- fastn.sitemap:
 
-\# Section: <url>
+# Section: <url>
 
 -- ds.markdown: 
 
