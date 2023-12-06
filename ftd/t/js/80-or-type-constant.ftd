@@ -11,5 +11,13 @@
 
 -- button-type b: small
 
+-- fancy-button: $b
+
+-- component fancy-button:
+caption button-type bt:
+
 -- ftd.text: !Smol
-text if { b == small }: Smol
+text if { fancy-button.bt == small }: Smol
+border-style: solid
+
+-- end: fancy-button

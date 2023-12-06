@@ -347,11 +347,10 @@ impl ftd::interpreter::Value {
                 name,
                 value,
                 full_variant,
-                variant,
+                ..
             } => {
-                dbg!(&full_variant, &variant);
                 let (js_variant, has_value) =
-                    ftd_to_js_variant(name, full_variant, value, &doc.name, value.line_number());
+                    ftd_to_js_variant(name, full_variant, value, doc.name, value.line_number());
                 if has_value {
                     return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                         variant: js_variant,
@@ -417,15 +416,14 @@ impl ftd::interpreter::Value {
 fn ftd_to_js_variant(
     name: &str,
     full_variant: &str,
-    value: &Box<ftd::interpreter::PropertyValue>,
+    value: &ftd::interpreter::PropertyValue,
     doc_id: &str,
     line_number: usize,
 ) -> (String, bool) {
     // returns (JSVariant, has_value)
-    dbg!(value);
     let variant = full_variant
         .strip_prefix(format!("{}.", name).as_str())
-        .unwrap_or(&full_variant);
+        .unwrap_or(full_variant);
     match name {
         "ftd#resizing" => {
             let js_variant = resizing_variants(variant);

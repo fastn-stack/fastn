@@ -584,7 +584,7 @@ impl<'a> TDoc<'a> {
                         if let Some(remaining) = &remaining {
                             (
                                 ftd::interpreter::Kind::or_type_with_variant(
-                                    &o.name.as_str(),
+                                    o.name.as_str(),
                                     remaining.as_str(),
                                     format!("{}.{}", &o.name, remaining).as_str(),
                                 )
@@ -669,7 +669,6 @@ impl<'a> TDoc<'a> {
         ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::KindData>>
         {
             let (v, remaining) = ftd::interpreter::utils::split_at(name, ".");
-            dbg!(&kind);
             match kind {
                 ftd::interpreter::Kind::Record { name: rec_name } => {
                     let record = try_ok_state!(doc.search_record(rec_name.as_str(), line_number)?);
@@ -1317,7 +1316,6 @@ impl<'a> TDoc<'a> {
             try_ok_state!(self.search_initial_thing(name, line_number)?);
 
         if let Some(remaining) = remaining {
-            dbg!(&remaining);
             return search_thing_(self, line_number, remaining.as_str(), initial_thing);
         }
         return Ok(ftd::interpreter::StateWithThing::new_thing(initial_thing));
@@ -1449,9 +1447,8 @@ impl<'a> TDoc<'a> {
                     variants,
                     ..
                 }) => {
-                    dbg!(&or_type_name, &name, &v, &variants);
                     if let Some(thing) = variants.into_iter().find(|or_type_variant| {
-                        let variant_name = dbg!(or_type_variant.name());
+                        let variant_name = or_type_variant.name();
                         name.eq(&v)
                             || variant_name
                                 .trim_start_matches(format!("{}.", or_type_name).as_str())
@@ -1514,8 +1511,6 @@ impl<'a> TDoc<'a> {
                 .map(|v| format!(".{}", v))
                 .unwrap_or_default()
         );
-
-        dbg!(&thing_name, &name);
 
         let state = if let Some(state) = {
             match &mut self.bag {
