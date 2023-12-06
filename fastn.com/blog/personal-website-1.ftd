@@ -10,10 +10,10 @@ post-url: /blog/personal-website-1/
 author: $authors.nandini
 
 Today, I’m excited to share my journey of creating my personal website using 
-`fastn`. I'm a freelance content writer, and [my existing website](https://www.canva.com/design/DAFbReZ9W-8/UC3KC6uGXfx_vRCnohjdFA/view?website#2), 
-built on Canva, felt more like scrolling through a series of slides than a 
-professional website. It lacked vital elements like a navigation bar, blog page, 
-and a contact form. 
+`fastn`. As a content writer, a professional-looking website is vital for my business. 
+Previously, I used Canva to build [my website](https://www.canva.com/design/DAFbReZ9W-8/UC3KC6uGXfx_vRCnohjdFA/view?website#2), 
+but in hindsight, it felt more like scrolling through slides. Furthermore, it lacked 
+essential components such as a navigation bar, blog page, and a contact form. 
 
 
 -- ds.blog-page:
@@ -86,7 +86,7 @@ icon: assets/contact.png
 
 -- note.note: Tip: Using `#` helps create sections on your website. 
 
--- ds.code:
+-- ds.code: Example
 lang: ftd 
 
 \-- fastn.sitemap:
@@ -152,7 +152,7 @@ copyright: © 2023 copyright all right reserved
 
 I appreciate the minimal syntax of fastn. Notice how clean and straightforward 
 the code of this page appears. Every content component used here is neatly 
-outlined within the `common` folder. Scroll down beyond `-- end: page`, and 
+outlined within the `common` folder. Scroll down beyond `- - end: page`, and 
 you'll discover the code detailing the layout and design of each component.
 
 -- ds.h3: [**`assets`**](https://github.com/fastn-community/saurabh-portfolio/tree/main/assets) folder
@@ -182,9 +182,9 @@ Here are a few prerequisites to get started with a fastn template.
 
 -- ds.markdown:
 
-To create your copy of the template, click `fork repository`. If you are like 
+To create a copy of the template, click `fork repository`. If you are like 
 me and already have fastn, GitHub desktop, and a text editor installed, simply 
-copy the HTTPS URL of the template. Then, go to your GitHub desktop, clone the 
+copy the `HTTPS URL` of the template. Then, go to your GitHub desktop, clone the 
 repository, and choose where to save it on your local system.
 
 An alternative way to use the template is by utilizing GitHub Pages to host 
@@ -193,8 +193,8 @@ your built assets. Follow the steps detailed in this guide
 
 -- ds.h2: Step 2: Adding Assets
 
-Open the assets folder and start adding images, icons, and other graphical 
-elements intended for your website. 
+I added all my images, icons, and other graphical 
+elements intended for my website in the assets folder.
 
 -- note.note: When saving graphics, remember to use lower-cased file names, and use hyphens instead of space.
 
@@ -202,8 +202,8 @@ Example: `Profile Picture.png` is incorrect, instead use `profile-picture.png`.
 
 -- ds.h2: Step 3: Editing the Template
 
-I opened the template folder on the text editor. Began by editing the `index.ftd` 
-file and moved to the `common.ftd` file.
+I opened the template folder on the text editor. I use Sublime Text Editor, you can use any text editor of your choice. 
+Later I began editing the `index.ftd` file and moved to the `common.ftd` file.
 
 -- ds.h3: Editing the `index.ftd` file
 
@@ -212,7 +212,7 @@ file and moved to the `common.ftd` file.
 Example: 
 
 - `Docs` section
-- `-- info-list:` from the `-- about-me-info:` section.
+- ` - - info-list:` from the ` - - about-me-info:` section.
 - `My Skills` section
 - Addresses in the contact form
 - Social Links like Facebook, Twitter and Instagram.
@@ -232,13 +232,16 @@ cta-primary-link: /#latest-works
 cta-secondary: Book a Meeting
 cta-secondary-link: https://calendly.com/nandhini-copywriter/discovery-call/
 
--- ds.markdown:
-
 If you're someone who doesn't just sell stuff but rallies behind 
 a cause, I'll whip up words that'll click with your audience and 
 turn them into full-on cheerleaders for the planet and your business.
 
--- ds.h3: Editing the index.ftd file in the common folder
+-- ds.markdown:
+
+Here is the edited [`index.ftd`](https://github.com/nandhinidevie/portfoliodemo/blob/main/index.ftd) 
+file of my website.
+
+-- ds.h3: Editing the `index.ftd` file in the `common` folder
 
 I just replaced and edited text and graphics in the sections as required. 
 Removed any unnecessary sections and duplicated components if I wanted to add a 
@@ -275,6 +278,8 @@ molestiae quas vel sint
 \-- end: testimonials
 
 -- ds.markdown:
+
+Here is the edited [`index.ftd`](https://github.com/nandhinidevie/portfoliodemo/blob/main/common/index.ftd) file in the common folder. 
 
 Once I made all the changes, I previewed my site locally. You can also 
 [publish it on GitHub](https://fastn.com/github-pages/)
