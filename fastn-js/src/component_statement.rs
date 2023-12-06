@@ -35,9 +35,7 @@ impl ComponentStatement {
             ComponentStatement::RecordInstance(record_instance) => {
                 Some(record_instance.name.clone())
             }
-            ComponentStatement::OrType(or_type) => {
-                Some(or_type.name.clone())
-            }
+            ComponentStatement::OrType(or_type) => Some(or_type.name.clone()),
             ComponentStatement::MutableList(mutable_list) => Some(mutable_list.name.clone()),
             _ => None,
         }

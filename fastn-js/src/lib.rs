@@ -10,9 +10,9 @@ mod device;
 mod event;
 mod loop_component;
 mod mutable_variable;
+mod or_type;
 mod property;
 mod record;
-mod or_type;
 mod ssr;
 mod static_variable;
 mod to_js;
@@ -32,11 +32,11 @@ pub use device::{DeviceBlock, DeviceType};
 pub use event::{Event, EventHandler, Function, FunctionData};
 pub use loop_component::ForLoop;
 pub use mutable_variable::{mutable_integer, mutable_string, MutableList, MutableVariable};
+pub use or_type::OrType;
 pub use property::{
     ConditionalValue, Formula, FormulaType, PropertyKind, SetProperty, SetPropertyValue, Value,
 };
 pub use record::RecordInstance;
-pub use or_type::OrType;
 pub use ssr::{ssr, ssr_str, ssr_with_js_string};
 pub use static_variable::{static_integer, static_string, StaticVariable};
 pub use to_js::to_js;
