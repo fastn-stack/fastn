@@ -140,11 +140,11 @@ impl Kind {
     }
 
     pub fn or_type_with_variant(name: &str, variant: &str, full_variant: &str) -> Kind {
-        dbg!(Kind::OrType {
+        Kind::OrType {
             name: name.to_string(),
             variant: Some(variant.to_string()),
             full_variant: Some(full_variant.to_string()),
-        })
+        }
     }
 
     pub fn into_list(self) -> Kind {
@@ -447,7 +447,6 @@ impl KindData {
                 ftd::interpreter::Thing::Component(_) => Kind::ui(),
                 ftd::interpreter::Thing::OrType(o) => Kind::or_type(o.name.as_str()),
                 ftd::interpreter::Thing::OrTypeWithVariant { or_type, variant } => {
-                    dbg!(&or_type, &variant);
                     Kind::or_type_with_variant(
                         or_type.as_str(),
                         variant.name().as_str(),
