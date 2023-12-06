@@ -652,7 +652,7 @@ async fn actual_route(
         ("get", "/-/clone/") if cfg!(feature = "remote") => clone(config).await,
         ("get", t) if t.starts_with("/-/view-src/") => view_source(config, req).await,
         ("get", t) if t.starts_with("/-/edit-src/") => edit_source(config, req).await,
-        ("get", t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
+        (_, t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
         ("post", "/-/edit/") => edit(config, req).await,
         ("post", "/-/revert/") => revert(config, req).await,
         ("get", "/-/editor-sync/") => editor_sync(config).await,

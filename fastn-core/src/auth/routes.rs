@@ -45,6 +45,21 @@ pub async fn handle_auth(
         // TODO: This has be set while creating the GitHub OAuth Application
         "/-/auth/github/" => fastn_core::auth::github::callback(&req, next).await,
         "/-/auth/logout/" => logout(&req, next),
+
+        "/-/auth/create-user/" => fastn_core::auth::emailpassword::create_user(&req).await,
+
+        // "/-/auth/resend-confirmation-email/" => todo!("confirm-email"),
+        // "/-/auth/login/?next=/" => todo!(),
+        // "/-/auth/send-email-login-code/" => todo!(),
+        // "/-/auth/logout/?next=/" => todo!(),
+        // "/-/auth/confirm-email/?code=<>" => todo!(),
+        // "/-/auth/add-email/" => todo!(),
+        // "/-/auth/update-name/" => todo!(),
+        // "/-/auth/update-password/" => todo!(),
+        // "/-/auth/update-username/" => todo!(),
+        // "/-/auth/update-email/" => todo!(),
+        // "/-/auth/disable-account/" => todo!(),
+        // "/-/auth/close-sessions/?session=<session-id|all>" => todo!(),
         _ => Ok(fastn_core::not_found!("route not found: {}", req.path())),
     }
 }

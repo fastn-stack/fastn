@@ -2,6 +2,8 @@ pub(crate) mod config;
 pub(crate) mod github;
 pub(crate) mod routes;
 
+mod emailpassword;
+
 mod utils;
 
 pub use utils::{decrypt, encrypt};
