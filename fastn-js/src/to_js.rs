@@ -641,7 +641,6 @@ impl fastn_js::RecordInstance {
     }
 }
 
-
 impl fastn_js::OrType {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         variable_to_js(

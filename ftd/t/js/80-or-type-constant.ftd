@@ -12,4 +12,4 @@
 -- button-type b: small
 
 -- ftd.text: !Smol
-text if { b == button-type.small }: Smol
+text if { b == small }: Smol

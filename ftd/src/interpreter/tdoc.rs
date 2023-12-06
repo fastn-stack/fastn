@@ -600,7 +600,7 @@ impl<'a> TDoc<'a> {
                                 false,
                             )
                         }
-                    },
+                    }
                     ftd::interpreter::Thing::OrTypeWithVariant { or_type, variant } => (
                         ftd::interpreter::Kind::or_type_with_variant(
                             or_type.as_str(),
@@ -637,7 +637,11 @@ impl<'a> TDoc<'a> {
             };
 
         if let Some(remaining) = remaining {
-            if !initial_kind.is_module() && !initial_kind.kind.is_or_type_with_variant(&initial_kind.kind.get_name(), remaining.as_str()) {
+            if !initial_kind.is_module()
+                && !initial_kind
+                    .kind
+                    .is_or_type_with_variant(&initial_kind.kind.get_name(), remaining.as_str())
+            {
                 return Ok(ftd::interpreter::StateWithThing::new_thing((
                     source,
                     try_ok_state!(get_kind_(

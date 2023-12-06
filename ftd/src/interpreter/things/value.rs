@@ -1,3 +1,5 @@
+use std::ops::Deref;
+
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum PropertyValue {
     Value {
@@ -1551,19 +1553,24 @@ impl Value {
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::Map<PropertyValue>> {
         match self {
-            t @ Self::OrType { value, .. } => {
-                if let ftd::interpreter::Value::Record { fields, .. } =
-                    value.clone().resolve(doc, line_number)?
-                {
-                    Ok(fields)
-                } else {
-                    ftd::interpreter::utils::e2(
+            t @ Self::OrType { value, .. } => match value.clone().resolve(doc, line_number)? {
+                ftd::interpreter::Value::Record { fields, .. } => Ok(fields),
+                ftd::interpreter::Value::OrType { variant, value, .. } => {
+                    let mut r: std::collections::BTreeMap<String, PropertyValue> =
+                        std::collections::BTreeMap::new();
+
+                    r.insert(variant, value.deref().clone());
+
+                    Ok(r)
+                }
+                _ => {
+                    return ftd::interpreter::utils::e2(
                         format!("Expected record variant for or-type, found: `{:?}`", t),
                         doc.name,
                         line_number,
                     )
                 }
-            }
+            },
             t => ftd::interpreter::utils::e2(
                 format!("Expected or-type, found: `{:?}`", t),
                 doc.name,
