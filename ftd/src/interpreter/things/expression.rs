@@ -128,10 +128,10 @@ impl Expression {
 
                             match v {
                                 ftd::interpreter::StateWithThing::Thing(thing) => {
-                                    if thing.kind().eq(&infer_from_value.kind()) {
+                                    if thing.kind().inner().eq(&infer_from_value.kind().inner()) {
                                         ftd::interpreter::StateWithThing::new_thing(thing)
                                     } else {
-                                        return ftd::interpreter::utils::e2(format!("Invalid value on the right-hand side. Expected \"{}\" but found \"{}\".", infer_from_value.kind().get_name(), thing.kind().get_name()), doc.name, line_number);
+                                        return ftd::interpreter::utils::e2(format!("Invalid value on the right-hand side. Expected \"{}\" but found \"{}\".", infer_from_value.kind().inner().get_name(), thing.kind().inner().get_name()), doc.name, line_number);
                                     }
                                 }
                                 t => t,
