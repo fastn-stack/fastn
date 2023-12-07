@@ -24,7 +24,7 @@
 	.__w-3 { width: 20px; }
 	.__w-4 { width: 30px; }
 	.__w-5 { width: 20px; }
-	.__w-6 { width: fit-content; }
+	.__w-6 { width: 100%; }
 	.__cur-7 { cursor: pointer; }
 	.__w-8 { width: 40%; }
 	.__bgc-9 { background-color: yellow; }
@@ -46,7 +46,7 @@
     parenti2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(20)), inherited);
     let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
     parenti3.setProperty(fastn_dom.PropertyKind.StringValue, "fill-container", inherited);
-    parenti3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.HugContent, inherited);
+    parenti3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
     let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
     parenti4.setProperty(fastn_dom.PropertyKind.StringValue, "Click me", inherited);
     parenti4.addEventHandler(fastn_dom.Event.Click, function () {
