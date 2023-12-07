@@ -18,16 +18,9 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="__w-3">Hello</div><div data-id="4" class="__w-4">Hello 30</div><div data-id="5" class="__w-5">Hello 20</div><div data-id="6" class="__w-6">fill-container</div><div data-id="7" class="__cur-7 __w-8 __bgc-9">Click me</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3">Smol</div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
-	.__w-3 { width: 20px; }
-	.__w-4 { width: 30px; }
-	.__w-5 { width: 20px; }
-	.__w-6 { width: fit-content; }
-	.__cur-7 { cursor: pointer; }
-	.__w-8 { width: 40%; }
-	.__bgc-9 { background-color: yellow; }
     </style>
 <script>
     (function() {
@@ -35,45 +28,47 @@
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(20)), inherited);
-    let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "Hello 30", inherited);
-    parenti1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(30)), inherited);
-    let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Hello 20", inherited);
-    parenti2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(20)), inherited);
-    let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti3.setProperty(fastn_dom.PropertyKind.StringValue, "fill-container", inherited);
-    parenti3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.HugContent, inherited);
-    let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti4.setProperty(fastn_dom.PropertyKind.StringValue, "Click me", inherited);
-    parenti4.addEventHandler(fastn_dom.Event.Click, function () {
-      ftd.toggle({
-        a: global.foo__flag,
-      }, parenti4);
+    let parenti0 = foo__fancy_button(parent, inherited, {
+      bt: global.foo__b
     });
-    parenti4.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([global.foo__flag], function () {
-      if (function () {
-        return fastn_utils.getter(global.foo__flag);
-      }()) {
-        return fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(40));
-      } else {
-        return fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(10));
-      }
-    }
-    ), inherited);
-    parenti4.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "yellow",
-      light: "yellow"
-    })), inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "foo__flag", fastn.mutable(true));
+fastn_utils.createNestedObject(global, "foo__button_type", fastn.recordInstance({
+  small: 1,
+  medium: 2,
+  large: 3
+}));
+let foo__fancy_button = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([__args__.bt,
+    global.foo__button_type.get("small")], function () {
+      if (function () {
+        return (fastn_utils.getter(__args__.bt) == fastn_utils.getter(global.foo__button_type.get("small")));
+      }()) {
+        return "Smol";
+      } else {
+        return "!Smol";
+      }
+    }
+    ), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__fancy_button"] = foo__fancy_button;
+fastn_utils.createNestedObject(global, "foo__b", 1);
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

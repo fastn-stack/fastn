@@ -1,0 +1,54 @@
+[
+  {
+    "component-invocation": {
+      "name": "ftd.column",
+      "properties": [
+        {
+          "value": {
+            "string-value": {
+              "value": "20",
+              "line-number": 2,
+              "source": "Default"
+            }
+          },
+          "source": {
+            "header": {
+              "name": "spacing.fixed.px",
+              "mutable": false
+            }
+          },
+          "condition": null,
+          "line-number": 2
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [
+        {
+          "name": "ftd.text",
+          "properties": [
+            {
+              "value": {
+                "string-value": {
+                  "value": "Hello",
+                  "line-number": 4,
+                  "source": "Default"
+                }
+              },
+              "source": "Caption",
+              "condition": null,
+              "line-number": 4
+            }
+          ],
+          "iteration": null,
+          "condition": null,
+          "events": [],
+          "children": [],
+          "line-number": 4
+        }
+      ],
+      "line-number": 1
+    }
+  }
+]

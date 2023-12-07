@@ -884,12 +884,13 @@ impl PropertyValue {
                 ftd::interpreter::Kind::OrType { name, variant, .. } => {
                     let or_type = try_ok_state!(doc.search_or_type(name, value.line_number())?);
                     let line_number = value.line_number();
+                    dbg!(&or_type.name, &variant);
                     if let Some(variant_name) = variant {
                         let variant = or_type
                             .variants
                             .into_iter()
                             .find(|v| {
-                                v.name().eq(variant_name)
+                                dbg!(v.name()).eq(variant_name)
                                     || variant_name.starts_with(format!("{}.", v.name()).as_str())
                             })
                             .ok_or(ftd::interpreter::Error::ParseError {
@@ -901,49 +902,49 @@ impl PropertyValue {
                                 line_number: value.line_number(),
                             })?;
                         let value = match &variant {
-                        ftd::interpreter::OrTypeVariant::Constant(c) => return ftd::interpreter::utils::e2(format!("Cannot pass constant variant as property, variant: `{}`. Help: Pass variant as value instead", c.name), doc.name, c.line_number),
-                        ftd::interpreter::OrTypeVariant::AnonymousRecord(record) => try_ok_state!(ftd::interpreter::PropertyValue::from_record(
-                            record,
-                            value,
-                            doc,
-                            is_mutable,
-                            expected_kind,
-                            definition_name_with_arguments,
-                            loop_object_name_and_kind,
-                        )?),
-                        ftd::interpreter::OrTypeVariant::Regular(regular) => {
-                            let variant_name = variant_name.trim_start_matches(format!("{}.", variant.name()).as_str()).trim().to_string();
-                            let kind = if regular.kind.kind.ref_inner().is_or_type() && !variant_name.is_empty() {
-                                let (name, variant, _full_variant) = regular.kind.kind.get_or_type().unwrap();
-                                let variant_name = format!("{}.{}", name, variant_name);
-                                ftd::interpreter::Kind::or_type_with_variant(name.as_str(), variant.unwrap_or_else(|| variant_name.clone()).as_str(), variant_name.as_str()).into_kind_data()
-                            } else {
-                                regular.kind.to_owned()
-                            };
+                    ftd::interpreter::OrTypeVariant::Constant(c) => return ftd::interpreter::utils::e2(format!("Cannot pass constant variant as property, variant: `{}`. Help: Pass variant as value instead", c.name), doc.name, c.line_number),
+                    ftd::interpreter::OrTypeVariant::AnonymousRecord(record) => try_ok_state!(ftd::interpreter::PropertyValue::from_record(
+                        record,
+                        value,
+                        doc,
+                        is_mutable,
+                        expected_kind,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                    )?),
+                    ftd::interpreter::OrTypeVariant::Regular(regular) => {
+                        let variant_name = variant_name.trim_start_matches(format!("{}.", variant.name()).as_str()).trim().to_string();
+                        let kind = if regular.kind.kind.ref_inner().is_or_type() && !variant_name.is_empty() {
+                            let (name, variant, _full_variant) = regular.kind.kind.get_or_type().unwrap();
+                            let variant_name = format!("{}.{}", name, variant_name);
+                            ftd::interpreter::Kind::or_type_with_variant(name.as_str(), variant.unwrap_or_else(|| variant_name.clone()).as_str(), variant_name.as_str()).into_kind_data()
+                        } else {
+                            regular.kind.to_owned()
+                        };
 
-                            /*try_ok_state!(
-                                ftd::interpreter::PropertyValue::value_from_ast_value(
-                                    value,
-                                    doc,
-                                    is_mutable,
-                                    Some(&kind),
-                                    definition_name_with_arguments,
-                                    loop_object_name_and_kind
-                                )?
-                            );*/
+                        /*try_ok_state!(
+                            ftd::interpreter::PropertyValue::value_from_ast_value(
+                                value,
+                                doc,
+                                is_mutable,
+                                Some(&kind),
+                                definition_name_with_arguments,
+                                loop_object_name_and_kind
+                            )?
+                        );*/
 
-                            try_ok_state!(
-                                ftd::interpreter::PropertyValue::from_ast_value_with_argument(
-                                    value,
-                                    doc,
-                                    is_mutable,
-                                    Some(&kind),
-                                    definition_name_with_arguments,
-                                    loop_object_name_and_kind
-                                )?
-                            )
-                        }
-                    };
+                        try_ok_state!(
+                            ftd::interpreter::PropertyValue::from_ast_value_with_argument(
+                                value,
+                                doc,
+                                is_mutable,
+                                Some(&kind),
+                                definition_name_with_arguments,
+                                loop_object_name_and_kind
+                            )?
+                        )
+                    }
+                };
                         ftd::interpreter::StateWithThing::new_thing(
                             ftd::interpreter::Value::new_or_type(
                                 name,
