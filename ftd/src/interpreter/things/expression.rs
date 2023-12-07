@@ -122,7 +122,23 @@ impl Expression {
                     definition_name_with_arguments,
                     loop_object_name_and_kind,
                 ) {
-                    Ok(v) => v,
+                    Ok(v) =>
+                        if let Some(infer_from) = variable.infer_from {
+                            let infer_from_value = result.get(&infer_from.value).unwrap();
+
+                            match v {
+                                ftd::interpreter::StateWithThing::Thing(thing) => {
+                                    if thing.kind().eq(&infer_from_value.kind()) {
+                                        ftd::interpreter::StateWithThing::new_thing(thing)
+                                    } else {
+                                        return ftd::interpreter::utils::e2(format!("Invalid value on the right-hand side. Expected \"{}\" but found \"{}\".", infer_from_value.kind().get_name(), thing.kind().get_name()), doc.name, line_number);
+                                    }
+                                }
+                                t => t,
+                            }
+                        } else {
+                            v
+                        },
                     Err(e) => {
                         if let Some(infer_from) = variable.infer_from {
                             let infer_from_value = result.get(&infer_from.value).unwrap();
