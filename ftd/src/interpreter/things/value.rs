@@ -884,13 +884,12 @@ impl PropertyValue {
                 ftd::interpreter::Kind::OrType { name, variant, .. } => {
                     let or_type = try_ok_state!(doc.search_or_type(name, value.line_number())?);
                     let line_number = value.line_number();
-                    dbg!(&or_type.name, &variant);
                     if let Some(variant_name) = variant {
                         let variant = or_type
                             .variants
                             .into_iter()
                             .find(|v| {
-                                dbg!(v.name()).eq(variant_name)
+                                v.name().eq(variant_name)
                                     || variant_name.starts_with(format!("{}.", v.name()).as_str())
                             })
                             .ok_or(ftd::interpreter::Error::ParseError {
