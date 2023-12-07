@@ -1,0 +1,6 @@
+-- ftd.column:
+spacing.fixed.px: 20
+
+-- ftd.text: Hello
+
+-- end: ftd.column
