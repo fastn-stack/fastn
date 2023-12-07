@@ -11,6 +11,15 @@
 
 -- button-type b: small
 
+;; A variable with the same name as a variant of a button type
+;; if we comment this out, the value of "small" will be inferred from the right-hand side or-type
+-- integer small: 2
+
+;; Since the specificity of a variable is higher, the value of the variable will be used
+;; and !smol will be printed
+-- ftd.text: !Smol
+text if { b == small }: Smol
+
 -- fancy-button: $b
 
 -- component fancy-button:
