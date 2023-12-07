@@ -16,7 +16,7 @@
 -- button-type small: small
 
 ;; Since the specificity of a variable is higher, the value of the variable will be used
-;; and !smol will be printed
+;; and smol will be printed
 -- ftd.text: !Smol
 text if { b == small }: Smol
 
