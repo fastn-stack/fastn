@@ -577,9 +577,7 @@ fn ftd_to_js_variant(
                 return match value {
                     ftd::interpreter::Value::Integer { value } => (value.to_string(), false),
                     ftd::interpreter::Value::Decimal { value } => (value.to_string(), false),
-                    ftd::interpreter::Value::String { text } => {
-                        (format!("\"{}\"", text), false)
-                    }
+                    ftd::interpreter::Value::String { text } => (format!("\"{}\"", text), false),
                     ftd::interpreter::Value::Boolean { value } => (value.to_string(), false),
                     _ => todo!("{} {}", t, variant),
                 };
