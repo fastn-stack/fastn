@@ -220,9 +220,9 @@ const ftd = (function() {
                             if (Array.isArray(value)) {
                                 // django returns a list of strings
                                 value = value.join(" ");
-                                // also django does not append `-error`
-                                key = key + "-error";
                             }
+                            // also django does not append `-error`
+                            key = key + "-error";
                             key = fastn_module + "#" + key;
                             data[key] = value;
                         }
