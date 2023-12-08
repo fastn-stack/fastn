@@ -37,8 +37,8 @@ testimonial-data list testimonials:
 -- ftd.column:
 width: fill-container
 align-content: center
-padding-vertical.px: 100
-padding-horizontal.px if { ftd.device == "mobile" }: 20
+padding-vertical.px: 24
+padding-horizontal.px: 18
 background.solid: $inherited.colors.background.step-2
 
 -- ftd.column:
@@ -70,7 +70,7 @@ $testimonials.body
 -- ftd.row:
 width: fill-container
 wrap: true
-spacing.fixed.px: 50
+spacing.fixed.px: 24
 margin-top.px: 50
 
 -- testimonial-card-1: $obj.title
@@ -105,7 +105,7 @@ ftd.image-src src:
 
 -- ftd.row:
 background.solid: $inherited.colors.background.base
-width.fixed.px: 540
+width.fixed.px: 400
 padding.px: 20
 spacing.fixed.px: 25
 
@@ -116,6 +116,8 @@ height.fixed.px: 120
 border-top-left-radius.percent: 50
 border-bottom-left-radius.percent: 50
 border-bottom-right-radius.percent: 50
+fit: cover
+align-self: center
 
 -- ftd.column:
 width: fill-container
