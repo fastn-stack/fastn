@@ -25,43 +25,6 @@ $processor$: pr.full-sitemap
 
 
 
--- record testimonial:
-caption title:
-body body:
-string designation:
-ftd.image-src src:
-
--- testimonial list testimonials:
-
--- testimonial: Nancy Bayers
-designation: Co-Founder
-src: $fastn-assets.files.images.blog.testimonial-1.jpeg
-
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-molestiae quas vel sint 
-
--- testimonial: Daniya Jacob
-designation: Co-Founder
-src: $fastn-assets.files.images.blog.testimonial-2.jpeg
-
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-molestiae quas vel sint
-
--- testimonial: Kavya Dominic
-designation: Owner
-src: $fastn-assets.files.images.blog.testimonial-3.jpeg
-
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-molestiae quas vel sint
-
--- end: testimonials
-
-
-
-
-
-
-
 
 
 
@@ -80,7 +43,7 @@ background.solid: $inherited.colors.background.step-2
 
 -- ftd.column:
 width: fill-container
-max-width.fixed.px: $common.max-width
+max-width.fixed.px: $max-width
 
 -- ftd.text: $testimonials.title
 if: { testimonials.title != NULL }
@@ -5423,3 +5386,44 @@ $processor$: pr.toc
 
 -- pr.sitemap-data footer-links:
 $processor$: fastn.sitemap
+
+
+
+
+
+
+
+
+
+
+
+-- record testimonial:
+caption title:
+body body:
+string designation:
+ftd.image-src src:
+
+-- testimonial list testimonials:
+
+-- testimonial: Nancy Bayers
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-1.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint 
+
+-- testimonial: Daniya Jacob
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-2.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+-- testimonial: Kavya Dominic
+designation: Owner
+src: $fastn-assets.files.images.blog.testimonial-3.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+-- end: testimonials
