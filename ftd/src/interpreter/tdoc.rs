@@ -688,27 +688,6 @@ impl<'a> TDoc<'a> {
                         ))
                     }
                 }
-                // ftd::interpreter::Kind::OrType { name, variant, .. } => {
-                //     let or_type = try_ok_state!(doc.search_or_type(name.as_str(), value.line_number())?);
-                //     let line_number = value.line_number();
-                //     if let Some(variant_name) = variant {
-                //         let variant = or_type
-                //             .variants
-                //             .into_iter()
-                //             .find(|v| {
-                //                 v.name().eq(variant_name.as_str())
-                //                     || variant_name.starts_with(format!("{}.", v.name()).as_str())
-                //             })
-                //             .ok_or(ftd::interpreter::Error::ParseError {
-                //                 message: format!(
-                //                     "Expected variant `{}` in or-type `{}`",
-                //                     variant_name, name
-                //                 ),
-                //                 doc_id: doc.name.to_string(),
-                //                 line_number: value.line_number(),
-                //             })?;
-                //     }
-                // }
                 ftd::interpreter::Kind::Optional { kind } => {
                     let state_with_thing = get_kind_(*kind, name, doc, line_number)?;
                     if let ftd::interpreter::StateWithThing::Thing(ref t) = state_with_thing {
