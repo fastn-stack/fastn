@@ -18,7 +18,6 @@
 
 -- ds.posts:
 
-
 -- ds.without-image-half:
 post-data: $domain-components.meta
 
