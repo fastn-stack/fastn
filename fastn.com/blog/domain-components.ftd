@@ -1,5 +1,6 @@
 -- import: fastn.com/blog/authors
 -- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/content-library as cl
 
 -- common.post-meta meta: Create domain-driven documentation for structured data and versatility
 published-on: November 24, 2023
@@ -8,39 +9,77 @@ author: $authors.nandini
 
 Are you someone who often grapples with the repetition of content? 
 Struggling to maintain a consistent design across various pages or 
-sections on websites? Tired of copy-pasting content and mismatched designs? 
+sections on websites? Or perhaps you're tired of copy-pasting content
+and the inconsistencies in design that follow?
 
 Let's dive into a relatable scenario: Imagine you want to showcase 
-customer testimonials — the fundamental part of any business site. 
-Each testimonial requires a name, a title, image and an impactful 
-quote. 
-
-However, maintaining uniformity across these testimonials is 
-a challenge. Plus, if you're working on multiple pages, duplicating 
-them becomes tedious because modifying one data turns into an 
-avalanche of updates across all the pages. The Solution...
+customer testimonials on your website. Each testimonial requires a name, 
+a title, image and a quote. Each testimonial needs a name, title, image, 
+and quote, neatly arranged within the page layout, adhering to the 
+page's color scheme and typography.
 
 -- ds.blog-page: 
 meta: $meta
 
--- ds.h1: Domain driven documentation in fastn
+-- ds.markdown: 
 
-With components created at domain level, you get to build content-specific pieces, 
-keeping all the unique stuff about each content type neatly packed together. 
+One way to achieve this is by recording the necessary values for each 
+testimonial, such as the name, designation, quote, and image. 
+Below is an example:
 
-For example, you can create a testimonial card component at the domain level, 
-consolidating the structured data required for testimonials. It ensures 
-that every testimonial instance maintains a consistent layout and 
-content format, erasing the headache of replicating or managing individual 
-testimonial sections across numerous pages. 
+-- ds.code:
+lang: ftd
 
-Consider the below testimonial card component and its code:
+\-- record testimonial: ;; <hl>
+caption title:
+body body:
+string designation:
+ftd.image-src src:
 
--- testimonials:
-testimonials: $testimonials
+\-- testimonial list testimonials: ;; <hl>
 
--- ds.code: 
-lang: ftd 
+\-- testimonial: Nancy Bayers
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-1.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint 
+
+\-- testimonial: Daniya Jacob
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-2.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+\-- end: testimonials ;; <hl>
+
+
+-- ds.markdown: 
+
+Following that, you'd define the testimonial and individual testimonial card components, 
+which will look like:
+
+-- ds.code:
+lang: ftd
+
+\-- component testimonials: ;; <hl>
+optional caption title:
+optional body body:
+testimonial list testimonials:
+
+[...]
+
+\-- testimonial-card: $obj.title ;; <hl>
+$loop$: $testimonials.testimonials as $obj
+designation: $obj.designation
+src: $obj.src
+
+\$obj.body
+
+[...]
+
+\-- end: testimonials ;; <hl>
 
 \-- component testimonial-card: ;; <hl>
 caption title:
@@ -48,101 +87,66 @@ string designation:
 body body:
 ftd.image-src src:
 
-\-- ftd.row:
-background.solid: $inherited.colors.background.base
-width.fixed.px: 540
-padding.px: 20
-spacing.fixed.px: 25
+[...]
 
-\-- ftd.image: ;; <hl>
-src: $testimonial-card.src
-width.fixed.px: 120
-height.fixed.px: 120
-border-top-left-radius.percent: 50
-border-bottom-left-radius.percent: 50
-border-bottom-right-radius.percent: 50
+\-- end: testimonial-card ;; <hl>
 
-\-- ftd.column: 
-width: fill-container
+-- ds.markdown: 
 
-\-- ftd.text: 
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
+Now imagine you want to use this testimonial component in all your marketing pages. 
+The biggest challenge here lies in maintaining consistency across these testimonials.
+Moreover, duplicating them becomes tedious because modifying one value turns into an 
+avalanche of updates across all the pages. 
 
-$testimonial-card.body
+-- ds.h1: The Solution: Domain driven documentation in fastn
 
-\-- ftd.text: $testimonial-card.title ;; <hl>
-role: $inherited.types.copy-regular
-color: $inherited.colors.text-strong
-style: bold
-margin-top.px: 16
+With components created at domain level, you are keeping all the attributes 
+of that content component neatly packed together in one place. 
 
-\-- ftd.text: $testimonial-card.designation ;; <hl>
-role: $inherited.types.label-large
-color: $inherited.colors.text-strong
-margin-top.px: 8
-style: bold
+For instance, you can create the above testimonial component within a separate file in your project.
+Then, whenever you need the testimonial component, you simply invoke it on the required page: 
 
-\-- end: ftd.column
+-- cl.testimonials: testimonials
+testimonials: $cl.testimonials
 
-\-- end: ftd.row
-
-\-- end: testimonial-card
-
-
--- ds.markdown:
-
-I’ve created a testimonial card component with a title, 
-designation, body, and image, defining its attributes at 
-the domain level. Whenever I wish to use a customer testimonial, 
-I simply call this component on the page and input the values 
-for title, designation, body, and image.
-
--- ds.h3: Example Code
 
 -- ds.code:
-lang: ftd 
+lang: ftd
 
-\-- testimonial list testimonials:
-
-\-- testimonial: Nancy Bayers
-designation: Co-Founder
-src: $assets.files.assets.testimonial-1.jpeg
-
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-molestiae quas vel sint 
-
-\-- testimonial: Daniya Jacob
-designation: Co-Founder
-src: $assets.files.assets.testimonial-2.jpeg
-
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-molestiae quas vel sint
-
-\-- end: testimonials
+\-- testimonials:
+testimonials: $testimonials
 
 
 -- ds.markdown:
 
-Notice how the data in each testimonial is neatly organized. Whenever I 
-need to update the content, I can focus solely on adjusting the 
-information without altering the design. Moreover, if I decide to revamp 
-the testimonial card's design, I can modify it at the component level, 
-and this adjustment will seamlessly propagate across all instances. 
+This approach ensures that each testimonial instance retains a consistent layout and content format, 
+eliminating the hassle of managing individual testimonial sections across multiple pages.
 
+When updating the testimonial content, you can focus solely on adjusting the information without 
+affecting the design. Furthermore, if you decide to modify the design, making changes at the 
+component level will seamlessly propagate across all instances. 
 
-For instance, if I wish to enlarge the image size from 120 to 200 pixels, I can 
+For instance, if you wish to enlarge the image size from 120 to 200 pixels, you can 
 easily achieve this by making a simple adjustment in the code. 
 
--- ds.image:
-src: $fastn-assets.files.images.blog.image-enlarge.png
+-- ds.code:
+lang: ftd
 
--- ds.image: (use code instead of image)
+\-- ftd.image:
+src: $testimonial-card.src
+width.fixed.px: 200 ;; <hl>
+height.fixed.px: 200 ;; <hl>
+
+;; -- ds.image:
+;; src: $fastn-assets.files.images.blog.image-enlarge.png
+;; width.fixed.px: 600
+
+-- ds.image:
 src: $fastn-assets.files.images.blog.big-profile.png
 
 -- ds.markdown:
 
-Adding a new testimonial? Just extend the code:
+Want to add a new testimonial? Just extend the code:
 
 -- ds.code:
 lang: ftd 
@@ -163,7 +167,7 @@ molestiae quas vel sint
 
 \-- end: testimonials
 
--- ds.image: (use code instead of image)
+-- ds.image:
 src: $fastn-assets.files.images.blog.new-testimonial.png
 
 
@@ -192,7 +196,9 @@ With fastn's domain components, you can easily streamline content creation and m
 design coherence. Embrace fastn to master the art of website creation! 
 
 In addition to domain-driven documentation, another valuable technique for swift webpage 
-creation is [creating a `-- content-library.ftd` for storing all recurring content components](/blog/content-library/). 
+creation is 
+[creating a `-- content-library.ftd` for storing all recurring content components](/blog/content-library/).
+
 
 
 -- ds.h3: Related Links
@@ -220,36 +226,6 @@ Read [docs](https://fastn.com/ftd/data-modelling/)
 
 
 
--- record testimonial:
-caption title:
-body body:
-string designation:
-ftd.image-src src:
-
--- testimonial list testimonials:
-
--- testimonial: Nancy Bayers
-designation: Co-Founder
-src: $fastn-assets.files.images.blog.testimonial-1.jpeg
-
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-molestiae quas vel sint 
-
--- testimonial: Daniya Jacob
-designation: Co-Founder
-src: $fastn-assets.files.images.blog.testimonial-2.jpeg
-
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-molestiae quas vel sint
-
--- testimonial: Kavya Dominic
-designation: Owner
-src: $fastn-assets.files.images.blog.testimonial-3.jpeg
-
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-molestiae quas vel sint
-
--- end: testimonials
 
 
 
@@ -264,118 +240,3 @@ molestiae quas vel sint
 
 
 
-
--- component testimonials:
-optional caption title:
-optional body body:
-testimonial list testimonials:
-
--- ftd.column:
-width: fill-container
-align-content: center
-padding-vertical.px: 100
-padding-horizontal.px if { ftd.device == "mobile" }: 20
-background.solid: $inherited.colors.background.step-2
-
--- ftd.column:
-width: fill-container
-max-width.fixed.px: $common.max-width
-
--- ftd.text: $testimonials.title
-if: { testimonials.title != NULL }
-role: $inherited.types.heading-large
-color: $inherited.colors.text
-style: bold
-
--- ftd.column:
-width.fixed.px: 100
-height.fixed.px: 2
-background.solid: $inherited.colors.border
-margin-top.px: 10
-
--- end: ftd.column
-
--- ftd.text:
-if: { testimonials.body != NULL }
-role: $inherited.types.heading-tiny
-color: $inherited.colors.text
-margin-top.px: 20
-
-$testimonials.body
-
--- ftd.row:
-width: fill-container
-wrap: true
-spacing.fixed.px: 50
-margin-top.px: 50
-
--- testimonial-card: $obj.title
-$loop$: $testimonials.testimonials as $obj
-designation: $obj.designation
-src: $obj.src
-
-$obj.body
-
--- end: ftd.row
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: testimonials
-
-
-
-
-
-
-
-
-
-
--- component testimonial-card:
-caption title:
-string designation:
-body body:
-ftd.image-src src:
-
--- ftd.row:
-background.solid: $inherited.colors.background.base
-width.fixed.px: 540
-padding.px: 20
-spacing.fixed.px: 25
-
--- ftd.image:
-src: $testimonial-card.src
-width.fixed.px: 120
-height.fixed.px: 120
-border-top-left-radius.percent: 50
-border-bottom-left-radius.percent: 50
-border-bottom-right-radius.percent: 50
-
--- ftd.column:
-width: fill-container
-
--- ftd.text: 
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-
-$testimonial-card.body
-
--- ftd.text: $testimonial-card.title
-role: $inherited.types.copy-regular
-color: $inherited.colors.text-strong
-style: bold
-margin-top.px: 16
-
--- ftd.text: $testimonial-card.designation
-role: $inherited.types.label-large
-color: $inherited.colors.text-strong
-margin-top.px: 8
-style: bold
-
--- end: ftd.column
-
--- end: ftd.row
-
--- end: testimonial-card
