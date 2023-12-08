@@ -107,7 +107,7 @@ For instance, you can create the above testimonial component within a separate f
 Then, whenever you need the testimonial component, you simply invoke it on the required page: 
 
 -- cl.testimonials: testimonials
-testimonials: $cl.testimonials
+testimonials: $cl.testimonials-list
 
 
 -- ds.code:

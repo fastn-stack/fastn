@@ -32,7 +32,7 @@ $processor$: pr.full-sitemap
 -- component testimonials:
 optional caption title:
 optional body body:
-testimonial list testimonials:
+testimonial-data list testimonials:
 
 -- ftd.column:
 width: fill-container
@@ -5397,33 +5397,33 @@ $processor$: fastn.sitemap
 
 
 
--- record testimonial:
+-- record testimonial-data:
 caption title:
 body body:
 string designation:
 ftd.image-src src:
 
--- testimonial list testimonials:
+-- testimonial-data list testimonials-list:
 
--- testimonial: Nancy Bayers
+-- testimonial-data: Nancy Bayers
 designation: Co-Founder
 src: $fastn-assets.files.images.blog.testimonial-1.jpeg
 
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
 molestiae quas vel sint 
 
--- testimonial: Daniya Jacob
+-- testimonial-data: Daniya Jacob
 designation: Co-Founder
 src: $fastn-assets.files.images.blog.testimonial-2.jpeg
 
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
 molestiae quas vel sint
 
--- testimonial: Kavya Dominic
+-- testimonial-data: Kavya Dominic
 designation: Owner
 src: $fastn-assets.files.images.blog.testimonial-3.jpeg
 
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
 molestiae quas vel sint
 
--- end: testimonials
+-- end: testimonials-list
