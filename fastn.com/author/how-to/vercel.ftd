@@ -3,65 +3,62 @@
 -- ds.page: Publishing Static Site On Vercel
 
 Vercel is an incredibly easy to use tool which helps you build and ship your
-websites with an easy to use interface. You can get started with a fresh
-repository (step 1) or you can deploy your existing repository (step 2).
+websites with an easy to use interface.
 
 -- cbox.warning: You Lose Many Dynamic Features In Static Modes
 
 `fastn` comes with a lot of dynamic features, which are only available when you
 are using [fastn server](/server/) for hosting.
 
--- ds.h1: Step 1. Choosing the source of your deployment
+-- ds.h1: Deploying existing `fastn` projects to Vercel
+id: deploy-existing-project
 
--- ds.h2: Step 1.1. Start from scratch: New Repository
+- Add `vercel.json` to the root of your project (right where your FASTN.ftd lives) with the following contents:
 
-Use this [template](https://vercel.com/new/clone?repository-url=https://github.com/fifthtry/fastn-blog&template=other)
-to initialize. Check out step 2 for the configuration setup.
+-- ds.code: vercel.json
+lang: json
 
--- ds.image: Just choose your repository name and click on the Create button
-src: $fastn-assets.files.images.setup.vercel-new-template.png
+{
+    "framework": null,
+    "buildCommand": "fastn build --base=/",
+    "outputDirectory": ".build",
+    "installCommand": "curl -fsSL https://fastn.com/install.sh | sh"
+}
+
+
+-- ds.markdown:
+
+- Create a [new Vercel deployment](https://vercel.com/new/) and import your project repository.
+
+-- ds.h1: Creating a new `fastn` project and deploy it on Vercel
+
+We recommend using our template repository
+[fastn-template](https://github.com/fastn-stack/fastn-template/) to create a
+new `fastn` project.
+
+- Creating your own repository
+
+Open the [fastn-template](https://github.com/fastn-stack/fastn-template/)
+repository in your browser and click on the `Use this template` button
+
+-- ds.image: Step I: Use the template repository to initialize your repository
+src: $fastn-assets.files.images.setup.github-use-this-template.png
 width: fill-container
 
--- ds.h2: Step 1.2. Deploy an existing repository
+- Follow the instruction to create a new Github repository from this template.
 
-Deploying an existing `fastn` repository on vercel is quite easy. On your vercel
-dashboard, click on [New Project](https://vercel.com/new) and select your git
-provider and the repository accordingly.
+- Wait for the Github Action to finish running. This Action renames package
+  name in `FASTN.ftd` to match with your repository name and your Github
+  username.
 
-Once done, you'll be taken to the Configuration Dashboard of the application.
-Select the `FRAMEWORK PRESET` as `Other` and enter the configuration mentioned
-in Step 2.
+- We'll be opting for a different deployment method instead of [using GitHub
+  Pages](/github-pages/). Feel free to delete the `.github` folder to eliminate
+  these GitHub Actions from your repository.
 
--- ds.image:
-src: $fastn-assets.files.images.setup.vercel-new-from-repo.png
-width: fill-container
+- Now [create a new Vercel deployment](https://vercel.com/new/) by importing
+  this repository.
 
--- ds.h1: Step 2. Vercel FASTN configuration
-
-Once the application is up and ready, head over to Settings > General and enter
-the following configuration in the __Build & Development Settings__
-
--- ds.code: Build Command
-lang: sh
-
-fastn build --base=/
-
--- ds.code: Output Directory
-lang: sh
-
-.build
-
--- ds.code: Install Command
-lang: sh
-
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/fastn-stack/fastn/main/install.sh)"
-
-
--- ds.image:
-src: $fastn-assets.files.images.setup.vercel-deploy-settings.png
-width: fill-container
-
-Congratulations, your FASTN package is now successfully hosted. You can head
-over to the application dashboard to see your deployment domain(s).
+If you have created a `fastn` project from scratch using `fastn create-package
+<your-package-name>`. [Follow the instructions above to add a vercel.json file](#deploy-existing-project).
 
 -- end: ds.page

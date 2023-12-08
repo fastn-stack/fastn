@@ -19,7 +19,8 @@ and follow the instructions.
 
 -- ds.h1: Create a repository using the fastn template: learning-template
 
-We have created a basic fastn-template that will create a fastn repository
+We have created a basic `fastn-template` that will use to create a `fastn`
+repository
 
 -- ftd.text: Click to create a repository
 link: https://github.com/new?template_name=learning-template&template_owner=fastn-community
@@ -39,24 +40,23 @@ margin-vertical.px: 6
 
 -- ds.h1: Select the `gh-pages` to publish on GitHub pages
 
-- Go to the Settings > Pages
+- Go to the `Settings > Pages`
 
 - Select `gh-pages` from the dropdown
 
-- Once the new workflow `Pages build and deployment` runs successfully, go to
-  the Pages from Setting and you will see a live GitHub site generated.
+- GitHub site will be generated, once the new workflow `Pages build and deployment` runs successfully.
 
--- ds.h1: Visit the site
-
-- Click on the `Visit site` and you will see the same output but on the live
-  site that you can share with others.
 
 -- ds.h1: Adding the live site url in Github `About` section
 
-You can add your live site in Github `About` section. This gives you easy
-accessibility to your live site.
+You can add your live site in Github `About` section in the first tab(Code tab).
+This gives you easy accessibility to your live site.
 
 Click on the setting icon in About section. Then select `Use your GitHub Pages
-website` checkbox. Now you can see your site url in About section.
+website` checkbox. Now you can see your site url in `About` section.
+
+-- ds.h1: Visit the site
+
+- Click on the site url in the `About` section and you will see the output.
 
 -- end: ds.page

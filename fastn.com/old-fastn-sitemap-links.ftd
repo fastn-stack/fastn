@@ -173,7 +173,7 @@
     document: book/appendix/d-common-commands.ftd
   - **e** Install `fastn`: /book/install/
     document: book/appendix/e-install.ftd
-    - Intall On Windows: /windows/-/book/
+    - Install On Windows: /windows/-/book/
       document: author/setup/windows.ftd
       skip: true
   - **f** A Programming Editor: /book/editor/
@@ -193,4 +193,3 @@
   skip: true
 - Getting Started: /setup/
   document: ftd/setup.ftd
-    

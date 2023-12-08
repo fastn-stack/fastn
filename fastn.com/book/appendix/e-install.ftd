@@ -26,7 +26,7 @@ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/fastn-stack/fastn/m
 
 Copy the command above by clicking on the copy icon, and paste it in the
 terminal. It will ask you to enter your super user password so it can do the
-installtion.
+installation.
 
 NOTE: A note on caution, when using terminal, it is generally not a good idea to
 trust random sites and run the commands they ask you to run. We have done this

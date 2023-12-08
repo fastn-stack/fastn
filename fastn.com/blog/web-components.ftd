@@ -105,7 +105,7 @@ tells `ftd` in what JS file is the `web-component` is defined. We have used
 [`fastn`'s' assets feature](/assets/) to refer to the JS file.
 
 To use this web-component you can just call `-- word-count:` somewhere and `ftd`
-will do the right thing, JS will get auto incldued, and web component will get
+will do the right thing, JS will get auto included, and web component will get
 rendered.
 
 -- ds.h1: Data Across JS and `ftd` Worlds

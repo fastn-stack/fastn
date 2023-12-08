@@ -225,7 +225,7 @@ cta-primary-url: /webflow/
 Tired of being locked into a theme in Webflow?  Try fastn for easy editing,
 better customization and full control.  
 
--- lib.compare-card: Design-Content Seperation
+-- lib.compare-card: Design-Content Separation
 icon: $fastn-assets.files.images.landing.triangle-1.svg
 image: $fastn-assets.files.images.landing.card-img-1.png 
 

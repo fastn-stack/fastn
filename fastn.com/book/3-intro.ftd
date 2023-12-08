@@ -29,11 +29,11 @@ limited to software professionals, and software companies, but for people at
 large.
 
 Consider spreadsheet applications, they are used by the masses. The formula
-language in spreadhseet applications are easy to learn, you improve your life
+language in spreadsheet applications are easy to learn, you improve your life
 by learning just how to sum things.
 
 -- ds.image:
-src: $assets.files.images.spreadhseet.png
+src: $assets.files.images.spreadsheet.png
 
 In just a min, you can learn this, and your life is improved. Once you learn
 the formula language, you can keep learning incrementally to keep improving
@@ -47,7 +47,7 @@ let you benefit your life must. Or rather, you can benefit a little bit, but as
 soon as you want to move to a little bit more, say want to show a UI, you have
 to suddenly learn a lot more. The learning from `print("hello world")` to
 `import django` and "just use React or jQuery" is not an easy journey and most
-people fail to cross it unless thay have decided to devote serious efforts in
+people fail to cross it unless they have decided to devote serious efforts in
 programming.
 
 -- ds.h1: Who `fastn` and `ftd` are for?
@@ -138,7 +138,7 @@ expensive software if they are out of job.
 -- ds.h2: Students
 
 Students should lean rudimentary programming to be able to setup web pages and
-basic web apps for themselves, thier projects, their schools, friends, families,
+basic web apps for themselves, their projects, their schools, friends, families,
 communities and so on.
 
 Getting started with and making full stack websites and web apps is really easy
@@ -159,7 +159,7 @@ Windows, Mac or a Linux machine. You can either use a Desktop or a Laptop.
 One advice that I got early in my life and has stuck with me is to not learn
 things alone. Find a friend, maybe your better half, maybe a kid or parent, and
 learn together, having someone you can discuss things with, who is at your level
-and figuring things out togther has really helped me, and may be it will you
+and figuring things out together has really helped me, and may be it will you
 too. If you do not know of someone in real life, maybe find someone on [our
 Discord channel: #book-club](https://discord.gg/5CDm3jPhAR) where others are
 learning `fastn` and `ftd` and following along this very book.

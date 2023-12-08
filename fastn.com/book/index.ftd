@@ -4,7 +4,7 @@
 
 *By Amit Upadhyay, with contributions from `fastn` community.*
 
-This version of the text assumes you are using the lastest version of `fastn`.
+This version of the text assumes you are using the latest version of `fastn`.
 See the [installation section](/install/) to install or update `fastn`.
 
 The online version of the book is available at
@@ -34,7 +34,7 @@ $on-global-key[e]$: $ftd.toggle($a=$author-mode)
 $on-click$: $ftd.toggle($a=$author-mode)
 
 - the "star us on github" should be a properly designed UI, not just text.
-- infact entire sidebar can be like that.
+- in fact entire sidebar can be like that.
 
 -- end: ds.page
 
@@ -46,5 +46,3 @@ If you get stuck, please come to our [Discord channel: `Web Developers` ->
 `#book-club`](https://discord.gg/5CDm3jPhAR) to get help from us.
 
 -- end: stuck
-
-

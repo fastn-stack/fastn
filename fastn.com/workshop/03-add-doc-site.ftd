@@ -1,14 +1,16 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- ds.page: Add doc-site - `fastn` Hands-On Workshop
+-- ds.page: Add doc-site - `fastn` Workshop
 
-In the [second step](/workshop/add-quote/), we added a component. Now, in the
+In the [second part](/workshop/add-quote/), we added a component. Now, in the
 third step, we will add a documentation site i.e., `doc-site`.
 
 -- cbox.info: Take a note
 
+As we did earlier and will be doing this after every part:
+
 Before we start with the second step. Make sure to close the server created for 
-`01-hello-world` then restart the new server for `03-add-doc-site`.
+`02-hello-world` then restart the new server for `03-add-doc-site`.
 
 - Close the server by using `Ctrl + c`
 - Change the directory to `03-add-doc-site` path
@@ -25,34 +27,34 @@ documentation site-like appearance and functionality.
 
 -- ds.h1: Adding the Dependency
 
-Similar to how we added the `quote` package, we will now include the `doc-site`
-package as a dependency in our project.
-
-You can observe the following code added at [line number 10 in
-`FASTN.ftd`](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/FASTN.ftd#L10)
-file:
+Similar to how we added the `quote` package, we will now include the [`doc-site`
+package](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/FASTN.ftd#L10) as a dependency in our project.
 
 -- ds.code:
 
 \-- fastn.dependency: fastn-community.github.io/doc-site
 
--- ds.h1: Import `doc-site`
+-- ds.h1: Auto-Import `doc-site`
 
-To make use of the `doc-site` dependency, we need to import it into our
-[`index.ftd`](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/index.ftd)
-file. So, go to `index.ftd` file and uncomment the [line number
-10](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/index.ftd#L10).
+To make use of the `doc-site` dependency, we need to import it. Since we are
+going to use `doc-site` across all the files therefore instead of importing
+`doc-site` in each file we can also `auto-import` in `FASTN.ftd` file itself. 
+
+So, go to `FASTN.ftd` file and uncomment the [line number
+17](https://github.com/fastn-stack/workshop/blob/main/a-website/03-add-doc-site/FASTN.ftd#L17).
+
+We will also give a shorter alias `ds` by using **`as`** command 
 
 -- ds.code:
 
-\-- import: fastn-community.github.io/doc-site as ds
+\-- fastn.auto-import: fastn-community.github.io/doc-site as ds
 
 -- ds.h1: Utilizing the `doc-site` Component: `page`
 
 Now that we've imported `doc-site`, let's use the `page` component.
 
-Follow these steps to remove the comments at [line numbers 24 and
-25](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/index.ftd#L24-L25)
+Follow these steps to remove the comments at [line numbers 12 and
+13](https://github.com/fastn-stack/workshop/blob/main/a-website/03-add-doc-site/index.ftd#L12-L13)
 and integrate the `page` component into your project.
 
 -- ds.code:
@@ -60,21 +62,21 @@ and integrate the `page` component into your project.
 \-- ds.page: Page Title
 site-name: My Site 
 
--- ds.h1: Give title and body
+-- ds.h2: Give title and body
 
 Give a personalised title and body to the page component and save and
-render the output.
+render the output by refreshing the page in the browser.
 
--- ds.h1: Add the `end` line
+-- ds.h2: Add the `end` line
 
 Since `page` is the container type component. You can add any number of
 components in its subsection. Like in our case, we have added `quote.chalice`
-component (in [line number 28 -
-31](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/index.ftd#L28-L31)).
+component (in [line number 16 -
+20](https://github.com/fastn-stack/workshop/blob/main/a-website/03-add-doc-site/index.ftd#L16-L20)).
 
 The container type component needs an `end` statement to mark the end of this
 container component. So, remove the comment at [line number
-40](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/index.ftd#L40).
+31](https://github.com/fastn-stack/workshop/blob/main/a-website/03-add-doc-site/index.ftd#L31).
 
 -- ds.code:
 
@@ -95,7 +97,7 @@ If you miss out any step, checkout the whole source code below:
 \-- fastn.package: hello
 
 \-- fastn.dependency: fastn-community.github.io/bling
-\-- fastn.dependency: fastn-community.github.io/doc-site
+\-- fastn.dependency: fastn-community.github.io/doc-site  ;; <hl>
 
 
 
@@ -104,15 +106,15 @@ If you miss out any step, checkout the whole source code below:
 \-- import: fastn-community.github.io/bling/quote
 \-- import: fastn-community.github.io/doc-site as ds
 
-\-- ds.page: Page Title
-site-name: My Site
+\-- ds.page: Page Title    ;; <hl>
+site-name: My Site         ;; <hl>
 
 \-- quote.chalice: Nelson Mandela
 
 The greatest glory in living lies not in never falling, but in rising every
 time we fall.
 
-\-- end: ds.page
+\-- end: ds.page  		  ;; <hl>
 
 
 -- end: ds.page

@@ -15,3 +15,11 @@ Cargo.lock
 .packages/
 .DS_Store
 _*
+
+
+
+
+
+####### TEMPORARY FIX FOR CACHE FILES ###########
+_Users_*fastn.com
+**/*fastn.com_*

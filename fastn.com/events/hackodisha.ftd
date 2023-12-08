@@ -108,7 +108,7 @@ the workshop included:
 
 Topics that were covered in the meeting:
 
-- Introducion of `fastn`
+- Introduction of `fastn`
 - What makes `fastn` cool?
 - Why choose `fastn`?
 - Showcase of the Case Study: acme-inc
@@ -118,7 +118,7 @@ Topics that were covered in the meeting:
 
 
 -- ftd.image:
-src: $assets.files.images.events.tutoral-session.png
+src: $assets.files.images.events.tutorial-session.png
 border-radius.px: 15
 width.fixed.percent: 40
 border-width.px: 1

@@ -7,7 +7,7 @@ before that let's setup a decent programming editor. Programs are written in
 "plain text" files. Editing plain text files is usually done best with special
 text editors. We have many to chose from, old timers use ViM or Emacs. Then
 there are VSCode and Jetbrains family of editors. These editors not only are
-quite good at editing text files, they also come with a plathora of features,
+quite good at editing text files, they also come with a plethora of features,
 like file browser that lets you easily see all the files in your "project",
 tools like Find and Replace to quickly find things across your files, and do
 mass replace, which can be handy if you change your mind about name of something
@@ -52,13 +52,13 @@ src: $assets.files.images.sublime-without-highlighting.png
 
 A tad boring if you ask me. Syntax highlighting is completely optional, you can
 write code without highlighting at all, but they help. Especially more advanced
-highligting performed by some editors show wrong lines using special
-highligting, e.g.:
+highlighting performed by some editors show wrong lines using special
+highlighting, e.g.:
 
 -- ds.image: Error Highlighting In CLion
 src: $assets.files.images.error-highlights.png
 
-As you can see there are a lot of tiny red colored "squigly lines", informing
+As you can see there are a lot of tiny red colored "squiggly lines", informing
 the editor that something is wrong. This is `CLion`, an editor from the
 `JetBrains` family of editors.
 

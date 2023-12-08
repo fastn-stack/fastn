@@ -20,52 +20,53 @@ These types can be categorized into two main groups: **Primitive** and
 -- ds.h1: Contents
 
 
-- [Primitive Types](ftd/built-in-types/#primitive-types)
-  - [`boolean`](ftd/built-in-types/#boolean)
-  - [`integer`](ftd/built-in-types/#integer)
-  - [`decimal`](ftd/built-in-types/#decimal)
-  - [`string`](ftd/built-in-types/#string)
-  - [`caption`](ftd/built-in-types/#caption)
-  - [`body`](ftd/built-in-types/#body)
-  - [`caption or body`](ftd/built-in-types/#caption-or-body)
-  - [`ftd.ui`](ftd/built-in-types/#ftd-ui)
-  - [`children`](ftd/built-in-types/#children)
-- [Derived Types](ftd/built-in-types/#derived-types)
-  - [`ftd.align-self`](ftd/built-in-types/#ftd-align-self)
-  - [`ftd.align`](ftd/built-in-types/#ftd-align)
-  - [`ftd.anchor`](ftd/built-in-types/#ftd-anchor)
-  - [`ftd.linear-gradient`](ftd/built-in-types/#ftd-linear-gradient)
-  - [`ftd.linear-gradient-color`](ftd/built-in-types/#ftd-linear-gradient-color)
-  - [`ftd.breakpoint-width-data`](ftd/built-in-types/#ftd-breakpoint-width-data)
-  - [`ftd.linear-gradient-directions`](ftd/built-in-types/#ftd-linear-gradient-directions)
-  - [`ftd.background-image`](ftd/built-in-types/#ftd-background-image)
-  - [`ftd.background-position`](ftd/built-in-types/#ftd-background-position)
-  - [`ftd.background-repeat`](ftd/built-in-types/#ftd-background-repeat)
-  - [`ftd.background-size`](ftd/built-in-types/#ftd-background-size)
-  - [`ftd.background`](ftd/built-in-types/#ftd-background)
-  - [`ftd.border-style`](ftd/built-in-types/#ftd-border-style)
-  - [`ftd.color`](ftd/built-in-types/#ftd-color)
-  - [`ftd.display`](ftd/built-in-types/#ftd-display)
-  - [`ftd.color-scheme`](ftd/built-in-types/#ftd-color-scheme)
-  - [`ftd.cursor`](ftd/built-in-types/#ftd-cursor)
-  - [`ftd.image-src`](ftd/built-in-types/#ftd-image-src)
-  - [`ftd.length`](ftd/built-in-types/#ftd-length)
-  - [`ftd.length-pair`](ftd/built-in-types/#ftd-length-pair)
-  - [`ftd.loading`](ftd/built-in-types/#ftd-loading)
-  - [`ftd.overflow`](ftd/built-in-types/#ftd-overflow)
-  - [`ftd.region`](ftd/built-in-types/#ftd-region)
-  - [`ftd.resize`](ftd/built-in-types/#ftd-resize)
-  - [`ftd.resizing`](ftd/built-in-types/#ftd-resizing)
-  - [`ftd.responsive-type`](ftd/built-in-types/#ftd-responsive-type)
-  - [`ftd.shadow`](ftd/built-in-types/#ftd-shadow)
-  - [`ftd.spacing`](ftd/built-in-types/#ftd-spacing)
-  - [`ftd.text-align`](ftd/built-in-types/#ftd-text-align)
-  - [`ftd.text-input-type`](ftd/built-in-types/#ftd-text-input-type)
-  - [`ftd.text-style`](ftd/built-in-types/#ftd-text-style)
-  - [`ftd.text-transform`](ftd/built-in-types/#ftd-text-transform)
-  - [`ftd.type`](ftd/built-in-types/#ftd-type)
-  - [`ftd.white-space`](ftd/built-in-types/#ftd-white-space)
-  - [`ftd.type-data`](ftd/built-in-types/#ftd-type-data)
+- [Primitive Types](/built-in-types#primitive-types)
+  - [`boolean`](/built-in-types#boolean)
+  - [`integer`](/built-in-types#integer)
+  - [`decimal`](/built-in-types#decimal)
+  - [`string`](/built-in-types#string)
+  - [`caption`](/built-in-types#caption)
+  - [`body`](/built-in-types#body)
+  - [`caption or body`](/built-in-types#caption-or-body)
+  - [`ftd.ui`](/built-in-types#ftd-ui)
+  - [`children`](/built-in-types#children)
+- [Derived Types](/built-in-types#derived-types)
+  - [`ftd.align-self`](/built-in-types#ftd-align-self)
+  - [`ftd.align`](/built-in-types#ftd-align)
+  - [`ftd.anchor`](/built-in-types#ftd-anchor)
+  - [`ftd.linear-gradient`](/built-in-types#ftd-linear-gradient)
+  - [`ftd.linear-gradient-color`](/built-in-types#ftd-linear-gradient-color)
+  - [`ftd.breakpoint-width-data`](/built-in-types#ftd-breakpoint-width-data)
+  - [`ftd.linear-gradient-directions`](/built-in-types#ftd-linear-gradient-directions)
+  - [`ftd.background-image`](/built-in-types#ftd-background-image)
+  - [`ftd.background-position`](/built-in-types#ftd-background-position)
+  - [`ftd.background-repeat`](/built-in-types#ftd-background-repeat)
+  - [`ftd.background-size`](/built-in-types#ftd-background-size)
+  - [`ftd.background`](/built-in-types#ftd-background)
+  - [`ftd.border-style`](/built-in-types#ftd-border-style)
+  - [`ftd.color`](/built-in-types#ftd-color)
+  - [`ftd.display`](/built-in-types#ftd-display)
+  - [`ftd.color-scheme`](/built-in-types#ftd-color-scheme)
+  - [`ftd.cursor`](/built-in-types#ftd-cursor)
+  - [`ftd.image-src`](/built-in-types#ftd-image-src)
+  - [`ftd.length`](/built-in-types#ftd-length)
+  - [`ftd.length-pair`](/built-in-types#ftd-length-pair)
+  - [`ftd.loading`](/built-in-types#ftd-loading)
+  - [`ftd.overflow`](/built-in-types#ftd-overflow)
+  - [`ftd.region`](/built-in-types#ftd-region)
+  - [`ftd.resize`](/built-in-types#ftd-resize)
+  - [`ftd.resizing`](/built-in-types#ftd-resizing)
+  - [`ftd.responsive-type`](/built-in-types#ftd-responsive-type)
+  - [`ftd.shadow`](/built-in-types#ftd-shadow)
+  - [`ftd.mask`](/built-in-types#ftd-mask)
+  - [`ftd.spacing`](/built-in-types#ftd-spacing)
+  - [`ftd.text-align`](/built-in-types#ftd-text-align)
+  - [`ftd.text-input-type`](/built-in-types#ftd-text-input-type)
+  - [`ftd.text-style`](/built-in-types#ftd-text-style)
+  - [`ftd.text-transform`](/built-in-types#ftd-text-transform)
+  - [`ftd.type`](/built-in-types#ftd-type)
+  - [`ftd.white-space`](/built-in-types#ftd-white-space)
+  - [`ftd.type-data`](/built-in-types#ftd-type-data)
 
 
 
@@ -444,7 +445,7 @@ derived types. Derived types comes in two types: [`record`](ftd/record/) and
 -- ds.h2: `ftd.linear-gradient`
 
 `ftd.linear-gradient` is a record. It accepts two values as fields: `direction`
-of type [`ftd.linear-gradient-directions`](ftd/built-in-types/#ftd-linear-gradient-directions)
+of type [`ftd.linear-gradient-directions`](/built-in-types#ftd-linear-gradient-directions)
 and `colors` as list of `string` type.
 
 -- ds.code: `ftd.linear-gradient`
@@ -457,11 +458,11 @@ ftd.linear-gradient-color list colors:
 -- ds.markdown:
 
 - `direction`: This field defines the direction of gradient line. It takes
-value of type [`ftd.linear-gradient-directions`](ftd/built-in-types/#ftd-linear-gradient-directions)
+value of type [`ftd.linear-gradient-directions`](/built-in-types#ftd-linear-gradient-directions)
 and is optional. By default, it takes `bottom`.
 
 - `colors`: This field takes a list of
-[`ftd.linear-gradient-color`](ftd/built-in-types/#ftd-linear-gradient-color)
+[`ftd.linear-gradient-color`](/built-in-types#ftd-linear-gradient-color)
 which defines the colors used in the gradient.
 
 
@@ -512,17 +513,17 @@ optional ftd.length stop-position:
 -- ds.markdown:
 
 - `color`: This field takes the color value of type
-[`ftd.color`](ftd/built-in-types/#ftd-color) and is of caption type.
+[`ftd.color`](/built-in-types#ftd-color) and is of caption type.
 
 - `start`: This field defines start position of the color and takes value
-of type [`ftd.length`](ftd/built-in-types/#ftd-length) and is optional.
+of type [`ftd.length`](/built-in-types#ftd-length) and is optional.
 
 - `end`: This field defines the color end position and takes value
-of type [`ftd.length`](ftd/built-in-types/#ftd-length) and is optional.
+of type [`ftd.length`](/built-in-types#ftd-length) and is optional.
 
 - `stop-position`: This field defines the color stop position from where the
 gradient mid occurs and takes value of type
-[`ftd.length`](ftd/built-in-types/#ftd-length) and is optional.
+[`ftd.length`](/built-in-types#ftd-length) and is optional.
 
 
 
@@ -1017,7 +1018,7 @@ lang: ftd
 As shown above, the `ftd.resizing` has following variants:
 
 - `fixed`: The `fixed` variant of `ftd.resizing` is used to give a fixed
-  [length](built-in-types/#ftd-length) to an element. For example,
+  [length](/built-in-types/#ftd-length) to an element. For example,
   `width.fixed.px: 100` sets the width of an element to be 100 pixels. This
   variant is useful when a specific size is required for an element, regardless
   of the size of its parent or contents.
@@ -1220,7 +1221,7 @@ ftd.length y:
 -- ds.h2: `ftd.type`
 
 `ftd.type` is a `record`. It is not a direct type for any component property, but
-it has a derived type [`ftd.responsive-type`](ftd/built-in-types/#ftd-responsive-type)
+it has a derived type [`ftd.responsive-type`](/built-in-types#ftd-responsive-type)
 which is a type `role`, a common property for component. It specifies the
 typography of the element.
 
@@ -1288,7 +1289,7 @@ letter-spacing.px: 5
 `ftd.responsive-type` is a record. It is a type for `role` property, a common
 property for component. It specifies the responsive typography of an element
 using fields for `desktop` and `mobile`, which are of type
-[`ftd.type`](ftd/built-in-types/#ftd-type).
+[`ftd.type`](/built-in-types#ftd-type).
 
 
 -- ds.code: `ftd.responsive-type`
@@ -1532,7 +1533,7 @@ As shown above, the `ftd.spacing` has following variants:
 
 
 - `fixed`: A fixed distance between each item, specified in a specific unit of
-  measurement, as given by [`ftd.length`](ftd/built-in-types/#ftd-length) such
+  measurement, as given by [`ftd.length`](/built-in-types#ftd-length) such
   as pixels, ems etc.
 
 - `space-between`: The space between items is evenly distributed. The first item
@@ -2637,6 +2638,281 @@ be set to 0px if not specified.
 
 - `inset`: This field will make the shadow inset (if provided true). By default, outset
 shadow will be used if this value is not specified or is given false.
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.mask`
+
+It is or-type type with the following fields.
+
+-- ds.code: `ftd.mask` or-type
+lang: ftd
+
+\-- or-type mask:
+
+\-- ftd.mask-image image:
+
+\-- ftd.mask-multi multi:
+
+\-- end: mask
+
+-- ds.markdown:
+
+- `image`: This value will set the mask image and/or the linear gradient.
+It takes value of type `ftd.mask-image` which is of record type.
+- `multi`: This value will allow you to set multiple properties such as `image`, `size`, `position`, etc. at once.
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-image`
+
+It is record type with the following fields.
+
+-- ds.code: `ftd.mask-image` record
+lang: ftd
+
+\-- record mask-image:
+caption ftd.image-src src:
+optional ftd.linear-gradient linear-gradient:
+optional ftd.color color:
+
+-- ds.markdown:
+
+- `src`: This field of `ftd.mask-image` stores the source of mask image in
+both light and dark modes.
+
+- `linear-gradient`: This value will set a linear gradient as mask image. It takes value of type `ftd.linear-gradient`.
+
+- `color`: This field specifies the color for the mask image. It takes `ftd.color` value and is optional.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-multi`
+
+It is record type with the following fields.
+
+-- ds.code: `ftd.mask-multi` record
+lang: ftd
+
+\-- record mask-multi:
+ftd.mask-image image:
+optional ftd.mask-size size:
+optional ftd.mask-size size-x:
+optional ftd.mask-size size-y:
+optional ftd.mask-repeat repeat:
+optional ftd.mask-position position:
+
+
+
+-- ds.markdown:
+
+- `image`: This field of type `ftd.mask-image` sets the mask image to be used.
+
+- `size`: This field of type `ftd.mask-size` will set the size of the mask image.
+
+- `size-x`: This field of type `ftd.mask-size` will set the horizontal length of the mask image.
+
+- `size-y`: This field of type `ftd.mask-size` will set the vertical length of the mask image.
+
+- `repeat`: This field of type `ftd.mask-repeat` specifies how background images are repeated.
+
+- `position`: This field of type `ftd.mask-position` sets the position of the mask image.
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-repeat`
+
+The `ftd.mask-repeat` property is used to specify how mask
+images are repeated. It is an `or-type` which is used with
+`ftd.mask-multi` and is optional under it.
+
+-- ds.code: `ftd.mask-repeat`
+lang: ftd
+
+\-- or-type mask-repeat:
+
+\-- constant string repeat: repeat
+\-- constant string repeat-x: repeat-x
+\-- constant string repeat-y: repeat-y
+\-- constant string no-repeat: no-repeat
+\-- constant string space: space
+\-- constant string round: round
+
+\-- end: mask-repeat
+
+-- ds.markdown:
+
+As shown above, the `ftd.mask-repeat` has following variants:
+
+- `repeat`: This value will make the mask image repeat as much as possible in both
+directions to cover the whole container area. The last image will be clipped
+if it doesn't fit as per container dimensions.
+
+- `repeat-x`: This value will show similar behaviour as `repeat` except the fact that
+the images will be repeated only in x-direction (horizontal direction) and the
+last image will be clipped if it doesnt fit within the container area.
+
+- `repeat-y`: This value will show similar behaviour as `repeat` except the fact that
+the images will be repeated only in y-direction (vertical direction) and the last image will be clipped if
+it doesnt fit within the container area.
+
+- `no-repeat`: This value will make the image not repeat itself in any direction
+and hence container area might not get entirely covered in case if the container
+area is larger than the image itself.
+
+- `space`: This value will make the image repeat itself in both directions just like
+`repeat` except the fact that the last images wont be clipped and whitespace will be
+evenly distributed between the images. The only case where clipping will happen when
+there is not enough space for a single image.
+
+- `round`: This value will make the background image repeat itself
+and then are either squished or stretched to fill up the container space
+leaving no gaps.
+
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-position`
+
+The `ftd.mask-position` property is used to specify the
+positioning of the mask image. It is an `or-type` which is used with
+`ftd.mask-multi` and is optional under it.
+
+-- ds.code: `ftd.mask-position`
+lang: ftd
+
+\-- or-type mask-position:
+
+\-- constant string left: left
+\-- constant string center: center
+\-- constant string bottom: bottom
+\-- constant string left-top: left-top
+\-- constant string left-center: left-center
+\-- constant string left-bottom: left-bottom
+\-- constant string center-top: center-top
+\-- constant string center-center: center-center
+\-- constant string center-bottom: center-bottom
+\-- constant string right-top: right-top
+\-- constant string right-center: right-center
+\-- constant string right-bottom: right-bottom
+
+\-- anonymous record length:
+
+\-- ftd.length x:
+\-- ftd.length y:
+
+\-- end: length
+
+\-- end: mask-position
+
+-- ds.markdown:
+
+As shown above, the `ftd.mask-position` has following variants:
+
+- `left`- Positions the image to the left of the container.
+- `center`- Positions the image to the center of the container.
+- `right`- Positions the image to the right of the container.
+- `left-top` - Positions the image to the left in horizontal direction
+and top along the vertical direction of the container.
+- `left-center` - Positions the image to the left in horizontal direction
+and center along the vertical direction of the container.
+- `left-bottom` - Positions the image to the left in horizontal direction
+and bottom along the vertical direction of the container.
+- `center-top` - Positions the image to the center in horizontal direction
+and top along the vertical direction of the container.
+- `center-center` - Positions the image to the center in horizontal direction
+and center along the vertical direction of the container.
+- `center-bottom` - Positions the image to the center in horizontal direction
+and bottom along the vertical direction of the container.
+- `right-top` - Positions the image to the right in horizontal direction
+and top along the vertical direction of the container.
+- `right-center` - Positions the image to the right in horizontal direction
+and center along the vertical direction of the container.
+- `right-bottom` - Positions the image to the right in horizontal direction
+and bottom along the vertical direction of the container.
+- `length` - This anonymous record value will set the position value
+based on the specified x and y values.
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-size`
+
+The `ftd.mask-size` property is used to specify the
+dimensions of the mask image. It is an `or-type` which is used with
+`ftd.mask-multi` and is optional under it.
+
+-- ds.code: `ftd.mask-size`
+lang: ftd
+
+\-- or-type mask-size:
+
+\-- constant string auto: auto
+\-- constant string cover: cover
+\-- constant string contain: contain
+
+\-- anonymous record length:
+
+\-- ftd.length x:
+\-- ftd.length y:
+
+\-- end: length
+
+\-- end: mask-size
+
+-- ds.markdown:
+
+As shown above, the `ftd.mask-size` has following variants:
+
+- `auto`: This value will scale the mask image
+in the corresponding directions while maintaining the intrinsic proportions
+of the specified image.
+
+- `cover`: This value will scale the image to the smallest possible size
+to fill the container area leaving no empty space while preserving its ratio.
+Image will be cropped for either direction if the container dimensions differ
+from the image dimensions.
+
+- `contain`: This value will scale the mask image as large as possible
+within its container area without cropping or stretching the image.
+
+- `length`: This anonymous record value will set the dimensions of the
+background image based on the specified x and y values.
+
+
 
 
 

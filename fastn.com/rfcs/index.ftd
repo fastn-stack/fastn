@@ -8,7 +8,7 @@ comments can be [found on Github](https://github.com/fastn-stack/fastn.com/pulls
 -- ds.h1: Under Development
 
 - [0003-variable-interpolation](/rfc/variable-interpolation/)
-- [0004-interemental-build](/rfc/incremental-build/)
+- [0004-incremental-build](/rfc/incremental-build/)
 
 -- ds.h1: Accepted RFCs
 

@@ -7,13 +7,12 @@ featured-link: /featured/portfolios/
 category: Featured Portfolio / Personal Sites
 image: $fastn-assets.files.images.featured.portfolios.portfolio.png
 owners: [$yashveer-mehra.info, $saurabh-lohiya.info]
-license-url: https://github.com/saurabh-lohiya/portfolio/
+license-url: https://github.com/fastn-community/saurabh-portfolio
 license: Creative Commons
 published-date: 09-Aug-2023
 cards: $text-ps
-github-url:https://github.com/saurabh-lohiya/portfolio/
-demo-link: https://saurabh-lohiya.github.io/portfolio/
-
+github-url: https://github.com/fastn-community/saurabh-portfolio
+demo-link: https://fastn-community.github.io/saurabh-portfolio/
 
 
 

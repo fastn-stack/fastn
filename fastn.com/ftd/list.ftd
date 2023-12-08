@@ -144,7 +144,7 @@ Once you have created a list, you can access its items using their index. In
 
 -- ds.h2: Using `loop`
 
-You can also access the elements of a list using a loop. In `fastn`, you can use
+You can also access the elements of a list [using a loop](/loop/). In `fastn`, you can use
 the `$loop$` keyword to iterate over a list. Here's an example:
 
 -- ds.code:

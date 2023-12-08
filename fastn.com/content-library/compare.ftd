@@ -138,7 +138,7 @@ width: fill-container
 spacing.fixed.em: 0.8
 max-width.fixed.px: 980
 
--- ds.h1: Rich collection of readymade components
+-- ds.h1: Rich collection of ready-made components
 
 fastn's versatility accommodates a wide range of projects, from landing pages to
 complex web applications, giving startups the agility they need to adapt and
@@ -289,7 +289,7 @@ width: fill-container
 spacing.fixed.em: 0.8
 max-width.fixed.px: 980
 
--- ds.h1: Rich collection of readymade components
+-- ds.h1: Rich collection of ready-made components
 
 fastn's versatility accommodates a wide range of projects, from landing pages to
 complex web applications, giving startups the agility they need to adapt and
@@ -655,7 +655,7 @@ With fastn, you retain full control and ownership. Your content and audience
 always belongs to you. fastn being open-source, ensures your content lives
 forever.
 
--- ds.h2: Cost of Onwership
+-- ds.h2: Cost of Ownership
 
 Webflow's pricing model could become costly as users add more features or their
 business scales. Over time, the cumulative costs might not be feasible for

@@ -2778,6 +2778,44 @@ color: $inherited.colors.text
 
 
 
+
+
+-- ds.h1: `mask: optional ftd.mask`
+id: mask
+
+This property hides an element (partially or fully) by masking or clipping the image at specific points. It takes
+[`ftd.mask`](ftd/built-in-types/#ftd-mask) value
+which is of `or-type` type and is optional.
+
+-- ds.rendered: Sample code using `mask`
+
+-- ds.rendered.input:
+
+\-- ftd.container:
+background.solid: red
+mask.image: https://mdn.github.io/css-examples/masking/star.svg
+width.fixed.px: 300
+height.fixed.px: 300
+
+-- ds.rendered.output:
+
+-- ftd.container:
+background.solid: red
+mask.image: https://mdn.github.io/css-examples/masking/star.svg
+width.fixed.px: 300
+height.fixed.px: 300
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
 -- ds.h1: `anchor: optional ftd.anchor`
 id: anchor
 

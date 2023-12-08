@@ -112,6 +112,8 @@ update_path() {
             return 0
         else
             log_error "Failed to add '${DESTINATION_PATH}' to PATH. Insufficient permissions for '$shell_config_file'."
+            log_message "The installer has successfully downloaded the \`fastn\` binary in '${DESTINATION_PATH}' but it failed to add it in your \$PATH variable."
+            log_message "Configure the \$PATH manually or run \`fastn\` binary from '${DESTINATION_PATH}/fastn'"
             return 1
         fi
     else
@@ -120,7 +122,7 @@ update_path() {
 }
 
 remove_temp_files() {
-    rm -f fastn_macos_x86_64 fastn_linux_musl_x86_64 fastn_controller_linux_musl_x86_64
+    rm -f fastn_macos_x86_64 fastn_linux_musl_x86_64
 }
 
 # Function to handle Ctrl+C
@@ -135,14 +137,12 @@ setup() {
     trap exit_on_interrupt INT
 
     PRE_RELEASE=""
-    CONTROLLER=""
     VERSION=""
 
     # Parse arguments
     while [ $# -gt 0 ]; do
         case $1 in
             --pre-release) PRE_RELEASE=true ;;
-            --controller) CONTROLLER=true ;;
             --version=*) VERSION="${1#*=}" ;;
             *) echo "Unknown CLI argument: $1"; exit 1 ;;
         esac
@@ -176,32 +176,15 @@ setup() {
     # Remove temporary files from previous install attempts
     remove_temp_files
 
-    if [ -n "$CONTROLLER" ]; then
-        if [ "$(uname)" = "Darwin" ]; then
-            FILENAME="fastn_controller_macos_x86_64"
-        else
-            FILENAME="fastn_controller_linux_musl_x86_64"
-        fi
+    if [ "$(uname)" = "Darwin" ]; then
+        FILENAME="fastn_macos_x86_64"
     else
-        if [ "$(uname)" = "Darwin" ]; then
-            FILENAME="fastn_macos_x86_64"
-        else
-            FILENAME="fastn_linux_musl_x86_64"
-        fi
+        FILENAME="fastn_linux_musl_x86_64"
     fi
 
     # Download the binary directly using the URL
     curl -# -L -o "${DESTINATION_PATH}/fastn" "${URL}/${FILENAME}"
     chmod +x "${DESTINATION_PATH}/fastn"
-
-    if [ -n "$CONTROLLER" ]; then
-        if [ "$(uname)" = "Darwin" ]; then
-            FILENAME="fastn_controller_macos_x86_64.d"
-        else
-            FILENAME="fastn_controller_linux_musl_x86_64.d"
-        fi
-        curl -# -L -o "${DESTINATION_PATH}/fastn.d" "${URL}/${FILENAME}"
-    fi
 
     # Check if the destination files are moved successfully before setting permissions
     if [ -e "${DESTINATION_PATH}/fastn" ]; then

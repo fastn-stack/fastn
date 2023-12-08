@@ -63,7 +63,7 @@ which is and alias for `ftd.ui list` does not have `ftd.` prefix.
 
 -- ds.h1: `ftd.color-scheme` related types
 
-We have a few abbrevated names. We prefer longer/descriptive names.
+We have a few abbreviated names. We prefer longer/descriptive names.
 
 - `ftd.btb -> ftd.body-text-border`
 - `ftd.pst -> ftd.primary-secondary-tertiary`

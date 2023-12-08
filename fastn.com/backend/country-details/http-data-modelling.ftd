@@ -59,13 +59,13 @@ using `for loop` and display it in a tabular form.
 src: $fastn-assets.files.images.backend.sketch.svg
 
 By the end of this part, you will have gained insights into how using `fastn`,
-REST APIs can seemlessly connect the backend with the frontend.
+REST APIs can seamlessly connect the backend with the frontend.
 
 The first step is to create a `fastn package`.
 
 -- cbox.info: What is `fastn` package?
 
-`fastn` package is a folder that requires atleast two files
+`fastn` package is a folder that requires at least two files
 
 - FASTN.ftd
 - index.ftd

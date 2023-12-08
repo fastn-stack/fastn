@@ -1,4 +1,4 @@
--- ds.page: Uninstall `fastn`
+-- ds.page: Uninstall `fastn` on Windows
 
 Uninstalling `fastn` is as easy as installation. When you download the
 executable file to install, it comes with `uninstall.exe` executable file.

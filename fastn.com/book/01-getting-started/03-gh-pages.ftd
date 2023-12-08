@@ -4,7 +4,7 @@
 -- ds.page: Publish Your Site
 
 Let's recap your progress so far. You have created your Github account, and you
-have created your first repository. The respository contains a `fastn` powered
+have created your first repository. The repository contains a `fastn` powered
 website, but you have not yet see how it looks like when "rendered". And you do
 not yet have the URL of your website.
 
@@ -152,7 +152,7 @@ will see a bunch of Workflows, "Deploy Site" is the most interesting one.
 configured "Deploy Site" to run every time any commit is created, and since a
 commit is created when you make a change, this means "Deploy Site" workflow is
 executed every time you make any changes. You make any changes, and Deploy Site
-runs, and it deployes your website.
+runs, and it deploys your website.
 
 Where have we done all this you ask? The workflow and the configuration sit in
 your repository, checkout the `.github` folder in your repo:
@@ -181,7 +181,7 @@ cover later. Installing `fastn` is also quite easy, we have an installation
 script you can use, or you can download the `fastn` executable from our
 downloads page, and soon we will upload `fastn` to your operating systems App
 Stores etc, so you can install it like any other software you use.
-And "building the website", which is conveting your `.ftd` files to `.html` etc
+And "building the website", which is converting your `.ftd` files to `.html` etc
 is done by `fastn` as we will show later. We are just giving a high level
 picture in this section, for now let Github Action will do all this for you.
 

@@ -40,12 +40,12 @@ the request to the provided `endpoint`.
 
 -- ds.h1: SQL
 
-If your fastn packge needs some data, you can use the [SQL processor](/sql/) to
+If your fastn package needs some data, you can use the [SQL processor](/sql/) to
 fetch data directly from the database, and avoid writing some APIs.
 
 -- ds.h1: Calling Your APIs
 
-If your fastn packge needs some data, direct SQL access does not work for you,
+If your fastn package needs some data, direct SQL access does not work for you,
 you can use [HTTP processor to make HTTP request](/http/) to your backend, fetch
 data from your fastn document.
 

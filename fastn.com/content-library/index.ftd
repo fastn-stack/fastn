@@ -4614,7 +4614,7 @@ optional ftd.resizing max-width:
 -- ftd.column:
 background.solid: $inherited.colors.background.base
 width: fill-container
-padding-top.px: 42
+/padding-top.px: 42
 align-content: center
 align-self: center
 spacing.fixed.px: 7
@@ -4625,7 +4625,7 @@ max-width.fixed.px if { !footer-desktop.full-width }: $footer-desktop.max-width
 
 -- ftd.row:
 width: fill-container
-spacing: space-between
+spacing: space-around
 padding-vertical.px: 50
 padding-right.px: 48
 
@@ -5188,7 +5188,7 @@ user accessibility and visual presentation of your website.
 -- article-record: SEO
 image: $fastn-assets.files.images.landing.seo.png
 
-fastn provides custom [URL customization](https://fastn.com/custom-url/), from 
+fastn provides custom [URL customization](https://fastn.com/custom-urls/), from 
 clean and organized links to [dynamic](https://fastn.com/dynamic-urls/) options. 
 You can also fine-tune [meta information](https://fastn.com/seo-meta/), add 
 OG-image, and manage [URL redirection](https://fastn.com/redirects/).

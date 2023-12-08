@@ -1,9 +1,9 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- ds.page: Hello World - `fastn` Hands-On Workshop
+-- ds.page: Hello World - `fastn` Workshop
 
-This is first step in the [`fastn` Hands On Workshop](/workshop/). In this we
-will install fastn on your machine, and run `fastn`.
+This is first part of the [`fastn` Hands On Workshop](/workshop/). In this we
+will install `fastn` on your machine, and run `fastn`.
 
 -- ds.h1: Install `fastn`
 
@@ -23,10 +23,10 @@ successfully installed.
 
 -- ds.h2: On Windows
 
-- Download the setup named `fastn_setup.exe`
-from the [Releases](https://github.com/fastn-stack/fastn/releases/latest) page
+- Download the setup named `fastn_setup.exe` installer from the 
+[https://fastn.com/setup.exe](https://fastn.com/setup.exe) URL
 
-- Run the setup and follow the installation steps
+- Run the setup and select `More info` and follow the installation steps
 
 - Once the setup is complete, you will have `fastn` installed in your system
 
@@ -42,7 +42,7 @@ If you see the Help text of the fastn command, it confirms that `fastn` is
 successfully installed.
 
 
--- ds.h1: Run `fastn`
+-- ds.h1: Clone `workshop`
 
 **Clone the [`workshop`](https://github.com/fastn-stack/workshop) repository**
 
@@ -63,13 +63,14 @@ git clone https://github.com/fastn-stack/workshop.git
 
 -- ds.markdown:
 
-Now, change the directory to the first folder `01-hello-world` through terminal.
+Now, change the directory to the first folder `01-hello-world` through
+cmd/terminal.
 
-Run the following command to run a local server:
+Run the following command to create a local server:
 
 -- ds.code:
 
-fastn serve
+fastn serve --edition=2023
 
 -- ds.markdown:
 
@@ -79,7 +80,7 @@ An empty page will be opened as the `index.ftd` is commented out.
 
 -- ds.h1: Update `index.ftd`
 
-- In the [`index.ftd`](https://github.com/fastn-stack/workshop/blob/main/01-hello-world/index.ftd) file, uncomment the line #9
+- In the [`index.ftd`](https://github.com/fastn-stack/workshop/blob/main/01-hello-world/index.ftd) file, uncomment the line to print `hello world`
 
 -- ds.image:
 src: $fastn-assets.files.images.workshop.uncommented-index.png

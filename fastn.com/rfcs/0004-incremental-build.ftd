@@ -92,10 +92,10 @@ the content of the `.build` folder, later being much bigger.
 
 The feature itself requires no training as this is an internal optimisation.
 
-Confiruing CI systems to preserve build cache across builds is required. We will
-be updating our fastn-template Github Action to include build caching. We will
-also have to write blog post on how to enable build caching on Vercel, and other
-hosting providers who give caching.
+Configuring CI systems to preserve build cache across builds is required. We
+will be updating our fastn-template Github Action to include build caching. We
+will also have to write blog post on how to enable build caching on Vercel, and
+other hosting providers who give caching.
 
 -- end: lib.teaching-notes
 
@@ -111,5 +111,3 @@ List unresolved questions here.
 
 
 -- end: lib.rfc
-
-

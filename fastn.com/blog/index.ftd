@@ -1,5 +1,7 @@
 -- import: fastn.com/blog/strongly-typed as p12
 -- import: fastn.com/blog/search as fp
+-- import: fastn.com/blog/cli-check-for-updates as fp
+-- import: fastn.com/blog/search as p12
 -- import: fastn.com/blog/acme as p11
 -- import: fastn.com/events/weekly-contest/week-1-quote as p10
 -- import: fastn.com/blog/writer-journey as p9
@@ -11,6 +13,8 @@
 -- import: fastn.com/blog/wittyhacks as p3
 -- import: fastn.com/blog/web-components as p2
 -- import: fastn.com/blog/show-cs as p1
+-- import: fastn.com/blog/breakpoint as r1
+-- import: fastn.com/blog/content-library
 
 -- ds.page-with-no-right-sidebar:
 
@@ -20,7 +24,13 @@
 post-data: $p12.meta
 
 -- ds.without-image-half:
+post-data: $r1.index-meta
+
+-- ds.featured-post:
 post-data: $fp.meta
+
+-- ds.without-image-half:
+post-data: $p12.meta
 
 -- ds.without-image-half:
 post-data: $p11.meta

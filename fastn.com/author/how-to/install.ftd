@@ -47,5 +47,43 @@ as it only requires downloading the setup and installing it on your local system
 3. [`fastn` from `source`](windows/#fastn-from-source)
 
 
+-- ds.h1:  For Nix/NixOS
+
+The [`fastn-stack/fastn`](https://github.com/fastn-stack/fastn) is a Nix flake that you can use in various ways:
+
+-- ds.markdown:
+
+- Directly run `fastn` without installing:
+
+-- ds.code: Run
+lang: sh
+
+nix run github:fastn-stack/fastn
+
+-- ds.markdown:
+
+- Add it as an input in your Nix flake:
+
+-- ds.code: Flake usage
+lang: nix
+
+{
+  description = "A very basic flake";
+
+  inputs.fastn.url = "github:fastn-stack/fastn";
+
+  outputs = { self, nixpkgs, fastn }:
+  let
+    system = "x86_64-linux";
+    pkgs = import nixpkgs { inherit system; };
+  in
+  {
+    devShells.${system}.default = pkgs.mkShell {
+        name = "my-fastn-shell";
+        buildInputs = [ fastn.defaultPackage.${system} ];
+      };
+  };
+}
+
 
 -- end: ds.page

@@ -153,7 +153,7 @@ Learn more about [fastn design system](/design-system/).
 
 -- ds.h1: Responsive
 
-`fastn` has built in supprot for reponsive, every where you specify a length,
+`fastn` has built in support for responsive, every where you specify a length,
 you can specify a "responsive length", and fastn will automatically use the
 right length based on mobile or desktop devices.
 

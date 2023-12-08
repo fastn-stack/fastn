@@ -4,7 +4,7 @@ With an opinionated design system, clear separation of content and design,
 and many other powerful features, fastn simplifies the web design process. 
 Whether you're a seasoned designer or a beginner, fastn ensures a quicker, more 
 cohesive, and user-friendly design experience. Plus, our library of 
-[readymade components](/featured/) allows you to quickly build modern websites 
+[ready-made components](/featured/) allows you to quickly build modern websites
 and user interfaces without starting from scratch. 
 
 Join our [Discord Community](https://discord.com/invite/a7eBUeutWD) with over 
@@ -56,7 +56,7 @@ create your own using Google Fonts and make a
 [typography to JSON](/typo-to-json/) or generate 
 [fastn code from any typography JSON](/typo-json-to-ftd/).
 
--- ds.h1: Seperation of Content and Design
+-- ds.h1: Separation of Content and Design
 
 With fastn, you can modify content without being concerned about design 
 repercussions.  Unlike traditional website builders, where altering themes or 

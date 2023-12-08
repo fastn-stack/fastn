@@ -3,7 +3,7 @@
 -- ds.h1: Version Policy
 
 Since we are a binary crate, and our library crates are only largely meant to be
-used by our binary crate, we are targetting the latest Rust version. Whenever a
+used by our binary crate, we are targeting the latest Rust version. Whenever a
 new version is released we always switch to it.
 
 -- ds.h1: Release Management
