@@ -512,6 +512,7 @@ pub(crate) async fn read_ftd_2023(
     let ssr_body = fastn_js::ssr_with_js_string(
         &package_name,
         format!("{js_ftd_script}\n{js_document_script}").as_str(),
+        main.id.as_str(),
     );
 
     let file_content = fastn_core::utils::replace_markers_2023(

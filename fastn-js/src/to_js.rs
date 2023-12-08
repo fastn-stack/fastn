@@ -1035,17 +1035,48 @@ impl ExpressionGenerator {
 
         if node.operator().get_variable_identifier_read().is_some() && !no_getter {
             let chain_dot_operator_count = value.matches('.').count();
-            // When there are chained dot operator value
-            // like person.name, person.meta.address
-            if chain_dot_operator_count > 1 {
+            let is_local_argument = value.starts_with(fastn_js::LOCAL_VARIABLE_MAP);
+            let is_global_value = value.contains(fastn_js::GLOBAL_VARIABLE_MAP);
+
+            // If value is internal looping index variable or global value or ftd variable
+            if value.eq("index") || is_global_value || value.starts_with("ftd") {
+                return format!("fastn_utils.getter({})", value);
+            }
+
+            // When there is dot chaining on local argument values
+            // like __args__.person.name, __args__.person.meta.address
+            if is_local_argument {
+                if chain_dot_operator_count > 1 {
+                    return format!(
+                        "fastn_utils.getter({})",
+                        get_chained_getter_string(value.as_str())
+                    );
+                }
+
+                // If the value is local argument variable with no dot chaining
+                // like __args__.name, __args__.address
+                return format!("fastn_utils.getter({})", value);
+            }
+
+            // Otherwise consider the value as global variable
+            // If dot chaining on global variable
+            // like person.name, places.0
+            if chain_dot_operator_count > 0 {
+                let global_variable_name =
+                    format!("{}.foo__{}", fastn_js::GLOBAL_VARIABLE_MAP, value.as_str());
                 return format!(
                     "fastn_utils.getter({})",
-                    get_chained_getter_string(value.as_str())
+                    get_chained_getter_string(global_variable_name.as_str())
                 );
             }
 
-            // When there is no chained dot operator value
-            format!("fastn_utils.getter({})", value)
+            // If no dot chaining on global variable
+            // like x, y (globally defined)
+            format!(
+                "fastn_utils.getter({}.foo__{})",
+                fastn_js::GLOBAL_VARIABLE_MAP,
+                value
+            )
         } else {
             value
         }

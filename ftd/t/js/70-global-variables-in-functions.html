@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -11,16 +10,19 @@
     </script>
 
     <script src="fastn-js.js"></script>
-    
 
     <style>
        
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3">The person named Sam Wan has first visited Bangalore on 27th October</div><div data-id="4">Person Sam Wan lives at Sam City in Some House. His contact number is +1234-56789</div><div data-id="5">First person is Sam Ather lives at Sam Ather City at Some Other House. His contact number is +987-654321</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="__c-3">Sam Wan</div><div data-id="4" class="__c-4">Sam Ather</div><div data-id="5" class="__c-5">Person Sam Wan works for FifthTry whose age is 30</div><div data-id="6" class="__c-6">Person Sam Ather works for FifthTry whose age is 23</div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
+	.__c-3 { color: green !important; }
+	.__c-4 { color: green !important; }
+	.__c-5 { color: blue !important; }
+	.__c-6 { color: blue !important; }
     </style>
 <script>
     (function() {
@@ -29,93 +31,77 @@
   __fastn_package_name__ = "foo";
   try {
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([global.foo__r,
-    global.foo__places], function () {
-      return foo__some_details({
-        person: global.foo__r,
-        places: global.foo__places,
-        date: "27th October",
-      }, parenti0);
+    parenti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+      dark: "green",
+      light: "green"
     }), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__p.get("name"), inherited);
     let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti1.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([global.foo__r], function () {
-      return foo__more_details({
-        p: global.foo__r,
-      }, parenti1);
+    parenti1.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+      dark: "green",
+      light: "green"
     }), inherited);
+    parenti1.setProperty(fastn_dom.PropertyKind.StringValue, fastn_utils.getListItem(global.foo__people.get(0)).get("name"), inherited);
     let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([global.foo__people], function () {
-      return foo__first_person_details({
-        people: global.foo__people,
+    parenti2.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+      dark: "blue",
+      light: "blue"
+    }), inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([], function () {
+      return foo__get_details({
+        company: "FifthTry",
       }, parenti2);
+    }), inherited);
+    let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti3.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+      dark: "blue",
+      light: "blue"
+    }), inherited);
+    parenti3.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([], function () {
+      return foo__get_first_person_details({
+        company: "FifthTry",
+      }, parenti3);
     }), inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 global["main"] = main;
-let foo__some_details = function (args) {
-  let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "foo";
-  try {
-    let __args__ = fastn_utils.getArgs({
-      places: fastn.mutableList([]),
-    }, args);
-    return ("The person named " + fastn_utils.getter(fastn_utils.getterByKey(__args__.person, "name")) + " has first visited " + fastn_utils.getter(fastn_utils.getterByKey(__args__.places, "0")) + " on " + fastn_utils.getter(__args__.date));
-  } finally {
-    __fastn_package_name__ = __fastn_super_package_name__;
-  }
-}
-global["foo__some_details"] = foo__some_details;
-fastn_utils.createNestedObject(global, "foo__meta", fastn.recordInstance({
-  address: "Sam City in Some House",
-  phone_number: "+1234-56789"
-}));
-fastn_utils.createNestedObject(global, "foo__r", fastn.recordInstance({
+fastn_utils.createNestedObject(global, "foo__p", fastn.recordInstance({
   name: "Sam Wan",
-  age: 23,
-  meta: global.foo__meta
+  age: 30
 }));
-fastn_utils.createNestedObject(global, "foo__places", fastn.mutableList(["Bangalore",
-"Mumbai",
-"Chennai",
-"Kolkata"]));
-let foo__more_details = function (args)
-{
-  let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "foo";
-  try {
-    let __args__ = fastn_utils.getArgs({
-    }, args);
-    return ("Person " + fastn_utils.getter(fastn_utils.getterByKey(__args__.p, "name")) + " lives at " + fastn_utils.getter(fastn_utils.getterByKey(fastn_utils.getterByKey(__args__.p, "meta"), "address")) + ". His contact number is " + fastn_utils.getter(fastn_utils.getterByKey(fastn_utils.getterByKey(__args__.p, "meta"), "phone_number")));
-  } finally {
-    __fastn_package_name__ = __fastn_super_package_name__;
-  }
-}
-global["foo__more_details"] = foo__more_details;
-let foo__first_person_details = function (args)
-{
-  let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "foo";
-  try {
-    let __args__ = fastn_utils.getArgs({
-      people: fastn.mutableList([]),
-    }, args);
-    return ("First person is " + fastn_utils.getter(fastn_utils.getterByKey(fastn_utils.getterByKey(__args__.people, "0"), "name")) + " lives at " + fastn_utils.getter(fastn_utils.getterByKey(fastn_utils.getterByKey(fastn_utils.getterByKey(__args__.people, "0"), "meta"), "address")) + ". His contact number is " + fastn_utils.getter(fastn_utils.getterByKey(fastn_utils.getterByKey(fastn_utils.getterByKey(__args__.people, "0"), "meta"), "phone_number")));
-  } finally {
-    __fastn_package_name__ = __fastn_super_package_name__;
-  }
-}
-global["foo__first_person_details"] = foo__first_person_details;
 fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([fastn.recordInstance({
-  age: 30,
-  meta: fastn.recordInstance({
-    address: "Sam Ather City at Some Other House",
-    phone_number: "+987-654321"
-  }),
+  age: 23,
   name: "Sam Ather"
 }),
-global.foo__r]));
+global.foo__p]));
+let foo__get_details = function (args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return ("Person " + fastn_utils.getter(fastn_utils.getterByKey(global.foo__p, "name")) + " works for " + fastn_utils.getter(__args__.company) + " whose age is " + fastn_utils.getter(fastn_utils.getterByKey(global.foo__p, "age")));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__get_details"] = foo__get_details;
+let foo__get_first_person_details = function (args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return ("Person " + fastn_utils.getter(fastn_utils.getterByKey(fastn_utils.getterByKey(global.foo__people, "0"), "name")) + " works for " + fastn_utils.getter(__args__.company) + " whose age is " + fastn_utils.getter(fastn_utils.getterByKey(fastn_utils.getterByKey(global.foo__people, "0"), "age")));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__get_first_person_details"] = foo__get_first_person_details;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
@@ -147,14 +133,14 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
             parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
             main(parenti0);
         }
-        fastnVirtual.doubleBuffer(main_wrapper);
+        fastn_virtual.hydrate(main_wrapper);
         ftd.post_init();
     })();
 
     window.onload = function() {
         fastn_utils.resetFullHeight();
         fastn_utils.setFullHeight();
-        ftd.emit_on_load();
     };
+
 </script>
 </html>

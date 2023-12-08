@@ -1,32 +1,32 @@
--- record Person:
+-- record person:
 caption name:
 integer age:
-Metadata meta:
+metadata meta:
 
--- record Metadata:
+-- record metadata:
 string address:
 string phone-number:
 
 -- string list places: Bangalore, Mumbai, Chennai, Kolkata
 
--- Person list people:
+-- person list people:
 
--- Person: Sam Ather
+-- person: Sam Ather
 age: 30
 
--- Person.meta:
+-- person.meta:
 address: Sam Ather City at Some Other House
 phone-number: +987-654321
 
--- Person: $r
+-- person: $r
 
 -- end: people
 
--- Metadata meta:
+-- metadata meta:
 address: Sam City in Some House
 phone-number: +1234-56789
 
--- Person r: Sam Wan
+-- person r: Sam Wan
 age: 23
 meta: $meta
 
@@ -37,19 +37,19 @@ meta: $meta
 -- ftd.text: $first-person-details(people = $people)
 
 -- string more-details(p):
-Person p:
+person p:
 
 "Person " + p.name + " lives at " + p.meta.address + ". His contact number is " + p.meta.phone-number
 
 -- string some-details(person, places):
-Person person:
+person person:
 string list places:
 string date:
 
-"This person named " + person.name + " has first visited " + places.0 + " on " + date
+"The person named " + person.name + " has first visited " + places.0 + " on " + date
 
 -- string first-person-details(people):
-Person list people:
+person list people:
 
-"First Person is " + people.0.name + " lives at " + people.0.meta.address + ". His contact number is " + people.0.meta.phone-number
+"First person is " + people.0.name + " lives at " + people.0.meta.address + ". His contact number is " + people.0.meta.phone-number
 

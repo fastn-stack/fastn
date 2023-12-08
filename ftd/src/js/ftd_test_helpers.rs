@@ -98,6 +98,7 @@ fn get_dummy_package_data() -> String {
 #[track_caller]
 fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &std::path::PathBuf) {
     let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
+    let doc_name = i.name.clone();
     let js_ast_data = ftd::js::document_into_js_ast(i);
     let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), "foo");
     let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), "foo");
@@ -126,6 +127,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &st
             let ssr_body = fastn_js::ssr_with_js_string(
                 "foo",
                 format!("{js_ftd_script}\n{js_document_script}").as_str(),
+                doc_name.as_str(),
             );
 
             format!(

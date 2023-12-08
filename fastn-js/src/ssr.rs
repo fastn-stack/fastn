@@ -1,4 +1,4 @@
-pub fn ssr_str(js: &str) -> String {
+pub fn ssr_str(js: &str, doc_name: &str) -> String {
     let all_js = fastn_js::all_js_with_test();
     let js = format!("{all_js}{js}");
 
@@ -19,7 +19,10 @@ pub fn ssr_str(js: &str) -> String {
             )
             .build()
             .unwrap();
-        context.eval_as::<String>(js.as_str()).unwrap()
+        context
+            .eval_as::<String>(js.as_str())
+            .map_err(|e| panic!("SSR Error: {}, doc_id: {}", e, doc_name))
+            .unwrap()
     }
 }
 
@@ -32,10 +35,10 @@ pub fn ssr(ast: &[fastn_js::Ast]) -> String {
         }};
         fastnVirtual.ssr(main_wrapper);", fastn_js::to_js(ast,
                                                                                     "foo"));
-    ssr_str(&js)
+    ssr_str(&js, "foo")
 }
 
-pub fn ssr_with_js_string(package_name: &str, js: &str) -> String {
+pub fn ssr_with_js_string(package_name: &str, js: &str, doc_name: &str) -> String {
     let js = format!("
         let __fastn_package_name__ = \"{}\";\n{}
         let main_wrapper = function(parent) {{
@@ -46,5 +49,5 @@ pub fn ssr_with_js_string(package_name: &str, js: &str) -> String {
         }};
         fastnVirtual.ssr(main_wrapper);", package_name, js);
 
-    ssr_str(&js)
+    ssr_str(&js, doc_name)
 }
