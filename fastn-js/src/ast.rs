@@ -16,7 +16,6 @@ impl Ast {
             Ast::StaticVariable(static_variable) => Some(static_variable.name.clone()),
             Ast::MutableVariable(mutable_variable) => Some(mutable_variable.name.clone()),
             Ast::RecordInstance(record_instance) => Some(record_instance.name.clone()),
-            // Ast::OrType(ot) => Some(ot.name.clone()),
             Ast::MutableList(mutable_list) => Some(mutable_list.name.clone()),
             _ => None,
         }
