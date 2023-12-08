@@ -166,6 +166,7 @@ const ftd = (function() {
     exports.http = function (url, method, fastn_module, ...body) {
         if (url instanceof fastn.mutableClass) url = url.get();
         if (method instanceof fastn.mutableClass) method = method.get();
+        if (fastn_module instanceof fastn.moduleClass) fastn_module = fastn_module.getName();
         method = method.trim().toUpperCase();
         let request_json = {};
         const init = {
