@@ -4,7 +4,7 @@
 -- import: fastn.com/assets
 
 
--- common.post-meta meta: Benefits of being a strongly typed language
+-- common.post-meta meta: Memory, Mutability and Reactivity
 published-on: October 25, 2023
 post-url: /blog/strongly-typed/
 author: $authors.nandini
