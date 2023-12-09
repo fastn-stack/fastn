@@ -197,9 +197,10 @@ let foo__form = function (parent, inherited, args)
     function (root, inherited) {
       fastn_dom.conditionalDom(root, [
         __args__.ns.get("name"),
-        __args__.ns.get("score")
+        __args__.ns.get("score"),
+        ftd.empty
       ], function () {
-        return (!ftd.is_empty(__args__.ns.get("name")) && !ftd.is_empty(__args__.ns.get("score")));
+        return (fastn_utils.getter(__args__.ns.get("name")) !== fastn_utils.getter(ftd.empty) && fastn_utils.getter(__args__.ns.get("score")) !== fastn_utils.getter(ftd.empty));
       }, function (root) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
         rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Submit", inherited);

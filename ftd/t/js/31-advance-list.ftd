@@ -79,7 +79,7 @@ $on-input$: $ftd.set-integer($a = $form.ns.score, v = $VALUE)
 -- end: ftd.column
 
 -- ftd.text: Submit
-if: { !ftd.is_empty(form.ns.name) && !ftd.is_empty(form.ns.score) }
+if: { form.ns.name != ftd.empty && form.ns.score != ftd.empty }
 $on-click$: $insert($a = $name-scores, v = *$form.ns)
 background.solid: #4CAF50
 color: white
