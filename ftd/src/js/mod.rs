@@ -55,7 +55,7 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
                     "colors".to_string(),
                     fastn_js::SetPropertyValue::Reference(
                         "ftd#default-colors__DOT__getClone()__DOT__setAndReturn\
-                        (\"is-root\"__COMMA__\
+                        (\"is_root\"__COMMA__\
                          true)"
                             .to_string(),
                     ),
@@ -64,7 +64,7 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
                     "types".to_string(),
                     fastn_js::SetPropertyValue::Reference(
                         "ftd#default-types__DOT__getClone()__DOT__setAndReturn\
-                        (\"is-root\"__COMMA__\
+                        (\"is_root\"__COMMA__\
                          true)"
                             .to_string(),
                     ),

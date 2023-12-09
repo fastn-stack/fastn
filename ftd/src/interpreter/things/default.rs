@@ -614,6 +614,86 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             })
         ),
         (
+            "ftd#decrement".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#decrement".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "a".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::integer(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "a = a - 1".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+                external_implementation: false
+            })
+        ),
+        (
+            "ftd#decrement-by".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#decrement-by".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "a".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::integer(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "v".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::integer(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "a = a - v".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+                external_implementation: false
+            })
+        ),
+        (
             "ftd#enable-light-mode".to_string(),
             ftd::interpreter::Thing::Function(ftd::interpreter::Function {
                 name: "ftd#enable-light-mode".to_string(),
