@@ -127,7 +127,9 @@ impl Expression {
                             let infer_from_value = result.get(&infer_from.value).unwrap();
 
                             match v {
-                                ftd::interpreter::StateWithThing::Thing(thing) => {
+                                ftd::interpreter::StateWithThing::Thing(thing)
+                                    if infer_from_value.kind().inner().is_or_type() =>
+                                {
                                     if thing.kind().inner().eq(&infer_from_value.kind().inner()) {
                                         ftd::interpreter::StateWithThing::new_thing(thing)
                                     } else {
