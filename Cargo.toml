@@ -9,6 +9,8 @@ members = [
     "fastn-js",
     "fastn-grammar",
     "foo",
+    "fbt_lib",
+    "fbt",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
@@ -79,6 +81,7 @@ dioxus-native-core-macro = { git = "https://github.com/DioxusLabs/dioxus", rev =
 dotenvy = "0.15"
 edit = "0.1"
 env_logger = "0.10"
+fbt-lib = { path = "fbt_lib" }
 fastn-cloud = { path = "fastn-cloud" }
 fastn-core = { path = "fastn-core" }
 fastn-issues = { path = "fastn-issues" }
@@ -179,10 +182,6 @@ features = ["http1", "server"]
 version = "6"
 default-features = false
 features=["macos_kqueue"]
-
-[workspace.dependencies.fbt-lib]
-git = "https://github.com/FifthTry/fbt"
-rev = "ea0ee98"
 
 [workspace.dependencies.syntect]
 # We use syntect for syntax highlighting feature in ftd.code.

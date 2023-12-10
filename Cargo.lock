@@ -775,24 +775,6 @@ dependencies = [
 
 [[package]]
 name = "comrak"
-version = "0.14.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15bf1e432b302dc6236dd0db580d182ce520bb24af82d6462e2d7a5e0a31c50d"
-dependencies = [
- "entities",
- "lazy_static 1.4.0",
- "memchr",
- "pest",
- "pest_derive",
- "regex",
- "shell-words",
- "typed-arena 1.7.0",
- "unicode_categories",
- "xdg",
-]
-
-[[package]]
-name = "comrak"
 version = "0.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "82c995deda3bfdebd07d0e2af79e9da13e4b1be652b21a746f3f5b24bf0a49ef"
@@ -803,7 +785,7 @@ dependencies = [
  "once_cell",
  "regex",
  "slug",
- "typed-arena 2.0.2",
+ "typed-arena",
  "unicode_categories",
 ]
 
@@ -1634,13 +1616,13 @@ dependencies = [
  "fastn-package",
  "fbt-lib",
  "fluent",
- "ftd 0.3.0",
+ "ftd",
  "futures",
  "futures-core",
  "futures-util",
  "hyper 1.0.1",
  "ignore",
- "indoc 2.0.4",
+ "indoc",
  "intl-memoizer",
  "itertools 0.12.0",
  "magic-crypt",
@@ -1683,7 +1665,7 @@ dependencies = [
 name = "fastn-issues"
 version = "0.1.0"
 dependencies = [
- "ftd 0.3.0",
+ "ftd",
  "rusqlite",
  "thiserror",
 ]
@@ -1693,7 +1675,7 @@ name = "fastn-js"
 version = "0.1.0"
 dependencies = [
  "fastn-grammar",
- "indoc 2.0.4",
+ "indoc",
  "itertools 0.12.0",
  "prettify-js",
  "pretty",
@@ -1721,7 +1703,7 @@ dependencies = [
  "async-trait",
  "camino",
  "fastn-issues",
- "ftd 0.3.0",
+ "ftd",
  "futures",
  "rusqlite",
  "serde",
@@ -1735,13 +1717,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "25cbce373ec4653f1a01a31e8a5e5ec0c622dc27ff9c4e6606eefef5cbbed4a5"
 
 [[package]]
+name = "fbt"
+version = "0.1.18"
+dependencies = [
+ "fbt-lib",
+]
+
+[[package]]
 name = "fbt-lib"
 version = "0.1.18"
-source = "git+https://github.com/FifthTry/fbt?rev=ea0ee98#ea0ee9832ab515c8acf7f0a1f4d89f2d4e6671eb"
 dependencies = [
  "colored",
  "diffy",
- "ftd 0.2.0",
+ "ftd",
  "rand",
  "sha2 0.10.8",
  "walkdir",
@@ -1873,30 +1861,10 @@ checksum = "c1fd087255f739f4f1aeea69f11b72f8080e9c2e7645cd06955dad4a178a49e3"
 
 [[package]]
 name = "ftd"
-version = "0.2.0"
-source = "git+https://github.com/FifthTry/ftd?rev=b698bd6#b698bd6acf4b6dfc1557976ef63f378c473e8432"
-dependencies = [
- "comrak 0.14.0",
- "css-color-parser",
- "format_num",
- "include_dir",
- "indoc 1.0.9",
- "itertools 0.10.5",
- "once_cell",
- "regex",
- "serde",
- "serde_json",
- "slug",
- "syntect",
- "thiserror",
-]
-
-[[package]]
-name = "ftd"
 version = "0.3.0"
 dependencies = [
  "colored",
- "comrak 0.19.0",
+ "comrak",
  "crossterm 0.27.0",
  "css-color-parser",
  "diffy",
@@ -1909,7 +1877,7 @@ dependencies = [
  "futures",
  "include_dir",
  "indexmap 2.1.0",
- "indoc 2.0.4",
+ "indoc",
  "itertools 0.12.0",
  "once_cell",
  "pretty_assertions",
@@ -2401,12 +2369,6 @@ dependencies = [
  "hashbrown 0.14.3",
  "serde",
 ]
-
-[[package]]
-name = "indoc"
-version = "1.0.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bfa799dd5ed20a7e349f3b4639aa80d74549c81716d9ec4f994c9b5815598306"
 
 [[package]]
 name = "indoc"
@@ -3136,51 +3098,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e3148f5046208a5d56bcfc03053e3ca6334e51da8dfb19b6cdc8b306fae3283e"
 
 [[package]]
-name = "pest"
-version = "2.7.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ae9cee2a55a544be8b89dc6848072af97a20f2422603c10865be2a42b580fff5"
-dependencies = [
- "memchr",
- "thiserror",
- "ucd-trie",
-]
-
-[[package]]
-name = "pest_derive"
-version = "2.7.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "81d78524685f5ef2a3b3bd1cafbc9fcabb036253d9b1463e726a91cd16e2dfc2"
-dependencies = [
- "pest",
- "pest_generator",
-]
-
-[[package]]
-name = "pest_generator"
-version = "2.7.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "68bd1206e71118b5356dae5ddc61c8b11e28b09ef6a31acbd15ea48a28e0c227"
-dependencies = [
- "pest",
- "pest_meta",
- "proc-macro2",
- "quote",
- "syn 2.0.39",
-]
-
-[[package]]
-name = "pest_meta"
-version = "2.7.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7c747191d4ad9e4a4ab9c8798f1e82a39affe7ef9648390b7e5548d18e099de6"
-dependencies = [
- "once_cell",
- "pest",
- "sha2 0.10.8",
-]
-
-[[package]]
 name = "phf"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3373,7 +3290,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b55c4d17d994b637e2f4daf6e5dc5d660d209d5642377d675d7a1c3ab69fa579"
 dependencies = [
  "arrayvec 0.5.2",
- "typed-arena 2.0.2",
+ "typed-arena",
  "unicode-width",
 ]
 
@@ -4132,12 +4049,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "shell-words"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "24188a676b6ae68c3b2cb3a01be17fbf7240ce009799bb56d5b1409051e78fde"
-
-[[package]]
 name = "shipyard"
 version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4735,12 +4646,6 @@ dependencies = [
 
 [[package]]
 name = "typed-arena"
-version = "1.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a9b2228007eba4120145f785df0f6c92ea538f5a3635a612ecf4e334c8c1446d"
-
-[[package]]
-name = "typed-arena"
 version = "2.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6af6ae20167a9ece4bcb41af5b80f8a1f1df981f6391189ce00fd257af04126a"
@@ -4750,12 +4655,6 @@ name = "typenum"
 version = "1.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42ff0bf0c66b8238c6f3b578df37d0b7848e55df8577b3f74f92a69acceeb825"
-
-[[package]]
-name = "ucd-trie"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed646292ffc8188ef8ea4d1e0e0150fb15a5c2e12ad9b8fc191ae7a8a7f3c4b9"
 
 [[package]]
 name = "unic-langid"
@@ -5211,12 +5110,6 @@ checksum = "05f360fc0b24296329c78fda852a1e9ae82de9cf7b27dae4b7f62f118f77b9ed"
 dependencies = [
  "tap",
 ]
-
-[[package]]
-name = "xdg"
-version = "2.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "213b7324336b53d2414b2db8537e56544d981803139155afa84f76eeebb7a546"
 
 [[package]]
 name = "yaml-rust"

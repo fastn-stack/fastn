@@ -1,0 +1,15 @@
+[package]
+name = "fbt"
+version = "0.1.18"
+authors = [
+    "Amit Upadhyay <upadhyay@gmail.com>",
+    "Shobhit Sharma <shobhit@fifthtry.com>",
+    "Sitesh <siteshpattanaik001@gmail.com>",
+]
+edition = "2021"
+description = "folder based testing tool (library)"
+license = "BSD-2-Clause"
+homepage = "https://www.fifthtry.com/fifthtry/fbt/"
+
+[dependencies]
+fbt-lib = { path = "../fbt_lib", version = "0.1.18" }
