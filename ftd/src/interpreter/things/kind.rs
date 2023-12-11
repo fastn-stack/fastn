@@ -329,6 +329,13 @@ impl Kind {
             _ => None,
         }
     }
+
+    pub fn get_or_type_name(&self) -> Option<&str> {
+        match self {
+            ftd::interpreter::Kind::OrType { ref name, .. } => Some(name),
+            _ => None,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
