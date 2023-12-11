@@ -1952,6 +1952,18 @@ a.value = a.value+v
 
 
 
+function ftd__decrement___main(a,args,data,id){
+a.value = a.value-1
+}
+
+
+
+function ftd__decrement_by___main(a,v,args,data,id){
+a.value = a.value-v
+}
+
+
+
 function ftd__enable_light_mode___main(args,data,id){
 return (enable_light_mode(args,data,id));
 }
@@ -2060,8 +2072,8 @@ window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","0:main__padding", data);
 window.ftd.utils.node_change_call("main","0:main__color", data);
+window.ftd.utils.node_change_call("main","0:main__padding", data);
 };
 
 
