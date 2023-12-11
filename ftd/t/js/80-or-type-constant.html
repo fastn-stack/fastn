@@ -18,7 +18,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3">Smol</div><div data-id="4">Smol</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3">Smol</div><comment data-id="4"></comment><div data-id="5">not medium</div><div data-id="6">Smol</div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
     </style>
@@ -40,7 +40,17 @@
       }
     }
     ), inherited);
-    let parenti1 = foo__fancy_button(parent, inherited, {
+    fastn_dom.conditionalDom(parent, [
+      global.foo__b,
+      global.foo__button_type.get("medium")
+    ], function () {
+      return (fastn_utils.getter(global.foo__b) !== fastn_utils.getter(global.foo__button_type.get("medium")));
+    }, function (root) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "not medium", inherited);
+      return rooti0;
+    });
+    let parenti2 = foo__fancy_button(parent, inherited, {
       bt: global.foo__b
     });
   } finally {

@@ -20,6 +20,9 @@
 -- ftd.text: !Smol
 text if { b == small }: Smol
 
+-- ftd.text: not medium
+if: { b != medium }
+
 -- fancy-button: $b
 
 -- component fancy-button:
