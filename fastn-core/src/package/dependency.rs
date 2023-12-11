@@ -9,6 +9,7 @@ pub struct Dependency {
     pub implements: Vec<String>,
     pub endpoint: Option<String>,
     pub mountpoint: Option<String>,
+    pub provides_via: Option<String>,
 }
 
 impl Dependency {
@@ -72,6 +73,8 @@ pub(crate) struct DependencyTemp {
     pub endpoint: Option<String>,
     #[serde(rename = "mount-point")]
     pub mountpoint: Option<String>,
+    #[serde(rename = "provides-via")]
+    pub provides_via: Option<String>,
 }
 
 impl DependencyTemp {
@@ -94,6 +97,7 @@ impl DependencyTemp {
                 }
                 None => None,
             },
+            provides_via: self.provides_via,
         })
     }
 }

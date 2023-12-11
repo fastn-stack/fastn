@@ -1393,6 +1393,11 @@ impl Config {
         };
         let fastn_doc = utils::fastn_doc(&root.join("FASTN.ftd")).await?;
         let package = fastn_core::Package::from_fastn_doc(&root, &fastn_doc)?;
+        println!(
+            "Package: {} system found {:?}",
+            package.name.as_str(),
+            &package.system
+        );
         let mut config = Config {
             package: package.clone(),
             packages_root: root.clone().join(".packages"),
@@ -1475,14 +1480,19 @@ impl Config {
             return Ok(package.clone());
         }
 
+        println!("Package details ==========================================");
+        // println!("Before change");
+        // dbg!(&package);
         let package = package
             .get_and_resolve(&self.get_root_for_package(package))
             .await?;
-
+        // dbg!(package.name.as_str());
+        // println!("After change --------------------------------");
+        // dbg!(&package);
+        println!("END =======================================================");
         self.add_package(&package);
         Ok(package)
     }
-
     pub(crate) fn add_package(&self, package: &fastn_core::Package) {
         self.all_packages
             .borrow_mut()

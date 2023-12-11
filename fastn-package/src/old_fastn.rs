@@ -95,4 +95,7 @@ pub struct PackageTemp {
     pub backend_headers: Option<Vec<BackendHeader>>,
     #[serde(rename = "icon")]
     pub icon: Option<ftd::ImageSrc>,
+    // This will contain the module name through which this package can
+    // be accessed when considered as a system's package
+    pub system: Option<String>,
 }
