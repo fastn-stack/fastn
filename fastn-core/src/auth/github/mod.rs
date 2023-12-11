@@ -43,6 +43,11 @@ pub async fn callback(
     let code = req.q("code", "".to_string())?;
     // TODO: CSRF check
 
+    // TODO: if a user is already logged in using emailpassword and uses github oauth
+    // present a merge account option:
+    // ask to add github email to the logged in user's profile
+    // ask to update details by giving a form
+
     let access_token = match fastn_core::auth::github::utils::github_client()
         .exchange_code(oauth2::AuthorizationCode::new(code))
         .request_async(oauth2::reqwest::async_http_client)
@@ -67,26 +72,44 @@ pub async fn callback(
         gh_user.email = Some(primary.email);
     }
 
-    let ud = UserDetail {
-        user: gh_user,
-        access_token,
-    };
+    let user_id = uuid::Uuid::new_v4();
 
-    let user_detail_str = serde_json::to_string(&ud)?;
+    let affected = fastn_core::auth::emailpassword::upsert_user(
+        &user_id,
+        gh_user
+            .email
+            .expect("email must exist for github user")
+            .as_str(),
+        gh_user.username.as_str(),
+        // TODO: should present an onabording form that asks for a name if github name is null
+        gh_user.name.unwrap_or(String::new()).as_str(),
+        "",
+    )
+    .await
+    .unwrap_or(0);
 
-    return Ok(actix_web::HttpResponse::Found()
-        .cookie(
-            actix_web::cookie::Cookie::build(
-                fastn_core::auth::AuthProviders::GitHub.as_str(),
-                fastn_core::auth::utils::encrypt(&user_detail_str).await,
-            )
-            .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
-            .path("/")
-            .permanent()
-            .finish(),
-        )
-        .append_header((actix_web::http::header::LOCATION, next))
-        .finish());
+    tracing::info!("fastn_user created. Rows affected: {}", &affected);
+
+    let session_id = uuid::Uuid::new_v4();
+
+    let affected = fastn_core::auth::emailpassword::create_session(&session_id, &user_id)
+        .await
+        .unwrap_or(0);
+
+    tracing::info!("session created. Rows affected: {}", &affected);
+
+    // TODO: access_token expires?
+    let affected = fastn_core::auth::insert_oauth_token(
+        session_id,
+        access_token.as_str(),
+        fastn_core::auth::AuthProviders::GitHub,
+    )
+    .await
+    .unwrap_or(0);
+
+    tracing::info!("token stored. Rows affected: {}", &affected);
+
+    fastn_core::auth::set_session_cookie_and_end_response(req, session_id, next).await
 }
 
 // it returns identities which matches to given input

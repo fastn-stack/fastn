@@ -1,4 +1,6 @@
-// route: /-/auth/login/
+use std::str::FromStr;
+
+/// route handler: /-/auth/login/
 pub async fn login(
     req: &fastn_core::http::Request,
     next: String,
@@ -11,19 +13,32 @@ pub async fn login(
 
     match provider.as_str() {
         "github" => fastn_core::auth::github::login(req, next).await,
+        // client should handle redirects to next for emailpassword login
+        "emailpassword" => fastn_core::auth::emailpassword::login(req, next).await,
         _ => Ok(fastn_core::not_found!("unknown provider: {}", provider)),
     }
 }
 
 // route: /-/auth/logout/
-pub fn logout(
+pub async fn logout(
     req: &fastn_core::http::Request,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     // TODO: Refactor, Not happy with this code, too much of repetition of similar code
+
+    if let Some(session_id) = req.cookie("session") {
+        let session_id =
+            uuid::Uuid::from_str(session_id.as_str()).expect("cookie contains valid uuid");
+        let affected = fastn_core::auth::emailpassword::destroy_session(session_id)
+            .await
+            .unwrap();
+
+        tracing::info!("session destroyed for {session_id}. Rows affected {affected}.");
+    }
+
     Ok(actix_web::HttpResponse::Found()
         .cookie(
-            actix_web::cookie::Cookie::build(fastn_core::auth::AuthProviders::GitHub.as_str(), "")
+            actix_web::cookie::Cookie::build("session", "")
                 .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
@@ -44,7 +59,7 @@ pub async fn handle_auth(
         "/-/auth/login/" => login(&req, next).await,
         // TODO: This has be set while creating the GitHub OAuth Application
         "/-/auth/github/" => fastn_core::auth::github::callback(&req, next).await,
-        "/-/auth/logout/" => logout(&req, next),
+        "/-/auth/logout/" => logout(&req, next).await,
 
         "/-/auth/create-user/" => fastn_core::auth::emailpassword::create_user(&req).await,
 

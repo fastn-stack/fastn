@@ -120,3 +120,39 @@ pub async fn get_auth_identities(
     };
     Ok(matched_identities)
 }
+
+async fn set_session_cookie_and_end_response(
+    req: &fastn_core::http::Request,
+    session_id: uuid::Uuid,
+    next: String,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    return Ok(actix_web::HttpResponse::Found()
+        .cookie(
+            actix_web::cookie::Cookie::build("session", session_id.to_string())
+                .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+                .path("/")
+                .permanent()
+                .finish(),
+        )
+        // redirect to next
+        .append_header((actix_web::http::header::LOCATION, next))
+        .finish());
+}
+
+async fn insert_oauth_token(
+    session_id: uuid::Uuid,
+    token: &str,
+    provider: AuthProviders,
+) -> fastn_core::Result<u64> {
+    let client = fastn_core::auth::emailpassword::db::get_client().await?;
+
+    let id = uuid::Uuid::new_v4();
+
+    Ok(client
+        .execute(
+            "insert into fastn_oauthtoken(id, session_id, token, provider) values ($1, $2, $3, $4)",
+            &[&id, &session_id, &token, &provider.as_str()],
+        )
+        .await
+        .unwrap())
+}

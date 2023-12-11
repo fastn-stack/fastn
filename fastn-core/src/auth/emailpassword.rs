@@ -1,4 +1,12 @@
-use argon2::PasswordHasher;
+use argon2::{Argon2, PasswordHasher, PasswordVerifier};
+
+#[derive(serde::Deserialize, serde::Serialize, Debug)]
+struct User {
+    username: String,
+    email: String,
+    name: String,
+    password: String,
+}
 
 // TODO: handle errors
 pub async fn create_user(
@@ -10,7 +18,7 @@ pub async fn create_user(
 
     let user: User = serde_json::from_slice(req.body())?;
 
-    dbg!(&user);
+    tracing::info!("user payload: {:?}", &user);
 
     let client = db::get_client().await?;
 
@@ -43,30 +51,131 @@ pub async fn create_user(
     let user_id = uuid::Uuid::new_v4();
 
     // TODO: email verification
-    let affected = client
-        .execute(
-            "INSERT into fastn_user(id, email, username, password, name) values ($1, $2, $3, $4, $5)",
-            &[&user_id, &user.email, &user.username, &hashed_password, &user.name],
-        )
-        .await
-        .unwrap();
+    // TODO: password can be null for oauth users. if it's null they should not login using
+    // emailpassword flow
+    let affected = upsert_user(
+        &user_id,
+        user.email.as_str(),
+        user.username.as_str(),
+        user.name.as_str(),
+        hashed_password.as_str(),
+    )
+    .await?;
 
-    dbg!(affected);
+    tracing::info!("fastn_user created. Rows affected: {}", &affected);
 
     fastn_core::http::api_ok(user)
 }
 
-#[derive(serde::Deserialize, serde::Serialize, Debug)]
-struct User {
-    username: String,
-    email: String,
-    name: String,
-    password: String,
+pub(crate) async fn login(
+    req: &crate::http::Request,
+    next: String,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    if req.method() != "POST" {
+        return Ok(fastn_core::not_found!("invalid route"));
+    }
+
+    #[derive(serde::Deserialize, Debug)]
+    struct Payload {
+        // TODO: add email/username
+        email: String,
+        password: String,
+    }
+
+    let body: Payload = serde_json::from_slice(req.body())?;
+
+    tracing::info!("request payload: {:?}", body);
+
+    let client = db::get_client().await?;
+
+    let user = client
+        .query(
+            "select id, username, email, name, password from user where email = $1 limit 1",
+            &[&body.email],
+        )
+        .await
+        .unwrap_or(vec![]);
+
+    if user.is_empty() {
+        return fastn_core::http::api_error("invalid payload");
+    }
+
+    let user = user.first().expect("vec of length must have first");
+
+    let password: String = user.get("password");
+    let user_id: uuid::Uuid = user.get("id");
+
+    let parsed_hash = argon2::PasswordHash::new(&password).unwrap();
+
+    let password_match = Argon2::default().verify_password(body.password.as_bytes(), &parsed_hash);
+
+    if password_match.is_err() {
+        return fastn_core::http::api_error("invalid payload");
+    }
+
+    let session_id = uuid::Uuid::new_v4();
+
+    let affected = create_session(&session_id, &user_id).await.unwrap_or(0);
+
+    tracing::info!("session created. Rows affected: {}", &affected);
+
+    // client has to 'follow' this request
+    // https://stackoverflow.com/a/39739894
+    fastn_core::auth::set_session_cookie_and_end_response(req, session_id, next).await
+}
+
+/// insert user if it not exists in the database returning the rows affected
+/// email and username is unique in fastn_user table
+pub async fn upsert_user(
+    user_id: &uuid::Uuid,
+    email: &str,
+    username: &str,
+    name: &str,
+    hashed_password: &str,
+) -> fastn_core::Result<u64> {
+    let client = db::get_client().await?;
+
+    Ok(client
+        .execute(
+            // TODO: what if user manually signups with email test@test then later logins using
+            // github with the same email but the username are differente in both cases?
+            // we should ask one time if they want to update their username or keep using existing
+            // one?
+            "insert into fastn_user(id, email, username, password, name) values ($1, $2, $3, $4, $5) on conflict do nothing",
+            &[&user_id, &email, &username, &hashed_password, &name],
+        )
+        .await
+        .unwrap())
+}
+
+// insert a row in fastn_session table
+pub async fn create_session(
+    session_id: &uuid::Uuid,
+    user_id: &uuid::Uuid,
+) -> fastn_core::Result<u64> {
+    let client = db::get_client().await?;
+
+    Ok(client
+        .execute(
+            "insert into fastn_session(id, user_id) values ($1, $2)",
+            &[&session_id, &user_id],
+        )
+        .await
+        .unwrap())
+}
+
+pub async fn destroy_session(session_id: uuid::Uuid) -> fastn_core::Result<u64> {
+    let client = db::get_client().await?;
+
+    Ok(client
+        .execute("delete from fastn_session where id = $1", &[&session_id])
+        .await
+        .unwrap())
 }
 
 // TODO: this is borrowed from pg.rs
 // pg.rs and this mod should use the same code
-mod db {
+pub mod db {
     async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
         let mut cfg = deadpool_postgres::Config::new();
         cfg.libpq_style_connection_string = match std::env::var("FASTN_DB_URL") {

@@ -10,10 +10,21 @@ CREATE TABLE IF NOT EXISTS fastn_user (
 );
 
 CREATE TABLE IF NOT EXISTS fastn_session (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     user_id UUID REFERENCES fastn_user(id),
     created_on TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS fastn_oauthtoken (
+    id UUID PRIMARY KEY,
+    session_id UUID NOT NULL REFERENCES fastn_session(id) ON DELETE CASCADE,
+    token text NOT NULL,
+    provider text NOT NULL,
+    created_on TIMESTAMP DEFAULT now()
+);
+
 
 ALTER TABLE fastn_user ALTER COLUMN created_on SET DEFAULT now();
+ALTER TABLE fastn_session ALTER COLUMN created_on SET DEFAULT now();
+ALTER TABLE fastn_user ADD UNIQUE (email);
+ALTER TABLE fastn_user ADD UNIQUE (username);
