@@ -112,42 +112,35 @@ impl Expression {
         for variable in variable_identifier_reads {
             let full_variable_name =
                 doc.resolve_reference_name(format!("${}", variable.value).as_str(), line_number)?;
-            let value = try_ok_state!(
-                match ftd::interpreter::PropertyValue::from_string_with_argument(
-                    full_variable_name.as_str(),
-                    doc,
-                    None,
-                    false,
-                    line_number,
-                    definition_name_with_arguments,
-                    loop_object_name_and_kind,
-                ) {
-                    Ok(v) =>
-                        if let Some(infer_from) = variable.infer_from {
-                            let infer_from_value = result.get(&infer_from.value).unwrap();
 
-                            match v {
-                                ftd::interpreter::StateWithThing::Thing(thing)
-                                    if infer_from_value.kind().inner().is_or_type() =>
-                                {
-                                    if thing.kind().inner().eq(&infer_from_value.kind().inner()) {
-                                        ftd::interpreter::StateWithThing::new_thing(thing)
-                                    } else {
-                                        return ftd::interpreter::utils::e2(format!("Invalid value on the right-hand side. Expected \"{}\" but found \"{}\".", infer_from_value.kind().inner().get_name(), thing.kind().inner().get_name()), doc.name, line_number);
-                                    }
-                                }
-                                t => t,
-                            }
-                        } else {
-                            v
-                        },
-                    Err(e) => {
-                        if let Some(infer_from) = variable.infer_from {
-                            let infer_from_value = result.get(&infer_from.value).unwrap();
-
-                            if let ftd::interpreter::Kind::OrType { name, .. } =
-                                infer_from_value.kind()
+            let value = try_ok_state!(match variable
+                .infer_from
+                .map(|infer_from| result.get(&infer_from.value).unwrap())
+            {
+                Some(infer_from_value) => {
+                    match ftd::interpreter::PropertyValue::from_string_with_argument(
+                        full_variable_name.as_str(),
+                        doc,
+                        None,
+                        false,
+                        line_number,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                    ) {
+                        Ok(v) => match v {
+                            ftd::interpreter::StateWithThing::Thing(thing)
+                                if infer_from_value.kind().inner().is_or_type() =>
                             {
+                                if thing.kind().inner().eq(&infer_from_value.kind().inner()) {
+                                    ftd::interpreter::StateWithThing::new_thing(thing)
+                                } else {
+                                    return ftd::interpreter::utils::e2(format!("Invalid value on the right-hand side. Expected \"{}\" but found \"{}\".", infer_from_value.kind().inner().get_name(), thing.kind().inner().get_name()), doc.name, line_number);
+                                }
+                            }
+                            t => t,
+                        },
+                        Err(e) => match infer_from_value.kind().get_or_type_name() {
+                            Some(name) => {
                                 let name = format!("${}.{}", name, variable.value);
                                 let full_variable_name =
                                     doc.resolve_reference_name(name.as_str(), line_number)?;
@@ -161,15 +154,22 @@ impl Expression {
                                     definition_name_with_arguments,
                                     loop_object_name_and_kind,
                                 )
-                            } else {
-                                Err(e)
                             }
-                        } else {
-                            Err(e)
-                        }
-                    }?,
+                            None => Err(e),
+                        }?,
+                    }
                 }
-            );
+                None => ftd::interpreter::PropertyValue::from_string_with_argument(
+                    full_variable_name.as_str(),
+                    doc,
+                    None,
+                    false,
+                    line_number,
+                    definition_name_with_arguments,
+                    loop_object_name_and_kind,
+                )?,
+            });
+
             ftd::interpreter::utils::insert_module_thing(
                 &value.kind().into_kind_data(),
                 variable.value.as_str(),
