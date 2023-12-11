@@ -70,6 +70,7 @@ pub struct Package {
 
     /// Redirect URLs
     pub redirects: Option<ftd::Map<String>>,
+    pub system: Option<String>,
 }
 
 impl Package {
@@ -103,6 +104,7 @@ impl Package {
             apps: vec![],
             icon: None,
             redirects: None,
+            system: None,
         }
     }
 
@@ -471,6 +473,20 @@ impl Package {
         crate::http::construct_url_and_get_str(format!("{}/FASTN.ftd", self.name).as_str()).await
     }
 
+    pub fn resolve_system_dependencies(&mut self) {
+        if let Some(system_module) = self.system.as_ref() {
+            println!("System module found: {:?}", system_module.as_str());
+            for dep in self.dependencies.iter() {
+                if dep.provides_via.is_some() {
+                    dbg!("Dependency name: {}", dep.package.name.as_str());
+                    dbg!("Provides via: {:?}", dep.provides_via.as_ref());
+                }
+            }
+        } else {
+            println!("No system module found for package: {}", self.name.as_str())
+        }
+    }
+
     #[tracing::instrument(skip_all)]
     pub(crate) async fn resolve(
         &mut self,
@@ -508,6 +524,8 @@ impl Package {
             .collect::<Vec<fastn_core::Result<fastn_core::Dependency>>>()
             .into_iter()
             .collect::<fastn_core::Result<Vec<fastn_core::Dependency>>>()?;
+
+        package.resolve_system_dependencies();
 
         let user_groups: Vec<crate::user_group::UserGroupTemp> =
             fastn_document.get("fastn#user-group")?;
@@ -566,6 +584,14 @@ impl Package {
         let mut deps = {
             let temp_deps: Vec<fastn_core::package::dependency::DependencyTemp> =
                 fastn_doc.get("fastn#dependency")?;
+
+            for dep in temp_deps.iter() {
+                println!(
+                    "Dep: {:?}, provides-via: {:?}",
+                    dep.name.as_str(),
+                    dep.provides_via.clone()
+                )
+            }
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
@@ -588,10 +614,12 @@ impl Package {
                 implements: Vec::new(),
                 endpoint: None,
                 mountpoint: None,
+                provides_via: None,
             });
         };
         // setting dependencies
         package.dependencies = deps;
+        dbg!(&package.dependencies);
         package.fastn_path = Some(root.join("FASTN.ftd"));
 
         package.redirects = {
@@ -734,6 +762,7 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             apps: vec![],
             icon: self.icon,
             redirects: None,
+            system: self.system,
         }
     }
 }

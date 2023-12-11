@@ -18,6 +18,7 @@ boolean inherit-auto-imports-from-original: true
 optional string endpoint:
 boolean backend: false
 backend-header list backend-headers:
+optional string system:
 
 
 -- record dependency-data:
@@ -27,6 +28,7 @@ optional body notes:
 string list implements:
 optional string endpoint:
 optional string mount-point:
+optional string provides-via:
 
 
 -- dependency-data list dependency:
