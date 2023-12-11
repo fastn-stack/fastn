@@ -20,7 +20,7 @@ pub async fn process(
         {
             ud = UserDetails {
                 is_logged_in: true,
-                username: user_detail.user.login,
+                username: user_detail.user.username,
                 name: user_detail.user.name.unwrap_or_default(),
                 email: user_detail.user.email.unwrap_or_default(),
             }

@@ -8,6 +8,14 @@ mod utils;
 
 pub use utils::{decrypt, encrypt};
 
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+pub struct FastnUser {
+    pub username: String,
+    pub id: String,
+    pub name: Option<String>,
+    pub email: Option<String>,
+}
+
 #[derive(Debug)]
 pub(crate) enum AuthProviders {
     GitHub,
@@ -63,7 +71,7 @@ pub async fn get_user_data_from_cookies(
                             serde_json::from_str(ud_decrypted.as_str())?;
                         match requested_field {
                             "username" | "user_name" | "user-name" => {
-                                Ok(Some(github_ud.user.login))
+                                Ok(Some(github_ud.user.username))
                             }
                             "token" => Ok(Some(github_ud.access_token)),
                             _ => Err(fastn_core::Error::GenericError(format!(
