@@ -1462,6 +1462,25 @@ impl Config {
         Ok(config)
     }
 
+    fn check_dependencies_provided(&self, package: &mut fastn_core::Package) {
+        for dependency in package.dependencies.iter_mut() {
+            if let Some(ref required_as) = dependency.required_as {
+                if let Some(provided_via) = self.package.dependencies.iter().find_map(|v| {
+                    if v.package.name.eq(&dependency.package.name) {
+                        v.provided_via.clone()
+                    } else {
+                        None
+                    }
+                }) {
+                    dependency.package.name = provided_via;
+                } else {
+                    //     Todo: throw error
+                }
+                dependency.alias = Some(required_as.clone());
+            }
+        }
+    }
+
     pub(crate) async fn resolve_package(
         &self,
         package: &fastn_core::Package,
@@ -1476,12 +1495,8 @@ impl Config {
         let mut package = package
             .get_and_resolve(&self.get_root_for_package(package))
             .await?;
-        println!("Resolving package: {}", package.name.as_str());
-        dbg!(&package.system, &package.system_is_confidential);
-        dbg!(&package.dependencies);
+        self.check_dependencies_provided(&mut package);
         self.add_package(&package);
-
-        println!("End --------------------------------");
         Ok(package)
     }
     pub(crate) fn add_package(&self, package: &fastn_core::Package) {

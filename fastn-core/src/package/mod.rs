@@ -483,7 +483,7 @@ impl Package {
         for dep in self.dependencies.iter() {
             println!("Dependency: {:?}", dep.package.name.as_str());
             if let Some(via) = dep.provided_via.as_ref() {
-                match dep.package.system.as_ref() {
+                /*match dep.package.system.as_ref() {
                     Some(system_module) => {
                         println!("System module dependency: {}", system_module);
                         let package_last_name = fastn_core::utils::get_last_name_from_package_name(
@@ -496,7 +496,7 @@ impl Package {
                         // ACTUAL LOGIC HERE
                     }
                     None => {}
-                }
+                }*/
             }
             println!("Dependency provided via: {:?}", dep.provided_via);
         }
@@ -550,6 +550,13 @@ impl Package {
             .into_iter()
             .map(|f| f.into_auto_import())
             .collect();
+        if let Some(ref package_alias) = package.system {
+            package.auto_import.push(fastn_core::AutoImport {
+                path: package.name.to_string(),
+                alias: Some(package_alias.clone()),
+                exposing: vec![],
+            });
+        }
         package.fonts = fastn_document.get("fastn#font")?;
         package.sitemap_temp = fastn_document.get("fastn#sitemap")?;
         *self = package;
@@ -627,7 +634,7 @@ impl Package {
         };
         // setting dependencies
         package.dependencies = deps;
-        package.resolve_system_dependencies()?;
+        // package.resolve_system_dependencies()?;
 
         package.fastn_path = Some(root.join("FASTN.ftd"));
 
