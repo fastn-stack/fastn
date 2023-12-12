@@ -74,7 +74,7 @@ pub(crate) struct DependencyTemp {
     pub endpoint: Option<String>,
     #[serde(rename = "mount-point")]
     pub mountpoint: Option<String>,
-    #[serde(rename = "provides-via")]
+    #[serde(rename = "provided-via")]
     pub provided_via: Option<String>,
     #[serde(rename = "required-as")]
     pub required_as: Option<String>,

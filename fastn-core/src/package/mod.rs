@@ -550,13 +550,7 @@ impl Package {
             .into_iter()
             .map(|f| f.into_auto_import())
             .collect();
-        if let Some(ref package_alias) = package.system {
-            package.auto_import.push(fastn_core::AutoImport {
-                path: package.name.to_string(),
-                alias: Some(package_alias.clone()),
-                exposing: vec![],
-            });
-        }
+
         package.fonts = fastn_document.get("fastn#font")?;
         package.sitemap_temp = fastn_document.get("fastn#sitemap")?;
         *self = package;
