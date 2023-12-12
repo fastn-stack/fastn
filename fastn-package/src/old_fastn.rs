@@ -98,5 +98,6 @@ pub struct PackageTemp {
     // This will contain the module name through which this package can
     // be accessed when considered as a system's package
     pub system: Option<String>,
+    #[serde(rename = "system-is-confidential")]
     pub system_is_confidential: Option<bool>,
 }
