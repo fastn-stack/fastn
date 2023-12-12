@@ -33,7 +33,14 @@ impl fastn_js::Ast {
             fastn_js::Ast::Export { from, to } => variable_to_js(
                 to,
                 &None,
-                text(fastn_js::utils::name_to_js(from).as_str()),
+                text(
+                    format!(
+                        "{}[\"{}\"]",
+                        &fastn_js::constants::GLOBAL_VARIABLE_MAP,
+                        fastn_js::utils::name_to_js(from)
+                    )
+                    .as_str(),
+                ),
                 true,
             ),
         }

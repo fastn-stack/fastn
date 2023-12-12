@@ -32,3 +32,6 @@ caption button-type bt:
 text if { fancy-button.bt == small }: Smol
 
 -- end: fancy-button
+
+
+-- string msg: Super secret message
