@@ -1,0 +1,19 @@
+-- component bar:
+module m: 80-or-type-constant
+
+-- ftd.column:
+
+-- bar.m.fancy-button: $bar.m.b
+
+-- ftd.integer: $bar.m.b
+color: red
+
+/-- ftd.text: Something for no reason
+color: purple
+
+-- end: ftd.column
+
+-- end: bar
+
+-- bar:
+
