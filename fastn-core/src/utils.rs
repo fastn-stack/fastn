@@ -495,11 +495,11 @@ pub(crate) fn validate_base_url(package: &fastn_core::Package) -> fastn_core::Re
     Ok(())
 }
 
-pub(crate) fn get_last_name_from_package_name(s: &str) -> &str {
+pub(crate) fn get_last_name_from_package_name(s: &str) -> String {
     if let Some(last_name) = s.rfind('/') {
-        return &s[last_name + 1..];
+        return s[last_name + 1..].to_string();
     }
-    s
+    s.to_string()
 }
 
 #[allow(dead_code)]

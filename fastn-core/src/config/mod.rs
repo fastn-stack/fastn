@@ -1472,7 +1472,13 @@ impl Config {
                         None
                     }
                 }) {
+                    let alias = fastn_core::utils::get_last_name_from_package_name(
+                        dependency.package.name.as_str(),
+                    );
                     dependency.package.name = provided_via;
+                    if dependency.alias.is_none() {
+                        dependency.alias = Some(alias.to_string());
+                    }
                 } else {
                     //     Todo: throw error
                 }
