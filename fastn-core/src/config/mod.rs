@@ -1476,9 +1476,6 @@ impl Config {
                         dependency.package.name.as_str(),
                     );
                     dependency.package.name = provided_via;
-                    if dependency.alias.is_none() {
-                        dependency.alias = Some(alias.to_string());
-                    }
                 } else {
                     //     Todo: throw error
                 }
@@ -1486,7 +1483,6 @@ impl Config {
             }
         }
         if let Some(ref package_alias) = package.system {
-            dbg!(&self.package.dependencies, &package);
             if let Some(provided_via) = self.package.dependencies.iter().find_map(|v| {
                 if v.package.name.eq(&package.name) {
                     v.provided_via.clone()
@@ -1494,24 +1490,33 @@ impl Config {
                     None
                 }
             }) {
-                dbg!(&provided_via, &self.package.name);
                 // Todo: Move to a function and check in dependencies too
-                if provided_via.starts_with(format!("{}/", &self.package.name).as_str())
+                let package_name = if provided_via
+                    .starts_with(format!("{}/", &self.package.name).as_str())
                     || provided_via.eq(&self.package.name)
                 {
-                    package.dependencies.push(fastn_core::Dependency {
-                        package: fastn_core::Package::new(self.package.name.as_str()),
-                        version: None,
-                        notes: None,
-                        alias: None,
-                        implements: vec![],
-                        endpoint: None,
-                        mountpoint: None,
-                        provided_via: None,
-                        required_as: None,
-                    });
-                    dbg!("1***", &package);
-                }
+                    self.package.name.clone()
+                } else if let Some(package_dependency) =
+                    self.package.dependencies.iter().find(|v| {
+                        provided_via.starts_with(format!("{}/", &v.package.name).as_str())
+                            || provided_via.eq(&v.package.name)
+                    })
+                {
+                    package_dependency.package.name.clone()
+                } else {
+                    todo!("Throw error")
+                };
+                package.dependencies.push(fastn_core::Dependency {
+                    package: fastn_core::Package::new(package_name.as_str()),
+                    version: None,
+                    notes: None,
+                    alias: None,
+                    implements: vec![],
+                    endpoint: None,
+                    mountpoint: None,
+                    provided_via: None,
+                    required_as: None,
+                });
                 package.auto_import.push(fastn_core::AutoImport {
                     path: provided_via.to_string(),
                     alias: Some(package_alias.clone()),
