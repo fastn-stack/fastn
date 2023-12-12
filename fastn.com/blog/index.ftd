@@ -1,3 +1,5 @@
+-- import: fastn.com/blog/strongly-typed as p12
+-- import: fastn.com/blog/search as fp
 -- import: fastn.com/blog/cli-check-for-updates as fp
 -- import: fastn.com/blog/search as p12
 -- import: fastn.com/blog/acme as p11
@@ -19,7 +21,7 @@
 -- ds.posts:
 
 -- ds.featured-post:
-post-data: $content-library.meta
+post-data: $p12.meta
 
 -- ds.without-image-half:
 post-data: $r1.index-meta
