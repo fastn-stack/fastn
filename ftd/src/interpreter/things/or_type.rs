@@ -22,7 +22,7 @@ impl OrType {
         if name.starts_with("ftd") {
             return name.to_string();
         }
-        if let Some((_, last)) = name.rsplit_once("#") {
+        if let Some((_, last)) = name.rsplit_once('#') {
             return last.to_string();
         }
         name.to_string()
