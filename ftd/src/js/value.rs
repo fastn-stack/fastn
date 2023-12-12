@@ -345,11 +345,18 @@ impl ftd::interpreter::Value {
             }
             ftd::interpreter::Value::OrType {
                 name,
-                variant,
                 value,
-                ..
+                full_variant,
+                variant,
             } => {
-                let (js_variant, has_value) = ftd_to_js_variant(name, variant);
+                let (js_variant, has_value) = ftd_to_js_variant(
+                    name,
+                    variant,
+                    full_variant,
+                    value,
+                    doc.name,
+                    value.line_number(),
+                );
                 if has_value {
                     return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                         variant: js_variant,
@@ -412,9 +419,18 @@ impl ftd::interpreter::Value {
     }
 }
 
-fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
+fn ftd_to_js_variant(
+    name: &str,
+    variant: &str,
+    full_variant: &str,
+    value: &ftd::interpreter::PropertyValue,
+    doc_id: &str,
+    line_number: usize,
+) -> (String, bool) {
     // returns (JSVariant, has_value)
-    let variant = variant.strip_prefix(format!("{}.", name).as_str()).unwrap();
+    let variant = variant
+        .strip_prefix(format!("{}.", name).as_str())
+        .unwrap_or(full_variant);
     match name {
         "ftd#resizing" => {
             let js_variant = resizing_variants(variant);
@@ -556,7 +572,19 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
                 js_variant.1,
             )
         }
-        t => todo!("{} {}", t, variant),
+        t => {
+            if let Ok(value) = value.value(doc_id, line_number) {
+                return match value {
+                    ftd::interpreter::Value::Integer { value } => (value.to_string(), false),
+                    ftd::interpreter::Value::Decimal { value } => (value.to_string(), false),
+                    ftd::interpreter::Value::String { text } => (format!("\"{}\"", text), false),
+                    ftd::interpreter::Value::Boolean { value } => (value.to_string(), false),
+                    _ => todo!("{} {}", t, variant),
+                };
+            }
+
+            todo!("{} {}", t, variant)
+        }
     }
 }
 

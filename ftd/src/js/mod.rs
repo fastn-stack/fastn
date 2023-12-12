@@ -129,6 +129,33 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
                 from: from.to_string(),
                 to: to.to_string(),
             })
+        } else if let ftd::interpreter::Thing::OrType(ot) = thing {
+            let mut fields = vec![];
+            for variant in &ot.variants {
+                if let Some(value) = &variant.clone().fields().get(0).unwrap().value {
+                    fields.push((
+                        variant
+                            .name()
+                            .trim_start_matches(
+                                format!(
+                                    "{}.",
+                                    ftd::interpreter::OrType::or_type_name(ot.name.as_str())
+                                )
+                                .as_str(),
+                            )
+                            .to_string(),
+                        value.to_fastn_js_value_with_none(&doc, &mut false),
+                    ));
+                }
+            }
+            document_asts.push(fastn_js::Ast::OrType(fastn_js::OrType {
+                name: ot.name.clone(),
+                variants: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
+                    fields,
+                    other_references: vec![],
+                }),
+                prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
+            }));
         }
     }
 
