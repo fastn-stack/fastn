@@ -1393,11 +1393,6 @@ impl Config {
         };
         let fastn_doc = utils::fastn_doc(&root.join("FASTN.ftd")).await?;
         let package = fastn_core::Package::from_fastn_doc(&root, &fastn_doc)?;
-        println!(
-            "Package: {} system found {:?}",
-            package.name.as_str(),
-            &package.system
-        );
         let mut config = Config {
             package: package.clone(),
             packages_root: root.clone().join(".packages"),
@@ -1411,7 +1406,6 @@ impl Config {
             ftd_external_css: Default::default(),
             ftd_inline_css: Default::default(),
         };
-
         // Update global_ids map from the current package files
         config.update_ids_from_package().await?;
 
@@ -1479,18 +1473,15 @@ impl Config {
         if let Some(package) = { self.all_packages.borrow().get(package.name.as_str()) } {
             return Ok(package.clone());
         }
-
-        println!("Package details ==========================================");
-        // println!("Before change");
-        // dbg!(&package);
-        let package = package
+        let mut package = package
             .get_and_resolve(&self.get_root_for_package(package))
             .await?;
-        // dbg!(package.name.as_str());
-        // println!("After change --------------------------------");
-        // dbg!(&package);
-        println!("END =======================================================");
+        println!("Resolving package: {}", package.name.as_str());
+        dbg!(&package.system, &package.system_is_confidential);
+        dbg!(&package.dependencies);
         self.add_package(&package);
+
+        println!("End --------------------------------");
         Ok(package)
     }
     pub(crate) fn add_package(&self, package: &fastn_core::Package) {

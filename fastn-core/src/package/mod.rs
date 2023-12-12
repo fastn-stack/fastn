@@ -71,6 +71,7 @@ pub struct Package {
     /// Redirect URLs
     pub redirects: Option<ftd::Map<String>>,
     pub system: Option<String>,
+    pub system_is_confidential: Option<bool>,
 }
 
 impl Package {
@@ -105,6 +106,7 @@ impl Package {
             icon: None,
             redirects: None,
             system: None,
+            system_is_confidential: None,
         }
     }
 
@@ -473,18 +475,32 @@ impl Package {
         crate::http::construct_url_and_get_str(format!("{}/FASTN.ftd", self.name).as_str()).await
     }
 
-    pub fn resolve_system_dependencies(&mut self) {
-        if let Some(system_module) = self.system.as_ref() {
-            println!("System module found: {:?}", system_module.as_str());
-            for dep in self.dependencies.iter() {
-                if dep.provides_via.is_some() {
-                    dbg!("Dependency name: {}", dep.package.name.as_str());
-                    dbg!("Provides via: {:?}", dep.provides_via.as_ref());
+    pub fn resolve_system_dependencies(&mut self) -> fastn_core::Result<()> {
+        println!(
+            "Resolving system dependencies for package {} <<<<<<<<<< ",
+            self.name.as_str()
+        );
+        for dep in self.dependencies.iter() {
+            println!("Dependency: {:?}", dep.package.name.as_str());
+            if let Some(via) = dep.provided_via.as_ref() {
+                match dep.package.system.as_ref() {
+                    Some(system_module) => {
+                        println!("System module dependency: {}", system_module);
+                        let package_last_name = fastn_core::utils::get_last_name_from_package_name(
+                            dep.package.name.as_str(),
+                        );
+                        // dep.package.name = via.to_string();
+                        println!("Package Last name: {}", package_last_name);
+                        println!("Provided via: {}", via);
+
+                        // ACTUAL LOGIC HERE
+                    }
+                    None => {}
                 }
             }
-        } else {
-            println!("No system module found for package: {}", self.name.as_str())
+            println!("Dependency provided via: {:?}", dep.provided_via);
         }
+        Ok(())
     }
 
     #[tracing::instrument(skip_all)]
@@ -524,8 +540,6 @@ impl Package {
             .collect::<Vec<fastn_core::Result<fastn_core::Dependency>>>()
             .into_iter()
             .collect::<fastn_core::Result<Vec<fastn_core::Dependency>>>()?;
-
-        package.resolve_system_dependencies();
 
         let user_groups: Vec<crate::user_group::UserGroupTemp> =
             fastn_document.get("fastn#user-group")?;
@@ -585,13 +599,6 @@ impl Package {
             let temp_deps: Vec<fastn_core::package::dependency::DependencyTemp> =
                 fastn_doc.get("fastn#dependency")?;
 
-            for dep in temp_deps.iter() {
-                println!(
-                    "Dep: {:?}, provides-via: {:?}",
-                    dep.name.as_str(),
-                    dep.provides_via.clone()
-                )
-            }
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
@@ -614,12 +621,14 @@ impl Package {
                 implements: Vec::new(),
                 endpoint: None,
                 mountpoint: None,
-                provides_via: None,
+                provided_via: None,
+                required_as: None,
             });
         };
         // setting dependencies
         package.dependencies = deps;
-        dbg!(&package.dependencies);
+        package.resolve_system_dependencies()?;
+
         package.fastn_path = Some(root.join("FASTN.ftd"));
 
         package.redirects = {
@@ -763,6 +772,7 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             icon: self.icon,
             redirects: None,
             system: self.system,
+            system_is_confidential: self.system_is_confidential,
         }
     }
 }

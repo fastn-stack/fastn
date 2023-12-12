@@ -19,6 +19,7 @@ optional string endpoint:
 boolean backend: false
 backend-header list backend-headers:
 optional string system:
+optional boolean system-is-confidential:
 
 
 -- record dependency-data:
@@ -28,7 +29,8 @@ optional body notes:
 string list implements:
 optional string endpoint:
 optional string mount-point:
-optional string provides-via:
+optional string provided-via:
+optional string required-as:
 
 
 -- dependency-data list dependency:
