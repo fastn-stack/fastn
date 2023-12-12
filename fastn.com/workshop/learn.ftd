@@ -58,10 +58,10 @@ offered to the students to acknowledge their competance in `fastn-stack`.
 - **Static hosting on Vercel:** Learn to [publish static site On Vercel](/vercel/)
 - **Dynamic hosting:** Learn [deploying on Heroku](/heroku/)
 
--- ds.h1: Other Resources
+;; -- ds.h1: Other Resources
 
-- **Blog:** [A content writer's experience with fastn.](/writer/)
-- **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/) 
+;; - **Blog:** [A content writer's experience with fastn.](/writer/)
+;; - **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/) 
 
 
 ;; -- ds.h1: Customize the Design of Your fastn Site
