@@ -1,7 +1,7 @@
 -- import: 80-or-type-constant as t
 
 
--- t.button-type b: large
+-- t.button-type b: small
 
 -- fancy-button: $b
 
