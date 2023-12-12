@@ -1422,26 +1422,20 @@ impl<'a> TDoc<'a> {
                     }
                 }
                 ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
-                    name: or_type_name,
+                    name,
                     variants,
                     ..
                 }) => {
+                    let or_type_name = ftd::interpreter::OrType::or_type_name(name.as_str());
                     if let Some(thing) = variants.into_iter().find(|or_type_variant| {
                         let variant_name = or_type_variant.name();
                         variant_name
-                            .trim_start_matches(
-                                format!(
-                                    "{}.",
-                                    or_type_name
-                                        .trim_start_matches(format!("{}#", doc.name).as_str())
-                                )
-                                .as_str(),
-                            )
+                            .trim_start_matches(format!("{}.", or_type_name).as_str())
                             .eq(&v)
                     }) {
                         // Todo: Handle remaining
                         ftd::interpreter::Thing::OrTypeWithVariant {
-                            or_type: or_type_name,
+                            or_type: name.clone(),
                             variant: thing,
                         }
                     } else {

@@ -18,6 +18,16 @@ impl OrType {
         }
     }
 
+    pub fn or_type_name(name: &str) -> String {
+        if name.starts_with("ftd") {
+            return name.to_string();
+        }
+        if let Some((_, last)) = name.rsplit_once("#") {
+            return last.to_string();
+        }
+        name.to_string()
+    }
+
     pub(crate) fn scan_ast(
         ast: ftd::ast::AST,
         doc: &mut ftd::interpreter::TDoc,

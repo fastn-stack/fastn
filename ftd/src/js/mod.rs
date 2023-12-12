@@ -134,8 +134,15 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
             for variant in &ot.variants {
                 if let Some(value) = &variant.clone().fields().get(0).unwrap().value {
                     fields.push((
-                        format!("{}#{}", &doc.name, variant.name())
-                            .trim_start_matches(format!("{}.", &ot.name).as_str())
+                        variant
+                            .name()
+                            .trim_start_matches(
+                                format!(
+                                    "{}.",
+                                    ftd::interpreter::OrType::or_type_name(ot.name.as_str())
+                                )
+                                .as_str(),
+                            )
                             .to_string(),
                         value.to_fastn_js_value_with_none(&doc, &mut false),
                     ));
