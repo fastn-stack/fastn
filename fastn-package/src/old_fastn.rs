@@ -95,6 +95,11 @@ pub struct PackageTemp {
     pub backend_headers: Option<Vec<BackendHeader>>,
     #[serde(rename = "icon")]
     pub icon: Option<ftd::ImageSrc>,
+    // This will contain the module name through which this package can
+    // be accessed when considered as a system's package
+    pub system: Option<String>,
+    #[serde(rename = "system-is-confidential")]
+    pub system_is_confidential: Option<bool>,
     #[serde(rename = "default-lang")]
     pub default_lang: Option<String>,
     pub lang: Option<String>,

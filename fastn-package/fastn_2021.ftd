@@ -18,6 +18,8 @@ boolean inherit-auto-imports-from-original: true
 optional string endpoint:
 boolean backend: false
 backend-header list backend-headers:
+optional string system:
+optional boolean system-is-confidential:
 optional string default-lang:
 optional string lang:
 optional string lang-en:
@@ -35,6 +37,8 @@ optional body notes:
 string list implements:
 optional string endpoint:
 optional string mount-point:
+optional string provided-via:
+optional string required-as:
 
 
 -- dependency-data list dependency:

@@ -22,8 +22,8 @@ impl Library2022 {
         current_processing_module: &str,
     ) -> ftd::p1::Result<(String, String, usize)> {
         match self.get(name, current_processing_module).await {
-            Some(v) => Ok(v),
-            None => ftd::p1::utils::parse_error(format!("library not found 1: {}", name), "", 0),
+            Ok(v) => Ok(v),
+            Err(e) => ftd::p1::utils::parse_error(e.to_string(), "", 0),
         }
     }
 
@@ -57,9 +57,9 @@ impl Library2022 {
         &mut self,
         name: &str,
         current_processing_module: &str,
-    ) -> Option<(String, String, usize)> {
+    ) -> fastn_core::Result<(String, String, usize)> {
         if name == "fastn" {
-            return Some((
+            return Ok((
                 fastn_core::library::fastn_dot_ftd::get2022(self).await,
                 "$fastn$/fastn.ftd".to_string(),
                 0,
@@ -77,36 +77,36 @@ impl Library2022 {
             name: &str,
             lib: &mut fastn_core::Library2022,
             current_processing_module: &str,
-        ) -> Option<(String, String, usize)> {
-            let package = lib.get_current_package(current_processing_module).ok()?;
+        ) -> fastn_core::Result<(String, String, usize)> {
+            let package = lib.get_current_package(current_processing_module)?;
             if name.starts_with(package.name.as_str()) {
-                if let Some((content, size)) = get_data_from_package(name, &package, lib).await {
-                    return Some((content, name.to_string(), size));
+                if let Some((content, size)) = get_data_from_package(name, &package, lib).await? {
+                    return Ok((content, name.to_string(), size));
                 }
             }
             // Self package referencing
             if package.name.ends_with(name.trim_end_matches('/')) {
                 let package_index = format!("{}/", package.name.as_str());
                 if let Some((content, size)) =
-                    get_data_from_package(package_index.as_str(), &package, lib).await
+                    get_data_from_package(package_index.as_str(), &package, lib).await?
                 {
-                    return Some((content, format!("{package_index}index.ftd"), size));
+                    return Ok((content, format!("{package_index}index.ftd"), size));
                 }
             }
 
             for (alias, package) in package.aliases() {
-                lib.push_package_under_process(name, package).await.ok()?;
+                lib.push_package_under_process(name, package).await?;
                 if name.starts_with(alias) {
                     let name = name.replacen(alias, &package.name, 1);
                     if let Some((content, size)) =
-                        get_data_from_package(name.as_str(), package, lib).await
+                        get_data_from_package(name.as_str(), package, lib).await?
                     {
-                        return Some((content, name.to_string(), size));
+                        return Ok((content, name.to_string(), size));
                     }
                 }
             }
 
-            let translation_of = match package.translation_of.as_ref() {
+            /*let translation_of = match package.translation_of.as_ref() {
                 Some(translation_of) => translation_of.to_owned(),
                 None => return None,
             };
@@ -129,9 +129,9 @@ impl Library2022 {
                         return Some((content, name.to_string(), size));
                     }
                 }
-            }
+            }*/
 
-            None
+            fastn_core::usage_error(format!("library not found: {}", name))
         }
 
         // TODO: This function is too long. Break it down.
@@ -140,29 +140,28 @@ impl Library2022 {
             name: &str,
             package: &fastn_core::Package,
             lib: &mut fastn_core::Library2022,
-        ) -> Option<(String, usize)> {
-            lib.push_package_under_process(name, package).await.ok()?;
+        ) -> fastn_core::Result<Option<(String, usize)>> {
+            lib.push_package_under_process(name, package).await?;
             let packages = lib.config.all_packages.borrow();
             let package = packages.get(package.name.as_str()).unwrap_or(package);
             // Explicit check for the current package.
             let name = format!("{}/", name.trim_end_matches('/'));
             if !name.starts_with(format!("{}/", package.name.as_str()).as_str()) {
-                return None;
+                return Ok(None);
             }
             let new_name = name.replacen(package.name.as_str(), "", 1);
             let (file_path, data) = package
                 .resolve_by_id(new_name.as_str(), None, lib.config.package.name.as_str())
-                .await
-                .ok()?;
+                .await?;
             if !file_path.ends_with(".ftd") {
-                return None;
+                return Ok(None);
             }
-            String::from_utf8(data).ok().map(|body| {
+            Ok(String::from_utf8(data).ok().map(|body| {
                 let body_with_prefix =
                     package.get_prefixed_body(body.as_str(), name.as_str(), true);
                 let line_number = body_with_prefix.split('\n').count() - body.split('\n').count();
                 (body_with_prefix, line_number)
-            })
+            }))
         }
     }
 
@@ -184,9 +183,9 @@ impl Library2022 {
             return Ok(());
         }
 
-        let package = self.config.resolve_package(package).await.map_err(|_| {
+        let package = self.config.resolve_package(package).await.map_err(|e| {
             ftd::ftd2021::p1::Error::ParseError {
-                message: format!("Cannot resolve the package: {}", package.name),
+                message: format!("Cannot resolve the package: {}, Error: {}", package.name, e),
                 doc_id: self.document_id.to_string(),
                 line_number: 0,
             }

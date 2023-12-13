@@ -1406,7 +1406,6 @@ impl Config {
             ftd_external_css: Default::default(),
             ftd_inline_css: Default::default(),
         };
-
         // Update global_ids map from the current package files
         config.update_ids_from_package().await?;
 
@@ -1463,6 +1462,96 @@ impl Config {
         Ok(config)
     }
 
+    fn get_package_name_for_module(&self, module_name: &str) -> fastn_core::Result<String> {
+        if module_name.starts_with(format!("{}/", &self.package.name).as_str())
+            || module_name.eq(&self.package.name)
+        {
+            Ok(self.package.name.clone())
+        } else if let Some(package_dependency) = self.package.dependencies.iter().find(|v| {
+            module_name.starts_with(format!("{}/", &v.package.name).as_str())
+                || module_name.eq(&v.package.name)
+        }) {
+            Ok(package_dependency.package.name.clone())
+        } else {
+            fastn_core::usage_error(format!("Can't find package for module {}", module_name))
+        }
+    }
+
+    fn check_dependencies_provided(
+        &self,
+        package: &mut fastn_core::Package,
+    ) -> fastn_core::Result<()> {
+        let mut auto_imports = vec![];
+        for dependency in package.dependencies.iter_mut() {
+            if let Some(ref required_as) = dependency.required_as {
+                if let Some(provided_via) = self.package.dependencies.iter().find_map(|v| {
+                    if v.package.name.eq(&dependency.package.name) {
+                        v.provided_via.clone()
+                    } else {
+                        None
+                    }
+                }) {
+                    let package_name = self.get_package_name_for_module(provided_via.as_str())?;
+                    dependency.package.name = package_name;
+                    auto_imports.push(fastn_core::AutoImport {
+                        path: provided_via.to_string(),
+                        alias: Some(required_as.clone()),
+                        exposing: vec![],
+                    });
+                } else {
+                    /*auto_imports.push(fastn_core::AutoImport {
+                        path: dependency.package.name.to_string(),
+                        alias: Some(required_as.clone()),
+                        exposing: vec![],
+                    });*/
+                    dbg!("Dependency needs to be provided.", &dependency.package.name);
+                    return fastn_core::usage_error(format!(
+                        "Dependency {} needs to be provided.",
+                        dependency.package.name
+                    ));
+                }
+            }
+        }
+        package.auto_import.extend(auto_imports);
+        if let Some(ref package_alias) = package.system {
+            if package.system_is_confidential.unwrap_or(true) {
+                return fastn_core::usage_error(format!("system-is-confidential is needed for system package {} and currently only false is supported.", package.name));
+            }
+            if let Some(provided_via) = self.package.dependencies.iter().find_map(|v| {
+                if v.package.name.eq(&package.name) {
+                    v.provided_via.clone()
+                } else {
+                    None
+                }
+            }) {
+                let package_name = self.get_package_name_for_module(provided_via.as_str())?;
+                package.dependencies.push(fastn_core::Dependency {
+                    package: fastn_core::Package::new(package_name.as_str()),
+                    version: None,
+                    notes: None,
+                    alias: None,
+                    implements: vec![],
+                    endpoint: None,
+                    mountpoint: None,
+                    provided_via: None,
+                    required_as: None,
+                });
+                package.auto_import.push(fastn_core::AutoImport {
+                    path: provided_via.to_string(),
+                    alias: Some(package_alias.clone()),
+                    exposing: vec![],
+                });
+            } else {
+                package.auto_import.push(fastn_core::AutoImport {
+                    path: package.name.to_string(),
+                    alias: Some(package_alias.clone()),
+                    exposing: vec![],
+                });
+            }
+        }
+        Ok(())
+    }
+
     pub(crate) async fn resolve_package(
         &self,
         package: &fastn_core::Package,
@@ -1474,15 +1563,13 @@ impl Config {
         if let Some(package) = { self.all_packages.borrow().get(package.name.as_str()) } {
             return Ok(package.clone());
         }
-
-        let package = package
+        let mut package = package
             .get_and_resolve(&self.get_root_for_package(package))
             .await?;
-
+        self.check_dependencies_provided(&mut package)?;
         self.add_package(&package);
         Ok(package)
     }
-
     pub(crate) fn add_package(&self, package: &fastn_core::Package) {
         self.all_packages
             .borrow_mut()

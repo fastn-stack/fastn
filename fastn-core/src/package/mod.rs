@@ -70,6 +70,8 @@ pub struct Package {
 
     /// Redirect URLs
     pub redirects: Option<ftd::Map<String>>,
+    pub system: Option<String>,
+    pub system_is_confidential: Option<bool>,
 
     pub lang: Option<Lang>,
 }
@@ -106,6 +108,8 @@ impl Package {
             apps: vec![],
             icon: None,
             redirects: None,
+            system: None,
+            system_is_confidential: None,
         }
     }
 
@@ -521,6 +525,7 @@ impl Package {
             .into_iter()
             .map(|f| f.into_auto_import())
             .collect();
+
         package.fonts = fastn_document.get("fastn#font")?;
         package.sitemap_temp = fastn_document.get("fastn#sitemap")?;
         *self = package;
@@ -557,7 +562,13 @@ impl Package {
             fastn_doc.get("fastn#package")?;
 
         let mut package = match temp_package {
-            Some(v) => v.into_package(),
+            Some(v) => {
+                let package = v.into_package();
+                if package.system.is_some() && package.system_is_confidential.unwrap_or(true) {
+                    return fastn_core::usage_error(format!("system-is-confidential is needed for system package {} and currently only false is supported.", package.name));
+                }
+                package
+            }
             None => {
                 return Err(fastn_core::Error::PackageError {
                     message: "FASTN.ftd does not contain package definition".to_string(),
@@ -569,6 +580,7 @@ impl Package {
         let mut deps = {
             let temp_deps: Vec<fastn_core::package::dependency::DependencyTemp> =
                 fastn_doc.get("fastn#dependency")?;
+
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
@@ -591,10 +603,14 @@ impl Package {
                 implements: Vec::new(),
                 endpoint: None,
                 mountpoint: None,
+                provided_via: None,
+                required_as: None,
             });
         };
         // setting dependencies
         package.dependencies = deps;
+        // package.resolve_system_dependencies()?;
+
         package.fastn_path = Some(root.join("FASTN.ftd"));
 
         package.redirects = {
@@ -763,6 +779,8 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             apps: vec![],
             icon: self.icon,
             redirects: None,
+            system: self.system,
+            system_is_confidential: self.system_is_confidential,
         }
     }
 }

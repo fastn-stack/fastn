@@ -8,6 +8,7 @@ members = [
     "fastn-issues",
     "fastn-js",
     "fastn-grammar",
+    "fastn-lang",
     "foo",
     # "fastn-wasm",
     # "fastn-runtime",
@@ -53,6 +54,8 @@ strip = true
 # If you are not using the latest version intentionally, please do not list it in this section
 # and create it's own [dependencies.<name>] section, and document it with why are you not
 # using the latest dependency, and what is the plan to moving to the latest version.
+
+accept-language = "2"
 actix-web = "4"
 antidote = "1"
 dirs = "5"
@@ -79,6 +82,8 @@ dioxus-native-core-macro = { git = "https://github.com/DioxusLabs/dioxus", rev =
 dotenvy = "0.15"
 edit = "0.1"
 env_logger = "0.10"
+enum-iterator = "0.6.0"
+enum-iterator-derive = "0.6.0"
 fastn-cloud = { path = "fastn-cloud" }
 fastn-core = { path = "fastn-core" }
 fastn-issues = { path = "fastn-issues" }
