@@ -742,9 +742,9 @@ impl Package {
             Some(v) => v,
             None => {
                 return fastn_core::usage_error(format!(
-                    "Module corresponding to `default-lang: {}` is not provided in FASTN.ftd of {}",
-                    lang.default_lang, self.name
-                ))
+                "Module corresponding to `default-language: {}` is not provided in FASTN.ftd of {}",
+                lang.default_lang, self.name
+            ))
             }
         };
 
@@ -786,14 +786,14 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             .map(|v| Package::new(&v))
             .collect::<Vec<Package>>();
 
-        let lang = if let Some(default_lang) = &self.default_lang {
+        let lang = if let Some(default_lang) = &self.default_language {
             let mut available_languages = std::collections::HashMap::new();
 
-            if let Some(lang_en) = self.lang_en {
+            if let Some(lang_en) = self.translation_en {
                 available_languages.insert("en".to_string(), lang_en);
             }
 
-            if let Some(lang_hi) = self.lang_hi {
+            if let Some(lang_hi) = self.translation_hi {
                 available_languages.insert("hi".to_string(), lang_hi);
             }
 

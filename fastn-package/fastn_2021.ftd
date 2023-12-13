@@ -20,10 +20,10 @@ boolean backend: false
 backend-header list backend-headers:
 optional string system:
 optional boolean system-is-confidential:
-optional string default-lang:
+optional string default-language:
 optional string lang:
-optional string lang-en:
-optional string lang-hi:
+optional string translation-en:
+optional string translation-hi:
 
 -- record package-lang:
 caption string lang:

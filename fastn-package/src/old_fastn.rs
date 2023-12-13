@@ -94,13 +94,13 @@ pub struct PackageTemp {
     pub system: Option<String>,
     #[serde(rename = "system-is-confidential")]
     pub system_is_confidential: Option<bool>,
-    #[serde(rename = "default-lang")]
-    pub default_lang: Option<String>,
+    #[serde(rename = "default-language")]
+    pub default_language: Option<String>,
     pub lang: Option<String>,
-    #[serde(rename = "lang-en")]
-    pub lang_en: Option<String>,
-    #[serde(rename = "lang-hi")]
-    pub lang_hi: Option<String>,
+    #[serde(rename = "translation-en")]
+    pub translation_en: Option<String>,
+    #[serde(rename = "translation-hi")]
+    pub translation_hi: Option<String>,
     // #[serde(flatten, deserialize_with = "deserialize_languages")]
     // pub other_languages: Option<Vec<Lang>>,
 }
