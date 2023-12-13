@@ -634,6 +634,17 @@ impl Package {
             .map(|f| f.into_auto_import())
             .collect();
 
+        if let Some(ref system_alias) = package.system {
+            if package.system_is_confidential.unwrap_or(true) {
+                return fastn_core::usage_error(format!("system-is-confidential is needed for system package {} and currently only false is supported.", package.name));
+            }
+            package.auto_import.push(fastn_core::AutoImport {
+                path: package.name.clone(),
+                alias: Some(system_alias.clone()),
+                exposing: vec![],
+            });
+        }
+
         auto_import_default_language(&mut package);
 
         package.ignored_paths = fastn_doc.get::<Vec<String>>("fastn#ignore")?;
