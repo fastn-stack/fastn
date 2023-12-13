@@ -645,6 +645,7 @@ impl Package {
             });
         }
 
+        package.auto_import_language(None)?;
         package.ignored_paths = fastn_doc.get::<Vec<String>>("fastn#ignore")?;
         package.fonts = fastn_doc.get("fastn#font")?;
         package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
