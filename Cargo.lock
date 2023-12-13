@@ -1447,16 +1447,7 @@ version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c79a6321a1197d7730510c7e3f6cb80432dfefecb32426de8cea0aa19b4bb8d7"
 dependencies = [
- "enum-iterator-derive 0.6.0",
-]
-
-[[package]]
-name = "enum-iterator"
-version = "1.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7add3873b5dd076766ee79c8e406ad1a472c385476b9e38849f8eec24f1be689"
-dependencies = [
- "enum-iterator-derive 1.2.1",
+ "enum-iterator-derive",
 ]
 
 [[package]]
@@ -1468,17 +1459,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 1.0.109",
-]
-
-[[package]]
-name = "enum-iterator-derive"
-version = "1.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eecf8589574ce9b895052fa12d69af7a233f99e6107f5cb8dd1044f2a17bfdcb"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.41",
 ]
 
 [[package]]
@@ -1731,8 +1711,8 @@ name = "fastn-lang"
 version = "0.1.0"
 dependencies = [
  "accept-language 3.1.0",
- "enum-iterator 1.4.1",
- "enum-iterator-derive 1.2.1",
+ "enum-iterator",
+ "enum-iterator-derive",
  "serde",
  "thiserror",
 ]
@@ -3585,8 +3565,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a6a276abf828a904b7cfe15798441f9c99d57004a7c2e11d24bab2de0cd587a9"
 dependencies = [
  "accept-language 2.0.0",
- "enum-iterator 0.6.0",
- "enum-iterator-derive 0.6.0",
+ "enum-iterator",
+ "enum-iterator-derive",
  "serde",
  "thiserror",
 ]
