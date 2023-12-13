@@ -5,8 +5,8 @@ authors = ["Amit Upadhyay <upadhyay@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-accept-language = "2"
-thiserror = "1"
-serde = "1"
-enum-iterator = "0.6.0"
-enum-iterator-derive = "0.6.0"
+accept-language.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+enum-iterator.workspace = true
+enum-iterator-derive.workspace = true
