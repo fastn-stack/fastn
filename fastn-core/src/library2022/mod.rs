@@ -94,9 +94,7 @@ impl Library2022 {
                 }
             }
 
-            dbg!("1***", &package);
             for (alias, package) in package.aliases() {
-                dbg!(&alias, &package);
                 lib.push_package_under_process(name, package).await.ok()?;
                 if name.starts_with(alias) {
                     let name = name.replacen(alias, &package.name, 1);

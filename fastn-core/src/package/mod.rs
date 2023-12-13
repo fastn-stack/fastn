@@ -475,34 +475,6 @@ impl Package {
         crate::http::construct_url_and_get_str(format!("{}/FASTN.ftd", self.name).as_str()).await
     }
 
-    pub fn resolve_system_dependencies(&mut self) -> fastn_core::Result<()> {
-        println!(
-            "Resolving system dependencies for package {} <<<<<<<<<< ",
-            self.name.as_str()
-        );
-        for dep in self.dependencies.iter() {
-            println!("Dependency: {:?}", dep.package.name.as_str());
-            if let Some(via) = dep.provided_via.as_ref() {
-                /*match dep.package.system.as_ref() {
-                    Some(system_module) => {
-                        println!("System module dependency: {}", system_module);
-                        let package_last_name = fastn_core::utils::get_last_name_from_package_name(
-                            dep.package.name.as_str(),
-                        );
-                        // dep.package.name = via.to_string();
-                        println!("Package Last name: {}", package_last_name);
-                        println!("Provided via: {}", via);
-
-                        // ACTUAL LOGIC HERE
-                    }
-                    None => {}
-                }*/
-            }
-            println!("Dependency provided via: {:?}", dep.provided_via);
-        }
-        Ok(())
-    }
-
     #[tracing::instrument(skip_all)]
     pub(crate) async fn resolve(
         &mut self,
