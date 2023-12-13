@@ -525,8 +525,7 @@ impl Package {
             .into_iter()
             .map(|f| f.into_auto_import())
             .collect();
-
-        auto_import_default_language(&mut package);
+        auto_import_language(&mut package, None);
 
         package.fonts = fastn_document.get("fastn#font")?;
         package.sitemap_temp = fastn_document.get("fastn#sitemap")?;
@@ -644,8 +643,6 @@ impl Package {
                 exposing: vec![],
             });
         }
-
-        auto_import_default_language(&mut package);
 
         package.ignored_paths = fastn_doc.get::<Vec<String>>("fastn#ignore")?;
         package.fonts = fastn_doc.get("fastn#font")?;
@@ -800,9 +797,15 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
     }
 }
 
-pub fn auto_import_default_language(package: &mut Package) {
+pub fn auto_import_language(package: &mut Package, req_lang: Option<String>) {
     if let Some(lang) = &package.lang {
-        if let Some(lang_module_path) = lang.available_languages.get(&lang.default_lang) {
+        let lang_module_path = if let Some(request_lang) = req_lang {
+            lang.available_languages.get(&request_lang)
+        } else {
+            lang.available_languages.get(&lang.default_lang)
+        };
+
+        if let Some(lang_module_path) = lang_module_path {
             package.auto_import.push(fastn_core::AutoImport {
                 path: lang_module_path.to_string(),
                 alias: Some("lang".to_string()),
