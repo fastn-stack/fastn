@@ -11,7 +11,8 @@ pub struct Package {
     pub versioned: bool,
     pub translation_of: Box<Option<Package>>,
     pub translations: Vec<Package>,
-    pub language: Option<String>,
+    pub requested_language: Option<String>,
+    pub selected_language: Option<String>,
     pub about: Option<String>,
     pub zip: Option<String>,
     pub download_base_url: Option<String>,
@@ -83,7 +84,8 @@ impl Package {
             versioned: false,
             translation_of: Box::new(None),
             translations: vec![],
-            language: None,
+            requested_language: None,
+            selected_language: None,
             lang: None,
             about: None,
             zip: None,
@@ -720,10 +722,10 @@ impl Package {
         } else {
             return Ok(());
         };
-        let lang_module_path_with_language = match req_lang {
+        let lang_module_path_with_language = match req_lang.as_ref() {
             Some(request_lang) => lang
                 .available_languages
-                .get(&request_lang)
+                .get(request_lang)
                 .map(|module| (module, request_lang.to_string()))
                 .or_else(|| {
                     lang.available_languages
@@ -752,7 +754,8 @@ impl Package {
             exposing: vec![],
         });
 
-        self.language = Some(language);
+        self.requested_language = req_lang;
+        self.selected_language = Some(language);
         Ok(())
     }
 }
@@ -807,7 +810,8 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             versioned: self.versioned,
             translation_of: Box::new(translation_of),
             translations,
-            language: self.language,
+            requested_language: None,
+            selected_language: None,
             lang,
             about: self.about,
             zip: self.zip,

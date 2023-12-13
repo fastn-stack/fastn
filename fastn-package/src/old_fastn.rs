@@ -75,8 +75,6 @@ pub struct PackageTemp {
     pub translation_of: Option<String>,
     #[serde(rename = "translation")]
     pub translations: Vec<String>,
-    #[serde(rename = "language")]
-    pub language: Option<String>,
     pub about: Option<String>,
     pub zip: Option<String>,
     #[serde(rename = "download-base-url")]
@@ -85,15 +83,11 @@ pub struct PackageTemp {
     pub canonical_url: Option<String>,
     #[serde(rename = "inherit-auto-imports-from-original")]
     pub import_auto_imports_from_original: bool,
-    #[serde(rename = "favicon")]
     pub favicon: Option<String>,
-    #[serde(rename = "endpoint")]
     pub endpoint: Option<String>,
-    #[serde(rename = "backend")]
     pub backend: bool,
     #[serde(rename = "backend-headers")]
     pub backend_headers: Option<Vec<BackendHeader>>,
-    #[serde(rename = "icon")]
     pub icon: Option<ftd::ImageSrc>,
     // This will contain the module name through which this package can
     // be accessed when considered as a system's package
