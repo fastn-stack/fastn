@@ -1462,22 +1462,25 @@ impl Config {
         Ok(config)
     }
 
-    fn get_package_name_for_module(&self, module_name: &str) -> String {
+    fn get_package_name_for_module(&self, module_name: &str) -> fastn_core::Result<String> {
         if module_name.starts_with(format!("{}/", &self.package.name).as_str())
             || module_name.eq(&self.package.name)
         {
-            self.package.name.clone()
+            Ok(self.package.name.clone())
         } else if let Some(package_dependency) = self.package.dependencies.iter().find(|v| {
             module_name.starts_with(format!("{}/", &v.package.name).as_str())
                 || module_name.eq(&v.package.name)
         }) {
-            package_dependency.package.name.clone()
+            Ok(package_dependency.package.name.clone())
         } else {
-            todo!("Throw error")
+            fastn_core::usage_error(format!("Can't find package for module {}", module_name))
         }
     }
 
-    fn check_dependencies_provided(&self, package: &mut fastn_core::Package) {
+    fn check_dependencies_provided(
+        &self,
+        package: &mut fastn_core::Package,
+    ) -> fastn_core::Result<()> {
         let mut auto_imports = vec![];
         for dependency in package.dependencies.iter_mut() {
             if let Some(ref required_as) = dependency.required_as {
@@ -1488,7 +1491,7 @@ impl Config {
                         None
                     }
                 }) {
-                    let package_name = self.get_package_name_for_module(provided_via.as_str());
+                    let package_name = self.get_package_name_for_module(provided_via.as_str())?;
                     dependency.package.name = package_name;
                     auto_imports.push(fastn_core::AutoImport {
                         path: provided_via.to_string(),
@@ -1496,16 +1499,24 @@ impl Config {
                         exposing: vec![],
                     });
                 } else {
-                    auto_imports.push(fastn_core::AutoImport {
+                    /*auto_imports.push(fastn_core::AutoImport {
                         path: dependency.package.name.to_string(),
                         alias: Some(required_as.clone()),
                         exposing: vec![],
-                    });
+                    });*/
+                    dbg!("Dependency needs to be provided.", &dependency.package.name);
+                    return fastn_core::usage_error(format!(
+                        "Dependency {} needs to be provided.",
+                        dependency.package.name
+                    ));
                 }
             }
         }
         package.auto_import.extend(auto_imports);
         if let Some(ref package_alias) = package.system {
+            if package.system_is_confidential.unwrap_or(true) {
+                return fastn_core::usage_error(format!("system-is-confidential is needed for system package {} and currently only false is supported.", package.name));
+            }
             if let Some(provided_via) = self.package.dependencies.iter().find_map(|v| {
                 if v.package.name.eq(&package.name) {
                     v.provided_via.clone()
@@ -1513,8 +1524,7 @@ impl Config {
                     None
                 }
             }) {
-                // Todo: Move to a function and check in dependencies too
-                let package_name = self.get_package_name_for_module(provided_via.as_str());
+                let package_name = self.get_package_name_for_module(provided_via.as_str())?;
                 package.dependencies.push(fastn_core::Dependency {
                     package: fastn_core::Package::new(package_name.as_str()),
                     version: None,
@@ -1539,6 +1549,7 @@ impl Config {
                 });
             }
         }
+        Ok(())
     }
 
     pub(crate) async fn resolve_package(
@@ -1555,7 +1566,7 @@ impl Config {
         let mut package = package
             .get_and_resolve(&self.get_root_for_package(package))
             .await?;
-        self.check_dependencies_provided(&mut package);
+        self.check_dependencies_provided(&mut package)?;
         self.add_package(&package);
         Ok(package)
     }
