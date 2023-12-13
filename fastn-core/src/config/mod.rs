@@ -63,6 +63,10 @@ pub struct RequestConfig {
 }
 
 impl RequestConfig {
+    pub fn current_language(&self) -> Option<String> {
+        self.config.package.selected_language.clone()
+    }
+
     pub fn new(
         config: &Config,
         request: &fastn_core::http::Request,
@@ -1567,6 +1571,10 @@ impl Config {
             .get_and_resolve(&self.get_root_for_package(package))
             .await?;
         self.check_dependencies_provided(&mut package)?;
+        package.auto_import_language(
+            self.package.requested_language.clone(),
+            self.package.selected_language.clone(),
+        )?;
         self.add_package(&package);
         Ok(package)
     }
