@@ -559,7 +559,13 @@ impl Package {
             fastn_doc.get("fastn#package")?;
 
         let mut package = match temp_package {
-            Some(v) => v.into_package(),
+            Some(v) => {
+                let package = v.into_package();
+                if package.system.is_some() && package.system_is_confidential.unwrap_or(true) {
+                    return fastn_core::usage_error(format!("system-is-confidential is needed for system package {} and currently only false is supported.", package.name));
+                }
+                package
+            }
             None => {
                 return Err(fastn_core::Error::PackageError {
                     message: "FASTN.ftd does not contain package definition".to_string(),
