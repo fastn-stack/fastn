@@ -169,8 +169,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             test.value_of_("file"), // TODO: handle more than one files
             test.value_of_("base").unwrap_or("/"),
             test.get_flag("headless"),
-            matches.get_flag("test"),
-            test.get_flag("check-build"),
         )
         .await;
     }

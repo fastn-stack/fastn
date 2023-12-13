@@ -6,8 +6,6 @@ pub async fn test(
     only_id: Option<&str>,
     base_url: &str,
     headless: bool,
-    test: bool,
-    check_build: bool,
 ) -> fastn_core::Result<()> {
     let test_folder = config.root.join(TEST_FOLDER);
     let mut documents = std::collections::BTreeMap::from_iter(
