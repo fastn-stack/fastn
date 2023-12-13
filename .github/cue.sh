@@ -1,3 +1,5 @@
+ls
+pwd
 cargo build --release
 ls target
 ls target/release
