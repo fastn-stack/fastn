@@ -63,6 +63,10 @@ pub struct RequestConfig {
 }
 
 impl RequestConfig {
+    pub fn current_language(&self) -> Option<String> {
+        self.config.package.language.clone()
+    }
+
     pub fn new(
         config: &Config,
         request: &fastn_core::http::Request,

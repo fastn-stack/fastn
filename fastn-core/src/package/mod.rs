@@ -720,34 +720,40 @@ impl Package {
         } else {
             return Ok(());
         };
-        let lang_module_path_with_language = if let Some(request_lang) = req_lang {
-            lang.available_languages
+        let lang_module_path_with_language = match req_lang {
+            Some(request_lang) => lang
+                .available_languages
                 .get(&request_lang)
-                .map(|v| (v, request_lang.to_string()))
-                .or(lang
-                    .available_languages
-                    .get(&lang.default_lang)
-                    .map(|v| (v, lang.default_lang.to_string())))
-        } else {
-            lang.available_languages
+                .map(|module| (module, request_lang.to_string()))
+                .or_else(|| {
+                    lang.available_languages
+                        .get(&lang.default_lang)
+                        .map(|v| (v, lang.default_lang.to_string()))
+                }),
+            None => lang
+                .available_languages
                 .get(&lang.default_lang)
-                .map(|v| (v, lang.default_lang.to_string()))
+                .map(|module| (module, lang.default_lang.to_string())),
         };
 
-        if let Some((lang_module_path, language)) = lang_module_path_with_language {
-            self.auto_import.push(fastn_core::AutoImport {
-                path: lang_module_path.to_string(),
-                alias: Some("lang".to_string()),
-                exposing: vec![],
-            });
-            self.language = Some(language);
-            Ok(())
-        } else {
-            fastn_core::usage_error(format!(
-                "Default language '{}' module is not provided: {}",
-                lang.default_lang, self.name
-            ))
-        }
+        let (lang_module_path, language) = match lang_module_path_with_language {
+            Some(v) => v,
+            None => {
+                return fastn_core::usage_error(format!(
+                    "Module corresponding to `default-lang: {}` is not provided in FASTN.ftd of {}",
+                    lang.default_lang, self.name
+                ))
+            }
+        };
+
+        self.auto_import.push(fastn_core::AutoImport {
+            path: lang_module_path.to_string(),
+            alias: Some("lang".to_string()),
+            exposing: vec![],
+        });
+
+        self.language = Some(language);
+        Ok(())
     }
 }
 
