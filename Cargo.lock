@@ -1578,7 +1578,7 @@ dependencies = [
 
 [[package]]
 name = "fastn"
-version = "0.4.19"
+version = "0.4.20"
 dependencies = [
  "clap",
  "colored",
@@ -1700,6 +1700,17 @@ dependencies = [
  "pretty_assertions",
  "quick-js",
  "rquickjs",
+]
+
+[[package]]
+name = "fastn-lang"
+version = "0.1.0"
+dependencies = [
+ "accept-language",
+ "enum-iterator",
+ "enum-iterator-derive",
+ "serde",
+ "thiserror",
 ]
 
 [[package]]
