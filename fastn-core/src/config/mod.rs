@@ -1571,7 +1571,10 @@ impl Config {
             .get_and_resolve(&self.get_root_for_package(package))
             .await?;
         self.check_dependencies_provided(&mut package)?;
-        package.auto_import_language(self.package.requested_language.clone())?;
+        package.auto_import_language(
+            self.package.requested_language.clone(),
+            self.package.selected_language.clone(),
+        )?;
         self.add_package(&package);
         Ok(package)
     }

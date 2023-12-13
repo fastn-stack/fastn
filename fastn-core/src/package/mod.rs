@@ -645,7 +645,7 @@ impl Package {
             });
         }
 
-        package.auto_import_language(None)?;
+        package.auto_import_language(None, None)?;
         package.ignored_paths = fastn_doc.get::<Vec<String>>("fastn#ignore")?;
         package.fonts = fastn_doc.get("fastn#font")?;
         package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
@@ -717,27 +717,41 @@ impl Package {
         }
     }
 
-    pub fn auto_import_language(&mut self, req_lang: Option<String>) -> fastn_core::Result<()> {
+    pub fn auto_import_language(
+        &mut self,
+        req_lang: Option<String>,
+        main_package_selected_language: Option<String>,
+    ) -> fastn_core::Result<()> {
         let lang = if let Some(lang) = &self.lang {
             lang
         } else {
             return Ok(());
         };
-        let lang_module_path_with_language = match req_lang.as_ref() {
-            Some(request_lang) => lang
+        let mut lang_module_path_with_language = None;
+
+        if let Some(request_lang) = req_lang.as_ref() {
+            lang_module_path_with_language = lang
                 .available_languages
                 .get(request_lang)
-                .map(|module| (module, request_lang.to_string()))
-                .or_else(|| {
-                    lang.available_languages
-                        .get(&lang.default_lang)
-                        .map(|v| (v, lang.default_lang.to_string()))
-                }),
-            None => lang
+                .map(|module| (module, request_lang.to_string()));
+        }
+
+        if lang_module_path_with_language.is_none() && !main_package_selected_language.eq(&req_lang)
+        {
+            if let Some(main_package_selected_language) = main_package_selected_language.as_ref() {
+                lang_module_path_with_language = lang
+                    .available_languages
+                    .get(main_package_selected_language)
+                    .map(|module| (module, main_package_selected_language.to_string()));
+            }
+        }
+
+        if lang_module_path_with_language.is_none() {
+            lang_module_path_with_language = lang
                 .available_languages
                 .get(&lang.default_lang)
-                .map(|module| (module, lang.default_lang.to_string())),
-        };
+                .map(|v| (v, lang.default_lang.to_string()));
+        }
 
         let (lang_module_path, language) = match lang_module_path_with_language {
             Some(v) => v,

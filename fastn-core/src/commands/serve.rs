@@ -30,7 +30,7 @@ async fn serve_file(
     if let Err(e) = config
         .config
         .package
-        .auto_import_language(config.request.cookie("fastn_lang"))
+        .auto_import_language(config.request.cookie("fastn_lang"), None)
     {
         return fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e);
     }
