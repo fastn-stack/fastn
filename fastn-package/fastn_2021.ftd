@@ -18,6 +18,14 @@ boolean inherit-auto-imports-from-original: true
 optional string endpoint:
 boolean backend: false
 backend-header list backend-headers:
+optional string default-lang:
+optional string lang:
+optional string lang-en:
+optional string lang-hi:
+
+-- record package-lang:
+caption string lang:
+string module:
 
 
 -- record dependency-data:

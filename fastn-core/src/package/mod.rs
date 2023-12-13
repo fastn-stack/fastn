@@ -70,6 +70,8 @@ pub struct Package {
 
     /// Redirect URLs
     pub redirects: Option<ftd::Map<String>>,
+
+    pub lang: Option<Lang>,
 }
 
 impl Package {
@@ -80,6 +82,7 @@ impl Package {
             translation_of: Box::new(None),
             translations: vec![],
             language: None,
+            lang: None,
             about: None,
             zip: None,
             download_base_url: None,
@@ -685,6 +688,12 @@ impl Package {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct Lang {
+    pub default_lang: String,
+    pub other_languages: std::collections::HashMap<String, String>,
+}
+
 trait PackageTempIntoPackage {
     fn into_package(self) -> Package;
 }
@@ -705,12 +714,32 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             .map(|v| Package::new(&v))
             .collect::<Vec<Package>>();
 
+        let lang = if let Some(default_lang) = self.default_lang {
+            let mut other_languages = std::collections::HashMap::new();
+
+            if let Some(lang_en) = self.lang_en {
+                other_languages.insert("en".to_string(), lang_en);
+            }
+
+            if let Some(lang_hi) = self.lang_hi {
+                other_languages.insert("hi".to_string(), lang_hi);
+            }
+
+            Some(Lang {
+                default_lang,
+                other_languages,
+            })
+        } else {
+            None
+        };
+
         Package {
             name: self.name.clone(),
             versioned: self.versioned,
             translation_of: Box::new(translation_of),
             translations,
             language: self.language,
+            lang,
             about: self.about,
             zip: self.zip,
             download_base_url: self.download_base_url.or(Some(self.name)),
