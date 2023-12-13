@@ -526,6 +526,8 @@ impl Package {
             .map(|f| f.into_auto_import())
             .collect();
 
+        auto_import_default_language(&mut package);
+
         package.fonts = fastn_document.get("fastn#font")?;
         package.sitemap_temp = fastn_document.get("fastn#sitemap")?;
         *self = package;
@@ -632,6 +634,8 @@ impl Package {
             .map(|f| f.into_auto_import())
             .collect();
 
+        auto_import_default_language(&mut package);
+
         package.ignored_paths = fastn_doc.get::<Vec<String>>("fastn#ignore")?;
         package.fonts = fastn_doc.get("fastn#font")?;
         package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
@@ -707,7 +711,7 @@ impl Package {
 #[derive(Debug, Clone)]
 pub struct Lang {
     pub default_lang: String,
-    pub other_languages: std::collections::HashMap<String, String>,
+    pub available_languages: std::collections::HashMap<String, String>,
 }
 
 trait PackageTempIntoPackage {
@@ -730,20 +734,20 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             .map(|v| Package::new(&v))
             .collect::<Vec<Package>>();
 
-        let lang = if let Some(default_lang) = self.default_lang {
-            let mut other_languages = std::collections::HashMap::new();
+        let lang = if let Some(default_lang) = &self.default_lang {
+            let mut available_languages = std::collections::HashMap::new();
 
             if let Some(lang_en) = self.lang_en {
-                other_languages.insert("en".to_string(), lang_en);
+                available_languages.insert("en".to_string(), lang_en);
             }
 
             if let Some(lang_hi) = self.lang_hi {
-                other_languages.insert("hi".to_string(), lang_hi);
+                available_languages.insert("hi".to_string(), lang_hi);
             }
 
             Some(Lang {
-                default_lang,
-                other_languages,
+                default_lang: default_lang.to_string(),
+                available_languages,
             })
         } else {
             None
@@ -781,6 +785,18 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             redirects: None,
             system: self.system,
             system_is_confidential: self.system_is_confidential,
+        }
+    }
+}
+
+pub fn auto_import_default_language(package: &mut Package) {
+    if let Some(lang) = &package.lang {
+        if let Some(lang_module_path) = lang.available_languages.get(&lang.default_lang) {
+            package.auto_import.push(fastn_core::AutoImport {
+                path: lang_module_path.to_string(),
+                alias: Some("lang".to_string()),
+                exposing: vec![],
+            })
         }
     }
 }
