@@ -525,7 +525,6 @@ impl Package {
             .into_iter()
             .map(|f| f.into_auto_import())
             .collect();
-        auto_import_language(&mut package, None);
 
         package.fonts = fastn_document.get("fastn#font")?;
         package.sitemap_temp = fastn_document.get("fastn#sitemap")?;
@@ -714,6 +713,42 @@ impl Package {
             None => self.endpoint.as_ref().map(|ep| (ep.as_str(), path)),
         }
     }
+
+    pub fn auto_import_language(&mut self, req_lang: Option<String>) -> fastn_core::Result<()> {
+        let lang = if let Some(lang) = &self.lang {
+            lang
+        } else {
+            return Ok(());
+        };
+        let lang_module_path_with_language = if let Some(request_lang) = req_lang {
+            lang.available_languages
+                .get(&request_lang)
+                .map(|v| (v, request_lang.to_string()))
+                .or(lang
+                    .available_languages
+                    .get(&lang.default_lang)
+                    .map(|v| (v, lang.default_lang.to_string())))
+        } else {
+            lang.available_languages
+                .get(&lang.default_lang)
+                .map(|v| (v, lang.default_lang.to_string()))
+        };
+
+        if let Some((lang_module_path, language)) = lang_module_path_with_language {
+            self.auto_import.push(fastn_core::AutoImport {
+                path: lang_module_path.to_string(),
+                alias: Some("lang".to_string()),
+                exposing: vec![],
+            });
+            self.language = Some(language);
+            Ok(())
+        } else {
+            fastn_core::usage_error(format!(
+                "Default language '{}' module is not provided: {}",
+                lang.default_lang, self.name
+            ))
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -793,24 +828,6 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             redirects: None,
             system: self.system,
             system_is_confidential: self.system_is_confidential,
-        }
-    }
-}
-
-pub fn auto_import_language(package: &mut Package, req_lang: Option<String>) {
-    if let Some(lang) = &package.lang {
-        let lang_module_path = if let Some(request_lang) = req_lang {
-            lang.available_languages.get(&request_lang)
-        } else {
-            lang.available_languages.get(&lang.default_lang)
-        };
-
-        if let Some(lang_module_path) = lang_module_path {
-            package.auto_import.push(fastn_core::AutoImport {
-                path: lang_module_path.to_string(),
-                alias: Some("lang".to_string()),
-                exposing: vec![],
-            })
         }
     }
 }

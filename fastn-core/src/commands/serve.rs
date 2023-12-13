@@ -27,10 +27,13 @@ async fn serve_file(
 
     let path = <&camino::Utf8Path>::clone(&path);
 
-    fastn_core::package::auto_import_language(
-        &mut config.config.package,
-        config.request.cookie("fastn_lang"),
-    );
+    if let Err(e) = config
+        .config
+        .package
+        .auto_import_language(config.request.cookie("fastn_lang"))
+    {
+        return fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e);
+    }
 
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
