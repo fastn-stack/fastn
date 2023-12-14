@@ -15,9 +15,7 @@ pub async fn process(
                 human: "English".to_string(),
                 is_active: true,
             });
-    dbg!(&current_language);
     let available_languages = req_config.config.package.available_languages_meta();
-    dbg!(&available_languages);
     let result = LanguageData {
         current_language,
         available_languages,
