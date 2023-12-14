@@ -179,7 +179,7 @@ impl Package {
                 id: lang.to_2_letter_code().to_string(),
                 id3: lang.to_3_letter_code().to_string(),
                 human: lang.human(),
-                is_active: true,
+                is_current: true,
             },
         )
     }
@@ -207,7 +207,7 @@ impl Package {
                         id: language.to_2_letter_code().to_string(),
                         id3: language.to_3_letter_code().to_string(),
                         human: language.human(),
-                        is_active: is_active_language(
+                        is_current: is_active_language(
                             &current_language,
                             &language,
                             self.name.as_str(),

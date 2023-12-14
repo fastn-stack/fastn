@@ -26,8 +26,8 @@ pub struct LanguageMeta {
     pub id: String,
     pub id3: String,
     pub human: String,
-    #[serde(rename = "is-active")]
-    pub is_active: bool,
+    #[serde(rename = "is-current")]
+    pub is_current: bool,
 }
 
 impl LanguageData {

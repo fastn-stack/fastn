@@ -166,3 +166,13 @@ optional header-data header:
 -- record header-data:
 boolean mutable:
 string name:
+
+-- record language-meta:
+string id:
+string id3:
+string human:
+boolean is-current:
+
+-- record language-data:
+language-meta current-language:
+language-meta list available-languages:
