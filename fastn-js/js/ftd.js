@@ -421,7 +421,7 @@ const ftd = (function() {
     }
 
     exports.get_current_language = function () {
-        var current_language = fastn_utils.private.getCookie("fastn_lang");
+        var current_language = fastn_utils.private.getCookie("fastn-lang");
         console.log("Current language: " + current_language);
         return current_language;
     }

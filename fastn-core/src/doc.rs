@@ -209,7 +209,7 @@ pub async fn resolve_import_2022(
                 "fetch-file".to_string(),
                 "query".to_string(),
                 "current-language".to_string(),
-                "lang-details".to_string(),
+                "translation-info".to_string(),
             ],
             0,
         )
@@ -284,7 +284,7 @@ pub async fn resolve_import_2022(
                 "fastn-apps".to_string(),
                 "is-reader".to_string(),
                 "current-language".to_string(),
-                "lang-details".to_string(),
+                "translation-info".to_string(),
             ],
             ignore_line_numbers,
         )
