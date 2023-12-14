@@ -234,7 +234,7 @@ impl Package {
                         }
                     },
                 )?;
-                return Ok(current.eq(&other));
+                return Ok(current.eq(other));
             }
             Ok(false)
         }
