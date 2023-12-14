@@ -40,6 +40,7 @@ pub struct Config {
     pub ftd_inline_js: Vec<String>,
     pub ftd_external_css: Vec<String>,
     pub ftd_inline_css: Vec<String>,
+    pub test_command_running: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -720,26 +721,6 @@ impl Config {
         Ok(documents)
     }
 
-    pub(crate) async fn get_test_files(
-        &self,
-        package: &fastn_core::Package,
-    ) -> fastn_core::Result<Vec<fastn_core::File>> {
-        let path = self.get_root_for_package(package);
-        let all_files = self.get_all_test_file_paths(package)?;
-        let mut documents =
-            fastn_core::paths_to_files(package.name.as_str(), all_files, &path).await?;
-        documents = documents
-            .into_iter()
-            .filter(|v| {
-                v.get_id()
-                    .ends_with(fastn_core::commands::test::TEST_FILE_EXTENSION)
-            })
-            .collect();
-        documents.sort_by_key(|v| v.get_id().to_string());
-
-        Ok(documents)
-    }
-
     /// updates the terms map from the files of the current package
     async fn update_ids_from_package(&mut self) -> fastn_core::Result<()> {
         let path = self.get_root_for_package(&self.package);
@@ -769,21 +750,6 @@ impl Config {
         let mut ignore_paths = ignore::WalkBuilder::new(&path);
         // ignore_paths.hidden(false); // Allow the linux hidden files to be evaluated
         ignore_paths.overrides(fastn_core::file::package_ignores(package, &path)?);
-        Ok(ignore_paths
-            .build()
-            .flatten()
-            .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
-            .collect::<Vec<camino::Utf8PathBuf>>())
-    }
-
-    pub(crate) fn get_all_test_file_paths(
-        &self,
-        package: &fastn_core::Package,
-    ) -> fastn_core::Result<Vec<camino::Utf8PathBuf>> {
-        let path = self
-            .get_root_for_package(package)
-            .join(fastn_core::commands::test::TEST_FOLDER);
-        let mut ignore_paths = ignore::WalkBuilder::new(&path);
         Ok(ignore_paths
             .build()
             .flatten()
@@ -1399,6 +1365,12 @@ impl Config {
         config
     }
 
+    pub fn set_test_command_running(self) -> Self {
+        let mut config = self;
+        config.test_command_running = true;
+        config
+    }
+
     /// `read()` is the way to read a Config.
     #[tracing::instrument(name = "Config::read", skip_all)]
     pub async fn read(
@@ -1439,6 +1411,7 @@ impl Config {
             ftd_inline_js: Default::default(),
             ftd_external_css: Default::default(),
             ftd_inline_css: Default::default(),
+            test_command_running: false,
         };
         // Update global_ids map from the current package files
         config.update_ids_from_package().await?;

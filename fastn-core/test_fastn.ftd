@@ -1,0 +1,32 @@
+-- component get:
+caption title:
+string url:
+body test:
+
+-- ftd.text: NOT IMPLEMENTED HERE
+
+-- end: get
+
+
+
+-- component post:
+caption title:
+string url:
+body post-body:
+string test:
+
+-- ftd.text: NOT IMPLEMENTED HERE
+
+-- end: post
+
+
+
+
+-- record test-data-structure:
+caption next-url:
+body next-post-body:
+
+
+-- test-data-structure test-data: /
+
+{}
