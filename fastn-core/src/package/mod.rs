@@ -159,17 +159,23 @@ impl Package {
     pub fn current_language_meta(
         &self,
     ) -> Option<fastn_core::library2022::processor::lang_details::LanguageMeta> {
-        if let Some(ref current_language) = self.selected_language {
-            if let Ok(lang) = realm_lang::Language::from_2_letter_code(current_language) {
-                return Some(
-                    fastn_core::library2022::processor::lang_details::LanguageMeta {
-                        id: lang.to_2_letter_code().to_string(),
-                        id3: lang.to_3_letter_code().to_string(),
-                        human: lang.human(),
-                        is_active: true,
-                    },
-                );
-            }
+        dbg!("Requested language: {:?}", self.requested_language.as_ref());
+        dbg!("Selected language: {:?}", self.selected_language.as_ref());
+        let default_language = "en".to_string();
+        let current_language = self
+            .requested_language
+            .as_ref()
+            .unwrap_or(self.selected_language.as_ref().unwrap_or(&default_language));
+
+        if let Ok(lang) = realm_lang::Language::from_2_letter_code(current_language) {
+            return Some(
+                fastn_core::library2022::processor::lang_details::LanguageMeta {
+                    id: lang.to_2_letter_code().to_string(),
+                    id3: lang.to_3_letter_code().to_string(),
+                    human: lang.human(),
+                    is_active: true,
+                },
+            );
         }
         None
     }
