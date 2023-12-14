@@ -101,6 +101,42 @@ pub struct PackageTemp {
     pub translation_en: Option<String>,
     #[serde(rename = "translation-hi")]
     pub translation_hi: Option<String>,
+    #[serde(rename = "translation-zh")]
+    pub translation_zh: Option<String>,
+    #[serde(rename = "translation-es")]
+    pub translation_es: Option<String>,
+    #[serde(rename = "translation-ar")]
+    pub translation_ar: Option<String>,
+    #[serde(rename = "translation-pt")]
+    pub translation_pt: Option<String>,
+    #[serde(rename = "translation-ru")]
+    pub translation_ru: Option<String>,
+    #[serde(rename = "translation-fr")]
+    pub translation_fr: Option<String>,
+    #[serde(rename = "translation-de")]
+    pub translation_de: Option<String>,
+    #[serde(rename = "translation-ja")]
+    pub translation_ja: Option<String>,
+    #[serde(rename = "translation-bn")]
+    pub translation_bn: Option<String>,
+    #[serde(rename = "translation-ur")]
+    pub translation_ur: Option<String>,
+    #[serde(rename = "translation-id")]
+    pub translation_id: Option<String>,
+    #[serde(rename = "translation-tr")]
+    pub translation_tr: Option<String>,
+    #[serde(rename = "translation-vi")]
+    pub translation_vi: Option<String>,
+    #[serde(rename = "translation-it")]
+    pub translation_it: Option<String>,
+    #[serde(rename = "translation-pl")]
+    pub translation_pl: Option<String>,
+    #[serde(rename = "translation-th")]
+    pub translation_th: Option<String>,
+    #[serde(rename = "translation-nl")]
+    pub translation_nl: Option<String>,
+    #[serde(rename = "translation-ko")]
+    pub translation_ko: Option<String>,
     // #[serde(flatten, deserialize_with = "deserialize_languages")]
     // pub other_languages: Option<Vec<Lang>>,
 }
