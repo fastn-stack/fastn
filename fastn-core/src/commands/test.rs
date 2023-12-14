@@ -3,7 +3,7 @@ pub(crate) const TEST_FILE_EXTENSION: &str = ".test.ftd";
 
 pub async fn test(
     config: &fastn_core::Config,
-    _only_id: Option<&str>,
+    only_id: Option<&str>,
     _base_url: &str,
     headless: bool,
 ) -> fastn_core::Result<()> {
@@ -17,6 +17,11 @@ pub async fn test(
     let ftd_documents = config.get_test_files().await?;
 
     for document in ftd_documents {
+        if let Some(id) = only_id {
+            if !document.id.contains(id) {
+                continue;
+            }
+        }
         println!("Running test in {}", document.id.yellow());
         read_ftd_test_file(document, config).await?;
     }
@@ -56,7 +61,7 @@ impl fastn_core::Config {
         let path = self
             .get_root_for_package(&self.package)
             .join(fastn_core::commands::test::TEST_FOLDER);
-        let mut ignore_paths = ignore::WalkBuilder::new(&path);
+        let ignore_paths = ignore::WalkBuilder::new(&path);
         Ok(ignore_paths
             .build()
             .flatten()
@@ -74,7 +79,7 @@ async fn read_ftd_test_file(
     let mut req_config =
         fastn_core::RequestConfig::new(config, &req, ftd_document.id.as_str(), base_url);
     req_config.current_document = Some(ftd_document.id.to_string());
-    let mut main_ftd_doc = fastn_core::doc::interpret_helper(
+    let main_ftd_doc = fastn_core::doc::interpret_helper(
         ftd_document.id_with_package().as_str(),
         ftd_document.content.as_str(),
         &mut req_config,
