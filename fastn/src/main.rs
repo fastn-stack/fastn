@@ -162,7 +162,8 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_external_js(external_js)
             .add_inline_js(inline_js)
             .add_external_css(external_css)
-            .add_inline_css(inline_css);
+            .add_inline_css(inline_css)
+            .set_test_command_running();
 
         return fastn_core::test(
             &config,
