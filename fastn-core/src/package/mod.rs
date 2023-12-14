@@ -11,7 +11,8 @@ pub struct Package {
     pub versioned: bool,
     pub translation_of: Box<Option<Package>>,
     pub translations: Vec<Package>,
-    pub language: Option<String>,
+    pub requested_language: Option<String>,
+    pub selected_language: Option<String>,
     pub about: Option<String>,
     pub zip: Option<String>,
     pub download_base_url: Option<String>,
@@ -72,6 +73,8 @@ pub struct Package {
     pub redirects: Option<ftd::Map<String>>,
     pub system: Option<String>,
     pub system_is_confidential: Option<bool>,
+
+    pub lang: Option<Lang>,
 }
 
 impl Package {
@@ -81,7 +84,9 @@ impl Package {
             versioned: false,
             translation_of: Box::new(None),
             translations: vec![],
-            language: None,
+            requested_language: None,
+            selected_language: None,
+            lang: None,
             about: None,
             zip: None,
             download_base_url: None,
@@ -634,6 +639,7 @@ impl Package {
             });
         }
 
+        package.auto_import_language(None, None)?;
         package.ignored_paths = fastn_doc.get::<Vec<String>>("fastn#ignore")?;
         package.fonts = fastn_doc.get("fastn#font")?;
         package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
@@ -704,6 +710,69 @@ impl Package {
             None => self.endpoint.as_ref().map(|ep| (ep.as_str(), path)),
         }
     }
+
+    pub fn auto_import_language(
+        &mut self,
+        req_lang: Option<String>,
+        main_package_selected_language: Option<String>,
+    ) -> fastn_core::Result<()> {
+        let lang = if let Some(lang) = &self.lang {
+            lang
+        } else {
+            return Ok(());
+        };
+        let mut lang_module_path_with_language = None;
+
+        if let Some(request_lang) = req_lang.as_ref() {
+            lang_module_path_with_language = lang
+                .available_languages
+                .get(request_lang)
+                .map(|module| (module, request_lang.to_string()));
+        }
+
+        if lang_module_path_with_language.is_none() && !main_package_selected_language.eq(&req_lang)
+        {
+            if let Some(main_package_selected_language) = main_package_selected_language.as_ref() {
+                lang_module_path_with_language = lang
+                    .available_languages
+                    .get(main_package_selected_language)
+                    .map(|module| (module, main_package_selected_language.to_string()));
+            }
+        }
+
+        if lang_module_path_with_language.is_none() {
+            lang_module_path_with_language = lang
+                .available_languages
+                .get(&lang.default_lang)
+                .map(|v| (v, lang.default_lang.to_string()));
+        }
+
+        let (lang_module_path, language) = match lang_module_path_with_language {
+            Some(v) => v,
+            None => {
+                return fastn_core::usage_error(format!(
+                "Module corresponding to `default-language: {}` is not provided in FASTN.ftd of {}",
+                lang.default_lang, self.name
+            ))
+            }
+        };
+
+        self.auto_import.push(fastn_core::AutoImport {
+            path: lang_module_path.to_string(),
+            alias: Some("lang".to_string()),
+            exposing: vec![],
+        });
+
+        self.requested_language = req_lang;
+        self.selected_language = Some(language);
+        Ok(())
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Lang {
+    pub default_lang: String,
+    pub available_languages: std::collections::HashMap<String, String>,
 }
 
 trait PackageTempIntoPackage {
@@ -726,12 +795,33 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             .map(|v| Package::new(&v))
             .collect::<Vec<Package>>();
 
+        let lang = if let Some(default_lang) = &self.default_language {
+            let mut available_languages = std::collections::HashMap::new();
+
+            if let Some(lang_en) = self.translation_en {
+                available_languages.insert("en".to_string(), lang_en);
+            }
+
+            if let Some(lang_hi) = self.translation_hi {
+                available_languages.insert("hi".to_string(), lang_hi);
+            }
+
+            Some(Lang {
+                default_lang: default_lang.to_string(),
+                available_languages,
+            })
+        } else {
+            None
+        };
+
         Package {
             name: self.name.clone(),
             versioned: self.versioned,
             translation_of: Box::new(translation_of),
             translations,
-            language: self.language,
+            requested_language: None,
+            selected_language: None,
+            lang,
             about: self.about,
             zip: self.zip,
             download_base_url: self.download_base_url.or(Some(self.name)),

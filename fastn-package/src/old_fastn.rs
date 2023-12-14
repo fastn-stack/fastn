@@ -75,8 +75,6 @@ pub struct PackageTemp {
     pub translation_of: Option<String>,
     #[serde(rename = "translation")]
     pub translations: Vec<String>,
-    #[serde(rename = "language")]
-    pub language: Option<String>,
     pub about: Option<String>,
     pub zip: Option<String>,
     #[serde(rename = "download-base-url")]
@@ -85,19 +83,66 @@ pub struct PackageTemp {
     pub canonical_url: Option<String>,
     #[serde(rename = "inherit-auto-imports-from-original")]
     pub import_auto_imports_from_original: bool,
-    #[serde(rename = "favicon")]
     pub favicon: Option<String>,
-    #[serde(rename = "endpoint")]
     pub endpoint: Option<String>,
-    #[serde(rename = "backend")]
     pub backend: bool,
     #[serde(rename = "backend-headers")]
     pub backend_headers: Option<Vec<BackendHeader>>,
-    #[serde(rename = "icon")]
     pub icon: Option<ftd::ImageSrc>,
     // This will contain the module name through which this package can
     // be accessed when considered as a system's package
     pub system: Option<String>,
     #[serde(rename = "system-is-confidential")]
     pub system_is_confidential: Option<bool>,
+    #[serde(rename = "default-language")]
+    pub default_language: Option<String>,
+    pub lang: Option<String>,
+    #[serde(rename = "translation-en")]
+    pub translation_en: Option<String>,
+    #[serde(rename = "translation-hi")]
+    pub translation_hi: Option<String>,
+    // #[serde(flatten, deserialize_with = "deserialize_languages")]
+    // pub other_languages: Option<Vec<Lang>>,
 }
+
+// #[derive(serde::Deserialize, Debug, Clone)]
+// pub struct Lang {
+//     pub lang: String,
+//     pub module: String,
+// }
+
+// fn deserialize_languages<'de, D>(deserializer: D) -> Result<Option<Vec<Lang>>, D::Error>
+// where
+//     D: serde::de::Deserializer<'de>,
+// {
+//     struct LanguageDataVisitor;
+
+//     impl<'de> serde::de::Visitor<'de> for LanguageDataVisitor {
+//         type Value = Option<Vec<Lang>>;
+
+//         fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+//             formatter.write_str("a map with language properties")
+//         }
+
+//         fn visit_map<M>(self, mut access: M) -> Result<Self::Value, M::Error>
+//         where
+//             M: serde::de::MapAccess<'de>,
+//         {
+//             let mut languages: Vec<Lang> = vec![];
+
+//             while let Some((key, value)) = access.next_entry::<String, String>()? {
+//                 dbg!(&key);
+//                 if dbg!(key.starts_with("lang-")) {
+//                     languages.push(Lang {
+//                         lang: key.trim().trim_start_matches("lang-").to_string(),
+//                         module: value.trim().to_string(),
+//                     });
+//                 }
+//             }
+
+//             Ok(if languages.is_empty() { None } else { Some(languages) })
+//         }
+//     }
+
+//     deserializer.deserialize_map(LanguageDataVisitor)
+// }
