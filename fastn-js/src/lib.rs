@@ -37,11 +37,15 @@ pub use property::{
     ConditionalValue, Formula, FormulaType, PropertyKind, SetProperty, SetPropertyValue, Value,
 };
 pub use record::RecordInstance;
-pub use ssr::{ssr, ssr_raw_string_without_test, ssr_str, ssr_with_js_string};
+pub use ssr::{run_test, ssr, ssr_raw_string_without_test, ssr_str, ssr_with_js_string};
 pub use static_variable::{static_integer, static_string, StaticVariable};
 pub use to_js::to_js;
 pub use udf::{udf_with_arguments, UDF};
 pub use udf_statement::UDFStatement;
+
+pub fn fastn_test_js() -> &'static str {
+    include_str!("../js/fastn_test.js")
+}
 
 pub fn all_js_without_test_and_ftd_langugage_js() -> String {
     let markdown_js = fastn_js::markdown_js();

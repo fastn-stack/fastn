@@ -1,3 +1,25 @@
+pub fn run_test(js: &str) -> Vec<bool> {
+    #[cfg(target_os = "windows")]
+    {
+        rquickjs::Context::full(&rquickjs::Runtime::new().unwrap())
+            .unwrap()
+            .with(|ctx| ctx.eval::<Vec<bool>, _>(js).unwrap())
+    }
+    #[cfg(not(target_os = "windows"))]
+    {
+        // Added logging support from console from within context
+        let context = quick_js::Context::builder()
+            .console(
+                |level: quick_js::console::Level, args: Vec<quick_js::JsValue>| {
+                    eprintln!("{}: {:?}", level, args);
+                },
+            )
+            .build()
+            .unwrap();
+        context.eval_as::<Vec<bool>>(js).unwrap()
+    }
+}
+
 pub fn ssr_str(js: &str) -> String {
     let all_js = fastn_js::all_js_with_test();
     let js = format!("{all_js}{js}");
@@ -46,7 +68,7 @@ pub fn ssr_raw_string(package_name: &str, js: &str) -> String {
 }
 
 pub fn ssr_raw_string_without_test(package_name: &str, js: &str) -> String {
-    let all_js = fastn_js::all_js_without_test();
+    let all_js = fastn_js::all_js_without_test_and_ftd_langugage_js();
     let raw_string = ssr_raw_string(package_name, js);
     format!("{all_js}{raw_string}")
 }
