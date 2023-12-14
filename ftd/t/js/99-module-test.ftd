@@ -1,0 +1,31 @@
+-- import: 08-inherited as colors
+
+-- component page:
+module colors: colors
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+background.solid: $page.colors.base-
+
+-- ftd.text: Hello world
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+background.solid: $colors.base-
+
+-- ftd.text: Hello world
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: page
+
+-- page:
+
+;; -- void change-bg-color(m):
+;; module m:
+
+;; m.base_.set("red")

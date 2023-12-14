@@ -1,11 +1,18 @@
 #[derive(Debug)]
 pub enum Value {
     Data(ftd::interpreter::Value),
-    Reference(String),
+    Reference(ReferenceData),
     ConditionalFormula(Vec<ftd::interpreter::Property>),
     FunctionCall(ftd::interpreter::FunctionCall),
     Clone(String),
 }
+
+#[derive(Debug)]
+pub struct ReferenceData {
+    pub name: String,
+    pub value: Option<ftd::interpreter::PropertyValue>,
+}
+// HEREHREH
 
 impl Value {
     pub(crate) fn to_set_property_value_with_none(
@@ -40,9 +47,45 @@ impl Value {
             Value::Data(value) => {
                 value.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
             }
-            Value::Reference(name) => {
-                fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(name, rdata))
-            }
+            Value::Reference(data) => match &data.value {
+                Some(value) => {
+                    if let ftd::interpreter::Kind::OrType {
+                        name,
+                        variant,
+                        full_variant,
+                    } = value.kind().inner()
+                    {
+                        dbg!(&name, &variant);
+                        let (js_variant, has_value) = ftd_to_js_variant(
+                            name.as_str(),
+                            variant.unwrap().as_str(),
+                            full_variant.unwrap().as_str(),
+                            &value,
+                            doc.name,
+                            value.line_number(),
+                        );
+                        dbg!(&js_variant, &has_value);
+                        if has_value {
+                            fastn_js::SetPropertyValue::Reference(format!(
+                                "{}({})",
+                                &js_variant.replace(".", "__DOT__"),
+                                &data.name
+                            ))
+                        } else {
+                            fastn_js::SetPropertyValue::Reference(js_variant.clone())
+                        }
+                    } else {
+                        fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
+                            data.name.as_str(),
+                            rdata,
+                        ))
+                    }
+                }
+                None => fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
+                    data.name.as_str(),
+                    rdata,
+                )),
+            },
             Value::ConditionalFormula(formulas) => fastn_js::SetPropertyValue::Formula(
                 properties_to_js_conditional_formula(doc, formulas, rdata),
             ),
@@ -301,7 +344,10 @@ impl ftd::interpreter::PropertyValue {
                 ftd::js::Value::Data(value.to_owned())
             }
             ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
-                ftd::js::Value::Reference(name.to_owned())
+                ftd::js::Value::Reference(ReferenceData {
+                    name: name.clone().to_string(),
+                    value: Some(self.clone()),
+                })
             }
             ftd::interpreter::PropertyValue::FunctionCall(ref function_call) => {
                 ftd::js::Value::FunctionCall(function_call.to_owned())
@@ -357,6 +403,7 @@ impl ftd::interpreter::Value {
                     doc.name,
                     value.line_number(),
                 );
+                dbg!(&variant, &js_variant);
                 if has_value {
                     return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                         variant: js_variant,
@@ -410,9 +457,9 @@ impl ftd::interpreter::Value {
                 })
             }
             ftd::interpreter::Value::Module { name, .. } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::Module {
+                dbg!(fastn_js::SetPropertyValue::Value(fastn_js::Value::Module {
                     name: name.to_string(),
-                })
+                }))
             }
             t => todo!("{:?}", t),
         }
