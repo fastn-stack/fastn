@@ -84,7 +84,6 @@ edit = "0.1"
 env_logger = "0.10"
 enum-iterator = "0.6"
 enum-iterator-derive = "0.6"
-fastn-lang = { path = "fastn-lang" }
 fastn-cloud = { path = "fastn-cloud" }
 fastn-core = { path = "fastn-core" }
 fastn-issues = { path = "fastn-issues" }

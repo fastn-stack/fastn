@@ -1634,7 +1634,6 @@ dependencies = [
  "edit",
  "env_logger",
  "fastn-js",
- "fastn-lang",
  "fastn-observer",
  "fastn-package",
  "fbt-lib",
