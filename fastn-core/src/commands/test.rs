@@ -82,7 +82,7 @@ async fn read_ftd_test_file(
         0,
     )
     .await?;
-    dbg!(&main_ftd_doc.tree);
+    // dbg!(&main_ftd_doc.tree);
     let doc = ftd::interpreter::TDoc::new(
         &main_ftd_doc.name,
         &main_ftd_doc.aliases,
@@ -133,7 +133,7 @@ async fn execute_get_instruction(
 async fn get_js_for_id(id: &str, config: &fastn_core::Config) -> fastn_core::Result<()> {
     let mut request = fastn_core::http::Request::default();
     request.path = id.to_string();
-    let request = fastn_core::commands::serve::serve(config, request).await?;
+    let request = fastn_core::commands::serve::serve_helper(config, request, true).await?;
     dbg!(&request.body());
     Ok(())
 }
