@@ -158,58 +158,85 @@ impl Package {
 
     pub fn current_language_meta(
         &self,
-    ) -> Option<fastn_core::library2022::processor::lang_details::LanguageMeta> {
-        dbg!("Requested language: {:?}", self.requested_language.as_ref());
-        dbg!("Selected language: {:?}", self.selected_language.as_ref());
+    ) -> ftd::interpreter::Result<fastn_core::library2022::processor::lang_details::LanguageMeta>
+    {
         let default_language = "en".to_string();
         let current_language = self
             .requested_language
             .as_ref()
             .unwrap_or(self.selected_language.as_ref().unwrap_or(&default_language));
 
-        if let Ok(lang) = realm_lang::Language::from_2_letter_code(current_language) {
-            return Some(
-                fastn_core::library2022::processor::lang_details::LanguageMeta {
-                    id: lang.to_2_letter_code().to_string(),
-                    id3: lang.to_3_letter_code().to_string(),
-                    human: lang.human(),
-                    is_active: true,
-                },
-            );
-        }
-        None
+        let lang = realm_lang::Language::from_2_letter_code(current_language).map_err(
+            |realm_lang::Error::InvalidCode { ref found }| ftd::interpreter::Error::ParseError {
+                message: found.clone(),
+                doc_id: format!("{}/FASTN.ftd", self.name.as_str()),
+                line_number: 0,
+            },
+        )?;
+
+        Ok(
+            fastn_core::library2022::processor::lang_details::LanguageMeta {
+                id: lang.to_2_letter_code().to_string(),
+                id3: lang.to_3_letter_code().to_string(),
+                human: lang.human(),
+                is_active: true,
+            },
+        )
     }
 
     pub fn available_languages_meta(
         &self,
-    ) -> Vec<fastn_core::library2022::processor::lang_details::LanguageMeta> {
+    ) -> ftd::interpreter::Result<Vec<fastn_core::library2022::processor::lang_details::LanguageMeta>>
+    {
         let current_language = self.selected_language.clone();
         let mut available_languages = vec![];
 
         if let Some(ref lang) = self.lang {
             for lang_id in lang.available_languages.keys() {
-                if let Ok(language) = realm_lang::Language::from_2_letter_code(lang_id) {
-                    available_languages.push(
-                        fastn_core::library2022::processor::lang_details::LanguageMeta {
-                            id: language.to_2_letter_code().to_string(),
-                            id3: language.to_3_letter_code().to_string(),
-                            human: language.human(),
-                            is_active: is_active_language(&current_language, &language),
-                        },
-                    );
-                }
+                let language = realm_lang::Language::from_2_letter_code(lang_id).map_err(
+                    |realm_lang::Error::InvalidCode { ref found }| {
+                        ftd::interpreter::Error::ParseError {
+                            message: found.clone(),
+                            doc_id: format!("{}/FASTN.ftd", self.name.as_str()),
+                            line_number: 0,
+                        }
+                    },
+                )?;
+                available_languages.push(
+                    fastn_core::library2022::processor::lang_details::LanguageMeta {
+                        id: language.to_2_letter_code().to_string(),
+                        id3: language.to_3_letter_code().to_string(),
+                        human: language.human(),
+                        is_active: is_active_language(
+                            &current_language,
+                            &language,
+                            self.name.as_str(),
+                        )?,
+                    },
+                );
             }
         }
 
-        return available_languages;
+        return Ok(available_languages);
 
-        fn is_active_language(current: &Option<String>, other: &realm_lang::Language) -> bool {
+        fn is_active_language(
+            current: &Option<String>,
+            other: &realm_lang::Language,
+            package_name: &str,
+        ) -> ftd::interpreter::Result<bool> {
             if let Some(ref current) = current {
-                if let Ok(current) = realm_lang::Language::from_2_letter_code(current.as_str()) {
-                    return current.eq(&other);
-                }
+                let current = realm_lang::Language::from_2_letter_code(current.as_str()).map_err(
+                    |realm_lang::Error::InvalidCode { ref found }| {
+                        ftd::interpreter::Error::ParseError {
+                            message: found.clone(),
+                            doc_id: format!("{}/FASTN.ftd", package_name),
+                            line_number: 0,
+                        }
+                    },
+                )?;
+                return Ok(current.eq(&other));
             }
-            false
+            Ok(false)
         }
     }
 

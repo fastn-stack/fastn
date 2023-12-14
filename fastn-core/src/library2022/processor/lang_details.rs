@@ -4,23 +4,13 @@ pub async fn process(
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &mut fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let current_language =
-        req_config
-            .config
-            .package
-            .current_language_meta()
-            .unwrap_or(LanguageMeta {
-                id: "en".to_string(),
-                id3: "eng".to_string(),
-                human: "English".to_string(),
-                is_active: true,
-            });
-    let available_languages = req_config.config.package.available_languages_meta();
-    let result = LanguageData {
-        current_language,
-        available_languages,
-    };
-    doc.from_json(&result, &kind, &value)
+    let current_language = req_config.config.package.current_language_meta()?;
+    let available_languages = req_config.config.package.available_languages_meta()?;
+    doc.from_json(
+        &LanguageData::new(current_language, available_languages),
+        &kind,
+        &value,
+    )
 }
 
 #[derive(Default, Debug, serde::Serialize)]
@@ -38,4 +28,13 @@ pub struct LanguageMeta {
     pub human: String,
     #[serde(rename = "is-active")]
     pub is_active: bool,
+}
+
+impl LanguageData {
+    pub fn new(current_language: LanguageMeta, available_languages: Vec<LanguageMeta>) -> Self {
+        LanguageData {
+            current_language,
+            available_languages,
+        }
+    }
 }

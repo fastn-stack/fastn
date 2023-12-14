@@ -49,7 +49,6 @@ diffy.workspace = true
 edit.workspace = true
 env_logger.workspace = true
 fastn-package.workspace = true
-fastn-lang.workspace = true
 fluent.workspace = true
 ftd.workspace = true
 futures.workspace = true
