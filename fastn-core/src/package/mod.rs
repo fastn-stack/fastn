@@ -801,6 +801,27 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             .map(|v| Package::new(&v))
             .collect::<Vec<Package>>();
 
+        // Currently supported languages
+        // English - en
+        // Hindi- hi
+        // Chinese - zh
+        // Spanish - es
+        // Arabic - ar
+        // Portuguese - pt
+        // Russian - ru
+        // French - fr
+        // German - de
+        // Japanese - ja
+        // Bengali - bn
+        // Urdu - ur
+        // Indonesian - id
+        // Turkish - tr
+        // Vietnamese - vi
+        // Italian - it
+        // Polish - pl
+        // Thai - th
+        // Dutch - nl
+        // Korean - ko
         let lang = if let Some(default_lang) = &self.default_language {
             let mut available_languages = std::collections::HashMap::new();
 
@@ -810,6 +831,78 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
 
             if let Some(lang_hi) = self.translation_hi {
                 available_languages.insert("hi".to_string(), lang_hi);
+            }
+
+            if let Some(lang_zh) = self.translation_zh {
+                available_languages.insert("zh".to_string(), lang_zh);
+            }
+
+            if let Some(lang_es) = self.translation_es {
+                available_languages.insert("es".to_string(), lang_es);
+            }
+
+            if let Some(lang_ar) = self.translation_ar {
+                available_languages.insert("ar".to_string(), lang_ar);
+            }
+
+            if let Some(lang_pt) = self.translation_pt {
+                available_languages.insert("pt".to_string(), lang_pt);
+            }
+
+            if let Some(lang_ru) = self.translation_ru {
+                available_languages.insert("ru".to_string(), lang_ru);
+            }
+
+            if let Some(lang_fr) = self.translation_fr {
+                available_languages.insert("fr".to_string(), lang_fr);
+            }
+
+            if let Some(lang_de) = self.translation_de {
+                available_languages.insert("de".to_string(), lang_de);
+            }
+
+            if let Some(lang_ja) = self.translation_ja {
+                available_languages.insert("ja".to_string(), lang_ja);
+            }
+
+            if let Some(lang_bn) = self.translation_bn {
+                available_languages.insert("bn".to_string(), lang_bn);
+            }
+
+            if let Some(lang_ur) = self.translation_ur {
+                available_languages.insert("ur".to_string(), lang_ur);
+            }
+
+            if let Some(lang_id) = self.translation_id {
+                available_languages.insert("id".to_string(), lang_id);
+            }
+
+            if let Some(lang_tr) = self.translation_tr {
+                available_languages.insert("tr".to_string(), lang_tr);
+            }
+
+            if let Some(lang_vi) = self.translation_vi {
+                available_languages.insert("vi".to_string(), lang_vi);
+            }
+
+            if let Some(lang_it) = self.translation_it {
+                available_languages.insert("it".to_string(), lang_it);
+            }
+
+            if let Some(lang_pl) = self.translation_pl {
+                available_languages.insert("pl".to_string(), lang_pl);
+            }
+
+            if let Some(lang_th) = self.translation_th {
+                available_languages.insert("th".to_string(), lang_th);
+            }
+
+            if let Some(lang_nl) = self.translation_nl {
+                available_languages.insert("nl".to_string(), lang_nl);
+            }
+
+            if let Some(lang_ko) = self.translation_ko {
+                available_languages.insert("ko".to_string(), lang_ko);
             }
 
             Some(Lang {
