@@ -3676,7 +3676,39 @@ fastn_utils.private = {
         while (newChildrenWrapper.firstChild) {
             parent.appendChild(newChildrenWrapper.firstChild);
         }
-    }
+    },
+
+    // Cookie related functions ----------------------------------------------
+    setCookie(cookieName, cookieValue) {
+        cookieName = fastn_utils.getStaticValue(cookieName);
+        cookieValue = fastn_utils.getStaticValue(cookieValue);
+
+        // Default expiration period of 30 days
+        var expires = "";
+        var expirationDays = 30;
+        if (expirationDays) {
+            var date = new Date();
+            date.setTime(date.getTime() + (expirationDays * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+
+        document.cookie = cookieName + "=" + encodeURIComponent(cookieValue) + expires + "; path=/";
+    },
+    getCookie(cookieName) {
+        cookieName = fastn_utils.getStaticValue(cookieName);
+        var name = cookieName + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var cookieArray = decodedCookie.split(';');
+
+        for (var i = 0; i < cookieArray.length; i++) {
+            var cookie = cookieArray[i].trim();
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+
+        return "None";
+    },
 }
 
 
@@ -4374,6 +4406,20 @@ const ftd = (function() {
         }
     }
 
+    // Language related functions ---------------------------------------------
+    exports.set_current_language = function (language) {
+        language = fastn_utils.getStaticValue(language);
+        console.log("Changing language ->, " + language);
+        fastn_utils.private.setCookie("fastn-lang", language);
+        location.reload();
+    }
+
+    exports.get_current_language = function () {
+        var current_language = fastn_utils.private.getCookie("fastn_lang");
+        console.log("Current language: " + current_language);
+        return current_language;
+    }
+
     return exports;
 })();
 
@@ -4611,7 +4657,7 @@ window.ftd = ftd;
 
 ftd.toggle = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4628,7 +4674,7 @@ ftd.toggle = function (args) {
 }
 ftd.increment = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4645,7 +4691,7 @@ ftd.increment = function (args) {
 }
 ftd.increment_by = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4662,7 +4708,7 @@ ftd.increment_by = function (args) {
 }
 ftd.decrement = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4679,7 +4725,7 @@ ftd.decrement = function (args) {
 }
 ftd.decrement_by = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4696,7 +4742,7 @@ ftd.decrement_by = function (args) {
 }
 ftd.enable_light_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4707,7 +4753,7 @@ ftd.enable_light_mode = function (args) {
 }
 ftd.enable_dark_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4718,7 +4764,7 @@ ftd.enable_dark_mode = function (args) {
 }
 ftd.enable_system_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4729,7 +4775,7 @@ ftd.enable_system_mode = function (args) {
 }
 ftd.set_bool = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4746,7 +4792,7 @@ ftd.set_bool = function (args) {
 }
 ftd.set_boolean = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4763,7 +4809,7 @@ ftd.set_boolean = function (args) {
 }
 ftd.set_string = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4780,7 +4826,7 @@ ftd.set_string = function (args) {
 }
 ftd.set_integer = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
