@@ -106,7 +106,7 @@ of that content component neatly packed together in one place.
 For instance, you can create the above testimonial component within a separate file in your project.
 Then, whenever you need the testimonial component, you simply invoke it on the required page: 
 
--- cl.testimonials: testimonials
+-- cl.testimonials: 
 testimonials: $cl.testimonials-list
 
 
