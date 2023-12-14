@@ -1,5 +1,3 @@
-use hyper::http::request;
-
 pub(crate) const TEST_FOLDER: &str = "_tests";
 pub(crate) const TEST_FILE_EXTENSION: &str = ".test.ftd";
 
@@ -126,15 +124,27 @@ async fn execute_get_instruction(
         .to_string()
         .unwrap();
 
-    get_js_for_id(url.as_str(), config).await?;
+    get_js_for_id(url.as_str(), test.as_str(), config).await?;
     Ok(())
 }
 
-async fn get_js_for_id(id: &str, config: &fastn_core::Config) -> fastn_core::Result<()> {
+async fn get_js_for_id(
+    id: &str,
+    test: &str,
+    config: &fastn_core::Config,
+) -> fastn_core::Result<()> {
+    use actix_web::body::MessageBody;
+
     let mut request = fastn_core::http::Request::default();
     request.path = id.to_string();
-    let request = fastn_core::commands::serve::serve_helper(config, request, true).await?;
-    dbg!(&request.body());
+    let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
+    dbg!(&response.body());
+    let body = response.into_body().try_into_bytes().unwrap(); // Todo: Throw error
+    let body_str = std::str::from_utf8(&body).unwrap(); // Todo: Throw error
+    let fastn_test_js = fastn_js::fastn_test_js();
+    let test_string = format!("{body_str}\n{fastn_test_js}\n{test}\nfastn.test_result");
+    std::fs::write("test.js", test_string.clone()).unwrap();
+    dbg!(fastn_js::run_test(test_string.as_str()));
     Ok(())
 }
 
@@ -167,19 +177,3 @@ fn get_value(
 pub fn test_fastn_ftd() -> &'static str {
     include_str!("../../test_fastn.ftd")
 }
-
-/*fn get_asts(document: ftd::interpreter::Document) -> Vec<fastn_js::Ast> {
-    let mut js_ast_data = ftd::js::document_into_js_ast(document);
-    // Remove the fastn asts. This will come from test_fastn.js
-    js_ast_data.asts = js_ast_data
-        .asts
-        .into_iter()
-        .filter(|ast| {
-            ast.get_name()
-                .map(|name| !name.starts_with("fastn#"))
-                .unwrap_or(true)
-        })
-        .collect();
-
-    js_ast_data.asts
-}*/
