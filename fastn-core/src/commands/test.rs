@@ -3,10 +3,12 @@ pub(crate) const TEST_FILE_EXTENSION: &str = ".test.ftd";
 
 pub async fn test(
     config: &fastn_core::Config,
-    only_id: Option<&str>,
-    base_url: &str,
+    _only_id: Option<&str>,
+    _base_url: &str,
     headless: bool,
 ) -> fastn_core::Result<()> {
+    use colored::Colorize;
+
     if !headless {
         return fastn_core::usage_error(
             "Currently headless mode is only suuported, use: --headless flag".to_string(),
@@ -15,6 +17,7 @@ pub async fn test(
     let ftd_documents = config.get_test_files().await?;
 
     for document in ftd_documents {
+        println!("Running test in {}", document.id.yellow());
         read_ftd_test_file(document, config).await?;
     }
 
@@ -80,7 +83,7 @@ async fn read_ftd_test_file(
         0,
     )
     .await?;
-    // dbg!(&main_ftd_doc.tree);
+
     let doc = ftd::interpreter::TDoc::new(
         &main_ftd_doc.name,
         &main_ftd_doc.aliases,
@@ -88,7 +91,9 @@ async fn read_ftd_test_file(
     );
 
     for instruction in main_ftd_doc.tree {
-        execute_instruction(&instruction, &doc, config).await?;
+        if !execute_instruction(&instruction, &doc, config).await? {
+            break;
+        }
     }
     Ok(())
 }
@@ -97,7 +102,7 @@ async fn execute_instruction(
     instruction: &ftd::interpreter::Component,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
-) -> fastn_core::Result<()> {
+) -> fastn_core::Result<bool> {
     match instruction.name.as_str() {
         "fastn#get" => execute_get_instruction(instruction, doc, config).await,
         "fastn#post" => todo!(),
@@ -112,7 +117,7 @@ async fn execute_get_instruction(
     instruction: &ftd::interpreter::Component,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
-) -> fastn_core::Result<()> {
+) -> fastn_core::Result<bool> {
     let property_values = instruction.get_interpreter_property_value_of_all_arguments(&doc);
     let url = get_value_ok("url", &property_values, instruction.line_number)?
         .to_string()
@@ -124,28 +129,33 @@ async fn execute_get_instruction(
         .to_string()
         .unwrap();
 
-    get_js_for_id(url.as_str(), test.as_str(), config).await?;
-    Ok(())
+    Ok(get_js_for_id(url.as_str(), test.as_str(), title.as_str(), config).await?)
 }
 
 async fn get_js_for_id(
     id: &str,
     test: &str,
+    title: &str,
     config: &fastn_core::Config,
-) -> fastn_core::Result<()> {
+) -> fastn_core::Result<bool> {
     use actix_web::body::MessageBody;
+    use colored::Colorize;
 
+    print!("{}:  ", title.yellow());
     let mut request = fastn_core::http::Request::default();
     request.path = id.to_string();
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
-    dbg!(&response.body());
     let body = response.into_body().try_into_bytes().unwrap(); // Todo: Throw error
     let body_str = std::str::from_utf8(&body).unwrap(); // Todo: Throw error
     let fastn_test_js = fastn_js::fastn_test_js();
     let test_string = format!("{body_str}\n{fastn_test_js}\n{test}\nfastn.test_result");
-    std::fs::write("test.js", test_string.clone()).unwrap();
-    dbg!(fastn_js::run_test(test_string.as_str()));
-    Ok(())
+    let test_result = fastn_js::run_test(test_string.as_str());
+    if test_result.iter().any(|v| *v == false) {
+        println!("{}", "Test Failed".red());
+        return Ok(false);
+    }
+    println!("{}", "Test Passed".green());
+    Ok(true)
 }
 
 fn get_value_ok(
