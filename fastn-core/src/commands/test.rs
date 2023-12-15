@@ -61,8 +61,7 @@ impl fastn_core::Config {
         let path = self
             .get_root_for_package(&self.package)
             .join(fastn_core::commands::test::TEST_FOLDER);
-        let ignore_paths = ignore::WalkBuilder::new(&path);
-        Ok(ignore_paths
+        Ok(ignore::WalkBuilder::new(path)
             .build()
             .flatten()
             .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
@@ -123,7 +122,7 @@ async fn execute_get_instruction(
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
 ) -> fastn_core::Result<bool> {
-    let property_values = instruction.get_interpreter_property_value_of_all_arguments(&doc);
+    let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc);
     let url = get_value_ok("url", &property_values, instruction.line_number)?
         .to_string()
         .unwrap();
@@ -134,7 +133,7 @@ async fn execute_get_instruction(
         .to_string()
         .unwrap();
 
-    Ok(get_js_for_id(url.as_str(), test.as_str(), title.as_str(), config).await?)
+    get_js_for_id(url.as_str(), test.as_str(), title.as_str(), config).await
 }
 
 async fn get_js_for_id(
@@ -155,7 +154,7 @@ async fn get_js_for_id(
     let fastn_test_js = fastn_js::fastn_test_js();
     let test_string = format!("{body_str}\n{fastn_test_js}\n{test}\nfastn.test_result");
     let test_result = fastn_js::run_test(test_string.as_str());
-    if test_result.iter().any(|v| *v == false) {
+    if test_result.iter().any(|v| !(*v)) {
         println!("{}", "Test Failed".red());
         return Ok(false);
     }
@@ -178,11 +177,7 @@ fn get_value(
     key: &str,
     property_values: &ftd::Map<ftd::interpreter::PropertyValue>,
 ) -> Option<ftd::interpreter::Value> {
-    let property_value = if let Some(property_value) = property_values.get(key) {
-        property_value
-    } else {
-        return None;
-    };
+    let property_value = property_values.get(key)?;
     match property_value {
         ftd::interpreter::PropertyValue::Value { value, .. } => Some(value.clone()),
         _ => unimplemented!(),
