@@ -2075,8 +2075,8 @@ window.ftd.utils.set_value_helper(data, "foo#c", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#c", "main");
 window.ftd.call_immutable_value_changes("foo#c", "main");
-window.ftd.utils.node_change_call("main","0,0:main__text", data);
 window.ftd.utils.node_change_call("main","0,1:main__text", data);
+window.ftd.utils.node_change_call("main","0,0:main__text", data);
 };
 
 window.set_value_main["foo#switcher:is-active:0"] = function (data, new_value, remaining) {
@@ -2095,8 +2095,8 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0,1:main__color", data);
 window.ftd.utils.node_change_call("main","0,0:main__color", data);
+window.ftd.utils.node_change_call("main","0,1:main__color", data);
 };
 
 window.set_value_main["ftd#default-colors"] = function (data, new_value, remaining) {
@@ -2104,8 +2104,8 @@ window.ftd.utils.set_value_helper(data, "ftd#default-colors", remaining, new_val
 
 window.ftd.call_mutable_value_changes("ftd#default-colors", "main");
 window.ftd.call_immutable_value_changes("ftd#default-colors", "main");
-window.ftd.utils.node_change_call("main","0,0:main__color", data);
 window.ftd.utils.node_change_call("main","0,1:main__color", data);
+window.ftd.utils.node_change_call("main","0,0:main__color", data);
 };
 
 
