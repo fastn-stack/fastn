@@ -14,6 +14,14 @@ pub struct User {
     pub is_sponsored_by: bool,
 }
 
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+pub struct GhUserDetails {
+    pub login: String,
+    pub id: usize,
+    pub name: Option<String>,
+    pub email: Option<String>,
+}
+
 // TODO: API to starred a repo on behalf of the user
 // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
 pub async fn starred_repo(token: &str) -> fastn_core::Result<Vec<String>> {
@@ -130,10 +138,10 @@ pub async fn is_user_sponsored(
     }
 }
 
-pub async fn user_details(access_token: &str) -> fastn_core::Result<fastn_core::auth::FastnUser> {
+pub async fn user_details(access_token: &str) -> fastn_core::Result<GhUserDetails> {
     // API Docs: https://docs.github.com/en/rest/users/users#get-the-authenticated-user
     // TODO: Handle paginated response
-    let user_obj: fastn_core::auth::FastnUser =
+    let user_obj: GhUserDetails =
         fastn_core::http::get_api("https://api.github.com/user", access_token).await?;
 
     Ok(user_obj)
