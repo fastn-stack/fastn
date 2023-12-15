@@ -132,15 +132,25 @@ async fn execute_get_instruction(
     let test = get_value_ok("test", &property_values, instruction.line_number)?
         .to_string()
         .unwrap();
+    let http_status = get_value_ok("http-status", &property_values, instruction.line_number)?
+        .integer(doc.name, instruction.line_number)?;
 
-    get_js_for_id(url.as_str(), test.as_str(), title.as_str(), config).await
+    get_js_for_id(
+        config,
+        url.as_str(),
+        test.as_str(),
+        title.as_str(),
+        http_status,
+    )
+    .await
 }
 
 async fn get_js_for_id(
+    config: &fastn_core::Config,
     id: &str,
     test: &str,
     title: &str,
-    config: &fastn_core::Config,
+    http_status: i64,
 ) -> fastn_core::Result<bool> {
     use colored::Colorize;
 
@@ -148,6 +158,17 @@ async fn get_js_for_id(
     let mut request = fastn_core::http::Request::default();
     request.path = id.to_string();
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
+
+    if let Some((expected, actual)) = is_response_status_assertion_failed(&response, http_status)? {
+        println!(
+            "Test Failed: {} Expected: {} Found: {}",
+            "Response status mismatch".red(),
+            expected.to_string().yellow(),
+            actual.to_string().yellow()
+        );
+        return Ok(false);
+    }
+
     let body = fastn_core::http::response_body(response)
         .map(|v| v.to_string())
         .flatten();
@@ -158,6 +179,24 @@ async fn get_js_for_id(
     }
     println!("{}", "Test Passed".green());
     Ok(true)
+}
+
+/// Returns `None` if the assertion passed (status codes match), or
+/// `Some((expected, actual))` if it failed.
+fn is_response_status_assertion_failed(
+    response: &fastn_core::http::Response,
+    expected_status: i64,
+) -> fastn_core::Result<Option<(u16, u16)>> {
+    let response_status = response.status();
+    let expected_status_code = actix_web::http::StatusCode::from_u16(expected_status as u16)
+        .map_err(|e| fastn_core::Error::UsageError {
+            message: e.to_string(),
+        })?;
+    Ok(if response_status.eq(&expected_status_code) {
+        None
+    } else {
+        Some((expected_status as u16, response_status.as_u16()))
+    })
 }
 
 fn get_value_ok(
@@ -183,5 +222,5 @@ fn get_value(
 }
 
 pub fn test_fastn_ftd() -> &'static str {
-    include_str!("../../test_fastn.ftd")
+    include_str!("../../fastn_test.ftd")
 }

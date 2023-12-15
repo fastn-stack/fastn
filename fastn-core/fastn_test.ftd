@@ -2,6 +2,8 @@
 caption title:
 string url:
 body test:
+integer http-status: 200
+optional string http-location:
 
 -- ftd.text: NOT IMPLEMENTED HERE
 
