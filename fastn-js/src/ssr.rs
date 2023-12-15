@@ -1,4 +1,8 @@
-pub fn run_test(js: &str) -> Vec<bool> {
+pub fn run_test(response_body: Option<String>, test: &str) -> Vec<bool> {
+    let fastn_test_js = fastn_js::fastn_test_js();
+    let response_body = response_body.unwrap_or_default();
+    let js = format!("{response_body}\n{fastn_test_js}\n{test}\nfastn.test_result");
+
     #[cfg(target_os = "windows")]
     {
         rquickjs::Context::full(&rquickjs::Runtime::new().unwrap())
@@ -16,7 +20,7 @@ pub fn run_test(js: &str) -> Vec<bool> {
             )
             .build()
             .unwrap();
-        context.eval_as::<Vec<bool>>(js).unwrap()
+        context.eval_as::<Vec<bool>>(js.as_str()).unwrap()
     }
 }
 

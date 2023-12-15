@@ -11,7 +11,7 @@ pub async fn test(
 
     if !headless {
         return fastn_core::usage_error(
-            "Currently headless mode is only suuported, use: --headless flag".to_string(),
+            "Currently headless mode is only supported, use: --headless flag".to_string(),
         );
     }
     let ftd_documents = config.get_test_files().await?;
@@ -142,18 +142,16 @@ async fn get_js_for_id(
     title: &str,
     config: &fastn_core::Config,
 ) -> fastn_core::Result<bool> {
-    use actix_web::body::MessageBody;
     use colored::Colorize;
 
     print!("{}:  ", title.yellow());
     let mut request = fastn_core::http::Request::default();
     request.path = id.to_string();
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
-    let body = response.into_body().try_into_bytes().unwrap(); // Todo: Throw error
-    let body_str = std::str::from_utf8(&body).unwrap(); // Todo: Throw error
-    let fastn_test_js = fastn_js::fastn_test_js();
-    let test_string = format!("{body_str}\n{fastn_test_js}\n{test}\nfastn.test_result");
-    let test_result = fastn_js::run_test(test_string.as_str());
+    let body = fastn_core::http::response_body(response)
+        .map(|v| v.to_string())
+        .flatten();
+    let test_result = fastn_js::run_test(body, test);
     if test_result.iter().any(|v| !(*v)) {
         println!("{}", "Test Failed".red());
         return Ok(false);

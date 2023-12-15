@@ -73,6 +73,31 @@ pub fn ok_with_content_type(
         .body(data)
 }
 
+pub(crate) enum ResponseBody {
+    Bytes(hyper::body::Bytes),
+    String(String),
+}
+
+impl ResponseBody {
+    pub(crate) fn to_string(&self) -> Option<String> {
+        match self {
+            ResponseBody::Bytes(_) => None,
+            ResponseBody::String(s) => Some(s.to_string()),
+        }
+    }
+}
+
+pub(crate) fn response_body(response: fastn_core::http::Response) -> Option<ResponseBody> {
+    use actix_web::body::MessageBody;
+
+    let body = response.into_body().try_into_bytes().ok()?;
+    Some(if let Ok(body) = std::str::from_utf8(&body) {
+        ResponseBody::String(body.to_string())
+    } else {
+        ResponseBody::Bytes(body)
+    })
+}
+
 #[derive(Debug, Clone, Default)]
 pub struct Request {
     method: String,
