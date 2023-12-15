@@ -415,15 +415,12 @@ const ftd = (function() {
     // Language related functions ---------------------------------------------
     exports.set_current_language = function (language) {
         language = fastn_utils.getStaticValue(language);
-        console.log("Changing language ->, " + language);
         fastn_utils.private.setCookie("fastn-lang", language);
         location.reload();
     }
 
     exports.get_current_language = function () {
-        var current_language = fastn_utils.private.getCookie("fastn-lang");
-        console.log("Current language: " + current_language);
-        return current_language;
+        return fastn_utils.private.getCookie("fastn-lang");
     }
 
     return exports;
