@@ -72,6 +72,11 @@ impl Value {
                                 ))),
                             });
                         }
+
+                        return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
+                            variant: js_variant,
+                            value: None,
+                        });
                     }
                 }
 
