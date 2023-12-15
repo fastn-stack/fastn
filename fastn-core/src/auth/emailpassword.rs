@@ -8,6 +8,23 @@ struct User {
     password: String,
 }
 
+#[derive(Debug)]
+pub struct Token {
+    pub session_id: uuid::Uuid,
+    pub token: uuid::Uuid,
+    pub provider: String,
+}
+
+impl Token {
+    fn from_row(row: &tokio_postgres::Row) -> Self {
+        Token {
+            session_id: row.get("session_id"),
+            token: row.get("token"),
+            provider: row.get("provider"),
+        }
+    }
+}
+
 // TODO: handle errors
 pub async fn create_user(
     req: &fastn_core::http::Request,
@@ -171,6 +188,71 @@ pub async fn destroy_session(session_id: uuid::Uuid) -> fastn_core::Result<u64> 
         .execute("delete from fastn_session where id = $1", &[&session_id])
         .await
         .unwrap())
+}
+
+pub async fn insert_oauth_token(
+    session_id: &uuid::Uuid,
+    token: &str,
+    provider: fastn_core::auth::AuthProviders,
+) -> fastn_core::Result<u64> {
+    let client = fastn_core::auth::emailpassword::db::get_client().await?;
+
+    let id = uuid::Uuid::new_v4();
+
+    Ok(client
+        .execute(
+            "insert into fastn_oauthtoken(id, session_id, token, provider) values ($1, $2, $3, $4)",
+            &[&id, &session_id, &token, &provider.as_str()],
+        )
+        .await
+        .unwrap())
+}
+
+pub async fn get_token_from_db(
+    session_id: &uuid::Uuid,
+    provider: &str,
+) -> fastn_core::Result<Token> {
+    let client = db::get_client().await?;
+
+    let token = client
+        .query(
+            "select session_id, token, provider from fastn_oauthtoken where session_id = $1 and provider = $2",
+            &[&session_id, &provider],
+        )
+        .await
+        .unwrap_or(vec![]);
+
+    if token.is_empty() {
+        return fastn_core::error::Error::generic_err("no token exists");
+    }
+
+    let token = token.first().expect("vec of length must have first");
+
+    Ok(Token::from_row(token))
+}
+
+pub async fn get_user_from_session(
+    session_id: &uuid::Uuid,
+) -> fastn_core::Result<fastn_core::auth::FastnUser> {
+    let client = db::get_client().await?;
+
+    let rows = client
+        .query(
+            "select id, username, name, email \
+                    from fastn_user \
+                    where id = (select user_id from fastn_session where id = $1)",
+            &[&session_id],
+        )
+        .await
+        .unwrap_or(vec![]);
+
+    if rows.is_empty() {
+        return fastn_core::error::Error::generic_err("no session found for the given session_id");
+    }
+
+    Ok(fastn_core::auth::FastnUser::from_row(
+        rows.first().expect("vec of length 1 must have first()"),
+    ))
 }
 
 // TODO: this is borrowed from pg.rs

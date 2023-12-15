@@ -7,22 +7,22 @@ pub async fn process(
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let mut ud = Default::default();
 
-    if let Some(gh_cookie) = req_config.request.cookie("github") {
-        if let Ok(user_detail) = fastn_core::auth::decrypt(&gh_cookie)
-            .await
-            .map_err(|e| tracing::info!("[user-details]: Failed to decrypt cookie: {e}"))
-            .and_then(|decrypted_cookie| {
-                serde_json::from_str::<fastn_core::auth::github::UserDetail>(
-                    decrypted_cookie.as_str(),
-                )
-                .map_err(|e| tracing::info!("[user-details]: Serde deserialization failed {e}:"))
-            })
-        {
+    if let Some(session_id) = req_config.request.cookie(fastn_core::auth::COOKIE_NAME) {
+        let session_id =
+            <uuid::Uuid as std::str::FromStr>::from_str(session_id.as_str()).map_err(|e| {
+                ftd::interpreter::Error::OtherError(format!(
+                    "Failed to parse uuid from string: {e}"
+                ))
+            })?;
+
+        if let Ok(user) = fastn_core::auth::get_authenticated_user(&session_id).await {
             ud = UserDetails {
                 is_logged_in: true,
-                username: user_detail.user.username,
-                name: user_detail.user.name.unwrap_or_default(),
-                email: user_detail.user.email.unwrap_or_default(),
+                username: user.username,
+                // TODO: workaround until we have a step in signup process where we ask for their
+                // name and email if OAuth provider returns null
+                name: user.name.unwrap_or("".to_string()),
+                email: user.email.unwrap_or("".to_string()),
             }
         }
     }

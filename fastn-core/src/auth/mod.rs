@@ -6,7 +6,9 @@ mod emailpassword;
 
 mod utils;
 
-pub use utils::{decrypt, encrypt};
+use std::str::FromStr;
+
+pub const COOKIE_NAME: &str = "session";
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct FastnUser {
@@ -16,13 +18,24 @@ pub struct FastnUser {
     pub email: Option<String>,
 }
 
+impl FastnUser {
+    fn from_row(row: &tokio_postgres::Row) -> Self {
+        FastnUser {
+            id: row.get("id"),
+            username: row.get("username"),
+            name: row.get("name"),
+            email: row.get("email"),
+        }
+    }
+}
+
 #[derive(Debug)]
-pub(crate) enum AuthProviders {
+pub enum AuthProviders {
     GitHub,
 }
 
 impl AuthProviders {
-    pub(crate) const AUTH_ITER: [AuthProviders; 1] = [AuthProviders::GitHub];
+    // pub(crate) const AUTH_ITER: [AuthProviders; 1] = [AuthProviders::GitHub];
     pub(crate) fn as_str(&self) -> &'static str {
         match self {
             AuthProviders::GitHub => "github",
@@ -37,51 +50,47 @@ impl AuthProviders {
     }
 }
 
-pub fn secret_key() -> String {
-    match std::env::var("FASTN_SECRET_KEY") {
-        Ok(secret) => secret,
-        Err(_e) => {
-            println!("WARN: SECRET_KEY not set");
-            // TODO: Need to change this approach later
-            "FASTN_TEMP_SECRET".to_string()
-        }
-    }
-}
-
 /// will fetch out the decrypted user data from cookies
 /// and return it as string
 /// if no cookie wrt to platform found it throws an error
 pub async fn get_user_data_from_cookies(
-    platform: &str,
+    provider: &str,
     requested_field: &str,
     cookies: &std::collections::HashMap<String, String>,
 ) -> fastn_core::Result<Option<String>> {
-    let ud_encrypted = cookies.get(platform).ok_or_else(|| {
-        fastn_core::Error::GenericError(format!(
-            "user detail not found for platform {} in the cookies",
-            platform
-        ))
+    let session_id = cookies.get(fastn_core::auth::COOKIE_NAME).ok_or_else(|| {
+        fastn_core::Error::GenericError("user detail not found in the cookie".to_string())
     });
-    match ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(ud_decrypted) = utils::decrypt(encrypt_str).await {
-                return match fastn_core::auth::AuthProviders::from_str(platform) {
-                    fastn_core::auth::AuthProviders::GitHub => {
-                        let github_ud: github::UserDetail =
-                            serde_json::from_str(ud_decrypted.as_str())?;
-                        match requested_field {
-                            "username" | "user_name" | "user-name" => {
-                                Ok(Some(github_ud.user.username))
-                            }
-                            "token" => Ok(Some(github_ud.access_token)),
-                            _ => Err(fastn_core::Error::GenericError(format!(
-                                "invalid field {} requested for platform {}",
-                                requested_field, platform
-                            ))),
+
+    match session_id {
+        Ok(session_id) => {
+            let session_id = uuid::Uuid::from_str(session_id.as_str())?;
+
+            return match fastn_core::auth::AuthProviders::from_str(provider) {
+                fastn_core::auth::AuthProviders::GitHub => {
+                    // TODO: come back here when user_details is updated to use session id
+                    let user: FastnUser =
+                        fastn_core::auth::get_authenticated_user(&session_id).await?;
+
+                    match requested_field {
+                        "username" | "user_name" | "user-name" => Ok(Some(user.username)),
+
+                        "token" => {
+                            return fastn_core::auth::emailpassword::get_token_from_db(
+                                &session_id,
+                                provider,
+                            )
+                            .await
+                            .map(|t| Some(t.token.to_string()));
                         }
+
+                        _ => Err(fastn_core::Error::GenericError(format!(
+                            "invalid field {} requested for platform {}",
+                            requested_field, provider
+                        ))),
                     }
-                };
-            }
+                }
+            };
         }
         Err(err) => {
             // Debug out the error and return None
@@ -89,6 +98,7 @@ pub async fn get_user_data_from_cookies(
             dbg!(&error_msg);
         }
     };
+
     Ok(None)
 }
 
@@ -98,20 +108,29 @@ pub async fn get_auth_identities(
 ) -> fastn_core::Result<Vec<fastn_core::user_group::UserIdentity>> {
     let mut matched_identities: Vec<fastn_core::user_group::UserIdentity> = vec![];
 
-    let github_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::GitHub.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
+    let session_id =
+        cookies
+            .get(fastn_core::auth::COOKIE_NAME)
+            .ok_or(fastn_core::Error::GenericError(
                 "github user detail not found in the cookies".to_string(),
-            )
-        });
-    match github_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(github_ud_decrypted) = utils::decrypt(encrypt_str).await {
-                let github_ud: github::UserDetail =
-                    serde_json::from_str(github_ud_decrypted.as_str())?;
-                matched_identities.extend(github::matched_identities(github_ud, identities).await?);
-            }
+            ));
+
+    match session_id {
+        Ok(session_id) => {
+            let session_id = uuid::Uuid::from_str(session_id.as_str())?;
+
+            let token = fastn_core::auth::emailpassword::get_token_from_db(&session_id, "github")
+                .await
+                .map(|t| t.token.to_string())?;
+
+            let user: FastnUser = fastn_core::auth::get_authenticated_user(&session_id).await?;
+
+            let github_ud: github::UserDetail = github::UserDetail {
+                access_token: token,
+                user,
+            };
+
+            matched_identities.extend(github::matched_identities(github_ud, identities).await?);
         }
         Err(err) => {
             // TODO: What to do with this error
@@ -128,7 +147,7 @@ async fn set_session_cookie_and_end_response(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     return Ok(actix_web::HttpResponse::Found()
         .cookie(
-            actix_web::cookie::Cookie::build("session", session_id.to_string())
+            actix_web::cookie::Cookie::build(fastn_core::auth::COOKIE_NAME, session_id.to_string())
                 .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
                 .path("/")
                 .permanent()
@@ -139,20 +158,8 @@ async fn set_session_cookie_and_end_response(
         .finish());
 }
 
-async fn insert_oauth_token(
-    session_id: uuid::Uuid,
-    token: &str,
-    provider: AuthProviders,
-) -> fastn_core::Result<u64> {
-    let client = fastn_core::auth::emailpassword::db::get_client().await?;
-
-    let id = uuid::Uuid::new_v4();
-
-    Ok(client
-        .execute(
-            "insert into fastn_oauthtoken(id, session_id, token, provider) values ($1, $2, $3, $4)",
-            &[&id, &session_id, &token, &provider.as_str()],
-        )
-        .await
-        .unwrap())
+pub async fn get_authenticated_user(
+    session_id: &uuid::Uuid,
+) -> fastn_core::Result<fastn_core::auth::FastnUser> {
+    fastn_core::auth::emailpassword::get_user_from_session(session_id).await
 }

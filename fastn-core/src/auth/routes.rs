@@ -26,7 +26,7 @@ pub async fn logout(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     // TODO: Refactor, Not happy with this code, too much of repetition of similar code
 
-    if let Some(session_id) = req.cookie("session") {
+    if let Some(session_id) = req.cookie(fastn_core::auth::COOKIE_NAME) {
         let session_id =
             uuid::Uuid::from_str(session_id.as_str()).expect("cookie contains valid uuid");
         let affected = fastn_core::auth::emailpassword::destroy_session(session_id)
@@ -38,7 +38,7 @@ pub async fn logout(
 
     Ok(actix_web::HttpResponse::Found()
         .cookie(
-            actix_web::cookie::Cookie::build("session", "")
+            actix_web::cookie::Cookie::build(fastn_core::auth::COOKIE_NAME, "")
                 .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())

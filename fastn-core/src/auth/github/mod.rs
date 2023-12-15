@@ -80,7 +80,7 @@ pub async fn callback(
             .email
             .expect("email must exist for github user")
             .as_str(),
-        gh_user.username.as_str(),
+        gh_user.login.as_str(),
         // TODO: should present an onabording form that asks for a name if github name is null
         gh_user.name.unwrap_or(String::new()).as_str(),
         "",
@@ -99,8 +99,8 @@ pub async fn callback(
     tracing::info!("session created. Rows affected: {}", &affected);
 
     // TODO: access_token expires?
-    let affected = fastn_core::auth::insert_oauth_token(
-        session_id,
+    let affected = fastn_core::auth::emailpassword::insert_oauth_token(
+        &session_id,
         access_token.as_str(),
         fastn_core::auth::AuthProviders::GitHub,
     )
