@@ -43,7 +43,7 @@ pub use commands::{
     close_cr::close_cr, create_cr::create_cr, create_package::create_package, diff::diff,
     edit::edit, mark_resolved::mark_resolved, mark_upto_date::mark_upto_date, merge::merge,
     query::query, resolve_conflict::resolve_conflict, revert::revert, rm::rm, serve::listen,
-    start_tracking::start_tracking, status::status, sync2::sync2,
+    start_tracking::start_tracking, status::status, sync2::sync2, test::test,
     translation_status::translation_status, update::update,
 };
 pub use config::{Config, FTDEdition, RequestConfig};

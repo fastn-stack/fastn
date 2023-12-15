@@ -134,11 +134,10 @@ impl Field {
         }
     }
 
-    pub(crate) fn get_default_interpreter_value(
+    pub(crate) fn get_default_interpreter_property_value(
         &self,
-        doc: &ftd::interpreter::TDoc,
         properties: &[ftd::interpreter::Property],
-    ) -> Option<ftd::interpreter::Value> {
+    ) -> Option<ftd::interpreter::PropertyValue> {
         let sources = self.to_sources();
         let properties = ftd::interpreter::utils::find_properties_by_source(
             sources.as_slice(),
@@ -151,10 +150,22 @@ impl Field {
 
         for property in properties {
             if property.condition.is_none() {
-                return property.value.resolve(doc, 0).ok();
+                return Some(property.value);
             }
         }
 
+        None
+    }
+
+    pub(crate) fn get_default_interpreter_value(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        properties: &[ftd::interpreter::Property],
+    ) -> Option<ftd::interpreter::Value> {
+        let property_value = self.get_default_interpreter_property_value(properties);
+        if let Some(property_value) = property_value {
+            return property_value.resolve(doc, 0).ok();
+        }
         None
     }
 

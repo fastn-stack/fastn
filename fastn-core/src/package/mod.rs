@@ -156,6 +156,90 @@ impl Package {
         self
     }
 
+    pub fn current_language_meta(
+        &self,
+    ) -> ftd::interpreter::Result<fastn_core::library2022::processor::lang_details::LanguageMeta>
+    {
+        let default_language = "en".to_string();
+        let current_language = self
+            .requested_language
+            .as_ref()
+            .unwrap_or(self.selected_language.as_ref().unwrap_or(&default_language));
+
+        let lang = realm_lang::Language::from_2_letter_code(current_language).map_err(
+            |realm_lang::Error::InvalidCode { ref found }| ftd::interpreter::Error::ParseError {
+                message: found.clone(),
+                doc_id: format!("{}/FASTN.ftd", self.name.as_str()),
+                line_number: 0,
+            },
+        )?;
+
+        Ok(
+            fastn_core::library2022::processor::lang_details::LanguageMeta {
+                id: lang.to_2_letter_code().to_string(),
+                id3: lang.to_3_letter_code().to_string(),
+                human: lang.human(),
+                is_current: true,
+            },
+        )
+    }
+
+    pub fn available_languages_meta(
+        &self,
+    ) -> ftd::interpreter::Result<Vec<fastn_core::library2022::processor::lang_details::LanguageMeta>>
+    {
+        let current_language = self.selected_language.clone();
+        let mut available_languages = vec![];
+
+        if let Some(ref lang) = self.lang {
+            for lang_id in lang.available_languages.keys() {
+                let language = realm_lang::Language::from_2_letter_code(lang_id).map_err(
+                    |realm_lang::Error::InvalidCode { ref found }| {
+                        ftd::interpreter::Error::ParseError {
+                            message: found.clone(),
+                            doc_id: format!("{}/FASTN.ftd", self.name.as_str()),
+                            line_number: 0,
+                        }
+                    },
+                )?;
+                available_languages.push(
+                    fastn_core::library2022::processor::lang_details::LanguageMeta {
+                        id: language.to_2_letter_code().to_string(),
+                        id3: language.to_3_letter_code().to_string(),
+                        human: language.human(),
+                        is_current: is_active_language(
+                            &current_language,
+                            &language,
+                            self.name.as_str(),
+                        )?,
+                    },
+                );
+            }
+        }
+
+        return Ok(available_languages);
+
+        fn is_active_language(
+            current: &Option<String>,
+            other: &realm_lang::Language,
+            package_name: &str,
+        ) -> ftd::interpreter::Result<bool> {
+            if let Some(ref current) = current {
+                let current = realm_lang::Language::from_2_letter_code(current.as_str()).map_err(
+                    |realm_lang::Error::InvalidCode { ref found }| {
+                        ftd::interpreter::Error::ParseError {
+                            message: found.clone(),
+                            doc_id: format!("{}/FASTN.ftd", package_name),
+                            line_number: 0,
+                        }
+                    },
+                )?;
+                return Ok(current.eq(other));
+            }
+            Ok(false)
+        }
+    }
+
     pub fn get_dependency_for_interface(&self, interface: &str) -> Option<&fastn_core::Dependency> {
         self.dependencies
             .iter()
@@ -564,13 +648,7 @@ impl Package {
             fastn_doc.get("fastn#package")?;
 
         let mut package = match temp_package {
-            Some(v) => {
-                let package = v.into_package();
-                if package.system.is_some() && package.system_is_confidential.unwrap_or(true) {
-                    return fastn_core::usage_error(format!("system-is-confidential is needed for system package {} and currently only false is supported.", package.name));
-                }
-                package
-            }
+            Some(v) => v.into_package(),
             None => {
                 return Err(fastn_core::Error::PackageError {
                     message: "FASTN.ftd does not contain package definition".to_string(),
@@ -801,6 +879,27 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             .map(|v| Package::new(&v))
             .collect::<Vec<Package>>();
 
+        // Currently supported languages
+        // English - en
+        // Hindi- hi
+        // Chinese - zh
+        // Spanish - es
+        // Arabic - ar
+        // Portuguese - pt
+        // Russian - ru
+        // French - fr
+        // German - de
+        // Japanese - ja
+        // Bengali - bn
+        // Urdu - ur
+        // Indonesian - id
+        // Turkish - tr
+        // Vietnamese - vi
+        // Italian - it
+        // Polish - pl
+        // Thai - th
+        // Dutch - nl
+        // Korean - ko
         let lang = if let Some(default_lang) = &self.default_language {
             let mut available_languages = std::collections::HashMap::new();
 
@@ -810,6 +909,78 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
 
             if let Some(lang_hi) = self.translation_hi {
                 available_languages.insert("hi".to_string(), lang_hi);
+            }
+
+            if let Some(lang_zh) = self.translation_zh {
+                available_languages.insert("zh".to_string(), lang_zh);
+            }
+
+            if let Some(lang_es) = self.translation_es {
+                available_languages.insert("es".to_string(), lang_es);
+            }
+
+            if let Some(lang_ar) = self.translation_ar {
+                available_languages.insert("ar".to_string(), lang_ar);
+            }
+
+            if let Some(lang_pt) = self.translation_pt {
+                available_languages.insert("pt".to_string(), lang_pt);
+            }
+
+            if let Some(lang_ru) = self.translation_ru {
+                available_languages.insert("ru".to_string(), lang_ru);
+            }
+
+            if let Some(lang_fr) = self.translation_fr {
+                available_languages.insert("fr".to_string(), lang_fr);
+            }
+
+            if let Some(lang_de) = self.translation_de {
+                available_languages.insert("de".to_string(), lang_de);
+            }
+
+            if let Some(lang_ja) = self.translation_ja {
+                available_languages.insert("ja".to_string(), lang_ja);
+            }
+
+            if let Some(lang_bn) = self.translation_bn {
+                available_languages.insert("bn".to_string(), lang_bn);
+            }
+
+            if let Some(lang_ur) = self.translation_ur {
+                available_languages.insert("ur".to_string(), lang_ur);
+            }
+
+            if let Some(lang_id) = self.translation_id {
+                available_languages.insert("id".to_string(), lang_id);
+            }
+
+            if let Some(lang_tr) = self.translation_tr {
+                available_languages.insert("tr".to_string(), lang_tr);
+            }
+
+            if let Some(lang_vi) = self.translation_vi {
+                available_languages.insert("vi".to_string(), lang_vi);
+            }
+
+            if let Some(lang_it) = self.translation_it {
+                available_languages.insert("it".to_string(), lang_it);
+            }
+
+            if let Some(lang_pl) = self.translation_pl {
+                available_languages.insert("pl".to_string(), lang_pl);
+            }
+
+            if let Some(lang_th) = self.translation_th {
+                available_languages.insert("th".to_string(), lang_th);
+            }
+
+            if let Some(lang_nl) = self.translation_nl {
+                available_languages.insert("nl".to_string(), lang_nl);
+            }
+
+            if let Some(lang_ko) = self.translation_ko {
+                available_languages.insert("ko".to_string(), lang_ko);
             }
 
             Some(Lang {

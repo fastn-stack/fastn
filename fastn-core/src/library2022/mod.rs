@@ -59,11 +59,19 @@ impl Library2022 {
         current_processing_module: &str,
     ) -> fastn_core::Result<(String, String, usize)> {
         if name == "fastn" {
-            return Ok((
-                fastn_core::library::fastn_dot_ftd::get2022(self).await,
-                "$fastn$/fastn.ftd".to_string(),
-                0,
-            ));
+            if self.config.test_command_running {
+                return Ok((
+                    fastn_core::commands::test::test_fastn_ftd().to_string(),
+                    "$fastn$/fastn.ftd".to_string(),
+                    0,
+                ));
+            } else {
+                return Ok((
+                    fastn_core::library::fastn_dot_ftd::get2022(self).await,
+                    "$fastn$/fastn.ftd".to_string(),
+                    0,
+                ));
+            }
         }
 
         return get_for_package(
@@ -222,6 +230,7 @@ impl Library2022 {
                 processor::figma_tokens::process_figma_tokens_old(value, kind, doc)
             }
             "http" => processor::http::process(value, kind, doc, self).await,
+            "translation-info" => processor::lang_details::process(value, kind, doc, self).await,
             "current-language" => processor::lang::process(value, kind, doc, self).await,
             "tutor-data" => fastn_core::tutor::process(value, kind, doc).await,
             "toc" => processor::toc::process(value, kind, doc),

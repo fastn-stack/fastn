@@ -40,6 +40,7 @@ pub struct Config {
     pub ftd_inline_js: Vec<String>,
     pub ftd_external_css: Vec<String>,
     pub ftd_inline_css: Vec<String>,
+    pub test_command_running: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -636,7 +637,7 @@ impl Config {
         let mut hash: std::collections::HashMap<fastn_core::Version, Vec<fastn_core::File>> =
             std::collections::HashMap::new();
 
-        let all_files = self.get_all_file_paths1(package, true)?;
+        let all_files = self.get_all_file_paths(package)?;
 
         for file in all_files {
             if file.is_dir() {
@@ -711,7 +712,7 @@ impl Config {
         package: &fastn_core::Package,
     ) -> fastn_core::Result<Vec<fastn_core::File>> {
         let path = self.get_root_for_package(package);
-        let all_files = self.get_all_file_paths1(package, true)?;
+        let all_files = self.get_all_file_paths(package)?;
         // TODO: Unwrap?
         let mut documents =
             fastn_core::paths_to_files(package.name.as_str(), all_files, &path).await?;
@@ -723,7 +724,7 @@ impl Config {
     /// updates the terms map from the files of the current package
     async fn update_ids_from_package(&mut self) -> fastn_core::Result<()> {
         let path = self.get_root_for_package(&self.package);
-        let all_files_path = self.get_all_file_paths1(&self.package, true)?;
+        let all_files_path = self.get_all_file_paths(&self.package)?;
 
         let documents =
             fastn_core::paths_to_files(self.package.name.as_str(), all_files_path, &path).await?;
@@ -741,19 +742,14 @@ impl Config {
         Ok(())
     }
 
-    pub(crate) fn get_all_file_paths1(
+    pub(crate) fn get_all_file_paths(
         &self,
         package: &fastn_core::Package,
-        ignore_history: bool,
     ) -> fastn_core::Result<Vec<camino::Utf8PathBuf>> {
         let path = self.get_root_for_package(package);
         let mut ignore_paths = ignore::WalkBuilder::new(&path);
         // ignore_paths.hidden(false); // Allow the linux hidden files to be evaluated
-        ignore_paths.overrides(fastn_core::file::package_ignores(
-            package,
-            &path,
-            ignore_history,
-        )?);
+        ignore_paths.overrides(fastn_core::file::package_ignores(package, &path)?);
         Ok(ignore_paths
             .build()
             .flatten()
@@ -761,7 +757,7 @@ impl Config {
             .collect::<Vec<camino::Utf8PathBuf>>())
     }
 
-    pub(crate) fn get_all_file_path(
+    pub(crate) fn deprecated_get_all_file_path(
         &self,
         package: &fastn_core::Package,
         ignore_paths: Vec<String>,
@@ -1369,6 +1365,12 @@ impl Config {
         config
     }
 
+    pub fn set_test_command_running(self) -> Self {
+        let mut config = self;
+        config.test_command_running = true;
+        config
+    }
+
     /// `read()` is the way to read a Config.
     #[tracing::instrument(name = "Config::read", skip_all)]
     pub async fn read(
@@ -1409,6 +1411,7 @@ impl Config {
             ftd_inline_js: Default::default(),
             ftd_external_css: Default::default(),
             ftd_inline_css: Default::default(),
+            test_command_running: false,
         };
         // Update global_ids map from the current package files
         config.update_ids_from_package().await?;
