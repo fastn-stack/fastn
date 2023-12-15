@@ -47,45 +47,39 @@ impl Value {
             Value::Data(value) => {
                 value.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
             }
-            Value::Reference(data) => match &data.value {
-                Some(value) => {
+            Value::Reference(data) => {
+                if let Some(value) = &data.value {
                     if let ftd::interpreter::Kind::OrType {
                         name,
-                        variant,
-                        full_variant,
+                        variant: Some(variant),
+                        full_variant: Some(full_variant),
                     } = value.kind().inner()
                     {
-                        dbg!(&name, &variant);
                         let (js_variant, has_value) = ftd_to_js_variant(
                             name.as_str(),
-                            variant.unwrap().as_str(),
-                            full_variant.unwrap().as_str(),
-                            &value,
+                            variant.as_str(),
+                            full_variant.as_str(),
+                            value,
                             doc.name,
                             value.line_number(),
                         );
-                        dbg!(&js_variant, &has_value);
+
                         if has_value {
-                            fastn_js::SetPropertyValue::Reference(format!(
-                                "{}({})",
-                                &js_variant.replace(".", "__DOT__"),
-                                &data.name
-                            ))
-                        } else {
-                            fastn_js::SetPropertyValue::Reference(js_variant.clone())
+                            return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
+                                variant: js_variant,
+                                value: Some(Box::new(fastn_js::SetPropertyValue::Reference(
+                                    ftd::js::utils::update_reference(data.name.as_str(), rdata),
+                                ))),
+                            });
                         }
-                    } else {
-                        fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
-                            data.name.as_str(),
-                            rdata,
-                        ))
                     }
                 }
-                None => fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
+
+                fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
                     data.name.as_str(),
                     rdata,
-                )),
-            },
+                ))
+            }
             Value::ConditionalFormula(formulas) => fastn_js::SetPropertyValue::Formula(
                 properties_to_js_conditional_formula(doc, formulas, rdata),
             ),
@@ -403,7 +397,6 @@ impl ftd::interpreter::Value {
                     doc.name,
                     value.line_number(),
                 );
-                dbg!(&variant, &js_variant);
                 if has_value {
                     return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                         variant: js_variant,
@@ -457,9 +450,9 @@ impl ftd::interpreter::Value {
                 })
             }
             ftd::interpreter::Value::Module { name, .. } => {
-                dbg!(fastn_js::SetPropertyValue::Value(fastn_js::Value::Module {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::Module {
                     name: name.to_string(),
-                }))
+                })
             }
             t => todo!("{:?}", t),
         }

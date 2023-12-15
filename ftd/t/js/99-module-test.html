@@ -18,11 +18,17 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __h-4"><div data-id="4">Hello world</div></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __h-4 __bgc-5"><div data-id="4">Hello world</div><div data-id="5" class="ft_column __w-6 __h-7 __bgc-8"><div data-id="6">Hello world</div></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
 	.__h-4 { height: 100%; }
+	.__bgc-5 { background-color: #FFFFFF; }
+	body.dark .__bgc-5 { background-color: #000000; }
+	.__w-6 { width: 100%; }
+	.__h-7 { height: 100%; }
+	.__bgc-8 { background-color: #FFFFFF; }
+	body.dark .__bgc-8 { background-color: #000000; }
     </style>
 <script>
     (function() {
@@ -36,7 +42,12 @@
   }
 }
 global["main"] = main;
-let foo__page = function (parent, inherited, args) {
+fastn_utils.createNestedObject(global, "_08_inherited__base_", fastn.recordInstance({
+  light: "#FFFFFF",
+  dark: "#000000"
+}));
+let foo__page = function (parent, inherited, args)
+{
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
@@ -48,10 +59,21 @@ let foo__page = function (parent, inherited, args) {
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
     parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Background, __args__.colors.get("base_"), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(__args__.colors.get("base_")), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello world", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(global._08_inherited__base_), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello world", inherited);
+      }
+      ]), inherited);
     }
     ]), inherited);
     return parenti0;
@@ -60,10 +82,6 @@ let foo__page = function (parent, inherited, args) {
   }
 }
 global["foo__page"] = foo__page;
-fastn_utils.createNestedObject(global, "_08_inherited__base_", fastn.recordInstance({
-  light: "#FFFFFF",
-  dark: "#000000"
-}));
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
