@@ -1,13 +1,5 @@
 use argon2::{Argon2, PasswordHasher, PasswordVerifier};
 
-#[derive(serde::Deserialize, serde::Serialize, Debug)]
-struct User {
-    username: String,
-    email: String,
-    name: String,
-    password: String,
-}
-
 #[derive(Debug)]
 pub struct Token {
     pub session_id: uuid::Uuid,
@@ -33,7 +25,15 @@ pub async fn create_user(
         return Ok(fastn_core::not_found!("invalid route"));
     }
 
-    let user: User = serde_json::from_slice(req.body())?;
+    #[derive(serde::Deserialize, serde::Serialize, Debug)]
+    struct UserPayload {
+        username: String,
+        email: String,
+        name: String,
+        password: String,
+    }
+
+    let user: UserPayload = serde_json::from_slice(req.body())?;
 
     tracing::info!("user payload: {:?}", &user);
 
@@ -70,7 +70,7 @@ pub async fn create_user(
     // TODO: email verification
     // TODO: password can be null for oauth users. if it's null they should not login using
     // emailpassword flow
-    let affected = upsert_user(
+    let user = upsert_user(
         &user_id,
         user.email.as_str(),
         user.username.as_str(),
@@ -79,7 +79,7 @@ pub async fn create_user(
     )
     .await?;
 
-    tracing::info!("fastn_user created. Rows affected: {}", &affected);
+    tracing::info!("fastn_user created. user: {:?}", &user);
 
     fastn_core::http::api_ok(user)
 }
@@ -107,7 +107,7 @@ pub(crate) async fn login(
 
     let user = client
         .query(
-            "select id, username, email, name, password from user where email = $1 limit 1",
+            "select id, username, email, name, password from fastn_user where email = $1 limit 1",
             &[&body.email],
         )
         .await
@@ -149,10 +149,10 @@ pub async fn upsert_user(
     username: &str,
     name: &str,
     hashed_password: &str,
-) -> fastn_core::Result<u64> {
+) -> fastn_core::Result<fastn_core::auth::FastnUser> {
     let client = db::get_client().await?;
 
-    Ok(client
+    let affected = client
         .execute(
             // TODO: what if user manually signups with email test@test then later logins using
             // github with the same email but the username are differente in both cases?
@@ -162,7 +162,27 @@ pub async fn upsert_user(
             &[&user_id, &email, &username, &hashed_password, &name],
         )
         .await
-        .unwrap())
+        .unwrap();
+
+    tracing::info!("upsert user affected rows: {affected}");
+
+    let rows = client
+        .query(
+            "select id, username, name, email \
+                    from fastn_user \
+                    where email = $1",
+            &[&email],
+        )
+        .await
+        .unwrap_or(vec![]);
+
+    if rows.is_empty() {
+        return fastn_core::error::Error::generic_err("no session found for the given session_id");
+    }
+
+    Ok(fastn_core::auth::FastnUser::from_row(
+        rows.first().expect("vec of length 1 must have first()"),
+    ))
 }
 
 // insert a row in fastn_session table

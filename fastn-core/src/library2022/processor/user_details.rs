@@ -8,21 +8,23 @@ pub async fn process(
     let mut ud = Default::default();
 
     if let Some(session_id) = req_config.request.cookie(fastn_core::auth::COOKIE_NAME) {
-        let session_id =
-            <uuid::Uuid as std::str::FromStr>::from_str(session_id.as_str()).map_err(|e| {
-                ftd::interpreter::Error::OtherError(format!(
-                    "Failed to parse uuid from string: {e}"
-                ))
-            })?;
+        if !session_id.is_empty() {
+            let session_id = <uuid::Uuid as std::str::FromStr>::from_str(session_id.as_str())
+                .map_err(|e| {
+                    ftd::interpreter::Error::OtherError(format!(
+                        "Failed to parse uuid from string: {e}"
+                    ))
+                })?;
 
-        if let Ok(user) = fastn_core::auth::get_authenticated_user(&session_id).await {
-            ud = UserDetails {
-                is_logged_in: true,
-                username: user.username,
-                // TODO: workaround until we have a step in signup process where we ask for their
-                // name and email if OAuth provider returns null
-                name: user.name.unwrap_or("".to_string()),
-                email: user.email.unwrap_or("".to_string()),
+            if let Ok(user) = fastn_core::auth::get_authenticated_user(&session_id).await {
+                ud = UserDetails {
+                    is_logged_in: true,
+                    username: user.username,
+                    // TODO: workaround until we have a step in signup process where we ask for their
+                    // name and email if OAuth provider returns null
+                    name: user.name.unwrap_or("".to_string()),
+                    email: user.email.unwrap_or("".to_string()),
+                }
             }
         }
     }

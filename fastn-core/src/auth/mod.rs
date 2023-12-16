@@ -13,7 +13,7 @@ pub const COOKIE_NAME: &str = "session";
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct FastnUser {
     pub username: String,
-    pub id: String,
+    pub id: uuid::Uuid,
     pub name: Option<String>,
     pub email: Option<String>,
 }

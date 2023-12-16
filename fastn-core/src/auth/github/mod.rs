@@ -74,7 +74,7 @@ pub async fn callback(
 
     let user_id = uuid::Uuid::new_v4();
 
-    let affected = fastn_core::auth::emailpassword::upsert_user(
+    let user = fastn_core::auth::emailpassword::upsert_user(
         &user_id,
         gh_user
             .email
@@ -86,13 +86,13 @@ pub async fn callback(
         "",
     )
     .await
-    .unwrap_or(0);
+    .unwrap();
 
-    tracing::info!("fastn_user created. Rows affected: {}", &affected);
+    tracing::info!("fastn_user created. user: {:?}", &user);
 
     let session_id = uuid::Uuid::new_v4();
 
-    let affected = fastn_core::auth::emailpassword::create_session(&session_id, &user_id)
+    let affected = fastn_core::auth::emailpassword::create_session(&session_id, &user.id)
         .await
         .unwrap_or(0);
 
