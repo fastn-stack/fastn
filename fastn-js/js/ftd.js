@@ -166,6 +166,7 @@ const ftd = (function() {
     exports.http = function (url, method, fastn_module, ...body) {
         if (url instanceof fastn.mutableClass) url = url.get();
         if (method instanceof fastn.mutableClass) method = method.get();
+        if (fastn_module instanceof fastn.moduleClass) fastn_module = fastn_module.getName();
         method = method.trim().toUpperCase();
         let request_json = {};
         const init = {
@@ -220,9 +221,9 @@ const ftd = (function() {
                             if (Array.isArray(value)) {
                                 // django returns a list of strings
                                 value = value.join(" ");
-                                // also django does not append `-error`
-                                key = key + "-error";
                             }
+                            // also django does not append `-error`
+                            key = key + "-error";
                             key = fastn_module + "#" + key;
                             data[key] = value;
                         }
@@ -409,6 +410,17 @@ const ftd = (function() {
         } else {
             return value;
         }
+    }
+
+    // Language related functions ---------------------------------------------
+    exports.set_current_language = function (language) {
+        language = fastn_utils.getStaticValue(language);
+        fastn_utils.private.setCookie("fastn-lang", language);
+        location.reload();
+    }
+
+    exports.get_current_language = function () {
+        return fastn_utils.private.getCookie("fastn-lang");
     }
 
     return exports;

@@ -20,12 +20,21 @@ fn handle_redirect(
 async fn serve_file(
     config: &mut fastn_core::RequestConfig,
     path: &camino::Utf8Path,
+    only_js: bool,
 ) -> fastn_core::http::Response {
     if let Some(r) = handle_redirect(&config.config, path) {
         return r;
     }
 
     let path = <&camino::Utf8Path>::clone(&path);
+
+    if let Err(e) = config
+        .config
+        .package
+        .auto_import_language(config.request.cookie("fastn-lang"), None)
+    {
+        return fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e);
+    }
 
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
@@ -86,12 +95,13 @@ async fn serve_file(
             if fastn_core::utils::is_ftd_path(path.as_str()) {
                 return fastn_core::http::ok(main_document.content.as_bytes().to_vec());
             }
-            match fastn_core::package::package_doc::read_ftd(
+            match fastn_core::package::package_doc::read_ftd_(
                 config,
                 &main_document,
                 "/",
                 false,
                 false,
+                only_js,
             )
             .await
             {
@@ -236,6 +246,15 @@ pub async fn serve(
     config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    serve_helper(config, req, false).await
+}
+
+#[tracing::instrument(skip_all)]
+pub async fn serve_helper(
+    config: &fastn_core::Config,
+    req: fastn_core::http::Request,
+    only_js: bool,
+) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
 
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
@@ -245,7 +264,7 @@ pub async fn serve(
     let mut resp = if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
         serve_fastn_file(config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
-        serve_file(&mut req_config, &path.join("/")).await
+        serve_file(&mut req_config, &path.join("/"), only_js).await
     } else if let Some(cr_number) = fastn_core::cr::get_cr_path_from_url(path.as_str()) {
         serve_cr_file(&mut req_config, &path, cr_number).await
     } else {
@@ -303,7 +322,7 @@ pub async fn serve(
         // so it should say not found and pass it to proxy
         let cookies = req_config.request.cookies().clone();
 
-        let file_response = serve_file(&mut req_config, path.as_path()).await;
+        let file_response = serve_file(&mut req_config, path.as_path(), only_js).await;
         // If path is not present in sitemap then pass it to proxy
         // TODO: Need to handle other package URL as well, and that will start from `-`
         // and all the static files starts with `-`

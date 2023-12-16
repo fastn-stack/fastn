@@ -1,0 +1,5 @@
+-- import: 85-export-or-type as mod
+
+-- mod.button-type b: small
+
+-- mod.fancy-button: $b

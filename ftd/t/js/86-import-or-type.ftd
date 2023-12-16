@@ -1,0 +1,5 @@
+-- import: 85-export-or-type as mod
+
+-- mod.fancy-button: $mod.b
+
+-- ftd.text: $mod.msg

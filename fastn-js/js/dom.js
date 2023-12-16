@@ -1812,7 +1812,7 @@ class Node2 {
                     this.attachCss("justify-content", staticValue[1]);
                     break;
                 case fastn_dom.Spacing.Fixed()[0]:
-                    this.attachCss("gap", staticValue[1]);
+                    this.attachCss("gap", fastn_utils.getStaticValue(staticValue[1]));
                     break;
             }
 

@@ -422,6 +422,8 @@
             this.#name = name;
             this.#global = global;
         }
+
+        getName() { return this.#name; }
     
         get(function_name) {
             return this.#global[`${this.#name}__${function_name}`];
@@ -441,7 +443,8 @@
     fastn.recordInstanceClass = RecordInstance;
     fastn.module = function (name, global) {
         return new Module(name, global);
-    }    
+    }
+    fastn.moduleClass = Module;
 
     return fastn;
 })({});

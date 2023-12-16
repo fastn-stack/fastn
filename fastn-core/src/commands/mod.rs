@@ -22,5 +22,6 @@ pub mod stop_tracking;
 pub mod sync;
 pub mod sync2;
 pub mod sync_status;
+pub mod test;
 pub mod translation_status;
 pub mod update;
