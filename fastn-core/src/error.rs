@@ -91,6 +91,9 @@ pub enum Error {
 
     #[error("UuidParseError: {}", _0)]
     UuidParseError(#[from] uuid::Error),
+
+    #[error("MissingEnvironmentVariableError: {}", _0)]
+    EnvironmentVariableError(#[from] std::env::VarError),
 }
 
 impl From<std::convert::Infallible> for Error {
