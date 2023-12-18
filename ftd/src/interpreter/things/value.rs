@@ -1947,7 +1947,7 @@ impl Value {
         }
     }
 
-    pub fn to_serde_value(&self) -> Option<serde_json::Value> {
+    pub fn to_serde_value(&self, doc: &ftd::interpreter::TDoc<'_>) -> Option<serde_json::Value> {
         match self {
             Value::String { text, .. } => Some(serde_json::Value::String(text.to_string())),
             Value::Integer { value } => Some(serde_json::json!(value)),
@@ -1955,7 +1955,7 @@ impl Value {
             Value::Boolean { value } => Some(serde_json::Value::Bool(value.to_owned())),
             Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
-                    data.to_serde_value()
+                    data.to_serde_value(doc)
                 } else {
                     Some(serde_json::Value::Null)
                 }
@@ -1963,8 +1963,9 @@ impl Value {
             Value::Object { values } => {
                 let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in values {
-                    if let ftd::interpreter::PropertyValue::Value { value, .. } = v {
-                        if let Some(v) = value.to_serde_value() {
+                    let resolved_value = v.clone().resolve(doc, 0).ok();
+                    if let Some(ref value) = resolved_value {
+                        if let Some(v) = value.to_serde_value(doc) {
                             new_values.insert(k.to_owned(), v);
                         }
                     }
@@ -1974,8 +1975,9 @@ impl Value {
             Value::Record { fields, .. } => {
                 let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in fields {
-                    if let ftd::interpreter::PropertyValue::Value { value, .. } = v {
-                        if let Some(v) = value.to_serde_value() {
+                    let resolved_value = v.clone().resolve(doc, 0).ok();
+                    if let Some(ref value) = resolved_value {
+                        if let Some(v) = value.to_serde_value(doc) {
                             new_values.insert(k.to_owned(), v);
                         }
                     }
@@ -1985,8 +1987,9 @@ impl Value {
             Value::List { data, .. } => {
                 let mut new_values: Vec<serde_json::Value> = Default::default();
                 for v in data {
-                    if let ftd::interpreter::PropertyValue::Value { value, .. } = v {
-                        if let Some(v) = value.to_serde_value() {
+                    let resolved_value = v.clone().resolve(doc, 0).ok();
+                    if let Some(ref value) = resolved_value {
+                        if let Some(v) = value.to_serde_value(doc) {
                             new_values.push(v);
                         }
                     }
@@ -1997,7 +2000,7 @@ impl Value {
         }
     }
 
-    pub fn to_string(&self) -> Option<String> {
+    pub fn to_string(&self, doc: &ftd::interpreter::TDoc<'_>) -> Option<String> {
         match self {
             Value::String { text } => Some(text.to_string()),
             Value::Integer { value } => Some(value.to_string()),
@@ -2005,13 +2008,13 @@ impl Value {
             Value::Boolean { value } => Some(value.to_string()),
             Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
-                    data.to_string()
+                    data.to_string(doc)
                 } else {
                     Some("".to_string())
                 }
             }
             Value::Object { .. } | Value::Record { .. } | Value::List { .. } => {
-                serde_json::to_string(&self.to_serde_value()).ok()
+                serde_json::to_string(&self.to_serde_value(doc)).ok()
             }
             _ => None,
         }
