@@ -394,6 +394,9 @@ pub(crate) async fn http_post_with_cookie(
 ) -> fastn_core::Result<(fastn_core::Result<Vec<u8>>, Vec<String>)> {
     let mut resp_cookies = vec![];
 
+    println!("HTTP post --------------------------------");
+    dbg!(&headers, &body);
+
     tracing::info!(url = url);
     let mut req_headers = reqwest::header::HeaderMap::new();
     req_headers.insert(

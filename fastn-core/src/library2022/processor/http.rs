@@ -82,7 +82,7 @@ pub async fn process(
         if value.starts_with('$') {
             if let Some(value) = doc
                 .get_value(header.line_number, value.as_str())?
-                .to_string()
+                .to_string(doc)
             {
                 if method.as_str().eq("post") {
                     body.push(format!("\"{}\": {}", header.key, value));
@@ -108,7 +108,7 @@ pub async fn process(
             url.as_str(),
             req_config.request.cookies_string(),
             &conf,
-            dbg!(format!("{{{}}}", body.join(","))).as_str(),
+            format!("{{{}}}", body.join(",")).as_str(),
         )
         .await
     } else {
