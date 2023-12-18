@@ -23,14 +23,52 @@ $processor$: pr.full-sitemap
 
 
 
+-- component display-testimonial-card:
+caption title:
+string designation:
+body body:
+ftd.image-src src:
 
+-- ftd.row:
+background.solid: $inherited.colors.background.base
+width.fixed.px: 540
+padding.px: 20
+spacing.fixed.px: 25
 
+-- ftd.image:
+src: $display-testimonial-card.src
+width.fixed.px: 120
+height.fixed.px: 120
+border-top-left-radius.percent: 50
+border-bottom-left-radius.percent: 50
+border-bottom-right-radius.percent: 50
 
+-- ftd.column:
+width: fill-container
 
+-- ftd.text: 
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
 
+$display-testimonial-card.body
 
+-- ftd.text: $display-testimonial-card.title
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+style: bold
+margin-top.px: 16
 
+-- ftd.text: $display-testimonial-card.designation
+role: $inherited.types.label-large
+color: $inherited.colors.text-strong
+margin-top.px: 8
+style: bold
 
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: display-testimonial-card
 
 
 
