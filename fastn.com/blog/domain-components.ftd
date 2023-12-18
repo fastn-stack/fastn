@@ -23,9 +23,8 @@ meta: $meta
 
 -- ds.markdown: 
 
-One way to achieve this is by recording the necessary values for each 
+Below is one way to create such testimonials. Start by creating a record for all the necessary values of a 
 testimonial, such as the name, designation, quote, and image. 
-Below is an example:
 
 -- ds.code:
 lang: ftd
@@ -94,9 +93,9 @@ ftd.image-src src:
 -- ds.markdown: 
 
 Now imagine you want to use this testimonial component in all your marketing pages. 
-The biggest challenge here lies in maintaining consistency across these testimonials.
-Moreover, duplicating them becomes tedious because modifying one value turns into an 
-avalanche of updates across all the pages. 
+Duplicating the entire code becomes tedious because modifying one value turns into an 
+avalanche of updates across all the pages. And the biggest challenge here lies in 
+maintaining consistency across these testimonials.
 
 -- ds.h1: The Solution: Domain driven documentation in fastn
 
@@ -104,10 +103,8 @@ With components created at domain level, you are keeping all the attributes
 of that content component neatly packed together in one place. 
 
 For instance, you can create the above testimonial component within a separate file in your project.
-Then, whenever you need the testimonial component, you simply invoke it on the required page: 
-
--- cl.testimonials: 
-testimonials: $cl.testimonials-list
+Then, whenever you need the testimonial component, you simply invoke it on the required page. 
+Below is how you invoke the testimonial component.
 
 
 -- ds.code:
@@ -116,6 +113,8 @@ lang: ftd
 \-- testimonials:
 testimonials: $testimonials
 
+-- cl.testimonials: 
+testimonials: $cl.testimonials-list
 
 -- ds.markdown:
 
@@ -151,6 +150,13 @@ Want to add a new testimonial? Just extend the code:
 -- ds.code:
 lang: ftd 
 
+\-- testimonial-data: Nancy Bayers
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-1.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint 
+
 \-- testimonial: Daniya Jacob
 designation: Co-Founder
 src: $fastn-assets.files.images.blog.testimonial-2.jpeg
@@ -158,7 +164,7 @@ src: $fastn-assets.files.images.blog.testimonial-2.jpeg
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
 molestiae quas vel sint
 
-\-- testimonial: Kavya Dominic
+\-- testimonial: Kavya Dominic ;; <hl>
 designation: Owner
 src: $fastn-assets.files.images.blog.testimonial-3.jpeg
 
@@ -197,7 +203,7 @@ design coherence. Embrace fastn to master the art of website creation!
 
 In addition to domain-driven documentation, another valuable technique for swift webpage 
 creation is 
-[creating a `-- content-library.ftd` for storing all recurring content components](/blog/content-library/).
+[creating a `content-library.ftd` for storing all recurring content components](/blog/content-library/).
 
 
 
