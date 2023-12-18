@@ -45,7 +45,7 @@ pub struct Config {
 
 #[derive(Debug, Clone)]
 pub struct RequestConfig {
-    pub named_parameters: Vec<(String, ftd::Value)>,
+    pub named_parameters: Vec<(String, ftd::interpreter::Value)>,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
     pub current_document: Option<String>,

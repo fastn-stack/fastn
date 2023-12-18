@@ -15,7 +15,7 @@ enum PathParams {
 pub fn url_match(
     request_url: &str,
     sitemap_params: &[fastn_core::sitemap::PathParams],
-) -> fastn_core::Result<(bool, Vec<(String, ftd::Value)>)> {
+) -> fastn_core::Result<(bool, Vec<(String, ftd::interpreter::Value)>)> {
     use itertools::Itertools;
     // request_attrs: [abrark, foo, 28]
     let request_parts = request_url.trim_matches('/').split('/').collect_vec();
@@ -28,7 +28,7 @@ pub fn url_match(
     // req: [a, ak, foo]
     // d-urls: [(0, a, None), (1, username, Some(string)), (2, foo, None)]
     // [(param_name, value)]
-    let mut path_parameters: Vec<(String, ftd::Value)> = vec![];
+    let mut path_parameters: Vec<(String, ftd::interpreter::Value)> = vec![];
     let mut count = 0;
     for req_part in request_parts {
         match &sitemap_params[count] {
@@ -56,23 +56,22 @@ pub fn url_match(
     }
     return Ok((true, path_parameters));
 
-    fn get_value_type(value: &str, r#type: &str) -> fastn_core::Result<ftd::Value> {
+    fn get_value_type(value: &str, r#type: &str) -> fastn_core::Result<ftd::interpreter::Value> {
         match r#type {
-            "string" => Ok(ftd::Value::String {
+            "string" => Ok(ftd::interpreter::Value::String {
                 text: value.to_string(),
-                source: ftd::TextSource::Default,
             }),
             "integer" => {
                 let value = value.parse::<i64>()?;
-                Ok(ftd::Value::Integer { value })
+                Ok(ftd::interpreter::Value::Integer { value })
             }
             "decimal" => {
                 let value = value.parse::<f64>()?;
-                Ok(ftd::Value::Decimal { value })
+                Ok(ftd::interpreter::Value::Decimal { value })
             }
             "boolean" => {
                 let value = value.parse::<bool>()?;
-                Ok(ftd::Value::Boolean { value })
+                Ok(ftd::interpreter::Value::Boolean { value })
             }
             _ => unimplemented!(),
         }
@@ -125,8 +124,6 @@ pub fn parse_named_params(
 
 #[cfg(test)]
 mod tests {
-    use ftd::TextSource;
-
     // cargo test --package fastn --lib sitemap::utils::tests::parse_path_params_test_0
     #[test]
     fn parse_path_params_test_0() {
@@ -186,12 +183,14 @@ mod tests {
             vec![
                 (
                     "username".to_string(),
-                    ftd::Value::String {
+                    ftd::interpreter::Value::String {
                         text: "arpita".to_string(),
-                        source: TextSource::Default
                     }
                 ),
-                ("age".to_string(), ftd::Value::Integer { value: 28 })
+                (
+                    "age".to_string(),
+                    ftd::interpreter::Value::Integer { value: 28 }
+                )
             ]
         )
     }
@@ -266,9 +265,8 @@ mod tests {
             output.1,
             vec![(
                 "username".to_string(),
-                ftd::Value::String {
+                ftd::interpreter::Value::String {
                     text: "a".to_string(),
-                    source: TextSource::Default
                 }
             )]
         )
@@ -317,12 +315,14 @@ mod tests {
             vec![
                 (
                     "username".to_string(),
-                    ftd::Value::String {
+                    ftd::interpreter::Value::String {
                         text: "abrark".to_string(),
-                        source: TextSource::Default
                     }
                 ),
-                ("age".to_string(), ftd::Value::Integer { value: 28 })
+                (
+                    "age".to_string(),
+                    ftd::interpreter::Value::Integer { value: 28 }
+                )
             ]
         );
     }

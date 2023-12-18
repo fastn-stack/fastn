@@ -1,7 +1,7 @@
 // document and path-parameters
 pub(crate) type ResolveDocOutput = (
     Option<String>,
-    Vec<(String, ftd::Value)>,
+    Vec<(String, ftd::interpreter::Value)>,
     std::collections::BTreeMap<String, String>,
 );
 
