@@ -30,22 +30,24 @@ Below is an example:
 -- ds.code:
 lang: ftd
 
-\-- record testimonial: ;; <hl>
+\-- record testimonial-data: ;; <hl>
 caption title:
 body body:
 string designation:
 ftd.image-src src:
 
-\-- testimonial list testimonials: ;; <hl>
 
-\-- testimonial: Nancy Bayers
+
+\-- testimonial-data list testimonials: ;; <hl>
+
+\-- testimonial-data: Nancy Bayers
 designation: Co-Founder
 src: $fastn-assets.files.images.blog.testimonial-1.jpeg
 
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
 molestiae quas vel sint 
 
-\-- testimonial: Daniya Jacob
+\-- testimonial-data: Daniya Jacob
 designation: Co-Founder
 src: $fastn-assets.files.images.blog.testimonial-2.jpeg
 
@@ -70,7 +72,7 @@ testimonial list testimonials:
 
 [...]
 
-\-- testimonial-card: $obj.title ;; <hl>
+\-- display-testimonial-card: $obj.title ;; <hl>
 $loop$: $testimonials.testimonials as $obj
 designation: $obj.designation
 src: $obj.src
@@ -81,7 +83,7 @@ src: $obj.src
 
 \-- end: testimonials ;; <hl>
 
-\-- component testimonial-card: ;; <hl>
+\-- component display-testimonial-card: ;; <hl>
 caption title:
 string designation:
 body body:
@@ -89,7 +91,7 @@ ftd.image-src src:
 
 [...]
 
-\-- end: testimonial-card ;; <hl>
+\-- end: display-testimonial-card ;; <hl>
 
 -- ds.markdown: 
 
@@ -133,7 +135,7 @@ easily achieve this by making a simple adjustment in the code.
 lang: ftd
 
 \-- ftd.image:
-src: $testimonial-card.src
+src: $display-testimonial-card.src
 width.fixed.px: 200 ;; <hl>
 height.fixed.px: 200 ;; <hl>
 
@@ -216,27 +218,3 @@ Read [docs](https://fastn.com/ftd/data-modelling/)
 
 
 -- end: ds.blog-page
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
