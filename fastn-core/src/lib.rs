@@ -26,6 +26,7 @@ pub mod library;
 mod proxy;
 pub mod sitemap;
 mod snapshot;
+mod schema;
 mod sync_utils;
 mod track;
 mod tracker;
