@@ -85,7 +85,7 @@ pub async fn create_user(
 }
 
 pub(crate) async fn login(
-    req: &crate::http::Request,
+    req: &fastn_core::http::Request,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     if req.method() != "POST" {
