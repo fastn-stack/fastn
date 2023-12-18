@@ -2002,7 +2002,7 @@ impl Value {
         doc: &ftd::interpreter::TDoc<'_>,
     ) -> ftd::interpreter::Result<Option<String>> {
         match self {
-            Value::String { text } => Ok(Some(format!("\"{}\"", text.to_string()))),
+            Value::String { text } => Ok(Some(format!("\"{}\"", text))),
             Value::Integer { value } => Ok(Some(value.to_string())),
             Value::Decimal { value } => Ok(Some(value.to_string())),
             Value::Boolean { value } => Ok(Some(value.to_string())),
