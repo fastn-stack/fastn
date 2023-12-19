@@ -1395,8 +1395,8 @@ class Node2 {
         const darkValue = value.get("dark");
 
         const closure = fastn.closure(() => {
-            let lightValueStatic = fastn_utils.getStaticValue(value.get("light"));
-            let darkValueStatic = fastn_utils.getStaticValue(value.get("dark"));
+            let lightValueStatic = fastn_utils.getStaticValue(lightValue);
+            let darkValueStatic = fastn_utils.getStaticValue(darkValue);
             
             if (lightValueStatic === darkValueStatic) {
                 this.attachCss(property, lightValueStatic, false);
