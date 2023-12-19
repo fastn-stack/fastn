@@ -64,6 +64,10 @@ pub struct RequestConfig {
 }
 
 impl RequestConfig {
+    pub fn url(&self) -> String {
+        self.request.uri.clone()
+    }
+
     pub fn current_language(&self) -> Option<String> {
         self.config.package.selected_language.clone()
     }

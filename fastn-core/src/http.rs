@@ -76,7 +76,7 @@ pub fn ok_with_content_type(
 #[derive(Debug, Clone, Default)]
 pub struct Request {
     method: String,
-    uri: String,
+    pub uri: String,
     pub path: String,
     query_string: String,
     cookies: std::collections::HashMap<String, String>,
