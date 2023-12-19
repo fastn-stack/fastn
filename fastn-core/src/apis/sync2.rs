@@ -117,7 +117,7 @@ pub async fn sync2(
 
     match sync_worker(config, sync_req).await {
         Ok(data) => fastn_core::http::api_ok(data),
-        Err(err) => fastn_core::http::api_error(err.to_string()),
+        Err(err) => fastn_core::http::api_error(err.to_string(), None),
     }
 }
 

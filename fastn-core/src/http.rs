@@ -37,6 +37,7 @@ pub fn not_found_(msg: String) -> fastn_core::http::Response {
 impl actix_web::ResponseError for fastn_core::Error {}
 
 pub type Response = actix_web::HttpResponse;
+pub type StatusCode = actix_web::http::StatusCode;
 
 pub fn ok(data: Vec<u8>) -> fastn_core::http::Response {
     actix_web::HttpResponse::Ok().body(data)
@@ -579,8 +580,11 @@ pub(crate) fn api_ok(
     ))
 }
 
+/// construct an error response with `message`
+/// and `status_code`. Use 500 if `status_code` is None
 pub(crate) fn api_error<T: Into<String>>(
     message: T,
+    status_code: Option<actix_web::http::StatusCode>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     #[derive(serde::Serialize, Debug)]
     struct ErrorResponse {
@@ -595,7 +599,7 @@ pub(crate) fn api_error<T: Into<String>>(
 
     Ok(actix_web::HttpResponse::Ok()
         .content_type(actix_web::http::header::ContentType::json())
-        .status(actix_web::http::StatusCode::INTERNAL_SERVER_ERROR)
+        .status(status_code.unwrap_or(actix_web::http::StatusCode::INTERNAL_SERVER_ERROR))
         .body(serde_json::to_string(&resp)?))
 }
 
