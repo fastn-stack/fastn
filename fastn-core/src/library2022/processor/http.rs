@@ -96,7 +96,7 @@ pub async fn process(
                 body.push(format!(
                     "\"{}\": \"{}\"",
                     header.key,
-                    value.trim_matches('"')
+                    fastn_core::utils::escape_string(value.as_str())
                 ));
                 continue;
             }
@@ -112,7 +112,7 @@ pub async fn process(
             url.as_str(),
             req_config.request.cookies_string(),
             &conf,
-            format!("{{{}}}", body.join(",")).as_str(),
+            dbg!(format!("{{{}}}", body.join(",")).as_str()),
         )
         .await
     } else {
