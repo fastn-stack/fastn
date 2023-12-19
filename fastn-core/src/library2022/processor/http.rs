@@ -112,7 +112,7 @@ pub async fn process(
             url.as_str(),
             req_config.request.cookies_string(),
             &conf,
-            dbg!(format!("{{{}}}", body.join(",")).as_str()),
+            format!("{{{}}}", body.join(",")).as_str(),
         )
         .await
     } else {
