@@ -9,6 +9,7 @@ ftd/t/js/**.script.html
 result
 
 .direnv
+.envrc
 
 # Rust stuff
 target
