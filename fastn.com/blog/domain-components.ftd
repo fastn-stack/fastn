@@ -35,8 +35,6 @@ body body:
 string designation:
 ftd.image-src src:
 
-
-
 \-- testimonial-data list testimonials: ;; <hl>
 
 \-- testimonial-data: Nancy Bayers
@@ -115,8 +113,10 @@ lang: ftd
 \-- testimonials:
 testimonials: $testimonials
 
--- cl.testimonials: 
+-- cl.testimonials: Testimonials
 testimonials: $cl.testimonials-list
+
+Hear from our customers
 
 -- ds.markdown:
 
@@ -127,7 +127,7 @@ When updating the testimonial content, you can focus solely on adjusting the inf
 affecting the design. Furthermore, if you decide to modify the design, making changes at the 
 component level will seamlessly propagate across all instances. 
 
-For instance, if you wish to enlarge the image size from 120 to 200 pixels, you can 
+For instance, if you wish to enlarge the image size from 120 to 160 pixels, you can 
 easily achieve this by making a simple adjustment in the code. 
 
 -- ds.code:
@@ -135,19 +135,25 @@ lang: ftd
 
 \-- ftd.image:
 src: $display-testimonial-card.src
-width.fixed.px: 200 ;; <hl>
-height.fixed.px: 200 ;; <hl>
+width.fixed.px: 160 ;; <hl>
+height.fixed.px: 160 ;; <hl>
 
 ;; -- ds.image:
 ;; src: $fastn-assets.files.images.blog.image-enlarge.png
 ;; width.fixed.px: 600
 
--- ds.image:
-src: $fastn-assets.files.images.blog.big-profile.png
+
+-- cl.testimonials-n: Testimonials
+testimonials-n: $cl.test-list
+
+Hear from our customers
+
+;; -- ds.image:
+;; src: $fastn-assets.files.images.blog.big-profile.png
 
 -- ds.markdown:
 
-Want to add a new testimonial? Just extend the code:
+**Want to add a new testimonial? Just extend the code:**
 
 -- ds.code:
 lang: ftd 
@@ -175,8 +181,15 @@ molestiae quas vel sint
 
 \-- end: testimonials
 
--- ds.image:
-src: $fastn-assets.files.images.blog.new-testimonial.png
+
+-- cl.test-n: Testimonials
+test-n: $cl.test-lists
+
+Hear from our customers
+
+
+;; -- ds.image:
+;; src: $fastn-assets.files.images.blog.new-testimonial.png
 
 
 -- ds.h1: Benefits of Domain Components
