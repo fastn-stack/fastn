@@ -1379,22 +1379,24 @@ class Node2 {
         const lightValue = value.get("light");
         const darkValue = value.get("dark");
 
-        [lightValue, darkValue].forEach(modeValue => {
-            modeValue.addClosure(fastn.closure(() => {
-                let lightValueStatic = fastn_utils.getStaticValue(value.get("light"));
-                let darkValueStatic = fastn_utils.getStaticValue(value.get("dark"));
-                
-                if (lightValueStatic === darkValueStatic) {
-                    this.attachCss(property, lightValueStatic, false);
-                } else {
-                    let lightClass = this.attachCss(property, lightValueStatic, true);
-                    this.attachCss(property, darkValueStatic, true, `body.dark .${lightClass}`);
-                    if (visited) {
-                        this.attachCss(property, lightValueStatic, true, `.${lightClass}:visited`);
-                        this.attachCss(property, darkValueStatic, true, `body.dark  .${lightClass}:visited`);
-                    }
+        const closure = fastn.closure(() => {
+            let lightValueStatic = fastn_utils.getStaticValue(value.get("light"));
+            let darkValueStatic = fastn_utils.getStaticValue(value.get("dark"));
+            
+            if (lightValueStatic === darkValueStatic) {
+                this.attachCss(property, lightValueStatic, false);
+            } else {
+                let lightClass = this.attachCss(property, lightValueStatic, true);
+                this.attachCss(property, darkValueStatic, true, `body.dark .${lightClass}`);
+                if (visited) {
+                    this.attachCss(property, lightValueStatic, true, `.${lightClass}:visited`);
+                    this.attachCss(property, darkValueStatic, true, `body.dark  .${lightClass}:visited`);
                 }
-            }).addNodeProperty(this, null, inherited));
+            }
+        }).addNodeProperty(this, null, inherited);
+
+        [lightValue, darkValue].forEach(modeValue => {
+            modeValue.addClosure(closure);
             this.#mutables.push(modeValue);
         });
     }
