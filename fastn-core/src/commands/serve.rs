@@ -258,16 +258,20 @@ pub async fn serve_helper(
     let _lock = LOCK.read().await;
 
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
-
+    dbg!(req.path.as_str());
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
+    dbg!(&path);
 
     let mut resp = if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
+        println!("Serving FASTN.ftd");
         serve_fastn_file(config).await
-    } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
+    } else if path.as_str().trim_matches('"').is_empty() {
+        println!("Serving index.ftd");
         serve_file(&mut req_config, &path.join("/"), only_js).await
     } else if let Some(cr_number) = fastn_core::cr::get_cr_path_from_url(path.as_str()) {
         serve_cr_file(&mut req_config, &path, cr_number).await
     } else {
+        println!("Serving proxy pass");
         // url is present in config or not
         // If not present than proxy pass it
 

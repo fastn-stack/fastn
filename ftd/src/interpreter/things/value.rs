@@ -2000,15 +2000,22 @@ impl Value {
     pub fn to_string(
         &self,
         doc: &ftd::interpreter::TDoc<'_>,
+        use_quotes: bool,
     ) -> ftd::interpreter::Result<Option<String>> {
         match self {
-            Value::String { text } => Ok(Some(format!("\"{}\"", text))),
+            Value::String { text } => {
+                if use_quotes {
+                    Ok(Some(format!("\"{}\"", text)))
+                } else {
+                    Ok(Some(text.to_string()))
+                }
+            }
             Value::Integer { value } => Ok(Some(value.to_string())),
             Value::Decimal { value } => Ok(Some(value.to_string())),
             Value::Boolean { value } => Ok(Some(value.to_string())),
             Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
-                    data.to_string(doc)
+                    data.to_string(doc, use_quotes)
                 } else {
                     Ok(Some("".to_string()))
                 }

@@ -2,6 +2,9 @@
 caption title:
 string url:
 body test:
+optional string http-status:
+optional string http-location:
+optional string http-redirect:
 
 -- ftd.text: NOT IMPLEMENTED HERE
 
