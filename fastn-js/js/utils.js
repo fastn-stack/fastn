@@ -470,9 +470,6 @@ let fastn_utils = {
             return lowercased;
         }).join('');
     },
-    snakeToKebabCase(value) {
-        return value.replaceAll('_', '-');
-    },
     escapeHtmlInCode(str) {
         return str.replace(/[<]/g, "&lt;");
     },
