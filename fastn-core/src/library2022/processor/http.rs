@@ -93,7 +93,11 @@ pub async fn process(
             }
         } else {
             if method.as_str().eq("post") {
-                body.push(format!("\"{}\": {}", header.key, value));
+                body.push(format!(
+                    "\"{}\": \"{}\"",
+                    header.key,
+                    fastn_core::utils::escape_string(value.as_str())
+                ));
                 continue;
             }
             url.query_pairs_mut()

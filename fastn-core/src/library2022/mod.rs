@@ -256,6 +256,7 @@ impl Library2022 {
             "user-group-by-id" => processor::user_group::process_by_id(value, kind, doc, self),
             "get-identities" => processor::user_group::get_identities(value, kind, doc, self),
             "document-id" => processor::document::document_id(value, kind, doc, self),
+            "current-url" => processor::document::current_url(self),
             "document-full-id" => processor::document::document_full_id(value, kind, doc, self),
             "document-suffix" => processor::document::document_suffix(value, kind, doc, self),
             "document-name" => processor::document::document_name(value, kind, doc, self).await,

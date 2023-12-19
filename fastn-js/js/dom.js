@@ -1175,16 +1175,30 @@ class Node2 {
             return;
         }
 
-        let direction = fastn_utils.getStaticValue(value.get("direction"));
+        const closure = fastn.closure(() => {
+            let direction = fastn_utils.getStaticValue(value.get("direction"));
 
-        const [lightGradientString, darkGradientString] = this.getLinearGradientString(value);
+            const [lightGradientString, darkGradientString] = this.getLinearGradientString(value);
 
-        if (lightGradientString === darkGradientString) {
-            this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
-        } else {
-            let lightClass = this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`,true);
-            this.attachCss("background-image", `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
-        }
+            if (lightGradientString === darkGradientString) {
+                this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
+            } else {
+                let lightClass = this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`,true);
+                this.attachCss("background-image", `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
+            }
+        }).addNodeProperty(this, null, inherited);
+
+        const colorsList = value.get("colors").get().getList();
+
+        colorsList
+        .forEach(({ item }) => {
+            const color = item.get("color");
+
+            [color.get("light"), color.get("dark")].forEach(variant => {
+                variant.addClosure(closure);
+                this.#mutables.push(variant);
+            });
+        });
     }
     attachBackgroundImageCss(value) {
         if (fastn_utils.isNull(value)) {
@@ -1375,32 +1389,48 @@ class Node2 {
             this.attachCss(property, value);
             return;
         }
-        let lightValue = fastn_utils.getStaticValue(value.get("light"));
-        let darkValue = fastn_utils.getStaticValue(value.get("dark"));
-        if (lightValue === darkValue) {
-            this.attachCss(property, lightValue, false);
-        } else {
-            let lightClass = this.attachCss(property, lightValue, true);
-            this.attachCss(property, darkValue, true, `body.dark .${lightClass}`);
-            if (visited) {
-                this.attachCss(property, lightValue, true, `.${lightClass}:visited`);
-                this.attachCss(property, darkValue, true, `body.dark  .${lightClass}:visited`);
+        value = value instanceof fastn.mutableClass ? value.get() : value;
+        
+        const lightValue = value.get("light");
+        const darkValue = value.get("dark");
+
+        const closure = fastn.closure(() => {
+            let lightValueStatic = fastn_utils.getStaticValue(lightValue);
+            let darkValueStatic = fastn_utils.getStaticValue(darkValue);
+            
+            if (lightValueStatic === darkValueStatic) {
+                this.attachCss(property, lightValueStatic, false);
+            } else {
+                let lightClass = this.attachCss(property, lightValueStatic, true);
+                this.attachCss(property, darkValueStatic, true, `body.dark .${lightClass}`);
+                if (visited) {
+                    this.attachCss(property, lightValueStatic, true, `.${lightClass}:visited`);
+                    this.attachCss(property, darkValueStatic, true, `body.dark  .${lightClass}:visited`);
+                }
             }
-        }
+        }).addNodeProperty(this, null, inherited);
+
+        [lightValue, darkValue].forEach(modeValue => {
+            modeValue.addClosure(closure);
+            this.#mutables.push(modeValue);
+        });
     }
     attachRoleCss(value) {
         if (fastn_utils.isNull(value)) {
             this.attachCss('role', value);
             return;
         }
-        let desktopValue = fastn_utils.getStaticValue(value.get("desktop"));
-        let mobileValue = fastn_utils.getStaticValue(value.get("mobile"));
-        if (fastn_utils.sameResponsiveRole(desktopValue, mobileValue)) {
-            this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
-        } else {
-            let desktopClass = this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
-            this.attachCss("role", fastn_utils.getRoleValues(mobileValue), true, `body.mobile .${desktopClass}`);
-        }
+        value.addClosure(fastn.closure(() => {
+            let desktopValue = value.get("desktop");
+            let mobileValue = value.get("mobile");
+            if (fastn_utils.sameResponsiveRole(desktopValue, mobileValue)) {
+                this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
+            } else {
+                let desktopClass = this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
+                this.attachCss("role", fastn_utils.getRoleValues(mobileValue), true, `body.mobile .${desktopClass}`);
+            }
+        }).addNodeProperty(this, null, inherited));
+        this.#mutables.push(value);
     }
     attachTextStyles(styles) {
         if (fastn_utils.isNull(styles)) {
