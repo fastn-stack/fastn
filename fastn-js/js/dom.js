@@ -1174,16 +1174,31 @@ class Node2 {
             this.attachCss("background-image", value);
             return;
         }
-        let direction = fastn_utils.getStaticValue(value.get("direction"));
 
-        const [lightGradientString, darkGradientString] = this.getLinearGradientString(value);
+        const closure = fastn.closure(() => {
+            let direction = fastn_utils.getStaticValue(value.get("direction"));
 
-        if (lightGradientString === darkGradientString) {
-            this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
-        } else {
-            let lightClass = this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`,true);
-            this.attachCss("background-image", `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
-        }
+            const [lightGradientString, darkGradientString] = this.getLinearGradientString(value);
+
+            if (lightGradientString === darkGradientString) {
+                this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
+            } else {
+                let lightClass = this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`,true);
+                this.attachCss("background-image", `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
+            }
+        }).addNodeProperty(this, null, inherited);
+
+        const colorsList = value.get("colors").get().getList();
+
+        colorsList
+        .forEach(({ item }) => {
+            const color = item.get("color");
+
+            [color.get("light"), color.get("dark")].forEach(variant => {
+                variant.addClosure(closure);
+                this.#mutables.push(variant);
+            });
+        });
     }
     attachBackgroundImageCss(value) {
         if (fastn_utils.isNull(value)) {
