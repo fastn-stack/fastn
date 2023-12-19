@@ -1,8 +1,7 @@
-use std::str::FromStr;
-
 /// route handler: /-/auth/login/
 pub async fn login(
     req: &fastn_core::http::Request,
+    db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     if fastn_core::auth::utils::is_authenticated(req) {
@@ -13,8 +12,8 @@ pub async fn login(
 
     match provider.as_str() {
         "github" => fastn_core::auth::github::login(req, next).await,
-        // client should handle redirects to next for emailpassword login
-        "emailpassword" => fastn_core::auth::emailpassword::login(req, next).await,
+        // client should handle redirects to next for email_password login
+        "emailpassword" => fastn_core::auth::email_password::login(req, db_pool, next).await,
         _ => Ok(fastn_core::not_found!("unknown provider: {}", provider)),
     }
 }
@@ -22,16 +21,26 @@ pub async fn login(
 // route: /-/auth/logout/
 pub async fn logout(
     req: &fastn_core::http::Request,
+    db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    // TODO: Refactor, Not happy with this code, too much of repetition of similar code
+    use diesel::prelude::*;
+    use diesel_async::RunQueryDsl;
 
     if let Some(session_id) = req.cookie(fastn_core::auth::COOKIE_NAME) {
-        let session_id =
-            uuid::Uuid::from_str(session_id.as_str()).expect("cookie contains valid uuid");
-        let affected = fastn_core::auth::emailpassword::destroy_session(session_id)
+        let session_id: i32 = session_id.parse()?;
+
+        let mut conn = db_pool
+            .get()
             .await
-            .unwrap();
+            .map_err(|e| fastn_core::Error::DatabaseError {
+                message: format!("Failed to get connection to db. {:?}", e),
+            })?;
+
+        let affected = diesel::delete(fastn_core::schema::fastn_session::table)
+            .filter(fastn_core::schema::fastn_session::id.eq(&session_id))
+            .execute(&mut conn)
+            .await?;
 
         tracing::info!("session destroyed for {session_id}. Rows affected {affected}.");
     }
@@ -55,13 +64,15 @@ pub async fn handle_auth(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let next = req.q("next", "/".to_string())?;
 
+    let pool = fastn_core::db::pool().await.as_ref().unwrap();
+
     match req.path() {
-        "/-/auth/login/" => login(&req, next).await,
+        "/-/auth/login/" => login(&req, pool, next).await,
         // TODO: This has be set while creating the GitHub OAuth Application
         "/-/auth/github/" => fastn_core::auth::github::callback(&req, next).await,
-        "/-/auth/logout/" => logout(&req, next).await,
+        "/-/auth/logout/" => logout(&req, pool, next).await,
 
-        "/-/auth/create-user/" => fastn_core::auth::emailpassword::create_user(&req).await,
+        "/-/auth/create-user/" => fastn_core::auth::email_password::create_user(&req, pool).await,
 
         // "/-/auth/resend-confirmation-email/" => todo!("confirm-email"),
         // "/-/auth/login/?next=/" => todo!(),

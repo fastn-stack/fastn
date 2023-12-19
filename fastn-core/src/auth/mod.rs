@@ -2,7 +2,7 @@ pub(crate) mod config;
 pub(crate) mod github;
 pub(crate) mod routes;
 
-mod emailpassword;
+mod email_password;
 
 mod utils;
 
@@ -10,23 +10,15 @@ use std::str::FromStr;
 
 pub const COOKIE_NAME: &str = "session";
 
-#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, serde::Deserialize, serde::Serialize, diesel::Queryable, diesel::Selectable)]
+#[diesel(table_name = fastn_core::schema::fastn_user)]
 pub struct FastnUser {
+    pub id: i32,
     pub username: String,
-    pub id: uuid::Uuid,
-    pub name: Option<String>,
-    pub email: Option<String>,
-}
-
-impl FastnUser {
-    fn from_row(row: &tokio_postgres::Row) -> Self {
-        FastnUser {
-            id: row.get("id"),
-            username: row.get("username"),
-            name: row.get("name"),
-            email: row.get("email"),
-        }
-    }
+    #[serde(skip_serializing)]
+    pub password: String,
+    pub name: String,
+    pub created_at: chrono::DateTime<chrono::Utc>,
 }
 
 #[derive(Debug)]
@@ -142,7 +134,7 @@ pub async fn get_auth_identities(
 
 async fn set_session_cookie_and_end_response(
     req: &fastn_core::http::Request,
-    session_id: uuid::Uuid,
+    session_id: i32,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     return Ok(actix_web::HttpResponse::Found()

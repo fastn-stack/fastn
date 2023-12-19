@@ -1318,6 +1318,7 @@ checksum = "62c6fcf842f17f8c78ecf7c81d75c5ce84436b41ee07e03f490fbb5f5a8731d8"
 dependencies = [
  "bitflags 2.4.1",
  "byteorder",
+ "chrono",
  "diesel_derives",
  "itoa",
 ]
@@ -1741,6 +1742,7 @@ dependencies = [
  "async-lock",
  "async-recursion",
  "camino",
+ "chrono",
  "clap",
  "colored",
  "deadpool-postgres",

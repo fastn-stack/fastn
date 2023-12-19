@@ -1068,3 +1068,40 @@ pub fn ignore_headers() -> Vec<&'static str> {
 pub(crate) fn is_ftd_path(path: &str) -> bool {
     path.trim_matches('/').ends_with(".ftd")
 }
+
+#[derive(
+    Clone,
+    Debug,
+    diesel::deserialize::FromSqlRow,
+    diesel::expression::AsExpression,
+    PartialOrd,
+    PartialEq,
+)]
+#[diesel(sql_type = fastn_core::schema::sql_types::Citext)]
+pub struct CiString(pub String);
+
+pub fn citext(s: &str) -> CiString {
+    CiString(s.into())
+}
+
+impl diesel::serialize::ToSql<fastn_core::schema::sql_types::Citext, diesel::pg::Pg> for CiString {
+    fn to_sql<'b>(
+        &'b self,
+        out: &mut diesel::serialize::Output<'b, '_, diesel::pg::Pg>,
+    ) -> diesel::serialize::Result {
+        diesel::serialize::ToSql::<diesel::sql_types::Text, diesel::pg::Pg>::to_sql(&self.0, out)
+    }
+}
+
+impl diesel::deserialize::FromSql<fastn_core::schema::sql_types::Citext, diesel::pg::Pg>
+    for CiString
+{
+    fn from_sql(
+        bytes: <diesel::pg::Pg as diesel::backend::Backend>::RawValue<'_>,
+    ) -> diesel::deserialize::Result<Self> {
+        Ok(CiString(diesel::deserialize::FromSql::<
+            diesel::sql_types::Text,
+            diesel::pg::Pg,
+        >::from_sql(bytes)?))
+    }
+}

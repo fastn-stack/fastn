@@ -94,6 +94,12 @@ pub enum Error {
 
     #[error("MissingEnvironmentVariableError: {}", _0)]
     EnvironmentVariableError(#[from] std::env::VarError),
+
+    #[error("DatabaseError: {message}")]
+    DatabaseError { message: String },
+
+    #[error("DatabaseQueryError: {}", _0)]
+    DatabaseQueryError(#[from] diesel::result::Error),
 }
 
 impl From<std::convert::Infallible> for Error {

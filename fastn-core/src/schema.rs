@@ -9,41 +9,41 @@ pub mod sql_types {
 diesel::table! {
     fastn_email_confirmation (id) {
         id -> Int4,
-        email_id -> Nullable<Int4>,
-        created_at -> Nullable<Timestamptz>,
-        sent_at -> Nullable<Timestamptz>,
-        key -> Nullable<Text>,
+        email_id -> Int4,
+        created_at -> Timestamptz,
+        sent_at -> Timestamptz,
+        key -> Text,
     }
 }
 
 diesel::table! {
     fastn_oauthtoken (id) {
         id -> Int4,
-        session_id -> Nullable<Int4>,
+        session_id -> Int4,
         token -> Text,
         provider -> Text,
-        created_at -> Nullable<Timestamptz>,
-        updated_at -> Nullable<Timestamptz>,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
     }
 }
 
 diesel::table! {
     fastn_session (id) {
         id -> Int4,
-        user_id -> Nullable<Int4>,
-        created_at -> Nullable<Timestamptz>,
-        updated_at -> Nullable<Timestamptz>,
+        user_id -> Int4,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
     }
 }
 
 diesel::table! {
     fastn_user (id) {
         id -> Int4,
-        username -> Nullable<Text>,
-        password -> Nullable<Text>,
+        username -> Text,
+        password -> Text,
         name -> Text,
-        created_at -> Nullable<Timestamptz>,
-        updated_at -> Nullable<Timestamptz>,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
     }
 }
 
@@ -53,11 +53,11 @@ diesel::table! {
 
     fastn_user_email (id) {
         id -> Int4,
-        user_id -> Nullable<Int4>,
+        user_id -> Int4,
         email -> Citext,
-        verified -> Nullable<Bool>,
-        primary -> Nullable<Bool>,
-        created_at -> Nullable<Timestamptz>,
+        verified -> Bool,
+        primary -> Bool,
+        created_at -> Timestamptz,
     }
 }
 
