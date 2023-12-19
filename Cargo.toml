@@ -146,7 +146,8 @@ prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }
 argon2 = "0.5.2"
 lettre = { version = "0.11.2", features = ["serde", "tokio1", "tokio1-native-tls"]}
-diesel = { version = "2.1.4", features = ["postgres_backend", "r2d2"]}
+diesel = "2.1.4"
+diesel-async = { version = "0.4.1", features = ["postgres", "deadpool"]}
 
 [workspace.dependencies.uuid]
 version = "1.6.1"

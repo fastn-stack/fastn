@@ -9,6 +9,7 @@ pub mod commands;
 mod config;
 mod controller;
 mod cr;
+mod db;
 mod doc;
 mod file;
 mod font;

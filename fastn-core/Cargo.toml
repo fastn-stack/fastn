@@ -82,6 +82,7 @@ argon2.workspace = true
 uuid.workspace = true
 lettre.workspace = true
 diesel.workspace = true
+diesel-async.workspace = true
 
 [dev-dependencies]
 fbt-lib.workspace = true
