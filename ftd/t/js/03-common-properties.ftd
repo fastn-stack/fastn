@@ -1029,16 +1029,16 @@ margin.px: 20
 light: yellow
 dark: red
 
--- ftd.shadow s: 
-color: $yellow-red 
-x-offset.px: 10 
-y-offset.px: 10 
-blur.px: 1 
+-- ftd.shadow s:
+color: $yellow-red
+x-offset.px: 10
+y-offset.px: 10
+blur.px: 1
 
 -- ftd.column:
 width.fixed.px: 100
 height.fixed.px: 100
-shadow: $s 
+shadow: $s
 margin.px: 20
 
 -- end: ftd.column
