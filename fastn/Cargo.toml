@@ -21,3 +21,7 @@ tokio.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
 dotenvy.workspace = true
+
+
+[features]
+remote = ["fastn-core/remote"]
