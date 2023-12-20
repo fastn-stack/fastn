@@ -626,7 +626,6 @@ pub(crate) fn get_available_port(
     None
 }
 
-// TODO: move to fastn_core::http
 pub async fn get_api<T: serde::de::DeserializeOwned>(
     url: impl AsRef<str>,
     bearer_token: &str,
@@ -686,4 +685,82 @@ pub async fn github_graphql<T: serde::de::DeserializeOwned>(
     let return_obj = response.json::<T>().await?;
 
     Ok(return_obj)
+}
+
+/// construct `ftd.http` consumable error responses
+/// https://github.com/fastn-stack/fastn/blob/7f0b79a/fastn-js/js/ftd.js#L218C45-L229
+/// ```json
+/// {
+///     data: null,
+///     errors: {
+///         key: Vec<String>
+///     }
+/// }
+/// ```
+pub async fn user_err(
+    errors: Vec<(&str, Vec<&str>)>,
+    status_code: fastn_core::http::StatusCode,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    let mut json_error = serde_json::Map::new();
+
+    for (key, values) in errors {
+        json_error.insert(
+            key.to_owned(),
+            serde_json::Value::Array(
+                values
+                    .iter()
+                    .map(|&v| serde_json::Value::String(v.to_owned()))
+                    .collect(),
+            ),
+        );
+    }
+
+    let resp = serde_json::json!({
+        "data": null,
+        "errors": json_error,
+    });
+
+    Ok(actix_web::HttpResponse::Ok()
+        .status(status_code)
+        .content_type(actix_web::http::header::ContentType::json())
+        .body(serde_json::to_string(&resp)?))
+}
+
+#[cfg(test)]
+mod test {
+    use actix_web::body::MessageBody;
+
+    #[tokio::test]
+    async fn user_err() -> fastn_core::Result<()> {
+        let user_err = vec!["invalid email", "not found"];
+        let token_err = vec!["no key expected with name token"];
+        let errors = vec![("user", user_err.clone()), ("token", token_err.clone())];
+
+        let res =
+            fastn_core::http::user_err(errors, fastn_core::http::StatusCode::BAD_REQUEST).await?;
+
+        assert_eq!(res.status(), fastn_core::http::StatusCode::BAD_REQUEST);
+
+        #[derive(serde::Deserialize)]
+        struct Errors {
+            user: Vec<String>,
+            token: Vec<String>,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct TestErrorResponse {
+            data: Option<String>,
+            errors: Errors,
+        }
+
+        let bytes = res.into_body().try_into_bytes().unwrap();
+
+        let body: TestErrorResponse = serde_json::from_slice(&bytes)?;
+
+        assert_eq!(body.data, None);
+        assert_eq!(body.errors.user, user_err);
+        assert_eq!(body.errors.token, token_err);
+
+        Ok(())
+    }
 }
