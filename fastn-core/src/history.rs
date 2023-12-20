@@ -180,14 +180,22 @@ impl FileHistory {
                     .map(|v| format!("src-cr: {}\n", v))
                     .unwrap_or_else(|| "".to_string());
                 file_history_data = format!(
-                    "{}\n-- fastn.file-edit-data:\ntimestamp: {}\noperation: {:?}\nversion: {}\n{}{}\n{}\n",
-                    file_history_data,
-                    file_edit.timestamp,
-                    file_edit.operation,
-                    file_edit.version,
-                    author,
-                    src_cr,
-                    file_edit.message.as_ref().unwrap_or(&"".to_string())
+                    indoc::indoc! {"
+                        {file_history_data}
+                        -- fastn.file-edit-data:
+                        timestamp: {timestamp}
+                        operation: {operation}
+                        version: {version}
+                        {author}{src_cr}
+                        {message}
+                    "},
+                    file_history_data = file_history_data,
+                    timestamp = file_edit.timestamp,
+                    operation = format!("{:?}", file_edit.operation),
+                    version = file_edit.version,
+                    author = author,
+                    src_cr = src_cr,
+                    message = file_edit.message.clone().unwrap_or_default()
                 );
             }
             file_history_data = format!(
