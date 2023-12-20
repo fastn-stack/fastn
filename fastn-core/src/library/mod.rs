@@ -350,7 +350,7 @@ pub struct FastnLibrary {}
 impl FastnLibrary {
     pub fn get(&self, name: &str, _doc: &ftd::ftd2021::p2::TDoc) -> Option<String> {
         if name == "fastn" {
-            Some(fastn_package::old_fastn::fastn_ftd().to_string())
+            Some(fastn_package::old_fastn::fastn_ftd_2021().to_string())
         } else {
             // Note: currently we do not allow users to import other modules from FASTN.ftd
             eprintln!("FASTN.ftd can only import `fastn` module");

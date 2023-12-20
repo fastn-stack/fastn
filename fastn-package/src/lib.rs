@@ -12,3 +12,7 @@ const FASTN_PACKAGE_VARIABLE: &str = "fastn#package";
 static FTD_CACHE: tokio::sync::OnceCell<
     tokio::sync::RwLock<std::collections::HashMap<String, ftd::ast::AST>>,
 > = tokio::sync::OnceCell::const_new();
+
+pub fn fastn_ftd_2023() -> &'static str {
+    include_str!("../fastn_2023.ftd")
+}

@@ -257,7 +257,7 @@ pub(crate) async fn get2022_(lib: &fastn_core::Library) -> String {
             -- string package-name: {package_name}
             -- string home-url: {home_url}
         "},
-        fastn_base = fastn_package::old_fastn::fastn_ftd(),
+        fastn_base = fastn_package::old_fastn::fastn_ftd_2021(),
         capital_fastn = capital_fastn(lib),
         build_info = construct_fastn_cli_variables(lib),
         document_id = lib.document_id,
@@ -317,7 +317,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
             -- string package-name: {package_name}
             -- string home-url: {home_url}
         "},
-        fastn_base = fastn_package::old_fastn::fastn_ftd(),
+        fastn_base = fastn_package::old_fastn::fastn_ftd_2021(),
         design_ftd = fastn_core::design_ftd(),
         capital_fastn = capital_fastn(lib),
         i18n_data = i18n_data(lib).await,
