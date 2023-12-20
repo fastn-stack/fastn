@@ -1660,9 +1660,6 @@ pub fn length(l: &ftd::Length, f: &str) -> (String, String) {
         ftd::Length::VW { value } => (s, format!("{}vw", value)),
         ftd::Length::VMIN { value } => (s, format!("{}vmin", value)),
         ftd::Length::VMAX { value } => (s, format!("{}vmax", value)),
-        ftd::Length::DVH  { value } => (s, format!("{}dvh", value)),
-        ftd::Length::LVH  { value } => (s, format!("{}lvh", value)),
-        ftd::Length::SVH  { value } => (s, format!("{}svh", value)),
 
         _ => (s, "100%".to_string()),
         //        ftd::Length::Shrink => (s, "width".to_string()),   TODO
@@ -2060,4 +2057,5 @@ fn style(l: &ftd::Weight) -> (String, String) {
         ftd::Weight::ExtraLight => ("font-weight".to_string(), "200".to_string()),
         ftd::Weight::HairLine => ("font-weight".to_string(), "100".to_string()),
     }
+
 }
