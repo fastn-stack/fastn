@@ -2057,5 +2057,4 @@ fn style(l: &ftd::Weight) -> (String, String) {
         ftd::Weight::ExtraLight => ("font-weight".to_string(), "200".to_string()),
         ftd::Weight::HairLine => ("font-weight".to_string(), "100".to_string()),
     }
-
 }
