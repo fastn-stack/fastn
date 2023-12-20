@@ -73,7 +73,13 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         // project-path is optional
         let path = project.value_of_("path");
         let download_base_url = project.value_of_("download-base-url");
-        return fastn_core::create_package(name, path, download_base_url).await;
+        return fastn_core::create_package(
+            name,
+            path,
+            download_base_url,
+            project.get_flag("server"),
+        )
+        .await;
     }
 
     if let Some(clone) = matches.subcommand_matches("clone") {
@@ -353,6 +359,7 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(name: <NAME> "The name of the package to create"))
                 .arg(clap::arg!(-p --path [PATH] "Where to create the package (relative or absolute path, default value: the name)"))
                 .arg(clap::arg!(--"download-base-url" <DOWNLOAD_BASE_URL> "base url of the package where it can downloaded"))
+                .arg(clap::arg!(--"server" "Creates the server package so sync works"))
         )
         .subcommand(
             clap::Command::new("build")

@@ -160,9 +160,15 @@ impl FileHistory {
     }
 
     pub(crate) fn to_ftd(history: &[&fastn_core::history::FileHistory]) -> String {
-        let mut files_history = vec!["-- import: fastn".to_string()];
+        let mut files_history = vec![
+            "-- import: fastn".to_string(),
+            "-- $fastn.history:".to_string(),
+        ];
         for file_history in history {
-            let mut file_history_data = format!("-- fastn.history: {}\n", file_history.filename);
+            let mut file_history_data = format!(
+                "-- fastn.file-history: {}\n-- fastn.file-history.file-edit:\n",
+                file_history.filename
+            );
             for file_edit in &file_history.file_edit {
                 let author = file_edit
                     .author
@@ -174,7 +180,7 @@ impl FileHistory {
                     .map(|v| format!("src-cr: {}\n", v))
                     .unwrap_or_else(|| "".to_string());
                 file_history_data = format!(
-                    "{}\n--- file-edit:\ntimestamp: {}\noperation: {:?}\nversion: {}\n{}{}\n{}\n",
+                    "{}\n-- fastn.file-edit-data:\ntimestamp: {}\noperation: {:?}\nversion: {}\n{}{}\n{}\n",
                     file_history_data,
                     file_edit.timestamp,
                     file_edit.operation,
@@ -184,8 +190,13 @@ impl FileHistory {
                     file_edit.message.as_ref().unwrap_or(&"".to_string())
                 );
             }
+            file_history_data = format!(
+                "{}\n-- end: fastn.file-history.file-edit",
+                file_history_data
+            );
             files_history.push(file_history_data);
         }
+        files_history.push("-- end: $fastn.history".to_string());
         files_history.join("\n\n\n")
     }
 

@@ -1,0 +1,15 @@
+-- record file-edit-data:
+optional body message:
+integer timestamp:
+integer version:
+optional string author:
+option integer src-cr:
+string operation:
+
+
+-- record file-history:
+caption filename:
+file-edit-data list file-edit:
+
+
+-- file-history list $history:
