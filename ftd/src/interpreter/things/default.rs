@@ -3105,6 +3105,35 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         None,
                         0,
                     )),
+
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LENGTH_DVH,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LENGTH_LVH,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LENGTH_SVH,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+
                     ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
                         ftd::interpreter::FTD_LENGTH_EM,
                         ftd::interpreter::Kind::decimal()
