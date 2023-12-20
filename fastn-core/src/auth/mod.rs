@@ -150,8 +150,41 @@ async fn set_session_cookie_and_end_response(
         .finish());
 }
 
-pub async fn get_authenticated_user(
-    session_id: &uuid::Uuid,
-) -> fastn_core::Result<fastn_core::auth::FastnUser> {
-    fastn_core::auth::emailpassword::get_user_from_session(session_id).await
+/// get FastnUser and its primary email from session
+pub async fn get_authenticated_user_with_email(
+    session_id: &i32,
+) -> fastn_core::Result<(fastn_core::auth::FastnUser, String)> {
+    use diesel::prelude::*;
+    use diesel_async::RunQueryDsl;
+
+    let pool = fastn_core::db::pool().await.as_ref().unwrap();
+
+    let mut conn = pool
+        .get()
+        .await
+        .map_err(|e| fastn_core::Error::DatabaseError {
+            message: format!("Failed to get connection to db. {:?}", e),
+        })?;
+
+    let user_id: i32 = fastn_core::schema::fastn_session::table
+        .select(fastn_core::schema::fastn_session::user_id)
+        .filter(fastn_core::schema::fastn_session::id.eq(session_id))
+        .first(&mut conn)
+        .await?;
+
+    let user: fastn_core::auth::FastnUser = fastn_core::schema::fastn_user::table
+        .filter(fastn_core::schema::fastn_user::id.eq(user_id))
+        .select(fastn_core::auth::FastnUser::as_select())
+        .first(&mut conn)
+        .await?;
+
+    let email: fastn_core::utils::CiString = fastn_core::schema::fastn_user_email::table
+        .filter(fastn_core::schema::fastn_user_email::user_id.eq(user_id))
+        .filter(fastn_core::schema::fastn_user_email::verified.eq(true))
+        .filter(fastn_core::schema::fastn_user_email::primary.eq(true))
+        .select(fastn_core::schema::fastn_user_email::email)
+        .first(&mut conn)
+        .await?;
+
+    Ok((user, email.0))
 }

@@ -69,7 +69,7 @@ pub async fn handle_auth(
     match req.path() {
         "/-/auth/login/" => login(&req, pool, next).await,
         // TODO: This has be set while creating the GitHub OAuth Application
-        "/-/auth/github/" => fastn_core::auth::github::callback(&req, next).await,
+        "/-/auth/github/" => fastn_core::auth::github::callback(&req, pool, next).await,
         "/-/auth/logout/" => logout(&req, pool, next).await,
 
         "/-/auth/create-user/" => fastn_core::auth::email_password::create_user(&req, pool).await,

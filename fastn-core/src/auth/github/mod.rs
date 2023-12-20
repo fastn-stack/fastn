@@ -38,8 +38,12 @@ pub async fn login(
 // the token and setting it to cookies
 pub async fn callback(
     req: &fastn_core::http::Request,
+    db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    use diesel::prelude::*;
+    use diesel_async::RunQueryDsl;
+
     let code = req.q("code", "".to_string())?;
     // TODO: CSRF check
 
@@ -47,6 +51,12 @@ pub async fn callback(
     // present a merge account option:
     // ask to add github email to the logged in user's profile
     // ask to update details by giving a form
+    // redirect to next for now
+    if fastn_core::auth::utils::is_authenticated(req) {
+        return Ok(actix_web::HttpResponse::Found()
+            .append_header((actix_web::http::header::LOCATION, next))
+            .finish());
+    }
 
     let access_token = match fastn_core::auth::github::utils::github_client()
         .exchange_code(oauth2::AuthorizationCode::new(code))
@@ -72,42 +82,70 @@ pub async fn callback(
         gh_user.email = Some(primary.email);
     }
 
-    let user_id = uuid::Uuid::new_v4();
-
-    let user = fastn_core::auth::emailpassword::upsert_user(
-        &user_id,
-        gh_user
-            .email
-            .expect("email must exist for github user")
-            .as_str(),
-        gh_user.login.as_str(),
-        // TODO: should present an onabording form that asks for a name if github name is null
-        gh_user.name.unwrap_or(String::new()).as_str(),
-        "",
-    )
-    .await
-    .unwrap();
-
-    tracing::info!("fastn_user created. user: {:?}", &user);
-
-    let session_id = uuid::Uuid::new_v4();
-
-    let affected = fastn_core::auth::emailpassword::create_session(&session_id, &user.id)
+    let mut conn = db_pool
+        .get()
         .await
-        .unwrap_or(0);
+        .map_err(|e| fastn_core::Error::DatabaseError {
+            message: format!("Failed to get connection to db. {:?}", e),
+        })?;
 
-    tracing::info!("session created. Rows affected: {}", &affected);
+    let existing_user_email: Option<fastn_core::utils::CiString> =
+        fastn_core::schema::fastn_user_email::table
+            .select(fastn_core::schema::fastn_user_email::email)
+            .filter(
+                fastn_core::schema::fastn_user_email::email.eq(fastn_core::utils::citext(
+                    gh_user
+                        .email
+                        .expect("Every github account has a primary email")
+                        .as_str(),
+                )),
+            )
+            .first(&mut conn)
+            .await
+            .optional()?;
+
+    if existing_user_email.is_some() {
+        return fastn_core::http::user_err(
+            vec![("email", vec!["email already taken"])],
+            fastn_core::http::StatusCode::BAD_REQUEST,
+        )
+        .await;
+    }
+
+    let user = diesel::insert_into(fastn_core::schema::fastn_user::table)
+        .values((
+            fastn_core::schema::fastn_user::username.eq(gh_user.login),
+            fastn_core::schema::fastn_user::password.eq(""),
+            fastn_core::schema::fastn_user::name.eq(gh_user.name.unwrap_or("".to_string())),
+        ))
+        .returning(fastn_core::auth::FastnUser::as_returning())
+        .get_result(&mut conn)
+        .await?;
+
+    tracing::info!("fastn_user created. user_id: {:?}", &user.id);
+
+    // TODO: session should store device that was used to login (chrome desktop on windows)
+    let session_id: i32 = diesel::insert_into(fastn_core::schema::fastn_session::table)
+        .values((fastn_core::schema::fastn_session::user_id.eq(&user.id),))
+        .returning(fastn_core::schema::fastn_session::id)
+        .get_result(&mut conn)
+        .await?;
+
+    tracing::info!("session created. session_id: {}", &session_id);
 
     // TODO: access_token expires?
-    let affected = fastn_core::auth::emailpassword::insert_oauth_token(
-        &session_id,
-        access_token.as_str(),
-        fastn_core::auth::AuthProviders::GitHub,
-    )
-    .await
-    .unwrap_or(0);
+    // handle refresh tokens
+    let token_id: i32 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
+        .values((
+            fastn_core::schema::fastn_oauthtoken::session_id.eq(session_id),
+            fastn_core::schema::fastn_oauthtoken::token.eq(access_token),
+            fastn_core::schema::fastn_oauthtoken::provider.eq("github"),
+        ))
+        .returning(fastn_core::schema::fastn_oauthtoken::id)
+        .get_result(&mut conn)
+        .await?;
 
-    tracing::info!("token stored. Rows affected: {}", &affected);
+    tracing::info!("token stored. token_id: {}", &token_id);
 
     fastn_core::auth::set_session_cookie_and_end_response(req, session_id, next).await
 }
