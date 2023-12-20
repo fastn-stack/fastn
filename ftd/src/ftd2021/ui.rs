@@ -1851,6 +1851,9 @@ pub enum Length {
     VW { value: i64 },
     VMIN { value: i64 },
     VMAX { value: i64 },
+    DVH  { value: i64 },
+    LVH  { value: i64 },
+    SVH  { value: i64 },
 }
 
 impl Length {
@@ -1939,6 +1942,36 @@ impl Length {
                 Err(_) => {
                     ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
                 } // TODO
+            };
+        }
+
+        if l.starts_with("dvh ") {
+            let v = ftd::ftd2021::p2::utils::get_name("dvh", l.as_str(), doc_id)?;
+            return match v.parse() {
+                Ok(v) => Ok(Some(Length::DVH { value: v })),
+                Err(_) => {
+                    ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
+                }
+            };
+        }
+
+        if l.starts_with("lvh ") {
+            let v = ftd::ftd2021::p2::utils::get_name("lvh", l.as_str(), doc_id)?;
+            return match v.parse() {
+                Ok(v) => Ok(Some(Length::LVH { value: v })),
+                Err(_) => {
+                    ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
+                }
+            };
+        }
+
+        if l.starts_with("svh ") {
+            let v = ftd::ftd2021::p2::utils::get_name("svh", l.as_str(), doc_id)?;
+            return match v.parse() {
+                Ok(v) => Ok(Some(Length::SVH { value: v })),
+                Err(_) => {
+                    ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
+                }
             };
         }
 

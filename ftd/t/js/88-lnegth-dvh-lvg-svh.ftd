@@ -1,0 +1,26 @@
+-- integer dvh;
+-- integer lvh;
+-- integer svh;
+
+
+    dvh: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}dvh` });
+        }
+        return `${value}dvh`;
+    },
+
+    lvh: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}lvh` });
+        }
+        return `${value}lvh`;
+    },
+
+    svh: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}svh` });
+        }
+        return `${value}svh`;
+    },
+
