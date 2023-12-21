@@ -691,28 +691,22 @@ pub async fn github_graphql<T: serde::de::DeserializeOwned>(
 /// https://github.com/fastn-stack/fastn/blob/7f0b79a/fastn-js/js/ftd.js#L218C45-L229
 /// ```json
 /// {
-///     data: null,
-///     errors: {
-///         key: Vec<String>
+///     "data": null,
+///     "errors": {
+///         key: String,
+///         key2: String,
+///         ...
 ///     }
 /// }
 /// ```
 pub async fn user_err(
-    errors: Vec<(&str, Vec<&str>)>,
+    errors: Vec<(&str, &str)>,
     status_code: fastn_core::http::StatusCode,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let mut json_error = serde_json::Map::new();
 
-    for (key, values) in errors {
-        json_error.insert(
-            key.to_owned(),
-            serde_json::Value::Array(
-                values
-                    .iter()
-                    .map(|&v| serde_json::Value::String(v.to_owned()))
-                    .collect(),
-            ),
-        );
+    for (k, v) in errors {
+        json_error.insert(k.to_string(), serde_json::Value::String(v.to_string()));
     }
 
     let resp = serde_json::json!({
@@ -732,9 +726,9 @@ mod test {
 
     #[tokio::test]
     async fn user_err() -> fastn_core::Result<()> {
-        let user_err = vec!["invalid email", "not found"];
-        let token_err = vec!["no key expected with name token"];
-        let errors = vec![("user", user_err.clone()), ("token", token_err.clone())];
+        let user_err = "invalid email";
+        let token_err = "no key expected with name token";
+        let errors = vec![("user", user_err), ("token", token_err)];
 
         let res =
             fastn_core::http::user_err(errors, fastn_core::http::StatusCode::BAD_REQUEST).await?;
@@ -743,8 +737,8 @@ mod test {
 
         #[derive(serde::Deserialize)]
         struct Errors {
-            user: Vec<String>,
-            token: Vec<String>,
+            user: String,
+            token: String,
         }
 
         #[derive(serde::Deserialize)]

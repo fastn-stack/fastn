@@ -106,7 +106,7 @@ pub async fn callback(
 
     if existing_user_email.is_some() {
         return fastn_core::http::user_err(
-            vec![("email", vec!["email already taken"])],
+            vec![("email", "email already taken")],
             fastn_core::http::StatusCode::BAD_REQUEST,
         )
         .await;
