@@ -88,8 +88,10 @@ pub async fn process(
                     body.push(format!("\"{}\": {}", header.key, value));
                     continue;
                 }
-                url.query_pairs_mut()
-                    .append_pair(header.key.as_str(), &value);
+                url.query_pairs_mut().append_pair(
+                    header.key.as_str(),
+                    value.trim_start_matches('"').trim_end_matches('"'),
+                );
             }
         } else {
             if method.as_str().eq("post") {
