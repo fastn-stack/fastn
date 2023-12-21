@@ -1139,6 +1139,8 @@ For example, width.fixed.lvh: 25 sets the height to be 25% of the larger viewpor
 
 - svh:  This variant sets the value relative to the large viewport height.
 For example, width.fixed.svh: 25 sets the height to be 25% of the smaller viewport height.
+For more details and examples on these length units based on viewport, please refer to the
+https://developer.mozilla.org/en-US/docs/Web/CSS/length#relative_length_units_based_on_viewport.
 
 - `em`: This variant sets the value relative to the size of the parent
 element, in the case of typographical properties like `font-size`, and the font
