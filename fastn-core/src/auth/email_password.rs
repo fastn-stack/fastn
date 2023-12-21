@@ -59,22 +59,60 @@ pub async fn create_user(
         .get_result(&mut conn)
         .await?;
 
-    let affected = diesel::insert_into(fastn_core::schema::fastn_user_email::table)
-        .values((
-            fastn_core::schema::fastn_user_email::user_id.eq(user.id),
-            fastn_core::schema::fastn_user_email::email
-                .eq(fastn_core::utils::citext(user_payload.email.as_str())),
-            fastn_core::schema::fastn_user_email::verified.eq(false),
-            fastn_core::schema::fastn_user_email::primary.eq(true),
-        ))
-        .execute(&mut conn)
-        .await?;
-
     tracing::info!("fastn_user created. user_id: {}", &user.id);
 
-    if affected > 0 {
-        tracing::info!("fastn_user_email created");
+    let (email, email_id): (fastn_core::utils::CiString, i32) =
+        diesel::insert_into(fastn_core::schema::fastn_user_email::table)
+            .values((
+                fastn_core::schema::fastn_user_email::user_id.eq(user.id),
+                fastn_core::schema::fastn_user_email::email
+                    .eq(fastn_core::utils::citext(user_payload.email.as_str())),
+                fastn_core::schema::fastn_user_email::verified.eq(false),
+                fastn_core::schema::fastn_user_email::primary.eq(true),
+            ))
+            .returning((
+                fastn_core::schema::fastn_user_email::email,
+                fastn_core::schema::fastn_user_email::id,
+            ))
+            .get_result(&mut conn)
+            .await?;
+
+    tracing::info!("fastn_user email inserted. email id: {}", &email_id);
+
+    let key = generate_key(64);
+
+    let stored_key: String =
+        diesel::insert_into(fastn_core::schema::fastn_email_confirmation::table)
+            .values((
+                fastn_core::schema::fastn_email_confirmation::email_id.eq(email_id),
+                fastn_core::schema::fastn_email_confirmation::sent_at
+                    .eq(chrono::offset::Utc::now()),
+                fastn_core::schema::fastn_email_confirmation::key.eq(key),
+            ))
+            .returning(fastn_core::schema::fastn_email_confirmation::key)
+            .get_result(&mut conn)
+            .await?;
+
+    let confirmation_link = confirmation_link(req, stored_key);
+
+    let mut mailer = fastn_core::mail::Mailer::from_env()?;
+
+    if let Ok(debug_mode) = std::env::var("DEBUG") {
+        if debug_mode == "true" {
+            mailer.mock();
+        }
     }
+
+    mailer
+        .send_raw(
+            format!("{} <{}>", user.name, email.0)
+                .parse::<lettre::message::Mailbox>()
+                .unwrap(),
+            "Verify your email",
+            confirmation_mail_body(confirmation_link),
+        )
+        .await
+        .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
 
     fastn_core::http::api_ok(user)
 }
@@ -163,4 +201,25 @@ pub(crate) async fn login(
     // client has to 'follow' this request
     // https://stackoverflow.com/a/39739894
     fastn_core::auth::set_session_cookie_and_end_response(req, session_id, next).await
+}
+
+fn confirmation_mail_body(link: String) -> String {
+    format!("Use this link to verify your email: {link}")
+}
+
+fn generate_key(length: usize) -> String {
+    let mut rng = rand::thread_rng();
+    rand::distributions::DistString::sample_string(
+        &rand::distributions::Alphanumeric,
+        &mut rng,
+        length,
+    )
+}
+
+fn confirmation_link(req: &fastn_core::http::Request, key: String) -> String {
+    format!(
+        "{}://{}/-/auth/confirm-email/?code={key}",
+        req.connection_info.scheme(),
+        req.connection_info.host()
+    )
 }
