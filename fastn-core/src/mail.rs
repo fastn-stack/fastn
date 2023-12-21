@@ -8,14 +8,14 @@ pub enum MailError {
     Smtp(#[from] lettre::transport::smtp::Error),
 }
 
-// TODO: add support for DKIM
-// https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail
+/// Send SMTP emails
 pub struct Mailer {
     smtp_username: String,
     smtp_password: String,
     smtp_host: String,
     sender_email: String,
     sender_name: Option<String>,
+    mock: bool,
 }
 
 impl Mailer {
@@ -33,14 +33,25 @@ impl Mailer {
             sender_email,
             sender_name,
             smtp_host,
+            mock: false,
         })
     }
 
+    /// log the email body without actually sending it
+    /// useful for testing
+    pub fn mock(&mut self) -> &Self {
+        self.mock = true;
+
+        self
+    }
+
+    // TODO: add support for DKIM
+    // https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail
     /// send {body} as html body of the email
-    pub fn send_raw(
+    pub async fn send_raw(
         &self,
         to: lettre::message::Mailbox,
-        subject: String,
+        subject: &str,
         body: String,
     ) -> Result<(), MailError> {
         let email = lettre::Message::builder()
@@ -53,16 +64,26 @@ impl Mailer {
             .header(lettre::message::header::ContentType::TEXT_HTML)
             .body(body)?;
 
-        let creds = lettre::transport::smtp::authentication::Credentials::new(
-            self.smtp_username.clone(),
-            self.smtp_password.clone(),
-        );
+        if self.mock {
+            println!("{:?}", email);
+        } else {
+            let creds = lettre::transport::smtp::authentication::Credentials::new(
+                self.smtp_username.clone(),
+                self.smtp_password.clone(),
+            );
 
-        let mailer = lettre::SmtpTransport::relay(&self.smtp_host)?
-            .credentials(creds)
-            .build();
+            let mailer =
+                lettre::AsyncSmtpTransport::<lettre::Tokio1Executor>::relay(&self.smtp_host)?
+                    .credentials(creds)
+                    .build();
 
-        lettre::Transport::send(&mailer, &email)?;
+            let response = lettre::AsyncTransport::send(&mailer, email).await?;
+
+            tracing::info!(
+                "sent email: {:?}",
+                response.message().collect::<Vec<&str>>()
+            );
+        }
 
         Ok(())
     }
