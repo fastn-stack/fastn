@@ -1,7 +1,7 @@
 -- component get:
 caption title:
 string url:
-body test:
+optional body test:
 optional string http-status:
 optional string http-location:
 optional string http-redirect:
@@ -15,8 +15,11 @@ optional string http-redirect:
 -- component post:
 caption title:
 string url:
-body post-body:
+body body:
 string test:
+optional string http-status:
+optional string http-location:
+optional string http-redirect:
 
 -- ftd.text: NOT IMPLEMENTED HERE
 

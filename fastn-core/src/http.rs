@@ -91,6 +91,9 @@ pub struct Request {
 }
 
 impl Request {
+    pub fn set_body(&mut self, body: actix_web::web::Bytes) {
+        self.body = body;
+    }
     //pub fn get_named_params() -> {}
     pub fn from_actix(req: actix_web::HttpRequest, body: actix_web::web::Bytes) -> Self {
         let headers = {

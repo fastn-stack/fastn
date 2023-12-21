@@ -89,7 +89,7 @@ pub async fn process(
                     continue;
                 }
                 url.query_pairs_mut()
-                    .append_pair(header.key.as_str(), &value);
+                    .append_pair(header.key.as_str(), &value.trim_matches('"'));
             }
         } else {
             if method.as_str().eq("post") {

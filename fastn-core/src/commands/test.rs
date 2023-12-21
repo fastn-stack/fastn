@@ -2,11 +2,12 @@ pub(crate) const TEST_FOLDER: &str = "_tests";
 pub(crate) const TEST_FILE_EXTENSION: &str = ".test.ftd";
 
 // mandatory test parameters
-pub(crate) const TEST_CONTENT_HEADER: &str = "test";
 pub(crate) const TEST_TITLE_HEADER: &str = "title";
 pub(crate) const TEST_URL_HEADER: &str = "url";
 
 // optional test parameters
+pub(crate) const POST_BODY_HEADER: &str = "body";
+pub(crate) const TEST_CONTENT_HEADER: &str = "test";
 pub(crate) const HTTP_REDIRECT_HEADER: &str = "http-redirect";
 pub(crate) const HTTP_STATUS_HEADER: &str = "http-status";
 pub(crate) const HTTP_LOCATION_HEADER: &str = "http-location";
@@ -32,7 +33,7 @@ pub async fn test(
                 continue;
             }
         }
-        println!("Running test in {}", document.id.yellow());
+        println!("Running test file: {}", document.id.magenta());
         read_ftd_test_file(document, config).await?;
     }
 
@@ -84,6 +85,7 @@ async fn read_ftd_test_file(
     config: &fastn_core::Config,
 ) -> fastn_core::Result<()> {
     let req = fastn_core::http::Request::default();
+    let mut saved_cookies: ftd::Map<String> = ftd::Map::new();
     let base_url = "/";
     let mut req_config =
         fastn_core::RequestConfig::new(config, &req, ftd_document.id.as_str(), base_url);
@@ -103,9 +105,8 @@ async fn read_ftd_test_file(
         &main_ftd_doc.aliases,
         &main_ftd_doc.data,
     );
-
     for instruction in main_ftd_doc.tree {
-        if !execute_instruction(&instruction, &doc, config).await? {
+        if !execute_instruction(&instruction, &doc, config, &mut saved_cookies).await? {
             break;
         }
     }
@@ -116,10 +117,11 @@ async fn execute_instruction(
     instruction: &ftd::interpreter::Component,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
+    saved_cookies: &mut ftd::Map<String>,
 ) -> fastn_core::Result<bool> {
     match instruction.name.as_str() {
-        "fastn#get" => execute_get_instruction(instruction, doc, config).await,
-        "fastn#post" => todo!(),
+        "fastn#get" => execute_get_instruction(instruction, doc, config, saved_cookies).await,
+        "fastn#post" => execute_post_instruction(instruction, doc, config, saved_cookies).await,
         t => fastn_core::usage_error(format!(
             "Unknown instruction {}, line number: {}",
             t, instruction.line_number
@@ -127,10 +129,11 @@ async fn execute_instruction(
     }
 }
 
-async fn execute_get_instruction(
+async fn execute_post_instruction(
     instruction: &ftd::interpreter::Component,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
+    saved_cookies: &mut ftd::Map<String>,
 ) -> fastn_core::Result<bool> {
     let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc);
 
@@ -141,74 +144,188 @@ async fn execute_get_instruction(
     let title = get_value_ok(TEST_TITLE_HEADER, &property_values, instruction.line_number)?
         .to_string(doc, false)?
         .unwrap();
-    let test = get_value_ok(
-        TEST_CONTENT_HEADER,
-        &property_values,
-        instruction.line_number,
-    )?
-    .to_string(doc, false)?
-    .unwrap();
 
     // Optional test parameters --------------------------------
-    let mut optional_parameters: ftd::Map<String> = ftd::Map::new();
+    let mut other_params: ftd::Map<String> = ftd::Map::new();
+
+    if let Some(test_content) =
+        get_optional_value_string(TEST_CONTENT_HEADER, &property_values, doc)?
+    {
+        other_params.insert(TEST_CONTENT_HEADER.to_string(), test_content);
+    }
+
+    if let Some(post_body) = get_optional_value_string(POST_BODY_HEADER, &property_values, doc)? {
+        other_params.insert(
+            POST_BODY_HEADER.to_string(),
+            fastn_core::utils::escape_string(post_body.as_str()),
+        );
+    }
+
     if let Some(http_status) = get_optional_value_string(HTTP_STATUS_HEADER, &property_values, doc)?
     {
-        optional_parameters.insert(HTTP_STATUS_HEADER.to_string(), http_status);
+        other_params.insert(HTTP_STATUS_HEADER.to_string(), http_status);
     }
 
     if let Some(http_location) =
         get_optional_value_string(HTTP_LOCATION_HEADER, &property_values, doc)?
     {
-        optional_parameters.insert(HTTP_LOCATION_HEADER.to_string(), http_location);
+        other_params.insert(HTTP_LOCATION_HEADER.to_string(), http_location);
     }
 
     if let Some(http_redirect) =
         get_optional_value_string(HTTP_REDIRECT_HEADER, &property_values, doc)?
     {
-        optional_parameters.insert(HTTP_REDIRECT_HEADER.to_string(), http_redirect);
+        other_params.insert(HTTP_REDIRECT_HEADER.to_string(), http_redirect);
     }
 
-    assert_optional_headers(&optional_parameters)?;
+    assert_optional_headers(&other_params)?;
+
+    get_post_response_for_id(
+        url.as_str(),
+        title.as_str(),
+        other_params,
+        config,
+        saved_cookies,
+    )
+    .await
+}
+
+async fn get_post_response_for_id(
+    id: &str,
+    title: &str,
+    optional_params: ftd::Map<String>,
+    config: &fastn_core::Config,
+    saved_cookies: &mut ftd::Map<String>,
+) -> fastn_core::Result<bool> {
+    use actix_web::body::MessageBody;
+    use colored::Colorize;
+
+    println!("Test: {}  ", title.yellow());
+    let post_body = actix_web::web::Bytes::copy_from_slice(
+        optional_params
+            .get(POST_BODY_HEADER)
+            .cloned()
+            .unwrap_or_default()
+            .as_bytes(),
+    );
+    let mut request = fastn_core::http::Request::default();
+    request.path = id.to_string();
+    request.set_body(post_body.into());
+    let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
+    println!("POST response details --------------------------------");
+    dbg!(&response);
+    let (response_status_code, response_location) = assert_response(&response, &optional_params)?;
+    let test = optional_params.get(TEST_CONTENT_HEADER);
+    if let Some(test_content) = test {
+        let body = response.into_body().try_into_bytes().unwrap(); // Todo: Throw error
+        let body_str = std::str::from_utf8(&body).unwrap(); // Todo: Throw error
+        let fastn_test_js = fastn_js::fastn_test_js();
+        let fastn_assertion_headers =
+            fastn_js::fastn_assertion_headers(response_status_code, response_location.as_str());
+        let fastn_js = fastn_js::all_js_without_test_and_ftd_langugage_js();
+        let mut test_string = format!(
+            "{body_str}\n{fastn_assertion_headers}\n{fastn_test_js}\n\
+            {test_content}\nfastn.test_result"
+        );
+        dbg!(&test_string);
+        test_string = format!("{}\n{}", fastn_js, test_string);
+        let test_result = fastn_js::run_test(test_string.as_str());
+        if test_result.iter().any(|v| !(*v)) {
+            println!("{}", "Test Failed".red());
+            return Ok(false);
+        }
+    }
+    println!("{}", "Test Passed".green());
+    Ok(true)
+}
+
+async fn execute_get_instruction(
+    instruction: &ftd::interpreter::Component,
+    doc: &ftd::interpreter::TDoc<'_>,
+    config: &fastn_core::Config,
+    saved_cookies: &mut ftd::Map<String>,
+) -> fastn_core::Result<bool> {
+    let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc);
+
+    // Mandatory test parameters --------------------------------
+    let url = get_value_ok(TEST_URL_HEADER, &property_values, instruction.line_number)?
+        .to_string(doc, false)?
+        .unwrap();
+    let title = get_value_ok(TEST_TITLE_HEADER, &property_values, instruction.line_number)?
+        .to_string(doc, false)?
+        .unwrap();
+
+    // Optional test parameters --------------------------------
+    let mut optional_params: ftd::Map<String> = ftd::Map::new();
+    if let Some(test_content) =
+        get_optional_value_string(TEST_CONTENT_HEADER, &property_values, doc)?
+    {
+        optional_params.insert(TEST_CONTENT_HEADER.to_string(), test_content);
+    }
+
+    if let Some(http_status) = get_optional_value_string(HTTP_STATUS_HEADER, &property_values, doc)?
+    {
+        optional_params.insert(HTTP_STATUS_HEADER.to_string(), http_status);
+    }
+
+    if let Some(http_location) =
+        get_optional_value_string(HTTP_LOCATION_HEADER, &property_values, doc)?
+    {
+        optional_params.insert(HTTP_LOCATION_HEADER.to_string(), http_location);
+    }
+
+    if let Some(http_redirect) =
+        get_optional_value_string(HTTP_REDIRECT_HEADER, &property_values, doc)?
+    {
+        optional_params.insert(HTTP_REDIRECT_HEADER.to_string(), http_redirect);
+    }
+
+    assert_optional_headers(&optional_params)?;
 
     get_js_for_id(
         url.as_str(),
-        test.as_str(),
         title.as_str(),
-        optional_parameters,
+        optional_params,
         config,
+        saved_cookies,
     )
     .await
 }
 
 async fn get_js_for_id(
     id: &str,
-    test: &str,
     title: &str,
-    other_params: ftd::Map<String>,
+    optional_params: ftd::Map<String>,
     config: &fastn_core::Config,
+    saved_cookies: &mut ftd::Map<String>,
 ) -> fastn_core::Result<bool> {
     use actix_web::body::MessageBody;
     use colored::Colorize;
 
-    print!("{}:  ", title.yellow());
+    println!("Test: {}  ", title.yellow());
     let mut request = fastn_core::http::Request::default();
     request.path = id.to_string();
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
-    let (response_status_code, response_location) = assert_response(&response, &other_params)?;
-    let body = response.into_body().try_into_bytes().unwrap(); // Todo: Throw error
-    let body_str = std::str::from_utf8(&body).unwrap(); // Todo: Throw error
-    let fastn_test_js = fastn_js::fastn_test_js();
-    let fastn_assertion_headers =
-        fastn_js::fastn_assertion_headers(response_status_code, response_location.as_str());
-    let fastn_js = fastn_js::all_js_without_test_and_ftd_langugage_js();
-    let test_string = format!(
-        "{fastn_js}\n{body_str}\n{fastn_assertion_headers}\n{fastn_test_js}\n{test}\nfastn\
-        .test_result"
-    );
-    let test_result = fastn_js::run_test(test_string.as_str());
-    if test_result.iter().any(|v| !(*v)) {
-        println!("{}", "Test Failed".red());
-        return Ok(false);
+    println!("GET response details --------------------------------");
+    dbg!(&response);
+    let (response_status_code, response_location) = assert_response(&response, &optional_params)?;
+    let test = optional_params.get(TEST_CONTENT_HEADER);
+    if let Some(test_content) = test {
+        let body = response.into_body().try_into_bytes().unwrap(); // Todo: Throw error
+        let body_str = std::str::from_utf8(&body).unwrap(); // Todo: Throw error
+        let fastn_test_js = fastn_js::fastn_test_js();
+        let fastn_assertion_headers =
+            fastn_js::fastn_assertion_headers(response_status_code, response_location.as_str());
+        let fastn_js = fastn_js::all_js_without_test_and_ftd_langugage_js();
+        let test_string = format!(
+            "{fastn_js}\n{body_str}\n{fastn_assertion_headers}\n{fastn_test_js}\n\
+            {test_content}\nfastn.test_result"
+        );
+        let test_result = fastn_js::run_test(test_string.as_str());
+        if test_result.iter().any(|v| !(*v)) {
+            println!("{}", "Test Failed".red());
+            return Ok(false);
+        }
     }
     println!("{}", "Test Passed".green());
     Ok(true)
@@ -273,8 +390,8 @@ pub fn assert_optional_headers(
         && optional_test_parameters.contains_key(HTTP_REDIRECT_HEADER)
     {
         return fastn_core::usage_error(format!(
-            "Use either {} or {} both not allowed.",
-            HTTP_STATUS_HEADER, HTTP_REDIRECT_HEADER
+            "Use either [{} and {}] or [{}] both not allowed.",
+            HTTP_STATUS_HEADER, HTTP_LOCATION_HEADER, HTTP_REDIRECT_HEADER
         ));
     }
     Ok(true)
@@ -303,10 +420,10 @@ pub fn assert_redirect(
         ));
     }
 
-    let response_location = get_response_location(response)?;
+    let response_location = get_response_location(response)?.unwrap_or_default();
     if !response_location.eq(redirection_location) {
         return fastn_core::assert_error(format!(
-            "HTTP redirect location mismatch. Expected {:?}, Found {:?}",
+            "HTTP redirect location mismatch. Expected \"{:?}\", Found \"{:?}\"",
             redirection_location, response_location
         ));
     }
@@ -322,24 +439,24 @@ pub fn assert_location_and_status(
     let default_status_code = "200".to_string();
     let response_status_code = response.status().as_u16();
     let response_status_code_string = response_status_code.to_string();
-    let expected_status_code = params.get(HTTP_STATUS_HEADER);
+    let expected_status_code = params
+        .get(HTTP_STATUS_HEADER)
+        .unwrap_or(&default_status_code);
 
-    if let Some(expected_code) = expected_status_code {
-        if !response_status_code_string.eq(expected_code) {
-            return fastn_core::assert_error(format!(
-                "HTTP status code mismatch. Expected {}, Found {}",
-                expected_code, response_status_code
-            ));
-        }
+    if !response_status_code_string.eq(expected_status_code) {
+        return fastn_core::assert_error(format!(
+            "HTTP status code mismatch. Expected {}, Found {}",
+            expected_status_code, response_status_code
+        ));
     }
 
-    let response_location = get_response_location(response)?;
+    let response_location = get_response_location(response)?.unwrap_or_default();
     let expected_location = params.get(HTTP_LOCATION_HEADER);
 
     if let Some(expected_location) = expected_location {
         if !expected_location.eq(response_location.as_str()) {
             return fastn_core::assert_error(format!(
-                "HTTP Location mismatch. Expected {:?}, Found {:?}",
+                "HTTP Location mismatch. Expected \"{:?}\", Found \"{:?}\"",
                 expected_location, response_location
             ));
         }
@@ -348,13 +465,15 @@ pub fn assert_location_and_status(
     Ok((response_status_code, response_location))
 }
 
-pub fn get_response_location(response: &fastn_core::http::Response) -> fastn_core::Result<String> {
+pub fn get_response_location(
+    response: &fastn_core::http::Response,
+) -> fastn_core::Result<Option<String>> {
     if let Some(redirect_location) = response.headers().get("Location") {
         return if let Ok(location) = redirect_location.to_str() {
-            Ok(location.to_string())
+            Ok(Some(location.to_string()))
         } else {
             fastn_core::generic_error("Failed to convert 'Location' header to string".to_string())
         };
     }
-    return fastn_core::generic_error("No 'Location' header found in the response".to_string());
+    return Ok(None);
 }
