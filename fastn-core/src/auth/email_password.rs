@@ -26,18 +26,34 @@ pub async fn create_user(
             message: format!("Failed to get connection to db. {:?}", e),
         })?;
 
-    let count: i64 = fastn_core::schema::fastn_user::table
-        .filter(fastn_core::schema::fastn_user::username.eq(&user_payload.email))
+    let username_check: i64 = fastn_core::schema::fastn_user::table
+        .filter(fastn_core::schema::fastn_user::username.eq(&user_payload.username))
         .select(diesel::dsl::count(fastn_core::schema::fastn_user::id))
         .first(&mut conn)
         .await?;
 
-    if count > 0 {
-        return fastn_core::http::api_error(
-            "username taken.",
-            fastn_core::http::StatusCode::BAD_REQUEST.into(),
-        );
+    let email_check: i64 = fastn_core::schema::fastn_user_email::table
+        .filter(fastn_core::schema::fastn_user_email::email.eq(fastn_core::utils::citext(user_payload.email.as_str())))
+        .select(diesel::dsl::count(fastn_core::schema::fastn_user_email::id))
+        .first(&mut conn)
+        .await?;
+
+    if username_check > 0 {
+        return fastn_core::http::user_err(
+            vec![("username", "username already taken")],
+            fastn_core::http::StatusCode::BAD_REQUEST,
+        )
+        .await;
     }
+
+    if email_check > 0 {
+        return fastn_core::http::user_err(
+            vec![("email", "email already taken")],
+            fastn_core::http::StatusCode::BAD_REQUEST,
+        )
+        .await;
+    }
+
 
     let salt =
         argon2::password_hash::SaltString::generate(&mut argon2::password_hash::rand_core::OsRng);
