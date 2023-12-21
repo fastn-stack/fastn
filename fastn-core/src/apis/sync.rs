@@ -100,6 +100,7 @@ pub(crate) async fn sync_worker(
                 }
 
                 tokio::fs::copy(config.root.join(path), snapshot_path).await?;
+                // hostn::update_latest_ftd(config, path, timestamp).await?;
                 snapshots.insert(path.to_string(), timestamp);
                 // Create a new file
                 // Take snapshot

@@ -666,9 +666,9 @@ async fn actual_route(
 
     let req = fastn_core::http::Request::from_actix(req, body);
     match (req.method().to_lowercase().as_str(), req.path()) {
-        ("post", "/-/sync/") if cfg!(feature = "remote") => sync(config, req).await,
-        ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(config, req).await,
-        ("get", "/-/clone/") if cfg!(feature = "remote") => clone(config).await,
+        ("post", "/-/sync/") if cfg!(feature = "self-hosted") => sync(config, req).await,
+        ("post", "/-/sync2/") if cfg!(feature = "self-hosted") => sync2(config, req).await,
+        ("get", "/-/clone/") if cfg!(feature = "self-hosted") => clone(config).await,
         ("get", t) if t.starts_with("/-/view-src/") => view_source(config, req).await,
         ("get", t) if t.starts_with("/-/edit-src/") => edit_source(config, req).await,
         ("get", t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
@@ -685,6 +685,7 @@ async fn actual_route(
         ("get", "/-/tutor.js") => fastn_core::tutor::js().await,
         ("post", "/-/tutor/start/") => fastn_core::tutor::start(req.json()?).await,
         ("get", "/-/tutor/stop/") => fastn_core::tutor::stop().await,
+        (_, "/-/create-site/") if cfg!(feature = "hostn") => hostn::create_site,
         (_, _) => serve(config, req).await,
     }
 }
