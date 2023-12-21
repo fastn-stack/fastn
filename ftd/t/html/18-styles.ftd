@@ -89,18 +89,15 @@ background.solid: yellow
 
 
 -- ftd.text: Data
-width.fixed.px if { num % 12 == 0 }: 20
-width.fixed.percent if { num % 12 == 1 }: 20
-width.fixed.calc if { num % 12 == 2 }: 20
-width.fixed.vh if { num % 12 == 3 }: 20
-width.fixed.vw if { num % 12 == 4 }: 20
-width.fixed.em if { num % 12 == 5 }: 20
-width.fixed.rem if { num % 12 == 6 }: 20
-width.fixed.vmin if { num % 12 == 7 }: 20
-width.fixed.vmax if { num % 12 == 8 }: 20
-width.fixed.dvh if { num % 12 == 9 }: 20
-width.fixed.lvh if { num % 12 == 10 }: 20
-width.fixed.svh if { num % 12 == 11 }: 20
+width.fixed.px if { num % 9 == 0 }: 20
+width.fixed.percent if { num % 9 == 1 }: 20
+width.fixed.calc if { num % 9 == 2 }: 20
+width.fixed.vh if { num % 9 == 3 }: 20
+width.fixed.vw if { num % 9 == 4 }: 20
+width.fixed.em if { num % 9 == 5 }: 20
+width.fixed.rem if { num % 9 == 6 }: 20
+width.fixed.vmin if { num % 9 == 7 }: 20
+width.fixed.vmax if { num % 9 == 8 }: 20
 background.solid: red
 $on-click$: $increment($a = $num)
 
