@@ -1155,8 +1155,8 @@ which are `ftd.length` types. The `desktop` field specifies the value of the
 length on desktop devices, while the `mobile` field specifies the value on
 mobile devices.
 
-For more details and examples on these length units based on viewport, please refer this
-[documentation](https://developer.mozimlla.org/en-US/docs/Web/CSS/length#relative_length_units_based_on_viewport)
+For more details and examples on these length units based on viewport, Please refer this
+[documentation](https://developer.mozimlla.org/en-US/docs/Web/CSS/length#relative_length_units_based_on_viewport).
 
 For example,
 
