@@ -1,4 +1,4 @@
-pub async fn create_user(
+pub(crate) async fn create_user(
     req: &fastn_core::http::Request,
     db_pool: &fastn_core::db::PgPool,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -33,7 +33,10 @@ pub async fn create_user(
         .await?;
 
     let email_check: i64 = fastn_core::schema::fastn_user_email::table
-        .filter(fastn_core::schema::fastn_user_email::email.eq(fastn_core::utils::citext(user_payload.email.as_str())))
+        .filter(
+            fastn_core::schema::fastn_user_email::email
+                .eq(fastn_core::utils::citext(user_payload.email.as_str())),
+        )
         .select(diesel::dsl::count(fastn_core::schema::fastn_user_email::id))
         .first(&mut conn)
         .await?;
@@ -53,7 +56,6 @@ pub async fn create_user(
         )
         .await;
     }
-
 
     let salt =
         argon2::password_hash::SaltString::generate(&mut argon2::password_hash::rand_core::OsRng);
@@ -217,6 +219,105 @@ pub(crate) async fn login(
     // client has to 'follow' this request
     // https://stackoverflow.com/a/39739894
     fastn_core::auth::set_session_cookie_and_end_response(req, session_id, next).await
+}
+
+pub(crate) async fn confirm_email(
+    req: &fastn_core::http::Request,
+    db_pool: &fastn_core::db::PgPool,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    use diesel::prelude::*;
+    use diesel_async::RunQueryDsl;
+
+    let code = req.query().get("code");
+
+    if code.is_none() {
+        return fastn_core::http::api_error(
+            "Bad Request",
+            fastn_core::http::StatusCode::BAD_REQUEST.into(),
+        );
+    }
+
+    let code = match code.unwrap() {
+        serde_json::Value::String(c) => c,
+        _ => {
+            return fastn_core::http::api_error(
+                "Bad Request",
+                fastn_core::http::StatusCode::BAD_REQUEST.into(),
+            );
+        }
+    };
+
+    let mut conn = db_pool
+        .get()
+        .await
+        .map_err(|e| fastn_core::Error::DatabaseError {
+            message: format!("Failed to get connection to db. {:?}", e),
+        })?;
+
+    let conf_data: Option<(i32, chrono::DateTime<chrono::Utc>)> =
+        fastn_core::schema::fastn_email_confirmation::table
+            .select((
+                fastn_core::schema::fastn_email_confirmation::email_id,
+                fastn_core::schema::fastn_email_confirmation::sent_at,
+            ))
+            .filter(fastn_core::schema::fastn_email_confirmation::key.eq(code))
+            .first(&mut conn)
+            .await
+            .optional()?;
+
+    if conf_data.is_none() {
+        return fastn_core::http::api_error(
+            "Bad Request",
+            fastn_core::http::StatusCode::BAD_REQUEST.into(),
+        );
+    }
+
+    let (email_id, sent_at) = conf_data.unwrap();
+
+    if key_expired(sent_at) {
+        // TODO: this redirect route should be configurable
+        return Ok(fastn_core::http::redirect_with_code(
+            format!(
+                "{}://{}/-/auth/resend-confirmation-email/",
+                req.connection_info.scheme(),
+                req.connection_info.host(),
+            ),
+            302,
+        ));
+    }
+
+    let affected = diesel::update(fastn_core::schema::fastn_user_email::table)
+        .set(fastn_core::schema::fastn_user_email::verified.eq(true))
+        .filter(fastn_core::schema::fastn_user_email::id.eq(email_id))
+        .execute(&mut conn)
+        .await?;
+
+    tracing::info!("verified {} email", affected);
+
+    // TODO: there's no GET /-/auth/login/ yet
+    // the client will have to create one for now
+    // this path should be configuratble too
+    Ok(fastn_core::http::redirect_with_code(
+        format!(
+            "{}://{}/-/auth/login/",
+            req.connection_info.scheme(),
+            req.connection_info.host(),
+        ),
+        302,
+    ))
+}
+
+/// check if it has been 3 days since the verification code was sent
+fn key_expired(sent_at: chrono::DateTime<chrono::Utc>) -> bool {
+    let expiry_limit_in_days: u64 = std::env::var("EMAIL_CONFIRMATION_EXPIRE_DAYS")
+        .ok()
+        .map(|v| v.parse().unwrap())
+        .unwrap_or(3);
+
+    sent_at
+        .checked_add_days(chrono::Days::new(expiry_limit_in_days))
+        .unwrap()
+        <= chrono::offset::Utc::now()
 }
 
 fn confirmation_mail_body(link: String) -> String {
