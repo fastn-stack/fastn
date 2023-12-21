@@ -1140,9 +1140,6 @@ For example, width.fixed.lvh: 25 sets the height to be 25% of the larger viewpor
 - `svh`:  This variant sets the value relative to the large viewport height.
 For example, width.fixed.svh: 25 sets the height to be 25% of the smaller viewport height.
 
-For more details and examples on these length units based on viewport, please refer this
-[documentation](https://developer.mozimlla.org/en-US/docs/Web/CSS/length#relative_length_units_based_on_viewport)
-
 - `em`: This variant sets the value relative to the size of the parent
 element, in the case of typographical properties like `font-size`, and the font
 size of the element itself, in the case of other properties like width.
@@ -1158,6 +1155,8 @@ which are `ftd.length` types. The `desktop` field specifies the value of the
 length on desktop devices, while the `mobile` field specifies the value on
 mobile devices.
 
+For more details and examples on these length units based on viewport, please refer this
+[documentation](https://developer.mozimlla.org/en-US/docs/Web/CSS/length#relative_length_units_based_on_viewport)
 
 For example,
 
