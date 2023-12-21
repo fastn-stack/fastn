@@ -1587,7 +1587,6 @@ dependencies = [
  "clap",
  "colored",
  "dotenvy",
- "fastn-cloud",
  "fastn-core",
  "fastn-observer",
  "futures",
@@ -1597,24 +1596,6 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber",
-]
-
-[[package]]
-name = "fastn-cloud"
-version = "0.1.0"
-dependencies = [
- "camino",
- "fastn-core",
- "futures",
- "home",
- "mime_guess",
- "reqwest",
- "serde",
- "serde_json",
- "tejar",
- "thiserror",
- "tokio",
- "walkdir",
 ]
 
 [[package]]
@@ -2167,12 +2148,6 @@ name = "hermit-abi"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d77f7ec81a6d05a3abb01ab6eb7590f6083d08449fe5a1c8b1e620283546ccb7"
-
-[[package]]
-name = "hex"
-version = "0.4.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
 name = "hmac"
@@ -4399,22 +4374,6 @@ name = "tap"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "55937e1799185b12863d447f42597ed69d9928686b8d88a1df17376a097d8369"
-
-[[package]]
-name = "tejar"
-version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "69348a5c80d5e535c653709742976b1f627474ac8446a27d9d2eaa84d7e10022"
-dependencies = [
- "camino",
- "hex",
- "mime_guess",
- "rand",
- "sha2 0.10.8",
- "thiserror",
- "tokio",
- "walkdir",
-]
 
 [[package]]
 name = "tempfile"

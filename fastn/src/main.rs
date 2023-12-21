@@ -1,5 +1,3 @@
-mod commands;
-
 pub fn main() {
     fastn_observer::observe();
 
@@ -21,8 +19,6 @@ async fn outer_main() {
 pub enum Error {
     #[error("FastnCoreError: {}", _0)]
     FastnCoreError(#[from] fastn_core::Error),
-    #[error("FastnCloudError: {}", _0)]
-    FastnCloudError(#[from] commands::cloud::Error),
 }
 
 async fn async_main() -> Result<(), Error> {
@@ -30,23 +26,12 @@ async fn async_main() -> Result<(), Error> {
 
     set_env_vars();
 
-    if cloud_commands(&matches).await? {
-        return Ok(());
-    }
-
     futures::try_join!(
         fastn_core_commands(&matches),
         check_for_update_cmd(&matches)
     )?;
 
     Ok(())
-}
-
-async fn cloud_commands(matches: &clap::ArgMatches) -> Result<bool, commands::cloud::Error> {
-    match matches.subcommand() {
-        Some((commands::cloud::PUBLISH_STATIC, _matches)) => commands::cloud::handle().await,
-        _ => Ok(false),
-    }
 }
 
 async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
@@ -524,7 +509,6 @@ fn app(version: &'static str) -> clap::Command {
         )
         .subcommand(fastn_core::commands::stop_tracking::command())
         .subcommand(sub_command::serve())
-        .subcommand(sub_command::publish_static())
 }
 
 mod sub_command {
@@ -555,12 +539,6 @@ mod sub_command {
                         .hide(true) // this is only for testing purpose
                 )
         }
-    }
-    pub fn publish_static() -> clap::Command {
-        // TODO: GIVE commands const name
-        clap::Command::new(crate::commands::cloud::PUBLISH_STATIC)
-            .about("Publish fastn package statically")
-            .after_help("Publish fastn packages to fastn-cloud as static")
     }
 }
 
