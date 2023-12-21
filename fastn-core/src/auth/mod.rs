@@ -6,8 +6,6 @@ mod email_password;
 
 mod utils;
 
-use std::str::FromStr;
-
 pub const COOKIE_NAME: &str = "session";
 
 #[derive(Debug, serde::Deserialize, serde::Serialize, diesel::Queryable, diesel::Selectable)]
@@ -44,7 +42,6 @@ impl AuthProviders {
 
 /// will fetch out the decrypted user data from cookies
 /// and return it as string
-/// if no cookie wrt to platform found it throws an error
 pub async fn get_user_data_from_cookies(
     provider: &str,
     requested_field: &str,
@@ -56,26 +53,46 @@ pub async fn get_user_data_from_cookies(
 
     match session_id {
         Ok(session_id) => {
-            let session_id = uuid::Uuid::from_str(session_id.as_str())?;
+            let session_id: i32 = session_id.parse()?;
 
             return match fastn_core::auth::AuthProviders::from_str(provider) {
                 fastn_core::auth::AuthProviders::GitHub => {
-                    // TODO: come back here when user_details is updated to use session id
-                    let user: FastnUser =
-                        fastn_core::auth::get_authenticated_user(&session_id).await?;
+                    let (user, _) =
+                        fastn_core::auth::get_authenticated_user_with_email(&session_id).await?;
 
                     match requested_field {
                         "username" | "user_name" | "user-name" => Ok(Some(user.username)),
 
                         "token" => {
-                            return fastn_core::auth::emailpassword::get_token_from_db(
-                                &session_id,
-                                provider,
-                            )
-                            .await
-                            .map(|t| Some(t.token.to_string()));
-                        }
+                            use diesel::prelude::*;
+                            use diesel_async::RunQueryDsl;
 
+                            let pool = fastn_core::db::pool().await.as_ref().unwrap();
+                            let mut conn =
+                                pool.get()
+                                    .await
+                                    .map_err(|e| fastn_core::Error::DatabaseError {
+                                        message: format!("Failed to get connection to db. {:?}", e),
+                                    })?;
+
+                            let token = fastn_core::schema::fastn_oauthtoken::table
+                                .select(fastn_core::schema::fastn_oauthtoken::token)
+                                .filter(
+                                    fastn_core::schema::fastn_oauthtoken::session_id
+                                        .eq(&session_id),
+                                )
+                                .filter(fastn_core::schema::fastn_oauthtoken::provider.eq("github"))
+                                .first::<String>(&mut conn)
+                                .await
+                                .optional()
+                                .map_err(|e| fastn_core::Error::DatabaseError {
+                                    message: format!(
+                                        "failed to get token from fastn_oauthtoken: {e}"
+                                    ),
+                                })?;
+
+                            Ok(token)
+                        }
                         _ => Err(fastn_core::Error::GenericError(format!(
                             "invalid field {} requested for platform {}",
                             requested_field, provider
@@ -109,13 +126,31 @@ pub async fn get_auth_identities(
 
     match session_id {
         Ok(session_id) => {
-            let session_id = uuid::Uuid::from_str(session_id.as_str())?;
+            use diesel::prelude::*;
+            use diesel_async::RunQueryDsl;
 
-            let token = fastn_core::auth::emailpassword::get_token_from_db(&session_id, "github")
+            let session_id: i32 = session_id.parse()?;
+
+            let pool = fastn_core::db::pool().await.as_ref().unwrap();
+            let mut conn = pool
+                .get()
                 .await
-                .map(|t| t.token.to_string())?;
+                .map_err(|e| fastn_core::Error::DatabaseError {
+                    message: format!("Failed to get connection to db. {:?}", e),
+                })?;
 
-            let user: FastnUser = fastn_core::auth::get_authenticated_user(&session_id).await?;
+            let token: String = fastn_core::schema::fastn_oauthtoken::table
+                .select(fastn_core::schema::fastn_oauthtoken::token)
+                .filter(fastn_core::schema::fastn_oauthtoken::session_id.eq(&session_id))
+                .filter(fastn_core::schema::fastn_oauthtoken::provider.eq("github"))
+                .first::<String>(&mut conn)
+                .await
+                .map_err(|e| fastn_core::Error::DatabaseError {
+                    message: format!("failed to get token from fastn_oauthtoken: {e}"),
+                })?;
+
+            let (user, _) =
+                fastn_core::auth::get_authenticated_user_with_email(&session_id).await?;
 
             let github_ud: github::UserDetail = github::UserDetail {
                 access_token: token,
