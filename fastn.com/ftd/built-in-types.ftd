@@ -3012,7 +3012,7 @@ style: italic
 - `vw <integer>`: Relative to 1% of the width of the viewport
 - `vmin <integer>`: Sets the value relative to the smaller dimension between the width and height of the viewport.
 - `vmax <integer>`: Sets the value relative to the larger dimension between the width and height of the viewport.
-- `dvh <decimal>`:  Sets the value relative to the dynmaic changing viewport.
+- `dvh <decimal>`:  Sets the value relative to the dynamic changing viewport.
 - `lvh <decimal>`:  Sets the value relative to the large view port height.
 - `svh <decimal>`:  Sets the value relative to the small view port height.
 - `<integer>`: Gives <integer>px unit space.
