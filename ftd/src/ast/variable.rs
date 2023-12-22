@@ -194,7 +194,7 @@ impl VariableFlags {
         };
 
         match kv.key.as_str() {
-            "$always-include$" => {
+            ftd::ast::constants::ALWAYS_INCLUDE => {
                 let value = kv
                     .value
                     .as_ref()
