@@ -26,7 +26,6 @@ pub async fn create_package(
     name: &str,
     path: Option<&str>,
     download_base_url: Option<&str>,
-    is_server_package: bool,
 ) -> fastn_core::Result<()> {
     use colored::Colorize;
 
@@ -64,8 +63,7 @@ pub async fn create_package(
     fastn_core::utils::update(&final_dir.join("index.ftd"), tmp_index.as_bytes()).await?;
     fastn_core::utils::update(&final_dir.join(".gitignore"), tmp_gitignore.as_bytes()).await?;
 
-    // Note: Not required for now
-    if is_server_package {
+    if cfg!(feature = "remote") {
         let sync_message = "Initial sync".to_string();
         let file_list: std::collections::BTreeMap<String, fastn_core::history::FileEditTemp> =
             IntoIterator::into_iter([
