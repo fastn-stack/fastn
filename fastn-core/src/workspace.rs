@@ -170,7 +170,8 @@ impl fastn_core::Config {
 
 impl WorkspaceEntry {
     fn get_ftd_string(workspace: &[Self]) -> String {
-        let mut workspace_data = "-- import: fastn".to_string();
+        let mut workspace_data =
+            "-- import: fastn\n\n-- fastn.workspace-entry list client-workspace:\n".to_string();
         for workspace_entry in workspace {
             let deleted = if let Some(deleted) = workspace_entry.deleted {
                 format!("deleted: {}\n", deleted)
@@ -188,10 +189,11 @@ impl WorkspaceEntry {
                 "".to_string()
             };
             workspace_data = format!(
-                "{}\n\n-- fastn.client-workspace: {}\n{}{}{}",
+                "{}\n\n-- fastn.workspace-entry: {}\n{}{}{}",
                 workspace_data, workspace_entry.filename, version, deleted, cr
             );
         }
+        workspace_data = format!("{}\n-- end: client-workspace\n", workspace_data);
         workspace_data
     }
 
