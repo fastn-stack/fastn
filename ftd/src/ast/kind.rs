@@ -568,7 +568,7 @@ impl VariableValue {
             .filter(|v| {
                 (!ftd::ast::utils::is_condition(v.get_key().as_str(), &v.get_kind())
                     && v.get_key().ne(ftd::ast::utils::PROCESSOR))
-                    || ftd::ast::VariableFlags::from_header(v, doc_id).is_err()
+                    && ftd::ast::VariableFlags::from_header(v, doc_id).is_err()
             })
             .map(|header| {
                 let key = header.get_key();
