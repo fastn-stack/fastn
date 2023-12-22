@@ -302,6 +302,7 @@ fastn_dom.PropertyKind = {
     BackdropFilter: 119,
     Mask: 120,
     TextInputValue: 121,
+    FetchPriority: 111,
 };
 
 
@@ -409,6 +410,12 @@ fastn_dom.Fit = {
     contain: "contain",
     cover: "cover",
     scaleDown: "scale-down",
+}
+
+fastn_dom.FetchPriority = {
+    auto: "auto",
+    high: "high",
+    low:  "low",
 }
 
 fastn_dom.Overflow = {
@@ -2103,7 +2110,9 @@ class Node2 {
             this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Fit) {
             this.attachCss("object-fit", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
+        } else if (kind === fastn_dom.PropertyKind.FetchPriority) {
+            this.attachCss("src", staticValue);
+        }else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
             if (fastn_utils.isNull(staticValue)) {
                 this.attachAttribute("src", staticValue);
                 return;

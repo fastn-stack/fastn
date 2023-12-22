@@ -549,6 +549,10 @@ fn ftd_to_js_variant(
             let js_variant = object_fit_variants(variant);
             (format!("fastn_dom.Fit.{}", js_variant), false)
         }
+        "ftd#image-fetchPriority" => {
+            let js_variant = object_fetch_priority_variants(variant);
+            (format!("fastn_dom.FetchPriority.{}", js_variant), false)
+        }
         "ftd#backdrop-filter" => {
             let js_variant = backdrop_filter_variants(variant);
             (format!("fastn_dom.BackdropFilter.{}", js_variant), true)
@@ -930,6 +934,15 @@ fn object_fit_variants(name: &str) -> &'static str {
         "cover" => "cover",
         "scale-down" => "scaleDown",
         t => todo!("invalid object fit variant {}", t),
+    }
+}
+
+fn object_fetch_priority_variants(name: &str) -> &'static str {
+    match name {
+        "auto" => "auto",
+        "high" => "high",
+        "low" => "low",
+        t => todo!("invalid object fetchPriority variant {}", t),
     }
 }
 
