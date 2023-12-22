@@ -10,6 +10,3 @@ string operation:
 -- record file-history:
 caption filename:
 file-edit-data list file-edit:
-
-
--- file-history list $history:
