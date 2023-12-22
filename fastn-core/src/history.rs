@@ -5,6 +5,20 @@ pub struct FileHistory {
     pub file_edit: Vec<FileEdit>,
 }
 
+impl fastn_core::Config {
+    async fn to_file_history(&self, file: &str) -> fastn_core::Result<Vec<FileHistory>> {
+        let doc = {
+            let req = fastn_core::http::Request::default();
+            let mut lib = fastn_core::RequestConfig::new(self, &req, "", "/");
+            let doc =
+                fastn_core::doc::interpret_helper("history.ftd", file, &mut lib, "/", false, 0)
+                    .await?;
+            doc
+        };
+        Ok(doc.get("history.ftd#history")?)
+    }
+}
+
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Eq, Clone)]
 pub struct FileEdit {
     pub message: Option<String>,
@@ -70,7 +84,7 @@ impl fastn_core::Config {
     pub async fn get_history(&self) -> fastn_core::Result<Vec<FileHistory>> {
         let history_file_path = self.history_file();
         let history_content = tokio::fs::read_to_string(history_file_path).await?;
-        FileHistory::from_ftd(history_content.as_str())
+        self.to_file_history(history_content.as_str()).await
     }
 
     pub async fn get_remote_manifest(
@@ -162,7 +176,7 @@ impl FileHistory {
     pub(crate) fn to_ftd(history: &[&fastn_core::history::FileHistory]) -> String {
         let mut files_history = vec![
             "-- import: fastn".to_string(),
-            "-- $fastn.history:".to_string(),
+            "-- fastn.file-history list history:".to_string(),
         ];
         for file_history in history {
             let mut file_history_data = format!(
@@ -204,7 +218,7 @@ impl FileHistory {
             );
             files_history.push(file_history_data);
         }
-        files_history.push("-- end: $fastn.history".to_string());
+        files_history.push("-- end: history".to_string());
         files_history.join("\n\n\n")
     }
 

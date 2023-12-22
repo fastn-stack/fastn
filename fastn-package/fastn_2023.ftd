@@ -3,7 +3,7 @@ optional body message:
 integer timestamp:
 integer version:
 optional string author:
-option integer src-cr:
+optional integer src-cr:
 string operation:
 
 
