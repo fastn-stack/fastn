@@ -176,7 +176,10 @@ impl FileHistory {
     pub(crate) fn to_ftd(history: &[&fastn_core::history::FileHistory]) -> String {
         let mut files_history = vec![
             "-- import: fastn".to_string(),
-            "-- fastn.file-history list history:".to_string(),
+            format!(
+                "-- fastn.file-history list history:\n{}: true",
+                ftd::ast::ALWAYS_INCLUDE
+            ),
         ];
         for file_history in history {
             let mut file_history_data = format!(

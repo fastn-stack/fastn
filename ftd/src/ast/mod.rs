@@ -17,6 +17,7 @@ mod web_component;
 pub use component::{
     Argument, Component, ComponentDefinition, Event, Loop, Property, PropertySource,
 };
+pub use constants::ALWAYS_INCLUDE;
 pub use function::Function;
 pub use import::{Export, Exposing, Import};
 pub use kind::{
