@@ -127,6 +127,11 @@ pub const FTD_IMAGE_FIT_CONTAIN: &str = "ftd#image-fit.contain";
 pub const FTD_IMAGE_FIT_FILL: &str = "ftd#image-fit.fill";
 pub const FTD_IMAGE_FIT_SCALE_DOWN: &str = "ftd#image-fit.scale-down";
 
+pub const FTD_IMAGE_FETCH_PRIORITY: &str = "ftd#image-fetch-priority";
+pub const FTD_IMAGE_FETCH_PRIORITY_AUTO: &str = "ftd#image-fetch-priority.auto";
+pub const FTD_IMAGE_FETCH_PRIORITY_HIGH: &str = "ftd#image-fetch-priority.high";
+pub const FTD_IMAGE_FETCH_PRIORITY_LOW: &str = "ftd#image-fetch-priority.low";
+
 pub const FTD_VIDEO_SRC: &str = "ftd#video-src";
 pub const FTD_VIDEO_SRC_LIGHT: &str = "ftd#video-src.light";
 pub const FTD_VIDEO_SRC_DARK: &str = "ftd#video-src.dark";
