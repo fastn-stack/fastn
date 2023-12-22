@@ -224,14 +224,6 @@ impl FileHistory {
         files_history.push("-- end: history".to_string());
         files_history.join("\n\n\n")
     }
-
-    pub(crate) fn from_ftd(file: &str) -> fastn_core::Result<Vec<FileHistory>> {
-        let doc = {
-            let lib = fastn_core::FastnLibrary::default();
-            fastn_core::doc::parse_ftd("history.ftd", file, &lib)?
-        };
-        Ok(doc.get("fastn#history")?)
-    }
 }
 
 pub(crate) async fn insert_into_history(
