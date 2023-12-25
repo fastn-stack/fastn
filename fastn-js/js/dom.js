@@ -115,6 +115,7 @@ fastn_dom.propertyMap = {
     "-webkit-mask-repeat": "wmre",
     "mask-position": "mp",
     "-webkit-mask-position": "wmp",
+    "fetch-priority": "ftp",
 };
 
 // dynamic-class-css.md
@@ -302,7 +303,7 @@ fastn_dom.PropertyKind = {
     BackdropFilter: 119,
     Mask: 120,
     TextInputValue: 121,
-    FetchPriority: 111,
+    FetchPriority: 122,
 };
 
 
@@ -2127,7 +2128,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Fit) {
             this.attachCss("object-fit", staticValue);
         } else if (kind === fastn_dom.PropertyKind.FetchPriority) {
-            this.attachCss("src", staticValue);
+            this.attachAttribute("src", staticValue);
         }else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
             if (fastn_utils.isNull(staticValue)) {
                 this.attachAttribute("src", staticValue);

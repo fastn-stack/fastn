@@ -655,7 +655,7 @@ impl Image {
                 component_definition.arguments.as_slice(),
             ),
             fetch_priority: ftd::js::value::get_optional_js_value(
-                "fetchPriority",
+                "fetch-priority",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
