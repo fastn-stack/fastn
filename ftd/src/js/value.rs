@@ -549,7 +549,7 @@ fn ftd_to_js_variant(
             let js_variant = object_fit_variants(variant);
             (format!("fastn_dom.Fit.{}", js_variant), false)
         }
-        "ftd#image-fetchPriority" => {
+        "ftd#image-fetch-priority" => {
             let js_variant = object_fetch_priority_variants(variant);
             (format!("fastn_dom.FetchPriority.{}", js_variant), false)
         }
