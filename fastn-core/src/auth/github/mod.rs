@@ -89,29 +89,55 @@ pub async fn callback(
             message: format!("Failed to get connection to db. {:?}", e),
         })?;
 
-    let existing_user_email: Option<fastn_core::utils::CiString> =
+    let existing_email_and_user_id: Option<(fastn_core::utils::CiString, i32)> =
         fastn_core::schema::fastn_user_email::table
-            .select(fastn_core::schema::fastn_user_email::email)
+            .select((
+                fastn_core::schema::fastn_user_email::email,
+                fastn_core::schema::fastn_user_email::user_id,
+            ))
             .filter(
                 fastn_core::schema::fastn_user_email::email.eq(fastn_core::utils::citext(
                     gh_user
                         .email
-                        .expect("Every github account has a primary email")
-                        .as_str(),
+                        .as_ref()
+                        .expect("Every github account has a primary email"),
                 )),
             )
             .first(&mut conn)
             .await
             .optional()?;
 
-    if existing_user_email.is_some() {
-        return fastn_core::http::user_err(
-            vec![("email", "email already taken")],
-            fastn_core::http::StatusCode::BAD_REQUEST,
-        )
-        .await;
+    if existing_email_and_user_id.is_some() {
+        // user already exists, just create a session and redirect to next
+        let (_, user_id) = existing_email_and_user_id.unwrap();
+
+        let session_id: i32 = diesel::insert_into(fastn_core::schema::fastn_session::table)
+            .values(fastn_core::schema::fastn_session::user_id.eq(&user_id))
+            .returning(fastn_core::schema::fastn_session::id)
+            .get_result(&mut conn)
+            .await?;
+
+        tracing::info!("session created. session_id: {}", &session_id);
+
+        // TODO: access_token expires?
+        // handle refresh tokens
+        let token_id: i32 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
+            .values((
+                fastn_core::schema::fastn_oauthtoken::session_id.eq(session_id),
+                fastn_core::schema::fastn_oauthtoken::token.eq(access_token),
+                fastn_core::schema::fastn_oauthtoken::provider.eq("github"),
+            ))
+            .returning(fastn_core::schema::fastn_oauthtoken::id)
+            .get_result(&mut conn)
+            .await?;
+
+        tracing::info!("token stored. token_id: {}", &token_id);
+
+        return fastn_core::auth::set_session_cookie_and_redirect_to_next(req, session_id, next)
+            .await;
     }
 
+    // first time login, create fastn_user
     let user = diesel::insert_into(fastn_core::schema::fastn_user::table)
         .values((
             fastn_core::schema::fastn_user::username.eq(gh_user.login),
@@ -124,6 +150,24 @@ pub async fn callback(
         .await?;
 
     tracing::info!("fastn_user created. user_id: {:?}", &user.id);
+
+    let email_id: i32 = diesel::insert_into(fastn_core::schema::fastn_user_email::table)
+        .values((
+            fastn_core::schema::fastn_user_email::user_id.eq(&user.id),
+            fastn_core::schema::fastn_user_email::email.eq(fastn_core::utils::citext(
+                gh_user
+                    .email
+                    .as_ref()
+                    .expect("Every github account has a primary email"),
+            )),
+            fastn_core::schema::fastn_user_email::verified.eq(true),
+            fastn_core::schema::fastn_user_email::primary.eq(true),
+        ))
+        .returning(fastn_core::schema::fastn_user_email::id)
+        .get_result(&mut conn)
+        .await?;
+
+    tracing::info!("fastn_user_email created. email: {:?}", &email_id);
 
     // TODO: session should store device that was used to login (chrome desktop on windows)
     let session_id: i32 = diesel::insert_into(fastn_core::schema::fastn_session::table)
@@ -148,7 +192,7 @@ pub async fn callback(
 
     tracing::info!("token stored. token_id: {}", &token_id);
 
-    fastn_core::auth::set_session_cookie_and_end_response(req, session_id, next).await
+    fastn_core::auth::set_session_cookie_and_redirect_to_next(req, session_id, next).await
 }
 
 // it returns identities which matches to given input

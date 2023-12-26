@@ -167,7 +167,7 @@ pub async fn get_auth_identities(
     Ok(matched_identities)
 }
 
-async fn set_session_cookie_and_end_response(
+async fn set_session_cookie_and_redirect_to_next(
     req: &fastn_core::http::Request,
     session_id: i32,
     next: String,
