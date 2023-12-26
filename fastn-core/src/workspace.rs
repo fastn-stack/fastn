@@ -93,11 +93,20 @@ impl fastn_core::Config {
 
     pub(crate) async fn read_workspace(&self) -> fastn_core::Result<Vec<WorkspaceEntry>> {
         let workspace = {
-            let workspace = tokio::fs::read_to_string(self.workspace_file());
-            let lib = fastn_core::FastnLibrary::default();
-            fastn_core::doc::parse_ftd("fastn", workspace.await?.as_str(), &lib)?
+            let req = fastn_core::http::Request::default();
+            let mut lib = fastn_core::RequestConfig::new(self, &req, "", "/");
+            let workspace = tokio::fs::read_to_string(self.workspace_file()).await?;
+            fastn_core::doc::interpret_helper(
+                "workspace.ftd",
+                workspace.as_str(),
+                &mut lib,
+                "/",
+                false,
+                0,
+            )
+            .await?
         };
-        Ok(workspace.get("fastn#client-workspace")?)
+        Ok(workspace.get("workspace.ftd#client-workspace")?)
     }
 
     pub(crate) async fn get_workspace_map(
@@ -170,8 +179,10 @@ impl fastn_core::Config {
 
 impl WorkspaceEntry {
     fn get_ftd_string(workspace: &[Self]) -> String {
-        let mut workspace_data =
-            "-- import: fastn\n\n-- fastn.workspace-entry list client-workspace:\n".to_string();
+        let mut workspace_data = format!(
+            "-- import: fastn\n\n-- fastn.workspace-entry list client-workspace:\n{}: true",
+            ftd::ast::ALWAYS_INCLUDE
+        );
         for workspace_entry in workspace {
             let deleted = if let Some(deleted) = workspace_entry.deleted {
                 format!("deleted: {}\n", deleted)

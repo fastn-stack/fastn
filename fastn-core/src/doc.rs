@@ -36,7 +36,6 @@ pub async fn interpret_helper(
 ) -> ftd::interpreter::Result<ftd::interpreter::Document> {
     tracing::info!(document = name);
     let doc = cached_parse(name, source, line_number)?;
-    dbg!(&doc.ast);
     let mut s = ftd::interpreter::interpret_with_line_number(name, doc)?;
     lib.module_package_map.insert(
         name.trim_matches('/').to_string(),
