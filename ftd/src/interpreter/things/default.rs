@@ -10257,7 +10257,7 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
                         .into_optional(),
                 ),
                 ftd::interpreter::Argument::default(
-                    "fetchPriority",
+                    "fetch-priority",
                     ftd::interpreter::Kind::string()
                         .into_kind_data()
                         .into_optional(),
