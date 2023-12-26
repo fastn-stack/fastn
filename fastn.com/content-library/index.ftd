@@ -23,6 +23,430 @@ $processor$: pr.full-sitemap
 
 
 
+-- component display-testimonial-card:
+caption title:
+string designation:
+body body:
+ftd.image-src src:
+
+-- ftd.row:
+background.solid: $inherited.colors.background.base
+width.fixed.px: 540
+padding.px: 20
+spacing.fixed.px: 25
+
+-- ftd.image:
+src: $display-testimonial-card.src
+width.fixed.px: 120
+height.fixed.px: 120
+border-top-left-radius.percent: 50
+border-bottom-left-radius.percent: 50
+border-bottom-right-radius.percent: 50
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: 
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+$display-testimonial-card.body
+
+-- ftd.text: $display-testimonial-card.title
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+style: bold
+margin-top.px: 16
+
+-- ftd.text: $display-testimonial-card.designation
+role: $inherited.types.label-large
+color: $inherited.colors.text-strong
+margin-top.px: 8
+style: bold
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: display-testimonial-card
+
+
+
+
+
+
+
+
+
+-- component testimonials:
+optional caption title:
+optional body body:
+testimonial-data list testimonials:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-vertical.px: 24
+padding-horizontal.px: 18
+background.solid: $inherited.colors.background.step-2
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $max-width
+
+-- ftd.text: $testimonials.title
+if: { testimonials.title != NULL }
+role: $inherited.types.heading-large
+color: $inherited.colors.text
+style: bold
+
+-- ftd.column:
+width.fixed.px: 100
+height.fixed.px: 2
+background.solid: $inherited.colors.border
+margin-top.px: 10
+
+-- end: ftd.column
+
+-- ftd.text:
+if: { testimonials.body != NULL }
+role: $inherited.types.heading-tiny
+color: $inherited.colors.text
+margin-top.px: 20
+
+$testimonials.body
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing.fixed.px: 24
+margin-top.px: 50
+
+-- testimonial-card-1: $obj.title
+$loop$: $testimonials.testimonials as $obj
+designation: $obj.designation
+src: $obj.src
+
+$obj.body
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: testimonials
+
+
+
+
+
+
+
+
+
+
+-- component testimonial-card-1:
+caption title:
+string designation:
+body body:
+ftd.image-src src:
+
+-- ftd.row:
+background.solid: $inherited.colors.background.base
+width.fixed.px: 400
+padding.px: 20
+spacing.fixed.px: 25
+
+-- ftd.image:
+src: $testimonial-card-1.src
+width.fixed.px: 120
+height.fixed.px: 120
+border-top-left-radius.percent: 50
+border-bottom-left-radius.percent: 50
+border-bottom-right-radius.percent: 50
+fit: cover
+align-self: center
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: 
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+$testimonial-card-1.body
+
+-- ftd.text: $testimonial-card-1.title
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+style: bold
+margin-top.px: 16
+
+-- ftd.text: $testimonial-card-1.designation
+role: $inherited.types.label-large
+color: $inherited.colors.text-strong
+margin-top.px: 8
+style: bold
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: testimonial-card-1
+
+
+
+
+
+-- component testimonials-n:
+optional caption title:
+optional body body:
+test-data list testimonials-n:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-vertical.px: 24
+padding-horizontal.px: 18
+background.solid: $inherited.colors.background.step-2
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $max-width
+
+-- ftd.text: $testimonials-n.title
+if: { testimonials-n.title != NULL }
+role: $inherited.types.heading-large
+color: $inherited.colors.text
+style: bold
+
+-- ftd.column:
+width.fixed.px: 100
+height.fixed.px: 2
+background.solid: $inherited.colors.border
+margin-top.px: 10
+
+-- end: ftd.column
+
+-- ftd.text:
+if: { testimonials-n.body != NULL }
+role: $inherited.types.heading-tiny
+color: $inherited.colors.text
+margin-top.px: 20
+
+$testimonials-n.body
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing.fixed.px: 24
+margin-top.px: 50
+
+-- testimonial-card-n: $obj.title
+$loop$: $testimonials-n.testimonials-n as $obj
+designation: $obj.designation
+src: $obj.src
+
+$obj.body
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: testimonials-n
+
+
+
+
+
+
+
+
+
+
+-- component testimonial-card-n:
+caption title:
+string designation:
+body body:
+ftd.image-src src:
+
+-- ftd.row:
+background.solid: $inherited.colors.background.base
+width.fixed.px: 400
+padding.px: 20
+spacing.fixed.px: 25
+
+-- ftd.image:
+src: $testimonial-card-n.src
+width.fixed.px: 160
+height.fixed.px: 160
+border-top-left-radius.percent: 50
+border-bottom-left-radius.percent: 50
+border-bottom-right-radius.percent: 50
+fit: cover
+align-self: center
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: 
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+$testimonial-card-n.body
+
+-- ftd.text: $testimonial-card-n.title
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+style: bold
+margin-top.px: 16
+
+-- ftd.text: $testimonial-card-n.designation
+role: $inherited.types.label-large
+color: $inherited.colors.text-strong
+margin-top.px: 8
+style: bold
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: testimonial-card-n
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component test-n:
+optional caption title:
+optional body body:
+test-info list test-n:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-vertical.px: 24
+padding-horizontal.px: 18
+background.solid: $inherited.colors.background.step-2
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $max-width
+
+-- ftd.text: $test-n.title
+if: { test-n.title != NULL }
+role: $inherited.types.heading-large
+color: $inherited.colors.text
+style: bold
+
+-- ftd.column:
+width.fixed.px: 100
+height.fixed.px: 2
+background.solid: $inherited.colors.border
+margin-top.px: 10
+
+-- end: ftd.column
+
+-- ftd.text:
+if: { test-n.body != NULL }
+role: $inherited.types.heading-tiny
+color: $inherited.colors.text
+margin-top.px: 20
+
+$test-n.body
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing.fixed.px: 24
+margin-top.px: 50
+
+-- test-card-n: $obj.title
+$loop$: $test-n.test-n as $obj
+designation: $obj.designation
+src: $obj.src
+
+$obj.body
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: test-n
+
+
+
+
+
+
+
+-- component test-card-n:
+caption title:
+string designation:
+body body:
+ftd.image-src src:
+
+-- ftd.row:
+background.solid: $inherited.colors.background.base
+width.fixed.px: 400
+padding.px: 20
+spacing.fixed.px: 25
+
+-- ftd.image:
+src: $test-card-n.src
+width.fixed.px: 120
+height.fixed.px: 120
+border-top-left-radius.percent: 50
+border-bottom-left-radius.percent: 50
+border-bottom-right-radius.percent: 50
+fit: cover
+align-self: center
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: 
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+$test-card-n.body
+
+-- ftd.text: $test-card-n.title
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+style: bold
+margin-top.px: 16
+
+-- ftd.text: $test-card-n.designation
+role: $inherited.types.label-large
+color: $inherited.colors.text-strong
+margin-top.px: 8
+style: bold
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: test-card-n
+
+
+
+
+
 
 
 -- component hero-content:
@@ -5254,3 +5678,104 @@ $processor$: pr.toc
 
 -- pr.sitemap-data footer-links:
 $processor$: fastn.sitemap
+
+
+
+
+
+
+
+
+
+
+
+-- record testimonial-data:
+caption title:
+body body:
+string designation:
+ftd.image-src src:
+
+-- testimonial-data list testimonials-list:
+
+-- testimonial-data: Nancy Bayers
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-1.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint 
+
+-- testimonial-data: Daniya Jacob
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-2.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+
+-- end: testimonials-list
+
+
+
+
+-- record test-data:
+caption title:
+body body:
+string designation:
+ftd.image-src src:
+
+-- test-data list test-list:
+
+-- test-data: Nancy Bayers
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-1.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint 
+
+-- test-data: Daniya Jacob
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-2.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+
+-- end: test-list
+
+
+-- record test-info:
+caption title:
+body body:
+string designation:
+ftd.image-src src:
+
+-- test-info list test-lists:
+
+-- test-info: Nancy Bayers
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-1.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint 
+
+-- test-info: Daniya Jacob
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-2.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+-- test-info: Kavya Dominic 
+designation: Owner
+src: $fastn-assets.files.images.blog.testimonial-3.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+-- end: test-lists
+
+
+
+
+
+
