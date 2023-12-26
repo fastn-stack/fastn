@@ -2129,7 +2129,7 @@ class Node2 {
             this.attachCss("object-fit", staticValue);
         } else if (kind === fastn_dom.PropertyKind.FetchPriority) {
             this.attachAttribute("fetchpriority", staticValue);
-        }else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
+        } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
             if (fastn_utils.isNull(staticValue)) {
                 this.attachAttribute("src", staticValue);
                 return;
