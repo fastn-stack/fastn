@@ -42,6 +42,7 @@ colored.workspace = true
 deadpool-postgres.workspace = true
 diesel-async.workspace = true
 diesel.workspace = true
+diesel_migrations.workspace = true
 diffy.workspace = true
 dirs.workspace = true
 edit.workspace = true
@@ -68,6 +69,7 @@ oauth2 = { workspace = true, optional = true }
 once_cell.workspace = true
 postgres-native-tls.workspace = true
 postgres-types.workspace = true
+rand.workspace = true
 realm-lang.workspace = true
 regex.workspace = true
 reqwest.workspace = true
@@ -84,7 +86,6 @@ tracing.workspace = true
 url.workspace = true
 uuid.workspace = true
 zip.workspace = true
-rand.workspace = true
 
 [dev-dependencies]
 fbt-lib.workspace = true

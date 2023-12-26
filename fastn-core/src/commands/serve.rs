@@ -753,6 +753,13 @@ You can try without providing port, it will automatically pick unused port."#,
         }
     };
 
+    if let Ok(auth_enabled) = std::env::var("FASTN_ENABLE_AUTH") {
+        if auth_enabled != "false" {
+            tracing::info!("running auth related migrations");
+            fastn_core::auth::enable_auth()?
+        }
+    }
+
     let app = move || {
         actix_web::App::new()
             .app_data(actix_web::web::Data::new(AppData {
