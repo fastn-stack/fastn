@@ -64,7 +64,13 @@ pub async fn handle_auth(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let next = req.q("next", "/".to_string())?;
 
-    let pool = fastn_core::db::pool().await.as_ref().unwrap();
+    let pool =
+        fastn_core::db::pool()
+            .await
+            .as_ref()
+            .map_err(|e| fastn_core::Error::DatabaseError {
+                message: format!("Failed to get connection to db. {:?}", e),
+            })?;
 
     match req.path() {
         "/-/auth/login/" => login(&req, pool, next).await,

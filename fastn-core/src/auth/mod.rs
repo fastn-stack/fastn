@@ -67,7 +67,12 @@ pub async fn get_user_data_from_cookies(
                             use diesel::prelude::*;
                             use diesel_async::RunQueryDsl;
 
-                            let pool = fastn_core::db::pool().await.as_ref().unwrap();
+                            let pool = fastn_core::db::pool().await.as_ref().map_err(|e| {
+                                fastn_core::Error::DatabaseError {
+                                    message: format!("Failed to get connection to db. {:?}", e),
+                                }
+                            })?;
+
                             let mut conn =
                                 pool.get()
                                     .await
@@ -131,7 +136,12 @@ pub async fn get_auth_identities(
 
             let session_id: i32 = session_id.parse()?;
 
-            let pool = fastn_core::db::pool().await.as_ref().unwrap();
+            let pool = fastn_core::db::pool().await.as_ref().map_err(|e| {
+                fastn_core::Error::DatabaseError {
+                    message: format!("Failed to get connection to db. {:?}", e),
+                }
+            })?;
+
             let mut conn = pool
                 .get()
                 .await
@@ -192,7 +202,13 @@ pub async fn get_authenticated_user_with_email(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    let pool = fastn_core::db::pool().await.as_ref().unwrap();
+    let pool =
+        fastn_core::db::pool()
+            .await
+            .as_ref()
+            .map_err(|e| fastn_core::Error::DatabaseError {
+                message: format!("Failed to get connection to db. {:?}", e),
+            })?;
 
     let mut conn = pool
         .get()
