@@ -2128,7 +2128,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Fit) {
             this.attachCss("object-fit", staticValue);
         } else if (kind === fastn_dom.PropertyKind.FetchPriority) {
-            this.attachAttribute("fetch-priority", staticValue);
+            this.attachAttribute("fetchpriority", staticValue);
         }else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
             if (fastn_utils.isNull(staticValue)) {
                 this.attachAttribute("src", staticValue);
