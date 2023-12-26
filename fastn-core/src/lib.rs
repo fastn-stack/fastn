@@ -32,7 +32,7 @@ mod tracker;
 mod translation;
 mod version;
 // mod wasm;
-pub(crate) mod catch_panic;
+pub mod catch_panic;
 pub(crate) mod google_sheets;
 mod library2022;
 mod workspace;
