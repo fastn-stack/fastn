@@ -457,7 +457,7 @@ fn app(version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("sync")
                 .about("Sync with fastn-repo (or .history folder if not using fastn-repo)")
-                .arg(clap::arg!(file: <FILE>... "The file(s) to sync (leave empty to sync entire package)"))
+                .arg(clap::arg!(file: <FILE>... "The file(s) to sync (leave empty to sync entire package)").required(false))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(

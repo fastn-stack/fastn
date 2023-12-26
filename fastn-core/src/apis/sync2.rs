@@ -319,7 +319,7 @@ pub(crate) async fn sync_worker(
     let remote_manifest =
         fastn_core::history::FileHistory::get_remote_manifest(remote_history.as_slice(), true)?;
 
-    let clone_history = config.get_history().await?;
+    let clone_history = config.to_file_history(request.history.as_str()).await?;
     let client_latest =
         fastn_core::history::FileHistory::get_remote_manifest(clone_history.as_slice(), true)?;
 
