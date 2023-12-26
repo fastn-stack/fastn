@@ -116,7 +116,8 @@ pub async fn callback(
         .values((
             fastn_core::schema::fastn_user::username.eq(gh_user.login),
             fastn_core::schema::fastn_user::password.eq(""),
-            fastn_core::schema::fastn_user::name.eq(gh_user.name.unwrap_or("".to_string())),
+            // TODO: should present an onabording form that asks for a name if github name is null
+            fastn_core::schema::fastn_user::name.eq(gh_user.name.unwrap_or_default()),
         ))
         .returning(fastn_core::auth::FastnUser::as_returning())
         .get_result(&mut conn)
