@@ -10,10 +10,7 @@ impl fastn_core::Config {
         let doc = {
             let req = fastn_core::http::Request::default();
             let mut lib = fastn_core::RequestConfig::new(self, &req, "", "/");
-            let doc =
-                fastn_core::doc::interpret_helper("history.ftd", file, &mut lib, "/", false, 0)
-                    .await?;
-            doc
+            fastn_core::doc::interpret_helper("history.ftd", file, &mut lib, "/", false, 0).await?
         };
         Ok(doc.get("history.ftd#history")?)
     }
