@@ -10,9 +10,7 @@ pub async fn process(
     if let Some(session_id) = req_config.request.cookie(fastn_core::auth::COOKIE_NAME) {
         if !session_id.is_empty() {
             let session_id: i32 = session_id.parse().map_err(|e| {
-                ftd::interpreter::Error::OtherError(format!(
-                    "Failed to parse uuid from string: {e}"
-                ))
+                ftd::interpreter::Error::OtherError(format!("Failed to parse id from string: {e}"))
             })?;
 
             if let Ok((user, email)) =
