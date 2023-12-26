@@ -1642,7 +1642,6 @@ class Node2 {
             ftd.breakpoint_width.set(fastn_utils.getStaticValue(staticValue));
         } else if (kind === fastn_dom.PropertyKind.Css) {
             let css_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
-            console.log(css_list);
             css_list.forEach((css) => {
                 this.attachExternalCss(css);
             });
