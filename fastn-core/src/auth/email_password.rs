@@ -17,7 +17,17 @@ pub(crate) async fn create_user(
         password: String,
     }
 
-    let user_payload: UserPayload = req.json()?;
+    let user_payload = req.json::<UserPayload>();
+
+    if let Err(e) = user_payload {
+        return fastn_core::http::user_err(
+            vec![("payload", format!("invalid payload: {:?}", e).as_str())],
+            fastn_core::http::StatusCode::BAD_REQUEST,
+        )
+        .await;
+    }
+
+    let user_payload = user_payload.unwrap();
 
     let mut conn = db_pool
         .get()
@@ -118,7 +128,17 @@ pub(crate) async fn login(
         password: String,
     }
 
-    let payload: Payload = req.json()?;
+    let payload = req.json::<Payload>();
+
+    if let Err(e) = payload {
+        return fastn_core::http::user_err(
+            vec![("payload", format!("invalid payload: {:?}", e).as_str())],
+            fastn_core::http::StatusCode::BAD_REQUEST,
+        )
+        .await;
+    }
+
+    let payload = payload.unwrap();
 
     let mut conn = db_pool
         .get()
@@ -150,7 +170,7 @@ pub(crate) async fn login(
         // or should we redirect them to the oauth provider they used last time?
         // redirecting them will require saving the method they used to login which de don't atm
         return fastn_core::http::api_error(
-            "use available oauth providers to sign in",
+            "This user is registered using other login methods. Use available oauth providers to sign in",
             fastn_core::http::StatusCode::BAD_REQUEST.into(),
         );
     }
@@ -182,7 +202,7 @@ pub(crate) async fn login(
 
     // client has to 'follow' this request
     // https://stackoverflow.com/a/39739894
-    fastn_core::auth::set_session_cookie_and_end_response(req, session_id, next).await
+    fastn_core::auth::set_session_cookie_and_redirect_to_next(req, session_id, next).await
 }
 
 pub(crate) async fn confirm_email(
@@ -353,7 +373,20 @@ async fn create_and_send_confirmation_email(
 
     let confirmation_link = confirmation_link(req, stored_key);
 
-    let mut mailer = fastn_core::mail::Mailer::from_env()?;
+    let mailer = fastn_core::mail::Mailer::from_env();
+
+    if mailer.is_err() {
+        return Err(fastn_core::Error::generic(
+            "Failed to create mailer from env. Creating mailer requires the following environment variables: \
+                \tFASTN_SMTP_USERNAME \
+                \tFASTN_SMTP_PASSWORD \
+                \tFASTN_SMTP_HOST \
+                \tFASTN_SMTP_SENDER_EMAIL \
+                \tFASTN_SMTP_SENDER_NAME",
+        ));
+    }
+
+    let mut mailer = mailer.unwrap();
 
     if let Ok(debug_mode) = std::env::var("DEBUG") {
         if debug_mode == "true" {
@@ -385,9 +418,9 @@ async fn create_and_send_confirmation_email(
 /// can be configured using EMAIL_CONFIRMATION_EXPIRE_DAYS
 fn key_expired(sent_at: chrono::DateTime<chrono::Utc>) -> bool {
     let expiry_limit_in_days: u64 = std::env::var("EMAIL_CONFIRMATION_EXPIRE_DAYS")
-        .ok()
-        .map(|v| v.parse().unwrap())
-        .unwrap_or(3);
+        .unwrap_or("3".to_string())
+        .parse()
+        .expect("EMAIL_CONFIRMATION_EXPIRE_DAYS should be a number");
 
     sent_at
         .checked_add_days(chrono::Days::new(expiry_limit_in_days))
