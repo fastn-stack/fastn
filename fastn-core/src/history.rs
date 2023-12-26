@@ -6,7 +6,7 @@ pub struct FileHistory {
 }
 
 impl fastn_core::Config {
-    async fn to_file_history(&self, file: &str) -> fastn_core::Result<Vec<FileHistory>> {
+    pub(crate) async fn to_file_history(&self, file: &str) -> fastn_core::Result<Vec<FileHistory>> {
         let doc = {
             let req = fastn_core::http::Request::default();
             let mut lib = fastn_core::RequestConfig::new(self, &req, "", "/");
