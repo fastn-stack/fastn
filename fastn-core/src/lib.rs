@@ -17,7 +17,7 @@ mod package;
 pub mod tutor;
 pub(crate) mod watcher;
 #[macro_use]
-mod http;
+pub mod http;
 mod auth;
 mod ds;
 mod error;
