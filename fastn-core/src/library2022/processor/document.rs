@@ -65,6 +65,14 @@ pub fn process_writers(
     doc.from_json(&writers, &kind, &value)
 }
 
+pub fn current_url(
+    req_config: &fastn_core::RequestConfig,
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    Ok(ftd::interpreter::Value::String {
+        text: req_config.url(),
+    })
+}
+
 pub fn document_id(
     _value: ftd::ast::VariableValue,
     _kind: ftd::interpreter::Kind,

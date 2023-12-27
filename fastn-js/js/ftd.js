@@ -1,4 +1,4 @@
-const ftd = (function() {
+const ftd = (function () {
     const exports = {};
 
     const riveNodes = {};
@@ -44,9 +44,9 @@ const ftd = (function() {
             fallbackCopyTextToClipboard(text);
             return;
         }
-        navigator.clipboard.writeText(text).then(function() {
+        navigator.clipboard.writeText(text).then(function () {
             console.log('Async: Copying to clipboard was successful!');
-        }, function(err) {
+        }, function (err) {
             console.error('Async: Could not copy text: ', err);
         });
     };
@@ -57,7 +57,7 @@ const ftd = (function() {
     exports.set_rive_boolean = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
         let riveConst = node.getExtraData().rive;
         const stateMachineName = riveConst.stateMachineNames[0];
@@ -69,7 +69,7 @@ const ftd = (function() {
     exports.toggle_rive_boolean = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
         let riveConst = node.getExtraData().rive;
         const stateMachineName = riveConst.stateMachineNames[0];
@@ -81,7 +81,7 @@ const ftd = (function() {
     exports.set_rive_integer = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
         let riveConst = node.getExtraData().rive;
         const stateMachineName = riveConst.stateMachineNames[0];
@@ -93,7 +93,7 @@ const ftd = (function() {
     exports.fire_rive = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
         let riveConst = node.getExtraData().rive;
         const stateMachineName = riveConst.stateMachineNames[0];
@@ -105,7 +105,7 @@ const ftd = (function() {
     exports.play_rive = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
         node.getExtraData().rive.play(args.input);
     };
@@ -113,7 +113,7 @@ const ftd = (function() {
     exports.pause_rive = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
         node.getExtraData().rive.pause(args.input);
     };
@@ -121,7 +121,7 @@ const ftd = (function() {
     exports.toggle_play_rive = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
         let riveConst = node.getExtraData().rive
         riveConst.playingAnimationNames.includes(args.input)
@@ -130,26 +130,26 @@ const ftd = (function() {
     };
 
     exports.get = (value, index) => {
-         return fastn_utils.getStaticValue(fastn_utils.getterByKey(value, index));
+        return fastn_utils.getStaticValue(fastn_utils.getterByKey(value, index));
     };
 
     exports.component_data = component => {
         let attributesIndex = component.getAttribute(fastn_dom.webComponentArgument);
         let attributes = fastn_dom.webComponent[attributesIndex];
         return Object.fromEntries(
-            Object.entries(attributes).map(([k,v]) => {
+            Object.entries(attributes).map(([k, v]) => {
                 // Todo: check if argument is mutable reference or not
-                    if (v instanceof fastn.mutableClass) {
-                        v = fastn.webComponentVariable.mutable(v);
-                    } else if (v instanceof fastn.mutableListClass) {
-                        v = fastn.webComponentVariable.mutableList(v);
-                    } else if (v instanceof fastn.recordInstanceClass) {
-                        v = fastn.webComponentVariable.record(v);
-                    } else {
-                        v = fastn.webComponentVariable.static(v);
-                    }
-                    return [k, v];
+                if (v instanceof fastn.mutableClass) {
+                    v = fastn.webComponentVariable.mutable(v);
+                } else if (v instanceof fastn.mutableListClass) {
+                    v = fastn.webComponentVariable.mutableList(v);
+                } else if (v instanceof fastn.recordInstanceClass) {
+                    v = fastn.webComponentVariable.record(v);
+                } else {
+                    v = fastn.webComponentVariable.static(v);
                 }
+                return [k, v];
+            }
             )
         );
     };
@@ -182,13 +182,12 @@ const ftd = (function() {
         }
 
         if (url instanceof fastn.mutableClass) url = url.get();
-
         method = method.trim().toUpperCase();
         let request_json = {};
 
         const init = {
             method,
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             json: null,
             redirect,
         };
@@ -245,9 +244,9 @@ const ftd = (function() {
                             if (Array.isArray(value)) {
                                 // django returns a list of strings
                                 value = value.join(" ");
-                                // also django does not append `-error`
-                                key = key + "-error";
                             }
+                            // also django does not append `-error`
+                            key = key + "-error";
                             key = fastn_module + "#" + key;
                             data[key] = value;
                         }
@@ -270,9 +269,9 @@ const ftd = (function() {
         return json;
     }
 
-    exports.navigate = function(url, request_data) {
+    exports.navigate = function (url, request_data) {
         let query_parameters = new URLSearchParams();
-        if(request_data instanceof fastn.recordInstanceClass) {
+        if (request_data instanceof fastn.recordInstanceClass) {
             // @ts-ignore
             for (let [header, value] of Object.entries(request_data.toObject())) {
                 let [key, val] = value.length === 2 ? value : [header, value];
@@ -290,7 +289,7 @@ const ftd = (function() {
 
     exports.toggle_dark_mode = function () {
         const is_dark_mode = exports.get(exports.dark_mode);
-        if(is_dark_mode) {
+        if (is_dark_mode) {
             enable_light_mode();
         } else {
             enable_dark_mode();
@@ -304,7 +303,7 @@ const ftd = (function() {
             }
             const packageNamePrefix = __fastn_package_name__ ? `${__fastn_package_name__}_` : "";
             const snakeCaseKey = fastn_utils.toSnakeCase(key);
-        
+
             return `${packageNamePrefix}${snakeCaseKey}`;
         },
         set(key, value) {
@@ -314,11 +313,11 @@ const ftd = (function() {
         },
         get(key) {
             key = this._get_key(key);
-            if(ssr) {
+            if (ssr) {
                 return;
             }
             const item = localStorage.getItem(key);
-            if(!item) {
+            if (!item) {
                 return;
             }
             try {
@@ -336,21 +335,21 @@ const ftd = (function() {
     }
 
     exports.on_load = listener => {
-        if(typeof listener !== 'function') {
+        if (typeof listener !== 'function') {
             throw new Error("listener must be a function");
         }
 
-        if(fastnLoaded) {
+        if (fastnLoaded) {
             listener();
             return;
         }
-        
+
         onLoadListeners.add(listener);
     };
 
     exports.emit_on_load = () => {
-        if(fastnLoaded) return;
-        
+        if (fastnLoaded) return;
+
         fastnLoaded = true;
         onLoadListeners.forEach(listener => listener());
     };
@@ -359,11 +358,11 @@ const ftd = (function() {
 
     function legacyNameToJS(s) {
         let name = s.toString();
-    
+
         if (name[0].charCodeAt(0) >= 48 && name[0].charCodeAt(0) <= 57) {
             name = '_' + name;
         }
-    
+
         return name
             .replaceAll('#', "__")
             .replaceAll('-', "_")
@@ -377,13 +376,13 @@ const ftd = (function() {
     function getDocNameAndRemaining(s) {
         let part1 = "";
         let patternToSplitAt = s;
-        
+
         const split1 = s.split('#');
         if (split1.length === 2) {
             part1 = split1[0] + '#';
             patternToSplitAt = split1[1];
         }
-    
+
         const split2 = patternToSplitAt.split('.');
         if (split2.length === 2) {
             return [part1 + split2[0], split2[1]];
@@ -394,39 +393,39 @@ const ftd = (function() {
 
     function isMutable(obj) {
         return obj instanceof fastn.mutableClass ||
-        obj instanceof fastn.mutableListClass ||
-        obj instanceof fastn.recordInstanceClass;
+            obj instanceof fastn.mutableListClass ||
+            obj instanceof fastn.recordInstanceClass;
     }
 
-    exports.set_value = function(variable, value) {
+    exports.set_value = function (variable, value) {
         const [var_name, remaining] = getDocNameAndRemaining(variable);
         let name = legacyNameToJS(var_name);
-        if(global[name] === undefined) {
+        if (global[name] === undefined) {
             console.log(`[ftd-legacy]: ${variable} is not in global map, ignoring`);
             return;
         }
         const mutable = global[name];
-        if(!isMutable(mutable)) {
+        if (!isMutable(mutable)) {
             console.log(`[ftd-legacy]: ${variable} is not a mutable, ignoring`);
             return;
         }
-        if(remaining) {
+        if (remaining) {
             mutable.get(remaining).set(value);
         } else {
             mutable.set(value);
         }
-    }    
+    }
 
-    exports.get_value = function(variable) {
+    exports.get_value = function (variable) {
         const [var_name, remaining] = getDocNameAndRemaining(variable);
         let name = legacyNameToJS(var_name);
-        if(global[name] === undefined) {
+        if (global[name] === undefined) {
             console.log(`[ftd-legacy]: ${variable} is not in global map, ignoring`);
             return;
         }
         const value = global[name];
-        if(isMutable(value)) {
-            if(remaining) {
+        if (isMutable(value)) {
+            if (remaining) {
                 return value.get(remaining);
             } else {
                 return value.get();
@@ -434,6 +433,17 @@ const ftd = (function() {
         } else {
             return value;
         }
+    }
+
+    // Language related functions ---------------------------------------------
+    exports.set_current_language = function (language) {
+        language = fastn_utils.getStaticValue(language);
+        fastn_utils.private.setCookie("fastn-lang", language);
+        location.reload();
+    }
+
+    exports.get_current_language = function () {
+        return fastn_utils.private.getCookie("fastn-lang");
     }
 
     return exports;

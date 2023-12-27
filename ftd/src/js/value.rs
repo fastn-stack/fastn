@@ -345,11 +345,18 @@ impl ftd::interpreter::Value {
             }
             ftd::interpreter::Value::OrType {
                 name,
-                variant,
                 value,
-                ..
+                full_variant,
+                variant,
             } => {
-                let (js_variant, has_value) = ftd_to_js_variant(name, variant);
+                let (js_variant, has_value) = ftd_to_js_variant(
+                    name,
+                    variant,
+                    full_variant,
+                    value,
+                    doc.name,
+                    value.line_number(),
+                );
                 if has_value {
                     return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                         variant: js_variant,
@@ -412,9 +419,18 @@ impl ftd::interpreter::Value {
     }
 }
 
-fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
+fn ftd_to_js_variant(
+    name: &str,
+    variant: &str,
+    full_variant: &str,
+    value: &ftd::interpreter::PropertyValue,
+    doc_id: &str,
+    line_number: usize,
+) -> (String, bool) {
     // returns (JSVariant, has_value)
-    let variant = variant.strip_prefix(format!("{}.", name).as_str()).unwrap();
+    let variant = variant
+        .strip_prefix(format!("{}.", name).as_str())
+        .unwrap_or(full_variant);
     match name {
         "ftd#resizing" => {
             let js_variant = resizing_variants(variant);
@@ -533,6 +549,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = object_fit_variants(variant);
             (format!("fastn_dom.Fit.{}", js_variant), false)
         }
+        "ftd#image-fetch-priority" => {
+            let js_variant = object_fetch_priority_variants(variant);
+            (format!("fastn_dom.FetchPriority.{}", js_variant), false)
+        }
         "ftd#backdrop-filter" => {
             let js_variant = backdrop_filter_variants(variant);
             (format!("fastn_dom.BackdropFilter.{}", js_variant), true)
@@ -556,7 +576,19 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
                 js_variant.1,
             )
         }
-        t => todo!("{} {}", t, variant),
+        t => {
+            if let Ok(value) = value.value(doc_id, line_number) {
+                return match value {
+                    ftd::interpreter::Value::Integer { value } => (value.to_string(), false),
+                    ftd::interpreter::Value::Decimal { value } => (value.to_string(), false),
+                    ftd::interpreter::Value::String { text } => (format!("\"{}\"", text), false),
+                    ftd::interpreter::Value::Boolean { value } => (value.to_string(), false),
+                    _ => todo!("{} {}", t, variant),
+                };
+            }
+
+            todo!("{} {}", t, variant)
+        }
     }
 }
 
@@ -591,6 +623,9 @@ fn length_variants(name: &str) -> &'static str {
         "vw" => "Vw",
         "vmin" => "Vmin",
         "vmax" => "Vmax",
+        "dvh" => "Dvh",
+        "lvh" => "Lvh",
+        "svh" => "Svh",
         "calc" => "Calc",
         "responsive" => "Responsive",
         t => todo!("invalid length variant {}", t),
@@ -902,6 +937,15 @@ fn object_fit_variants(name: &str) -> &'static str {
         "cover" => "cover",
         "scale-down" => "scaleDown",
         t => todo!("invalid object fit variant {}", t),
+    }
+}
+
+fn object_fetch_priority_variants(name: &str) -> &'static str {
+    match name {
+        "auto" => "auto",
+        "high" => "high",
+        "low" => "low",
+        t => todo!("invalid object fetchPriority variant {}", t),
     }
 }
 

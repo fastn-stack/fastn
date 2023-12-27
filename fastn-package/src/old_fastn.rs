@@ -75,8 +75,6 @@ pub struct PackageTemp {
     pub translation_of: Option<String>,
     #[serde(rename = "translation")]
     pub translations: Vec<String>,
-    #[serde(rename = "language")]
-    pub language: Option<String>,
     pub about: Option<String>,
     pub zip: Option<String>,
     #[serde(rename = "download-base-url")]
@@ -85,14 +83,102 @@ pub struct PackageTemp {
     pub canonical_url: Option<String>,
     #[serde(rename = "inherit-auto-imports-from-original")]
     pub import_auto_imports_from_original: bool,
-    #[serde(rename = "favicon")]
     pub favicon: Option<String>,
-    #[serde(rename = "endpoint")]
     pub endpoint: Option<String>,
-    #[serde(rename = "backend")]
     pub backend: bool,
     #[serde(rename = "backend-headers")]
     pub backend_headers: Option<Vec<BackendHeader>>,
-    #[serde(rename = "icon")]
     pub icon: Option<ftd::ImageSrc>,
+    // This will contain the module name through which this package can
+    // be accessed when considered as a system's package
+    pub system: Option<String>,
+    #[serde(rename = "system-is-confidential")]
+    pub system_is_confidential: Option<bool>,
+    #[serde(rename = "default-language")]
+    pub default_language: Option<String>,
+    pub lang: Option<String>,
+    #[serde(rename = "translation-en")]
+    pub translation_en: Option<String>,
+    #[serde(rename = "translation-hi")]
+    pub translation_hi: Option<String>,
+    #[serde(rename = "translation-zh")]
+    pub translation_zh: Option<String>,
+    #[serde(rename = "translation-es")]
+    pub translation_es: Option<String>,
+    #[serde(rename = "translation-ar")]
+    pub translation_ar: Option<String>,
+    #[serde(rename = "translation-pt")]
+    pub translation_pt: Option<String>,
+    #[serde(rename = "translation-ru")]
+    pub translation_ru: Option<String>,
+    #[serde(rename = "translation-fr")]
+    pub translation_fr: Option<String>,
+    #[serde(rename = "translation-de")]
+    pub translation_de: Option<String>,
+    #[serde(rename = "translation-ja")]
+    pub translation_ja: Option<String>,
+    #[serde(rename = "translation-bn")]
+    pub translation_bn: Option<String>,
+    #[serde(rename = "translation-ur")]
+    pub translation_ur: Option<String>,
+    #[serde(rename = "translation-id")]
+    pub translation_id: Option<String>,
+    #[serde(rename = "translation-tr")]
+    pub translation_tr: Option<String>,
+    #[serde(rename = "translation-vi")]
+    pub translation_vi: Option<String>,
+    #[serde(rename = "translation-it")]
+    pub translation_it: Option<String>,
+    #[serde(rename = "translation-pl")]
+    pub translation_pl: Option<String>,
+    #[serde(rename = "translation-th")]
+    pub translation_th: Option<String>,
+    #[serde(rename = "translation-nl")]
+    pub translation_nl: Option<String>,
+    #[serde(rename = "translation-ko")]
+    pub translation_ko: Option<String>,
+    // #[serde(flatten, deserialize_with = "deserialize_languages")]
+    // pub other_languages: Option<Vec<Lang>>,
 }
+
+// #[derive(serde::Deserialize, Debug, Clone)]
+// pub struct Lang {
+//     pub lang: String,
+//     pub module: String,
+// }
+
+// fn deserialize_languages<'de, D>(deserializer: D) -> Result<Option<Vec<Lang>>, D::Error>
+// where
+//     D: serde::de::Deserializer<'de>,
+// {
+//     struct LanguageDataVisitor;
+
+//     impl<'de> serde::de::Visitor<'de> for LanguageDataVisitor {
+//         type Value = Option<Vec<Lang>>;
+
+//         fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+//             formatter.write_str("a map with language properties")
+//         }
+
+//         fn visit_map<M>(self, mut access: M) -> Result<Self::Value, M::Error>
+//         where
+//             M: serde::de::MapAccess<'de>,
+//         {
+//             let mut languages: Vec<Lang> = vec![];
+
+//             while let Some((key, value)) = access.next_entry::<String, String>()? {
+//                 dbg!(&key);
+//                 if dbg!(key.starts_with("lang-")) {
+//                     languages.push(Lang {
+//                         lang: key.trim().trim_start_matches("lang-").to_string(),
+//                         module: value.trim().to_string(),
+//                     });
+//                 }
+//             }
+
+//             Ok(if languages.is_empty() { None } else { Some(languages) })
+//         }
+//     }
+
+//     deserializer.deserialize_map(LanguageDataVisitor)
+// }

@@ -269,6 +269,10 @@ impl Kind {
         matches!(self, Kind::OrType { .. })
     }
 
+    pub fn is_or_type_with_variant(&self, or_type_name: &str, variant_name: &str) -> bool {
+        matches!(self, Kind::OrType { name, variant, .. } if name.eq(or_type_name) && variant.is_some() && variant.as_ref().unwrap().eq(variant_name))
+    }
+
     pub fn is_string(&self) -> bool {
         matches!(self, Kind::String { .. })
     }
@@ -325,6 +329,13 @@ impl Kind {
             _ => None,
         }
     }
+
+    pub fn get_or_type_name(&self) -> Option<&str> {
+        match self {
+            ftd::interpreter::Kind::OrType { ref name, .. } => Some(name),
+            _ => None,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -366,6 +377,7 @@ impl KindData {
         match modifier {
             ftd::ast::VariableModifier::Optional => self.optional(),
             ftd::ast::VariableModifier::List => self.list(),
+            ftd::ast::VariableModifier::Constant => self.constant(),
         }
     }
 
@@ -485,6 +497,16 @@ impl KindData {
     fn list(self) -> KindData {
         KindData {
             kind: Kind::List {
+                kind: Box::new(self.kind),
+            },
+            caption: self.caption,
+            body: self.body,
+        }
+    }
+
+    fn constant(self) -> KindData {
+        KindData {
+            kind: Kind::Constant {
                 kind: Box::new(self.kind),
             },
             caption: self.caption,

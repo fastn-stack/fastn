@@ -6,6 +6,8 @@ pub(crate) mod figma_typography_tokens;
 pub(crate) mod get_data;
 pub(crate) mod google_sheets;
 pub(crate) mod http;
+pub(crate) mod lang;
+pub(crate) mod lang_details;
 pub(crate) mod package_query;
 pub(crate) mod package_tree;
 pub(crate) mod pg;

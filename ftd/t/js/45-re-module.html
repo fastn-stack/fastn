@@ -189,9 +189,9 @@ let foo__c_hello = function (parent, inherited, args)
   }
 }
 global["foo__c_hello"] = foo__c_hello;
-let _01_basic__print = _01_basic_module__print;
+let _01_basic__print = global["_01_basic_module__print"];
 global["_01_basic__print"] = _01_basic__print;
-let _45_re_module__print = _01_basic_module__print;
+let _45_re_module__print = global["_01_basic_module__print"];
 global["_45_re_module__print"] = _45_re_module__print;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";

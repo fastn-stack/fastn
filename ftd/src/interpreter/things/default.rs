@@ -614,6 +614,86 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             })
         ),
         (
+            "ftd#decrement".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#decrement".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "a".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::integer(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "a = a - 1".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+                external_implementation: false
+            })
+        ),
+        (
+            "ftd#decrement-by".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#decrement-by".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "a".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::integer(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "v".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::integer(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "a = a - v".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+                external_implementation: false
+            })
+        ),
+        (
             "ftd#enable-light-mode".to_string(),
             ftd::interpreter::Thing::Function(ftd::interpreter::Function {
                 name: "ftd#enable-light-mode".to_string(),
@@ -2188,6 +2268,45 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
+             ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY.to_string(),
+             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                 name: ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY.to_string(),
+                 variants: vec![
+                     ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                         ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_AUTO,
+                         ftd::interpreter::Kind::string().into_kind_data(),
+                         false,
+                         Some(
+                              ftd::interpreter::Value::new_string("auto")
+                                  .into_property_value(false, 0),
+                         ),
+                                0,
+                         )),
+                     ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                         ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_LOW,
+                         ftd::interpreter::Kind::string().into_kind_data(),
+                         false,
+                         Some(
+                              ftd::interpreter::Value::new_string("low")
+                                  .into_property_value(false, 0),
+                         ),
+                                0,
+                         )),
+                     ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                         ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_HIGH,
+                         ftd::interpreter::Kind::string().into_kind_data(),
+                         false,
+                         Some(
+                              ftd::interpreter::Value::new_string("high")
+                                  .into_property_value(false, 0),
+                         ),
+                                0,
+                            )),
+                        ],
+                        line_number: 0,
+                    }),
+        ),
+        (
             ftd::interpreter::FTD_ANCHOR.to_string(),
             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
                 name: ftd::interpreter::FTD_ANCHOR.to_string(),
@@ -3025,6 +3144,35 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         None,
                         0,
                     )),
+
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LENGTH_DVH,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LENGTH_LVH,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LENGTH_SVH,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+
                     ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
                         ftd::interpreter::FTD_LENGTH_EM,
                         ftd::interpreter::Kind::decimal()
@@ -10133,6 +10281,12 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
                 ),
                 ftd::interpreter::Argument::default(
                     "alt",
+                    ftd::interpreter::Kind::string()
+                        .into_kind_data()
+                        .into_optional(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "fetch-priority",
                     ftd::interpreter::Kind::string()
                         .into_kind_data()
                         .into_optional(),

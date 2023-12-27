@@ -1,0 +1,37 @@
+-- or-type button-type:
+
+-- constant integer small: 1
+
+-- constant integer medium: 2
+
+-- constant integer large: 3
+
+-- end: button-type
+
+
+-- button-type b: small
+
+;; A variable with the same name as a variant of a button type
+;; if we comment this out, the value of "small" will be inferred from the right-hand side or-type
+-- button-type small: small
+
+;; Since the specificity of a variable is higher, the value of the variable will be used
+;; and smol will be printed
+-- ftd.text: !Smol
+text if { b == small }: Smol
+
+-- ftd.text: not medium
+if: { b != medium }
+
+-- fancy-button: $b
+
+-- component fancy-button:
+caption button-type bt:
+
+-- ftd.text: !Smol
+text if { fancy-button.bt == small }: Smol
+
+-- end: fancy-button
+
+
+-- string msg: Super secret message

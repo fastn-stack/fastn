@@ -150,6 +150,31 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         .await;
     }
 
+    if let Some(test) = matches.subcommand_matches("test") {
+        let edition = test.value_of_("edition").map(ToString::to_string);
+        let external_js = test.values_of_("external-js");
+        let inline_js = test.values_of_("js");
+        let external_css = test.values_of_("external-css");
+        let inline_css = test.values_of_("css");
+
+        config = config
+            .add_edition(edition)?
+            .add_external_js(external_js)
+            .add_inline_js(inline_js)
+            .add_external_css(external_css)
+            .add_inline_css(inline_css)
+            .set_test_command_running();
+
+        return fastn_core::test(
+            &config,
+            test.value_of_("file"), // TODO: handle more than one files
+            test.value_of_("base").unwrap_or("/"),
+            test.get_flag("headless"),
+            test.get_flag("script"),
+        )
+        .await;
+    }
+
     if let Some(build) = matches.subcommand_matches("build") {
         if matches.get_flag("verbose") {
             println!("{}", fastn_core::debug_env_vars());
@@ -346,6 +371,23 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
                     .action(clap::ArgAction::Append))
                 .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
+        )
+        .subcommand(
+            clap::Command::new("test")
+                .about("Run the test files in `_tests` folder")
+                .arg(clap::arg!(file: [FILE]... "The file to build (if specified only these are built, else entire package is built)"))
+                .arg(clap::arg!(-b --base [BASE] "The base path.").default_value("/"))
+                .arg(clap::arg!(--"headless" "Run the test in headless mode"))
+                .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
+                    .action(clap::ArgAction::Append))
+                .arg(clap::arg!(--"js" <URL> "Script text added in ftd files")
+                    .action(clap::ArgAction::Append))
+                .arg(clap::arg!(--"external-css" <URL> "CSS added in ftd files")
+                    .action(clap::ArgAction::Append))
+                .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
+                    .action(clap::ArgAction::Append))
+                .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
+                .arg(clap::arg!(--"script" "Generates a script file (for debugging purposes)"))
         )
         .subcommand(
             clap::Command::new("mark-resolved")

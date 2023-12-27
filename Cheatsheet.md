@@ -534,6 +534,9 @@ string dark: $light
 -- integer vw:
 -- integer vmin:
 -- integer vmax:
+-- decimal dvh;
+-- decimal lvh;
+-- decimal svh;
 -- decimal em:
 -- decimal rem:
 -- ftd.responsive-length responsive:

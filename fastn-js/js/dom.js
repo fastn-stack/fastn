@@ -115,6 +115,7 @@ fastn_dom.propertyMap = {
     "-webkit-mask-repeat": "wmre",
     "mask-position": "mp",
     "-webkit-mask-position": "wmp",
+    "fetch-priority": "ftp",
 };
 
 // dynamic-class-css.md
@@ -302,6 +303,7 @@ fastn_dom.PropertyKind = {
     BackdropFilter: 119,
     Mask: 120,
     TextInputValue: 121,
+    FetchPriority: 122,
 };
 
 
@@ -409,6 +411,12 @@ fastn_dom.Fit = {
     contain: "contain",
     cover: "cover",
     scaleDown: "scale-down",
+}
+
+fastn_dom.FetchPriority = {
+    auto: "auto",
+    high: "high",
+    low:  "low",
 }
 
 fastn_dom.Overflow = {
@@ -649,6 +657,26 @@ fastn_dom.Length = {
         }
         return `${value}vw`;
     },
+    Dvh: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}dvh`})
+        }
+        return `${value}dvh`;
+    },
+    Lvh: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}lvh`})
+        }
+         return `${value}lvh`;
+    },
+    Svh: (value) => {
+        if (value instanceof fastn.mutableClass) {
+             return fastn.formula([value], function () { return `${value.get()}svh`})
+        }
+        return `${value}svh`;
+    },
+
+
     Vmin: (value) => {
         if (value instanceof fastn.mutableClass) {
             return fastn.formula([value], function () { return `${value.get()}vmin`})
@@ -1175,16 +1203,30 @@ class Node2 {
             return;
         }
 
-        let direction = fastn_utils.getStaticValue(value.get("direction"));
+        const closure = fastn.closure(() => {
+            let direction = fastn_utils.getStaticValue(value.get("direction"));
 
-        const [lightGradientString, darkGradientString] = this.getLinearGradientString(value);
+            const [lightGradientString, darkGradientString] = this.getLinearGradientString(value);
 
-        if (lightGradientString === darkGradientString) {
-            this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
-        } else {
-            let lightClass = this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`,true);
-            this.attachCss("background-image", `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
-        }
+            if (lightGradientString === darkGradientString) {
+                this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
+            } else {
+                let lightClass = this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`,true);
+                this.attachCss("background-image", `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
+            }
+        }).addNodeProperty(this, null, inherited);
+
+        const colorsList = value.get("colors").get().getList();
+
+        colorsList
+        .forEach(({ item }) => {
+            const color = item.get("color");
+
+            [color.get("light"), color.get("dark")].forEach(variant => {
+                variant.addClosure(closure);
+                this.#mutables.push(variant);
+            });
+        });
     }
     attachBackgroundImageCss(value) {
         if (fastn_utils.isNull(value)) {
@@ -1345,7 +1387,7 @@ class Node2 {
         }
     }
     attachExternalCss(css) {
-        if (doubleBuffering) {
+        if(!ssr) {
             let css_tag = document.createElement('link');
             css_tag.rel = 'stylesheet';
             css_tag.type = 'text/css';
@@ -1359,7 +1401,7 @@ class Node2 {
         }
     }
     attachExternalJs(js) {
-        if (doubleBuffering) {
+        if(!ssr) {
             let js_tag = document.createElement('script');
             js_tag.src = js;
 
@@ -1375,32 +1417,48 @@ class Node2 {
             this.attachCss(property, value);
             return;
         }
-        let lightValue = fastn_utils.getStaticValue(value.get("light"));
-        let darkValue = fastn_utils.getStaticValue(value.get("dark"));
-        if (lightValue === darkValue) {
-            this.attachCss(property, lightValue, false);
-        } else {
-            let lightClass = this.attachCss(property, lightValue, true);
-            this.attachCss(property, darkValue, true, `body.dark .${lightClass}`);
-            if (visited) {
-                this.attachCss(property, lightValue, true, `.${lightClass}:visited`);
-                this.attachCss(property, darkValue, true, `body.dark  .${lightClass}:visited`);
+        value = value instanceof fastn.mutableClass ? value.get() : value;
+        
+        const lightValue = value.get("light");
+        const darkValue = value.get("dark");
+
+        const closure = fastn.closure(() => {
+            let lightValueStatic = fastn_utils.getStaticValue(lightValue);
+            let darkValueStatic = fastn_utils.getStaticValue(darkValue);
+            
+            if (lightValueStatic === darkValueStatic) {
+                this.attachCss(property, lightValueStatic, false);
+            } else {
+                let lightClass = this.attachCss(property, lightValueStatic, true);
+                this.attachCss(property, darkValueStatic, true, `body.dark .${lightClass}`);
+                if (visited) {
+                    this.attachCss(property, lightValueStatic, true, `.${lightClass}:visited`);
+                    this.attachCss(property, darkValueStatic, true, `body.dark  .${lightClass}:visited`);
+                }
             }
-        }
+        }).addNodeProperty(this, null, inherited);
+
+        [lightValue, darkValue].forEach(modeValue => {
+            modeValue.addClosure(closure);
+            this.#mutables.push(modeValue);
+        });
     }
     attachRoleCss(value) {
         if (fastn_utils.isNull(value)) {
             this.attachCss('role', value);
             return;
         }
-        let desktopValue = fastn_utils.getStaticValue(value.get("desktop"));
-        let mobileValue = fastn_utils.getStaticValue(value.get("mobile"));
-        if (fastn_utils.sameResponsiveRole(desktopValue, mobileValue)) {
-            this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
-        } else {
-            let desktopClass = this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
-            this.attachCss("role", fastn_utils.getRoleValues(mobileValue), true, `body.mobile .${desktopClass}`);
-        }
+        value.addClosure(fastn.closure(() => {
+            let desktopValue = value.get("desktop");
+            let mobileValue = value.get("mobile");
+            if (fastn_utils.sameResponsiveRole(desktopValue, mobileValue)) {
+                this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
+            } else {
+                let desktopClass = this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
+                this.attachCss("role", fastn_utils.getRoleValues(mobileValue), true, `body.mobile .${desktopClass}`);
+            }
+        }).addNodeProperty(this, null, inherited));
+        this.#mutables.push(value);
     }
     attachTextStyles(styles) {
         if (fastn_utils.isNull(styles)) {
@@ -1812,7 +1870,7 @@ class Node2 {
                     this.attachCss("justify-content", staticValue[1]);
                     break;
                 case fastn_dom.Spacing.Fixed()[0]:
-                    this.attachCss("gap", staticValue[1]);
+                    this.attachCss("gap", fastn_utils.getStaticValue(staticValue[1]));
                     break;
             }
 
@@ -2073,6 +2131,8 @@ class Node2 {
             this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Fit) {
             this.attachCss("object-fit", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.FetchPriority) {
+            this.attachAttribute("fetchpriority", staticValue);
         } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
             if (fastn_utils.isNull(staticValue)) {
                 this.attachAttribute("src", staticValue);

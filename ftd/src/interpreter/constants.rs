@@ -17,6 +17,9 @@ pub const FTD_LENGTH_VH: &str = "ftd#length.vh";
 pub const FTD_LENGTH_VW: &str = "ftd#length.vw";
 pub const FTD_LENGTH_VMIN: &str = "ftd#length.vmin";
 pub const FTD_LENGTH_VMAX: &str = "ftd#length.vmax";
+pub const FTD_LENGTH_DVH: &str = "ftd#length.dvh";
+pub const FTD_LENGTH_LVH: &str = "ftd#length.lvh";
+pub const FTD_LENGTH_SVH: &str = "ftd#length.svh";
 pub const FTD_LENGTH_EM: &str = "ftd#length.em";
 pub const FTD_LENGTH_REM: &str = "ftd#length.rem";
 pub const FTD_LENGTH_RESPONSIVE: &str = "ftd#length.responsive";
@@ -123,6 +126,11 @@ pub const FTD_IMAGE_FIT_COVER: &str = "ftd#image-fit.cover";
 pub const FTD_IMAGE_FIT_CONTAIN: &str = "ftd#image-fit.contain";
 pub const FTD_IMAGE_FIT_FILL: &str = "ftd#image-fit.fill";
 pub const FTD_IMAGE_FIT_SCALE_DOWN: &str = "ftd#image-fit.scale-down";
+
+pub const FTD_IMAGE_FETCH_PRIORITY: &str = "ftd#image-fetch-priority";
+pub const FTD_IMAGE_FETCH_PRIORITY_AUTO: &str = "ftd#image-fetch-priority.auto";
+pub const FTD_IMAGE_FETCH_PRIORITY_HIGH: &str = "ftd#image-fetch-priority.high";
+pub const FTD_IMAGE_FETCH_PRIORITY_LOW: &str = "ftd#image-fetch-priority.low";
 
 pub const FTD_VIDEO_SRC: &str = "ftd#video-src";
 pub const FTD_VIDEO_SRC_LIGHT: &str = "ftd#video-src.light";
