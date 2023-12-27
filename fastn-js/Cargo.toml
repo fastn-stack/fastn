@@ -14,6 +14,7 @@ itertools.workspace = true
 indoc.workspace = true
 fastn-grammar.workspace = true
 prettify-js.workspace = true
+camino.workspace = true
 
 [target.'cfg(not(windows))'.dependencies]
 quick-js.workspace = true

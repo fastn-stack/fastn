@@ -88,6 +88,9 @@ pub enum Error {
 
     #[error("TokioMPSCError2: {}", _0)]
     TokioMPSCError2(#[from] tokio::sync::mpsc::error::SendError<usize>),
+
+    #[error("AssertError: {message}")]
+    AssertError { message: String },
 }
 
 impl From<std::convert::Infallible> for Error {
