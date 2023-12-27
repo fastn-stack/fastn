@@ -1387,25 +1387,29 @@ class Node2 {
         }
     }
     attachExternalCss(css) {
-        let css_tag = document.createElement('link');
-        css_tag.rel = 'stylesheet';
-        css_tag.type = 'text/css';
-        css_tag.href = css;
+        if(!ssr) {
+            let css_tag = document.createElement('link');
+            css_tag.rel = 'stylesheet';
+            css_tag.type = 'text/css';
+            css_tag.href = css;
 
-        let head = document.head || document.getElementsByTagName("head")[0];
-        if (!fastn_dom.externalCss.has(css)){
-            head.appendChild(css_tag);
-            fastn_dom.externalCss.add(css);
+            let head = document.head || document.getElementsByTagName("head")[0];
+            if (!fastn_dom.externalCss.has(css)){
+                head.appendChild(css_tag);
+                fastn_dom.externalCss.add(css);
+            }
         }
     }
     attachExternalJs(js) {
-        let js_tag = document.createElement('script');
-        js_tag.src = js;
+        if(!ssr) {
+            let js_tag = document.createElement('script');
+            js_tag.src = js;
 
-        let head = document.head || document.getElementsByTagName("head")[0];
-        if (!fastn_dom.externalJs.has(js)){
-            head.appendChild(js_tag);
-            fastn_dom.externalCss.add(js);
+            let head = document.head || document.getElementsByTagName("head")[0];
+            if (!fastn_dom.externalJs.has(js)){
+                head.appendChild(js_tag);
+                fastn_dom.externalCss.add(js);
+            }
         }
     }
     attachColorCss(property, value, visited) {
