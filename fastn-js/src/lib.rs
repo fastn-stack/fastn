@@ -37,11 +37,24 @@ pub use property::{
     ConditionalValue, Formula, FormulaType, PropertyKind, SetProperty, SetPropertyValue, Value,
 };
 pub use record::RecordInstance;
-pub use ssr::{run_test, ssr, ssr_raw_string_without_test, ssr_str, ssr_with_js_string};
+pub use ssr::{
+    generate_script_file, run_test, ssr, ssr_raw_string_without_test, ssr_str, ssr_with_js_string,
+};
 pub use static_variable::{static_integer, static_string, StaticVariable};
 pub use to_js::to_js;
 pub use udf::{udf_with_arguments, UDF};
 pub use udf_statement::UDFStatement;
+
+pub fn fastn_assertion_headers(http_status_code: u16, http_location: &str) -> String {
+    format!(
+        indoc::indoc! {"
+            fastn.http_status = {http_status};
+            fastn.http_location = \"{http_location}\";
+        "},
+        http_status = http_status_code,
+        http_location = http_location
+    )
+}
 
 pub fn fastn_test_js() -> &'static str {
     include_str!("../js/fastn_test.js")

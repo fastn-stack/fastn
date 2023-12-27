@@ -1708,7 +1708,7 @@ dependencies = [
 
 [[package]]
 name = "fastn"
-version = "0.4.27"
+version = "0.4.28"
 dependencies = [
  "clap",
  "colored",
@@ -1830,6 +1830,7 @@ dependencies = [
 name = "fastn-js"
 version = "0.1.0"
 dependencies = [
+ "camino",
  "fastn-grammar",
  "indoc 2.0.4",
  "itertools 0.12.0",

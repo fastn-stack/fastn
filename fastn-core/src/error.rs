@@ -100,6 +100,9 @@ pub enum Error {
 
     #[error("DatabaseQueryError: {}", _0)]
     DatabaseQueryError(#[from] diesel::result::Error),
+
+    #[error("AssertError: {message}")]
+    AssertError { message: String },
 }
 
 impl From<std::convert::Infallible> for Error {

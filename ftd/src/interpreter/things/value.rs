@@ -1997,18 +1997,43 @@ impl Value {
         }
     }
 
+    pub fn to_list(
+        &self,
+        doc: &ftd::interpreter::TDoc<'_>,
+        _use_quotes: bool,
+    ) -> ftd::interpreter::Result<Option<Vec<ftd::interpreter::Value>>> {
+        match self {
+            Value::List { data, .. } => {
+                let mut values = vec![];
+                for d in data.iter() {
+                    let resolved_value = d.clone().resolve(doc, d.line_number())?;
+                    values.push(resolved_value);
+                }
+                Ok(Some(values))
+            }
+            _ => Ok(None),
+        }
+    }
+
     pub fn to_string(
         &self,
         doc: &ftd::interpreter::TDoc<'_>,
+        use_quotes: bool,
     ) -> ftd::interpreter::Result<Option<String>> {
         match self {
-            Value::String { text } => Ok(Some(format!("\"{}\"", text))),
+            Value::String { text } => {
+                if use_quotes {
+                    Ok(Some(format!("\"{}\"", text)))
+                } else {
+                    Ok(Some(text.to_string()))
+                }
+            }
             Value::Integer { value } => Ok(Some(value.to_string())),
             Value::Decimal { value } => Ok(Some(value.to_string())),
             Value::Boolean { value } => Ok(Some(value.to_string())),
             Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
-                    data.to_string(doc)
+                    data.to_string(doc, use_quotes)
                 } else {
                     Ok(Some("".to_string()))
                 }
