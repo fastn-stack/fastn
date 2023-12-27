@@ -256,7 +256,7 @@ async fn get_post_response_for_id(
     request.set_method("post");
     request.set_body(post_body);
     request.insert_header(reqwest::header::CONTENT_TYPE, "application/json");
-    request.set_cookies(&saved_cookies);
+    request.set_cookies(saved_cookies);
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
     update_cookies(saved_cookies, &response);
 
@@ -376,6 +376,7 @@ async fn execute_get_instruction(
     .await
 }
 
+#[allow(clippy::too_many_arguments)]
 async fn get_js_for_id(
     id: &str,
     title: &str,
@@ -396,7 +397,7 @@ async fn get_js_for_id(
         request.set_query_string(query_string.as_str());
     }
     request.set_method("get");
-    request.set_cookies(&saved_cookies);
+    request.set_cookies(saved_cookies);
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
     update_cookies(saved_cookies, &response);
 
@@ -606,5 +607,5 @@ pub fn get_response_location(
             fastn_core::generic_error("Failed to convert 'Location' header to string".to_string())
         };
     }
-    return Ok(None);
+    Ok(None)
 }

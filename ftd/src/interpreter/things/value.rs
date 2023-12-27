@@ -2000,7 +2000,7 @@ impl Value {
     pub fn to_list(
         &self,
         doc: &ftd::interpreter::TDoc<'_>,
-        use_quotes: bool,
+        _use_quotes: bool,
     ) -> ftd::interpreter::Result<Option<Vec<ftd::interpreter::Value>>> {
         match self {
             Value::List { data, .. } => {
