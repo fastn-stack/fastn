@@ -2277,7 +2277,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                          ftd::interpreter::Kind::string().into_kind_data(),
                          false,
                          Some(
-                              ftd::interpreter::Value::new_string("auto")
+                              ftd::interpreter::Value::new_string(
+                                 crate::interpreter::FTD_IMAGE_FETCH_PRIORITY_AUTO,
+                              )
                                   .into_property_value(false, 0),
                          ),
                                 0,
@@ -2287,7 +2289,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                          ftd::interpreter::Kind::string().into_kind_data(),
                          false,
                          Some(
-                              ftd::interpreter::Value::new_string("low")
+                              ftd::interpreter::Value::new_string(
+                                  crate::interpreter::FTD_IMAGE_FETCH_PRIORITY_LOW,
+                              )
                                   .into_property_value(false, 0),
                          ),
                                 0,
@@ -2297,7 +2301,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                          ftd::interpreter::Kind::string().into_kind_data(),
                          false,
                          Some(
-                              ftd::interpreter::Value::new_string("high")
+                              ftd::interpreter::Value::new_string(
+                                 crate::interpreter::FTD_IMAGE_FETCH_PRIORITY_HIGH,
+                              )
                                   .into_property_value(false, 0),
                          ),
                                 0,
