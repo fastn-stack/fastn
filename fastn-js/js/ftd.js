@@ -162,17 +162,37 @@ const ftd = (function() {
     exports.clear = exports.clear_all;
     exports.set_list = function (list, value) { list.set(value) }
 
-    /// Sample usage: ftd.http("/api/v1/...", "POST", ("a", 1), ("b", 2))
-    exports.http = function (url, method, fastn_module, ...body) {
+    exports.http = function (url, opts, ...body) {
+        if (!opts instanceof fastn.recordInstanceClass) {
+            console.info(`opts must be a record instance:
+                record ftd.http-opts:
+                string method: GET
+                string redirect: manual
+                string fastn-module:
+            `);
+            throw new Error("invalid opts");
+        }
+
+        let method = opts.get("method").get();
+        let fastn_module = opts.get("fastn_module").get();
+        let redirect = opts.get("redirect").get();
+
+        if (!["manual", "follow", "error"].includes(redirect)) {
+            throw new Error(`redirect must be one of "manual", "follow", "error"`);
+        }
+
         if (url instanceof fastn.mutableClass) url = url.get();
-        if (method instanceof fastn.mutableClass) method = method.get();
+
         method = method.trim().toUpperCase();
         let request_json = {};
+
         const init = {
             method,
             headers: {'Content-Type': 'application/json'},
             json: null,
+            redirect,
         };
+
         if (body && method !== 'GET') {
             if (body[0] instanceof fastn.recordInstanceClass) {
                 if (body.length !== 1) {
@@ -199,6 +219,11 @@ const ftd = (function() {
         let json;
         fetch(url, init)
             .then(res => {
+                if (res.redirected) {
+                    window.location.href = res.url;
+                    return;
+                }
+
                 if (!res.ok) {
                     return new Error("[http]: Request failed", res)
                 }
