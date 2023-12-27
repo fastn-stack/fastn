@@ -19,7 +19,7 @@
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __jc-4 __ali-5"><a data-id="4" href="https://www.fastn.com" class="__m-6">This is a link</a><img data-id="5" src="https://picsum.photos/200/300"></img></div><div data-id="6" class="ft_column __w-7 __jc-8 __ali-9"><a data-id="7" href="https://www.fastn.com" rel="nofollow sponsored">No follow link</a></div><div data-id="8" class="ft_column __w-10 __jc-11 __ali-12"><a data-id="9" href="https://www.fastn.com" target="_blank" class="__m-13">This is a link (will open in new tab)</a></div><div data-id="10" class="ft_column __w-14 __mt-15 __mb-16"><input data-id="11" type="checkbox" checked></input><input data-id="12" type="checkbox" disabled></input></div><div data-id="13" class="ft_column __w-17 __mt-18 __mb-19"><input data-id="14" placeholder="Enter some text"></input><textarea data-id="15" placeholder="Multiline input"></textarea><input data-id="16" type="password"></input><input data-id="17" placeholder="This would be disabled" disabled></input><input data-id="18" value="This is default text"></input><input data-id="19" placeholder="Max input length 10" maxlength="10"></input></div><iframe data-id="20" allowfullscreen loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik"></iframe><pre data-id="21" class="language-ftd fastn-theme-dark"><code data-id="22" class="language-ftd fastn-theme-dark">-- ftd.text: Hello World
-</code></pre></div></body><style id="styles">
+</code></pre><div data-id="23">Fetch Priority = Auto</div><img data-id="24" src="https://picsum.photos/536/354" fetchpriority="auto"></img><div data-id="25">Fetch Priority = low</div><img data-id="26" src="https://picsum.photos/536/354" fetchpriority="low"></img><div data-id="27">Fetch Priority = high</div><img data-id="28" src="https://picsum.photos/536/354" fetchpriority="high"></img></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -138,6 +138,30 @@
     parenti6.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
     parenti6.setProperty(fastn_dom.PropertyKind.CodeTheme, "fastn-theme.dark", inherited);
     parenti6.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
+    let parenti7 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti7.setProperty(fastn_dom.PropertyKind.StringValue, "Fetch Priority = Auto", inherited);
+    let parenti8 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Image);
+    parenti8.setProperty(fastn_dom.PropertyKind.ImageSrc, fastn.recordInstance({
+      dark: "https://picsum.photos/536/354",
+      light: "https://picsum.photos/536/354"
+    }), inherited);
+    parenti8.setProperty(fastn_dom.PropertyKind.FetchPriority, "auto", inherited);
+    let parenti9 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti9.setProperty(fastn_dom.PropertyKind.StringValue, "Fetch Priority = low", inherited);
+    let parenti10 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Image);
+    parenti10.setProperty(fastn_dom.PropertyKind.ImageSrc, fastn.recordInstance({
+      dark: "https://picsum.photos/536/354",
+      light: "https://picsum.photos/536/354"
+    }), inherited);
+    parenti10.setProperty(fastn_dom.PropertyKind.FetchPriority, "low", inherited);
+    let parenti11 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti11.setProperty(fastn_dom.PropertyKind.StringValue, "Fetch Priority = high", inherited);
+    let parenti12 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Image);
+    parenti12.setProperty(fastn_dom.PropertyKind.ImageSrc, fastn.recordInstance({
+      dark: "https://picsum.photos/536/354",
+      light: "https://picsum.photos/536/354"
+    }), inherited);
+    parenti12.setProperty(fastn_dom.PropertyKind.FetchPriority, "high", inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

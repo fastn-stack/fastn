@@ -470,7 +470,6 @@ let fastn_utils = {
             return lowercased;
         }).join('');
     },
-
     escapeHtmlInCode(str) {
         return str.replace(/[<]/g, "&lt;");
     },

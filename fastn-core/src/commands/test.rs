@@ -124,13 +124,13 @@ async fn execute_get_instruction(
 ) -> fastn_core::Result<bool> {
     let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc);
     let url = get_value_ok("url", &property_values, instruction.line_number)?
-        .to_string()
+        .to_string(doc)?
         .unwrap();
     let title = get_value_ok("title", &property_values, instruction.line_number)?
-        .to_string()
+        .to_string(doc)?
         .unwrap();
     let test = get_value_ok("test", &property_values, instruction.line_number)?
-        .to_string()
+        .to_string(doc)?
         .unwrap();
 
     get_js_for_id(url.as_str(), test.as_str(), title.as_str(), config).await

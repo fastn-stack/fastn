@@ -82,18 +82,24 @@ pub async fn process(
         if value.starts_with('$') {
             if let Some(value) = doc
                 .get_value(header.line_number, value.as_str())?
-                .to_string()
+                .to_string(doc)?
             {
                 if method.as_str().eq("post") {
                     body.push(format!("\"{}\": {}", header.key, value));
                     continue;
                 }
-                url.query_pairs_mut()
-                    .append_pair(header.key.as_str(), &value);
+                url.query_pairs_mut().append_pair(
+                    header.key.as_str(),
+                    value.trim_start_matches('"').trim_end_matches('"'),
+                );
             }
         } else {
             if method.as_str().eq("post") {
-                body.push(format!("\"{}\": {}", header.key, value));
+                body.push(format!(
+                    "\"{}\": \"{}\"",
+                    header.key,
+                    fastn_core::utils::escape_string(value.as_str())
+                ));
                 continue;
             }
             url.query_pairs_mut()
@@ -108,7 +114,7 @@ pub async fn process(
             url.as_str(),
             req_config.request.cookies_string(),
             &conf,
-            dbg!(format!("{{{}}}", body.join(","))).as_str(),
+            format!("{{{}}}", body.join(",")).as_str(),
         )
         .await
     } else {
