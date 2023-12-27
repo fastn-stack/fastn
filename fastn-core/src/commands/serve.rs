@@ -262,7 +262,7 @@ pub async fn serve_helper(
 
     let mut resp = if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
         serve_fastn_file(config).await
-    } else if path.as_str().trim_matches('"').is_empty() {
+    } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
         serve_file(&mut req_config, &path.join("/"), only_js).await
     } else if let Some(cr_number) = fastn_core::cr::get_cr_path_from_url(path.as_str()) {
         serve_cr_file(&mut req_config, &path, cr_number).await

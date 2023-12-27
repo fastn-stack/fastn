@@ -1,4 +1,3 @@
-use reqwest::header::HeaderValue;
 #[macro_export]
 macro_rules! server_error {
     ($($t:tt)*) => {{
@@ -222,7 +221,8 @@ impl Request {
     }
 
     pub fn insert_header(&mut self, name: reqwest::header::HeaderName, value: &'static str) {
-        self.headers.insert(name, HeaderValue::from_static(value));
+        self.headers
+            .insert(name, reqwest::header::HeaderValue::from_static(value));
     }
 
     pub fn set_method(&mut self, method: &str) {
