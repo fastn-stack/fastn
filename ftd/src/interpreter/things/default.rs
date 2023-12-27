@@ -2268,6 +2268,45 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
+             ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY.to_string(),
+             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                 name: ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY.to_string(),
+                 variants: vec![
+                     ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                         ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_AUTO,
+                         ftd::interpreter::Kind::string().into_kind_data(),
+                         false,
+                         Some(
+                              ftd::interpreter::Value::new_string("auto")
+                                  .into_property_value(false, 0),
+                         ),
+                                0,
+                         )),
+                     ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                         ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_LOW,
+                         ftd::interpreter::Kind::string().into_kind_data(),
+                         false,
+                         Some(
+                              ftd::interpreter::Value::new_string("low")
+                                  .into_property_value(false, 0),
+                         ),
+                                0,
+                         )),
+                     ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                         ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_HIGH,
+                         ftd::interpreter::Kind::string().into_kind_data(),
+                         false,
+                         Some(
+                              ftd::interpreter::Value::new_string("high")
+                                  .into_property_value(false, 0),
+                         ),
+                                0,
+                            )),
+                        ],
+                        line_number: 0,
+                    }),
+        ),
+        (
             ftd::interpreter::FTD_ANCHOR.to_string(),
             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
                 name: ftd::interpreter::FTD_ANCHOR.to_string(),
@@ -3105,6 +3144,35 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         None,
                         0,
                     )),
+
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LENGTH_DVH,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LENGTH_LVH,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LENGTH_SVH,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+
                     ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
                         ftd::interpreter::FTD_LENGTH_EM,
                         ftd::interpreter::Kind::decimal()
@@ -10213,6 +10281,12 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
                 ),
                 ftd::interpreter::Argument::default(
                     "alt",
+                    ftd::interpreter::Kind::string()
+                        .into_kind_data()
+                        .into_optional(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "fetch-priority",
                     ftd::interpreter::Kind::string()
                         .into_kind_data()
                         .into_optional(),

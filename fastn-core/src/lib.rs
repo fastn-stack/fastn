@@ -17,7 +17,7 @@ mod package;
 pub mod tutor;
 pub(crate) mod watcher;
 #[macro_use]
-mod http;
+pub mod http;
 mod auth;
 mod ds;
 mod error;
@@ -32,7 +32,7 @@ mod tracker;
 mod translation;
 mod version;
 // mod wasm;
-pub(crate) mod catch_panic;
+pub mod catch_panic;
 pub(crate) mod google_sheets;
 mod library2022;
 mod workspace;
