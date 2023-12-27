@@ -170,6 +170,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             test.value_of_("file"), // TODO: handle more than one files
             test.value_of_("base").unwrap_or("/"),
             test.get_flag("headless"),
+            test.get_flag("script"),
         )
         .await;
     }
@@ -386,6 +387,7 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
                     .action(clap::ArgAction::Append))
                 .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
+                .arg(clap::arg!(--"script" "Generates a script file (for debugging purposes)"))
         )
         .subcommand(
             clap::Command::new("mark-resolved")

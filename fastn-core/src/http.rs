@@ -212,6 +212,27 @@ impl Request {
         self.cookies().get(name).map(|v| v.to_string())
     }
 
+    pub fn set_body(&mut self, body: actix_web::web::Bytes) {
+        self.body = body;
+    }
+
+    pub fn set_cookies(&mut self, cookies: &std::collections::HashMap<String, String>) {
+        self.cookies = cookies.clone();
+    }
+
+    pub fn insert_header(&mut self, name: reqwest::header::HeaderName, value: &'static str) {
+        self.headers
+            .insert(name, reqwest::header::HeaderValue::from_static(value));
+    }
+
+    pub fn set_method(&mut self, method: &str) {
+        self.method = method.to_uppercase();
+    }
+
+    pub fn set_query_string(&mut self, query_string: &str) {
+        self.query_string = query_string.to_string();
+    }
+
     pub fn host(&self) -> String {
         self.host.to_string()
         // use std::borrow::Borrow;

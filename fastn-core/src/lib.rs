@@ -318,6 +318,14 @@ pub(crate) fn usage_error<T>(message: String) -> Result<T> {
     Err(Error::UsageError { message })
 }
 
+pub(crate) fn generic_error<T>(message: String) -> Result<T> {
+    Error::generic_err(message)
+}
+
+pub(crate) fn assert_error<T>(message: String) -> Result<T> {
+    Err(Error::AssertError { message })
+}
+
 #[cfg(test)]
 mod tests {
 
