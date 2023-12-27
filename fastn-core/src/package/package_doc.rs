@@ -73,7 +73,7 @@ impl fastn_core::Package {
         );
         Err(fastn_core::Error::PackageError {
             message: format!(
-                "fs_fetch_by_id:: Corresponding file not found 1 for id: {}. Package: {}",
+                "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
                 id, &self.name
             ),
         })
@@ -171,7 +171,7 @@ impl fastn_core::Package {
         if !restore_default {
             return Err(fastn_core::Error::PackageError {
                 message: format!(
-                    "fs_fetch_by_id:: Corresponding file not found 2 for id: {}. Package: {}",
+                    "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
                     file_path, &self.name
                 ),
             });
@@ -190,7 +190,7 @@ impl fastn_core::Package {
             _ => {
                 return Err(fastn_core::Error::PackageError {
                     message: format!(
-                        "fs_fetch_by_id:: Corresponding file not found 3 for id: {}. Package: {}",
+                        "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
                         file_path, &self.name
                     ),
                 })
@@ -258,7 +258,7 @@ impl fastn_core::Package {
                 tracing::error!(id = id, msg = "id error: can not get the dark");
                 return Err(fastn_core::Error::PackageError {
                     message: format!(
-                        "fs_fetch_by_id:: Corresponding file not found 4 for id: {}. Package: {}",
+                        "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
                         id, &self.name
                     ),
                 });
@@ -278,7 +278,7 @@ impl fastn_core::Package {
             tracing::error!(id = id, msg = "id error: can not get the dark");
             return Err(fastn_core::Error::PackageError {
                 message: format!(
-                    "fs_fetch_by_id:: Corresponding file not found 5 for id: {}. Package: {}",
+                    "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
                     id, &self.name
                 ),
             });
