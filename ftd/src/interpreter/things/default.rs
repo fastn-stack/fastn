@@ -2277,9 +2277,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                          ftd::interpreter::Kind::string().into_kind_data(),
                          false,
                          Some(
-                              ftd::interpreter::Value::new_string(
-                                 ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_AUTO,
-                              )
+                              ftd::interpreter::Value::new_string("auto")
                                   .into_property_value(false, 0),
                          ),
                                 0,
@@ -2289,9 +2287,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                          ftd::interpreter::Kind::string().into_kind_data(),
                          false,
                          Some(
-                              ftd::interpreter::Value::new_string(
-                                 ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_LOW,
-                              )
+                              ftd::interpreter::Value::new_string("low")
                                   .into_property_value(false, 0),
                          ),
                                 0,
@@ -2301,9 +2297,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                          ftd::interpreter::Kind::string().into_kind_data(),
                          false,
                          Some(
-                              ftd::interpreter::Value::new_string(
-                                 ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_HIGH,
-                              )
+                              ftd::interpreter::Value::new_string("high")
                                   .into_property_value(false, 0),
                          ),
                                 0,
@@ -10293,7 +10287,7 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
                 ),
                 ftd::interpreter::Argument::default(
                     "fetch-priority",
-                    ftd::interpreter::Kind::string()
+                    ftd::interpreter::Kind::string(ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY)
                         .into_kind_data()
                         .into_optional(),
                 ),
