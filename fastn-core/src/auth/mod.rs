@@ -243,10 +243,9 @@ pub async fn get_authenticated_user_with_email(
 pub(crate) fn enable_auth() -> fastn_core::Result<()> {
     use diesel::Connection;
     use diesel_migrations::MigrationHarness;
+
     let db_url = std::env::var("FASTN_DB_URL")?;
 
-    // change in migrations require a change in rust code for to run
-    // see the docs of this function for the workaround that we do not need right now
     const MIGRATIONS: diesel_migrations::EmbeddedMigrations =
         diesel_migrations::embed_migrations!();
 
