@@ -95,7 +95,7 @@ async fn serve_file(
             if fastn_core::utils::is_ftd_path(path.as_str()) {
                 return fastn_core::http::ok(main_document.content.as_bytes().to_vec());
             }
-            dbg!(path.as_str(), main_document.id.as_str());
+            // dbg!(path.as_str(), main_document.id.as_str());
             match fastn_core::package::package_doc::read_ftd_(
                 config,
                 &main_document,
@@ -262,10 +262,10 @@ pub async fn serve_helper(
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
 
     let mut resp = if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
-        println!("Serving FASTN.ftd");
+        // println!("Serving FASTN.ftd");
         serve_fastn_file(config).await
     } else if path.as_str().trim_matches('"').is_empty() {
-        println!("Serving index.ftd");
+        // println!("Serving index.ftd");
         serve_file(&mut req_config, &path.join("/"), only_js).await
     } else if let Some(cr_number) = fastn_core::cr::get_cr_path_from_url(path.as_str()) {
         serve_cr_file(&mut req_config, &path, cr_number).await
@@ -324,7 +324,7 @@ pub async fn serve_helper(
         // so it should say not found and pass it to proxy
         let cookies = req_config.request.cookies().clone();
 
-        println!("Serving other .ftd file");
+        // println!("Serving other .ftd file");
         let file_response = serve_file(&mut req_config, path.as_path(), only_js).await;
         // If path is not present in sitemap then pass it to proxy
         // TODO: Need to handle other package URL as well, and that will start from `-`
@@ -339,7 +339,7 @@ pub async fn serve_helper(
             &path
         );
         if file_response.status() == actix_web::http::StatusCode::NOT_FOUND {
-            println!("Proxy passing to other endpoint");
+            // println!("Proxy passing to other endpoint");
             // TODO: Check if path exists in dynamic urls also, otherwise pass to endpoint
             // Already checked in the above method serve_file
 

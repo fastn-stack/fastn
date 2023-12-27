@@ -5,10 +5,15 @@ optional body test:
 optional string http-status:
 optional string http-location:
 optional string http-redirect:
+query list query-params:
 
 -- ftd.text: NOT IMPLEMENTED HERE
 
 -- end: get
+
+-- record query:
+caption key:
+string value:
 
 
 

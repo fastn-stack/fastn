@@ -6,6 +6,9 @@ pub(crate) const TEST_TITLE_HEADER: &str = "title";
 pub(crate) const TEST_URL_HEADER: &str = "url";
 
 // optional test parameters
+pub(crate) const QUERY_PARAMS_HEADER: &str = "query-params";
+pub(crate) const QUERY_PARAMS_HEADER_KEY: &str = "key";
+pub(crate) const QUERY_PARAMS_HEADER_VALUE: &str = "value";
 pub(crate) const POST_BODY_HEADER: &str = "body";
 pub(crate) const TEST_CONTENT_HEADER: &str = "test";
 pub(crate) const HTTP_REDIRECT_HEADER: &str = "http-redirect";
@@ -85,7 +88,8 @@ async fn read_ftd_test_file(
     config: &fastn_core::Config,
 ) -> fastn_core::Result<()> {
     let req = fastn_core::http::Request::default();
-    let mut saved_cookies: ftd::Map<String> = ftd::Map::new();
+    let mut saved_cookies: std::collections::HashMap<String, String> =
+        std::collections::HashMap::new();
     let base_url = "/";
     let mut req_config =
         fastn_core::RequestConfig::new(config, &req, ftd_document.id.as_str(), base_url);
@@ -117,7 +121,7 @@ async fn execute_instruction(
     instruction: &ftd::interpreter::Component,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
-    saved_cookies: &mut ftd::Map<String>,
+    saved_cookies: &mut std::collections::HashMap<String, String>,
 ) -> fastn_core::Result<bool> {
     match instruction.name.as_str() {
         "fastn#get" => execute_get_instruction(instruction, doc, config, saved_cookies).await,
@@ -133,7 +137,7 @@ async fn execute_post_instruction(
     instruction: &ftd::interpreter::Component,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
-    saved_cookies: &mut ftd::Map<String>,
+    saved_cookies: &mut std::collections::HashMap<String, String>,
 ) -> fastn_core::Result<bool> {
     let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc);
 
@@ -155,10 +159,7 @@ async fn execute_post_instruction(
     }
 
     if let Some(post_body) = get_optional_value_string(POST_BODY_HEADER, &property_values, doc)? {
-        other_params.insert(
-            POST_BODY_HEADER.to_string(),
-            fastn_core::utils::escape_string(post_body.as_str()),
-        );
+        other_params.insert(POST_BODY_HEADER.to_string(), post_body);
     }
 
     if let Some(http_status) = get_optional_value_string(HTTP_STATUS_HEADER, &property_values, doc)?
@@ -195,39 +196,51 @@ async fn get_post_response_for_id(
     title: &str,
     optional_params: ftd::Map<String>,
     config: &fastn_core::Config,
-    saved_cookies: &mut ftd::Map<String>,
+    saved_cookies: &mut std::collections::HashMap<String, String>,
 ) -> fastn_core::Result<bool> {
     use actix_web::body::MessageBody;
     use colored::Colorize;
 
     println!("Test: {}  ", title.yellow());
-    let post_body = actix_web::web::Bytes::copy_from_slice(
-        optional_params
-            .get(POST_BODY_HEADER)
-            .cloned()
-            .unwrap_or_default()
-            .as_bytes(),
-    );
+    let req_body = optional_params
+        .get(POST_BODY_HEADER)
+        .cloned()
+        .unwrap_or_default();
+    // dbg!("POST req body received: {}", req_body.as_str());
+    let post_body = actix_web::web::Bytes::copy_from_slice(req_body.as_bytes());
     let mut request = fastn_core::http::Request::default();
     request.path = id.to_string();
-    request.set_body(post_body.into());
+    request.set_method("post");
+    request.set_body(post_body);
+    request.insert_header(reqwest::header::CONTENT_TYPE, "application/json");
+    // println!("{:?}", request.body());
+    // request.set_cookies(&saved_cookies);
+    // println!("POST request details");
+    // dbg!(&request);
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
-    println!("POST response details --------------------------------");
-    dbg!(&response);
+    // println!("POST response details --------------------------------");
+    // dbg!(&response);
+    // println!("update saved cookies");
+    // update_cookies(saved_cookies, &response);
+    // dbg!(&saved_cookies);
     let (response_status_code, response_location) = assert_response(&response, &optional_params)?;
     let test = optional_params.get(TEST_CONTENT_HEADER);
     if let Some(test_content) = test {
         let body = response.into_body().try_into_bytes().unwrap(); // Todo: Throw error
-        let body_str = std::str::from_utf8(&body).unwrap(); // Todo: Throw error
+        let response_body = format!(
+            "fastn.http_response = {}",
+            std::str::from_utf8(&body).unwrap()
+        ); //
+           // Todo: Throw error
         let fastn_test_js = fastn_js::fastn_test_js();
         let fastn_assertion_headers =
             fastn_js::fastn_assertion_headers(response_status_code, response_location.as_str());
         let fastn_js = fastn_js::all_js_without_test_and_ftd_langugage_js();
         let mut test_string = format!(
-            "{body_str}\n{fastn_assertion_headers}\n{fastn_test_js}\n\
+            "{response_body}\n{fastn_assertion_headers}\n{fastn_test_js}\n\
             {test_content}\nfastn.test_result"
         );
-        dbg!(&test_string);
+        // dbg!(&test_string);
         test_string = format!("{}\n{}", fastn_js, test_string);
         let test_result = fastn_js::run_test(test_string.as_str());
         if test_result.iter().any(|v| !(*v)) {
@@ -243,12 +256,12 @@ async fn execute_get_instruction(
     instruction: &ftd::interpreter::Component,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
-    saved_cookies: &mut ftd::Map<String>,
+    saved_cookies: &mut std::collections::HashMap<String, String>,
 ) -> fastn_core::Result<bool> {
     let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc);
 
     // Mandatory test parameters --------------------------------
-    let url = get_value_ok(TEST_URL_HEADER, &property_values, instruction.line_number)?
+    let mut url = get_value_ok(TEST_URL_HEADER, &property_values, instruction.line_number)?
         .to_string(doc, false)?
         .unwrap();
     let title = get_value_ok(TEST_TITLE_HEADER, &property_values, instruction.line_number)?
@@ -257,10 +270,45 @@ async fn execute_get_instruction(
 
     // Optional test parameters --------------------------------
     let mut optional_params: ftd::Map<String> = ftd::Map::new();
+
+    if let Some(query_params) = get_optional_value_list(QUERY_PARAMS_HEADER, &property_values, doc)?
+    {
+        let mut query_strings = vec![];
+        for query in query_params.iter() {
+            if let ftd::interpreter::Value::Record { name, fields } = query {
+                let resolved_key = fields
+                    .get(QUERY_PARAMS_HEADER_KEY)
+                    .unwrap()
+                    .clone()
+                    .resolve(doc, 0)?
+                    .to_string(doc, false)?
+                    .unwrap();
+                let resolved_value = fields
+                    .get(QUERY_PARAMS_HEADER_VALUE)
+                    .unwrap()
+                    .clone()
+                    .resolve(doc, 0)?
+                    .to_string(doc, false)?
+                    .unwrap();
+                let query_key_value =
+                    format!("{}={}", resolved_key.as_str(), resolved_value.as_str());
+                query_strings.push(query_key_value);
+            }
+        }
+        if !query_strings.is_empty() {
+            let query_string = format!("?{}", query_strings.join("&").to_string());
+            url.push_str(query_string.as_str());
+            optional_params.insert(QUERY_PARAMS_HEADER.to_string(), query_string);
+        }
+    }
+
     if let Some(test_content) =
         get_optional_value_string(TEST_CONTENT_HEADER, &property_values, doc)?
     {
-        optional_params.insert(TEST_CONTENT_HEADER.to_string(), test_content);
+        optional_params.insert(
+            TEST_CONTENT_HEADER.to_string(),
+            fastn_core::utils::escape_string(test_content.as_str()),
+        );
     }
 
     if let Some(http_status) = get_optional_value_string(HTTP_STATUS_HEADER, &property_values, doc)?
@@ -297,7 +345,7 @@ async fn get_js_for_id(
     title: &str,
     optional_params: ftd::Map<String>,
     config: &fastn_core::Config,
-    saved_cookies: &mut ftd::Map<String>,
+    saved_cookies: &mut std::collections::HashMap<String, String>,
 ) -> fastn_core::Result<bool> {
     use actix_web::body::MessageBody;
     use colored::Colorize;
@@ -305,9 +353,14 @@ async fn get_js_for_id(
     println!("Test: {}  ", title.yellow());
     let mut request = fastn_core::http::Request::default();
     request.path = id.to_string();
+    // request.set_cookies(&saved_cookies);
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
-    println!("GET response details --------------------------------");
-    dbg!(&response);
+    // println!("GET response details --------------------------------");
+    // dbg!(&response);
+    // dbg!(&response.headers());
+    // println!("update saved cookies");
+    // update_cookies(saved_cookies, &response);
+    // dbg!(&saved_cookies);
     let (response_status_code, response_location) = assert_response(&response, &optional_params)?;
     let test = optional_params.get(TEST_CONTENT_HEADER);
     if let Some(test_content) = test {
@@ -329,6 +382,16 @@ async fn get_js_for_id(
     }
     println!("{}", "Test Passed".green());
     Ok(true)
+}
+
+fn update_cookies(
+    saved_cookies: &mut std::collections::HashMap<String, String>,
+    response: &actix_web::HttpResponse,
+) {
+    for ref c in response.cookies() {
+        println!("response cookie {}: {}", c.name(), c.value());
+        saved_cookies.insert(c.name().to_string(), c.value().to_string());
+    }
 }
 
 fn get_value_ok(
@@ -364,6 +427,18 @@ fn get_optional_value(
         };
     }
     None
+}
+
+fn get_optional_value_list(
+    key: &str,
+    property_values: &ftd::Map<ftd::interpreter::PropertyValue>,
+    doc: &ftd::interpreter::TDoc<'_>,
+) -> ftd::interpreter::Result<Option<Vec<ftd::interpreter::Value>>> {
+    let value = get_optional_value(key, property_values);
+    if let Some(ref value) = value {
+        return value.to_list(doc, false);
+    }
+    Ok(None)
 }
 
 fn get_optional_value_string(

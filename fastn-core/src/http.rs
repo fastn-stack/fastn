@@ -1,3 +1,4 @@
+use reqwest::header::HeaderValue;
 #[macro_export]
 macro_rules! server_error {
     ($($t:tt)*) => {{
@@ -91,9 +92,6 @@ pub struct Request {
 }
 
 impl Request {
-    pub fn set_body(&mut self, body: actix_web::web::Bytes) {
-        self.body = body;
-    }
     //pub fn get_named_params() -> {}
     pub fn from_actix(req: actix_web::HttpRequest, body: actix_web::web::Bytes) -> Self {
         let headers = {
@@ -213,6 +211,22 @@ impl Request {
 
     pub fn cookie(&self, name: &str) -> Option<String> {
         self.cookies().get(name).map(|v| v.to_string())
+    }
+
+    pub fn set_body(&mut self, body: actix_web::web::Bytes) {
+        self.body = body;
+    }
+
+    pub fn set_cookies(&mut self, cookies: &std::collections::HashMap<String, String>) {
+        self.cookies = cookies.clone();
+    }
+
+    pub fn insert_header(&mut self, name: reqwest::header::HeaderName, value: &'static str) {
+        self.headers.insert(name, HeaderValue::from_static(value));
+    }
+
+    pub fn set_method(&mut self, method: &str) {
+        self.method = method.to_uppercase();
     }
 
     pub fn host(&self) -> String {

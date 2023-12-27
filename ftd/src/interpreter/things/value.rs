@@ -1997,6 +1997,24 @@ impl Value {
         }
     }
 
+    pub fn to_list(
+        &self,
+        doc: &ftd::interpreter::TDoc<'_>,
+        use_quotes: bool,
+    ) -> ftd::interpreter::Result<Option<Vec<ftd::interpreter::Value>>> {
+        match self {
+            Value::List { data, .. } => {
+                let mut values = vec![];
+                for d in data.iter() {
+                    let resolved_value = d.clone().resolve(doc, d.line_number())?;
+                    values.push(resolved_value);
+                }
+                Ok(Some(values))
+            }
+            _ => Ok(None),
+        }
+    }
+
     pub fn to_string(
         &self,
         doc: &ftd::interpreter::TDoc<'_>,
