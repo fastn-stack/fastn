@@ -229,6 +229,10 @@ impl Request {
         self.method = method.to_uppercase();
     }
 
+    pub fn set_query_string(&mut self, query_string: &str) {
+        self.query_string = query_string.to_string();
+    }
+
     pub fn host(&self) -> String {
         self.host.to_string()
         // use std::borrow::Borrow;

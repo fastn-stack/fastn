@@ -20,6 +20,7 @@ pub async fn test(
     only_id: Option<&str>,
     _base_url: &str,
     headless: bool,
+    script: bool,
 ) -> fastn_core::Result<()> {
     use colored::Colorize;
 
@@ -37,7 +38,7 @@ pub async fn test(
             }
         }
         println!("Running test file: {}", document.id.magenta());
-        read_ftd_test_file(document, config).await?;
+        read_ftd_test_file(document, config, script).await?;
     }
 
     Ok(())
@@ -81,11 +82,17 @@ impl fastn_core::Config {
             .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
             .collect::<Vec<camino::Utf8PathBuf>>())
     }
+
+    pub(crate) fn get_test_directory_path(&self) -> camino::Utf8PathBuf {
+        self.get_root_for_package(&self.package)
+            .join(fastn_core::commands::test::TEST_FOLDER)
+    }
 }
 
 async fn read_ftd_test_file(
     ftd_document: fastn_core::Document,
     config: &fastn_core::Config,
+    script: bool,
 ) -> fastn_core::Result<()> {
     let req = fastn_core::http::Request::default();
     let mut saved_cookies: std::collections::HashMap<String, String> =
@@ -109,10 +116,21 @@ async fn read_ftd_test_file(
         &main_ftd_doc.aliases,
         &main_ftd_doc.data,
     );
+    let mut instruction_number = 1;
     for instruction in main_ftd_doc.tree {
-        if !execute_instruction(&instruction, &doc, config, &mut saved_cookies).await? {
+        if !execute_instruction(
+            &instruction,
+            &doc,
+            config,
+            &mut saved_cookies,
+            script,
+            instruction_number,
+        )
+        .await?
+        {
             break;
         }
+        instruction_number += 1;
     }
     Ok(())
 }
@@ -122,10 +140,32 @@ async fn execute_instruction(
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,
+    script: bool,
+    instruction_number: i64,
 ) -> fastn_core::Result<bool> {
     match instruction.name.as_str() {
-        "fastn#get" => execute_get_instruction(instruction, doc, config, saved_cookies).await,
-        "fastn#post" => execute_post_instruction(instruction, doc, config, saved_cookies).await,
+        "fastn#get" => {
+            execute_get_instruction(
+                instruction,
+                doc,
+                config,
+                saved_cookies,
+                script,
+                instruction_number,
+            )
+            .await
+        }
+        "fastn#post" => {
+            execute_post_instruction(
+                instruction,
+                doc,
+                config,
+                saved_cookies,
+                script,
+                instruction_number,
+            )
+            .await
+        }
         t => fastn_core::usage_error(format!(
             "Unknown instruction {}, line number: {}",
             t, instruction.line_number
@@ -138,6 +178,8 @@ async fn execute_post_instruction(
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,
+    script: bool,
+    _instruction_number: i64,
 ) -> fastn_core::Result<bool> {
     let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc);
 
@@ -187,6 +229,7 @@ async fn execute_post_instruction(
         other_params,
         config,
         saved_cookies,
+        script,
     )
     .await
 }
@@ -197,6 +240,7 @@ async fn get_post_response_for_id(
     optional_params: ftd::Map<String>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,
+    _script: bool,
 ) -> fastn_core::Result<bool> {
     use actix_web::body::MessageBody;
     use colored::Colorize;
@@ -206,23 +250,16 @@ async fn get_post_response_for_id(
         .get(POST_BODY_HEADER)
         .cloned()
         .unwrap_or_default();
-    // dbg!("POST req body received: {}", req_body.as_str());
     let post_body = actix_web::web::Bytes::copy_from_slice(req_body.as_bytes());
     let mut request = fastn_core::http::Request::default();
     request.path = id.to_string();
     request.set_method("post");
     request.set_body(post_body);
     request.insert_header(reqwest::header::CONTENT_TYPE, "application/json");
-    // println!("{:?}", request.body());
-    // request.set_cookies(&saved_cookies);
-    // println!("POST request details");
-    // dbg!(&request);
+    request.set_cookies(&saved_cookies);
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
-    // println!("POST response details --------------------------------");
-    // dbg!(&response);
-    // println!("update saved cookies");
-    // update_cookies(saved_cookies, &response);
-    // dbg!(&saved_cookies);
+    update_cookies(saved_cookies, &response);
+
     let (response_status_code, response_location) = assert_response(&response, &optional_params)?;
     let test = optional_params.get(TEST_CONTENT_HEADER);
     if let Some(test_content) = test {
@@ -230,18 +267,16 @@ async fn get_post_response_for_id(
         let response_body = format!(
             "fastn.http_response = {}",
             std::str::from_utf8(&body).unwrap()
-        ); //
-           // Todo: Throw error
+        );
+        // Todo: Throw error
         let fastn_test_js = fastn_js::fastn_test_js();
         let fastn_assertion_headers =
             fastn_js::fastn_assertion_headers(response_status_code, response_location.as_str());
         let fastn_js = fastn_js::all_js_without_test_and_ftd_langugage_js();
-        let mut test_string = format!(
-            "{response_body}\n{fastn_assertion_headers}\n{fastn_test_js}\n\
+        let test_string = format!(
+            "{fastn_js}\n\n{response_body}\n{fastn_assertion_headers}\n{fastn_test_js}\n\
             {test_content}\nfastn.test_result"
         );
-        // dbg!(&test_string);
-        test_string = format!("{}\n{}", fastn_js, test_string);
         let test_result = fastn_js::run_test(test_string.as_str());
         if test_result.iter().any(|v| !(*v)) {
             println!("{}", "Test Failed".red());
@@ -257,11 +292,13 @@ async fn execute_get_instruction(
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,
+    script: bool,
+    instruction_number: i64,
 ) -> fastn_core::Result<bool> {
     let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc);
 
     // Mandatory test parameters --------------------------------
-    let mut url = get_value_ok(TEST_URL_HEADER, &property_values, instruction.line_number)?
+    let url = get_value_ok(TEST_URL_HEADER, &property_values, instruction.line_number)?
         .to_string(doc, false)?
         .unwrap();
     let title = get_value_ok(TEST_TITLE_HEADER, &property_values, instruction.line_number)?
@@ -275,7 +312,7 @@ async fn execute_get_instruction(
     {
         let mut query_strings = vec![];
         for query in query_params.iter() {
-            if let ftd::interpreter::Value::Record { name, fields } = query {
+            if let ftd::interpreter::Value::Record { fields, .. } = query {
                 let resolved_key = fields
                     .get(QUERY_PARAMS_HEADER_KEY)
                     .unwrap()
@@ -296,8 +333,7 @@ async fn execute_get_instruction(
             }
         }
         if !query_strings.is_empty() {
-            let query_string = format!("?{}", query_strings.join("&").to_string());
-            url.push_str(query_string.as_str());
+            let query_string = query_strings.join("&").to_string();
             optional_params.insert(QUERY_PARAMS_HEADER.to_string(), query_string);
         }
     }
@@ -305,10 +341,7 @@ async fn execute_get_instruction(
     if let Some(test_content) =
         get_optional_value_string(TEST_CONTENT_HEADER, &property_values, doc)?
     {
-        optional_params.insert(
-            TEST_CONTENT_HEADER.to_string(),
-            fastn_core::utils::escape_string(test_content.as_str()),
-        );
+        optional_params.insert(TEST_CONTENT_HEADER.to_string(), test_content);
     }
 
     if let Some(http_status) = get_optional_value_string(HTTP_STATUS_HEADER, &property_values, doc)?
@@ -336,6 +369,9 @@ async fn execute_get_instruction(
         optional_params,
         config,
         saved_cookies,
+        script,
+        doc.name,
+        instruction_number,
     )
     .await
 }
@@ -346,6 +382,9 @@ async fn get_js_for_id(
     optional_params: ftd::Map<String>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,
+    script: bool,
+    doc_name: &str,
+    instruction_number: i64,
 ) -> fastn_core::Result<bool> {
     use actix_web::body::MessageBody;
     use colored::Colorize;
@@ -353,27 +392,45 @@ async fn get_js_for_id(
     println!("Test: {}  ", title.yellow());
     let mut request = fastn_core::http::Request::default();
     request.path = id.to_string();
-    // request.set_cookies(&saved_cookies);
+    if let Some(query_string) = optional_params.get(QUERY_PARAMS_HEADER) {
+        request.set_query_string(query_string.as_str());
+    }
+    request.set_method("get");
+    request.set_cookies(&saved_cookies);
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
-    // println!("GET response details --------------------------------");
-    // dbg!(&response);
-    // dbg!(&response.headers());
-    // println!("update saved cookies");
-    // update_cookies(saved_cookies, &response);
-    // dbg!(&saved_cookies);
+    update_cookies(saved_cookies, &response);
+
     let (response_status_code, response_location) = assert_response(&response, &optional_params)?;
     let test = optional_params.get(TEST_CONTENT_HEADER);
     if let Some(test_content) = test {
         let body = response.into_body().try_into_bytes().unwrap(); // Todo: Throw error
-        let body_str = std::str::from_utf8(&body).unwrap(); // Todo: Throw error
+        let response_body = format!(
+            "fastn.http_response = {}",
+            std::str::from_utf8(&body).unwrap()
+        );
         let fastn_test_js = fastn_js::fastn_test_js();
         let fastn_assertion_headers =
             fastn_js::fastn_assertion_headers(response_status_code, response_location.as_str());
         let fastn_js = fastn_js::all_js_without_test_and_ftd_langugage_js();
         let test_string = format!(
-            "{fastn_js}\n{body_str}\n{fastn_assertion_headers}\n{fastn_test_js}\n\
+            "{fastn_js}\n{response_body}\n{fastn_assertion_headers}\n{fastn_test_js}\n\
             {test_content}\nfastn.test_result"
         );
+        if script {
+            let mut test_file_name = doc_name.to_string();
+            if let Some((_, file_name)) = test_file_name.trim_end_matches('/').rsplit_once('/') {
+                test_file_name = file_name.to_string();
+            }
+            fastn_js::generate_script_file(
+                test_string.as_str(),
+                config.get_test_directory_path(),
+                test_file_name
+                    .replace(".test", format!(".t{}.test", instruction_number).as_str())
+                    .as_str(),
+            );
+            println!("{}", "Script file created".green());
+            return Ok(true);
+        }
         let test_result = fastn_js::run_test(test_string.as_str());
         if test_result.iter().any(|v| !(*v)) {
             println!("{}", "Test Failed".red());
@@ -389,7 +446,6 @@ fn update_cookies(
     response: &actix_web::HttpResponse,
 ) {
     for ref c in response.cookies() {
-        println!("response cookie {}: {}", c.name(), c.value());
         saved_cookies.insert(c.name().to_string(), c.value().to_string());
     }
 }
