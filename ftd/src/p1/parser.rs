@@ -178,7 +178,7 @@ impl State {
             };
         }
 
-        let start_line = clean_line(start_line.as_str());
+        let start_line = clean_line_with_trim(start_line.as_str());
 
         let is_commented = start_line.starts_with("/-- ");
         let line = if is_commented {
@@ -665,8 +665,8 @@ impl State {
                 line_number: ftd::p1::utils::i32_to_usize(line_number),
             })?
             .0;
-        let value = value.join("\n").trim().to_string();
-        if !value.is_empty() {
+        let value = value.join("\n").to_string();
+        if !value.trim().is_empty() {
             section.body = Some(ftd::p1::Body::new(
                 ftd::p1::utils::i32_to_usize(line_number),
                 trim_body(value.as_str()).as_str(),
@@ -685,7 +685,7 @@ impl State {
         let mut new_line_number = None;
         for (line_number, mut line) in self.content.split('\n').enumerate() {
             line = line.trim_start();
-            if line.trim().is_empty() || line.starts_with("-- ") || line.starts_with("/-- ") {
+            if line.is_empty() || line.starts_with("-- ") || line.starts_with("/-- ") {
                 new_line_number = Some(line_number);
                 break;
             }
@@ -693,7 +693,7 @@ impl State {
                 self.line_number += 1;
                 continue;
             }
-            let line = clean_line(line);
+            let line = clean_line_with_trim(line);
             if let Ok((name_with_kind, caption)) = colon_separated_values(
                 ftd::p1::utils::i32_to_usize(self.line_number),
                 line.as_str(),
@@ -887,29 +887,44 @@ fn get_name_kind_and_condition(name_with_kind: &str) -> (String, Option<String>,
 }
 
 fn clean_line(line: &str) -> String {
-    let line = line.trim_start();
-    if line.starts_with("\\;;") || line.starts_with("\\-- ") {
-        return line[1..].to_string();
+    let trimmed_line = line.trim_start();
+    if trimmed_line.starts_with("\\;;") || trimmed_line.starts_with("\\-- ") {
+        return format!(
+            "{}{}",
+            " ".repeat(line.len() - trimmed_line.len()),
+            trimmed_line[1..].to_string()
+        );
     }
 
     if !line.contains("<hl>") {
         return remove_inline_comments(line);
     }
 
-    line.to_string()
+    format!(
+        "{}{}",
+        " ".repeat(line.len() - trimmed_line.len()),
+        trimmed_line
+    )
+}
+
+fn clean_line_with_trim(line: &str) -> String {
+    clean_line(line).trim_start().to_string()
 }
 
 fn trim_body(s: &str) -> String {
     let mut leading_spaces_count = usize::MAX;
     let mut value = vec![];
 
-    // Get minimum number of the starting space in the whole body
+    // Get minimum number of the starting space in the whole body, ignoring empty line
     for line in s.split('\n') {
         let trimmed_line = line.trim_start().to_string();
         let current_leading_spaces_count = line.len() - trimmed_line.len();
-        if current_leading_spaces_count < leading_spaces_count {
+        if line.len() != 0 && current_leading_spaces_count < leading_spaces_count {
             leading_spaces_count = current_leading_spaces_count;
         }
+    }
+    if leading_spaces_count == usize::MAX {
+        leading_spaces_count = 0;
     }
 
     // Trim the lines of the body upto the leading_spaces_count
@@ -1027,7 +1042,7 @@ pub(crate) fn get_block_header_condition(
         if !valid_line(line) {
             continue;
         }
-        let line = clean_line(line);
+        let line = clean_line_with_trim(line);
         if let Ok((name_with_kind, caption)) =
             colon_separated_values(line_number, line.as_str(), doc_id)
         {
