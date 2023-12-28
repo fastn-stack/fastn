@@ -1,0 +1,155 @@
+[
+  {
+    "name": "ds.page",
+    "kind": null,
+    "caption": null,
+    "headers": [
+      {
+        "type": "KV",
+        "line_number": 0,
+        "key": "document-title",
+        "kind": null,
+        "value": "fastn | The Beginner-Friendly Full-Stack Framework",
+        "condition": null,
+        "access_modifier": "Public",
+        "source": "Header"
+      },
+      {
+        "type": "KV",
+        "line_number": 0,
+        "key": "document-description",
+        "kind": null,
+        "value": "Design, develop, and deploy stunning websites and web apps effortlessly. Easy-to-learn full-stack framework. No coding knowledge required. Start now!",
+        "condition": null,
+        "access_modifier": "Public",
+        "source": "Header"
+      },
+      {
+        "type": "KV",
+        "line_number": 0,
+        "key": "document-image",
+        "kind": null,
+        "value": "https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg",
+        "condition": null,
+        "access_modifier": "Public",
+        "source": "Header"
+      },
+      {
+        "type": "KV",
+        "line_number": 0,
+        "key": "full-width",
+        "kind": null,
+        "value": "true",
+        "condition": null,
+        "access_modifier": "Public",
+        "source": "Header"
+      },
+      {
+        "type": "KV",
+        "line_number": 0,
+        "key": "sidebar",
+        "kind": null,
+        "value": "false",
+        "condition": null,
+        "access_modifier": "Public",
+        "source": "Header"
+      },
+      {
+        "type": "Section",
+        "line_number": 0,
+        "key": "fluid-wrap",
+        "kind": null,
+        "section": [
+          {
+            "name": "lib.hero-content",
+            "kind": null,
+            "caption": null,
+            "headers": [],
+            "body": null,
+            "sub_sections": [],
+            "is_commented": false,
+            "line_number": 0,
+            "block_body": false
+          },
+          {
+            "name": "lib.feature-card",
+            "kind": null,
+            "caption": {
+              "type": "KV",
+              "line_number": 0,
+              "key": "$caption$",
+              "kind": null,
+              "value": "Everyone in your team can learn fastn in a day!",
+              "condition": null,
+              "access_modifier": "Public",
+              "source": "Caption"
+            },
+            "headers": [
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-text",
+                "kind": null,
+                "value": "Learn more",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-link",
+                "kind": null,
+                "value": "/install/",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "image",
+                "kind": null,
+                "value": "$fastn-assets.files.images.landing.chat-group.png",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "icon",
+                "kind": null,
+                "value": "$fastn-assets.files.images.landing.face-icon.svg",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "code",
+                "kind": null,
+                "value": "-- import: fastn-community.github.io/bling/chat\n\n-- chat.message-left: Hello World! 😀\n\n-- chat.message-left: I'm Nandhini, a freelance\ncontent writer.\n\n-- chat.message-left: Fun fact: I built this\nentire page with fastn! 🚀 It's that easy!",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Body"
+              }
+            ],
+            "body": null,
+            "sub_sections": [],
+            "is_commented": false,
+            "line_number": 0,
+            "block_body": false
+          }
+        ],
+        "condition": null
+      }
+    ],
+    "body": null,
+    "sub_sections": [],
+    "is_commented": false,
+    "line_number": 0,
+    "block_body": false
+  }
+]
