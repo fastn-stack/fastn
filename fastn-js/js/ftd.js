@@ -182,8 +182,8 @@ const ftd = (function () {
 
     exports.http = function (url, opts, ...body) {
         if (!opts instanceof fastn.recordInstanceClass) {
-            console.info(`opts must be a record instance:
-                record ftd.http-opts:
+            console.info(`opts must be a record instance of
+                -- record ftd.http-options:
                 string method: GET
                 string redirect: manual
                 string fastn-module:

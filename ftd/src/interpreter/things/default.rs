@@ -10249,9 +10249,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            "ftd#http-opts".to_string(),
+            "ftd#http-options".to_string(),
             ftd::interpreter::Thing::Record(ftd::interpreter::Record {
-                name: "ftd#http-opts".to_string(),
+                name: "ftd#http-options".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     ftd::interpreter::Field {
                         name: "method".to_string(),
