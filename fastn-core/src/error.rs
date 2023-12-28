@@ -63,6 +63,9 @@ pub enum Error {
     #[error("NotFoundError: {}", _0)]
     NotFound(String),
 
+    #[error("FastnIoError: {}", _0)]
+    FastnIoError(String),
+
     #[error("PackageError: {message}")]
     PackageError { message: String },
 
