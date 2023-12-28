@@ -438,7 +438,7 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Merge two manifests together")
                 .arg(clap::arg!(src: <SRC> "The source manifest to merge"))
                 .arg(clap::arg!(dest: <DEST> "The destination manifest to merge"))
-                .arg(clap::arg!(file: <FILE>... "The file(s) to merge"))
+                .arg(clap::arg!(file: <FILE>... "The file(s) to merge").required(false))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
