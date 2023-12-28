@@ -78,7 +78,9 @@ pub async fn handle_auth(
         "/-/auth/github/" => fastn_core::auth::github::callback(&req, pool, next).await,
         "/-/auth/logout/" => logout(&req, pool, next).await,
 
-        "/-/auth/create-user/" => fastn_core::auth::email_password::create_user(&req, pool, next).await,
+        "/-/auth/create-user/" => {
+            fastn_core::auth::email_password::create_user(&req, pool, next).await
+        }
         "/-/auth/confirm-email/" => {
             fastn_core::auth::email_password::confirm_email(&req, pool).await
         }
