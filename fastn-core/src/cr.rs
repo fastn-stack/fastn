@@ -26,12 +26,13 @@ pub(crate) async fn get_cr_meta(
     }
 
     let doc = tokio::fs::read_to_string(&cr_meta_path).await?;
-    resolve_cr_meta(&doc, cr_number).await
+    resolve_cr_meta(&doc, cr_number, config).await
 }
 
 pub(crate) async fn resolve_cr_meta(
     content: &str,
     cr_number: usize,
+    config: &fastn_core::Config,
 ) -> fastn_core::Result<fastn_core::cr::CRMeta> {
     #[derive(serde::Deserialize)]
     struct CRMetaTemp {
@@ -54,8 +55,8 @@ pub(crate) async fn resolve_cr_meta(
             message: "Content is empty in cr about".to_string(),
         });
     }
-    let lib = fastn_core::FastnLibrary::default();
-    let b = match fastn_core::doc::parse_ftd(".about.ftd", content, &lib) {
+
+    let b = match fastn_core::doc::parse_ftd_2023(".about.ftd", content, config).await {
         Ok(v) => v,
         Err(e) => {
             eprintln!("failed to parse .about.ftd for CR#{}: {:?}", cr_number, &e);
@@ -63,7 +64,7 @@ pub(crate) async fn resolve_cr_meta(
         }
     };
 
-    Ok(b.get::<CRMetaTemp>("fastn#cr-meta")?
+    Ok(b.get::<CRMetaTemp>(".about.ftd#cr-meta")?
         .into_cr_meta(cr_number))
 }
 
@@ -94,7 +95,11 @@ pub(crate) async fn create_cr_meta(
 }
 
 pub(crate) fn generate_cr_meta_content(cr_meta: &fastn_core::cr::CRMeta) -> String {
-    let mut meta_content = format!("-- import: fastn\n\n\n-- fastn.cr-meta: {}", cr_meta.title,);
+    let mut meta_content = format!(
+        "-- import: fastn\n\n\n-- fastn.cr-meta-data cr-meta: {}\n{}: true",
+        cr_meta.title,
+        ftd::ast::ALWAYS_INCLUDE
+    );
     if !cr_meta.open {
         meta_content = format!("{}\n{}", meta_content, cr_meta.open);
     }

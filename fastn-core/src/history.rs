@@ -7,11 +7,7 @@ pub struct FileHistory {
 
 impl fastn_core::Config {
     pub(crate) async fn to_file_history(&self, file: &str) -> fastn_core::Result<Vec<FileHistory>> {
-        let doc = {
-            let req = fastn_core::http::Request::default();
-            let mut lib = fastn_core::RequestConfig::new(self, &req, "", "/");
-            fastn_core::doc::interpret_helper("history.ftd", file, &mut lib, "/", false, 0).await?
-        };
+        let doc = fastn_core::doc::parse_ftd_2023("history.ftd", file, self).await?;
         Ok(doc.get("history.ftd#history")?)
     }
 }

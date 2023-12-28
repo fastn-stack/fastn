@@ -685,7 +685,8 @@ async fn add_close_cr_status(
     }
     let cr_about_path = config.history_path(cr_about_path_str.as_str(), cr_about_file_edit.version);
     let cr_meta_content = tokio::fs::read_to_string(cr_about_path).await?;
-    let mut cr_about = fastn_core::cr::resolve_cr_meta(cr_meta_content.as_str(), cr).await?;
+    let mut cr_about =
+        fastn_core::cr::resolve_cr_meta(cr_meta_content.as_str(), cr, config).await?;
     cr_about.open = false;
     let cr_close_content = fastn_core::cr::generate_cr_meta_content(&cr_about);
     Ok(fastn_core::sync_utils::FileStatus::Update {
