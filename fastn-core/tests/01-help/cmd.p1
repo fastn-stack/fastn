@@ -17,6 +17,7 @@ Commands:
   rm                Removes one or more files from the workspace
   update            Reinstall all the dependency packages
   sync              Sync with fastn-repo (or .history folder if not using fastn-repo)
+  create-cr         Create a Change Request
   resolve-conflict  Show un-synced changes to files in this fastn package
   serve             Serve package content over HTTP
   publish-static    Publish fastn package statically
