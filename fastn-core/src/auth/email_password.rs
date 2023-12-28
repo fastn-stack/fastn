@@ -1,6 +1,7 @@
 pub(crate) async fn create_user(
     req: &fastn_core::http::Request,
     db_pool: &fastn_core::db::PgPool,
+    next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
@@ -106,7 +107,19 @@ pub(crate) async fn create_user(
 
     create_and_send_confirmation_email(email.0.to_string(), db_pool, req).await?;
 
-    fastn_core::http::api_ok(user)
+    let redirect_url = format!(
+        "{}://{}{}",
+        req.connection_info.scheme(),
+        req.connection_info.host(),
+        next,
+    );
+
+    let resp = serde_json::json!({
+        "user": user,
+        "redirect": redirect_url,
+    });
+
+    Ok(fastn_core::http::ok(serde_json::to_vec(&resp)?))
 }
 
 pub(crate) async fn login(
@@ -283,7 +296,7 @@ pub(crate) async fn confirm_email(
     // this path should be configuratble too
     Ok(fastn_core::http::redirect_with_code(
         format!(
-            "{}://{}/-/auth/login/",
+            "{}://{}/login/",
             req.connection_info.scheme(),
             req.connection_info.host(),
         ),
