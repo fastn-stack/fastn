@@ -25,7 +25,7 @@ pub(crate) async fn get_cr_meta(
         return fastn_core::usage_error(format!("CR#{} doesn't exist", cr_number));
     }
 
-    let doc = tokio::fs::read_to_string(&cr_meta_path).await?;
+    let doc = fastn_core::tokio_fs::read_to_string(&cr_meta_path).await?;
     resolve_cr_meta(&doc, cr_number, config).await
 }
 
@@ -147,7 +147,7 @@ pub(crate) async fn get_deleted_files(
     if !deleted_files_path.exists() {
         return Ok(vec![]);
     }
-    let deleted_files_content = tokio::fs::read_to_string(&deleted_files_path).await?;
+    let deleted_files_content = fastn_core::tokio_fs::read_to_string(&deleted_files_path).await?;
     resolve_cr_deleted(deleted_files_content.as_str(), cr_number).await
 }
 
@@ -294,7 +294,7 @@ pub(crate) async fn cr_clone_file_info(
             continue;
         }
         let file_path = config.history_path(filename.as_str(), file_edit.version);
-        let content = tokio::fs::read(&file_path).await?;
+        let content = fastn_core::tokio_fs::read(&file_path).await?;
 
         let path = config.path_without_root(&file_path)?;
 
@@ -331,7 +331,7 @@ pub(crate) async fn cr_clone_file_info(
             } else {
                 config.root.join(workspace_entry.filename)
             };
-            let cr_deleted_files = tokio::fs::read_to_string(cr_deleted_path).await?;
+            let cr_deleted_files = fastn_core::tokio_fs::read_to_string(cr_deleted_path).await?;
             fastn_core::cr::resolve_cr_deleted(cr_deleted_files.as_str(), cr_number)
                 .await?
                 .into_iter()
@@ -341,7 +341,8 @@ pub(crate) async fn cr_clone_file_info(
                 .collect_vec();
             continue;
         }
-        let content = tokio::fs::read(config.root.join(workspace_entry.filename.as_str())).await?;
+        let content =
+            fastn_core::tokio_fs::read(config.root.join(workspace_entry.filename.as_str())).await?;
 
         file_info.insert(
             filename,
@@ -376,7 +377,7 @@ pub(crate) async fn cr_remote_file_info(
             continue;
         }
         let file_path = config.history_path(filename.as_str(), file_edit.version);
-        let content = tokio::fs::read(&file_path).await?;
+        let content = fastn_core::tokio_fs::read(&file_path).await?;
 
         let path = config.path_without_root(&file_path)?;
 
@@ -406,7 +407,7 @@ pub(crate) async fn cr_remote_file_info(
 
         if filename.eq(&deleted_file_str) {
             let cr_deleted_path = config.history_path(filename.as_str(), file_edit.version);
-            let cr_deleted_files = tokio::fs::read_to_string(cr_deleted_path).await?;
+            let cr_deleted_files = fastn_core::tokio_fs::read_to_string(cr_deleted_path).await?;
             fastn_core::cr::resolve_cr_deleted(cr_deleted_files.as_str(), cr_number)
                 .await?
                 .into_iter()
@@ -418,7 +419,7 @@ pub(crate) async fn cr_remote_file_info(
         }
 
         let file_path = config.history_path(filename.as_str(), file_edit.version);
-        let content = tokio::fs::read(&file_path).await?;
+        let content = fastn_core::tokio_fs::read(&file_path).await?;
 
         let path = config.path_without_root(&file_path)?;
 

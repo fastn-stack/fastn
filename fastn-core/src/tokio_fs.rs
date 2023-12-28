@@ -4,7 +4,10 @@ pub async fn read(
     let path_str = format!("{:#?}", path);
     tokio::fs::read(path)
         .await
-        .map_err(|e| fastn_core::Error::FastnIoError(format!("{}: file path: {:?}", e, path_str)))
+        .map_err(|e| fastn_core::Error::FastnIoError {
+            io_error: e,
+            path: path_str,
+        })
 }
 
 pub async fn read_to_string(
@@ -13,5 +16,8 @@ pub async fn read_to_string(
     let path_str = format!("{:#?}", path);
     tokio::fs::read_to_string(path)
         .await
-        .map_err(|e| fastn_core::Error::FastnIoError(format!("{}: file path: {:?}", e, path_str)))
+        .map_err(|e| fastn_core::Error::FastnIoError {
+            io_error: e,
+            path: path_str,
+        })
 }

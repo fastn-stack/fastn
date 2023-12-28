@@ -28,17 +28,14 @@ async fn clone_worker(config: &fastn_core::Config) -> fastn_core::Result<CloneRe
             .map(|x| {
                 let root = root.clone();
                 tokio::spawn(async move {
-                    tokio::fs::read(&x)
-                        .await
-                        .map_err(fastn_core::Error::IoError)
-                        .map(|v| {
-                            (
-                                x.strip_prefix(root)
-                                    .unwrap_or_else(|_| x.as_path())
-                                    .to_string(),
-                                v,
-                            )
-                        })
+                    fastn_core::tokio_fs::read(&x).await.map(|v| {
+                        (
+                            x.strip_prefix(root)
+                                .unwrap_or_else(|_| x.as_path())
+                                .to_string(),
+                            v,
+                        )
+                    })
                 })
             })
             .collect::<Vec<tokio::task::JoinHandle<fastn_core::Result<(String, Vec<u8>)>>>>(),

@@ -76,7 +76,7 @@ impl FileOperation {
 impl fastn_core::Config {
     pub async fn get_history(&self) -> fastn_core::Result<Vec<FileHistory>> {
         let history_file_path = self.history_file();
-        let history_content = tokio::fs::read_to_string(history_file_path).await?;
+        let history_content = fastn_core::tokio_fs::read_to_string(history_file_path).await?;
         self.to_file_history(history_content.as_str()).await
     }
 
@@ -271,7 +271,7 @@ pub(crate) async fn insert_into_history_(
         if !file_op.operation.eq(&FileOperation::Deleted) {
             let new_file_path =
                 remote_state.join(fastn_core::utils::snapshot_id(file, &(version as u128)));
-            let content = tokio::fs::read(root.join(file)).await?;
+            let content = fastn_core::tokio_fs::read(root.join(file)).await?;
             fastn_core::utils::update(&new_file_path, content.as_slice()).await?;
         }
     }

@@ -24,7 +24,7 @@ pub async fn fetch_files(
         })?;
 
     Ok(ftd::interpreter::Value::String {
-        text: tokio::fs::read_to_string(req_config.config.root.join(path))
+        text: fastn_core::tokio_fs::read_to_string(req_config.config.root.join(path))
             .await
             .map_err(|v| ftd::interpreter::Error::ParseError {
                 message: v.to_string(),
