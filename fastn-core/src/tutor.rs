@@ -86,7 +86,7 @@ pub async fn process(
     }
 
     let fs_state: TutorStateFS =
-        match tokio::fs::read(dirs::home_dir().unwrap().join(".fastn").join("tutor.json")).await {
+        match config.read(dirs::home_dir().unwrap().join(".fastn").join("tutor.json")).await {
             Ok(v) => serde_json::from_slice(&v)?,
             Err(e) => match dbg!(e.kind()) {
                 std::io::ErrorKind::NotFound => {

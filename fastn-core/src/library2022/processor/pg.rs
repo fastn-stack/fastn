@@ -59,7 +59,7 @@ async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::Cre
 
     if let Ok(cert) = std::env::var("FASTN_PG_CERTIFICATE") {
         // TODO: This does not work with Heroku certificate.
-        let cert = tokio::fs::read(cert).await.unwrap();
+        let cert = config.read(cert).await.unwrap();
         // TODO: We should allow DER formatted certificates too, maybe based on file extension?
         let cert = native_tls::Certificate::from_pem(&cert).unwrap();
         connector.add_root_certificate(cert);

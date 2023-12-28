@@ -70,7 +70,7 @@ where
 {
     let cache_file = get_cache_file(id)?;
     serde_json::from_str(
-        &std::fs::read_to_string(cache_file)
+        config.read_to_string(cache_file)
             .map_err(|e| {
                 tracing::debug!("file read error: {}", e.to_string());
                 e
@@ -629,7 +629,7 @@ pub fn get_inline_js_html(inline_js: &[String]) -> String {
     let mut result = "".to_string();
     for path in inline_js {
         if camino::Utf8Path::new(path).exists() {
-            if let Ok(content) = std::fs::read_to_string(path) {
+            if let Ok(content) = config.read_to_string(path) {
                 result = format!("{}<script>{}</script>", result, content);
             }
         }
@@ -641,7 +641,7 @@ pub fn get_inline_css_html(inline_js: &[String]) -> String {
     let mut result = "".to_string();
     for path in inline_js {
         if camino::Utf8Path::new(path).exists() {
-            if let Ok(content) = std::fs::read_to_string(path) {
+            if let Ok(content) = config.read_to_string(path) {
                 result = format!("{}<style>{}</style>", result, content);
             }
         }

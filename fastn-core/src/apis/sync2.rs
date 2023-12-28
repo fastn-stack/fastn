@@ -203,7 +203,7 @@ pub(crate) async fn do_sync(
                             continue;
                         };
                         let theirs_path = config.history_path(path, file_edit.version);
-                        let theirs_content = tokio::fs::read_to_string(theirs_path).await?;
+                        let theirs_content = config.read_to_string(theirs_path).await?;
                         let ours_content = String::from_utf8(content.clone())
                             .map_err(|e| fastn_core::Error::APIResponseError(e.to_string()))?;
                         match diffy::MergeOptions::new()
@@ -271,7 +271,7 @@ pub(crate) async fn do_sync(
                     continue;
                 };
                 let server_content =
-                    tokio::fs::read(config.history_path(path, file_edit.version)).await?;
+                    config.read(config.history_path(path, file_edit.version)).await?;
 
                 // if: Client Says Deleted and server says modified
                 // that means Remote timestamp is greater than client timestamp
@@ -330,7 +330,7 @@ pub(crate) async fn sync_worker(
     Ok(SyncResponse {
         files: synced_files.into_values().collect_vec(),
         dot_history: history_files,
-        latest_ftd: tokio::fs::read_to_string(config.history_file()).await?,
+        latest_ftd: config.read_to_string(config.history_file()).await?,
     })
 }
 
@@ -364,7 +364,7 @@ async fn clone_history_files(
             .filter(|x| client_file_edit.map(|c| x.0.gt(&c.version)).unwrap_or(true))
             .collect_vec();
         for (_, path) in history_paths {
-            let content = tokio::fs::read(config.remote_history_dir().join(&path)).await?;
+            let content = config.read(config.remote_history_dir().join(&path)).await?;
             dot_history.push(File { path, content });
         }
     }
@@ -414,7 +414,7 @@ async fn client_current_files(
             );
             continue;
         }
-        let content = tokio::fs::read(config.root.join(path)).await?;
+        let content = config.read(config.root.join(path)).await?;
         synced_files.insert(
             path.clone(),
             SyncResponseFile::Add {

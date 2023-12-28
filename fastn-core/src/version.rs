@@ -118,7 +118,7 @@ pub(crate) async fn build_version(
                         )
                     };
                     let new_file_path = config.root.join(".build").join(file_rel_path);
-                    let original_content = std::fs::read_to_string(&original_file_path)?;
+                    let original_content = config.read_to_string(&original_file_path)?;
                     std::fs::create_dir_all(&new_file_path.as_str().replace("index.html", ""))?;
                     let mut f = std::fs::File::create(&new_file_path)?;
                     let from_pattern = format!("<base href=\"{}{}/\">", base_url, version);

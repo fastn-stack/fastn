@@ -10,7 +10,7 @@ impl fastn_core::Package {
 
         let file_path = package_root.join(name.trim_start_matches('/'));
         // Issue 1: Need to remove / from the start of the name
-        match tokio::fs::read(&file_path).await {
+        match config.read(&file_path).await {
             Ok(content) => Ok(content),
             Err(err) => {
                 tracing::error!(

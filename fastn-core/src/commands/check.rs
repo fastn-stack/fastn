@@ -32,7 +32,7 @@ async fn check_index_in_folders(
     let mut has_ignored_directory = false;
 
     if folder.is_dir() {
-        let mut entries = tokio::fs::read_dir(&folder).await?;
+        let mut entries = config.read_dir(&folder).await?;
         while let Some(current_entry) = entries.next_entry().await? {
             let current_entry_path = current_entry.path();
             let entry_path = camino::Utf8PathBuf::from_path_buf(current_entry_path)

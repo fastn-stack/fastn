@@ -71,7 +71,7 @@ async fn write(
 ) -> fastn_core::Result<()> {
     use tokio::io::AsyncWriteExt;
     let string = if path.exists() {
-        let existing_doc = tokio::fs::read_to_string(path).await?;
+        let existing_doc = config.read_to_string(path).await?;
         format!(
             "{}\n\n-- fastn.track: {}\nself-timestamp: {}",
             existing_doc, target, timestamp

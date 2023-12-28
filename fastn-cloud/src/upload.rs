@@ -50,7 +50,7 @@ pub async fn upload(
 ) -> Result<(), fastn_cloud::UploadError> {
     let sid: Sid = serde_json::from_str(sid)?;
     let (list_file, data_file) = tejar_create(root).await?;
-    let list_content = tokio::fs::read_to_string(list_file.as_path()).await?;
+    let list_content = config.read_to_string(list_file.as_path()).await?;
     // TODO: missing files handle sid
     println!("Getting Missing Files");
     let missing_files_api_resp = missing_files_api(

@@ -72,7 +72,7 @@ impl fastn_core::Config {
     pub async fn get_available_crs(&self) -> fastn_core::Result<Vec<i32>> {
         let mut response = vec![];
         if self.clone_available_crs_path().exists() {
-            let crs = tokio::fs::read_to_string(self.clone_available_crs_path()).await?;
+            let crs = config.read_to_string(self.clone_available_crs_path()).await?;
             for cr in crs.split('\n') {
                 response.push(cr.parse()?)
             }
@@ -93,7 +93,7 @@ impl fastn_core::Config {
 
     pub(crate) async fn read_workspace(&self) -> fastn_core::Result<Vec<WorkspaceEntry>> {
         let workspace = {
-            let workspace = tokio::fs::read_to_string(self.workspace_file());
+            let workspace = config.read_to_string(self.workspace_file());
             let lib = fastn_core::FastnLibrary::default();
             fastn_core::doc::parse_ftd("fastn", workspace.await?.as_str(), &lib)?
         };

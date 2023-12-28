@@ -75,7 +75,7 @@ async fn merge_main_into_cr(
             break;
         }
         if cr_file_path.eq(&deleted_file_str) {
-            let cr_deleted_files = tokio::fs::read_to_string(
+            let cr_deleted_files = config.read_to_string(
                 config.history_path(cr_file_path.as_str(), cr_file_edit.version),
             )
             .await?;
@@ -153,7 +153,7 @@ async fn merge_main_into_cr(
         };
 
         let ours_content_bytes =
-            tokio::fs::read(config.history_path(cr_file_path.as_str(), cr_file_edit.version))
+            config.read(config.history_path(cr_file_path.as_str(), cr_file_edit.version))
                 .await?;
 
         // get corresponding track file
@@ -167,7 +167,7 @@ async fn merge_main_into_cr(
                     continue;
                 }
                 let theirs_content_bytes =
-                    tokio::fs::read(config.history_path(filename.as_str(), file_edit.version))
+                    config.read(config.history_path(filename.as_str(), file_edit.version))
                         .await?;
                 if sha2::Sha256::digest(&ours_content_bytes)
                     .eq(&sha2::Sha256::digest(theirs_content_bytes))
@@ -209,7 +209,7 @@ async fn merge_main_into_cr(
                 continue;
             }
             let theirs_content_bytes =
-                tokio::fs::read(config.history_path(filename.as_str(), file_edit.version)).await?;
+                config.read(config.history_path(filename.as_str(), file_edit.version)).await?;
             if sha2::Sha256::digest(&ours_content_bytes)
                 .eq(&sha2::Sha256::digest(theirs_content_bytes))
             {
@@ -254,7 +254,7 @@ async fn merge_main_into_cr(
 
         // try to merge
         let ancestor_content = if let Ok(content) =
-            tokio::fs::read_to_string(config.history_path(filename.as_str(), track_info.version))
+            config.read_to_string(config.history_path(filename.as_str(), track_info.version))
                 .await
         {
             content
@@ -270,7 +270,7 @@ async fn merge_main_into_cr(
         };
 
         let theirs_content =
-            tokio::fs::read_to_string(config.history_path(filename.as_str(), file_edit.version))
+            config.read_to_string(config.history_path(filename.as_str(), file_edit.version))
                 .await?;
 
         let ours_content = String::from_utf8(ours_content_bytes.clone())?;
@@ -432,7 +432,7 @@ async fn merge_cr_into_main(
         }
         if cr_file_name.eq(&deleted_files) {
             // status for deleted files
-            let cr_deleted_files = tokio::fs::read_to_string(
+            let cr_deleted_files = config.read_to_string(
                 config.history_path(cr_file_name.as_str(), cr_file_edit.version),
             )
             .await?;
@@ -488,7 +488,7 @@ async fn merge_cr_into_main(
             }
         }
 
-        let cr_file_content = tokio::fs::read(&cr_file_path).await?;
+        let cr_file_content = config.read(&cr_file_path).await?;
         let file_edit = if let Some(file_edit) = remote_manifest.get(filename.as_str()) {
             file_edit
         } else {
@@ -523,7 +523,7 @@ async fn merge_cr_into_main(
         };
 
         let ours_content_bytes =
-            tokio::fs::read(config.history_path(cr_file_path.as_str(), cr_file_edit.version))
+            config.read(config.history_path(cr_file_path.as_str(), cr_file_edit.version))
                 .await?;
 
         let track_file_path =
@@ -549,7 +549,7 @@ async fn merge_cr_into_main(
                 );
             }
             let theirs_content_bytes =
-                tokio::fs::read(config.history_path(filename.as_str(), file_edit.version)).await?;
+                config.read(config.history_path(filename.as_str(), file_edit.version)).await?;
             if !sha2::Sha256::digest(&ours_content_bytes)
                 .eq(&sha2::Sha256::digest(theirs_content_bytes))
             {
@@ -593,7 +593,7 @@ async fn merge_cr_into_main(
         }
 
         let ancestor_content = if let Ok(content) =
-            tokio::fs::read_to_string(config.history_path(filename.as_str(), track_info.version))
+            config.read_to_string(config.history_path(filename.as_str(), track_info.version))
                 .await
         {
             content
@@ -609,7 +609,7 @@ async fn merge_cr_into_main(
         };
 
         let theirs_content =
-            tokio::fs::read_to_string(config.history_path(filename.as_str(), file_edit.version))
+            config.read_to_string(config.history_path(filename.as_str(), file_edit.version))
                 .await?;
 
         let ours_content = String::from_utf8(ours_content_bytes.clone())?;
@@ -684,7 +684,7 @@ async fn add_close_cr_status(
         });
     }
     let cr_about_path = config.history_path(cr_about_path_str.as_str(), cr_about_file_edit.version);
-    let cr_meta_content = tokio::fs::read_to_string(cr_about_path).await?;
+    let cr_meta_content = config.read_to_string(cr_about_path).await?;
     let mut cr_about = fastn_core::cr::resolve_cr_meta(cr_meta_content.as_str(), cr).await?;
     cr_about.open = false;
     let cr_close_content = fastn_core::cr::generate_cr_meta_content(&cr_about);

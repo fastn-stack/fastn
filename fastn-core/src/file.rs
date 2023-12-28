@@ -208,13 +208,13 @@ pub(crate) async fn get_file(
         Some((_, "ftd")) => File::Ftd(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: tokio::fs::read_to_string(&doc_path).await?,
+            content: config.read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),
         }),
         Some((_, "md")) => File::Markdown(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: tokio::fs::read_to_string(&doc_path).await?,
+            content: config.read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),
         }),
         Some((_, ext))
@@ -226,7 +226,7 @@ pub(crate) async fn get_file(
             File::Image(Static {
                 package_name: package_name.to_string(),
                 id: id.to_string(),
-                content: tokio::fs::read(&doc_path).await?,
+                content: config.read(&doc_path).await?,
                 base_path: base_path.to_path_buf(),
             })
         }
@@ -234,14 +234,14 @@ pub(crate) async fn get_file(
             File::Code(Document {
                 package_name: package_name.to_string(),
                 id: id.to_string(),
-                content: tokio::fs::read_to_string(&doc_path).await?,
+                content: config.read_to_string(&doc_path).await?,
                 parent_path: base_path.to_string(),
             })
         }
         _ => File::Static(Static {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: tokio::fs::read(&doc_path).await?,
+            content: config.read(&doc_path).await?,
             base_path: base_path.to_path_buf(),
         }),
     })

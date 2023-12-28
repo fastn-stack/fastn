@@ -21,7 +21,7 @@ pub(crate) fn get_tracks(
     }
 
     let lib = fastn_core::FastnLibrary::default();
-    let doc = std::fs::read_to_string(path)?;
+    let doc = config.read_to_string(path)?;
     let b = match fastn_core::doc::parse_ftd(base_path, doc.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {
