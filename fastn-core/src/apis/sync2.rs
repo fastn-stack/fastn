@@ -187,7 +187,7 @@ pub(crate) async fn do_sync(
                         // else: Both has modified the same file
                         let ancestor_path = config.history_path(path, *version);
                         let ancestor_content = if let Ok(ancestor_content) =
-                            tokio::fs::read_to_string(ancestor_path).await
+                            config.read_to_string(ancestor_path, None).await
                         {
                             ancestor_content
                         } else {
