@@ -17,6 +17,7 @@ pub use ftd2021::value_with_default::ValueWithDefault;
 pub use ftd2021::variable::{PropertyValue, TextSource, Value, Variable, VariableFlags};
 
 pub mod ast;
+pub mod document_store;
 pub mod executor;
 pub mod ftd2021;
 pub mod html;
@@ -32,6 +33,8 @@ pub mod test_helper;
 mod utils;
 #[cfg(feature = "native-rendering")]
 mod wasm;
+
+pub use document_store::DocumentStore;
 
 pub const PROCESSOR_MARKER: &str = "$processor$";
 

@@ -1910,6 +1910,7 @@ dependencies = [
 name = "ftd"
 version = "0.3.0"
 dependencies = [
+ "async-trait",
  "colored",
  "comrak 0.19.0",
  "crossterm 0.27.0",

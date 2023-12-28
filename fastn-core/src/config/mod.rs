@@ -43,8 +43,9 @@ pub struct Config {
     pub test_command_running: bool,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct RequestConfig {
+    pub ds: Box<dyn ftd::DocumentStore>,
     pub named_parameters: Vec<(String, ftd::Value)>,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
