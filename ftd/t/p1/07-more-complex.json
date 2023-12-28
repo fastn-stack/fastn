@@ -1,5 +1,25 @@
 [
   {
+    "name": "import",
+    "kind": null,
+    "caption": {
+      "type": "KV",
+      "line_number": 0,
+      "key": "$caption$",
+      "kind": null,
+      "value": "fastn.com/content-library as lib",
+      "condition": null,
+      "access_modifier": "Public",
+      "source": "Caption"
+    },
+    "headers": [],
+    "body": null,
+    "sub_sections": [],
+    "is_commented": false,
+    "line_number": 0,
+    "block_body": false
+  },
+  {
     "name": "ds.page",
     "kind": null,
     "caption": null,
@@ -134,9 +154,1748 @@
                 "condition": null,
                 "access_modifier": "Public",
                 "source": "Body"
+              },
+              {
+                "type": "Section",
+                "line_number": 0,
+                "key": "additional-cards",
+                "kind": null,
+                "section": [
+                  {
+                    "name": "lib.testimonial",
+                    "kind": null,
+                    "caption": {
+                      "type": "KV",
+                      "line_number": 0,
+                      "key": "$caption$",
+                      "kind": null,
+                      "value": "From skeptic to web developer in an afternoon!",
+                      "condition": null,
+                      "access_modifier": "Public",
+                      "source": "Caption"
+                    },
+                    "headers": [
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "author-title",
+                        "kind": null,
+                        "value": "Nandini Devi",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "avatar",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.nandini.png",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "label",
+                        "kind": null,
+                        "value": "Content Writer",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      }
+                    ],
+                    "body": {
+                      "line_number": 0,
+                      "value": "I was very skeptical about learning to write any syntax; I had never done any\ncoding before. But I decided to give it a shot and went through the videos.\nIt’s actually surprisingly simple; it doesn't feel like coding at all. It's\njust like writing text in a text file, and you end up with a beautifully\ndesigned website. Definitely the most productive and result-oriented activity\nI've ever undertaken in a single afternoon."
+                    },
+                    "sub_sections": [],
+                    "is_commented": false,
+                    "line_number": 0,
+                    "block_body": false
+                  },
+                  {
+                    "name": "lib.card-wrap",
+                    "kind": null,
+                    "caption": null,
+                    "headers": [],
+                    "body": null,
+                    "sub_sections": [
+                      {
+                        "name": "lib.card",
+                        "kind": null,
+                        "caption": {
+                          "type": "KV",
+                          "line_number": 0,
+                          "key": "$caption$",
+                          "kind": null,
+                          "value": "800+",
+                          "condition": null,
+                          "access_modifier": "Public",
+                          "source": "Caption"
+                        },
+                        "headers": [
+                          {
+                            "type": "KV",
+                            "line_number": 0,
+                            "key": "icon",
+                            "kind": null,
+                            "value": "$fastn-assets.files.images.landing.square-icon.svg",
+                            "condition": null,
+                            "access_modifier": "Public",
+                            "source": "Header"
+                          },
+                          {
+                            "type": "KV",
+                            "line_number": 0,
+                            "key": "bg-image",
+                            "kind": null,
+                            "value": "$fastn-assets.files.images.landing.card-bg.png",
+                            "condition": null,
+                            "access_modifier": "Public",
+                            "source": "Header"
+                          }
+                        ],
+                        "body": {
+                          "line_number": 0,
+                          "value": "Have built their first fastn-powered website within 2 hours of discovering\nfastn."
+                        },
+                        "sub_sections": [],
+                        "is_commented": false,
+                        "line_number": 0,
+                        "block_body": false
+                      },
+                      {
+                        "name": "lib.card",
+                        "kind": null,
+                        "caption": {
+                          "type": "KV",
+                          "line_number": 0,
+                          "key": "$caption$",
+                          "kind": null,
+                          "value": "2 hr",
+                          "condition": null,
+                          "access_modifier": "Public",
+                          "source": "Caption"
+                        },
+                        "headers": [
+                          {
+                            "type": "KV",
+                            "line_number": 0,
+                            "key": "icon",
+                            "kind": null,
+                            "value": "$fastn-assets.files.images.landing.two-triangle.svg",
+                            "condition": null,
+                            "access_modifier": "Public",
+                            "source": "Header"
+                          },
+                          {
+                            "type": "KV",
+                            "line_number": 0,
+                            "key": "bg-image",
+                            "kind": null,
+                            "value": "$fastn-assets.files.images.landing.card-bg.png",
+                            "condition": null,
+                            "access_modifier": "Public",
+                            "source": "Header"
+                          },
+                          {
+                            "type": "KV",
+                            "line_number": 0,
+                            "key": "cta-text",
+                            "kind": null,
+                            "value": "Get Started!",
+                            "condition": null,
+                            "access_modifier": "Public",
+                            "source": "Header"
+                          },
+                          {
+                            "type": "KV",
+                            "line_number": 0,
+                            "key": "cta-link",
+                            "kind": null,
+                            "value": "/quick-build/",
+                            "condition": null,
+                            "access_modifier": "Public",
+                            "source": "Header"
+                          }
+                        ],
+                        "body": {
+                          "line_number": 0,
+                          "value": "Build your first fastn-powered website in just 2 hours."
+                        },
+                        "sub_sections": [],
+                        "is_commented": false,
+                        "line_number": 0,
+                        "block_body": false
+                      }
+                    ],
+                    "is_commented": false,
+                    "line_number": 0,
+                    "block_body": false
+                  }
+                ],
+                "condition": null
+              }
+            ],
+            "body": {
+              "line_number": 0,
+              "value": "fastn's user-friendly interface and minimal syntax make it accessible even to\nthose with no prior programming experience."
+            },
+            "sub_sections": [],
+            "is_commented": false,
+            "line_number": 0,
+            "block_body": false
+          },
+          {
+            "name": "lib.learn-fastn",
+            "kind": null,
+            "caption": {
+              "type": "KV",
+              "line_number": 0,
+              "key": "$caption$",
+              "kind": null,
+              "value": "Learn full-stack web development using fastn in a week",
+              "condition": null,
+              "access_modifier": "Public",
+              "source": "Caption"
+            },
+            "headers": [
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-primary-text",
+                "kind": null,
+                "value": "Learn Now",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-primary-link",
+                "kind": null,
+                "value": "/learn/",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "image",
+                "kind": null,
+                "value": "$fastn-assets.files.images.landing.crash-course.svg",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
               }
             ],
             "body": null,
+            "sub_sections": [],
+            "is_commented": false,
+            "line_number": 0,
+            "block_body": false
+          },
+          {
+            "name": "lib.feature-card",
+            "kind": null,
+            "caption": {
+              "type": "KV",
+              "line_number": 0,
+              "key": "$caption$",
+              "kind": null,
+              "value": "Anyone in your team can contribute to or modify the website",
+              "condition": null,
+              "access_modifier": "Public",
+              "source": "Caption"
+            },
+            "headers": [
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-text",
+                "kind": null,
+                "value": "Learn more",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-link",
+                "kind": null,
+                "value": "/acme/",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "icon",
+                "kind": null,
+                "value": "$fastn-assets.files.images.landing.face-icon.svg",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "transparent",
+                "kind": null,
+                "value": "true",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "Section",
+                "line_number": 0,
+                "key": "additional-cards",
+                "kind": null,
+                "section": [
+                  {
+                    "name": "lib.hero-bottom-hug",
+                    "kind": null,
+                    "caption": {
+                      "type": "KV",
+                      "line_number": 0,
+                      "key": "$caption$",
+                      "kind": null,
+                      "value": "Instant theme, color & typography changes",
+                      "condition": null,
+                      "access_modifier": "Public",
+                      "source": "Caption"
+                    },
+                    "headers": [
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "icon",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.icon.svg",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "image-1",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.hero-image-1.svg",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "image-2",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.hero-image-2.png",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "image-3",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.hero-image-3.png",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      }
+                    ],
+                    "body": null,
+                    "sub_sections": [],
+                    "is_commented": false,
+                    "line_number": 0,
+                    "block_body": false
+                  },
+                  {
+                    "name": "lib.hero-bottom-hug",
+                    "kind": null,
+                    "caption": {
+                      "type": "KV",
+                      "line_number": 0,
+                      "key": "$caption$",
+                      "kind": null,
+                      "value": "Modify content effortlessly",
+                      "condition": null,
+                      "access_modifier": "Public",
+                      "source": "Caption"
+                    },
+                    "headers": [
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "icon",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.triangle-three-icon.svg",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "image-2",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.hero-image-4.svg",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "image-3",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.hero-image-5.svg",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      }
+                    ],
+                    "body": null,
+                    "sub_sections": [],
+                    "is_commented": false,
+                    "line_number": 0,
+                    "block_body": false
+                  },
+                  {
+                    "name": "lib.hero-bottom-hug",
+                    "kind": null,
+                    "caption": {
+                      "type": "KV",
+                      "line_number": 0,
+                      "key": "$caption$",
+                      "kind": null,
+                      "value": "Adding new components is easy",
+                      "condition": null,
+                      "access_modifier": "Public",
+                      "source": "Caption"
+                    },
+                    "headers": [
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "icon",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.icon.svg",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "image-2",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.hero-image-6.svg",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "image-3",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.hero-image-7.png",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      }
+                    ],
+                    "body": null,
+                    "sub_sections": [],
+                    "is_commented": false,
+                    "line_number": 0,
+                    "block_body": false
+                  },
+                  {
+                    "name": "lib.promo-card",
+                    "kind": null,
+                    "caption": {
+                      "type": "KV",
+                      "line_number": 0,
+                      "key": "$caption$",
+                      "kind": null,
+                      "value": "After evaluating web development frameworks & online website builders, startups prefer fastn for building their website.",
+                      "condition": null,
+                      "access_modifier": "Public",
+                      "source": "Caption"
+                    },
+                    "headers": [
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "cta-text",
+                        "kind": null,
+                        "value": "Read case study",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "cta-link",
+                        "kind": null,
+                        "value": "/acme/",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      }
+                    ],
+                    "body": null,
+                    "sub_sections": [],
+                    "is_commented": false,
+                    "line_number": 0,
+                    "block_body": false
+                  },
+                  {
+                    "name": "lib.feature-card",
+                    "kind": null,
+                    "caption": {
+                      "type": "KV",
+                      "line_number": 0,
+                      "key": "$caption$",
+                      "kind": null,
+                      "value": "Rich Library",
+                      "condition": null,
+                      "access_modifier": "Public",
+                      "source": "Caption"
+                    },
+                    "headers": [
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "cta-text",
+                        "kind": null,
+                        "value": "Learn more",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "cta-link",
+                        "kind": null,
+                        "value": "/featured/",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "icon",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.smile-icon.svg",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "transparent",
+                        "kind": null,
+                        "value": "true",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "is-child",
+                        "kind": null,
+                        "value": "true",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      }
+                    ],
+                    "body": {
+                      "line_number": 0,
+                      "value": "fastn offers a rich library of ready-made components, color schemes, and website\ntemplates. This means, you don’t have to start from scratch, instead, browse\nthe dozens of professionally created templates, customize layout, style, and\ngraphics, and deploy instantly."
+                    },
+                    "sub_sections": [
+                      {
+                        "name": "lib.right-video",
+                        "kind": null,
+                        "caption": null,
+                        "headers": [
+                          {
+                            "type": "KV",
+                            "line_number": 0,
+                            "key": "image",
+                            "kind": null,
+                            "value": "$fastn-assets.files.images.landing.right-video.png",
+                            "condition": null,
+                            "access_modifier": "Public",
+                            "source": "Header"
+                          },
+                          {
+                            "type": "KV",
+                            "line_number": 0,
+                            "key": "icon-1",
+                            "kind": null,
+                            "value": "$fastn-assets.files.images.landing.cube.svg",
+                            "condition": null,
+                            "access_modifier": "Public",
+                            "source": "Header"
+                          },
+                          {
+                            "type": "KV",
+                            "line_number": 0,
+                            "key": "info-1",
+                            "kind": null,
+                            "value": "The Uniform Design System allows components created by different teams to be usable by each other.",
+                            "condition": null,
+                            "access_modifier": "Public",
+                            "source": "Header"
+                          },
+                          {
+                            "type": "KV",
+                            "line_number": 0,
+                            "key": "icon-2",
+                            "kind": null,
+                            "value": "$fastn-assets.files.images.landing.arrow-up.svg",
+                            "condition": null,
+                            "access_modifier": "Public",
+                            "source": "Header"
+                          },
+                          {
+                            "type": "KV",
+                            "line_number": 0,
+                            "key": "info-2",
+                            "kind": null,
+                            "value": "Every component supports responsive design, dark mode, & themability.",
+                            "condition": null,
+                            "access_modifier": "Public",
+                            "source": "Header"
+                          },
+                          {
+                            "type": "KV",
+                            "line_number": 0,
+                            "key": "icon-3",
+                            "kind": null,
+                            "value": "$fastn-assets.files.images.landing.stack.svg",
+                            "condition": null,
+                            "access_modifier": "Public",
+                            "source": "Header"
+                          },
+                          {
+                            "type": "KV",
+                            "line_number": 0,
+                            "key": "info-3",
+                            "kind": null,
+                            "value": "1000+ developers are building fastn components.",
+                            "condition": null,
+                            "access_modifier": "Public",
+                            "source": "Header"
+                          }
+                        ],
+                        "body": null,
+                        "sub_sections": [],
+                        "is_commented": false,
+                        "line_number": 0,
+                        "block_body": false
+                      }
+                    ],
+                    "is_commented": false,
+                    "line_number": 0,
+                    "block_body": false
+                  },
+                  {
+                    "name": "lib.featured-theme",
+                    "kind": null,
+                    "caption": {
+                      "type": "KV",
+                      "line_number": 0,
+                      "key": "$caption$",
+                      "kind": null,
+                      "value": "Choose from the numerous color schemes created by 100s of designers.",
+                      "condition": null,
+                      "access_modifier": "Public",
+                      "source": "Caption"
+                    },
+                    "headers": [
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "cta-primary-text",
+                        "kind": null,
+                        "value": "View all color themes",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "cta-primary-url",
+                        "kind": null,
+                        "value": "/featured/cs/",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "cta-secondary-text",
+                        "kind": null,
+                        "value": "View all typography",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "cta-secondary-url",
+                        "kind": null,
+                        "value": "/featured/fonts/",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "image-1",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.winter-cs.png",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "image-title-1",
+                        "kind": null,
+                        "value": "Winter CS",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "image-2",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.forest-cs.png",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "image-title-2",
+                        "kind": null,
+                        "value": "Forest CS",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "image-3",
+                        "kind": null,
+                        "value": "$fastn-assets.files.images.landing.saturated-cs.png",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      },
+                      {
+                        "type": "KV",
+                        "line_number": 0,
+                        "key": "image-title-3",
+                        "kind": null,
+                        "value": "Saturated Sunset CS",
+                        "condition": null,
+                        "access_modifier": "Public",
+                        "source": "Header"
+                      }
+                    ],
+                    "body": null,
+                    "sub_sections": [],
+                    "is_commented": false,
+                    "line_number": 0,
+                    "block_body": false
+                  }
+                ],
+                "condition": null
+              }
+            ],
+            "body": {
+              "line_number": 0,
+              "value": "Updating content with fastn is as easy as changing a few lines of code. This\nmeans anyone can contribute, reducing your dependency on developers."
+            },
+            "sub_sections": [],
+            "is_commented": false,
+            "line_number": 0,
+            "block_body": false
+          },
+          {
+            "name": "lib.feature-card",
+            "kind": null,
+            "caption": {
+              "type": "KV",
+              "line_number": 0,
+              "key": "$caption$",
+              "kind": null,
+              "value": "Your team can collaborate & deploy on your preferred infrastructure",
+              "condition": null,
+              "access_modifier": "Public",
+              "source": "Caption"
+            },
+            "headers": [
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-text",
+                "kind": null,
+                "value": "Learn more",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-link",
+                "kind": null,
+                "value": "/deploy/",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "icon",
+                "kind": null,
+                "value": "$fastn-assets.files.images.landing.face-icon.svg",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              }
+            ],
+            "body": {
+              "line_number": 0,
+              "value": "fastn seamlessly integrates with your existing workflows. You can use the text\neditor you love and are comfortable with. Use GitHub, Dropbox, iCloud, or any\nother platform you prefer. You maintain full control over your content,\ninfrastructure, and tools."
+            },
+            "sub_sections": [
+              {
+                "name": "lib.image-featured",
+                "kind": null,
+                "caption": null,
+                "headers": [
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "image-1",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.image-placeholder-1.png",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "image-2",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.image-placeholder-2.svg",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "image-3",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.image-placeholder-3.svg",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "icon-1",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.cube.svg",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "info-1",
+                    "kind": null,
+                    "value": "fastn offers deployment for static sites using deploy.yml from fastn-template on platforms like GitHub and Vercel.",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "icon-2",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.arrow-up.svg",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "info-2",
+                    "kind": null,
+                    "value": "The .build folder generated by the fastn build command simplifies publishing on any static server.",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "icon-3",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.stack.svg",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "info-3",
+                    "kind": null,
+                    "value": "fastn also supports dynamic sites with deployment options across Linux, Windows, & Mac, providing flexibility in hosting.",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  }
+                ],
+                "body": null,
+                "sub_sections": [],
+                "is_commented": false,
+                "line_number": 0,
+                "block_body": false
+              }
+            ],
+            "is_commented": false,
+            "line_number": 0,
+            "block_body": false
+          },
+          {
+            "name": "lib.compare",
+            "kind": null,
+            "caption": {
+              "type": "KV",
+              "line_number": 0,
+              "key": "$caption$",
+              "kind": null,
+              "value": "What makes fastn better than react",
+              "condition": null,
+              "access_modifier": "Public",
+              "source": "Caption"
+            },
+            "headers": [
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-primary-text",
+                "kind": null,
+                "value": "Learn More",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-primary-url",
+                "kind": null,
+                "value": "/react/",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "transparent",
+                "kind": null,
+                "value": "true",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              }
+            ],
+            "body": {
+              "line_number": 0,
+              "value": "Why waste your developers' time on building landing pages? With fastn, anyone in\nyour team can build a `www.foo.com`, leaving your development bandwidth available\nfor `app.foo.com`."
+            },
+            "sub_sections": [
+              {
+                "name": "lib.compare-card",
+                "kind": null,
+                "caption": {
+                  "type": "KV",
+                  "line_number": 0,
+                  "key": "$caption$",
+                  "kind": null,
+                  "value": "Learning Curve",
+                  "condition": null,
+                  "access_modifier": "Public",
+                  "source": "Caption"
+                },
+                "headers": [
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "icon",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.triangle-1.svg",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "image",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.card-img-1.png",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  }
+                ],
+                "body": {
+                  "line_number": 0,
+                  "value": "React is complex for non-programmers, while fastn is accessible to everyone,\neven those with no coding experience."
+                },
+                "sub_sections": [],
+                "is_commented": false,
+                "line_number": 0,
+                "block_body": false
+              },
+              {
+                "name": "lib.compare-card",
+                "kind": null,
+                "caption": {
+                  "type": "KV",
+                  "line_number": 0,
+                  "key": "$caption$",
+                  "kind": null,
+                  "value": "CMS Integration",
+                  "condition": null,
+                  "access_modifier": "Public",
+                  "source": "Caption"
+                },
+                "headers": [
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "icon",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.triangle-2.svg",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "image",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.card-img-2.png",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  }
+                ],
+                "body": {
+                  "line_number": 0,
+                  "value": "React needs CMS integration, adding complexity. With fastn, you can manage\ncontent with ease without a CMS."
+                },
+                "sub_sections": [],
+                "is_commented": false,
+                "line_number": 0,
+                "block_body": false
+              },
+              {
+                "name": "lib.compare-card",
+                "kind": null,
+                "caption": {
+                  "type": "KV",
+                  "line_number": 0,
+                  "key": "$caption$",
+                  "kind": null,
+                  "value": "Integrated Design System",
+                  "condition": null,
+                  "access_modifier": "Public",
+                  "source": "Caption"
+                },
+                "headers": [
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "icon",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.triangle-3.svg",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "image",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.card-img-3.png",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  }
+                ],
+                "body": {
+                  "line_number": 0,
+                  "value": "Unlike React, in fastn components developed by one team can seamlessly integrate\ninto the projects of another."
+                },
+                "sub_sections": [],
+                "is_commented": false,
+                "line_number": 0,
+                "block_body": false
+              }
+            ],
+            "is_commented": false,
+            "line_number": 0,
+            "block_body": false
+          },
+          {
+            "name": "lib.compare",
+            "kind": null,
+            "caption": {
+              "type": "KV",
+              "line_number": 0,
+              "key": "$caption$",
+              "kind": null,
+              "value": "What makes fastn better than Webflow",
+              "condition": null,
+              "access_modifier": "Public",
+              "source": "Caption"
+            },
+            "headers": [
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-primary-text",
+                "kind": null,
+                "value": "Learn More",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-primary-url",
+                "kind": null,
+                "value": "/webflow/",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              }
+            ],
+            "body": {
+              "line_number": 0,
+              "value": "Tired of being locked into a theme in Webflow?  Try fastn for easy editing,\nbetter customization and full control."
+            },
+            "sub_sections": [
+              {
+                "name": "lib.compare-card",
+                "kind": null,
+                "caption": {
+                  "type": "KV",
+                  "line_number": 0,
+                  "key": "$caption$",
+                  "kind": null,
+                  "value": "Design-Content Separation",
+                  "condition": null,
+                  "access_modifier": "Public",
+                  "source": "Caption"
+                },
+                "headers": [
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "icon",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.triangle-1.svg",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "image",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.card-img-1.png",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  }
+                ],
+                "body": {
+                  "line_number": 0,
+                  "value": "In Webflow, once you choose a theme and add content, altering the overall design\nis difficult. In fastn, you can change content without design disruptions."
+                },
+                "sub_sections": [],
+                "is_commented": false,
+                "line_number": 0,
+                "block_body": false
+              },
+              {
+                "name": "lib.compare-card",
+                "kind": null,
+                "caption": {
+                  "type": "KV",
+                  "line_number": 0,
+                  "key": "$caption$",
+                  "kind": null,
+                  "value": "Run On Your Infrastructure",
+                  "condition": null,
+                  "access_modifier": "Public",
+                  "source": "Caption"
+                },
+                "headers": [
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "icon",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.triangle-2.svg",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "image",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.card-img-2.png",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  }
+                ],
+                "body": {
+                  "line_number": 0,
+                  "value": "fastn is an open-source solution, offering the flexibility to run and deploy\nwebsites according to your preferences, on your own infrastructure."
+                },
+                "sub_sections": [],
+                "is_commented": false,
+                "line_number": 0,
+                "block_body": false
+              },
+              {
+                "name": "lib.compare-card",
+                "kind": null,
+                "caption": {
+                  "type": "KV",
+                  "line_number": 0,
+                  "key": "$caption$",
+                  "kind": null,
+                  "value": "Local Editing",
+                  "condition": null,
+                  "access_modifier": "Public",
+                  "source": "Caption"
+                },
+                "headers": [
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "icon",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.triangle-3.svg",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "image",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.card-img-3.png",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  }
+                ],
+                "body": {
+                  "line_number": 0,
+                  "value": "You can download your website locally, edit it on your preferred platform, and\ncollaborate using familiar tools like GitHub, iCloud, or others that suit your\nworkflow."
+                },
+                "sub_sections": [],
+                "is_commented": false,
+                "line_number": 0,
+                "block_body": false
+              }
+            ],
+            "is_commented": false,
+            "line_number": 0,
+            "block_body": false
+          },
+          {
+            "name": "lib.cards-section",
+            "kind": null,
+            "caption": null,
+            "headers": [
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "transparent",
+                "kind": null,
+                "value": "true",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              }
+            ],
+            "body": null,
+            "sub_sections": [
+              {
+                "name": "lib.heart-line-title-card",
+                "kind": null,
+                "caption": {
+                  "type": "KV",
+                  "line_number": 0,
+                  "key": "$caption$",
+                  "kind": null,
+                  "value": "Loved by 1000+ creators",
+                  "condition": null,
+                  "access_modifier": "Public",
+                  "source": "Caption"
+                },
+                "headers": [],
+                "body": {
+                  "line_number": 0,
+                  "value": "Testimonials from members of the fastn community."
+                },
+                "sub_sections": [],
+                "is_commented": false,
+                "line_number": 0,
+                "block_body": false
+              },
+              {
+                "name": "lib.testimonial-card",
+                "kind": null,
+                "caption": {
+                  "type": "KV",
+                  "line_number": 0,
+                  "key": "$caption$",
+                  "kind": null,
+                  "value": "Rutuja Kapate",
+                  "condition": null,
+                  "access_modifier": "Public",
+                  "source": "Caption"
+                },
+                "headers": [
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "avatar",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.rutuja-kapate.png",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "bgcolor",
+                    "kind": null,
+                    "value": "$inherited.colors.custom.three",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "bg-color",
+                    "kind": null,
+                    "value": "$inherited.colors.background.step-1",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "label",
+                    "kind": null,
+                    "value": "Web Developer",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "width",
+                    "kind": null,
+                    "value": "500",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  }
+                ],
+                "body": {
+                  "line_number": 0,
+                  "value": "As a web developer, I've found fastn to be a game-changer. Its a user-friendly\nlanguage makes building beautiful websites a breeze. With ready-made UI\ncomponents and easy deployment options, fastn streamlines web development.\nHighly recommend!"
+                },
+                "sub_sections": [],
+                "is_commented": false,
+                "line_number": 0,
+                "block_body": false
+              },
+              {
+                "name": "lib.testimonial-card",
+                "kind": null,
+                "caption": {
+                  "type": "KV",
+                  "line_number": 0,
+                  "key": "$caption$",
+                  "kind": null,
+                  "value": "Swapnendu Banerjee",
+                  "condition": null,
+                  "access_modifier": "Public",
+                  "source": "Caption"
+                },
+                "headers": [
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "avatar",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.swapnendu-banerjee.png",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "bgcolor",
+                    "kind": null,
+                    "value": "$inherited.colors.custom.one",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "bg-color",
+                    "kind": null,
+                    "value": "$inherited.colors.background.step-1",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "label",
+                    "kind": null,
+                    "value": "Co-founder & PR Lead at NoobCode",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "width",
+                    "kind": null,
+                    "value": "500",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "margin-top",
+                    "kind": null,
+                    "value": "74",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  }
+                ],
+                "body": {
+                  "line_number": 0,
+                  "value": "Learning and working with fastn is really fun because here we get frontend and\nbackend under the umbrella and the syntax is really very much user friendly. I\nam learning and enjoying fastn."
+                },
+                "sub_sections": [],
+                "is_commented": false,
+                "line_number": 0,
+                "block_body": false
+              },
+              {
+                "name": "lib.testimonial-card",
+                "kind": null,
+                "caption": {
+                  "type": "KV",
+                  "line_number": 0,
+                  "key": "$caption$",
+                  "kind": null,
+                  "value": "Jahanvi Raycha",
+                  "condition": null,
+                  "access_modifier": "Public",
+                  "source": "Caption"
+                },
+                "headers": [
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "avatar",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.students-program.champions.jahanvi-raycha.jpg",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "bgcolor",
+                    "kind": null,
+                    "value": "$inherited.colors.custom.two",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "bg-color",
+                    "kind": null,
+                    "value": "$inherited.colors.background.step-1",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "label",
+                    "kind": null,
+                    "value": "Software Developer",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "width",
+                    "kind": null,
+                    "value": "500",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "margin-top",
+                    "kind": null,
+                    "value": "-74",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  }
+                ],
+                "body": {
+                  "line_number": 0,
+                  "value": "**fastn** made web development a breeze for me. I launched my portfolio website on\nGitHub Pages within 30 minutes, thanks to its intuitive language and the\never-helpful community on Discord. It's my go-to framework for a seamless\ncoding experience."
+                },
+                "sub_sections": [],
+                "is_commented": false,
+                "line_number": 0,
+                "block_body": false
+              },
+              {
+                "name": "lib.testimonial-card",
+                "kind": null,
+                "caption": {
+                  "type": "KV",
+                  "line_number": 0,
+                  "key": "$caption$",
+                  "kind": null,
+                  "value": "Govindaraman S",
+                  "condition": null,
+                  "access_modifier": "Public",
+                  "source": "Caption"
+                },
+                "headers": [
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "avatar",
+                    "kind": null,
+                    "value": "$fastn-assets.files.images.landing.govindaraman_lab.png",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "bgcolor",
+                    "kind": null,
+                    "value": "$inherited.colors.custom.nine",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "bg-color",
+                    "kind": null,
+                    "value": "$inherited.colors.background.step-1",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "label",
+                    "kind": null,
+                    "value": "Front End Developer, Trizwit Labs",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "width",
+                    "kind": null,
+                    "value": "500",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  },
+                  {
+                    "type": "KV",
+                    "line_number": 0,
+                    "key": "margin-top",
+                    "kind": null,
+                    "value": "54",
+                    "condition": null,
+                    "access_modifier": "Public",
+                    "source": "Header"
+                  }
+                ],
+                "body": {
+                  "line_number": 0,
+                  "value": "**fastn** web framework, tailored for someone with a design background and zero\ncoding experience like me, has revolutionized website creation. Building\nwebsites is a walk in the park, and what's truly impressive is how easily I can\nmodify the colors and content in a matter of minutes."
+                },
+                "sub_sections": [],
+                "is_commented": false,
+                "line_number": 0,
+                "block_body": false
+              }
+            ],
+            "is_commented": false,
+            "line_number": 0,
+            "block_body": false
+          },
+          {
+            "name": "lib.our-community",
+            "kind": null,
+            "caption": {
+              "type": "KV",
+              "line_number": 0,
+              "key": "$caption$",
+              "kind": null,
+              "value": "fastn Community",
+              "condition": null,
+              "access_modifier": "Public",
+              "source": "Caption"
+            },
+            "headers": [
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "image",
+                "kind": null,
+                "value": "$fastn-assets.files.images.landing.discord-community.svg",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-primary-text",
+                "kind": null,
+                "value": "Join Discord",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              },
+              {
+                "type": "KV",
+                "line_number": 0,
+                "key": "cta-primary-url",
+                "kind": null,
+                "value": "/discord/",
+                "condition": null,
+                "access_modifier": "Public",
+                "source": "Header"
+              }
+            ],
+            "body": {
+              "line_number": 0,
+              "value": "Join a vibrant community of 1000+ developers and designers who are actively\nbuilding fastn components for you."
+            },
             "sub_sections": [],
             "is_commented": false,
             "line_number": 0,
