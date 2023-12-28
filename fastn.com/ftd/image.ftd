@@ -244,6 +244,47 @@ padding.px: 10
 
 -- end: ds.rendered
 
+
+
+
+
+
+
+-- ds.h2: `fetch-priority`
+
+Type: `optional` [`ftd.fetch-priority`](ftd/built-in-types/#ftd-fetch-priority)
+
+Required: False
+
+The `fetch-priority` property signals high or low priority for crucial `ftd.image` elements,
+optimizing early user experience.
+
+-- ds.rendered: Sample code using `fetch-priority`
+
+-- ds.rendered.input:
+
+\-- import: fastn.com/assets
+
+\-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
+fetch-priority: high ;; <hl>
+width.fixed.px: 400
+height.fixed.px: 300
+color: $inherited.colors.text
+padding.px: 10
+
+-- ds.rendered.output:
+
+-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
+fetch-priority: high
+width.fixed.px: 400
+height.fixed.px: 300
+color: $inherited.colors.text
+padding.px: 10
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
 -- end: ds.page
 
 

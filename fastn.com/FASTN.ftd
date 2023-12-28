@@ -517,7 +517,7 @@ skip: true
     document: ftd/variables.ftd
   - Built-in Types: /built-in-types/
     document: ftd/built-in-types.ftd
-    description: boolean, integer, decimal, string, caption, body, caption or body, ftd.ui, children, ftd.align-self, ftd.align, ftd.anchor, ftd.linear-gradient, ftd.linear-gradient-color, ftd.breakpoint-width-data, ftd.linear-gradient-directions, ftd.background-image, ftd.background-position, ftd.background-repeat, ftd.background-size, ftd.background, ftd.border-style, ftd.color, ftd.display, ftd.color-scheme, ftd.cursor, ftd.image-src, ftd.length, ftd.length-pair, ftd.loading, ftd.overflow, ftd.region, ftd.resize, ftd.resizing, ftd.responsive-type, ftd.shadow, ftd.spacing, ftd.text-align, ftd.text-input-type, ftd.text-style, ftd.text-transform, ftd.type, ftd.white-space, ftd.type-data
+    description: boolean, integer, decimal, string, caption, body, caption or body, ftd.ui, children, ftd.align-self, ftd.align, ftd.anchor, ftd.linear-gradient, ftd.linear-gradient-color, ftd.breakpoint-width-data, ftd.linear-gradient-directions, ftd.background-image, ftd.background-position, ftd.background-repeat, ftd.background-size, ftd.background, ftd.border-style, ftd.color, ftd.display, ftd.color-scheme, ftd.cursor, ftd.image-src, ftd.length, ftd.length-pair, ftd.loading, ftd.overflow, ftd.region, ftd.resize, ftd.resizing, ftd.responsive-type, ftd.shadow, ftd.spacing, ftd.text-align, ftd.text-input-type, ftd.text-style, ftd.text-transform, ftd.type, ftd.white-space, ftd.type-data, ftd.fetch-priority
   - `record`: /record/
     document: ftd/record.ftd
   - `or-type`: /or-type/

@@ -67,6 +67,7 @@ These types can be categorized into two main groups: **Primitive** and
   - [`ftd.type`](/built-in-types#ftd-type)
   - [`ftd.white-space`](/built-in-types#ftd-white-space)
   - [`ftd.type-data`](/built-in-types#ftd-type-data)
+  - [`ftd.fetch-priority`](/built-in-types#ftd-fetch-priority)
 
 
 
@@ -816,6 +817,38 @@ within its container area without cropping or stretching the image.
 
 - `length`: This anonymous record value will set the dimensions of the
 background image based on the specified x and y values.
+
+
+
+
+
+
+-- ds.h2: `ftd.fetch-priority`
+
+The `ftd.fetch-priority` property is used to specify the priority of the image.
+
+-- ds.code: `ftd.fetch-priority`
+lang: ftd
+
+\-- or-type fetch-priority:
+
+\-- constant string high: high
+\-- constant string low: low
+
+\-- end: fetch-priority
+
+-- ds.markdown:
+
+As shown above, the `ftd.fetch-priority` has following variants
+
+- `high`: Fetch the image at a high priority relative to other images.
+
+- `low`: Fetch the image at a low priority relative to other images.
+
+
+
+
+
 
 -- ds.h2: `ftd.color`
 
