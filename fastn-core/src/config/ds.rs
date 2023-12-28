@@ -1,4 +1,12 @@
-impl fastn_core::Config {
+pub struct DocumentStore {
+    root: std::path::PathBuf,
+}
+
+impl DocumentStore {
+    pub fn new(root: std::path::PathBuf) -> Self {
+        Self { root }
+    }
+
     pub async fn read_content(
         &self,
         path: &str,

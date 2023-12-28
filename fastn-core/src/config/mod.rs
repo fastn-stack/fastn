@@ -1,7 +1,7 @@
 // Document: https://fastn_core.dev/crate/config/
 // Document: https://fastn_core.dev/crate/package/
 
-mod ds;
+pub mod ds;
 pub(crate) mod utils;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
@@ -30,6 +30,7 @@ impl FTDEdition {
 #[derive(Debug, Clone)]
 pub struct Config {
     // Global Information
+    pub ds: fastn_core::config::ds::DS,
     pub package: fastn_core::Package,
     pub root: camino::Utf8PathBuf,
     pub packages_root: camino::Utf8PathBuf,
@@ -299,6 +300,31 @@ impl RequestConfig {
 }
 
 impl Config {
+    pub async fn read_content(
+        &self,
+        path: &str,
+        user_id: Option<u32>,
+    ) -> ftd::interpreter::Result<Vec<u8>> {
+        self.ds.read_content(path, user_id).await
+    }
+
+    pub async fn read_to_string<T: AsRef<str>>(
+        &self,
+        path: T,
+        user_id: Option<u32>,
+    ) -> ftd::interpreter::Result<String> {
+        self.ds.read_to_string(path, user_id).await
+    }
+
+    pub async fn write_content(
+        &self,
+        path: &str,
+        data: &[u8],
+        user_id: Option<u32>,
+    ) -> ftd::interpreter::Result<()> {
+        self.ds.write_content(path, data, user_id).await
+    }
+
     /// `build_dir` is where the static built files are stored. `fastn build` command creates this
     /// folder and stores its output here.
     pub fn build_dir(&self) -> camino::Utf8PathBuf {
@@ -1379,7 +1405,7 @@ impl Config {
     /// `read()` is the way to read a Config.
     #[tracing::instrument(name = "Config::read", skip_all)]
     pub async fn read(
-        root: Option<String>,
+        root: fastn_core::config::ds::DS,
         resolve_sitemap: bool,
     ) -> fastn_core::Result<fastn_core::Config> {
         let (root, original_directory) = match root {
@@ -1402,7 +1428,8 @@ impl Config {
                 )
             }
         };
-        let fastn_doc = utils::fastn_doc(&root.join("FASTN.ftd")).await?;
+        let ds = fastn_core::ds::DocumentStore::new(root);
+        let fastn_doc = utils::fastn_doc(&ds, &root.join("FASTN.ftd")).await?;
         let package = fastn_core::Package::from_fastn_doc(&root, &fastn_doc)?;
         let mut config = Config {
             package: package.clone(),
