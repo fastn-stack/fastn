@@ -76,7 +76,7 @@ pub fn ok_with_content_type(
 #[derive(Debug, Clone, Default)]
 pub struct Request {
     method: String,
-    uri: String,
+    pub uri: String,
     pub path: String,
     query_string: String,
     cookies: std::collections::HashMap<String, String>,
@@ -212,6 +212,27 @@ impl Request {
         self.cookies().get(name).map(|v| v.to_string())
     }
 
+    pub fn set_body(&mut self, body: actix_web::web::Bytes) {
+        self.body = body;
+    }
+
+    pub fn set_cookies(&mut self, cookies: &std::collections::HashMap<String, String>) {
+        self.cookies = cookies.clone();
+    }
+
+    pub fn insert_header(&mut self, name: reqwest::header::HeaderName, value: &'static str) {
+        self.headers
+            .insert(name, reqwest::header::HeaderValue::from_static(value));
+    }
+
+    pub fn set_method(&mut self, method: &str) {
+        self.method = method.to_uppercase();
+    }
+
+    pub fn set_query_string(&mut self, query_string: &str) {
+        self.query_string = query_string.to_string();
+    }
+
     pub fn host(&self) -> String {
         self.host.to_string()
         // use std::borrow::Borrow;
@@ -265,7 +286,7 @@ impl ResponseBuilder {
 
     pub async fn from_reqwest(
         response: reqwest::Response,
-        package_name: &str,
+        _package_name: &str,
     ) -> fastn_core::http::Response {
         let status = response.status();
 
@@ -279,24 +300,25 @@ impl ResponseBuilder {
         {
             response_builder.insert_header(header);
         }
-        if status == actix_web::http::StatusCode::FOUND {
-            response_builder.status(actix_web::http::StatusCode::OK);
-            if let Some(location) = response.headers().get(actix_web::http::header::LOCATION) {
-                let redirect = location.to_str().unwrap();
-                let path = if redirect.trim_matches('/').is_empty() {
-                    format!("/-/{}/", package_name)
-                } else {
-                    // if it contains query-params so url should not end with /
-                    if redirect.contains('?') {
-                        format!("/-/{}/{}", package_name, redirect.trim_matches('/'))
-                    } else {
-                        format!("/-/{}/{}/", package_name, redirect.trim_matches('/'))
-                    }
-                };
-                let t = serde_json::json!({"redirect": path.as_str()}).to_string();
-                return response_builder.body(t);
-            }
-        }
+
+        // if status == actix_web::http::StatusCode::FOUND && false {
+        //     response_builder.status(actix_web::http::StatusCode::OK);
+        //     if let Some(location) = response.headers().get(actix_web::http::header::LOCATION) {
+        //         let redirect = location.to_str().unwrap();
+        //         let path = if redirect.trim_matches('/').is_empty() {
+        //             format!("/-/{}/", package_name)
+        //         } else {
+        //             // if it contains query-params so url should not end with /
+        //             if redirect.contains('?') {
+        //                 format!("/-/{}/{}", package_name, redirect.trim_matches('/'))
+        //             } else {
+        //                 format!("/-/{}/{}/", package_name, redirect.trim_matches('/'))
+        //             }
+        //         };
+        //         let t = serde_json::json!({"redirect": path.as_str()}).to_string();
+        //         return response_builder.body(t);
+        //     }
+        // }
 
         let content = match response.bytes().await {
             Ok(b) => b,
@@ -390,7 +412,9 @@ pub(crate) async fn http_post_with_cookie(
     cookie: Option<String>,
     headers: &std::collections::HashMap<String, String>,
     body: &str,
-) -> fastn_core::Result<Vec<u8>> {
+) -> fastn_core::Result<(fastn_core::Result<Vec<u8>>, Vec<String>)> {
+    let mut resp_cookies = vec![];
+
     tracing::info!(url = url);
     let mut req_headers = reqwest::header::HeaderMap::new();
     req_headers.insert(
@@ -416,6 +440,13 @@ pub(crate) async fn http_post_with_cookie(
         .build()?;
 
     let res = c.post(url).body(body.to_string()).send().await?;
+    res.headers().iter().for_each(|(k, v)| {
+        if k.as_str().eq("set-cookie") {
+            if let Ok(v) = v.to_str() {
+                resp_cookies.push(v.to_string());
+            }
+        }
+    });
 
     if !res.status().eq(&reqwest::StatusCode::OK) {
         let message = format!(
@@ -425,14 +456,19 @@ pub(crate) async fn http_post_with_cookie(
             res.text().await
         );
         tracing::error!(url = url, msg = message);
-        return Err(fastn_core::Error::APIResponseError(message));
+        return Ok((
+            Err(fastn_core::Error::APIResponseError(message)),
+            resp_cookies,
+        ));
     }
     tracing::info!(msg = "returning success", url = url);
-    Ok(res.bytes().await?.into())
+    Ok((Ok(res.bytes().await?.into()), resp_cookies))
 }
 
 pub(crate) async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
-    http_get_with_cookie(url, None, &std::collections::HashMap::new()).await
+    http_get_with_cookie(url, None, &std::collections::HashMap::new(), true)
+        .await?
+        .0
 }
 
 static NOT_FOUND_CACHE: once_cell::sync::Lazy<antidote::RwLock<std::collections::HashSet<String>>> =
@@ -443,10 +479,16 @@ pub(crate) async fn http_get_with_cookie(
     url: &str,
     cookie: Option<String>,
     headers: &std::collections::HashMap<String, String>,
-) -> fastn_core::Result<Vec<u8>> {
-    if NOT_FOUND_CACHE.read().contains(url) {
-        return Err(fastn_core::Error::APIResponseError(
-            "page not found, cached".to_string(),
+    use_cache: bool,
+) -> fastn_core::Result<(fastn_core::Result<Vec<u8>>, Vec<String>)> {
+    let mut cookies = vec![];
+
+    if use_cache && NOT_FOUND_CACHE.read().contains(url) {
+        return Ok((
+            Err(fastn_core::Error::APIResponseError(
+                "page not found, cached".to_string(),
+            )),
+            cookies,
         ));
     }
 
@@ -474,7 +516,16 @@ pub(crate) async fn http_get_with_cookie(
         .default_headers(req_headers)
         .build()?;
 
+    // if we are not able to send the request, we could not have read the cookie
     let res = c.get(url).send().await?;
+
+    res.headers().iter().for_each(|(k, v)| {
+        if k.as_str().eq("set-cookie") {
+            if let Ok(v) = v.to_str() {
+                cookies.push(v.to_string());
+            }
+        }
+    });
 
     if !res.status().eq(&reqwest::StatusCode::OK) {
         let message = format!(
@@ -484,11 +535,15 @@ pub(crate) async fn http_get_with_cookie(
             res.text().await
         );
         tracing::error!(url = url, msg = message);
-        NOT_FOUND_CACHE.write().insert(url.to_string());
-        return Err(fastn_core::Error::APIResponseError(message));
+
+        if use_cache {
+            NOT_FOUND_CACHE.write().insert(url.to_string());
+        }
+
+        return Ok((Err(fastn_core::Error::APIResponseError(message)), cookies));
     }
     tracing::info!(msg = "returning success", url = url);
-    Ok(res.bytes().await?.into())
+    Ok((Ok(res.bytes().await?.into()), cookies))
 }
 
 // pub async fn http_get_with_type<T: serde::de::DeserializeOwned>(

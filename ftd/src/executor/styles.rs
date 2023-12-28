@@ -2235,7 +2235,7 @@ impl Spacing {
                     \"start\"
                 }
             "}
-            .to_string(),
+                .to_string(),
             true,
         )
     }

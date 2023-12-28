@@ -8,6 +8,7 @@ members = [
     "fastn-issues",
     "fastn-js",
     "fastn-grammar",
+    "fastn-lang",
     "foo",
     # "fastn-wasm",
     # "fastn-runtime",
@@ -53,6 +54,8 @@ strip = true
 # If you are not using the latest version intentionally, please do not list it in this section
 # and create it's own [dependencies.<name>] section, and document it with why are you not
 # using the latest dependency, and what is the plan to moving to the latest version.
+
+accept-language = "3"
 actix-web = "4"
 antidote = "1"
 dirs = "5"
@@ -61,23 +64,26 @@ deadpool-postgres = { git = "https://github.com/amitu/deadpool", rev = "dbf5a46"
 postgres-native-tls = "0.5"
 tokio-postgres = { version = "0.7", features = ["with-serde_json-1"] }
 postgres-types = "0.2"
-async-lock = "2"
+async-lock = "3"
 async-recursion = "1"
 async-trait = "0.1"
-actix-web-lab = "0.19"
+actix-web-lab = "0.20"
 bitflags = "2"
 bytemuck = { version = "1", features = [ "derive" ] }
 camino = "1"
 clap = "4"
-colored = "2.0.4"
+colored = "2"
 crossterm = "0.27"
 css-color-parser = "0.1"
 diffy = "0.3"
 dioxus-html = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 dioxus-native-core = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 dioxus-native-core-macro = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
+dotenvy = "0.15"
 edit = "0.1"
 env_logger = "0.10"
+enum-iterator = "0.6"
+enum-iterator-derive = "0.6"
 fastn-cloud = { path = "fastn-cloud" }
 fastn-core = { path = "fastn-core" }
 fastn-issues = { path = "fastn-issues" }
@@ -97,7 +103,7 @@ ignore = "0.4"
 include_dir = "0.7"
 indoc = "2"
 intl-memoizer = "0.5"
-itertools = "0.11"
+itertools = "0.12"
 log = "0.4"
 magic-crypt = { version = "3", default-features = false }
 mime_guess = "2"
@@ -113,9 +119,9 @@ reqwest = { version = "0.11", features = ["json"] }
 rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 ron = "0.8"
 rquickjs = { version = "0.3", features = ["macro"] }
-quick-js = "0.4.1"
+quick-js = "0.4"
 rustc-hash = "1"
-rusty-hook = "^0.11.2"
+rusty-hook = "0.11"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"
@@ -124,7 +130,7 @@ slug = "0.1"
 taffy = "0.3"
 tejar = "0.1"
 thiserror = "1"
-tokio = { version = "1.27.0", features = ["full"] }
+tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
 url = "2"
@@ -132,9 +138,9 @@ ansi_term = "0.12"
 walkdir = "2"
 smallvec = "1"
 wasm-bindgen = "0.2"
-wasmtime = "13"
-wgpu = "0.17"
-winit = "0.28"
+wasmtime = "15"
+wgpu = "0.18"
+winit = "0.29"
 zip = "0.6"
 prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }
@@ -144,7 +150,7 @@ git = "https://github.com/fastn-stack/fastn-observer"
 rev = "47b29ea"
 
 [workspace.dependencies.rusqlite]
-version = "0.29.0"
+version = "0.30"
 features = [
     # We are using bundled version of rusqlite so we do not need sqlitelib, headers as a
     # dependency. By default, if we do not bundle, our binary will link against system
@@ -168,7 +174,7 @@ features = [
 ]
 
 [workspace.dependencies.hyper]
-version = "0.14"
+version = "1"
 default-features = false
 features = ["http1", "server"]
 

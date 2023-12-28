@@ -17,7 +17,7 @@ async fn clone_worker(config: &fastn_core::Config) -> fastn_core::Result<CloneRe
     use itertools::Itertools;
 
     let all_files = config
-        .get_all_file_path(&config.package, Default::default())?
+        .deprecated_get_all_file_path(&config.package, Default::default())?
         .into_iter()
         .filter(|v| !config.remote_cr().eq(v))
         .collect_vec();

@@ -11,6 +11,7 @@
     </script>
 
     <script src="fastn-js.js"></script>
+    
 
     <style>
        
@@ -93,7 +94,7 @@ fastn.recordInstance({
   address: null,
   name: "Rithik"
 })]));
-let foo__append = _01_basic__append;
+let foo__append = global["_01_basic__append"];
 global["foo__append"] = foo__append;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
@@ -133,7 +134,7 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
     window.onload = function() {
         fastn_utils.resetFullHeight();
         fastn_utils.setFullHeight();
+        ftd.emit_on_load();
     };
-
 </script>
 </html>

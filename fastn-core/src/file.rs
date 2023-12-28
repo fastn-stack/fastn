@@ -142,17 +142,15 @@ pub(crate) async fn paths_to_files(
 pub fn package_ignores(
     package: &fastn_core::Package,
     root_path: &camino::Utf8PathBuf,
-    ignore_history: bool,
 ) -> Result<ignore::overrides::Override, ignore::Error> {
     let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
-    if ignore_history {
-        overrides.add("!.history")?;
-    }
+    overrides.add("!.history")?;
     overrides.add("!.packages")?;
     overrides.add("!.tracks")?;
     overrides.add("!fastn")?;
     overrides.add("!rust-toolchain")?;
     overrides.add("!.build")?;
+    overrides.add("!_tests")?;
     for ignored_path in &package.ignored_paths {
         overrides.add(format!("!{}", ignored_path).as_str())?;
     }

@@ -1,0 +1,32 @@
+-- record status:
+boolean is-logged-in:
+optional user-details user:
+
+-- record user-details:
+string name:
+string email:
+string login:
+integer id:
+
+
+-- status user:
+is-logged-in: false
+
+-- boolean loggedIn(user):
+user u: $user
+
+u.is-logged-in
+
+-- void increment(a):
+integer $a:
+
+a = a + 1
+
+-- integer increase(a):
+integer a:
+
+a + 1
+
+
+
+

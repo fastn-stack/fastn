@@ -1,7 +1,7 @@
 use crate::utils::HasElements;
 
 async fn i18n_data(lib: &fastn_core::Library) -> String {
-    let lang = match lib.config.config.package.language {
+    let lang = match lib.config.config.package.selected_language {
         Some(ref lang) => {
             realm_lang::Language::from_2_letter_code(lang).unwrap_or(realm_lang::Language::English)
         }
@@ -9,7 +9,7 @@ async fn i18n_data(lib: &fastn_core::Library) -> String {
     };
 
     let primary_lang = match lib.config.config.package.translation_of.as_ref() {
-        Some(ref package) => match package.language {
+        Some(ref package) => match package.selected_language {
             Some(ref lang) => realm_lang::Language::from_2_letter_code(lang)
                 .unwrap_or(realm_lang::Language::English),
             None => lang,
@@ -450,7 +450,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         );
     }
 
-    if let Some(ref language) = lib.config.config.package.language {
+    if let Some(ref language) = lib.config.config.package.selected_language {
         fastn_base = format!(
             indoc::indoc! {"
                 {fastn_base}
@@ -686,7 +686,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         let mut translation_status_list = "".to_string();
         for translation in lib.config.config.package.translations.iter() {
             if let Some(ref status) = translation.translation_status_summary {
-                if let Some(ref language) = translation.language {
+                if let Some(ref language) = translation.selected_language {
                     let url = format!("https://{}/-/translation-status/", translation.name);
                     let status = {
                         let mut status_data = format!(
@@ -768,7 +768,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         };
 
         for lang_package in other_language_packages {
-            let language = if let Some(ref lang) = lang_package.language {
+            let language = if let Some(ref lang) = lang_package.selected_language {
                 fastn_core::utils::language_to_human(lang)
             } else {
                 continue;

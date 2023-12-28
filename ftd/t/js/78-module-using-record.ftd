@@ -1,0 +1,13 @@
+-- header:
+
+-- component header:
+module m: 78-data-for-module
+
+-- ftd.column:
+
+-- ftd.text: Hello
+if: { header.m.user.is-logged-in }
+
+-- end: ftd.column
+
+-- end: header

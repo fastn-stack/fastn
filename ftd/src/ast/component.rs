@@ -208,6 +208,15 @@ impl Component {
                 children: vec![],
                 line_number,
             }),
+            ftd::ast::VariableValue::Constant { line_number, .. } => Ok(ftd::ast::Component {
+                name: key.to_string(),
+                properties: vec![],
+                iteration: None,
+                condition: None,
+                events: vec![],
+                children: vec![],
+                line_number,
+            }),
             ftd::ast::VariableValue::List { value, line_number } => {
                 let mut children = vec![];
                 for val in value {

@@ -13,6 +13,7 @@ pub enum ComponentStatement {
     MutableList(fastn_js::MutableList),
     ForLoop(fastn_js::ForLoop),
     RecordInstance(fastn_js::RecordInstance),
+    OrType(fastn_js::OrType),
     DeviceBlock(fastn_js::DeviceBlock),
     /// This contains arbitrary js to include. Some external tool or cms that we support.
     /// One such example is `ftd.rive`.
@@ -34,6 +35,7 @@ impl ComponentStatement {
             ComponentStatement::RecordInstance(record_instance) => {
                 Some(record_instance.name.clone())
             }
+            ComponentStatement::OrType(or_type) => Some(or_type.name.clone()),
             ComponentStatement::MutableList(mutable_list) => Some(mutable_list.name.clone()),
             _ => None,
         }

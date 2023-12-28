@@ -16,15 +16,13 @@ pub(crate) fn find_root_for_file(
 }
 
 pub async fn fastn_doc(path: &camino::Utf8Path) -> fastn_core::Result<ftd::ftd2021::p2::Document> {
-    {
-        let doc = tokio::fs::read_to_string(path);
-        let lib = fastn_core::FastnLibrary::default();
-        match fastn_core::doc::parse_ftd("fastn", doc.await?.as_str(), &lib) {
-            Ok(v) => Ok(v),
-            Err(e) => Err(fastn_core::Error::PackageError {
-                message: format!("failed to parse FASTN.ftd 3: {:?}", &e),
-            }),
-        }
+    let doc = tokio::fs::read_to_string(path);
+    let lib = fastn_core::FastnLibrary::default();
+    match fastn_core::doc::parse_ftd("fastn", doc.await?.as_str(), &lib) {
+        Ok(v) => Ok(v),
+        Err(e) => Err(fastn_core::Error::PackageError {
+            message: format!("failed to parse FASTN.ftd 3: {:?}", &e),
+        }),
     }
 }
 
@@ -109,6 +107,21 @@ pub fn get_clean_url(
                 ));
             }
         }
+    }
+
+    if let Some(endpoint) = config.package.endpoint.as_ref() {
+        return Ok((
+            Some(config.package.name.to_string()),
+            url::Url::parse(
+                format!(
+                    "{}/{}",
+                    endpoint.trim_end_matches('/'),
+                    url.trim_start_matches('/')
+                )
+                .as_str(),
+            )?,
+            std::collections::HashMap::new(),
+        ));
     }
 
     let msg = format!("http-processor: end-point not found url: {}", url);

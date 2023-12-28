@@ -166,6 +166,22 @@ impl Component {
         argument.get_default_interpreter_value(doc, self.properties.as_slice())
     }
 
+    pub fn get_interpreter_property_value_of_all_arguments(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::Map<ftd::interpreter::PropertyValue> {
+        let component_definition = doc.get_component(self.name.as_str(), 0).unwrap();
+        let mut property_values: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
+        for argument in component_definition.arguments.iter() {
+            if let Some(property_value) =
+                argument.get_default_interpreter_property_value(self.properties.as_slice())
+            {
+                property_values.insert(argument.name.to_string(), property_value);
+            }
+        }
+        property_values
+    }
+
     // Todo: Remove this function after removing 0.3
     pub fn get_children_property(&self) -> Option<ftd::interpreter::Property> {
         self.get_children_properties().first().map(|v| v.to_owned())
@@ -1365,10 +1381,13 @@ impl Event {
                 ast_event.line_number,
             )?;
 
+            let reference = function_name.as_str().trim_start_matches('$');
+            let reference_full_name = action.name.as_str();
+
             ftd::interpreter::utils::insert_module_thing(
                 &action.kind,
-                function_name.as_str(),
-                action.name.as_str(),
+                reference,
+                reference_full_name,
                 definition_name_with_arguments,
                 ast_event.line_number,
                 doc,

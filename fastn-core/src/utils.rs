@@ -495,6 +495,22 @@ pub(crate) fn validate_base_url(package: &fastn_core::Package) -> fastn_core::Re
     Ok(())
 }
 
+pub fn escape_string(s: &str) -> String {
+    let mut result = String::new();
+    for c in s.chars() {
+        match c {
+            '\\' => result.push_str("\\\\"),
+            '\"' => result.push_str("\\\""),
+            '\n' => result.push_str("\\n"),
+            '\r' => result.push_str("\\r"),
+            '\t' => result.push_str("\\t"),
+            '\0' => result.push_str("\\0"),
+            _ => result.push(c),
+        }
+    }
+    result
+}
+
 #[allow(dead_code)]
 pub fn escape_ftd(file: &str) -> String {
     use itertools::Itertools;
@@ -741,9 +757,7 @@ pub fn get_fastn_package_data(package: &fastn_core::Package) -> String {
     )
 }
 
-#[allow(clippy::too_many_arguments)]
 pub fn replace_markers_2023(
-    s: &str,
     js_script: &str,
     scripts: &str,
     ssr_body: &str,
@@ -752,60 +766,46 @@ pub fn replace_markers_2023(
     base_url: &str,
     config: &fastn_core::Config,
 ) -> String {
-    ftd::html::utils::trim_all_lines(
-        s.replace(
-            "__fastn_package__",
-            get_fastn_package_data(&config.package).as_str(),
+    format!(
+        include_str!("../../ftd/ftd-js.html"),
+        fastn_package = get_fastn_package_data(&config.package).as_str(),
+        base_url_tag = if !base_url.is_empty() {
+            format!("<base href=\"{}\">", base_url)
+        } else {
+            "".to_string()
+        },
+        favicon_html_tag = resolve_favicon(
+            config.root.as_str(),
+            config.package.name.as_str(),
+            &config.package.favicon,
         )
-        .replace(
-            "__js_script__",
-            format!("{js_script}{}", fastn_core::utils::available_code_themes()).as_str(),
-        )
-        .replace(
-            "__html_body__",
-            format!("{}{}", ssr_body, font_style).as_str(),
-        )
-        .replace(
-            "__favicon_html_tag__",
-            resolve_favicon(
-                config.root.as_str(),
-                config.package.name.as_str(),
-                &config.package.favicon,
-            )
-            .unwrap_or_default()
-            .as_str(),
-        )
-        .replace(
-            "__script_file__",
-            format!(
-                r#"
-                    <script src="{}"></script>
-                    <script src="{}"></script>
-                    <script src="{}"></script>
-                    <link rel="stylesheet" href="{}">
-                    {}
-                "#,
-                hashed_markdown_js(),
-                hashed_prism_js(),
-                hashed_default_ftd_js(config.package.name.as_str()),
-                hashed_prism_css(),
-                scripts,
-            )
-            .as_str(),
-        )
-        .replace(
-            "__extra_js__",
-            get_extra_js(
-                config.ftd_external_js.as_slice(),
-                config.ftd_inline_js.as_slice(),
-                "",
-                "",
-            )
-            .as_str(),
-        )
-        .replace("__default_css__", default_css)
-        .replace("__base_url__", base_url)
+        .unwrap_or_default()
         .as_str(),
+        js_script = format!("{js_script}{}", fastn_core::utils::available_code_themes()).as_str(),
+        script_file = format!(
+            r#"
+                <script src="{}"></script>
+                <script src="{}"></script>
+                <script src="{}"></script>
+                <link rel="stylesheet" href="{}">
+                {}
+            "#,
+            hashed_markdown_js(),
+            hashed_prism_js(),
+            hashed_default_ftd_js(config.package.name.as_str()),
+            hashed_prism_css(),
+            scripts,
+        )
+        .as_str(),
+        extra_js = get_extra_js(
+            config.ftd_external_js.as_slice(),
+            config.ftd_inline_js.as_slice(),
+            "",
+            "",
+        )
+        .as_str(),
+        default_css = default_css,
+        html_body = format!("{}{}", ssr_body, font_style).as_str(),
     )
 }
 

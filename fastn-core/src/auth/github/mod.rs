@@ -1,10 +1,12 @@
-pub mod apis;
+mod apis;
 mod utils;
+
+pub use apis::*;
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct UserDetail {
     pub access_token: String,
-    pub username: String,
+    pub user: GhUserDetails,
 }
 
 pub async fn login(
@@ -20,18 +22,13 @@ pub async fn login(
 
     // Note: public_repos user:email all these things are github resources
     // So we have to tell oauth_client who is getting logged in what are we going to access
-    let (mut authorize_url, _token) = fastn_core::auth::github::utils::github_client()
+    let (authorize_url, _token) = fastn_core::auth::github::utils::github_client()
         .set_redirect_uri(oauth2::RedirectUrl::new(redirect_url)?)
         .authorize_url(oauth2::CsrfToken::new_random)
         .add_scope(oauth2::Scope::new("public_repo".to_string()))
         .add_scope(oauth2::Scope::new("user:email".to_string()))
         .add_scope(oauth2::Scope::new("read:org".to_string()))
         .url();
-
-    // https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest:~:text=an%20appropriate%20display.-,prompt,-OPTIONAL.%20Space%20delimited
-    authorize_url
-        .query_pairs_mut()
-        .append_pair("prompt", "consent");
 
     Ok(fastn_core::http::redirect(authorize_url.to_string()))
 }
@@ -57,26 +54,35 @@ pub async fn callback(
         Err(e) => return Ok(fastn_core::server_error!("{}", e.to_string())),
     };
 
-    let gh_user = fastn_core::auth::github::apis::user_details(access_token.as_str()).await?;
+    let mut gh_user = fastn_core::auth::github::apis::user_details(access_token.as_str()).await?;
+
+    if gh_user.email.is_none() {
+        // pick primary email
+        let emails = fastn_core::auth::github::apis::user_emails(access_token.as_str()).await?;
+        let primary = emails
+            .into_iter()
+            .find(|e| e.primary)
+            .expect("primary email must exist for a github account");
+
+        gh_user.email = Some(primary.email);
+    }
 
     let ud = UserDetail {
-        username: gh_user.login,
+        user: gh_user,
         access_token,
     };
 
     let user_detail_str = serde_json::to_string(&ud)?;
+
     return Ok(actix_web::HttpResponse::Found()
         .cookie(
             actix_web::cookie::Cookie::build(
                 fastn_core::auth::AuthProviders::GitHub.as_str(),
-                fastn_core::auth::utils::encrypt_str(&user_detail_str).await,
+                fastn_core::auth::utils::encrypt(&user_detail_str).await,
             )
             .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
             .path("/")
             .permanent()
-            // TODO: AbrarK is running on http,
-            // will remove it later
-            // .secure(true)
             .finish(),
         )
         .append_header((actix_web::http::header::LOCATION, next))
@@ -236,7 +242,7 @@ pub async fn matched_contributed_repos(
             fastn_core::auth::github::apis::repo_contributors(ud.access_token.as_str(), repo)
                 .await?;
 
-        if repo_contributors.contains(&ud.username) {
+        if repo_contributors.contains(&ud.user.login) {
             matched_repo_contributors_list.push(String::from(repo.to_owned()));
         }
     }
@@ -276,7 +282,7 @@ pub async fn matched_collaborated_repos(
             fastn_core::auth::github::apis::repo_collaborators(ud.access_token.as_str(), repo)
                 .await?;
 
-        if repo_collaborator.contains(&ud.username) {
+        if repo_collaborator.contains(&ud.user.login) {
             matched_repo_collaborator_list.push(String::from(repo.to_owned()));
         }
     }
@@ -320,7 +326,7 @@ pub async fn matched_org_teams(
                 team_name,
             )
             .await?;
-            if team_members.contains(&ud.username) {
+            if team_members.contains(&ud.user.login) {
                 matched_org_teams.push(org_team.to_string());
             }
         }
@@ -362,7 +368,7 @@ pub async fn matched_sponsored_org(
     for sponsor in sponsors_list.iter() {
         if fastn_core::auth::github::apis::is_user_sponsored(
             ud.access_token.as_str(),
-            ud.username.as_str(),
+            ud.user.login.as_str(),
             sponsor.to_owned(),
         )
         .await?

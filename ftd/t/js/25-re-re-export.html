@@ -11,6 +11,7 @@
     </script>
 
     <script src="fastn-js.js"></script>
+    
 
     <style>
        
@@ -118,13 +119,13 @@ fastn.recordInstance({
   address: null,
   name: "Rithik"
 })]));
-let foo__append = _01_basic__append;
+let foo__append = global["_01_basic__append"];
 global["foo__append"] = foo__append;
-let _24_re_export__append = _01_basic__append;
+let _24_re_export__append = global["_01_basic__append"];
 global["_24_re_export__append"] = _24_re_export__append;
-let _24_re_export__print = _01_basic_module__print;
+let _24_re_export__print = global["_01_basic_module__print"];
 global["_24_re_export__print"] = _24_re_export__print;
-let _01_basic__print = _01_basic_module__print;
+let _01_basic__print = global["_01_basic_module__print"];
 global["_01_basic__print"] = _01_basic__print;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
@@ -164,7 +165,7 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
     window.onload = function() {
         fastn_utils.resetFullHeight();
         fastn_utils.setFullHeight();
+        ftd.emit_on_load();
     };
-
 </script>
 </html>

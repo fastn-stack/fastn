@@ -7,9 +7,7 @@ pub async fn process(
     let (headers, query) =
         fastn_core::library2022::processor::sqlite::get_p1_data("package-data", &value, doc.name)?;
 
-    fastn_core::library2022::utils::log_deprecation_warning(
-        "`package-query` has been deprecated, use `sql` processor instead.",
-    );
+    fastn_core::warning!("`package-query` has been deprecated, use `sql` processor instead.");
 
     let sqlite_database =
         match headers.get_optional_string_by_key("db", doc.name, value.line_number())? {

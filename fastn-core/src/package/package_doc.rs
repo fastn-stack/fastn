@@ -370,6 +370,18 @@ pub(crate) async fn read_ftd(
     download_assets: bool,
     test: bool,
 ) -> fastn_core::Result<FTDResult> {
+    read_ftd_(config, main, base_url, download_assets, test, false).await
+}
+
+#[tracing::instrument(skip_all)]
+pub(crate) async fn read_ftd_(
+    config: &mut fastn_core::RequestConfig,
+    main: &fastn_core::Document,
+    base_url: &str,
+    download_assets: bool,
+    test: bool,
+    only_js: bool,
+) -> fastn_core::Result<FTDResult> {
     tracing::info!(document = main.id);
     match config.config.ftd_edition {
         fastn_core::FTDEdition::FTD2021 => {
@@ -379,7 +391,7 @@ pub(crate) async fn read_ftd(
             read_ftd_2022(config, main, base_url, download_assets, test).await
         }
         fastn_core::FTDEdition::FTD2023 => {
-            read_ftd_2023(config, main, base_url, download_assets).await
+            read_ftd_2023(config, main, base_url, download_assets, only_js).await
         }
     }
 }
@@ -459,6 +471,7 @@ pub(crate) async fn read_ftd_2023(
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
+    only_js: bool,
 ) -> fastn_core::Result<FTDResult> {
     let package_name = config.config.package.name.to_string();
     let c = &config.config.clone();
@@ -509,21 +522,27 @@ pub(crate) async fn read_ftd_2023(
         ftd::js::default_bag_into_js_ast().as_slice(),
         package_name.as_str(),
     );
-    let ssr_body = fastn_js::ssr_with_js_string(
-        &package_name,
-        format!("{js_ftd_script}\n{js_document_script}").as_str(),
-    );
+    let file_content = if only_js {
+        fastn_js::ssr_raw_string_without_test(
+            &package_name,
+            format!("{js_ftd_script}\n{js_document_script}").as_str(),
+        )
+    } else {
+        let ssr_body = fastn_js::ssr_with_js_string(
+            &package_name,
+            format!("{js_ftd_script}\n{js_document_script}").as_str(),
+        );
 
-    let file_content = fastn_core::utils::replace_markers_2023(
-        ftd::ftd_js_html(),
-        js_document_script.as_str(),
-        js_ast_data.scripts.join("").as_str(),
-        ssr_body.as_str(),
-        config.config.get_font_style().as_str(),
-        ftd::ftd_js_css(),
-        base_url,
-        c,
-    );
+        fastn_core::utils::replace_markers_2023(
+            js_document_script.as_str(),
+            js_ast_data.scripts.join("").as_str(),
+            ssr_body.as_str(),
+            config.config.get_font_style().as_str(),
+            ftd::ftd_js_css(),
+            base_url,
+            c,
+        )
+    };
 
     Ok(FTDResult::Html(file_content.into()))
 }

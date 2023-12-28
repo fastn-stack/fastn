@@ -18,6 +18,34 @@ boolean inherit-auto-imports-from-original: true
 optional string endpoint:
 boolean backend: false
 backend-header list backend-headers:
+optional string system:
+optional boolean system-is-confidential:
+optional string default-language:
+optional string lang:
+optional string translation-en:
+optional string translation-hi:
+optional string translation-zh:
+optional string translation-es:
+optional string translation-ar:
+optional string translation-pt:
+optional string translation-ru:
+optional string translation-fr:
+optional string translation-de:
+optional string translation-ja:
+optional string translation-bn:
+optional string translation-ur:
+optional string translation-id:
+optional string translation-tr:
+optional string translation-vi:
+optional string translation-it:
+optional string translation-pl:
+optional string translation-th:
+optional string translation-nl:
+optional string translation-ko:
+
+-- record package-lang:
+caption string lang:
+string module:
 
 
 -- record dependency-data:
@@ -27,6 +55,8 @@ optional body notes:
 string list implements:
 optional string endpoint:
 optional string mount-point:
+optional string provided-via:
+optional string required-as:
 
 
 -- dependency-data list dependency:

@@ -1,0 +1,12 @@
+[package]
+name = "fastn-lang"
+version = "0.1.0"
+authors = ["Amit Upadhyay <upadhyay@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+accept-language.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+enum-iterator.workspace = true
+enum-iterator-derive.workspace = true

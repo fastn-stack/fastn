@@ -43,6 +43,9 @@ pub fn convert_to_document_id(doc_name: &str) -> String {
     format!("/{}/", document_id)
 }
 
+#[allow(dead_code)]
+/// We might use this in future
+/// would be helpful if this is documented properly
 pub fn document_full_id(
     req_config: &fastn_core::RequestConfig,
     doc: &ftd::ftd2021::p2::TDoc,

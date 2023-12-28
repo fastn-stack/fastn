@@ -56,10 +56,6 @@ pub fn theme_css() -> ftd::Map<String> {
     themes
 }
 
-pub fn ftd_js_html() -> &'static str {
-    include_str!("../ftd-js.html")
-}
-
 pub fn ftd_js_css() -> &'static str {
     include_str!("../ftd-js.css")
 }

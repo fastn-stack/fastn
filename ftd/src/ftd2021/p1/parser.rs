@@ -815,7 +815,7 @@ mod test {
             ),
             super::Section::with_name("hello")
                 .add_sub_section(super::SubSection::with_name("realm.rr.step.body").and_body(
-                    &indoc!(
+                    indoc!(
                         r#"
                         {
                           "body": "-- h0: Hello World\n\n-- markup:\n\ndemo cr 1\n",

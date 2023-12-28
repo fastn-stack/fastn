@@ -101,3 +101,23 @@ lang: ftd
 
 \-- ftd.text: Hello World
 
+
+;; --------------------KERNEL(ftd.image)----------------------
+
+-- ftd.text: Fetch Priority = Auto
+
+-- ftd.image: https://picsum.photos/536/354
+fetch-priority: auto
+
+
+-- ftd.text: Fetch Priority = low
+
+-- ftd.image: https://picsum.photos/536/354
+fetch-priority: low
+
+
+-- ftd.text: Fetch Priority = high
+
+-- ftd.image: https://picsum.photos/536/354
+fetch-priority: high
+

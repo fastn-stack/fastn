@@ -74,17 +74,17 @@ let fastn_utils = {
     },
     getInheritedValues(default_args, inherited, function_args) {
         let record_fields = {
-            "colors": ftd.default_colors.getClone().setAndReturn("is-root", true),
-            "types": ftd.default_types.getClone().setAndReturn("is-root", true)
+            "colors": ftd.default_colors.getClone().setAndReturn("is_root", true),
+            "types": ftd.default_types.getClone().setAndReturn("is_root", true)
         }
         Object.assign(record_fields, default_args);
         let fields = {};
         if (inherited instanceof fastn.recordInstanceClass) {
-            fields = inherited.getAllFields();
-            if (fields["colors"].get("is-root")) {
+            fields = inherited.getClonedFields();
+            if (fastn_utils.getStaticValue(fields["colors"].get("is_root"))) {
                delete fields.colors;
             }
-            if (fields["types"].get("is-root")) {
+            if (fastn_utils.getStaticValue(fields["types"].get("is_root"))) {
                delete fields.types;
             }
         }
@@ -272,6 +272,7 @@ let fastn_utils = {
      */
     markdown_inline(i) {
         if (fastn_utils.isNull(i)) return;
+        i = i.toString();
         const { space_before, space_after } = fastn_utils.private.spaces(i);
         const o = (() => {
             let g = fastn_utils.private.replace_last_occurrence(marked.parse(i), "<p>", "");
@@ -469,7 +470,6 @@ let fastn_utils = {
             return lowercased;
         }).join('');
     },
-
     escapeHtmlInCode(str) {
         return str.replace(/[<]/g, "&lt;");
     },
@@ -684,7 +684,39 @@ fastn_utils.private = {
         while (newChildrenWrapper.firstChild) {
             parent.appendChild(newChildrenWrapper.firstChild);
         }
-    }
+    },
+
+    // Cookie related functions ----------------------------------------------
+    setCookie(cookieName, cookieValue) {
+        cookieName = fastn_utils.getStaticValue(cookieName);
+        cookieValue = fastn_utils.getStaticValue(cookieValue);
+
+        // Default expiration period of 30 days
+        var expires = "";
+        var expirationDays = 30;
+        if (expirationDays) {
+            var date = new Date();
+            date.setTime(date.getTime() + (expirationDays * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+
+        document.cookie = cookieName + "=" + encodeURIComponent(cookieValue) + expires + "; path=/";
+    },
+    getCookie(cookieName) {
+        cookieName = fastn_utils.getStaticValue(cookieName);
+        var name = cookieName + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var cookieArray = decodedCookie.split(';');
+
+        for (var i = 0; i < cookieArray.length; i++) {
+            var cookie = cookieArray[i].trim();
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+
+        return "None";
+    },
 }
 
 

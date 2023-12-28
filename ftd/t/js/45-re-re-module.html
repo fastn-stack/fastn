@@ -11,6 +11,7 @@
     </script>
 
     <script src="fastn-js.js"></script>
+    
 
     <style>
        
@@ -152,7 +153,7 @@ let foo__moo = function (parent, inherited, args)
   }
 }
 global["foo__moo"] = foo__moo;
-let _01_basic__print = _01_basic_module__print;
+let _01_basic__print = global["_01_basic_module__print"];
 global["_01_basic__print"] = _01_basic__print;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
@@ -192,7 +193,7 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
     window.onload = function() {
         fastn_utils.resetFullHeight();
         fastn_utils.setFullHeight();
+        ftd.emit_on_load();
     };
-
 </script>
 </html>

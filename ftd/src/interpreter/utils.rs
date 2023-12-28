@@ -729,7 +729,15 @@ pub(crate) fn insert_module_thing(
             reference.strip_prefix(&format!("{}.{}.", component_name, arg.name))
         {
             let module_component_name = format!("{}#{}", module_name, reference);
-            if let Ok(module_component_definition) =
+            if let Ok(function_definition) =
+                doc.get_function(module_component_name.as_str(), line_number)
+            {
+                let function_module_thing = ftd::interpreter::ModuleThing::function(
+                    reference.to_string(),
+                    function_definition.return_kind.clone(),
+                );
+                things.insert(reference.to_string(), function_module_thing);
+            } else if let Ok(module_component_definition) =
                 doc.get_component(module_component_name.as_str(), 0)
             {
                 let component_module_thing = ftd::interpreter::ModuleThing::component(

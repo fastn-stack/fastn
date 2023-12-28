@@ -17,7 +17,7 @@ mod package;
 pub mod tutor;
 pub(crate) mod watcher;
 #[macro_use]
-mod http;
+pub mod http;
 mod auth;
 mod ds;
 mod error;
@@ -32,7 +32,8 @@ mod tracker;
 mod translation;
 mod version;
 // mod wasm;
-pub(crate) mod catch_panic;
+pub mod catch_panic;
+pub(crate) mod google_sheets;
 mod library2022;
 mod workspace;
 
@@ -42,7 +43,7 @@ pub use commands::{
     close_cr::close_cr, create_cr::create_cr, create_package::create_package, diff::diff,
     edit::edit, mark_resolved::mark_resolved, mark_upto_date::mark_upto_date, merge::merge,
     query::query, resolve_conflict::resolve_conflict, revert::revert, rm::rm, serve::listen,
-    start_tracking::start_tracking, status::status, sync2::sync2,
+    start_tracking::start_tracking, status::status, sync2::sync2, test::test,
     translation_status::translation_status, update::update,
 };
 pub use config::{Config, FTDEdition, RequestConfig};
@@ -315,6 +316,14 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 pub(crate) fn usage_error<T>(message: String) -> Result<T> {
     Err(Error::UsageError { message })
+}
+
+pub(crate) fn generic_error<T>(message: String) -> Result<T> {
+    Error::generic_err(message)
+}
+
+pub(crate) fn assert_error<T>(message: String) -> Result<T> {
+    Err(Error::AssertError { message })
 }
 
 #[cfg(test)]

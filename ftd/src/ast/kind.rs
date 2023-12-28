@@ -8,10 +8,12 @@ pub struct VariableKind {
 pub enum VariableModifier {
     List,
     Optional,
+    Constant,
 }
 
 pub const OPTIONAL: &str = "optional";
 pub const LIST: &str = "list";
+pub const CONSTANT: &str = "constant";
 
 impl VariableModifier {
     pub(crate) fn is_optional_from_expr(expr: &str) -> bool {
@@ -20,6 +22,10 @@ impl VariableModifier {
 
     pub(crate) fn is_list_from_expr(expr: &str) -> bool {
         expr.eq(LIST)
+    }
+
+    pub(crate) fn is_constant_from_expr(expr: &str) -> bool {
+        expr.eq(CONSTANT)
     }
 
     fn is_list(&self) -> bool {
@@ -37,6 +43,8 @@ impl VariableModifier {
                 return Some(VariableModifier::Optional);
             } else if VariableModifier::is_list_from_expr(expr.last().unwrap()) {
                 return Some(VariableModifier::List);
+            } else if VariableModifier::is_constant_from_expr(expr.get(0).unwrap()) {
+                return Some(VariableModifier::Constant);
             }
         }
         None
@@ -69,6 +77,7 @@ impl VariableKind {
         let kind = match modifier {
             Some(VariableModifier::Optional) if expr.len() >= 2 => expr[1..].join(" "),
             Some(VariableModifier::List) if expr.len() >= 2 => expr[..expr.len() - 1].join(" "),
+            Some(VariableModifier::Constant) if expr.len() >= 2 => expr[1..].join(" "),
             None => expr.join(" "),
             _ => {
                 return ftd::ast::parse_error(
@@ -88,6 +97,11 @@ pub enum VariableValue {
     Optional {
         value: Box<Option<VariableValue>>,
         line_number: usize,
+    },
+    Constant {
+        value: String,
+        line_number: usize,
+        source: ValueSource,
     },
     List {
         value: Vec<VariableKeyValue>,
@@ -267,14 +281,14 @@ impl HeaderValue {
 }
 
 impl VariableValue {
-    pub(crate) fn inner(&self) -> Option<VariableValue> {
+    pub fn inner(&self) -> Option<VariableValue> {
         match self {
             VariableValue::Optional { value, .. } => value.as_ref().as_ref().map(|v| v.to_owned()),
             t => Some(t.to_owned()),
         }
     }
 
-    pub(crate) fn record_name(&self) -> Option<String> {
+    pub fn record_name(&self) -> Option<String> {
         let mut name = None;
         let inner_value = self.inner();
         if let Some(ftd::ast::VariableValue::Record {
@@ -289,6 +303,7 @@ impl VariableValue {
     pub fn string(&self, doc_id: &str) -> ftd::ast::Result<String> {
         match self {
             VariableValue::String { value, .. } => Ok(value.to_string()),
+            VariableValue::Constant { value, .. } => Ok(value.to_string()),
             t => ftd::ast::parse_error(
                 format!("Expect Variable value string, found: `{:?}`", t),
                 doc_id,
@@ -357,6 +372,7 @@ impl VariableValue {
     pub fn line_number(&self) -> usize {
         match self {
             VariableValue::Optional { line_number, .. }
+            | VariableValue::Constant { line_number, .. }
             | VariableValue::List { line_number, .. }
             | VariableValue::Record { line_number, .. }
             | VariableValue::String { line_number, .. } => *line_number,
@@ -366,6 +382,7 @@ impl VariableValue {
     pub fn set_line_number(&mut self, new_line_number: usize) {
         match self {
             VariableValue::Optional { line_number, .. }
+            | VariableValue::Constant { line_number, .. }
             | VariableValue::List { line_number, .. }
             | VariableValue::Record { line_number, .. }
             | VariableValue::String { line_number, .. } => *line_number = new_line_number,
@@ -422,11 +439,11 @@ impl VariableValue {
         }
     }
 
-    pub(crate) fn is_record(&self) -> bool {
+    pub fn is_record(&self) -> bool {
         matches!(self, VariableValue::Record { .. })
     }
 
-    pub(crate) fn is_string(&self) -> bool {
+    pub fn is_string(&self) -> bool {
         matches!(self, VariableValue::String { .. })
     }
 

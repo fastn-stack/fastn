@@ -1,0 +1,43 @@
+-- component get:
+caption title:
+string url:
+optional body test:
+optional string http-status:
+optional string http-location:
+optional string http-redirect:
+query list query-params:
+
+-- ftd.text: NOT IMPLEMENTED HERE
+
+-- end: get
+
+-- record query:
+caption key:
+string value:
+
+
+
+-- component post:
+caption title:
+string url:
+body body:
+string test:
+optional string http-status:
+optional string http-location:
+optional string http-redirect:
+
+-- ftd.text: NOT IMPLEMENTED HERE
+
+-- end: post
+
+
+
+
+-- record test-data-structure:
+caption next-url:
+body next-post-body:
+
+
+-- test-data-structure test-data: /
+
+{}

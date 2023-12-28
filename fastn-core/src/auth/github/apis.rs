@@ -18,7 +18,8 @@ pub struct User {
 pub struct GhUserDetails {
     pub login: String,
     pub id: usize,
-    pub name: String,
+    pub name: Option<String>,
+    pub email: Option<String>,
 }
 
 // TODO: API to starred a repo on behalf of the user
@@ -137,12 +138,27 @@ pub async fn is_user_sponsored(
     }
 }
 
-// TODO: It can be stored in the request cookies
 pub async fn user_details(access_token: &str) -> fastn_core::Result<GhUserDetails> {
     // API Docs: https://docs.github.com/en/rest/users/users#get-the-authenticated-user
     // TODO: Handle paginated response
     let user_obj: GhUserDetails =
         fastn_core::http::get_api("https://api.github.com/user", access_token).await?;
+
+    Ok(user_obj)
+}
+
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+pub struct GhEmail {
+    pub email: String,
+    pub verified: bool,
+    pub primary: bool,
+    pub visibility: String,
+}
+
+pub async fn user_emails(access_token: &str) -> fastn_core::Result<Vec<GhEmail>> {
+    // API Docs: https://docs.github.com/en/rest/users/emails?apiVersion=2022-11-28#list-email-addresses-for-the-authenticated-user
+    let user_obj: Vec<GhEmail> =
+        fastn_core::http::get_api("https://api.github.com/user/emails", access_token).await?;
 
     Ok(user_obj)
 }
