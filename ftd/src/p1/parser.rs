@@ -892,7 +892,7 @@ fn clean_line(line: &str) -> String {
         return format!(
             "{}{}",
             " ".repeat(line.len() - trimmed_line.len()),
-            trimmed_line[1..].to_string()
+            &trimmed_line[1..]
         );
     }
 
@@ -919,7 +919,7 @@ fn trim_body(s: &str) -> String {
     for line in s.split('\n') {
         let trimmed_line = line.trim_start().to_string();
         let current_leading_spaces_count = line.len() - trimmed_line.len();
-        if line.len() != 0 && current_leading_spaces_count < leading_spaces_count {
+        if !line.is_empty() && current_leading_spaces_count < leading_spaces_count {
             leading_spaces_count = current_leading_spaces_count;
         }
     }
