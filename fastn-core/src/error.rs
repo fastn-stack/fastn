@@ -63,8 +63,11 @@ pub enum Error {
     #[error("NotFoundError: {}", _0)]
     NotFound(String),
 
-    #[error("FastnIoError: {}", _0)]
-    FastnIoError(String),
+    #[error("FastnIoError: {io_error}, path: {path}")]
+    FastnIoError {
+        io_error: std::io::Error,
+        path: String,
+    },
 
     #[error("PackageError: {message}")]
     PackageError { message: String },

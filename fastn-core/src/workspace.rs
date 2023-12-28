@@ -72,7 +72,7 @@ impl fastn_core::Config {
     pub async fn get_available_crs(&self) -> fastn_core::Result<Vec<i32>> {
         let mut response = vec![];
         if self.clone_available_crs_path().exists() {
-            let crs = tokio::fs::read_to_string(self.clone_available_crs_path()).await?;
+            let crs = fastn_core::tokio_fs::read_to_string(self.clone_available_crs_path()).await?;
             for cr in crs.split('\n') {
                 if cr.trim().is_empty() {
                     continue;
@@ -98,7 +98,7 @@ impl fastn_core::Config {
         let workspace = {
             let req = fastn_core::http::Request::default();
             let mut lib = fastn_core::RequestConfig::new(self, &req, "", "/");
-            let workspace = tokio::fs::read_to_string(self.workspace_file()).await?;
+            let workspace = fastn_core::tokio_fs::read_to_string(self.workspace_file()).await?;
             fastn_core::doc::interpret_helper(
                 "workspace.ftd",
                 workspace.as_str(),

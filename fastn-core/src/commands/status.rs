@@ -127,8 +127,8 @@ pub(crate) async fn get_file_status(
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
 
-        let content = tokio::fs::read(&doc.get_full_path()).await?;
-        let existing_doc = tokio::fs::read(&path).await?;
+        let content = fastn_core::tokio_fs::read(&doc.get_full_path()).await?;
+        let existing_doc = fastn_core::tokio_fs::read(&path).await?;
         if sha2::Sha256::digest(content).eq(&sha2::Sha256::digest(existing_doc)) {
             return Ok(FileStatus::Uptodate);
         }
