@@ -466,7 +466,7 @@ fn app(version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("create-cr")
                 .about("Create a Change Request")
-                .arg(clap::arg!(title: <TITLE> "The title of the new CR"))
+                .arg(clap::arg!(title: <TITLE> "The title of the new CR").required(false))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(

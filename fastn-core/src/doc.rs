@@ -818,6 +818,16 @@ pub async fn resolve_foreign_variable2(
     }
 }
 
+pub async fn parse_ftd_2023(
+    name: &str,
+    source: &str,
+    config: &fastn_core::Config,
+) -> ftd::interpreter::Result<ftd::interpreter::Document> {
+    let req = fastn_core::http::Request::default();
+    let mut lib = fastn_core::RequestConfig::new(config, &req, "", "/");
+    fastn_core::doc::interpret_helper(name, source, &mut lib, "/", false, 0).await
+}
+
 // No need to make async since this is pure.
 pub fn parse_ftd(
     name: &str,
