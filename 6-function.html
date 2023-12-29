@@ -2069,9 +2069,9 @@ set_data_value(data, "foo#new-name", value);
 }
 window.ftd.call_mutable_value_changes("foo#name", "main");
 window.ftd.call_immutable_value_changes("foo#name", "main");
-window.ftd.utils.node_change_call("main","2:main__text", data);
 window.ftd.utils.node_change_call("main","1:main__text", data);
 window.ftd.utils.node_change_call("main","2:main__padding", data);
+window.ftd.utils.node_change_call("main","2:main__text", data);
 };
 
 window.set_value_main["foo#new-name"] = function (data, new_value, remaining) {
