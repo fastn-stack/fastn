@@ -1,0 +1,6 @@
+{
+  "includes": ["fastn-js/js/**/*.js"],
+  "plugins": [
+    "https://plugins.dprint.dev/prettier-0.32.0.json@fa93f05ab38f00c6de138f7747372585c661f79dfb11d7f1209c069b56680820"
+  ]
+}
