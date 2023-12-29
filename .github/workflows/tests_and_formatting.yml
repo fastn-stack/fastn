@@ -1,4 +1,4 @@
-name: Rust Checks
+name: Rust and JS Checks/Formatting
 
 on:
   workflow_dispatch:
@@ -74,3 +74,16 @@ jobs:
       - name: Check if test succeeded
         if: steps.test.outcome != 'success'
         run: exit 1
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Prettify code
+        uses: creyD/prettier_action@v4.3
+        with:
+          prettier_options: --write --tab-width 4 /home/runner/work/fastn/fastn/fastn-js/js/**/*.js
+          only_changed: True
