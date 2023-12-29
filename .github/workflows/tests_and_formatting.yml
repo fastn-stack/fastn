@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -78,4 +80,3 @@ jobs:
         uses: creyD/prettier_action@v4.3
         with:
           prettier_options: --write --tab-width 4 /home/runner/work/fastn/fastn/fastn-js/js/**/*.js
-          only_changed: True
