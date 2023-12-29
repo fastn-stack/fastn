@@ -234,7 +234,7 @@ pub fn value_to_colored_string_without_null(
         serde_json::Value::Array(v) => {
             let mut s = String::new();
             let mut is_first = true;
-            for (_, value) in v.iter().enumerate() {
+            for value in v.iter() {
                 let value_string = value_to_colored_string_without_null(value, indent_level + 1);
                 if !value_string.is_empty() {
                     s.push_str(&format!(

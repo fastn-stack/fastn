@@ -110,7 +110,7 @@ fn construct_tree_util(mut elements: Vec<(TocItem, usize)>) -> Vec<TocItem> {
     if elements.is_empty() {
         return vec![];
     }
-    let smallest_level = elements.get(0).unwrap().1;
+    let smallest_level = elements.first().unwrap().1;
     elements.push((TocItem::default(), smallest_level));
     // println!("Elements: {:#?}", elements);
     let mut tree = construct_tree(elements, smallest_level);
