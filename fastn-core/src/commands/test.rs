@@ -6,6 +6,7 @@ pub(crate) const TEST_TITLE_HEADER: &str = "title";
 pub(crate) const TEST_URL_HEADER: &str = "url";
 
 // optional test parameters
+pub(crate) const TEST_ID_HEADER: &str = "id";
 pub(crate) const QUERY_PARAMS_HEADER: &str = "query-params";
 pub(crate) const QUERY_PARAMS_HEADER_KEY: &str = "key";
 pub(crate) const QUERY_PARAMS_HEADER_VALUE: &str = "value";
@@ -15,12 +16,50 @@ pub(crate) const HTTP_REDIRECT_HEADER: &str = "http-redirect";
 pub(crate) const HTTP_STATUS_HEADER: &str = "http-status";
 pub(crate) const HTTP_LOCATION_HEADER: &str = "http-location";
 
+macro_rules! log_variable {
+    // When verbose is true, debug variables
+    ($verbose:expr, $($variable:expr),*) => {
+        if $verbose {
+            $(std::dbg!($variable);)*
+        }
+    };
+}
+
+macro_rules! log_message {
+    // When verbose is true, print message
+    ($verbose:expr, $($message:expr),*) => {
+        if $verbose {
+            $(std::println!($message);)*
+        }
+    };
+}
+
+#[derive(Debug, Clone)]
+pub struct TestParameters {
+    pub script: bool,
+    pub verbose: bool,
+    pub instruction_number: i64,
+    pub test_results: ftd::Map<String>,
+}
+
+impl TestParameters {
+    pub fn new(script: bool, verbose: bool) -> Self {
+        TestParameters {
+            script,
+            verbose,
+            instruction_number: 0,
+            test_results: Default::default(),
+        }
+    }
+}
+
 pub async fn test(
     config: &fastn_core::Config,
     only_id: Option<&str>,
     _base_url: &str,
     headless: bool,
     script: bool,
+    verbose: bool,
 ) -> fastn_core::Result<()> {
     use colored::Colorize;
 
@@ -37,8 +76,9 @@ pub async fn test(
                 continue;
             }
         }
+        let mut test_parameters = TestParameters::new(script, verbose);
         println!("Running test file: {}", document.id.magenta());
-        read_ftd_test_file(document, config, script).await?;
+        read_ftd_test_file(document, config, &mut test_parameters).await?;
     }
 
     Ok(())
@@ -92,7 +132,7 @@ impl fastn_core::Config {
 async fn read_ftd_test_file(
     ftd_document: fastn_core::Document,
     config: &fastn_core::Config,
-    script: bool,
+    mut test_parameters: &mut TestParameters,
 ) -> fastn_core::Result<()> {
     let req = fastn_core::http::Request::default();
     let mut saved_cookies: std::collections::HashMap<String, String> =
@@ -118,13 +158,13 @@ async fn read_ftd_test_file(
     );
     let mut instruction_number = 1;
     for instruction in main_ftd_doc.tree {
+        test_parameters.instruction_number = instruction_number;
         if !execute_instruction(
             &instruction,
             &doc,
             config,
             &mut saved_cookies,
-            script,
-            instruction_number,
+            &mut test_parameters,
         )
         .await?
         {
@@ -140,31 +180,14 @@ async fn execute_instruction(
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,
-    script: bool,
-    instruction_number: i64,
+    test_parameters: &mut TestParameters,
 ) -> fastn_core::Result<bool> {
     match instruction.name.as_str() {
         "fastn#get" => {
-            execute_get_instruction(
-                instruction,
-                doc,
-                config,
-                saved_cookies,
-                script,
-                instruction_number,
-            )
-            .await
+            execute_get_instruction(instruction, doc, config, saved_cookies, test_parameters).await
         }
         "fastn#post" => {
-            execute_post_instruction(
-                instruction,
-                doc,
-                config,
-                saved_cookies,
-                script,
-                instruction_number,
-            )
-            .await
+            execute_post_instruction(instruction, doc, config, saved_cookies, test_parameters).await
         }
         t => fastn_core::usage_error(format!(
             "Unknown instruction {}, line number: {}",
@@ -178,8 +201,7 @@ async fn execute_post_instruction(
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,
-    script: bool,
-    _instruction_number: i64,
+    test_parameters: &mut TestParameters,
 ) -> fastn_core::Result<bool> {
     let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc);
 
@@ -192,44 +214,49 @@ async fn execute_post_instruction(
         .unwrap();
 
     // Optional test parameters --------------------------------
-    let mut other_params: ftd::Map<String> = ftd::Map::new();
+    let mut optional_params: ftd::Map<String> = ftd::Map::new();
+
+    if let Some(test_id) = get_optional_value_string(TEST_ID_HEADER, &property_values, doc)? {
+        optional_params.insert(TEST_ID_HEADER.to_string(), test_id);
+    }
 
     if let Some(test_content) =
         get_optional_value_string(TEST_CONTENT_HEADER, &property_values, doc)?
     {
-        other_params.insert(TEST_CONTENT_HEADER.to_string(), test_content);
+        optional_params.insert(TEST_CONTENT_HEADER.to_string(), test_content);
     }
 
     if let Some(post_body) = get_optional_value_string(POST_BODY_HEADER, &property_values, doc)? {
-        other_params.insert(POST_BODY_HEADER.to_string(), post_body);
+        optional_params.insert(POST_BODY_HEADER.to_string(), post_body);
     }
 
     if let Some(http_status) = get_optional_value_string(HTTP_STATUS_HEADER, &property_values, doc)?
     {
-        other_params.insert(HTTP_STATUS_HEADER.to_string(), http_status);
+        optional_params.insert(HTTP_STATUS_HEADER.to_string(), http_status);
     }
 
     if let Some(http_location) =
         get_optional_value_string(HTTP_LOCATION_HEADER, &property_values, doc)?
     {
-        other_params.insert(HTTP_LOCATION_HEADER.to_string(), http_location);
+        optional_params.insert(HTTP_LOCATION_HEADER.to_string(), http_location);
     }
 
     if let Some(http_redirect) =
         get_optional_value_string(HTTP_REDIRECT_HEADER, &property_values, doc)?
     {
-        other_params.insert(HTTP_REDIRECT_HEADER.to_string(), http_redirect);
+        optional_params.insert(HTTP_REDIRECT_HEADER.to_string(), http_redirect);
     }
 
-    assert_optional_headers(&other_params)?;
+    assert_optional_headers(&optional_params)?;
 
     get_post_response_for_id(
         url.as_str(),
         title.as_str(),
-        other_params,
+        optional_params,
         config,
         saved_cookies,
-        script,
+        doc.name,
+        test_parameters,
     )
     .await
 }
@@ -240,12 +267,16 @@ async fn get_post_response_for_id(
     optional_params: ftd::Map<String>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,
-    _script: bool,
+    doc_name: &str,
+    test_parameters: &mut TestParameters,
 ) -> fastn_core::Result<bool> {
     use actix_web::body::MessageBody;
     use colored::Colorize;
 
-    println!("Test: {}  ", title.yellow());
+    println!("Test: {}", title.yellow());
+    log_message!(test_parameters.verbose, "Test type: GET");
+    log_variable!(test_parameters.verbose, &test_parameters.script);
+
     let req_body = optional_params
         .get(POST_BODY_HEADER)
         .cloned()
@@ -257,26 +288,72 @@ async fn get_post_response_for_id(
     request.set_body(post_body);
     request.insert_header(reqwest::header::CONTENT_TYPE, "application/json");
     request.set_cookies(saved_cookies);
+
+    log_message!(test_parameters.verbose, "Request details");
+    log_variable!(test_parameters.verbose, &request);
+
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
     update_cookies(saved_cookies, &response);
+
+    log_message!(test_parameters.verbose, "Response details");
+    log_variable!(test_parameters.verbose, &response);
 
     let (response_status_code, response_location) = assert_response(&response, &optional_params)?;
     let test = optional_params.get(TEST_CONTENT_HEADER);
     if let Some(test_content) = test {
         let body = response.into_body().try_into_bytes().unwrap(); // Todo: Throw error
-        let response_body = format!(
-            "fastn.http_response = {}",
-            std::str::from_utf8(&body).unwrap()
+        let just_response_body = std::str::from_utf8(&body).unwrap();
+        let response_variable = format!("fastn.http_response = {}", just_response_body);
+
+        // Save Test results
+        test_parameters.test_results.insert(
+            test_parameters.instruction_number.to_string(),
+            just_response_body.to_string(),
         );
+        // Save Test result at its id key as well
+        if let Some(test_id) = optional_params.get(TEST_ID_HEADER) {
+            test_parameters
+                .test_results
+                .insert(test_id.clone(), just_response_body.to_string());
+        }
+
+        // Previous Test results variable
+        let test_results_variable = if !test_parameters.test_results.is_empty() {
+            make_test_results_variable(&test_parameters.test_results)
+        } else {
+            "".to_string()
+        };
+
+        log_message!(test_parameters.verbose, "Previous Test results");
+        log_variable!(test_parameters.verbose, &test_results_variable);
+
         // Todo: Throw error
         let fastn_test_js = fastn_js::fastn_test_js();
         let fastn_assertion_headers =
             fastn_js::fastn_assertion_headers(response_status_code, response_location.as_str());
         let fastn_js = fastn_js::all_js_without_test_and_ftd_langugage_js();
         let test_string = format!(
-            "{fastn_js}\n\n{response_body}\n{fastn_assertion_headers}\n{fastn_test_js}\n\
+            "{fastn_js}\n\n{response_variable}\n{fastn_assertion_headers}\n{fastn_test_js}\n\
             {test_content}\nfastn.test_result"
         );
+        if test_parameters.script {
+            let mut test_file_name = doc_name.to_string();
+            if let Some((_, file_name)) = test_file_name.trim_end_matches('/').rsplit_once('/') {
+                test_file_name = file_name.to_string();
+            }
+            fastn_js::generate_script_file(
+                test_string.as_str(),
+                config.get_test_directory_path(),
+                test_file_name
+                    .replace(
+                        ".test",
+                        format!(".t{}.test", test_parameters.instruction_number).as_str(),
+                    )
+                    .as_str(),
+            );
+            println!("{}", "Script file created".green());
+            return Ok(true);
+        }
         let test_result = fastn_js::run_test(test_string.as_str());
         if test_result.iter().any(|v| !(*v)) {
             println!("{}", "Test Failed".red());
@@ -292,8 +369,7 @@ async fn execute_get_instruction(
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,
-    script: bool,
-    instruction_number: i64,
+    test_parameters: &mut TestParameters,
 ) -> fastn_core::Result<bool> {
     let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc);
 
@@ -307,6 +383,10 @@ async fn execute_get_instruction(
 
     // Optional test parameters --------------------------------
     let mut optional_params: ftd::Map<String> = ftd::Map::new();
+
+    if let Some(test_id) = get_optional_value_string(TEST_ID_HEADER, &property_values, doc)? {
+        optional_params.insert(TEST_ID_HEADER.to_string(), test_id);
+    }
 
     if let Some(query_params) = get_optional_value_list(QUERY_PARAMS_HEADER, &property_values, doc)?
     {
@@ -369,28 +449,28 @@ async fn execute_get_instruction(
         optional_params,
         config,
         saved_cookies,
-        script,
         doc.name,
-        instruction_number,
+        test_parameters,
     )
     .await
 }
 
-#[allow(clippy::too_many_arguments)]
 async fn get_js_for_id(
     id: &str,
     title: &str,
     optional_params: ftd::Map<String>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,
-    script: bool,
     doc_name: &str,
-    instruction_number: i64,
+    test_parameters: &mut TestParameters,
 ) -> fastn_core::Result<bool> {
     use actix_web::body::MessageBody;
     use colored::Colorize;
 
-    println!("Test: {}  ", title.yellow());
+    println!("Test: {}", title.yellow());
+    log_message!(test_parameters.verbose, "Test type: GET");
+    log_variable!(test_parameters.verbose, &test_parameters.script);
+
     let mut request = fastn_core::http::Request::default();
     request.path = id.to_string();
     if let Some(query_string) = optional_params.get(QUERY_PARAMS_HEADER) {
@@ -398,26 +478,55 @@ async fn get_js_for_id(
     }
     request.set_method("get");
     request.set_cookies(saved_cookies);
+
+    log_message!(test_parameters.verbose, "Request details");
+    log_variable!(test_parameters.verbose, &request);
+
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
     update_cookies(saved_cookies, &response);
+
+    log_message!(test_parameters.verbose, "Response details");
+    log_variable!(test_parameters.verbose, &response);
 
     let (response_status_code, response_location) = assert_response(&response, &optional_params)?;
     let test = optional_params.get(TEST_CONTENT_HEADER);
     if let Some(test_content) = test {
         let body = response.into_body().try_into_bytes().unwrap(); // Todo: Throw error
-        let response_body = format!(
-            "fastn.http_response = {}",
-            std::str::from_utf8(&body).unwrap()
+        let just_response_body = std::str::from_utf8(&body).unwrap();
+        let response_variable = format!("fastn.http_response = {}", just_response_body);
+
+        // Save Test results
+        test_parameters.test_results.insert(
+            test_parameters.instruction_number.to_string(),
+            just_response_body.to_string(),
         );
+        // Save Test result at its id key as well (if given)
+        if let Some(test_id) = optional_params.get(TEST_ID_HEADER) {
+            test_parameters
+                .test_results
+                .insert(test_id.clone(), just_response_body.to_string());
+        }
+
+        // Previous Test results variable
+        let test_results_variable = if !test_parameters.test_results.is_empty() {
+            make_test_results_variable(&test_parameters.test_results)
+        } else {
+            "".to_string()
+        };
+
+        log_message!(test_parameters.verbose, "Previous Test results");
+        log_variable!(test_parameters.verbose, &test_results_variable);
+
         let fastn_test_js = fastn_js::fastn_test_js();
         let fastn_assertion_headers =
             fastn_js::fastn_assertion_headers(response_status_code, response_location.as_str());
         let fastn_js = fastn_js::all_js_without_test_and_ftd_langugage_js();
         let test_string = format!(
-            "{fastn_js}\n{response_body}\n{fastn_assertion_headers}\n{fastn_test_js}\n\
+            "{fastn_js}\n{test_results_variable}\n{response_variable}\n{fastn_assertion_headers}\n\
+            {fastn_test_js}\n\
             {test_content}\nfastn.test_result"
         );
-        if script {
+        if test_parameters.script {
             let mut test_file_name = doc_name.to_string();
             if let Some((_, file_name)) = test_file_name.trim_end_matches('/').rsplit_once('/') {
                 test_file_name = file_name.to_string();
@@ -426,7 +535,10 @@ async fn get_js_for_id(
                 test_string.as_str(),
                 config.get_test_directory_path(),
                 test_file_name
-                    .replace(".test", format!(".t{}.test", instruction_number).as_str())
+                    .replace(
+                        ".test",
+                        format!(".t{}.test", test_parameters.instruction_number).as_str(),
+                    )
                     .as_str(),
             );
             println!("{}", "Script file created".green());
@@ -440,6 +552,21 @@ async fn get_js_for_id(
     }
     println!("{}", "Test Passed".green());
     Ok(true)
+}
+
+fn make_test_results_variable(test_results: &ftd::Map<String>) -> String {
+    let mut test_results_variable = "fastn.test_results = {};\n".to_string();
+    for (key, value) in test_results.iter() {
+        test_results_variable.push_str(
+            format!(
+                "fastn.test_results[\"{}\"] = {}",
+                key.as_str(),
+                value.as_str()
+            )
+            .as_str(),
+        )
+    }
+    test_results_variable
 }
 
 fn update_cookies(
