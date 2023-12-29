@@ -1,7 +1,9 @@
 -- import: 08-inherited as colors
+-- import: 85-export-or-type as mod2
 
 -- component page:
 module colors: colors
+module mod: 85-export-or-type
 
 -- ftd.column:
 width: fill-container
@@ -17,6 +19,9 @@ background.solid: $colors.base-
 
 -- ftd.text: Hello world
 
+-- button:
+type: $page.mod.button-type.small
+
 -- end: ftd.column
 
 -- end: ftd.column
@@ -25,7 +30,20 @@ background.solid: $colors.base-
 
 -- page:
 
-;; -- void change-bg-color(m):
-;; module m:
 
-;; m.base_.set("red")
+-- component button:
+mod2.button-type type:
+integer $count: 0
+
+-- ftd.integer: $button.count
+background.solid: blue
+color: white
+text-align: center
+min-width.fixed.px: 240
+selectable: false
+padding.px: 12
+padding.px if { button.type == small }: 4
+padding.px if { button.type == medium }: 8
+$on-click$: $ftd.increment($a = $button.count)
+
+-- end: button
