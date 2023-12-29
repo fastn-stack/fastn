@@ -24,7 +24,7 @@ pub async fn sync(
 
     let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
 
-    let latest_ftd = tokio::fs::read_to_string(config.history_dir().join(".latest.ftd"))
+    let latest_ftd = fastn_core::tokio_fs::read_to_string(config.history_dir().join(".latest.ftd"))
         .await
         .unwrap_or_else(|_| "".to_string());
 
@@ -117,7 +117,7 @@ async fn get_changed_files(
                 document.get_base_path(),
                 timestamp,
             );
-            let snapshot_file_content = tokio::fs::read(&snapshot_file_path).await?;
+            let snapshot_file_content = fastn_core::tokio_fs::read(&snapshot_file_path).await?;
             // Update
             let current_file_content = document.get_content();
             if sha2::Sha256::digest(&snapshot_file_content)
@@ -172,8 +172,8 @@ async fn write(
 
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
-        if let Ok(current_doc) = tokio::fs::read(&doc.get_full_path()).await {
-            let existing_doc = tokio::fs::read(&path).await?;
+        if let Ok(current_doc) = fastn_core::tokio_fs::read(&doc.get_full_path()).await {
+            let existing_doc = fastn_core::tokio_fs::read(&path).await?;
 
             if sha2::Sha256::digest(current_doc).eq(&sha2::Sha256::digest(existing_doc)) {
                 return Ok((

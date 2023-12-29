@@ -303,7 +303,7 @@ optional body message:
 integer timestamp:
 integer version:
 optional string author:
-option integer src-cr:
+optional integer src-cr:
 string operation:
 
 
@@ -457,7 +457,7 @@ integer version:
 -- record tracking-info:
 caption filename:
 integer version:
-option integer self-version:
+optional integer self-version:
 
 
 -- tracking-info list tracks:

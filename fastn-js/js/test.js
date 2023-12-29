@@ -1,5 +1,10 @@
 function assertKindIdIsUnique() {
-    let maps = [fastn_dom.PropertyKind, fastn_dom.ElementKind, fastn_dom.Event, fastn_dom.propertyMap];
+    let maps = [
+        fastn_dom.PropertyKind,
+        fastn_dom.ElementKind,
+        fastn_dom.Event,
+        fastn_dom.propertyMap,
+    ];
     for (let idx in maps) {
         let ids = new Set();
         let values = Object.values(flattenObject(maps[idx]));
@@ -11,7 +16,6 @@ function assertKindIdIsUnique() {
 }
 
 function assertKindIdIsUniqueForValue(value, ids) {
-
     if (value instanceof Function) {
         value = value()[0];
     } else if (value instanceof Object) {
@@ -38,7 +42,6 @@ function assertKindIdIsUniqueForValue(value, ids) {
 }
 
 assertKindIdIsUnique();
-
 
 function flattenObject(obj) {
     let result = {};

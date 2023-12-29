@@ -5,6 +5,13 @@ pub struct FileHistory {
     pub file_edit: Vec<FileEdit>,
 }
 
+impl fastn_core::Config {
+    pub(crate) async fn to_file_history(&self, file: &str) -> fastn_core::Result<Vec<FileHistory>> {
+        let doc = fastn_core::doc::parse_ftd_2023("history.ftd", file, self).await?;
+        Ok(doc.get("history.ftd#history")?)
+    }
+}
+
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Eq, Clone)]
 pub struct FileEdit {
     pub message: Option<String>,
@@ -69,8 +76,8 @@ impl FileOperation {
 impl fastn_core::Config {
     pub async fn get_history(&self) -> fastn_core::Result<Vec<FileHistory>> {
         let history_file_path = self.history_file();
-        let history_content = tokio::fs::read_to_string(history_file_path).await?;
-        FileHistory::from_ftd(history_content.as_str())
+        let history_content = fastn_core::tokio_fs::read_to_string(history_file_path).await?;
+        self.to_file_history(history_content.as_str()).await
     }
 
     pub async fn get_remote_manifest(
@@ -160,9 +167,18 @@ impl FileHistory {
     }
 
     pub(crate) fn to_ftd(history: &[&fastn_core::history::FileHistory]) -> String {
-        let mut files_history = vec!["-- import: fastn".to_string()];
+        let mut files_history = vec![
+            "-- import: fastn".to_string(),
+            format!(
+                "-- fastn.file-history list history:\n{}: true",
+                ftd::ast::ALWAYS_INCLUDE
+            ),
+        ];
         for file_history in history {
-            let mut file_history_data = format!("-- fastn.history: {}\n", file_history.filename);
+            let mut file_history_data = format!(
+                "-- fastn.file-history: {}\n-- fastn.file-history.file-edit:\n",
+                file_history.filename
+            );
             for file_edit in &file_history.file_edit {
                 let author = file_edit
                     .author
@@ -174,27 +190,32 @@ impl FileHistory {
                     .map(|v| format!("src-cr: {}\n", v))
                     .unwrap_or_else(|| "".to_string());
                 file_history_data = format!(
-                    "{}\n--- file-edit:\ntimestamp: {}\noperation: {:?}\nversion: {}\n{}{}\n{}\n",
-                    file_history_data,
-                    file_edit.timestamp,
-                    file_edit.operation,
-                    file_edit.version,
-                    author,
-                    src_cr,
-                    file_edit.message.as_ref().unwrap_or(&"".to_string())
+                    indoc::indoc! {"
+                        {file_history_data}
+                        -- fastn.file-edit-data:
+                        timestamp: {timestamp}
+                        operation: {operation}
+                        version: {version}
+                        {author}{src_cr}
+                        {message}
+                    "},
+                    file_history_data = file_history_data,
+                    timestamp = file_edit.timestamp,
+                    operation = format!("{:?}", file_edit.operation),
+                    version = file_edit.version,
+                    author = author,
+                    src_cr = src_cr,
+                    message = file_edit.message.clone().unwrap_or_default()
                 );
             }
+            file_history_data = format!(
+                "{}\n-- end: fastn.file-history.file-edit",
+                file_history_data
+            );
             files_history.push(file_history_data);
         }
+        files_history.push("-- end: history".to_string());
         files_history.join("\n\n\n")
-    }
-
-    pub(crate) fn from_ftd(file: &str) -> fastn_core::Result<Vec<FileHistory>> {
-        let doc = {
-            let lib = fastn_core::FastnLibrary::default();
-            fastn_core::doc::parse_ftd("history.ftd", file, &lib)?
-        };
-        Ok(doc.get("fastn#history")?)
     }
 }
 
@@ -250,7 +271,7 @@ pub(crate) async fn insert_into_history_(
         if !file_op.operation.eq(&FileOperation::Deleted) {
             let new_file_path =
                 remote_state.join(fastn_core::utils::snapshot_id(file, &(version as u128)));
-            let content = tokio::fs::read(root.join(file)).await?;
+            let content = fastn_core::tokio_fs::read(root.join(file)).await?;
             fastn_core::utils::update(&new_file_path, content.as_slice()).await?;
         }
     }

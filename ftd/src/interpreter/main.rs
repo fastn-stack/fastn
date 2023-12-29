@@ -827,14 +827,13 @@ impl InterpreterState {
 
 pub fn interpret(id: &str, source: &str) -> ftd::interpreter::Result<Interpreter> {
     let doc = ParsedDocument::parse_with_line_number(id, source, 0)?;
-    interpret_with_line_number(id, doc, 0)
+    interpret_with_line_number(id, doc)
 }
 
 #[tracing::instrument(skip_all)]
 pub fn interpret_with_line_number(
     id: &str,
     document: ParsedDocument,
-    _line_number: usize,
 ) -> ftd::interpreter::Result<Interpreter> {
     use itertools::Itertools;
 
@@ -850,7 +849,7 @@ pub fn interpret_with_line_number(
             .ast
             .iter()
             .filter_map(|v| {
-                if v.is_component() {
+                if v.is_component() || v.is_always_included_variable_definition() {
                     Some(ftd::interpreter::ToProcessItem {
                         number_of_scan: 0,
                         ast: v.to_owned(),
@@ -1127,6 +1126,127 @@ impl Document {
         }
 
         Ok(None)
+    }
+
+    pub fn get<T: serde::de::DeserializeOwned>(&self, key: &str) -> ftd::interpreter::Result<T> {
+        let v = self.json(key)?;
+        Ok(serde_json::from_value(v)?)
+    }
+
+    pub fn name(&self, k: &str) -> String {
+        if k.contains('#') {
+            k.to_string()
+        } else {
+            format!("{}#{}", self.name.as_str(), k)
+        }
+    }
+
+    pub fn json(&self, key: &str) -> ftd::interpreter::Result<serde_json::Value> {
+        let key = self.name(key);
+        let thing = match self.data.get(key.as_str()) {
+            Some(v) => v,
+            None => {
+                return Err(ftd::interpreter::Error::ValueNotFound {
+                    doc_id: self.name.to_string(),
+                    line_number: 0,
+                    message: key.to_string(),
+                })
+            }
+        };
+        let doc = self.tdoc();
+
+        match thing {
+            ftd::interpreter::Thing::Variable(v) => {
+                let mut property_value = &v.value;
+                for cv in v.conditional_value.iter() {
+                    if cv.condition.eval(&doc)? {
+                        property_value = &cv.value;
+                    }
+                }
+                let value = property_value.clone().resolve(&doc, v.line_number)?;
+                self.value_to_json(&value)
+            }
+            t => panic!("{:?} is not a variable", t),
+        }
+    }
+
+    fn value_to_json(
+        &self,
+        v: &ftd::interpreter::Value,
+    ) -> ftd::interpreter::Result<serde_json::Value> {
+        let doc = self.tdoc();
+        Ok(match v {
+            ftd::interpreter::Value::Integer { value } => {
+                serde_json::Value::Number(serde_json::Number::from(*value))
+            }
+            ftd::interpreter::Value::Boolean { value } => serde_json::Value::Bool(*value),
+            ftd::interpreter::Value::Decimal { value } => {
+                serde_json::Value::Number(serde_json::Number::from_f64(*value).unwrap())
+                // TODO: remove unwrap
+            }
+            ftd::interpreter::Value::String { text, .. } => {
+                serde_json::Value::String(text.to_owned())
+            }
+            ftd::interpreter::Value::Record { fields, .. } => self.object_to_json(fields)?,
+            ftd::interpreter::Value::OrType { variant, value, .. } => {
+                let mut map = serde_json::Map::new();
+                map.insert(
+                    "type".to_string(),
+                    serde_json::Value::String(variant.to_owned()),
+                );
+                map.insert(
+                    "value".to_string(),
+                    self.property_value_to_json(value.as_ref())?,
+                );
+                serde_json::Value::Object(map)
+            }
+            ftd::interpreter::Value::List { data, .. } => self.list_to_json(
+                data.iter()
+                    .filter_map(|v| v.clone().resolve(&doc, v.line_number()).ok())
+                    .collect::<Vec<ftd::interpreter::Value>>()
+                    .as_slice(),
+            )?,
+            ftd::interpreter::Value::Optional { data, .. } => match data.as_ref() {
+                Some(v) => self.value_to_json(v)?,
+                None => serde_json::Value::Null,
+            },
+            _ => {
+                return ftd::interpreter::utils::e2(
+                    format!("unhandled value found(value_to_json): {:?}", v),
+                    self.name.as_str(),
+                    0,
+                )
+            }
+        })
+    }
+
+    fn list_to_json(
+        &self,
+        data: &[ftd::interpreter::Value],
+    ) -> ftd::interpreter::Result<serde_json::Value> {
+        let mut list = vec![];
+        for item in data.iter() {
+            list.push(self.value_to_json(item)?)
+        }
+        Ok(serde_json::Value::Array(list))
+    }
+
+    fn object_to_json(
+        &self,
+        fields: &ftd::Map<ftd::interpreter::PropertyValue>,
+    ) -> ftd::interpreter::Result<serde_json::Value> {
+        let mut map = serde_json::Map::new();
+        for (k, v) in fields.iter() {
+            map.insert(k.to_string(), self.property_value_to_json(v)?);
+        }
+        Ok(serde_json::Value::Object(map))
+    }
+
+    fn property_value_to_json(
+        &self,
+        v: &ftd::interpreter::PropertyValue,
+    ) -> ftd::interpreter::Result<serde_json::Value> {
+        self.value_to_json(&v.clone().resolve(&self.tdoc(), v.line_number())?)
     }
 }
 

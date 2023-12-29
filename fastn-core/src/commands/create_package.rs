@@ -63,32 +63,34 @@ pub async fn create_package(
     fastn_core::utils::update(&final_dir.join("index.ftd"), tmp_index.as_bytes()).await?;
     fastn_core::utils::update(&final_dir.join(".gitignore"), tmp_gitignore.as_bytes()).await?;
 
-    // Note: Not required for now
-    // let sync_message = "Initial sync".to_string();
-    // let file_list: std::collections::BTreeMap<String, fastn_core::history::FileEditTemp> =
-    //     IntoIterator::into_iter([
-    //         (
-    //             "FASTN.ftd".to_string(),
-    //             fastn_core::history::FileEditTemp {
-    //                 message: Some(sync_message.to_string()),
-    //                 author: None,
-    //                 src_cr: None,
-    //                 operation: fastn_core::history::FileOperation::Added,
-    //             },
-    //         ),
-    //         (
-    //             "index.ftd".to_string(),
-    //             fastn_core::history::FileEditTemp {
-    //                 message: Some(sync_message.to_string()),
-    //                 author: None,
-    //                 src_cr: None,
-    //                 operation: fastn_core::history::FileOperation::Added,
-    //             },
-    //         ),
-    //     ])
-    //     .collect();
+    if cfg!(feature = "remote") {
+        let sync_message = "Initial sync".to_string();
+        let file_list: std::collections::BTreeMap<String, fastn_core::history::FileEditTemp> =
+            IntoIterator::into_iter([
+                (
+                    "FASTN.ftd".to_string(),
+                    fastn_core::history::FileEditTemp {
+                        message: Some(sync_message.to_string()),
+                        author: None,
+                        src_cr: None,
+                        operation: fastn_core::history::FileOperation::Added,
+                    },
+                ),
+                (
+                    "index.ftd".to_string(),
+                    fastn_core::history::FileEditTemp {
+                        message: Some(sync_message.to_string()),
+                        author: None,
+                        src_cr: None,
+                        operation: fastn_core::history::FileOperation::Added,
+                    },
+                ),
+            ])
+            .collect();
 
-    // fastn_core::history::insert_into_history(&final_dir, &file_list, &mut Default::default()).await?;
+        fastn_core::history::insert_into_history(&final_dir, &file_list, &mut Default::default())
+            .await?;
+    }
 
     println!(
         "fastn Package Created: {}\nPath: {}",

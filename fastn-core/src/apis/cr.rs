@@ -16,7 +16,7 @@ pub async fn create_cr(
             let url = format!("-/{}/-/about/", cr_number);
             fastn_core::http::api_ok(CreateCRResponse { url })
         }
-        Err(err) => fastn_core::http::api_error(err.to_string()),
+        Err(err) => fastn_core::http::api_error(err.to_string(), None),
     }
 }
 
@@ -41,7 +41,7 @@ pub async fn create_cr_page(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     match create_cr_page_worker(config, req).await {
         Ok(body) => Ok(body),
-        Err(err) => fastn_core::http::api_error(err.to_string()),
+        Err(err) => fastn_core::http::api_error(err.to_string(), None),
     }
 }
 

@@ -53,27 +53,8 @@
       },
       "mutable": false,
       "value": {
-        "Record": {
-          "name": "sitemap",
-          "caption": null,
-          "headers": [
-            {
-              "key": "$processor$",
-              "mutable": false,
-              "value": {
-                "string-value": {
-                  "value": "pr.sitemap",
-                  "line-number": 9,
-                  "source": "Default"
-                }
-              },
-              "line-number": 9,
-              "kind": null,
-              "condition": null
-            }
-          ],
-          "body": null,
-          "values": [],
+        "Optional": {
+          "value": null,
           "line_number": 8
         }
       },
@@ -137,27 +118,8 @@
       },
       "mutable": false,
       "value": {
-        "Record": {
-          "name": "sitemap",
-          "caption": null,
-          "headers": [
-            {
-              "key": "$processor$",
-              "mutable": false,
-              "value": {
-                "string-value": {
-                  "value": "sitemap",
-                  "line-number": 19,
-                  "source": "Default"
-                }
-              },
-              "line-number": 19,
-              "kind": null,
-              "condition": null
-            }
-          ],
-          "body": null,
-          "values": [],
+        "Optional": {
+          "value": null,
           "line_number": 18
         }
       },
