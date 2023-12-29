@@ -14,7 +14,7 @@ static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
 /*pub async fn get(path: &str) -> fastn_core::Result<usize> {
     match LOCK.try_read() {
         Ok(_) => {
-            let value = tokio::fs::read_to_string(path).await?;
+            let value = fastn_core::tokio_fs::read_to_string(path).await?;
             Ok(value.parse()?)
         }
         Err(e) => Err(fastn_core::Error::GenericError(e.to_string())),

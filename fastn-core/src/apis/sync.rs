@@ -83,7 +83,7 @@ pub(crate) async fn sync_worker(
     // TODO: Need to call at once only
     let mut snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
     let client_snapshots = fastn_core::snapshot::resolve_snapshots(&request.latest_ftd).await?;
-    // let latest_ftd = tokio::fs::read_to_string(config.history_dir().join(".latest.ftd")).await?;
+    // let latest_ftd = fastn_core::tokio_fs::read_to_string(config.history_dir().join(".latest.ftd")).await?;
     let timestamp = fastn_core::timestamp_nanosecond();
     let mut synced_files = std::collections::HashMap::new();
     for file in request.files.iter() {

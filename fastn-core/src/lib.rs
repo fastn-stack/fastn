@@ -35,6 +35,7 @@ mod version;
 pub mod catch_panic;
 pub(crate) mod google_sheets;
 mod library2022;
+pub(crate) mod tokio_fs;
 mod workspace;
 
 pub(crate) use auto_import::AutoImport;
@@ -105,13 +106,12 @@ fn package_info_about(config: &fastn_core::Config) -> fastn_core::Result<String>
         };
         indoc::formatdoc! {"
             {body_prefix}
-    
-            -- import: {package_info_package}/cr
 
-            -- cr.description:
+            -- optional string description:
+            {always_include}: true
         ",
         body_prefix = body_prefix,
-        package_info_package = config.package_info_package(),
+        always_include = ftd::ast::ALWAYS_INCLUDE,
         }
     })
 }

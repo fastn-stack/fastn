@@ -1332,7 +1332,8 @@ impl Config {
             }
         };
 
-        let doc = tokio::fs::read_to_string(fastn_manifest_path.join("fastn.manifest.ftd"));
+        let doc =
+            fastn_core::tokio_fs::read_to_string(fastn_manifest_path.join("fastn.manifest.ftd"));
         let lib = fastn_core::FastnLibrary::default();
         let fastn_manifest_processed =
             match fastn_core::doc::parse_ftd("fastn.manifest", doc.await?.as_str(), &lib) {

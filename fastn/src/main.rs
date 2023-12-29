@@ -413,7 +413,6 @@ fn app(version: &'static str) -> clap::Command {
             clap::Command::new("clone")
                 .about("Clone a package into a new directory")
                 .arg(clap::arg!(source: <SOURCE> "The source package to clone"))
-                .hide(true)
         )
         .subcommand(
             clap::Command::new("edit")
@@ -427,21 +426,19 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Add one or more files in the workspace")
                 .arg(clap::arg!(file: <FILE>... "The file(s) to add"))
                 .arg(clap::arg!(--cr <CR> "The CR to add the file(s) in"))
-                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("rm")
                 .about("Removes one or more files from the workspace")
                 .arg(clap::arg!(file: <FILE>... "The file(s) to remove"))
                 .arg(clap::arg!(--cr <CR> "The CR to remove the file(s) from"))
-                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("merge")
                 .about("Merge two manifests together")
                 .arg(clap::arg!(src: <SRC> "The source manifest to merge"))
                 .arg(clap::arg!(dest: <DEST> "The destination manifest to merge"))
-                .arg(clap::arg!(file: <FILE>... "The file(s) to merge"))
+                .arg(clap::arg!(file: <FILE>... "The file(s) to merge").required(false))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
@@ -457,8 +454,7 @@ fn app(version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("sync")
                 .about("Sync with fastn-repo (or .history folder if not using fastn-repo)")
-                .arg(clap::arg!(file: <FILE>... "The file(s) to sync (leave empty to sync entire package)"))
-                .hide(true) // hidden since the feature is not being released yet.
+                .arg(clap::arg!(file: <FILE>... "The file(s) to sync (leave empty to sync entire package)").required(false))
         )
         .subcommand(
             clap::Command::new("status")
@@ -470,8 +466,7 @@ fn app(version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("create-cr")
                 .about("Create a Change Request")
-                .arg(clap::arg!(title: <TITLE> "The title of the new CR"))
-                .hide(true) // hidden since the feature is not being released yet.
+                .arg(clap::arg!(title: <TITLE> "The title of the new CR").required(false))
         )
         .subcommand(
             clap::Command::new("close-cr")
@@ -500,7 +495,6 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--"delete-it" "Delete the file"))
                 .arg(clap::arg!(--"print" "Print the file to stdout"))
                 .arg(clap::arg!(file: <FILE> "The file to resolve the conflict for"))
-                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("check")

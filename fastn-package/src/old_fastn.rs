@@ -1,4 +1,4 @@
-pub fn fastn_ftd() -> &'static str {
+pub fn fastn_ftd_2021() -> &'static str {
     include_str!("../fastn_2021.ftd")
 }
 
@@ -26,7 +26,7 @@ pub fn parse_old_fastn(
             }
             ftd::ftd2021::Interpreter::StuckOnImport { module, state: st } => {
                 let source = if module == "fastn" {
-                    fastn_ftd()
+                    fastn_ftd_2021()
                 } else {
                     return Err(
                         fastn_issues::initialization::OldFastnParseError::InvalidImport { module },

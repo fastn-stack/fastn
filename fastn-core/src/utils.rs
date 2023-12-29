@@ -862,7 +862,7 @@ pub(crate) async fn copy(
     from: impl AsRef<camino::Utf8Path>,
     to: impl AsRef<camino::Utf8Path>,
 ) -> fastn_core::Result<()> {
-    let content = tokio::fs::read(from.as_ref()).await?;
+    let content = fastn_core::tokio_fs::read(from.as_ref()).await?;
     fastn_core::utils::update(to, content.as_slice()).await
 }
 

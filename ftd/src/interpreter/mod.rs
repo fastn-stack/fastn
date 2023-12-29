@@ -89,6 +89,12 @@ pub enum Error {
         line_number: usize,
     },
 
+    #[error("InterpreterIOError: {io_error}, path: {path}")]
+    InterpreterIOError {
+        io_error: std::io::Error,
+        path: String,
+    },
+
     #[error("EvalexprError: {}", _0)]
     EvalexprError(#[from] fastn_grammar::evalexpr::EvalexprError),
 
