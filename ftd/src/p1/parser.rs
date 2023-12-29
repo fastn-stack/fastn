@@ -532,10 +532,7 @@ impl State {
                     line_number: header_line_number,
                 })?
                 .0;
-            let value = (
-                trim_body(value.0.join("\n").as_str()).trim().to_string(),
-                value.1,
-            );
+            let value = (trim_body(value.0.join("\n").as_str()).to_string(), value.1);
             if !inline_record_headers.is_empty()
                 || (header_caption.is_some() && !value.0.is_empty())
             {
