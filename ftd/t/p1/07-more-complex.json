@@ -150,7 +150,7 @@
                 "line_number": 0,
                 "key": "code",
                 "kind": null,
-                "value": "-- import: fastn-community.github.io/bling/chat\n\n-- chat.message-left: Hello World! 😀\n\n-- chat.message-left: I'm Nandhini, a freelance\ncontent writer.\n\n-- chat.message-left: Fun fact: I built this\nentire page with fastn! 🚀 It's that easy!",
+                "value": "   -- import: fastn-community.github.io/bling/chat\n\n-- chat.message-left: Hello World! 😀\n\n-- chat.message-left: I'm Nandhini, a freelance\ncontent writer.\n\n-- chat.message-left: Fun fact: I built this\nentire page with fastn! 🚀 It's that easy!\n",
                 "condition": null,
                 "access_modifier": "Public",
                 "source": "Body"
