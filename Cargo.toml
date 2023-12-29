@@ -177,6 +177,13 @@ features = [
     "column_decltype",
 ]
 
+[workspace.dependencies.pq-sys]
+version = "0.4.8"
+features = [
+    # see workspace.dependencies.rusqlite
+    "bundled"
+]
+
 
 [workspace.dependencies.web-sys]
 version = "0.3"
