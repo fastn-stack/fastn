@@ -937,7 +937,7 @@ fn trim_body(s: &str) -> String {
         }
         value.push(trimmed_line);
     }
-    value.join("\n")
+    value.join("\n").trim_end().to_string()
 }
 
 fn remove_inline_comments(line: &str) -> String {
