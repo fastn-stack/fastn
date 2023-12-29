@@ -178,7 +178,7 @@ features = [
 ]
 
 [workspace.dependencies.pq-sys]
-version = "0.4.8"
+version = "0.4"
 features = [
     # see workspace.dependencies.rusqlite
     "bundled"
