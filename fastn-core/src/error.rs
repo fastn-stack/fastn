@@ -95,6 +95,18 @@ pub enum Error {
     #[error("TokioMPSCError2: {}", _0)]
     TokioMPSCError2(#[from] tokio::sync::mpsc::error::SendError<usize>),
 
+    #[error("UuidParseError: {}", _0)]
+    UuidParseError(#[from] uuid::Error),
+
+    #[error("MissingEnvironmentVariableError: {}", _0)]
+    EnvironmentVariableError(#[from] std::env::VarError),
+
+    #[error("DatabaseError: {message}")]
+    DatabaseError { message: String },
+
+    #[error("DatabaseQueryError: {}", _0)]
+    DatabaseQueryError(#[from] diesel::result::Error),
+
     #[error("AssertError: {message}")]
     AssertError { message: String },
 }

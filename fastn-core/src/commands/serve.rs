@@ -670,7 +670,7 @@ async fn actual_route(
         ("get", "/-/clone/") if cfg!(feature = "remote") => clone(config).await,
         ("get", t) if t.starts_with("/-/view-src/") => view_source(config, req).await,
         ("get", t) if t.starts_with("/-/edit-src/") => edit_source(config, req).await,
-        ("get", t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
+        (_, t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
         ("post", "/-/edit/") => edit(config, req).await,
         ("post", "/-/revert/") => revert(config, req).await,
         ("get", "/-/editor-sync/") => editor_sync(config).await,
@@ -751,6 +751,13 @@ You can try without providing port, it will automatically pick unused port."#,
             std::process::exit(2);
         }
     };
+
+    if let Ok(auth_enabled) = std::env::var("FASTN_ENABLE_AUTH") {
+        if auth_enabled != "false" {
+            tracing::info!("running auth related migrations");
+            fastn_core::auth::enable_auth()?
+        }
+    }
 
     let app = move || {
         actix_web::App::new()
