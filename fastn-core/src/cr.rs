@@ -341,7 +341,9 @@ pub(crate) async fn cr_clone_file_info(
                 .collect_vec();
             continue;
         }
-        let content = config.read(config.root.join(workspace_entry.filename.as_str())).await?;
+        let content = config
+            .read(config.root.join(workspace_entry.filename.as_str()))
+            .await?;
 
         file_info.insert(
             filename,

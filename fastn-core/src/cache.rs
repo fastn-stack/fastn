@@ -68,7 +68,9 @@ async fn update_get(path: &str, value: usize) -> fastn_core::Result<usize> {
     match LOCK.try_write() {
         Some(_lock) => {
             let old_value = _get_without_lock(path).await?;
-            config.write(path, (old_value + value).to_string().as_bytes()).await?;
+            config
+                .write(path, (old_value + value).to_string().as_bytes())
+                .await?;
             Ok(_get_without_lock(path).await?)
         }
         None => Err(fastn_core::Error::GenericError(
@@ -82,7 +84,9 @@ async fn update_create(path: &str, value: usize) -> fastn_core::Result<usize> {
     match LOCK.try_write() {
         Some(_lock) => {
             let old_value = _create_without_lock(path).await?;
-            config.write(path, (old_value + value).to_string().as_bytes()).await?;
+            config
+                .write(path, (old_value + value).to_string().as_bytes())
+                .await?;
             Ok(_get_without_lock(path).await?)
         }
         None => Err(fastn_core::Error::GenericError(

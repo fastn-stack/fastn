@@ -198,12 +198,13 @@ fn guess_mime_type(path: &str) -> mime_guess::Mime {
 
 #[tracing::instrument(skip_all)]
 async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Response {
-    let response = match config.read(
-        config
-            .get_root_for_package(&config.package)
-            .join("FASTN.ftd"),
-    )
-    .await
+    let response = match config
+        .read(
+            config
+                .get_root_for_package(&config.package)
+                .join("FASTN.ftd"),
+        )
+        .await
     {
         Ok(res) => res,
         Err(e) => {

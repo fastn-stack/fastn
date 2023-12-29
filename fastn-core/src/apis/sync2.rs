@@ -270,8 +270,9 @@ pub(crate) async fn do_sync(
                     // ALready deleted in server, do nothing
                     continue;
                 };
-                let server_content =
-                    config.read(config.history_path(path, file_edit.version)).await?;
+                let server_content = config
+                    .read(config.history_path(path, file_edit.version))
+                    .await?;
 
                 // if: Client Says Deleted and server says modified
                 // that means Remote timestamp is greater than client timestamp

@@ -277,11 +277,12 @@ pub(crate) async fn insert_into_history_(
     }
 
     let history_ftd = FileHistory::to_ftd(file_history.values().collect_vec().as_slice());
-    config.write(
-        root.join(".remote-state").join("history.ftd"),
-        history_ftd.as_str(),
-    )
-    .await?;
+    config
+        .write(
+            root.join(".remote-state").join("history.ftd"),
+            history_ftd.as_str(),
+        )
+        .await?;
 
     Ok(())
 }

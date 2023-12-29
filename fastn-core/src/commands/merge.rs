@@ -75,10 +75,9 @@ async fn merge_main_into_cr(
             break;
         }
         if cr_file_path.eq(&deleted_file_str) {
-            let cr_deleted_files = config.read_to_string(
-                config.history_path(cr_file_path.as_str(), cr_file_edit.version),
-            )
-            .await?;
+            let cr_deleted_files = config
+                .read_to_string(config.history_path(cr_file_path.as_str(), cr_file_edit.version))
+                .await?;
             let mut cr_deleted_list =
                 fastn_core::cr::resolve_cr_deleted(cr_deleted_files.as_str(), dest)
                     .await?
@@ -152,9 +151,9 @@ async fn merge_main_into_cr(
             continue;
         };
 
-        let ours_content_bytes =
-            config.read(config.history_path(cr_file_path.as_str(), cr_file_edit.version))
-                .await?;
+        let ours_content_bytes = config
+            .read(config.history_path(cr_file_path.as_str(), cr_file_edit.version))
+            .await?;
 
         // get corresponding track file
         let track_file_path_str =
@@ -166,9 +165,9 @@ async fn merge_main_into_cr(
                 if file_edit.is_deleted() {
                     continue;
                 }
-                let theirs_content_bytes =
-                    config.read(config.history_path(filename.as_str(), file_edit.version))
-                        .await?;
+                let theirs_content_bytes = config
+                    .read(config.history_path(filename.as_str(), file_edit.version))
+                    .await?;
                 if sha2::Sha256::digest(&ours_content_bytes)
                     .eq(&sha2::Sha256::digest(theirs_content_bytes))
                 {
@@ -208,8 +207,9 @@ async fn merge_main_into_cr(
             if file_edit.is_deleted() {
                 continue;
             }
-            let theirs_content_bytes =
-                config.read(config.history_path(filename.as_str(), file_edit.version)).await?;
+            let theirs_content_bytes = config
+                .read(config.history_path(filename.as_str(), file_edit.version))
+                .await?;
             if sha2::Sha256::digest(&ours_content_bytes)
                 .eq(&sha2::Sha256::digest(theirs_content_bytes))
             {
@@ -253,9 +253,9 @@ async fn merge_main_into_cr(
         }
 
         // try to merge
-        let ancestor_content = if let Ok(content) =
-            config.read_to_string(config.history_path(filename.as_str(), track_info.version))
-                .await
+        let ancestor_content = if let Ok(content) = config
+            .read_to_string(config.history_path(filename.as_str(), track_info.version))
+            .await
         {
             content
         } else {
@@ -269,9 +269,9 @@ async fn merge_main_into_cr(
             continue;
         };
 
-        let theirs_content =
-            config.read_to_string(config.history_path(filename.as_str(), file_edit.version))
-                .await?;
+        let theirs_content = config
+            .read_to_string(config.history_path(filename.as_str(), file_edit.version))
+            .await?;
 
         let ours_content = String::from_utf8(ours_content_bytes.clone())?;
 
@@ -432,10 +432,9 @@ async fn merge_cr_into_main(
         }
         if cr_file_name.eq(&deleted_files) {
             // status for deleted files
-            let cr_deleted_files = config.read_to_string(
-                config.history_path(cr_file_name.as_str(), cr_file_edit.version),
-            )
-            .await?;
+            let cr_deleted_files = config
+                .read_to_string(config.history_path(cr_file_name.as_str(), cr_file_edit.version))
+                .await?;
             let cr_deleted_list =
                 fastn_core::cr::resolve_cr_deleted(cr_deleted_files.as_str(), src).await?;
 
@@ -522,9 +521,9 @@ async fn merge_cr_into_main(
             }
         };
 
-        let ours_content_bytes =
-            config.read(config.history_path(cr_file_path.as_str(), cr_file_edit.version))
-                .await?;
+        let ours_content_bytes = config
+            .read(config.history_path(cr_file_path.as_str(), cr_file_edit.version))
+            .await?;
 
         let track_file_path =
             config.history_path(track_file_path_str.as_str(), track_file_edit.version);
@@ -548,8 +547,9 @@ async fn merge_cr_into_main(
                     },
                 );
             }
-            let theirs_content_bytes =
-                config.read(config.history_path(filename.as_str(), file_edit.version)).await?;
+            let theirs_content_bytes = config
+                .read(config.history_path(filename.as_str(), file_edit.version))
+                .await?;
             if !sha2::Sha256::digest(&ours_content_bytes)
                 .eq(&sha2::Sha256::digest(theirs_content_bytes))
             {
@@ -592,9 +592,9 @@ async fn merge_cr_into_main(
             continue;
         }
 
-        let ancestor_content = if let Ok(content) =
-            config.read_to_string(config.history_path(filename.as_str(), track_info.version))
-                .await
+        let ancestor_content = if let Ok(content) = config
+            .read_to_string(config.history_path(filename.as_str(), track_info.version))
+            .await
         {
             content
         } else {
@@ -608,9 +608,9 @@ async fn merge_cr_into_main(
             continue;
         };
 
-        let theirs_content =
-            config.read_to_string(config.history_path(filename.as_str(), file_edit.version))
-                .await?;
+        let theirs_content = config
+            .read_to_string(config.history_path(filename.as_str(), file_edit.version))
+            .await?;
 
         let ours_content = String::from_utf8(ours_content_bytes.clone())?;
 

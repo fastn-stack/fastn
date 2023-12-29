@@ -70,7 +70,8 @@ where
 {
     let cache_file = get_cache_file(id)?;
     serde_json::from_str(
-        config.read_to_string(cache_file)
+        config
+            .read_to_string(cache_file)
             .map_err(|e| {
                 tracing::debug!("file read error: {}", e.to_string());
                 e

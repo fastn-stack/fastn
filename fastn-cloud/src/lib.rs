@@ -40,7 +40,8 @@ pub async fn upload() -> Result<(), UploadError> {
     if !cw_id_path.exists() {
         return Err(UploadError::CwIdNotFound);
     }
-    let cw_id = config.read_to_string(cw_id_path.as_path())
+    let cw_id = config
+        .read_to_string(cw_id_path.as_path())
         .await
         .map_err(|_e| UploadError::CwIdReadError)?;
 
@@ -49,7 +50,8 @@ pub async fn upload() -> Result<(), UploadError> {
         return Err(UploadError::SidNotFound);
     }
 
-    let sid = config.read_to_string(sid_path.as_path())
+    let sid = config
+        .read_to_string(sid_path.as_path())
         .await
         .map_err(|_e| UploadError::SidReadError)?;
 
