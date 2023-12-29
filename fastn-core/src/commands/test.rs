@@ -132,7 +132,7 @@ impl fastn_core::Config {
 async fn read_ftd_test_file(
     ftd_document: fastn_core::Document,
     config: &fastn_core::Config,
-    mut test_parameters: &mut TestParameters,
+    test_parameters: &mut TestParameters,
 ) -> fastn_core::Result<()> {
     let req = fastn_core::http::Request::default();
     let mut saved_cookies: std::collections::HashMap<String, String> =
@@ -164,7 +164,7 @@ async fn read_ftd_test_file(
             &doc,
             config,
             &mut saved_cookies,
-            &mut test_parameters,
+            test_parameters,
         )
         .await?
         {
