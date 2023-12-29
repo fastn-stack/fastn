@@ -9,7 +9,7 @@ pub async fn clone(config: &fastn_core::Config) -> fastn_core::Result<fastn_core
     // TODO: implement authentication
     match clone_worker(config).await {
         Ok(data) => fastn_core::http::api_ok(data),
-        Err(err) => fastn_core::http::api_error(err.to_string()),
+        Err(err) => fastn_core::http::api_error(err.to_string(), None),
     }
 }
 
