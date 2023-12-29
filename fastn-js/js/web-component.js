@@ -33,7 +33,7 @@ class MutableListVariable {
         this.#value.set(index, fastn_utils.staticToMutables(list));
     }
     insertAt(index, value) {
-        this.#value.insertAt(index, fastn_utils.staticToMutables(value))
+        this.#value.insertAt(index, fastn_utils.staticToMutables(value));
     }
     deleteAt(index) {
         this.#value.deleteAt(index);
@@ -42,10 +42,10 @@ class MutableListVariable {
         this.#value.push(value);
     }
     pop() {
-        this.#value.pop()
+        this.#value.pop();
     }
     clearAll() {
-        this.#value.clearAll()
+        this.#value.clearAll();
     }
     on_change(func) {
         this.#value.addClosure(fastn.closureWithoutExecute(func));
@@ -77,7 +77,11 @@ class StaticVariable {
         this.#value = value;
         this.#closures = [];
         if (this.#value instanceof fastn.mutableClass) {
-            this.#value.addClosure(fastn.closure(() => this.#closures.forEach((closure) => closure.update())));
+            this.#value.addClosure(
+                fastn.closure(() =>
+                    this.#closures.forEach((closure) => closure.update()),
+                ),
+            );
         }
     }
 
@@ -92,7 +96,7 @@ class StaticVariable {
     }
 }
 
-fastn.webComponentVariable =  {
+fastn.webComponentVariable = {
     mutable: (value) => {
         return new MutableVariable(value);
     },
@@ -105,4 +109,4 @@ fastn.webComponentVariable =  {
     record: (value) => {
         return new RecordVariable(value);
     },
-}
+};
