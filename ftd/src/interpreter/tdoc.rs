@@ -1881,14 +1881,12 @@ impl<'a> TDoc<'a> {
         T: serde::Serialize + std::fmt::Debug,
     {
         let name = match value.inner() {
-            Some(ftd::ast::VariableValue::Record { name, .. }) => name,
-            _ => {
-                panic!("from_json called with non record value: {:?}", value);
-            }
+            Some(ftd::ast::VariableValue::Record { name, .. }) => Some(name),
+            _ => None,
         };
 
         let json = serde_json::to_value(json).map_err(|e| ftd::interpreter::Error::ParseError {
-            message: format!("Can't serialize to json: {e:?}, key={name}, found: {json:?}"),
+            message: format!("Can't serialize to json: {e:?}, key={name:?}, found: {json:?}"),
             doc_id: self.name.to_string(),
             line_number: value.line_number(),
         })?;

@@ -61,7 +61,7 @@ pub async fn revert(config: &fastn_core::Config, path: &str) -> fastn_core::Resu
             fastn_core::utils::update1(
                 &config.root,
                 path,
-                tokio::fs::read(revert_path).await?.as_slice(),
+                fastn_core::tokio_fs::read(revert_path).await?.as_slice(),
             )
             .await?;
         }

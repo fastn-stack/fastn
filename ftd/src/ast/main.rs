@@ -232,6 +232,18 @@ impl AST {
     pub fn is_component(&self) -> bool {
         matches!(self, AST::ComponentInvocation(_))
     }
+
+    pub fn is_always_included_variable_definition(&self) -> bool {
+        matches!(
+            self,
+            AST::VariableDefinition(ftd::ast::VariableDefinition {
+                flags: ftd::ast::VariableFlags {
+                    always_include: Some(true)
+                },
+                ..
+            })
+        )
+    }
 }
 
 /// Filters out commented parts from the parsed document.

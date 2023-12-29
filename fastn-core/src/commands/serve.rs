@@ -198,7 +198,7 @@ fn guess_mime_type(path: &str) -> mime_guess::Mime {
 
 #[tracing::instrument(skip_all)]
 async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Response {
-    let response = match tokio::fs::read(
+    let response = match fastn_core::tokio_fs::read(
         config
             .get_root_for_package(&config.package)
             .join("FASTN.ftd"),
@@ -228,7 +228,7 @@ async fn static_file(file_path: camino::Utf8PathBuf) -> fastn_core::http::Respon
         return fastn_core::not_found!("no such static file ({})", file_path);
     }
 
-    match tokio::fs::read(file_path.as_path()).await {
+    match fastn_core::tokio_fs::read(file_path.as_path()).await {
         Ok(r) => fastn_core::http::ok_with_content_type(r, guess_mime_type(file_path.as_str())),
         Err(e) => {
             tracing::error!(
@@ -258,7 +258,6 @@ pub async fn serve_helper(
     let _lock = LOCK.read().await;
 
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
-
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
 
     let mut resp = if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
@@ -671,7 +670,7 @@ async fn actual_route(
         ("get", "/-/clone/") if cfg!(feature = "remote") => clone(config).await,
         ("get", t) if t.starts_with("/-/view-src/") => view_source(config, req).await,
         ("get", t) if t.starts_with("/-/edit-src/") => edit_source(config, req).await,
-        ("get", t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
+        (_, t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
         ("post", "/-/edit/") => edit(config, req).await,
         ("post", "/-/revert/") => revert(config, req).await,
         ("get", "/-/editor-sync/") => editor_sync(config).await,
@@ -752,6 +751,13 @@ You can try without providing port, it will automatically pick unused port."#,
             std::process::exit(2);
         }
     };
+
+    if let Ok(auth_enabled) = std::env::var("FASTN_ENABLE_AUTH") {
+        if auth_enabled != "false" {
+            tracing::info!("running auth related migrations");
+            fastn_core::auth::enable_auth()?
+        }
+    }
 
     let app = move || {
         actix_web::App::new()

@@ -9,6 +9,7 @@ pub mod commands;
 mod config;
 mod controller;
 mod cr;
+mod db;
 mod doc;
 mod file;
 mod font;
@@ -17,13 +18,14 @@ mod package;
 pub mod tutor;
 pub(crate) mod watcher;
 #[macro_use]
-mod http;
+pub mod http;
 mod auth;
 mod ds;
 mod error;
 mod i18n;
 pub mod library;
 mod proxy;
+mod schema;
 pub mod sitemap;
 mod snapshot;
 mod sync_utils;
@@ -32,9 +34,11 @@ mod tracker;
 mod translation;
 mod version;
 // mod wasm;
-pub(crate) mod catch_panic;
+pub mod catch_panic;
 pub(crate) mod google_sheets;
 mod library2022;
+mod mail;
+pub(crate) mod tokio_fs;
 mod workspace;
 
 pub(crate) use auto_import::AutoImport;
@@ -105,13 +109,12 @@ fn package_info_about(config: &fastn_core::Config) -> fastn_core::Result<String>
         };
         indoc::formatdoc! {"
             {body_prefix}
-    
-            -- import: {package_info_package}/cr
 
-            -- cr.description:
+            -- optional string description:
+            {always_include}: true
         ",
         body_prefix = body_prefix,
-        package_info_package = config.package_info_package(),
+        always_include = ftd::ast::ALWAYS_INCLUDE,
         }
     })
 }
@@ -316,6 +319,14 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 pub(crate) fn usage_error<T>(message: String) -> Result<T> {
     Err(Error::UsageError { message })
+}
+
+pub(crate) fn generic_error<T>(message: String) -> Result<T> {
+    Error::generic_err(message)
+}
+
+pub(crate) fn assert_error<T>(message: String) -> Result<T> {
+    Err(Error::AssertError { message })
 }
 
 #[cfg(test)]

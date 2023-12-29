@@ -630,6 +630,7 @@ pub struct Image {
     pub src: ftd::js::Value,
     pub fit: Option<ftd::js::Value>,
     pub alt: Option<ftd::js::Value>,
+    pub fetch_priority: Option<ftd::js::Value>,
     pub common: Common,
 }
 
@@ -650,6 +651,11 @@ impl Image {
             .unwrap(),
             fit: ftd::js::value::get_optional_js_value(
                 "fit",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            fetch_priority: ftd::js::value::get_optional_js_value(
+                "fetch-priority",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
@@ -699,6 +705,16 @@ impl Image {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 fit.to_set_property(
                     fastn_js::PropertyKind::Fit,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
+        }
+        if let Some(ref fetch_priority) = self.fetch_priority {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                fetch_priority.to_set_property(
+                    fastn_js::PropertyKind::FetchPriority,
                     doc,
                     kernel.name.as_str(),
                     rdata,

@@ -62,9 +62,9 @@ pub(crate) async fn get_diff(
 ) -> fastn_core::Result<Option<String>> {
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
-        let content = tokio::fs::read_to_string(&doc.get_full_path()).await?;
+        let content = fastn_core::tokio_fs::read_to_string(&doc.get_full_path()).await?;
 
-        let existing_doc = tokio::fs::read_to_string(&path).await?;
+        let existing_doc = fastn_core::tokio_fs::read_to_string(&path).await?;
         if content.eq(&existing_doc) {
             return Ok(None);
         }

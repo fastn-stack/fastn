@@ -83,7 +83,7 @@ impl PropertyValue {
     pub fn resolve(
         self,
         doc: &ftd::interpreter::TDoc,
-        line_number: usize,
+        line_number: usize, // Todo: Remove this line number instead use self.line_number()
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         self.resolve_with_inherited(doc, line_number, &Default::default())
     }
@@ -1947,73 +1947,101 @@ impl Value {
         }
     }
 
-    pub fn to_serde_value(&self) -> Option<serde_json::Value> {
+    pub fn to_serde_value(
+        &self,
+        doc: &ftd::interpreter::TDoc<'_>,
+    ) -> ftd::interpreter::Result<Option<serde_json::Value>> {
         match self {
-            Value::String { text, .. } => Some(serde_json::Value::String(text.to_string())),
-            Value::Integer { value } => Some(serde_json::json!(value)),
-            Value::Decimal { value } => Some(serde_json::json!(value)),
-            Value::Boolean { value } => Some(serde_json::Value::Bool(value.to_owned())),
+            Value::String { text, .. } => Ok(Some(serde_json::Value::String(text.to_owned()))),
+            Value::Integer { value } => Ok(Some(serde_json::json!(value))),
+            Value::Decimal { value } => Ok(Some(serde_json::json!(value))),
+            Value::Boolean { value } => Ok(Some(serde_json::Value::Bool(value.to_owned()))),
             Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
-                    data.to_serde_value()
+                    data.to_serde_value(doc)
                 } else {
-                    Some(serde_json::Value::Null)
+                    Ok(Some(serde_json::Value::Null))
                 }
             }
             Value::Object { values } => {
                 let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in values {
-                    if let ftd::interpreter::PropertyValue::Value { value, .. } = v {
-                        if let Some(v) = value.to_serde_value() {
-                            new_values.insert(k.to_owned(), v);
-                        }
+                    let resolved_value = v.clone().resolve(doc, 0)?;
+                    if let Some(v) = resolved_value.to_serde_value(doc)? {
+                        new_values.insert(k.to_owned(), v);
                     }
                 }
-                serde_json::to_value(&new_values).ok()
+                Ok(Some(serde_json::to_value(&new_values)?))
             }
             Value::Record { fields, .. } => {
                 let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in fields {
-                    if let ftd::interpreter::PropertyValue::Value { value, .. } = v {
-                        if let Some(v) = value.to_serde_value() {
-                            new_values.insert(k.to_owned(), v);
-                        }
+                    let resolved_value = v.clone().resolve(doc, 0)?;
+                    if let Some(v) = resolved_value.to_serde_value(doc)? {
+                        new_values.insert(k.to_owned(), v);
                     }
                 }
-                serde_json::to_value(&new_values).ok()
+                Ok(Some(serde_json::to_value(&new_values)?))
             }
             Value::List { data, .. } => {
                 let mut new_values: Vec<serde_json::Value> = Default::default();
                 for v in data {
-                    if let ftd::interpreter::PropertyValue::Value { value, .. } = v {
-                        if let Some(v) = value.to_serde_value() {
-                            new_values.push(v);
-                        }
+                    let resolved_value = v.clone().resolve(doc, 0)?;
+                    if let Some(v) = resolved_value.to_serde_value(doc)? {
+                        new_values.push(v);
                     }
                 }
-                serde_json::to_value(&new_values).ok()
+                Ok(Some(serde_json::to_value(&new_values)?))
             }
-            _ => None,
+            _ => Ok(None),
         }
     }
 
-    pub fn to_string(&self) -> Option<String> {
+    pub fn to_list(
+        &self,
+        doc: &ftd::interpreter::TDoc<'_>,
+        _use_quotes: bool,
+    ) -> ftd::interpreter::Result<Option<Vec<ftd::interpreter::Value>>> {
         match self {
-            Value::String { text } => Some(text.to_string()),
-            Value::Integer { value } => Some(value.to_string()),
-            Value::Decimal { value } => Some(value.to_string()),
-            Value::Boolean { value } => Some(value.to_string()),
+            Value::List { data, .. } => {
+                let mut values = vec![];
+                for d in data.iter() {
+                    let resolved_value = d.clone().resolve(doc, d.line_number())?;
+                    values.push(resolved_value);
+                }
+                Ok(Some(values))
+            }
+            _ => Ok(None),
+        }
+    }
+
+    pub fn to_string(
+        &self,
+        doc: &ftd::interpreter::TDoc<'_>,
+        use_quotes: bool,
+    ) -> ftd::interpreter::Result<Option<String>> {
+        match self {
+            Value::String { text } => {
+                if use_quotes {
+                    Ok(Some(format!("\"{}\"", text)))
+                } else {
+                    Ok(Some(text.to_string()))
+                }
+            }
+            Value::Integer { value } => Ok(Some(value.to_string())),
+            Value::Decimal { value } => Ok(Some(value.to_string())),
+            Value::Boolean { value } => Ok(Some(value.to_string())),
             Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
-                    data.to_string()
+                    data.to_string(doc, use_quotes)
                 } else {
-                    Some("".to_string())
+                    Ok(Some("".to_string()))
                 }
             }
             Value::Object { .. } | Value::Record { .. } | Value::List { .. } => {
-                serde_json::to_string(&self.to_serde_value()).ok()
+                Ok(Some(serde_json::to_string(&self.to_serde_value(doc)?)?))
             }
-            _ => None,
+            _ => Ok(None),
         }
     }
 }

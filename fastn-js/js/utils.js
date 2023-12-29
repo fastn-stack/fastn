@@ -19,8 +19,10 @@ let fastn_utils = {
             node = "img";
         } else if (kind === fastn_dom.ElementKind.Video) {
             node = "video";
-        } else if (kind === fastn_dom.ElementKind.ContainerElement ||
-            kind === fastn_dom.ElementKind.Text) {
+        } else if (
+            kind === fastn_dom.ElementKind.ContainerElement ||
+            kind === fastn_dom.ElementKind.Text
+        ) {
             node = "div";
         } else if (kind === fastn_dom.ElementKind.Rive) {
             node = "canvas";
@@ -34,22 +36,25 @@ let fastn_utils = {
         } else if (kind === fastn_dom.ElementKind.Wrapper) {
             node = fastn_dom.wrapperNode;
         } else if (kind === fastn_dom.ElementKind.Code) {
-           node = "pre";
+            node = "pre";
         } else if (kind === fastn_dom.ElementKind.CodeChild) {
             node = "code";
         } else if (kind[0] === fastn_dom.ElementKind.WebComponent()[0]) {
             let [webcomponent, args] = kind[1];
             node = `${webcomponent}`;
             fastn_dom.webComponent.push(args);
-            attributes[fastn_dom.webComponentArgument] = fastn_dom.webComponent.length - 1;
+            attributes[fastn_dom.webComponentArgument] =
+                fastn_dom.webComponent.length - 1;
         }
         return [node, css, attributes];
     },
     createStyle(cssClass, obj) {
         if (doubleBuffering) {
-            fastn_dom.styleClasses = `${fastn_dom.styleClasses}${getClassAsString(cssClass, obj)}\n`;
+            fastn_dom.styleClasses = `${
+                fastn_dom.styleClasses
+            }${getClassAsString(cssClass, obj)}\n`;
         } else {
-            let styles = document.getElementById('styles');
+            let styles = document.getElementById("styles");
             let newClasses = getClassAsString(cssClass, obj);
             let textNode = document.createTextNode(newClasses);
             if (styles.styleSheet) {
@@ -61,37 +66,37 @@ let fastn_utils = {
     },
     getStaticValue(obj) {
         if (obj instanceof fastn.mutableClass) {
-           return this.getStaticValue(obj.get());
+            return this.getStaticValue(obj.get());
         } else if (obj instanceof fastn.mutableListClass) {
             return obj.getList();
-        }/*
+        } /*
         Todo: Make this work
         else if (obj instanceof fastn.recordInstanceClass) {
             return obj.getAllFields();
         }*/ else {
-           return obj;
+            return obj;
         }
     },
     getInheritedValues(default_args, inherited, function_args) {
         let record_fields = {
-            "colors": ftd.default_colors.getClone().setAndReturn("is_root", true),
-            "types": ftd.default_types.getClone().setAndReturn("is_root", true)
-        }
+            colors: ftd.default_colors.getClone().setAndReturn("is_root", true),
+            types: ftd.default_types.getClone().setAndReturn("is_root", true),
+        };
         Object.assign(record_fields, default_args);
         let fields = {};
         if (inherited instanceof fastn.recordInstanceClass) {
             fields = inherited.getClonedFields();
             if (fastn_utils.getStaticValue(fields["colors"].get("is_root"))) {
-               delete fields.colors;
+                delete fields.colors;
             }
             if (fastn_utils.getStaticValue(fields["types"].get("is_root"))) {
-               delete fields.types;
+                delete fields.types;
             }
         }
         Object.assign(record_fields, fields);
         Object.assign(record_fields, function_args);
         return fastn.recordInstance({
-              ...record_fields
+            ...record_fields,
         });
     },
     removeNonFastnClasses(node) {
@@ -105,7 +110,8 @@ let fastn_utils = {
         const classesToRemove = [];
 
         for (const className of iterativeClassList) {
-            if (!className.startsWith('__') && 
+            if (
+                !className.startsWith("__") &&
                 !internalClassNames.includes(className) &&
                 className !== extraCodeData?.language &&
                 className !== extraCodeData?.theme
@@ -119,10 +125,11 @@ let fastn_utils = {
         }
     },
     staticToMutables(obj) {
-        if (!(obj instanceof fastn.mutableClass) &&
+        if (
+            !(obj instanceof fastn.mutableClass) &&
             !(obj instanceof fastn.mutableListClass) &&
-            !(obj instanceof fastn.recordInstanceClass))
-        {
+            !(obj instanceof fastn.recordInstanceClass)
+        ) {
             if (Array.isArray(obj)) {
                 let list = [];
                 for (let index in obj) {
@@ -145,8 +152,9 @@ let fastn_utils = {
     getFlattenStaticValue(obj) {
         let staticValue = fastn_utils.getStaticValue(obj);
         if (Array.isArray(staticValue)) {
-            return staticValue.map(func =>
-                fastn_utils.getFlattenStaticValue(func.item));
+            return staticValue.map((func) =>
+                fastn_utils.getFlattenStaticValue(func.item),
+            );
         } /*
         Todo: Make this work
         else if (typeof staticValue === 'object' && fastn_utils.isNull(staticValue)) {
@@ -167,8 +175,10 @@ let fastn_utils = {
     },
     // Todo: Merge getterByKey with getter
     getterByKey(value, index) {
-        if (value instanceof fastn.mutableClass
-            || value instanceof fastn.recordInstanceClass) {
+        if (
+            value instanceof fastn.mutableClass ||
+            value instanceof fastn.recordInstanceClass
+        ) {
             return value.get(index);
         } else if (value instanceof fastn.mutableListClass) {
             return value.get(index).item;
@@ -178,8 +188,8 @@ let fastn_utils = {
     },
     setter(variable, value) {
         if (!fastn_utils.isNull(variable) && variable.set) {
-           variable.set(value);
-           return true;
+            variable.set(value);
+            return true;
         }
         return false;
     },
@@ -187,19 +197,27 @@ let fastn_utils = {
         return null;
     },
     sameResponsiveRole(desktop, mobile) {
-       return (desktop.get("font_family") ===  mobile.get("font_family")) &&
-       (desktop.get("letter_spacing") ===  mobile.get("letter_spacing")) &&
-       (desktop.get("line_height") ===  mobile.get("line_height")) &&
-       (desktop.get("size") ===  mobile.get("size")) &&
-       (desktop.get("weight") ===  mobile.get("weight"));
+        return (
+            desktop.get("font_family") === mobile.get("font_family") &&
+            desktop.get("letter_spacing") === mobile.get("letter_spacing") &&
+            desktop.get("line_height") === mobile.get("line_height") &&
+            desktop.get("size") === mobile.get("size") &&
+            desktop.get("weight") === mobile.get("weight")
+        );
     },
     getRoleValues(value) {
-        let font_families = fastn_utils.getStaticValue(value.get("font_family"));
+        let font_families = fastn_utils.getStaticValue(
+            value.get("font_family"),
+        );
         if (Array.isArray(font_families))
-            font_families = font_families.map(obj => fastn_utils.getStaticValue(obj.item)).join(', ');
+            font_families = font_families
+                .map((obj) => fastn_utils.getStaticValue(obj.item))
+                .join(", ");
         return {
             "font-family": font_families,
-            "letter-spacing": fastn_utils.getStaticValue(value.get("letter_spacing")),
+            "letter-spacing": fastn_utils.getStaticValue(
+                value.get("letter_spacing"),
+            ),
             "font-size": fastn_utils.getStaticValue(value.get("size")),
             "font-weight": fastn_utils.getStaticValue(value.get("weight")),
             "line-height": fastn_utils.getStaticValue(value.get("line_height")),
@@ -209,18 +227,19 @@ let fastn_utils = {
         if (value === null || value === undefined) {
             return value;
         }
-        if (value instanceof fastn.mutableClass ||
-            value instanceof fastn.mutableListClass )
-        {
+        if (
+            value instanceof fastn.mutableClass ||
+            value instanceof fastn.mutableListClass
+        ) {
             return value.getClone();
         }
-           if (value instanceof fastn.recordInstanceClass) {
+        if (value instanceof fastn.recordInstanceClass) {
             return value.getClone();
         }
         return value;
     },
     getListItem(value) {
-        if (value === undefined){
+        if (value === undefined) {
             return null;
         }
         if (value instanceof Object && value.hasOwnProperty("item")) {
@@ -231,16 +250,17 @@ let fastn_utils = {
     getEventKey(event) {
         if (65 <= event.keyCode && event.keyCode <= 90) {
             return String.fromCharCode(event.keyCode).toLowerCase();
-        }
-        else {
+        } else {
             return event.key;
         }
     },
     createNestedObject(currentObject, path, value) {
-        const properties = path.split('.');
+        const properties = path.split(".");
 
         for (let i = 0; i < properties.length - 1; i++) {
-            let property = fastn_utils.private.addUnderscoreToStart(properties[i]);
+            let property = fastn_utils.private.addUnderscoreToStart(
+                properties[i],
+            );
             if (currentObject instanceof fastn.recordInstanceClass) {
                 if (currentObject.get(property) === undefined) {
                     currentObject.set(property, fastn.recordInstance({}));
@@ -256,7 +276,7 @@ let fastn_utils = {
 
         const innermostProperty = properties[properties.length - 1];
         if (currentObject instanceof fastn.recordInstanceClass) {
-            currentObject.set(innermostProperty, value)
+            currentObject.set(innermostProperty, value);
         } else {
             currentObject[innermostProperty] = value;
         }
@@ -275,11 +295,20 @@ let fastn_utils = {
         i = i.toString();
         const { space_before, space_after } = fastn_utils.private.spaces(i);
         const o = (() => {
-            let g = fastn_utils.private.replace_last_occurrence(marked.parse(i), "<p>", "");
+            let g = fastn_utils.private.replace_last_occurrence(
+                marked.parse(i),
+                "<p>",
+                "",
+            );
             g = fastn_utils.private.replace_last_occurrence(g, "</p>", "");
             return g;
         })();
-        return `${fastn_utils.private.repeated_space(space_before)}${o}${fastn_utils.private.repeated_space(space_after)}`.replace(/\n+$/, '');
+        return `${fastn_utils.private.repeated_space(
+            space_before,
+        )}${o}${fastn_utils.private.repeated_space(space_after)}`.replace(
+            /\n+$/,
+            "",
+        );
     },
 
     process_post_markdown(node, body) {
@@ -288,23 +317,31 @@ let fastn_utils = {
             divElement.innerHTML = body;
 
             const current_node = node;
-            const colorClasses = Array.from(current_node.classList).filter(className => className.startsWith('__c'));
-            const roleClasses = Array.from(current_node.classList).filter(className => className.startsWith('__rl'));
-            const tableElements = Array.from(divElement.getElementsByTagName('table'));
-            const codeElements = Array.from(divElement.getElementsByTagName('code'));
+            const colorClasses = Array.from(current_node.classList).filter(
+                (className) => className.startsWith("__c"),
+            );
+            const roleClasses = Array.from(current_node.classList).filter(
+                (className) => className.startsWith("__rl"),
+            );
+            const tableElements = Array.from(
+                divElement.getElementsByTagName("table"),
+            );
+            const codeElements = Array.from(
+                divElement.getElementsByTagName("code"),
+            );
 
-            tableElements.forEach(table => {
-                colorClasses.forEach(colorClass => {
+            tableElements.forEach((table) => {
+                colorClasses.forEach((colorClass) => {
                     table.classList.add(colorClass);
                 });
             });
 
-            codeElements.forEach(code => {
-                roleClasses.forEach(roleClass => {
-                    var roleCls = '.' + roleClass;
+            codeElements.forEach((code) => {
+                roleClasses.forEach((roleClass) => {
+                    var roleCls = "." + roleClass;
                     let role = fastn_dom.classes[roleCls];
-                    let roleValue = role['value'];
-                    let fontFamily = roleValue['font-family'];
+                    let roleValue = role["value"];
+                    let fontFamily = roleValue["font-family"];
                     code.style.fontFamily = fontFamily;
                 });
             });
@@ -317,7 +354,7 @@ let fastn_utils = {
         return a === null || a === undefined;
     },
     isCommentNode(node) {
-      return node === fastn_dom.commentNode;
+        return node === fastn_dom.commentNode;
     },
     isWrapperNode(node) {
         return node === fastn_dom.wrapperNode;
@@ -325,10 +362,10 @@ let fastn_utils = {
     nextSibling(node, parent) {
         // For Conditional DOM
         while (Array.isArray(node)) {
-            node = node[node.length-1];
+            node = node[node.length - 1];
         }
         if (node.nextSibling) {
-          return node.nextSibling;
+            return node.nextSibling;
         }
         if (node.getNode && node.getNode().nextSibling !== undefined) {
             return node.getNode().nextSibling;
@@ -339,7 +376,7 @@ let fastn_utils = {
         let tagName = node;
         let element = fastnVirtual.document.createElement(node);
         for (let key in attributes) {
-            element.setAttribute(key, attributes[key])
+            element.setAttribute(key, attributes[key]);
         }
         for (let c in classes) {
             element.classList.add(classes[c]);
@@ -388,11 +425,11 @@ let fastn_utils = {
      * console.log(result.highlightedLines);
      */
     findAndRemoveHighlighter(text) {
-        const lines = text.split('\n');
-        const highlighter = ';; <hl>';
+        const lines = text.split("\n");
+        const highlighter = ";; <hl>";
         const result = {
-            modifiedText: '',
-            highlightedLines: ''
+            modifiedText: "",
+            highlightedLines: "",
         };
 
         let highlightedLines = [];
@@ -402,13 +439,17 @@ let fastn_utils = {
 
             if (highlighterIndex !== -1) {
                 highlightedLines.push(i + 1); // Adding 1 to convert to human-readable line numbers
-                result.modifiedText += line.substring(0, highlighterIndex) + line.substring(highlighterIndex + highlighter.length) + '\n';
+                result.modifiedText +=
+                    line.substring(0, highlighterIndex) +
+                    line.substring(highlighterIndex + highlighter.length) +
+                    "\n";
             } else {
-                result.modifiedText += line + '\n';
+                result.modifiedText += line + "\n";
             }
         }
 
-        result.highlightedLines = fastn_utils.private.mergeNumbers(highlightedLines);
+        result.highlightedLines =
+            fastn_utils.private.mergeNumbers(highlightedLines);
 
         return result;
     },
@@ -416,17 +457,21 @@ let fastn_utils = {
         return node.getNode().value;
     },
     setFullHeight() {
-        if(!ssr) {
+        if (!ssr) {
             document.body.style.height = `max(${document.documentElement.scrollHeight}px, 100%)`;
         }
     },
     resetFullHeight() {
-        if(!ssr) {
+        if (!ssr) {
             document.body.style.height = `100%`;
         }
     },
     highlightCode(codeElement, extraCodeData) {
-        if (!ssr && !fastn_utils.isNull(extraCodeData.language) && !fastn_utils.isNull(extraCodeData.theme)) {
+        if (
+            !ssr &&
+            !fastn_utils.isNull(extraCodeData.language) &&
+            !fastn_utils.isNull(extraCodeData.theme)
+        ) {
             Prism.highlightElement(codeElement);
         }
     },
@@ -434,14 +479,14 @@ let fastn_utils = {
     //Taken from: https://byby.dev/js-slugify-string
     slugify(str) {
         return String(str)
-            .normalize('NFKD') // split accented characters into their base characters and diacritical marks
-            .replace('.', '-')
-            .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
+            .normalize("NFKD") // split accented characters into their base characters and diacritical marks
+            .replace(".", "-")
+            .replace(/[\u0300-\u036f]/g, "") // remove all the accents, which happen to be all in the \u03xx UNICODE block.
             .trim() // trim leading or trailing whitespace
             .toLowerCase() // convert to lowercase
-            .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
-            .replace(/\s+/g, '-') // replace spaces with hyphens
-            .replace(/-+/g, '-'); // remove consecutive hyphens
+            .replace(/[^a-z0-9 -]/g, "") // remove non-alphanumeric characters
+            .replace(/\s+/g, "-") // replace spaces with hyphens
+            .replace(/-+/g, "-"); // remove consecutive hyphens
     },
 
     getEventListeners(node) {
@@ -451,43 +496,46 @@ let fastn_utils = {
             onmouseenter: node.onmouseenter,
             oninput: node.oninput,
             onblur: node.onblur,
-            onfocus: node.onfocus
-        }
+            onfocus: node.onfocus,
+        };
     },
 
     flattenArray(arr) {
         return fastn_utils.private.flattenArray([arr]);
     },
     toSnakeCase(value) {
-        return value.trim().split('').map((v, i) => {
-            const lowercased = v.toLowerCase();
-            if(v == " ") {
-              return "_";
-            }
-            if(v != lowercased && i > 0) {
-                return `_${lowercased}`
-            }
-            return lowercased;
-        }).join('');
+        return value
+            .trim()
+            .split("")
+            .map((v, i) => {
+                const lowercased = v.toLowerCase();
+                if (v == " ") {
+                    return "_";
+                }
+                if (v != lowercased && i > 0) {
+                    return `_${lowercased}`;
+                }
+                return lowercased;
+            })
+            .join("");
     },
-
     escapeHtmlInCode(str) {
         return str.replace(/[<]/g, "&lt;");
     },
 
     escapeHtmlInMarkdown(str) {
-        if(typeof str !== 'string') {
+        if (typeof str !== "string") {
             return str;
         }
 
         let result = "";
         let ch_map = {
-            '<': "&lt;",
-            '>': "&gt;",
-            '&': "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            "&": "&amp;",
             '"': "&quot;",
             "'": "&#39;",
-            '/': "&#47;",
+            "/": "&#47;",
         };
         let foundBackTick = false;
         for (var i = 0; i < str.length; i++) {
@@ -502,7 +550,10 @@ let fastn_utils = {
             // Also the `/` which is followed by `<` should be escaped.
             // For instance: `</` should be escaped but `http://` should not
             // be escaped. (`(current === '/' && !(i > 0 && str[i-1] === "<"))`)
-            if (foundBackTick || (current === '/' && !(i > 0 && str[i-1] === "<"))) {
+            if (
+                foundBackTick ||
+                (current === "/" && !(i > 0 && str[i - 1] === "<"))
+            ) {
                 result += current;
                 continue;
             }
@@ -520,7 +571,10 @@ let fastn_utils = {
                 args[arg] = passed_args[arg];
                 continue;
             }
-            if (default_args.hasOwnProperty(arg) && fastn_utils.getStaticValue(passed_args[arg]) !== undefined) {
+            if (
+                default_args.hasOwnProperty(arg) &&
+                fastn_utils.getStaticValue(passed_args[arg]) !== undefined
+            ) {
                 args[arg] = passed_args[arg];
             }
         }
@@ -544,13 +598,16 @@ let fastn_utils = {
         // newChildrenWrapper
         fastn_utils.private.replaceChildren(document.body, newChildrenWrapper);
     },
-}
-
+};
 
 fastn_utils.private = {
     flattenArray(arr) {
         return arr.reduce((acc, item) => {
-            return acc.concat(Array.isArray(item) ? fastn_utils.private.flattenArray(item) : item);
+            return acc.concat(
+                Array.isArray(item)
+                    ? fastn_utils.private.flattenArray(item)
+                    : item,
+            );
         }, []);
     },
     /**
@@ -564,7 +621,7 @@ fastn_utils.private = {
     spaces(s) {
         let space_before = 0;
         for (let i = 0; i < s.length; i++) {
-            if (s[i] !== ' ') {
+            if (s[i] !== " ") {
                 space_before = i;
                 break;
             }
@@ -576,7 +633,7 @@ fastn_utils.private = {
 
         let space_after = 0;
         for (let i = s.length - 1; i >= 0; i--) {
-            if (s[i] !== ' ') {
+            if (s[i] !== " ") {
                 space_after = s.length - 1 - i;
                 break;
             }
@@ -610,7 +667,7 @@ fastn_utils.private = {
      * @returns {string} - A string with 'n' spaces concatenated together.
      */
     repeated_space(n) {
-        return Array.from({ length: n }, () => ' ').join('');
+        return Array.from({ length: n }, () => " ").join("");
     },
     /**
      * Merges consecutive numbers in a comma-separated list into ranges.
@@ -651,11 +708,11 @@ fastn_utils.private = {
             mergedRanges.push(`${start}-${end}`);
         }
 
-        return mergedRanges.join(',');
+        return mergedRanges.join(",");
     },
     addUnderscoreToStart(text) {
         if (/^\d/.test(text)) {
-            return '_' + text;
+            return "_" + text;
         }
         return text;
     },
@@ -676,7 +733,7 @@ fastn_utils.private = {
         // Loop through the direct children and remove those with tagName 'div'
         for (var i = children.length - 1; i >= 0; i--) {
             var child = children[i];
-            if (child.tagName === 'DIV') {
+            if (child.tagName === "DIV") {
                 parent.removeChild(child);
             }
         }
@@ -697,17 +754,22 @@ fastn_utils.private = {
         var expirationDays = 30;
         if (expirationDays) {
             var date = new Date();
-            date.setTime(date.getTime() + (expirationDays * 24 * 60 * 60 * 1000));
+            date.setTime(date.getTime() + expirationDays * 24 * 60 * 60 * 1000);
             expires = "; expires=" + date.toUTCString();
         }
 
-        document.cookie = cookieName + "=" + encodeURIComponent(cookieValue) + expires + "; path=/";
+        document.cookie =
+            cookieName +
+            "=" +
+            encodeURIComponent(cookieValue) +
+            expires +
+            "; path=/";
     },
     getCookie(cookieName) {
         cookieName = fastn_utils.getStaticValue(cookieName);
         var name = cookieName + "=";
         var decodedCookie = decodeURIComponent(document.cookie);
-        var cookieArray = decodedCookie.split(';');
+        var cookieArray = decodedCookie.split(";");
 
         for (var i = 0; i < cookieArray.length; i++) {
             var cookie = cookieArray[i].trim();
@@ -718,8 +780,7 @@ fastn_utils.private = {
 
         return "None";
     },
-}
-
+};
 
 /*Object.prototype.get = function(index) {
     return this[index];

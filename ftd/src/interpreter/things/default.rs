@@ -2268,6 +2268,45 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
+             ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY.to_string(),
+             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                 name: ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY.to_string(),
+                 variants: vec![
+                     ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                         ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_AUTO,
+                         ftd::interpreter::Kind::string().into_kind_data(),
+                         false,
+                         Some(
+                              ftd::interpreter::Value::new_string("auto")
+                                  .into_property_value(false, 0),
+                         ),
+                                0,
+                         )),
+                     ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                         ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_LOW,
+                         ftd::interpreter::Kind::string().into_kind_data(),
+                         false,
+                         Some(
+                              ftd::interpreter::Value::new_string("low")
+                                  .into_property_value(false, 0),
+                         ),
+                                0,
+                         )),
+                     ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                         ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_HIGH,
+                         ftd::interpreter::Kind::string().into_kind_data(),
+                         false,
+                         Some(
+                              ftd::interpreter::Value::new_string("high")
+                                  .into_property_value(false, 0),
+                         ),
+                                0,
+                            )),
+                        ],
+                        line_number: 0,
+                    }),
+        ),
+        (
             ftd::interpreter::FTD_ANCHOR.to_string(),
             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
                 name: ftd::interpreter::FTD_ANCHOR.to_string(),
@@ -3105,6 +3144,35 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         None,
                         0,
                     )),
+
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LENGTH_DVH,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LENGTH_LVH,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LENGTH_SVH,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+
                     ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
                         ftd::interpreter::FTD_LENGTH_EM,
                         ftd::interpreter::Kind::decimal()
@@ -10180,6 +10248,130 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 line_number: 0,
             }),
         ),
+        (
+            "ftd#http-options".to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: "ftd#http-options".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "method".to_string(),
+                        kind: ftd::interpreter::Kind::or_type("ftd#http-method")
+                            .into_kind_data(),
+                        mutable: false,
+                        value: Some(
+                            ftd::interpreter::PropertyValue::Value {
+                                value: ftd::interpreter::Value::OrType {
+                                    name: "ftd#http-method".to_string(),
+                                    variant: "ftd#http-method.GET".to_string(),
+                                    full_variant: "ftd#http-method.GET".to_string(),
+                                    value: Box::new(ftd::interpreter::Value::new_string("GET")
+                                        .into_property_value(false, 0))
+                                }
+
+                                , is_mutable: false, line_number: 0 }
+                        ),
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "redirect".to_string(),
+                        kind: ftd::interpreter::Kind::or_type("ftd#http-redirect").into_kind_data(),
+                        mutable: false,
+                        value: Some(
+                            ftd::interpreter::PropertyValue::Value {
+                                value: ftd::interpreter::Value::OrType {
+                                    name: "ftd#http-redirect".to_string(),
+                                    variant: "ftd#http-redirect.manual".to_string(),
+                                    full_variant: "ftd#http-redirect.manual".to_string(),
+                                    value: Box::new(ftd::interpreter::Value::new_string("follow")
+                                        .into_property_value(false, 0))
+                                }
+
+                                , is_mutable: false, line_number: 0 }
+                        ),
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "fastn-module".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
+            "ftd#http-method".to_string(),
+            ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                name: "ftd#http-method".to_string(),
+                variants: vec![
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        "ftd#http-method.GET",
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("GET")
+                                .into_property_value(false, 0),
+                        ),
+                        0
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        "ftd#http-method.POST",
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("POST")
+                                .into_property_value(false, 0),
+                        ),
+                        0
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            "ftd#http-redirect".to_string(),
+            ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                name: "ftd#http-redirect".to_string(),
+                variants: vec![
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        "ftd#http-redirect.follow",
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("follow")
+                                .into_property_value(false, 0),
+                        ),
+                        0
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        "ftd#http-redirect.manual",
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("manual")
+                                .into_property_value(false, 0),
+                        ),
+                        0
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        "ftd#http-redirect.error",
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("error")
+                                .into_property_value(false, 0),
+                        ),
+                        0
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
     ];
 
     things.into_iter().collect()
@@ -10214,6 +10406,12 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
                 ftd::interpreter::Argument::default(
                     "alt",
                     ftd::interpreter::Kind::string()
+                        .into_kind_data()
+                        .into_optional(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "fetch-priority",
+                    ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY)
                         .into_kind_data()
                         .into_optional(),
                 ),
