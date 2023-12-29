@@ -174,7 +174,9 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         )
         .await;
     }
-
+    if let Some(fmt) = matches.subcommand_matches("fmt") {
+        return fastn_core::fmt(&config, fmt.value_of_("file"), fmt.get_flag("identation")).await;
+    }
     if let Some(build) = matches.subcommand_matches("build") {
         if matches.get_flag("verbose") {
             println!("{}", fastn_core::debug_env_vars());
@@ -354,6 +356,13 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(name: <NAME> "The name of the package to create"))
                 .arg(clap::arg!(-p --path [PATH] "Where to create the package (relative or absolute path, default value: the name)"))
                 .arg(clap::arg!(--"download-base-url" <DOWNLOAD_BASE_URL> "base url of the package where it can downloaded"))
+        )
+        .subcommand(
+            clap::Command::new("fmt")
+                .about("format the fastn package")
+                .arg(clap::arg!(file: [FILE]... "The file to format").required(false))
+                .arg(clap::arg!(-i --identation "Add identation to file/package"))
+                .hide(true), // hidden since the feature is not fully developed.
         )
         .subcommand(
             clap::Command::new("build")

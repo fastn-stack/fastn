@@ -45,14 +45,10 @@ impl File {
         }
     }
     pub fn get_full_path(&self) -> camino::Utf8PathBuf {
-        let (id, base_path) = match self {
-            Self::Ftd(a) => (a.id.to_string(), a.parent_path.to_string()),
-            Self::Static(a) => (a.id.to_string(), a.base_path.to_string()),
-            Self::Markdown(a) => (a.id.to_string(), a.parent_path.to_string()),
-            Self::Code(a) => (a.id.to_string(), a.parent_path.to_string()),
-            Self::Image(a) => (a.id.to_string(), a.base_path.to_string()),
-        };
-        camino::Utf8PathBuf::from(base_path).join(id)
+        match self {
+            Self::Ftd(a) | Self::Markdown(a) | Self::Code(a) => a.get_full_path(),
+            Self::Image(a) | Self::Static(a) => a.get_full_path(),
+        }
     }
 
     pub(crate) fn get_content(&self) -> &[u8] {
@@ -75,6 +71,13 @@ impl File {
     pub(crate) fn is_ftd(&self) -> bool {
         matches!(self, Self::Ftd(_))
     }
+
+    pub(crate) fn get_ftd_document(self) -> Option<fastn_core::Document> {
+        match self {
+            fastn_core::File::Ftd(ftd_document) => Some(ftd_document),
+            _ => None,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -88,6 +91,10 @@ pub struct Document {
 impl Document {
     pub fn id_to_path(&self) -> String {
         fastn_core::utils::id_to_path(self.id.as_str())
+    }
+
+    pub fn get_full_path(&self) -> camino::Utf8PathBuf {
+        camino::Utf8PathBuf::from(self.parent_path.to_string()).join(self.id.to_string())
     }
 
     pub fn id_with_package(&self) -> String {
@@ -113,6 +120,10 @@ pub struct Static {
 impl Static {
     pub fn id_with_package(&self) -> String {
         format!("{}/{}", self.package_name, self.id)
+    }
+
+    pub fn get_full_path(&self) -> camino::Utf8PathBuf {
+        camino::Utf8PathBuf::from(self.base_path.to_string()).join(self.id.to_string())
     }
 }
 
