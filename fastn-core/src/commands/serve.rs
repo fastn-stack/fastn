@@ -198,7 +198,7 @@ fn guess_mime_type(path: &str) -> mime_guess::Mime {
 
 #[tracing::instrument(skip_all)]
 async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Response {
-    let response = match tokio::fs::read(
+    let response = match fastn_core::tokio_fs::read(
         config
             .get_root_for_package(&config.package)
             .join("FASTN.ftd"),
@@ -228,7 +228,7 @@ async fn static_file(file_path: camino::Utf8PathBuf) -> fastn_core::http::Respon
         return fastn_core::not_found!("no such static file ({})", file_path);
     }
 
-    match tokio::fs::read(file_path.as_path()).await {
+    match fastn_core::tokio_fs::read(file_path.as_path()).await {
         Ok(r) => fastn_core::http::ok_with_content_type(r, guess_mime_type(file_path.as_str())),
         Err(e) => {
             tracing::error!(

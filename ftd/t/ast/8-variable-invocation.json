@@ -40,34 +40,10 @@
     "VariableInvocation": {
       "name": "score",
       "value": {
-        "Record": {
-          "name": "$score",
-          "caption": {
-            "string-value": {
-              "value": "50",
-              "line-number": 5,
-              "source": "Default"
-            }
-          },
-          "headers": [
-            {
-              "key": "if",
-              "mutable": false,
-              "value": {
-                "string-value": {
-                  "value": "not $flag",
-                  "line-number": 6,
-                  "source": "Default"
-                }
-              },
-              "line-number": 6,
-              "kind": null,
-              "condition": null
-            }
-          ],
-          "body": null,
-          "values": [],
-          "line_number": 5
+        "string-value": {
+          "value": "50",
+          "line-number": 5,
+          "source": "Default"
         }
       },
       "condition": {

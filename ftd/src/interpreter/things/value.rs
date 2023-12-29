@@ -83,7 +83,7 @@ impl PropertyValue {
     pub fn resolve(
         self,
         doc: &ftd::interpreter::TDoc,
-        line_number: usize,
+        line_number: usize, // Todo: Remove this line number instead use self.line_number()
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         self.resolve_with_inherited(doc, line_number, &Default::default())
     }

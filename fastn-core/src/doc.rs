@@ -11,7 +11,7 @@ fn cached_parse(
 
     let hash = fastn_core::utils::generate_hash(source);
 
-    if let Some(c) = fastn_core::utils::get_cached::<C>(id) {
+    /* if let Some(c) = fastn_core::utils::get_cached::<C>(id) {
         if c.hash == hash {
             tracing::debug!("cache hit");
             return Ok(c.doc);
@@ -19,7 +19,7 @@ fn cached_parse(
         tracing::debug!("cached hash mismatch");
     } else {
         tracing::debug!("cached miss");
-    }
+    }*/
 
     let doc = ftd::interpreter::ParsedDocument::parse_with_line_number(id, source, line_number)?;
     fastn_core::utils::cache_it(id, C { doc, hash }).map(|v| v.doc)
@@ -36,7 +36,7 @@ pub async fn interpret_helper(
 ) -> ftd::interpreter::Result<ftd::interpreter::Document> {
     tracing::info!(document = name);
     let doc = cached_parse(name, source, line_number)?;
-    let mut s = ftd::interpreter::interpret_with_line_number(name, doc, line_number)?;
+    let mut s = ftd::interpreter::interpret_with_line_number(name, doc)?;
     lib.module_package_map.insert(
         name.trim_matches('/').to_string(),
         lib.config.package.name.to_string(),
@@ -816,6 +816,16 @@ pub async fn resolve_foreign_variable2(
             }),
         }
     }
+}
+
+pub async fn parse_ftd_2023(
+    name: &str,
+    source: &str,
+    config: &fastn_core::Config,
+) -> ftd::interpreter::Result<ftd::interpreter::Document> {
+    let req = fastn_core::http::Request::default();
+    let mut lib = fastn_core::RequestConfig::new(config, &req, "", "/");
+    fastn_core::doc::interpret_helper(name, source, &mut lib, "/", false, 0).await
 }
 
 // No need to make async since this is pure.
