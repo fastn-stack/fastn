@@ -8,7 +8,7 @@ on:
     branches: [ main ]
 jobs:
   everything:
-    name: Rust Checks
+    name: Rust/JS Checks/Formatting
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -74,15 +74,7 @@ jobs:
       - name: Check if test succeeded
         if: steps.test.outcome != 'success'
         run: exit 1
-  prettier:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0
-      - name: Prettify code
+      - name: Prettify JS code
         uses: creyD/prettier_action@v4.3
         with:
           prettier_options: --write --tab-width 4 /home/runner/work/fastn/fastn/fastn-js/js/**/*.js
