@@ -45,7 +45,7 @@ jobs:
           command: clippy
           args: --tests -- -D warnings
       - name: Run cargo clippy (with feature=auth)
-        id: clippy
+        id: clippy-auth
         continue-on-error: true
         uses: actions-rs/cargo@v1
         with:
@@ -77,6 +77,9 @@ jobs:
         run: exit 1
       - name: Check if clippy is happy
         if: steps.clippy.outcome != 'success'
+        run: exit 1
+      - name: Check if clippy-auth is happy
+        if: steps.clippy-auth.outcome != 'success'
         run: exit 1
       - name: Check if test succeeded
         if: steps.test.outcome != 'success'
