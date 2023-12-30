@@ -1156,29 +1156,6 @@ pub fn bool_optional(
     }
 }
 
-#[cfg(test)]
-mod test {
-    macro_rules! p {
-        ($s:expr, $id: expr, $alias: expr) => {
-            assert_eq!(
-                super::parse_import(&Some($s.to_string()), $id, 0)
-                    .unwrap_or_else(|e| panic!("{}", e)),
-                ($id.to_string(), $alias.to_string())
-            )
-        };
-    }
-
-    #[test]
-    fn parse_import() {
-        p!("a/b/c as foo", "a/b/c", "foo");
-        p!("a/b as foo", "a/b", "foo");
-        p!("a/b/c", "a/b/c", "c");
-        p!("a/b", "a/b", "b");
-        p!("a", "a", "a");
-        p!("a as b", "a", "b");
-    }
-}
-
 pub fn decimal(
     name: &str,
     properties: &ftd::Map<ftd::Value>,
@@ -1846,4 +1823,27 @@ pub fn convert_to_document_id(doc_name: &str) -> String {
 
     // Attach /{doc_id}/ before returning
     format!("/{}/", document_id)
+}
+
+#[cfg(test)]
+mod test {
+    macro_rules! p {
+        ($s:expr, $id: expr, $alias: expr) => {
+            assert_eq!(
+                super::parse_import(&Some($s.to_string()), $id, 0)
+                    .unwrap_or_else(|e| panic!("{}", e)),
+                ($id.to_string(), $alias.to_string())
+            )
+        };
+    }
+
+    #[test]
+    fn parse_import() {
+        p!("a/b/c as foo", "a/b/c", "foo");
+        p!("a/b as foo", "a/b", "foo");
+        p!("a/b/c", "a/b/c", "c");
+        p!("a/b", "a/b", "b");
+        p!("a", "a", "a");
+        p!("a as b", "a", "b");
+    }
 }
