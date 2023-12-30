@@ -34,7 +34,7 @@ jobs:
         with:
           args: cargo build --target $BUILD_TARGET --release
       - name: run fastn
-        run: ./target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }}
+        run: ./target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }} --version
       - uses: actions/upload-artifact@v2
         with:
           name: linux_musl_x86_64
@@ -62,7 +62,7 @@ jobs:
           command: build
           args: --release
       - name: run fastn
-        run: ./target/release/${{ env.BINARY_NAME }}.exe
+        run: ./target/release/${{ env.BINARY_NAME }}.exe --version
       - uses: actions/upload-artifact@v2
         with:
           name: windows_x64_latest
@@ -108,7 +108,7 @@ jobs:
           command: build
           args: --release
       - name: run fastn
-        run: ./target/release/${{ env.BINARY_NAME }}
+        run: ./target/release/${{ env.BINARY_NAME }} --version
       - uses: actions/upload-artifact@v2
         with:
           name: macos_x64_latest
