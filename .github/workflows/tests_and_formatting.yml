@@ -44,6 +44,13 @@ jobs:
         with:
           command: clippy
           args: --tests -- -D warnings
+      - name: Run cargo clippy (with feature=auth)
+        id: clippy
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --tests --features=auth -- -D warnings
 #      - name: Install cargo check tools
 #        run: |
 #          cargo install --locked cargo-deny || true

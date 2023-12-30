@@ -317,10 +317,6 @@ pub async fn serve_helper(
             }
         }
 
-        // if request goes with mount-point /todos/api/add-todo/
-        // so it should say not found and pass it to proxy
-        let cookies = req_config.request.cookies().clone();
-
         let file_response = serve_file(&mut req_config, path.as_path(), only_js).await;
         // If path is not present in sitemap then pass it to proxy
         // TODO: Need to handle other package URL as well, and that will start from `-`
@@ -339,6 +335,7 @@ pub async fn serve_helper(
             // Already checked in the above method serve_file
 
             tracing::info!("executing proxy: path: {}", &path);
+            #[allow(unused_mut)]
             let (package_name, url, mut conf) =
                 fastn_core::config::utils::get_clean_url(config, path.as_str())?;
             let package_name = package_name.unwrap_or_else(|| config.package.name.to_string());
@@ -352,7 +349,12 @@ pub async fn serve_helper(
             // TODO: read app config and send them to service as header
             // Adjust x-fastn header from based on the platform and the requested field
             // this is for fastn.app
+            #[cfg(feature = "auth")]
             if let Some(user_id) = conf.get("user-id") {
+                // if request goes with mount-point /todos/api/add-todo/
+                // so it should say not found and pass it to proxy
+                let cookies = req_config.request.cookies().clone();
+
                 match user_id.split_once('-') {
                     Some((platform, requested_field)) => {
                         if let Some(user_data) = fastn_core::auth::get_user_data_from_cookies(
@@ -430,6 +432,7 @@ pub async fn clear_cache(
     config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    #[cfg(feature = "auth")]
     fn is_login(req: &fastn_core::http::Request) -> bool {
         // TODO: Need refactor not happy with this
         req.cookie(fastn_core::auth::AuthProviders::GitHub.as_str())
@@ -448,6 +451,7 @@ pub async fn clear_cache(
     }
     // TODO: Remove After Demo, till here
 
+    #[cfg(feature = "auth")]
     if !is_login(&req) {
         return Ok(actix_web::HttpResponse::Found()
             .append_header((
@@ -670,6 +674,7 @@ async fn actual_route(
         ("get", "/-/clone/") if cfg!(feature = "remote") => clone(config).await,
         ("get", t) if t.starts_with("/-/view-src/") => view_source(config, req).await,
         ("get", t) if t.starts_with("/-/edit-src/") => edit_source(config, req).await,
+        #[cfg(feature = "auth")]
         (_, t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
         ("post", "/-/edit/") => edit(config, req).await,
         ("post", "/-/revert/") => revert(config, req).await,
@@ -752,11 +757,10 @@ You can try without providing port, it will automatically pick unused port."#,
         }
     };
 
-    if let Ok(auth_enabled) = std::env::var("FASTN_ENABLE_AUTH") {
-        if auth_enabled != "false" {
-            tracing::info!("running auth related migrations");
-            fastn_core::auth::enable_auth()?
-        }
+    #[cfg(feature = "auth")]
+    {
+        tracing::info!("running auth related migrations");
+        fastn_core::auth::enable_auth()?
     }
 
     let app = move || {
