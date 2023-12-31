@@ -17,11 +17,6 @@ jobs:
       CARGO_TERM_COLOR: always
     steps:
       - uses: actions/checkout@main
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          override: true
       - uses: actions/cache@v2
         with:
           path: |
@@ -31,15 +26,17 @@ jobs:
             ftd/target
             fifthtry_content/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Create Release Build
-        run: cargo build --release --features=auth
-      - run: ls target
+      - name: Build-musl
+        uses: gmiam/rust-musl-action@0f17df9aea6eadc5eaeccdf733ec78c203103b61
+        continue-on-error: false
+        with:
+          args: cargo build --target x86_64-unknown-linux-musl --release
       - name: run fastn
-        run: ./target/release/fastn --version
+        run: ./target/x86_64-unknown-linux-musl/release/fastn --version
       - uses: actions/upload-artifact@v2
         with:
           name: linux_musl_x86_64
-          path: target/release/fastn
+          path: target/x86_64-unknown-linux-musl/release/fastn
   release-windows:
     name: Build for Windows
     runs-on: windows-latest
@@ -107,7 +104,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --features=auth
+          args: --release
       - name: run fastn
         run: ./target/release/fastn --version
       - uses: actions/upload-artifact@v2
