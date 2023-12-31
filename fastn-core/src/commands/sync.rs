@@ -47,7 +47,7 @@ pub async fn sync(
         let mut modified_files = vec![];
         let mut new_snapshots = vec![];
         for doc in documents {
-            let (snapshot, is_modified) = write(&doc, timestamp, &snapshots).await?;
+            let (snapshot, is_modified) = write(config, &doc, timestamp, &snapshots).await?;
             if is_modified {
                 modified_files.push(snapshot.filename.to_string());
             }
@@ -157,6 +157,7 @@ async fn get_changed_files(
 }
 
 async fn write(
+    config: &fastn_core::Config,
     doc: &fastn_core::File,
     timestamp: u128,
     snapshots: &std::collections::BTreeMap<String, u128>,

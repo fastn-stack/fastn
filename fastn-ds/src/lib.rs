@@ -8,14 +8,14 @@ impl DocumentStore {
         Self { root }
     }
 
-    pub async fn read_content(
+    pub async fn read_content<T: AsRef<str>>(
         &self,
-        path: &str,
+        path: T,
         _user_id: Option<u32>,
     ) -> ftd::interpreter::Result<Vec<u8>> {
         use tokio::io::AsyncReadExt;
 
-        let mut file = tokio::fs::File::open(self.root.join(path)).await?;
+        let mut file = tokio::fs::File::open(self.root.join(path.as_ref())).await?;
         let mut contents = vec![];
         file.read_to_end(&mut contents).await?;
         Ok(contents)

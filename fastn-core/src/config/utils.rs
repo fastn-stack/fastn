@@ -15,8 +15,11 @@ pub(crate) fn find_root_for_file(
     }
 }
 
-pub async fn fastn_doc(path: &camino::Utf8Path) -> fastn_core::Result<ftd::ftd2021::p2::Document> {
-    let doc = config.read_to_string(path);
+pub async fn fastn_doc(
+    ds: &fastn_ds::DocumentStore,
+    path: &camino::Utf8Path,
+) -> fastn_core::Result<ftd::ftd2021::p2::Document> {
+    let doc = ds.read_to_string(path, None).await?;
     let lib = fastn_core::FastnLibrary::default();
     match fastn_core::doc::parse_ftd("fastn", doc.await?.as_str(), &lib) {
         Ok(v) => Ok(v),

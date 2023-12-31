@@ -299,9 +299,9 @@ impl RequestConfig {
 }
 
 impl Config {
-    pub async fn read_content(
+    pub async fn read_content<T: AsRef<str>>(
         &self,
-        path: &str,
+        path: T,
         user_id: Option<u32>,
     ) -> ftd::interpreter::Result<Vec<u8>> {
         self.ds.read_content(path, user_id).await
@@ -926,7 +926,7 @@ impl Config {
             self.add_package(&package);
         }
 
-        let fastn_doc = utils::fastn_doc(fastn_path).await?;
+        let fastn_doc = utils::fastn_doc(self, fastn_path).await?;
 
         let mut package = package.clone();
 
@@ -1409,30 +1409,14 @@ impl Config {
     /// `read()` is the way to read a Config.
     #[tracing::instrument(name = "Config::read", skip_all)]
     pub async fn read(
-        root: fastn_ds::DocumentStore,
+        ds: fastn_ds::DocumentStore,
         resolve_sitemap: bool,
     ) -> fastn_core::Result<fastn_core::Config> {
-        let (root, original_directory) = match root {
-            Some(r) => {
-                let root: camino::Utf8PathBuf = tokio::fs::canonicalize(r.as_str())
-                    .await?
-                    .to_str()
-                    .map_or_else(|| r, |r| r.to_string())
-                    .into();
-                (root.clone(), root)
-            }
-            None => {
-                let original_directory: camino::Utf8PathBuf =
-                    tokio::fs::canonicalize(std::env::current_dir()?)
-                        .await?
-                        .try_into()?;
-                (
-                    fastn_core::Config::get_root_path(&original_directory).await?,
-                    original_directory,
-                )
-            }
-        };
-        let fastn_doc = utils::fastn_doc(&ds, &root.join("FASTN.ftd")).await?;
+        let original_directory: camino::Utf8PathBuf =
+            tokio::fs::canonicalize(std::env::current_dir()?)
+                .await?
+                .try_into()?;
+        let fastn_doc = utils::fastn_doc(&ds, "FASTN.ftd").await?;
         let package = fastn_core::Package::from_fastn_doc(&root, &fastn_doc)?;
         let mut config = Config {
             package: package.clone(),

@@ -12,6 +12,7 @@ pub struct Track {
 }
 
 pub(crate) fn get_tracks(
+    config: &fastn_core::Config,
     base_path: &str,
     path: &camino::Utf8PathBuf,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, Track>> {
@@ -21,7 +22,7 @@ pub(crate) fn get_tracks(
     }
 
     let lib = fastn_core::FastnLibrary::default();
-    let doc = config.read_to_string(path)?;
+    let doc = config.read_to_string(path, None)?;
     let b = match fastn_core::doc::parse_ftd(base_path, doc.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {

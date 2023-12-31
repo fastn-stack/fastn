@@ -571,7 +571,7 @@ impl Package {
     ) -> fastn_core::Result<()> {
         tracing::info!(path = fastn_path.as_str());
         let fastn_document = {
-            let doc = config.read_to_string(fastn_path).await?;
+            let doc = self.read_to_string(fastn_path).await?;
             let lib = fastn_core::FastnLibrary::default();
             match fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib) {
                 Ok(v) => v,
@@ -641,7 +641,7 @@ impl Package {
     }
 
     pub fn from_fastn_doc(
-        root: &camino::Utf8Path,
+        ds: &fastn_ds::DocumentStore,
         fastn_doc: &ftd::ftd2021::p2::Document,
     ) -> fastn_core::Result<Package> {
         let temp_package: Option<fastn_package::old_fastn::PackageTemp> =

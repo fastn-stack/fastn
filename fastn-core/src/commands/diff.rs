@@ -16,26 +16,27 @@ pub async fn diff(
         config.get_files(&config.package).await?
     };
     for doc in documents {
-        if let Some(diff) = get_diffy(&doc, &snapshots).await? {
+        if let Some(diff) = get_diffy(config, &doc, &snapshots).await? {
             println!("diff: {}", doc.get_id());
             println!("{}", diff);
         }
         if all {
-            get_track_diff(&doc, &snapshots, config.root.as_str()).await?;
+            get_track_diff(config, &doc, &snapshots, config.root.as_str()).await?;
         }
     }
     Ok(())
 }
 
 async fn get_diffy(
+    config: &fastn_core::Config,
     doc: &fastn_core::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fastn_core::Result<Option<String>> {
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
-        let content = config.read_to_string(&doc.get_full_path()).await?;
+        let content = config.read_to_string(&doc.get_full_path(), None).await?;
 
-        let existing_doc = config.read_to_string(&path).await?;
+        let existing_doc = config.read_to_string(&path, None).await?;
         if content.eq(&existing_doc) {
             return Ok(None);
         }
@@ -50,6 +51,7 @@ async fn get_diffy(
 }
 
 async fn get_track_diff(
+    config: &fastn_core::Config,
     doc: &fastn_core::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
     base_path: &str,
@@ -58,7 +60,7 @@ async fn get_track_diff(
     if std::fs::metadata(&path).is_err() {
         return Ok(());
     }
-    let tracks = fastn_core::tracker::get_tracks(base_path, &path)?;
+    let tracks = fastn_core::tracker::get_tracks(config, base_path, &path)?;
     for track in tracks.values() {
         if let Some(timestamp) = snapshots.get(&track.filename) {
             if track.other_timestamp.is_none() {
@@ -73,8 +75,8 @@ async fn get_track_diff(
                 track.other_timestamp.as_ref().unwrap(),
             );
 
-            let now_doc = config.read_to_string(&now_path).await?;
-            let then_doc = config.read_to_string(&then_path).await?;
+            let now_doc = config.read_to_string(&now_path, None).await?;
+            let then_doc = config.read_to_string(&then_path, None).await?;
             if now_doc.eq(&then_doc) {
                 continue;
             }
