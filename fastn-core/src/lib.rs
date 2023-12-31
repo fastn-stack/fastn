@@ -9,6 +9,8 @@ pub mod commands;
 mod config;
 mod controller;
 mod cr;
+#[cfg(feature = "auth")]
+mod db;
 mod doc;
 mod file;
 mod font;
@@ -18,12 +20,15 @@ pub mod tutor;
 pub(crate) mod watcher;
 #[macro_use]
 pub mod http;
+#[cfg(feature = "auth")]
 mod auth;
 mod ds;
 mod error;
 mod i18n;
 pub mod library;
 mod proxy;
+#[cfg(feature = "auth")]
+mod schema;
 pub mod sitemap;
 mod snapshot;
 mod sync_utils;
@@ -35,6 +40,8 @@ mod version;
 pub mod catch_panic;
 pub(crate) mod google_sheets;
 mod library2022;
+#[cfg(feature = "auth")]
+mod mail;
 pub(crate) mod tokio_fs;
 mod workspace;
 

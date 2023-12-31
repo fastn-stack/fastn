@@ -3,15 +3,15 @@ let fastn_dom = {};
 fastn_dom.styleClasses = "";
 
 fastn_dom.InternalClass = {
-    FT_COLUMN: 'ft_column',
-    FT_ROW: 'ft_row',
+    FT_COLUMN: "ft_column",
+    FT_ROW: "ft_row",
     FT_FULL_SIZE: "ft_full_size",
 };
 
 fastn_dom.codeData = {
     availableThemes: {},
-    addedCssFile: []
-}
+    addedCssFile: [],
+};
 
 fastn_dom.externalCss = new Set();
 fastn_dom.externalJs = new Set();
@@ -24,8 +24,8 @@ fastn_dom.wrapperNode = "wrapper";
 fastn_dom.commentMessage = "***FASTN***";
 fastn_dom.webComponentArgument = "args";
 
-fastn_dom.classes = { }
-fastn_dom.unsanitised_classes = {}
+fastn_dom.classes = {};
+fastn_dom.unsanitised_classes = {};
 fastn_dom.class_count = 0;
 fastn_dom.propertyMap = {
     "align-items": "ali",
@@ -55,22 +55,22 @@ fastn_dom.propertyMap = {
     "border-top-style": "bts",
     "border-top-width": "btw",
     "border-width": "bw",
-    "bottom": "b",
-    "color": "c",
-    "shadow": "sh",
+    bottom: "b",
+    color: "c",
+    shadow: "sh",
     "text-shadow": "tsh",
-    "cursor": "cur",
-    "display": "d",
+    cursor: "cur",
+    display: "d",
     "flex-wrap": "fw",
     "font-style": "fst",
     "font-weight": "fwt",
-    "gap": "g",
-    "height": "h",
+    gap: "g",
+    height: "h",
     "justify-content": "jc",
-    "left": "l",
-    "link": "lk",
+    left: "l",
+    link: "lk",
     "link-color": "lkc",
-    "margin": "m",
+    margin: "m",
     "margin-bottom": "mb",
     "margin-horizontal": "mh",
     "margin-left": "ml",
@@ -81,28 +81,28 @@ fastn_dom.propertyMap = {
     "max-width": "mxw",
     "min-height": "mnh",
     "min-width": "mnw",
-    "opacity": "op",
-    "overflow": "o",
+    opacity: "op",
+    overflow: "o",
     "overflow-x": "ox",
     "overflow-y": "oy",
     "object-fit": "of",
-    "padding": "p",
+    padding: "p",
     "padding-bottom": "pb",
     "padding-horizontal": "ph",
     "padding-left": "pl",
     "padding-right": "pr",
     "padding-top": "pt",
     "padding-vertical": "pv",
-    "position": "pos",
-    "resize": "res",
-    "role": "rl",
-    "right": "r",
-    "sticky": "s",
+    position: "pos",
+    resize: "res",
+    role: "rl",
+    right: "r",
+    sticky: "s",
     "text-align": "ta",
     "text-decoration": "td",
     "text-transform": "tt",
-    "top": "t",
-    "width": "w",
+    top: "t",
+    width: "w",
     "z-index": "z",
     "-webkit-box-orient": "wbo",
     "-webkit-line-clamp": "wlc",
@@ -119,14 +119,14 @@ fastn_dom.propertyMap = {
 };
 
 // dynamic-class-css.md
-fastn_dom.getClassesAsString = function() {
+fastn_dom.getClassesAsString = function () {
     return `<style id="styles">
     ${fastn_dom.getClassesAsStringWithoutStyleTag()}
     </style>`;
-}
+};
 
-fastn_dom.getClassesAsStringWithoutStyleTag = function() {
-    let classes = Object.entries(fastn_dom.classes).map(entry => {
+fastn_dom.getClassesAsStringWithoutStyleTag = function () {
+    let classes = Object.entries(fastn_dom.classes).map((entry) => {
         return getClassAsString(entry[0], entry[1]);
     });
 
@@ -134,20 +134,24 @@ fastn_dom.getClassesAsStringWithoutStyleTag = function() {
         padding: 0;
     }*/
     return classes.join("\n\t");
-}
+};
 
 function getClassAsString(className, obj) {
-    if (typeof obj.value === 'object' && obj.value !== null) {
+    if (typeof obj.value === "object" && obj.value !== null) {
         let value = "";
         for (let key in obj.value) {
             if (obj.value[key] === undefined || obj.value[key] === null) {
-                continue
+                continue;
             }
-            value = `${value} ${key}: ${obj.value[key]}${key === "color" ? " !important": ""};`
+            value = `${value} ${key}: ${obj.value[key]}${
+                key === "color" ? " !important" : ""
+            };`;
         }
-        return `${className} { ${value} }`
+        return `${className} { ${value} }`;
     } else {
-        return `${className} { ${obj.property}: ${obj.value}${obj.property === "color" ? " !important": ""}; }`;
+        return `${className} { ${obj.property}: ${obj.value}${
+            obj.property === "color" ? " !important" : ""
+        }; }`;
     }
 }
 
@@ -174,7 +178,9 @@ fastn_dom.ElementKind = {
     CodeChild: 16,
     // Note: 'arguments' cant be used as function parameter name bcoz it has
     // internal usage in js functions.
-    WebComponent: (webcomponent, args) => { return [17, [webcomponent, args]]; },
+    WebComponent: (webcomponent, args) => {
+        return [17, [webcomponent, args]];
+    },
     Video: 18,
 };
 
@@ -306,18 +312,16 @@ fastn_dom.PropertyKind = {
     FetchPriority: 122,
 };
 
-
-
 fastn_dom.Loading = {
     Lazy: "lazy",
     Eager: "eager",
-}
+};
 
 fastn_dom.LinkRel = {
     NoFollow: "nofollow",
     Sponsored: "sponsored",
     Ugc: "ugc",
-}
+};
 
 fastn_dom.TextInputType = {
     Text: "text",
@@ -331,7 +335,7 @@ fastn_dom.TextInputType = {
     Week: "week",
     Color: "color",
     File: "file",
-}
+};
 
 fastn_dom.AlignContent = {
     TopLeft: "top-left",
@@ -343,7 +347,7 @@ fastn_dom.AlignContent = {
     BottomLeft: "bottom-left",
     BottomRight: "bottom-right",
     BottomCenter: "bottom-center",
-}
+};
 
 fastn_dom.Region = {
     H1: "h1",
@@ -352,18 +356,20 @@ fastn_dom.Region = {
     H4: "h4",
     H5: "h5",
     H6: "h6",
-}
+};
 
 fastn_dom.Anchor = {
     Window: [1, "fixed"],
     Parent: [2, "absolute"],
-    Id: (value) => { return [3, value]; },
-}
+    Id: (value) => {
+        return [3, value];
+    },
+};
 
 fastn_dom.DeviceData = {
     Desktop: "desktop",
     Mobile: "mobile",
-}
+};
 
 fastn_dom.TextStyle = {
     Underline: "underline",
@@ -378,21 +384,25 @@ fastn_dom.TextStyle = {
     Light: "300",
     ExtraLight: "200",
     Hairline: "100",
-}
+};
 
 fastn_dom.Resizing = {
     FillContainer: "100%",
     HugContent: "fit-content",
     Auto: "auto",
-    Fixed: (value) => { return value; }
-}
+    Fixed: (value) => {
+        return value;
+    },
+};
 
 fastn_dom.Spacing = {
     SpaceEvenly: [1, "space-evenly"],
     SpaceBetween: [2, "space-between"],
     SpaceAround: [3, "space-around"],
-    Fixed: (value) => { return [4, value]; }
-}
+    Fixed: (value) => {
+        return [4, value];
+    },
+};
 
 fastn_dom.BorderStyle = {
     Solid: "solid",
@@ -403,7 +413,7 @@ fastn_dom.BorderStyle = {
     Groove: "groove",
     Inset: "inset",
     Outset: "outset",
-}
+};
 
 fastn_dom.Fit = {
     none: "none",
@@ -411,32 +421,32 @@ fastn_dom.Fit = {
     contain: "contain",
     cover: "cover",
     scaleDown: "scale-down",
-}
+};
 
 fastn_dom.FetchPriority = {
     auto: "auto",
     high: "high",
-    low:  "low",
-}
+    low: "low",
+};
 
 fastn_dom.Overflow = {
     Scroll: "scroll",
     Visible: "visible",
     Hidden: "hidden",
     Auto: "auto",
-}
+};
 
 fastn_dom.Display = {
     Block: "block",
     Inline: "inline",
     InlineBlock: "inline-block",
-}
+};
 
 fastn_dom.AlignSelf = {
     Start: "start",
     Center: "center",
     End: "end",
-}
+};
 
 fastn_dom.TextTransform = {
     None: "none",
@@ -445,14 +455,14 @@ fastn_dom.TextTransform = {
     Lowercase: "lowercase",
     Inherit: "inherit",
     Initial: "initial",
-}
+};
 
 fastn_dom.TextAlign = {
     Start: "start",
     Center: "center",
     End: "end",
     Justify: "justify",
-}
+};
 
 fastn_dom.Cursor = {
     None: "none",
@@ -488,14 +498,14 @@ fastn_dom.Cursor = {
     RowResize: "row-resize",
     AllScroll: "all-scroll",
     ZoomIn: "zoom-in",
-    ZoomOut: "zoom-out"
-}
+    ZoomOut: "zoom-out",
+};
 
 fastn_dom.Resize = {
     Vertical: "vertical",
     Horizontal: "horizontal",
     Both: "both",
-}
+};
 
 fastn_dom.WhiteSpace = {
     Normal: "normal",
@@ -504,7 +514,7 @@ fastn_dom.WhiteSpace = {
     PreLine: "pre-line",
     PreWrap: "pre-wrap",
     BreakSpaces: "break-spaces",
-}
+};
 
 fastn_dom.BackdropFilter = {
     Blur: (value) => {
@@ -534,7 +544,7 @@ fastn_dom.BackdropFilter = {
     Multi: (value) => {
         return [9, value];
     },
-}
+};
 
 fastn_dom.BackgroundStyle = {
     Solid: (value) => {
@@ -546,7 +556,7 @@ fastn_dom.BackgroundStyle = {
     LinearGradient: (value) => {
         return [3, value];
     },
-}
+};
 
 fastn_dom.BackgroundRepeat = {
     Repeat: "repeat",
@@ -555,14 +565,16 @@ fastn_dom.BackgroundRepeat = {
     NoRepeat: "no-repeat",
     Space: "space",
     Round: "round",
-}
+};
 
 fastn_dom.BackgroundSize = {
     Auto: "auto",
     Cover: "cover",
     Contain: "contain",
-    Length: (value) => { return value; },
-}
+    Length: (value) => {
+        return value;
+    },
+};
 
 fastn_dom.BackgroundPosition = {
     Left: "left",
@@ -577,12 +589,18 @@ fastn_dom.BackgroundPosition = {
     RightTop: "right top",
     RightCenter: "right center",
     RightBottom: "right bottom",
-    Length: (value) => { return value; },
-}
+    Length: (value) => {
+        return value;
+    },
+};
 
 fastn_dom.LinearGradientDirection = {
-    Angle: (value) => { return `${value}deg`; },
-    Turn: (value) => { return `${value}turn`; },
+    Angle: (value) => {
+        return `${value}deg`;
+    },
+    Turn: (value) => {
+        return `${value}turn`;
+    },
     Left: "270deg",
     Right: "90deg",
     Top: "0deg",
@@ -591,135 +609,163 @@ fastn_dom.LinearGradientDirection = {
     TopRight: "45deg",
     BottomLeft: "225deg",
     BottomRight: "135deg",
-}
+};
 
 fastn_dom.FontSize = {
     Px: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}px`})
+            return fastn.formula([value], function () {
+                return `${value.get()}px`;
+            });
         }
         return `${value}px`;
     },
     Em: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}em`})
+            return fastn.formula([value], function () {
+                return `${value.get()}em`;
+            });
         }
         return `${value}em`;
     },
     Rem: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}rem`})
+            return fastn.formula([value], function () {
+                return `${value.get()}rem`;
+            });
         }
         return `${value}rem`;
     },
-}
+};
 
 fastn_dom.Length = {
     Px: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}px`})
+            return fastn.formula([value], function () {
+                return `${value.get()}px`;
+            });
         }
         return `${value}px`;
     },
     Em: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}em`})
+            return fastn.formula([value], function () {
+                return `${value.get()}em`;
+            });
         }
         return `${value}em`;
     },
     Rem: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}rem`})
+            return fastn.formula([value], function () {
+                return `${value.get()}rem`;
+            });
         }
         return `${value}rem`;
     },
     Percent: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}%`})
+            return fastn.formula([value], function () {
+                return `${value.get()}%`;
+            });
         }
         return `${value}%`;
     },
     Calc: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `calc(${value.get()})`})
+            return fastn.formula([value], function () {
+                return `calc(${value.get()})`;
+            });
         }
         return `calc(${value})`;
     },
     Vh: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}vh`})
+            return fastn.formula([value], function () {
+                return `${value.get()}vh`;
+            });
         }
         return `${value}vh`;
     },
     Vw: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}vw`})
+            return fastn.formula([value], function () {
+                return `${value.get()}vw`;
+            });
         }
         return `${value}vw`;
     },
     Dvh: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}dvh`})
+            return fastn.formula([value], function () {
+                return `${value.get()}dvh`;
+            });
         }
         return `${value}dvh`;
     },
     Lvh: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}lvh`})
+            return fastn.formula([value], function () {
+                return `${value.get()}lvh`;
+            });
         }
-         return `${value}lvh`;
+        return `${value}lvh`;
     },
     Svh: (value) => {
         if (value instanceof fastn.mutableClass) {
-             return fastn.formula([value], function () { return `${value.get()}svh`})
+            return fastn.formula([value], function () {
+                return `${value.get()}svh`;
+            });
         }
         return `${value}svh`;
     },
 
-
     Vmin: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}vmin`})
+            return fastn.formula([value], function () {
+                return `${value.get()}vmin`;
+            });
         }
         return `${value}vmin`;
     },
     Vmax: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}vmax`})
+            return fastn.formula([value], function () {
+                return `${value.get()}vmax`;
+            });
         }
         return `${value}vmax`;
     },
     Responsive: (length) => {
-        return new PropertyValueAsClosure(
-            () => {
-                if (ftd.device.get() === "desktop") {
-                    return length.get("desktop");
-                } else {
-                    let mobile = length.get("mobile");
-                    let desktop = length.get("desktop");
-                    return mobile ? mobile: desktop;
-                }
-            },
-            [ftd.device, length]
-        );
-    }
-}
+        return new PropertyValueAsClosure(() => {
+            if (ftd.device.get() === "desktop") {
+                return length.get("desktop");
+            } else {
+                let mobile = length.get("mobile");
+                let desktop = length.get("desktop");
+                return mobile ? mobile : desktop;
+            }
+        }, [ftd.device, length]);
+    },
+};
 
 fastn_dom.Mask = {
     Image: (value) => {
         return [1, value];
     },
     Multi: (value) => {
-        return [2, value]
+        return [2, value];
     },
-}
+};
 
 fastn_dom.MaskSize = {
     Auto: "auto",
     Cover: "cover",
     Contain: "contain",
-    Fixed: (value) => { return value }
-}
+    Fixed: (value) => {
+        return value;
+    },
+};
 
 fastn_dom.MaskRepeat = {
     Repeat: "repeat",
@@ -728,7 +774,7 @@ fastn_dom.MaskRepeat = {
     NoRepeat: "no-repeat",
     Space: "space",
     Round: "round",
-}
+};
 
 fastn_dom.MaskPosition = {
     Left: "left",
@@ -743,21 +789,27 @@ fastn_dom.MaskPosition = {
     RightTop: "right top",
     RightCenter: "right center",
     RightBottom: "right bottom",
-    Length: (value) => { return value; },
-}
+    Length: (value) => {
+        return value;
+    },
+};
 
 fastn_dom.Event = {
     Click: 0,
     MouseEnter: 1,
     MouseLeave: 2,
     ClickOutside: 3,
-    GlobalKey: (val) => {return [4, val];},
-    GlobalKeySeq: (val) => {return [5, val];},
+    GlobalKey: (val) => {
+        return [4, val];
+    },
+    GlobalKeySeq: (val) => {
+        return [5, val];
+    },
     Input: 6,
     Change: 7,
     Blur: 8,
     Focus: 9,
-}
+};
 
 class PropertyValueAsClosure {
     closureFunction;
@@ -798,7 +850,7 @@ class Node2 {
 
         if (parentOrSibiling instanceof ParentNodeWithSibiling) {
             this.#parent = parentOrSibiling.getParent();
-            while(this.#parent instanceof ParentNodeWithSibiling) {
+            while (this.#parent instanceof ParentNodeWithSibiling) {
                 this.#parent = this.#parent.getParent();
             }
             sibiling = parentOrSibiling.getSibiling();
@@ -812,7 +864,6 @@ class Node2 {
             parent = parent.parent();
         }*/
 
-
         if (this.#parent.getNode) {
             this.#parent = this.#parent.getNode();
         }
@@ -822,7 +873,10 @@ class Node2 {
             return;
         }
         if (sibiling) {
-            this.#parent.insertBefore(this.#node, fastn_utils.nextSibling(sibiling, this.#parent));
+            this.#parent.insertBefore(
+                this.#node,
+                fastn_utils.nextSibling(sibiling, this.#parent),
+            );
         } else {
             this.#parent.appendChild(this.#node);
         }
@@ -830,15 +884,26 @@ class Node2 {
     createNode(kind) {
         if (kind === fastn_dom.ElementKind.Code) {
             let [node, classes, attributes] = fastn_utils.htmlNode(kind);
-            [this.#tagName, this.#node] = fastn_utils.createNodeHelper(node, classes, attributes);
-            let codeNode = new Node2(this.#node, fastn_dom.ElementKind.CodeChild);
+            [this.#tagName, this.#node] = fastn_utils.createNodeHelper(
+                node,
+                classes,
+                attributes,
+            );
+            let codeNode = new Node2(
+                this.#node,
+                fastn_dom.ElementKind.CodeChild,
+            );
             this.#children.push(codeNode);
         } else {
             let [node, classes, attributes] = fastn_utils.htmlNode(kind);
-            [this.#tagName, this.#node] = fastn_utils.createNodeHelper(node, classes, attributes);
+            [this.#tagName, this.#node] = fastn_utils.createNodeHelper(
+                node,
+                classes,
+                attributes,
+            );
         }
     }
-    getTagName(){
+    getTagName() {
         return this.#tagName;
     }
     getParent() {
@@ -846,15 +911,17 @@ class Node2 {
     }
     removeAllFaviconLinks() {
         if (doubleBuffering) {
-            const links = document.head.querySelectorAll('link[rel="shortcut icon"]');
-            links.forEach( link => {
+            const links = document.head.querySelectorAll(
+                'link[rel="shortcut icon"]',
+            );
+            links.forEach((link) => {
                 link.parentNode.removeChild(link);
             });
         }
     }
     setFavicon(url) {
         if (doubleBuffering) {
-            if (url instanceof fastn.recordInstanceClass) url = url.get('src');
+            if (url instanceof fastn.recordInstanceClass) url = url.get("src");
             while (true) {
                 if (url instanceof fastn.mutableClass) url = url.get();
                 else break;
@@ -869,11 +936,11 @@ class Node2 {
         }
     }
     updateTextInputValue() {
-        if(fastn_utils.isNull(this.#rawInnerValue)) {
+        if (fastn_utils.isNull(this.#rawInnerValue)) {
             this.attachAttribute("value");
             return;
         }
-        if (!ssr && this.#node.tagName.toLowerCase() === 'textarea') {
+        if (!ssr && this.#node.tagName.toLowerCase() === "textarea") {
             this.#node.innerHTML = this.#rawInnerValue;
         } else {
             this.attachAttribute("value", this.#rawInnerValue);
@@ -916,7 +983,7 @@ class Node2 {
         let node_kind = this.#kind;
         if (ssr) {
             if (node_kind !== fastn_dom.ElementKind.Image) {
-                this.updateTagName('a');
+                this.updateTagName("a");
                 this.attachAttribute("href", url);
             }
             return;
@@ -934,9 +1001,11 @@ class Node2 {
     }
     updatePositionForNodeById(node_id, value) {
         if (!ssr) {
-            const target_node = fastnVirtual.root.querySelector(`[id="${node_id}"]`);
+            const target_node = fastnVirtual.root.querySelector(
+                `[id="${node_id}"]`,
+            );
             if (!fastn_utils.isNull(target_node))
-                target_node.style['position'] = value;
+                target_node.style["position"] = value;
         }
     }
     updateParentPosition(value) {
@@ -948,7 +1017,7 @@ class Node2 {
             let current_node = this.#node;
             if (current_node) {
                 let parent_node = current_node.parentNode;
-                parent_node.style['position'] = value;
+                parent_node.style["position"] = value;
             }
         }
     }
@@ -963,9 +1032,9 @@ class Node2 {
             return;
         }
         if (!ssr && doubleBuffering) {
-            const metaTag = window.document.createElement('meta');
-            metaTag.setAttribute('name', name);
-            metaTag.setAttribute('content', value);
+            const metaTag = window.document.createElement("meta");
+            metaTag.setAttribute("name", name);
+            metaTag.setAttribute("content", value);
             document.head.appendChild(metaTag);
         }
     }
@@ -975,18 +1044,18 @@ class Node2 {
             return;
         }
         if (!ssr && doubleBuffering) {
-            const metaTag = window.document.createElement('meta');
-            metaTag.setAttribute('property', property);
-            metaTag.setAttribute('content', value);
+            const metaTag = window.document.createElement("meta");
+            metaTag.setAttribute("property", property);
+            metaTag.setAttribute("content", value);
             document.head.appendChild(metaTag);
         }
     }
     removeMetaTagByName(name) {
         if (!ssr && doubleBuffering) {
-            const metaTags = document.getElementsByTagName('meta');
+            const metaTags = document.getElementsByTagName("meta");
             for (let i = 0; i < metaTags.length; i++) {
                 const metaTag = metaTags[i];
-                if (metaTag.getAttribute('name') === name) {
+                if (metaTag.getAttribute("name") === name) {
                     metaTag.remove();
                     break;
                 }
@@ -995,10 +1064,10 @@ class Node2 {
     }
     removeMetaTagByProperty(property) {
         if (!ssr && doubleBuffering) {
-            const metaTags = document.getElementsByTagName('meta');
+            const metaTags = document.getElementsByTagName("meta");
             for (let i = 0; i < metaTags.length; i++) {
                 const metaTag = metaTags[i];
-                if (metaTag.getAttribute('property') === property) {
+                if (metaTag.getAttribute("property") === property) {
                     metaTag.remove();
                     break;
                 }
@@ -1011,7 +1080,7 @@ class Node2 {
         propertyShort = `__${propertyShort}`;
         let cls = `${propertyShort}-${fastn_dom.class_count}`;
         if (!!className) {
-           cls = className;
+            cls = className;
         } else {
             if (!fastn_dom.unsanitised_classes[cls]) {
                 fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
@@ -1037,7 +1106,8 @@ class Node2 {
         if (!ssr && !doubleBuffering) {
             if (!!className) {
                 if (!fastn_dom.classes[cssClass]) {
-                    fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
+                    fastn_dom.classes[cssClass] =
+                        fastn_dom.classes[cssClass] || obj;
                     fastn_utils.createStyle(cssClass, obj);
                 }
                 return cls;
@@ -1051,13 +1121,14 @@ class Node2 {
 
             if (createClass) {
                 if (!fastn_dom.classes[cssClass]) {
-                    fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
+                    fastn_dom.classes[cssClass] =
+                        fastn_dom.classes[cssClass] || obj;
                     fastn_utils.createStyle(cssClass, obj);
                 }
                 this.#node.style.removeProperty(property);
                 this.#node.classList.add(cls);
             } else if (!fastn_dom.classes[cssClass]) {
-                if (typeof value === 'object' && value !== null) {
+                if (typeof value === "object" && value !== null) {
                     for (let key in value) {
                         this.#node.style[key] = value[key];
                     }
@@ -1098,15 +1169,22 @@ class Node2 {
         const spread = fastn_utils.getStaticValue(value.get("spread"));
         const inset = fastn_utils.getStaticValue(value.get("inset"));
 
-        const shadowCommonCss = `${inset ? "inset " : ""}${xOffset} ${yOffset} ${blur} ${spread}`;
-        const lightShadowCss =  `${shadowCommonCss} ${lightColor}`;
+        const shadowCommonCss = `${
+            inset ? "inset " : ""
+        }${xOffset} ${yOffset} ${blur} ${spread}`;
+        const lightShadowCss = `${shadowCommonCss} ${lightColor}`;
         const darkShadowCss = `${shadowCommonCss} ${darkColor}`;
 
         if (lightShadowCss === darkShadowCss) {
             this.attachCss("box-shadow", lightShadowCss, false);
         } else {
             let lightClass = this.attachCss("box-shadow", lightShadowCss, true);
-            this.attachCss("box-shadow", darkShadowCss, true, `body.dark .${lightClass}`);
+            this.attachCss(
+                "box-shadow",
+                darkShadowCss,
+                true,
+                `body.dark .${lightClass}`,
+            );
         }
     }
     attachBackdropMultiFilter(value) {
@@ -1144,14 +1222,19 @@ class Node2 {
         const yOffset = fastn_utils.getStaticValue(value.get("y_offset"));
 
         const shadowCommonCss = `${xOffset} ${yOffset} ${blur}`;
-        const lightShadowCss =  `${shadowCommonCss} ${lightColor}`;
+        const lightShadowCss = `${shadowCommonCss} ${lightColor}`;
         const darkShadowCss = `${shadowCommonCss} ${darkColor}`;
 
         if (lightShadowCss === darkShadowCss) {
             this.attachCss("text-shadow", lightShadowCss, false);
         } else {
             let lightClass = this.attachCss("box-shadow", lightShadowCss, true);
-            this.attachCss("text-shadow", darkShadowCss, true, `body.dark .${lightClass}`);
+            this.attachCss(
+                "text-shadow",
+                darkShadowCss,
+                true,
+                `body.dark .${lightClass}`,
+            );
         }
     }
     getLinearGradientString(value) {
@@ -1171,25 +1254,27 @@ class Node2 {
             darkGradientString = `${darkGradientString} ${darkColor}`;
 
             let start = fastn_utils.getStaticValue(lg_color.get("start"));
-            if (start !== undefined && start !== null ) {
+            if (start !== undefined && start !== null) {
                 lightGradientString = `${lightGradientString} ${start}`;
                 darkGradientString = `${darkGradientString} ${start}`;
             }
 
             let end = fastn_utils.getStaticValue(lg_color.get("end"));
-            if (end !== undefined && end !== null ) {
+            if (end !== undefined && end !== null) {
                 lightGradientString = `${lightGradientString} ${end}`;
                 darkGradientString = `${darkGradientString} ${end}`;
             }
 
-            let stop_position = fastn_utils.getStaticValue(lg_color.get("stop_position"));
-            if (stop_position !== undefined && stop_position !== null ) {
+            let stop_position = fastn_utils.getStaticValue(
+                lg_color.get("stop_position"),
+            );
+            if (stop_position !== undefined && stop_position !== null) {
                 lightGradientString = `${lightGradientString}, ${stop_position}`;
                 darkGradientString = `${darkGradientString}, ${stop_position}`;
             }
 
-            lightGradientString = `${lightGradientString},`
-            darkGradientString = `${darkGradientString},`
+            lightGradientString = `${lightGradientString},`;
+            darkGradientString = `${darkGradientString},`;
         });
 
         lightGradientString = lightGradientString.trim().slice(0, -1);
@@ -1203,26 +1288,43 @@ class Node2 {
             return;
         }
 
-        const closure = fastn.closure(() => {
-            let direction = fastn_utils.getStaticValue(value.get("direction"));
+        const closure = fastn
+            .closure(() => {
+                let direction = fastn_utils.getStaticValue(
+                    value.get("direction"),
+                );
 
-            const [lightGradientString, darkGradientString] = this.getLinearGradientString(value);
+                const [lightGradientString, darkGradientString] =
+                    this.getLinearGradientString(value);
 
-            if (lightGradientString === darkGradientString) {
-                this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
-            } else {
-                let lightClass = this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`,true);
-                this.attachCss("background-image", `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
-            }
-        }).addNodeProperty(this, null, inherited);
+                if (lightGradientString === darkGradientString) {
+                    this.attachCss(
+                        "background-image",
+                        `linear-gradient(${direction}, ${lightGradientString})`,
+                        false,
+                    );
+                } else {
+                    let lightClass = this.attachCss(
+                        "background-image",
+                        `linear-gradient(${direction}, ${lightGradientString})`,
+                        true,
+                    );
+                    this.attachCss(
+                        "background-image",
+                        `linear-gradient(${direction}, ${darkGradientString})`,
+                        true,
+                        `body.dark .${lightClass}`,
+                    );
+                }
+            })
+            .addNodeProperty(this, null, inherited);
 
         const colorsList = value.get("colors").get().getList();
 
-        colorsList
-        .forEach(({ item }) => {
+        colorsList.forEach(({ item }) => {
             const color = item.get("color");
 
-            [color.get("light"), color.get("dark")].forEach(variant => {
+            [color.get("light"), color.get("dark")].forEach((variant) => {
                 variant.addClosure(closure);
                 this.#mutables.push(variant);
             });
@@ -1271,17 +1373,28 @@ class Node2 {
 
         if (repeat !== null) this.attachCss("background-repeat", repeat);
         if (position !== null) this.attachCss("background-position", position);
-        if (size !== null)  this.attachCss("background-size", size);
+        if (size !== null) this.attachCss("background-size", size);
 
         if (lightValue === darkValue) {
             this.attachCss("background-image", `url(${lightValue})`, false);
         } else {
-            let lightClass = this.attachCss("background-image", `url(${lightValue})`, true);
-            this.attachCss("background-image", `url(${darkValue})`, true, `body.dark .${lightClass}`);
+            let lightClass = this.attachCss(
+                "background-image",
+                `url(${lightValue})`,
+                true,
+            );
+            this.attachCss(
+                "background-image",
+                `url(${darkValue})`,
+                true,
+                `body.dark .${lightClass}`,
+            );
         }
     }
     attachMaskImageCss(value, vendorPrefix) {
-        const propertyWithPrefix = vendorPrefix ? `${vendorPrefix}-mask-image` : "mask-image";
+        const propertyWithPrefix = vendorPrefix
+            ? `${vendorPrefix}-mask-image`
+            : "mask-image";
 
         if (fastn_utils.isNull(value)) {
             this.attachCss(propertyWithPrefix, value);
@@ -1289,69 +1402,98 @@ class Node2 {
         }
 
         let src = fastn_utils.getStaticValue(value.get("src"));
-        let linearGradient = fastn_utils.getStaticValue(value.get("linear_gradient"));
+        let linearGradient = fastn_utils.getStaticValue(
+            value.get("linear_gradient"),
+        );
         let color = fastn_utils.getStaticValue(value.get("color"));
 
         const maskLightImageValues = [];
         const maskDarkImageValues = [];
 
-        if(!fastn_utils.isNull(src)) {
+        if (!fastn_utils.isNull(src)) {
             let lightValue = fastn_utils.getStaticValue(src.get("light"));
             let darkValue = fastn_utils.getStaticValue(src.get("dark"));
 
             const lightUrl = `url(${lightValue})`;
             const darkUrl = `url(${darkValue})`;
 
-            if(!fastn_utils.isNull(linearGradient)) {
+            if (!fastn_utils.isNull(linearGradient)) {
                 const lightImageValues = [lightUrl];
                 const darkImageValues = [darkUrl];
 
-                if(!fastn_utils.isNull(color)) {
-                    const lightColor = fastn_utils.getStaticValue(color.get("light"));
-                    const darkColor = fastn_utils.getStaticValue(color.get("dark"));
+                if (!fastn_utils.isNull(color)) {
+                    const lightColor = fastn_utils.getStaticValue(
+                        color.get("light"),
+                    );
+                    const darkColor = fastn_utils.getStaticValue(
+                        color.get("dark"),
+                    );
 
                     lightImageValues.push(lightColor);
                     darkImageValues.push(darkColor);
                 }
-                maskLightImageValues.push(`image(${lightImageValues.join(", ")})`);
-                maskDarkImageValues.push(`image(${darkImageValues.join(", ")})`);
+                maskLightImageValues.push(
+                    `image(${lightImageValues.join(", ")})`,
+                );
+                maskDarkImageValues.push(
+                    `image(${darkImageValues.join(", ")})`,
+                );
             } else {
                 maskLightImageValues.push(lightUrl);
                 maskDarkImageValues.push(darkUrl);
             }
         }
-        
-        if(!fastn_utils.isNull(linearGradient)) {
-            let direction = fastn_utils.getStaticValue(linearGradient.get("direction"));
 
-            const [lightGradientString, darkGradientString] = this.getLinearGradientString(linearGradient);
+        if (!fastn_utils.isNull(linearGradient)) {
+            let direction = fastn_utils.getStaticValue(
+                linearGradient.get("direction"),
+            );
 
-            maskLightImageValues.push(`linear-gradient(${direction}, ${lightGradientString})`);
-            maskDarkImageValues.push(`linear-gradient(${direction}, ${darkGradientString})`);
+            const [lightGradientString, darkGradientString] =
+                this.getLinearGradientString(linearGradient);
+
+            maskLightImageValues.push(
+                `linear-gradient(${direction}, ${lightGradientString})`,
+            );
+            maskDarkImageValues.push(
+                `linear-gradient(${direction}, ${darkGradientString})`,
+            );
         }
 
         const maskLightImageString = maskLightImageValues.join(", ");
         const maskDarkImageString = maskDarkImageValues.join(", ");
 
-        if(maskLightImageString === maskDarkImageString) {
+        if (maskLightImageString === maskDarkImageString) {
             this.attachCss(propertyWithPrefix, maskLightImageString, true);
         } else {
-            let lightClass = this.attachCss(propertyWithPrefix, maskLightImageString, true);
-            this.attachCss(propertyWithPrefix, maskDarkImageString, true, `body.dark .${lightClass}`);
+            let lightClass = this.attachCss(
+                propertyWithPrefix,
+                maskLightImageString,
+                true,
+            );
+            this.attachCss(
+                propertyWithPrefix,
+                maskDarkImageString,
+                true,
+                `body.dark .${lightClass}`,
+            );
         }
     }
     attachMaskSizeCss(value, vendorPrefix) {
-        const propertyNameWithPrefix = vendorPrefix ? `${vendorPrefix}-mask-size` : "mask-size";
-        if(fastn_utils.isNull(value)) {
+        const propertyNameWithPrefix = vendorPrefix
+            ? `${vendorPrefix}-mask-size`
+            : "mask-size";
+        if (fastn_utils.isNull(value)) {
             this.attachCss(propertyNameWithPrefix, value);
         }
-        const [size, ...two_values] = ["size", "size_x", "size_y"]
-            .map(size => fastn_utils.getStaticValue(value.get(size)));
-        
-        if(!fastn_utils.isNull(size)) {
+        const [size, ...two_values] = ["size", "size_x", "size_y"].map((size) =>
+            fastn_utils.getStaticValue(value.get(size)),
+        );
+
+        if (!fastn_utils.isNull(size)) {
             this.attachCss(propertyNameWithPrefix, size, true);
         } else {
-            const [size_x, size_y] = two_values.map(value => value || "auto");
+            const [size_x, size_y] = two_values.map((value) => value || "auto");
             this.attachCss(propertyNameWithPrefix, `${size_x} ${size_y}`, true);
         }
     }
@@ -1363,22 +1505,24 @@ class Node2 {
             this.attachCss("mask-image", value);
             return;
         }
-        
+
         const maskImage = fastn_utils.getStaticValue(value.get("image"));
         this.attachMaskImageCss(maskImage);
         this.attachMaskImageCss(maskImage, vendorPrefix);
         this.attachMaskSizeCss(value);
         this.attachMaskSizeCss(value, vendorPrefix);
         const maskRepeatValue = fastn_utils.getStaticValue(value.get("repeat"));
-        if(fastn_utils.isNull(maskRepeatValue)) {
+        if (fastn_utils.isNull(maskRepeatValue)) {
             this.attachCss("mask-repeat", maskRepeatValue, true);
             this.attachCss("-webkit-mask-repeat", maskRepeatValue, true);
         } else {
             this.attachCss("mask-repeat", maskRepeatValue, true);
             this.attachCss("-webkit-mask-repeat", maskRepeatValue, true);
         }
-        const maskPositionValue = fastn_utils.getStaticValue(value.get("position"));
-        if(fastn_utils.isNull(maskPositionValue)) {
+        const maskPositionValue = fastn_utils.getStaticValue(
+            value.get("position"),
+        );
+        if (fastn_utils.isNull(maskPositionValue)) {
             this.attachCss("mask-position", maskPositionValue, true);
             this.attachCss("-webkit-mask-position", maskPositionValue, true);
         } else {
@@ -1387,26 +1531,28 @@ class Node2 {
         }
     }
     attachExternalCss(css) {
-        if(!ssr) {
-            let css_tag = document.createElement('link');
-            css_tag.rel = 'stylesheet';
-            css_tag.type = 'text/css';
+        if (!ssr) {
+            let css_tag = document.createElement("link");
+            css_tag.rel = "stylesheet";
+            css_tag.type = "text/css";
             css_tag.href = css;
 
-            let head = document.head || document.getElementsByTagName("head")[0];
-            if (!fastn_dom.externalCss.has(css)){
+            let head =
+                document.head || document.getElementsByTagName("head")[0];
+            if (!fastn_dom.externalCss.has(css)) {
                 head.appendChild(css_tag);
                 fastn_dom.externalCss.add(css);
             }
         }
     }
     attachExternalJs(js) {
-        if(!ssr) {
-            let js_tag = document.createElement('script');
+        if (!ssr) {
+            let js_tag = document.createElement("script");
             js_tag.src = js;
 
-            let head = document.head || document.getElementsByTagName("head")[0];
-            if (!fastn_dom.externalJs.has(js)){
+            let head =
+                document.head || document.getElementsByTagName("head")[0];
+            if (!fastn_dom.externalJs.has(js)) {
                 head.appendChild(js_tag);
                 fastn_dom.externalCss.add(js);
             }
@@ -1418,110 +1564,153 @@ class Node2 {
             return;
         }
         value = value instanceof fastn.mutableClass ? value.get() : value;
-        
+
         const lightValue = value.get("light");
         const darkValue = value.get("dark");
 
-        const closure = fastn.closure(() => {
-            let lightValueStatic = fastn_utils.getStaticValue(lightValue);
-            let darkValueStatic = fastn_utils.getStaticValue(darkValue);
-            
-            if (lightValueStatic === darkValueStatic) {
-                this.attachCss(property, lightValueStatic, false);
-            } else {
-                let lightClass = this.attachCss(property, lightValueStatic, true);
-                this.attachCss(property, darkValueStatic, true, `body.dark .${lightClass}`);
-                if (visited) {
-                    this.attachCss(property, lightValueStatic, true, `.${lightClass}:visited`);
-                    this.attachCss(property, darkValueStatic, true, `body.dark  .${lightClass}:visited`);
-                }
-            }
-        }).addNodeProperty(this, null, inherited);
+        const closure = fastn
+            .closure(() => {
+                let lightValueStatic = fastn_utils.getStaticValue(lightValue);
+                let darkValueStatic = fastn_utils.getStaticValue(darkValue);
 
-        [lightValue, darkValue].forEach(modeValue => {
+                if (lightValueStatic === darkValueStatic) {
+                    this.attachCss(property, lightValueStatic, false);
+                } else {
+                    let lightClass = this.attachCss(
+                        property,
+                        lightValueStatic,
+                        true,
+                    );
+                    this.attachCss(
+                        property,
+                        darkValueStatic,
+                        true,
+                        `body.dark .${lightClass}`,
+                    );
+                    if (visited) {
+                        this.attachCss(
+                            property,
+                            lightValueStatic,
+                            true,
+                            `.${lightClass}:visited`,
+                        );
+                        this.attachCss(
+                            property,
+                            darkValueStatic,
+                            true,
+                            `body.dark  .${lightClass}:visited`,
+                        );
+                    }
+                }
+            })
+            .addNodeProperty(this, null, inherited);
+
+        [lightValue, darkValue].forEach((modeValue) => {
             modeValue.addClosure(closure);
             this.#mutables.push(modeValue);
         });
     }
     attachRoleCss(value) {
         if (fastn_utils.isNull(value)) {
-            this.attachCss('role', value);
+            this.attachCss("role", value);
             return;
         }
-        value.addClosure(fastn.closure(() => {
-            let desktopValue = value.get("desktop");
-            let mobileValue = value.get("mobile");
-            if (fastn_utils.sameResponsiveRole(desktopValue, mobileValue)) {
-                this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
-            } else {
-                let desktopClass = this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
-                this.attachCss("role", fastn_utils.getRoleValues(mobileValue), true, `body.mobile .${desktopClass}`);
-            }
-        }).addNodeProperty(this, null, inherited));
+        value.addClosure(
+            fastn
+                .closure(() => {
+                    let desktopValue = value.get("desktop");
+                    let mobileValue = value.get("mobile");
+                    if (
+                        fastn_utils.sameResponsiveRole(
+                            desktopValue,
+                            mobileValue,
+                        )
+                    ) {
+                        this.attachCss(
+                            "role",
+                            fastn_utils.getRoleValues(desktopValue),
+                            true,
+                        );
+                    } else {
+                        let desktopClass = this.attachCss(
+                            "role",
+                            fastn_utils.getRoleValues(desktopValue),
+                            true,
+                        );
+                        this.attachCss(
+                            "role",
+                            fastn_utils.getRoleValues(mobileValue),
+                            true,
+                            `body.mobile .${desktopClass}`,
+                        );
+                    }
+                })
+                .addNodeProperty(this, null, inherited),
+        );
         this.#mutables.push(value);
     }
     attachTextStyles(styles) {
         if (fastn_utils.isNull(styles)) {
-            this.attachCss('font-style', styles);
-            this.attachCss('font-weight', styles);
-            this.attachCss('text-decoration', styles);
+            this.attachCss("font-style", styles);
+            this.attachCss("font-weight", styles);
+            this.attachCss("text-decoration", styles);
             return;
         }
         for (var s of styles) {
             switch (s) {
-              case 'italic':
-                this.attachCss("font-style", s);
-                break;
-              case 'underline':
-              case 'line-through':
-                this.attachCss("text-decoration", s);
-                break;
-              default:
-                this.attachCss("font-weight", s);
+                case "italic":
+                    this.attachCss("font-style", s);
+                    break;
+                case "underline":
+                case "line-through":
+                    this.attachCss("text-decoration", s);
+                    break;
+                default:
+                    this.attachCss("font-weight", s);
             }
         }
     }
     attachAlignContent(value, node_kind) {
         if (fastn_utils.isNull(value)) {
-            this.attachCss('align-items', value);
+            this.attachCss("align-items", value);
             this.attachCss("justify-content", value);
             return;
         }
         if (node_kind === fastn_dom.ElementKind.Column) {
             switch (value) {
-                case 'top-left':
+                case "top-left":
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "start");
                     break;
-                case 'top-center':
+                case "top-center":
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "center");
                     break;
-                case 'top-right':
+                case "top-right":
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "end");
                     break;
-                case 'left':
+                case "left":
                     this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "start");
                     break;
-                case 'center':
+                case "center":
                     this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "center");
                     break;
-                case 'right':
+                case "right":
                     this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "end");
                     break;
-                case 'bottom-left':
+                case "bottom-left":
                     this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "left");
                     break;
-                case 'bottom-center':
+                case "bottom-center":
                     this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "center");
                     break;
-                case 'bottom-right':
+                case "bottom-right":
                     this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "end");
                     break;
@@ -1530,39 +1719,39 @@ class Node2 {
 
         if (node_kind === fastn_dom.ElementKind.Row) {
             switch (value) {
-                case 'top-left':
+                case "top-left":
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "start");
                     break;
-                case 'top-center':
+                case "top-center":
                     this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "start");
                     break;
-                case 'top-right':
+                case "top-right":
                     this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "start");
                     break;
-                case 'left':
+                case "left":
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "center");
                     break;
-                case 'center':
+                case "center":
                     this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "center");
                     break;
-                case 'right':
+                case "right":
                     this.attachCss("justify-content", "right");
                     this.attachCss("align-items", "center");
                     break;
-                case 'bottom-left':
+                case "bottom-left":
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "end");
                     break;
-                case 'bottom-center':
+                case "bottom-center":
                     this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "end");
                     break;
-                case 'bottom-right':
+                case "bottom-right":
                     this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "end");
                     break;
@@ -1570,55 +1759,84 @@ class Node2 {
         }
     }
     attachLinkColor(value) {
-        ftd.dark_mode.addClosure(fastn.closure(() => {
-            if (!ssr) {
-                const anchors = this.#node.tagName.toLowerCase() === 'a'
-                    ? [this.#node]
-                    : Array.from(this.#node.querySelectorAll("a"));
-                let propertyShort = `__${fastn_dom.propertyMap["link-color"]}`;
+        ftd.dark_mode.addClosure(
+            fastn
+                .closure(() => {
+                    if (!ssr) {
+                        const anchors =
+                            this.#node.tagName.toLowerCase() === "a"
+                                ? [this.#node]
+                                : Array.from(this.#node.querySelectorAll("a"));
+                        let propertyShort = `__${fastn_dom.propertyMap["link-color"]}`;
 
-                if(fastn_utils.isNull(value)) {
-                    anchors.forEach(a => {
-                        a.classList.values().forEach(className => {
-                            if(className.startsWith(`${propertyShort}-`)) {
-                                a.classList.remove(className);
+                        if (fastn_utils.isNull(value)) {
+                            anchors.forEach((a) => {
+                                a.classList.values().forEach((className) => {
+                                    if (
+                                        className.startsWith(
+                                            `${propertyShort}-`,
+                                        )
+                                    ) {
+                                        a.classList.remove(className);
+                                    }
+                                });
+                            });
+                        } else {
+                            const lightValue = fastn_utils.getStaticValue(
+                                value.get("light"),
+                            );
+                            const darkValue = fastn_utils.getStaticValue(
+                                value.get("dark"),
+                            );
+                            let cls = `${propertyShort}-${JSON.stringify(
+                                lightValue,
+                            )}`;
+
+                            if (!fastn_dom.unsanitised_classes[cls]) {
+                                fastn_dom.unsanitised_classes[cls] =
+                                    ++fastn_dom.class_count;
                             }
-                        });
-                    });
-                } else {
-                    const lightValue = fastn_utils.getStaticValue(value.get("light"));
-                    const darkValue = fastn_utils.getStaticValue(value.get("dark"));
-                    let cls = `${propertyShort}-${JSON.stringify(lightValue)}`;
-                    
-                    if (!fastn_dom.unsanitised_classes[cls]) {
-                        fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
-                    }
 
-                    cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
+                            cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
 
-                    const cssClass = `.${cls}`;
+                            const cssClass = `.${cls}`;
 
-                    if (!fastn_dom.classes[cssClass]) {
-                        const obj = { property: "color", value: lightValue };
-                        fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
-                        let styles = document.getElementById('styles');
-                        styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
-                    }
+                            if (!fastn_dom.classes[cssClass]) {
+                                const obj = {
+                                    property: "color",
+                                    value: lightValue,
+                                };
+                                fastn_dom.classes[cssClass] =
+                                    fastn_dom.classes[cssClass] || obj;
+                                let styles = document.getElementById("styles");
+                                styles.innerHTML = `${
+                                    styles.innerHTML
+                                }${getClassAsString(cssClass, obj)}\n`;
+                            }
 
-                    if(lightValue !== darkValue) {
-                        const obj = { property: "color", value: darkValue };
-                        let darkCls = `body.dark ${cssClass}`;
-                        if (!fastn_dom.classes[darkCls]) {
-                            fastn_dom.classes[darkCls] = fastn_dom.classes[darkCls] || obj;
-                            let styles = document.getElementById('styles');
-                            styles.innerHTML = `${styles.innerHTML}${getClassAsString(darkCls, obj)}\n`;
+                            if (lightValue !== darkValue) {
+                                const obj = {
+                                    property: "color",
+                                    value: darkValue,
+                                };
+                                let darkCls = `body.dark ${cssClass}`;
+                                if (!fastn_dom.classes[darkCls]) {
+                                    fastn_dom.classes[darkCls] =
+                                        fastn_dom.classes[darkCls] || obj;
+                                    let styles =
+                                        document.getElementById("styles");
+                                    styles.innerHTML = `${
+                                        styles.innerHTML
+                                    }${getClassAsString(darkCls, obj)}\n`;
+                                }
+                            }
+
+                            anchors.forEach((a) => a.classList.add(cls));
                         }
                     }
-
-                    anchors.forEach(a => a.classList.add(cls));
-                }
-            }
-        }).addNodeProperty(this, null, inherited));
+                })
+                .addNodeProperty(this, null, inherited),
+        );
         this.#mutables.push(ftd.dark_mode);
     }
     setStaticProperty(kind, value, inherited) {
@@ -1630,17 +1848,33 @@ class Node2 {
                 if (Array.isArray(staticValue)) {
                     staticValue.forEach((func, index) => {
                         if (index !== 0) {
-                            parentWithSibiling = new ParentNodeWithSibiling(this.#parent.getParent(), this.#children[index-1]);
+                            parentWithSibiling = new ParentNodeWithSibiling(
+                                this.#parent.getParent(),
+                                this.#children[index - 1],
+                            );
                         }
-                        this.#children.push(fastn_utils.getStaticValue(func.item)(parentWithSibiling, inherited))
+                        this.#children.push(
+                            fastn_utils.getStaticValue(func.item)(
+                                parentWithSibiling,
+                                inherited,
+                            ),
+                        );
                     });
                 } else {
-                    this.#children.push(staticValue(parentWithSibiling, inherited));
+                    this.#children.push(
+                        staticValue(parentWithSibiling, inherited),
+                    );
                 }
             } else {
                 if (Array.isArray(staticValue)) {
-                    staticValue.forEach(func =>
-                        this.#children.push(fastn_utils.getStaticValue(func.item)(this, inherited)));
+                    staticValue.forEach((func) =>
+                        this.#children.push(
+                            fastn_utils.getStaticValue(func.item)(
+                                this,
+                                inherited,
+                            ),
+                        ),
+                    );
                 } else {
                     this.#children.push(staticValue(this, inherited));
                 }
@@ -1653,12 +1887,16 @@ class Node2 {
             }
             ftd.breakpoint_width.set(fastn_utils.getStaticValue(staticValue));
         } else if (kind === fastn_dom.PropertyKind.Css) {
-            let css_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            let css_list = staticValue.map((obj) =>
+                fastn_utils.getStaticValue(obj.item),
+            );
             css_list.forEach((css) => {
                 this.attachExternalCss(css);
             });
         } else if (kind === fastn_dom.PropertyKind.Js) {
-            let js_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            let js_list = staticValue.map((obj) =>
+                fastn_utils.getStaticValue(obj.item),
+            );
             js_list.forEach((js) => {
                 this.attachExternalJs(js);
             });
@@ -1751,28 +1989,62 @@ class Node2 {
             let backdropType = staticValue[0];
             switch (backdropType) {
                 case 1:
-                    this.attachCss("backdrop-filter", `blur(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `blur(${fastn_utils.getStaticValue(staticValue[1])})`,
+                    );
                     break;
                 case 2:
-                    this.attachCss("backdrop-filter", `brightness(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `brightness(${fastn_utils.getStaticValue(
+                            staticValue[1],
+                        )})`,
+                    );
                     break;
                 case 3:
-                    this.attachCss("backdrop-filter", `contrast(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `contrast(${fastn_utils.getStaticValue(
+                            staticValue[1],
+                        )})`,
+                    );
                     break;
                 case 4:
-                    this.attachCss("backdrop-filter", `greyscale(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `greyscale(${fastn_utils.getStaticValue(
+                            staticValue[1],
+                        )})`,
+                    );
                     break;
                 case 5:
-                    this.attachCss("backdrop-filter", `invert(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `invert(${fastn_utils.getStaticValue(staticValue[1])})`,
+                    );
                     break;
                 case 6:
-                    this.attachCss("backdrop-filter", `opacity(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `opacity(${fastn_utils.getStaticValue(
+                            staticValue[1],
+                        )})`,
+                    );
                     break;
                 case 7:
-                    this.attachCss("backdrop-filter", `sepia(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `sepia(${fastn_utils.getStaticValue(staticValue[1])})`,
+                    );
                     break;
                 case 8:
-                    this.attachCss("backdrop-filter", `saturate(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `saturate(${fastn_utils.getStaticValue(
+                            staticValue[1],
+                        )})`,
+                    );
                     break;
                 case 9:
                     this.attachBackdropMultiFilter(staticValue[1]);
@@ -1799,7 +2071,9 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Classes) {
             fastn_utils.removeNonFastnClasses(this);
             if (!fastn_utils.isNull(staticValue)) {
-                let cls = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+                let cls = staticValue.map((obj) =>
+                    fastn_utils.getStaticValue(obj.item),
+                );
                 cls.forEach((c) => {
                     this.#node.classList.add(c);
                 });
@@ -1814,32 +2088,32 @@ class Node2 {
 
             let anchorType = staticValue[0];
             switch (anchorType) {
-              case 1:
-                this.attachCss("position", staticValue[1]);
-                break;
-              case 2:
-                this.attachCss("position", staticValue[1]);
-                this.updateParentPosition("relative");
-                break;
-              case 3:
-                const parent_node_id = staticValue[1];
-                this.attachCss("position", "absolute");
-                this.updatePositionForNodeById(parent_node_id, "relative");
-                break;
+                case 1:
+                    this.attachCss("position", staticValue[1]);
+                    break;
+                case 2:
+                    this.attachCss("position", staticValue[1]);
+                    this.updateParentPosition("relative");
+                    break;
+                case 3:
+                    const parent_node_id = staticValue[1];
+                    this.attachCss("position", "absolute");
+                    this.updatePositionForNodeById(parent_node_id, "relative");
+                    break;
             }
         } else if (kind === fastn_dom.PropertyKind.Sticky) {
             // sticky is boolean type
             switch (staticValue) {
-              case 'true':
-              case true:
-                this.attachCss("position", "sticky");
-                break;
-              case 'false':
-              case false:
-                this.attachCss("position", "static");
-                break;
-              default:
-                this.attachCss("position", staticValue);
+                case "true":
+                case true:
+                    this.attachCss("position", "sticky");
+                    break;
+                case "false":
+                case false:
+                    this.attachCss("position", "static");
+                    break;
+                default:
+                    this.attachCss("position", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.Top) {
             this.attachCss("top", staticValue);
@@ -1870,23 +2144,25 @@ class Node2 {
                     this.attachCss("justify-content", staticValue[1]);
                     break;
                 case fastn_dom.Spacing.Fixed()[0]:
-                    this.attachCss("gap", fastn_utils.getStaticValue(staticValue[1]));
+                    this.attachCss(
+                        "gap",
+                        fastn_utils.getStaticValue(staticValue[1]),
+                    );
                     break;
             }
-
         } else if (kind === fastn_dom.PropertyKind.Wrap) {
             // sticky is boolean type
             switch (staticValue) {
-              case 'true':
-              case true:
-                this.attachCss("flex-wrap", "wrap");
-                break;
-              case 'false':
-              case false:
-                this.attachCss("flex-wrap", "no-wrap");
-                break;
-              default:
-                this.attachCss("flex-wrap", staticValue);
+                case "true":
+                case true:
+                    this.attachCss("flex-wrap", "wrap");
+                    break;
+                case "false":
+                case false:
+                    this.attachCss("flex-wrap", "no-wrap");
+                    break;
+                default:
+                    this.attachCss("flex-wrap", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextTransform) {
             this.attachCss("text-transform", staticValue);
@@ -1911,7 +2187,7 @@ class Node2 {
             this.attachCss("resize", staticValue);
             this.attachCss("overflow", "auto");
         } else if (kind === fastn_dom.PropertyKind.Selectable) {
-            if(staticValue === false) {
+            if (staticValue === false) {
                 this.attachCss("user-select", "none");
             } else {
                 this.attachCss("user-select", null);
@@ -1995,8 +2271,8 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.TextInputValue) {
             this.#rawInnerValue = staticValue;
             this.updateTextInputValue();
-        } else if(kind === fastn_dom.PropertyKind.DefaultTextInputValue) {
-            if(!fastn_utils.isNull(this.#rawInnerValue)) {
+        } else if (kind === fastn_dom.PropertyKind.DefaultTextInputValue) {
+            if (!fastn_utils.isNull(this.#rawInnerValue)) {
                 return;
             }
             this.#rawInnerValue = staticValue;
@@ -2020,7 +2296,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
-            if(fastn_utils.isNull(staticValue)) {
+            if (fastn_utils.isNull(staticValue)) {
                 return;
             }
             this.updateToAnchor(staticValue);
@@ -2028,20 +2304,24 @@ class Node2 {
             if (fastn_utils.isNull(staticValue)) {
                 this.removeAttribute("rel");
             }
-            let rel_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            let rel_list = staticValue.map((obj) =>
+                fastn_utils.getStaticValue(obj.item),
+            );
             this.attachAttribute("rel", rel_list.join(" "));
         } else if (kind === fastn_dom.PropertyKind.OpenInNewTab) {
             // open_in_new_tab is boolean type
             switch (staticValue) {
-              case 'true':
-              case true:
-                this.attachAttribute("target", "_blank");
-                break;
-              default:
-                this.attachAttribute("target", staticValue);
+                case "true":
+                case true:
+                    this.attachAttribute("target", "_blank");
+                    break;
+                default:
+                    this.attachAttribute("target", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextStyle) {
-            let styles = staticValue?.map(obj => fastn_utils.getStaticValue(obj.item));
+            let styles = staticValue?.map((obj) =>
+                fastn_utils.getStaticValue(obj.item),
+            );
             this.attachTextStyles(styles);
         } else if (kind === fastn_dom.PropertyKind.Region) {
             this.updateTagName(staticValue);
@@ -2056,78 +2336,107 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Src) {
             this.attachAttribute("src", staticValue);
         } else if (kind === fastn_dom.PropertyKind.ImageSrc) {
-            ftd.dark_mode.addClosure(fastn.closure(() => {
-                if (fastn_utils.isNull(staticValue)) {
-                    this.attachAttribute("src", staticValue);
-                    return;
-                }
-                const is_dark_mode = ftd.dark_mode.get();
-                const src = staticValue.get(is_dark_mode ? 'dark' : 'light');
-                if (!ssr) {
-                    let image_node = this.#node;
-                    if( image_node.nodeName.toLowerCase() === "a" ) {
-                        let childNodes = image_node.childNodes;
-                        childNodes.forEach(function(child) {
-                            if (child.nodeName.toLowerCase() === "img")
-                                image_node = child;
-                        });
-                    }
-                    image_node.setAttribute("src", fastn_utils.getStaticValue(src));
-                }
-                else {
-                    this.attachAttribute("src", fastn_utils.getStaticValue(src));
-                }
-            }).addNodeProperty(this, null, inherited));
+            ftd.dark_mode.addClosure(
+                fastn
+                    .closure(() => {
+                        if (fastn_utils.isNull(staticValue)) {
+                            this.attachAttribute("src", staticValue);
+                            return;
+                        }
+                        const is_dark_mode = ftd.dark_mode.get();
+                        const src = staticValue.get(
+                            is_dark_mode ? "dark" : "light",
+                        );
+                        if (!ssr) {
+                            let image_node = this.#node;
+                            if (image_node.nodeName.toLowerCase() === "a") {
+                                let childNodes = image_node.childNodes;
+                                childNodes.forEach(function (child) {
+                                    if (child.nodeName.toLowerCase() === "img")
+                                        image_node = child;
+                                });
+                            }
+                            image_node.setAttribute(
+                                "src",
+                                fastn_utils.getStaticValue(src),
+                            );
+                        } else {
+                            this.attachAttribute(
+                                "src",
+                                fastn_utils.getStaticValue(src),
+                            );
+                        }
+                    })
+                    .addNodeProperty(this, null, inherited),
+            );
             this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Alt) {
             this.attachAttribute("alt", staticValue);
         } else if (kind === fastn_dom.PropertyKind.VideoSrc) {
-            ftd.dark_mode.addClosure(fastn.closure(() => {
-                if (fastn_utils.isNull(staticValue)) {
-                    this.attachAttribute("src", staticValue);
-                    return;
-                }
-                const is_dark_mode = ftd.dark_mode.get();
-                const src = staticValue.get(is_dark_mode ? 'dark' : 'light');
+            ftd.dark_mode.addClosure(
+                fastn
+                    .closure(() => {
+                        if (fastn_utils.isNull(staticValue)) {
+                            this.attachAttribute("src", staticValue);
+                            return;
+                        }
+                        const is_dark_mode = ftd.dark_mode.get();
+                        const src = staticValue.get(
+                            is_dark_mode ? "dark" : "light",
+                        );
 
-                this.attachAttribute("src", fastn_utils.getStaticValue(src));
-            }).addNodeProperty(this, null, inherited));
+                        this.attachAttribute(
+                            "src",
+                            fastn_utils.getStaticValue(src),
+                        );
+                    })
+                    .addNodeProperty(this, null, inherited),
+            );
             this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Autoplay) {
-            if(staticValue) {
+            if (staticValue) {
                 this.attachAttribute("autoplay", staticValue);
             } else {
                 this.removeAttribute("autoplay");
             }
         } else if (kind === fastn_dom.PropertyKind.Muted) {
-            if(staticValue) {
+            if (staticValue) {
                 this.attachAttribute("muted", staticValue);
             } else {
                 this.removeAttribute("muted");
             }
         } else if (kind === fastn_dom.PropertyKind.Controls) {
-            if(staticValue) {
+            if (staticValue) {
                 this.attachAttribute("controls", staticValue);
             } else {
                 this.removeAttribute("controls");
             }
         } else if (kind === fastn_dom.PropertyKind.LoopVideo) {
-            if(staticValue) {
+            if (staticValue) {
                 this.attachAttribute("loop", staticValue);
             } else {
                 this.removeAttribute("loop");
             }
         } else if (kind === fastn_dom.PropertyKind.Poster) {
-            ftd.dark_mode.addClosure(fastn.closure(() => {
-                if (fastn_utils.isNull(staticValue)) {
-                    this.attachAttribute("poster", staticValue);
-                    return;
-                }
-                const is_dark_mode = ftd.dark_mode.get();
-                const posterSrc = staticValue.get(is_dark_mode ? 'dark' : 'light');
+            ftd.dark_mode.addClosure(
+                fastn
+                    .closure(() => {
+                        if (fastn_utils.isNull(staticValue)) {
+                            this.attachAttribute("poster", staticValue);
+                            return;
+                        }
+                        const is_dark_mode = ftd.dark_mode.get();
+                        const posterSrc = staticValue.get(
+                            is_dark_mode ? "dark" : "light",
+                        );
 
-                this.attachAttribute("poster", fastn_utils.getStaticValue(posterSrc));
-            }).addNodeProperty(this, null, inherited));
+                        this.attachAttribute(
+                            "poster",
+                            fastn_utils.getStaticValue(posterSrc),
+                        );
+                    })
+                    .addNodeProperty(this, null, inherited),
+            );
             this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Fit) {
             this.attachCss("object-fit", staticValue);
@@ -2141,19 +2450,19 @@ class Node2 {
             const id_pattern = "^([a-zA-Z0-9_-]{11})$";
             let id = staticValue.match(id_pattern);
             if (!fastn_utils.isNull(id)) {
-                this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
+                this.attachAttribute(
+                    "src",
+                    `https:\/\/youtube.com/embed/${id[0]}`,
+                );
             } else {
                 this.attachAttribute("src", staticValue);
             }
-
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Code) {
             if (!fastn_utils.isNull(staticValue)) {
-                let {
-                    modifiedText,
-                    highlightedLines
-                } = fastn_utils.findAndRemoveHighlighter(staticValue);
+                let { modifiedText, highlightedLines } =
+                    fastn_utils.findAndRemoveHighlighter(staticValue);
                 if (highlightedLines.length !== 0) {
                     this.attachAttribute("data-line", highlightedLines);
                 }
@@ -2161,19 +2470,23 @@ class Node2 {
             }
             let codeNode = this.#children[0].getNode();
             let codeText = fastn_utils.escapeHtmlInCode(staticValue);
-            codeNode.innerHTML= codeText;
-            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
+            codeNode.innerHTML = codeText;
+            this.#extraData.code = this.#extraData.code
+                ? this.#extraData.code
+                : {};
             fastn_utils.highlightCode(codeNode, this.#extraData.code);
-        }  else if (kind === fastn_dom.PropertyKind.CodeShowLineNumber) {
+        } else if (kind === fastn_dom.PropertyKind.CodeShowLineNumber) {
             if (staticValue) {
                 this.#node.classList.add("line-numbers");
             } else {
                 this.#node.classList.remove("line-numbers");
             }
         } else if (kind === fastn_dom.PropertyKind.CodeTheme) {
-            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
-            if(fastn_utils.isNull(staticValue)) {
-                if(!fastn_utils.isNull(this.#extraData.code.theme)) {
+            this.#extraData.code = this.#extraData.code
+                ? this.#extraData.code
+                : {};
+            if (fastn_utils.isNull(staticValue)) {
+                if (!fastn_utils.isNull(this.#extraData.code.theme)) {
                     this.#node.classList.remove(this.#extraData.code.theme);
                 }
                 return;
@@ -2182,7 +2495,7 @@ class Node2 {
                 fastn_utils.addCodeTheme(staticValue);
             }
             staticValue = fastn_utils.getStaticValue(staticValue);
-            let theme = staticValue.replace("\.", "-");
+            let theme = staticValue.replace(".", "-");
             if (this.#extraData.code.theme !== theme) {
                 let codeNode = this.#children[0].getNode();
                 this.#node.classList.remove(this.#extraData.code.theme);
@@ -2194,7 +2507,9 @@ class Node2 {
             }
         } else if (kind === fastn_dom.PropertyKind.CodeLanguage) {
             let language = `language-${staticValue}`;
-            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
+            this.#extraData.code = this.#extraData.code
+                ? this.#extraData.code
+                : {};
             if (this.#extraData.code.language) {
                 this.#node.classList.remove(language);
             }
@@ -2206,68 +2521,117 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Favicon) {
             if (fastn_utils.isNull(staticValue)) return;
             this.setFavicon(staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle) {
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle
+        ) {
             this.updateMetaTitle(staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle) {
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle
+        ) {
             this.addMetaTagByProperty("og:title", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterTitle) {
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterTitle
+        ) {
             this.addMetaTagByName("twitter:title", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaDescription) {
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaDescription
+        ) {
             this.addMetaTagByName("description", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription) {
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription
+        ) {
             this.addMetaTagByProperty("og:description", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription) {
+        } else if (
+            kind ===
+            fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription
+        ) {
             this.addMetaTagByName("twitter:description", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGImage) {
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGImage
+        ) {
             // staticValue is of ftd.raw-image-src RecordInstance type
             if (fastn_utils.isNull(staticValue)) {
                 this.removeMetaTagByProperty("og:image");
                 return;
             }
-            this.addMetaTagByProperty("og:image", fastn_utils.getStaticValue(staticValue.get('src')));
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage) {
+            this.addMetaTagByProperty(
+                "og:image",
+                fastn_utils.getStaticValue(staticValue.get("src")),
+            );
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage
+        ) {
             // staticValue is of ftd.raw-image-src RecordInstance type
             if (fastn_utils.isNull(staticValue)) {
                 this.removeMetaTagByName("twitter:image");
                 return;
             }
-            this.addMetaTagByName("twitter:image", fastn_utils.getStaticValue(staticValue.get('src')));
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor) {
+            this.addMetaTagByName(
+                "twitter:image",
+                fastn_utils.getStaticValue(staticValue.get("src")),
+            );
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor
+        ) {
             // staticValue is of ftd.color RecordInstance type
             if (fastn_utils.isNull(staticValue)) {
                 this.removeMetaTagByName("theme-color");
                 return;
             }
-            this.addMetaTagByName("theme-color", fastn_utils.getStaticValue(staticValue.get('light')));
-        } else if (kind === fastn_dom.PropertyKind.IntegerValue
-            || kind === fastn_dom.PropertyKind.DecimalValue
-            || kind === fastn_dom.PropertyKind.BooleanValue) {
+            this.addMetaTagByName(
+                "theme-color",
+                fastn_utils.getStaticValue(staticValue.get("light")),
+            );
+        } else if (
+            kind === fastn_dom.PropertyKind.IntegerValue ||
+            kind === fastn_dom.PropertyKind.DecimalValue ||
+            kind === fastn_dom.PropertyKind.BooleanValue
+        ) {
             this.#node.innerHTML = staticValue;
             this.#rawInnerValue = staticValue;
         } else if (kind === fastn_dom.PropertyKind.StringValue) {
             this.#rawInnerValue = staticValue;
-            staticValue = fastn_utils.markdown_inline(fastn_utils.escapeHtmlInMarkdown(staticValue));
-            staticValue = fastn_utils.process_post_markdown(this.#node, staticValue);
-            if(!fastn_utils.isNull(staticValue)) {
+            staticValue = fastn_utils.markdown_inline(
+                fastn_utils.escapeHtmlInMarkdown(staticValue),
+            );
+            staticValue = fastn_utils.process_post_markdown(
+                this.#node,
+                staticValue,
+            );
+            if (!fastn_utils.isNull(staticValue)) {
                 this.#node.innerHTML = staticValue;
             } else {
                 this.#node.innerHTML = "";
             }
         } else {
-            throw ("invalid fastn_dom.PropertyKind: " + kind);
+            throw "invalid fastn_dom.PropertyKind: " + kind;
         }
     }
     setProperty(kind, value, inherited) {
         if (value instanceof fastn.mutableClass) {
-            this.setDynamicProperty(kind, [value], () => { return value.get(); }, inherited);
+            this.setDynamicProperty(
+                kind,
+                [value],
+                () => {
+                    return value.get();
+                },
+                inherited,
+            );
         } else if (value instanceof PropertyValueAsClosure) {
-            this.setDynamicProperty(kind, value.deps, value.closureFunction, inherited);
+            this.setDynamicProperty(
+                kind,
+                value.deps,
+                value.closureFunction,
+                inherited,
+            );
         } else {
             this.setStaticProperty(kind, value, inherited);
         }
     }
     setDynamicProperty(kind, deps, func, inherited) {
-        let closure = fastn.closure(func).addNodeProperty(this, kind, inherited);
+        let closure = fastn
+            .closure(func)
+            .addNodeProperty(this, kind, inherited);
         for (let dep in deps) {
             if (fastn_utils.isNull(deps[dep]) || !deps[dep].addClosure) {
                 continue;
@@ -2280,7 +2644,7 @@ class Node2 {
         return this.#node;
     }
     getExtraData() {
-        return this.#extraData
+        return this.#extraData;
     }
     getChildren() {
         return this.#children;
@@ -2294,19 +2658,29 @@ class Node2 {
     addEventHandler(event, func) {
         if (event === fastn_dom.Event.Click) {
             let onclickEvents = this.mergeFnCalls(this.#node.onclick, func);
-            if (fastn_utils.isNull(this.#node.onclick)) this.attachCss("cursor", "pointer");
+            if (fastn_utils.isNull(this.#node.onclick))
+                this.attachCss("cursor", "pointer");
             this.#node.onclick = onclickEvents;
         } else if (event === fastn_dom.Event.MouseEnter) {
-            let mouseEnterEvents = this.mergeFnCalls(this.#node.onmouseenter, func);
+            let mouseEnterEvents = this.mergeFnCalls(
+                this.#node.onmouseenter,
+                func,
+            );
             this.#node.onmouseenter = mouseEnterEvents;
         } else if (event === fastn_dom.Event.MouseLeave) {
-            let mouseLeaveEvents = this.mergeFnCalls(this.#node.onmouseleave, func);
+            let mouseLeaveEvents = this.mergeFnCalls(
+                this.#node.onmouseleave,
+                func,
+            );
             this.#node.onmouseleave = mouseLeaveEvents;
         } else if (event === fastn_dom.Event.ClickOutside) {
             ftd.clickOutsideEvents.push([this, func]);
         } else if (!!event[0] && event[0] === fastn_dom.Event.GlobalKey()[0]) {
             ftd.globalKeyEvents.push([this, func, event[1]]);
-        } else if (!!event[0] && event[0] === fastn_dom.Event.GlobalKeySeq()[0]) {
+        } else if (
+            !!event[0] &&
+            event[0] === fastn_dom.Event.GlobalKeySeq()[0]
+        ) {
             ftd.globalKeySeqEvents.push([this, func, event[1]]);
         } else if (event === fastn_dom.Event.Input) {
             let onInputEvents = this.mergeFnCalls(this.#node.oninput, func);
@@ -2347,7 +2721,10 @@ class ConditionalDom {
     #conditionUI;
 
     constructor(parent, deps, condition, node_constructor) {
-        this.#marker = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Comment);
+        this.#marker = fastn_dom.createKernel(
+            parent,
+            fastn_dom.ElementKind.Comment,
+        );
         this.#parent = parent;
 
         this.#conditionUI = null;
@@ -2355,14 +2732,21 @@ class ConditionalDom {
             fastn_utils.resetFullHeight();
             if (condition()) {
                 if (this.#conditionUI) {
-                    let conditionUI = fastn_utils.flattenArray(this.#conditionUI);
+                    let conditionUI = fastn_utils.flattenArray(
+                        this.#conditionUI,
+                    );
                     while (conditionUI.length > 0) {
                         let poppedElement = conditionUI.pop();
                         poppedElement.destroy();
                     }
                 }
-                this.#conditionUI = node_constructor(new ParentNodeWithSibiling(this.#parent, this.#marker));
-                if (!Array.isArray(this.#conditionUI) && fastn_utils.isWrapperNode(this.#conditionUI.getTagName())) {
+                this.#conditionUI = node_constructor(
+                    new ParentNodeWithSibiling(this.#parent, this.#marker),
+                );
+                if (
+                    !Array.isArray(this.#conditionUI) &&
+                    fastn_utils.isWrapperNode(this.#conditionUI.getTagName())
+                ) {
                     this.#conditionUI = this.#conditionUI.getChildren();
                 }
             } else if (this.#conditionUI) {
@@ -2374,8 +2758,8 @@ class ConditionalDom {
                 this.#conditionUI = null;
             }
             fastn_utils.setFullHeight();
-        })
-        deps.forEach(dep => {
+        });
+        deps.forEach((dep) => {
             if (!fastn_utils.isNull(dep) && dep.addClosure) {
                 dep.addClosure(closure);
             }
@@ -2387,7 +2771,7 @@ class ConditionalDom {
     }
 
     getParent() {
-        let nodes =  [this.#marker];
+        let nodes = [this.#marker];
         if (this.#conditionUI) {
             nodes.push(this.#conditionUI);
         }
@@ -2397,11 +2781,16 @@ class ConditionalDom {
 
 fastn_dom.createKernel = function (parent, kind) {
     return new Node2(parent, kind);
-}
+};
 
-fastn_dom.conditionalDom = function (parent, deps, condition, node_constructor) {
+fastn_dom.conditionalDom = function (
+    parent,
+    deps,
+    condition,
+    node_constructor,
+) {
     return new ConditionalDom(parent, deps, condition, node_constructor);
-}
+};
 
 class ParentNodeWithSibiling {
     #parent;
@@ -2425,7 +2814,10 @@ class ForLoop {
     #parent;
     #nodes;
     constructor(parent, node_constructor, list) {
-        this.#wrapper = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Comment);
+        this.#wrapper = fastn_dom.createKernel(
+            parent,
+            fastn_dom.ElementKind.Comment,
+        );
         this.#parent = parent;
         this.#node_constructor = node_constructor;
         this.#list = list;
@@ -2437,13 +2829,19 @@ class ForLoop {
         }
         fastn_utils.setFullHeight();
     }
-    createNode(index, resizeBodyHeight= true) {
+    createNode(index, resizeBodyHeight = true) {
         if (resizeBodyHeight) {
             fastn_utils.resetFullHeight();
         }
-        let parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#wrapper);
+        let parentWithSibiling = new ParentNodeWithSibiling(
+            this.#parent,
+            this.#wrapper,
+        );
         if (index !== 0) {
-            parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#nodes[index-1]);
+            parentWithSibiling = new ParentNodeWithSibiling(
+                this.#parent,
+                this.#nodes[index - 1],
+            );
         }
         let v = this.#list.get(index);
         let node = this.#node_constructor(parentWithSibiling, v.item, v.index);
@@ -2461,7 +2859,7 @@ class ForLoop {
         }
         fastn_utils.setFullHeight();
     }
-    deleteAllNode(resizeBodyHeight= true) {
+    deleteAllNode(resizeBodyHeight = true) {
         if (resizeBodyHeight) {
             fastn_utils.resetFullHeight();
         }
@@ -2488,4 +2886,4 @@ class ForLoop {
 
 fastn_dom.forLoop = function (parent, node_constructor, list) {
     return new ForLoop(parent, node_constructor, list);
-}
+};

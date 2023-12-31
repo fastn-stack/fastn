@@ -29,30 +29,27 @@ pub fn interpret(
 }
 
 #[cfg(test)]
-mod test {
-    #[track_caller]
-    fn p(s: &str, t: &ftd::Map<ftd::ftd2021::interpreter::Thing>) {
-        assert_eq!(
-            t,
-            &super::interpret("foo", s).unwrap_or_else(|e| panic!("{:?}", e))
-        )
-    }
+#[track_caller]
+fn p(s: &str, t: &ftd::Map<ftd::ftd2021::interpreter::Thing>) {
+    assert_eq!(
+        t,
+        &interpret("foo", s).unwrap_or_else(|e| panic!("{:?}", e))
+    )
+}
 
-    #[test]
-    fn integer() {
-        let bag: ftd::Map<ftd::ftd2021::interpreter::Thing> =
-            std::iter::IntoIterator::into_iter([(
-                "foo#age".to_string(),
-                ftd::ftd2021::interpreter::Thing::Variable(ftd::ftd2021::interpreter::Variable {
-                    name: "age".to_string(),
-                    value: ftd::ftd2021::interpreter::PropertyValue::Value {
-                        value: ftd::ftd2021::interpreter::Value::Integer { value: 40 },
-                    },
-                    conditions: vec![],
-                    flags: Default::default(),
-                }),
-            )])
-            .collect();
-        p("-- integer age: 40", &bag)
-    }
+#[test]
+fn integer() {
+    let bag: ftd::Map<ftd::ftd2021::interpreter::Thing> = std::iter::IntoIterator::into_iter([(
+        "foo#age".to_string(),
+        ftd::ftd2021::interpreter::Thing::Variable(ftd::ftd2021::interpreter::Variable {
+            name: "age".to_string(),
+            value: ftd::ftd2021::interpreter::PropertyValue::Value {
+                value: ftd::ftd2021::interpreter::Value::Integer { value: 40 },
+            },
+            conditions: vec![],
+            flags: Default::default(),
+        }),
+    )])
+    .collect();
+    p("-- integer age: 40", &bag)
 }

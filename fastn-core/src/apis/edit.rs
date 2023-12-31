@@ -52,7 +52,7 @@ pub async fn edit(
 
     match edit_worker(config, req_data).await {
         Ok(data) => fastn_core::http::api_ok(data),
-        Err(err) => fastn_core::http::api_error(err.to_string()),
+        Err(err) => fastn_core::http::api_error(err.to_string(), None),
     }
 }
 
@@ -181,7 +181,7 @@ pub async fn sync(config: &fastn_core::Config) -> fastn_core::Result<fastn_core:
             }
             fastn_core::http::api_ok(SyncResponse { reload: true })
         }
-        Err(err) => fastn_core::http::api_error(err.to_string()),
+        Err(err) => fastn_core::http::api_error(err.to_string(), None),
     }
 }
 
@@ -202,6 +202,6 @@ pub async fn revert(
             }
             fastn_core::http::api_ok(RevertResponse { reload: true })
         }
-        Err(err) => fastn_core::http::api_error(err.to_string()),
+        Err(err) => fastn_core::http::api_error(err.to_string(), None),
     }
 }

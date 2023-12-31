@@ -3,7 +3,9 @@ pub use ftd::ftd2021::di::definition::Definition;
 pub use ftd::ftd2021::di::import::Import;
 pub use ftd::ftd2021::di::invocation::Invocation;
 pub use ftd::ftd2021::di::main::DI;
-pub use ftd::ftd2021::di::property::{Property, PropertyValue, Source};
+pub use ftd::ftd2021::di::property::Property;
+#[cfg(test)]
+pub use ftd::ftd2021::di::property::Source;
 pub use ftd::ftd2021::di::record::Record;
 
 #[cfg(test)]

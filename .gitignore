@@ -8,6 +8,9 @@ ftd/t/js/**.script.html
 # nix symlink to the build output
 result
 
+.direnv
+.envrc
+
 # Rust stuff
 target
 **/*.rs.bk

@@ -5,29 +5,32 @@ pub async fn process(
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let mut ud = Default::default();
+    #[cfg(feature = "auth")]
+    if let Some(session_id) = req_config.request.cookie(fastn_core::auth::COOKIE_NAME) {
+        let mut ud = Default::default();
 
-    if let Some(gh_cookie) = req_config.request.cookie("github") {
-        if let Ok(user_detail) = fastn_core::auth::decrypt(&gh_cookie)
-            .await
-            .map_err(|e| tracing::info!("[user-details]: Failed to decrypt cookie: {e}"))
-            .and_then(|decrypted_cookie| {
-                serde_json::from_str::<fastn_core::auth::github::UserDetail>(
-                    decrypted_cookie.as_str(),
-                )
-                .map_err(|e| tracing::info!("[user-details]: Serde deserialization failed {e}:"))
-            })
-        {
-            ud = UserDetails {
-                is_logged_in: true,
-                username: user_detail.user.login,
-                name: user_detail.user.name.unwrap_or_default(),
-                email: user_detail.user.email.unwrap_or_default(),
+        if !session_id.is_empty() {
+            let session_id: i32 = session_id.parse().map_err(|e| {
+                ftd::interpreter::Error::OtherError(format!("Failed to parse id from string: {e}"))
+            })?;
+
+            if let Ok((user, email)) =
+                fastn_core::auth::get_authenticated_user_with_email(&session_id).await
+            {
+                ud = UserDetails {
+                    is_logged_in: true,
+                    username: user.username,
+                    name: user.name,
+                    email,
+                }
             }
         }
+
+        return doc.from_json(&ud, &kind, &value);
     }
 
-    doc.from_json(&ud, &kind, &value)
+    let _ = req_config;
+    doc.from_json::<std::vec::Vec<UserDetails>>(&vec![], &kind, &value)
 }
 
 #[derive(Debug, serde::Serialize, Default)]

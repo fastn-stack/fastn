@@ -235,7 +235,7 @@ pub fn value_to_colored_string_without_null(
         serde_json::Value::Array(v) => {
             let mut s = String::new();
             let mut is_first = true;
-            for (_, value) in v.iter().enumerate() {
+            for value in v.iter() {
                 let value_string = value_to_colored_string_without_null(value, indent_level + 1);
                 if !value_string.is_empty() {
                     s.push_str(&format!(
@@ -1084,4 +1084,45 @@ pub fn ignore_headers() -> Vec<&'static str> {
 
 pub(crate) fn is_ftd_path(path: &str) -> bool {
     path.trim_matches('/').ends_with(".ftd")
+}
+
+#[cfg(feature = "auth")]
+#[derive(
+    Clone,
+    Debug,
+    diesel::deserialize::FromSqlRow,
+    diesel::expression::AsExpression,
+    PartialOrd,
+    PartialEq,
+)]
+#[diesel(sql_type = fastn_core::schema::sql_types::Citext)]
+pub struct CiString(pub String);
+
+#[cfg(feature = "auth")]
+pub fn citext(s: &str) -> CiString {
+    CiString(s.into())
+}
+
+#[cfg(feature = "auth")]
+impl diesel::serialize::ToSql<fastn_core::schema::sql_types::Citext, diesel::pg::Pg> for CiString {
+    fn to_sql<'b>(
+        &'b self,
+        out: &mut diesel::serialize::Output<'b, '_, diesel::pg::Pg>,
+    ) -> diesel::serialize::Result {
+        diesel::serialize::ToSql::<diesel::sql_types::Text, diesel::pg::Pg>::to_sql(&self.0, out)
+    }
+}
+
+#[cfg(feature = "auth")]
+impl diesel::deserialize::FromSql<fastn_core::schema::sql_types::Citext, diesel::pg::Pg>
+    for CiString
+{
+    fn from_sql(
+        bytes: <diesel::pg::Pg as diesel::backend::Backend>::RawValue<'_>,
+    ) -> diesel::deserialize::Result<Self> {
+        Ok(CiString(diesel::deserialize::FromSql::<
+            diesel::sql_types::Text,
+            diesel::pg::Pg,
+        >::from_sql(bytes)?))
+    }
 }

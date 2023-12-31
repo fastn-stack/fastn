@@ -1,12 +1,10 @@
 mod apis;
 mod utils;
 
-pub use apis::*;
-
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct UserDetail {
     pub access_token: String,
-    pub user: GhUserDetails,
+    pub user: fastn_core::auth::FastnUser,
 }
 
 pub async fn login(
@@ -38,10 +36,25 @@ pub async fn login(
 // the token and setting it to cookies
 pub async fn callback(
     req: &fastn_core::http::Request,
+    db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    use diesel::prelude::*;
+    use diesel_async::RunQueryDsl;
+
     let code = req.q("code", "".to_string())?;
     // TODO: CSRF check
+
+    // TODO: if a user is already logged in using emailpassword and uses github oauth
+    // present a merge account option:
+    // ask to add github email to the logged in user's profile
+    // ask to update details by giving a form
+    // redirect to next for now
+    if fastn_core::auth::utils::is_authenticated(req) {
+        return Ok(actix_web::HttpResponse::Found()
+            .append_header((actix_web::http::header::LOCATION, next))
+            .finish());
+    }
 
     let access_token = match fastn_core::auth::github::utils::github_client()
         .exchange_code(oauth2::AuthorizationCode::new(code))
@@ -67,26 +80,117 @@ pub async fn callback(
         gh_user.email = Some(primary.email);
     }
 
-    let ud = UserDetail {
-        user: gh_user,
-        access_token,
-    };
+    let mut conn = db_pool
+        .get()
+        .await
+        .map_err(|e| fastn_core::Error::DatabaseError {
+            message: format!("Failed to get connection to db. {:?}", e),
+        })?;
 
-    let user_detail_str = serde_json::to_string(&ud)?;
-
-    return Ok(actix_web::HttpResponse::Found()
-        .cookie(
-            actix_web::cookie::Cookie::build(
-                fastn_core::auth::AuthProviders::GitHub.as_str(),
-                fastn_core::auth::utils::encrypt(&user_detail_str).await,
+    let existing_email_and_user_id: Option<(fastn_core::utils::CiString, i32)> =
+        fastn_core::schema::fastn_user_email::table
+            .select((
+                fastn_core::schema::fastn_user_email::email,
+                fastn_core::schema::fastn_user_email::user_id,
+            ))
+            .filter(
+                fastn_core::schema::fastn_user_email::email.eq(fastn_core::utils::citext(
+                    gh_user
+                        .email
+                        .as_ref()
+                        .expect("Every github account has a primary email"),
+                )),
             )
-            .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
-            .path("/")
-            .permanent()
-            .finish(),
-        )
-        .append_header((actix_web::http::header::LOCATION, next))
-        .finish());
+            .first(&mut conn)
+            .await
+            .optional()?;
+
+    if existing_email_and_user_id.is_some() {
+        // user already exists, just create a session and redirect to next
+        let (_, user_id) = existing_email_and_user_id.unwrap();
+
+        let session_id: i32 = diesel::insert_into(fastn_core::schema::fastn_session::table)
+            .values(fastn_core::schema::fastn_session::user_id.eq(&user_id))
+            .returning(fastn_core::schema::fastn_session::id)
+            .get_result(&mut conn)
+            .await?;
+
+        tracing::info!("session created. session_id: {}", &session_id);
+
+        // TODO: access_token expires?
+        // handle refresh tokens
+        let token_id: i32 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
+            .values((
+                fastn_core::schema::fastn_oauthtoken::session_id.eq(session_id),
+                fastn_core::schema::fastn_oauthtoken::token.eq(access_token),
+                fastn_core::schema::fastn_oauthtoken::provider.eq("github"),
+            ))
+            .returning(fastn_core::schema::fastn_oauthtoken::id)
+            .get_result(&mut conn)
+            .await?;
+
+        tracing::info!("token stored. token_id: {}", &token_id);
+
+        return fastn_core::auth::set_session_cookie_and_redirect_to_next(req, session_id, next)
+            .await;
+    }
+
+    // first time login, create fastn_user
+    let user = diesel::insert_into(fastn_core::schema::fastn_user::table)
+        .values((
+            fastn_core::schema::fastn_user::username.eq(gh_user.login),
+            fastn_core::schema::fastn_user::password.eq(""),
+            // TODO: should present an onabording form that asks for a name if github name is null
+            fastn_core::schema::fastn_user::name.eq(gh_user.name.unwrap_or_default()),
+        ))
+        .returning(fastn_core::auth::FastnUser::as_returning())
+        .get_result(&mut conn)
+        .await?;
+
+    tracing::info!("fastn_user created. user_id: {:?}", &user.id);
+
+    let email_id: i32 = diesel::insert_into(fastn_core::schema::fastn_user_email::table)
+        .values((
+            fastn_core::schema::fastn_user_email::user_id.eq(&user.id),
+            fastn_core::schema::fastn_user_email::email.eq(fastn_core::utils::citext(
+                gh_user
+                    .email
+                    .as_ref()
+                    .expect("Every github account has a primary email"),
+            )),
+            fastn_core::schema::fastn_user_email::verified.eq(true),
+            fastn_core::schema::fastn_user_email::primary.eq(true),
+        ))
+        .returning(fastn_core::schema::fastn_user_email::id)
+        .get_result(&mut conn)
+        .await?;
+
+    tracing::info!("fastn_user_email created. email: {:?}", &email_id);
+
+    // TODO: session should store device that was used to login (chrome desktop on windows)
+    let session_id: i32 = diesel::insert_into(fastn_core::schema::fastn_session::table)
+        .values((fastn_core::schema::fastn_session::user_id.eq(&user.id),))
+        .returning(fastn_core::schema::fastn_session::id)
+        .get_result(&mut conn)
+        .await?;
+
+    tracing::info!("session created. session_id: {}", &session_id);
+
+    // TODO: access_token expires?
+    // handle refresh tokens
+    let token_id: i32 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
+        .values((
+            fastn_core::schema::fastn_oauthtoken::session_id.eq(session_id),
+            fastn_core::schema::fastn_oauthtoken::token.eq(access_token),
+            fastn_core::schema::fastn_oauthtoken::provider.eq("github"),
+        ))
+        .returning(fastn_core::schema::fastn_oauthtoken::id)
+        .get_result(&mut conn)
+        .await?;
+
+    tracing::info!("token stored. token_id: {}", &token_id);
+
+    fastn_core::auth::set_session_cookie_and_redirect_to_next(req, session_id, next).await
 }
 
 // it returns identities which matches to given input
@@ -242,7 +346,7 @@ pub async fn matched_contributed_repos(
             fastn_core::auth::github::apis::repo_contributors(ud.access_token.as_str(), repo)
                 .await?;
 
-        if repo_contributors.contains(&ud.user.login) {
+        if repo_contributors.contains(&ud.user.username) {
             matched_repo_contributors_list.push(String::from(repo.to_owned()));
         }
     }
@@ -282,7 +386,7 @@ pub async fn matched_collaborated_repos(
             fastn_core::auth::github::apis::repo_collaborators(ud.access_token.as_str(), repo)
                 .await?;
 
-        if repo_collaborator.contains(&ud.user.login) {
+        if repo_collaborator.contains(&ud.user.username) {
             matched_repo_collaborator_list.push(String::from(repo.to_owned()));
         }
     }
@@ -326,7 +430,7 @@ pub async fn matched_org_teams(
                 team_name,
             )
             .await?;
-            if team_members.contains(&ud.user.login) {
+            if team_members.contains(&ud.user.username) {
                 matched_org_teams.push(org_team.to_string());
             }
         }
@@ -368,7 +472,7 @@ pub async fn matched_sponsored_org(
     for sponsor in sponsors_list.iter() {
         if fastn_core::auth::github::apis::is_user_sponsored(
             ud.access_token.as_str(),
-            ud.user.login.as_str(),
+            ud.user.username.as_str(),
             sponsor.to_owned(),
         )
         .await?

@@ -1,4 +1,4 @@
-name: Rust Checks
+name: Rust and JS Checks/Formatting
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
     branches: [ main ]
 jobs:
   everything:
-    name: Rust Checks
+    name: Rust/JS Checks/Formatting
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -43,7 +43,14 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: -- -D warnings
+          args: --tests -- -D warnings
+      - name: Run cargo clippy (with feature=auth)
+        id: clippy-auth
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --tests --features=auth -- -D warnings
 #      - name: Install cargo check tools
 #        run: |
 #          cargo install --locked cargo-deny || true
@@ -71,6 +78,13 @@ jobs:
       - name: Check if clippy is happy
         if: steps.clippy.outcome != 'success'
         run: exit 1
+      - name: Check if clippy-auth is happy
+        if: steps.clippy-auth.outcome != 'success'
+        run: exit 1
       - name: Check if test succeeded
         if: steps.test.outcome != 'success'
         run: exit 1
+      - name: Check if JS code is properly formatted
+        uses: dprint/check@v2.2
+        with:
+          config-path: .github/dprint-ci.json  

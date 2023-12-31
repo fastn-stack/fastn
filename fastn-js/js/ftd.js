@@ -50,7 +50,7 @@ const ftd = (function () {
             },
             function (err) {
                 console.error("Async: Could not copy text: ", err);
-            }
+            },
         );
     };
 
@@ -134,13 +134,13 @@ const ftd = (function () {
 
     exports.get = (value, index) => {
         return fastn_utils.getStaticValue(
-            fastn_utils.getterByKey(value, index)
+            fastn_utils.getterByKey(value, index),
         );
     };
 
     exports.component_data = (component) => {
         let attributesIndex = component.getAttribute(
-            fastn_dom.webComponentArgument
+            fastn_dom.webComponentArgument,
         );
         let attributes = fastn_dom.webComponent[attributesIndex];
         return Object.fromEntries(
@@ -156,7 +156,7 @@ const ftd = (function () {
                     v = fastn.webComponentVariable.static(v);
                 }
                 return [k, v];
-            })
+            }),
         );
     };
 
@@ -181,7 +181,7 @@ const ftd = (function () {
     };
 
     exports.http = function (url, opts, ...body) {
-        if (!opts instanceof fastn.recordInstanceClass) {
+        if ((!opts) instanceof fastn.recordInstanceClass) {
             console.info(`opts must be a record instance of
                 -- record ftd.http-options:
                 string method: GET
@@ -197,7 +197,7 @@ const ftd = (function () {
 
         if (!["manual", "follow", "error"].includes(redirect)) {
             throw new Error(
-                `redirect must be one of "manual", "follow", "error"`
+                `redirect must be one of "manual", "follow", "error"`,
             );
         }
 
@@ -216,7 +216,7 @@ const ftd = (function () {
             if (body[0] instanceof fastn.recordInstanceClass) {
                 if (body.length !== 1) {
                     console.warn(
-                        "body is a record instance, but has more than 1 element, ignoring"
+                        "body is a record instance, but has more than 1 element, ignoring",
                     );
                 }
                 request_json = body[0].toObject();
@@ -279,7 +279,7 @@ const ftd = (function () {
                     if (!!response.data) {
                         if (Object.keys(data).length !== 0) {
                             console.log(
-                                "both .errors and .data are present in response, ignoring .data"
+                                "both .errors and .data are present in response, ignoring .data",
                             );
                         } else {
                             data = response.data;
@@ -300,7 +300,7 @@ const ftd = (function () {
         if (request_data instanceof fastn.recordInstanceClass) {
             // @ts-ignore
             for (let [header, value] of Object.entries(
-                request_data.toObject()
+                request_data.toObject(),
             )) {
                 let [key, val] = value.length === 2 ? value : [header, value];
                 query_parameters.set(key, val);
@@ -342,7 +342,7 @@ const ftd = (function () {
                 key,
                 value && typeof value === "object"
                     ? JSON.stringify(value)
-                    : value
+                    : value,
             );
         },
         get(key) {
@@ -438,7 +438,7 @@ const ftd = (function () {
         let name = legacyNameToJS(var_name);
         if (global[name] === undefined) {
             console.log(
-                `[ftd-legacy]: ${variable} is not in global map, ignoring`
+                `[ftd-legacy]: ${variable} is not in global map, ignoring`,
             );
             return;
         }
@@ -459,7 +459,7 @@ const ftd = (function () {
         let name = legacyNameToJS(var_name);
         if (global[name] === undefined) {
             console.log(
-                `[ftd-legacy]: ${variable} is not in global map, ignoring`
+                `[ftd-legacy]: ${variable} is not in global map, ignoring`,
             );
             return;
         }

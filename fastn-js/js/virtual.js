@@ -1,4 +1,4 @@
-let fastnVirtual = {}
+let fastnVirtual = {};
 
 let id_counter = 0;
 let ssr = false;
@@ -11,10 +11,10 @@ class ClassList {
     }
 
     remove(itemToRemove) {
-        this.#classes.filter(item => item !== itemToRemove)
+        this.#classes.filter((item) => item !== itemToRemove);
     }
     toString() {
-        return this.#classes.join(' ');
+        return this.#classes.join(" ");
     }
     getClasses() {
         return this.#classes;
@@ -22,11 +22,11 @@ class ClassList {
 }
 
 class Node {
-    id
-    #dataId
-    #tagName
-    #children
-    #attributes
+    id;
+    #dataId;
+    #tagName;
+    #children;
+    #attributes;
     constructor(id, tagName) {
         this.#tagName = tagName;
         this.#dataId = id;
@@ -68,10 +68,14 @@ class Node {
     }
     // Caution: This is only supported in ssr mode
     toHtmlAsString() {
-        const openingTag = `<${this.#tagName}${this.getDataIdString()}${this.getIdString()}${this.getAttributesString()}${this.getClassString()}${this.getStyleString()}>`;
+        const openingTag = `<${
+            this.#tagName
+        }${this.getDataIdString()}${this.getIdString()}${this.getAttributesString()}${this.getClassString()}${this.getStyleString()}>`;
         const closingTag = `</${this.#tagName}>`;
         const innerHTML = this.innerHTML;
-        const childNodes = this.#children.map(child => child.toHtmlAsString()).join('');
+        const childNodes = this.#children
+            .map((child) => child.toHtmlAsString())
+            .join("");
 
         return `${openingTag}${innerHTML}${childNodes}${closingTag}`;
     }
@@ -81,19 +85,19 @@ class Node {
     }
     // Caution: This is only supported in ssr mode
     getIdString() {
-        return fastn_utils.isNull(this.id) ? "": ` id="${this.id}"`;
+        return fastn_utils.isNull(this.id) ? "" : ` id="${this.id}"`;
     }
     // Caution: This is only supported in ssr mode
     getClassString() {
         const classList = this.classList.toString();
-        return classList ? ` class="${classList}"` : '';
+        return classList ? ` class="${classList}"` : "";
     }
     // Caution: This is only supported in ssr mode
     getStyleString() {
         const styleProperties = Object.entries(this.style)
             .map(([prop, value]) => `${prop}:${value}`)
-            .join(';');
-        return styleProperties ? ` style="${styleProperties}"` : '';
+            .join(";");
+        return styleProperties ? ` style="${styleProperties}"` : "";
     }
     // Caution: This is only supported in ssr mode
     getAttributesString() {
@@ -103,8 +107,9 @@ class Node {
                     return `${attribute}=\"${value}\"`;
                 }
                 return `${attribute}`;
-            }).join(' ');
-        return nodeAttributes ? ` ${nodeAttributes}` : '';
+            })
+            .join(" ");
+        return nodeAttributes ? ` ${nodeAttributes}` : "";
     }
 }
 
@@ -133,7 +138,7 @@ class Document2 {
 fastnVirtual.document = new Document2();
 
 function addClosureToBreakpointWidth() {
-    let closure = fastn.closureWithoutExecute(function() {
+    let closure = fastn.closureWithoutExecute(function () {
         let current = ftd.get_device();
         let lastDevice = ftd.device.get();
         if (current === lastDevice) {
@@ -146,7 +151,7 @@ function addClosureToBreakpointWidth() {
     ftd.breakpoint_width.addClosure(closure);
 }
 
-fastnVirtual.doubleBuffer = function(main) {
+fastnVirtual.doubleBuffer = function (main) {
     addClosureToBreakpointWidth();
     let parent = document.createElement("div");
     let current_device = ftd.get_device();
@@ -154,16 +159,16 @@ fastnVirtual.doubleBuffer = function(main) {
     doubleBuffering = true;
     fastnVirtual.root = parent;
     main(parent);
-    fastn_utils.replaceBodyStyleAndChildren(parent)
+    fastn_utils.replaceBodyStyleAndChildren(parent);
     doubleBuffering = false;
     fastnVirtual.root = document.body;
-}
+};
 
-fastnVirtual.ssr = function(main) {
+fastnVirtual.ssr = function (main) {
     ssr = true;
     let body = fastnVirtual.document.createElement("body");
-    main(body)
+    main(body);
     ssr = false;
     id_counter = 0;
     return body.toHtmlAsString() + fastn_dom.getClassesAsString();
-}
+};
