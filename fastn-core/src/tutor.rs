@@ -75,6 +75,7 @@ pub(crate) async fn config(
 
 /// tutor-data $processor$
 pub async fn process(
+    config: &fastn_core::Config,
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
@@ -86,7 +87,7 @@ pub async fn process(
     }
 
     let path = dirs::home_dir().unwrap().join(".fastn").join("tutor.json");
-    let fs_state: TutorStateFS = match config.read(path.clone()).await {
+    let fs_state: TutorStateFS = match config.read_content(path.clone(), None).await {
         Ok(v) => serde_json::from_slice(&v)?,
         Err(e) => match e.kind() {
             std::io::ErrorKind::NotFound => {
