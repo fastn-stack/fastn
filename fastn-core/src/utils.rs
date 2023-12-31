@@ -740,6 +740,7 @@ pub async fn replace_markers_2022(
                 config.ftd_inline_css.as_slice(),
                 html_ui.css.as_str(),
             )
+            .await
             .as_str(),
         )
         .replace(

@@ -159,7 +159,12 @@ impl Library2022 {
             }
             let new_name = name.replacen(package.name.as_str(), "", 1);
             let (file_path, data) = package
-                .resolve_by_id(new_name.as_str(), None, lib.config.package.name.as_str())
+                .resolve_by_id(
+                    new_name.as_str(),
+                    None,
+                    lib.config.package.name.as_str(),
+                    &lib.config.ds,
+                )
                 .await?;
             if !file_path.ends_with(".ftd") {
                 return Ok(None);
@@ -266,7 +271,7 @@ impl Library2022 {
             "is-reader" => processor::user_group::is_reader(value, kind, doc, self).await,
             "sql" => processor::sql::process(value, kind, doc, self).await,
             "package-query" => processor::package_query::process(value, kind, doc, self).await,
-            "pg" => processor::pg::process(value, kind, doc).await,
+            "pg" => processor::pg::process(value, kind, doc, self).await,
             "package-tree" => {
                 processor::package_tree::process(value, kind, doc, &self.config).await
             }

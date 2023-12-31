@@ -998,7 +998,7 @@ impl Config {
             "{}{}",
             add_packages,
             package
-                .resolve_by_id(id, None, self.package.name.as_str())
+                .resolve_by_id(id, None, self.package.name.as_str(), &self.ds)
                 .await?
                 .0
         ))
@@ -1041,7 +1041,7 @@ impl Config {
         };
 
         let (file_name, content) = package
-            .resolve_by_id(id, None, self.package.name.as_str())
+            .resolve_by_id(id, None, self.package.name.as_str(), &self.ds)
             .await?;
         Ok((format!("{}{}", add_packages, file_name), content))
     }
@@ -1104,7 +1104,7 @@ impl Config {
         }
 
         let (file_name, content) = package
-            .resolve_by_id(id.as_str(), None, self.package.name.as_str())
+            .resolve_by_id(id.as_str(), None, self.package.name.as_str(), &self.ds)
             .await?;
 
         Ok((format!("{}{}", add_packages, file_name), content))
@@ -1151,7 +1151,9 @@ impl Config {
             utils::find_root_for_file(&self.packages_root.join(id), "FASTN.ftd")
         {
             let mut package = fastn_core::Package::new("unknown-package");
-            package.resolve(&package_root.join("FASTN.ftd")).await?;
+            package
+                .resolve(&package_root.join("FASTN.ftd"), &self.ds)
+                .await?;
             self.add_package(&package);
             return Ok((package.name.to_string(), package));
         }
@@ -1433,7 +1435,7 @@ impl Config {
         let package = fastn_core::Package::from_fastn_doc(&ds, &fastn_doc)?;
         let mut config = Config {
             package: package.clone(),
-            packages_root: ds.root.join(".packages").into(),
+            packages_root: camino::Utf8PathBuf::from_path_buf(ds.root.join(".packages")).unwrap(), // Todo: Remove unwrap()
             root: tokio::fs::canonicalize(&ds.root).await?.try_into()?,
             original_directory,
             all_packages: Default::default(),
@@ -1604,7 +1606,7 @@ impl Config {
             return Ok(package.clone());
         }
         let mut package = package
-            .get_and_resolve(&self.get_root_for_package(package))
+            .get_and_resolve(&self.get_root_for_package(package), &self.ds)
             .await?;
         self.check_dependencies_provided(&mut package)?;
         package.auto_import_language(

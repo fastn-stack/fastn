@@ -192,8 +192,8 @@ impl fastn_core::Config {
             let version = if let Some(version) = workspace_entry.version {
                 version
             } else {
-                let content = config
-                    .read(self.root.join(workspace_entry.filename.as_str()))
+                let content = self
+                    .read_content(self.root.join(workspace_entry.filename.as_str()), None)
                     .await?;
                 changed_files.push(FileStatus::Add {
                     path: workspace_entry.filename.to_string(),
@@ -218,11 +218,11 @@ impl fastn_core::Config {
                 continue;
             }
 
-            let content = config
-                .read(self.root.join(workspace_entry.filename.as_str()))
+            let content = self
+                .read_content(self.root.join(workspace_entry.filename.as_str()), None)
                 .await?;
             let history_path = self.history_path(filename.as_str(), version);
-            let history_content = config.read(history_path).await?;
+            let history_content = self.read_content(history_path, None).await?;
             if sha2::Sha256::digest(&content).eq(&sha2::Sha256::digest(&history_content)) {
                 changed_files.push(FileStatus::Uptodate {
                     path: workspace_entry.filename.to_string(),
@@ -288,7 +288,7 @@ impl fastn_core::Config {
                         continue;
                     };
                     let history_path = self.history_path(path, server_version);
-                    let history_content = config.read(history_path).await?;
+                    let history_content = self.read_content(history_path, None).await?;
                     if sha2::Sha256::digest(content).eq(&sha2::Sha256::digest(history_content)) {
                         already_added_files.push(fastn_core::workspace::WorkspaceEntry {
                             filename: path.to_string(),
@@ -323,8 +323,8 @@ impl fastn_core::Config {
                         continue;
                     }
 
-                    let ancestor_content = if let Ok(content) = config
-                        .read_to_string(self.history_path(path, *version))
+                    let ancestor_content = if let Ok(content) = self
+                        .read_to_string(self.history_path(path, *version), None)
                         .await
                     {
                         content
@@ -335,8 +335,8 @@ impl fastn_core::Config {
                     };
 
                     // attempt resolving conflict
-                    let theirs_content = config
-                        .read_to_string(self.history_path(path, server_file_edit.version))
+                    let theirs_content = self
+                        .read_to_string(self.history_path(path, server_file_edit.version), None)
                         .await?;
                     let ours_content = String::from_utf8(content.clone())?;
 

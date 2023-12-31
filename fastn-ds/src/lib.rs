@@ -4,7 +4,7 @@ pub struct DocumentStore {
 }
 
 impl DocumentStore {
-    pub fn new<T: AsRef<str>>(root: T) -> Self {
+    pub fn new<T: AsRef<std::path::Path>>(root: T) -> Self {
         Self {
             root: root.as_ref().into(),
         }
@@ -37,15 +37,15 @@ impl DocumentStore {
         Ok(contents)
     }
 
-    pub async fn write_content(
+    pub async fn write_content<T: AsRef<str>>(
         &self,
-        path: &str,
+        path: T,
         data: &[u8],
         _user_id: Option<u32>,
     ) -> ftd::interpreter::Result<()> {
         use tokio::io::AsyncWriteExt;
 
-        let mut file = tokio::fs::File::create(self.root.join(path)).await?;
+        let mut file = tokio::fs::File::create(self.root.join(path.as_ref())).await?;
         file.write_all(data).await?;
         Ok(())
     }

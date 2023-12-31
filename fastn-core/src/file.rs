@@ -129,7 +129,8 @@ pub(crate) async fn paths_to_files(
             .map(|x| {
                 let base = base_path.to_path_buf();
                 let p = pkg.clone();
-                tokio::spawn(async move { fastn_core::get_file(ds, p, &x, &base).await })
+                let ds = ds.clone();
+                tokio::spawn(async move { fastn_core::get_file(&ds, p, &x, &base).await })
             })
             .collect::<Vec<tokio::task::JoinHandle<fastn_core::Result<fastn_core::File>>>>(),
     )

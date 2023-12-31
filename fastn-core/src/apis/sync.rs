@@ -118,7 +118,7 @@ pub(crate) async fn sync_worker(
                 let snapshot_path =
                     fastn_core::utils::history_path(path, config.root.as_str(), remote_timestamp);
 
-                let data = config.read(snapshot_path).await?;
+                let data = config.read_content(snapshot_path, None).await?;
 
                 // if: Client Says Deleted and server says modified
                 // that means Remote timestamp is greater than client timestamp
@@ -165,13 +165,13 @@ pub(crate) async fn sync_worker(
                             config.root.as_str(),
                             client_snapshot_timestamp,
                         );
-                        let ancestor_content = config.read_to_string(ancestor_path).await?;
+                        let ancestor_content = config.read_to_string(ancestor_path, None).await?;
                         let ours_path = fastn_core::utils::history_path(
                             path,
                             config.root.as_str(),
                             snapshot_timestamp,
                         );
-                        let theirs_content = config.read_to_string(ours_path).await?;
+                        let theirs_content = config.read_to_string(ours_path, None).await?;
                         let ours_content = String::from_utf8(content.clone())
                             .map_err(|e| fastn_core::Error::APIResponseError(e.to_string()))?;
 
@@ -244,7 +244,7 @@ pub(crate) async fn sync_worker(
     )
     .await?;
 
-    let latest_ftd = config.read_to_string(config.latest_ftd()).await?;
+    let latest_ftd = config.read_to_string(config.latest_ftd(), None).await?;
 
     let r = SyncResponse {
         files: synced_files.into_values().collect_vec(),
@@ -296,7 +296,7 @@ async fn client_current_files(
     let diff = snapshot_diff(server_snapshot, client_snapshot);
     for (path, _) in diff.iter() {
         if !synced_files.contains_key(path) {
-            let content = config.read(config.root.join(path)).await?;
+            let content = config.read_content(config.root.join(path), None).await?;
             synced_files.insert(
                 path.clone(),
                 SyncResponseFile::Add {
@@ -361,7 +361,9 @@ async fn clone_history_files(
             .filter(|x| client_timestamp.map(|c| x.0.gt(c)).unwrap_or(true))
             .collect_vec();
         for (_, path) in history_paths {
-            let content = config.read(config.history_dir().join(&path)).await?;
+            let content = config
+                .read_content(config.history_dir().join(&path), None)
+                .await?;
             dot_history.push(File { path, content });
         }
     }

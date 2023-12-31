@@ -21,7 +21,7 @@ pub async fn fastn_doc(
 ) -> fastn_core::Result<ftd::ftd2021::p2::Document> {
     let doc = ds.read_to_string(path, None).await?;
     let lib = fastn_core::FastnLibrary::default();
-    match fastn_core::doc::parse_ftd("fastn", doc.await?.as_str(), &lib) {
+    match fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib) {
         Ok(v) => Ok(v),
         Err(e) => Err(fastn_core::Error::PackageError {
             message: format!("failed to parse FASTN.ftd 3: {:?}", &e),

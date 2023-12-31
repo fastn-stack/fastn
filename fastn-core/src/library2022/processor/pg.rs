@@ -1,4 +1,6 @@
-async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
+async fn create_pool(
+    req_config: &fastn_core::RequestConfig,
+) -> Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
     let mut cfg = deadpool_postgres::Config::new();
     cfg.libpq_style_connection_string = match std::env::var("FASTN_DB_URL") {
         Ok(v) => Some(v),
@@ -59,7 +61,7 @@ async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::Cre
 
     if let Ok(cert) = std::env::var("FASTN_PG_CERTIFICATE") {
         // TODO: This does not work with Heroku certificate.
-        let cert = config.read(cert).await.unwrap();
+        let cert = req_config.config.read_content(cert, None).await.unwrap();
         // TODO: We should allow DER formatted certificates too, maybe based on file extension?
         let cert = native_tls::Certificate::from_pem(&cert).unwrap();
         connector.add_root_certificate(cert);
@@ -79,18 +81,30 @@ static POOL_RESULT: tokio::sync::OnceCell<
 static EXECUTE_QUERY_LOCK: once_cell::sync::Lazy<tokio::sync::Mutex<()>> =
     once_cell::sync::Lazy::new(|| tokio::sync::Mutex::new(()));
 
-async fn pool() -> &'static Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
-    POOL_RESULT.get_or_init(create_pool).await
+async fn pool(
+    req_config: &fastn_core::RequestConfig,
+) -> &'static Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
+    POOL_RESULT
+        .get_or_init(|| async { create_pool(req_config).await })
+        .await
 }
 
 pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = super::sqlite::get_p1_data("pg", &value, doc.name)?;
 
-    let query_response = execute_query(query.as_str(), doc, value.line_number(), headers).await;
+    let query_response = execute_query(
+        query.as_str(),
+        doc,
+        value.line_number(),
+        headers,
+        req_config,
+    )
+    .await;
 
     match query_response {
         Ok(result) => {
@@ -316,11 +330,18 @@ async fn execute_query(
     doc: &ftd::interpreter::TDoc<'_>,
     line_number: usize,
     headers: ftd::ast::HeaderValues,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let _lock = EXECUTE_QUERY_LOCK.lock().await;
 
     let (query, query_args) = super::sql::extract_arguments(query)?;
-    let client = pool().await.as_ref().unwrap().get().await.unwrap();
+    let client = pool(req_config)
+        .await
+        .as_ref()
+        .unwrap()
+        .get()
+        .await
+        .unwrap();
 
     let stmt = client.prepare_cached(query.as_str()).await.unwrap();
 

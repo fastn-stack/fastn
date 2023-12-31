@@ -568,10 +568,11 @@ impl Package {
     pub(crate) async fn resolve(
         &mut self,
         fastn_path: &camino::Utf8PathBuf,
+        ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<()> {
         tracing::info!(path = fastn_path.as_str());
         let fastn_document = {
-            let doc = self.read_to_string(fastn_path).await?;
+            let doc = ds.read_to_string(fastn_path, None).await?;
             let lib = fastn_core::FastnLibrary::default();
             match fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib) {
                 Ok(v) => v,
@@ -622,6 +623,7 @@ impl Package {
     pub(crate) async fn get_and_resolve(
         &self,
         package_root: &camino::Utf8PathBuf,
+        ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<fastn_core::Package> {
         use tokio::io::AsyncWriteExt;
 
@@ -636,7 +638,7 @@ impl Package {
         }
 
         let mut package = self.clone();
-        package.resolve(&file_extract_path).await?;
+        package.resolve(&file_extract_path, ds).await?;
         Ok(package)
     }
 
@@ -691,7 +693,8 @@ impl Package {
         package.dependencies = deps;
         // package.resolve_system_dependencies()?;
 
-        package.fastn_path = Some(root.join("FASTN.ftd"));
+        package.fastn_path =
+            Some(camino::Utf8PathBuf::from_path_buf(ds.root.join("FASTN.ftd")).unwrap()); // todo: Remove unwrap()
 
         package.redirects = {
             let redirects_temp: Option<redirects::RedirectsTemp> =
