@@ -61,14 +61,16 @@ pub(crate) async fn config(
         None => (None, app_data.clone()),
     };
 
-    let config = fastn_core::Config::read(fastn_ds::DocumentStore::new(root), false)
-        .await
-        .unwrap()
-        .add_edition(app_data.edition)?
-        .add_external_js(app_data.external_js)
-        .add_inline_js(app_data.inline_js)
-        .add_external_css(app_data.external_css)
-        .add_inline_css(app_data.inline_css);
+    let config = match root {
+        Some(root) => fastn_core::Config::read(fastn_ds::DocumentStore::new(root), false).await,
+        None => fastn_core::Config::read_current(false).await,
+    }
+    .unwrap()
+    .add_edition(app_data.edition)?
+    .add_external_js(app_data.external_js)
+    .add_inline_js(app_data.inline_js)
+    .add_external_css(app_data.external_css)
+    .add_inline_css(app_data.inline_css);
 
     Ok((config, app_data.package_name))
 }

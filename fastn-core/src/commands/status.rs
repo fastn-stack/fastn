@@ -68,7 +68,7 @@ async fn all_status(
     let mut track_status = std::collections::BTreeMap::new();
     for doc in config.get_files(&config.package).await? {
         let status = get_file_status(config, &doc, snapshots, workspaces).await?;
-        let track = get_track_status(&doc, snapshots, config.root.as_str())?;
+        let track = get_track_status(config, &doc, snapshots, config.root.as_str())?;
         if !track.is_empty() {
             track_status.insert(doc.get_id().to_string(), track);
         }

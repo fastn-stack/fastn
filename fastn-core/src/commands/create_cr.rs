@@ -16,13 +16,9 @@ pub async fn create_cr(config: &fastn_core::Config, title: Option<&str>) -> fast
         cr_number as usize,
     )
     .await?;*/
-    let cr_meta_content = fastn_core::cr::resolve_cr_meta(
-        config,
-        cr_meta_content.as_str(),
-        cr_number as usize,
-        config,
-    )
-    .await?;
+    let cr_meta_content =
+        fastn_core::cr::resolve_cr_meta(config, cr_meta_content.as_str(), cr_number as usize)
+            .await?;
     add_cr_to_workspace(config, &cr_meta_content).await
 }
 
