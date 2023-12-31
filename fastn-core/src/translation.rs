@@ -170,7 +170,7 @@ impl TranslatedDocument {
                 continue;
             }
             let tracks =
-                fastn_core::tracker::get_tracks(config, config.root.as_str(), &track_path)?;
+                fastn_core::tracker::get_tracks(config, config.root.as_str(), &track_path).await?;
             if let Some(fastn_core::Track {
                 last_merged_version: Some(last_merged_version),
                 self_timestamp,
@@ -210,7 +210,7 @@ impl TranslatedDocument {
     }
 }
 
-pub(crate) fn get_translation_status_counts(
+pub(crate) async fn get_translation_status_counts(
     config: &fastn_core::Config,
     snapshots: &std::collections::BTreeMap<String, u128>,
     path: &camino::Utf8PathBuf,
@@ -232,7 +232,7 @@ pub(crate) fn get_translation_status_counts(
             translation_status_count.never_marked += 1;
             continue;
         }
-        let tracks = fastn_core::tracker::get_tracks(config, path.as_str(), &track_path)?;
+        let tracks = fastn_core::tracker::get_tracks(config, path.as_str(), &track_path).await?;
         if let Some(fastn_core::Track {
             last_merged_version: Some(last_merged_version),
             ..

@@ -65,7 +65,7 @@ async fn get_track_diff(
     if std::fs::metadata(&path).is_err() {
         return Ok(());
     }
-    let tracks = fastn_core::tracker::get_tracks(config, base_path, &path)?;
+    let tracks = fastn_core::tracker::get_tracks(config, base_path, &path).await?;
     for track in tracks.values() {
         if let Some(timestamp) = snapshots.get(&track.filename) {
             if track.other_timestamp.is_none() {

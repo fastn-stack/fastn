@@ -40,7 +40,7 @@ async fn file_status(
     let file = fastn_core::get_file(&config.ds, package_name, &path, base_path).await?;
 
     let file_status = get_file_status(config, &file, snapshots, workspaces).await?;
-    let track_status = get_track_status(config, &file, snapshots, base_path.as_str())?;
+    let track_status = get_track_status(config, &file, snapshots, base_path.as_str()).await?;
 
     let mut clean = true;
     if !file_status.eq(&FileStatus::Uptodate) {
@@ -68,7 +68,7 @@ async fn all_status(
     let mut track_status = std::collections::BTreeMap::new();
     for doc in config.get_files(&config.package).await? {
         let status = get_file_status(config, &doc, snapshots, workspaces).await?;
-        let track = get_track_status(config, &doc, snapshots, config.root.as_str())?;
+        let track = get_track_status(config, &doc, snapshots, config.root.as_str()).await?;
         if !track.is_empty() {
             track_status.insert(doc.get_id().to_string(), track);
         }
@@ -142,7 +142,7 @@ pub(crate) async fn get_file_status(
     Ok(FileStatus::Added)
 }
 
-fn get_track_status(
+async fn get_track_status(
     config: &fastn_core::Config,
     doc: &fastn_core::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
@@ -153,7 +153,7 @@ fn get_track_status(
     if !path.exists() {
         return Ok(track_list);
     }
-    let tracks = fastn_core::tracker::get_tracks(config, base_path, &path)?;
+    let tracks = fastn_core::tracker::get_tracks(config, base_path, &path).await?;
     for track in tracks.values() {
         // ignore in case of the translation package
         if doc.get_id().eq(track.filename.as_str()) && track.last_merged_version.is_some() {

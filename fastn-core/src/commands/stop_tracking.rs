@@ -36,7 +36,7 @@ async fn check(
     base_path: &str,
 ) -> fastn_core::Result<()> {
     let file_path = fastn_core::utils::track_path(who, base_path);
-    let mut tracks = fastn_core::tracker::get_tracks(config, base_path, &file_path)?;
+    let mut tracks = fastn_core::tracker::get_tracks(config, base_path, &file_path).await?;
     if let Some(whom) = whom {
         if tracks.remove(whom).is_some() {
             write(&file_path, &tracks).await?;

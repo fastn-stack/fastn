@@ -11,7 +11,7 @@ pub struct Track {
     pub last_merged_version: Option<u128>,
 }
 
-pub(crate) fn get_tracks(
+pub(crate) async fn get_tracks(
     config: &fastn_core::Config,
     base_path: &str,
     path: &camino::Utf8PathBuf,
@@ -22,7 +22,7 @@ pub(crate) fn get_tracks(
     }
 
     let lib = fastn_core::FastnLibrary::default();
-    let doc = config.read_to_string(path, None)?;
+    let doc = config.read_to_string(path, None).await?;
     let b = match fastn_core::doc::parse_ftd(base_path, doc.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {

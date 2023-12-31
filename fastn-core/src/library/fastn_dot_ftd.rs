@@ -541,6 +541,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
                     &original_snapshots,
                     &lib.config.config.root,
                 )
+                .await
             {
                 let mut never_marked_files = "".to_string();
                 let mut missing_files = "".to_string();

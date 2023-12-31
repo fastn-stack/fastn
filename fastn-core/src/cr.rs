@@ -217,7 +217,7 @@ impl fastn_core::Config {
             let tracked_file = cr_track_path.strip_prefix(self.track_dir())?;
             let tracked_file_str =
                 fastn_core::cr::cr_path_to_file_name(cr_number, tracked_file.as_str())?;
-            if let Some(info) = fastn_core::track::get_tracking_info_(&cr_track_path)
+            if let Some(info) = fastn_core::track::get_tracking_info_(self, &cr_track_path)
                 .await?
                 .into_iter()
                 .find(|v| tracked_file_str.eq(&v.filename))
