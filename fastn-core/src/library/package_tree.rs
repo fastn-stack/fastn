@@ -73,6 +73,7 @@ async fn insert(
         )
         .await?;
     } else if let Ok(file) = fastn_core::get_file(
+        &config.ds,
         config.package.name.to_string(),
         &config.root.join(full_path),
         &config.root,

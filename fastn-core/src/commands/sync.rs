@@ -14,8 +14,13 @@ pub async fn sync(
             .iter()
             .map(|x| config.root.join(x))
             .collect::<Vec<camino::Utf8PathBuf>>();
-        fastn_core::paths_to_files(config.package.name.as_str(), files, config.root.as_path())
-            .await?
+        fastn_core::paths_to_files(
+            &config.ds,
+            config.package.name.as_str(),
+            files,
+            config.root.as_path(),
+        )
+        .await?
     } else {
         config.get_files(&config.package).await?
     };

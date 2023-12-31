@@ -37,7 +37,7 @@ async fn file_status(
         return Ok(());
     }
 
-    let file = fastn_core::get_file(package_name, &path, base_path).await?;
+    let file = fastn_core::get_file(&config.ds, package_name, &path, base_path).await?;
 
     let file_status = get_file_status(config, &file, snapshots, workspaces).await?;
     let track_status = get_track_status(config, &file, snapshots, base_path.as_str())?;
@@ -96,7 +96,6 @@ async fn all_status(
 
 pub(crate) async fn get_file_status(
     config: &fastn_core::Config,
-
     doc: &fastn_core::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
     workspaces: &std::collections::BTreeMap<String, fastn_core::snapshot::Workspace>,

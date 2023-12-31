@@ -117,6 +117,7 @@ impl Static {
 }
 
 pub(crate) async fn paths_to_files(
+    ds: &fastn_ds::DocumentStore,
     package_name: &str,
     files: Vec<camino::Utf8PathBuf>,
     base_path: &camino::Utf8Path,
@@ -128,7 +129,7 @@ pub(crate) async fn paths_to_files(
             .map(|x| {
                 let base = base_path.to_path_buf();
                 let p = pkg.clone();
-                tokio::spawn(async move { fastn_core::get_file(p, &x, &base).await })
+                tokio::spawn(async move { fastn_core::get_file(ds, p, &x, &base).await })
             })
             .collect::<Vec<tokio::task::JoinHandle<fastn_core::Result<fastn_core::File>>>>(),
     )
@@ -175,6 +176,7 @@ pub fn ignore_path(
 }
 
 pub(crate) async fn get_file(
+    ds: &fastn_ds::DocumentStore,
     package_name: String,
     doc_path: &camino::Utf8Path,
     base_path: &camino::Utf8Path,
@@ -208,13 +210,13 @@ pub(crate) async fn get_file(
         Some((_, "ftd")) => File::Ftd(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: config.read_to_string(&doc_path).await?,
+            content: ds.read_to_string(&doc_path, None).await?,
             parent_path: base_path.to_string(),
         }),
         Some((_, "md")) => File::Markdown(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: config.read_to_string(&doc_path).await?,
+            content: ds.read_to_string(&doc_path, None).await?,
             parent_path: base_path.to_string(),
         }),
         Some((_, ext))
@@ -226,7 +228,7 @@ pub(crate) async fn get_file(
             File::Image(Static {
                 package_name: package_name.to_string(),
                 id: id.to_string(),
-                content: config.read(&doc_path).await?,
+                content: ds.read_content(&doc_path, None).await?,
                 base_path: base_path.to_path_buf(),
             })
         }
@@ -234,14 +236,14 @@ pub(crate) async fn get_file(
             File::Code(Document {
                 package_name: package_name.to_string(),
                 id: id.to_string(),
-                content: config.read_to_string(&doc_path).await?,
+                content: ds.read_to_string(&doc_path, None).await?,
                 parent_path: base_path.to_string(),
             })
         }
         _ => File::Static(Static {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: config.read(&doc_path).await?,
+            content: ds.read_content(&doc_path, None).await?,
             base_path: base_path.to_path_buf(),
         }),
     })

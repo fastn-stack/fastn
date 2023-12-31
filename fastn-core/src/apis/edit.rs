@@ -111,13 +111,15 @@ pub(crate) async fn edit_worker(
         let workspaces = fastn_core::snapshot::get_workspace(config).await?;
 
         let file = fastn_core::get_file(
+            &config.ds,
             config.package.name.to_string(),
             &config.root.join(&path),
             &config.root,
         )
         .await?;
         let before_update_status =
-            fastn_core::commands::status::get_file_status(&file, &snapshots, &workspaces).await?;
+            fastn_core::commands::status::get_file_status(config, &file, &snapshots, &workspaces)
+                .await?;
 
         (path.to_string(), None, Some(before_update_status))
     } else if request.path.ends_with('/') {
@@ -149,13 +151,15 @@ pub(crate) async fn edit_worker(
         let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
         let workspaces = fastn_core::snapshot::get_workspace(config).await?;
         let file = fastn_core::get_file(
+            &config.ds,
             config.package.name.to_string(),
             &config.root.join(&file_name),
             &config.root,
         )
         .await?;
         let after_update_status =
-            fastn_core::commands::status::get_file_status(&file, &snapshots, &workspaces).await?;
+            fastn_core::commands::status::get_file_status(config, &file, &snapshots, &workspaces)
+                .await?;
         if !before_update_status.eq(&after_update_status) {
             return Ok(EditResponse {
                 path: request.path,

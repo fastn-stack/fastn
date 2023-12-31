@@ -203,7 +203,7 @@ pub(crate) async fn do_sync(
                             continue;
                         };
                         let theirs_path = config.history_path(path, file_edit.version);
-                        let theirs_content = config.read_to_string(theirs_path).await?;
+                        let theirs_content = config.read_to_string(theirs_path, None).await?;
                         let ours_content = String::from_utf8(content.clone())
                             .map_err(|e| fastn_core::Error::APIResponseError(e.to_string()))?;
                         match diffy::MergeOptions::new()
@@ -271,7 +271,7 @@ pub(crate) async fn do_sync(
                     continue;
                 };
                 let server_content = config
-                    .read(config.history_path(path, file_edit.version))
+                    .read_content(config.history_path(path, file_edit.version), None)
                     .await?;
 
                 // if: Client Says Deleted and server says modified
@@ -303,8 +303,13 @@ pub(crate) async fn do_sync(
         }
     }
 
-    fastn_core::history::insert_into_history(&config.root, &to_be_in_history, &mut remote_history)
-        .await?;
+    fastn_core::history::insert_into_history(
+        &config.ds,
+        &config.root,
+        &to_be_in_history,
+        &mut remote_history,
+    )
+    .await?;
     Ok(synced_files)
 }
 
@@ -331,7 +336,7 @@ pub(crate) async fn sync_worker(
     Ok(SyncResponse {
         files: synced_files.into_values().collect_vec(),
         dot_history: history_files,
-        latest_ftd: config.read_to_string(config.history_file()).await?,
+        latest_ftd: config.read_to_string(config.history_file(), None).await?,
     })
 }
 
@@ -365,7 +370,9 @@ async fn clone_history_files(
             .filter(|x| client_file_edit.map(|c| x.0.gt(&c.version)).unwrap_or(true))
             .collect_vec();
         for (_, path) in history_paths {
-            let content = config.read(config.remote_history_dir().join(&path)).await?;
+            let content = config
+                .read_content(config.remote_history_dir().join(&path), None)
+                .await?;
             dot_history.push(File { path, content });
         }
     }
@@ -415,7 +422,7 @@ async fn client_current_files(
             );
             continue;
         }
-        let content = config.read(config.root.join(path)).await?;
+        let content = config.read_content(config.root.join(path), None).await?;
         synced_files.insert(
             path.clone(),
             SyncResponseFile::Add {

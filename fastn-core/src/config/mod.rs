@@ -179,6 +179,7 @@ impl RequestConfig {
             let file_name = self.config.get_file_path_and_resolve(id.as_str()).await?;
             let package = self.config.find_package_by_id(id.as_str()).await?.1;
             let file = fastn_core::get_file(
+                &self.config.ds,
                 package.name.to_string(),
                 &self.config.root.join(file_name),
                 &self.config.get_root_for_package(&package),
@@ -197,6 +198,7 @@ impl RequestConfig {
 
             let package = self.config.find_package_by_id(path).await?.1;
             let mut file = fastn_core::get_file(
+                &self.config.ds,
                 package.name.to_string(),
                 &self.config.root.join(file_name.trim_start_matches('/')),
                 &self.config.get_root_for_package(&package),
@@ -679,6 +681,7 @@ impl Config {
             }
             let version = get_version(&file, &path).await?;
             let file = fastn_core::get_file(
+                &self.ds,
                 package.name.to_string(),
                 &file,
                 &(if version.original.eq("BASE_VERSION") {
@@ -749,7 +752,7 @@ impl Config {
         let all_files = self.get_all_file_paths(package)?;
         // TODO: Unwrap?
         let mut documents =
-            fastn_core::paths_to_files(package.name.as_str(), all_files, &path).await?;
+            fastn_core::paths_to_files(&self.ds, package.name.as_str(), all_files, &path).await?;
         documents.sort_by_key(|v| v.get_id().to_string()); // TODO: why is to_string() needed?
 
         Ok(documents)
@@ -761,7 +764,8 @@ impl Config {
         let all_files_path = self.get_all_file_paths(&self.package)?;
 
         let documents =
-            fastn_core::paths_to_files(self.package.name.as_str(), all_files_path, &path).await?;
+            fastn_core::paths_to_files(&self.ds, self.package.name.as_str(), all_files_path, &path)
+                .await?;
         for document in documents.iter() {
             if let fastn_core::File::Ftd(doc) = document {
                 // Ignore fetching id's from FASTN.ftd since
@@ -835,6 +839,7 @@ impl Config {
             .1;
 
         let mut file = fastn_core::get_file(
+            &self.ds,
             package.name.to_string(),
             &self.root.join(file_name),
             &self.get_root_for_package(&package),
@@ -1429,7 +1434,7 @@ impl Config {
         let mut config = Config {
             package: package.clone(),
             packages_root: ds.root.join(".packages").into(),
-            root,
+            root: tokio::fs::canonicalize(&ds.root).await?.try_into()?,
             original_directory,
             all_packages: Default::default(),
             global_ids: Default::default(),
