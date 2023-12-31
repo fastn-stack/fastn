@@ -1764,6 +1764,7 @@ dependencies = [
  "dirs",
  "edit",
  "env_logger",
+ "fastn-ds",
  "fastn-js",
  "fastn-observer",
  "fastn-package",
@@ -1806,6 +1807,14 @@ dependencies = [
  "url",
  "uuid",
  "zip",
+]
+
+[[package]]
+name = "fastn-ds"
+version = "0.1.0"
+dependencies = [
+ "ftd 0.3.0",
+ "tokio",
 ]
 
 [[package]]

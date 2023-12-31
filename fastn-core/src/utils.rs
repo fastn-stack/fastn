@@ -70,13 +70,13 @@ where
 {
     let cache_file = get_cache_file(id)?;
     serde_json::from_str(
-        config
-            .read_to_string(cache_file)
+        std::fs::read_to_string(cache_file)
             .map_err(|e| {
                 tracing::debug!("file read error: {}", e.to_string());
                 e
             })
-            .ok()?,
+            .ok()?
+            .as_str(),
     )
     .map_err(|e| {
         tracing::debug!("not valid json: {}", e.to_string());
@@ -626,11 +626,11 @@ pub fn get_external_css_html(external_js: &[String]) -> String {
     result
 }
 
-pub fn get_inline_js_html(inline_js: &[String]) -> String {
+pub async fn get_inline_js_html(config: &fastn_core::Config, inline_js: &[String]) -> String {
     let mut result = "".to_string();
     for path in inline_js {
         if camino::Utf8Path::new(path).exists() {
-            if let Ok(content) = config.read_to_string(path) {
+            if let Ok(content) = config.read_to_string(path, None).await {
                 result = format!("{}<script>{}</script>", result, content);
             }
         }
@@ -638,11 +638,11 @@ pub fn get_inline_js_html(inline_js: &[String]) -> String {
     result
 }
 
-pub fn get_inline_css_html(inline_js: &[String]) -> String {
+pub async fn get_inline_css_html(config: &fastn_core::Config, inline_js: &[String]) -> String {
     let mut result = "".to_string();
     for path in inline_js {
         if camino::Utf8Path::new(path).exists() {
-            if let Ok(content) = config.read_to_string(path) {
+            if let Ok(content) = config.read_to_string(path, None).await {
                 result = format!("{}<style>{}</style>", result, content);
             }
         }
@@ -650,27 +650,38 @@ pub fn get_inline_css_html(inline_js: &[String]) -> String {
     result
 }
 
-fn get_extra_js(external_js: &[String], inline_js: &[String], js: &str, rive_data: &str) -> String {
+async fn get_extra_js(
+    config: &fastn_core::Config,
+    external_js: &[String],
+    inline_js: &[String],
+    js: &str,
+    rive_data: &str,
+) -> String {
     format!(
         "{}{}{}{}",
         get_external_js_html(external_js),
-        get_inline_js_html(inline_js),
+        get_inline_js_html(config, inline_js).await,
         js,
         rive_data
     )
 }
 
-fn get_extra_css(external_css: &[String], inline_css: &[String], css: &str) -> String {
+async fn get_extra_css(
+    config: &fastn_core::Config,
+    external_css: &[String],
+    inline_css: &[String],
+    css: &str,
+) -> String {
     format!(
         "{}{}{}",
         get_external_css_html(external_css),
-        get_inline_css_html(inline_css),
+        get_inline_css_html(config, inline_css).await,
         css
     )
 }
 
 #[allow(clippy::too_many_arguments)]
-pub fn replace_markers_2022(
+pub async fn replace_markers_2022(
     s: &str,
     html_ui: ftd::html::HtmlUI,
     config: &fastn_core::Config,
@@ -712,16 +723,19 @@ pub fn replace_markers_2022(
         .replace(
             "__extra_js__",
             get_extra_js(
+                config,
                 config.ftd_external_js.as_slice(),
                 config.ftd_inline_js.as_slice(),
                 html_ui.js.as_str(),
                 html_ui.rive_data.as_str(),
             )
+            .await
             .as_str(),
         )
         .replace(
             "__extra_css__",
             get_extra_css(
+                config,
                 config.ftd_external_css.as_slice(),
                 config.ftd_inline_css.as_slice(),
                 html_ui.css.as_str(),
@@ -758,7 +772,7 @@ pub fn get_fastn_package_data(package: &fastn_core::Package) -> String {
     )
 }
 
-pub fn replace_markers_2023(
+pub async fn replace_markers_2023(
     js_script: &str,
     scripts: &str,
     ssr_body: &str,
@@ -799,11 +813,13 @@ pub fn replace_markers_2023(
         )
         .as_str(),
         extra_js = get_extra_js(
+            config,
             config.ftd_external_js.as_slice(),
             config.ftd_inline_js.as_slice(),
             "",
             "",
         )
+        .await
         .as_str(),
         default_css = default_css,
         html_body = format!("{}{}", ssr_body, font_style).as_str(),

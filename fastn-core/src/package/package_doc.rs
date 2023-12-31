@@ -459,7 +459,8 @@ pub(crate) async fn read_ftd_2022(
         main.id_to_path().as_str(),
         font_style.as_str(),
         base_url,
-    );
+    )
+    .await;
 
     Ok(FTDResult::Html(file_content.into()))
 }
@@ -542,6 +543,7 @@ pub(crate) async fn read_ftd_2023(
             base_url,
             c,
         )
+        .await
     };
 
     Ok(FTDResult::Html(file_content.into()))

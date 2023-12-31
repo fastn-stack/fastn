@@ -1,7 +1,6 @@
 // Document: https://fastn_core.dev/crate/config/
 // Document: https://fastn_core.dev/crate/package/
 
-pub mod ds;
 pub(crate) mod utils;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
@@ -30,7 +29,7 @@ impl FTDEdition {
 #[derive(Debug, Clone)]
 pub struct Config {
     // Global Information
-    pub ds: fastn_core::config::ds::DS,
+    pub ds: fastn_ds::DocumentStore,
     pub package: fastn_core::Package,
     pub root: camino::Utf8PathBuf,
     pub packages_root: camino::Utf8PathBuf,
@@ -316,13 +315,17 @@ impl Config {
         self.ds.read_to_string(path, user_id).await
     }
 
-    pub async fn write_content(
+    pub async fn write_content<T: AsRef<str>>(
         &self,
-        path: &str,
+        path: T,
         data: &[u8],
         user_id: Option<u32>,
     ) -> ftd::interpreter::Result<()> {
         self.ds.write_content(path, data, user_id).await
+    }
+
+    pub async fn read_dir<T: AsRef<str>>(&self, path: T, user_id: Option<u32>) {
+        self.ds.read_dir(path, user_id).await
     }
 
     /// `build_dir` is where the static built files are stored. `fastn build` command creates this
@@ -1406,7 +1409,7 @@ impl Config {
     /// `read()` is the way to read a Config.
     #[tracing::instrument(name = "Config::read", skip_all)]
     pub async fn read(
-        root: fastn_core::config::ds::DS,
+        root: fastn_ds::DocumentStore,
         resolve_sitemap: bool,
     ) -> fastn_core::Result<fastn_core::Config> {
         let (root, original_directory) = match root {
@@ -1429,7 +1432,6 @@ impl Config {
                 )
             }
         };
-        let ds = fastn_core::ds::DocumentStore::new(root);
         let fastn_doc = utils::fastn_doc(&ds, &root.join("FASTN.ftd")).await?;
         let package = fastn_core::Package::from_fastn_doc(&root, &fastn_doc)?;
         let mut config = Config {

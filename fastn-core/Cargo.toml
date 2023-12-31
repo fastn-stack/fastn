@@ -47,6 +47,7 @@ dirs.workspace = true
 edit.workspace = true
 env_logger.workspace = true
 fastn-js.workspace = true
+fastn-ds.workspace = true
 fastn-observer.workspace = true
 fastn-package.workspace = true
 fluent.workspace = true

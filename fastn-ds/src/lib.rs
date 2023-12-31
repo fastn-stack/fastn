@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct DocumentStore {
     root: std::path::PathBuf,
 }
