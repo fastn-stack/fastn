@@ -24,4 +24,4 @@ dotenvy.workspace = true
 
 
 [features]
-remote = ["fastn-core/remote"]
+auth = ["fastn-core/auth"]
