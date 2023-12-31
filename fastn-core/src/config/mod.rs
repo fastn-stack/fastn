@@ -926,7 +926,7 @@ impl Config {
             self.add_package(&package);
         }
 
-        let fastn_doc = utils::fastn_doc(self, fastn_path).await?;
+        let fastn_doc = utils::fastn_doc(&self.ds, fastn_path).await?;
 
         let mut package = package.clone();
 
@@ -1406,6 +1406,14 @@ impl Config {
         config
     }
 
+    pub async fn read_current(resolve_sitemap: bool) -> fastn_core::Result<fastn_core::Config> {
+        Config::read(
+            fastn_ds::DocumentStore::new(std::env::current_dir()?),
+            resolve_sitemap,
+        )
+        .await
+    }
+
     /// `read()` is the way to read a Config.
     #[tracing::instrument(name = "Config::read", skip_all)]
     pub async fn read(
@@ -1416,11 +1424,11 @@ impl Config {
             tokio::fs::canonicalize(std::env::current_dir()?)
                 .await?
                 .try_into()?;
-        let fastn_doc = utils::fastn_doc(&ds, "FASTN.ftd").await?;
-        let package = fastn_core::Package::from_fastn_doc(&root, &fastn_doc)?;
+        let fastn_doc = utils::fastn_doc(&ds, "FASTN.ftd".into()).await?;
+        let package = fastn_core::Package::from_fastn_doc(&ds, &fastn_doc)?;
         let mut config = Config {
             package: package.clone(),
-            packages_root: root.clone().join(".packages"),
+            packages_root: ds.root.join(".packages").into(),
             root,
             original_directory,
             all_packages: Default::default(),
@@ -1431,6 +1439,7 @@ impl Config {
             ftd_external_css: Default::default(),
             ftd_inline_css: Default::default(),
             test_command_running: false,
+            ds,
         };
         // Update global_ids map from the current package files
         config.update_ids_from_package().await?;
@@ -1633,6 +1642,7 @@ impl Config {
             return fastn_core::usage_error("Can be used by remote only".to_string());
         }
         let value = fastn_core::cache::update(
+            self,
             self.remote_cr().to_string().as_str(),
             number_of_crs_to_reserve,
         )

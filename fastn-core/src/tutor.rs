@@ -61,7 +61,7 @@ pub(crate) async fn config(
         None => (None, app_data.clone()),
     };
 
-    let config = fastn_core::Config::read(root, false)
+    let config = fastn_core::Config::read(fastn_ds::DocumentStore::new(root), false)
         .await
         .unwrap()
         .add_edition(app_data.edition)?

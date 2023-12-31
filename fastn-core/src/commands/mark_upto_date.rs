@@ -73,7 +73,7 @@ async fn mark_upto_date_simple(
     config: &fastn_core::Config,
 ) -> fastn_core::Result<()> {
     let file_path = fastn_core::utils::track_path(who, config.root.as_str());
-    let mut tracks = fastn_core::tracker::get_tracks(config.root.as_str(), &file_path)?;
+    let mut tracks = fastn_core::tracker::get_tracks(config, config.root.as_str(), &file_path)?;
     if let Some(whom) = whom {
         return if let Some(track) = tracks.get_mut(whom) {
             let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;

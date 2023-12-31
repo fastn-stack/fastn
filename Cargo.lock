@@ -1715,6 +1715,7 @@ dependencies = [
  "dotenvy",
  "fastn-cloud",
  "fastn-core",
+ "fastn-ds",
  "fastn-observer",
  "futures",
  "reqwest",

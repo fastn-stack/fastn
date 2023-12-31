@@ -1,11 +1,13 @@
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
-    root: std::path::PathBuf,
+    pub root: std::path::PathBuf,
 }
 
 impl DocumentStore {
-    pub fn new(root: std::path::PathBuf) -> Self {
-        Self { root }
+    pub fn new<T: AsRef<str>>(root: T) -> Self {
+        Self {
+            root: root.as_ref().into(),
+        }
     }
 
     pub async fn read_content<T: AsRef<str>>(

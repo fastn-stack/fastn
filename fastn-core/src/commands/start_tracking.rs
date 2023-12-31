@@ -40,7 +40,7 @@ async fn check(
     // if source is already tracking target, print message and return
     {
         let track_path = fastn_core::utils::track_path(source, base_path);
-        let tracks = fastn_core::tracker::get_tracks(base_path, &track_path)?;
+        let tracks = fastn_core::tracker::get_tracks(config, base_path, &track_path)?;
 
         if tracks.contains_key(target) {
             println!("{} is already tracking {}", source, target);

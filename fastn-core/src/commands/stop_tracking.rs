@@ -3,7 +3,7 @@ async fn stop_tracking(
     who: &str,
     whom: Option<&str>,
 ) -> fastn_core::Result<()> {
-    check(who, whom, config.root.as_str()).await?;
+    check(config, who, whom, config.root.as_str()).await?;
 
     Ok(())
 }
@@ -22,16 +22,21 @@ pub async fn handle_command(matches: &clap::ArgMatches) -> fastn_core::Result<()
     use fastn_core::utils::ValueOf;
 
     stop_tracking(
-        &fastn_core::Config::read(None, true).await?,
+        &fastn_core::Config::read_current(true).await?,
         matches.value_of_("source").unwrap(),
         matches.value_of_("target"),
     )
     .await
 }
 
-async fn check(who: &str, whom: Option<&str>, base_path: &str) -> fastn_core::Result<()> {
+async fn check(
+    config: &fastn_core::Config,
+    who: &str,
+    whom: Option<&str>,
+    base_path: &str,
+) -> fastn_core::Result<()> {
     let file_path = fastn_core::utils::track_path(who, base_path);
-    let mut tracks = fastn_core::tracker::get_tracks(base_path, &file_path)?;
+    let mut tracks = fastn_core::tracker::get_tracks(config, base_path, &file_path)?;
     if let Some(whom) = whom {
         if tracks.remove(whom).is_some() {
             write(&file_path, &tracks).await?;
