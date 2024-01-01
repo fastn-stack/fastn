@@ -14,7 +14,7 @@ pub async fn post_build_check(config: &fastn_core::Config) -> fastn_core::Result
                 INDEX_FILE
             )));
         }
-        check_index_in_folders(config, build_path, build_directory.as_str())
+        check_index_in_folders(build_path, build_directory.as_str())
             .await
             .map_err(|e| fastn_core::Error::GenericError(e.to_string()))?;
     }
@@ -24,7 +24,6 @@ pub async fn post_build_check(config: &fastn_core::Config) -> fastn_core::Result
 
 #[async_recursion::async_recursion]
 async fn check_index_in_folders(
-    config: &fastn_core::Config,
     folder: camino::Utf8PathBuf,
     build_path: &str,
 ) -> Result<(), fastn_core::Error> {
@@ -33,7 +32,8 @@ async fn check_index_in_folders(
     let mut has_ignored_directory = false;
 
     if folder.is_dir() {
-        let mut entries = config.read_dir(&folder, None).await?;
+        // Todo: Use config.read_dir instead of tokio::fs::read_dir
+        let mut entries = tokio::fs::read_dir(&folder).await?;
         while let Some(current_entry) = entries.next_entry().await? {
             let current_entry_path = current_entry.path();
             let entry_path = camino::Utf8PathBuf::from_path_buf(current_entry_path)
@@ -48,7 +48,7 @@ async fn check_index_in_folders(
                 file_count += 1;
             }
             if entry_path.is_dir() && !is_ignored_directory {
-                check_index_in_folders(config, entry_path, build_path).await?;
+                check_index_in_folders(entry_path, build_path).await?;
             }
         }
         if file_count > 0 || !has_ignored_directory {

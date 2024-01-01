@@ -12,6 +12,7 @@ homepage.workspace = true
 [dependencies]
 camino.workspace = true
 fastn-core.workspace = true
+fastn-ds.workspace = true
 futures.workspace = true
 home.workspace = true
 mime_guess.workspace = true

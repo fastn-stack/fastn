@@ -48,7 +48,7 @@ async fn file_status(
         clean = false;
     }
     for (i, j) in track_status {
-        println!("{}: {} -> {}", j.to_string(), source, i);
+        println!("{}: {} -> {}", j, source, i);
         clean = false;
     }
     if clean {
@@ -198,7 +198,7 @@ fn print_track_status(
             if j.eq(&TrackStatus::UptoDate) {
                 continue;
             }
-            println!("{}: {} -> {}", j.to_string(), k, i);
+            println!("{}: {} -> {}", j, k, i);
             status = false;
         }
     }

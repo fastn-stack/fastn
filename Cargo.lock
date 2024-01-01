@@ -1732,6 +1732,7 @@ version = "0.1.0"
 dependencies = [
  "camino",
  "fastn-core",
+ "fastn-ds",
  "futures",
  "home",
  "mime_guess",

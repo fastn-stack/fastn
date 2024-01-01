@@ -326,7 +326,11 @@ impl Config {
         self.ds.write_content(path, data, user_id).await
     }
 
-    pub async fn read_dir<T: AsRef<str>>(&self, path: T, user_id: Option<u32>) {
+    pub async fn read_dir<T: AsRef<str>>(
+        &self,
+        path: T,
+        user_id: Option<u32>,
+    ) -> ftd::interpreter::Result<tokio::fs::ReadDir> {
         self.ds.read_dir(path, user_id).await
     }
 
@@ -1326,6 +1330,7 @@ impl Config {
         })
     }
 
+    #[allow(dead_code)]
     async fn get_root_path(
         directory: &camino::Utf8PathBuf,
     ) -> fastn_core::Result<camino::Utf8PathBuf> {
