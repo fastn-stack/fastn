@@ -31,11 +31,9 @@ auth = ["oauth2", "diesel", "diesel_migrations", "diesel-async", "lettre"]
 [dependencies]
 actix-web.workspace = true
 antidote.workspace = true
-argon2.workspace = true
 async-lock.workspace = true
 async-recursion.workspace = true
 camino.workspace = true
-chrono.workspace = true
 clap.workspace = true
 colored.workspace = true
 deadpool-postgres.workspace = true
@@ -61,7 +59,6 @@ indoc.workspace = true
 intl-memoizer.workspace = true
 itertools.workspace = true
 lettre = { workspace = true, optional = true }
-magic-crypt.workspace = true
 mime_guess.workspace = true
 native-tls.workspace = true
 notify.workspace = true
@@ -91,4 +88,3 @@ zip.workspace = true
 fbt-lib.workspace = true
 indoc.workspace = true
 pretty_assertions.workspace = true
-rusty-hook.workspace = true
