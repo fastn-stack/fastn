@@ -2,21 +2,11 @@ pub fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let req = match config.request.as_ref() {
-        Some(v) => v,
-        None => {
-            return ftd::interpreter::utils::e2(
-                "config does not contain http-request object",
-                doc.name,
-                value.line_number(),
-            )
-        }
-    };
-    let mut data = req.query().clone();
+    let mut data = req_config.request.query().clone();
 
-    for (name, param_value) in config.named_parameters.iter() {
+    for (name, param_value) in req_config.named_parameters.iter() {
         let json_value =
             param_value
                 .to_serde_value()
@@ -28,7 +18,7 @@ pub fn process(
         data.insert(name.to_string(), json_value);
     }
 
-    match req.body_as_json() {
+    match req_config.request.body_as_json() {
         Ok(Some(b)) => {
             data.extend(b);
         }
@@ -43,7 +33,7 @@ pub fn process(
     }
 
     data.extend(
-        config
+        req_config
             .extra_data
             .iter()
             .map(|(k, v)| (k.to_string(), serde_json::Value::String(v.to_string()))),

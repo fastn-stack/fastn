@@ -67,7 +67,7 @@ pub(crate) async fn sync_(
     request_files: Vec<fastn_core::apis::sync2::SyncRequestFile>,
     workspace: &mut std::collections::BTreeMap<String, fastn_core::workspace::WorkspaceEntry>,
 ) -> fastn_core::Result<()> {
-    let history = tokio::fs::read_to_string(config.history_file()).await?;
+    let history = fastn_core::tokio_fs::read_to_string(config.history_file()).await?;
     let sync_request = fastn_core::apis::sync2::SyncRequest {
         package_name: config.package.name.to_string(),
         files: request_files,
@@ -76,17 +76,18 @@ pub(crate) async fn sync_(
     let response = send_to_fastn_serve(&sync_request).await?;
     update_current_directory(config, &response).await?;
     update_history(config, &response.dot_history, &response.latest_ftd).await?;
-    update_workspace(&response, workspace).await?;
+    update_workspace(config, &response, workspace).await?;
     Ok(())
 }
 
 async fn update_workspace(
+    config: &fastn_core::Config,
     response: &fastn_core::apis::sync2::SyncResponse,
     workspace: &mut std::collections::BTreeMap<String, fastn_core::workspace::WorkspaceEntry>,
 ) -> fastn_core::Result<()> {
     use itertools::Itertools;
 
-    let remote_history = fastn_core::history::FileHistory::from_ftd(response.latest_ftd.as_str())?;
+    let remote_history = config.get_history().await?;
     let remote_manifest =
         fastn_core::history::FileHistory::get_remote_manifest(remote_history.as_slice(), true)?;
     let conflicted_files = response

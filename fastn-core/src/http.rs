@@ -15,7 +15,7 @@ macro_rules! unauthorised {
 #[macro_export]
 macro_rules! not_found {
     ($($t:tt)*) => {{
-        fastn_core::http::not_found_(format!($($t)*))
+        fastn_core::http::not_found_(format!($($t)*) + "\n")
     }};
 }
 
@@ -37,6 +37,7 @@ pub fn not_found_(msg: String) -> fastn_core::http::Response {
 impl actix_web::ResponseError for fastn_core::Error {}
 
 pub type Response = actix_web::HttpResponse;
+pub type StatusCode = actix_web::http::StatusCode;
 
 pub fn ok(data: Vec<u8>) -> fastn_core::http::Response {
     actix_web::HttpResponse::Ok().body(data)
@@ -73,10 +74,10 @@ pub fn ok_with_content_type(
         .body(data)
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct Request {
     method: String,
-    uri: String,
+    pub uri: String,
     pub path: String,
     query_string: String,
     cookies: std::collections::HashMap<String, String>,
@@ -86,6 +87,7 @@ pub struct Request {
     ip: Option<String>,
     scheme: String,
     host: String,
+    pub connection_info: actix_web::dev::ConnectionInfo,
     // path_params: Vec<(String, )>
 }
 
@@ -107,6 +109,7 @@ impl Request {
             uri: req.uri().to_string(),
             path: req.path().to_string(),
             query_string: req.query_string().to_string(),
+            connection_info: req.connection_info().clone(),
             headers,
             query: {
                 actix_web::web::Query::<std::collections::HashMap<String, serde_json::Value>>::from_query(
@@ -210,6 +213,27 @@ impl Request {
         self.cookies().get(name).map(|v| v.to_string())
     }
 
+    pub fn set_body(&mut self, body: actix_web::web::Bytes) {
+        self.body = body;
+    }
+
+    pub fn set_cookies(&mut self, cookies: &std::collections::HashMap<String, String>) {
+        self.cookies = cookies.clone();
+    }
+
+    pub fn insert_header(&mut self, name: reqwest::header::HeaderName, value: &'static str) {
+        self.headers
+            .insert(name, reqwest::header::HeaderValue::from_static(value));
+    }
+
+    pub fn set_method(&mut self, method: &str) {
+        self.method = method.to_uppercase();
+    }
+
+    pub fn set_query_string(&mut self, query_string: &str) {
+        self.query_string = query_string.to_string();
+    }
+
     pub fn host(&self) -> String {
         self.host.to_string()
         // use std::borrow::Borrow;
@@ -227,6 +251,18 @@ impl Request {
 
     pub fn query(&self) -> &std::collections::HashMap<String, serde_json::Value> {
         &self.query
+    }
+
+    pub fn q<T>(&self, key: &str, default: T) -> fastn_core::Result<T>
+    where
+        T: serde::de::DeserializeOwned,
+    {
+        let value = match self.query.get(key) {
+            Some(v) => v,
+            None => return Ok(default),
+        };
+
+        Ok(serde_json::from_value(value.clone())?)
     }
 
     pub fn get_ip(&self) -> Option<String> {
@@ -251,7 +287,7 @@ impl ResponseBuilder {
 
     pub async fn from_reqwest(
         response: reqwest::Response,
-        package_name: &str,
+        _package_name: &str,
     ) -> fastn_core::http::Response {
         let status = response.status();
 
@@ -265,24 +301,25 @@ impl ResponseBuilder {
         {
             response_builder.insert_header(header);
         }
-        if status == actix_web::http::StatusCode::FOUND {
-            response_builder.status(actix_web::http::StatusCode::OK);
-            if let Some(location) = response.headers().get(actix_web::http::header::LOCATION) {
-                let redirect = location.to_str().unwrap();
-                let path = if redirect.trim_matches('/').is_empty() {
-                    format!("/-/{}/", package_name)
-                } else {
-                    // if it contains query-params so url should not end with /
-                    if redirect.contains('?') {
-                        format!("/-/{}/{}", package_name, redirect.trim_matches('/'))
-                    } else {
-                        format!("/-/{}/{}/", package_name, redirect.trim_matches('/'))
-                    }
-                };
-                let t = serde_json::json!({"redirect": path.as_str()}).to_string();
-                return response_builder.body(t);
-            }
-        }
+
+        // if status == actix_web::http::StatusCode::FOUND && false {
+        //     response_builder.status(actix_web::http::StatusCode::OK);
+        //     if let Some(location) = response.headers().get(actix_web::http::header::LOCATION) {
+        //         let redirect = location.to_str().unwrap();
+        //         let path = if redirect.trim_matches('/').is_empty() {
+        //             format!("/-/{}/", package_name)
+        //         } else {
+        //             // if it contains query-params so url should not end with /
+        //             if redirect.contains('?') {
+        //                 format!("/-/{}/{}", package_name, redirect.trim_matches('/'))
+        //             } else {
+        //                 format!("/-/{}/{}/", package_name, redirect.trim_matches('/'))
+        //             }
+        //         };
+        //         let t = serde_json::json!({"redirect": path.as_str()}).to_string();
+        //         return response_builder.body(t);
+        //     }
+        // }
 
         let content = match response.bytes().await {
             Ok(b) => b,
@@ -298,10 +335,11 @@ impl ResponseBuilder {
 
 pub(crate) fn url_regex() -> regex::Regex {
     regex::Regex::new(
-        r#"((([A-Za-z]{3,9}:(?://)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:/[\+~%/.\w_]*)?\??(?:[-\+=&;%@.\w_]*)\#?(?:[\w]*))?)"#
+        r"((([A-Za-z]{3,9}:(?://)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:/[\+~%/.\w_]*)?\??(?:[-\+=&;%@.\w_]*)\#?(?:[\w]*))?)"
     ).unwrap()
 }
 
+#[tracing::instrument]
 pub(crate) async fn construct_url_and_get_str(url: &str) -> fastn_core::Result<String> {
     construct_url_and_return_response(url.to_string(), |f| async move {
         http_get_str(f.as_str()).await
@@ -309,7 +347,9 @@ pub(crate) async fn construct_url_and_get_str(url: &str) -> fastn_core::Result<S
     .await
 }
 
+#[tracing::instrument]
 pub(crate) async fn construct_url_and_get(url: &str) -> fastn_core::Result<Vec<u8>> {
+    println!("http_download_by_id: {url}");
     construct_url_and_return_response(
         url.to_string(),
         |f| async move { http_get(f.as_str()).await },
@@ -317,6 +357,7 @@ pub(crate) async fn construct_url_and_get(url: &str) -> fastn_core::Result<Vec<u
     .await
 }
 
+#[tracing::instrument(skip(f))]
 pub(crate) async fn construct_url_and_return_response<T, F, D>(
     url: String,
     f: F,
@@ -325,15 +366,20 @@ where
     F: FnOnce(String) -> T + Copy,
     T: futures::Future<Output = std::result::Result<D, fastn_core::Error>> + Send + 'static,
 {
-    if url[1..].contains("://") || url.starts_with("//") {
-        f(url).await
-    } else if let Ok(response) = f(format!("https://{}", url)).await {
-        Ok(response)
+    let mut url = if url[1..].contains("://") || url.starts_with("//") {
+        url
     } else {
-        f(format!("http://{}", url)).await
+        format!("https://{}", url)
+    };
+
+    if let Ok(package_proxy) = std::env::var("FASTN_PACKAGE_PROXY") {
+        url = format!("{}/proxy/?url={}", package_proxy, url);
     }
+
+    f(url).await
 }
 
+#[tracing::instrument]
 pub(crate) async fn get_json<T: serde::de::DeserializeOwned>(url: &str) -> fastn_core::Result<T> {
     Ok(reqwest::Client::new()
         .get(url)
@@ -345,6 +391,7 @@ pub(crate) async fn get_json<T: serde::de::DeserializeOwned>(url: &str) -> fastn
         .await?)
 }
 
+#[tracing::instrument(skip(body))]
 pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(
     url: &str,
     body: B,
@@ -366,7 +413,9 @@ pub(crate) async fn http_post_with_cookie(
     cookie: Option<String>,
     headers: &std::collections::HashMap<String, String>,
     body: &str,
-) -> fastn_core::Result<Vec<u8>> {
+) -> fastn_core::Result<(fastn_core::Result<Vec<u8>>, Vec<String>)> {
+    let mut resp_cookies = vec![];
+
     tracing::info!(url = url);
     let mut req_headers = reqwest::header::HeaderMap::new();
     req_headers.insert(
@@ -392,6 +441,13 @@ pub(crate) async fn http_post_with_cookie(
         .build()?;
 
     let res = c.post(url).body(body.to_string()).send().await?;
+    res.headers().iter().for_each(|(k, v)| {
+        if k.as_str().eq("set-cookie") {
+            if let Ok(v) = v.to_str() {
+                resp_cookies.push(v.to_string());
+            }
+        }
+    });
 
     if !res.status().eq(&reqwest::StatusCode::OK) {
         let message = format!(
@@ -401,14 +457,19 @@ pub(crate) async fn http_post_with_cookie(
             res.text().await
         );
         tracing::error!(url = url, msg = message);
-        return Err(fastn_core::Error::APIResponseError(message));
+        return Ok((
+            Err(fastn_core::Error::APIResponseError(message)),
+            resp_cookies,
+        ));
     }
     tracing::info!(msg = "returning success", url = url);
-    Ok(res.bytes().await?.into())
+    Ok((Ok(res.bytes().await?.into()), resp_cookies))
 }
 
 pub(crate) async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
-    http_get_with_cookie(url, None, &std::collections::HashMap::new()).await
+    http_get_with_cookie(url, None, &std::collections::HashMap::new(), true)
+        .await?
+        .0
 }
 
 static NOT_FOUND_CACHE: once_cell::sync::Lazy<antidote::RwLock<std::collections::HashSet<String>>> =
@@ -419,10 +480,16 @@ pub(crate) async fn http_get_with_cookie(
     url: &str,
     cookie: Option<String>,
     headers: &std::collections::HashMap<String, String>,
-) -> fastn_core::Result<Vec<u8>> {
-    if NOT_FOUND_CACHE.read().contains(url) {
-        return Err(fastn_core::Error::APIResponseError(
-            "page not found, cached".to_string(),
+    use_cache: bool,
+) -> fastn_core::Result<(fastn_core::Result<Vec<u8>>, Vec<String>)> {
+    let mut cookies = vec![];
+
+    if use_cache && NOT_FOUND_CACHE.read().contains(url) {
+        return Ok((
+            Err(fastn_core::Error::APIResponseError(
+                "page not found, cached".to_string(),
+            )),
+            cookies,
         ));
     }
 
@@ -450,7 +517,16 @@ pub(crate) async fn http_get_with_cookie(
         .default_headers(req_headers)
         .build()?;
 
+    // if we are not able to send the request, we could not have read the cookie
     let res = c.get(url).send().await?;
+
+    res.headers().iter().for_each(|(k, v)| {
+        if k.as_str().eq("set-cookie") {
+            if let Ok(v) = v.to_str() {
+                cookies.push(v.to_string());
+            }
+        }
+    });
 
     if !res.status().eq(&reqwest::StatusCode::OK) {
         let message = format!(
@@ -460,11 +536,15 @@ pub(crate) async fn http_get_with_cookie(
             res.text().await
         );
         tracing::error!(url = url, msg = message);
-        NOT_FOUND_CACHE.write().insert(url.to_string());
-        return Err(fastn_core::Error::APIResponseError(message));
+
+        if use_cache {
+            NOT_FOUND_CACHE.write().insert(url.to_string());
+        }
+
+        return Ok((Err(fastn_core::Error::APIResponseError(message)), cookies));
     }
     tracing::info!(msg = "returning success", url = url);
-    Ok(res.bytes().await?.into())
+    Ok((Ok(res.bytes().await?.into()), cookies))
 }
 
 // pub async fn http_get_with_type<T: serde::de::DeserializeOwned>(
@@ -521,8 +601,11 @@ pub(crate) fn api_ok(
     ))
 }
 
+/// construct an error response with `message`
+/// and `status_code`. Use 500 if `status_code` is None
 pub(crate) fn api_error<T: Into<String>>(
     message: T,
+    status_code: Option<actix_web::http::StatusCode>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     #[derive(serde::Serialize, Debug)]
     struct ErrorResponse {
@@ -537,7 +620,7 @@ pub(crate) fn api_error<T: Into<String>>(
 
     Ok(actix_web::HttpResponse::Ok()
         .content_type(actix_web::http::header::ContentType::json())
-        .status(actix_web::http::StatusCode::INTERNAL_SERVER_ERROR)
+        .status(status_code.unwrap_or(actix_web::http::StatusCode::INTERNAL_SERVER_ERROR))
         .body(serde_json::to_string(&resp)?))
 }
 
@@ -562,4 +645,137 @@ pub(crate) fn get_available_port(
         }
     }
     None
+}
+
+pub async fn get_api<T: serde::de::DeserializeOwned>(
+    url: impl AsRef<str>,
+    bearer_token: &str,
+) -> fastn_core::Result<T> {
+    let response = reqwest::Client::new()
+        .get(url.as_ref())
+        .header(
+            reqwest::header::AUTHORIZATION,
+            format!("{} {}", "Bearer", bearer_token),
+        )
+        .header(reqwest::header::ACCEPT, "application/json")
+        .header(
+            reqwest::header::USER_AGENT,
+            reqwest::header::HeaderValue::from_static("fastn"),
+        )
+        .send()
+        .await?;
+
+    if !response.status().eq(&reqwest::StatusCode::OK) {
+        return Err(fastn_core::Error::APIResponseError(format!(
+            "fastn-API-ERROR: {}, Error: {}",
+            url.as_ref(),
+            response.text().await?
+        )));
+    }
+
+    Ok(response.json().await?)
+}
+
+pub async fn github_graphql<T: serde::de::DeserializeOwned>(
+    query: &str,
+    token: &str,
+) -> fastn_core::Result<T> {
+    let mut map: std::collections::HashMap<&str, &str> = std::collections::HashMap::new();
+    map.insert("query", query);
+
+    let response = reqwest::Client::new()
+        .post("https://api.github.com/graphql")
+        .json(&map)
+        .header(
+            reqwest::header::AUTHORIZATION,
+            format!("{} {}", "Bearer", token),
+        )
+        .header(reqwest::header::ACCEPT, "application/json")
+        .header(
+            reqwest::header::USER_AGENT,
+            reqwest::header::HeaderValue::from_static("fastn"),
+        )
+        .send()
+        .await?;
+    if !response.status().eq(&reqwest::StatusCode::OK) {
+        return Err(fastn_core::Error::APIResponseError(format!(
+            "GitHub API ERROR: {}",
+            response.status()
+        )));
+    }
+    let return_obj = response.json::<T>().await?;
+
+    Ok(return_obj)
+}
+
+/// construct `ftd.http` consumable error responses
+/// https://github.com/fastn-stack/fastn/blob/7f0b79a/fastn-js/js/ftd.js#L218C45-L229
+/// ```json
+/// {
+///     "data": null,
+///     "errors": {
+///         key: String,
+///         key2: String,
+///         ...
+///     }
+/// }
+/// ```
+pub async fn user_err(
+    errors: Vec<(&str, &str)>,
+    status_code: fastn_core::http::StatusCode,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    let mut json_error = serde_json::Map::new();
+
+    for (k, v) in errors {
+        json_error.insert(k.to_string(), serde_json::Value::String(v.to_string()));
+    }
+
+    let resp = serde_json::json!({
+        "data": null,
+        "errors": json_error,
+    });
+
+    Ok(actix_web::HttpResponse::Ok()
+        .status(status_code)
+        .content_type(actix_web::http::header::ContentType::json())
+        .body(serde_json::to_string(&resp)?))
+}
+
+#[cfg(test)]
+mod test {
+    use actix_web::body::MessageBody;
+
+    #[tokio::test]
+    async fn user_err() -> fastn_core::Result<()> {
+        let user_err = "invalid email";
+        let token_err = "no key expected with name token";
+        let errors = vec![("user", user_err), ("token", token_err)];
+
+        let res =
+            fastn_core::http::user_err(errors, fastn_core::http::StatusCode::BAD_REQUEST).await?;
+
+        assert_eq!(res.status(), fastn_core::http::StatusCode::BAD_REQUEST);
+
+        #[derive(serde::Deserialize)]
+        struct Errors {
+            user: String,
+            token: String,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct TestErrorResponse {
+            data: Option<String>,
+            errors: Errors,
+        }
+
+        let bytes = res.into_body().try_into_bytes().unwrap();
+
+        let body: TestErrorResponse = serde_json::from_slice(&bytes)?;
+
+        assert_eq!(body.data, None);
+        assert_eq!(body.errors.user, user_err);
+        assert_eq!(body.errors.token, token_err);
+
+        Ok(())
+    }
 }

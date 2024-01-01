@@ -32,6 +32,19 @@ width: fill-container
 padding.vmax: 3
 width: fill-container
 
+-- ftd.text: dvh Padding
+padding.dvh: 3
+width: fill-container
+
+-- ftd.text: lvh Padding
+padding.lvh: 3
+width: fill-container
+
+-- ftd.text: svh Padding
+padding.svh: 3
+width: fill-container
+
+
 -- ftd.text: calc Padding
 padding.calc: 100% - 95%
 width: fill-container
@@ -69,6 +82,18 @@ width: fill-container
 
 -- ftd.text: vmax Height
 height.fixed.vmax: 10
+width: fill-container
+
+-- ftd.text: dvh Height
+height.fixed.dvh: 10
+width: fill-container
+
+-- ftd.text: lvh Height
+height.fixed.lvh: 10
+width: fill-container
+
+-- ftd.text: svh Height
+height.fixed.svh: 10
 width: fill-container
 
 -- ftd.text: calc Height
@@ -995,6 +1020,26 @@ margin.px: 20
 -- ftd.text: Two
 
 -- ftd.text: Three
+
+-- end: ftd.column
+
+;; ----------------------- SHADOW --------------------------------
+
+-- ftd.color yellow-red:
+light: yellow
+dark: red
+
+-- ftd.shadow s:
+color: $yellow-red
+x-offset.px: 10
+y-offset.px: 10
+blur.px: 1
+
+-- ftd.column:
+width.fixed.px: 100
+height.fixed.px: 100
+shadow: $s
+margin.px: 20
 
 -- end: ftd.column
 

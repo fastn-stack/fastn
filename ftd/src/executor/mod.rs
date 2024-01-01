@@ -27,7 +27,7 @@ pub use rive::RiveData;
 pub use styles::{
     AlignSelf, Alignment, Anchor, Background, BackgroundImage, BackgroundPosition,
     BackgroundRepeat, BackgroundSize, BorderStyle, BreakpointWidth, Color, ColorValue, Cursor,
-    Display, FontSize, Length, LineClamp, LinearGradient, LinearGradientColor,
+    Display, FontSize, ImageFit, Length, LineClamp, LinearGradient, LinearGradientColor,
     LinearGradientDirection, Loading, Overflow, Region, Resize, Resizing, ResponsiveType, Shadow,
     Spacing, TextAlign, TextInputType, TextStyle, TextTransform, TextWeight, WhiteSpace,
 };

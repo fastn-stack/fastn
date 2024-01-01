@@ -30,7 +30,7 @@ pub async fn process(
             line_number: value.line_number(),
         })?
         .into_iter()
-        .map(|v| v.get_id())
+        .map(|v| v.get_id().to_string())
         .collect_vec();
     let deleted_files = snapshots
         .keys()
@@ -38,7 +38,7 @@ pub async fn process(
         .map(|v| v.to_string());
 
     let mut files = config
-        .get_all_file_paths1(&config.package, true)
+        .get_all_file_paths(&config.package)
         .map_err(|_e| ftd::interpreter::Error::ParseError {
             message: "fastn-error: error in package-tree processor `get_all_file_paths1`"
                 .to_string(),

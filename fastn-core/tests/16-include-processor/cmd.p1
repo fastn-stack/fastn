@@ -1,8 +1,8 @@
 -- fbt:
-cmd: $FBT_CWD/../target/debug/fastn --test build --test
+cmd: $FBT_CWD/../target/debug/fastn --test build --edition 2022
 output: .build
 
 -- stdout:
 
-Processing fifthtry.github.io/amitu/FASTN.ftd ... done in <omitted>
-Processing fifthtry.github.io/amitu/index.ftd ... done in <omitted>
+Processing fifthtry.github.io/amitu/FASTN/ ... done in <omitted>
+Processing fifthtry.github.io/amitu/ ... done in <omitted>

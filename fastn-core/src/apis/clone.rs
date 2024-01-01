@@ -5,22 +5,19 @@ pub struct CloneResponse {
     pub reserved_crs: Vec<i32>,
 }
 
-pub async fn clone(
-    req: fastn_core::http::Request,
-) -> fastn_core::Result<fastn_core::http::Response> {
+pub async fn clone(config: &fastn_core::Config) -> fastn_core::Result<fastn_core::http::Response> {
     // TODO: implement authentication
-    match clone_worker(req).await {
+    match clone_worker(config).await {
         Ok(data) => fastn_core::http::api_ok(data),
-        Err(err) => fastn_core::http::api_error(err.to_string()),
+        Err(err) => fastn_core::http::api_error(err.to_string(), None),
     }
 }
 
-async fn clone_worker(req: fastn_core::http::Request) -> fastn_core::Result<CloneResponse> {
+async fn clone_worker(config: &fastn_core::Config) -> fastn_core::Result<CloneResponse> {
     use itertools::Itertools;
 
-    let config = fastn_core::Config::read(None, false, Some(&req)).await?;
     let all_files = config
-        .get_all_file_path(&config.package, Default::default())?
+        .deprecated_get_all_file_path(&config.package, Default::default())?
         .into_iter()
         .filter(|v| !config.remote_cr().eq(v))
         .collect_vec();
@@ -31,17 +28,14 @@ async fn clone_worker(req: fastn_core::http::Request) -> fastn_core::Result<Clon
             .map(|x| {
                 let root = root.clone();
                 tokio::spawn(async move {
-                    tokio::fs::read(&x)
-                        .await
-                        .map_err(fastn_core::Error::IoError)
-                        .map(|v| {
-                            (
-                                x.strip_prefix(root)
-                                    .unwrap_or_else(|_| x.as_path())
-                                    .to_string(),
-                                v,
-                            )
-                        })
+                    fastn_core::tokio_fs::read(&x).await.map(|v| {
+                        (
+                            x.strip_prefix(root)
+                                .unwrap_or_else(|_| x.as_path())
+                                .to_string(),
+                            v,
+                        )
+                    })
                 })
             })
             .collect::<Vec<tokio::task::JoinHandle<fastn_core::Result<(String, Vec<u8>)>>>>(),

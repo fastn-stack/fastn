@@ -80,10 +80,12 @@ pub(crate) async fn build_version(
     let mut documents = std::collections::BTreeMap::new();
     for key in versioned_documents.keys().sorted() {
         let doc = versioned_documents[key].to_owned();
-        documents.extend(
-            doc.iter()
-                .map(|v| (v.get_id(), (key.original.to_string(), v.to_owned()))),
-        );
+        documents.extend(doc.iter().map(|v| {
+            (
+                v.get_id().to_string(),
+                (key.original.to_string(), v.to_owned()),
+            )
+        }));
         if key.eq(&fastn_core::Version::base()) {
             continue;
         }

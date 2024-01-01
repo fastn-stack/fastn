@@ -1,0 +1,17 @@
+-- string list names:
+
+-- string: A
+-- string: B
+-- string: C
+-- string: D
+
+-- end: names
+
+-- ftd.column:
+
+-- ftd.text: $name
+if: { ftd.len(names) > 2 }
+for: $name in $names
+color: red
+
+-- end: ftd.column

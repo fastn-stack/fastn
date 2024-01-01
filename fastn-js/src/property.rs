@@ -28,6 +28,27 @@ impl fastn_js::SetPropertyValue {
         }
     }
 
+    pub(crate) fn is_local_value(&self) -> bool {
+        if let fastn_js::SetPropertyValue::Reference(name) = self {
+            fastn_js::utils::is_local_variable_map_prefix(name)
+        } else {
+            false
+        }
+    }
+
+    pub(crate) fn is_local_value_dependent(&self) -> bool {
+        match self {
+            fastn_js::SetPropertyValue::Reference(name)
+            | fastn_js::SetPropertyValue::Clone(name) => {
+                fastn_js::utils::is_local_variable_map_prefix(name)
+            }
+            fastn_js::SetPropertyValue::Value(value) => value.is_local_value_dependent(),
+            fastn_js::SetPropertyValue::Formula(formula) => {
+                formula.type_.is_local_value_dependent()
+            }
+        }
+    }
+
     pub fn is_formula(&self) -> bool {
         matches!(&self, fastn_js::SetPropertyValue::Formula(_))
     }
@@ -54,6 +75,20 @@ pub struct Formula {
 pub enum FormulaType {
     Conditional(Vec<ConditionalValue>),
     FunctionCall(fastn_js::Function),
+}
+
+impl FormulaType {
+    pub(crate) fn is_local_value_dependent(&self) -> bool {
+        match self {
+            FormulaType::Conditional(conditional_values) => conditional_values
+                .iter()
+                .any(|v| v.expression.is_local_value_dependent()),
+            FormulaType::FunctionCall(function) => function
+                .parameters
+                .iter()
+                .any(|v| v.1.is_local_value_dependent()),
+        }
+    }
 }
 
 impl Formula {
@@ -165,9 +200,13 @@ pub enum Value {
     },
     Record {
         fields: Vec<(String, SetPropertyValue)>,
+        other_references: Vec<String>,
     },
     UI {
         value: Vec<fastn_js::ComponentStatement>,
+    },
+    Module {
+        name: String,
     },
     Null,
     Undefined,
@@ -177,7 +216,7 @@ impl Value {
     pub(crate) fn to_js(&self, element_name: &Option<String>) -> String {
         use itertools::Itertools;
         match self {
-            Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n")),
+            Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n").replace('\"', "\\\"")),
             Value::Integer(i) => i.to_string(),
             Value::Decimal(f) => f.to_string(),
             Value::Boolean(b) => b.to_string(),
@@ -199,8 +238,23 @@ impl Value {
                     .map(|v| v.to_js_with_element_name(element_name))
                     .join(", ")
             ),
-            Value::Record { fields } => format!(
-                "fastn.recordInstance({{{}}})",
+            Value::Record {
+                fields,
+                other_references,
+            } => format!(
+                "fastn.recordInstance({{{}{}}})",
+                if other_references.is_empty() {
+                    "".to_string()
+                } else {
+                    format!(
+                        "{}, ",
+                        other_references
+                            .iter()
+                            .map(|v| format!("...{v}.getAllFields()"))
+                            .collect_vec()
+                            .join(", ")
+                    )
+                },
                 fields
                     .iter()
                     .map(|(k, v)| format!(
@@ -225,18 +279,48 @@ impl Value {
             ),
             Value::Null => "null".to_string(),
             Value::Undefined => "undefined".to_string(),
+            Value::Module { name } => {
+                format!(
+                    "fastn.module(\"{}\", global)",
+                    fastn_js::utils::name_to_js(name)
+                )
+            }
+        }
+    }
+
+    pub(crate) fn is_local_value_dependent(&self) -> bool {
+        match self {
+            Value::OrType { value, .. } => value
+                .as_ref()
+                .map(|v| v.is_local_value_dependent())
+                .unwrap_or_default(),
+            Value::List { value } => value.iter().any(|v| v.is_local_value_dependent()),
+            Value::Record { fields, .. } => fields.iter().any(|v| v.1.is_local_value_dependent()),
+            Value::UI { .. } => {
+                //Todo: Check for UI
+                false
+            }
+            _ => false,
         }
     }
 }
 
 #[derive(Debug)]
 pub enum PropertyKind {
+    BreakpointWidth,
     Children,
     StringValue,
+    IntegerValue,
+    DecimalValue,
+    BooleanValue,
     Id,
+    Css,
+    Js,
     Region,
     OpenInNewTab,
     Link,
+    LinkColor,
+    LinkRel,
     Anchor,
     Classes,
     AlignSelf,
@@ -295,6 +379,7 @@ pub enum PropertyKind {
     TextTransform,
     TextIndent,
     TextAlign,
+    TextShadow,
     LineClamp,
     Opacity,
     Cursor,
@@ -312,13 +397,27 @@ pub enum PropertyKind {
     Placeholder,
     Multiline,
     TextInputType,
+    InputMaxLength,
+    TextInputValue,
     DefaultTextInputValue,
     Loading,
     Alt,
     Src,
+    Fit,
+    FetchPriority,
     ImageSrc,
+    VideoSrc,
+    LoopVideo,
+    Controls,
+    Autoplay,
+    Muted,
+    Poster,
     YoutubeSrc,
+    Shadow,
     Code,
+    CodeTheme,
+    CodeLanguage,
+    CodeShowLineNumber,
     MetaTitle,
     MetaOGTitle,
     MetaTwitterTitle,
@@ -328,16 +427,28 @@ pub enum PropertyKind {
     MetaOGImage,
     MetaTwitterImage,
     MetaThemeColor,
+    Favicon,
+    Selectable,
+    BackdropFilter,
+    Mask,
 }
 
 impl PropertyKind {
     pub(crate) fn to_js(&self) -> &'static str {
         match self {
+            PropertyKind::BreakpointWidth => "fastn_dom.PropertyKind.BreakpointWidth",
             PropertyKind::Children => "fastn_dom.PropertyKind.Children",
             PropertyKind::Id => "fastn_dom.PropertyKind.Id",
+            PropertyKind::Css => "fastn_dom.PropertyKind.Css",
+            PropertyKind::Js => "fastn_dom.PropertyKind.Js",
+            PropertyKind::LinkColor => "fastn_dom.PropertyKind.LinkColor",
+            PropertyKind::LinkRel => "fastn_dom.PropertyKind.LinkRel",
             PropertyKind::AlignSelf => "fastn_dom.PropertyKind.AlignSelf",
             PropertyKind::Anchor => "fastn_dom.PropertyKind.Anchor",
             PropertyKind::StringValue => "fastn_dom.PropertyKind.StringValue",
+            PropertyKind::IntegerValue => "fastn_dom.PropertyKind.IntegerValue",
+            PropertyKind::DecimalValue => "fastn_dom.PropertyKind.DecimalValue",
+            PropertyKind::BooleanValue => "fastn_dom.PropertyKind.BooleanValue",
             PropertyKind::Width => "fastn_dom.PropertyKind.Width",
             PropertyKind::Padding => "fastn_dom.PropertyKind.Padding",
             PropertyKind::PaddingHorizontal => "fastn_dom.PropertyKind.PaddingHorizontal",
@@ -395,6 +506,7 @@ impl PropertyKind {
             PropertyKind::TextTransform => "fastn_dom.PropertyKind.TextTransform",
             PropertyKind::TextIndent => "fastn_dom.PropertyKind.TextIndent",
             PropertyKind::TextAlign => "fastn_dom.PropertyKind.TextAlign",
+            PropertyKind::TextShadow => "fastn_dom.PropertyKind.TextShadow",
             PropertyKind::LineClamp => "fastn_dom.PropertyKind.LineClamp",
             PropertyKind::Opacity => "fastn_dom.PropertyKind.Opacity",
             PropertyKind::Cursor => "fastn_dom.PropertyKind.Cursor",
@@ -416,13 +528,27 @@ impl PropertyKind {
             PropertyKind::Placeholder => "fastn_dom.PropertyKind.Placeholder",
             PropertyKind::Multiline => "fastn_dom.PropertyKind.Multiline",
             PropertyKind::TextInputType => "fastn_dom.PropertyKind.TextInputType",
+            PropertyKind::InputMaxLength => "fastn_dom.PropertyKind.InputMaxLength",
+            PropertyKind::TextInputValue => "fastn_dom.PropertyKind.TextInputValue",
             PropertyKind::DefaultTextInputValue => "fastn_dom.PropertyKind.DefaultTextInputValue",
             PropertyKind::Loading => "fastn_dom.PropertyKind.Loading",
             PropertyKind::Src => "fastn_dom.PropertyKind.Src",
             PropertyKind::ImageSrc => "fastn_dom.PropertyKind.ImageSrc",
+            PropertyKind::VideoSrc => "fastn_dom.PropertyKind.VideoSrc",
+            PropertyKind::Autoplay => "fastn_dom.PropertyKind.Autoplay",
+            PropertyKind::Muted => "fastn_dom.PropertyKind.Muted",
+            PropertyKind::LoopVideo => "fastn_dom.PropertyKind.LoopVideo",
+            PropertyKind::Controls => "fastn_dom.PropertyKind.Controls",
+            PropertyKind::Poster => "fastn_dom.PropertyKind.Poster",
             PropertyKind::Alt => "fastn_dom.PropertyKind.Alt",
+            PropertyKind::Fit => "fastn_dom.PropertyKind.Fit",
             PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
+            PropertyKind::FetchPriority => "fastn_dom.PropertyKind.FetchPriority",
+            PropertyKind::Shadow => "fastn_dom.PropertyKind.Shadow",
             PropertyKind::Code => "fastn_dom.PropertyKind.Code",
+            PropertyKind::CodeTheme => "fastn_dom.PropertyKind.CodeTheme",
+            PropertyKind::CodeShowLineNumber => "fastn_dom.PropertyKind.CodeShowLineNumber",
+            PropertyKind::CodeLanguage => "fastn_dom.PropertyKind.CodeLanguage",
             PropertyKind::MetaTitle => "fastn_dom.PropertyKind.DocumentProperties.MetaTitle",
             PropertyKind::MetaOGTitle => "fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle",
             PropertyKind::MetaTwitterTitle => {
@@ -444,6 +570,10 @@ impl PropertyKind {
             PropertyKind::MetaThemeColor => {
                 "fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor"
             }
+            PropertyKind::Favicon => "fastn_dom.PropertyKind.Favicon",
+            PropertyKind::Selectable => "fastn_dom.PropertyKind.Selectable",
+            PropertyKind::BackdropFilter => "fastn_dom.PropertyKind.BackdropFilter",
+            PropertyKind::Mask => "fastn_dom.PropertyKind.Mask",
         }
     }
 }

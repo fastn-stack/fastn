@@ -1,4 +1,5 @@
 mod commands;
+
 pub fn main() {
     fastn_observer::observe();
 
@@ -26,10 +27,18 @@ pub enum Error {
 
 async fn async_main() -> Result<(), Error> {
     let matches = app(version()).get_matches();
+
+    set_env_vars();
+
     if cloud_commands(&matches).await? {
         return Ok(());
     }
-    fastn_core_commands(&matches).await?;
+
+    futures::try_join!(
+        fastn_core_commands(&matches),
+        check_for_update_cmd(&matches)
+    )?;
+
     Ok(())
 }
 
@@ -43,6 +52,10 @@ async fn cloud_commands(matches: &clap::ArgMatches) -> Result<bool, commands::cl
 async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
     use colored::Colorize;
     use fastn_core::utils::ValueOf;
+
+    if matches.subcommand_name().is_none() {
+        return Ok(());
+    }
 
     match matches.subcommand() {
         Some((fastn_core::commands::stop_tracking::COMMAND, matches)) => {
@@ -62,6 +75,17 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let download_base_url = project.value_of_("download-base-url");
         return fastn_core::create_package(name, path, download_base_url).await;
     }
+
+    if let Some(clone) = matches.subcommand_matches("clone") {
+        return fastn_core::clone(clone.value_of_("source").unwrap()).await;
+    }
+
+    if let Some(_tutor) = matches.subcommand_matches("tutor") {
+        return fastn_core::tutor::main().await;
+    }
+
+    let mut config = fastn_core::Config::read(None, true).await?;
+    let package_name = config.package.name.clone();
 
     if let Some(serve) = matches.subcommand_matches("serve") {
         let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
@@ -89,15 +113,10 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             inline_js,
             external_css,
             inline_css,
+            package_name,
         )
         .await;
     }
-
-    if let Some(clone) = matches.subcommand_matches("clone") {
-        return fastn_core::clone(clone.value_of_("source").unwrap()).await;
-    }
-
-    let mut config = fastn_core::Config::read(None, true, None).await?;
 
     if matches.subcommand_matches("update").is_some() {
         return fastn_core::update(&config).await;
@@ -131,6 +150,31 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         .await;
     }
 
+    if let Some(test) = matches.subcommand_matches("test") {
+        let edition = test.value_of_("edition").map(ToString::to_string);
+        let external_js = test.values_of_("external-js");
+        let inline_js = test.values_of_("js");
+        let external_css = test.values_of_("external-css");
+        let inline_css = test.values_of_("css");
+
+        config = config
+            .add_edition(edition)?
+            .add_external_js(external_js)
+            .add_inline_js(inline_js)
+            .add_external_css(external_css)
+            .add_inline_css(inline_css)
+            .set_test_command_running();
+
+        return fastn_core::test(
+            &config,
+            test.value_of_("file"), // TODO: handle more than one files
+            test.value_of_("base").unwrap_or("/"),
+            test.get_flag("headless"),
+            test.get_flag("script"),
+        )
+        .await;
+    }
+
     if let Some(build) = matches.subcommand_matches("build") {
         if matches.get_flag("verbose") {
             println!("{}", fastn_core::debug_env_vars());
@@ -150,11 +194,12 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_inline_css(inline_css);
 
         return fastn_core::build(
-            &mut config,
+            &config,
             build.value_of_("file"), // TODO: handle more than one files
             build.value_of_("base").unwrap_or("/"),
             build.get_flag("ignore-failed"),
-            build.get_flag("test"),
+            matches.get_flag("test"),
+            build.get_flag("check-build"),
         )
         .await;
     }
@@ -234,12 +279,67 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::mark_upto_date(&config, source, target).await;
     }
 
-    unreachable!("No subcommand matched");
+    if matches.subcommand_matches("check").is_some() {
+        return fastn_core::post_build_check(&config).await;
+    }
+
+    Ok(())
+}
+
+async fn check_for_update_cmd(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
+    let env_var_set = {
+        if let Ok(val) = std::env::var("FASTN_CHECK_FOR_UPDATES") {
+            val != "false"
+        } else {
+            false
+        }
+    };
+
+    let flag = matches.get_flag("check-for-updates");
+
+    // if the env var is set or the -c flag is passed then check for updates
+    if flag || env_var_set {
+        check_for_update(flag).await?;
+    }
+
+    Ok(())
+}
+
+async fn check_for_update(report: bool) -> fastn_core::Result<()> {
+    #[derive(serde::Deserialize, Debug)]
+    struct GithubRelease {
+        tag_name: String,
+    }
+
+    let url = "https://api.github.com/repos/fastn-stack/fastn/releases/latest";
+    let release: GithubRelease = reqwest::Client::new()
+        .get(url)
+        .header(reqwest::header::ACCEPT, "application/vnd.github+json")
+        .header(reqwest::header::USER_AGENT, "fastn")
+        .send()
+        .await?
+        .json()
+        .await?;
+
+    let current_version = version();
+
+    if release.tag_name != current_version {
+        println!(
+                "You are using fastn {}, and latest release is {}, visit https://fastn.com/install/ to learn how to upgrade.",
+                current_version, release.tag_name
+            );
+    } else if report {
+        // log only when -c is passed
+        println!("You are using the latest release of fastn.");
+    }
+
+    Ok(())
 }
 
 fn app(version: &'static str) -> clap::Command {
-    clap::Command::new("fastn: FTD Package Manager")
+    clap::Command::new("fastn: Full-stack Web Development Made Easy")
         .version(version)
+        .arg(clap::arg!(-c --"check-for-updates" "Check for updates"))
         .arg_required_else_help(true)
         .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
         .arg(clap::arg!(--test "Runs the command in test mode").hide(true))
@@ -261,7 +361,7 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(file: [FILE]... "The file to build (if specified only these are built, else entire package is built)"))
                 .arg(clap::arg!(-b --base [BASE] "The base path.").default_value("/"))
                 .arg(clap::arg!(--"ignore-failed" "Ignore failed files."))
-                .arg(clap::arg!(--"test" "Use for test"))
+                .arg(clap::arg!(--"check-build" "Checks .build for index files validation."))
                 .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
                     .action(clap::ArgAction::Append))
                 .arg(clap::arg!(--"js" <URL> "Script text added in ftd files")
@@ -271,6 +371,23 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
                     .action(clap::ArgAction::Append))
                 .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
+        )
+        .subcommand(
+            clap::Command::new("test")
+                .about("Run the test files in `_tests` folder")
+                .arg(clap::arg!(file: [FILE]... "The file to build (if specified only these are built, else entire package is built)"))
+                .arg(clap::arg!(-b --base [BASE] "The base path.").default_value("/"))
+                .arg(clap::arg!(--"headless" "Run the test in headless mode"))
+                .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
+                    .action(clap::ArgAction::Append))
+                .arg(clap::arg!(--"js" <URL> "Script text added in ftd files")
+                    .action(clap::ArgAction::Append))
+                .arg(clap::arg!(--"external-css" <URL> "CSS added in ftd files")
+                    .action(clap::ArgAction::Append))
+                .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
+                    .action(clap::ArgAction::Append))
+                .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
+                .arg(clap::arg!(--"script" "Generates a script file (for debugging purposes)"))
         )
         .subcommand(
             clap::Command::new("mark-resolved")
@@ -296,7 +413,6 @@ fn app(version: &'static str) -> clap::Command {
             clap::Command::new("clone")
                 .about("Clone a package into a new directory")
                 .arg(clap::arg!(source: <SOURCE> "The source package to clone"))
-                .hide(true)
         )
         .subcommand(
             clap::Command::new("edit")
@@ -310,21 +426,19 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Add one or more files in the workspace")
                 .arg(clap::arg!(file: <FILE>... "The file(s) to add"))
                 .arg(clap::arg!(--cr <CR> "The CR to add the file(s) in"))
-                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("rm")
                 .about("Removes one or more files from the workspace")
                 .arg(clap::arg!(file: <FILE>... "The file(s) to remove"))
                 .arg(clap::arg!(--cr <CR> "The CR to remove the file(s) from"))
-                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("merge")
                 .about("Merge two manifests together")
                 .arg(clap::arg!(src: <SRC> "The source manifest to merge"))
                 .arg(clap::arg!(dest: <DEST> "The destination manifest to merge"))
-                .arg(clap::arg!(file: <FILE>... "The file(s) to merge"))
+                .arg(clap::arg!(file: <FILE>... "The file(s) to merge").required(false))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
@@ -340,8 +454,7 @@ fn app(version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("sync")
                 .about("Sync with fastn-repo (or .history folder if not using fastn-repo)")
-                .arg(clap::arg!(file: <FILE>... "The file(s) to sync (leave empty to sync entire package)"))
-                .hide(true) // hidden since the feature is not being released yet.
+                .arg(clap::arg!(file: <FILE>... "The file(s) to sync (leave empty to sync entire package)").required(false))
         )
         .subcommand(
             clap::Command::new("status")
@@ -353,8 +466,7 @@ fn app(version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("create-cr")
                 .about("Create a Change Request")
-                .arg(clap::arg!(title: <TITLE> "The title of the new CR"))
-                .hide(true) // hidden since the feature is not being released yet.
+                .arg(clap::arg!(title: <TITLE> "The title of the new CR").required(false))
         )
         .subcommand(
             clap::Command::new("close-cr")
@@ -383,7 +495,6 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--"delete-it" "Delete the file"))
                 .arg(clap::arg!(--"print" "Print the file to stdout"))
                 .arg(clap::arg!(file: <FILE> "The file to resolve the conflict for"))
-                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("check")
@@ -396,6 +507,9 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(source: <SOURCE> "The source file to mark as up to date"))
                 .arg(clap::arg!(--target <TARGET> "The target file to mark as up to date"))
                 .hide(true) // hidden since the feature is not being released yet.
+        )
+        .subcommand(
+            clap::Command::new("tutor").about("Start fastn tutor").hide(true)
         )
         .subcommand(
             clap::Command::new("start-tracking")
@@ -455,6 +569,51 @@ pub fn version() -> &'static str {
                 Box::leak(format!("{} [{}]", env!("CARGO_PKG_VERSION"), sha).into_boxed_str())
             }
             None => env!("CARGO_PKG_VERSION"),
+        }
+    }
+}
+
+fn set_env_vars() {
+    let checked_in = {
+        if let Ok(status) = std::process::Command::new("git")
+            .arg("ls-files")
+            .arg("--error-unmatch")
+            .arg(".env")
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .status()
+        {
+            status.success() // .env is checked in
+        } else {
+            false
+        }
+    };
+
+    let ignore = {
+        if let Ok(val) = std::env::var("FASTN_DANGER_ACCEPT_CHECKED_IN_ENV") {
+            val != "false"
+        } else {
+            false
+        }
+    };
+
+    if checked_in && !ignore {
+        eprintln!(
+            "ERROR: the .env file is checked in to version control! This is a security risk.
+Remove it from your version control system or run fastn again with
+FASTN_DANGER_ACCEPT_CHECKED_IN_ENV set"
+        );
+        std::process::exit(1);
+    } else {
+        if checked_in && ignore {
+            println!(
+                "WARN: your .env file has been detected in the version control system! This poses a
+significant security risk in case the source code becomes public."
+            );
+        }
+
+        if dotenvy::dotenv().is_ok() {
+            println!("INFO: loaded environment variables from .env file.");
         }
     }
 }

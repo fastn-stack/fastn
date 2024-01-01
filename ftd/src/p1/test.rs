@@ -77,31 +77,9 @@ fn p1_test_all() {
     }
 }
 
-fn find_all_files_matching_extension_recursively(
-    dir: impl AsRef<std::path::Path>,
-    extension: &str,
-) -> Vec<std::path::PathBuf> {
-    let mut files = vec![];
-    for entry in std::fs::read_dir(dir).unwrap() {
-        let entry = entry.unwrap();
-        let path = entry.path();
-        if path.is_dir() {
-            files.extend(find_all_files_matching_extension_recursively(
-                &path, extension,
-            ));
-        } else {
-            match path.extension() {
-                Some(ext) if ext == extension => files.push(path),
-                _ => continue,
-            }
-        }
-    }
-    files
-}
-
 fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
     let files = {
-        let mut f = find_all_files_matching_extension_recursively("t/p1", "ftd");
+        let mut f = ftd::utils::find_all_files_matching_extension_recursively("t/p1", "ftd");
         f.sort();
         f
     };
@@ -477,7 +455,7 @@ fn with_dash_dash() {
         ),
         &ftd::p1::Section::with_name("hello")
             .add_sub_section(
-                ftd::p1::Section::with_name("realm.rr.step.body").and_body(&indoc!(
+                ftd::p1::Section::with_name("realm.rr.step.body").and_body(indoc!(
                     r#"
                         {
                           "body": "-- h0: Hello World\n\n-- markup:\n\ndemo cr 1\n",
@@ -494,7 +472,7 @@ fn with_dash_dash() {
 #[test]
 fn indented_body() {
     p(
-        &indoc!(
+        indoc!(
             "
                  -- markup:
 

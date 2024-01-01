@@ -1,0 +1,96 @@
+-- string list names:
+
+-- string: Rithik
+-- string: Ritesh
+-- string: Heulitig
+
+-- end: names
+
+
+
+
+
+-- display-names:
+names: $names
+
+
+
+
+
+
+
+
+
+-- component display-names:
+string list names:
+integer $selected: 0
+integer len: $length(a = $display-names.names)
+
+-- ftd.column:
+$on-global-key[down]$: $increment($a=$display-names.selected, n=$display-names.len)
+$on-global-key[up]$: $decrement($a=$display-names.selected, n=$display-names.len)
+
+-- display-name: $obj
+idx: $idx
+$selected: $display-names.selected
+for: obj, idx in $display-names.names
+
+-- end: ftd.column
+
+
+-- end: display-names
+
+
+
+
+
+
+
+
+
+-- component display-name:
+caption name:
+integer idx:
+integer $selected:
+
+
+-- ftd.text: $display-name.name
+background.solid if { display-name.selected == display-name.idx }: yellow
+$on-mouse-enter$: $ftd.set-integer($a = $display-name.selected, v = $display-name.idx)
+
+-- end: display-name
+
+
+
+
+
+-- integer length(a):
+string list a:
+
+len(a)
+
+
+
+
+
+
+
+
+
+
+
+
+-- void increment(a,n):
+integer $a:
+integer n:
+
+a = (a + 1) % n
+
+
+
+
+-- void decrement(a,n):
+integer $a:
+integer n:
+
+a = (a - 1) % n

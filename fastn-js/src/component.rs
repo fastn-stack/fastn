@@ -2,7 +2,7 @@
 pub struct Component {
     pub name: String,
     pub params: Vec<String>,
-    pub args: Vec<(String, fastn_js::SetPropertyValue)>,
+    pub args: Vec<(String, fastn_js::SetPropertyValue, bool)>, // Vec<(name, value, is_mutable)>
     pub body: Vec<fastn_js::ComponentStatement>,
 }
 
@@ -18,7 +18,7 @@ pub fn component0(name: &str, body: Vec<fastn_js::ComponentStatement>) -> fastn_
 pub fn component_with_params(
     name: &str,
     body: Vec<fastn_js::ComponentStatement>,
-    args: Vec<(String, fastn_js::SetPropertyValue)>,
+    args: Vec<(String, fastn_js::SetPropertyValue, bool)>,
 ) -> fastn_js::Ast {
     fastn_js::Ast::Component(Component {
         name: name.to_string(),

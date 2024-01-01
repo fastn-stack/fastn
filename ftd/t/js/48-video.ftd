@@ -1,0 +1,15 @@
+-- ftd.video-src my-video:
+dark: https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4
+light: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+-- ftd.image-src my-video-poster:
+dark: https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerFun.jpg
+light: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg
+
+-- ftd.video:
+src: $my-video
+poster: $my-video-poster
+autoplay: true
+loop: true
+muted: true
+controls: true

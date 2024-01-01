@@ -3,3 +3,9 @@ integer a:
 integer b:
 
 a + b
+
+-- string join(a, b) :
+string a:
+string b:
+
+a + " " + b

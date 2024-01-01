@@ -17,6 +17,9 @@ pub const FTD_LENGTH_VH: &str = "ftd#length.vh";
 pub const FTD_LENGTH_VW: &str = "ftd#length.vw";
 pub const FTD_LENGTH_VMIN: &str = "ftd#length.vmin";
 pub const FTD_LENGTH_VMAX: &str = "ftd#length.vmax";
+pub const FTD_LENGTH_DVH: &str = "ftd#length.dvh";
+pub const FTD_LENGTH_LVH: &str = "ftd#length.lvh";
+pub const FTD_LENGTH_SVH: &str = "ftd#length.svh";
 pub const FTD_LENGTH_EM: &str = "ftd#length.em";
 pub const FTD_LENGTH_REM: &str = "ftd#length.rem";
 pub const FTD_LENGTH_RESPONSIVE: &str = "ftd#length.responsive";
@@ -116,6 +119,31 @@ pub const FTD_RAW_IMAGE_SRC: &str = "ftd#raw-image-src";
 pub const FTD_IMAGE_SRC: &str = "ftd#image-src";
 pub const FTD_IMAGE_SRC_LIGHT: &str = "ftd#image-src.light";
 pub const FTD_IMAGE_SRC_DARK: &str = "ftd#image-src.dark";
+
+pub const FTD_IMAGE_FIT: &str = "ftd#image-fit";
+pub const FTD_IMAGE_FIT_NONE: &str = "ftd#image-fit.none";
+pub const FTD_IMAGE_FIT_COVER: &str = "ftd#image-fit.cover";
+pub const FTD_IMAGE_FIT_CONTAIN: &str = "ftd#image-fit.contain";
+pub const FTD_IMAGE_FIT_FILL: &str = "ftd#image-fit.fill";
+pub const FTD_IMAGE_FIT_SCALE_DOWN: &str = "ftd#image-fit.scale-down";
+
+pub const FTD_IMAGE_FETCH_PRIORITY: &str = "ftd#image-fetch-priority";
+pub const FTD_IMAGE_FETCH_PRIORITY_AUTO: &str = "ftd#image-fetch-priority.auto";
+pub const FTD_IMAGE_FETCH_PRIORITY_HIGH: &str = "ftd#image-fetch-priority.high";
+pub const FTD_IMAGE_FETCH_PRIORITY_LOW: &str = "ftd#image-fetch-priority.low";
+
+pub const FTD_VIDEO_SRC: &str = "ftd#video-src";
+pub const FTD_VIDEO_SRC_LIGHT: &str = "ftd#video-src.light";
+pub const FTD_VIDEO_SRC_DARK: &str = "ftd#video-src.dark";
+
+pub const FTD_VIDEO_POSTER: &str = "ftd#video-poster";
+pub const FTD_VIDEO_POSTER_LIGHT: &str = "ftd#video-poster.light";
+pub const FTD_VIDEO_POSTER_DARK: &str = "ftd#video-poster.dark";
+
+pub const FTD_VIDEO_AUTOPLAY: &str = "ftd#video-autoplay";
+pub const FTD_VIDEO_MUTED: &str = "ftd#muted";
+pub const FTD_VIDEO_CONTROLS: &str = "ftd#video-controls";
+pub const FTD_VIDEO_LOOP: &str = "ftd#video-loop";
 
 pub const FTD_SPACING: &str = "ftd#spacing";
 pub const FTD_SPACING_FIXED: &str = "ftd#spacing.fixed";
@@ -293,3 +321,59 @@ pub const FTD_TEXT_STYLE_WEIGHT_REGULAR: &str = "ftd#text-style.regular";
 pub const FTD_TEXT_STYLE_WEIGHT_LIGHT: &str = "ftd#text-style.light";
 pub const FTD_TEXT_STYLE_WEIGHT_EXTRA_LIGHT: &str = "ftd#text-style.extra-light";
 pub const FTD_TEXT_STYLE_WEIGHT_HAIRLINE: &str = "ftd#text-style.hairline";
+
+pub const FTD_LINK_REL: &str = "ftd#link-rel";
+pub const FTD_LINK_REL_NO_FOLLOW: &str = "ftd#link-rel.no-follow";
+pub const FTD_LINK_REL_SPONSORED: &str = "ftd#link-rel.sponsored";
+pub const FTD_LINK_REL_UGC: &str = "ftd#link-rel.ugc";
+
+pub const FTD_BACKDROP_MULTI: &str = "ftd#backdrop-multi";
+pub const FTD_BACKDROP_FILTER: &str = "ftd#backdrop-filter";
+pub const FTD_BACKDROP_FILTER_BLUR: &str = "ftd#backdrop-filter.blur";
+pub const FTD_BACKDROP_FILTER_BRIGHTNESS: &str = "ftd#backdrop-filter.brightness";
+pub const FTD_BACKDROP_FILTER_CONTRAST: &str = "ftd#backdrop-filter.contrast";
+pub const FTD_BACKDROP_FILTER_GRAYSCALE: &str = "ftd#backdrop-filter.grayscale";
+pub const FTD_BACKDROP_FILTER_INVERT: &str = "ftd#backdrop-filter.invert";
+pub const FTD_BACKDROP_FILTER_OPACITY: &str = "ftd#backdrop-filter.opacity";
+pub const FTD_BACKDROP_FILTER_SEPIA: &str = "ftd#backdrop-filter.sepia";
+pub const FTD_BACKDROP_FILTER_SATURATE: &str = "ftd#backdrop-filter.saturate";
+pub const FTD_BACKDROP_FILTER_MULTI: &str = "ftd#backdrop-filter.multi";
+
+pub const FTD_MASK_IMAGE_DATA: &str = "ftd#mask-image";
+pub const FTD_MASK_IMAGE_DATA_SRC: &str = "ftd#mask-image.src";
+pub const FTD_MASK_IMAGE_DATA_LINEAR_GRADIENT: &str = "ftd#mask-image.linear-gradient";
+
+pub const FTD_MASK: &str = "ftd#mask";
+pub const FTD_MASK_IMAGE: &str = "ftd#mask.image";
+pub const FTD_MASK_MULTI: &str = "ftd#mask.multi";
+
+pub const FTD_MASK_MULTI_DATA: &str = "ftd#mask-multi";
+
+pub const FTD_MASK_SIZE: &str = "ftd#mask-size";
+pub const FTD_MASK_SIZE_FIXED: &str = "ftd#mask-size.fixed";
+pub const FTD_MASK_SIZE_COVER: &str = "ftd#mask-size.cover";
+pub const FTD_MASK_SIZE_CONTAIN: &str = "ftd#mask-size.contain";
+pub const FTD_MASK_SIZE_AUTO: &str = "ftd#mask-size.auto";
+
+pub const FTD_MASK_REPEAT: &str = "ftd#mask-repeat";
+pub const FTD_MASK_REPEAT_BOTH_REPEAT: &str = "ftd#mask-repeat.repeat";
+pub const FTD_MASK_REPEAT_X_REPEAT: &str = "ftd#mask-repeat.repeat-x";
+pub const FTD_MASK_REPEAT_Y_REPEAT: &str = "ftd#mask-repeat.repeat-y";
+pub const FTD_MASK_REPEAT_NO_REPEAT: &str = "ftd#mask-repeat.no-repeat";
+pub const FTD_MASK_REPEAT_SPACE: &str = "ftd#mask-repeat.space";
+pub const FTD_MASK_REPEAT_ROUND: &str = "ftd#mask-repeat.round";
+
+pub const FTD_MASK_POSITION: &str = "ftd#mask-position";
+pub const FTD_MASK_POSITION_LEFT: &str = "ftd#mask-position.left";
+pub const FTD_MASK_POSITION_CENTER: &str = "ftd#mask-position.center";
+pub const FTD_MASK_POSITION_RIGHT: &str = "ftd#mask-position.right";
+pub const FTD_MASK_POSITION_LEFT_TOP: &str = "ftd#mask-position.left-top";
+pub const FTD_MASK_POSITION_LEFT_CENTER: &str = "ftd#mask-position.left-center";
+pub const FTD_MASK_POSITION_LEFT_BOTTOM: &str = "ftd#mask-position.left-bottom";
+pub const FTD_MASK_POSITION_CENTER_TOP: &str = "ftd#mask-position.center-top";
+pub const FTD_MASK_POSITION_CENTER_CENTER: &str = "ftd#mask-position.center-center";
+pub const FTD_MASK_POSITION_CENTER_BOTTOM: &str = "ftd#mask-position.center-bottom";
+pub const FTD_MASK_POSITION_RIGHT_TOP: &str = "ftd#mask-position.right-top";
+pub const FTD_MASK_POSITION_RIGHT_CENTER: &str = "ftd#mask-position.right-center";
+pub const FTD_MASK_POSITION_RIGHT_BOTTOM: &str = "ftd#mask-position.right-bottom";
+pub const FTD_MASK_POSITION_LENGTH: &str = "ftd#mask-position.length";

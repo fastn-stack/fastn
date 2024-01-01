@@ -563,14 +563,20 @@
 }
 }
 },
-"ftd#device": "desktop",
+"ftd#device": "mobile",
+"ftd#empty": "",
 "ftd#follow-system-dark-mode": true,
 "ftd#font-code": "sans-serif",
 "ftd#font-copy": "sans-serif",
 "ftd#font-display": "sans-serif",
+"ftd#nbsp": "&nbsp;",
+"ftd#non-breaking-space": "&nbsp;",
+"ftd#space": " ",
 "ftd#system-dark-mode": false,
 "www.amitu.com/#dtype": {
-"font-family": "cursive",
+"font-family": [
+"cursive"
+],
 "letter-spacing": "5px",
 "line-height": "65px",
 "size": "40px",
@@ -582,7 +588,9 @@
 "light": "https://fastn.io/-/fastn.io/images/fastn.svg"
 },
 "www.amitu.com/#mtype": {
-"font-family": "fantasy",
+"font-family": [
+"fantasy"
+],
 "letter-spacing": "3px",
 "line-height": "35px",
 "size": "20px",
@@ -590,14 +598,18 @@
 },
 "www.amitu.com/#rtype": {
 "desktop": {
-"font-family": "cursive",
+"font-family": [
+"cursive"
+],
 "letter-spacing": "5px",
 "line-height": "65px",
 "size": "40px",
 "weight": 700
 },
 "mobile": {
-"font-family": "fantasy",
+"font-family": [
+"fantasy"
+],
 "letter-spacing": "3px",
 "line-height": "35px",
 "size": "20px",
@@ -620,10 +632,10 @@
 
 </head>
 <body style="height: 100%; margin: 0;">
+<script src="default-47D9AFCD179BB157D8432FE0DC7B328F231E1CDACA1CB36790A41EAC123C7461.js"></script>
+
 
 <div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;www.amitu.com/#flag&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">Click me and document title changes</div><div data-id="0,1:main" style="" class="ft_common ft_md">hello</div><h2 data-id="0,2:main" id="hello-world" style="font-family: cursive; font-size: 40px; font-weight: 700; letter-spacing: 5px; line-height: 65px" class="ft_common ft_md">Hello World</h2><h1 data-id="0,3:main" id="hello-h1" style="color: rgba(88,75,66,1); font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px" class="ft_common ft_md">hello_h1</h1><h3 data-id="0,4:main" id="hello-h0" style="font-family: cursive; font-size: 40px; font-weight: 700; letter-spacing: 5px; line-height: 65px" class="ft_common ft_md">hello_h0</h3></div>
-
-<script src="default-3E3B237BDD2341CB31D7CE15B0DE762E992DF32A4234CEC50B04A92E9FD3B670.js"></script>
 <script>
 
 
@@ -683,6 +695,18 @@ a.value = a.value+1
 
 function ftd__increment_by___main(a,v,args,data,id){
 a.value = a.value+v
+}
+
+
+
+function ftd__decrement___main(a,args,data,id){
+a.value = a.value-1
+}
+
+
+
+function ftd__decrement_by___main(a,v,args,data,id){
+a.value = a.value-v
 }
 
 
@@ -939,6 +963,5 @@ window.ftd.utils.node_change_call("main","0,2:main__line-height", data);
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>
-
 </body>
 </html>

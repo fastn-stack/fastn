@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <meta content="fastn" name="generator">
+    
+    
+    <script>
+        let __fastn_package_name__ = "foo";
+    </script>
+
+    <script src="fastn-js.js"></script>
+    
+
+    <style>
+       
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3">FifthTry Click here</div><div data-id="4" class="ft_column"><comment data-id="5"></comment><div data-id="6" class="__c-3">Ritesh</div><div data-id="7" class="__c-4">Rithik</div></div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__c-3 { color: red !important; }
+	.__c-4 { color: red !important; }
+    </style>
+<script>
+    (function() {
+        let main = function (parent) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([], function () {
+      return foo__append({
+        a: "FifthTry",
+        b: "Click here",
+      }, parenti0);
+    }), inherited);
+    let parenti1 = foo__display_persons(parent, inherited, {
+      p: global.foo__people
+    });
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["main"] = main;
+let _01_basic__append = function (args) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["_01_basic__append"] = _01_basic__append;
+let foo__display_persons = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+      p: fastn.mutableList([]),
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      fastn_utils.getter(__args__.p).forLoop(root, function (root, item, index) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item.get("name"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+          dark: "red",
+          light: "red"
+        }), inherited);
+        return rooti0;
+      });
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__display_persons"] = foo__display_persons;
+fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([fastn.recordInstance({
+  address: null,
+  name: "Ritesh"
+}),
+fastn.recordInstance({
+  address: null,
+  name: "Rithik"
+})]));
+let foo__append = global["_01_basic__append"];
+global["foo__append"] = foo__append;
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastnVirtual.doubleBuffer(main_wrapper);
+        ftd.post_init();
+    })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+        ftd.emit_on_load();
+    };
+</script>
+</html>

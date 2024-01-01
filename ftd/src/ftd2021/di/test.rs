@@ -50,31 +50,10 @@ fn test_all() {
     }
 }
 
-fn find_all_files_matching_extension_recursively(
-    dir: impl AsRef<std::path::Path>,
-    extension: &str,
-) -> Vec<std::path::PathBuf> {
-    let mut files = vec![];
-    for entry in std::fs::read_dir(dir).unwrap() {
-        let entry = entry.unwrap();
-        let path = entry.path();
-        if path.is_dir() {
-            files.extend(find_all_files_matching_extension_recursively(
-                &path, extension,
-            ));
-        } else {
-            match path.extension() {
-                Some(ext) if ext == extension => files.push(path),
-                _ => continue,
-            }
-        }
-    }
-    files
-}
-
 fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
     let files = {
-        let mut f = find_all_files_matching_extension_recursively("src/ftd2021/di/t", "ftd");
+        let mut f =
+            ftd::utils::find_all_files_matching_extension_recursively("src/ftd2021/di/t", "ftd");
         f.sort();
         f
     };

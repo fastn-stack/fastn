@@ -1,0 +1,28 @@
+-- ftd.image: https://picsum.photos/200/300
+width.fixed.px: 200
+height.fixed.px: 200
+
+-- ftd.image: https://picsum.photos/200/300
+fit: cover
+width.fixed.px: 200
+height.fixed.px: 200
+
+-- ftd.image: https://picsum.photos/200/300
+fit: contain
+width.fixed.px: 200
+height.fixed.px: 200
+
+-- ftd.image: https://picsum.photos/200/300
+fit: fill
+width.fixed.px: 200
+height.fixed.px: 200
+
+-- ftd.image: https://picsum.photos/200/300
+fit: none
+width.fixed.px: 200
+height.fixed.px: 200
+
+-- ftd.image: https://picsum.photos/200/300
+fit: scale-down
+width.fixed.px: 200
+height.fixed.px: 200

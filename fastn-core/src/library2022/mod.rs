@@ -13,27 +13,17 @@ impl KeyValueData {
     }
 }
 
-#[derive(Debug)]
-pub struct Library2022 {
-    pub config: fastn_core::Config,
-    /// If the current module being parsed is a markdown file, `.markdown` contains the name and
-    /// content of that file
-    pub markdown: Option<(String, String)>,
-    pub document_id: String,
-    pub translated_data: fastn_core::TranslationData,
-    pub base_url: String,
-    pub module_package_map: std::collections::BTreeMap<String, String>,
-}
+pub type Library2022 = fastn_core::RequestConfig;
 
 impl Library2022 {
     pub async fn get_with_result(
         &mut self,
         name: &str,
         current_processing_module: &str,
-    ) -> ftd::p1::Result<(String, usize)> {
+    ) -> ftd::p1::Result<(String, String, usize)> {
         match self.get(name, current_processing_module).await {
-            Some(v) => Ok(v),
-            None => ftd::p1::utils::parse_error(format!("library not found 1: {}", name), "", 0),
+            Ok(v) => Ok(v),
+            Err(e) => ftd::p1::utils::parse_error(e.to_string(), "", 0),
         }
     }
 
@@ -67,9 +57,21 @@ impl Library2022 {
         &mut self,
         name: &str,
         current_processing_module: &str,
-    ) -> Option<(String, usize)> {
+    ) -> fastn_core::Result<(String, String, usize)> {
         if name == "fastn" {
-            return Some((fastn_core::library::fastn_dot_ftd::get2022(self).await, 0));
+            if self.config.test_command_running {
+                return Ok((
+                    fastn_core::commands::test::test_fastn_ftd().to_string(),
+                    "$fastn$/fastn.ftd".to_string(),
+                    0,
+                ));
+            } else {
+                return Ok((
+                    fastn_core::library::fastn_dot_ftd::get2022(self).await,
+                    "$fastn$/fastn.ftd".to_string(),
+                    0,
+                ));
+            }
         }
 
         return get_for_package(
@@ -83,64 +85,61 @@ impl Library2022 {
             name: &str,
             lib: &mut fastn_core::Library2022,
             current_processing_module: &str,
-        ) -> Option<(String, usize)> {
-            let package = lib.get_current_package(current_processing_module).ok()?;
+        ) -> fastn_core::Result<(String, String, usize)> {
+            let package = lib.get_current_package(current_processing_module)?;
             if name.starts_with(package.name.as_str()) {
-                if let Some(r) = get_data_from_package(name, &package, lib).await {
-                    return Some(r);
+                if let Some((content, size)) = get_data_from_package(name, &package, lib).await? {
+                    return Ok((content, name.to_string(), size));
                 }
             }
             // Self package referencing
             if package.name.ends_with(name.trim_end_matches('/')) {
                 let package_index = format!("{}/", package.name.as_str());
-                if let Some(r) = get_data_from_package(package_index.as_str(), &package, lib).await
+                if let Some((content, size)) =
+                    get_data_from_package(package_index.as_str(), &package, lib).await?
                 {
-                    return Some(r);
+                    return Ok((content, format!("{package_index}index.ftd"), size));
                 }
             }
 
             for (alias, package) in package.aliases() {
-                lib.push_package_under_process(name, package).await.ok()?;
+                lib.push_package_under_process(name, package).await?;
                 if name.starts_with(alias) {
-                    if let Some(r) = get_data_from_package(
-                        name.replacen(alias, &package.name, 1).as_str(),
-                        package,
-                        lib,
-                    )
-                    .await
+                    let name = name.replacen(alias, &package.name, 1);
+                    if let Some((content, size)) =
+                        get_data_from_package(name.as_str(), package, lib).await?
                     {
-                        return Some(r);
+                        return Ok((content, name.to_string(), size));
                     }
                 }
             }
 
-            let translation_of = match package.translation_of.as_ref() {
+            /*let translation_of = match package.translation_of.as_ref() {
                 Some(translation_of) => translation_of.to_owned(),
                 None => return None,
             };
 
             let name = name.replacen(package.name.as_str(), translation_of.name.as_str(), 1);
             if name.starts_with(translation_of.name.as_str()) {
-                if let Some(r) = get_data_from_package(name.as_str(), &translation_of, lib).await {
-                    return Some(r);
+                if let Some((content, size)) =
+                    get_data_from_package(name.as_str(), &translation_of, lib).await
+                {
+                    return Some((content, name.to_string(), size));
                 }
             }
 
             for (alias, package) in translation_of.aliases() {
                 if name.starts_with(alias) {
-                    if let Some(r) = get_data_from_package(
-                        name.replacen(alias, &package.name, 1).as_str(),
-                        package,
-                        lib,
-                    )
-                    .await
+                    let name = name.replacen(alias, &package.name, 1);
+                    if let Some((content, size)) =
+                        get_data_from_package(name.as_str(), package, lib).await
                     {
-                        return Some(r);
+                        return Some((content, name.to_string(), size));
                     }
                 }
-            }
+            }*/
 
-            None
+            fastn_core::usage_error(format!("library not found: {}", name))
         }
 
         // TODO: This function is too long. Break it down.
@@ -149,27 +148,28 @@ impl Library2022 {
             name: &str,
             package: &fastn_core::Package,
             lib: &mut fastn_core::Library2022,
-        ) -> Option<(String, usize)> {
-            lib.push_package_under_process(name, package).await.ok()?;
+        ) -> fastn_core::Result<Option<(String, usize)>> {
+            lib.push_package_under_process(name, package).await?;
             let packages = lib.config.all_packages.borrow();
             let package = packages.get(package.name.as_str()).unwrap_or(package);
             // Explicit check for the current package.
-            if !name.starts_with(package.name.as_str()) {
-                return None;
+            let name = format!("{}/", name.trim_end_matches('/'));
+            if !name.starts_with(format!("{}/", package.name.as_str()).as_str()) {
+                return Ok(None);
             }
             let new_name = name.replacen(package.name.as_str(), "", 1);
             let (file_path, data) = package
                 .resolve_by_id(new_name.as_str(), None, lib.config.package.name.as_str())
-                .await
-                .ok()?;
+                .await?;
             if !file_path.ends_with(".ftd") {
-                return None;
+                return Ok(None);
             }
-            String::from_utf8(data).ok().map(|body| {
-                let body_with_prefix = package.get_prefixed_body(body.as_str(), name, true);
+            Ok(String::from_utf8(data).ok().map(|body| {
+                let body_with_prefix =
+                    package.get_prefixed_body(body.as_str(), name.as_str(), true);
                 let line_number = body_with_prefix.split('\n').count() - body.split('\n').count();
                 (body_with_prefix, line_number)
-            })
+            }))
         }
     }
 
@@ -191,9 +191,9 @@ impl Library2022 {
             return Ok(());
         }
 
-        let package = self.config.resolve_package(package).await.map_err(|_| {
+        let package = self.config.resolve_package(package).await.map_err(|e| {
             ftd::ftd2021::p1::Error::ParseError {
-                message: format!("Cannot resolve the package: {}", package.name),
+                message: format!("Cannot resolve the package: {}, Error: {}", package.name, e),
                 doc_id: self.document_id.to_string(),
                 line_number: 0,
             }
@@ -225,72 +225,52 @@ impl Library2022 {
             "figma-typo-token" => {
                 processor::figma_typography_tokens::process_typography_tokens(value, kind, doc)
             }
-            "figma-cs-token" => {
-                processor::figma_tokens::process_figma_tokens(value, kind, doc, &self.config)
-            }
+            "figma-cs-token" => processor::figma_tokens::process_figma_tokens(value, kind, doc),
             "figma-cs-token-old" => {
-                processor::figma_tokens::process_figma_tokens_old(value, kind, doc, &self.config)
+                processor::figma_tokens::process_figma_tokens_old(value, kind, doc)
             }
-            "http" => processor::http::process(value, kind, doc, &self.config).await,
-            "toc" => processor::toc::process(value, kind, doc, &self.config),
-            "get-data" => processor::get_data::process(value, kind, doc, &self.config),
-            "sitemap" => processor::sitemap::process(value, kind, doc, &self.config),
-            "full-sitemap" => {
-                processor::sitemap::full_sitemap_process(value, kind, doc, &self.config)
-            }
-            "request-data" => processor::request_data::process(value, kind, doc, &self.config),
+            "http" => processor::http::process(value, kind, doc, self).await,
+            "translation-info" => processor::lang_details::process(value, kind, doc, self).await,
+            "current-language" => processor::lang::process(value, kind, doc, self).await,
+            "tutor-data" => fastn_core::tutor::process(value, kind, doc).await,
+            "toc" => processor::toc::process(value, kind, doc),
+            "get-data" => processor::get_data::process(value, kind, doc, self),
+            "sitemap" => processor::sitemap::process(value, kind, doc, self),
+            "full-sitemap" => processor::sitemap::full_sitemap_process(value, kind, doc, self),
+            "request-data" => processor::request_data::process(value, kind, doc, self),
             "document-readers" => processor::document::process_readers(
                 value,
                 kind,
                 doc,
-                &self.config,
+                self,
                 self.document_id.as_str(),
             ),
             "document-writers" => processor::document::process_writers(
                 value,
                 kind,
                 doc,
-                &self.config,
+                self,
                 self.document_id.as_str(),
             ),
-            "user-groups" => processor::user_group::process(value, kind, doc, &self.config),
-            "user-group-by-id" => {
-                processor::user_group::process_by_id(value, kind, doc, &self.config)
-            }
-            "get-identities" => {
-                processor::user_group::get_identities(value, kind, doc, &self.config)
-            }
-            "document-id" => processor::document::document_id(value, kind, doc, &self.config),
-            "document-full-id" => {
-                processor::document::document_full_id(value, kind, doc, &self.config)
-            }
-            "document-suffix" => {
-                processor::document::document_suffix(value, kind, doc, &self.config)
-            }
-            "document-name" => {
-                processor::document::document_name(value, kind, doc, &self.config).await
-            }
-            "fetch-file" => {
-                processor::fetch_file::fetch_files(value, kind, doc, &self.config).await
-            }
-            "user-details" => processor::user_details::process(value, kind, doc, &self.config),
-            "fastn-apps" => processor::apps::process(value, kind, doc, &self.config),
-            "is-reader" => processor::user_group::is_reader(value, kind, doc, &self.config).await,
-            "package-query" => processor::sqlite::process(value, kind, doc, &self.config).await,
+            "user-groups" => processor::user_group::process(value, kind, doc, self),
+            "user-group-by-id" => processor::user_group::process_by_id(value, kind, doc, self),
+            "get-identities" => processor::user_group::get_identities(value, kind, doc, self),
+            "document-id" => processor::document::document_id(value, kind, doc, self),
+            "current-url" => processor::document::current_url(self),
+            "document-full-id" => processor::document::document_full_id(value, kind, doc, self),
+            "document-suffix" => processor::document::document_suffix(value, kind, doc, self),
+            "document-name" => processor::document::document_name(value, kind, doc, self).await,
+            "fetch-file" => processor::fetch_file::fetch_files(value, kind, doc, self).await,
+            "user-details" => processor::user_details::process(value, kind, doc, self).await,
+            "fastn-apps" => processor::apps::process(value, kind, doc, self),
+            "is-reader" => processor::user_group::is_reader(value, kind, doc, self).await,
+            "sql" => processor::sql::process(value, kind, doc, self).await,
+            "package-query" => processor::package_query::process(value, kind, doc, self).await,
             "pg" => processor::pg::process(value, kind, doc).await,
             "package-tree" => {
                 processor::package_tree::process(value, kind, doc, &self.config).await
             }
-            "query" => {
-                processor::query::process(
-                    value,
-                    kind,
-                    doc,
-                    &mut self.config,
-                    self.document_id.as_str(),
-                )
-                .await
-            }
+            "query" => processor::query::process(value, kind, doc, self).await,
             t => Err(ftd::interpreter::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,

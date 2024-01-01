@@ -1,0 +1,27 @@
+-- ftd.integer: $count
+$on-click$: $ftd.increment($a = $count)
+
+-- word-count:
+$count: $count
+
+This, is, the, body.
+
+
+
+
+
+
+-- string js-s: ftd/ftd/t/assets/web_component.js
+
+
+-- web-component word-count:
+body body:
+integer $count:
+string separator: ,
+js: $js-s
+
+-- end: word-count
+
+
+
+-- integer $count: 0

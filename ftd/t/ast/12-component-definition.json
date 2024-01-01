@@ -111,6 +111,7 @@
             "iteration": {
               "on": "$locations",
               "alias": "obj",
+              "loop_counter_alias": null,
               "line-number": 20
             },
             "condition": null,

@@ -1,0 +1,119 @@
+-- ftd.row:
+width: fill-container
+spacing: space-around
+padding-vertical.px: 50
+
+-- debug-test:
+
+-- ftd-code-test:
+
+-- ftd-code-test:
+theme: fastn-theme.dark
+
+-- end: ftd.row
+
+
+
+
+
+-- component debug-test:
+string theme: fastn-theme.light
+
+-- ftd.code:
+lang: ftd
+theme: $debug-test.theme
+
+\/-- ds.code:
+lang: ftd
+
+fooo
+
+-- end: debug-test
+
+
+
+
+-- component ftd-code-test:
+string theme: fastn-theme.light
+
+-- ftd.code:
+lang: ftd
+theme: $ftd-code-test.theme
+
+
+\;; Section Comment
+
+\/-- ftd.text:
+color: red
+
+This is body part of ftd.text
+
+\;; Inline comment as line comment
+
+\-- ftd.text: Hello ;; This is inline comment
+
+\-- import: fastn-community.github.io/bling/quote
+
+\;; Component invocation
+
+\-- quote.charcoal: Amit Upadhyay
+label: Creator of `fastn`
+avatar: $fastn-assets.files.images.amitu.jpg
+logo: $fastn-assets.files.images.logo-fifthtry.svg
+
+The web has lost some of the exuberance from the
+early 2000s, and it makes me a little sad.
+
+\;; Component Definition
+
+\-- component toggle-text:
+boolean $current: false
+caption title:
+
+\-- ftd.text: $toggle-text.title
+align-self: center
+text-align: center
+color if { toggle-text.current }: #D42D42
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+border-radius.px: 5
+border-radius.px: 5
+$on-click$: $ftd.toggle($a = $toggle-text.current)
+
+\-- end: toggle-text
+
+\;; Record definition
+
+\-- record Person:
+caption name:
+body description:
+string id:
+integer age:
+
+\;; Variable definition
+
+\-- integer key: 1
+
+\-- ftd.text: Key is one
+if: { key == 1 }
+color: red
+padding.px: 10
+
+\;; List and list initialization
+
+\-- ftd.ui list foo:
+
+\-- foo:
+
+\-- ftd.text: Hello World!
+color: $inherited.colors.text-strong
+
+\-- ftd.text: I love `fastn`.
+color: $inherited.colors.text-strong
+
+\-- end: foo
+
+\-- ui:
+$loop$: $foo as $ui
+
+-- end: ftd-code-test

@@ -11,7 +11,7 @@ $on-click$: $clamp($a = $value)
 $on-click$: $append-integer($a = $counters, v = 1)
 
 -- counter-list: $obj
-$loop$: $counters as $obj
+for: obj in $counters
 if: { LOOP.COUNTER % 2 == value }
 
 

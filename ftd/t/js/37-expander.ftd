@@ -1,0 +1,73 @@
+-- ftd.column:
+padding.px: 20
+border-width.px: 1
+spacing.fixed.px: 50
+background.solid: #eee
+width: fill-container
+height: fill-container
+align-content: top-center
+
+
+-- box: What is FTD?
+
+FTD is an open source programming language for writing prose.
+
+-- box:
+title: We are adding text of header using title
+
+Here is a FTD document that is importing a library, lib, and has a heading of
+level 1, "Hello World". FTD language is designed for human beings, not just
+programmers, we have taken precautions like not requiring quoting for strings,
+not relying on indentation nor on braces that most programming
+languages require.
+
+It is not verbose like HTML, and not simplistic like Markdown. We can define
+variables in FTD. FTD is strongly typed. We can do event handling. Since we are
+targeting "human beings" we have created a lot of "actions" that we believe one
+will be invoking on a day to day basis, like toggle, which can be used to create
+simple event handling.
+
+
+-- box:
+
+-- end: ftd.column
+
+
+-- component box:
+caption title: default header
+body body: default body
+boolean $open: false
+
+-- ftd.column:
+border-width.px: 4
+width.fixed.percent: 60
+
+-- ftd.row:
+padding.px: 10
+border-width.px: 1
+width: fill-container
+spacing: space-between
+$on-click$: $ftd.toggle($a = $box.open)
+
+-- ftd.text: $box.title
+-- ftd.text: O
+if: { !box.open }
+
+-- ftd.text: X
+if: { box.open }
+
+-- end: ftd.row
+
+-- ftd.text:
+if: { box.open }
+padding.px: 10
+height: hug-content
+
+$box.body
+
+-- end: ftd.column
+
+-- end: box
+
+
+-- string name: FifthTry

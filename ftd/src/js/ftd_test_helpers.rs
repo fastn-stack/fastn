@@ -15,14 +15,18 @@ pub fn interpret_helper(
             ftd::interpreter::Interpreter::StuckOnImport {
                 module, state: st, ..
             } => {
-                let source = "";
+                let mut source = "".to_string();
                 let mut foreign_variable = vec![];
                 let mut foreign_function = vec![];
                 if module.eq("test") {
                     foreign_variable.push("var".to_string());
                     foreign_function.push("fn".to_string());
                 }
-                let document = ftd::interpreter::ParsedDocument::parse(module.as_str(), source)?;
+                if let Ok(value) = std::fs::read_to_string(format!("./t/js/{}.ftd", module)) {
+                    source = value;
+                }
+                let document =
+                    ftd::interpreter::ParsedDocument::parse(module.as_str(), source.as_str())?;
                 s = st.continue_after_import(
                     module.as_str(),
                     document,
@@ -70,39 +74,103 @@ pub fn interpret_helper(
     Ok(document)
 }
 
+fn test_available_code_themes() -> String {
+    let themes = ftd::theme_css();
+    let mut result = vec![];
+    for theme in themes.keys() {
+        result.push(format!(
+            "fastn_dom.codeData.availableThemes[\"{theme}\"] = \"../../theme_css/{theme}.css\";"
+        ))
+    }
+    result.join("\n")
+}
+
+fn get_dummy_package_data() -> String {
+    return indoc::indoc! {
+        "
+        let __fastn_package_name__ = \"foo\";
+        "
+    }
+    .trim()
+    .to_string();
+}
+
 #[track_caller]
-fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathBuf) {
+fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &std::path::PathBuf) {
     let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let js_ast_data = ftd::js::document_into_js_ast(i);
-    let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), true);
-    let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), false);
-    let ssr_body =
-        fastn_js::ssr_with_js_string(format!("{js_ftd_script}\n{js_document_script}").as_str());
+    let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), "foo");
+    let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), "foo");
+    let dummy_package_data = get_dummy_package_data();
 
-    let html_str = ftd::ftd_js_html()
-        .replace("__js_script__", js_document_script.as_str())
-        .replace("__html_body__", ssr_body.as_str())
-        .replace(
-            "__script_file__",
+    let html_str = {
+        if script {
             format!(
-                "{}{}",
-                js_ast_data.scripts.join(""),
-                if manual {
-                    format!(
-                        "<script>\n{}\n</script><script src=\"../../markdown.js\"></script>",
-                        ftd::js::all_js_with_test()
-                    )
-                } else {
-                    "<script src=\"fastn-js.js\"></script>".to_string()
-                }
+                indoc::indoc! {"
+                        <html>
+                        <script>
+                        {dummy_package_data}
+                        {all_js}
+                        {js_ftd_script}
+                        {js_document_script}
+                        fastnVirtual.ssr(main);
+                        </script>
+                        </html>
+                    "},
+                dummy_package_data = dummy_package_data,
+                all_js = fastn_js::all_js_with_test(),
+                js_ftd_script = js_ftd_script,
+                js_document_script = js_document_script
             )
-            .as_str(),
-        )
-        .replace(
-            "__default_css__",
-            format!("{}", if manual { ftd::ftd_js_css() } else { "" }).as_str(),
-        );
-    if fix || manual {
+        } else {
+            let ssr_body = fastn_js::ssr_with_js_string(
+                "foo",
+                format!("{js_ftd_script}\n{js_document_script}").as_str(),
+            );
+
+            format!(
+                include_str!("../../ftd-js.html"),
+                fastn_package = dummy_package_data.as_str(),
+                js_script =
+                    format!("{js_document_script}{}", test_available_code_themes()).as_str(),
+                favicon_html_tag = "",
+                base_url_tag = "",
+                extra_js = "",
+                default_css = (if manual { ftd::ftd_js_css() } else { "" })
+                    .to_string()
+                    .as_str(),
+                html_body = ssr_body.as_str(),
+                script_file = format!(
+                    "{}{}",
+                    js_ast_data.scripts.join(""),
+                    if manual {
+                        format!(
+                            r#"
+                        <script src="../../prism/prism.js"></script>
+                        <script src="../../prism/prism-line-highlight.js"></script>
+                        <script src="../../prism/prism-line-numbers.js"></script>
+                        <script src="../../prism/prism-rust.js"></script>
+                        <script src="../../prism/prism-json.js"></script>
+                        <script src="../../prism/prism-python.js"></script>
+                        <script src="../../prism/prism-markdown.js"></script>
+                        <script src="../../prism/prism-bash.js"></script>
+                        <script src="../../prism/prism-sql.js"></script>
+                        <script src="../../prism/prism-javascript.js"></script>
+                        <link rel="stylesheet" href="../../prism/prism-line-highlight.css">
+                        <link rel="stylesheet" href="../../prism/prism-line-numbers.css">
+                        <script>{}</script>
+                    "#,
+                            ftd::js::all_js_without_test("foo")
+                        )
+                    } else {
+                        "<script src=\"fastn-js.js\"></script>".to_string()
+                    }
+                )
+                .as_str(),
+            )
+        }
+    };
+    if fix || manual || script {
         std::fs::write(file_location, html_str).unwrap();
         return;
     }
@@ -116,9 +184,30 @@ fn fastn_js_test_all() {
     let cli_args: Vec<String> = std::env::args().collect();
     let fix = cli_args.iter().any(|v| v.eq("fix=true"));
     let manual = cli_args.iter().any(|v| v.eq("manual=true"));
+    let script = cli_args.iter().any(|v| v.eq("script=true"));
+    let clear = cli_args.iter().any(|v| v.eq("clear"));
     let path = cli_args.iter().find_map(|v| v.strip_prefix("path="));
-    for (files, html_file_location) in find_file_groups(manual) {
-        let t = if fix || manual {
+    for (files, html_file_location) in find_file_groups(manual, script) {
+        if clear {
+            for f in &files {
+                match path {
+                    Some(path) if !f.to_str().unwrap().contains(path) => continue,
+                    _ => {}
+                }
+                let script = filename_with_second_last_extension_replaced_with_json(f, false, true);
+
+                if std::fs::remove_file(&script).is_ok() {
+                    println!("Removed {}", script.display());
+                }
+                let manual = filename_with_second_last_extension_replaced_with_json(f, true, false);
+                if std::fs::remove_file(&manual).is_ok() {
+                    println!("Removed {}", manual.display());
+                }
+            }
+            continue;
+        }
+
+        let t = if fix || manual || script {
             "".to_string()
         } else {
             std::fs::read_to_string(&html_file_location).unwrap()
@@ -135,41 +224,24 @@ fn fastn_js_test_all() {
                     "fixing"
                 } else if manual {
                     "Running manual test"
+                } else if script {
+                    "Creating script file"
                 } else {
                     "testing"
                 },
                 f.display()
             );
-            p(&s, &t, fix, manual, &html_file_location);
+            p(&s, &t, fix, manual, script, &html_file_location);
         }
     }
 }
 
-fn find_all_files_matching_extension_recursively(
-    dir: impl AsRef<std::path::Path>,
-    extension: &str,
-) -> Vec<std::path::PathBuf> {
-    let mut files = vec![];
-    for entry in std::fs::read_dir(dir).unwrap() {
-        let entry = entry.unwrap();
-        let path = entry.path();
-        if path.is_dir() {
-            files.extend(find_all_files_matching_extension_recursively(
-                &path, extension,
-            ));
-        } else {
-            match path.extension() {
-                Some(ext) if ext == extension => files.push(path),
-                _ => continue,
-            }
-        }
-    }
-    files
-}
-
-fn find_file_groups(manual: bool) -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
+fn find_file_groups(
+    manual: bool,
+    script: bool,
+) -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
     let files = {
-        let mut f = find_all_files_matching_extension_recursively("t/js", "ftd");
+        let mut f = ftd::utils::find_all_files_matching_extension_recursively("t/js", "ftd");
         f.sort();
         f
     };
@@ -177,7 +249,7 @@ fn find_file_groups(manual: bool) -> Vec<(Vec<std::path::PathBuf>, std::path::Pa
     let mut o: Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> = vec![];
 
     for f in files {
-        let json = filename_with_second_last_extension_replaced_with_json(&f, manual);
+        let json = filename_with_second_last_extension_replaced_with_json(&f, manual, script);
         match o.last_mut() {
             Some((v, j)) if j == &json => v.push(f),
             _ => o.push((vec![f], json)),
@@ -190,6 +262,7 @@ fn find_file_groups(manual: bool) -> Vec<(Vec<std::path::PathBuf>, std::path::Pa
 fn filename_with_second_last_extension_replaced_with_json(
     path: &std::path::Path,
     manual: bool,
+    script: bool,
 ) -> std::path::PathBuf {
     let stem = path.file_stem().unwrap().to_str().unwrap();
 
@@ -199,6 +272,12 @@ fn filename_with_second_last_extension_replaced_with_json(
             Some((b, _)) => b,
             None => stem,
         },
-        if manual { ".manual" } else { "" }
+        if manual {
+            ".manual"
+        } else if script {
+            ".script"
+        } else {
+            ""
+        }
     ))
 }

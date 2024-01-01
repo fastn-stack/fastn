@@ -1,0 +1,390 @@
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 10
+
+;; -------------- TOP-LEFT --------------
+
+-- ftd.text: TOP LEFT
+role: $inherited.types.heading-medium
+color: black
+
+-- ftd.row:
+padding-vertical.px: 10
+width: fill-container
+border-width.px: 2
+border-color: green
+spacing: space-around
+
+-- ftd.column:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: top-left
+
+-- ftd.text: Column
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.column
+
+-- ftd.row:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: top-left
+
+-- ftd.text: Row
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+;; -------------- TOP-CENTER --------------
+
+-- ftd.text: TOP CENTER
+role: $inherited.types.heading-medium
+color: black
+
+-- ftd.row:
+padding-vertical.px: 10
+width: fill-container
+border-width.px: 2
+border-color: green
+spacing: space-around
+
+-- ftd.column:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: top-center
+
+-- ftd.text: Column
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.column
+
+-- ftd.row:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: top-center
+
+-- ftd.text: Row
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+;; -------------- TOP-RIGHT --------------
+
+-- ftd.text: TOP RIGHT
+role: $inherited.types.heading-medium
+color: black
+
+-- ftd.row:
+padding-vertical.px: 10
+width: fill-container
+border-width.px: 2
+border-color: green
+spacing: space-around
+
+-- ftd.column:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: top-right
+
+-- ftd.text: Column
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.column
+
+-- ftd.row:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: top-right
+
+-- ftd.text: Row
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+;; -------------- LEFT --------------
+
+-- ftd.text: LEFT
+role: $inherited.types.heading-medium
+color: black
+
+-- ftd.row:
+padding-vertical.px: 10
+width: fill-container
+border-width.px: 2
+border-color: green
+spacing: space-around
+
+-- ftd.column:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: left
+
+-- ftd.text: Column
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.column
+
+-- ftd.row:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: left
+
+-- ftd.text: Row
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+;; -------------- CENTER --------------
+
+-- ftd.text: CENTER
+role: $inherited.types.heading-medium
+color: black
+
+-- ftd.row:
+padding-vertical.px: 10
+width: fill-container
+border-width.px: 2
+border-color: green
+spacing: space-around
+
+-- ftd.column:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: center
+
+-- ftd.text: Column
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.column
+
+-- ftd.row:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: center
+
+-- ftd.text: Row
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+;; -------------- RIGHT --------------
+
+-- ftd.text: RIGHT
+role: $inherited.types.heading-medium
+color: black
+
+-- ftd.row:
+padding-vertical.px: 10
+width: fill-container
+border-width.px: 2
+border-color: green
+spacing: space-around
+
+-- ftd.column:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: right
+
+-- ftd.text: Column
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.column
+
+-- ftd.row:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: right
+
+-- ftd.text: Row
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+;; -------------- BOTTOM-LEFT --------------
+
+-- ftd.text: BOTTOM LEFT
+role: $inherited.types.heading-medium
+color: black
+
+-- ftd.row:
+padding-vertical.px: 10
+width: fill-container
+border-width.px: 2
+border-color: green
+spacing: space-around
+
+-- ftd.column:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: bottom-left
+
+-- ftd.text: Column
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.column
+
+-- ftd.row:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: bottom-left
+
+-- ftd.text: Row
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+
+;; -------------- BOTTOM-CENTER --------------
+
+-- ftd.text: BOTTOM CENTER
+role: $inherited.types.heading-medium
+color: black
+
+-- ftd.row:
+padding-vertical.px: 10
+width: fill-container
+border-width.px: 2
+border-color: green
+spacing: space-around
+
+-- ftd.column:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: bottom-center
+
+-- ftd.text: Column
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.column
+
+-- ftd.row:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: bottom-center
+
+-- ftd.text: Row
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+
+
+;; -------------- BOTTOM-RIGHT --------------
+
+-- ftd.text: BOTTOM RIGHT
+role: $inherited.types.heading-medium
+color: black
+
+-- ftd.row:
+padding-vertical.px: 10
+width: fill-container
+border-width.px: 2
+border-color: green
+spacing: space-around
+
+-- ftd.column:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: bottom-right
+
+-- ftd.text: Column
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.column
+
+-- ftd.row:
+height.fixed.px: 100
+width.fixed.px: 200
+background.solid: yellow
+align-content: bottom-right
+
+-- ftd.text: Row
+color: red
+border-width.px: 2
+border-color: red
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- end: ftd.column

@@ -50,6 +50,9 @@ pub enum Error {
     #[error("P1Error: {}", _0)]
     P1Error(#[from] ftd::p1::Error),
 
+    #[error("IOError: {}", _0)]
+    IOError(#[from] std::io::Error),
+
     #[error("OldP1Error: {}", _0)]
     OldP1Error(#[from] ftd::ftd2021::p1::Error),
 
@@ -84,6 +87,12 @@ pub enum Error {
         message: String,
         doc_id: String,
         line_number: usize,
+    },
+
+    #[error("InterpreterIOError: {io_error}, path: {path}")]
+    InterpreterIOError {
+        io_error: std::io::Error,
+        path: String,
     },
 
     #[error("EvalexprError: {}", _0)]

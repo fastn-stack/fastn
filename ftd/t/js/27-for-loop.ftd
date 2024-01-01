@@ -1,0 +1,27 @@
+-- string list weekdays:
+
+-- string: Sunday
+-- string: Monday
+-- string: Tuesday
+-- string: Wednesday
+-- string: Thursday
+-- string: Friday
+-- string: Saturday
+
+-- end: weekdays
+
+/-- ftd.text: $day
+$loop$: $weekdays as $day
+
+/-- ftd.text: $day
+for: $day in $weekdays
+
+-- ftd.text: $join(a = $key, b = $day)
+for: $day, $key in $weekdays
+if: { key >= 2 }
+
+-- string join(a,b):
+integer a:
+string b:
+
+a + " " + b

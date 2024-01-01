@@ -1,7 +1,9 @@
 <div align="center">
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-) ![Contributors](https://img.shields.io/github/contributors/fastn-stack/fastn?color=dark-green) ![Issues](https://img.shields.io/github/issues/fastn-stack/fastn) ![License](https://img.shields.io/github/license/fastn-stack/fastn) [![Discord](https://img.shields.io/discord/793929082483769345)](https://discord.com/channels/793929082483769345/)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fftd-lang%2Ffpm.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fftd-lang%2Ffpm?ref=badge_shield)
+![Contributors](https://img.shields.io/github/contributors/fastn-stack/fastn?color=dark-green) 
+![Issues](https://img.shields.io/github/issues/fastn-stack/fastn) 
+![License](https://img.shields.io/github/license/fastn-stack/fastn) 
+[![Discord](https://dcbadge.vercel.app/api/server/eNXVBMq4xt?style=flat)](https://fastn.com/discord/)
 
 </div>
 
@@ -22,9 +24,9 @@ to HTML/CSS/JS, and can be deployed on your server, or on `fastn cloud` by
 FifthTry.
 
 The quickest way to learn `fastn` is the [short video course we have created:
-expander](https://fastn.io/expander/), it takes you through the basics.
+expander](https://fastn.com/expander/), it takes you through the basics.
 
-Then checkout the [frontend](https://fastn.io/frontend/) and [backend](https://fastn.io/backend/) sections of
+Then checkout the [frontend](https://fastn.com/frontend/) and [backend](https://fastn.com/backend/) sections of
 our documentation.
 
 ## `ftd`: Programming Language For The Next Billion Programmers
@@ -49,10 +51,10 @@ yet it does not feel technical.
 
 This is what it produces:
 
-<a href="https://fastn.io/#ftd-programming-language-for-the-next-billion-programmers" rel="nofollow"><img src="assets/img.png" alt="img.png" style="max-width: 100%; width: 450px;"></a>
+<a href="https://fastn.com/#ftd-programming-language-for-the-next-billion-programmers" rel="nofollow"><img src="assets/img.png" alt="img.png" style="max-width: 100%; width: 450px;"></a>
 
 
-Learn more about [`ftd` Programming Language](https://fastn.io/ftd/).
+Learn more about [`ftd` Programming Language](https://fastn.com/ftd/).
 
 
 ## There are a lot of ready made `ftd` components available today
@@ -71,7 +73,7 @@ The web has lost some of the exuberance from the
 early 2000s, and it makes me a little sad.
 ```
 
-[![img_1.png](assets/img_1.png)](https://fastn.io/#there-are-a-lot-of-ready-made-ftd-components-available-today)
+[![img_1.png](assets/img_1.png)](https://fastn.com/#there-are-a-lot-of-ready-made-ftd-components-available-today)
 
 ## Or you can create your own components
 
@@ -96,7 +98,7 @@ border-radius.px: 5
 -- toggle-text: `ftd` is cool!
 ```
 
-<a href="https://fastn.io/#or-you-can-create-your-own-components" align="center" rel="nofollow"><img src="assets/img_2.png" alt="toggle button" style="max-width: 100%; width: 225px;"></a>
+<a href="https://fastn.com/#or-you-can-create-your-own-components" align="center" rel="nofollow"><img src="assets/img_2.png" alt="toggle button" style="max-width: 100%; width: 225px;"></a>
 
 `ftd`'s event handling capabilities can be used for form validation, ajax
 requests etc, to create fully functional frontend applications.
@@ -107,10 +109,10 @@ requests etc, to create fully functional frontend applications.
 We ship pre built binaries for Linux, Mac and Windows.
 
 ```shell
-curl -fsSL https://fastn.io/install.sh | bash
+curl -fsSL https://fastn.com/install.sh | bash
 ```
 
-[![fastn.png](assets/fastn.png)](https://fastn.io/#you-use-fastn-to-work-with-ftd)
+[![fastn.png](assets/fastn.png)](https://fastn.com/#you-use-fastn-to-work-with-ftd)
 
 
 ## Integrated Web Development Experience
@@ -129,14 +131,14 @@ for building websites.
 ## `fastn` for Static Sites
 
 `fastn` websites can be compiled into static html, js, css etc, and can be
-deployed on any static hosting providers eg [Github Pages](https://fastn.io/how-to/github-pages/),
-[Vercel](https://fastn.io/how-to/vercel/)  etc.
+deployed on any static hosting providers eg [Github Pages](https://fastn.com/github-pages/),
+[Vercel](https://fastn.com/vercel/)  etc.
 
 **`ftd` source code of the page you are reading**
 
 ```ftd
 -- import: fifthtry.github.io/bling/quote
--- import: fastn.io/ftd as ftd-index
+-- import: fastn.com/ftd as ftd-index
 
 -- my-ds.page: Overview of `fastn` and `ftd`
 
@@ -149,7 +151,7 @@ compromise on what you can build with it.
 portfolio websites, project and marketing websites etc. It is cheap, fast, and
 requires little maintenance.
 
-[![github-pages.png](assets/github-pages.png)](https://fastn.io/#fastn-for-static-sites)
+[![github-pages.png](assets/github-pages.png)](https://fastn.com/#fastn-for-static-sites)
 
 ## Data Driven Website
 
@@ -202,7 +204,7 @@ We are working on `wasm` support so developers can extend `ftd's` standard
 libraries and offer access to more backend functionalities.
 
 
-<a href="https://fastn.io/#upcoming-wasm-support" rel="nofollow"><img src="wasm.png" alt="wasm.png" style="max-width: 100%; width: 450px;"></a>
+<a href="https://fastn.com/#upcoming-wasm-support" rel="nofollow"><img src="assets/wasm.png" alt="wasm.png" style="max-width: 100%; width: 450px;"></a>
 
 
 ## Hosting Dynamic Sites
@@ -216,6 +218,34 @@ We also offer our own hosting solution for your static and dynamic sites. Using
 `fastn` Cloud frees you from devops needs, and you get a fully integrated,
 managed hosting solution, that a non programmers can use with ease.
 
+
+## Usage with Nix
+
+```sh
+nix run github:fastn-stack/fastn
+```
+
+In a `flake.nix` file:
+
+```Nix
+{
+  inputs = {
+    flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    fastn.url = "github:fastn-stack/fastn";
+  };
+
+  outputs = { self, flake-utils, nixpkgs, fastn }:
+    flake-utils.lib.eachDefaultSystem (system:
+      rec {
+        # nix develop
+        devShell = pkgs.mkShell {
+          nativeBuildInputs = [ fastn ];
+        };
+      }
+    );
+}
+```
 
 
 ## Contributors

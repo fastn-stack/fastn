@@ -4,10 +4,10 @@ pub struct CreateCRRequest {
 }
 
 pub async fn create_cr(
-    req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
     cr_req: CreateCRRequest,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    match create_cr_worker(req, cr_req).await {
+    match create_cr_worker(config, cr_req).await {
         Ok(cr_number) => {
             #[derive(serde::Serialize)]
             struct CreateCRResponse {
@@ -16,15 +16,14 @@ pub async fn create_cr(
             let url = format!("-/{}/-/about/", cr_number);
             fastn_core::http::api_ok(CreateCRResponse { url })
         }
-        Err(err) => fastn_core::http::api_error(err.to_string()),
+        Err(err) => fastn_core::http::api_error(err.to_string(), None),
     }
 }
 
 async fn create_cr_worker(
-    req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
     cr_request: CreateCRRequest,
 ) -> fastn_core::Result<usize> {
-    let config = fastn_core::Config::read(None, false, Some(req)).await?;
     let cr_number = config.extract_cr_number().await?;
     let default_title = format!("CR#{cr_number}");
     let cr_meta = fastn_core::cr::CRMeta {
@@ -32,24 +31,25 @@ async fn create_cr_worker(
         cr_number: cr_number as usize,
         open: true,
     };
-    fastn_core::commands::create_cr::add_cr_to_workspace(&config, &cr_meta).await?;
+    fastn_core::commands::create_cr::add_cr_to_workspace(config, &cr_meta).await?;
     Ok(cr_number as usize)
 }
 
 pub async fn create_cr_page(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    match create_cr_page_worker(req).await {
+    match create_cr_page_worker(config, req).await {
         Ok(body) => Ok(body),
-        Err(err) => fastn_core::http::api_error(err.to_string()),
+        Err(err) => fastn_core::http::api_error(err.to_string(), None),
     }
 }
 
 async fn create_cr_page_worker(
+    config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let mut config = fastn_core::Config::read(None, false, Some(&req)).await?;
-    let create_cr_ftd = fastn_core::package_info_create_cr(&config)?;
+    let create_cr_ftd = fastn_core::package_info_create_cr(config)?;
 
     let main_document = fastn_core::Document {
         id: "create-cr.ftd".to_string(),
@@ -58,7 +58,10 @@ async fn create_cr_page_worker(
         package_name: config.package.name.clone(),
     };
 
-    fastn_core::package::package_doc::read_ftd(&mut config, &main_document, "/", false, false)
+    let mut req_config =
+        fastn_core::RequestConfig::new(config, &req, main_document.id.as_str(), "/");
+
+    fastn_core::package::package_doc::read_ftd(&mut req_config, &main_document, "/", false, false)
         .await
         .map(Into::into)
 }

@@ -1467,11 +1467,15 @@
 }
 }
 },
-"ftd#device": "desktop",
+"ftd#device": "mobile",
+"ftd#empty": "",
 "ftd#follow-system-dark-mode": true,
 "ftd#font-code": "sans-serif",
 "ftd#font-copy": "sans-serif",
 "ftd#font-display": "sans-serif",
+"ftd#nbsp": "&nbsp;",
+"ftd#non-breaking-space": "&nbsp;",
+"ftd#space": " ",
 "ftd#system-dark-mode": false
 }
 </script>
@@ -2679,7 +2683,7 @@ else {
 return null;
 }
 }
-else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+else if (typeof bg === 'object' && !!bg && "colors" in bg && Object.keys(bg.colors).length) {
 let colors = "";
 // if the bg direction is provided by the user, use it, otherwise default
 let direction = (_a = bg.direction) !== null && _a !== void 0 ? _a : "to bottom";
@@ -2703,7 +2707,7 @@ colors = `${colors}, ${c["stop-position"]}`;
 }
 }
 }
-let res = `linear-gradient("${direction}, ${colors}")`;
+let res = `linear-gradient(${direction}, ${colors})`;
 return res;
 }
 else {
@@ -2845,6 +2849,18 @@ a.value = a.value+v
 
 
 
+function ftd__decrement___main(a,args,data,id){
+a.value = a.value-1
+}
+
+
+
+function ftd__decrement_by___main(a,v,args,data,id){
+a.value = a.value-v
+}
+
+
+
 function ftd__enable_light_mode___main(args,data,id){
 return (enable_light_mode(args,data,id));
 }
@@ -2909,7 +2925,7 @@ window.node_change_main["1,0:main__text"] = function(data) {
 document.querySelector(`[data-id="1,0:main"]`).innerHTML = resolve_reference("foo#foo:name:1", data);
 }
 window.node_change_main["1,1,0:main__text"] = function(data) {
-document.querySelector(`[data-id="1,1,0:main"]`).innerHTML = resolve_reference("foo#inherited-name", data);
+document.querySelector(`[data-id="1,1,0:main"]`).innerHTML = resolve_reference("foo#foo:name:1", data);
 }
 window.node_change_main["1,1,1:main__text"] = function(data) {
 document.querySelector(`[data-id="1,1,1:main"]`).innerHTML = resolve_reference("foo#foo:name:1", data);
@@ -2954,6 +2970,7 @@ window.ftd.utils.set_value_helper(data, "foo#foo:name:1", remaining, new_value);
 window.ftd.call_mutable_value_changes("foo#foo:name:1", "main");
 window.ftd.call_immutable_value_changes("foo#foo:name:1", "main");
 window.ftd.utils.node_change_call("main","1,0:main__text", data);
+window.ftd.utils.node_change_call("main","1,1,0:main__text", data);
 window.ftd.utils.node_change_call("main","1,1,1:main__text", data);
 window.ftd.utils.node_change_call("main","1,1,3,0:main__text", data);
 window.ftd.utils.node_change_call("main","1,1,3,1:main__text", data);
@@ -2975,14 +2992,6 @@ window.ftd.utils.set_value_helper(data, "foo#green-block:title-color:4", remaini
 window.ftd.call_mutable_value_changes("foo#green-block:title-color:4", "main");
 window.ftd.call_immutable_value_changes("foo#green-block:title-color:4", "main");
 window.ftd.utils.node_change_call("main","4,0:main__color", data);
-};
-
-window.set_value_main["foo#inherited-name"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#inherited-name", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("foo#inherited-name", "main");
-window.ftd.call_immutable_value_changes("foo#inherited-name", "main");
-window.ftd.utils.node_change_call("main","1,1,0:main__text", data);
 };
 
 window.set_value_main["foo#main"] = function (data, new_value, remaining) {
@@ -3018,18 +3027,6 @@ window.ftd.utils.node_change_call("main","0,0:main__color", data);
 window.ftd.utils.node_change_call("main","2,0:main__color", data);
 window.ftd.utils.node_change_call("main","3,0:main__color", data);
 window.ftd.utils.node_change_call("main","4,0:main__color", data);
-};
-
-window.set_value_main["inherited.name"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "inherited.name", remaining, new_value);
-if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#inherited-name"]){window["resolve_value_main"]["foo#inherited-name"](data);
-} else {
-let value = resolve_reference("inherited.name", data, null);
-set_data_value(data, "foo#inherited-name", value);
-}
-window.ftd.call_mutable_value_changes("inherited.name", "main");
-window.ftd.call_immutable_value_changes("inherited.name", "main");
-window.ftd.utils.node_change_call("main","1,1,0:main__text", data);
 };
 
 

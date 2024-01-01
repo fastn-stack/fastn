@@ -210,6 +210,15 @@ pub(crate) fn dependencies_from_property_value(
         result
     } else if property_value.is_value() && property_value.kind().is_ftd_length() {
         dependencies_from_length_property_value(property_value, doc)
+    } else if property_value.is_value() && property_value.kind().is_ftd_background_color() {
+        let mut values = vec![];
+        let value = property_value.value("", 0).unwrap();
+        let property_value = value
+            .get_or_type(doc.name, property_value.line_number())
+            .unwrap()
+            .2;
+        values.extend(dependencies_from_property_value(property_value, doc));
+        values
     } else if property_value.is_value() && property_value.kind().is_ftd_resizing_fixed() {
         let value = property_value.value("", 0).unwrap();
         let property_value = value
@@ -303,9 +312,7 @@ impl ftd::interpreter::PropertyValue {
             ftd::interpreter::PropertyValue::Reference { name, .. } => Some(format!(
                 "resolve_reference(\"{}\", data){}",
                 js_reference_name(name),
-                field
-                    .map(|v| format!(".{}", v))
-                    .unwrap_or_else(|| "".to_string())
+                field.map(|v| format!(".{}", v)).unwrap_or_default()
             )),
             ftd::interpreter::PropertyValue::FunctionCall(function_call) => {
                 let action = serde_json::to_string(&ftd::html::Action::from_function_call(

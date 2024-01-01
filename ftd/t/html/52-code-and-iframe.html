@@ -566,11 +566,15 @@
 }
 }
 },
-"ftd#device": "desktop",
+"ftd#device": "mobile",
+"ftd#empty": "",
 "ftd#follow-system-dark-mode": true,
 "ftd#font-code": "sans-serif",
 "ftd#font-copy": "sans-serif",
 "ftd#font-display": "sans-serif",
+"ftd#nbsp": "&nbsp;",
+"ftd#non-breaking-space": "&nbsp;",
+"ftd#space": " ",
 "ftd#system-dark-mode": false
 }
 </script>
@@ -1931,7 +1935,7 @@ else {
 return null;
 }
 }
-else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+else if (typeof bg === 'object' && !!bg && "colors" in bg && Object.keys(bg.colors).length) {
 let colors = "";
 // if the bg direction is provided by the user, use it, otherwise default
 let direction = (_a = bg.direction) !== null && _a !== void 0 ? _a : "to bottom";
@@ -1955,7 +1959,7 @@ colors = `${colors}, ${c["stop-position"]}`;
 }
 }
 }
-let res = `linear-gradient("${direction}, ${colors}")`;
+let res = `linear-gradient(${direction}, ${colors})`;
 return res;
 }
 else {
@@ -2093,6 +2097,18 @@ a.value = a.value+1
 
 function ftd__increment_by___main(a,v,args,data,id){
 a.value = a.value+v
+}
+
+
+
+function ftd__decrement___main(a,args,data,id){
+a.value = a.value-1
+}
+
+
+
+function ftd__decrement_by___main(a,v,args,data,id){
+a.value = a.value-v
 }
 
 

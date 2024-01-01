@@ -1,0 +1,11 @@
+-- ftd.background-image bg-image:
+src: https://picsum.photos/200/300
+repeat: no-repeat
+position: center
+
+-- ftd.column:
+width: fill-container
+height.fixed.px: 500
+background.image: $bg-image
+
+-- end: ftd.column

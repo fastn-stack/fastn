@@ -44,8 +44,8 @@
             })
         }
 
-        document.body.innerHTML = fastn_virtual.ssr(main);
-        fastn_virtual.hydrate(main);
+        document.body.innerHTML = fastnVirtual.ssr(main);
+        fastnVirtual.doubleBuffer(main);
     })();
 </script>
 </html>

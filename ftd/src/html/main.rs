@@ -139,8 +139,8 @@ pub(crate) struct HtmlGenerator<'a> {
     pub immutable_variable: Vec<String>,
 }
 
-impl<'a> HtmlGenerator<'a> {
-    pub fn new(id: &str, doc: &'a ftd::interpreter::TDoc<'a>) -> HtmlGenerator<'a> {
+impl HtmlGenerator<'_> {
+    pub fn new<'a>(id: &str, doc: &'a ftd::interpreter::TDoc<'a>) -> HtmlGenerator<'a> {
         HtmlGenerator {
             id: id.to_string(),
             doc,

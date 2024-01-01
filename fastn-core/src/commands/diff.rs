@@ -31,11 +31,11 @@ async fn get_diffy(
     doc: &fastn_core::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fastn_core::Result<Option<String>> {
-    if let Some(timestamp) = snapshots.get(&doc.get_id()) {
-        let path = fastn_core::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
-        let content = tokio::fs::read_to_string(&doc.get_full_path()).await?;
+    if let Some(timestamp) = snapshots.get(doc.get_id()) {
+        let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
+        let content = fastn_core::tokio_fs::read_to_string(&doc.get_full_path()).await?;
 
-        let existing_doc = tokio::fs::read_to_string(&path).await?;
+        let existing_doc = fastn_core::tokio_fs::read_to_string(&path).await?;
         if content.eq(&existing_doc) {
             return Ok(None);
         }
@@ -54,7 +54,7 @@ async fn get_track_diff(
     snapshots: &std::collections::BTreeMap<String, u128>,
     base_path: &str,
 ) -> fastn_core::Result<()> {
-    let path = fastn_core::utils::track_path(&doc.get_id(), &doc.get_base_path());
+    let path = fastn_core::utils::track_path(doc.get_id(), doc.get_base_path());
     if std::fs::metadata(&path).is_err() {
         return Ok(());
     }
@@ -65,16 +65,16 @@ async fn get_track_diff(
                 continue;
             }
             let now_path =
-                fastn_core::utils::history_path(&track.filename, &doc.get_base_path(), timestamp);
+                fastn_core::utils::history_path(&track.filename, doc.get_base_path(), timestamp);
 
             let then_path = fastn_core::utils::history_path(
                 &track.filename,
-                &doc.get_base_path(),
+                doc.get_base_path(),
                 track.other_timestamp.as_ref().unwrap(),
             );
 
-            let now_doc = tokio::fs::read_to_string(&now_path).await?;
-            let then_doc = tokio::fs::read_to_string(&then_path).await?;
+            let now_doc = fastn_core::tokio_fs::read_to_string(&now_path).await?;
+            let then_doc = fastn_core::tokio_fs::read_to_string(&then_path).await?;
             if now_doc.eq(&then_doc) {
                 continue;
             }

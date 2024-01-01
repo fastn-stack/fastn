@@ -1,74 +1,139 @@
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    
+    <meta content="fastn" name="generator">
+    
+    
+    <script>
+        let __fastn_package_name__ = "foo";
+    </script>
+
     <script src="fastn-js.js"></script>
+    
 
     <style>
        
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column w-1 p-2 g-3"><div data-id="3">Ritesh</div><div data-id="4">Ritesh</div><div data-id="5">Ritesh</div><div data-id="6">Change name 1</div><div data-id="7">Change name 2</div></div></body><style id="styles">
-    .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
-	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
-	.w-1 { width: 100%; }
-	.p-2 { padding: 10px; }
-	.g-3 { gap: 5px; }
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __p-4 __g-5"><div data-id="4">Ritesh</div><div data-id="5">Ritesh</div><div data-id="6">Ritesh</div><div data-id="7" class="__cur-6">Change name 1</div><div data-id="8" class="__cur-7">Change name 2</div></div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__w-3 { width: 100%; }
+	.__p-4 { padding: 10px; }
+	.__g-5 { gap: 5px; }
+	.__cur-6 { cursor: pointer; }
+	.__cur-7 { cursor: pointer; }
     </style>
 <script>
     (function() {
-        let global = {
-};
-let main = function (parent) {
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(5)), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name2, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name3, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Change name 1", inherited);
-    rooti0.addEventHandler(fastn_dom.Event.Click, function () {
-      foo__append_yo({
-        a: global.foo__name,
-      }, rooti0);
-    });
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Change name 2", inherited);
-    rooti0.addEventHandler(fastn_dom.Event.Click, function () {
-      foo__append_yo({
-        a: global.foo__name2,
-      }, rooti0);
-    });
+        let main = function (parent) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(5)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name2, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name3, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Change name 1", inherited);
+      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+        foo__append_yo({
+          a: global.foo__name,
+        }, rooti0);
+      });
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Change name 2", inherited);
+      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+        foo__append_yo({
+          a: global.foo__name2,
+        }, rooti0);
+      });
+    }
+    ]), inherited);
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
   }
-  ]), inherited);
 }
+global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__name", fastn.mutable("Ritesh"));
 fastn_utils.createNestedObject(global, "foo__name2", fastn_utils.clone(global.foo__name));
 fastn_utils.createNestedObject(global, "foo__name3", global.foo__name);
 let foo__append_yo = function (args)
 {
-  let __args__ = args;
-  let fastn_utils_val___args___a = fastn_utils.getter(__args__.a) + " yo ";
-  if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
-    __args__.a = fastn_utils_val___args___a;
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + " yo ");
+    if (fastn_utils_val___args___a instanceof fastn.mutableClass) {
+      fastn_utils_val___args___a = fastn_utils_val___args___a.get();
+    }
+    if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
+      __args__.a = fastn_utils_val___args___a;
+    }
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
+global["foo__append_yo"] = foo__append_yo;
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
 
-        fastn_virtual.hydrate(main);
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastnVirtual.doubleBuffer(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+        ftd.emit_on_load();
+    };
 </script>
 </html>

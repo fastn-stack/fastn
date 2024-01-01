@@ -143,6 +143,8 @@
     "ftd": "ftd",
     "inherited": "inherited"
   },
-  "js": [],
+  "js": [
+    "ftd/ftd/t/assets/web_component.js:type=\"module\""
+  ],
   "css": []
 }

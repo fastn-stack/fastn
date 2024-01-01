@@ -1,0 +1,121 @@
+-- integer list $counters:
+
+
+
+
+-- integer list c:
+
+-- integer: 10
+-- integer: 11
+-- integer: 12
+
+-- end: c
+
+
+
+
+
+-- ftd.text: Click to append one
+$on-click$: $append-integer($a = $counters, v = 1)
+
+-- ftd.text: Click to insert 3 at start
+$on-click$: $insert-integer($a = $counters, v = 3)
+
+-- ftd.text: Click to pop
+$on-click$: $pop-integer($a = $counters, v = 1)
+
+-- ftd.text: Click to delete at start
+$on-click$: $delete-integer($a = $counters)
+
+-- ftd.text: Click to clear all
+$on-click$: $clear-integer($a = $counters)
+
+-- ftd.text: Click to set [10, 11, 12]
+$on-click$: $set-integer($a = $counters, other = $c)
+
+
+-- counter-list: $obj
+for: obj in $counters
+
+
+
+
+
+
+
+
+
+
+
+
+-- component counter-list:
+caption integer $counter:
+
+-- ftd.integer: $counter-list.counter
+$on-click$: $increment($a = $counter-list.counter)
+
+-- end: counter-list
+
+
+
+
+
+-- void pop-integer(a):
+integer list $a:
+
+ftd.pop(a)
+
+
+
+-- void delete-integer(a):
+integer list $a:
+
+ftd.delete_at(a, 0)
+
+
+
+
+
+-- void clear-integer(a):
+integer list $a:
+
+ftd.clear_all(a)
+
+
+
+
+-- void set-integer(a):
+integer list $a:
+integer list other:
+
+ftd.set_list(a, other)
+
+
+
+
+-- void append-integer(a,v):
+integer list $a:
+integer v:
+
+ftd.append(a, v)
+
+
+
+
+
+-- void insert-integer(a,v):
+integer list $a:
+integer v:
+
+ftd.insert_at(a, 0, v)
+
+
+
+
+
+
+
+-- void increment(a):
+integer $a:
+
+a = a + 1;

@@ -8,6 +8,22 @@ align-content: center
 link: https://www.fastn.com
 margin.px: 20
 
+-- ftd.image:
+src: https://picsum.photos/200/300
+link: https://www.fastn.com
+
+-- end: ftd.column
+
+;; ----------------------- LINK REL -----------------------
+
+-- ftd.column:
+width: fill-container
+align-content: center
+
+-- ftd.text: No follow link
+link: https://www.fastn.com
+rel: no-follow, sponsored
+
 -- end: ftd.column
 
 ;; ------------------------- OPEN-IN-NEW-TAB --------------------------------
@@ -64,6 +80,10 @@ enabled: false
 -- ftd.text-input:
 default-value: This is default text
 
+-- ftd.text-input:
+placeholder: Max input length 10
+max-length: 10
+
 -- end: ftd.column
 
 ;; ---------------------- KERNEL(ftd.iframe) --------------------
@@ -80,4 +100,24 @@ loading: lazy
 lang: ftd
 
 \-- ftd.text: Hello World
+
+
+;; --------------------KERNEL(ftd.image)----------------------
+
+-- ftd.text: Fetch Priority = Auto
+
+-- ftd.image: https://picsum.photos/536/354
+fetch-priority: auto
+
+
+-- ftd.text: Fetch Priority = low
+
+-- ftd.image: https://picsum.photos/536/354
+fetch-priority: low
+
+
+-- ftd.text: Fetch Priority = high
+
+-- ftd.image: https://picsum.photos/536/354
+fetch-priority: high
 

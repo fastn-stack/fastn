@@ -166,6 +166,22 @@ impl Component {
         argument.get_default_interpreter_value(doc, self.properties.as_slice())
     }
 
+    pub fn get_interpreter_property_value_of_all_arguments(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::Map<ftd::interpreter::PropertyValue> {
+        let component_definition = doc.get_component(self.name.as_str(), 0).unwrap();
+        let mut property_values: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
+        for argument in component_definition.arguments.iter() {
+            if let Some(property_value) =
+                argument.get_default_interpreter_property_value(self.properties.as_slice())
+            {
+                property_values.insert(argument.name.to_string(), property_value);
+            }
+        }
+        property_values
+    }
+
     // Todo: Remove this function after removing 0.3
     pub fn get_children_property(&self) -> Option<ftd::interpreter::Property> {
         self.get_children_properties().first().map(|v| v.to_owned())
@@ -228,7 +244,11 @@ impl Component {
     ) -> ftd::interpreter::Result<()> {
         Property::scan_ast_children(ast_component.children, definition_name_with_arguments, doc)?;
         match definition_name_with_arguments {
-            Some((definition, _)) if ast_component.name.eq(definition) => {}
+            Some((definition, _))
+                if ast_component.name.eq(definition)
+                    || ast_component
+                        .name
+                        .starts_with(format!("{definition}.").as_str()) => {}
             _ => doc.scan_thing(ast_component.name.as_str(), ast_component.line_number)?,
         }
 
@@ -297,6 +317,7 @@ impl Component {
             loop_object_name_and_kind = Some((
                 iteration.alias.to_string(),
                 iteration.loop_object_as_argument(doc)?,
+                iteration.loop_counter_alias.to_owned(),
             ));
             Some(iteration)
         } else {
@@ -408,7 +429,7 @@ impl Component {
         doc: &mut ftd::interpreter::TDoc,
         iteration: &Option<Loop>,
         condition: &Option<ftd::interpreter::Expression>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         events: &[Event],
         ast_properties: &Vec<ftd::ast::Property>,
         ast_children: &Vec<ftd::ast::Component>,
@@ -586,7 +607,7 @@ impl Property {
         ast_children: Vec<ftd::ast::Component>,
         component_name: &str,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Property>>> {
@@ -800,7 +821,7 @@ impl Property {
         ast_properties: Vec<ftd::ast::Property>,
         component_name: &str,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Property>>> {
@@ -821,12 +842,12 @@ impl Property {
                 doc,
             )?));
         }
-
         try_ok_state!(search_things_for_module(
             component_name,
             properties.as_slice(),
             doc,
             component_arguments.as_slice(),
+            definition_name_with_arguments,
             line_number,
         )?);
 
@@ -838,7 +859,7 @@ impl Property {
         component_name: &str,
         component_arguments: &[Argument],
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Property>> {
         let argument = try_ok_state!(Property::get_argument_for_property(
@@ -990,6 +1011,7 @@ fn search_things_for_module(
     properties: &[ftd::interpreter::Property],
     doc: &mut ftd::interpreter::TDoc,
     arguments: &[ftd::interpreter::Argument],
+    definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
     line_number: usize,
 ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<()>> {
     for argument in arguments.iter() {
@@ -1015,23 +1037,15 @@ fn search_things_for_module(
                 line_number,
             );
         }
-        let module_property = property
-            .first()
-            .unwrap()
-            .resolve(doc, &Default::default())?
-            // TODO: Remove unwrap()
-            .unwrap();
+        let module_property = property.first().unwrap();
+        // TODO: Remove unwrap()
 
-        let (m_name, things) = match module_property {
-            ftd::interpreter::Value::Module { name, things } => (name, things),
-            t => {
-                return ftd::interpreter::utils::e2(
-                    format!("Expected module, found: {:?}", t),
-                    doc.name,
-                    line_number,
-                )
-            }
-        };
+        let (m_name, things) = get_module_name_and_thing(
+            module_property,
+            doc,
+            definition_name_with_arguments,
+            argument,
+        )?;
 
         let mut m_alias;
         {
@@ -1060,33 +1074,58 @@ fn search_things_for_module(
         if let Some(m) = doc.aliases.get(m_alias.as_str()) {
             m_alias = m.to_string();
         }
+
         let mut unresolved_thing = None;
 
         for (thing, _expected_kind) in things {
-            let (_, module_component_name) = component_name
-                .rsplit_once('.')
-                .unwrap_or(("", component_name));
-            let thing_real_name = if let Some((_doc_name, element)) = thing.split_once('#') {
-                format!(
-                    "{}#{}",
-                    m_alias,
-                    element.trim_start_matches(
-                        format!("{}.{}.", module_component_name, argument.name).as_str(),
-                    )
-                )
-            } else {
-                format!(
-                    "{}#{}",
-                    m_alias,
-                    thing.trim_start_matches(
-                        format!("{}.{}.", module_component_name, argument.name).as_str(),
-                    )
-                )
+            let mut new_doc_name = doc.name.to_string();
+            let mut new_doc_aliases = doc.aliases.clone();
+
+            // If the module name (value) is coming from the argument of the component then we
+            // need to change doc to the new-doc, else if it's coming from property then no need
+            // to change the doc.
+            if module_property.source.is_default() {
+                // This is needed because the component can be exported from some other module
+                // so, we need to fetch this module name in module_name
+                // -- import: foo
+                // export: bar
+                //
+                // So the bar component is actually present in foo module and we need foo as
+                // value of module_name.
+                let component_name = doc
+                    .get_thing(component_name, line_number)
+                    .map(|v| v.name())
+                    .unwrap_or(component_name.to_string());
+                let module_name =
+                    ftd::interpreter::utils::get_doc_name(component_name.as_str(), doc.name);
+
+                if let Some(state) = doc.state() {
+                    let parsed_document = state.parsed_libs.get(module_name.as_str()).unwrap();
+                    new_doc_name = parsed_document.name.to_string();
+                    new_doc_aliases = parsed_document.doc_aliases.clone();
+                }
+            }
+
+            let mut new_doc = match &mut doc.bag {
+                ftd::interpreter::BagOrState::Bag(bag) => {
+                    ftd::interpreter::TDoc::new(&new_doc_name, &new_doc_aliases, bag)
+                }
+                ftd::interpreter::BagOrState::State(state) => {
+                    ftd::interpreter::TDoc::new_state(&new_doc_name, &new_doc_aliases, state)
+                }
             };
+
+            let mut m_alias = m_alias.clone();
+            if let Some(m) = new_doc.aliases.get(m_alias.as_str()) {
+                m_alias = m.to_string();
+            }
+
+            let thing_real_name = format!("{}#{}", m_alias, thing);
+
             if unresolved_thing.is_some() {
-                doc.scan_thing(&thing_real_name, line_number)?;
+                new_doc.scan_thing(&thing_real_name, line_number)?;
             } else {
-                let result = doc.search_thing(&thing_real_name, line_number)?;
+                let result = new_doc.search_thing(&thing_real_name, line_number)?;
                 if !result.is_thing() {
                     unresolved_thing = Some(result);
                 } else {
@@ -1103,19 +1142,106 @@ fn search_things_for_module(
     Ok(ftd::interpreter::StateWithThing::new_thing(()))
 }
 
+fn get_module_name_and_thing(
+    module_property: &ftd::interpreter::Property,
+    doc: &mut ftd::interpreter::TDoc,
+    definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
+    component_argument: &ftd::interpreter::Argument,
+) -> ftd::interpreter::Result<(String, ftd::Map<ftd::interpreter::ModuleThing>)> {
+    let default_things = {
+        let value = if let Some(ref value) = component_argument.value {
+            value.clone().resolve(doc, module_property.line_number)?
+        } else {
+            return ftd::interpreter::utils::e2(
+                "Cannot find component argument value for module",
+                doc.name,
+                component_argument.line_number,
+            );
+        };
+
+        if let Some(thing) = value.module_thing_optional() {
+            thing.clone()
+        } else {
+            return ftd::interpreter::utils::e2(
+                "Cannot find component argument value for module",
+                doc.name,
+                component_argument.line_number,
+            );
+        }
+    };
+    if let Some(module_name) = module_property.value.get_reference_or_clone() {
+        if let Some((argument, ..)) =
+            ftd::interpreter::utils::get_component_argument_for_reference_and_remaining(
+                module_name,
+                doc.name,
+                definition_name_with_arguments,
+                module_property.line_number,
+            )?
+        {
+            if let Some(ref mut property_value) = argument.value {
+                if let ftd::interpreter::PropertyValue::Value { value, .. } = property_value {
+                    if let Some((name, thing)) = value.mut_module_optional() {
+                        thing.extend(default_things);
+                        return Ok((name.to_string(), thing.clone()));
+                    } else {
+                        return ftd::interpreter::utils::e2(
+                            format!("Expected module, found: {:?}", property_value),
+                            doc.name,
+                            module_property.line_number,
+                        );
+                    }
+                }
+                match property_value
+                    .clone()
+                    .resolve(doc, module_property.line_number)?
+                {
+                    ftd::interpreter::Value::Module { name, things } => return Ok((name, things)),
+                    t => {
+                        return ftd::interpreter::utils::e2(
+                            format!("Expected module, found: {:?}", t),
+                            doc.name,
+                            module_property.line_number,
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    match module_property
+        .resolve(doc, &Default::default())?
+        // TODO: Remove unwrap()
+        .unwrap()
+    {
+        ftd::interpreter::Value::Module { name, things } => Ok((name, things)),
+        t => ftd::interpreter::utils::e2(
+            format!("Expected module, found: {:?}", t),
+            doc.name,
+            module_property.line_number,
+        ),
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Loop {
     pub on: ftd::interpreter::PropertyValue,
     pub alias: String,
+    pub loop_counter_alias: Option<String>,
     pub line_number: usize,
 }
 
 impl Loop {
-    fn new(on: ftd::interpreter::PropertyValue, alias: &str, line_number: usize) -> Loop {
+    fn new(
+        on: ftd::interpreter::PropertyValue,
+        alias: &str,
+        loop_counter_alias: Option<String>,
+        line_number: usize,
+    ) -> Loop {
         Loop {
             on,
             alias: alias.to_string(),
             line_number,
+            loop_counter_alias,
         }
     }
 
@@ -1198,6 +1324,9 @@ impl Loop {
         Ok(ftd::interpreter::StateWithThing::new_thing(Loop::new(
             on,
             doc.resolve_name(ast_loop.alias.as_str()).as_str(),
+            ast_loop
+                .loop_counter_alias
+                .map(|loop_counter_alias| doc.resolve_name(loop_counter_alias.as_str())),
             ast_loop.line_number,
         )))
     }
@@ -1233,7 +1362,7 @@ impl Event {
     fn from_ast_event(
         ast_event: ftd::ast::Event,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Event>> {
         let action = try_ok_state!(ftd::interpreter::FunctionCall::from_string(
@@ -1244,6 +1373,26 @@ impl Event {
             loop_object_name_and_kind,
             ast_event.line_number,
         )?);
+
+        if action.module_name.is_some() {
+            let (function_name, _) = ftd::interpreter::utils::get_function_name_and_properties(
+                ast_event.action.as_str(),
+                doc.name,
+                ast_event.line_number,
+            )?;
+
+            let reference = function_name.as_str().trim_start_matches('$');
+            let reference_full_name = action.name.as_str();
+
+            ftd::interpreter::utils::insert_module_thing(
+                &action.kind,
+                reference,
+                reference_full_name,
+                definition_name_with_arguments,
+                ast_event.line_number,
+                doc,
+            )?;
+        }
 
         let event_name = ftd::interpreter::EventName::from_string(
             ast_event.name.as_str(),
@@ -1261,7 +1410,7 @@ impl Event {
     fn from_ast_events(
         ast_events: Vec<ftd::ast::Event>,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Event>>> {
         let mut events = vec![];

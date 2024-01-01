@@ -9,7 +9,7 @@ pub async fn query(
             .get_files(&config.package)
             .await?
             .into_iter()
-            .map(|v| (v.get_id(), v)),
+            .map(|v| (v.get_id().to_string(), v)),
     );
 
     if let Some(path) = path {
@@ -35,7 +35,7 @@ pub async fn query(
     for file in documents.values() {
         if file.is_ftd() {
             let value = get_ftd_json(file, stage)?;
-            values.insert(file.get_id(), value);
+            values.insert(file.get_id().to_string(), value);
         }
     }
 

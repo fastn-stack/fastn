@@ -1,0 +1,14 @@
+-- import: 80-or-type-constant as t
+
+
+-- t.button-type b: small
+
+-- fancy-button: $b
+
+-- component fancy-button:
+caption t.button-type bt:
+
+-- ftd.text: !Smol
+text if { fancy-button.bt == small }: Smol
+
+-- end: fancy-button

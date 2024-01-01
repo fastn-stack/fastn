@@ -66,9 +66,9 @@ async fn all_status(
         let status = get_file_status(&doc, snapshots, workspaces).await?;
         let track = get_track_status(&doc, snapshots, config.root.as_str())?;
         if !track.is_empty() {
-            track_status.insert(doc.get_id(), track);
+            track_status.insert(doc.get_id().to_string(), track);
         }
-        file_status.insert(doc.get_id(), status);
+        file_status.insert(doc.get_id().to_string(), status);
     }
 
     let deleted_files = snapshots
@@ -102,13 +102,13 @@ pub(crate) async fn get_file_status(
     // For that in that entry will be present in workspace.ftd
     // Added: If file do not present in `latest.ftd` and also do not present in .fastn/workspace.ftd
 
-    if let Some(workspace) = workspaces.get(&doc.get_id()) {
+    if let Some(workspace) = workspaces.get(doc.get_id()) {
         return Ok(match workspace.workspace {
             fastn_core::snapshot::WorkspaceType::Conflicted
             | fastn_core::snapshot::WorkspaceType::Revert
             | fastn_core::snapshot::WorkspaceType::AbortMerge => {
                 let conflicted_version = workspace.conflicted;
-                match snapshots.get(&doc.get_id()) {
+                match snapshots.get(doc.get_id()) {
                     Some(latest_version) if conflicted_version.lt(latest_version) => {
                         FileStatus::Outdated
                     }
@@ -124,11 +124,11 @@ pub(crate) async fn get_file_status(
         });
     }
 
-    if let Some(timestamp) = snapshots.get(&doc.get_id()) {
-        let path = fastn_core::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
+    if let Some(timestamp) = snapshots.get(doc.get_id()) {
+        let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
 
-        let content = tokio::fs::read(&doc.get_full_path()).await?;
-        let existing_doc = tokio::fs::read(&path).await?;
+        let content = fastn_core::tokio_fs::read(&doc.get_full_path()).await?;
+        let existing_doc = fastn_core::tokio_fs::read(&path).await?;
         if sha2::Sha256::digest(content).eq(&sha2::Sha256::digest(existing_doc)) {
             return Ok(FileStatus::Uptodate);
         }
@@ -142,7 +142,7 @@ fn get_track_status(
     snapshots: &std::collections::BTreeMap<String, u128>,
     base_path: &str,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, TrackStatus>> {
-    let path = fastn_core::utils::track_path(&doc.get_id(), &doc.get_base_path());
+    let path = fastn_core::utils::track_path(doc.get_id(), doc.get_base_path());
     let mut track_list = std::collections::BTreeMap::new();
     if !path.exists() {
         return Ok(track_list);

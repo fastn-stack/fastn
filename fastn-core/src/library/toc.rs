@@ -45,7 +45,11 @@ impl TocItem {
         // TODO: num converting to ol and li in ftd.???
         TocItemCompat {
             url: self.url.clone(),
-            number: Some(self.number.iter().map(|x| format!("{}.", x)).collect()),
+            number: Some(self.number.iter().fold(String::new(), |mut output, x| {
+                use std::fmt::Write;
+                let _ = write!(output, "{x}.");
+                output
+            })),
             title: self.title.clone(),
             path: self.path.clone(),
             description: self.description.clone(),
@@ -106,7 +110,7 @@ fn construct_tree_util(mut elements: Vec<(TocItem, usize)>) -> Vec<TocItem> {
     if elements.is_empty() {
         return vec![];
     }
-    let smallest_level = elements.get(0).unwrap().1;
+    let smallest_level = elements.first().unwrap().1;
     elements.push((TocItem::default(), smallest_level));
     // println!("Elements: {:#?}", elements);
     let mut tree = construct_tree(elements, smallest_level);
@@ -279,7 +283,7 @@ impl TocParser {
                     _ => {
                         // The URL can have its own colons. So match the URL first
                         let url_regex = regex::Regex::new(
-                            r#":[ ]?(?P<url>(?:https?)?://(?:[a-zA-Z0-9]+\.)?(?:[A-z0-9]+\.)(?:[A-z0-9]+)(?:[/A-Za-z0-9\?:\&%]+))"#
+                            r":[ ]?(?P<url>(?:https?)?://(?:[a-zA-Z0-9]+\.)?(?:[A-z0-9]+\.)(?:[A-z0-9]+)(?:[/A-Za-z0-9\?:\&%]+))"
                         ).unwrap();
                         if let Some(regex_match) = url_regex.find(current_title.as_str()) {
                             let curr_title = current_title.as_str();

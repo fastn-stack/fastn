@@ -1,0 +1,19 @@
+-- ftd.text: Save To Local Storage
+$on-click$: $save()
+
+-- string $name: World
+
+-- ftd.text: $name
+
+-- ftd.text: Load From Local Storage
+$on-click$: $load($a = $name)
+
+-- void save():
+
+ftd.local_storage.set("name", "Universe")
+
+-- string load(a):
+string $a:
+
+loaded_name = ftd.local_storage.get("name");
+__args__.a.set(loaded_name)

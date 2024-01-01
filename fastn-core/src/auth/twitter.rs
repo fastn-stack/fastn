@@ -437,11 +437,8 @@ pub mod apis {
             username: String,
             id: String,
         }
-        let user_obj: DataObj = fastn_core::auth::utils::get_api(
-            "https://api.twitter.com/2/users/me",
-            format!("{} {}", "Bearer", token).as_str(),
-        )
-        .await?;
+        let user_obj: DataObj =
+            fastn_core::auth::utils::get_api("https://api.twitter.com/2/users/me", token).await?;
 
         Ok((user_obj.data.username, user_obj.data.id))
     }
@@ -463,7 +460,7 @@ pub mod apis {
                 "https://api.twitter.com/2/users/by/username/", username
             )
             .as_str(),
-            format!("{} {}", "Bearer", token).as_str(),
+            token,
         )
         .await?;
         Ok(user_obj.data.id)
@@ -478,7 +475,7 @@ pub mod apis {
                 "https://api.twitter.com/2/tweets/", tweet_id, "/liking_users"
             )
             .as_str(),
-            format!("{} {}", "Bearer", token).as_str(),
+            token,
         )
         .await?;
         Ok(liking_member_list.data.into_iter().map(|x| x.id).collect())
@@ -496,7 +493,7 @@ pub mod apis {
                 "https://api.twitter.com/2/tweets/", tweet_id, "/retweeted_by"
             )
             .as_str(),
-            format!("{} {}", "Bearer", token).as_str(),
+            token,
         )
         .await?;
         Ok(retweeted_member_list
@@ -515,7 +512,7 @@ pub mod apis {
                 "https://api.twitter.com/2/users/", member_id, "/followers"
             )
             .as_str(),
-            format!("{} {}", "Bearer", token).as_str(),
+            token,
         )
         .await?;
         Ok(member_follower_list
@@ -537,7 +534,7 @@ pub mod apis {
                 "https://api.twitter.com/2/users/", member_id, "/following"
             )
             .as_str(),
-            format!("{} {}", "Bearer", token).as_str(),
+            token,
         )
         .await?;
         Ok(member_following_list
@@ -559,7 +556,7 @@ pub mod apis {
                 "https://api.twitter.com/2/spaces/", space_id, "/buyers"
             )
             .as_str(),
-            format!("{} {}", "Bearer", token).as_str(),
+            token,
         )
         .await?;
         Ok(space_ticket_buyers_list

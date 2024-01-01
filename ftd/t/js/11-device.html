@@ -1,59 +1,152 @@
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    
+    <meta content="fastn" name="generator">
+    
+    
+    <script>
+        let __fastn_package_name__ = "foo";
+    </script>
+
     <script src="fastn-js.js"></script>
+    
 
     <style>
        
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2"><div data-id="3"><div data-id="4">Hello from desktop</div><div data-id="5">Hello again from desktop</div></div></div><div data-id="6"></div></body><style id="styles">
-    .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
-	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3">====Start====</div><comment data-id="4"></comment><div data-id="5">====Middle====</div><comment data-id="6"></comment><div data-id="8">Hello from mobile</div><div data-id="9">Hello again from mobile</div><div data-id="10">====End====</div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
     </style>
 <script>
     (function() {
-        let global = {
-};
-let main = function (parent) {
-  fastn_dom.conditionalDom(parent, [
-    ftd.device
-  ], function () {
-    return (ftd.device.get() === "desktop");
-  }, function (root) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Div);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop", inherited);
-    },
-    function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello again from desktop", inherited);
-    }
-    ]), inherited);
-    return rooti0;
-  });
-  fastn_dom.conditionalDom(parent, [
-    ftd.device
-  ], function () {
-    return (ftd.device.get() === "mobile");
-  }, function (root) {
-    let rooti1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Div);
-    rooti1.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from mobile", inherited);
-    },
-    function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello again from mobile", inherited);
-    }
-    ]), inherited);
-    return rooti1;
-  });
+        let main = function (parent) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "====Start====", inherited);
+    fastn_dom.conditionalDom(parent, [
+      ftd.device
+    ], function () {
+      return (ftd.device.get() === "desktop");
+    }, function (root) {
+      let rooti1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Wrapper);
+      rooti1.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = foo__desktop_view(root, inherited);
+        return rooti0;
+      }
+      ]), inherited);
+      return rooti1;
+    });
+    let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "====Middle====", inherited);
+    fastn_dom.conditionalDom(parent, [
+      ftd.device
+    ], function () {
+      return (ftd.device.get() === "mobile");
+    }, function (root) {
+      let rooti3 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Wrapper);
+      rooti3.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from mobile", inherited);
+        return rooti0;
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello again from mobile", inherited);
+        return rooti0;
+      }
+      ]), inherited);
+      return rooti3;
+    });
+    let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti4.setProperty(fastn_dom.PropertyKind.StringValue, "====End====", inherited);
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
+global["main"] = main;
+let foo__desktop_view = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+      show: fastn.wrapMutable(true),
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    return fastn_dom.conditionalDom(parent, [
+      __args__.show
+    ], function () {
+      return fastn_utils.getter(__args__.show);
+    }, function (root) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+        ftd.toggle({
+          a: __args__.show,
+        }, rooti0);
+      });
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop", inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello again from desktop", inherited);
+      }
+      ]), inherited);
+      return rooti0;
+    }).getParent();
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__desktop_view"] = foo__desktop_view;
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
 
-        fastn_virtual.hydrate(main);
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastnVirtual.doubleBuffer(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+        ftd.emit_on_load();
+    };
 </script>
 </html>

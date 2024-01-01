@@ -358,6 +358,7 @@
                                       }
                                     },
                                     "alias": "foo#obj",
+                                    "loop_counter_alias": null,
                                     "line_number": 40
                                   },
                                   "condition": null,

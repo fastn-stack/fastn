@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <meta content="fastn" name="generator">
+    
+    
+    <script>
+        let __fastn_package_name__ = "foo";
+    </script>
+
+    <script src="fastn-js.js"></script>
+    
+
+    <style>
+       
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><img data-id="3" id="test" src="https://picsum.photos/200" class="__w-3 __h-4"></img><div data-id="4" class="ft_row __pos-5 __w-6 __h-7"></div><div data-id="5" class="__cur-9">&gt;&gt; Blur/Unblur Image &lt;&lt;</div><div data-id="6" class="__cur-10">&gt;&gt; Set/Unset Contrast on Image &lt;&lt;</div><div data-id="7" class="__cur-11">&gt;&gt; Set/Unset Multi &lt;&lt;</div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__w-3 { width: 300px; }
+	.__h-4 { height: 300px; }
+	.__pos-5 { position: absolute; }
+	.__w-6 { width: 300px; }
+	.__h-7 { height: 300px; }
+	.__cur-9 { cursor: pointer; }
+	.__cur-10 { cursor: pointer; }
+	.__cur-11 { cursor: pointer; }
+    </style>
+<script>
+    (function() {
+        let main = function (parent) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Image);
+    parenti0.setProperty(fastn_dom.PropertyKind.ImageSrc, fastn.recordInstance({
+      dark: "https://picsum.photos/200",
+      light: "https://picsum.photos/200"
+    }), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Id, "test", inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
+    let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti1.setProperty(fastn_dom.PropertyKind.Anchor, fastn_dom.Anchor.Id("test"), inherited);
+    parenti1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
+    parenti1.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(300)), inherited);
+    parenti1.setProperty(fastn_dom.PropertyKind.BackdropFilter, fastn.formula([global.foo__blur_image,
+    global.foo__contrast_image,
+    global.foo__set_multi_filters], function () {
+      if (function () {
+        return fastn_utils.getter(global.foo__blur_image);
+      }()) {
+        return fastn_dom.BackdropFilter.Blur(fastn_dom.Length.Px(10));
+      } else if (function () {
+        return fastn_utils.getter(global.foo__contrast_image);
+      }()) {
+        return fastn_dom.BackdropFilter.Contrast(fastn_dom.Length.Percent(30));
+      } else if (function () {
+        return fastn_utils.getter(global.foo__set_multi_filters);
+      }()) {
+        return fastn_dom.BackdropFilter.Multi(global.foo__bdf);
+      }
+    }
+    ), inherited);
+    let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, ">> Blur/Unblur Image <<", inherited);
+    parenti2.addEventHandler(fastn_dom.Event.Click, function () {
+      ftd.toggle({
+        a: global.foo__blur_image,
+      }, parenti2);
+    });
+    let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti3.setProperty(fastn_dom.PropertyKind.StringValue, ">> Set/Unset Contrast on Image <<", inherited);
+    parenti3.addEventHandler(fastn_dom.Event.Click, function () {
+      ftd.toggle({
+        a: global.foo__contrast_image,
+      }, parenti3);
+    });
+    let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti4.setProperty(fastn_dom.PropertyKind.StringValue, ">> Set/Unset Multi <<", inherited);
+    parenti4.addEventHandler(fastn_dom.Event.Click, function () {
+      ftd.toggle({
+        a: global.foo__set_multi_filters,
+      }, parenti4);
+    });
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["main"] = main;
+fastn_utils.createNestedObject(global, "foo__blur_image", fastn.mutable(false));
+fastn_utils.createNestedObject(global, "foo__contrast_image", fastn.mutable(false));
+fastn_utils.createNestedObject(global, "foo__bdf", fastn.recordInstance({
+  blur: fastn_dom.Length.Px(10),
+  brightness: fastn_dom.Length.Percent(50),
+  contrast: fastn_dom.Length.Percent(40),
+  grayscale: fastn_dom.Length.Percent(40),
+  invert: null,
+  opacity: null,
+  sepia: null,
+  saturate: null
+}));
+fastn_utils.createNestedObject(global, "foo__set_multi_filters", fastn.mutable(false));
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastnVirtual.doubleBuffer(main_wrapper);
+        ftd.post_init();
+    })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+        ftd.emit_on_load();
+    };
+</script>
+</html>

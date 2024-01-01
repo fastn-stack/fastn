@@ -29,6 +29,76 @@ macro_rules! warning {
     }};
 }
 
+fn id_to_cache_key(id: &str) -> String {
+    // TODO: use MAIN_SEPARATOR here
+    id.replace(['/', '\\'], "_")
+}
+
+pub fn get_ftd_hash(path: &str) -> fastn_core::Result<String> {
+    let path = fastn_core::utils::replace_last_n(path, 1, "/", "");
+    Ok(fastn_core::utils::generate_hash(
+        std::fs::read(format!("{path}.ftd"))
+            .or_else(|_| std::fs::read(format!("{path}/index.ftd")))?,
+    ))
+}
+
+pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
+    let cache_dir = dirs::cache_dir()?;
+    let base_path = cache_dir.join("fastn.com");
+
+    if !base_path.exists() {
+        if let Err(err) = std::fs::create_dir_all(&base_path) {
+            eprintln!("Failed to create cache directory: {}", err);
+            return None;
+        }
+    }
+
+    Some(
+        base_path
+            .join(id_to_cache_key(
+                &std::env::current_dir()
+                    .expect("cant read current dir")
+                    .to_string_lossy(),
+            ))
+            .join(id_to_cache_key(id)),
+    )
+}
+
+pub fn get_cached<T>(id: &str) -> Option<T>
+where
+    T: serde::de::DeserializeOwned,
+{
+    let cache_file = get_cache_file(id)?;
+    serde_json::from_str(
+        &std::fs::read_to_string(cache_file)
+            .map_err(|e| {
+                tracing::debug!("file read error: {}", e.to_string());
+                e
+            })
+            .ok()?,
+    )
+    .map_err(|e| {
+        tracing::debug!("not valid json: {}", e.to_string());
+        e
+    })
+    .ok()
+}
+
+pub fn cache_it<T>(id: &str, d: T) -> ftd::interpreter::Result<T>
+where
+    T: serde::ser::Serialize,
+{
+    let cache_file = get_cache_file(id)
+        .ok_or_else(|| ftd::interpreter::Error::OtherError("cache dir not found".to_string()))?;
+    std::fs::create_dir_all(cache_file.parent().unwrap()).map_err(|e| {
+        ftd::interpreter::Error::OtherError(format!("failed to create cache dir: {}", e))
+    })?;
+    std::fs::write(cache_file, serde_json::to_string(&d)?).map_err(|e| {
+        ftd::interpreter::Error::OtherError(format!("failed to write cache file: {}", e))
+    })?;
+    Ok(d)
+}
+
 pub fn redirect_page_html(url: &str) -> String {
     include_str!("../redirect.html").replace("__REDIRECT_URL__", url)
 }
@@ -41,9 +111,60 @@ pub fn print_end(msg: &str, start: std::time::Instant) {
     } else {
         println!(
             // TODO: instead of lots of spaces put proper erase current terminal line thing
-            "\r{} in {:?}.                          ",
+            "\r{:?} {} in {:?}.                          ",
+            std::time::Instant::now(),
             msg.green(),
             start.elapsed()
+        );
+    }
+}
+
+/// replace_last_n("a.b.c.d.e.f", 2, ".", "/") => "a.b.c.d/e/f"
+pub fn replace_last_n(s: &str, n: usize, pattern: &str, replacement: &str) -> String {
+    use itertools::Itertools;
+
+    s.rsplitn(n + 1, pattern)
+        .collect_vec()
+        .into_iter()
+        .rev()
+        .join(replacement)
+}
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn replace_last_n() {
+        assert_eq!(
+            super::replace_last_n("a.b.c.d.e.f", 2, ".", "/"),
+            "a.b.c.d/e/f"
+        );
+        assert_eq!(
+            super::replace_last_n("a.b.c.d.e.", 2, ".", "/"),
+            "a.b.c.d/e/"
+        );
+        assert_eq!(super::replace_last_n("d-e.f", 2, ".", "/"), "d-e/f");
+        assert_eq!(
+            super::replace_last_n("a.ftd/b.ftd", 1, ".ftd", "/index.html"),
+            "a.ftd/b/index.html"
+        );
+        assert_eq!(
+            super::replace_last_n("index.ftd/b/index.ftd", 1, "index.ftd", "index.html"),
+            "index.ftd/b/index.html"
+        );
+    }
+}
+
+pub fn print_error(msg: &str, start: std::time::Instant) {
+    use colored::Colorize;
+
+    if fastn_core::utils::is_test() {
+        println!("done in <omitted>");
+    } else {
+        eprintln!(
+            "\r{:?} {} in {:?}.                          ",
+            std::time::Instant::now(),
+            msg.red(),
+            start.elapsed(),
         );
     }
 }
@@ -113,7 +234,7 @@ pub fn value_to_colored_string_without_null(
         serde_json::Value::Array(v) => {
             let mut s = String::new();
             let mut is_first = true;
-            for (_, value) in v.iter().enumerate() {
+            for value in v.iter() {
                 let value_string = value_to_colored_string_without_null(value, indent_level + 1);
                 if !value_string.is_empty() {
                     s.push_str(&format!(
@@ -237,15 +358,6 @@ pub(crate) async fn get_number_of_documents(
         no_of_docs = format!("{} / {}", no_of_docs, no_of_original_docs);
     }
     Ok(no_of_docs)
-}
-
-pub(crate) fn get_extension(file_name: &str) -> fastn_core::Result<String> {
-    if let Some((_, ext)) = file_name.rsplit_once('.') {
-        return Ok(ext.to_string());
-    }
-    Err(fastn_core::Error::UsageError {
-        message: format!("extension not found, `{}`", file_name),
-    })
 }
 
 pub(crate) async fn get_current_document_last_modified_on(
@@ -381,6 +493,22 @@ pub(crate) fn validate_base_url(package: &fastn_core::Package) -> fastn_core::Re
     }
 
     Ok(())
+}
+
+pub fn escape_string(s: &str) -> String {
+    let mut result = String::new();
+    for c in s.chars() {
+        match c {
+            '\\' => result.push_str("\\\\"),
+            '\"' => result.push_str("\\\""),
+            '\n' => result.push_str("\\n"),
+            '\r' => result.push_str("\\r"),
+            '\t' => result.push_str("\\t"),
+            '\0' => result.push_str("\\0"),
+            _ => result.push(c),
+        }
+    }
+    result
 }
 
 #[allow(dead_code)]
@@ -544,7 +672,7 @@ fn get_extra_css(external_css: &[String], inline_css: &[String], css: &str) -> S
 pub fn replace_markers_2022(
     s: &str,
     html_ui: ftd::html::HtmlUI,
-    config: &mut fastn_core::Config,
+    config: &fastn_core::Config,
     main_id: &str,
     font_style: &str,
     base_url: &str,
@@ -620,31 +748,64 @@ pub fn replace_markers_2022(
     )
 }
 
-#[allow(clippy::too_many_arguments)]
+pub fn get_fastn_package_data(package: &fastn_core::Package) -> String {
+    format!(
+        indoc::indoc! {"
+        let __fastn_package_name__ = \"{package_name}\";
+    "},
+        package_name = package.name
+    )
+}
+
 pub fn replace_markers_2023(
-    s: &str,
     js_script: &str,
+    scripts: &str,
     ssr_body: &str,
     font_style: &str,
     default_css: &str,
+    base_url: &str,
+    config: &fastn_core::Config,
 ) -> String {
-    ftd::html::utils::trim_all_lines(
-        s.replace("__js_script__", js_script)
-            .replace(
-                "__html_body__",
-                format!("{}{}", ssr_body, font_style).as_str(),
-            )
-            .replace(
-                "__script_file__",
-                format!(
-                    "<script src=\"{}\"></script><script src=\"{}\"></script>",
-                    hashed_default_ftd_js(),
-                    hashed_markdown_js()
-                )
-                .as_str(),
-            )
-            .replace("__default_css__", default_css)
-            .as_str(),
+    format!(
+        include_str!("../../ftd/ftd-js.html"),
+        fastn_package = get_fastn_package_data(&config.package).as_str(),
+        base_url_tag = if !base_url.is_empty() {
+            format!("<base href=\"{}\">", base_url)
+        } else {
+            "".to_string()
+        },
+        favicon_html_tag = resolve_favicon(
+            config.root.as_str(),
+            config.package.name.as_str(),
+            &config.package.favicon,
+        )
+        .unwrap_or_default()
+        .as_str(),
+        js_script = format!("{js_script}{}", fastn_core::utils::available_code_themes()).as_str(),
+        script_file = format!(
+            r#"
+                <script src="{}"></script>
+                <script src="{}"></script>
+                <script src="{}"></script>
+                <link rel="stylesheet" href="{}">
+                {}
+            "#,
+            hashed_markdown_js(),
+            hashed_prism_js(),
+            hashed_default_ftd_js(config.package.name.as_str()),
+            hashed_prism_css(),
+            scripts,
+        )
+        .as_str(),
+        extra_js = get_extra_js(
+            config.ftd_external_js.as_slice(),
+            config.ftd_inline_js.as_slice(),
+            "",
+            "",
+        )
+        .as_str(),
+        default_css = default_css,
+        html_body = format!("{}{}", ssr_body, font_style).as_str(),
     )
 }
 
@@ -660,6 +821,14 @@ pub(crate) async fn write(
     if root.join(file_path).exists() {
         return Ok(());
     }
+    update1(root, file_path, data).await
+}
+
+pub(crate) async fn overwrite(
+    root: &camino::Utf8PathBuf,
+    file_path: &str,
+    data: &[u8],
+) -> fastn_core::Result<()> {
     update1(root, file_path, data).await
 }
 
@@ -693,7 +862,7 @@ pub(crate) async fn copy(
     from: impl AsRef<camino::Utf8Path>,
     to: impl AsRef<camino::Utf8Path>,
 ) -> fastn_core::Result<()> {
-    let content = tokio::fs::read(from.as_ref()).await?;
+    let content = fastn_core::tokio_fs::read(from.as_ref()).await?;
     fastn_core::utils::update(to, content.as_slice()).await
 }
 
@@ -811,7 +980,7 @@ pub fn query(uri: &str) -> fastn_core::Result<Vec<(String, String)>> {
             .collect_vec(),
     )
 }
-pub fn generate_hash(content: &str) -> String {
+pub fn generate_hash(content: impl AsRef<[u8]>) -> String {
     use sha2::digest::FixedOutput;
     use sha2::Digest;
     let mut hasher = sha2::Sha256::new();
@@ -837,15 +1006,15 @@ pub fn hashed_default_js_name() -> &'static str {
     &JS_HASH
 }
 
-static FTD_JS_HASH: once_cell::sync::Lazy<String> = once_cell::sync::Lazy::new(|| {
-    format!(
-        "default-{}.js",
-        generate_hash(ftd::js::all_js_without_test().as_str())
-    )
-});
+static FTD_JS_HASH: once_cell::sync::OnceCell<String> = once_cell::sync::OnceCell::new();
 
-pub fn hashed_default_ftd_js() -> &'static str {
-    &FTD_JS_HASH
+pub fn hashed_default_ftd_js(package_name: &str) -> &'static str {
+    FTD_JS_HASH.get_or_init(|| {
+        format!(
+            "default-{}.js",
+            generate_hash(ftd::js::all_js_without_test(package_name).as_str())
+        )
+    })
 }
 
 static MARKDOWN_HASH: once_cell::sync::Lazy<String> =
@@ -853,6 +1022,44 @@ static MARKDOWN_HASH: once_cell::sync::Lazy<String> =
 
 pub fn hashed_markdown_js() -> &'static str {
     &MARKDOWN_HASH
+}
+
+static PRISM_JS_HASH: once_cell::sync::Lazy<String> =
+    once_cell::sync::Lazy::new(|| format!("prism-{}.js", generate_hash(ftd::prism_js().as_str()),));
+
+pub fn hashed_prism_js() -> &'static str {
+    &PRISM_JS_HASH
+}
+
+static PRISM_CSS_HASH: once_cell::sync::Lazy<String> = once_cell::sync::Lazy::new(|| {
+    format!("prism-{}.css", generate_hash(ftd::prism_css().as_str()),)
+});
+
+pub fn hashed_prism_css() -> &'static str {
+    &PRISM_CSS_HASH
+}
+
+static CODE_THEME_HASH: once_cell::sync::Lazy<ftd::Map<String>> =
+    once_cell::sync::Lazy::new(|| {
+        ftd::theme_css()
+            .into_iter()
+            .map(|(k, v)| (k, format!("code-theme-{}.css", generate_hash(v.as_str()))))
+            .collect()
+    });
+
+pub fn hashed_code_theme_css() -> &'static ftd::Map<String> {
+    &CODE_THEME_HASH
+}
+
+pub fn available_code_themes() -> String {
+    let themes = hashed_code_theme_css();
+    let mut result = vec![];
+    for (theme, url) in themes {
+        result.push(format!(
+            "fastn_dom.codeData.availableThemes[\"{theme}\"] = \"{url}\";"
+        ))
+    }
+    result.join("\n")
 }
 
 #[cfg(test)]
@@ -876,4 +1083,45 @@ pub fn ignore_headers() -> Vec<&'static str> {
 
 pub(crate) fn is_ftd_path(path: &str) -> bool {
     path.trim_matches('/').ends_with(".ftd")
+}
+
+#[cfg(feature = "auth")]
+#[derive(
+    Clone,
+    Debug,
+    diesel::deserialize::FromSqlRow,
+    diesel::expression::AsExpression,
+    PartialOrd,
+    PartialEq,
+)]
+#[diesel(sql_type = fastn_core::schema::sql_types::Citext)]
+pub struct CiString(pub String);
+
+#[cfg(feature = "auth")]
+pub fn citext(s: &str) -> CiString {
+    CiString(s.into())
+}
+
+#[cfg(feature = "auth")]
+impl diesel::serialize::ToSql<fastn_core::schema::sql_types::Citext, diesel::pg::Pg> for CiString {
+    fn to_sql<'b>(
+        &'b self,
+        out: &mut diesel::serialize::Output<'b, '_, diesel::pg::Pg>,
+    ) -> diesel::serialize::Result {
+        diesel::serialize::ToSql::<diesel::sql_types::Text, diesel::pg::Pg>::to_sql(&self.0, out)
+    }
+}
+
+#[cfg(feature = "auth")]
+impl diesel::deserialize::FromSql<fastn_core::schema::sql_types::Citext, diesel::pg::Pg>
+    for CiString
+{
+    fn from_sql(
+        bytes: <diesel::pg::Pg as diesel::backend::Backend>::RawValue<'_>,
+    ) -> diesel::deserialize::Result<Self> {
+        Ok(CiString(diesel::deserialize::FromSql::<
+            diesel::sql_types::Text,
+            diesel::pg::Pg,
+        >::from_sql(bytes)?))
+    }
 }

@@ -1,0 +1,15 @@
+-- ftd.code:
+lang: ftd
+role: $inherited.types.copy-small
+theme: fastn-theme.light
+theme if { ftd.dark-mode }: fastn-theme.dark
+
+\-- ftd.column:
+padding.px: 10 ;; <hl>
+spacing.fixed.px: "50"
+height.fixed.px: 200
+width.fixed.px: 300 ;; <hl>
+overflow-y: scroll
+border-color: $red-yellow
+border-style: solid
+border-width.px: 2

@@ -6,6 +6,8 @@ pub enum Ast {
     MutableVariable(fastn_js::MutableVariable),
     MutableList(fastn_js::MutableList),
     RecordInstance(fastn_js::RecordInstance),
+    OrType(fastn_js::OrType),
+    Export { from: String, to: String },
 }
 
 impl Ast {
@@ -16,6 +18,19 @@ impl Ast {
             Ast::RecordInstance(record_instance) => Some(record_instance.name.clone()),
             Ast::MutableList(mutable_list) => Some(mutable_list.name.clone()),
             _ => None,
+        }
+    }
+
+    pub fn get_name(&self) -> Option<String> {
+        match self {
+            Ast::StaticVariable(static_variable) => Some(static_variable.name.clone()),
+            Ast::MutableVariable(mutable_variable) => Some(mutable_variable.name.clone()),
+            Ast::RecordInstance(record_instance) => Some(record_instance.name.clone()),
+            Ast::MutableList(mutable_list) => Some(mutable_list.name.clone()),
+            Ast::Component(component) => Some(component.name.clone()),
+            Ast::UDF(udf) => Some(udf.name.clone()),
+            Ast::OrType(or_type) => Some(or_type.name.clone()),
+            Ast::Export { .. } => None,
         }
     }
 }

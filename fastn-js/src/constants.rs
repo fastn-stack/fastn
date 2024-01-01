@@ -1,7 +1,10 @@
 pub const GLOBAL_VARIABLE_MAP: &str = "global";
+pub const LEGACY_GLOBAL_MAP_REF_VARIABLE: &str = "__fastn_legacy_global_ref__";
 pub const LOCAL_VARIABLE_MAP: &str = "__args__";
+pub const FUNCTION_ARGS: &str = "args";
 pub const INHERITED_PREFIX: &str = "__$$inherited$$__";
 pub const INHERITED_VARIABLE: &str = "inherited";
 pub const MAIN_FUNCTION: &str = "main";
 pub const FUNCTION_PARENT: &str = "root";
 pub const COMPONENT_PARENT: &str = "parent";
+pub const GET_STATIC_VALUE: &str = "fastn_utils.getStaticValue";

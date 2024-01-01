@@ -575,7 +575,7 @@ impl Document {
 
     pub fn title(&self) -> Option<ftd::ftd2021::Rendered> {
         // find the text of first primary heading
-        for i in vec![
+        for i in [
             ftd::Region::H0,
             ftd::Region::H1,
             ftd::Region::H2,

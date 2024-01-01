@@ -1,6 +1,6 @@
 [package]
 name = "fastn"
-version = "0.3.12"
+version = "0.4.33"
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -13,7 +13,15 @@ colored.workspace = true
 fastn-cloud.workspace = true
 fastn-observer.workspace = true
 fastn-core.workspace = true
+futures.workspace = true
+reqwest.workspace = true
+serde.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
+dotenvy.workspace = true
+
+
+[features]
+auth = ["fastn-core/auth"]

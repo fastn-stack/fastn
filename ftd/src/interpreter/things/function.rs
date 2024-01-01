@@ -250,6 +250,8 @@ pub struct FunctionCall {
     pub line_number: usize,
     pub values: ftd::Map<ftd::interpreter::PropertyValue>,
     pub order: Vec<String>,
+    // (Default module, Argument name of module kind)
+    pub module_name: Option<(String, String)>,
 }
 
 impl FunctionCall {
@@ -260,6 +262,7 @@ impl FunctionCall {
         line_number: usize,
         values: ftd::Map<ftd::interpreter::PropertyValue>,
         order: Vec<String>,
+        module_name: Option<(String, String)>,
     ) -> FunctionCall {
         FunctionCall {
             name: name.to_string(),
@@ -268,6 +271,7 @@ impl FunctionCall {
             line_number,
             values,
             order,
+            module_name,
         }
     }
 
@@ -289,7 +293,17 @@ impl FunctionCall {
                 line_number,
             )?;
 
-        doc.scan_initial_thing(function_name.as_str(), line_number)?;
+        let initial_kind_with_remaining_and_source =
+            ftd::interpreter::utils::is_argument_in_component_or_loop(
+                function_name.as_str(),
+                doc,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+            );
+
+        if !initial_kind_with_remaining_and_source {
+            doc.scan_initial_thing(function_name.as_str(), line_number)?;
+        }
 
         for (_, value) in properties.iter() {
             ftd::interpreter::PropertyValue::scan_string_with_argument(
@@ -309,7 +323,7 @@ impl FunctionCall {
         doc: &mut ftd::interpreter::TDoc,
         mutable: bool,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::FunctionCall>>
     {
@@ -323,7 +337,61 @@ impl FunctionCall {
                 doc.name,
                 line_number,
             )?;
-        let function = try_ok_state!(doc.search_function(function_name.as_str(), line_number)?);
+
+        let mut resolved_function_name = function_name.clone();
+        let initial_kind_with_remaining_and_source =
+            ftd::interpreter::utils::get_argument_for_reference_and_remaining(
+                resolved_function_name.as_str(),
+                doc,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+                line_number,
+            )?;
+
+        let mut module_name = None;
+        let mut source = ftd::interpreter::PropertyValueSource::Global;
+        if let Some((ref argument, ref function, source_)) = initial_kind_with_remaining_and_source
+        {
+            source = source_;
+            if argument.kind.is_module() {
+                if let Some(ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::Module { ref name, .. },
+                    ..
+                }) = argument.value
+                {
+                    if let Some(function) = function {
+                        module_name = Some((
+                            name.to_string(),
+                            source
+                                .get_name()
+                                .map(|v| {
+                                    source.get_reference_name(
+                                        format!("{v}.{}", argument.name).as_str(),
+                                        doc,
+                                    )
+                                })
+                                .unwrap_or(argument.name.to_string()),
+                        ));
+                        resolved_function_name = format!("{name}#{function}");
+                    } else {
+                        return ftd::interpreter::utils::e2(
+                            format!("No function found: {}", expression),
+                            doc.name,
+                            argument.line_number,
+                        );
+                    }
+                } else {
+                    return ftd::interpreter::utils::e2(
+                        format!("Default value not found for module {}", argument.name),
+                        doc.name,
+                        argument.line_number,
+                    );
+                }
+            }
+        }
+
+        let function =
+            try_ok_state!(doc.search_function(resolved_function_name.as_str(), line_number)?);
         let mut values: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
         let mut order = vec![];
 
@@ -346,7 +414,7 @@ impl FunctionCall {
                     return ftd::interpreter::utils::e2(
                         format!(
                             "Mutability conflict in argument `{}` for function `{}`",
-                            property_key, function_name
+                            property_key, resolved_function_name
                         ),
                         doc.name,
                         line_number,
@@ -391,17 +459,17 @@ impl FunctionCall {
             order.push(argument.name.to_string());
         }
 
-        let reference_full_name = ftd::interpreter::PropertyValueSource::Global
-            .get_reference_name(function_name.as_str(), doc);
+        let reference_full_name = source.get_reference_name(function_name.as_str(), doc);
 
         Ok(ftd::interpreter::StateWithThing::new_thing(
             ftd::interpreter::FunctionCall::new(
                 reference_full_name.as_str(),
-                function.return_kind,
+                function.return_kind.clone(),
                 mutable,
                 line_number,
                 values,
                 order,
+                module_name,
             ),
         ))
     }

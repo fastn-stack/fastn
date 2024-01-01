@@ -1,0 +1,10 @@
+-- string list names:
+
+-- string: Arpita
+-- string: Ayushi
+
+-- end: names
+
+
+-- ftd.text: $obj
+for: obj in $names

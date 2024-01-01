@@ -77,7 +77,7 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let doc = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let mut executor =
         ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
-    for thing in ftd::interpreter::default::default_bag().keys() {
+    for thing in ftd::interpreter::default::get_default_bag().keys() {
         executor.bag.remove(thing);
     }
     let expected_json = serde_json::to_string_pretty(&executor).unwrap();
@@ -115,31 +115,9 @@ fn executor_test_all() {
     }
 }
 
-fn find_all_files_matching_extension_recursively(
-    dir: impl AsRef<std::path::Path>,
-    extension: &str,
-) -> Vec<std::path::PathBuf> {
-    let mut files = vec![];
-    for entry in std::fs::read_dir(dir).unwrap() {
-        let entry = entry.unwrap();
-        let path = entry.path();
-        if path.is_dir() {
-            files.extend(find_all_files_matching_extension_recursively(
-                &path, extension,
-            ));
-        } else {
-            match path.extension() {
-                Some(ext) if ext == extension => files.push(path),
-                _ => continue,
-            }
-        }
-    }
-    files
-}
-
 fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
     let files = {
-        let mut f = find_all_files_matching_extension_recursively("t/executor", "ftd");
+        let mut f = ftd::utils::find_all_files_matching_extension_recursively("t/executor", "ftd");
         f.sort();
         f
     };

@@ -15,8 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CARGO_TERM_COLOR: always
-      BUILD_TARGET: x86_64-unknown-linux-musl
-      BINARY_NAME: fastn
     steps:
       - uses: actions/checkout@main
       - uses: actions/cache@v2
@@ -29,23 +27,16 @@ jobs:
             fifthtry_content/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build-musl
-        uses: gmiam/rust-musl-action@9e6a37bf27ecfffb6b92240ea276bea5487fa15d
+        uses: gmiam/rust-musl-action@0f17df9aea6eadc5eaeccdf733ec78c203103b61
         continue-on-error: false
         with:
-          args: cargo build --target $BUILD_TARGET --release
+          args: cargo build --target x86_64-unknown-linux-musl --release
+      - name: run fastn
+        run: ./target/x86_64-unknown-linux-musl/release/fastn --version
       - uses: actions/upload-artifact@v2
         with:
           name: linux_musl_x86_64
-          path: target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }}*
-      - name: Build-musl
-        uses: gmiam/rust-musl-action@9e6a37bf27ecfffb6b92240ea276bea5487fa15d
-        continue-on-error: false
-        with:
-          args: cargo build --target $BUILD_TARGET --release --features controller
-      - uses: actions/upload-artifact@v2
-        with:
-          name: fastn_controller_linux_musl_x86_64
-          path: target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }}*
+          path: target/x86_64-unknown-linux-musl/release/fastn
   release-windows:
     name: Build for Windows
     runs-on: windows-latest
@@ -68,14 +59,16 @@ jobs:
         with:
           command: build
           args: --release
-      - uses: actions/upload-artifact@master
+      - name: run fastn
+        run: ./target/release/fastn.exe --version
+      - uses: actions/upload-artifact@v2
         with:
           name: windows_x64_latest
           path: target/release/fastn.exe
       - name: Download EnVar plugin for NSIS
         uses: carlosperate/download-file-action@v1.0.3
         with:
-          file-url: https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip
+          file-url: https://github.com/GsNSIS/EnVar/releases/download/v0.3.1/EnVar-Plugin.zip
           file-name: envar_plugin.zip
           location: ${{ github.workspace }}
       - name: Extract EnVar plugin
@@ -112,7 +105,9 @@ jobs:
         with:
           command: build
           args: --release
-      - uses: actions/upload-artifact@master
+      - name: run fastn
+        run: ./target/release/fastn --version
+      - uses: actions/upload-artifact@v2
         with:
           name: macos_x64_latest
           path: |
@@ -123,23 +118,19 @@ jobs:
     needs: [release-ubuntu, release-macos, release-windows]
     steps:
       - uses: actions/checkout@main
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: macos_x64_latest
           path: ~/download/macos
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: linux_musl_x86_64
           path: ~/download/linux_musl
-      - uses: actions/download-artifact@v2
-        with:
-          name: fastn_controller_linux_musl_x86_64
-          path: ~/download/fastn_controller_linux_musl
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: windows_x64_latest
           path: ~/download/windows
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: windows_x64_installer.exe
           path: ~/download/windows
@@ -149,16 +140,13 @@ jobs:
           mv ~/download/windows/windows_x64_installer.exe ~/download/windows/fastn_setup.exe
           mv ~/download/macos/fastn ~/download/macos/fastn_macos_x86_64
           mv ~/download/linux_musl/fastn ~/download/linux_musl/fastn_linux_musl_x86_64
-          mv ~/download/linux_musl/fastn.d ~/download/linux_musl/fastn_linux_musl_x86_64.d
-          mv ~/download/fastn_controller_linux_musl/fastn ~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64
-          mv ~/download/fastn_controller_linux_musl/fastn.d ~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64.d
       - name: Update .github/RELEASE_TEMPLATE.md
         run: |
             sed -i "s/GITHUB_SHA/${GITHUB_SHA}/g" .github/RELEASE_TEMPLATE.md
             sed -i "s/DATE/$(date)/g" .github/RELEASE_TEMPLATE.md
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~/download/windows/fastn_windows_x86_64.exe,~/download/windows/fastn_setup.exe,~/download/macos/fastn_macos_x86_64,~/download/linux_musl/fastn_linux_musl_x86_64,~/download/linux_musl/fastn_linux_musl_x86_64.d,~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64,~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64.d"
+          artifacts: "~/download/windows/fastn_windows_x86_64.exe,~/download/windows/fastn_setup.exe,~/download/macos/fastn_macos_x86_64,~/download/linux_musl/fastn_linux_musl_x86_64"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}

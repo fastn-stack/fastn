@@ -1,0 +1,70 @@
+-- show-persons:
+persons: $people
+
+-- person first-person: $get-first-person(a = $people)
+
+
+-- show-person: $first-person.name
+emp-id: $first-person.emp-id
+
+
+
+-- record person:
+caption name:
+integer emp-id:
+
+
+
+-- person list people:
+
+-- person: Ritesh
+emp-id: 1
+
+-- person: Ajinosaurus
+emp-id: 2
+
+-- end: people
+
+
+-- person get-first-person(a):
+person list a:
+
+ftd.get(a, 0)
+
+
+
+
+
+-- component show-persons:
+person list persons:
+
+-- ftd.column:
+
+-- show-person: $p.name
+emp-id: $p.emp-id
+for: p in $show-persons.persons
+
+-- end: ftd.column
+
+-- end: show-persons
+
+
+
+
+
+-- component show-person:
+caption name:
+integer emp-id:
+
+-- ftd.row:
+spacing.fixed.px: 5
+
+-- ftd.integer: $show-person.emp-id
+color: green
+
+-- ftd.text: $show-person.name
+color: blue
+
+-- end: ftd.row
+
+-- end: show-person

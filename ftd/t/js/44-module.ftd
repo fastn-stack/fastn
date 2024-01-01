@@ -1,0 +1,22 @@
+-- bar:
+
+-- bar:
+m: 01-basic-module
+
+
+-- component bar:
+module m: 01-basic
+caption title: default header again
+
+-- ftd.column:
+padding.px: 10
+border-width.px: 1
+margin-bottom.px: 5
+
+-- ftd.text: $bar.m.append(a = FifthTry, b = $bar.m.hello)
+-- ftd.text: $bar.m.hello
+-- bar.m.print: $bar.title
+
+-- end: ftd.column
+
+-- end: bar

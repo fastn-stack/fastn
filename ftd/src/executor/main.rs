@@ -42,7 +42,7 @@ impl Default for RT {
     }
 }
 
-impl<'a> ExecuteDoc<'a> {
+impl ExecuteDoc<'_> {
     #[tracing::instrument(skip_all)]
     pub fn from_interpreter(document: ftd::interpreter::Document) -> ftd::executor::Result<RT> {
         let mut document = document;
@@ -779,8 +779,8 @@ impl<'a> ExecuteDoc<'a> {
                     component_definition
                         .arguments
                         .iter()
+                        .filter(|&k| k.name.eq("colors") || k.name.eq("types"))
                         .cloned()
-                        .filter(|k| k.name.eq("colors") || k.name.eq("types"))
                         .collect_vec()
                         .as_slice(),
                     local_container,

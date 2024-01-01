@@ -4,7 +4,6 @@ pub fn process_figma_tokens(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &mut ftd::interpreter::TDoc,
-    _config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let line_number = value.line_number();
     let mut variable_name: Option<String> = None;
@@ -47,7 +46,6 @@ pub fn process_figma_tokens_old(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &mut ftd::interpreter::TDoc,
-    _config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let line_number = value.line_number();
     let mut variable_name: Option<String> = None;

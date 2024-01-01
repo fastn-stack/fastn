@@ -1,7 +1,17 @@
 -- ftd.text: Hello
 $on-click$: $external-fun()
+$on-click$: $external-fun-1()
+
+-- string js-s: ftd/ftd/t/assets/test.js
+
 
 -- void external-fun():
-js: ftd/ftd/t/assets/test.js
+js: $js-s, ftd/ftd/t/assets/test.js
 
 show("Hello World!");
+
+
+-- void external-fun-1():
+js: $js-s
+
+show("Hello World Again!");

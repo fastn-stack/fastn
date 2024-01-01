@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <meta content="fastn" name="generator">
+    
+    
+    <script>
+        let __fastn_package_name__ = "foo";
+    </script>
+
+    <script src="fastn-js.js"></script>
+    
+
+    <style>
+       
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __h-4 __p-5 __bw-6 __bgc-7 __jc-8 __ali-9 __g-10"><div data-id="4" class="ft_column __w-11 __bw-12"><div data-id="5" class="ft_row __cur-13 __w-14 __p-15 __bw-16 __jc-17"><div data-id="6">What is FTD?</div><comment data-id="7"></comment><div data-id="8">O</div><comment data-id="9"></comment></div><comment data-id="10"></comment></div><div data-id="11" class="ft_column __w-18 __bw-19"><div data-id="12" class="ft_row __cur-20 __w-21 __p-22 __bw-23 __jc-24"><div data-id="13">We are adding text of header using title</div><comment data-id="14"></comment><div data-id="15">O</div><comment data-id="16"></comment></div><comment data-id="17"></comment></div><div data-id="18" class="ft_column __w-25 __bw-26"><div data-id="19" class="ft_row __cur-27 __w-28 __p-29 __bw-30 __jc-31"><div data-id="20">default header</div><comment data-id="21"></comment><div data-id="22">O</div><comment data-id="23"></comment></div><comment data-id="24"></comment></div></div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__w-3 { width: 100%; }
+	.__h-4 { height: 100%; }
+	.__p-5 { padding: 20px; }
+	.__bw-6 { border-width: 1px; }
+	.__bgc-7 { background-color: #eee; }
+	.__jc-8 { justify-content: start; }
+	.__ali-9 { align-items: center; }
+	.__g-10 { gap: 50px; }
+	.__w-11 { width: 60%; }
+	.__bw-12 { border-width: 4px; }
+	.__cur-13 { cursor: pointer; }
+	.__w-14 { width: 100%; }
+	.__p-15 { padding: 10px; }
+	.__bw-16 { border-width: 1px; }
+	.__jc-17 { justify-content: space-between; }
+	.__w-18 { width: 60%; }
+	.__bw-19 { border-width: 4px; }
+	.__cur-20 { cursor: pointer; }
+	.__w-21 { width: 100%; }
+	.__p-22 { padding: 10px; }
+	.__bw-23 { border-width: 1px; }
+	.__jc-24 { justify-content: space-between; }
+	.__w-25 { width: 60%; }
+	.__bw-26 { border-width: 4px; }
+	.__cur-27 { cursor: pointer; }
+	.__w-28 { width: 100%; }
+	.__p-29 { padding: 10px; }
+	.__bw-30 { border-width: 1px; }
+	.__jc-31 { justify-content: space-between; }
+    </style>
+<script>
+    (function() {
+        let main = function (parent) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+      dark: "#eee",
+      light: "#eee"
+    })), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopCenter, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(50)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = foo__box(root, inherited, {
+        title: "What is FTD?",
+        body: "FTD is an open source programming language for writing prose."
+      });
+    },
+    function (root, inherited) {
+      let rooti0 = foo__box(root, inherited, {
+        title: "We are adding text of header using title",
+        body: "Here is a FTD document that is importing a library, lib, and has a heading of\nlevel 1, \"Hello World\". FTD language is designed for human beings, not just\nprogrammers, we have taken precautions like not requiring quoting for strings,\nnot relying on indentation nor on braces that most programming\nlanguages require.\n\nIt is not verbose like HTML, and not simplistic like Markdown. We can define\nvariables in FTD. FTD is strongly typed. We can do event handling. Since we are\ntargeting \"human beings\" we have created a lot of \"actions\" that we believe one\nwill be invoking on a day to day basis, like toggle, which can be used to create\nsimple event handling."
+      });
+    },
+    function (root, inherited) {
+      let rooti0 = foo__box(root, inherited);
+    }
+    ]), inherited);
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["main"] = main;
+let foo__box = function (parent, inherited, args) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+      title: "default header",
+      body: "default body",
+      open: fastn.wrapMutable(false),
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(60)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+        ftd.toggle({
+          a: __args__.open,
+        }, rooti0);
+      });
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.title, inherited);
+      },
+      function (root, inherited) {
+        fastn_dom.conditionalDom(root, [
+          __args__.open
+        ], function () {
+          return (!fastn_utils.getter(__args__.open));
+        }, function (root) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "O", inherited);
+          return rooti0;
+        });
+      },
+      function (root, inherited) {
+        fastn_dom.conditionalDom(root, [
+          __args__.open
+        ], function () {
+          return fastn_utils.getter(__args__.open);
+        }, function (root) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "X", inherited);
+          return rooti0;
+        });
+      }
+      ]), inherited);
+    },
+    function (root, inherited) {
+      fastn_dom.conditionalDom(root, [
+        __args__.open
+      ], function () {
+        return fastn_utils.getter(__args__.open);
+      }, function (root) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.body, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.HugContent, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+        return rooti0;
+      });
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__box"] = foo__box;
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastnVirtual.doubleBuffer(main_wrapper);
+        ftd.post_init();
+    })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+        ftd.emit_on_load();
+    };
+</script>
+</html>

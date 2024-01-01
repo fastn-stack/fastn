@@ -128,6 +128,7 @@ impl Component {
             for header in section.headers.0.iter() {
                 let name = header.get_key();
                 if name.eq(ftd::ast::utils::LOOP)
+                    || name.eq(ftd::ast::utils::FOR)
                     || Event::get_event_name(name.as_str()).is_some()
                     || ftd::ast::utils::is_condition(header.get_key().as_str(), &header.get_kind())
                 {
@@ -207,6 +208,15 @@ impl Component {
                 children: vec![],
                 line_number,
             }),
+            ftd::ast::VariableValue::Constant { line_number, .. } => Ok(ftd::ast::Component {
+                name: key.to_string(),
+                properties: vec![],
+                iteration: None,
+                condition: None,
+                events: vec![],
+                children: vec![],
+                line_number,
+            }),
             ftd::ast::VariableValue::List { value, line_number } => {
                 let mut children = vec![];
                 for val in value {
@@ -245,6 +255,7 @@ impl Component {
                 }
                 for header in headers.0.iter() {
                     if header.key.eq(ftd::ast::utils::LOOP)
+                        || header.key.eq(ftd::ast::utils::FOR)
                         || Event::get_event_name_from_header_value(header).is_some()
                         || ftd::ast::utils::is_condition(header.key.as_str(), &header.kind)
                     {
@@ -354,6 +365,7 @@ impl Property {
     ) -> ftd::ast::Result<Property> {
         if !Self::is_property(header)
             || header.get_key().eq(ftd::ast::utils::LOOP)
+            || header.get_key().eq(ftd::ast::utils::FOR)
             || Event::get_event_name(header.get_key().as_str()).is_some()
         {
             return ftd::ast::parse_error(
@@ -418,21 +430,75 @@ impl PropertySource {
 pub struct Loop {
     pub on: String,
     pub alias: String,
+    pub loop_counter_alias: Option<String>,
     #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
 impl Loop {
-    fn new(on: &str, alias: &str, line_number: usize) -> Loop {
+    fn new(on: &str, alias: &str, loop_counter_alias: Option<String>, line_number: usize) -> Loop {
         Loop {
             on: on.to_string(),
             alias: alias.to_string(),
+            loop_counter_alias,
             line_number,
         }
     }
 
+    fn get_loop_parameters(
+        loop_statement: &str,
+        is_for_loop: bool,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::ast::Result<(String, String, Option<String>)> {
+        if is_for_loop {
+            let (pair, on) = ftd::ast::utils::split_at(loop_statement, ftd::ast::utils::IN);
+
+            let on = on.ok_or(ftd::ast::Error::Parse {
+                message: "Statement \"for\" needs a list to operate on".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number,
+            })?;
+
+            let (alias, loop_counter_alias) = ftd::ast::utils::split_at(pair.as_str(), ", ");
+
+            Ok((alias, on, loop_counter_alias))
+        } else {
+            use colored::Colorize;
+
+            println!(
+                "{}",
+                "Warning: \"$loop$\" is deprecated, use \"for\" instead".bright_yellow()
+            );
+
+            let (on, alias) = ftd::ast::utils::split_at(loop_statement, ftd::ast::utils::AS);
+
+            let alias = if let Some(alias) = alias {
+                if !alias.starts_with(ftd::ast::utils::REFERENCE) {
+                    return ftd::ast::parse_error(
+                    format!(
+                        "Loop alias should start with reference, found: `{}`. Help: use `${}` instead",
+                        alias, alias
+                    ),
+                    doc_id,
+                    line_number,
+                );
+                }
+
+                alias
+            } else {
+                "object".to_string()
+            };
+
+            Ok((alias, on, None))
+        }
+    }
+
     fn from_ast_headers(headers: &HeaderValues, doc_id: &str) -> ftd::ast::Result<Option<Loop>> {
-        let loop_header = headers.0.iter().find(|v| v.key.eq(ftd::ast::utils::LOOP));
+        let loop_header = headers
+            .0
+            .iter()
+            .find(|v| [ftd::ast::utils::LOOP, ftd::ast::utils::FOR].contains(&v.key.as_str()));
         let loop_header = if let Some(loop_header) = loop_header {
             loop_header
         } else {
@@ -441,7 +507,14 @@ impl Loop {
 
         let loop_statement = loop_header.value.string(doc_id)?;
 
-        let (on, alias) = ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::AS);
+        let is_for_loop = loop_header.key.eq(ftd::ast::utils::FOR);
+
+        let (alias, on, loop_counter_alias) = Self::get_loop_parameters(
+            loop_statement.as_str(),
+            is_for_loop,
+            doc_id,
+            loop_header.line_number,
+        )?;
 
         if !on.starts_with(ftd::ast::utils::REFERENCE) && !on.starts_with(ftd::ast::utils::CLONE) {
             return ftd::ast::parse_error(
@@ -454,38 +527,22 @@ impl Loop {
             );
         }
 
-        let alias = {
-            if let Some(alias) = alias {
-                if !alias.starts_with(ftd::ast::utils::REFERENCE) {
-                    return ftd::ast::parse_error(
-                        format!(
-                            "Loop alias should start with reference, found: `{}`. Help: use `${}` instead",
-                            alias, alias
-                        ),
-                        doc_id,
-                        loop_header.line_number,
-                    );
-                }
-                alias
-                    .trim_start_matches(ftd::ast::utils::REFERENCE)
-                    .to_string()
-            } else {
-                "object".to_string()
-            }
-        };
+        let alias = alias
+            .trim_start_matches(ftd::ast::utils::REFERENCE)
+            .to_string();
 
         Ok(Some(Loop::new(
             on.as_str(),
             alias.as_str(),
+            loop_counter_alias,
             loop_header.line_number,
         )))
     }
 
     fn from_headers(headers: &ftd::p1::Headers, doc_id: &str) -> ftd::ast::Result<Option<Loop>> {
-        let loop_header = headers
-            .0
-            .iter()
-            .find(|v| v.get_key().eq(ftd::ast::utils::LOOP));
+        let loop_header = headers.0.iter().find(|v| {
+            [ftd::ast::utils::LOOP, ftd::ast::utils::FOR].contains(&v.get_key().as_str())
+        });
         let loop_header = if let Some(loop_header) = loop_header {
             loop_header
         } else {
@@ -500,7 +557,14 @@ impl Loop {
                 line_number: loop_header.get_line_number(),
             })?;
 
-        let (on, alias) = ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::AS);
+        let is_for_loop = loop_header.get_key().eq(ftd::ast::utils::FOR);
+
+        let (alias, on, loop_counter_alias) = Self::get_loop_parameters(
+            loop_statement.as_str(),
+            is_for_loop,
+            doc_id,
+            loop_header.get_line_number(),
+        )?;
 
         if !on.starts_with(ftd::ast::utils::REFERENCE) && !on.starts_with(ftd::ast::utils::CLONE) {
             return ftd::ast::parse_error(
@@ -513,29 +577,14 @@ impl Loop {
             );
         }
 
-        let alias = {
-            if let Some(alias) = alias {
-                if !alias.starts_with(ftd::ast::utils::REFERENCE) {
-                    return ftd::ast::parse_error(
-                        format!(
-                            "Loop alias should start with reference, found: `{}`. Help: use `${}` instead",
-                            alias, alias
-                        ),
-                        doc_id,
-                        loop_header.get_line_number(),
-                    );
-                }
-                alias
-                    .trim_start_matches(ftd::ast::utils::REFERENCE)
-                    .to_string()
-            } else {
-                "object".to_string()
-            }
-        };
+        let alias = alias
+            .trim_start_matches(ftd::ast::utils::REFERENCE)
+            .to_string();
 
         Ok(Some(Loop::new(
             on.as_str(),
             alias.as_str(),
+            loop_counter_alias,
             loop_header.get_line_number(),
         )))
     }

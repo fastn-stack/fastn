@@ -11,12 +11,14 @@ Name "Fastn"
 VIProductVersion "${VERSION}"
 
 ; Default installation directory
-InstallDir $PROGRAMFILES\fastn
+InstallDir $PROGRAMFILES64\fastn
 
 !define PRODUCT_NAME "fastn"
 
-; Styling
+; Uninstaller name
+!define UNINSTALLER_NAME "uninstall.exe"
 
+; Styling
 !define MUI_BRANDINGTEXT "fastn ${VERSION}"
 !define MUI_ICON "fastn.ico"
 !define MUI_INSTFILESPAGE_COLORS "FFFFFF 000000"
@@ -30,17 +32,14 @@ CRCCheck On
 RequestExecutionLevel admin
 
 ; Pages
-
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE ${CURRENT_WD}\LICENSE
 !insertmacro MUI_PAGE_INSTFILES
 
 ; Default Language
-
 !insertmacro MUI_LANGUAGE "English"
 
 ; Sections
-
 Section "Fastn Installer" SectionOne
 
     ; check for write permissions in path
@@ -67,5 +66,19 @@ Section "Fastn Installer" SectionOne
     EnVar::AddValue "Path" "$InstDir"
     Pop $0 ; 0 on success
     ${EndIf}
-    
+
+    ; Write an uninstaller
+    WriteUninstaller "${UNINSTALLER_NAME}"
+
+SectionEnd
+
+Section "Uninstall"
+    ; Uninstaller section
+    Delete "$INSTDIR\fastn.exe"
+    Delete "$INSTDIR\LICENSE"
+    Delete "$INSTDIR\README.md"
+    RMDir "$INSTDIR"
+    ; Remove from PATH
+    EnVar::SetHKCU
+    EnVar::DeleteValue "Path" "$InstDir"
 SectionEnd

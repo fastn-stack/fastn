@@ -1,0 +1,56 @@
+-- import: 44-module
+
+-- import: 01-basic-module
+export: print
+exposing: print
+
+-- 44-module.bar:
+
+-- 44-module.bar:
+m: 01-basic-module
+
+
+-- 44-module.bar:
+m: 45-re-module
+
+
+-- c-hello:
+
+
+
+
+-- string hello: 45-re-module hello world
+
+
+-- component hello-component:
+
+-- ftd.text: $hello
+
+-- end: hello-component
+
+
+-- component c-hello:
+module category: 45-re-module
+
+-- c-hello.category.hello-component:
+
+-- end: c-hello
+
+
+
+
+
+
+
+
+
+
+
+-- string append(a,b):
+string a:
+string b:
+
+a + " ****** " + b
+
+
+-- string hello: Hello World from 45-re-module!!

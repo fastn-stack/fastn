@@ -125,6 +125,7 @@
           }
         },
         "alias": "foo#obj",
+        "loop_counter_alias": null,
         "line_number": 12
       },
       "condition": null,

@@ -14,19 +14,33 @@ pub fn reference_to_js(s: &str) -> String {
 
     let (mut p1, mut p2) = get_doc_name_and_remaining(s.as_str());
     p1 = fastn_js::utils::name_to_js_(p1.as_str());
-    while let Some(remaining) = p2 {
-        let (p21, p22) = get_doc_name_and_remaining(remaining.as_str());
-        p1 = format!(
-            "{}.get(\"{}\")",
-            p1,
-            fastn_js::utils::name_to_js_(p21.as_str())
-        );
+    let mut wrapper_function = None;
+    while let Some(ref remaining) = p2 {
+        let (p21, p22) = get_doc_name_and_remaining(remaining);
+        match p21.parse::<i64>() {
+            Ok(num) if p22.is_none() => {
+                p1 = format!("{}.get({})", p1, num);
+                wrapper_function = Some("fastn_utils.getListItem");
+            }
+            _ => {
+                p1 = format!(
+                    "{}.get(\"{}\")",
+                    p1,
+                    fastn_js::utils::name_to_js_(p21.as_str())
+                );
+                wrapper_function = None;
+            }
+        }
         p2 = p22;
     }
-    format!(
+    let p1 = format!(
         "{}{p1}",
         prefix.map(|v| format!("{v}.")).unwrap_or_default()
-    )
+    );
+    if let Some(func) = wrapper_function {
+        return format!("{}({})", func, p1);
+    }
+    p1
 }
 
 pub fn clone_to_js(s: &str) -> String {
@@ -62,10 +76,20 @@ fn get_prefix(s: &str) -> (Option<&str>, String) {
     } else if let Some(prefix) = s.strip_prefix("ftd.").or(s.strip_prefix("ftd#")) {
         s = prefix.to_string();
         Some("ftd")
+    } else if let Some(prefix) = s.strip_prefix("fastn_utils.") {
+        s = prefix.to_string();
+        Some("fastn_utils")
     } else {
         None
     };
     (prefix, s)
+}
+
+pub(crate) fn is_local_variable_map_prefix(s: &str) -> bool {
+    fastn_js::utils::get_prefix(s)
+        .0
+        .map(|v| v.eq(fastn_js::LOCAL_VARIABLE_MAP))
+        .unwrap_or_default()
 }
 
 pub fn name_to_js(s: &str) -> String {
@@ -79,6 +103,7 @@ pub fn name_to_js(s: &str) -> String {
 
 pub fn name_to_js_(s: &str) -> String {
     let mut s = s.to_string();
+    //todo: remove this
     if s.as_bytes()[0].is_ascii_digit() {
         s = format!("_{}", s);
     }

@@ -1,0 +1,212 @@
+[
+  {
+    "VariableDefinition": {
+      "name": "s1",
+      "kind": {
+        "modifier": null,
+        "kind": "string"
+      },
+      "mutable": false,
+      "value": {
+        "string-value": {
+          "value": "a",
+          "line-number": 1,
+          "source": "Default"
+        }
+      },
+      "processor": null,
+      "flags": {
+        "always_include": null
+      },
+      "line_number": 1
+    }
+  },
+  {
+    "VariableDefinition": {
+      "name": "s2",
+      "kind": {
+        "modifier": "List",
+        "kind": "string"
+      },
+      "mutable": false,
+      "value": {
+        "List": {
+          "value": [
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
+                  "value": "a",
+                  "line-number": 3,
+                  "source": "Default"
+                }
+              }
+            },
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
+                  "value": "b",
+                  "line-number": 3,
+                  "source": "Default"
+                }
+              }
+            },
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
+                  "value": "c",
+                  "line-number": 3,
+                  "source": "Default"
+                }
+              }
+            }
+          ],
+          "line_number": 3
+        }
+      },
+      "processor": null,
+      "flags": {
+        "always_include": null
+      },
+      "line_number": 3
+    }
+  },
+  {
+    "VariableDefinition": {
+      "name": "s3",
+      "kind": {
+        "modifier": "List",
+        "kind": "string"
+      },
+      "mutable": false,
+      "value": {
+        "List": {
+          "value": [
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
+                  "value": "$s1",
+                  "line-number": 5,
+                  "source": "Default"
+                }
+              }
+            },
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
+                  "value": "b",
+                  "line-number": 5,
+                  "source": "Default"
+                }
+              }
+            },
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
+                  "value": "c",
+                  "line-number": 5,
+                  "source": "Default"
+                }
+              }
+            },
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
+                  "value": "d",
+                  "line-number": 5,
+                  "source": "Default"
+                }
+              }
+            }
+          ],
+          "line_number": 5
+        }
+      },
+      "processor": null,
+      "flags": {
+        "always_include": null
+      },
+      "line_number": 5
+    }
+  },
+  {
+    "VariableDefinition": {
+      "name": "s4",
+      "kind": {
+        "modifier": "List",
+        "kind": "string"
+      },
+      "mutable": false,
+      "value": {
+        "string-value": {
+          "value": "$s2",
+          "line-number": 7,
+          "source": "Default"
+        }
+      },
+      "processor": null,
+      "flags": {
+        "always_include": null
+      },
+      "line_number": 7
+    }
+  },
+  {
+    "VariableDefinition": {
+      "name": "s5",
+      "kind": {
+        "modifier": "List",
+        "kind": "string"
+      },
+      "mutable": false,
+      "value": {
+        "List": {
+          "value": [
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
+                  "value": "a",
+                  "line-number": 9,
+                  "source": "Default"
+                }
+              }
+            },
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
+                  "value": "b",
+                  "line-number": 9,
+                  "source": "Default"
+                }
+              }
+            },
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
+                  "value": "$s1",
+                  "line-number": 9,
+                  "source": "Default"
+                }
+              }
+            }
+          ],
+          "line_number": 9
+        }
+      },
+      "processor": null,
+      "flags": {
+        "always_include": null
+      },
+      "line_number": 9
+    }
+  }
+]

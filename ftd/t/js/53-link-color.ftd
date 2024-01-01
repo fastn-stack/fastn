@@ -1,0 +1,17 @@
+-- ftd.color link-color:
+dark: red
+light: blue
+
+-- ftd.text: Click me
+link: https://google.com
+link-color: $link-color
+
+-- ftd.text:
+link-color: $link-color
+
+Hello world [Test](https://google.com)
+
+This is awesome [Test](https://google.com)
+
+
+<a> hello </a>

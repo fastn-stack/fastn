@@ -232,12 +232,25 @@ impl Kind {
         matches!(self, Kind::Record { name, .. } if name.eq(ftd::interpreter::FTD_FONT_SIZE))
     }
 
+    pub fn is_ftd_background_color(&self) -> bool {
+        matches!(self, Kind::OrType { name, variant, .. } if name.eq(ftd::interpreter::FTD_BACKGROUND) &&
+            variant.is_some() && variant.as_ref().unwrap().starts_with(ftd::interpreter::FTD_BACKGROUND_SOLID))
+    }
+
     pub fn is_ftd_length(&self) -> bool {
         matches!(self, Kind::OrType { name, .. } if name.eq(ftd::interpreter::FTD_LENGTH))
     }
 
     pub fn is_ftd_image_src(&self) -> bool {
         matches!(self, Kind::Record { name, .. } if name.eq(ftd::interpreter::FTD_IMAGE_SRC))
+    }
+
+    pub fn is_ftd_video_src(&self) -> bool {
+        matches!(self, Kind::Record { name, .. } if name.eq(ftd::interpreter::FTD_VIDEO_SRC))
+    }
+
+    pub fn is_ftd_video_poster(&self) -> bool {
+        matches!(self, Kind::Record { name, .. } if name.eq(ftd::interpreter::FTD_VIDEO_POSTER))
     }
 
     pub fn is_ftd_color(&self) -> bool {
@@ -254,6 +267,10 @@ impl Kind {
 
     pub fn is_or_type(&self) -> bool {
         matches!(self, Kind::OrType { .. })
+    }
+
+    pub fn is_or_type_with_variant(&self, or_type_name: &str, variant_name: &str) -> bool {
+        matches!(self, Kind::OrType { name, variant, .. } if name.eq(or_type_name) && variant.is_some() && variant.as_ref().unwrap().eq(variant_name))
     }
 
     pub fn is_string(&self) -> bool {
@@ -312,6 +329,13 @@ impl Kind {
             _ => None,
         }
     }
+
+    pub fn get_or_type_name(&self) -> Option<&str> {
+        match self {
+            ftd::interpreter::Kind::OrType { ref name, .. } => Some(name),
+            _ => None,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -353,6 +377,7 @@ impl KindData {
         match modifier {
             ftd::ast::VariableModifier::Optional => self.optional(),
             ftd::ast::VariableModifier::List => self.list(),
+            ftd::ast::VariableModifier::Constant => self.constant(),
         }
     }
 
@@ -472,6 +497,16 @@ impl KindData {
     fn list(self) -> KindData {
         KindData {
             kind: Kind::List {
+                kind: Box::new(self.kind),
+            },
+            caption: self.caption,
+            body: self.body,
+        }
+    }
+
+    fn constant(self) -> KindData {
+        KindData {
+            kind: Kind::Constant {
                 kind: Box::new(self.kind),
             },
             caption: self.caption,

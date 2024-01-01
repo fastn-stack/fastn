@@ -1,9 +1,11 @@
+-- ftd.text: ====Start====
 -- ftd.desktop:
 
--- ftd.text: Hello from desktop
--- ftd.text: Hello again from desktop
+-- desktop-view:
 
 -- end: ftd.desktop
+
+-- ftd.text: ====Middle====
 
 -- ftd.mobile:
 
@@ -11,3 +13,21 @@
 -- ftd.text: Hello again from mobile
 
 -- end: ftd.mobile
+
+-- ftd.text: ====End====
+
+
+
+-- component desktop-view:
+boolean $show: true
+
+-- ftd.column:
+if: { desktop-view.show }
+$on-click$: $ftd.toggle($a = $desktop-view.show)
+
+-- ftd.text: Hello from desktop
+-- ftd.text: Hello again from desktop
+
+-- end: ftd.column
+
+-- end: desktop-view

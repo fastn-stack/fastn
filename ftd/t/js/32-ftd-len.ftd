@@ -1,0 +1,81 @@
+-- string list $months: January, February, March, April, May, June, July, August, September, October
+
+-- ftd.column:
+background.solid: black
+width.fixed.px: 300
+padding.px: 10
+margin.px: 10
+spacing.fixed.px: 5
+
+-- ftd.text: $month
+for: $month, $index in $months
+color: orange
+color if { index % 3 == 1 }: white
+color if { index % 3 == 2 }: green
+
+-- end: ftd.column
+
+-- mbox:
+
+;; ----------------------- COMPONENT DEFINITION -----------------------
+
+-- component mbox:
+optional string $current-value:
+
+-- ftd.column:
+margin.px: 10
+width.fixed.px: 500
+spacing.fixed.px: 10
+
+-- ftd.row:
+spacing.fixed.px: 10
+border-width.px: 2
+border-color: black
+
+-- ftd.text: Month
+role: $inherited.types.label-large
+
+-- ftd.text-input:
+placeholder: Enter your month name
+role: $inherited.types.copy-small
+width: fill-container
+$on-input$: $ftd.set-string($a = $mbox.current-value, v = $VALUE)
+
+-- ftd.text: $mbox.current-value
+if: { mbox.current-value != NULL }
+color: red
+
+-- end: ftd.row
+
+-- ftd.text: Append
+$on-click$: $append($a = $months, v = *$mbox.current-value)
+border-width.px: 2
+border-color: black
+
+-- end: ftd.column
+
+-- end: mbox
+
+
+
+
+
+
+;; ------------------- FUNCTIONS --------------------------------
+
+-- void delete(a,i):
+name-score list $a:
+integer i:
+
+ftd.delete_at(a, i)
+
+-- integer plus-one(a):
+integer a:
+
+a + 1
+
+-- void append(a,v):
+string list $a:
+string v:
+
+ftd.append(a, v)

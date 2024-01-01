@@ -2235,7 +2235,7 @@ impl Spacing {
                     \"start\"
                 }
             "}
-            .to_string(),
+                .to_string(),
             true,
         )
     }
@@ -2867,7 +2867,7 @@ pub struct Type {
     pub line_height: Option<FontSize>,
     pub letter_spacing: Option<FontSize>,
     pub weight: Option<i64>,
-    pub font_family: Option<String>,
+    pub font_family: Option<Vec<String>>,
 }
 
 impl Type {
@@ -2876,7 +2876,7 @@ impl Type {
         line_height: Option<FontSize>,
         letter_spacing: Option<FontSize>,
         weight: Option<i64>,
-        font_family: Option<String>,
+        font_family: Option<Vec<String>>,
     ) -> Type {
         Type {
             size,
@@ -2956,10 +2956,12 @@ impl Type {
 
         let font_family = {
             if let Some(value) = values.get("font-family") {
-                value
-                    .clone()
-                    .resolve(&doc.itdoc(), line_number)?
-                    .optional_string(doc.name, line_number)?
+                Some(
+                    value
+                        .clone()
+                        .resolve(&doc.itdoc(), line_number)?
+                        .string_list(&doc.itdoc(), line_number)?,
+                )
             } else {
                 None
             }
@@ -3107,7 +3109,10 @@ impl ResponsiveType {
     }
 
     pub fn to_css_font_family(&self) -> Option<String> {
-        self.desktop.font_family.to_owned()
+        if let Some(font_family) = self.desktop.font_family.as_ref() {
+            return Some(font_family.join(", "));
+        }
+        None
     }
 
     pub fn font_family_pattern() -> (String, bool) {
@@ -4064,6 +4069,84 @@ impl BorderStyle {
             BorderStyle::RIDGE => "ridge".to_string(),
             BorderStyle::INSET => "inset".to_string(),
             BorderStyle::OUTSET => "outset".to_string(),
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum ImageFit {
+    NONE,
+    FILL,
+    COVER,
+    CONTAIN,
+    SCALEDOWN,
+}
+
+impl ImageFit {
+    fn from_optional_values(
+        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            return Ok(Some(ImageFit::from_values(value, doc, line_number)?));
+        }
+        Ok(None)
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter::FTD_IMAGE_FIT_NONE => Ok(ImageFit::NONE),
+            ftd::interpreter::FTD_IMAGE_FIT_COVER => Ok(ImageFit::COVER),
+            ftd::interpreter::FTD_IMAGE_FIT_CONTAIN => Ok(ImageFit::CONTAIN),
+            ftd::interpreter::FTD_IMAGE_FIT_FILL => Ok(ImageFit::FILL),
+            ftd::interpreter::FTD_IMAGE_FIT_SCALE_DOWN => Ok(ImageFit::SCALEDOWN),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.image-fit`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn optional_image_fit(
+        properties: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+        component_name: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<ImageFit>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter::FTD_IMAGE_FIT,
+            inherited_variables,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            ImageFit::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            ImageFit::NONE => "none".to_string(),
+            ImageFit::COVER => "cover".to_string(),
+            ImageFit::CONTAIN => "contain".to_string(),
+            ImageFit::FILL => "fill".to_string(),
+            ImageFit::SCALEDOWN => "scale-down".to_string(),
         }
     }
 }

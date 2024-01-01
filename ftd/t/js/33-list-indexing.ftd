@@ -1,0 +1,31 @@
+-- string list $names:
+
+-- string: Rithik
+-- string: Ritesh
+-- string: Heulitig
+
+-- end: $names
+
+-- ftd.text: Push something
+$on-click$: $append($a = $names, v = something)
+
+-- ftd.text: $name
+for: name in $names
+color: green
+
+-- void delete(a,v):
+string list $a:
+integer i:
+
+ftd.delete-at(a,i)
+
+-- void append(a,v):
+string list $a:
+string v:
+
+ftd.append(a,v)
+
+-- ftd.text: $names.2
+if: { names.2 != NULL }
+color: red
+

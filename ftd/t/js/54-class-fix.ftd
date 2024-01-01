@@ -1,0 +1,10 @@
+-- ftd.text: Hello
+background.solid: $bg-yg
+
+-- ftd.text: hello
+background.solid: yellow
+
+
+-- ftd.color bg-yg:
+light: yellow
+dark: green

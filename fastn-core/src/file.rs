@@ -8,13 +8,22 @@ pub enum File {
 }
 
 impl File {
-    pub fn get_id(&self) -> String {
+    pub fn get_id(&self) -> &str {
         match self {
-            Self::Ftd(a) => a.id.clone(),
-            Self::Static(a) => a.id.clone(),
-            Self::Markdown(a) => a.id.clone(),
-            Self::Code(a) => a.id.clone(),
-            Self::Image(a) => a.id.clone(),
+            Self::Ftd(a) => a.id.as_str(),
+            Self::Static(a) => a.id.as_str(),
+            Self::Markdown(a) => a.id.as_str(),
+            Self::Code(a) => a.id.as_str(),
+            Self::Image(a) => a.id.as_str(),
+        }
+    }
+    pub fn get_id_with_package(&self) -> String {
+        match self {
+            Self::Ftd(a) => a.id_with_package(),
+            Self::Static(a) => a.id_with_package(),
+            Self::Markdown(a) => a.id_with_package(),
+            Self::Code(a) => a.id_with_package(),
+            Self::Image(a) => a.id_with_package(),
         }
     }
     pub fn set_id(&mut self, new_id: &str) {
@@ -26,13 +35,13 @@ impl File {
             Self::Image(a) => &mut a.id,
         }) = new_id.to_string();
     }
-    pub fn get_base_path(&self) -> String {
+    pub fn get_base_path(&self) -> &str {
         match self {
-            Self::Ftd(a) => a.parent_path.to_string(),
-            Self::Static(a) => a.base_path.to_string(),
-            Self::Markdown(a) => a.parent_path.to_string(),
-            Self::Code(a) => a.parent_path.to_string(),
-            Self::Image(a) => a.base_path.to_string(),
+            Self::Ftd(a) => a.parent_path.as_str(),
+            Self::Static(a) => a.base_path.as_str(),
+            Self::Markdown(a) => a.parent_path.as_str(),
+            Self::Code(a) => a.parent_path.as_str(),
+            Self::Image(a) => a.base_path.as_str(),
         }
     }
     pub fn get_full_path(&self) -> camino::Utf8PathBuf {
@@ -46,13 +55,13 @@ impl File {
         camino::Utf8PathBuf::from(base_path).join(id)
     }
 
-    pub(crate) fn get_content(&self) -> Vec<u8> {
+    pub(crate) fn get_content(&self) -> &[u8] {
         match self {
-            Self::Ftd(ref a) => a.content.as_bytes().to_vec(),
-            Self::Static(ref a) => a.content.clone(),
-            Self::Markdown(ref a) => a.content.as_bytes().to_vec(),
-            Self::Code(ref a) => a.content.as_bytes().to_vec(),
-            Self::Image(ref a) => a.content.clone(),
+            Self::Ftd(ref a) => a.content.as_bytes(),
+            Self::Static(ref a) => a.content.as_ref(),
+            Self::Markdown(ref a) => a.content.as_bytes(),
+            Self::Code(ref a) => a.content.as_bytes(),
+            Self::Image(ref a) => a.content.as_ref(),
         }
     }
 
@@ -84,7 +93,7 @@ impl Document {
     pub fn id_with_package(&self) -> String {
         format!(
             "{}/{}",
-            self.package_name.as_str(),
+            self.package_name,
             self.id
                 .replace("/index.ftd", "/")
                 .replace("index.ftd", "")
@@ -95,9 +104,16 @@ impl Document {
 
 #[derive(Debug, Clone)]
 pub struct Static {
+    pub package_name: String,
     pub id: String,
     pub content: Vec<u8>,
     pub base_path: camino::Utf8PathBuf,
+}
+
+impl Static {
+    pub fn id_with_package(&self) -> String {
+        format!("{}/{}", self.package_name, self.id)
+    }
 }
 
 pub(crate) async fn paths_to_files(
@@ -126,17 +142,15 @@ pub(crate) async fn paths_to_files(
 pub fn package_ignores(
     package: &fastn_core::Package,
     root_path: &camino::Utf8PathBuf,
-    ignore_history: bool,
 ) -> Result<ignore::overrides::Override, ignore::Error> {
     let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
-    if ignore_history {
-        overrides.add("!.history")?;
-    }
+    overrides.add("!.history")?;
     overrides.add("!.packages")?;
     overrides.add("!.tracks")?;
     overrides.add("!fastn")?;
     overrides.add("!rust-toolchain")?;
     overrides.add("!.build")?;
+    overrides.add("!_tests")?;
     for ignored_path in &package.ignored_paths {
         overrides.add(format!("!{}", ignored_path).as_str())?;
     }
@@ -194,13 +208,13 @@ pub(crate) async fn get_file(
         Some((_, "ftd")) => File::Ftd(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: tokio::fs::read_to_string(&doc_path).await?,
+            content: fastn_core::tokio_fs::read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),
         }),
         Some((_, "md")) => File::Markdown(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: tokio::fs::read_to_string(&doc_path).await?,
+            content: fastn_core::tokio_fs::read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),
         }),
         Some((_, ext))
@@ -210,8 +224,9 @@ pub(crate) async fn get_file(
                 .starts_with("image/") =>
         {
             File::Image(Static {
+                package_name: package_name.to_string(),
                 id: id.to_string(),
-                content: tokio::fs::read(&doc_path).await?,
+                content: fastn_core::tokio_fs::read(&doc_path).await?,
                 base_path: base_path.to_path_buf(),
             })
         }
@@ -219,13 +234,14 @@ pub(crate) async fn get_file(
             File::Code(Document {
                 package_name: package_name.to_string(),
                 id: id.to_string(),
-                content: tokio::fs::read_to_string(&doc_path).await?,
+                content: fastn_core::tokio_fs::read_to_string(&doc_path).await?,
                 parent_path: base_path.to_string(),
             })
         }
         _ => File::Static(Static {
+            package_name: package_name.to_string(),
             id: id.to_string(),
-            content: tokio::fs::read(&doc_path).await?,
+            content: fastn_core::tokio_fs::read(&doc_path).await?,
             base_path: base_path.to_path_buf(),
         }),
     })

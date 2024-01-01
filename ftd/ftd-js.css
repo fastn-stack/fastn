@@ -48,7 +48,17 @@ table {
 }*/
 
 *, :after, :before {
-    box-sizing: inherit;
+    /*box-sizing: inherit;*/
+    box-sizing: border-box;
+    text-decoration: none;
+    box-sizing: border-box;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-style: solid;
+    height: auto;
+    width: auto;
 }
 
 *, pre, div {
@@ -75,7 +85,7 @@ body {
     width: 100%;
 }
 
-input, code {
+input {
     vertical-align: middle;
 }
 pre {
@@ -94,9 +104,12 @@ iframe {
 }
 
 pre code {
+    /*
+    This break show-line-number in `ftd.code`
     overflow-x: auto;
+    */
     display: block;
-    padding: 10px !important;
+    padding: 0 1em !important;
 }
 
 /* Common styles  */
@@ -117,6 +130,26 @@ pre code {
     display: flex;
     align-items: start;
     justify-content: start
+}
+
+.ft_full_size {
+    width: 100%;
+    height: 100%;
+}
+
+.ft_row {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: row;
+    box-sizing: border-box;
+}
+.ft_column {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .ft_row {
@@ -188,6 +221,11 @@ pre code {
     background: #c1c8ce;
 }
 
+ul, ol {
+    /* Added padding to the left to move the ol number/ ul bullet to the right */
+    padding-left: 20px;
+}
+
 a {
     color: #2952a3;
 }
@@ -212,7 +250,7 @@ a:hover {
     text-decoration: none;
 }
 
-.ft_md code {
+code {
     padding: 0.1rem 0.25rem;
     border-radius: 4px;
     background-color: #0000000d;
@@ -228,15 +266,20 @@ a:hover {
     margin: 0;
 }
 
-body.fpm-dark .ft_md a {
-    text-decoration: none;
-}
 
-
-body.fpm-dark .ft_md code {
+body.dark code {
     padding: 0.1rem 0.25rem;
     border-radius: 4px;
     background-color: #ffffff1f;
+}
+
+
+body.dark a {
+    color: #6498ff
+}
+
+body.dark a:visited {
+    color: #b793fb;
 }
 
 
@@ -244,6 +287,21 @@ p {
     margin-block-end: 1em;
 }
 
-h1 {
+h1:only-child {
     margin-block-end: 0.67em
+}
+
+table, td, th {
+  border: 1px solid;
+}
+
+th {
+    padding: 6px;
+}
+
+td {
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }

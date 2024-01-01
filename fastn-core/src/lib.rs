@@ -9,20 +9,26 @@ pub mod commands;
 mod config;
 mod controller;
 mod cr;
+#[cfg(feature = "auth")]
+mod db;
 mod doc;
 mod file;
 mod font;
 mod history;
 mod package;
+pub mod tutor;
 pub(crate) mod watcher;
 #[macro_use]
-mod http;
+pub mod http;
+#[cfg(feature = "auth")]
 mod auth;
 mod ds;
 mod error;
 mod i18n;
 pub mod library;
 mod proxy;
+#[cfg(feature = "auth")]
+mod schema;
 pub mod sitemap;
 mod snapshot;
 mod sync_utils;
@@ -31,19 +37,24 @@ mod tracker;
 mod translation;
 mod version;
 // mod wasm;
+pub mod catch_panic;
+pub(crate) mod google_sheets;
 mod library2022;
+#[cfg(feature = "auth")]
+mod mail;
+pub(crate) mod tokio_fs;
 mod workspace;
 
 pub(crate) use auto_import::AutoImport;
 pub use commands::{
-    abort_merge::abort_merge, add::add, build::build, clone::clone, close_cr::close_cr,
-    create_cr::create_cr, create_package::create_package, diff::diff, edit::edit,
-    mark_resolved::mark_resolved, mark_upto_date::mark_upto_date, merge::merge, query::query,
-    resolve_conflict::resolve_conflict, revert::revert, rm::rm, serve::listen,
-    start_tracking::start_tracking, status::status, sync2::sync2,
+    abort_merge::abort_merge, add::add, build::build, check::post_build_check, clone::clone,
+    close_cr::close_cr, create_cr::create_cr, create_package::create_package, diff::diff,
+    edit::edit, mark_resolved::mark_resolved, mark_upto_date::mark_upto_date, merge::merge,
+    query::query, resolve_conflict::resolve_conflict, revert::revert, rm::rm, serve::listen,
+    start_tracking::start_tracking, status::status, sync2::sync2, test::test,
     translation_status::translation_status, update::update,
 };
-pub use config::{Config, FTDEdition};
+pub use config::{Config, FTDEdition, RequestConfig};
 pub use error::Error;
 pub use file::File;
 pub(crate) use file::{get_file, paths_to_files, Document, Static};
@@ -56,7 +67,7 @@ pub(crate) use package::Package;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};
-pub(crate) use utils::{copy_dir_all, time, timestamp_nanosecond};
+pub(crate) use utils::{copy_dir_all, timestamp_nanosecond};
 pub(crate) use version::Version;
 pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 
@@ -65,6 +76,8 @@ pub const PACKAGE_THEME_INTERFACE: &str = "ftd-lang.github.io/theme";
 pub const NUMBER_OF_CRS_TO_RESERVE: usize = 5;
 
 pub const IMAGE_EXT: &[&str] = &["jpg", "png", "svg"];
+
+pub const VIDEO_EXT: &[&str] = &["mp4", "ogg", "webm"];
 
 pub fn ftd_html() -> &'static str {
     include_str!("../ftd_2022.html")
@@ -89,38 +102,6 @@ fn fastn_lib_ftd() -> &'static str {
     include_str!("../ftd/fastn-lib.ftd")
 }
 
-fn package_info_image(
-    config: &fastn_core::Config,
-    doc: &fastn_core::Static,
-    package: &fastn_core::Package,
-) -> fastn_core::Result<String> {
-    let path = config.root.join("fastn").join("image.ftd");
-    Ok(if path.is_file() {
-        std::fs::read_to_string(path)?
-    } else {
-        let body_prefix = match config.package.generate_prefix_string(false) {
-            Some(bp) => bp,
-            None => String::new(),
-        };
-        indoc::formatdoc! {"
-            {body_prefix}
-    
-            -- import: {package_info_package}/image as pi 
-
-            -- ftd.image-src src: {src}
-            dark: {src}
-    
-            -- pi.image-page: {file_name}
-            src: $src
-        ",
-        body_prefix = body_prefix,
-        file_name = doc.id,
-        package_info_package = config.package_info_package(),
-        src = format!("-/{}/{}", package.name.as_str(), doc.id.as_str()),
-        }
-    })
-}
-
 fn package_info_about(config: &fastn_core::Config) -> fastn_core::Result<String> {
     let path = config.root.join("fastn").join("cr.ftd");
     Ok(if path.is_file() {
@@ -132,13 +113,12 @@ fn package_info_about(config: &fastn_core::Config) -> fastn_core::Result<String>
         };
         indoc::formatdoc! {"
             {body_prefix}
-    
-            -- import: {package_info_package}/cr
 
-            -- cr.description:
+            -- optional string description:
+            {always_include}: true
         ",
         body_prefix = body_prefix,
-        package_info_package = config.package_info_package(),
+        always_include = ftd::ast::ALWAYS_INCLUDE,
         }
     })
 }
@@ -224,123 +204,6 @@ fn package_info_create_cr(config: &fastn_core::Config) -> fastn_core::Result<Str
         ",
         body_prefix = body_prefix,
         package_info_package = config.package_info_package(),
-    })
-}
-
-fn package_info_code(
-    config: &fastn_core::Config,
-    file_name: &str,
-    content: &str,
-    extension: &str,
-) -> fastn_core::Result<String> {
-    let path = config.root.join("fastn").join("code.ftd");
-    Ok(if path.is_file() {
-        std::fs::read_to_string(path)?
-    } else {
-        let body_prefix = match config.package.generate_prefix_string(false) {
-            Some(bp) => bp,
-            None => String::new(),
-        };
-        if content.trim().is_empty() {
-            format!(
-                indoc::indoc! {"
-                {body_prefix}
-        
-                -- import: {package_info_package}/code as pi 
-        
-                -- pi.code-page: {file_name}
-                lang: {ext}
-
-                "},
-                body_prefix = body_prefix,
-                package_info_package = config.package_info_package(),
-                file_name = file_name,
-                ext = extension,
-            )
-        } else {
-            format!(
-                indoc::indoc! {"
-                {body_prefix}
-        
-                -- import: {package_info_package}/code as pi 
-        
-                -- pi.code-page: {file_name}
-                lang: {ext}
-
-                {content}
-
-                "},
-                body_prefix = body_prefix,
-                package_info_package = config.package_info_package(),
-                file_name = file_name,
-                ext = extension,
-                content = content,
-            )
-        }
-    })
-}
-
-fn package_info_markdown(
-    config: &fastn_core::Config,
-    file_name: &str,
-    content: &str,
-) -> fastn_core::Result<String> {
-    let path = config.root.join("fastn").join("markdown.ftd");
-    Ok(if path.is_file() {
-        std::fs::read_to_string(path)?
-    } else if !config
-        .ftd_edition
-        .eq(&fastn_core::config::FTDEdition::FTD2021)
-    {
-        if content.trim().is_empty() {
-            content.to_string()
-        } else {
-            format!(
-                indoc::indoc! {"
-                -- ftd.text:
-
-                {content}
-            "},
-                content = content,
-            )
-        }
-    } else {
-        let body_prefix = match config.package.generate_prefix_string(false) {
-            Some(bp) => bp,
-            None => String::new(),
-        };
-        if content.trim().is_empty() {
-            format!(
-                indoc::indoc! {"
-                {body_prefix}
-        
-                -- import: {package_info_package}/markdown as pi 
-        
-                -- pi.markdown-page: {file_name}
-
-            "},
-                body_prefix = body_prefix,
-                package_info_package = config.package_info_package(),
-                file_name = file_name,
-            )
-        } else {
-            format!(
-                indoc::indoc! {"
-                {body_prefix}
-        
-                -- import: {package_info_package}/markdown as pi 
-        
-                -- pi.markdown-page: {file_name}
-
-                {content}
-
-            "},
-                body_prefix = body_prefix,
-                package_info_package = config.package_info_package(),
-                content = content,
-                file_name = file_name,
-            )
-        }
     })
 }
 
@@ -431,7 +294,7 @@ fn get_messages(
 pub fn get_env_ftd_file() -> String {
     std::env::vars()
         .filter(|(key, val)| {
-            vec!["CARGO", "VERGEN", "FASTN"]
+            ["CARGO", "VERGEN", "FASTN"]
                 .iter()
                 .any(|prefix| !key.is_empty() && key.starts_with(prefix) && !val.is_empty())
         })
@@ -443,7 +306,7 @@ pub fn get_env_ftd_file() -> String {
 pub fn debug_env_vars() -> String {
     std::env::vars()
         .filter(|(key, _)| {
-            vec!["CARGO", "VERGEN", "FASTN"]
+            ["CARGO", "VERGEN", "FASTN"]
                 .iter()
                 .any(|prefix| key.starts_with(prefix))
         })
@@ -460,6 +323,14 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 pub(crate) fn usage_error<T>(message: String) -> Result<T> {
     Err(Error::UsageError { message })
+}
+
+pub(crate) fn generic_error<T>(message: String) -> Result<T> {
+    Error::generic_err(message)
+}
+
+pub(crate) fn assert_error<T>(message: String) -> Result<T> {
+    Err(Error::AssertError { message })
 }
 
 #[cfg(test)]

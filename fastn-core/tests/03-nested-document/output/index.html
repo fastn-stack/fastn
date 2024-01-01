@@ -562,11 +562,15 @@
 }
 }
 },
-"ftd#device": "desktop",
+"ftd#device": "mobile",
+"ftd#empty": "",
 "ftd#follow-system-dark-mode": true,
 "ftd#font-code": "sans-serif",
 "ftd#font-copy": "sans-serif",
 "ftd#font-display": "sans-serif",
+"ftd#nbsp": "&nbsp;",
+"ftd#non-breaking-space": "&nbsp;",
+"ftd#space": " ",
 "ftd#system-dark-mode": false
 }
 </script>
@@ -584,10 +588,10 @@
 
 </head>
 <body style="height: 100%; margin: 0;">
+<script src="default-47D9AFCD179BB157D8432FE0DC7B328F231E1CDACA1CB36790A41EAC123C7461.js"></script>
+
 
 <div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md">hello</div></div>
-
-<script src="default-3E3B237BDD2341CB31D7CE15B0DE762E992DF32A4234CEC50B04A92E9FD3B670.js"></script>
 <script>
 
 
@@ -647,6 +651,18 @@ a.value = a.value+1
 
 function ftd__increment_by___main(a,v,args,data,id){
 a.value = a.value+v
+}
+
+
+
+function ftd__decrement___main(a,args,data,id){
+a.value = a.value-1
+}
+
+
+
+function ftd__decrement_by___main(a,v,args,data,id){
+a.value = a.value-v
 }
 
 
@@ -712,6 +728,5 @@ a.value = v
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>
-
 </body>
 </html>

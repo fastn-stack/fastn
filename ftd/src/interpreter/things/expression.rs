@@ -49,7 +49,7 @@ impl Expression {
     pub(crate) fn from_ast_condition(
         condition: ftd::ast::Condition,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Expression>> {
         if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
@@ -86,7 +86,7 @@ impl Expression {
         let variable_identifier_reads = get_variable_identifier_read(node);
         for variable in variable_identifier_reads {
             let full_variable_name =
-                doc.resolve_reference_name(format!("${}", variable).as_str(), line_number)?;
+                doc.resolve_reference_name(format!("${}", variable.value).as_str(), line_number)?;
             ftd::interpreter::PropertyValue::scan_string_with_argument(
                 full_variable_name.as_str(),
                 doc,
@@ -101,7 +101,7 @@ impl Expression {
     pub(crate) fn get_references(
         node: &mut fastn_grammar::evalexpr::ExprNode,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<
@@ -111,17 +111,75 @@ impl Expression {
         let mut result: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
         for variable in variable_identifier_reads {
             let full_variable_name =
-                doc.resolve_reference_name(format!("${}", variable).as_str(), line_number)?;
-            let value = try_ok_state!(ftd::interpreter::PropertyValue::from_string_with_argument(
+                doc.resolve_reference_name(format!("${}", variable.value).as_str(), line_number)?;
+
+            let value = try_ok_state!(match variable
+                .infer_from
+                .map(|infer_from| result.get(&infer_from.value).unwrap())
+            {
+                Some(infer_from_value) => {
+                    match ftd::interpreter::PropertyValue::from_string_with_argument(
+                        full_variable_name.as_str(),
+                        doc,
+                        None,
+                        false,
+                        line_number,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                    ) {
+                        Ok(v) => match v {
+                            ftd::interpreter::StateWithThing::Thing(thing)
+                                if infer_from_value.kind().inner().is_or_type() =>
+                            {
+                                if thing.kind().inner().eq(&infer_from_value.kind().inner()) {
+                                    ftd::interpreter::StateWithThing::new_thing(thing)
+                                } else {
+                                    return ftd::interpreter::utils::e2(format!("Invalid value on the right-hand side. Expected \"{}\" but found \"{}\".", infer_from_value.kind().inner().get_name(), thing.kind().inner().get_name()), doc.name, line_number);
+                                }
+                            }
+                            t => t,
+                        },
+                        Err(e) => match infer_from_value.kind().get_or_type_name() {
+                            Some(name) => {
+                                let name = format!("${}.{}", name, variable.value);
+                                let full_variable_name =
+                                    doc.resolve_reference_name(name.as_str(), line_number)?;
+
+                                ftd::interpreter::PropertyValue::from_string_with_argument(
+                                    full_variable_name.as_str(),
+                                    doc,
+                                    None,
+                                    false,
+                                    line_number,
+                                    definition_name_with_arguments,
+                                    loop_object_name_and_kind,
+                                )
+                            }
+                            None => Err(e),
+                        }?,
+                    }
+                }
+                None => ftd::interpreter::PropertyValue::from_string_with_argument(
+                    full_variable_name.as_str(),
+                    doc,
+                    None,
+                    false,
+                    line_number,
+                    definition_name_with_arguments,
+                    loop_object_name_and_kind,
+                )?,
+            });
+
+            ftd::interpreter::utils::insert_module_thing(
+                &value.kind().into_kind_data(),
+                variable.value.as_str(),
                 full_variable_name.as_str(),
-                doc,
-                None,
-                false,
-                line_number,
                 definition_name_with_arguments,
-                loop_object_name_and_kind,
-            )?);
-            result.insert(variable, value);
+                line_number,
+                doc,
+            )
+            .ok();
+            result.insert(variable.value, value);
         }
         Ok(ftd::interpreter::StateWithThing::new_thing(result))
     }
@@ -158,14 +216,24 @@ fn get_expression_mode(exp: &str) -> Option<String> {
         .map(ToString::to_string)
 }
 
-fn get_variable_identifier_read(node: &mut fastn_grammar::evalexpr::ExprNode) -> Vec<String> {
-    return get_variable_identifier_read_(node, &mut vec![]);
+#[derive(Debug, PartialEq, Clone)]
+pub(crate) struct VariableIdentifierReadNode {
+    value: String,
+    infer_from: Option<Box<VariableIdentifierReadNode>>,
+}
+
+fn get_variable_identifier_read(
+    node: &mut fastn_grammar::evalexpr::ExprNode,
+) -> Vec<VariableIdentifierReadNode> {
+    return get_variable_identifier_read_(node, &mut vec![], false, None);
 
     fn get_variable_identifier_read_(
         node: &mut fastn_grammar::evalexpr::ExprNode,
         write_variable: &mut Vec<String>,
-    ) -> Vec<String> {
-        let mut values = vec![];
+        add_infer_type: bool,
+        last_variable_identifier_read: Option<Box<VariableIdentifierReadNode>>,
+    ) -> Vec<VariableIdentifierReadNode> {
+        let mut values: Vec<VariableIdentifierReadNode> = vec![];
         if let Some(operator) = node.operator().get_variable_identifier_write() {
             write_variable.push(operator);
             // TODO: if operator.eq(ftd::ast::NULL) throw error
@@ -175,11 +243,27 @@ fn get_variable_identifier_read(node: &mut fastn_grammar::evalexpr::ExprNode) ->
                     value: fastn_grammar::evalexpr::Value::Empty,
                 };
             } else if !write_variable.contains(&operator) {
-                values.push(operator);
+                values.push(VariableIdentifierReadNode {
+                    value: operator,
+                    infer_from: if add_infer_type {
+                        last_variable_identifier_read
+                    } else {
+                        None
+                    },
+                });
             }
         }
+        let operator = node.operator().clone();
         for child in node.mut_children().iter_mut() {
-            values.extend(get_variable_identifier_read_(child, write_variable));
+            values.extend(get_variable_identifier_read_(
+                child,
+                write_variable,
+                matches!(
+                    operator,
+                    fastn_grammar::evalexpr::Operator::Eq | fastn_grammar::evalexpr::Operator::Neq
+                ),
+                values.last().map(|last| Box::new(last.clone())),
+            ));
         }
         values
     }

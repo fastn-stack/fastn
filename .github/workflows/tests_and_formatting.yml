@@ -1,0 +1,90 @@
+name: Rust and JS Checks/Formatting
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  everything:
+    name: Rust/JS Checks/Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v3
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          override: true
+          components: rustfmt, clippy
+#      - name: Set up cargo cache
+#        uses: actions/cache@v3 # there is also https://github.com/Swatinem/rust-cache
+#        continue-on-error: false
+#        with:
+#          path: |
+#            ~/.cargo/registry/index/
+#            ~/.cargo/registry/cache/
+#            ~/.cargo/git/db/
+#            target/
+#          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+#          restore-keys: ${{ runner.os }}-cargo-
+      - name: Run cargo fmt
+        id: fmt
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+      - name: Run cargo clippy
+        id: clippy
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --tests -- -D warnings
+      - name: Run cargo clippy (with feature=auth)
+        id: clippy-auth
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --tests --features=auth -- -D warnings
+#      - name: Install cargo check tools
+#        run: |
+#          cargo install --locked cargo-deny || true
+#          cargo install --locked cargo-outdated || true
+#          cargo install --locked cargo-udeps || true
+#          cargo install --locked cargo-audit || true
+#          cargo install --locked cargo-pants || true
+#      - name: Check
+#        run: |
+#          cargo deny check
+#          cargo outdated --exit-code 1
+#          cargo udeps
+#          rm -rf ~/.cargo/advisory-db
+#          cargo audit
+#          cargo pants
+      - name: Run cargo test
+        id: test
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+      - name: Check if code is properly formatted
+        if: steps.fmt.outcome != 'success'
+        run: exit 1
+      - name: Check if clippy is happy
+        if: steps.clippy.outcome != 'success'
+        run: exit 1
+      - name: Check if clippy-auth is happy
+        if: steps.clippy-auth.outcome != 'success'
+        run: exit 1
+      - name: Check if test succeeded
+        if: steps.test.outcome != 'success'
+        run: exit 1
+      - name: Check if JS code is properly formatted
+        uses: dprint/check@v2.2
+        with:
+          config-path: .github/dprint-ci.json  

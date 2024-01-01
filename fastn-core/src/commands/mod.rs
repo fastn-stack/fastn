@@ -1,6 +1,7 @@
 pub mod abort_merge;
 pub mod add;
 pub mod build;
+pub mod check;
 pub mod clone;
 pub mod close_cr;
 pub mod create_cr;
@@ -21,5 +22,6 @@ pub mod stop_tracking;
 pub mod sync;
 pub mod sync2;
 pub mod sync_status;
+pub mod test;
 pub mod translation_status;
 pub mod update;

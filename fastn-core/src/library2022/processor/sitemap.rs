@@ -2,17 +2,17 @@ pub fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    if let Some(ref sitemap) = config.package.sitemap {
-        let doc_id = config
+    if let Some(ref sitemap) = req_config.config.package.sitemap {
+        let doc_id = req_config
             .current_document
             .clone()
             .map(|v| fastn_core::utils::id_to_path(v.as_str()))
             .unwrap_or_else(|| {
                 doc.name
                     .to_string()
-                    .replace(config.package.name.as_str(), "")
+                    .replace(req_config.config.package.name.as_str(), "")
             })
             .trim()
             .replace(std::path::MAIN_SEPARATOR, "/");
@@ -32,17 +32,17 @@ pub fn full_sitemap_process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    if let Some(ref sitemap) = config.package.sitemap {
-        let doc_id = config
+    if let Some(ref sitemap) = req_config.config.package.sitemap {
+        let doc_id = req_config
             .current_document
             .clone()
             .map(|v| fastn_core::utils::id_to_path(v.as_str()))
             .unwrap_or_else(|| {
                 doc.name
                     .to_string()
-                    .replace(config.package.name.as_str(), "")
+                    .replace(req_config.config.package.name.as_str(), "")
             })
             .trim()
             .replace(std::path::MAIN_SEPARATOR, "/");
@@ -168,7 +168,7 @@ pub fn to_sitemap_compat(
     ) -> fastn_core::sitemap::toc::TocItemCompat {
         let mut is_child_active: bool = false;
         let mut children: Vec<fastn_core::sitemap::toc::TocItemCompat> = vec![];
-        for child in subsection.toc.iter() {
+        for child in subsection.toc.iter().filter(|t| !t.skip) {
             let child_to_toc_compat = to_toc_compat(child, current_document);
             if child_to_toc_compat.is_active {
                 is_child_active = true;
@@ -213,7 +213,7 @@ pub fn to_sitemap_compat(
     ) -> fastn_core::sitemap::toc::TocItemCompat {
         let mut is_child_active: bool = false;
         let mut children: Vec<fastn_core::sitemap::toc::TocItemCompat> = vec![];
-        for child in section.subsections.iter().filter(|t| !t.skip && t.visible) {
+        for child in section.subsections.iter().filter(|t| !t.skip) {
             let child_to_subsection_compat = to_subsection_compat(child, current_document);
             if child_to_subsection_compat.is_active {
                 is_child_active = true;

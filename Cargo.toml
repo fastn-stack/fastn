@@ -8,14 +8,15 @@ members = [
     "fastn-issues",
     "fastn-js",
     "fastn-grammar",
-    "fastn-observer",
+    "fastn-lang",
+    "foo",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
 exclude = ["fastn-runtime", "fastn-wasm"]
+resolver = "2"
 
 [workspace.package]
-version = "0.3.0"
 authors = [
     "Amit Upadhyay <upadhyay@gmail.com>",
     "Arpita Jaiswal <arpita@fifthtry.com>",
@@ -53,36 +54,41 @@ strip = true
 # If you are not using the latest version intentionally, please do not list it in this section
 # and create it's own [dependencies.<name>] section, and document it with why are you not
 # using the latest dependency, and what is the plan to moving to the latest version.
+
+accept-language = "3"
 actix-web = "4"
 antidote = "1"
 dirs = "5"
 native-tls = "0.2"
 deadpool-postgres = { git = "https://github.com/amitu/deadpool", rev = "dbf5a46" }
 postgres-native-tls = "0.5"
-tokio-postgres = { version = "0.7", features = ["with-serde_json-1"] }
+tokio-postgres = { version = "0.7", features = ["with-serde_json-1", "with-uuid-1"] }
 postgres-types = "0.2"
-async-lock = "2"
+async-lock = "3"
 async-recursion = "1"
 async-trait = "0.1"
+actix-web-lab = "0.20"
 bitflags = "2"
 bytemuck = { version = "1", features = [ "derive" ] }
 camino = "1"
 clap = "4"
-colored = "2.0.4"
-crossterm = "0.26"
+colored = "2"
+crossterm = "0.27"
 css-color-parser = "0.1"
 diffy = "0.3"
 dioxus-html = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 dioxus-native-core = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 dioxus-native-core-macro = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
+dotenvy = "0.15"
 edit = "0.1"
 env_logger = "0.10"
+enum-iterator = "0.6"
+enum-iterator-derive = "0.6"
 fastn-cloud = { path = "fastn-cloud" }
 fastn-core = { path = "fastn-core" }
 fastn-issues = { path = "fastn-issues" }
 fastn-package = { path = "fastn-package" }
 fastn-runtime = { path = "fastn-runtime" }
-fastn-observer = { path = "fastn-observer" }
 fastn-wasm = { path = "fastn-wasm" }
 fastn-grammar = { path = "fastn-grammar" }
 fluent = "0.16"
@@ -90,12 +96,14 @@ format_num = "0.1"
 ftd = { path = "ftd" }
 fastn-js = { path = "fastn-js" }
 futures = "0.3"
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+futures-core = "0.3"
 home = "0.5"
 ignore = "0.4"
 include_dir = "0.7"
 indoc = "2"
 intl-memoizer = "0.5"
-itertools = "0.10"
+itertools = "0.12"
 log = "0.4"
 magic-crypt = { version = "3", default-features = false }
 mime_guess = "2"
@@ -110,10 +118,10 @@ regex = "1"
 reqwest = { version = "0.11", features = ["json"] }
 rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 ron = "0.8"
-rquickjs = { version = "0.1", features = ["macro"] }
-quick-js = "0.4.1"
+rquickjs = { version = "0.3", features = ["macro"] }
+quick-js = "0.4"
 rustc-hash = "1"
-rusty-hook = "^0.11.2"
+rusty-hook = "0.11"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"
@@ -122,7 +130,7 @@ slug = "0.1"
 taffy = "0.3"
 tejar = "0.1"
 thiserror = "1"
-tokio = { version = "1.27.0", features = ["full"] }
+tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
 url = "2"
@@ -130,15 +138,34 @@ ansi_term = "0.12"
 walkdir = "2"
 smallvec = "1"
 wasm-bindgen = "0.2"
-wasmtime = "10"
-wgpu = "0.16"
-winit = "0.28"
+wasmtime = "15"
+wgpu = "0.18"
+winit = "0.29"
 zip = "0.6"
 prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }
+argon2 = "0.5"
+lettre = { version = "0.11", features = ["serde", "tokio1", "tokio1-native-tls"]}
+diesel = { version = "2.1", features = ["chrono", "postgres", "postgres_backend"]}
+diesel-async = { version = "0.4", features = ["postgres", "deadpool", "async-connection-wrapper"]}
+diesel_migrations = "2.1"
+chrono = { version = "0.4", features = ["serde"]}
+
+[workspace.dependencies.uuid]
+version = "1.6.1"
+features = [
+    "v4",                # Lets you generate random UUIDs
+    "fast-rng",          # Use a faster (but still sufficiently random) RNG
+    "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
+    "serde",
+]
+
+[workspace.dependencies.fastn-observer]
+git = "https://github.com/fastn-stack/fastn-observer"
+rev = "47b29ea"
 
 [workspace.dependencies.rusqlite]
-version = "0.29.0"
+version = "0.30"
 features = [
     # We are using bundled version of rusqlite so we do not need sqlitelib, headers as a
     # dependency. By default, if we do not bundle, our binary will link against system
@@ -147,6 +174,14 @@ features = [
     # sqlite dynamic library is installed on everyone's machine. We can chose to give two
     # binaries, one with bundled, one without, but it is not worth the tradeoff right now.
     "bundled",
+    "column_decltype",
+]
+
+[workspace.dependencies.pq-sys]
+version = "0.4"
+features = [
+    # see workspace.dependencies.rusqlite
+    "bundled"
 ]
 
 
@@ -161,7 +196,7 @@ features = [
 ]
 
 [workspace.dependencies.hyper]
-version = "0.14"
+version = "1"
 default-features = false
 features = ["http1", "server"]
 
@@ -197,7 +232,7 @@ features = [
 [workspace.dependencies.comrak]
 # We use comrak for markup processing.
 
-version = "0.18"
+version = "0.19"
 # By default comrak ships with support for syntax highlighting using syntext for "fenced
 # code blocks". We have disabled that by not using default features. We did that because
 # we already have a way to show code in ftd, ftd.code. Further, comark requires syntect 4.6

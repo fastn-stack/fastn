@@ -11,7 +11,7 @@ pub async fn handle_command(matches: &clap::ArgMatches) -> fastn_core::Result<()
     use fastn_core::utils::ValueOf;
 
     sync_status(
-        &fastn_core::Config::read(None, true, None).await?,
+        &fastn_core::Config::read(None, true).await?,
         matches.value_of_("file"), // TODO: handle multiple files
     )
     .await
@@ -44,6 +44,8 @@ pub(crate) fn print_status(
     file_status: &fastn_core::sync_utils::FileStatus,
     print_untracked: bool,
 ) {
+    use colored::Colorize;
+
     let (file_status, path, status) = match file_status {
         fastn_core::sync_utils::FileStatus::Add { path, status, .. } => ("Added", path, status),
         fastn_core::sync_utils::FileStatus::Update { path, status, .. } => {
@@ -67,7 +69,9 @@ pub(crate) fn print_status(
         fastn_core::sync_utils::Status::CloneDeletedRemoteEdited(_) => {
             println!("CloneDeletedRemoteEdited: {}", path)
         }
-        fastn_core::sync_utils::Status::NoConflict => println!("{}: {}", file_status, path),
+        fastn_core::sync_utils::Status::NoConflict => {
+            println!("{}: {}", file_status.yellow(), path)
+        }
         fastn_core::sync_utils::Status::CloneAddedRemoteAdded(_) => {
             println!("CloneAddedRemoteAdded: {}", path)
         }

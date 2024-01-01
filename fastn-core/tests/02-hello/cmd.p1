@@ -1,9 +1,10 @@
 -- fbt:
-cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test build --test --ignore-failed
+cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test build --edition 2022 --ignore-failed
 output: amitu/.build
 
 -- stdout:
 
-Processing www.amitu.com/FASTN.ftd ... done in <omitted>
-Processing www.amitu.com/fail_doc.ftd ... Failed
-Processing www.amitu.com/index.ftd ... done in <omitted>
+Processing www.amitu.com/FASTN/ ... done in <omitted>
+Processing www.amitu.com/fail_doc/ ... Failed done in <omitted>
+Processing www.amitu.com/ ... done in <omitted>
+

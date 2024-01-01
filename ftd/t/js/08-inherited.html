@@ -1,76 +1,112 @@
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    
+    <meta content="fastn" name="generator">
+    
+    
+    <script>
+        let __fastn_package_name__ = "foo";
+    </script>
+
     <script src="fastn-js.js"></script>
+    
 
     <style>
        
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="c-1">Hello from foo</div><div data-id="3" class="c-1">ftd.text says Hello</div><div data-id="4" class="ft_column w-2 h-3"><div data-id="5" class="ft_column w-2 h-4"><div data-id="6" class="c-5">Hello</div><div data-id="7" class="c-6">Hello from foo</div></div></div></body><style id="styles">
-    .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
-	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
-	.c-1 { color: #141414; }
-	body.dark .c-1 { color: #ffffff; }
-	.w-2 { width: 100%; }
-	.h-3 { height: 200px; }
-	.h-4 { height: 100%; }
-	.c-5 { color: #707070; }
-	body.dark .c-5 { color: #D9D9D9; }
-	.c-6 { color: #333333; }
-	body.dark .c-6 { color: #FFFFFF; }
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="__c-3 __bgc-4">Hello from foo</div><div data-id="4" class="__c-5 __bgc-6">ftd.text says Hello</div><div data-id="5" class="ft_column __w-7 __h-8"><div data-id="6" class="ft_column __w-9 __h-10 __bgc-11"><div data-id="7" class="__c-12">Hello</div><div data-id="8" class="__c-13 __bgc-14">Hello from foo</div></div></div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__c-3 { color: #141414 !important; }
+	body.dark .__c-3 { color: #ffffff !important; }
+	.__c-3:visited { color: #141414 !important; }
+	body.dark  .__c-3:visited { color: #ffffff !important; }
+	.__bgc-4 { background-color: #e7e7e4; }
+	body.dark .__bgc-4 { background-color: #18181b; }
+	.__c-5 { color: #141414 !important; }
+	body.dark .__c-5 { color: #ffffff !important; }
+	.__c-5:visited { color: #141414 !important; }
+	body.dark  .__c-5:visited { color: #ffffff !important; }
+	.__bgc-6 { background-color: #e7e7e4; }
+	body.dark .__bgc-6 { background-color: #18181b; }
+	.__w-7 { width: 100%; }
+	.__h-8 { height: 200px; }
+	.__w-9 { width: 100%; }
+	.__h-10 { height: 100%; }
+	.__bgc-11 { background-color: #FDFAF1; }
+	body.dark .__bgc-11 { background-color: #111111; }
+	.__c-12 { color: #707070 !important; }
+	body.dark .__c-12 { color: #D9D9D9 !important; }
+	.__c-12:visited { color: #707070 !important; }
+	body.dark  .__c-12:visited { color: #D9D9D9 !important; }
+	.__c-13 { color: #333333 !important; }
+	body.dark .__c-13 { color: #FFFFFF !important; }
+	.__c-13:visited { color: #333333 !important; }
+	body.dark  .__c-13:visited { color: #FFFFFF !important; }
+	.__bgc-14 { background-color: #FFFFFF; }
+	body.dark .__bgc-14 { background-color: #000000; }
     </style>
 <script>
     (function() {
-        let global = {
-};
-let main = function (parent) {
-  let parenti0 = foo__foo(parent, inherited);
-  let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "ftd.text says Hello", inherited);
-  parenti1.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text_strong"), inherited);
-  parenti1.setProperty(fastn_dom.PropertyKind.Background, inherited.get("colors").get("background").get("base"), inherited);
-  let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti2.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-  let __$$inherited$$__parenti2 = fastn.recordInstance({
-    colors: global.foo__colors
-  });
-  parenti2.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-    rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Background, inherited.get("colors").get("background").get("step_1"), inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text"), inherited);
-    },
-    function (root, inherited) {
-      let rooti0 = foo__foo(root, inherited);
+        let main = function (parent) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let parenti0 = foo__foo(parent, inherited);
+    let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "ftd.text says Hello", inherited);
+    parenti1.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text_strong"), inherited);
+    parenti1.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(inherited.get("colors").get("background").get("base")), inherited);
+    let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
+    let __$$inherited$$__parenti2 = fastn.recordInstance({
+      ...inherited.getAllFields(),
+      colors: global.foo__colors
+    });
+    parenti2.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(inherited.get("colors").get("background").get("step_1")), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text"), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = foo__foo(root, inherited);
+      }
+      ]), inherited);
     }
-    ]), inherited);
+    ]), __$$inherited$$__parenti2);
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
   }
-  ]), __$$inherited$$__parenti2);
 }
+global["main"] = main;
 let foo__foo = function (parent, inherited, args) {
-  let __args__ = {
-  };
-  inherited = fastn.recordInstance({
-    ...__args__,
-    ...inherited.getAllFields(),
-    ...args
-  });
-  __args__ = {
-    ...__args__,
-    ...args
-  };
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from foo", inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text_strong"), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Background, inherited.get("colors").get("background").get("base"), inherited);
-  return parenti0;
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from foo", inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text_strong"), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(inherited.get("colors").get("background").get("base")), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
 }
+global["foo__foo"] = foo__foo;
 fastn_utils.createNestedObject(global, "foo__base_", fastn.recordInstance({
   light: "#FFFFFF",
   dark: "#000000"
@@ -466,9 +502,45 @@ fastn_utils.createNestedObject(global, "foo__colors", fastn.recordInstance({
   warning: global.foo__warning_btb_,
   custom: global.foo__custom_
 }));
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
 
-        fastn_virtual.hydrate(main);
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastnVirtual.doubleBuffer(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+        ftd.emit_on_load();
+    };
 </script>
 </html>

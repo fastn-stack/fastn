@@ -1,210 +1,110 @@
-pub(crate) mod amazon;
-pub(crate) mod apple;
-pub(crate) mod baidu;
-pub(crate) mod bitbucket;
 pub(crate) mod config;
-pub(crate) mod digitalocean;
-pub(crate) mod discord;
-pub(crate) mod doorkeeper;
-pub(crate) mod dropbox;
-pub(crate) mod facebook;
 pub(crate) mod github;
-pub(crate) mod gitlab;
-pub(crate) mod gmail;
-pub(crate) mod google;
-pub(crate) mod instagram;
-pub(crate) mod linkedin;
-pub(crate) mod microsoft;
-pub(crate) mod okta;
-pub(crate) mod pintrest;
-pub(crate) mod processor;
 pub(crate) mod routes;
-pub(crate) mod slack;
-pub(crate) mod telegram;
-pub(crate) mod tiktok;
-pub(crate) mod twitch;
-pub(crate) mod twitter;
-pub(crate) mod wechat;
-pub(crate) mod yahoo;
-pub(crate) mod zoho;
 
-pub mod utils;
+mod email_password;
+
+mod utils;
+
+pub const COOKIE_NAME: &str = "session";
+
+#[derive(Debug, serde::Deserialize, serde::Serialize, diesel::Queryable, diesel::Selectable)]
+#[diesel(table_name = fastn_core::schema::fastn_user)]
+pub struct FastnUser {
+    pub id: i32,
+    pub username: String,
+    #[serde(skip_serializing)]
+    pub password: String,
+    pub name: String,
+    pub created_at: chrono::DateTime<chrono::Utc>,
+}
+
 #[derive(Debug)]
-pub(crate) enum AuthProviders {
+pub enum AuthProviders {
     GitHub,
-    TeleGram,
-    Google,
-    Discord,
-    Slack,
-    Amazon,
-    Apple,
-    Baidu,
-    BitBucket,
-    DigitalOcean,
-    DoorKeeper,
-    DropBox,
-    Facebook,
-    GitLab,
-    Instagram,
-    LinkedIn,
-    Microsoft,
-    Okta,
-    Pintrest,
-    TikTok,
-    Twitch,
-    Twitter,
-    WeChat,
-    Yahoo,
-    Zoho,
-    Gmail,
 }
 
 impl AuthProviders {
-    pub(crate) const AUTH_ITER: [AuthProviders; 26] = [
-        AuthProviders::GitHub,
-        AuthProviders::TeleGram,
-        AuthProviders::Google,
-        AuthProviders::Discord,
-        AuthProviders::Slack,
-        AuthProviders::Amazon,
-        AuthProviders::Apple,
-        AuthProviders::Baidu,
-        AuthProviders::BitBucket,
-        AuthProviders::DigitalOcean,
-        AuthProviders::DoorKeeper,
-        AuthProviders::DropBox,
-        AuthProviders::Facebook,
-        AuthProviders::GitLab,
-        AuthProviders::Instagram,
-        AuthProviders::LinkedIn,
-        AuthProviders::Microsoft,
-        AuthProviders::Okta,
-        AuthProviders::Pintrest,
-        AuthProviders::TikTok,
-        AuthProviders::Twitch,
-        AuthProviders::Twitter,
-        AuthProviders::WeChat,
-        AuthProviders::Yahoo,
-        AuthProviders::Zoho,
-        AuthProviders::Gmail,
-    ];
+    // pub(crate) const AUTH_ITER: [AuthProviders; 1] = [AuthProviders::GitHub];
     pub(crate) fn as_str(&self) -> &'static str {
         match self {
             AuthProviders::GitHub => "github",
-            AuthProviders::TeleGram => "telegram",
-            AuthProviders::Google => "google",
-            AuthProviders::Discord => "discord",
-            AuthProviders::Slack => "slack",
-            AuthProviders::Amazon => "amazon",
-            AuthProviders::Apple => "apple",
-            AuthProviders::Baidu => "baidu",
-            AuthProviders::BitBucket => "bitbucket",
-            AuthProviders::DigitalOcean => "digitalocean",
-            AuthProviders::DoorKeeper => "doorkeeper",
-            AuthProviders::DropBox => "dropbox",
-            AuthProviders::Facebook => "facebook",
-            AuthProviders::GitLab => "gitlab",
-            AuthProviders::Instagram => "instagram",
-            AuthProviders::LinkedIn => "linkedin",
-            AuthProviders::Microsoft => "microsoft",
-            AuthProviders::Okta => "okta",
-            AuthProviders::Pintrest => "pintrest",
-            AuthProviders::TikTok => "tiktok",
-            AuthProviders::Twitch => "twitch",
-            AuthProviders::Twitter => "twitter",
-            AuthProviders::WeChat => "wechat",
-            AuthProviders::Yahoo => "yahoo",
-            AuthProviders::Zoho => "zoho",
-            AuthProviders::Gmail => "gmail",
         }
     }
 
     pub(crate) fn from_str(s: &str) -> Self {
         match s {
             "github" => AuthProviders::GitHub,
-            "telegram" => AuthProviders::TeleGram,
-            "google" => AuthProviders::Google,
-            "discord" => AuthProviders::Discord,
-            "slack" => AuthProviders::Slack,
             _ => panic!("Invalid auth provider {}", s),
-        }
-    }
-}
-
-pub fn secret_key() -> String {
-    match std::env::var("SECRET_KEY") {
-        Ok(secret) => secret,
-        Err(_e) => {
-            println!("WARN: SECRET_KEY not set");
-            // TODO: Need to change this approach later
-            "FASTN_TEMP_SECRET".to_string()
         }
     }
 }
 
 /// will fetch out the decrypted user data from cookies
 /// and return it as string
-/// if no cookie wrt to platform found it throws an error
 pub async fn get_user_data_from_cookies(
-    platform: &str,
+    provider: &str,
     requested_field: &str,
     cookies: &std::collections::HashMap<String, String>,
 ) -> fastn_core::Result<Option<String>> {
-    let ud_encrypted = cookies.get(platform).ok_or_else(|| {
-        fastn_core::Error::GenericError(format!(
-            "user detail not found for platform {} in the cookies",
-            platform
-        ))
+    let session_id = cookies.get(fastn_core::auth::COOKIE_NAME).ok_or_else(|| {
+        fastn_core::Error::GenericError("user detail not found in the cookie".to_string())
     });
-    match ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                match fastn_core::auth::AuthProviders::from_str(platform) {
-                    fastn_core::auth::AuthProviders::GitHub => {
-                        let github_ud: github::UserDetail =
-                            serde_json::from_str(ud_decrypted.as_str())?;
-                        return match requested_field {
-                            "username" | "user_name" | "user-name" => Ok(Some(github_ud.user_name)),
-                            "token" => Ok(Some(github_ud.token)),
-                            _ => Err(fastn_core::Error::GenericError(format!(
-                                "invalid field {} requested for platform {}",
-                                requested_field, platform
-                            ))),
-                        };
+
+    match session_id {
+        Ok(session_id) => {
+            let session_id: i32 = session_id.parse()?;
+
+            return match fastn_core::auth::AuthProviders::from_str(provider) {
+                fastn_core::auth::AuthProviders::GitHub => {
+                    let (user, _) =
+                        fastn_core::auth::get_authenticated_user_with_email(&session_id).await?;
+
+                    match requested_field {
+                        "username" | "user_name" | "user-name" => Ok(Some(user.username)),
+
+                        "token" => {
+                            use diesel::prelude::*;
+                            use diesel_async::RunQueryDsl;
+
+                            let pool = fastn_core::db::pool().await.as_ref().map_err(|e| {
+                                fastn_core::Error::DatabaseError {
+                                    message: format!("Failed to get connection to db. {:?}", e),
+                                }
+                            })?;
+
+                            let mut conn =
+                                pool.get()
+                                    .await
+                                    .map_err(|e| fastn_core::Error::DatabaseError {
+                                        message: format!("Failed to get connection to db. {:?}", e),
+                                    })?;
+
+                            let token = fastn_core::schema::fastn_oauthtoken::table
+                                .select(fastn_core::schema::fastn_oauthtoken::token)
+                                .filter(
+                                    fastn_core::schema::fastn_oauthtoken::session_id
+                                        .eq(&session_id),
+                                )
+                                .filter(fastn_core::schema::fastn_oauthtoken::provider.eq("github"))
+                                .first::<String>(&mut conn)
+                                .await
+                                .optional()
+                                .map_err(|e| fastn_core::Error::DatabaseError {
+                                    message: format!(
+                                        "failed to get token from fastn_oauthtoken: {e}"
+                                    ),
+                                })?;
+
+                            Ok(token)
+                        }
+                        _ => Err(fastn_core::Error::GenericError(format!(
+                            "invalid field {} requested for platform {}",
+                            requested_field, provider
+                        ))),
                     }
-                    fastn_core::auth::AuthProviders::TeleGram => {
-                        let telegram_ud: telegram::UserDetail =
-                            serde_json::from_str(ud_decrypted.as_str())?;
-                        return match requested_field {
-                            "username" | "user_name" | "user-name" => {
-                                Ok(Some(telegram_ud.user_name))
-                            }
-                            "uid" | "userid" | "user-id" => Ok(Some(telegram_ud.user_id)),
-                            "token" => Ok(Some(telegram_ud.token)),
-                            _ => Err(fastn_core::Error::GenericError(format!(
-                                "invalid field {} requested for platform {}",
-                                requested_field, platform
-                            ))),
-                        };
-                    }
-                    fastn_core::auth::AuthProviders::Discord => {
-                        let discord_ud: discord::UserDetail =
-                            serde_json::from_str(ud_decrypted.as_str())?;
-                        return match requested_field {
-                            "username" | "user_name" | "user-name" => {
-                                Ok(Some(discord_ud.user_name))
-                            }
-                            "id" | "userid" | "user-id" => Ok(Some(discord_ud.user_id)),
-                            "token" => Ok(Some(discord_ud.token)),
-                            _ => Err(fastn_core::Error::GenericError(format!(
-                                "invalid field {} requested for platform {}",
-                                requested_field, platform
-                            ))),
-                        };
-                    }
-                    _ => unimplemented!(),
                 }
-            }
+            };
         }
         Err(err) => {
             // Debug out the error and return None
@@ -212,560 +112,153 @@ pub async fn get_user_data_from_cookies(
             dbg!(&error_msg);
         }
     };
+
     Ok(None)
 }
 
-// TODO: rename the method later
-// bridge between fastn_core to auth to check
 pub async fn get_auth_identities(
     cookies: &std::collections::HashMap<String, String>,
     identities: &[fastn_core::user_group::UserIdentity],
 ) -> fastn_core::Result<Vec<fastn_core::user_group::UserIdentity>> {
     let mut matched_identities: Vec<fastn_core::user_group::UserIdentity> = vec![];
 
-    let github_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::GitHub.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
+    let session_id =
+        cookies
+            .get(fastn_core::auth::COOKIE_NAME)
+            .ok_or(fastn_core::Error::GenericError(
                 "github user detail not found in the cookies".to_string(),
-            )
-        });
-    match github_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(github_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let github_ud: github::UserDetail =
-                    serde_json::from_str(github_ud_decrypted.as_str())?;
-                matched_identities.extend(github::matched_identities(github_ud, identities).await?);
-            }
+            ));
+
+    match session_id {
+        Ok(session_id) => {
+            use diesel::prelude::*;
+            use diesel_async::RunQueryDsl;
+
+            let session_id: i32 = session_id.parse()?;
+
+            let pool = fastn_core::db::pool().await.as_ref().map_err(|e| {
+                fastn_core::Error::DatabaseError {
+                    message: format!("Failed to get connection to db. {:?}", e),
+                }
+            })?;
+
+            let mut conn = pool
+                .get()
+                .await
+                .map_err(|e| fastn_core::Error::DatabaseError {
+                    message: format!("Failed to get connection to db. {:?}", e),
+                })?;
+
+            let token: String = fastn_core::schema::fastn_oauthtoken::table
+                .select(fastn_core::schema::fastn_oauthtoken::token)
+                .filter(fastn_core::schema::fastn_oauthtoken::session_id.eq(&session_id))
+                .filter(fastn_core::schema::fastn_oauthtoken::provider.eq("github"))
+                .first::<String>(&mut conn)
+                .await
+                .map_err(|e| fastn_core::Error::DatabaseError {
+                    message: format!("failed to get token from fastn_oauthtoken: {e}"),
+                })?;
+
+            let (user, _) =
+                fastn_core::auth::get_authenticated_user_with_email(&session_id).await?;
+
+            let github_ud: github::UserDetail = github::UserDetail {
+                access_token: token,
+                user,
+            };
+
+            matched_identities.extend(github::matched_identities(github_ud, identities).await?);
         }
         Err(err) => {
             // TODO: What to do with this error
             format!("{}{}", "github user detail not found in the cookies", err);
         }
     };
-    let telegram_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::TeleGram.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "telegram user detail not found in the cookies".to_string(),
-            )
-        });
-    match telegram_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(telegram_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let telegram_ud: telegram::UserDetail =
-                    serde_json::from_str(telegram_ud_decrypted.as_str())?;
-                matched_identities
-                    .extend(telegram::matched_identities(telegram_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "telegram user detail not found in the cookies", err);
-        }
-    };
-    let discord_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Discord.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "discord user detail not found in the cookies".to_string(),
-            )
-        });
-    match discord_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(discord_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let discord_ud: discord::UserDetail =
-                    serde_json::from_str(discord_ud_decrypted.as_str())?;
-                matched_identities
-                    .extend(discord::matched_identities(discord_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "discord user detail not found in the cookies", err);
-        }
-    };
-    let twitter_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Twitter.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "twitter user detail not found in the cookies".to_string(),
-            )
-        });
-
-    match twitter_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(twitter_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let twitter_ud: twitter::UserDetail =
-                    serde_json::from_str(twitter_ud_decrypted.as_str())?;
-                matched_identities
-                    .extend(twitter::matched_identities(twitter_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "twitter user detail not found in the cookies", err);
-        }
-    };
-    let amazon_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Amazon.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "amazon user detail not found in the cookies".to_string(),
-            )
-        });
-    match amazon_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(amazon_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let amazon_ud: amazon::UserDetail =
-                    serde_json::from_str(amazon_ud_decrypted.as_str())?;
-                matched_identities.extend(amazon::matched_identities(amazon_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "amazon user detail not found in the cookies", err);
-        }
-    };
-    let facebook_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Facebook.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "facebook user detail not found in the cookies".to_string(),
-            )
-        });
-    match facebook_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(facebook_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let facebook_ud: facebook::UserDetail =
-                    serde_json::from_str(facebook_ud_decrypted.as_str())?;
-                matched_identities
-                    .extend(facebook::matched_identities(facebook_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "facebook user detail not found in the cookies", err);
-        }
-    };
-    let gmail_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Gmail.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "gmail user detail not found in the cookies".to_string(),
-            )
-        });
-    match gmail_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(gmail_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let gmail_ud: gmail::UserDetail =
-                    serde_json::from_str(gmail_ud_decrypted.as_str())?;
-                matched_identities.extend(gmail::matched_identities(gmail_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "gmail user detail not found in the cookies", err);
-        }
-    };
-    let slack_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Slack.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "slack user detail not found in the cookies".to_string(),
-            )
-        });
-    match slack_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(slack_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let slack_ud: slack::UserDetail =
-                    serde_json::from_str(slack_ud_decrypted.as_str())?;
-                matched_identities.extend(slack::matched_identities(slack_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "slack user detail not found in the cookies", err);
-        }
-    };
-    let apple_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Apple.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "apple user detail not found in the cookies".to_string(),
-            )
-        });
-    match apple_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(apple_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let apple_ud: apple::UserDetail =
-                    serde_json::from_str(apple_ud_decrypted.as_str())?;
-                matched_identities.extend(apple::matched_identities(apple_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "apple user detail not found in the cookies", err);
-        }
-    };
-    let baidu_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Baidu.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "baidu user detail not found in the cookies".to_string(),
-            )
-        });
-    match baidu_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(baidu_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let baidu_ud: baidu::UserDetail =
-                    serde_json::from_str(baidu_ud_decrypted.as_str())?;
-                matched_identities.extend(baidu::matched_identities(baidu_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "baidu user detail not found in the cookies", err);
-        }
-    };
-    let bitbucket_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::BitBucket.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "bitbucket user detail not found in the cookies".to_string(),
-            )
-        });
-    match bitbucket_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(bitbucket_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let bitbucket_ud: bitbucket::UserDetail =
-                    serde_json::from_str(bitbucket_ud_decrypted.as_str())?;
-                matched_identities
-                    .extend(bitbucket::matched_identities(bitbucket_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!(
-                "{}{}",
-                "bitbucket user detail not found in the cookies", err
-            );
-        }
-    };
-    let digitalocean_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::DigitalOcean.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "digitalocean user detail not found in the cookies".to_string(),
-            )
-        });
-    match digitalocean_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(digitalocean_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let digitalocean_ud: digitalocean::UserDetail =
-                    serde_json::from_str(digitalocean_ud_decrypted.as_str())?;
-                matched_identities
-                    .extend(digitalocean::matched_identities(digitalocean_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!(
-                "{}{}",
-                "digitalocean user detail not found in the cookies", err
-            );
-        }
-    };
-    let doorkeeper_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::DoorKeeper.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "doorkeeper user detail not found in the cookies".to_string(),
-            )
-        });
-    match doorkeeper_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(doorkeeper_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let doorkeeper_ud: doorkeeper::UserDetail =
-                    serde_json::from_str(doorkeeper_ud_decrypted.as_str())?;
-                matched_identities
-                    .extend(doorkeeper::matched_identities(doorkeeper_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!(
-                "{}{}",
-                "doorkeeper user detail not found in the cookies", err
-            );
-        }
-    };
-    let dropbox_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::DropBox.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "DropBox user detail not found in the cookies".to_string(),
-            )
-        });
-    match dropbox_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(dropbox_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let dropbox_ud: dropbox::UserDetail =
-                    serde_json::from_str(dropbox_ud_decrypted.as_str())?;
-                matched_identities
-                    .extend(dropbox::matched_identities(dropbox_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "dropbox user detail not found in the cookies", err);
-        }
-    };
-    let gitlab_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::GitLab.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "GitLab user detail not found in the cookies".to_string(),
-            )
-        });
-    match gitlab_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(gitlab_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let gitlab_ud: gitlab::UserDetail =
-                    serde_json::from_str(gitlab_ud_decrypted.as_str())?;
-                matched_identities.extend(gitlab::matched_identities(gitlab_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "GitLab user detail not found in the cookies", err);
-        }
-    };
-    let instagram_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Instagram.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "Instagram user detail not found in the cookies".to_string(),
-            )
-        });
-    match instagram_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(instagram_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let instagram_ud: instagram::UserDetail =
-                    serde_json::from_str(instagram_ud_decrypted.as_str())?;
-                matched_identities
-                    .extend(instagram::matched_identities(instagram_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!(
-                "{}{}",
-                "Instagram user detail not found in the cookies", err
-            );
-        }
-    };
-    let linkedin_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::LinkedIn.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "LinkedIn user detail not found in the cookies".to_string(),
-            )
-        });
-    match linkedin_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(linkedin_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let linkedin_ud: linkedin::UserDetail =
-                    serde_json::from_str(linkedin_ud_decrypted.as_str())?;
-                matched_identities
-                    .extend(linkedin::matched_identities(linkedin_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "LinkedIn user detail not found in the cookies", err);
-        }
-    };
-    let microsoft_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Microsoft.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "Microsoft user detail not found in the cookies".to_string(),
-            )
-        });
-    match microsoft_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(microsoft_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let microsoft_ud: microsoft::UserDetail =
-                    serde_json::from_str(microsoft_ud_decrypted.as_str())?;
-                matched_identities
-                    .extend(microsoft::matched_identities(microsoft_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!(
-                "{}{}",
-                "Microsoft user detail not found in the cookies", err
-            );
-        }
-    };
-    let okta_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Okta.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError("Okta user detail not found in the cookies".to_string())
-        });
-    match okta_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(okta_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let okta_ud: okta::UserDetail = serde_json::from_str(okta_ud_decrypted.as_str())?;
-                matched_identities.extend(okta::matched_identities(okta_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "Okta user detail not found in the cookies", err);
-        }
-    };
-    let pintrest_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Pintrest.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "Pintrest user detail not found in the cookies".to_string(),
-            )
-        });
-    match pintrest_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(pintrest_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let pintrest_ud: pintrest::UserDetail =
-                    serde_json::from_str(pintrest_ud_decrypted.as_str())?;
-                matched_identities
-                    .extend(pintrest::matched_identities(pintrest_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "Pintrest user detail not found in the cookies", err);
-        }
-    };
-    let tiktok_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::TikTok.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "TikTok user detail not found in the cookies".to_string(),
-            )
-        });
-    match tiktok_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(tiktok_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let tiktok_ud: tiktok::UserDetail =
-                    serde_json::from_str(tiktok_ud_decrypted.as_str())?;
-                matched_identities.extend(tiktok::matched_identities(tiktok_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "TikTok user detail not found in the cookies", err);
-        }
-    };
-    let twitch_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Twitch.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "Twitch user detail not found in the cookies".to_string(),
-            )
-        });
-    match twitch_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(twitch_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let twitch_ud: twitch::UserDetail =
-                    serde_json::from_str(twitch_ud_decrypted.as_str())?;
-                matched_identities.extend(twitch::matched_identities(twitch_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "Twitch user detail not found in the cookies", err);
-        }
-    };
-    let twitter_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Twitter.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "Twitter user detail not found in the cookies".to_string(),
-            )
-        });
-    match twitter_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(twitter_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let twitter_ud: twitter::UserDetail =
-                    serde_json::from_str(twitter_ud_decrypted.as_str())?;
-                matched_identities
-                    .extend(twitter::matched_identities(twitter_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "Twitter user detail not found in the cookies", err);
-        }
-    };
-    let wechat_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::WeChat.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "WeChat user detail not found in the cookies".to_string(),
-            )
-        });
-    match wechat_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(wechat_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let wechat_ud: wechat::UserDetail =
-                    serde_json::from_str(wechat_ud_decrypted.as_str())?;
-                matched_identities.extend(wechat::matched_identities(wechat_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "WeChat user detail not found in the cookies", err);
-        }
-    };
-    let yahoo_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Yahoo.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "Yahoo user detail not found in the cookies".to_string(),
-            )
-        });
-    match yahoo_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(yahoo_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let yahoo_ud: yahoo::UserDetail =
-                    serde_json::from_str(yahoo_ud_decrypted.as_str())?;
-                matched_identities.extend(yahoo::matched_identities(yahoo_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "Yahoo user detail not found in the cookies", err);
-        }
-    };
-    let zoho_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Zoho.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError("Zoho user detail not found in the cookies".to_string())
-        });
-    match zoho_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(zoho_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let zoho_ud: zoho::UserDetail = serde_json::from_str(zoho_ud_decrypted.as_str())?;
-                matched_identities.extend(zoho::matched_identities(zoho_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "Zoho user detail not found in the cookies", err);
-        }
-    };
-    let google_ud_encrypted = cookies
-        .get(fastn_core::auth::AuthProviders::Google.as_str())
-        .ok_or_else(|| {
-            fastn_core::Error::GenericError(
-                "Google user detail not found in the cookies".to_string(),
-            )
-        });
-    match google_ud_encrypted {
-        Ok(encrypt_str) => {
-            if let Ok(google_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                let google_ud: google::UserDetail =
-                    serde_json::from_str(google_ud_decrypted.as_str())?;
-                matched_identities.extend(google::matched_identities(google_ud, identities).await?);
-            }
-        }
-        Err(err) => {
-            format!("{}{}", "Google user detail not found in the cookies", err);
-        }
-    };
-    // TODO: which API to from which platform based on identity
-    // identity can be github-*, discord-*, and etc...
-    //let matched_identities = github::matched_identities(token.as_str(), identities).await?;
-
-    //TODO: Call discord::matched_identities
-    //TODO: Call google::matched_identities
-    //TODO: Call twitter::matched_identities
     Ok(matched_identities)
+}
+
+async fn set_session_cookie_and_redirect_to_next(
+    req: &fastn_core::http::Request,
+    session_id: i32,
+    next: String,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    return Ok(actix_web::HttpResponse::Found()
+        .cookie(
+            actix_web::cookie::Cookie::build(fastn_core::auth::COOKIE_NAME, session_id.to_string())
+                .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+                .path("/")
+                .permanent()
+                .finish(),
+        )
+        // redirect to next
+        .append_header((actix_web::http::header::LOCATION, next))
+        .finish());
+}
+
+/// get FastnUser and its primary email from session
+pub async fn get_authenticated_user_with_email(
+    session_id: &i32,
+) -> fastn_core::Result<(fastn_core::auth::FastnUser, String)> {
+    use diesel::prelude::*;
+    use diesel_async::RunQueryDsl;
+
+    let pool =
+        fastn_core::db::pool()
+            .await
+            .as_ref()
+            .map_err(|e| fastn_core::Error::DatabaseError {
+                message: format!("Failed to get connection to db. {:?}", e),
+            })?;
+
+    let mut conn = pool
+        .get()
+        .await
+        .map_err(|e| fastn_core::Error::DatabaseError {
+            message: format!("Failed to get connection to db. {:?}", e),
+        })?;
+
+    let user_id: i32 = fastn_core::schema::fastn_session::table
+        .select(fastn_core::schema::fastn_session::user_id)
+        .filter(fastn_core::schema::fastn_session::id.eq(session_id))
+        .first(&mut conn)
+        .await?;
+
+    let user: fastn_core::auth::FastnUser = fastn_core::schema::fastn_user::table
+        .filter(fastn_core::schema::fastn_user::id.eq(user_id))
+        .select(fastn_core::auth::FastnUser::as_select())
+        .first(&mut conn)
+        .await?;
+
+    let email: fastn_core::utils::CiString = fastn_core::schema::fastn_user_email::table
+        .filter(fastn_core::schema::fastn_user_email::user_id.eq(user_id))
+        .filter(fastn_core::schema::fastn_user_email::verified.eq(true))
+        .filter(fastn_core::schema::fastn_user_email::primary.eq(true))
+        .select(fastn_core::schema::fastn_user_email::email)
+        .first(&mut conn)
+        .await?;
+
+    Ok((user, email.0))
+}
+
+pub(crate) fn enable_auth() -> fastn_core::Result<()> {
+    use diesel::Connection;
+    use diesel_migrations::MigrationHarness;
+
+    let db_url = std::env::var("FASTN_DB_URL")?;
+
+    const MIGRATIONS: diesel_migrations::EmbeddedMigrations =
+        diesel_migrations::embed_migrations!();
+
+    let mut conn = diesel::pg::PgConnection::establish(&db_url).map_err(|e| {
+        fastn_core::Error::DatabaseError {
+            message: format!("Failed to connect to db. {:?}", e),
+        }
+    })?;
+
+    conn.run_pending_migrations(MIGRATIONS)
+        .map_err(|e| fastn_core::Error::DatabaseError {
+            message: format!("Failed to run migrations. {:?}", e),
+        })?;
+
+    Ok(())
 }

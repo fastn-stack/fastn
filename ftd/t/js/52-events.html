@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <meta content="fastn" name="generator">
+    
+    
+    <script>
+        let __fastn_package_name__ = "foo";
+    </script>
+
+    <script src="fastn-js.js"></script>
+    
+
+    <style>
+       
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column"><comment data-id="4"></comment><div data-id="5" class="__bgc-3">Rithik</div><div data-id="6">Ritesh</div><div data-id="7">Heulitig</div></div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__bgc-3 { background-color: yellow; }
+    </style>
+<script>
+    (function() {
+        let main = function (parent) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let parenti0 = foo__display_names(parent, inherited, {
+      names: global.foo__names
+    });
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["main"] = main;
+let foo__length = function (args) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = fastn_utils.getArgs({
+      a: fastn.mutableList([]),
+    }, args);
+    return (len(__args__.a));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__length"] = foo__length;
+let foo__display_name = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
+    parenti0.addEventHandler(fastn_dom.Event.MouseEnter, function () {
+      ftd.set_integer({
+        a: __args__.selected,
+        v: __args__.idx,
+      }, parenti0);
+    });
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn.formula([__args__.idx,
+    __args__.selected], function () {
+      if (function () {
+        return (fastn_utils.getter(__args__.selected) == fastn_utils.getter(__args__.idx));
+      }()) {
+        return fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+          dark: "yellow",
+          light: "yellow"
+        }));
+      }
+    }
+    ), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__display_name"] = foo__display_name;
+let foo__increment = function (args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    let fastn_utils_val___args___a = fastn_utils.clone((fastn_utils.getter(__args__.a) + 1) % fastn_utils.getter(__args__.n));
+    if (fastn_utils_val___args___a instanceof fastn.mutableClass) {
+      fastn_utils_val___args___a = fastn_utils_val___args___a.get();
+    }
+    if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
+      __args__.a = fastn_utils_val___args___a;
+    }
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__increment"] = foo__increment;
+let foo__decrement = function (args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    let fastn_utils_val___args___a = fastn_utils.clone((fastn_utils.getter(__args__.a) - 1) % fastn_utils.getter(__args__.n));
+    if (fastn_utils_val___args___a instanceof fastn.mutableClass) {
+      fastn_utils_val___args___a = fastn_utils_val___args___a.get();
+    }
+    if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
+      __args__.a = fastn_utils_val___args___a;
+    }
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__decrement"] = foo__decrement;
+let foo__display_names = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+      names: fastn.mutableList([]),
+      selected: fastn.wrapMutable(0),
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    __args__.len = __args__.len ? __args__.len : fastn.formula([__args__.names], function () {
+      return foo__length({
+        a: __args__.names,
+      });
+    });
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.addEventHandler(fastn_dom.Event.GlobalKey(["ArrowDown"]), function () {
+      foo__increment({
+        a: __args__.selected,
+        n: __args__.len,
+      }, parenti0);
+    });
+    parenti0.addEventHandler(fastn_dom.Event.GlobalKey(["ArrowUp"]), function () {
+      foo__decrement({
+        a: __args__.selected,
+        n: __args__.len,
+      }, parenti0);
+    });
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      fastn_utils.getter(__args__.names).forLoop(root, function (root, item, index) {
+        let rooti0 = foo__display_name(root, inherited, {
+          name: item,
+          idx: index,
+          selected: fastn.wrapMutable(__args__.selected)
+        });
+        return rooti0;
+      });
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__display_names"] = foo__display_names;
+fastn_utils.createNestedObject(global, "foo__names", fastn.mutableList(["Rithik",
+"Ritesh",
+"Heulitig"]));
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastnVirtual.doubleBuffer(main_wrapper);
+        ftd.post_init();
+    })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+        ftd.emit_on_load();
+    };
+</script>
+</html>

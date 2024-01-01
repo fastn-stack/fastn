@@ -1,0 +1,320 @@
+-- import: fastn.com/content-library as lib
+
+;; Create rich user interfaces, integrate with
+;; Domain specific language for writing content and creating rich user interfaces,
+;; integrate with APIs and databases.
+;; build your next website "without developers"
+;; programming language for non developers -
+;; -- hero-section: build your next website without developers
+
+
+-- ds.page:
+document-title: fastn | The Beginner-Friendly Full-Stack Framework
+document-description: Design, develop, and deploy stunning websites and web apps effortlessly. Easy-to-learn full-stack framework. No coding knowledge required. Start now!
+document-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
+full-width: true
+sidebar: false
+
+    -- ds.page.fluid-wrap:
+
+        -- lib.hero-content:
+
+        -- lib.feature-card: Everyone in your team can learn fastn in a day!
+        cta-text: Learn more
+        cta-link: /install/
+        image: $fastn-assets.files.images.landing.chat-group.png
+        icon: $fastn-assets.files.images.landing.face-icon.svg
+
+            -- lib.feature-card.code:
+
+                   \-- import: fastn-community.github.io/bling/chat
+
+                \-- chat.message-left: Hello World! 😀
+
+                \-- chat.message-left: I'm Nandhini, a freelance
+                content writer.
+
+                \-- chat.message-left: Fun fact: I built this
+                entire page with fastn! 🚀 It's that easy!
+
+            -- lib.feature-card.body:
+
+            fastn's user-friendly interface and minimal syntax make it accessible even to
+            those with no prior programming experience.
+
+            -- lib.feature-card.additional-cards:
+
+                -- lib.testimonial: From skeptic to web developer in an afternoon!
+                author-title: Nandini Devi
+                avatar: $fastn-assets.files.images.landing.nandini.png
+                label: Content Writer
+
+                I was very skeptical about learning to write any syntax; I had never done any
+                coding before. But I decided to give it a shot and went through the videos.
+                It’s actually surprisingly simple; it doesn't feel like coding at all. It's
+                just like writing text in a text file, and you end up with a beautifully
+                designed website. Definitely the most productive and result-oriented activity
+                I've ever undertaken in a single afternoon.
+
+                -- lib.card-wrap:
+
+                    -- lib.card: 800+
+                    icon: $fastn-assets.files.images.landing.square-icon.svg
+                    bg-image: $fastn-assets.files.images.landing.card-bg.png
+
+                    Have built their first fastn-powered website within 2 hours of discovering
+                    fastn.
+
+                    -- lib.card: 2 hr
+                    icon: $fastn-assets.files.images.landing.two-triangle.svg
+                    bg-image: $fastn-assets.files.images.landing.card-bg.png
+                    cta-text: Get Started!
+                    cta-link: /quick-build/
+
+                    Build your first fastn-powered website in just 2 hours.
+
+                -- end: lib.card-wrap
+
+            -- end: lib.feature-card.additional-cards
+
+        -- end: lib.feature-card
+
+        -- lib.learn-fastn: Learn full-stack web development using fastn in a week
+        cta-primary-text: Learn Now
+        cta-primary-link: /learn/
+        image: $fastn-assets.files.images.landing.crash-course.svg
+
+        -- lib.feature-card: Anyone in your team can contribute to or modify the website
+        cta-text: Learn more
+        cta-link: /acme/
+        icon: $fastn-assets.files.images.landing.face-icon.svg
+        transparent: true
+
+            -- lib.feature-card.body:
+
+            Updating content with fastn is as easy as changing a few lines of code. This
+            means anyone can contribute, reducing your dependency on developers.
+
+
+            -- lib.feature-card.additional-cards:
+
+                -- lib.hero-bottom-hug: Instant theme, color & typography changes
+                icon: $fastn-assets.files.images.landing.icon.svg
+                image-1: $fastn-assets.files.images.landing.hero-image-1.svg
+                image-2: $fastn-assets.files.images.landing.hero-image-2.png
+                image-3: $fastn-assets.files.images.landing.hero-image-3.png
+
+                -- lib.hero-bottom-hug: Modify content effortlessly
+                icon: $fastn-assets.files.images.landing.triangle-three-icon.svg
+                image-2: $fastn-assets.files.images.landing.hero-image-4.svg
+                image-3: $fastn-assets.files.images.landing.hero-image-5.svg
+
+                -- lib.hero-bottom-hug: Adding new components is easy
+                icon: $fastn-assets.files.images.landing.icon.svg
+                image-2: $fastn-assets.files.images.landing.hero-image-6.svg
+                image-3: $fastn-assets.files.images.landing.hero-image-7.png
+
+                -- lib.promo-card: After evaluating web development frameworks & online website builders, startups prefer fastn for building their website.
+                cta-text: Read case study
+                cta-link: /acme/
+
+                -- lib.feature-card: Rich Library
+                cta-text: Learn more
+                cta-link: /featured/
+                icon: $fastn-assets.files.images.landing.smile-icon.svg
+                transparent: true
+                is-child: true
+
+                    -- lib.feature-card.body:
+
+                    fastn offers a rich library of ready-made components, color schemes, and website
+                    templates. This means, you don’t have to start from scratch, instead, browse
+                    the dozens of professionally created templates, customize layout, style, and
+                    graphics, and deploy instantly.
+
+                    -- lib.right-video:
+                    image: $fastn-assets.files.images.landing.right-video.png
+                    icon-1: $fastn-assets.files.images.landing.cube.svg
+                    info-1: The Uniform Design System allows components created by different teams to be usable by each other.
+                    icon-2: $fastn-assets.files.images.landing.arrow-up.svg
+                    info-2: Every component supports responsive design, dark mode, & themability.
+                    icon-3: $fastn-assets.files.images.landing.stack.svg
+                    info-3: 1000+ developers are building fastn components.
+
+                -- end: lib.feature-card
+
+                -- lib.featured-theme: Choose from the numerous color schemes created by 100s of designers.
+                cta-primary-text: View all color themes
+                cta-primary-url: /featured/cs/
+                cta-secondary-text: View all typography
+                cta-secondary-url: /featured/fonts/
+                image-1: $fastn-assets.files.images.landing.winter-cs.png
+                image-title-1: Winter CS
+                image-2: $fastn-assets.files.images.landing.forest-cs.png
+                image-title-2: Forest CS
+                image-3: $fastn-assets.files.images.landing.saturated-cs.png
+                image-title-3: Saturated Sunset CS
+
+            -- end: lib.feature-card.additional-cards
+
+        -- end: lib.feature-card
+
+        -- lib.feature-card: Your team can collaborate & deploy on your preferred infrastructure
+        cta-text: Learn more
+        cta-link: /deploy/
+        icon: $fastn-assets.files.images.landing.face-icon.svg
+
+            -- lib.feature-card.body:
+
+            fastn seamlessly integrates with your existing workflows. You can use the text
+            editor you love and are comfortable with. Use GitHub, Dropbox, iCloud, or any
+            other platform you prefer. You maintain full control over your content,
+            infrastructure, and tools.
+
+            -- lib.image-featured:
+            image-1: $fastn-assets.files.images.landing.image-placeholder-1.png
+            image-2: $fastn-assets.files.images.landing.image-placeholder-2.svg
+            image-3: $fastn-assets.files.images.landing.image-placeholder-3.svg
+            icon-1: $fastn-assets.files.images.landing.cube.svg
+            info-1: fastn offers deployment for static sites using deploy.yml from fastn-template on platforms like GitHub and Vercel.
+            icon-2: $fastn-assets.files.images.landing.arrow-up.svg
+            info-2: The .build folder generated by the fastn build command simplifies publishing on any static server.
+            icon-3: $fastn-assets.files.images.landing.stack.svg
+            info-3: fastn also supports dynamic sites with deployment options across Linux, Windows, & Mac, providing flexibility in hosting.
+
+        -- end: lib.feature-card
+
+
+        -- lib.compare: What makes fastn better than react
+        cta-primary-text: Learn More
+        cta-primary-url: /react/
+        transparent: true
+
+        Why waste your developers' time on building landing pages? With fastn, anyone in
+        your team can build a `www.foo.com`, leaving your development bandwidth available
+        for `app.foo.com`.
+
+            -- lib.compare-card: Learning Curve
+            icon: $fastn-assets.files.images.landing.triangle-1.svg
+            image: $fastn-assets.files.images.landing.card-img-1.png
+
+            React is complex for non-programmers, while fastn is accessible to everyone,
+            even those with no coding experience.
+
+            -- lib.compare-card: CMS Integration
+            icon: $fastn-assets.files.images.landing.triangle-2.svg
+            image: $fastn-assets.files.images.landing.card-img-2.png
+
+            React needs CMS integration, adding complexity. With fastn, you can manage
+            content with ease without a CMS.
+
+            -- lib.compare-card: Integrated Design System
+            icon: $fastn-assets.files.images.landing.triangle-3.svg
+            image: $fastn-assets.files.images.landing.card-img-3.png
+
+            Unlike React, in fastn components developed by one team can seamlessly integrate
+            into the projects of another.
+
+        -- end: lib.compare
+
+        -- lib.compare: What makes fastn better than Webflow
+        cta-primary-text: Learn More
+        cta-primary-url: /webflow/
+
+        Tired of being locked into a theme in Webflow?  Try fastn for easy editing,
+        better customization and full control.
+
+            -- lib.compare-card: Design-Content Separation
+            icon: $fastn-assets.files.images.landing.triangle-1.svg
+            image: $fastn-assets.files.images.landing.card-img-1.png
+
+            In Webflow, once you choose a theme and add content, altering the overall design
+            is difficult. In fastn, you can change content without design disruptions.
+
+            -- lib.compare-card: Run On Your Infrastructure
+            icon: $fastn-assets.files.images.landing.triangle-2.svg
+            image: $fastn-assets.files.images.landing.card-img-2.png
+
+            fastn is an open-source solution, offering the flexibility to run and deploy
+            websites according to your preferences, on your own infrastructure.
+
+            -- lib.compare-card: Local Editing
+            icon: $fastn-assets.files.images.landing.triangle-3.svg
+            image: $fastn-assets.files.images.landing.card-img-3.png
+
+            You can download your website locally, edit it on your preferred platform, and
+            collaborate using familiar tools like GitHub, iCloud, or others that suit your
+            workflow.
+
+        -- end: lib.compare
+
+        -- lib.cards-section:
+        transparent: true
+
+            -- lib.heart-line-title-card: Loved by 1000+ creators
+
+            Testimonials from members of the fastn community.
+
+            -- lib.testimonial-card: Rutuja Kapate
+            avatar: $fastn-assets.files.images.landing.rutuja-kapate.png
+            bgcolor: $inherited.colors.custom.three
+            bg-color: $inherited.colors.background.step-1
+            label: Web Developer
+            width: 500
+
+            As a web developer, I've found fastn to be a game-changer. Its a user-friendly
+            language makes building beautiful websites a breeze. With ready-made UI
+            components and easy deployment options, fastn streamlines web development.
+            Highly recommend!
+
+            -- lib.testimonial-card: Swapnendu Banerjee
+            avatar: $fastn-assets.files.images.landing.swapnendu-banerjee.png
+            bgcolor: $inherited.colors.custom.one
+            bg-color: $inherited.colors.background.step-1
+            label: Co-founder & PR Lead at NoobCode
+            width: 500
+            margin-top: 74
+
+            Learning and working with fastn is really fun because here we get frontend and
+            backend under the umbrella and the syntax is really very much user friendly. I
+            am learning and enjoying fastn.
+
+            -- lib.testimonial-card: Jahanvi Raycha
+            avatar: $fastn-assets.files.images.students-program.champions.jahanvi-raycha.jpg
+            bgcolor: $inherited.colors.custom.two
+            bg-color: $inherited.colors.background.step-1
+            label: Software Developer
+            width: 500
+            margin-top: -74
+
+            **fastn** made web development a breeze for me. I launched my portfolio website on
+            GitHub Pages within 30 minutes, thanks to its intuitive language and the
+            ever-helpful community on Discord. It's my go-to framework for a seamless
+            coding experience.
+
+            -- lib.testimonial-card: Govindaraman S
+            avatar: $fastn-assets.files.images.landing.govindaraman_lab.png
+            bgcolor: $inherited.colors.custom.nine
+            bg-color: $inherited.colors.background.step-1
+            label: Front End Developer, Trizwit Labs
+            width: 500
+            margin-top: 54
+
+            **fastn** web framework, tailored for someone with a design background and zero
+            coding experience like me, has revolutionized website creation. Building
+            websites is a walk in the park, and what's truly impressive is how easily I can
+            modify the colors and content in a matter of minutes.
+
+        -- end: lib.cards-section
+
+        -- lib.our-community: fastn Community
+        image: $fastn-assets.files.images.landing.discord-community.svg
+        cta-primary-text: Join Discord
+        cta-primary-url: /discord/
+
+        Join a vibrant community of 1000+ developers and designers who are actively
+        building fastn components for you.
+
+    -- end: ds.page.fluid-wrap
+
+-- end: ds.page

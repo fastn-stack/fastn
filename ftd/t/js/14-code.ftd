@@ -7,10 +7,50 @@ lang: ftd
 role: $inherited.types.copy-small
 
 \-- ftd.column:
+padding.px: 10 ;; <hl>
+spacing.fixed.px: 50 ;; <hl>
+height.fixed.px: 200 ;; <hl>
+width.fixed.px: 300 ;; <hl>
+overflow-y: scroll
+border-color: $red-yellow
+border-style: solid
+border-width.px: 2
+
+\-- ftd.text: The blue planet below is sticky
+
+\-- ftd.text: Blue planet
+color: black
+background.solid: deepskyblue
+sticky: true
+width.fixed.px: 120
+text-align: center
+left.px: 50
+top.px: 0
+
+\-- ftd.text:
 padding.px: 10
-spacing.fixed.px: 50
-height.fixed.px: 200
-width.fixed.px: 300
+
+Far out in the uncharted backwaters of the unfashionable end of the western
+spiral arm of the Galaxy lies a small unregarded blue planet.
+Orbiting this at a distance of roughly ninety-two million miles is an
+utterly insignificant little planet whose ape-descended life
+forms are so amazingly primitive that they still think fastn code written
+by humans is still a pretty neat idea of escalating knowledge throughout the
+universe.
+
+\-- end: ftd.column
+
+
+
+-- ftd.code:
+lang: ftd
+show-line-number: true
+
+\-- ftd.column:
+padding.px: 10 ;; <hl>
+spacing.fixed.px: 50 ;; <hl>
+height.fixed.px: 200 ;; <hl>
+width.fixed.px: 300 ;; <hl>
 overflow-y: scroll
 border-color: $red-yellow
 border-style: solid
@@ -41,3 +81,82 @@ universe.
 \-- end: ftd.column
 
 -- end: ftd.column
+
+
+
+-- code:
+
+\-- ftd.text:
+color: red
+
+Hello World
+
+
+
+-- ftd.text: Dark Mode
+$on-click$: $set-dark()
+
+-- ftd.text: Light Mode
+$on-click$: $set-light()
+
+-- ftd.text: System Mode
+$on-click$: $set-system()
+
+
+
+
+
+
+
+
+
+
+
+-- void set-dark():
+
+enable_dark_mode()
+
+
+-- void set-light():
+
+enable_light_mode()
+
+
+-- void set-system():
+
+enable_system_mode()
+
+
+
+
+
+
+
+
+
+
+
+-- component code:
+body text:
+
+-- ftd.column:
+
+-- ftd.code:
+lang: ftd
+width: fill-container
+theme: fastn-theme.light
+if: { !ftd.dark-mode }
+
+$code.text
+
+-- ftd.code:
+lang: ftd
+width: fill-container
+theme: fastn-theme.dark
+if: { ftd.dark-mode }
+
+$code.text
+
+-- end: ftd.column
+
+-- end: code

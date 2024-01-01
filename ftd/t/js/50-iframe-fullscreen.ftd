@@ -1,0 +1,30 @@
+-- ftd.column:
+width: fill-container
+align-content: center
+
+-- youtube:
+v: GWhxP1TFFvA
+width.fixed.px: 800
+height.fixed.px: 300
+
+-- end: ftd.column
+
+
+
+
+
+
+-- component youtube:
+caption v:
+optional ftd.resizing width: fill-container
+optional ftd.resizing height:
+
+-- ftd.iframe:
+youtube: $youtube.v
+min-height.fixed.px if {ftd.device == "desktop"}: 400
+min-height.fixed.px if {ftd.device == "mobile"}: 200
+width: $youtube.width
+height: $youtube.height
+margin-bottom.px: 24
+
+-- end: youtube

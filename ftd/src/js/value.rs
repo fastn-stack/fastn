@@ -13,7 +13,12 @@ impl Value {
         doc: &ftd::interpreter::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::SetPropertyValue {
-        self.to_set_property_value_with_ui(doc, &ftd::js::ResolverData::none(), has_rive_components)
+        self.to_set_property_value_with_ui(
+            doc,
+            &ftd::js::ResolverData::none(),
+            has_rive_components,
+            false,
+        )
     }
 
     pub(crate) fn to_set_property_value(
@@ -21,7 +26,7 @@ impl Value {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> fastn_js::SetPropertyValue {
-        self.to_set_property_value_with_ui(doc, rdata, &mut false)
+        self.to_set_property_value_with_ui(doc, rdata, &mut false, false)
     }
 
     pub(crate) fn to_set_property_value_with_ui(
@@ -29,9 +34,12 @@ impl Value {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
+        should_return: bool,
     ) -> fastn_js::SetPropertyValue {
         match self {
-            Value::Data(value) => value.to_fastn_js_value(doc, rdata, has_rive_components),
+            Value::Data(value) => {
+                value.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
+            }
             Value::Reference(name) => {
                 fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(name, rdata))
             }
@@ -94,7 +102,7 @@ fn properties_to_js_conditional_formula(
                 .condition
                 .as_ref()
                 .map(|condition| condition.update_node_with_variable_reference_js(rdata)),
-            expression: property.value.to_fastn_js_value(doc, rdata),
+            expression: property.value.to_fastn_js_value(doc, rdata, false),
         });
     }
 
@@ -131,6 +139,12 @@ impl ftd::interpreter::Expression {
                 if format!("${}", ftd::interpreter::FTD_LOOP_COUNTER).eq(identifier) {
                     operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
                         identifier: "index".to_string(),
+                    }
+                } else if let Some(loop_counter_alias) = rdata.loop_counter_alias {
+                    if loop_counter_alias.eq(identifier.trim_start_matches('$')) {
+                        operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
+                            identifier: "index".to_string(),
+                        }
                     }
                 } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
                     references.get(identifier)
@@ -201,16 +215,16 @@ impl ftd::interpreter::Argument {
         // line_number: usize
     ) -> Option<ftd::js::Value> {
         let sources = self.to_sources();
-        let properties = ftd::interpreter::utils::find_properties_by_source(
+
+        let properties = ftd::interpreter::utils::find_properties_by_source_without_default(
             sources.as_slice(),
             properties,
-            "", // doc_name
-            self,
-            0, // line_number
-        )
-        .unwrap();
+        );
 
-        ftd::js::utils::get_js_value_from_properties(properties.as_slice())
+        ftd::js::utils::get_js_value_from_properties(properties.as_slice()) /* .map(|v|
+                                                                            if let Some(ftd::interpreter::Value::Module {}) = self.value.and_then(|v| v.value_optional()) {
+
+                                                                             }*/
     }
 }
 
@@ -249,15 +263,21 @@ impl ftd::interpreter::PropertyValue {
         doc: &ftd::interpreter::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::SetPropertyValue {
-        self.to_fastn_js_value_with_ui(doc, &ftd::js::ResolverData::none(), has_rive_components)
+        self.to_fastn_js_value_with_ui(
+            doc,
+            &ftd::js::ResolverData::none(),
+            has_rive_components,
+            false,
+        )
     }
 
     pub(crate) fn to_fastn_js_value(
         &self,
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
+        should_return: bool,
     ) -> fastn_js::SetPropertyValue {
-        self.to_fastn_js_value_with_ui(doc, rdata, &mut false)
+        self.to_fastn_js_value_with_ui(doc, rdata, &mut false, should_return)
     }
 
     pub(crate) fn to_fastn_js_value_with_ui(
@@ -265,9 +285,14 @@ impl ftd::interpreter::PropertyValue {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
+        should_return: bool,
     ) -> fastn_js::SetPropertyValue {
-        self.to_value()
-            .to_set_property_value_with_ui(doc, rdata, has_rive_components)
+        self.to_value().to_set_property_value_with_ui(
+            doc,
+            rdata,
+            has_rive_components,
+            should_return,
+        )
     }
 
     pub(crate) fn to_value(&self) -> ftd::js::Value {
@@ -294,6 +319,7 @@ impl ftd::interpreter::Value {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
+        should_return: bool,
     ) -> fastn_js::SetPropertyValue {
         use itertools::Itertools;
 
@@ -303,7 +329,7 @@ impl ftd::interpreter::Value {
             }
             ftd::interpreter::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
-                    data.to_fastn_js_value(doc, rdata, has_rive_components)
+                    data.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
                 } else {
                     fastn_js::SetPropertyValue::Value(fastn_js::Value::Null)
                 }
@@ -319,15 +345,22 @@ impl ftd::interpreter::Value {
             }
             ftd::interpreter::Value::OrType {
                 name,
-                variant,
                 value,
-                ..
+                full_variant,
+                variant,
             } => {
-                let (js_variant, has_value) = ftd_to_js_variant(name, variant);
+                let (js_variant, has_value) = ftd_to_js_variant(
+                    name,
+                    variant,
+                    full_variant,
+                    value,
+                    doc.name,
+                    value.line_number(),
+                );
                 if has_value {
                     return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                         variant: js_variant,
-                        value: Some(Box::new(value.to_fastn_js_value(doc, rdata))),
+                        value: Some(Box::new(value.to_fastn_js_value(doc, rdata, should_return))),
                     });
                 }
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
@@ -339,7 +372,14 @@ impl ftd::interpreter::Value {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::List {
                     value: data
                         .iter()
-                        .map(|v| v.to_fastn_js_value(doc, rdata))
+                        .map(|v| {
+                            v.to_fastn_js_value_with_ui(
+                                doc,
+                                rdata,
+                                has_rive_components,
+                                should_return,
+                            )
+                        })
                         .collect_vec(),
                 })
             }
@@ -347,20 +387,31 @@ impl ftd::interpreter::Value {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
                     fields: fields
                         .iter()
-                        .map(|(k, v)| (k.to_string(), v.to_fastn_js_value(doc, rdata)))
+                        .map(|(k, v)| {
+                            (
+                                k.to_string(),
+                                v.to_fastn_js_value(doc, rdata, should_return),
+                            )
+                        })
                         .collect_vec(),
+                    other_references: vec![],
                 })
             }
             ftd::interpreter::Value::UI { component, .. } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::UI {
-                    value: component.to_component_statements_(
+                    value: component.to_component_statements(
                         fastn_js::FUNCTION_PARENT,
                         0,
                         doc,
                         &rdata.clone_with_default_inherited_variable(),
-                        false,
+                        should_return,
                         has_rive_components,
                     ),
+                })
+            }
+            ftd::interpreter::Value::Module { name, .. } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::Module {
+                    name: name.to_string(),
                 })
             }
             t => todo!("{:?}", t),
@@ -368,13 +419,26 @@ impl ftd::interpreter::Value {
     }
 }
 
-fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
+fn ftd_to_js_variant(
+    name: &str,
+    variant: &str,
+    full_variant: &str,
+    value: &ftd::interpreter::PropertyValue,
+    doc_id: &str,
+    line_number: usize,
+) -> (String, bool) {
     // returns (JSVariant, has_value)
-    let variant = variant.strip_prefix(format!("{}.", name).as_str()).unwrap();
+    let variant = variant
+        .strip_prefix(format!("{}.", name).as_str())
+        .unwrap_or(full_variant);
     match name {
         "ftd#resizing" => {
             let js_variant = resizing_variants(variant);
             (format!("fastn_dom.Resizing.{}", js_variant.0), js_variant.1)
+        }
+        "ftd#link-rel" => {
+            let js_variant = link_rel_variants(variant);
+            (format!("fastn_dom.LinkRel.{}", js_variant), false)
         }
         "ftd#length" => {
             let js_variant = length_variants(variant);
@@ -455,7 +519,7 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
         }
         "ftd#anchor" => {
             let js_variant = anchor_variants(variant);
-            (format!("fastn_dom.Anchor.{}", js_variant), false)
+            (format!("fastn_dom.Anchor.{}", js_variant.0), js_variant.1)
         }
         "ftd#device-data" => {
             let js_variant = device_data_variants(variant);
@@ -481,7 +545,50 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = loading_variants(variant);
             (format!("fastn_dom.Loading.{}", js_variant), false)
         }
-        t => todo!("{} {}", t, variant),
+        "ftd#image-fit" => {
+            let js_variant = object_fit_variants(variant);
+            (format!("fastn_dom.Fit.{}", js_variant), false)
+        }
+        "ftd#image-fetch-priority" => {
+            let js_variant = object_fetch_priority_variants(variant);
+            (format!("fastn_dom.FetchPriority.{}", js_variant), false)
+        }
+        "ftd#backdrop-filter" => {
+            let js_variant = backdrop_filter_variants(variant);
+            (format!("fastn_dom.BackdropFilter.{}", js_variant), true)
+        }
+        "ftd#mask" => {
+            let js_variant = mask_variants(variant);
+            (format!("fastn_dom.Mask.{}", js_variant), true)
+        }
+        "ftd#mask-size" => {
+            let js_variant = mask_size_variants(variant);
+            (format!("fastn_dom.MaskSize.{}", js_variant.0), js_variant.1)
+        }
+        "ftd#mask-repeat" => {
+            let js_variant = mask_repeat_variants(variant);
+            (format!("fastn_dom.MaskRepeat.{}", js_variant), false)
+        }
+        "ftd#mask-position" => {
+            let js_variant = mask_position_variants(variant);
+            (
+                format!("fastn_dom.MaskPosition.{}", js_variant.0),
+                js_variant.1,
+            )
+        }
+        t => {
+            if let Ok(value) = value.value(doc_id, line_number) {
+                return match value {
+                    ftd::interpreter::Value::Integer { value } => (value.to_string(), false),
+                    ftd::interpreter::Value::Decimal { value } => (value.to_string(), false),
+                    ftd::interpreter::Value::String { text } => (format!("\"{}\"", text), false),
+                    ftd::interpreter::Value::Boolean { value } => (value.to_string(), false),
+                    _ => todo!("{} {}", t, variant),
+                };
+            }
+
+            todo!("{} {}", t, variant)
+        }
     }
 }
 
@@ -497,6 +604,15 @@ fn resizing_variants(name: &str) -> (&'static str, bool) {
     }
 }
 
+fn link_rel_variants(name: &str) -> &'static str {
+    match name {
+        "no-follow" => "NoFollow",
+        "sponsored" => "Sponsored",
+        "ugc" => "Ugc",
+        t => panic!("invalid link rel variant {}", t),
+    }
+}
+
 fn length_variants(name: &str) -> &'static str {
     match name {
         "px" => "Px",
@@ -507,7 +623,11 @@ fn length_variants(name: &str) -> &'static str {
         "vw" => "Vw",
         "vmin" => "Vmin",
         "vmax" => "Vmax",
+        "dvh" => "Dvh",
+        "lvh" => "Lvh",
+        "svh" => "Svh",
         "calc" => "Calc",
+        "responsive" => "Responsive",
         t => todo!("invalid length variant {}", t),
     }
 }
@@ -722,11 +842,11 @@ fn align_self_variants(name: &str) -> &'static str {
     }
 }
 
-fn anchor_variants(name: &str) -> &'static str {
+fn anchor_variants(name: &str) -> (&'static str, bool) {
     match name {
-        "window" => "Window",
-        "parent" => "Parent",
-        "id" => "Id",
+        "window" => ("Window", false),
+        "parent" => ("Parent", false),
+        "id" => ("Id", true),
         t => todo!("invalid anchor variant {}", t),
     }
 }
@@ -806,5 +926,89 @@ fn loading_variants(name: &str) -> &'static str {
         "lazy" => "Lazy",
         "eager" => "Eager",
         t => todo!("invalid loading variant {}", t),
+    }
+}
+
+fn object_fit_variants(name: &str) -> &'static str {
+    match name {
+        "none" => "none",
+        "fill" => "fill",
+        "contain" => "contain",
+        "cover" => "cover",
+        "scale-down" => "scaleDown",
+        t => todo!("invalid object fit variant {}", t),
+    }
+}
+
+fn object_fetch_priority_variants(name: &str) -> &'static str {
+    match name {
+        "auto" => "auto",
+        "high" => "high",
+        "low" => "low",
+        t => todo!("invalid object fetchPriority variant {}", t),
+    }
+}
+
+fn backdrop_filter_variants(name: &str) -> &'static str {
+    match name {
+        "blur" => "Blur",
+        "brightness" => "Brightness",
+        "contrast" => "Contrast",
+        "grayscale" => "Grayscale",
+        "invert" => "Invert",
+        "opacity" => "Opacity",
+        "sepia" => "Sepia",
+        "saturate" => "Saturate",
+        "multi" => "Multi",
+        t => unimplemented!("invalid backdrop filter variant {}", t),
+    }
+}
+
+fn mask_variants(name: &str) -> &'static str {
+    match name {
+        "image" => "Image",
+        "multi" => "Multi",
+        t => todo!("invalid mask variant {}", t),
+    }
+}
+
+fn mask_size_variants(name: &str) -> (&'static str, bool) {
+    match name {
+        "auto" => ("Auto", false),
+        "cover" => ("Cover", false),
+        "contain" => ("Contain", false),
+        "fixed" => ("Fixed", true),
+        t => todo!("invalid mask variant {}", t),
+    }
+}
+
+fn mask_repeat_variants(name: &str) -> &'static str {
+    match name {
+        "repeat" => "Repeat",
+        "repeat-x" => "RepeatX",
+        "repeat-y" => "RepeatY",
+        "no-repeat" => "NoRepeat",
+        "space" => "Space",
+        "round" => "Round",
+        t => todo!("invalid mask repeat variant {}", t),
+    }
+}
+
+fn mask_position_variants(name: &str) -> (&'static str, bool) {
+    match name {
+        "left" => ("Left", false),
+        "right" => ("Right", false),
+        "center" => ("Center", false),
+        "left-top" => ("LeftTop", false),
+        "left-center" => ("LeftCenter", false),
+        "left-bottom" => ("LeftBottom", false),
+        "center-top" => ("CenterTop", false),
+        "center-center" => ("CenterCenter", false),
+        "center-bottom" => ("CenterBottom", false),
+        "right-top" => ("RightTop", false),
+        "right-center" => ("RightCenter", false),
+        "right-bottom" => ("RightBottom", false),
+        "length" => ("Length", true),
+        t => todo!("invalid mask position variant {}", t),
     }
 }

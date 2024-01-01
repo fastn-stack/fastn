@@ -7,7 +7,7 @@ pub use fastn_core::Library2022;
 
 #[derive(Debug)]
 pub struct Library {
-    pub config: fastn_core::Config,
+    pub config: fastn_core::RequestConfig,
     /// If the current module being parsed is a markdown file, `.markdown` contains the name and
     /// content of that file
     pub markdown: Option<(String, String)>,
@@ -58,7 +58,7 @@ impl Library {
 
             for (alias, package) in package.to_owned().aliases() {
                 if name.starts_with(alias) {
-                    let package = lib.config.resolve_package(package).await.ok()?;
+                    let package = lib.config.config.resolve_package(package).await.ok()?;
                     if let Some(r) = get_data_from_package(
                         name.replacen(alias, &package.name, 1).as_str(),
                         &package,
@@ -122,8 +122,8 @@ impl Library {
             package: &fastn_core::Package,
             lib: &Library,
         ) -> Option<String> {
-            let path = lib.config.get_root_for_package(package);
-            fastn_core::Config::download_required_file(&lib.config.root, name, package)
+            let path = lib.config.config.get_root_for_package(package);
+            fastn_core::Config::download_required_file(&lib.config.config.root, name, package)
                 .await
                 .ok()?;
             // Explicit check for the current package.
@@ -148,7 +148,7 @@ impl Library {
 
 #[derive(Debug)]
 pub struct Library2 {
-    pub config: fastn_core::Config,
+    pub config: fastn_core::RequestConfig,
     /// If the current module being parsed is a markdown file, `.markdown` contains the name and
     /// content of that file
     pub markdown: Option<(String, String)>,
@@ -166,6 +166,7 @@ impl Library2 {
         self.packages_under_process.push(package.name.to_string());
         if self
             .config
+            .config
             .all_packages
             .borrow()
             .contains_key(package.name.as_str())
@@ -173,15 +174,19 @@ impl Library2 {
             return Ok(());
         }
 
-        let package = self.config.resolve_package(package).await.map_err(|_| {
-            ftd::ftd2021::p1::Error::ParseError {
+        let package = self
+            .config
+            .config
+            .resolve_package(package)
+            .await
+            .map_err(|_| ftd::ftd2021::p1::Error::ParseError {
                 message: format!("Cannot resolve the package: {}", package.name),
                 doc_id: self.document_id.to_string(),
                 line_number: 0,
-            }
-        })?;
+            })?;
 
         self.config
+            .config
             .all_packages
             .borrow_mut()
             .insert(package.name.to_string(), package);
@@ -198,6 +203,7 @@ impl Library2 {
         })?;
 
         self.config
+            .config
             .all_packages
             .borrow()
             .get(current_package_name)
@@ -288,7 +294,7 @@ impl Library2 {
             lib: &mut Library2,
         ) -> Option<String> {
             lib.push_package_under_process(package).await.ok()?;
-            let packages = lib.config.all_packages.borrow();
+            let packages = lib.config.config.all_packages.borrow();
             let package = packages.get(package.name.as_str()).unwrap_or(package);
             // Explicit check for the current package.
             if !name.starts_with(package.name.as_str()) {
@@ -296,7 +302,11 @@ impl Library2 {
             }
             let new_name = name.replacen(package.name.as_str(), "", 1);
             let (file_path, data) = package
-                .resolve_by_id(new_name.as_str(), None, lib.config.package.name.as_str())
+                .resolve_by_id(
+                    new_name.as_str(),
+                    None,
+                    lib.config.config.package.name.as_str(),
+                )
                 .await
                 .ok()?;
             if !file_path.ends_with(".ftd") {
@@ -340,7 +350,7 @@ pub struct FastnLibrary {}
 impl FastnLibrary {
     pub fn get(&self, name: &str, _doc: &ftd::ftd2021::p2::TDoc) -> Option<String> {
         if name == "fastn" {
-            Some(fastn_package::old_fastn::fastn_ftd().to_string())
+            Some(fastn_package::old_fastn::fastn_ftd_2021().to_string())
         } else {
             // Note: currently we do not allow users to import other modules from FASTN.ftd
             eprintln!("FASTN.ftd can only import `fastn` module");

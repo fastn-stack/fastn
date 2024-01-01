@@ -1,17 +1,28 @@
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    
+    <meta content="fastn" name="generator">
+    
+    
+    <script>
+        let __fastn_package_name__ = "foo";
+    </script>
+
     <script src="fastn-js.js"></script>
+    
 
     <style>
        
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column w-1 bgc-2"><div data-id="3" class="ft_column role-3">-- ftd.column:
-padding.px: 10
-spacing.fixed.px: 50
-height.fixed.px: 200
-width.fixed.px: 300
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __bgc-4"><pre data-id="4" data-line="2-5" class="language-ftd fastn-theme-dark __rl-5"><code data-id="5" class="language-ftd fastn-theme-dark">-- ftd.column:
+padding.px: 10 
+spacing.fixed.px: 50 
+height.fixed.px: 200 
+width.fixed.px: 300 
 overflow-y: scroll
 border-color: $red-yellow
 border-style: solid
@@ -39,35 +50,232 @@ forms are so amazingly primitive that they still think fastn code written
 by humans is still a pretty neat idea of escalating knowledge throughout the
 universe.
 
--- end: ftd.column</div></div></body><style id="styles">
-    .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
-	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
-	.w-1 { width: fit-content; }
-	.bgc-2 { background-color: #0d260d; }
-	.role-3 {  font-family: sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; }
-	body.mobile .role-3 {  font-family: sans-serif; font-size: 12px; font-weight: 400; line-height: 16px; }
+-- end: ftd.column
+</code></pre><pre data-id="6" data-line="2-5" class="language-ftd fastn-theme-dark line-numbers"><code data-id="7" class="language-ftd fastn-theme-dark">-- ftd.column:
+padding.px: 10 
+spacing.fixed.px: 50 
+height.fixed.px: 200 
+width.fixed.px: 300 
+overflow-y: scroll
+border-color: $red-yellow
+border-style: solid
+border-width.px: 2
+
+-- ftd.text: The blue planet below is sticky
+
+-- ftd.text: Blue planet
+color: black
+background.solid: deepskyblue
+sticky: true
+width.fixed.px: 120
+text-align: center
+left.px: 50
+top.px: 0
+
+-- ftd.text:
+padding.px: 10
+
+Far out in the uncharted backwaters of the unfashionable end of the western
+spiral arm of the Galaxy lies a small unregarded blue planet.
+Orbiting this at a distance of roughly ninety-two million miles is an
+utterly insignificant little planet whose ape-descended life
+forms are so amazingly primitive that they still think fastn code written
+by humans is still a pretty neat idea of escalating knowledge throughout the
+universe.
+
+-- end: ftd.column
+</code></pre></div><div data-id="8" class="ft_column"><comment data-id="9"></comment><pre data-id="10" class="language-ftd fastn-theme-light __w-6"><code data-id="11" class="language-ftd fastn-theme-light">-- ftd.text:
+color: red
+
+Hello World
+</code></pre><comment data-id="12"></comment></div><div data-id="13" class="__cur-7">Dark Mode</div><div data-id="14" class="__cur-8">Light Mode</div><div data-id="15" class="__cur-9">System Mode</div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__w-3 { width: fit-content; }
+	.__bgc-4 { background-color: #0d260d; }
+	.__rl-5 {  font-family: sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; }
+	body.mobile .__rl-5 {  font-family: sans-serif; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__w-6 { width: 100%; }
+	.__cur-7 { cursor: pointer; }
+	.__cur-8 { cursor: pointer; }
+	.__cur-9 { cursor: pointer; }
     </style>
 <script>
     (function() {
-        let global = {
-};
-let main = function (parent) {
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.HugContent, inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-    dark: "#0d260d",
-    light: "#0d260d"
-  })), inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
-    rooti0.setProperty(fastn_dom.PropertyKind.Code, "-- ftd.column:\npadding.px: 10\nspacing.fixed.px: 50\nheight.fixed.px: 200\nwidth.fixed.px: 300\noverflow-y: scroll\nborder-color: $red-yellow\nborder-style: solid\nborder-width.px: 2\n\n-- ftd.text: The blue planet below is sticky\n\n-- ftd.text: Blue planet\ncolor: black\nbackground.solid: deepskyblue\nsticky: true\nwidth.fixed.px: 120\ntext-align: center\nleft.px: 50\ntop.px: 0\n\n-- ftd.text:\npadding.px: 10\n\nFar out in the uncharted backwaters of the unfashionable end of the western\nspiral arm of the Galaxy lies a small unregarded blue planet.\nOrbiting this at a distance of roughly ninety-two million miles is an\nutterly insignificant little planet whose ape-descended life\nforms are so amazingly primitive that they still think fastn code written\nby humans is still a pretty neat idea of escalating knowledge throughout the\nuniverse.\n\n-- end: ftd.column", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_small"), inherited);
+        let main = function (parent) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.HugContent, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+      dark: "#0d260d",
+      light: "#0d260d"
+    })), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Code);
+      rooti0.setProperty(fastn_dom.PropertyKind.Code, "-- ftd.column:\npadding.px: 10 ;; <hl>\nspacing.fixed.px: 50 ;; <hl>\nheight.fixed.px: 200 ;; <hl>\nwidth.fixed.px: 300 ;; <hl>\noverflow-y: scroll\nborder-color: $red-yellow\nborder-style: solid\nborder-width.px: 2\n\n-- ftd.text: The blue planet below is sticky\n\n-- ftd.text: Blue planet\ncolor: black\nbackground.solid: deepskyblue\nsticky: true\nwidth.fixed.px: 120\ntext-align: center\nleft.px: 50\ntop.px: 0\n\n-- ftd.text:\npadding.px: 10\n\nFar out in the uncharted backwaters of the unfashionable end of the western\nspiral arm of the Galaxy lies a small unregarded blue planet.\nOrbiting this at a distance of roughly ninety-two million miles is an\nutterly insignificant little planet whose ape-descended life\nforms are so amazingly primitive that they still think fastn code written\nby humans is still a pretty neat idea of escalating knowledge throughout the\nuniverse.\n\n-- end: ftd.column", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeTheme, "fastn-theme.dark", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_small"), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Code);
+      rooti0.setProperty(fastn_dom.PropertyKind.Code, "-- ftd.column:\npadding.px: 10 ;; <hl>\nspacing.fixed.px: 50 ;; <hl>\nheight.fixed.px: 200 ;; <hl>\nwidth.fixed.px: 300 ;; <hl>\noverflow-y: scroll\nborder-color: $red-yellow\nborder-style: solid\nborder-width.px: 2\n\n-- ftd.text: The blue planet below is sticky\n\n-- ftd.text: Blue planet\ncolor: black\nbackground.solid: deepskyblue\nsticky: true\nwidth.fixed.px: 120\ntext-align: center\nleft.px: 50\ntop.px: 0\n\n-- ftd.text:\npadding.px: 10\n\nFar out in the uncharted backwaters of the unfashionable end of the western\nspiral arm of the Galaxy lies a small unregarded blue planet.\nOrbiting this at a distance of roughly ninety-two million miles is an\nutterly insignificant little planet whose ape-descended life\nforms are so amazingly primitive that they still think fastn code written\nby humans is still a pretty neat idea of escalating knowledge throughout the\nuniverse.\n\n-- end: ftd.column", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeTheme, "fastn-theme.dark", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, true, inherited);
+    }
+    ]), inherited);
+    let parenti1 = foo__code(parent, inherited, {
+      text: "-- ftd.text:\ncolor: red\n\nHello World"
+    });
+    let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Dark Mode", inherited);
+    parenti2.addEventHandler(fastn_dom.Event.Click, function () {
+      foo__set_dark({
+      }, parenti2);
+    });
+    let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti3.setProperty(fastn_dom.PropertyKind.StringValue, "Light Mode", inherited);
+    parenti3.addEventHandler(fastn_dom.Event.Click, function () {
+      foo__set_light({
+      }, parenti3);
+    });
+    let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti4.setProperty(fastn_dom.PropertyKind.StringValue, "System Mode", inherited);
+    parenti4.addEventHandler(fastn_dom.Event.Click, function () {
+      foo__set_system({
+      }, parenti4);
+    });
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
   }
-  ]), inherited);
 }
+global["main"] = main;
+let foo__code = function (parent, inherited, args) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      fastn_dom.conditionalDom(root, [
+        ftd.dark_mode
+      ], function () {
+        return (!fastn_utils.getter(ftd.dark_mode));
+      }, function (root) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Code);
+        rooti0.setProperty(fastn_dom.PropertyKind.Code, __args__.text, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.CodeTheme, "fastn-theme.light", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+        return rooti0;
+      });
+    },
+    function (root, inherited) {
+      fastn_dom.conditionalDom(root, [
+        ftd.dark_mode
+      ], function () {
+        return fastn_utils.getter(ftd.dark_mode);
+      }, function (root) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Code);
+        rooti0.setProperty(fastn_dom.PropertyKind.Code, __args__.text, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.CodeTheme, "fastn-theme.dark", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+        return rooti0;
+      });
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__code"] = foo__code;
+let foo__set_dark = function (args) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return (enable_dark_mode());
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__set_dark"] = foo__set_dark;
+let foo__set_light = function (args) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return (enable_light_mode());
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__set_light"] = foo__set_light;
+let foo__set_system = function (args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return (enable_system_mode());
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__set_system"] = foo__set_system;
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
 
-        fastn_virtual.hydrate(main);
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastnVirtual.doubleBuffer(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+        ftd.emit_on_load();
+    };
 </script>
 </html>

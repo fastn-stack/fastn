@@ -1,0 +1,17 @@
+-- ftd.text: Update Value
+$on-click$: $update-value()
+
+-- string $name: Harsh Singh
+
+-- ftd.text: $name
+
+-- ftd.text: Get value
+$on-click$: $get-value()
+
+-- void update-value():
+
+ftd.set_value("foo#name", "test")
+
+-- void get-value():
+
+console.log(ftd.get_value("foo#name"))

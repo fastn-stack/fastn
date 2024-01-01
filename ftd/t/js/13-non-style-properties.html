@@ -1,95 +1,211 @@
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    
+    <meta content="fastn" name="generator">
+    
+    
+    <script>
+        let __fastn_package_name__ = "foo";
+    </script>
+
     <script src="fastn-js.js"></script>
+    
 
     <style>
        
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column w-1 ali-2"><a data-id="3" href="https://www.fastn.com" class="m-3">This is a link</a></div><div data-id="4" class="ft_column w-1 ali-2"><a data-id="5" href="https://www.fastn.com" target="_blank" class="m-3">This is a link (will open in new tab)</a></div><div data-id="6" class="ft_column w-1 mt-4 mb-5"><input data-id="7" type="checkbox" checked></input><input data-id="8" type="checkbox" disabled></input></div><div data-id="9" class="ft_column w-1 mt-4 mb-5"><input data-id="10" placeholder="Enter some text"></input><textarea data-id="11" placeholder="Multiline input"></textarea><input data-id="12" type="password"></input><input data-id="13" placeholder="This would be disabled" disabled></input><input data-id="14" value="This is default text"></input></div><iframe data-id="15" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik"></iframe><div data-id="16" class="ft_column">-- ftd.text: Hello World</div></body><style id="styles">
-    .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
-	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
-	.w-1 { width: 100%; }
-	.ali-2 { align-items: center; }
-	.m-3 { margin: 20px; }
-	.mt-4 { margin-top: 30px; }
-	.mb-5 { margin-bottom: 30px; }
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __jc-4 __ali-5"><a data-id="4" href="https://www.fastn.com" class="__m-6">This is a link</a><img data-id="5" src="https://picsum.photos/200/300"></img></div><div data-id="6" class="ft_column __w-7 __jc-8 __ali-9"><a data-id="7" href="https://www.fastn.com" rel="nofollow sponsored">No follow link</a></div><div data-id="8" class="ft_column __w-10 __jc-11 __ali-12"><a data-id="9" href="https://www.fastn.com" target="_blank" class="__m-13">This is a link (will open in new tab)</a></div><div data-id="10" class="ft_column __w-14 __mt-15 __mb-16"><input data-id="11" type="checkbox" checked></input><input data-id="12" type="checkbox" disabled></input></div><div data-id="13" class="ft_column __w-17 __mt-18 __mb-19"><input data-id="14" placeholder="Enter some text"></input><textarea data-id="15" placeholder="Multiline input"></textarea><input data-id="16" type="password"></input><input data-id="17" placeholder="This would be disabled" disabled></input><input data-id="18" value="This is default text"></input><input data-id="19" placeholder="Max input length 10" maxlength="10"></input></div><iframe data-id="20" allowfullscreen loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik"></iframe><pre data-id="21" class="language-ftd fastn-theme-dark"><code data-id="22" class="language-ftd fastn-theme-dark">-- ftd.text: Hello World
+</code></pre><div data-id="23">Fetch Priority = Auto</div><img data-id="24" src="https://picsum.photos/536/354" fetchpriority="auto"></img><div data-id="25">Fetch Priority = low</div><img data-id="26" src="https://picsum.photos/536/354" fetchpriority="low"></img><div data-id="27">Fetch Priority = high</div><img data-id="28" src="https://picsum.photos/536/354" fetchpriority="high"></img></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__w-3 { width: 100%; }
+	.__jc-4 { justify-content: center; }
+	.__ali-5 { align-items: center; }
+	.__m-6 { margin: 20px; }
+	.__w-7 { width: 100%; }
+	.__jc-8 { justify-content: center; }
+	.__ali-9 { align-items: center; }
+	.__w-10 { width: 100%; }
+	.__jc-11 { justify-content: center; }
+	.__ali-12 { align-items: center; }
+	.__m-13 { margin: 20px; }
+	.__w-14 { width: 100%; }
+	.__mt-15 { margin-top: 30px; }
+	.__mb-16 { margin-bottom: 30px; }
+	.__w-17 { width: 100%; }
+	.__mt-18 { margin-top: 30px; }
+	.__mb-19 { margin-bottom: 30px; }
     </style>
 <script>
     (function() {
-        let global = {
-};
-let main = function (parent) {
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
-  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is a link", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
+        let main = function (parent) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is a link", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Image);
+      rooti0.setProperty(fastn_dom.PropertyKind.ImageSrc, fastn.recordInstance({
+        dark: "https://picsum.photos/200/300",
+        light: "https://picsum.photos/200/300"
+      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
+    }
+    ]), inherited);
+    let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti1.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+    parenti1.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "No follow link", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.LinkRel, fastn.mutableList([fastn_dom.LinkRel.NoFollow,
+      fastn_dom.LinkRel.Sponsored]), inherited);
+    }
+    ]), inherited);
+    let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+    parenti2.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is a link (will open in new tab)", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.OpenInNewTab, true, inherited);
+    }
+    ]), inherited);
+    let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti3.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(30), inherited);
+    parenti3.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.CheckBox);
+      rooti0.setProperty(fastn_dom.PropertyKind.Checked, true, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.CheckBox);
+      rooti0.setProperty(fastn_dom.PropertyKind.Checked, false, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Enabled, false, inherited);
+    }
+    ]), inherited);
+    let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti4.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti4.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(30), inherited);
+    parenti4.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+      rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "Enter some text", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+      rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "Multiline input", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Multiline, true, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+      rooti0.setProperty(fastn_dom.PropertyKind.TextInputType, fastn_dom.TextInputType.Password, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+      rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "This would be disabled", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Enabled, false, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+      rooti0.setProperty(fastn_dom.PropertyKind.DefaultTextInputValue, "This is default text", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+      rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "Max input length 10", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.InputMaxLength, 10, inherited);
+    }
+    ]), inherited);
+    let parenti5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.IFrame);
+    parenti5.setProperty(fastn_dom.PropertyKind.Loading, fastn_dom.Loading.Lazy, inherited);
+    parenti5.setProperty(fastn_dom.PropertyKind.Src, "https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik", inherited);
+    let parenti6 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Code);
+    parenti6.setProperty(fastn_dom.PropertyKind.Code, "-- ftd.text: Hello World", inherited);
+    parenti6.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
+    parenti6.setProperty(fastn_dom.PropertyKind.CodeTheme, "fastn-theme.dark", inherited);
+    parenti6.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
+    let parenti7 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti7.setProperty(fastn_dom.PropertyKind.StringValue, "Fetch Priority = Auto", inherited);
+    let parenti8 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Image);
+    parenti8.setProperty(fastn_dom.PropertyKind.ImageSrc, fastn.recordInstance({
+      dark: "https://picsum.photos/536/354",
+      light: "https://picsum.photos/536/354"
+    }), inherited);
+    parenti8.setProperty(fastn_dom.PropertyKind.FetchPriority, fastn_dom.FetchPriority.auto, inherited);
+    let parenti9 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti9.setProperty(fastn_dom.PropertyKind.StringValue, "Fetch Priority = low", inherited);
+    let parenti10 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Image);
+    parenti10.setProperty(fastn_dom.PropertyKind.ImageSrc, fastn.recordInstance({
+      dark: "https://picsum.photos/536/354",
+      light: "https://picsum.photos/536/354"
+    }), inherited);
+    parenti10.setProperty(fastn_dom.PropertyKind.FetchPriority, fastn_dom.FetchPriority.low, inherited);
+    let parenti11 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+    parenti11.setProperty(fastn_dom.PropertyKind.StringValue, "Fetch Priority = high", inherited);
+    let parenti12 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Image);
+    parenti12.setProperty(fastn_dom.PropertyKind.ImageSrc, fastn.recordInstance({
+      dark: "https://picsum.photos/536/354",
+      light: "https://picsum.photos/536/354"
+    }), inherited);
+    parenti12.setProperty(fastn_dom.PropertyKind.FetchPriority, fastn_dom.FetchPriority.high, inherited);
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
   }
-  ]), inherited);
-  let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti1.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
-  parenti1.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is a link (will open in new tab)", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.OpenInNewTab, true, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
-  }
-  ]), inherited);
-  let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti2.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(30), inherited);
-  parenti2.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.CheckBox);
-    rooti0.setProperty(fastn_dom.PropertyKind.Checked, true, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.CheckBox);
-    rooti0.setProperty(fastn_dom.PropertyKind.Checked, false, inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Enabled, false, inherited);
-  }
-  ]), inherited);
-  let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-  parenti3.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(30), inherited);
-  parenti3.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
-    rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "Enter some text", inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
-    rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "Multiline input", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Multiline, true, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
-    rooti0.setProperty(fastn_dom.PropertyKind.TextInputType, fastn_dom.TextInputType.Password, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
-    rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "This would be disabled", inherited);
-    rooti0.setProperty(fastn_dom.PropertyKind.Enabled, false, inherited);
-  },
-  function (root, inherited) {
-    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
-    rooti0.setProperty(fastn_dom.PropertyKind.DefaultTextInputValue, "This is default text", inherited);
-  }
-  ]), inherited);
-  let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.IFrame);
-  parenti4.setProperty(fastn_dom.PropertyKind.Loading, fastn_dom.Loading.Lazy, inherited);
-  parenti4.setProperty(fastn_dom.PropertyKind.Src, "https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik", inherited);
-  let parenti5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti5.setProperty(fastn_dom.PropertyKind.Code, "-- ftd.text: Hello World", inherited);
 }
+global["main"] = main;
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
 
-        fastn_virtual.hydrate(main);
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastnVirtual.doubleBuffer(main_wrapper);
         ftd.post_init();
     })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+        ftd.emit_on_load();
+    };
 </script>
 </html>

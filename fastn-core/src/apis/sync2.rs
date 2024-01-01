@@ -110,14 +110,14 @@ pub struct File {
 }
 
 pub async fn sync2(
-    req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
     sync_req: SyncRequest,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     dbg!("remote server call", &sync_req.package_name);
 
-    match sync_worker(req, sync_req).await {
+    match sync_worker(config, sync_req).await {
         Ok(data) => fastn_core::http::api_ok(data),
-        Err(err) => fastn_core::http::api_error(err.to_string()),
+        Err(err) => fastn_core::http::api_error(err.to_string(), None),
     }
 }
 
@@ -187,7 +187,7 @@ pub(crate) async fn do_sync(
                         // else: Both has modified the same file
                         let ancestor_path = config.history_path(path, *version);
                         let ancestor_content = if let Ok(ancestor_content) =
-                            tokio::fs::read_to_string(ancestor_path).await
+                            fastn_core::tokio_fs::read_to_string(ancestor_path).await
                         {
                             ancestor_content
                         } else {
@@ -203,7 +203,8 @@ pub(crate) async fn do_sync(
                             continue;
                         };
                         let theirs_path = config.history_path(path, file_edit.version);
-                        let theirs_content = tokio::fs::read_to_string(theirs_path).await?;
+                        let theirs_content =
+                            fastn_core::tokio_fs::read_to_string(theirs_path).await?;
                         let ours_content = String::from_utf8(content.clone())
                             .map_err(|e| fastn_core::Error::APIResponseError(e.to_string()))?;
                         match diffy::MergeOptions::new()
@@ -271,7 +272,8 @@ pub(crate) async fn do_sync(
                     continue;
                 };
                 let server_content =
-                    tokio::fs::read(config.history_path(path, file_edit.version)).await?;
+                    fastn_core::tokio_fs::read(config.history_path(path, file_edit.version))
+                        .await?;
 
                 // if: Client Says Deleted and server says modified
                 // that means Remote timestamp is greater than client timestamp
@@ -308,30 +310,29 @@ pub(crate) async fn do_sync(
 }
 
 pub(crate) async fn sync_worker(
-    req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
     request: SyncRequest,
 ) -> fastn_core::Result<SyncResponse> {
     use itertools::Itertools;
 
     // TODO: Need to call at once only
-    let config = fastn_core::Config::read(None, false, Some(req)).await?;
-    let mut synced_files = do_sync(&config, request.files.as_slice()).await?;
+    let mut synced_files = do_sync(config, request.files.as_slice()).await?;
     let remote_history = config.get_history().await?;
     let remote_manifest =
         fastn_core::history::FileHistory::get_remote_manifest(remote_history.as_slice(), true)?;
 
-    let clone_history = fastn_core::history::FileHistory::from_ftd(request.history.as_str())?;
+    let clone_history = config.to_file_history(request.history.as_str()).await?;
     let client_latest =
         fastn_core::history::FileHistory::get_remote_manifest(clone_history.as_slice(), true)?;
 
-    client_current_files(&config, &remote_manifest, &client_latest, &mut synced_files).await?;
+    client_current_files(config, &remote_manifest, &client_latest, &mut synced_files).await?;
 
-    let history_files = clone_history_files(&config, &remote_manifest, &client_latest).await?;
+    let history_files = clone_history_files(config, &remote_manifest, &client_latest).await?;
 
     Ok(SyncResponse {
         files: synced_files.into_values().collect_vec(),
         dot_history: history_files,
-        latest_ftd: tokio::fs::read_to_string(config.history_file()).await?,
+        latest_ftd: fastn_core::tokio_fs::read_to_string(config.history_file()).await?,
     })
 }
 
@@ -365,7 +366,8 @@ async fn clone_history_files(
             .filter(|x| client_file_edit.map(|c| x.0.gt(&c.version)).unwrap_or(true))
             .collect_vec();
         for (_, path) in history_paths {
-            let content = tokio::fs::read(config.remote_history_dir().join(&path)).await?;
+            let content =
+                fastn_core::tokio_fs::read(config.remote_history_dir().join(&path)).await?;
             dot_history.push(File { path, content });
         }
     }
@@ -415,7 +417,7 @@ async fn client_current_files(
             );
             continue;
         }
-        let content = tokio::fs::read(config.root.join(path)).await?;
+        let content = fastn_core::tokio_fs::read(config.root.join(path)).await?;
         synced_files.insert(
             path.clone(),
             SyncResponseFile::Add {

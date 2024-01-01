@@ -1,1 +1,38 @@
+-- import: 01-basic-module
+export: print
+
+-- ftd.text: "Hello"
+id: hello-id
+
 -- ftd.text: Hello
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.text: Hello
+background.solid: $bg-og
+
+-- ftd.color bg-og:
+light: yellow
+dark: green
+
+-- string append(a,b):
+string a:
+string b:
+
+a + " " + b
+
+
+/-- component print:
+caption name:
+
+-- ftd.text: $print.name
+
+-- end: print
+
+
+-- string hello: Hello World!!
+
+
+
+-- record person:
+caption name:
+optional string address:

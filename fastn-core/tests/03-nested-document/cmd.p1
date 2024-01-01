@@ -1,11 +1,11 @@
 -- fbt:
-cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test build --test
+cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test build --edition 2022
 output: amitu/.build
 
 
 -- stdout:
 
-Processing amitu/FASTN.ftd ... done in <omitted>
-Processing amitu/index.ftd ... done in <omitted>
-Processing amitu/nested/document.ftd ... done in <omitted>
-Processing amitu/nested/index.ftd ... done in <omitted>
+Processing amitu/FASTN/ ... done in <omitted>
+Processing amitu/ ... done in <omitted>
+Processing amitu/nested/document/ ... done in <omitted>
+Processing amitu/nested/ ... done in <omitted>

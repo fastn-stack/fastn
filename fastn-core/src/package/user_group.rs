@@ -556,110 +556,20 @@ pub async fn access_identities(
     // github-starred: fastn-lang/ftd
     // discord-server: abrark.com
     // github-watches: fastn-lang/ftd
+    #[cfg(feature = "auth")]
     match fastn_core::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await
     {
         Ok(ids) => Ok(ids),
         Err(fastn_core::Error::GenericError(_err)) => Ok(vec![]),
         e => e,
     }
-}
 
-pub mod processor {
-    use itertools::Itertools;
+    #[cfg(not(feature = "auth"))]
+    {
+        // suppress warnings
+        let _ = req;
+        let _ = sitemap_identities;
 
-    pub fn user_groups(
-        section: &ftd::ftd2021::p1::Section,
-        doc: &ftd::ftd2021::p2::TDoc,
-        config: &fastn_core::Config,
-    ) -> ftd::ftd2021::p1::Result<ftd::Value> {
-        let g = config
-            .package
-            .groups
-            .values()
-            .map(|g| g.to_group_compat())
-            .collect_vec();
-        doc.from_json(&g, section)
+        Ok(vec![])
     }
-
-    pub fn user_group_by_id(
-        section: &ftd::ftd2021::p1::Section,
-        doc: &ftd::ftd2021::p2::TDoc,
-        config: &fastn_core::Config,
-    ) -> ftd::ftd2021::p1::Result<ftd::Value> {
-        let id = section.header.str(doc.name, section.line_number, "id")?;
-        let g = config
-            .package
-            .groups
-            .get(id)
-            .map(|g| g.to_group_compat())
-            .ok_or_else(|| ftd::ftd2021::p1::Error::NotFound {
-                key: format!("user-group: `{}` not found", id),
-                doc_id: doc.name.to_string(),
-                line_number: section.line_number,
-            })?;
-        doc.from_json(&g, section)
-    }
-
-    pub fn get_identities(
-        section: &ftd::ftd2021::p1::Section,
-        doc: &ftd::ftd2021::p2::TDoc,
-        config: &fastn_core::Config,
-    ) -> ftd::ftd2021::p1::Result<ftd::Value> {
-        let doc_id = fastn_core::library::document::document_full_id(config, doc)?;
-        let identities = super::get_identities(config, doc_id.as_str(), true).map_err(|e| {
-            ftd::ftd2021::p1::Error::ParseError {
-                message: e.to_string(),
-                doc_id,
-                line_number: section.line_number,
-            }
-        })?;
-
-        Ok(ftd::Value::List {
-            data: identities
-                .into_iter()
-                .map(|i| ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: i.to_string(),
-                        source: ftd::TextSource::Default,
-                    },
-                })
-                .collect_vec(),
-            kind: ftd::ftd2021::p2::Kind::List {
-                kind: Box::new(ftd::ftd2021::p2::Kind::String {
-                    caption: false,
-                    body: false,
-                    default: None,
-                    is_reference: false,
-                }),
-                default: None,
-                is_reference: false,
-            },
-        })
-    }
-
-    // is user can_read the document or not based on defined readers in sitemap
-    pub async fn is_reader<'a>(
-        section: &ftd::ftd2021::p1::Section,
-        doc: &'a ftd::ftd2021::p2::TDoc<'_>,
-        config: &fastn_core::Config,
-    ) -> ftd::ftd2021::p1::Result<ftd::Value> {
-        let doc_id = fastn_core::library::document::document_full_id(config, doc)?;
-        let is_reader = config
-            .can_read(config.request.as_ref().unwrap(), &doc_id, false)
-            .await
-            .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
-                message: e.to_string(),
-                doc_id,
-                line_number: section.line_number,
-            })?;
-
-        Ok(ftd::Value::Boolean { value: is_reader })
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    // TODO:
-    #[test]
-    fn get_identities() {}
 }

@@ -1,0 +1,37 @@
+-- import: 01-basic as b
+export: append, print, person
+exposing: append
+
+-- ftd.text: $append(a = FifthTry, b = Click here)
+
+
+-- b.person list people:
+
+-- b.person: Ritesh
+-- b.person: Rithik
+
+-- end: people
+
+
+
+
+
+-- display-persons:
+p: $people
+
+
+
+
+
+-- component display-persons:
+b.person list p:
+
+-- ftd.column:
+
+-- ftd.text: $obj.name
+for: obj in $display-persons.p
+color: red
+
+-- end: ftd.column
+
+-- end: display-persons

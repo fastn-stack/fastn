@@ -1,0 +1,20 @@
+-- import: 44-module
+
+-- goo:
+-- moo:
+
+-- component goo:
+module c: 44-module
+
+-- goo.c.bar:
+
+-- end: goo
+
+
+-- component moo:
+module c-moo: 44-module
+
+-- goo:
+c: $moo.c-moo
+
+-- end: moo

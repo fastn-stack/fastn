@@ -20,7 +20,18 @@ pub enum Event {
 }
 
 #[derive(Debug)]
+pub enum FunctionData {
+    Name(String),
+    // -- component bar:
+    // module m:
+    //
+    // -- ftd.text: $bar.m.func(a = Hello)
+    // -- end: bar
+    Definition(fastn_js::SetPropertyValue),
+}
+
+#[derive(Debug)]
 pub struct Function {
-    pub name: String,
+    pub name: Box<FunctionData>,
     pub parameters: Vec<(String, fastn_js::SetPropertyValue)>,
 }

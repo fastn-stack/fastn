@@ -1,0 +1,92 @@
+-- code-tests:
+
+
+
+;; Language supported (besides fastn)
+;; py, sql, html, json, sh, md, js.
+-- component code-tests:
+
+-- ftd.column:
+spacing.fixed.px: 10
+
+-- ftd.code:
+lang: md
+
+# Heading 1
+
+## Heading 2
+
+-- ftd.code:
+lang: sh
+
+#!/bin/bash
+
+# This is a comment
+echo "Hello, World!"
+
+# Variables
+name="John"
+age=30
+
+echo "My name is $name and I am $age years old."
+
+-- ftd.code:
+lang: py
+
+print("Hello World")
+
+-- ftd.code:
+lang: html
+
+<h1> Hello World </h1>
+
+-- ftd.code:
+lang: ftd
+
+\-- ftd.text: Hello World
+
+-- ftd.code:
+lang: js
+
+function foo() {
+    return 'Hello World';
+}
+
+-- ftd.code:
+lang: json
+
+{
+  "name": "John Doe",
+  "age": 30,
+  "email": "john@example.com",
+  "isSubscribed": true,
+  "address": {
+    "street": "123 Main St",
+    "city": "Anytown",
+    "country": "USA"
+  },
+  "hobbies": ["reading", "hiking", "cooking"]
+}
+
+-- ftd.code:
+lang: sql
+
+SELECT first_name, last_name, age FROM customers WHERE age >= 18;
+
+-- ftd.code:
+lang: rs
+
+fn main() {
+    // Printing
+    println!("Hello, World!");
+
+    // Variables
+    let name = "Alice";
+    let age = 25;
+
+    println!("My name is {} and I am {} years old.", name, age);
+}
+
+-- end: ftd.column
+
+-- end: code-tests

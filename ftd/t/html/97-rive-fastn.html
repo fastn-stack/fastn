@@ -562,11 +562,15 @@
 }
 }
 },
-"ftd#device": "desktop",
+"ftd#device": "mobile",
+"ftd#empty": "",
 "ftd#follow-system-dark-mode": true,
 "ftd#font-code": "sans-serif",
 "ftd#font-copy": "sans-serif",
 "ftd#font-display": "sans-serif",
+"ftd#nbsp": "&nbsp;",
+"ftd#non-breaking-space": "&nbsp;",
+"ftd#space": " ",
 "ftd#system-dark-mode": false
 }
 </script>
@@ -780,7 +784,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><canvas data-id="0:main" height="500" id="fastn" width="500" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn&quot;],[&quot;input&quot;,&quot;play&quot;],[&quot;value&quot;,true]]}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn&quot;],[&quot;input&quot;,&quot;play&quot;],[&quot;value&quot;,false]]}]', this)" style="width: 440px" class="ft_common"></canvas><canvas data-id="1:main" height="500" id="fastn-anime" width="500" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__play_rive___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn-anime&quot;],[&quot;input&quot;,&quot;play&quot;]]}]', this)" style="width: 800px" class="ft_common"></canvas></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><canvas data-id="0:main" height="500" id="fastn" width="500" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn&quot;],[&quot;input&quot;,&quot;play&quot;],[&quot;value&quot;,true]]}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn&quot;],[&quot;input&quot;,&quot;play&quot;],[&quot;value&quot;,false]]}]', this)" style="width: 440px" class="ft_common"></canvas><canvas data-id="1:main" height="500" id="fastn-anime" width="500" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__play_rive___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn-anime&quot;],[&quot;input&quot;,&quot;play&quot;]]}]', this)" style="width: 380px" class="ft_common"></canvas></div>
 
 
 <script>
@@ -1774,7 +1778,7 @@ else {
 return null;
 }
 }
-else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+else if (typeof bg === 'object' && !!bg && "colors" in bg && Object.keys(bg.colors).length) {
 let colors = "";
 // if the bg direction is provided by the user, use it, otherwise default
 let direction = (_a = bg.direction) !== null && _a !== void 0 ? _a : "to bottom";
@@ -1798,7 +1802,7 @@ colors = `${colors}, ${c["stop-position"]}`;
 }
 }
 }
-let res = `linear-gradient("${direction}, ${colors}")`;
+let res = `linear-gradient(${direction}, ${colors})`;
 return res;
 }
 else {
@@ -1936,6 +1940,18 @@ a.value = a.value+1
 
 function ftd__increment_by___main(a,v,args,data,id){
 a.value = a.value+v
+}
+
+
+
+function ftd__decrement___main(a,args,data,id){
+a.value = a.value-1
+}
+
+
+
+function ftd__decrement_by___main(a,v,args,data,id){
+a.value = a.value-v
 }
 
 

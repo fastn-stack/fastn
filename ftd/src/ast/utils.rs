@@ -26,6 +26,8 @@ pub fn get_import_alias(input: &str) -> (String, String) {
 
 pub(crate) fn is_variable_mutable(name: &str) -> bool {
     name.starts_with(REFERENCE)
+        && !name.eq(ftd::ast::utils::PROCESSOR)
+        && !name.eq(ftd::ast::utils::LOOP)
 }
 
 pub(crate) fn is_condition(value: &str, kind: &Option<String>) -> bool {
@@ -76,5 +78,7 @@ pub const REFERENCE: &str = "$";
 pub const CLONE: &str = "*$";
 pub const LOOP: &str = "$loop$";
 pub const AS: &str = " as ";
+pub const IN: &str = " in ";
 pub const IF: &str = "if";
+pub const FOR: &str = "for";
 pub const PROCESSOR: &str = "$processor$";
