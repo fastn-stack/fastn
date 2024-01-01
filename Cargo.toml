@@ -10,6 +10,7 @@ members = [
     "fastn-grammar",
     "fastn-lang",
     "foo",
+    "fastn-ds",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
@@ -85,6 +86,7 @@ env_logger = "0.10"
 enum-iterator = "0.6"
 enum-iterator-derive = "0.6"
 fastn-cloud = { path = "fastn-cloud" }
+fastn-ds = { path = "fastn-ds" }
 fastn-core = { path = "fastn-core" }
 fastn-issues = { path = "fastn-issues" }
 fastn-package = { path = "fastn-package" }
@@ -231,7 +233,6 @@ features = [
 
 [workspace.dependencies.comrak]
 # We use comrak for markup processing.
-
 version = "0.19"
 # By default comrak ships with support for syntax highlighting using syntext for "fenced
 # code blocks". We have disabled that by not using default features. We did that because

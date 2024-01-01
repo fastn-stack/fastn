@@ -50,7 +50,9 @@ pub async fn process(
     let db_type = db_config.db_type.as_str();
 
     match db_type {
-        "postgres" => Ok(fastn_core::library2022::processor::pg::process(value, kind, doc).await?),
+        "postgres" => {
+            Ok(fastn_core::library2022::processor::pg::process(value, kind, doc, config).await?)
+        }
         "sqlite" => Ok(fastn_core::library2022::processor::sqlite::process(
             value,
             kind,

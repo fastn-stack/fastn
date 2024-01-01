@@ -14,6 +14,7 @@ native-rendering = ["taffy", "crossterm"]
 terminal = ["rink", "dioxus-native-core", "dioxus-native-core-macro", "dioxus-html", "futures", "tokio", "rustc-hash"]
 
 [dependencies]
+async-trait.workspace = true
 comrak.workspace = true
 crossterm = { workspace = true, optional = true }
 css-color-parser.workspace = true

@@ -4,13 +4,14 @@ impl fastn_core::Package {
         &self,
         name: &str,
         package_root: Option<&camino::Utf8PathBuf>,
+        ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<Vec<u8>> {
         tracing::info!(document = name);
         let package_root = self.package_root_with_default(package_root)?;
 
         let file_path = package_root.join(name.trim_start_matches('/'));
         // Issue 1: Need to remove / from the start of the name
-        match fastn_core::tokio_fs::read(&file_path).await {
+        match ds.read_content(&file_path, None).await {
             Ok(content) => Ok(content),
             Err(err) => {
                 tracing::error!(
@@ -50,15 +51,16 @@ impl fastn_core::Package {
         &self,
         id: &str,
         package_root: Option<&camino::Utf8PathBuf>,
+        ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         if fastn_core::file::is_static(id)? {
-            if let Ok(data) = self.fs_fetch_by_file_name(id, package_root).await {
+            if let Ok(data) = self.fs_fetch_by_file_name(id, package_root, ds).await {
                 return Ok((id.to_string(), data));
             }
         } else {
             for name in file_id_to_names(id) {
                 if let Ok(data) = self
-                    .fs_fetch_by_file_name(name.as_str(), package_root)
+                    .fs_fetch_by_file_name(name.as_str(), package_root, ds)
                     .await
                 {
                     return Ok((name, data));
@@ -157,8 +159,12 @@ impl fastn_core::Package {
         file_path: &str,
         package_root: Option<&camino::Utf8PathBuf>,
         restore_default: bool,
+        ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<Vec<u8>> {
-        if let Ok(response) = self.fs_fetch_by_file_name(file_path, package_root).await {
+        if let Ok(response) = self
+            .fs_fetch_by_file_name(file_path, package_root, ds)
+            .await
+        {
             return Ok(response);
         }
         if let Ok(response) = self
@@ -200,7 +206,7 @@ impl fastn_core::Package {
         let root = self.package_root_with_default(package_root)?;
 
         if let Ok(response) = self
-            .fs_fetch_by_file_name(new_file_path.as_str(), package_root)
+            .fs_fetch_by_file_name(new_file_path.as_str(), package_root, ds)
             .await
         {
             tokio::fs::copy(root.join(new_file_path), root.join(file_path)).await?;
@@ -225,9 +231,10 @@ impl fastn_core::Package {
         id: &str,
         package_root: Option<&camino::Utf8PathBuf>,
         config_package_name: &str,
+        ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         tracing::info!(id = id);
-        if let Ok(response) = self.fs_fetch_by_id(id, package_root).await {
+        if let Ok(response) = self.fs_fetch_by_id(id, package_root, ds).await {
             return Ok(response);
         }
 
@@ -266,7 +273,7 @@ impl fastn_core::Package {
         };
 
         let root = self.package_root_with_default(package_root)?;
-        if let Ok(response) = self.fs_fetch_by_id(new_id.as_str(), package_root).await {
+        if let Ok(response) = self.fs_fetch_by_id(new_id.as_str(), package_root, ds).await {
             if config_package_name.ne(&self.name) {
                 fastn_core::utils::write(&root, id.trim_start_matches('/'), response.1.as_slice())
                     .await?;
@@ -459,7 +466,8 @@ pub(crate) async fn read_ftd_2022(
         main.id_to_path().as_str(),
         font_style.as_str(),
         base_url,
-    );
+    )
+    .await;
 
     Ok(FTDResult::Html(file_content.into()))
 }
@@ -542,6 +550,7 @@ pub(crate) async fn read_ftd_2023(
             base_url,
             c,
         )
+        .await
     };
 
     Ok(FTDResult::Html(file_content.into()))

@@ -1,9 +1,12 @@
+use std::fmt::Display;
+
 pub async fn status(config: &fastn_core::Config, source: Option<&str>) -> fastn_core::Result<()> {
     let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
     let workspaces = fastn_core::snapshot::get_workspace(config).await?;
     match source {
         Some(source) => {
             file_status(
+                config,
                 config.package.name.clone(),
                 &config.root,
                 source,
@@ -17,6 +20,7 @@ pub async fn status(config: &fastn_core::Config, source: Option<&str>) -> fastn_
 }
 
 async fn file_status(
+    config: &fastn_core::Config,
     package_name: String,
     base_path: &camino::Utf8PathBuf,
     source: &str,
@@ -33,10 +37,10 @@ async fn file_status(
         return Ok(());
     }
 
-    let file = fastn_core::get_file(package_name, &path, base_path).await?;
+    let file = fastn_core::get_file(&config.ds, package_name, &path, base_path).await?;
 
-    let file_status = get_file_status(&file, snapshots, workspaces).await?;
-    let track_status = get_track_status(&file, snapshots, base_path.as_str())?;
+    let file_status = get_file_status(config, &file, snapshots, workspaces).await?;
+    let track_status = get_track_status(config, &file, snapshots, base_path.as_str()).await?;
 
     let mut clean = true;
     if !file_status.eq(&FileStatus::Uptodate) {
@@ -44,7 +48,7 @@ async fn file_status(
         clean = false;
     }
     for (i, j) in track_status {
-        println!("{}: {} -> {}", j.to_string(), source, i);
+        println!("{}: {} -> {}", j, source, i);
         clean = false;
     }
     if clean {
@@ -63,8 +67,8 @@ async fn all_status(
     let mut file_status = std::collections::BTreeMap::new();
     let mut track_status = std::collections::BTreeMap::new();
     for doc in config.get_files(&config.package).await? {
-        let status = get_file_status(&doc, snapshots, workspaces).await?;
-        let track = get_track_status(&doc, snapshots, config.root.as_str())?;
+        let status = get_file_status(config, &doc, snapshots, workspaces).await?;
+        let track = get_track_status(config, &doc, snapshots, config.root.as_str()).await?;
         if !track.is_empty() {
             track_status.insert(doc.get_id().to_string(), track);
         }
@@ -91,6 +95,7 @@ async fn all_status(
 }
 
 pub(crate) async fn get_file_status(
+    config: &fastn_core::Config,
     doc: &fastn_core::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
     workspaces: &std::collections::BTreeMap<String, fastn_core::snapshot::Workspace>,
@@ -127,8 +132,8 @@ pub(crate) async fn get_file_status(
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
 
-        let content = fastn_core::tokio_fs::read(&doc.get_full_path()).await?;
-        let existing_doc = fastn_core::tokio_fs::read(&path).await?;
+        let content = config.read_content(&doc.get_full_path(), None).await?;
+        let existing_doc = config.read_content(&path, None).await?;
         if sha2::Sha256::digest(content).eq(&sha2::Sha256::digest(existing_doc)) {
             return Ok(FileStatus::Uptodate);
         }
@@ -137,7 +142,8 @@ pub(crate) async fn get_file_status(
     Ok(FileStatus::Added)
 }
 
-fn get_track_status(
+async fn get_track_status(
+    config: &fastn_core::Config,
     doc: &fastn_core::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
     base_path: &str,
@@ -147,7 +153,7 @@ fn get_track_status(
     if !path.exists() {
         return Ok(track_list);
     }
-    let tracks = fastn_core::tracker::get_tracks(base_path, &path)?;
+    let tracks = fastn_core::tracker::get_tracks(config, base_path, &path).await?;
     for track in tracks.values() {
         // ignore in case of the translation package
         if doc.get_id().eq(track.filename.as_str()) && track.last_merged_version.is_some() {
@@ -192,7 +198,7 @@ fn print_track_status(
             if j.eq(&TrackStatus::UptoDate) {
                 continue;
             }
-            println!("{}: {} -> {}", j.to_string(), k, i);
+            println!("{}: {} -> {}", j, k, i);
             status = false;
         }
     }
@@ -232,9 +238,9 @@ enum TrackStatus {
     OutOfDate { seconds: u64 },
 }
 
-impl ToString for TrackStatus {
-    fn to_string(&self) -> String {
-        match self {
+impl Display for TrackStatus {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let str = match self {
             TrackStatus::UptoDate => "Up to date".to_string(),
             TrackStatus::NeverMarked => "Never marked".to_string(),
             TrackStatus::OutOfDate { seconds } => {
@@ -243,6 +249,7 @@ impl ToString for TrackStatus {
                     fastn_core::utils::seconds_to_human(*seconds)
                 )
             }
-        }
+        };
+        write!(f, "{}", str)
     }
 }

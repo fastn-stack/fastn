@@ -67,7 +67,7 @@ pub(crate) async fn sync_(
     request_files: Vec<fastn_core::apis::sync2::SyncRequestFile>,
     workspace: &mut std::collections::BTreeMap<String, fastn_core::workspace::WorkspaceEntry>,
 ) -> fastn_core::Result<()> {
-    let history = fastn_core::tokio_fs::read_to_string(config.history_file()).await?;
+    let history = config.read_to_string(config.history_file(), None).await?;
     let sync_request = fastn_core::apis::sync2::SyncRequest {
         package_name: config.package.name.to_string(),
         files: request_files,

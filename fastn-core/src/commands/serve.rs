@@ -198,12 +198,14 @@ fn guess_mime_type(path: &str) -> mime_guess::Mime {
 
 #[tracing::instrument(skip_all)]
 async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Response {
-    let response = match fastn_core::tokio_fs::read(
-        config
-            .get_root_for_package(&config.package)
-            .join("FASTN.ftd"),
-    )
-    .await
+    let response = match config
+        .read_content(
+            config
+                .get_root_for_package(&config.package)
+                .join("FASTN.ftd"),
+            None,
+        )
+        .await
     {
         Ok(res) => res,
         Err(e) => {
@@ -213,22 +215,25 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
     fastn_core::http::ok_with_content_type(response, mime_guess::mime::APPLICATION_OCTET_STREAM)
 }
 
-async fn favicon() -> fastn_core::Result<fastn_core::http::Response> {
+async fn favicon(config: &fastn_core::Config) -> fastn_core::Result<fastn_core::http::Response> {
     let mut path = camino::Utf8PathBuf::from("favicon.ico");
     if !path.exists() {
         path = camino::Utf8PathBuf::from("static/favicon.ico");
     }
-    Ok(static_file(path).await)
+    Ok(static_file(config, path).await)
 }
 
 #[tracing::instrument(skip_all)]
-async fn static_file(file_path: camino::Utf8PathBuf) -> fastn_core::http::Response {
+async fn static_file(
+    config: &fastn_core::Config,
+    file_path: camino::Utf8PathBuf,
+) -> fastn_core::http::Response {
     if !file_path.exists() {
         tracing::error!(msg = "no such static file ({})", path = file_path.as_str());
         return fastn_core::not_found!("no such static file ({})", file_path);
     }
 
-    match fastn_core::tokio_fs::read(file_path.as_path()).await {
+    match config.read_content(file_path.as_path(), None).await {
         Ok(r) => fastn_core::http::ok_with_content_type(r, guess_mime_type(file_path.as_str())),
         Err(e) => {
             tracing::error!(
@@ -683,7 +688,7 @@ async fn actual_route(
         ("get", "/-/create-cr-page/") => create_cr_page(config, req).await,
         ("get", "/-/clear-cache/") => clear_cache(config, req).await,
         ("get", "/-/poll/") => fastn_core::watcher::poll().await,
-        ("get", "/favicon.ico") => favicon().await,
+        ("get", "/favicon.ico") => favicon(config).await,
         ("get", "/test/") => test().await,
         ("get", "/-/pwd/") => fastn_core::tutor::pwd().await,
         ("get", "/-/tutor.js") => fastn_core::tutor::js().await,

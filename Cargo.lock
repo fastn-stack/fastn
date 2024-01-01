@@ -1715,6 +1715,7 @@ dependencies = [
  "dotenvy",
  "fastn-cloud",
  "fastn-core",
+ "fastn-ds",
  "fastn-observer",
  "futures",
  "reqwest",
@@ -1731,6 +1732,7 @@ version = "0.1.0"
 dependencies = [
  "camino",
  "fastn-core",
+ "fastn-ds",
  "futures",
  "home",
  "mime_guess",
@@ -1764,6 +1766,7 @@ dependencies = [
  "dirs",
  "edit",
  "env_logger",
+ "fastn-ds",
  "fastn-js",
  "fastn-observer",
  "fastn-package",
@@ -1806,6 +1809,14 @@ dependencies = [
  "url",
  "uuid",
  "zip",
+]
+
+[[package]]
+name = "fastn-ds"
+version = "0.1.0"
+dependencies = [
+ "ftd 0.3.0",
+ "tokio",
 ]
 
 [[package]]
@@ -2045,6 +2056,7 @@ dependencies = [
 name = "ftd"
 version = "0.3.0"
 dependencies = [
+ "async-trait",
  "colored",
  "comrak 0.19.0",
  "crossterm 0.27.0",

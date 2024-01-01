@@ -84,7 +84,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::tutor::main().await;
     }
 
-    let mut config = fastn_core::Config::read(None, true).await?;
+    let mut config = fastn_core::Config::read_current(true).await?;
     let package_name = config.package.name.clone();
 
     if let Some(serve) = matches.subcommand_matches("serve") {

@@ -22,17 +22,18 @@ pub(crate) async fn get_tracking_info(
     path: &camino::Utf8PathBuf,
 ) -> fastn_core::Result<Vec<fastn_core::track::TrackingInfo>> {
     let track_path = config.track_path(path);
-    get_tracking_info_(&track_path).await
+    get_tracking_info_(config, &track_path).await
 }
 
 pub(crate) async fn get_tracking_info_(
+    config: &fastn_core::Config,
     track_path: &camino::Utf8PathBuf,
 ) -> fastn_core::Result<Vec<fastn_core::track::TrackingInfo>> {
     if !track_path.exists() {
         return fastn_core::usage_error(format!("No tracking found for {}", track_path));
     }
 
-    let doc = fastn_core::tokio_fs::read_to_string(&track_path).await?;
+    let doc = config.read_to_string(&track_path, None).await?;
     resolve_tracking_info(&doc, track_path).await
 }
 

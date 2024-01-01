@@ -75,10 +75,12 @@ async fn merge_main_into_cr(
             break;
         }
         if cr_file_path.eq(&deleted_file_str) {
-            let cr_deleted_files = fastn_core::tokio_fs::read_to_string(
-                config.history_path(cr_file_path.as_str(), cr_file_edit.version),
-            )
-            .await?;
+            let cr_deleted_files = config
+                .read_to_string(
+                    config.history_path(cr_file_path.as_str(), cr_file_edit.version),
+                    None,
+                )
+                .await?;
             let mut cr_deleted_list =
                 fastn_core::cr::resolve_cr_deleted(cr_deleted_files.as_str(), dest)
                     .await?
@@ -152,10 +154,12 @@ async fn merge_main_into_cr(
             continue;
         };
 
-        let ours_content_bytes = fastn_core::tokio_fs::read(
-            config.history_path(cr_file_path.as_str(), cr_file_edit.version),
-        )
-        .await?;
+        let ours_content_bytes = config
+            .read_content(
+                config.history_path(cr_file_path.as_str(), cr_file_edit.version),
+                None,
+            )
+            .await?;
 
         // get corresponding track file
         let track_file_path_str =
@@ -167,10 +171,12 @@ async fn merge_main_into_cr(
                 if file_edit.is_deleted() {
                     continue;
                 }
-                let theirs_content_bytes = fastn_core::tokio_fs::read(
-                    config.history_path(filename.as_str(), file_edit.version),
-                )
-                .await?;
+                let theirs_content_bytes = config
+                    .read_content(
+                        config.history_path(filename.as_str(), file_edit.version),
+                        None,
+                    )
+                    .await?;
                 if sha2::Sha256::digest(&ours_content_bytes)
                     .eq(&sha2::Sha256::digest(theirs_content_bytes))
                 {
@@ -198,7 +204,7 @@ async fn merge_main_into_cr(
         let track_file_path =
             config.history_path(track_file_path_str.as_str(), track_file_edit.version);
 
-        let mut tracking_infos = fastn_core::track::get_tracking_info_(&track_file_path)
+        let mut tracking_infos = fastn_core::track::get_tracking_info_(config, &track_file_path)
             .await?
             .into_iter()
             .map(|v| (v.filename.to_string(), v))
@@ -210,10 +216,12 @@ async fn merge_main_into_cr(
             if file_edit.is_deleted() {
                 continue;
             }
-            let theirs_content_bytes = fastn_core::tokio_fs::read(
-                config.history_path(filename.as_str(), file_edit.version),
-            )
-            .await?;
+            let theirs_content_bytes = config
+                .read_content(
+                    config.history_path(filename.as_str(), file_edit.version),
+                    None,
+                )
+                .await?;
             if sha2::Sha256::digest(&ours_content_bytes)
                 .eq(&sha2::Sha256::digest(theirs_content_bytes))
             {
@@ -257,10 +265,12 @@ async fn merge_main_into_cr(
         }
 
         // try to merge
-        let ancestor_content = if let Ok(content) = fastn_core::tokio_fs::read_to_string(
-            config.history_path(filename.as_str(), track_info.version),
-        )
-        .await
+        let ancestor_content = if let Ok(content) = config
+            .read_to_string(
+                config.history_path(filename.as_str(), track_info.version),
+                None,
+            )
+            .await
         {
             content
         } else {
@@ -274,10 +284,12 @@ async fn merge_main_into_cr(
             continue;
         };
 
-        let theirs_content = fastn_core::tokio_fs::read_to_string(
-            config.history_path(filename.as_str(), file_edit.version),
-        )
-        .await?;
+        let theirs_content = config
+            .read_to_string(
+                config.history_path(filename.as_str(), file_edit.version),
+                None,
+            )
+            .await?;
 
         let ours_content = String::from_utf8(ours_content_bytes.clone())?;
 
@@ -438,10 +450,12 @@ async fn merge_cr_into_main(
         }
         if cr_file_name.eq(&deleted_files) {
             // status for deleted files
-            let cr_deleted_files = fastn_core::tokio_fs::read_to_string(
-                config.history_path(cr_file_name.as_str(), cr_file_edit.version),
-            )
-            .await?;
+            let cr_deleted_files = config
+                .read_to_string(
+                    config.history_path(cr_file_name.as_str(), cr_file_edit.version),
+                    None,
+                )
+                .await?;
             let cr_deleted_list =
                 fastn_core::cr::resolve_cr_deleted(cr_deleted_files.as_str(), src).await?;
 
@@ -494,7 +508,7 @@ async fn merge_cr_into_main(
             }
         }
 
-        let cr_file_content = fastn_core::tokio_fs::read(&cr_file_path).await?;
+        let cr_file_content = config.read_content(&cr_file_path, None).await?;
         let file_edit = if let Some(file_edit) = remote_manifest.get(filename.as_str()) {
             file_edit
         } else {
@@ -528,15 +542,17 @@ async fn merge_cr_into_main(
             }
         };
 
-        let ours_content_bytes = fastn_core::tokio_fs::read(
-            config.history_path(cr_file_path.as_str(), cr_file_edit.version),
-        )
-        .await?;
+        let ours_content_bytes = config
+            .read_content(
+                config.history_path(cr_file_path.as_str(), cr_file_edit.version),
+                None,
+            )
+            .await?;
 
         let track_file_path =
             config.history_path(track_file_path_str.as_str(), track_file_edit.version);
 
-        let mut tracking_infos = fastn_core::track::get_tracking_info_(&track_file_path)
+        let mut tracking_infos = fastn_core::track::get_tracking_info_(config, &track_file_path)
             .await?
             .into_iter()
             .map(|v| (v.filename.to_string(), v))
@@ -555,10 +571,12 @@ async fn merge_cr_into_main(
                     },
                 );
             }
-            let theirs_content_bytes = fastn_core::tokio_fs::read(
-                config.history_path(filename.as_str(), file_edit.version),
-            )
-            .await?;
+            let theirs_content_bytes = config
+                .read_content(
+                    config.history_path(filename.as_str(), file_edit.version),
+                    None,
+                )
+                .await?;
             if !sha2::Sha256::digest(&ours_content_bytes)
                 .eq(&sha2::Sha256::digest(theirs_content_bytes))
             {
@@ -601,10 +619,12 @@ async fn merge_cr_into_main(
             continue;
         }
 
-        let ancestor_content = if let Ok(content) = fastn_core::tokio_fs::read_to_string(
-            config.history_path(filename.as_str(), track_info.version),
-        )
-        .await
+        let ancestor_content = if let Ok(content) = config
+            .read_to_string(
+                config.history_path(filename.as_str(), track_info.version),
+                None,
+            )
+            .await
         {
             content
         } else {
@@ -618,10 +638,12 @@ async fn merge_cr_into_main(
             continue;
         };
 
-        let theirs_content = fastn_core::tokio_fs::read_to_string(
-            config.history_path(filename.as_str(), file_edit.version),
-        )
-        .await?;
+        let theirs_content = config
+            .read_to_string(
+                config.history_path(filename.as_str(), file_edit.version),
+                None,
+            )
+            .await?;
 
         let ours_content = String::from_utf8(ours_content_bytes.clone())?;
 
@@ -695,9 +717,9 @@ async fn add_close_cr_status(
         });
     }
     let cr_about_path = config.history_path(cr_about_path_str.as_str(), cr_about_file_edit.version);
-    let cr_meta_content = fastn_core::tokio_fs::read_to_string(cr_about_path).await?;
+    let cr_meta_content = config.read_to_string(cr_about_path, None).await?;
     let mut cr_about =
-        fastn_core::cr::resolve_cr_meta(cr_meta_content.as_str(), cr, config).await?;
+        fastn_core::cr::resolve_cr_meta(config, cr_meta_content.as_str(), cr).await?;
     cr_about.open = false;
     let cr_close_content = fastn_core::cr::generate_cr_meta_content(&cr_about);
     Ok(fastn_core::sync_utils::FileStatus::Update {

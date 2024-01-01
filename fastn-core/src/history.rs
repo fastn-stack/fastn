@@ -76,7 +76,7 @@ impl FileOperation {
 impl fastn_core::Config {
     pub async fn get_history(&self) -> fastn_core::Result<Vec<FileHistory>> {
         let history_file_path = self.history_file();
-        let history_content = fastn_core::tokio_fs::read_to_string(history_file_path).await?;
+        let history_content = self.read_to_string(history_file_path, None).await?;
         self.to_file_history(history_content.as_str()).await
     }
 
@@ -220,6 +220,7 @@ impl FileHistory {
 }
 
 pub(crate) async fn insert_into_history(
+    ds: &fastn_ds::DocumentStore,
     root: &camino::Utf8PathBuf,
     file_list: &std::collections::BTreeMap<String, fastn_core::history::FileEditTemp>,
     history: &mut Vec<fastn_core::history::FileHistory>,
@@ -231,12 +232,13 @@ pub(crate) async fn insert_into_history(
             .iter_mut()
             .map(|v| (v.filename.to_string(), v.clone()))
             .collect();
-    insert_into_history_(root, file_list, &mut file_history).await?;
+    insert_into_history_(ds, root, file_list, &mut file_history).await?;
     *history = file_history.into_values().collect_vec();
     Ok(())
 }
 
 pub(crate) async fn insert_into_history_(
+    ds: &fastn_ds::DocumentStore,
     root: &camino::Utf8PathBuf,
     file_list: &std::collections::BTreeMap<String, fastn_core::history::FileEditTemp>,
     file_history: &mut std::collections::BTreeMap<String, fastn_core::history::FileHistory>,
@@ -271,15 +273,16 @@ pub(crate) async fn insert_into_history_(
         if !file_op.operation.eq(&FileOperation::Deleted) {
             let new_file_path =
                 remote_state.join(fastn_core::utils::snapshot_id(file, &(version as u128)));
-            let content = fastn_core::tokio_fs::read(root.join(file)).await?;
+            let content = ds.read_content(root.join(file), None).await?;
             fastn_core::utils::update(&new_file_path, content.as_slice()).await?;
         }
     }
 
     let history_ftd = FileHistory::to_ftd(file_history.values().collect_vec().as_slice());
-    tokio::fs::write(
-        root.join(".remote-state").join("history.ftd"),
-        history_ftd.as_str(),
+    ds.write_content(
+        root.join(".remote-state").join("history.ftd").as_str(),
+        history_ftd.as_bytes(),
+        None,
     )
     .await?;
 
