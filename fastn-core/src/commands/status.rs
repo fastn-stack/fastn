@@ -132,8 +132,8 @@ pub(crate) async fn get_file_status(
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
 
-        let content = config.read_content(&doc.get_full_path()).await?;
-        let existing_doc = config.read_content(&path).await?;
+        let content = config.ds.read_content(&doc.get_full_path()).await?;
+        let existing_doc = config.ds.read_content(&path).await?;
         if sha2::Sha256::digest(content).eq(&sha2::Sha256::digest(existing_doc)) {
             return Ok(FileStatus::Uptodate);
         }

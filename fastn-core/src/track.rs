@@ -33,7 +33,7 @@ pub(crate) async fn get_tracking_info_(
         return fastn_core::usage_error(format!("No tracking found for {}", track_path));
     }
 
-    let doc = config.read_to_string(&track_path).await?;
+    let doc = config.ds.read_to_string(&track_path).await?;
     resolve_tracking_info(&doc, track_path).await
 }
 

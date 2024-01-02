@@ -76,7 +76,7 @@ pub async fn resolve_dependencies(
             "Git cloning successful for the package {}",
             package_response.package
         );
-        // Resolve dependencies by reading the FASTN.ftd using config.read()
+        // Resolve dependencies by reading the FASTN.ftd using config.ds.read()
         // Assuming package_name and repo name are identical
         fastn_core::Config::read_current(false).await?;
     } else {

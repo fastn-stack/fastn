@@ -123,7 +123,7 @@ async fn get_changed_files(
                 document.get_base_path(),
                 timestamp,
             );
-            let snapshot_file_content = config.read_content(&snapshot_file_path).await?;
+            let snapshot_file_content = config.ds.read_content(&snapshot_file_path).await?;
             // Update
             let current_file_content = document.get_content();
             if sha2::Sha256::digest(&snapshot_file_content)
@@ -179,8 +179,8 @@ async fn write(
 
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
-        if let Ok(current_doc) = config.read_content(&doc.get_full_path()).await {
-            let existing_doc = config.read_content(&path).await?;
+        if let Ok(current_doc) = config.ds.read_content(&doc.get_full_path()).await {
+            let existing_doc = config.ds.read_content(&path).await?;
 
             if sha2::Sha256::digest(current_doc).eq(&sha2::Sha256::digest(existing_doc)) {
                 return Ok((
