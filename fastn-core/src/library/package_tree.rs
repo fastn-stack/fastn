@@ -73,6 +73,7 @@ async fn insert(
         )
         .await?;
     } else if let Ok(file) = fastn_core::get_file(
+        &config.ds,
         config.package.name.to_string(),
         &config.root.join(full_path),
         &config.root,
@@ -80,7 +81,8 @@ async fn insert(
     .await
     {
         let status =
-            fastn_core::commands::status::get_file_status(&file, snapshots, workspaces).await?;
+            fastn_core::commands::status::get_file_status(config, &file, snapshots, workspaces)
+                .await?;
         node.url = Some(url.to_string());
         node.number = Some(format!("{:?}", status))
     } else {

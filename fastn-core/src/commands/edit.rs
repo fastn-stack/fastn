@@ -35,7 +35,7 @@ pub async fn edit(config: &fastn_core::Config, file: &str, cr: &str) -> fastn_co
     }
 
     if file_path.exists() {
-        let content = fastn_core::tokio_fs::read(&file_path).await?;
+        let content = config.read_content(&file_path).await?;
         fastn_core::utils::update(&cr_file_path, content.as_slice()).await?;
     } else {
         fastn_core::utils::update(&cr_file_path, vec![].as_slice()).await?;

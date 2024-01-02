@@ -5,9 +5,10 @@ pub async fn process(
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let mut ud = Default::default();
-
+    #[cfg(feature = "auth")]
     if let Some(session_id) = req_config.request.cookie(fastn_core::auth::COOKIE_NAME) {
+        let mut ud = Default::default();
+
         if !session_id.is_empty() {
             let session_id: i32 = session_id.parse().map_err(|e| {
                 ftd::interpreter::Error::OtherError(format!("Failed to parse id from string: {e}"))
@@ -24,9 +25,12 @@ pub async fn process(
                 }
             }
         }
+
+        return doc.from_json(&ud, &kind, &value);
     }
 
-    doc.from_json(&ud, &kind, &value)
+    let _ = req_config;
+    doc.from_json::<std::vec::Vec<UserDetails>>(&vec![], &kind, &value)
 }
 
 #[derive(Debug, serde::Serialize, Default)]

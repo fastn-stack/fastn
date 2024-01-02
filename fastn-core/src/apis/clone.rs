@@ -27,8 +27,9 @@ async fn clone_worker(config: &fastn_core::Config) -> fastn_core::Result<CloneRe
             .into_iter()
             .map(|x| {
                 let root = root.clone();
+                let ds = config.ds.clone();
                 tokio::spawn(async move {
-                    fastn_core::tokio_fs::read(&x).await.map(|v| {
+                    ds.read_content(&x).await.map_err(|e| e.into()).map(|v| {
                         (
                             x.strip_prefix(root)
                                 .unwrap_or_else(|_| x.as_path())

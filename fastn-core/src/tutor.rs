@@ -61,20 +61,23 @@ pub(crate) async fn config(
         None => (None, app_data.clone()),
     };
 
-    let config = fastn_core::Config::read(root, false)
-        .await
-        .unwrap()
-        .add_edition(app_data.edition)?
-        .add_external_js(app_data.external_js)
-        .add_inline_js(app_data.inline_js)
-        .add_external_css(app_data.external_css)
-        .add_inline_css(app_data.inline_css);
+    let config = match root {
+        Some(root) => fastn_core::Config::read(fastn_ds::DocumentStore::new(root), false).await,
+        None => fastn_core::Config::read_current(false).await,
+    }
+    .unwrap()
+    .add_edition(app_data.edition)?
+    .add_external_js(app_data.external_js)
+    .add_inline_js(app_data.inline_js)
+    .add_external_css(app_data.external_css)
+    .add_inline_css(app_data.inline_css);
 
     Ok((config, app_data.package_name))
 }
 
 /// tutor-data $processor$
 pub async fn process(
+    config: &fastn_core::Config,
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
@@ -86,9 +89,10 @@ pub async fn process(
     }
 
     let path = dirs::home_dir().unwrap().join(".fastn").join("tutor.json");
-    let fs_state: TutorStateFS = match tokio::fs::read(path.clone()).await {
+    // Todo: Remove unwrap() from path.to_str().unwrap()
+    let fs_state: TutorStateFS = match config.read_content(path.to_str().unwrap()).await {
         Ok(v) => serde_json::from_slice(&v)?,
-        Err(e) => match e.kind() {
+        Err(ftd::interpreter::Error::IOError(e)) => match e.kind() {
             std::io::ErrorKind::NotFound => {
                 println!("not found, using default");
                 TutorStateFS::default()
@@ -101,6 +105,7 @@ pub async fn process(
                 });
             }
         },
+        Err(e) => return Err(e),
     };
 
     let state = TutorState {
