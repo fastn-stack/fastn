@@ -649,7 +649,7 @@ async fn handle_file_(
             }
         }
         fastn_core::File::Static(sa) => {
-            process_static(sa, &config.ds.root(), &config.package).await?
+            process_static(sa, config.ds.root(), &config.package).await?
         }
         fastn_core::File::Markdown(_doc) => {
             // TODO: bring this feature back
@@ -657,7 +657,7 @@ async fn handle_file_(
             return Ok(());
         }
         fastn_core::File::Image(main_doc) => {
-            process_static(main_doc, &config.ds.root(), &config.package).await?;
+            process_static(main_doc, config.ds.root(), &config.package).await?;
         }
         fastn_core::File::Code(doc) => {
             process_static(
@@ -667,7 +667,7 @@ async fn handle_file_(
                     content: doc.content.clone().into_bytes(),
                     base_path: camino::Utf8PathBuf::from(doc.parent_path.as_str()),
                 },
-                &config.ds.root(),
+                config.ds.root(),
                 &config.package,
             )
             .await?;

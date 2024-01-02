@@ -194,7 +194,7 @@ impl fastn_core::Config {
             } else {
                 let content = self
                     .ds
-                    .read_content(self.root.join(workspace_entry.filename.as_str()))
+                    .read_content(self.ds.root().join(workspace_entry.filename.as_str()))
                     .await?;
                 changed_files.push(FileStatus::Add {
                     path: workspace_entry.filename.to_string(),
@@ -221,7 +221,7 @@ impl fastn_core::Config {
 
             let content = self
                 .ds
-                .read_content(self.root.join(workspace_entry.filename.as_str()))
+                .read_content(self.ds.root().join(workspace_entry.filename.as_str()))
                 .await?;
             let history_path = self.history_path(filename.as_str(), version);
             let history_content = self.ds.read_content(history_path).await?;
@@ -349,8 +349,11 @@ impl fastn_core::Config {
                         .merge(&ancestor_content, &ours_content, &theirs_content)
                     {
                         Ok(data) => {
-                            fastn_core::utils::update(self.root.join(filename), data.as_bytes())
-                                .await?;
+                            fastn_core::utils::update(
+                                self.ds.root().join(filename),
+                                data.as_bytes(),
+                            )
+                            .await?;
                             *content = data.as_bytes().to_vec();
                             *version = server_file_edit.version;
                         }

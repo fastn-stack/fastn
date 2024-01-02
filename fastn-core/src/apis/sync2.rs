@@ -309,7 +309,7 @@ pub(crate) async fn do_sync(
 
     fastn_core::history::insert_into_history(
         &config.ds,
-        &config.ds.root(),
+        config.ds.root(),
         &to_be_in_history,
         &mut remote_history,
     )

@@ -30,7 +30,7 @@ impl DocumentStore {
         }
     }
 
-    pub fn root(&self) -> &camino::Utf8Path {
+    pub fn root(&self) -> &camino::Utf8PathBuf {
         &self.root
     }
 

@@ -76,7 +76,7 @@ async fn insert(
         &config.ds,
         config.package.name.to_string(),
         &config.ds.root().join(full_path),
-        &config.ds.root(),
+        config.ds.root(),
     )
     .await
     {

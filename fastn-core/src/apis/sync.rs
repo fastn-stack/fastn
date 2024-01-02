@@ -81,7 +81,7 @@ pub(crate) async fn sync_worker(
     use itertools::Itertools;
 
     // TODO: Need to call at once only
-    let mut snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
+    let mut snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
     let client_snapshots = fastn_core::snapshot::resolve_snapshots(&request.latest_ftd).await?;
     // let latest_ftd = fastn_core::tokio_fs::read_to_string(config.history_dir().join(".latest.ftd")).await?;
     let timestamp = fastn_core::timestamp_nanosecond();
@@ -90,7 +90,7 @@ pub(crate) async fn sync_worker(
         match file {
             SyncRequestFile::Add { path, content } => {
                 // We need to check if, file is already available on server
-                fastn_core::utils::update1(&config.ds.root(), path, content).await?;
+                fastn_core::utils::update1(config.ds.root(), path, content).await?;
 
                 let snapshot_path =
                     fastn_core::utils::history_path(path, config.ds.root().as_str(), &timestamp);
@@ -155,7 +155,7 @@ pub(crate) async fn sync_worker(
                 if let Some(snapshot_timestamp) = snapshots.get(path) {
                     // No conflict case, Only client modified the file
                     if client_snapshot_timestamp.eq(snapshot_timestamp) {
-                        fastn_core::utils::update1(&config.ds.root(), path, content).await?;
+                        fastn_core::utils::update1(config.ds.root(), path, content).await?;
                         let snapshot_path = fastn_core::utils::history_path(
                             path,
                             config.ds.root().as_str(),
@@ -186,12 +186,8 @@ pub(crate) async fn sync_worker(
                             .merge(&ancestor_content, &ours_content, &theirs_content)
                         {
                             Ok(data) => {
-                                fastn_core::utils::update1(
-                                    &config.ds.root(),
-                                    path,
-                                    data.as_bytes(),
-                                )
-                                .await?;
+                                fastn_core::utils::update1(config.ds.root(), path, data.as_bytes())
+                                    .await?;
                                 let snapshot_path = fastn_core::utils::history_path(
                                     path,
                                     config.ds.root().as_str(),

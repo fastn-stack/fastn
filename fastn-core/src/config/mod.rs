@@ -307,11 +307,11 @@ impl Config {
     /// `build_dir` is where the static built files are stored. `fastn build` command creates this
     /// folder and stores its output here.
     pub fn build_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".build")
+        self.ds.root().join(".build")
     }
 
     pub fn clone_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".clone-state")
+        self.ds.root().join(".clone-state")
     }
 
     pub fn workspace_file(&self) -> camino::Utf8PathBuf {
@@ -323,11 +323,11 @@ impl Config {
     }
 
     pub fn cr_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
-        self.root.join(fastn_core::cr::cr_path(cr_number))
+        self.ds.root().join(fastn_core::cr::cr_path(cr_number))
     }
 
     pub fn path_without_root(&self, path: &camino::Utf8PathBuf) -> fastn_core::Result<String> {
-        Ok(path.strip_prefix(&self.root)?.to_string())
+        Ok(path.strip_prefix(self.ds.root())?.to_string())
     }
 
     pub fn cr_deleted_file_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
@@ -355,7 +355,7 @@ impl Config {
             .cr_path(cr_number)
             .join(path)
             .to_string()
-            .replace(self.root.to_string().as_str(), "");
+            .replace(self.ds.root().to_string().as_str(), "");
         let track_path = format!("{}.track", path_without_root);
         self.track_dir().join(track_path)
     }
@@ -382,7 +382,7 @@ impl Config {
     }
 
     pub fn remote_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".remote-state")
+        self.ds.root().join(".remote-state")
     }
 
     pub fn remote_history_dir(&self) -> camino::Utf8PathBuf {
@@ -419,11 +419,11 @@ impl Config {
     /// `.history` file is created or updated by `fastn sync` command only, no one else should edit
     /// anything in it.
     pub fn history_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".history")
+        self.ds.root().join(".history")
     }
 
     pub fn fastn_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".fastn")
+        self.ds.root().join(".fastn")
     }
 
     pub fn conflicted_dir(&self) -> camino::Utf8PathBuf {
@@ -444,14 +444,14 @@ impl Config {
     ///
     /// One `fastn.snapshot` for every file that is currently part of the package.
     pub fn latest_ftd(&self) -> camino::Utf8PathBuf {
-        self.root.join(".history/.latest.ftd")
+        self.ds.root().join(".history/.latest.ftd")
     }
 
     /// track_dir returns the directory where track files are stored. Tracking information as well
     /// is considered part of a package, but it is not downloaded when a package is downloaded as
     /// a dependency of another package.
     pub fn track_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".tracks")
+        self.ds.root().join(".tracks")
     }
 
     /// `is_translation_package()` is a helper to tell you if the current package is a translation
@@ -712,7 +712,7 @@ impl Config {
             // TODO: Unwrap?
             package_fastn_path.parent().unwrap().to_owned()
         } else if package.name.eq(&self.package.name) {
-            self.root.clone()
+            self.ds.root().clone()
         } else {
             self.packages_root.clone().join(package.name.as_str())
         }
@@ -790,7 +790,7 @@ impl Config {
         id: &str,
         package: &fastn_core::Package,
     ) -> fastn_core::Result<fastn_core::File> {
-        let file_name = fastn_core::Config::get_file_name(&self.root, id)?;
+        let file_name = fastn_core::Config::get_file_name(self.ds.root(), id)?;
         self.get_files(package)
             .await?
             .into_iter()
@@ -815,7 +815,7 @@ impl Config {
         let mut file = fastn_core::get_file(
             &self.ds,
             package.name.to_string(),
-            &self.root.join(file_name),
+            &self.ds.root().join(file_name),
             &self.get_root_for_package(&package),
         )
         .await?;
@@ -1389,11 +1389,9 @@ impl Config {
     }
 
     pub async fn read_current(resolve_sitemap: bool) -> fastn_core::Result<fastn_core::Config> {
-        Config::read(
-            fastn_ds::DocumentStore::new(std::env::current_dir()?),
-            resolve_sitemap,
-        )
-        .await
+        let current_dir: camino::Utf8PathBuf =
+            std::env::current_dir()?.canonicalize()?.try_into()?;
+        Config::read(fastn_ds::DocumentStore::new(current_dir), resolve_sitemap).await
     }
 
     /// `read()` is the way to read a Config.
@@ -1410,8 +1408,7 @@ impl Config {
         let package = fastn_core::Package::from_fastn_doc(&ds, &fastn_doc)?;
         let mut config = Config {
             package: package.clone(),
-            packages_root: camino::Utf8PathBuf::from_path_buf(ds.root().join(".packages")).unwrap(), // Todo: Remove unwrap()
-            root: tokio::fs::canonicalize(ds.root()).await?.try_into()?,
+            packages_root: ds.root().join(".packages"), // Todo: Remove unwrap()
             original_directory,
             all_packages: Default::default(),
             global_ids: Default::default(),

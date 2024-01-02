@@ -123,7 +123,7 @@ impl Library {
             lib: &Library,
         ) -> Option<String> {
             let path = lib.config.config.get_root_for_package(package);
-            fastn_core::Config::download_required_file(&lib.config.config.ds.root(), name, package)
+            fastn_core::Config::download_required_file(lib.config.config.ds.root(), name, package)
                 .await
                 .ok()?;
             // Explicit check for the current package.

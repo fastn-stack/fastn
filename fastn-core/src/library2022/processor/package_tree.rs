@@ -6,7 +6,7 @@ pub async fn process(
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     use itertools::Itertools;
     let root = config.get_root_for_package(&config.package);
-    let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root())
+    let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root())
         .await
         .map_err(|_e| ftd::interpreter::Error::ParseError {
             message: "fastn-error: error in package-tree processor `get_latest_snapshots`"
