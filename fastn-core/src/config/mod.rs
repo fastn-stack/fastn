@@ -301,37 +301,27 @@ impl RequestConfig {
 }
 
 impl Config {
-    pub async fn read_content<T: AsRef<str>>(
-        &self,
-        path: T,
-        user_id: Option<u32>,
-    ) -> ftd::interpreter::Result<Vec<u8>> {
-        self.ds.read_content(path, user_id).await
+    pub async fn read_content<T: AsRef<str>>(&self, path: T) -> ftd::interpreter::Result<Vec<u8>> {
+        self.ds.read_content(path).await
     }
 
-    pub async fn read_to_string<T: AsRef<str>>(
-        &self,
-        path: T,
-        user_id: Option<u32>,
-    ) -> ftd::interpreter::Result<String> {
-        self.ds.read_to_string(path, user_id).await
+    pub async fn read_to_string<T: AsRef<str>>(&self, path: T) -> ftd::interpreter::Result<String> {
+        self.ds.read_to_string(path).await
     }
 
     pub async fn write_content<T: AsRef<str>>(
         &self,
         path: T,
         data: &[u8],
-        user_id: Option<u32>,
     ) -> ftd::interpreter::Result<()> {
-        self.ds.write_content(path, data, user_id).await
+        self.ds.write_content(path, data).await
     }
 
     pub async fn read_dir<T: AsRef<str>>(
         &self,
         path: T,
-        user_id: Option<u32>,
     ) -> ftd::interpreter::Result<tokio::fs::ReadDir> {
-        self.ds.read_dir(path, user_id).await
+        self.ds.read_dir(path).await
     }
 
     /// `build_dir` is where the static built files are stored. `fastn build` command creates this

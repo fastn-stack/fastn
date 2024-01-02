@@ -49,7 +49,7 @@ pub async fn create_or_inc(path: &str) -> fastn_core::Result<usize> {
 }*/
 
 async fn _get_without_lock(config: &fastn_core::Config, path: &str) -> fastn_core::Result<usize> {
-    let value = config.read_to_string(path, None).await?;
+    let value = config.read_to_string(path).await?;
     Ok(value.parse()?)
 }
 
@@ -76,7 +76,7 @@ async fn update_get(
         Some(_lock) => {
             let old_value = _get_without_lock(config, path).await?;
             config
-                .write_content(path, (old_value + value).to_string().as_bytes(), None)
+                .write_content(path, (old_value + value).to_string().as_bytes())
                 .await?;
             Ok(_get_without_lock(config, path).await?)
         }
@@ -96,7 +96,7 @@ async fn update_create(
         Some(_lock) => {
             let old_value = _create_without_lock(config, path).await?;
             config
-                .write_content(path, (old_value + value).to_string().as_bytes(), None)
+                .write_content(path, (old_value + value).to_string().as_bytes())
                 .await?;
             Ok(_get_without_lock(config, path).await?)
         }
