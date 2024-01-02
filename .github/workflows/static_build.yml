@@ -1,0 +1,30 @@
+name: Create a new release
+
+on:
+  push:
+    branches:
+      - fix/static_build
+jobs:
+  test-release:
+    name: Build for Linux
+    runs-on: ubuntu-latest
+    container: 
+      image: ekidd/rust-musl-builder
+      volumes:
+        - ${{ github.workspace }}:/home/rust/src
+    env:
+      CARGO_TERM_COLOR: always
+    steps:
+      - uses: actions/checkout@main
+      - name: Build-musl
+        run: |
+          echo "Building static binaries using ekidd/rust-musl-builder"
+          sudo chown rust -R /opt/rust/
+          rustup target add x86_64-unknown-linux-musl
+          RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition" cargo build --release --features=auth
+      - name: run fastn
+        run: ./target/x86_64-unknown-linux-musl/release/fastn --version
+      - name: ls files
+        run: ls target/
+        run: ls target/x86_64-unknown-linux-musl/release/fastn
+        run: file target/x86_64-unknown-linux-musl/release/fastn
