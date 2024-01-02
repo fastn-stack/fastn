@@ -693,8 +693,7 @@ impl Package {
         package.dependencies = deps;
         // package.resolve_system_dependencies()?;
 
-        package.fastn_path =
-            Some(camino::Utf8PathBuf::from_path_buf(ds.root().join("FASTN.ftd")).unwrap()); // todo: Remove unwrap()
+        package.fastn_path = Some(ds.root().join("FASTN.ftd"));
 
         package.redirects = {
             let redirects_temp: Option<redirects::RedirectsTemp> =

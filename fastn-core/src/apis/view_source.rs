@@ -31,7 +31,7 @@ async fn handle_view_source(
 
     match file {
         fastn_core::File::Ftd(_) | fastn_core::File::Markdown(_) | fastn_core::File::Code(_) => {
-            let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
+            let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
             let diff = get_diff(config, &file, &snapshots).await;
             let editor_ftd = fastn_core::package_info_editor(config, file_name.as_str(), diff)?;
             let main_document = fastn_core::Document {

@@ -210,7 +210,8 @@ fn package_info_create_cr(config: &fastn_core::Config) -> fastn_core::Result<Str
 #[allow(dead_code)]
 fn original_package_status(config: &fastn_core::Config) -> fastn_core::Result<String> {
     let path = config
-        .root
+        .ds
+        .root()
         .join("fastn")
         .join("translation")
         .join("original-status.ftd");
@@ -232,7 +233,8 @@ fn original_package_status(config: &fastn_core::Config) -> fastn_core::Result<St
 #[allow(dead_code)]
 fn translation_package_status(config: &fastn_core::Config) -> fastn_core::Result<String> {
     let path = config
-        .root
+        .ds
+        .root()
         .join("fastn")
         .join("translation")
         .join("translation-status.ftd");

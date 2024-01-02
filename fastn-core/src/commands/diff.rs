@@ -3,7 +3,7 @@ pub async fn diff(
     files: Option<Vec<String>>,
     all: bool,
 ) -> fastn_core::Result<()> {
-    let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
+    let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
     let all = all || files.is_some();
     let documents = if let Some(ref files) = files {
         let files = files

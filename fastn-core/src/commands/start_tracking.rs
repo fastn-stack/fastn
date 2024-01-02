@@ -5,7 +5,7 @@ pub async fn start_tracking(
 ) -> fastn_core::Result<()> {
     tokio::fs::create_dir_all(config.track_dir()).await?;
 
-    let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
+    let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
     check(
         config,
         config.ds.root().as_str(),

@@ -348,7 +348,7 @@ pub(crate) fn track_path(id: &str, base_path: &str) -> camino::Utf8PathBuf {
 pub(crate) async fn get_number_of_documents(
     config: &fastn_core::Config,
 ) -> fastn_core::Result<String> {
-    let mut no_of_docs = fastn_core::snapshot::get_latest_snapshots(&config.ds.root())
+    let mut no_of_docs = fastn_core::snapshot::get_latest_snapshots(config.ds.root())
         .await?
         .len()
         .to_string();
@@ -365,7 +365,7 @@ pub(crate) async fn get_current_document_last_modified_on(
     config: &fastn_core::Config,
     document_id: &str,
 ) -> Option<String> {
-    fastn_core::snapshot::get_latest_snapshots(&config.ds.root())
+    fastn_core::snapshot::get_latest_snapshots(config.ds.root())
         .await
         .unwrap_or_default()
         .get(document_id)

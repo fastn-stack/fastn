@@ -111,14 +111,14 @@ pub(crate) async fn edit_worker(
         .get_file_path_and_resolve(request.path.as_str())
         .await
     {
-        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
+        let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
         let workspaces = fastn_core::snapshot::get_workspace(config).await?;
 
         let file = fastn_core::get_file(
             &config.ds,
             config.package.name.to_string(),
             &config.ds.root().join(&path),
-            &config.ds.root(),
+            config.ds.root(),
         )
         .await?;
         let before_update_status =
@@ -145,20 +145,20 @@ pub(crate) async fn edit_worker(
     };
 
     fastn_core::utils::update1(
-        &config.ds.root(),
+        config.ds.root(),
         file_name.as_str(),
         request.value.unwrap_or_default().into_bytes().as_slice(),
     )
     .await?;
 
     if let Some(before_update_status) = before_update_status {
-        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
+        let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
         let workspaces = fastn_core::snapshot::get_workspace(config).await?;
         let file = fastn_core::get_file(
             &config.ds,
             config.package.name.to_string(),
             &config.ds.root().join(&file_name),
-            &config.ds.root(),
+            config.ds.root(),
         )
         .await?;
         let after_update_status =
