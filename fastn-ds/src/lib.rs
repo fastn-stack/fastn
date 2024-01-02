@@ -1,6 +1,6 @@
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
-    root: std::path::PathBuf,
+    root: camino::Utf8PathBuf,
 }
 
 #[derive(thiserror::Error, Debug)]
@@ -24,13 +24,13 @@ pub enum WriteError {
 }
 
 impl DocumentStore {
-    pub fn new<T: AsRef<std::path::Path>>(root: T) -> Self {
+    pub fn new<T: AsRef<camino::Utf8Path>>(root: T) -> Self {
         Self {
             root: root.as_ref().into(),
         }
     }
 
-    pub fn root(&self) -> &std::path::Path {
+    pub fn root(&self) -> &camino::Utf8Path {
         &self.root
     }
 

@@ -39,7 +39,7 @@ pub async fn resolve_conflict(
                 path
             ));
         }
-        fastn_core::utils::update(&config.root.join(path), content).await?;
+        fastn_core::utils::update(&config.ds.root().join(path), content).await?;
     } else if use_theirs {
         let content =
             conflicted_data
@@ -57,7 +57,7 @@ pub async fn resolve_conflict(
                 path
             ));
         }
-        fastn_core::utils::update(&config.root.join(path), content).await?;
+        fastn_core::utils::update(&config.ds.root().join(path), content).await?;
     } else if revive_it {
         let content = conflicted_data
             .ours
@@ -66,13 +66,13 @@ pub async fn resolve_conflict(
             .ok_or(fastn_core::Error::UsageError {
                 message: format!("Can't find content: `{}`", path),
             })?;
-        fastn_core::utils::update(&config.root.join(path), content).await?;
+        fastn_core::utils::update(&config.ds.root().join(path), content).await?;
     } else if delete_it {
         if !(conflicted_data.ours.deleted() || conflicted_data.theirs.deleted()) {
             return fastn_core::usage_error(format!("{} is not in `delete-edit-conflict`", path));
         }
-        if config.root.join(path).exists() {
-            tokio::fs::remove_file(config.root.join(path)).await?;
+        if config.ds.root().join(path).exists() {
+            tokio::fs::remove_file(config.ds.root().join(path)).await?;
         }
     } else if print {
         let content = conflicted_data
@@ -97,7 +97,7 @@ pub async fn resolve_conflict(
         let edited = edit::edit(content).map_err(|e| fastn_core::Error::UsageError {
             message: format!("{}, Help: Use `fastn resolve-conflict --print {}`", e, path,),
         })?;
-        fastn_core::utils::update(&config.root.join(path), edited.as_bytes()).await?;
+        fastn_core::utils::update(&config.ds.root().join(path), edited.as_bytes()).await?;
     }
 
     mark_resolve(config, file_status, delete_it).await?;

@@ -149,7 +149,7 @@ async fn update_current_directory(
                 if status.add_add_conflict() {
                     println!("CloneAddedRemoteAdded: {}", path);
                 } else {
-                    fastn_core::utils::update(&config.root.join(path), content).await?;
+                    fastn_core::utils::update(&config.ds.root().join(path), content).await?;
                 }
             }
             fastn_core::apis::sync2::SyncResponseFile::Update {
@@ -164,12 +164,12 @@ async fn update_current_directory(
                 } else if status.edit_edit_conflict() {
                     println!("Conflict: {}", path);
                 } else {
-                    fastn_core::utils::update(&config.root.join(path), content).await?;
+                    fastn_core::utils::update(&config.ds.root().join(path), content).await?;
                 }
             }
             fastn_core::apis::sync2::SyncResponseFile::Delete { path, .. } => {
-                if config.root.join(path).exists() {
-                    tokio::fs::remove_file(config.root.join(path)).await?;
+                if config.ds.root().join(path).exists() {
+                    tokio::fs::remove_file(config.ds.root().join(path)).await?;
                 }
             }
         }

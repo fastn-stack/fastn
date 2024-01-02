@@ -779,7 +779,7 @@ async fn add_close_cr_status(
             })?;
             let cr_tracking_infos = fastn_core::track::resolve_tracking_info(
                 String::from_utf8(content)?.as_str(),
-                &config.root.join(cr_track_path),
+                &config.ds.root().join(cr_track_path),
             )
             .await?;
             let tracking_info = cr_tracking_infos

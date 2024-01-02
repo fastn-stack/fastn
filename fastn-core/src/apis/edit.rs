@@ -61,7 +61,7 @@ pub(crate) async fn edit_worker(
     request: EditRequest,
 ) -> fastn_core::Result<EditResponse> {
     if request.is_delete() {
-        let path = config.root.join(&request.path);
+        let path = config.ds.root().join(&request.path);
         if path.is_dir() {
             tokio::fs::remove_dir_all(&path).await?;
         } else if path.is_file() {
@@ -90,7 +90,11 @@ pub(crate) async fn edit_worker(
             rename
         };
 
-        tokio::fs::rename(config.root.join(&request.path), config.root.join(new_path)).await?;
+        tokio::fs::rename(
+            config.ds.root().join(&request.path),
+            config.ds.root().join(new_path),
+        )
+        .await?;
 
         // TODO: redirect to renamed file, if folder so it will redirect to renamed folder with
         // index.ftd, if index.ftd does not exists so it will redirected to main project index.ftd
@@ -107,14 +111,14 @@ pub(crate) async fn edit_worker(
         .get_file_path_and_resolve(request.path.as_str())
         .await
     {
-        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
+        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
         let workspaces = fastn_core::snapshot::get_workspace(config).await?;
 
         let file = fastn_core::get_file(
             &config.ds,
             config.package.name.to_string(),
-            &config.root.join(&path),
-            &config.root,
+            &config.ds.root().join(&path),
+            &config.ds.root(),
         )
         .await?;
         let before_update_status =
@@ -141,20 +145,20 @@ pub(crate) async fn edit_worker(
     };
 
     fastn_core::utils::update1(
-        &config.root,
+        &config.ds.root(),
         file_name.as_str(),
         request.value.unwrap_or_default().into_bytes().as_slice(),
     )
     .await?;
 
     if let Some(before_update_status) = before_update_status {
-        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
+        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
         let workspaces = fastn_core::snapshot::get_workspace(config).await?;
         let file = fastn_core::get_file(
             &config.ds,
             config.package.name.to_string(),
-            &config.root.join(&file_name),
-            &config.root,
+            &config.ds.root().join(&file_name),
+            &config.ds.root(),
         )
         .await?;
         let after_update_status =

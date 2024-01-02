@@ -599,7 +599,7 @@ impl Sitemap {
         config: &fastn_core::Config,
     ) -> fastn_core::Result<()> {
         let package_root = config.get_root_for_package(package);
-        let current_package_root = config.root.to_owned();
+        let current_package_root = config.ds.root().to_owned();
         for section in self.sections.iter_mut() {
             resolve_section(section, &package_root, &current_package_root, config).await?;
         }
@@ -621,8 +621,8 @@ impl Sitemap {
                 .await
             {
                 (
-                    Some(config.root.join(file_name.as_str())),
-                    Some(config.root.join(file_name.as_str())),
+                    Some(config.ds.root().join(file_name.as_str())),
+                    Some(config.ds.root().join(file_name.as_str())),
                 )
             } else if crate::http::url_regex()
                 .find(section.get_file_id().as_str())
@@ -691,8 +691,8 @@ impl Sitemap {
                     .await
                 {
                     (
-                        Some(config.root.join(file_name.as_str())),
-                        Some(config.root.join(file_name.as_str())),
+                        Some(config.ds.root().join(file_name.as_str())),
+                        Some(config.ds.root().join(file_name.as_str())),
                     )
                 } else if crate::http::url_regex().find(id.as_str()).is_some() {
                     (None, None)
@@ -747,8 +747,8 @@ impl Sitemap {
                 .await
             {
                 (
-                    Some(config.root.join(file_name.as_str())),
-                    Some(config.root.join(file_name.as_str())),
+                    Some(config.ds.root().join(file_name.as_str())),
+                    Some(config.ds.root().join(file_name.as_str())),
                 )
             } else if toc.get_file_id().trim().is_empty()
                 || crate::http::url_regex()

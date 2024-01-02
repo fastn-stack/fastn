@@ -153,7 +153,7 @@ pub(crate) async fn do_sync(
                     );
                     continue;
                 }
-                fastn_core::utils::update(&config.root.join(path), content).await?;
+                fastn_core::utils::update(&config.ds.root().join(path), content).await?;
                 to_be_in_history.insert(
                     path.to_string(),
                     fastn_core::history::FileEditTemp {
@@ -172,7 +172,7 @@ pub(crate) async fn do_sync(
             } => {
                 if let Some(file_edit) = remote_manifest.get(path) {
                     if file_edit.version.eq(version) {
-                        fastn_core::utils::update(&config.root.join(path), content).await?;
+                        fastn_core::utils::update(&config.ds.root().join(path), content).await?;
                         // TODO: get all data like message, author, src-cr from request
                         to_be_in_history.insert(
                             path.to_string(),
@@ -211,8 +211,11 @@ pub(crate) async fn do_sync(
                             .merge(&ancestor_content, &ours_content, &theirs_content)
                         {
                             Ok(data) => {
-                                fastn_core::utils::update(&config.root.join(path), data.as_bytes())
-                                    .await?;
+                                fastn_core::utils::update(
+                                    &config.ds.root().join(path),
+                                    data.as_bytes(),
+                                )
+                                .await?;
                                 to_be_in_history.insert(
                                     path.to_string(),
                                     fastn_core::history::FileEditTemp {
@@ -287,8 +290,8 @@ pub(crate) async fn do_sync(
                         },
                     );
                 } else {
-                    if config.root.join(path).exists() {
-                        tokio::fs::remove_file(config.root.join(path)).await?;
+                    if config.ds.root().join(path).exists() {
+                        tokio::fs::remove_file(config.ds.root().join(path)).await?;
                     }
                     to_be_in_history.insert(
                         path.to_string(),
@@ -306,7 +309,7 @@ pub(crate) async fn do_sync(
 
     fastn_core::history::insert_into_history(
         &config.ds,
-        &config.root,
+        &config.ds.root(),
         &to_be_in_history,
         &mut remote_history,
     )
@@ -424,7 +427,7 @@ async fn client_current_files(
             );
             continue;
         }
-        let content = config.ds.read_content(config.root.join(path)).await?;
+        let content = config.ds.read_content(config.ds.root().join(path)).await?;
         synced_files.insert(
             path.clone(),
             SyncResponseFile::Add {

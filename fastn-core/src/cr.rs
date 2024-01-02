@@ -329,7 +329,7 @@ pub(crate) async fn cr_clone_file_info(
             let cr_deleted_path = if let Some(version) = workspace_entry.version {
                 config.history_path(workspace_entry.filename.as_str(), version)
             } else {
-                config.root.join(workspace_entry.filename)
+                config.ds.root().join(workspace_entry.filename)
             };
             let cr_deleted_files = config.ds.read_to_string(cr_deleted_path).await?;
             fastn_core::cr::resolve_cr_deleted(cr_deleted_files.as_str(), cr_number)

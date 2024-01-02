@@ -1,14 +1,14 @@
 use std::fmt::Display;
 
 pub async fn status(config: &fastn_core::Config, source: Option<&str>) -> fastn_core::Result<()> {
-    let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
+    let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
     let workspaces = fastn_core::snapshot::get_workspace(config).await?;
     match source {
         Some(source) => {
             file_status(
                 config,
                 config.package.name.clone(),
-                &config.root,
+                &config.ds.root(),
                 source,
                 &snapshots,
                 &workspaces,
@@ -68,7 +68,7 @@ async fn all_status(
     let mut track_status = std::collections::BTreeMap::new();
     for doc in config.get_files(&config.package).await? {
         let status = get_file_status(config, &doc, snapshots, workspaces).await?;
-        let track = get_track_status(config, &doc, snapshots, config.root.as_str()).await?;
+        let track = get_track_status(config, &doc, snapshots, config.ds.root().as_str()).await?;
         if !track.is_empty() {
             track_status.insert(doc.get_id().to_string(), track);
         }

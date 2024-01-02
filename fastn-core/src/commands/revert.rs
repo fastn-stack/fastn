@@ -19,7 +19,7 @@ pub async fn revert(config: &fastn_core::Config, path: &str) -> fastn_core::Resu
 
     if let Some(server_version) = file_status.get_latest_version() {
         let server_path = config.history_path(path, server_version);
-        fastn_core::utils::copy(&server_path, &config.root.join(path)).await?;
+        fastn_core::utils::copy(&server_path, &config.ds.root().join(path)).await?;
         if let Some(workspace_entry) = workspace.get_mut(path) {
             workspace_entry.version = Some(server_version);
             workspace_entry.deleted = None;
@@ -44,22 +44,22 @@ pub async fn revert(config: &fastn_core::Config, path: &str) -> fastn_core::Resu
             .workspace
             .eq(&fastn_core::snapshot::WorkspaceType::CloneEditedRemoteDeleted)
         {
-            if config.root.join(path).exists() {
-                tokio::fs::remove_file(config.root.join(path)).await?;
+            if config.ds.root().join(path).exists() {
+                tokio::fs::remove_file(config.ds.root().join(path)).await?;
             }
         } else {
             let revert_path =
-                fastn_core::utils::history_path(path, config.root.as_str(), &workspace.conflicted);
-            tokio::fs::copy(revert_path, config.root.join(path)).await?;
+                fastn_core::utils::history_path(path, config.ds.root().as_str(), &workspace.conflicted);
+            tokio::fs::copy(revert_path, config.ds.root().join(path)).await?;
         }
         workspace.set_revert();
     } else {
-        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
+        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
         if let Some(timestamp) = snapshots.get(path) {
-            let revert_path = fastn_core::utils::history_path(path, config.root.as_str(), timestamp);
+            let revert_path = fastn_core::utils::history_path(path, config.ds.root().as_str(), timestamp);
 
             fastn_core::utils::update1(
-                &config.root,
+                &config.ds.root(),
                 path,
                 fastn_core::tokio_fs::read(revert_path).await?.as_slice(),
             )
