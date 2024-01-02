@@ -92,7 +92,7 @@ pub async fn process(
     // Todo: Remove unwrap() from path.to_str().unwrap()
     let fs_state: TutorStateFS = match config.ds.read_content(path.to_str().unwrap()).await {
         Ok(v) => serde_json::from_slice(&v)?,
-        Err(ftd::interpreter::Error::IOError(e)) => match e.kind() {
+        Err(fastn_ds::ReadError::IOError(e)) => match e.kind() {
             std::io::ErrorKind::NotFound => {
                 println!("not found, using default");
                 TutorStateFS::default()
@@ -105,7 +105,6 @@ pub async fn process(
                 });
             }
         },
-        Err(e) => return Err(e),
     };
 
     let state = TutorState {
