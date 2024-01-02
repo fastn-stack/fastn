@@ -306,6 +306,7 @@ impl Library2 {
                     new_name.as_str(),
                     None,
                     lib.config.config.package.name.as_str(),
+                    &lib.config.config.ds,
                 )
                 .await
                 .ok()?;

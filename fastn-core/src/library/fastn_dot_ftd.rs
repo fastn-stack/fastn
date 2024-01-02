@@ -537,9 +537,11 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         {
             if let Ok(translation_status) =
                 fastn_core::commands::translation_status::get_translation_status(
+                    &lib.config.config,
                     &original_snapshots,
                     &lib.config.config.root,
                 )
+                .await
             {
                 let mut never_marked_files = "".to_string();
                 let mut missing_files = "".to_string();

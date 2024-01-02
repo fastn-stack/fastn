@@ -35,12 +35,14 @@ pub async fn upload() -> Result<(), UploadError> {
             "Run `fastn build` to create a .build directory before running this".to_string(),
         ));
     }
+    let ds = fastn_ds::DocumentStore::new(std::env::current_dir()?);
 
     let cw_id_path = fastn_cloud::utils::cw_id();
     if !cw_id_path.exists() {
         return Err(UploadError::CwIdNotFound);
     }
-    let cw_id = tokio::fs::read_to_string(cw_id_path.as_path())
+    let cw_id = ds
+        .read_to_string(cw_id_path.as_path())
         .await
         .map_err(|_e| UploadError::CwIdReadError)?;
 
@@ -49,11 +51,12 @@ pub async fn upload() -> Result<(), UploadError> {
         return Err(UploadError::SidNotFound);
     }
 
-    let sid = tokio::fs::read_to_string(sid_path.as_path())
+    let sid = ds
+        .read_to_string(sid_path.as_path())
         .await
         .map_err(|_e| UploadError::SidReadError)?;
 
-    fastn_cloud::upload::upload(build_dir.as_path(), sid.trim(), cw_id.trim()).await?;
+    fastn_cloud::upload::upload(&ds, build_dir.as_path(), sid.trim(), cw_id.trim()).await?;
     println!("publish-static upload done");
     Ok(())
 }

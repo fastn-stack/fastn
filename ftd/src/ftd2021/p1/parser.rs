@@ -1,4 +1,4 @@
-pub use ftd::ftd2021::p1::{Error, Header, Result, Section, SubSection, SubSections};
+pub use ftd::ftd2021::p1::{Result, Section, SubSection};
 
 #[derive(Debug)]
 enum ParsingState {

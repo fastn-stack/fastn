@@ -761,7 +761,8 @@ async fn get_documents_for_current_package(
                     config.package.name.to_string()
                 };
                 let mut file =
-                    fastn_core::get_file(package_name, doc_path, config.root.as_path()).await?;
+                    fastn_core::get_file(&config.ds, package_name, doc_path, config.root.as_path())
+                        .await?;
                 if let Some(ref url) = url {
                     let url = url.replace("/index.html", "");
                     let extension = if matches!(file, fastn_core::File::Markdown(_)) {

@@ -8,7 +8,7 @@ repository.workspace = true
 homepage.workspace = true
 
 [features]
-default = ["auth"]
+default = []
 # fastn comes with some feature to integrate with fastn controller. fastn controller is a
 # separate software, optional. fastn controller is responsible for creating a new fastn
 # package, and deploying it on some server, backing content up and so on. fastn has to
@@ -26,28 +26,28 @@ controller = ["remote"]
 # is created for every user, and local edits in the workspace is allowed.
 remote = []
 
-auth = ["github-auth"]
-github-auth = ["dep:oauth2"]
+auth = ["oauth2", "diesel", "diesel_migrations", "diesel-async", "lettre"]
 
 [dependencies]
 actix-web.workspace = true
-antidote.workspace = true
+chrono.workspace = true
 argon2.workspace = true
+antidote.workspace = true
 async-lock.workspace = true
 async-recursion.workspace = true
 camino.workspace = true
-chrono.workspace = true
 clap.workspace = true
 colored.workspace = true
 deadpool-postgres.workspace = true
-diesel-async.workspace = true
-diesel.workspace = true
-diesel_migrations.workspace = true
+diesel-async = { workspace = true, optional = true }
+diesel = { workspace = true, optional = true }
+diesel_migrations = { workspace = true, optional = true }
 diffy.workspace = true
 dirs.workspace = true
 edit.workspace = true
 env_logger.workspace = true
 fastn-js.workspace = true
+fastn-ds.workspace = true
 fastn-observer.workspace = true
 fastn-package.workspace = true
 fluent.workspace = true
@@ -60,8 +60,7 @@ ignore.workspace = true
 indoc.workspace = true
 intl-memoizer.workspace = true
 itertools.workspace = true
-lettre.workspace = true
-magic-crypt.workspace = true
+lettre = { workspace = true, optional = true }
 mime_guess.workspace = true
 native-tls.workspace = true
 notify.workspace = true
@@ -91,4 +90,3 @@ zip.workspace = true
 fbt-lib.workspace = true
 indoc.workspace = true
 pretty_assertions.workspace = true
-rusty-hook.workspace = true

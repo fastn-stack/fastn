@@ -1,6 +1,6 @@
 [package]
 name = "fastn"
-version = "0.4.31"
+version = "0.4.33"
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -21,7 +21,8 @@ tokio.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
 dotenvy.workspace = true
+fastn-ds.workspace = true
 
 
 [features]
-remote = ["fastn-core/remote"]
+auth = ["fastn-core/auth"]

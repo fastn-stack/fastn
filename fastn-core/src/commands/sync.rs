@@ -14,8 +14,13 @@ pub async fn sync(
             .iter()
             .map(|x| config.root.join(x))
             .collect::<Vec<camino::Utf8PathBuf>>();
-        fastn_core::paths_to_files(config.package.name.as_str(), files, config.root.as_path())
-            .await?
+        fastn_core::paths_to_files(
+            &config.ds,
+            config.package.name.as_str(),
+            files,
+            config.root.as_path(),
+        )
+        .await?
     } else {
         config.get_files(&config.package).await?
     };
@@ -24,7 +29,8 @@ pub async fn sync(
 
     let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
 
-    let latest_ftd = fastn_core::tokio_fs::read_to_string(config.history_dir().join(".latest.ftd"))
+    let latest_ftd = config
+        .read_to_string(config.history_dir().join(".latest.ftd"))
         .await
         .unwrap_or_else(|_| "".to_string());
 
@@ -46,7 +52,7 @@ pub async fn sync(
         let mut modified_files = vec![];
         let mut new_snapshots = vec![];
         for doc in documents {
-            let (snapshot, is_modified) = write(&doc, timestamp, &snapshots).await?;
+            let (snapshot, is_modified) = write(config, &doc, timestamp, &snapshots).await?;
             if is_modified {
                 modified_files.push(snapshot.filename.to_string());
             }
@@ -117,7 +123,7 @@ async fn get_changed_files(
                 document.get_base_path(),
                 timestamp,
             );
-            let snapshot_file_content = fastn_core::tokio_fs::read(&snapshot_file_path).await?;
+            let snapshot_file_content = config.read_content(&snapshot_file_path).await?;
             // Update
             let current_file_content = document.get_content();
             if sha2::Sha256::digest(&snapshot_file_content)
@@ -156,6 +162,7 @@ async fn get_changed_files(
 }
 
 async fn write(
+    config: &fastn_core::Config,
     doc: &fastn_core::File,
     timestamp: u128,
     snapshots: &std::collections::BTreeMap<String, u128>,
@@ -172,8 +179,8 @@ async fn write(
 
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
-        if let Ok(current_doc) = fastn_core::tokio_fs::read(&doc.get_full_path()).await {
-            let existing_doc = fastn_core::tokio_fs::read(&path).await?;
+        if let Ok(current_doc) = config.read_content(&doc.get_full_path()).await {
+            let existing_doc = config.read_content(&path).await?;
 
             if sha2::Sha256::digest(current_doc).eq(&sha2::Sha256::digest(existing_doc)) {
                 return Ok((

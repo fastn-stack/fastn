@@ -11,7 +11,7 @@ pub async fn handle_command(matches: &clap::ArgMatches) -> fastn_core::Result<()
     use fastn_core::utils::ValueOf;
 
     sync_status(
-        &fastn_core::Config::read(None, true).await?,
+        &fastn_core::Config::read_current(true).await?,
         matches.value_of_("file"), // TODO: handle multiple files
     )
     .await

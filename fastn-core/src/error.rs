@@ -104,6 +104,7 @@ pub enum Error {
     #[error("DatabaseError: {message}")]
     DatabaseError { message: String },
 
+    #[cfg(feature = "auth")]
     #[error("DatabaseQueryError: {}", _0)]
     DatabaseQueryError(#[from] diesel::result::Error),
 

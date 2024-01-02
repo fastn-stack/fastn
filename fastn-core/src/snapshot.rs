@@ -151,6 +151,6 @@ pub(crate) async fn get_workspace(
         return Ok(Default::default());
     }
 
-    let doc = fastn_core::tokio_fs::read_to_string(&latest_file_path).await?;
+    let doc = config.read_to_string(&latest_file_path).await?;
     resolve_workspace(&doc).await
 }
