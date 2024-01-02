@@ -44,13 +44,10 @@ impl DocumentStore {
     }
 
     pub async fn read_to_string<T: AsRef<str>>(&self, path: T) -> Result<String, ReadStringError> {
-        use tokio::io::AsyncReadExt;
-
-        let path = path.as_ref();
-        let mut file = tokio::fs::File::open(self.root.join(path)).await?;
-        let mut contents = String::new();
-        file.read_to_string(&mut contents).await?;
-        Ok(contents)
+        self.read_content(path)
+            .await
+            .map_err(ReadStringError::ReadError)
+            .and_then(|v| String::from_utf8(v).map_err(ReadStringError::UTF8Error))
     }
 
     pub async fn write_content<T: AsRef<str>>(
