@@ -25,6 +25,7 @@ jobs:
       - name: run fastn
         run: ./target/x86_64-unknown-linux-musl/release/fastn --version
       - name: ls files
-        run: ls target/
-        run: ls target/x86_64-unknown-linux-musl/release/fastn
-        run: file target/x86_64-unknown-linux-musl/release/fastn
+        run: |
+          ls target/
+          ls target/x86_64-unknown-linux-musl/release/fastn
+          file target/x86_64-unknown-linux-musl/release/fastn
