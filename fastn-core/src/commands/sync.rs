@@ -30,6 +30,7 @@ pub async fn sync(
     let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
 
     let latest_ftd = config
+        .ds
         .read_to_string(config.history_dir().join(".latest.ftd"))
         .await
         .unwrap_or_else(|_| "".to_string());

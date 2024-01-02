@@ -153,6 +153,7 @@ async fn merge_main_into_cr(
         };
 
         let ours_content_bytes = config
+            .ds
             .read_content(config.history_path(cr_file_path.as_str(), cr_file_edit.version))
             .await?;
 
@@ -167,6 +168,7 @@ async fn merge_main_into_cr(
                     continue;
                 }
                 let theirs_content_bytes = config
+                    .ds
                     .read_content(config.history_path(filename.as_str(), file_edit.version))
                     .await?;
                 if sha2::Sha256::digest(&ours_content_bytes)
@@ -209,6 +211,7 @@ async fn merge_main_into_cr(
                 continue;
             }
             let theirs_content_bytes = config
+                .ds
                 .read_content(config.history_path(filename.as_str(), file_edit.version))
                 .await?;
             if sha2::Sha256::digest(&ours_content_bytes)
@@ -526,6 +529,7 @@ async fn merge_cr_into_main(
         };
 
         let ours_content_bytes = config
+            .ds
             .read_content(config.history_path(cr_file_path.as_str(), cr_file_edit.version))
             .await?;
 
@@ -552,6 +556,7 @@ async fn merge_cr_into_main(
                 );
             }
             let theirs_content_bytes = config
+                .ds
                 .read_content(config.history_path(filename.as_str(), file_edit.version))
                 .await?;
             if !sha2::Sha256::digest(&ours_content_bytes)

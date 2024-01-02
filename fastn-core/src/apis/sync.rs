@@ -362,6 +362,7 @@ async fn clone_history_files(
             .collect_vec();
         for (_, path) in history_paths {
             let content = config
+                .ds
                 .read_content(config.history_dir().join(&path))
                 .await?;
             dot_history.push(File { path, content });
