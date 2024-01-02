@@ -7,11 +7,15 @@ pub async fn abort_merge(config: &fastn_core::Config, path: &str) -> fastn_core:
             .workspace
             .eq(&fastn_core::snapshot::WorkspaceType::CloneDeletedRemoteEdited)
         {
-            if config.root.join(path).exists() {
-                tokio::fs::remove_file(config.root.join(path)).await?;
+            if config.ds.root().join(path).exists() {
+                tokio::fs::remove_file(config.ds.root().join(path)).await?;
             }
         } else {
-            tokio::fs::copy(config.conflicted_dir().join(path), config.root.join(path)).await?;
+            tokio::fs::copy(
+                config.conflicted_dir().join(path),
+                config.ds.root().join(path),
+            )
+            .await?;
         }
         workspace.set_abort();
     }

@@ -3,7 +3,7 @@ pub const BUILD_FOLDER: &str = ".build";
 pub const IGNORED_DIRECTORIES: [&str; 4] = ["-", "images", "static", "assets"];
 
 pub async fn post_build_check(config: &fastn_core::Config) -> fastn_core::Result<()> {
-    let build_path = config.root.join(BUILD_FOLDER);
+    let build_path = config.ds.root().join(BUILD_FOLDER);
     let build_directory = build_path.as_str().to_string();
     println!("Post build index assertion started ...");
 

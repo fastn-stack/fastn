@@ -31,7 +31,6 @@ pub struct Config {
     // Global Information
     pub ds: fastn_ds::DocumentStore,
     pub package: fastn_core::Package,
-    pub root: camino::Utf8PathBuf,
     pub packages_root: camino::Utf8PathBuf,
     pub original_directory: camino::Utf8PathBuf,
     pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, fastn_core::Package>>,
@@ -181,7 +180,7 @@ impl RequestConfig {
             let file = fastn_core::get_file(
                 &self.config.ds,
                 package.name.to_string(),
-                &self.config.root.join(file_name),
+                &self.config.ds.root().join(file_name),
                 &self.config.get_root_for_package(&package),
             )
             .await?;
@@ -200,7 +199,11 @@ impl RequestConfig {
             let mut file = fastn_core::get_file(
                 &self.config.ds,
                 package.name.to_string(),
-                &self.config.root.join(file_name.trim_start_matches('/')),
+                &self
+                    .config
+                    .ds
+                    .root()
+                    .join(file_name.trim_start_matches('/')),
                 &self.config.get_root_for_package(&package),
             )
             .await?;

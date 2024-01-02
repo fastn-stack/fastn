@@ -21,7 +21,7 @@ pub async fn process(
             }
         };
 
-    let sqlite_database_path = req_config.config.root.join(sqlite_database.as_str());
+    let sqlite_database_path = req_config.config.ds.root().join(sqlite_database.as_str());
 
     if !sqlite_database_path.exists() {
         return ftd::interpreter::utils::e2(

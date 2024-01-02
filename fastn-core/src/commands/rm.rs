@@ -29,7 +29,7 @@ async fn simple_rm(config: &fastn_core::Config, file: &str) -> fastn_core::Resul
 
     if let Some(workspace_entry) = workspace.get_mut(file) {
         workspace_entry.set_deleted();
-        let path = config.root.join(&workspace_entry.filename);
+        let path = config.ds.root().join(&workspace_entry.filename);
         if path.exists() {
             tokio::fs::remove_file(path).await?;
         }

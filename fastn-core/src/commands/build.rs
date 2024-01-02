@@ -11,7 +11,7 @@ pub async fn build(
 
     // Default css and js
     default_build_files(
-        config.root.join(".build"),
+        config.ds.root().join(".build"),
         &config.ftd_edition,
         &config.package.name,
     )
@@ -49,7 +49,7 @@ pub async fn build(
                 format!("{}/index.html", redirect_from.trim_matches('/'))
             };
 
-            let save_path = config.root.join(".build").join(save_file.as_str());
+            let save_path = config.ds.root().join(".build").join(save_file.as_str());
             fastn_core::utils::update(save_path, content.as_bytes())
                 .await
                 .ok();
@@ -583,8 +583,8 @@ async fn handle_file_(
             }
 
             fastn_core::utils::copy(
-                config.root.join(doc.id.as_str()),
-                config.root.join(".build").join(doc.id.as_str()),
+                config.ds.root().join(doc.id.as_str()),
+                config.ds.root().join(".build").join(doc.id.as_str()),
             )
             .await
             .ok();
@@ -648,14 +648,16 @@ async fn handle_file_(
                 }
             }
         }
-        fastn_core::File::Static(sa) => process_static(sa, &config.root, &config.package).await?,
+        fastn_core::File::Static(sa) => {
+            process_static(sa, &config.ds.root(), &config.package).await?
+        }
         fastn_core::File::Markdown(_doc) => {
             // TODO: bring this feature back
             print!("Skipped ");
             return Ok(());
         }
         fastn_core::File::Image(main_doc) => {
-            process_static(main_doc, &config.root, &config.package).await?;
+            process_static(main_doc, &config.ds.root(), &config.package).await?;
         }
         fastn_core::File::Code(doc) => {
             process_static(
@@ -665,7 +667,7 @@ async fn handle_file_(
                     content: doc.content.clone().into_bytes(),
                     base_path: camino::Utf8PathBuf::from(doc.parent_path.as_str()),
                 },
-                &config.root,
+                &config.ds.root(),
                 &config.package,
             )
             .await?;
@@ -760,9 +762,13 @@ async fn get_documents_for_current_package(
                 } else {
                     config.package.name.to_string()
                 };
-                let mut file =
-                    fastn_core::get_file(&config.ds, package_name, doc_path, config.root.as_path())
-                        .await?;
+                let mut file = fastn_core::get_file(
+                    &config.ds,
+                    package_name,
+                    doc_path,
+                    config.ds.root().as_path(),
+                )
+                .await?;
                 if let Some(ref url) = url {
                     let url = url.replace("/index.html", "");
                     let extension = if matches!(file, fastn_core::File::Markdown(_)) {

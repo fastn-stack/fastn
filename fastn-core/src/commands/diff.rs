@@ -3,18 +3,18 @@ pub async fn diff(
     files: Option<Vec<String>>,
     all: bool,
 ) -> fastn_core::Result<()> {
-    let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
+    let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
     let all = all || files.is_some();
     let documents = if let Some(ref files) = files {
         let files = files
             .iter()
-            .map(|x| config.root.join(x))
+            .map(|x| config.ds.root().join(x))
             .collect::<Vec<camino::Utf8PathBuf>>();
         fastn_core::paths_to_files(
             &config.ds,
             config.package.name.as_str(),
             files,
-            config.root.as_path(),
+            config.ds.root().as_path(),
         )
         .await?
     } else {
@@ -26,7 +26,7 @@ pub async fn diff(
             println!("{}", diff);
         }
         if all {
-            get_track_diff(config, &doc, &snapshots, config.root.as_str()).await?;
+            get_track_diff(config, &doc, &snapshots, config.ds.root().as_str()).await?;
         }
     }
     Ok(())

@@ -23,9 +23,9 @@ async fn mark_upto_date_translation(
             ),
         });
     }
-    let file_path = fastn_core::utils::track_path(who, config.root.as_str());
+    let file_path = fastn_core::utils::track_path(who, config.ds.root().as_str());
     let mut tracks =
-        fastn_core::tracker::get_tracks(config, config.root.as_str(), &file_path).await?;
+        fastn_core::tracker::get_tracks(config, config.ds.root().as_str(), &file_path).await?;
 
     let original_snapshot =
         fastn_core::snapshot::get_latest_snapshots(&config.original_path()?).await?;
@@ -40,7 +40,7 @@ async fn mark_upto_date_translation(
     if let Some(track) = tracks.get_mut(who) {
         track.last_merged_version = Some(*original_timestamp);
     } else {
-        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
+        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
         let self_timestamp = match snapshots.get(who) {
             Some(timestamp) => timestamp,
             _ => {
@@ -73,12 +73,12 @@ async fn mark_upto_date_simple(
     whom: Option<&str>,
     config: &fastn_core::Config,
 ) -> fastn_core::Result<()> {
-    let file_path = fastn_core::utils::track_path(who, config.root.as_str());
+    let file_path = fastn_core::utils::track_path(who, config.ds.root().as_str());
     let mut tracks =
-        fastn_core::tracker::get_tracks(config, config.root.as_str(), &file_path).await?;
+        fastn_core::tracker::get_tracks(config, config.ds.root().as_str(), &file_path).await?;
     if let Some(whom) = whom {
         return if let Some(track) = tracks.get_mut(whom) {
-            let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
+            let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
             if let Some(timestamp) = snapshots.get(whom) {
                 track.other_timestamp = Some(*timestamp);
                 write(&file_path, &tracks).await?;
