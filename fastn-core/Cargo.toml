@@ -26,16 +26,18 @@ controller = ["remote"]
 # is created for every user, and local edits in the workspace is allowed.
 remote = []
 
-auth = ["oauth2", "diesel", "diesel_migrations", "diesel-async", "lettre"]
+auth = ["oauth2", "diesel", "diesel_migrations", "diesel-async", "lettre", "argon2"]
 
 [dependencies]
 actix-web.workspace = true
 chrono.workspace = true
 argon2.workspace = true
 antidote.workspace = true
+argon2 = { workspace = true, optional = true }
 async-lock.workspace = true
 async-recursion.workspace = true
 camino.workspace = true
+chrono.workspace = true
 clap.workspace = true
 colored.workspace = true
 deadpool-postgres.workspace = true

@@ -8,18 +8,12 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-#rquickjs = { workspace = true, optional = true }
 pretty.workspace = true
 itertools.workspace = true
 indoc.workspace = true
 fastn-grammar.workspace = true
 prettify-js.workspace = true
 camino.workspace = true
-
-[target.'cfg(not(windows))'.dependencies]
-quick-js.workspace = true
-
-[target.'cfg(windows)'.dependencies]
 rquickjs.workspace = true
 
 [dev-dependencies]
