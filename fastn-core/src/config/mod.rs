@@ -301,29 +301,6 @@ impl RequestConfig {
 }
 
 impl Config {
-    pub async fn read_content<T: AsRef<str>>(&self, path: T) -> ftd::interpreter::Result<Vec<u8>> {
-        self.ds.read_content(path).await
-    }
-
-    pub async fn read_to_string<T: AsRef<str>>(&self, path: T) -> ftd::interpreter::Result<String> {
-        self.ds.read_to_string(path).await
-    }
-
-    pub async fn write_content<T: AsRef<str>>(
-        &self,
-        path: T,
-        data: &[u8],
-    ) -> ftd::interpreter::Result<()> {
-        self.ds.write_content(path, data).await
-    }
-
-    pub async fn read_dir<T: AsRef<str>>(
-        &self,
-        path: T,
-    ) -> ftd::interpreter::Result<tokio::fs::ReadDir> {
-        self.ds.read_dir(path).await
-    }
-
     /// `build_dir` is where the static built files are stored. `fastn build` command creates this
     /// folder and stores its output here.
     pub fn build_dir(&self) -> camino::Utf8PathBuf {
@@ -1430,8 +1407,8 @@ impl Config {
         let package = fastn_core::Package::from_fastn_doc(&ds, &fastn_doc)?;
         let mut config = Config {
             package: package.clone(),
-            packages_root: camino::Utf8PathBuf::from_path_buf(ds.root.join(".packages")).unwrap(), // Todo: Remove unwrap()
-            root: tokio::fs::canonicalize(&ds.root).await?.try_into()?,
+            packages_root: camino::Utf8PathBuf::from_path_buf(ds.root().join(".packages")).unwrap(), // Todo: Remove unwrap()
+            root: tokio::fs::canonicalize(ds.root()).await?.try_into()?,
             original_directory,
             all_packages: Default::default(),
             global_ids: Default::default(),

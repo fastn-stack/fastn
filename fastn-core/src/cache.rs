@@ -76,7 +76,7 @@ async fn update_get(
         Some(_lock) => {
             let old_value = _get_without_lock(config, path).await?;
             config
-                .write_content(path, (old_value + value).to_string().as_bytes())
+                .write_content(path, (old_value + value).to_string().into())
                 .await?;
             Ok(_get_without_lock(config, path).await?)
         }
@@ -96,7 +96,7 @@ async fn update_create(
         Some(_lock) => {
             let old_value = _create_without_lock(config, path).await?;
             config
-                .write_content(path, (old_value + value).to_string().as_bytes())
+                .write_content(path, (old_value + value).to_string().into())
                 .await?;
             Ok(_get_without_lock(config, path).await?)
         }
