@@ -10,4 +10,4 @@ homepage.workspace = true
 
 [dependencies]
 tokio.workspace = true
-ftd.workspace = true
+thiserror.workspace = true
