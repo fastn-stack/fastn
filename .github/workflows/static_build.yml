@@ -17,6 +17,10 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --features=auth
+          args: >
+            --config 'target.x86_64-pc-windows-msvc.pq.rustc-link-search = ["C:\\Program Files\\PostgreSQL\\14\\lib"]' 
+            --config 'target.x86_64-pc-windows-msvc.pq.rustc-link-lib = ["libpq"]' 
+            --release 
+            --features=auth
       - name: run fastn
         run: ./target/release/fastn.exe --version
