@@ -1,0 +1,13 @@
+-- import: fastn/processors as pr
+
+-- record test-data:
+string data:
+integer id:
+
+-- test-data d:
+$processor$: pr.sql
+
+SELECT * FROM test WHERE id = 1;
+
+-- ftd.text: $d.data
+color: red
