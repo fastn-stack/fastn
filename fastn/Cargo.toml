@@ -12,6 +12,7 @@ clap.workspace = true
 colored.workspace = true
 fastn-cloud.workspace = true
 fastn-observer.workspace = true
+fastn-update.workspace = true
 fastn-core.workspace = true
 futures.workspace = true
 reqwest.workspace = true

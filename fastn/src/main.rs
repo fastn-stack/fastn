@@ -119,7 +119,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     }
 
     if matches.subcommand_matches("update").is_some() {
-        return fastn_core::update(&config).await;
+        return fastn_update::update(&config).await;
     }
 
     if let Some(edit) = matches.subcommand_matches("edit") {

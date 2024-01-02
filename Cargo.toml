@@ -10,7 +10,8 @@ members = [
     "fastn-grammar",
     "fastn-lang",
     "foo",
-    "fastn-ds",
+    "fastn-ds", 
+    "fastn-update",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
@@ -87,6 +88,7 @@ enum-iterator = "0.6"
 enum-iterator-derive = "0.6"
 fastn-cloud = { path = "fastn-cloud" }
 fastn-ds = { path = "fastn-ds" }
+fastn-update = { path = "fastn-update" }
 fastn-core = { path = "fastn-core" }
 fastn-issues = { path = "fastn-issues" }
 fastn-package = { path = "fastn-package" }
