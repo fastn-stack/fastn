@@ -15,7 +15,7 @@ jobs:
       - name: Build-musl
         run: |
           echo "Building static binaries using ekidd/rust-musl-builder"
-          docker build -t fastn-build-image .github/
+          docker build -t fastn-build-image -f .github/Dockerfile .
           docker run --name fastn-build fastn-build-image
           mkdir -p out
           docker cp fastn-build:/home/rust/src/target/x86_64-unknown-linux-musl/release/fastn out/
