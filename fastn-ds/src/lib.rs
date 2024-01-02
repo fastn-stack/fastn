@@ -64,6 +64,6 @@ impl DocumentStore {
 
     pub async fn read_dir<T: AsRef<str>>(&self, path: T) -> std::io::Result<tokio::fs::ReadDir> {
         // Todo: Return type should be ftd::interpreter::Result<Vec<fastn_ds::Dir>> not ftd::interpreter::Result<tokio::fs::ReadDir>
-        Ok(tokio::fs::read_dir(path.as_ref()).await?)
+        tokio::fs::read_dir(path.as_ref()).await
     }
 }
