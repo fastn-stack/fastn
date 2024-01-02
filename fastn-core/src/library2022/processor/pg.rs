@@ -61,7 +61,7 @@ async fn create_pool(
 
     if let Ok(cert) = std::env::var("FASTN_PG_CERTIFICATE") {
         // TODO: This does not work with Heroku certificate.
-        let cert = req_config.config.read_content(cert, None).await.unwrap();
+        let cert = req_config.config.read_content(cert).await.unwrap();
         // TODO: We should allow DER formatted certificates too, maybe based on file extension?
         let cert = native_tls::Certificate::from_pem(&cert).unwrap();
         connector.add_root_certificate(cert);

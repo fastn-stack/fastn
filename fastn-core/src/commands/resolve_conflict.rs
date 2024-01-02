@@ -183,7 +183,7 @@ async fn get_conflict_data(
                 return fastn_core::usage_error(format!("`{}` is not in conflict state", path));
             };
             let history_path = config.history_path(path, remote_version);
-            let history_content = config.read_content(history_path, None).await?;
+            let history_content = config.read_content(history_path).await?;
             /* if let Ok(theirs_string) = String::from_utf8(history_content.to_vec()) {
                 let ours_string = String::from_utf8(content.to_vec())?;
                 let patch = diffy::create_patch(ours_string.as_str(), theirs_string.as_str());
@@ -235,11 +235,11 @@ async fn get_conflict_data(
                 ));
             }
             let theirs_path = config.history_path(path, remote_version);
-            let theirs_content = config.read_content(theirs_path, None).await?;
+            let theirs_content = config.read_content(theirs_path).await?;
             if let Ok(theirs_string) = String::from_utf8(theirs_content.to_vec()) {
                 let ours_string = String::from_utf8(content.to_vec())?;
                 let ancestor_path = config.history_path(path, *version);
-                let ancestor_content = config.read_content(ancestor_path, None).await?;
+                let ancestor_content = config.read_content(ancestor_path).await?;
                 let ancestor_string = String::from_utf8(ancestor_content)?;
                 match diffy::MergeOptions::new()
                     .set_conflict_style(diffy::ConflictStyle::Merge)
@@ -247,7 +247,7 @@ async fn get_conflict_data(
                 {
                     Ok(data) => {
                         // Not possible to reach here
-                        config.write_content(path, data.as_bytes(), None).await?;
+                        config.write_content(path, data.as_bytes()).await?;
                         return fastn_core::usage_error(format!("`{}` already resolved", path));
                     }
                     Err(data) => {
@@ -276,7 +276,7 @@ async fn get_conflict_data(
                     ));
                 };
             let theirs_path = config.history_path(path, *version);
-            let theirs_content = config.read_content(theirs_path, None).await?;
+            let theirs_content = config.read_content(theirs_path).await?;
             Ok(ConflictData {
                 theirs: Content::Content(theirs_content),
                 ours: Content::Deleted,

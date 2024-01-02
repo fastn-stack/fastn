@@ -11,7 +11,7 @@ impl fastn_core::Package {
 
         let file_path = package_root.join(name.trim_start_matches('/'));
         // Issue 1: Need to remove / from the start of the name
-        match ds.read_content(&file_path, None).await {
+        match ds.read_content(&file_path).await {
             Ok(content) => Ok(content),
             Err(err) => {
                 tracing::error!(

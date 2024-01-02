@@ -90,7 +90,7 @@ pub async fn process(
 
     let path = dirs::home_dir().unwrap().join(".fastn").join("tutor.json");
     // Todo: Remove unwrap() from path.to_str().unwrap()
-    let fs_state: TutorStateFS = match config.read_content(path.to_str().unwrap(), None).await {
+    let fs_state: TutorStateFS = match config.read_content(path.to_str().unwrap()).await {
         Ok(v) => serde_json::from_slice(&v)?,
         Err(ftd::interpreter::Error::IOError(e)) => match e.kind() {
             std::io::ErrorKind::NotFound => {

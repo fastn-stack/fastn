@@ -118,13 +118,13 @@ impl TranslatedDocument {
                 config.original_path()?.as_str(),
                 last_marked_on,
             );
-            let last_marked_on_data = config.read_to_string(last_marked_on_path, None).await?;
+            let last_marked_on_data = config.read_to_string(last_marked_on_path).await?;
             let original_latest_path = fastn_core::utils::history_path(
                 original.get_id(),
                 config.original_path()?.as_str(),
                 original_latest,
             );
-            let original_latest_data = config.read_to_string(original_latest_path, None).await?;
+            let original_latest_data = config.read_to_string(original_latest_path).await?;
 
             let patch = diffy::create_patch(&last_marked_on_data, &original_latest_data);
             Ok(patch.to_string().replace("---", "\\---"))

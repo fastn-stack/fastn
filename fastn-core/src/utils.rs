@@ -630,7 +630,7 @@ pub async fn get_inline_js_html(config: &fastn_core::Config, inline_js: &[String
     let mut result = "".to_string();
     for path in inline_js {
         if camino::Utf8Path::new(path).exists() {
-            if let Ok(content) = config.read_to_string(path, None).await {
+            if let Ok(content) = config.read_to_string(path).await {
                 result = format!("{}<script>{}</script>", result, content);
             }
         }
@@ -642,7 +642,7 @@ pub async fn get_inline_css_html(config: &fastn_core::Config, inline_js: &[Strin
     let mut result = "".to_string();
     for path in inline_js {
         if camino::Utf8Path::new(path).exists() {
-            if let Ok(content) = config.read_to_string(path, None).await {
+            if let Ok(content) = config.read_to_string(path).await {
                 result = format!("{}<style>{}</style>", result, content);
             }
         }
