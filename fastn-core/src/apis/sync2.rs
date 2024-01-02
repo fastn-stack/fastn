@@ -271,6 +271,7 @@ pub(crate) async fn do_sync(
                     continue;
                 };
                 let server_content = config
+                    .ds
                     .read_content(config.history_path(path, file_edit.version))
                     .await?;
 
@@ -371,6 +372,7 @@ async fn clone_history_files(
             .collect_vec();
         for (_, path) in history_paths {
             let content = config
+                .ds
                 .read_content(config.remote_history_dir().join(&path))
                 .await?;
             dot_history.push(File { path, content });
