@@ -39,9 +39,9 @@ async fn get_diffy(
 ) -> fastn_core::Result<Option<String>> {
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
-        let content = config.read_to_string(&doc.get_full_path()).await?;
+        let content = config.ds.read_to_string(&doc.get_full_path()).await?;
 
-        let existing_doc = config.read_to_string(&path).await?;
+        let existing_doc = config.ds.read_to_string(&path).await?;
         if content.eq(&existing_doc) {
             return Ok(None);
         }
@@ -80,8 +80,8 @@ async fn get_track_diff(
                 track.other_timestamp.as_ref().unwrap(),
             );
 
-            let now_doc = config.read_to_string(&now_path).await?;
-            let then_doc = config.read_to_string(&then_path).await?;
+            let now_doc = config.ds.read_to_string(&now_path).await?;
+            let then_doc = config.ds.read_to_string(&then_path).await?;
             if now_doc.eq(&then_doc) {
                 continue;
             }

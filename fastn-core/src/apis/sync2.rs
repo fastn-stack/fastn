@@ -187,7 +187,7 @@ pub(crate) async fn do_sync(
                         // else: Both has modified the same file
                         let ancestor_path = config.history_path(path, *version);
                         let ancestor_content = if let Ok(ancestor_content) =
-                            config.read_to_string(ancestor_path).await
+                            config.ds.read_to_string(ancestor_path).await
                         {
                             ancestor_content
                         } else {
@@ -203,7 +203,7 @@ pub(crate) async fn do_sync(
                             continue;
                         };
                         let theirs_path = config.history_path(path, file_edit.version);
-                        let theirs_content = config.read_to_string(theirs_path).await?;
+                        let theirs_content = config.ds.read_to_string(theirs_path).await?;
                         let ours_content = String::from_utf8(content.clone())
                             .map_err(|e| fastn_core::Error::APIResponseError(e.to_string()))?;
                         match diffy::MergeOptions::new()
@@ -336,7 +336,7 @@ pub(crate) async fn sync_worker(
     Ok(SyncResponse {
         files: synced_files.into_values().collect_vec(),
         dot_history: history_files,
-        latest_ftd: config.read_to_string(config.history_file()).await?,
+        latest_ftd: config.ds.read_to_string(config.history_file()).await?,
     })
 }
 
@@ -422,7 +422,7 @@ async fn client_current_files(
             );
             continue;
         }
-        let content = config.read_content(config.root.join(path)).await?;
+        let content = config.ds.read_content(config.root.join(path)).await?;
         synced_files.insert(
             path.clone(),
             SyncResponseFile::Add {
