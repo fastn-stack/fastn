@@ -26,7 +26,8 @@ pub async fn fetch_files(
     Ok(ftd::interpreter::Value::String {
         text: req_config
             .config
-            .read_to_string(req_config.config.root.join(path))
+            .ds
+            .read_to_string(req_config.config.ds.root().join(path))
             .await
             .map_err(|v| ftd::interpreter::Error::ParseError {
                 message: v.to_string(),

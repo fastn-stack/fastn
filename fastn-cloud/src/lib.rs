@@ -26,6 +26,8 @@ pub enum UploadError {
     SidParseError(#[from] serde_json::Error),
     #[error("TejarReadError: {}", _0)]
     TejarRead(#[from] tejar::error::ReadError),
+    #[error("FromPathBufError: {}", _0)]
+    FromPathBufError(#[from] camino::FromPathBufError),
 }
 
 pub async fn upload() -> Result<(), UploadError> {
@@ -35,7 +37,8 @@ pub async fn upload() -> Result<(), UploadError> {
             "Run `fastn build` to create a .build directory before running this".to_string(),
         ));
     }
-    let ds = fastn_ds::DocumentStore::new(std::env::current_dir()?);
+    let current_dir: camino::Utf8PathBuf = std::env::current_dir()?.canonicalize()?.try_into()?;
+    let ds = fastn_ds::DocumentStore::new(current_dir);
 
     let cw_id_path = fastn_cloud::utils::cw_id();
     if !cw_id_path.exists() {

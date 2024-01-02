@@ -22,7 +22,7 @@ pub(crate) async fn get_tracks(
     }
 
     let lib = fastn_core::FastnLibrary::default();
-    let doc = config.read_to_string(path).await?;
+    let doc = config.ds.read_to_string(path).await?;
     let b = match fastn_core::doc::parse_ftd(base_path, doc.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {

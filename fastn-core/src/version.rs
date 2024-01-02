@@ -108,7 +108,7 @@ pub(crate) async fn build_version(
                         )
                     };
                     let original_file_path =
-                        config.root.join(".build").join(original_file_rel_path);
+                        config.ds.root().join(".build").join(original_file_rel_path);
                     let file_rel_path = if new_id.contains("index.ftd") {
                         new_id.replace("index.ftd", "index.html")
                     } else {
@@ -117,8 +117,8 @@ pub(crate) async fn build_version(
                             format!("{}index.html", std::path::MAIN_SEPARATOR).as_str(),
                         )
                     };
-                    let new_file_path = config.root.join(".build").join(file_rel_path);
-                    let original_content = config.read_to_string(&original_file_path).await?;
+                    let new_file_path = config.ds.root().join(".build").join(file_rel_path);
+                    let original_content = config.ds.read_to_string(&original_file_path).await?;
                     std::fs::create_dir_all(&new_file_path.as_str().replace("index.html", ""))?;
                     let mut f = std::fs::File::create(&new_file_path)?;
                     let from_pattern = format!("<base href=\"{}{}/\">", base_url, version);

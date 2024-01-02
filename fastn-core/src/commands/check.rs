@@ -3,7 +3,7 @@ pub const BUILD_FOLDER: &str = ".build";
 pub const IGNORED_DIRECTORIES: [&str; 4] = ["-", "images", "static", "assets"];
 
 pub async fn post_build_check(config: &fastn_core::Config) -> fastn_core::Result<()> {
-    let build_path = config.root.join(BUILD_FOLDER);
+    let build_path = config.ds.root().join(BUILD_FOLDER);
     let build_directory = build_path.as_str().to_string();
     println!("Post build index assertion started ...");
 
@@ -32,7 +32,7 @@ async fn check_index_in_folders(
     let mut has_ignored_directory = false;
 
     if folder.is_dir() {
-        // Todo: Use config.read_dir instead of tokio::fs::read_dir
+        // Todo: Use config.ds.read_dir instead of tokio::fs::read_dir
         let mut entries = tokio::fs::read_dir(&folder).await?;
         while let Some(current_entry) = entries.next_entry().await? {
             let current_entry_path = current_entry.path();

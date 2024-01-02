@@ -33,7 +33,7 @@ pub async fn process(
     headers: ftd::ast::HeaderValues,
     query: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let sqlite_database_path = req_config.config.root.join(&db_config.db_url);
+    let sqlite_database_path = req_config.config.ds.root().join(&db_config.db_url);
 
     // need the query params
     // question is they can be multiple

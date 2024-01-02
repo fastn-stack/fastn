@@ -103,7 +103,7 @@ fn fastn_lib_ftd() -> &'static str {
 }
 
 fn package_info_about(config: &fastn_core::Config) -> fastn_core::Result<String> {
-    let path = config.root.join("fastn").join("cr.ftd");
+    let path = config.ds.root().join("fastn").join("cr.ftd");
     Ok(if path.is_file() {
         std::fs::read_to_string(path)?
     } else {
@@ -210,7 +210,8 @@ fn package_info_create_cr(config: &fastn_core::Config) -> fastn_core::Result<Str
 #[allow(dead_code)]
 fn original_package_status(config: &fastn_core::Config) -> fastn_core::Result<String> {
     let path = config
-        .root
+        .ds
+        .root()
         .join("fastn")
         .join("translation")
         .join("original-status.ftd");
@@ -232,7 +233,8 @@ fn original_package_status(config: &fastn_core::Config) -> fastn_core::Result<St
 #[allow(dead_code)]
 fn translation_package_status(config: &fastn_core::Config) -> fastn_core::Result<String> {
     let path = config
-        .root
+        .ds
+        .root()
         .join("fastn")
         .join("translation")
         .join("translation-status.ftd");
@@ -257,7 +259,7 @@ fn get_messages(
 ) -> fastn_core::Result<String> {
     Ok(match status {
         TranslatedDocument::Missing { .. } => {
-            let path = config.root.join("fastn/translation/missing.ftd");
+            let path = config.ds.root().join("fastn/translation/missing.ftd");
             if path.is_file() {
                 std::fs::read_to_string(path)?
             } else {
@@ -265,7 +267,7 @@ fn get_messages(
             }
         }
         TranslatedDocument::NeverMarked { .. } => {
-            let path = config.root.join("fastn/translation/never-marked.ftd");
+            let path = config.ds.root().join("fastn/translation/never-marked.ftd");
             if path.is_file() {
                 std::fs::read_to_string(path)?
             } else {
@@ -273,7 +275,7 @@ fn get_messages(
             }
         }
         TranslatedDocument::Outdated { .. } => {
-            let path = config.root.join("fastn/translation/out-of-date.ftd");
+            let path = config.ds.root().join("fastn/translation/out-of-date.ftd");
             if path.is_file() {
                 std::fs::read_to_string(path)?
             } else {
@@ -281,7 +283,7 @@ fn get_messages(
             }
         }
         TranslatedDocument::UptoDate { .. } => {
-            let path = config.root.join("fastn/translation/upto-date.ftd");
+            let path = config.ds.root().join("fastn/translation/upto-date.ftd");
             if path.is_file() {
                 std::fs::read_to_string(path)?
             } else {

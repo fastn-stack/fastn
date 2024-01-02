@@ -348,7 +348,7 @@ pub(crate) fn track_path(id: &str, base_path: &str) -> camino::Utf8PathBuf {
 pub(crate) async fn get_number_of_documents(
     config: &fastn_core::Config,
 ) -> fastn_core::Result<String> {
-    let mut no_of_docs = fastn_core::snapshot::get_latest_snapshots(&config.root)
+    let mut no_of_docs = fastn_core::snapshot::get_latest_snapshots(config.ds.root())
         .await?
         .len()
         .to_string();
@@ -365,7 +365,7 @@ pub(crate) async fn get_current_document_last_modified_on(
     config: &fastn_core::Config,
     document_id: &str,
 ) -> Option<String> {
-    fastn_core::snapshot::get_latest_snapshots(&config.root)
+    fastn_core::snapshot::get_latest_snapshots(config.ds.root())
         .await
         .unwrap_or_default()
         .get(document_id)
@@ -386,7 +386,7 @@ pub(crate) async fn get_last_modified_on(path: &camino::Utf8PathBuf) -> Option<S
     @amitu need to come up with idea
     This data would be used in fastn.title
 pub(crate) fn get_package_title(config: &fastn_core::Config) -> String {
-    let fastn = if let Ok(fastn) = std::fs::read_to_string(config.root.join("index.ftd")) {
+    let fastn = if let Ok(fastn) = std::fs::read_to_string(config.ds.root().join("index.ftd")) {
         fastn
     } else {
         return config.package.name.clone();
@@ -630,7 +630,7 @@ pub async fn get_inline_js_html(config: &fastn_core::Config, inline_js: &[String
     let mut result = "".to_string();
     for path in inline_js {
         if camino::Utf8Path::new(path).exists() {
-            if let Ok(content) = config.read_to_string(path).await {
+            if let Ok(content) = config.ds.read_to_string(path).await {
                 result = format!("{}<script>{}</script>", result, content);
             }
         }
@@ -642,7 +642,7 @@ pub async fn get_inline_css_html(config: &fastn_core::Config, inline_js: &[Strin
     let mut result = "".to_string();
     for path in inline_js {
         if camino::Utf8Path::new(path).exists() {
-            if let Ok(content) = config.read_to_string(path).await {
+            if let Ok(content) = config.ds.read_to_string(path).await {
                 result = format!("{}<style>{}</style>", result, content);
             }
         }
@@ -706,7 +706,7 @@ pub async fn replace_markers_2022(
         .replace(
             "__favicon_html_tag__",
             resolve_favicon(
-                config.root.as_str(),
+                config.ds.root().as_str(),
                 config.package.name.as_str(),
                 &config.package.favicon,
             )
@@ -791,7 +791,7 @@ pub async fn replace_markers_2023(
             "".to_string()
         },
         favicon_html_tag = resolve_favicon(
-            config.root.as_str(),
+            config.ds.root().as_str(),
             config.package.name.as_str(),
             &config.package.favicon,
         )

@@ -31,13 +31,13 @@ async fn handle_view_source(
 
     match file {
         fastn_core::File::Ftd(_) | fastn_core::File::Markdown(_) | fastn_core::File::Code(_) => {
-            let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
+            let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
             let diff = get_diff(config, &file, &snapshots).await;
             let editor_ftd = fastn_core::package_info_editor(config, file_name.as_str(), diff)?;
             let main_document = fastn_core::Document {
                 id: "editor.ftd".to_string(),
                 content: editor_ftd,
-                parent_path: config.root.as_str().to_string(),
+                parent_path: config.ds.root().as_str().to_string(),
                 package_name: config.package.name.clone(),
             };
             fastn_core::package::package_doc::read_ftd(
@@ -63,9 +63,9 @@ pub(crate) async fn get_diff(
 ) -> fastn_core::Result<Option<String>> {
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
-        let content = config.read_to_string(&doc.get_full_path()).await?;
+        let content = config.ds.read_to_string(&doc.get_full_path()).await?;
 
-        let existing_doc = config.read_to_string(&path).await?;
+        let existing_doc = config.ds.read_to_string(&path).await?;
         if content.eq(&existing_doc) {
             return Ok(None);
         }

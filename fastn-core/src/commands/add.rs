@@ -22,7 +22,7 @@ async fn simple_add(config: &fastn_core::Config, file: &str) -> fastn_core::Resu
         });
     }
 
-    if !config.root.join(file).exists() {
+    if !config.ds.root().join(file).exists() {
         return Err(fastn_core::Error::UsageError {
             message: format!("{} doesn't exists", file),
         });
@@ -78,7 +78,7 @@ async fn cr_add(config: &fastn_core::Config, file: &str, cr: usize) -> fastn_cor
         .write_workspace(workspace.into_values().collect_vec().as_slice())
         .await?;
 
-    let file_path = config.root.join(file);
+    let file_path = config.ds.root().join(file);
 
     if file_path.exists() {
         fastn_core::utils::copy(&file_path, &cr_file_path).await?;

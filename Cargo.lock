@@ -1710,7 +1710,8 @@ dependencies = [
 name = "fastn-ds"
 version = "0.1.0"
 dependencies = [
- "ftd 0.3.0",
+ "camino",
+ "thiserror",
  "tokio",
 ]
 
