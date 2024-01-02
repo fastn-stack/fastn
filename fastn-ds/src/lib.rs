@@ -7,6 +7,8 @@ pub struct DocumentStore {
 pub enum ReadError {
     #[error("io error {0}")]
     IOError(#[from] std::io::Error),
+    #[error("error")]
+    Error,
 }
 
 #[derive(thiserror::Error, Debug)]
