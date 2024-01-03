@@ -40,7 +40,7 @@ def fetch_data():
     return data
 
 
-@app.route('/get-data', methods=['GET'])
+@app.route('/get-data/', methods=['GET'])
 def get_data():
     # Fetch data from the 'test' table
     data = fetch_data()
