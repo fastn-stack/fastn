@@ -92,7 +92,6 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
     use itertools::Itertools;
     let doc = ftd::interpreter::TDoc::new(&document.name, &document.aliases, &document.data);
     // Check if document tree has rive. This is used to add rive script.
-    // dbg!(&document.tree);
     let mut has_rive_components = false;
     let mut document_asts = vec![ftd::js::from_tree(
         document.tree.as_slice(),
