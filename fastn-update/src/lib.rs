@@ -67,14 +67,6 @@ impl Package {
     }
 }
 
-pub async fn generate_checksum(zipball: Vec<u8>) -> fastn_core::Result<String> {
-    use sha2::{Digest, Sha256};
-
-    let mut hasher = Sha256::new();
-    hasher.update(&zipball);
-    Ok(format!("{:x}", hasher.finalize()))
-}
-
 pub async fn resolve_dependencies(config: &fastn_core::Config) -> fastn_core::Result<()> {
     use std::io::Seek;
 
@@ -83,7 +75,7 @@ pub async fn resolve_dependencies(config: &fastn_core::Config) -> fastn_core::Re
     for dependency in &config.package.dependencies {
         if let Some((username, repo)) = extract_github_details(dependency.package.name.as_str()) {
             let zipball = resolve_dependency_from_gh(username.as_str(), repo.as_str()).await?;
-            let checksum = generate_checksum(zipball.clone()).await?;
+            let checksum = fastn_core::utils::generate_hash(zipball.clone());
             let mut zipball_cursor = std::io::Cursor::new(zipball);
             zipball_cursor.seek(std::io::SeekFrom::Start(0))?;
             let mut archive = zip::ZipArchive::new(zipball_cursor)?;
