@@ -303,6 +303,19 @@ impl VariableValue {
         }
     }
 
+    pub fn set_condition(self, condition: Option<ftd::ast::Condition>) -> Self {
+        let mut variable_value = self;
+        let mut_condition = match &mut variable_value {
+            ftd::ast::VariableValue::Record { condition, .. }
+            | ftd::ast::VariableValue::Optional { condition, .. }
+            | ftd::ast::VariableValue::Constant { condition, .. }
+            | ftd::ast::VariableValue::List { condition, .. }
+            | ftd::ast::VariableValue::String { condition, .. } => condition,
+        };
+        *mut_condition = condition;
+        variable_value
+    }
+
     pub fn record_name(&self) -> Option<String> {
         let mut name = None;
         let inner_value = self.inner();
@@ -344,6 +357,7 @@ impl VariableValue {
         kind_name: String,
         source: ftd::ast::ValueSource,
         line_number: usize,
+        condition: Option<ftd::ast::Condition>,
     ) -> ftd::ast::VariableValue {
         use itertools::Itertools;
 
@@ -370,7 +384,7 @@ impl VariableValue {
                 })
                 .collect_vec(),
             line_number,
-            condition: None,
+            condition,
         }
     }
 
@@ -425,7 +439,7 @@ impl VariableValue {
                 value,
                 line_number,
                 source,
-                condition: _,
+                condition,
             } => {
                 // Bracket list from string
                 let bracket_list = VariableValue::from_string_bracket_list(
@@ -433,6 +447,7 @@ impl VariableValue {
                     kind.get_name(),
                     source,
                     line_number,
+                    condition,
                 );
                 match bracket_list {
                     VariableValue::List { value, .. } => {
@@ -540,7 +555,12 @@ impl VariableValue {
                 } else if self.is_list() || self.is_record() {
                     // todo: check if `end` exists
                     Ok(self)
-                } else if let VariableValue::String { ref value, .. } = self {
+                } else if let VariableValue::String {
+                    ref value,
+                    ref condition,
+                    ..
+                } = self
+                {
                     if value.starts_with('$') && !value.contains(',') {
                         Ok(self)
                     } else {
@@ -549,6 +569,7 @@ impl VariableValue {
                             kind.kind.clone(),
                             ftd::ast::ValueSource::Default,
                             line_number,
+                            condition.clone(),
                         ))
                     }
                 } else {
@@ -620,7 +641,7 @@ impl VariableValue {
 
         if values.is_empty() && headers.is_empty() && !(caption.is_some() && body.is_some()) {
             return Ok(if let Some(caption) = caption {
-                caption
+                caption.set_condition(condition)
             } else if let Some(body) = body {
                 VariableValue::String {
                     value: body.value,
