@@ -63,7 +63,11 @@ pub(crate) async fn get_diff(
     snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fastn_core::Result<Option<String>> {
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
-        let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
+        let path = fastn_core::utils::history_path(
+            doc.get_id(),
+            &fastn_ds::Path::new(doc.get_base_path()),
+            timestamp,
+        );
         let content = config.ds.read_to_string(&doc.get_full_path()).await?;
 
         let existing_doc = config.ds.read_to_string(&path).await?;

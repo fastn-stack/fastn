@@ -23,7 +23,7 @@ pub async fn status(config: &fastn_core::Config, source: Option<&str>) -> fastn_
 async fn file_status(
     config: &fastn_core::Config,
     package_name: String,
-    base_path: &camino::Utf8PathBuf,
+    base_path: &fastn_ds::Path,
     source: &str,
     snapshots: &std::collections::BTreeMap<String, u128>,
     workspaces: &std::collections::BTreeMap<String, fastn_core::snapshot::Workspace>,
@@ -131,7 +131,11 @@ pub(crate) async fn get_file_status(
     }
 
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
-        let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
+        let path = fastn_core::utils::history_path(
+            doc.get_id(),
+            &fastn_ds::Path::new(doc.get_base_path()),
+            timestamp,
+        );
 
         let content = config.ds.read_content(&doc.get_full_path()).await?;
         let existing_doc = config.ds.read_content(&path).await?;

@@ -76,7 +76,7 @@ impl FileOperation {
 impl fastn_core::Config {
     pub async fn get_history(&self) -> fastn_core::Result<Vec<FileHistory>> {
         let history_file_path = self.history_file();
-        let history_content = self.ds.read_to_string(history_file_path).await?;
+        let history_content = self.ds.read_to_string(&history_file_path).await?;
         self.to_file_history(history_content.as_str()).await
     }
 
@@ -120,7 +120,7 @@ impl fastn_core::Config {
 
     pub async fn get_non_deleted_latest_file_paths(
         &self,
-    ) -> fastn_core::Result<Vec<(String, camino::Utf8PathBuf)>> {
+    ) -> fastn_core::Result<Vec<(String, fastn_ds::Path)>> {
         use itertools::Itertools;
 
         Ok(self
@@ -221,7 +221,7 @@ impl FileHistory {
 
 pub(crate) async fn insert_into_history(
     ds: &fastn_ds::DocumentStore,
-    root: &camino::Utf8PathBuf,
+    root: &fastn_ds::Path,
     file_list: &std::collections::BTreeMap<String, fastn_core::history::FileEditTemp>,
     history: &mut Vec<fastn_core::history::FileHistory>,
 ) -> fastn_core::Result<()> {
@@ -232,14 +232,14 @@ pub(crate) async fn insert_into_history(
             .iter_mut()
             .map(|v| (v.filename.to_string(), v.clone()))
             .collect();
-    insert_into_history_(ds, root, file_list, &mut file_history).await?;
+    insert_into_history_(ds, &root, file_list, &mut file_history).await?;
     *history = file_history.into_values().collect_vec();
     Ok(())
 }
 
 pub(crate) async fn insert_into_history_(
     ds: &fastn_ds::DocumentStore,
-    root: &camino::Utf8PathBuf,
+    root: &fastn_ds::Path,
     file_list: &std::collections::BTreeMap<String, fastn_core::history::FileEditTemp>,
     file_history: &mut std::collections::BTreeMap<String, fastn_core::history::FileHistory>,
 ) -> fastn_core::Result<()> {
@@ -273,8 +273,8 @@ pub(crate) async fn insert_into_history_(
         if !file_op.operation.eq(&FileOperation::Deleted) {
             let new_file_path =
                 remote_state.join(fastn_core::utils::snapshot_id(file, &(version as u128)));
-            let content = ds.read_content(root.join(file)).await?;
-            fastn_core::utils::update(&new_file_path, content.as_slice()).await?;
+            let content = ds.read_content(&root.join(file)).await?;
+            fastn_core::utils::update(&new_file_path, content.as_slice(), ds).await?;
         }
     }
 

@@ -326,9 +326,12 @@ pub(crate) fn nanos_to_rfc3339(nanos: &u128) -> String {
     nanos.to_string() // TODO
 }
 
-pub(crate) fn history_path(id: &str, base_path: &str, timestamp: &u128) -> fastn_ds::Path {
+pub(crate) fn history_path(
+    id: &str,
+    base_path: &fastn_ds::Path,
+    timestamp: &u128,
+) -> fastn_ds::Path {
     let id_with_timestamp_extension = snapshot_id(id, timestamp);
-    let base_path = fastn_ds::Path::new(base_path);
     base_path.join(".history").join(id_with_timestamp_extension)
 }
 

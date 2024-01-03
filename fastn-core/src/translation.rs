@@ -115,13 +115,13 @@ impl TranslatedDocument {
         ) -> fastn_core::Result<String> {
             let last_marked_on_path = fastn_core::utils::history_path(
                 original.get_id(),
-                config.original_path()?.as_str(),
+                &config.original_path()?,
                 last_marked_on,
             );
             let last_marked_on_data = config.ds.read_to_string(&last_marked_on_path).await?;
             let original_latest_path = fastn_core::utils::history_path(
                 original.get_id(),
-                config.original_path()?.as_str(),
+                &config.original_path()?,
                 original_latest,
             );
             let original_latest_data = config.ds.read_to_string(&original_latest_path).await?;

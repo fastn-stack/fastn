@@ -14,7 +14,7 @@ pub struct Track {
 pub(crate) async fn get_tracks(
     config: &fastn_core::Config,
     base_path: &str,
-    path: &camino::Utf8PathBuf,
+    path: &fastn_ds::Path,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, Track>> {
     let mut tracks = std::collections::BTreeMap::new();
     if !path.exists() {

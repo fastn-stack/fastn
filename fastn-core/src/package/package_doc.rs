@@ -222,7 +222,8 @@ impl fastn_core::Package {
             .await
         {
             Ok(response) => {
-                tokio::fs::copy(root.join(new_file_path), root.join(file_path)).await?;
+                ds.copy(&root.join(new_file_path), &root.join(file_path))
+                    .await?;
                 Ok(response)
             }
             Err(e) => Err(e),
