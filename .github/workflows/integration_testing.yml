@@ -68,35 +68,12 @@ jobs:
         run: |
           python scripts/populate-table.py
 
-#      - name: Test Hello World (debug)
-#        run: |
-#          python scripts/hello-world-test.py
-
       - name: Test server (port 5000)
         run: |
           python scripts/test-server.py &
           
           # Waiting for the server to start
           sleep 10  # We might want to wait more
-
-#      - name: Check test server status (debug)
-#        run: |
-#          ps aux | grep "python scripts/test-server.py"
-
-#      - name: Test server endpoint (debug)
-#        run: |
-#          curl http://127.0.0.1:5000/get-data/
-
-#      - name: Current Directory (debug)
-#        run: |
-#          echo "Current Working Directory"
-#          pwd
-#          echo "Current Directory files"
-#          ls -al
-
-#      - name: Export Postgres connection FASTN_DB_URL
-#        run: |
-#          export FASTN_DB_URL=postgres://testuser:testpassword@localhost:5432/testdb
 
       - name: Run integration tests
         run: |
