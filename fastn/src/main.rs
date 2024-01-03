@@ -171,6 +171,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             test.value_of_("base").unwrap_or("/"),
             test.get_flag("headless"),
             test.get_flag("script"),
+            test.get_flag("verbose"),
         )
         .await;
     }
@@ -388,6 +389,7 @@ fn app(version: &'static str) -> clap::Command {
                     .action(clap::ArgAction::Append))
                 .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
                 .arg(clap::arg!(--"script" "Generates a script file (for debugging purposes)"))
+                .arg(clap::arg!(--"verbose" "To provide more better logs (for debugging purposes)"))
         )
         .subcommand(
             clap::Command::new("mark-resolved")

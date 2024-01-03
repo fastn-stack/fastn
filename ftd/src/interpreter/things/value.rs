@@ -213,6 +213,7 @@ impl PropertyValue {
             value: value.to_string(),
             line_number,
             source: ftd::ast::ValueSource::Default,
+            condition: None,
         };
 
         ftd::interpreter::PropertyValue::scan_ast_value_with_argument(
@@ -237,6 +238,7 @@ impl PropertyValue {
             value: value.to_string(),
             line_number,
             source: ftd::ast::ValueSource::Default,
+            condition: None,
         };
 
         ftd::interpreter::PropertyValue::from_ast_value_with_argument(
@@ -478,7 +480,8 @@ impl PropertyValue {
                     ftd::ast::VariableValue::String {
                         value: body.value.to_string(),
                         line_number: body.line_number,
-                        source: ftd::ast::ValueSource::Body
+                        source: ftd::ast::ValueSource::Body,
+                        condition: None
                     },
                     doc,
                     field.mutable || is_mutable,
@@ -510,6 +513,7 @@ impl PropertyValue {
                 let mut variable = ftd::ast::VariableValue::List {
                     value: vec![],
                     line_number: value.line_number(),
+                    condition: None,
                 };
                 if let Some(header) = headers {
                     variable = header.value.clone();

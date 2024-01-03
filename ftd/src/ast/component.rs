@@ -217,7 +217,11 @@ impl Component {
                 children: vec![],
                 line_number,
             }),
-            ftd::ast::VariableValue::List { value, line_number } => {
+            ftd::ast::VariableValue::List {
+                value,
+                line_number,
+                condition,
+            } => {
                 let mut children = vec![];
                 for val in value {
                     children.push(Component::from_variable_value(
@@ -230,7 +234,7 @@ impl Component {
                     name: key.to_string(),
                     properties: vec![],
                     iteration: None,
-                    condition: None,
+                    condition,
                     events: vec![],
                     children,
                     line_number,
@@ -243,13 +247,14 @@ impl Component {
                 body,
                 line_number,
                 values,
+                condition,
             } => {
                 let mut properties = vec![];
                 if let Some(caption) = caption.as_ref() {
                     properties.push(ftd::ast::Property {
                         value: caption.to_owned(),
                         source: ftd::ast::PropertySource::Caption,
-                        condition: None,
+                        condition: caption.condition_expression(),
                         line_number,
                     });
                 }
@@ -280,7 +285,6 @@ impl Component {
                 }
 
                 let iteration = Loop::from_ast_headers(&headers, doc_id)?;
-                let condition = ftd::ast::Condition::from_ast_headers(&headers, doc_id)?;
                 let events = Event::from_ast_headers(&headers, doc_id)?;
 
                 let mut children = vec![];
@@ -307,6 +311,7 @@ impl Component {
                 value,
                 line_number,
                 source: value_source,
+                condition,
             } => Ok(ftd::ast::Component {
                 name: key.to_string(),
                 properties: vec![Property::from_value(
@@ -315,7 +320,7 @@ impl Component {
                     line_number,
                 )],
                 iteration: None,
-                condition: None,
+                condition,
                 events: vec![],
                 children: vec![],
                 line_number,
@@ -375,7 +380,7 @@ impl Property {
             );
         }
 
-        let value = ftd::ast::VariableValue::from_p1_header(header, doc_id);
+        let value = ftd::ast::VariableValue::from_p1_header(header, doc_id)?;
 
         Ok(Property::new(
             value,

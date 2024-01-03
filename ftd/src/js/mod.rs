@@ -621,12 +621,11 @@ impl ftd::interpreter::Component {
             return None;
         }
 
-        let value = ftd::js::Value::Reference(self.name.to_owned()).to_set_property_value_with_ui(
-            doc,
-            rdata,
-            has_rive_components,
-            should_return,
-        );
+        let value = ftd::js::Value::Reference(value::ReferenceData {
+            name: self.name.to_owned(),
+            value: None,
+        })
+        .to_set_property_value_with_ui(doc, rdata, has_rive_components, should_return);
         let instantiate_component = fastn_js::InstantiateComponent::new_with_definition(
             value,
             arguments,
@@ -675,12 +674,11 @@ impl ftd::interpreter::Component {
         }*/
 
         // The reference `self.name` is either the ftd.ui type variable or the loop-alias
-        let value = ftd::js::Value::Reference(self.name.to_owned()).to_set_property_value_with_ui(
-            doc,
-            rdata,
-            has_rive_components,
-            should_return,
-        );
+        let value = ftd::js::Value::Reference(value::ReferenceData {
+            name: self.name.to_owned(),
+            value: None,
+        })
+        .to_set_property_value_with_ui(doc, rdata, has_rive_components, should_return);
 
         let instantiate_component = fastn_js::InstantiateComponent::new_with_definition(
             value,

@@ -103,8 +103,8 @@ fastn_utils.createNestedObject(global, "foo__pos", fastn_dom.BackgroundPosition.
 fastn_utils.createNestedObject(global, "foo__bg_image", fastn.recordInstance({
   src: global.foo__bg_image_src,
   repeat: fastn_dom.BackgroundRepeat.NoRepeat,
-  size: global.foo__len,
-  position: global.foo__pos
+  size: fastn_dom.BackgroundSize.Length(global.foo__len),
+  position: fastn_dom.BackgroundPosition.Length(global.foo__pos)
 }));
 fastn_utils.createNestedObject(global, "foo__red_orange", fastn.recordInstance({
   light: "red",
