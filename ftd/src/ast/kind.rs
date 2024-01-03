@@ -293,7 +293,7 @@ impl VariableValue {
         }
     }
 
-    pub fn condition(&self) -> &Option<ftd::ast::Condition> {
+    pub(crate) fn condition(&self) -> &Option<ftd::ast::Condition> {
         match self {
             ftd::ast::VariableValue::Record { condition, .. }
             | ftd::ast::VariableValue::Optional { condition, .. }
@@ -303,7 +303,13 @@ impl VariableValue {
         }
     }
 
-    pub fn set_condition(self, condition: Option<ftd::ast::Condition>) -> Self {
+    pub(crate) fn condition_expression(&self) -> Option<String> {
+        self.condition()
+            .as_ref()
+            .map(|condition| condition.expression.clone())
+    }
+
+    pub(crate) fn set_condition(self, condition: Option<ftd::ast::Condition>) -> Self {
         let mut variable_value = self;
         let mut_condition = match &mut variable_value {
             ftd::ast::VariableValue::Record { condition, .. }
