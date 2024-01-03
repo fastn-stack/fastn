@@ -66,9 +66,6 @@ async fn write(
     tracks: &std::collections::BTreeMap<String, fastn_core::Track>,
     ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    use tokio::io::AsyncWriteExt;
-
-    let mut f = tokio::fs::File::create(file_path).await?;
     let mut string = "-- import: fastn".to_string();
 
     for track in tracks.values() {

@@ -208,18 +208,20 @@ impl fastn_core::Config {
         &self,
         cr_number: usize,
     ) -> fastn_core::Result<Vec<fastn_core::track::TrackingInfo>> {
-        let cr_track_paths = ignore::WalkBuilder::new(self.cr_track_dir(cr_number))
-            .build()
-            .flatten()
-            .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap())
-            .filter(|x| x.is_file() && x.extension().map(|v| v.eq("track")).unwrap_or(false))
-            .collect::<Vec<camino::Utf8PathBuf>>();
+        use itertools::Itertools;
+
+        let cr_track_paths = self
+            .ds
+            .get_all_file_path(&self.cr_track_dir(cr_number), &[])
+            .into_iter()
+            .filter(|v| v.extension().map(|v| v.eq("track")).unwrap_or(false))
+            .collect_vec();
+
         let mut tracking_info_list = vec![];
 
         for cr_track_path in cr_track_paths {
-            let tracked_file = cr_track_path.strip_prefix(self.track_dir())?;
-            let tracked_file_str =
-                fastn_core::cr::cr_path_to_file_name(cr_number, tracked_file.as_str())?;
+            let tracked_file = cr_track_path.strip_prefix(&self.track_dir());
+            let tracked_file_str = fastn_core::cr::cr_path_to_file_name(cr_number, &tracked_file)?;
             if let Some(info) = fastn_core::track::get_tracking_info_(self, &cr_track_path)
                 .await?
                 .into_iter()
@@ -238,10 +240,11 @@ pub(crate) fn cr_path(cr_number: usize) -> String {
 
 pub(crate) fn cr_path_to_file_name(
     cr_number: usize,
-    cr_file_path: &str,
+    cr_file_path: &fastn_ds::Path,
 ) -> fastn_core::Result<String> {
     let cr_path = cr_path(cr_number);
     Ok(cr_file_path
+        .to_string()
         .trim_matches('/')
         .trim_start_matches(cr_path.as_str())
         .to_string())
