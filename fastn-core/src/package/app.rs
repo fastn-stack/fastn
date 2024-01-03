@@ -129,9 +129,19 @@ pub async fn can_read(config: &fastn_core::RequestConfig, path: &str) -> fastn_c
         app_identities.extend(ug.get_identities(&config.config)?)
     }
 
-    let auth_identities =
-        fastn_core::auth::get_auth_identities(config.request.cookies(), app_identities.as_slice())
-            .await?;
+    let auth_identities = {
+        #[cfg(feature = "auth")]
+        let i = fastn_core::auth::get_auth_identities(
+            config.request.cookies(),
+            app_identities.as_slice(),
+        )
+        .await?;
+
+        #[cfg(not(feature = "auth"))]
+        let i = vec![];
+
+        i
+    };
 
     return fastn_core::user_group::belongs_to(
         &config.config,

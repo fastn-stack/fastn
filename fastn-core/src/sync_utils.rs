@@ -192,9 +192,10 @@ impl fastn_core::Config {
             let version = if let Some(version) = workspace_entry.version {
                 version
             } else {
-                let content =
-                    fastn_core::tokio_fs::read(self.root.join(workspace_entry.filename.as_str()))
-                        .await?;
+                let content = self
+                    .ds
+                    .read_content(self.ds.root().join(workspace_entry.filename.as_str()))
+                    .await?;
                 changed_files.push(FileStatus::Add {
                     path: workspace_entry.filename.to_string(),
                     content,
@@ -218,11 +219,12 @@ impl fastn_core::Config {
                 continue;
             }
 
-            let content =
-                fastn_core::tokio_fs::read(self.root.join(workspace_entry.filename.as_str()))
-                    .await?;
+            let content = self
+                .ds
+                .read_content(self.ds.root().join(workspace_entry.filename.as_str()))
+                .await?;
             let history_path = self.history_path(filename.as_str(), version);
-            let history_content = fastn_core::tokio_fs::read(history_path).await?;
+            let history_content = self.ds.read_content(history_path).await?;
             if sha2::Sha256::digest(&content).eq(&sha2::Sha256::digest(&history_content)) {
                 changed_files.push(FileStatus::Uptodate {
                     path: workspace_entry.filename.to_string(),
@@ -288,7 +290,7 @@ impl fastn_core::Config {
                         continue;
                     };
                     let history_path = self.history_path(path, server_version);
-                    let history_content = fastn_core::tokio_fs::read(history_path).await?;
+                    let history_content = self.ds.read_content(history_path).await?;
                     if sha2::Sha256::digest(content).eq(&sha2::Sha256::digest(history_content)) {
                         already_added_files.push(fastn_core::workspace::WorkspaceEntry {
                             filename: path.to_string(),
@@ -323,9 +325,10 @@ impl fastn_core::Config {
                         continue;
                     }
 
-                    let ancestor_content = if let Ok(content) =
-                        fastn_core::tokio_fs::read_to_string(self.history_path(path, *version))
-                            .await
+                    let ancestor_content = if let Ok(content) = self
+                        .ds
+                        .read_to_string(self.history_path(path, *version))
+                        .await
                     {
                         content
                     } else {
@@ -335,10 +338,10 @@ impl fastn_core::Config {
                     };
 
                     // attempt resolving conflict
-                    let theirs_content = fastn_core::tokio_fs::read_to_string(
-                        self.history_path(path, server_file_edit.version),
-                    )
-                    .await?;
+                    let theirs_content = self
+                        .ds
+                        .read_to_string(self.history_path(path, server_file_edit.version))
+                        .await?;
                     let ours_content = String::from_utf8(content.clone())?;
 
                     match diffy::MergeOptions::new()
@@ -346,8 +349,11 @@ impl fastn_core::Config {
                         .merge(&ancestor_content, &ours_content, &theirs_content)
                     {
                         Ok(data) => {
-                            fastn_core::utils::update(self.root.join(filename), data.as_bytes())
-                                .await?;
+                            fastn_core::utils::update(
+                                self.ds.root().join(filename),
+                                data.as_bytes(),
+                            )
+                            .await?;
                             *content = data.as_bytes().to_vec();
                             *version = server_file_edit.version;
                         }

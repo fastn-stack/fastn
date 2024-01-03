@@ -45,7 +45,3 @@ colored.workspace = true
 [dev-dependencies]
 diffy.workspace = true
 pretty_assertions.workspace = true
-rand.workspace = true
-rand_pcg.workspace = true
-ron.workspace = true
-rusty-hook.workspace = true

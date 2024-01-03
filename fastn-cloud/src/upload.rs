@@ -44,14 +44,15 @@ pub async fn missing_files_api(
 }
 
 pub async fn upload(
+    ds: &fastn_ds::DocumentStore,
     root: &camino::Utf8Path,
     sid: &str,
     cw_id: &str,
 ) -> Result<(), fastn_cloud::UploadError> {
     let sid: Sid = serde_json::from_str(sid)?;
     let (list_file, data_file) = tejar_create(root).await?;
-    let list_content = tokio::fs::read_to_string(list_file.as_path()).await?;
-    // TODO: missing files handle sid
+    let list_content = ds.read_to_string(list_file.as_path()).await.unwrap(); // Todo: Remove unwrap()
+                                                                              // TODO: missing files handle sid
     println!("Getting Missing Files");
     let missing_files_api_resp = missing_files_api(
         sid.sid.as_str(),

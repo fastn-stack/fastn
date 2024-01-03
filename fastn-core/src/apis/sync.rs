@@ -81,7 +81,7 @@ pub(crate) async fn sync_worker(
     use itertools::Itertools;
 
     // TODO: Need to call at once only
-    let mut snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
+    let mut snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
     let client_snapshots = fastn_core::snapshot::resolve_snapshots(&request.latest_ftd).await?;
     // let latest_ftd = fastn_core::tokio_fs::read_to_string(config.history_dir().join(".latest.ftd")).await?;
     let timestamp = fastn_core::timestamp_nanosecond();
@@ -90,16 +90,16 @@ pub(crate) async fn sync_worker(
         match file {
             SyncRequestFile::Add { path, content } => {
                 // We need to check if, file is already available on server
-                fastn_core::utils::update1(&config.root, path, content).await?;
+                fastn_core::utils::update1(config.ds.root(), path, content).await?;
 
                 let snapshot_path =
-                    fastn_core::utils::history_path(path, config.root.as_str(), &timestamp);
+                    fastn_core::utils::history_path(path, config.ds.root().as_str(), &timestamp);
 
                 if let Some((dir, _)) = snapshot_path.as_str().rsplit_once('/') {
                     tokio::fs::create_dir_all(dir).await?;
                 }
 
-                tokio::fs::copy(config.root.join(path), snapshot_path).await?;
+                tokio::fs::copy(config.ds.root().join(path), snapshot_path).await?;
                 snapshots.insert(path.to_string(), timestamp);
                 // Create a new file
                 // Take snapshot
@@ -115,10 +115,13 @@ pub(crate) async fn sync_worker(
                     .get(path.as_str())
                     .ok_or_else(|| fastn_core::Error::APIResponseError("".to_string()))?;
 
-                let snapshot_path =
-                    fastn_core::utils::history_path(path, config.root.as_str(), remote_timestamp);
+                let snapshot_path = fastn_core::utils::history_path(
+                    path,
+                    config.ds.root().as_str(),
+                    remote_timestamp,
+                );
 
-                let data = fastn_core::tokio_fs::read(snapshot_path).await?;
+                let data = config.ds.read_content(snapshot_path).await?;
 
                 // if: Client Says Deleted and server says modified
                 // that means Remote timestamp is greater than client timestamp
@@ -134,8 +137,8 @@ pub(crate) async fn sync_worker(
                 } else {
                     // else: both should have same version,
                     // client version(timestamp) can never be greater than server's version
-                    if config.root.join(path).exists() {
-                        tokio::fs::remove_file(config.root.join(path)).await?;
+                    if config.ds.root().join(path).exists() {
+                        tokio::fs::remove_file(config.ds.root().join(path)).await?;
                     }
                     snapshots.remove(path);
                 }
@@ -152,28 +155,29 @@ pub(crate) async fn sync_worker(
                 if let Some(snapshot_timestamp) = snapshots.get(path) {
                     // No conflict case, Only client modified the file
                     if client_snapshot_timestamp.eq(snapshot_timestamp) {
-                        fastn_core::utils::update1(&config.root, path, content).await?;
-                        let snapshot_path =
-                            fastn_core::utils::history_path(path, config.root.as_str(), &timestamp);
-                        tokio::fs::copy(config.root.join(path), snapshot_path).await?;
+                        fastn_core::utils::update1(config.ds.root(), path, content).await?;
+                        let snapshot_path = fastn_core::utils::history_path(
+                            path,
+                            config.ds.root().as_str(),
+                            &timestamp,
+                        );
+                        tokio::fs::copy(config.ds.root().join(path), snapshot_path).await?;
                         snapshots.insert(path.to_string(), timestamp);
                     } else {
                         // else: Both has modified the same file
                         // TODO: Need to handle static files like images, don't require merging
                         let ancestor_path = fastn_core::utils::history_path(
                             path,
-                            config.root.as_str(),
+                            config.ds.root().as_str(),
                             client_snapshot_timestamp,
                         );
-                        let ancestor_content =
-                            fastn_core::tokio_fs::read_to_string(ancestor_path).await?;
+                        let ancestor_content = config.ds.read_to_string(ancestor_path).await?;
                         let ours_path = fastn_core::utils::history_path(
                             path,
-                            config.root.as_str(),
+                            config.ds.root().as_str(),
                             snapshot_timestamp,
                         );
-                        let theirs_content =
-                            fastn_core::tokio_fs::read_to_string(ours_path).await?;
+                        let theirs_content = config.ds.read_to_string(ours_path).await?;
                         let ours_content = String::from_utf8(content.clone())
                             .map_err(|e| fastn_core::Error::APIResponseError(e.to_string()))?;
 
@@ -182,14 +186,14 @@ pub(crate) async fn sync_worker(
                             .merge(&ancestor_content, &ours_content, &theirs_content)
                         {
                             Ok(data) => {
-                                fastn_core::utils::update1(&config.root, path, data.as_bytes())
+                                fastn_core::utils::update1(config.ds.root(), path, data.as_bytes())
                                     .await?;
                                 let snapshot_path = fastn_core::utils::history_path(
                                     path,
-                                    config.root.as_str(),
+                                    config.ds.root().as_str(),
                                     &timestamp,
                                 );
-                                tokio::fs::copy(config.root.join(path), snapshot_path).await?;
+                                tokio::fs::copy(config.ds.root().join(path), snapshot_path).await?;
                                 snapshots.insert(path.to_string(), timestamp);
                                 synced_files.insert(
                                     path.to_string(),
@@ -246,7 +250,7 @@ pub(crate) async fn sync_worker(
     )
     .await?;
 
-    let latest_ftd = fastn_core::tokio_fs::read_to_string(config.latest_ftd()).await?;
+    let latest_ftd = config.ds.read_to_string(config.latest_ftd()).await?;
 
     let r = SyncResponse {
         files: synced_files.into_values().collect_vec(),
@@ -298,7 +302,7 @@ async fn client_current_files(
     let diff = snapshot_diff(server_snapshot, client_snapshot);
     for (path, _) in diff.iter() {
         if !synced_files.contains_key(path) {
-            let content = fastn_core::tokio_fs::read(config.root.join(path)).await?;
+            let content = config.ds.read_content(config.ds.root().join(path)).await?;
             synced_files.insert(
                 path.clone(),
                 SyncResponseFile::Add {
@@ -363,7 +367,10 @@ async fn clone_history_files(
             .filter(|x| client_timestamp.map(|c| x.0.gt(c)).unwrap_or(true))
             .collect_vec();
         for (_, path) in history_paths {
-            let content = fastn_core::tokio_fs::read(config.history_dir().join(&path)).await?;
+            let content = config
+                .ds
+                .read_content(config.history_dir().join(&path))
+                .await?;
             dot_history.push(File { path, content });
         }
     }

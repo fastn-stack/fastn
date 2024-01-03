@@ -104,8 +104,18 @@ pub enum Error {
     #[error("DatabaseError: {message}")]
     DatabaseError { message: String },
 
+    #[cfg(feature = "auth")]
     #[error("DatabaseQueryError: {}", _0)]
     DatabaseQueryError(#[from] diesel::result::Error),
+
+    #[error("ds::ReadError: {}", _0)]
+    DSReadError(#[from] fastn_ds::ReadError),
+
+    #[error("ds::ReadStringError: {}", _0)]
+    DSReadStringError(#[from] fastn_ds::ReadStringError),
+
+    #[error("ds::WriteError: {}", _0)]
+    DSWriteError(#[from] fastn_ds::WriteError),
 
     #[error("AssertError: {message}")]
     AssertError { message: String },

@@ -7,7 +7,7 @@ pub async fn edit(config: &fastn_core::Config, file: &str, cr: &str) -> fastn_co
         return fastn_core::usage_error(format!("CR#{} is closed", cr));
     };
 
-    let cr_track_path = config.cr_track_path(&config.root.join(file), cr);
+    let cr_track_path = config.cr_track_path(&config.ds.root().join(file), cr);
     let cr_file_path = config.cr_path(cr).join(file);
     if cr_track_path.exists() && cr_file_path.exists() {
         return fastn_core::usage_error(format!("{} is already tracked in cr {}", file, cr));
@@ -35,7 +35,7 @@ pub async fn edit(config: &fastn_core::Config, file: &str, cr: &str) -> fastn_co
     }
 
     if file_path.exists() {
-        let content = fastn_core::tokio_fs::read(&file_path).await?;
+        let content = config.ds.read_content(&file_path).await?;
         fastn_core::utils::update(&cr_file_path, content.as_slice()).await?;
     } else {
         fastn_core::utils::update(&cr_file_path, vec![].as_slice()).await?;

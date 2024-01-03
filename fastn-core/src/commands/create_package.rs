@@ -29,6 +29,9 @@ pub async fn create_package(
 ) -> fastn_core::Result<()> {
     use colored::Colorize;
 
+    let current_dir: camino::Utf8PathBuf = std::env::current_dir()?.canonicalize()?.try_into()?;
+    let ds = fastn_ds::DocumentStore::new(current_dir);
+
     let base_path = {
         match std::env::current_dir() {
             Ok(bp) => match bp.to_str() {
@@ -88,8 +91,13 @@ pub async fn create_package(
             ])
             .collect();
 
-        fastn_core::history::insert_into_history(&final_dir, &file_list, &mut Default::default())
-            .await?;
+        fastn_core::history::insert_into_history(
+            &ds,
+            &final_dir,
+            &file_list,
+            &mut Default::default(),
+        )
+        .await?;
     }
 
     println!(

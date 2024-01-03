@@ -7321,7 +7321,6 @@ mod interpreter {
                                 data_id: Some(s("main-container")),
                                 ..Default::default()
                             },
-                            ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
@@ -8222,7 +8221,6 @@ mod interpreter {
                 is_not_visible: true,
                 ..Default::default()
             },
-            ..Default::default()
         }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
@@ -8258,7 +8256,6 @@ mod interpreter {
                 reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
-            ..Default::default()
         }));
 
         let mut bag = interpreter::default_bag();
@@ -10181,7 +10178,6 @@ mod interpreter {
                 reference: Some(s("foo/bar#toc")),
                 ..Default::default()
             },
-            ..Default::default()
         });
         let col1 = ftd::Element::Column(ftd::Column {
             spacing: None,
@@ -10238,7 +10234,6 @@ mod interpreter {
                 reference: Some(s("foo/bar#toc")),
                 ..Default::default()
             },
-            ..Default::default()
         });
         main.container.children.push(col.clone());
         main.container.children.push(ftd::Element::Row(ftd::Row {

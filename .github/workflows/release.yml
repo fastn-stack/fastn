@@ -15,8 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CARGO_TERM_COLOR: always
-      BUILD_TARGET: x86_64-unknown-linux-musl
-      BINARY_NAME: fastn
     steps:
       - uses: actions/checkout@main
       - uses: actions/cache@v2
@@ -29,14 +27,18 @@ jobs:
             fifthtry_content/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build-musl
-        uses: gmiam/rust-musl-action@9e6a37bf27ecfffb6b92240ea276bea5487fa15d
-        continue-on-error: false
-        with:
-          args: cargo build --target $BUILD_TARGET --release
+        run: |
+          echo "Building static binaries using ekidd/rust-musl-builder"
+          docker build -t fastn-build-image -f .github/Dockerfile .
+          docker run --name fastn-build fastn-build-image
+          mkdir -p out
+          docker cp fastn-build:/home/rust/src/target/x86_64-unknown-linux-musl/release/fastn out/
+      - name: run fastn
+        run: out/fastn --version
       - uses: actions/upload-artifact@v2
         with:
           name: linux_musl_x86_64
-          path: target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }}
+          path: out/fastn
   release-windows:
     name: Build for Windows
     runs-on: windows-latest
@@ -58,7 +60,13 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release
+          args: >
+            --config 'target.x86_64-pc-windows-msvc.pq.rustc-link-search = ["C:\\Program Files\\PostgreSQL\\14\\lib"]' 
+            --config 'target.x86_64-pc-windows-msvc.pq.rustc-link-lib = ["libpq"]' 
+            --release 
+            --features=auth
+      - name: run fastn
+        run: ./target/release/fastn.exe --version
       - uses: actions/upload-artifact@v2
         with:
           name: windows_x64_latest
@@ -80,7 +88,6 @@ jobs:
         with:
           name: windows_x64_installer.exe
           path: windows_x64_installer.exe
-          
   release-macos:
     name: Build for MacOS
     runs-on: macos-latest
@@ -102,7 +109,9 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release
+          args: --release --features=auth
+      - name: run fastn
+        run: ./target/release/fastn --version
       - uses: actions/upload-artifact@v2
         with:
           name: macos_x64_latest

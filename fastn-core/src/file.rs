@@ -117,6 +117,7 @@ impl Static {
 }
 
 pub(crate) async fn paths_to_files(
+    ds: &fastn_ds::DocumentStore,
     package_name: &str,
     files: Vec<camino::Utf8PathBuf>,
     base_path: &camino::Utf8Path,
@@ -128,7 +129,8 @@ pub(crate) async fn paths_to_files(
             .map(|x| {
                 let base = base_path.to_path_buf();
                 let p = pkg.clone();
-                tokio::spawn(async move { fastn_core::get_file(p, &x, &base).await })
+                let ds = ds.clone();
+                tokio::spawn(async move { fastn_core::get_file(&ds, p, &x, &base).await })
             })
             .collect::<Vec<tokio::task::JoinHandle<fastn_core::Result<fastn_core::File>>>>(),
     )
@@ -175,6 +177,7 @@ pub fn ignore_path(
 }
 
 pub(crate) async fn get_file(
+    ds: &fastn_ds::DocumentStore,
     package_name: String,
     doc_path: &camino::Utf8Path,
     base_path: &camino::Utf8Path,
@@ -185,36 +188,34 @@ pub(crate) async fn get_file(
         });
     }
 
-    let id = match std::fs::canonicalize(doc_path)?
-        .to_str()
-        .unwrap()
-        .rsplit_once(
-            if base_path.as_str().ends_with(std::path::MAIN_SEPARATOR) {
-                base_path.as_str().to_string()
-            } else {
-                format!("{}{}", base_path, std::path::MAIN_SEPARATOR)
-            }
-            .as_str(),
-        ) {
-        Some((_, id)) => id.replace(std::path::MAIN_SEPARATOR, "/"),
-        None => {
-            return Err(fastn_core::Error::UsageError {
-                message: format!("{:?} should be a file", doc_path),
-            });
-        }
-    };
+    let base_path_str = base_path
+        .as_str()
+        .trim_end_matches(std::path::MAIN_SEPARATOR);
+
+    if !doc_path.as_str().starts_with(base_path_str) {
+        return Err(fastn_core::Error::UsageError {
+            message: format!("{:?} should be a file", doc_path),
+        });
+    }
+
+    let id = doc_path
+        .as_str()
+        .trim_start_matches(base_path_str)
+        .replace(std::path::MAIN_SEPARATOR, "/")
+        .trim_start_matches('/')
+        .to_string();
 
     Ok(match id.rsplit_once('.') {
         Some((_, "ftd")) => File::Ftd(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: fastn_core::tokio_fs::read_to_string(&doc_path).await?,
+            content: ds.read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),
         }),
         Some((_, "md")) => File::Markdown(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: fastn_core::tokio_fs::read_to_string(&doc_path).await?,
+            content: ds.read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),
         }),
         Some((_, ext))
@@ -226,7 +227,7 @@ pub(crate) async fn get_file(
             File::Image(Static {
                 package_name: package_name.to_string(),
                 id: id.to_string(),
-                content: fastn_core::tokio_fs::read(&doc_path).await?,
+                content: ds.read_content(&doc_path).await?,
                 base_path: base_path.to_path_buf(),
             })
         }
@@ -234,14 +235,14 @@ pub(crate) async fn get_file(
             File::Code(Document {
                 package_name: package_name.to_string(),
                 id: id.to_string(),
-                content: fastn_core::tokio_fs::read_to_string(&doc_path).await?,
+                content: ds.read_to_string(&doc_path).await?,
                 parent_path: base_path.to_string(),
             })
         }
         _ => File::Static(Static {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: fastn_core::tokio_fs::read(&doc_path).await?,
+            content: ds.read_content(&doc_path).await?,
             base_path: base_path.to_path_buf(),
         }),
     })

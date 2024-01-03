@@ -3,6 +3,10 @@ pub(crate) fn get_p1_data(
     value: &ftd::ast::VariableValue,
     doc_name: &str,
 ) -> ftd::interpreter::Result<(ftd::ast::HeaderValues, String)> {
+    if let ftd::ast::VariableValue::String { value, .. } = value {
+        return Ok((ftd::ast::HeaderValues::new(vec![]), value.clone()));
+    }
+
     match value.get_record(doc_name) {
         Ok(val) => Ok((
             val.2.to_owned(),
@@ -33,7 +37,7 @@ pub async fn process(
     headers: ftd::ast::HeaderValues,
     query: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let sqlite_database_path = req_config.config.root.join(&db_config.db_url);
+    let sqlite_database_path = req_config.config.ds.root().join(&db_config.db_url);
 
     // need the query params
     // question is they can be multiple
@@ -94,13 +98,7 @@ pub(crate) fn result_to_value(
                 }
             }
         }
-        Err(e) => match kind.get_name().as_str() {
-            "integer" => Ok(ftd::interpreter::Value::Integer {
-                value: status as i64,
-            }),
-            "string" => Ok(ftd::interpreter::Value::String { text: (e) }),
-            _ => unimplemented!(),
-        },
+        Err(e) => Err(ftd::interpreter::Error::OtherError(e)),
     }
 }
 

@@ -48,28 +48,38 @@ pub async fn create_or_inc(path: &str) -> fastn_core::Result<usize> {
     }
 }*/
 
-async fn _get_without_lock(path: &str) -> fastn_core::Result<usize> {
-    let value = fastn_core::tokio_fs::read_to_string(path).await?;
+async fn _get_without_lock(config: &fastn_core::Config, path: &str) -> fastn_core::Result<usize> {
+    let value = config.ds.read_to_string(path).await?;
     Ok(value.parse()?)
 }
 
-async fn _create_without_lock(path: &str) -> fastn_core::Result<usize> {
+async fn _create_without_lock(
+    config: &fastn_core::Config,
+    path: &str,
+) -> fastn_core::Result<usize> {
     use tokio::io::AsyncWriteExt;
     let content: usize = 1;
     tokio::fs::File::create(path)
         .await?
         .write_all(content.to_string().as_bytes())
         .await?;
-    _get_without_lock(path).await
+    _get_without_lock(config, path).await
 }
 
-async fn update_get(path: &str, value: usize) -> fastn_core::Result<usize> {
+async fn update_get(
+    config: &fastn_core::Config,
+    path: &str,
+    value: usize,
+) -> fastn_core::Result<usize> {
     // TODO: why are we not just taking the lock using `let _lock = LOCK.write()`?
     match LOCK.try_write() {
         Some(_lock) => {
-            let old_value = _get_without_lock(path).await?;
-            tokio::fs::write(path, (old_value + value).to_string().as_bytes()).await?;
-            Ok(_get_without_lock(path).await?)
+            let old_value = _get_without_lock(config, path).await?;
+            config
+                .ds
+                .write_content(path, (old_value + value).to_string().into())
+                .await?;
+            Ok(_get_without_lock(config, path).await?)
         }
         None => Err(fastn_core::Error::GenericError(
             "Failed to acquire lock".to_string(),
@@ -77,13 +87,20 @@ async fn update_get(path: &str, value: usize) -> fastn_core::Result<usize> {
     }
 }
 
-async fn update_create(path: &str, value: usize) -> fastn_core::Result<usize> {
+async fn update_create(
+    config: &fastn_core::Config,
+    path: &str,
+    value: usize,
+) -> fastn_core::Result<usize> {
     // TODO: why are we not just taking the lock using `let _lock = LOCK.write()`?
     match LOCK.try_write() {
         Some(_lock) => {
-            let old_value = _create_without_lock(path).await?;
-            tokio::fs::write(path, (old_value + value).to_string().as_bytes()).await?;
-            Ok(_get_without_lock(path).await?)
+            let old_value = _create_without_lock(config, path).await?;
+            config
+                .ds
+                .write_content(path, (old_value + value).to_string().into())
+                .await?;
+            Ok(_get_without_lock(config, path).await?)
         }
         None => Err(fastn_core::Error::GenericError(
             "Failed to acquire lock".to_string(),
@@ -91,10 +108,14 @@ async fn update_create(path: &str, value: usize) -> fastn_core::Result<usize> {
     }
 }
 
-pub async fn update(path: &str, value: usize) -> fastn_core::Result<usize> {
+pub async fn update(
+    config: &fastn_core::Config,
+    path: &str,
+    value: usize,
+) -> fastn_core::Result<usize> {
     if camino::Utf8Path::new(path).exists() {
-        update_get(path, value).await
+        update_get(config, path, value).await
     } else {
-        update_create(path, value).await
+        update_create(config, path, value).await
     }
 }

@@ -134,7 +134,7 @@ pub(crate) async fn create_workspace(
     }
 
     fastn_core::utils::update1(
-        &config.root.join(".fastn"),
+        &config.ds.root().join(".fastn"),
         "workspace.ftd",
         data.join("\n\n").as_bytes(),
     )
@@ -145,12 +145,12 @@ pub(crate) async fn create_workspace(
 pub(crate) async fn get_workspace(
     config: &fastn_core::Config,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, Workspace>> {
-    let latest_file_path = config.root.join(".fastn").join("workspace.ftd");
+    let latest_file_path = config.ds.root().join(".fastn").join("workspace.ftd");
     if !latest_file_path.exists() {
         // TODO: should we error out here?
         return Ok(Default::default());
     }
 
-    let doc = fastn_core::tokio_fs::read_to_string(&latest_file_path).await?;
+    let doc = config.ds.read_to_string(&latest_file_path).await?;
     resolve_workspace(&doc).await
 }

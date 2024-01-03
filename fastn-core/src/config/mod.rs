@@ -29,8 +29,8 @@ impl FTDEdition {
 #[derive(Debug, Clone)]
 pub struct Config {
     // Global Information
+    pub ds: fastn_ds::DocumentStore,
     pub package: fastn_core::Package,
-    pub root: camino::Utf8PathBuf,
     pub packages_root: camino::Utf8PathBuf,
     pub original_directory: camino::Utf8PathBuf,
     pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, fastn_core::Package>>,
@@ -178,8 +178,9 @@ impl RequestConfig {
             let file_name = self.config.get_file_path_and_resolve(id.as_str()).await?;
             let package = self.config.find_package_by_id(id.as_str()).await?.1;
             let file = fastn_core::get_file(
+                &self.config.ds,
                 package.name.to_string(),
-                &self.config.root.join(file_name),
+                &self.config.ds.root().join(file_name),
                 &self.config.get_root_for_package(&package),
             )
             .await?;
@@ -196,8 +197,13 @@ impl RequestConfig {
 
             let package = self.config.find_package_by_id(path).await?.1;
             let mut file = fastn_core::get_file(
+                &self.config.ds,
                 package.name.to_string(),
-                &self.config.root.join(file_name.trim_start_matches('/')),
+                &self
+                    .config
+                    .ds
+                    .root()
+                    .join(file_name.trim_start_matches('/')),
                 &self.config.get_root_for_package(&package),
             )
             .await?;
@@ -301,11 +307,11 @@ impl Config {
     /// `build_dir` is where the static built files are stored. `fastn build` command creates this
     /// folder and stores its output here.
     pub fn build_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".build")
+        self.ds.root().join(".build")
     }
 
     pub fn clone_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".clone-state")
+        self.ds.root().join(".clone-state")
     }
 
     pub fn workspace_file(&self) -> camino::Utf8PathBuf {
@@ -317,11 +323,11 @@ impl Config {
     }
 
     pub fn cr_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
-        self.root.join(fastn_core::cr::cr_path(cr_number))
+        self.ds.root().join(fastn_core::cr::cr_path(cr_number))
     }
 
     pub fn path_without_root(&self, path: &camino::Utf8PathBuf) -> fastn_core::Result<String> {
-        Ok(path.strip_prefix(&self.root)?.to_string())
+        Ok(path.strip_prefix(self.ds.root())?.to_string())
     }
 
     pub fn cr_deleted_file_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
@@ -349,7 +355,7 @@ impl Config {
             .cr_path(cr_number)
             .join(path)
             .to_string()
-            .replace(self.root.to_string().as_str(), "");
+            .replace(self.ds.root().to_string().as_str(), "");
         let track_path = format!("{}.track", path_without_root);
         self.track_dir().join(track_path)
     }
@@ -376,7 +382,7 @@ impl Config {
     }
 
     pub fn remote_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".remote-state")
+        self.ds.root().join(".remote-state")
     }
 
     pub fn remote_history_dir(&self) -> camino::Utf8PathBuf {
@@ -413,11 +419,11 @@ impl Config {
     /// `.history` file is created or updated by `fastn sync` command only, no one else should edit
     /// anything in it.
     pub fn history_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".history")
+        self.ds.root().join(".history")
     }
 
     pub fn fastn_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".fastn")
+        self.ds.root().join(".fastn")
     }
 
     pub fn conflicted_dir(&self) -> camino::Utf8PathBuf {
@@ -438,14 +444,14 @@ impl Config {
     ///
     /// One `fastn.snapshot` for every file that is currently part of the package.
     pub fn latest_ftd(&self) -> camino::Utf8PathBuf {
-        self.root.join(".history/.latest.ftd")
+        self.ds.root().join(".history/.latest.ftd")
     }
 
     /// track_dir returns the directory where track files are stored. Tracking information as well
     /// is considered part of a package, but it is not downloaded when a package is downloaded as
     /// a dependency of another package.
     pub fn track_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".tracks")
+        self.ds.root().join(".tracks")
     }
 
     /// `is_translation_package()` is a helper to tell you if the current package is a translation
@@ -649,6 +655,7 @@ impl Config {
             }
             let version = get_version(&file, &path).await?;
             let file = fastn_core::get_file(
+                &self.ds,
                 package.name.to_string(),
                 &file,
                 &(if version.original.eq("BASE_VERSION") {
@@ -705,7 +712,7 @@ impl Config {
             // TODO: Unwrap?
             package_fastn_path.parent().unwrap().to_owned()
         } else if package.name.eq(&self.package.name) {
-            self.root.clone()
+            self.ds.root().clone()
         } else {
             self.packages_root.clone().join(package.name.as_str())
         }
@@ -719,7 +726,7 @@ impl Config {
         let all_files = self.get_all_file_paths(package)?;
         // TODO: Unwrap?
         let mut documents =
-            fastn_core::paths_to_files(package.name.as_str(), all_files, &path).await?;
+            fastn_core::paths_to_files(&self.ds, package.name.as_str(), all_files, &path).await?;
         documents.sort_by_key(|v| v.get_id().to_string()); // TODO: why is to_string() needed?
 
         Ok(documents)
@@ -731,7 +738,8 @@ impl Config {
         let all_files_path = self.get_all_file_paths(&self.package)?;
 
         let documents =
-            fastn_core::paths_to_files(self.package.name.as_str(), all_files_path, &path).await?;
+            fastn_core::paths_to_files(&self.ds, self.package.name.as_str(), all_files_path, &path)
+                .await?;
         for document in documents.iter() {
             if let fastn_core::File::Ftd(doc) = document {
                 // Ignore fetching id's from FASTN.ftd since
@@ -782,7 +790,7 @@ impl Config {
         id: &str,
         package: &fastn_core::Package,
     ) -> fastn_core::Result<fastn_core::File> {
-        let file_name = fastn_core::Config::get_file_name(&self.root, id)?;
+        let file_name = fastn_core::Config::get_file_name(self.ds.root(), id)?;
         self.get_files(package)
             .await?
             .into_iter()
@@ -805,8 +813,9 @@ impl Config {
             .1;
 
         let mut file = fastn_core::get_file(
+            &self.ds,
             package.name.to_string(),
-            &self.root.join(file_name),
+            &self.ds.root().join(file_name),
             &self.get_root_for_package(&package),
         )
         .await?;
@@ -896,7 +905,7 @@ impl Config {
             self.add_package(&package);
         }
 
-        let fastn_doc = utils::fastn_doc(fastn_path).await?;
+        let fastn_doc = utils::fastn_doc(&self.ds, fastn_path).await?;
 
         let mut package = package.clone();
 
@@ -963,7 +972,7 @@ impl Config {
             "{}{}",
             add_packages,
             package
-                .resolve_by_id(id, None, self.package.name.as_str())
+                .resolve_by_id(id, None, self.package.name.as_str(), &self.ds)
                 .await?
                 .0
         ))
@@ -1006,7 +1015,7 @@ impl Config {
         };
 
         let (file_name, content) = package
-            .resolve_by_id(id, None, self.package.name.as_str())
+            .resolve_by_id(id, None, self.package.name.as_str(), &self.ds)
             .await?;
         Ok((format!("{}{}", add_packages, file_name), content))
     }
@@ -1069,7 +1078,7 @@ impl Config {
         }
 
         let (file_name, content) = package
-            .resolve_by_id(id.as_str(), None, self.package.name.as_str())
+            .resolve_by_id(id.as_str(), None, self.package.name.as_str(), &self.ds)
             .await?;
 
         Ok((format!("{}{}", add_packages, file_name), content))
@@ -1116,7 +1125,9 @@ impl Config {
             utils::find_root_for_file(&self.packages_root.join(id), "FASTN.ftd")
         {
             let mut package = fastn_core::Package::new("unknown-package");
-            package.resolve(&package_root.join("FASTN.ftd")).await?;
+            package
+                .resolve(&package_root.join("FASTN.ftd"), &self.ds)
+                .await?;
             self.add_package(&package);
             return Ok((package.name.to_string(), package));
         }
@@ -1289,6 +1300,7 @@ impl Config {
         })
     }
 
+    #[allow(dead_code)]
     async fn get_root_path(
         directory: &camino::Utf8PathBuf,
     ) -> fastn_core::Result<camino::Utf8PathBuf> {
@@ -1376,38 +1388,27 @@ impl Config {
         config
     }
 
+    pub async fn read_current(resolve_sitemap: bool) -> fastn_core::Result<fastn_core::Config> {
+        let current_dir: camino::Utf8PathBuf =
+            std::env::current_dir()?.canonicalize()?.try_into()?;
+        Config::read(fastn_ds::DocumentStore::new(current_dir), resolve_sitemap).await
+    }
+
     /// `read()` is the way to read a Config.
     #[tracing::instrument(name = "Config::read", skip_all)]
     pub async fn read(
-        root: Option<String>,
+        ds: fastn_ds::DocumentStore,
         resolve_sitemap: bool,
     ) -> fastn_core::Result<fastn_core::Config> {
-        let (root, original_directory) = match root {
-            Some(r) => {
-                let root: camino::Utf8PathBuf = tokio::fs::canonicalize(r.as_str())
-                    .await?
-                    .to_str()
-                    .map_or_else(|| r, |r| r.to_string())
-                    .into();
-                (root.clone(), root)
-            }
-            None => {
-                let original_directory: camino::Utf8PathBuf =
-                    tokio::fs::canonicalize(std::env::current_dir()?)
-                        .await?
-                        .try_into()?;
-                (
-                    fastn_core::Config::get_root_path(&original_directory).await?,
-                    original_directory,
-                )
-            }
-        };
-        let fastn_doc = utils::fastn_doc(&root.join("FASTN.ftd")).await?;
-        let package = fastn_core::Package::from_fastn_doc(&root, &fastn_doc)?;
+        let original_directory: camino::Utf8PathBuf =
+            tokio::fs::canonicalize(std::env::current_dir()?)
+                .await?
+                .try_into()?;
+        let fastn_doc = utils::fastn_doc(&ds, "FASTN.ftd".into()).await?;
+        let package = fastn_core::Package::from_fastn_doc(&ds, &fastn_doc)?;
         let mut config = Config {
             package: package.clone(),
-            packages_root: root.clone().join(".packages"),
-            root,
+            packages_root: ds.root().join(".packages"), // Todo: Remove unwrap()
             original_directory,
             all_packages: Default::default(),
             global_ids: Default::default(),
@@ -1417,6 +1418,7 @@ impl Config {
             ftd_external_css: Default::default(),
             ftd_inline_css: Default::default(),
             test_command_running: false,
+            ds,
         };
         // Update global_ids map from the current package files
         config.update_ids_from_package().await?;
@@ -1576,7 +1578,7 @@ impl Config {
             return Ok(package.clone());
         }
         let mut package = package
-            .get_and_resolve(&self.get_root_for_package(package))
+            .get_and_resolve(&self.get_root_for_package(package), &self.ds)
             .await?;
         self.check_dependencies_provided(&mut package)?;
         package.auto_import_language(
@@ -1619,6 +1621,7 @@ impl Config {
             return fastn_core::usage_error("Can be used by remote only".to_string());
         }
         let value = fastn_core::cache::update(
+            self,
             self.remote_cr().to_string().as_str(),
             number_of_crs_to_reserve,
         )

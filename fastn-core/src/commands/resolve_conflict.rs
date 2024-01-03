@@ -39,7 +39,7 @@ pub async fn resolve_conflict(
                 path
             ));
         }
-        fastn_core::utils::update(&config.root.join(path), content).await?;
+        fastn_core::utils::update(&config.ds.root().join(path), content).await?;
     } else if use_theirs {
         let content =
             conflicted_data
@@ -57,7 +57,7 @@ pub async fn resolve_conflict(
                 path
             ));
         }
-        fastn_core::utils::update(&config.root.join(path), content).await?;
+        fastn_core::utils::update(&config.ds.root().join(path), content).await?;
     } else if revive_it {
         let content = conflicted_data
             .ours
@@ -66,13 +66,13 @@ pub async fn resolve_conflict(
             .ok_or(fastn_core::Error::UsageError {
                 message: format!("Can't find content: `{}`", path),
             })?;
-        fastn_core::utils::update(&config.root.join(path), content).await?;
+        fastn_core::utils::update(&config.ds.root().join(path), content).await?;
     } else if delete_it {
         if !(conflicted_data.ours.deleted() || conflicted_data.theirs.deleted()) {
             return fastn_core::usage_error(format!("{} is not in `delete-edit-conflict`", path));
         }
-        if config.root.join(path).exists() {
-            tokio::fs::remove_file(config.root.join(path)).await?;
+        if config.ds.root().join(path).exists() {
+            tokio::fs::remove_file(config.ds.root().join(path)).await?;
         }
     } else if print {
         let content = conflicted_data
@@ -97,7 +97,7 @@ pub async fn resolve_conflict(
         let edited = edit::edit(content).map_err(|e| fastn_core::Error::UsageError {
             message: format!("{}, Help: Use `fastn resolve-conflict --print {}`", e, path,),
         })?;
-        fastn_core::utils::update(&config.root.join(path), edited.as_bytes()).await?;
+        fastn_core::utils::update(&config.ds.root().join(path), edited.as_bytes()).await?;
     }
 
     mark_resolve(config, file_status, delete_it).await?;
@@ -183,7 +183,7 @@ async fn get_conflict_data(
                 return fastn_core::usage_error(format!("`{}` is not in conflict state", path));
             };
             let history_path = config.history_path(path, remote_version);
-            let history_content = fastn_core::tokio_fs::read(history_path).await?;
+            let history_content = config.ds.read_content(history_path).await?;
             /* if let Ok(theirs_string) = String::from_utf8(history_content.to_vec()) {
                 let ours_string = String::from_utf8(content.to_vec())?;
                 let patch = diffy::create_patch(ours_string.as_str(), theirs_string.as_str());
@@ -235,11 +235,11 @@ async fn get_conflict_data(
                 ));
             }
             let theirs_path = config.history_path(path, remote_version);
-            let theirs_content = fastn_core::tokio_fs::read(theirs_path).await?;
+            let theirs_content = config.ds.read_content(theirs_path).await?;
             if let Ok(theirs_string) = String::from_utf8(theirs_content.to_vec()) {
                 let ours_string = String::from_utf8(content.to_vec())?;
                 let ancestor_path = config.history_path(path, *version);
-                let ancestor_content = fastn_core::tokio_fs::read(ancestor_path).await?;
+                let ancestor_content = config.ds.read_content(ancestor_path).await?;
                 let ancestor_string = String::from_utf8(ancestor_content)?;
                 match diffy::MergeOptions::new()
                     .set_conflict_style(diffy::ConflictStyle::Merge)
@@ -247,7 +247,7 @@ async fn get_conflict_data(
                 {
                     Ok(data) => {
                         // Not possible to reach here
-                        tokio::fs::write(path, &data).await?;
+                        config.ds.write_content(path, data.into()).await?;
                         return fastn_core::usage_error(format!("`{}` already resolved", path));
                     }
                     Err(data) => {
@@ -276,7 +276,7 @@ async fn get_conflict_data(
                     ));
                 };
             let theirs_path = config.history_path(path, *version);
-            let theirs_content = fastn_core::tokio_fs::read(theirs_path).await?;
+            let theirs_content = config.ds.read_content(theirs_path).await?;
             Ok(ConflictData {
                 theirs: Content::Content(theirs_content),
                 ours: Content::Deleted,
