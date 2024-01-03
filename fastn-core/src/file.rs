@@ -188,24 +188,22 @@ pub(crate) async fn get_file(
         });
     }
 
-    let id = match std::fs::canonicalize(doc_path)?
-        .to_str()
-        .unwrap()
-        .rsplit_once(
-            if base_path.as_str().ends_with(std::path::MAIN_SEPARATOR) {
-                base_path.as_str().to_string()
-            } else {
-                format!("{}{}", base_path, std::path::MAIN_SEPARATOR)
-            }
-            .as_str(),
-        ) {
-        Some((_, id)) => id.replace(std::path::MAIN_SEPARATOR, "/"),
-        None => {
-            return Err(fastn_core::Error::UsageError {
-                message: format!("{:?} should be a file", doc_path),
-            });
-        }
-    };
+    let base_path_str = base_path
+        .as_str()
+        .trim_end_matches(std::path::MAIN_SEPARATOR);
+
+    if !doc_path.as_str().starts_with(base_path_str) {
+        return Err(fastn_core::Error::UsageError {
+            message: format!("{:?} should be a file", doc_path),
+        });
+    }
+
+    let id = doc_path
+        .as_str()
+        .trim_start_matches(base_path_str)
+        .replace(std::path::MAIN_SEPARATOR, "/")
+        .trim_start_matches('/')
+        .to_string();
 
     Ok(match id.rsplit_once('.') {
         Some((_, "ftd")) => File::Ftd(Document {

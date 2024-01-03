@@ -132,13 +132,14 @@ impl VariableInvocation {
             );
         }
 
-        let value = ftd::ast::VariableValue::from_p1(section, doc_id);
-        let condition = ftd::ast::Condition::from_headers(&section.headers, doc_id)?;
+        let value = ftd::ast::VariableValue::from_p1(section, doc_id)?;
+        let condition = value.condition().clone();
         let processor = Processor::from_headers(&section.headers, doc_id)?;
 
         Ok(VariableInvocation::new(
             section.name.trim_start_matches(ftd::ast::utils::REFERENCE),
-            value,
+            // Removing condition because it's redundant here.
+            value.set_condition(None),
             condition,
             processor,
             section.line_number,

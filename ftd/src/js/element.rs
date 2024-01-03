@@ -1528,8 +1528,8 @@ impl DocumentMeta {
     }
 
     pub fn has_self_reference(&self, value: &ftd::js::Value) -> bool {
-        if let ftd::js::Value::Reference(name) = value {
-            return name.starts_with("ftd#document");
+        if let ftd::js::Value::Reference(reference) = value {
+            return reference.name.starts_with("ftd#document");
         }
         false
     }
