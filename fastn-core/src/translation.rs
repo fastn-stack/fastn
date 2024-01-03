@@ -172,8 +172,7 @@ impl TranslatedDocument {
                 continue;
             }
             let tracks =
-                fastn_core::tracker::get_tracks(config, config.ds.root().as_str(), &track_path)
-                    .await?;
+                fastn_core::tracker::get_tracks(config, config.ds.root(), &track_path).await?;
             if let Some(fastn_core::Track {
                 last_merged_version: Some(last_merged_version),
                 self_timestamp,
@@ -230,12 +229,12 @@ pub(crate) async fn get_translation_status_counts(
             translation_status_count.missing += 1;
             continue;
         }
-        let track_path = fastn_core::utils::track_path(file.as_str(), path.as_str());
+        let track_path = fastn_core::utils::track_path(file.as_str(), path);
         if !track_path.exists() {
             translation_status_count.never_marked += 1;
             continue;
         }
-        let tracks = fastn_core::tracker::get_tracks(config, path.as_str(), &track_path).await?;
+        let tracks = fastn_core::tracker::get_tracks(config, path, &track_path).await?;
         if let Some(fastn_core::Track {
             last_merged_version: Some(last_merged_version),
             ..

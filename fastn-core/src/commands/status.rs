@@ -41,7 +41,7 @@ async fn file_status(
     let file = fastn_core::get_file(&config.ds, package_name, &path, base_path).await?;
 
     let file_status = get_file_status(config, &file, snapshots, workspaces).await?;
-    let track_status = get_track_status(config, &file, snapshots, base_path.as_str()).await?;
+    let track_status = get_track_status(config, &file, snapshots, base_path).await?;
 
     let mut clean = true;
     if !file_status.eq(&FileStatus::Uptodate) {
@@ -69,7 +69,7 @@ async fn all_status(
     let mut track_status = std::collections::BTreeMap::new();
     for doc in config.get_files(&config.package).await? {
         let status = get_file_status(config, &doc, snapshots, workspaces).await?;
-        let track = get_track_status(config, &doc, snapshots, config.ds.root().as_str()).await?;
+        let track = get_track_status(config, &doc, snapshots, config.ds.root()).await?;
         if !track.is_empty() {
             track_status.insert(doc.get_id().to_string(), track);
         }
@@ -151,9 +151,10 @@ async fn get_track_status(
     config: &fastn_core::Config,
     doc: &fastn_core::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
-    base_path: &str,
+    base_path: &fastn_ds::Path,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, TrackStatus>> {
-    let path = fastn_core::utils::track_path(doc.get_id(), doc.get_base_path());
+    let path =
+        fastn_core::utils::track_path(doc.get_id(), &fastn_ds::Path::new(doc.get_base_path()));
     let mut track_list = std::collections::BTreeMap::new();
     if !path.exists() {
         return Ok(track_list);

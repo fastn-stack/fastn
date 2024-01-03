@@ -3,7 +3,7 @@ async fn stop_tracking(
     who: &str,
     whom: Option<&str>,
 ) -> fastn_core::Result<()> {
-    check(config, who, whom, config.ds.root().as_str()).await?;
+    check(config, who, whom, config.ds.root()).await?;
 
     Ok(())
 }
@@ -33,13 +33,13 @@ async fn check(
     config: &fastn_core::Config,
     who: &str,
     whom: Option<&str>,
-    base_path: &str,
+    base_path: &fastn_ds::Path,
 ) -> fastn_core::Result<()> {
     let file_path = fastn_core::utils::track_path(who, base_path);
     let mut tracks = fastn_core::tracker::get_tracks(config, base_path, &file_path).await?;
     if let Some(whom) = whom {
         if tracks.remove(whom).is_some() {
-            write(&file_path, &tracks).await?;
+            write(&file_path, &tracks, &config.ds).await?;
             println!("{} is now stop tracking {}", who, whom);
             return Ok(());
         } else {
@@ -62,8 +62,9 @@ async fn check(
 }
 
 async fn write(
-    file_path: &camino::Utf8PathBuf,
+    file_path: &fastn_ds::Path,
     tracks: &std::collections::BTreeMap<String, fastn_core::Track>,
+    ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
     use tokio::io::AsyncWriteExt;
 
@@ -79,6 +80,6 @@ async fn write(
             string = format!("{}\nother-timestamp: {}", string, other_timestamp);
         }
     }
-    f.write_all(string.as_bytes()).await?;
+    ds.write_content(file_path, string.into_bytes()).await?;
     Ok(())
 }
