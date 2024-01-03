@@ -14,6 +14,7 @@ pub async fn build(
         config.ds.root().join(".build"),
         &config.ftd_edition,
         &config.package.name,
+        &config.ds,
     )
     .await?;
 
@@ -50,7 +51,7 @@ pub async fn build(
             };
 
             let save_path = config.ds.root().join(".build").join(save_file.as_str());
-            fastn_core::utils::update(save_path, content.as_bytes())
+            fastn_core::utils::update(&save_path, content.as_bytes(), &config.ds)
                 .await
                 .ok();
         }
@@ -665,7 +666,7 @@ async fn handle_file_(
                     package_name: config.package.name.to_string(),
                     id: doc.id.to_string(),
                     content: doc.content.clone().into_bytes(),
-                    base_path: camino::Utf8PathBuf::from(doc.parent_path.as_str()),
+                    base_path: fastn_ds::Path::new(doc.parent_path.as_str()),
                 },
                 config.ds.root(),
                 &config.package,
@@ -679,22 +680,23 @@ async fn handle_file_(
 
 #[tracing::instrument]
 pub async fn default_build_files(
-    base_path: camino::Utf8PathBuf,
+    base_path: fastn_ds::Path,
     ftd_edition: &fastn_core::FTDEdition,
     package_name: &str,
+    ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
     if ftd_edition.is_2023() {
         let default_ftd_js_content = ftd::js::all_js_without_test(package_name);
         let hashed_ftd_js_name = fastn_core::utils::hashed_default_ftd_js(package_name);
         let save_default_ftd_js = base_path.join(hashed_ftd_js_name);
-        fastn_core::utils::update(save_default_ftd_js, default_ftd_js_content.as_bytes())
+        fastn_core::utils::update(&save_default_ftd_js, default_ftd_js_content.as_bytes(), ds)
             .await
             .ok();
 
         let markdown_js_content = ftd::markdown_js();
         let hashed_markdown_js_name = fastn_core::utils::hashed_markdown_js();
         let save_markdown_js = base_path.join(hashed_markdown_js_name);
-        fastn_core::utils::update(save_markdown_js, markdown_js_content.as_bytes())
+        fastn_core::utils::update(&save_markdown_js, markdown_js_content.as_bytes(), ds)
             .await
             .ok();
 
@@ -703,7 +705,7 @@ pub async fn default_build_files(
         for (theme, file_name) in hashed_code_themes {
             let save_markdown_js = base_path.join(file_name);
             let theme_content = theme_css.get(theme).unwrap();
-            fastn_core::utils::update(save_markdown_js, theme_content.as_bytes())
+            fastn_core::utils::update(&save_markdown_js, theme_content.as_bytes(), ds)
                 .await
                 .ok();
         }
@@ -711,28 +713,28 @@ pub async fn default_build_files(
         let prism_js_content = ftd::prism_js();
         let hashed_prism_js_name = fastn_core::utils::hashed_prism_js();
         let save_prism_js = base_path.join(hashed_prism_js_name);
-        fastn_core::utils::update(save_prism_js, prism_js_content.as_bytes())
+        fastn_core::utils::update(&save_prism_js, prism_js_content.as_bytes(), ds)
             .await
             .ok();
 
         let prism_css_content = ftd::prism_css();
         let hashed_prism_css_name = fastn_core::utils::hashed_prism_css();
         let save_prism_css = base_path.join(hashed_prism_css_name);
-        fastn_core::utils::update(save_prism_css, prism_css_content.as_bytes())
+        fastn_core::utils::update(&save_prism_css, prism_css_content.as_bytes(), ds)
             .await
             .ok();
     } else {
         let default_css_content = ftd::css();
         let hashed_css_name = fastn_core::utils::hashed_default_css_name();
         let save_default_css = base_path.join(hashed_css_name);
-        fastn_core::utils::update(save_default_css, default_css_content.as_bytes())
+        fastn_core::utils::update(&save_default_css, default_css_content.as_bytes(), ds)
             .await
             .ok();
 
         let default_js_content = format!("{}\n\n{}", ftd::build_js(), fastn_core::fastn_2022_js());
         let hashed_js_name = fastn_core::utils::hashed_default_js_name();
         let save_default_js = base_path.join(hashed_js_name);
-        fastn_core::utils::update(save_default_js, default_js_content.as_bytes())
+        fastn_core::utils::update(&save_default_js, default_js_content.as_bytes(), ds)
             .await
             .ok();
     }
@@ -792,7 +794,7 @@ async fn get_documents_for_current_package(
 
 async fn process_static(
     sa: &fastn_core::Static,
-    base_path: &camino::Utf8Path,
+    base_path: &fastn_ds::Path,
     package: &fastn_core::Package,
 ) -> fastn_core::Result<()> {
     copy_to_build(sa, base_path, package)?;

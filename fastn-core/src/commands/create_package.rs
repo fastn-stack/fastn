@@ -52,8 +52,8 @@ pub async fn create_package(
 
     let final_dir = {
         match path {
-            Some(p) => camino::Utf8PathBuf::from(base_path).join(p).join(name),
-            None => camino::Utf8PathBuf::from(base_path).join(name),
+            Some(p) => fastn_ds::Path::new(base_path).join(p).join(name),
+            None => fastn_ds::Path::new(base_path).join(name),
         }
     };
 

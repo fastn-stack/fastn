@@ -884,16 +884,16 @@ pub(crate) async fn copy(
 }
 
 pub(crate) async fn update(
-    root: impl AsRef<camino::Utf8Path>,
+    root: &fastn_ds::Path,
     data: &[u8],
+    ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
     use tokio::io::AsyncWriteExt;
 
-    let (file_root, file_name) = if let Some(file_root) = root.as_ref().parent() {
+    let (file_root, file_name) = if let Some(file_root) = root.parent() {
         (
             file_root,
-            root.as_ref()
-                .file_name()
+            root.file_name()
                 .ok_or_else(|| fastn_core::Error::UsageError {
                     message: format!(
                         "Invalid File Path: Can't find file name `{:?}`",
@@ -910,13 +910,8 @@ pub(crate) async fn update(
         });
     };
 
-    if !file_root.exists() {
-        tokio::fs::create_dir_all(file_root).await?;
-    }
-
-    Ok(tokio::fs::File::create(file_root.join(file_name))
-        .await?
-        .write_all(data)
+    Ok(ds
+        .write_content(&file_root.join(file_name), data.to_vec())
         .await?)
 }
 

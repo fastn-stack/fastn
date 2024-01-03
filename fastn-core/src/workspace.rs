@@ -64,6 +64,7 @@ impl fastn_core::Config {
                 .map(|v| v.to_string())
                 .join("\n")
                 .as_bytes(),
+            &self.ds,
         )
         .await?;
         Ok(())
@@ -74,7 +75,7 @@ impl fastn_core::Config {
         if self.clone_available_crs_path().exists() {
             let crs = self
                 .ds
-                .read_to_string(self.clone_available_crs_path())
+                .read_to_string(&self.clone_available_crs_path())
                 .await?;
             for cr in crs.split('\n') {
                 if cr.trim().is_empty() {
@@ -162,6 +163,7 @@ impl fastn_core::Config {
         fastn_core::utils::update(
             &workspace_path,
             WorkspaceEntry::get_ftd_string(workspace).as_bytes(),
+            &self.ds,
         )
         .await?;
         Ok(())

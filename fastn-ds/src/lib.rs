@@ -85,6 +85,10 @@ impl Path {
         }
         Ok(())
     }
+
+    pub fn file_name(&self) -> Option<String> {
+        self.path.file_name().map(|v| v.to_string())
+    }
 }
 
 impl std::fmt::Display for fastn_ds::Path {
