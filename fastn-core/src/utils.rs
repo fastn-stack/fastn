@@ -876,11 +876,12 @@ pub(crate) async fn update1(
 }
 
 pub(crate) async fn copy(
-    from: impl AsRef<camino::Utf8Path>,
-    to: impl AsRef<camino::Utf8Path>,
+    from: &fastn_ds::Path,
+    to: &fastn_ds::Path,
+    ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    let content = fastn_core::tokio_fs::read(from.as_ref()).await?;
-    fastn_core::utils::update(to, content.as_slice()).await
+    let content = ds.read_content(from).await?;
+    fastn_core::utils::update(to, content.as_slice(), ds).await
 }
 
 pub(crate) async fn update(
@@ -888,24 +889,19 @@ pub(crate) async fn update(
     data: &[u8],
     ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    use tokio::io::AsyncWriteExt;
-
     let (file_root, file_name) = if let Some(file_root) = root.parent() {
         (
             file_root,
             root.file_name()
                 .ok_or_else(|| fastn_core::Error::UsageError {
-                    message: format!(
-                        "Invalid File Path: Can't find file name `{:?}`",
-                        root.as_ref()
-                    ),
+                    message: format!("Invalid File Path: Can't find file name `{:?}`", root),
                 })?,
         )
     } else {
         return Err(fastn_core::Error::UsageError {
             message: format!(
                 "Invalid File Path: file path doesn't have parent: {:?}",
-                root.as_ref()
+                root
             ),
         });
     };
@@ -948,14 +944,18 @@ pub fn parse_from_cli(key: &str) -> Option<String> {
 }
 
 /// Remove from provided `root` except given list
-pub async fn remove_except(root: &fastn_ds::Path, except: &[&str]) -> fastn_core::Result<()> {
+pub async fn remove_except(
+    root: &fastn_ds::Path,
+    except: &[&str],
+    ds: &fastn_ds::DocumentStore,
+) -> fastn_core::Result<()> {
     use itertools::Itertools;
     let except = except.iter().map(|x| root.join(x)).collect_vec();
     for path in root.get_all_file_path(&[]) {
         if except.contains(&path) {
             continue;
         }
-        path.remove().await?;
+        ds.remove(&path).await?;
     }
     Ok(())
 }

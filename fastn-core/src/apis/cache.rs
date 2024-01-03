@@ -84,14 +84,14 @@ pub async fn clear_(
                 .to_string()
                 .starts_with(&config.ds.root().to_string())
             {
-                main_file_path.remove().await?;
+                config.ds.remove(&main_file_path).await?;
             }
         } else if package_file_path.exists() {
             if package_file_path
                 .to_string()
                 .starts_with(&config.ds.root().to_string())
             {
-                package_file_path.remove().await?;
+                config.ds.remove(&package_file_path).await?;
             }
         } else {
             println!("Not able to remove file from cache: {}", file);
@@ -102,20 +102,25 @@ pub async fn clear_(
     for package in query.package.iter() {
         if package.eq("main") {
             // TODO: List directories and files other than main
-            fastn_core::utils::remove_except(config.ds.root(), &[".packages", ".build"]).await?;
+            fastn_core::utils::remove_except(
+                config.ds.root(),
+                &[".packages", ".build"],
+                &config.ds,
+            )
+            .await?;
         } else {
             let path = config.packages_root.join(package);
             if path
                 .to_string()
                 .starts_with(&config.packages_root.to_string())
             {
-                path.remove().await?;
+                config.ds.remove(&path).await?;
             }
         }
     }
 
     if query.all_dependencies {
-        config.packages_root.remove().await?;
+        config.ds.remove(&config.packages_root).await?;
     }
 
     // Download FASTN.ftd again after removing all the content

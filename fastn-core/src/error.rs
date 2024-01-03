@@ -120,6 +120,9 @@ pub enum Error {
     #[error("ds::RemoveError: {}", _0)]
     DSRemoveError(#[from] fastn_ds::RemoveError),
 
+    #[error("ds::RemoveError: {}", _0)]
+    DSRenameError(#[from] fastn_ds::RenameError),
+
     #[error("AssertError: {message}")]
     AssertError { message: String },
 }

@@ -12,12 +12,6 @@ pub struct Path {
     path: camino::Utf8PathBuf,
 }
 
-#[derive(thiserror::Error, Debug)]
-pub enum RemoveError {
-    #[error("io error {0}")]
-    IOError(#[from] std::io::Error),
-}
-
 impl Path {
     pub fn new<T: AsRef<str>>(path: T) -> Self {
         Self {
@@ -73,19 +67,6 @@ impl Path {
         self.path.eq(&other.path)
     }
 
-    /// Remove path: It can be directory or file
-    pub async fn remove(&self) -> Result<(), RemoveError> {
-        if self.path.is_file() {
-            tokio::fs::remove_file(&self.path).await?;
-        } else if self.path.is_dir() {
-            tokio::fs::remove_dir_all(&self.path).await?
-        } else if self.path.is_symlink() {
-            // TODO:
-            // It can be a directory or a file
-        }
-        Ok(())
-    }
-
     pub fn file_name(&self) -> Option<String> {
         self.path.file_name().map(|v| v.to_string())
     }
@@ -106,6 +87,18 @@ fn package_ignores(
         overrides.add(format!("!{}", ignored_path).as_str())?;
     }
     overrides.build()
+}
+
+#[derive(thiserror::Error, Debug)]
+pub enum RemoveError {
+    #[error("io error {0}")]
+    IOError(#[from] std::io::Error),
+}
+
+#[derive(thiserror::Error, Debug)]
+pub enum RenameError {
+    #[error("io error {0}")]
+    IOError(#[from] std::io::Error),
 }
 
 #[derive(thiserror::Error, Debug)]
@@ -177,5 +170,21 @@ impl DocumentStore {
     pub async fn read_dir(&self, path: &Path) -> std::io::Result<tokio::fs::ReadDir> {
         // Todo: Return type should be ftd::interpreter::Result<Vec<fastn_ds::Dir>> not ftd::interpreter::Result<tokio::fs::ReadDir>
         tokio::fs::read_dir(&path.path).await
+    }
+
+    pub async fn rename(&self, from: &Path, to: &Path) -> Result<(), RenameError> {
+        Ok(tokio::fs::rename(&from.path, &to.path).await?)
+    }
+
+    pub async fn remove(&self, path: &Path) -> Result<(), RemoveError> {
+        if path.path.is_file() {
+            tokio::fs::remove_file(&path.path).await?;
+        } else if path.path.is_dir() {
+            tokio::fs::remove_dir_all(&path.path).await?
+        } else if path.path.is_symlink() {
+            // TODO:
+            // It can be a directory or a file
+        }
+        Ok(())
     }
 }
