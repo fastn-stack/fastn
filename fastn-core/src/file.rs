@@ -182,17 +182,12 @@ pub(crate) async fn get_file(
     doc_path: &fastn_ds::Path,
     base_path: &fastn_ds::Path,
 ) -> fastn_core::Result<File> {
-    if doc_path.is_dir() {
-        return Err(fastn_core::Error::UsageError {
-            message: format!("{} should be a file", doc_path.as_str()),
-        });
-    }
-
     let base_path_str = base_path
         .to_string()
-        .trim_end_matches(std::path::MAIN_SEPARATOR);
+        .trim_end_matches(std::path::MAIN_SEPARATOR)
+        .to_string();
 
-    if !doc_path.as_str().starts_with(base_path_str) {
+    if !doc_path.to_string().starts_with(base_path_str) {
         return Err(fastn_core::Error::UsageError {
             message: format!("{:?} should be a file", doc_path),
         });
@@ -200,7 +195,7 @@ pub(crate) async fn get_file(
 
     let id = doc_path
         .to_string()
-        .trim_start_matches(base_path_str)
+        .trim_start_matches(base_path_str.as_str())
         .replace(std::path::MAIN_SEPARATOR, "/")
         .trim_start_matches('/')
         .to_string();
@@ -228,7 +223,7 @@ pub(crate) async fn get_file(
                 package_name: package_name.to_string(),
                 id: id.to_string(),
                 content: ds.read_content(&doc_path).await?,
-                base_path: base_path.to_path_buf(),
+                base_path: base_path.clone(),
             })
         }
         Some((_, ext)) if ftd::ftd2021::code::KNOWN_EXTENSIONS.contains(ext) => {
@@ -243,7 +238,7 @@ pub(crate) async fn get_file(
             package_name: package_name.to_string(),
             id: id.to_string(),
             content: ds.read_content(&doc_path).await?,
-            base_path: base_path.to_path_buf(),
+            base_path: base_path.clone(),
         }),
     })
 }

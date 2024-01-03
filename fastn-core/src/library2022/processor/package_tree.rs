@@ -46,10 +46,8 @@ pub async fn process(
             line_number: value.line_number(),
         })?
         .into_iter()
-        .filter(|v| v.is_file())
         .map(|v| {
             v.strip_prefix(&root)
-                .unwrap_or_else(|_| v.as_path())
                 .to_string()
                 .replace(std::path::MAIN_SEPARATOR.to_string().as_str(), "/")
         })
