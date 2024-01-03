@@ -38,7 +38,7 @@ async fn handle_view_source(
             let main_document = fastn_core::Document {
                 id: "editor.ftd".to_string(),
                 content: editor_ftd,
-                parent_path: config.ds.root().as_str().to_string(),
+                parent_path: config.ds.root().to_string(),
                 package_name: config.package.name.clone(),
             };
             fastn_core::package::package_doc::read_ftd(

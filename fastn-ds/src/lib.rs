@@ -120,6 +120,10 @@ impl DocumentStore {
         &self.root
     }
 
+    pub fn home(&self) -> Path {
+        Path { path: home() }
+    }
+
     pub async fn read_content(&self, path: &Path) -> Result<Vec<u8>, ReadError> {
         use tokio::io::AsyncReadExt;
 
@@ -201,4 +205,15 @@ impl DocumentStore {
             }) //todo: improve error message
             .collect::<Vec<fastn_ds::Path>>()
     }
+}
+
+fn home() -> camino::Utf8PathBuf {
+    let home = match dirs::home_dir() {
+        Some(h) => h,
+        None => {
+            eprintln!("Impossible to get your home directory");
+            std::process::exit(1);
+        }
+    };
+    camino::Utf8PathBuf::from_path_buf(home).expect("Issue while reading your home directory")
 }

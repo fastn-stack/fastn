@@ -559,7 +559,12 @@ impl Config {
                 let start = std::time::Instant::now();
                 print!("Processing {} ... ", url);
                 let content = self.get_file_and_resolve(url.as_str()).await?.1;
-                fastn_core::utils::update(&self.build_dir().join(&url), content.as_slice()).await?;
+                fastn_core::utils::update(
+                    &self.build_dir().join(&url),
+                    content.as_slice(),
+                    &self.ds,
+                )
+                .await?;
                 fastn_core::utils::print_end(format!("Processed {}", url).as_str(), start);
             }
         }
@@ -1389,7 +1394,7 @@ impl Config {
         resolve_sitemap: bool,
     ) -> fastn_core::Result<fastn_core::Config> {
         let original_directory = fastn_ds::Path::new(std::env::current_dir()?.to_str().unwrap()); // todo: remove unwrap()
-        let fastn_doc = utils::fastn_doc(&ds, "FASTN.ftd".into()).await?;
+        let fastn_doc = utils::fastn_doc(&ds, &fastn_ds::Path::new("FASTN.ftd")).await?;
         let package = fastn_core::Package::from_fastn_doc(&ds, &fastn_doc)?;
         let mut config = Config {
             package: package.clone(),

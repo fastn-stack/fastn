@@ -266,10 +266,6 @@ pub(crate) async fn insert_into_history_(
         }
         let remote_state = root.join(".remote-state").join("history");
 
-        if !remote_state.exists() {
-            tokio::fs::create_dir_all(&remote_state).await?;
-        }
-
         if !file_op.operation.eq(&FileOperation::Deleted) {
             let new_file_path =
                 remote_state.join(fastn_core::utils::snapshot_id(file, &(version as u128)));
@@ -280,7 +276,7 @@ pub(crate) async fn insert_into_history_(
 
     let history_ftd = FileHistory::to_ftd(file_history.values().collect_vec().as_slice());
     ds.write_content(
-        root.join(".remote-state").join("history.ftd").as_str(),
+        &root.join(".remote-state").join("history.ftd"),
         history_ftd.into(),
     )
     .await?;
