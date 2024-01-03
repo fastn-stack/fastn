@@ -232,7 +232,7 @@ pub(crate) async fn insert_into_history(
             .iter_mut()
             .map(|v| (v.filename.to_string(), v.clone()))
             .collect();
-    insert_into_history_(ds, &root, file_list, &mut file_history).await?;
+    insert_into_history_(ds, root, file_list, &mut file_history).await?;
     *history = file_history.into_values().collect_vec();
     Ok(())
 }

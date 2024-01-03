@@ -15,7 +15,7 @@ pub async fn diff(
             &config.ds,
             config.package.name.as_str(),
             files,
-            &config.ds.root(),
+            config.ds.root(),
         )
         .await?
     } else {
@@ -91,14 +91,12 @@ async fn get_track_diff(
             println!(
                 "diff {} -> {}: {}",
                 doc.get_id(),
-                then_path.to_string().replace(
-                    &format!("{}/.history/", doc.get_base_path().to_string()),
-                    ""
-                ),
-                now_path.to_string().replace(
-                    &format!("{}/.history/", doc.get_base_path().to_string()),
-                    ""
-                ),
+                then_path
+                    .to_string()
+                    .replace(&format!("{}/.history/", doc.get_base_path()), ""),
+                now_path
+                    .to_string()
+                    .replace(&format!("{}/.history/", doc.get_base_path()), ""),
             );
             println!("{}", diff);
         }
