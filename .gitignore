@@ -4,6 +4,7 @@
 
 ftd/t/js/**.manual.html
 ftd/t/js/**.script.html
+integration-tests/**.script.html
 
 # nix symlink to the build output
 result
