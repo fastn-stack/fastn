@@ -33,7 +33,14 @@ async fn serve_file(
         .package
         .auto_import_language(config.request.cookie("fastn-lang"), None)
     {
-        return fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e);
+        return if !config.config.test_command_running {
+            fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e)
+        } else {
+            fastn_core::http::not_found_without_warning(format!(
+                "fastn-Error: path: {}, {:?}",
+                path, e
+            ))
+        };
     }
 
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
@@ -44,7 +51,14 @@ async fn serve_file(
                 path = path.as_str(),
                 error = %e
             );
-            return fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e);
+            return if !config.config.test_command_running {
+                fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e)
+            } else {
+                fastn_core::http::not_found_without_warning(format!(
+                    "fastn-Error: path: {}, {:?}",
+                    path, e
+                ))
+            };
         }
     };
 

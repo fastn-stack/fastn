@@ -592,7 +592,7 @@ fn make_test_results_variable(test_results: &ftd::Map<String>) -> String {
     for (key, value) in test_results.iter() {
         test_results_variable.push_str(
             format!(
-                "fastn.test_results[\"{}\"] = {}",
+                "fastn.test_results[\"{}\"] = {};\n",
                 key.as_str(),
                 value.as_str()
             )
