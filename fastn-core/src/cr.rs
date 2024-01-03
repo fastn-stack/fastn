@@ -76,6 +76,7 @@ pub(crate) async fn create_cr_about(
     fastn_core::utils::update(
         &config.cr_about_path(cr_meta.cr_number),
         default_cr_about_content.as_bytes(),
+        &config.ds,
     )
     .await?;
     Ok(())
@@ -89,6 +90,7 @@ pub(crate) async fn create_cr_meta(
     fastn_core::utils::update(
         &config.cr_meta_path(cr_meta.cr_number),
         meta_content.as_bytes(),
+        &config.ds,
     )
     .await?;
     Ok(())
@@ -179,6 +181,7 @@ pub(crate) async fn create_deleted_files(
     fastn_core::utils::update(
         &config.cr_deleted_file_path(cr_number),
         cr_deleted_content.as_bytes(),
+        &config.ds,
     )
     .await?;
     Ok(())
@@ -331,7 +334,7 @@ pub(crate) async fn cr_clone_file_info(
             } else {
                 config.ds.root().join(workspace_entry.filename)
             };
-            let cr_deleted_files = config.ds.read_to_string(cr_deleted_path).await?;
+            let cr_deleted_files = config.ds.read_to_string(&cr_deleted_path).await?;
             fastn_core::cr::resolve_cr_deleted(cr_deleted_files.as_str(), cr_number)
                 .await?
                 .into_iter()
@@ -343,7 +346,7 @@ pub(crate) async fn cr_clone_file_info(
         }
         let content = config
             .ds
-            .read_content(workspace_entry.filename.as_str())
+            .read_content(&fastn_ds::Path::new(workspace_entry.filename.as_str()))
             .await?;
 
         file_info.insert(
@@ -409,7 +412,7 @@ pub(crate) async fn cr_remote_file_info(
 
         if filename.eq(&deleted_file_str) {
             let cr_deleted_path = config.history_path(filename.as_str(), file_edit.version);
-            let cr_deleted_files = config.ds.read_to_string(cr_deleted_path).await?;
+            let cr_deleted_files = config.ds.read_to_string(&cr_deleted_path).await?;
             fastn_core::cr::resolve_cr_deleted(cr_deleted_files.as_str(), cr_number)
                 .await?
                 .into_iter()

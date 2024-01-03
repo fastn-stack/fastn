@@ -584,8 +584,9 @@ async fn handle_file_(
             }
 
             fastn_core::utils::copy(
-                config.ds.root().join(doc.id.as_str()),
-                config.ds.root().join(".build").join(doc.id.as_str()),
+                &config.ds.root().join(doc.id.as_str()),
+                &config.ds.root().join(".build").join(doc.id.as_str()),
+                &config.ds,
             )
             .await
             .ok();
@@ -650,7 +651,7 @@ async fn handle_file_(
             }
         }
         fastn_core::File::Static(sa) => {
-            process_static(sa, config.ds.root(), &config.package).await?
+            process_static(sa, config.ds.root(), &config.package, &config.ds).await?
         }
         fastn_core::File::Markdown(_doc) => {
             // TODO: bring this feature back
@@ -658,7 +659,7 @@ async fn handle_file_(
             return Ok(());
         }
         fastn_core::File::Image(main_doc) => {
-            process_static(main_doc, config.ds.root(), &config.package).await?;
+            process_static(main_doc, config.ds.root(), &config.package, &config.ds).await?;
         }
         fastn_core::File::Code(doc) => {
             process_static(
@@ -670,6 +671,7 @@ async fn handle_file_(
                 },
                 config.ds.root(),
                 &config.package,
+                &config.ds,
             )
             .await?;
         }
@@ -796,17 +798,19 @@ async fn process_static(
     sa: &fastn_core::Static,
     base_path: &fastn_ds::Path,
     package: &fastn_core::Package,
+    ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    copy_to_build(sa, base_path, package)?;
+    copy_to_build(sa, base_path, package, ds).await?;
     if let Some(original_package) = package.translation_of.as_ref() {
-        copy_to_build(sa, base_path, original_package)?;
+        copy_to_build(sa, base_path, original_package, ds).await?;
     }
     return Ok(());
 
-    fn copy_to_build(
+    async fn copy_to_build(
         sa: &fastn_core::Static,
-        base_path: &camino::Utf8Path,
+        base_path: &fastn_ds::Path,
         package: &fastn_core::Package,
+        ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<()> {
         let build_path = base_path
             .join(".build")
@@ -814,31 +818,14 @@ async fn process_static(
             .join(package.name.as_str());
 
         let full_file_path = build_path.join(sa.id.as_str());
-        let (file_root, _file_name) = if let Some((file_root, file_name)) = full_file_path
-            .as_str()
-            .rsplit_once(std::path::MAIN_SEPARATOR)
-        {
-            (file_root.to_string(), file_name.to_string())
-        } else {
-            ("".to_string(), full_file_path.to_string())
-        };
-
-        if !base_path.join(&file_root).exists() {
-            std::fs::create_dir_all(base_path.join(&file_root))?;
-        }
-        std::fs::write(full_file_path, &sa.content)?;
+        ds.write_content(&full_file_path, sa.content.clone())
+            .await?;
 
         {
             // TODO: need to remove this once download_base_url is removed
-            std::fs::create_dir_all(base_path.join(".build"))?;
-            if let Some((dir, _)) = sa.id.rsplit_once(std::path::MAIN_SEPARATOR) {
-                std::fs::create_dir_all(base_path.join(".build").join(dir))?;
-            }
-
-            std::fs::copy(
-                sa.base_path.join(sa.id.as_str()),
-                base_path.join(".build").join(sa.id.as_str()),
-            )?;
+            let content = ds.read_content(&sa.base_path.join(sa.id.as_str())).await?;
+            ds.write_content(&base_path.join(".build").join(sa.id.as_str()), content)
+                .await?;
         }
         Ok(())
     }

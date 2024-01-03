@@ -19,7 +19,7 @@ pub async fn revert(config: &fastn_core::Config, path: &str) -> fastn_core::Resu
 
     if let Some(server_version) = file_status.get_latest_version() {
         let server_path = config.history_path(path, server_version);
-        fastn_core::utils::copy(&server_path, &config.ds.root().join(path)).await?;
+        fastn_core::utils::copy(&server_path, &config.ds.root().join(path), &config.ds).await?;
         if let Some(workspace_entry) = workspace.get_mut(path) {
             workspace_entry.version = Some(server_version);
             workspace_entry.deleted = None;

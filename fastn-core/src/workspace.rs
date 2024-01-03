@@ -102,7 +102,7 @@ impl fastn_core::Config {
         let workspace = {
             let req = fastn_core::http::Request::default();
             let mut lib = fastn_core::RequestConfig::new(self, &req, "", "/");
-            let workspace = fastn_core::tokio_fs::read_to_string(self.workspace_file()).await?;
+            let workspace = lib.config.ds.read_to_string(&self.workspace_file()).await?;
             fastn_core::doc::interpret_helper(
                 "workspace.ftd",
                 workspace.as_str(),
