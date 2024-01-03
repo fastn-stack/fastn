@@ -201,6 +201,8 @@ pub(crate) async fn get_file(
     let id = doc_path
         .as_str()
         .trim_start_matches(base_path_str)
+        .replace(std::path::MAIN_SEPARATOR, "/")
+        .trim_start_matches('/')
         .to_string();
 
     Ok(match id.rsplit_once('.') {
