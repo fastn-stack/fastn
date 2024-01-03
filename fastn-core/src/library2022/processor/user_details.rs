@@ -30,7 +30,8 @@ pub async fn process(
     }
 
     let _ = req_config;
-    doc.from_json::<std::vec::Vec<UserDetails>>(&vec![], &kind, &value)
+    let ud: UserDetails = Default::default();
+    doc.from_json(&ud, &kind, &value)
 }
 
 #[derive(Debug, serde::Serialize, Default)]
