@@ -13,6 +13,9 @@ jobs:
   integration-test:
     runs-on: ubuntu-latest
 
+    env:
+      FASTN_DB_URL: postgres://testuser:testpassword@localhost:5432/testdb
+
     services:
       postgres:
         image: postgres:latest
@@ -91,9 +94,9 @@ jobs:
 #          echo "Current Directory files"
 #          ls -al
 
-      - name: Export Postgres connection FASTN_DB_URL
-        run: |
-          export FASTN_DB_URL=postgres://testuser:testpassword@localhost:5432/testdb
+#      - name: Export Postgres connection FASTN_DB_URL
+#        run: |
+#          export FASTN_DB_URL=postgres://testuser:testpassword@localhost:5432/testdb
 
       - name: Run integration tests
         run: |
