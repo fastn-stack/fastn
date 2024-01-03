@@ -35,24 +35,24 @@ impl File {
             Self::Image(a) => &mut a.id,
         }) = new_id.to_string();
     }
-    pub fn get_base_path(&self) -> &str {
+    pub fn get_base_path(&self) -> &fastn_ds::Path {
         match self {
-            Self::Ftd(a) => a.parent_path.as_str(),
-            Self::Static(a) => a.base_path.to_string().as_str(),
-            Self::Markdown(a) => a.parent_path.as_str(),
-            Self::Code(a) => a.parent_path.as_str(),
-            Self::Image(a) => a.base_path.to_string().as_str(),
+            Self::Ftd(a) => &a.parent_path,
+            Self::Static(a) => &a.base_path,
+            Self::Markdown(a) => &a.parent_path,
+            Self::Code(a) => &a.parent_path,
+            Self::Image(a) => &a.base_path,
         }
     }
     pub fn get_full_path(&self) -> fastn_ds::Path {
         let (id, base_path) = match self {
-            Self::Ftd(a) => (a.id.to_string(), a.parent_path.to_string()),
-            Self::Static(a) => (a.id.to_string(), a.base_path.to_string()),
-            Self::Markdown(a) => (a.id.to_string(), a.parent_path.to_string()),
-            Self::Code(a) => (a.id.to_string(), a.parent_path.to_string()),
-            Self::Image(a) => (a.id.to_string(), a.base_path.to_string()),
+            Self::Ftd(a) => (a.id.to_string(), &a.parent_path),
+            Self::Static(a) => (a.id.to_string(), &a.base_path),
+            Self::Markdown(a) => (a.id.to_string(), &a.parent_path),
+            Self::Code(a) => (a.id.to_string(), &a.parent_path),
+            Self::Image(a) => (a.id.to_string(), &a.base_path),
         };
-        fastn_ds::Path::new(base_path).join(id)
+        base_path.join(id)
     }
 
     pub(crate) fn get_content(&self) -> &[u8] {
@@ -82,7 +82,7 @@ pub struct Document {
     pub package_name: String,
     pub id: String,
     pub content: String,
-    pub parent_path: String,
+    pub parent_path: fastn_ds::Path,
 }
 
 impl Document {
@@ -170,13 +170,13 @@ pub(crate) async fn get_file(
             package_name: package_name.to_string(),
             id: id.to_string(),
             content: ds.read_to_string(&doc_path).await?,
-            parent_path: base_path.to_string(),
+            parent_path: base_path.clone(),
         }),
         Some((_, "md")) => File::Markdown(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
             content: ds.read_to_string(&doc_path).await?,
-            parent_path: base_path.to_string(),
+            parent_path: base_path.clone(),
         }),
         Some((_, ext))
             if mime_guess::MimeGuess::from_ext(ext)
@@ -196,7 +196,7 @@ pub(crate) async fn get_file(
                 package_name: package_name.to_string(),
                 id: id.to_string(),
                 content: ds.read_to_string(&doc_path).await?,
-                parent_path: base_path.to_string(),
+                parent_path: base_path.clone(),
             })
         }
         _ => File::Static(Static {

@@ -665,7 +665,7 @@ async fn handle_file_(
                     package_name: config.package.name.to_string(),
                     id: doc.id.to_string(),
                     content: doc.content.clone().into_bytes(),
-                    base_path: fastn_ds::Path::new(doc.parent_path.as_str()),
+                    base_path: doc.parent_path.clone(),
                 },
                 config.ds.root(),
                 &config.package,

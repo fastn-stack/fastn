@@ -54,7 +54,7 @@ async fn create_cr_page_worker(
     let main_document = fastn_core::Document {
         id: "create-cr.ftd".to_string(),
         content: create_cr_ftd,
-        parent_path: config.ds.root().to_string(),
+        parent_path: config.ds.root().clone(),
         package_name: config.package.name.clone(),
     };
 
