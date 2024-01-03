@@ -1,11 +1,3 @@
--- record c:
-string light: 
-string dark: 
-
--- c cc:
-light: #ffffff
-dark: #000000
-
 -- foo:
 
 -- ftd.text: ftd.text says Hello
