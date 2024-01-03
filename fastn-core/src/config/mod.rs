@@ -263,7 +263,8 @@ impl RequestConfig {
                 &self.config,
                 document_readers.as_slice(),
                 access_identities.iter().collect_vec().as_slice(),
-            )?;
+            )
+            .await?;
 
             if with_confidential {
                 if belongs_to {
@@ -296,7 +297,8 @@ impl RequestConfig {
                 &self.config,
                 document_writers.as_slice(),
                 access_identities.iter().collect_vec().as_slice(),
-            );
+            )
+            .await;
         }
 
         Ok(false)
@@ -327,7 +329,7 @@ impl Config {
     }
 
     pub fn path_without_root(&self, path: &fastn_ds::Path) -> fastn_core::Result<String> {
-        Ok(path.strip_prefix(self.ds.root())?.to_string())
+        Ok(path.strip_prefix(self.ds.root()).to_string())
     }
 
     pub fn cr_deleted_file_path(&self, cr_number: usize) -> fastn_ds::Path {
@@ -349,7 +351,7 @@ impl Config {
     pub fn cr_track_path(&self, path: &fastn_ds::Path, cr_number: usize) -> fastn_ds::Path {
         let path_without_root = self
             .cr_path(cr_number)
-            .join(path)
+            .join(path.to_string().as_str())
             .to_string()
             .replace(self.ds.root().to_string().as_str(), "");
         let track_path = format!("{}.track", path_without_root);
@@ -650,9 +652,6 @@ impl Config {
         let all_files = self.get_all_file_paths(package)?;
 
         for file in all_files {
-            if file.is_dir() {
-                continue;
-            }
             let version = get_version(&file, &path).await?;
             let file = fastn_core::get_file(
                 &self.ds,
@@ -677,25 +676,21 @@ impl Config {
             x: &fastn_ds::Path,
             path: &fastn_ds::Path,
         ) -> fastn_core::Result<fastn_core::Version> {
-            let id = match tokio::fs::canonicalize(x)
-                .await?
-                .to_str()
-                .unwrap()
-                .rsplit_once(
-                    if path.to_string().ends_with(std::path::MAIN_SEPARATOR) {
-                        path.to_string()
-                    } else {
-                        format!("{}{}", path, std::path::MAIN_SEPARATOR)
-                    }
-                    .as_str(),
-                ) {
-                Some((_, id)) => id.to_string(),
-                None => {
-                    return Err(fastn_core::Error::UsageError {
-                        message: format!("{:?} should be a file", x),
-                    });
-                }
+            let path_str = path
+                .to_string()
+                .trim_end_matches(std::path::MAIN_SEPARATOR)
+                .to_string();
+            let id = if x.to_string().contains(&path_str) {
+                x.to_string()
+                    .trim_start_matches(path_str.as_str())
+                    .trim_start_matches(std::path::MAIN_SEPARATOR)
+                    .to_string()
+            } else {
+                return Err(fastn_core::Error::UsageError {
+                    message: format!("{:?} should be a file", x),
+                });
             };
+
             if let Some((v, _)) = id.split_once('/') {
                 fastn_core::Version::parse(v)
             } else {
@@ -1134,12 +1129,11 @@ impl Config {
     }
 
     pub(crate) async fn download_required_file(
-        root: &camino::Utf8PathBuf,
+        root: &fastn_ds::Path,
         id: &str,
         package: &fastn_core::Package,
+        ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<String> {
-        use tokio::io::AsyncWriteExt;
-
         let id = id.trim_start_matches(package.name.as_str());
 
         let base =
@@ -1157,10 +1151,7 @@ impl Config {
             .await
             {
                 let base = root.join(".packages").join(package.name.as_str());
-                tokio::fs::create_dir_all(&base).await?;
-                tokio::fs::File::create(base.join("index.ftd"))
-                    .await?
-                    .write_all(string.as_bytes())
+                ds.write_content(&base.join("index.ftd"), string.into_bytes())
                     .await?;
                 return Ok(format!(".packages/{}/index.ftd", package.name));
             }
@@ -1170,10 +1161,7 @@ impl Config {
             .await
             {
                 let base = root.join(".packages").join(package.name.as_str());
-                tokio::fs::create_dir_all(&base).await?;
-                tokio::fs::File::create(base.join("README.md"))
-                    .await?
-                    .write_all(string.as_bytes())
+                ds.write_content(&base.join("README.md"), string.into_bytes())
                     .await?;
                 return Ok(format!(".packages/{}/README.md", package.name));
             }
@@ -1194,12 +1182,8 @@ impl Config {
             let base = root
                 .join(".packages")
                 .join(format!("{}{}", package.name.as_str(), prefix));
-            tokio::fs::create_dir_all(&base).await?;
             let file_path = base.join(format!("{}.ftd", id));
-            tokio::fs::File::create(&file_path)
-                .await?
-                .write_all(string.as_bytes())
-                .await?;
+            ds.write_content(&file_path, string.into_bytes()).await?;
             return Ok(file_path.to_string());
         }
         if let Ok(string) = crate::http::http_get_str(
@@ -1208,12 +1192,8 @@ impl Config {
         .await
         {
             let base = root.join(".packages").join(package.name.as_str()).join(id);
-            tokio::fs::create_dir_all(&base).await?;
             let file_path = base.join("index.ftd");
-            tokio::fs::File::create(&file_path)
-                .await?
-                .write_all(string.as_bytes())
-                .await?;
+            ds.write_content(&file_path, string.into_bytes()).await?;
             return Ok(file_path.to_string());
         }
         if let Ok(string) =
@@ -1221,10 +1201,7 @@ impl Config {
                 .await
         {
             let base = root.join(".packages").join(package.name.as_str());
-            tokio::fs::create_dir_all(&base).await?;
-            tokio::fs::File::create(base.join(format!("{}.md", id)))
-                .await?
-                .write_all(string.as_bytes())
+            ds.write_content(&base.join(format!("{}.md", id)), string.into_bytes())
                 .await?;
             return Ok(format!(".packages/{}/{}.md", package.name, id));
         }
@@ -1234,10 +1211,7 @@ impl Config {
         .await
         {
             let base = root.join(".packages").join(package.name.as_str());
-            tokio::fs::create_dir_all(&base).await?;
-            tokio::fs::File::create(base.join(format!("{}/README.md", id)))
-                .await?
-                .write_all(string.as_bytes())
+            ds.write_content(&base.join(format!("{}/README.md", id)), string.into_bytes())
                 .await?;
             return Ok(format!(".packages/{}/{}/README.md", package.name, id));
         }
@@ -1296,7 +1270,10 @@ impl Config {
     }
 
     #[allow(dead_code)]
-    async fn get_root_path(directory: &fastn_ds::Path) -> fastn_core::Result<fastn_ds::Path> {
+    async fn get_root_path(
+        directory: &fastn_ds::Path,
+        ds: &fastn_ds::DocumentStore,
+    ) -> fastn_core::Result<fastn_ds::Path> {
         if let Some(fastn_ftd_root) = utils::find_root_for_file(directory, "FASTN.ftd") {
             return Ok(fastn_ftd_root);
         }
@@ -1310,11 +1287,12 @@ impl Config {
             }
         };
 
-        let doc =
-            fastn_core::tokio_fs::read_to_string(fastn_manifest_path.join("fastn.manifest.ftd"));
+        let doc = ds
+            .read_to_string(&fastn_manifest_path.join("fastn.manifest.ftd"))
+            .await?;
         let lib = fastn_core::FastnLibrary::default();
         let fastn_manifest_processed =
-            match fastn_core::doc::parse_ftd("fastn.manifest", doc.await?.as_str(), &lib) {
+            match fastn_core::doc::parse_ftd("fastn.manifest", doc.as_str(), &lib) {
                 Ok(fastn_manifest_processed) => fastn_manifest_processed,
                 Err(e) => {
                     return Err(fastn_core::Error::PackageError {
@@ -1585,14 +1563,14 @@ impl Config {
     }
 
     #[tracing::instrument(skip(self))]
-    pub(crate) fn get_fastn_document(
+    pub(crate) async fn get_fastn_document(
         &self,
         package_name: &str,
     ) -> fastn_core::Result<ftd::ftd2021::p2::Document> {
         let package = fastn_core::Package::new(package_name);
         let root = self.get_root_for_package(&package);
         let package_fastn_path = root.join("FASTN.ftd");
-        let doc = std::fs::read_to_string(package_fastn_path)?;
+        let doc = self.ds.read_to_string(&package_fastn_path).await?;
         let lib = fastn_core::FastnLibrary::default();
         Ok(fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib)?)
     }

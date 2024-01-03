@@ -571,7 +571,7 @@ fn resolve_favicon(
         // relative favicon path wrt package
         let path = fastn_ds::Path::new(package_name).join(favicon_path);
         // mime content type of the favicon
-        let content_type = mime_guess::from_path(path.as_str()).first_or_octet_stream();
+        let content_type = mime_guess::from_path(path.to_string().as_str()).first_or_octet_stream();
 
         (favicon_path.to_string(), content_type.to_string())
     }

@@ -38,10 +38,10 @@ impl File {
     pub fn get_base_path(&self) -> &str {
         match self {
             Self::Ftd(a) => a.parent_path.as_str(),
-            Self::Static(a) => a.base_path.as_str(),
+            Self::Static(a) => a.base_path.to_string().as_str(),
             Self::Markdown(a) => a.parent_path.as_str(),
             Self::Code(a) => a.parent_path.as_str(),
-            Self::Image(a) => a.base_path.as_str(),
+            Self::Image(a) => a.base_path.to_string().as_str(),
         }
     }
     pub fn get_full_path(&self) -> fastn_ds::Path {
@@ -139,41 +139,6 @@ pub(crate) async fn paths_to_files(
     .flatten()
     .flatten()
     .collect::<Vec<fastn_core::File>>())
-}
-
-pub fn package_ignores(
-    package: &fastn_core::Package,
-    root_path: &fastn_ds::Path,
-) -> Result<ignore::overrides::Override, ignore::Error> {
-    let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
-    overrides.add("!.history")?;
-    overrides.add("!.packages")?;
-    overrides.add("!.tracks")?;
-    overrides.add("!fastn")?;
-    overrides.add("!rust-toolchain")?;
-    overrides.add("!.build")?;
-    overrides.add("!_tests")?;
-    for ignored_path in &package.ignored_paths {
-        overrides.add(format!("!{}", ignored_path).as_str())?;
-    }
-    overrides.build()
-}
-
-pub fn ignore_path(
-    package: &fastn_core::Package,
-    root_path: &fastn_ds::Path,
-    ignore_paths: Vec<String>,
-) -> Result<ignore::overrides::Override, ignore::Error> {
-    let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
-    overrides.add("!.packages")?;
-    overrides.add("!.build")?;
-    for ignored_path in &package.ignored_paths {
-        overrides.add(format!("!{}", ignored_path).as_str())?;
-    }
-    for ignored_path in ignore_paths {
-        overrides.add(format!("!{}", ignored_path).as_str())?;
-    }
-    overrides.build()
 }
 
 pub(crate) async fn get_file(

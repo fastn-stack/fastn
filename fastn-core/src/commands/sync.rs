@@ -168,14 +168,6 @@ async fn write(
     snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fastn_core::Result<(fastn_core::Snapshot, bool)> {
     use sha2::Digest;
-    if let Some((dir, _)) = doc.get_id().rsplit_once('/') {
-        tokio::fs::create_dir_all(
-            camino::Utf8PathBuf::from(doc.get_base_path())
-                .join(".history")
-                .join(dir),
-        )
-        .await?;
-    }
 
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(

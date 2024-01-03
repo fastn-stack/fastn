@@ -60,6 +60,12 @@ impl Path {
     pub fn extension(&self) -> Option<String> {
         self.path.extension().map(|v| v.to_string())
     }
+
+    pub fn with_extension(&self, extension: impl AsRef<str>) -> Self {
+        Self {
+            path: self.path.with_extension(extension),
+        }
+    }
 }
 
 impl std::fmt::Display for fastn_ds::Path {

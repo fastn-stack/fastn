@@ -229,16 +229,22 @@ async fn static_file(
     file_path: fastn_ds::Path,
 ) -> fastn_core::http::Response {
     if !file_path.exists() {
-        tracing::error!(msg = "no such static file ({})", path = file_path.as_str());
+        tracing::error!(
+            msg = "no such static file ({})",
+            path = file_path.to_string()
+        );
         return fastn_core::not_found!("no such static file ({})", file_path);
     }
 
     match config.ds.read_content(&file_path).await {
-        Ok(r) => fastn_core::http::ok_with_content_type(r, guess_mime_type(file_path.as_str())),
+        Ok(r) => fastn_core::http::ok_with_content_type(
+            r,
+            guess_mime_type(file_path.to_string().as_str()),
+        ),
         Err(e) => {
             tracing::error!(
                 msg = "file-system-error ({})",
-                path = file_path.as_str(),
+                path = file_path.to_string(),
                 error = e.to_string()
             );
             fastn_core::not_found!("fastn-Error: path: {:?}, error: {:?}", file_path, e)
