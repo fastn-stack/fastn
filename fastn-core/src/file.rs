@@ -188,18 +188,15 @@ pub(crate) async fn get_file(
         });
     }
 
-    let id = match std::fs::canonicalize(doc_path)?
-        .to_str()
-        .unwrap()
-        .rsplit_once(
-            if base_path.as_str().ends_with(std::path::MAIN_SEPARATOR) {
-                base_path.as_str().to_string()
-            } else {
-                format!("{}{}", base_path, std::path::MAIN_SEPARATOR)
-            }
-            .as_str(),
-        ) {
-        Some((_, id)) => id.replace(std::path::MAIN_SEPARATOR, "/"),
+    let id = match doc_path.as_str().rsplit_once(
+        base_path
+            .as_str()
+            .trim_end_matches(std::path::MAIN_SEPARATOR),
+    ) {
+        Some((_, id)) => id
+            .replace(std::path::MAIN_SEPARATOR, "/")
+            .trim_start_matches('/')
+            .to_string(),
         None => {
             return Err(fastn_core::Error::UsageError {
                 message: format!("{:?} should be a file", doc_path),
