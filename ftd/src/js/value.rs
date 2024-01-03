@@ -12,7 +12,6 @@ pub struct ReferenceData {
     pub name: String,
     pub value: Option<ftd::interpreter::PropertyValue>,
 }
-// HEREHREH
 
 impl Value {
     pub(crate) fn to_set_property_value_with_none(
@@ -64,6 +63,7 @@ impl Value {
                             value.line_number(),
                         );
 
+                        // return or-type value with reference
                         if has_value {
                             return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                                 variant: js_variant,
@@ -73,6 +73,7 @@ impl Value {
                             });
                         }
 
+                        // return or-type value
                         return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                             variant: js_variant,
                             value: None,
@@ -80,6 +81,7 @@ impl Value {
                     }
                 }
 
+                // for other datatypes, simply return a reference
                 fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
                     data.name.as_str(),
                     rdata,
