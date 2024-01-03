@@ -131,11 +131,7 @@ pub(crate) async fn get_file_status(
     }
 
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
-        let path = fastn_core::utils::history_path(
-            doc.get_id(),
-            &fastn_ds::Path::new(doc.get_base_path()),
-            timestamp,
-        );
+        let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
 
         let content = config.ds.read_content(&doc.get_full_path()).await?;
         let existing_doc = config.ds.read_content(&path).await?;
@@ -153,8 +149,7 @@ async fn get_track_status(
     snapshots: &std::collections::BTreeMap<String, u128>,
     base_path: &fastn_ds::Path,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, TrackStatus>> {
-    let path =
-        fastn_core::utils::track_path(doc.get_id(), &fastn_ds::Path::new(doc.get_base_path()));
+    let path = fastn_core::utils::track_path(doc.get_id(), doc.get_base_path());
     let mut track_list = std::collections::BTreeMap::new();
     if !path.exists() {
         return Ok(track_list);
