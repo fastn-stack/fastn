@@ -137,7 +137,8 @@ async fn merge_main_into_cr(
             }
             continue;
         }
-        let filename = fastn_core::cr::cr_path_to_file_name(dest, cr_file_path.as_str())?;
+        let filename =
+            fastn_core::cr::cr_path_to_file_name(dest, &fastn_ds::Path::new(cr_file_path))?;
         if let Some(file) = file {
             if filename.ne(file) {
                 continue;
@@ -485,7 +486,7 @@ async fn merge_cr_into_main(
         }
 
         let cr_file_path = config.history_path(cr_file_name.as_str(), cr_file_edit.version);
-        let filename = fastn_core::cr::cr_path_to_file_name(src, cr_file_path.as_str())?;
+        let filename = fastn_core::cr::cr_path_to_file_name(src, &cr_file_path)?;
         if let Some(file) = file {
             if filename.ne(file) {
                 continue;
@@ -530,7 +531,9 @@ async fn merge_cr_into_main(
 
         let ours_content_bytes = config
             .ds
-            .read_content(&config.history_path(cr_file_path.as_str(), cr_file_edit.version))
+            .read_content(
+                &config.history_path(cr_file_path.to_string().as_str(), cr_file_edit.version),
+            )
             .await?;
 
         let track_file_path =

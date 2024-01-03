@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 pub fn root() -> camino::Utf8PathBuf {
     camino::Utf8PathBuf::from_path_buf(
         std::env::current_dir().expect("Issue while reading current dir"),
