@@ -570,7 +570,7 @@ impl Package {
         fastn_path: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<()> {
-        tracing::info!(path = fastn_path.as_str());
+        tracing::info!(path = fastn_path.to_string());
         let fastn_document = {
             let doc = ds.read_to_string(fastn_path).await?;
             let lib = fastn_core::FastnLibrary::default();
@@ -579,7 +579,7 @@ impl Package {
                 Err(e) => {
                     tracing::error!(
                         msg = "failed to pare FASTN.ftd file",
-                        path = fastn_path.as_str()
+                        path = fastn_path.to_string()
                     );
                     return Err(fastn_core::Error::PackageError {
                         message: format!("failed to parse FASTN.ftd: {:?}", &e),
@@ -625,15 +625,10 @@ impl Package {
         package_root: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<fastn_core::Package> {
-        use tokio::io::AsyncWriteExt;
-
         let file_extract_path = package_root.join("FASTN.ftd");
         if !file_extract_path.exists() {
-            std::fs::create_dir_all(package_root)?;
             let fastn_string = self.get_fastn().await?;
-            tokio::fs::File::create(&file_extract_path)
-                .await?
-                .write_all(fastn_string.as_bytes())
+            ds.write_content(&file_extract_path, fastn_string.into_bytes())
                 .await?;
         }
 

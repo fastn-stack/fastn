@@ -760,9 +760,10 @@ impl Config {
             "_tests".to_string(),
         ];
         ignored_files.extend(package.ignored_paths.clone());
-        Ok(self
-            .get_root_for_package(package)
-            .get_all_file_path(ignored_files.as_slice()))
+        Ok(self.ds.get_all_file_path(
+            &self.get_root_for_package(package),
+            ignored_files.as_slice(),
+        ))
     }
 
     pub(crate) fn deprecated_get_all_file_path(
@@ -774,7 +775,7 @@ impl Config {
         let mut ignored_files = vec![".packages".to_string(), ".build".to_string()];
         ignored_files.extend(package.ignored_paths.clone());
         ignored_files.extend(ignore_paths);
-        Ok(path.get_all_file_path(ignored_files.as_slice()))
+        Ok(self.ds.get_all_file_path(&path, ignored_files.as_slice()))
     }
 
     pub async fn get_file_by_id(

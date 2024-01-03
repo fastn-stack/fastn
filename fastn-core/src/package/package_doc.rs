@@ -16,7 +16,7 @@ impl fastn_core::Package {
             Err(err) => {
                 tracing::error!(
                     msg = "file-read-error: file not found",
-                    path = file_path.as_str()
+                    path = file_path.to_string()
                 );
                 Err(Err(err)?)
             }
@@ -212,7 +212,8 @@ impl fastn_core::Package {
             .fs_fetch_by_file_name(new_file_path.as_str(), package_root, ds)
             .await
         {
-            tokio::fs::copy(root.join(new_file_path), root.join(file_path)).await?;
+            ds.copy(&root.join(new_file_path), &root.join(file_path))
+                .await?;
             return Ok(response);
         }
 

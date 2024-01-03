@@ -45,20 +45,6 @@ impl Path {
         }
     }
 
-    pub fn get_all_file_path(&self, ignore_paths: &[String]) -> Vec<fastn_ds::Path> {
-        let path = &self.path;
-        let mut ignore_path = ignore::WalkBuilder::new(path);
-        // ignore_paths.hidden(false); // Allow the linux hidden files to be evaluated
-        ignore_path.overrides(package_ignores(ignore_paths, path).unwrap());
-        ignore_path
-            .build()
-            .flatten()
-            .map(|x| fastn_ds::Path {
-                path: camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap(),
-            }) //todo: improve error message
-            .collect::<Vec<fastn_ds::Path>>()
-    }
-
     pub fn exists(&self) -> bool {
         self.path.exists()
     }
@@ -150,6 +136,11 @@ impl DocumentStore {
             .and_then(|v| String::from_utf8(v).map_err(ReadStringError::UTF8Error))
     }
 
+    pub async fn copy(&self, from: &Path, to: &Path) -> Result<(), WriteError> {
+        tokio::fs::copy(&from.path, &to.path).await?;
+        Ok(())
+    }
+
     pub async fn write_content(&self, path: &Path, data: Vec<u8>) -> Result<(), WriteError> {
         use tokio::io::AsyncWriteExt;
 
@@ -186,5 +177,28 @@ impl DocumentStore {
             // It can be a directory or a file
         }
         Ok(())
+    }
+
+    pub fn get_all_file_path(
+        &self,
+        path: &fastn_ds::Path,
+        ignore_paths: &[String],
+    ) -> Vec<fastn_ds::Path> {
+        let path = &path.path;
+        let mut ignore_path = ignore::WalkBuilder::new(path);
+        // ignore_paths.hidden(false); // Allow the linux hidden files to be evaluated
+        ignore_path.overrides(package_ignores(ignore_paths, path).unwrap());
+        ignore_path
+            .build()
+            .flatten()
+            .filter_map(|x| {
+                let path = camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap();
+                if path.is_dir() {
+                    None
+                } else {
+                    Some(fastn_ds::Path { path })
+                }
+            }) //todo: improve error message
+            .collect::<Vec<fastn_ds::Path>>()
     }
 }

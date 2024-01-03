@@ -88,9 +88,10 @@ pub async fn process(
         ));
     }
 
-    let path = dirs::home_dir().unwrap().join(".fastn").join("tutor.json");
-    // Todo: Remove unwrap() from path.to_str().unwrap()
-    let fs_state: TutorStateFS = match config.ds.read_content(path.to_str().unwrap()).await {
+    // let path = dirs::home_dir().unwrap().join(".fastn").join("tutor.json");
+    let path = config.ds.root().join(".fastn").join("tutor.json"); //todo: dirs::home_dir() instead of config.ds.root()
+                                                                   // Todo: Remove unwrap() from path.to_str().unwrap()
+    let fs_state: TutorStateFS = match config.ds.read_content(&path).await {
         Ok(v) => serde_json::from_slice(&v)?,
         Err(fastn_ds::ReadError::IOError(e)) => match e.kind() {
             std::io::ErrorKind::NotFound => {
