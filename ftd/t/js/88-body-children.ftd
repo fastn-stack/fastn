@@ -10,10 +10,10 @@ Hello
 -- rendered.uis:
 
 -- ftd.text: $name
-if: {name != NULL}
+if: { name != NULL }
 
 -- ftd.code:
-if: {name != NULL}
+if: { name != NULL }
 text: $name
 lang: ftd
 
