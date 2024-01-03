@@ -154,6 +154,8 @@ diesel = { version = "2.1", features = ["chrono", "postgres", "postgres_backend"
 diesel-async = { version = "0.4", features = ["postgres", "deadpool", "async-connection-wrapper"]}
 diesel_migrations = "2.1"
 chrono = { version = "0.4", features = ["serde"]}
+tar = "0.4"
+flate2 = "1.0"
 
 [workspace.dependencies.uuid]
 version = "1.6.1"
