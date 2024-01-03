@@ -3,7 +3,7 @@ impl fastn_core::Package {
     pub(crate) async fn fs_fetch_by_file_name(
         &self,
         name: &str,
-        package_root: Option<&camino::Utf8PathBuf>,
+        package_root: Option<&fastn_ds::Path>,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<Vec<u8>> {
         tracing::info!(document = name);
@@ -25,14 +25,14 @@ impl fastn_core::Package {
 
     pub(crate) fn package_root_with_default(
         &self,
-        package_root: Option<&camino::Utf8PathBuf>,
-    ) -> fastn_core::Result<camino::Utf8PathBuf> {
+        package_root: Option<&fastn_ds::Path>,
+    ) -> fastn_core::Result<fastn_ds::Path> {
         tracing::info!(package = self.name);
         if let Some(package_root) = package_root {
             Ok(package_root.to_owned())
         } else {
             match self.fastn_path.as_ref() {
-                Some(path) if path.parent().is_some() => Ok(path.parent().unwrap().to_path_buf()),
+                Some(path) if path.parent().is_some() => Ok(path.parent().unwrap()),
                 _ => {
                     tracing::error!(
                         msg = "package root not found. Package: {}",
@@ -50,7 +50,7 @@ impl fastn_core::Package {
     pub(crate) async fn fs_fetch_by_id(
         &self,
         id: &str,
-        package_root: Option<&camino::Utf8PathBuf>,
+        package_root: Option<&fastn_ds::Path>,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         if fastn_core::file::is_static(id)? {
@@ -124,7 +124,8 @@ impl fastn_core::Package {
     pub(crate) async fn http_download_by_id(
         &self,
         id: &str,
-        package_root: Option<&camino::Utf8PathBuf>,
+        package_root: Option<&fastn_ds::Path>,
+        ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         tracing::info!(document = id);
         let package_root = self.package_root_with_default(package_root)?;
@@ -134,6 +135,7 @@ impl fastn_core::Package {
             &package_root,
             file_path.trim_start_matches('/'),
             data.as_slice(),
+            ds,
         )
         .await?;
 
@@ -144,12 +146,13 @@ impl fastn_core::Package {
     pub(crate) async fn http_download_by_file_name(
         &self,
         file_path: &str,
-        package_root: Option<&camino::Utf8PathBuf>,
+        package_root: Option<&fastn_ds::Path>,
+        ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<Vec<u8>> {
         let package_root = self.package_root_with_default(package_root)?;
 
         let data = self.http_fetch_by_file_name(file_path).await?;
-        fastn_core::utils::write(&package_root, file_path, data.as_slice()).await?;
+        fastn_core::utils::write(&package_root, file_path, data.as_slice(), ds).await?;
 
         Ok(data)
     }
@@ -157,7 +160,7 @@ impl fastn_core::Package {
     pub(crate) async fn resolve_by_file_name(
         &self,
         file_path: &str,
-        package_root: Option<&camino::Utf8PathBuf>,
+        package_root: Option<&fastn_ds::Path>,
         restore_default: bool,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<Vec<u8>> {
@@ -168,7 +171,7 @@ impl fastn_core::Package {
             return Ok(response);
         }
         if let Ok(response) = self
-            .http_download_by_file_name(file_path, package_root)
+            .http_download_by_file_name(file_path, package_root, ds)
             .await
         {
             return Ok(response);
@@ -214,7 +217,7 @@ impl fastn_core::Package {
         }
 
         match self
-            .http_download_by_file_name(new_file_path.as_str(), package_root)
+            .http_download_by_file_name(new_file_path.as_str(), package_root, ds)
             .await
         {
             Ok(response) => {
@@ -229,7 +232,7 @@ impl fastn_core::Package {
     pub(crate) async fn resolve_by_id(
         &self,
         id: &str,
-        package_root: Option<&camino::Utf8PathBuf>,
+        package_root: Option<&fastn_ds::Path>,
         config_package_name: &str,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
@@ -239,7 +242,7 @@ impl fastn_core::Package {
         }
 
         if config_package_name.ne(&self.name) {
-            if let Ok(response) = self.http_download_by_id(id, package_root).await {
+            if let Ok(response) = self.http_download_by_id(id, package_root, ds).await {
                 return Ok(response);
             }
         }
@@ -275,8 +278,13 @@ impl fastn_core::Package {
         let root = self.package_root_with_default(package_root)?;
         if let Ok(response) = self.fs_fetch_by_id(new_id.as_str(), package_root, ds).await {
             if config_package_name.ne(&self.name) {
-                fastn_core::utils::write(&root, id.trim_start_matches('/'), response.1.as_slice())
-                    .await?;
+                fastn_core::utils::write(
+                    &root,
+                    id.trim_start_matches('/'),
+                    response.1.as_slice(),
+                    ds,
+                )
+                .await?;
             }
             return Ok(response);
         }
@@ -292,7 +300,7 @@ impl fastn_core::Package {
         }
 
         match self
-            .http_download_by_id(new_id.as_str(), package_root)
+            .http_download_by_id(new_id.as_str(), package_root, ds)
             .await
         {
             Ok(response) => {
@@ -301,6 +309,7 @@ impl fastn_core::Package {
                         &root,
                         id.trim_start_matches('/'),
                         response.1.as_slice(),
+                        ds,
                     )
                     .await?;
                 }
@@ -566,7 +575,8 @@ pub(crate) async fn process_ftd(
 ) -> fastn_core::Result<FTDResult> {
     let build_dir = config.config.build_dir();
     let response = read_ftd(config, main, base_url, build_static_files, test).await?;
-    fastn_core::utils::overwrite(&build_dir, file_path, &response.html()).await?;
+    fastn_core::utils::overwrite(&build_dir, file_path, &response.html(), &config.config.ds)
+        .await?;
 
     Ok(response)
 }

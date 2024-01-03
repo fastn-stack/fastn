@@ -7,9 +7,15 @@ pub struct DocumentStore {
     root: Path,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Path {
     path: camino::Utf8PathBuf,
+}
+
+#[derive(thiserror::Error, Debug)]
+pub enum RemoveError {
+    #[error("io error {0}")]
+    IOError(#[from] std::io::Error),
 }
 
 impl Path {
@@ -65,6 +71,19 @@ impl Path {
 
     pub fn eq(&self, other: &Self) -> bool {
         self.path.eq(&other.path)
+    }
+
+    /// Remove path: It can be directory or file
+    pub async fn remove(&self) -> Result<(), RemoveError> {
+        if self.path.is_file() {
+            tokio::fs::remove_file(&self.path).await?;
+        } else if self.path.is_dir() {
+            tokio::fs::remove_dir_all(&self.path).await?
+        } else if self.path.is_symlink() {
+            // TODO:
+            // It can be a directory or a file
+        }
+        Ok(())
     }
 }
 

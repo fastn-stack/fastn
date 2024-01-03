@@ -43,8 +43,6 @@ pub(crate) async fn create_latest_snapshots(
     config: &fastn_core::Config,
     snapshots: &[Snapshot],
 ) -> fastn_core::Result<()> {
-    use tokio::io::AsyncWriteExt;
-
     let new_file_path = config.latest_ftd();
     let mut snapshot_data = "-- import: fastn".to_string();
 
@@ -55,10 +53,10 @@ pub(crate) async fn create_latest_snapshots(
         );
     }
 
-    let mut f = tokio::fs::File::create(new_file_path.as_str()).await?;
-
-    f.write_all(snapshot_data.as_bytes()).await?;
-
+    config
+        .ds
+        .write_content(&new_file_path, snapshot_data.as_bytes().to_vec())
+        .await?;
     Ok(())
 }
 

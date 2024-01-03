@@ -117,6 +117,9 @@ pub enum Error {
     #[error("ds::WriteError: {}", _0)]
     DSWriteError(#[from] fastn_ds::WriteError),
 
+    #[error("ds::RemoveError: {}", _0)]
+    DSRemoveError(#[from] fastn_ds::RemoveError),
+
     #[error("AssertError: {message}")]
     AssertError { message: String },
 }

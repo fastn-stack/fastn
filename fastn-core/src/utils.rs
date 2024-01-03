@@ -414,7 +414,7 @@ pub(crate) fn get_package_title(config: &fastn_core::Config) -> String {
     }
 }*/
 
-#[async_recursion::async_recursion(?Send)]
+/*#[async_recursion::async_recursion(?Send)]
 pub async fn copy_dir_all(
     src: impl AsRef<camino::Utf8Path> + 'static,
     dst: impl AsRef<camino::Utf8Path> + 'static,
@@ -447,7 +447,7 @@ pub async fn copy_dir_all(
         }
     }
     Ok(())
-}
+}*/
 
 pub(crate) fn seconds_to_human(s: u64) -> String {
     let days = s / 3600 / 24;
@@ -952,37 +952,15 @@ pub fn parse_from_cli(key: &str) -> Option<String> {
         .map(String::to_string)
 }
 
-/// Remove path: It can be directory or file
-pub async fn remove(path: &std::path::Path) -> std::io::Result<()> {
-    if path.is_file() {
-        tokio::fs::remove_file(path).await?;
-    } else if path.is_dir() {
-        tokio::fs::remove_dir_all(path).await?
-    } else if path.is_symlink() {
-        // TODO:
-        // It can be a directory or a file
-    }
-    Ok(())
-}
-
 /// Remove from provided `root` except given list
 pub async fn remove_except(root: &fastn_ds::Path, except: &[&str]) -> fastn_core::Result<()> {
     use itertools::Itertools;
-    let except = except
-        .iter()
-        .map(|x| root.join(x))
-        .map(|x| x.into_std_path_buf())
-        .collect_vec();
-    let mut all = tokio::fs::read_dir(root).await?;
-    while let Some(file) = all.next_entry().await? {
-        if except.contains(&file.path()) {
+    let except = except.iter().map(|x| root.join(x)).collect_vec();
+    for path in root.get_all_file_path(&[]) {
+        if except.contains(&path) {
             continue;
         }
-        if file.metadata().await?.is_dir() {
-            tokio::fs::remove_dir_all(file.path()).await?;
-        } else if file.metadata().await?.is_file() {
-            tokio::fs::remove_file(file.path()).await?;
-        }
+        path.remove().await?;
     }
     Ok(())
 }

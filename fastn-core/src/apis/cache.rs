@@ -82,14 +82,16 @@ pub async fn clear_(
         if main_file_path.exists() {
             if main_file_path
                 .to_string()
-                .starts_with(config.ds.root().to_string())
+                .starts_with(&config.ds.root().to_string())
             {
-                fastn_core::utils::remove(path.as_path()).await?;
+                main_file_path.remove().await?;
             }
         } else if package_file_path.exists() {
-            let path = tokio::fs::canonicalize(package_file_path).await?;
-            if path.starts_with(config.ds.root()) {
-                fastn_core::utils::remove(path.as_path()).await?;
+            if package_file_path
+                .to_string()
+                .starts_with(&config.ds.root().to_string())
+            {
+                package_file_path.remove().await?;
             }
         } else {
             println!("Not able to remove file from cache: {}", file);
@@ -103,14 +105,17 @@ pub async fn clear_(
             fastn_core::utils::remove_except(config.ds.root(), &[".packages", ".build"]).await?;
         } else {
             let path = config.packages_root.join(package);
-            if path.starts_with(&config.packages_root) {
-                fastn_core::utils::remove(path.as_path()).await?;
+            if path
+                .to_string()
+                .starts_with(&config.packages_root.to_string())
+            {
+                path.remove().await?;
             }
         }
     }
 
     if query.all_dependencies {
-        tokio::fs::remove_dir_all(&config.packages_root).await?;
+        config.packages_root.remove().await?;
     }
 
     // Download FASTN.ftd again after removing all the content
