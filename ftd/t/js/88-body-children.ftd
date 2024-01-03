@@ -9,7 +9,8 @@ Hello
 
 -- rendered.uis:
 
--- ftd.text: Hello
+-- ftd.text: $name
+if: {name != NULL}
 
 -- ftd.code:
 if: {name != NULL}

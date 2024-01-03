@@ -18,7 +18,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column"><div data-id="4">Hello</div><div data-id="5" class="ft_column"><div data-id="6">Hello</div><comment data-id="7"></comment></div></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column"><div data-id="4">Hello</div><div data-id="5" class="ft_column"><comment data-id="6"></comment><comment data-id="7"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
     </style>
@@ -31,8 +31,15 @@
     let parenti0 = foo__rendered(parent, inherited, {
       text: "Hello",
       uis: fastn.mutableList([function (root, inherited) {
-        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
+        fastn_dom.conditionalDom(root, [
+          global.foo__name
+        ], function () {
+          return (fastn_utils.getter(global.foo__name) !== null);
+        }, function (root) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name, inherited);
+          return rooti0;
+        });
       },
       function (root, inherited) {
         fastn_dom.conditionalDom(root, [
