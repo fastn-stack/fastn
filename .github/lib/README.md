@@ -4,6 +4,8 @@ These DLLs are required for certain PostgreSQL-related dependencies on Windows. 
 
 The DLLs are designed for PostgreSQL v16 but are also compatible with version 14. However, in the future, this compatibility may change, and these DLLs will need to be updated to their latest version.
 
+Note: All of these DLLs are x86_64 since the 32-bit versions of these DLLs are not supported by 64-bit systems and binaries (the fastn executable is a 64-bit binary).
+
 Downloaded from:
 - [libpq](https://www.dllme.com/dll/files/libpq)
 - [libssl-3-x64](https://www.dllme.com/dll/files/libssl-3-x64)
