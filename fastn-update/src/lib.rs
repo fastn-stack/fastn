@@ -41,10 +41,27 @@ impl Manifest {
 }
 
 #[derive(serde::Serialize, serde::Deserialize)]
+pub enum PackageSource {
+    Github {
+        username: String,
+        repository: String,
+    },
+}
+
+impl PackageSource {
+    pub fn github(username: String, repository: String) -> Self {
+        PackageSource::Github {
+            username,
+            repository,
+        }
+    }
+}
+
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Package {
     pub name: String,
     pub version: Option<String>,
-    pub source: String,
+    pub source: PackageSource,
     pub checksum: String,
     pub dependencies: Vec<String>,
 }
@@ -53,7 +70,7 @@ impl Package {
     pub fn new(
         name: String,
         version: Option<String>,
-        source: String,
+        source: PackageSource,
         checksum: String,
         dependencies: Vec<String>,
     ) -> Self {
@@ -73,26 +90,35 @@ pub async fn resolve_dependencies(config: &fastn_core::Config) -> fastn_core::Re
     let mut packages: Vec<Package> = vec![];
 
     for dependency in &config.package.dependencies {
-        if let Some((username, repo)) = extract_github_details(dependency.package.name.as_str()) {
-            let zipball = resolve_dependency_from_gh(username.as_str(), repo.as_str()).await?;
+        if let Some((username, repository)) =
+            extract_github_details(dependency.package.name.as_str())
+        {
+            let zipball =
+                resolve_dependency_from_gh(username.as_str(), repository.as_str()).await?;
             let checksum = fastn_core::utils::generate_hash(zipball.clone());
             let mut zipball_cursor = std::io::Cursor::new(zipball);
             zipball_cursor.seek(std::io::SeekFrom::Start(0))?;
             let mut archive = zip::ZipArchive::new(zipball_cursor)?;
+            let dependency_path = &config.packages_root.join(&dependency.package.name);
             for i in 0..archive.len() {
                 let mut entry = archive.by_index(i)?;
 
                 if entry.is_file() {
                     let mut buffer = Vec::new();
                     entry.read_to_end(&mut buffer)?;
+                    let name = entry
+                        .name()
+                        .split_once('/')
+                        .map(|(_, name)| name)
+                        .unwrap_or(entry.name());
                     config
                         .ds
-                        .write_content(&config.packages_root.join(entry.name()), buffer)
+                        .write_content(&dependency_path.join(name), buffer)
                         .await?;
                 }
             }
 
-            let source = format!("git+https://github.com/{}/{}", username, repo);
+            let source = PackageSource::github(username, repository);
 
             let package = Package::new(
                 dependency.package.name.clone(),
