@@ -763,9 +763,11 @@ You can try without providing port, it will automatically pick unused port."#,
     };
 
     #[cfg(feature = "auth")]
-    {
-        tracing::info!("running auth related migrations");
-        fastn_core::auth::enable_auth()?
+    if let Ok(auth_enabled) = std::env::var("FASTN_ENABLE_AUTH") {
+        if auth_enabled == "true" {
+            tracing::info!("running auth related migrations");
+            fastn_core::auth::enable_auth()?
+        }
     }
 
     let app = move || {
