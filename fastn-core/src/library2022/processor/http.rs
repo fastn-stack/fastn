@@ -107,7 +107,9 @@ pub async fn process(
         }
     }
 
-    println!("calling `http` processor with url: {}", &url);
+    if !req_config.config.test_command_running {
+        println!("calling `http` processor with url: {}", &url);
+    }
 
     let resp = if method.as_str().eq("post") {
         fastn_core::http::http_post_with_cookie(
