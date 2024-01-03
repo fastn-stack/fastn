@@ -300,23 +300,27 @@ async fn get_post_response_for_id(
     log_variable!(test_parameters.verbose, &response);
 
     let (response_status_code, response_location) = assert_response(&response, &optional_params)?;
+    let response_content_type = get_content_type(&response).unwrap_or("text/html".to_string());
     let test = optional_params.get(TEST_CONTENT_HEADER);
     if let Some(test_content) = test {
         let body = response.into_body().try_into_bytes().unwrap(); // Todo: Throw error
         let just_response_body = std::str::from_utf8(&body).unwrap();
-        let response_variable = format!("fastn.http_response = {}", just_response_body);
-
-        // Save Test results
-        test_parameters.test_results.insert(
-            test_parameters.instruction_number.to_string(),
-            just_response_body.to_string(),
-        );
-        // Save Test result at its id key as well
-        if let Some(test_id) = optional_params.get(TEST_ID_HEADER) {
-            test_parameters
-                .test_results
-                .insert(test_id.clone(), just_response_body.to_string());
-        }
+        let response_js_data = if response_content_type.eq("application/json") {
+            // Save Test results
+            test_parameters.test_results.insert(
+                test_parameters.instruction_number.to_string(),
+                just_response_body.to_string(),
+            );
+            // Save Test result at its id key as well (if given)
+            if let Some(test_id) = optional_params.get(TEST_ID_HEADER) {
+                test_parameters
+                    .test_results
+                    .insert(test_id.clone(), just_response_body.to_string());
+            }
+            format!("fastn.http_response = {}", just_response_body)
+        } else {
+            just_response_body.to_string()
+        };
 
         // Previous Test results variable
         let test_results_variable = if !test_parameters.test_results.is_empty() {
@@ -333,10 +337,19 @@ async fn get_post_response_for_id(
         let fastn_assertion_headers =
             fastn_js::fastn_assertion_headers(response_status_code, response_location.as_str());
         let fastn_js = fastn_js::all_js_without_test_and_ftd_langugage_js();
-        let test_string = format!(
-            "{fastn_js}\n\n{response_variable}\n{fastn_assertion_headers}\n{fastn_test_js}\n\
-            {test_content}\nfastn.test_result"
-        );
+        let test_string = if response_content_type.eq("application/json") {
+            format!(
+                "{fastn_js}\n{response_js_data}\n{test_results_variable}\n\
+                {fastn_assertion_headers}\n{fastn_test_js}\n{test_content}\
+                \nfastn.test_result"
+            )
+        } else {
+            format!(
+                "{response_js_data}\n{test_results_variable}\n\
+                {fastn_assertion_headers}\n{fastn_test_js}\n{test_content}\
+                \nfastn.test_result"
+            )
+        };
         if test_parameters.script {
             let mut test_file_name = doc_name.to_string();
             if let Some((_, file_name)) = test_file_name.trim_end_matches('/').rsplit_once('/') {
@@ -456,6 +469,13 @@ async fn execute_get_instruction(
     .await
 }
 
+fn get_content_type(response: &actix_web::HttpResponse) -> Option<String> {
+    response
+        .headers()
+        .get(actix_web::http::header::CONTENT_TYPE)
+        .and_then(|content_type| content_type.to_str().ok().map(String::from))
+}
+
 async fn get_js_for_id(
     id: &str,
     title: &str,
@@ -490,23 +510,27 @@ async fn get_js_for_id(
     log_variable!(test_parameters.verbose, &response);
 
     let (response_status_code, response_location) = assert_response(&response, &optional_params)?;
+    let response_content_type = get_content_type(&response).unwrap_or("text/html".to_string());
     let test = optional_params.get(TEST_CONTENT_HEADER);
     if let Some(test_content) = test {
         let body = response.into_body().try_into_bytes().unwrap(); // Todo: Throw error
         let just_response_body = std::str::from_utf8(&body).unwrap();
-        let response_variable = format!("fastn.http_response = {}", just_response_body);
-
-        // Save Test results
-        test_parameters.test_results.insert(
-            test_parameters.instruction_number.to_string(),
-            just_response_body.to_string(),
-        );
-        // Save Test result at its id key as well (if given)
-        if let Some(test_id) = optional_params.get(TEST_ID_HEADER) {
-            test_parameters
-                .test_results
-                .insert(test_id.clone(), just_response_body.to_string());
-        }
+        let response_js_data = if response_content_type.eq("application/json") {
+            // Save Test results
+            test_parameters.test_results.insert(
+                test_parameters.instruction_number.to_string(),
+                just_response_body.to_string(),
+            );
+            // Save Test result at its id key as well (if given)
+            if let Some(test_id) = optional_params.get(TEST_ID_HEADER) {
+                test_parameters
+                    .test_results
+                    .insert(test_id.clone(), just_response_body.to_string());
+            }
+            format!("fastn.http_response = {}", just_response_body)
+        } else {
+            just_response_body.to_string()
+        };
 
         // Previous Test results variable
         let test_results_variable = if !test_parameters.test_results.is_empty() {
@@ -522,11 +546,19 @@ async fn get_js_for_id(
         let fastn_assertion_headers =
             fastn_js::fastn_assertion_headers(response_status_code, response_location.as_str());
         let fastn_js = fastn_js::all_js_without_test_and_ftd_langugage_js();
-        let test_string = format!(
-            "{fastn_js}\n{test_results_variable}\n{response_variable}\n{fastn_assertion_headers}\n\
-            {fastn_test_js}\n\
-            {test_content}\nfastn.test_result"
-        );
+        let test_string = if response_content_type.eq("application/json") {
+            format!(
+                "{fastn_js}\n{response_js_data}\n{test_results_variable}\n\
+                {fastn_assertion_headers}\n{fastn_test_js}\n{test_content}\
+                \nfastn.test_result"
+            )
+        } else {
+            format!(
+                "{response_js_data}\n{test_results_variable}\n\
+                {fastn_assertion_headers}\n{fastn_test_js}\n{test_content}\
+                \nfastn.test_result"
+            )
+        };
         if test_parameters.script {
             let mut test_file_name = doc_name.to_string();
             if let Some((_, file_name)) = test_file_name.trim_end_matches('/').rsplit_once('/') {

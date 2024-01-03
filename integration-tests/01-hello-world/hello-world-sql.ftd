@@ -1,8 +1,8 @@
 -- import: fastn/processors as pr
 
 -- record test-data:
-string data:
 integer id:
+string data:
 
 -- test-data d:
 $processor$: pr.sql
