@@ -27,7 +27,7 @@ pub async fn diff(
             println!("{}", diff);
         }
         if all {
-            get_track_diff(config, &doc, &snapshots, config.ds.root().as_str()).await?;
+            get_track_diff(config, &doc, &snapshots, config.ds.root()).await?;
         }
     }
     Ok(())
@@ -64,9 +64,10 @@ async fn get_track_diff(
     config: &fastn_core::Config,
     doc: &fastn_core::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
-    base_path: &str,
+    base_path: &fastn_ds::Path,
 ) -> fastn_core::Result<()> {
-    let path = fastn_core::utils::track_path(doc.get_id(), doc.get_base_path());
+    let path =
+        fastn_core::utils::track_path(doc.get_id(), &fastn_ds::Path::new(doc.get_base_path()));
     let tracks = fastn_core::tracker::get_tracks(config, base_path, &path).await?;
     for track in tracks.values() {
         if let Some(timestamp) = snapshots.get(&track.filename) {

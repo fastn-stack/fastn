@@ -7,20 +7,13 @@ pub async fn start_tracking(
 
     let snapshots =
         fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root()).await?;
-    check(
-        config,
-        config.ds.root().as_str(),
-        &snapshots,
-        source,
-        target,
-    )
-    .await?;
+    check(config, config.ds.root(), &snapshots, source, target).await?;
     Ok(())
 }
 
 async fn check(
     config: &fastn_core::Config,
-    base_path: &str,
+    base_path: &fastn_ds::Path,
     snapshots: &std::collections::BTreeMap<String, u128>,
     source: &str,
     target: &str,
@@ -56,15 +49,6 @@ async fn check(
         }
     }
 
-    if let Some((dir, _)) = source.rsplit_once('/') {
-        tokio::fs::create_dir_all(
-            camino::Utf8PathBuf::from(base_path)
-                .join(".tracks")
-                .join(dir),
-        )
-        .await?;
-    }
-
     let new_file_path = fastn_core::utils::track_path(source, base_path);
 
     write(config, target, *timestamp, &new_file_path).await?;
@@ -77,7 +61,7 @@ async fn write(
     config: &fastn_core::Config,
     target: &str,
     timestamp: u128,
-    path: &camino::Utf8PathBuf,
+    path: &fastn_ds::Path,
 ) -> fastn_core::Result<()> {
     let string = if path.exists() {
         let existing_doc = config.ds.read_to_string(path).await?;

@@ -23,9 +23,8 @@ async fn mark_upto_date_translation(
             ),
         });
     }
-    let file_path = fastn_core::utils::track_path(who, config.ds.root().as_str());
-    let mut tracks =
-        fastn_core::tracker::get_tracks(config, config.ds.root().as_str(), &file_path).await?;
+    let file_path = fastn_core::utils::track_path(who, config.ds.root());
+    let mut tracks = fastn_core::tracker::get_tracks(config, config.ds.root(), &file_path).await?;
 
     let original_snapshot =
         fastn_core::snapshot::get_latest_snapshots(&config.ds, &config.original_path()?).await?;
@@ -66,7 +65,7 @@ async fn mark_upto_date_translation(
         );
     }
     println!("{} is now marked upto date", who);
-    write(&file_path, &tracks).await
+    write(&file_path, &tracks, &config.ds).await
 }
 
 async fn mark_upto_date_simple(
@@ -74,16 +73,15 @@ async fn mark_upto_date_simple(
     whom: Option<&str>,
     config: &fastn_core::Config,
 ) -> fastn_core::Result<()> {
-    let file_path = fastn_core::utils::track_path(who, config.ds.root().as_str());
-    let mut tracks =
-        fastn_core::tracker::get_tracks(config, config.ds.root().as_str(), &file_path).await?;
+    let file_path = fastn_core::utils::track_path(who, config.ds.root());
+    let mut tracks = fastn_core::tracker::get_tracks(config, config.ds.root(), &file_path).await?;
     if let Some(whom) = whom {
         return if let Some(track) = tracks.get_mut(whom) {
             let snapshots =
                 fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root()).await?;
             if let Some(timestamp) = snapshots.get(whom) {
                 track.other_timestamp = Some(*timestamp);
-                write(&file_path, &tracks).await?;
+                write(&file_path, &tracks, &config.ds).await?;
                 println!("{} is now marked upto date with {}", who, whom);
                 Ok(())
             } else {
@@ -110,14 +108,10 @@ async fn mark_upto_date_simple(
 }
 
 async fn write(
-    file_path: &camino::Utf8PathBuf,
+    file_path: &fastn_ds::Path,
     tracks: &std::collections::BTreeMap<String, fastn_core::Track>,
+    ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    use tokio::io::AsyncWriteExt;
-    if let Some((dir, _)) = file_path.as_str().rsplit_once('/') {
-        tokio::fs::create_dir_all(dir).await?;
-    }
-    let mut f = tokio::fs::File::create(file_path).await?;
     let mut string = "-- import: fastn".to_string();
 
     for track in tracks.values() {
@@ -135,6 +129,7 @@ async fn write(
             string = format!("{}\npackage: {}", string, package);
         }
     }
-    f.write_all(string.as_bytes()).await?;
+
+    ds.write_content(file_path, string.into_bytes()).await?;
     Ok(())
 }

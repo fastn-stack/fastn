@@ -13,7 +13,7 @@ pub struct Track {
 
 pub(crate) async fn get_tracks(
     config: &fastn_core::Config,
-    base_path: &str,
+    base_path: &fastn_ds::Path,
     path: &fastn_ds::Path,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, Track>> {
     let mut tracks = std::collections::BTreeMap::new();
@@ -23,7 +23,7 @@ pub(crate) async fn get_tracks(
 
     let lib = fastn_core::FastnLibrary::default();
     let doc = config.ds.read_to_string(path).await?;
-    let b = match fastn_core::doc::parse_ftd(base_path, doc.as_str(), &lib) {
+    let b = match fastn_core::doc::parse_ftd(base_path.to_string().as_str(), doc.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {
             eprintln!("failed to parse {}: {:?}", base_path, &e);

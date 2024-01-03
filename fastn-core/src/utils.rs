@@ -343,8 +343,7 @@ pub(crate) fn snapshot_id(path: &str, timestamp: &u128) -> String {
     }
 }
 
-pub(crate) fn track_path(id: &str, base_path: &str) -> fastn_ds::Path {
-    let base_path = fastn_ds::Path::new(base_path);
+pub(crate) fn track_path(id: &str, base_path: &fastn_ds::Path) -> fastn_ds::Path {
     base_path.join(".tracks").join(format!("{}.track", id))
 }
 

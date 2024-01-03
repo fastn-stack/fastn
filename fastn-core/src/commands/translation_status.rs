@@ -36,7 +36,7 @@ async fn original_package_status(config: &fastn_core::Config) -> fastn_core::Res
 pub(crate) async fn get_translation_status(
     config: &fastn_core::Config,
     snapshots: &std::collections::BTreeMap<String, u128>,
-    path: &camino::Utf8PathBuf,
+    path: &fastn_ds::Path,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, TranslationStatus>> {
     let mut translation_status = std::collections::BTreeMap::new();
     for (file, timestamp) in snapshots {
@@ -44,12 +44,12 @@ pub(crate) async fn get_translation_status(
             translation_status.insert(file.clone(), TranslationStatus::Missing);
             continue;
         }
-        let track_path = fastn_core::utils::track_path(file.as_str(), path.as_str());
+        let track_path = fastn_core::utils::track_path(file.as_str(), path);
         if !track_path.exists() {
             translation_status.insert(file.clone(), TranslationStatus::NeverMarked);
             continue;
         }
-        let tracks = fastn_core::tracker::get_tracks(config, path.as_str(), &track_path).await?;
+        let tracks = fastn_core::tracker::get_tracks(config, path, &track_path).await?;
         if let Some(fastn_core::Track {
             last_merged_version: Some(last_merged_version),
             ..
