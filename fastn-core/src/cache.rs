@@ -49,7 +49,7 @@ pub async fn create_or_inc(path: &str) -> fastn_core::Result<usize> {
 }*/
 
 async fn _get_without_lock(config: &fastn_core::Config, path: &str) -> fastn_core::Result<usize> {
-    let value = config.ds.read_to_string(path).await?;
+    let value = config.ds.read_to_string(&fastn_ds::Path::new(path)).await?;
     Ok(value.parse()?)
 }
 
@@ -77,7 +77,10 @@ async fn update_get(
             let old_value = _get_without_lock(config, path).await?;
             config
                 .ds
-                .write_content(path, (old_value + value).to_string().into())
+                .write_content(
+                    &fastn_ds::Path::new(path),
+                    (old_value + value).to_string().into(),
+                )
                 .await?;
             Ok(_get_without_lock(config, path).await?)
         }
@@ -98,7 +101,10 @@ async fn update_create(
             let old_value = _create_without_lock(config, path).await?;
             config
                 .ds
-                .write_content(path, (old_value + value).to_string().into())
+                .write_content(
+                    &fastn_ds::Path::new(path),
+                    (old_value + value).to_string().into(),
+                )
                 .await?;
             Ok(_get_without_lock(config, path).await?)
         }

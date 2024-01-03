@@ -153,7 +153,8 @@ pub(crate) async fn do_sync(
                     );
                     continue;
                 }
-                fastn_core::utils::update(&config.ds.root().join(path), content).await?;
+                fastn_core::utils::update(&config.ds.root().join(path), content, &config.ds)
+                    .await?;
                 to_be_in_history.insert(
                     path.to_string(),
                     fastn_core::history::FileEditTemp {
@@ -172,7 +173,12 @@ pub(crate) async fn do_sync(
             } => {
                 if let Some(file_edit) = remote_manifest.get(path) {
                     if file_edit.version.eq(version) {
-                        fastn_core::utils::update(&config.ds.root().join(path), content).await?;
+                        fastn_core::utils::update(
+                            &config.ds.root().join(path),
+                            content,
+                            &config.ds,
+                        )
+                        .await?;
                         // TODO: get all data like message, author, src-cr from request
                         to_be_in_history.insert(
                             path.to_string(),
@@ -214,6 +220,7 @@ pub(crate) async fn do_sync(
                                 fastn_core::utils::update(
                                     &config.ds.root().join(path),
                                     data.as_bytes(),
+                                    &config.ds,
                                 )
                                 .await?;
                                 to_be_in_history.insert(
