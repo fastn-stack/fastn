@@ -35,7 +35,7 @@ jobs:
           override: true
           components: rustfmt, clippy
 
-      - name: Fastn install
+      - name: fastn installation (using source)
         id: fastn-install
         continue-on-error: true
         uses: actions-rs/cargo@v1
@@ -65,9 +65,9 @@ jobs:
         run: |
           python scripts/populate-table.py
 
-      - name: Test Hello World (debug)
-        run: |
-          python scripts/hello-world-test.py
+#      - name: Test Hello World (debug)
+#        run: |
+#          python scripts/hello-world-test.py
 
       - name: Test server (port 5000)
         run: |
@@ -76,27 +76,27 @@ jobs:
           # Waiting for the server to start
           sleep 10  # We might want to wait more
 
-      - name: Check test server status (debug)
-        run: |
-          ps aux | grep "python scripts/test-server.py"
-
-      - name: Test server endpoint (debug)
-        run: |
-          curl http://127.0.0.1:5000/get-data
-
-      - name: Current Directory (debug)
-        run: |
-          echo "Current Working Directory"
-          pwd 
-          echo "Current Directory files"
-          ls -al 
-
-#      - name: Export Postgres connection FASTN_DB_URL
+#      - name: Check test server status (debug)
 #        run: |
-#          export FASTN_DB_URL=postgres://testuser:testpassword@localhost:5432/testdb
+#          ps aux | grep "python scripts/test-server.py"
 
-      - name: Run integration tests (hello world)
+#      - name: Test server endpoint (debug)
+#        run: |
+#          curl http://127.0.0.1:5000/get-data/
+
+#      - name: Current Directory (debug)
+#        run: |
+#          echo "Current Working Directory"
+#          pwd
+#          echo "Current Directory files"
+#          ls -al
+
+      - name: Export Postgres connection FASTN_DB_URL
         run: |
           export FASTN_DB_URL=postgres://testuser:testpassword@localhost:5432/testdb
-          cd integration-tests/01-hello-world
-          fastn test --headless
+
+      - name: Run integration tests
+        run: |
+          for folder in integration-tests/*/; do
+            (cd "$folder" && fastn test --headless)
+          done
