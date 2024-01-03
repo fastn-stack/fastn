@@ -149,6 +149,7 @@ pub(crate) async fn edit_worker(
         config.ds.root(),
         file_name.as_str(),
         request.value.unwrap_or_default().into_bytes().as_slice(),
+        &config.ds,
     )
     .await?;
 

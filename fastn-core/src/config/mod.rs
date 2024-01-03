@@ -31,8 +31,8 @@ pub struct Config {
     // Global Information
     pub ds: fastn_ds::DocumentStore,
     pub package: fastn_core::Package,
-    pub packages_root: camino::Utf8PathBuf,
-    pub original_directory: camino::Utf8PathBuf,
+    pub packages_root: fastn_ds::Path,
+    pub original_directory: fastn_ds::Path,
     pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, fastn_core::Package>>,
     pub global_ids: std::collections::HashMap<String, String>,
     pub ftd_edition: FTDEdition,
@@ -750,25 +750,31 @@ impl Config {
         &self,
         package: &fastn_core::Package,
     ) -> fastn_core::Result<Vec<fastn_ds::Path>> {
+        let mut ignored_files = vec![
+            ".history".to_string(),
+            ".packages".to_string(),
+            ".tracks".to_string(),
+            "fastn".to_string(),
+            "rust-toolchain".to_string(),
+            ".build".to_string(),
+            "_tests".to_string(),
+        ];
+        ignored_files.extend(package.ignored_paths.clone());
         Ok(self
             .get_root_for_package(package)
-            .get_all_file_path(package.ignored_paths.as_slice()))
+            .get_all_file_path(ignored_files.as_slice()))
     }
 
     pub(crate) fn deprecated_get_all_file_path(
         &self,
         package: &fastn_core::Package,
         ignore_paths: Vec<String>,
-    ) -> fastn_core::Result<Vec<camino::Utf8PathBuf>> {
+    ) -> fastn_core::Result<Vec<fastn_ds::Path>> {
         let path = self.get_root_for_package(package);
-        let mut ignore_paths_build = ignore::WalkBuilder::new(&path);
-        ignore_paths_build.hidden(false);
-        ignore_paths_build.overrides(fastn_core::file::ignore_path(package, &path, ignore_paths)?);
-        Ok(ignore_paths_build
-            .build()
-            .flatten()
-            .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
-            .collect::<Vec<camino::Utf8PathBuf>>())
+        let mut ignored_files = vec![".packages".to_string(), ".build".to_string()];
+        ignored_files.extend(package.ignored_paths.clone());
+        ignored_files.extend(ignore_paths);
+        Ok(path.get_all_file_path(ignored_files.as_slice()))
     }
 
     pub async fn get_file_by_id(
@@ -1234,10 +1240,7 @@ impl Config {
         })
     }
 
-    pub(crate) fn get_file_name(
-        root: &camino::Utf8PathBuf,
-        id: &str,
-    ) -> fastn_core::Result<String> {
+    pub(crate) fn get_file_name(root: &fastn_ds::Path, id: &str) -> fastn_core::Result<String> {
         let mut id = id.to_string();
         let mut add_packages = "".to_string();
         if let Some(new_id) = id.strip_prefix("-/") {
@@ -1287,9 +1290,7 @@ impl Config {
     }
 
     #[allow(dead_code)]
-    async fn get_root_path(
-        directory: &camino::Utf8PathBuf,
-    ) -> fastn_core::Result<camino::Utf8PathBuf> {
+    async fn get_root_path(directory: &fastn_ds::Path) -> fastn_core::Result<fastn_ds::Path> {
         if let Some(fastn_ftd_root) = utils::find_root_for_file(directory, "FASTN.ftd") {
             return Ok(fastn_ftd_root);
         }
@@ -1386,10 +1387,7 @@ impl Config {
         ds: fastn_ds::DocumentStore,
         resolve_sitemap: bool,
     ) -> fastn_core::Result<fastn_core::Config> {
-        let original_directory: camino::Utf8PathBuf =
-            tokio::fs::canonicalize(std::env::current_dir()?)
-                .await?
-                .try_into()?;
+        let original_directory = fastn_ds::Path::new(std::env::current_dir()?.to_str().unwrap()); // todo: remove unwrap()
         let fastn_doc = utils::fastn_doc(&ds, "FASTN.ftd".into()).await?;
         let package = fastn_core::Package::from_fastn_doc(&ds, &fastn_doc)?;
         let mut config = Config {

@@ -80,8 +80,10 @@ pub async fn clear_(
         let main_file_path = config.ds.root().join(file.as_str());
         let package_file_path = config.packages_root.join(file.as_str());
         if main_file_path.exists() {
-            let path = tokio::fs::canonicalize(main_file_path).await?;
-            if path.starts_with(config.ds.root()) {
+            if main_file_path
+                .to_string()
+                .starts_with(config.ds.root().to_string())
+            {
                 fastn_core::utils::remove(path.as_path()).await?;
             }
         } else if package_file_path.exists() {
@@ -100,7 +102,7 @@ pub async fn clear_(
             // TODO: List directories and files other than main
             fastn_core::utils::remove_except(config.ds.root(), &[".packages", ".build"]).await?;
         } else {
-            let path = tokio::fs::canonicalize(config.packages_root.join(package)).await?;
+            let path = config.packages_root.join(package);
             if path.starts_with(&config.packages_root) {
                 fastn_core::utils::remove(path.as_path()).await?;
             }

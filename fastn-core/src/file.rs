@@ -127,7 +127,7 @@ pub(crate) async fn paths_to_files(
         files
             .into_iter()
             .map(|x| {
-                let base = base_path.to_path_buf();
+                let base = base_path.clone();
                 let p = pkg.clone();
                 let ds = ds.clone();
                 tokio::spawn(async move { fastn_core::get_file(&ds, p, &x, &base).await })
@@ -189,7 +189,7 @@ pub(crate) async fn get_file(
     }
 
     let base_path_str = base_path
-        .as_str()
+        .to_string()
         .trim_end_matches(std::path::MAIN_SEPARATOR);
 
     if !doc_path.as_str().starts_with(base_path_str) {
@@ -199,7 +199,7 @@ pub(crate) async fn get_file(
     }
 
     let id = doc_path
-        .as_str()
+        .to_string()
         .trim_start_matches(base_path_str)
         .replace(std::path::MAIN_SEPARATOR, "/")
         .trim_start_matches('/')

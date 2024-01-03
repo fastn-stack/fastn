@@ -567,7 +567,7 @@ impl Package {
     #[tracing::instrument(skip_all)]
     pub(crate) async fn resolve(
         &mut self,
-        fastn_path: &camino::Utf8PathBuf,
+        fastn_path: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<()> {
         tracing::info!(path = fastn_path.as_str());
@@ -622,7 +622,7 @@ impl Package {
     #[tracing::instrument(skip(self))]
     pub(crate) async fn get_and_resolve(
         &self,
-        package_root: &camino::Utf8PathBuf,
+        package_root: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<fastn_core::Package> {
         use tokio::io::AsyncWriteExt;
