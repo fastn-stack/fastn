@@ -254,7 +254,7 @@ impl Component {
                     properties.push(ftd::ast::Property {
                         value: caption.to_owned(),
                         source: ftd::ast::PropertySource::Caption,
-                        condition: None,
+                        condition: caption.condition_expression(),
                         line_number,
                     });
                 }
