@@ -60,7 +60,7 @@ where
         };
         let mut buffer = Vec::new();
         std::io::Read::read_to_end(&mut entry, &mut buffer)?;
-        config.write_content(&entry_path, &buffer).await?;
+        config.ds.write_content(&entry_path, buffer).await?;
     }
 
     Ok(())
@@ -83,7 +83,8 @@ pub async fn resolve_dependencies(config: &fastn_core::Config) -> fastn_core::Re
                     let mut buffer = Vec::new();
                     entry.read_to_end(&mut buffer)?;
                     config
-                        .write_content(&config.packages_root.join(entry.name()), &buffer)
+                        .ds
+                        .write_content(&config.packages_root.join(entry.name()), buffer)
                         .await?;
                 }
             }
@@ -94,7 +95,7 @@ pub async fn resolve_dependencies(config: &fastn_core::Config) -> fastn_core::Re
 }
 
 pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
-    if let Err(e) = std::fs::remove_dir_all(config.root.join(".packages")) {
+    if let Err(e) = std::fs::remove_dir_all(config.ds.root().join(".packages")) {
         match e.kind() {
             std::io::ErrorKind::NotFound => {}
             _ => return Err(e.into()),

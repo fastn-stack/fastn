@@ -5,8 +5,15 @@ pub async fn start_tracking(
 ) -> fastn_core::Result<()> {
     tokio::fs::create_dir_all(config.track_dir()).await?;
 
-    let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
-    check(config, config.root.as_str(), &snapshots, source, target).await?;
+    let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
+    check(
+        config,
+        config.ds.root().as_str(),
+        &snapshots,
+        source,
+        target,
+    )
+    .await?;
     Ok(())
 }
 
@@ -72,7 +79,7 @@ async fn write(
     path: &camino::Utf8PathBuf,
 ) -> fastn_core::Result<()> {
     let string = if path.exists() {
-        let existing_doc = config.read_to_string(path).await?;
+        let existing_doc = config.ds.read_to_string(path).await?;
         format!(
             "{}\n\n-- fastn.track: {}\nself-timestamp: {}",
             existing_doc, target, timestamp
@@ -84,6 +91,6 @@ async fn write(
         )
     };
 
-    config.write_content(path, string.as_bytes()).await?;
+    config.ds.write_content(path, string.into()).await?;
     Ok(())
 }

@@ -199,6 +199,7 @@ fn guess_mime_type(path: &str) -> mime_guess::Mime {
 #[tracing::instrument(skip_all)]
 async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Response {
     let response = match config
+        .ds
         .read_content(
             config
                 .get_root_for_package(&config.package)
@@ -232,7 +233,7 @@ async fn static_file(
         return fastn_core::not_found!("no such static file ({})", file_path);
     }
 
-    match config.read_content(file_path.as_path()).await {
+    match config.ds.read_content(file_path.as_path()).await {
         Ok(r) => fastn_core::http::ok_with_content_type(r, guess_mime_type(file_path.as_str())),
         Err(e) => {
             tracing::error!(

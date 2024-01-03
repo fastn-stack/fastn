@@ -3,18 +3,18 @@ pub async fn diff(
     files: Option<Vec<String>>,
     all: bool,
 ) -> fastn_core::Result<()> {
-    let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
+    let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
     let all = all || files.is_some();
     let documents = if let Some(ref files) = files {
         let files = files
             .iter()
-            .map(|x| config.root.join(x))
+            .map(|x| config.ds.root().join(x))
             .collect::<Vec<camino::Utf8PathBuf>>();
         fastn_core::paths_to_files(
             &config.ds,
             config.package.name.as_str(),
             files,
-            config.root.as_path(),
+            config.ds.root().as_path(),
         )
         .await?
     } else {
@@ -26,7 +26,7 @@ pub async fn diff(
             println!("{}", diff);
         }
         if all {
-            get_track_diff(config, &doc, &snapshots, config.root.as_str()).await?;
+            get_track_diff(config, &doc, &snapshots, config.ds.root().as_str()).await?;
         }
     }
     Ok(())
@@ -39,9 +39,9 @@ async fn get_diffy(
 ) -> fastn_core::Result<Option<String>> {
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
-        let content = config.read_to_string(&doc.get_full_path()).await?;
+        let content = config.ds.read_to_string(&doc.get_full_path()).await?;
 
-        let existing_doc = config.read_to_string(&path).await?;
+        let existing_doc = config.ds.read_to_string(&path).await?;
         if content.eq(&existing_doc) {
             return Ok(None);
         }
@@ -80,8 +80,8 @@ async fn get_track_diff(
                 track.other_timestamp.as_ref().unwrap(),
             );
 
-            let now_doc = config.read_to_string(&now_path).await?;
-            let then_doc = config.read_to_string(&then_path).await?;
+            let now_doc = config.ds.read_to_string(&now_path).await?;
+            let then_doc = config.ds.read_to_string(&then_path).await?;
             if now_doc.eq(&then_doc) {
                 continue;
             }

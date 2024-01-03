@@ -12,13 +12,13 @@ pub async fn sync(
     let documents = if let Some(ref files) = files {
         let files = files
             .iter()
-            .map(|x| config.root.join(x))
+            .map(|x| config.ds.root().join(x))
             .collect::<Vec<camino::Utf8PathBuf>>();
         fastn_core::paths_to_files(
             &config.ds,
             config.package.name.as_str(),
             files,
-            config.root.as_path(),
+            config.ds.root().as_path(),
         )
         .await?
     } else {
@@ -27,9 +27,10 @@ pub async fn sync(
 
     tokio::fs::create_dir_all(config.history_dir()).await?;
 
-    let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.root).await?;
+    let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
 
     let latest_ftd = config
+        .ds
         .read_to_string(config.history_dir().join(".latest.ftd"))
         .await
         .unwrap_or_else(|_| "".to_string());
@@ -123,7 +124,7 @@ async fn get_changed_files(
                 document.get_base_path(),
                 timestamp,
             );
-            let snapshot_file_content = config.read_content(&snapshot_file_path).await?;
+            let snapshot_file_content = config.ds.read_content(&snapshot_file_path).await?;
             // Update
             let current_file_content = document.get_content();
             if sha2::Sha256::digest(&snapshot_file_content)
@@ -179,8 +180,8 @@ async fn write(
 
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
-        if let Ok(current_doc) = config.read_content(&doc.get_full_path()).await {
-            let existing_doc = config.read_content(&path).await?;
+        if let Ok(current_doc) = config.ds.read_content(&doc.get_full_path()).await {
+            let existing_doc = config.ds.read_content(&path).await?;
 
             if sha2::Sha256::digest(current_doc).eq(&sha2::Sha256::digest(existing_doc)) {
                 return Ok((
@@ -244,7 +245,7 @@ async fn update_current_directory(
     for file in files {
         match file {
             fastn_core::apis::sync::SyncResponseFile::Add { path, content, .. } => {
-                fastn_core::utils::update1(&config.root, path, content).await?;
+                fastn_core::utils::update1(config.ds.root(), path, content).await?;
             }
             fastn_core::apis::sync::SyncResponseFile::Update {
                 path,
@@ -260,11 +261,11 @@ async fn update_current_directory(
                 if fastn_core::apis::sync::SyncStatus::Conflict.eq(status) {
                     println!("Conflict: {}", path);
                 }
-                fastn_core::utils::update1(&config.root, path, content).await?;
+                fastn_core::utils::update1(config.ds.root(), path, content).await?;
             }
             fastn_core::apis::sync::SyncResponseFile::Delete { path, .. } => {
-                if config.root.join(path).exists() {
-                    tokio::fs::remove_file(config.root.join(path)).await?;
+                if config.ds.root().join(path).exists() {
+                    tokio::fs::remove_file(config.ds.root().join(path)).await?;
                 }
             }
         }

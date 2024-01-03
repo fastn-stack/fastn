@@ -3,7 +3,7 @@ async fn stop_tracking(
     who: &str,
     whom: Option<&str>,
 ) -> fastn_core::Result<()> {
-    check(config, who, whom, config.root.as_str()).await?;
+    check(config, who, whom, config.ds.root().as_str()).await?;
 
     Ok(())
 }

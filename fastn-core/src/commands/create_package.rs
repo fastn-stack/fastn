@@ -29,7 +29,8 @@ pub async fn create_package(
 ) -> fastn_core::Result<()> {
     use colored::Colorize;
 
-    let ds = fastn_ds::DocumentStore::new(std::env::current_dir()?);
+    let current_dir: camino::Utf8PathBuf = std::env::current_dir()?.canonicalize()?.try_into()?;
+    let ds = fastn_ds::DocumentStore::new(current_dir);
 
     let base_path = {
         match std::env::current_dir() {
