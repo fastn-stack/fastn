@@ -132,7 +132,7 @@ impl VariableInvocation {
             );
         }
 
-        let value = ftd::ast::VariableValue::from_p1(section, doc_id);
+        let value = ftd::ast::VariableValue::from_p1(section, doc_id)?;
         let condition = ftd::ast::Condition::from_headers(&section.headers, doc_id)?;
         let processor = Processor::from_headers(&section.headers, doc_id)?;
 

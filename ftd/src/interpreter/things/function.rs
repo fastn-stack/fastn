@@ -60,7 +60,8 @@ impl Function {
                     ftd::ast::VariableValue::String {
                         value: js.to_string(),
                         line_number: function.line_number(),
-                        source: ftd::ast::ValueSource::Default
+                        source: ftd::ast::ValueSource::Default,
+                        condition: None
                     },
                     doc,
                     false,
@@ -425,7 +426,8 @@ impl FunctionCall {
                         ftd::ast::VariableValue::String {
                             value: property,
                             line_number,
-                            source: ftd::ast::ValueSource::Default
+                            source: ftd::ast::ValueSource::Default,
+                            condition: None
                         },
                         doc,
                         mutable,
