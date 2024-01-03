@@ -1,0 +1,29 @@
+# editor and OS junk
+.idea
+**/.DS_Store
+
+ftd/t/js/**.manual.html
+ftd/t/js/**.script.html
+
+# nix symlink to the build output
+result
+
+.direnv
+.envrc
+
+# Rust stuff
+target
+**/*.rs.bk
+
+# fastn test
+fastn-core/tests/**/.build
+
+fastn-core/tests/**/.packages/fifthtry.github.io/package-info/
+
+/**/.packages
+/**/.remote-state
+
+
+docs
+.env
+.env.swp
