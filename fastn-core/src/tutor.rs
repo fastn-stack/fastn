@@ -105,6 +105,13 @@ pub async fn process(
                 });
             }
         },
+        Err(e) => {
+            println!("error: {:?}", e);
+            return Err(ftd::interpreter::Error::InterpreterIOError {
+                io_error: std::io::Error::new(std::io::ErrorKind::Other, e.to_string()),
+                path: format!("{:?}", path),
+            });
+        }
     };
 
     let state = TutorState {

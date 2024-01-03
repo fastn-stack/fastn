@@ -6,6 +6,7 @@ optional string http-status:
 optional string http-location:
 optional string http-redirect:
 query list query-params:
+optional string id:
 
 -- ftd.text: NOT IMPLEMENTED HERE
 
@@ -25,6 +26,7 @@ string test:
 optional string http-status:
 optional string http-location:
 optional string http-redirect:
+optional string id:
 
 -- ftd.text: NOT IMPLEMENTED HERE
 
