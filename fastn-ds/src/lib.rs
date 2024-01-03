@@ -35,7 +35,7 @@ impl DocumentStore {
         data: &[u8],
     ) -> ftd::interpreter::Result<()> {
         use tokio::io::AsyncWriteExt;
-        let full_path = dbg!(self.root.join(path.as_ref()));
+        let full_path = self.root.join(path.as_ref());
         if let Some(parent) = full_path.parent() {
             tokio::fs::create_dir_all(parent).await?;
         }

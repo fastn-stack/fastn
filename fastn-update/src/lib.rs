@@ -1,3 +1,5 @@
+use std::io::Read;
+
 extern crate self as fastn_update;
 
 static GITHUB_PAGES_REGEX: once_cell::sync::Lazy<regex::Regex> =
@@ -20,7 +22,7 @@ async fn resolve_dependency_from_gh(
     repository: &str,
 ) -> fastn_core::Result<Vec<u8>> {
     let url = format!(
-        "https://api.github.com/repos/{}/{}/tarball",
+        "https://api.github.com/repos/{}/{}/zipball",
         username, repository
     );
     let tar_gz = fastn_core::http::http_get(&url).await?;
@@ -65,17 +67,26 @@ where
 }
 
 pub async fn resolve_dependencies(config: &fastn_core::Config) -> fastn_core::Result<()> {
-    use std::io::Seek;
+    use std::io::{Seek, Write};
 
     for dependency in &config.package.dependencies {
         if let Some((username, repo)) = extract_github_details(dependency.package.name.as_str()) {
-            let tar_gz = resolve_dependency_from_gh(username.as_str(), repo.as_str()).await?;
-            let mut tar = std::io::Cursor::new(tar_gz);
-            tar.seek(std::io::SeekFrom::Start(0))?;
-            let archive = tar::Archive::new(flate2::read::GzDecoder::new(tar));
-            let target_dir = config.packages_root.join(&dependency.package.name);
+            let zipball = resolve_dependency_from_gh(username.as_str(), repo.as_str()).await?;
+            let mut temp_file = tempfile::tempfile()?;
+            temp_file.write_all(&zipball)?;
+            temp_file.seek(std::io::SeekFrom::Start(0))?;
+            let mut archive = zip::ZipArchive::new(temp_file)?;
+            for i in 0..archive.len() {
+                let mut entry = archive.by_index(i)?;
 
-            unpack_package_archive(config, target_dir, archive).await?;
+                if entry.is_file() {
+                    let mut buffer = Vec::new();
+                    entry.read_to_end(&mut buffer)?;
+                    config
+                        .write_content(&config.packages_root.join(entry.name()), &buffer)
+                        .await?;
+                }
+            }
         }
     }
 

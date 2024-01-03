@@ -19,3 +19,5 @@ regex.workspace = true
 tar.workspace = true
 flate2.workspace = true
 camino.workspace = true
+tempfile.workspace = true
+zip.workspace = true
