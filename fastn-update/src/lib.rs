@@ -50,25 +50,41 @@ pub struct Package {
 }
 
 impl Package {
-    pub fn new(name: String, version: Option<String>, source: String, checksum: String, dependencies: Vec<String>) -> Self {
-        Package { name, version, source, checksum, dependencies }
+    pub fn new(
+        name: String,
+        version: Option<String>,
+        source: String,
+        checksum: String,
+        dependencies: Vec<String>,
+    ) -> Self {
+        Package {
+            name,
+            version,
+            source,
+            checksum,
+            dependencies,
+        }
     }
+}
+
+pub async fn generate_checksum(zipball: Vec<u8>) -> fastn_core::Result<String> {
+    use sha2::{Digest, Sha256};
+
+    let mut hasher = Sha256::new();
+    hasher.update(&zipball);
+    Ok(format!("{:x}", hasher.finalize()))
 }
 
 pub async fn resolve_dependencies(config: &fastn_core::Config) -> fastn_core::Result<()> {
     use std::io::Seek;
-    use sha2::{Digest, Sha256};
 
     let mut packages: Vec<Package> = vec![];
 
     for dependency in &config.package.dependencies {
         if let Some((username, repo)) = extract_github_details(dependency.package.name.as_str()) {
             let zipball = resolve_dependency_from_gh(username.as_str(), repo.as_str()).await?;
+            let checksum = generate_checksum(zipball.clone()).await?;
             let mut zipball_cursor = std::io::Cursor::new(zipball);
-            let mut hasher = Sha256::new();
-            let mut buffer = Vec::new();
-            let _ = &zipball_cursor.clone().take(u64::MAX.into()).read_to_end(&mut buffer)?;
-            hasher.update(&buffer);
             zipball_cursor.seek(std::io::SeekFrom::Start(0))?;
             let mut archive = zip::ZipArchive::new(zipball_cursor)?;
             for i in 0..archive.len() {
@@ -86,14 +102,17 @@ pub async fn resolve_dependencies(config: &fastn_core::Config) -> fastn_core::Re
 
             let source = format!("git+https://github.com/{}/{}", username, repo);
 
-            let checksum = format!("{:x}", hasher.finalize());
-
             let package = Package::new(
                 dependency.package.name.clone(),
                 None, // todo: fix this when versioning is available
                 source,
                 checksum,
-                dependency.package.dependencies.iter().map(|d| d.package.name.clone()).collect(),
+                dependency
+                    .package
+                    .dependencies
+                    .iter()
+                    .map(|d| d.package.name.clone())
+                    .collect(),
             );
 
             packages.push(package);
@@ -103,7 +122,13 @@ pub async fn resolve_dependencies(config: &fastn_core::Config) -> fastn_core::Re
     let manifest = Manifest::new(packages);
     let dot_fastn_dir = config.ds.root().join(".fastn");
 
-    config.ds.write_content(dot_fastn_dir.join("manifest.json"), serde_json::to_vec_pretty(&manifest)?).await?;
+    config
+        .ds
+        .write_content(
+            dot_fastn_dir.join("manifest.json"),
+            serde_json::to_vec_pretty(&manifest)?,
+        )
+        .await?;
 
     println!("Wrote manifest.json");
 
