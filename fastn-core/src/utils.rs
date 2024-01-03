@@ -326,9 +326,9 @@ pub(crate) fn nanos_to_rfc3339(nanos: &u128) -> String {
     nanos.to_string() // TODO
 }
 
-pub(crate) fn history_path(id: &str, base_path: &str, timestamp: &u128) -> camino::Utf8PathBuf {
+pub(crate) fn history_path(id: &str, base_path: &str, timestamp: &u128) -> fastn_ds::Path {
     let id_with_timestamp_extension = snapshot_id(id, timestamp);
-    let base_path = camino::Utf8PathBuf::from(base_path);
+    let base_path = fastn_ds::Path::new(base_path);
     base_path.join(".history").join(id_with_timestamp_extension)
 }
 
@@ -348,7 +348,7 @@ pub(crate) fn track_path(id: &str, base_path: &str) -> camino::Utf8PathBuf {
 pub(crate) async fn get_number_of_documents(
     config: &fastn_core::Config,
 ) -> fastn_core::Result<String> {
-    let mut no_of_docs = fastn_core::snapshot::get_latest_snapshots(config.ds.root())
+    let mut no_of_docs = fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root())
         .await?
         .len()
         .to_string();
@@ -365,15 +365,18 @@ pub(crate) async fn get_current_document_last_modified_on(
     config: &fastn_core::Config,
     document_id: &str,
 ) -> Option<String> {
-    fastn_core::snapshot::get_latest_snapshots(config.ds.root())
+    fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root())
         .await
         .unwrap_or_default()
         .get(document_id)
         .map(nanos_to_rfc3339)
 }
 
-pub(crate) async fn get_last_modified_on(path: &camino::Utf8PathBuf) -> Option<String> {
-    fastn_core::snapshot::get_latest_snapshots(path)
+pub(crate) async fn get_last_modified_on(
+    ds: &fastn_ds::DocumentStore,
+    path: &fastn_ds::Path,
+) -> Option<String> {
+    fastn_core::snapshot::get_latest_snapshots(ds, path)
         .await
         .unwrap_or_default()
         .values()

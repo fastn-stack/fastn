@@ -111,7 +111,8 @@ pub(crate) async fn edit_worker(
         .get_file_path_and_resolve(request.path.as_str())
         .await
     {
-        let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
+        let snapshots =
+            fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root()).await?;
         let workspaces = fastn_core::snapshot::get_workspace(config).await?;
 
         let file = fastn_core::get_file(
@@ -152,7 +153,8 @@ pub(crate) async fn edit_worker(
     .await?;
 
     if let Some(before_update_status) = before_update_status {
-        let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
+        let snapshots =
+            fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root()).await?;
         let workspaces = fastn_core::snapshot::get_workspace(config).await?;
         let file = fastn_core::get_file(
             &config.ds,

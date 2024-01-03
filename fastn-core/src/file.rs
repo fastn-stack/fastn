@@ -44,7 +44,7 @@ impl File {
             Self::Image(a) => a.base_path.as_str(),
         }
     }
-    pub fn get_full_path(&self) -> camino::Utf8PathBuf {
+    pub fn get_full_path(&self) -> fastn_ds::Path {
         let (id, base_path) = match self {
             Self::Ftd(a) => (a.id.to_string(), a.parent_path.to_string()),
             Self::Static(a) => (a.id.to_string(), a.base_path.to_string()),
@@ -52,7 +52,7 @@ impl File {
             Self::Code(a) => (a.id.to_string(), a.parent_path.to_string()),
             Self::Image(a) => (a.id.to_string(), a.base_path.to_string()),
         };
-        camino::Utf8PathBuf::from(base_path).join(id)
+        fastn_ds::Path::new(base_path).join(id)
     }
 
     pub(crate) fn get_content(&self) -> &[u8] {
@@ -107,7 +107,7 @@ pub struct Static {
     pub package_name: String,
     pub id: String,
     pub content: Vec<u8>,
-    pub base_path: camino::Utf8PathBuf,
+    pub base_path: fastn_ds::Path,
 }
 
 impl Static {
@@ -119,8 +119,8 @@ impl Static {
 pub(crate) async fn paths_to_files(
     ds: &fastn_ds::DocumentStore,
     package_name: &str,
-    files: Vec<camino::Utf8PathBuf>,
-    base_path: &camino::Utf8Path,
+    files: Vec<fastn_ds::Path>,
+    base_path: &fastn_ds::Path,
 ) -> fastn_core::Result<Vec<fastn_core::File>> {
     let pkg = package_name.to_string();
     Ok(futures::future::join_all(
@@ -143,7 +143,7 @@ pub(crate) async fn paths_to_files(
 
 pub fn package_ignores(
     package: &fastn_core::Package,
-    root_path: &camino::Utf8PathBuf,
+    root_path: &fastn_ds::Path,
 ) -> Result<ignore::overrides::Override, ignore::Error> {
     let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
     overrides.add("!.history")?;
@@ -161,7 +161,7 @@ pub fn package_ignores(
 
 pub fn ignore_path(
     package: &fastn_core::Package,
-    root_path: &camino::Utf8PathBuf,
+    root_path: &fastn_ds::Path,
     ignore_paths: Vec<String>,
 ) -> Result<ignore::overrides::Override, ignore::Error> {
     let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
@@ -179,8 +179,8 @@ pub fn ignore_path(
 pub(crate) async fn get_file(
     ds: &fastn_ds::DocumentStore,
     package_name: String,
-    doc_path: &camino::Utf8Path,
-    base_path: &camino::Utf8Path,
+    doc_path: &fastn_ds::Path,
+    base_path: &fastn_ds::Path,
 ) -> fastn_core::Result<File> {
     if doc_path.is_dir() {
         return Err(fastn_core::Error::UsageError {

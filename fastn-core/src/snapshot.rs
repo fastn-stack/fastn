@@ -25,9 +25,9 @@ pub(crate) async fn resolve_snapshots(
         .collect())
 }
 
-// TODO: replace path with config
 pub(crate) async fn get_latest_snapshots(
-    path: &camino::Utf8PathBuf,
+    ds: &fastn_ds::DocumentStore,
+    path: &fastn_ds::Path,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, u128>> {
     let latest_file_path = path.join(".history/.latest.ftd");
     if !latest_file_path.exists() {
@@ -35,7 +35,7 @@ pub(crate) async fn get_latest_snapshots(
         return Ok(Default::default());
     }
 
-    let doc = std::fs::read_to_string(&latest_file_path)?;
+    let doc = ds.read_to_string(&latest_file_path)?;
     resolve_snapshots(&doc).await
 }
 
