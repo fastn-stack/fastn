@@ -58,6 +58,14 @@ impl Path {
             }) //todo: improve error message
             .collect::<Vec<fastn_ds::Path>>()
     }
+
+    pub fn exists(&self) -> bool {
+        self.path.exists()
+    }
+
+    pub fn eq(&self, other: &Self) -> bool {
+        self.path.eq(&other.path)
+    }
 }
 
 impl std::fmt::Display for fastn_ds::Path {
@@ -71,13 +79,6 @@ fn package_ignores(
     root_path: &camino::Utf8PathBuf,
 ) -> Result<ignore::overrides::Override, ignore::Error> {
     let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
-    overrides.add("!.history")?;
-    overrides.add("!.packages")?;
-    overrides.add("!.tracks")?;
-    overrides.add("!fastn")?;
-    overrides.add("!rust-toolchain")?;
-    overrides.add("!.build")?;
-    overrides.add("!_tests")?;
     for ignored_path in ignore_paths {
         overrides.add(format!("!{}", ignored_path).as_str())?;
     }
@@ -136,7 +137,16 @@ impl DocumentStore {
     pub async fn write_content(&self, path: &Path, data: Vec<u8>) -> Result<(), WriteError> {
         use tokio::io::AsyncWriteExt;
 
-        let mut file = tokio::fs::File::create(self.root.join(&path.path).path).await?;
+        let full_path = self.root.join(&path.path);
+
+        // Create the directory if it doesn't exist
+        if let Some(parent) = full_path.parent() {
+            if !parent.exists() {
+                tokio::fs::create_dir_all(parent.path).await?;
+            }
+        }
+
+        let mut file = tokio::fs::File::create(full_path.path).await?;
         file.write_all(&data).await?;
         Ok(())
     }

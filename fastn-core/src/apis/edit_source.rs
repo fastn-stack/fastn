@@ -4,9 +4,8 @@ pub(crate) async fn edit_source(
 ) -> fastn_core::http::Response {
     // TODO: Need to remove unwrap
     let path = {
-        let mut path: camino::Utf8PathBuf =
-            req.path().replacen("/-/edit-src/", "", 1).parse().unwrap();
-        if path.eq(&camino::Utf8PathBuf::new().join("")) {
+        let mut path = fastn_ds::Path::new(req.path().replacen("/-/edit-src/", "", 1));
+        if path.eq(&fastn_ds::Path::new("")) {
             path = path.join("/");
         }
         path

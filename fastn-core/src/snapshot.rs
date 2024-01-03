@@ -35,7 +35,7 @@ pub(crate) async fn get_latest_snapshots(
         return Ok(Default::default());
     }
 
-    let doc = ds.read_to_string(&latest_file_path)?;
+    let doc = ds.read_to_string(&latest_file_path).await?;
     resolve_snapshots(&doc).await
 }
 
@@ -137,6 +137,7 @@ pub(crate) async fn create_workspace(
         &config.ds.root().join(".fastn"),
         "workspace.ftd",
         data.join("\n\n").as_bytes(),
+        &config.ds,
     )
     .await?;
     Ok(())
