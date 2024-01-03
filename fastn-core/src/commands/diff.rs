@@ -39,7 +39,11 @@ async fn get_diffy(
     snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fastn_core::Result<Option<String>> {
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
-        let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
+        let path = fastn_core::utils::history_path(
+            doc.get_id(),
+            &fastn_ds::Path::new(doc.get_base_path()),
+            timestamp,
+        );
         let content = config.ds.read_to_string(&doc.get_full_path()).await?;
 
         let existing_doc = config.ds.read_to_string(&path).await?;
@@ -72,12 +76,15 @@ async fn get_track_diff(
             if track.other_timestamp.is_none() {
                 continue;
             }
-            let now_path =
-                fastn_core::utils::history_path(&track.filename, doc.get_base_path(), timestamp);
+            let now_path = fastn_core::utils::history_path(
+                &track.filename,
+                &fastn_ds::Path::new(doc.get_base_path()),
+                timestamp,
+            );
 
             let then_path = fastn_core::utils::history_path(
                 &track.filename,
-                doc.get_base_path(),
+                &fastn_ds::Path::new(doc.get_base_path()),
                 track.other_timestamp.as_ref().unwrap(),
             );
 

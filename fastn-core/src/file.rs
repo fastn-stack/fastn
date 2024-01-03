@@ -187,7 +187,7 @@ pub(crate) async fn get_file(
         .trim_end_matches(std::path::MAIN_SEPARATOR)
         .to_string();
 
-    if !doc_path.to_string().starts_with(base_path_str) {
+    if !doc_path.to_string().starts_with(&base_path_str) {
         return Err(fastn_core::Error::UsageError {
             message: format!("{:?} should be a file", doc_path),
         });

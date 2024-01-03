@@ -18,14 +18,12 @@ pub async fn sync(
             &config.ds,
             config.package.name.as_str(),
             files,
-            config.ds.root().as_path(),
+            config.ds.root(),
         )
         .await?
     } else {
         config.get_files(&config.package).await?
     };
-
-    tokio::fs::create_dir_all(config.history_dir()).await?;
 
     let snapshots =
         fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root()).await?;
@@ -122,7 +120,7 @@ async fn get_changed_files(
         if let Some(timestamp) = snapshots.get(document.get_id()) {
             let snapshot_file_path = fastn_core::utils::history_path(
                 document.get_id(),
-                document.get_base_path(),
+                &fastn_ds::Path::new(document.get_base_path()),
                 timestamp,
             );
             let snapshot_file_content = config.ds.read_content(&snapshot_file_path).await?;
@@ -180,7 +178,11 @@ async fn write(
     }
 
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
-        let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
+        let path = fastn_core::utils::history_path(
+            doc.get_id(),
+            &fastn_ds::Path::new(doc.get_base_path()),
+            timestamp,
+        );
         if let Ok(current_doc) = config.ds.read_content(&doc.get_full_path()).await {
             let existing_doc = config.ds.read_content(&path).await?;
 
@@ -196,10 +198,13 @@ async fn write(
         }
     }
 
-    let new_file_path =
-        fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), &timestamp);
+    let new_file_path = fastn_core::utils::history_path(
+        doc.get_id(),
+        &fastn_ds::Path::new(doc.get_base_path()),
+        &timestamp,
+    );
 
-    tokio::fs::copy(doc.get_full_path(), new_file_path).await?;
+    config.ds.copy(&doc.get_full_path(), &new_file_path).await?;
 
     Ok((
         fastn_core::Snapshot {
@@ -429,7 +434,10 @@ async fn collect_garbage(config: &fastn_core::Config) -> fastn_core::Result<()> 
         .collect_vec();
 
     for path in paths {
-        tokio::fs::remove_file(config.conflicted_dir().join(&path)).await?;
+        config
+            .ds
+            .remove(&config.conflicted_dir().join(&path))
+            .await?;
         workspaces.remove(&path);
     }
 

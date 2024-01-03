@@ -11,7 +11,7 @@ pub(crate) async fn edit_source(
         path
     };
 
-    match handle_view_source(config, req, path.as_str()).await {
+    match handle_view_source(config, req, path.to_string().as_str()).await {
         Ok(body) => fastn_core::http::ok(body),
         Err(e) => {
             fastn_core::server_error!("new_path: {}, Error: {:?}", path, e)
@@ -35,7 +35,7 @@ async fn handle_view_source(
             let main_document = fastn_core::Document {
                 id: "editor-source.ftd".to_string(),
                 content: editor_ftd,
-                parent_path: config.ds.root().as_str().to_string(),
+                parent_path: config.ds.root().to_string().to_string(),
                 package_name: config.package.name.clone(),
             };
             fastn_core::package::package_doc::read_ftd(
