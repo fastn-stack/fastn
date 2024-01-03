@@ -143,12 +143,12 @@ pub async fn can_read(config: &fastn_core::RequestConfig, path: &str) -> fastn_c
         i
     };
 
-    return fastn_core::user_group::belongs_to(
+    fastn_core::user_group::belongs_to(
         &config.config,
         user_groups.as_slice(),
         auth_identities.iter().collect_vec().as_slice(),
     )
-    .await;
+    .await
 
     // get the app readers
     // get the groups

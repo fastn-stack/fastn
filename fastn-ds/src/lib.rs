@@ -19,10 +19,6 @@ impl Path {
         }
     }
 
-    pub fn to_string(&self) -> String {
-        self.path.as_str().to_string()
-    }
-
     pub fn join<T: AsRef<str>>(&self, path: T) -> Self {
         Self {
             path: self.path.join(path.as_ref()),
@@ -49,10 +45,6 @@ impl Path {
         self.path.exists()
     }
 
-    pub fn eq(&self, other: &Self) -> bool {
-        self.path.eq(&other.path)
-    }
-
     pub fn file_name(&self) -> Option<String> {
         self.path.file_name().map(|v| v.to_string())
     }
@@ -70,7 +62,7 @@ impl Path {
 
 impl std::fmt::Display for fastn_ds::Path {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.path)
+        write!(f, "{}", self.path.as_str())
     }
 }
 
