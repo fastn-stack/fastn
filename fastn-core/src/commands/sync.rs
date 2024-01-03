@@ -27,7 +27,8 @@ pub async fn sync(
 
     tokio::fs::create_dir_all(config.history_dir()).await?;
 
-    let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
+    let snapshots =
+        fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root()).await?;
 
     let latest_ftd = config
         .ds

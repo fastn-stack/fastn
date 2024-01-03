@@ -45,7 +45,7 @@ pub async fn upload() -> Result<(), UploadError> {
         return Err(UploadError::CwIdNotFound);
     }
     let cw_id = ds
-        .read_to_string(cw_id_path.as_path())
+        .read_to_string(&fastn_ds::Path::new(cw_id_path.as_path()))
         .await
         .map_err(|_e| UploadError::CwIdReadError)?;
 
@@ -55,7 +55,7 @@ pub async fn upload() -> Result<(), UploadError> {
     }
 
     let sid = ds
-        .read_to_string(sid_path.as_path())
+        .read_to_string(&fastn_ds::Path::new(sid_path.as_path()))
         .await
         .map_err(|_e| UploadError::SidReadError)?;
 

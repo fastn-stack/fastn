@@ -1,7 +1,8 @@
 use std::fmt::Display;
 
 pub async fn status(config: &fastn_core::Config, source: Option<&str>) -> fastn_core::Result<()> {
-    let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
+    let snapshots =
+        fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root()).await?;
     let workspaces = fastn_core::snapshot::get_workspace(config).await?;
     match source {
         Some(source) => {

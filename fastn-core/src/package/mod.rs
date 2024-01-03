@@ -25,7 +25,7 @@ pub struct Package {
     pub auto_import: Vec<fastn_core::AutoImport>,
     /// `fastn_path` contains the fastn package root. This value is found in `FASTN.ftd` or
     /// `fastn.manifest.ftd` file.
-    pub fastn_path: Option<camino::Utf8PathBuf>,
+    pub fastn_path: Option<fastn_ds::Path>,
     /// `ignored` keeps track of files that are to be ignored by `fastn build`, `fastn sync` etc.
     pub ignored_paths: Vec<String>,
     /// `fonts` keeps track of the fonts used by the package.

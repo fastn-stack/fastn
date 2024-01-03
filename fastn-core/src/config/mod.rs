@@ -306,35 +306,35 @@ impl RequestConfig {
 impl Config {
     /// `build_dir` is where the static built files are stored. `fastn build` command creates this
     /// folder and stores its output here.
-    pub fn build_dir(&self) -> camino::Utf8PathBuf {
+    pub fn build_dir(&self) -> fastn_ds::Path {
         self.ds.root().join(".build")
     }
 
-    pub fn clone_dir(&self) -> camino::Utf8PathBuf {
+    pub fn clone_dir(&self) -> fastn_ds::Path {
         self.ds.root().join(".clone-state")
     }
 
-    pub fn workspace_file(&self) -> camino::Utf8PathBuf {
+    pub fn workspace_file(&self) -> fastn_ds::Path {
         self.clone_dir().join("workspace.ftd")
     }
 
-    pub fn clone_available_crs_path(&self) -> camino::Utf8PathBuf {
+    pub fn clone_available_crs_path(&self) -> fastn_ds::Path {
         self.clone_dir().join("cr")
     }
 
-    pub fn cr_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
+    pub fn cr_path(&self, cr_number: usize) -> fastn_ds::Path {
         self.ds.root().join(fastn_core::cr::cr_path(cr_number))
     }
 
-    pub fn path_without_root(&self, path: &camino::Utf8PathBuf) -> fastn_core::Result<String> {
+    pub fn path_without_root(&self, path: &fastn_ds::Path) -> fastn_core::Result<String> {
         Ok(path.strip_prefix(self.ds.root())?.to_string())
     }
 
-    pub fn cr_deleted_file_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
+    pub fn cr_deleted_file_path(&self, cr_number: usize) -> fastn_ds::Path {
         self.cr_path(cr_number).join("-/deleted.ftd")
     }
 
-    pub fn track_path(&self, path: &camino::Utf8PathBuf) -> camino::Utf8PathBuf {
+    pub fn track_path(&self, path: &fastn_ds::Path) -> fastn_ds::Path {
         let path_without_root = self
             .path_without_root(path)
             .unwrap_or_else(|_| path.to_string());
@@ -342,15 +342,11 @@ impl Config {
         self.track_dir().join(track_path)
     }
 
-    pub fn cr_track_dir(&self, cr_number: usize) -> camino::Utf8PathBuf {
+    pub fn cr_track_dir(&self, cr_number: usize) -> fastn_ds::Path {
         self.track_dir().join(fastn_core::cr::cr_path(cr_number))
     }
 
-    pub fn cr_track_path(
-        &self,
-        path: &camino::Utf8PathBuf,
-        cr_number: usize,
-    ) -> camino::Utf8PathBuf {
+    pub fn cr_track_path(&self, path: &fastn_ds::Path, cr_number: usize) -> fastn_ds::Path {
         let path_without_root = self
             .cr_path(cr_number)
             .join(path)
@@ -360,11 +356,11 @@ impl Config {
         self.track_dir().join(track_path)
     }
 
-    pub fn cr_about_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
+    pub fn cr_about_path(&self, cr_number: usize) -> fastn_ds::Path {
         self.cr_path(cr_number).join("-/about.ftd")
     }
 
-    pub fn cr_meta_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
+    pub fn cr_meta_path(&self, cr_number: usize) -> fastn_ds::Path {
         self.cr_path(cr_number).join("-/meta.ftd")
     }
 
@@ -381,24 +377,24 @@ impl Config {
         }
     }
 
-    pub fn remote_dir(&self) -> camino::Utf8PathBuf {
+    pub fn remote_dir(&self) -> fastn_ds::Path {
         self.ds.root().join(".remote-state")
     }
 
-    pub fn remote_history_dir(&self) -> camino::Utf8PathBuf {
+    pub fn remote_history_dir(&self) -> fastn_ds::Path {
         self.remote_dir().join("history")
     }
 
     /// location that stores lowest available cr number
-    pub fn remote_cr(&self) -> camino::Utf8PathBuf {
+    pub fn remote_cr(&self) -> fastn_ds::Path {
         self.remote_dir().join("cr")
     }
 
-    pub fn history_file(&self) -> camino::Utf8PathBuf {
+    pub fn history_file(&self) -> fastn_ds::Path {
         self.remote_dir().join("history.ftd")
     }
 
-    pub(crate) fn history_path(&self, id: &str, version: i32) -> camino::Utf8PathBuf {
+    pub(crate) fn history_path(&self, id: &str, version: i32) -> fastn_ds::Path {
         let id_with_timestamp_extension = fastn_core::utils::snapshot_id(id, &(version as u128));
         self.remote_history_dir().join(id_with_timestamp_extension)
     }
@@ -418,15 +414,15 @@ impl Config {
     ///     
     /// `.history` file is created or updated by `fastn sync` command only, no one else should edit
     /// anything in it.
-    pub fn history_dir(&self) -> camino::Utf8PathBuf {
+    pub fn history_dir(&self) -> fastn_ds::Path {
         self.ds.root().join(".history")
     }
 
-    pub fn fastn_dir(&self) -> camino::Utf8PathBuf {
+    pub fn fastn_dir(&self) -> fastn_ds::Path {
         self.ds.root().join(".fastn")
     }
 
-    pub fn conflicted_dir(&self) -> camino::Utf8PathBuf {
+    pub fn conflicted_dir(&self) -> fastn_ds::Path {
         self.fastn_dir().join("conflicted")
     }
 
@@ -443,14 +439,14 @@ impl Config {
     /// ```
     ///
     /// One `fastn.snapshot` for every file that is currently part of the package.
-    pub fn latest_ftd(&self) -> camino::Utf8PathBuf {
+    pub fn latest_ftd(&self) -> fastn_ds::Path {
         self.ds.root().join(".history/.latest.ftd")
     }
 
     /// track_dir returns the directory where track files are stored. Tracking information as well
     /// is considered part of a package, but it is not downloaded when a package is downloaded as
     /// a dependency of another package.
-    pub fn track_dir(&self) -> camino::Utf8PathBuf {
+    pub fn track_dir(&self) -> fastn_ds::Path {
         self.ds.root().join(".tracks")
     }
 
@@ -462,7 +458,7 @@ impl Config {
 
     /// original_path() returns the path of the original package if the current package is a
     /// translation package. it returns the path in `.packages` folder where the
-    pub fn original_path(&self) -> fastn_core::Result<camino::Utf8PathBuf> {
+    pub fn original_path(&self) -> fastn_core::Result<fastn_ds::Path> {
         let o = match self.package.translation_of.as_ref() {
             Some(ref o) => o,
             None => {
@@ -474,8 +470,7 @@ impl Config {
         match &o.fastn_path {
             Some(fastn_path) => Ok(fastn_path
                 .parent()
-                .expect("Expect fastn_path parent. Panic!")
-                .to_owned()),
+                .expect("Expect fastn_path parent. Panic!")),
             _ => Err(fastn_core::Error::UsageError {
                 message: format!("Unable to find `fastn_path` of the package {}", o.name),
             }),
@@ -674,16 +669,16 @@ impl Config {
         return Ok(hash);
 
         async fn get_version(
-            x: &camino::Utf8PathBuf,
-            path: &camino::Utf8PathBuf,
+            x: &fastn_ds::Path,
+            path: &fastn_ds::Path,
         ) -> fastn_core::Result<fastn_core::Version> {
             let id = match tokio::fs::canonicalize(x)
                 .await?
                 .to_str()
                 .unwrap()
                 .rsplit_once(
-                    if path.as_str().ends_with(std::path::MAIN_SEPARATOR) {
-                        path.as_str().to_string()
+                    if path.to_string().ends_with(std::path::MAIN_SEPARATOR) {
+                        path.to_string()
                     } else {
                         format!("{}{}", path, std::path::MAIN_SEPARATOR)
                     }
@@ -704,10 +699,7 @@ impl Config {
         }
     }
 
-    pub(crate) fn get_root_for_package(
-        &self,
-        package: &fastn_core::Package,
-    ) -> camino::Utf8PathBuf {
+    pub(crate) fn get_root_for_package(&self, package: &fastn_core::Package) -> fastn_ds::Path {
         if let Some(package_fastn_path) = &package.fastn_path {
             // TODO: Unwrap?
             package_fastn_path.parent().unwrap().to_owned()
@@ -757,16 +749,10 @@ impl Config {
     pub(crate) fn get_all_file_paths(
         &self,
         package: &fastn_core::Package,
-    ) -> fastn_core::Result<Vec<camino::Utf8PathBuf>> {
-        let path = self.get_root_for_package(package);
-        let mut ignore_paths = ignore::WalkBuilder::new(&path);
-        // ignore_paths.hidden(false); // Allow the linux hidden files to be evaluated
-        ignore_paths.overrides(fastn_core::file::package_ignores(package, &path)?);
-        Ok(ignore_paths
-            .build()
-            .flatten()
-            .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
-            .collect::<Vec<camino::Utf8PathBuf>>())
+    ) -> fastn_core::Result<Vec<fastn_ds::Path>> {
+        Ok(self
+            .get_root_for_package(package)
+            .get_all_file_path(package.ignored_paths.as_slice()))
     }
 
     pub(crate) fn deprecated_get_all_file_path(

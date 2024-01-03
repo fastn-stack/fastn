@@ -54,7 +54,7 @@ pub async fn revert(config: &fastn_core::Config, path: &str) -> fastn_core::Resu
         }
         workspace.set_revert();
     } else {
-        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
+        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds, &config.ds.root()).await?;
         if let Some(timestamp) = snapshots.get(path) {
             let revert_path = fastn_core::utils::history_path(path, config.ds.root().as_str(), timestamp);
 
