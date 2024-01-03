@@ -73,6 +73,7 @@ pub(crate) fn result_to_value(
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     match result {
         Ok(result) => {
+            dbg!(&result);
             if kind.is_list() {
                 doc.rows_to_value(result.as_slice(), &kind, value)
             } else {
