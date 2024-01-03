@@ -298,7 +298,7 @@ pub(crate) async fn do_sync(
                     );
                 } else {
                     if config.ds.root().join(path).exists() {
-                        tokio::fs::remove_file(config.ds.root().join(path)).await?;
+                        config.ds.remove(&config.ds.root().join(path)).await?;
                     }
                     to_be_in_history.insert(
                         path.to_string(),
@@ -359,19 +359,17 @@ async fn clone_history_files(
     use itertools::Itertools;
 
     let diff = snapshot_diff(remote_manifest, client_latest);
-    let history = ignore::WalkBuilder::new(config.remote_history_dir())
-        .hidden(false)
-        .build()
-        .flatten()
-        .map(|x| {
-            x.into_path()
-                .to_str()
-                .unwrap()
-                .trim_start_matches(config.remote_history_dir().as_str())
+    let history = config
+        .ds
+        .get_all_file_path(&config.remote_history_dir(), &[])
+        .into_iter()
+        .map(|v| {
+            v.to_string()
+                .trim_start_matches(&config.remote_history_dir().to_string())
                 .trim_matches('/')
                 .to_string()
         })
-        .collect::<Vec<String>>();
+        .collect_vec();
 
     let mut dot_history = vec![];
     for (path, _) in diff.iter() {

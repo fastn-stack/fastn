@@ -16,16 +16,16 @@ pub fn home() -> camino::Utf8PathBuf {
     camino::Utf8PathBuf::from_path_buf(home).expect("Issue while reading your home directory")
 }
 
-pub fn build_dir() -> camino::Utf8PathBuf {
-    root().join(".build")
+pub fn build_dir(ds: &fastn_ds::DocumentStore) -> fastn_ds::Path {
+    ds.root().join(".build")
 }
 
-pub fn cw_id() -> camino::Utf8PathBuf {
-    root().join(".fastn/cw-id")
+pub fn cw_id(ds: &fastn_ds::DocumentStore) -> fastn_ds::Path {
+    ds.root().join(".fastn/cw-id")
 }
 
-pub fn sid() -> camino::Utf8PathBuf {
-    home().join(".fastn/sid.json")
+pub fn sid(ds: &fastn_ds::DocumentStore) -> fastn_ds::Path {
+    ds.home().join(".fastn/sid.json")
 }
 
 pub fn walkdir_util(root: &camino::Utf8Path) -> Vec<tejar::create::InputFile> {

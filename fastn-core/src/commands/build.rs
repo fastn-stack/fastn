@@ -7,8 +7,6 @@ pub async fn build(
     test: bool,
     check_build: bool,
 ) -> fastn_core::Result<()> {
-    tokio::fs::create_dir_all(config.build_dir()).await?;
-
     // Default css and js
     default_build_files(
         config.ds.root().join(".build"),
@@ -766,13 +764,9 @@ async fn get_documents_for_current_package(
                 } else {
                     config.package.name.to_string()
                 };
-                let mut file = fastn_core::get_file(
-                    &config.ds,
-                    package_name,
-                    doc_path,
-                    config.ds.root().as_path(),
-                )
-                .await?;
+                let mut file =
+                    fastn_core::get_file(&config.ds, package_name, doc_path, config.ds.root())
+                        .await?;
                 if let Some(ref url) = url {
                     let url = url.replace("/index.html", "");
                     let extension = if matches!(file, fastn_core::File::Markdown(_)) {

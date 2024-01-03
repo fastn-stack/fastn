@@ -19,7 +19,7 @@ impl TrackingInfo {
 #[allow(dead_code)]
 pub(crate) async fn get_tracking_info(
     config: &fastn_core::Config,
-    path: &camino::Utf8PathBuf,
+    path: &fastn_ds::Path,
 ) -> fastn_core::Result<Vec<fastn_core::track::TrackingInfo>> {
     let track_path = config.track_path(path);
     get_tracking_info_(config, &track_path).await
@@ -27,7 +27,7 @@ pub(crate) async fn get_tracking_info(
 
 pub(crate) async fn get_tracking_info_(
     config: &fastn_core::Config,
-    track_path: &camino::Utf8PathBuf,
+    track_path: &fastn_ds::Path,
 ) -> fastn_core::Result<Vec<fastn_core::track::TrackingInfo>> {
     if !track_path.exists() {
         return fastn_core::usage_error(format!("No tracking found for {}", track_path));
@@ -39,7 +39,7 @@ pub(crate) async fn get_tracking_info_(
 
 pub(crate) async fn resolve_tracking_info(
     content: &str,
-    path: &camino::Utf8PathBuf,
+    path: &fastn_ds::Path,
 ) -> fastn_core::Result<Vec<fastn_core::track::TrackingInfo>> {
     if content.trim().is_empty() {
         return Err(fastn_core::Error::UsageError {
@@ -61,10 +61,15 @@ pub(crate) async fn resolve_tracking_info(
 pub(crate) async fn create_tracking_info(
     config: &fastn_core::Config,
     tracking_infos: &[fastn_core::track::TrackingInfo],
-    path: &camino::Utf8PathBuf,
+    path: &fastn_ds::Path,
 ) -> fastn_core::Result<()> {
     let tracking_info_content = generate_tracking_info_content(tracking_infos);
-    fastn_core::utils::update(&config.track_path(path), tracking_info_content.as_bytes()).await?;
+    fastn_core::utils::update(
+        &config.track_path(path),
+        tracking_info_content.as_bytes(),
+        &config.ds,
+    )
+    .await?;
     Ok(())
 }
 

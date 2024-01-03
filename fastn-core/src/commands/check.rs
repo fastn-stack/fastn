@@ -4,27 +4,26 @@ pub const IGNORED_DIRECTORIES: [&str; 4] = ["-", "images", "static", "assets"];
 
 pub async fn post_build_check(config: &fastn_core::Config) -> fastn_core::Result<()> {
     let build_path = config.ds.root().join(BUILD_FOLDER);
-    let build_directory = build_path.as_str().to_string();
     println!("Post build index assertion started ...");
 
-    if build_path.is_dir() {
-        if !build_path.join(INDEX_FILE).exists() {
-            return Err(fastn_core::Error::NotFound(format!(
-                "Couldn't find {} in package root folder",
-                INDEX_FILE
-            )));
-        }
-        check_index_in_folders(build_path, build_directory.as_str())
-            .await
-            .map_err(|e| fastn_core::Error::GenericError(e.to_string()))?;
+    // if build_path.is_dir() {
+    if !build_path.join(INDEX_FILE).exists() {
+        return Err(fastn_core::Error::NotFound(format!(
+            "Couldn't find {} in package root folder",
+            INDEX_FILE
+        )));
     }
+    // check_index_in_folders(build_path, build_directory.as_str())
+    //     .await
+    //     .map_err(|e| fastn_core::Error::GenericError(e.to_string()))?;
 
     Ok(())
 }
 
-#[async_recursion::async_recursion]
+// Todo: Rewrite this code
+/*#[async_recursion::async_recursion]
 async fn check_index_in_folders(
-    folder: camino::Utf8PathBuf,
+    folder: fastn_ds::Path,
     build_path: &str,
 ) -> Result<(), fastn_core::Error> {
     use colored::Colorize;
@@ -63,7 +62,7 @@ async fn check_index_in_folders(
         }
     }
     Ok(())
-}
+}*/
 
 fn is_ignored_directory(path: &camino::Utf8PathBuf) -> bool {
     IGNORED_DIRECTORIES.iter().any(|dir| path.ends_with(dir))

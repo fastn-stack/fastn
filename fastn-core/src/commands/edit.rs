@@ -36,9 +36,9 @@ pub async fn edit(config: &fastn_core::Config, file: &str, cr: &str) -> fastn_co
 
     if file_path.exists() {
         let content = config.ds.read_content(&file_path).await?;
-        fastn_core::utils::update(&cr_file_path, content.as_slice()).await?;
+        fastn_core::utils::update(&cr_file_path, content.as_slice(), &config.ds).await?;
     } else {
-        fastn_core::utils::update(&cr_file_path, vec![].as_slice()).await?;
+        fastn_core::utils::update(&cr_file_path, vec![].as_slice(), &config.ds).await?;
     }
 
     // tracks the file
