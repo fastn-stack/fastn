@@ -226,7 +226,7 @@ async fn handle_dependency_file(
 }
 
 // removes deleted documents from cache and build folder
-fn remove_deleted_documents(
+async fn remove_deleted_documents(
     config: &fastn_core::Config,
     c: &mut cache::Cache,
     documents: &std::collections::BTreeMap<String, fastn_core::File>,
@@ -257,15 +257,15 @@ fn remove_deleted_documents(
         let file_path = &folder_path.with_extension("ftd");
 
         if file_path.exists() {
-            std::fs::remove_file(file_path)?;
+            config.ds.remove(file_path).await?;
         }
 
-        std::fs::remove_dir_all(&folder_path)?;
+        config.ds.remove(&folder_path).await?;
 
         // If the parent folder of the file's output folder is also empty, delete it as well.
         if let Some(folder_parent) = folder_parent {
-            if folder_parent.read_dir()?.count().eq(&0) {
-                std::fs::remove_dir_all(folder_parent)?;
+            if config.ds.get_all_file_path(&folder_parent, &[]).is_empty() {
+                config.ds.remove(&folder_parent).await?;
             }
         }
 
@@ -386,7 +386,7 @@ async fn incremental_build(
             }
         }
 
-        remove_deleted_documents(config, &mut c, documents)?;
+        remove_deleted_documents(config, &mut c, documents).await?;
     } else {
         for document in documents.values() {
             handle_file(

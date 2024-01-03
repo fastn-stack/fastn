@@ -113,18 +113,14 @@ impl fastn_core::Config {
         Ok(tests)
     }
 
-    pub(crate) fn get_all_test_file_paths(&self) -> fastn_core::Result<Vec<camino::Utf8PathBuf>> {
+    pub(crate) fn get_all_test_file_paths(&self) -> fastn_core::Result<Vec<fastn_ds::Path>> {
         let path = self
             .get_root_for_package(&self.package)
             .join(fastn_core::commands::test::TEST_FOLDER);
-        Ok(ignore::WalkBuilder::new(path)
-            .build()
-            .flatten()
-            .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
-            .collect::<Vec<camino::Utf8PathBuf>>())
+        Ok(self.ds.get_all_file_path(&path, &[]))
     }
 
-    pub(crate) fn get_test_directory_path(&self) -> camino::Utf8PathBuf {
+    pub(crate) fn get_test_directory_path(&self) -> fastn_ds::Path {
         self.get_root_for_package(&self.package)
             .join(fastn_core::commands::test::TEST_FOLDER)
     }
@@ -342,16 +338,18 @@ async fn get_post_response_for_id(
             if let Some((_, file_name)) = test_file_name.trim_end_matches('/').rsplit_once('/') {
                 test_file_name = file_name.to_string();
             }
-            fastn_js::generate_script_file(
+            generate_script_file(
                 test_string.as_str(),
-                config.get_test_directory_path(),
+                &config.get_test_directory_path(),
                 test_file_name
                     .replace(
                         ".test",
                         format!(".t{}.test", test_parameters.instruction_number).as_str(),
                     )
                     .as_str(),
-            );
+                &config.ds,
+            )
+            .await;
             println!("{}", "Script file created".green());
             return Ok(true);
         }
@@ -532,16 +530,18 @@ async fn get_js_for_id(
             if let Some((_, file_name)) = test_file_name.trim_end_matches('/').rsplit_once('/') {
                 test_file_name = file_name.to_string();
             }
-            fastn_js::generate_script_file(
+            generate_script_file(
                 test_string.as_str(),
-                config.get_test_directory_path(),
+                &config.get_test_directory_path(),
                 test_file_name
                     .replace(
                         ".test",
                         format!(".t{}.test", test_parameters.instruction_number).as_str(),
                     )
                     .as_str(),
-            );
+                &config.ds,
+            )
+            .await;
             println!("{}", "Script file created".green());
             return Ok(true);
         }
@@ -736,4 +736,26 @@ pub fn get_response_location(
         };
     }
     Ok(None)
+}
+
+async fn generate_script_file(
+    content: &str,
+    test_directory: &fastn_ds::Path,
+    test_file_name: &str,
+    ds: &fastn_ds::DocumentStore,
+) {
+    let html_content = format!(
+        indoc::indoc! {"
+                        <html>
+                        <script>
+                        {content}
+                        </script>
+                        </html>
+                    "},
+        content = content
+    );
+    let file_location = test_directory.join(test_file_name.replace(".test", ".script.html"));
+    ds.write_content(&file_location, html_content.into_bytes())
+        .await
+        .unwrap();
 }

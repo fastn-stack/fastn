@@ -52,7 +52,7 @@ impl TranslatedDocument {
     ) -> fastn_core::Result<()> {
         // handle the message
         // render with-fallback or with-message
-        let _message = fastn_core::get_messages(self, config)?;
+        let _message = fastn_core::get_messages(self, config).await?;
         let (_main, _fallback, _translated_data) = match self {
             TranslatedDocument::Missing { original } => {
                 (original, None, TranslationData::new("Missing"))
@@ -159,8 +159,7 @@ impl TranslatedDocument {
                 continue;
             }
             let translated_document = translated_documents.get(file.as_str()).unwrap();
-            let track_path =
-                fastn_core::utils::track_path(file.as_str(), config.ds.root().as_str());
+            let track_path = fastn_core::utils::track_path(file.as_str(), config.ds.root());
             if !track_path.exists() {
                 translation_status.insert(
                     file,

@@ -26,7 +26,7 @@ pub async fn revert(config: &fastn_core::Config, path: &str) -> fastn_core::Resu
         }
     } else {
         // in case of new file added
-        tokio::fs::remove_file(path).await?;
+        config.ds.remove(&fastn_ds::Path::new(path)).await?;
         workspace.remove(path);
     }
     config

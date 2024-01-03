@@ -3,7 +3,7 @@
 /// TODO: make async
 pub(crate) fn find_root_for_file(dir: &fastn_ds::Path, file_name: &str) -> Option<fastn_ds::Path> {
     if dir.join(file_name).exists() {
-        Some(dir.into())
+        Some(dir.clone())
     } else {
         if let Some(p) = dir.parent() {
             return find_root_for_file(&p, file_name);

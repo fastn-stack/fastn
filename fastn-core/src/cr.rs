@@ -72,7 +72,7 @@ pub(crate) async fn create_cr_about(
     config: &fastn_core::Config,
     cr_meta: &fastn_core::cr::CRMeta,
 ) -> fastn_core::Result<()> {
-    let default_cr_about_content = fastn_core::package_info_about(config)?;
+    let default_cr_about_content = fastn_core::package_info_about(config).await?;
     fastn_core::utils::update(
         &config.cr_about_path(cr_meta.cr_number),
         default_cr_about_content.as_bytes(),

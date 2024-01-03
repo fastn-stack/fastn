@@ -103,15 +103,25 @@ impl Library {
             None
         }
 
-        fn get_file_from_location(base_path: &camino::Utf8PathBuf, name: &str) -> Option<String> {
+        async fn get_file_from_location(
+            base_path: &fastn_ds::Path,
+            name: &str,
+            ds: &fastn_ds::DocumentStore,
+        ) -> Option<String> {
             let os_name = name
                 .trim_start_matches('/')
                 .trim_end_matches('/')
                 .replace('/', std::path::MAIN_SEPARATOR.to_string().as_str());
-            if let Ok(v) = std::fs::read_to_string(base_path.join(format!("{}.ftd", os_name))) {
+            if let Ok(v) = ds
+                .read_to_string(&base_path.join(format!("{}.ftd", os_name)))
+                .await
+            {
                 return Some(v);
             }
-            if let Ok(v) = std::fs::read_to_string(base_path.join(os_name).join("index.ftd")) {
+            if let Ok(v) = ds
+                .read_to_string(&base_path.join(os_name).join("index.ftd"))
+                .await
+            {
                 return Some(v);
             }
             None
@@ -123,9 +133,14 @@ impl Library {
             lib: &Library,
         ) -> Option<String> {
             let path = lib.config.config.get_root_for_package(package);
-            fastn_core::Config::download_required_file(lib.config.config.ds.root(), name, package)
-                .await
-                .ok()?;
+            fastn_core::Config::download_required_file(
+                lib.config.config.ds.root(),
+                name,
+                package,
+                &lib.config.config.ds,
+            )
+            .await
+            .ok()?;
             // Explicit check for the current package.
             if name.starts_with(package.name.as_str()) {
                 let new_name = name.replacen(package.name.as_str(), "", 1);
@@ -137,7 +152,9 @@ impl Library {
                         panic!("Expected assets doc to be initialized")
                     }
                     // return Some(package.get_assets_doc());
-                } else if let Some(body) = get_file_from_location(&path, new_name.as_str()) {
+                } else if let Some(body) =
+                    get_file_from_location(&path, new_name.as_str(), &lib.config.config.ds).await
+                {
                     return Some(package.get_prefixed_body(body.as_str(), name, true));
                 }
             }

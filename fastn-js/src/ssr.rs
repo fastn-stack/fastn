@@ -72,22 +72,3 @@ pub fn ssr_raw_string_without_test(package_name: &str, js: &str) -> String {
     let raw_string = ssr_raw_string(package_name, js);
     format!("{all_js}{raw_string}")
 }
-
-pub fn generate_script_file(
-    content: &str,
-    test_directory: camino::Utf8PathBuf,
-    test_file_name: &str,
-) {
-    let html_content = format!(
-        indoc::indoc! {"
-                        <html>
-                        <script>
-                        {content}
-                        </script>
-                        </html>
-                    "},
-        content = content
-    );
-    let file_location = test_directory.join(test_file_name.replace(".test", ".script.html"));
-    std::fs::write(file_location, html_content).unwrap();
-}
