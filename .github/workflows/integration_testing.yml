@@ -136,7 +136,7 @@ jobs:
           done
 
       - name: Install pip dependencies (sourcing auto.sh)
-        id: navigate-inside-slides
+        id: install-pip-dependencies
         run: |
           source scripts/auto.sh
 
@@ -148,7 +148,7 @@ jobs:
           recreate-db
 
       - name: Start django service
-        id: setup-django
+        id: start-django
         run: |
           # This will need secret key
           python backend/manage.py runserver 7999 &
@@ -157,6 +157,7 @@ jobs:
           sleep 10  # We might want to wait more
 
       - name: Run integration tests
+        id: slides-integration-tests
         run: |
           cd frontend
           fastn test --headless
