@@ -898,7 +898,7 @@ impl Config {
     ) -> fastn_core::Result<fastn_core::Package> {
         let fastn_path = &self.packages_root.join(&package.name).join("FASTN.ftd");
 
-        if !self.ds.exists(&fastn_path) {
+        if !self.ds.exists(fastn_path) {
             let package = self.resolve_package(package).await?;
             self.add_package(&package);
         }

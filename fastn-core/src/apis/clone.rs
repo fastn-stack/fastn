@@ -32,7 +32,7 @@ async fn clone_worker(config: &fastn_core::Config) -> fastn_core::Result<CloneRe
                     ds.read_content(&x)
                         .await
                         .map_err(|e| e.into())
-                        .map(|v| (x.strip_prefix(&root).unwrap_or_else(|| x).to_string(), v))
+                        .map(|v| (x.strip_prefix(&root).unwrap_or(x).to_string(), v))
                 })
             })
             .collect::<Vec<tokio::task::JoinHandle<fastn_core::Result<(String, Vec<u8>)>>>>(),
