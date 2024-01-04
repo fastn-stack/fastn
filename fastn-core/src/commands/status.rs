@@ -29,7 +29,7 @@ async fn file_status(
     workspaces: &std::collections::BTreeMap<String, fastn_core::snapshot::Workspace>,
 ) -> fastn_core::Result<()> {
     let path = base_path.join(source);
-    if !path.exists() {
+    if !config.ds.exists(&path) {
         if snapshots.contains_key(source) {
             println!("{:?}: {}", FileStatus::Deleted, source);
         } else {
@@ -151,7 +151,7 @@ async fn get_track_status(
 ) -> fastn_core::Result<std::collections::BTreeMap<String, TrackStatus>> {
     let path = fastn_core::utils::track_path(doc.get_id(), doc.get_base_path());
     let mut track_list = std::collections::BTreeMap::new();
-    if !path.exists() {
+    if !config.ds.exists(&path) {
         return Ok(track_list);
     }
     let tracks = fastn_core::tracker::get_tracks(config, base_path, &path).await?;

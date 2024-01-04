@@ -11,11 +11,9 @@ pub async fn mark_resolved(config: &fastn_core::Config, path: &str) -> fastn_cor
     .await?;
     // TODO: Check workspace value and then delete it
     // This is certainly bad idea
-    if config.conflicted_dir().join(path).exists() {
-        config
-            .ds
-            .remove(&config.conflicted_dir().join(path))
-            .await?;
-    }
+    config
+        .ds
+        .remove(&config.conflicted_dir().join(path))
+        .await?;
     Ok(())
 }

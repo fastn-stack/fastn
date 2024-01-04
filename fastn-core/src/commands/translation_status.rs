@@ -40,12 +40,12 @@ pub(crate) async fn get_translation_status(
 ) -> fastn_core::Result<std::collections::BTreeMap<String, TranslationStatus>> {
     let mut translation_status = std::collections::BTreeMap::new();
     for (file, timestamp) in snapshots {
-        if !path.join(file).exists() {
+        if !config.ds.exists(&path.join(file)) {
             translation_status.insert(file.clone(), TranslationStatus::Missing);
             continue;
         }
         let track_path = fastn_core::utils::track_path(file.as_str(), path);
-        if !track_path.exists() {
+        if !config.ds.exists(&track_path) {
             translation_status.insert(file.clone(), TranslationStatus::NeverMarked);
             continue;
         }

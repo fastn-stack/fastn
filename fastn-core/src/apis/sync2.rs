@@ -297,9 +297,7 @@ pub(crate) async fn do_sync(
                         },
                     );
                 } else {
-                    if config.ds.root().join(path).exists() {
-                        config.ds.remove(&config.ds.root().join(path)).await?;
-                    }
+                    config.ds.remove(&config.ds.root().join(path)).await?;
                     to_be_in_history.insert(
                         path.to_string(),
                         fastn_core::history::FileEditTemp {

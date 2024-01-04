@@ -71,9 +71,7 @@ pub async fn resolve_conflict(
         if !(conflicted_data.ours.deleted() || conflicted_data.theirs.deleted()) {
             return fastn_core::usage_error(format!("{} is not in `delete-edit-conflict`", path));
         }
-        if config.ds.root().join(path).exists() {
-            config.ds.remove(&config.ds.root().join(path)).await?;
-        }
+        config.ds.remove(&config.ds.root().join(path)).await?;
     } else if print {
         let content = conflicted_data
             .marker

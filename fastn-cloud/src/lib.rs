@@ -34,14 +34,14 @@ pub async fn upload() -> Result<(), UploadError> {
     let current_dir: camino::Utf8PathBuf = std::env::current_dir()?.canonicalize()?.try_into()?;
     let ds = fastn_ds::DocumentStore::new(current_dir);
     let build_dir = fastn_cloud::utils::build_dir(&ds);
-    if !build_dir.exists() {
+    if !ds.exists(&build_dir) {
         return Err(UploadError::BuildDirNotFound(
             "Run `fastn build` to create a .build directory before running this".to_string(),
         ));
     }
 
     let cw_id_path = fastn_cloud::utils::cw_id(&ds);
-    if !cw_id_path.exists() {
+    if !ds.exists(&cw_id_path) {
         return Err(UploadError::CwIdNotFound);
     }
     let _cw_id = ds
@@ -50,7 +50,7 @@ pub async fn upload() -> Result<(), UploadError> {
         .map_err(|_e| UploadError::CwIdReadError)?;
 
     let sid_path = fastn_cloud::utils::sid(&ds);
-    if !sid_path.exists() {
+    if !ds.exists(&sid_path) {
         return Err(UploadError::SidNotFound);
     }
 

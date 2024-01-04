@@ -545,8 +545,8 @@ pub fn id_to_path(id: &str) -> String {
 
 /// returns true if an existing file named "file_name"
 /// exists in the root package folder
-fn is_file_in_root(root: &str, file_name: &str) -> bool {
-    fastn_ds::Path::new(root).join(file_name).exists()
+fn is_file_in_root(root: &str, file_name: &str, ds: &fastn_ds::DocumentStore) -> bool {
+    ds.exists(&fastn_ds::Path::new(root).join(file_name))
 }
 
 /// returns favicon html tag as string
@@ -556,6 +556,7 @@ fn resolve_favicon(
     root_path: &str,
     package_name: &str,
     favicon: &Option<String>,
+    ds: &fastn_ds::DocumentStore,
 ) -> Option<String> {
     /// returns html tag for using favicon.
     fn favicon_html(favicon_path: &str, content_type: &str) -> String {
@@ -593,13 +594,13 @@ fn resolve_favicon(
 
                 // Just check if any favicon exists in the root package directory
                 // in the above mentioned priority order
-                let found_favicon_id = if is_file_in_root(root_path, "favicon.ico") {
+                let found_favicon_id = if is_file_in_root(root_path, "favicon.ico", ds) {
                     "favicon.ico"
-                } else if is_file_in_root(root_path, "favicon.svg") {
+                } else if is_file_in_root(root_path, "favicon.svg", ds) {
                     "favicon.svg"
-                } else if is_file_in_root(root_path, "favicon.png") {
+                } else if is_file_in_root(root_path, "favicon.png", ds) {
                     "favicon.png"
-                } else if is_file_in_root(root_path, "favicon.jpg") {
+                } else if is_file_in_root(root_path, "favicon.jpg", ds) {
                     "favicon.jpg"
                 } else {
                     // Not using any favicon
@@ -635,10 +636,8 @@ pub async fn get_inline_js_html(config: &fastn_core::Config, inline_js: &[String
     let mut result = "".to_string();
     for path in inline_js {
         let path = fastn_ds::Path::new(path);
-        if path.exists() {
-            if let Ok(content) = config.ds.read_to_string(&path).await {
-                result = format!("{}<script>{}</script>", result, content);
-            }
+        if let Ok(content) = config.ds.read_to_string(&path).await {
+            result = format!("{}<script>{}</script>", result, content);
         }
     }
     result
@@ -648,10 +647,8 @@ pub async fn get_inline_css_html(config: &fastn_core::Config, inline_js: &[Strin
     let mut result = "".to_string();
     for path in inline_js {
         let path = fastn_ds::Path::new(path);
-        if path.exists() {
-            if let Ok(content) = config.ds.read_to_string(&path).await {
-                result = format!("{}<style>{}</style>", result, content);
-            }
+        if let Ok(content) = config.ds.read_to_string(&path).await {
+            result = format!("{}<style>{}</style>", result, content);
         }
     }
     result
@@ -716,6 +713,7 @@ pub async fn replace_markers_2022(
                 config.ds.root().to_string().as_str(),
                 config.package.name.as_str(),
                 &config.package.favicon,
+                &config.ds,
             )
             .unwrap_or_default()
             .as_str(),
@@ -801,6 +799,7 @@ pub async fn replace_markers_2023(
             config.ds.root().to_string().as_str(),
             config.package.name.as_str(),
             &config.package.favicon,
+            &config.ds
         )
         .unwrap_or_default()
         .as_str(),
@@ -844,7 +843,7 @@ pub(crate) async fn write(
     data: &[u8],
     ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    if root.join(file_path).exists() {
+    if ds.exists(&root.join(file_path)) {
         return Ok(());
     }
     update1(root, file_path, data, ds).await

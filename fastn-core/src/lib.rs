@@ -103,7 +103,7 @@ fn fastn_lib_ftd() -> &'static str {
 
 async fn package_info_about(config: &fastn_core::Config) -> fastn_core::Result<String> {
     let path = config.ds.root().join("fastn").join("cr.ftd");
-    Ok(if path.exists() {
+    Ok(if config.ds.exists(&path) {
         config.ds.read_to_string(&path).await?
     } else {
         let body_prefix = match config.package.generate_prefix_string(false) {
@@ -214,7 +214,7 @@ async fn original_package_status(config: &fastn_core::Config) -> fastn_core::Res
         .join("fastn")
         .join("translation")
         .join("original-status.ftd");
-    Ok(if path.exists() {
+    Ok(if config.ds.exists(&path) {
         config.ds.read_to_string(&path).await?
     } else {
         let body_prefix = match config.package.generate_prefix_string(false) {
@@ -237,7 +237,7 @@ async fn translation_package_status(config: &fastn_core::Config) -> fastn_core::
         .join("fastn")
         .join("translation")
         .join("translation-status.ftd");
-    Ok(if path.exists() {
+    Ok(if config.ds.exists(&path) {
         config.ds.read_to_string(&path).await?
     } else {
         let body_prefix = match config.package.generate_prefix_string(false) {
@@ -259,7 +259,7 @@ async fn get_messages(
     Ok(match status {
         TranslatedDocument::Missing { .. } => {
             let path = config.ds.root().join("fastn/translation/missing.ftd");
-            if path.exists() {
+            if config.ds.exists(&path) {
                 config.ds.read_to_string(&path).await?
             } else {
                 include_str!("../ftd/translation/missing.ftd").to_string()
@@ -267,7 +267,7 @@ async fn get_messages(
         }
         TranslatedDocument::NeverMarked { .. } => {
             let path = config.ds.root().join("fastn/translation/never-marked.ftd");
-            if path.exists() {
+            if config.ds.exists(&path) {
                 config.ds.read_to_string(&path).await?
             } else {
                 include_str!("../ftd/translation/never-marked.ftd").to_string()
@@ -275,7 +275,7 @@ async fn get_messages(
         }
         TranslatedDocument::Outdated { .. } => {
             let path = config.ds.root().join("fastn/translation/out-of-date.ftd");
-            if path.exists() {
+            if config.ds.exists(&path) {
                 config.ds.read_to_string(&path).await?
             } else {
                 include_str!("../ftd/translation/out-of-date.ftd").to_string()
@@ -283,7 +283,7 @@ async fn get_messages(
         }
         TranslatedDocument::UptoDate { .. } => {
             let path = config.ds.root().join("fastn/translation/upto-date.ftd");
-            if path.exists() {
+            if config.ds.exists(&path) {
                 config.ds.read_to_string(&path).await?
             } else {
                 include_str!("../ftd/translation/upto-date.ftd").to_string()

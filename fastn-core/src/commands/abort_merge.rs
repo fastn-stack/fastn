@@ -7,9 +7,7 @@ pub async fn abort_merge(config: &fastn_core::Config, path: &str) -> fastn_core:
             .workspace
             .eq(&fastn_core::snapshot::WorkspaceType::CloneDeletedRemoteEdited)
         {
-            if config.ds.root().join(path).exists() {
-                config.ds.remove(&config.ds.root().join(path)).await?;
-            }
+            config.ds.remove(&config.ds.root().join(path)).await?;
         } else {
             config
                 .ds

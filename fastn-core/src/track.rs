@@ -29,7 +29,7 @@ pub(crate) async fn get_tracking_info_(
     config: &fastn_core::Config,
     track_path: &fastn_ds::Path,
 ) -> fastn_core::Result<Vec<fastn_core::track::TrackingInfo>> {
-    if !track_path.exists() {
+    if !config.ds.exists(&track_path) {
         return fastn_core::usage_error(format!("No tracking found for {}", track_path));
     }
 

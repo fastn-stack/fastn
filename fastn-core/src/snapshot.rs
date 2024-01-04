@@ -30,7 +30,7 @@ pub(crate) async fn get_latest_snapshots(
     path: &fastn_ds::Path,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, u128>> {
     let latest_file_path = path.join(".history/.latest.ftd");
-    if !latest_file_path.exists() {
+    if !ds.exists(&latest_file_path) {
         // TODO: should we error out here?
         return Ok(Default::default());
     }
@@ -145,7 +145,7 @@ pub(crate) async fn get_workspace(
     config: &fastn_core::Config,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, Workspace>> {
     let latest_file_path = config.ds.root().join(".fastn").join("workspace.ftd");
-    if !latest_file_path.exists() {
+    if !config.ds.exists(&latest_file_path) {
         // TODO: should we error out here?
         return Ok(Default::default());
     }

@@ -134,9 +134,7 @@ pub(crate) async fn sync_worker(
                 } else {
                     // else: both should have same version,
                     // client version(timestamp) can never be greater than server's version
-                    if config.ds.root().join(path).exists() {
-                        config.ds.remove(&config.ds.root().join(path)).await?;
-                    }
+                    config.ds.remove(&config.ds.root().join(path)).await?;
                     snapshots.remove(path);
                 }
             }
