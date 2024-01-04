@@ -1,0 +1,18 @@
+-- component page:
+ftd.background.solid background: yellow
+ftd.length.px max-width: 70
+
+-- ftd.column:
+background: $page.background
+width.fixed: $variable
+max-width.fixed: $page.max-width
+
+-- end: ftd.column
+
+-- end: page
+
+
+-- ftd.length.px variable: 60
+
+
+-- page:

@@ -1616,7 +1616,7 @@ dependencies = [
 
 [[package]]
 name = "fastn"
-version = "0.4.35"
+version = "0.4.38"
 dependencies = [
  "clap",
  "colored",
@@ -1720,6 +1720,8 @@ name = "fastn-ds"
 version = "0.1.0"
 dependencies = [
  "camino",
+ "dirs",
+ "ignore",
  "thiserror",
  "tokio",
 ]

@@ -607,8 +607,8 @@ impl Sitemap {
 
         async fn resolve_section(
             section: &mut section::Section,
-            package_root: &camino::Utf8PathBuf,
-            current_package_root: &camino::Utf8PathBuf,
+            package_root: &fastn_ds::Path,
+            current_package_root: &fastn_ds::Path,
             config: &fastn_core::Config,
         ) -> fastn_core::Result<()> {
             let (file_location, translation_file_location) = if let Ok(file_name) = config
@@ -633,6 +633,7 @@ impl Sitemap {
                 match fastn_core::Config::get_file_name(
                     current_package_root,
                     section.get_file_id().as_str(),
+                    &config.ds
                 ) {
                     Ok(name) => {
                         if current_package_root.eq(package_root) {
@@ -650,6 +651,7 @@ impl Sitemap {
                                 fastn_core::Config::get_file_name(
                                     package_root,
                                     section.get_file_id().as_str(),
+                                    &config.ds
                                 )
                                     .map_err(|e| {
                                         fastn_core::Error::UsageError {
@@ -676,8 +678,8 @@ impl Sitemap {
 
         async fn resolve_subsection(
             subsection: &mut section::Subsection,
-            package_root: &camino::Utf8PathBuf,
-            current_package_root: &camino::Utf8PathBuf,
+            package_root: &fastn_ds::Path,
+            current_package_root: &fastn_ds::Path,
             config: &fastn_core::Config,
         ) -> fastn_core::Result<()> {
             if let Some(ref id) = subsection.get_file_id() {
@@ -697,7 +699,7 @@ impl Sitemap {
                 } else if crate::http::url_regex().find(id.as_str()).is_some() {
                     (None, None)
                 } else {
-                    match fastn_core::Config::get_file_name(current_package_root, id.as_str()) {
+                    match fastn_core::Config::get_file_name(current_package_root, id.as_str(), &config.ds) {
                         Ok(name) => {
                             if current_package_root.eq(package_root) {
                                 (Some(current_package_root.join(name)), None)
@@ -710,7 +712,7 @@ impl Sitemap {
                         }
                         Err(_) => (
                             Some(package_root.join(
-                                fastn_core::Config::get_file_name(package_root, id.as_str()).map_err(
+                                fastn_core::Config::get_file_name(package_root, id.as_str(),&config.ds).map_err(
                                     |e| fastn_core::Error::UsageError {
                                         message: format!(
                                             "`{}` not found, fix fastn.sitemap in FASTN.ftd. Error: {:?}",
@@ -736,8 +738,8 @@ impl Sitemap {
         #[async_recursion::async_recursion(?Send)]
         async fn resolve_toc(
             toc: &mut toc::TocItem,
-            package_root: &camino::Utf8PathBuf,
-            current_package_root: &camino::Utf8PathBuf,
+            package_root: &fastn_ds::Path,
+            current_package_root: &fastn_ds::Path,
             config: &fastn_core::Config,
         ) -> fastn_core::Result<()> {
             let (file_location, translation_file_location) = if let Ok(file_name) = config
@@ -757,7 +759,7 @@ impl Sitemap {
             {
                 (None, None)
             } else {
-                match fastn_core::Config::get_file_name(current_package_root, toc.get_file_id().as_str()) {
+                match fastn_core::Config::get_file_name(current_package_root, toc.get_file_id().as_str(), &config.ds) {
                     Ok(name) => {
                         if current_package_root.eq(package_root) {
                             (Some(current_package_root.join(name)), None)
@@ -774,6 +776,7 @@ impl Sitemap {
                                 fastn_core::Config::get_file_name(
                                     package_root,
                                     toc.get_file_id().as_str(),
+                                    &config.ds
                                 )
                                     .map_err(|e| {
                                         fastn_core::Error::UsageError {
@@ -809,11 +812,7 @@ impl Sitemap {
     /// )
     pub(crate) fn get_all_locations(
         &self,
-    ) -> Vec<(
-        &camino::Utf8PathBuf,
-        &Option<camino::Utf8PathBuf>,
-        Option<String>,
-    )> {
+    ) -> Vec<(&fastn_ds::Path, &Option<fastn_ds::Path>, Option<String>)> {
         let mut locations = vec![];
         for section in self.sections.iter() {
             if let Some(ref file_location) = section.file_location {
@@ -869,11 +868,7 @@ impl Sitemap {
 
         fn get_toc_locations(
             toc: &toc::TocItem,
-        ) -> Vec<(
-            &camino::Utf8PathBuf,
-            &Option<camino::Utf8PathBuf>,
-            Option<String>,
-        )> {
+        ) -> Vec<(&fastn_ds::Path, &Option<fastn_ds::Path>, Option<String>)> {
             let mut locations = vec![];
             for child in toc.children.iter() {
                 if let Some(ref file_location) = child.file_location {

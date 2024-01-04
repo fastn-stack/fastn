@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 #[derive(serde::Deserialize, Debug)]
 pub struct MissingApiResponse {
     pub missing_hashes: Vec<String>,
@@ -51,8 +53,11 @@ pub async fn upload(
 ) -> Result<(), fastn_cloud::UploadError> {
     let sid: Sid = serde_json::from_str(sid)?;
     let (list_file, data_file) = tejar_create(root).await?;
-    let list_content = ds.read_to_string(list_file.as_path()).await.unwrap(); // Todo: Remove unwrap()
-                                                                              // TODO: missing files handle sid
+    let list_content = ds
+        .read_to_string(&fastn_ds::Path::new(list_file.as_path()))
+        .await
+        .unwrap(); // Todo: Remove unwrap()
+                   // TODO: missing files handle sid
     println!("Getting Missing Files");
     let missing_files_api_resp = missing_files_api(
         sid.sid.as_str(),

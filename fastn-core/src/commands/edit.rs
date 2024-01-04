@@ -9,7 +9,7 @@ pub async fn edit(config: &fastn_core::Config, file: &str, cr: &str) -> fastn_co
 
     let cr_track_path = config.cr_track_path(&config.ds.root().join(file), cr);
     let cr_file_path = config.cr_path(cr).join(file);
-    if cr_track_path.exists() && cr_file_path.exists() {
+    if config.ds.exists(&cr_track_path) && config.ds.exists(&cr_file_path) {
         return fastn_core::usage_error(format!("{} is already tracked in cr {}", file, cr));
     }
 
@@ -28,17 +28,17 @@ pub async fn edit(config: &fastn_core::Config, file: &str, cr: &str) -> fastn_co
     // copy file to cr directory
     let file_path = config.history_path(file, file_edit.version);
 
-    if cr_file_path.exists() {
+    if config.ds.exists(&cr_file_path) {
         return Err(fastn_core::Error::UsageError {
             message: format!("{} is already exists", cr_file_path),
         });
     }
 
-    if file_path.exists() {
+    if config.ds.exists(&file_path) {
         let content = config.ds.read_content(&file_path).await?;
-        fastn_core::utils::update(&cr_file_path, content.as_slice()).await?;
+        fastn_core::utils::update(&cr_file_path, content.as_slice(), &config.ds).await?;
     } else {
-        fastn_core::utils::update(&cr_file_path, vec![].as_slice()).await?;
+        fastn_core::utils::update(&cr_file_path, vec![].as_slice(), &config.ds).await?;
     }
 
     // tracks the file

@@ -3,18 +3,19 @@ pub async fn diff(
     files: Option<Vec<String>>,
     all: bool,
 ) -> fastn_core::Result<()> {
-    let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
+    let snapshots =
+        fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root()).await?;
     let all = all || files.is_some();
     let documents = if let Some(ref files) = files {
         let files = files
             .iter()
             .map(|x| config.ds.root().join(x))
-            .collect::<Vec<camino::Utf8PathBuf>>();
+            .collect::<Vec<fastn_ds::Path>>();
         fastn_core::paths_to_files(
             &config.ds,
             config.package.name.as_str(),
             files,
-            config.ds.root().as_path(),
+            config.ds.root(),
         )
         .await?
     } else {
@@ -26,7 +27,7 @@ pub async fn diff(
             println!("{}", diff);
         }
         if all {
-            get_track_diff(config, &doc, &snapshots, config.ds.root().as_str()).await?;
+            get_track_diff(config, &doc, &snapshots, config.ds.root()).await?;
         }
     }
     Ok(())
@@ -59,12 +60,9 @@ async fn get_track_diff(
     config: &fastn_core::Config,
     doc: &fastn_core::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
-    base_path: &str,
+    base_path: &fastn_ds::Path,
 ) -> fastn_core::Result<()> {
     let path = fastn_core::utils::track_path(doc.get_id(), doc.get_base_path());
-    if std::fs::metadata(&path).is_err() {
-        return Ok(());
-    }
     let tracks = fastn_core::tracker::get_tracks(config, base_path, &path).await?;
     for track in tracks.values() {
         if let Some(timestamp) = snapshots.get(&track.filename) {

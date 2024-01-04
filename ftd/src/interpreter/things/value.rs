@@ -916,7 +916,10 @@ impl PropertyValue {
                         loop_object_name_and_kind,
                     )?),
                     ftd::interpreter::OrTypeVariant::Regular(regular) => {
-                        let variant_name = variant_name.trim_start_matches(format!("{}.", variant.name()).as_str()).trim().to_string();
+                        let mut variant_name = variant_name.trim_start_matches(format!("{}.", variant.name()).as_str()).trim().to_string();
+                        if variant_name.eq(&variant.name()) {
+                            variant_name = "".to_string();
+                        }
                         let kind = if regular.kind.kind.ref_inner().is_or_type() && !variant_name.is_empty() {
                             let (name, variant, _full_variant) = regular.kind.kind.get_or_type().unwrap();
                             let variant_name = format!("{}.{}", name, variant_name);
@@ -2059,7 +2062,7 @@ fn get_kind(
             expected_kind.clone()
         } else {
             let mut expected_kind = expected_kind.clone();
-            if !found_kind.is_module() {
+            if !found_kind.is_module() && !found_kind.is_or_type() {
                 expected_kind.kind = found_kind.kind.clone();
             }
             expected_kind

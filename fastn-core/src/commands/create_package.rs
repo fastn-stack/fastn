@@ -52,19 +52,18 @@ pub async fn create_package(
 
     let final_dir = {
         match path {
-            Some(p) => camino::Utf8PathBuf::from(base_path).join(p).join(name),
-            None => camino::Utf8PathBuf::from(base_path).join(name),
+            Some(p) => fastn_ds::Path::new(base_path).join(p).join(name),
+            None => fastn_ds::Path::new(base_path).join(name),
         }
     };
 
     // Create all directories if not present
-    tokio::fs::create_dir_all(final_dir.as_str()).await?;
 
     let (tmp_fastn, tmp_index, tmp_gitignore) = template_contents(name, download_base_url).await;
 
-    fastn_core::utils::update(&final_dir.join("FASTN.ftd"), tmp_fastn.as_bytes()).await?;
-    fastn_core::utils::update(&final_dir.join("index.ftd"), tmp_index.as_bytes()).await?;
-    fastn_core::utils::update(&final_dir.join(".gitignore"), tmp_gitignore.as_bytes()).await?;
+    fastn_core::utils::update(&final_dir.join("FASTN.ftd"), tmp_fastn.as_bytes(), &ds).await?;
+    fastn_core::utils::update(&final_dir.join("index.ftd"), tmp_index.as_bytes(), &ds).await?;
+    fastn_core::utils::update(&final_dir.join(".gitignore"), tmp_gitignore.as_bytes(), &ds).await?;
 
     if cfg!(feature = "remote") {
         let sync_message = "Initial sync".to_string();

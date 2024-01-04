@@ -74,7 +74,6 @@ pub(crate) async fn build_version(
     _asset_documents: &std::collections::HashMap<String, String>,
 ) -> fastn_core::Result<()> {
     use itertools::Itertools;
-    use std::io::Write;
 
     let versioned_documents = config.get_versions(&config.package).await?;
     let mut documents = std::collections::BTreeMap::new();
@@ -119,15 +118,17 @@ pub(crate) async fn build_version(
                     };
                     let new_file_path = config.ds.root().join(".build").join(file_rel_path);
                     let original_content = config.ds.read_to_string(&original_file_path).await?;
-                    std::fs::create_dir_all(&new_file_path.as_str().replace("index.html", ""))?;
-                    let mut f = std::fs::File::create(&new_file_path)?;
                     let from_pattern = format!("<base href=\"{}{}/\">", base_url, version);
                     let to_pattern = format!("<base href=\"{}{}/\">", base_url, key.original);
-                    f.write_all(
-                        original_content
-                            .replace(from_pattern.as_str(), to_pattern.as_str())
-                            .as_bytes(),
-                    )?;
+                    config
+                        .ds
+                        .write_content(
+                            &new_file_path,
+                            original_content
+                                .replace(from_pattern.as_str(), to_pattern.as_str())
+                                .into_bytes(),
+                        )
+                        .await?;
                     continue;
                 }
             }

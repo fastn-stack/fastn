@@ -21,7 +21,7 @@ pub(crate) async fn get_cr_meta(
     cr_number: usize,
 ) -> fastn_core::Result<fastn_core::cr::CRMeta> {
     let cr_meta_path = config.cr_meta_path(cr_number);
-    if !cr_meta_path.exists() {
+    if !config.ds.exists(&cr_meta_path) {
         return fastn_core::usage_error(format!("CR#{} doesn't exist", cr_number));
     }
 
@@ -72,10 +72,11 @@ pub(crate) async fn create_cr_about(
     config: &fastn_core::Config,
     cr_meta: &fastn_core::cr::CRMeta,
 ) -> fastn_core::Result<()> {
-    let default_cr_about_content = fastn_core::package_info_about(config)?;
+    let default_cr_about_content = fastn_core::package_info_about(config).await?;
     fastn_core::utils::update(
         &config.cr_about_path(cr_meta.cr_number),
         default_cr_about_content.as_bytes(),
+        &config.ds,
     )
     .await?;
     Ok(())
@@ -89,6 +90,7 @@ pub(crate) async fn create_cr_meta(
     fastn_core::utils::update(
         &config.cr_meta_path(cr_meta.cr_number),
         meta_content.as_bytes(),
+        &config.ds,
     )
     .await?;
     Ok(())
@@ -140,11 +142,11 @@ pub(crate) async fn get_deleted_files(
     config: &fastn_core::Config,
     cr_number: usize,
 ) -> fastn_core::Result<Vec<CRDeleted>> {
-    if !config.cr_path(cr_number).exists() {
+    if !config.ds.exists(&config.cr_path(cr_number)) {
         return fastn_core::usage_error(format!("CR#{} doesn't exist", cr_number));
     }
     let deleted_files_path = config.cr_deleted_file_path(cr_number);
-    if !deleted_files_path.exists() {
+    if !config.ds.exists(&deleted_files_path) {
         return Ok(vec![]);
     }
     let deleted_files_content = config.ds.read_to_string(&deleted_files_path).await?;
@@ -179,6 +181,7 @@ pub(crate) async fn create_deleted_files(
     fastn_core::utils::update(
         &config.cr_deleted_file_path(cr_number),
         cr_deleted_content.as_bytes(),
+        &config.ds,
     )
     .await?;
     Ok(())
@@ -205,18 +208,28 @@ impl fastn_core::Config {
         &self,
         cr_number: usize,
     ) -> fastn_core::Result<Vec<fastn_core::track::TrackingInfo>> {
-        let cr_track_paths = ignore::WalkBuilder::new(self.cr_track_dir(cr_number))
-            .build()
-            .flatten()
-            .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap())
-            .filter(|x| x.is_file() && x.extension().map(|v| v.eq("track")).unwrap_or(false))
-            .collect::<Vec<camino::Utf8PathBuf>>();
+        use itertools::Itertools;
+
+        let cr_track_paths = self
+            .ds
+            .get_all_file_path(&self.cr_track_dir(cr_number), &[])
+            .into_iter()
+            .filter(|v| v.extension().map(|v| v.eq("track")).unwrap_or(false))
+            .collect_vec();
+
         let mut tracking_info_list = vec![];
 
         for cr_track_path in cr_track_paths {
-            let tracked_file = cr_track_path.strip_prefix(self.track_dir())?;
-            let tracked_file_str =
-                fastn_core::cr::cr_path_to_file_name(cr_number, tracked_file.as_str())?;
+            let tracked_file = cr_track_path.strip_prefix(&self.track_dir()).ok_or(
+                fastn_core::Error::UsageError {
+                    message: format!(
+                        "Can't find prefix `{}` in `{}`",
+                        self.track_dir(),
+                        cr_track_path
+                    ),
+                },
+            )?;
+            let tracked_file_str = fastn_core::cr::cr_path_to_file_name(cr_number, &tracked_file)?;
             if let Some(info) = fastn_core::track::get_tracking_info_(self, &cr_track_path)
                 .await?
                 .into_iter()
@@ -235,10 +248,11 @@ pub(crate) fn cr_path(cr_number: usize) -> String {
 
 pub(crate) fn cr_path_to_file_name(
     cr_number: usize,
-    cr_file_path: &str,
+    cr_file_path: &fastn_ds::Path,
 ) -> fastn_core::Result<String> {
     let cr_path = cr_path(cr_number);
     Ok(cr_file_path
+        .to_string()
         .trim_matches('/')
         .trim_start_matches(cr_path.as_str())
         .to_string())
@@ -331,7 +345,7 @@ pub(crate) async fn cr_clone_file_info(
             } else {
                 config.ds.root().join(workspace_entry.filename)
             };
-            let cr_deleted_files = config.ds.read_to_string(cr_deleted_path).await?;
+            let cr_deleted_files = config.ds.read_to_string(&cr_deleted_path).await?;
             fastn_core::cr::resolve_cr_deleted(cr_deleted_files.as_str(), cr_number)
                 .await?
                 .into_iter()
@@ -343,7 +357,7 @@ pub(crate) async fn cr_clone_file_info(
         }
         let content = config
             .ds
-            .read_content(workspace_entry.filename.as_str())
+            .read_content(&fastn_ds::Path::new(workspace_entry.filename.as_str()))
             .await?;
 
         file_info.insert(
@@ -409,7 +423,7 @@ pub(crate) async fn cr_remote_file_info(
 
         if filename.eq(&deleted_file_str) {
             let cr_deleted_path = config.history_path(filename.as_str(), file_edit.version);
-            let cr_deleted_files = config.ds.read_to_string(cr_deleted_path).await?;
+            let cr_deleted_files = config.ds.read_to_string(&cr_deleted_path).await?;
             fastn_core::cr::resolve_cr_deleted(cr_deleted_files.as_str(), cr_number)
                 .await?
                 .into_iter()

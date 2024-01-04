@@ -126,7 +126,7 @@ pub async fn can_read(config: &fastn_core::RequestConfig, path: &str) -> fastn_c
 
     let mut app_identities = vec![];
     for ug in user_groups.iter() {
-        app_identities.extend(ug.get_identities(&config.config)?)
+        app_identities.extend(ug.get_identities(&config.config).await?)
     }
 
     let auth_identities = {
@@ -143,11 +143,12 @@ pub async fn can_read(config: &fastn_core::RequestConfig, path: &str) -> fastn_c
         i
     };
 
-    return fastn_core::user_group::belongs_to(
+    fastn_core::user_group::belongs_to(
         &config.config,
         user_groups.as_slice(),
         auth_identities.iter().collect_vec().as_slice(),
-    );
+    )
+    .await
 
     // get the app readers
     // get the groups

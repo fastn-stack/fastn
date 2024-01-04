@@ -292,7 +292,7 @@ fn extract_named_parameters(
 }
 
 pub(crate) async fn execute_query(
-    database_path: &camino::Utf8PathBuf,
+    database_path: &fastn_ds::Path,
     query: &str,
     doc: &ftd::interpreter::TDoc<'_>,
     headers: ftd::ast::HeaderValues,
@@ -301,7 +301,7 @@ pub(crate) async fn execute_query(
     let doc_name = doc.name;
 
     let conn = match rusqlite::Connection::open_with_flags(
-        database_path,
+        database_path.to_string(),
         rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
     ) {
         Ok(conn) => conn,

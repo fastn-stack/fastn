@@ -153,7 +153,8 @@ pub(crate) async fn do_sync(
                     );
                     continue;
                 }
-                fastn_core::utils::update(&config.ds.root().join(path), content).await?;
+                fastn_core::utils::update(&config.ds.root().join(path), content, &config.ds)
+                    .await?;
                 to_be_in_history.insert(
                     path.to_string(),
                     fastn_core::history::FileEditTemp {
@@ -172,7 +173,12 @@ pub(crate) async fn do_sync(
             } => {
                 if let Some(file_edit) = remote_manifest.get(path) {
                     if file_edit.version.eq(version) {
-                        fastn_core::utils::update(&config.ds.root().join(path), content).await?;
+                        fastn_core::utils::update(
+                            &config.ds.root().join(path),
+                            content,
+                            &config.ds,
+                        )
+                        .await?;
                         // TODO: get all data like message, author, src-cr from request
                         to_be_in_history.insert(
                             path.to_string(),
@@ -187,7 +193,7 @@ pub(crate) async fn do_sync(
                         // else: Both has modified the same file
                         let ancestor_path = config.history_path(path, *version);
                         let ancestor_content = if let Ok(ancestor_content) =
-                            config.ds.read_to_string(ancestor_path).await
+                            config.ds.read_to_string(&ancestor_path).await
                         {
                             ancestor_content
                         } else {
@@ -203,7 +209,7 @@ pub(crate) async fn do_sync(
                             continue;
                         };
                         let theirs_path = config.history_path(path, file_edit.version);
-                        let theirs_content = config.ds.read_to_string(theirs_path).await?;
+                        let theirs_content = config.ds.read_to_string(&theirs_path).await?;
                         let ours_content = String::from_utf8(content.clone())
                             .map_err(|e| fastn_core::Error::APIResponseError(e.to_string()))?;
                         match diffy::MergeOptions::new()
@@ -214,6 +220,7 @@ pub(crate) async fn do_sync(
                                 fastn_core::utils::update(
                                     &config.ds.root().join(path),
                                     data.as_bytes(),
+                                    &config.ds,
                                 )
                                 .await?;
                                 to_be_in_history.insert(
@@ -275,7 +282,7 @@ pub(crate) async fn do_sync(
                 };
                 let server_content = config
                     .ds
-                    .read_content(config.history_path(path, file_edit.version))
+                    .read_content(&config.history_path(path, file_edit.version))
                     .await?;
 
                 // if: Client Says Deleted and server says modified
@@ -290,9 +297,7 @@ pub(crate) async fn do_sync(
                         },
                     );
                 } else {
-                    if config.ds.root().join(path).exists() {
-                        tokio::fs::remove_file(config.ds.root().join(path)).await?;
-                    }
+                    config.ds.remove(&config.ds.root().join(path)).await?;
                     to_be_in_history.insert(
                         path.to_string(),
                         fastn_core::history::FileEditTemp {
@@ -340,7 +345,7 @@ pub(crate) async fn sync_worker(
     Ok(SyncResponse {
         files: synced_files.into_values().collect_vec(),
         dot_history: history_files,
-        latest_ftd: config.ds.read_to_string(config.history_file()).await?,
+        latest_ftd: config.ds.read_to_string(&config.history_file()).await?,
     })
 }
 
@@ -352,19 +357,17 @@ async fn clone_history_files(
     use itertools::Itertools;
 
     let diff = snapshot_diff(remote_manifest, client_latest);
-    let history = ignore::WalkBuilder::new(config.remote_history_dir())
-        .hidden(false)
-        .build()
-        .flatten()
-        .map(|x| {
-            x.into_path()
-                .to_str()
-                .unwrap()
-                .trim_start_matches(config.remote_history_dir().as_str())
+    let history = config
+        .ds
+        .get_all_file_path(&config.remote_history_dir(), &[])
+        .into_iter()
+        .map(|v| {
+            v.to_string()
+                .trim_start_matches(&config.remote_history_dir().to_string())
                 .trim_matches('/')
                 .to_string()
         })
-        .collect::<Vec<String>>();
+        .collect_vec();
 
     let mut dot_history = vec![];
     for (path, _) in diff.iter() {
@@ -376,7 +379,7 @@ async fn clone_history_files(
         for (_, path) in history_paths {
             let content = config
                 .ds
-                .read_content(config.remote_history_dir().join(&path))
+                .read_content(&config.remote_history_dir().join(&path))
                 .await?;
             dot_history.push(File { path, content });
         }
@@ -427,7 +430,7 @@ async fn client_current_files(
             );
             continue;
         }
-        let content = config.ds.read_content(config.ds.root().join(path)).await?;
+        let content = config.ds.read_content(&config.ds.root().join(path)).await?;
         synced_files.insert(
             path.clone(),
             SyncResponseFile::Add {
