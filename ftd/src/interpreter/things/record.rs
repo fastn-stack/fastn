@@ -137,7 +137,7 @@ impl Field {
     pub(crate) fn get_default_interpreter_property_value(
         &self,
         properties: &[ftd::interpreter::Property],
-    ) -> Option<ftd::interpreter::PropertyValue> {
+    ) -> ftd::interpreter::Result<Option<ftd::interpreter::PropertyValue>> {
         let sources = self.to_sources();
         let properties = ftd::interpreter::utils::find_properties_by_source(
             sources.as_slice(),
@@ -145,28 +145,27 @@ impl Field {
             "", // doc_name
             self,
             0, // line_number
-        )
-        .unwrap();
+        )?;
 
         for property in properties {
             if property.condition.is_none() {
-                return Some(property.value);
+                return Ok(Some(property.value));
             }
         }
 
-        None
+        Ok(None)
     }
 
     pub(crate) fn get_default_interpreter_value(
         &self,
         doc: &ftd::interpreter::TDoc,
         properties: &[ftd::interpreter::Property],
-    ) -> Option<ftd::interpreter::Value> {
-        let property_value = self.get_default_interpreter_property_value(properties);
+    ) -> ftd::interpreter::Result<Option<ftd::interpreter::Value>> {
+        let property_value = self.get_default_interpreter_property_value(properties)?;
         if let Some(property_value) = property_value {
-            return property_value.resolve(doc, 0).ok();
+            return Ok(property_value.resolve(doc, 0).ok());
         }
-        None
+        Ok(None)
     }
 
     pub fn to_sources(&self) -> Vec<ftd::interpreter::PropertySource> {
@@ -389,6 +388,13 @@ impl Field {
 
     pub fn is_body(&self) -> bool {
         self.kind.body
+    }
+
+    pub(crate) fn is_value_required(&self) -> bool {
+        if self.kind.is_optional() || self.kind.is_list() {
+            return false;
+        }
+        self.value.is_none()
     }
 
     pub(crate) fn for_component_or_web_component(

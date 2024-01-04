@@ -1104,10 +1104,10 @@ impl Document {
 
         for v in &components {
             let url = v
-                .get_interpreter_value_of_argument("url", &self.tdoc())
+                .get_interpreter_value_of_argument("url", &self.tdoc())?
                 .and_then(|v| v.string(self.name.as_str(), 0).ok());
             let code = v
-                .get_interpreter_value_of_argument("code", &self.tdoc())
+                .get_interpreter_value_of_argument("code", &self.tdoc())?
                 .and_then(|v| v.integer(self.name.as_str(), 0).ok());
 
             if v.condition.is_none() {

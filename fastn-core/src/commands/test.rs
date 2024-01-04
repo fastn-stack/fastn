@@ -200,7 +200,7 @@ async fn execute_post_instruction(
     saved_cookies: &mut std::collections::HashMap<String, String>,
     test_parameters: &mut TestParameters,
 ) -> fastn_core::Result<bool> {
-    let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc);
+    let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc)?;
 
     // Mandatory test parameters --------------------------------
     let url = get_value_ok(TEST_URL_HEADER, &property_values, instruction.line_number)?
@@ -383,7 +383,7 @@ async fn execute_get_instruction(
     saved_cookies: &mut std::collections::HashMap<String, String>,
     test_parameters: &mut TestParameters,
 ) -> fastn_core::Result<bool> {
-    let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc);
+    let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc)?;
 
     // Mandatory test parameters --------------------------------
     let url = get_value_ok(TEST_URL_HEADER, &property_values, instruction.line_number)?

@@ -96,8 +96,50 @@ fn get_dummy_package_data() -> String {
 }
 
 #[track_caller]
-fn p(s: &str, t: &str, fix: bool, manual: bool, script: bool, file_location: &std::path::PathBuf) {
-    let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
+fn p(
+    s: &str,
+    t: &Option<String>,
+    e: &Option<String>,
+    fix: bool,
+    manual: bool,
+    script: bool,
+    file_location: &std::path::PathBuf,
+    error_file_location: &std::path::PathBuf,
+) {
+    let i = match interpret_helper("foo", s) {
+        Ok(doc) => doc,
+        Err(expected_error) => {
+            if fix || manual || script {
+                let expected_error = expected_error.to_string();
+                std::fs::write(error_file_location, expected_error).unwrap();
+                if file_location.exists() {
+                    std::fs::remove_file(file_location).unwrap();
+                }
+                return;
+            }
+            if t.is_some() {
+                panic!(
+                    "{:?} file not expected. found: {:?}",
+                    file_location, expected_error
+                );
+            }
+            match e.as_ref() {
+                Some(found_error) => {
+                    let expected_error = expected_error.to_string();
+                    assert_eq!(
+                        found_error, &expected_error,
+                        "Expected Error: {}",
+                        expected_error
+                    );
+                    return;
+                }
+                None => {
+                    panic!("{:?}", expected_error);
+                }
+            }
+        }
+    };
+    let t = t.clone().unwrap_or_default();
     let js_ast_data = ftd::js::document_into_js_ast(i);
     let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), "foo");
     let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), "foo");
@@ -187,19 +229,21 @@ fn fastn_js_test_all() {
     let script = cli_args.iter().any(|v| v.eq("script=true"));
     let clear = cli_args.iter().any(|v| v.eq("clear"));
     let path = cli_args.iter().find_map(|v| v.strip_prefix("path="));
-    for (files, html_file_location) in find_file_groups(manual, script) {
+    for (files, html_file_location, error_file_location) in find_file_groups(manual, script) {
         if clear {
             for f in &files {
                 match path {
                     Some(path) if !f.to_str().unwrap().contains(path) => continue,
                     _ => {}
                 }
-                let script = filename_with_second_last_extension_replaced_with_json(f, false, true);
+                let script =
+                    filename_with_second_last_extension_replaced_with_json(f, false, true).0;
 
                 if std::fs::remove_file(&script).is_ok() {
                     println!("Removed {}", script.display());
                 }
-                let manual = filename_with_second_last_extension_replaced_with_json(f, true, false);
+                let manual =
+                    filename_with_second_last_extension_replaced_with_json(f, true, false).0;
                 if std::fs::remove_file(&manual).is_ok() {
                     println!("Removed {}", manual.display());
                 }
@@ -208,10 +252,17 @@ fn fastn_js_test_all() {
         }
 
         let t = if fix || manual || script {
-            "".to_string()
+            None
         } else {
-            std::fs::read_to_string(&html_file_location).unwrap()
+            std::fs::read_to_string(&html_file_location).ok()
         };
+
+        let e = if fix || manual || script {
+            None
+        } else {
+            std::fs::read_to_string(&error_file_location).ok()
+        };
+
         for f in files {
             match path {
                 Some(path) if !f.to_str().unwrap().contains(path) => continue,
@@ -231,7 +282,17 @@ fn fastn_js_test_all() {
                 },
                 f.display()
             );
-            p(&s, &t, fix, manual, script, &html_file_location);
+
+            p(
+                &s,
+                &t,
+                &e,
+                fix,
+                manual,
+                script,
+                &html_file_location,
+                &error_file_location,
+            );
         }
     }
 }
@@ -239,20 +300,28 @@ fn fastn_js_test_all() {
 fn find_file_groups(
     manual: bool,
     script: bool,
-) -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
+) -> Vec<(
+    Vec<std::path::PathBuf>,
+    std::path::PathBuf,
+    std::path::PathBuf,
+)> {
     let files = {
         let mut f = ftd::utils::find_all_files_matching_extension_recursively("t/js", "ftd");
         f.sort();
         f
     };
 
-    let mut o: Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> = vec![];
+    let mut o: Vec<(
+        Vec<std::path::PathBuf>,
+        std::path::PathBuf,
+        std::path::PathBuf,
+    )> = vec![];
 
     for f in files {
         let json = filename_with_second_last_extension_replaced_with_json(&f, manual, script);
         match o.last_mut() {
-            Some((v, j)) if j == &json => v.push(f),
-            _ => o.push((vec![f], json)),
+            Some((v, j, _)) if j == &json.0 => v.push(f),
+            _ => o.push((vec![f], json.0, json.1)),
         }
     }
 
@@ -263,21 +332,24 @@ fn filename_with_second_last_extension_replaced_with_json(
     path: &std::path::Path,
     manual: bool,
     script: bool,
-) -> std::path::PathBuf {
+) -> (std::path::PathBuf, std::path::PathBuf) {
     let stem = path.file_stem().unwrap().to_str().unwrap();
-
-    path.with_file_name(format!(
-        "{}{}.html",
-        match stem.split_once('.') {
-            Some((b, _)) => b,
-            None => stem,
-        },
-        if manual {
-            ".manual"
-        } else if script {
-            ".script"
-        } else {
-            ""
-        }
-    ))
+    let stem = match stem.split_once('.') {
+        Some((b, _)) => b,
+        None => stem,
+    };
+    (
+        path.with_file_name(format!(
+            "{}{}.html",
+            stem,
+            if manual {
+                ".manual"
+            } else if script {
+                ".script"
+            } else {
+                ""
+            }
+        )),
+        path.with_file_name(format!("{}.error", stem)),
+    )
 }
