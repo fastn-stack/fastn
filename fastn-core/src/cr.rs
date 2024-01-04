@@ -220,7 +220,15 @@ impl fastn_core::Config {
         let mut tracking_info_list = vec![];
 
         for cr_track_path in cr_track_paths {
-            let tracked_file = cr_track_path.strip_prefix(&self.track_dir());
+            let tracked_file = cr_track_path.strip_prefix(&self.track_dir()).ok_or(
+                fastn_core::Error::UsageError {
+                    message: format!(
+                        "Can't find prefix `{}` in `{}`",
+                        self.track_dir(),
+                        cr_track_path
+                    ),
+                },
+            )?;
             let tracked_file_str = fastn_core::cr::cr_path_to_file_name(cr_number, &tracked_file)?;
             if let Some(info) = fastn_core::track::get_tracking_info_(self, &cr_track_path)
                 .await?

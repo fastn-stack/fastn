@@ -31,14 +31,13 @@ impl Path {
         })
     }
 
-    pub fn strip_prefix(&self, base: &Self) -> Self {
-        Path {
-            path: self
-                .path
-                .strip_prefix(base.path.as_str())
-                .unwrap()
-                .to_path_buf(),
-        }
+    pub fn strip_prefix(&self, base: &Self) -> Option<Self> {
+        self.path
+            .strip_prefix(base.path.as_str())
+            .ok()
+            .map(|v| Path {
+                path: v.to_path_buf(),
+            })
     }
 
     pub fn exists(&self) -> bool {
