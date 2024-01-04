@@ -382,7 +382,8 @@
             "order": [
               "a",
               "b"
-            ]
+            ],
+            "module_name": null
           },
           "line_number": 25
         }
@@ -454,7 +455,8 @@
             "order": [
               "a",
               "b"
-            ]
+            ],
+            "module_name": null
           },
           "line_number": 28
         }
