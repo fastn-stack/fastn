@@ -116,7 +116,8 @@
                       "order": [
                         "a",
                         "b"
-                      ]
+                      ],
+                      "module_name": null
                     }
                   },
                   "source": "Caption",
