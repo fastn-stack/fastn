@@ -626,7 +626,7 @@ impl Package {
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<fastn_core::Package> {
         let file_extract_path = package_root.join("FASTN.ftd");
-        if !file_extract_path.exists() {
+        if !ds.exists(&file_extract_path) {
             let fastn_string = self.get_fastn().await?;
             ds.write_content(&file_extract_path, fastn_string.into_bytes())
                 .await?;

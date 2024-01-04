@@ -1,12 +1,16 @@
 /// `find_root_for_file()` starts with the given path, which is the current directory where the
 /// application started in, and goes up till it finds a folder that contains `FASTN.ftd` file.
 /// TODO: make async
-pub(crate) fn find_root_for_file(dir: &fastn_ds::Path, file_name: &str) -> Option<fastn_ds::Path> {
-    if dir.join(file_name).exists() {
+pub(crate) fn find_root_for_file(
+    dir: &fastn_ds::Path,
+    file_name: &str,
+    ds: &fastn_ds::DocumentStore,
+) -> Option<fastn_ds::Path> {
+    if ds.exists(&dir.join(file_name)) {
         Some(dir.clone())
     } else {
         if let Some(p) = dir.parent() {
-            return find_root_for_file(&p, file_name);
+            return find_root_for_file(&p, file_name, ds);
         };
         None
     }

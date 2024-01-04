@@ -171,9 +171,7 @@ async fn update_current_directory(
                 }
             }
             fastn_core::apis::sync2::SyncResponseFile::Delete { path, .. } => {
-                if config.ds.root().join(path).exists() {
-                    config.ds.remove(&config.ds.root().join(path)).await?;
-                }
+                config.ds.remove(&config.ds.root().join(path)).await?;
             }
         }
     }

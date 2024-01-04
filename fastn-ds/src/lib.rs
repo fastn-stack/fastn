@@ -40,10 +40,6 @@ impl Path {
             })
     }
 
-    pub fn exists(&self) -> bool {
-        self.path.exists()
-    }
-
     pub fn file_name(&self) -> Option<String> {
         self.path.file_name().map(|v| v.to_string())
     }
@@ -153,7 +149,7 @@ impl DocumentStore {
 
         // Create the directory if it doesn't exist
         if let Some(parent) = full_path.parent() {
-            if !parent.exists() {
+            if !parent.path.exists() {
                 tokio::fs::create_dir_all(parent.path).await?;
             }
         }
@@ -173,6 +169,9 @@ impl DocumentStore {
     }
 
     pub async fn remove(&self, path: &Path) -> Result<(), RemoveError> {
+        if !path.path.exists() {
+            return Ok(());
+        }
         if path.path.is_file() {
             tokio::fs::remove_file(&path.path).await?;
         } else if path.path.is_dir() {
@@ -205,6 +204,10 @@ impl DocumentStore {
                 }
             }) //todo: improve error message
             .collect::<Vec<fastn_ds::Path>>()
+    }
+
+    pub fn exists(&self, path: &fastn_ds::Path) -> bool {
+        path.path.exists()
     }
 }
 

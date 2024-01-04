@@ -72,7 +72,7 @@ impl fastn_core::Config {
 
     pub async fn get_available_crs(&self) -> fastn_core::Result<Vec<i32>> {
         let mut response = vec![];
-        if self.clone_available_crs_path().exists() {
+        if self.ds.exists(&self.clone_available_crs_path()) {
             let crs = self
                 .ds
                 .read_to_string(&self.clone_available_crs_path())

@@ -256,10 +256,7 @@ async fn remove_deleted_documents(
         let folder_parent = folder_path.parent();
         let file_path = &folder_path.with_extension("ftd");
 
-        if file_path.exists() {
-            config.ds.remove(file_path).await?;
-        }
-
+        config.ds.remove(file_path).await?;
         config.ds.remove(&folder_path).await?;
 
         // If the parent folder of the file's output folder is also empty, delete it as well.

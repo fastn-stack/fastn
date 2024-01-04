@@ -21,7 +21,7 @@ pub(crate) async fn get_cr_meta(
     cr_number: usize,
 ) -> fastn_core::Result<fastn_core::cr::CRMeta> {
     let cr_meta_path = config.cr_meta_path(cr_number);
-    if !cr_meta_path.exists() {
+    if !config.ds.exists(&cr_meta_path) {
         return fastn_core::usage_error(format!("CR#{} doesn't exist", cr_number));
     }
 
@@ -142,11 +142,11 @@ pub(crate) async fn get_deleted_files(
     config: &fastn_core::Config,
     cr_number: usize,
 ) -> fastn_core::Result<Vec<CRDeleted>> {
-    if !config.cr_path(cr_number).exists() {
+    if !config.ds.exists(&config.cr_path(cr_number)) {
         return fastn_core::usage_error(format!("CR#{} doesn't exist", cr_number));
     }
     let deleted_files_path = config.cr_deleted_file_path(cr_number);
-    if !deleted_files_path.exists() {
+    if !config.ds.exists(&deleted_files_path) {
         return Ok(vec![]);
     }
     let deleted_files_content = config.ds.read_to_string(&deleted_files_path).await?;
