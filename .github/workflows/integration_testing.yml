@@ -44,7 +44,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: install
-          args: --path fastn --profile dev
+          args: --path fastn --profile release
 
       - name: Set up Python
         uses: actions/setup-python@v2
