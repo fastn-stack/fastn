@@ -61,7 +61,7 @@ async fn write(
     timestamp: u128,
     path: &fastn_ds::Path,
 ) -> fastn_core::Result<()> {
-    let string = if config.ds.exists(&path) {
+    let string = if config.ds.exists(path) {
         let existing_doc = config.ds.read_to_string(path).await?;
         format!(
             "{}\n\n-- fastn.track: {}\nself-timestamp: {}",
