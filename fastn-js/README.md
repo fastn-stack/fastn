@@ -6,4 +6,4 @@ JavaScript formatting is tested using [`dprint-check-action`](https://github.com
 dprint fmt --config=.github/dprint-ci.json
 ```
 
-Pull Request: [https://github.com/fastn-stack/fastn/pull/1661](https://github.com/fastn-stack/fastn/pull/1661)
+Pull Request: [fastn-stack/fastn#1661](https://github.com/fastn-stack/fastn/pull/1661)
