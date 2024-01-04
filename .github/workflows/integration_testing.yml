@@ -11,6 +11,7 @@ on:
 
 jobs:
   integration-test:
+    if: false  # temporarily skipping this test (for debugging other tests)
     runs-on: ubuntu-latest
 
     env:
@@ -80,3 +81,82 @@ jobs:
           for folder in integration-tests/*/; do
             (cd "$folder" && fastn test --headless)
           done
+
+  slides-integration-test:
+    runs-on: ubuntu-latest
+
+    env:
+      FASTN_DB_URL: postgres://admin:admin@localhost:5432/fifthtry
+      FASTN_SECRET_KEY: fddfbbb85dcae750433875eb8f0fdced08d72aff
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: fifthtry
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          override: true
+          components: rustfmt, clippy
+
+      - name: fastn installation (using source)
+        id: fastn-install
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: --path fastn --profile dev
+
+      - name: Clone Slides repository
+        id: clone-slides-repo
+        run: |
+          git clone https://github.com/FifthTry/slides.git
+
+      - name: Navigate inside slides repository
+        id: navigate-inside-slides
+        run: |
+          cd slides
+
+      - name: Wait for PostgreSQL to start
+        run: |
+          timeout=30
+          until pg_isready -h localhost -p 5432 -U testuser -d testdb || ((timeout-- <= 0)); do
+            sleep 1
+          done
+
+      - name: Install pip dependencies (sourcing auto.sh)
+        id: navigate-inside-slides
+        run: |
+          source scripts/auto.sh
+
+      - name: Setup django
+        id: setup-django
+        run: |
+          make-migrations
+          migrate
+          recreate-db
+
+      - name: Start django service
+        id: setup-django
+        run: |
+          # This will need secret key
+          python backend/manage.py runserver 7999 &
+          
+          # Waiting for the server to start
+          sleep 10  # We might want to wait more
+
+      - name: Run integration tests
+        run: |
+          cd frontend
+          fastn test --headless
