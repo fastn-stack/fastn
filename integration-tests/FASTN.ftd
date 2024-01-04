@@ -1,4 +1,4 @@
 -- import: fastn
 
--- fastn.package: test-1
+-- fastn.package: integration-tests
 endpoint: http://127.0.0.1:5000
