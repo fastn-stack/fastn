@@ -2584,7 +2584,9 @@ class Node2 {
                 fastn_utils.getStaticValue(staticValue.get("light")),
             );
         } else if (
-            kind === fastn_dom.PropertyKind.DocumentProperties.MetaFacebookDomainVerification
+            kind ===
+            fastn_dom.PropertyKind.DocumentProperties
+                .MetaFacebookDomainVerification
         ) {
             if (fastn_utils.isNull(staticValue)) {
                 this.removeMetaTagByName("facebook-domain-verification");
