@@ -11,6 +11,8 @@ pub(crate) fn extract_github_details(pages_url: &str) -> Option<(String, String)
     }
 }
 
+// https://api.github.com/repos/User/repo/:archive_format/:ref
+// https://stackoverflow.com/questions/8377081/github-api-download-zip-or-tarball-link
 pub(crate) fn get_download_url_gh(username: &str, repository: &str) -> String {
     format!(
         "https://api.github.com/repos/{}/{}/zipball",
@@ -31,9 +33,7 @@ pub(crate) fn get_package_source_url(package: &fastn_core::package::Package) -> 
     None
 }
 
-// https://api.github.com/repos/User/repo/:archive_format/:ref
-// https://stackoverflow.com/questions/8377081/github-api-download-zip-or-tarball-link
-pub(crate) async fn download_archive_from_gh(
+pub(crate) async fn download_archive(
     url: String,
 ) -> fastn_core::Result<(zip::ZipArchive<std::io::Cursor<Vec<u8>>>, String)> {
     use std::io::Seek;

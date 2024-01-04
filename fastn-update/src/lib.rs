@@ -15,7 +15,7 @@ pub async fn resolve_dependencies(
         match fastn_update::utils::get_package_source_url(&dependency.package) {
             Some(source) => {
                 let (mut archive, checksum) =
-                    fastn_update::utils::download_archive_from_gh(source.clone()).await?;
+                    fastn_update::utils::download_archive(source.clone()).await?;
                 let dependency_path = &packages_root.join(&dependency.package.name);
 
                 for i in 0..archive.len() {
