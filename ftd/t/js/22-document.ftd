@@ -8,6 +8,7 @@ twitter-description: This is twitter description
 og-image: $fastn-image.light
 twitter-image: $fastn-image.dark
 theme-color: white
+facebook-domain-verification: 7uedwv99dgux8pbshcr7jzhb3l3hvu
 
 -- ftd.text: This is document component
 
