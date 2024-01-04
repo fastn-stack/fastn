@@ -2,142 +2,82 @@ use std::io::Read;
 
 extern crate self as fastn_update;
 
-static GITHUB_PAGES_REGEX: once_cell::sync::Lazy<regex::Regex> =
-    once_cell::sync::Lazy::new(|| regex::Regex::new(r"([^/]+)\.github\.io/([^/]+)").unwrap());
+mod types;
+mod utils;
 
-fn extract_github_details(pages_url: &str) -> Option<(String, String)> {
-    if let Some(captures) = GITHUB_PAGES_REGEX.captures(pages_url) {
-        let username = captures.get(1).unwrap().as_str().to_string();
-        let repository = captures.get(2).unwrap().as_str().to_string();
-        Some((username, repository))
-    } else {
-        None
-    }
-}
+pub async fn resolve_dependencies(
+    config: &fastn_core::Config,
+    packages_root: &camino::Utf8PathBuf,
+    dependencies: &Vec<fastn_core::package::dependency::Dependency>,
+    packages: &mut Vec<fastn_update::types::Package>,
+) -> fastn_core::Result<()> {
+    for dependency in dependencies {
+        match fastn_update::utils::get_package_source_url(&dependency.package) {
+            Some(source) => {
+                let (mut archive, checksum) =
+                    fastn_update::utils::download_archive_from_gh(source.clone()).await?;
+                let dependency_path = &packages_root.join(&dependency.package.name);
 
-// https://api.github.com/repos/User/repo/:archive_format/:ref
-// https://stackoverflow.com/questions/8377081/github-api-download-zip-or-tarball-link
-async fn resolve_dependency_from_gh(
-    username: &str,
-    repository: &str,
-) -> fastn_core::Result<Vec<u8>> {
-    let url = format!(
-        "https://api.github.com/repos/{}/{}/zipball",
-        username, repository
-    );
-    let zipball = fastn_core::http::http_get(&url).await?;
-    Ok(zipball)
-}
+                for i in 0..archive.len() {
+                    let mut entry = archive.by_index(i)?;
 
-#[derive(serde::Serialize, serde::Deserialize)]
-pub struct Manifest {
-    pub packages: Vec<Package>,
-}
-
-impl Manifest {
-    pub fn new(packages: Vec<Package>) -> Self {
-        Manifest { packages }
-    }
-}
-
-#[derive(serde::Serialize, serde::Deserialize)]
-pub enum PackageSource {
-    Github {
-        username: String,
-        repository: String,
-    },
-}
-
-impl PackageSource {
-    pub fn github(username: String, repository: String) -> Self {
-        PackageSource::Github {
-            username,
-            repository,
-        }
-    }
-}
-
-#[derive(serde::Serialize, serde::Deserialize)]
-pub struct Package {
-    pub name: String,
-    pub version: Option<String>,
-    pub source: PackageSource,
-    pub checksum: String,
-    pub dependencies: Vec<String>,
-}
-
-impl Package {
-    pub fn new(
-        name: String,
-        version: Option<String>,
-        source: PackageSource,
-        checksum: String,
-        dependencies: Vec<String>,
-    ) -> Self {
-        Package {
-            name,
-            version,
-            source,
-            checksum,
-            dependencies,
-        }
-    }
-}
-
-pub async fn resolve_dependencies(config: &fastn_core::Config) -> fastn_core::Result<()> {
-    use std::io::Seek;
-
-    let mut packages: Vec<Package> = vec![];
-
-    for dependency in &config.package.dependencies {
-        if let Some((username, repository)) =
-            extract_github_details(dependency.package.name.as_str())
-        {
-            let zipball =
-                resolve_dependency_from_gh(username.as_str(), repository.as_str()).await?;
-            let checksum = fastn_core::utils::generate_hash(zipball.clone());
-            let mut zipball_cursor = std::io::Cursor::new(zipball);
-            zipball_cursor.seek(std::io::SeekFrom::Start(0))?;
-            let mut archive = zip::ZipArchive::new(zipball_cursor)?;
-            let dependency_path = &config.packages_root.join(&dependency.package.name);
-            for i in 0..archive.len() {
-                let mut entry = archive.by_index(i)?;
-
-                if entry.is_file() {
-                    let mut buffer = Vec::new();
-                    entry.read_to_end(&mut buffer)?;
-                    let name = entry
-                        .name()
-                        .split_once('/')
-                        .map(|(_, name)| name)
-                        .unwrap_or(entry.name());
-                    config
-                        .ds
-                        .write_content(&dependency_path.join(name), buffer)
-                        .await?;
+                    if entry.is_file() {
+                        let mut buffer = Vec::new();
+                        entry.read_to_end(&mut buffer)?;
+                        if let Some(path) = entry.enclosed_name() {
+                            if let Some(name) = path.to_str() {
+                                let path = &dependency_path.join(name);
+                                config.ds.write_content(&path, buffer).await?;
+                            }
+                        }
+                    }
                 }
+
+                let package = fastn_update::types::Package::new(
+                    dependency.package.name.clone(),
+                    None, // todo: fix this when versioning is available
+                    source,
+                    checksum,
+                    dependency
+                        .package
+                        .dependencies
+                        .iter()
+                        .map(|d| d.package.name.clone())
+                        .collect(),
+                );
+
+                packages.push(package);
             }
-
-            let source = PackageSource::github(username, repository);
-
-            let package = Package::new(
-                dependency.package.name.clone(),
-                None, // todo: fix this when versioning is available
-                source,
-                checksum,
-                dependency
-                    .package
-                    .dependencies
-                    .iter()
-                    .map(|d| d.package.name.clone())
-                    .collect(),
-            );
-
-            packages.push(package);
+            None => {
+                return Err(fastn_core::Error::PackageError {
+                    message: format!(
+                        "Could not download package: {}, no source found.",
+                        dependency.package.name
+                    ),
+                })
+            }
         }
     }
 
-    let manifest = Manifest::new(packages);
+    Ok(())
+}
+
+pub async fn process(config: &fastn_core::Config) -> fastn_core::Result<()> {
+    let mut packages: Vec<fastn_update::types::Package> = vec![];
+
+    // 1st PASS: download the direct dependencies
+    resolve_dependencies(
+        config,
+        &config.packages_root,
+        &config.package.dependencies,
+        &mut packages,
+    )
+    .await?;
+
+    // 2nd PASS: download all other dependencies
+    //
+
+    let manifest = fastn_update::types::Manifest::new(packages);
     let dot_fastn_dir = config.ds.root().join(".fastn");
 
     config
@@ -167,7 +107,7 @@ pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
         return Ok(());
     }
 
-    resolve_dependencies(config).await?;
+    process(config).await?;
 
     if c.package.dependencies.len() == 1 {
         println!("Updated the package dependency.");
