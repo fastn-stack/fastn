@@ -376,7 +376,7 @@ width: fill-container
 
 -- component install:
 caption title:
-body subtitle:
+optional body subtitle:
 string cta-text:
 string cta-link:
 string code-lang:
@@ -406,6 +406,7 @@ color: $inherited.colors.text-strong
 text-align: center
 
 -- ftd.text: $install.subtitle
+if: { install.subtitle != NULL }
 role: $inherited.types.copy-large
 color: $inherited.colors.text
 margin-bottom.em if { ftd.device == "desktop" }: 4
