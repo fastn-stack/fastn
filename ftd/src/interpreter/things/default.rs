@@ -10961,6 +10961,13 @@ pub fn document_function() -> ftd::interpreter::ComponentDefinition {
                     .into_kind_data(),
             ),
             ftd::interpreter::Argument::default(
+                "facebook-domain-verification",
+                ftd::interpreter::Kind::string()
+                    .into_optional()
+                    .into_kind_data()
+                    .caption_or_body(),
+            ),
+            ftd::interpreter::Argument::default(
                 "title",
                 ftd::interpreter::Kind::string()
                     .into_optional()
