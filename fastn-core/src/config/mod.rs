@@ -329,7 +329,12 @@ impl Config {
     }
 
     pub fn path_without_root(&self, path: &fastn_ds::Path) -> fastn_core::Result<String> {
-        Ok(path.strip_prefix(self.ds.root()).to_string())
+        Ok(path
+            .strip_prefix(self.ds.root())
+            .ok_or(fastn_core::Error::UsageError {
+                message: format!("Can't find prefix `{}` in `{}`", self.ds.root(), path),
+            })?
+            .to_string())
     }
 
     pub fn cr_deleted_file_path(&self, cr_number: usize) -> fastn_ds::Path {

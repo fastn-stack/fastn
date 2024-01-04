@@ -48,6 +48,7 @@ pub async fn process(
         .into_iter()
         .map(|v| {
             v.strip_prefix(&root)
+                .unwrap_or_else(|| v)
                 .to_string()
                 .replace(std::path::MAIN_SEPARATOR.to_string().as_str(), "/")
         })
