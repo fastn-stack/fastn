@@ -96,6 +96,7 @@ fn get_dummy_package_data() -> String {
 }
 
 #[track_caller]
+#[allow(clippy::too_many_arguments)]
 fn p(
     s: &str,
     t: &Option<String>,
