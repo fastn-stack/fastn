@@ -1,0 +1,14 @@
+-- component page:
+ftd.background.solid background: yellow
+
+-- ftd.column:
+background: $page.background
+
+-- end: ftd.column
+
+-- end: page
+
+
+
+
+-- page:

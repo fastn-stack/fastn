@@ -2059,7 +2059,7 @@ fn get_kind(
             expected_kind.clone()
         } else {
             let mut expected_kind = expected_kind.clone();
-            if !found_kind.is_module() {
+            if !found_kind.is_module() && !found_kind.is_or_type() {
                 expected_kind.kind = found_kind.kind.clone();
             }
             expected_kind
