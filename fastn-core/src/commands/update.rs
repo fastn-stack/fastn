@@ -1,5 +1,7 @@
 pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
-    if let Err(e) = std::fs::remove_dir_all(config.ds.root().join(".packages")) {
+    if let Err(fastn_ds::RemoveError::IOError(e)) =
+        config.ds.remove(&config.ds.root().join(".packages")).await
+    {
         match e.kind() {
             std::io::ErrorKind::NotFound => {}
             _ => return Err(e.into()),

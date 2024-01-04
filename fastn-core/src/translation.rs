@@ -52,7 +52,7 @@ impl TranslatedDocument {
     ) -> fastn_core::Result<()> {
         // handle the message
         // render with-fallback or with-message
-        let _message = fastn_core::get_messages(self, config)?;
+        let _message = fastn_core::get_messages(self, config).await?;
         let (_main, _fallback, _translated_data) = match self {
             TranslatedDocument::Missing { original } => {
                 (original, None, TranslationData::new("Missing"))
@@ -115,16 +115,16 @@ impl TranslatedDocument {
         ) -> fastn_core::Result<String> {
             let last_marked_on_path = fastn_core::utils::history_path(
                 original.get_id(),
-                config.original_path()?.as_str(),
+                &config.original_path()?,
                 last_marked_on,
             );
-            let last_marked_on_data = config.ds.read_to_string(last_marked_on_path).await?;
+            let last_marked_on_data = config.ds.read_to_string(&last_marked_on_path).await?;
             let original_latest_path = fastn_core::utils::history_path(
                 original.get_id(),
-                config.original_path()?.as_str(),
+                &config.original_path()?,
                 original_latest,
             );
-            let original_latest_data = config.ds.read_to_string(original_latest_path).await?;
+            let original_latest_data = config.ds.read_to_string(&original_latest_path).await?;
 
             let patch = diffy::create_patch(&last_marked_on_data, &original_latest_data);
             Ok(patch.to_string().replace("---", "\\---"))
@@ -137,7 +137,8 @@ impl TranslatedDocument {
         translated_documents: std::collections::BTreeMap<String, fastn_core::File>,
     ) -> fastn_core::Result<std::collections::BTreeMap<String, TranslatedDocument>> {
         let original_snapshots =
-            fastn_core::snapshot::get_latest_snapshots(&config.original_path()?).await?;
+            fastn_core::snapshot::get_latest_snapshots(&config.ds, &config.original_path()?)
+                .await?;
         let mut translation_status = std::collections::BTreeMap::new();
         for (file, timestamp) in original_snapshots {
             let original_document =
@@ -158,8 +159,7 @@ impl TranslatedDocument {
                 continue;
             }
             let translated_document = translated_documents.get(file.as_str()).unwrap();
-            let track_path =
-                fastn_core::utils::track_path(file.as_str(), config.ds.root().as_str());
+            let track_path = fastn_core::utils::track_path(file.as_str(), config.ds.root());
             if !track_path.exists() {
                 translation_status.insert(
                     file,
@@ -171,8 +171,7 @@ impl TranslatedDocument {
                 continue;
             }
             let tracks =
-                fastn_core::tracker::get_tracks(config, config.ds.root().as_str(), &track_path)
-                    .await?;
+                fastn_core::tracker::get_tracks(config, config.ds.root(), &track_path).await?;
             if let Some(fastn_core::Track {
                 last_merged_version: Some(last_merged_version),
                 self_timestamp,
@@ -215,7 +214,7 @@ impl TranslatedDocument {
 pub(crate) async fn get_translation_status_counts(
     config: &fastn_core::Config,
     snapshots: &std::collections::BTreeMap<String, u128>,
-    path: &camino::Utf8PathBuf,
+    path: &&fastn_ds::Path,
 ) -> fastn_core::Result<TranslationStatusSummary> {
     let mut translation_status_count = TranslationStatusSummary {
         never_marked: 0,
@@ -229,12 +228,12 @@ pub(crate) async fn get_translation_status_counts(
             translation_status_count.missing += 1;
             continue;
         }
-        let track_path = fastn_core::utils::track_path(file.as_str(), path.as_str());
+        let track_path = fastn_core::utils::track_path(file.as_str(), path);
         if !track_path.exists() {
             translation_status_count.never_marked += 1;
             continue;
         }
-        let tracks = fastn_core::tracker::get_tracks(config, path.as_str(), &track_path).await?;
+        let tracks = fastn_core::tracker::get_tracks(config, path, &track_path).await?;
         if let Some(fastn_core::Track {
             last_merged_version: Some(last_merged_version),
             ..
@@ -250,7 +249,7 @@ pub(crate) async fn get_translation_status_counts(
         }
     }
     translation_status_count.last_modified_on =
-        futures::executor::block_on(fastn_core::utils::get_last_modified_on(path));
+        futures::executor::block_on(fastn_core::utils::get_last_modified_on(&config.ds, path));
     Ok(translation_status_count)
 }
 

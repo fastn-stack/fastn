@@ -42,7 +42,6 @@ pub(crate) mod google_sheets;
 mod library2022;
 #[cfg(feature = "auth")]
 mod mail;
-pub(crate) mod tokio_fs;
 mod workspace;
 
 pub(crate) use auto_import::AutoImport;
@@ -67,7 +66,7 @@ pub(crate) use package::Package;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};
-pub(crate) use utils::{copy_dir_all, timestamp_nanosecond};
+pub(crate) use utils::timestamp_nanosecond;
 pub(crate) use version::Version;
 pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 
@@ -102,10 +101,10 @@ fn fastn_lib_ftd() -> &'static str {
     include_str!("../ftd/fastn-lib.ftd")
 }
 
-fn package_info_about(config: &fastn_core::Config) -> fastn_core::Result<String> {
+async fn package_info_about(config: &fastn_core::Config) -> fastn_core::Result<String> {
     let path = config.ds.root().join("fastn").join("cr.ftd");
-    Ok(if path.is_file() {
-        std::fs::read_to_string(path)?
+    Ok(if path.exists() {
+        config.ds.read_to_string(&path).await?
     } else {
         let body_prefix = match config.package.generate_prefix_string(false) {
             Some(bp) => bp,
@@ -208,15 +207,15 @@ fn package_info_create_cr(config: &fastn_core::Config) -> fastn_core::Result<Str
 }
 
 #[allow(dead_code)]
-fn original_package_status(config: &fastn_core::Config) -> fastn_core::Result<String> {
+async fn original_package_status(config: &fastn_core::Config) -> fastn_core::Result<String> {
     let path = config
         .ds
         .root()
         .join("fastn")
         .join("translation")
         .join("original-status.ftd");
-    Ok(if path.is_file() {
-        std::fs::read_to_string(path)?
+    Ok(if path.exists() {
+        config.ds.read_to_string(&path).await?
     } else {
         let body_prefix = match config.package.generate_prefix_string(false) {
             Some(bp) => bp,
@@ -231,15 +230,15 @@ fn original_package_status(config: &fastn_core::Config) -> fastn_core::Result<St
 }
 
 #[allow(dead_code)]
-fn translation_package_status(config: &fastn_core::Config) -> fastn_core::Result<String> {
+async fn translation_package_status(config: &fastn_core::Config) -> fastn_core::Result<String> {
     let path = config
         .ds
         .root()
         .join("fastn")
         .join("translation")
         .join("translation-status.ftd");
-    Ok(if path.is_file() {
-        std::fs::read_to_string(path)?
+    Ok(if path.exists() {
+        config.ds.read_to_string(&path).await?
     } else {
         let body_prefix = match config.package.generate_prefix_string(false) {
             Some(bp) => bp,
@@ -253,39 +252,39 @@ fn translation_package_status(config: &fastn_core::Config) -> fastn_core::Result
     })
 }
 
-fn get_messages(
+async fn get_messages(
     status: &fastn_core::TranslatedDocument,
     config: &fastn_core::Config,
 ) -> fastn_core::Result<String> {
     Ok(match status {
         TranslatedDocument::Missing { .. } => {
             let path = config.ds.root().join("fastn/translation/missing.ftd");
-            if path.is_file() {
-                std::fs::read_to_string(path)?
+            if path.exists() {
+                config.ds.read_to_string(&path).await?
             } else {
                 include_str!("../ftd/translation/missing.ftd").to_string()
             }
         }
         TranslatedDocument::NeverMarked { .. } => {
             let path = config.ds.root().join("fastn/translation/never-marked.ftd");
-            if path.is_file() {
-                std::fs::read_to_string(path)?
+            if path.exists() {
+                config.ds.read_to_string(&path).await?
             } else {
                 include_str!("../ftd/translation/never-marked.ftd").to_string()
             }
         }
         TranslatedDocument::Outdated { .. } => {
             let path = config.ds.root().join("fastn/translation/out-of-date.ftd");
-            if path.is_file() {
-                std::fs::read_to_string(path)?
+            if path.exists() {
+                config.ds.read_to_string(&path).await?
             } else {
                 include_str!("../ftd/translation/out-of-date.ftd").to_string()
             }
         }
         TranslatedDocument::UptoDate { .. } => {
             let path = config.ds.root().join("fastn/translation/upto-date.ftd");
-            if path.is_file() {
-                std::fs::read_to_string(path)?
+            if path.exists() {
+                config.ds.read_to_string(&path).await?
             } else {
                 include_str!("../ftd/translation/upto-date.ftd").to_string()
             }

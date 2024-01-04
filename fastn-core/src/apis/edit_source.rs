@@ -4,15 +4,14 @@ pub(crate) async fn edit_source(
 ) -> fastn_core::http::Response {
     // TODO: Need to remove unwrap
     let path = {
-        let mut path: camino::Utf8PathBuf =
-            req.path().replacen("/-/edit-src/", "", 1).parse().unwrap();
-        if path.eq(&camino::Utf8PathBuf::new().join("")) {
+        let mut path = fastn_ds::Path::new(req.path().replacen("/-/edit-src/", "", 1));
+        if path.eq(&fastn_ds::Path::new("")) {
             path = path.join("/");
         }
         path
     };
 
-    match handle_view_source(config, req, path.as_str()).await {
+    match handle_view_source(config, req, path.to_string().as_str()).await {
         Ok(body) => fastn_core::http::ok(body),
         Err(e) => {
             fastn_core::server_error!("new_path: {}, Error: {:?}", path, e)
@@ -36,7 +35,7 @@ async fn handle_view_source(
             let main_document = fastn_core::Document {
                 id: "editor-source.ftd".to_string(),
                 content: editor_ftd,
-                parent_path: config.ds.root().as_str().to_string(),
+                parent_path: config.ds.root().clone(),
                 package_name: config.package.name.clone(),
             };
             fastn_core::package::package_doc::read_ftd(

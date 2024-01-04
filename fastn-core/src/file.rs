@@ -35,24 +35,24 @@ impl File {
             Self::Image(a) => &mut a.id,
         }) = new_id.to_string();
     }
-    pub fn get_base_path(&self) -> &str {
+    pub fn get_base_path(&self) -> &fastn_ds::Path {
         match self {
-            Self::Ftd(a) => a.parent_path.as_str(),
-            Self::Static(a) => a.base_path.as_str(),
-            Self::Markdown(a) => a.parent_path.as_str(),
-            Self::Code(a) => a.parent_path.as_str(),
-            Self::Image(a) => a.base_path.as_str(),
+            Self::Ftd(a) => &a.parent_path,
+            Self::Static(a) => &a.base_path,
+            Self::Markdown(a) => &a.parent_path,
+            Self::Code(a) => &a.parent_path,
+            Self::Image(a) => &a.base_path,
         }
     }
-    pub fn get_full_path(&self) -> camino::Utf8PathBuf {
+    pub fn get_full_path(&self) -> fastn_ds::Path {
         let (id, base_path) = match self {
-            Self::Ftd(a) => (a.id.to_string(), a.parent_path.to_string()),
-            Self::Static(a) => (a.id.to_string(), a.base_path.to_string()),
-            Self::Markdown(a) => (a.id.to_string(), a.parent_path.to_string()),
-            Self::Code(a) => (a.id.to_string(), a.parent_path.to_string()),
-            Self::Image(a) => (a.id.to_string(), a.base_path.to_string()),
+            Self::Ftd(a) => (a.id.to_string(), &a.parent_path),
+            Self::Static(a) => (a.id.to_string(), &a.base_path),
+            Self::Markdown(a) => (a.id.to_string(), &a.parent_path),
+            Self::Code(a) => (a.id.to_string(), &a.parent_path),
+            Self::Image(a) => (a.id.to_string(), &a.base_path),
         };
-        camino::Utf8PathBuf::from(base_path).join(id)
+        base_path.join(id)
     }
 
     pub(crate) fn get_content(&self) -> &[u8] {
@@ -82,7 +82,7 @@ pub struct Document {
     pub package_name: String,
     pub id: String,
     pub content: String,
-    pub parent_path: String,
+    pub parent_path: fastn_ds::Path,
 }
 
 impl Document {
@@ -107,7 +107,7 @@ pub struct Static {
     pub package_name: String,
     pub id: String,
     pub content: Vec<u8>,
-    pub base_path: camino::Utf8PathBuf,
+    pub base_path: fastn_ds::Path,
 }
 
 impl Static {
@@ -119,15 +119,15 @@ impl Static {
 pub(crate) async fn paths_to_files(
     ds: &fastn_ds::DocumentStore,
     package_name: &str,
-    files: Vec<camino::Utf8PathBuf>,
-    base_path: &camino::Utf8Path,
+    files: Vec<fastn_ds::Path>,
+    base_path: &fastn_ds::Path,
 ) -> fastn_core::Result<Vec<fastn_core::File>> {
     let pkg = package_name.to_string();
     Ok(futures::future::join_all(
         files
             .into_iter()
             .map(|x| {
-                let base = base_path.to_path_buf();
+                let base = base_path.clone();
                 let p = pkg.clone();
                 let ds = ds.clone();
                 tokio::spawn(async move { fastn_core::get_file(&ds, p, &x, &base).await })
@@ -141,66 +141,26 @@ pub(crate) async fn paths_to_files(
     .collect::<Vec<fastn_core::File>>())
 }
 
-pub fn package_ignores(
-    package: &fastn_core::Package,
-    root_path: &camino::Utf8PathBuf,
-) -> Result<ignore::overrides::Override, ignore::Error> {
-    let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
-    overrides.add("!.history")?;
-    overrides.add("!.packages")?;
-    overrides.add("!.tracks")?;
-    overrides.add("!fastn")?;
-    overrides.add("!rust-toolchain")?;
-    overrides.add("!.build")?;
-    overrides.add("!_tests")?;
-    for ignored_path in &package.ignored_paths {
-        overrides.add(format!("!{}", ignored_path).as_str())?;
-    }
-    overrides.build()
-}
-
-pub fn ignore_path(
-    package: &fastn_core::Package,
-    root_path: &camino::Utf8PathBuf,
-    ignore_paths: Vec<String>,
-) -> Result<ignore::overrides::Override, ignore::Error> {
-    let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
-    overrides.add("!.packages")?;
-    overrides.add("!.build")?;
-    for ignored_path in &package.ignored_paths {
-        overrides.add(format!("!{}", ignored_path).as_str())?;
-    }
-    for ignored_path in ignore_paths {
-        overrides.add(format!("!{}", ignored_path).as_str())?;
-    }
-    overrides.build()
-}
-
 pub(crate) async fn get_file(
     ds: &fastn_ds::DocumentStore,
     package_name: String,
-    doc_path: &camino::Utf8Path,
-    base_path: &camino::Utf8Path,
+    doc_path: &fastn_ds::Path,
+    base_path: &fastn_ds::Path,
 ) -> fastn_core::Result<File> {
-    if doc_path.is_dir() {
-        return Err(fastn_core::Error::UsageError {
-            message: format!("{} should be a file", doc_path.as_str()),
-        });
-    }
-
     let base_path_str = base_path
-        .as_str()
-        .trim_end_matches(std::path::MAIN_SEPARATOR);
+        .to_string()
+        .trim_end_matches(std::path::MAIN_SEPARATOR)
+        .to_string();
 
-    if !doc_path.as_str().starts_with(base_path_str) {
+    if !doc_path.to_string().starts_with(&base_path_str) {
         return Err(fastn_core::Error::UsageError {
             message: format!("{:?} should be a file", doc_path),
         });
     }
 
     let id = doc_path
-        .as_str()
-        .trim_start_matches(base_path_str)
+        .to_string()
+        .trim_start_matches(base_path_str.as_str())
         .replace(std::path::MAIN_SEPARATOR, "/")
         .trim_start_matches('/')
         .to_string();
@@ -209,14 +169,14 @@ pub(crate) async fn get_file(
         Some((_, "ftd")) => File::Ftd(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: ds.read_to_string(&doc_path).await?,
-            parent_path: base_path.to_string(),
+            content: ds.read_to_string(doc_path).await?,
+            parent_path: base_path.clone(),
         }),
         Some((_, "md")) => File::Markdown(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: ds.read_to_string(&doc_path).await?,
-            parent_path: base_path.to_string(),
+            content: ds.read_to_string(doc_path).await?,
+            parent_path: base_path.clone(),
         }),
         Some((_, ext))
             if mime_guess::MimeGuess::from_ext(ext)
@@ -227,23 +187,23 @@ pub(crate) async fn get_file(
             File::Image(Static {
                 package_name: package_name.to_string(),
                 id: id.to_string(),
-                content: ds.read_content(&doc_path).await?,
-                base_path: base_path.to_path_buf(),
+                content: ds.read_content(doc_path).await?,
+                base_path: base_path.clone(),
             })
         }
         Some((_, ext)) if ftd::ftd2021::code::KNOWN_EXTENSIONS.contains(ext) => {
             File::Code(Document {
                 package_name: package_name.to_string(),
                 id: id.to_string(),
-                content: ds.read_to_string(&doc_path).await?,
-                parent_path: base_path.to_string(),
+                content: ds.read_to_string(doc_path).await?,
+                parent_path: base_path.clone(),
             })
         }
         _ => File::Static(Static {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: ds.read_content(&doc_path).await?,
-            base_path: base_path.to_path_buf(),
+            content: ds.read_content(doc_path).await?,
+            base_path: base_path.clone(),
         }),
     })
 }

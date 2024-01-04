@@ -25,7 +25,7 @@ pub struct Package {
     pub auto_import: Vec<fastn_core::AutoImport>,
     /// `fastn_path` contains the fastn package root. This value is found in `FASTN.ftd` or
     /// `fastn.manifest.ftd` file.
-    pub fastn_path: Option<camino::Utf8PathBuf>,
+    pub fastn_path: Option<fastn_ds::Path>,
     /// `ignored` keeps track of files that are to be ignored by `fastn build`, `fastn sync` etc.
     pub ignored_paths: Vec<String>,
     /// `fonts` keeps track of the fonts used by the package.
@@ -567,10 +567,10 @@ impl Package {
     #[tracing::instrument(skip_all)]
     pub(crate) async fn resolve(
         &mut self,
-        fastn_path: &camino::Utf8PathBuf,
+        fastn_path: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<()> {
-        tracing::info!(path = fastn_path.as_str());
+        tracing::info!(path = fastn_path.to_string());
         let fastn_document = {
             let doc = ds.read_to_string(fastn_path).await?;
             let lib = fastn_core::FastnLibrary::default();
@@ -579,7 +579,7 @@ impl Package {
                 Err(e) => {
                     tracing::error!(
                         msg = "failed to pare FASTN.ftd file",
-                        path = fastn_path.as_str()
+                        path = fastn_path.to_string()
                     );
                     return Err(fastn_core::Error::PackageError {
                         message: format!("failed to parse FASTN.ftd: {:?}", &e),
@@ -622,18 +622,13 @@ impl Package {
     #[tracing::instrument(skip(self))]
     pub(crate) async fn get_and_resolve(
         &self,
-        package_root: &camino::Utf8PathBuf,
+        package_root: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<fastn_core::Package> {
-        use tokio::io::AsyncWriteExt;
-
         let file_extract_path = package_root.join("FASTN.ftd");
         if !file_extract_path.exists() {
-            std::fs::create_dir_all(package_root)?;
             let fastn_string = self.get_fastn().await?;
-            tokio::fs::File::create(&file_extract_path)
-                .await?
-                .write_all(fastn_string.as_bytes())
+            ds.write_content(&file_extract_path, fastn_string.into_bytes())
                 .await?;
         }
 

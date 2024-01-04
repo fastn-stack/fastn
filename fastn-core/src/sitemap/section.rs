@@ -50,12 +50,12 @@ pub struct Section {
     /// # Fifthtry: https://fifthtry.com/
     /// ````
     /// In that case it store `None`
-    pub file_location: Option<camino::Utf8PathBuf>,
+    pub file_location: Option<fastn_ds::Path>,
 
     /// `translation_file_location` has value in case of translation package.
     /// It stores the location of the document in the
     /// file system in the translation package.
-    pub translation_file_location: Option<camino::Utf8PathBuf>,
+    pub translation_file_location: Option<fastn_ds::Path>,
 
     /// `extra_data` stores the key value data provided in the section.
     /// This is passed as context and consumes by processors like `get-data`.
@@ -148,8 +148,8 @@ pub struct Subsection {
     pub icon: Option<String>,
     pub bury: bool,
     pub title: Option<String>,
-    pub file_location: Option<camino::Utf8PathBuf>,
-    pub translation_file_location: Option<camino::Utf8PathBuf>,
+    pub file_location: Option<fastn_ds::Path>,
+    pub translation_file_location: Option<fastn_ds::Path>,
     pub visible: bool,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub is_active: bool,

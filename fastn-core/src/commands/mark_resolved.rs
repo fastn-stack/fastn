@@ -12,7 +12,10 @@ pub async fn mark_resolved(config: &fastn_core::Config, path: &str) -> fastn_cor
     // TODO: Check workspace value and then delete it
     // This is certainly bad idea
     if config.conflicted_dir().join(path).exists() {
-        tokio::fs::remove_file(config.conflicted_dir().join(path)).await?;
+        config
+            .ds
+            .remove(&config.conflicted_dir().join(path))
+            .await?;
     }
     Ok(())
 }

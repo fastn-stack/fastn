@@ -201,7 +201,7 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
     let response = match config
         .ds
         .read_content(
-            config
+            &config
                 .get_root_for_package(&config.package)
                 .join("FASTN.ftd"),
         )
@@ -216,9 +216,9 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
 }
 
 async fn favicon(config: &fastn_core::Config) -> fastn_core::Result<fastn_core::http::Response> {
-    let mut path = camino::Utf8PathBuf::from("favicon.ico");
+    let mut path = fastn_ds::Path::new("favicon.ico");
     if !path.exists() {
-        path = camino::Utf8PathBuf::from("static/favicon.ico");
+        path = fastn_ds::Path::new("static/favicon.ico");
     }
     Ok(static_file(config, path).await)
 }
@@ -226,19 +226,25 @@ async fn favicon(config: &fastn_core::Config) -> fastn_core::Result<fastn_core::
 #[tracing::instrument(skip_all)]
 async fn static_file(
     config: &fastn_core::Config,
-    file_path: camino::Utf8PathBuf,
+    file_path: fastn_ds::Path,
 ) -> fastn_core::http::Response {
     if !file_path.exists() {
-        tracing::error!(msg = "no such static file ({})", path = file_path.as_str());
+        tracing::error!(
+            msg = "no such static file ({})",
+            path = file_path.to_string()
+        );
         return fastn_core::not_found!("no such static file ({})", file_path);
     }
 
-    match config.ds.read_content(file_path.as_path()).await {
-        Ok(r) => fastn_core::http::ok_with_content_type(r, guess_mime_type(file_path.as_str())),
+    match config.ds.read_content(&file_path).await {
+        Ok(r) => fastn_core::http::ok_with_content_type(
+            r,
+            guess_mime_type(file_path.to_string().as_str()),
+        ),
         Err(e) => {
             tracing::error!(
                 msg = "file-system-error ({})",
-                path = file_path.as_str(),
+                path = file_path.to_string(),
                 error = e.to_string()
             );
             fastn_core::not_found!("fastn-Error: path: {:?}, error: {:?}", file_path, e)
@@ -420,14 +426,11 @@ pub async fn serve_helper(
 pub(crate) async fn download_init_package(url: &Option<String>) -> std::io::Result<()> {
     let mut package = fastn_core::Package::new("unknown-package");
     package.download_base_url = url.to_owned();
+    let current_dir = camino::Utf8PathBuf::from_path_buf(std::env::current_dir()?)
+        .expect("fastn-Error: Unable to change path");
+    let ds = fastn_ds::DocumentStore::new(current_dir);
     package
-        .http_download_by_id(
-            "FASTN.ftd",
-            Some(
-                &camino::Utf8PathBuf::from_path_buf(std::env::current_dir()?)
-                    .expect("fastn-Error: Unable to change path"),
-            ),
-        )
+        .http_download_by_id("FASTN.ftd", Some(ds.root()), &ds)
         .await
         .expect("Unable to find FASTN.ftd file");
     Ok(())

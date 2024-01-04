@@ -19,14 +19,14 @@ pub async fn revert(config: &fastn_core::Config, path: &str) -> fastn_core::Resu
 
     if let Some(server_version) = file_status.get_latest_version() {
         let server_path = config.history_path(path, server_version);
-        fastn_core::utils::copy(&server_path, &config.ds.root().join(path)).await?;
+        fastn_core::utils::copy(&server_path, &config.ds.root().join(path), &config.ds).await?;
         if let Some(workspace_entry) = workspace.get_mut(path) {
             workspace_entry.version = Some(server_version);
             workspace_entry.deleted = None;
         }
     } else {
         // in case of new file added
-        tokio::fs::remove_file(path).await?;
+        config.ds.remove(&fastn_ds::Path::new(path)).await?;
         workspace.remove(path);
     }
     config
@@ -54,7 +54,7 @@ pub async fn revert(config: &fastn_core::Config, path: &str) -> fastn_core::Resu
         }
         workspace.set_revert();
     } else {
-        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds.root()).await?;
+        let snapshots = fastn_core::snapshot::get_latest_snapshots(&config.ds, &config.ds.root()).await?;
         if let Some(timestamp) = snapshots.get(path) {
             let revert_path = fastn_core::utils::history_path(path, config.ds.root().as_str(), timestamp);
 

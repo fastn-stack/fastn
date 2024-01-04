@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 const FASTN_CW_HOST: &str = "http://127.0.0.1:3001";
 
 #[derive(thiserror::Error, Debug)]

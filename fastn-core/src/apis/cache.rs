@@ -80,14 +80,18 @@ pub async fn clear_(
         let main_file_path = config.ds.root().join(file.as_str());
         let package_file_path = config.packages_root.join(file.as_str());
         if main_file_path.exists() {
-            let path = tokio::fs::canonicalize(main_file_path).await?;
-            if path.starts_with(config.ds.root()) {
-                fastn_core::utils::remove(path.as_path()).await?;
+            if main_file_path
+                .to_string()
+                .starts_with(&config.ds.root().to_string())
+            {
+                config.ds.remove(&main_file_path).await?;
             }
         } else if package_file_path.exists() {
-            let path = tokio::fs::canonicalize(package_file_path).await?;
-            if path.starts_with(config.ds.root()) {
-                fastn_core::utils::remove(path.as_path()).await?;
+            if package_file_path
+                .to_string()
+                .starts_with(&config.ds.root().to_string())
+            {
+                config.ds.remove(&package_file_path).await?;
             }
         } else {
             println!("Not able to remove file from cache: {}", file);
@@ -98,17 +102,25 @@ pub async fn clear_(
     for package in query.package.iter() {
         if package.eq("main") {
             // TODO: List directories and files other than main
-            fastn_core::utils::remove_except(config.ds.root(), &[".packages", ".build"]).await?;
+            fastn_core::utils::remove_except(
+                config.ds.root(),
+                &[".packages", ".build"],
+                &config.ds,
+            )
+            .await?;
         } else {
-            let path = tokio::fs::canonicalize(config.packages_root.join(package)).await?;
-            if path.starts_with(&config.packages_root) {
-                fastn_core::utils::remove(path.as_path()).await?;
+            let path = config.packages_root.join(package);
+            if path
+                .to_string()
+                .starts_with(&config.packages_root.to_string())
+            {
+                config.ds.remove(&path).await?;
             }
         }
     }
 
     if query.all_dependencies {
-        tokio::fs::remove_dir_all(&config.packages_root).await?;
+        config.ds.remove(&config.packages_root).await?;
     }
 
     // Download FASTN.ftd again after removing all the content

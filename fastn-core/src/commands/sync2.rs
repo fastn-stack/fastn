@@ -67,7 +67,7 @@ pub(crate) async fn sync_(
     request_files: Vec<fastn_core::apis::sync2::SyncRequestFile>,
     workspace: &mut std::collections::BTreeMap<String, fastn_core::workspace::WorkspaceEntry>,
 ) -> fastn_core::Result<()> {
-    let history = config.ds.read_to_string(config.history_file()).await?;
+    let history = config.ds.read_to_string(&config.history_file()).await?;
     let sync_request = fastn_core::apis::sync2::SyncRequest {
         package_name: config.package.name.to_string(),
         files: request_files,
@@ -128,10 +128,11 @@ async fn update_history(
         fastn_core::utils::update(
             &config.remote_history_dir().join(file.path.as_str()),
             &file.content,
+            &config.ds,
         )
         .await?;
     }
-    fastn_core::utils::update(&config.history_file(), latest_ftd.as_bytes()).await?;
+    fastn_core::utils::update(&config.history_file(), latest_ftd.as_bytes(), &config.ds).await?;
     Ok(())
 }
 
@@ -149,7 +150,8 @@ async fn update_current_directory(
                 if status.add_add_conflict() {
                     println!("CloneAddedRemoteAdded: {}", path);
                 } else {
-                    fastn_core::utils::update(&config.ds.root().join(path), content).await?;
+                    fastn_core::utils::update(&config.ds.root().join(path), content, &config.ds)
+                        .await?;
                 }
             }
             fastn_core::apis::sync2::SyncResponseFile::Update {
@@ -164,12 +166,13 @@ async fn update_current_directory(
                 } else if status.edit_edit_conflict() {
                     println!("Conflict: {}", path);
                 } else {
-                    fastn_core::utils::update(&config.ds.root().join(path), content).await?;
+                    fastn_core::utils::update(&config.ds.root().join(path), content, &config.ds)
+                        .await?;
                 }
             }
             fastn_core::apis::sync2::SyncResponseFile::Delete { path, .. } => {
                 if config.ds.root().join(path).exists() {
-                    tokio::fs::remove_file(config.ds.root().join(path)).await?;
+                    config.ds.remove(&config.ds.root().join(path)).await?;
                 }
             }
         }

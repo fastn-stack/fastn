@@ -1,4 +1,4 @@
-use fastn_core::package::PackageTempIntoPackage;
+//use fastn_core::package::PackageTempIntoPackage;
 
 #[derive(Debug, Clone)]
 pub struct Dependency {
@@ -107,7 +107,7 @@ impl DependencyTemp {
 }
 
 impl fastn_core::Package {
-    /// `process()` checks the package exists in `.packages` or `fastn_HOME` folder (`fastn_HOME` not
+    /*    /// `process()` checks the package exists in `.packages` or `fastn_HOME` folder (`fastn_HOME` not
     /// yet implemented), and if not downloads and unpacks the method.
     ///
     /// This is done in following way:
@@ -308,11 +308,11 @@ impl fastn_core::Package {
                 })
             }
         }
-    }
+    }*/
 
-    pub async fn process2(
+    /*pub async fn process2(
         &mut self,
-        base_dir: &camino::Utf8PathBuf,
+        base_dir: &fastn_ds::Path,
         downloaded_package: &mut Vec<String>,
         download_translations: bool,
         download_dependencies: bool,
@@ -429,7 +429,7 @@ impl fastn_core::Package {
                 })
             }
         }
-    }
+    }*/
 
     pub(crate) async fn _unzip_package(&self) -> fastn_core::Result<()> {
         use std::io::Write;
@@ -495,7 +495,7 @@ impl fastn_core::Package {
         Ok(())
     }
 
-    /// This function is called by `process()` or recursively called by itself.
+    /*    /// This function is called by `process()` or recursively called by itself.
     /// It checks the `FASTN.ftd` file of dependent package and find out all the dependency packages.
     /// If dependent package is not available, it calls `process()` to download it inside `.packages` directory
     /// and if dependent package is available, it copies it to `.packages` directory
@@ -620,17 +620,17 @@ impl fastn_core::Package {
         }
         *mutpackage = package;
         Ok(())
-    }
+    }*/
 
-    #[async_recursion::async_recursion]
+    /*#[async_recursion::async_recursion]
     async fn process_fastn2(
-        root: &camino::Utf8PathBuf,
-        base_path: &camino::Utf8PathBuf,
+        root: &fastn_ds::Path,
+        base_path: &fastn_ds::Path,
         downloaded_package: &mut Vec<String>,
         mutpackage: &mut fastn_core::Package,
         download_translations: bool,
         download_dependencies: bool,
-        fastn_path: &camino::Utf8PathBuf,
+        fastn_path: &fastn_ds::Path,
     ) -> fastn_core::Result<()> {
         let ftd_document = {
             let doc = std::fs::read_to_string(fastn_path)?;
@@ -745,5 +745,5 @@ impl fastn_core::Package {
         }
         *mutpackage = package;
         Ok(())
-    }
+    }*/
 }

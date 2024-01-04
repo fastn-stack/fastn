@@ -54,10 +54,10 @@ pub fn process_by_id(
 
 /// processor: get-identities
 /// This is used to get all the identities of the current document
-pub fn get_identities(
+pub async fn get_identities(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
-    doc: &ftd::interpreter::TDoc,
+    doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     use itertools::Itertools;
@@ -65,13 +65,13 @@ pub fn get_identities(
     let doc_id = fastn_core::library2022::utils::document_full_id(req_config, doc)?;
 
     let identities =
-        fastn_core::user_group::get_identities(&req_config.config, doc_id.as_str(), true).map_err(
-            |e| ftd::ftd2021::p1::Error::ParseError {
+        fastn_core::user_group::get_identities(&req_config.config, doc_id.as_str(), true)
+            .await
+            .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
                 message: e.to_string(),
                 doc_id,
                 line_number: value.line_number(),
-            },
-        )?;
+            })?;
 
     Ok(ftd::interpreter::Value::List {
         data: identities

@@ -12,3 +12,5 @@ homepage.workspace = true
 tokio.workspace = true
 thiserror.workspace = true
 camino.workspace = true
+ignore.workspace = true
+dirs.workspace = true
