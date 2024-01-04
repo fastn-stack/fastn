@@ -38,6 +38,39 @@
         "external_implementation": false
       }
     },
+    "foo#increment": {
+      "Function": {
+        "name": "foo#increment",
+        "return_kind": {
+          "kind": "Void",
+          "caption": false,
+          "body": false
+        },
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": true,
+            "value": null,
+            "line_number": 17,
+            "access_modifier": "Public"
+          }
+        ],
+        "expression": [
+          {
+            "expression": "a += 1",
+            "line_number": 21
+          }
+        ],
+        "js": null,
+        "line_number": 16,
+        "external_implementation": false
+      }
+    },
     "foo#foo": {
       "Component": {
         "name": "foo#foo",
@@ -226,39 +259,6 @@
         "is_static": false
       }
     },
-    "foo#increment": {
-      "Function": {
-        "name": "foo#increment",
-        "return_kind": {
-          "kind": "Void",
-          "caption": false,
-          "body": false
-        },
-        "arguments": [
-          {
-            "name": "a",
-            "kind": {
-              "kind": "Integer",
-              "caption": false,
-              "body": false
-            },
-            "mutable": true,
-            "value": null,
-            "line_number": 17,
-            "access_modifier": "Public"
-          }
-        ],
-        "expression": [
-          {
-            "expression": "a += 1",
-            "line_number": 21
-          }
-        ],
-        "js": null,
-        "line_number": 16,
-        "external_implementation": false
-      }
-    },
     "foo#num": {
       "Variable": {
         "name": "foo#num",
@@ -381,7 +381,8 @@
                     },
                     "order": [
                       "a"
-                    ]
+                    ],
+                    "module_name": null
                   },
                   "line_number": 32
                 },
@@ -413,7 +414,8 @@
                     },
                     "order": [
                       "a"
-                    ]
+                    ],
+                    "module_name": null
                   },
                   "line_number": 33
                 }
