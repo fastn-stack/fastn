@@ -3,6 +3,52 @@ extern crate self as fastn_update;
 mod types;
 mod utils;
 
+pub async fn resolve_dependencies_(
+    ds: &fastn_ds::DocumentStore,
+    _packages_root: &fastn_ds::Path,
+    current_package: &fastn_core::Package,
+) -> fastn_core::Result<()> {
+    let mut stack = vec![current_package.clone()];
+    let mut resolved = std::collections::HashSet::new();
+    resolved.insert(current_package.name.to_string());
+    while let Some(package) = stack.pop() {
+        for dependency in package.dependencies {
+            if resolved.contains(&dependency.package.name) {
+                continue;
+            }
+            let manifest = get_manifest(ds, package.name.as_str());
+            download_zip(&ds, &manifest).await?;
+            let package = resolve_package(ds, package.name.as_str());
+            resolved.insert(package.name.to_string());
+            stack.push(package);
+        }
+    }
+    Ok(())
+}
+
+struct Manifest {
+    files: Vec<String>,
+    zip_url: String,
+}
+
+async fn download_zip(
+    _ds: &fastn_ds::DocumentStore,
+    _manifest: &Manifest,
+) -> fastn_core::Result<()> {
+    todo!()
+}
+
+// Get FASTN.ftd from downloaded zip and resolve
+fn resolve_package(_ds: &fastn_ds::DocumentStore, _package: &str) -> fastn_core::Package {
+    todo!()
+}
+
+// Download manifest of the package `<package-name>/.fastn/manifest.json`
+// Resolve to `Manifest` struct
+fn get_manifest(_ds: &fastn_ds::DocumentStore, _package: &str) -> Manifest {
+    todo!()
+}
+
 #[async_recursion::async_recursion(?Send)]
 pub async fn resolve_dependencies(
     ds: &fastn_ds::DocumentStore,
@@ -100,7 +146,7 @@ pub async fn resolve_dependencies(
 
                 println!("It came here");
 
-                if !visited.contains(package_name) {
+                if !processing_set.contains(package_name) {
                     processing_set.insert(package_name.clone());
 
                     println!(
@@ -158,6 +204,7 @@ pub async fn process(config: &fastn_core::Config) -> fastn_core::Result<()> {
     let mut processing_set = std::collections::HashSet::new();
     let mut visited = std::collections::HashSet::new();
 
+    // resolve_dependencies_(&config.ds, &config.packages_root, &config.package).await?;
     // 1st PASS: download the direct dependencies
     resolve_dependencies(
         &config.ds,

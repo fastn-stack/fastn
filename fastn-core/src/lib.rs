@@ -62,7 +62,7 @@ pub use library::{FastnLibrary, Library, Library2};
 pub use library2022::Library2022;
 pub(crate) use package::dependency::Dependency;
 pub use package::user_group;
-pub(crate) use package::Package;
+pub use package::Package;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};
