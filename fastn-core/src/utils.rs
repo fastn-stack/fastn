@@ -476,14 +476,14 @@ pub fn id_to_path(id: &str) -> String {
 
 /// returns true if an existing file named "file_name"
 /// exists in the root package folder
-fn is_file_in_root(root: &str, file_name: &str, ds: &fastn_ds::DocumentStore) -> bool {
-    ds.exists(&fastn_ds::Path::new(root).join(file_name))
+async fn is_file_in_root(root: &str, file_name: &str, ds: &fastn_ds::DocumentStore) -> bool {
+    ds.exists(&fastn_ds::Path::new(root).join(file_name)).await
 }
 
 /// returns favicon html tag as string
 /// (if favicon is passed as header in fastn.package or if any favicon.* file is present in the root package folder)
 /// otherwise returns None
-fn resolve_favicon(
+async fn resolve_favicon(
     root_path: &str,
     package_name: &str,
     favicon: &Option<String>,
@@ -525,13 +525,13 @@ fn resolve_favicon(
 
                 // Just check if any favicon exists in the root package directory
                 // in the above mentioned priority order
-                let found_favicon_id = if is_file_in_root(root_path, "favicon.ico", ds) {
+                let found_favicon_id = if is_file_in_root(root_path, "favicon.ico", ds).await {
                     "favicon.ico"
-                } else if is_file_in_root(root_path, "favicon.svg", ds) {
+                } else if is_file_in_root(root_path, "favicon.svg", ds).await {
                     "favicon.svg"
-                } else if is_file_in_root(root_path, "favicon.png", ds) {
+                } else if is_file_in_root(root_path, "favicon.png", ds).await {
                     "favicon.png"
-                } else if is_file_in_root(root_path, "favicon.jpg", ds) {
+                } else if is_file_in_root(root_path, "favicon.jpg", ds).await {
                     "favicon.jpg"
                 } else {
                     // Not using any favicon
@@ -646,6 +646,7 @@ pub async fn replace_markers_2022(
                 &config.package.favicon,
                 &config.ds,
             )
+            .await
             .unwrap_or_default()
             .as_str(),
         )
@@ -732,6 +733,7 @@ pub async fn replace_markers_2023(
             &config.package.favicon,
             &config.ds
         )
+        .await
         .unwrap_or_default()
         .as_str(),
         js_script = format!("{js_script}{}", fastn_core::utils::available_code_themes()).as_str(),
@@ -774,7 +776,7 @@ pub(crate) async fn write(
     data: &[u8],
     ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    if ds.exists(&root.join(file_path)) {
+    if ds.exists(&root.join(file_path)).await {
         return Ok(());
     }
     update1(root, file_path, data, ds).await

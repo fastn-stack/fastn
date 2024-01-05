@@ -212,7 +212,7 @@ impl DocumentStore {
             .collect::<Vec<fastn_ds::Path>>()
     }
 
-    pub fn exists(&self, path: &fastn_ds::Path) -> bool {
+    pub async fn exists(&self, path: &fastn_ds::Path) -> bool {
         path.path.exists()
     }
 }

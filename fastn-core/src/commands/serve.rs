@@ -171,7 +171,7 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
 
 async fn favicon(config: &fastn_core::Config) -> fastn_core::Result<fastn_core::http::Response> {
     let mut path = fastn_ds::Path::new("favicon.ico");
-    if !config.ds.exists(&path) {
+    if !config.ds.exists(&path).await {
         path = fastn_ds::Path::new("static/favicon.ico");
     }
     Ok(static_file(config, path).await)
@@ -182,7 +182,7 @@ async fn static_file(
     config: &fastn_core::Config,
     file_path: fastn_ds::Path,
 ) -> fastn_core::http::Response {
-    if !config.ds.exists(&file_path) {
+    if !config.ds.exists(&file_path).await {
         tracing::error!(
             msg = "no such static file ({})",
             path = file_path.to_string()

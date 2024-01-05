@@ -23,7 +23,7 @@ pub async fn process(
 
     let sqlite_database_path = req_config.config.ds.root().join(sqlite_database.as_str());
 
-    if !req_config.config.ds.exists(&sqlite_database_path) {
+    if !req_config.config.ds.exists(&sqlite_database_path).await {
         return ftd::interpreter::utils::e2(
             "`db` does not exists for package-query processor".to_string(),
             doc.name,
