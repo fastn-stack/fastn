@@ -195,6 +195,7 @@ fn is_virtual_dep(path: &str) -> bool {
         || path.ends_with("/-/assets.ftd")
 }
 
+#[allow(clippy::too_many_arguments)]
 async fn handle_dependency_file(
     config: &fastn_core::Config,
     cache: &mut cache::Cache,
