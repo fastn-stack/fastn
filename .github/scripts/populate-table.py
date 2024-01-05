@@ -1,18 +1,8 @@
 import psycopg2
-
-# PostgreSQL connection parameters
-db_params = {
-    "host": "localhost",
-    "port": 5432,
-    "user": "testuser",
-    "password": "testpassword",
-    "database": "testdb",
-}
-
+import os
 
 def create_table():
-    # Connect to the PostgreSQL database
-    connection = psycopg2.connect(**db_params)
+    connection = psycopg2.connect(os.environ["FASTN_DB_URL"])
 
     try:
         # Create a cursor object to execute SQL queries

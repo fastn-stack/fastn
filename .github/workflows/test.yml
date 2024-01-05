@@ -1,4 +1,4 @@
-name: Rust and JS Checks/Formatting
+name: Tests and Formatting
 
 on:
   workflow_dispatch:
@@ -10,6 +10,18 @@ jobs:
   everything:
     name: Rust/JS Checks/Formatting
     runs-on: ubuntu-latest
+    env:
+      FASTN_DB_URL: postgres://testuser:testpassword@localhost:5432/testdb
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: testdb
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Check out
         uses: actions/checkout@v3
@@ -72,6 +84,16 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
+      - name: Run integration tests
+        id: integration-test
+        continue-on-error: true
+        run: |
+          bash .github/scripts/run-integration-tests.sh
+      - name: Check if JS code is properly formatted
+        id: js-fmt
+        uses: dprint/check@v2.2
+        with:
+          config-path: .github/dprint-ci.json
       - name: Check if code is properly formatted
         if: steps.fmt.outcome != 'success'
         run: exit 1
@@ -81,10 +103,12 @@ jobs:
       - name: Check if clippy-auth is happy
         if: steps.clippy-auth.outcome != 'success'
         run: exit 1
+      - name: Check if js-fmt is happy
+        if: steps.js-fmt.outcome != 'success'
+        run: exit 1
       - name: Check if test succeeded
         if: steps.test.outcome != 'success'
         run: exit 1
-      - name: Check if JS code is properly formatted
-        uses: dprint/check@v2.2
-        with:
-          config-path: .github/dprint-ci.json  
+      - name: Check if integration test passed
+        if: steps.integration-test.outcome != 'success'
+        run: exit 1
