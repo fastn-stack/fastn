@@ -195,6 +195,7 @@ fn is_virtual_dep(path: &str) -> bool {
         || path.ends_with("/-/assets.ftd")
 }
 
+#[allow(clippy::too_many_arguments)]
 async fn handle_dependency_file(
     config: &fastn_core::Config,
     cache: &mut cache::Cache,
@@ -203,12 +204,17 @@ async fn handle_dependency_file(
     ignore_failed: bool,
     test: bool,
     name_without_package_name: String,
+    processed: &mut Vec<String>,
 ) -> fastn_core::Result<()> {
     for document in documents.values() {
         if remove_extension(document.get_id()).eq(name_without_package_name.as_str())
             || remove_extension(&document.get_id_with_package())
                 .eq(name_without_package_name.as_str())
         {
+            let id = document.get_id().to_string();
+            if processed.contains(&id) {
+                continue;
+            }
             handle_file(
                 document,
                 config,
@@ -219,6 +225,7 @@ async fn handle_dependency_file(
                 Some(cache),
             )
             .await?;
+            processed.push(id);
         }
     }
 
@@ -285,6 +292,8 @@ async fn incremental_build(
 
     let (cache_hit, mut c) = cache::get()?;
 
+    let mut processed: Vec<String> = vec![];
+
     if cache_hit {
         let mut unresolved_dependencies: Vec<String> = documents
             .iter()
@@ -335,6 +344,7 @@ async fn incremental_build(
                         ignore_failed,
                         test,
                         unresolved_dependency.to_string(),
+                        &mut processed,
                     )
                     .await?;
 
@@ -366,6 +376,7 @@ async fn incremental_build(
                         ignore_failed,
                         test,
                         unresolved_dependency.to_string(),
+                        &mut processed,
                     )
                     .await?;
 
@@ -386,6 +397,10 @@ async fn incremental_build(
         remove_deleted_documents(config, &mut c, documents).await?;
     } else {
         for document in documents.values() {
+            let id = document.get_id().to_string();
+            if processed.contains(&id) {
+                continue;
+            }
             handle_file(
                 document,
                 config,
@@ -396,6 +411,7 @@ async fn incremental_build(
                 Some(&mut c),
             )
             .await?;
+            processed.push(id);
         }
     }
 
