@@ -1,8 +1,0 @@
--- fbt:
-cmd: $FBT_CWD/../target/debug/fastn --test add new.ftd && $FBT_CWD/../target/debug/fastn --test sync-status
-output: .clone-state
-skip: add is not yet implemented
-
--- stdout:
-
-Added: new.ftd

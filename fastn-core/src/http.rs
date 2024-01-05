@@ -605,29 +605,6 @@ pub(crate) fn api_ok(
     ))
 }
 
-/// construct an error response with `message`
-/// and `status_code`. Use 500 if `status_code` is None
-pub(crate) fn api_error<T: Into<String>>(
-    message: T,
-    status_code: Option<actix_web::http::StatusCode>,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    #[derive(serde::Serialize, Debug)]
-    struct ErrorResponse {
-        message: String,
-        success: bool,
-    }
-
-    let resp = ErrorResponse {
-        message: message.into(),
-        success: false,
-    };
-
-    Ok(actix_web::HttpResponse::Ok()
-        .content_type(actix_web::http::header::ContentType::json())
-        .status(status_code.unwrap_or(actix_web::http::StatusCode::INTERNAL_SERVER_ERROR))
-        .body(serde_json::to_string(&resp)?))
-}
-
 pub(crate) fn get_available_port(
     port: Option<u16>,
     bind_address: &str,

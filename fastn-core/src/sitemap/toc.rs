@@ -152,9 +152,4 @@ impl TocItemCompat {
             nav_title: None,
         }
     }
-
-    pub(crate) fn add_path(mut self, path: &str) -> Self {
-        self.path = Some(path.to_string());
-        self
-    }
 }

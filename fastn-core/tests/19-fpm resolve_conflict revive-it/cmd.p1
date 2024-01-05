@@ -1,8 +1,0 @@
--- fbt:
-cmd: $FBT_CWD/../target/debug/fastn --test sync-status && $FBT_CWD/../target/debug/fastn --test resolve-conflict --revive-it index.ftd
-output: .clone-state
-skip: resolve_conflict is not yet implemented
-
--- stdout:
-
-CloneEditedRemoteDeleted: index.ftd
