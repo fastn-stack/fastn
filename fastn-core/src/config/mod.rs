@@ -542,7 +542,7 @@ impl Config {
 
     /// update the config.global_ids map from the contents of a file
     /// in case the user defines the id for any component in the document
-    pub async fn update_global_ids_from_file(
+    async fn update_global_ids_from_file(
         &mut self,
         doc_id: &str,
         data: &str,
@@ -691,6 +691,7 @@ impl Config {
     }
 
     /// updates the terms map from the files of the current package
+    #[allow(dead_code)]
     async fn update_ids_from_package(&mut self) -> fastn_core::Result<()> {
         let path = self.get_root_for_package(&self.package);
         let all_files_path = self.get_all_file_paths(&self.package)?;
@@ -1228,7 +1229,7 @@ impl Config {
             ds,
         };
         // Update global_ids map from the current package files
-        config.update_ids_from_package().await?;
+        // config.update_ids_from_package().await?;
 
         // TODO: Major refactor, while parsing sitemap of a package why do we need config in it?
         config.package.sitemap = {
