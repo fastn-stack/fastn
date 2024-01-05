@@ -916,6 +916,12 @@ skip: true
 
 # Blog: /blog/
 
+- Building Your Personal Website with fastn: /blog/personal-website-1/
+  document: blog/personal-website-1.ftd
+- Content Library: /blog/content-library/
+  document: blog/content-library.ftd
+- Memory, Mutability and Reactivity: /blog/strongly-typed/
+  document: blog/strongly-typed.ftd
 - Domain Components: /blog/domain-components/
   document: blog/domain-components.ftd
 - Search Feature in fastn.com: /blog/search/
