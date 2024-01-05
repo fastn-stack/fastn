@@ -16,11 +16,17 @@ pub async fn resolve_dependencies_(
             if resolved.contains(&dependency.package.name) {
                 continue;
             }
-            let manifest = get_manifest(ds, package.name.as_str());
+            let manifest = get_manifest(ds, dependency.package.name.as_str());
             download_zip(&ds, &manifest).await?;
-            let package = resolve_package(ds, package.name.as_str());
-            resolved.insert(package.name.to_string());
-            stack.push(package);
+            let dep_package = {
+                let mut dep_package = dependency.package.clone();
+                dep_package
+                    .resolve(&dep_package.fastn_path.unwrap(), ds)
+                    .await?;
+                dep_package
+            };
+            resolved.insert(dependency.package.name.to_string());
+            stack.push(dep_package);
         }
     }
     Ok(())
@@ -35,11 +41,6 @@ async fn download_zip(
     _ds: &fastn_ds::DocumentStore,
     _manifest: &Manifest,
 ) -> fastn_core::Result<()> {
-    todo!()
-}
-
-// Get FASTN.ftd from downloaded zip and resolve
-fn resolve_package(_ds: &fastn_ds::DocumentStore, _package: &str) -> fastn_core::Package {
     todo!()
 }
 

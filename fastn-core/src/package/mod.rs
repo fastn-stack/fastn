@@ -565,7 +565,7 @@ impl Package {
     }
 
     #[tracing::instrument(skip_all)]
-    pub(crate) async fn resolve(
+    pub async fn resolve(
         &mut self,
         fastn_path: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
