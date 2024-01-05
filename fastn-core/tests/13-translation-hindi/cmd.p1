@@ -1,5 +1,5 @@
 -- fbt:
-cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test build --test
+cmd: cd amitu && $FBT_CWD/../target/release/fastn --test build --test
 output: amitu/.build
 skip: translation is yet not supported
 

@@ -1,5 +1,5 @@
 -- fbt:
-cmd: $FBT_CWD/../target/debug/fastn --test build --test
+cmd: $FBT_CWD/../target/release/fastn --test build --test
 output: .build
 skip: Need to fix this test
 
