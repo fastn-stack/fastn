@@ -1,21 +1,13 @@
 from flask import Flask, jsonify
 import psycopg2
+import os
 
 app = Flask(__name__)
-
-# PostgreSQL connection parameters
-db_params = {
-    "host": "localhost",
-    "port": 5432,
-    "user": "testuser",
-    "password": "testpassword",
-    "database": "testdb",
-}
 
 
 def fetch_data():
     # Connect to the PostgreSQL database
-    connection = psycopg2.connect(**db_params)
+    connection = psycopg2.connect(os.environ["FASTN_DB_URL"])
 
     try:
         # Create a cursor object to execute SQL queries
