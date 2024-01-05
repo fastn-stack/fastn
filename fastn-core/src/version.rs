@@ -65,7 +65,7 @@ impl Ord for Version {
     }
 }
 
-#[allow(dead_code)]
+/*#[allow(dead_code)]
 pub(crate) async fn build_version(
     config: &fastn_core::Config,
     _file: Option<&str>,
@@ -171,4 +171,4 @@ pub(crate) async fn build_version(
     //     .await?;
     // }
     // Ok(())
-}
+}*/

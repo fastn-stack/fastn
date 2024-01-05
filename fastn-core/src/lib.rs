@@ -8,7 +8,7 @@ mod cache;
 pub mod commands;
 mod config;
 mod controller;
-mod cr;
+// mod cr;
 #[cfg(feature = "auth")]
 mod db;
 mod doc;

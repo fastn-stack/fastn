@@ -645,7 +645,7 @@ impl Config {
         Ok(())
     }
 
-    pub(crate) async fn get_versions(
+    /*pub(crate) async fn get_versions(
         &self,
         package: &fastn_core::Package,
     ) -> fastn_core::Result<std::collections::HashMap<fastn_core::Version, Vec<fastn_core::File>>>
@@ -702,7 +702,7 @@ impl Config {
                 Ok(fastn_core::Version::base())
             }
         }
-    }
+    }*/
 
     pub(crate) fn get_root_for_package(&self, package: &fastn_core::Package) -> fastn_ds::Path {
         if let Some(package_fastn_path) = &package.fastn_path {
@@ -783,7 +783,7 @@ impl Config {
         Ok(self.ds.get_all_file_path(&path, ignored_files.as_slice()))
     }
 
-    pub async fn get_file_by_id(
+    /* pub async fn get_file_by_id(
         &self,
         id: &str,
         package: &fastn_core::Package,
@@ -796,7 +796,7 @@ impl Config {
             .ok_or_else(|| fastn_core::Error::UsageError {
                 message: format!("No such file found: {}", id),
             })
-    }
+    }*/
 
     pub(crate) async fn get_file_and_package_by_cr_id(
         &self,
