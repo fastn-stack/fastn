@@ -634,7 +634,7 @@ impl Sitemap {
                     current_package_root,
                     section.get_file_id().as_str(),
                     &config.ds
-                ) {
+                ).await {
                     Ok(name) => {
                         if current_package_root.eq(package_root) {
                             (Some(current_package_root.join(name)), None)
@@ -652,7 +652,7 @@ impl Sitemap {
                                     package_root,
                                     section.get_file_id().as_str(),
                                     &config.ds
-                                )
+                                ).await
                                     .map_err(|e| {
                                         fastn_core::Error::UsageError {
                                             message: format!(
@@ -699,7 +699,7 @@ impl Sitemap {
                 } else if crate::http::url_regex().find(id.as_str()).is_some() {
                     (None, None)
                 } else {
-                    match fastn_core::Config::get_file_name(current_package_root, id.as_str(), &config.ds) {
+                    match fastn_core::Config::get_file_name(current_package_root, id.as_str(), &config.ds).await {
                         Ok(name) => {
                             if current_package_root.eq(package_root) {
                                 (Some(current_package_root.join(name)), None)
@@ -712,7 +712,7 @@ impl Sitemap {
                         }
                         Err(_) => (
                             Some(package_root.join(
-                                fastn_core::Config::get_file_name(package_root, id.as_str(),&config.ds).map_err(
+                                fastn_core::Config::get_file_name(package_root, id.as_str(),&config.ds).await.map_err(
                                     |e| fastn_core::Error::UsageError {
                                         message: format!(
                                             "`{}` not found, fix fastn.sitemap in FASTN.ftd. Error: {:?}",
@@ -759,7 +759,7 @@ impl Sitemap {
             {
                 (None, None)
             } else {
-                match fastn_core::Config::get_file_name(current_package_root, toc.get_file_id().as_str(), &config.ds) {
+                match fastn_core::Config::get_file_name(current_package_root, toc.get_file_id().as_str(), &config.ds).await {
                     Ok(name) => {
                         if current_package_root.eq(package_root) {
                             (Some(current_package_root.join(name)), None)
@@ -777,7 +777,7 @@ impl Sitemap {
                                     package_root,
                                     toc.get_file_id().as_str(),
                                     &config.ds
-                                )
+                                ).await
                                     .map_err(|e| {
                                         fastn_core::Error::UsageError {
                                             message: format!(

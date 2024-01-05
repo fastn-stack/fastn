@@ -7,7 +7,7 @@ pub async fn post_build_check(config: &fastn_core::Config) -> fastn_core::Result
     println!("Post build index assertion started ...");
 
     // if build_path.is_dir() {
-    if !config.ds.exists(&build_path.join(INDEX_FILE)) {
+    if !config.ds.exists(&build_path.join(INDEX_FILE)).await {
         return Err(fastn_core::Error::NotFound(format!(
             "Couldn't find {} in package root folder",
             INDEX_FILE

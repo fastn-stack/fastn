@@ -797,7 +797,7 @@ impl Config {
     ) -> fastn_core::Result<fastn_core::Package> {
         let fastn_path = &self.packages_root.join(&package.name).join("FASTN.ftd");
 
-        if !self.ds.exists(fastn_path) {
+        if !self.ds.exists(fastn_path).await {
             let package = self.resolve_package(package).await?;
             self.add_package(&package);
         }
@@ -955,7 +955,7 @@ impl Config {
         }
 
         if let Some(package_root) =
-            utils::find_root_for_file(&self.packages_root.join(id), "FASTN.ftd", &self.ds)
+            utils::find_root_for_file(&self.packages_root.join(id), "FASTN.ftd", &self.ds).await
         {
             let mut package = fastn_core::Package::new("unknown-package");
             package
@@ -1060,7 +1060,7 @@ impl Config {
         })
     }
 
-    pub(crate) fn get_file_name(
+    pub(crate) async fn get_file_name(
         root: &fastn_ds::Path,
         id: &str,
         ds: &fastn_ds::DocumentStore,
@@ -1079,10 +1079,16 @@ impl Config {
             .replace("/index.html", "/")
             .replace("index.html", "/");
         if id.eq("/") {
-            if ds.exists(&root.join(format!("{}index.ftd", add_packages))) {
+            if ds
+                .exists(&root.join(format!("{}index.ftd", add_packages)))
+                .await
+            {
                 return Ok(format!("{}index.ftd", add_packages));
             }
-            if ds.exists(&root.join(format!("{}README.md", add_packages))) {
+            if ds
+                .exists(&root.join(format!("{}README.md", add_packages)))
+                .await
+            {
                 return Ok(format!("{}README.md", add_packages));
             }
             return Err(fastn_core::Error::UsageError {
@@ -1090,16 +1096,28 @@ impl Config {
             });
         }
         id = id.trim_matches('/').to_string();
-        if ds.exists(&root.join(format!("{}{}.ftd", add_packages, id))) {
+        if ds
+            .exists(&root.join(format!("{}{}.ftd", add_packages, id)))
+            .await
+        {
             return Ok(format!("{}{}.ftd", add_packages, id));
         }
-        if ds.exists(&root.join(format!("{}{}/index.ftd", add_packages, id))) {
+        if ds
+            .exists(&root.join(format!("{}{}/index.ftd", add_packages, id)))
+            .await
+        {
             return Ok(format!("{}{}/index.ftd", add_packages, id));
         }
-        if ds.exists(&root.join(format!("{}{}.md", add_packages, id))) {
+        if ds
+            .exists(&root.join(format!("{}{}.md", add_packages, id)))
+            .await
+        {
             return Ok(format!("{}{}.md", add_packages, id));
         }
-        if ds.exists(&root.join(format!("{}{}/README.md", add_packages, id))) {
+        if ds
+            .exists(&root.join(format!("{}{}/README.md", add_packages, id)))
+            .await
+        {
             return Ok(format!("{}{}/README.md", add_packages, id));
         }
         Err(fastn_core::Error::UsageError {
@@ -1112,11 +1130,11 @@ impl Config {
         directory: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<fastn_ds::Path> {
-        if let Some(fastn_ftd_root) = utils::find_root_for_file(directory, "FASTN.ftd", ds) {
+        if let Some(fastn_ftd_root) = utils::find_root_for_file(directory, "FASTN.ftd", ds).await {
             return Ok(fastn_ftd_root);
         }
         let fastn_manifest_path =
-            match utils::find_root_for_file(directory, "fastn.manifest.ftd", ds) {
+            match utils::find_root_for_file(directory, "fastn.manifest.ftd", ds).await {
                 Some(fastn_manifest_path) => fastn_manifest_path,
                 None => {
                     return Err(fastn_core::Error::UsageError {
@@ -1149,7 +1167,7 @@ impl Config {
                 accumulator.join(part)
             });
 
-        if ds.exists(&new_package_root.join("FASTN.ftd")) {
+        if ds.exists(&new_package_root.join("FASTN.ftd")).await {
             Ok(new_package_root)
         } else {
             Err(fastn_core::Error::PackageError {

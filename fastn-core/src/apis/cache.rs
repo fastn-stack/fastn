@@ -79,14 +79,14 @@ pub async fn clear_(
     for file in query.file.iter() {
         let main_file_path = config.ds.root().join(file.as_str());
         let package_file_path = config.packages_root.join(file.as_str());
-        if config.ds.exists(&main_file_path) {
+        if config.ds.exists(&main_file_path).await {
             if main_file_path
                 .to_string()
                 .starts_with(&config.ds.root().to_string())
             {
                 config.ds.remove(&main_file_path).await?;
             }
-        } else if config.ds.exists(&package_file_path) {
+        } else if config.ds.exists(&package_file_path).await {
             if package_file_path
                 .to_string()
                 .starts_with(&config.ds.root().to_string())
@@ -124,7 +124,7 @@ pub async fn clear_(
     }
 
     // Download FASTN.ftd again after removing all the content
-    if !config.ds.exists(&config.ds.root().join("FASTN.ftd")) {
+    if !config.ds.exists(&config.ds.root().join("FASTN.ftd")).await {
         fastn_core::commands::serve::download_init_package(&config.package.download_base_url)
             .await?;
     }
