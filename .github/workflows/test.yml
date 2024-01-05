@@ -84,7 +84,6 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --release # running in release so we do not build both release and debug
       - name: Run integration tests
         id: integration-test
         continue-on-error: true

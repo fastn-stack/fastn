@@ -1,5 +1,5 @@
 -- fbt:
-cmd: $FBT_CWD/../target/release/fastn --test --help
+cmd: $FBT_CWD/../target/debug/fastn --test --help
 
 Will have to be updated every time version changes.
 

@@ -26,8 +26,7 @@ def create_table():
 
 
 def insert_data():
-    # Connect to the PostgreSQL database
-    connection = psycopg2.connect(**db_params)
+    connection = psycopg2.connect(os.environ["FASTN_DB_URL"])
 
     try:
         # Create a cursor object to execute SQL queries
