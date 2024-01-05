@@ -1,0 +1,183 @@
+-- import: fastn-community.github.io/doc-site/assets
+
+-- import: fastn/processors as pr
+
+-- boolean login-button: false
+
+-- boolean pricing-cta: false
+
+-- boolean parent-brand: true
+
+-- boolean show-floater: false
+
+-- boolean show-footer: true
+
+-- string wall-message: Please, login via clicking on below button
+
+-- string login-url: /
+
+-- boolean is-reader: false
+
+-- string site-name: Doc Site
+
+-- ftd.image-src site-logo: null
+
+-- integer logo-width: 200
+
+-- integer logo-height: 64
+
+-- ftd.image-src brand-site-logo:
+light: https://www.fifthtry.com/-/fifthtry.com/images/dummy-site-logo.png
+dark: https://www.fifthtry.com/-/fifthtry.com/images/dummy-site-logo.png
+
+-- ftd.image-src fastn-logo:
+light: https://fastn.com/-/fastn.com/images/fastn.svg
+dark: https://fastn.com/-/fastn.com/images/fastn-dark.svg
+
+-- string brand-site-name: FifthTry
+
+-- string brand-caption: FifthTry
+
+-- string brand-site-url: /
+
+-- string site-url: index.html
+
+-- pr.toc-item list sections:
+
+-- pr.toc-item list sub-sections:
+
+-- pr.toc-item list toc:
+
+-- pr.toc-item list footer-toc:
+
+-- pr.sitemap-data sitemap:
+$processor$: fastn.sitemap
+
+-- fastn.app-ui apps:
+$processor$: pr.fastn-apps
+
+
+
+
+
+-- record item:
+caption title:
+optional string url:
+boolean is-last: false
+
+-- item list itemlist:
+
+-- item: About
+url: https://github.com/FifthTry
+
+-- item: Terms
+url: https://fifthtry.com/terms/
+
+-- item: Privacy
+url: https://fifthtry.com/privacy/
+
+-- item: Blog
+url: https://fifthtry.com/blog/
+is-last: true
+
+-- end: itemlist
+
+
+
+
+
+-- record tags-list:
+caption title:
+string tag-link:
+
+-- tags-list list tags:
+
+-- tags-list: Programming
+tag-link: blog/
+
+-- tags-list: Data Science
+tag-link: blog/
+
+-- tags-list: Technology
+tag-link: blog/
+
+-- tags-list: Writing
+tag-link: blog/
+
+-- tags-list: AI/ML
+tag-link: blog/
+
+-- tags-list: UI/UX
+tag-link: blog/
+
+-- end: tags
+
+
+
+
+
+-- tags-list list topic:
+
+-- tags-list: Design Inspiration
+tag-link: blog/
+
+-- end: topic
+
+
+
+
+
+-- record social-media:
+ftd.image-src src:
+string link: /
+
+-- social-media list social-links:
+
+-- social-media:
+link: /
+src: $assets.files.static.fb.png
+
+-- social-media: 
+link: /
+src: $assets.files.static.figma.png
+
+-- social-media:
+link: /
+src: $assets.files.static.google.png
+
+-- social-media: 
+link: /
+src: $assets.files.static.chat.png
+
+-- social-media: 
+link: /
+src: $assets.files.static.social.png
+
+-- end: social-links
+
+
+
+
+
+-- record author-meta:
+caption title:
+string profile:
+string company:
+string bio-url:
+optional ftd.image-src image:
+body body:
+
+
+
+
+
+-- record post-meta:
+caption title:
+string published-on:
+optional ftd.image-src post-image:
+optional body body:
+string post-url:
+author-meta author:
+social-media list social-list:
+tags-list list tags:
+optional string read-time:

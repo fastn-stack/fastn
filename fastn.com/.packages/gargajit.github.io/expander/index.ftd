@@ -1,0 +1,186 @@
+-- import: fifthtry.github.io/doc-site as ds
+-- import: gargajit.github.io/expander/assets
+-- import: fifthtry.github.io/forest-cs
+-- import: fifthtry.github.io/admonitions as cbox
+ 
+-- ds.page: Polished Page
+site-logo: $assets.files.images.logo.svg
+colors: $forest-cs.main
+
+In this video we are going to polish our `expander project` and 
+We are going to do the following:
+
+- Use featured components
+- replace `ftd.text` icons on header with images of arrows
+- add `on-mouse` event handlers
+- add buttons by creating a component
+
+
+-- ds.h1: About Expander
+
+`Expander` is a package which has a component called `box`.
+This box has a `header area` and a `body area`.
+
+One can expand or collapse the body area when clicked on the
+header area. It takes user defined content or it also has a default text.
+
+
+-- ds.markdown:
+
+Box can have user-defined values or it can have default values as well.
+Following are the two boxes:
+
+
+-- box: What is FTD?
+
+
+FTD is the innovative programming language for writing prose. 
+Say goodbye to the complexities of traditional programming languages 
+and hello to a simplified and intuitive experience.
+
+FTD language is designed for human beings, not just 
+programmers, we have taken precautions like not 
+requiring quoting for strings, not relying on 
+indentation nor on braces that most programming 
+languages require.
+
+-- ds.markdown:
+
+This box gives `default values`.
+
+-- box:
+
+
+-- ds.markdown:
+
+This looks much better. We can do a lot more.
+
+-- cbox.tip: Tip!
+
+`Doc-site` has a dark-mode switcher on the bottom-right 
+side of the web-page.
+
+-- end: cbox.tip
+
+-- end: ds.page
+
+
+
+
+
+-- component box:
+caption title: Default Header
+body body: Default Body
+boolean $open: false 
+boolean $over: false
+ftd.color headercolor: $header-text-color
+ftd.color bordercolor: $border-color
+ftd.color bodycolor: $body-text-color
+ftd.color hovercolor: $hover-color
+optional ftd.color bg-header: $bg-header
+optional ftd.color bg-body: $bg-body 
+
+
+;; column for box
+-- ftd.column:
+border-width.px: 4
+spacing.fixed.px: 10
+width: fill-container
+border-color: $box.bordercolor
+color: $box.bodycolor
+background.solid: $box.bg-body
+
+
+
+;; header Row
+-- ftd.row:
+width: fill-container
+spacing: space-between
+border-bottom-width.px: 1
+padding.px: 10
+color: $box.headercolor
+background.solid: $box.bg-header
+border-color: $box.bordercolor
+background.solid if { box.over }: $box.hovercolor
+$on-click$: $toggle($value = $box.open)
+$on-mouse-enter$: $ftd.set-bool($a = $box.over, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $box.over, v = false)
+
+
+
+
+-- ftd.text: $box.title
+
+-- ftd.image: 
+src: $assets.files.images.downarrow.png
+width.fixed.px: 20
+if: { !box.open }
+
+
+-- ftd.image: 
+src: $assets.files.images.uparrow.png
+width.fixed.px: 20
+if: { box.open }
+
+-- end: ftd.row
+;; header row ends
+
+
+-- ftd.text: $box.body
+padding.px: 10
+height: hug-content
+if: { box.open }
+
+
+
+-- end: ftd.column
+;; box column ends
+
+-- end: box
+
+
+-- void toggle(value):
+boolean $value:
+
+
+value = !value;
+
+
+
+
+
+
+
+-- ftd.color bg-header:
+light: #f1f8ff
+dark: #235294
+	
+
+
+-- ftd.color bg-body:
+light: #f1f8ff
+dark: #235294
+
+
+
+-- ftd.color header-text-color:
+light: #858692
+dark: #e2e8ec
+
+
+
+-- ftd.color body-text-color:
+light: #3f3e43
+dark: #e2e8ec
+
+
+
+-- ftd.color border-color:
+light: #79ad9e
+dark: #a0b2c1
+
+
+-- ftd.color hover-color:
+light: #b7e7d9
+dark: #5276a9
+

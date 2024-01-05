@@ -1,0 +1,293 @@
+-- import: fastn-community.github.io/spectrum-ds/assets
+-- import:  fastn-community.github.io/opensans-font/assets as opensans-assets
+
+
+
+-- import: fastn/processors as pr
+
+-- boolean show-footer: true
+
+
+-- string $site-name: Spectum DS
+
+
+-- integer logo-width: 200
+
+-- integer logo-height: 32
+
+
+-- string $site-url: index.html
+
+-- ftd.image-src site-logo: $assets.files.static.ipsum-logo.svg
+
+
+-- pr.toc-item list footer-toc:
+
+-- boolean show-grid: true
+
+-- boolean show-list: false
+
+
+
+-- pr.sitemap-data sitemap:
+$processor$: pr.sitemap
+
+-- fastn.app-ui apps:
+$processor$: pr.fastn-apps
+
+
+
+
+
+
+
+-- record template:
+caption title:
+string template-url: 
+optional ftd.image-src screenshot:
+optional string licence-url: 
+optional string github-url:
+optional body body: 
+boolean is-last: false
+
+-- template list doc-sites:
+
+-- template: Doc-site
+template-url: https://fastn-community.github.io/doc-site/
+screenshot: $assets.files.static.doc-site.jpg
+
+-- end: doc-sites
+
+
+
+
+
+-- template list schemes:
+
+-- template: Winter CS
+template-url: https://fastn-community.github.io/winter-cs/
+screenshot: $assets.files.static.cs.winter-cs.png
+licence-url: https://github.com/fastn-community/winter-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/winter-cs
+
+Add warmth and energy to your designs with the `winter-cs`.
+
+-- template: Dark Flame CS
+template-url: https://fastn-community.github.io/dark-flame-cs/
+screenshot: $assets.files.static.cs.dark-flame-cs.png
+licence-url: https://github.com/fastn-community/dark-flame-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/dark-flame-cs/
+
+Add warmth and energy to your designs with the `dark-flame-cs`.
+
+
+-- template: Saturated Sunset CS
+template-url: https://fastn-community.github.io/saturated-sunset-cs/
+screenshot: $assets.files.static.cs.saturated-sunset-cs.png
+licence-url: https://github.com/fastn-community/saturated-sunset-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/saturated-sunset-cs
+
+Add warmth and energy to your designs with the `saturated-sunset-cs`.
+
+
+-- template: Forest CS
+template-url: https://fastn-community.github.io/forest-cs/
+screenshot: $assets.files.static.cs.forest-cs.png
+licence-url: https://github.com/fastn-community/forest-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/forest-cs
+
+Add warmth and energy to your designs with the `forest-cs`.
+
+-- end: schemes
+
+
+
+
+
+
+
+
+
+
+-- template list bling:
+
+-- template: Bling
+template-url: https://fifthtry.github.io/bling/
+screenshot: $assets.files.static.bling-components.png
+licence-url: https://github.com/FifthTry/bling/blob/main/LICENSE
+github-url: https://github.com/FifthTry/bling/
+
+`fifthtry.github.io/bling` is develoed and designed with various components which 
+can be used inside `ftd` web packages.
+
+-- end: bling
+
+
+
+
+
+
+
+
+
+
+-- template list fonts:
+
+-- template: Inter Typography
+template-url: https://fastn-community.github.io/inter-typography/
+licence-url: https://github.com/fastn-community/inter-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/inter-typography
+screenshot: $assets.files.static.font.inter-font.jpg
+
+`inter-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- template: Lato Typography
+template-url: https://fastn-community.github.io/lato-typography/
+licence-url: https://github.com/fastn-community/lato-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/lato-typography
+screenshot: $assets.files.static.font.lato-font.jpg
+
+`lato-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- template: Opensans Typography
+template-url: https://fastn-community.github.io/opensans-typography/
+licence-url: https://github.com/fastn-community/opensans-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/opensans-typography
+screenshot: $assets.files.static.font.opensans-font.jpg
+
+`opensans-font` typography is available and can be used inside `fastn` web
+packages.
+
+
+-- template: Roboto Typography
+template-url: https://fastn-community.github.io/roboto-typography/
+licence-url: https://github.com/fastn-community/roboto-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/roboto-typography
+screenshot: $assets.files.static.font.roboto-font.jpg
+
+`roboto-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- template: Roboto Mono Typography
+template-url: https://fastn-community.github.io/roboto-mono-typography/
+licence-url: https://github.com/fastn-community/roboto-mono-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/roboto-mono-typography
+screenshot: $assets.files.static.font.roboto-mono-font.jpg
+
+`roboto-mono-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- end: fonts
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- record social-media:
+ftd.image-src src:
+optional ftd.image-src hover-src:
+string link: /
+
+-- social-media list social-link:
+
+-- social-media list social-links:
+
+-- social-media:
+link: /
+src: $assets.files.static.meta.svg
+hover-src: $assets.files.static.meta.svg
+
+-- social-media: 
+link: /
+src: $assets.files.static.figma.svg
+hover-src: $assets.files.static.figma.svg
+
+-- social-media:
+link: /
+src: $assets.files.static.google.svg
+hover-src: $assets.files.static.google.svg
+
+-- social-media: 
+link: /
+src: $assets.files.static.tweak.svg
+hover-src: $assets.files.static.tweak.svg
+
+-- social-media: 
+link: /
+src: $assets.files.static.ball.svg
+hover-src: $assets.files.static.ball.svg
+
+-- end: social-links
+
+
+
+
+
+
+
+-- record owner:
+caption title:
+optional string profile:
+ftd.image-src avatar: $assets.files.static.avatar.jpg
+optional string role:
+
+-- owner list owners:
+
+-- owner: Muskaan Verma
+profile: /
+avatar: $assets.files.static.avatar.svg
+role: Designer
+
+-- end: owners
+
+
+
+
+
+
+-- ftd.type copy-regular-mobile:
+line-height.px: 24
+size.px: 16
+letter-spacing.px: 0
+weight: 700
+font-family: $opensans-assets.fonts.Open-Sans
+
+-- ftd.type copy-regular-desktop:
+line-height.px: 57
+size.px: 24
+letter-spacing.px: 0
+font-family: $opensans-assets.fonts.Open-Sans
+weight: 700
+
+-- ftd.responsive-type copy-regular:
+desktop: $copy-regular-desktop
+mobile: $copy-regular-mobile
+
+
+-- ftd.type copy-small-mobile:
+size.px: 16
+line-height.px: 24
+weight: 400
+font-family: $opensans-assets.fonts.Open-Sans
+
+-- ftd.type copy-small-desktop:
+size.px: 14
+line-height.px: 30
+weight: 400
+font-family: $opensans-assets.fonts.Open-Sans
+
+-- ftd.responsive-type copy-small:
+desktop: $copy-small-desktop
+mobile: $copy-small-mobile
+
+

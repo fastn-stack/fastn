@@ -1,0 +1,19 @@
+-- import: fastn
+
+-- fastn.package: fastn-community.github.io/banner
+
+-- fastn.dependency: fifthtry.github.io/package-doc
+
+-- fastn.auto-import: fifthtry.github.io/package-doc as pd
+-- fastn.auto-import: fastn
+-- fastn.auto-import: fifthtry.github.io/package-doc/typography as tf
+-- fastn.auto-import: fifthtry.github.io/package-doc/code-block as cb
+-- fastn.auto-import: fifthtry.github.io/package-doc/forest-theme as ft
+
+-- fastn.sitemap:
+
+# Home: index.html
+
+- Simple Banner: index.html
+- CTA Banner: cta-banner/
+- Floating Banner: floating-banner/

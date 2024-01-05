@@ -1,0 +1,59 @@
+-- import: fastn-stack.github.io/fastn-js/assets
+
+-- void download-as-image(element_id,filename):
+string element_id:
+string filename:
+js: [//cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js, $assets.files.download.js]
+
+download_as_image(element_id, filename)
+
+-- void download-as-png(element_id,filename):
+string element_id:
+string filename:
+js: [//cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js, $assets.files.download.js]
+
+download_as_png(element_id, filename)
+
+-- void download-as-jpeg(element_id,filename):
+string element_id:
+string filename:
+js: [//cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js, $assets.files.download.js]
+
+download_as_jpeg(element_id, filename)
+
+-- void download-as-svg(element_id,filename):
+string element_id:
+string filename:
+js: [//cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js, $assets.files.download.js]
+
+download_as_svg(element_id, filename)
+
+
+
+-- void clamp-increment(a,by,min,max):
+integer $a:
+integer by: 1
+integer min: 0
+integer max: 5
+
+
+a = (((a - min) + by) % (max - min)) + min
+
+
+
+-- void clamp-decrement(a,by,min,max):
+integer $a:
+integer by: 1
+integer min: 0
+integer max: 5
+js: [$assets.files.lib.js]
+
+clampDecrement(a, by, min, max)
+
+
+-- integer list range(min,max):
+integer min: 0
+integer max:
+js: [$assets.files.lib.js]
+
+getRange(min, max)

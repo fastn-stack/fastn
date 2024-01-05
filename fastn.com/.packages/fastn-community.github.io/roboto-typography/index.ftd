@@ -1,0 +1,667 @@
+-- import: fifthtry.github.io/package-doc/doc as pd
+-- import: fifthtry.github.io/package-doc/forest-theme as ds
+-- import: fifthtry.github.io/package-doc/footer
+-- import: fastn-community.github.io/roboto-font/assets as roboto-assets
+
+
+
+-- ds.page: 
+show-footer: true
+site-name: `roboto-typography`
+
+-- ds.page.footer:
+
+-- footer.fastn-footer:
+
+-- end: ds.page.footer
+
+-- pd.package: roboto-typography package
+name: fastn-community.github.io/roboto-typography
+
+This FTD font `roboto-typography` can be used for your ftd web projects. 
+
+You can use this roboto-typography inside the `FTD` project. Follow below
+instructions to use this font package.
+
+-- ds.h3: How to use roboto-typography?
+
+To use this roboto-typography inside your `ftd` web project, if you are
+using our [doc-site](https://github.com/fifthtry/doc-site) theme then you just
+have to pass types to `ds.page`
+
+Let's say you are using `doc-site` inside your project then, it's as simple as
+making a sandwich.
+
+-- ds.code: Add this to your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/roboto-typography
+
+-- ds.markdown:
+
+Now import `roboto-typography` inside `.ftd` file as shown below:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/roboto-typography
+
+
+-- ds.markdown: 
+
+add `roboto-typography` `types` to `ds.page` `types` attribute as shown
+below:
+
+-- ds.code:
+lang: ftd
+
+\-- ds.page:
+types: $roboto-typography.types
+
+-- ds.markdown: 
+
+Once you add `types: $roboto-typography.types` inside your `.ftd` file,
+`roboto-typography` will be added as `fastn` default typography to your
+`ds.page` and to all components you add inside `ds.page`.
+
+If you're not using `doc-site` theme and building your own `fastn` web theme.
+Then, add `roboto-typography` dependency into `FASTN.ftd` file.
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/roboto-typography
+
+-- ds.markdown:
+
+Once you add above dependency, then import `roboto-typography` inside your
+`.ftd` file:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/roboto-typography
+
+-- ds.markdown:
+
+Done! `roboto-typography` is now added. Lets define a `page` component:
+
+-- ds.code:
+lang: ftd
+download: my-ds.ftd
+
+\-- import: fastn-community.github.io/roboto-typography
+
+\-- component page:
+caption title:
+body body:
+children wrap:
+ftd.type-data types: $roboto-typography.types
+
+\-- ftd.column:
+width: fill-container
+spacing.fixed.px: 32
+padding.px: 30
+background.solid: $inherited.colors.background.base
+border-width.px: 1
+border-color: $inherited.colors.border-strong
+border-radius.px: 10
+margin-vertical.px: 10
+
+\-- ftd.text: $page.title
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+
+\-- ftd.text: 
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+$page.body
+
+\-- ftd.column:
+width: fill-container
+children: $page.wrap
+
+\-- end: ftd.column
+
+\-- end: ftd.column
+
+\-- end: page
+
+
+-- ds.markdown:
+
+In above code snippet we defined `page` component which has `types`, `title`,
+`body` and  `wrap` attributes.
+
+The `types` attribute used to pass a typography to it. In above example we have
+added `$roboto-typography.types` as default `ftd.type-data`. The
+`ftd.type-data` contains all `fastn` default `inherited` types.
+
+The `title` attribute will be used for adding `page` titles. 
+
+The `body` attribute is used to add body to `page` component, the `body` can
+contain multiple pagragraphs, lists and any markdown format content.
+
+The `wrap` attribute allows adding child components to `page` component. You can
+add any other component inside `page`.
+
+Click on download icon on above code snippet `my-ds.ftd` file will be
+downloaded. 
+
+-- ds.rendered:
+download: types.ftd
+
+-- ds.rendered.input:
+
+\-- import: <your-fastn-package-name>/my-ds
+
+\-- my-ds.page: I am a page title
+
+I am `page` component body. Body can contain multiple paragraphs, links etc.
+
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+Ipsum has been the industry’s standard dummy
+
+- I am a list item.
+
+- I am a list item.
+
+\-- ftd.text: I am a child component of `page`
+role: $inherited.types.heading-medium
+color: $inherited.colors.text
+
+\-- end: my-ds.page
+
+
+-- ds.rendered.output:
+
+-- page: I am a page title
+types: $types
+
+I am `page` component body. Body can contain multiple paragraphs, links etc.
+
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+Ipsum has been the industry’s standard dummy
+
+- I am a list item.
+
+- I am a list item.
+
+-- ftd.text: I am a child component of `page`
+role: $inherited.types.heading-medium
+color: $inherited.colors.text
+
+-- end: page
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.markdown:
+
+Click on download icon on above code snippet `types.ftd` file will be
+downloaded, add previously downloaded `my-ds.ftd` and `types.ftd` inside
+`fastn` package. Update `<your-fastn-package-name>` with your `fastn.package`
+name and run `fastn serve`, load localhost web page on browser.
+
+e.g. `http://127.0.0.1:8001/types` You will see the `page` component using
+`roboto-typography` `types` applied to `inherited` types.
+
+Done! isn't it simple? Try this and don't forget to jump on our [Discord](https://discord.gg/bucrdvptYd)
+
+[Click here](fastn-typography/) to know more `fastn` predefined `inherited`
+types using `roboto-font` font-family and font-sizes.
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.type heading-hero-mobile:
+line-height.px: 60
+size.px: 52
+letter-spacing.px: 0
+weight: 700
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type heading-hero-desktop:
+line-height.px: 60
+size.px: 52
+letter-spacing.px: 0
+weight: 700
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type heading-hero:
+desktop: $heading-hero-desktop
+mobile: $heading-hero-mobile
+
+
+
+
+
+-- ftd.type heading-large-mobile:
+line-height.px: 48
+size.px: 40
+letter-spacing.px: 0
+weight: 700
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type heading-large-desktop:
+line-height.px: 48
+size.px: 40
+letter-spacing.px: 0
+weight: 700
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type heading-large:
+desktop: $heading-large-desktop
+mobile: $heading-large-mobile
+
+
+
+
+
+-- ftd.type heading-medium-mobile:
+line-height.px: 44
+size.px: 32
+letter-spacing.px: 0
+weight: 600
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type heading-medium-desktop:
+line-height.px: 44
+size.px: 32
+letter-spacing.px: 0
+font-family: $roboto-assets.fonts.Roboto
+weight: 600
+
+-- ftd.responsive-type heading-medium:
+desktop: $heading-medium-desktop
+mobile: $heading-medium-mobile
+
+
+
+
+
+-- ftd.type heading-small-mobile:
+line-height.px: 36
+size.px: 24
+letter-spacing.px: 0
+weight: 500
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type heading-small-desktop:
+line-height.px: 36
+size.px: 24
+letter-spacing.px: 0
+weight: 500
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type heading-small:
+desktop: $heading-small-desktop
+mobile: $heading-small-mobile
+
+
+
+
+
+
+-- ftd.type heading-tiny-mobile:
+line-height.px: 26
+size.px: 18
+letter-spacing.px: 0
+weight: 500
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type heading-tiny-desktop:
+line-height.px: 26
+size.px: 18
+letter-spacing.px: 0
+weight: 500
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type heading-tiny:
+desktop: $heading-tiny-desktop
+mobile: $heading-tiny-mobile
+
+
+
+
+
+-- ftd.type copy-large-mobile:
+line-height.px: 28
+size.px: 20
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type copy-large-desktop:
+line-height.px: 28
+size.px: 20
+letter-spacing.px: 0
+font-family: $roboto-assets.fonts.Roboto
+weight: 400
+
+-- ftd.responsive-type copy-large:
+desktop: $copy-large-desktop
+mobile: $copy-large-mobile
+
+
+
+
+
+-- ftd.type copy-regular-mobile:
+line-height.px: 24
+size.px: 16
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type copy-regular-desktop:
+line-height.px: 24
+size.px: 16
+letter-spacing.px: 0
+font-family: $roboto-assets.fonts.Roboto
+weight: 400
+
+-- ftd.responsive-type copy-regular:
+desktop: $copy-regular-desktop
+mobile: $copy-regular-mobile
+
+
+
+
+
+-- ftd.type copy-small-mobile:
+line-height.px: 20
+size.px: 16
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+
+-- ftd.type copy-small-desktop:
+line-height.px: 20
+size.px: 16
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type copy-small:
+desktop: $copy-small-desktop
+mobile: $copy-small-mobile
+
+
+
+
+
+-- ftd.type fine-print-mobile:
+line-height.px: 18
+size.px: 14
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type fine-print-desktop:
+line-height.px: 18
+size.px: 14
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type fine-print:
+desktop: $fine-print-desktop
+mobile: $fine-print-mobile
+
+
+
+
+
+-- ftd.type blockquote-mobile:
+line-height.px: 16
+size.px: 14
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type blockquote-desktop:
+line-height.px: 16
+size.px: 14
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type blockquote:
+desktop: $blockquote-desktop
+mobile: $blockquote-mobile
+
+
+
+
+
+-- ftd.type source-code-mobile:
+line-height.px: 16
+size.px: 14
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type source-code-desktop:
+line-height.px: 16
+size.px: 14
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type source-code:
+desktop: $source-code-desktop
+mobile: $source-code-mobile
+
+
+
+
+
+-- ftd.type label-large-mobile:
+line-height.px: 22
+size.px: 16
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type label-large-desktop:
+line-height.px: 22
+size.px: 16
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type label-large:
+desktop: $label-large-desktop
+mobile: $label-large-mobile
+
+
+
+
+
+-- ftd.type label-small-mobile:
+line-height.px: 16
+size.px: 14
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type label-small-desktop:
+line-height.px: 16
+size.px: 14
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type label-small:
+desktop: $label-small-desktop
+mobile: $label-small-mobile
+
+
+
+
+
+-- ftd.type button-large-mobile:
+line-height.px: 24
+size.px: 18
+letter-spacing.px: 0
+weight: 700
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type button-large-desktop:
+line-height.px: 24
+size.px: 18
+letter-spacing.px: 0
+weight: 700
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type button-large:
+desktop: $button-large-desktop
+mobile: $button-large-mobile
+
+
+
+
+
+-- ftd.type button-medium-mobile:
+line-height.px: 21
+size.px: 16
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type button-medium-desktop:
+line-height.px: 21
+size.px: 16
+letter-spacing.px: 0
+weight: 700
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type button-medium:
+desktop: $button-medium-desktop
+mobile: $button-medium-mobile
+
+
+
+
+
+-- ftd.type button-small-mobile:
+line-height.px: 19
+size.px: 14
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type button-small-desktop:
+line-height.px: 19
+size.px: 14
+letter-spacing.px: 0
+weight: 700
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type button-small:
+desktop: $button-small-desktop
+mobile: $button-small-mobile
+
+
+
+
+
+-- ftd.type link-mobile:
+line-height.px: 19
+size.px: 14
+letter-spacing.px: 0
+weight: 400
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.type link-desktop:
+line-height.px: 19
+size.px: 14
+letter-spacing.px: 0
+weight: 700
+font-family: $roboto-assets.fonts.Roboto
+
+-- ftd.responsive-type link:
+desktop: $link-desktop
+mobile: $link-mobile
+
+
+
+
+
+-- ftd.type-data types:
+heading-hero: $heading-hero
+heading-large: $heading-large
+heading-medium: $heading-medium
+heading-small: $heading-small
+heading-tiny: $heading-tiny
+copy-large: $copy-large
+copy-regular: $copy-regular
+copy-small: $copy-small
+fine-print: $fine-print
+blockquote: $blockquote
+source-code: $source-code
+label-large: $label-large
+label-small: $label-small
+button-large: $button-large
+button-medium: $button-medium
+button-small: $button-small
+link: $link
+
+
+
+
+
+
+
+
+
+
+-- component page:
+caption title:
+body body:
+children wrap:
+ftd.type-data types: 
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 32
+padding.px: 30
+background.solid: $inherited.colors.background.base
+border-width.px: 1
+border-color: $inherited.colors.border-strong
+border-radius.px: 10
+margin-vertical.px: 10
+
+-- ftd.text: $page.title
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+
+-- ftd.text: 
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+$page.body
+
+-- ftd.column:
+width: fill-container
+children: $page.wrap
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: page

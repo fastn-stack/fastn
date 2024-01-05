@@ -1,0 +1,30 @@
+-- import: fastn
+
+-- fastn.package: fastn-community.github.io/site-doc
+
+-- fastn.dependency: fastn-community.github.io/code-block as cb
+-- fastn.dependency: fastn-community.github.io/dark-flame-cs as cs
+-- fastn.dependency: fastn-community.github.io/opensans-typography as typo
+-- fastn.dependency: fastn-community.github.io/pretty-ws
+-- fastn.dependency: fastn-community.github.io/winter-cs
+-- fastn.dependency: fastn-community.github.io/dark-mode-switcher as dms
+
+-- fastn.auto-import: fastn
+-- fastn.auto-import: cb
+-- fastn.auto-import: cs
+-- fastn.auto-import: typo
+-- fastn.auto-import: dms
+
+
+
+
+
+
+
+-- fastn.sitemap:
+
+# Home: index.html
+
+- Site Doc: index.html
+- Component Doc: /component-doc/
+  

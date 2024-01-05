@@ -1,0 +1,18 @@
+-- import: fastn
+
+-- fastn.package: fifthtry.github.io/dark-mode-switcher
+
+
+-- fastn.dependency: fifthtry.github.io/code-block
+-- fastn.dependency: fastn-community.github.io/site-doc
+
+
+
+-- fastn.sitemap:
+
+# Home: index.html
+
+- Documentation: /docs/
+
+# GitHub
+  url: https://github.com/fifthtry/dark-mode-switcher

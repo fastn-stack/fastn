@@ -1,0 +1,709 @@
+-- import: fastn
+-- import: fifthtry.github.io/product-switcher/assets
+-- import: fastn-community.github.io/site-doc
+-- import: fifthtry.github.io/code-block as cb
+
+
+
+
+
+
+
+
+
+
+
+-- site-doc.doc-home: Product Switcher
+github-url: https://fifthtry.github.io/product-switcher
+color-scheme: \$ftd.default-colors
+typography: \$ftd.default-types
+current-package: fifthtry.github.io/product-switcher
+show-tabs: false
+
+-- site-doc.header: What is a Product Switcher?
+
+A product switcher is a user interface element that allows users to quickly
+switch between different products or product categories within a software
+application or website. It is typically displayed as a dropdown menu or a set
+of tabs that enable users to easily navigate between different products or
+product lines.
+
+In a software application, a product switcher can be used to allow users to
+switch between different versions of the software, or between different modules
+or features within the application.
+
+-- site-doc.header: How to install fastn?
+
+Please, [click here](https://fastn.io/install/) to read fastn installation
+documentation.
+
+
+-- site-doc.header: How to use `product-switcher`?
+
+To use `product-switcher` add below lines into your FASTN.ftd file:
+
+To learn more about product-switcher [click here](/docs/).
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fifthtry.github.io/product-switcher
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+
+-- component switcher:
+ftd.color bg-color: $inherited.colors.background.step-1
+ftd.color text-color: $inherited.colors.text-strong
+ftd.color bg-hover: $inherited.colors.background.base
+ftd.color body-text-color: $inherited.colors.text
+ftd.color shadow-color: $shadow-color
+product-data list products:
+boolean $mouse-events: false
+boolean $on-left: true
+
+-- ftd.column:
+$on-mouse-enter$: $ftd.set-bool($a = $switcher.mouse-events, v = true)
+align-content: left
+align-content if { !switcher.on-left }: right
+if:{ !ftd.is_empty(switcher.products) }
+
+-- ftd.desktop:
+
+-- switcher-desktop:
+$mouse-events: $switcher.mouse-events
+on-left: $switcher.on-left
+brand: $switcher.products
+bg-color: $switcher.bg-color
+text-color: $switcher.text-color
+bg-hover: $switcher.bg-hover
+body-text-color: $switcher.body-text-color
+shadow-color: $switcher.shadow-color
+
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
+-- switcher-mobile:
+$mouse-events: $switcher.mouse-events
+brand: $switcher.products
+bg-color: $switcher.bg-color
+text-color: $switcher.text-color
+body-text-color: $switcher.body-text-color
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: switcher
+
+
+
+
+
+
+
+
+
+
+-- component switcher-desktop:
+product-data list brand:
+boolean on-left: 
+boolean $mouse-events: 
+optional ftd.color bg-color:
+optional ftd.color text-color:
+optional ftd.color bg-hover:
+ftd.color body-text-color:
+ftd.color shadow-color:
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.row:
+color: $switcher-desktop.text-color
+background.solid: $switcher-desktop.bg-color 
+border-radius.px: 4
+padding-horizontal.px: 8
+padding-vertical.px: 8
+$on-mouse-enter$: $ftd.set-bool($a = $switcher-desktop.mouse-events, v = true)
+align-content if {switcher-desktop.on-left}: left
+align-content if {!switcher-desktop.on-left}: right
+spacing.fixed.px: 8
+
+-- brand-title: $obj.title
+$loop$: $switcher-desktop.brand as $obj
+index: $obj.index
+text-color: $switcher-desktop.text-color
+
+-- ftd.row:
+padding-top.px: 10
+
+-- ftd.image: 
+src: $assets.files.assets.images.down-arrow.svg
+height: fill-container
+width.fixed.px: 12
+
+-- end: ftd.row
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.row:
+if: {switcher-desktop.mouse-events}
+anchor: parent
+width: fill-container
+min-width.fixed.px: 460
+min-height.fixed.px: 255
+border-radius.px: 8
+left.px if {switcher-desktop.on-left}: -96
+top.px if {switcher-desktop.on-left}: 25
+right.px if {!switcher-desktop.on-left}: -3
+top.px if {!switcher-desktop.on-left}: 40
+background.solid: $switcher-desktop.bg-hover
+;;shadow-offset-x: 0
+;;shadow-offset-y: 4
+;;shadow-size: 0
+;;shadow-blur: 4
+;;shadow-color: $switcher-desktop.shadow-color
+;; z-index: 999 -- TODO FTD 0.3
+$on-mouse-enter$: $ftd.set-bool($a = $switcher-desktop.mouse-events, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $switcher-desktop.mouse-events, v = false)
+;;$on-mouse-leave$: $var-current-product = $current-product
+$on-click-outside$:  $ftd.set-bool($a = $switcher-desktop.mouse-events, v = false)
+
+-- ftd.row:
+width: fill-container
+min-width.fixed.px: 460
+min-height.fixed.px: 255
+
+-- ftd.row:
+width: fill-container
+min-width.fixed.px: 460
+min-height.fixed.px: 255
+
+-- product-list:
+brand: $switcher-desktop.brand
+text-color: $switcher-desktop.text-color
+bg-color: $switcher-desktop.bg-color
+bg-hover: $switcher-desktop.bg-hover
+body-text-color: $switcher-desktop.body-text-color
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: switcher-desktop
+
+
+
+
+
+
+
+
+
+
+-- component product-list:
+product-data list brand:
+ftd.color text-color:
+ftd.color bg-color:
+ftd.color bg-hover:
+ftd.color body-text-color:
+
+-- ftd.row:
+width: fill-container
+;; z-index: 1 -- TODO FTD 0.3
+
+-- title-list:
+brand: $product-list.brand
+text-color: $product-list.text-color
+bg-hover: $product-list.bg-hover
+bg-color: $product-list.bg-color
+body-text-color: $product-list.body-text-color
+
+-- copy-list:
+$loop$: $product-list.brand as $obj
+copy: $obj.body
+index: $obj.index
+sub-title: $obj.sub-title
+button-text: $obj.button-text
+url: $obj.url
+text-color: $product-list.text-color
+body-text-color: $product-list.body-text-color
+bg-color: $product-list.bg-color
+
+-- end: ftd.row
+
+-- end: product-list
+
+
+
+
+
+
+
+
+
+
+-- component title-list:
+product-data list brand:
+ftd.color text-color:
+ftd.color bg-color:
+ftd.color bg-hover:
+ftd.color body-text-color:
+
+-- ftd.column:
+width.fixed.percent:  50
+
+-- title-image: $obj.title
+$loop$: $title-list.brand as $obj
+index: $obj.index
+logo: $obj.logo
+url: $obj.url
+text-color: $title-list.text-color
+bg-color: $title-list.bg-color
+bg-hover: $title-list.bg-hover
+body-text-color: $title-list.body-text-color
+
+-- end: ftd.column
+
+-- end: title-list
+
+
+
+
+
+
+
+
+
+
+-- component title-image:
+caption title:
+integer index:
+ftd.color bg-hover:
+optional ftd.image-src logo:
+string url:
+ftd.color text-color:
+ftd.color bg-color:
+ftd.color body-text-color:
+
+-- ftd.row:
+$on-mouse-enter$: $ftd.set-integer($a = $var-current-product, v = $title-image.index)
+background.solid: $title-image.bg-hover
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+padding-vertical.px:16
+padding-horizontal.px:16
+padding-right.px: 24
+padding-bottom.px: 24
+background.solid: $title-image.bg-hover
+background.solid if {var-current-product == title-image.index}: $title-image.bg-color
+color: $title-image.body-text-color
+color if {var-current-product == title-image.index}: $inherited.colors.text-strong
+link: $title-image.url
+
+-- ftd.image:
+src: $title-image.logo
+margin-right.px: 8
+width.fixed.px: 32
+height.fixed.px: 32
+
+-- ftd.text: $title-image.title
+role: $inherited.types.copy-regular
+white-space: nowrap
+width: fill-container
+color: $inherited.colors.text-strong
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: title-image
+
+
+
+
+
+
+
+
+
+
+-- component copy-list:
+boolean mouse-in: false
+optional string copy:
+optional ftd.color menu-hover: $inherited.colors.text-strong
+integer index:
+ftd.color text-color:
+ftd.color bg-color:
+ftd.color body-text-color:
+string url:
+optional string sub-title:
+optional string button-text:
+
+-- ftd.column:
+width: fill-container
+min-height.fixed.px: 288
+border-top-right-radius.px: 8
+border-top-left-radius.px: 8
+if:{var-current-product == copy-list.index}
+background.solid: $copy-list.bg-color
+link: $copy-list.url
+
+-- ftd.row:
+width: fill-container
+padding-vertical.px:16
+padding-horizontal.px:16
+
+-- ftd.column:
+
+-- ftd.text: $copy-list.sub-title
+role: $inherited.types.copy-regular
+color: $copy-list.text-color
+
+-- ftd.text: $copy-list.copy
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: copy-list
+
+
+
+
+
+
+
+
+
+
+-- component brand-title:
+integer index:
+caption title:
+ftd.color text-color:
+;; ftd.image-src logo: 
+
+-- ftd.row:
+if: {brand-title.index == current-product}
+spacing.fixed.px: 4
+
+/-- ftd.image:
+src: $brand-title.logo
+height.fixed.px: 24
+width: hug-content
+
+-- ftd.text: $brand-title.title
+role: $inherited.types.copy-regular
+color: $brand-title.text-color
+cursor: pointer
+padding-top.px: 4
+
+-- end: ftd.row
+
+-- end: brand-title
+
+
+
+
+
+
+
+
+
+
+-- component brand-name:
+caption title:
+optional string copy:
+integer index:
+optional ftd.color text-color:
+optional ftd.color bg-color: 
+string url:
+string sub-title:
+ftd.image-src logo:
+ftd.color body-text-color:
+
+-- ftd.column:
+width: fill-container
+link: $brand-name.url
+padding-top.px: 12
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 4
+border-top-width.px: 1
+border-color: $inherited.colors.border
+padding-vertical.px: 8
+
+-- ftd.image:
+height.fixed.px: 36
+width: hug-content
+src: $brand-name.logo
+
+-- ftd.text: $brand-name.title
+padding-top.px: 12
+role: $inherited.types.copy-regular
+color: $brand-name.text-color
+
+-- end: ftd.row
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $brand-name.sub-title
+role: $inherited.types.copy-small
+color: $brand-name.text-color
+
+-- ftd.text:
+text: $brand-name.copy
+width: fill-container
+role: $inherited.types.copy-small
+color: $brand-name.body-text-color
+
+-- ftd.text: explore ->
+role: $inherited.types.label-small
+color: $inherited.colors.cta-primary.base
+;;white-space: nowrap
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: brand-name
+
+
+
+
+
+
+
+
+
+
+-- component switcher-mobile:
+product-data list brand:
+boolean $mouse-events: 
+optional ftd.color bg-color:
+optional ftd.color text-color:
+ftd.color body-text-color:
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+$on-click$: $ftd.toggle($a = $switcher-mobile.mouse-events)
+
+
+-- ftd.text: All Product ->
+role: $inherited.types.copy-regular
+color: $inherited.colors.cta-primary.base
+white-space: nowrap
+
+-- end: ftd.row
+
+-- ftd.row:
+if: {switcher-mobile.mouse-events}
+anchor: window
+background.solid: $switcher-mobile.bg-color
+top.px: 0
+bottom.px: 0
+left.px: 0
+right.px: 0
+;;z-index: 1000
+;; sticky: true
+height.fixed.calc: 100vh - 0px
+width.fixed.calc:  100% - 48px
+align-content: top-left
+overflow-y: auto
+
+-- ftd.column:
+width: fill-container
+padding-top.px: 32
+padding-horizontal.px: 24
+
+-- ftd.text: <- back
+role: $inherited.types.copy-regular
+color: $switcher-mobile.text-color
+$on-click$: $ftd.toggle($a = $switcher-mobile.mouse-events)
+padding-top.px: 4
+padding-bottom.px: 16
+
+-- brand-name:
+copy: $obj.body
+index: $obj.index
+logo: $obj.mobile-logo
+sub-title: $obj.sub-title
+url: $obj.url
+title: $obj.title
+$loop$: $switcher-mobile.brand as $obj
+text-color: $switcher-mobile.text-color
+bg-color: $switcher-mobile.bg-color
+body-text-color: $switcher-mobile.body-text-color
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: switcher-mobile
+
+
+
+
+
+
+
+
+
+
+-- product-data list product:
+
+-- record product-data:
+caption title:
+body body:
+integer index:
+string url:
+ftd.image-src logo: 
+ftd.image-src mobile-logo: 
+optional string sub-title:
+optional string button-text:
+
+-- product-data list example-product:
+
+-- product-data: cDoc
+index: 1
+mobile-logo: $assets.files.assets.images.logo-brand.svg
+logo: $assets.files.assets.images.doc-framework.png
+url: https://fifthtry.github.io/cdoc-doc/
+sub-title: Continuous Documentation
+
+`cdoc` is an open source web application that integrates with Github and works like continuous integration.
+
+- Initial Setup Flow
+- Self Hosted Flow
+
+
+-- product-data: FTD
+index: 2
+mobile-logo: $assets.files.assets.images.logo-brand.svg
+logo: $assets.files.assets.images.ftd.png
+url: https://ftd.dev/
+sub-title: FifthTry Document
+
+FTD gives you a lot of power over your presentation, and yet it is quite easy to learn.
+
+- FTD Is Easy To Learn
+- FTD Is Quite Powerful
+
+
+-- product-data: FASTN
+index: 3
+mobile-logo: $assets.files.assets.images.logo-brand.svg
+logo: $assets.files.assets.images.fastn.png
+url: https://fastn.dev/
+sub-title: `ftd` package manager
+
+`fastn` is `ftd package manager`, defines a package format for packaging `ftd` files.
+
+- Distributed Package Manager
+- Translation Tracking
+
+
+-- product-data: ftd-py
+index: 4
+mobile-logo: $assets.files.assets.images.logo-brand.svg
+logo: $assets.files.assets.images.home.png
+url: https://fifthtry.github.io/python.ftd.dev/
+sub-title: `ftd-py` Documentation
+
+`ftd-py`: Python Package for Working With FTD/FASTN
+
+- Python Package for Working With `FTD/FASTN`
+- `ftd_django` is a Python package
+
+-- end: example-product
+
+
+
+
+
+
+
+-- integer $current-product: 1
+
+-- integer $var-current-product: *$current-product
+
+-- ftd.color header-bg:
+light: rgba(45, 212, 143, 0.05)
+dark: rgba(45, 212, 143, 0.05)
+
+-- ftd.color shadow-color:
+light: rgba(45, 212, 191, 0.2)
+dark: rgba(45, 212, 191, 0.2)
+
+-- ftd.color shadow-color-right:
+light: rgba(45, 212, 191, 0.14)
+dark: rgba(45, 212, 191, 0.2)
+
+-- ftd.color shadow-color-left:
+light: rgba(45, 212, 191, 0.12)
+dark: rgba(45, 212, 191, 0.12)
+
+
+
+;; Below are functions::
+
+-- void toggle(value):
+boolean $value:
+
+value = !value;
+
+-- void set(value,v):
+boolean $value:
+boolean v:
+
+value = v
+
+
+-- void data(value,v):
+integer value:
+integer v:
+
+value = v
+
+
+-- void setdata(value,v):
+integer $value:
+integer v:
+
+value = v
+
+
+

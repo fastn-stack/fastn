@@ -1,0 +1,57 @@
+-- import: fastn
+
+-- fastn.package: fastn-community.github.io/app-switcher
+
+-- fastn.dependency: fastn-community.github.io/site-doc
+-- fastn.dependency: fastn-community.github.io/code-block
+
+-- fastn.auto-import: fastn
+
+
+/-- fastn.app: Todos
+mount-point: /todos/
+package: kameri-app.herokuapp.com
+end-point: https://kameri-service.herokuapp.com
+readers: fastn-fans
+/config: db_url=$ENV.DB_URL
+/config: name=Upadhyay Khanadan
+
+/-- fastn.app: Kameri App
+mount-point: /todos/
+package: kameri-app.herokuapp.com
+end-point: https://kameri-service.herokuapp.com
+readers: fastn-fans
+/config: db_url=$ENV.DB_URL
+/config: name=Upadhyay Khanadan
+
+
+/-- fastn.app: Movie DB
+mount-point: /todos/
+package: kameri-app.herokuapp.com
+end-point: https://kameri-service.herokuapp.com
+readers: fastn-fans
+/config: db_url=$ENV.DB_URL
+/config: name=Upadhyay Khanadan
+
+
+/-- fastn.app: Todos for Family
+mount-point: /todos/
+package: kameri-app.herokuapp.com
+end-point: https://kameri-service.herokuapp.com
+readers: fastn-fans
+/config: db_url=$ENV.DB_URL
+/config: name=Upadhyay Khanadan
+
+
+
+
+-- fastn.sitemap:
+
+# Home: index.html
+
+- Documentation: /docs/
+
+# GitHub
+  url: https://github.com/fastn-community/app-switcher
+
+
