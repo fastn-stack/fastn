@@ -939,6 +939,7 @@ pub struct DocumentMeta {
     pub description: Option<ftd::js::Value>,
     pub og_description: Option<ftd::js::Value>,
     pub twitter_description: Option<ftd::js::Value>,
+    pub facebook_domain_verification: Option<ftd::js::Value>,
     pub og_image: Option<ftd::js::Value>,
     pub twitter_image: Option<ftd::js::Value>,
     pub theme_color: Option<ftd::js::Value>,
@@ -1524,12 +1525,17 @@ impl DocumentMeta {
                 properties,
                 arguments,
             ),
+            facebook_domain_verification: ftd::js::value::get_optional_js_value(
+                "facebook-domain-verification",
+                properties,
+                arguments,
+            ),
         }
     }
 
     pub fn has_self_reference(&self, value: &ftd::js::Value) -> bool {
-        if let ftd::js::Value::Reference(name) = value {
-            return name.starts_with("ftd#document");
+        if let ftd::js::Value::Reference(reference) = value {
+            return reference.name.starts_with("ftd#document");
         }
         false
     }
@@ -1663,6 +1669,17 @@ impl DocumentMeta {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 theme_color.to_set_property(
                     fastn_js::PropertyKind::MetaThemeColor,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
+            ));
+        }
+
+        if let Some(ref facebook_domain_verification) = self.facebook_domain_verification {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                facebook_domain_verification.to_set_property(
+                    fastn_js::PropertyKind::MetaFacebookDomainVerification,
                     doc,
                     element_name,
                     rdata,

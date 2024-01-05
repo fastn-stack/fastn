@@ -13,25 +13,24 @@ pub async fn sync(
         let files = files
             .iter()
             .map(|x| config.ds.root().join(x))
-            .collect::<Vec<camino::Utf8PathBuf>>();
+            .collect::<Vec<fastn_ds::Path>>();
         fastn_core::paths_to_files(
             &config.ds,
             config.package.name.as_str(),
             files,
-            config.ds.root().as_path(),
+            config.ds.root(),
         )
         .await?
     } else {
         config.get_files(&config.package).await?
     };
 
-    tokio::fs::create_dir_all(config.history_dir()).await?;
-
-    let snapshots = fastn_core::snapshot::get_latest_snapshots(config.ds.root()).await?;
+    let snapshots =
+        fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root()).await?;
 
     let latest_ftd = config
         .ds
-        .read_to_string(config.history_dir().join(".latest.ftd"))
+        .read_to_string(&config.history_dir().join(".latest.ftd"))
         .await
         .unwrap_or_else(|_| "".to_string());
 
@@ -169,14 +168,6 @@ async fn write(
     snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fastn_core::Result<(fastn_core::Snapshot, bool)> {
     use sha2::Digest;
-    if let Some((dir, _)) = doc.get_id().rsplit_once('/') {
-        tokio::fs::create_dir_all(
-            camino::Utf8PathBuf::from(doc.get_base_path())
-                .join(".history")
-                .join(dir),
-        )
-        .await?;
-    }
 
     if let Some(timestamp) = snapshots.get(doc.get_id()) {
         let path = fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), timestamp);
@@ -198,7 +189,7 @@ async fn write(
     let new_file_path =
         fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), &timestamp);
 
-    tokio::fs::copy(doc.get_full_path(), new_file_path).await?;
+    config.ds.copy(&doc.get_full_path(), &new_file_path).await?;
 
     Ok((
         fastn_core::Snapshot {
@@ -245,7 +236,7 @@ async fn update_current_directory(
     for file in files {
         match file {
             fastn_core::apis::sync::SyncResponseFile::Add { path, content, .. } => {
-                fastn_core::utils::update1(config.ds.root(), path, content).await?;
+                fastn_core::utils::update1(config.ds.root(), path, content, &config.ds).await?;
             }
             fastn_core::apis::sync::SyncResponseFile::Update {
                 path,
@@ -261,12 +252,10 @@ async fn update_current_directory(
                 if fastn_core::apis::sync::SyncStatus::Conflict.eq(status) {
                     println!("Conflict: {}", path);
                 }
-                fastn_core::utils::update1(config.ds.root(), path, content).await?;
+                fastn_core::utils::update1(config.ds.root(), path, content, &config.ds).await?;
             }
             fastn_core::apis::sync::SyncResponseFile::Delete { path, .. } => {
-                if config.ds.root().join(path).exists() {
-                    tokio::fs::remove_file(config.ds.root().join(path)).await?;
-                }
+                config.ds.remove(&config.ds.root().join(path)).await?;
             }
         }
     }
@@ -279,10 +268,21 @@ async fn update_history(
     latest_ftd: &str,
 ) -> fastn_core::Result<()> {
     for file in files {
-        fastn_core::utils::update1(&config.history_dir(), file.path.as_str(), &file.content)
-            .await?;
+        fastn_core::utils::update1(
+            &config.history_dir(),
+            file.path.as_str(),
+            &file.content,
+            &config.ds,
+        )
+        .await?;
     }
-    fastn_core::utils::update1(&config.history_dir(), ".latest.ftd", latest_ftd.as_bytes()).await?;
+    fastn_core::utils::update1(
+        &config.history_dir(),
+        ".latest.ftd",
+        latest_ftd.as_bytes(),
+        &config.ds,
+    )
+    .await?;
     Ok(())
 }
 
@@ -340,7 +340,8 @@ async fn on_conflict(
                         fastn_core::snapshot::resolve_snapshots(&response.latest_ftd).await?;
                     let content = get_file_content(path, request.files.as_slice())
                         .ok_or_else(|| error("File should be available in request file"))?;
-                    fastn_core::utils::update1(&config.conflicted_dir(), path, content).await?;
+                    fastn_core::utils::update1(&config.conflicted_dir(), path, content, &config.ds)
+                        .await?;
                     workspace.insert(
                         path.to_string(),
                         fastn_core::snapshot::Workspace {
@@ -357,7 +358,8 @@ async fn on_conflict(
                 } else if fastn_core::apis::sync::SyncStatus::CloneEditedRemoteDeleted.eq(status) {
                     let content = get_file_content(path, request.files.as_slice())
                         .ok_or_else(|| error("File should be available in request file"))?;
-                    fastn_core::utils::update1(&config.conflicted_dir(), path, content).await?;
+                    fastn_core::utils::update1(&config.conflicted_dir(), path, content, &config.ds)
+                        .await?;
                     workspace.insert(
                         path.to_string(),
                         fastn_core::snapshot::Workspace {
@@ -415,7 +417,10 @@ async fn collect_garbage(config: &fastn_core::Config) -> fastn_core::Result<()> 
         .collect_vec();
 
     for path in paths {
-        tokio::fs::remove_file(config.conflicted_dir().join(&path)).await?;
+        config
+            .ds
+            .remove(&config.conflicted_dir().join(&path))
+            .await?;
         workspaces.remove(&path);
     }
 

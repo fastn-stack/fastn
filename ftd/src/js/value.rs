@@ -1,10 +1,16 @@
 #[derive(Debug)]
 pub enum Value {
     Data(ftd::interpreter::Value),
-    Reference(String),
+    Reference(ReferenceData),
     ConditionalFormula(Vec<ftd::interpreter::Property>),
     FunctionCall(ftd::interpreter::FunctionCall),
     Clone(String),
+}
+
+#[derive(Debug)]
+pub struct ReferenceData {
+    pub name: String,
+    pub value: Option<ftd::interpreter::PropertyValue>,
 }
 
 impl Value {
@@ -40,8 +46,46 @@ impl Value {
             Value::Data(value) => {
                 value.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
             }
-            Value::Reference(name) => {
-                fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(name, rdata))
+            Value::Reference(data) => {
+                if let Some(value) = &data.value {
+                    if let ftd::interpreter::Kind::OrType {
+                        name,
+                        variant: Some(variant),
+                        full_variant: Some(full_variant),
+                    } = value.kind().inner()
+                    {
+                        let (js_variant, has_value) = ftd_to_js_variant(
+                            name.as_str(),
+                            variant.as_str(),
+                            full_variant.as_str(),
+                            value,
+                            doc.name,
+                            value.line_number(),
+                        );
+
+                        // return or-type value with reference
+                        if has_value {
+                            return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
+                                variant: js_variant,
+                                value: Some(Box::new(fastn_js::SetPropertyValue::Reference(
+                                    ftd::js::utils::update_reference(data.name.as_str(), rdata),
+                                ))),
+                            });
+                        }
+
+                        // return or-type value
+                        return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
+                            variant: js_variant,
+                            value: None,
+                        });
+                    }
+                }
+
+                // for other datatypes, simply return a reference
+                fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
+                    data.name.as_str(),
+                    rdata,
+                ))
             }
             Value::ConditionalFormula(formulas) => fastn_js::SetPropertyValue::Formula(
                 properties_to_js_conditional_formula(doc, formulas, rdata),
@@ -301,7 +345,10 @@ impl ftd::interpreter::PropertyValue {
                 ftd::js::Value::Data(value.to_owned())
             }
             ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
-                ftd::js::Value::Reference(name.to_owned())
+                ftd::js::Value::Reference(ReferenceData {
+                    name: name.clone().to_string(),
+                    value: Some(self.clone()),
+                })
             }
             ftd::interpreter::PropertyValue::FunctionCall(ref function_call) => {
                 ftd::js::Value::FunctionCall(function_call.to_owned())

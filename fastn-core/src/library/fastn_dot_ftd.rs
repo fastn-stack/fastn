@@ -420,7 +420,7 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
     }
 
     if let Some(last_modified_on) = futures::executor::block_on(
-        fastn_core::utils::get_last_modified_on(lib.config.config.ds.root()),
+        fastn_core::utils::get_last_modified_on(&lib.config.config.ds, lib.config.config.ds.root()),
     ) {
         fastn_base = format!(
             indoc::indoc! {"
@@ -532,9 +532,9 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         } else {
             String::from("/")
         };
-        if let Ok(original_snapshots) =
-            futures::executor::block_on(fastn_core::snapshot::get_latest_snapshots(&original_path))
-        {
+        if let Ok(original_snapshots) = futures::executor::block_on(
+            fastn_core::snapshot::get_latest_snapshots(&lib.config.config.ds, &original_path),
+        ) {
             if let Ok(translation_status) =
                 fastn_core::commands::translation_status::get_translation_status(
                     &lib.config.config,

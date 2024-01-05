@@ -416,6 +416,7 @@ pub async fn resolve_foreign_variable2022(
                         &lib.config.build_dir().join("-").join(package.name.as_str()),
                         light_path.as_str(),
                         light.as_slice(),
+                        &lib.config.ds,
                     )
                     .await
                     .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
@@ -469,6 +470,7 @@ pub async fn resolve_foreign_variable2022(
                             &lib.config.build_dir().join("-").join(package.name.as_str()),
                             dark_path.as_str(),
                             dark.as_slice(),
+                            &lib.config.ds,
                         )
                         .await
                         .map_err(|e| {
@@ -567,6 +569,7 @@ async fn download(
             &lib.config.build_dir().join("-").join(package.name.as_str()),
             path,
             data.as_slice(),
+            &lib.config.ds,
         )
         .await
         .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
@@ -698,6 +701,7 @@ pub async fn resolve_foreign_variable2(
                             .join(package.name.as_str()),
                         light_path.as_str(),
                         light.as_slice(),
+                        &lib.config.config.ds,
                     )
                     .await
                     .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
@@ -762,6 +766,7 @@ pub async fn resolve_foreign_variable2(
                                 .join(package.name.as_str()),
                             dark_path.as_str(),
                             dark.as_slice(),
+                            &lib.config.config.ds,
                         )
                         .await
                         .map_err(|e| {

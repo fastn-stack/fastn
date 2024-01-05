@@ -427,6 +427,7 @@ pub enum PropertyKind {
     MetaOGImage,
     MetaTwitterImage,
     MetaThemeColor,
+    MetaFacebookDomainVerification,
     Favicon,
     Selectable,
     BackdropFilter,
@@ -569,6 +570,9 @@ impl PropertyKind {
             }
             PropertyKind::MetaThemeColor => {
                 "fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor"
+            }
+            PropertyKind::MetaFacebookDomainVerification => {
+                "fastn_dom.PropertyKind.DocumentProperties.MetaFacebookDomainVerification"
             }
             PropertyKind::Favicon => "fastn_dom.PropertyKind.Favicon",
             PropertyKind::Selectable => "fastn_dom.PropertyKind.Selectable",

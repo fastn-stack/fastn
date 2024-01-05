@@ -3,6 +3,10 @@ pub(crate) fn get_p1_data(
     value: &ftd::ast::VariableValue,
     doc_name: &str,
 ) -> ftd::interpreter::Result<(ftd::ast::HeaderValues, String)> {
+    if let ftd::ast::VariableValue::String { value, .. } = value {
+        return Ok((ftd::ast::HeaderValues::new(vec![]), value.clone()));
+    }
+
     match value.get_record(doc_name) {
         Ok(val) => Ok((
             val.2.to_owned(),
@@ -94,13 +98,7 @@ pub(crate) fn result_to_value(
                 }
             }
         }
-        Err(e) => match kind.get_name().as_str() {
-            "integer" => Ok(ftd::interpreter::Value::Integer {
-                value: status as i64,
-            }),
-            "string" => Ok(ftd::interpreter::Value::String { text: (e) }),
-            _ => unimplemented!(),
-        },
+        Err(e) => Err(ftd::interpreter::Error::OtherError(e)),
     }
 }
 
@@ -294,7 +292,7 @@ fn extract_named_parameters(
 }
 
 pub(crate) async fn execute_query(
-    database_path: &camino::Utf8PathBuf,
+    database_path: &fastn_ds::Path,
     query: &str,
     doc: &ftd::interpreter::TDoc<'_>,
     headers: ftd::ast::HeaderValues,
@@ -303,7 +301,7 @@ pub(crate) async fn execute_query(
     let doc_name = doc.name;
 
     let conn = match rusqlite::Connection::open_with_flags(
-        database_path,
+        database_path.to_string(),
         rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
     ) {
         Ok(conn) => conn,

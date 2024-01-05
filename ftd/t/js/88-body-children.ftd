@@ -1,0 +1,44 @@
+-- optional string name:
+
+
+-- rendered:
+
+-- rendered.text:
+
+Hello
+
+-- rendered.uis:
+
+-- ftd.text: $name
+if: { name != NULL }
+
+-- ftd.code:
+if: { name != NULL }
+text: $name
+lang: ftd
+
+-- end: rendered.uis
+
+-- end: rendered
+
+
+
+
+
+
+-- component rendered:
+body text:
+children uis:
+
+-- ftd.column:
+
+-- ftd.text: $rendered.text
+
+-- ftd.column:
+children: $rendered.uis
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: rendered

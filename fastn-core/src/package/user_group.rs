@@ -196,7 +196,8 @@ impl UserGroup {
     // Maybe Logic: group.identities + (For all group.groups(g.group - g.excluded_group)).identities
     //              - group.excluded_identities
 
-    pub fn get_identities(
+    #[async_recursion::async_recursion(?Send)]
+    pub async fn get_identities(
         &self,
         config: &fastn_core::Config,
     ) -> fastn_core::Result<Vec<UserIdentity>> {
@@ -204,15 +205,15 @@ impl UserGroup {
 
         // A group contains child another groups
         for group in self.groups.iter() {
-            let user_group = user_group_by_id(config, group.as_str())?.ok_or_else(|| {
-                fastn_core::Error::GroupNotFound {
+            let user_group = user_group_by_id(config, group.as_str())
+                .await?
+                .ok_or_else(|| fastn_core::Error::GroupNotFound {
                     id: group.to_string(),
                     message: "group not found while getting identities".to_string(),
-                }
-            })?;
+                })?;
 
             // Recursive call to get child groups identities
-            identities.extend(user_group.get_identities(config)?)
+            identities.extend(user_group.get_identities(config).await?)
         }
         identities.extend(self.identities.clone());
 
@@ -221,7 +222,8 @@ impl UserGroup {
 
     /// This function returns `true` if any of given
     /// identities is part of group else return's `false`
-    pub fn belongs_to(
+    #[async_recursion::async_recursion(?Send)]
+    pub async fn belongs_to(
         &self,
         config: &fastn_core::Config,
         identities: &[&UserIdentity],
@@ -235,17 +237,17 @@ impl UserGroup {
         }
 
         for group_id in self.groups.iter() {
-            let group = user_group_by_id(config, group_id.as_str())?.ok_or_else(|| {
-                fastn_core::Error::GroupNotFound {
+            let group = user_group_by_id(config, group_id.as_str())
+                .await?
+                .ok_or_else(|| fastn_core::Error::GroupNotFound {
                     id: group_id.to_string(),
                     message: format!(
                         "group not found while checking belongs_to with group: {}",
                         self.id.as_str()
                     ),
-                }
-            })?;
+                })?;
 
-            if group.belongs_to(config, identities)? {
+            if group.belongs_to(config, identities).await? {
                 return Ok(true);
             }
         }
@@ -436,7 +438,7 @@ impl UserGroupTemp {
 
 /// `get_identities` for a `document_name`
 /// This will get the identities from groups defined in sitemap
-pub fn get_identities(
+pub async fn get_identities(
     config: &crate::Config,
     document_name: &str,
     is_read: bool,
@@ -453,21 +455,19 @@ pub fn get_identities(
         vec![]
     };
 
-    let identities: fastn_core::Result<Vec<Vec<UserIdentity>>> = readers_writers
-        .into_iter()
-        .map(|g| g.get_identities(config))
-        .collect();
-
-    let identities = identities?
-        .into_iter()
-        .flat_map(|x| x.into_iter())
-        .collect();
+    let identities = {
+        let mut identities = vec![];
+        for g in readers_writers {
+            identities.extend(g.get_identities(config).await?);
+        }
+        identities
+    };
 
     Ok(identities)
 }
 
 // TODO Doc: group-id should not contain / in it
-pub fn user_groups_by_package(
+pub async fn user_groups_by_package(
     config: &fastn_core::Config,
     package: &str,
 ) -> fastn_core::Result<Vec<UserGroup>> {
@@ -477,7 +477,7 @@ pub fn user_groups_by_package(
     // let package = config.find_package_by_name(package).await?;
     // Ok(package.groups.into_values().collect_vec())
 
-    let fastn_document = config.get_fastn_document(package)?;
+    let fastn_document = config.get_fastn_document(package).await?;
     fastn_document
         .get::<Vec<UserGroupTemp>>("fastn#user-group")?
         .into_iter()
@@ -486,7 +486,7 @@ pub fn user_groups_by_package(
 }
 
 /// group_id: "<package_name>/<group_id>" or "<group_id>"
-pub fn user_group_by_id(
+pub async fn user_group_by_id(
     config: &fastn_core::Config,
     group_id: &str,
 ) -> fastn_core::Result<Option<UserGroup>> {
@@ -495,19 +495,20 @@ pub fn user_group_by_id(
         .rsplit_once('/')
         .unwrap_or((&config.package.name, group_id));
 
-    Ok(user_groups_by_package(config, package)?
+    Ok(user_groups_by_package(config, package)
+        .await?
         .into_iter()
         .find(|g| g.id.as_str() == group_id))
 }
 
 /// return true if: any input identity is match with any input group's identity.
-pub fn belongs_to(
+pub async fn belongs_to(
     config: &fastn_core::Config,
     groups: &[&UserGroup],
     identities: &[&UserIdentity],
 ) -> fastn_core::Result<bool> {
     for group in groups.iter() {
-        if group.belongs_to(config, identities)? {
+        if group.belongs_to(config, identities).await? {
             return Ok(true);
         }
     }
@@ -550,7 +551,7 @@ pub async fn access_identities(
     document_name: &str,
     is_read: bool,
 ) -> fastn_core::Result<Vec<UserIdentity>> {
-    let sitemap_identities = get_identities(config, document_name, is_read)?;
+    let sitemap_identities = get_identities(config, document_name, is_read).await?;
     //dbg!(&sitemap_identities);
     // github-team: fastn-lang/ftd
     // github-starred: fastn-lang/ftd

@@ -6,7 +6,7 @@ mod utils;
 #[async_recursion::async_recursion(?Send)]
 pub async fn resolve_dependencies(
     ds: &fastn_ds::DocumentStore,
-    packages_root: &camino::Utf8PathBuf,
+    packages_root: &fastn_ds::Path,
     dependencies: &Vec<fastn_core::package::dependency::Dependency>,
     packages: &mut Vec<fastn_update::types::Package>,
     visited: &mut std::collections::HashSet<String>,
@@ -175,7 +175,7 @@ pub async fn process(config: &fastn_core::Config) -> fastn_core::Result<()> {
     config
         .ds
         .write_content(
-            dot_fastn_dir.join("manifest.json"),
+            &dot_fastn_dir.join("manifest.json"),
             serde_json::to_vec_pretty(&manifest)?,
         )
         .await?;
@@ -186,7 +186,9 @@ pub async fn process(config: &fastn_core::Config) -> fastn_core::Result<()> {
 }
 
 pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
-    if let Err(e) = std::fs::remove_dir_all(config.ds.root().join(".packages")) {
+    if let Err(fastn_ds::RemoveError::IOError(e)) =
+        config.ds.remove(&config.ds.root().join(".packages")).await
+    {
         match e.kind() {
             std::io::ErrorKind::NotFound => {}
             _ => return Err(e.into()),

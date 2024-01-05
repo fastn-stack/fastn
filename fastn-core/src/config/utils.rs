@@ -2,14 +2,15 @@
 /// application started in, and goes up till it finds a folder that contains `FASTN.ftd` file.
 /// TODO: make async
 pub(crate) fn find_root_for_file(
-    dir: &camino::Utf8Path,
+    dir: &fastn_ds::Path,
     file_name: &str,
-) -> Option<camino::Utf8PathBuf> {
-    if dir.join(file_name).exists() {
-        Some(dir.into())
+    ds: &fastn_ds::DocumentStore,
+) -> Option<fastn_ds::Path> {
+    if ds.exists(&dir.join(file_name)) {
+        Some(dir.clone())
     } else {
         if let Some(p) = dir.parent() {
-            return find_root_for_file(p, file_name);
+            return find_root_for_file(&p, file_name, ds);
         };
         None
     }
@@ -17,7 +18,7 @@ pub(crate) fn find_root_for_file(
 
 pub async fn fastn_doc(
     ds: &fastn_ds::DocumentStore,
-    path: &camino::Utf8Path,
+    path: &fastn_ds::Path,
 ) -> fastn_core::Result<ftd::ftd2021::p2::Document> {
     let doc = ds.read_to_string(path).await?;
     let lib = fastn_core::FastnLibrary::default();

@@ -64,7 +64,8 @@ impl ComponentDefinition {
                     ftd::ast::VariableValue::String {
                         value: css.to_string(),
                         line_number: component_definition.line_number(),
-                        source: ftd::ast::ValueSource::Default
+                        source: ftd::ast::ValueSource::Default,
+                        condition: None
                     },
                     doc,
                     false,
@@ -156,7 +157,7 @@ impl Component {
         &self,
         argument_name: &str,
         doc: &ftd::interpreter::TDoc,
-    ) -> Option<ftd::interpreter::Value> {
+    ) -> ftd::interpreter::Result<Option<ftd::interpreter::Value>> {
         let component_definition = doc.get_component(self.name.as_str(), 0).unwrap();
         let argument = component_definition
             .arguments
@@ -169,17 +170,17 @@ impl Component {
     pub fn get_interpreter_property_value_of_all_arguments(
         &self,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::Map<ftd::interpreter::PropertyValue> {
+    ) -> ftd::interpreter::Result<ftd::Map<ftd::interpreter::PropertyValue>> {
         let component_definition = doc.get_component(self.name.as_str(), 0).unwrap();
         let mut property_values: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
         for argument in component_definition.arguments.iter() {
             if let Some(property_value) =
-                argument.get_default_interpreter_property_value(self.properties.as_slice())
+                argument.get_default_interpreter_property_value(self.properties.as_slice())?
             {
                 property_values.insert(argument.name.to_string(), property_value);
             }
         }
-        property_values
+        Ok(property_values)
     }
 
     // Todo: Remove this function after removing 0.3
@@ -832,6 +833,7 @@ impl Property {
             doc,
             line_number,
         )?);
+
         for property in ast_properties {
             properties.push(try_ok_state!(Property::from_ast_property(
                 property,
@@ -850,6 +852,14 @@ impl Property {
             definition_name_with_arguments,
             line_number,
         )?);
+
+        check_if_property_is_provided_for_required_argument(
+            &component_arguments,
+            &properties,
+            component_name,
+            line_number,
+            doc.name,
+        )?;
 
         Ok(ftd::interpreter::StateWithThing::new_thing(properties))
     }
@@ -1004,6 +1014,35 @@ impl Property {
         }
         None
     }
+}
+
+fn check_if_property_is_provided_for_required_argument(
+    component_arguments: &[ftd::interpreter::Field],
+    properties: &[ftd::interpreter::Property],
+    component_name: &str,
+    line_number: usize,
+    doc_id: &str,
+) -> ftd::interpreter::Result<()> {
+    for argument in component_arguments {
+        if !argument.is_value_required() {
+            continue;
+        }
+        if argument
+            .get_default_interpreter_property_value(properties)
+            .map(|v| v.is_none())
+            .unwrap_or(true)
+        {
+            return Err(ftd::interpreter::Error::ParseError {
+                message: format!(
+                    "Property `{}` of component `{}` is not passed",
+                    argument.name, component_name
+                ),
+                doc_id: doc_id.to_string(),
+                line_number,
+            });
+        }
+    }
+    Ok(())
 }
 
 fn search_things_for_module(

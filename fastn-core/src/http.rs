@@ -29,9 +29,13 @@ pub fn unauthorised_(msg: String) -> fastn_core::http::Response {
     actix_web::HttpResponse::Unauthorized().body(msg)
 }
 
+pub fn not_found_without_warning(msg: String) -> fastn_core::http::Response {
+    actix_web::HttpResponse::NotFound().body(msg)
+}
+
 pub fn not_found_(msg: String) -> fastn_core::http::Response {
     fastn_core::warning!("page not found: {}", msg);
-    actix_web::HttpResponse::NotFound().body(msg)
+    not_found_without_warning(msg)
 }
 
 impl actix_web::ResponseError for fastn_core::Error {}

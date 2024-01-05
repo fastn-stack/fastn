@@ -1103,10 +1103,14 @@
                         "name": "foo#len",
                         "kind": {
                           "kind": {
-                            "OrType": {
-                              "name": "ftd#length",
-                              "variant": "ftd#length.px",
-                              "full_variant": "ftd#length.px"
+                            "Optional": {
+                              "kind": {
+                                "OrType": {
+                                  "name": "ftd#length",
+                                  "variant": null,
+                                  "full_variant": null
+                                }
+                              }
                             }
                           },
                           "caption": false,
@@ -1538,10 +1542,14 @@
                         "name": "foo#len",
                         "kind": {
                           "kind": {
-                            "OrType": {
-                              "name": "ftd#length",
-                              "variant": "ftd#length.px",
-                              "full_variant": "ftd#length.px"
+                            "Optional": {
+                              "kind": {
+                                "OrType": {
+                                  "name": "ftd#length",
+                                  "variant": null,
+                                  "full_variant": null
+                                }
+                              }
                             }
                           },
                           "caption": false,

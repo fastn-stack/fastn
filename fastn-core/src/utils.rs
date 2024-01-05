@@ -326,9 +326,12 @@ pub(crate) fn nanos_to_rfc3339(nanos: &u128) -> String {
     nanos.to_string() // TODO
 }
 
-pub(crate) fn history_path(id: &str, base_path: &str, timestamp: &u128) -> camino::Utf8PathBuf {
+pub(crate) fn history_path(
+    id: &str,
+    base_path: &fastn_ds::Path,
+    timestamp: &u128,
+) -> fastn_ds::Path {
     let id_with_timestamp_extension = snapshot_id(id, timestamp);
-    let base_path = camino::Utf8PathBuf::from(base_path);
     base_path.join(".history").join(id_with_timestamp_extension)
 }
 
@@ -340,22 +343,22 @@ pub(crate) fn snapshot_id(path: &str, timestamp: &u128) -> String {
     }
 }
 
-pub(crate) fn track_path(id: &str, base_path: &str) -> camino::Utf8PathBuf {
-    let base_path = camino::Utf8PathBuf::from(base_path);
+pub(crate) fn track_path(id: &str, base_path: &fastn_ds::Path) -> fastn_ds::Path {
     base_path.join(".tracks").join(format!("{}.track", id))
 }
 
 pub(crate) async fn get_number_of_documents(
     config: &fastn_core::Config,
 ) -> fastn_core::Result<String> {
-    let mut no_of_docs = fastn_core::snapshot::get_latest_snapshots(config.ds.root())
+    let mut no_of_docs = fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root())
         .await?
         .len()
         .to_string();
     if let Ok(original_path) = config.original_path() {
-        let no_of_original_docs = fastn_core::snapshot::get_latest_snapshots(&original_path)
-            .await?
-            .len();
+        let no_of_original_docs =
+            fastn_core::snapshot::get_latest_snapshots(&config.ds, &original_path)
+                .await?
+                .len();
         no_of_docs = format!("{} / {}", no_of_docs, no_of_original_docs);
     }
     Ok(no_of_docs)
@@ -365,15 +368,18 @@ pub(crate) async fn get_current_document_last_modified_on(
     config: &fastn_core::Config,
     document_id: &str,
 ) -> Option<String> {
-    fastn_core::snapshot::get_latest_snapshots(config.ds.root())
+    fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root())
         .await
         .unwrap_or_default()
         .get(document_id)
         .map(nanos_to_rfc3339)
 }
 
-pub(crate) async fn get_last_modified_on(path: &camino::Utf8PathBuf) -> Option<String> {
-    fastn_core::snapshot::get_latest_snapshots(path)
+pub(crate) async fn get_last_modified_on(
+    ds: &fastn_ds::DocumentStore,
+    path: &fastn_ds::Path,
+) -> Option<String> {
+    fastn_core::snapshot::get_latest_snapshots(ds, path)
         .await
         .unwrap_or_default()
         .values()
@@ -410,7 +416,7 @@ pub(crate) fn get_package_title(config: &fastn_core::Config) -> String {
     }
 }*/
 
-#[async_recursion::async_recursion(?Send)]
+/*#[async_recursion::async_recursion(?Send)]
 pub async fn copy_dir_all(
     src: impl AsRef<camino::Utf8Path> + 'static,
     dst: impl AsRef<camino::Utf8Path> + 'static,
@@ -420,8 +426,7 @@ pub async fn copy_dir_all(
     while let Some(child) = dir.next_entry().await? {
         if child.metadata().await?.is_dir() {
             copy_dir_all(
-                camino::Utf8PathBuf::from_path_buf(child.path())
-                    .expect("we only work with utf8 paths"),
+                fastn_ds::Path::from_path_buf(child.path()).expect("we only work with utf8 paths"),
                 dst.as_ref().join(
                     child
                         .file_name()
@@ -444,7 +449,7 @@ pub async fn copy_dir_all(
         }
     }
     Ok(())
-}
+}*/
 
 pub(crate) fn seconds_to_human(s: u64) -> String {
     let days = s / 3600 / 24;
@@ -540,8 +545,8 @@ pub fn id_to_path(id: &str) -> String {
 
 /// returns true if an existing file named "file_name"
 /// exists in the root package folder
-fn is_file_in_root(root: &str, file_name: &str) -> bool {
-    camino::Utf8PathBuf::from(root).join(file_name).exists()
+fn is_file_in_root(root: &str, file_name: &str, ds: &fastn_ds::DocumentStore) -> bool {
+    ds.exists(&fastn_ds::Path::new(root).join(file_name))
 }
 
 /// returns favicon html tag as string
@@ -551,6 +556,7 @@ fn resolve_favicon(
     root_path: &str,
     package_name: &str,
     favicon: &Option<String>,
+    ds: &fastn_ds::DocumentStore,
 ) -> Option<String> {
     /// returns html tag for using favicon.
     fn favicon_html(favicon_path: &str, content_type: &str) -> String {
@@ -564,9 +570,9 @@ fn resolve_favicon(
     /// returns relative favicon path from package and its mime content type
     fn get_favicon_path_and_type(package_name: &str, favicon_path: &str) -> (String, String) {
         // relative favicon path wrt package
-        let path = camino::Utf8PathBuf::from(package_name).join(favicon_path);
+        let path = fastn_ds::Path::new(package_name).join(favicon_path);
         // mime content type of the favicon
-        let content_type = mime_guess::from_path(path.as_str()).first_or_octet_stream();
+        let content_type = mime_guess::from_path(path.to_string().as_str()).first_or_octet_stream();
 
         (favicon_path.to_string(), content_type.to_string())
     }
@@ -588,13 +594,13 @@ fn resolve_favicon(
 
                 // Just check if any favicon exists in the root package directory
                 // in the above mentioned priority order
-                let found_favicon_id = if is_file_in_root(root_path, "favicon.ico") {
+                let found_favicon_id = if is_file_in_root(root_path, "favicon.ico", ds) {
                     "favicon.ico"
-                } else if is_file_in_root(root_path, "favicon.svg") {
+                } else if is_file_in_root(root_path, "favicon.svg", ds) {
                     "favicon.svg"
-                } else if is_file_in_root(root_path, "favicon.png") {
+                } else if is_file_in_root(root_path, "favicon.png", ds) {
                     "favicon.png"
-                } else if is_file_in_root(root_path, "favicon.jpg") {
+                } else if is_file_in_root(root_path, "favicon.jpg", ds) {
                     "favicon.jpg"
                 } else {
                     // Not using any favicon
@@ -629,10 +635,9 @@ pub fn get_external_css_html(external_js: &[String]) -> String {
 pub async fn get_inline_js_html(config: &fastn_core::Config, inline_js: &[String]) -> String {
     let mut result = "".to_string();
     for path in inline_js {
-        if camino::Utf8Path::new(path).exists() {
-            if let Ok(content) = config.ds.read_to_string(path).await {
-                result = format!("{}<script>{}</script>", result, content);
-            }
+        let path = fastn_ds::Path::new(path);
+        if let Ok(content) = config.ds.read_to_string(&path).await {
+            result = format!("{}<script>{}</script>", result, content);
         }
     }
     result
@@ -641,10 +646,9 @@ pub async fn get_inline_js_html(config: &fastn_core::Config, inline_js: &[String
 pub async fn get_inline_css_html(config: &fastn_core::Config, inline_js: &[String]) -> String {
     let mut result = "".to_string();
     for path in inline_js {
-        if camino::Utf8Path::new(path).exists() {
-            if let Ok(content) = config.ds.read_to_string(path).await {
-                result = format!("{}<style>{}</style>", result, content);
-            }
+        let path = fastn_ds::Path::new(path);
+        if let Ok(content) = config.ds.read_to_string(&path).await {
+            result = format!("{}<style>{}</style>", result, content);
         }
     }
     result
@@ -706,9 +710,10 @@ pub async fn replace_markers_2022(
         .replace(
             "__favicon_html_tag__",
             resolve_favicon(
-                config.ds.root().as_str(),
+                config.ds.root().to_string().as_str(),
                 config.package.name.as_str(),
                 &config.package.favicon,
+                &config.ds,
             )
             .unwrap_or_default()
             .as_str(),
@@ -791,9 +796,10 @@ pub async fn replace_markers_2023(
             "".to_string()
         },
         favicon_html_tag = resolve_favicon(
-            config.ds.root().as_str(),
+            config.ds.root().to_string().as_str(),
             config.package.name.as_str(),
             &config.package.favicon,
+            &config.ds
         )
         .unwrap_or_default()
         .as_str(),
@@ -832,92 +838,77 @@ pub fn is_test() -> bool {
 }
 
 pub(crate) async fn write(
-    root: &camino::Utf8PathBuf,
+    root: &fastn_ds::Path,
     file_path: &str,
     data: &[u8],
+    ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    if root.join(file_path).exists() {
+    if ds.exists(&root.join(file_path)) {
         return Ok(());
     }
-    update1(root, file_path, data).await
+    update1(root, file_path, data, ds).await
 }
 
 pub(crate) async fn overwrite(
-    root: &camino::Utf8PathBuf,
+    root: &fastn_ds::Path,
     file_path: &str,
     data: &[u8],
+    ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    update1(root, file_path, data).await
+    update1(root, file_path, data, ds).await
 }
 
 // TODO: remove this function use update instead
 pub(crate) async fn update1(
-    root: &camino::Utf8PathBuf,
+    root: &fastn_ds::Path,
     file_path: &str,
     data: &[u8],
+    ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    use tokio::io::AsyncWriteExt;
-
     let (file_root, file_name) = if let Some((file_root, file_name)) = file_path.rsplit_once('/') {
         (file_root.to_string(), file_name.to_string())
     } else {
         ("".to_string(), file_path.to_string())
     };
 
-    if !root.join(&file_root).exists() {
-        tokio::fs::create_dir_all(root.join(&file_root)).await?;
-    }
-
-    Ok(
-        tokio::fs::File::create(root.join(file_root).join(file_name))
-            .await?
-            .write_all(data)
-            .await?,
-    )
+    Ok(ds
+        .write_content(&root.join(file_root).join(file_name), data.to_vec())
+        .await?)
 }
 
 pub(crate) async fn copy(
-    from: impl AsRef<camino::Utf8Path>,
-    to: impl AsRef<camino::Utf8Path>,
+    from: &fastn_ds::Path,
+    to: &fastn_ds::Path,
+    ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    let content = fastn_core::tokio_fs::read(from.as_ref()).await?;
-    fastn_core::utils::update(to, content.as_slice()).await
+    let content = ds.read_content(from).await?;
+    fastn_core::utils::update(to, content.as_slice(), ds).await
 }
 
 pub(crate) async fn update(
-    root: impl AsRef<camino::Utf8Path>,
+    root: &fastn_ds::Path,
     data: &[u8],
+    ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    use tokio::io::AsyncWriteExt;
-
-    let (file_root, file_name) = if let Some(file_root) = root.as_ref().parent() {
+    let (file_root, file_name) = if let Some(file_root) = root.parent() {
         (
             file_root,
-            root.as_ref()
-                .file_name()
+            root.file_name()
                 .ok_or_else(|| fastn_core::Error::UsageError {
-                    message: format!(
-                        "Invalid File Path: Can't find file name `{:?}`",
-                        root.as_ref()
-                    ),
+                    message: format!("Invalid File Path: Can't find file name `{:?}`", root),
                 })?,
         )
     } else {
         return Err(fastn_core::Error::UsageError {
             message: format!(
                 "Invalid File Path: file path doesn't have parent: {:?}",
-                root.as_ref()
+                root
             ),
         });
     };
 
-    if !file_root.exists() {
-        tokio::fs::create_dir_all(file_root).await?;
-    }
-
-    Ok(tokio::fs::File::create(file_root.join(file_name))
-        .await?
-        .write_all(data)
+    Ok(ds
+        .write_content(&file_root.join(file_name), data.to_vec())
         .await?)
 }
 
@@ -953,37 +944,19 @@ pub fn parse_from_cli(key: &str) -> Option<String> {
         .map(String::to_string)
 }
 
-/// Remove path: It can be directory or file
-pub async fn remove(path: &std::path::Path) -> std::io::Result<()> {
-    if path.is_file() {
-        tokio::fs::remove_file(path).await?;
-    } else if path.is_dir() {
-        tokio::fs::remove_dir_all(path).await?
-    } else if path.is_symlink() {
-        // TODO:
-        // It can be a directory or a file
-    }
-    Ok(())
-}
-
 /// Remove from provided `root` except given list
-pub async fn remove_except(root: &camino::Utf8Path, except: &[&str]) -> fastn_core::Result<()> {
+pub async fn remove_except(
+    root: &fastn_ds::Path,
+    except: &[&str],
+    ds: &fastn_ds::DocumentStore,
+) -> fastn_core::Result<()> {
     use itertools::Itertools;
-    let except = except
-        .iter()
-        .map(|x| root.join(x))
-        .map(|x| x.into_std_path_buf())
-        .collect_vec();
-    let mut all = tokio::fs::read_dir(root).await?;
-    while let Some(file) = all.next_entry().await? {
-        if except.contains(&file.path()) {
+    let except = except.iter().map(|x| root.join(x)).collect_vec();
+    for path in ds.get_all_file_path(root, &[]) {
+        if except.contains(&path) {
             continue;
         }
-        if file.metadata().await?.is_dir() {
-            tokio::fs::remove_dir_all(file.path()).await?;
-        } else if file.metadata().await?.is_file() {
-            tokio::fs::remove_file(file.path()).await?;
-        }
+        ds.remove(&path).await?;
     }
     Ok(())
 }

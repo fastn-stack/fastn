@@ -12,7 +12,10 @@ text: $markdown.text
 
 -- end: markdown
 
+
 -- markdown:
+
+Some markdown text
 
 ;; COMMENT NEXT LINE
 ;; Go to the [new page](/new-page/).

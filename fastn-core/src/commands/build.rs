@@ -7,13 +7,12 @@ pub async fn build(
     test: bool,
     check_build: bool,
 ) -> fastn_core::Result<()> {
-    tokio::fs::create_dir_all(config.build_dir()).await?;
-
     // Default css and js
     default_build_files(
         config.ds.root().join(".build"),
         &config.ftd_edition,
         &config.package.name,
+        &config.ds,
     )
     .await?;
 
@@ -50,7 +49,7 @@ pub async fn build(
             };
 
             let save_path = config.ds.root().join(".build").join(save_file.as_str());
-            fastn_core::utils::update(save_path, content.as_bytes())
+            fastn_core::utils::update(&save_path, content.as_bytes(), &config.ds)
                 .await
                 .ok();
         }
@@ -227,7 +226,7 @@ async fn handle_dependency_file(
 }
 
 // removes deleted documents from cache and build folder
-fn remove_deleted_documents(
+async fn remove_deleted_documents(
     config: &fastn_core::Config,
     c: &mut cache::Cache,
     documents: &std::collections::BTreeMap<String, fastn_core::File>,
@@ -257,16 +256,13 @@ fn remove_deleted_documents(
         let folder_parent = folder_path.parent();
         let file_path = &folder_path.with_extension("ftd");
 
-        if file_path.exists() {
-            std::fs::remove_file(file_path)?;
-        }
-
-        std::fs::remove_dir_all(&folder_path)?;
+        config.ds.remove(file_path).await?;
+        config.ds.remove(&folder_path).await?;
 
         // If the parent folder of the file's output folder is also empty, delete it as well.
         if let Some(folder_parent) = folder_parent {
-            if folder_parent.read_dir()?.count().eq(&0) {
-                std::fs::remove_dir_all(folder_parent)?;
+            if config.ds.get_all_file_path(&folder_parent, &[]).is_empty() {
+                config.ds.remove(&folder_parent).await?;
             }
         }
 
@@ -387,7 +383,7 @@ async fn incremental_build(
             }
         }
 
-        remove_deleted_documents(config, &mut c, documents)?;
+        remove_deleted_documents(config, &mut c, documents).await?;
     } else {
         for document in documents.values() {
             handle_file(
@@ -583,8 +579,9 @@ async fn handle_file_(
             }
 
             fastn_core::utils::copy(
-                config.ds.root().join(doc.id.as_str()),
-                config.ds.root().join(".build").join(doc.id.as_str()),
+                &config.ds.root().join(doc.id.as_str()),
+                &config.ds.root().join(".build").join(doc.id.as_str()),
+                &config.ds,
             )
             .await
             .ok();
@@ -649,7 +646,7 @@ async fn handle_file_(
             }
         }
         fastn_core::File::Static(sa) => {
-            process_static(sa, config.ds.root(), &config.package).await?
+            process_static(sa, config.ds.root(), &config.package, &config.ds).await?
         }
         fastn_core::File::Markdown(_doc) => {
             // TODO: bring this feature back
@@ -657,7 +654,7 @@ async fn handle_file_(
             return Ok(());
         }
         fastn_core::File::Image(main_doc) => {
-            process_static(main_doc, config.ds.root(), &config.package).await?;
+            process_static(main_doc, config.ds.root(), &config.package, &config.ds).await?;
         }
         fastn_core::File::Code(doc) => {
             process_static(
@@ -665,10 +662,11 @@ async fn handle_file_(
                     package_name: config.package.name.to_string(),
                     id: doc.id.to_string(),
                     content: doc.content.clone().into_bytes(),
-                    base_path: camino::Utf8PathBuf::from(doc.parent_path.as_str()),
+                    base_path: doc.parent_path.clone(),
                 },
                 config.ds.root(),
                 &config.package,
+                &config.ds,
             )
             .await?;
         }
@@ -679,22 +677,23 @@ async fn handle_file_(
 
 #[tracing::instrument]
 pub async fn default_build_files(
-    base_path: camino::Utf8PathBuf,
+    base_path: fastn_ds::Path,
     ftd_edition: &fastn_core::FTDEdition,
     package_name: &str,
+    ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
     if ftd_edition.is_2023() {
         let default_ftd_js_content = ftd::js::all_js_without_test(package_name);
         let hashed_ftd_js_name = fastn_core::utils::hashed_default_ftd_js(package_name);
         let save_default_ftd_js = base_path.join(hashed_ftd_js_name);
-        fastn_core::utils::update(save_default_ftd_js, default_ftd_js_content.as_bytes())
+        fastn_core::utils::update(&save_default_ftd_js, default_ftd_js_content.as_bytes(), ds)
             .await
             .ok();
 
         let markdown_js_content = ftd::markdown_js();
         let hashed_markdown_js_name = fastn_core::utils::hashed_markdown_js();
         let save_markdown_js = base_path.join(hashed_markdown_js_name);
-        fastn_core::utils::update(save_markdown_js, markdown_js_content.as_bytes())
+        fastn_core::utils::update(&save_markdown_js, markdown_js_content.as_bytes(), ds)
             .await
             .ok();
 
@@ -703,7 +702,7 @@ pub async fn default_build_files(
         for (theme, file_name) in hashed_code_themes {
             let save_markdown_js = base_path.join(file_name);
             let theme_content = theme_css.get(theme).unwrap();
-            fastn_core::utils::update(save_markdown_js, theme_content.as_bytes())
+            fastn_core::utils::update(&save_markdown_js, theme_content.as_bytes(), ds)
                 .await
                 .ok();
         }
@@ -711,28 +710,28 @@ pub async fn default_build_files(
         let prism_js_content = ftd::prism_js();
         let hashed_prism_js_name = fastn_core::utils::hashed_prism_js();
         let save_prism_js = base_path.join(hashed_prism_js_name);
-        fastn_core::utils::update(save_prism_js, prism_js_content.as_bytes())
+        fastn_core::utils::update(&save_prism_js, prism_js_content.as_bytes(), ds)
             .await
             .ok();
 
         let prism_css_content = ftd::prism_css();
         let hashed_prism_css_name = fastn_core::utils::hashed_prism_css();
         let save_prism_css = base_path.join(hashed_prism_css_name);
-        fastn_core::utils::update(save_prism_css, prism_css_content.as_bytes())
+        fastn_core::utils::update(&save_prism_css, prism_css_content.as_bytes(), ds)
             .await
             .ok();
     } else {
         let default_css_content = ftd::css();
         let hashed_css_name = fastn_core::utils::hashed_default_css_name();
         let save_default_css = base_path.join(hashed_css_name);
-        fastn_core::utils::update(save_default_css, default_css_content.as_bytes())
+        fastn_core::utils::update(&save_default_css, default_css_content.as_bytes(), ds)
             .await
             .ok();
 
         let default_js_content = format!("{}\n\n{}", ftd::build_js(), fastn_core::fastn_2022_js());
         let hashed_js_name = fastn_core::utils::hashed_default_js_name();
         let save_default_js = base_path.join(hashed_js_name);
-        fastn_core::utils::update(save_default_js, default_js_content.as_bytes())
+        fastn_core::utils::update(&save_default_js, default_js_content.as_bytes(), ds)
             .await
             .ok();
     }
@@ -762,13 +761,9 @@ async fn get_documents_for_current_package(
                 } else {
                     config.package.name.to_string()
                 };
-                let mut file = fastn_core::get_file(
-                    &config.ds,
-                    package_name,
-                    doc_path,
-                    config.ds.root().as_path(),
-                )
-                .await?;
+                let mut file =
+                    fastn_core::get_file(&config.ds, package_name, doc_path, config.ds.root())
+                        .await?;
                 if let Some(ref url) = url {
                     let url = url.replace("/index.html", "");
                     let extension = if matches!(file, fastn_core::File::Markdown(_)) {
@@ -792,19 +787,21 @@ async fn get_documents_for_current_package(
 
 async fn process_static(
     sa: &fastn_core::Static,
-    base_path: &camino::Utf8Path,
+    base_path: &fastn_ds::Path,
     package: &fastn_core::Package,
+    ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    copy_to_build(sa, base_path, package)?;
+    copy_to_build(sa, base_path, package, ds).await?;
     if let Some(original_package) = package.translation_of.as_ref() {
-        copy_to_build(sa, base_path, original_package)?;
+        copy_to_build(sa, base_path, original_package, ds).await?;
     }
     return Ok(());
 
-    fn copy_to_build(
+    async fn copy_to_build(
         sa: &fastn_core::Static,
-        base_path: &camino::Utf8Path,
+        base_path: &fastn_ds::Path,
         package: &fastn_core::Package,
+        ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<()> {
         let build_path = base_path
             .join(".build")
@@ -812,31 +809,14 @@ async fn process_static(
             .join(package.name.as_str());
 
         let full_file_path = build_path.join(sa.id.as_str());
-        let (file_root, _file_name) = if let Some((file_root, file_name)) = full_file_path
-            .as_str()
-            .rsplit_once(std::path::MAIN_SEPARATOR)
-        {
-            (file_root.to_string(), file_name.to_string())
-        } else {
-            ("".to_string(), full_file_path.to_string())
-        };
-
-        if !base_path.join(&file_root).exists() {
-            std::fs::create_dir_all(base_path.join(&file_root))?;
-        }
-        std::fs::write(full_file_path, &sa.content)?;
+        ds.write_content(&full_file_path, sa.content.clone())
+            .await?;
 
         {
             // TODO: need to remove this once download_base_url is removed
-            std::fs::create_dir_all(base_path.join(".build"))?;
-            if let Some((dir, _)) = sa.id.rsplit_once(std::path::MAIN_SEPARATOR) {
-                std::fs::create_dir_all(base_path.join(".build").join(dir))?;
-            }
-
-            std::fs::copy(
-                sa.base_path.join(sa.id.as_str()),
-                base_path.join(".build").join(sa.id.as_str()),
-            )?;
+            let content = ds.read_content(&sa.base_path.join(sa.id.as_str())).await?;
+            ds.write_content(&base_path.join(".build").join(sa.id.as_str()), content)
+                .await?;
         }
         Ok(())
     }
