@@ -1,7 +1,5 @@
 extern crate self as fastn_ds;
 
-use std::fmt::Formatter;
-
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
     root: Path,
@@ -12,7 +10,7 @@ pub struct Path {
     path: camino::Utf8PathBuf,
 }
 
-impl Path {
+impl fastn_ds::Path {
     pub fn new<T: AsRef<str>>(path: T) -> Self {
         Self {
             path: camino::Utf8PathBuf::from(path.as_ref()),
@@ -56,7 +54,7 @@ impl Path {
 }
 
 impl std::fmt::Display for fastn_ds::Path {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.path.as_str())
     }
 }
@@ -113,15 +111,15 @@ impl DocumentStore {
         }
     }
 
-    pub fn root(&self) -> &Path {
+    pub fn root(&self) -> &fastn_ds::Path {
         &self.root
     }
 
-    pub fn home(&self) -> Path {
-        Path { path: home() }
+    pub fn home(&self) -> fastn_ds::Path {
+        fastn_ds::Path { path: home() }
     }
 
-    pub async fn read_content(&self, path: &Path) -> Result<Vec<u8>, ReadError> {
+    pub async fn read_content(&self, path: &fastn_ds::Path) -> Result<Vec<u8>, ReadError> {
         use tokio::io::AsyncReadExt;
 
         let mut file = tokio::fs::File::open(self.root.join(&path.path).path).await?;
@@ -130,19 +128,23 @@ impl DocumentStore {
         Ok(contents)
     }
 
-    pub async fn read_to_string(&self, path: &Path) -> Result<String, ReadStringError> {
+    pub async fn read_to_string(&self, path: &fastn_ds::Path) -> Result<String, ReadStringError> {
         self.read_content(path)
             .await
             .map_err(ReadStringError::ReadError)
             .and_then(|v| String::from_utf8(v).map_err(ReadStringError::UTF8Error))
     }
 
-    pub async fn copy(&self, from: &Path, to: &Path) -> Result<(), WriteError> {
+    pub async fn copy(&self, from: &fastn_ds::Path, to: &fastn_ds::Path) -> Result<(), WriteError> {
         tokio::fs::copy(&from.path, &to.path).await?;
         Ok(())
     }
 
-    pub async fn write_content(&self, path: &Path, data: Vec<u8>) -> Result<(), WriteError> {
+    pub async fn write_content(
+        &self,
+        path: &fastn_ds::Path,
+        data: Vec<u8>,
+    ) -> Result<(), WriteError> {
         use tokio::io::AsyncWriteExt;
 
         let full_path = self.root.join(&path.path);
@@ -159,16 +161,20 @@ impl DocumentStore {
         Ok(())
     }
 
-    pub async fn read_dir(&self, path: &Path) -> std::io::Result<tokio::fs::ReadDir> {
+    pub async fn read_dir(&self, path: &fastn_ds::Path) -> std::io::Result<tokio::fs::ReadDir> {
         // Todo: Return type should be ftd::interpreter::Result<Vec<fastn_ds::Dir>> not ftd::interpreter::Result<tokio::fs::ReadDir>
         tokio::fs::read_dir(&path.path).await
     }
 
-    pub async fn rename(&self, from: &Path, to: &Path) -> Result<(), RenameError> {
+    pub async fn rename(
+        &self,
+        from: &fastn_ds::Path,
+        to: &fastn_ds::Path,
+    ) -> Result<(), RenameError> {
         Ok(tokio::fs::rename(&from.path, &to.path).await?)
     }
 
-    pub async fn remove(&self, path: &Path) -> Result<(), RemoveError> {
+    pub async fn remove(&self, path: &fastn_ds::Path) -> Result<(), RemoveError> {
         if !path.path.exists() {
             return Ok(());
         }
