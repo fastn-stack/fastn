@@ -286,6 +286,7 @@ fastn_dom.PropertyKind = {
         MetaOGImage: 97,
         MetaTwitterImage: 98,
         MetaThemeColor: 99,
+        MetaFacebookDomainVerification: 123,
     },
     Shadow: 100,
     CodeTheme: 101,
@@ -2581,6 +2582,19 @@ class Node2 {
             this.addMetaTagByName(
                 "theme-color",
                 fastn_utils.getStaticValue(staticValue.get("light")),
+            );
+        } else if (
+            kind ===
+            fastn_dom.PropertyKind.DocumentProperties
+                .MetaFacebookDomainVerification
+        ) {
+            if (fastn_utils.isNull(staticValue)) {
+                this.removeMetaTagByName("facebook-domain-verification");
+                return;
+            }
+            this.addMetaTagByName(
+                "facebook-domain-verification",
+                fastn_utils.getStaticValue(staticValue),
             );
         } else if (
             kind === fastn_dom.PropertyKind.IntegerValue ||

@@ -90,6 +90,8 @@ jobs:
         run: |
           bash .github/scripts/run-integration-tests.sh
       - name: Check if JS code is properly formatted
+        # curl -fsSL https://dprint.dev/install.sh | sh
+        # /Users/amitu/.dprint/bin/dprint fmt --config .github/dprint-ci.json
         id: js-fmt
         uses: dprint/check@v2.2
         with:

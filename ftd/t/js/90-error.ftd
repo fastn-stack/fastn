@@ -1,0 +1,9 @@
+-- component display-hello:
+ftd.color color:
+
+-- ftd.text: Hello
+
+-- end: display-hello
+
+
+-- display-hello:
