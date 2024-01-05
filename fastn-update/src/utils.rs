@@ -1,3 +1,5 @@
+// https://api.github.com/repos/User/repo/:archive_format/:ref
+// https://stackoverflow.com/questions/8377081/github-api-download-zip-or-tarball-link
 pub(crate) static GITHUB_PAGES_REGEX: once_cell::sync::Lazy<regex::Regex> =
     once_cell::sync::Lazy::new(|| regex::Regex::new(r"([^/]+)\.github\.io/([^/]+)").unwrap());
 
@@ -11,8 +13,6 @@ pub(crate) fn extract_github_details(pages_url: &str) -> Option<(String, String)
     }
 }
 
-// https://api.github.com/repos/User/repo/:archive_format/:ref
-// https://stackoverflow.com/questions/8377081/github-api-download-zip-or-tarball-link
 pub(crate) fn get_download_url_gh(username: &str, repository: &str) -> String {
     format!(
         "https://api.github.com/repos/{}/{}/zipball",
@@ -21,6 +21,7 @@ pub(crate) fn get_download_url_gh(username: &str, repository: &str) -> String {
 }
 
 pub(crate) fn get_package_source_url(package: &fastn_core::package::Package) -> Option<String> {
+    // todo: replace this with actual zip archive source url logic
     if let Some((username, repository)) =
         fastn_update::utils::extract_github_details(package.name.as_str())
     {

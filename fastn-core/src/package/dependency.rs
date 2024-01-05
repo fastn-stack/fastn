@@ -36,13 +36,13 @@ impl Dependency {
 }
 
 #[derive(serde::Deserialize, Debug, Clone)]
-pub(crate) struct AutoImportTemp {
+pub struct AutoImportTemp {
     pub name: String,
     pub exposing: Vec<String>,
 }
 
 impl AutoImportTemp {
-    pub(crate) fn into_auto_import(self) -> fastn_core::AutoImport {
+    pub fn into_auto_import(self) -> fastn_core::AutoImport {
         let exposing = {
             let mut exposing = vec![];
             for item in self.exposing {
@@ -66,7 +66,7 @@ impl AutoImportTemp {
 }
 
 #[derive(serde::Deserialize, Debug, Clone)]
-pub(crate) struct DependencyTemp {
+pub struct DependencyTemp {
     pub name: String,
     pub version: Option<String>,
     pub notes: Option<String>,
@@ -81,7 +81,7 @@ pub(crate) struct DependencyTemp {
 }
 
 impl DependencyTemp {
-    pub(crate) fn into_dependency(self) -> fastn_core::Result<fastn_core::Dependency> {
+    pub fn into_dependency(self) -> fastn_core::Result<fastn_core::Dependency> {
         let (package_name, alias) = match self.name.as_str().split_once(" as ") {
             Some((package, alias)) => (package, Some(alias.to_string())),
             _ => (self.name.as_str(), None),

@@ -11,7 +11,7 @@ mod controller;
 mod cr;
 #[cfg(feature = "auth")]
 mod db;
-mod doc;
+pub mod doc;
 mod file;
 mod font;
 mod history;

@@ -861,7 +861,7 @@ pub struct Lang {
     pub available_languages: std::collections::HashMap<String, String>,
 }
 
-trait PackageTempIntoPackage {
+pub trait PackageTempIntoPackage {
     fn into_package(self) -> Package;
 }
 
