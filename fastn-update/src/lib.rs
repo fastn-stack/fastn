@@ -17,7 +17,7 @@ pub async fn resolve_dependencies_(
             }
             let dependency_path = &packages_root.join(&dependency.package.name);
             let manifest = get_manifest(ds, dependency_path).await?;
-            download_zip(&ds, packages_root, &manifest).await?;
+            download_zip(ds, packages_root, &manifest).await?;
             let dep_package = {
                 let mut dep_package = dependency.package.clone();
                 dep_package
@@ -53,7 +53,7 @@ async fn download_zip(
                     .unwrap()
                     .1;
                 let output_path = &dependency_path.join(path_without_prefix);
-                ds.write_content(&output_path, buffer).await?;
+                ds.write_content(output_path, buffer).await?;
             }
         }
     }
