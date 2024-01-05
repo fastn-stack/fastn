@@ -605,9 +605,9 @@ pub(crate) fn api_ok(
     ))
 }
 
-/// construct an error response with `message`
+// construct an error response with `message`
 /// and `status_code`. Use 500 if `status_code` is None
-pub(crate) fn api_error<T: Into<String>>(
+pub fn api_error<T: Into<String>>(
     message: T,
     status_code: Option<actix_web::http::StatusCode>,
 ) -> fastn_core::Result<fastn_core::http::Response> {

@@ -1,51 +1,8 @@
 #[derive(Clone, Eq, PartialEq, Hash, Debug)]
-pub struct Version {
+pub(crate) struct Version {
     pub major: u64,
     pub minor: Option<u64>,
     pub original: String,
-}
-
-impl Version {
-    pub(crate) fn base() -> fastn_core::Version {
-        fastn_core::Version {
-            major: 0,
-            minor: None,
-            original: "BASE_VERSION".to_string(),
-        }
-    }
-
-    pub(crate) fn parse(s: &str) -> fastn_core::Result<fastn_core::Version> {
-        let v = s.strip_prefix(['v', 'V']).unwrap_or(s);
-        let mut minor = None;
-        let major = if let Some((major, minor_)) = v.split_once('.') {
-            if minor_.contains('.') {
-                return Err(fastn_core::Error::UsageError {
-                    message: format!("Cannot have more than one dots `.`, found: `{}`", s),
-                });
-            }
-            let minor_ = minor_
-                .parse::<u64>()
-                .map_err(|e| fastn_core::Error::UsageError {
-                    message: format!("Invalid minor for `{}`: `{:?}`", s, e),
-                })?;
-            minor = Some(minor_);
-            major
-                .parse::<u64>()
-                .map_err(|e| fastn_core::Error::UsageError {
-                    message: format!("Invalid major for `{}`: `{:?}`", s, e),
-                })?
-        } else {
-            v.parse::<u64>()
-                .map_err(|e| fastn_core::Error::UsageError {
-                    message: format!("Invalid major for `{}`: `{:?}`", s, e),
-                })?
-        };
-        Ok(fastn_core::Version {
-            major,
-            minor,
-            original: s.to_string(),
-        })
-    }
 }
 
 impl PartialOrd for Version {
@@ -65,7 +22,7 @@ impl Ord for Version {
     }
 }
 
-#[allow(dead_code)]
+/*#[allow(dead_code)]
 pub(crate) async fn build_version(
     config: &fastn_core::Config,
     _file: Option<&str>,
@@ -171,4 +128,4 @@ pub(crate) async fn build_version(
     //     .await?;
     // }
     // Ok(())
-}
+}*/

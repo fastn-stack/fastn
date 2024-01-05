@@ -65,40 +65,6 @@ pub async fn create_package(
     fastn_core::utils::update(&final_dir.join("index.ftd"), tmp_index.as_bytes(), &ds).await?;
     fastn_core::utils::update(&final_dir.join(".gitignore"), tmp_gitignore.as_bytes(), &ds).await?;
 
-    if cfg!(feature = "remote") {
-        let sync_message = "Initial sync".to_string();
-        let file_list: std::collections::BTreeMap<String, fastn_core::history::FileEditTemp> =
-            IntoIterator::into_iter([
-                (
-                    "FASTN.ftd".to_string(),
-                    fastn_core::history::FileEditTemp {
-                        message: Some(sync_message.to_string()),
-                        author: None,
-                        src_cr: None,
-                        operation: fastn_core::history::FileOperation::Added,
-                    },
-                ),
-                (
-                    "index.ftd".to_string(),
-                    fastn_core::history::FileEditTemp {
-                        message: Some(sync_message.to_string()),
-                        author: None,
-                        src_cr: None,
-                        operation: fastn_core::history::FileOperation::Added,
-                    },
-                ),
-            ])
-            .collect();
-
-        fastn_core::history::insert_into_history(
-            &ds,
-            &final_dir,
-            &file_list,
-            &mut Default::default(),
-        )
-        .await?;
-    }
-
     println!(
         "fastn Package Created: {}\nPath: {}",
         name.green(),

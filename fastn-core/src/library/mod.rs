@@ -1,6 +1,5 @@
 pub(crate) mod document;
 pub(crate) mod fastn_dot_ftd;
-pub(crate) mod package_tree;
 pub use document::convert_to_document_id;
 pub(crate) mod toc;
 pub use fastn_core::Library2022;
