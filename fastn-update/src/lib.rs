@@ -1,11 +1,10 @@
 extern crate self as fastn_update;
 
-mod types;
 mod utils;
 
 pub async fn resolve_dependencies_(
     ds: &fastn_ds::DocumentStore,
-    _packages_root: &fastn_ds::Path,
+    packages_root: &fastn_ds::Path,
     current_package: &fastn_core::Package,
 ) -> fastn_core::Result<()> {
     let mut stack = vec![current_package.clone()];
@@ -16,12 +15,13 @@ pub async fn resolve_dependencies_(
             if resolved.contains(&dependency.package.name) {
                 continue;
             }
-            let manifest = get_manifest(ds, dependency.package.name.as_str());
-            download_zip(&ds, &manifest).await?;
+            let dependency_path = &packages_root.join(&dependency.package.name);
+            let manifest = get_manifest(ds, dependency_path).await?;
+            download_zip(&ds, packages_root, &manifest).await?;
             let dep_package = {
                 let mut dep_package = dependency.package.clone();
                 dep_package
-                    .resolve(&dep_package.fastn_path.unwrap(), ds)
+                    .resolve(&dep_package.fastn_path.clone().unwrap(), ds)
                     .await?;
                 dep_package
             };
@@ -32,167 +32,28 @@ pub async fn resolve_dependencies_(
     Ok(())
 }
 
-struct Manifest {
-    files: Vec<String>,
-    zip_url: String,
-}
-
 async fn download_zip(
-    _ds: &fastn_ds::DocumentStore,
-    _manifest: &Manifest,
-) -> fastn_core::Result<()> {
-    todo!()
-}
-
-// Download manifest of the package `<package-name>/.fastn/manifest.json`
-// Resolve to `Manifest` struct
-fn get_manifest(_ds: &fastn_ds::DocumentStore, _package: &str) -> Manifest {
-    todo!()
-}
-
-#[async_recursion::async_recursion(?Send)]
-pub async fn resolve_dependencies(
     ds: &fastn_ds::DocumentStore,
-    packages_root: &fastn_ds::Path,
-    dependencies: &Vec<fastn_core::package::dependency::Dependency>,
-    packages: &mut Vec<fastn_update::types::Package>,
-    visited: &mut std::collections::HashSet<String>,
-    processing_set: &mut std::collections::HashSet<String>,
+    dependency_path: &fastn_ds::Path,
+    manifest: &fastn_core::Manifest,
 ) -> fastn_core::Result<()> {
-    use fastn_core::package::PackageTempIntoPackage;
-    use std::io::Read;
+    let mut archive = fastn_update::utils::download_archive(manifest.zip_url.clone()).await?;
 
-    for dependency in dependencies {
-        let package_name = &dependency.package.name;
+    for i in 0..archive.len() {
+        let mut entry = archive.by_index(i)?;
 
-        println!("Currently resolving {}", &package_name);
-
-        // Check for circular dependency
-        if processing_set.contains(package_name) || package_name.eq(fastn_core::FASTN_UI_INTERFACE)
-        {
-            continue;
-        }
-
-        processing_set.insert(package_name.clone());
-
-        match fastn_update::utils::get_package_source_url(&dependency.package) {
-            Some(source) => {
-                let (mut archive, checksum) =
-                    fastn_update::utils::download_archive(source.clone()).await?;
-                let dependency_path = &packages_root.join(&dependency.package.name);
-
-                for i in 0..archive.len() {
-                    let mut entry = archive.by_index(i)?;
-
-                    if entry.is_file() {
-                        let mut buffer = Vec::new();
-                        entry.read_to_end(&mut buffer)?;
-                        if let Some(path) = entry.enclosed_name() {
-                            let path_without_prefix = path
-                                .to_str()
-                                .unwrap()
-                                .split_once(std::path::MAIN_SEPARATOR)
-                                .unwrap()
-                                .1;
-                            let output_path = &dependency_path.join(path_without_prefix);
-                            ds.write_content(&output_path, buffer).await?;
-                        }
-                    }
-                }
-
-                // read FASTN.ftd
-                let fastn_path = dependency_path.join("FASTN.ftd");
-                let ftd_document = {
-                    let doc = ds.read_to_string(&fastn_path).await?;
-                    let lib = fastn_core::FastnLibrary::default();
-                    match fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib) {
-                        Ok(v) => v,
-                        Err(e) => {
-                            return Err(fastn_core::Error::PackageError {
-                                message: format!("failed to parse FASTN.ftd 2: {:?}", &e),
-                            });
-                        }
-                    }
-                };
-                let mut package = {
-                    let temp_package: fastn_package::old_fastn::PackageTemp =
-                        ftd_document.get("fastn#package")?;
-                    temp_package.into_package()
-                };
-
-                package.translation_status_summary =
-                    ftd_document.get("fastn#translation-status-summary")?;
-
-                package.fastn_path = Some(fastn_path.clone());
-                package.dependencies = {
-                    let temp_deps: Vec<fastn_core::package::dependency::DependencyTemp> =
-                        ftd_document.get("fastn#dependency")?;
-                    temp_deps
-                        .into_iter()
-                        .map(|v| v.into_dependency())
-                        .collect::<Vec<fastn_core::Result<fastn_core::package::dependency::Dependency>>>()
-                        .into_iter()
-                        .collect::<fastn_core::Result<Vec<fastn_core::package::dependency::Dependency>>>()?
-                };
-
-                let auto_imports: Vec<fastn_core::package::dependency::AutoImportTemp> =
-                    ftd_document.get("fastn#auto-import")?;
-                let auto_import = auto_imports
-                    .into_iter()
-                    .map(|f| f.into_auto_import())
-                    .collect();
-                package.auto_import = auto_import;
-                package.fonts = ftd_document.get("fastn#font")?;
-                package.sitemap_temp = ftd_document.get("fastn#sitemap")?;
-
-                println!("It came here");
-
-                if !processing_set.contains(package_name) {
-                    processing_set.insert(package_name.clone());
-
-                    println!(
-                        "Currently processing dependencies of package: {}",
-                        &package_name
-                    );
-
-                    resolve_dependencies(
-                        ds,
-                        &dependency_path.join(".packages"),
-                        &package.dependencies,
-                        &mut Vec::<fastn_update::types::Package>::new(),
-                        visited,
-                        processing_set,
-                    )
-                    .await?;
-
-                    processing_set.remove(package_name);
-                    visited.insert(package_name.clone());
-
-                    processing_set.remove(package_name);
-
-                    let package = fastn_update::types::Package::new(
-                        dependency.package.name.clone(),
-                        None, // todo: fix this when versioning is available
-                        source,
-                        checksum,
-                        dependency
-                            .package
-                            .dependencies
-                            .iter()
-                            .map(|d| d.package.name.clone())
-                            .collect(),
-                    );
-
-                    packages.push(package);
-                }
-            }
-            None => {
-                return Err(fastn_core::Error::PackageError {
-                    message: format!(
-                        "Could not download package: {}, no source found.",
-                        dependency.package.name
-                    ),
-                })
+        if entry.is_file() {
+            let mut buffer = Vec::new();
+            std::io::Read::read_to_end(&mut entry, &mut buffer)?;
+            if let Some(path) = entry.enclosed_name() {
+                let path_without_prefix = path
+                    .to_str()
+                    .unwrap()
+                    .split_once(std::path::MAIN_SEPARATOR)
+                    .unwrap()
+                    .1;
+                let output_path = &dependency_path.join(path_without_prefix);
+                ds.write_content(&output_path, buffer).await?;
             }
         }
     }
@@ -200,35 +61,21 @@ pub async fn resolve_dependencies(
     Ok(())
 }
 
+/// Download manifest of the package `<package-name>/.fastn/manifest.json`
+/// Resolve to `fastn_core::Manifest` struct
+async fn get_manifest(
+    ds: &fastn_ds::DocumentStore,
+    dependency_path: &fastn_ds::Path,
+) -> fastn_core::Result<fastn_core::Manifest> {
+    let dot_fastn_folder = dependency_path.join(".fastn");
+    let manifest_path = dot_fastn_folder.join("manifest.json");
+    let manifest = serde_json::de::from_slice(&ds.read_content(&manifest_path).await?)?;
+
+    Ok(manifest)
+}
+
 pub async fn process(config: &fastn_core::Config) -> fastn_core::Result<()> {
-    let mut packages: Vec<fastn_update::types::Package> = vec![];
-    let mut processing_set = std::collections::HashSet::new();
-    let mut visited = std::collections::HashSet::new();
-
-    // resolve_dependencies_(&config.ds, &config.packages_root, &config.package).await?;
-    // 1st PASS: download the direct dependencies
-    resolve_dependencies(
-        &config.ds,
-        &config.packages_root,
-        &config.package.dependencies,
-        &mut packages,
-        &mut visited,
-        &mut processing_set,
-    )
-    .await?;
-
-    let manifest = fastn_update::types::Manifest::new(packages);
-    let dot_fastn_dir = config.ds.root().join(".fastn");
-
-    config
-        .ds
-        .write_content(
-            &dot_fastn_dir.join("manifest.json"),
-            serde_json::to_vec_pretty(&manifest)?,
-        )
-        .await?;
-
-    println!("Wrote manifest.json");
+    resolve_dependencies_(&config.ds, &config.packages_root, &config.package).await?;
 
     Ok(())
 }

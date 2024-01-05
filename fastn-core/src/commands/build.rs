@@ -3,6 +3,7 @@ pub async fn build(
     config: &fastn_core::Config,
     only_id: Option<&str>,
     base_url: &str,
+    zip_url: Option<&str>,
     ignore_failed: bool,
     test: bool,
     check_build: bool,
@@ -18,6 +19,29 @@ pub async fn build(
 
     {
         let documents = get_documents_for_current_package(config).await?;
+
+        if let Some(zip_url) = zip_url {
+            let files = config
+                .get_files(&config.package)
+                .await?
+                .iter()
+                .map(|v| v.get_id().to_string())
+                .collect();
+
+            let manifest = fastn_core::Manifest::new(files, zip_url.to_string());
+
+            let dot_fastn_folder = config.ds.root().join(".fastn");
+
+            let _ = &config
+                .ds
+                .write_content(
+                    &dot_fastn_folder.join("manifest.json"),
+                    serde_json::ser::to_vec_pretty(&manifest)?,
+                )
+                .await?;
+
+            println!("Wrote .fastn/manifest.json");
+        }
 
         match only_id {
             Some(id) => {
