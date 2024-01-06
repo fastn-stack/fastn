@@ -585,9 +585,7 @@ pub(crate) async fn http_get_str(url: &str) -> fastn_core::Result<String> {
     }
 }
 
-pub(crate) fn api_ok(
-    data: impl serde::Serialize,
-) -> fastn_core::Result<fastn_core::http::Response> {
+pub fn api_ok(data: impl serde::Serialize) -> fastn_core::Result<fastn_core::http::Response> {
     #[derive(serde::Serialize)]
     struct SuccessResponse<T: serde::Serialize> {
         data: T,

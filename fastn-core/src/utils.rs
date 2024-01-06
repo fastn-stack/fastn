@@ -818,7 +818,7 @@ pub(crate) async fn copy(
     fastn_core::utils::update(to, content.as_slice(), ds).await
 }
 
-pub(crate) async fn update(
+pub async fn update(
     root: &fastn_ds::Path,
     data: &[u8],
     ds: &fastn_ds::DocumentStore,
