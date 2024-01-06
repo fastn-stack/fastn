@@ -21,7 +21,11 @@ pub async fn fmt(
 
         let parsed_content =
             parsed_to_sections(format!("{}\n\n", ftd_document.content.as_str()).as_str());
-        let content = format_sections(parsed_content);
+        let format_sections = format_sections(parsed_content, !no_indentation);
+        config
+            .ds
+            .write_content(&ftd_document.get_full_path(), format_sections.into_bytes())
+            .await?;
     }
 
     Ok(())
@@ -32,7 +36,7 @@ struct Section {
     kind: SectionKind,
 }
 
-pub enum SectionKind {
+enum SectionKind {
     Comment,
     Empty,
     Section {
@@ -69,15 +73,18 @@ impl Section {
     }
 }
 
-fn format_sections(sections: Vec<Section>) -> String {
+fn format_sections(sections: Vec<Section>, indentation: bool) -> String {
     let mut output = vec![];
     for section in sections {
-        output.push(format_section(&section, 0))
+        output.push(format_section(
+            &section,
+            if indentation { Some(0) } else { None },
+        ))
     }
     output.join("\n")
 }
 
-fn format_section(section: &Section, indentation: usize) -> String {
+fn format_section(section: &Section, indentation: Option<usize>) -> String {
     match &section.kind {
         SectionKind::Comment => add_indentation(section.value.as_str(), indentation),
         SectionKind::Empty => section.value.to_string(),
@@ -100,11 +107,11 @@ fn format_section_kind(
     end: bool,
     sub_sections: &[Section],
     value: &str,
-    indentation: usize,
+    indentation: Option<usize>,
 ) -> String {
     let mut output = vec![add_indentation(value, indentation)];
     for section in sub_sections {
-        output.push(format_section(section, indentation + 1));
+        output.push(format_section(section, indentation.map(|v| v + 1)));
     }
     if end {
         output.push(add_indentation(
@@ -115,10 +122,13 @@ fn format_section_kind(
     output.join("\n")
 }
 
-fn add_indentation(input: &str, indentation: usize) -> String {
-    if indentation.eq(&0) {
-        return String::new();
-    }
+fn add_indentation(input: &str, indentation: Option<usize>) -> String {
+    let indentation = match indentation {
+        Some(indentation) if !indentation.eq(&0) => indentation,
+        _ => {
+            return String::new();
+        }
+    };
     let mut value = vec![];
     for i in input.split('\n') {
         value.push(format!("{}{}", "\t".repeat(indentation), i));
@@ -153,27 +163,28 @@ fn end_section(input: &mut String, sections: &mut Vec<Section>) -> bool {
         input.to_string()
     };
 
-    let mut sub_sections = vec![];
     let section_name = if let Some(section_name) = end_section_name(first_line.as_str()) {
         section_name
     } else {
         return false;
     };
+
+    let mut sub_sections = vec![];
     while let Some(mut section) = sections.pop() {
         match &mut section.kind {
             SectionKind::Section {
                 name,
                 end,
                 sub_sections: s,
-            } if section_name.eq(name) => {
+            } if section_name.eq(name.trim_start_matches('$')) => {
                 *end = true;
-                *s = sub_sections.clone();
+                *s = sub_sections;
                 sections.push(section);
                 *input = remaining.unwrap_or_default();
                 return true;
             }
             _ => {
-                sections.push(section);
+                sub_sections.push(section);
             }
         }
     }
@@ -189,8 +200,6 @@ fn end_section_name(input: &str) -> Option<String> {
 }
 
 fn section(input: &mut String, sections: &mut Vec<Section>) -> Option<Section> {
-    use itertools::Itertools;
-
     let section_name = get_section_name(input)?;
     let mut value = vec![];
     let mut first_time_encounter_section = true;
@@ -221,10 +230,7 @@ fn section(input: &mut String, sections: &mut Vec<Section>) -> Option<Section> {
                 }
             }
         }
-        Some(Section::new_section(
-            section_name.as_str(),
-            value.join("\n").as_str(),
-        ))
+        Some(Section::new_section(section_name.as_str(), value.as_str()))
     } else {
         None
     }

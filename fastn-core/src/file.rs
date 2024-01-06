@@ -45,14 +45,10 @@ impl File {
         }
     }
     pub fn get_full_path(&self) -> fastn_ds::Path {
-        let (id, base_path) = match self {
-            Self::Ftd(a) => (a.id.to_string(), &a.parent_path),
-            Self::Static(a) => (a.id.to_string(), &a.base_path),
-            Self::Markdown(a) => (a.id.to_string(), &a.parent_path),
-            Self::Code(a) => (a.id.to_string(), &a.parent_path),
-            Self::Image(a) => (a.id.to_string(), &a.base_path),
-        };
-        base_path.join(id)
+        match self {
+            Self::Ftd(a) | Self::Markdown(a) | Self::Code(a) => a.get_full_path(),
+            Self::Image(a) | Self::Static(a) => a.get_full_path(),
+        }
     }
 
     pub fn is_static(&self) -> bool {
@@ -97,6 +93,10 @@ impl Document {
                 .replace(".ftd", "/")
         )
     }
+
+    pub fn get_full_path(&self) -> fastn_ds::Path {
+        self.parent_path.join(self.id.as_str())
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -110,6 +110,10 @@ pub struct Static {
 impl Static {
     pub fn id_with_package(&self) -> String {
         format!("{}/{}", self.package_name, self.id)
+    }
+
+    pub fn get_full_path(&self) -> fastn_ds::Path {
+        self.base_path.join(self.id.as_str())
     }
 }
 

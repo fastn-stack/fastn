@@ -2,7 +2,7 @@ impl ftd::interpreter::Value {
     pub fn create(&self) -> fastn_wasm::Expression {
         match self {
             ftd::interpreter::Value::String { text } => {
-                let data = text.as_bytes().to_vec();
+                let data = text.into_bytes();
 
                 fastn_wasm::Expression::Call {
                     name: "string_new".to_string(),
