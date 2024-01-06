@@ -8,7 +8,7 @@ pub mod commands;
 mod config;
 #[cfg(feature = "auth")]
 mod db;
-mod doc;
+pub mod doc;
 mod file;
 mod font;
 mod package;
@@ -204,7 +204,7 @@ pub fn debug_env_vars() -> String {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-pub(crate) fn usage_error<T>(message: String) -> Result<T> {
+pub fn usage_error<T>(message: String) -> Result<T> {
     Err(Error::UsageError { message })
 }
 
