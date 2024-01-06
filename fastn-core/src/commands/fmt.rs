@@ -19,9 +19,12 @@ pub async fn fmt(
             }
         }
 
+        dbg!(&ftd_document.id);
+
         let parsed_content =
             parsed_to_sections(format!("{}\n\n", ftd_document.content.as_str()).as_str());
-        let format_sections = format_sections(parsed_content, !no_indentation);
+        dbg!(&parsed_content);
+        let format_sections = dbg!(format_sections(parsed_content, !no_indentation));
         config
             .ds
             .write_content(&ftd_document.get_full_path(), format_sections.into_bytes())
@@ -31,11 +34,13 @@ pub async fn fmt(
     Ok(())
 }
 
+#[derive(Debug)]
 struct Section {
     value: String,
     kind: SectionKind,
 }
 
+#[derive(Debug)]
 enum SectionKind {
     Comment,
     Empty,
@@ -126,7 +131,7 @@ fn add_indentation(input: &str, indentation: Option<usize>) -> String {
     let indentation = match indentation {
         Some(indentation) if !indentation.eq(&0) => indentation,
         _ => {
-            return String::new();
+            return input.to_string();
         }
     };
     let mut value = vec![];
@@ -148,6 +153,14 @@ fn parsed_to_sections(input: &str) -> Vec<Section> {
             sections.push(comment_section);
         } else if let Some(section) = section(&mut input, &mut sections) {
             sections.push(section);
+        } else {
+            panic!(
+                "`{}`: can't parse",
+                input
+                    .split_once('\n')
+                    .map(|(v, _)| v.to_string())
+                    .unwrap_or_else(|| input.to_string())
+            );
         }
     }
 
@@ -169,8 +182,13 @@ fn end_section(input: &mut String, sections: &mut Vec<Section>) -> bool {
         return false;
     };
 
+    dbg!("end**", &section_name);
+
+    *input = remaining.unwrap_or_default();
+
     let mut sub_sections = vec![];
     while let Some(mut section) = sections.pop() {
+        dbg!("pop", &section);
         match &mut section.kind {
             SectionKind::Section {
                 name,
@@ -180,7 +198,6 @@ fn end_section(input: &mut String, sections: &mut Vec<Section>) -> bool {
                 *end = true;
                 *s = sub_sections;
                 sections.push(section);
-                *input = remaining.unwrap_or_default();
                 return true;
             }
             _ => {
@@ -196,18 +213,25 @@ fn end_section_name(input: &str) -> Option<String> {
     use itertools::Itertools;
 
     let input = input.split_whitespace().join(" ");
-    input.strip_prefix("-- end:").map(|v| v.to_string())
+    input.strip_prefix("-- end:").map(|v| v.trim().to_string())
 }
 
 fn section(input: &mut String, sections: &mut Vec<Section>) -> Option<Section> {
     let section_name = get_section_name(input)?;
     let mut value = vec![];
     let mut first_time_encounter_section = true;
+    dbg!("section**", &section_name, &input);
+    if !input.trim().is_empty() && !input.contains('\n') {
+        value.push(input.to_string());
+        *input = String::new();
+    }
     while let Some((first_line, remaining)) = input.split_once('\n') {
         let first_line = first_line.trim().to_string();
+        dbg!(&first_line);
         if first_line.starts_with("-- ") || first_line.starts_with("/-- ") {
             if first_time_encounter_section {
                 first_time_encounter_section = false;
+                *input = remaining.to_string();
                 value.push(first_line);
                 continue;
             }
@@ -215,6 +239,7 @@ fn section(input: &mut String, sections: &mut Vec<Section>) -> Option<Section> {
             break;
         }
         value.push(first_line);
+        *input = remaining.to_string();
     }
 
     if !value.is_empty() {
@@ -222,7 +247,9 @@ fn section(input: &mut String, sections: &mut Vec<Section>) -> Option<Section> {
         if !value.trim().is_empty() {
             if let Some((v, probable_comment_section)) = value.rsplit_once("\n\n") {
                 let mut probable_comment_section = probable_comment_section.to_string();
+                dbg!(&probable_comment_section);
                 if let Some(comment_section) = comment_section(&mut probable_comment_section) {
+                    dbg!("after", &probable_comment_section, &comment_section);
                     if probable_comment_section.eq("\n") {
                         sections.push(comment_section);
                         value = format!("{v}\n\n");
@@ -247,14 +274,12 @@ fn get_section_name(input: &str) -> Option<String> {
     if !first_line.starts_with("-- ") && !first_line.starts_with("/-- ") {
         None
     } else if let Some((section_name_kind, _)) = first_line.split_once(':') {
-        Some(
-            section_name_kind
-                .split_whitespace()
-                .join(" ")
-                .split_once(' ')
-                .map(|(_, v)| v.to_string())
-                .unwrap_or_else(|| section_name_kind.to_string()),
-        )
+        Some(dbg!(dbg!(dbg!(section_name_kind
+            .split_whitespace()
+            .join(" "))
+        .rsplit_once(' '))
+        .map(|(_, v)| v.to_string())
+        .unwrap_or_else(|| section_name_kind.to_string())))
     } else {
         None
     }
@@ -269,6 +294,7 @@ fn empty_section(input: &mut String) -> Option<Section> {
             break;
         }
         value.push(first_line);
+        *input = remaining.to_string();
     }
 
     if !value.is_empty() {
@@ -280,6 +306,12 @@ fn empty_section(input: &mut String) -> Option<Section> {
 
 fn comment_section(input: &mut String) -> Option<Section> {
     let mut value = vec![];
+
+    if !input.trim().is_empty() && !input.contains('\n') {
+        value.push(input.to_string());
+        *input = String::new();
+    }
+
     while let Some((first_line, remaining)) = input.split_once('\n') {
         let first_line = first_line.trim().to_string();
         if first_line.starts_with("-- ")
@@ -290,6 +322,7 @@ fn comment_section(input: &mut String) -> Option<Section> {
             break;
         }
         value.push(first_line);
+        *input = remaining.to_string();
     }
     if !value.is_empty() {
         Some(Section::new_comment(value.join("\n").as_str()))
