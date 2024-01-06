@@ -107,7 +107,7 @@ async fn serve_file(
     match f {
         fastn_core::File::Ftd(main_document) => {
             if fastn_core::utils::is_ftd_path(path.as_str()) {
-                return fastn_core::http::ok(main_document.content.as_bytes().to_vec());
+                return fastn_core::http::ok(main_document.content.into_bytes());
             }
             match fastn_core::package::package_doc::read_ftd_(
                 config,
