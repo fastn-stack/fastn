@@ -885,7 +885,7 @@ pub async fn remove_except(
 ) -> fastn_core::Result<()> {
     use itertools::Itertools;
     let except = except.iter().map(|x| root.join(x)).collect_vec();
-    for path in ds.get_all_file_path(root, &[]) {
+    for path in ds.get_all_file_path(root, &[]).await {
         if except.contains(&path) {
             continue;
         }

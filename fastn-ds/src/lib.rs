@@ -189,7 +189,7 @@ impl DocumentStore {
         Ok(())
     }
 
-    pub fn get_all_file_path(
+    pub async fn get_all_file_path(
         &self,
         path: &fastn_ds::Path,
         ignore_paths: &[String],

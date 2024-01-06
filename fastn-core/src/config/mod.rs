@@ -540,72 +540,6 @@ impl Config {
         Ok(())
     }
 
-    /// update the config.global_ids map from the contents of a file
-    /// in case the user defines the id for any component in the document
-    async fn update_global_ids_from_file(
-        &mut self,
-        doc_id: &str,
-        data: &str,
-    ) -> fastn_core::Result<()> {
-        /// updates the config.global_ids map
-        ///
-        /// mapping from [id -> link]
-        ///
-        /// link: <document-id>#<slugified-id>
-        fn update_id_map(
-            global_ids: &mut std::collections::HashMap<String, String>,
-            id_string: &str,
-            doc_name: &str,
-            line_number: usize,
-        ) -> fastn_core::Result<()> {
-            // returns doc-id from link as String
-            fn fetch_doc_id_from_link(link: &str) -> fastn_core::Result<String> {
-                // link = <document-id>#<slugified-id>
-                let doc_id = link.split_once('#').map(|s| s.0);
-                match doc_id {
-                    Some(id) => Ok(id.to_string()),
-                    None => Err(fastn_core::Error::PackageError {
-                        message: format!("Invalid link format {}", link),
-                    }),
-                }
-            }
-
-            let (_header, value) =
-                ftd::ftd2021::p2::utils::split_once(id_string, doc_name, line_number)?;
-            let document_id = fastn_core::library::convert_to_document_id(doc_name);
-
-            if let Some(id) = value {
-                // check if the current id already exists in the map
-                // if it exists then throw error
-                if global_ids.contains_key(&id) {
-                    return Err(fastn_core::Error::UsageError {
-                        message: format!(
-                            "conflicting id: \'{}\' used in doc: \'{}\' and doc: \'{}\'",
-                            id,
-                            fetch_doc_id_from_link(&global_ids[&id])?,
-                            document_id
-                        ),
-                    });
-                }
-
-                // mapping id -> <document-id>#<slugified-id>
-                let link = format!("{}#{}", document_id, slug::slugify(&id));
-                global_ids.insert(id, link);
-            }
-
-            Ok(())
-        }
-
-        // Vec<captured_id, line_number>
-        let captured_global_ids: Vec<(String, usize)> =
-            ftd::ftd2021::p1::parse_file_for_global_ids(data);
-        for (captured_id, ln) in captured_global_ids.iter() {
-            update_id_map(&mut self.global_ids, captured_id.as_str(), doc_id, *ln)?;
-        }
-
-        Ok(())
-    }
-
     /*pub(crate) async fn get_versions(
         &self,
         package: &fastn_core::Package,
@@ -681,7 +615,7 @@ impl Config {
         package: &fastn_core::Package,
     ) -> fastn_core::Result<Vec<fastn_core::File>> {
         let path = self.get_root_for_package(package);
-        let all_files = self.get_all_file_paths(package)?;
+        let all_files = self.get_all_file_paths(package).await?;
         // TODO: Unwrap?
         let mut documents =
             fastn_core::paths_to_files(&self.ds, package.name.as_str(), all_files, &path).await?;
@@ -690,30 +624,7 @@ impl Config {
         Ok(documents)
     }
 
-    /// updates the terms map from the files of the current package
-    #[allow(dead_code)]
-    async fn update_ids_from_package(&mut self) -> fastn_core::Result<()> {
-        let path = self.get_root_for_package(&self.package);
-        let all_files_path = self.get_all_file_paths(&self.package)?;
-
-        let documents =
-            fastn_core::paths_to_files(&self.ds, self.package.name.as_str(), all_files_path, &path)
-                .await?;
-        for document in documents.iter() {
-            if let fastn_core::File::Ftd(doc) = document {
-                // Ignore fetching id's from FASTN.ftd since
-                // id's would be used to link inside sitemap
-                if doc.id.eq("FASTN.ftd") {
-                    continue;
-                }
-                self.update_global_ids_from_file(&doc.id, &doc.content)
-                    .await?;
-            }
-        }
-        Ok(())
-    }
-
-    pub(crate) fn get_all_file_paths(
+    pub(crate) async fn get_all_file_paths(
         &self,
         package: &fastn_core::Package,
     ) -> fastn_core::Result<Vec<fastn_ds::Path>> {
@@ -727,10 +638,13 @@ impl Config {
             "_tests".to_string(),
         ];
         ignored_files.extend(package.ignored_paths.clone());
-        Ok(self.ds.get_all_file_path(
-            &self.get_root_for_package(package),
-            ignored_files.as_slice(),
-        ))
+        Ok(self
+            .ds
+            .get_all_file_path(
+                &self.get_root_for_package(package),
+                ignored_files.as_slice(),
+            )
+            .await)
     }
 
     // Input
