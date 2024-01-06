@@ -65,6 +65,13 @@ impl File {
     pub(crate) fn is_ftd(&self) -> bool {
         matches!(self, Self::Ftd(_))
     }
+
+    pub(crate) fn get_ftd_document(self) -> Option<fastn_core::Document> {
+        match self {
+            fastn_core::File::Ftd(ftd_document) => Some(ftd_document),
+            _ => None,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
