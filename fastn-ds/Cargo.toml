@@ -11,6 +11,11 @@ homepage.workspace = true
 [dependencies]
 tokio.workspace = true
 thiserror.workspace = true
+ftd.workspace = true
+dashmap.workspace = true
+actix-web.workspace = true
+deadpool.workspace = true
+diesel-async.workspace = true
 camino.workspace = true
-ignore.workspace = true
-dirs.workspace = true
+diesel.workspace = true
+

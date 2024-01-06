@@ -792,7 +792,7 @@ pub(crate) async fn overwrite(
 }
 
 // TODO: remove this function use update instead
-pub(crate) async fn update1(
+pub async fn update1(
     root: &fastn_ds::Path,
     file_path: &str,
     data: &[u8],
