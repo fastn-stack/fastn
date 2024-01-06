@@ -140,6 +140,15 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         .await;
     }
 
+    if let Some(fmt) = matches.subcommand_matches("fmt") {
+        return fastn_core::fmt(
+            &config,
+            fmt.value_of_("file"),
+            fmt.get_flag("no-identation"),
+        )
+        .await;
+    }
+
     if let Some(query) = matches.subcommand_matches("query") {
         return fastn_core::query(
             &config,
@@ -242,6 +251,13 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
                     .action(clap::ArgAction::Append))
                 .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
+        )
+        .subcommand(
+            clap::Command::new("fmt")
+                .about("format the fastn package")
+                .arg(clap::arg!(file: [FILE]... "The file to format").required(false))
+                .arg(clap::arg!(-i --no-identation "No identation added to file/package"))
+                .hide(true), // hidden since the feature is not fully developed.
         )
         .subcommand(
             clap::Command::new("test")
