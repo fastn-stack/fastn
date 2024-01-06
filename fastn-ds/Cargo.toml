@@ -12,10 +12,7 @@ homepage.workspace = true
 tokio.workspace = true
 thiserror.workspace = true
 ftd.workspace = true
-dashmap.workspace = true
 actix-web.workspace = true
-deadpool.workspace = true
-diesel-async.workspace = true
 camino.workspace = true
-diesel.workspace = true
-
+ignore.workspace = true
+dirs.workspace = true
