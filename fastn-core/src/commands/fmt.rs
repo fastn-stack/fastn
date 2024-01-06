@@ -19,12 +19,9 @@ pub async fn fmt(
             }
         }
 
-        dbg!(&ftd_document.id);
-
         let parsed_content =
             parsed_to_sections(format!("{}\n\n", ftd_document.content.as_str()).as_str());
-        dbg!(&parsed_content);
-        let format_sections = dbg!(format_sections(parsed_content, !no_indentation));
+        let format_sections = format_sections(parsed_content, !no_indentation);
         config
             .ds
             .write_content(&ftd_document.get_full_path(), format_sections.into_bytes())
@@ -86,7 +83,7 @@ fn format_sections(sections: Vec<Section>, indentation: bool) -> String {
             if indentation { Some(0) } else { None },
         ))
     }
-    output.join("\n")
+    format!("{}\n", output.join("\n").trim_end())
 }
 
 fn format_section(section: &Section, indentation: Option<usize>) -> String {
@@ -151,7 +148,7 @@ fn parsed_to_sections(input: &str) -> Vec<Section> {
             sections.push(empty_section);
         } else if let Some(comment_section) = comment_section(&mut input) {
             sections.push(comment_section);
-        } else if let Some(section) = section(&mut input, &mut sections) {
+        } else if let Some(section) = section(&mut input) {
             sections.push(section);
         } else {
             panic!(
@@ -182,13 +179,10 @@ fn end_section(input: &mut String, sections: &mut Vec<Section>) -> bool {
         return false;
     };
 
-    dbg!("end**", &section_name);
-
     *input = remaining.unwrap_or_default();
 
     let mut sub_sections = vec![];
     while let Some(mut section) = sections.pop() {
-        dbg!("pop", &section);
         match &mut section.kind {
             SectionKind::Section {
                 name,
@@ -201,7 +195,7 @@ fn end_section(input: &mut String, sections: &mut Vec<Section>) -> bool {
                 return true;
             }
             _ => {
-                sub_sections.push(section);
+                sub_sections.insert(0, section);
             }
         }
     }
@@ -216,18 +210,16 @@ fn end_section_name(input: &str) -> Option<String> {
     input.strip_prefix("-- end:").map(|v| v.trim().to_string())
 }
 
-fn section(input: &mut String, sections: &mut Vec<Section>) -> Option<Section> {
+fn section(input: &mut String) -> Option<Section> {
     let section_name = get_section_name(input)?;
     let mut value = vec![];
     let mut first_time_encounter_section = true;
-    dbg!("section**", &section_name, &input);
     if !input.trim().is_empty() && !input.contains('\n') {
         value.push(input.to_string());
         *input = String::new();
     }
     while let Some((first_line, remaining)) = input.split_once('\n') {
         let first_line = first_line.trim().to_string();
-        dbg!(&first_line);
         if first_line.starts_with("-- ") || first_line.starts_with("/-- ") {
             if first_time_encounter_section {
                 first_time_encounter_section = false;
@@ -247,12 +239,10 @@ fn section(input: &mut String, sections: &mut Vec<Section>) -> Option<Section> {
         if !value.trim().is_empty() {
             if let Some((v, probable_comment_section)) = value.rsplit_once("\n\n") {
                 let mut probable_comment_section = probable_comment_section.to_string();
-                dbg!(&probable_comment_section);
                 if let Some(comment_section) = comment_section(&mut probable_comment_section) {
-                    dbg!("after", &probable_comment_section, &comment_section);
-                    if probable_comment_section.eq("\n") {
-                        sections.push(comment_section);
-                        value = format!("{v}\n\n");
+                    if probable_comment_section.trim().is_empty() {
+                        *input = format!("{}\n{}", comment_section.value, input);
+                        value = format!("{v}\n");
                     }
                 }
             }
@@ -274,12 +264,14 @@ fn get_section_name(input: &str) -> Option<String> {
     if !first_line.starts_with("-- ") && !first_line.starts_with("/-- ") {
         None
     } else if let Some((section_name_kind, _)) = first_line.split_once(':') {
-        Some(dbg!(dbg!(dbg!(section_name_kind
-            .split_whitespace()
-            .join(" "))
-        .rsplit_once(' '))
-        .map(|(_, v)| v.to_string())
-        .unwrap_or_else(|| section_name_kind.to_string())))
+        Some(
+            section_name_kind
+                .split_whitespace()
+                .join(" ")
+                .rsplit_once(' ')
+                .map(|(_, v)| v.to_string())
+                .unwrap_or_else(|| section_name_kind.to_string()),
+        )
     } else {
         None
     }
@@ -287,7 +279,11 @@ fn get_section_name(input: &str) -> Option<String> {
 
 fn empty_section(input: &mut String) -> Option<Section> {
     let mut value = vec![];
-    while let Some((first_line, remaining)) = input.split_once('\n') {
+    while !input.is_empty() {
+        let (first_line, remaining) = match input.split_once('\n') {
+            Some((first_line, remaining)) => (first_line.to_string(), remaining.to_string()),
+            None => (input.to_string(), String::new()),
+        };
         let first_line = first_line.trim().to_string();
         if !first_line.is_empty() {
             *input = format!("{first_line}\n{remaining}");
@@ -307,12 +303,11 @@ fn empty_section(input: &mut String) -> Option<Section> {
 fn comment_section(input: &mut String) -> Option<Section> {
     let mut value = vec![];
 
-    if !input.trim().is_empty() && !input.contains('\n') {
-        value.push(input.to_string());
-        *input = String::new();
-    }
-
-    while let Some((first_line, remaining)) = input.split_once('\n') {
+    while !input.is_empty() {
+        let (first_line, remaining) = match input.split_once('\n') {
+            Some((first_line, remaining)) => (first_line.to_string(), remaining.to_string()),
+            None => (input.to_string(), String::new()),
+        };
         let first_line = first_line.trim().to_string();
         if first_line.starts_with("-- ")
             || first_line.starts_with("/-- ")
