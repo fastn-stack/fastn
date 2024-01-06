@@ -141,12 +141,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     }
 
     if let Some(fmt) = matches.subcommand_matches("fmt") {
-        return fastn_core::fmt(
-            &config,
-            fmt.value_of_("file"),
-            fmt.get_flag("no-identation"),
-        )
-        .await;
+        return fastn_core::fmt(&config, fmt.value_of_("file"), fmt.get_flag("noidentation")).await;
     }
 
     if let Some(query) = matches.subcommand_matches("query") {
@@ -256,7 +251,7 @@ fn app(version: &'static str) -> clap::Command {
             clap::Command::new("fmt")
                 .about("format the fastn package")
                 .arg(clap::arg!(file: [FILE]... "The file to format").required(false))
-                .arg(clap::arg!(-i --no-identation "No identation added to file/package"))
+                .arg(clap::arg!(-i --noidentation "No identation added to file/package").required(false))
                 .hide(true), // hidden since the feature is not fully developed.
         )
         .subcommand(
