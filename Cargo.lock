@@ -1701,8 +1701,10 @@ dependencies = [
 name = "fastn-ds"
 version = "0.1.0"
 dependencies = [
+ "actix-web",
  "camino",
  "dirs",
+ "ftd 0.3.0",
  "ignore",
  "thiserror",
  "tokio",
