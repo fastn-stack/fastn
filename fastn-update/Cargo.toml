@@ -12,12 +12,12 @@ homepage.workspace = true
 
 [dependencies]
 fastn-core.workspace = true
+fastn-observer.workspace = true
+tracing.workspace = true
 fastn-ds.workspace = true
 fastn-package.workspace = true
 serde.workspace = true
 serde_json.workspace = true
-once_cell.workspace = true
-async-recursion.workspace = true
-regex.workspace = true
-camino.workspace = true
 zip.workspace = true
+indicatif.workspace = true
+colored.workspace = true

@@ -8,9 +8,10 @@ pub async fn build(
     test: bool,
     check_build: bool,
 ) -> fastn_core::Result<()> {
+    let build_dir = config.ds.root().join(".build");
     // Default css and js
     default_build_files(
-        config.ds.root().join(".build"),
+        build_dir.clone(),
         &config.ftd_edition,
         &config.package.name,
         &config.ds,
@@ -30,12 +31,10 @@ pub async fn build(
 
             let manifest = fastn_core::Manifest::new(files, zip_url.to_string());
 
-            let dot_fastn_folder = config.ds.root().join(".fastn");
-
             let _ = &config
                 .ds
                 .write_content(
-                    &dot_fastn_folder.join("manifest.json"),
+                    &build_dir.join("manifest.json"),
                     serde_json::ser::to_vec_pretty(&manifest)?,
                 )
                 .await?;
