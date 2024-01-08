@@ -1,0 +1,57 @@
+-- record employee:
+caption string name:
+string email:
+integer age:
+
+
+
+-- employee list employees:
+
+-- employee: Ram
+email: ram@gmail.com
+age: 23
+
+-- employee: Shyam
+email: shyam23@gmail.com
+age: 28
+
+-- end: employees
+
+
+
+;; Read a single employee from the list by its index
+
+-- employee-card: $employees.0
+
+
+
+;; Iterate over the employees list
+-- employee-card: $emp
+for: $emp in $employees
+
+
+
+-- component employee-card:
+caption employee emp:
+
+;; the outer column
+-- ftd.column:
+
+-- ftd.column:
+
+-- ftd.text: $employee-card.emp.name
+
+;; the description text
+-- ftd.text:
+
+The description you see here:
+  - I am the description text
+  - I am part of employee-card definition
+
+This description comes inside `ftd.column`.
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: employee-card
