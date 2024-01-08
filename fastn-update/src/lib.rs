@@ -26,27 +26,8 @@ pub async fn resolve_dependencies_(
                 continue;
             }
             let dependency_path = &packages_root.join(&dependency.package.name);
-            match get_manifest(dependency.package.name.clone()).await {
-                Ok(manifest) => {
-                    pb.set_message("Downloaded manifest.json");
-                    download_and_unpack_zip(
-                        ds,
-                        &packages_root.join(&dependency.package.name),
-                        &manifest,
-                    )
-                    .await?;
-                    pb.set_message("Downloaded and unpacked zip archive");
-                    let dep_package = {
-                        let mut dep_package = dependency.package.clone();
-                        let fastn_path = dependency_path.join("FASTN.ftd");
-                        dep_package.resolve(&fastn_path, ds).await?;
-                        dep_package
-                    };
-                    resolved.insert(dependency.package.name.to_string());
-                    stack.push(dep_package);
-                    pb.inc(1);
-                    pb.set_message("Resolved");
-                }
+            let manifest = match get_manifest(dependency.package.name.clone()).await {
+                Ok(manifest) => manifest,
                 Err(e) => {
                     pb.set_message(format!(
                         "Failed to resolve manifest.json for {}",
@@ -56,7 +37,21 @@ pub async fn resolve_dependencies_(
 
                     return Err(e);
                 }
-            }
+            };
+            pb.set_message("Downloaded manifest.json");
+            download_and_unpack_zip(ds, &packages_root.join(&dependency.package.name), &manifest)
+                .await?;
+            pb.set_message("Downloaded and unpacked zip archive");
+            let dep_package = {
+                let mut dep_package = dependency.package.clone();
+                let fastn_path = dependency_path.join("FASTN.ftd");
+                dep_package.resolve(&fastn_path, ds).await?;
+                dep_package
+            };
+            resolved.insert(dependency.package.name.to_string());
+            stack.push(dep_package);
+            pb.inc(1);
+            pb.set_message("Resolved");
         }
     }
     pb.finish();
