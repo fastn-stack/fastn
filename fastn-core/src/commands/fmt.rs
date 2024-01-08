@@ -230,7 +230,11 @@ fn section(input: &mut String) -> Option<Section> {
         };
         let mut trimmed_line = first_line.trim_start().to_string();
         let current_leading_spaces_count = first_line.len() - trimmed_line.len();
+
         if trimmed_line.starts_with("-- ") || trimmed_line.starts_with("/-- ") {
+            // If the first_time_encounter_section then store the indentation here in the
+            // `leading_spaces_count`
+            // Also, don't break code, for this is section definition line.
             if first_time_encounter_section {
                 first_time_encounter_section = false;
                 *input = remaining.to_string();
@@ -241,6 +245,10 @@ fn section(input: &mut String) -> Option<Section> {
             *input = format!("{first_line}\n{remaining}");
             break;
         }
+
+        // Use the indentation saved in `leading_spaces_count` and add indentation upto the
+        // extra space left when deducting the `leading_spaces_count`. This ensures the section body
+        // keeps the indentation as intended by user
         if !trimmed_line.is_empty() {
             trimmed_line = format!(
                 "{}{}",
@@ -258,20 +266,27 @@ fn section(input: &mut String) -> Option<Section> {
 
     if !value.is_empty() {
         let mut value = value.join("\n").to_string();
-        if !value.trim().is_empty() {
-            if let Some((v, probable_comment_section)) = value.rsplit_once("\n\n") {
-                let mut probable_comment_section = probable_comment_section.to_string();
-                if let Some(comment_section) = comment_section(&mut probable_comment_section) {
-                    if probable_comment_section.trim().is_empty() {
-                        *input = format!("{}\n{}", comment_section.value, input);
-                        value = format!("{v}\n");
-                    }
-                }
-            }
-        }
+        remove_comment_from_section_value_if_its_comment_for_other_section(input, &mut value);
         Some(Section::new_section(section_name.as_str(), value.as_str()))
     } else {
         None
+    }
+}
+
+fn remove_comment_from_section_value_if_its_comment_for_other_section(
+    input: &mut String,
+    value: &mut String,
+) {
+    if !value.trim().is_empty() {
+        if let Some((v, probable_comment_section)) = value.rsplit_once("\n\n") {
+            let mut probable_comment_section = probable_comment_section.to_string();
+            if let Some(comment_section) = comment_section(&mut probable_comment_section) {
+                if probable_comment_section.trim().is_empty() {
+                    *input = format!("{}\n{}", comment_section.value, input);
+                    *value = format!("{v}\n");
+                }
+            }
+        }
     }
 }
 

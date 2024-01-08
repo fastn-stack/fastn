@@ -249,7 +249,7 @@ fn app(version: &'static str) -> clap::Command {
         )
         .subcommand(
             clap::Command::new("fmt")
-                .about("format the fastn package")
+                .about("Format the fastn package")
                 .arg(clap::arg!(file: [FILE]... "The file to format").required(false))
                 .arg(clap::arg!(-i --noidentation "No identation added to file/package").required(false))
         )
