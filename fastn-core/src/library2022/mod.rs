@@ -272,9 +272,6 @@ impl Library2022 {
             "sql" => processor::sql::process(value, kind, doc, self).await,
             "package-query" => processor::package_query::process(value, kind, doc, self).await,
             "pg" => processor::pg::process(value, kind, doc, self).await,
-            "package-tree" => {
-                processor::package_tree::process(value, kind, doc, &self.config).await
-            }
             "query" => processor::query::process(value, kind, doc, self).await,
             t => Err(ftd::interpreter::Error::ParseError {
                 doc_id: self.document_id.to_string(),

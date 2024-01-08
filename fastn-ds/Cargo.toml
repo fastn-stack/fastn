@@ -11,6 +11,8 @@ homepage.workspace = true
 [dependencies]
 tokio.workspace = true
 thiserror.workspace = true
+ftd.workspace = true
+actix-web.workspace = true
 camino.workspace = true
 ignore.workspace = true
 dirs.workspace = true

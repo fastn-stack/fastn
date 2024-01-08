@@ -585,9 +585,7 @@ pub(crate) async fn http_get_str(url: &str) -> fastn_core::Result<String> {
     }
 }
 
-pub(crate) fn api_ok(
-    data: impl serde::Serialize,
-) -> fastn_core::Result<fastn_core::http::Response> {
+pub fn api_ok(data: impl serde::Serialize) -> fastn_core::Result<fastn_core::http::Response> {
     #[derive(serde::Serialize)]
     struct SuccessResponse<T: serde::Serialize> {
         data: T,
@@ -605,9 +603,9 @@ pub(crate) fn api_ok(
     ))
 }
 
-/// construct an error response with `message`
+// construct an error response with `message`
 /// and `status_code`. Use 500 if `status_code` is None
-pub(crate) fn api_error<T: Into<String>>(
+pub fn api_error<T: Into<String>>(
     message: T,
     status_code: Option<actix_web::http::StatusCode>,
 ) -> fastn_core::Result<fastn_core::http::Response> {

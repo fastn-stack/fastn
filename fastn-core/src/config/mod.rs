@@ -320,14 +320,6 @@ impl Config {
         self.clone_dir().join("workspace.ftd")
     }
 
-    pub fn clone_available_crs_path(&self) -> fastn_ds::Path {
-        self.clone_dir().join("cr")
-    }
-
-    pub fn cr_path(&self, cr_number: usize) -> fastn_ds::Path {
-        self.ds.root().join(fastn_core::cr::cr_path(cr_number))
-    }
-
     pub fn path_without_root(&self, path: &fastn_ds::Path) -> fastn_core::Result<String> {
         Ok(path
             .strip_prefix(self.ds.root())
@@ -337,38 +329,12 @@ impl Config {
             .to_string())
     }
 
-    pub fn cr_deleted_file_path(&self, cr_number: usize) -> fastn_ds::Path {
-        self.cr_path(cr_number).join("-/deleted.ftd")
-    }
-
     pub fn track_path(&self, path: &fastn_ds::Path) -> fastn_ds::Path {
         let path_without_root = self
             .path_without_root(path)
             .unwrap_or_else(|_| path.to_string());
         let track_path = format!("{}.track", path_without_root);
         self.track_dir().join(track_path)
-    }
-
-    pub fn cr_track_dir(&self, cr_number: usize) -> fastn_ds::Path {
-        self.track_dir().join(fastn_core::cr::cr_path(cr_number))
-    }
-
-    pub fn cr_track_path(&self, path: &fastn_ds::Path, cr_number: usize) -> fastn_ds::Path {
-        let path_without_root = self
-            .cr_path(cr_number)
-            .join(path.to_string().as_str())
-            .to_string()
-            .replace(self.ds.root().to_string().as_str(), "");
-        let track_path = format!("{}.track", path_without_root);
-        self.track_dir().join(track_path)
-    }
-
-    pub fn cr_about_path(&self, cr_number: usize) -> fastn_ds::Path {
-        self.cr_path(cr_number).join("-/about.ftd")
-    }
-
-    pub fn cr_meta_path(&self, cr_number: usize) -> fastn_ds::Path {
-        self.cr_path(cr_number).join("-/meta.ftd")
     }
 
     pub(crate) fn package_info_package(&self) -> &str {
@@ -399,11 +365,6 @@ impl Config {
 
     pub fn history_file(&self) -> fastn_ds::Path {
         self.remote_dir().join("history.ftd")
-    }
-
-    pub(crate) fn history_path(&self, id: &str, version: i32) -> fastn_ds::Path {
-        let id_with_timestamp_extension = fastn_core::utils::snapshot_id(id, &(version as u128));
-        self.remote_history_dir().join(id_with_timestamp_extension)
     }
 
     /// history of a fastn package is stored in `.history` folder.
@@ -579,73 +540,7 @@ impl Config {
         Ok(())
     }
 
-    /// update the config.global_ids map from the contents of a file
-    /// in case the user defines the id for any component in the document
-    pub async fn update_global_ids_from_file(
-        &mut self,
-        doc_id: &str,
-        data: &str,
-    ) -> fastn_core::Result<()> {
-        /// updates the config.global_ids map
-        ///
-        /// mapping from [id -> link]
-        ///
-        /// link: <document-id>#<slugified-id>
-        fn update_id_map(
-            global_ids: &mut std::collections::HashMap<String, String>,
-            id_string: &str,
-            doc_name: &str,
-            line_number: usize,
-        ) -> fastn_core::Result<()> {
-            // returns doc-id from link as String
-            fn fetch_doc_id_from_link(link: &str) -> fastn_core::Result<String> {
-                // link = <document-id>#<slugified-id>
-                let doc_id = link.split_once('#').map(|s| s.0);
-                match doc_id {
-                    Some(id) => Ok(id.to_string()),
-                    None => Err(fastn_core::Error::PackageError {
-                        message: format!("Invalid link format {}", link),
-                    }),
-                }
-            }
-
-            let (_header, value) =
-                ftd::ftd2021::p2::utils::split_once(id_string, doc_name, line_number)?;
-            let document_id = fastn_core::library::convert_to_document_id(doc_name);
-
-            if let Some(id) = value {
-                // check if the current id already exists in the map
-                // if it exists then throw error
-                if global_ids.contains_key(&id) {
-                    return Err(fastn_core::Error::UsageError {
-                        message: format!(
-                            "conflicting id: \'{}\' used in doc: \'{}\' and doc: \'{}\'",
-                            id,
-                            fetch_doc_id_from_link(&global_ids[&id])?,
-                            document_id
-                        ),
-                    });
-                }
-
-                // mapping id -> <document-id>#<slugified-id>
-                let link = format!("{}#{}", document_id, slug::slugify(&id));
-                global_ids.insert(id, link);
-            }
-
-            Ok(())
-        }
-
-        // Vec<captured_id, line_number>
-        let captured_global_ids: Vec<(String, usize)> =
-            ftd::ftd2021::p1::parse_file_for_global_ids(data);
-        for (captured_id, ln) in captured_global_ids.iter() {
-            update_id_map(&mut self.global_ids, captured_id.as_str(), doc_id, *ln)?;
-        }
-
-        Ok(())
-    }
-
-    pub(crate) async fn get_versions(
+    /*pub(crate) async fn get_versions(
         &self,
         package: &fastn_core::Package,
     ) -> fastn_core::Result<std::collections::HashMap<fastn_core::Version, Vec<fastn_core::File>>>
@@ -702,7 +597,7 @@ impl Config {
                 Ok(fastn_core::Version::base())
             }
         }
-    }
+    }*/
 
     pub(crate) fn get_root_for_package(&self, package: &fastn_core::Package) -> fastn_ds::Path {
         if let Some(package_fastn_path) = &package.fastn_path {
@@ -720,7 +615,7 @@ impl Config {
         package: &fastn_core::Package,
     ) -> fastn_core::Result<Vec<fastn_core::File>> {
         let path = self.get_root_for_package(package);
-        let all_files = self.get_all_file_paths(package)?;
+        let all_files = self.get_all_file_paths(package).await?;
         // TODO: Unwrap?
         let mut documents =
             fastn_core::paths_to_files(&self.ds, package.name.as_str(), all_files, &path).await?;
@@ -729,29 +624,7 @@ impl Config {
         Ok(documents)
     }
 
-    /// updates the terms map from the files of the current package
-    async fn update_ids_from_package(&mut self) -> fastn_core::Result<()> {
-        let path = self.get_root_for_package(&self.package);
-        let all_files_path = self.get_all_file_paths(&self.package)?;
-
-        let documents =
-            fastn_core::paths_to_files(&self.ds, self.package.name.as_str(), all_files_path, &path)
-                .await?;
-        for document in documents.iter() {
-            if let fastn_core::File::Ftd(doc) = document {
-                // Ignore fetching id's from FASTN.ftd since
-                // id's would be used to link inside sitemap
-                if doc.id.eq("FASTN.ftd") {
-                    continue;
-                }
-                self.update_global_ids_from_file(&doc.id, &doc.content)
-                    .await?;
-            }
-        }
-        Ok(())
-    }
-
-    pub(crate) fn get_all_file_paths(
+    pub(crate) async fn get_all_file_paths(
         &self,
         package: &fastn_core::Package,
     ) -> fastn_core::Result<Vec<fastn_ds::Path>> {
@@ -765,73 +638,13 @@ impl Config {
             "_tests".to_string(),
         ];
         ignored_files.extend(package.ignored_paths.clone());
-        Ok(self.ds.get_all_file_path(
-            &self.get_root_for_package(package),
-            ignored_files.as_slice(),
-        ))
-    }
-
-    pub(crate) fn deprecated_get_all_file_path(
-        &self,
-        package: &fastn_core::Package,
-        ignore_paths: Vec<String>,
-    ) -> fastn_core::Result<Vec<fastn_ds::Path>> {
-        let path = self.get_root_for_package(package);
-        let mut ignored_files = vec![".packages".to_string(), ".build".to_string()];
-        ignored_files.extend(package.ignored_paths.clone());
-        ignored_files.extend(ignore_paths);
-        Ok(self.ds.get_all_file_path(&path, ignored_files.as_slice()))
-    }
-
-    pub async fn get_file_by_id(
-        &self,
-        id: &str,
-        package: &fastn_core::Package,
-    ) -> fastn_core::Result<fastn_core::File> {
-        let file_name = fastn_core::Config::get_file_name(self.ds.root(), id, &self.ds)?;
-        self.get_files(package)
-            .await?
-            .into_iter()
-            .find(|v| v.get_id().eq(file_name.as_str()))
-            .ok_or_else(|| fastn_core::Error::UsageError {
-                message: format!("No such file found: {}", id),
-            })
-    }
-
-    pub(crate) async fn get_file_and_package_by_cr_id(
-        &self,
-        id: &str,
-        cr_number: usize,
-    ) -> fastn_core::Result<fastn_core::File> {
-        let file_name = self.get_cr_file_and_resolve(id, cr_number).await?.0;
-        let id_without_cr_prefix = fastn_core::cr::get_id_from_cr_id(id, cr_number)?;
-        let package = self
-            .find_package_by_id(id_without_cr_prefix.as_str())
-            .await?
-            .1;
-
-        let mut file = fastn_core::get_file(
-            &self.ds,
-            package.name.to_string(),
-            &self.ds.root().join(file_name),
-            &self.get_root_for_package(&package),
-        )
-        .await?;
-
-        if id_without_cr_prefix.contains("-/") && !id_without_cr_prefix.contains("-/about") {
-            let url = id_without_cr_prefix
-                .trim_end_matches("/index.html")
-                .trim_matches('/');
-            let extension = if matches!(file, fastn_core::File::Markdown(_)) {
-                "/index.md".to_string()
-            } else if matches!(file, fastn_core::File::Ftd(_)) {
-                "/index.ftd".to_string()
-            } else {
-                "".to_string()
-            };
-            file.set_id(format!("{}{}", url, extension).as_str());
-        }
-        Ok(file)
+        Ok(self
+            .ds
+            .get_all_file_path(
+                &self.get_root_for_package(package),
+                ignored_files.as_slice(),
+            )
+            .await)
     }
 
     // Input
@@ -898,7 +711,7 @@ impl Config {
     ) -> fastn_core::Result<fastn_core::Package> {
         let fastn_path = &self.packages_root.join(&package.name).join("FASTN.ftd");
 
-        if !self.ds.exists(fastn_path) {
+        if !self.ds.exists(fastn_path).await {
             let package = self.resolve_package(package).await?;
             self.add_package(&package);
         }
@@ -1018,70 +831,6 @@ impl Config {
         Ok((format!("{}{}", add_packages, file_name), content))
     }
 
-    pub(crate) async fn get_cr_file_and_resolve(
-        &self,
-        cr_id: &str,
-        cr_number: usize,
-    ) -> fastn_core::Result<(String, Vec<u8>)> {
-        let id_without_cr_prefix = fastn_core::cr::get_id_from_cr_id(cr_id, cr_number)?;
-        let (package_name, package) = self
-            .find_package_by_id(id_without_cr_prefix.as_str())
-            .await?;
-        let package = self.resolve_package(&package).await?;
-        self.add_package(&package);
-        let mut new_id = id_without_cr_prefix.to_string();
-        let mut add_packages = "".to_string();
-        if let Some(id) = new_id.strip_prefix("-/") {
-            // Check if the id is alias for index.ftd. eg: `/-/bar/`
-            if id.starts_with(&package_name) || !package.name.eq(self.package.name.as_str()) {
-                new_id = id.to_string();
-            }
-            if !package.name.eq(self.package.name.as_str()) {
-                add_packages = format!(".packages/{}/", package.name);
-            }
-        }
-        let id = {
-            let mut id = match new_id.split_once("-/") {
-                Some((p1, p2))
-                    if !(package_name.eq(self.package.name.as_str())
-                        && fastn_core::utils::ids_matches(p2, "about")) =>
-                // full id in case of about page as it's a special page
-                {
-                    p1.to_string()
-                }
-                _ => new_id,
-            }
-            .trim()
-            .trim_start_matches(package_name.as_str())
-            .to_string();
-            if id.is_empty() {
-                id = "/".to_string();
-            }
-            id
-        };
-
-        if package.name.eq(self.package.name.as_str()) {
-            let file_info_map = fastn_core::cr::cr_clone_file_info(self, cr_number).await?;
-            let file_info = fastn_core::package::package_doc::file_id_to_names(id.as_str())
-                .into_iter()
-                .find_map(|id| file_info_map.get(&id))
-                .ok_or_else(|| fastn_core::Error::UsageError {
-                    message: format!("{} is not found", cr_id),
-                })?;
-
-            return Ok((
-                format!("{}{}", add_packages, file_info.path),
-                file_info.content.to_owned(),
-            ));
-        }
-
-        let (file_name, content) = package
-            .resolve_by_id(id.as_str(), None, self.package.name.as_str(), &self.ds)
-            .await?;
-
-        Ok((format!("{}{}", add_packages, file_name), content))
-    }
-
     /// Return (package name or alias, package)
     pub(crate) async fn find_package_by_id(
         &self,
@@ -1120,7 +869,7 @@ impl Config {
         }
 
         if let Some(package_root) =
-            utils::find_root_for_file(&self.packages_root.join(id), "FASTN.ftd", &self.ds)
+            utils::find_root_for_file(&self.packages_root.join(id), "FASTN.ftd", &self.ds).await
         {
             let mut package = fastn_core::Package::new("unknown-package");
             package
@@ -1225,7 +974,7 @@ impl Config {
         })
     }
 
-    pub(crate) fn get_file_name(
+    pub(crate) async fn get_file_name(
         root: &fastn_ds::Path,
         id: &str,
         ds: &fastn_ds::DocumentStore,
@@ -1244,10 +993,16 @@ impl Config {
             .replace("/index.html", "/")
             .replace("index.html", "/");
         if id.eq("/") {
-            if ds.exists(&root.join(format!("{}index.ftd", add_packages))) {
+            if ds
+                .exists(&root.join(format!("{}index.ftd", add_packages)))
+                .await
+            {
                 return Ok(format!("{}index.ftd", add_packages));
             }
-            if ds.exists(&root.join(format!("{}README.md", add_packages))) {
+            if ds
+                .exists(&root.join(format!("{}README.md", add_packages)))
+                .await
+            {
                 return Ok(format!("{}README.md", add_packages));
             }
             return Err(fastn_core::Error::UsageError {
@@ -1255,16 +1010,28 @@ impl Config {
             });
         }
         id = id.trim_matches('/').to_string();
-        if ds.exists(&root.join(format!("{}{}.ftd", add_packages, id))) {
+        if ds
+            .exists(&root.join(format!("{}{}.ftd", add_packages, id)))
+            .await
+        {
             return Ok(format!("{}{}.ftd", add_packages, id));
         }
-        if ds.exists(&root.join(format!("{}{}/index.ftd", add_packages, id))) {
+        if ds
+            .exists(&root.join(format!("{}{}/index.ftd", add_packages, id)))
+            .await
+        {
             return Ok(format!("{}{}/index.ftd", add_packages, id));
         }
-        if ds.exists(&root.join(format!("{}{}.md", add_packages, id))) {
+        if ds
+            .exists(&root.join(format!("{}{}.md", add_packages, id)))
+            .await
+        {
             return Ok(format!("{}{}.md", add_packages, id));
         }
-        if ds.exists(&root.join(format!("{}{}/README.md", add_packages, id))) {
+        if ds
+            .exists(&root.join(format!("{}{}/README.md", add_packages, id)))
+            .await
+        {
             return Ok(format!("{}{}/README.md", add_packages, id));
         }
         Err(fastn_core::Error::UsageError {
@@ -1277,11 +1044,11 @@ impl Config {
         directory: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<fastn_ds::Path> {
-        if let Some(fastn_ftd_root) = utils::find_root_for_file(directory, "FASTN.ftd", ds) {
+        if let Some(fastn_ftd_root) = utils::find_root_for_file(directory, "FASTN.ftd", ds).await {
             return Ok(fastn_ftd_root);
         }
         let fastn_manifest_path =
-            match utils::find_root_for_file(directory, "fastn.manifest.ftd", ds) {
+            match utils::find_root_for_file(directory, "fastn.manifest.ftd", ds).await {
                 Some(fastn_manifest_path) => fastn_manifest_path,
                 None => {
                     return Err(fastn_core::Error::UsageError {
@@ -1314,7 +1081,7 @@ impl Config {
                 accumulator.join(part)
             });
 
-        if ds.exists(&new_package_root.join("FASTN.ftd")) {
+        if ds.exists(&new_package_root.join("FASTN.ftd")).await {
             Ok(new_package_root)
         } else {
             Err(fastn_core::Error::PackageError {
@@ -1394,7 +1161,7 @@ impl Config {
             ds,
         };
         // Update global_ids map from the current package files
-        config.update_ids_from_package().await?;
+        // config.update_ids_from_package().await?;
 
         // TODO: Major refactor, while parsing sitemap of a package why do we need config in it?
         config.package.sitemap = {
@@ -1578,30 +1345,5 @@ impl Config {
         let doc = self.ds.read_to_string(&package_fastn_path).await?;
         let lib = fastn_core::FastnLibrary::default();
         Ok(fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib)?)
-    }
-
-    pub(crate) async fn get_reserved_crs(
-        &self,
-        number_of_crs_to_reserve: Option<usize>,
-    ) -> fastn_core::Result<Vec<i32>> {
-        let number_of_crs_to_reserve =
-            if let Some(number_of_crs_to_reserve) = number_of_crs_to_reserve {
-                number_of_crs_to_reserve
-            } else {
-                fastn_core::NUMBER_OF_CRS_TO_RESERVE
-            };
-        if !cfg!(feature = "remote") {
-            return fastn_core::usage_error("Can be used by remote only".to_string());
-        }
-        let value = fastn_core::cache::update(
-            self,
-            self.remote_cr().to_string().as_str(),
-            number_of_crs_to_reserve,
-        )
-        .await? as i32;
-
-        Ok(Vec::from_iter(
-            (value - (number_of_crs_to_reserve as i32))..value,
-        ))
     }
 }

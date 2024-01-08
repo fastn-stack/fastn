@@ -35,7 +35,7 @@ pub async fn build(
                 }
 
                 let name = file.get_id().to_string();
-                let content = file.get_content();
+                let content = &config.ds.read_content(&file.get_full_path()).await?;
                 let hash = fastn_core::utils::generate_hash(content);
                 let size = content.len();
 
@@ -311,7 +311,12 @@ async fn remove_deleted_documents(
 
         // If the parent folder of the file's output folder is also empty, delete it as well.
         if let Some(folder_parent) = folder_parent {
-            if config.ds.get_all_file_path(&folder_parent, &[]).is_empty() {
+            if config
+                .ds
+                .get_all_file_path(&folder_parent, &[])
+                .await
+                .is_empty()
+            {
                 config.ds.remove(&folder_parent).await?;
             }
         }

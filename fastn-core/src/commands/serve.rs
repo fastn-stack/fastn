@@ -146,66 +146,6 @@ async fn serve_file(
     }
 }
 
-async fn serve_cr_file(
-    req_config: &mut fastn_core::RequestConfig,
-    path: &camino::Utf8Path,
-    cr_number: usize,
-) -> fastn_core::http::Response {
-    let _lock = LOCK.read().await;
-    let f = match req_config
-        .config
-        .get_file_and_package_by_cr_id(path.as_str(), cr_number)
-        .await
-    {
-        Ok(f) => f,
-        Err(e) => {
-            return fastn_core::server_error!("fastn-Error: path: {}, {:?}", path, e);
-        }
-    };
-
-    // Auth Stuff
-    if !f.is_static() {
-        match req_config.can_read(path.as_str(), true).await {
-            Ok(can_read) => {
-                if !can_read {
-                    return fastn_core::unauthorised!("You are unauthorized to access: {}", path);
-                }
-            }
-            Err(e) => {
-                return fastn_core::server_error!("fastn-Error: can_read error: {}, {:?}", path, e);
-            }
-        }
-    }
-
-    req_config.current_document = Some(f.get_id().to_string());
-    match f {
-        fastn_core::File::Ftd(main_document) => {
-            match fastn_core::package::package_doc::read_ftd(
-                req_config,
-                &main_document,
-                "/",
-                false,
-                false,
-            )
-            .await
-            {
-                Ok(r) => r.into(),
-                Err(e) => {
-                    fastn_core::server_error!("fastn-Error: path: {}, {:?}", path, e)
-                }
-            }
-        }
-        fastn_core::File::Image(image) => fastn_core::http::ok_with_content_type(
-            image.content,
-            guess_mime_type(image.id.as_str()),
-        ),
-        fastn_core::File::Static(s) => fastn_core::http::ok(s.content),
-        _ => {
-            fastn_core::server_error!("fastn unknown handler")
-        }
-    }
-}
-
 fn guess_mime_type(path: &str) -> mime_guess::Mime {
     mime_guess::from_path(path).first_or_octet_stream()
 }
@@ -231,7 +171,7 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
 
 async fn favicon(config: &fastn_core::Config) -> fastn_core::Result<fastn_core::http::Response> {
     let mut path = fastn_ds::Path::new("favicon.ico");
-    if !config.ds.exists(&path) {
+    if !config.ds.exists(&path).await {
         path = fastn_ds::Path::new("static/favicon.ico");
     }
     Ok(static_file(config, path).await)
@@ -242,7 +182,7 @@ async fn static_file(
     config: &fastn_core::Config,
     file_path: fastn_ds::Path,
 ) -> fastn_core::http::Response {
-    if !config.ds.exists(&file_path) {
+    if !config.ds.exists(&file_path).await {
         tracing::error!(
             msg = "no such static file ({})",
             path = file_path.to_string()
@@ -289,8 +229,6 @@ pub async fn serve_helper(
         serve_fastn_file(config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
         serve_file(&mut req_config, &path.join("/"), only_js).await
-    } else if let Some(cr_number) = fastn_core::cr::get_cr_path_from_url(path.as_str()) {
-        serve_cr_file(&mut req_config, &path, cr_number).await
     } else {
         // url is present in config or not
         // If not present than proxy pass it
@@ -491,83 +429,6 @@ pub async fn clear_cache(
         .finish());
 }
 
-// TODO: Move them to routes folder
-async fn sync(
-    config: &fastn_core::Config,
-    req: fastn_core::http::Request,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.write().await;
-    fastn_core::apis::sync(config, req.json()?).await
-}
-
-async fn sync2(
-    config: &fastn_core::Config,
-    req: fastn_core::http::Request,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.write().await;
-    fastn_core::apis::sync2(config, req.json()?).await
-}
-
-pub async fn clone(config: &fastn_core::Config) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.read().await;
-    fastn_core::apis::clone(config).await
-}
-
-pub(crate) async fn view_source(
-    config: &fastn_core::Config,
-    req: fastn_core::http::Request,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.read().await;
-    Ok(fastn_core::apis::view_source(config, &req).await)
-}
-
-pub(crate) async fn edit_source(
-    config: &fastn_core::Config,
-    req: fastn_core::http::Request,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.read().await;
-    Ok(fastn_core::apis::edit_source(config, &req).await)
-}
-
-pub async fn edit(
-    config: &fastn_core::Config,
-    req: fastn_core::http::Request,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.write().await;
-    fastn_core::apis::edit(config, &req, req.json()?).await
-}
-
-pub async fn revert(
-    config: &fastn_core::Config,
-    req: fastn_core::http::Request,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.write().await;
-    fastn_core::apis::edit::revert(config, req.json()?).await
-}
-
-pub async fn editor_sync(
-    config: &fastn_core::Config,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.write().await;
-    fastn_core::apis::edit::sync(config).await
-}
-
-pub async fn create_cr(
-    config: &fastn_core::Config,
-    req: fastn_core::http::Request,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.write().await;
-    fastn_core::apis::cr::create_cr(config, req.json()?).await
-}
-
-pub async fn create_cr_page(
-    config: &fastn_core::Config,
-    req: fastn_core::http::Request,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    let _lock = LOCK.read().await;
-    fastn_core::apis::cr::create_cr_page(config, req).await
-}
-
 #[derive(serde::Deserialize, Default, Clone)]
 pub(crate) struct AppData {
     pub(crate) edition: Option<String>,
@@ -691,18 +552,8 @@ async fn actual_route(
 
     let req = fastn_core::http::Request::from_actix(req, body);
     match (req.method().to_lowercase().as_str(), req.path()) {
-        ("post", "/-/sync/") if cfg!(feature = "remote") => sync(config, req).await,
-        ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(config, req).await,
-        ("get", "/-/clone/") if cfg!(feature = "remote") => clone(config).await,
-        ("get", t) if t.starts_with("/-/view-src/") => view_source(config, req).await,
-        ("get", t) if t.starts_with("/-/edit-src/") => edit_source(config, req).await,
         #[cfg(feature = "auth")]
         (_, t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
-        ("post", "/-/edit/") => edit(config, req).await,
-        ("post", "/-/revert/") => revert(config, req).await,
-        ("get", "/-/editor-sync/") => editor_sync(config).await,
-        ("post", "/-/create-cr/") => create_cr(config, req).await,
-        ("get", "/-/create-cr-page/") => create_cr_page(config, req).await,
         ("get", "/-/clear-cache/") => clear_cache(config, req).await,
         ("get", "/-/poll/") => fastn_core::watcher::poll().await,
         ("get", "/favicon.ico") => favicon(config).await,
@@ -743,20 +594,6 @@ pub async fn listen(
 
     if package_download_base_url.is_some() {
         download_init_package(&package_download_base_url).await?;
-    }
-
-    if cfg!(feature = "controller") {
-        // fastn-controller base path and ec2 instance id (hardcoded for now)
-        let fastn_controller: String = std::env::var("FASTN_CONTROLLER")
-            .unwrap_or_else(|_| "https://controller.fifthtry.com".to_string());
-        let fastn_instance: String =
-            std::env::var("FASTN_INSTANCE_ID").expect("FASTN_INSTANCE_ID is required");
-
-        println!("Resolving dependency");
-        match crate::controller::resolve_dependencies(fastn_instance, fastn_controller).await {
-            Ok(_) => println!("Dependencies resolved"),
-            Err(e) => panic!("Error resolving dependencies using controller!!: {:?}", e),
-        }
     }
 
     let tcp_listener = match fastn_core::http::get_available_port(port, bind_address) {

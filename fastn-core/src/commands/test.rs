@@ -92,7 +92,7 @@ impl fastn_core::Config {
         use itertools::Itertools;
         let package = &self.package;
         let path = self.get_root_for_package(package);
-        let all_files = self.get_all_test_file_paths()?;
+        let all_files = self.get_all_test_file_paths().await?;
         let documents =
             fastn_core::paths_to_files(&self.ds, package.name.as_str(), all_files, &path).await?;
         let mut tests = documents
@@ -113,11 +113,11 @@ impl fastn_core::Config {
         Ok(tests)
     }
 
-    pub(crate) fn get_all_test_file_paths(&self) -> fastn_core::Result<Vec<fastn_ds::Path>> {
+    pub(crate) async fn get_all_test_file_paths(&self) -> fastn_core::Result<Vec<fastn_ds::Path>> {
         let path = self
             .get_root_for_package(&self.package)
             .join(fastn_core::commands::test::TEST_FOLDER);
-        Ok(self.ds.get_all_file_path(&path, &[]))
+        Ok(self.ds.get_all_file_path(&path, &[]).await)
     }
 
     pub(crate) fn get_test_directory_path(&self) -> fastn_ds::Path {

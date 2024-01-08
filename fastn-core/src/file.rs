@@ -55,16 +55,6 @@ impl File {
         base_path.join(id)
     }
 
-    pub(crate) fn get_content(&self) -> &[u8] {
-        match self {
-            Self::Ftd(ref a) => a.content.as_bytes(),
-            Self::Static(ref a) => a.content.as_ref(),
-            Self::Markdown(ref a) => a.content.as_bytes(),
-            Self::Code(ref a) => a.content.as_bytes(),
-            Self::Image(ref a) => a.content.as_ref(),
-        }
-    }
-
     pub fn is_static(&self) -> bool {
         matches!(
             self,

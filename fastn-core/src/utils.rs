@@ -309,13 +309,6 @@ impl<T> HasElements for Vec<T> {
     }
 }
 
-pub(crate) fn timestamp_nanosecond() -> u128 {
-    match std::time::SystemTime::now().duration_since(std::time::SystemTime::UNIX_EPOCH) {
-        Ok(n) => n.as_nanos(),
-        Err(_) => panic!("SystemTime before UNIX EPOCH!"),
-    }
-}
-
 pub(crate) fn language_to_human(language: &str) -> String {
     realm_lang::Language::from_2_letter_code(language)
         .map(|v| v.human())
@@ -348,43 +341,23 @@ pub(crate) fn track_path(id: &str, base_path: &fastn_ds::Path) -> fastn_ds::Path
 }
 
 pub(crate) async fn get_number_of_documents(
-    config: &fastn_core::Config,
+    _config: &fastn_core::Config,
 ) -> fastn_core::Result<String> {
-    let mut no_of_docs = fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root())
-        .await?
-        .len()
-        .to_string();
-    if let Ok(original_path) = config.original_path() {
-        let no_of_original_docs =
-            fastn_core::snapshot::get_latest_snapshots(&config.ds, &original_path)
-                .await?
-                .len();
-        no_of_docs = format!("{} / {}", no_of_docs, no_of_original_docs);
-    }
-    Ok(no_of_docs)
+    Ok(0.to_string())
 }
 
 pub(crate) async fn get_current_document_last_modified_on(
-    config: &fastn_core::Config,
-    document_id: &str,
+    _config: &fastn_core::Config,
+    _document_id: &str,
 ) -> Option<String> {
-    fastn_core::snapshot::get_latest_snapshots(&config.ds, config.ds.root())
-        .await
-        .unwrap_or_default()
-        .get(document_id)
-        .map(nanos_to_rfc3339)
+    None
 }
 
 pub(crate) async fn get_last_modified_on(
-    ds: &fastn_ds::DocumentStore,
-    path: &fastn_ds::Path,
+    _ds: &fastn_ds::DocumentStore,
+    _path: &fastn_ds::Path,
 ) -> Option<String> {
-    fastn_core::snapshot::get_latest_snapshots(ds, path)
-        .await
-        .unwrap_or_default()
-        .values()
-        .max()
-        .map(nanos_to_rfc3339)
+    None
 }
 
 /*
@@ -451,48 +424,6 @@ pub async fn copy_dir_all(
     Ok(())
 }*/
 
-pub(crate) fn seconds_to_human(s: u64) -> String {
-    let days = s / 3600 / 24;
-    let hours = s / 3600 - days * 24;
-    let months = days / 30;
-    if s == 0 {
-        "Just now".to_string()
-    } else if s == 1 {
-        "One second ago".to_string()
-    } else if s < 60 {
-        format!("{} seconds ago", s)
-    } else if s < 3600 {
-        format!("{} minutes ago", s / 60)
-    } else if s < 3600 * 10 {
-        let r = s - hours * 60;
-        if r == 0 {
-            format!("{} hours ago", hours)
-        } else if hours == 1 && r == 1 {
-            "An hour and a minute ago".to_string()
-        } else if hours == 1 {
-            format!("An hour and {} minutes ago", r)
-        } else {
-            format!("{} hours ago", hours)
-        }
-    } else if days < 1 {
-        format!("{} hours ago", hours)
-    } else if days == 1 && hours == 0 {
-        "A day ago".to_string()
-    } else if days == 1 && hours == 1 {
-        "A day an hour ago".to_string()
-    } else if days == 1 {
-        format!("A day ago and {} hours ago", hours)
-    } else if days < 7 && hours == 0 {
-        format!("{} days ago", days)
-    } else if months == 1 {
-        "A month ago".to_string()
-    } else if months < 24 {
-        format!("{} months ago", months)
-    } else {
-        format!("{} years ago", months / 12)
-    }
-}
-
 pub(crate) fn validate_base_url(package: &fastn_core::Package) -> fastn_core::Result<()> {
     if package.download_base_url.is_none() {
         warning!("expected base in fastn.package: {:?}", package.name);
@@ -545,14 +476,14 @@ pub fn id_to_path(id: &str) -> String {
 
 /// returns true if an existing file named "file_name"
 /// exists in the root package folder
-fn is_file_in_root(root: &str, file_name: &str, ds: &fastn_ds::DocumentStore) -> bool {
-    ds.exists(&fastn_ds::Path::new(root).join(file_name))
+async fn is_file_in_root(root: &str, file_name: &str, ds: &fastn_ds::DocumentStore) -> bool {
+    ds.exists(&fastn_ds::Path::new(root).join(file_name)).await
 }
 
 /// returns favicon html tag as string
 /// (if favicon is passed as header in fastn.package or if any favicon.* file is present in the root package folder)
 /// otherwise returns None
-fn resolve_favicon(
+async fn resolve_favicon(
     root_path: &str,
     package_name: &str,
     favicon: &Option<String>,
@@ -594,13 +525,13 @@ fn resolve_favicon(
 
                 // Just check if any favicon exists in the root package directory
                 // in the above mentioned priority order
-                let found_favicon_id = if is_file_in_root(root_path, "favicon.ico", ds) {
+                let found_favicon_id = if is_file_in_root(root_path, "favicon.ico", ds).await {
                     "favicon.ico"
-                } else if is_file_in_root(root_path, "favicon.svg", ds) {
+                } else if is_file_in_root(root_path, "favicon.svg", ds).await {
                     "favicon.svg"
-                } else if is_file_in_root(root_path, "favicon.png", ds) {
+                } else if is_file_in_root(root_path, "favicon.png", ds).await {
                     "favicon.png"
-                } else if is_file_in_root(root_path, "favicon.jpg", ds) {
+                } else if is_file_in_root(root_path, "favicon.jpg", ds).await {
                     "favicon.jpg"
                 } else {
                     // Not using any favicon
@@ -715,6 +646,7 @@ pub async fn replace_markers_2022(
                 &config.package.favicon,
                 &config.ds,
             )
+            .await
             .unwrap_or_default()
             .as_str(),
         )
@@ -801,6 +733,7 @@ pub async fn replace_markers_2023(
             &config.package.favicon,
             &config.ds
         )
+        .await
         .unwrap_or_default()
         .as_str(),
         js_script = format!("{js_script}{}", fastn_core::utils::available_code_themes()).as_str(),
@@ -843,7 +776,7 @@ pub(crate) async fn write(
     data: &[u8],
     ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    if ds.exists(&root.join(file_path)) {
+    if ds.exists(&root.join(file_path)).await {
         return Ok(());
     }
     update1(root, file_path, data, ds).await
@@ -859,7 +792,7 @@ pub(crate) async fn overwrite(
 }
 
 // TODO: remove this function use update instead
-pub(crate) async fn update1(
+pub async fn update1(
     root: &fastn_ds::Path,
     file_path: &str,
     data: &[u8],
@@ -885,7 +818,7 @@ pub(crate) async fn copy(
     fastn_core::utils::update(to, content.as_slice(), ds).await
 }
 
-pub(crate) async fn update(
+pub async fn update(
     root: &fastn_ds::Path,
     data: &[u8],
     ds: &fastn_ds::DocumentStore,
@@ -952,7 +885,7 @@ pub async fn remove_except(
 ) -> fastn_core::Result<()> {
     use itertools::Itertools;
     let except = except.iter().map(|x| root.join(x)).collect_vec();
-    for path in ds.get_all_file_path(root, &[]) {
+    for path in ds.get_all_file_path(root, &[]).await {
         if except.contains(&path) {
             continue;
         }
