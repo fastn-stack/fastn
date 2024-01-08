@@ -1802,15 +1802,12 @@ dependencies = [
 name = "fastn-update"
 version = "0.1.0"
 dependencies = [
- "colored",
  "fastn-core",
  "fastn-ds",
- "fastn-observer",
  "fastn-package",
  "indicatif",
  "serde",
  "serde_json",
- "tracing",
  "zip",
 ]
 
