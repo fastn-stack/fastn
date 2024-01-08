@@ -28,14 +28,14 @@ pub async fn resolve_dependencies_(
             let dependency_path = &packages_root.join(&dependency.package.name);
             match get_manifest(dependency.package.name.clone()).await {
                 Ok(manifest) => {
-                    pb.set_prefix("Downloaded manifest.json");
+                    pb.set_message("Downloaded manifest.json");
                     download_and_unpack_zip(
                         ds,
                         &packages_root.join(&dependency.package.name),
                         &manifest,
                     )
                     .await?;
-                    pb.set_prefix("Downloaded and unpacked zip archive");
+                    pb.set_message("Downloaded and unpacked zip archive");
                     let dep_package = {
                         let mut dep_package = dependency.package.clone();
                         let fastn_path = dependency_path.join("FASTN.ftd");
