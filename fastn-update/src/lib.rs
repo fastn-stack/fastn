@@ -26,6 +26,7 @@ pub async fn resolve_dependencies_(
                 continue;
             }
             let dependency_path = &packages_root.join(&dependency.package.name);
+            pb.set_message("Downloading manifest.json");
             let manifest = match get_manifest(dependency.package.name.clone()).await {
                 Ok(manifest) => manifest,
                 Err(e) => {
@@ -38,7 +39,7 @@ pub async fn resolve_dependencies_(
                     return Err(e);
                 }
             };
-            pb.set_message("Downloaded manifest.json");
+            pb.set_message("Downloading package archive");
             download_and_unpack_zip(ds, &packages_root.join(&dependency.package.name), &manifest)
                 .await?;
             pb.set_message("Downloaded and unpacked zip archive");
