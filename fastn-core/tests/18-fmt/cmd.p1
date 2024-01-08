@@ -1,0 +1,8 @@
+-- fbt:
+cmd: $FBT_CWD/../target/debug/fastn --test fmt
+output: .
+
+-- stdout:
+
+Formatting FASTN.ftd ... Done
+Formatting index.ftd ... Done

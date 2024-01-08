@@ -40,7 +40,7 @@ mod mail;
 
 pub(crate) use auto_import::AutoImport;
 pub use commands::{
-    build::build, check::post_build_check, create_package::create_package, query::query,
+    build::build, check::post_build_check, create_package::create_package, fmt::fmt, query::query,
     serve::listen, test::test,
 };
 pub use config::{Config, FTDEdition, RequestConfig};
