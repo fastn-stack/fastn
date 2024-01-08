@@ -102,9 +102,7 @@ async fn get_manifest(package: String) -> fastn_core::Result<fastn_core::Manifes
 }
 
 async fn process(config: &fastn_core::Config) -> fastn_core::Result<()> {
-    resolve_dependencies(&config.ds, &config.packages_root, &config.package).await?;
-
-    Ok(())
+    resolve_dependencies(&config.ds, &config.packages_root, &config.package).await
 }
 
 pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
