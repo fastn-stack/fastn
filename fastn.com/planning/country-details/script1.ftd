@@ -5,14 +5,14 @@ src: $fastn-assets.files.images.backend.pr-http.png
 
 -- ds.markdown:
 
-Hi Guys, welcome to the video. In this video I will help you understand how 
+Hi Guys, welcome to the video. In this video I will help you understand how
 using `fastn`, REST APIs can seamlessly connect the backend with the frontend.
 
 -- ds.image:
 src: $fastn-assets.files.images.backend.sketch-ppt.png
 
-`fastn` has its own `http processor` which we will use to get the data and use 
-the concepts of data modelling to store the data in form of records. Then we 
+`fastn` has its own `http processor` which we will use to get the data and use
+the concepts of data modelling to store the data in form of records. Then we
 will display the data in a tabular form.
 
 -- ds.image:
@@ -22,7 +22,7 @@ src: $fastn-assets.files.images.backend.sketch.svg
 
 Let's start by creating a `fastn` package.
 
-I like to repeat this line in my videos that a `fastn` package essentially 
+I like to repeat this line in my videos that a `fastn` package essentially
 needs two documents.
 
 - One is `FASTN.ftd`, and remember FASTN here is in upper case.
@@ -34,9 +34,9 @@ In `FASTN.ftd` document we import `fastn`.
 
 \-- import: fastn
 
--- ds.markdown: 
+-- ds.markdown:
 
-After a line space, we use a package variable of fastn and assign a package 
+After a line space, we use a package variable of fastn and assign a package
 name to it.
 
 -- ds.code:
@@ -44,7 +44,7 @@ name to it.
 \-- fastn.package: country-details
 
 
--- ds.markdown: 
+-- ds.markdown:
 
 In this example, we are going to fetch a JSON data from this URL:
 
@@ -52,12 +52,12 @@ In this example, we are going to fetch a JSON data from this URL:
 https://famous-loincloth-ox.cyclic.app/
 ```
 
-This JSON data is in the form of array list, and each data has two fields, one 
+This JSON data is in the form of array list, and each data has two fields, one
 is the name of the country and another is the capital.
 
-We are going to call this data through `http` processor and save each data as a 
-record. Since this is a list of data so we will use `for` loop to display the 
-data. 
+We are going to call this data through `http` processor and save each data as a
+record. Since this is a list of data so we will use `for` loop to display the
+data.
 
 -- ds.markdown:
 
@@ -76,7 +76,7 @@ string capital:
 -- ds.markdown:
 
 Now, to use the `http` processor first we will import `fastn/processors` which
-is a library provided by `fastn` and we will give an alias as `pr` 
+is a library provided by `fastn` and we will give an alias as `pr`
 
 -- ds.code:
 
@@ -98,7 +98,7 @@ use the `country-data` record as the type.
 Now, we will use `http` processor to fetch the data from the URL I mentioned
 earlier. So we will pass the URL.
 
--- ds.code: 
+-- ds.code:
 
 \-- country-data list countries:
 $processor$: pr.http
@@ -136,7 +136,7 @@ Let's show the country name.
 -- ds.code:
 
 \-- component country-detail:
-caption country-data country:  
+caption country-data country:
 
 \-- ftd.text: $country-detail.country.name  ;; <hl>
 
@@ -155,12 +155,12 @@ for: $country in $countries
 
 -- ds.markdown:
 
-There you go, we have displayed the list of the names of the countries that 
+There you go, we have displayed the list of the names of the countries that
 are there in the JSON data.
 
 Now wrap the two texts for country name and capital in `row` container.
 
--- ds.code: 
+-- ds.code:
 
 \-- ftd.row:
 width.fixed.percent: 20
@@ -174,7 +174,7 @@ width.fixed.percent: 20
 -- ds.markdown:
 
 So you have successfully fetched and displayed the values of JSON data from the
-external website using the `http` processor and one of the data modelling type, 
+external website using the `http` processor and one of the data modelling type,
 `record`.
 
 But I promised that we will display this data in tabular form. So, for that we
@@ -244,9 +244,9 @@ Join us on Discord, and share your package which you will create following this
 video. You can share it on the discord's `show-and-tell` channel.
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
-the `fastn` website. 
+the `fastn` website.
 
-Support us by clicking on this link and give us a star ⭐ on GitHub and join 
+Support us by clicking on this link and give us a star ⭐ on GitHub and join
 our fastn community on Discord.
 
 

@@ -6,7 +6,7 @@ files. Through these ways we can incorporate JavaScript/CSS in `fastn`:
 
 - [**JS in function**](/js-in-function/): A JavaScript function can be called
   within a function
-  
+
 - [**Web component**](/web-component/): A custom web component, created using JavaScript (or other
     languages too, that compiles to JS) can be incorporated into `fastn`
     documentation.

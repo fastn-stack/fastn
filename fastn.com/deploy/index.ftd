@@ -45,23 +45,23 @@ choices for where to deploy it.
 -- ds.h1: Next
 
 - **Get Started with fastn**:
-  We provide a [step-by-step guide](https://fastn.com/quick-build/) to help you 
-  build your first fastn-powered website. You can also 
-  [install fastn](/install/) and learn to [build UI Components](/expander/) 
+  We provide a [step-by-step guide](https://fastn.com/quick-build/) to help you
+  build your first fastn-powered website. You can also
+  [install fastn](/install/) and learn to [build UI Components](/expander/)
   using fastn.
 
 - **Web Designing**:
-  Check out our [design features](/design/) to see how we can enhance your web 
+  Check out our [design features](/design/) to see how we can enhance your web
   design.
 
 
 - **Docs**:
-  Our [docs](/ftd/data-modelling/) is the go-to resource for mastering fastn. 
-  It provides valuable resources from in-depth explanations to best practices. 
+  Our [docs](/ftd/data-modelling/) is the go-to resource for mastering fastn.
+  It provides valuable resources from in-depth explanations to best practices.
 
 
 - **Frontend**:
-  fastn is a versatile and user-friendly solution for all your 
+  fastn is a versatile and user-friendly solution for all your
   [frontend development](/frontend/) needs.
 
 -- end: ds.page

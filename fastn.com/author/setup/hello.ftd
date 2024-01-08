@@ -13,4 +13,3 @@ $on-click$: $ftd.toggle($a = $toggle-text.current)
 -- end: toggle-text
 
 -- toggle-text: `fastn` is cool!
-

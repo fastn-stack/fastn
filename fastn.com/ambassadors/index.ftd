@@ -5,7 +5,7 @@
 -- import: fastn.com/content-library as lib
 
 
--- ds.page: 
+-- ds.page:
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -20,150 +20,150 @@ sidebar: false
 
 -- ds.page.footer:
 
--- footer.social-sideline-footer:
-social: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
-
+	-- footer.social-sideline-footer:
+	social: true
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: /
+	twitter-url: https://twitter.com/FifthTryHQ
+	discord-url: https://discord.gg/bucrdvptYd
+	copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+	
 -- end: ds.page.footer
 
 -- ftd.column:
 width: fill-container
 background.solid: $inherited.colors.background.step-1
 
--- hero-with-4-images: fastn ambassadors program
-image-1: $fastn-assets.files.images.ambassadors.event-image-1.jpg
-image-2: $fastn-assets.files.images.ambassadors.event-image-2.jpg
-image-3: $fastn-assets.files.images.ambassadors.event-image-3.jpg
-image-4: $fastn-assets.files.images.ambassadors.event-image-4.jpg
-cta-text: Apply now
-cta-link: ambassadors/how-it-works/
-
-You might find yourself helping fellow students build their coding skills online
-with Microsoft Learn, organizing a virtual hackathon to solve real-world
-challenges,
-
-
--- hero-large: Be a force for good-locally and globally
-image: $fastn-assets.files.images.ambassadors.unsplash-1.jpg
-
-You might find yourself helping fellow students build their coding skills online
-with Microsoft Learn, organizing a virtual hackathon to solve real-world
-challenges, earning certifications, or building digital communities—it’s all up
-to you.
-
-
--- featured-cards:
-
--- lib.card: Grow
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-min-height.fixed.em: 22
-
-Apply new learnings to build great solutions for local problems. Advance your
-skills, career, and network. Give back to your community by helping others
-learn.
-
--- lib.card: Learn
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
-min-height.fixed.em: 21
-
-Learn about a range of technical topics and gain new skills through hands-on
-workshops, events, talks, and project-building activities online and
-in-person.
-
--- lib.card: Connect
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
-min-height.fixed.em: 21
-
-Meet students interested in developer technologies at your college or
-university. All are welcome, including those with diverse backgrounds and
-different majors.
-
--- end: featured-cards
-
-
--- hero-large: How it works
-image: $fastn-assets.files.images.ambassadors.unsplash-2.jpg
-move-left: true
-cta-text: Learn More
-cta-link: ambassadors/how-it-works/
-
-You might find yourself helping fellow students build their coding skills online
-with Microsoft Learn, organizing a virtual hackathon to solve real-world
-challenges, earning certifications, or building digital communities—it’s all up
-to you.
+	-- hero-with-4-images: fastn ambassadors program
+	image-1: $fastn-assets.files.images.ambassadors.event-image-1.jpg
+	image-2: $fastn-assets.files.images.ambassadors.event-image-2.jpg
+	image-3: $fastn-assets.files.images.ambassadors.event-image-3.jpg
+	image-4: $fastn-assets.files.images.ambassadors.event-image-4.jpg
+	cta-text: Apply now
+	cta-link: ambassadors/how-it-works/
+	
+	You might find yourself helping fellow students build their coding skills online
+	with Microsoft Learn, organizing a virtual hackathon to solve real-world
+	challenges,
+	
+	
+	-- hero-large: Be a force for good-locally and globally
+	image: $fastn-assets.files.images.ambassadors.unsplash-1.jpg
+	
+	You might find yourself helping fellow students build their coding skills online
+	with Microsoft Learn, organizing a virtual hackathon to solve real-world
+	challenges, earning certifications, or building digital communities—it’s all up
+	to you.
+	
+	
+	-- featured-cards:
+	
+		-- lib.card: Grow
+		image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+		min-height.fixed.em: 22
+		
+		Apply new learnings to build great solutions for local problems. Advance your
+		skills, career, and network. Give back to your community by helping others
+		learn.
+		
+		-- lib.card: Learn
+		image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
+		min-height.fixed.em: 21
+		
+		Learn about a range of technical topics and gain new skills through hands-on
+		workshops, events, talks, and project-building activities online and
+		in-person.
+		
+		-- lib.card: Connect
+		image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+		min-height.fixed.em: 21
+		
+		Meet students interested in developer technologies at your college or
+		university. All are welcome, including those with diverse backgrounds and
+		different majors.
+		
+	-- end: featured-cards
 
 
+	-- hero-large: How it works
+	image: $fastn-assets.files.images.ambassadors.unsplash-2.jpg
+	move-left: true
+	cta-text: Learn More
+	cta-link: ambassadors/how-it-works/
+	
+	You might find yourself helping fellow students build their coding skills online
+	with Microsoft Learn, organizing a virtual hackathon to solve real-world
+	challenges, earning certifications, or building digital communities—it’s all up
+	to you.
+	
+	
+	
+	-- heart-line-title-card: Words for students
+	
+	Browse dozens of professionally designed templates. Easily change
+	structure,style,and graphics -then host instantly.
+	
+	
+	-- testimonial-cards:
+	
+		-- testimonial-card: Jenny Wilson
+		avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-1.svg
+		bgcolor: $inherited.colors.custom.two
+		bg-color: $inherited.colors.background.step-2
+		label: CEO, ABC Company
+		width: 500
+		
+		At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+		pellentesque  egestas nulla .
+		
+		-- testimonial-card: Jenny Wilson
+		avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-2.svg
+		bgcolor: $inherited.colors.custom.nine
+		bg-color: $inherited.colors.background.step-2
+		label: CEO, ABC Company
+		width: 500
+		
+		At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+		pellentesque  egestas nulla .
+		
+		-- testimonial-card: Jenny Wilson
+		avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-3.svg
+		bgcolor: $inherited.colors.custom.three
+		bg-color: $inherited.colors.background.step-2
+		label: CEO, ABC Company
+		width: 500
+		
+		At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+		pellentesque  egestas nulla .
+		
+		-- testimonial-card: Jenny Wilson
+		avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-4.svg
+		bgcolor: $inherited.colors.custom.one
+		bg-color: $inherited.colors.background.step-2
+		label: CEO, ABC Company
+		width: 500
+		
+		At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
+		pellentesque  egestas nulla .
+		
+	-- end: testimonial-cards
 
--- heart-line-title-card: Words for students
-
-Browse dozens of professionally designed templates. Easily change
-structure,style,and graphics -then host instantly.
-
-
--- testimonial-cards:
-
--- testimonial-card: Jenny Wilson
-avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-1.svg
-bgcolor: $inherited.colors.custom.two
-bg-color: $inherited.colors.background.step-2
-label: CEO, ABC Company
-width: 500
-
-At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
-pellentesque  egestas nulla .
-
--- testimonial-card: Jenny Wilson
-avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-2.svg
-bgcolor: $inherited.colors.custom.nine
-bg-color: $inherited.colors.background.step-2
-label: CEO, ABC Company
-width: 500
-
-At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
-pellentesque  egestas nulla .
-
--- testimonial-card: Jenny Wilson
-avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-3.svg
-bgcolor: $inherited.colors.custom.three
-bg-color: $inherited.colors.background.step-2
-label: CEO, ABC Company
-width: 500
-
-At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
-pellentesque  egestas nulla .
-
--- testimonial-card: Jenny Wilson
-avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-4.svg
-bgcolor: $inherited.colors.custom.one
-bg-color: $inherited.colors.background.step-2
-label: CEO, ABC Company
-width: 500
-
-At nulla tristique facilisis augue. Lectus diam dignissim erat blandit
-pellentesque  egestas nulla .
-
--- end: testimonial-cards
-
--- youtuber-card:
-src: gQpR3APtI5w
-user: Jassi Pajji
-company: Student, Medicap University, Indore
-avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-1.svg
-user-bio-link: https://www.youtube.com/@Jasneet
-
-Join me on an exciting journey from Indore to Ujjain as I organize the
-electrifying Fastn Roadshow Ujjain event! In this vlog, I'll take you behind
-the scenes of this remarkable event, where we showcase the power of Fastn - the
-ultimate solution for full-stack web development made easy.
-
--- faqs: FAQ's
-faqs-list: $list-of-faqs
-
-
+	-- youtuber-card:
+	src: gQpR3APtI5w
+	user: Jassi Pajji
+	company: Student, Medicap University, Indore
+	avatar: $fastn-assets.files.images.ambassadors.testimonials.avatar-1.svg
+	user-bio-link: https://www.youtube.com/@Jasneet
+	
+	Join me on an exciting journey from Indore to Ujjain as I organize the
+	electrifying Fastn Roadshow Ujjain event! In this vlog, I'll take you behind
+	the scenes of this remarkable event, where we showcase the power of Fastn - the
+	ultimate solution for full-stack web development made easy.
+	
+	-- faqs: FAQ's
+	faqs-list: $list-of-faqs
+	
+	
 -- end: ftd.column
 
 -- end: ds.page
@@ -190,160 +190,160 @@ body body:
 -- ftd.column:
 width: fill-container
 
--- ftd.desktop:
+	-- ftd.desktop:
+	
+		-- ftd.column:
+		width: fill-container
+		background.solid: $inherited.colors.background.step-2
+		padding-vertical.px: 60
+		padding-left.px: 60
+		align-content: center
+		
+			-- ftd.row:
+			width: fill-container
+			align-content: center
+			spacing: space-between
+			max-width.fixed.px: 1440
+			
+				-- ftd.column:
+				width.fixed.percent: 40
+				color: $inherited.colors.text-strong
+				spacing.fixed.px: 44
+				
+					-- ftd.image:
+					src: $fastn-assets.files.images.ambassadors.paper-plane.svg
+					anchor: parent
+					left.px: -34
+					top.px: -45
+					
+					-- ftd.image:
+					src: $fastn-assets.files.images.ambassadors.book-icon.svg
+					anchor: parent
+					right.px: 40
+					top.px: -48
+					
+					-- ftd.text: $hero-with-4-images.title
+					role: $inherited.types.heading-large
+					
+					-- ftd.text:
+					role: $inherited.types.copy-regular
+					
+					$hero-with-4-images.body
+					
+					-- cta-button: $hero-with-4-images.cta-text
+					if: { hero-with-4-images.cta-text != NULL }
+					role: primary
+					link: $hero-with-4-images.cta-link
+					show-arrow: true
+					new-tab: true
+					
+				-- end: ftd.column
 
--- ftd.column:
-width: fill-container
-background.solid: $inherited.colors.background.step-2
-padding-vertical.px: 60
-padding-left.px: 60
-align-content: center
+				-- ftd.column:
+				width.fixed.percent: 55
+				
+					-- ftd.row:
+					width: fill-container
+					wrap: true
+					spacing.fixed.px: 24
+					
+						-- ftd.image:
+						src: $hero-with-4-images.image-1
+						
+						-- ftd.image:
+						src: $hero-with-4-images.image-2
+						
+						-- ftd.image:
+						src: $hero-with-4-images.image-3
+						
+						-- ftd.image:
+						src: $hero-with-4-images.image-4
+						
+					-- end: ftd.row
 
--- ftd.row:
-width: fill-container
-align-content: center
-spacing: space-between
-max-width.fixed.px: 1440
+				-- end: ftd.column
 
--- ftd.column:
-width.fixed.percent: 40
-color: $inherited.colors.text-strong
-spacing.fixed.px: 44
+			-- end: ftd.row
 
--- ftd.image:
-src: $fastn-assets.files.images.ambassadors.paper-plane.svg
-anchor: parent
-left.px: -34
-top.px: -45
+		-- end: ftd.column
 
--- ftd.image:
-src: $fastn-assets.files.images.ambassadors.book-icon.svg
-anchor: parent
-right.px: 40
-top.px: -48
-
--- ftd.text: $hero-with-4-images.title
-role: $inherited.types.heading-large
-
--- ftd.text:
-role: $inherited.types.copy-regular
-
-$hero-with-4-images.body
-
--- cta-button: $hero-with-4-images.cta-text
-if: { hero-with-4-images.cta-text != NULL }
-role: primary
-link: $hero-with-4-images.cta-link
-show-arrow: true
-new-tab: true
-
--- end: ftd.column
-
--- ftd.column:
-width.fixed.percent: 55
-
--- ftd.row:
-width: fill-container
-wrap: true
-spacing.fixed.px: 24
-
--- ftd.image:
-src: $hero-with-4-images.image-1
-
--- ftd.image:
-src: $hero-with-4-images.image-2
-
--- ftd.image:
-src: $hero-with-4-images.image-3
-
--- ftd.image:
-src: $hero-with-4-images.image-4
-
--- end: ftd.row
-
--- end: ftd.column
-
--- end: ftd.row
-
--- end: ftd.column
-
--- end: ftd.desktop
+	-- end: ftd.desktop
 
 
--- ftd.mobile:
+	-- ftd.mobile:
+	
+		-- ftd.column:
+		width: fill-container
+		background.solid: $inherited.colors.background.step-2
+		align-content: center
+		padding-top.px: 60
+		padding-bottom.px: 24
+		padding-horizontal.px: 24
+		
+			-- ftd.column:
+			width: fill-container
+			align-content: center
+			spacing.fixed.px: 24
+			max-width.fixed.px: 1440
+			
+				-- ftd.column:
+				width: fill-container
+				color: $inherited.colors.text-strong
+				spacing.fixed.px: 24
+				
+					-- ftd.image:
+					src: $fastn-assets.files.images.ambassadors.paper-plane.svg
+					anchor: parent
+					left.px: -24
+					top.px: -58
+					
+					-- ftd.image:
+					src: $fastn-assets.files.images.ambassadors.book-icon.svg
+					anchor: parent
+					right.px: -10
+					top.px: -48
+					
+					-- ftd.text: $hero-with-4-images.title
+					role: $inherited.types.heading-hero
+					
+					-- ftd.text:
+					role: $inherited.types.copy-regular
+					
+					$hero-with-4-images.body
+					
+					-- cta-button: $hero-with-4-images.cta-text
+					if: { hero-with-4-images.cta-text != NULL }
+					role: primary
+					link: $hero-with-4-images.cta-link
+					show-arrow: true
+					new-tab: true
+					
+				-- end: ftd.column
 
--- ftd.column:
-width: fill-container
-background.solid: $inherited.colors.background.step-2
-align-content: center
-padding-top.px: 60
-padding-bottom.px: 24
-padding-horizontal.px: 24
+				-- ftd.column:
+				width: fill-container
+				spacing.fixed.px: 18
+				align-content: center
+				
+					-- ftd.image:
+					src: $hero-with-4-images.image-1
+					
+					-- ftd.image:
+					src: $hero-with-4-images.image-2
+					
+					-- ftd.image:
+					src: $hero-with-4-images.image-3
+					
+					-- ftd.image:
+					src: $hero-with-4-images.image-4
+					
+				-- end: ftd.column
 
--- ftd.column:
-width: fill-container
-align-content: center
-spacing.fixed.px: 24
-max-width.fixed.px: 1440
+			-- end: ftd.column
 
--- ftd.column:
-width: fill-container
-color: $inherited.colors.text-strong
-spacing.fixed.px: 24
+		-- end: ftd.column
 
--- ftd.image:
-src: $fastn-assets.files.images.ambassadors.paper-plane.svg
-anchor: parent
-left.px: -24
-top.px: -58
-
--- ftd.image:
-src: $fastn-assets.files.images.ambassadors.book-icon.svg
-anchor: parent
-right.px: -10
-top.px: -48
-
--- ftd.text: $hero-with-4-images.title
-role: $inherited.types.heading-hero
-
--- ftd.text:
-role: $inherited.types.copy-regular
-
-$hero-with-4-images.body
-
--- cta-button: $hero-with-4-images.cta-text
-if: { hero-with-4-images.cta-text != NULL }
-role: primary
-link: $hero-with-4-images.cta-link
-show-arrow: true
-new-tab: true
-
--- end: ftd.column
-
--- ftd.column:
-width: fill-container
-spacing.fixed.px: 18
-align-content: center
-
--- ftd.image:
-src: $hero-with-4-images.image-1
-
--- ftd.image:
-src: $hero-with-4-images.image-2
-
--- ftd.image:
-src: $hero-with-4-images.image-3
-
--- ftd.image:
-src: $hero-with-4-images.image-4
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: ftd.mobile
+	-- end: ftd.mobile
 
 -- end: ftd.column
 
@@ -372,75 +372,75 @@ boolean new-tab: false
 align-self if { cta-button.align-center }: center
 margin-top.px if { cta-button.align-center && ftd.device == "mobile" }: 40
 
--- ftd.row:
-if: { !cta-button.medium }
-width.fixed.px if { cta-button.width != NULL }: $cta-button.width
-spacing.fixed.px: 10
-link if { cta-button.link != NULL }: $cta-button.link
-open-in-new-tab if { cta-button.new-tab }: true
-background.solid if { cta-button.role == "primary" }: $inherited.colors.cta-primary.base
-background.solid if { cta-button.role == "secondary" }: $inherited.colors.cta-secondary.base
-border-radius.px: 30
-padding-vertical.px if { cta-button.role == "primary" || cta-button.role == "secondary" }: 20
-padding-horizontal.px if { cta-button.role == "primary" || cta-button.role == "secondary" }: 42
-align-content if { cta-button.role == "primary" }: center
+	-- ftd.row:
+	if: { !cta-button.medium }
+	width.fixed.px if { cta-button.width != NULL }: $cta-button.width
+	spacing.fixed.px: 10
+	link if { cta-button.link != NULL }: $cta-button.link
+	open-in-new-tab if { cta-button.new-tab }: true
+	background.solid if { cta-button.role == "primary" }: $inherited.colors.cta-primary.base
+	background.solid if { cta-button.role == "secondary" }: $inherited.colors.cta-secondary.base
+	border-radius.px: 30
+	padding-vertical.px if { cta-button.role == "primary" || cta-button.role == "secondary" }: 20
+	padding-horizontal.px if { cta-button.role == "primary" || cta-button.role == "secondary" }: 42
+	align-content if { cta-button.role == "primary" }: center
+	
+		-- ftd.text: $cta-button.title
+		if: { $cta-button.title != NULL }
+		role: $inherited.types.button-medium
+		color: $inherited.colors.background.step-1
+		color if { cta-button.role == "secondary" }: $inherited.colors.cta-secondary.text
+		color if { cta-button.role == "primary" }: $inherited.colors.cta-primary.text
+		white-space: nowrap
+		text-align: center
+		
+		-- ftd.image:
+		if: { cta-button.show-arrow }
+		src: $fastn-assets.files.images.ambassadors.cta-arrow-right.svg
+		width: auto
+		height: auto
+		align-self: center
+		
+		-- ftd.image:
+		if: { cta-button.role != "primary" }
+		src: $fastn-assets.files.images.ambassadors.cta-arrow.svg
+		width: auto
+		height: auto
+		align-self: center
+		
+	-- end: ftd.row
 
--- ftd.text: $cta-button.title
-if: { $cta-button.title != NULL }
-role: $inherited.types.button-medium
-color: $inherited.colors.background.step-1
-color if { cta-button.role == "secondary" }: $inherited.colors.cta-secondary.text
-color if { cta-button.role == "primary" }: $inherited.colors.cta-primary.text
-white-space: nowrap
-text-align: center
-
--- ftd.image:
-if: { cta-button.show-arrow }
-src: $fastn-assets.files.images.ambassadors.cta-arrow-right.svg
-width: auto
-height: auto
-align-self: center
-
--- ftd.image:
-if: { cta-button.role != "primary" }
-src: $fastn-assets.files.images.ambassadors.cta-arrow.svg
-width: auto
-height: auto
-align-self: center
-
--- end: ftd.row
-
--- ftd.row:
-if: { cta-button.medium }
-width.fixed.px if { cta-button.width != NULL }: $cta-button.width
-spacing.fixed.px: 10
-link if { cta-button.link != NULL }: $cta-button.link
-background.solid if { cta-button.role == "primary" }: $inherited.colors.cta-primary.base
-background.solid if { cta-button.role == "secondary" }: $inherited.colors.cta-secondary.base
-border-radius.px: 30
-padding-vertical.px: 20
-padding-horizontal.px: 42
-padding-vertical.px if { ftd.device == "mobile" }: 15
-padding-horizontal.px if { ftd.device == "mobile" }: 30
-align-content: center
-
--- ftd.text: $cta-button.title
-role: $inherited.types.button-small
-color: $inherited.colors.text
-color if { cta-button.role == "secondary" }: $inherited.colors.cta-secondary.text
-color if { cta-button.role == "primary" }: $inherited.colors.cta-primary.text
-white-space: nowrap
-text-align: center
-
--- ftd.image:
-if: { cta-button.show-arrow }
-src: $fastn-assets.files.images.ambassadors.cta-arrow-right.svg
-width: auto
-width.fixed.px if { ftd.device == "mobile" }: 19
-height: auto
-align-self: center
-
--- end: ftd.row
+	-- ftd.row:
+	if: { cta-button.medium }
+	width.fixed.px if { cta-button.width != NULL }: $cta-button.width
+	spacing.fixed.px: 10
+	link if { cta-button.link != NULL }: $cta-button.link
+	background.solid if { cta-button.role == "primary" }: $inherited.colors.cta-primary.base
+	background.solid if { cta-button.role == "secondary" }: $inherited.colors.cta-secondary.base
+	border-radius.px: 30
+	padding-vertical.px: 20
+	padding-horizontal.px: 42
+	padding-vertical.px if { ftd.device == "mobile" }: 15
+	padding-horizontal.px if { ftd.device == "mobile" }: 30
+	align-content: center
+	
+		-- ftd.text: $cta-button.title
+		role: $inherited.types.button-small
+		color: $inherited.colors.text
+		color if { cta-button.role == "secondary" }: $inherited.colors.cta-secondary.text
+		color if { cta-button.role == "primary" }: $inherited.colors.cta-primary.text
+		white-space: nowrap
+		text-align: center
+		
+		-- ftd.image:
+		if: { cta-button.show-arrow }
+		src: $fastn-assets.files.images.ambassadors.cta-arrow-right.svg
+		width: auto
+		width.fixed.px if { ftd.device == "mobile" }: 19
+		height: auto
+		align-self: center
+		
+	-- end: ftd.row
 
 -- end: ftd.column
 
@@ -464,14 +464,14 @@ align-content: center
 background.solid: $inherited.colors.background.step-1
 margin-vertical.px: 100
 
--- ftd.row:
-width: fill-container
-max-width.fixed.px: 1440
-align-content: center
-children: $featured-cards.wrapper
-spacing.fixed.px: 44
-
--- end: ftd.row
+	-- ftd.row:
+	width: fill-container
+	max-width.fixed.px: 1440
+	align-content: center
+	children: $featured-cards.wrapper
+	spacing.fixed.px: 44
+	
+	-- end: ftd.row
 
 -- end: ftd.column
 
@@ -495,15 +495,15 @@ align-content: center
 background.solid: $inherited.colors.background.step-1
 margin-vertical.px: 100
 
--- ftd.row:
-width: fill-container
-max-width.fixed.px: 1440
-align-content: center
-children: $testimonial-cards.wrapper
-spacing.fixed.px: 64
-wrap: true
-
--- end: ftd.row
+	-- ftd.row:
+	width: fill-container
+	max-width.fixed.px: 1440
+	align-content: center
+	children: $testimonial-cards.wrapper
+	spacing.fixed.px: 64
+	wrap: true
+	
+	-- end: ftd.row
 
 -- end: ftd.column
 
@@ -533,33 +533,33 @@ integer spacing: 24
 -- ftd.column:
 width: fill-container
 
--- ftd.desktop:
+	-- ftd.desktop:
+	
+		-- heart-line-title-card-desktop: $heart-line-title-card.title
+		body: $heart-line-title-card.body
+		show-arrow: $heart-line-title-card.show-arrow
+		width: $heart-line-title-card.width
+		wrapper: $heart-line-title-card.wrapper
+		cta: $heart-line-title-card.cta
+		cta-url: $heart-line-title-card.cta-url
+		cta-text: $heart-line-title-card.cta-text
+		spacing: $heart-line-title-card.spacing
+		
+	-- end: ftd.desktop
 
--- heart-line-title-card-desktop: $heart-line-title-card.title
-body: $heart-line-title-card.body
-show-arrow: $heart-line-title-card.show-arrow
-width: $heart-line-title-card.width
-wrapper: $heart-line-title-card.wrapper
-cta: $heart-line-title-card.cta
-cta-url: $heart-line-title-card.cta-url
-cta-text: $heart-line-title-card.cta-text
-spacing: $heart-line-title-card.spacing
-
--- end: ftd.desktop
-
--- ftd.mobile:
-
--- heart-line-title-card-mobile: $heart-line-title-card.title
-body: $heart-line-title-card.body
-show-arrow: $heart-line-title-card.show-arrow
-width: $heart-line-title-card.width
-wrapper: $heart-line-title-card.wrapper
-cta: $heart-line-title-card.cta
-cta-url: $heart-line-title-card.cta-url
-cta-text: $heart-line-title-card.cta-text
-spacing: $heart-line-title-card.spacing
-
--- end: ftd.mobile
+	-- ftd.mobile:
+	
+		-- heart-line-title-card-mobile: $heart-line-title-card.title
+		body: $heart-line-title-card.body
+		show-arrow: $heart-line-title-card.show-arrow
+		width: $heart-line-title-card.width
+		wrapper: $heart-line-title-card.wrapper
+		cta: $heart-line-title-card.cta
+		cta-url: $heart-line-title-card.cta-url
+		cta-text: $heart-line-title-card.cta-text
+		spacing: $heart-line-title-card.spacing
+		
+	-- end: ftd.mobile
 
 -- end: ftd.column
 
@@ -582,8 +582,8 @@ integer width:
 children wrapper:
 optional string cta-url:
 optional string cta-text:
-boolean cta: 
-integer spacing: 
+boolean cta:
+integer spacing:
 
 -- ftd.column:
 width: fill-container
@@ -591,75 +591,75 @@ z-index: 0
 align-self: center
 padding-vertical.px: 80
 
--- ftd.row:
-width: fill-container
-align-self: center
-align-content: center
-spacing.fixed.px: $heart-line-title-card-desktop.spacing
+	-- ftd.row:
+	width: fill-container
+	align-self: center
+	align-content: center
+	spacing.fixed.px: $heart-line-title-card-desktop.spacing
+	
+		-- ftd.image:
+		src: $fastn-assets.files.images.ambassadors.chart-line-type-1.svg
+		width: auto
+		width if { heart-line-title-card-desktop.cta-text != NULL }: fill-container
+		height: auto
+		align-self: center
+		
+		-- ftd.text: $heart-line-title-card-desktop.title
+		if: { heart-line-title-card-desktop.title != NULL }
+		role: $inherited.types.heading-large
+		color: $inherited.colors.text-strong
+		align-self: center
+		width: fill-container
+		margin-top.px: 24
+		text-align: center
+		white-space: nowrap
+		
+		-- cta-button: $heart-line-title-card-desktop.cta-text
+		if: { heart-line-title-card-desktop.cta-text != NULL }
+		role: primary
+		link: $heart-line-title-card-desktop.cta-url
+		show-arrow: true
+		
+		-- ftd.image:
+		src: $fastn-assets.files.images.ambassadors.chart-line-type-2.svg
+		width: auto
+		height: auto
+		align-self: center
+		
+	-- end: ftd.row
 
--- ftd.image:
-src: $fastn-assets.files.images.ambassadors.chart-line-type-1.svg
-width: auto
-width if { heart-line-title-card-desktop.cta-text != NULL }: fill-container
-height: auto
-align-self: center
+	-- ftd.column:
+	width: fill-container
+	max-width.fixed.px: $heart-line-title-card-desktop.width
+	align-content: center
+	align-self: center
+	spacing.fixed.px: 16
+	
+		-- ftd.image:
+		if: { heart-line-title-card-desktop.show-arrow }
+		src: $fastn-assets.files.images.ambassadors.arrow-zigzag.svg
+		width: auto
+		height: auto
+		
+		-- ftd.text:
+		if: { heart-line-title-card-desktop.body != NULL }
+		color: $inherited.colors.text
+		role: $inherited.types.copy-large
+		text-align: center
+		width.fixed.percent: 50
+		
+		$heart-line-title-card-desktop.body
+		
+	-- end: ftd.column
 
--- ftd.text: $heart-line-title-card-desktop.title
-if: { heart-line-title-card-desktop.title != NULL }
-role: $inherited.types.heading-large
-color: $inherited.colors.text-strong
-align-self: center
-width: fill-container
-margin-top.px: 24
-text-align: center
-white-space: nowrap
-
--- cta-button: $heart-line-title-card-desktop.cta-text
-if: { heart-line-title-card-desktop.cta-text != NULL }
-role: primary
-link: $heart-line-title-card-desktop.cta-url
-show-arrow: true
-
--- ftd.image:
-src: $fastn-assets.files.images.ambassadors.chart-line-type-2.svg
-width: auto
-height: auto
-align-self: center
-
--- end: ftd.row
-
--- ftd.column:
-width: fill-container
-max-width.fixed.px: $heart-line-title-card-desktop.width
-align-content: center
-align-self: center
-spacing.fixed.px: 16
-
--- ftd.image:
-if: { heart-line-title-card-desktop.show-arrow }
-src: $fastn-assets.files.images.ambassadors.arrow-zigzag.svg
-width: auto
-height: auto
-
--- ftd.text:
-if: { heart-line-title-card-desktop.body != NULL }
-color: $inherited.colors.text
-role: $inherited.types.copy-large
-text-align: center
-width.fixed.percent: 50
-
-$heart-line-title-card-desktop.body
-
--- end: ftd.column
-
--- ftd.column:
-width: fill-container
-max-width.fixed.px: $heart-line-title-card-desktop.width
-align-content: center
-align-self: center
-children: $heart-line-title-card-desktop.wrapper
-
--- end: ftd.column
+	-- ftd.column:
+	width: fill-container
+	max-width.fixed.px: $heart-line-title-card-desktop.width
+	align-content: center
+	align-self: center
+	children: $heart-line-title-card-desktop.wrapper
+	
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -682,8 +682,8 @@ integer width:
 children wrapper:
 optional string cta-url:
 optional string cta-text:
-boolean cta: 
-integer spacing: 
+boolean cta:
+integer spacing:
 
 -- ftd.column:
 width: fill-container
@@ -693,85 +693,85 @@ align-content: center
 padding-bottom.px: 24
 padding-horizontal.px if { heart-line-title-card-mobile.title != NULL }: 12
 
--- ftd.column:
-margin-bottom.px if { heart-line-title-card-mobile.cta-text != NULL }: 33
+	-- ftd.column:
+	margin-bottom.px if { heart-line-title-card-mobile.cta-text != NULL }: 33
+	
+		-- cta-button: $heart-line-title-card-mobile.cta-text
+		if: { heart-line-title-card-mobile.cta-text != NULL }
+		role: primary
+		link: $heart-line-title-card-mobile.cta-url
+		show-arrow: true
+		
+	-- end: ftd.column
 
--- cta-button: $heart-line-title-card-mobile.cta-text
-if: { heart-line-title-card-mobile.cta-text != NULL }
-role: primary
-link: $heart-line-title-card-mobile.cta-url
-show-arrow: true
+	-- ftd.row:
+	width: fill-container
+	spacing.fixed.px if { heart-line-title-card-mobile.cta-text != NULL }: 50
+	
+		-- ftd.image:
+		src: $fastn-assets.files.images.ambassadors.chart-line-type-2.svg
+		width: fill-container
+		width.fixed.px if { heart-line-title-card-mobile.cta-text != NULL }: 160
+		height: auto
+		
+		-- ftd.image:
+		if: { heart-line-title-card-mobile.cta-text != NULL }
+		src: $fastn-assets.files.images.ambassadors.chart-line-type-2.svg
+		width.fixed.px: 160
+		height: auto
+		
+	-- end: ftd.row
 
--- end: ftd.column
+	-- ftd.row:
+	align-self: center
+	align-content: center
+	spacing.fixed.px: 24
+	width.fixed.px: 345
+	
+		-- ftd.text: $heart-line-title-card-mobile.title
+		if: { heart-line-title-card-mobile.title != NULL }
+		role: $inherited.types.heading-large
+		color: $inherited.colors.text-strong
+		align-self: center
+		width: fill-container
+		margin-top.px: 24
+		text-align: center
+		
+	-- end: ftd.row
 
--- ftd.row:
-width: fill-container
-spacing.fixed.px if { heart-line-title-card-mobile.cta-text != NULL }: 50
+	-- ftd.column:
+	width: fill-container
+	max-width.fixed.px: $heart-line-title-card-mobile.width
+	align-content: center
+	align-self: center
+	spacing.fixed.px: 16
+	
+		-- ftd.image:
+		if: { heart-line-title-card-mobile.show-arrow }
+		src: $fastn-assets.files.images.ambassadors.arrow-zigzag.svg
+		width.fixed.px: 132
+		height.fixed.px: 20
+		align-self: end
+		
+		-- ftd.text:
+		if: { heart-line-title-card-mobile.body != NULL }
+		color: $inherited.colors.text
+		role: $inherited.types.copy-small
+		text-align: center
+		
+		$heart-line-title-card-mobile.body
+		
+	-- end: ftd.column
 
--- ftd.image:
-src: $fastn-assets.files.images.ambassadors.chart-line-type-2.svg
-width: fill-container
-width.fixed.px if { heart-line-title-card-mobile.cta-text != NULL }: 160
-height: auto
-
--- ftd.image:
-if: { heart-line-title-card-mobile.cta-text != NULL }
-src: $fastn-assets.files.images.ambassadors.chart-line-type-2.svg
-width.fixed.px: 160
-height: auto
-
--- end: ftd.row
-
--- ftd.row:
-align-self: center
-align-content: center
-spacing.fixed.px: 24
-width.fixed.px: 345
-
--- ftd.text: $heart-line-title-card-mobile.title
-if: { heart-line-title-card-mobile.title != NULL }
-role: $inherited.types.heading-large
-color: $inherited.colors.text-strong
-align-self: center
-width: fill-container
-margin-top.px: 24
-text-align: center
-
--- end: ftd.row
-
--- ftd.column:
-width: fill-container
-max-width.fixed.px: $heart-line-title-card-mobile.width
-align-content: center
-align-self: center
-spacing.fixed.px: 16
-
--- ftd.image:
-if: { heart-line-title-card-mobile.show-arrow }
-src: $fastn-assets.files.images.ambassadors.arrow-zigzag.svg
-width.fixed.px: 132
-height.fixed.px: 20
-align-self: end
-
--- ftd.text:
-if: { heart-line-title-card-mobile.body != NULL }
-color: $inherited.colors.text
-role: $inherited.types.copy-small
-text-align: center
-
-$heart-line-title-card-mobile.body
-
--- end: ftd.column
-
--- ftd.column:
-width: fill-container
-max-width.fixed.px: $heart-line-title-card-mobile.width
-align-content: center
-align-self: center
-children: $heart-line-title-card-mobile.wrapper
-padding-horizontal.px: 12
-
--- end: ftd.column
+	-- ftd.column:
+	width: fill-container
+	max-width.fixed.px: $heart-line-title-card-mobile.width
+	align-content: center
+	align-self: center
+	children: $heart-line-title-card-mobile.wrapper
+	padding-horizontal.px: 12
+	
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -806,124 +806,124 @@ width: fill-container
 max-width.fixed.px: $testimonial-card.width
 padding-horizontal.px if { ftd.device == "mobile" }: 24
 
--- ftd.column:
-width: fill-container
-max-width.fixed.px: $testimonial-card.width
-margin-top.px: $testimonial-card.margin-top
-right.px: $testimonial-card.margin-right
-right.px if { ftd.device == "mobile" }: 0
-margin-top.px if { ftd.device == "mobile" }: 12
+	-- ftd.column:
+	width: fill-container
+	max-width.fixed.px: $testimonial-card.width
+	margin-top.px: $testimonial-card.margin-top
+	right.px: $testimonial-card.margin-right
+	right.px if { ftd.device == "mobile" }: 0
+	margin-top.px if { ftd.device == "mobile" }: 12
+	
+		-- ftd.column:
+		if: { !testimonial-card.right }
+		width: fill-container
+		height: fill-container
+		border-width.px: 1
+		border-color: $inherited.colors.border-strong
+		border-radius.px: 30
+		z-index: 0
+		anchor: parent
+		left.px: -18
+		bottom.px: -18
+		background.solid: $testimonial-card.bgcolor
+		left.px if { ftd.device == "mobile" }: -12
+		
+		-- end: ftd.column
 
--- ftd.column:
-if: { !testimonial-card.right }
-width: fill-container
-height: fill-container
-border-width.px: 1
-border-color: $inherited.colors.border-strong
-border-radius.px: 30
-z-index: 0
-anchor: parent
-left.px: -18
-bottom.px: -18
-background.solid: $testimonial-card.bgcolor
-left.px if { ftd.device == "mobile" }: -12
+		-- ftd.column:
+		if: { testimonial-card.right }
+		width: fill-container
+		height: fill-container
+		border-width.px: 1
+		border-color: $inherited.colors.border-strong
+		border-radius.px: 30
+		z-index: 0
+		anchor: parent
+		left.px: 10
+		bottom.px: -15
+		background.solid: $testimonial-card.bgcolor
+		left.px if { ftd.device == "mobile" }: -12
+		
+		-- end: ftd.column
 
--- end: ftd.column
+		-- ftd.column:
+		width: fill-container
+		background.solid: $testimonial-card.bg-color
+		padding-vertical.px: 34
+		padding-horizontal.px: 26
+		padding-bottom.px if { !testimonial-card.right }: 70
+		spacing.fixed.px: 32
+		z-index: 11
+		border-radius.px: 30
+		
+			-- ftd.column:
+			if: { testimonial-card.right }
+			width: fill-container
+			align-content: center
+			spacing.fixed.px: 26
+			
+				-- ftd.text: $testimonial-card.title
+				role: $inherited.types.heading-medium
+				color: $inherited.colors.text
+				text-align: center
+				
+				-- ftd.text:
+				if: { testimonial-card.body != NULL }
+				color: $inherited.colors.text-strong
+				role: $inherited.types.copy-regular
+				
+				$testimonial-card.body
+				
+				-- cta-button: $testimonial-card.cta-text
+				role: primary
+				link: $testimonial-card.cta-link
+				show-arrow: true
+				
+			-- end: ftd.column
 
--- ftd.column:
-if: { testimonial-card.right }
-width: fill-container
-height: fill-container
-border-width.px: 1
-border-color: $inherited.colors.border-strong
-border-radius.px: 30
-z-index: 0
-anchor: parent
-left.px: 10
-bottom.px: -15
-background.solid: $testimonial-card.bgcolor
-left.px if { ftd.device == "mobile" }: -12
+			-- ftd.row:
+			if: { !testimonial-card.right }
+			width: fill-container
+			spacing.fixed.px: 26
+			
+				-- ftd.image:
+				if: { testimonial-card.avatar != NULL }
+				src: $testimonial-card.avatar
+				width.fixed.px: 104
+				height.fixed.px: 96
+				border-radius.px: 30
+				align-self: center
+				
+				-- ftd.text:
+				if: { testimonial-card.body != NULL }
+				color: $inherited.colors.text
+				role: $inherited.types.copy-regular
+				align-self: center
+				
+				$testimonial-card.body
+				
+			-- end: ftd.row
 
--- end: ftd.column
+			-- ftd.column:
+			width: fill-container
+			spacing.fixed.px: 6
+			
+				-- ftd.text: $testimonial-card.title
+				if: { !testimonial-card.right }
+				role: $inherited.types.blockquote
+				color: $inherited.colors.text
+				
+				-- ftd.text:
+				if: { testimonial-card.label != NULL }
+				text: $testimonial-card.label
+				role: $inherited.types.fine-print
+				color: $inherited.colors.text
+				
+			-- end: ftd.column
 
--- ftd.column:
-width: fill-container
-background.solid: $testimonial-card.bg-color
-padding-vertical.px: 34
-padding-horizontal.px: 26
-padding-bottom.px if { !testimonial-card.right }: 70
-spacing.fixed.px: 32
-z-index: 11
-border-radius.px: 30
+		-- end: ftd.column
 
--- ftd.column:
-if: { testimonial-card.right }
-width: fill-container
-align-content: center
-spacing.fixed.px: 26
-
--- ftd.text: $testimonial-card.title
-role: $inherited.types.heading-medium
-color: $inherited.colors.text
-text-align: center
-
--- ftd.text:
-if: { testimonial-card.body != NULL }
-color: $inherited.colors.text-strong
-role: $inherited.types.copy-regular
-
-$testimonial-card.body
-
--- cta-button: $testimonial-card.cta-text
-role: primary
-link: $testimonial-card.cta-link
-show-arrow: true
-
--- end: ftd.column
-
--- ftd.row:
-if: { !testimonial-card.right }
-width: fill-container
-spacing.fixed.px: 26
-
--- ftd.image:
-if: { testimonial-card.avatar != NULL }
-src: $testimonial-card.avatar
-width.fixed.px: 104
-height.fixed.px: 96
-border-radius.px: 30
-align-self: center
-
--- ftd.text:
-if: { testimonial-card.body != NULL }
-color: $inherited.colors.text
-role: $inherited.types.copy-regular
-align-self: center
-
-$testimonial-card.body
-
--- end: ftd.row
-
--- ftd.column:
-width: fill-container
-spacing.fixed.px: 6
-
--- ftd.text: $testimonial-card.title
-if: { !testimonial-card.right }
-role: $inherited.types.blockquote
-color: $inherited.colors.text
-
--- ftd.text:
-if: { testimonial-card.label != NULL } 
-text: $testimonial-card.label
-role: $inherited.types.fine-print
-color: $inherited.colors.text
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: ftd.column
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -948,36 +948,36 @@ padding-vertical.px if {ftd.device != "mobile"}: 108
 width: fill-container
 align-content: center
 
--- ftd.column:
-width: fill-container
-max-width.fixed.px: 1200
-align-content: center
+	-- ftd.column:
+	width: fill-container
+	max-width.fixed.px: 1200
+	align-content: center
+	
+		-- ftd.text: $faqs.title
+		role: $inherited.types.heading-hero
+		color: $inherited.colors.custom.nine
+		margin-bottom.px: 32
+		margin-bottom.px if { faqs.body == NULL }: 87
+		
+		-- ftd.text:
+		if: { faqs.body != NULL }
+		role: $inherited.types.copy-regular
+		color: $inherited.colors.text
+		margin-bottom.px: 87
+		
+		$faqs.body
+		
+		-- ftd.column:
+		width: fill-container
+		
+			-- faqs-list-detail:
+			$loop$: $faqs.faqs-list as $obj
+			title: $obj.title
+			body: $obj.body
+			
+		-- end: ftd.column
 
--- ftd.text: $faqs.title
-role: $inherited.types.heading-hero
-color: $inherited.colors.custom.nine
-margin-bottom.px: 32
-margin-bottom.px if { faqs.body == NULL }: 87
-
--- ftd.text:
-if: { faqs.body != NULL }
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-margin-bottom.px: 87
-
-$faqs.body
-
--- ftd.column:
-width: fill-container
-
--- faqs-list-detail:
-$loop$: $faqs.faqs-list as $obj
-title: $obj.title
-body: $obj.body
-
--- end: ftd.column
-
--- end: ftd.column
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -993,7 +993,7 @@ body: $obj.body
 
 
 -- component faqs-list-detail:
-caption title: 
+caption title:
 optional body body:
 optional ftd.image-src icon:
 optional boolean $toggle: false
@@ -1004,34 +1004,34 @@ padding-vertical.px: 24
 border-bottom-width.px: 1
 border-color: $inherited.colors.custom.nine
 
--- ftd.row:
-width: fill-container
-width if { ftd.device == "mobile"}: fill-container
-align-self: center
-spacing: space-between
-spacing.fixed.px if { ftd.device == "mobile"}: 25
-$on-click$: $ftd.toggle($a = $faqs-list-detail.toggle)
+	-- ftd.row:
+	width: fill-container
+	width if { ftd.device == "mobile"}: fill-container
+	align-self: center
+	spacing: space-between
+	spacing.fixed.px if { ftd.device == "mobile"}: 25
+	$on-click$: $ftd.toggle($a = $faqs-list-detail.toggle)
+	
+		-- ftd.text: $faqs-list-detail.title
+		role: $inherited.types.heading-tiny
+		color: $inherited.colors.text-strong
+		width: fill-container
+		
+		-- ftd.image:
+		src: $fastn-assets.files.images.ambassadors.toggle-down.svg
+		src if { faqs-list-detail.toggle }: $fastn-assets.files.images.ambassadors.toggle-up.svg
+		width.fixed.px: 18
+		
+	-- end: ftd.row
 
--- ftd.text: $faqs-list-detail.title
-role: $inherited.types.heading-tiny
-color: $inherited.colors.text-strong
-width: fill-container
-
--- ftd.image:
-src: $fastn-assets.files.images.ambassadors.toggle-down.svg
-src if { faqs-list-detail.toggle }: $fastn-assets.files.images.ambassadors.toggle-up.svg
-width.fixed.px: 18
-
--- end: ftd.row
-
--- ftd.text:
-if: { $faqs-list-detail.body != NULL && faqs-list-detail.toggle }
-role: $inherited.types.copy-regular
-color: $inherited.colors.text-strong
-margin-top.px: 18
-
-$faqs-list-detail.body
-
+	-- ftd.text:
+	if: { $faqs-list-detail.body != NULL && faqs-list-detail.toggle }
+	role: $inherited.types.copy-regular
+	color: $inherited.colors.text-strong
+	margin-top.px: 18
+	
+	$faqs-list-detail.body
+	
 -- end: ftd.column
 
 -- end: faqs-list-detail
@@ -1060,54 +1060,54 @@ padding-vertical.px: 60
 padding-left.px: 60
 align-content: center
 
--- ftd.row:
-width: fill-container
-align-content: center
-spacing.fixed.px: 60
-max-width.fixed.px: 1440
+	-- ftd.row:
+	width: fill-container
+	align-content: center
+	spacing.fixed.px: 60
+	max-width.fixed.px: 1440
+	
+		-- ftd.column:
+		width.fixed.percent: 50
+		
+			-- ds.youtube:
+			v: $youtuber-card.src
+			
+		-- end: ftd.column
 
--- ftd.column:
-width.fixed.percent: 50
+		-- ftd.column:
+		width.fixed.percent: 40
+		align-content: center
+		spacing.fixed.px: 60
+		
+			-- ftd.text:
+			role: $inherited.types.copy-regular
+			color: $inherited.colors.text-strong
+			
+			$youtuber-card.body
+			
+			-- ftd.column:
+			align-content: center
+			link: $youtuber-card.user-bio-link
+			spacing.fixed.px: 8
+			
+				-- ftd.image:
+				src: $youtuber-card.avatar
+				border-radius.px: 500
+				width.fixed.px: 72
+				
+				-- ftd.text: $youtuber-card.user
+				color: $inherited.colors.text
+				role: $inherited.types.copy-regular
+				
+				-- ftd.text: $youtuber-card.company
+				color: $inherited.colors.text
+				role: $inherited.types.fine-print
+				
+			-- end: ftd.column
 
--- ds.youtube:
-v: $youtuber-card.src
+		-- end: ftd.column
 
--- end: ftd.column
-
--- ftd.column:
-width.fixed.percent: 40
-align-content: center
-spacing.fixed.px: 60
-
--- ftd.text:
-role: $inherited.types.copy-regular
-color: $inherited.colors.text-strong
-
-$youtuber-card.body
-
--- ftd.column:
-align-content: center
-link: $youtuber-card.user-bio-link
-spacing.fixed.px: 8
-
--- ftd.image:
-src: $youtuber-card.avatar
-border-radius.px: 500
-width.fixed.px: 72
-
--- ftd.text: $youtuber-card.user
-color: $inherited.colors.text
-role: $inherited.types.copy-regular
-
--- ftd.text: $youtuber-card.company
-color: $inherited.colors.text
-role: $inherited.types.fine-print
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: ftd.row
+	-- end: ftd.row
 
 -- end: ftd.column
 
@@ -1136,80 +1136,80 @@ padding-vertical.px: 60
 padding-left.px: 60
 align-content: center
 
--- ftd.row:
-if: { !$hero-large.move-left }
-width: fill-container
-align-content: center
-spacing.fixed.px: 60
-max-width.fixed.px: 1440
-padding-horizontal.px: 150
+	-- ftd.row:
+	if: { !$hero-large.move-left }
+	width: fill-container
+	align-content: center
+	spacing.fixed.px: 60
+	max-width.fixed.px: 1440
+	padding-horizontal.px: 150
+	
+		-- ftd.image:
+		src: $hero-large.image
+		border-radius.px: 8
+		
+		-- ftd.column:
+		width.fixed.px: 440
+		padding.px: 48
+		color: $inherited.colors.text-strong
+		background.solid: $inherited.colors.cta-primary.base
+		anchor: parent
+		right.px: 0
+		bottom.px: 0
+		border-radius.px: 16
+		spacing.fixed.px: 32
+		
+			-- ftd.text: $hero-large.title
+			role: $inherited.types.heading-hero
+			
+			-- ftd.text:
+			role: $inherited.types.copy-regular
+			
+			$hero-large.body
+			
+		-- end: ftd.column
 
--- ftd.image:
-src: $hero-large.image
-border-radius.px: 8
+	-- end: ftd.row
 
--- ftd.column:
-width.fixed.px: 440
-padding.px: 48
-color: $inherited.colors.text-strong
-background.solid: $inherited.colors.cta-primary.base
-anchor: parent
-right.px: 0
-bottom.px: 0
-border-radius.px: 16
-spacing.fixed.px: 32
+	-- ftd.row:
+	if: { $hero-large.move-left }
+	width: fill-container
+	align-content: center
+	spacing.fixed.px: 60
+	max-width.fixed.px: 1440
+	padding-horizontal.px: 150
+	
+		-- ftd.column:
+		width.fixed.px: 440
+		padding.px: 48
+		color: $inherited.colors.text-strong
+		background.solid: $inherited.colors.cta-primary.base
+		anchor: parent
+		left.px: 0
+		bottom.px: 0
+		border-radius.px: 16
+		spacing.fixed.px: 32
+		
+			-- ftd.text: $hero-large.title
+			role: $inherited.types.heading-hero
+			
+			-- ftd.text:
+			role: $inherited.types.copy-regular
+			
+			$hero-large.body
+			
+			-- cta-button: $hero-large.cta-text
+			if: { hero-large.cta-text != NULL }
+			role: secondary
+			link: $hero-large.cta-link
+			
+		-- end: ftd.column
 
--- ftd.text: $hero-large.title
-role: $inherited.types.heading-hero
-
--- ftd.text:
-role: $inherited.types.copy-regular
-
-$hero-large.body
-
--- end: ftd.column
-
--- end: ftd.row
-
--- ftd.row:
-if: { $hero-large.move-left }
-width: fill-container
-align-content: center
-spacing.fixed.px: 60
-max-width.fixed.px: 1440
-padding-horizontal.px: 150
-
--- ftd.column:
-width.fixed.px: 440
-padding.px: 48
-color: $inherited.colors.text-strong
-background.solid: $inherited.colors.cta-primary.base
-anchor: parent
-left.px: 0
-bottom.px: 0
-border-radius.px: 16
-spacing.fixed.px: 32
-
--- ftd.text: $hero-large.title
-role: $inherited.types.heading-hero
-
--- ftd.text:
-role: $inherited.types.copy-regular
-
-$hero-large.body
-
--- cta-button: $hero-large.cta-text
-if: { hero-large.cta-text != NULL }
-role: secondary
-link: $hero-large.cta-link
-
--- end: ftd.column
-
--- ftd.image:
-src: $hero-large.image
-border-radius.px: 8
-
--- end: ftd.row
+		-- ftd.image:
+		src: $hero-large.image
+		border-radius.px: 8
+		
+	-- end: ftd.row
 
 -- end: ftd.column
 
@@ -1237,42 +1237,42 @@ padding-vertical.px: 60
 padding-left.px: 60
 align-content: center
 
--- ftd.column:
-width: fill-container
-align-content: center
-spacing: space-between
-max-width.fixed.px: 1200
+	-- ftd.column:
+	width: fill-container
+	align-content: center
+	spacing: space-between
+	max-width.fixed.px: 1200
+	
+		-- ftd.image:
+		src: $article.image
+		width: fill-container
+		
+		-- ftd.column:
+		width: fill-container
+		spacing.fixed.px: 16
+		margin-top.px: 48
+		
+			-- ftd.text: $article.title
+			role: $inherited.types.heading-large
+			color: $inherited.colors.text-strong
+			
+			-- ftd.text:
+			role: $inherited.types.copy-regular
+			color: $inherited.colors.text
+			margin-top.px: 64
+			
+			$article.body
+			
+		-- end: ftd.column
 
--- ftd.image:
-src: $article.image
-width: fill-container
+		-- ftd.column:
+		width: fill-container
+		children: $article.wrapper
+		spacing.fixed.px: 16
+		
+		-- end: ftd.column
 
--- ftd.column:
-width: fill-container
-spacing.fixed.px: 16
-margin-top.px: 48
-
--- ftd.text: $article.title
-role: $inherited.types.heading-large
-color: $inherited.colors.text-strong
-
--- ftd.text:
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-margin-top.px: 64
-
-$article.body
-
--- end: ftd.column
-
--- ftd.column:
-width: fill-container
-children: $article.wrapper
-spacing.fixed.px: 16
-
--- end: ftd.column
-
--- end: ftd.column
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -1288,7 +1288,7 @@ spacing.fixed.px: 16
 
 
 -- record faq:
-caption title: 
+caption title:
 optional body body:
 
 

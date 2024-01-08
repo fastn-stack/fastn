@@ -19,13 +19,13 @@ To [import assets](https://github.com/fastn-stack/workshop/blob/main/a-website/0
 
 -- ds.markdown:
 
-`hello` is the package-name where assets is imported. 
+`hello` is the package-name where assets is imported.
 
 -- ds.h1: Add the image
 
 - Let's give a `site-logo`. Uncomment [line #23.](https://github.com/fastn-stack/workshop/blob/main/a-website/06-add-image-and-video/index.ftd#L23)
 
-To use the assets we pass the reference 
+To use the assets we pass the reference
 `$assets.files.<folder-path>.<file-name-with-extension>`.
 
 You can add the image directly from the URL or you can use assets. In both
@@ -49,7 +49,7 @@ The benefit of adding images using **`assets`** is that:
   the image.
 - **`assets`** support `light` and `dark` mode images.
 
-If you open the [sixth part](https://github.com/fastn-stack/workshop/tree/main/a-website/06-add-image-and-video) you will notice we have added all the 
+If you open the [sixth part](https://github.com/fastn-stack/workshop/tree/main/a-website/06-add-image-and-video) you will notice we have added all the
 images in the `static` folder.
 
 You can define images for both *light* and *dark* modes, and the assets
@@ -78,18 +78,18 @@ Now try to switch your mode and you can see the image changing.
 
 Now, let's see how to embed the YouTube videos.
 
-To embed the YouTube video you need to have the **Video ID** and pass it to the 
-header property `v` of `-- ds.youtube:`. 
+To embed the YouTube video you need to have the **Video ID** and pass it to the
+header property `v` of `-- ds.youtube:`.
 (Video ID is highlighted in the below image)
 
--- ds.image:  
-src: $fastn-assets.files.images.workshop.06-video-id.png 
+-- ds.image:
+src: $fastn-assets.files.images.workshop.06-video-id.png
 
 -- ds.markdown:
 
 Uncomment [line 70](https://github.com/fastn-stack/workshop/blob/main/a-website/06-add-image-and-video/index.ftd#L70)
 
--- ds.code: 
+-- ds.code:
 
 \-- ds.youtube:
 v: _yM7y_Suaio

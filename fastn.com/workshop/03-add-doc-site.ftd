@@ -9,7 +9,7 @@ third step, we will add a documentation site i.e., `doc-site`.
 
 As we did earlier and will be doing this after every part:
 
-Before we start with the second step. Make sure to close the server created for 
+Before we start with the second step. Make sure to close the server created for
 `02-hello-world` then restart the new server for `03-add-doc-site`.
 
 - Close the server by using `Ctrl + c`
@@ -38,12 +38,12 @@ package](https://github.com/fastn-stack/workshop/blob/main/03-add-doc-site/FASTN
 
 To make use of the `doc-site` dependency, we need to import it. Since we are
 going to use `doc-site` across all the files therefore instead of importing
-`doc-site` in each file we can also `auto-import` in `FASTN.ftd` file itself. 
+`doc-site` in each file we can also `auto-import` in `FASTN.ftd` file itself.
 
 So, go to `FASTN.ftd` file and uncomment the [line number
 17](https://github.com/fastn-stack/workshop/blob/main/a-website/03-add-doc-site/FASTN.ftd#L17).
 
-We will also give a shorter alias `ds` by using **`as`** command 
+We will also give a shorter alias `ds` by using **`as`** command
 
 -- ds.code:
 
@@ -60,7 +60,7 @@ and integrate the `page` component into your project.
 -- ds.code:
 
 \-- ds.page: Page Title
-site-name: My Site 
+site-name: My Site
 
 -- ds.h2: Give title and body
 

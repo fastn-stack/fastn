@@ -8,7 +8,7 @@ if: { !show-planning }
 
 In this video we will learn how to add or change typography
 
--- ds.youtube: 
+-- ds.youtube:
 if: { !show-planning }
 v: IcNMT-7lvgs
 
@@ -28,7 +28,7 @@ if: { show-planning }
 3. Use the `types` property in the page component of doc-site
 
 
-**Internal Note**: 
+**Internal Note**:
 
 - Here just showing it quickly how to add the typography then after
   introduction, explain it.
@@ -48,12 +48,12 @@ if: { show-planning }
 src: $fastn-assets.files.expander.ds.img.typography-intro.png
 
 
--- ds.markdown: 
+-- ds.markdown:
 if: { show-planning }
 
 Good typography enhances content legibility, guides users through the site,
 establishes a visual identity, highlights important information, ensures
-accessibility, and creates a cohesive and professional appearance. 
+accessibility, and creates a cohesive and professional appearance.
 
 -- ds.h1: Introduction
 if: { !show-planning }
@@ -76,12 +76,12 @@ $on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
 
 The three steps to adding a typography are:
 
-- **Select the typography of your choice.** 
+- **Select the typography of your choice.**
 
   You can create your own typography or
   you can select it from the [`featured page`](/featured/fonts-typography/).
 
-  *Note:* For explanation, we have selected 
+  *Note:* For explanation, we have selected
   [`lobster-typography`](https://fastn-community.github.io/lobster-typography/)
 
 
@@ -106,11 +106,11 @@ lang: ftd
 
 
   In the previous video, we created the custom component page in the `my-ds`
-  document 
+  document
 
-  To highlight the benefit of this approach, there's no need to individually 
-  add the typography to each page. 
-  Instead, by adding the typography once and using `my-ds.page`, the 
+  To highlight the benefit of this approach, there's no need to individually
+  add the typography to each page.
+  Instead, by adding the typography once and using `my-ds.page`, the
   color-scheme will be applied to all pages that utilize `my-ds.page`.
 
   And if one decides to go for another typography, then changing it once in
@@ -147,10 +147,10 @@ To change the typography,
 - Select the typography
 - Replace the old typography with new one as dependency
 
--- ds.markdown: 
+-- ds.markdown:
 
-In conclusion, Typography plays a vital role in website creation, impacting readability, 
-visual hierarchy, and brand identity, ultimately leading to a visually 
+In conclusion, Typography plays a vital role in website creation, impacting readability,
+visual hierarchy, and brand identity, ultimately leading to a visually
 appealing and user-friendly website.
 
 
@@ -160,19 +160,19 @@ appealing and user-friendly website.
 if: { show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
-the `fastn` website. 
+the `fastn` website.
 
-Support us by clicking on this link and give us a star ⭐ on GitHub and join 
+Support us by clicking on this link and give us a star ⭐ on GitHub and join
 our fastn community on Discord.
 
 
--- ds.markdown: 
+-- ds.markdown:
 if: { !show-planning }
 
-Thank you guys, keep watching these videos to learn more about fastn. 
+Thank you guys, keep watching these videos to learn more about fastn.
 
-Support us by giving a star ⭐ on 
-[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community 
+Support us by giving a star ⭐ on
+[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community
 on [Discord](/discord/).
 
 

@@ -7,13 +7,13 @@ A business card is a small card that typically contains an individual's or a
 company's contact information, such as their name, job title, company name,
 address, phone number, email address, and website.
 
-You can quickly create a business card using `fastn`. `fastn` also helps you to 
+You can quickly create a business card using `fastn`. `fastn` also helps you to
 create so and so...
 
 Checkout the embedded video to know quickly about fastn.
 
 
- ;; this is a hero component that can have an iframe for video or a button 
+ ;; this is a hero component that can have an iframe for video or a button
 to redirect on a new tab where one can understand the fastn
 
 
@@ -30,7 +30,7 @@ to redirect on a new tab where one can understand the fastn
 
 -- ds.h1: How to create
 
-Pre-requisites: 
+Pre-requisites:
 
 - Install fastn
 - Download any text editor such as Sublime Text
@@ -41,7 +41,6 @@ Pre-requisites:
 You download the fastn executable. To download it Click here.
 
 ;; or we can make a collapsed optional tab for Mac/Linux and Windows
-
 -- ds.h2: Download text editor
 
 share the process
@@ -72,14 +71,3 @@ share the process
 
 
 -- end: ds.page
-
-
-
-
-
-
-
-
-
-
-

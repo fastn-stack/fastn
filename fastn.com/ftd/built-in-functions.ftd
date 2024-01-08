@@ -31,9 +31,9 @@ color: $inherited.colors.text
 
 -- ds.rendered.output:
 
--- ftd.integer: $length(a = $places)
-color: $inherited.colors.text
-
+	-- ftd.integer: $length(a = $places)
+	color: $inherited.colors.text
+	
 -- end: ds.rendered.output
 
 
@@ -52,34 +52,34 @@ to the end of the given mutable list `a` of same type as `v`.
 
 -- ds.rendered: Sample code using `append()`
 
--- ds.rendered.input:
-
-\-- string list $some-list:
-
-\-- void append-fn(a,v): ;; <hl>
-string list $a: ;; <hl>
-string v: ;; <hl>
-\;; <hl>
-ftd.append(a, v); ;; <hl>
-
-\-- ftd.column:
-width: fill-container
-color: $inherited.colors.text
-spacing.fixed.px: 5
-
-\-- display-text: Append text
-$on-click$: $append-fn($a = $some-list, v = fifthtry) ;; <hl>
-
-\-- display-list-item: $val
-$loop$: $some-list as $val
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- append-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- string list $some-list:
+	
+	\-- void append-fn(a,v): ;; <hl>
+	string list $a: ;; <hl>
+	string v: ;; <hl>
+	\;; <hl>
+	ftd.append(a, v); ;; <hl>
+	
+	\-- ftd.column:
+	width: fill-container
+	color: $inherited.colors.text
+	spacing.fixed.px: 5
+	
+	\-- display-text: Append text
+	$on-click$: $append-fn($a = $some-list, v = fifthtry) ;; <hl>
+	
+	\-- display-list-item: $val
+	$loop$: $some-list as $val
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- append-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -95,35 +95,35 @@ at the index `num` in the given mutable list `a` of same type as `v`.
 
 -- ds.rendered: Sample code using `insert_at()`
 
--- ds.rendered.input:
-
-\-- void insert-at(a,v,num): ;; <hl>
-string list $a: ;; <hl>
-string v: ;; <hl>
-integer num: ;; <hl>
-\;; <hl>
-ftd.insert_at(a, v, num); ;; <hl>
-
-\-- string list $alphabets: A, B, C, D
-
-\-- ftd.column:
-width: fill-container
-color: $inherited.colors.text
-spacing.fixed.px: 5
-
-\-- display-text: Insert Fifthtry at 2nd index
-$on-click$: $insert-at($a = $alphabets, v = Fifthtry, num = 2) ;; <hl>
-
-\-- display-list-item: $val
-$loop$: $alphabets as $val
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- insert-at-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- void insert-at(a,v,num): ;; <hl>
+	string list $a: ;; <hl>
+	string v: ;; <hl>
+	integer num: ;; <hl>
+	\;; <hl>
+	ftd.insert_at(a, v, num); ;; <hl>
+	
+	\-- string list $alphabets: A, B, C, D
+	
+	\-- ftd.column:
+	width: fill-container
+	color: $inherited.colors.text
+	spacing.fixed.px: 5
+	
+	\-- display-text: Insert Fifthtry at 2nd index
+	$on-click$: $insert-at($a = $alphabets, v = Fifthtry, num = 2) ;; <hl>
+	
+	\-- display-list-item: $val
+	$loop$: $alphabets as $val
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- insert-at-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -142,34 +142,34 @@ from the given mutable list `a`.
 
 -- ds.rendered: Sample code using `delete_at()`
 
--- ds.rendered.input:
-
-\-- void delete-at(a,num): ;; <hl>
-string list $a: ;; <hl>
-integer num: ;; <hl>
-\;; <hl>
-ftd.delete_at(a, num); ;; <hl>
-
-\-- string list $places: Bangalore, Mumbai, NewYork, Indore, Bangkok
-
-\-- ftd.column:
-width: fill-container
-color: $inherited.colors.text
-spacing.fixed.px: 5
-
-\-- display-text: Delete Value from 1st index
-$on-click$: $delete-at($a = $places, num = 1) ;; <hl>
-
-\-- display-list-item: $val
-$loop$: $places as $val
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- delete-at-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- void delete-at(a,num): ;; <hl>
+	string list $a: ;; <hl>
+	integer num: ;; <hl>
+	\;; <hl>
+	ftd.delete_at(a, num); ;; <hl>
+	
+	\-- string list $places: Bangalore, Mumbai, NewYork, Indore, Bangkok
+	
+	\-- ftd.column:
+	width: fill-container
+	color: $inherited.colors.text
+	spacing.fixed.px: 5
+	
+	\-- display-text: Delete Value from 1st index
+	$on-click$: $delete-at($a = $places, num = 1) ;; <hl>
+	
+	\-- display-list-item: $val
+	$loop$: $places as $val
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- delete-at-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -189,32 +189,32 @@ This is a default `fastn` function that will clear the given mutable list `a`.
 
 -- ds.rendered: Sample code using `clear()`
 
--- ds.rendered.input:
-
-\-- string list $palindromes: dad, bob, racecar
-
-\-- void clear-fn(a): ;; <hl>
-string list $a: ;; <hl>
-\;; <hl>
-ftd.clear(a); ;; <hl>
-
-\-- ftd.column:
-width: fill-container
-spacing.fixed.px: 5
-
-\-- display-text: Click to Clear list
-$on-click$: $clear-fn($a = $palindromes) ;; <hl>
-
-\-- display-list-item: $val
-$loop$: $palindromes as $val
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- clear-list-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- string list $palindromes: dad, bob, racecar
+	
+	\-- void clear-fn(a): ;; <hl>
+	string list $a: ;; <hl>
+	\;; <hl>
+	ftd.clear(a); ;; <hl>
+	
+	\-- ftd.column:
+	width: fill-container
+	spacing.fixed.px: 5
+	
+	\-- display-text: Click to Clear list
+	$on-click$: $clear-fn($a = $palindromes) ;; <hl>
+	
+	\-- display-list-item: $val
+	$loop$: $palindromes as $val
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- clear-list-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -239,24 +239,24 @@ the dark mode.
 
 -- ds.rendered: Sample code using `enable_dark_mode()`
 
--- ds.rendered.input:
-
-\-- void set-dark(): ;; <hl>
-\;; <hl>
-enable_dark_mode() ;; <hl>
-
-\-- ftd.text: Dark Mode
-$on-click$: $set-dark() ;; <hl>
-
-\;; Alternative way
-\-- ftd.text: Click to set Dark Mode
-$on-click$: $ftd.enable-dark-mode() ;; <hl>
-
--- ds.rendered.output:
-
--- enable-dark-mode-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- void set-dark(): ;; <hl>
+	\;; <hl>
+	enable_dark_mode() ;; <hl>
+	
+	\-- ftd.text: Dark Mode
+	$on-click$: $set-dark() ;; <hl>
+	
+	\;; Alternative way
+	\-- ftd.text: Click to set Dark Mode
+	$on-click$: $ftd.enable-dark-mode() ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- enable-dark-mode-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -276,24 +276,24 @@ the light mode.
 
 -- ds.rendered: Sample code using `enable_light_mode()`
 
--- ds.rendered.input:
-
-\-- void set-light():;; <hl>
-\;; <hl>
-enable_light_mode() ;; <hl>
-
-\-- ftd.text: Light Mode
-$on-click$: $set-light() ;; <hl>
-
-\;; Alternative way
-\-- ftd.text: Click to set Light Mode
-$on-click$: $ftd.enable-light-mode() ;; <hl>
-
--- ds.rendered.output:
-
--- enable-light-mode-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- void set-light():;; <hl>
+	\;; <hl>
+	enable_light_mode() ;; <hl>
+	
+	\-- ftd.text: Light Mode
+	$on-click$: $set-light() ;; <hl>
+	
+	\;; Alternative way
+	\-- ftd.text: Click to set Light Mode
+	$on-click$: $ftd.enable-light-mode() ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- enable-light-mode-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -311,24 +311,24 @@ the system mode.
 
 -- ds.rendered: Sample code using `enable_system_mode()`
 
--- ds.rendered.input:
-
-\-- void set-system(): ;; <hl>
-\;; <hl>
-enable_system_mode() ;; <hl>
-
-\-- ftd.text: System Mode
-$on-click$: $set-system() ;; <hl>
-
-\;; Alternative way
-\-- ftd.text: Click to set System Mode
-$on-click$: $ftd.enable-system-mode() ;; <hl>
-
--- ds.rendered.output:
-
--- enable-system-mode-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- void set-system(): ;; <hl>
+	\;; <hl>
+	enable_system_mode() ;; <hl>
+	
+	\-- ftd.text: System Mode
+	$on-click$: $set-system() ;; <hl>
+	
+	\;; Alternative way
+	\-- ftd.text: Click to set System Mode
+	$on-click$: $ftd.enable-system-mode() ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- enable-system-mode-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -345,20 +345,20 @@ copy content in clipboard.
 
 -- ds.rendered: Sample code using `copy-to-clipboard()`
 
--- ds.rendered.input:
-
-\-- ftd.text: Click to Copy ⭐️
-$on-click$: $ftd.copy-to-clipboard(a = ⭐) ;; <hl>
-color: $inherited.colors.text
-border-color: $red-yellow
-border-width.px: 2
-padding.px: 10
-
--- ds.rendered.output:
-
--- copy-clipboard-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: Click to Copy ⭐️
+	$on-click$: $ftd.copy-to-clipboard(a = ⭐) ;; <hl>
+	color: $inherited.colors.text
+	border-color: $red-yellow
+	border-width.px: 2
+	padding.px: 10
+	
+	-- ds.rendered.output:
+	
+		-- copy-clipboard-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -382,27 +382,27 @@ as argument `a` to this function.
 
 -- ds.rendered: Sample code using `toggle()`
 
--- ds.rendered.input:
-
-\-- boolean $b: false
-
-\-- ftd.column:
-color: $inherited.colors.text
-width: fill-container
-spacing.fixed.px: 10
-
-\-- display-boolean: $b
-
-\-- display-text: Click to toggle
-$on-click$: $ftd.toggle($a = $b) ;; <hl>
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- toggle-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- boolean $b: false
+	
+	\-- ftd.column:
+	color: $inherited.colors.text
+	width: fill-container
+	spacing.fixed.px: 10
+	
+	\-- display-boolean: $b
+	
+	\-- display-text: Click to toggle
+	$on-click$: $ftd.toggle($a = $b) ;; <hl>
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- toggle-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -422,27 +422,27 @@ passed as argument `a` to this function.
 
 -- ds.rendered: Sample code using `increment()`
 
--- ds.rendered.input:
-
-\-- integer $x: 1
-
-\-- ftd.column:
-color: $inherited.colors.text
-width: fill-container
-spacing.fixed.px: 10
-
-\-- display-integer: $x
-
-\-- display-text: Click to increment by 1
-$on-click$: $ftd.increment($a = $x) ;; <hl>
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- increment-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- integer $x: 1
+	
+	\-- ftd.column:
+	color: $inherited.colors.text
+	width: fill-container
+	spacing.fixed.px: 10
+	
+	\-- display-integer: $x
+	
+	\-- display-text: Click to increment by 1
+	$on-click$: $ftd.increment($a = $x) ;; <hl>
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- increment-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -463,27 +463,27 @@ which is passed as argument `a` to this function.
 
 -- ds.rendered: Sample code using `increment-by()`
 
--- ds.rendered.input:
-
-\-- integer $z: 1
-
-\-- ftd.column:
-color: $inherited.colors.text
-width: fill-container
-spacing.fixed.px: 10
-
-\-- display-integer: $z
-
-\-- display-text: Click to increment by 5
-$on-click$: $ftd.increment-by($a = $z, v = 5) ;; <hl>
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- increment-by-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- integer $z: 1
+	
+	\-- ftd.column:
+	color: $inherited.colors.text
+	width: fill-container
+	spacing.fixed.px: 10
+	
+	\-- display-integer: $z
+	
+	\-- display-text: Click to increment by 5
+	$on-click$: $ftd.increment-by($a = $z, v = 5) ;; <hl>
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- increment-by-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -499,32 +499,32 @@ $on-click$: $ftd.increment-by($a = $z, v = 5) ;; <hl>
 
 -- ds.h2: `set-bool($a: bool, v: bool)`
 
-This is FScript function. It will set the boolean variable by value `v` which 
+This is FScript function. It will set the boolean variable by value `v` which
 is passed as argument `a` to this function.
 
 -- ds.rendered: Sample code using `set-bool()`
 
--- ds.rendered.input:
-
-\-- boolean $b1: false
-
-\-- ftd.column:
-color: $inherited.colors.text
-width: fill-container
-spacing.fixed.px: 10
-
-\-- display-boolean: $b1
-
-\-- display-text: Click to set the boolean as true
-$on-click$: $ftd.set-bool($a = $b1, v = true) ;; <hl>
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- set-bool-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- boolean $b1: false
+	
+	\-- ftd.column:
+	color: $inherited.colors.text
+	width: fill-container
+	spacing.fixed.px: 10
+	
+	\-- display-boolean: $b1
+	
+	\-- display-text: Click to set the boolean as true
+	$on-click$: $ftd.set-bool($a = $b1, v = true) ;; <hl>
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- set-bool-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -543,27 +543,27 @@ passed as argument `a` to this function.
 
 -- ds.rendered: Sample code using `set-string()`
 
--- ds.rendered.input:
-
-\-- string $s: Hello
-
-\-- ftd.column:
-color: $inherited.colors.text
-width: fill-container
-spacing.fixed.px: 10
-
-\-- display-text: $s
-
-\-- display-text: Click to set the string as World
-$on-click$: $ftd.set-string($a = $s, v = World) ;; <hl>
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- set-string-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- string $s: Hello
+	
+	\-- ftd.column:
+	color: $inherited.colors.text
+	width: fill-container
+	spacing.fixed.px: 10
+	
+	\-- display-text: $s
+	
+	\-- display-text: Click to set the string as World
+	$on-click$: $ftd.set-string($a = $s, v = World) ;; <hl>
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- set-string-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -582,27 +582,27 @@ passed as argument `a` to this function.
 
 -- ds.rendered: Sample code using `set-integer()`
 
--- ds.rendered.input:
-
-\-- integer $y: 1
-
-\-- ftd.column:
-color: $inherited.colors.text
-width: fill-container
-spacing.fixed.px: 10
-
-\-- display-integer: $y
-
-\-- display-text: Click to set the integer as 100
-$on-click$: $ftd.set-integer($a = $y, v = 100) ;; <hl>
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- set-integer-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- integer $y: 1
+	
+	\-- ftd.column:
+	color: $inherited.colors.text
+	width: fill-container
+	spacing.fixed.px: 10
+	
+	\-- display-integer: $y
+	
+	\-- display-text: Click to set the integer as 100
+	$on-click$: $ftd.set-integer($a = $y, v = 100) ;; <hl>
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- set-integer-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -622,23 +622,23 @@ or empty.
 
 -- ds.rendered: Sample code using `is_empty()`
 
--- ds.rendered.input:
-
-\-- optional string name:
-
-\-- string list names:
-
-\-- display-text: name is empty
-if: { ftd.is_empty(name) } ;; <hl>
-
-\-- display-text: There is no name in names
-if: { ftd.is_empty(names) } ;; <hl>
-
--- ds.rendered.output:
-
--- is-empty-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- optional string name:
+	
+	\-- string list names:
+	
+	\-- display-text: name is empty
+	if: { ftd.is_empty(name) } ;; <hl>
+	
+	\-- display-text: There is no name in names
+	if: { ftd.is_empty(names) } ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- is-empty-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -891,12 +891,12 @@ width: fill-container
 color: $inherited.colors.text
 spacing.fixed.px: 5
 
--- display-text: Append text
-$on-click$: $append($a = $some-list, v = fifthtry)
-
--- display-list-item: $val
-$loop$: $some-list as $val
-
+	-- display-text: Append text
+	$on-click$: $append($a = $some-list, v = fifthtry)
+	
+	-- display-list-item: $val
+	$loop$: $some-list as $val
+	
 -- end: ftd.column
 
 -- end: append-sample
@@ -912,11 +912,11 @@ color: $inherited.colors.text
 width: fill-container
 spacing.fixed.px: 10
 
--- display-boolean: $b
-
--- display-text: Click to toggle
-$on-click$: $ftd.toggle($a = $b) ;; <hl>
-
+	-- display-boolean: $b
+	
+	-- display-text: Click to toggle
+	$on-click$: $ftd.toggle($a = $b) ;; <hl>
+	
 -- end: ftd.column
 
 -- end: toggle-sample
@@ -933,11 +933,11 @@ color: $inherited.colors.text
 width: fill-container
 spacing.fixed.px: 10
 
--- display-integer: $x
-
--- display-text: Click to increment by 1
-$on-click$: $ftd.increment($a = $x)
-
+	-- display-integer: $x
+	
+	-- display-text: Click to increment by 1
+	$on-click$: $ftd.increment($a = $x)
+	
 -- end: ftd.column
 
 -- end: increment-sample
@@ -955,11 +955,11 @@ color: $inherited.colors.text
 width: fill-container
 spacing.fixed.px: 10
 
--- display-integer: $z
-
--- display-text: Click to increment by 5
-$on-click$: $ftd.increment-by($a = $z, v = 5)
-
+	-- display-integer: $z
+	
+	-- display-text: Click to increment by 5
+	$on-click$: $ftd.increment-by($a = $z, v = 5)
+	
 -- end: ftd.column
 
 -- end: increment-by-sample
@@ -976,11 +976,11 @@ color: $inherited.colors.text
 width: fill-container
 spacing.fixed.px: 10
 
--- display-boolean: $b1
-
--- display-text: Click to set the boolean as true
-$on-click$: $ftd.set-bool($a = $b1, v = true)
-
+	-- display-boolean: $b1
+	
+	-- display-text: Click to set the boolean as true
+	$on-click$: $ftd.set-bool($a = $b1, v = true)
+	
 -- end: ftd.column
 
 
@@ -1000,11 +1000,11 @@ color: $inherited.colors.text
 width: fill-container
 spacing.fixed.px: 10
 
--- display-text: $s
-
--- display-text: Click to set the string as World
-$on-click$: $ftd.set-string($a = $s, v = World)
-
+	-- display-text: $s
+	
+	-- display-text: Click to set the string as World
+	$on-click$: $ftd.set-string($a = $s, v = World)
+	
 -- end: ftd.column
 
 -- end: set-string-sample
@@ -1022,11 +1022,11 @@ color: $inherited.colors.text
 width: fill-container
 spacing.fixed.px: 10
 
--- display-integer: $x1
-
--- display-text: Click to set the integer as 100
-$on-click$: $ftd.set-integer($a = $x1, v = 100)
-
+	-- display-integer: $x1
+	
+	-- display-text: Click to set the integer as 100
+	$on-click$: $ftd.set-integer($a = $x1, v = 100)
+	
 -- end: ftd.column
 
 -- end: set-integer-sample
@@ -1045,12 +1045,12 @@ color: $inherited.colors.text
 width: fill-container
 spacing.fixed.px: 10
 
--- display-text: name is empty
-if: { ftd.is_empty(name) }
-
--- display-text: There is no name in names
-if: { ftd.is_empty(names) }
-
+	-- display-text: name is empty
+	if: { ftd.is_empty(name) }
+	
+	-- display-text: There is no name in names
+	if: { ftd.is_empty(names) }
+	
 -- end: ftd.column
 
 -- end: is-empty-sample
@@ -1068,12 +1068,12 @@ color: $inherited.colors.text
 width: fill-container
 spacing.fixed.px: 10
 
--- display-text: Dark Mode
-$on-click$: $set-dark()
-
--- display-text: Click to set Dark Mode
-$on-click$: $ftd.enable-dark-mode()
-
+	-- display-text: Dark Mode
+	$on-click$: $set-dark()
+	
+	-- display-text: Click to set Dark Mode
+	$on-click$: $ftd.enable-dark-mode()
+	
 -- end: ftd.column
 
 
@@ -1095,12 +1095,12 @@ color: $inherited.colors.text
 width: fill-container
 spacing.fixed.px: 10
 
--- display-text: Light Mode
-$on-click$: $set-light()
-
--- display-text: Click to set Light Mode
-$on-click$: $ftd.enable-light-mode()
-
+	-- display-text: Light Mode
+	$on-click$: $set-light()
+	
+	-- display-text: Click to set Light Mode
+	$on-click$: $ftd.enable-light-mode()
+	
 -- end: ftd.column
 
 -- end: enable-light-mode-sample
@@ -1120,12 +1120,12 @@ color: $inherited.colors.text
 width: fill-container
 spacing.fixed.px: 10
 
--- display-text: System Mode
-$on-click$: $set-system()
-
--- display-text: Click to set System Mode
-$on-click$: $ftd.enable-system-mode()
-
+	-- display-text: System Mode
+	$on-click$: $set-system()
+	
+	-- display-text: Click to set System Mode
+	$on-click$: $ftd.enable-system-mode()
+	
 -- end: ftd.column
 
 -- end: enable-system-mode-sample
@@ -1165,12 +1165,12 @@ width: fill-container
 color: $inherited.colors.text
 spacing.fixed.px: 5
 
--- display-text: Insert Fifthtry at 2nd index
-$on-click$: $insert_at($a = $alphabets, v = Fifthtry, num = 2)
-
--- display-list-item: $val
-$loop$: $alphabets as $val
-
+	-- display-text: Insert Fifthtry at 2nd index
+	$on-click$: $insert_at($a = $alphabets, v = Fifthtry, num = 2)
+	
+	-- display-list-item: $val
+	$loop$: $alphabets as $val
+	
 -- end: ftd.column
 
 -- end: insert-at-sample
@@ -1192,12 +1192,12 @@ width: fill-container
 color: $inherited.colors.text
 spacing.fixed.px: 5
 
--- display-text: Delete Value from 1st index
-$on-click$: $delete_at($a = $places, num = 1)
-
--- display-list-item: $val
-$loop$: $places as $val
-
+	-- display-text: Delete Value from 1st index
+	$on-click$: $delete_at($a = $places, num = 1)
+	
+	-- display-list-item: $val
+	$loop$: $places as $val
+	
 -- end: ftd.column
 
 -- end: delete-at-sample
@@ -1216,12 +1216,12 @@ $loop$: $places as $val
 width: fill-container
 spacing.fixed.px: 5
 
--- display-text: Click to Clear list
-$on-click$: $clear($a = $palindromes)
-
--- display-list-item: $val
-$loop$: $palindromes as $val
-
+	-- display-text: Click to Clear list
+	$on-click$: $clear($a = $palindromes)
+	
+	-- display-list-item: $val
+	$loop$: $palindromes as $val
+	
 -- end: ftd.column
 
 -- end: clear-list-sample

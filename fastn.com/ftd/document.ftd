@@ -55,13 +55,13 @@ Attempting to use ftd.document as a child component will result in an error.
 
 -- ds.rendered.output:
 
--- ftd.text:
-color: $inherited.colors.error.text
-role: $inherited.types.copy-regular
-
-FTDExecError(ParseError { message: "ftd.document can occur only once and must be
-the root", doc_id: "<doc_id>", line_number: <line_number> })
-
+	-- ftd.text:
+	color: $inherited.colors.error.text
+	role: $inherited.types.copy-regular
+	
+	FTDExecError(ParseError { message: "ftd.document can occur only once and must be
+	the root", doc_id: "<doc_id>", line_number: <line_number> })
+	
 -- end: ds.rendered.output
 
 
@@ -83,13 +83,13 @@ configurations can cause conflicts and inconsistencies.
 
 -- ds.rendered.output:
 
--- ftd.text:
-color: $inherited.colors.error.text
-role: $inherited.types.copy-regular
-
-FTDExecError(ParseError { message: "ftd.document can occur only once and must be
-the root", doc_id: "<doc_id>", line_number: <line_number> })
-
+	-- ftd.text:
+	color: $inherited.colors.error.text
+	role: $inherited.types.copy-regular
+	
+	FTDExecError(ParseError { message: "ftd.document can occur only once and must be
+	the root", doc_id: "<doc_id>", line_number: <line_number> })
+	
 -- end: ds.rendered.output
 
 
@@ -110,13 +110,13 @@ cannot have any other elements at the same level.
 
 -- ds.rendered.output:
 
--- ftd.text:
-color: $inherited.colors.error.text
-role: $inherited.types.copy-regular
-
-FTDExecError(ParseError { message: "ftd.document can't have siblings.", doc_id:
-"<doc_id>", line_number: <line_number> })
-
+	-- ftd.text:
+	color: $inherited.colors.error.text
+	role: $inherited.types.copy-regular
+	
+	FTDExecError(ParseError { message: "ftd.document can't have siblings.", doc_id:
+	"<doc_id>", line_number: <line_number> })
+	
 -- end: ds.rendered.output
 
 

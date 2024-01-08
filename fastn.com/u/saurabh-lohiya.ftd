@@ -9,14 +9,14 @@ profile: Developer
 -- ds.user-info.works:
 
 
--- ft-ui.grid-view: Documentation Sites
-templates: $doc-sites
-show-large: true
-
--- ft-ui.grid-view: Color Schemes
-templates: $schemes
-show-large: true
-
+	-- ft-ui.grid-view: Documentation Sites
+	templates: $doc-sites
+	show-large: true
+	
+	-- ft-ui.grid-view: Color Schemes
+	templates: $schemes
+	show-large: true
+	
 -- end: ds.user-info.works
 
 -- end: ds.user-info
@@ -41,22 +41,22 @@ role: Developer
 
 -- common.social-media list social-links:
 
--- common.social-media: 
+-- common.social-media:
 link: https://discord.gg/saurabh-lohiya#9200
 src: $fastn-assets.files.images.discord.svg
 hover-src: $fastn-assets.files.images.discord-hover.svg
 
--- common.social-media: 
+-- common.social-media:
 link: https://github.com/saurabh-lohiya
 src: $fastn-assets.files.images.github-grey.svg
 hover-src: $fastn-assets.files.images.github-grey-hover.svg
 
-/-- common.social-media: 
+/-- common.social-media:
 link: https://twitter.com/priyanka9634
 src: $fastn-assets.files.images.twitter.svg
 hover-src: $fastn-assets.files.images.twitter-hover.svg
 
--- common.social-media: 
+-- common.social-media:
 link: https://www.linkedin.com/in/saurabh-lohiya/
 src: $fastn-assets.files.images.linkedin.svg
 hover-src: $fastn-assets.files.images.linkedin-hover.svg

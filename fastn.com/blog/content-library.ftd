@@ -2,29 +2,29 @@
 -- import: fastn-community.github.io/doc-site/common
 -- import: fastn.com/content-library as cl
 
--- common.post-meta meta: Create a `content-library.ftd` file for recurring content components 
+-- common.post-meta meta: Create a `content-library.ftd` file for recurring content components
 published-on: November 25, 2023
 post-url: /blog/content-library/
 author: $authors.nandini
 
-Let's say you need a new landing page for a marketing campaign. Traditionally, 
-building such a page involves starting from ground zero, designing and structuring components 
-individually. 
+Let's say you need a new landing page for a marketing campaign. Traditionally,
+building such a page involves starting from ground zero, designing and structuring components
+individually.
 
-However, there's a smarter, more efficient approach - creating a `content-library.ftd` 
-file and storing all your recurring content components inside it. This means that instead of 
-starting from zero, you can grab parts you need from one central place when making a new page. 
+However, there's a smarter, more efficient approach - creating a `content-library.ftd`
+file and storing all your recurring content components inside it. This means that instead of
+starting from zero, you can grab parts you need from one central place when making a new page.
 This makes building landing pages much quicker and easier.
 
 
--- ds.blog-page: 
+-- ds.blog-page:
 meta: $meta
 
 -- ds.h1: Understanding the `content-library.ftd` Approach
 
-At its heart, the `content-library.ftd` is a file that houses content components like titles, 
-descriptions, banners, hero sections, forms, testimonials, calls-to-actions or any other marketing content 
-pieces that are recurrently used across landing pages. 
+At its heart, the `content-library.ftd` is a file that houses content components like titles,
+descriptions, banners, hero sections, forms, testimonials, calls-to-actions or any other marketing content
+pieces that are recurrently used across landing pages.
 
 Inside the `content-library.ftd` file, you define and create your components.
 
@@ -37,7 +37,7 @@ When you require these components:
 For instance, let’s consider a call-to-action component created in the `content-library.ftd` file:
 
 -- ds.code:
-lang: ftd 
+lang: ftd
 
 \-- component get-started:
 
@@ -69,14 +69,14 @@ lang:ftd
 Here is another example, a [landing page](https://fastn.com/react/) and its code.
 
 -- ds.code:
-lang: ftd 
+lang: ftd
 
 \-- import: fastn.com/content-library/compare as cl ;; <hl>
 
 
 \-- ds.page-with-get-started-and-no-right-sidebar: fastn vs React, Angular and Javascript
 
-fastn is a no-fuss alternative to the complexities of React, Angular, and 
+fastn is a no-fuss alternative to the complexities of React, Angular, and
 JavaScript. Here is a quick glance.
 
 
@@ -98,29 +98,29 @@ JavaScript. Here is a quick glance.
 \-- end: ds.page-with-get-started-and-no-right-sidebar
 
 
--- ds.markdown: 
+-- ds.markdown:
 
-Notice how clean and straightforward the code of this page appears. 
-By outlining each component utilized on this page separately within the 
+Notice how clean and straightforward the code of this page appears.
+By outlining each component utilized on this page separately within the
 `content-library.ftd` file, generating new landing pages becomes effortless.
 
 -- ds.h1: Advantages of using a `content-library.ftd` file for your project
 
 -- ds.h2: Avoiding Duplication and Maintaining Consistency
 
-By creating a `content-library.ftd` file, redundancy and repetition are minimized. 
-Any updates or changes made to the original content components in the `content-library.ftd` 
-automatically reflect across all landing pages that reference them. This not only saves time 
+By creating a `content-library.ftd` file, redundancy and repetition are minimized.
+Any updates or changes made to the original content components in the `content-library.ftd`
+automatically reflect across all landing pages that reference them. This not only saves time
 but also ensures consistency in branding and messaging.
 
 -- ds.h2: Efficiency in Launching New Landing Pages
 
-Developing new landing pages becomes more straightforward. 
+Developing new landing pages becomes more straightforward.
 Instead of starting each page's content creation from scratch, developers or marketers
 can quickly assemble various content components from the `content-library.ftd` file,
 for launching new campaigns or pages.
 
-Read about [domain-driven documentation](/blog/domain-components/), another valuable 
+Read about [domain-driven documentation](/blog/domain-components/), another valuable
 technique for swift webpage creation.
 
 -- ds.h3: Related Links
@@ -137,4 +137,3 @@ Read [docs](https://fastn.com/ftd/data-modelling/)
 
 
 -- end: ds.blog-page
-

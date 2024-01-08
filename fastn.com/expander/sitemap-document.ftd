@@ -1,9 +1,9 @@
 -- ds.page: How to create clean URL
 
-Generally the URL of the page is corresponding to the location of that page in 
-the package. 
+Generally the URL of the page is corresponding to the location of that page in
+the package.
 
-This makes the URL more complex. In this video we will learn how to make it 
+This makes the URL more complex. In this video we will learn how to make it
 clean.
 
 -- ds.youtube:
@@ -14,21 +14,21 @@ v: 4ke75MpOEks
 
 To create the clean URL, we will learn about the `document feature` of Sitemap
 
-Sitemap let's you structure your website by allowing you to organize your files 
+Sitemap let's you structure your website by allowing you to organize your files
 in hierarchical manner ie. separate sections, subsections and TOC.
 
 
 -- ds.h2: Why document?
 
 1. it helps to decouple the package organization and corresponding URLs.
-So you can keep files as you wish in the package but URL still does not depend 
+So you can keep files as you wish in the package but URL still does not depend
 on the path of the file.
-  
+
 2. It empowers the user to give a custom URL to the page
 
 3. And That also helps to give a clean URL
 
-4. Not only this, you can include a file more than once in the sitemap with 
+4. Not only this, you can include a file more than once in the sitemap with
 different URLs.
 
 -- end: ds.page

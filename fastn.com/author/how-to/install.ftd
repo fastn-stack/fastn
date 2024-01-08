@@ -10,7 +10,7 @@ select one of the following options:
 
 -- ds.h1:  For MacOS/Linux
 
--- cbox.info: Recommended 
+-- cbox.info: Recommended
 
 We recommend installing `fastn` using the installer script. You can do this by
 running the below command in your terminal. This is the preferred method.
@@ -30,7 +30,7 @@ source <(curl -fsSL https://fastn.com/install.sh)
 
 -- ds.h1:  For Windows
 
--- cbox.info: For Windows (Recommended) 
+-- cbox.info: For Windows (Recommended)
 
 We recommend you to install `fastn` through fastn installer:
 [fastn.com/setup.exe](https://fastn.com/setup.exe). This is the preferred method
@@ -40,7 +40,7 @@ as it only requires downloading the setup and installing it on your local system
 -- end: cbox.info
 
 
--- ds.markdown: 
+-- ds.markdown:
 
 1. [`fastn` using `installer`](windows/#fastn-using-installer) (Recommended)
 2. [`fastn` through `pre-built binary`](windows/#fastn-through-pre-built-binary)

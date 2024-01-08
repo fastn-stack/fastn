@@ -30,40 +30,40 @@ max-width.fixed.px: 1340
 
 -- ds.page.footer:
 
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: index.html
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
 -- end: ds.page.footer
 -- ds.page.layout-bar:
 
--- ds.layout: Color schemes - Yellow Lily CS
-cta-url: https://meenukumari28.github.io/yellow-lily-cs/
-previous-url: /template-url: /cs/
-cta-text: Use this color scheme
-github-url: https://github.com/MeenuKumari28/yellow-lily-cs/
-
+	-- ds.layout: Color schemes - Yellow Lily CS
+	cta-url: https://meenukumari28.github.io/yellow-lily-cs/
+	previous-url: /template-url: /cs/
+	cta-text: Use this color scheme
+	github-url: https://github.com/MeenuKumari28/yellow-lily-cs/
+	
 -- end: ds.page.layout-bar
 
 -- ds.page.abstract-bar:
 
--- ds.distributors: 
-owners: $owner-fastn
-license-url: https://github.com/fastn-community/winter-cs/blob/main/LICENSE
-license: Creative Commons
-published-date: 03-May-2023
-used-by: 2 +
-likes: 1 Stars
-connect: $social-links
-
+	-- ds.distributors:
+	owners: $owner-fastn
+	license-url: https://github.com/fastn-community/winter-cs/blob/main/LICENSE
+	license: Creative Commons
+	published-date: 03-May-2023
+	used-by: 2 +
+	likes: 1 Stars
+	connect: $social-links
+	
 -- end: ds.page.abstract-bar
 
 
--- ds.preview-card: 
+-- ds.preview-card:
 image: $fastn-assets.files.images.featured.cs.yellow-lily-cs.png
 cta-url: https://meenukumari28.github.io/yellow-lily-cs/
 cta-text: Demo
@@ -88,15 +88,15 @@ more-link: /template-url: /cs/
 
 -- common.social-media list social-links:
 
--- common.social-media: 
+-- common.social-media:
 link: https://discord.gg/bucrdvptYd
 src: $assets.files.images.discord.svg
 
--- common.social-media: 
+-- common.social-media:
 link: https://twitter.com/fastn_stack
 src: $assets.files.images.twitter.svg
 
--- common.social-media: 
+-- common.social-media:
 link: https://www.linkedin.com/company/fifthtry/
 src: $assets.files.images.linkedin.svg
 

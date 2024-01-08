@@ -11,23 +11,23 @@ id: conditional-attributes-removes-component-duplication
 
 
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- ftd.decimal: $rent1
-if: { !is-price }	;; <hl>
-
-\-- ftd.decimal: $rent2
-if: { is-price } ;; <hl>
-
-
--- ds.code: Recommended
-lang: ftd
-
-\-- ftd.decimal:
-value if { is-price }: $rent2	;; <hl>
-value: $rent1
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.decimal: $rent1
+	if: { !is-price }	;; <hl>
+	
+	\-- ftd.decimal: $rent2
+	if: { is-price } ;; <hl>
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.decimal:
+	value if { is-price }: $rent2	;; <hl>
+	value: $rent1
+	
 -- end: utils.code-display
 
 
@@ -39,51 +39,51 @@ value: $rent1
 id: minimize-container-components
 
 
-This guideline advises against using container components when there is only 
+This guideline advises against using container components when there is only
 one or no child, as it can lead to unnecessary abstraction and complexity
 in the code. Instead, it's recommended to remove the parent container which
 results in simpler and more readable code.
 
 
 
--- ds.code: Not recommended
-lang: ftd
-
-\;; -------- Example 1 --------
-
-\-- ftd.column:  
-
-\-- ftd.text: Hello World
-
-\-- end: ftd.column 
-
-
-\;; -------- Example 2 --------
-
-\-- ftd.column: 
-color: $inherited.colors.text
-margin.px: 10
-
-\-- ftd.text: Hello World
-
-\-- end: ftd.column 
-
-
-
--- ds.code: Recommended
-lang: ftd
-
-\;; -------- Example 1 --------
-
-\-- ftd.text: Hello World
-
-
-\;; -------- Example 2 --------
-
-\-- ftd.text: Hello World
-color: $inherited.colors.text
-margin.px: 10
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\;; -------- Example 1 --------
+	
+	\-- ftd.column:
+	
+	\-- ftd.text: Hello World
+	
+	\-- end: ftd.column
+	
+	
+	\;; -------- Example 2 --------
+	
+	\-- ftd.column:
+	color: $inherited.colors.text
+	margin.px: 10
+	
+	\-- ftd.text: Hello World
+	
+	\-- end: ftd.column
+	
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\;; -------- Example 1 --------
+	
+	\-- ftd.text: Hello World
+	
+	
+	\;; -------- Example 2 --------
+	
+	\-- ftd.text: Hello World
+	color: $inherited.colors.text
+	margin.px: 10
+	
 -- end: utils.code-display
 
 

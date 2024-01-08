@@ -62,8 +62,8 @@ hello-world element. used it in `index.ftd`.
 
 -- ds.output:
 
--- hello-world:
-
+	-- hello-world:
+	
 -- end: ds.output
 
 
@@ -152,8 +152,8 @@ Now lets call this component and pass a data.
 
 -- ds.output:
 
--- num-to-words: 19
-
+	-- num-to-words: 19
+	
 -- end: ds.output
 
 
@@ -221,15 +221,15 @@ function which do the necessary changes in `js` world.
 
 -- ds.output:
 
--- ftd.integer: $num
-color: $inherited.colors.text-strong
-
--- ftd.text: I increment the `num`
-$on-click$: $ftd.increment($a = $num)
-color: $inherited.colors.text
-
--- num-to-words: $num
-
+	-- ftd.integer: $num
+	color: $inherited.colors.text-strong
+	
+	-- ftd.text: I increment the `num`
+	$on-click$: $ftd.increment($a = $num)
+	color: $inherited.colors.text
+	
+	-- num-to-words: $num
+	
 -- end: ds.output
 
 
@@ -297,16 +297,16 @@ In the above code as you can see that we are passing the mutable reference of
 
 -- ds.output:
 
--- ftd.integer: $num-1
-color: $inherited.colors.text-strong
-
--- ftd.text: I increment the `num`
-$on-click$: $ftd.increment($a = $num-1)
-color: $inherited.colors.text
-
--- mut-num-to-words:
-$num: $num-1
-
+	-- ftd.integer: $num-1
+	color: $inherited.colors.text-strong
+	
+	-- ftd.text: I increment the `num`
+	$on-click$: $ftd.increment($a = $num-1)
+	color: $inherited.colors.text
+	
+	-- mut-num-to-words:
+	$num: $num-1
+	
 -- end: ds.output
 
 

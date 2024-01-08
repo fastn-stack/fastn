@@ -1,6 +1,6 @@
 
 
--- ds.page: 
+-- ds.page:
 sidebar: false
 
 -- ds.h1: This is how output will be seen
@@ -11,4 +11,3 @@ width.fixed.px: 600
 
 
 -- end: ds.page
-

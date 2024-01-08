@@ -4,214 +4,214 @@ full-width: true
 -- all-questions:
 total-questions: 3
 
--- all-questions.questions:
+	-- all-questions.questions:
+	
+		-- question-data: Which of the following is wrong?
+		answers: 3
+		
+		-- question-data.options:
+		
+			-- options:
+			
+			-- options.ui:
+			
+				-- ds.code:
+				copy: false
+				max-width: fill-container
+				
+				\-- ftd.text: Hello
+				color: red
+				
+			-- end: options.ui
+
 
--- question-data: Which of the following is wrong?
-answers: 3
+
+
+			-- options:
+			
+			-- options.ui:
+			
+				-- ds.code:
+				copy: false
+				max-width: fill-container
+				
+				\-- ftd.text:
+				text: Hello
+				color: red
+				
+			-- end: options.ui
+
+
+
+
+			-- options:
+			is-answer: 1
+			
+			-- options.ui:
+			
+				-- ds.code:
+				copy: false
+				max-width: fill-container
+				
+				\-- ftd.text:
+				value: Hello
+				color: red
+				
+			-- end: options.ui
+
+
+
+			-- options:
+			
+			-- options.ui:
+			
+				-- ds.code:
+				copy: false
+				max-width: fill-container
+				
+				\-- ftd.text:
+				color: red
+				
+				Hello
+				
+			-- end: options.ui
+
+
+		-- end: question-data.options
+
+
+
+
+
 
--- question-data.options:
 
--- options:
 
--- options.ui:
 
--- ds.code:
-copy: false
-max-width: fill-container
 
-\-- ftd.text: Hello
-color: red
 
--- end: options.ui
 
 
+		-- question-data:
+		answers: 2
+		question: How to create a record `person` where
+		
+		
+		-- question-data.more-detail:
+		
+		- `employee-id` of type `integer` is taken in `caption`
+		- `name` of type `string`
+		- `bio` of type `string` is taken in `body` and is `optional`?
+		
+		
+		
+		-- question-data.options:
+		
+			-- options:
+			
+			-- options.ui:
+			
+				-- ds.code:
+				copy: false
+				max-width: fill-container
+				
+				\-- record person:
+				caption integer employee-id:
+				string name:
+				body bio:
+				
+			-- end: options.ui
 
 
--- options:
 
--- options.ui:
 
--- ds.code:
-copy: false
-max-width: fill-container
+			-- options:
+			is-answer: 1
+			
+			-- options.ui:
+			
+				-- ds.code:
+				copy: false
+				max-width: fill-container
+				
+				\-- record person:
+				caption integer employee-id:
+				string name:
+				optional body bio:
+				
+			-- end: options.ui
 
-\-- ftd.text:
-text: Hello
-color: red
 
--- end: options.ui
 
 
+			-- options:
+			
+			-- options.ui:
+			
+				-- ds.code:
+				copy: false
+				max-width: fill-container
+				
+				\-- record person:
+				integer caption employee-id:
+				string name:
+				optional body bio:
+				
+			-- end: options.ui
 
 
--- options:
-is-answer: 1
 
--- options.ui:
+			-- options:
+			
+			-- options.ui:
+			
+				-- ds.code:
+				copy: false
+				max-width: fill-container
+				
+				\-- record person:
+				employee-id: integer caption
+				name: string
+				bio: optional body
+				
+			-- end: options.ui
 
--- ds.code:
-copy: false
-max-width: fill-container
 
-\-- ftd.text:
-value: Hello
-color: red
+		-- end: question-data.options
 
--- end: options.ui
 
 
 
--- options:
 
--- options.ui:
 
--- ds.code:
-copy: false
-max-width: fill-container
 
-\-- ftd.text:
-color: red
 
-Hello
 
--- end: options.ui
 
 
--- end: question-data.options
 
 
 
 
 
 
+		-- question-data: Which of them are called container components?
+		answers: 2
+		
+		-- question-data.options:
+		
+			-- options: ftd.text
+			
+			-- options: ftd.row
+			is-answer: 1
+			
+			-- options: component
+			
+			-- options: ftd.kernel
+			
+		-- end: question-data.options
 
 
-
-
-
-
-
--- question-data:
-answers: 2
-question: How to create a record `person` where
-
-
--- question-data.more-detail:
-
-- `employee-id` of type `integer` is taken in `caption`
-- `name` of type `string`
-- `bio` of type `string` is taken in `body` and is `optional`?
-
-
-
--- question-data.options:
-
--- options:
-
--- options.ui:
-
--- ds.code:
-copy: false
-max-width: fill-container
-
-\-- record person:
-caption integer employee-id:
-string name:
-body bio:
-
--- end: options.ui
-
-
-
-
--- options:
-is-answer: 1
-
--- options.ui:
-
--- ds.code:
-copy: false
-max-width: fill-container
-
-\-- record person:
-caption integer employee-id:
-string name:
-optional body bio:
-
--- end: options.ui
-
-
-
-
--- options:
-
--- options.ui:
-
--- ds.code:
-copy: false
-max-width: fill-container
-
-\-- record person:
-integer caption employee-id:
-string name:
-optional body bio:
-
--- end: options.ui
-
-
-
--- options:
-
--- options.ui:
-
--- ds.code:
-copy: false
-max-width: fill-container
-
-\-- record person:
-employee-id: integer caption
-name: string
-bio: optional body
-
--- end: options.ui
-
-
--- end: question-data.options
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- question-data: Which of them are called container components?
-answers: 2
-
--- question-data.options:
-
--- options: ftd.text
-
--- options: ftd.row
-is-answer: 1
-
--- options: component
-
--- options: ftd.kernel
-
--- end: question-data.options
-
-
--- end: all-questions.questions
+	-- end: all-questions.questions
 
 -- end: all-questions
 
@@ -255,62 +255,62 @@ integer $wrong: 0
 width: fill-container
 color: $inherited.colors.text
 
--- ftd.row:
-color: $inherited.colors.success.text
-role: $inherited.types.heading-small
-spacing: space-between
-width: fill-container
-padding-horizontal.px: 50
-;; background.solid: $inherited.colors.info.base
-background.solid: $inherited.colors.background.step-2
+	-- ftd.row:
+	color: $inherited.colors.success.text
+	role: $inherited.types.heading-small
+	spacing: space-between
+	width: fill-container
+	padding-horizontal.px: 50
+	;; background.solid: $inherited.colors.info.base
+	background.solid: $inherited.colors.background.step-2
+	
+		-- ftd.text: Score:
+		style: bold
+		
+		-- ftd.row:
+		spacing.fixed.px: 5
+		color: $inherited.colors.success.text
+		
+			-- ftd.text: Correct:
+			style: bold
+			
+			-- ftd.integer: $all-questions.correct
+			
+		-- end: ftd.row
 
--- ftd.text: Score:
-style: bold
 
--- ftd.row:
-spacing.fixed.px: 5
-color: $inherited.colors.success.text
+		-- ftd.row:
+		spacing.fixed.px: 5
+		color: $inherited.colors.warning.text
+		
+			-- ftd.text: Wrong:
+			style: bold
+			
+			-- ftd.integer: $all-questions.wrong
+			
+		-- end: ftd.row
 
--- ftd.text: Correct:
-style: bold
+		-- ftd.row:
+		spacing.fixed.px: 5
+		
+			-- ftd.text: Total Questions:
+			style: bold
+			
+			-- ftd.integer: $all-questions.total-questions
+			
+		-- end: ftd.row
 
--- ftd.integer: $all-questions.correct
+	-- end: ftd.row
 
--- end: ftd.row
-
-
--- ftd.row:
-spacing.fixed.px: 5
-color: $inherited.colors.warning.text
-
--- ftd.text: Wrong:
-style: bold
-
--- ftd.integer: $all-questions.wrong
-
--- end: ftd.row
-
--- ftd.row:
-spacing.fixed.px: 5
-
--- ftd.text: Total Questions:
-style: bold
-
--- ftd.integer: $all-questions.total-questions
-
--- end: ftd.row
-
--- end: ftd.row
-
--- question-ui: $obj.question
-more-detail: $obj.more-detail
-answers: $obj.answers
-options: $obj.options
-number: $LOOP.COUNTER
-$correct: $all-questions.correct
-$wrong: $all-questions.wrong
-$loop$: $all-questions.questions as $obj
-
+	-- question-ui: $obj.question
+	more-detail: $obj.more-detail
+	answers: $obj.answers
+	options: $obj.options
+	number: $LOOP.COUNTER
+	$correct: $all-questions.correct
+	$wrong: $all-questions.wrong
+	$loop$: $all-questions.questions as $obj
+	
 -- end: ftd.column
 
 -- end: all-questions
@@ -352,82 +352,82 @@ margin-bottom.px: 32
 padding-horizontal.px: 50
 padding-vertical.px: 30
 
--- ftd.row:
-role: $inherited.types.heading-medium
-color: $inherited.colors.text-strong
-margin-bottom.rem: 0.5
-width: fill-container
-padding-top.em: 0.3
-region: h2
-border-bottom-width.px if { question-ui.more-detail == NULL }: 1
-border-color if { question-ui.more-detail == NULL }: $inherited.colors.border
-spacing.fixed.px: 10
+	-- ftd.row:
+	role: $inherited.types.heading-medium
+	color: $inherited.colors.text-strong
+	margin-bottom.rem: 0.5
+	width: fill-container
+	padding-top.em: 0.3
+	region: h2
+	border-bottom-width.px if { question-ui.more-detail == NULL }: 1
+	border-color if { question-ui.more-detail == NULL }: $inherited.colors.border
+	spacing.fixed.px: 10
+	
+		-- ftd.row:
+		
+			-- ftd.integer: $number-plus-one(a = $question-ui.number)
+			style: bold
+			
+			-- ftd.text: .
+			
+		-- end: ftd.row
 
--- ftd.row:
+		-- ftd.text: $question-ui.question
+		
+	-- end: ftd.row
 
--- ftd.integer: $number-plus-one(a = $question-ui.number)
-style: bold
-
--- ftd.text: .
-
--- end: ftd.row
-
--- ftd.text: $question-ui.question
-
--- end: ftd.row
-
--- ftd.text: $question-ui.more-detail
-if: { question-ui.more-detail != NULL }
-border-bottom-width.px: 1
-width: fill-container
-border-color: $inherited.colors.border
-
--- options-ui: $obj.value
-is-answer: $obj.is-answer
-$is-submitted: $question-ui.is-submitted
-number: $LOOP.COUNTER
-more-detail-ui: $obj.ui
-$number-correct: $question-ui.number-correct
-$loop$: $question-ui.options as $obj
-
--- ftd.text: Submit
-if: { !question-ui.is-submitted }
-color: $inherited.colors.cta-primary.text
-background.solid: $inherited.colors.cta-primary.base
-padding-vertical.px: 5
-padding-horizontal.px: 10
-margin-top.px: 10
-border-radius.px: 5
-$on-click$: $ftd.set-bool($a = $question-ui.is-submitted, v = true)
-$on-click$: $submit-answer($correct = $question-ui.correct, $wrong = $question-ui.wrong, number = $question-ui.number-correct, answers = $question-ui.answers)
-
-
-
-
--- ftd.text: Correct (+1)
-color: $inherited.colors.success.text
-role: $inherited.types.heading-small
-style: bold
-if: { question-ui.is-submitted && len(question-ui.answers) == question-ui.number-correct }
-
--- ftd.text: Wrong (-1)
-color: $inherited.colors.warning.text
-role: $inherited.types.heading-small
-style: bold
-if: { question-ui.is-submitted && len(question-ui.answers) != question-ui.number-correct }
-
--- ftd.row:
-margin-top.px: 10
-if: { question-ui.is-submitted }
-color: $inherited.colors.success.text
-spacing.fixed.px: 2
-
--- ftd.text: Answers:
-
--- ftd.integer: $obj
-$loop$: $question-ui.answers as $obj
-
--- end: ftd.row
+	-- ftd.text: $question-ui.more-detail
+	if: { question-ui.more-detail != NULL }
+	border-bottom-width.px: 1
+	width: fill-container
+	border-color: $inherited.colors.border
+	
+	-- options-ui: $obj.value
+	is-answer: $obj.is-answer
+	$is-submitted: $question-ui.is-submitted
+	number: $LOOP.COUNTER
+	more-detail-ui: $obj.ui
+	$number-correct: $question-ui.number-correct
+	$loop$: $question-ui.options as $obj
+	
+	-- ftd.text: Submit
+	if: { !question-ui.is-submitted }
+	color: $inherited.colors.cta-primary.text
+	background.solid: $inherited.colors.cta-primary.base
+	padding-vertical.px: 5
+	padding-horizontal.px: 10
+	margin-top.px: 10
+	border-radius.px: 5
+	$on-click$: $ftd.set-bool($a = $question-ui.is-submitted, v = true)
+	$on-click$: $submit-answer($correct = $question-ui.correct, $wrong = $question-ui.wrong, number = $question-ui.number-correct, answers = $question-ui.answers)
+	
+	
+	
+	
+	-- ftd.text: Correct (+1)
+	color: $inherited.colors.success.text
+	role: $inherited.types.heading-small
+	style: bold
+	if: { question-ui.is-submitted && len(question-ui.answers) == question-ui.number-correct }
+	
+	-- ftd.text: Wrong (-1)
+	color: $inherited.colors.warning.text
+	role: $inherited.types.heading-small
+	style: bold
+	if: { question-ui.is-submitted && len(question-ui.answers) != question-ui.number-correct }
+	
+	-- ftd.row:
+	margin-top.px: 10
+	if: { question-ui.is-submitted }
+	color: $inherited.colors.success.text
+	spacing.fixed.px: 2
+	
+		-- ftd.text: Answers:
+		
+		-- ftd.integer: $obj
+		$loop$: $question-ui.answers as $obj
+		
+	-- end: ftd.row
 
 -- end: ftd.column
 
@@ -468,46 +468,46 @@ spacing.fixed.px: 10
 align-content: center
 padding-horizontal.px: 20
 
--- ftd.checkbox:
-;; $on-click$: $ftd.toggle($a = $options-ui.is-checked)
-$on-click$: $toggle-option($a = $options-ui.is-checked, $checked = $options-ui.number-correct, answer = $options-ui.is-answer)
-checked: $options-ui.is-checked
-enabled if { options-ui.is-submitted }: false
-enabled: true
+	-- ftd.checkbox:
+	;; $on-click$: $ftd.toggle($a = $options-ui.is-checked)
+	$on-click$: $toggle-option($a = $options-ui.is-checked, $checked = $options-ui.number-correct, answer = $options-ui.is-answer)
+	checked: $options-ui.is-checked
+	enabled if { options-ui.is-submitted }: false
+	enabled: true
+	
+	-- ftd.row:
+	
+		-- ftd.integer: $number-plus-one(a = $options-ui.number)
+		style: bold
+		
+		-- ftd.text: .
+		
+	-- end: ftd.row
 
--- ftd.row:
+	-- ftd.text: $options-ui.value
+	if: { options-ui.value != NULL }
+	
+	-- ftd.column:
+	children: $options-ui.more-detail-ui
+	width: fill-container
+	
+	-- end: ftd.column
 
--- ftd.integer: $number-plus-one(a = $options-ui.number)
-style: bold
-
--- ftd.text: .
-
--- end: ftd.row
-
--- ftd.text: $options-ui.value
-if: { options-ui.value != NULL }
-
--- ftd.column:
-children: $options-ui.more-detail-ui
-width: fill-container
-
--- end: ftd.column
-
--- ftd.image:
-src: $fastn-assets.files.images.correct.svg
-width.fixed.px: 70
-if: { options-ui.is-submitted && options-ui.is-answer == 1 && options-ui.is-checked }
-
--- ftd.image:
-src: $fastn-assets.files.images.cross.svg
-width.fixed.px: 70
-if: { options-ui.is-submitted && options-ui.is-answer != 1 && options-ui.is-checked }
-
--- ftd.image:
-src: $fastn-assets.files.images.missed.svg
-width.fixed.px: 70
-if: { options-ui.is-submitted && options-ui.is-answer == 1 && !options-ui.is-checked }
-
+	-- ftd.image:
+	src: $fastn-assets.files.images.correct.svg
+	width.fixed.px: 70
+	if: { options-ui.is-submitted && options-ui.is-answer == 1 && options-ui.is-checked }
+	
+	-- ftd.image:
+	src: $fastn-assets.files.images.cross.svg
+	width.fixed.px: 70
+	if: { options-ui.is-submitted && options-ui.is-answer != 1 && options-ui.is-checked }
+	
+	-- ftd.image:
+	src: $fastn-assets.files.images.missed.svg
+	width.fixed.px: 70
+	if: { options-ui.is-submitted && options-ui.is-answer == 1 && !options-ui.is-checked }
+	
 -- end: ftd.row
 
 

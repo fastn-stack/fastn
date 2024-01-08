@@ -18,8 +18,8 @@ Welcome to the video!
 
 Today, we will learn how To Create a Clean URL in `fastn`
 
-Generally the URL of the page is corresponding to the location of that page in 
-the package. 
+Generally the URL of the page is corresponding to the location of that page in
+the package.
 
 This makes the URL more complex.
 
@@ -31,7 +31,7 @@ src: $fastn-assets.files.planning.sitemap-features.img.benefits.jpg
 
 To create the clean URL, we will learn about the `document feature` of Sitemap
 
-Sitemap let's you structure your website by allowing you to organize your files 
+Sitemap let's you structure your website by allowing you to organize your files
 in hierarchical manner ie. separate sections, subsections and TOC.
 
 
@@ -42,27 +42,27 @@ In sitemap you can use documents feature to organize your urls better.
 -- ds.h2: Why document?
 
 1. it helps to decouple the package organization and corresponding URLs.
-So you can keep files as you wish in the package but URL still does not depend 
+So you can keep files as you wish in the package but URL still does not depend
 on the path of the file.
-  
+
 2. It empowers the user to give a custom URL to the page
 
 3. And That also helps to give a clean URL
 
-4. Not only this, you can include a file more than once in the sitemap with 
+4. Not only this, you can include a file more than once in the sitemap with
 different URLs.
 
 -- ds.h2: How?
 
-Here we have two sections, Home and Season and the latter has 4 TOCs and each TOC 
+Here we have two sections, Home and Season and the latter has 4 TOCs and each TOC
 has 2 sub TOCs.
 
 
 Now to access these files my URL becomes the path of the file in this package.
 
-So the URLs are long and complex. 
-And there is another limitation that I want to give a custom URL to this 
-section as `current-season` but this url is same as summer, so we cannot 
+So the URLs are long and complex.
+And there is another limitation that I want to give a custom URL to this
+section as `current-season` but this url is same as summer, so we cannot
 use this file with more than one url.
 
 And if I want to use the file of summer season as my current season, It limits
@@ -70,15 +70,15 @@ me to use the same path name as URL. So I cannot modify it.
 
 Let me show how the URLs look in the browser.
 
-When I click on season, it shows the summer season, which is the season at 
-the time of recording this video. But the URL displayed is this, instead I 
+When I click on season, it shows the summer season, which is the season at
+the time of recording this video. But the URL displayed is this, instead I
 wanted it as  `current-season`.
 
 
 Also the URL has folder name. and if you check other URLs as well, it is not
 the path we want to be displayed.
 
-So `document feature` is the one stop solution to make the URL clean. 
+So `document feature` is the one stop solution to make the URL clean.
 
 I will replace this with the custom URL.
 
@@ -101,12 +101,12 @@ lang: ftd
 
 -- ds.markdown:
 
-Make sure that when using document write the name of the file along with it's 
+Make sure that when using document write the name of the file along with it's
 extension `.ftd`.
 
-Now let's check in browser. There you go. 
+Now let's check in browser. There you go.
 
-And just to confirm same file when opened with Summer Season toc, has the 
+And just to confirm same file when opened with Summer Season toc, has the
 unchanged URL.
 
 Now let's apply for other files too and check in the browser.
@@ -115,11 +115,11 @@ Now all URLs are clean and meaningful.
 
 
 
--- ds.h1: Closing Remarks 
+-- ds.h1: Closing Remarks
 
-Thank you guys, keep watching these videos to learn more about fastn. 
+Thank you guys, keep watching these videos to learn more about fastn.
 Checkout the `fastn` website.
-Support us by giving a star on GitHub and connect with our fastn community on 
+Support us by giving a star on GitHub and connect with our fastn community on
 Discord.
 
 

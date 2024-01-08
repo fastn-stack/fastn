@@ -23,7 +23,7 @@ successfully installed.
 
 -- ds.h2: On Windows
 
-- Download the setup named `fastn_setup.exe` installer from the 
+- Download the setup named `fastn_setup.exe` installer from the
 [https://fastn.com/setup.exe](https://fastn.com/setup.exe) URL
 
 - Run the setup and select `More info` and follow the installation steps
@@ -52,8 +52,8 @@ width: fill-container
 
 -- ds.markdown:
 
-- On GitHub, click on the `Code` and copy the HTTPS `.git` URL 
-- Open Terminal/command prompt and change the directory to desktop, for easy 
+- On GitHub, click on the `Code` and copy the HTTPS `.git` URL
+- Open Terminal/command prompt and change the directory to desktop, for easy
 access
 - Paste or type the below code to clone the repository
 

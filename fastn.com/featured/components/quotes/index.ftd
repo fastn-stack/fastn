@@ -1,6 +1,6 @@
 -- import: fastn.com/featured as ft-ui
 
--- ds.page: 
+-- ds.page:
 sidebar: false
 
 -- ft-ui.grid-view: Simple Quotes
@@ -66,4 +66,3 @@ template-url: /quotes/electric/
 screenshot: $fastn-assets.files.images.featured.components.quotes.quotes-with-images.demo-1.png
 
 -- end: quotes-with-images
-

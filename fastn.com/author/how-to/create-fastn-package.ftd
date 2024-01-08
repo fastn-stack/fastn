@@ -93,31 +93,31 @@ width: fill-container
 
 -- utils.switches.elements:
 
--- ds.h2: Using Command
-
-The simplest way to create a `fastn` package is to use the command line tool.
-Suppose you want to create a package named `hello-fastn`, you need to follow
-these steps:
-
-- [Open the Terminal (Linux/MacOS) or Command prompt (Windows)](open-terminal/)
-- Run the following command in terminal
-
--- ds.code: create-package
-lang: sh
-
-fastn create-package hello-fastn
-
-
--- ds.markdown:
-
-;; TODO: Give link to about `FASTN.ftd` and `index.ftd`
-
-The above command will create a folder named `hello-fastn` containing two files:
-[`FASTN.ftd`](create-fastn-package/#fastn-ftd) and [`index.ftd`](create-fastn-package/#index-ftd). You can view the contents of this folder in
-a text editor such as [SublimeText](https://www.sublimetext.com/3).
-
-
-
+	-- ds.h2: Using Command
+	
+	The simplest way to create a `fastn` package is to use the command line tool.
+	Suppose you want to create a package named `hello-fastn`, you need to follow
+	these steps:
+	
+	- [Open the Terminal (Linux/MacOS) or Command prompt (Windows)](open-terminal/)
+	- Run the following command in terminal
+	
+	-- ds.code: create-package
+	lang: sh
+	
+	fastn create-package hello-fastn
+	
+	
+	-- ds.markdown:
+	
+	;; TODO: Give link to about `FASTN.ftd` and `index.ftd`
+	
+	The above command will create a folder named `hello-fastn` containing two files:
+	[`FASTN.ftd`](create-fastn-package/#fastn-ftd) and [`index.ftd`](create-fastn-package/#index-ftd). You can view the contents of this folder in
+	a text editor such as [SublimeText](https://www.sublimetext.com/3).
+	
+	
+	
 -- end: utils.switches.elements
 
 
@@ -131,17 +131,17 @@ a text editor such as [SublimeText](https://www.sublimetext.com/3).
 
 -- utils.switches.elements:
 
--- ds.h2: Manual
-
-Start by creating a folder named, let say `hello-fastn`. Open this folder in a
-text editor, such as ([SublimeText](https://www.sublimetext.com/3)). In this
-folder, add two files: `index.ftd` and `FASTN.ftd`. Checkout [package file
-info](create-fastn-package/#fastn-ftd) section to understand what these files
-are and the content they should contain in detail. Copy the content to the
-respective files you have just created.
-
-
-
+	-- ds.h2: Manual
+	
+	Start by creating a folder named, let say `hello-fastn`. Open this folder in a
+	text editor, such as ([SublimeText](https://www.sublimetext.com/3)). In this
+	folder, add two files: `index.ftd` and `FASTN.ftd`. Checkout [package file
+	info](create-fastn-package/#fastn-ftd) section to understand what these files
+	are and the content they should contain in detail. Copy the content to the
+	respective files you have just created.
+	
+	
+	
 -- end: utils.switches.elements
 
 
@@ -164,43 +164,42 @@ width: fill-container
 spacing.fixed.px: 32
 padding.px: 20
 
--- ds.h3: `FASTN.ftd`
-
-`FASTN.ftd` is a configuration file where we set configuration for the package.
-
-In `FASTN.ftd`, the code should look like this:
-
--- ds.code: `FASTN.ftd`
-lang: ftd
-
-\-- import: fastn
-
-\-- fastn.package: hello-fastn
-
--- ds.markdown:
-
-In the code above, we set the package name as`hello-fastn`.
-
-;; TODO: Give link to about `FASTN.ftd`
-
--- ds.h3: `index.ftd`
-
-`index.ftd` is the index page of your package. You can think of the index page
-as being the home or default page of your package.
-
-In `index.ftd`, the code should look like this:
-
--- ds.code: `index.ftd`
-lang: ftd
-
-\-- ftd.text: Hello World
-
--- ds.markdown:
-
-In the code above, we added a kernel component `ftd.text` and passed `Hello
-World` as the value for `text` property.
-
-
+	-- ds.h3: `FASTN.ftd`
+	
+	`FASTN.ftd` is a configuration file where we set configuration for the package.
+	
+	In `FASTN.ftd`, the code should look like this:
+	
+	-- ds.code: `FASTN.ftd`
+	lang: ftd
+	
+	\-- import: fastn
+	
+	\-- fastn.package: hello-fastn
+	
+	-- ds.markdown:
+	
+	In the code above, we set the package name as`hello-fastn`.
+	
+	;; TODO: Give link to about `FASTN.ftd`
+	-- ds.h3: `index.ftd`
+	
+	`index.ftd` is the index page of your package. You can think of the index page
+	as being the home or default page of your package.
+	
+	In `index.ftd`, the code should look like this:
+	
+	-- ds.code: `index.ftd`
+	lang: ftd
+	
+	\-- ftd.text: Hello World
+	
+	-- ds.markdown:
+	
+	In the code above, we added a kernel component `ftd.text` and passed `Hello
+	World` as the value for `text` property.
+	
+	
 -- end: ftd.column
 
 -- end: package-file-info

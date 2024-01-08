@@ -64,77 +64,77 @@ ftd.ui list fluid-wrap:
 
 -- ftd.ui list page.footer:
 
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: index.html
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
 -- end: page.footer
 
 
 -- ftd.ui list page.banner:
 
--- banner.cta-banner:
-cta-text: Learn Now
-cta-link: /learn/
-bgcolor: $inherited.colors.cta-primary.base
-
-Learn full-stack web development using fastn in a week
-
+	-- banner.cta-banner:
+	cta-text: Learn Now
+	cta-link: /learn/
+	bgcolor: $inherited.colors.cta-primary.base
+	
+	Learn full-stack web development using fastn in a week
+	
 -- end: page.banner
 
 
 -- ftd.ui list page.right-sidebar:
 
 
--- utils.compact-text: Support `fastn`!
+	-- utils.compact-text: Support `fastn`!
+	
+		-- utils.compact-text.body:
+		
+		Enjoying `fastn`? Please consider giving us a star ⭐️ on
+		[GitHub](https://github.com/fastn-stack/fastn) to show your support!
+		
+	-- end: utils.compact-text
 
--- utils.compact-text.body:
+	-- utils.compact-text: Getting Help
+	
+		-- utils.compact-text.body:
+		
+		Have a question or need help?
+		
+		Visit our [GitHub Q&A discussion](https://github.com/fastn-stack/fastn/discussions/categories/q-a)
+		to get answers and subscribe to it to stay tuned.
+		
+		Join our [Discord](https://discord.gg/a7eBUeutWD) channel and share your
+		thoughts, suggestion, question etc.
+		
+		Connect with our [community](/community/)!
+		
+	-- end: utils.compact-text
 
-Enjoying `fastn`? Please consider giving us a star ⭐️ on
-[GitHub](https://github.com/fastn-stack/fastn) to show your support!
-
--- end: utils.compact-text
-
--- utils.compact-text: Getting Help
-
--- utils.compact-text.body:
-
-Have a question or need help?
-
-Visit our [GitHub Q&A discussion](https://github.com/fastn-stack/fastn/discussions/categories/q-a)
-to get answers and subscribe to it to stay tuned.
-
-Join our [Discord](https://discord.gg/a7eBUeutWD) channel and share your
-thoughts, suggestion, question etc.
-
-Connect with our [community](/community/)!
-
--- end: utils.compact-text
-
--- utils.compact-text: Found an issue?
-
-If you find some issue, please visit our [GitHub
-issues](https://github.com/fastn-stack/fastn/issues) to tell us about it.
-
--- utils.compact-text: Quick links:
-
-- [Install `fastn`](install/)
-- [Create `fastn` package](create-fastn-package/)
-- [Expander Crash Course](expander/)
-- [Syntax Highlighting in Sublime Text](/sublime/)
-
--- utils.compact-text: Join us
-
-We welcome you to join our [Discord](https://discord.gg/a7eBUeutWD) community
-today.
-
-We are trying to create the language for human beings and we do not believe it
-would be possible without your support. We would love to hear from you.
-
+	-- utils.compact-text: Found an issue?
+	
+	If you find some issue, please visit our [GitHub
+	issues](https://github.com/fastn-stack/fastn/issues) to tell us about it.
+	
+	-- utils.compact-text: Quick links:
+	
+	- [Install `fastn`](install/)
+	- [Create `fastn` package](create-fastn-package/)
+	- [Expander Crash Course](expander/)
+	- [Syntax Highlighting in Sublime Text](/sublime/)
+	
+	-- utils.compact-text: Join us
+	
+	We welcome you to join our [Discord](https://discord.gg/a7eBUeutWD) community
+	today.
+	
+	We are trying to create the language for human beings and we do not believe it
+	would be possible without your support. We would love to hear from you.
+	
 -- end: page.right-sidebar
 
 -- doc-site.page: $page.title
@@ -164,21 +164,21 @@ fluid-width: false
 max-width.fixed.px: 1340
 fluid-wrap: $page.fluid-wrap
 
--- doc-site.page.header-logo-ui:
+	-- doc-site.page.header-logo-ui:
+	
+		-- notification.display-notifications:
+		if: { ftd.device == "desktop" }
+		
+	-- end: doc-site.page.header-logo-ui
 
--- notification.display-notifications:
-if: { ftd.device == "desktop" }
-
--- end: doc-site.page.header-logo-ui
-
--- ftd.column:
-margin-top.em if { ftd.device == "mobile" }: 0.5
-spacing.fixed.em: 0.8
-width: fill-container
-children: $page.wrapper
-$on-global-key[/]$: $open-search()
-
--- end: ftd.column
+	-- ftd.column:
+	margin-top.em if { ftd.device == "mobile" }: 0.5
+	spacing.fixed.em: 0.8
+	width: fill-container
+	children: $page.wrapper
+	$on-global-key[/]$: $open-search()
+	
+	-- end: ftd.column
 
 -- end: doc-site.page
 
@@ -204,16 +204,16 @@ right-sidebar: []
 
 $page-with-get-started-and-no-right-sidebar.body
 
--- ftd.column:
-spacing.fixed.em: 0.8
-width: fill-container
-
--- obj:
-$loop$: $page-with-get-started-and-no-right-sidebar.uis as $obj
-
--- cl.get-started:
-
--- end: ftd.column
+	-- ftd.column:
+	spacing.fixed.em: 0.8
+	width: fill-container
+	
+		-- obj:
+		$loop$: $page-with-get-started-and-no-right-sidebar.uis as $obj
+		
+		-- cl.get-started:
+		
+	-- end: ftd.column
 
 -- end: page
 
@@ -235,15 +235,15 @@ right-sidebar: []
 
 $page-with-no-right-sidebar.body
 
--- ftd.column:
-spacing.fixed.em: 0.8
-width: fill-container
-min-height.fixed.calc: 100vh
-
--- obj:
-$loop$: $page-with-no-right-sidebar.uis as $obj
-
--- end: ftd.column
+	-- ftd.column:
+	spacing.fixed.em: 0.8
+	width: fill-container
+	min-height.fixed.calc: 100vh
+	
+		-- obj:
+		$loop$: $page-with-no-right-sidebar.uis as $obj
+		
+	-- end: ftd.column
 
 -- end: page
 
@@ -273,22 +273,22 @@ common.post-meta meta:
 sidebar: false
 right-sidebar: []
 
--- doc-site.post:
-meta: $blog-page.meta
-
--- doc-site.markdown:
-if: { blog-page.meta.body != NULL }
-
-$blog-page.meta.body
-
--- ftd.column:
-spacing.fixed.em: 0.8
-width: fill-container
-
--- obj:
-$loop$: $blog-page.uis as $obj
-
--- end: ftd.column
+	-- doc-site.post:
+	meta: $blog-page.meta
+	
+	-- doc-site.markdown:
+	if: { blog-page.meta.body != NULL }
+	
+	$blog-page.meta.body
+	
+	-- ftd.column:
+	spacing.fixed.em: 0.8
+	width: fill-container
+	
+		-- obj:
+		$loop$: $blog-page.uis as $obj
+		
+	-- end: ftd.column
 
 -- end: page
 
@@ -304,31 +304,31 @@ boolean $show: false
 -- ftd.column:
 width: fill-container
 
--- ftd.text: [⭐️](https://github.com/fastn-stack/fastn)
-align-self: center
-$on-mouse-enter$: $ftd.play-rive(rive = star, input = stars)
-$on-mouse-leave$: $ftd.pause-rive(rive = star, input = stars)
-$on-mouse-enter$: $ftd.set-bool($a = $star-component.show, v = true)
-$on-mouse-leave$: $ftd.set-bool($a = $star-component.show, v = false)
-margin-top.px: 10
-
--- ftd.column:
-width: fill-container
-anchor: parent
-z-index: -1
-top.px if { star-component.show }: -110
-top.px: -900
-
--- ftd.rive:
-id: star
-src: $fastn-assets.files.rive.stars.riv
-canvas-width: 100
-canvas-height: 100
-autoplay: false
-width.fixed.px: 200
-height.fixed.px: 150
-
--- end: ftd.column
+	-- ftd.text: [⭐️](https://github.com/fastn-stack/fastn)
+	align-self: center
+	$on-mouse-enter$: $ftd.play-rive(rive = star, input = stars)
+	$on-mouse-leave$: $ftd.pause-rive(rive = star, input = stars)
+	$on-mouse-enter$: $ftd.set-bool($a = $star-component.show, v = true)
+	$on-mouse-leave$: $ftd.set-bool($a = $star-component.show, v = false)
+	margin-top.px: 10
+	
+	-- ftd.column:
+	width: fill-container
+	anchor: parent
+	z-index: -1
+	top.px if { star-component.show }: -110
+	top.px: -900
+	
+		-- ftd.rive:
+		id: star
+		src: $fastn-assets.files.rive.stars.riv
+		canvas-width: 100
+		canvas-height: 100
+		autoplay: false
+		width.fixed.px: 200
+		height.fixed.px: 150
+		
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -380,30 +380,30 @@ boolean $show: false
 -- ftd.column:
 width: fill-container
 
--- ftd.text: [💻️](/community/)
-align-self: center
-$on-mouse-enter$: $ftd.set-bool($a = $chronica-component.show, v = true)
-$on-mouse-leave$: $ftd.set-bool($a = $chronica-component.show, v = false)
-$on-mouse-enter$: $ftd.play-rive(rive = chronica, input = Teacher Hand Out)
-$on-mouse-leave$: $ftd.pause-rive(rive = chronica, input = Teacher Hand Out)
-margin-top.px: 10
-
--- ftd.column:
-width: fill-container
-anchor: parent
-z-index: -1
-top.px if { chronica-component.show }: -160
-top.px: -900
-
--- ftd.rive:
-id: chronica
-src: $fastn-assets.files.rive.chronica-new.riv
-canvas-width: 100
-canvas-height: 100
-width.fixed.px: 200
-height.fixed.px: 150
-
--- end: ftd.column
+	-- ftd.text: [💻️](/community/)
+	align-self: center
+	$on-mouse-enter$: $ftd.set-bool($a = $chronica-component.show, v = true)
+	$on-mouse-leave$: $ftd.set-bool($a = $chronica-component.show, v = false)
+	$on-mouse-enter$: $ftd.play-rive(rive = chronica, input = Teacher Hand Out)
+	$on-mouse-leave$: $ftd.pause-rive(rive = chronica, input = Teacher Hand Out)
+	margin-top.px: 10
+	
+	-- ftd.column:
+	width: fill-container
+	anchor: parent
+	z-index: -1
+	top.px if { chronica-component.show }: -160
+	top.px: -900
+	
+		-- ftd.rive:
+		id: chronica
+		src: $fastn-assets.files.rive.chronica-new.riv
+		canvas-width: 100
+		canvas-height: 100
+		width.fixed.px: 200
+		height.fixed.px: 150
+		
+	-- end: ftd.column
 
 -- end: ftd.column
 

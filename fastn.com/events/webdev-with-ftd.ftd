@@ -25,52 +25,52 @@ host: $trizwit
 venue: $venue
 share-button-text: Register Now
 
-Exciting news for web developers. **Trizwit Labs** along with **Google 
-Developer Student Club | MACE** and **FifthTry** are organizing a technical 
+Exciting news for web developers. **Trizwit Labs** along with **Google
+Developer Student Club | MACE** and **FifthTry** are organizing a technical
 session on web development using `ftd`! 🌐💻
 
 
--- ds.h3: What is `ftd`?
-
-[`ftd`](https://fastn.com/ftd/) is an innovative programming language for
-writing prose, developed by the team at `FifthTry`.
-
- `ftd` is designed for everyone, not just programmers. that's designed to
-simplify the development process and help you build websites faster and more
-efficiently than ever before. Say goodbye to the complexities of traditional
-programming languages and hello to a simplified and intuitive experience.
-
-`ftd` is a part of the new full stack web development, 
-[`fastn`](https://fastn.com/) also developed at `FifthTry`.
-
--- ds.h3: Trizwit Labs
-
-[`Trizwit Labs`](https://www.trizwit.com/) is our `Gold` Partner. The speaker,
-Govindraman S is a front-end developer from`Trizwit Labs`. He will walk-through
-the entire process of creating a website, from ideation to deployment.
-
-Things you are going to learn:
-
-✅ Getting started with FTD
-
-✅ Key features and benefits of FTD
-
-✅ Best practices for using FTD
-
-✅ Tips and tricks for optimizing your development process
-
-
-
+	-- ds.h3: What is `ftd`?
+	
+	[`ftd`](https://fastn.com/ftd/) is an innovative programming language for
+	writing prose, developed by the team at `FifthTry`.
+	
+	 `ftd` is designed for everyone, not just programmers. that's designed to
+	simplify the development process and help you build websites faster and more
+	efficiently than ever before. Say goodbye to the complexities of traditional
+	programming languages and hello to a simplified and intuitive experience.
+	
+	`ftd` is a part of the new full stack web development,
+	[`fastn`](https://fastn.com/) also developed at `FifthTry`.
+	
+	-- ds.h3: Trizwit Labs
+	
+	[`Trizwit Labs`](https://www.trizwit.com/) is our `Gold` Partner. The speaker,
+	Govindraman S is a front-end developer from`Trizwit Labs`. He will walk-through
+	the entire process of creating a website, from ideation to deployment.
+	
+	Things you are going to learn:
+	
+	✅ Getting started with FTD
+	
+	✅ Key features and benefits of FTD
+	
+	✅ Best practices for using FTD
+	
+	✅ Tips and tricks for optimizing your development process
+	
+	
+	
 -- end: event.event
 
 
 -- event.speakers: Speaker
 
--- event.speaker: Govindaraman S
-avatar: $assets.files.images.events.Govindaraman_S.jpg
-profile: Front-End Developer from Trizwit Labs
-link: https://www.linkedin.com/in/govindaraman-s/
-
+	-- event.speaker: Govindaraman S
+	avatar: $assets.files.images.events.Govindaraman_S.jpg
+	profile: Front-End Developer from Trizwit Labs
+	link: https://www.linkedin.com/in/govindaraman-s/
+	
 -- end: event.speakers
 
 
@@ -81,18 +81,18 @@ switch-to-column: false
 padding-vertical: 80
 title-medium: true
 
--- event.social-card: DISCORD
-link: https://discord.gg/a7eBUeutWD
-icon: $assets.files.images.discord.svg
-
--- event.social-card: TWITTER
-link: https://twitter.com/FifthTryHQ
-icon: $assets.files.images.twitter.svg
-
--- event.social-card: LINKEDIN
-link: https://www.linkedin.com/company/69613898/
-icon: $assets.files.images.linkedin.svg
-
+	-- event.social-card: DISCORD
+	link: https://discord.gg/a7eBUeutWD
+	icon: $assets.files.images.discord.svg
+	
+	-- event.social-card: TWITTER
+	link: https://twitter.com/FifthTryHQ
+	icon: $assets.files.images.twitter.svg
+	
+	-- event.social-card: LINKEDIN
+	link: https://www.linkedin.com/company/69613898/
+	icon: $assets.files.images.linkedin.svg
+	
 -- end: event.row-container
 
 -- end: ds.page

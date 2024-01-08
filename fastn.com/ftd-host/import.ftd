@@ -20,7 +20,7 @@ You can do following imports:
 - [Import module from dependency package](import/#import-module-from-dependency-package)
 - [Import special modules](import/#import-special-modules)
 
-`fastn` also provides a way to define 
+`fastn` also provides a way to define
 [import alias](import/#understanding-alias).
 
 
@@ -102,7 +102,7 @@ readable.
 
 -- ds.h2: Defining Alias
 
-To define an alias in `fastn`, we can use the **`as`** keyword when importing a 
+To define an alias in `fastn`, we can use the **`as`** keyword when importing a
 module.
 For example, to create an alias `mn` for a module called `module-name`, we can
 write:
@@ -118,7 +118,7 @@ This allows us to refer to the imported module as `mn` instead of `module-name`.
 
 -- ds.h2: `fastn` defined alias
 
-`fastn` also defines aliases by itself, when we import a module *without* 
+`fastn` also defines aliases by itself, when we import a module *without*
 specifying an alias using the `as` keyword. In this case, the word after the
 last slash in the module path becomes the alias. For example:
 

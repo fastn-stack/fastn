@@ -3,7 +3,7 @@
 -- ds.page: Install `fastn` on Windows
 
 
-For Windows machine, there are three ways to install `fastn`. 
+For Windows machine, there are three ways to install `fastn`.
 
 1. [`fastn` using `installer`](windows/#fastn-using-installer) (Recommended)
 2. [`fastn` through `pre-built binary`](windows/#fastn-through-pre-built-binary)
@@ -14,7 +14,7 @@ For Windows machine, there are three ways to install `fastn`.
 
 On Windows, we recommend you to install `fastn` through fastn installer:
 
-To install `fastn_setup.exe`, on your browser, use the URL:  
+To install `fastn_setup.exe`, on your browser, use the URL:
 [fastn.com/setup.exe](/setup.exe)
 
 This is the preferred method as it only requires downloading the setup and
@@ -23,7 +23,7 @@ installing it on your local system.
 -- ds.image:
 src: $fastn-assets.files.images.setup.windows-setup-process.gif
 
--- ds.markdown: 
+-- ds.markdown:
 
 `fastn` is written using `rust` language, if you are familiar with it and want
 to use `fastn` for your project or for experimentation, you can do it by
@@ -75,7 +75,7 @@ v: lw-qVPCJgZs
 
 - Get the latest executable file for windows in the releases page, under Assets
 
-- Once downloaded, select `Keep` option and ignore the warning 
+- Once downloaded, select `Keep` option and ignore the warning
 
 - Create a folder named `FASTN` (UpperCase) in your C drive
 
@@ -123,7 +123,7 @@ successfully installed.
 
 - While renaming the file name make sure to write `fastn` and not `fastn.exe`
 - Check that your machine has the latest version of `fastn`
-- Make sure to start a fresh session of command prompt, to verify the 
+- Make sure to start a fresh session of command prompt, to verify the
   installation
 
 -- cbox.tip: Tip

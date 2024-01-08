@@ -155,14 +155,14 @@ caption person p:
 -- ftd.column:
 spacing.fixed.px: 10
 
--- ds.h2: Person
-
--- v.label-text: Name
-value: $show-person.p.name
-
--- v.label-text: Department
-value: $show-person.p.department
-
+	-- ds.h2: Person
+	
+	-- v.label-text: Name
+	value: $show-person.p.name
+	
+	-- v.label-text: Department
+	value: $show-person.p.department
+	
 -- end: ftd.column
 
 -- end: show-person

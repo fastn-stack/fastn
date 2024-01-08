@@ -4,11 +4,11 @@
 
 Welcome to the `fastn` world.
 
-This course is for anyone irrespective of their background or technical 
+This course is for anyone irrespective of their background or technical
 knowledge. No prior coding experience is required.
 
 This document will kickstart your journey in creating a website from scratch.
-You will be guided through a series of video courses that will enable you to 
+You will be guided through a series of video courses that will enable you to
 learn and create a website using `fastn`.
 
 With the promise - `If you can type, you can code`, let's begin!
@@ -43,7 +43,7 @@ Let's see how to edit the content and utilise various components.
 
 -- ds.h3: `doc-site` components
 
-`doc-site` has a lot of powerful components that can be used. Check out the 
+`doc-site` has a lot of powerful components that can be used. Check out the
 following link to read about the components.
 
 
@@ -53,14 +53,14 @@ Let's see how to use markdown in `fastn`.
 
 Checkout the following video to understand all about markdown.
 
--- ftd.text: Markdown in doc-site 
+-- ftd.text: Markdown in doc-site
 link: https://fastn.com/markdown/
 open-in-new-tab: true
 
 
 -- ds.markdown:
 
-`doc-site` has a lot many components that you can use and create exciting 
+`doc-site` has a lot many components that you can use and create exciting
 websites. Click here to checkout all `doc-site` components.
 
 -- ftd.text: Doc-Site Components
@@ -85,7 +85,7 @@ open-in-new-tab: true
 
 Let's learn how to add or change the typography in `doc-site`
 
--- ftd.text: Add or change the typography 
+-- ftd.text: Add or change the typography
 link: https://fastn.com/typography/
 open-in-new-tab: true
 
@@ -102,29 +102,29 @@ open-in-new-tab: true
 
 -- ds.h1: Working locally
 
-We have created a package/repository on GitHub. It's easy to make changes on 
-GitHub if the project is small and `pages build and deployment` does not take 
+We have created a package/repository on GitHub. It's easy to make changes on
+GitHub if the project is small and `pages build and deployment` does not take
 much time.
 
 As we grow our website at organization level or full-fledged personal website,
-it's preferred to `work locally` and once happy with the changes we push the 
-changes via creating a Pull Request and merge it in the `main` branch after 
+it's preferred to `work locally` and once happy with the changes we push the
+changes via creating a Pull Request and merge it in the `main` branch after
 extensive review from peers.
 
 Now, let's learn how to work locally.
 
 -- ds.h2: Installation
 
-To work locally you will need to clone the repository in your local machine, 
-and to edit project we will need a text editor, and to view the project in a 
-local server, we will need to install `fastn`. 
+To work locally you will need to clone the repository in your local machine,
+and to edit project we will need a text editor, and to view the project in a
+local server, we will need to install `fastn`.
 
 Download and Install followings:
 
 
 -- ds.markdown:
 
-**Install `fastn`:** Installation of `fastn` is very easy. Just click on the 
+**Install `fastn`:** Installation of `fastn` is very easy. Just click on the
 following link:
 
 -- ftd.text: Install fastn
@@ -134,7 +134,7 @@ open-in-new-tab: true
 
 -- ds.markdown:
 
-**Install a text editor:** You will need an editor to write your content that 
+**Install a text editor:** You will need an editor to write your content that
 will then render in the browser as a website.
 We recommend you to use Sublime Text.
 
@@ -153,7 +153,7 @@ open-in-new-tab: true
 
 -- note.note: For developers
 
-If you are familiar and comfortable with Git commands on terminal/command 
+If you are familiar and comfortable with Git commands on terminal/command
 prompt you can ignore Install GitHub Desktop
 
 
@@ -167,7 +167,7 @@ Everything is setup.
 -- ds.h1: Sitemap
 
 `Sitemap` serves as a blueprint or roadmap, providing information about the
-organization and hierarchy of content on the website. Let's learn how to add 
+organization and hierarchy of content on the website. Let's learn how to add
 Sitemap.
 
 -- ftd.text: Sitemap in `FASTN.ftd`
@@ -192,62 +192,62 @@ In `fastn` you can comment a single line or an entire element.
 
 -- ds.rendered: Single line comment
 
--- ds.rendered.input:
-
-\;; This line will be commented out.  ;; <hl>
-
-This line will be displayed
-So to comment out a line in `fastn`, we use double semi-colons `;;`.
-
-
--- ds.rendered.output:
-
--- ds.markdown: 
-
-;; This line will not be displayed.
-
-This line will be displayed.
-So to comment out a line in `fastn`, we use double semi-colons `;;`.
-
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\;; This line will be commented out.  ;; <hl>
+	
+	This line will be displayed
+	So to comment out a line in `fastn`, we use double semi-colons `;;`.
+	
+	
+	-- ds.rendered.output:
+	
+		-- ds.markdown:
+		
+		;; This line will not be displayed.
+		
+		This line will be displayed.
+		So to comment out a line in `fastn`, we use double semi-colons `;;`.
+		
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
 
--- ds.rendered: Comment an entire Section 
+-- ds.rendered: Comment an entire Section
 
--- ds.rendered.input:
-
-\-- ds.markdown:
-
-The body text in `first` markdown element will be displayed.
-
-\/-- ds.markdown:
-
-The body text of `second` markdown element will be commented out.
-
-\-- ds.markdown:
-
-So to comment an entire section, we use forward slash `/`.
-
-
--- ds.rendered.output:
-
-
--- ds.markdown:
-
-The body text in `first` markdown element will be displayed.
-
-/-- ds.markdown:
-
-The body text of `second` markdown element will be commented out.
-
--- ds.markdown:
-
-So to comment an entire section, we use forward slash `/`.
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ds.markdown:
+	
+	The body text in `first` markdown element will be displayed.
+	
+	\/-- ds.markdown:
+	
+	The body text of `second` markdown element will be commented out.
+	
+	\-- ds.markdown:
+	
+	So to comment an entire section, we use forward slash `/`.
+	
+	
+	-- ds.rendered.output:
+	
+	
+		-- ds.markdown:
+		
+		The body text in `first` markdown element will be displayed.
+		
+		/-- ds.markdown:
+		
+		The body text of `second` markdown element will be commented out.
+		
+		-- ds.markdown:
+		
+		So to comment an entire section, we use forward slash `/`.
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -262,7 +262,7 @@ open-in-new-tab: true
 
 -- ds.markdown:
 
-**Bonus:** Follow the below video and learn how to round the edges of the 
+**Bonus:** Follow the below video and learn how to round the edges of the
 image.
 
 -- ftd.text: Create rounded border
@@ -272,7 +272,7 @@ open-in-new-tab: true
 
 /-- ds.h1: Hello World
 
-Let's introduce you to the syntax of `fastn` by displaying `Hello World` in 
+Let's introduce you to the syntax of `fastn` by displaying `Hello World` in
 the browser.
 
 /-- ftd.text: First Program: Hello World
@@ -282,7 +282,7 @@ open-in-new-tab: true
 /-- ds.markdown:
 
 Have you noticed that it required - one line of code - to display the text.
-This is the magic and strength of `fastn`. 
+This is the magic and strength of `fastn`.
 
 
 

@@ -11,34 +11,34 @@ When positioning elements on a web page, it is common to use the `left` and
 values are the same, it is more efficient to use the `horizontal` property
 instead.
 
-The `horizontal` property is a shorthand for specifying both the `left` and 
+The `horizontal` property is a shorthand for specifying both the `left` and
 `right` properties with a single value.
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- ftd.text: Hello World
-padding-left.px: 20 			;; <hl>
-padding-right.px: 20 			;; <hl>
-
-\;; or
-
-\-- ftd.text: Hello World
-margin-left.px: 20 				;; <hl>
-margin-right.px: 20 			;; <hl>
-
--- ds.code: Recommended
-lang: ftd
-
-\-- ftd.text: Hello World
-padding-horizontal.px: 20 		;; <hl>
-
-
-\;; or
-
-\-- ftd.text: Hello World
-margin-horizontal.px: 20 		;; <hl>
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.text: Hello World
+	padding-left.px: 20 			;; <hl>
+	padding-right.px: 20 			;; <hl>
+	
+	\;; or
+	
+	\-- ftd.text: Hello World
+	margin-left.px: 20 				;; <hl>
+	margin-right.px: 20 			;; <hl>
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.text: Hello World
+	padding-horizontal.px: 20 		;; <hl>
+	
+	
+	\;; or
+	
+	\-- ftd.text: Hello World
+	margin-horizontal.px: 20 		;; <hl>
+	
 -- end: utils.code-display
 
 
@@ -54,33 +54,33 @@ When positioning elements on a web page, it is common to use the `top` and
 values are the same, it is more efficient to use the `horizontal` property
 instead.
 
-The `horizontal` property is a shorthand for specifying both the `top` and 
+The `horizontal` property is a shorthand for specifying both the `top` and
 `bottom` properties with a single value.
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- ftd.text: Hello World
-padding-top.px: 20 				;; <hl>
-padding-bottom.px: 20 			;; <hl>
-
-\;; or
-
-\-- ftd.text: Hello World
-margin-top.px: 20 				;; <hl>
-margin-bottom.px: 20 			;; <hl>
-
--- ds.code: Recommended
-lang: ftd
-
-\-- ftd.text: Hello World
-padding-vertical.px: 20 		;; <hl>
-
-\;; or
-
-\-- ftd.text: Hello World
-margin-vertical.px: 20 			;; <hl>
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.text: Hello World
+	padding-top.px: 20 				;; <hl>
+	padding-bottom.px: 20 			;; <hl>
+	
+	\;; or
+	
+	\-- ftd.text: Hello World
+	margin-top.px: 20 				;; <hl>
+	margin-bottom.px: 20 			;; <hl>
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.text: Hello World
+	padding-vertical.px: 20 		;; <hl>
+	
+	\;; or
+	
+	\-- ftd.text: Hello World
+	margin-vertical.px: 20 			;; <hl>
+	
 -- end: utils.code-display
 
 
@@ -97,33 +97,33 @@ those properties have the same values for all child elements. This can help
 optimize performance and reduce the amount of repetitive code. It saves time
 and improves the overall functionality of their applications.
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- ftd.column:
-
-\-- ftd.text: Hello
-align-self: center 		;; <hl>
-
-\-- ftd.text: World
-align-self: center 		;; <hl>
-
-\--end: ftd.column
-
-
-
--- ds.code: Recommended
-lang: ftd
-
-\-- ftd.column:
-align-content: center 		;; <hl>
-
-\-- ftd.text: Hello
-
-\-- ftd.text: World
-
-\--end: ftd.column
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	
+	\-- ftd.text: Hello
+	align-self: center 		;; <hl>
+	
+	\-- ftd.text: World
+	align-self: center 		;; <hl>
+	
+	\--end: ftd.column
+	
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	align-content: center 		;; <hl>
+	
+	\-- ftd.text: Hello
+	
+	\-- ftd.text: World
+	
+	\--end: ftd.column
+	
 -- end: utils.code-display
 
 
@@ -143,34 +143,34 @@ However, if different values of `align-content are applied to the container and
 its child elements, then the property should be applied to the child elements
 to control their alignment.
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- ftd.column:
-align-content: center 		;; <hl>
-
-\-- ftd.text: Hello
-align-self: start 			
-
-\-- ftd.text: World
-align-self: center 			;; <hl>
-
-\-- end: ftd.column
-
-
--- ds.code: Recommended
-lang: ftd
-
-\-- ftd.column:
-align-content: center 		;; <hl>
-
-\-- ftd.text: Hello
-align-self: start
-
-\-- ftd.text: World
-
-\-- end: ftd.column
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	align-content: center 		;; <hl>
+	
+	\-- ftd.text: Hello
+	align-self: start
+	
+	\-- ftd.text: World
+	align-self: center 			;; <hl>
+	
+	\-- end: ftd.column
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	align-content: center 		;; <hl>
+	
+	\-- ftd.text: Hello
+	align-self: start
+	
+	\-- ftd.text: World
+	
+	\-- end: ftd.column
+	
 -- end: utils.code-display
 
 
@@ -181,36 +181,36 @@ align-self: start
 -- utils.code-display: `parent-propagation`: Propagating Child Properties to Parent Containers
 id: parent-propagation
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- ftd.column:
-
-\-- ftd.text: Hello World
-color: $inherited.colors.text
-role: $inherited.types.copy-regular
-
-\-- ftd.text: Hello Multiverse
-color: $inherited.colors.text
-role: $inherited.types.copy-regular
-
-\-- end: ftd.column
-
-
--- ds.code: Recommended
-lang: ftd
-
-\-- ftd.column:
-color: $inherited.colors.text
-role: $inherited.types.copy-regular
-
-\-- ftd.text: Hello World
-
-\-- ftd.text: Hello Multiverse
-
-
-\-- end: ftd.column
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	
+	\-- ftd.text: Hello World
+	color: $inherited.colors.text
+	role: $inherited.types.copy-regular
+	
+	\-- ftd.text: Hello Multiverse
+	color: $inherited.colors.text
+	role: $inherited.types.copy-regular
+	
+	\-- end: ftd.column
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	color: $inherited.colors.text
+	role: $inherited.types.copy-regular
+	
+	\-- ftd.text: Hello World
+	
+	\-- ftd.text: Hello Multiverse
+	
+	
+	\-- end: ftd.column
+	
 -- end: utils.code-display
 
 

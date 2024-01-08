@@ -15,7 +15,7 @@ codebases.
 
 -- utils.code-display: `80-char`: 80 char in text editor
 id: 80-char
-show-vertical: true 
+show-vertical: true
 
 80-character word wrapping is a useful practice that can not only improve the
 readability, consistency, compatibility, accessibility, formatting of written
@@ -23,37 +23,37 @@ documents, but also the portability as it is more likely to work across
 editors.
 
 
--- ds.markdown:
-
-**Example:** 
-
--- ds.image: 
-src: $assets.files.images.best-practices.80-char-ruler.png
-width: fill-container
-
-
--- utils.tippy: Shortcut keys to Wrap Paragraph at Ruler in Sublime Text
-
-- **MacOS**: Cmd + Option + Q
-- **Windows**: Alt + Q
-
--- ds.markdown:
-
-**When Paragraph is not wrapped at ruler:**
-
--- ds.image: 
-src: $assets.files.images.best-practices.bad-word-wrapping.png
-width: fill-container
-
-
--- ds.markdown:
-
-**When Paragraph is wrapped at ruler:**
-
--- ds.image: 
-src: $assets.files.images.best-practices.good-word-wrapping.png
-width: fill-container
-
+	-- ds.markdown:
+	
+	**Example:**
+	
+	-- ds.image:
+	src: $assets.files.images.best-practices.80-char-ruler.png
+	width: fill-container
+	
+	
+	-- utils.tippy: Shortcut keys to Wrap Paragraph at Ruler in Sublime Text
+	
+	- **MacOS**: Cmd + Option + Q
+	- **Windows**: Alt + Q
+	
+	-- ds.markdown:
+	
+	**When Paragraph is not wrapped at ruler:**
+	
+	-- ds.image:
+	src: $assets.files.images.best-practices.bad-word-wrapping.png
+	width: fill-container
+	
+	
+	-- ds.markdown:
+	
+	**When Paragraph is wrapped at ruler:**
+	
+	-- ds.image:
+	src: $assets.files.images.best-practices.good-word-wrapping.png
+	width: fill-container
+	
 -- end: utils.code-display
 
 
@@ -62,25 +62,25 @@ title: `list-indentation`: Consistent markdown list indentation while wrapping
 id: list-indentation
 show-vertical: true
 
-Indent wrapped lines in markdown lists by the same number of spaces as the 
+Indent wrapped lines in markdown lists by the same number of spaces as the
 first character of the previous line, excluding any special characters.
 
--- ds.markdown:
-
-**Not Recommended** 
-
--- ds.image: 
-src: $assets.files.images.best-practices.list-indentation-bad.png
-width: fill-container
-
-
-**Recommended**
-
--- ds.image: 
-src: $assets.files.images.best-practices.list-indentation-good.png
-width: fill-container
-
-
+	-- ds.markdown:
+	
+	**Not Recommended**
+	
+	-- ds.image:
+	src: $assets.files.images.best-practices.list-indentation-bad.png
+	width: fill-container
+	
+	
+	**Recommended**
+	
+	-- ds.image:
+	src: $assets.files.images.best-practices.list-indentation-good.png
+	width: fill-container
+	
+	
 -- end: utils.code-display
 
 
@@ -96,33 +96,33 @@ Adding one line space between sections in a document can improve
 it's `readability` and make it `easier for readers to distinguish different
 parts` of the content.
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- component planning:  ;; <hl>
-\-- ftd.row:  ;; <hl>
-margin-top.px: 26
-padding-left.px: 50
-width.fixed.px: 1400
-height: fill-container
-\-- end: ftd.row:  ;; <hl>
-\-- end: planning  ;; <hl>
-
--- ds.code: Recommended
-lang: ftd
-
-\-- component planning:
-\;; <hl>
-\-- ftd.row:
-margin-top.px: 26
-padding-left.px: 50
-width.fixed.px: 1400
-height: fill-container
-
-\-- end: ftd.row:
-\;; <hl>
-\-- end: planning
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- component planning:  ;; <hl>
+	\-- ftd.row:  ;; <hl>
+	margin-top.px: 26
+	padding-left.px: 50
+	width.fixed.px: 1400
+	height: fill-container
+	\-- end: ftd.row:  ;; <hl>
+	\-- end: planning  ;; <hl>
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- component planning:
+	\;; <hl>
+	\-- ftd.row:
+	margin-top.px: 26
+	padding-left.px: 50
+	width.fixed.px: 1400
+	height: fill-container
+	
+	\-- end: ftd.row:
+	\;; <hl>
+	\-- end: planning
+	
 -- end: utils.code-display
 
 
@@ -133,21 +133,21 @@ height: fill-container
 -- utils.code-display: `colon-after-space`: One char space after `:`
 id: colon-after-space
 
-The convention of adding `one character space after a colon` in written 
+The convention of adding `one character space after a colon` in written
 language is used to improve the `readability` of the text and make it `easier `
-for readers to distinguish between the preceding text` and the `information 
+for readers to distinguish between the preceding text` and the `information
 that follows`.
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- ftd.text:Hello
-
--- ds.code: Recommended
-lang: ftd
-
-\-- ftd.text: Hello 
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.text:Hello
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.text: Hello
+	
 -- end: utils.code-display
 
 
@@ -166,53 +166,53 @@ The convention of adding 10 line spaces between two components in a document is
 a `formatting technique used to create a clear visual separation` and help
 organize the content for easier reading and comprehension.
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- component c1:
-
-content of component goes here
-
-\-- end: c1
-
-\-- component c2:
-
-content of component goes here
-
-\-- end: c2
-
--- ds.code: Recommended
-lang: ftd
-
-\-- component c1:
-
-content of component goes here
-
-\-- end: c1
-
-
-
-
-
-
-
-
-
-
-\-- component c2:
-
-content of component goes here
-
-\-- end: c2
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- component c1:
+	
+	content of component goes here
+	
+	\-- end: c1
+	
+	\-- component c2:
+	
+	content of component goes here
+	
+	\-- end: c2
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- component c1:
+	
+	content of component goes here
+	
+	\-- end: c1
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	\-- component c2:
+	
+	content of component goes here
+	
+	\-- end: c2
+	
 -- end: utils.code-display
 
 
--- utils.code-display: 
+-- utils.code-display:
 title: `end-line`: ensure a document ends with a trailing new line
 id: end-line
 
-It is done to ensure that the last line of code in the file does not end 
+It is done to ensure that the last line of code in the file does not end
 without a newline.
 
 This is because some programming languages or tools might interpret the
@@ -221,26 +221,26 @@ problems when different code files are merged or concatenated. Therefore,
 adding a newline at the end of the document is a good practice to ensure
 consistent behavior across different tools and systems.
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- ds.page: Page 1
-
-content goes here.
-
-\-- end: ds.page
-
-
--- ds.code: Recommended
-lang: ftd
-
-\-- ds.page: Page 1
-
-content goes here.
-
-\-- end: ds.page
-\;; <hl>
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ds.page: Page 1
+	
+	content goes here.
+	
+	\-- end: ds.page
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ds.page: Page 1
+	
+	content goes here.
+	
+	\-- end: ds.page
+	\;; <hl>
+	
 -- end: utils.code-display
 
 
@@ -250,7 +250,7 @@ content goes here.
 
 
 
--- utils.code-display: 
+-- utils.code-display:
 title: `space-around-expression`: One char space at the start and end of conditional expression
 id: space-around-expression
 
@@ -262,22 +262,22 @@ Including these spaces is not strictly necessary for the code to function
 correctly, but it is considered good coding practice and can help make the code
 easier to maintain and modify in the future.
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- integer num: 1
-
-\-- ftd.text: Number is 1
-if: {num == 1}	;; <hl>
-
--- ds.code: Recommended
-lang: ftd
-
-\-- integer num: 1
-
-\-- ftd.text: Number is 1
-if: { num == 1 }	;; <hl>
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- integer num: 1
+	
+	\-- ftd.text: Number is 1
+	if: {num == 1}	;; <hl>
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- integer num: 1
+	
+	\-- ftd.text: Number is 1
+	if: { num == 1 }	;; <hl>
+	
 -- end: utils.code-display
 
 
@@ -298,40 +298,40 @@ Just as we give space between two different words, it is advisable to treat
 words followed by emojis as two separate entities to maintain clarity and
 effective communication.
 
--- ds.code: Not recommended
-lang: ftd
-
-\;; -------- Example 1 --------
-
-\-- ds.page: Formatting🚧
-
-\;; -------- Example 2 --------
-
-\-- fastn.sitemap:
-
-# Guidelines🚧
-
-## Formatting🚧
-
-- Space before emoji🚧: /url/
-
--- ds.code: Recommended
-lang: ftd
-
-\;; -------- Example 1 --------
-
-\-- ds.page: Formatting 🚧
-
-\;; -------- Example 2 --------
-
-\-- fastn.sitemap:
-
-# Guidelines 🚧
-
-## Formatting 🚧
-
-- Space before emoji 🚧: /url/
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\;; -------- Example 1 --------
+	
+	\-- ds.page: Formatting🚧
+	
+	\;; -------- Example 2 --------
+	
+	\-- fastn.sitemap:
+	
+	# Guidelines🚧
+	
+	## Formatting🚧
+	
+	- Space before emoji🚧: /url/
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\;; -------- Example 1 --------
+	
+	\-- ds.page: Formatting 🚧
+	
+	\;; -------- Example 2 --------
+	
+	\-- fastn.sitemap:
+	
+	# Guidelines 🚧
+	
+	## Formatting 🚧
+	
+	- Space before emoji 🚧: /url/
+	
 -- end: utils.code-display
 
 

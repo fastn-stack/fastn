@@ -14,7 +14,7 @@ function show_alert(a) {
 
 -- ds.markdown:
 
-Now, let's say we want to call this function when a user clicks a text in an 
+Now, let's say we want to call this function when a user clicks a text in an
 `fastn` component. Here's how we can achieve this in `index.ftd`:
 
 -- ds.code: `index.ftd`
@@ -39,10 +39,10 @@ the `show_alert` function.
 
 -- ds.output:
 
--- ftd.text: Click here to print name in alert!
-color: $inherited.colors.text
-$on-click$: $call-js-fn(a = FifthTry Alert)
-
+	-- ftd.text: Click here to print name in alert!
+	color: $inherited.colors.text
+	$on-click$: $call-js-fn(a = FifthTry Alert)
+	
 -- end: ds.output
 
 -- end: ds.page

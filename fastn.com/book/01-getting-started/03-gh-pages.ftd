@@ -71,7 +71,6 @@ you will learn about how to move from static hosting provider to dynamic
 hosting provider in later parts of this book.
 
 ;; TODO: update reference to dynamic hosting parts.
-
 -- ds.h2: What Exactly Is Static Hosting?
 
 In technical terms, static hosting means HTML/CSS/JS/images. If you can code up

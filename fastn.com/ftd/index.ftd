@@ -73,9 +73,9 @@ no quotes. and **markdown** is *supported*.
 
 -- ds.markdown:
 
-Note: These are not built in components of `fastn`, but are using 
+Note: These are not built in components of `fastn`, but are using
 [open source component libraries](/featured/), eg
-[fastn-community.github.io/bling/quote](https://fastn-community.github.io/bling/chat/). 
+[fastn-community.github.io/bling/quote](https://fastn-community.github.io/bling/chat/).
 Learn how to [build your own](/expander/).
 
 -- ds.code: using little more complex components
@@ -103,8 +103,8 @@ early 2000s, and it makes me a little sad.
 
 -- ds.markdown:
 
-There are 
-[many components to chose from](https://fastn-community.github.io/bling/quote/), 
+There are
+[many components to chose from](https://fastn-community.github.io/bling/quote/),
 and you can create your own with ease.
 
 -- ds.h1: A language for building UI
@@ -135,8 +135,8 @@ $on-click$: $ftd.toggle($a = $toggle-text.current)
 
 -- ds.output:
 
--- toggle-text: `fastn` is cool!
-
+	-- toggle-text: `fastn` is cool!
+	
 -- end: ds.output
 
 
@@ -218,22 +218,22 @@ following example:
 width: fill-container
 spacing.fixed.px: 50
 
--- ds.code: `ftd.text` kernel component
-lang: ftd
-
-\-- boolean $current: true
-
-\-- ftd.text: Hello World!
-align-self: center
-text-align: center
-padding.px: 20
-color if { current }: #D42D42
-color: $inherited.colors.cta-primary.text
-background.solid: $inherited.colors.cta-primary.base
-$on-click$: $ftd.toggle($a = $current)
-
--- toggle-text: Hello World!
-
+	-- ds.code: `ftd.text` kernel component
+	lang: ftd
+	
+	\-- boolean $current: true
+	
+	\-- ftd.text: Hello World!
+	align-self: center
+	text-align: center
+	padding.px: 20
+	color if { current }: #D42D42
+	color: $inherited.colors.cta-primary.text
+	background.solid: $inherited.colors.cta-primary.base
+	$on-click$: $ftd.toggle($a = $current)
+	
+	-- toggle-text: Hello World!
+	
 -- end: ftd.row
 
 
@@ -252,30 +252,30 @@ code organization. For example:
 width: fill-container
 spacing.fixed.px: 50
 
--- ds.code: Creating a custom component
-lang: ftd
-
-\-- component toggle-text:
-boolean $current: false
-caption title:
-
-\-- ftd.text: $toggle-text.title
-align-self: center
-color if { toggle-text.current }: $inherited.colors.cta-primary.disabled
-color: $inherited.colors.cta-primary.text
-role: $inherited.types.heading-tiny
-background.solid: $inherited.colors.cta-primary.base
-padding.px: 20
-border-radius.px: 5
-$on-click$: $ftd.toggle($a = $toggle-text.current)
-
-\-- end: toggle-text
-
-\-- toggle-text: `ftd` is cool!
-
-
--- toggle-text: `ftd` is cool!
-
+	-- ds.code: Creating a custom component
+	lang: ftd
+	
+	\-- component toggle-text:
+	boolean $current: false
+	caption title:
+	
+	\-- ftd.text: $toggle-text.title
+	align-self: center
+	color if { toggle-text.current }: $inherited.colors.cta-primary.disabled
+	color: $inherited.colors.cta-primary.text
+	role: $inherited.types.heading-tiny
+	background.solid: $inherited.colors.cta-primary.base
+	padding.px: 20
+	border-radius.px: 5
+	$on-click$: $ftd.toggle($a = $toggle-text.current)
+	
+	\-- end: toggle-text
+	
+	\-- toggle-text: `ftd` is cool!
+	
+	
+	-- toggle-text: `ftd` is cool!
+	
 -- end: ftd.row
 
 
@@ -309,7 +309,7 @@ has a level 1 heading of "Hello World".
 
 -- ds.h2: Data Modelling
 
-`fastn` language is also a good first class data language. You can define and use 
+`fastn` language is also a good first class data language. You can define and use
 records:
 
 -- ds.code: Data Modelling in `fastn`

@@ -156,10 +156,10 @@ $loop$: $weekdays as $obj
 
 -- ds.output:
 
--- ftd.text: $obj
-$loop$: $weekdays as $obj
-color: $inherited.colors.text
-
+	-- ftd.text: $obj
+	$loop$: $weekdays as $obj
+	color: $inherited.colors.text
+	
 -- end: ds.output
 
 -- ds.markdown:
@@ -175,9 +175,9 @@ $loop$: $uis as $obj
 
 -- ds.output:
 
--- obj:
-$loop$: $uis as $obj
-
+	-- obj:
+	$loop$: $uis as $obj
+	
 -- end: ds.output
 
 
@@ -199,9 +199,9 @@ color: $inherited.colors.text-strong
 
 -- ds.output:
 
--- ftd.text: $weekdays.0
-color: $inherited.colors.text-strong
-
+	-- ftd.text: $weekdays.0
+	color: $inherited.colors.text-strong
+	
 -- end: ds.output
 
 -- ds.markdown:
@@ -216,8 +216,8 @@ lang: ftd
 
 -- ds.output:
 
--- uis.0:
-
+	-- uis.0:
+	
 -- end: ds.output
 
 
@@ -253,7 +253,7 @@ $processor$: some-list
 
 /-- ds.page: `list`
 
--- ds.markdown: 
+-- ds.markdown:
 
 `list` keyword can be used to create a list or an array in `fastn`.
 
@@ -365,7 +365,7 @@ let people: Vec<Person> = doc.get("people")?;
 
 -- ds.markdown:
 
-You can read more details of reading `.ftd` files 
+You can read more details of reading `.ftd` files
 [`Reading .ftd Files`](/reading-data/) guide.
 
 

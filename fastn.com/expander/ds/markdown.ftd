@@ -24,30 +24,30 @@ Gives the idea about the markdown syntax allowed in `fastn`
 if: { show-planning }
 
 `fastn` supports `Markdown`. Hence, instead of learning tags, one can still
-create content-heavy and powerful website using plain text without missing out 
-on formatting. 
+create content-heavy and powerful website using plain text without missing out
+on formatting.
 
 Supporting `Markdown` makes `fastn` versatile as it also supports the
 conversion of the marked-up text into various output formats such as HTML.
 
 By importing the `doc-site` package in your fastn projects and using
-any of the component like `ds.markdown` component, you gain access to 
-Markdown's intuitive and readable text formatting syntax. 
+any of the component like `ds.markdown` component, you gain access to
+Markdown's intuitive and readable text formatting syntax.
 
 
 -- ds.h1: Introduction
 if: { !show-planning }
 
 `fastn` supports the `Markdown`. Hence, instead of learning tags, one can still
-create content-heavy and powerful website using plain text without missing out 
-on formatting. 
+create content-heavy and powerful website using plain text without missing out
+on formatting.
 
 Supporting `Markdown` makes `fastn` versatile as it also supports the
 conversion of the marked-up text into various output formats such as HTML.
 
 By importing the `doc-site` package in your fastn projects and using
-any of the component like `ds.markdown` component, you gain access to 
-Markdown's intuitive and readable text formatting syntax. 
+any of the component like `ds.markdown` component, you gain access to
+Markdown's intuitive and readable text formatting syntax.
 
 
 
@@ -56,7 +56,7 @@ if: { show-planning }
 
 Welcome!! My name is Ajit
 
-In this video we will see how to use markdown in your fastn projects 
+In this video we will see how to use markdown in your fastn projects
 using doc-site.
 
 
@@ -66,20 +66,20 @@ src: $fastn-assets.files.expander.ds.img.markdown-intro.png
 
 -- ds.h1: Markdown
 
-`Markdown` is a way to write the content for the web. 
+`Markdown` is a way to write the content for the web.
 
 Markdown provides a way to style text elements such as headings, lists, links,
 and more, using plain text and minimal special characters.
 
 -- note.note: Markdown Yes, but...
 
-We do not recommend you to style text elements such as `headings`, `images` and 
+We do not recommend you to style text elements such as `headings`, `images` and
 `code-block` instead we want you to use following components:
 
 | Elements     |  Components  |
 | :----------  |  :---------  |
 | heading      |  `ds.h1`     |
-| image        |  `ds.image`  | 
+| image        |  `ds.image`  |
 | code-block   |  `ds.code`   |
 
 -- ds.h2: Benefits
@@ -103,11 +103,11 @@ src: $fastn-assets.files.expander.ds.img.markdown-benefits.png
 -- ds.h1: Markdown syntax in doc-site
 $on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
 
-To use the *Markdown Syntax* in your fastn projects using components of 
-`doc-site`. The first thing is to add doc-site in your package and then use 
+To use the *Markdown Syntax* in your fastn projects using components of
+`doc-site`. The first thing is to add doc-site in your package and then use
 the components of `doc-site` package.
 
-To add `doc-site` in your package. 
+To add `doc-site` in your package.
 Add it as the `fastn.dependency` in your `FASTN.ftd` document.
 
 -- ds.code: Dependency
@@ -131,26 +131,26 @@ Now, start using the components like ds.page, ds.markdown, ds.h1 etc.
 -- ds.code: Syntax
 lang: ftd
 
-\-- ds.markdown: 
+\-- ds.markdown:
 
 
 -- ds.rendered: Plain text
 
--- ds.rendered.input:
-
-\-- ds.markdown:
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-tempor incididunt.
-
--- ds.rendered.output:
-
--- ds.markdown:
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-tempor incididunt.
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ds.markdown:
+	
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+	tempor incididunt.
+	
+	-- ds.rendered.output:
+	
+		-- ds.markdown:
+		
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+		tempor incididunt.
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -159,21 +159,21 @@ tempor incididunt.
 
 -- ds.rendered: Inline styles
 
--- ds.rendered.input:
-
-\-- ds.markdown:
-
-**Bold Text** dolor sit amet, *Italic text* elit, sed do eiusmod tempor
-  incididunt.
-
--- ds.rendered.output:
-
--- ds.markdown:
-
-**Bold Text** dolor sit amet, *Italic text* elit, sed do eiusmod tempor
-  incididunt.
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ds.markdown:
+	
+	**Bold Text** dolor sit amet, *Italic text* elit, sed do eiusmod tempor
+	  incididunt.
+	
+	-- ds.rendered.output:
+	
+		-- ds.markdown:
+		
+		**Bold Text** dolor sit amet, *Italic text* elit, sed do eiusmod tempor
+		  incididunt.
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -183,21 +183,21 @@ tempor incididunt.
 
 -- ds.rendered: Inline links
 
--- ds.rendered.input:
-
-\-- ds.markdown:
-
-Lorem ipsum [fastn](https://fastn.com/) amet, consectetur adipiscing
-elit, sed do eiusmod tempor incididunt. 
-
--- ds.rendered.output:
-
--- ds.markdown:
-
-Lorem ipsum [fastn](https://fastn.com/) amet, consectetur adipiscing
-elit, sed do eiusmod tempor incididunt. 
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ds.markdown:
+	
+	Lorem ipsum [fastn](https://fastn.com/) amet, consectetur adipiscing
+	elit, sed do eiusmod tempor incididunt.
+	
+	-- ds.rendered.output:
+	
+		-- ds.markdown:
+		
+		Lorem ipsum [fastn](https://fastn.com/) amet, consectetur adipiscing
+		elit, sed do eiusmod tempor incididunt.
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -207,19 +207,19 @@ elit, sed do eiusmod tempor incididunt.
 
 -- ds.rendered: Turning a URL into a link
 
--- ds.rendered.input:
-
-\-- ds.markdown:
-
-https://fastn.com/
-
--- ds.rendered.output:
-
--- ds.markdown:
-
-https://fastn.com/
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ds.markdown:
+	
+	https://fastn.com/
+	
+	-- ds.rendered.output:
+	
+		-- ds.markdown:
+		
+		https://fastn.com/
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -233,119 +233,119 @@ https://fastn.com/
 
 -- ds.rendered: Markdown List
 
--- ds.rendered.input:
-
-\-- ds.markdown:
-
-**Bullet list:**
-
-- List item 1
-- List item 2
-- List item 3
-  - Sub List item 1
-  - Sub List item 1
-
-**Ordered list:**
-
-1. List item 
-2. List item 
-3. List item
-   1. Sub List Item
-   2. Sub List Item
-   3. Sub List Item
-
--- ds.rendered.output:
-
--- ds.markdown:
-
-**Bullet list:**
-
-- List item 1
-- List item 2
-- List item 3
-  - Sub List item 1
-  - Sub List item 1
-
-**Ordered list:**
-
-1. List item 
-2. List item 
-3. List item
-   1. Sub List Item
-   2. Sub List Item
-   3. Sub List Item
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ds.markdown:
+	
+	**Bullet list:**
+	
+	- List item 1
+	- List item 2
+	- List item 3
+	  - Sub List item 1
+	  - Sub List item 1
+	
+	**Ordered list:**
+	
+	1. List item
+	2. List item
+	3. List item
+	   1. Sub List Item
+	   2. Sub List Item
+	   3. Sub List Item
+	
+	-- ds.rendered.output:
+	
+		-- ds.markdown:
+		
+		**Bullet list:**
+		
+		- List item 1
+		- List item 2
+		- List item 3
+		  - Sub List item 1
+		  - Sub List item 1
+		
+		**Ordered list:**
+		
+		1. List item
+		2. List item
+		3. List item
+		   1. Sub List Item
+		   2. Sub List Item
+		   3. Sub List Item
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
 
--- ds.markdown: 
+-- ds.markdown:
 
 We can strikethrough a word or a sentence using single `~` symbol
 
 -- ds.rendered: Strikethrough
 
--- ds.rendered.input:
-
-\-- ds.markdown:
-
-~The world is flat.~
-
--- ds.rendered.output:
-
--- ds.markdown:
-
-~The world is flat.~
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ds.markdown:
+	
+	~The world is flat.~
+	
+	-- ds.rendered.output:
+	
+		-- ds.markdown:
+		
+		~The world is flat.~
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
 
 -- ds.markdown:
 
-To create a superscript, use one caret symbol (^) before and after the 
+To create a superscript, use one caret symbol (^) before and after the
 characters.
 
 -- ds.rendered: Superscript
 
--- ds.rendered.input:
-
-\-- ds.markdown:
-
-X^2^
-
--- ds.rendered.output:
-
--- ds.markdown:
-
-X^2^
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ds.markdown:
+	
+	X^2^
+	
+	-- ds.rendered.output:
+	
+		-- ds.markdown:
+		
+		X^2^
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
 
 -- ds.rendered: Horizontal Rule
 
--- ds.rendered.input:
-
-\-- ds.markdown:
-
-To create a Horizontal Rule we write
-
-***
-
--- ds.rendered.output:
-
--- ds.markdown:
-
-To create a Horizontal Rule we write
-
-***
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ds.markdown:
+	
+	To create a Horizontal Rule we write
+	
+	***
+	
+	-- ds.rendered.output:
+	
+		-- ds.markdown:
+		
+		To create a Horizontal Rule we write
+		
+		***
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -355,23 +355,23 @@ To create a Horizontal Rule we write
 This way you can make use of Markdown in your fastn projects.
 
 
--- ds.h1: Closing Remarks 
+-- ds.h1: Closing Remarks
 if: { show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
-the `fastn` website. 
+the `fastn` website.
 
-Support us by clicking on this link and give us a star ⭐ on GitHub and join 
+Support us by clicking on this link and give us a star ⭐ on GitHub and join
 our fastn community on Discord.
 
 
--- ds.markdown: 
+-- ds.markdown:
 if: { !show-planning }
 
-Thank you guys, keep watching these videos to learn more about fastn. 
+Thank you guys, keep watching these videos to learn more about fastn.
 
-Support us by giving a star ⭐ on 
-[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community 
+Support us by giving a star ⭐ on
+[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community
 on [Discord](/discord/).
 
 

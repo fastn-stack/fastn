@@ -29,16 +29,16 @@ width: fill-container
 The JSON data is structured in a way, that some properties are nested within
 another property.
 
--- ftd.image: 
+-- ftd.image:
 src: $fastn-assets.files.images.backend.pretty-json.png
 max-width: fill-container
 
 -- ds.markdown:
 
-So we will create a `records` and some of them will be nested within another 
+So we will create a `records` and some of them will be nested within another
 record.
 
-Create a new document, let's say `models.ftd` and declare all the `records` 
+Create a new document, let's say `models.ftd` and declare all the `records`
 within it.
 
 -- ds.code:
@@ -50,7 +50,7 @@ string region:
 string list capital:
 country-flag flags:
 
-The record `country` has a property `name` which has a type that itself is a 
+The record `country` has a property `name` which has a type that itself is a
 `record`.
 
 Property `population` is an integer while `region` and `capital` are of string
@@ -61,7 +61,7 @@ list of `capital`.
 
 Let's declare the `country-name` and `country-flag` records too.
 
--- ds.code: 
+-- ds.code:
 
 \-- record country-name:
 optional string common:
@@ -75,15 +75,15 @@ caption svg:
 
 -- ds.markdown:
 
-So we are done with the data-modelling part. 
+So we are done with the data-modelling part.
 
 -- ds.h1: Part 2 - UI component
 
-We will create a component let's say, `country-card`. This component will 
-display the data that will be requested from the JSON data, and displayed in 
+We will create a component let's say, `country-card`. This component will
+display the data that will be requested from the JSON data, and displayed in
 form of country cards.
 
-We can apply various `fastn` properties to create a good UI like we can add 
+We can apply various `fastn` properties to create a good UI like we can add
 default and on-hover `shadow` to the cards.
 
 -- ds.code:
@@ -185,8 +185,8 @@ spread.rem: 0.2
 
 -- ds.h1: Part 3 - Display the country list page
 
-Everything is ready. Let's assemble everything. We will request the JSON data 
-and display the data in the card using the component in the `index.ftd` 
+Everything is ready. Let's assemble everything. We will request the JSON data
+and display the data in the card using the component in the `index.ftd`
 document.
 
 We will need the two documents and processors so import the `processors` and the
@@ -201,7 +201,7 @@ two documents.
 
 -- ds.markdown:
 
-We will create a list of `countries` and the datatype will be `record country` 
+We will create a list of `countries` and the datatype will be `record country`
 that we created in `models` document.
 
 -- ds.code:
@@ -213,7 +213,7 @@ url: https://restcountries.com/v3.1/all
 
 -- ds.markdown:
 
-Now we will call the component `country-card` from `card` document and we will 
+Now we will call the component `country-card` from `card` document and we will
 wrap it inside the row container component.
 
 -- ds.code:
@@ -225,7 +225,7 @@ padding.rem: 2
 border-radius.rem: 1
 
 \-- card.country-card: $country
-for: $country in $countries 
+for: $country in $countries
 
 \-- end: ftd.row
 
@@ -235,7 +235,7 @@ width: fill-container
 
 -- ds.markdown:
 
-There you go, the country list page is ready and you can see all the country 
+There you go, the country list page is ready and you can see all the country
 details are displayed in form of a card.
 
 
@@ -245,9 +245,9 @@ Join us on Discord, and share your package which you will create following this
 video. You can share it on the discord's `show-and-tell` channel.
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
-the `fastn` website. 
+the `fastn` website.
 
-Support us by clicking on this link and give us a star ⭐ on GitHub and join 
+Support us by clicking on this link and give us a star ⭐ on GitHub and join
 our fastn community on Discord.
 
 

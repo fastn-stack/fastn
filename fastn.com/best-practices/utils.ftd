@@ -86,20 +86,20 @@ width: $letter-category-display.width
 spacing.fixed.px: 10
 
 
--- ftd.text: $letter-category-display.letter-title
-color: $inherited.colors.text
-role: $inherited.types.heading-medium
-link: $letter-category-display.title-link
-
--- ftd.column:
-spacing.fixed.px: 5
-wrap: true
-
--- letter: $item.name
-$loop$: $letter-category-display.letter-items as $item
-link: $item.link
-
--- end: ftd.column
+	-- ftd.text: $letter-category-display.letter-title
+	color: $inherited.colors.text
+	role: $inherited.types.heading-medium
+	link: $letter-category-display.title-link
+	
+	-- ftd.column:
+	spacing.fixed.px: 5
+	wrap: true
+	
+		-- letter: $item.name
+		$loop$: $letter-category-display.letter-items as $item
+		link: $item.link
+		
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -135,60 +135,60 @@ width: fill-container
 height: $letter-stack.height
 spacing.fixed.px: 10
 
--- letter-category-display: $obj.title
-$loop$: $letter-stack.contents-a as $obj
-width.fixed.percent: 45
-title-link: $obj.link
-letter-items: $obj.sub-categories
-
--- letter-category-display: $obj.title
-$loop$: $letter-stack.contents-c as $obj
-width.fixed.percent: 45
-title-link: $obj.link
-letter-items: $obj.sub-categories
-
--- letter-category-display: $obj.title
-$loop$: $letter-stack.contents-d as $obj
-width.fixed.percent: 45
-title-link: $obj.link
-letter-items: $obj.sub-categories
-
--- letter-category-display: $obj.title
-$loop$: $letter-stack.contents-f as $obj
-width.fixed.percent: 45
-title-link: $obj.link
-letter-items: $obj.sub-categories
-
--- letter-category-display: $obj.title
-$loop$: $letter-stack.contents-i as $obj
-width.fixed.percent: 45
-title-link: $obj.link
-letter-items: $obj.sub-categories
-
--- letter-category-display: $obj.title
-$loop$: $letter-stack.contents-o as $obj
-width.fixed.percent: 45
-title-link: $obj.link
-letter-items: $obj.sub-categories
-
--- letter-category-display: $obj.title
-$loop$: $letter-stack.contents-p as $obj
-width.fixed.percent: 45
-title-link: $obj.link
-letter-items: $obj.sub-categories
-
--- letter-category-display: $obj.title
-$loop$: $letter-stack.contents-s as $obj
-width.fixed.percent: 45
-title-link: $obj.link
-letter-items: $obj.sub-categories
-
--- letter-category-display: $obj.title
-$loop$: $letter-stack.contents-v as $obj
-width.fixed.percent: 45
-title-link: $obj.link
-letter-items: $obj.sub-categories
-
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-a as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-c as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-d as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-f as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-i as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-o as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-p as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-s as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-v as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
 -- end: ftd.column
 
 -- end: letter-stack
@@ -262,7 +262,7 @@ link: /how-to-use-conditions#mutually-exclusive-conditions
 
 
 
--- letter-data list sub-categories-4: 
+-- letter-data list sub-categories-4:
 
 -- letter-data: Using conditional attributes to avoid duplicating similar components
 link: /container-guidelines#conditional-attributes-removes-component-duplication
@@ -286,7 +286,7 @@ sub-categories: $sub-categories-5
 
 
 
--- letter-data list sub-categories-5: 
+-- letter-data list sub-categories-5:
 
 -- letter-data: Don’t use device condition to show or hide the component
 link: /device-guidelines#dont-use-device-condition

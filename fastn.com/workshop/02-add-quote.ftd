@@ -7,7 +7,7 @@ our local server.
 
 -- cbox.info: Take a note
 
-Before we start with the second step. Make sure to close the server created for 
+Before we start with the second step. Make sure to close the server created for
 `01-hello-world` then restart the new server for `02-add-quote`.
 
 - Close the server by using `Ctrl + c`
@@ -21,35 +21,35 @@ Before we start with the second step. Make sure to close the server created for
 
 -- ds.h1: Second part
 
-In the second part, we will learn how to add a 
-[`quote`](https://fastn-community.github.io/bling/quote/) component that is 
-[featured](/featured/) in our official website. 
+In the second part, we will learn how to add a
+[`quote`](https://fastn-community.github.io/bling/quote/) component that is
+[featured](/featured/) in our official website.
 
-`Quote` is a component of `bling` dependency package. 
+`Quote` is a component of `bling` dependency package.
 
-In `fastn`, when we want to use a component of a different package, we have to 
+In `fastn`, when we want to use a component of a different package, we have to
 do two steps:
 
 - Add the package as **dependency** in `FASTN.ftd`
 - `import` the package in the `.ftd` file where you want to utilize the
   component
 
--- ds.h2: Add the dependency 
+-- ds.h2: Add the dependency
 
 Here we are adding a dependency of package `fastn-community.github.io/bling`
 
-Uncomment the line where the package is added as dependency in the 
+Uncomment the line where the package is added as dependency in the
 [`FASTN.ftd`](https://github.com/fastn-stack/workshop/blob/main/02-add-quote/FASTN.ftd) file
 
 -- ftd.image:
 src: $fastn-assets.files.images.workshop.02-FASTN.png
 width: fill-container
 
--- ds.h2: Import the package 
+-- ds.h2: Import the package
 
 In the `index.ftd` document we import the `quote` component from bling package.
 
-Uncomment the following lines in the [`index.ftd`](https://github.com/fastn-stack/workshop/blob/main/02-add-quote/index.ftd) file: 
+Uncomment the following lines in the [`index.ftd`](https://github.com/fastn-stack/workshop/blob/main/02-add-quote/index.ftd) file:
 
 - Uncomment the [import line](https://github.com/fastn-stack/workshop/blob/main/a-website/02-add-quote/index.ftd#L4).
 

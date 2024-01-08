@@ -43,29 +43,29 @@ by using `$`.
 
 -- ds.rendered: Sample code using add() function
 
--- ds.rendered.input:
-
-\-- integer add(a, b):
-integer a:
-integer b:
-
-a + b
-
-\-- ftd.column:
-spacing.fixed.px: 10
-color: $inherited.colors.text
-
-\-- ftd.text: Adding 35 and 83
-
-\-- ftd.integer: $add(a=35, b=83) ;; <hl>
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- add-function-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- integer add(a, b):
+	integer a:
+	integer b:
+	
+	a + b
+	
+	\-- ftd.column:
+	spacing.fixed.px: 10
+	color: $inherited.colors.text
+	
+	\-- ftd.text: Adding 35 and 83
+	
+	\-- ftd.integer: $add(a=35, b=83) ;; <hl>
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- add-function-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -95,25 +95,25 @@ Value will range from `[0,max]` given `max > 0`.
 
 -- ds.rendered: Sample code using `regular-clamp()`
 
--- ds.rendered.input:
-
-\-- integer $num: 0
-
-\-- display-integer: $num
-$on-click$: $regular-clamp($a = $num, by = 1, max = 6)  ;; <hl>
-
-\-- void regular-clamp(a,by,max): ;; <hl>
-integer $a: ;; <hl>
-integer by: ;; <hl>
-integer max: ;; <hl>
-\;; <hl>
-a = (a + by) % (max + 1) ;; <hl>
-
--- ds.rendered.output:
-
--- regular-clamp-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- integer $num: 0
+	
+	\-- display-integer: $num
+	$on-click$: $regular-clamp($a = $num, by = 1, max = 6)  ;; <hl>
+	
+	\-- void regular-clamp(a,by,max): ;; <hl>
+	integer $a: ;; <hl>
+	integer by: ;; <hl>
+	integer max: ;; <hl>
+	\;; <hl>
+	a = (a + by) % (max + 1) ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- regular-clamp-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -136,26 +136,26 @@ Value will range from `[min,max]` given `max > min`.
 
 -- ds.rendered: Sample code using `clamp_with_limits()`
 
--- ds.rendered.input:
-
-\-- integer $n: 1
-
-\-- display-integer: $n
-$on-click$: $clamp_with_limits($a = $n, by = 1, min = 1, max = 6) ;; <hl>
-
-\-- void clamp_with_limits(a,by,min,max):  ;; <hl>
-integer $a:  ;; <hl>
-integer by: 1  ;; <hl>
-integer min: 0  ;; <hl>
-integer max: 5  ;; <hl>
-\;; <hl>
-a = (((a - min) + by) % (max + 1 - min)) + min  ;; <hl>
-
--- ds.rendered.output:
-
--- clamp-with-limits-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- integer $n: 1
+	
+	\-- display-integer: $n
+	$on-click$: $clamp_with_limits($a = $n, by = 1, min = 1, max = 6) ;; <hl>
+	
+	\-- void clamp_with_limits(a,by,min,max):  ;; <hl>
+	integer $a:  ;; <hl>
+	integer by: 1  ;; <hl>
+	integer min: 0  ;; <hl>
+	integer max: 5  ;; <hl>
+	\;; <hl>
+	a = (((a - min) + by) % (max + 1 - min)) + min  ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- clamp-with-limits-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -226,10 +226,10 @@ padding.px: 10
 spacing.fixed.px: 10
 color: $inherited.colors.text
 
--- ftd.text: Adding 35 and 83
-
--- ftd.integer: $add(a=35, b=83)
-
+	-- ftd.text: Adding 35 and 83
+	
+	-- ftd.integer: $add(a=35, b=83)
+	
 -- end: ftd.column
 
 -- end: add-function-sample

@@ -8,16 +8,16 @@ width: fill-container
 spacing: space-between
 
 
--- qr-card: Discord
-img: $fastn-assets.files.assets.social-qr-svg.fastn-discord.svg
-
--- qr-card: GitHub
-img: $fastn-assets.files.assets.social-qr-svg.fastn-github.svg
-
-
--- qr-card: LinkedIn
-img: $fastn-assets.files.assets.social-qr-svg.fastn-linkedIn.svg
-
+	-- qr-card: Discord
+	img: $fastn-assets.files.assets.social-qr-svg.fastn-discord.svg
+	
+	-- qr-card: GitHub
+	img: $fastn-assets.files.assets.social-qr-svg.fastn-github.svg
+	
+	
+	-- qr-card: LinkedIn
+	img: $fastn-assets.files.assets.social-qr-svg.fastn-linkedIn.svg
+	
 -- end: ftd.row
 
 -- ftd.row:
@@ -25,13 +25,13 @@ width: fill-container
 spacing: space-evenly
 margin-top.px: 50
 
--- qr-card: Twitter
-img: $fastn-assets.files.assets.social-qr-svg.fastn-twitter.svg
-
-
--- qr-card: Instagram
-img: $fastn-assets.files.assets.social-qr-svg.fastn-instagram.svg
-
+	-- qr-card: Twitter
+	img: $fastn-assets.files.assets.social-qr-svg.fastn-twitter.svg
+	
+	
+	-- qr-card: Instagram
+	img: $fastn-assets.files.assets.social-qr-svg.fastn-instagram.svg
+	
 -- end: ftd.row
 
 -- end: ds.page
@@ -46,14 +46,14 @@ ftd.image-src img:
 width.fixed.percent: 25
 align-content: center
 
--- ftd.text: $qr-card.title
-role: $inherited.types.heading-small
-color: $inherited.colors.text-strong
-
--- ftd.image: $qr-card.img
-width: fill-container
-margin-top.px: 5
-
+	-- ftd.text: $qr-card.title
+	role: $inherited.types.heading-small
+	color: $inherited.colors.text-strong
+	
+	-- ftd.image: $qr-card.img
+	width: fill-container
+	margin-top.px: 5
+	
 -- end: ftd.column
 
 -- end: qr-card

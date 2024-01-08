@@ -8,7 +8,7 @@ the scripts etc here.
 - Video series on doc-site
   - [markdown primer](/markdown/) [[🗎Planning]](/markdown/-/planning/)
   - [understanding sitemap](/understanding-sitemap/) [[🗎Planning]](/understanding-sitemap/-/planning/) - Introduction
-  - [SEO](/seo-meta/) [[🗎Planning]](/seo/-/planning/)  
+  - [SEO](/seo-meta/) [[🗎Planning]](/seo/-/planning/)
   - [Publish a package](https://fastn-community.github.io/doc-site/getting-started/)
   - [Using page component](/ds-page/) [[🗎Planning]](/ds-page/-/planning/)
   - changing color-scheme [[🗎Planning]](/color-scheme/-/planning/)
@@ -26,13 +26,13 @@ the scripts etc here.
 - How to add color (in text, border, background)
   - create color record type variable
   - light and dark mode
-- How to create dark mode switcher 
-- How to create color-scheme 
+- How to create dark mode switcher
+- How to create color-scheme
 - How to customize fonts (or add font-style)
   - create responsive-type variable (font)
 - Understanding caption (this is not a video title)
 - Understanding body (this is not a video title)
-- How to pass components to a container component 
+- How to pass components to a container component
   - Understanding of ftd.ui and children
 
 -- ds.h2: Abbreviations
@@ -52,8 +52,8 @@ the scripts etc here.
 - R: understanding colors
 - R: understanding fonts
 - R: github pages (templates, publishing, domain mapping? etc)
-- ✅ R: [installing fastn](/install/) 
-- R: using `key-value` pair to show-hide content in a single doc   
+- ✅ R: [installing fastn](/install/)
+- R: using `key-value` pair to show-hide content in a single doc
 - R: why we always use .px, what else can we do?
 
 -- ds.h1: Design A Fastn Compatible Site
@@ -82,20 +82,20 @@ the scripts etc here.
     - R: tabs
     - R: dropdown
     - ✅ R: [button](/button-using-fastn/)   [[🗎Planning]](https://fastn.com/planning)
-    - R: post card 
+    - R: post card
 - R: creating various page layouts
-    - ✅ R: [holy-grail](/holy-grail/)     [[🗎Planning]](/holy-grail/-/planning/) 
-- ✅ R: [event handling](/expander/events/) (basic) 
+    - ✅ R: [holy-grail](/holy-grail/)     [[🗎Planning]](/holy-grail/-/planning/)
+- ✅ R: [event handling](/expander/events/) (basic)
 - R: creating docs pages
 - D: using module system to create interchangable packages
 - D: translation crosslinks
-- ✅ R: [rive](/rive/)     [[🗎Planning]](/planning/rive/)  
+- ✅ R: [rive](/rive/)     [[🗎Planning]](/planning/rive/)
 - R: embedding youtube or iframes
 - R: add images in documents
 - R: mobile responsive site
 - R: using css for things fastn is lacking
 - R: integration with JS
-- R: How to use icon libraries like `react-icons` or `font-awesome` or any 
+- R: How to use icon libraries like `react-icons` or `font-awesome` or any
   external icon library in fastn
 
 

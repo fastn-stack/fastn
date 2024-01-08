@@ -8,7 +8,7 @@
 
 
 
--- ds.page: 
+-- ds.page:
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -24,21 +24,21 @@ max-width.fixed.px: 1340
 
 -- ds.page.footer:
 
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: index.html
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
 -- end: ds.page.footer
 -- ftd.column:
 width: fill-container
 align-content: center
 
--- profile: Saurabh Garg
-
+	-- profile: Saurabh Garg
+	
 -- end: ftd.column
 
 
@@ -58,21 +58,21 @@ show-large: true
 
 
 -- component profile:
-caption title: 
+caption title:
 optional string link:
 
 -- ftd.column:
 
--- ftd.column:
-align-content: center
-link: $profile.link
-
--- ds.contributor: $profile.title
-profile: Developer
-owners: $owner-saurabh
-connect: $social-links
-
--- end: ftd.column
+	-- ftd.column:
+	align-content: center
+	link: $profile.link
+	
+		-- ds.contributor: $profile.title
+		profile: Developer
+		owners: $owner-saurabh
+		connect: $social-links
+		
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -117,25 +117,24 @@ role: Developer
 
 -- common.social-media list social-links:
 
-/-- common.social-media: 
+/-- common.social-media:
 link: https://discord.gg/priyankayadav#4890
 src: $fastn-assets.files.images.discord.svg
 hover-src: $fastn-assets.files.images.discord-hover.svg
 
--- common.social-media: 
+-- common.social-media:
 link: https://github.com/sourabh-garg
 src: $fastn-assets.files.images.github-grey.svg
 hover-src: $fastn-assets.files.images.github-grey-hover.svg
 
-/-- common.social-media: 
+/-- common.social-media:
 link: https://twitter.com/priyanka9634
 src: $fastn-assets.files.images.twitter.svg
 hover-src: $fastn-assets.files.images.twitter-hover.svg
 
--- common.social-media: 
+-- common.social-media:
 link: https://www.linkedin.com/in/sourabh-garg-94536887/
 src: $fastn-assets.files.images.linkedin.svg
 hover-src: $fastn-assets.files.images.linkedin-hover.svg
 
 -- end: social-links
-

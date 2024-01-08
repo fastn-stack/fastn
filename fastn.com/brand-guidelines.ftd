@@ -57,26 +57,26 @@ wrap: true
 padding-vertical.px: 24
 align-content: center
 
--- utils.logo-card:
-logo: $fastn-assets.files.images.brand-guidelines.logo-dark.svg
-id: logo-card-1
-link: https://fastn.com/images/brand-guidelines/logo-dark-img.svg
-
--- utils.logo-card:
-logo: $fastn-assets.files.images.brand-guidelines.logo-light.svg
-id: logo-card-2
-link: https://fastn.com/images/brand-guidelines/logo-light-img.svg
-
--- utils.logo-card:
-logo: $fastn-assets.files.images.brand-guidelines.logo-without-bg.svg
-id: logo-card-3
-link: https://fastn.com/images/brand-guidelines/logo-without-bg-img.svg
-
--- utils.logo-card:
-logo: $fastn-assets.files.images.brand-guidelines.logo-without-bg-white.svg
-id: logo-card-4
-link: https://fastn.com/images/brand-guidelines/logo-without-bg-white-img.svg
-
+	-- utils.logo-card:
+	logo: $fastn-assets.files.images.brand-guidelines.logo-dark.svg
+	id: logo-card-1
+	link: https://fastn.com/images/brand-guidelines/logo-dark-img.svg
+	
+	-- utils.logo-card:
+	logo: $fastn-assets.files.images.brand-guidelines.logo-light.svg
+	id: logo-card-2
+	link: https://fastn.com/images/brand-guidelines/logo-light-img.svg
+	
+	-- utils.logo-card:
+	logo: $fastn-assets.files.images.brand-guidelines.logo-without-bg.svg
+	id: logo-card-3
+	link: https://fastn.com/images/brand-guidelines/logo-without-bg-img.svg
+	
+	-- utils.logo-card:
+	logo: $fastn-assets.files.images.brand-guidelines.logo-without-bg-white.svg
+	id: logo-card-4
+	link: https://fastn.com/images/brand-guidelines/logo-without-bg-white-img.svg
+	
 -- end: ftd.row
 
 -- ds.h1: Color

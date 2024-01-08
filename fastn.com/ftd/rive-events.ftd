@@ -20,29 +20,29 @@ The `on-rive-pause[<timeline>]` event gets fired when the animation pauses.
 
 -- ds.rendered:
 
--- ds.rendered.input:
-
-\-- string $idle: Unknown Idle State
-
-\-- ftd.text: $idle
-
-\-- ftd.rive:
-id: vehicle
-src: https://cdn.rive.app/animations/vehicles.riv
-autoplay: false
-artboard: Jeep
-$on-rive-play[idle]$: $ftd.set-string($a = $idle, v = Playing Idle)
-$on-rive-pause[idle]$: $ftd.set-string($a = $idle, v = Pausing Idle)
-
-
-\-- ftd.text: Idle/Run
-$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
-
--- ds.rendered.output:
-
--- on-rive-play-pause-event:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- string $idle: Unknown Idle State
+	
+	\-- ftd.text: $idle
+	
+	\-- ftd.rive:
+	id: vehicle
+	src: https://cdn.rive.app/animations/vehicles.riv
+	autoplay: false
+	artboard: Jeep
+	$on-rive-play[idle]$: $ftd.set-string($a = $idle, v = Playing Idle)
+	$on-rive-pause[idle]$: $ftd.set-string($a = $idle, v = Pausing Idle)
+	
+	
+	\-- ftd.text: Idle/Run
+	$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
+	
+	-- ds.rendered.output:
+	
+		-- on-rive-play-pause-event:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -56,32 +56,32 @@ occurs.
 
 -- ds.rendered:
 
--- ds.rendered.input:
-
-\-- integer $bounce: 0
-
-\-- ftd.row:
-spacing.fixed.px: 5
-
-\-- ftd.text: Number of times bounce occur:
-\-- ftd.integer: $bounce
-
-\-- end: ftd.row
-
-\-- ftd.rive:
-id: van
-src: https://cdn.rive.app/animations/vehicles.riv
-state-machine: bumpy
-$on-rive-state-change[bounce]$: $ftd.increment($a = $bounce)
-
-\-- ftd.text: Click to Bump
-$on-click$: $ftd.fire-rive(rive = van, input = bump)
-
--- ds.rendered.output:
-
--- on-rive-state-machine-event:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- integer $bounce: 0
+	
+	\-- ftd.row:
+	spacing.fixed.px: 5
+	
+	\-- ftd.text: Number of times bounce occur:
+	\-- ftd.integer: $bounce
+	
+	\-- end: ftd.row
+	
+	\-- ftd.rive:
+	id: van
+	src: https://cdn.rive.app/animations/vehicles.riv
+	state-machine: bumpy
+	$on-rive-state-change[bounce]$: $ftd.increment($a = $bounce)
+	
+	\-- ftd.text: Click to Bump
+	$on-click$: $ftd.fire-rive(rive = van, input = bump)
+	
+	-- ds.rendered.output:
+	
+		-- on-rive-state-machine-event:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -97,19 +97,19 @@ string $idle: Unknown Idle State
 width: fill-container
 color: $inherited.colors.text
 
--- ftd.text: $on-rive-play-pause-event.idle
-
--- ftd.rive:
-id: vehicle-play
-src: https://cdn.rive.app/animations/vehicles.riv
-autoplay: false
-artboard: Jeep
-$on-rive-play[idle]$: $ftd.set-string($a = $on-rive-play-pause-event.idle, v = Playing Idle)
-$on-rive-pause[idle]$: $ftd.set-string($a = $on-rive-play-pause-event.idle, v = Pausing Idle)
-
--- ftd.text: Idle/Run
-$on-click$: $ftd.toggle-play-rive(rive = vehicle-play, input = idle)
-
+	-- ftd.text: $on-rive-play-pause-event.idle
+	
+	-- ftd.rive:
+	id: vehicle-play
+	src: https://cdn.rive.app/animations/vehicles.riv
+	autoplay: false
+	artboard: Jeep
+	$on-rive-play[idle]$: $ftd.set-string($a = $on-rive-play-pause-event.idle, v = Playing Idle)
+	$on-rive-pause[idle]$: $ftd.set-string($a = $on-rive-play-pause-event.idle, v = Pausing Idle)
+	
+	-- ftd.text: Idle/Run
+	$on-click$: $ftd.toggle-play-rive(rive = vehicle-play, input = idle)
+	
 -- end: ftd.column
 
 -- end: on-rive-play-pause-event
@@ -125,23 +125,23 @@ integer $bounce: 0
 width: fill-container
 color: $inherited.colors.text
 
--- ftd.row:
-spacing.fixed.px: 5
+	-- ftd.row:
+	spacing.fixed.px: 5
+	
+		-- ftd.text: Number of times bounce occur:
+		-- ftd.integer: $on-rive-state-machine-event.bounce
+		
+	-- end: ftd.row
 
--- ftd.text: Number of times bounce occur:
--- ftd.integer: $on-rive-state-machine-event.bounce
-
--- end: ftd.row
-
--- ftd.rive:
-id: van-play
-src: https://cdn.rive.app/animations/vehicles.riv
-state-machine: bumpy
-$on-rive-state-change[bounce]$: $ftd.increment($a = $on-rive-state-machine-event.bounce)
-
--- ftd.text: Click to Bump
-$on-click$: $ftd.fire-rive(rive = van-play, input = bump)
-
+	-- ftd.rive:
+	id: van-play
+	src: https://cdn.rive.app/animations/vehicles.riv
+	state-machine: bumpy
+	$on-rive-state-change[bounce]$: $ftd.increment($a = $on-rive-state-machine-event.bounce)
+	
+	-- ftd.text: Click to Bump
+	$on-click$: $ftd.fire-rive(rive = van-play, input = bump)
+	
 -- end: ftd.column
 
 -- end: on-rive-state-machine-event

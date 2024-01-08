@@ -68,11 +68,11 @@ This feature works better with dynamic hosting. If you are using `fastn` in
 called will be shown to everyone. But if you are using [dynamic
 mode](/deploy/) then this page would be regenerated on every page load.
 
--- read-more.read-more: Learn More
-link: /deploy/
-
-Deploying `fastn` Sites
-
+	-- read-more.read-more: Learn More
+	link: /deploy/
+	
+	Deploying `fastn` Sites
+	
 -- end: cbox.warning
 
 -- end: static-vs-dynamic

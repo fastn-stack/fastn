@@ -51,15 +51,15 @@ the row, which will be vertically stacked with the specified spacing.
 
 -- ds.output:
 
--- ftd.column:
-spacing.fixed.px: 20
-color: $inherited.colors.text
-
--- ftd.text: Hello
-
--- ftd.text: World
-
--- end: ftd.column
+	-- ftd.column:
+	spacing.fixed.px: 20
+	color: $inherited.colors.text
+	
+		-- ftd.text: Hello
+		
+		-- ftd.text: World
+		
+	-- end: ftd.column
 
 
 -- end: ds.output

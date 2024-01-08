@@ -67,13 +67,13 @@ perception of the site.
 -- ds.h1: Adding color-scheme
 $on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
 
-**Select/choose the color-scheme of your choice.** 
+**Select/choose the color-scheme of your choice.**
 
   You can create your own color-scheme or
-  you can select it from the [`featured page`](/featured/cs/). 
+  you can select it from the [`featured page`](/featured/cs/).
   Copy the package name.
 
-  *Note:* For explanation, we have selected 
+  *Note:* For explanation, we have selected
   [`winter-cs`](https://fastn-community.github.io/winter-cs/)
 
 The two steps to adding a color-scheme are:
@@ -86,7 +86,7 @@ lang: ftd
 \-- fastn.dependency: fastn-community.github.io/winter-cs
 
 
--- ds.code: **B:** And, import the package in the `my-ds` document 
+-- ds.code: **B:** And, import the package in the `my-ds` document
 lang: ftd
 
 \-- import: fastn-community.github.io/winter-cs
@@ -98,9 +98,9 @@ lang: ftd
   In the previous video, we created a custom component page in the `my-ds`
   document.
 
-  To highlight the benefit of this approach, there's no need to individually 
-  add the color-scheme to each page. 
-  Instead, by adding the color-scheme once and using `my-ds.page`, the 
+  To highlight the benefit of this approach, there's no need to individually
+  add the color-scheme to each page.
+  Instead, by adding the color-scheme once and using `my-ds.page`, the
   color-scheme will be applied to all pages that utilize `my-ds.page`.
 
   And if one decides to go for another color-scheme, then changing it once in
@@ -131,7 +131,7 @@ colors: $winter-cs.main		;; <hl>
 
 **Case A:** Some projects needs visibility i.e. instead of passing reference,
   color-scheme should be visible and hence in such cases we pass the name of
-  the color-scheme as the value of `colors` property. 
+  the color-scheme as the value of `colors` property.
 
 **Case B:** But at times, you need to do things quickly by changing one line of
   code. In such cases we give alias `as my-cs` after the package name when
@@ -153,7 +153,7 @@ colors: $winter-cs.main		;; <hl>
 - Select the color-scheme
 - Replace the old color-scheme with new one as dependency
 
--- ds.markdown: 
+-- ds.markdown:
 
 In summary, a well-chosen color scheme is a powerful tool in website creation.
 It enhances the visual appeal, reinforces branding, improves readability and
@@ -165,19 +165,19 @@ meaningful user experience.
 if: { show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
-the `fastn` website. 
+the `fastn` website.
 
-Support us by clicking on this link and give us a star ⭐ on GitHub and join 
+Support us by clicking on this link and give us a star ⭐ on GitHub and join
 our fastn community on Discord.
 
 
--- ds.markdown: 
+-- ds.markdown:
 if: { !show-planning }
 
-Thank you guys, keep watching these videos to learn more about fastn. 
+Thank you guys, keep watching these videos to learn more about fastn.
 
-Support us by giving a star ⭐ on 
-[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community 
+Support us by giving a star ⭐ on
+[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community
 on [Discord](/discord/).
 
 

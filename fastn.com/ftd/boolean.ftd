@@ -10,17 +10,17 @@ boolean value to display.
 
 -- ds.rendered: Sample Usage
 
--- ds.rendered.input:
-
-\-- ftd.boolean: true
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.boolean: true
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.boolean: true
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.boolean: true
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -41,17 +41,17 @@ There are three ways to pass integer to `ftd.boolean`: as `caption`, as a
 
 -- ds.rendered: value as `caption`
 
--- ds.rendered.input:
-
-\-- ftd.boolean: false ;; <hl>
-color: $inherited.colors.text-strong
-
--- ds.rendered.output:
-
--- ftd.boolean: false
-color: $inherited.colors.text-strong
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.boolean: false ;; <hl>
+	color: $inherited.colors.text-strong
+	
+	-- ds.rendered.output:
+	
+		-- ftd.boolean: false
+		color: $inherited.colors.text-strong
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -59,19 +59,19 @@ color: $inherited.colors.text-strong
 
 -- ds.rendered: value as `header`
 
--- ds.rendered.input:
-
-\-- ftd.boolean:
-value: false ;; <hl>
-color: $inherited.colors.text-strong
-
--- ds.rendered.output:
-
--- ftd.boolean:
-value: false
-color: $inherited.colors.text-strong
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.boolean:
+	value: false ;; <hl>
+	color: $inherited.colors.text-strong
+	
+	-- ds.rendered.output:
+	
+		-- ftd.boolean:
+		value: false
+		color: $inherited.colors.text-strong
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -79,21 +79,21 @@ color: $inherited.colors.text-strong
 
 -- ds.rendered: value as `body`
 
--- ds.rendered.input:
-
-\-- ftd.boolean:
-color: $inherited.colors.text-strong
-
-false ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.boolean:
-color: $inherited.colors.text-strong
-
-false
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.boolean:
+	color: $inherited.colors.text-strong
+	
+	false ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.boolean:
+		color: $inherited.colors.text-strong
+		
+		false
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 

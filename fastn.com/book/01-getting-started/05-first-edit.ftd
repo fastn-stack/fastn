@@ -161,6 +161,6 @@ information about one or more changes. You have some changes so far, one change
 to be precise. You can convert this change into a commit using `git commit`
 command.
 
-We are going to do that next. Let's run `git commit -am 
+We are going to do that next. Let's run `git commit -am
 
 -- end: ds.page

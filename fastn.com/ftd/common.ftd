@@ -16,19 +16,19 @@ and is optional.
 
 -- ds.rendered: Sample code using `id`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-id: fifthtry ;; <hl>
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-id: fifthtry
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	id: fifthtry ;; <hl>
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		id: fifthtry
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -56,21 +56,21 @@ inside of any defined borders. It accepts the
 
 -- ds.rendered: Sample code using `padding`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-padding.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-padding.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	padding.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		padding.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -87,21 +87,21 @@ and is optional.
 
 -- ds.rendered: Sample code using `padding-vertical`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-padding-vertical.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-padding-vertical.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	padding-vertical.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		padding-vertical.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -119,21 +119,21 @@ and is optional.
 
 -- ds.rendered: Sample code using `padding-horizontal`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-padding-horizontal.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-padding-horizontal.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	padding-horizontal.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		padding-horizontal.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -150,21 +150,21 @@ and is optional.
 
 -- ds.rendered: Sample code using `padding-left`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-padding-left.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-padding-left.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	padding-left.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		padding-left.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -182,21 +182,21 @@ and is optional.
 
 -- ds.rendered: Sample code using `padding-right`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-padding-right.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-padding-right.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	padding-right.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		padding-right.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -213,21 +213,21 @@ and is optional.
 
 -- ds.rendered: Sample code using `padding-top`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-padding-top.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-padding-top.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	padding-top.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		padding-top.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -245,21 +245,21 @@ and is optional.
 
 -- ds.rendered: Sample code using `padding-bottom`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-padding-bottom.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-padding-bottom.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	padding-bottom.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		padding-bottom.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -279,22 +279,22 @@ outside of any defined borders. It accepts the
 
 -- ds.rendered: Sample code using `margin`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-margin.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-margin.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	margin.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		margin.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -313,21 +313,21 @@ and is optional.
 
 -- ds.rendered: Sample code using `margin-vertical`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-margin-vertical.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-margin-vertical.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	margin-vertical.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		margin-vertical.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -346,21 +346,21 @@ and is optional.
 
 -- ds.rendered: Sample code using `margin-horizontal`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-margin-horizontal.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-margin-horizontal.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	margin-horizontal.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		margin-horizontal.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -381,21 +381,21 @@ and is optional.
 
 -- ds.rendered: Sample code using `margin-left`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-margin-left.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-margin-left.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	margin-left.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		margin-left.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -414,21 +414,21 @@ and is optional.
 
 -- ds.rendered: Sample code using `margin-right`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-margin-right.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-margin-right.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	margin-right.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		margin-right.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -448,21 +448,21 @@ and is optional.
 
 -- ds.rendered: Sample code using `margin-top`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-margin-top.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-margin-top.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	margin-top.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		margin-top.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -482,21 +482,21 @@ and is optional.
 
 -- ds.rendered: Sample code using `margin-bottom`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-margin-bottom.px: 60 ;; <hl>
-color: $inherited.colors.text
-border-width.px: 2
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-margin-bottom.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	margin-bottom.px: 60 ;; <hl>
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		margin-bottom.px: 60
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -517,49 +517,49 @@ and is optional.
 
 -- ds.rendered: Sample code using `align-self`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.column:
+	width.fixed.px: 200
+	
+	\-- ftd.text: Start
+	color: $red-yellow
+	align-self: start  ;; <hl>
+	
+	\-- ftd.text: Center
+	color: $red-yellow
+	align-self: center  ;; <hl>
+	
+	\-- ftd.text: End
+	color: $red-yellow
+	align-self: end  ;; <hl>
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		width.fixed.px: 200
+		
+			-- ftd.text: Start
+			color: $red-yellow
+			align-self: start
+			
+			-- ftd.text: Center
+			color: $red-yellow
+			align-self: center
+			
+			-- ftd.text: End
+			color: $red-yellow
+			align-self: end
+			
+		-- end: ftd.column
 
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.column:
-width.fixed.px: 200
-
-\-- ftd.text: Start
-color: $red-yellow
-align-self: start  ;; <hl>
-
-\-- ftd.text: Center
-color: $red-yellow
-align-self: center  ;; <hl>
-
-\-- ftd.text: End
-color: $red-yellow
-align-self: end  ;; <hl>
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-width.fixed.px: 200
-
--- ftd.text: Start
-color: $red-yellow
-align-self: start
-
--- ftd.text: Center
-color: $red-yellow
-align-self: center
-
--- ftd.text: End
-color: $red-yellow
-align-self: end
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -579,21 +579,21 @@ and is optional.
 
 -- ds.rendered: Sample code using `color`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow: ;; <hl>
-light: red ;; <hl>
-dark: yellow ;; <hl>
-
-\-- ftd.text: FifthTry
-color: $red-yellow ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-color: $red-yellow
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow: ;; <hl>
+	light: red ;; <hl>
+	dark: yellow ;; <hl>
+	
+	\-- ftd.text: FifthTry
+	color: $red-yellow ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		color: $red-yellow
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -612,37 +612,37 @@ and is optional. Default value is set to `auto` if not provided.
 
 -- ds.rendered: Sample code using `width`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.column:
+	width.fixed.px: 100 ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: Width of this container is 100px
+	color: $inherited.colors.text
+	padding.px: 10
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		width.fixed.px: 100
+		border-color: $red-yellow
+		border-width.px: 2
+		
+			-- ftd.text: Width of this container is 100px
+			color: $inherited.colors.text
+			padding.px: 10
+			
+		-- end: ftd.column
 
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.column:
-width.fixed.px: 100 ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: Width of this container is 100px
-color: $inherited.colors.text
-padding.px: 10
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-width.fixed.px: 100
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text: Width of this container is 100px
-color: $inherited.colors.text
-padding.px: 10
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -662,37 +662,37 @@ and is optional.
 
 -- ds.rendered: Sample code using `min-width`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.column:
+	min-width.fixed.px: 400 ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: Min Width of this container is 400px
+	color: $inherited.colors.text
+	padding.px: 10
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		min-width.fixed.px: 400
+		border-color: $red-yellow
+		border-width.px: 2
+		
+			-- ftd.text: Min Width of this container is 400px
+			color: $inherited.colors.text
+			padding.px: 10
+			
+		-- end: ftd.column
 
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.column:
-min-width.fixed.px: 400 ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: Min Width of this container is 400px
-color: $inherited.colors.text
-padding.px: 10
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-min-width.fixed.px: 400
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text: Min Width of this container is 400px
-color: $inherited.colors.text
-padding.px: 10
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -712,43 +712,43 @@ and is optional.
 
 -- ds.rendered: Sample code using `max-width`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.column:
+	max-width.fixed.px: 300 ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text:
+	color: $inherited.colors.text
+	padding.px: 10
+	
+	Max Width of this container is 300px.
+	If you add more text than it can accommodate, then it will overflow.
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		max-width.fixed.px: 300
+		border-color: $red-yellow
+		border-width.px: 2
+		
+			-- ftd.text:
+			color: $inherited.colors.text
+			padding.px: 10
+			
+			Max Width of this container is 300px.
+			If you add more text than it can accommodate, then it will overflow.
+			
+		-- end: ftd.column
 
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.column:
-max-width.fixed.px: 300 ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text:
-color: $inherited.colors.text
-padding.px: 10
-
-Max Width of this container is 300px.
-If you add more text than it can accommodate, then it will overflow.
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-max-width.fixed.px: 300
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text:
-color: $inherited.colors.text
-padding.px: 10
-
-Max Width of this container is 300px.
-If you add more text than it can accommodate, then it will overflow.
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -768,37 +768,37 @@ and is optional. Default value is set to `auto` if not provided.
 
 -- ds.rendered: Sample code using `height`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.column:
+	height.fixed.px: 100 ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: Height of this container is 100px
+	color: $inherited.colors.text
+	padding.px: 10
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		height.fixed.px: 100
+		border-color: $red-yellow
+		border-width.px: 2
+		
+			-- ftd.text: Height of this container is 100px
+			color: $inherited.colors.text
+			padding.px: 10
+			
+		-- end: ftd.column
 
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.column:
-height.fixed.px: 100 ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: Height of this container is 100px
-color: $inherited.colors.text
-padding.px: 10
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-height.fixed.px: 100
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text: Height of this container is 100px
-color: $inherited.colors.text
-padding.px: 10
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -817,53 +817,53 @@ and is optional.
 
 -- ds.rendered: Sample code using `min-height`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.column:
+	min-height.fixed.px: 100 ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	spacing.fixed.px: 10
+	
+	\-- ftd.text: Min Height of this container is 100px
+	color: $inherited.colors.text
+	padding.px: 10
+	
+	\-- ftd.text:
+	color: $inherited.colors.text
+	padding.px: 10
+	
+	If more text are added inside this container, the text might overflow
+	if it can't be accommodated.
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		min-height.fixed.px: 100
+		border-color: $red-yellow
+		border-width.px: 2
+		spacing.fixed.px: 10
+		
+			-- ftd.text: Min Height of this container is 100px
+			color: $inherited.colors.text
+			padding.px: 10
+			
+			-- ftd.text:
+			color: $inherited.colors.text
+			padding.px: 10
+			
+			If more text are added inside this container, the text might overflow
+			if it can't be accommodated.
+			
+		-- end: ftd.column
 
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.column:
-min-height.fixed.px: 100 ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-spacing.fixed.px: 10
-
-\-- ftd.text: Min Height of this container is 100px
-color: $inherited.colors.text
-padding.px: 10
-
-\-- ftd.text:
-color: $inherited.colors.text
-padding.px: 10
-
-If more text are added inside this container, the text might overflow
-if it can't be accommodated.
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-min-height.fixed.px: 100
-border-color: $red-yellow
-border-width.px: 2
-spacing.fixed.px: 10
-
--- ftd.text: Min Height of this container is 100px
-color: $inherited.colors.text
-padding.px: 10
-
--- ftd.text:
-color: $inherited.colors.text
-padding.px: 10
-
-If more text are added inside this container, the text might overflow
-if it can't be accommodated.
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -883,45 +883,45 @@ and is optional.
 
 -- ds.rendered: Sample code using `max-height`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.column:
+	max-height.fixed.px: 50 ;; <hl>
+	max-width.fixed.px: 300
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text:
+	color: $inherited.colors.text
+	padding.px: 10
+	
+	Max Height of this container is 50px.
+	If you add more text than it can accommodate, then it will overflow.
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		max-height.fixed.px: 50
+		max-width.fixed.px: 300
+		border-color: $red-yellow
+		border-width.px: 2
+		
+			-- ftd.text:
+			color: $inherited.colors.text
+			padding.px: 10
+			
+			Max Height of this container is 50px.
+			If you add more text than it can accommodate, then it will overflow.
+			
+		-- end: ftd.column
 
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.column:
-max-height.fixed.px: 50 ;; <hl>
-max-width.fixed.px: 300
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text:
-color: $inherited.colors.text
-padding.px: 10
-
-Max Height of this container is 50px.
-If you add more text than it can accommodate, then it will overflow.
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-max-height.fixed.px: 50
-max-width.fixed.px: 300
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text:
-color: $inherited.colors.text
-padding.px: 10
-
-Max Height of this container is 50px.
-If you add more text than it can accommodate, then it will overflow.
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -948,23 +948,23 @@ input of [`ftd.color`](ftd/built-in-types/#ftd-color) type.
 
 -- ds.rendered: Specifying background as a solid color
 
--- ds.rendered.input:
-
-\-- ftd.color yellow-red: ;; <hl>
-light: yellow ;; <hl>
-dark: red ;; <hl>
-
-\-- ftd.text: FifthTry
-background.solid: $yellow-red ;; <hl>
-color: $inherited.colors.text-strong
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-color: $inherited.colors.text-strong
-background.solid: $yellow-red
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color yellow-red: ;; <hl>
+	light: yellow ;; <hl>
+	dark: red ;; <hl>
+	
+	\-- ftd.text: FifthTry
+	background.solid: $yellow-red ;; <hl>
+	color: $inherited.colors.text-strong
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		color: $inherited.colors.text-strong
+		background.solid: $yellow-red
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -980,27 +980,27 @@ type and is optional.
 
 -- ds.rendered: Specifying background as an image
 
--- ds.rendered.input:
-
-\-- ftd.background-image bg-image: ;; <hl>
-src: $fastn-assets.files.images.logo-fifthtry.svg ;; <hl>
-repeat: no-repeat ;; <hl>
-position: center ;; <hl>
-
-\-- ftd.row:
-width: fill-container
-height.fixed.px: 200
-background.image: $bg-image ;; <hl>
-
-\-- ftd.text: Fifthtry logo as background image
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- render-bg:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.background-image bg-image: ;; <hl>
+	src: $fastn-assets.files.images.logo-fifthtry.svg ;; <hl>
+	repeat: no-repeat ;; <hl>
+	position: center ;; <hl>
+	
+	\-- ftd.row:
+	width: fill-container
+	height.fixed.px: 200
+	background.image: $bg-image ;; <hl>
+	
+	\-- ftd.text: Fifthtry logo as background image
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- render-bg:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1021,87 +1021,87 @@ type and is optional.
 
 -- ds.rendered: Specifying linear gradient as background
 
--- ds.rendered.input:
-
-\-- integer $gradient-counter: 0
-
-\-- ftd.linear-gradient lg: ;; <hl>
-direction: bottom-left ;; <hl>
-colors: $color-values ;; <hl>
-
-\-- ftd.linear-gradient lg-2: ;; <hl>
-direction: top-right ;; <hl>
-colors: $color-values-2 ;; <hl>
-
-\-- ftd.linear-gradient lg-3: ;; <hl>
-direction: right ;; <hl>
-colors: $rainbow-values ;; <hl>
-
-\-- ftd.linear-gradient-color list rainbow-values:
-
-\-- ftd.linear-gradient-color: violet
-end.percent: 14.28
-
-\-- ftd.linear-gradient-color: indigo
-start.percent: 14.28
-end.percent: 28.57
-
-\-- ftd.linear-gradient-color: blue
-start.percent: 28.57
-end.percent: 42.85
-
-\-- ftd.linear-gradient-color: green
-start.percent: 42.85
-end.percent: 57.14
-
-\-- ftd.linear-gradient-color: yellow
-start.percent: 57.14
-end.percent: 71.42
-
-\-- ftd.linear-gradient-color: orange
-start.percent: 71.42
-end.percent: 85.71
-
-\-- ftd.linear-gradient-color: red
-start.percent: 85.71
-
-\-- end: rainbow-values
-
-\-- ftd.linear-gradient-color list color-values:
-
-\-- ftd.linear-gradient-color: red
-stop-position.percent: 20
-
-\-- ftd.linear-gradient-color: yellow
-
-\-- end: color-values
-
-\-- ftd.linear-gradient-color list color-values-2:
-
-\-- ftd.linear-gradient-color: blue
-\-- ftd.linear-gradient-color: green
-
-\-- end: color-values-2
-
-\-- ftd.row:
-width: fill-container
-height.fixed.px: 200
-background.linear-gradient: $lg ;; <hl>
-background.linear-gradient if { gradient-counter % 3 == 1 }: $lg-2 ;; <hl>
-background.linear-gradient if { gradient-counter % 3 == 2 }: $lg-3 ;; <hl>
-$on-click$: $ftd.increment($a = $gradient-counter)
-align-content: center
-
-\-- ftd.text: This is linear gradient (click to change)
-color: $inherited.colors.text-strong
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- render-gradient:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- integer $gradient-counter: 0
+	
+	\-- ftd.linear-gradient lg: ;; <hl>
+	direction: bottom-left ;; <hl>
+	colors: $color-values ;; <hl>
+	
+	\-- ftd.linear-gradient lg-2: ;; <hl>
+	direction: top-right ;; <hl>
+	colors: $color-values-2 ;; <hl>
+	
+	\-- ftd.linear-gradient lg-3: ;; <hl>
+	direction: right ;; <hl>
+	colors: $rainbow-values ;; <hl>
+	
+	\-- ftd.linear-gradient-color list rainbow-values:
+	
+	\-- ftd.linear-gradient-color: violet
+	end.percent: 14.28
+	
+	\-- ftd.linear-gradient-color: indigo
+	start.percent: 14.28
+	end.percent: 28.57
+	
+	\-- ftd.linear-gradient-color: blue
+	start.percent: 28.57
+	end.percent: 42.85
+	
+	\-- ftd.linear-gradient-color: green
+	start.percent: 42.85
+	end.percent: 57.14
+	
+	\-- ftd.linear-gradient-color: yellow
+	start.percent: 57.14
+	end.percent: 71.42
+	
+	\-- ftd.linear-gradient-color: orange
+	start.percent: 71.42
+	end.percent: 85.71
+	
+	\-- ftd.linear-gradient-color: red
+	start.percent: 85.71
+	
+	\-- end: rainbow-values
+	
+	\-- ftd.linear-gradient-color list color-values:
+	
+	\-- ftd.linear-gradient-color: red
+	stop-position.percent: 20
+	
+	\-- ftd.linear-gradient-color: yellow
+	
+	\-- end: color-values
+	
+	\-- ftd.linear-gradient-color list color-values-2:
+	
+	\-- ftd.linear-gradient-color: blue
+	\-- ftd.linear-gradient-color: green
+	
+	\-- end: color-values-2
+	
+	\-- ftd.row:
+	width: fill-container
+	height.fixed.px: 200
+	background.linear-gradient: $lg ;; <hl>
+	background.linear-gradient if { gradient-counter % 3 == 1 }: $lg-2 ;; <hl>
+	background.linear-gradient if { gradient-counter % 3 == 2 }: $lg-3 ;; <hl>
+	$on-click$: $ftd.increment($a = $gradient-counter)
+	align-content: center
+	
+	\-- ftd.text: This is linear gradient (click to change)
+	color: $inherited.colors.text-strong
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- render-gradient:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1117,25 +1117,25 @@ This property sets the width of the border. It takes input of type
 
 -- ds.rendered: Sample code using `border-width`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.text: FifthTry
-border-width.px: 3 ;; <hl>
-color: $inherited.colors.text
-border-color: $red-yellow
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-width.px: 3
-color: $inherited.colors.text
-border-color: $red-yellow
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 3 ;; <hl>
+	color: $inherited.colors.text
+	border-color: $red-yellow
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-width.px: 3
+		color: $inherited.colors.text
+		border-color: $red-yellow
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1153,25 +1153,25 @@ This property sets the width of the left border. It takes input of type
 
 -- ds.rendered: Sample code using `border-left-width`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.text: FifthTry
-border-left-width.px: 3 ;; <hl>
-color: $inherited.colors.text
-border-color: $red-yellow
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-left-width.px: 3
-color: $inherited.colors.text
-border-color: $red-yellow
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.text: FifthTry
+	border-left-width.px: 3 ;; <hl>
+	color: $inherited.colors.text
+	border-color: $red-yellow
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-left-width.px: 3
+		color: $inherited.colors.text
+		border-color: $red-yellow
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1188,25 +1188,25 @@ This property sets the width of the right border. It takes input of type
 
 -- ds.rendered: Sample code using `border-right-width`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.text: FifthTry
-border-right-width.px: 3 ;; <hl>
-color: $inherited.colors.text
-border-color: $red-yellow
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-right-width.px: 3
-color: $inherited.colors.text
-border-color: $red-yellow
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.text: FifthTry
+	border-right-width.px: 3 ;; <hl>
+	color: $inherited.colors.text
+	border-color: $red-yellow
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-right-width.px: 3
+		color: $inherited.colors.text
+		border-color: $red-yellow
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1223,25 +1223,25 @@ This property sets the width of the top border. It takes input of type
 
 -- ds.rendered: Sample code using `border-top-width`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.text: FifthTry
-border-top-width.px: 3 ;; <hl>
-color: $inherited.colors.text
-border-color: $red-yellow
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-top-width.px: 3
-color: $inherited.colors.text
-border-color: $red-yellow
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.text: FifthTry
+	border-top-width.px: 3 ;; <hl>
+	color: $inherited.colors.text
+	border-color: $red-yellow
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-top-width.px: 3
+		color: $inherited.colors.text
+		border-color: $red-yellow
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1260,25 +1260,25 @@ This property sets the width of the bottom border. It takes input of type
 
 -- ds.rendered: Sample code using `border-bottom-width`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.text: FifthTry
-border-bottom-width.px: 3 ;; <hl>
-color: $inherited.colors.text
-border-color: $red-yellow
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-bottom-width.px: 3
-color: $inherited.colors.text
-border-color: $red-yellow
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.text: FifthTry
+	border-bottom-width.px: 3 ;; <hl>
+	color: $inherited.colors.text
+	border-color: $red-yellow
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-bottom-width.px: 3
+		color: $inherited.colors.text
+		border-color: $red-yellow
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1298,27 +1298,27 @@ and is optional.
 
 -- ds.rendered: Sample code using `border-radius`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-color: $red-yellow
-border-radius.px: 5 ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-color: $red-yellow
-border-radius.px: 5
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 2
+	color: $inherited.colors.text
+	border-color: $red-yellow
+	border-radius.px: 5 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-width.px: 2
+		color: $inherited.colors.text
+		border-color: $red-yellow
+		border-radius.px: 5
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1337,27 +1337,27 @@ optional.
 
 -- ds.rendered: Sample code using `border-top-left-radius`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.text: FifthTry
-border-width.px: 3
-color: $inherited.colors.text
-border-color: $red-yellow
-border-top-left-radius.px: 8 ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-width.px: 3
-color: $inherited.colors.text
-border-color: $red-yellow
-border-top-left-radius.px: 8
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 3
+	color: $inherited.colors.text
+	border-color: $red-yellow
+	border-top-left-radius.px: 8 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-width.px: 3
+		color: $inherited.colors.text
+		border-color: $red-yellow
+		border-top-left-radius.px: 8
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1377,27 +1377,27 @@ optional.
 
 -- ds.rendered: Sample code using `border-top-right-radius`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.text: FifthTry
-border-width.px: 3
-color: $inherited.colors.text
-border-color: $red-yellow
-border-top-right-radius.px: 8 ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-width.px: 3
-color: $inherited.colors.text
-border-color: $red-yellow
-border-top-right-radius.px: 8
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 3
+	color: $inherited.colors.text
+	border-color: $red-yellow
+	border-top-right-radius.px: 8 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-width.px: 3
+		color: $inherited.colors.text
+		border-color: $red-yellow
+		border-top-right-radius.px: 8
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1417,27 +1417,27 @@ optional.
 
 -- ds.rendered: Sample code using `border-bottom-left-radius`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.text: FifthTry
-border-width.px: 3
-color: $inherited.colors.text
-border-color: $red-yellow
-border-bottom-left-radius.px: 8 ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-width.px: 3
-color: $inherited.colors.text
-border-color: $red-yellow
-border-bottom-left-radius.px: 8
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 3
+	color: $inherited.colors.text
+	border-color: $red-yellow
+	border-bottom-left-radius.px: 8 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-width.px: 3
+		color: $inherited.colors.text
+		border-color: $red-yellow
+		border-bottom-left-radius.px: 8
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1456,27 +1456,27 @@ optional.
 
 -- ds.rendered: Sample code using `border-bottom-right-radius`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
-
-\-- ftd.text: FifthTry
-border-width.px: 3
-color: $inherited.colors.text
-border-color: $red-yellow
-border-bottom-right-radius.px: 8 ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-width.px: 3
-color: $inherited.colors.text
-border-color: $red-yellow
-border-bottom-right-radius.px: 8
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow:
+	light: red
+	dark: yellow
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 3
+	color: $inherited.colors.text
+	border-color: $red-yellow
+	border-bottom-right-radius.px: 8 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-width.px: 3
+		color: $inherited.colors.text
+		border-color: $red-yellow
+		border-bottom-right-radius.px: 8
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1497,25 +1497,25 @@ input of [`ftd.color`](/built-in-types/#ftd-color) type.
 
 -- ds.rendered: Sample code using `border-color`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow: ;; <hl>
-light: red ;; <hl>
-dark: yellow ;; <hl>
-
-\-- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-color: $red-yellow ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-color: $red-yellow
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow: ;; <hl>
+	light: red ;; <hl>
+	dark: yellow ;; <hl>
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 2
+	color: $inherited.colors.text
+	border-color: $red-yellow ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-width.px: 2
+		color: $inherited.colors.text
+		border-color: $red-yellow
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1536,25 +1536,25 @@ takes input of [`ftd.color`](/built-in-types/#ftd-color) type.
 
 -- ds.rendered: Sample code using `border-left-color`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow: ;; <hl>
-light: red ;; <hl>
-dark: yellow ;; <hl>
-
-\-- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-left-color: $red-yellow ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-left-color: $red-yellow
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow: ;; <hl>
+	light: red ;; <hl>
+	dark: yellow ;; <hl>
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 2
+	color: $inherited.colors.text
+	border-left-color: $red-yellow ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-width.px: 2
+		color: $inherited.colors.text
+		border-left-color: $red-yellow
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1576,25 +1576,25 @@ takes input of [`ftd.color`](/built-in-types/#ftd-color) type.
 
 -- ds.rendered: Sample code using `border-right-color`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow: ;; <hl>
-light: red ;; <hl>
-dark: yellow ;; <hl>
-
-\-- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-right-color: $red-yellow ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-right-color: $red-yellow
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow: ;; <hl>
+	light: red ;; <hl>
+	dark: yellow ;; <hl>
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 2
+	color: $inherited.colors.text
+	border-right-color: $red-yellow ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-width.px: 2
+		color: $inherited.colors.text
+		border-right-color: $red-yellow
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1614,25 +1614,25 @@ takes input of [`ftd.color`](/built-in-types/#ftd-color) type.
 
 -- ds.rendered: Sample code using `border-top-color`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow: ;; <hl>
-light: red ;; <hl>
-dark: yellow ;; <hl>
-
-\-- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-top-color: $red-yellow ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-top-color: $red-yellow
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow: ;; <hl>
+	light: red ;; <hl>
+	dark: yellow ;; <hl>
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 2
+	color: $inherited.colors.text
+	border-top-color: $red-yellow ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-width.px: 2
+		color: $inherited.colors.text
+		border-top-color: $red-yellow
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1652,25 +1652,25 @@ It takes input of [`ftd.color`](/built-in-types/#ftd-color) type.
 
 -- ds.rendered: Sample code using `border-bottom-color`
 
--- ds.rendered.input:
-
-\-- ftd.color red-yellow: ;; <hl>
-light: red ;; <hl>
-dark: yellow ;; <hl>
-
-\-- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-bottom-color: $red-yellow ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-bottom-color: $red-yellow
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-yellow: ;; <hl>
+	light: red ;; <hl>
+	dark: yellow ;; <hl>
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 2
+	color: $inherited.colors.text
+	border-bottom-color: $red-yellow ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-width.px: 2
+		color: $inherited.colors.text
+		border-bottom-color: $red-yellow
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1692,23 +1692,23 @@ this value is not provided.
 
 -- ds.rendered: Sample code using `border-style`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-border-style: dashed ;; <hl>
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-style: dashed
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	border-style: dashed ;; <hl>
+	border-width.px: 2
+	border-color: $red-yellow
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-style: dashed
+		border-width.px: 2
+		border-color: $red-yellow
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1726,23 +1726,23 @@ value and is optional.
 
 -- ds.rendered: Sample code using `border-style-left`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-border-style-left: dashed ;; <hl>
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-style-left: dashed
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	border-style-left: dashed ;; <hl>
+	border-width.px: 2
+	border-color: $red-yellow
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-style-left: dashed
+		border-width.px: 2
+		border-color: $red-yellow
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1760,23 +1760,23 @@ value and is optional.
 
 -- ds.rendered: Sample code using `border-style-right`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-border-style-right: dashed ;; <hl>
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-style-right: dashed
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	border-style-right: dashed ;; <hl>
+	border-width.px: 2
+	border-color: $red-yellow
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-style-right: dashed
+		border-width.px: 2
+		border-color: $red-yellow
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1794,23 +1794,23 @@ value and is optional.
 
 -- ds.rendered: Sample code using `border-style-top`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-border-style-top: dashed ;; <hl>
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-style-top: dashed
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	border-style-top: dashed ;; <hl>
+	border-width.px: 2
+	border-color: $red-yellow
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-style-top: dashed
+		border-width.px: 2
+		border-color: $red-yellow
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1828,23 +1828,23 @@ value and is optional.
 
 -- ds.rendered: Sample code using `border-style-bottom`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-border-style-bottom: dashed ;; <hl>
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-style-bottom: dashed
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	border-style-bottom: dashed ;; <hl>
+	border-width.px: 2
+	border-color: $red-yellow
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-style-bottom: dashed
+		border-width.px: 2
+		border-color: $red-yellow
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1862,23 +1862,23 @@ value and is optional.
 
 -- ds.rendered: Sample code using `border-style-horizontal`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-border-style-horizontal: dashed ;; <hl>
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-style-horizontal: dashed
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	border-style-horizontal: dashed ;; <hl>
+	border-width.px: 2
+	border-color: $red-yellow
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-style-horizontal: dashed
+		border-width.px: 2
+		border-color: $red-yellow
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1896,23 +1896,23 @@ value and is optional.
 
 -- ds.rendered: Sample code using `border-style-vertical`
 
--- ds.rendered.input:
-
-\-- ftd.text: FifthTry
-border-style-vertical: dashed ;; <hl>
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-border-style-vertical: dashed
-border-width.px: 2
-border-color: $red-yellow
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: FifthTry
+	border-style-vertical: dashed ;; <hl>
+	border-width.px: 2
+	border-color: $red-yellow
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		border-style-vertical: dashed
+		border-width.px: 2
+		border-color: $red-yellow
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -1934,121 +1934,121 @@ any edge. It takes value of type
 
 -- ds.rendered: Sample code using `overflow`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	width: fill-container
+	spacing: space-evenly
+	color: $inherited.colors.text
+	
+	\-- ftd.text:
+	width.fixed.px: 150
+	height.fixed.px: 100
+	overflow: visible ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	overflow = Visible
+	
+	The quick, brown fox jumps over a lazy dog.
+	DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+	
+	\-- ftd.text:
+	width.fixed.px: 150
+	height.fixed.px: 100
+	overflow: scroll ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	overflow = Scroll
+	
+	The quick, brown fox jumps over a lazy dog.
+	DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+	
+	\-- ftd.text:
+	width.fixed.px: 150
+	height.fixed.px: 100
+	overflow: auto ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	overflow = Auto
+	
+	The quick, brown fox jumps over a lazy dog.
+	DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+	
+	\-- ftd.text:
+	width.fixed.px: 150
+	height.fixed.px: 100
+	overflow: hidden ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	overflow = Hidden
+	
+	The quick, brown fox jumps over a lazy dog.
+	DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- ftd.row:
+		width: fill-container
+		spacing: space-evenly
+		color: $inherited.colors.text
+		
+			-- ftd.text:
+			width.fixed.px: 150
+			height.fixed.px: 100
+			overflow: visible
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			overflow = Visible
+			
+			Thequickbrownfoxjumps over a lazy dog.
+			DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+			
+			-- ftd.text:
+			width.fixed.px: 150
+			height.fixed.px: 100
+			overflow: scroll
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			overflow = Scroll
+			
+			Thequickbrownfoxjumps over a lazy dog.
+			DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+			
+			-- ftd.text:
+			width.fixed.px: 150
+			height.fixed.px: 100
+			overflow: auto
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			overflow = Auto
+			
+			Thequickbrownfoxjumps over a lazy dog.
+			DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+			
+			-- ftd.text:
+			width.fixed.px: 150
+			height.fixed.px: 100
+			overflow: hidden
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			overflow = Hidden
+			
+			Thequickbrownfoxjumps over a lazy dog.
+			DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+			
+		-- end: ftd.row
 
-\-- ftd.row:
-width: fill-container
-spacing: space-evenly
-color: $inherited.colors.text
-
-\-- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow: visible ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-overflow = Visible
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
-\-- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow: scroll ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-overflow = Scroll
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
-\-- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow: auto ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-overflow = Auto
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
-\-- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow: hidden ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-overflow = Hidden
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- ftd.row:
-width: fill-container
-spacing: space-evenly
-color: $inherited.colors.text
-
--- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow: visible
-border-color: $red-yellow
-border-width.px: 2
-
-overflow = Visible
-
-Thequickbrownfoxjumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
--- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow: scroll
-border-color: $red-yellow
-border-width.px: 2
-
-overflow = Scroll
-
-Thequickbrownfoxjumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
--- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow: auto
-border-color: $red-yellow
-border-width.px: 2
-
-overflow = Auto
-
-Thequickbrownfoxjumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
--- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow: hidden
-border-color: $red-yellow
-border-width.px: 2
-
-overflow = Hidden
-
-Thequickbrownfoxjumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
--- end: ftd.row
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -2069,124 +2069,124 @@ left and right edges. It takes value of type
 
 -- ds.rendered: Sample code using `overflow-x`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	width: fill-container
+	spacing: space-evenly
+	
+	\-- ftd.text:
+	width.fixed.px: 150
+	height.fixed.px: 100
+	overflow-x: visible ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	overflow-x = Visible
+	
+	The quick, brown fox jumps over a lazy dog.
+	DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+	
+	\-- ftd.text:
+	width.fixed.px: 120
+	height.fixed.px: 100
+	overflow-x: scroll ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	overflow-x = Scroll
+	
+	The quick, brown fox jumps over a lazy dog.
+	DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+	
+	\-- ftd.text:
+	width.fixed.px: 150
+	height.fixed.px: 100
+	overflow-x: auto ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	overflow-x = Auto
+	
+	The quick, brown fox jumps over a lazy dog.
+	DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+	
+	\-- ftd.text:
+	color: $inherited.colors.text
+	width.fixed.px: 150
+	height.fixed.px: 100
+	overflow-x: hidden ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	overflow-x = Hidden
+	
+	The quick, brown fox jumps over a lazy dog.
+	DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		width: fill-container
+		spacing.fixed.px: 10
+		
+			-- ftd.text:
+			width.fixed.px: 150
+			height.fixed.px: 100
+			overflow-x: visible
+			border-color: $red-yellow
+			border-width.px: 2
+			color: $inherited.colors.text
+			
+			overflow-x = Visible
+			
+			The value of Pi is 3.1415926535897932384626433832795029.
+			The value of e is 2.7182818284590452353602874713526625.
+			
+			-- ftd.text:
+			width.fixed.px: 150
+			height.fixed.px: 100
+			overflow-x: scroll
+			border-color: $red-yellow
+			border-width.px: 2
+			color: $inherited.colors.text
+			
+			overflow-x = Scroll
+			
+			The value of Pi is 3.1415926535897932384626433832795029.
+			The value of e is 2.7182818284590452353602874713526625.
+			
+			-- ftd.text:
+			width.fixed.px: 150
+			height.fixed.px: 100
+			overflow-x: auto
+			border-color: $red-yellow
+			border-width.px: 2
+			color: $inherited.colors.text
+			
+			overflow-x = Auto
+			
+			The value of Pi is 3.1415926535897932384626433832795029.
+			The value of e is 2.7182818284590452353602874713526625.
+			
+			-- ftd.text:
+			width.fixed.px: 150
+			height.fixed.px: 100
+			overflow-x: hidden
+			border-color: $red-yellow
+			border-width.px: 2
+			color: $inherited.colors.text
+			
+			overflow-x = Hidden
+			
+			The value of Pi is 3.1415926535897932384626433832795029.
+			The value of e is 2.7182818284590452353602874713526625.
+			
+		-- end: ftd.column
 
-\-- ftd.row:
-width: fill-container
-spacing: space-evenly
-
-\-- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-x: visible ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-overflow-x = Visible
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
-\-- ftd.text:
-width.fixed.px: 120
-height.fixed.px: 100
-overflow-x: scroll ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-overflow-x = Scroll
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
-\-- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-x: auto ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-overflow-x = Auto
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
-\-- ftd.text:
-color: $inherited.colors.text
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-x: hidden ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-overflow-x = Hidden
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- ftd.column:
-width: fill-container
-spacing.fixed.px: 10
-
--- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-x: visible
-border-color: $red-yellow
-border-width.px: 2
-color: $inherited.colors.text
-
-overflow-x = Visible
-
-The value of Pi is 3.1415926535897932384626433832795029.
-The value of e is 2.7182818284590452353602874713526625.
-
--- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-x: scroll
-border-color: $red-yellow
-border-width.px: 2
-color: $inherited.colors.text
-
-overflow-x = Scroll
-
-The value of Pi is 3.1415926535897932384626433832795029.
-The value of e is 2.7182818284590452353602874713526625.
-
--- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-x: auto
-border-color: $red-yellow
-border-width.px: 2
-color: $inherited.colors.text
-
-overflow-x = Auto
-
-The value of Pi is 3.1415926535897932384626433832795029.
-The value of e is 2.7182818284590452353602874713526625.
-
--- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-x: hidden
-border-color: $red-yellow
-border-width.px: 2
-color: $inherited.colors.text
-
-overflow-x = Hidden
-
-The value of Pi is 3.1415926535897932384626433832795029.
-The value of e is 2.7182818284590452353602874713526625.
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -2208,122 +2208,122 @@ top and bottom edges. It takes value of type
 
 -- ds.rendered: Sample code using `overflow-y`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	width: fill-container
+	spacing: space-evenly
+	color: $inherited.colors.text
+	
+	\-- ftd.text:
+	width.fixed.px: 150
+	height.fixed.px: 100
+	overflow-y: visible ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	overflow-y = Visible
+	
+	The quick, brown fox jumps over a lazy dog.
+	DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+	
+	\-- ftd.text:
+	width.fixed.px: 150
+	height.fixed.px: 100
+	overflow-y: scroll ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	overflow-y = Scroll
+	
+	The quick, brown fox jumps over a lazy dog.
+	DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+	
+	\-- ftd.text:
+	width.fixed.px: 150
+	height.fixed.px: 100
+	overflow-y: auto ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	overflow-y = Auto
+	
+	The quick, brown fox jumps over a lazy dog.
+	DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+	
+	\-- ftd.text:
+	width.fixed.px: 150
+	height.fixed.px: 100
+	overflow-y: hidden ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	overflow-y = Hidden
+	
+	The quick, brown fox jumps over a lazy dog.
+	DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- ftd.row:
+		width: fill-container
+		spacing: space-evenly
+		color: $inherited.colors.text
+		
+			-- ftd.text:
+			width.fixed.px: 150
+			height.fixed.px: 100
+			overflow-y: visible
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			overflow-y = Visible
+			
+			The quick, brown fox jumps over a lazy dog.
+			DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+			
+			-- ftd.text:
+			width.fixed.px: 150
+			height.fixed.px: 100
+			overflow-y: scroll
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			overflow-y = Scroll
+			
+			The quick, brown fox jumps over a lazy dog.
+			DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+			
+			-- ftd.text:
+			width.fixed.px: 150
+			height.fixed.px: 100
+			overflow-y: auto
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			overflow-y = Auto
+			
+			The quick, brown fox jumps over a lazy dog.
+			DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+			
+			-- ftd.text:
+			width.fixed.px: 150
+			height.fixed.px: 100
+			overflow-y: hidden
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			overflow-y = Hidden
+			
+			The quick, brown fox jumps over a lazy dog.
+			DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+			
+			
+		-- end: ftd.row
 
-\-- ftd.row:
-width: fill-container
-spacing: space-evenly
-color: $inherited.colors.text
-
-\-- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-y: visible ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-overflow-y = Visible
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
-\-- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-y: scroll ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-overflow-y = Scroll
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
-\-- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-y: auto ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-overflow-y = Auto
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
-\-- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-y: hidden ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-overflow-y = Hidden
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- ftd.row:
-width: fill-container
-spacing: space-evenly
-color: $inherited.colors.text
-
--- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-y: visible
-border-color: $red-yellow
-border-width.px: 2
-
-overflow-y = Visible
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
--- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-y: scroll
-border-color: $red-yellow
-border-width.px: 2
-
-overflow-y = Scroll
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
--- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-y: auto
-border-color: $red-yellow
-border-width.px: 2
-
-overflow-y = Auto
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
--- ftd.text:
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-y: hidden
-border-color: $red-yellow
-border-width.px: 2
-
-overflow-y = Hidden
-
-The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
-
-
--- end: ftd.row
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -2342,96 +2342,96 @@ and is optional.
 
 -- ds.rendered: Sample code using `cursor`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.column:
+	width: fill-container
+	padding.px: 10
+	spacing.fixed.px: 10
+	
+	\-- ftd.text: This text will show pointer cursor on hover
+	color: $inherited.colors.text
+	padding.px: 10
+	cursor: pointer ;; <hl>
+	border-width.px: 2
+	border-color: $red-yellow
+	
+	\-- ftd.text: This text will show progress cursor on hover
+	color: $inherited.colors.text
+	padding.px: 10
+	cursor: progress ;; <hl>
+	border-width.px: 2
+	border-color: $red-yellow
+	
+	
+	\-- ftd.text: This text will show zoom-in cursor on hover
+	color: $inherited.colors.text
+	padding.px: 10
+	cursor: zoom-in ;; <hl>
+	border-width.px: 2
+	border-color: $red-yellow
+	
+	\-- ftd.text: This text will show help cursor on hover
+	color: $inherited.colors.text
+	padding.px: 10
+	cursor: help ;; <hl>
+	border-width.px: 2
+	border-color: $red-yellow
+	
+	\-- ftd.text: This text will show cross-hair cursor on hover
+	color: $inherited.colors.text
+	padding.px: 10
+	cursor: crosshair ;; <hl>
+	border-width.px: 2
+	border-color: $red-yellow
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		width: fill-container
+		padding.px: 10
+		spacing.fixed.px: 10
+		
+			-- ftd.text: This text will show pointer cursor on hover
+			color: $inherited.colors.text
+			padding.px: 10
+			cursor: pointer
+			border-width.px: 2
+			border-color: $red-yellow
+			
+			-- ftd.text: This text will show progress cursor on hover
+			color: $inherited.colors.text
+			padding.px: 10
+			cursor: progress
+			border-width.px: 2
+			border-color: $red-yellow
+			
+			-- ftd.text: This text will show zoom-in cursor on hover
+			color: $inherited.colors.text
+			padding.px: 10
+			cursor: zoom-in
+			border-width.px: 2
+			border-color: $red-yellow
+			
+			-- ftd.text: This text will show help cursor on hover
+			color: $inherited.colors.text
+			padding.px: 10
+			cursor: help
+			border-width.px: 2
+			border-color: $red-yellow
+			
+			-- ftd.text: This text will show cross-hair cursor on hover
+			color: $inherited.colors.text
+			padding.px: 10
+			cursor: crosshair
+			border-width.px: 2
+			border-color: $red-yellow
+			
+		-- end: ftd.column
 
-\-- ftd.column:
-width: fill-container
-padding.px: 10
-spacing.fixed.px: 10
-
-\-- ftd.text: This text will show pointer cursor on hover
-color: $inherited.colors.text
-padding.px: 10
-cursor: pointer ;; <hl>
-border-width.px: 2
-border-color: $red-yellow
-
-\-- ftd.text: This text will show progress cursor on hover
-color: $inherited.colors.text
-padding.px: 10
-cursor: progress ;; <hl>
-border-width.px: 2
-border-color: $red-yellow
-
-
-\-- ftd.text: This text will show zoom-in cursor on hover
-color: $inherited.colors.text
-padding.px: 10
-cursor: zoom-in ;; <hl>
-border-width.px: 2
-border-color: $red-yellow
-
-\-- ftd.text: This text will show help cursor on hover
-color: $inherited.colors.text
-padding.px: 10
-cursor: help ;; <hl>
-border-width.px: 2
-border-color: $red-yellow
-
-\-- ftd.text: This text will show cross-hair cursor on hover
-color: $inherited.colors.text
-padding.px: 10
-cursor: crosshair ;; <hl>
-border-width.px: 2
-border-color: $red-yellow
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-width: fill-container
-padding.px: 10
-spacing.fixed.px: 10
-
--- ftd.text: This text will show pointer cursor on hover
-color: $inherited.colors.text
-padding.px: 10
-cursor: pointer
-border-width.px: 2
-border-color: $red-yellow
-
--- ftd.text: This text will show progress cursor on hover
-color: $inherited.colors.text
-padding.px: 10
-cursor: progress
-border-width.px: 2
-border-color: $red-yellow
-
--- ftd.text: This text will show zoom-in cursor on hover
-color: $inherited.colors.text
-padding.px: 10
-cursor: zoom-in
-border-width.px: 2
-border-color: $red-yellow
-
--- ftd.text: This text will show help cursor on hover
-color: $inherited.colors.text
-padding.px: 10
-cursor: help
-border-width.px: 2
-border-color: $red-yellow
-
--- ftd.text: This text will show cross-hair cursor on hover
-color: $inherited.colors.text
-padding.px: 10
-cursor: crosshair
-border-width.px: 2
-border-color: $red-yellow
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -2455,19 +2455,19 @@ role that the UI element will be playing. It takes value of type
 
 -- ds.rendered: Sample code using `region`
 
--- ds.rendered.input:
-
-\-- ftd.text: Hello World
-region: h1 ;; <hl>
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.text: Hello World
-region: h1
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: Hello World
+	region: h1 ;; <hl>
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: Hello World
+		region: h1
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -2487,19 +2487,19 @@ This converts the element to a hyper link.
 
 -- ds.rendered: Sample code using `link`
 
--- ds.rendered.input:
-
-\-- ftd.text: fifthtry
-link: https://www.fifthtry.com ;; <hl>
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.text: fifthtry
-link: https://www.fifthtry.com
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: fifthtry
+	link: https://www.fifthtry.com ;; <hl>
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: fifthtry
+		link: https://www.fifthtry.com
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -2526,11 +2526,11 @@ color: $inherited.colors.text
 
 -- ds.rendered.output:
 
--- ftd.text: fifthtry (opens in new tab)
-link: https://www.fifthtry.com
-open-in-new-tab: true
-color: $inherited.colors.text
-
+	-- ftd.text: fifthtry (opens in new tab)
+	link: https://www.fifthtry.com
+	open-in-new-tab: true
+	color: $inherited.colors.text
+	
 -- end: ds.rendered.output
 
 
@@ -2551,29 +2551,29 @@ is optional.
 
 -- ds.rendered: Sample code using `role`
 
--- ds.rendered.input:
-
-\-- ftd.column:
-color: $inherited.colors.text
-width: fill-container
-spacing.fixed.px: 10
-
-\-- ftd.text: Heading Hero
-role: $inherited.types.heading-hero ;; <hl>
-
-\-- ftd.text: Heading Large
-role: $inherited.types.heading-large ;; <hl>
-
-\-- ftd.text: Copy Regular
-role: $inherited.types.copy-regular ;; <hl>
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- role-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.column:
+	color: $inherited.colors.text
+	width: fill-container
+	spacing.fixed.px: 10
+	
+	\-- ftd.text: Heading Hero
+	role: $inherited.types.heading-hero ;; <hl>
+	
+	\-- ftd.text: Heading Large
+	role: $inherited.types.heading-large ;; <hl>
+	
+	\-- ftd.text: Copy Regular
+	role: $inherited.types.copy-regular ;; <hl>
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- role-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -2597,77 +2597,77 @@ and is optional
 
 -- ds.rendered: Sample code using `resize`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	resize: both ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 1
+	margin.px: 10
+	
+	\-- ftd.text: This row is resizable both directions
+	color: $inherited.colors.text
+	
+	\-- end: ftd.row
+	
+	\-- ftd.row:
+	resize: horizontal ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 1
+	margin.px: 10
+	
+	\-- ftd.text: This row is resizable only horizontally
+	color: $inherited.colors.text
+	
+	\-- end: ftd.row
+	
+	\-- ftd.row:
+	resize: vertical ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 1
+	margin.px: 10
+	
+	\-- ftd.text: This row is resizable only vertically
+	color: $inherited.colors.text
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- ftd.row:
+		resize: both
+		border-color: $red-yellow
+		border-width.px: 1
+		margin.px: 10
+		
+			-- ftd.text: This row is resizable both directions
+			color: $inherited.colors.text
+			
+		-- end: ftd.row
 
-\-- ftd.row:
-resize: both ;; <hl>
-border-color: $red-yellow
-border-width.px: 1
-margin.px: 10
+		-- ftd.row:
+		resize: horizontal
+		border-color: $red-yellow
+		border-width.px: 1
+		margin.px: 10
+		
+			-- ftd.text: This row is resizable only horizontally
+			color: $inherited.colors.text
+			
+		-- end: ftd.row
 
-\-- ftd.text: This row is resizable both directions
-color: $inherited.colors.text
+		-- ftd.row:
+		resize: vertical
+		border-color: $red-yellow
+		border-width.px: 1
+		margin.px: 10
+		
+			-- ftd.text: This row is resizable only vertically
+			color: $inherited.colors.text
+			
+		-- end: ftd.row
 
-\-- end: ftd.row
-
-\-- ftd.row:
-resize: horizontal ;; <hl>
-border-color: $red-yellow
-border-width.px: 1
-margin.px: 10
-
-\-- ftd.text: This row is resizable only horizontally
-color: $inherited.colors.text
-
-\-- end: ftd.row
-
-\-- ftd.row:
-resize: vertical ;; <hl>
-border-color: $red-yellow
-border-width.px: 1
-margin.px: 10
-
-\-- ftd.text: This row is resizable only vertically
-color: $inherited.colors.text
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- ftd.row:
-resize: both
-border-color: $red-yellow
-border-width.px: 1
-margin.px: 10
-
--- ftd.text: This row is resizable both directions
-color: $inherited.colors.text
-
--- end: ftd.row
-
--- ftd.row:
-resize: horizontal
-border-color: $red-yellow
-border-width.px: 1
-margin.px: 10
-
--- ftd.text: This row is resizable only horizontally
-color: $inherited.colors.text
-
--- end: ftd.row
-
--- ftd.row:
-resize: vertical
-border-color: $red-yellow
-border-width.px: 1
-margin.px: 10
-
--- ftd.text: This row is resizable only vertically
-color: $inherited.colors.text
-
--- end: ftd.row
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -2689,47 +2689,47 @@ optional.
 
 -- ds.rendered: Sample code using `sticky`
 
--- ds.rendered.input:
-
-\-- ftd.column:
-padding.px: 10
-color: $inherited.colors.text
-spacing.fixed.px: 50
-height.fixed.px: 200
-width.fixed.px: 300
-overflow-y: scroll
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: The blue planet below is sticky
-
-\-- ftd.text: Blue planet
-color: black
-background.solid: deepskyblue
-sticky: true ;; <hl>
-width.fixed.px: 120
-text-align: center
-left.px: 50
-top.px: 0
-
-\-- ftd.text:
-padding.px: 10
-
-Far out in the uncharted backwaters of the unfashionable end of the western
-spiral arm of the Galaxy lies a small unregarded blue planet.
-Orbiting this at a distance of roughly ninety-two million miles is an
-utterly insignificant little planet whose ape-descended life
-forms are so amazingly primitive that they still think `fastn` code written
-by humans are still a pretty neat idea of escalating knowledge throughout the
-universe.
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- sticky-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.column:
+	padding.px: 10
+	color: $inherited.colors.text
+	spacing.fixed.px: 50
+	height.fixed.px: 200
+	width.fixed.px: 300
+	overflow-y: scroll
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: The blue planet below is sticky
+	
+	\-- ftd.text: Blue planet
+	color: black
+	background.solid: deepskyblue
+	sticky: true ;; <hl>
+	width.fixed.px: 120
+	text-align: center
+	left.px: 50
+	top.px: 0
+	
+	\-- ftd.text:
+	padding.px: 10
+	
+	Far out in the uncharted backwaters of the unfashionable end of the western
+	spiral arm of the Galaxy lies a small unregarded blue planet.
+	Orbiting this at a distance of roughly ninety-two million miles is an
+	utterly insignificant little planet whose ape-descended life
+	forms are so amazingly primitive that they still think `fastn` code written
+	by humans are still a pretty neat idea of escalating knowledge throughout the
+	universe.
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- sticky-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -2744,30 +2744,30 @@ which is of record type and is optional.
 
 -- ds.rendered: Sample code using `shadow`
 
--- ds.rendered.input:
-
-\-- ftd.color yellow-red:
-light: yellow
-dark: red
-
-\-- ftd.shadow s: ;; <hl>
-color: $yellow-red ;; <hl>
-x-offset.px: 10 ;; <hl>
-y-offset.px: 10 ;; <hl>
-blur.px: 1 ;; <hl>
-
-\-- ftd.text: FifthTry
-shadow: $s ;; <hl>
-margin.px: 10
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-shadow: $s
-margin.px: 10
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color yellow-red:
+	light: yellow
+	dark: red
+	
+	\-- ftd.shadow s: ;; <hl>
+	color: $yellow-red ;; <hl>
+	x-offset.px: 10 ;; <hl>
+	y-offset.px: 10 ;; <hl>
+	blur.px: 1 ;; <hl>
+	
+	\-- ftd.text: FifthTry
+	shadow: $s ;; <hl>
+	margin.px: 10
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: FifthTry
+		shadow: $s
+		margin.px: 10
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -2789,23 +2789,23 @@ which is of `or-type` type and is optional.
 
 -- ds.rendered: Sample code using `mask`
 
--- ds.rendered.input:
-
-\-- ftd.container:
-background.solid: red
-mask.image: https://mdn.github.io/css-examples/masking/star.svg
-width.fixed.px: 300
-height.fixed.px: 300
-
--- ds.rendered.output:
-
--- ftd.container:
-background.solid: red
-mask.image: https://mdn.github.io/css-examples/masking/star.svg
-width.fixed.px: 300
-height.fixed.px: 300
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.container:
+	background.solid: red
+	mask.image: https://mdn.github.io/css-examples/masking/star.svg
+	width.fixed.px: 300
+	height.fixed.px: 300
+	
+	-- ds.rendered.output:
+	
+		-- ftd.container:
+		background.solid: red
+		mask.image: https://mdn.github.io/css-examples/masking/star.svg
+		width.fixed.px: 300
+		height.fixed.px: 300
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -2825,107 +2825,107 @@ type [`ftd.anchor`](ftd/built-in-types/#ftd-anchor) and is optional.
 
 -- ds.rendered: Sample code using `anchor`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.column:
+	margin.px: 10
+	padding.px: 20
+	border-color: $red-yellow
+	border-width.px: 2
+	width.fixed.px: 600
+	
+	\-- ftd.column:
+	id: c1
+	padding.px: 20
+	border-color: green
+	border-width.px: 2
+	width.fixed.px: 400
+	
+	\-- ftd.text: Inside Inner Container
+	color: $inherited.colors.text-strong
+	anchor.id: c1 ;; <hl>
+	top.px: 0
+	left.px: 0
+	
+	\-- end: ftd.column
+	
+	\-- end: ftd.column
+	
+	\-- ftd.column:
+	id: c2
+	margin.px: 10
+	padding.px: 20
+	border-color: $red-yellow
+	border-width.px: 2
+	width.fixed.px: 600
+	
+	\-- ftd.column:
+	padding.px: 20
+	border-color: blue
+	border-width.px: 2
+	width.fixed.px: 400
+	
+	\-- ftd.text: Inside Outer Container
+	color: $inherited.colors.text-strong
+	anchor.id: c2 ;; <hl>
+	top.px: 0
+	left.px: 0
+	
+	\-- end: ftd.column
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		margin.px: 10
+		padding.px: 20
+		border-color: $red-yellow
+		border-width.px: 2
+		width.fixed.px: 600
+		
+			-- ftd.column:
+			id: c1
+			padding.px: 20
+			border-color: green
+			border-width.px: 2
+			width.fixed.px: 400
+			
+				-- ftd.text: Inside Inner Container
+				color: $inherited.colors.text-strong
+				anchor.id: c1
+				top.px: 0
+				left.px: 0
+				
+			-- end: ftd.column
 
-\-- ftd.column:
-margin.px: 10
-padding.px: 20
-border-color: $red-yellow
-border-width.px: 2
-width.fixed.px: 600
+		-- end: ftd.column
 
-\-- ftd.column:
-id: c1
-padding.px: 20
-border-color: green
-border-width.px: 2
-width.fixed.px: 400
+		-- ftd.column:
+		id: c2
+		margin.px: 10
+		padding.px: 20
+		border-color: $red-yellow
+		border-width.px: 2
+		width.fixed.px: 600
+		
+			-- ftd.column:
+			padding.px: 20
+			border-color: blue
+			border-width.px: 2
+			width.fixed.px: 400
+			
+				-- ftd.text: Inside Outer Container
+				color: $inherited.colors.text-strong
+				anchor.id: c2
+				top.px: 0
+				left.px: 0
+				
+			-- end: ftd.column
 
-\-- ftd.text: Inside Inner Container
-color: $inherited.colors.text-strong
-anchor.id: c1 ;; <hl>
-top.px: 0
-left.px: 0
+		-- end: ftd.column
 
-\-- end: ftd.column
-
-\-- end: ftd.column
-
-\-- ftd.column:
-id: c2
-margin.px: 10
-padding.px: 20
-border-color: $red-yellow
-border-width.px: 2
-width.fixed.px: 600
-
-\-- ftd.column:
-padding.px: 20
-border-color: blue
-border-width.px: 2
-width.fixed.px: 400
-
-\-- ftd.text: Inside Outer Container
-color: $inherited.colors.text-strong
-anchor.id: c2 ;; <hl>
-top.px: 0
-left.px: 0
-
-\-- end: ftd.column
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-margin.px: 10
-padding.px: 20
-border-color: $red-yellow
-border-width.px: 2
-width.fixed.px: 600
-
--- ftd.column:
-id: c1
-padding.px: 20
-border-color: green
-border-width.px: 2
-width.fixed.px: 400
-
--- ftd.text: Inside Inner Container
-color: $inherited.colors.text-strong
-anchor.id: c1
-top.px: 0
-left.px: 0
-
--- end: ftd.column
-
--- end: ftd.column
-
--- ftd.column:
-id: c2
-margin.px: 10
-padding.px: 20
-border-color: $red-yellow
-border-width.px: 2
-width.fixed.px: 600
-
--- ftd.column:
-padding.px: 20
-border-color: blue
-border-width.px: 2
-width.fixed.px: 400
-
--- ftd.text: Inside Outer Container
-color: $inherited.colors.text-strong
-anchor.id: c2
-top.px: 0
-left.px: 0
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -2945,49 +2945,49 @@ complete transparency.
 
 -- ds.rendered: Sample code using `opacity`
 
--- ds.rendered.input:
-
-\-- integer $counter: 0
-
-\-- string sample-text:
-
-Far far away, behind the word mountains, far from the countries
-Vokalia and Consonantia, there live the blind texts. Separated they
-in Bookmarksgrove right at the coast of the Semantics, a large language
-ocean. A small river named Duden flows by their place and supplies it
-with the necessary regelialia. It is a paradisematic country, in which
-roasted parts of sentences fly into your mouth. Even the all-powerful
-Pointing has no control about the blind texts it is an almost unorthographic
-life One day however a small line of blind text by the name of Lorem
-Ipsum decided to leave for the far World of Grammar.
-
-\-- ftd.column:
-width: fill-container
-background.solid: #963770
-opacity: 1.0
-opacity if { counter % 4 == 1 }: 0.7
-opacity if { counter % 4 == 2 }: 0.5
-opacity if { counter % 4 == 3 }: 0.2
-
-\-- ftd.text: $sample-text
-color: white
-padding.px: 10
-
-\-- end: ftd.column
-
-\-- ftd.text: Change opacity
-color: $inherited.colors.text
-$on-click$: $ftd.increment($a = $counter)
-margin-vertical.px: 10
-border-width.px: 1
-align-self: center
-text-align: center
-
--- ds.rendered.output:
-
--- opacity-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- integer $counter: 0
+	
+	\-- string sample-text:
+	
+	Far far away, behind the word mountains, far from the countries
+	Vokalia and Consonantia, there live the blind texts. Separated they
+	in Bookmarksgrove right at the coast of the Semantics, a large language
+	ocean. A small river named Duden flows by their place and supplies it
+	with the necessary regelialia. It is a paradisematic country, in which
+	roasted parts of sentences fly into your mouth. Even the all-powerful
+	Pointing has no control about the blind texts it is an almost unorthographic
+	life One day however a small line of blind text by the name of Lorem
+	Ipsum decided to leave for the far World of Grammar.
+	
+	\-- ftd.column:
+	width: fill-container
+	background.solid: #963770
+	opacity: 1.0
+	opacity if { counter % 4 == 1 }: 0.7
+	opacity if { counter % 4 == 2 }: 0.5
+	opacity if { counter % 4 == 3 }: 0.2
+	
+	\-- ftd.text: $sample-text
+	color: white
+	padding.px: 10
+	
+	\-- end: ftd.column
+	
+	\-- ftd.text: Change opacity
+	color: $inherited.colors.text
+	$on-click$: $ftd.increment($a = $counter)
+	margin-vertical.px: 10
+	border-width.px: 1
+	align-self: center
+	text-align: center
+	
+	-- ds.rendered.output:
+	
+		-- opacity-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -3008,88 +3008,88 @@ It takes value of type
 
 -- ds.rendered: Sample code using `whitespace`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- string sample-text:
+	
+	But ere she from the church-door stepped She smiled and told us why:
+	
+	'It was a wicked woman's curse,' Quoth she, 'and what care I?'
+	She smiled, and smiled, and passed it off Ere from the door she stept—
+	
+	\-- end: sample-text
+	
+	\-- ftd.column:
+	spacing.fixed.px: 10
+	color: $inherited.colors.text
+	
+	\-- ftd.text: $sample-text
+	white-space: normal ;; <hl>
+	padding.px: 10
+	width.fixed.px: 400
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: $sample-text
+	white-space: nowrap ;; <hl>
+	padding.px: 10
+	width.fixed.px: 400
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: $sample-text
+	white-space: pre ;; <hl>
+	padding.px: 10
+	width.fixed.px: 400
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: $sample-text
+	white-space: break-spaces ;; <hl>
+	padding.px: 10
+	width.fixed.px: 400
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		spacing.fixed.px: 10
+		color: $inherited.colors.text
+		
+			-- ftd.text: $sample-text
+			white-space: normal
+			padding.px: 10
+			width.fixed.px: 400
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			-- ftd.text: $sample-text
+			white-space: nowrap
+			padding.px: 10
+			width.fixed.px: 400
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			-- ftd.text: $sample-text
+			white-space: pre
+			padding.px: 10
+			width.fixed.px: 400
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			-- ftd.text: $sample-text
+			white-space: break-spaces
+			padding.px: 10
+			width.fixed.px: 400
+			border-color: $red-yellow
+			border-width.px: 2
+			
+		-- end: ftd.column
 
-\-- string sample-text:
-
-But ere she from the church-door stepped She smiled and told us why:
-
-'It was a wicked woman's curse,' Quoth she, 'and what care I?'
-She smiled, and smiled, and passed it off Ere from the door she stept—
-
-\-- end: sample-text
-
-\-- ftd.column:
-spacing.fixed.px: 10
-color: $inherited.colors.text
-
-\-- ftd.text: $sample-text
-white-space: normal ;; <hl>
-padding.px: 10
-width.fixed.px: 400
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: $sample-text
-white-space: nowrap ;; <hl>
-padding.px: 10
-width.fixed.px: 400
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: $sample-text
-white-space: pre ;; <hl>
-padding.px: 10
-width.fixed.px: 400
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: $sample-text
-white-space: break-spaces ;; <hl>
-padding.px: 10
-width.fixed.px: 400
-border-color: $red-yellow
-border-width.px: 2
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-spacing.fixed.px: 10
-color: $inherited.colors.text
-
--- ftd.text: $sample-text
-white-space: normal
-padding.px: 10
-width.fixed.px: 400
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text: $sample-text
-white-space: nowrap
-padding.px: 10
-width.fixed.px: 400
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text: $sample-text
-white-space: pre
-padding.px: 10
-width.fixed.px: 400
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text: $sample-text
-white-space: break-spaces
-padding.px: 10
-width.fixed.px: 400
-border-color: $red-yellow
-border-width.px: 2
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -3111,92 +3111,92 @@ and is optional.
 
 -- ds.rendered:
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- string sample-text:
+	
+	But ere she from the church-door stepped She smiled and told us why:
+	
+	'It was a wicked woman's curse,' Quoth she, 'and what care I?'
+	She smiled, and smiled, and passed it off Ere from the door she stept—
+	
+	\-- end: sample-text
+	
+	\-- ftd.column:
+	spacing.fixed.px: 10
+	color: $inherited.colors.text
+	
+	\-- ftd.text: $sample-text
+	padding.px: 10
+	width.fixed.px: 400
+	text-transform: none ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: $sample-text
+	padding.px: 10
+	width.fixed.px: 400
+	text-transform: capitalize ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: $sample-text
+	padding.px: 10
+	width.fixed.px: 400
+	text-transform: uppercase ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: $sample-text
+	padding.px: 10
+	width.fixed.px: 400
+	text-transform: lowercase ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		spacing.fixed.px: 10
+		color: $inherited.colors.text
+		
+			-- ftd.text: $sample-text
+			white-space: normal
+			padding.px: 10
+			width.fixed.px: 400
+			text-transform: none
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			-- ftd.text: $sample-text
+			white-space: normal
+			padding.px: 10
+			width.fixed.px: 400
+			text-transform: capitalize
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			-- ftd.text: $sample-text
+			white-space: normal
+			padding.px: 10
+			width.fixed.px: 400
+			text-transform: uppercase
+			border-color: $red-yellow
+			border-width.px: 2
+			
+			-- ftd.text: $sample-text
+			white-space: normal
+			padding.px: 10
+			width.fixed.px: 400
+			text-transform: lowercase
+			border-color: $red-yellow
+			border-width.px: 2
+			
+		-- end: ftd.column
 
-\-- string sample-text:
-
-But ere she from the church-door stepped She smiled and told us why:
-
-'It was a wicked woman's curse,' Quoth she, 'and what care I?'
-She smiled, and smiled, and passed it off Ere from the door she stept—
-
-\-- end: sample-text
-
-\-- ftd.column:
-spacing.fixed.px: 10
-color: $inherited.colors.text
-
-\-- ftd.text: $sample-text
-padding.px: 10
-width.fixed.px: 400
-text-transform: none ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: $sample-text
-padding.px: 10
-width.fixed.px: 400
-text-transform: capitalize ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: $sample-text
-padding.px: 10
-width.fixed.px: 400
-text-transform: uppercase ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: $sample-text
-padding.px: 10
-width.fixed.px: 400
-text-transform: lowercase ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-spacing.fixed.px: 10
-color: $inherited.colors.text
-
--- ftd.text: $sample-text
-white-space: normal
-padding.px: 10
-width.fixed.px: 400
-text-transform: none
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text: $sample-text
-white-space: normal
-padding.px: 10
-width.fixed.px: 400
-text-transform: capitalize
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text: $sample-text
-white-space: normal
-padding.px: 10
-width.fixed.px: 400
-text-transform: uppercase
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text: $sample-text
-white-space: normal
-padding.px: 10
-width.fixed.px: 400
-text-transform: lowercase
-border-color: $red-yellow
-border-width.px: 2
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -3215,23 +3215,23 @@ value as a list of strings.
 
 -- ds.rendered: Sample code using `classes`
 
--- ds.rendered.input:
-
-\-- ftd.text:
-color: $inherited.colors.text
-classes: markdown, text ;; <hl>
-
-# This text has class `markdown` and `text`
-
--- ds.rendered.output:
-
--- ftd.text:
-color: $inherited.colors.text
-classes: markdown, text
-
-# This text has classes `markdown` and `text`
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text:
+	color: $inherited.colors.text
+	classes: markdown, text ;; <hl>
+	
+	# This text has class `markdown` and `text`
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text:
+		color: $inherited.colors.text
+		classes: markdown, text
+		
+		# This text has classes `markdown` and `text`
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -3249,39 +3249,39 @@ from the top edge of the nearest container. It takes value of type
 
 -- ds.rendered: Sample code using `top`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.column:
+	width.fixed.px: 400
+	height.fixed.px: 100
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: Move down from top edge by 20px
+	top.px: 20 ;; <hl>
+	anchor: parent
+	padding-horizontal.px: 10
+	color: $inherited.colors.text
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		width.fixed.px: 400
+		height.fixed.px: 100
+		border-color: $red-yellow
+		border-width.px: 2
+		
+			-- ftd.text: Move down from top edge by 20px
+			top.px: 20
+			anchor: parent
+			padding-horizontal.px: 10
+			color: $inherited.colors.text
+			
+		-- end: ftd.column
 
-\-- ftd.column:
-width.fixed.px: 400
-height.fixed.px: 100
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: Move down from top edge by 20px
-top.px: 20 ;; <hl>
-anchor: parent
-padding-horizontal.px: 10
-color: $inherited.colors.text
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-width.fixed.px: 400
-height.fixed.px: 100
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text: Move down from top edge by 20px
-top.px: 20
-anchor: parent
-padding-horizontal.px: 10
-color: $inherited.colors.text
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -3304,39 +3304,39 @@ from the bottom edge of the nearest container. It takes value of type
 
 -- ds.rendered: Sample code using `bottom`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.column:
+	width.fixed.px: 400
+	height.fixed.px: 100
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: Move up from bottom edge by 20px
+	bottom.px: 20 ;; <hl>
+	anchor: parent
+	padding-horizontal.px: 10
+	color: $inherited.colors.text
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		width.fixed.px: 400
+		height.fixed.px: 100
+		border-color: $red-yellow
+		border-width.px: 2
+		
+			-- ftd.text: Move up from bottom edge by 20px
+			bottom.px: 20
+			anchor: parent
+			padding-horizontal.px: 10
+			color: $inherited.colors.text
+			
+		-- end: ftd.column
 
-\-- ftd.column:
-width.fixed.px: 400
-height.fixed.px: 100
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: Move up from bottom edge by 20px
-bottom.px: 20 ;; <hl>
-anchor: parent
-padding-horizontal.px: 10
-color: $inherited.colors.text
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-width.fixed.px: 400
-height.fixed.px: 100
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text: Move up from bottom edge by 20px
-bottom.px: 20
-anchor: parent
-padding-horizontal.px: 10
-color: $inherited.colors.text
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -3359,39 +3359,39 @@ from the left edge of the nearest container. It takes value of type
 
 -- ds.rendered: Sample code using `left`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.column:
+	width.fixed.px: 400
+	height.fixed.px: 50
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: Move right from left edge by 50px
+	left.px: 50 ;; <hl>
+	anchor: parent
+	padding-vertical.px: 10
+	color: $inherited.colors.text
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		width.fixed.px: 400
+		height.fixed.px: 50
+		border-color: $red-yellow
+		border-width.px: 2
+		
+			-- ftd.text: Move right from left edge by 50px
+			left.px: 50
+			anchor: parent
+			padding-vertical.px: 10
+			color: $inherited.colors.text
+			
+		-- end: ftd.column
 
-\-- ftd.column:
-width.fixed.px: 400
-height.fixed.px: 50
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: Move right from left edge by 50px
-left.px: 50 ;; <hl>
-anchor: parent
-padding-vertical.px: 10
-color: $inherited.colors.text
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-width.fixed.px: 400
-height.fixed.px: 50
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text: Move right from left edge by 50px
-left.px: 50
-anchor: parent
-padding-vertical.px: 10
-color: $inherited.colors.text
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -3412,39 +3412,39 @@ from the right edge of the nearest container. It takes value of type
 
 -- ds.rendered: Sample code using `right`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.column:
+	width.fixed.px: 400
+	height.fixed.px: 50
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: Move left from right edge by 50px
+	right.px: 50 ;; <hl>
+	anchor: parent
+	padding-vertical.px: 10
+	color: $inherited.colors.text
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		width.fixed.px: 400
+		height.fixed.px: 50
+		border-color: $red-yellow
+		border-width.px: 2
+		
+			-- ftd.text: Move left from right edge by 50px
+			right.px: 50
+			anchor: parent
+			padding-vertical.px: 10
+			color: $inherited.colors.text
+			
+		-- end: ftd.column
 
-\-- ftd.column:
-width.fixed.px: 400
-height.fixed.px: 50
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: Move left from right edge by 50px
-right.px: 50 ;; <hl>
-anchor: parent
-padding-vertical.px: 10
-color: $inherited.colors.text
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-width.fixed.px: 400
-height.fixed.px: 50
-border-color: $red-yellow
-border-width.px: 2
-
--- ftd.text: Move left from right edge by 50px
-right.px: 50
-anchor: parent
-padding-vertical.px: 10
-color: $inherited.colors.text
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -3528,60 +3528,60 @@ of elements with a lower z-index value. It takes value of type
 
 -- ds.rendered: Sample code using `z-index`
 
--- ds.rendered.input:
-
-\-- ftd.color red-blue:
-light: red
-dark: blue
-
-\-- ftd.row:
-width: fill-container
-height.fixed.px: 180
-color: black
-
-\-- ftd.text: z-index = 3
-left.px: 50
-top.px: 20
-padding.px: 20
-width.fixed.px: 200
-text-align: center
-border-color: $red-blue
-border-width.px: 2
-background.solid: deepskyblue
-z-index: 3 ;; <hl>
-anchor: parent
-
-\-- ftd.text: z-index = 2
-left.px: 70
-top.px: 60
-padding.px: 20
-text-align: center
-width.fixed.px: 200
-border-color: $red-blue
-border-width.px: 2
-background.solid: deepskyblue
-z-index: 2 ;; <hl>
-anchor: parent
-
-\-- ftd.text: z-index = 1
-left.px: 90
-top.px: 100
-padding.px: 20
-text-align: center
-width.fixed.px: 200
-border-color: $red-blue
-border-width.px: 2
-background.solid: deepskyblue
-z-index: 1 ;; <hl>
-anchor: parent
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- z-index-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.color red-blue:
+	light: red
+	dark: blue
+	
+	\-- ftd.row:
+	width: fill-container
+	height.fixed.px: 180
+	color: black
+	
+	\-- ftd.text: z-index = 3
+	left.px: 50
+	top.px: 20
+	padding.px: 20
+	width.fixed.px: 200
+	text-align: center
+	border-color: $red-blue
+	border-width.px: 2
+	background.solid: deepskyblue
+	z-index: 3 ;; <hl>
+	anchor: parent
+	
+	\-- ftd.text: z-index = 2
+	left.px: 70
+	top.px: 60
+	padding.px: 20
+	text-align: center
+	width.fixed.px: 200
+	border-color: $red-blue
+	border-width.px: 2
+	background.solid: deepskyblue
+	z-index: 2 ;; <hl>
+	anchor: parent
+	
+	\-- ftd.text: z-index = 1
+	left.px: 90
+	top.px: 100
+	padding.px: 20
+	text-align: center
+	width.fixed.px: 200
+	border-color: $red-blue
+	border-width.px: 2
+	background.solid: deepskyblue
+	z-index: 1 ;; <hl>
+	anchor: parent
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- z-index-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -3594,484 +3594,484 @@ anchor: parent
 
 /-- ftd.column:
 
-/-- ds.h1: `border-radius.px: Integer`
-
-The border-radius property defines the radius of the element's corners.
-
-
-/-- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-border-width.px: 2
-border-radius.px: 50
-
-
-/-- ds.markdown:
-
-This will render like this:
-
-/-- ds.output:
-
-/-- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-radius.px: 50
-
-/-- end: ds.output
-
-
-
-/-- ds.h1: `border-top-left-radius.px: Integer`
-
-The border-top-left-radius property defines the radius of the top left corner.
-
-
-/-- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-border-width.px: 2
-border-top-left-radius.px: 50
-
-
-/-- ds.markdown:
-
-This will render like this:
-
-/-- ds.output:
-
-/-- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-top-left-radius.px: 50
-
-/-- end: ds.output
-
-
-/-- ds.h1: `border-top-right-radius.px: Integer`
-
-The border-top-right-radius property defines the radius of the top right corner.
-
-
-/-- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-border-width.px: 2
-border-top-right-radius.px: 50
-
-
-/-- ds.markdown:
-
-This will render like this:
-
-/-- ds.output:
-
-/-- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-top-right-radius.px: 50
-
-/-- end: ds.output
-
-
-/-- ds.h1: `border-bottom-left-radius.px: Integer`
-
-The border-bottom-radius property defines the radius of the bottom left corner.
-
-
-/-- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-border-width.px: 2
-border-bottom-left-radius.px: 50
-
-
-/-- ds.markdown:
-
-This will render like this:
-
-/-- ds.output:
-
-/-- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-bottom-left-radius.px: 50
-
-/-- end: ds.output
-
-
-
-/-- ds.h1: `border-bottom-right-radius.px: Integer`
-
-The border-bottom-right-radius property defines the radius of the bottom right 
-corner.
-
-
-/-- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-border-width.px: 2
-border-bottom-right-radius.px: 50
-
-
-/-- ds.markdown:
-
-This will render like this:
-
-/-- ds.output:
-
-/-- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-border-bottom-right-radius.px: 50
-
-/-- end: ds.output
-
-
-
-
-
-
-/-- ds.h1: `width.fixed.px: Integer`
-
-The width property sets the fixed width of an element.
-
-The width of an element does not include padding, borders, or margins.
-It takes the [length values](/built-in-types/#length-string)
-
-
-/-- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-width.fixed.px: 200
-
-
-/-- ds.markdown:
-
-This will render like this:
-
-/-- ds.output:
-
-/-- ftd.text: FifthTry
-width.fixed.px: 200
-color: $inherited.colors.text
-border-width.px: 2
-
-/-- end: ds.output
-
-
-/-- ds.h1: `min-width: String`
-
-The min-width property defines the minimum width of an element.
-It takes the [length values](/built-in-types/#length-string)
-
-If the content is smaller than the minimum width, the minimum width will be applied.
-
-If the content is larger than the minimum width, the min-width property has no effect.
-
-
-/-- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-min-width: fill-container
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text: FifthTry
-min-width: fill-container
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.output
-
-
--- ds.h1: `max-width: String`
-
-The max-width property defines the maximum width of an element.
-It takes the [length values](/built-in-types/#length-string)
-
-If the content is larger than the maximum width, it will automatically change the height of the element.
-
-If the content is smaller than the maximum width, the max-width property has no effect.
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-max-width: fill-container
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text: FifthTry
-max-width: fill-container
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.output
-
-
--- ds.h1: `height: String`
-
-The height property sets the height of an element.
-
-The height of an element does not include padding, borders, or margins.
-It takes the [length values](/built-in-types/#length-string)
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-height: fill-container
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text: FifthTry
-height: fill-container
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.output
-
-
--- ds.h1: `min-height: String`
-
-The min-height property defines the minimum height of an element.
-It takes the [length values](/built-in-types/#length-string)
-
-If the content is smaller than the minimum height, the minimum height will be applied.
-
-If the content is larger than the minimum height, the min-width property has no effect.
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-min-height: fill-container
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text: FifthTry
-min-height: fill-container
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.output
-
-
--- ds.h1: `max-height: String`
-
-The max-height property defines the maximum height of an element.
-It takes the [length values](/built-in-types/#length-string)
-
-If the content is larger than the maximum height, it will automatically change the height of the element.
-
-If the content is smaller than the maximum height, the max-height property has no effect.
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-max-height: fill-container
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text: FifthTry
-max-height: fill-container
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.output
-
--- ds.h1: `overflow-x: String`
-
-The overflow-x property specifies whether to clip the content, add a scroll bar,
-or display overflow content of a block-level element, when it overflows at the
-left and right edges. It takes the following values:
-
-- hidden
-- visible
-- auto
-- scroll
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text:
-background.solid: $red-yellow
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-x: scroll
-
-Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
-word consectetuer adipiscing elit, sed diam nonummy nibh euismod
-tincidunt ut laoreet dolore magna aliquam erat
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text:
-color: $inherited.colors.text-strong
-background.solid: $red-yellow
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-x: scroll
-
-Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
-word consectetuer adipiscing elit, sed diam nonummy nibh euismod
-tincidunt ut laoreet dolore magna aliquam erat
-
-
--- end: ds.output
-
-
--- ds.h1: `overflow-y: String`
-
-The overflow-y property specifies whether to clip the content,
-add a scroll bar, or display overflow content of a block-level element,
-when it overflows at the top and bottom edges. It takes the following values:
-
-- hidden
-- visible
-- auto
-- scroll
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text:
-background.solid: $red-yellow
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-y: scroll
-
-Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
-word consectetuer adipiscing elit, sed diam nonummy nibh euismod
-tincidunt ut laoreet dolore magna aliquam erat
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text:
-color: $inherited.colors.text-strong
-background.solid: $red-yellow
-width.fixed.px: 150
-height.fixed.px: 100
-overflow-y: scroll
-
-Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
-word consectetuer adipiscing elit, sed diam nonummy nibh euismod
-tincidunt ut laoreet dolore magna aliquam erat
-
--- end: ds.output
-
--- ds.h1: `cursor: String`
-
-You can set the cursor to be shown over any element by using `cursor` attribute:
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.row:
-width: fill
-border-width.px: 5
-border-color: $inherited.colors.text
-padding.px: 10
-cursor: pointer
-
-\-- ftd.text: this row has pointer as cursor
-align: center
-width: fill
-
-\-- end: ftd.row
-
-
-
--- ds.markdown:
-
-We support the same format as [CSS cursor](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor).
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.row:
-width: fill-container
-border-width.px: 5
-border-color: $inherited.colors.text
-padding.px: 10
-cursor: pointer
-
-
--- ftd.text: this row has pointer as cursor
-align-self: center
-width: fill-container
-color: $inherited.colors.text
-
--- end: ds.output
-
--- ds.h1: `region`
-
-This is the [ARIA Region](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques#landmark_roles)
-role that UI element is playing. Valid values are:
-
-
--- ds.h2: `h0`, `h1`, till `h7`
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: hello
-region: h1
-
+	/-- ds.h1: `border-radius.px: Integer`
+	
+	The border-radius property defines the radius of the element's corners.
+	
+	
+	/-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 2
+	border-radius.px: 50
+	
+	
+	/-- ds.markdown:
+	
+	This will render like this:
+	
+	/-- ds.output:
+	
+	/-- ftd.text: FifthTry
+	border-width.px: 2
+	color: $inherited.colors.text
+	border-radius.px: 50
+	
+	/-- end: ds.output
+	
+	
+	
+	/-- ds.h1: `border-top-left-radius.px: Integer`
+	
+	The border-top-left-radius property defines the radius of the top left corner.
+	
+	
+	/-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 2
+	border-top-left-radius.px: 50
+	
+	
+	/-- ds.markdown:
+	
+	This will render like this:
+	
+	/-- ds.output:
+	
+	/-- ftd.text: FifthTry
+	border-width.px: 2
+	color: $inherited.colors.text
+	border-top-left-radius.px: 50
+	
+	/-- end: ds.output
+	
+	
+	/-- ds.h1: `border-top-right-radius.px: Integer`
+	
+	The border-top-right-radius property defines the radius of the top right corner.
+	
+	
+	/-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 2
+	border-top-right-radius.px: 50
+	
+	
+	/-- ds.markdown:
+	
+	This will render like this:
+	
+	/-- ds.output:
+	
+	/-- ftd.text: FifthTry
+	border-width.px: 2
+	color: $inherited.colors.text
+	border-top-right-radius.px: 50
+	
+	/-- end: ds.output
+	
+	
+	/-- ds.h1: `border-bottom-left-radius.px: Integer`
+	
+	The border-bottom-radius property defines the radius of the bottom left corner.
+	
+	
+	/-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 2
+	border-bottom-left-radius.px: 50
+	
+	
+	/-- ds.markdown:
+	
+	This will render like this:
+	
+	/-- ds.output:
+	
+	/-- ftd.text: FifthTry
+	border-width.px: 2
+	color: $inherited.colors.text
+	border-bottom-left-radius.px: 50
+	
+	/-- end: ds.output
+	
+	
+	
+	/-- ds.h1: `border-bottom-right-radius.px: Integer`
+	
+	The border-bottom-right-radius property defines the radius of the bottom right
+	corner.
+	
+	
+	/-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: FifthTry
+	border-width.px: 2
+	border-bottom-right-radius.px: 50
+	
+	
+	/-- ds.markdown:
+	
+	This will render like this:
+	
+	/-- ds.output:
+	
+	/-- ftd.text: FifthTry
+	border-width.px: 2
+	color: $inherited.colors.text
+	border-bottom-right-radius.px: 50
+	
+	/-- end: ds.output
+	
+	
+	
+	
+	
+	
+	/-- ds.h1: `width.fixed.px: Integer`
+	
+	The width property sets the fixed width of an element.
+	
+	The width of an element does not include padding, borders, or margins.
+	It takes the [length values](/built-in-types/#length-string)
+	
+	
+	/-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: FifthTry
+	width.fixed.px: 200
+	
+	
+	/-- ds.markdown:
+	
+	This will render like this:
+	
+	/-- ds.output:
+	
+	/-- ftd.text: FifthTry
+	width.fixed.px: 200
+	color: $inherited.colors.text
+	border-width.px: 2
+	
+	/-- end: ds.output
+	
+	
+	/-- ds.h1: `min-width: String`
+	
+	The min-width property defines the minimum width of an element.
+	It takes the [length values](/built-in-types/#length-string)
+	
+	If the content is smaller than the minimum width, the minimum width will be applied.
+	
+	If the content is larger than the minimum width, the min-width property has no effect.
+	
+	
+	/-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: FifthTry
+	min-width: fill-container
+	
+	
+	-- ds.markdown:
+	
+	This will render like this:
+	
+	-- ds.output:
+	
+		-- ftd.text: FifthTry
+		min-width: fill-container
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.output
+
+
+	-- ds.h1: `max-width: String`
+	
+	The max-width property defines the maximum width of an element.
+	It takes the [length values](/built-in-types/#length-string)
+	
+	If the content is larger than the maximum width, it will automatically change the height of the element.
+	
+	If the content is smaller than the maximum width, the max-width property has no effect.
+	
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: FifthTry
+	max-width: fill-container
+	
+	
+	-- ds.markdown:
+	
+	This will render like this:
+	
+	-- ds.output:
+	
+		-- ftd.text: FifthTry
+		max-width: fill-container
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.output
+
+
+	-- ds.h1: `height: String`
+	
+	The height property sets the height of an element.
+	
+	The height of an element does not include padding, borders, or margins.
+	It takes the [length values](/built-in-types/#length-string)
+	
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: FifthTry
+	height: fill-container
+	
+	
+	-- ds.markdown:
+	
+	This will render like this:
+	
+	-- ds.output:
+	
+		-- ftd.text: FifthTry
+		height: fill-container
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.output
+
+
+	-- ds.h1: `min-height: String`
+	
+	The min-height property defines the minimum height of an element.
+	It takes the [length values](/built-in-types/#length-string)
+	
+	If the content is smaller than the minimum height, the minimum height will be applied.
+	
+	If the content is larger than the minimum height, the min-width property has no effect.
+	
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: FifthTry
+	min-height: fill-container
+	
+	
+	-- ds.markdown:
+	
+	This will render like this:
+	
+	-- ds.output:
+	
+		-- ftd.text: FifthTry
+		min-height: fill-container
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.output
+
+
+	-- ds.h1: `max-height: String`
+	
+	The max-height property defines the maximum height of an element.
+	It takes the [length values](/built-in-types/#length-string)
+	
+	If the content is larger than the maximum height, it will automatically change the height of the element.
+	
+	If the content is smaller than the maximum height, the max-height property has no effect.
+	
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: FifthTry
+	max-height: fill-container
+	
+	
+	-- ds.markdown:
+	
+	This will render like this:
+	
+	-- ds.output:
+	
+		-- ftd.text: FifthTry
+		max-height: fill-container
+		color: $inherited.colors.text
+		border-width.px: 2
+		
+	-- end: ds.output
+
+	-- ds.h1: `overflow-x: String`
+	
+	The overflow-x property specifies whether to clip the content, add a scroll bar,
+	or display overflow content of a block-level element, when it overflows at the
+	left and right edges. It takes the following values:
+	
+	- hidden
+	- visible
+	- auto
+	- scroll
+	
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text:
+	background.solid: $red-yellow
+	width.fixed.px: 150
+	height.fixed.px: 100
+	overflow-x: scroll
+	
+	Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
+	word consectetuer adipiscing elit, sed diam nonummy nibh euismod
+	tincidunt ut laoreet dolore magna aliquam erat
+	
+	
+	-- ds.markdown:
+	
+	This will render like this:
+	
+	-- ds.output:
+	
+		-- ftd.text:
+		color: $inherited.colors.text-strong
+		background.solid: $red-yellow
+		width.fixed.px: 150
+		height.fixed.px: 100
+		overflow-x: scroll
+		
+		Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
+		word consectetuer adipiscing elit, sed diam nonummy nibh euismod
+		tincidunt ut laoreet dolore magna aliquam erat
+		
+		
+	-- end: ds.output
+
+
+	-- ds.h1: `overflow-y: String`
+	
+	The overflow-y property specifies whether to clip the content,
+	add a scroll bar, or display overflow content of a block-level element,
+	when it overflows at the top and bottom edges. It takes the following values:
+	
+	- hidden
+	- visible
+	- auto
+	- scroll
+	
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text:
+	background.solid: $red-yellow
+	width.fixed.px: 150
+	height.fixed.px: 100
+	overflow-y: scroll
+	
+	Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
+	word consectetuer adipiscing elit, sed diam nonummy nibh euismod
+	tincidunt ut laoreet dolore magna aliquam erat
+	
+	
+	-- ds.markdown:
+	
+	This will render like this:
+	
+	-- ds.output:
+	
+		-- ftd.text:
+		color: $inherited.colors.text-strong
+		background.solid: $red-yellow
+		width.fixed.px: 150
+		height.fixed.px: 100
+		overflow-y: scroll
+		
+		Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
+		word consectetuer adipiscing elit, sed diam nonummy nibh euismod
+		tincidunt ut laoreet dolore magna aliquam erat
+		
+	-- end: ds.output
+
+	-- ds.h1: `cursor: String`
+	
+	You can set the cursor to be shown over any element by using `cursor` attribute:
+	
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- ftd.row:
+	width: fill
+	border-width.px: 5
+	border-color: $inherited.colors.text
+	padding.px: 10
+	cursor: pointer
+	
+	\-- ftd.text: this row has pointer as cursor
+	align: center
+	width: fill
+	
+	\-- end: ftd.row
+	
+	
+	
+	-- ds.markdown:
+	
+	We support the same format as [CSS cursor](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor).
+	
+	-- ds.markdown:
+	
+	This will render like this:
+	
+	-- ds.output:
+	
+		-- ftd.row:
+		width: fill-container
+		border-width.px: 5
+		border-color: $inherited.colors.text
+		padding.px: 10
+		cursor: pointer
+		
+		
+		-- ftd.text: this row has pointer as cursor
+		align-self: center
+		width: fill-container
+		color: $inherited.colors.text
+		
+	-- end: ds.output
+
+	-- ds.h1: `region`
+	
+	This is the [ARIA Region](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques#landmark_roles)
+	role that UI element is playing. Valid values are:
+	
+	
+	-- ds.h2: `h0`, `h1`, till `h7`
+	
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: hello
+	region: h1
+	
 -- end: ftd.column
 
 
@@ -4232,7 +4232,7 @@ color: $inherited.colors.text
 
 /-- ds.markdown:
 
-Note: Be careful about CSRF when using this feature. If the URL is dynamically 
+Note: Be careful about CSRF when using this feature. If the URL is dynamically
 generated, include some CSRF token for example.
 
 Note: both `link` and `submit` can not be provided.
@@ -4297,8 +4297,8 @@ gradient-colors: red , blue
 
 /-- ds.markdown:
 
-You can also make a gradient diagonally. 
-Following example shows a gradient that starts at bottom left and goes to 
+You can also make a gradient diagonally.
+Following example shows a gradient that starts at bottom left and goes to
 top right.
 
 
@@ -4382,7 +4382,7 @@ gradient-colors: red, green
 /-- ds.markdown:
 
 For more control you can use angle instead of the pre-defined directions.
-A value of 0deg is equivalent to "bottom to top". A value of 90deg is equivalent 
+A value of 0deg is equivalent to "bottom to top". A value of 90deg is equivalent
 to "left to right". A value of 180deg is equivalent to "top to bottom".
 
 
@@ -4437,7 +4437,7 @@ gradient-colors: red, green
 
 /-- ds.h1: `background-image: String`
 
-`background-image` accepts a url as the value. Use this property to make an image 
+`background-image` accepts a url as the value. Use this property to make an image
 as background of a container.
 
 
@@ -4544,167 +4544,167 @@ color: $inherited.colors.text
 /-- ds.output:
 
 
-/-- ftd.row:
-width: fill
-height: 300
-background-image: $assets.files.images.oCHWQQF.jpg
-background-parallax: true
+	/-- ftd.row:
+	width: fill
+	height: 300
+	background-image: $assets.files.images.oCHWQQF.jpg
+	background-parallax: true
+	
+	
+	/-- ftd.text: Sample Text
+	role: $fastn.type.heading-large
+	align: center
+	color: $inherited.colors.text
+	width: fill
+	height: fill
+	
+	
+	/-- ds.h1: `sticky: boolean`
+	
+	An element with sticky; is positioned based on the user's scroll position.
+	
+	
+	/-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: FifthTry
+	sticky: true
+	
+	
+	
+	-- ds.h1: `anchor: String`
+	
+	It specifies type of positioning of the element relative to it's
+	parent/ancestor or window
+	
+	It accepts two values:
+	
+	- `parent`: The element is positioned relative to the immediate ancestor.
+	- `window`: The element is positioned relative to the viewport, which means
+	   it always stays in the same place even if the page is scrolled.
+	
+	The top, right, bottom, and left properties are used to position the element.
+	These properties are described later.
+	
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: FifthTry
+	top: 1
+	
+	-- ds.h1: `z-index: Integer`
+	
+	The z-index property specifies the stack order of an element.
+	
+	An element with greater stack order is always in front of an
+	element with a lower stack order.
+	
+	[Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/z-index)
+	
+	
+	-- ds.code: specifying z-index
+	lang: ftd
+	
+	\-- ftd.column:
+	padding.px: 80
+	
+	\-- ftd.text: FifthTry Red
+	z-index: 1
+	background.solid: $red-yellow
+	left.px: 20
+	top.px: 20
+	padding.px: 40
+	anchor: parent
+	
+	\-- ftd.text: FifthTry Yellow
+	z-index: 2
+	background.solid: $yellow
+	left.px: 40
+	top.px: 40
+	padding.px: 40
+	anchor: parent
+	
+	\-- end: ftd.column
+	
+	
+	-- ds.output:
+	
+		-- ftd.column:
+		padding.px: 80
+		
+		-- ftd.text: FifthTry Red
+		z-index: 1
+		background.solid: $red-yellow
+		left.px: 20
+		top.px: 20
+		padding.px: 40
+		anchor: parent
+		
+		-- ftd.text: FifthTry Yellow
+		z-index: 2
+		background.solid: $inherited.colors.custom.one
+		left.px: 40
+		top.px: 40
+		padding.px: 40
+		anchor: parent
+		
+		
+	-- end: ds.output
 
 
-/-- ftd.text: Sample Text
-role: $fastn.type.heading-large
-align: center
-color: $inherited.colors.text
-width: fill
-height: fill
+	-- ds.h1: `white-space: String`
+	
+	The white-space CSS property sets how white space inside an
+	element is handled.
+	
+	[Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/white-space)
+	
+	
+	-- ds.code: specifying white-space
+	lang: ftd
+	
+	\-- ftd.text:
+	white-space: pre-wrap
+	
+	But ere she from the church-door stepped She smiled and told us why:
+	'It was a wicked woman's curse,' Quoth she, 'and what care I?' She smiled,
+	and smiled, and passed it off Ere from the door she stept—
+	
+	
+	-- ds.output:
+	
+		-- ftd.text:
+		white-space: pre-wrap
+		color: $inherited.colors.text
+		
+		But ere she from the church-door stepped She smiled and told us why:
+		'It was a wicked woman's curse,' Quoth she, 'and what care I?' She smiled,
+		and smiled, and passed it off Ere from the door she stept—
+		
+		
+	-- end: ds.output
 
 
-/-- ds.h1: `sticky: boolean`
-
-An element with sticky; is positioned based on the user's scroll position.
-
-
-/-- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-sticky: true
-
-
-
--- ds.h1: `anchor: String`
-
-It specifies type of positioning of the element relative to it's
-parent/ancestor or window
-
-It accepts two values:
-
-- `parent`: The element is positioned relative to the immediate ancestor.
-- `window`: The element is positioned relative to the viewport, which means
-   it always stays in the same place even if the page is scrolled.
-
-The top, right, bottom, and left properties are used to position the element.
-These properties are described later.
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-top: 1
-
--- ds.h1: `z-index: Integer`
-
-The z-index property specifies the stack order of an element.
-
-An element with greater stack order is always in front of an
-element with a lower stack order.
-
-[Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/z-index)
-
-
--- ds.code: specifying z-index
-lang: ftd
-
-\-- ftd.column:
-padding.px: 80
-
-\-- ftd.text: FifthTry Red
-z-index: 1
-background.solid: $red-yellow
-left.px: 20
-top.px: 20
-padding.px: 40
-anchor: parent
-
-\-- ftd.text: FifthTry Yellow
-z-index: 2
-background.solid: $yellow
-left.px: 40
-top.px: 40
-padding.px: 40
-anchor: parent
-
-\-- end: ftd.column
-
-
--- ds.output:
-
--- ftd.column:
-padding.px: 80
-
--- ftd.text: FifthTry Red
-z-index: 1
-background.solid: $red-yellow
-left.px: 20
-top.px: 20
-padding.px: 40
-anchor: parent
-
--- ftd.text: FifthTry Yellow
-z-index: 2
-background.solid: $inherited.colors.custom.one
-left.px: 40
-top.px: 40
-padding.px: 40
-anchor: parent
-
-
--- end: ds.output
-
-
--- ds.h1: `white-space: String`
-
-The white-space CSS property sets how white space inside an
-element is handled.
-
-[Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/white-space)
-
-
--- ds.code: specifying white-space
-lang: ftd
-
-\-- ftd.text:
-white-space: pre-wrap
-
-But ere she from the church-door stepped She smiled and told us why:
-'It was a wicked woman's curse,' Quoth she, 'and what care I?' She smiled,
-and smiled, and passed it off Ere from the door she stept—
-
-
--- ds.output:
-
--- ftd.text:
-white-space: pre-wrap
-color: $inherited.colors.text
-
-But ere she from the church-door stepped She smiled and told us why:
-'It was a wicked woman's curse,' Quoth she, 'and what care I?' She smiled,
-and smiled, and passed it off Ere from the door she stept—
-
-
--- end: ds.output
-
-
--- ds.h1: `text-transform: String`
-
-The text-transform CSS property specifies how to capitalize an element's
-text. It can be used to make text appear in all-uppercase or all-lowercase,
-or with each word capitalized. It also can help improve legibility for ruby.
-
-[Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/text-transform)
-
-
--- ds.code: specifying text-transform
-lang: ftd
-
-\-- ftd.text:
-text-transform: capitalize
-
-But ere she from the church-door stepped She smiled and told us why:
-'It was a wicked woman's curse,' Quoth she, 'and what care I?' She smiled,
-and smiled, and passed it off Ere from the door she stept—
-
+	-- ds.h1: `text-transform: String`
+	
+	The text-transform CSS property specifies how to capitalize an element's
+	text. It can be used to make text appear in all-uppercase or all-lowercase,
+	or with each word capitalized. It also can help improve legibility for ruby.
+	
+	[Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/text-transform)
+	
+	
+	-- ds.code: specifying text-transform
+	lang: ftd
+	
+	\-- ftd.text:
+	text-transform: capitalize
+	
+	But ere she from the church-door stepped She smiled and told us why:
+	'It was a wicked woman's curse,' Quoth she, 'and what care I?' She smiled,
+	and smiled, and passed it off Ere from the door she stept—
+	
 -- end: ds.output
 
 /-- ds.output:
@@ -4827,8 +4827,8 @@ width: fill-container
 height.fixed.px: 200
 background.image: $bg-image
 
--- ftd.text: Fifthtry logo as background image
-
+	-- ftd.text: Fifthtry logo as background image
+	
 -- end: ftd.row
 
 -- end: render-bg
@@ -4850,9 +4850,9 @@ background.linear-gradient if { gradient-counter % 3 == 2 }: $lg-3
 $on-click$: $ftd.increment($a = $gradient-counter)
 align-content: center
 
--- ftd.text: This is linear gradient (click to change)
-color: $inherited.colors.text-strong
-
+	-- ftd.text: This is linear gradient (click to change)
+	color: $inherited.colors.text-strong
+	
 -- end: ftd.row
 
 -- end: render-gradient
@@ -4888,28 +4888,28 @@ overflow-y: scroll
 border-color: $red-yellow
 border-width.px: 2
 
--- ftd.text: The blue planet below is sticky
-
--- ftd.text: Blue planet
-color: black
-background.solid: deepskyblue
-sticky: true
-width.fixed.px: 120
-text-align: center
-left.px: 50
-top.px: 0
-
--- ftd.text:
-padding.px: 10
-
-Far out in the uncharted backwaters of the unfashionable end of the western
-spiral arm of the Galaxy lies a small unregarded blue planet.
-Orbiting this at a distance of roughly ninety-two million miles is an
-utterly insignificant little planet whose ape-descended life
-forms are so amazingly primitive that they still think `fastn` code written
-by humans are still a pretty neat idea of escalating knowledge throughout the
-universe.
-
+	-- ftd.text: The blue planet below is sticky
+	
+	-- ftd.text: Blue planet
+	color: black
+	background.solid: deepskyblue
+	sticky: true
+	width.fixed.px: 120
+	text-align: center
+	left.px: 50
+	top.px: 0
+	
+	-- ftd.text:
+	padding.px: 10
+	
+	Far out in the uncharted backwaters of the unfashionable end of the western
+	spiral arm of the Galaxy lies a small unregarded blue planet.
+	Orbiting this at a distance of roughly ninety-two million miles is an
+	utterly insignificant little planet whose ape-descended life
+	forms are so amazingly primitive that they still think `fastn` code written
+	by humans are still a pretty neat idea of escalating knowledge throughout the
+	universe.
+	
 -- end: ftd.column
 
 -- end: sticky-sample
@@ -4927,42 +4927,42 @@ width: fill-container
 height.fixed.px: 180
 color: black
 
--- ftd.text: z-index = 3
-left.px: 50
-top.px: 20
-padding.px: 20
-width.fixed.px: 200
-text-align: center
-border-color: $red-blue
-border-width.px: 2
-background.solid: deepskyblue
-z-index: 3
-anchor: parent
-
--- ftd.text: z-index = 2
-left.px: 70
-top.px: 60
-padding.px: 20
-text-align: center
-width.fixed.px: 200
-border-color: $red-blue
-border-width.px: 2
-background.solid: deepskyblue
-z-index: 2
-anchor: parent
-
--- ftd.text: z-index = 1
-left.px: 90
-top.px: 100
-padding.px: 20
-text-align: center
-width.fixed.px: 200
-border-color: $red-blue
-border-width.px: 2
-background.solid: deepskyblue
-z-index: 1
-anchor: parent
-
+	-- ftd.text: z-index = 3
+	left.px: 50
+	top.px: 20
+	padding.px: 20
+	width.fixed.px: 200
+	text-align: center
+	border-color: $red-blue
+	border-width.px: 2
+	background.solid: deepskyblue
+	z-index: 3
+	anchor: parent
+	
+	-- ftd.text: z-index = 2
+	left.px: 70
+	top.px: 60
+	padding.px: 20
+	text-align: center
+	width.fixed.px: 200
+	border-color: $red-blue
+	border-width.px: 2
+	background.solid: deepskyblue
+	z-index: 2
+	anchor: parent
+	
+	-- ftd.text: z-index = 1
+	left.px: 90
+	top.px: 100
+	padding.px: 20
+	text-align: center
+	width.fixed.px: 200
+	border-color: $red-blue
+	border-width.px: 2
+	background.solid: deepskyblue
+	z-index: 1
+	anchor: parent
+	
 -- end: ftd.row
 
 -- end: z-index-sample
@@ -4983,15 +4983,15 @@ color: $inherited.colors.text
 width: fill-container
 spacing.fixed.px: 10
 
--- ftd.text: Heading Hero
-role: $inherited.types.heading-hero
-
--- ftd.text: Heading Large
-role: $inherited.types.heading-large
-
--- ftd.text: Copy Regular
-role: $inherited.types.copy-regular
-
+	-- ftd.text: Heading Hero
+	role: $inherited.types.heading-hero
+	
+	-- ftd.text: Heading Large
+	role: $inherited.types.heading-large
+	
+	-- ftd.text: Copy Regular
+	role: $inherited.types.copy-regular
+	
 -- end: ftd.column
 
 -- end: role-sample
@@ -5010,27 +5010,27 @@ role: $inherited.types.copy-regular
 width: fill-container
 spacing.fixed.px: 10
 
--- ftd.column:
-width: fill-container
-background.solid: #963770
-opacity: 1.0
-opacity if { opacity-counter % 4 == 1 }: 0.7
-opacity if { opacity-counter % 4 == 2 }: 0.5
-opacity if { opacity-counter % 4 == 3 }: 0.2
+	-- ftd.column:
+	width: fill-container
+	background.solid: #963770
+	opacity: 1.0
+	opacity if { opacity-counter % 4 == 1 }: 0.7
+	opacity if { opacity-counter % 4 == 2 }: 0.5
+	opacity if { opacity-counter % 4 == 3 }: 0.2
+	
+		-- ftd.text: $opacity-sample-text
+		color: white
+		padding.px: 10
+		
+	-- end: ftd.column
 
--- ftd.text: $opacity-sample-text
-color: white
-padding.px: 10
-
--- end: ftd.column
-
--- ftd.text: Change opacity
-color: $inherited.colors.text
-$on-click$: $ftd.increment($a = $opacity-counter)
-border-width.px: 1
-align-self: center
-text-align: center
-
+	-- ftd.text: Change opacity
+	color: $inherited.colors.text
+	$on-click$: $ftd.increment($a = $opacity-counter)
+	border-width.px: 1
+	align-self: center
+	text-align: center
+	
 -- end: ftd.column
 
 -- end: opacity-sample

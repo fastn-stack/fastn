@@ -282,17 +282,17 @@ Some benefits of using `or-type` include:
 
 ;; Todo:
 /-- ds.page: `or-type`
-    
--- ds.markdown: 
 
-`fastn` supports `or-type`, which is loosely equivalent of `enum` in Rust, and is 
-otherwise known as ["algebraic data 
+-- ds.markdown:
+
+`fastn` supports `or-type`, which is loosely equivalent of `enum` in Rust, and is
+otherwise known as ["algebraic data
 type"](https://en.wikipedia.org/wiki/Algebraic_data_type).
 
 -- ds.h1: Declaring an `or-type`
 
 Say we have a sales business and we are going to get "leads", and a lead can be
-either an individual or a company. In case of individuals we have fields like 
+either an individual or a company. In case of individuals we have fields like
 their name, and phone number. For a company we have company name and the name of
 contact and the fax number of the company.
 
@@ -337,7 +337,7 @@ fax: +1-234-567890
 
 -- ds.markdown:
 
-Note that in the `type` we have included the `or-type` as well as the exact 
+Note that in the `type` we have included the `or-type` as well as the exact
 `variant` we want to construct.
 
 -- ds.h1: Reading An `or-type` From Rust
@@ -385,7 +385,7 @@ let amitu: Lead = doc.get("amitu")?;
 
 -- ds.markdown:
 
-You can read more details of reading `.ftd` files [`Reading .ftd 
+You can read more details of reading `.ftd` files [`Reading .ftd
 Files`](reading-data/) guide.
 
 

@@ -7,10 +7,10 @@ profile: Designer
 
 -- ds.user-info.works:
 
--- ft-ui.grid-view: Documentation Sites
-templates: $doc-sites
-show-large: true
-
+	-- ft-ui.grid-view: Documentation Sites
+	templates: $doc-sites
+	show-large: true
+	
 -- end: ds.user-info.works
 
 -- end: ds.user-info
@@ -35,7 +35,7 @@ role: Designer
 
 -- common.social-media list social-links:
 
--- common.social-media: 
+-- common.social-media:
 link: https://www.linkedin.com/in/jay-kumar-78188897/
 src: $fastn-assets.files.images.linkedin.svg
 hover-src: $fastn-assets.files.images.linkedin-hover.svg

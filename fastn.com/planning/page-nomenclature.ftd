@@ -1,17 +1,17 @@
 -- ds.page: Anatomy of a Page: Nomenclature and Composition
 
-The purpose of the nomenclature of a page is to establish a standardized and 
-consistent naming system. This naming system helps ensure clear communication 
+The purpose of the nomenclature of a page is to establish a standardized and
+consistent naming system. This naming system helps ensure clear communication
 and understanding among team members when discussing and working on a project.
 
 -- ds.h1: Breaking Down the Page: Three Paths to Composition
 
-Every webpage we create can take on a distinct form. We've simplified the page 
+Every webpage we create can take on a distinct form. We've simplified the page
 composition into three core layouts:
 
 -- ds.h3: Web Page with 2 Sidebars
 
-A layout that balances content with supplementary information through two 
+A layout that balances content with supplementary information through two
 sidebars, providing a comprehensive view.
 
 (Show example/ wireframe)
@@ -30,87 +30,85 @@ A visually immersive layout that spans the entire page width.
 
 -- ds.h1: Defining Sections
 
-Within the canvas of a webpage, sections play a pivotal role. Each section 
-includes specific content, contributing to the overall narrative. There's a 
-plethora of section types, each with unique purpose and layout. These sections 
-will contain elements like headings, text, images, and more. 
+Within the canvas of a webpage, sections play a pivotal role. Each section
+includes specific content, contributing to the overall narrative. There's a
+plethora of section types, each with unique purpose and layout. These sections
+will contain elements like headings, text, images, and more.
 
 
 -- ds.h2: Flush and Width Properties
 
-Each section is defined by two essential properties: flush and width. 
+Each section is defined by two essential properties: flush and width.
 
 The flush property determines the section's width concerning the page size.
 When set to true, the section stretches from edge to edge, embracing the
 full available width of the screen. When flush is set to false, it means that
-the section will have a defined width and won't stretch to the full width of 
+the section will have a defined width and won't stretch to the full width of
 the page. Instead, it will adhere to the values specified by the width property.
 
-The width property refers to a fixed width of the section. Width can be 
+The width property refers to a fixed width of the section. Width can be
 assigned values like `wide`, `narrow`, `half`, `flush`, `2/3`, and `1/3`.
 
-For instance, 
+For instance,
 
-**`Flush`**: When width is set to flush, the section's content spans the entire 
-width of the screen. 
+**`Flush`**: When width is set to flush, the section's content spans the entire
+width of the screen.
 
-**`Wide`**: A wide width occupies a substantial portion of the page's width, 
-offering more room for content without taking up the full width. 
+**`Wide`**: A wide width occupies a substantial portion of the page's width,
+offering more room for content without taking up the full width.
 
-**`Half`**: A section set to half width occupies half of the screen's width.  
+**`Half`**: A section set to half width occupies half of the screen's width.
 
-**`1/3`**: A section set to 1/3 width occupies about one-third of the screen's 
+**`1/3`**: A section set to 1/3 width occupies about one-third of the screen's
 width.
 
-(Embed interactive element to show the different width values. Example: 
-sliders or toggles to allow readers to dynamically see how different 
+(Embed interactive element to show the different width values. Example:
+sliders or toggles to allow readers to dynamically see how different
 properties (flush, wide, half, narrow, etc.) affect the appearance of a section
 on a page.)
 
 -- ds.h2: Naming a section
 
-The name of the section should simplify the identification process. 
+The name of the section should simplify the identification process.
 
-To distinguish different sections, we assign names based on the elements within 
-each section. 
+To distinguish different sections, we assign names based on the elements within
+each section.
 
-For instance, a section with a heading, image, and CTA, as well as a section 
-with only a heading and image, will carry distinct names. For instance, the 
-former can be labeled as `h1-with-image-and-1-cta`, and the latter can be 
-referred to as `h1-with-image`. 
+For instance, a section with a heading, image, and CTA, as well as a section
+with only a heading and image, will carry distinct names. For instance, the
+former can be labeled as `h1-with-image-and-1-cta`, and the latter can be
+referred to as `h1-with-image`.
 
 (Show examples of both sections)
 
-In scenarios where sections share common elements but boast varying alignments 
+In scenarios where sections share common elements but boast varying alignments
 or orientations, we utilize a numerical prefix to establish distinct identities.
 
 Here is a practical example:
-Imagine two hero sections, each featuring 2 CTAs. In the first, the heading, 
-subtitle, and CTAs are aligned at the top of the section, followed by the 
-image. For the second, the hero section showcases the same elements but with a 
-distinct alignment—headings, subtitles, and CTAs are right-aligned, while the 
-image is positioned to the left. To facilitate clear identification, we 
-designate these sections as `1-hero-with-2-cta` and `2-hero-with-2-cta` 
-respectively. This approach ensures an intuitive and organized system for 
+Imagine two hero sections, each featuring 2 CTAs. In the first, the heading,
+subtitle, and CTAs are aligned at the top of the section, followed by the
+image. For the second, the hero section showcases the same elements but with a
+distinct alignment—headings, subtitles, and CTAs are right-aligned, while the
+image is positioned to the left. To facilitate clear identification, we
+designate these sections as `1-hero-with-2-cta` and `2-hero-with-2-cta`
+respectively. This approach ensures an intuitive and organized system for
 referencing.
 
 (Show examples of both sections)
 
 -- ds.h1: The Section Grid
 
-A section grid brings multiple sections together in a grid format.  These grids 
-act as the foundation for arranging multiple sections in a cohesive and 
-visually appealing manner, typically in a column arrangement. 
+A section grid brings multiple sections together in a grid format.  These grids
+act as the foundation for arranging multiple sections in a cohesive and
+visually appealing manner, typically in a column arrangement.
 
 Section grids can be organized in various ways:
 
-One-column, two-column, three-column, one-third right column, one-third left 
-column, full-width column. 
+One-column, two-column, three-column, one-third right column, one-third left
+column, full-width column.
 
 (Show Example for each type)
 
 
 
 -- end: ds.page
-
-

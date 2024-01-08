@@ -82,44 +82,44 @@ full-width-bar: true
 fluid-width: false
 max-width.fixed.px: 1340
 
--- ds.page.footer:
+	-- ds.page.footer:
+	
+		-- footer.footer:
+		site-logo: $fastn-assets.files.images.fastn.svg
+		site-url: index.html
+		social-links: $footer.social-links
+		copyright: Copyright © 2023 - fastn.com
+		full-width: false
+		max-width.fixed.px: 1340
+		
+	-- end: ds.page.footer
 
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
+	-- ds.page.abstract-bar:
+	
+		-- ds.distributors: $featured-category.title
+		owners: $featured-category.owners
+		license-url: $featured-category.license-url
+		license: $featured-category.license
+		published-date: $featured-category.published-date
+		
+	-- end: ds.page.abstract-bar
 
--- end: ds.page.footer
+	-- ds.page.full-width-wrap:
+	
+		-- ft-ui.grid-view: $featured-category.category
+		templates: $featured-category.cards
+		more-link-text: View more
+		more-link: $featured-category.featured-link
+		show-large: true
+		
+	-- end: ds.page.full-width-wrap
 
--- ds.page.abstract-bar:
-
--- ds.distributors: $featured-category.title
-owners: $featured-category.owners
-license-url: $featured-category.license-url
-license: $featured-category.license
-published-date: $featured-category.published-date
-
--- end: ds.page.abstract-bar
-
--- ds.page.full-width-wrap:
-
--- ft-ui.grid-view: $featured-category.category
-templates: $featured-category.cards
-more-link-text: View more
-more-link: $featured-category.featured-link
-show-large: true
-
--- end: ds.page.full-width-wrap
-
--- ds.preview-card:
-image: $featured-category.image
-cta-url: $featured-category.demo-link
-cta-text: Demo
-github-url: $featured-category.github-url
-
+	-- ds.preview-card:
+	image: $featured-category.image
+	cta-url: $featured-category.demo-link
+	cta-text: Demo
+	github-url: $featured-category.github-url
+	
 -- end: ds.page
 
 -- end: featured-category
@@ -130,13 +130,13 @@ github-url: $featured-category.github-url
 
 
 -- component user-info:
-caption title: 
-optional ftd.image-src avatar: 
-common.social-media list social-links: 
-string profile: 
+caption title:
+optional ftd.image-src avatar:
+common.social-media list social-links:
+string profile:
 ftd.ui list works:
 
--- ds.page: 
+-- ds.page:
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -150,36 +150,35 @@ full-width: true
 fluid-width: false
 max-width.fixed.px: 1340
 
--- ds.page.footer:
+	-- ds.page.footer:
+	
+		-- footer.footer:
+		site-logo: $fastn-assets.files.images.fastn.svg
+		site-url: index.html
+		social-links: $footer.social-links
+		copyright: Copyright © 2023 - fastn.com
+		full-width: false
+		max-width.fixed.px: 1340
+		
+	-- end: ds.page.footer
 
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
+	-- ftd.column:
+	width: fill-container
+	align-content: center
+	
+		-- ds.contributor: $user-info.title
+		avatar: $user-info.avatar
+		profile: $user-info.profile
+		connect: $user-info.social-links
+		
+	-- end: ftd.column
 
--- end: ds.page.footer
-
--- ftd.column:
-width: fill-container
-align-content: center
-
--- ds.contributor: $user-info.title
-avatar: $user-info.avatar
-profile: $user-info.profile
-connect: $user-info.social-links
-
--- end: ftd.column
-
--- ftd.column:
-width: fill-container
-children: $user-info.works
-
--- end: ftd.column
+	-- ftd.column:
+	width: fill-container
+	children: $user-info.works
+	
+	-- end: ftd.column
 
 -- end: ds.page
 
 -- end: user-info
-

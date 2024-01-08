@@ -10,25 +10,25 @@ v: cZI2dVTIOHM
 
 -- ds.rendered: Hello Rive!
 
--- ds.rendered.input:
-
-\-- import: fastn.com/assets
-
-\-- ftd.rive:
-id: panda
-background.solid: #aaa
-src: $assets.files.rive.panda.riv
-width.fixed.px: 400
-
--- ds.rendered.output:
-
--- ftd.rive:
-id: panda
-background.solid: #aaa
-src: $assets.files.rive.panda.riv
-width.fixed.px: 400
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- import: fastn.com/assets
+	
+	\-- ftd.rive:
+	id: panda
+	background.solid: #aaa
+	src: $assets.files.rive.panda.riv
+	width.fixed.px: 400
+	
+	-- ds.rendered.output:
+	
+		-- ftd.rive:
+		id: panda
+		background.solid: #aaa
+		src: $assets.files.rive.panda.riv
+		width.fixed.px: 400
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -89,27 +89,27 @@ v: H6PH8-fuCNs
 
 -- ds.rendered: Sample code
 
--- ds.rendered.input:
-
-\-- ftd.rive:
-id: fastn
-src: $fastn-assets.files.assets.fastn.riv
-width.fixed.px: 440
-state-machine: Together
-$on-mouse-enter$: $ftd.set-rive-boolean(rive = fastn, input = play, value = true)
-$on-mouse-leave$: $ftd.set-rive-boolean(rive = fastn, input = play, value = false)
-
--- ds.rendered.output:
-
--- ftd.rive:
-id: fastn
-src: $fastn-assets.files.assets.fastn.riv
-width.fixed.px: 600
-state-machine: Together
-$on-mouse-enter$: $ftd.set-rive-boolean(rive = fastn, input = play, value = true)
-$on-mouse-leave$: $ftd.set-rive-boolean(rive = fastn, input = play, value = false)
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.rive:
+	id: fastn
+	src: $fastn-assets.files.assets.fastn.riv
+	width.fixed.px: 440
+	state-machine: Together
+	$on-mouse-enter$: $ftd.set-rive-boolean(rive = fastn, input = play, value = true)
+	$on-mouse-leave$: $ftd.set-rive-boolean(rive = fastn, input = play, value = false)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.rive:
+		id: fastn
+		src: $fastn-assets.files.assets.fastn.riv
+		width.fixed.px: 600
+		state-machine: Together
+		$on-mouse-enter$: $ftd.set-rive-boolean(rive = fastn, input = play, value = true)
+		$on-mouse-leave$: $ftd.set-rive-boolean(rive = fastn, input = play, value = false)
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 

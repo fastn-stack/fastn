@@ -9,18 +9,18 @@ v: 6Cc0pqk8OiI
 -- ds.h3: Why to publish a package?
 
 Your project is in local machine, and you want to share the
-it with the world, you would want it to be 
+it with the world, you would want it to be
 published on GitHub.
 
 -- ds.h3: How to publish a package?
 
-You can create a package from scratch or you can use a template. 
+You can create a package from scratch or you can use a template.
 
-If you choose to use the `fastn github template`, 
+If you choose to use the `fastn github template`,
 [click here](https://github.com/ftd-lang/fastn-template/generate).
 
 
-Use that template to create your package and copy your project code and 
+Use that template to create your package and copy your project code and
 replace the pre-defined code of tempate in the `index.ftd` document.
 
 This way, you have moved your project into a package that anyone can use in
@@ -40,4 +40,3 @@ Continue with the [part 6 now](/expander/polish/).
 -- string source: default
 $processor$: pr.get-data
 key: source
-

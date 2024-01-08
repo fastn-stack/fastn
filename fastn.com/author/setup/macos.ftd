@@ -3,7 +3,7 @@
 
 -- ds.page: Install `fastn` on Mac/Linux
 
-For MacOS/Linux machine, there are three ways to install `fastn`. 
+For MacOS/Linux machine, there are three ways to install `fastn`.
 
 1. [`fastn` through `pre-built binary`](macos/#fastn-through-pre-built-binary)
  (Recommended)
@@ -21,7 +21,7 @@ installing it on your local system.
 src: $fastn-assets.files.images.setup.macos-fastn-installation.gif
 
 
--- ds.markdown: 
+-- ds.markdown:
 
 `fastn` is written using `rust` language, if you are familiar with it and want
 to use `fastn` for your project or for experimentation, you can do it by
@@ -88,7 +88,7 @@ To verify, open terminal and execute the command, `fastn`.
 src: $fastn-assets.files.images.setup.fastn-terminal-macos.png
 width: fill-container
 
--- ds.markdown: 
+-- ds.markdown:
 
 
 If you see the Help text of the fastn command, it confirms that FASTN is

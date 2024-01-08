@@ -41,13 +41,13 @@ willingness to try something new.
 -- ds.blog-page:
 meta: $meta
 
--- ds.h1: Meet Mayur and Tushar 
+-- ds.h1: Meet Mayur and Tushar
 
-Over 700 students and budding programmers recently joined us at the fastn 
-Roadshow, where they built their first fastn-powered websites within a few hours 
-of learning about fastn. 
+Over 700 students and budding programmers recently joined us at the fastn
+Roadshow, where they built their first fastn-powered websites within a few hours
+of learning about fastn.
 
-`Mayur Kawale` is one of them. You can check out his recent work 
+`Mayur Kawale` is one of them. You can check out his recent work
 [`here`](https://mefisto04.github.io/fastn_portfoliomk/)
 
 -- ftd.iframe:
@@ -57,9 +57,9 @@ height.fixed.px: 1000
 
 -- ds.markdown:
 
-`Tushar` is another recent fastn enthusiast. He created a 
+`Tushar` is another recent fastn enthusiast. He created a
 [`website`](https://tusharpamnani.github.io/fastn-site2/) and
-[`newsletter sign-up page`](https://tusharpamnani.github.io/fastn-newsletter/), 
+[`newsletter sign-up page`](https://tusharpamnani.github.io/fastn-newsletter/),
 using fastn.
 
 -- ftd.iframe:
@@ -70,15 +70,15 @@ height.fixed.px: 1080
 
 -- ds.markdown:
 
-These stories are just the beginning. Check out our 
+These stories are just the beginning. Check out our
 [`Discord`](https://discord.com/invite/xs4FM8UZB5) #share-your-work thread for
-similar tales of accomplishments. You can also see more inspiring stories on 
-LinkedIn and Twitter under the hashtags 
-[`#fastn`](https://twitter.com/search?q=%23fastn&src=typed_query) and 
+similar tales of accomplishments. You can also see more inspiring stories on
+LinkedIn and Twitter under the hashtags
+[`#fastn`](https://twitter.com/search?q=%23fastn&src=typed_query) and
 [`#fastnroadshow.`](https://www.linkedin.com/search/results/content/?keywords=%23fastnroadshow&origin=GLOBAL_SEARCH_HEADER&sid=s.4)
 
-So the next time you think coding is not for you, take the plunge and 
-[`try fastn.`](https://fastn-community.github.io/business-card/) 
+So the next time you think coding is not for you, take the plunge and
+[`try fastn.`](https://fastn-community.github.io/business-card/)
 It might prove you wrong—in the best possible way!
 
 
