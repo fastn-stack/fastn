@@ -3,6 +3,7 @@ pub async fn fmt(
     file: Option<&str>,
     no_indentation: bool,
 ) -> fastn_core::Result<()> {
+    use colored::Colorize;
     use itertools::Itertools;
 
     let documents = config
@@ -19,7 +20,7 @@ pub async fn fmt(
             }
         }
 
-        println!("Formatting {} ... ", ftd_document.id);
+        print!("Formatting {} ... ", ftd_document.id);
 
         let parsed_content =
             parsed_to_sections(format!("{}\n\n", ftd_document.content.as_str()).as_str());
@@ -28,6 +29,7 @@ pub async fn fmt(
             .ds
             .write_content(&ftd_document.get_full_path(), format_sections.into_bytes())
             .await?;
+        println!("{}", "Done".green())
     }
 
     Ok(())
@@ -220,23 +222,37 @@ fn section(input: &mut String) -> Option<Section> {
     let section_name = get_section_name(input)?;
     let mut value = vec![];
     let mut first_time_encounter_section = true;
-    if !input.trim().is_empty() && !input.contains('\n') {
-        value.push(input.to_string());
-        *input = String::new();
-    }
-    while let Some((first_line, remaining)) = input.split_once('\n') {
-        let first_line = first_line.trim().to_string();
-        if first_line.starts_with("-- ") || first_line.starts_with("/-- ") {
+    let mut leading_spaces_count = 0;
+    while !input.is_empty() {
+        let (first_line, remaining) = match input.split_once('\n') {
+            Some((first_line, remaining)) => (first_line.to_string(), remaining.to_string()),
+            None => (input.to_string(), String::new()),
+        };
+        let mut trimmed_line = first_line.trim_start().to_string();
+        let current_leading_spaces_count = first_line.len() - trimmed_line.len();
+        if trimmed_line.starts_with("-- ") || trimmed_line.starts_with("/-- ") {
             if first_time_encounter_section {
                 first_time_encounter_section = false;
                 *input = remaining.to_string();
-                value.push(first_line);
+                value.push(trimmed_line.trim().to_string());
+                leading_spaces_count = current_leading_spaces_count;
                 continue;
             }
             *input = format!("{first_line}\n{remaining}");
             break;
         }
-        value.push(first_line);
+        if !trimmed_line.is_empty() {
+            trimmed_line = format!(
+                "{}{}",
+                " ".repeat(if current_leading_spaces_count > leading_spaces_count {
+                    current_leading_spaces_count - leading_spaces_count
+                } else {
+                    0
+                }),
+                trimmed_line.trim()
+            );
+        }
+        value.push(trimmed_line);
         *input = remaining.to_string();
     }
 
@@ -290,12 +306,12 @@ fn empty_section(input: &mut String) -> Option<Section> {
             Some((first_line, remaining)) => (first_line.to_string(), remaining.to_string()),
             None => (input.to_string(), String::new()),
         };
-        let first_line = first_line.trim().to_string();
-        if !first_line.is_empty() {
+        let trimmed_line = first_line.trim().to_string();
+        if !trimmed_line.is_empty() {
             *input = format!("{first_line}\n{remaining}");
             break;
         }
-        value.push(first_line);
+        value.push(trimmed_line);
         *input = remaining.to_string();
     }
 
@@ -314,15 +330,15 @@ fn comment_section(input: &mut String) -> Option<Section> {
             Some((first_line, remaining)) => (first_line.to_string(), remaining.to_string()),
             None => (input.to_string(), String::new()),
         };
-        let first_line = first_line.trim().to_string();
-        if first_line.starts_with("-- ")
-            || first_line.starts_with("/-- ")
-            || !first_line.starts_with(";;")
+        let trimmed_line = first_line.trim().to_string();
+        if trimmed_line.starts_with("-- ")
+            || trimmed_line.starts_with("/-- ")
+            || !trimmed_line.starts_with(";;")
         {
             *input = format!("{first_line}\n{remaining}");
             break;
         }
-        value.push(first_line);
+        value.push(trimmed_line);
         *input = remaining.to_string();
     }
     if !value.is_empty() {
