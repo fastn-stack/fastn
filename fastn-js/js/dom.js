@@ -643,7 +643,7 @@ fastn_dom.Length = {
     Px: (value) => {
         if (value instanceof fastn.mutableClass) {
             return fastn.formula([value], function () {
-                return `${value.get()}px`;
+                return `${fastn_utils.getStaticValue(value)}px`;
             });
         }
         return `${value}px`;
@@ -651,7 +651,7 @@ fastn_dom.Length = {
     Em: (value) => {
         if (value instanceof fastn.mutableClass) {
             return fastn.formula([value], function () {
-                return `${value.get()}em`;
+                return `${fastn_utils.getStaticValue(value)}em`;
             });
         }
         return `${value}em`;
@@ -659,7 +659,7 @@ fastn_dom.Length = {
     Rem: (value) => {
         if (value instanceof fastn.mutableClass) {
             return fastn.formula([value], function () {
-                return `${value.get()}rem`;
+                return `${fastn_utils.getStaticValue(value)}rem`;
             });
         }
         return `${value}rem`;
@@ -667,7 +667,7 @@ fastn_dom.Length = {
     Percent: (value) => {
         if (value instanceof fastn.mutableClass) {
             return fastn.formula([value], function () {
-                return `${value.get()}%`;
+                return `${fastn_utils.getStaticValue(value)}%`;
             });
         }
         return `${value}%`;
@@ -675,7 +675,7 @@ fastn_dom.Length = {
     Calc: (value) => {
         if (value instanceof fastn.mutableClass) {
             return fastn.formula([value], function () {
-                return `calc(${value.get()})`;
+                return `calc(${fastn_utils.getStaticValue(value)})`;
             });
         }
         return `calc(${value})`;
@@ -683,7 +683,7 @@ fastn_dom.Length = {
     Vh: (value) => {
         if (value instanceof fastn.mutableClass) {
             return fastn.formula([value], function () {
-                return `${value.get()}vh`;
+                return `${fastn_utils.getStaticValue(value)}vh`;
             });
         }
         return `${value}vh`;
@@ -691,7 +691,7 @@ fastn_dom.Length = {
     Vw: (value) => {
         if (value instanceof fastn.mutableClass) {
             return fastn.formula([value], function () {
-                return `${value.get()}vw`;
+                return `${fastn_utils.getStaticValue(value)}vw`;
             });
         }
         return `${value}vw`;
@@ -699,7 +699,7 @@ fastn_dom.Length = {
     Dvh: (value) => {
         if (value instanceof fastn.mutableClass) {
             return fastn.formula([value], function () {
-                return `${value.get()}dvh`;
+                return `${fastn_utils.getStaticValue(value)}dvh`;
             });
         }
         return `${value}dvh`;
@@ -707,7 +707,7 @@ fastn_dom.Length = {
     Lvh: (value) => {
         if (value instanceof fastn.mutableClass) {
             return fastn.formula([value], function () {
-                return `${value.get()}lvh`;
+                return `${fastn_utils.getStaticValue(value)}lvh`;
             });
         }
         return `${value}lvh`;
@@ -715,7 +715,7 @@ fastn_dom.Length = {
     Svh: (value) => {
         if (value instanceof fastn.mutableClass) {
             return fastn.formula([value], function () {
-                return `${value.get()}svh`;
+                return `${fastn_utils.getStaticValue(value)}svh`;
             });
         }
         return `${value}svh`;
@@ -724,7 +724,7 @@ fastn_dom.Length = {
     Vmin: (value) => {
         if (value instanceof fastn.mutableClass) {
             return fastn.formula([value], function () {
-                return `${value.get()}vmin`;
+                return `${fastn_utils.getStaticValue(value)}vmin`;
             });
         }
         return `${value}vmin`;
@@ -732,7 +732,7 @@ fastn_dom.Length = {
     Vmax: (value) => {
         if (value instanceof fastn.mutableClass) {
             return fastn.formula([value], function () {
-                return `${value.get()}vmax`;
+                return `${fastn_utils.getStaticValue(value)}vmax`;
             });
         }
         return `${value}vmax`;
