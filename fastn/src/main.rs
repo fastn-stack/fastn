@@ -236,7 +236,7 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Build static site from this fastn package")
                 .arg(clap::arg!(file: [FILE]... "The file to build (if specified only these are built, else entire package is built)"))
                 .arg(clap::arg!(-b --base [BASE] "The base path.").default_value("/"))
-                .arg(clap::arg!(-b --"zip-url" ["ZIP URL"] "The zip url of the package."))
+                .arg(clap::arg!(--"zip-url" ["ZIP URL"] "The zip url of the package."))
                 .arg(clap::arg!(--"ignore-failed" "Ignore failed files."))
                 .arg(clap::arg!(--"check-build" "Checks .build for index files validation."))
                 .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
