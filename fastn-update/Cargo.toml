@@ -1,0 +1,20 @@
+[package]
+name = "fastn-update"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+fastn-core.workspace = true
+fastn-ds.workspace = true
+fastn-package.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+zip.workspace = true
+indicatif.workspace = true

@@ -9,7 +9,8 @@ members = [
     "fastn-grammar",
     "fastn-lang",
     "foo",
-    "fastn-ds",
+    "fastn-ds", 
+    "fastn-update",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
@@ -85,6 +86,7 @@ env_logger = "0.10"
 enum-iterator = "0.6"
 enum-iterator-derive = "0.6"
 fastn-ds = { path = "fastn-ds" }
+fastn-update = { path = "fastn-update" }
 fastn-core = { path = "fastn-core" }
 fastn-issues = { path = "fastn-issues" }
 fastn-package = { path = "fastn-package" }
@@ -150,6 +152,7 @@ diesel = { version = "2.1", features = ["chrono", "postgres", "postgres_backend"
 diesel-async = { version = "0.4", features = ["postgres", "deadpool", "async-connection-wrapper"]}
 diesel_migrations = "2.1"
 chrono = { version = "0.4", features = ["serde"]}
+indicatif = "0.17.1"
 
 [workspace.dependencies.uuid]
 version = "1.6.1"

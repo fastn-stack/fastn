@@ -85,6 +85,10 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         .await;
     }
 
+    if matches.subcommand_matches("update").is_some() {
+        return fastn_update::update(&config).await;
+    }
+
     if let Some(test) = matches.subcommand_matches("test") {
         let edition = test.value_of_("edition").map(ToString::to_string);
         let external_js = test.values_of_("external-js");
@@ -133,6 +137,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             &config,
             build.value_of_("file"), // TODO: handle more than one files
             build.value_of_("base").unwrap_or("/"),
+            build.value_of_("zip-url"),
             build.get_flag("ignore-failed"),
             matches.get_flag("test"),
             build.get_flag("check-build"),
@@ -235,6 +240,7 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Build static site from this fastn package")
                 .arg(clap::arg!(file: [FILE]... "The file to build (if specified only these are built, else entire package is built)"))
                 .arg(clap::arg!(-b --base [BASE] "The base path.").default_value("/"))
+                .arg(clap::arg!(--"zip-url" ["ZIP URL"] "The zip url of the package."))
                 .arg(clap::arg!(--"ignore-failed" "Ignore failed files."))
                 .arg(clap::arg!(--"check-build" "Checks .build for index files validation."))
                 .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
@@ -283,6 +289,10 @@ fn app(version: &'static str) -> clap::Command {
             clap::Command::new("check")
                 .about("Check if everything is fine with current fastn package")
                 .hide(true) // hidden since the feature is not being released yet.
+        )
+        .subcommand(
+            clap::Command::new("update")
+                .about("Update dependency packages for this fastn package")
         )
         .subcommand(sub_command::serve())
 }

@@ -11,7 +11,8 @@ mod db;
 pub mod doc;
 mod file;
 mod font;
-mod package;
+pub mod manifest;
+pub mod package;
 pub mod tutor;
 pub(crate) mod watcher;
 #[macro_use]
@@ -40,7 +41,7 @@ mod mail;
 pub(crate) use auto_import::AutoImport;
 pub use commands::{
     build::build, check::post_build_check, create_package::create_package, fmt::fmt, query::query,
-    serve::listen, test::test, update::update,
+    serve::listen, test::test,
 };
 pub use config::{Config, FTDEdition, RequestConfig};
 pub use error::Error;
@@ -49,9 +50,10 @@ pub(crate) use file::{get_file, paths_to_files, Document, Static};
 pub(crate) use font::Font;
 pub use library::{FastnLibrary, Library, Library2};
 pub use library2022::Library2022;
+pub use manifest::Manifest;
 pub(crate) use package::dependency::Dependency;
 pub use package::user_group;
-pub(crate) use package::Package;
+pub use package::Package;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};

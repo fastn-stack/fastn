@@ -6,4 +6,3 @@ pub mod query;
 pub mod serve;
 pub mod test;
 pub mod translation_status;
-pub mod update;

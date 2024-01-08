@@ -13,6 +13,7 @@ Commands:
   fmt             Format the fastn package
   test            Run the test files in `_tests` folder
   query           JSON Dump in various stages
+  update          Update dependency packages for this fastn package
   serve           Serve package content over HTTP
   help            Print this message or the help of the given subcommand(s)
 

@@ -470,7 +470,7 @@ pub(crate) async fn http_post_with_cookie(
     Ok((Ok(res.bytes().await?.into()), resp_cookies))
 }
 
-pub(crate) async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
+pub async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
     http_get_with_cookie(url, None, &std::collections::HashMap::new(), true)
         .await?
         .0
