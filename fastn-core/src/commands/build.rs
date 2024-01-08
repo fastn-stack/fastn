@@ -22,44 +22,7 @@ pub async fn build(
         let documents = get_documents_for_current_package(config).await?;
 
         if let Some(zip_url) = zip_url {
-            use sha2::digest::FixedOutput;
-            use sha2::Digest;
-
-            let mut hasher = sha2::Sha256::new();
-            let mut files: std::collections::HashMap<String, fastn_core::manifest::File> =
-                std::collections::HashMap::new();
-
-            for file in config.get_files(&config.package).await? {
-                if file.get_id().eq(fastn_core::manifest::MANIFEST_JSON) {
-                    continue;
-                }
-
-                let name = file.get_id().to_string();
-                let content = &config.ds.read_content(&file.get_full_path()).await?;
-                let hash = fastn_core::utils::generate_hash(content);
-                let size = content.len();
-
-                hasher.update(content);
-
-                files.insert(
-                    name.clone(),
-                    fastn_core::manifest::File::new(name, hash, size),
-                );
-            }
-
-            let checksum = format!("{:X}", hasher.finalize_fixed());
-
-            let manifest = fastn_core::Manifest::new(files, zip_url.to_string(), checksum);
-
-            let _ = &config
-                .ds
-                .write_content(
-                    &build_dir.join("manifest.json"),
-                    serde_json::ser::to_vec_pretty(&manifest)?,
-                )
-                .await?;
-
-            println!("Wrote manifest.json");
+            write_manifest_json(config, &build_dir, zip_url).await?;
         }
 
         match only_id {
@@ -103,6 +66,53 @@ pub async fn build(
     if check_build {
         return fastn_core::post_build_check(config).await;
     }
+
+    Ok(())
+}
+
+async fn write_manifest_json(
+    config: &fastn_core::Config,
+    build_dir: &fastn_ds::Path,
+    zip_url: &str,
+) -> fastn_core::Result<()> {
+    use sha2::digest::FixedOutput;
+    use sha2::Digest;
+
+    let mut hasher = sha2::Sha256::new();
+    let mut files: std::collections::HashMap<String, fastn_core::manifest::File> =
+        std::collections::HashMap::new();
+
+    for file in config.get_files(&config.package).await? {
+        if file.get_id().eq(fastn_core::manifest::MANIFEST_JSON) {
+            continue;
+        }
+
+        let name = file.get_id().to_string();
+        let content = &config.ds.read_content(&file.get_full_path()).await?;
+        let hash = fastn_core::utils::generate_hash(content);
+        let size = content.len();
+
+        hasher.update(content);
+
+        files.insert(
+            name.clone(),
+            fastn_core::manifest::File::new(name, hash, size),
+        );
+    }
+
+    let checksum = format!("{:X}", hasher.finalize_fixed());
+
+    let manifest = fastn_core::Manifest::new(files, zip_url.to_string(), checksum);
+
+    let _ = &config
+        .ds
+        .write_content(
+            &build_dir.join("manifest.json"),
+            serde_json::ser::to_vec_pretty(&manifest)?,
+        )
+        .await?;
+
+    println!("Wrote manifest.json");
 
     Ok(())
 }
