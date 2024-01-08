@@ -78,6 +78,14 @@ async fn write_manifest_json(
     use sha2::digest::FixedOutput;
     use sha2::Digest;
 
+    let start = std::time::Instant::now();
+
+    println!(
+        "Processing {}/{}",
+        &config.package.name.as_str(),
+        fastn_core::manifest::MANIFEST_JSON
+    );
+
     let mut hasher = sha2::Sha256::new();
     let mut files: std::collections::HashMap<String, fastn_core::manifest::File> =
         std::collections::HashMap::new();
@@ -107,12 +115,20 @@ async fn write_manifest_json(
     let _ = &config
         .ds
         .write_content(
-            &build_dir.join("manifest.json"),
+            &build_dir.join(fastn_core::manifest::MANIFEST_JSON),
             serde_json::ser::to_vec_pretty(&manifest)?,
         )
         .await?;
 
-    println!("Wrote manifest.json");
+    fastn_core::utils::print_end(
+        format!(
+            "Processed {}/{}",
+            &config.package.name.as_str(),
+            fastn_core::manifest::MANIFEST_JSON
+        )
+        .as_str(),
+        start,
+    );
 
     Ok(())
 }
