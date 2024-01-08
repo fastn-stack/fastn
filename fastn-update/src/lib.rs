@@ -2,8 +2,6 @@ extern crate self as fastn_update;
 
 mod utils;
 
-const MANIFEST_FILE: &str = "manifest.json";
-
 pub async fn resolve_dependencies_(
     ds: &fastn_ds::DocumentStore,
     packages_root: &fastn_ds::Path,
@@ -93,13 +91,23 @@ async fn download_and_unpack_zip(
 /// Download manifest of the package `<package-name>/.fastn/manifest.json`
 /// Resolve to `fastn_core::Manifest` struct
 async fn get_manifest(package: String) -> fastn_core::Result<fastn_core::Manifest> {
-    let manifest_bytes =
-        match fastn_core::http::http_get(&format!("https://{}/{}", package, MANIFEST_FILE)).await {
-            Ok(bytes) => bytes,
-            Err(_) => {
-                fastn_core::http::http_get(&format!("http://{}/{}", package, MANIFEST_FILE)).await?
-            }
-        };
+    let manifest_bytes = match fastn_core::http::http_get(&format!(
+        "https://{}/{}",
+        package,
+        fastn_core::manifest::MANIFEST_JSON
+    ))
+    .await
+    {
+        Ok(bytes) => bytes,
+        Err(_) => {
+            fastn_core::http::http_get(&format!(
+                "http://{}/{}",
+                package,
+                fastn_core::manifest::MANIFEST_JSON
+            ))
+            .await?
+        }
+    };
     let manifest = serde_json::de::from_slice(&manifest_bytes)?;
 
     Ok(manifest)
