@@ -252,7 +252,6 @@ fn app(version: &'static str) -> clap::Command {
                 .about("format the fastn package")
                 .arg(clap::arg!(file: [FILE]... "The file to format").required(false))
                 .arg(clap::arg!(-i --noidentation "No identation added to file/package").required(false))
-                .hide(true), // hidden since the feature is not fully developed.
         )
         .subcommand(
             clap::Command::new("test")
