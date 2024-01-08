@@ -280,6 +280,10 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Check if everything is fine with current fastn package")
                 .hide(true) // hidden since the feature is not being released yet.
         )
+        .subcommand(
+            clap::Command::new("update")
+                .about("Update dependency packages for this fastn package")
+        )
         .subcommand(sub_command::serve())
 }
 

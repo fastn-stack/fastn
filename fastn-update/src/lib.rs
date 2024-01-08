@@ -47,11 +47,14 @@ pub async fn resolve_dependencies_(
                     pb.inc(1);
                     pb.set_message("Resolved");
                 }
-                Err(_) => {
+                Err(e) => {
                     pb.set_message(format!(
                         "Failed to resolve manifest.json for {}",
                         &dependency.package.name
                     ));
+                    pb.finish();
+
+                    return Err(e);
                 }
             }
         }
@@ -135,12 +138,16 @@ pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
         return Ok(());
     }
 
-    if process(config).await.is_ok() {
-        if c.package.dependencies.len() == 1 {
-            println!("Updated the package dependency.");
-        } else {
-            println!("Updated {} dependencies.", c.package.dependencies.len())
-        }
+    if process(config).await.is_err() {
+        eprintln!("Update failed.");
+
+        return Ok(());
+    }
+
+    if c.package.dependencies.len() == 1 {
+        println!("Updated the package dependency.");
+    } else {
+        println!("Updated {} dependencies.", c.package.dependencies.len())
     }
 
     Ok(())
