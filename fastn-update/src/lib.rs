@@ -2,7 +2,7 @@ extern crate self as fastn_update;
 
 mod utils;
 
-pub async fn resolve_dependencies_(
+async fn resolve_dependencies(
     ds: &fastn_ds::DocumentStore,
     packages_root: &fastn_ds::Path,
     current_package: &fastn_core::Package,
@@ -101,8 +101,8 @@ async fn get_manifest(package: String) -> fastn_core::Result<fastn_core::Manifes
     Ok(manifest)
 }
 
-pub async fn process(config: &fastn_core::Config) -> fastn_core::Result<()> {
-    resolve_dependencies_(&config.ds, &config.packages_root, &config.package).await?;
+async fn process(config: &fastn_core::Config) -> fastn_core::Result<()> {
+    resolve_dependencies(&config.ds, &config.packages_root, &config.package).await?;
 
     Ok(())
 }
