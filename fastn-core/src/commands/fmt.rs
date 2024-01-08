@@ -19,6 +19,8 @@ pub async fn fmt(
             }
         }
 
+        println!("Formatting {} ... ", ftd_document.id);
+
         let parsed_content =
             parsed_to_sections(format!("{}\n\n", ftd_document.content.as_str()).as_str());
         let format_sections = format_sections(parsed_content, !no_indentation);
@@ -80,13 +82,13 @@ fn format_sections(sections: Vec<Section>, indentation: bool) -> String {
     for section in sections {
         output.push(format_section(
             &section,
-            if indentation { Some(0) } else { None },
+            if indentation { Some(-1) } else { None },
         ))
     }
     format!("{}\n", output.join("\n").trim_end())
 }
 
-fn format_section(section: &Section, indentation: Option<usize>) -> String {
+fn format_section(section: &Section, indentation: Option<i32>) -> String {
     match &section.kind {
         SectionKind::Comment => add_indentation(section.value.as_str(), indentation),
         SectionKind::Empty => section.value.to_string(),
@@ -109,7 +111,7 @@ fn format_section_kind(
     end: bool,
     sub_sections: &[Section],
     value: &str,
-    indentation: Option<usize>,
+    indentation: Option<i32>,
 ) -> String {
     let mut output = vec![add_indentation(value, indentation)];
     for section in sub_sections {
@@ -124,16 +126,16 @@ fn format_section_kind(
     output.join("\n")
 }
 
-fn add_indentation(input: &str, indentation: Option<usize>) -> String {
+fn add_indentation(input: &str, indentation: Option<i32>) -> String {
     let indentation = match indentation {
-        Some(indentation) if !indentation.eq(&0) => indentation,
+        Some(indentation) if indentation > 0 => indentation,
         _ => {
             return input.to_string();
         }
     };
     let mut value = vec![];
     for i in input.split('\n') {
-        value.push(format!("{}{}", "\t".repeat(indentation), i));
+        value.push(format!("{}{}", "\t".repeat(indentation as usize), i));
     }
     value.join("\n")
 }
@@ -188,7 +190,11 @@ fn end_section(input: &mut String, sections: &mut Vec<Section>) -> bool {
                 name,
                 end,
                 sub_sections: s,
-            } if section_name.eq(name.trim_start_matches('$')) => {
+            } if section_name
+                .trim_start_matches('$')
+                .eq(name.trim_start_matches('$'))
+                && !*end =>
+            {
                 *end = true;
                 *s = sub_sections;
                 sections.push(section);
