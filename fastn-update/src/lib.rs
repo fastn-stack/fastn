@@ -2,60 +2,89 @@ extern crate self as fastn_update;
 
 mod utils;
 
+#[derive(thiserror::Error, Debug)]
+enum Error {
+    #[error("Failed to resolve manifest.json for package '{package}'")]
+    ManifestResolution {
+        package: String,
+        #[source]
+        error: fastn_core::Error,
+    },
+    #[error("Failed to download and unpack archive for package '{package}'")]
+    ArchiveDownload {
+        package: String,
+        #[source]
+        error: fastn_core::Error,
+    },
+    #[error("Failed to resolve dependency '{package}'")]
+    DependencyResolution {
+        package: String,
+        #[source]
+        error: fastn_core::Error,
+    },
+}
+
+type Result<T> = std::result::Result<T, Error>;
+
 async fn resolve_dependencies(
     ds: &fastn_ds::DocumentStore,
     packages_root: &fastn_ds::Path,
     current_package: &fastn_core::Package,
-) -> fastn_core::Result<()> {
+    pb: &indicatif::ProgressBar,
+) -> fastn_update::Result<()> {
     let mut stack = vec![current_package.clone()];
     let mut resolved = std::collections::HashSet::new();
     resolved.insert(current_package.name.to_string());
 
-    let spinner_style =
-        indicatif::ProgressStyle::with_template("{prefix:.bold.dim} {spinner} {msg}")
-            .unwrap()
-            .tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
-    let pb = indicatif::ProgressBar::new(current_package.dependencies.len() as u64);
-    pb.set_style(spinner_style);
     while let Some(package) = stack.pop() {
-        pb.set_prefix(format!("Resolving package {}", &package.name));
         for dependency in package.dependencies {
             if resolved.contains(&dependency.package.name)
                 || dependency.package.name.eq(&fastn_core::FASTN_UI_INTERFACE)
             {
                 continue;
             }
-            let dependency_path = &packages_root.join(&dependency.package.name);
-            pb.set_message("Downloading manifest.json");
-            let manifest = match get_manifest(dependency.package.name.clone()).await {
+            let package_name = dependency.package.name.clone();
+            let dependency_path = &packages_root.join(&package_name);
+
+            pb.set_message(format!("Resolving {}/manifest.json", &package_name));
+
+            let manifest = match get_manifest(package_name.clone()).await {
                 Ok(manifest) => manifest,
                 Err(e) => {
-                    pb.set_message(format!(
-                        "Failed to resolve manifest.json for {}",
-                        &dependency.package.name
-                    ));
-                    pb.finish();
-
-                    return Err(e);
+                    return Err(Error::ManifestResolution {
+                        package: package_name.clone(),
+                        error: e,
+                    });
                 }
             };
-            pb.set_message("Downloading package archive");
-            download_and_unpack_zip(ds, &packages_root.join(&dependency.package.name), &manifest)
-                .await?;
-            pb.set_message("Downloaded and unpacked zip archive");
+
+            pb.set_message(format!("Downloading {} archive", &package_name));
+
+            if let Err(e) =
+                download_and_unpack_zip(ds, &packages_root.join(&package_name), &manifest).await
+            {
+                return Err(Error::ArchiveDownload {
+                    package: package_name.clone(),
+                    error: e,
+                });
+            }
+
             let dep_package = {
                 let mut dep_package = dependency.package.clone();
                 let fastn_path = dependency_path.join("FASTN.ftd");
-                dep_package.resolve(&fastn_path, ds).await?;
+                if let Err(e) = dep_package.resolve(&fastn_path, ds).await {
+                    return Err(Error::DependencyResolution {
+                        package: package_name.clone(),
+                        error: e,
+                    });
+                };
                 dep_package
             };
-            resolved.insert(dependency.package.name.to_string());
+            resolved.insert(package_name.to_string());
             stack.push(dep_package);
             pb.inc(1);
-            pb.set_message("Resolved");
         }
     }
-    pb.finish();
     Ok(())
 }
 
@@ -87,7 +116,7 @@ async fn download_and_unpack_zip(
     Ok(())
 }
 
-/// Download manifest of the package `<package-name>/.fastn/manifest.json`
+/// Download manifest of the package `<package-name>/manifest.json`
 /// Resolve to `fastn_core::Manifest` struct
 async fn get_manifest(package: String) -> fastn_core::Result<fastn_core::Manifest> {
     let manifest_bytes = fastn_core::http::http_get(&format!(
@@ -99,10 +128,6 @@ async fn get_manifest(package: String) -> fastn_core::Result<fastn_core::Manifes
     let manifest = serde_json::de::from_slice(&manifest_bytes)?;
 
     Ok(manifest)
-}
-
-async fn process(config: &fastn_core::Config) -> fastn_core::Result<()> {
-    resolve_dependencies(&config.ds, &config.packages_root, &config.package).await
 }
 
 pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
@@ -121,17 +146,33 @@ pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
         return Ok(());
     }
 
-    if process(config).await.is_err() {
-        eprintln!("Update failed.");
+    let spinner_style =
+        indicatif::ProgressStyle::with_template("{prefix:.bold.dim} {spinner} {msg}")
+            .unwrap()
+            .tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
+
+    let current_package = &config.package;
+    let pb = indicatif::ProgressBar::new(current_package.dependencies.len() as u64);
+    pb.set_style(spinner_style);
+    pb.set_prefix("Updating packages");
+
+    if let Err(e) =
+        resolve_dependencies(&config.ds, &config.packages_root, current_package, &pb).await
+    {
+        pb.set_prefix("Update failed");
+        pb.abandon_with_message(e.to_string());
 
         return Ok(());
     }
 
-    if c.package.dependencies.len() == 1 {
-        println!("Updated the package dependency.");
-    } else {
-        println!("Updated {} dependencies.", c.package.dependencies.len())
+    pb.set_prefix("Updated");
+
+    match c.package.dependencies.len() {
+        1 => pb.set_message("package dependency"),
+        n => pb.set_message(format!("{} dependencies.", n)),
     }
+
+    pb.finish();
 
     Ok(())
 }
