@@ -3,35 +3,91 @@ extern crate self as fastn_update;
 mod utils;
 
 #[derive(thiserror::Error, Debug)]
-enum Error {
-    #[error("Failed to resolve manifest.json for package '{package}'")]
-    ManifestResolution {
+pub enum ManifestError {
+    #[error("Failed to download manifest.json for package '{package}'")]
+    DownloadError {
         package: String,
         #[source]
-        error: fastn_core::Error,
+        source: fastn_core::Error,
     },
-    #[error("Failed to download and unpack archive for package '{package}'")]
-    ArchiveDownload {
+    #[error("Failed to deserialize manifest.json for package '{package}'")]
+    DeserializationError {
         package: String,
         #[source]
-        error: fastn_core::Error,
-    },
-    #[error("Failed to resolve dependency '{package}'")]
-    DependencyResolution {
-        package: String,
-        #[source]
-        error: fastn_core::Error,
+        source: serde_json::Error,
     },
 }
 
-type Result<T> = std::result::Result<T, Error>;
+#[derive(thiserror::Error, Debug)]
+pub enum ArchiveError {
+    #[error("Failed to read archive for package '{package}'")]
+    IoReadError {
+        package: String,
+        #[source]
+        source: std::io::Error,
+    },
+    #[error("Failed to unpack archive for package '{package}'")]
+    ZipError {
+        package: String,
+        #[source]
+        source: zip::result::ZipError,
+    },
+    #[error("Failed to download archive for package '{package}'")]
+    DownloadError {
+        package: String,
+        #[source]
+        source: fastn_core::Error,
+    },
+    #[error("Failed to write archive content for package '{package}'")]
+    DsWriteError {
+        package: String,
+        #[source]
+        source: fastn_ds::WriteError,
+    },
+}
 
-async fn resolve_dependencies(
+#[derive(thiserror::Error, Debug)]
+pub enum DependencyError {
+    #[error("Failed to resolve dependency '{package}'")]
+    ResolveError {
+        package: String,
+        #[source]
+        source: fastn_core::Error,
+    },
+}
+
+#[derive(thiserror::Error, Debug)]
+pub enum UpdateError {
+    #[error("Manifest error: {0}")]
+    Manifest(#[from] ManifestError),
+
+    #[error("Archive error: {0}")]
+    Archive(#[from] ArchiveError),
+
+    #[error("Dependency error: {0}")]
+    Dependency(#[from] DependencyError),
+}
+
+async fn resolve_dependency_package(
+    ds: &fastn_ds::DocumentStore,
+    dependency: &fastn_core::package::dependency::Dependency,
+    dependency_path: &fastn_ds::Path,
+    package: String,
+) -> Result<fastn_core::Package, DependencyError> {
+    let mut dep_package = dependency.package.clone();
+    let fastn_path = dependency_path.join("FASTN.ftd");
+    if let Err(e) = dep_package.resolve(&fastn_path, ds).await {
+        return Err(DependencyError::ResolveError { package, source: e });
+    }
+    Ok(dep_package)
+}
+
+async fn update_dependencies(
     ds: &fastn_ds::DocumentStore,
     packages_root: &fastn_ds::Path,
     current_package: &fastn_core::Package,
     pb: &indicatif::ProgressBar,
-) -> fastn_update::Result<()> {
+) -> Result<(), UpdateError> {
     let mut stack = vec![current_package.clone()];
     let mut resolved = std::collections::HashSet::new();
     resolved.insert(current_package.name.to_string());
@@ -48,38 +104,21 @@ async fn resolve_dependencies(
 
             pb.set_message(format!("Resolving {}/manifest.json", &package_name));
 
-            let manifest = match get_manifest(package_name.clone()).await {
-                Ok(manifest) => manifest,
-                Err(e) => {
-                    return Err(Error::ManifestResolution {
-                        package: package_name.clone(),
-                        error: e,
-                    });
-                }
-            };
+            let manifest = get_manifest(package_name.clone()).await?;
 
             pb.set_message(format!("Downloading {} archive", &package_name));
 
-            if let Err(e) =
-                download_and_unpack_zip(ds, &packages_root.join(&package_name), &manifest).await
-            {
-                return Err(Error::ArchiveDownload {
-                    package: package_name.clone(),
-                    error: e,
-                });
-            }
+            download_and_unpack_zip(
+                ds,
+                &packages_root.join(&package_name),
+                &manifest,
+                package_name.clone(),
+            )
+            .await?;
 
-            let dep_package = {
-                let mut dep_package = dependency.package.clone();
-                let fastn_path = dependency_path.join("FASTN.ftd");
-                if let Err(e) = dep_package.resolve(&fastn_path, ds).await {
-                    return Err(Error::DependencyResolution {
-                        package: package_name.clone(),
-                        error: e,
-                    });
-                };
-                dep_package
-            };
+            let dep_package =
+                resolve_dependency_package(ds, &dependency, dependency_path, package_name.clone())
+                    .await?;
             resolved.insert(package_name.to_string());
             stack.push(dep_package);
             pb.inc_length(1);
@@ -94,15 +133,29 @@ async fn download_and_unpack_zip(
     ds: &fastn_ds::DocumentStore,
     dependency_path: &fastn_ds::Path,
     manifest: &fastn_core::Manifest,
-) -> fastn_core::Result<()> {
-    let mut archive = fastn_update::utils::download_archive(manifest.zip_url.clone()).await?;
+    package_name: String,
+) -> Result<(), ArchiveError> {
+    let mut archive = fastn_update::utils::download_archive(manifest.zip_url.clone())
+        .await
+        .map_err(|e| ArchiveError::DownloadError {
+            package: package_name.clone(),
+            source: e,
+        })?;
 
     for i in 0..archive.len() {
-        let mut entry = archive.by_index(i)?;
+        let mut entry = archive.by_index(i).map_err(|e| ArchiveError::ZipError {
+            package: package_name.clone(),
+            source: e,
+        })?;
 
         if entry.is_file() {
             let mut buffer = Vec::new();
-            std::io::Read::read_to_end(&mut entry, &mut buffer)?;
+            std::io::Read::read_to_end(&mut entry, &mut buffer).map_err(|e| {
+                ArchiveError::IoReadError {
+                    package: package_name.clone(),
+                    source: e,
+                }
+            })?;
             if let Some(path) = entry.enclosed_name() {
                 let path = path.to_str().unwrap();
                 let path_without_prefix = match path.split_once(std::path::MAIN_SEPARATOR) {
@@ -110,7 +163,12 @@ async fn download_and_unpack_zip(
                     None => path,
                 };
                 let output_path = &dependency_path.join(path_without_prefix);
-                ds.write_content(output_path, buffer).await?;
+                ds.write_content(output_path, buffer).await.map_err(|e| {
+                    ArchiveError::DsWriteError {
+                        package: package_name.clone(),
+                        source: e,
+                    }
+                })?;
             }
         }
     }
@@ -120,14 +178,23 @@ async fn download_and_unpack_zip(
 
 /// Download manifest of the package `<package-name>/manifest.json`
 /// Resolve to `fastn_core::Manifest` struct
-async fn get_manifest(package: String) -> fastn_core::Result<fastn_core::Manifest> {
+async fn get_manifest(package_name: String) -> Result<fastn_core::Manifest, ManifestError> {
     let manifest_bytes = fastn_core::http::http_get(&format!(
         "https://{}/{}",
-        package,
-        fastn_core::manifest::MANIFEST_JSON
+        package_name,
+        fastn_core::manifest::MANIFEST_FILE
     ))
-    .await?;
-    let manifest = serde_json::de::from_slice(&manifest_bytes)?;
+    .await
+    .map_err(|e| ManifestError::DownloadError {
+        package: package_name.clone(),
+        source: e,
+    })?;
+    let manifest = serde_json::de::from_slice(&manifest_bytes).map_err(|e| {
+        ManifestError::DeserializationError {
+            package: package_name.clone(),
+            source: e,
+        }
+    })?;
 
     Ok(manifest)
 }
@@ -159,7 +226,7 @@ pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
     pb.set_prefix("Updating packages");
 
     if let Err(e) =
-        resolve_dependencies(&config.ds, &config.packages_root, current_package, &pb).await
+        update_dependencies(&config.ds, &config.packages_root, current_package, &pb).await
     {
         pb.set_prefix("Update failed");
         pb.abandon_with_message(e.to_string());

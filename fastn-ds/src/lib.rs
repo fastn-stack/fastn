@@ -122,6 +122,8 @@ impl DocumentStore {
     pub async fn read_content(&self, path: &fastn_ds::Path) -> Result<Vec<u8>, ReadError> {
         use tokio::io::AsyncReadExt;
 
+        tracing::debug!("read_content {}", &path);
+
         let mut file = tokio::fs::File::open(self.root.join(&path.path).path).await?;
         let mut contents = vec![];
         file.read_to_end(&mut contents).await?;
@@ -136,6 +138,8 @@ impl DocumentStore {
     }
 
     pub async fn copy(&self, from: &fastn_ds::Path, to: &fastn_ds::Path) -> Result<(), WriteError> {
+        tracing::debug!("copy from {} to {}", from, to);
+
         tokio::fs::copy(&from.path, &to.path).await?;
         Ok(())
     }
@@ -146,6 +150,8 @@ impl DocumentStore {
         data: Vec<u8>,
     ) -> Result<(), WriteError> {
         use tokio::io::AsyncWriteExt;
+
+        tracing::debug!("write_content {}", &path);
 
         let full_path = self.root.join(&path.path);
 
@@ -163,6 +169,8 @@ impl DocumentStore {
 
     pub async fn read_dir(&self, path: &fastn_ds::Path) -> std::io::Result<tokio::fs::ReadDir> {
         // Todo: Return type should be ftd::interpreter::Result<Vec<fastn_ds::Dir>> not ftd::interpreter::Result<tokio::fs::ReadDir>
+        tracing::debug!("read_dir {}", &path);
+
         tokio::fs::read_dir(&path.path).await
     }
 
