@@ -82,8 +82,10 @@ async fn resolve_dependencies(
             };
             resolved.insert(package_name.to_string());
             stack.push(dep_package);
-            pb.inc(1);
+            pb.inc_length(1);
         }
+
+        pb.inc(1);
     }
     Ok(())
 }

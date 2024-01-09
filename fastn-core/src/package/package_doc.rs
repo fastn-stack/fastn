@@ -243,11 +243,11 @@ impl fastn_core::Package {
             return Ok(response);
         }
 
-        if config_package_name.ne(&self.name) {
-            if let Ok(response) = self.http_download_by_id(id, package_root, ds).await {
-                return Ok(response);
-            }
-        }
+        // if config_package_name.ne(&self.name) {
+        //     if let Ok(response) = self.http_download_by_id(id, package_root, ds).await {
+        //         return Ok(response);
+        //     }
+        // }
 
         let new_id = match id.rsplit_once('.') {
             Some((remaining, ext))
