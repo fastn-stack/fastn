@@ -223,7 +223,7 @@ async fn read_ftd_test_file(
     for instruction in all_instructions.iter() {
         test_parameters.instruction_number = instruction_number;
         if !execute_instruction(
-            &instruction,
+            instruction,
             &doc,
             config,
             &mut saved_cookies,
@@ -239,7 +239,7 @@ async fn read_ftd_test_file(
 }
 
 async fn get_all_instructions(
-    instructions: &Vec<ftd::interpreter::Component>,
+    instructions: &[ftd::interpreter::Component],
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
 ) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
@@ -267,7 +267,7 @@ async fn get_all_instructions(
     let mut all_instructions = fixture_instructions;
     all_instructions.extend(rest_instructions);
 
-    return Ok(all_instructions);
+    Ok(all_instructions)
 }
 
 async fn execute_instruction(
