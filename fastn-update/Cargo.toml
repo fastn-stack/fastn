@@ -18,3 +18,4 @@ serde.workspace = true
 serde_json.workspace = true
 zip.workspace = true
 indicatif.workspace = true
+thiserror.workspace = true
