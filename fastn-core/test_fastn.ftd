@@ -1,3 +1,13 @@
+-- record query:
+caption key:
+string value:
+
+
+
+
+
+
+
 -- component get:
 caption title:
 string url:
@@ -12,9 +22,9 @@ optional string id:
 
 -- end: get
 
--- record query:
-caption key:
-string value:
+
+
+
 
 
 
@@ -31,6 +41,23 @@ optional string id:
 -- ftd.text: NOT IMPLEMENTED HERE
 
 -- end: post
+
+
+
+
+
+
+-- component test:
+caption title:
+string fixture:
+
+-- ftd.text: NOT IMPLEMENTED HERE
+
+-- end: test
+
+
+
+
 
 
 
