@@ -1,4 +1,4 @@
-pub const MANIFEST_JSON: &str = "manifest.json";
+pub const MANIFEST_FILE: &str = "manifest.json";
 
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct Manifest {

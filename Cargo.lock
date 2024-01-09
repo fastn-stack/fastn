@@ -1728,6 +1728,7 @@ dependencies = [
  "ignore",
  "thiserror",
  "tokio",
+ "tracing",
 ]
 
 [[package]]
