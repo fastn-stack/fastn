@@ -1,4 +1,4 @@
--- ds.page: How to create a button 
+-- ds.page: How to create a button
 
 Video Title: How to create a button
 
@@ -22,11 +22,11 @@ src: $fastn-assets.files.planning.button.button-using-fastn.jpg
 **Script**
 
 Hey Guys, my name is Ajit and I am back with another video on `fastn`.
-In this video we are going to create buttons using `fastn language`. 
+In this video we are going to create buttons using `fastn language`.
 
 
 We will start off by creating a button with basic UI then we will
-recreate this button as you see on the screen in the later stages of this 
+recreate this button as you see on the screen in the later stages of this
 video.
 
 
@@ -34,20 +34,20 @@ This UI is just an inspiration we took from Vercel. We will make it look like
 this using `fastn`.
 
 
-To make the button we will use the concepts like: 
-- [`components`](https://fastn.com/components). 
+To make the button we will use the concepts like:
+- [`components`](https://fastn.com/components).
 - To the component we will apply various properties with their respective
-  [`built-in types`](/built-in-types/). 
-  Some of the `Primitive Types` like `caption`, `string`, `boolean` while 
+  [`built-in types`](/built-in-types/).
+  Some of the `Primitive Types` like `caption`, `string`, `boolean` while
   others of the `Derived Types` like `ftd.color`, `ftd.shadow`.
-- We will use [`records`](/record/) as well to 
-  define colors for both light and dark mode as well as shadow-color similar to 
+- We will use [`records`](/record/) as well to
+  define colors for both light and dark mode as well as shadow-color similar to
   what we have in second button.
 - We will do `event handling` that gives **shadow** to the button `on-hover`.
 
 
 You can find all the URLs of the concepts which we will discuss in this video
-in the description below. 
+in the description below.
 
 
 
@@ -76,7 +76,7 @@ lang: ftd
 -- ds.markdown:
 
 We will give the basic properties to this component like, `title` and `link`.
-- `title` is of `caption` type. 
+- `title` is of `caption` type.
 - `link` is of `string` type.
 
 You can also make the link as `optional`, if you do not want to add any link to
@@ -87,7 +87,7 @@ lang: ftd
 
 \-- component button:
 caption title:
-optional string link: 
+optional string link:
 
 \-- end: button
 
@@ -109,7 +109,7 @@ border-width.px: 2
 
 -- ds.markdown:
 
-The dollars used here is for reference that the value in the caption of 
+The dollars used here is for reference that the value in the caption of
 `ftd.text` will come from component button's title and same for link.
 
 This will do. We can use this component to show the button.
@@ -141,10 +141,10 @@ text-align: center         ;; <hl>
 
 -- ds.markdown:
 
-After that, we will give `color` and `role` to the text. 
+After that, we will give `color` and `role` to the text.
 
-For that, in the component definition we have added a variable `text-color` of 
-type `ftd.color`. 
+For that, in the component definition we have added a variable `text-color` of
+type `ftd.color`.
 
 We can give a default value using `$inherited.colors` to this variable. In
 case, the user doesn't pass any text-color, while calling this component, it
@@ -155,7 +155,7 @@ lang: ftd
 
 \-- component button:
 caption title:
-optional string link: 
+optional string link:
 ftd.color text-color: $inherited.colors.text-strong 	  ;; <hl>
 
 
@@ -173,16 +173,16 @@ lang: ftd
 \-- ftd.text: $button.title
 link: $button.link
 border-width.px: 2
-border-radius.px: 6        
-padding.px: 10             
-min-width.fixed.px: 175    
-style: bold    
-color: $button.text-color             ;; <hl>                       
+border-radius.px: 6
+padding.px: 10
+min-width.fixed.px: 175
+style: bold
+color: $button.text-color             ;; <hl>
 role: $inherited.types.copy-regular		;; <hl>
 
 
 
--- ds.markdown: 
+-- ds.markdown:
 
 `role` is a font specification which defines several font-related properties
 like `font-weight`, `line-height`, `letter-spacing` etc. If you want to read
@@ -208,13 +208,13 @@ lang: ftd
 \-- ftd.text: $button.title
 link: $button.link
 border-width.px: 2
-border-radius.px: 6        
-padding.px: 10             
-min-width.fixed.px: 175  
-text-align: center  
-style: bold    
-color: $button.text-color                                    
-role: $inherited.types.copy-regular   
+border-radius.px: 6
+padding.px: 10
+min-width.fixed.px: 175
+text-align: center
+style: bold
+color: $button.text-color
+role: $inherited.types.copy-regular
 background.solid: $button.bg-color    ;; <hl>
 border-color: $button.border-color    ;; <hl>
 
@@ -243,11 +243,11 @@ dark: #e4b0ac
 
 -- ds.markdown:
 
-These variables are of record type `ftd.color`. You can check the URL of 
-records to read about them. 
+These variables are of record type `ftd.color`. You can check the URL of
+records to read about them.
 
 
-Let's add the shadow to the button. First we will create a variable of 
+Let's add the shadow to the button. First we will create a variable of
 type `ftd.shadow`, which is also a record.
 
 -- ds.code:
@@ -263,7 +263,7 @@ spread.px: 7
 
 -- ds.markdown:
 
-Now we will add the component property of type `ftd.shadow` and make it 
+Now we will add the component property of type `ftd.shadow` and make it
 optional
 
 -- ds.code:
@@ -273,8 +273,8 @@ lang: ftd
 caption title:
 optional string link:
 ftd.color text-color: $inherited.colors.text-strong
-ftd.color bg-color: $inherited.colors.background.base      
-ftd.color border-color: $inherited.colors.border-strong     
+ftd.color bg-color: $inherited.colors.background.base
+ftd.color border-color: $inherited.colors.border-strong
 optional ftd.shadow hover-shadow: 	                     ;; <hl>
 
 
@@ -289,14 +289,14 @@ lang: ftd
 \-- ftd.text: $button.title
 link: $button.link
 border-width.px: 2
-border-radius.px: 6        
-padding.px: 10             
-min-width.fixed.px: 175    
-style: bold                           
-role: $inherited.types.copy-regular   
-color: $button.text-color      
-background.solid: $button.bg-color   
-border-color: $button.border-color     
+border-radius.px: 6
+padding.px: 10
+min-width.fixed.px: 175
+style: bold
+role: $inherited.types.copy-regular
+color: $button.text-color
+background.solid: $button.bg-color
+border-color: $button.border-color
 shadow: $button.hover-shadow           ;; <hl>
 
 
@@ -314,15 +314,15 @@ lang: ftd
 caption title:
 optional string link:
 ftd.color text-color: $inherited.colors.text-strong
-ftd.color bg-color: $inherited.colors.background.base      
-ftd.color border-color: $inherited.colors.border-strong     
-optional ftd.shadow hover-shadow:      
-boolean $is-hover: false 
+ftd.color bg-color: $inherited.colors.background.base
+ftd.color border-color: $inherited.colors.border-strong
+optional ftd.shadow hover-shadow:
+boolean $is-hover: false
 
 
 -- ds.markdown:
 
-And then in the button we will add the events.                
+And then in the button we will add the events.
 
 -- ds.code:
 lang: ftd
@@ -371,7 +371,7 @@ link: https://fastn.com/expander
 
 There you go, we have polished the UI and it looks similar to our original UI
 with our own touch to it. I hope you have learnt with me and found this video
-easy to follow. If you like us, you can give us a ✨ on 
+easy to follow. If you like us, you can give us a ✨ on
 [GitHub](https://github.com/fastn-stack/fastn).
 
 Also, we would love to see your package which you will create following this

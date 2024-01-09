@@ -12,10 +12,10 @@ v: _NsLKtGrzdU
 
 -- ds.markdown:
 
-The name of package manager for `fastn` language is 
+The name of package manager for `fastn` language is
 [`fastn`](https://fastn.com).
 
-We will begin by installing `fastn` on your machine. 
+We will begin by installing `fastn` on your machine.
 [`Install fastn`](https://fastn.com/install/).
 
 You can open installation page in a new tab, and follow the instructions.
@@ -44,10 +44,10 @@ say in your `Desktop` folder.
 
 
 Open the newly created folder in any text editor.
-We recommend [Sublime Text](https://www.sublimetext.com) or 
+We recommend [Sublime Text](https://www.sublimetext.com) or
 [VS Code](https://code.visualstudio.com) for working with FTD.
 
-Open the folder and add two new files, `FASTN.ftd` and `index.ftd` to create 
+Open the folder and add two new files, `FASTN.ftd` and `index.ftd` to create
 the `fastn` package.
 
 
@@ -58,7 +58,7 @@ the `fastn` package.
 It is a special file which keeps package configuration related data like
 
 - package name
-- package dependencies 
+- package dependencies
 - sitemap, etc
 
 Import the special library, fastn
@@ -110,7 +110,7 @@ fastn serve
 
 Using just one line code, we displayed the `Hello World`s.
 
-You have successfully completed the Part 1. 
+You have successfully completed the Part 1.
 
 Continue with the [part 2 now](/expander/basic-ui/).
 

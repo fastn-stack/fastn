@@ -77,10 +77,10 @@ Click on `10`.
 
 -- ds.output:
 
--- ftd.integer: $x
-$on-click$: $ftd.increment($a = $x)
-color: $inherited.colors.text
-
+	-- ftd.integer: $x
+	$on-click$: $ftd.increment($a = $x)
+	color: $inherited.colors.text
+	
 -- end: ds.output
 
 
@@ -121,28 +121,28 @@ Give it a try and click on "I change x" to see how `x` and `y` change together!
 
 -- ds.output:
 
--- ftd.row:
-spacing.fixed.px: 10
-color: $inherited.colors.text
+	-- ftd.row:
+	spacing.fixed.px: 10
+	color: $inherited.colors.text
+	
+		-- ftd.text: x:
+		-- ftd.integer: $x
+		
+	-- end: ftd.row
 
--- ftd.text: x:
--- ftd.integer: $x
+	-- ftd.row:
+	spacing.fixed.px: 10
+	color: $inherited.colors.text
+	
+		-- ftd.text: y:
+		-- ftd.integer: $y
+		
+	-- end: ftd.row
 
--- end: ftd.row
-
--- ftd.row:
-spacing.fixed.px: 10
-color: $inherited.colors.text
-
--- ftd.text: y:
--- ftd.integer: $y
-
--- end: ftd.row
-
--- ftd.text: I change x :)
-$on-click$: $ftd.increment($a = $x)
-color: $inherited.colors.text
-
+	-- ftd.text: I change x :)
+	$on-click$: $ftd.increment($a = $x)
+	color: $inherited.colors.text
+	
 -- end: ds.output
 
 
@@ -173,28 +173,28 @@ Click on `I change x :)` to see the result.
 
 -- ds.output:
 
--- ftd.row:
-spacing.fixed.px: 10
-color: $inherited.colors.text
+	-- ftd.row:
+	spacing.fixed.px: 10
+	color: $inherited.colors.text
+	
+		-- ftd.text: x:
+		-- ftd.integer: $x
+		
+	-- end: ftd.row
 
--- ftd.text: x:
--- ftd.integer: $x
+	-- ftd.row:
+	spacing.fixed.px: 10
+	color: $inherited.colors.text
+	
+		-- ftd.text: y:
+		-- ftd.integer: $z
+		
+	-- end: ftd.row
 
--- end: ftd.row
-
--- ftd.row:
-spacing.fixed.px: 10
-color: $inherited.colors.text
-
--- ftd.text: y:
--- ftd.integer: $z
-
--- end: ftd.row
-
--- ftd.text: I change x :)
-$on-click$: $ftd.increment($a = $x)
-color: $inherited.colors.text
-
+	-- ftd.text: I change x :)
+	$on-click$: $ftd.increment($a = $x)
+	color: $inherited.colors.text
+	
 -- end: ds.output
 
 

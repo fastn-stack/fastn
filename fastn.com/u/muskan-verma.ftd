@@ -8,14 +8,14 @@ profile: Designer
 
 -- ds.user-info.works:
 
--- ft-ui.grid-view: Documentation Sites
-templates: $doc-sites
-show-large: true
-
--- ft-ui.grid-view: Color Schemes
-templates: $schemes
-show-large: true
-
+	-- ft-ui.grid-view: Documentation Sites
+	templates: $doc-sites
+	show-large: true
+	
+	-- ft-ui.grid-view: Color Schemes
+	templates: $schemes
+	show-large: true
+	
 -- end: ds.user-info.works
 
 -- end: ds.user-info
@@ -40,22 +40,22 @@ role: Designer
 
 -- common.social-media list social-links:
 
--- common.social-media: 
+-- common.social-media:
 link: https://discord.gg/Muskaan#9098
 src: $fastn-assets.files.images.discord.svg
 hover-src: $fastn-assets.files.images.discord-hover.svg
 
-/-- common.social-media: 
+/-- common.social-media:
 link: https://twitter.com/fastn_stack
 src: $fastn-assets.files.images.github-grey.svg
 hover-src: $fastn-assets.files.images.github-grey-hover.svg
 
-/-- common.social-media: 
+/-- common.social-media:
 link: https://twitter.com/fastn_stack
 src: $fastn-assets.files.images.twitter.svg
 hover-src: $fastn-assets.files.images.twitter-hover.svg
 
--- common.social-media: 
+-- common.social-media:
 link: https://www.linkedin.com/in/muskaan-verma-6aba71179/
 src: $fastn-assets.files.images.linkedin.svg
 hover-src: $fastn-assets.files.images.linkedin-hover.svg

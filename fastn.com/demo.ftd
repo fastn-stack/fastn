@@ -90,21 +90,21 @@ spacing.fixed.px: 20
 background.solid if { counter.count % 2 == 0 }: yellow
 border-radius.px: 5
 
--- ftd.text: ➕
-$on-click$: $ftd.increment-by($a=$counter.count, v=1)
-
--- ftd.integer: $counter.count
-
--- ftd.integer: $counter.d
-
--- ftd.text: ➖
-$on-click$: $ftd.increment-by($a=$counter.count, v=-1)
-
--- ftd.text: delete
-if: { counter.index != NULL }
-$on-click$: $delete-counter($c=$counters, index=$counter.index)
-color: red
-
+	-- ftd.text: ➕
+	$on-click$: $ftd.increment-by($a=$counter.count, v=1)
+	
+	-- ftd.integer: $counter.count
+	
+	-- ftd.integer: $counter.d
+	
+	-- ftd.text: ➖
+	$on-click$: $ftd.increment-by($a=$counter.count, v=-1)
+	
+	-- ftd.text: delete
+	if: { counter.index != NULL }
+	$on-click$: $delete-counter($c=$counters, index=$counter.index)
+	color: red
+	
 -- end: ftd.row
 
 -- end: counter

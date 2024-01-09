@@ -6,25 +6,25 @@
 
 -- ds.rendered: Usage
 
--- ds.rendered.input:
-
-\-- ftd.video:
-src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-controls: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
--- ds.rendered.output:
-
--- ftd.video:
-src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-controls: true
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.video:
+	src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	controls: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video:
+		src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		controls: true
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -54,13 +54,13 @@ fit: contain
 
 -- ds.output: Output: Video
 
--- ftd.video:
-src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-width.fixed.px: 400
-height.fixed.px: 300
-controls: true
-fit: contain
-
+	-- ftd.video:
+	src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	width.fixed.px: 400
+	height.fixed.px: 300
+	controls: true
+	fit: contain
+	
 -- end: ds.output
 
 -- ds.code: Video using assets
@@ -108,39 +108,39 @@ In the first example below, the controls attribute has been set to true, which i
 
 -- ds.rendered: Sample code using `controls`
 
--- ds.rendered.input:
-
-\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-controls: true ;; <hl>
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
-\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-controls: false ;; <hl>
-muted: true
-autoplay: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
--- ds.rendered.output:
-
--- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-controls: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
--- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-controls: false
-muted: true
-autoplay: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	controls: true ;; <hl>
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	controls: false ;; <hl>
+	muted: true
+	autoplay: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		controls: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		controls: false
+		muted: true
+		autoplay: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -160,27 +160,27 @@ A Boolean attribute that indicates the default setting of the audio contained in
 
 -- ds.rendered: Sample code using `muted`
 
--- ds.rendered.input:
-
-\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-muted: true ;; <hl>
-controls: true
-autoplay: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
--- ds.rendered.output:
-
--- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-muted: true
-controls: true
-autoplay: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	muted: true ;; <hl>
+	controls: true
+	autoplay: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		muted: true
+		controls: true
+		autoplay: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -203,25 +203,25 @@ A Boolean attribute; if set to `true`, the video automatically begins to play ba
 
 -- ds.rendered: Sample code using `autoplay`
 
--- ds.rendered.input:
-
-\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-autoplay: true ;; <hl>
-muted: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
--- ds.rendered.output:
-
--- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-muted: true
-autoplay: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	autoplay: true ;; <hl>
+	muted: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		muted: true
+		autoplay: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -239,27 +239,27 @@ A Boolean attribute; if set to `true`, the video will play in a loop.
 
 -- ds.rendered: Sample code using `loop`
 
--- ds.rendered.input:
-
-\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-loop: true ;; <hl>
-autoplay: true
-muted: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
--- ds.rendered.output:
-
--- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-loop: true
-muted: true
-autoplay: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	loop: true ;; <hl>
+	autoplay: true
+	muted: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		loop: true
+		muted: true
+		autoplay: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -278,25 +278,25 @@ A URL for an image to be shown while the video is downloading. If this attribute
 
 -- ds.rendered: Sample code using `poster`
 
--- ds.rendered.input:
-
-\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg ;; <hl>
-controls: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
--- ds.rendered.output:
-
--- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg
-controls: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg ;; <hl>
+	controls: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg
+		controls: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -317,30 +317,26 @@ This property offers various options for the content to adapt to the container, 
 
 -- ds.rendered: Sample code using `fit`
 
--- ds.rendered.input:
-
-\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg ;; <hl>
-controls: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
-poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg
-controls: true
-width.fixed.px: 400
-height.fixed.px: 300
-fit: contain
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg ;; <hl>
+	controls: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg
+		controls: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
 -- end: ds.page
-
-
-
-

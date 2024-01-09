@@ -16,30 +16,30 @@ It takes value as a list of `ftd.ui` components.
 
 -- ds.rendered: Sample code using `children`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.ui list child-components:
+	
+	\-- ftd.text: This is first child text
+	\-- ftd.text: This is another child text
+	
+	\-- end: child-components
+	
+	\-- ftd.column:
+	color: $inherited.colors.text
+	children: $child-components
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		color: $inherited.colors.text
+		children: $child-components
+		
+		-- end: ftd.column
 
-\-- ftd.ui list child-components:
-
-\-- ftd.text: This is first child text
-\-- ftd.text: This is another child text
-
-\-- end: child-components
-
-\-- ftd.column:
-color: $inherited.colors.text
-children: $child-components
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-color: $inherited.colors.text
-children: $child-components
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -58,37 +58,37 @@ type `ftd.color-scheme` and is optional.
 
 -- ds.rendered: Sample code using `colors`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- import: fastn-community.github.io/saturated-sunset-cs as cs
+	
+	\-- ftd.column:
+	colors: $cs.main
+	spacing.fixed.px: 10
+	
+	\-- ftd.text: Hello World
+	color: $inherited.colors.background.step-2
+	
+	\-- ftd.text: We have used forest cs here
+	color: $inherited.colors.background.step-2
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		colors: $cs.main
+		spacing.fixed.px: 10
+		
+			-- ftd.text: Hello World
+			color: $inherited.colors.background.step-2
+			
+			-- ftd.text: We have used forest cs here
+			color: $inherited.colors.background.step-2
+			
+		-- end: ftd.column
 
-\-- import: fastn-community.github.io/saturated-sunset-cs as cs
-
-\-- ftd.column:
-colors: $cs.main
-spacing.fixed.px: 10
-
-\-- ftd.text: Hello World
-color: $inherited.colors.background.step-2
-
-\-- ftd.text: We have used forest cs here
-color: $inherited.colors.background.step-2
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-colors: $cs.main
-spacing.fixed.px: 10
-
--- ftd.text: Hello World
-color: $inherited.colors.background.step-2
-
--- ftd.text: We have used forest cs here
-color: $inherited.colors.background.step-2
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -108,41 +108,41 @@ and is optional.
 
 -- ds.rendered: Sample code using `types`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- import: fastn-community.github.io/virgil-typography as typo
+	
+	\-- ftd.column:
+	types: $typo.types
+	spacing.fixed.px: 10
+	
+	\-- ftd.text: Hello World
+	role: $inherited.types.heading-medium
+	color: $inherited.colors.text
+	
+	\-- ftd.text: We have used virgil typography here
+	role: $inherited.types.heading-medium
+	color: $inherited.colors.text
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		types: $typo.types
+		spacing.fixed.px: 10
+		
+			-- ftd.text: Hello World
+			role: $inherited.types.heading-medium
+			color: $inherited.colors.text
+			
+			-- ftd.text: We have used virgil typography here
+			role: $inherited.types.heading-medium
+			color: $inherited.colors.text
+			
+		-- end: ftd.column
 
-\-- import: fastn-community.github.io/virgil-typography as typo
-
-\-- ftd.column:
-types: $typo.types
-spacing.fixed.px: 10
-
-\-- ftd.text: Hello World
-role: $inherited.types.heading-medium
-color: $inherited.colors.text
-
-\-- ftd.text: We have used virgil typography here
-role: $inherited.types.heading-medium
-color: $inherited.colors.text
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- ftd.column:
-types: $typo.types
-spacing.fixed.px: 10
-
--- ftd.text: Hello World
-role: $inherited.types.heading-medium
-color: $inherited.colors.text
-
--- ftd.text: We have used virgil typography here
-role: $inherited.types.heading-medium
-color: $inherited.colors.text
-
--- end: ftd.column
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 

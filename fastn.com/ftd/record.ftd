@@ -1,8 +1,8 @@
-\-- ft-core.concept:
+/-- ft-core.concept:
 
 -- ds.page: `record`
 
--- ds.markdown: 
+-- ds.markdown:
 
 `fastn` supports `record` types. These are also called `struct` in some
 languages.
@@ -166,8 +166,8 @@ For each field in `person` record, we have a corresponding field in our `Person`
 `struct`.
 
 Note that we used `age` as i32, but it could have been any type that can be
-deserialised from 
-[JSON Number](https://docs.serde.rs/serde_json/struct.Number.html) since 
+deserialised from
+[JSON Number](https://docs.serde.rs/serde_json/struct.Number.html) since
 `fastn` integer is converted to `JSON Number`.
 
 ;; Todo:
@@ -184,7 +184,7 @@ let amitu: Person = doc.get("amitu")?;
 
 /-- ds.markdown:
 
-You can read more details of reading `.ftd` files 
+You can read more details of reading `.ftd` files
 [`Reading .ftd Files`](reading-data/) guide.
 
 

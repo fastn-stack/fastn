@@ -12,30 +12,30 @@ id: inherited-colors
 hardcoded colors then switching color schemes will not affect your component,
 and website maintainers using your component will have a great experience.
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- ftd.column:
-background.solid: white
-
-\-- colms:
-$color-value: #b4ccba
-
-\-- ftd.text: Campaign Summary
-color: #7D8180
-
--- ds.code: Recommended
-lang: ftd
-
-\-- ftd.column:
-background.solid: $inherited.colors.background.base
-
-\-- colms:
-$color-value: $inherited.colors.custom.one
-
-\-- ftd.text: Campaign Summary
-color: $inherited.colors.text
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	background.solid: white
+	
+	\-- colms:
+	$color-value: #b4ccba
+	
+	\-- ftd.text: Campaign Summary
+	color: #7D8180
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	background.solid: $inherited.colors.background.base
+	
+	\-- colms:
+	$color-value: $inherited.colors.custom.one
+	
+	\-- ftd.text: Campaign Summary
+	color: $inherited.colors.text
+	
 -- end: utils.code-display
 
 
@@ -52,39 +52,39 @@ typography, while maintaining consistency across the design system.
 
 
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- ftd.type dtype:
-size.px: 40
-weight: 900
-font-family: cursive
-line-height.px: 65
-letter-spacing.px: 5
-
-\-- ftd.type mtype:
-size.px: 20
-weight: 100
-font-family: fantasy
-line-height.px: 35
-letter-spacing.px: 3
-
-\-- ftd.responsive-type rtype:
-desktop: $dtype
-mobile: $mtype
-
-\-- ftd.text: Hello World
-role: $rtype
-
-
-
--- ds.code: Recommended
-lang: ftd
-
-\-- ftd.text: Hello World
-role: $inherited.types.copy-regular
-
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.type dtype:
+	size.px: 40
+	weight: 900
+	font-family: cursive
+	line-height.px: 65
+	letter-spacing.px: 5
+	
+	\-- ftd.type mtype:
+	size.px: 20
+	weight: 100
+	font-family: fantasy
+	line-height.px: 35
+	letter-spacing.px: 3
+	
+	\-- ftd.responsive-type rtype:
+	desktop: $dtype
+	mobile: $mtype
+	
+	\-- ftd.text: Hello World
+	role: $rtype
+	
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.text: Hello World
+	role: $inherited.types.copy-regular
+	
+	
 -- end: utils.code-display
 
 

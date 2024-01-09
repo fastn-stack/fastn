@@ -4,7 +4,7 @@ SEO is essential aspect of web-development. Google crawler uses meta-tags to
 crawl data and improve the ranking of your webpage and hence it becomes
 important for optimizing the website.
 
-`fastn` helps to add data in the `meta-tags` like `og-title`, `og-description` 
+`fastn` helps to add data in the `meta-tags` like `og-title`, `og-description`
 and `og-image`.
 
 -- ds.h1: Add `document-title` for `og-title`

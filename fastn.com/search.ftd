@@ -41,50 +41,50 @@ spacing.fixed.px: 10
 
 
 
--- ftd.row:
-role: $inherited.types.fine-print
-color: $inherited.colors.text
-width: fill-container
-spacing.fixed.px: 7
-align-content: center
+	-- ftd.row:
+	role: $inherited.types.fine-print
+	color: $inherited.colors.text
+	width: fill-container
+	spacing.fixed.px: 7
+	align-content: center
+	
+		-- ftd.image:
+		src: $fastn-assets.files.images.search-icon.svg
+		width.fixed.px: 16
+		height.fixed.px: 16
+		
+		-- ftd.text-input:
+		value: $search
+		placeholder: Enter search query...
+		$on-input$: $ftd.set-string($a = $search, v = $VALUE)
+		$on-input$: $update-search-result($a = $search, s = $sitemap, $uis = $uis)
+		role: $inherited.types.fine-print
+		background.solid: $inherited.colors.background.step-2
+		color: $inherited.colors.text
+		width: fill-container
+		border-radius.px: 4
+		padding-vertical.px: 7
+		padding-horizontal.px: 12
+		$on-global-key[esc]$: $go-back()
+		$on-global-key[down]$: $increment($a=$selected, n=$len)
+		$on-global-key[up]$: $decrement($a=$selected, n=$len)
+		$on-global-key[j]$: $increment($a=$selected, n=$len)
+		$on-global-key[k]$: $decrement($a=$selected, n=$len)
+		$on-global-key[Enter]$: $go-to-url(a=$selected, l=$uis)
+		
+	-- end: ftd.row
 
--- ftd.image:
-src: $fastn-assets.files.images.search-icon.svg
-width.fixed.px: 16
-height.fixed.px: 16
-
--- ftd.text-input:
-value: $search
-placeholder: Enter search query...
-$on-input$: $ftd.set-string($a = $search, v = $VALUE)
-$on-input$: $update-search-result($a = $search, s = $sitemap, $uis = $uis)
-role: $inherited.types.fine-print
-background.solid: $inherited.colors.background.step-2
-color: $inherited.colors.text
-width: fill-container
-border-radius.px: 4
-padding-vertical.px: 7
-padding-horizontal.px: 12
-$on-global-key[esc]$: $go-back()
-$on-global-key[down]$: $increment($a=$selected, n=$len)
-$on-global-key[up]$: $decrement($a=$selected, n=$len)
-$on-global-key[j]$: $increment($a=$selected, n=$len)
-$on-global-key[k]$: $decrement($a=$selected, n=$len)
-$on-global-key[Enter]$: $go-to-url(a=$selected, l=$uis)
-
--- end: ftd.row
-
--- ftd.row:
-align-self: end
-role: $inherited.types.fine-print
-color: $inherited.colors.text
-spacing.fixed.px: 2
-if: { len > 0 }
-
--- ftd.text: Showing:
--- ftd.integer: $len
-
--- end: ftd.row
+	-- ftd.row:
+	align-self: end
+	role: $inherited.types.fine-print
+	color: $inherited.colors.text
+	spacing.fixed.px: 2
+	if: { len > 0 }
+	
+		-- ftd.text: Showing:
+		-- ftd.integer: $len
+		
+	-- end: ftd.row
 
 -- end: ftd.column
 
@@ -106,10 +106,10 @@ if: { len > 0 }
 width: fill-container
 spacing.fixed.px: 10
 
--- display-search-item: $ui
-idx: $idx
-for: ui, idx in $uis
-
+	-- display-search-item: $ui
+	idx: $idx
+	for: ui, idx in $uis
+	
 -- end: ftd.column
 
 -- end: display-search-result
@@ -134,21 +134,21 @@ border-color: $inherited.colors.border
 background.solid if { display-search-item.idx == selected }: $inherited.colors.background.step-2
 padding-bottom.px: 7
 
--- ds.h2: $display-search-item.ui.title
-if: { display-search-item.ui.title != NULL }
-
--- ftd.text: $display-search-item.ui.url
-role: $inherited.types.fine-print
-color: $inherited.colors.cta-primary.base
-padding-bottom.px: 7
-
--- ftd.text: $display-search-item.ui.description
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-if: { display-search-item.ui.description != NULL }
-line-clamp: 3
-
-
+	-- ds.h2: $display-search-item.ui.title
+	if: { display-search-item.ui.title != NULL }
+	
+	-- ftd.text: $display-search-item.ui.url
+	role: $inherited.types.fine-print
+	color: $inherited.colors.cta-primary.base
+	padding-bottom.px: 7
+	
+	-- ftd.text: $display-search-item.ui.description
+	role: $inherited.types.copy-regular
+	color: $inherited.colors.text
+	if: { display-search-item.ui.description != NULL }
+	line-clamp: 3
+	
+	
 -- end: ftd.column
 
 -- end: display-search-item

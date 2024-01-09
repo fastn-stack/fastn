@@ -113,8 +113,8 @@ border-radius.px: 5
 
 -- ds.output:
 
--- ftd-index.toggle-text: `fastn` is cool!
-
+	-- ftd-index.toggle-text: `fastn` is cool!
+	
 -- end: ds.output
 
 -- ds.markdown:

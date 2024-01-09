@@ -63,7 +63,7 @@ the editor that something is wrong. This is `CLion`, an editor from the
 `JetBrains` family of editors.
 
 We do not yet have this level of error reporting support for `ftd`/`fastn`, but
-we are working on it. 
+we are working on it.
 
 -- ds.h1: Syntax Highlighting Support For `ftd` in SublimeText
 

@@ -1,6 +1,6 @@
 -- ds.page: Redirect - `fastn` Hands-On Workshop
 
-`ftd.redirect` helps to avoid page not found if the URL has been modified. 
+`ftd.redirect` helps to avoid page not found if the URL has been modified.
 
 -- ds.h1: Add `ftd.redirect`
 

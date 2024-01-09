@@ -95,31 +95,31 @@ where we have used certain lists defined [here](/loop#sample-data).
 copy: true
 download: index.ftd
 
--- ds.rendered.input:
-
-\;; This will print all the items from list places
-\-- ftd.text: $place
-for: $place in $places ;; <hl>
-color: $inherited.colors.text
-
-\;; This will print all the numbers from list odd-numbers
-\-- ftd.integer: $number
-for: $number in $odd-numbers ;; <hl>
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
-;; This will print all the items from list places
--- ftd.text: $place
-for: $place in $places
-color: $inherited.colors.text
-
-;; This will print all the numbers from list odd-numbers
--- ftd.integer: $number
-for: $number in $odd-numbers
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\;; This will print all the items from list places
+	\-- ftd.text: $place
+	for: $place in $places ;; <hl>
+	color: $inherited.colors.text
+	
+	\;; This will print all the numbers from list odd-numbers
+	\-- ftd.integer: $number
+	for: $number in $odd-numbers ;; <hl>
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		;; This will print all the items from list places
+		-- ftd.text: $place
+		for: $place in $places
+		color: $inherited.colors.text
+		
+		;; This will print all the numbers from list odd-numbers
+		-- ftd.integer: $number
+		for: $number in $odd-numbers
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -142,31 +142,30 @@ following general syntax that we can find below.
 copy: true
 download: index.ftd
 
--- ds.rendered.input:
-
-\;; This will print all the items from list places
-\-- ftd.text: $place
-$loop$: $places as $place ;; <hl>
-color: $inherited.colors.text
-
-\;; This will print all the numbers from list odd-numbers
-\-- ftd.integer: $number
-$loop$: $odd-numbers as $number ;; <hl>
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.text: $place
-$loop$: $places as $place
-color: $inherited.colors.text
-
--- ftd.integer: $number
-$loop$: $odd-numbers as $number
-color: $inherited.colors.text
-
-;; This will print all the numbers from list odd-numbers
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\;; This will print all the items from list places
+	\-- ftd.text: $place
+	$loop$: $places as $place ;; <hl>
+	color: $inherited.colors.text
+	
+	\;; This will print all the numbers from list odd-numbers
+	\-- ftd.integer: $number
+	$loop$: $odd-numbers as $number ;; <hl>
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: $place
+		$loop$: $places as $place
+		color: $inherited.colors.text
+		
+		-- ftd.integer: $number
+		$loop$: $odd-numbers as $number
+		color: $inherited.colors.text
+		
+		;; This will print all the numbers from list odd-numbers
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -186,20 +185,20 @@ will do it.
 
 /-- ds.rendered: Printing only persons with age < 25
 
--- ds.rendered.input:
-
-\-- ftd.text: $person.name
-if: { person.age < 25 } ;; <hl>
-for: person in $persons
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.text: $person.name
-$loop$: $persons as $person
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: $person.name
+	if: { person.age < 25 } ;; <hl>
+	for: person in $persons
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: $person.name
+		$loop$: $persons as $person
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -227,4 +226,3 @@ age: 24
 age: 30
 
 -- end: persons
-

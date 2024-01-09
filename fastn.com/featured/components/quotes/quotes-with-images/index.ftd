@@ -1,6 +1,6 @@
 -- import: fastn.com/featured as ft-ui
 
--- ds.page: 
+-- ds.page:
 full-width: true
 sidebar: false
 
@@ -20,4 +20,3 @@ template-url: /quotes/charcoal/
 screenshot: $fastn-assets.files.images.featured.components.quotes.quotes-with-images.demo-1.png
 
 -- end: author-avatar-quotes
-

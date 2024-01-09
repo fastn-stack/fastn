@@ -18,22 +18,22 @@ corresponding devices.
 
 
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- desktop-page:
-if: { ftd.device == "desktop" } ;; <hl>
-
-
--- ds.code: Recommended
-lang: ftd
-
-\-- ftd.desktop:
-
-\-- desktop-page:
-
-\-- end: ftd.desktop
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- desktop-page:
+	if: { ftd.device == "desktop" } ;; <hl>
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.desktop:
+	
+	\-- desktop-page:
+	
+	\-- end: ftd.desktop
+	
 -- end: utils.code-display
 
 

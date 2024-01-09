@@ -1,8 +1,8 @@
 -- ds.page: Building UIs with `ftd`
 
-`ftd` is an alternative to HTML/CSS for building UIs. `ftd` uses HTML/CSS 
+`ftd` is an alternative to HTML/CSS for building UIs. `ftd` uses HTML/CSS
 internally for rendering on the web, but its planning to support more backends like
-terminal/curses, and mobile device native frameworks for iOS and Android, and 
+terminal/curses, and mobile device native frameworks for iOS and Android, and
 possibly also a low-level implementation for embedded devices.
 
 One of the key concepts in `ftd` is the idea of a [`component`](/components/).

@@ -7,38 +7,38 @@ id: not-null-opt-arg
 
 This coding principle emphasizes the importance of using `if-condition` for
 `optional` arguments or variables, and ensuring that they have a "not null"
-condition. 
+condition.
 
 By doing so, it helps prevent unexpected errors or bugs in the code
 that can arise from assuming the presence of `optional` arguments or variables
 without checking their values first.
 
 
--- ds.code: Not recommended
-lang: ftd
-
-\-- component school:
-optional string name:
-
-\-- ftd.text: $school.name
-
-
-\-- end: school
-
-
-
--- ds.code: Recommended
-lang: ftd
-
-\-- component school:
-optional string name:
-
-\-- ftd.text: $school.name
-if: { school.name != NULL }
-
-\-- end: school
-
-
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- component school:
+	optional string name:
+	
+	\-- ftd.text: $school.name
+	
+	
+	\-- end: school
+	
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- component school:
+	optional string name:
+	
+	\-- ftd.text: $school.name
+	if: { school.name != NULL }
+	
+	\-- end: school
+	
+	
 -- end: utils.code-display
 
 

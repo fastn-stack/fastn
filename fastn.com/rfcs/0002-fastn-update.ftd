@@ -55,69 +55,69 @@ be have consistent performance.
 
 -- lib.detailed-design:
 
--- ds.h2: Package Manifest File
-
-For every fastn package we will be creating a package manifest file:
-
--- ds.code:
-lang: ftd
-
-\-- record package:
-string name:             \;; full package name
-document list documents: \;; all the `fastn` files
-file list assets:        \;; all the images etc assets
-file list fonts:         \;; if the package is a font package
-
-\-- record file:
-string full-name:        \;; relative to FASTN.ftd
-string checksum:         \;; sha256 checksum of the document content
-integer file-size:       \;; in bytes
-
-\-- record document:
-string list dependencies: \;; this is all the direct dependencies
-file file:
-
--- ds.h2: `fastn build`
-
-`fastn build` will create the `/-/manifest.json` file.
-
--- ds.h2: Structure of `.packages` folder
-
-A packages e.g., `fastn-community.github.io/doc-site` will be stored in:
-`.packages/fastn-community.github.io/doc-site`, and it's `manifest file` will be
-in `.packages/fastn-community.github.io/doc-site/-/manifest.json`.
-
--- ds.h2: `fastn update --status`
-
-`fastn update --status` will download latest `manifest.json` for each package,
-and compare the one `.packages` folder and list all the packages and files that
-are out of date.
-
--- ds.h2: `fastn update <optional package-name>`
-
-`fastn update`, without package name will update all the out of date
-files in `.packages`. If `package-name` is passed, only that package will be
-updated. If during package update we encounter new dependencies we do not
-already have we download them as well.
-
--- ds.h2: Transitive Dependencies
-
-`fastn update` will download all dependencies including transitive dependencies.
-
--- ds.h2: How The Packages Will Be Developed Locally?
-
-Checkout the entire repo at the right location in the `.packages` folder.
-
--- ds.h2: `fastn serve --release` flag
-
-The download on demand feature would be only available in "debug mode", which is
-the default. For deploying on production server, `--release` should be used,
-which considers a missing document an error.
-
-Running `fastn check` can be used to check if the package has all its
-dependencies available in `.packages` folder. Check will in future perform more
-checks.
-
+	-- ds.h2: Package Manifest File
+	
+	For every fastn package we will be creating a package manifest file:
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- record package:
+	string name:             \;; full package name
+	document list documents: \;; all the `fastn` files
+	file list assets:        \;; all the images etc assets
+	file list fonts:         \;; if the package is a font package
+	
+	\-- record file:
+	string full-name:        \;; relative to FASTN.ftd
+	string checksum:         \;; sha256 checksum of the document content
+	integer file-size:       \;; in bytes
+	
+	\-- record document:
+	string list dependencies: \;; this is all the direct dependencies
+	file file:
+	
+	-- ds.h2: `fastn build`
+	
+	`fastn build` will create the `/-/manifest.json` file.
+	
+	-- ds.h2: Structure of `.packages` folder
+	
+	A packages e.g., `fastn-community.github.io/doc-site` will be stored in:
+	`.packages/fastn-community.github.io/doc-site`, and it's `manifest file` will be
+	in `.packages/fastn-community.github.io/doc-site/-/manifest.json`.
+	
+	-- ds.h2: `fastn update --status`
+	
+	`fastn update --status` will download latest `manifest.json` for each package,
+	and compare the one `.packages` folder and list all the packages and files that
+	are out of date.
+	
+	-- ds.h2: `fastn update <optional package-name>`
+	
+	`fastn update`, without package name will update all the out of date
+	files in `.packages`. If `package-name` is passed, only that package will be
+	updated. If during package update we encounter new dependencies we do not
+	already have we download them as well.
+	
+	-- ds.h2: Transitive Dependencies
+	
+	`fastn update` will download all dependencies including transitive dependencies.
+	
+	-- ds.h2: How The Packages Will Be Developed Locally?
+	
+	Checkout the entire repo at the right location in the `.packages` folder.
+	
+	-- ds.h2: `fastn serve --release` flag
+	
+	The download on demand feature would be only available in "debug mode", which is
+	the default. For deploying on production server, `--release` should be used,
+	which considers a missing document an error.
+	
+	Running `fastn check` can be used to check if the package has all its
+	dependencies available in `.packages` folder. Check will in future perform more
+	checks.
+	
 -- end: lib.detailed-design
 
 
@@ -125,39 +125,39 @@ checks.
 
 -- lib.alternatives:
 
--- ds.h2: Lockfile Approach
-
-Other package ecosystems do not typically vendor dependencies, instead create a
-lockfile with exact versions. Dependencies are downloaded on every developer and
-CI machine, prod machine during deployment.
-
-We consider vendoring a superior approach as it reduces overall load on the
-central package repository, reduces total network activity in general. Vendoring
-also allows local changes to upstream packages.
-
--- ds.h2: `fastn update` Only Downloads
-
-One option we considered is to ensure only `fastn udpate` does any network
-activity. If any document is missing we rest of fastn will report a hint asking
-user to run `fastn udpate` to fix it. This simplifies our code, and gaurantees
-no unneeded network call. Possibly.
-
-This was rejected because a. we would have still wanted to give "automatically
-run `fastn update` on need, at least in dev mode".
-
-We rejected this option as for `fastn update` to detect all the dependencies we
-have to parse all documents in the package, and this takes time, making `fastn
-update` a slow process. A slow process that has to be used is a lot is a bad
-user experience.
-
-If we make the process itself fast using incremental analysis approach (only
-analyse documents that have changed since last run) we can make this fast and
-use this.
-
-Since this is a small decision, rest of the RFC is applicable in both cases, we
-have decided to start working on it for now till we implment the incremental
-anaysis approach.
-
+	-- ds.h2: Lockfile Approach
+	
+	Other package ecosystems do not typically vendor dependencies, instead create a
+	lockfile with exact versions. Dependencies are downloaded on every developer and
+	CI machine, prod machine during deployment.
+	
+	We consider vendoring a superior approach as it reduces overall load on the
+	central package repository, reduces total network activity in general. Vendoring
+	also allows local changes to upstream packages.
+	
+	-- ds.h2: `fastn update` Only Downloads
+	
+	One option we considered is to ensure only `fastn udpate` does any network
+	activity. If any document is missing we rest of fastn will report a hint asking
+	user to run `fastn udpate` to fix it. This simplifies our code, and gaurantees
+	no unneeded network call. Possibly.
+	
+	This was rejected because a. we would have still wanted to give "automatically
+	run `fastn update` on need, at least in dev mode".
+	
+	We rejected this option as for `fastn update` to detect all the dependencies we
+	have to parse all documents in the package, and this takes time, making `fastn
+	update` a slow process. A slow process that has to be used is a lot is a bad
+	user experience.
+	
+	If we make the process itself fast using incremental analysis approach (only
+	analyse documents that have changed since last run) we can make this fast and
+	use this.
+	
+	Since this is a small decision, rest of the RFC is applicable in both cases, we
+	have decided to start working on it for now till we implment the incremental
+	anaysis approach.
+	
 -- end: lib.alternatives
 
 
@@ -181,27 +181,25 @@ dependency was updated, and so it is safe to update?
 -- lib.unresolved-questions:
 
 
--- ds.h2: Would This Lead To Conflicts?
-
-If two developers have both done an update at different times, so they get
-different versions of the same dependency, can two diff versions cause
-conflicts?
-
--- ds.h2: Would having ability to modify dependency code cause ecosystem issues?
-
-Like if I am vendoring code, it's trivial for me to modify them, and people will
-start modifying them, and so is that a good thing, or a bad, and we start
-building features to disallow that (e.g., fastn update complaining about
-checksum mismatch).
-
-If it is a good thing we can make `fastn update` do a three way merge to keep
-your local changes while updating dependencies.
-
-
+	-- ds.h2: Would This Lead To Conflicts?
+	
+	If two developers have both done an update at different times, so they get
+	different versions of the same dependency, can two diff versions cause
+	conflicts?
+	
+	-- ds.h2: Would having ability to modify dependency code cause ecosystem issues?
+	
+	Like if I am vendoring code, it's trivial for me to modify them, and people will
+	start modifying them, and so is that a good thing, or a bad, and we start
+	building features to disallow that (e.g., fastn update complaining about
+	checksum mismatch).
+	
+	If it is a good thing we can make `fastn update` do a three way merge to keep
+	your local changes while updating dependencies.
+	
+	
 -- end: lib.unresolved-questions
 
 
 
 -- end: lib.rfc
-
-

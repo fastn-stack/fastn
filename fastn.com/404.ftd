@@ -16,20 +16,20 @@ padding-vertical.px: 40
 padding-horizontal.px: 20
 spacing.fixed.px: 20
 
--- ftd.text: Page Not Found!
-role: $inherited.types.heading-hero
-
-/-- ftd.image:
-src: $m-assets.files.page-not-found-panda.svg
-width.fixed.percent if { ftd.device == "desktop" }: 50
-width: fill-container
-
--- ftd.text:
-role: $inherited.types.heading-small
-text-align: center
-
-Uh oh, Panda can’t seem to find the page you’re looking for.
-
+	-- ftd.text: Page Not Found!
+	role: $inherited.types.heading-hero
+	
+	/-- ftd.image:
+	src: $m-assets.files.page-not-found-panda.svg
+	width.fixed.percent if { ftd.device == "desktop" }: 50
+	width: fill-container
+	
+	-- ftd.text:
+	role: $inherited.types.heading-small
+	text-align: center
+	
+	Uh oh, Panda can’t seem to find the page you’re looking for.
+	
 -- end: ftd.column
 
 -- end: ds.page

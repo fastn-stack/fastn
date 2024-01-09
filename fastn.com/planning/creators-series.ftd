@@ -10,18 +10,17 @@ websites using fastn.
 -- ftd.column:
 spacing.fixed.px: 20
 
--- ds.h1: Intro To Website creator Series
-
--- ds.markdown:
-
-Hello and welcome to `fastn` videos series. `fastn` helps you build websites
-fast.
-
-
-;; intro image
-
-;; intro music
-
+	-- ds.h1: Intro To Website creator Series
+	
+	-- ds.markdown:
+	
+	Hello and welcome to `fastn` videos series. `fastn` helps you build websites
+	fast.
+	
+	
+	;; intro image
+	
+	;; intro music
 -- end: ftd.column
 
 -- end: intro
@@ -33,17 +32,16 @@ fast.
 -- ftd.column:
 spacing.fixed.px: 20
 
--- ds.h1: Outro
-
--- ds.markdown:
-
-If you are thinking about making a website, give fastn a chance. Like and
-subscribe if you found the video useful.
-
-;; outro image
-
-;; outro music
-
+	-- ds.h1: Outro
+	
+	-- ds.markdown:
+	
+	If you are thinking about making a website, give fastn a chance. Like and
+	subscribe if you found the video useful.
+	
+	;; outro image
+	
+	;; outro music
 -- end: ftd.column
 
 -- end: outro

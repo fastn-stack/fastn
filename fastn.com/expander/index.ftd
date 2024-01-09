@@ -50,7 +50,7 @@ Start with the [part 1 now](/expander/hello-world/).
 -- ds.h3: Resources
 
 - [`fastn` installation instructions](https://fastn.com/install/)
-- Create a new fastn project using this 
+- Create a new fastn project using this
 [Fastn Github Template](https://github.com/ftd-lang/fastn-template/generate)
 
 

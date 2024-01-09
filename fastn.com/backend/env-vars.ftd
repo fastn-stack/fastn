@@ -150,11 +150,11 @@ $env-doc.content
 -- component fastn-pg-variables:
 
 -- ftd.column:
--- fastn-pg-url:
--- fastn-pg-danger-disable-ssl:
--- fastn-pg-ssl-mode:
--- fastn-pg-danger-allow-unverified-certificate:
--- fastn-pg-certificate:
+	-- fastn-pg-url:
+	-- fastn-pg-danger-disable-ssl:
+	-- fastn-pg-ssl-mode:
+	-- fastn-pg-danger-allow-unverified-certificate:
+	-- fastn-pg-certificate:
 -- end: ftd.column
 
 -- end: fastn-pg-variables
@@ -162,8 +162,8 @@ $env-doc.content
 -- component fastn-auth-variables:
 
 -- ftd.column:
--- fastn-github-client-id:
--- fastn-github-client-secret:
+	-- fastn-github-client-id:
+	-- fastn-github-client-secret:
 -- end: ftd.column
 
 -- end: fastn-auth-variables

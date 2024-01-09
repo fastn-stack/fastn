@@ -3,8 +3,8 @@
 -- ds.page: Built-in Types
 
 
-`fastn` comes with some built-in types. These can be used to define properties 
-of components or fields of [`record`](ftd/record/) and 
+`fastn` comes with some built-in types. These can be used to define properties
+of components or fields of [`record`](ftd/record/) and
 [`or-type`](ftd/or-type/).
 These types can be categorized into two main groups: **Primitive** and
 **Derived**.
@@ -164,12 +164,12 @@ of `shobhit` variable.
 By default `caption` is alias for `string` but if you want to pass
 types other than `string` you can do the following:
 
--- ds.code: record with caption as integer
-lang: ftd
-
-\-- record marks:
-caption integer number:
-
+	-- ds.code: record with caption as integer
+	lang: ftd
+	
+	\-- record marks:
+	caption integer number:
+	
 -- end: cbox.info
 
 
@@ -214,12 +214,12 @@ case of `amitu` var, or it can come as an explicit key, as in the declaration of
 By default `body` is alias for `string` but if you want to pass
 types other than `string` you can do the following:
 
--- ds.code: record with body as integer
-lang: ftd
-
-\-- record marks:
-body integer number:
-
+	-- ds.code: record with body as integer
+	lang: ftd
+	
+	\-- record marks:
+	body integer number:
+	
 -- end: cbox.info
 
 -- ds.h2: `caption or body`
@@ -260,18 +260,18 @@ the declaration of `shobhit` variable, or in "body" location, eg for `abrar`.
 By default `caption or body` is alias for `string` but if you want to pass
 types other than `string` you can do the following:
 
--- ds.code: record with body as integer
-lang: ftd
-
-\-- record marks:
-caption or body integer number:
-
+	-- ds.code: record with body as integer
+	lang: ftd
+	
+	\-- record marks:
+	caption or body integer number:
+	
 -- end: cbox.info
 
 
 -- ds.h2: `ftd.ui`
 
-`ftd.ui` is a data type in the `fastn` language that represents a user 
+`ftd.ui` is a data type in the `fastn` language that represents a user
 interface component.
 
 -- ds.code:
@@ -291,7 +291,7 @@ a single component of type `ftd.text` with text property value as `Hello`.
 `-- uis.0:` will display the first item in the `uis` list,
 
 -- ds.output:
--- uis.0:
+	-- uis.0:
 -- end: ds.output
 
 
@@ -924,9 +924,9 @@ wonder!
 
 -- ds.output:
 
--- ftd.text: Switch your device mode (light/dark)
-color: $red-orange
-
+	-- ftd.text: Switch your device mode (light/dark)
+	color: $red-orange
+	
 -- end: ds.output
 
 
@@ -1089,7 +1089,7 @@ min-width: hug-content
 In the above example, the `ftd.text` component has a `width` stretches to the
 width of its parent container, a `height` calculated and set by browser
 automatically based on its contents or other factors, `max-width` sets to be 300
-pixels and `min-width` dynamically resizes to be as small as possible while 
+pixels and `min-width` dynamically resizes to be as small as possible while
 still surrounding its contents.
 
 
@@ -1208,13 +1208,13 @@ border-color: $inherited.colors.border
 
 -- ds.output:
 
--- ftd.text: Hello
-padding.responsive: $p
-background.solid: $inherited.colors.background.step-1
-color: $inherited.colors.text
-border-width.px: 1
-border-color: $inherited.colors.border
-
+	-- ftd.text: Hello
+	padding.responsive: $p
+	background.solid: $inherited.colors.background.step-1
+	color: $inherited.colors.text
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	
 -- end: ds.output
 
 
@@ -1405,10 +1405,10 @@ Check the below output in different devices.
 
 -- ds.output:
 
--- ftd.text: Hello World
-role: $rtype
-color: $inherited.colors.text
-
+	-- ftd.text: Hello World
+	role: $rtype
+	color: $inherited.colors.text
+	
 -- end: ds.output
 
 
@@ -3051,7 +3051,6 @@ style: italic
 - `<integer>`: Gives <integer>px unit space.
 
 ;; Todo: Add all types from cheatsheet
-
 -- end: ds.page
 
 

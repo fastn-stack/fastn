@@ -10,7 +10,7 @@ templates: $admonitions
 ;;more-link: /featured/components/admonitions/
 
 We have designed and developed below bling components. You can use them on your
-`fastn` web site. 
+`fastn` web site.
 
 -- ft-ui.grid-view: Bling Components
 templates: $bling
@@ -18,7 +18,7 @@ templates: $bling
 ;;more-link: /featured/components/bling/
 
 We have designed and developed below bling components. You can use them on your
-`fastn` web site. 
+`fastn` web site.
 
 -- ft-ui.grid-view: Buttons
 templates: $buttons
@@ -26,7 +26,7 @@ templates: $buttons
 ;;more-link: /featured/components/
 
 We have designed and developed below button components package. You can use them
-on your `fastn` web site. 
+on your `fastn` web site.
 
 -- ft-ui.grid-view: Business Cards
 templates: $cards
@@ -34,7 +34,7 @@ more-link-text: View all
 more-link: /featured/components/business-cards/
 
 We have designed and developed below business-cards. You can use them on your
-`fastn` web site. 
+`fastn` web site.
 
 -- ft-ui.grid-view: Code Block
 templates: $code-block
@@ -42,7 +42,7 @@ templates: $code-block
 ;;more-link: /featured/components/
 
 We have designed and developed below code block and button components package.
-You can use them on your `fastn` web site. 
+You can use them on your `fastn` web site.
 
 -- ft-ui.grid-view: Headers / Navbars
 templates: $headers
@@ -50,7 +50,7 @@ more-link-text: View all
 more-link: /featured/components/headers/
 
 We have designed and developed below header / navbar packages. You can use them
-on your `fastn` web site. 
+on your `fastn` web site.
 
 -- ft-ui.grid-view: Footers
 templates: $footers
@@ -58,7 +58,7 @@ more-link-text: View all
 more-link: /featured/components/footers/
 
 We have designed and developed below footer packages. You can use them on your
-`fastn` web site.  
+`fastn` web site.
 
 -- ft-ui.grid-view: Modal / Dialog Box
 templates: $dialogs
@@ -66,7 +66,7 @@ more-link-text: View all
 more-link: /featured/components/modals/
 
 We have designed and developed below footer packages. You can use them on your
-`fastn` web site.  
+`fastn` web site.
 
 -- ft-ui.grid-view: Language Switcher
 templates: $language-switcher

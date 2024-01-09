@@ -18,7 +18,7 @@ well as can be used by others when published on GitHub.
 
 In our `Expander project`, we have used the `component` and named it as `box`.
 We moved our column code block that represents the box which we created in the
-last part and re-used the `component` three times. 
+last part and re-used the `component` three times.
 
 Documentation: [read more](https://fastn.com/components/)
 
@@ -63,7 +63,7 @@ body <body name>: <default value if any>
 Now we can pass the arguments names for caption and body to Header and Body
 respectively.
 
--- ds.code: 
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: $box.<caption name>

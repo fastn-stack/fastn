@@ -41,29 +41,29 @@ src: $fastn-assets.files.expander.layout.intro.jpg
 -- ds.h2: Holy-grail layout
 if: { source == "planning" }
 
-Holy Grail is a layout pattern that’s very common on the web. 
+Holy Grail is a layout pattern that’s very common on the web.
 
 It consists of:
 
 - a header
 - main content area, which has three parts
-	- navigation or left-sidebar
-	- content in the middle
-	- right-sidebar
+ - navigation or left-sidebar
+ - content in the middle
+ - right-sidebar
 - a footer.
 
 The header and footer has padding of 35 and 20 pixel respectively.
-To the two sidebars we will apply width of 25% so the remaining 50% will be for 
-the main content. 
+To the two sidebars we will apply width of 25% so the remaining 50% will be for
+the main content.
 
 -- ds.h2: Holy-grail layout
 if: { source == "default" }
 
 The most commonly used layout for websites is the `holy-grail` layout. This
 layout is designed to optimize the use of screen space by dividing the webpage
-into three main sections: 
+into three main sections:
 
-- a header at the top 
+- a header at the top
 - a main content area in the
 center, and sidebars on both sides.
 - a footer
@@ -81,7 +81,7 @@ Let's learn how to create this layout.
 
 We will start by creating a component that will be for the entire page.
 
-The three parts of the home-page, ie the header, the main part and the 
+The three parts of the home-page, ie the header, the main part and the
 footer part, are aligned in from top to down manner.
 
 So, inside the component `home-page` we will use `ftd.column`.
@@ -112,9 +112,9 @@ height: fill-container
 
 -- ds.h1: Header component
 
-Let's take the header first and create the component for the header. 
+Let's take the header first and create the component for the header.
 
--- ds.code: 
+-- ds.code:
 lang: ftd
 
 \-- component header:
@@ -136,15 +136,15 @@ role: $inherited.types.copy-regular
 
 -- ds.markdown:
 
-We have given some properties width, padding, and background color to the row, 
-note, we are using `$inherited` for background color so that if we use any  
+We have given some properties width, padding, and background color to the row,
+note, we are using `$inherited` for background color so that if we use any
 color-scheme, it will take the background-color defined in that color-scheme.
 
-And for now, I have given a child to the row as ftd.text with it's inherited 
-role.  
+And for now, I have given a child to the row as ftd.text with it's inherited
+role.
 
-We have one component header ready, we can display it. So before we move ahead, 
-let's comment others (main and footer) and display header 
+We have one component header ready, we can display it. So before we move ahead,
+let's comment others (main and footer) and display header
 by calling the component `home-page`. To call it we will write:
 
 -- ds.code:
@@ -160,7 +160,7 @@ So we have the header in our page.
 
 Now, similarly, we will build the main area.
 
-As I have mentioned, in the `holy-grail` layout main area has three parts, 
+As I have mentioned, in the `holy-grail` layout main area has three parts,
 which is in left-to-right manner therefore we will put them in a row.
 
 
@@ -187,9 +187,9 @@ background.solid: $inherited.colors.background.base
 \-- end: main-area
 
 
--- ds.markdown: 
+-- ds.markdown:
 
-Now we will create 3 separate components for left-sidebar, content and 
+Now we will create 3 separate components for left-sidebar, content and
 right-sidebar.
 
 -- ds.h2: left-sidebar component
@@ -218,11 +218,11 @@ role: $inherited.types.copy-regular
 
 -- ds.markdown:
 
-This is the left-sidebar component. Inside the container component column of 
+This is the left-sidebar component. Inside the container component column of
 width of 25% has a child `ftd.text`.
 
 
-Similarly, I have created the two components, one for the content, the other 
+Similarly, I have created the two components, one for the content, the other
 for the right-sidebar.
 
 
@@ -279,15 +279,15 @@ role: $inherited.types.copy-regular
 -- ds.markdown:
 
 Since we have already called them in the main-area component.
-Let's see the main area in the browser. So we will remove the comment where 
+Let's see the main area in the browser. So we will remove the comment where
 the main component is called.
 
 
 -- ds.h1: footer component
 
 Last but not the least, let's create the component for footer.
-In this component, just like header, we have a row, which has a text. Just the 
-padding value is different. 
+In this component, just like header, we have a row, which has a text. Just the
+padding value is different.
 
 -- ds.code:
 lang: ftd
@@ -315,16 +315,16 @@ color: $inherited.colors.text
 Our footer is also ready, so we can remove the comment in the home-page and
 Save and refresh the browser.
 
-Now we have the complete `holy-grail` layout for the home-page. 
+Now we have the complete `holy-grail` layout for the home-page.
 
 
 I hope you have found this layouting using `fastn` language easy.
 
 Before we close this, let's see the basic way to add the header links.
 
-In the package, I have created 3 dummy files that will repesent the sections. 
+In the package, I have created 3 dummy files that will repesent the sections.
 
-And, inside the row of the header component, we will add another row and 
+And, inside the row of the header component, we will add another row and
 to this row we will give three sections as text.
 
 
@@ -350,28 +350,28 @@ link: /section-3/
 color: $inherited.colors.text
 
 
-\-- end: ftd.row 
+\-- end: ftd.row
 
 -- ds.markdown:
 
-And for formatting, to the parent row, I have added spacing between these two 
+And for formatting, to the parent row, I have added spacing between these two
 sections, `ftd.text` and `ftd.row`.
 
--- ds.h1: Closing Remarks 
+-- ds.h1: Closing Remarks
 if: { source == "planning" }
 
-Thank you guys, keep watching these videos to learn more about fastn. 
+Thank you guys, keep watching these videos to learn more about fastn.
 Checkout the `fastn` website.
-Support us by clicking on this link and give us a star on GitHub and join our 
+Support us by clicking on this link and give us a star on GitHub and join our
 fastn community on Discord.
 
 
--- ds.markdown: 
+-- ds.markdown:
 if: { source == "default" }
 
-Thank you guys, keep watching these videos to learn more about fastn. 
+Thank you guys, keep watching these videos to learn more about fastn.
 
-Support us by giving a star on [GitHub](https://github.com/fastn-stack/fastn/) 
+Support us by giving a star on [GitHub](https://github.com/fastn-stack/fastn/)
 and join our fastn community on [Discord](/discord/).
 
 
@@ -392,8 +392,3 @@ v: tSX0io_zw18
 -- string source: default
 $processor$: pr.get-data
 key: source
-
-
-
-
-

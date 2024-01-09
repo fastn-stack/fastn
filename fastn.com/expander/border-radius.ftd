@@ -5,36 +5,36 @@ v: 6naTh8u_uOM
 
 -- ds.h1: Introduction
 
-`border-radius` property rounds the corners of the border. It takes input of 
+`border-radius` property rounds the corners of the border. It takes input of
 type `ftd.length` and is optional.
 
 Let's apply this property.
 
 -- ds.h1: On Text
 
-We have a text here inside the container component column. `border-width` and 
+We have a text here inside the container component column. `border-width` and
 `border-color` and `padding` is already applied to this text.
 
-To give a `border-radius` we need to write `border-radius.px` followed by a 
+To give a `border-radius` we need to write `border-radius.px` followed by a
 colon and give a pixel value.
 
 -- ds.rendered: border-radius on text
 
--- ds.rendered.input: 
-
-\-- ftd.text: Hello
-border-width.px: 2
-border-color: red
-border-radius.px: 10 	 ;; <hl>
-
--- ds.rendered.output: 
-
--- ftd.text: Hello World
-border-width.px: 2
-border-color: red
-border-radius.px: 10 	
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.text: Hello
+	border-width.px: 2
+	border-color: red
+	border-radius.px: 10 	 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: Hello World
+		border-width.px: 2
+		border-color: red
+		border-radius.px: 10
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -45,43 +45,43 @@ We do the same thing. And it looks like this.
 
 -- ds.rendered: border-radius on container
 
--- ds.rendered.input: 
-
-\-- ftd.row:
-width: fill-container
-border-width.px: 2
-border-color: red
-spacing.fixed.px: 10
-padding.px: 10
-align-content: center
-border-radius.px: 10 	 ;; <hl>
-
-\-- ftd.text: Hello 
-
-\-- ftd.text: World
-
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- ftd.row:
-width: fill-container
-border-width.px: 2
-border-color: blue
-spacing.fixed.px: 10
-padding.px: 10
-align-content: center
-border-radius.px: 10 	 
-
--- ftd.text: Hello 
-
--- ftd.text: World
-
-
--- end: ftd.row
+	-- ds.rendered.input:
 	
--- end: ds.rendered.output
+	\-- ftd.row:
+	width: fill-container
+	border-width.px: 2
+	border-color: red
+	spacing.fixed.px: 10
+	padding.px: 10
+	align-content: center
+	border-radius.px: 10 	 ;; <hl>
+	
+	\-- ftd.text: Hello
+	
+	\-- ftd.text: World
+	
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- ftd.row:
+		width: fill-container
+		border-width.px: 2
+		border-color: blue
+		spacing.fixed.px: 10
+		padding.px: 10
+		align-content: center
+		border-radius.px: 10
+		
+			-- ftd.text: Hello
+			
+			-- ftd.text: World
+			
+			
+		-- end: ftd.row
+
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -92,30 +92,30 @@ To the image, we do the same thing. And it looks like this.
 
 -- ds.rendered: border-radius on image
 
--- ds.rendered.input: 
-
-\-- ftd.image:
-width.fixed.px: 400
-src: $fastn-assets.files.planning.border-radius.ocean.jpg
-border-radius.px: 15
-
-
--- ds.rendered.output:
-
--- ftd.image:
-margin.px: 20
-width.fixed.px: 400
-src: $fastn-assets.files.planning.border-radius.ocean.jpg
-border-radius.px: 15
+	-- ds.rendered.input:
 	
--- end: ds.rendered.output
+	\-- ftd.image:
+	width.fixed.px: 400
+	src: $fastn-assets.files.planning.border-radius.ocean.jpg
+	border-radius.px: 15
+	
+	
+	-- ds.rendered.output:
+	
+		-- ftd.image:
+		margin.px: 20
+		width.fixed.px: 400
+		src: $fastn-assets.files.planning.border-radius.ocean.jpg
+		border-radius.px: 15
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
 
--- ds.markdown: 
+-- ds.markdown:
 
-I hope you know now how to add `border-radius` in `fastn`. Feel free to reach 
+I hope you know now how to add `border-radius` in `fastn`. Feel free to reach
 out and ask your doubts, if you have any.
 
 -- end: ds.page

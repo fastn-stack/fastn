@@ -8,7 +8,7 @@ v: 8f44sUZRSSA
 
 -- ds.markdown:
 
-- Create a [mutable](/variables/#mutable) `boolean variable` inside the 
+- Create a [mutable](/variables/#mutable) `boolean variable` inside the
 component.
 
 -- ds.code: Boolean variable
@@ -56,7 +56,7 @@ Here We Go!!! We have made the Expander Project from scratch.
 
 Don't want to rewrite this but want to reuse it in your next project?
 
-Or, You want to share it with others? 
+Or, You want to share it with others?
 
 In Part 5, you will learn how to publish it as a package on GitHub.
 

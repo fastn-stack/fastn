@@ -111,84 +111,84 @@ color: $inherited.colors.text
 spacing: space-between
 wrap: true
 
--- letter: A
-link: $letter-bar.link-a
-
--- letter: B
-link: $letter-bar.link-b
-
--- letter: C
-link: $letter-bar.link-c
-
--- letter: D
-link: $letter-bar.link-d
-
--- letter: E
-link: $letter-bar.link-e
-
--- letter: F
-link: $letter-bar.link-f
-
--- letter: G
-link: $letter-bar.link-g
-
--- letter: H
-link: $letter-bar.link-h
-
--- letter: I
-link: $letter-bar.link-i
-
--- letter: J
-link: $letter-bar.link-j
-
--- letter: K
-link: $letter-bar.link-k
-
--- letter: L
-link: $letter-bar.link-l
-
--- letter: M
-link: $letter-bar.link-m
-
--- letter: N
-link: $letter-bar.link-n
-
--- letter: O
-link: $letter-bar.link-o
-
--- letter: P
-link: $letter-bar.link-p
-
--- letter: Q
-link: $letter-bar.link-q
-
--- letter: R
-link: $letter-bar.link-r
-
--- letter: S
-link: $letter-bar.link-s
-
--- letter: T
-link: $letter-bar.link-t
-
--- letter: U
-link: $letter-bar.link-u
-
--- letter: V
-link: $letter-bar.link-v
-
--- letter: W
-link: $letter-bar.link-w
-
--- letter: X
-link: $letter-bar.link-x
-
--- letter: Y
-link: $letter-bar.link-y
-
--- letter: Z
-link: $letter-bar.link-z
-
+	-- letter: A
+	link: $letter-bar.link-a
+	
+	-- letter: B
+	link: $letter-bar.link-b
+	
+	-- letter: C
+	link: $letter-bar.link-c
+	
+	-- letter: D
+	link: $letter-bar.link-d
+	
+	-- letter: E
+	link: $letter-bar.link-e
+	
+	-- letter: F
+	link: $letter-bar.link-f
+	
+	-- letter: G
+	link: $letter-bar.link-g
+	
+	-- letter: H
+	link: $letter-bar.link-h
+	
+	-- letter: I
+	link: $letter-bar.link-i
+	
+	-- letter: J
+	link: $letter-bar.link-j
+	
+	-- letter: K
+	link: $letter-bar.link-k
+	
+	-- letter: L
+	link: $letter-bar.link-l
+	
+	-- letter: M
+	link: $letter-bar.link-m
+	
+	-- letter: N
+	link: $letter-bar.link-n
+	
+	-- letter: O
+	link: $letter-bar.link-o
+	
+	-- letter: P
+	link: $letter-bar.link-p
+	
+	-- letter: Q
+	link: $letter-bar.link-q
+	
+	-- letter: R
+	link: $letter-bar.link-r
+	
+	-- letter: S
+	link: $letter-bar.link-s
+	
+	-- letter: T
+	link: $letter-bar.link-t
+	
+	-- letter: U
+	link: $letter-bar.link-u
+	
+	-- letter: V
+	link: $letter-bar.link-v
+	
+	-- letter: W
+	link: $letter-bar.link-w
+	
+	-- letter: X
+	link: $letter-bar.link-x
+	
+	-- letter: Y
+	link: $letter-bar.link-y
+	
+	-- letter: Z
+	link: $letter-bar.link-z
+	
 -- end: ftd.row
 
 -- end: letter-bar
@@ -214,19 +214,19 @@ width: $letter-category.width
 spacing.fixed.px: 10
 wrap: true
 
--- ftd.text: $letter-category.letter-name
-color: $inherited.colors.text
-role: $inherited.types.heading-large
-
--- ftd.column:
-spacing.fixed.px: 5
-wrap: true
-
--- letter: $item.name
-$loop$: $letter-category.letter-items as $item
-link: $item.link
-
--- end: ftd.column
+	-- ftd.text: $letter-category.letter-name
+	color: $inherited.colors.text
+	role: $inherited.types.heading-large
+	
+	-- ftd.column:
+	spacing.fixed.px: 5
+	wrap: true
+	
+		-- letter: $item.name
+		$loop$: $letter-category.letter-items as $item
+		link: $item.link
+		
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -278,136 +278,136 @@ width: fill-container
 height: $letter-stack.height
 spacing.fixed.px: 23
 
--- letter-category: A
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-a
-
--- letter-category: B
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-b
-
--- letter-category: C
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-c
-
--- letter-category: D
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-d
-
--- letter-category: E
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-e
-
--- letter-category: F
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-f
-
--- letter-category: G
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-g
-
--- letter-category: H
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-h
-
--- letter-category: I
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-i
-
--- letter-category: J
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-j
-
--- letter-category: K
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-k
-
--- letter-category: L
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-l
-
--- letter-category: M
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-m
-
--- letter-category: N
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-n
-
--- letter-category: O
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-o
-
--- letter-category: P
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-p
-
--- letter-category: Q
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-q
-
--- letter-category: R
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-r
-
--- letter-category: S
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-s
-
--- letter-category: T
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-t
-
--- letter-category: U
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-u
-
--- letter-category: V
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-v
-
--- letter-category: W
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-w
-
--- letter-category: X
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-x
-
--- letter-category: Y
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-y
-
--- letter-category: Z
-width.fixed.percent if { ftd.device != "mobile" }: 20
-width: fill-container
-letter-items: $letter-stack.contents-z
-
+	-- letter-category: A
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-a
+	
+	-- letter-category: B
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-b
+	
+	-- letter-category: C
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-c
+	
+	-- letter-category: D
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-d
+	
+	-- letter-category: E
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-e
+	
+	-- letter-category: F
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-f
+	
+	-- letter-category: G
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-g
+	
+	-- letter-category: H
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-h
+	
+	-- letter-category: I
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-i
+	
+	-- letter-category: J
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-j
+	
+	-- letter-category: K
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-k
+	
+	-- letter-category: L
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-l
+	
+	-- letter-category: M
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-m
+	
+	-- letter-category: N
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-n
+	
+	-- letter-category: O
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-o
+	
+	-- letter-category: P
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-p
+	
+	-- letter-category: Q
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-q
+	
+	-- letter-category: R
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-r
+	
+	-- letter-category: S
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-s
+	
+	-- letter-category: T
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-t
+	
+	-- letter-category: U
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-u
+	
+	-- letter-category: V
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-v
+	
+	-- letter-category: W
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-w
+	
+	-- letter-category: X
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-x
+	
+	-- letter-category: Y
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-y
+	
+	-- letter-category: Z
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-z
+	
 -- end: ftd.column
 
 -- end: letter-stack

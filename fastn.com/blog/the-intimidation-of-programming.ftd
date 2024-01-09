@@ -21,82 +21,82 @@ meta: $meta
 
 -- ds.h1: Navigating the Complex Maze of Programming
 
-One of the first challenges faced is deciphering the `complex syntax`. The rules 
-and structures leave beginners feeling lost and overwhelmed. Beyond the 
-individual components of code lies the challenge of understanding its overall 
-structure. How do these lines of syntax come together to create functional 
+One of the first challenges faced is deciphering the `complex syntax`. The rules
+and structures leave beginners feeling lost and overwhelmed. Beyond the
+individual components of code lies the challenge of understanding its overall
+structure. How do these lines of syntax come together to create functional
 programs?
 
 > **How can one balance logic and presentation to build a website successfully?**
 
-Adding to the confusion is the `abundance of technology options`, frameworks, 
-and tools, each with its specific purpose. For instance, JavaScript serves one 
-purpose, HTML another, and CSS an entirely different one. 
+Adding to the confusion is the `abundance of technology options`, frameworks,
+and tools, each with its specific purpose. For instance, JavaScript serves one
+purpose, HTML another, and CSS an entirely different one.
 
-Each language is the brainchild of different creators with varying goals. 
-It is up to the learner to figure out the right mix of languages for their 
-projects. 
+Each language is the brainchild of different creators with varying goals.
+It is up to the learner to figure out the right mix of languages for their
+projects.
 
 And as you delve deeper, you encounter the `divergent ecosystem`.
-For instance, the JS world, with its varying approaches and tools, further 
-compounds the complexity. 
+For instance, the JS world, with its varying approaches and tools, further
+compounds the complexity.
 
-JavaScript is not easy to learn, nor is it easy to use for authoring 
-web content. From HTML-based solutions like HTMX to the JSX approach, where 
-HTML is sparingly written, the diversity can leave beginners unsure of where to 
-start or which path to follow. 
+JavaScript is not easy to learn, nor is it easy to use for authoring
+web content. From HTML-based solutions like HTMX to the JSX approach, where
+HTML is sparingly written, the diversity can leave beginners unsure of where to
+start or which path to follow.
 
 > **The time and effort required to gain proficiency becomes never ending.**
 
 
 -- ds.h1: The Illusion of Alternatives
 
-Non-programmers might explore CMS or website builders, assuming they are a 
-viable alternative. Yet, SAAS-based solutions can confine users to the 
-limitations set by the service, restricting their creative freedom. 
+Non-programmers might explore CMS or website builders, assuming they are a
+viable alternative. Yet, SAAS-based solutions can confine users to the
+limitations set by the service, restricting their creative freedom.
 
-The fear of relying on third-party providers looms large; what if they cease 
-operations or impose undesirable changes? 
+The fear of relying on third-party providers looms large; what if they cease
+operations or impose undesirable changes?
 
-In contrast, a Programme-based solution offers `long-term viability` and 
-`independence`. Skilled developers can maintain and evolve the solution over 
+In contrast, a Programme-based solution offers `long-term viability` and
+`independence`. Skilled developers can maintain and evolve the solution over
 time, minimizing the impact of potential service interruptions.
 
 
 -- ds.h1: Seeking a Simpler Solution
 
-In a world where programming might seem intentionally difficult, especially to 
-those unfamiliar with it, we question the necessity for such complexity. 
+In a world where programming might seem intentionally difficult, especially to
+those unfamiliar with it, we question the necessity for such complexity.
 
-Shouldn't we have a simpler solution — a tool accessible to all, akin to using 
-Excel? A solution that is stable and easy-to-learn within a few hours. 
+Shouldn't we have a simpler solution — a tool accessible to all, akin to using
+Excel? A solution that is stable and easy-to-learn within a few hours.
 
-This question inspired the creation of [**`fastn`**](https://fastn.com/) — a 
-solution that aims to eliminate the intimidation associated with programming. 
+This question inspired the creation of [**`fastn`**](https://fastn.com/) — a
+solution that aims to eliminate the intimidation associated with programming.
 At `fastn`, we simplify programming, making it accessible to everyone.
 
-`fastn` achieves this by offering a `domain-specific language` optimized for 
-authoring web content. Its `user-friendly interface and minimal syntax` allow 
-even those with no prior programming experience to grasp its functionalities 
+`fastn` achieves this by offering a `domain-specific language` optimized for
+authoring web content. Its `user-friendly interface and minimal syntax` allow
+even those with no prior programming experience to grasp its functionalities
 swiftly.
 
-Take the below example for instance, 
+Take the below example for instance,
 
 -- ds.h2: Input
 
--- ds.code: 
+-- ds.code:
 lang: ftd
 
 \-- chat-female-avatar: Hello World! 😀
 
 \-- chat-female-avatar:
 
-I'm Nandhini, the writer behind this blog. 
+I'm Nandhini, the writer behind this blog.
 
 \-- chat-female-avatar:
 
-Fun fact: I also built this entire page with fastn! 🚀 
-It's that easy! 
+Fun fact: I also built this entire page with fastn! 🚀
+It's that easy!
 
 -- ds.h2: Output
 
@@ -104,22 +104,22 @@ It's that easy!
 
 -- ftd-index.chat-female-avatar:
 
-I'm Nandhini, the writer behind this blog. 
+I'm Nandhini, the writer behind this blog.
 
 -- ftd-index.chat-female-avatar:
 
-Fun fact: I also built this entire page with fastn! 🚀 
+Fun fact: I also built this entire page with fastn! 🚀
 
-It's that easy! 
+It's that easy!
 
 
 -- ds.markdown:
 
-As we continue our journey, fastn is also creating a lot of 
-[`learning material`](https://fastn.com/expander/) for people to start using it. 
+As we continue our journey, fastn is also creating a lot of
+[`learning material`](https://fastn.com/expander/) for people to start using it.
 
-Additionally, [`our design community portal`](https://fastn.com/featured/) 
-serves as a hub for designers and frontend developers to submit their fastn 
+Additionally, [`our design community portal`](https://fastn.com/featured/)
+serves as a hub for designers and frontend developers to submit their fastn
 packages for end users to discover and use.
 
 Learn more about [`fastn`](https://fastn.com/home/) here.

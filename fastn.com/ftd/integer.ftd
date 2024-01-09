@@ -10,17 +10,17 @@ integer value to display.
 
 -- ds.rendered: Sample Usage
 
--- ds.rendered.input:
-
-\-- ftd.integer: 10
-color: $inherited.colors.text
-
--- ds.rendered.output:
-
--- ftd.integer: 10
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.integer: 10
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.integer: 10
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -42,15 +42,15 @@ There are three ways to pass integer to `ftd.integer`: as `caption`, as a
 
 -- ds.rendered: value as `caption`
 
--- ds.rendered.input:
-
-\-- ftd.integer: 10000 ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.integer: 10000
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.integer: 10000 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.integer: 10000
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -59,17 +59,17 @@ There are three ways to pass integer to `ftd.integer`: as `caption`, as a
 
 -- ds.rendered: value as `header`
 
--- ds.rendered.input:
-
-\-- ftd.integer:
-value: 20000 ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.integer:
-value: 20000
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.integer:
+	value: 20000 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.integer:
+		value: 20000
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -77,19 +77,19 @@ value: 20000
 
 -- ds.rendered: value as `body`
 
--- ds.rendered.input:
-
-\-- ftd.integer:
-
-1234 ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.integer:
-
-1234
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.integer:
+	
+	1234 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.integer:
+		
+		1234
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -104,19 +104,19 @@ You can find documentation of formatting strings
 
 -- ds.rendered: Sample code to format integer as hex value
 
--- ds.rendered.input:
-
-\-- ftd.integer:
-value: 48879
-format: #X ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.integer:
-value: 48879
-format: #X
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.integer:
+	value: 48879
+	format: #X ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.integer:
+		value: 48879
+		format: #X
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 

@@ -88,7 +88,7 @@ The syntax of using `http` processor is as follows:
 -- ds.h2: Data modelling: `record`
 
 For this example, we will use `record` feature of `fastn`'s. `record` can be
-used to create a user defined data type. 
+used to create a user defined data type.
 
 Here we are creating a new record called `country-data`.
 
@@ -100,7 +100,7 @@ string capital:
 
 -- ds.h2: Start building
 
-Let's implement the theory and build the project. 
+Let's implement the theory and build the project.
 
 -- ds.h3: **Step 1:** Import `fastn/processors`
 
@@ -111,7 +111,7 @@ Copy the import line and paste it at the top of the `index.ftd` document
 \-- import: fastn/processors as pr
 
 
--- ds.h3: **Step 2:** Declare a `record` 
+-- ds.h3: **Step 2:** Declare a `record`
 
 Before a record can be used it must be declared.
 
@@ -125,7 +125,7 @@ string capital:
 
 -- ds.h3: **Step 3:** Create a list
 
-Since the JSON data has a list of countries and their respective capitals, 
+Since the JSON data has a list of countries and their respective capitals,
 therefore, we will create a list and use the `country-data` record as the type.
 
 -- ds.code: `countries` is a `list` of `country-data`
@@ -136,9 +136,9 @@ therefore, we will create a list and use the `country-data` record as the type.
 -- ds.markdown:
 
 `$processor$: pr.http` will initialise `countries` with the data returned
-by the `url`. 
+by the `url`.
 
--- ds.code: 
+-- ds.code:
 
 \-- country-data list countries:
 $processor$: pr.http
@@ -152,7 +152,7 @@ url: https://famous-loincloth-ox.cyclic.app/
 
 Now that we have download the data from the `url` and stored it in `countries`,
 we want to show it to user. To do that let's create a component called
-`country-detail`. 
+`country-detail`.
 
 
 -- ds.code: Create component `country-detail`
@@ -163,10 +163,10 @@ we want to show it to user. To do that let's create a component called
 \-- end: country-detail
 
 
--- ds.markdown: 
+-- ds.markdown:
 
 This component will have a property `country`. We will mark it as `caption` to
-make easy for users of this component. 
+make easy for users of this component.
 
 -- ds.code:
 
@@ -182,7 +182,7 @@ Let's show the country name.
 -- ds.code:
 
 \-- component country-detail:
-caption country-data country:  
+caption country-data country:
 
 \-- ftd.text: $country-detail.country.name  ;; <hl>
 
@@ -194,7 +194,7 @@ caption country-data country:
 -- ds.markdown:
 
 Till now, we have just defined the component but to display the list of country
-names we need call the component. Therefore, after closing the component we 
+names we need call the component. Therefore, after closing the component we
 can call the component and use a `for` loop.
 
 
@@ -207,7 +207,7 @@ for: $country in $countries
 
 Now wrap the two texts for country name and capital in `row` container
 
--- ds.code: 
+-- ds.code:
 
 \-- ftd.row:
 width.fixed.percent: 20
@@ -221,7 +221,7 @@ width.fixed.percent: 20
 -- ds.markdown:
 
 So you have successfully fetched and displayed the values of JSON data from the
-external website using the `http` processor and one of the data modelling type, 
+external website using the `http` processor and one of the data modelling type,
 `record`.
 
 -- ds.h3: Improved UI

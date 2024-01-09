@@ -104,17 +104,17 @@ Double-click the `Terminal.app` icon and the Terminal will open.
 
 -- ds.h1: Open the Command Prompt
 
-The `**Command Prompt**`, officially called the `Windows Command Processor` and 
-often abbreviated to `CMD`, is the `command line interface` for Windows operating 
-systems. A command line interface is a way of interacting with a computer directly 
+The `**Command Prompt**`, officially called the `Windows Command Processor` and
+often abbreviated to `CMD`, is the `command line interface` for Windows operating
+systems. A command line interface is a way of interacting with a computer directly
 using text commands.
 
 -- ds.h2: How to open Command Prompt from the Windows Start Menu
 
-First, click the Start Menu button in the lower-left corner to open the start 
+First, click the Start Menu button in the lower-left corner to open the start
 menu.
 
-Scroll down to “Windows System” and click that to open a dropdown of different 
+Scroll down to “Windows System” and click that to open a dropdown of different
 Windows programs. Then click “Command Prompt”:
 
 -- ds.image:
@@ -123,7 +123,7 @@ src: $fastn-assets.files.images.setup.cmd-prompt-start-menu.png
 
 -- ds.h2: How to open Command Prompt with the search bar
 
-One of the fastest ways to open Command Prompt is by using the search bar in the 
+One of the fastest ways to open Command Prompt is by using the search bar in the
 Windows Taskbar.
 
 Just type “cmd” into the search bar and click on “Command Prompt”:
@@ -134,16 +134,16 @@ src: $fastn-assets.files.images.setup.search-cmd-prompt-1.png
 
 -- ds.h2: How to open Command Prompt from the Run program
 
-Windows 10 has another program called Run that lets you, well, run other programs. 
-You can also do things like open folders and files, but that’s outside the scope 
+Windows 10 has another program called Run that lets you, well, run other programs.
+You can also do things like open folders and files, but that’s outside the scope
 of this tutorial.
 
-To open Run, you can open the Start Menu and find it under “Windows System”. 
+To open Run, you can open the Start Menu and find it under “Windows System”.
 You could also type “run” in the search box and find it that way.
 
 But the fastest way to open Run is with the shortcut **Windows Key + R**.
 
-Then, once the Run window is open, just type in “cmd” and press “OK” to open 
+Then, once the Run window is open, just type in “cmd” and press “OK” to open
 Command Prompt:
 
 -- ds.image:
@@ -152,8 +152,8 @@ src: $fastn-assets.files.images.setup.run-cmd.png
 
 -- ds.h2: How to Open Command Prompt in a Folder
 
-In many cases, you wish not to write the folder directory in command prompt rather 
-open the command prompt in a folder with the path of a particular project or 
+In many cases, you wish not to write the folder directory in command prompt rather
+open the command prompt in a folder with the path of a particular project or
 repository.
 
 First, open the folder.

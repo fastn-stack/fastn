@@ -7,7 +7,7 @@ src: $fastn-assets.files.images.backend.dynamic-country-list-page.jpg
 
 Hi Guys, welcome to the video.
 
-In this video we will build a dynamic country list page. 
+In this video we will build a dynamic country list page.
 
 For this, we will request the JSON data using `http processor` and store it in
 `fastn` records and later in the video, we will create a country list page that
@@ -15,7 +15,7 @@ will display the list of countries in form of cards. Each country card will
 display country's flag and country's `common` name and also display values of
 `population`, `region` and `capital`.
 
-We will do this in three parts. 
+We will do this in three parts.
 
 -- ds.image:
 src: $fastn-assets.files.images.backend.three-stages.jpg
@@ -34,16 +34,16 @@ src: $fastn-assets.files.images.backend.three-stages.jpg
 
 
 
--- ftd.image: 
+-- ftd.image:
 src: $fastn-assets.files.images.backend.pretty-json.png
 max-width: fill-container
 
 -- ds.markdown:
 
-The JSON data is structured in a way, that some properties are nested within 
+The JSON data is structured in a way, that some properties are nested within
 another property. Let's visualise it with the help of an illustration:
 
--- ftd.image: 
+-- ftd.image:
 src: $fastn-assets.files.images.backend.tree-structure-ppt.jpg
 max-width: fill-container
 
@@ -60,11 +60,11 @@ Also, flags have nested properties "svg" and "png" in the JSON data. We will
 utilize the "svg" property.
 
 
--- ds.h1: First Part: data modelling 
+-- ds.h1: First Part: data modelling
 
 So I have this package country-details in my machine.
 
-I will create a separate document called `models.ftd` where we will do the data 
+I will create a separate document called `models.ftd` where we will do the data
 modelling using `records`.
 
 So let's create the first `record`.
@@ -80,18 +80,18 @@ country-flag flags:
 
 -- ds.markdown:
 
-`name` property has a type that itself is a `record` which we will create in a 
+`name` property has a type that itself is a `record` which we will create in a
 bit.
 
-`population` is an integer while `region` and `capital` are of string type. 
-Also, some countries have more than one capital hence we will create the list 
+`population` is an integer while `region` and `capital` are of string type.
+Also, some countries have more than one capital hence we will create the list
 of `capital`.
 
 Last but not the least, `flags` also has a `record` datatype.
 
 Let's declare the `country-name` and `country-flag` records too.
 
--- ds.code: 
+-- ds.code:
 
 \-- record country-name:
 optional string common:
@@ -105,7 +105,7 @@ caption svg:
 
 -- ds.markdown:
 
-The `country-name` record has two properties `common` and `official`, both of 
+The `country-name` record has two properties `common` and `official`, both of
 string type.
 
 And the `country-flag` record has svg property which can be passed as caption.
@@ -114,13 +114,13 @@ So this way we are done with the data-modelling part.
 
 -- ds.h1: Second Part: create a `card` component
 
-Moving to the second part of the video, we will create a `card` component. 
+Moving to the second part of the video, we will create a `card` component.
 
 I will put all the components inside a components folder.
 
 In this folder, I have created a `card.ftd` document.
 
-Since we are going to display the value of properties declared in the records 
+Since we are going to display the value of properties declared in the records
 in `models.ftd` hence at the top of the `card.ftd` we will import that document.
 
 -- ds.code:
@@ -129,7 +129,7 @@ in `models.ftd` hence at the top of the `card.ftd` we will import that document.
 
 -- ds.markdown:
 
-In the import line we will write the package name, slash, and the document name 
+In the import line we will write the package name, slash, and the document name
 we are importing, that is, models
 
 Now, create a component let's say `country-card`.
@@ -152,8 +152,8 @@ caption models.country country:
 
 -- ds.markdown:
 
-And structure the card in a way that I showed at the start using columns and 
-row and putting the flag, common name, population, region and capital. And 
+And structure the card in a way that I showed at the start using columns and
+row and putting the flag, common name, population, region and capital. And
 apply fastn properties appropriately.
 
 Main column
@@ -254,8 +254,8 @@ for: $capital-name, $index in $country-card.country.capital
 
 -- ds.markdown:
 
-We can also apply default shadow and on-hover shadow to the card component to 
-make the component look good. 
+We can also apply default shadow and on-hover shadow to the card component to
+make the component look good.
 
 
 -- ds.code:
@@ -273,7 +273,7 @@ spread.rem: 0.2
 
 -- ds.markdown:
 
-So, we will add shadow property to the component, and create a mutable boolean 
+So, we will add shadow property to the component, and create a mutable boolean
 variable.
 
 \;; shadow properties
@@ -317,7 +317,7 @@ import the `processors` and the two documents.
 
 -- ds.markdown:
 
-We will create a list of `countries` and the datatype will be `record country` 
+We will create a list of `countries` and the datatype will be `record country`
 that we created in `models` document.
 
 -- ds.code:
@@ -329,10 +329,10 @@ url: https://restcountries.com/v3.1/all
 
 -- ds.markdown:
 
-The data will be stored using processors by doing http request to the endpoint 
+The data will be stored using processors by doing http request to the endpoint
 we will give as URL.
 
-Now we will call the component `country-card` from `card` document and we will 
+Now we will call the component `country-card` from `card` document and we will
 wrap it inside the row container component.
 
 -- ds.code:
@@ -344,7 +344,7 @@ padding.rem: 2
 border-radius.rem: 1
 
 \-- card.country-card: $country
-for: $country in $countries 
+for: $country in $countries
 
 \-- end: ftd.row
 
@@ -364,9 +364,9 @@ Join us on Discord, and share your package which you will create following this
 video. You can share it on the discord's `show-and-tell` channel.
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
-the `fastn` website. 
+the `fastn` website.
 
-Support us by clicking on this link and give us a star ⭐ on GitHub and join 
+Support us by clicking on this link and give us a star ⭐ on GitHub and join
 our fastn community on Discord.
 
 

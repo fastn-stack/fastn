@@ -34,7 +34,7 @@ favicon: /-/fastn.com/images/favicon.svg
 
 # Examples: /examples/
   skip: true
-  
+
 # Explore: /frontend/
 
 ## Features: /frontend/
@@ -932,7 +932,7 @@ skip: true
 - A Content Writer’s Journey with fastn: /writer/
   document: blog/writer-journey.ftd
 - fastn might prove you wrong: /prove/
-  document: blog/prove-you-wrong.ftd 
+  document: blog/prove-you-wrong.ftd
 - The Intimidation of Programming: /intimidation/
   document: blog/the-intimidation-of-programming.ftd
 - Optimize your website: /blog/seo-meta/
@@ -949,7 +949,7 @@ skip: true
   document: blog/show-cs.ftd
 - Using Custom Breakpoints: /breakpoint/
   document: blog/breakpoint.ftd
-  
+
 
 # dev: /d/
   skip: true

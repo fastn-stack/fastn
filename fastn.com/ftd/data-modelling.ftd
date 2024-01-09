@@ -37,7 +37,7 @@ It has support for [typed variables](variables/), [`records`](ftd/record/)
 (`struct` in other languages), [`or-type`](ftd/or-type/) (`enum` in Rust, also
 called "algebraic data type") and [lists](ftd/list/).
 
-`fastn` files can be validated to conform to strict type or not, and this can be 
+`fastn` files can be validated to conform to strict type or not, and this can be
 used by editors to assist humans write correct `fastn` files.
 
 ;; Todo:

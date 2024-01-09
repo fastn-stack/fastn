@@ -22,35 +22,35 @@ component. It also takes `input` which is the timeline name.
 
 -- ds.rendered: Sample code using `ftd.toggle-play-rive(...)`
 
--- ds.rendered.input:
-
-\-- ftd.rive:
-id: vehicle
-src: https://cdn.rive.app/animations/vehicles.riv
-autoplay: false
-artboard: Jeep
-width.fixed.px: 600
-
-\-- ftd.text: Idle/Run
-$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
-align-self: center
-
-
--- ds.rendered.output:
-
--- ftd.rive:
-id: vehicle
-src: https://cdn.rive.app/animations/vehicles.riv
-autoplay: false
-artboard: Jeep
-width.fixed.px: 600
-
--- ftd.text: Idle/Run
-$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
-align-self: center
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.rive:
+	id: vehicle
+	src: https://cdn.rive.app/animations/vehicles.riv
+	autoplay: false
+	artboard: Jeep
+	width.fixed.px: 600
+	
+	\-- ftd.text: Idle/Run
+	$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
+	align-self: center
+	
+	
+	-- ds.rendered.output:
+	
+		-- ftd.rive:
+		id: vehicle
+		src: https://cdn.rive.app/animations/vehicles.riv
+		autoplay: false
+		artboard: Jeep
+		width.fixed.px: 600
+		
+		-- ftd.text: Idle/Run
+		$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
+		align-self: center
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -84,27 +84,27 @@ component. It also takes `input` which is the timeline name.
 
 -- ds.rendered: Sample code using `ftd.play-rive(...)` and `ftd.pause-rive(...)`
 
--- ds.rendered.input:
-
-\-- ftd.rive:
-id: bell
-src: $fastn-assets.files.assets.bell-icon.riv
-autoplay: false
-width.fixed.px: 200
-$on-mouse-enter$: $ftd.play-rive(rive = bell, input = Hover)
-$on-mouse-leave$: $ftd.pause-rive(rive = bell, input = Hover)
-
--- ds.rendered.output:
-
--- ftd.rive:
-id: bell
-src: $fastn-assets.files.assets.bell-icon.riv
-autoplay: false
-width.fixed.px: 200
-$on-mouse-enter$: $ftd.play-rive(rive = bell, input = Hover)
-$on-mouse-leave$: $ftd.pause-rive(rive = bell, input = Hover)
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.rive:
+	id: bell
+	src: $fastn-assets.files.assets.bell-icon.riv
+	autoplay: false
+	width.fixed.px: 200
+	$on-mouse-enter$: $ftd.play-rive(rive = bell, input = Hover)
+	$on-mouse-leave$: $ftd.pause-rive(rive = bell, input = Hover)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.rive:
+		id: bell
+		src: $fastn-assets.files.assets.bell-icon.riv
+		autoplay: false
+		width.fixed.px: 200
+		$on-mouse-enter$: $ftd.play-rive(rive = bell, input = Hover)
+		$on-mouse-leave$: $ftd.pause-rive(rive = bell, input = Hover)
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -136,25 +136,25 @@ machine.
 
 -- ds.rendered: Sample code using `ftd.fire-rive(...)`
 
--- ds.rendered.input:
-
-\-- ftd.rive:
-id: van
-src: https://cdn.rive.app/animations/vehicles.riv
-width.fixed.px: 400
-state-machine: bumpy
-$on-click$: $ftd.fire-rive(rive = van, input = bump)
-
--- ds.rendered.output:
-
--- ftd.rive:
-id: van
-src: https://cdn.rive.app/animations/vehicles.riv
-width.fixed.px: 400
-state-machine: bumpy
-$on-click$: $ftd.fire-rive(rive = van, input = bump)
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.rive:
+	id: van
+	src: https://cdn.rive.app/animations/vehicles.riv
+	width.fixed.px: 400
+	state-machine: bumpy
+	$on-click$: $ftd.fire-rive(rive = van, input = bump)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.rive:
+		id: van
+		src: https://cdn.rive.app/animations/vehicles.riv
+		width.fixed.px: 400
+		state-machine: bumpy
+		$on-click$: $ftd.fire-rive(rive = van, input = bump)
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -177,25 +177,25 @@ input.
 
 -- ds.rendered: Sample code using `ftd.set-rive-integer(...)`
 
--- ds.rendered.input:
-
-\-- ftd.rive:
-id: helix-loader
-src: $fastn-assets.files.assets.helix-loader.riv
-width.fixed.px: 400
-state-machine: State Machine
-$on-click$: $ftd.set-rive-integer(rive = helix-loader, input = Load Percentage, value = 50)
-
--- ds.rendered.output:
-
--- ftd.rive:
-id: helix-loader
-src: $fastn-assets.files.assets.helix-loader.riv
-width.fixed.px: 400
-state-machine: State Machine
-$on-click$: $ftd.set-rive-integer(rive = helix-loader, input = Load Percentage, value = 50)
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.rive:
+	id: helix-loader
+	src: $fastn-assets.files.assets.helix-loader.riv
+	width.fixed.px: 400
+	state-machine: State Machine
+	$on-click$: $ftd.set-rive-integer(rive = helix-loader, input = Load Percentage, value = 50)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.rive:
+		id: helix-loader
+		src: $fastn-assets.files.assets.helix-loader.riv
+		width.fixed.px: 400
+		state-machine: State Machine
+		$on-click$: $ftd.set-rive-integer(rive = helix-loader, input = Load Percentage, value = 50)
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -217,30 +217,30 @@ component and `input` which is the boolean type.
 
 -- ds.rendered: Sample code using `ftd.toggle-rive-boolean(...)`
 
--- ds.rendered.input:
-
-\-- ftd.rive:
-id: toggle
-src: $fastn-assets.files.assets.toggleufbot.riv
-state-machine: StateMachine
-width.fixed.px: 400
-
-\-- ftd.text: Click me
-$on-click$: $ftd.toggle-rive-boolean(rive = toggle, input = Toggle)
-
--- ds.rendered.output:
-
--- ftd.rive:
-id: toggle
-src: $fastn-assets.files.assets.toggleufbot.riv
-state-machine: StateMachine
-width.fixed.px: 400
-
--- ftd.text: Click me
-$on-click$: $ftd.toggle-rive-boolean(rive = toggle, input = Toggle)
-color: $inherited.colors.text
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.rive:
+	id: toggle
+	src: $fastn-assets.files.assets.toggleufbot.riv
+	state-machine: StateMachine
+	width.fixed.px: 400
+	
+	\-- ftd.text: Click me
+	$on-click$: $ftd.toggle-rive-boolean(rive = toggle, input = Toggle)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.rive:
+		id: toggle
+		src: $fastn-assets.files.assets.toggleufbot.riv
+		state-machine: StateMachine
+		width.fixed.px: 400
+		
+		-- ftd.text: Click me
+		$on-click$: $ftd.toggle-rive-boolean(rive = toggle, input = Toggle)
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -262,27 +262,27 @@ input.
 
 -- ds.rendered: Sample code using `ftd.set-rive-boolean(...)`
 
--- ds.rendered.input:
-
-\-- ftd.rive:
-id: mousetoggle
-src: $fastn-assets.files.assets.toggleufbot.riv
-state-machine: StateMachine
-width.fixed.px: 400
-$on-mouse-enter$: $ftd.set-rive-boolean(rive = mousetoggle, input = Toggle, value = true)
-$on-mouse-leave$: $ftd.set-rive-boolean(rive = mousetoggle, input = Toggle, value = false)
-
--- ds.rendered.output:
-
--- ftd.rive:
-id: mousetoggle
-src: $fastn-assets.files.assets.toggleufbot.riv
-state-machine: StateMachine
-width.fixed.px: 400
-$on-mouse-enter$: $ftd.set-rive-boolean(rive = mousetoggle, input = Toggle, value = true)
-$on-mouse-leave$: $ftd.set-rive-boolean(rive = mousetoggle, input = Toggle, value = false)
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.rive:
+	id: mousetoggle
+	src: $fastn-assets.files.assets.toggleufbot.riv
+	state-machine: StateMachine
+	width.fixed.px: 400
+	$on-mouse-enter$: $ftd.set-rive-boolean(rive = mousetoggle, input = Toggle, value = true)
+	$on-mouse-leave$: $ftd.set-rive-boolean(rive = mousetoggle, input = Toggle, value = false)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.rive:
+		id: mousetoggle
+		src: $fastn-assets.files.assets.toggleufbot.riv
+		state-machine: StateMachine
+		width.fixed.px: 400
+		$on-mouse-enter$: $ftd.set-rive-boolean(rive = mousetoggle, input = Toggle, value = true)
+		$on-mouse-leave$: $ftd.set-rive-boolean(rive = mousetoggle, input = Toggle, value = false)
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 

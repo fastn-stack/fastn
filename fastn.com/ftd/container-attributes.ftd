@@ -12,35 +12,35 @@ will have no effect.
 
 -- ds.rendered: Sample code using `wrap`
 
--- ds.rendered.input:
-
-\-- ftd.row:
-width.fixed.px: 100
-spacing.fixed.px: 10
-border-color: $red-yellow
-border-width.px: 2
-color: $inherited.colors.text
-wrap: true ;; <hl>
-
-\-- ftd.text: One
-
-\-- ftd.text: Two
-
-\-- ftd.text: Three
-
-\-- ftd.text: Four
-
-\-- ftd.text: Five
-
-\-- ftd.text: Six
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- wrap-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	width.fixed.px: 100
+	spacing.fixed.px: 10
+	border-color: $red-yellow
+	border-width.px: 2
+	color: $inherited.colors.text
+	wrap: true ;; <hl>
+	
+	\-- ftd.text: One
+	
+	\-- ftd.text: Two
+	
+	\-- ftd.text: Three
+	
+	\-- ftd.text: Four
+	
+	\-- ftd.text: Five
+	
+	\-- ftd.text: Six
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- wrap-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -56,28 +56,28 @@ inside a flex container like `ftd.row`, `ftd.column`. It takes value of type
 
 -- ds.rendered: Sample code using `align-content`
 
--- ds.rendered.input:
-
-\-- ftd.column:
-width.fixed.px: 300
-align-content: top-center ;; <hl>
-color: $inherited.colors.text
-border-color: $red-yellow
-border-width.px: 2
-
-\-- ftd.text: One
-
-\-- ftd.text: Two
-
-\-- ftd.text: Three
-
-\-- end: ftd.column
-
--- ds.rendered.output:
-
--- align-content-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.column:
+	width.fixed.px: 300
+	align-content: top-center ;; <hl>
+	color: $inherited.colors.text
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: One
+	
+	\-- ftd.text: Two
+	
+	\-- ftd.text: Three
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- align-content-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -100,28 +100,28 @@ and is optional.
 
 -- ds.rendered: Sample code using `spacing`
 
--- ds.rendered.input:
-
-\-- ftd.row:
-spacing: space-evenly ;; <hl>
-border-color: $red-yellow
-border-width.px: 2
-color: $inherited.colors.text
-width: fill-container
-
-\-- ftd.text: One
-
-\-- ftd.text: Two
-
-\-- ftd.text: Three
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- spacing-sample:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	spacing: space-evenly ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	color: $inherited.colors.text
+	width: fill-container
+	
+	\-- ftd.text: One
+	
+	\-- ftd.text: Two
+	
+	\-- ftd.text: Three
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- spacing-sample:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -140,18 +140,18 @@ border-color: $red-yellow
 border-width.px: 2
 wrap: true
 
--- ftd.text: One
-
--- ftd.text: Two
-
--- ftd.text: Three
-
--- ftd.text: Four
-
--- ftd.text: Five
-
--- ftd.text: Six
-
+	-- ftd.text: One
+	
+	-- ftd.text: Two
+	
+	-- ftd.text: Three
+	
+	-- ftd.text: Four
+	
+	-- ftd.text: Five
+	
+	-- ftd.text: Six
+	
 -- end: ftd.row
 
 -- end: wrap-sample
@@ -170,12 +170,12 @@ color: $inherited.colors.text
 border-color: $red-yellow
 border-width.px: 2
 
--- ftd.text: One
-
--- ftd.text: Two
-
--- ftd.text: Three
-
+	-- ftd.text: One
+	
+	-- ftd.text: Two
+	
+	-- ftd.text: Three
+	
 -- end: ftd.column
 
 -- end: align-content-sample
@@ -196,12 +196,12 @@ border-width.px: 2
 color: $inherited.colors.text
 width: fill-container
 
--- ftd.text: One
-
--- ftd.text: Two
-
--- ftd.text: Three
-
+	-- ftd.text: One
+	
+	-- ftd.text: Two
+	
+	-- ftd.text: Three
+	
 -- end: ftd.row
 
 -- end: spacing-sample

@@ -7,10 +7,10 @@ project.
 -- ds.h1: REST API
 
 
-REST stands for `Representational State Transfer`. REST APIs use standard HTTP 
-methods (GET, POST, PUT, DELETE) to interact. 
+REST stands for `Representational State Transfer`. REST APIs use standard HTTP
+methods (GET, POST, PUT, DELETE) to interact.
 
-REST APIs often use common data formats for the information exchange, such as 
+REST APIs often use common data formats for the information exchange, such as
 JSON (Javascript Object Notation) or XML (eXtensible Markup Language)
 
 

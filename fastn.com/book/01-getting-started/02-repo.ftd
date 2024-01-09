@@ -190,7 +190,6 @@ count and it takes you to the following page:
 
 ;; Note to editor, the caption is a joke
 ;; https://www.reddit.com/r/startrek/comments/9hzrqp/
-
 -- ds.image: There... are... ~four~ two commits!
 src: $assets.files.images.commits.png
 

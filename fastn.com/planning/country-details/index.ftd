@@ -5,8 +5,8 @@ This guide provides step-by-step instructions to deploy the `country-details`
 project. The deployment will be on Heroku using
 the fastn buildpack.
 
-We are going to create a project in `fastn` that will create a Dynamic UI to 
-display the countries along with their Population, Region and Capital among 
+We are going to create a project in `fastn` that will create a Dynamic UI to
+display the countries along with their Population, Region and Capital among
 other data.
 
 **VIDEO 0: Walkthrough, showcasing final UI**
@@ -17,7 +17,7 @@ other data.
 
 -- ds.h1: Basics of http and Data modelling
 
-Before that, let's take another example where the json data will only have 
+Before that, let's take another example where the json data will only have
 country-name and capital.
 
 **VIDEO 1: Basics of http and Data modelling though an example**
@@ -61,32 +61,32 @@ role: $inherited.types.copy-regular
 
 
 
--- ds.h1: Building dynamic country list page 
+-- ds.h1: Building dynamic country list page
 
 **VIDEO 2: explanation of nested model system and fetching and displaying the
   data that is needed for the index page that will have country list**
- 
+
 - Create a `models.ftd` to do all the data modelling
 
 - Create `card.ftd` document that will have the UI component that will display
-  the countries and its data in form of a card. 
+  the countries and its data in form of a card.
 
-- In `index.ftd` we will do `http-processor` and call the UI component and 
+- In `index.ftd` we will do `http-processor` and call the UI component and
 apply `for` loop.
 
 
 
 -- ds.h1: Building country details page
 
-**VIDEO 3: focuses on country details page** 
+**VIDEO 3: focuses on country details page**
 
-- Firstly, we will move the header part in a separate document `header.ftd` 
+- Firstly, we will move the header part in a separate document `header.ftd`
 inside the `components` folder
 
-- Create a `details.ftd` document that will define 2 string variables `cca2` 
+- Create a `details.ftd` document that will define 2 string variables `cca2`
 and `url`.
-  - `cca2` string will store the value through the request-data processor 
-  - the `url` string will use the function that appends value of `cca2` to the 
+  - `cca2` string will store the value through the request-data processor
+  - the `url` string will use the function that appends value of `cca2` to the
   base url.
 
 - Create `utility.ftd` to write the functions

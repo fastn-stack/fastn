@@ -21,10 +21,10 @@ v: eRSgpMqTduQ
 
 -- ds.h1: Featured Components - How to use?
 
-This Crash Course is for everyone, for the one's who want to learn how to 
+This Crash Course is for everyone, for the one's who want to learn how to
 create a components like the one we are going to create in this Crash Course.
-And we also respect the choice of those wanting to know **how to use** the 
-`Featured Components` directly and rather focus on building their websites or 
+And we also respect the choice of those wanting to know **how to use** the
+`Featured Components` directly and rather focus on building their websites or
 blog-posts or create exciting UIs.
 
 
@@ -43,7 +43,7 @@ Here is the list of packages I have used:
 
 -- cbox.text-4: **doc-site**
 
- fifthtry.github.io/doc-site    
+ fifthtry.github.io/doc-site
 
 
 -- cbox.text-4: **admonitions**
@@ -53,10 +53,10 @@ Here is the list of packages I have used:
 
 -- cbox.text-4:  **color-scheme**
 
-fastn-community.github.io/winter-cs     
+fastn-community.github.io/winter-cs
 
 
--- ds.markdown: 
+-- ds.markdown:
 
 You can include any such component of your own. For example, I will include the
 box component I created earlier.
@@ -64,7 +64,7 @@ box component I created earlier.
 
 -- cbox.text-4: **expander**
 
-gargajit.github.io/expander     
+gargajit.github.io/expander
 
 
 
@@ -145,7 +145,7 @@ lang: ftd
 
 \-- ftd.column:
 padding.px: 50
-background.solid: #eee 
+background.solid: #eee
 width: fill-container
 height: fill-container
 align-content: top-center
@@ -185,7 +185,7 @@ width: fill-container
 -- ds.h3: Container Components
 if: { source == "default" }
 
-Column (top to bottom): 
+Column (top to bottom):
 
 
 -- ds.image:
@@ -212,7 +212,7 @@ if: { source == "default" }
 -- ds.markdown:
 if: { source == "default" }
 
-Row (left to right): 
+Row (left to right):
 
 -- ds.image:
 if: { source == "default" }

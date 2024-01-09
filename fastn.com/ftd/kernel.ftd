@@ -2,7 +2,7 @@
 
 -- ds.page: Kernel Components
 
-`fastn` comes with a few `kernel` components, these components are the building 
+`fastn` comes with a few `kernel` components, these components are the building
 blocks for building all other components.
 
 -- cbox.info: import

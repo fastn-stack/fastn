@@ -20,7 +20,7 @@ yo: 42
 
 -- ds.markdown:
 
-Each section starts with `-- `. 
+Each section starts with `-- `.
 
 The section has these properties:
 
@@ -54,14 +54,14 @@ lang: ftd
 
 -- ds.h2: `section name`
 
-The section name is the only **mandatory parameter** for a section. Name starts 
+The section name is the only **mandatory parameter** for a section. Name starts
 after `-- ` or section kind if present, and ends with the first `:`. Trailing
 `:` is mandatory.
 
-In our example, the name of the first section is `some section`, and the second 
+In our example, the name of the first section is `some section`, and the second
 section's name is `something`.
 
-Section name contains alphanumeric characters, underscores, space, dots(`.`), 
+Section name contains alphanumeric characters, underscores, space, dots(`.`),
 hash(`#`), and hyphens(`-`). Colon terminates the section name.
 
 Leading and trailing whitespaces are not considered part of the section name.
@@ -73,7 +73,7 @@ the `caption` of the section.
 
 The `caption` is optional.
 
-In our example, the first section's caption is "the caption of the section", and 
+In our example, the first section's caption is "the caption of the section", and
 the second section does not have a caption.
 
 Leading and trailing whitespaces are not considered part of the caption.

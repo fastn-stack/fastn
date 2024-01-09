@@ -1,3 +1,5 @@
+/-- ftd.text:
+
 ## Events: /events/webdev-with-ftd/
    document: webdev-with-ftd.ftd
 
@@ -49,13 +51,13 @@
 ;;- `fastn` Community: /community/
 - Docs: /docs/
 
-  
+
 
 
 # Create Website: /create-website/
   document: author/how-to/install.ftd
   source: build
-  
+
 ## Create Website: /create-website/
   document: author/how-to/install.ftd
 
@@ -68,7 +70,7 @@
 - Hello World: /expander/hello-world/-/build/
 - Basic UI: /expander/basic-ui/-/build/
 - Publish a package: /expander/publish/-/build/
-- Create clean URLs: 
+- Create clean URLs:
 - Create rounded border: /rounded-border/-/build/
   document: /expander/border-radius.ftd
 - Using images in documents: /using-images/-/build/
@@ -82,14 +84,14 @@
 - Using page component: /ds-page/
   document: /expander/ds/ds-page.ftd
   skip: true
-- Redirects:  
+- Redirects:
 
 
 
 
 ## Learn: /frontend/learn/
   document: /expander/index.ftd
-   
+
 - Expander Crash Course: /expander/
     - Install `fastn`: /install/-/expander/
       document: author/how-to/install.ftd

@@ -223,12 +223,12 @@ The output appears as follows:
 
 -- ds.output:
 
--- ftd.column:
-colors: $sunset-cs.main
-
--- my-color:
-
--- end: ftd.column
+	-- ftd.column:
+	colors: $sunset-cs.main
+	
+		-- my-color:
+		
+	-- end: ftd.column
 
 -- end: ds.output
 
@@ -254,12 +254,12 @@ colors: $forest-cs.main
 
 -- ds.output:
 
--- ftd.column:
-colors: $forest-cs.main
-
--- my-color:
-
--- end: ftd.column
+	-- ftd.column:
+	colors: $forest-cs.main
+	
+		-- my-color:
+		
+	-- end: ftd.column
 
 -- end: ds.output
 
@@ -347,74 +347,74 @@ background.solid: $inherited.colors.background.step-1
 padding.px: 40
 spacing.fixed.px: 20
 
--- dark-mode-switcher:
-
--- ftd.row:
-width: fill-container
-spacing.fixed.px: 10
-wrap: true
-
-
--- ftd.column:
-width.fixed.percent: 47
-colors: $winter-cs.main
-
--- ftd.text: Winter
-role: $inherited.types.heading-small
-color: $inherited.colors.text-strong
-
--- color-display:
-
--- end: ftd.column
-
-
-
--- ftd.column:
-width.fixed.percent: 47
-colors: $dark-flame-cs.main
-
--- ftd.text: Dark flame
-role: $inherited.types.heading-small
-color: $inherited.colors.text-strong
-
--- color-display:
-
--- end: ftd.column
+	-- dark-mode-switcher:
+	
+	-- ftd.row:
+	width: fill-container
+	spacing.fixed.px: 10
+	wrap: true
+	
+	
+		-- ftd.column:
+		width.fixed.percent: 47
+		colors: $winter-cs.main
+		
+			-- ftd.text: Winter
+			role: $inherited.types.heading-small
+			color: $inherited.colors.text-strong
+			
+			-- color-display:
+			
+		-- end: ftd.column
 
 
 
--- ftd.column:
-width.fixed.percent: 47
-colors: $forest-cs.main
-margin-top.px: 20
-
--- ftd.text: Forest
-role: $inherited.types.heading-small
-color: $inherited.colors.text-strong
-
--- color-display:
-
--- end: ftd.column
-
+		-- ftd.column:
+		width.fixed.percent: 47
+		colors: $dark-flame-cs.main
+		
+			-- ftd.text: Dark flame
+			role: $inherited.types.heading-small
+			color: $inherited.colors.text-strong
+			
+			-- color-display:
+			
+		-- end: ftd.column
 
 
 
--- ftd.column:
-width.fixed.percent: 47
-colors: $sunset-cs.main
-margin-top.px: 20
+		-- ftd.column:
+		width.fixed.percent: 47
+		colors: $forest-cs.main
+		margin-top.px: 20
+		
+			-- ftd.text: Forest
+			role: $inherited.types.heading-small
+			color: $inherited.colors.text-strong
+			
+			-- color-display:
+			
+		-- end: ftd.column
 
--- ftd.text: Sunset
-role: $inherited.types.heading-small
-color: $inherited.colors.text-strong
 
 
--- color-display:
 
--- end: ftd.column
+		-- ftd.column:
+		width.fixed.percent: 47
+		colors: $sunset-cs.main
+		margin-top.px: 20
+		
+			-- ftd.text: Sunset
+			role: $inherited.types.heading-small
+			color: $inherited.colors.text-strong
+			
+			
+			-- color-display:
+			
+		-- end: ftd.column
 
 
--- end: ftd.row
+	-- end: ftd.row
 -- end: ftd.column
 
 -- end: color-schemes
@@ -437,40 +437,40 @@ border-color: $inherited.colors.border
 background.solid: $inherited.colors.error.base
 border-width.px: 4
 
--- custom-dots:
+	-- custom-dots:
+	
+	-- ftd.column:
+	width: fill-container
+	background.solid: $inherited.colors.background.base
+	border-width.px: 4
+	border-color: $inherited.colors.shadow
+	
+		-- header:
+		
+		-- love-color-text:
+		
+		
+		-- ftd.column:
+		width: fill-container
+		padding.px: 10
+		spacing.fixed.px: 30
+		
+			-- primary-dots:
+			
+			-- content:
+			
+			-- ftd.image:
+			src: $fastn-assets.files.images.cs.show-cs-1.jpg
+			width: fill-container
+			border-color: $inherited.colors.shadow
+			border-width.px: 10
+			height.fixed.px: 162
+			
+			-- secondary-dots:
+			
+		-- end: ftd.column
 
--- ftd.column:
-width: fill-container
-background.solid: $inherited.colors.background.base
-border-width.px: 4
-border-color: $inherited.colors.shadow
-
--- header:
-
--- love-color-text:
-
-
--- ftd.column:
-width: fill-container
-padding.px: 10
-spacing.fixed.px: 30
-
--- primary-dots:
-
--- content:
-
--- ftd.image:
-src: $fastn-assets.files.images.cs.show-cs-1.jpg
-width: fill-container
-border-color: $inherited.colors.shadow
-border-width.px: 10
-height.fixed.px: 162
-
--- secondary-dots:
-
--- end: ftd.column
-
--- end: ftd.column
+	-- end: ftd.column
 
 -- end: ftd.row
 
@@ -506,11 +506,11 @@ padding-horizontal.px: 10
 border-bottom-width.px: 4
 border-color: $inherited.colors.border-strong
 
--- ftd.text: Color scheme
-role: $inherited.types.heading-small
-color: $inherited.colors.text-strong
-padding-vertical.px: 20
-
+	-- ftd.text: Color scheme
+	role: $inherited.types.heading-small
+	color: $inherited.colors.text-strong
+	padding-vertical.px: 20
+	
 -- end: ftd.row
 
 
@@ -546,41 +546,41 @@ width: fill-container
 wrap: true
 spacing: space-between
 
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-primary.base
-
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-primary.hover
-
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-primary.pressed
-
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-primary.disabled
-
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-primary.focused
-
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-primary.border
-
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-primary.text
-
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-primary.base
+	
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-primary.hover
+	
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-primary.pressed
+	
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-primary.disabled
+	
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-primary.focused
+	
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-primary.border
+	
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-primary.text
+	
 -- end: ftd.row
 
 -- end: primary-dots
@@ -600,41 +600,41 @@ width: fill-container
 wrap: true
 spacing: space-between
 
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-secondary.base
-
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-secondary.hover
-
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-secondary.pressed
-
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-secondary.disabled
-
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-secondary.focused
-
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-secondary.border
-
--- ftd.column:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.cta-secondary.text
-
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-secondary.base
+	
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-secondary.hover
+	
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-secondary.pressed
+	
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-secondary.disabled
+	
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-secondary.focused
+	
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-secondary.border
+	
+	-- ftd.column:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.cta-secondary.text
+	
 -- end: ftd.row
 
 -- end: secondary-dots
@@ -655,56 +655,56 @@ background.solid: $inherited.colors.cta-secondary.text
 spacing.fixed.px: 15
 padding-horizontal.px: 2
 
--- ftd.row:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.custom.one
-
--- ftd.row:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.custom.two
-
--- ftd.row:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.custom.three
-
--- ftd.row:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.custom.four
-
--- ftd.row:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.custom.five
-
--- ftd.row:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.custom.six
-
--- ftd.row:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.custom.seven
-
--- ftd.row:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.custom.eight
-
--- ftd.row:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.custom.nine
-
--- ftd.row:
-width.fixed.px: 15
-height.fixed.px: 15
-background.solid: $inherited.colors.custom.ten
-
+	-- ftd.row:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.custom.one
+	
+	-- ftd.row:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.custom.two
+	
+	-- ftd.row:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.custom.three
+	
+	-- ftd.row:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.custom.four
+	
+	-- ftd.row:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.custom.five
+	
+	-- ftd.row:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.custom.six
+	
+	-- ftd.row:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.custom.seven
+	
+	-- ftd.row:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.custom.eight
+	
+	-- ftd.row:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.custom.nine
+	
+	-- ftd.row:
+	width.fixed.px: 15
+	height.fixed.px: 15
+	background.solid: $inherited.colors.custom.ten
+	
 -- end: ftd.column
 
 -- end: custom-dots
@@ -720,22 +720,22 @@ background.solid: $inherited.colors.custom.ten
 width: fill-container
 spacing: space-around
 
--- button.button: Dark Mode
-role: primary
-large: true
-$on-click$: $ftd.enable-dark-mode()
-
--- button.button: Light Mode
-role: secondary
-large: true
-$on-click$: $ftd.enable-light-mode()
-
--- button.button: System Mode
-role: tertiary
-large: true
-$on-click$: $ftd.enable-system-mode()
-
-
+	-- button.button: Dark Mode
+	role: primary
+	large: true
+	$on-click$: $ftd.enable-dark-mode()
+	
+	-- button.button: Light Mode
+	role: secondary
+	large: true
+	$on-click$: $ftd.enable-light-mode()
+	
+	-- button.button: System Mode
+	role: tertiary
+	large: true
+	$on-click$: $ftd.enable-system-mode()
+	
+	
 -- end: ftd.row
 
 -- end: dark-mode-switcher

@@ -3,13 +3,13 @@
 -- ds.page: Basics of text - `fastn` Workshop
 
 In the fifth part of the workshop, we will learn how to add text using to basic
-`markdown` styling. 
+`markdown` styling.
 
 `fastn` supports **Markdown**. Hence, instead of learning tags, one can still
 create content-heavy and powerful website using plain text without missing out
 on formatting.
 
-In our `doc-site` package we have a library of components that can be used to 
+In our `doc-site` package we have a library of components that can be used to
 add styling and apply all markdown syntax.
 
 
@@ -18,11 +18,11 @@ add styling and apply all markdown syntax.
 To add the heading to your content use the header components of `doc-site`.
 `doc-site` has three levels of headings: `h1`, `h2` and `h3`
 
-One by one, lets uncomment [`ds.h1`](https://github.com/fastn-stack/workshop/blob/main/a-website/05-basic-of-text/index.ftd#L16) 
-and [`ds.h2`](https://github.com/fastn-stack/workshop/blob/main/a-website/05-basic-of-text/index.ftd#L24) 
-and see the output after refreshing the browser. 
+One by one, lets uncomment [`ds.h1`](https://github.com/fastn-stack/workshop/blob/main/a-website/05-basic-of-text/index.ftd#L16)
+and [`ds.h2`](https://github.com/fastn-stack/workshop/blob/main/a-website/05-basic-of-text/index.ftd#L24)
+and see the output after refreshing the browser.
 
-The text written after `-- ds.h1:` becomes the heading and using this component 
+The text written after `-- ds.h1:` becomes the heading and using this component
 you can also add the body in the body area.
 
 -- ftd.image:

@@ -19,11 +19,11 @@ Understanding of datatypes, components.
 **Script**
 
 Hey Guys, my name is Ajit and I am back with another video on `fastn`.
-Today we will learn how to create a postcard using `fastn language`. 
+Today we will learn how to create a postcard using `fastn language`.
 
 The postcard I will be creating looks like this:
 
--- ds.image: 
+-- ds.image:
 src: $fastn-assets.files.planning.post-card.postcard.png
 
 
@@ -46,8 +46,8 @@ lang:ftd
 
 -- ds.markdown:
 
-To this component, we will need some title, subtitle, description, a button and 
-an image. So add the following porperties to this component. 
+To this component, we will need some title, subtitle, description, a button and
+an image. So add the following porperties to this component.
 
 -- ds.code:
 lang:ftd
@@ -65,8 +65,8 @@ optional string cta-text:
 Title as a caption, subtitle as a string and description in body. Image and
 cta-link and cta-text for button.
 
-And we will need colors for text, background, border, for button. So we will 
-add those properties too. 
+And we will need colors for text, background, border, for button. So we will
+add those properties too.
 
 -- ds.code:
 lang: ftd
@@ -81,9 +81,9 @@ optional ftd.color cta-text-color: $inherited.colors.cta-primary.text
 
 -- ds.markdown:
 
-If you noticed the post card has all the text on left side and image on right 
-side. So we will put them in row. And inside that row, the title, subtitle, 
-description and button is in top to down manner so we will put them inside a 
+If you noticed the post card has all the text on left side and image on right
+side. So we will put them in row. And inside that row, the title, subtitle,
+description and button is in top to down manner so we will put them inside a
 column.
 
 
@@ -115,7 +115,7 @@ height.fixed.px: 420
 
 -- ds.markdown:
 
-Now to this row we will add column for the texts in the title, subtitle, 
+Now to this row we will add column for the texts in the title, subtitle,
 description and button.
 
 -- ds.code:
@@ -142,7 +142,7 @@ lang: ftd
 
 -- ds.markdown:
 
-Let's give properties to this column and these texts as well add condition to 
+Let's give properties to this column and these texts as well add condition to
 the optional texts.
 
 -- ds.code:
@@ -175,7 +175,7 @@ width.fixed.px: 350
 
 -- ds.markdown:
 
-The button has the text as well as the image. From left to right. So we will 
+The button has the text as well as the image. From left to right. So we will
 put it in row.
 
 
@@ -203,7 +203,7 @@ lang: ftd
 link: $post-card.cta-link
 color: $inherited.colors.cta-primary.text
 width.fixed.px: 200
-height.fixed.px: 50 
+height.fixed.px: 50
 background.solid: $post-card.cta-bg-color
 border-width.px: 1
 border-color: $post-card.cta-border-color
@@ -252,5 +252,3 @@ Thank you guys.
 
 
 -- end: ds.page
-
-

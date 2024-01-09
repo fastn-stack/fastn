@@ -28,17 +28,17 @@ It takes value of type [`string`](ftd/built-in-types/#string) and is optional.
 
 -- ds.rendered: Sample code using `src`
 
--- ds.rendered.input:
-
-\-- ftd.iframe:
-src: https://www.example.com
-
--- ds.rendered.output:
-
--- ftd.iframe:
-src: https://www.example.com
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.iframe:
+	src: https://www.example.com
+	
+	-- ds.rendered.output:
+	
+		-- ftd.iframe:
+		src: https://www.example.com
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -57,25 +57,25 @@ your iframe element.
 
 -- ds.rendered: Sample code using `srcdoc`
 
--- ds.rendered.input:
-
-\-- ftd.iframe:
-border-width.px: 4
-border-color: $red-yellow
-padding.px: 20
-
-<p style='color: coral;'>This text is coral.</p> ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.iframe:
-border-width.px: 4
-border-color: $red-yellow
-padding.px: 20
-
-<p style='color: coral;'>This text is coral</p>
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.iframe:
+	border-width.px: 4
+	border-color: $red-yellow
+	padding.px: 20
+	
+	<p style='color: coral;'>This text is coral.</p> ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.iframe:
+		border-width.px: 4
+		border-color: $red-yellow
+		padding.px: 20
+		
+		<p style='color: coral;'>This text is coral</p>
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -92,17 +92,17 @@ It takes value of type [`string`](ftd/built-in-types/#string) and is optional.
 
 -- ds.rendered: Sample code using `youtube`
 
--- ds.rendered.input:
-
-\-- ftd.iframe:
-youtube: 10MHfy3b3c8 ;; <hl>
-
--- ds.rendered.output:
-
--- ftd.iframe:
-youtube: 10MHfy3b3c8
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.iframe:
+	youtube: 10MHfy3b3c8 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.iframe:
+		youtube: 10MHfy3b3c8
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -122,19 +122,19 @@ and is optional.
 
 -- ds.rendered: Sample code using `loading`
 
--- ds.rendered.input:
-
-\-- ftd.iframe:
-youtube: 10MHfy3b3c8 ;; <hl>
-loading: lazy
-
--- ds.rendered.output:
-
--- ftd.iframe:
-youtube: 10MHfy3b3c8
-loading: lazy
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- ftd.iframe:
+	youtube: 10MHfy3b3c8 ;; <hl>
+	loading: lazy
+	
+	-- ds.rendered.output:
+	
+		-- ftd.iframe:
+		youtube: 10MHfy3b3c8
+		loading: lazy
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 

@@ -34,35 +34,35 @@ all the [common attributes ](ftd/common/).
 
 -- ds.rendered: Sample code using `ftd.container`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.container:
+	color: $inherited.colors.text
+	
+	\-- ftd.text: Hello
+	display: inline
+	
+	\-- ftd.text: World
+	display: inline
+	color: $red-yellow
+	
+	\-- end: ftd.container
+	
+	-- ds.rendered.output:
+	
+		-- ftd.container:
+		color: $inherited.colors.text
+		
+			-- ftd.text: Hello
+			display: inline
+			
+			-- ftd.text: World
+			display: inline
+			color: $red-yellow
+			
+		-- end: ftd.container
 
-\-- ftd.container:
-color: $inherited.colors.text
-
-\-- ftd.text: Hello
-display: inline
-
-\-- ftd.text: World
-display: inline
-color: $red-yellow
-
-\-- end: ftd.container
-
--- ds.rendered.output:
-
--- ftd.container:
-color: $inherited.colors.text
-
--- ftd.text: Hello
-display: inline
-
--- ftd.text: World
-display: inline
-color: $red-yellow
-
--- end: ftd.container
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 

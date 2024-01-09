@@ -17,8 +17,8 @@ The `sql` processor allows you to execute SQL queries against a database. it sup
 
 -- ds.markdown:
 
-To connect to your database and determine the type of database you are using, fastn reads an environment variable called `FASTN_DB_URL`, which contains the connection string for your database. 
-You can define this variable in a `.env` file at the root of your folder, or you can define it directly in your shell environment. 
+To connect to your database and determine the type of database you are using, fastn reads an environment variable called `FASTN_DB_URL`, which contains the connection string for your database.
+You can define this variable in a `.env` file at the root of your folder, or you can define it directly in your shell environment.
 If the platform where you are hosting this website supports setting environment variables, you can declare this variable there as well.
 
 
@@ -91,8 +91,8 @@ for: $p in $people
 
 -- ds.h1: Passing Named Parameters in Your Query
 
-The `sql` processor allows you to pass named parameters in your queries. 
-You can pass a named parameter by defining it as a header/property of the section where the query is executed. 
+The `sql` processor allows you to pass named parameters in your queries.
+You can pass a named parameter by defining it as a header/property of the section where the query is executed.
 To access the named parameter in your query, use the following syntax:
 
 -- ds.code: Syntax for Named Parameters
@@ -102,7 +102,7 @@ lang: sql
 
 -- ds.markdown:
 
-In this syntax, the name following the `$` symbol represents the parameter's name, 
+In this syntax, the name following the `$` symbol represents the parameter's name,
 and you can specify its type by appending `::<PARAM_TYPE>` to indicate the desired data type.
 
 You can find the list of the data types that are currently supported by fastn:
@@ -156,8 +156,8 @@ SELECT * FROM users WHERE username = $username::STRING;
 
 -- ds.markdown:
 
-Now, whenever a visitor accesses your dynamic page, such as `/user/<username>`, 
-fastn will retrieve the username from the URL using the `request-data` processor and pass it to your SQL query as a named parameter. 
+Now, whenever a visitor accesses your dynamic page, such as `/user/<username>`,
+fastn will retrieve the username from the URL using the `request-data` processor and pass it to your SQL query as a named parameter.
 This allows you to retrieve the data of the user whose username matches the passed value.
 
 
@@ -303,14 +303,14 @@ caption person p:
 -- ftd.column:
 spacing.fixed.px: 10
 
--- ds.h2: Person
-
--- v.label-text: Name
-value: $show-person.p.name
-
--- v.label-text: Department
-value: $show-person.p.department
-
+	-- ds.h2: Person
+	
+	-- v.label-text: Name
+	value: $show-person.p.name
+	
+	-- v.label-text: Department
+	value: $show-person.p.department
+	
 -- end: ftd.column
 
 -- end: show-person

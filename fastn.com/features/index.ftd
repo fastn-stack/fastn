@@ -35,8 +35,8 @@ packages, and `fastn` can install all the dependencies of a package.
 -- ds.h1: `fastn`: Static Site Generator
 
 `fastn` can also convert `.ftd` files to static HTML files, so you can use it as
-a static site generator, and publish `.ftd` files on 
-[Github Pages](/github-pages/), [Vercel](/vercel/), S3 etc static site hosting 
+a static site generator, and publish `.ftd` files on
+[Github Pages](/github-pages/), [Vercel](/vercel/), S3 etc static site hosting
 sites.
 
 [Learn more about `fastn` as static site generator](/static/).

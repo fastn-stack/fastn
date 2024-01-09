@@ -9,33 +9,33 @@ one or more options from a set of choices.
 
 -- ds.rendered: Sample usage
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	spacing.fixed.px: 5
+	color: $inherited.colors.text
+	align-content: center
+	
+	\-- ftd.checkbox:
+	
+	\-- ftd.text: FifthTry
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- ftd.row:
+		spacing.fixed.px: 5
+		color: $inherited.colors.text
+		align-content: center
+		
+			-- ftd.checkbox:
+			
+			-- ftd.text: FifthTry
+			
+		-- end: ftd.row
 
-\-- ftd.row:
-spacing.fixed.px: 5
-color: $inherited.colors.text
-align-content: center
-
-\-- ftd.checkbox:
-
-\-- ftd.text: FifthTry
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- ftd.row:
-spacing.fixed.px: 5
-color: $inherited.colors.text
-align-content: center
-
--- ftd.checkbox:
-
--- ftd.text: FifthTry
-
--- end: ftd.row
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -47,32 +47,32 @@ checked state of `ftd.checkbox`.
 
 -- ds.rendered: Sample usage
 
--- ds.rendered.input:
-
-\-- boolean $is-checked: false
-
-\-- ftd.row:
-spacing.fixed.px: 5
-color: $inherited.colors.text
-align-content: center
-
-\-- ftd.checkbox:
-checked: $is-checked
-$on-click$: $ftd.set-bool($a = $is-checked, v = $CHECKED)
-
-\-- ftd.text: The checkbox is checked
-if: { is-checked }
-
-\-- ftd.text: The checkbox is not checked
-if: { !is-checked }
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- example-2:
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- boolean $is-checked: false
+	
+	\-- ftd.row:
+	spacing.fixed.px: 5
+	color: $inherited.colors.text
+	align-content: center
+	
+	\-- ftd.checkbox:
+	checked: $is-checked
+	$on-click$: $ftd.set-bool($a = $is-checked, v = $CHECKED)
+	
+	\-- ftd.text: The checkbox is checked
+	if: { is-checked }
+	
+	\-- ftd.text: The checkbox is not checked
+	if: { !is-checked }
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- example-2:
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -93,35 +93,35 @@ a checkbox component should be pre-selected (checked) when the page loads.
 
 -- ds.rendered: `checked`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	spacing.fixed.px: 5
+	align-content: center
+	color: $inherited.colors.text
+	
+	\-- ftd.checkbox:
+	checked: true
+	
+	\-- ftd.text: This checkbox is checked when page loads
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- ftd.row:
+		spacing.fixed.px: 5
+		align-content: center
+		color: $inherited.colors.text
+		
+			-- ftd.checkbox:
+			checked: true
+			
+			-- ftd.text: This checkbox is checked when page loads
+			
+		-- end: ftd.row
 
-\-- ftd.row:
-spacing.fixed.px: 5
-align-content: center
-color: $inherited.colors.text
-
-\-- ftd.checkbox:
-checked: true
-
-\-- ftd.text: This checkbox is checked when page loads
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- ftd.row:
-spacing.fixed.px: 5
-align-content: center
-color: $inherited.colors.text
-
--- ftd.checkbox:
-checked: true
-
--- ftd.text: This checkbox is checked when page loads
-
--- end: ftd.row
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -137,37 +137,37 @@ browsers.
 
 -- ds.rendered: `checked`
 
--- ds.rendered.input:
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	spacing.fixed.px: 5
+	align-content: center
+	color: $inherited.colors.text
+	
+	\-- ftd.checkbox:
+	enabled: false
+	checked: true
+	
+	\-- ftd.text: This checkbox is disabled and is checked
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- ftd.row:
+		spacing.fixed.px: 5
+		align-content: center
+		color: $inherited.colors.text
+		
+			-- ftd.checkbox:
+			enabled: false
+			checked: true
+			
+			-- ftd.text: This checkbox is disabled and is checked
+			
+		-- end: ftd.row
 
-\-- ftd.row:
-spacing.fixed.px: 5
-align-content: center
-color: $inherited.colors.text
-
-\-- ftd.checkbox:
-enabled: false
-checked: true
-
-\-- ftd.text: This checkbox is disabled and is checked
-
-\-- end: ftd.row
-
--- ds.rendered.output:
-
--- ftd.row:
-spacing.fixed.px: 5
-align-content: center
-color: $inherited.colors.text
-
--- ftd.checkbox:
-enabled: false
-checked: true
-
--- ftd.text: This checkbox is disabled and is checked
-
--- end: ftd.row
-
--- end: ds.rendered.output
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -188,16 +188,16 @@ spacing.fixed.px: 5
 color: $inherited.colors.text
 align-content: center
 
--- ftd.checkbox:
-checked: $example-2.is-checked
-$on-click$: $ftd.set-bool($a = $example-2.is-checked, v = $CHECKED)
-
--- ftd.text: The checkbox is checked
-if: { example-2.is-checked }
-
--- ftd.text: The checkbox is not checked
-if: { !example-2.is-checked }
-
+	-- ftd.checkbox:
+	checked: $example-2.is-checked
+	$on-click$: $ftd.set-bool($a = $example-2.is-checked, v = $CHECKED)
+	
+	-- ftd.text: The checkbox is checked
+	if: { example-2.is-checked }
+	
+	-- ftd.text: The checkbox is not checked
+	if: { !example-2.is-checked }
+	
 -- end: ftd.row
 
 -- end: example-2

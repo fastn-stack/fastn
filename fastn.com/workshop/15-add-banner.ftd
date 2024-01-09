@@ -1,6 +1,6 @@
 -- ds.page: Add banner to the website - `fastn` Workshop
 
-`ftd.sitemap` has a `document` feature which contains the path of the document 
+`ftd.sitemap` has a `document` feature which contains the path of the document
 hence you can clean the URL by customizing it.
 
 -- ds.h1: Use `document` feature

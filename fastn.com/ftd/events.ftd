@@ -29,8 +29,8 @@ if: { show }
 
 -- ds.rendered.output:
 
--- on-click-event:
-
+	-- on-click-event:
+	
 -- end: ds.rendered.output
 
 
@@ -62,8 +62,8 @@ if: { show }
 
 -- ds.rendered.output:
 
--- on-click-outside-event:
-
+	-- on-click-outside-event:
+	
 -- end: ds.rendered.output
 
 
@@ -92,8 +92,8 @@ if: { show }
 
 -- ds.rendered.output:
 
--- on-mouse-enter-event:
-
+	-- on-mouse-enter-event:
+	
 -- end: ds.rendered.output
 
 
@@ -123,8 +123,8 @@ if: { show }
 
 -- ds.rendered.output:
 
--- on-mouse-leave-event:
-
+	-- on-mouse-leave-event:
+	
 -- end: ds.rendered.output
 
 
@@ -158,8 +158,8 @@ $on-input$: $ftd.set-string($a = $txt, v = $VALUE)
 
 -- ds.rendered.output:
 
--- on-input-event:
-
+	-- on-input-event:
+	
 -- end: ds.rendered.output
 
 
@@ -195,8 +195,8 @@ $on-change$: $ftd.set-string($a = $txt, v = $VALUE)
 
 -- ds.rendered.output:
 
--- on-change-event:
-
+	-- on-change-event:
+	
 -- end: ds.rendered.output
 
 
@@ -236,8 +236,8 @@ $on-blur$: $ftd.set-bool($a = $flag, v = false) ;; <hl>
 
 -- ds.rendered.output:
 
--- on-focus-blur-event:
-
+	-- on-focus-blur-event:
+	
 -- end: ds.rendered.output
 
 
@@ -272,8 +272,8 @@ $on-global-key[ctrl-a-s]$: $ftd.toggle($a = $flag)
 
 -- ds.rendered.output:
 
--- on-global-key-event:
-
+	-- on-global-key-event:
+	
 -- end: ds.rendered.output
 
 
@@ -300,8 +300,8 @@ $on-global-key-seq[ctrl-ctrl-ctrl]$: $ftd.toggle($a = $flag)
 
 -- ds.rendered.output:
 
--- on-global-key-seq-event:
-
+	-- on-global-key-seq-event:
+	
 -- end: ds.rendered.output
 
 
@@ -348,12 +348,12 @@ boolean $show: true
 -- ftd.column:
 color: $inherited.colors.text
 
--- ftd.text: Click me!
-$on-click$: $ftd.toggle($a = $on-click-event.show)
-
--- ftd.text: Hide and Seek
-if: { on-click-event.show }
-
+	-- ftd.text: Click me!
+	$on-click$: $ftd.toggle($a = $on-click-event.show)
+	
+	-- ftd.text: Hide and Seek
+	if: { on-click-event.show }
+	
 -- end: ftd.column
 
 -- end: on-click-event
@@ -370,13 +370,13 @@ boolean $show: false
 -- ftd.column:
 color: $inherited.colors.text
 
--- ftd.text: Click me and click outside then
-$on-click$: $ftd.set-bool($a = $on-click-outside-event.show, v = true)
-$on-click-outside$: $ftd.set-bool($a = $on-click-outside-event.show, v = false)
-
--- ftd.text: Hide and Seek
-if: { on-click-outside-event.show }
-
+	-- ftd.text: Click me and click outside then
+	$on-click$: $ftd.set-bool($a = $on-click-outside-event.show, v = true)
+	$on-click-outside$: $ftd.set-bool($a = $on-click-outside-event.show, v = false)
+	
+	-- ftd.text: Hide and Seek
+	if: { on-click-outside-event.show }
+	
 -- end: ftd.column
 
 -- end: on-click-outside-event
@@ -393,12 +393,12 @@ boolean $show: true
 -- ftd.column:
 color: $inherited.colors.text
 
--- ftd.text: Enter mouse cursor over me
-$on-mouse-enter$: $ftd.toggle($a = $on-mouse-enter-event.show)
-
--- ftd.text: Hide and Seek
-if: { on-mouse-enter-event.show }
-
+	-- ftd.text: Enter mouse cursor over me
+	$on-mouse-enter$: $ftd.toggle($a = $on-mouse-enter-event.show)
+	
+	-- ftd.text: Hide and Seek
+	if: { on-mouse-enter-event.show }
+	
 -- end: ftd.column
 
 -- end: on-mouse-enter-event
@@ -415,13 +415,13 @@ boolean $show: false
 -- ftd.column:
 color: $inherited.colors.text
 
--- ftd.text: Enter mouse cursor over me
-$on-mouse-enter$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = true)
-$on-mouse-leave$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = false)
-
--- ftd.text: Hide and Seek
-if: { on-mouse-leave-event.show }
-
+	-- ftd.text: Enter mouse cursor over me
+	$on-mouse-enter$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = true)
+	$on-mouse-leave$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = false)
+	
+	-- ftd.text: Hide and Seek
+	if: { on-mouse-leave-event.show }
+	
 -- end: ftd.column
 
 -- end: on-mouse-leave-event
@@ -437,15 +437,15 @@ string $txt: Fifthtry
 -- ftd.column:
 color: $inherited.colors.text
 
--- ftd.text: $on-input-event.txt
-
--- ftd.text-input:
-placeholder: Type any text ...
-type: text
-width.fixed.px: 400
-border-width.px: 2
-$on-input$: $ftd.set-string($a = $on-input-event.txt, v = $VALUE)
-
+	-- ftd.text: $on-input-event.txt
+	
+	-- ftd.text-input:
+	placeholder: Type any text ...
+	type: text
+	width.fixed.px: 400
+	border-width.px: 2
+	$on-input$: $ftd.set-string($a = $on-input-event.txt, v = $VALUE)
+	
 -- end: ftd.column
 
 -- end: on-input-event
@@ -460,15 +460,15 @@ string $txt: Fifthtry
 -- ftd.column:
 color: $inherited.colors.text
 
--- ftd.text: $on-change-event.txt
-
--- ftd.text-input:
-placeholder: Type any text ...
-type: text
-width.fixed.px: 400
-border-width.px: 2
-$on-change$: $ftd.set-string($a = $on-change-event.txt, v = $VALUE)
-
+	-- ftd.text: $on-change-event.txt
+	
+	-- ftd.text-input:
+	placeholder: Type any text ...
+	type: text
+	width.fixed.px: 400
+	border-width.px: 2
+	$on-change$: $ftd.set-string($a = $on-change-event.txt, v = $VALUE)
+	
 -- end: ftd.column
 
 -- end: on-change-event

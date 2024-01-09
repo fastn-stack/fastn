@@ -8,7 +8,7 @@
 
 
 
--- ds.page: 
+-- ds.page:
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -24,14 +24,14 @@ max-width.fixed.px: 1340
 
 -- ds.page.footer:
 
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: index.html
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
 -- end: ds.page.footer
 
 -- ds.contributor: Ayush Soni
@@ -59,25 +59,24 @@ connect: $social-links
 
 -- common.social-media list social-links:
 
--- common.social-media: 
+-- common.social-media:
 link: https://discord.gg/ayushsoni1010
 src: $fastn-assets.files.images.discord.svg
 hover-src: $fastn-assets.files.images.discord-hover.svg
 
--- common.social-media: 
+-- common.social-media:
 link: https://github.com/ayushsoni1010
 src: $fastn-assets.files.images.github-grey.svg
 hover-src: $fastn-assets.files.images.github-grey-hover.svg
 
--- common.social-media: 
+-- common.social-media:
 link: https://twitter.com/ayushsoni1010
 src: $fastn-assets.files.images.twitter.svg
 hover-src: $fastn-assets.files.images.twitter-hover.svg
 
--- common.social-media: 
+-- common.social-media:
 link: https://www.linkedin.com/in/ayushsoni1010/
 src: $fastn-assets.files.images.linkedin.svg
 hover-src: $fastn-assets.files.images.linkedin-hover.svg
 
 -- end: social-links
-

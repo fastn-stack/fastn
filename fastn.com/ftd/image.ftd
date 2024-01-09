@@ -6,19 +6,19 @@
 
 -- ds.rendered: Usage
 
--- ds.rendered.input:
-
-\-- import: fastn.com/assets
-
-\-- ftd.image:
-src: $assets.files.images.cs.show-cs-1.jpg
-
--- ds.rendered.output:
-
--- ftd.image:
-src: $assets.files.images.cs.show-cs-1.jpg
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- import: fastn.com/assets
+	
+	\-- ftd.image:
+	src: $assets.files.images.cs.show-cs-1.jpg
+	
+	-- ds.rendered.output:
+	
+		-- ftd.image:
+		src: $assets.files.images.cs.show-cs-1.jpg
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -56,11 +56,11 @@ height.fixed.px: 115
 
 -- ds.output: Output: Two images using `ftd.image-src` type variable
 
--- ftd.image:
-src: $my-images
-width.fixed.px: 200
-height.fixed.px: 115
-
+	-- ftd.image:
+	src: $my-images
+	width.fixed.px: 200
+	height.fixed.px: 115
+	
 -- end: ds.output
 
 -- ds.markdown:
@@ -93,11 +93,11 @@ height.fixed.px: 115
 
 -- ds.output: Output: One image using `ftd.image-src` type variable
 
--- ftd.image:
-src: $just-light
-width.fixed.px: 200
-height.fixed.px: 115
-
+	-- ftd.image:
+	src: $just-light
+	width.fixed.px: 200
+	height.fixed.px: 115
+	
 -- end: ds.output
 
 -- ds.markdown:
@@ -142,11 +142,11 @@ The output will look same as above.
 
 -- ds.output: Output: Image using assets
 
--- ftd.image:
-src: $assets.files.images.cs.show-cs-1.jpg
-width.fixed.px: 200
-height.fixed.px: 115
-
+	-- ftd.image:
+	src: $assets.files.images.cs.show-cs-1.jpg
+	width.fixed.px: 200
+	height.fixed.px: 115
+	
 -- end: ds.output
 
 -- ds.markdown:
@@ -182,23 +182,23 @@ image](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#alt).
 
 -- ds.rendered: Sample code using `alt`
 
--- ds.rendered.input:
-
-\-- import: fastn.com/assets
-
-\-- ftd.image: foo.jpg
-alt: Image can't be displayed ;; <hl>
-color: $inherited.colors.text
-padding.px: 10
-
--- ds.rendered.output:
-
--- ftd.image: foo.jpg
-alt: Image can't be displayed
-color: $inherited.colors.text
-padding.px: 10
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- import: fastn.com/assets
+	
+	\-- ftd.image: foo.jpg
+	alt: Image can't be displayed ;; <hl>
+	color: $inherited.colors.text
+	padding.px: 10
+	
+	-- ds.rendered.output:
+	
+		-- ftd.image: foo.jpg
+		alt: Image can't be displayed
+		color: $inherited.colors.text
+		padding.px: 10
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -220,27 +220,27 @@ This property offers various options for the content to adapt to the container, 
 
 -- ds.rendered: Sample code using `fit`
 
--- ds.rendered.input:
-
-\-- import: fastn.com/assets
-
-\-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
-fit: cover ;; <hl>
-width.fixed.px: 400
-height.fixed.px: 300
-color: $inherited.colors.text
-padding.px: 10
-
--- ds.rendered.output:
-
--- ftd.image: $assets.files.images.cs.show-cs-1.jpg
-fit: cover
-width.fixed.px: 400
-height.fixed.px: 300
-color: $inherited.colors.text
-padding.px: 10
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- import: fastn.com/assets
+	
+	\-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
+	fit: cover ;; <hl>
+	width.fixed.px: 400
+	height.fixed.px: 300
+	color: $inherited.colors.text
+	padding.px: 10
+	
+	-- ds.rendered.output:
+	
+		-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
+		fit: cover
+		width.fixed.px: 400
+		height.fixed.px: 300
+		color: $inherited.colors.text
+		padding.px: 10
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -261,27 +261,27 @@ optimizing early user experience.
 
 -- ds.rendered: Sample code using `fetch-priority`
 
--- ds.rendered.input:
-
-\-- import: fastn.com/assets
-
-\-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
-fetch-priority: high ;; <hl>
-width.fixed.px: 400
-height.fixed.px: 300
-color: $inherited.colors.text
-padding.px: 10
-
--- ds.rendered.output:
-
--- ftd.image: $assets.files.images.cs.show-cs-1.jpg
-fetch-priority: high
-width.fixed.px: 400
-height.fixed.px: 300
-color: $inherited.colors.text
-padding.px: 10
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- import: fastn.com/assets
+	
+	\-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
+	fetch-priority: high ;; <hl>
+	width.fixed.px: 400
+	height.fixed.px: 300
+	color: $inherited.colors.text
+	padding.px: 10
+	
+	-- ds.rendered.output:
+	
+		-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
+		fetch-priority: high
+		width.fixed.px: 400
+		height.fixed.px: 300
+		color: $inherited.colors.text
+		padding.px: 10
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 

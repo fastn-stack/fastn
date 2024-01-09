@@ -37,60 +37,60 @@ Below mentioned code shows how we can generate equivalent `fastn` code for
 
 -- ds.rendered: Using `typo_to_ftd(json)` to generate `fastn` code
 
--- ds.rendered.input:
-
-\-- import: fastn-stack.github.io/fastn-js/assets as js-assets
-\-- import: fastn-community.github.io/doc-site as ds
-\-- import: fifthtry.github.io/fastn-typography as fastn-typo
-
-\-- optional string $code:
-\-- optional string $formatted-code:
-
-\-- string fastn-typo-json:
-$processor$: pr.figma-typo-token
-variable: $forest-cs.main
-name: fastn-typography
-
-\-- void typo-to-ftd(json,store_at,formatted_string):
-string json:
-string $store_at:
-string $formatted_string:
-js: [$js-assets.files.typo.js]
-
-value = typo_to_ftd(json);
-store_at = value[0];
-formatted_string = value[1];
-
-\-- ftd.text: Generate `fastn` code
-$on-click$: $typo-to-ftd(json = $fastn-typo-json, $store_at = $code, $formatted_string = $formatted-code)
-color: $inherited.colors.text
-role: $inherited.types.copy-regular
-border-width.px: 2
-padding.px: 5
-
-\-- ds.code:
-if: { code != NULL }
-body: $formatted-code
-text: $code
-max-height.fixed.px: 300
-
--- ds.rendered.output:
-
--- ftd.text: Generate `fastn` code
-$on-click$: $typo-to-ftd(json = $fastn-typo-json, $store_at = $code, $formatted_string = $formatted-code)
-color: $inherited.colors.text
-role: $inherited.types.copy-regular
-border-width.px: 2
-padding.px: 5
-
--- ds.code:
-if: { code != NULL }
-body: $formatted-code
-text: $code
-max-height.fixed.px: 300
-download: types.ftd
-
--- end: ds.rendered.output
+	-- ds.rendered.input:
+	
+	\-- import: fastn-stack.github.io/fastn-js/assets as js-assets
+	\-- import: fastn-community.github.io/doc-site as ds
+	\-- import: fifthtry.github.io/fastn-typography as fastn-typo
+	
+	\-- optional string $code:
+	\-- optional string $formatted-code:
+	
+	\-- string fastn-typo-json:
+	$processor$: pr.figma-typo-token
+	variable: $forest-cs.main
+	name: fastn-typography
+	
+	\-- void typo-to-ftd(json,store_at,formatted_string):
+	string json:
+	string $store_at:
+	string $formatted_string:
+	js: [$js-assets.files.typo.js]
+	
+	value = typo_to_ftd(json);
+	store_at = value[0];
+	formatted_string = value[1];
+	
+	\-- ftd.text: Generate `fastn` code
+	$on-click$: $typo-to-ftd(json = $fastn-typo-json, $store_at = $code, $formatted_string = $formatted-code)
+	color: $inherited.colors.text
+	role: $inherited.types.copy-regular
+	border-width.px: 2
+	padding.px: 5
+	
+	\-- ds.code:
+	if: { code != NULL }
+	body: $formatted-code
+	text: $code
+	max-height.fixed.px: 300
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: Generate `fastn` code
+		$on-click$: $typo-to-ftd(json = $fastn-typo-json, $store_at = $code, $formatted_string = $formatted-code)
+		color: $inherited.colors.text
+		role: $inherited.types.copy-regular
+		border-width.px: 2
+		padding.px: 5
+		
+		-- ds.code:
+		if: { code != NULL }
+		body: $formatted-code
+		text: $code
+		max-height.fixed.px: 300
+		download: types.ftd
+		
+	-- end: ds.rendered.output
 
 -- end: ds.rendered
 

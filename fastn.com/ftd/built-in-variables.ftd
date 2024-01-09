@@ -62,19 +62,19 @@ body about:
 -- ftd.column:
 spacing.fixed.px: 10
 
--- ds.h1: $variable.name
-
--- label-text: Type
-value: $variable.type
-
--- label-text: Default Value
-value: $variable.default
-if: { variable.default != NULL }
-
--- ds.markdown:
-
-$variable.about
-
+	-- ds.h1: $variable.name
+	
+	-- label-text: Type
+	value: $variable.type
+	
+	-- label-text: Default Value
+	value: $variable.default
+	if: { variable.default != NULL }
+	
+	-- ds.markdown:
+	
+	$variable.about
+	
 -- end: ftd.column
 
 -- end: variable
@@ -91,14 +91,14 @@ string value:
 -- ftd.row:
 spacing.fixed.px: 10
 
--- ds.markdown: 
-
-$label-text.name
-
--- ds.markdown: 
-
-$label-text.value
-
+	-- ds.markdown:
+	
+	$label-text.name
+	
+	-- ds.markdown:
+	
+	$label-text.value
+	
 -- end: ftd.row
 
 -- end: label-text

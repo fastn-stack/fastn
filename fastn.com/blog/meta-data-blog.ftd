@@ -62,8 +62,8 @@ There are various SEO techniques to improve the ranking of the page, like:
 - **Keyword research**: Identify various keywords and phrases that users are
     likely to search for when looking for information related to your website.
 
-- **On-page optimization**: Optimize your website's content, Open-graph(og) 
-    meta tags, headings, URLs and, internal linking structure to align with 
+- **On-page optimization**: Optimize your website's content, Open-graph(og)
+    meta tags, headings, URLs and, internal linking structure to align with
     targeted keywords.
 
 - **Off-page optimization**: Build high-quality backlinks from reputable
@@ -76,8 +76,8 @@ There are various SEO techniques to improve the ranking of the page, like:
 - **Content creation**: Create high-quality, informative, and engaging content
     that incorporates targeted keywords and addresses user intent.
 
-- **Optimizing User-experience**: Improve website usability, page loading 
-	speed, mobile responsiveness, and navigation to enhance user experience. 
+- **Optimizing User-experience**: Improve website usability, page loading
+ speed, mobile responsiveness, and navigation to enhance user experience.
 
 
 -- ds.markdown:
@@ -105,7 +105,7 @@ Twitter tag).
 
 You can find these tags in the `<head>` section of your website.
 
--- ftd.image: 
+-- ftd.image:
 src: $fastn-assets.files.expander.ds.img.og-seo-blog.png
 border-width.px: 2
 width: fill-container
@@ -115,33 +115,33 @@ shadow: $s
 
 -- ds.h2: Why are Open Graph tags important
 
-In the midst of content flooding on social media, your website needs to 
-stand out. People are more likely to see and click shared content with optimized 
+In the midst of content flooding on social media, your website needs to
+stand out. People are more likely to see and click shared content with optimized
 OG tags because:
 
 1. They make the content more eye-catching in the feeds
 2. They tell people what the content is about at a glance
-3. These tags help social media sites understand what the content is about, 
+3. These tags help social media sites understand what the content is about,
 which can help increase your brand visibility through search.
 
 -- ds.h3: og-tags in `doc-site`
 
-In `fastn-community` we have a package called 
-[`doc-site`](https://fastn-community.github.io/doc-site/). It provides 
-out-of-the-box documentation features that can be used to create any kind of 
+In `fastn-community` we have a package called
+[`doc-site`](https://fastn-community.github.io/doc-site/). It provides
+out-of-the-box documentation features that can be used to create any kind of
 site.
 
-Any website that uses `doc-site` can very easily add their customized meta 
-data using properties like `document-title`, `document-description` and 
+Any website that uses `doc-site` can very easily add their customized meta
+data using properties like `document-title`, `document-description` and
 `document-image` in the `page` component of this package.
 
-You can learn 
-[`How to add meta-data for better website optimization`](/seo-meta/) and 
+You can learn
+[`How to add meta-data for better website optimization`](/seo-meta/) and
 improve your website's search ranking and traffic through social media.
 
 -- ds.h3: Example
 
--- ftd.image: 
+-- ftd.image:
 src: $fastn-assets.files.expander.ds.img.seo-post.png
 border-width.px: 2
 border-radius.px: 10

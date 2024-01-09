@@ -13,7 +13,7 @@
 
 
 
--- ds.page: 
+-- ds.page:
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -31,21 +31,21 @@ max-width.fixed.px: 1340
 
 -- ds.page.footer:
 
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: index.html
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
 -- end: ds.page.footer
 -- ds.page.layout-bar:
 
--- ds.layout: Subscription Form
-previous-url: featured/components-library/	
-github-url: https://github.com/FifthTry/subscription-app
-
+	-- ds.layout: Subscription Form
+	previous-url: featured/components-library/
+	github-url: https://github.com/FifthTry/subscription-app
+	
 -- end: ds.page.layout-bar
 
 

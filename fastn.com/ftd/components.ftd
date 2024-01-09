@@ -54,8 +54,8 @@ copy: true
 
 -- ds.rendered.output:
 
--- heading: My Heading
-
+	-- heading: My Heading
+	
 -- end: ds.rendered.output
 
 
@@ -83,8 +83,8 @@ if: { num <= 10 }
 
 -- ds.rendered.output:
 
--- heading: My Heading
-
+	-- heading: My Heading
+	
 -- end: ds.rendered.output
 
 
@@ -102,12 +102,12 @@ if: { num > 10 }
 
 -- ds.rendered.output:
 
--- heading: My Heading
-if: { false }
-
--- ftd.text: Heading not shown!!
-color: $inherited.colors.text
-
+	-- heading: My Heading
+	if: { false }
+	
+	-- ftd.text: Heading not shown!!
+	color: $inherited.colors.text
+	
 -- end: ds.rendered.output
 
 
@@ -161,9 +161,9 @@ title: I love `ftd`!
 
 -- ds.rendered.output:
 
--- heading:
-title: I love `ftd`!
-
+	-- heading:
+	title: I love `ftd`!
+	
 -- end: ds.rendered.output
 
 
@@ -205,8 +205,8 @@ copy: true
 
 -- ds.rendered.output:
 
--- heading: I am in caption area.
-
+	-- heading: I am in caption area.
+	
 -- end: ds.rendered.output
 
 
@@ -228,12 +228,12 @@ Since I am long description, it's better to pass it here. Isn't it?
 
 -- ds.rendered.output:
 
--- heading:
-
-I am in body area.
-
-Since I am long description, it's better to pass it here. Isn't it?
-
+	-- heading:
+	
+	I am in body area.
+	
+	Since I am long description, it's better to pass it here. Isn't it?
+	
 -- end: ds.rendered.output
 
 
@@ -242,31 +242,31 @@ Since I am long description, it's better to pass it here. Isn't it?
 By default `caption` or `body` is alias for `string` but if you want to pass
 types other than `string` you can do the following:
 
--- ftd.column:
-padding-vertical.px: 20
-width: fill-container
+	-- ftd.column:
+	padding-vertical.px: 20
+	width: fill-container
+	
+		-- ds.rendered:
+		copy: true
+		
+		-- ds.rendered.input:
+		
+		\-- component show-number:
+		caption integer number:
+		
+		\-- ftd.integer: $show-number.number
+		
+		\-- end: show-number
+		
+		\-- show-number: 45
+		
+		-- ds.rendered.output:
+		
+			-- show-number: 45
+			
+		-- end: ds.rendered.output
 
--- ds.rendered:
-copy: true
-
--- ds.rendered.input:
-
-\-- component show-number:
-caption integer number:
-
-\-- ftd.integer: $show-number.number
-
-\-- end: show-number
-
-\-- show-number: 45
-
--- ds.rendered.output:
-
--- show-number: 45
-
--- end: ds.rendered.output
-
--- end: ftd.column
+	-- end: ftd.column
 
 -- end: cbox.info
 
@@ -305,8 +305,8 @@ copy: true
 
 -- ds.rendered.output:
 
---  heading: hello
-
+	--  heading: hello
+	
 -- end: ds.rendered.output
 
 
@@ -320,9 +320,9 @@ text-color: green
 
 -- ds.rendered.output:
 
--- heading: this is nice
-text-color: green
-
+	-- heading: this is nice
+	text-color: green
+	
 -- end: ds.rendered.output
 
 
@@ -355,8 +355,8 @@ copy: true
 
 -- ds.rendered.output:
 
--- heading:
-
+	-- heading:
+	
 -- end: ds.rendered.output
 
 
@@ -397,8 +397,8 @@ copy: true
 
 -- ds.rendered.output:
 
--- heading-with-detail: Title same as detail
-
+	-- heading-with-detail: Title same as detail
+	
 -- end: ds.rendered.output
 
 
@@ -420,10 +420,10 @@ title: Default Title
 
 -- ds.rendered.output:
 
--- heading:
-title if { num <= 10 }: `num` is less than equal to 10
-title: Default Title
-
+	-- heading:
+	title if { num <= 10 }: `num` is less than equal to 10
+	title: Default Title
+	
 -- end: ds.rendered.output
 
 
@@ -439,10 +439,10 @@ title: Default Title
 
 -- ds.rendered.output:
 
--- heading:
-title if { num > 10 }: `num` is less than equal to 10
-title: Default Title
-
+	-- heading:
+	title if { num > 10 }: `num` is less than equal to 10
+	title: Default Title
+	
 -- end: ds.rendered.output
 
 
@@ -506,14 +506,14 @@ copy: true
 
 -- ds.rendered.output:
 
--- show-ui: My UIs
-
--- show-ui.uis:
-
--- ftd.text: My First UI
--- heading: Using Heading Too
-
--- end: show-ui.uis
+	-- show-ui: My UIs
+	
+	-- show-ui.uis:
+	
+		-- ftd.text: My First UI
+		-- heading: Using Heading Too
+		
+	-- end: show-ui.uis
 
 -- end: ds.rendered.output
 
@@ -564,14 +564,14 @@ copy: true
 
 -- ds.rendered.output:
 
--- show-ui: My UIs
-
--- show-ui.uis:
-
--- ftd.text: My First UI
--- heading: Using Heading Too
-
--- end: show-ui.uis
+	-- show-ui: My UIs
+	
+	-- show-ui.uis:
+	
+		-- ftd.text: My First UI
+		-- heading: Using Heading Too
+		
+	-- end: show-ui.uis
 
 -- end: ds.rendered.output
 
@@ -623,11 +623,11 @@ My Description
 
 -- ds.rendered.output:
 
--- toggle-ui-: My Title
-$open: false
-
-My Description
-
+	-- toggle-ui-: My Title
+	$open: false
+	
+	My Description
+	
 -- end: ds.rendered.output
 
 
@@ -642,10 +642,10 @@ My Description
 
 -- ds.rendered.output:
 
--- toggle-ui-: My Title
-
-My Description
-
+	-- toggle-ui-: My Title
+	
+	My Description
+	
 -- end: ds.rendered.output
 
 
@@ -684,16 +684,16 @@ change in `global-open` value changes the `open` attribute too.
 
 -- ds.output: Click on the `I change global-open` and see the effect.
 
--- ftd.text: I change global-open
-$on-click$: $ftd.toggle($a = $global-open)
-color: $inherited.colors.text-strong
-
--- toggle-ui-: My Title
-$open: $global-open
-
-My Description
-
-
+	-- ftd.text: I change global-open
+	$on-click$: $ftd.toggle($a = $global-open)
+	color: $inherited.colors.text-strong
+	
+	-- toggle-ui-: My Title
+	$open: $global-open
+	
+	My Description
+	
+	
 -- end: ds.output
 
 
@@ -744,10 +744,10 @@ My Description
 
 -- ds.rendered.output:
 
--- toggle-ui: Click me!
-
-My Description
-
+	-- toggle-ui: Click me!
+	
+	My Description
+	
 -- end: ds.rendered.output
 
 
@@ -821,8 +821,8 @@ The output looks like this:
 
 -- ds.output: `heading` invocation
 
--- heading: I love FTD!!
-
+	-- heading: I love FTD!!
+	
 -- end: ds.output
 
 
@@ -859,16 +859,16 @@ instance, and in second we overwrite the default value with `green`.
 
 -- ds.output: `foo` with default `text-color`
 
---  foo: hello
-
+	--  foo: hello
+	
 -- end: ds.output
 
 
 -- ds.output: `foo` with `text-color` value as `green`
 
--- foo: this is nice
-text-color: green
-
+	-- foo: this is nice
+	text-color: green
+	
 -- end: ds.output
 
 
@@ -904,8 +904,8 @@ it will go away.
 
 -- ds.output: `foo` with `text-color` value as `green`
 
--- foo-with-event: I'll hide if you click me!
-
+	-- foo-with-event: I'll hide if you click me!
+	
 -- end: ds.output
 
 
@@ -980,9 +980,9 @@ value: Bangalore, India
 
 -- ds.markdown:
 
-Here we have created one heading and two labels. 
+Here we have created one heading and two labels.
 
-We have placed the `heading` and `label`s inside an `ftd.column` to put some 
+We have placed the `heading` and `label`s inside an `ftd.column` to put some
 spacing between them.
 
 This is how it looks like:
@@ -991,22 +991,22 @@ This is how it looks like:
 
 -- ds.output: `heading` and `label` in `ftd.column`
 
--- ftd.column:
-spacing.fixed.px: 20
-border-width.px: 1
-border-radius.px: 5
-border-color: $inherited.colors.border
-padding.px: 20
-
--- heading: hello there! This is my heading
-
--- label: Name:
-value: Amit Upadhyay
-
--- label: Location:
-value: Bangalore, India
-
--- end: ftd.column
+	-- ftd.column:
+	spacing.fixed.px: 20
+	border-width.px: 1
+	border-radius.px: 5
+	border-color: $inherited.colors.border
+	padding.px: 20
+	
+		-- heading: hello there! This is my heading
+		
+		-- label: Name:
+		value: Amit Upadhyay
+		
+		-- label: Location:
+		value: Bangalore, India
+		
+	-- end: ftd.column
 
 -- end: ds.output
 
@@ -1034,14 +1034,14 @@ if: { !ftd.dark-mode }
 
 -- ds.output: Conditional component
 
--- ftd.text: we are in dark mode
-color: $inherited.colors.text
-if: { ftd.dark-mode }
-
--- ftd.text: we are in light mode
-color: $inherited.colors.text
-if: { !ftd.dark-mode }
-
+	-- ftd.text: we are in dark mode
+	color: $inherited.colors.text
+	if: { ftd.dark-mode }
+	
+	-- ftd.text: we are in light mode
+	color: $inherited.colors.text
+	if: { !ftd.dark-mode }
+	
 -- end: ds.output
 
 
@@ -1080,7 +1080,7 @@ color: $heading.text-color
 
 
 
--- component label: 
+-- component label:
 caption name:
 body value:
 
@@ -1089,10 +1089,10 @@ width: fill-container
 spacing.fixed.px: 5
 color: $inherited.colors.text
 
--- ftd.text: $label.name
-
--- ftd.text: $label.value
-
+	-- ftd.text: $label.name
+	
+	-- ftd.text: $label.value
+	
 -- end: ftd.row
 
 -- end: label
@@ -1151,12 +1151,12 @@ body detail: $heading-with-detail.title
 spacing.fixed.px: 20
 color: $inherited.colors.text
 
--- ftd.text: $heading-with-detail.title
-role: $inherited.types.heading-small
-
--- ftd.text: $heading-with-detail.detail
-role: $inherited.types.label-small
-
+	-- ftd.text: $heading-with-detail.title
+	role: $inherited.types.heading-small
+	
+	-- ftd.text: $heading-with-detail.detail
+	role: $inherited.types.label-small
+	
 -- end: ftd.column
 
 -- end: heading-with-detail
@@ -1175,15 +1175,15 @@ children uis:
 spacing.fixed.px: 10
 color: $inherited.colors.text
 
--- ftd.text: $show-ui.title
-
--- ftd.column:
-children: $show-ui.uis
-border-width.px: 1
-padding.px: 10
-border-color: $inherited.colors.border
-
--- end: ftd.column
+	-- ftd.text: $show-ui.title
+	
+	-- ftd.column:
+	children: $show-ui.uis
+	border-width.px: 1
+	padding.px: 10
+	border-color: $inherited.colors.border
+	
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -1200,11 +1200,11 @@ boolean $open: true
 color: $inherited.colors.text
 $on-click$: $ftd.toggle($a = $toggle-ui.open)
 
--- ftd.text: $toggle-ui.title
-
--- ftd.text: $toggle-ui.description
-if: { toggle-ui.open }
-
+	-- ftd.text: $toggle-ui.title
+	
+	-- ftd.text: $toggle-ui.description
+	if: { toggle-ui.open }
+	
 -- end: ftd.column
 
 -- end: toggle-ui
@@ -1222,11 +1222,11 @@ boolean $open: true
 -- ftd.column:
 color: $inherited.colors.text
 
--- ftd.text: $toggle-ui-.title
-
--- ftd.text: $toggle-ui-.description
-if: { toggle-ui-.open }
-
+	-- ftd.text: $toggle-ui-.title
+	
+	-- ftd.text: $toggle-ui-.description
+	if: { toggle-ui-.open }
+	
 -- end: ftd.column
 
 -- end: toggle-ui-

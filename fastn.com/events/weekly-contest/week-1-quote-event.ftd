@@ -36,7 +36,7 @@ venue: $venue
 
 The team at FifthTry would love to host our second `fastn` meet-up at
 91Springboard, Bannerghatta Road Unit(C3 Conference Room, 3rd Floor) on the
-coming Friday. 
+coming Friday.
 
 In this meetup, we will cover everything about fastn by answering the following
 questions:
@@ -47,59 +47,59 @@ questions:
   development team?
 - What we have been up to of late?
 
-Also, you will hear from a few people who have learned and used 
-[`fastn language`](https://fastn.com/ftd/). They will share their experience, 
+Also, you will hear from a few people who have learned and used
+[`fastn language`](https://fastn.com/ftd/). They will share their experience,
 and show what they have built.
 
-There will be a hands-on session where you will learn 
+There will be a hands-on session where you will learn
 [fastn language](https://fastn.com/ftd/).
 
-We will appreciate if you can share this meet-up with your team. 
+We will appreciate if you can share this meet-up with your team.
 
 
--- ds.h3: What is `fastn`?
-
-`fastn` is a universal new-age web-development platform, consciously structured
-to have a low learning curve on par with Microsoft Excel basics. It has been
-built specifically to make workflows across design, development & deployment
-simple and consistent. 
-
-`fastn` is powered by three important elements - an indigenous design system, a
-curated list of UI components / templates and a powerful tailor-made
-programming language - [fastn language](https://fastn.com/ftd/).
-
-
--- ds.h3: `fastn` language
-
-`fastn` langauge is designed for everyone, not just programmers. It is a new
-open-source, front-end, programming language.
-
-[fastn langauge](https://fastn.com/ftd/) can be used for building UI and is
-optimised for content centric websites, like: home pages, marketing landing
-pages, documentation pages and so on. For non-programmers, learning `fastn`
-language for authoring websites takes a day or so.
-
-[fastn language](https://fastn.com/ftd/) can also be used as a general purpose
-UI language. A team in Kerala is using it right now to build a web3 application
-and it’s coming along quite nicely (though there are still many paper cuts and
-partially implemented features that we do not yet recommend for general purpose
-JS replacement. These will be ironed out maybe in another month or two).
-
-Checkout our mini course - [Expander Crash Course](https://fastn.com/expander/)
-We have also built a full-stack framework on top of it: 
-[fastn](https://github.com/fastn-stack/fastn).
-
-Join us to learn more!
-
+	-- ds.h3: What is `fastn`?
+	
+	`fastn` is a universal new-age web-development platform, consciously structured
+	to have a low learning curve on par with Microsoft Excel basics. It has been
+	built specifically to make workflows across design, development & deployment
+	simple and consistent.
+	
+	`fastn` is powered by three important elements - an indigenous design system, a
+	curated list of UI components / templates and a powerful tailor-made
+	programming language - [fastn language](https://fastn.com/ftd/).
+	
+	
+	-- ds.h3: `fastn` language
+	
+	`fastn` langauge is designed for everyone, not just programmers. It is a new
+	open-source, front-end, programming language.
+	
+	[fastn langauge](https://fastn.com/ftd/) can be used for building UI and is
+	optimised for content centric websites, like: home pages, marketing landing
+	pages, documentation pages and so on. For non-programmers, learning `fastn`
+	language for authoring websites takes a day or so.
+	
+	[fastn language](https://fastn.com/ftd/) can also be used as a general purpose
+	UI language. A team in Kerala is using it right now to build a web3 application
+	and it’s coming along quite nicely (though there are still many paper cuts and
+	partially implemented features that we do not yet recommend for general purpose
+	JS replacement. These will be ironed out maybe in another month or two).
+	
+	Checkout our mini course - [Expander Crash Course](https://fastn.com/expander/)
+	We have also built a full-stack framework on top of it:
+	[fastn](https://github.com/fastn-stack/fastn).
+	
+	Join us to learn more!
+	
 -- end: event.event
 
 -- event.speakers: Speaker
 
--- event.speaker: Amit Upadhyay
-avatar: $assets.files.images.events.amitu.jpg
-profile: CEO, FifthTry Pvt. Ltd.
-link: https://www.linkedin.com/in/amitu/
-
+	-- event.speaker: Amit Upadhyay
+	avatar: $assets.files.images.events.amitu.jpg
+	profile: CEO, FifthTry Pvt. Ltd.
+	link: https://www.linkedin.com/in/amitu/
+	
 -- end: event.speakers
 
 -- event.row-container: Subscribe now
@@ -109,22 +109,18 @@ switch-to-column: false
 padding-vertical: 80
 title-medium: true
 
--- event.social-card: DISCORD
-link: https://discord.gg/a7eBUeutWD
-icon: $assets.files.images.discord.svg
-
--- event.social-card: TWITTER
-link: https://twitter.com/FifthTryHQ
-icon: $assets.files.images.twitter.svg
-
--- event.social-card: LINKEDIN
-link: https://www.linkedin.com/company/69613898/
-icon: $assets.files.images.linkedin.svg
-
+	-- event.social-card: DISCORD
+	link: https://discord.gg/a7eBUeutWD
+	icon: $assets.files.images.discord.svg
+	
+	-- event.social-card: TWITTER
+	link: https://twitter.com/FifthTryHQ
+	icon: $assets.files.images.twitter.svg
+	
+	-- event.social-card: LINKEDIN
+	link: https://www.linkedin.com/company/69613898/
+	icon: $assets.files.images.linkedin.svg
+	
 -- end: event.row-container
 
 -- end: ds.page
-
-
-
-

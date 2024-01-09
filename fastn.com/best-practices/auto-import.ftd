@@ -2,7 +2,7 @@
 
 -- ds.page: Auto-import
 
-We `auto-import` the packages in the `FASTN.ftd` file. 
+We `auto-import` the packages in the `FASTN.ftd` file.
 
 -- ds.code: Syntax
 lang: ftd
@@ -31,7 +31,7 @@ unnecessarily big.
 
 -- note.note: `fastn` is intelligent
 
-If a package is not used in any `.ftd` file but it is `auto-imported` in the 
+If a package is not used in any `.ftd` file but it is `auto-imported` in the
 `FASTN.ftd` file, that package would not be downloaded.
 
 

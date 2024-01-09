@@ -32,7 +32,7 @@ src: $fastn-assets.files.expander.ds.img.page-intro.png
 
 -- ds.h1: Introduction
 
-We have this component in `doc-site`. 
+We have this component in `doc-site`.
 
 -- ds.code: Page component
 lang: ftd
@@ -89,12 +89,12 @@ logo-width: 50
 site-url: https://fastn.com/
 
 
-Hello, I am the first paragraph in the body area 🖐. 
+Hello, I am the first paragraph in the body area 🖐.
 
-And I am the second paragraph 🙆‍♂️ in the body area of the page component. 
+And I am the second paragraph 🙆‍♂️ in the body area of the page component.
 
-At vero eos et accusamus et iusto odio 
-dignissimos ducimus qui blanditiis molestias excepturi sint occaecati 
+At vero eos et accusamus et iusto odio
+dignissimos ducimus qui blanditiis molestias excepturi sint occaecati
 cupiditate non provident.
 
 
@@ -117,16 +117,16 @@ I don't brag about myself but I am the convenient one 😎.
 
 \-- end: ds.page
 
--- ds.markdown: 
+-- ds.markdown:
 
-We will learn how to add and change color schemes and typography in the 
+We will learn how to add and change color schemes and typography in the
 upcoming videos.
 
 Let's view it in the browser. Since we are giving a `site-logo` that has a file
 from this package, let's first import assets.
 
 
-This is how the page looks with default color-scheme and typography. We have 
+This is how the page looks with default color-scheme and typography. We have
 the
 site logo and site name at the top left along with the site-url which you can
 see at the bottom-left, when I hover the mouse pointer on logo.
@@ -138,46 +138,46 @@ if: { show-planning }
 
 The component `page` has various benefits:
 
-From harmonizing *color schemes*, *site logo* and *name* to selecting 
-compelling typography, you can effortlessly infuse your website with a unified 
+From harmonizing *color schemes*, *site logo* and *name* to selecting
+compelling typography, you can effortlessly infuse your website with a unified
 and professional look.
 
-`Page` has some properties that easily add meta-data and hence unlock the 
-potential of SEO optimization and boost your website's visibility and ranking. 
-There is a separate video dedicated to the same, you can find the link in 
+`Page` has some properties that easily add meta-data and hence unlock the
+potential of SEO optimization and boost your website's visibility and ranking.
+There is a separate video dedicated to the same, you can find the link in
 the description.
 
 -- ds.markdown:
 if: { !show-planning }
 
-From harmonizing *color schemes*, *site logo* and *name* to selecting 
-compelling typography, you can effortlessly infuse your website with a unified 
+From harmonizing *color schemes*, *site logo* and *name* to selecting
+compelling typography, you can effortlessly infuse your website with a unified
 and professional look.
 
-`Page` has some properties that easily add meta-data and hence unlocks the 
-potential of SEO optimization and boost your website's visibility and ranking. 
+`Page` has some properties that easily add meta-data and hence unlocks the
+potential of SEO optimization and boost your website's visibility and ranking.
 
-To know about this, checkout 
+To know about this, checkout
 [How to add meta-data for website optimization](/seo-meta/).
 
 
 
 -- ds.h1: Customized Page Component
 
-Now imagine, you have a dozen of such documents in your package. 
+Now imagine, you have a dozen of such documents in your package.
 
-On top of it, imagine displaying your distinctive site logo and site name 
-across the website, creating a unified visual identity that resonates with 
-your brand. It would be a tedious job applying the same properties to all the 
+On top of it, imagine displaying your distinctive site logo and site name
+across the website, creating a unified visual identity that resonates with
+your brand. It would be a tedious job applying the same properties to all the
 documents.
 
 Also, in the future, if you add new properties or change one or more values of
 the properties, then you would need to manually update it on all the pages.
 
 To maintain the consistency and make it easy to update throughout the website
-with a single change, we can create a custom page component. 
+with a single change, we can create a custom page component.
 
-To do the same, we will move the component definition in a separate document, 
+To do the same, we will move the component definition in a separate document,
 let's call it `my-ds.ftd`.
 
 And create our custom component:
@@ -210,7 +210,7 @@ wrapper: $page.wrapper
 The `ds.page` component is wrapped inside this component page.
 
 So now in `index.ftd` document we can remove these properties and instead use
-the custom page of my-ds document i.e. `my-ds.page` 
+the custom page of my-ds document i.e. `my-ds.page`
 
 We are still making use of header and markdown components of `doc-site`, so we
 will import `doc-site` here. But, we are not importing assets here anymore so
@@ -239,23 +239,23 @@ missing out on any property.
 
 
 
--- ds.h1: Closing Remarks 
+-- ds.h1: Closing Remarks
 if: { show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
-the `fastn` website. 
+the `fastn` website.
 
-Support us by clicking on this link and give us a star ⭐ on GitHub and join 
+Support us by clicking on this link and give us a star ⭐ on GitHub and join
 our fastn community on Discord.
 
 
--- ds.markdown: 
+-- ds.markdown:
 if: { !show-planning }
 
-Thank you guys, keep watching these videos to learn more about fastn. 
+Thank you guys, keep watching these videos to learn more about fastn.
 
-Support us by giving a star ⭐ on 
-[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community 
+Support us by giving a star ⭐ on
+[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community
 on [Discord](/discord/).
 
 

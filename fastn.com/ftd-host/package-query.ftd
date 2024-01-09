@@ -19,7 +19,7 @@ SELECT * FROM user;
 Note: This document is about querying SQLite Database that is part of your
 `fastn` package. You can also [query PostgreSQL using `fastn`](/sql/).
 
-`package-query` processor allows you to execute SQL queries against SQLite 
+`package-query` processor allows you to execute SQL queries against SQLite
 files that are part of your `fastn` package.
 
 -- processor.deprecated-sql-procesor:
@@ -133,14 +133,14 @@ caption person p:
 -- ftd.column:
 spacing.fixed.px: 10
 
--- ds.h2: Person
-
--- v.label-text: Name
-value: $show-person.p.name
-
--- v.label-text: Department
-value: $show-person.p.department
-
+	-- ds.h2: Person
+	
+	-- v.label-text: Name
+	value: $show-person.p.name
+	
+	-- v.label-text: Department
+	value: $show-person.p.department
+	
 -- end: ftd.column
 
 -- end: show-person

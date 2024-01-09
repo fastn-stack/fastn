@@ -22,39 +22,39 @@ max-width.fixed.px: 1340
 
 -- ds.page.footer:
 
--- footer.footer:
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: index.html
-social-links: $footer.social-links
-copyright: Copyright © 2023 - fastn.com
-full-width: false
-max-width.fixed.px: 1340
-
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: index.html
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
 -- end: ds.page.footer
 
 -- lib.team: Student Ambassadors
 
 
--- lib.member: Ayush Soni
-photo: $fastn-assets.files.images.students-program.ambassadors.ayush-soni.jpg
-photo-grey: $fastn-assets.files.images.students-program.ambassadors.ayush-soni-greyscale.jpg
-link: /ambassadors/ayush-soni/
-designation: DevRel Engineer
-
--- lib.member: Ajit Garg
-photo: $fastn-assets.files.images.students-program.champions.ajit.jpg
-photo-grey: $fastn-assets.files.images.students-program.champions.ajit-greyscale.jpg
-link: /ambassadors/ajit-garg/
-designation: DevRel
-
--- lib.member: Govindaraman S
-photo: $fastn-assets.files.images.students-program.ambassadors.govindaraman.jpg
-photo-grey: $fastn-assets.files.images.students-program.ambassadors.govindaraman-grayscale.jpg
-link: /ambassadors/govindaraman-s/
-designation: Front End Developer, Trizwit Labs
-
-
-
+	-- lib.member: Ayush Soni
+	photo: $fastn-assets.files.images.students-program.ambassadors.ayush-soni.jpg
+	photo-grey: $fastn-assets.files.images.students-program.ambassadors.ayush-soni-greyscale.jpg
+	link: /ambassadors/ayush-soni/
+	designation: DevRel Engineer
+	
+	-- lib.member: Ajit Garg
+	photo: $fastn-assets.files.images.students-program.champions.ajit.jpg
+	photo-grey: $fastn-assets.files.images.students-program.champions.ajit-greyscale.jpg
+	link: /ambassadors/ajit-garg/
+	designation: DevRel
+	
+	-- lib.member: Govindaraman S
+	photo: $fastn-assets.files.images.students-program.ambassadors.govindaraman.jpg
+	photo-grey: $fastn-assets.files.images.students-program.ambassadors.govindaraman-grayscale.jpg
+	link: /ambassadors/govindaraman-s/
+	designation: Front End Developer, Trizwit Labs
+	
+	
+	
 -- end: lib.team
 
 

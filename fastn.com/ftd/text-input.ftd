@@ -30,20 +30,20 @@ padding.px: 10
 
 -- ds.output:
 
--- ftd.text-input:
-placeholder: Type any text ...
-padding-horizontal.px: 16
-padding-vertical.px: 8
-width.fixed.px: 200
-border-width.px: 1
-border-color: $inherited.colors.border
-border-radius.px: 4
-$on-input$: $ftd.set-string($a = $current-value, v = $VALUE)
-
--- ftd.text: $current-value
-color: coral
-padding.px: 10
-
+	-- ftd.text-input:
+	placeholder: Type any text ...
+	padding-horizontal.px: 16
+	padding-vertical.px: 8
+	width.fixed.px: 200
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	border-radius.px: 4
+	$on-input$: $ftd.set-string($a = $current-value, v = $VALUE)
+	
+	-- ftd.text: $current-value
+	color: coral
+	padding.px: 10
+	
 -- end: ds.output
 
 
@@ -73,11 +73,11 @@ placeholder: Type any text ...
 
 -- ds.output:
 
--- ftd.text-input:
-placeholder: Type any text ...
-border-width.px: 1
-border-color: $inherited.colors.border
-
+	-- ftd.text-input:
+	placeholder: Type any text ...
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	
 -- end: ds.output
 
 
@@ -95,11 +95,11 @@ value: I love ftd
 
 -- ds.output:
 
--- ftd.text-input:
-value: I love ftd
-border-width.px: 1
-border-color: $inherited.colors.border
-
+	-- ftd.text-input:
+	value: I love ftd
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	
 -- end: ds.output
 
 
@@ -121,11 +121,11 @@ default-value: I love ftd
 
 -- ds.output:
 
--- ftd.text-input:
-default-value: I love ftd
-border-width.px: 1
-border-color: $inherited.colors.border
-
+	-- ftd.text-input:
+	default-value: I love ftd
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	
 -- end: ds.output
 
 
@@ -149,11 +149,11 @@ multiline: false
 
 -- ds.output: Output: `multiline: false`
 
--- ftd.text-input:
-multiline: false
-border-width.px: 1
-border-color: $inherited.colors.border
-
+	-- ftd.text-input:
+	multiline: false
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	
 -- end: ds.output
 
 
@@ -166,11 +166,11 @@ multiline: true
 
 -- ds.output: Output: `multiline: true`
 
--- ftd.text-input:
-multiline: true
-border-width.px: 1
-border-color: $inherited.colors.border
-
+	-- ftd.text-input:
+	multiline: true
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	
 -- end: ds.output
 
 
@@ -190,13 +190,13 @@ value: Hello
 
 -- ds.output: Output: `enabled: false`
 
--- ftd.text-input:
-enabled: false
-border-width.px: 1
-border-color: $inherited.colors.border
-value: Hello
-color: $inherited.colors.text
-
+	-- ftd.text-input:
+	enabled: false
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	value: Hello
+	color: $inherited.colors.text
+	
 -- end: ds.output
 
 
@@ -210,12 +210,12 @@ value: Hello
 
 -- ds.output: Output: `enabled: true`
 
--- ftd.text-input:
-enabled: true
-border-width.px: 1
-border-color: $inherited.colors.border
-value: Hello
-
+	-- ftd.text-input:
+	enabled: true
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	value: Hello
+	
 -- end: ds.output
 
 -- ds.h2: `max-length: optional integer`
@@ -233,11 +233,11 @@ max-length: 10
 
 -- ds.output: Output: `max-length` is set to 10 characters
 
--- ftd.text-input:
-placeholder: Max 10 characters
-type: text
-max-length: 10
-
+	-- ftd.text-input:
+	placeholder: Max 10 characters
+	type: text
+	max-length: 10
+	
 -- end: ds.output
 
 -- ds.h2: `type: optional ftd.text-input-type`
@@ -257,13 +257,13 @@ type: text
 
 -- ds.output: Output: `type: text`
 
--- ftd.text-input:
-enabled: true
-border-width.px: 1
-border-color: $inherited.colors.border
-value: Hello
-type: text
-
+	-- ftd.text-input:
+	enabled: true
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	value: Hello
+	type: text
+	
 -- end: ds.output
 
 
@@ -277,12 +277,12 @@ type: email
 
 -- ds.output: Output: `type: email`
 
--- ftd.text-input:
-border-width.px: 1
-border-color: $inherited.colors.border
-value: Hello@abc.com
-type: email
-
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	value: Hello@abc.com
+	type: email
+	
 -- end: ds.output
 
 
@@ -296,12 +296,12 @@ type: password
 
 -- ds.output: Output: `type: password`
 
--- ftd.text-input:
-border-width.px: 1
-border-color: $inherited.colors.border
-value: Hello
-type: password
-
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	value: Hello
+	type: password
+	
 -- end: ds.output
 
 
@@ -315,12 +315,12 @@ type: url
 
 -- ds.output: Output: `type: url`
 
--- ftd.text-input:
-border-width.px: 1
-border-color: $inherited.colors.border
-value: https://fastn.com
-type: url
-
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	value: https://fastn.com
+	type: url
+	
 -- end: ds.output
 
 
@@ -334,11 +334,11 @@ type: datetime
 
 -- ds.output: Output: `type: datetime`
 
--- ftd.text-input:
-border-width.px: 1
-border-color: $inherited.colors.border
-type: datetime
-
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: datetime
+	
 -- end: ds.output
 
 
@@ -354,11 +354,11 @@ type: date
 
 -- ds.output: Output: `type: date`
 
--- ftd.text-input:
-border-width.px: 1
-border-color: $inherited.colors.border
-type: date
-
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: date
+	
 -- end: ds.output
 
 
@@ -373,11 +373,11 @@ type: time
 
 -- ds.output: Output: `type: time`
 
--- ftd.text-input:
-border-width.px: 1
-border-color: $inherited.colors.border
-type: time
-
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: time
+	
 -- end: ds.output
 
 
@@ -392,11 +392,11 @@ type: month
 
 -- ds.output: Output: `type: month`
 
--- ftd.text-input:
-border-width.px: 1
-border-color: $inherited.colors.border
-type: month
-
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: month
+	
 -- end: ds.output
 
 
@@ -412,11 +412,11 @@ type: week
 
 -- ds.output: Output: `type: week`
 
--- ftd.text-input:
-border-width.px: 1
-border-color: $inherited.colors.border
-type: week
-
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: week
+	
 -- end: ds.output
 
 
@@ -433,13 +433,13 @@ height.fixed.px: 40
 
 -- ds.output: Output: `type: color`
 
--- ftd.text-input:
-border-width.px: 1
-border-color: $inherited.colors.border
-type: color
-width.fixed.px: 40
-height.fixed.px: 40
-
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: color
+	width.fixed.px: 40
+	height.fixed.px: 40
+	
 -- end: ds.output
 
 
@@ -454,11 +454,11 @@ type: file
 
 -- ds.output: Output: `type: file`
 
--- ftd.text-input:
-border-width.px: 1
-border-color: $inherited.colors.border
-type: file
-
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: file
+	
 -- end: ds.output
 
 

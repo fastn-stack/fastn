@@ -1,7 +1,7 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/assets
 
--- ds.page: 
+-- ds.page:
 sidebar: false
 full-width: true
 
@@ -44,166 +44,166 @@ border-color: $inherited.colors.border-strong
 width: fill-container
 min-height.fixed.vh: 90
 
--- ftd.column:
-width.fixed.percent: 22
-width.fixed.percent if { exercise.sidebar }: 4
-color: $inherited.colors.text
-height.fixed.vh: 90
-max-height.fixed.vh: 90
-overflow-y: auto
+	-- ftd.column:
+	width.fixed.percent: 22
+	width.fixed.percent if { exercise.sidebar }: 4
+	color: $inherited.colors.text
+	height.fixed.vh: 90
+	max-height.fixed.vh: 90
+	overflow-y: auto
+	
+		-- ftd.row:
+		padding-vertical.px: 12
+		padding-horizontal.px: 16
+		width: fill-container
+		spacing: space-between
+		border-bottom-width.px: 1
+		border-color: $inherited.colors.border-strong
+		align-content: center
+		
+			-- ftd.text: EXAMPLES
+			if:{ !exercise.sidebar }
+			role: $inherited.types.label-large
+			
+			-- ftd.image:
+			src: $assets.files.examples.assets.collapse-sidebar.svg
+			src if { exercise.sidebar }:$assets.files.examples.assets.open-sidebar.svg
+			$on-click$: $ftd.toggle($a = $exercise.sidebar)
+			
+		-- end: ftd.row
 
--- ftd.row:
-padding-vertical.px: 12
-padding-horizontal.px: 16
-width: fill-container
-spacing: space-between
-border-bottom-width.px: 1
-border-color: $inherited.colors.border-strong
-align-content: center
+		-- ftd.column:
+		if: { !exercise.sidebar }
+		padding-vertical.px: 9
+		padding-horizontal.px: 16
+		width: fill-container
+		
+			-- render-files:
+			$loop$: $exercise.list-of-files as $obj
+			title: $obj.title
+			link: $obj.url
+			children: $obj.children
+			
+		-- end: ftd.column
 
--- ftd.text: EXAMPLES
-if:{ !exercise.sidebar }
-role: $inherited.types.label-large
+	-- end: ftd.column
 
--- ftd.image:
-src: $assets.files.examples.assets.collapse-sidebar.svg
-src if { exercise.sidebar }:$assets.files.examples.assets.open-sidebar.svg
-$on-click$: $ftd.toggle($a = $exercise.sidebar)
+	-- ftd.column:
+	width.fixed.percent: 0
+	width.fixed.percent if { !exercise.responsive && !exercise.sidebar }: 39
+	width.fixed.percent if { exercise.sidebar && !exercise.responsive }: 48
+	spacing.fixed.px: 24
+	border-right-width.px: 1
+	border-left-width.px: 1
+	border-color: $inherited.colors.border
+	background.solid: $inherited.colors.background.step-2
+	min-height.fixed.vh: 90
+	overflow: hidden
+	max-height.fixed.vh: 90
+	
+		-- code-block:
+		if:{ file-1 }
+		info: File-1.ftd
+		
+		-- code-block:
+		if:{ !file-1 && file-2 }
+		info: File-2.ftd
+		
+		
+	-- end: ftd.column
 
--- end: ftd.row
+	-- ftd.column:
+	width.fixed.percent: 39
+	width.fixed.percent if { exercise.responsive && !exercise.sidebar }: 78
+	width.fixed.percent if { exercise.sidebar && !exercise.responsive }: 48
+	width.fixed.percent if { exercise.sidebar && exercise.responsive }: 96
+	spacing.fixed.px: 16
+	
+		-- ftd.row:
+		if: { ! exercise.responsive }
+		width: fill-container
+		padding-left.px: 10
+		padding-right.px: 24
+		align-content: center
+		spacing.fixed.px: 24
+		border-bottom-width.px: 1
+		border-color: $inherited.colors.border
+		padding-vertical.px: 6
+		
+			-- ftd.text-input:
+			value: $exercise.src
+			$on-input$: $ftd.set-string($a = $exercise.src, v=$VALUE)
+			role: $inherited.types.fine-print
+			background.solid: $inherited.colors.background.step-2
+			color: $inherited.colors.text
+			width: fill-container
+			border-radius.px: 4
+			padding-vertical.px: 7
+			padding-horizontal.px: 12
+			
+			-- ftd.image:
+			src: $assets.files.examples.assets.copy.svg
+			$on-click$: $ftd.copy-to-clipboard(a = $exercise.src)
+			anchor: parent
+			right.px: 86
+			
+			-- ftd.image:
+			src: $assets.files.examples.assets.responsive.svg
+			$on-click$: $ftd.set-bool($a = $exercise.responsive, v = true)
+			$on-click$: $ftd.set-bool($a = $exercise.desktop, v = true)
+			width.fixed.px: 24
+			
+		-- end: ftd.row
 
--- ftd.column:
-if: { !exercise.sidebar }
-padding-vertical.px: 9
-padding-horizontal.px: 16
-width: fill-container
+		-- ftd.row:
+		if: { exercise.responsive }
+		width: fill-container
+		padding-horizontal.px: 10
+		border-bottom-width.px: 1
+		padding-vertical.px: 8
+		border-color: $inherited.colors.border
+		
+			-- ftd.row:
+			align-content: center
+			spacing.fixed.px: 24
+			width: fill-container
+			
+				-- ftd.image:
+				src: $assets.files.examples.assets.desktop-active.svg
+				src if { exercise.mobile } : $assets.files.examples.assets.desktop-inactive.svg
+				$on-click$: $ftd.set-bool($a = $exercise.desktop, v = true)
+				$on-click$: $ftd.set-bool($a = $exercise.mobile, v = false)
+				
+				-- ftd.image:
+				src: $assets.files.examples.assets.mobile-active.svg
+				src if { exercise.desktop } : $assets.files.examples.assets.mobile-inactive.svg
+				$on-click$: $ftd.set-bool($a = $exercise.mobile, v = true)
+				$on-click$: $ftd.set-bool($a = $exercise.desktop, v = false)
+				
+			-- end: ftd.row
 
--- render-files:
-$loop$: $exercise.list-of-files as $obj
-title: $obj.title
-link: $obj.url
-children: $obj.children
+			-- ftd.image:
+			src: $assets.files.examples.assets.cross.svg
+			$on-click$: $ftd.set-bool($a = $exercise.responsive, v = false)
+			$on-click$: $ftd.set-bool($a = $exercise.mobile, v = false)
+			align-self: center
+			
+		-- end: ftd.row
 
--- end: ftd.column
+		-- ftd.column:
+		width.fixed.percent: 100
+		width.fixed.px if { exercise.mobile } : 352
+		align-self: center
+		
+			-- ftd.iframe:
+			min-height.fixed.vh: 83
+			max-height.fixed.vh: 83
+			src: $exercise.src
+			width: fill-container
+			
+		-- end: ftd.column
 
--- end: ftd.column
-
--- ftd.column:
-width.fixed.percent: 0
-width.fixed.percent if { !exercise.responsive && !exercise.sidebar }: 39
-width.fixed.percent if { exercise.sidebar && !exercise.responsive }: 48
-spacing.fixed.px: 24
-border-right-width.px: 1
-border-left-width.px: 1
-border-color: $inherited.colors.border
-background.solid: $inherited.colors.background.step-2
-min-height.fixed.vh: 90
-overflow: hidden
-max-height.fixed.vh: 90
-
--- code-block:
-if:{ file-1 }
-info: File-1.ftd
-
--- code-block:
-if:{ !file-1 && file-2 }
-info: File-2.ftd
-
-
--- end: ftd.column
-
--- ftd.column:
-width.fixed.percent: 39
-width.fixed.percent if { exercise.responsive && !exercise.sidebar }: 78
-width.fixed.percent if { exercise.sidebar && !exercise.responsive }: 48
-width.fixed.percent if { exercise.sidebar && exercise.responsive }: 96
-spacing.fixed.px: 16
-
--- ftd.row:
-if: { ! exercise.responsive } 
-width: fill-container
-padding-left.px: 10
-padding-right.px: 24
-align-content: center
-spacing.fixed.px: 24
-border-bottom-width.px: 1
-border-color: $inherited.colors.border
-padding-vertical.px: 6
-
--- ftd.text-input: 
-value: $exercise.src
-$on-input$: $ftd.set-string($a = $exercise.src, v=$VALUE)
-role: $inherited.types.fine-print
-background.solid: $inherited.colors.background.step-2
-color: $inherited.colors.text
-width: fill-container
-border-radius.px: 4
-padding-vertical.px: 7
-padding-horizontal.px: 12
-
--- ftd.image: 
-src: $assets.files.examples.assets.copy.svg
-$on-click$: $ftd.copy-to-clipboard(a = $exercise.src)
-anchor: parent
-right.px: 86
-
--- ftd.image:
-src: $assets.files.examples.assets.responsive.svg
-$on-click$: $ftd.set-bool($a = $exercise.responsive, v = true)
-$on-click$: $ftd.set-bool($a = $exercise.desktop, v = true)
-width.fixed.px: 24
-
--- end: ftd.row
-
--- ftd.row:
-if: { exercise.responsive } 
-width: fill-container
-padding-horizontal.px: 10
-border-bottom-width.px: 1
-padding-vertical.px: 8
-border-color: $inherited.colors.border
-
--- ftd.row:
-align-content: center
-spacing.fixed.px: 24
-width: fill-container
-
--- ftd.image:
-src: $assets.files.examples.assets.desktop-active.svg
-src if { exercise.mobile } : $assets.files.examples.assets.desktop-inactive.svg
-$on-click$: $ftd.set-bool($a = $exercise.desktop, v = true)
-$on-click$: $ftd.set-bool($a = $exercise.mobile, v = false)
-
--- ftd.image:
-src: $assets.files.examples.assets.mobile-active.svg
-src if { exercise.desktop } : $assets.files.examples.assets.mobile-inactive.svg
-$on-click$: $ftd.set-bool($a = $exercise.mobile, v = true)
-$on-click$: $ftd.set-bool($a = $exercise.desktop, v = false)
-
--- end: ftd.row
-
--- ftd.image:
-src: $assets.files.examples.assets.cross.svg
-$on-click$: $ftd.set-bool($a = $exercise.responsive, v = false)
-$on-click$: $ftd.set-bool($a = $exercise.mobile, v = false)
-align-self: center
-
--- end: ftd.row
-
--- ftd.column:
-width.fixed.percent: 100
-width.fixed.px if { exercise.mobile } : 352
-align-self: center
-
--- ftd.iframe:
-min-height.fixed.vh: 83
-max-height.fixed.vh: 83
-src: $exercise.src
-width: fill-container
-
--- end: ftd.column
-
--- end: ftd.column
+	-- end: ftd.column
 
 -- end: ftd.row
 
@@ -227,22 +227,22 @@ pr.toc-item list children:
 -- ftd.column:
 width: fill-container
 
--- ftd.text: $render-files.title
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-padding.px: 8
-
--- ftd.column:
-width: fill-container
-if: { !ftd.is_empty(render-files.children) }
-
--- render-files-children:
-$loop$: $render-files.children as $obj
-title: $obj.title
-link: $obj.url
-children: $obj.children
-
--- end: ftd.column
+	-- ftd.text: $render-files.title
+	role: $inherited.types.copy-regular
+	color: $inherited.colors.text
+	padding.px: 8
+	
+	-- ftd.column:
+	width: fill-container
+	if: { !ftd.is_empty(render-files.children) }
+	
+		-- render-files-children:
+		$loop$: $render-files.children as $obj
+		title: $obj.title
+		link: $obj.url
+		children: $obj.children
+		
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -267,62 +267,62 @@ boolean $open: false
 width: fill-container
 spacing.fixed.px: 8
 
--- ftd.row:
-width: fill-container
-background.solid if {render-files-children.open }: $inherited.colors.background.step-2
-padding.px: 8
-border-radius.px:2
-align-content: center
+	-- ftd.row:
+	width: fill-container
+	background.solid if {render-files-children.open }: $inherited.colors.background.step-2
+	padding.px: 8
+	border-radius.px:2
+	align-content: center
+	
+		-- ftd.row:
+		if: { !ftd.is_empty(render-files-children.children) }
+		padding.px: 12
+		background.solid: $inherited.colors.text
+		border-radius.px: 2
+		
+		-- end: ftd.row
 
--- ftd.row:
-if: { !ftd.is_empty(render-files-children.children) }
-padding.px: 12
-background.solid: $inherited.colors.text
-border-radius.px: 2
+		-- ftd.image:
+		src: $assets.files.examples.assets.file.svg
+		if: { ftd.is_empty(render-files-children.children) }
+		
+		-- ftd.text: $render-files-children.title
+		role: $inherited.types.copy-small
+		color: $inherited.colors.text
+		padding-left.px: 12
+		width: fill-container
+		
+		-- ftd.column:
+		if: { !ftd.is_empty(render-files-children.children) }
+		align-content: right
+		width: fill-container
+		
+			-- ftd.image:
+			src: $assets.files.examples.assets.down.svg
+			src if {render-files-children.open }: $assets.files.examples.assets.up.svg
+			$on-click$: $ftd.toggle($a = $render-files-children.open)
+			width.fixed.px: 12
+			
+		-- end: ftd.column
 
--- end: ftd.row
+	-- end: ftd.row
 
--- ftd.image:
-src: $assets.files.examples.assets.file.svg
-if: { ftd.is_empty(render-files-children.children) }
-
--- ftd.text: $render-files-children.title
-role: $inherited.types.copy-small
-color: $inherited.colors.text
-padding-left.px: 12
-width: fill-container
-
--- ftd.column:
-if: { !ftd.is_empty(render-files-children.children) }
-align-content: right
-width: fill-container
-
--- ftd.image:
-src: $assets.files.examples.assets.down.svg
-src if {render-files-children.open }: $assets.files.examples.assets.up.svg
-$on-click$: $ftd.toggle($a = $render-files-children.open)
-width.fixed.px: 12
-
--- end: ftd.column
-
--- end: ftd.row
-
--- ftd.column:
-if: { render-files-children.open && !ftd.is_empty(render-files-children.children) }
-border-left-width.px: 1
-margin-left.px: 21
-padding-left.px: 12
-border-color: $inherited.colors.border-strong
-width.fixed.percent: 93
-spacing.fixed.px: 8
-
--- render-files-children-toc:
-$loop$: $render-files-children.children as $obj
-title: $obj.title
-link: $obj.url
-children: $obj.children
-
--- end: ftd.column
+	-- ftd.column:
+	if: { render-files-children.open && !ftd.is_empty(render-files-children.children) }
+	border-left-width.px: 1
+	margin-left.px: 21
+	padding-left.px: 12
+	border-color: $inherited.colors.border-strong
+	width.fixed.percent: 93
+	spacing.fixed.px: 8
+	
+		-- render-files-children-toc:
+		$loop$: $render-files-children.children as $obj
+		title: $obj.title
+		link: $obj.url
+		children: $obj.children
+		
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -348,57 +348,57 @@ boolean $active: false
 width: fill-container
 spacing.fixed.px: 8
 
--- ftd.row:
-background.solid if { render-files-children-toc.open || render-files-children-toc.active }: $inherited.colors.background.step-2
-padding.px: 5
-border-radius.px:2
-align-content: center
-width: fill-container
+	-- ftd.row:
+	background.solid if { render-files-children-toc.open || render-files-children-toc.active }: $inherited.colors.background.step-2
+	padding.px: 5
+	border-radius.px:2
+	align-content: center
+	width: fill-container
+	
+		-- ftd.image:
+		src: $assets.files.examples.assets.file.svg
+		src if { !ftd.is_empty(render-files-children-toc.children) }: $assets.files.examples.assets.folder.svg
+		width.fixed.px: 12
+		
+		-- ftd.text: $render-files-children-toc.title
+		role: $inherited.types.fine-print
+		color: $inherited.colors.text
+		width: fill-container
+		padding-left.px: 12
+		$on-click$: $ftd.toggle($a = $render-files-children-toc.active)
+		$on-click$: $ftd.toggle($a = $file-1)
+		$on-click$: $ftd.toggle($a = $file-2)
+		
+		-- ftd.column:
+		if: { !ftd.is_empty(render-files-children-toc.children) }
+		align-content: right
+		width: fill-container
+		
+			-- ftd.image:
+			src: $assets.files.examples.assets.down.svg
+			src if { render-files-children-toc.open }: $assets.files.examples.assets.up.svg
+			$on-click$: $ftd.toggle($a = $render-files-children-toc.open)
+			width.fixed.px: 12
+			
+		-- end: ftd.column
 
--- ftd.image:
-src: $assets.files.examples.assets.file.svg
-src if { !ftd.is_empty(render-files-children-toc.children) }: $assets.files.examples.assets.folder.svg
-width.fixed.px: 12
+	-- end: ftd.row
 
--- ftd.text: $render-files-children-toc.title
-role: $inherited.types.fine-print
-color: $inherited.colors.text
-width: fill-container
-padding-left.px: 12
-$on-click$: $ftd.toggle($a = $render-files-children-toc.active)
-$on-click$: $ftd.toggle($a = $file-1)
-$on-click$: $ftd.toggle($a = $file-2)
-
--- ftd.column:
-if: { !ftd.is_empty(render-files-children-toc.children) }
-align-content: right
-width: fill-container
-
--- ftd.image:
-src: $assets.files.examples.assets.down.svg
-src if { render-files-children-toc.open }: $assets.files.examples.assets.up.svg
-$on-click$: $ftd.toggle($a = $render-files-children-toc.open)
-width.fixed.px: 12
-
--- end: ftd.column
-
--- end: ftd.row
-
--- ftd.column:
-if: { render-files-children-toc.open && !ftd.is_empty(render-files-children-toc.children) }
-border-left-width.px:1
-margin-left.px: 12
-padding-left.px: 8
-width.fixed.percent: 96
-border-color: $inherited.colors.border
-
--- render-files-children-toc:
-$loop$: $render-files-children-toc.children as $obj
-title: $obj.title
-link: $obj.url
-children: $obj.children
-
--- end: ftd.column
+	-- ftd.column:
+	if: { render-files-children-toc.open && !ftd.is_empty(render-files-children-toc.children) }
+	border-left-width.px:1
+	margin-left.px: 12
+	padding-left.px: 8
+	width.fixed.percent: 96
+	border-color: $inherited.colors.border
+	
+		-- render-files-children-toc:
+		$loop$: $render-files-children-toc.children as $obj
+		title: $obj.title
+		link: $obj.url
+		children: $obj.children
+		
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -423,33 +423,33 @@ padding-horizontal.px: 10
 padding-vertical.px: 10
 background.solid: $inherited.colors.background.step-2
 
--- ftd.text: $code-block.info
-role: $inherited.types.copy-small
-color: $inherited.colors.text
-
--- ds.code:
-lang: ftd
-
-1. -- ftd.text: Hello World
-2. role: $inherited.types.copy-regular
-3. color: $inherited.colors.text-strong
-4. width: fill-container
-5.
-6. -- ftd.column:
-7. width: fill-container
-8.
-9. -- ftd.text: Hello World
-8. role: $inherited.types.copy-regular
-9. color: $inherited.colors.text-strong
-10. width: fill-container
-11.
-12. end: ftd.column
-
-
--- ftd.column:
-children: $code-block.code-wrapper
-
--- end: ftd.column
+	-- ftd.text: $code-block.info
+	role: $inherited.types.copy-small
+	color: $inherited.colors.text
+	
+	-- ds.code:
+	lang: ftd
+	
+	1. -- ftd.text: Hello World
+	2. role: $inherited.types.copy-regular
+	3. color: $inherited.colors.text-strong
+	4. width: fill-container
+	5.
+	6. -- ftd.column:
+	7. width: fill-container
+	8.
+	9. -- ftd.text: Hello World
+	8. role: $inherited.types.copy-regular
+	9. color: $inherited.colors.text-strong
+	10. width: fill-container
+	11.
+	12. end: ftd.column
+	
+	
+	-- ftd.column:
+	children: $code-block.code-wrapper
+	
+	-- end: ftd.column
 
 -- end: ftd.column
 
@@ -498,22 +498,13 @@ $processor$: pr.toc
       - `index.ftd`: /
       - `home.ftd`: /
       - `section.ftd`: /
-- Hero: 
+- Hero:
   - first-code: /
     - `index.ftd`: /
     - `home.ftd`: /
-    - `section.ftd`: 
+    - `section.ftd`:
 - Blog: index.html
   - `blog-1.ftd`: /
   - `blog-2.ftd`: /
   - `blog-3.ftd`: /
   - `blog-4.ftd`: /
-
-
-
-
-
-
-
-
-
