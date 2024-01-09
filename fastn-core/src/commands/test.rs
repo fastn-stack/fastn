@@ -38,30 +38,6 @@ macro_rules! log_message {
 }
 
 #[derive(Debug, Clone)]
-pub struct Fixture {
-    pub content: String,
-    pub file_name: String,
-}
-
-impl Fixture {
-    pub fn new(content: String, file_name: String) -> Self {
-        Fixture { content, file_name }
-    }
-
-    pub fn content_without_imports(&self) -> String {
-        let mut result = String::new();
-        let fixture_content = self.content.as_str();
-        for line in fixture_content.lines() {
-            if line.trim().starts_with("-- import") {
-                continue;
-            }
-            result.push_str(line);
-        }
-        result
-    }
-}
-
-#[derive(Debug, Clone)]
 pub struct TestParameters {
     pub script: bool,
     pub verbose: bool,
