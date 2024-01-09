@@ -1,11 +1,14 @@
 pub(crate) const TEST_FOLDER: &str = "_tests";
+pub(crate) const FIXTURE_FOLDER: &str = "fixtures";
 pub(crate) const TEST_FILE_EXTENSION: &str = ".test.ftd";
+pub(crate) const FIXTURE_FILE_EXTENSION: &str = ".fixture.ftd";
 
 // mandatory test parameters
 pub(crate) const TEST_TITLE_HEADER: &str = "title";
 pub(crate) const TEST_URL_HEADER: &str = "url";
 
 // optional test parameters
+pub(crate) const FIXTURE_HEADER: &str = "fixture";
 pub(crate) const TEST_ID_HEADER: &str = "id";
 pub(crate) const QUERY_PARAMS_HEADER: &str = "query-params";
 pub(crate) const QUERY_PARAMS_HEADER_KEY: &str = "key";
@@ -32,6 +35,30 @@ macro_rules! log_message {
             $(std::println!($message);)*
         }
     };
+}
+
+#[derive(Debug, Clone)]
+pub struct Fixture {
+    pub content: String,
+    pub file_name: String,
+}
+
+impl Fixture {
+    pub fn new(content: String, file_name: String) -> Self {
+        Fixture { content, file_name }
+    }
+
+    pub fn content_without_imports(&self) -> String {
+        let mut result = String::new();
+        let fixture_content = self.content.as_str();
+        for line in fixture_content.lines() {
+            if line.trim().starts_with("-- import") {
+                continue;
+            }
+            result.push_str(line);
+        }
+        result
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -65,7 +92,7 @@ pub async fn test(
 
     if !headless {
         return fastn_core::usage_error(
-            "Currently headless mode is only suuported, use: --headless flag".to_string(),
+            "Currently headless mode is only supported, use: --headless flag".to_string(),
         );
     }
     let ftd_documents = config.get_test_files().await?;
@@ -85,6 +112,44 @@ pub async fn test(
 }
 
 impl fastn_core::Config {
+    /**
+    Returns the list of all fixture files with extension of `<file name>.fixture.ftd`
+    **/
+    pub(crate) async fn get_fixture_files(&self) -> fastn_core::Result<Vec<fastn_core::Document>> {
+        use itertools::Itertools;
+        let package = &self.package;
+        let path = self.get_root_for_package(package);
+        let all_files = self.get_all_fixture_file_paths().await?;
+        let documents =
+            fastn_core::paths_to_files(&self.ds, package.name.as_str(), all_files, &path).await?;
+        let mut fixtures = documents
+            .into_iter()
+            .filter_map(|file| match file {
+                fastn_core::File::Ftd(ftd_document)
+                    if ftd_document
+                        .id
+                        .ends_with(fastn_core::commands::test::FIXTURE_FILE_EXTENSION) =>
+                {
+                    Some(ftd_document)
+                }
+                _ => None,
+            })
+            .collect_vec();
+        fixtures.sort_by_key(|v| v.id.to_string());
+
+        Ok(fixtures)
+    }
+
+    pub(crate) async fn get_all_fixture_file_paths(
+        &self,
+    ) -> fastn_core::Result<Vec<fastn_ds::Path>> {
+        let path = self
+            .get_root_for_package(&self.package)
+            .join(fastn_core::commands::test::TEST_FOLDER)
+            .join(fastn_core::commands::test::FIXTURE_FOLDER);
+        Ok(self.ds.get_all_file_path(&path, &[]).await)
+    }
+
     /**
     Returns the list of all test files with extension of `<file name>.test.ftd`
     **/
@@ -126,6 +191,30 @@ impl fastn_core::Config {
     }
 }
 
+async fn read_only_instructions(
+    ftd_document: fastn_core::Document,
+    config: &fastn_core::Config,
+) -> ftd::interpreter::Result<Vec<ftd::interpreter::Component>> {
+    let req = fastn_core::http::Request::default();
+    let mut _saved_cookies: std::collections::HashMap<String, String> =
+        std::collections::HashMap::new();
+    let base_url = "/";
+    let mut req_config =
+        fastn_core::RequestConfig::new(config, &req, ftd_document.id.as_str(), base_url);
+    req_config.current_document = Some(ftd_document.id.to_string());
+    let main_ftd_doc = fastn_core::doc::interpret_helper(
+        ftd_document.id_with_package().as_str(),
+        ftd_document.content.as_str(),
+        &mut req_config,
+        base_url,
+        false,
+        0,
+    )
+    .await?;
+
+    Ok(main_ftd_doc.tree)
+}
+
 async fn read_ftd_test_file(
     ftd_document: fastn_core::Document,
     config: &fastn_core::Config,
@@ -153,8 +242,9 @@ async fn read_ftd_test_file(
         &main_ftd_doc.aliases,
         &main_ftd_doc.data,
     );
+    let all_instructions = get_all_instructions(&main_ftd_doc.tree, &doc, config).await?;
     let mut instruction_number = 1;
-    for instruction in main_ftd_doc.tree {
+    for instruction in all_instructions.iter() {
         test_parameters.instruction_number = instruction_number;
         if !execute_instruction(
             &instruction,
@@ -170,6 +260,38 @@ async fn read_ftd_test_file(
         instruction_number += 1;
     }
     Ok(())
+}
+
+async fn get_all_instructions(
+    instructions: &Vec<ftd::interpreter::Component>,
+    doc: &ftd::interpreter::TDoc<'_>,
+    config: &fastn_core::Config,
+) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
+    let mut fixture_instructions = vec![];
+    let mut rest_instructions = vec![];
+    let mut included_fixtures: std::collections::HashSet<String> = std::collections::HashSet::new();
+    for instruction in instructions.iter() {
+        match instruction.name.as_str() {
+            "fastn#test" => {
+                // Fixture instructions
+                fixture_instructions.extend(
+                    execute_test_instruction(instruction, doc, config, &mut included_fixtures)
+                        .await?,
+                )
+            }
+            "fastn#get" | "fastn#post" => rest_instructions.push(instruction.clone()),
+            t => {
+                return fastn_core::usage_error(format!(
+                    "Unknown instruction {}, line number: {}",
+                    t, instruction.line_number
+                ))
+            }
+        }
+    }
+    let mut all_instructions = fixture_instructions;
+    all_instructions.extend(rest_instructions);
+
+    return Ok(all_instructions);
 }
 
 async fn execute_instruction(
@@ -191,6 +313,72 @@ async fn execute_instruction(
             t, instruction.line_number
         )),
     }
+}
+
+async fn execute_test_instruction(
+    instruction: &ftd::interpreter::Component,
+    doc: &ftd::interpreter::TDoc<'_>,
+    config: &fastn_core::Config,
+    included_fixtures: &mut std::collections::HashSet<String>,
+) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
+    let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc)?;
+
+    // Mandatory test parameters --------------------------------
+    let title = get_value_ok(TEST_TITLE_HEADER, &property_values, instruction.line_number)?
+        .to_string(doc, false)?
+        .unwrap();
+
+    // Optional test parameters --------------------------------
+    let mut optional_params: ftd::Map<String> = ftd::Map::new();
+
+    if let Some(fixture) = get_optional_value_string(FIXTURE_HEADER, &property_values, doc)? {
+        optional_params.insert(FIXTURE_HEADER.to_string(), fixture);
+    }
+
+    process_test_instruction(title, config, optional_params, included_fixtures).await
+}
+
+async fn process_test_instruction(
+    title: String,
+    config: &fastn_core::Config,
+    optional_params: ftd::Map<String>,
+    included_fixtures: &mut std::collections::HashSet<String>,
+) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
+    println!("Test: {}", title);
+    let mut fixture_instructions = vec![];
+    if let Some(fixture_file_name) = optional_params.get(FIXTURE_HEADER) {
+        if !included_fixtures.contains(fixture_file_name) {
+            fixture_instructions
+                .extend(read_fixture_instructions(config, fixture_file_name.to_string()).await?);
+            included_fixtures.insert(fixture_file_name.to_string());
+        }
+    }
+
+    Ok(fixture_instructions)
+}
+
+async fn read_fixture_instructions(
+    config: &fastn_core::Config,
+    fixture_file_name: String,
+) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
+    let mut fixture_instructions = vec![];
+    let fixture_files = config.get_fixture_files().await?;
+    let current_fixture_file = fixture_files.iter().find(|d| {
+        d.id.trim_start_matches(format!("{}/{}/", TEST_FOLDER, FIXTURE_FOLDER).as_str())
+            .trim_end_matches(FIXTURE_FILE_EXTENSION)
+            .eq(fixture_file_name.as_str())
+    });
+
+    if let Some(fixture) = current_fixture_file {
+        fixture_instructions.extend(read_only_instructions(fixture.clone(), config).await?);
+    } else {
+        println!(
+            "Fixture: {} not found inside fixtures folder",
+            fixture_file_name.as_str()
+        );
+    }
+
+    Ok(fixture_instructions)
 }
 
 async fn execute_post_instruction(
