@@ -120,8 +120,8 @@ async fn update_dependencies(
                 resolve_dependency_package(ds, &dependency, dependency_path, package_name.clone())
                     .await?;
             resolved.insert(package_name.to_string());
+            pb.inc_length(dep_package.dependencies.len() as u64);
             stack.push(dep_package);
-            pb.inc_length(1);
         }
 
         pb.inc(1);
@@ -199,6 +199,7 @@ async fn get_manifest(package_name: String) -> Result<fastn_core::Manifest, Mani
     Ok(manifest)
 }
 
+#[tracing::instrument(skip_all)]
 pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
     if let Err(fastn_ds::RemoveError::IOError(e)) =
         config.ds.remove(&config.ds.root().join(".packages")).await
