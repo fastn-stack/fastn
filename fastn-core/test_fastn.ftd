@@ -49,7 +49,7 @@ optional string id:
 
 -- component test:
 caption title:
-optional string fixture:
+string list fixtures:
 
 -- ftd.text: NOT IMPLEMENTED HERE
 

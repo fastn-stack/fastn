@@ -1,14 +1,14 @@
 pub(crate) const TEST_FOLDER: &str = "_tests";
 pub(crate) const FIXTURE_FOLDER: &str = "fixtures";
 pub(crate) const TEST_FILE_EXTENSION: &str = ".test.ftd";
-pub(crate) const FIXTURE_FILE_EXTENSION: &str = ".fixture.ftd";
+pub(crate) const FIXTURE_FILE_EXTENSION: &str = ".test.ftd";
 
 // mandatory test parameters
 pub(crate) const TEST_TITLE_HEADER: &str = "title";
 pub(crate) const TEST_URL_HEADER: &str = "url";
 
 // optional test parameters
-pub(crate) const FIXTURE_HEADER: &str = "fixture";
+pub(crate) const FIXTURE_HEADER: &str = "fixtures";
 pub(crate) const TEST_ID_HEADER: &str = "id";
 pub(crate) const QUERY_PARAMS_HEADER: &str = "query-params";
 pub(crate) const QUERY_PARAMS_HEADER_KEY: &str = "key";
@@ -167,10 +167,11 @@ impl fastn_core::Config {
     }
 }
 
+#[async_recursion::async_recursion(?Send)]
 async fn read_only_instructions(
     ftd_document: fastn_core::Document,
     config: &fastn_core::Config,
-) -> ftd::interpreter::Result<Vec<ftd::interpreter::Component>> {
+) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
     let req = fastn_core::http::Request::default();
     let mut _saved_cookies: std::collections::HashMap<String, String> =
         std::collections::HashMap::new();
@@ -188,7 +189,12 @@ async fn read_only_instructions(
     )
     .await?;
 
-    Ok(main_ftd_doc.tree)
+    let doc = ftd::interpreter::TDoc::new(
+        &main_ftd_doc.name,
+        &main_ftd_doc.aliases,
+        &main_ftd_doc.data,
+    );
+    get_all_instructions(&main_ftd_doc.tree, &doc, config).await
 }
 
 async fn read_ftd_test_file(
@@ -306,28 +312,36 @@ async fn execute_test_instruction(
         .to_string(doc, false)?
         .unwrap();
 
-    // Optional test parameters --------------------------------
-    let mut optional_params: ftd::Map<String> = ftd::Map::new();
+    let fixtures =
+        if let Some(fixtures) = get_optional_value_list(FIXTURE_HEADER, &property_values, doc)? {
+            let mut resolved_fixtures = vec![];
+            for fixture in fixtures.iter() {
+                if let ftd::interpreter::Value::String { text } = fixture {
+                    resolved_fixtures.push(text.to_string());
+                }
+            }
+            resolved_fixtures
+        } else {
+            vec![]
+        };
 
-    if let Some(fixture) = get_optional_value_string(FIXTURE_HEADER, &property_values, doc)? {
-        optional_params.insert(FIXTURE_HEADER.to_string(), fixture);
-    }
-
-    process_test_instruction(title, config, optional_params, included_fixtures).await
+    process_test_instruction(title, config, fixtures, included_fixtures).await
 }
 
 async fn process_test_instruction(
     title: String,
     config: &fastn_core::Config,
-    optional_params: ftd::Map<String>,
+    fixtures: Vec<String>,
     included_fixtures: &mut std::collections::HashSet<String>,
 ) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
     println!("Test: {}", title);
     let mut fixture_instructions = vec![];
-    if let Some(fixture_file_name) = optional_params.get(FIXTURE_HEADER) {
-        if !included_fixtures.contains(fixture_file_name) {
+
+    for fixture_file_name in fixtures.iter() {
+        println!("Processing fixture file: {}", fixture_file_name.as_str());
+        if !included_fixtures.contains(fixture_file_name.as_str()) {
             fixture_instructions
-                .extend(read_fixture_instructions(config, fixture_file_name.to_string()).await?);
+                .extend(read_fixture_instructions(config, fixture_file_name.as_str()).await?);
             included_fixtures.insert(fixture_file_name.to_string());
         }
     }
@@ -337,14 +351,14 @@ async fn process_test_instruction(
 
 async fn read_fixture_instructions(
     config: &fastn_core::Config,
-    fixture_file_name: String,
+    fixture_file_name: &str,
 ) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
     let mut fixture_instructions = vec![];
     let fixture_files = config.get_fixture_files().await?;
     let current_fixture_file = fixture_files.iter().find(|d| {
         d.id.trim_start_matches(format!("{}/{}/", TEST_FOLDER, FIXTURE_FOLDER).as_str())
             .trim_end_matches(FIXTURE_FILE_EXTENSION)
-            .eq(fixture_file_name.as_str())
+            .eq(fixture_file_name)
     });
 
     if let Some(fixture) = current_fixture_file {
@@ -352,7 +366,7 @@ async fn read_fixture_instructions(
     } else {
         println!(
             "Fixture: {} not found inside fixtures folder",
-            fixture_file_name.as_str()
+            fixture_file_name
         );
     }
 
