@@ -439,7 +439,7 @@ pub(crate) struct AppData {
     pub(crate) package_name: String,
 }
 
-fn handle_default_route(
+pub fn handle_default_route(
     req: &actix_web::HttpRequest,
     package_name: &str,
 ) -> Option<fastn_core::http::Response> {

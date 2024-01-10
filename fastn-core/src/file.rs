@@ -117,7 +117,7 @@ impl Static {
     }
 }
 
-pub(crate) async fn paths_to_files(
+pub async fn paths_to_files(
     ds: &fastn_ds::DocumentStore,
     package_name: &str,
     files: Vec<fastn_ds::Path>,
@@ -142,7 +142,7 @@ pub(crate) async fn paths_to_files(
     .collect::<Vec<fastn_core::File>>())
 }
 
-pub(crate) async fn get_file(
+pub async fn get_file(
     ds: &fastn_ds::DocumentStore,
     package_name: String,
     doc_path: &fastn_ds::Path,
