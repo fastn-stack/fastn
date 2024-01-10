@@ -236,6 +236,9 @@ impl Request {
 
     pub fn set_query_string(&mut self, query_string: &str) {
         self.query_string = query_string.to_string();
+        self.query = actix_web::web::Query::<std::collections::HashMap<String, serde_json::Value>>::from_query(
+            self.query_string.as_str(),
+        ).unwrap().0;
     }
 
     pub fn host(&self) -> String {
