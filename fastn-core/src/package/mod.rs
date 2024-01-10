@@ -560,9 +560,9 @@ impl Package {
         Ok(self.get_font_ftd().unwrap_or_default())
     }
 
-    pub(crate) async fn get_fastn(&self) -> fastn_core::Result<String> {
-        crate::http::construct_url_and_get_str(format!("{}/FASTN.ftd", self.name).as_str()).await
-    }
+    // pub(crate) async fn get_fastn(&self) -> fastn_core::Result<String> {
+    //     crate::http::construct_url_and_get_str(format!("{}/FASTN.ftd", self.name).as_str()).await
+    // }
 
     #[tracing::instrument(skip_all)]
     pub async fn resolve(
