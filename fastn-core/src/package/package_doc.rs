@@ -381,7 +381,7 @@ impl From<FTDResult> for fastn_core::http::Response {
 }
 
 #[tracing::instrument(skip_all)]
-pub(crate) async fn read_ftd(
+pub async fn read_ftd(
     config: &mut fastn_core::RequestConfig,
     main: &fastn_core::Document,
     base_url: &str,
