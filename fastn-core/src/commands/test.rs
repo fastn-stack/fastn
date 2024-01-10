@@ -173,8 +173,6 @@ async fn read_only_instructions(
     config: &fastn_core::Config,
 ) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
     let req = fastn_core::http::Request::default();
-    let mut _saved_cookies: std::collections::HashMap<String, String> =
-        std::collections::HashMap::new();
     let base_url = "/";
     let mut req_config =
         fastn_core::RequestConfig::new(config, &req, ftd_document.id.as_str(), base_url);
