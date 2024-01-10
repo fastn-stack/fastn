@@ -238,6 +238,8 @@ async fn read_ftd_test_file(
     Ok(())
 }
 
+// This will give all overall set of instructions for a test file
+// including instructions from fixture and other test instructions
 async fn get_all_instructions(
     instructions: &[ftd::interpreter::Component],
     doc: &ftd::interpreter::TDoc<'_>,
