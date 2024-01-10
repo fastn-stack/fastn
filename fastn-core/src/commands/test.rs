@@ -89,7 +89,7 @@ pub async fn test(
 
 impl fastn_core::Config {
     /**
-    Returns the list of all fixture files with extension of `<file name>.fixture.ftd`
+    Returns the list of all fixture files with extension of `<file name>.test.ftd`
     **/
     pub(crate) async fn get_fixture_files(&self) -> fastn_core::Result<Vec<fastn_core::Document>> {
         use itertools::Itertools;
