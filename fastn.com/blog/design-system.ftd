@@ -32,10 +32,13 @@ v: https://www.youtube.com/embed/3RbLgwi7IPI?si=Crfh5Sq0PLyzjEzd
 
 -- ds.h1: Familiarize Yourself with the Design System Package
 
-Begin by thoroughly examining the individual files within the design system 
-package. These files consists an array of design elements, including section 
-layouts, spacing, and typography. Take your time to explore each file 
-to grasp the package's capabilities.
+Begin by thoroughly examining the individual files within the [**design system package**](https://github.com/fastn-community/design-system)
+package. These files consists an array of design elements, including [section 
+layouts](https://github.com/fastn-community/design-system/tree/main/layout), 
+[spacing](https://github.com/fastn-community/design-system/blob/main/spaces.ftd), 
+and [typography](https://github.com/fastn-community/design-system/blob/main/typography.ftd). 
+
+Take your time to explore each file to understand the package's capabilities.
 
 -- ds.h1: Initial Setup
 
@@ -66,9 +69,10 @@ and use hyphens instead of space.
 
 -- ds.h3: FASTN.ftd
 
-Start by creating the `FASTN.ftd` file and insert the code provided below.
+In your text editor, right click on the folder and click on `New File` and save 
+the file as `FASTN.ftd` and insert the code provided below.
 
--- ds.code:
+-- ds.code: FASTN.ftd
 lang: ftd
 
 \-- import: fastn
@@ -79,9 +83,10 @@ lang: ftd
 
 -- ds.h3: index.ftd
 
-For the homepage, create the `index.ftd` file and add the code below.
+Now, again right click on the folder and click on `New File` and save it as 
+`index.ftd` and add the code below.
 
--- ds.code:
+-- ds.code: index.ftd
 lang: ftd
 
 \-- import: fastn-community.github.io/design-system as ds
@@ -117,24 +122,24 @@ src: $fastn-assets.files.images.blog.heading-tn.png
 
 -- ds.h2: Breakdown of key layout structures
 
-[**`ds.section-row:`**](https://github.com/fastn-community/design-system/blob/main/layout/section-row.ftd) 
+[**`ds.section-row`**](https://github.com/fastn-community/design-system/blob/main/layout/section-row.ftd) 
 is used to structure elements horizontally adjacent to 
 each other within a single section or component of a website. 
 
-Conversely, use [**`ds.row:`**](https://github.com/fastn-community/design-system/blob/main/layout/row.ftd) 
+Use [**`ds.row`**](https://github.com/fastn-community/design-system/blob/main/layout/row.ftd) 
 for organizing elements side by side, providing a 
 layout within that specific section or component.
 
-Likewise, for vertical structuring within a section, use [**`ds.section-column:`**](https://github.com/fastn-community/design-system/blob/main/layout/section-column.ftd)
+Likewise, for vertical structuring within a section, use [**`ds.section-column`**](https://github.com/fastn-community/design-system/blob/main/layout/section-column.ftd)
 to arrange elements on top of each other within a single section or component 
 of a website..  For elements inside the section to follow a similar vertical 
-arrangement, opt for [**`ds.column:`**](https://github.com/fastn-community/design-system/blob/main/layout/column.ftd)
+arrangement, opt for [**`ds.column`**](https://github.com/fastn-community/design-system/blob/main/layout/column.ftd)
 
 It's important to note that a component or section in your website can have only 
 one of either a `ds.section-row` and `ds.section-column`.
 
 However, within these designated sections, you can have multiple instances of 
-`ds.row:` or `ds.column:` to structure elements side by side or one on top of 
+`ds.row` or `ds.column` to structure elements side by side or one on top of 
 the other, respectively. 
 
 -- ds.h2: Utilizing Spaces in the Design System Package
