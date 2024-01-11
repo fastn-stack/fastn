@@ -6,6 +6,7 @@ pub(crate) const FIXTURE_FILE_EXTENSION: &str = ".test.ftd";
 // mandatory test parameters
 pub(crate) const TEST_TITLE_HEADER: &str = "title";
 pub(crate) const TEST_URL_HEADER: &str = "url";
+pub(crate) const TESTS_CHILDREN_HEADER: &str = "tests";
 
 // optional test parameters
 pub(crate) const FIXTURE_HEADER: &str = "fixtures";
@@ -249,19 +250,32 @@ async fn get_all_instructions(
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
 ) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
-    let mut fixture_instructions = vec![];
+    let mut fixture_and_test_instructions = vec![];
     let mut rest_instructions = vec![];
     let mut included_fixtures: std::collections::HashSet<String> = std::collections::HashSet::new();
+    let mut found_test_component = false;
     for instruction in instructions.iter() {
         match instruction.name.as_str() {
             "fastn#test" => {
                 // Fixture instructions
-                fixture_instructions.extend(
-                    execute_test_instruction(instruction, doc, config, &mut included_fixtures)
+                found_test_component = true;
+                fixture_and_test_instructions.extend(
+                    get_instructions_from_test(instruction, doc, config, &mut included_fixtures)
                         .await?,
-                )
+                );
             }
-            "fastn#get" | "fastn#post" => rest_instructions.push(instruction.clone()),
+            "fastn#get" | "fastn#post" => {
+                if found_test_component {
+                    return fastn_core::usage_error(format!(
+                        "fastn.test exists which can't have sibling instruction {}, doc: {} \
+                        line_number: {}",
+                        instruction.name.as_str(),
+                        doc.name,
+                        instruction.line_number
+                    ));
+                }
+                rest_instructions.push(instruction.clone())
+            }
             t => {
                 return fastn_core::usage_error(format!(
                     "Unknown instruction {}, line number: {}",
@@ -270,7 +284,9 @@ async fn get_all_instructions(
             }
         }
     }
-    let mut all_instructions = fixture_instructions;
+    // instructions from fastn.test (fixture and fastn.test children instructions)
+    let mut all_instructions = fixture_and_test_instructions;
+    // Rest instructions if fastn.test not used at all
     all_instructions.extend(rest_instructions);
 
     Ok(all_instructions)
@@ -297,7 +313,7 @@ async fn execute_instruction(
     }
 }
 
-async fn execute_test_instruction(
+async fn get_instructions_from_test(
     instruction: &ftd::interpreter::Component,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
@@ -323,23 +339,42 @@ async fn execute_test_instruction(
             vec![]
         };
 
-    process_test_instruction(title, config, fixtures, included_fixtures).await
+    println!("Test: {}", title);
+    let fixture_instructions =
+        get_fixture_instructions(config, fixtures, included_fixtures).await?;
+
+    let test_instructions = if let Some(test_instructions) =
+        get_optional_value_list(TESTS_CHILDREN_HEADER, &property_values, doc)?
+    {
+        let mut instructions = vec![];
+        for instruction in test_instructions.iter() {
+            if let ftd::interpreter::Value::UI { component, .. } = instruction {
+                instructions.push(component.clone());
+            }
+        }
+        instructions
+    } else {
+        vec![]
+    };
+
+    let mut all_instructions = fixture_instructions;
+    all_instructions.extend(test_instructions);
+
+    Ok(all_instructions)
 }
 
-async fn process_test_instruction(
-    title: String,
+async fn get_fixture_instructions(
     config: &fastn_core::Config,
     fixtures: Vec<String>,
     included_fixtures: &mut std::collections::HashSet<String>,
 ) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
-    println!("Test: {}", title);
     let mut fixture_instructions = vec![];
 
     for fixture_file_name in fixtures.iter() {
-        println!("Processing fixture file: {}", fixture_file_name.as_str());
         if !included_fixtures.contains(fixture_file_name.as_str()) {
-            fixture_instructions
-                .extend(read_fixture_instructions(config, fixture_file_name.as_str()).await?);
+            let instructions =
+                read_fixture_instructions(config, fixture_file_name.as_str()).await?;
+            fixture_instructions.extend(instructions);
             included_fixtures.insert(fixture_file_name.to_string());
         }
     }
