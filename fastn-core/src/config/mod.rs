@@ -1346,39 +1346,4 @@ impl Config {
         let lib = fastn_core::FastnLibrary::default();
         Ok(fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib)?)
     }
-
-    pub async fn serialize_to_file(
-        &self,
-        file_path: &fastn_ds::Path,
-        all_packages: std::collections::BTreeMap<String, fastn_core::Manifest>,
-    ) -> fastn_core::Result<()> {
-        let serialized_config = SerializedConfig::from_config(self, all_packages);
-        let serialized_json = serde_json::to_vec_pretty(&serialized_config)?;
-
-        let _ = &self.ds.write_content(file_path, serialized_json).await?;
-
-        Ok(())
-    }
-}
-
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct SerializedConfig {
-    pub package: String,
-    pub packages_root: String,
-    pub original_directory: String,
-    pub all_packages: std::collections::BTreeMap<String, fastn_core::Manifest>,
-}
-
-impl SerializedConfig {
-    pub fn from_config(
-        config: &Config,
-        all_packages: std::collections::BTreeMap<String, fastn_core::Manifest>,
-    ) -> Self {
-        SerializedConfig {
-            package: config.package.name.clone(),
-            packages_root: config.packages_root.to_string(),
-            original_directory: config.original_directory.to_string(),
-            all_packages,
-        }
-    }
 }
