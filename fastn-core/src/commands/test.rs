@@ -159,7 +159,8 @@ impl fastn_core::Config {
         let path = self
             .get_root_for_package(&self.package)
             .join(fastn_core::commands::test::TEST_FOLDER);
-        Ok(self.ds.get_all_file_path(&path, &[]).await)
+        let ignored_directories = ["fixtures".to_string()];
+        Ok(self.ds.get_all_file_path(&path, &ignored_directories).await)
     }
 
     pub(crate) fn get_test_directory_path(&self) -> fastn_ds::Path {
