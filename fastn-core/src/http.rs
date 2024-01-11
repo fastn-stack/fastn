@@ -474,6 +474,8 @@ pub(crate) async fn http_post_with_cookie(
 }
 
 pub async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
+    tracing::debug!("http_get {}", &url);
+
     http_get_with_cookie(url, None, &std::collections::HashMap::new(), true)
         .await?
         .0
