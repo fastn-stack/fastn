@@ -87,14 +87,21 @@ async fn update_dependencies(
     packages_root: &fastn_ds::Path,
     current_package: &fastn_core::Package,
     pb: &indicatif::ProgressBar,
-) -> Result<(), UpdateError> {
+) -> Result<std::collections::BTreeMap<String, fastn_core::Manifest>, UpdateError> {
     let mut stack = vec![current_package.clone()];
-    let mut resolved = std::collections::HashSet::new();
-    resolved.insert(current_package.name.to_string());
+    let mut resolved = std::collections::BTreeMap::new();
+    resolved.insert(
+        current_package.name.to_string(),
+        fastn_core::Manifest::new(
+            std::collections::HashMap::new(),
+            "".to_string(),
+            "".to_string(),
+        ),
+    );
 
     while let Some(package) = stack.pop() {
         for dependency in package.dependencies {
-            if resolved.contains(&dependency.package.name) {
+            if resolved.get(&dependency.package.name).is_some() {
                 continue;
             }
             let package_name = dependency.package.name.clone();
@@ -102,16 +109,7 @@ async fn update_dependencies(
 
             pb.set_message(format!("Resolving {}/manifest.json", &package_name));
 
-            let (manifest, manifest_bytes) = get_manifest(package_name.clone()).await?;
-
-            let manifest_path = dependency_path.join(fastn_core::manifest::MANIFEST_FILE);
-
-            ds.write_content(&manifest_path, manifest_bytes)
-                .await
-                .map_err(|e| ArchiveError::DsWriteError {
-                    package: package_name.clone(),
-                    source: e,
-                })?;
+            let manifest = get_manifest(package_name.clone()).await?;
 
             pb.set_message(format!("Downloading {} archive", &package_name));
 
@@ -124,21 +122,21 @@ async fn update_dependencies(
             .await?;
 
             if dependency.package.name.eq(&fastn_core::FASTN_UI_INTERFACE) {
-                resolved.insert(package_name.to_string());
+                resolved.insert(package_name.to_string(), manifest);
                 continue;
             }
 
             let dep_package =
                 resolve_dependency_package(ds, &dependency, dependency_path, package_name.clone())
                     .await?;
-            resolved.insert(package_name.to_string());
+            resolved.insert(package_name.to_string(), manifest);
             pb.inc_length(dep_package.dependencies.len() as u64);
             stack.push(dep_package);
         }
 
         pb.inc(1);
     }
-    Ok(())
+    Ok(resolved)
 }
 
 async fn download_and_unpack_zip(
@@ -193,9 +191,7 @@ async fn download_and_unpack_zip(
 
 /// Download manifest of the package `<package-name>/manifest.json`
 /// Resolve to `fastn_core::Manifest` struct
-async fn get_manifest(
-    package_name: String,
-) -> Result<(fastn_core::Manifest, Vec<u8>), ManifestError> {
+async fn get_manifest(package_name: String) -> Result<fastn_core::Manifest, ManifestError> {
     let manifest_bytes = fastn_core::http::http_get(&format!(
         "https://{}/{}",
         package_name,
@@ -213,7 +209,7 @@ async fn get_manifest(
         }
     })?;
 
-    Ok((manifest, manifest_bytes))
+    Ok(manifest)
 }
 
 #[tracing::instrument(skip_all)]
@@ -243,14 +239,16 @@ pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
     pb.set_style(spinner_style);
     pb.set_prefix("Updating packages");
 
-    if let Err(e) =
-        update_dependencies(&config.ds, &config.packages_root, current_package, &pb).await
-    {
-        pb.set_prefix("Update failed");
-        pb.abandon_with_message(e.to_string());
+    let all_packages =
+        match update_dependencies(&config.ds, &config.packages_root, current_package, &pb).await {
+            Ok(packages) => packages,
+            Err(e) => {
+                pb.set_prefix("Update failed");
+                pb.abandon_with_message(e.to_string());
 
-        return Ok(());
-    }
+                return Ok(());
+            }
+        };
 
     pb.set_prefix("Updated");
 
@@ -260,6 +258,11 @@ pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
     }
 
     pb.finish();
+
+    let build_path = c.ds.root().join(".build");
+    let config_file_path = build_path.join("config.json");
+
+    c.serialize_to_file(&config_file_path, all_packages).await?;
 
     Ok(())
 }

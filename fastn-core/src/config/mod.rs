@@ -1347,8 +1347,12 @@ impl Config {
         Ok(fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib)?)
     }
 
-    pub async fn serialize_to_file(&self, file_path: &fastn_ds::Path) -> fastn_core::Result<()> {
-        let serialized_config = SerializedConfig::from_config(self);
+    pub async fn serialize_to_file(
+        &self,
+        file_path: &fastn_ds::Path,
+        all_packages: std::collections::BTreeMap<String, fastn_core::Manifest>,
+    ) -> fastn_core::Result<()> {
+        let serialized_config = SerializedConfig::from_config(self, all_packages);
         let serialized_json = serde_json::to_vec_pretty(&serialized_config)?;
 
         let _ = &self.ds.write_content(file_path, serialized_json).await?;
@@ -1362,33 +1366,19 @@ pub struct SerializedConfig {
     pub package: String,
     pub packages_root: String,
     pub original_directory: String,
-    pub all_packages: Vec<String>,
-    pub global_ids: std::collections::HashMap<String, String>,
-    pub ftd_external_js: Vec<String>,
-    pub ftd_inline_js: Vec<String>,
-    pub ftd_external_css: Vec<String>,
-    pub ftd_inline_css: Vec<String>,
-    pub test_command_running: bool,
+    pub all_packages: std::collections::BTreeMap<String, fastn_core::Manifest>,
 }
 
 impl SerializedConfig {
-    pub fn from_config(config: &Config) -> Self {
+    pub fn from_config(
+        config: &Config,
+        all_packages: std::collections::BTreeMap<String, fastn_core::Manifest>,
+    ) -> Self {
         SerializedConfig {
             package: config.package.name.clone(),
             packages_root: config.packages_root.to_string(),
             original_directory: config.original_directory.to_string(),
-            all_packages: config
-                .all_packages
-                .borrow()
-                .values()
-                .map(|p| p.name.clone())
-                .collect(),
-            global_ids: config.global_ids.clone(),
-            ftd_external_js: config.ftd_external_js.clone(),
-            ftd_inline_js: config.ftd_inline_js.clone(),
-            ftd_external_css: config.ftd_external_css.clone(),
-            ftd_inline_css: config.ftd_inline_css.clone(),
-            test_command_running: config.test_command_running,
+            all_packages,
         }
     }
 }
