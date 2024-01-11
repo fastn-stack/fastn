@@ -258,6 +258,14 @@ async fn get_all_instructions(
         match instruction.name.as_str() {
             "fastn#test" => {
                 // Fixture instructions
+                if found_test_component {
+                    return fastn_core::usage_error(format!(
+                        "Can't have another 'fastn.test'. There already exists one, doc: {} \
+                        line_number: {}",
+                        doc.name, instruction.line_number
+                    ));
+                }
+
                 found_test_component = true;
                 fixture_and_test_instructions.extend(
                     get_instructions_from_test(instruction, doc, config, &mut included_fixtures)
