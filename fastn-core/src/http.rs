@@ -758,8 +758,7 @@ mod test {
         let token_err = "no key expected with name token";
         let errors = vec![("user", user_err), ("token", token_err)];
 
-        let res =
-            fastn_core::http::user_err(errors, fastn_core::http::StatusCode::BAD_REQUEST).await?;
+        let res = fastn_core::http::user_err(errors, fastn_core::http::StatusCode::BAD_REQUEST)?;
 
         assert_eq!(res.status(), fastn_core::http::StatusCode::BAD_REQUEST);
 
