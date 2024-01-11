@@ -260,8 +260,8 @@ async fn get_all_instructions(
                 // Fixture instructions
                 if found_test_component {
                     return fastn_core::usage_error(format!(
-                        "Can't have another 'fastn.test'. There already exists one, doc: {} \
-                        line_number: {}",
+                        "'fastn.test' already exists, and another instance of it is not allowed \
+                        in the same file., doc: {} line_number: {}",
                         doc.name, instruction.line_number
                     ));
                 }
@@ -394,7 +394,6 @@ async fn read_fixture_instructions(
     config: &fastn_core::Config,
     fixture_file_name: &str,
 ) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
-    let mut fixture_instructions = vec![];
     let fixture_files = config.get_fixture_files().await?;
     let current_fixture_file = fixture_files.iter().find(|d| {
         d.id.trim_start_matches(format!("{}/{}/", TEST_FOLDER, FIXTURE_FOLDER).as_str())
@@ -402,16 +401,14 @@ async fn read_fixture_instructions(
             .eq(fixture_file_name)
     });
 
-    if let Some(fixture) = current_fixture_file {
-        fixture_instructions.extend(read_only_instructions(fixture.clone(), config).await?);
-    } else {
-        println!(
+    if current_fixture_file.is_none() {
+        return fastn_core::usage_error(format!(
             "Fixture: {} not found inside fixtures folder",
             fixture_file_name
-        );
+        ));
     }
 
-    Ok(fixture_instructions)
+    read_only_instructions(current_fixture_file.unwrap().clone(), config).await
 }
 
 async fn execute_post_instruction(
