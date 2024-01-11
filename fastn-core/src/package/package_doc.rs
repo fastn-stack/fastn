@@ -47,12 +47,56 @@ impl fastn_core::Package {
     }
 
     #[tracing::instrument(skip(self))]
+    pub(crate) async fn fs_fetch_by_id_using_manifest(
+        &self,
+        id: &str,
+        package_root: Option<&fastn_ds::Path>,
+        ds: &fastn_ds::DocumentStore,
+        manifest: &fastn_core::Manifest,
+    ) -> fastn_core::Result<(String, Vec<u8>)> {
+        let new_id = if fastn_core::file::is_static(id)? {
+            Some(id.to_string())
+        } else {
+            file_id_to_names(id)
+                .iter()
+                .find(|id| manifest.files.contains_key(id.as_str()))
+                .map(|id| id.to_string())
+        };
+        if let Some(id) = new_id {
+            if let Ok(data) = self
+                .fs_fetch_by_file_name(id.as_str(), package_root, ds)
+                .await
+            {
+                return Ok((id.to_string(), data));
+            }
+        }
+
+        tracing::error!(
+            msg = "fs-error: file not found",
+            document = id,
+            package = self.name
+        );
+        Err(fastn_core::Error::PackageError {
+            message: format!(
+                "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
+                id, &self.name
+            ),
+        })
+    }
+
+    #[tracing::instrument(skip(self))]
     pub(crate) async fn fs_fetch_by_id(
         &self,
         id: &str,
         package_root: Option<&fastn_ds::Path>,
         ds: &fastn_ds::DocumentStore,
+        manifest: &Option<fastn_core::Manifest>,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
+        if let Some(manifest) = manifest {
+            return self
+                .fs_fetch_by_id_using_manifest(id, package_root, ds, manifest)
+                .await;
+        }
         if fastn_core::file::is_static(id)? {
             if let Ok(data) = self.fs_fetch_by_file_name(id, package_root, ds).await {
                 return Ok((id.to_string(), data));
@@ -239,7 +283,25 @@ impl fastn_core::Package {
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         tracing::info!(id = id);
-        if let Ok(response) = self.fs_fetch_by_id(id, package_root, ds).await {
+
+        let manifest_path = self
+            .fastn_path
+            .as_ref()
+            .and_then(|path| path.parent())
+            .map(|parent| parent.join(fastn_core::manifest::MANIFEST_FILE));
+        let manifest: Option<fastn_core::Manifest> = if let Some(manifest_path) = manifest_path {
+            match ds.read_content(&manifest_path).await {
+                Ok(manifest_bytes) => match serde_json::de::from_slice(manifest_bytes.as_slice()) {
+                    Ok(manifest) => Some(manifest),
+                    Err(_) => None,
+                },
+                Err(_) => None,
+            }
+        } else {
+            None
+        };
+
+        if let Ok(response) = self.fs_fetch_by_id(id, package_root, ds, &manifest).await {
             return Ok(response);
         }
 
@@ -278,7 +340,10 @@ impl fastn_core::Package {
         };
 
         let root = self.package_root_with_default(package_root)?;
-        if let Ok(response) = self.fs_fetch_by_id(new_id.as_str(), package_root, ds).await {
+        if let Ok(response) = self
+            .fs_fetch_by_id(new_id.as_str(), package_root, ds, &manifest)
+            .await
+        {
             if config_package_name.ne(&self.name) {
                 fastn_core::utils::write(
                     &root,
