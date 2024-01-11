@@ -130,9 +130,9 @@ Use [**`ds.row`**](https://github.com/fastn-community/design-system/blob/main/la
 for organizing elements side by side, providing a 
 layout within that specific section or component.
 
-Likewise, for vertical structuring within a section, use [**`ds.section-column`**](https://github.com/fastn-community/design-system/blob/main/layout/section-column.ftd)
+Likewise, for vertical structuring, use [**`ds.section-column`**](https://github.com/fastn-community/design-system/blob/main/layout/section-column.ftd)
 to arrange elements on top of each other within a single section or component 
-of a website..  For elements inside the section to follow a similar vertical 
+of a website.  For elements inside the section to follow a similar vertical 
 arrangement, opt for [**`ds.column`**](https://github.com/fastn-community/design-system/blob/main/layout/column.ftd)
 
 It's important to note that a component or section in your website can have only 
@@ -204,9 +204,8 @@ margin: $ds.spaces.vertical-gap.small
 
 -- ds.h3: 3. Spacing
 
-This defines the space between elements within a container, similar to margin, 
-it takes the same values for both Both horizontal and 
-vertical gaps.
+This defines the space between elements within a container. Similar to margin, 
+it takes the values for both horizontal and vertical gaps.
     
 **The syntax for spacing is:**
 
@@ -230,7 +229,7 @@ layout and arrangement of elements on your website.
 
 Take a look at the elements of the [talknotes.io](https://talknotes.io/) website header. The header 
 consists of a logo, header links, and buttons, that are structured adjacent to 
-each other.
+each other. Hence, we will be using `ds.section-row` to create the header component.
 
 -- ds.image: Header Section
 src: $fastn-assets.files.images.blog.header-drawing.png
