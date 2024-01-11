@@ -322,7 +322,7 @@ impl Config {
 
     pub fn path_without_root(&self, path: &fastn_ds::Path) -> fastn_core::Result<String> {
         Ok(path
-            .strip_prefix(self.ds.root())
+            .strip_prefix(&self.ds.root())
             .ok_or(fastn_core::Error::UsageError {
                 message: format!("Can't find prefix `{}` in `{}`", self.ds.root(), path),
             })?

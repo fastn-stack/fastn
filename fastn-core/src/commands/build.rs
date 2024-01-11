@@ -736,7 +736,7 @@ async fn handle_file_(
             }
         }
         fastn_core::File::Static(sa) => {
-            process_static(sa, config.ds.root(), &config.package, &config.ds).await?
+            process_static(sa, &config.ds.root(), &config.package, &config.ds).await?
         }
         fastn_core::File::Markdown(_doc) => {
             // TODO: bring this feature back
@@ -744,7 +744,7 @@ async fn handle_file_(
             return Ok(());
         }
         fastn_core::File::Image(main_doc) => {
-            process_static(main_doc, config.ds.root(), &config.package, &config.ds).await?;
+            process_static(main_doc, &config.ds.root(), &config.package, &config.ds).await?;
         }
         fastn_core::File::Code(doc) => {
             process_static(
@@ -754,7 +754,7 @@ async fn handle_file_(
                     content: doc.content.clone().into_bytes(),
                     base_path: doc.parent_path.clone(),
                 },
-                config.ds.root(),
+                &config.ds.root(),
                 &config.package,
                 &config.ds,
             )
@@ -852,7 +852,7 @@ async fn get_documents_for_current_package(
                     config.package.name.to_string()
                 };
                 let mut file =
-                    fastn_core::get_file(&config.ds, package_name, doc_path, config.ds.root())
+                    fastn_core::get_file(&config.ds, package_name, doc_path, &config.ds.root())
                         .await?;
                 if let Some(ref url) = url {
                     let url = url.replace("/index.html", "");
