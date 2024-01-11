@@ -727,7 +727,7 @@ pub async fn github_graphql<T: serde::de::DeserializeOwned>(
 ///     }
 /// }
 /// ```
-pub async fn user_err(
+pub fn user_err(
     errors: Vec<(&str, &str)>,
     status_code: fastn_core::http::StatusCode,
 ) -> fastn_core::Result<fastn_core::http::Response> {
