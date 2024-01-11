@@ -382,7 +382,7 @@ pub(crate) async fn download_init_package(url: &Option<String>) -> std::io::Resu
         .expect("fastn-Error: Unable to change path");
     let ds = fastn_ds::DocumentStore::new(current_dir);
     package
-        .http_download_by_id("FASTN.ftd", Some(ds.root()), &ds)
+        .http_download_by_id("FASTN.ftd", Some(&ds.root()), &ds)
         .await
         .expect("Unable to find FASTN.ftd file");
     Ok(())

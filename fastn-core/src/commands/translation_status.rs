@@ -18,7 +18,7 @@ async fn translation_package_status(config: &fastn_core::Config) -> fastn_core::
     let original_snapshots =
         fastn_core::snapshot::get_latest_snapshots(&config.ds, &config.original_path()?).await?;
     let translation_status =
-        get_translation_status(config, &original_snapshots, config.ds.root()).await?;
+        get_translation_status(config, &original_snapshots, &config.ds.root()).await?;
     print_translation_status(&translation_status);
     Ok(())
 }

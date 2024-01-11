@@ -111,8 +111,8 @@ impl DocumentStore {
         }
     }
 
-    pub fn root(&self) -> &fastn_ds::Path {
-        &self.root
+    pub fn root(&self) -> fastn_ds::Path {
+        self.root.clone()
     }
 
     pub fn home(&self) -> fastn_ds::Path {
