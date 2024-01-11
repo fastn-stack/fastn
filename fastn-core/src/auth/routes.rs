@@ -27,22 +27,33 @@ pub async fn logout(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    if let Some(session_id) = req.cookie(fastn_core::auth::COOKIE_NAME) {
-        let session_id: i32 = session_id.parse()?;
-
-        let mut conn = db_pool
-            .get()
+    if let Some(session_data) = req.cookie(fastn_core::auth::COOKIE_NAME) {
+        let session_data = fastn_core::auth::utils::decrypt(&session_data)
             .await
-            .map_err(|e| fastn_core::Error::DatabaseError {
-                message: format!("Failed to get connection to db. {:?}", e),
-            })?;
+            .unwrap_or_default();
 
-        let affected = diesel::delete(fastn_core::schema::fastn_session::table)
-            .filter(fastn_core::schema::fastn_session::id.eq(&session_id))
-            .execute(&mut conn)
-            .await?;
+        #[derive(serde::Deserialize)]
+        struct SessionData {
+            session_id: i32,
+        }
 
-        tracing::info!("session destroyed for {session_id}. Rows affected {affected}.");
+        if let Ok(data) = serde_json::from_str::<SessionData>(session_data.as_str()) {
+            let session_id = data.session_id;
+
+            let mut conn = db_pool
+                .get()
+                .await
+                .map_err(|e| fastn_core::Error::DatabaseError {
+                    message: format!("Failed to get connection to db. {:?}", e),
+                })?;
+
+            let affected = diesel::delete(fastn_core::schema::fastn_session::table)
+                .filter(fastn_core::schema::fastn_session::id.eq(&session_id))
+                .execute(&mut conn)
+                .await?;
+
+            tracing::info!("session destroyed for {session_id}. Rows affected {affected}.");
+        }
     }
 
     Ok(actix_web::HttpResponse::Found()
