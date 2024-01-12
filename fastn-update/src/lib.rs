@@ -156,10 +156,6 @@ async fn download_and_unpack_zip(
     manifest: &fastn_core::Manifest,
     package_name: String,
 ) -> Result<(), ArchiveError> {
-    if package_name.eq("fastn-community.github.io/midnight-storm") {
-        return Ok(());
-    }
-
     let mut archive = fastn_update::utils::download_archive(manifest.zip_url.clone())
         .await
         .map_err(|e| ArchiveError::DownloadError {
