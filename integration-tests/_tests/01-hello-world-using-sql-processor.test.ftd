@@ -1,5 +1,7 @@
 -- import: fastn
 
+-- fastn.test: 01-hello-world-using-sql-processor
+
 ;; Add variable value assertions later
 -- fastn.get: Fetching Test Data (using sql processor)
 url: /hello-world-sql/
