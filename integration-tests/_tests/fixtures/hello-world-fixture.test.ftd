@@ -9,5 +9,3 @@ http-status: 200
 -- fastn.get.test:
 
 fastn.assert.eq(fastn.http_response["data"], "Hello, World!");
-
--- end: fastn.test
