@@ -55,7 +55,49 @@ impl fastn_core::Package {
         manifest: &fastn_core::Manifest,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         let new_id = if fastn_core::file::is_static(id)? {
-            Some(id.to_string())
+            if manifest.files.contains_key(id.trim_start_matches('/')) {
+                Some(id.to_string())
+            } else {
+                let new_id = match id.rsplit_once('.') {
+                    Some((remaining, ext))
+                        if mime_guess::MimeGuess::from_ext(ext)
+                            .first_or_octet_stream()
+                            .to_string()
+                            .starts_with("image/") =>
+                    {
+                        if remaining.ends_with("-dark") {
+                            format!(
+                                "{}.{}",
+                                remaining.trim_matches('/').trim_end_matches("-dark"),
+                                ext
+                            )
+                        } else {
+                            format!("{}-dark.{}", remaining.trim_matches('/'), ext)
+                        }
+                    }
+                    _ => {
+                        tracing::error!(id = id, msg = "id error: can not get the dark");
+                        return Err(fastn_core::Error::PackageError {
+                            message: format!(
+                                "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
+                                id, &self.name
+                            ),
+                        });
+                    }
+                };
+
+                if !manifest.files.contains_key(&new_id) {
+                    tracing::error!(id = id, msg = "id error: can not get the dark");
+                    return Err(fastn_core::Error::PackageError {
+                        message: format!(
+                            "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
+                            id, &self.name
+                        ),
+                    });
+                }
+
+                Some(new_id)
+            }
         } else {
             file_id_to_names(id)
                 .iter()
@@ -205,73 +247,79 @@ impl fastn_core::Package {
         &self,
         file_path: &str,
         package_root: Option<&fastn_ds::Path>,
-        restore_default: bool,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<Vec<u8>> {
-        if let Ok(response) = self
-            .fs_fetch_by_file_name(file_path, package_root, ds)
-            .await
-        {
-            return Ok(response);
-        }
-        if let Ok(response) = self
-            .http_download_by_file_name(file_path, package_root, ds)
-            .await
-        {
-            return Ok(response);
-        }
-
-        if !restore_default {
-            return Err(fastn_core::Error::PackageError {
-                message: format!(
-                    "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
-                    file_path, &self.name
-                ),
-            });
-        }
-
-        let new_file_path = match file_path.rsplit_once('.') {
-            Some((remaining, ext))
-                if mime_guess::MimeGuess::from_ext(ext)
-                    .first_or_octet_stream()
-                    .to_string()
-                    .starts_with("image/")
-                    && remaining.ends_with("-dark") =>
-            {
-                format!("{}.{}", remaining.trim_end_matches("-dark"), ext)
+        let manifest_path = self
+            .fastn_path
+            .as_ref()
+            .and_then(|path| path.parent())
+            .map(|parent| parent.join(fastn_core::manifest::MANIFEST_FILE));
+        let manifest: Option<fastn_core::Manifest> = if let Some(manifest_path) = manifest_path {
+            match ds.read_content(&manifest_path).await {
+                Ok(manifest_bytes) => match serde_json::de::from_slice(manifest_bytes.as_slice()) {
+                    Ok(manifest) => Some(manifest),
+                    Err(_) => None,
+                },
+                Err(_) => None,
             }
-            _ => {
-                return Err(fastn_core::Error::PackageError {
-                    message: format!(
-                        "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
-                        file_path, &self.name
-                    ),
-                })
-            }
+        } else {
+            None
         };
 
-        let root = self.package_root_with_default(package_root)?;
+        let new_file_path = match &manifest {
+            Some(manifest) if manifest.files.contains_key(file_path) => file_path.to_string(),
+            Some(manifest) => {
+                let new_file_path = match file_path.rsplit_once('.') {
+                    Some((remaining, ext))
+                        if mime_guess::MimeGuess::from_ext(ext)
+                            .first_or_octet_stream()
+                            .to_string()
+                            .starts_with("image/") =>
+                    {
+                        if remaining.ends_with("-dark") {
+                            format!(
+                                "{}.{}",
+                                remaining.trim_matches('/').trim_end_matches("-dark"),
+                                ext
+                            )
+                        } else {
+                            format!("{}-dark.{}", remaining.trim_matches('/'), ext)
+                        }
+                    }
+                    _ => {
+                        tracing::error!(
+                            file_path = file_path,
+                            msg = "file_path error: can not get the dark"
+                        );
+                        return Err(fastn_core::Error::PackageError {
+                            message: format!(
+                                "fs_fetch_by_file_name:: Corresponding file not found for file_path: {}. Package: {}",
+                                file_path, &self.name
+                            ),
+                        });
+                    }
+                };
 
-        if let Ok(response) = self
-            .fs_fetch_by_file_name(new_file_path.as_str(), package_root, ds)
-            .await
-        {
-            ds.copy(&root.join(new_file_path), &root.join(file_path))
-                .await?;
-            return Ok(response);
-        }
+                if !manifest.files.contains_key(&new_file_path) {
+                    tracing::error!(
+                        file_path = file_path,
+                        msg = "file_path error: can not get the dark"
+                    );
+                    return Err(fastn_core::Error::PackageError {
+                        message: format!(
+                            "fs_fetch_by_file_name:: Corresponding file not found for file_path: {}. Package: {}",
+                            file_path, &self.name
+                        ),
+                    });
+                }
 
-        match self
-            .http_download_by_file_name(new_file_path.as_str(), package_root, ds)
-            .await
-        {
-            Ok(response) => {
-                ds.copy(&root.join(new_file_path), &root.join(file_path))
-                    .await?;
-                Ok(response)
+                new_file_path
             }
-            Err(e) => Err(e),
-        }
+            None => file_path.to_string(),
+        };
+
+        self.fs_fetch_by_file_name(&new_file_path, package_root, ds)
+            .await
     }
 
     #[tracing::instrument(skip(self))]
