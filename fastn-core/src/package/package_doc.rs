@@ -46,6 +46,30 @@ impl fastn_core::Package {
         }
     }
 
+    pub(crate) async fn get_manifest(
+        &self,
+        ds: &fastn_ds::DocumentStore,
+    ) -> fastn_core::Result<Option<fastn_core::Manifest>> {
+        let manifest_path = self
+            .fastn_path
+            .as_ref()
+            .and_then(|path| path.parent())
+            .map(|parent| parent.join(fastn_core::manifest::MANIFEST_FILE));
+        let manifest: Option<fastn_core::Manifest> = if let Some(manifest_path) = manifest_path {
+            match ds.read_content(&manifest_path).await {
+                Ok(manifest_bytes) => match serde_json::de::from_slice(manifest_bytes.as_slice()) {
+                    Ok(manifest) => Some(manifest),
+                    Err(_) => None,
+                },
+                Err(_) => None,
+            }
+        } else {
+            None
+        };
+
+        Ok(manifest)
+    }
+
     #[tracing::instrument(skip(self))]
     pub(crate) async fn fs_fetch_by_id_using_manifest(
         &self,
@@ -249,22 +273,7 @@ impl fastn_core::Package {
         package_root: Option<&fastn_ds::Path>,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<Vec<u8>> {
-        let manifest_path = self
-            .fastn_path
-            .as_ref()
-            .and_then(|path| path.parent())
-            .map(|parent| parent.join(fastn_core::manifest::MANIFEST_FILE));
-        let manifest: Option<fastn_core::Manifest> = if let Some(manifest_path) = manifest_path {
-            match ds.read_content(&manifest_path).await {
-                Ok(manifest_bytes) => match serde_json::de::from_slice(manifest_bytes.as_slice()) {
-                    Ok(manifest) => Some(manifest),
-                    Err(_) => None,
-                },
-                Err(_) => None,
-            }
-        } else {
-            None
-        };
+        let manifest = self.get_manifest(ds).await?;
 
         let new_file_path = match &manifest {
             Some(manifest) if manifest.files.contains_key(file_path) => file_path.to_string(),
@@ -332,22 +341,56 @@ impl fastn_core::Package {
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         tracing::info!(id = id);
 
-        let manifest_path = self
-            .fastn_path
-            .as_ref()
-            .and_then(|path| path.parent())
-            .map(|parent| parent.join(fastn_core::manifest::MANIFEST_FILE));
-        let manifest: Option<fastn_core::Manifest> = if let Some(manifest_path) = manifest_path {
-            match ds.read_content(&manifest_path).await {
-                Ok(manifest_bytes) => match serde_json::de::from_slice(manifest_bytes.as_slice()) {
-                    Ok(manifest) => Some(manifest),
-                    Err(_) => None,
-                },
-                Err(_) => None,
+        if config_package_name.eq(&self.name) {
+            if fastn_core::file::is_static(id)? {
+                if let Ok(data) = self.fs_fetch_by_file_name(id, package_root, ds).await {
+                    return Ok((id.to_string(), data));
+                }
+
+                let new_id = match id.rsplit_once('.') {
+                    Some((remaining, ext))
+                        if mime_guess::MimeGuess::from_ext(ext)
+                            .first_or_octet_stream()
+                            .to_string()
+                            .starts_with("image/") =>
+                    {
+                        if remaining.ends_with("-dark") {
+                            format!(
+                                "{}.{}",
+                                remaining.trim_matches('/').trim_end_matches("-dark"),
+                                ext
+                            )
+                        } else {
+                            format!("{}-dark.{}", remaining.trim_matches('/'), ext)
+                        }
+                    }
+                    _ => {
+                        tracing::error!(id = id, msg = "id error: can not get the dark");
+                        return Err(fastn_core::Error::PackageError {
+                            message: format!(
+                                "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
+                                id, &self.name
+                            ),
+                        });
+                    }
+                };
+
+                if let Ok(data) = self.fs_fetch_by_file_name(&new_id, package_root, ds).await {
+                    return Ok((new_id.to_string(), data));
+                }
+            } else {
+                for name in file_id_to_names(id) {
+                    if let Ok(data) = self
+                        .fs_fetch_by_file_name(name.as_str(), package_root, ds)
+                        .await
+                    {
+                        return Ok((name, data));
+                    }
+                }
             }
-        } else {
-            None
-        };
+        }
+
+        let manifest = self.get_manifest(ds).await?;
 
         self.fs_fetch_by_id(id, package_root, ds, &manifest).await
     }

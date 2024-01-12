@@ -22,7 +22,7 @@ pub async fn build(
         let documents = get_documents_for_current_package(config).await?;
 
         if let Some(zip_url) = zip_url {
-            write_manifest_json(config, &build_dir, zip_url).await?;
+            write_manifest_file(config, &build_dir, zip_url).await?;
         }
 
         match only_id {
@@ -70,7 +70,7 @@ pub async fn build(
     Ok(())
 }
 
-async fn write_manifest_json(
+pub async fn write_manifest_file(
     config: &fastn_core::Config,
     build_dir: &fastn_ds::Path,
     zip_url: &str,
