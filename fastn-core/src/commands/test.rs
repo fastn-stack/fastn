@@ -327,10 +327,9 @@ async fn get_instructions_from_test(
 ) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
     let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc)?;
 
-    // Mandatory test parameters --------------------------------
-    let title = get_value_ok(TEST_TITLE_HEADER, &property_values, instruction.line_number)?
-        .to_string(doc, false)?
-        .unwrap();
+    if let Some(title) = get_optional_value_string(TEST_TITLE_HEADER, &property_values, doc)? {
+        println!("Test: {}", title);
+    }
 
     let fixtures =
         if let Some(fixtures) = get_optional_value_list(FIXTURE_HEADER, &property_values, doc)? {
@@ -345,7 +344,6 @@ async fn get_instructions_from_test(
             vec![]
         };
 
-    println!("Test: {}", title);
     let fixture_instructions =
         get_fixture_instructions(config, fixtures, included_fixtures).await?;
 
