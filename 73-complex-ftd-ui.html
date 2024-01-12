@@ -2084,10 +2084,10 @@ window.ftd.utils.set_value_helper(data, "foo#switcher:is-active:0", remaining, n
 
 window.ftd.call_mutable_value_changes("foo#switcher:is-active:0", "main");
 window.ftd.call_immutable_value_changes("foo#switcher:is-active:0", "main");
+window.ftd.utils.node_change_call("main","0,1:main__color", data);
 window.ftd.utils.node_change_call("main","0,2:main__display", data);
 window.ftd.utils.node_change_call("main","0,0:main__color", data);
 window.ftd.utils.node_change_call("main","0,3:main__display", data);
-window.ftd.utils.node_change_call("main","0,1:main__color", data);
 };
 
 window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
@@ -2095,8 +2095,8 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0,0:main__color", data);
 window.ftd.utils.node_change_call("main","0,1:main__color", data);
+window.ftd.utils.node_change_call("main","0,0:main__color", data);
 };
 
 window.set_value_main["ftd#default-colors"] = function (data, new_value, remaining) {

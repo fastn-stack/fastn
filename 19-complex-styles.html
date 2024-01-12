@@ -2083,10 +2083,10 @@ set_data_value(data, "foo#foo:resize:1", value);
 }
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","1,0:main__height", data);
-window.ftd.utils.node_change_call("main","1:main__align-items", data);
 window.ftd.utils.node_change_call("main","1:main__width", data);
+window.ftd.utils.node_change_call("main","1:main__align-items", data);
 window.ftd.utils.node_change_call("main","1:main__justify-content", data);
+window.ftd.utils.node_change_call("main","1,0:main__height", data);
 };
 
 window.set_value_main["foo#foo:align:1"] = function (data, new_value, remaining) {
@@ -2094,8 +2094,8 @@ window.ftd.utils.set_value_helper(data, "foo#foo:align:1", remaining, new_value)
 
 window.ftd.call_mutable_value_changes("foo#foo:align:1", "main");
 window.ftd.call_immutable_value_changes("foo#foo:align:1", "main");
-window.ftd.utils.node_change_call("main","1:main__align-items", data);
 window.ftd.utils.node_change_call("main","1:main__justify-content", data);
+window.ftd.utils.node_change_call("main","1:main__align-items", data);
 };
 
 window.set_value_main["foo#foo:px:1"] = function (data, new_value, remaining) {
@@ -2117,15 +2117,6 @@ window.ftd.utils.node_change_call("main","1:main__width", data);
 };
 
 window.resolve_value_main = {};
-window.resolve_value_main["foo#foo:px:1"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-set_data_value(data, "foo#foo:px:1", 30);
-}
-else {set_data_value(data, "foo#foo:px:1", 40);}
-
-}
 window.resolve_value_main["foo#foo:align:1"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
@@ -2142,6 +2133,15 @@ return resolve_reference("foo#flag", data);
 set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSON.stringify("ftd#resizing.hug-content")));
 }
 else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSON.stringify(50)));}
+
+}
+window.resolve_value_main["foo#foo:px:1"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+set_data_value(data, "foo#foo:px:1", 30);
+}
+else {set_data_value(data, "foo#foo:px:1", 40);}
 
 }
 
