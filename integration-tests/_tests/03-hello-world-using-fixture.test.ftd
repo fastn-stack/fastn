@@ -1,0 +1,4 @@
+-- import: fastn
+
+-- fastn.test: Hello World from fixture
+fixtures: hello-world-fixture

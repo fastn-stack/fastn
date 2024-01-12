@@ -1,0 +1,13 @@
+-- import: fastn
+
+-- fastn.test: Hello world fixture
+
+-- fastn.get: Fetching Test Data (from test server)
+url: /get-data/
+http-status: 200
+
+-- fastn.get.test:
+
+fastn.assert.eq(fastn.http_response["data"], "Hello, World!");
+
+-- end: fastn.test
