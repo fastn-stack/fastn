@@ -1,0 +1,8 @@
+-- import: fastn
+
+-- fastn.test: Hello world using fixture
+fixtures: hello-world-using-endpoint
+
+-- fastn.get: Hello world (using sql processor)
+url: /hello-world-sql/
+http-status: 200
