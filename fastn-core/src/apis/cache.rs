@@ -103,7 +103,7 @@ pub async fn clear_(
         if package.eq("main") {
             // TODO: List directories and files other than main
             fastn_core::utils::remove_except(
-                config.ds.root(),
+                &config.ds.root(),
                 &[".packages", ".build"],
                 &config.ds,
             )
