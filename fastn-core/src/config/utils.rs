@@ -80,18 +80,31 @@ pub fn get_clean_url(
 
     // This is for current package
     if let Some(remaining_url) = trim_package_name(url.as_str(), config.package.name.as_str()) {
-        let end_point = match config.package.endpoint.as_ref() {
-            Some(ep) => ep,
-            None => {
-                return Err(fastn_core::Error::GenericError(format!(
-                    "package does not contain the endpoint: {:?}",
-                    config.package.name
-                )));
+        if config.package.endpoint.is_empty() {
+            return Err(fastn_core::Error::GenericError(format!(
+                "package does not contain the endpoint: {:?}",
+                config.package.name
+            )));
+        }
+
+        let mut end_point = None;
+        for e in config.package.endpoint.iter() {
+            if remaining_url.starts_with(e.mountpoint.as_str()) {
+                end_point = Some(e.endpoint.to_string());
+                break;
             }
-        };
+        }
+
+        if end_point.is_none() {
+            return Err(fastn_core::Error::GenericError(format!(
+                "No mountpoint matched for url: {}",
+                remaining_url.as_str()
+            )));
+        }
+
         return Ok((
             Some(config.package.name.to_string()),
-            url::Url::parse(format!("{}{}", end_point, remaining_url).as_str())?,
+            url::Url::parse(format!("{}{}", end_point.unwrap(), remaining_url).as_str())?,
             std::collections::HashMap::new(), // TODO:
         ));
     }
@@ -114,13 +127,14 @@ pub fn get_clean_url(
         }
     }
 
-    if let Some(endpoint) = config.package.endpoint.as_ref() {
+    // Todo: Fix this later
+    if let Some(e) = config.package.endpoint.first() {
         return Ok((
             Some(config.package.name.to_string()),
             url::Url::parse(
                 format!(
                     "{}/{}",
-                    endpoint.trim_end_matches('/'),
+                    e.endpoint.trim_end_matches('/'),
                     url.trim_start_matches('/')
                 )
                 .as_str(),

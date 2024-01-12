@@ -1,3 +1,10 @@
+-- record endpoint-data:
+caption endpoint:
+string mountpoint:
+optional boolean user-id:
+
+-- endpoint-data list endpoint:
+
 -- record backend-header:
 string header-key:
 string header-value:
@@ -15,7 +22,7 @@ optional string translation-of:
 string list translation:
 optional string canonical-url:
 boolean inherit-auto-imports-from-original: true
-optional string endpoint:
+endpoint-data list endpoint:
 boolean backend: false
 backend-header list backend-headers:
 optional string system:
@@ -46,7 +53,6 @@ optional string translation-ko:
 -- record package-lang:
 caption string lang:
 string module:
-
 
 -- record dependency-data:
 caption name:

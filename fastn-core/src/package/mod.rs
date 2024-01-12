@@ -55,7 +55,7 @@ pub struct Package {
     pub favicon: Option<String>,
 
     /// endpoint for proxy service
-    pub endpoint: Option<String>,
+    pub endpoint: Vec<fastn_package::old_fastn::EndpointData>,
 
     /// Attribute to define the usage of a WASM backend
     pub backend: bool,
@@ -104,7 +104,7 @@ impl Package {
             dynamic_urls: None,
             dynamic_urls_temp: None,
             favicon: None,
-            endpoint: None,
+            endpoint: vec![],
             backend: false,
             backend_headers: None,
             apps: vec![],
@@ -587,11 +587,16 @@ impl Package {
                 }
             }
         };
+        dbg!("Reading fastn.package");
+        dbg!(&fastn_document.data.get("fastn#endpoint"));
         let mut package = {
             let temp_package: fastn_package::old_fastn::PackageTemp =
                 fastn_document.get("fastn#package")?;
             temp_package.into_package()
         };
+        package.endpoint =
+            fastn_document.get::<Vec<fastn_package::old_fastn::EndpointData>>("fastn#endpoint")?;
+        dbg!(&package.endpoint);
         package.translation_status_summary =
             fastn_document.get("fastn#translation-status-summary")?;
         package.fastn_path = Some(fastn_path.to_owned());
@@ -773,6 +778,8 @@ impl Package {
     // Output: Package's dependency which contains mount-point and endpoint
     // where request path starts-with dependency mount-point.
     // (endpoint, sanitized request path from mount-point)
+    #[allow(unreachable_code)]
+    #[allow(dead_code)]
     pub fn get_dep_endpoint<'a>(&'a self, path: &'a str) -> Option<(&'a str, &'a str)> {
         fn dep_endpoint<'a>(package: &'a Package, path: &'a str) -> Option<(&'a str, &'a str)> {
             let dependencies = package.dep_with_ep_and_mp();
@@ -788,7 +795,7 @@ impl Package {
         match dep_endpoint(self, path) {
             Some((ep, r)) => Some((ep, r)),
             // TODO: should it refer to default package or not?
-            None => self.endpoint.as_ref().map(|ep| (ep.as_str(), path)),
+            None => self.endpoint.first().map(|ep| (ep.endpoint.as_str(), path)),
         }
     }
 
