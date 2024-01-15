@@ -48,9 +48,8 @@ optional string id:
 
 
 -- component test:
-caption title:
+optional caption title:
 string list fixtures:
-children tests:
 
 -- ftd.text: NOT IMPLEMENTED HERE
 
