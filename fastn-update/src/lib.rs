@@ -1,3 +1,5 @@
+use fastn_core::Manifest;
+
 extern crate self as fastn_update;
 
 mod utils;
@@ -15,6 +17,12 @@ pub enum ManifestError {
         package: String,
         #[source]
         source: serde_json::Error,
+    },
+    #[error("Failed to read manifest content for package '{package}'")]
+    DsReadError {
+        package: String,
+        #[source]
+        source: fastn_ds::ReadError,
     },
 }
 
@@ -77,6 +85,7 @@ async fn resolve_dependency_package(
     let mut dep_package = dependency.package.clone();
     let fastn_path = dependency_path.join("FASTN.ftd");
     if let Err(e) = dep_package.resolve(&fastn_path, ds).await {
+        eprintln!("{}", &e);
         return Err(DependencyError::ResolveError { package, source: e });
     }
     Ok(dep_package)
@@ -102,35 +111,52 @@ async fn update_dependencies(
 
             pb.set_message(format!("Resolving {}/manifest.json", &package_name));
 
-            let (manifest, manifest_bytes) = match get_manifest(package_name.clone()).await {
-                Ok(m) => m,
-                Err(_) => {
-                    pb.set_message(format!(
-                        "Skipping package \"{}\", manifest.json not found",
-                        &package_name
-                    ));
-                    continue;
-                }
-            };
+            let (manifest, manifest_bytes) = get_manifest(package_name.clone()).await?;
 
             let manifest_path = dependency_path.join(fastn_core::manifest::MANIFEST_FILE);
 
-            ds.write_content(&manifest_path, manifest_bytes)
-                .await
-                .map_err(|e| ArchiveError::DsWriteError {
-                    package: package_name.clone(),
-                    source: e,
-                })?;
+            // Download the archive if:
+            // 1. The package does not already exist
+            // 2. The checksums of the downloaded package manifest and the existing manifest do not match
+            let should_download_archive = if !ds.exists(dependency_path).await {
+                true
+            } else {
+                let existing_manifest_bytes =
+                    ds.read_content(&manifest_path).await.map_err(|e| {
+                        ManifestError::DsReadError {
+                            package: package_name.clone(),
+                            source: e,
+                        }
+                    })?;
+                let existing_manifest =
+                    read_manifest(&existing_manifest_bytes, package_name.clone())?;
 
-            pb.set_message(format!("Downloading {} archive", &package_name));
+                existing_manifest.checksum.ne(manifest.checksum.as_str())
+            };
 
-            download_and_unpack_zip(
-                ds,
-                &packages_root.join(&package_name),
-                &manifest,
-                package_name.clone(),
-            )
-            .await?;
+            if !should_download_archive {
+                pb.set_message(format!(
+                    "Skipping download for package \"{}\" as it already exists.",
+                    &package_name
+                ));
+            } else {
+                pb.set_message(format!("Downloading {} archive", &package_name));
+
+                download_and_unpack_zip(
+                    ds,
+                    &packages_root.join(&package_name),
+                    &manifest,
+                    package_name.clone(),
+                )
+                .await?;
+
+                ds.write_content(&manifest_path, manifest_bytes)
+                    .await
+                    .map_err(|e| ArchiveError::DsWriteError {
+                        package: package_name.clone(),
+                        source: e,
+                    })?;
+            }
 
             if dependency.package.name.eq(&fastn_core::FASTN_UI_INTERFACE) {
                 resolved.insert(package_name.to_string());
@@ -200,6 +226,13 @@ async fn download_and_unpack_zip(
     Ok(())
 }
 
+fn read_manifest(bytes: &[u8], package: String) -> Result<Manifest, ManifestError> {
+    let manifest: fastn_core::Manifest = serde_json::de::from_slice(bytes)
+        .map_err(|e| ManifestError::DeserializationError { package, source: e })?;
+
+    Ok(manifest)
+}
+
 /// Download manifest of the package `<package-name>/manifest.json`
 /// Resolve to `fastn_core::Manifest` struct
 async fn get_manifest(
@@ -215,12 +248,7 @@ async fn get_manifest(
         package: package_name.clone(),
         source: e,
     })?;
-    let manifest = serde_json::de::from_slice(&manifest_bytes).map_err(|e| {
-        ManifestError::DeserializationError {
-            package: package_name.clone(),
-            source: e,
-        }
-    })?;
+    let manifest = read_manifest(&manifest_bytes, package_name.clone())?;
 
     Ok((manifest, manifest_bytes))
 }
