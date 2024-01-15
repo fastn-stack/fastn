@@ -476,12 +476,16 @@ async fn get_post_response_for_id(
         .get(POST_BODY_HEADER)
         .cloned()
         .unwrap_or_default();
+
     let post_body = actix_web::web::Bytes::copy_from_slice(req_body.as_bytes());
-    let mut request = fastn_core::http::Request::default();
-    request.path = id.to_string();
-    request.set_method("post");
-    request.set_body(post_body);
-    request.insert_header(reqwest::header::CONTENT_TYPE, "application/json");
+
+    let actix_request = actix_web::test::TestRequest::with_uri(id)
+        .method(actix_web::http::Method::POST)
+        .insert_header(actix_web::http::header::ContentType::json())
+        .to_http_request();
+
+    let mut request = fastn_core::http::Request::from_actix(actix_request, post_body);
+
     request.set_cookies(saved_cookies);
 
     log_message!(test_parameters.verbose, "Request details");
@@ -513,8 +517,11 @@ async fn get_post_response_for_id(
             }
             format!("fastn.http_response = {}", just_response_body)
         } else {
-            just_response_body.to_string()
+            format!("fastn.http_response = {}", just_response_body)
         };
+
+        log_message!(test_parameters.verbose, "fastn.http_response = ");
+        log_variable!(test_parameters.verbose, &response_js_data);
 
         // Previous Test results variable
         let test_results_variable = if !test_parameters.test_results.is_empty() {
@@ -539,7 +546,7 @@ async fn get_post_response_for_id(
             )
         } else {
             format!(
-                "{response_js_data}\n{test_results_variable}\n\
+                "{fastn_js}{response_js_data}\n{test_results_variable}\n\
                 {fastn_assertion_headers}\n{fastn_test_js}\n{test_content}\
                 \nfastn.test_result"
             )
@@ -564,7 +571,9 @@ async fn get_post_response_for_id(
             println!("{}", "Script file created".green());
             return Ok(true);
         }
+
         let test_result = fastn_js::run_test(test_string.as_str());
+
         if test_result.iter().any(|v| !(*v)) {
             println!("{}", "Test Failed".red());
             return Ok(false);
