@@ -1,12 +1,11 @@
 pub(crate) mod config;
 pub(crate) mod github;
 pub(crate) mod routes;
+pub(crate) mod utils;
 
 mod email_password;
 
-mod utils;
-
-pub const COOKIE_NAME: &str = "session";
+pub const COOKIE_NAME: &str = "fastn_session";
 
 #[derive(Debug, serde::Deserialize, serde::Serialize, diesel::Queryable, diesel::Selectable)]
 #[diesel(table_name = fastn_core::schema::fastn_user)]
@@ -182,9 +181,22 @@ async fn set_session_cookie_and_redirect_to_next(
     session_id: i32,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    let (user, email) = fastn_core::auth::get_authenticated_user_with_email(&session_id).await?;
+
+    let cookie_json = serde_json::json!({
+        "session_id": session_id,
+        "user": {
+            "username": user.username,
+            "name": user.name,
+            "email": email,
+        }
+    });
+
+    let encrypted_cookie = fastn_core::auth::utils::encrypt(&cookie_json.to_string()).await;
+
     return Ok(actix_web::HttpResponse::Found()
         .cookie(
-            actix_web::cookie::Cookie::build(fastn_core::auth::COOKIE_NAME, session_id.to_string())
+            actix_web::cookie::Cookie::build(fastn_core::auth::COOKIE_NAME, encrypted_cookie)
                 .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
                 .path("/")
                 .permanent()

@@ -6,6 +6,32 @@ pub fn domain(host: &str) -> String {
     }
 }
 
+pub async fn encrypt(input: &str) -> String {
+    use magic_crypt::MagicCryptTrait;
+    let secret_key = fastn_core::auth::utils::secret_key();
+    let mc_obj = magic_crypt::new_magic_crypt!(secret_key.as_str(), 256);
+    mc_obj.encrypt_to_base64(input).as_str().to_owned()
+}
+
+pub async fn decrypt(input: &str) -> Result<String, magic_crypt::MagicCryptError> {
+    use magic_crypt::MagicCryptTrait;
+    let secret_key = fastn_core::auth::utils::secret_key();
+    let mc_obj = magic_crypt::new_magic_crypt!(&secret_key, 256);
+    mc_obj.decrypt_base64_to_string(input)
+}
+
+pub fn secret_key() -> String {
+    match std::env::var("FASTN_SECRET_KEY") {
+        Ok(secret) => secret,
+        Err(_e) => {
+            fastn_core::warning!(
+                "WARN: Using default SECRET_KEY. Provide one using FASTN_SECRET_KEY env var."
+            );
+            "FASTN_TEMP_SECRET".to_string()
+        }
+    }
+}
+
 pub fn is_authenticated(req: &fastn_core::http::Request) -> bool {
     req.cookie(fastn_core::auth::COOKIE_NAME).is_some()
 }

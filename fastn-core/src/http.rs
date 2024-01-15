@@ -727,7 +727,7 @@ pub async fn github_graphql<T: serde::de::DeserializeOwned>(
 ///     }
 /// }
 /// ```
-pub async fn user_err(
+pub fn user_err(
     errors: Vec<(&str, &str)>,
     status_code: fastn_core::http::StatusCode,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -758,8 +758,7 @@ mod test {
         let token_err = "no key expected with name token";
         let errors = vec![("user", user_err), ("token", token_err)];
 
-        let res =
-            fastn_core::http::user_err(errors, fastn_core::http::StatusCode::BAD_REQUEST).await?;
+        let res = fastn_core::http::user_err(errors, fastn_core::http::StatusCode::BAD_REQUEST)?;
 
         assert_eq!(res.status(), fastn_core::http::StatusCode::BAD_REQUEST);
 
