@@ -220,6 +220,22 @@ pub async fn serve_helper(
     req: fastn_core::http::Request,
     only_js: bool,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    match (req.method().to_lowercase().as_str(), req.path()) {
+        #[cfg(feature = "auth")]
+        (_, t) if t.starts_with("/-/auth/") => {
+            return fastn_core::auth::routes::handle_auth(req).await
+        }
+        ("get", "/-/clear-cache/") => return clear_cache(config, req).await,
+        ("get", "/-/poll/") => return fastn_core::watcher::poll().await,
+        ("get", "/favicon.ico") => return favicon(config).await,
+        ("get", "/test/") => return test().await,
+        ("get", "/-/pwd/") => return fastn_core::tutor::pwd().await,
+        ("get", "/-/tutor.js") => return fastn_core::tutor::js().await,
+        ("post", "/-/tutor/start/") => return fastn_core::tutor::start(req.json()?).await,
+        ("get", "/-/tutor/stop/") => return fastn_core::tutor::stop().await,
+        _ => {}
+    }
+
     let _lock = LOCK.read().await;
 
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
@@ -551,19 +567,8 @@ async fn actual_route(
     }
 
     let req = fastn_core::http::Request::from_actix(req, body);
-    match (req.method().to_lowercase().as_str(), req.path()) {
-        #[cfg(feature = "auth")]
-        (_, t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
-        ("get", "/-/clear-cache/") => clear_cache(config, req).await,
-        ("get", "/-/poll/") => fastn_core::watcher::poll().await,
-        ("get", "/favicon.ico") => favicon(config).await,
-        ("get", "/test/") => test().await,
-        ("get", "/-/pwd/") => fastn_core::tutor::pwd().await,
-        ("get", "/-/tutor.js") => fastn_core::tutor::js().await,
-        ("post", "/-/tutor/start/") => fastn_core::tutor::start(req.json()?).await,
-        ("get", "/-/tutor/stop/") => fastn_core::tutor::stop().await,
-        (_, _) => serve(config, req).await,
-    }
+
+    serve(config, req).await
 }
 
 #[tracing::instrument(skip_all)]
