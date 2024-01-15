@@ -1811,6 +1811,7 @@ dependencies = [
  "ignore",
  "thiserror",
  "tokio",
+ "tracing",
 ]
 
 [[package]]
@@ -1891,6 +1892,8 @@ dependencies = [
  "indicatif",
  "serde",
  "serde_json",
+ "thiserror",
+ "tracing",
  "zip",
 ]
 
