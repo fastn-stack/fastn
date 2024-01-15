@@ -1,5 +1,3 @@
-use fastn_core::Manifest;
-
 extern crate self as fastn_update;
 
 mod utils;
@@ -85,7 +83,6 @@ async fn resolve_dependency_package(
     let mut dep_package = dependency.package.clone();
     let fastn_path = dependency_path.join("FASTN.ftd");
     if let Err(e) = dep_package.resolve(&fastn_path, ds).await {
-        eprintln!("{}", &e);
         return Err(DependencyError::ResolveError { package, source: e });
     }
     Ok(dep_package)
@@ -226,7 +223,7 @@ async fn download_and_unpack_zip(
     Ok(())
 }
 
-fn read_manifest(bytes: &[u8], package: String) -> Result<Manifest, ManifestError> {
+fn read_manifest(bytes: &[u8], package: String) -> Result<fastn_core::Manifest, ManifestError> {
     let manifest: fastn_core::Manifest = serde_json::de::from_slice(bytes)
         .map_err(|e| ManifestError::DeserializationError { package, source: e })?;
 
