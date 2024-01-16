@@ -134,6 +134,18 @@ pub fn replace_last_n(s: &str, n: usize, pattern: &str, replacement: &str) -> St
 #[cfg(test)]
 mod test {
     #[test]
+    fn is_static_path() {
+        assert!(super::is_static_path("/foo/bar.js"));
+        assert!(super::is_static_path("/bar.js"));
+        assert!(!super::is_static_path("/foo/bar.js/"));
+        assert!(!super::is_static_path("/bar.js/"));
+        assert!(!super::is_static_path("/foo/bar.ftd"));
+        assert!(!super::is_static_path("/foo/bar.ftd/"));
+        assert!(!super::is_static_path("/foo/bar"));
+        assert!(!super::is_static_path("/foo/bar/"));
+    }
+
+    #[test]
     fn replace_last_n() {
         assert_eq!(
             super::replace_last_n("a.b.c.d.e.f", 2, ".", "/"),
@@ -1047,5 +1059,19 @@ impl diesel::deserialize::FromSql<fastn_core::schema::sql_types::Citext, diesel:
             diesel::sql_types::Text,
             diesel::pg::Pg,
         >::from_sql(bytes)?))
+    }
+}
+
+pub(crate) fn is_static_path(path: &str) -> bool {
+    assert!(path.starts_with('/'));
+
+    match path
+        .rsplit_once('/')
+        .map(|(_, k)| k)
+        .and_then(|k| k.rsplit_once('.').map(|(_, ext)| ext))
+    {
+        Some("ftd") => false,
+        Some(_) => true,
+        None => false,
     }
 }
