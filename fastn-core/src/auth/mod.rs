@@ -243,7 +243,7 @@ async fn set_session_cookie_and_redirect_to_next(
                     // TODO: there should be an option to configure the resend verification
                     // mail webpage
                     vec![("username", "User is not verified")],
-                    fastn_core::http::StatusCode::BAD_REQUEST,
+                    fastn_core::http::StatusCode::OK,
                 );
             }
 

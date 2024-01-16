@@ -24,7 +24,7 @@ pub(crate) async fn create_user(
     if let Err(e) = user_payload {
         return fastn_core::http::user_err(
             vec![("payload", format!("invalid payload: {:?}", e).as_str())],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -56,7 +56,7 @@ pub(crate) async fn create_user(
     if let Err(_e) = email_check {
         return fastn_core::http::user_err(
             vec![("email", "invalid email")],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -65,14 +65,14 @@ pub(crate) async fn create_user(
     if username_check > 0 {
         return fastn_core::http::user_err(
             vec![("username", "username already taken")],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
     if email_check > 0 {
         return fastn_core::http::user_err(
             vec![("email", "email already taken")],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -129,7 +129,7 @@ pub(crate) async fn create_user(
                 ("email", "invalid email"),
                 ("detail", format!("{e}").as_str()),
             ],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -178,7 +178,7 @@ pub(crate) async fn login(
     if let Err(e) = payload {
         return fastn_core::http::user_err(
             vec![("payload", format!("invalid payload: {:?}", e).as_str())],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -201,7 +201,7 @@ pub(crate) async fn login(
     if user.is_none() {
         return fastn_core::http::user_err(
             vec![("username", "invalid username")],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -215,7 +215,7 @@ pub(crate) async fn login(
         // redirecting them will require saving the method they used to login which de don't atm
         return fastn_core::http::user_err(
             vec![("username", "invalid username")],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -231,7 +231,7 @@ pub(crate) async fn login(
     if password_match.is_err() {
         return fastn_core::http::user_err(
             vec![("password", "incorrect username/password")],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -260,10 +260,7 @@ pub(crate) async fn confirm_email(
     let code = req.query().get("code");
 
     if code.is_none() {
-        return fastn_core::http::api_error(
-            "Bad Request",
-            fastn_core::http::StatusCode::BAD_REQUEST.into(),
-        );
+        return fastn_core::http::api_error("Bad Request", fastn_core::http::StatusCode::OK.into());
     }
 
     let code = match code.unwrap() {
@@ -271,7 +268,7 @@ pub(crate) async fn confirm_email(
         _ => {
             return fastn_core::http::api_error(
                 "Bad Request",
-                fastn_core::http::StatusCode::BAD_REQUEST.into(),
+                fastn_core::http::StatusCode::OK.into(),
             );
         }
     };
@@ -295,10 +292,7 @@ pub(crate) async fn confirm_email(
             .optional()?;
 
     if conf_data.is_none() {
-        return fastn_core::http::api_error(
-            "Bad Request",
-            fastn_core::http::StatusCode::BAD_REQUEST.into(),
-        );
+        return fastn_core::http::api_error("Bad Request", fastn_core::http::StatusCode::OK.into());
     }
 
     let (email_id, sent_at) = conf_data.unwrap();
@@ -338,10 +332,7 @@ pub(crate) async fn resend_email(
     let email = req.query().get("email");
 
     if email.is_none() {
-        return fastn_core::http::api_error(
-            "Bad Request",
-            fastn_core::http::StatusCode::BAD_REQUEST.into(),
-        );
+        return fastn_core::http::api_error("Bad Request", fastn_core::http::StatusCode::OK.into());
     }
 
     let email = match email.unwrap() {
@@ -349,7 +340,7 @@ pub(crate) async fn resend_email(
         _ => {
             return fastn_core::http::api_error(
                 "Bad Request",
-                fastn_core::http::StatusCode::BAD_REQUEST.into(),
+                fastn_core::http::StatusCode::OK.into(),
             );
         }
     };

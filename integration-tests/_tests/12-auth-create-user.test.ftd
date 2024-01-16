@@ -7,7 +7,7 @@
 -- fastn.post: Create user with insufficient data should fail
 url: /-/auth/create-user/
 body: {"username": "siddhant"}
-http-status: 400
+http-status: 200
 
 -- fastn.post.test:
 
@@ -27,7 +27,7 @@ fastn.assert.eq(fastn.http_response.user.username, "john");
 -- fastn.post: Create user with same data should result in an error
 url: /-/auth/create-user/?next=/hello/
 body: {"name": "John", "email": "john@mail.com", "password": "testpasswd", "username": "john"}
-http-status: 400
+http-status: 200
 
 
 -- fastn.post.test:
@@ -38,7 +38,7 @@ fastn.assert.eq(fastn.http_response.errors.username, "username already taken");
 -- fastn.post: login with insufficient data should error
 url: /-/auth/login/?provider=emailpassword
 body: {"username": "someone"}
-http-status: 400
+http-status: 200
 
 -- fastn.post.test:
 
@@ -48,7 +48,7 @@ fastn.assert.not_empty(fastn.http_response.errors.payload);
 -- fastn.post: login with invalid user shouldn't work
 url: /-/auth/login/?provider=emailpassword
 body: {"username": "someone", "password": "veryrealpasswd"}
-http-status: 400
+http-status: 200
 
 -- fastn.post.test:
 
@@ -58,7 +58,7 @@ fastn.assert.eq(fastn.http_response.errors.username, "invalid username");
 -- fastn.post: login with valid user but wrong password
 url: /-/auth/login/?provider=emailpassword
 body: {"username": "john", "password": "veryrealpasswd"}
-http-status: 400
+http-status: 200
 
 -- fastn.post.test:
 
@@ -68,7 +68,7 @@ fastn.assert.eq(fastn.http_response.errors.password, "incorrect username/passwor
 -- fastn.post: login with valid but unverfied user
 url: /-/auth/login/?provider=emailpassword&next=/hello/
 body: {"username": "john", "password": "testpasswd"}
-http-status: 400
+http-status: 200
 
 -- fastn.post.test:
 
