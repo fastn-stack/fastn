@@ -12,6 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FASTN_DB_URL: postgres://testuser:testpassword@localhost:5432/testdb
+      DEBUG: true
+      FASTN_ENABLE_AUTH: true
+      FASTN_SMTP_USERNAME: 
+      FASTN_SMTP_PASSWORD: 
+      FASTN_SMTP_HOST: 
+      FASTN_SMTP_SENDER_EMAIL: 
+      FASTN_SMTP_SENDER_NAME: 
     services:
       postgres:
         image: postgres:latest
@@ -84,6 +91,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
+          args: --features=auth
       - name: Run integration tests
         id: integration-test
         continue-on-error: true

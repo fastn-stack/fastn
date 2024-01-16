@@ -42,6 +42,14 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return Ok(());
     }
 
+    #[cfg(feature = "auth")]
+    if let Ok(auth_enabled) = std::env::var("FASTN_ENABLE_AUTH") {
+        if auth_enabled == "true" {
+            tracing::info!("running auth related migrations");
+            enable_auth()?
+        }
+    }
+
     if let Some(project) = matches.subcommand_matches("create-package") {
         // project-name => required field (any package Url or standard project name)
         let name = project.value_of_("name").unwrap();
@@ -382,4 +390,28 @@ significant security risk in case the source code becomes public."
             println!("INFO: loaded environment variables from .env file.");
         }
     }
+}
+
+#[cfg(feature = "auth")]
+fn enable_auth() -> fastn_core::Result<()> {
+    use diesel::Connection;
+    use diesel_migrations::MigrationHarness;
+
+    let db_url = std::env::var("FASTN_DB_URL")?;
+
+    const MIGRATIONS: diesel_migrations::EmbeddedMigrations =
+        diesel_migrations::embed_migrations!();
+
+    let mut conn = diesel::pg::PgConnection::establish(&db_url).map_err(|e| {
+        fastn_core::Error::DatabaseError {
+            message: format!("Failed to connect to db. {:?}", e),
+        }
+    })?;
+
+    conn.run_pending_migrations(MIGRATIONS)
+        .map_err(|e| fastn_core::Error::DatabaseError {
+            message: format!("Failed to run migrations. {:?}", e),
+        })?;
+
+    Ok(())
 }

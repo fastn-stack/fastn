@@ -54,6 +54,11 @@ impl Mailer {
         subject: &str,
         body: String,
     ) -> Result<(), MailError> {
+        if self.mock {
+            println!("to: {}\nsubject: {}\nbody: {}", to, subject, body);
+            return Ok(());
+        }
+
         let email = lettre::Message::builder()
             .from(lettre::message::Mailbox::new(
                 self.sender_name.clone(),
@@ -64,26 +69,21 @@ impl Mailer {
             .header(lettre::message::header::ContentType::TEXT_HTML)
             .body(body)?;
 
-        if self.mock {
-            println!("{:?}", email);
-        } else {
-            let creds = lettre::transport::smtp::authentication::Credentials::new(
-                self.smtp_username.clone(),
-                self.smtp_password.clone(),
-            );
+        let creds = lettre::transport::smtp::authentication::Credentials::new(
+            self.smtp_username.clone(),
+            self.smtp_password.clone(),
+        );
 
-            let mailer =
-                lettre::AsyncSmtpTransport::<lettre::Tokio1Executor>::relay(&self.smtp_host)?
-                    .credentials(creds)
-                    .build();
+        let mailer = lettre::AsyncSmtpTransport::<lettre::Tokio1Executor>::relay(&self.smtp_host)?
+            .credentials(creds)
+            .build();
 
-            let response = lettre::AsyncTransport::send(&mailer, email).await?;
+        let response = lettre::AsyncTransport::send(&mailer, email).await?;
 
-            tracing::info!(
-                "sent email: {:?}",
-                response.message().collect::<Vec<&str>>()
-            );
-        }
+        tracing::info!(
+            "sent email: {:?}",
+            response.message().collect::<Vec<&str>>()
+        );
 
         Ok(())
     }
