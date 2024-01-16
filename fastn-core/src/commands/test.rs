@@ -131,6 +131,7 @@ impl fastn_core::Config {
     **/
     pub(crate) async fn get_test_files(&self) -> fastn_core::Result<Vec<fastn_core::Document>> {
         use itertools::Itertools;
+
         let package = &self.package;
         let path = self.get_root_for_package(package);
         let all_files = self.get_all_test_file_paths().await?;
@@ -494,6 +495,8 @@ async fn get_post_response_for_id(
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
     update_cookies(saved_cookies, &response);
 
+    let test_data = fastn_test_data(&response);
+
     log_message!(test_parameters.verbose, "Response details");
     log_variable!(test_parameters.verbose, &response);
 
@@ -538,19 +541,13 @@ async fn get_post_response_for_id(
         let fastn_assertion_headers =
             fastn_js::fastn_assertion_headers(response_status_code, response_location.as_str());
         let fastn_js = fastn_js::all_js_without_test_and_ftd_langugage_js();
-        let test_string = if response_content_type.eq("application/json") {
-            format!(
-                "{fastn_js}\n{response_js_data}\n{test_results_variable}\n\
+
+        let test_string = format!(
+            "{fastn_js}\n{test_data}\n{response_js_data}\n{test_results_variable}\n\
                 {fastn_assertion_headers}\n{fastn_test_js}\n{test_content}\
                 \nfastn.test_result"
-            )
-        } else {
-            format!(
-                "{fastn_js}{response_js_data}\n{test_results_variable}\n\
-                {fastn_assertion_headers}\n{fastn_test_js}\n{test_content}\
-                \nfastn.test_result"
-            )
-        };
+        );
+
         if test_parameters.script {
             let mut test_file_name = doc_name.to_string();
             if let Some((_, file_name)) = test_file_name.trim_end_matches('/').rsplit_once('/') {
@@ -711,6 +708,8 @@ async fn get_js_for_id(
     let response = fastn_core::commands::serve::serve_helper(config, request, true).await?;
     update_cookies(saved_cookies, &response);
 
+    let test_data = fastn_test_data(&response);
+
     log_message!(test_parameters.verbose, "Response details");
     log_variable!(test_parameters.verbose, &response);
 
@@ -751,19 +750,11 @@ async fn get_js_for_id(
         let fastn_assertion_headers =
             fastn_js::fastn_assertion_headers(response_status_code, response_location.as_str());
         let fastn_js = fastn_js::all_js_without_test_and_ftd_langugage_js();
-        let test_string = if response_content_type.eq("application/json") {
-            format!(
-                "{fastn_js}\n{response_js_data}\n{test_results_variable}\n\
+        let test_string = format!(
+            "{fastn_js}\n{test_data}\n{response_js_data}\n{test_results_variable}\n\
                 {fastn_assertion_headers}\n{fastn_test_js}\n{test_content}\
                 \nfastn.test_result"
-            )
-        } else {
-            format!(
-                "{response_js_data}\n{test_results_variable}\n\
-                {fastn_assertion_headers}\n{fastn_test_js}\n{test_content}\
-                \nfastn.test_result"
-            )
-        };
+        );
         if test_parameters.script {
             let mut test_file_name = doc_name.to_string();
             if let Some((_, file_name)) = test_file_name.trim_end_matches('/').rsplit_once('/') {
@@ -997,4 +988,32 @@ async fn generate_script_file(
     ds.write_content(&file_location, html_content.into_bytes())
         .await
         .unwrap();
+}
+
+fn fastn_test_data(response: &actix_web::HttpResponse) -> String {
+    use itertools::Itertools;
+
+    let mut res = response
+        .headers()
+        .iter()
+        .filter_map(|(k, v)| {
+            if k.as_str().starts_with("X-Fastn-Test-") {
+                Some(format!(
+                    "fastn.test_data[\"{}\"] = \"{}\";",
+                    k.as_str()
+                        .strip_prefix("X-Fastn-Test-")
+                        .unwrap()
+                        .to_lowercase()
+                        .replace('-', "_"),
+                    v.to_str().unwrap(),
+                ))
+            } else {
+                None
+            }
+        })
+        .join("\n");
+
+    res.insert_str(0, "fastn.test_data = {};\n");
+
+    res
 }

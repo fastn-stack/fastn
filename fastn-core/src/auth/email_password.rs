@@ -144,12 +144,10 @@ pub(crate) async fn create_user(
         "redirect": redirect_url_from_next(req, next),
     });
 
-
     let mut resp = actix_web::HttpResponse::Ok();
 
     if config.test_command_running {
-        resp
-            .insert_header(("X-Fastn-Test", "true"))
+        resp.insert_header(("X-Fastn-Test", "true"))
             .insert_header(("X-Fastn-Test-Email-Confirmation-Link", conf_link));
     }
 
