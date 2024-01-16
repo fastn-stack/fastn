@@ -1,9 +1,11 @@
 -- fbt:
-cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test build
+cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test build --zip-url=https://codeload.github.com/amitu/dotcom/zip/refs/heads/main
 output: amitu/.build
 
 -- stdout:
 
+Processing www.amitu.com/manifest.json
+done in <omitted>
 Processing www.amitu.com/FASTN/ ... done in <omitted>
 Processing www.amitu.com/ ... done in <omitted>
 Processing www.amitu.com/scrot.png ... done in <omitted>

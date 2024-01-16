@@ -1,0 +1,26 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "hash": "F7DFEE30B35D80DCD3A3E40C68B88F4120C120ED3109F1F2E8528962DB466C99",
+      "size": 67
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "hash": "14A9BF3DE0FBCDA6C849BD611FA2550FE79599A94194DF2986B207320E2126E0",
+      "size": 18
+    },
+    "nested/document.ftd": {
+      "name": "nested/document.ftd",
+      "hash": "56ECF84886EAE7A1CDA4D8FBC2F656AC9DA6D393563A0F3AD2AAC886966EB81D",
+      "size": 28
+    },
+    "nested/index.ftd": {
+      "name": "nested/index.ftd",
+      "hash": "FD3E20D5A4709DDE48AA5F5D92C9F5FC6F00071EC105EF65CEA40E267EBD0662",
+      "size": 73
+    }
+  },
+  "zip_url": "https://codeload.github.com/amitu/dotcom/zip/refs/heads/main",
+  "checksum": "25EEEE35A747979BE1E8A5D5FD33979CEE27928F9A9B0205C0FC55D8ED43AF57"
+}

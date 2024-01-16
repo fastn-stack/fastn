@@ -1,0 +1,26 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "hash": "0722FFE84DB2D8F1DBC57EE489566FB91C1AE19FF402034B6CAEA29D96E2CE5B",
+      "size": 42
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "hash": "14A9BF3DE0FBCDA6C849BD611FA2550FE79599A94194DF2986B207320E2126E0",
+      "size": 18
+    },
+    "page.md": {
+      "name": "page.md",
+      "hash": "5FCA1C450E14D65E9AC2B3F16663B3CEF98724841B098E49304334F37F9F32BD",
+      "size": 84
+    },
+    "scrot.png": {
+      "name": "scrot.png",
+      "hash": "1F886288F2E5D0B1657A0691A842575844944334FB942772A130A2F0258B0C2D",
+      "size": 470661
+    }
+  },
+  "zip_url": "https://codeload.github.com/amitu/dotcom/zip/refs/heads/main",
+  "checksum": "F4915B2DBC79F644821B92C823B6A2C2E27A2C014946EB62BF5436A12BAAE72A"
+}

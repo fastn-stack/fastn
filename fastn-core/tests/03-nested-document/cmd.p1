@@ -1,10 +1,12 @@
 -- fbt:
-cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test build --edition 2022
+cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test build --edition 2022 --zip-url=https://codeload.github.com/amitu/dotcom/zip/refs/heads/main
 output: amitu/.build
 
 
 -- stdout:
 
+Processing amitu/manifest.json
+done in <omitted>
 Processing amitu/FASTN/ ... done in <omitted>
 Processing amitu/ ... done in <omitted>
 Processing amitu/nested/document/ ... done in <omitted>
