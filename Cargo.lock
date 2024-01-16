@@ -1721,6 +1721,8 @@ version = "0.4.43"
 dependencies = [
  "clap",
  "colored",
+ "diesel",
+ "diesel_migrations",
  "dotenvy",
  "fastn-core",
  "fastn-ds",
@@ -1751,7 +1753,6 @@ dependencies = [
  "deadpool-postgres",
  "diesel",
  "diesel-async",
- "diesel_migrations",
  "diffy",
  "dirs",
  "edit",

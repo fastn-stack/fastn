@@ -10,6 +10,8 @@ homepage.workspace = true
 [dependencies]
 clap.workspace = true
 colored.workspace = true
+diesel = { workspace = true, optional = true }
+diesel_migrations = { workspace = true, optional = true }
 fastn-observer.workspace = true
 fastn-update.workspace = true
 fastn-core.workspace = true
@@ -25,4 +27,4 @@ fastn-ds.workspace = true
 
 
 [features]
-auth = ["fastn-core/auth"]
+auth = ["fastn-core/auth", "diesel", "diesel_migrations"]
