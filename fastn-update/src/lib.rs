@@ -1,63 +1,57 @@
+use snafu::prelude::*;
+
 extern crate self as fastn_update;
 
 mod utils;
 
-#[derive(thiserror::Error, Debug)]
+#[derive(Snafu, Debug)]
 pub enum ManifestError {
-    #[error("Failed to download manifest.json for package '{package}'")]
-    DownloadError {
+    #[snafu(display("Failed to download manifest.json for package '{package}'"))]
+    DownloadManifest {
         package: String,
-        #[source]
         source: fastn_core::Error,
     },
-    #[error("Failed to deserialize manifest.json for package '{package}'")]
-    DeserializationError {
+    #[snafu(display("Failed to deserialize manifest.json for package '{package}'"))]
+    DeserializeManifest {
         package: String,
-        #[source]
         source: serde_json::Error,
     },
-    #[error("Failed to read manifest content for package '{package}'")]
-    DsReadError {
+    #[snafu(display("Failed to read manifest content for package '{package}'"))]
+    ReadManifest {
         package: String,
-        #[source]
         source: fastn_ds::ReadError,
     },
 }
 
-#[derive(thiserror::Error, Debug)]
+#[derive(Snafu, Debug)]
 pub enum ArchiveError {
-    #[error("Failed to read archive for package '{package}'")]
-    IoReadError {
+    #[snafu(display("Failed to read archive for package '{package}'"))]
+    ReadArchive {
         package: String,
-        #[source]
         source: std::io::Error,
     },
-    #[error("Failed to unpack archive for package '{package}'")]
-    ZipError {
+    #[snafu(display("Failed to unpack archive for package '{package}'"))]
+    ArchiveEntryRead {
         package: String,
-        #[source]
         source: zip::result::ZipError,
     },
-    #[error("Failed to download archive for package '{package}'")]
-    DownloadError {
+    #[snafu(display("Failed to download archive for package '{package}'"))]
+    DownloadArchive {
         package: String,
-        #[source]
         source: fastn_core::Error,
     },
-    #[error("Failed to write archive content for package '{package}'")]
-    DsWriteError {
+    #[snafu(display("Failed to write archive content for package '{package}'"))]
+    WriteArchiveContent {
         package: String,
-        #[source]
         source: fastn_ds::WriteError,
     },
 }
 
-#[derive(thiserror::Error, Debug)]
+#[derive(Snafu, Debug)]
 pub enum DependencyError {
-    #[error("Failed to resolve dependency '{package}'")]
-    ResolveError {
+    #[snafu(display("Failed to resolve dependency '{package}'"))]
+    ResolveDependency {
         package: String,
-        #[source]
         source: fastn_core::Error,
     },
 }
@@ -78,13 +72,15 @@ async fn resolve_dependency_package(
     ds: &fastn_ds::DocumentStore,
     dependency: &fastn_core::package::dependency::Dependency,
     dependency_path: &fastn_ds::Path,
-    package: String,
 ) -> Result<fastn_core::Package, DependencyError> {
     let mut dep_package = dependency.package.clone();
     let fastn_path = dependency_path.join("FASTN.ftd");
-    if let Err(e) = dep_package.resolve(&fastn_path, ds).await {
-        return Err(DependencyError::ResolveError { package, source: e });
-    }
+    dep_package
+        .resolve(&fastn_path, ds)
+        .await
+        .context(ResolveDependencySnafu {
+            package: dependency.package.name.clone(),
+        })?;
     Ok(dep_package)
 }
 
@@ -103,12 +99,13 @@ async fn update_dependencies(
             if resolved.contains(&dependency.package.name) {
                 continue;
             }
-            let package_name = dependency.package.name.clone();
+            let dep_package = &dependency.package;
+            let package_name = dep_package.name.clone();
             let dependency_path = &packages_root.join(&package_name);
 
             pb.set_message(format!("Resolving {}/manifest.json", &package_name));
 
-            let (manifest, manifest_bytes) = get_manifest(package_name.clone()).await?;
+            let (manifest, manifest_bytes) = get_manifest(&package_name).await?;
 
             let manifest_path = dependency_path.join(fastn_core::manifest::MANIFEST_FILE);
 
@@ -119,14 +116,13 @@ async fn update_dependencies(
                 true
             } else {
                 let existing_manifest_bytes =
-                    ds.read_content(&manifest_path).await.map_err(|e| {
-                        ManifestError::DsReadError {
+                    ds.read_content(&manifest_path)
+                        .await
+                        .context(ReadManifestSnafu {
                             package: package_name.clone(),
-                            source: e,
-                        }
-                    })?;
-                let existing_manifest =
-                    read_manifest(&existing_manifest_bytes, package_name.clone())?;
+                        })?;
+                let existing_manifest: fastn_core::Manifest =
+                    read_manifest(&existing_manifest_bytes, &package_name)?;
 
                 existing_manifest.checksum.ne(manifest.checksum.as_str())
             };
@@ -143,16 +139,16 @@ async fn update_dependencies(
                     ds,
                     &packages_root.join(&package_name),
                     &manifest,
-                    package_name.clone(),
+                    &package_name,
+                    pb,
                 )
                 .await?;
 
                 ds.write_content(&manifest_path, manifest_bytes)
                     .await
-                    .map_err(|e| ArchiveError::DsWriteError {
+                    .context(WriteArchiveContentSnafu {
                         package: package_name.clone(),
-                        source: e,
-                    })?;
+                    })?
             }
 
             if dependency.package.name.eq(&fastn_core::FASTN_UI_INTERFACE) {
@@ -160,11 +156,9 @@ async fn update_dependencies(
                 continue;
             }
 
-            let dep_package =
-                resolve_dependency_package(ds, &dependency, dependency_path, package_name.clone())
-                    .await?;
+            let dep_package = resolve_dependency_package(ds, &dependency, dependency_path).await?;
             resolved.insert(package_name.to_string());
-            pb.inc_length(dep_package.dependencies.len() as u64);
+            pb.inc_length(1);
             stack.push(dep_package);
         }
 
@@ -177,28 +171,24 @@ async fn download_and_unpack_zip(
     ds: &fastn_ds::DocumentStore,
     dependency_path: &fastn_ds::Path,
     manifest: &fastn_core::Manifest,
-    package_name: String,
+    package_name: &str,
+    pb: &indicatif::ProgressBar,
 ) -> Result<(), ArchiveError> {
     let mut archive = fastn_update::utils::download_archive(manifest.zip_url.clone())
         .await
-        .map_err(|e| ArchiveError::DownloadError {
-            package: package_name.clone(),
-            source: e,
+        .context(DownloadArchiveSnafu {
+            package: package_name,
         })?;
 
     for i in 0..archive.len() {
-        let mut entry = archive.by_index(i).map_err(|e| ArchiveError::ZipError {
-            package: package_name.clone(),
-            source: e,
+        let mut entry = archive.by_index(i).context(ArchiveEntryReadSnafu {
+            package: package_name,
         })?;
 
         if entry.is_file() {
             let mut buffer = Vec::new();
-            std::io::Read::read_to_end(&mut entry, &mut buffer).map_err(|e| {
-                ArchiveError::IoReadError {
-                    package: package_name.clone(),
-                    source: e,
-                }
+            std::io::Read::read_to_end(&mut entry, &mut buffer).context(ReadArchiveSnafu {
+                package: package_name,
             })?;
             if let Some(path) = entry.enclosed_name() {
                 let path = path.to_str().unwrap();
@@ -210,12 +200,12 @@ async fn download_and_unpack_zip(
                     continue;
                 }
                 let output_path = &dependency_path.join(path_without_prefix);
-                ds.write_content(output_path, buffer).await.map_err(|e| {
-                    ArchiveError::DsWriteError {
-                        package: package_name.clone(),
-                        source: e,
-                    }
-                })?;
+                ds.write_content(output_path, buffer)
+                    .await
+                    .context(WriteArchiveContentSnafu {
+                        package: package_name,
+                    })?;
+                pb.tick();
             }
         }
     }
@@ -223,9 +213,11 @@ async fn download_and_unpack_zip(
     Ok(())
 }
 
-fn read_manifest(bytes: &[u8], package: String) -> Result<fastn_core::Manifest, ManifestError> {
-    let manifest: fastn_core::Manifest = serde_json::de::from_slice(bytes)
-        .map_err(|e| ManifestError::DeserializationError { package, source: e })?;
+fn read_manifest(bytes: &[u8], package_name: &str) -> Result<fastn_core::Manifest, ManifestError> {
+    let manifest: fastn_core::Manifest =
+        serde_json::de::from_slice(bytes).context(DeserializeManifestSnafu {
+            package: package_name,
+        })?;
 
     Ok(manifest)
 }
@@ -233,7 +225,7 @@ fn read_manifest(bytes: &[u8], package: String) -> Result<fastn_core::Manifest, 
 /// Download manifest of the package `<package-name>/manifest.json`
 /// Resolve to `fastn_core::Manifest` struct
 async fn get_manifest(
-    package_name: String,
+    package_name: &str,
 ) -> Result<(fastn_core::Manifest, Vec<u8>), ManifestError> {
     let manifest_bytes = fastn_core::http::http_get(&format!(
         "https://{}/{}",
@@ -241,11 +233,10 @@ async fn get_manifest(
         fastn_core::manifest::MANIFEST_FILE
     ))
     .await
-    .map_err(|e| ManifestError::DownloadError {
-        package: package_name.clone(),
-        source: e,
+    .context(DownloadManifestSnafu {
+        package: package_name,
     })?;
-    let manifest = read_manifest(&manifest_bytes, package_name.clone())?;
+    let manifest = read_manifest(&manifest_bytes, package_name)?;
 
     Ok((manifest, manifest_bytes))
 }
@@ -258,14 +249,14 @@ pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
     }
 
     let spinner_style =
-        indicatif::ProgressStyle::with_template("{prefix:.bold.dim} {spinner} {msg}")
+        indicatif::ProgressStyle::with_template("{prefix:.bold.dim} [{pos}/{len}] {spinner} {msg}")
             .unwrap()
-            .tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
+            .tick_chars("⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏");
 
     let current_package = &config.package;
     let pb = indicatif::ProgressBar::new(current_package.dependencies.len() as u64);
     pb.set_style(spinner_style);
-    pb.set_prefix("Updating packages");
+    pb.set_prefix("Updating dependencies");
 
     if let Err(e) =
         update_dependencies(&config.ds, &config.packages_root, current_package, &pb).await
@@ -276,14 +267,12 @@ pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
         return Ok(());
     }
 
-    pb.set_prefix("Updated");
+    pb.finish_and_clear();
 
     match config.package.dependencies.len() {
-        1 => pb.set_message("package dependency"),
-        n => pb.set_message(format!("{} dependencies.", n)),
+        1 => println!("Updated package dependency"),
+        n => println!("Updated {} dependencies.", n),
     }
-
-    pb.finish();
 
     Ok(())
 }
