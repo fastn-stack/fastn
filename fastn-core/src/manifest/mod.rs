@@ -10,12 +10,12 @@ pub struct Manifest {
 impl Manifest {
     pub fn new(
         files: std::collections::HashMap<String, File>,
-        zip_url: String,
+        zip_url: &str,
         checksum: String,
     ) -> Self {
         Manifest {
             files,
-            zip_url,
+            zip_url: zip_url.to_string(),
             checksum,
         }
     }

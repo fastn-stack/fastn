@@ -96,7 +96,7 @@ pub async fn write_manifest_file(
         }
 
         let name = file.get_id().to_string();
-        let content = &config.ds.read_content(&file.get_full_path()).await?;
+        let content = file.content();
         let hash = fastn_core::utils::generate_hash(content);
         let size = content.len();
 
@@ -110,9 +110,9 @@ pub async fn write_manifest_file(
 
     let checksum = format!("{:X}", hasher.finalize_fixed());
 
-    let manifest = fastn_core::Manifest::new(files, zip_url.to_string(), checksum);
+    let manifest = fastn_core::Manifest::new(files, zip_url, checksum);
 
-    let _ = &config
+    config
         .ds
         .write_content(
             &build_dir.join(fastn_core::manifest::MANIFEST_FILE),
@@ -123,7 +123,7 @@ pub async fn write_manifest_file(
     fastn_core::utils::print_end(
         format!(
             "Processed {}/{}",
-            &config.package.name.as_str(),
+            config.package.name,
             fastn_core::manifest::MANIFEST_FILE
         )
         .as_str(),

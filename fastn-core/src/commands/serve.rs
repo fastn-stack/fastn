@@ -456,53 +456,45 @@ pub(crate) struct AppData {
 }
 
 pub fn handle_default_route(
-    req: &actix_web::HttpRequest,
+    req: &fastn_core::http::Request,
     package_name: &str,
-) -> Option<fastn_core::http::Response> {
+) -> Option<fastn_core::Result<fastn_core::http::Response>> {
     if req
         .path()
         .ends_with(fastn_core::utils::hashed_default_css_name())
     {
-        return Some(
-            actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_CSS)
-                .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(ftd::css()),
-        );
+        return Some(Ok(actix_web::HttpResponse::Ok()
+            .content_type(mime_guess::mime::TEXT_CSS)
+            .append_header(("Cache-Control", "public, max-age=31536000"))
+            .body(ftd::css())));
     } else if req
         .path()
         .ends_with(fastn_core::utils::hashed_default_js_name())
     {
-        return Some(
-            actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
-                .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(format!(
-                    "{}\n\n{}",
-                    ftd::build_js(),
-                    fastn_core::fastn_2022_js()
-                )),
-        );
+        return Some(Ok(actix_web::HttpResponse::Ok()
+            .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+            .append_header(("Cache-Control", "public, max-age=31536000"))
+            .body(format!(
+                "{}\n\n{}",
+                ftd::build_js(),
+                fastn_core::fastn_2022_js()
+            ))));
     } else if req
         .path()
         .ends_with(fastn_core::utils::hashed_default_ftd_js(package_name))
     {
-        return Some(
-            actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
-                .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(ftd::js::all_js_without_test(package_name)),
-        );
+        return Some(Ok(actix_web::HttpResponse::Ok()
+            .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+            .append_header(("Cache-Control", "public, max-age=31536000"))
+            .body(ftd::js::all_js_without_test(package_name))));
     } else if req
         .path()
         .ends_with(fastn_core::utils::hashed_markdown_js())
     {
-        return Some(
-            actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
-                .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(ftd::markdown_js()),
-        );
+        return Some(Ok(actix_web::HttpResponse::Ok()
+            .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+            .append_header(("Cache-Control", "public, max-age=31536000"))
+            .body(ftd::markdown_js())));
     } else if let Some(theme) =
         fastn_core::utils::hashed_code_theme_css()
             .iter()
@@ -516,25 +508,21 @@ pub fn handle_default_route(
     {
         let theme_css = ftd::theme_css();
         return theme_css.get(theme).cloned().map(|theme| {
-            actix_web::HttpResponse::Ok()
+            Ok(actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_CSS)
                 .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(theme)
+                .body(theme))
         });
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_js()) {
-        return Some(
-            actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
-                .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(ftd::prism_js()),
-        );
+        return Some(Ok(actix_web::HttpResponse::Ok()
+            .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+            .append_header(("Cache-Control", "public, max-age=31536000"))
+            .body(ftd::prism_js())));
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_css()) {
-        return Some(
-            actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_CSS)
-                .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(ftd::prism_css()),
-        );
+        return Some(Ok(actix_web::HttpResponse::Ok()
+            .content_type(mime_guess::mime::TEXT_CSS)
+            .append_header(("Cache-Control", "public, max-age=31536000"))
+            .body(ftd::prism_css())));
     }
 
     None
@@ -552,6 +540,22 @@ async fn test() -> fastn_core::Result<fastn_core::http::Response> {
     Ok(actix_web::HttpResponse::Ok().finish())
 }
 
+async fn handle_static_route(
+    _req: &fastn_core::http::Request,
+    _ds: &fastn_ds::DocumentStore,
+) -> Option<fastn_core::Result<fastn_core::http::Response>> {
+    // static means it has a static extension
+    None
+}
+
+async fn handle_endpoints(
+    _config: &fastn_core::Config,
+    _req: &fastn_core::http::Request,
+) -> Option<fastn_core::Result<fastn_core::http::Response>> {
+    // static means it has an extension and it does not start with endpoint
+    None
+}
+
 #[tracing::instrument(skip_all)]
 async fn actual_route(
     config: &fastn_core::Config,
@@ -562,8 +566,18 @@ async fn actual_route(
     tracing::info!(method = req.method().as_str(), uri = req.path());
     tracing::info!(tutor_mode = fastn_core::tutor::is_tutor());
 
+    let req = fastn_core::http::Request::from_actix(req, body);
+
+    if let Some(endpoint_response) = handle_endpoints(config, &req).await {
+        return endpoint_response;
+    }
+
     if let Some(default_response) = handle_default_route(&req, package_name) {
-        return Ok(default_response);
+        return default_response;
+    }
+
+    if let Some(static_response) = handle_static_route(&req, &config.ds).await {
+        return static_response;
     }
 
     let req = fastn_core::http::Request::from_actix(req, body);
