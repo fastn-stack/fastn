@@ -168,6 +168,20 @@ pub async fn serve(
     config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    if let Some(endpoint_response) = handle_endpoints(config, &req).await {
+        return endpoint_response;
+    }
+
+    if let Some(default_response) = handle_default_route(&req, config.package.name.as_str()) {
+        return default_response;
+    }
+
+    if let Some(static_response) =
+        handle_static_route(req.path(), config.package.name.as_str(), &config.ds).await
+    {
+        return static_response;
+    }
+
     serve_helper(config, req, false).await
 }
 
@@ -393,7 +407,6 @@ pub(crate) struct AppData {
     pub(crate) inline_js: Vec<String>,
     pub(crate) external_css: Vec<String>,
     pub(crate) inline_css: Vec<String>,
-    pub(crate) package_name: String,
 }
 
 pub fn handle_default_route(
@@ -558,24 +571,10 @@ async fn actual_route(
     config: &fastn_core::Config,
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
-    package_name: &str,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     tracing::info!(method = req.method().as_str(), uri = req.path());
-    tracing::info!(tutor_mode = fastn_core::tutor::is_tutor());
 
     let req = fastn_core::http::Request::from_actix(req, body);
-
-    if let Some(endpoint_response) = handle_endpoints(config, &req).await {
-        return endpoint_response;
-    }
-
-    if let Some(default_response) = handle_default_route(&req, package_name) {
-        return default_response;
-    }
-
-    if let Some(static_response) = handle_static_route(req.path(), package_name, &config.ds).await {
-        return static_response;
-    }
 
     match (req.method().to_lowercase().as_str(), req.path()) {
         #[cfg(feature = "auth")]
@@ -583,10 +582,6 @@ async fn actual_route(
         ("get", "/-/clear-cache/") => clear_cache(config, req).await,
         ("get", "/-/poll/") => fastn_core::watcher::poll().await,
         ("get", "/test/") => test().await,
-        ("get", "/-/pwd/") => fastn_core::tutor::pwd().await,
-        ("get", "/-/tutor.js") => fastn_core::tutor::js().await,
-        ("post", "/-/tutor/start/") => fastn_core::tutor::start(req.json()?).await,
-        ("get", "/-/tutor/stop/") => fastn_core::tutor::stop().await,
         (_, _) => serve(config, req).await,
     }
 }
@@ -597,8 +592,15 @@ async fn route(
     body: actix_web::web::Bytes,
     app_data: actix_web::web::Data<AppData>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let (config, package_name) = fastn_core::tutor::config(&app_data).await?;
-    actual_route(&config, req, body, package_name.as_str()).await
+    let config = fastn_core::Config::read_current(false)
+        .await?
+        .add_edition(app_data.edition.clone())?
+        .add_external_js(app_data.external_js.clone())
+        .add_inline_js(app_data.inline_js.clone())
+        .add_external_css(app_data.external_css.clone())
+        .add_inline_css(app_data.inline_css.clone());
+
+    actual_route(&config, req, body).await
 }
 
 //noinspection HttpUrlsUsage
@@ -612,7 +614,6 @@ pub async fn listen(
     inline_js: Vec<String>,
     external_css: Vec<String>,
     inline_css: Vec<String>,
-    package_name: String,
 ) -> fastn_core::Result<()> {
     use colored::Colorize;
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
@@ -657,7 +658,6 @@ You can try without providing port, it will automatically pick unused port."#,
                 inline_js: inline_js.clone(),
                 external_css: external_css.clone(),
                 inline_css: inline_css.clone(),
-                package_name: package_name.clone(),
             }))
             .wrap(actix_web::middleware::Compress::default())
             .wrap(fastn_core::catch_panic::CatchPanic::default())
@@ -670,11 +670,7 @@ You can try without providing port, it will automatically pick unused port."#,
             .route("/{path:.*}", actix_web::web::route().to(route))
     };
 
-    if fastn_core::tutor::is_tutor() {
-        println!("### Server Started in TUTOR MODE ###");
-    } else {
-        println!("### Server Started ###");
-    }
+    println!("### Server Started ###");
     println!(
         "Go to: http://{}:{}",
         bind_address,

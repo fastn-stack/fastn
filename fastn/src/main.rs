@@ -52,7 +52,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     }
 
     let mut config = fastn_core::Config::read_current(false).await?;
-    let package_name = config.package.name.clone();
 
     if let Some(serve) = matches.subcommand_matches("serve") {
         let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
@@ -80,7 +79,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             inline_js,
             external_css,
             inline_css,
-            package_name,
         )
         .await;
     }
