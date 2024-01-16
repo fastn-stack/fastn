@@ -168,10 +168,8 @@ pub async fn serve(
     config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    println!("Serve request path: {}", req.path());
     if let Some(endpoint_response) = handle_endpoints(config, &req).await {
-        println!("Endpoint response");
-        return dbg!(endpoint_response);
+        return endpoint_response;
     }
 
     if let Some(default_response) = handle_default_route(&req, config.package.name.as_str()) {
@@ -181,11 +179,9 @@ pub async fn serve(
     if let Some(static_response) =
         handle_static_route(req.path(), config.package.name.as_str(), &config.ds).await
     {
-        println!("Static response");
-        return dbg!(static_response);
+        return static_response;
     }
 
-    println!("Handling other files");
     serve_helper(config, req, false).await
 }
 
@@ -474,7 +470,6 @@ async fn handle_static_route(
             return None;
         }
 
-        println!("Handling static route: {}", path);
         // the path can start with slash or -/. If later, it is a static file from our dependencies, so
         // we have to look for them inside .packages.
         let path = match path.strip_prefix("/-/") {
@@ -484,8 +479,6 @@ async fn handle_static_route(
             Some(path) => format!(".packages/{path}"),
             None => path.to_string(),
         };
-
-        println!("Static path: {}", path.as_str());
 
         Some(
             static_file(ds, path.strip_prefix('/').unwrap_or(path.as_str()))
@@ -519,12 +512,9 @@ async fn handle_endpoints(
     config: &fastn_core::Config,
     req: &fastn_core::http::Request,
 ) -> Option<fastn_core::Result<fastn_core::http::Response>> {
-    println!("Handling endpoints");
     let mut endpoint = None;
-    dbg!(req.path.as_str());
 
     for ep in config.package.endpoints.iter() {
-        dbg!(&ep);
         if !req.path().starts_with(ep.mountpoint.as_str()) {
             continue;
         }
@@ -537,17 +527,16 @@ async fn handle_endpoints(
         None => return None,
     };
 
-    println!("Found mountpoint match: {:?}", endpoint.mountpoint.as_str());
-    println!("Endpoint: {:?}", endpoint.endpoint.as_str());
-
     Some(
         fastn_core::proxy::get_out(
-            url::Url::parse(dbg!(format!(
-                "{}/{}",
-                endpoint.endpoint.trim_end_matches('/'),
-                req.path().trim_start_matches('/')
+            url::Url::parse(
+                format!(
+                    "{}/{}",
+                    endpoint.endpoint.trim_end_matches('/'),
+                    req.path().trim_start_matches('/')
+                )
+                .as_str(),
             )
-            .as_str(),))
             .unwrap(),
             req,
             &std::collections::HashMap::new(),
@@ -565,8 +554,6 @@ async fn actual_route(
     tracing::info!(method = req.method().as_str(), uri = req.path());
 
     let req = fastn_core::http::Request::from_actix(req, body);
-    println!("Serve Request");
-    dbg!(&req);
 
     match (req.method().to_lowercase().as_str(), req.path()) {
         #[cfg(feature = "auth")]

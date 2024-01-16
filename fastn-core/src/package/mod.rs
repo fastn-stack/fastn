@@ -587,8 +587,6 @@ impl Package {
                 }
             }
         };
-        println!("Reading fastn.package");
-        dbg!(&fastn_document.data.get("fastn#endpoint"));
         let mut package = {
             let temp_package: fastn_package::old_fastn::PackageTemp =
                 fastn_document.get("fastn#package")?;
@@ -596,7 +594,6 @@ impl Package {
         };
         package.endpoints =
             fastn_document.get::<Vec<fastn_package::old_fastn::EndpointData>>("fastn#endpoint")?;
-        dbg!(&package.endpoints);
         package.translation_status_summary =
             fastn_document.get("fastn#translation-status-summary")?;
         package.fastn_path = Some(fastn_path.to_owned());
@@ -652,7 +649,6 @@ impl Package {
             }
         };
 
-        println!("Reading from fastn doc");
         package.endpoints =
             fastn_doc.get::<Vec<fastn_package::old_fastn::EndpointData>>("fastn#endpoint")?;
 
