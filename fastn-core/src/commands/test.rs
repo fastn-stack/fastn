@@ -6,7 +6,6 @@ pub(crate) const FIXTURE_FILE_EXTENSION: &str = ".test.ftd";
 // mandatory test parameters
 pub(crate) const TEST_TITLE_HEADER: &str = "title";
 pub(crate) const TEST_URL_HEADER: &str = "url";
-pub(crate) const TESTS_CHILDREN_HEADER: &str = "tests";
 
 // optional test parameters
 pub(crate) const FIXTURE_HEADER: &str = "fixtures";
@@ -274,13 +273,11 @@ async fn get_all_instructions(
                 );
             }
             "fastn#get" | "fastn#post" => {
-                if found_test_component {
+                if !found_test_component {
                     return fastn_core::usage_error(format!(
-                        "fastn.test exists which can't have sibling instruction {}, doc: {} \
+                        "fastn.test doesn't exist for this test, doc: {} \
                         line_number: {}",
-                        instruction.name.as_str(),
-                        doc.name,
-                        instruction.line_number
+                        doc.name, instruction.line_number
                     ));
                 }
                 rest_instructions.push(instruction.clone())
@@ -330,10 +327,9 @@ async fn get_instructions_from_test(
 ) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
     let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc)?;
 
-    // Mandatory test parameters --------------------------------
-    let title = get_value_ok(TEST_TITLE_HEADER, &property_values, instruction.line_number)?
-        .to_string(doc, false)?
-        .unwrap();
+    if let Some(title) = get_optional_value_string(TEST_TITLE_HEADER, &property_values, doc)? {
+        println!("Test: {}", title);
+    }
 
     let fixtures =
         if let Some(fixtures) = get_optional_value_list(FIXTURE_HEADER, &property_values, doc)? {
@@ -348,27 +344,10 @@ async fn get_instructions_from_test(
             vec![]
         };
 
-    println!("Test: {}", title);
     let fixture_instructions =
         get_fixture_instructions(config, fixtures, included_fixtures).await?;
 
-    let test_instructions = if let Some(test_instructions) =
-        get_optional_value_list(TESTS_CHILDREN_HEADER, &property_values, doc)?
-    {
-        let mut instructions = vec![];
-        for instruction in test_instructions.iter() {
-            if let ftd::interpreter::Value::UI { component, .. } = instruction {
-                instructions.push(component.clone());
-            }
-        }
-        instructions
-    } else {
-        vec![]
-    };
-
-    let mut all_instructions = fixture_instructions;
-    all_instructions.extend(test_instructions);
-
+    let all_instructions = fixture_instructions;
     Ok(all_instructions)
 }
 

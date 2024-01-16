@@ -1,6 +1,6 @@
 -- import: fastn
 
--- fastn.test: 02-hello-world-using-endpoint
+-- fastn.test:
 
 -- fastn.get: Fetching Test Data (from test server)
 url: /get-data/
@@ -9,4 +9,3 @@ http-status: 200
 -- fastn.get.test:
 
 fastn.assert.eq(fastn.http_response["data"], "Hello, World!");
-

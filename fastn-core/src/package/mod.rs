@@ -560,9 +560,9 @@ impl Package {
         Ok(self.get_font_ftd().unwrap_or_default())
     }
 
-    pub(crate) async fn get_fastn(&self) -> fastn_core::Result<String> {
-        crate::http::construct_url_and_get_str(format!("{}/FASTN.ftd", self.name).as_str()).await
-    }
+    // pub(crate) async fn get_fastn(&self) -> fastn_core::Result<String> {
+    //     crate::http::construct_url_and_get_str(format!("{}/FASTN.ftd", self.name).as_str()).await
+    // }
 
     #[tracing::instrument(skip_all)]
     pub async fn resolve(
@@ -631,12 +631,6 @@ impl Package {
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<fastn_core::Package> {
         let file_extract_path = package_root.join("FASTN.ftd");
-        if !ds.exists(&file_extract_path).await {
-            let fastn_string = self.get_fastn().await?;
-            ds.write_content(&file_extract_path, fastn_string.into_bytes())
-                .await?;
-        }
-
         let mut package = self.clone();
         package.resolve(&file_extract_path, ds).await?;
         Ok(package)

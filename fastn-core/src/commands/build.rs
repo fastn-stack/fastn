@@ -22,7 +22,7 @@ pub async fn build(
         let documents = get_documents_for_current_package(config).await?;
 
         if let Some(zip_url) = zip_url {
-            write_manifest_json(config, &build_dir, zip_url).await?;
+            write_manifest_file(config, &build_dir, zip_url).await?;
         }
 
         match only_id {
@@ -70,7 +70,7 @@ pub async fn build(
     Ok(())
 }
 
-async fn write_manifest_json(
+pub async fn write_manifest_file(
     config: &fastn_core::Config,
     build_dir: &fastn_ds::Path,
     zip_url: &str,
@@ -83,7 +83,7 @@ async fn write_manifest_json(
     println!(
         "Processing {}/{}",
         &config.package.name.as_str(),
-        fastn_core::manifest::MANIFEST_JSON
+        fastn_core::manifest::MANIFEST_FILE
     );
 
     let mut hasher = sha2::Sha256::new();
@@ -91,12 +91,12 @@ async fn write_manifest_json(
         std::collections::HashMap::new();
 
     for file in config.get_files(&config.package).await? {
-        if file.get_id().eq(fastn_core::manifest::MANIFEST_JSON) {
+        if file.get_id().eq(fastn_core::manifest::MANIFEST_FILE) {
             continue;
         }
 
         let name = file.get_id().to_string();
-        let content = &config.ds.read_content(&file.get_full_path()).await?;
+        let content = file.content();
         let hash = fastn_core::utils::generate_hash(content);
         let size = content.len();
 
@@ -110,12 +110,12 @@ async fn write_manifest_json(
 
     let checksum = format!("{:X}", hasher.finalize_fixed());
 
-    let manifest = fastn_core::Manifest::new(files, zip_url.to_string(), checksum);
+    let manifest = fastn_core::Manifest::new(files, zip_url, checksum);
 
-    let _ = &config
+    config
         .ds
         .write_content(
-            &build_dir.join(fastn_core::manifest::MANIFEST_JSON),
+            &build_dir.join(fastn_core::manifest::MANIFEST_FILE),
             serde_json::ser::to_vec_pretty(&manifest)?,
         )
         .await?;
@@ -123,8 +123,8 @@ async fn write_manifest_json(
     fastn_core::utils::print_end(
         format!(
             "Processed {}/{}",
-            &config.package.name.as_str(),
-            fastn_core::manifest::MANIFEST_JSON
+            config.package.name,
+            fastn_core::manifest::MANIFEST_FILE
         )
         .as_str(),
         start,
