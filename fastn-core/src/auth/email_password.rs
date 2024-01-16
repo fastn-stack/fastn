@@ -1,5 +1,6 @@
 pub(crate) async fn create_user(
     req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -136,14 +137,23 @@ pub(crate) async fn create_user(
 
     tracing::info!("fastn_user email inserted");
 
-    create_and_send_confirmation_email(email.0.to_string(), db_pool, req).await?;
+    let conf_link = create_and_send_confirmation_email(email.0.to_string(), db_pool, req).await?;
 
-    let resp = serde_json::json!({
+    let resp_body = serde_json::json!({
         "user": user,
         "redirect": redirect_url_from_next(req, next),
     });
 
-    Ok(fastn_core::http::ok(serde_json::to_vec(&resp)?))
+
+    let mut resp = actix_web::HttpResponse::Ok();
+
+    if config.test_command_running {
+        resp
+            .insert_header(("X-Fastn-Test", "true"))
+            .insert_header(("X-Fastn-Test-Email-Confirmation-Link", conf_link));
+    }
+
+    Ok(resp.json(resp_body))
 }
 
 pub(crate) async fn login(
@@ -361,7 +371,7 @@ async fn create_and_send_confirmation_email(
     email: String,
     db_pool: &fastn_core::db::PgPool,
     req: &fastn_core::http::Request,
-) -> fastn_core::Result<()> {
+) -> fastn_core::Result<String> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
@@ -433,12 +443,12 @@ async fn create_and_send_confirmation_email(
                 .parse::<lettre::message::Mailbox>()
                 .unwrap(),
             "Verify your email",
-            confirmation_mail_body(confirmation_link),
+            confirmation_mail_body(&confirmation_link),
         )
         .await
         .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
 
-    Ok(())
+    Ok(confirmation_link)
 }
 
 /// check if it has been 3 days since the verification code was sent
@@ -455,7 +465,7 @@ fn key_expired(sent_at: chrono::DateTime<chrono::Utc>) -> bool {
         <= chrono::offset::Utc::now()
 }
 
-fn confirmation_mail_body(link: String) -> String {
+fn confirmation_mail_body(link: &str) -> String {
     format!("Use this link to verify your email: {link}")
 }
 

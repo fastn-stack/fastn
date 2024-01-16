@@ -223,7 +223,7 @@ pub async fn serve_helper(
     match (req.method().to_lowercase().as_str(), req.path()) {
         #[cfg(feature = "auth")]
         (_, t) if t.starts_with("/-/auth/") => {
-            return fastn_core::auth::routes::handle_auth(req).await
+            return fastn_core::auth::routes::handle_auth(req, config).await
         }
         ("get", "/-/clear-cache/") => return clear_cache(config, req).await,
         ("get", "/-/poll/") => return fastn_core::watcher::poll().await,
@@ -579,8 +579,6 @@ async fn actual_route(
     if let Some(static_response) = handle_static_route(&req, &config.ds).await {
         return static_response;
     }
-
-    let req = fastn_core::http::Request::from_actix(req, body);
 
     serve(config, req).await
 }
