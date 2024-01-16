@@ -3,7 +3,6 @@ pub async fn build(
     config: &fastn_core::Config,
     only_id: Option<&str>,
     base_url: &str,
-    zip_url: Option<&str>,
     ignore_failed: bool,
     test: bool,
     check_build: bool,
@@ -21,7 +20,8 @@ pub async fn build(
     {
         let documents = get_documents_for_current_package(config).await?;
 
-        fastn_core::manifest::write_manifest_file(config, &build_dir, zip_url).await?;
+        fastn_core::manifest::write_manifest_file(config, &build_dir, config.package.zip.clone())
+            .await?;
 
         match only_id {
             Some(id) => {

@@ -5,19 +5,19 @@ pub const MANIFEST_FILE: &str = "manifest.json";
 #[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
 pub struct Manifest {
     pub files: std::collections::BTreeMap<String, File>,
-    pub zip_url: String,
+    pub zip_url: Option<String>,
     pub checksum: String,
 }
 
 impl Manifest {
     pub fn new(
         files: std::collections::BTreeMap<String, File>,
-        zip_url: String,
+        zip_url: Option<String>,
         checksum: String,
     ) -> Self {
         Manifest {
             files,
-            zip_url: zip_url.to_string(),
+            zip_url,
             checksum,
         }
     }
@@ -39,7 +39,7 @@ impl File {
 pub async fn write_manifest_file(
     config: &fastn_core::Config,
     build_dir: &fastn_ds::Path,
-    zip_url: Option<&str>,
+    zip_url: Option<String>,
 ) -> fastn_core::Result<()> {
     use sha2::digest::FixedOutput;
     use sha2::Digest;
@@ -53,17 +53,17 @@ pub async fn write_manifest_file(
     );
 
     let zip_url = match zip_url {
-        Some(zip_url) => zip_url.to_string(),
+        Some(zip_url) => Some(zip_url.to_string()),
         None => {
             match fastn_core::manifest::utils::get_gh_zipball_url(config.package.name.clone()) {
-                Some(gh_zip_url) => gh_zip_url,
+                Some(gh_zip_url) => Some(gh_zip_url),
                 None => {
-                    return Err(fastn_core::error::Error::UsageError {
-                        message: format!(
-                            "Could not find zip url for package \"{}\".",
-                            &config.package.name
-                        ),
-                    })
+                    fastn_core::warning!(
+                        "Could not find zip url for package \"{}\".",
+                        &config.package.name
+                    );
+
+                    None
                 }
             }
         }
@@ -93,7 +93,7 @@ pub async fn write_manifest_file(
 
     let checksum = format!("{:X}", hasher.finalize_fixed());
 
-    let manifest = fastn_core::Manifest::new(files, zip_url.to_string(), checksum);
+    let manifest = fastn_core::Manifest::new(files, zip_url, checksum);
 
     let _ = &config
         .ds
