@@ -252,8 +252,7 @@ async fn get_manifest(
 
 #[tracing::instrument(skip_all)]
 pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
-    let c = fastn_core::Config::read_current(false).await?;
-    if c.package.dependencies.is_empty() {
+    if config.package.dependencies.is_empty() {
         println!("No dependencies to update.");
         return Ok(());
     }
@@ -279,7 +278,7 @@ pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
 
     pb.set_prefix("Updated");
 
-    match c.package.dependencies.len() {
+    match config.package.dependencies.len() {
         1 => pb.set_message("package dependency"),
         n => pb.set_message(format!("{} dependencies.", n)),
     }
