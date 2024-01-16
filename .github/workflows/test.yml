@@ -90,7 +90,8 @@ jobs:
         continue-on-error: true
         uses: actions-rs/cargo@v1
         with:
-          command: test --features auth
+          command: test
+          args: --features=auth
       - name: Run integration tests
         id: integration-test
         continue-on-error: true
