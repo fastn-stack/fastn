@@ -17,7 +17,7 @@ impl Manifest {
     ) -> Self {
         Manifest {
             files,
-            zip_url,
+            zip_url: zip_url.to_string(),
             checksum,
         }
     }

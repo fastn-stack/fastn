@@ -104,44 +104,38 @@ async fn serve_file(
         };
     }
 
-    match f {
-        fastn_core::File::Ftd(main_document) => {
-            if fastn_core::utils::is_ftd_path(path.as_str()) {
-                return fastn_core::http::ok(main_document.content.into_bytes());
-            }
-            match fastn_core::package::package_doc::read_ftd_(
-                config,
-                &main_document,
-                "/",
-                false,
-                false,
-                only_js,
-            )
-            .await
-            {
-                Ok(r) => r.into(),
-                Err(e) => {
-                    tracing::error!(
-                        msg = "fastn-Error",
-                        path = path.as_str(),
-                        error = e.to_string()
-                    );
-                    fastn_core::server_error!("fastn-Error: path: {}, {:?}", path, e)
-                }
-            }
-        }
-        fastn_core::File::Image(image) => fastn_core::http::ok_with_content_type(
-            image.content,
-            guess_mime_type(image.id.as_str()),
-        ),
-        fastn_core::File::Static(s) => fastn_core::http::ok(s.content),
-        fastn_core::File::Code(s) => fastn_core::http::ok_with_content_type(
-            s.content.into_bytes(),
-            guess_mime_type(s.id.as_str()),
-        ),
+    let main_document = match f {
+        fastn_core::File::Ftd(main_document) => main_document,
         _ => {
             tracing::error!(msg = "unknown handler", path = path.as_str());
-            fastn_core::server_error!("unknown handler")
+            return fastn_core::server_error!("unknown handler");
+        }
+    };
+
+    if fastn_core::utils::is_ftd_path(path.as_str()) {
+        return fastn_core::http::not_found_without_warning(
+            "we do not serve ftd file source".to_string(),
+        );
+    }
+
+    match fastn_core::package::package_doc::read_ftd_(
+        config,
+        &main_document,
+        "/",
+        false,
+        false,
+        only_js,
+    )
+    .await
+    {
+        Ok(r) => r.into(),
+        Err(e) => {
+            tracing::error!(
+                msg = "fastn-Error",
+                path = path.as_str(),
+                error = e.to_string()
+            );
+            fastn_core::server_error!("fastn-Error: path: {}, {:?}", path, e)
         }
     }
 }
@@ -169,48 +163,25 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
     fastn_core::http::ok_with_content_type(response, mime_guess::mime::APPLICATION_OCTET_STREAM)
 }
 
-async fn favicon(config: &fastn_core::Config) -> fastn_core::Result<fastn_core::http::Response> {
-    let mut path = fastn_ds::Path::new("favicon.ico");
-    if !config.ds.exists(&path).await {
-        path = fastn_ds::Path::new("static/favicon.ico");
-    }
-    Ok(static_file(config, path).await)
-}
-
-#[tracing::instrument(skip_all)]
-async fn static_file(
-    config: &fastn_core::Config,
-    file_path: fastn_ds::Path,
-) -> fastn_core::http::Response {
-    if !config.ds.exists(&file_path).await {
-        tracing::error!(
-            msg = "no such static file ({})",
-            path = file_path.to_string()
-        );
-        return fastn_core::not_found!("no such static file ({})", file_path);
-    }
-
-    match config.ds.read_content(&file_path).await {
-        Ok(r) => fastn_core::http::ok_with_content_type(
-            r,
-            guess_mime_type(file_path.to_string().as_str()),
-        ),
-        Err(e) => {
-            tracing::error!(
-                msg = "file-system-error ({})",
-                path = file_path.to_string(),
-                error = e.to_string()
-            );
-            fastn_core::not_found!("fastn-Error: path: {:?}, error: {:?}", file_path, e)
-        }
-    }
-}
-
 #[tracing::instrument(skip_all)]
 pub async fn serve(
     config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    if let Some(endpoint_response) = handle_endpoints(config, &req).await {
+        return endpoint_response;
+    }
+
+    if let Some(default_response) = handle_default_route(&req, config.package.name.as_str()) {
+        return default_response;
+    }
+
+    if let Some(static_response) =
+        handle_static_route(req.path(), config.package.name.as_str(), &config.ds).await
+    {
+        return static_response;
+    }
+
     serve_helper(config, req, false).await
 }
 
@@ -436,57 +407,48 @@ pub(crate) struct AppData {
     pub(crate) inline_js: Vec<String>,
     pub(crate) external_css: Vec<String>,
     pub(crate) inline_css: Vec<String>,
-    pub(crate) package_name: String,
 }
 
 pub fn handle_default_route(
-    req: &actix_web::HttpRequest,
+    req: &fastn_core::http::Request,
     package_name: &str,
-) -> Option<fastn_core::http::Response> {
+) -> Option<fastn_core::Result<fastn_core::http::Response>> {
     if req
         .path()
         .ends_with(fastn_core::utils::hashed_default_css_name())
     {
-        return Some(
-            actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_CSS)
-                .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(ftd::css()),
-        );
+        return Some(Ok(actix_web::HttpResponse::Ok()
+            .content_type(mime_guess::mime::TEXT_CSS)
+            .append_header(("Cache-Control", "public, max-age=31536000"))
+            .body(ftd::css())));
     } else if req
         .path()
         .ends_with(fastn_core::utils::hashed_default_js_name())
     {
-        return Some(
-            actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
-                .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(format!(
-                    "{}\n\n{}",
-                    ftd::build_js(),
-                    fastn_core::fastn_2022_js()
-                )),
-        );
+        return Some(Ok(actix_web::HttpResponse::Ok()
+            .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+            .append_header(("Cache-Control", "public, max-age=31536000"))
+            .body(format!(
+                "{}\n\n{}",
+                ftd::build_js(),
+                fastn_core::fastn_2022_js()
+            ))));
     } else if req
         .path()
         .ends_with(fastn_core::utils::hashed_default_ftd_js(package_name))
     {
-        return Some(
-            actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
-                .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(ftd::js::all_js_without_test(package_name)),
-        );
+        return Some(Ok(actix_web::HttpResponse::Ok()
+            .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+            .append_header(("Cache-Control", "public, max-age=31536000"))
+            .body(ftd::js::all_js_without_test(package_name))));
     } else if req
         .path()
         .ends_with(fastn_core::utils::hashed_markdown_js())
     {
-        return Some(
-            actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
-                .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(ftd::markdown_js()),
-        );
+        return Some(Ok(actix_web::HttpResponse::Ok()
+            .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+            .append_header(("Cache-Control", "public, max-age=31536000"))
+            .body(ftd::markdown_js())));
     } else if let Some(theme) =
         fastn_core::utils::hashed_code_theme_css()
             .iter()
@@ -500,25 +462,21 @@ pub fn handle_default_route(
     {
         let theme_css = ftd::theme_css();
         return theme_css.get(theme).cloned().map(|theme| {
-            actix_web::HttpResponse::Ok()
+            Ok(actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_CSS)
                 .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(theme)
+                .body(theme))
         });
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_js()) {
-        return Some(
-            actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
-                .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(ftd::prism_js()),
-        );
+        return Some(Ok(actix_web::HttpResponse::Ok()
+            .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+            .append_header(("Cache-Control", "public, max-age=31536000"))
+            .body(ftd::prism_js())));
     } else if req.path().ends_with(fastn_core::utils::hashed_prism_css()) {
-        return Some(
-            actix_web::HttpResponse::Ok()
-                .content_type(mime_guess::mime::TEXT_CSS)
-                .append_header(("Cache-Control", "public, max-age=31536000"))
-                .body(ftd::prism_css()),
-        );
+        return Some(Ok(actix_web::HttpResponse::Ok()
+            .content_type(mime_guess::mime::TEXT_CSS)
+            .append_header(("Cache-Control", "public, max-age=31536000"))
+            .body(ftd::prism_css())));
     }
 
     None
@@ -536,32 +494,94 @@ async fn test() -> fastn_core::Result<fastn_core::http::Response> {
     Ok(actix_web::HttpResponse::Ok().finish())
 }
 
+async fn handle_static_route(
+    path: &str,
+    package_name: &str,
+    ds: &fastn_ds::DocumentStore,
+) -> Option<fastn_core::Result<fastn_core::http::Response>> {
+    return Some(match handle_static_route_(path, package_name, ds).await? {
+        Ok(r) => Ok(r),
+        Err(fastn_ds::ReadError::NotFound) => {
+            Ok(fastn_core::http::not_found_without_warning("".to_string()))
+        }
+        Err(e) => Err(e.into()),
+    });
+
+    async fn handle_static_route_(
+        path: &str,
+        package_name: &str,
+        ds: &fastn_ds::DocumentStore,
+    ) -> Option<Result<fastn_core::http::Response, fastn_ds::ReadError>> {
+        if path == "/favicon.ico" {
+            return Some(favicon(ds).await);
+        }
+
+        if !fastn_core::utils::is_static_path(path) {
+            return None;
+        }
+
+        // the path can start with slash or -/. If later, it is a static file from our dependencies, so
+        // we have to look for them inside .packages.
+        let path = match path.strip_prefix("/-/") {
+            Some(path) if path.starts_with(package_name) => {
+                path.strip_prefix(package_name).unwrap_or(path).to_string()
+            }
+            Some(path) => format!(".packages/{path}"),
+            None => path.to_string(),
+        };
+
+        Some(
+            static_file(ds, path.strip_prefix('/').unwrap_or(path.as_str()))
+                .await
+                .map_err(Into::into),
+        )
+    }
+
+    async fn favicon(
+        ds: &fastn_ds::DocumentStore,
+    ) -> Result<fastn_core::http::Response, fastn_ds::ReadError> {
+        match static_file(ds, "favicon.ico").await {
+            Ok(r) => Ok(r),
+            Err(fastn_ds::ReadError::NotFound) => Ok(static_file(ds, "static/favicon.ico").await?),
+            Err(e) => Err(e),
+        }
+    }
+
+    #[tracing::instrument(skip(ds))]
+    async fn static_file(
+        ds: &fastn_ds::DocumentStore,
+        path: &str,
+    ) -> Result<fastn_core::http::Response, fastn_ds::ReadError> {
+        ds.read_content(&fastn_ds::Path::new(path)).await.map(|r| {
+            fastn_core::http::ok_with_content_type(r, guess_mime_type(path.to_string().as_str()))
+        })
+    }
+}
+
+async fn handle_endpoints(
+    _config: &fastn_core::Config,
+    _req: &fastn_core::http::Request,
+) -> Option<fastn_core::Result<fastn_core::http::Response>> {
+    // static means it has an extension and it does not start with endpoint
+    None
+}
+
 #[tracing::instrument(skip_all)]
 async fn actual_route(
     config: &fastn_core::Config,
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
-    package_name: &str,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     tracing::info!(method = req.method().as_str(), uri = req.path());
-    tracing::info!(tutor_mode = fastn_core::tutor::is_tutor());
-
-    if let Some(default_response) = handle_default_route(&req, package_name) {
-        return Ok(default_response);
-    }
 
     let req = fastn_core::http::Request::from_actix(req, body);
+
     match (req.method().to_lowercase().as_str(), req.path()) {
         #[cfg(feature = "auth")]
         (_, t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
         ("get", "/-/clear-cache/") => clear_cache(config, req).await,
         ("get", "/-/poll/") => fastn_core::watcher::poll().await,
-        ("get", "/favicon.ico") => favicon(config).await,
         ("get", "/test/") => test().await,
-        ("get", "/-/pwd/") => fastn_core::tutor::pwd().await,
-        ("get", "/-/tutor.js") => fastn_core::tutor::js().await,
-        ("post", "/-/tutor/start/") => fastn_core::tutor::start(req.json()?).await,
-        ("get", "/-/tutor/stop/") => fastn_core::tutor::stop().await,
         (_, _) => serve(config, req).await,
     }
 }
@@ -572,8 +592,15 @@ async fn route(
     body: actix_web::web::Bytes,
     app_data: actix_web::web::Data<AppData>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let (config, package_name) = fastn_core::tutor::config(&app_data).await?;
-    actual_route(&config, req, body, package_name.as_str()).await
+    let config = fastn_core::Config::read_current(false)
+        .await?
+        .add_edition(app_data.edition.clone())?
+        .add_external_js(app_data.external_js.clone())
+        .add_inline_js(app_data.inline_js.clone())
+        .add_external_css(app_data.external_css.clone())
+        .add_inline_css(app_data.inline_css.clone());
+
+    actual_route(&config, req, body).await
 }
 
 //noinspection HttpUrlsUsage
@@ -587,7 +614,6 @@ pub async fn listen(
     inline_js: Vec<String>,
     external_css: Vec<String>,
     inline_css: Vec<String>,
-    package_name: String,
 ) -> fastn_core::Result<()> {
     use colored::Colorize;
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
@@ -632,7 +658,6 @@ You can try without providing port, it will automatically pick unused port."#,
                 inline_js: inline_js.clone(),
                 external_css: external_css.clone(),
                 inline_css: inline_css.clone(),
-                package_name: package_name.clone(),
             }))
             .wrap(actix_web::middleware::Compress::default())
             .wrap(fastn_core::catch_panic::CatchPanic::default())
@@ -645,11 +670,7 @@ You can try without providing port, it will automatically pick unused port."#,
             .route("/{path:.*}", actix_web::web::route().to(route))
     };
 
-    if fastn_core::tutor::is_tutor() {
-        println!("### Server Started in TUTOR MODE ###");
-    } else {
-        println!("### Server Started ###");
-    }
+    println!("### Server Started ###");
     println!(
         "Go to: http://{}:{}",
         bind_address,

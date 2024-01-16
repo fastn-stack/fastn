@@ -616,10 +616,9 @@ impl Config {
     ) -> fastn_core::Result<Vec<fastn_core::File>> {
         let path = self.get_root_for_package(package);
         let all_files = self.get_all_file_paths(package).await?;
-        // TODO: Unwrap?
         let mut documents =
             fastn_core::paths_to_files(&self.ds, package.name.as_str(), all_files, &path).await?;
-        documents.sort_by_key(|v| v.get_id().to_string()); // TODO: why is to_string() needed?
+        documents.sort_by_key(|v| v.get_id().to_string());
 
         Ok(documents)
     }

@@ -86,8 +86,8 @@ pub enum RenameError {
 pub enum ReadError {
     #[error("io error {0}")]
     IOError(#[from] std::io::Error),
-    #[error("error")]
-    Error,
+    #[error("not found")]
+    NotFound,
 }
 
 #[derive(thiserror::Error, Debug)]
