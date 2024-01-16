@@ -2033,8 +2033,8 @@ window.ftd.utils.set_value_helper(data, "foo#show-indent:count:0", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-indent:count:0", "main");
 window.ftd.call_immutable_value_changes("foo#show-indent:count:0", "main");
-window.ftd.utils.node_change_call("main","0,0:main__text", data);
 window.ftd.utils.node_change_call("main","0,1:main__text-indent", data);
+window.ftd.utils.node_change_call("main","0,0:main__text", data);
 };
 
 
