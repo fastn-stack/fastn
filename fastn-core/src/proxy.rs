@@ -15,7 +15,7 @@ static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
     once_cell::sync::Lazy::new(|| std::sync::Arc::new(client_builder()));
 
 // This method will connect client request to the out of the world
-#[tracing::instrument(skip(req, req_headers))]
+#[tracing::instrument(skip(req, extra_headers))]
 pub(crate) async fn get_out(
     url: url::Url,
     req: &fastn_core::http::Request,
@@ -40,9 +40,8 @@ pub(crate) async fn get_out(
         },
         reqwest::Url::parse(
             format!(
-                "{}/{}{}",
-                host.trim_end_matches('/'),
-                path.trim_start_matches('/'),
+                "{}/{}",
+                url.as_str().trim_start_matches("/"),
                 if req.query_string().is_empty() {
                     "".to_string()
                 } else {

@@ -169,6 +169,8 @@ pub async fn serve(
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     if let Some(endpoint_response) = handle_endpoints(config, &req).await {
+        println!("Endpoint response");
+        dbg!(&endpoint_response);
         return endpoint_response;
     }
 
@@ -512,13 +514,17 @@ async fn handle_endpoints(
     config: &fastn_core::Config,
     req: &fastn_core::http::Request,
 ) -> Option<fastn_core::Result<fastn_core::http::Response>> {
+    println!("Handling endpoints");
     let mut endpoint = None;
+    dbg!(req.path.as_str());
 
-    for ep in config.package.endpoints {
-        if !req.path().starts_with(ep.mountpoint) {
+    for ep in config.package.endpoints.iter() {
+        dbg!(&ep);
+        if !req.path().starts_with(ep.mountpoint.as_str()) {
             continue;
         }
         endpoint = Some(ep.clone());
+        break;
     }
 
     let endpoint = match endpoint {
@@ -526,37 +532,25 @@ async fn handle_endpoints(
         None => return None,
     };
 
-    #[allow(unused_mut)]
-    let (url, mut extra_headers) = fastn_core::config::utils::get_clean_url(config, req.path())?;
+    println!("Found mountpoint match: {:?}", endpoint.mountpoint.as_str());
+    println!("Endpoint: {:?}", endpoint.endpoint.as_str());
 
-    // TODO: read app config and send them to service as header
-    // Adjust x-fastn header from based on the platform and the requested field
-    // this is for fastn.app
-    #[cfg(feature = "auth")]
-    if let Some(user_id) = extra_headers.get("user-id") {
-        // if request goes with mount-point /todos/api/add-todo/
-        // so it should say not found and pass it to proxy
-        let cookies = req.cookies();
-
-        match user_id.split_once('-') {
-            Some((platform, requested_field)) => {
-                if let Some(user_data) = fastn_core::auth::get_user_data_from_cookies(
-                    platform,
-                    requested_field,
-                    &cookies,
+    Some(
+        fastn_core::proxy::get_out(
+            url::Url::parse(
+                format!(
+                    "{}/{}",
+                    endpoint.endpoint.trim_end_matches('/'),
+                    req.path().trim_start_matches('/')
                 )
-                .await?
-                {
-                    extra_headers.insert("X-FASTN-USER-ID".to_string(), user_data);
-                }
-            }
-            _ => return Some(Ok(fastn_core::unauthorised!("invalid user-id provided"))),
-        }
-    }
-
-    Some(Ok(
-        fastn_core::proxy::get_out(url, req, &extra_headers).await
-    ))
+                .as_str(),
+            )
+            .unwrap(),
+            req,
+            &std::collections::HashMap::new(),
+        )
+        .await,
+    )
 }
 
 #[tracing::instrument(skip_all)]
@@ -568,6 +562,8 @@ async fn actual_route(
     tracing::info!(method = req.method().as_str(), uri = req.path());
 
     let req = fastn_core::http::Request::from_actix(req, body);
+    println!("Serve Request");
+    dbg!(&req);
 
     match (req.method().to_lowercase().as_str(), req.path()) {
         #[cfg(feature = "auth")]
