@@ -13,7 +13,6 @@ mod file;
 mod font;
 pub mod manifest;
 pub mod package;
-pub mod tutor;
 pub(crate) mod watcher;
 #[macro_use]
 pub mod http;
