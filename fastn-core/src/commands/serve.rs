@@ -168,10 +168,10 @@ pub async fn serve(
     config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    println!("Serve request path: {}", req.path());
     if let Some(endpoint_response) = handle_endpoints(config, &req).await {
         println!("Endpoint response");
-        dbg!(&endpoint_response);
-        return endpoint_response;
+        return dbg!(endpoint_response);
     }
 
     if let Some(default_response) = handle_default_route(&req, config.package.name.as_str()) {
@@ -181,9 +181,11 @@ pub async fn serve(
     if let Some(static_response) =
         handle_static_route(req.path(), config.package.name.as_str(), &config.ds).await
     {
-        return static_response;
+        println!("Static response");
+        return dbg!(static_response);
     }
 
+    println!("Handling other files");
     serve_helper(config, req, false).await
 }
 
@@ -472,6 +474,7 @@ async fn handle_static_route(
             return None;
         }
 
+        println!("Handling static route: {}", path);
         // the path can start with slash or -/. If later, it is a static file from our dependencies, so
         // we have to look for them inside .packages.
         let path = match path.strip_prefix("/-/") {
@@ -481,6 +484,8 @@ async fn handle_static_route(
             Some(path) => format!(".packages/{path}"),
             None => path.to_string(),
         };
+
+        println!("Static path: {}", path.as_str());
 
         Some(
             static_file(ds, path.strip_prefix('/').unwrap_or(path.as_str()))
@@ -537,14 +542,12 @@ async fn handle_endpoints(
 
     Some(
         fastn_core::proxy::get_out(
-            url::Url::parse(
-                format!(
-                    "{}/{}",
-                    endpoint.endpoint.trim_end_matches('/'),
-                    req.path().trim_start_matches('/')
-                )
-                .as_str(),
+            url::Url::parse(dbg!(format!(
+                "{}/{}",
+                endpoint.endpoint.trim_end_matches('/'),
+                req.path().trim_start_matches('/')
             )
+            .as_str(),))
             .unwrap(),
             req,
             &std::collections::HashMap::new(),
