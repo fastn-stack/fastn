@@ -166,8 +166,21 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
 #[tracing::instrument(skip_all)]
 pub async fn serve(
     config: &fastn_core::Config,
+    package_name: &str,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    if let Some(endpoint_response) = handle_endpoints(config, &req).await {
+        return endpoint_response;
+    }
+
+    if let Some(default_response) = handle_default_route(&req, package_name) {
+        return default_response;
+    }
+
+    if let Some(static_response) = handle_static_route(req.path(), package_name, &config.ds).await {
+        return static_response;
+    }
+
     serve_helper(config, req, false).await
 }
 
@@ -565,18 +578,6 @@ async fn actual_route(
 
     let req = fastn_core::http::Request::from_actix(req, body);
 
-    if let Some(endpoint_response) = handle_endpoints(config, &req).await {
-        return endpoint_response;
-    }
-
-    if let Some(default_response) = handle_default_route(&req, package_name) {
-        return default_response;
-    }
-
-    if let Some(static_response) = handle_static_route(req.path(), package_name, &config.ds).await {
-        return static_response;
-    }
-
     match (req.method().to_lowercase().as_str(), req.path()) {
         #[cfg(feature = "auth")]
         (_, t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
@@ -587,7 +588,7 @@ async fn actual_route(
         ("get", "/-/tutor.js") => fastn_core::tutor::js().await,
         ("post", "/-/tutor/start/") => fastn_core::tutor::start(req.json()?).await,
         ("get", "/-/tutor/stop/") => fastn_core::tutor::stop().await,
-        (_, _) => serve(config, req).await,
+        (_, _) => serve(config, package_name, req).await,
     }
 }
 
