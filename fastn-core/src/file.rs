@@ -8,6 +8,16 @@ pub enum File {
 }
 
 impl File {
+    pub fn content(&self) -> &[u8] {
+        match self {
+            Self::Ftd(a) => a.content.as_bytes(),
+            Self::Static(a) => a.content.as_slice(),
+            Self::Markdown(a) => a.content.as_bytes(),
+            Self::Code(a) => a.content.as_bytes(),
+            Self::Image(a) => a.content.as_slice(),
+        }
+    }
+
     pub fn get_id(&self) -> &str {
         match self {
             Self::Ftd(a) => a.id.as_str(),

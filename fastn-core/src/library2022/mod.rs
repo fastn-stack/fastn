@@ -237,7 +237,6 @@ impl Library2022 {
             "http" => processor::http::process(value, kind, doc, self).await,
             "translation-info" => processor::lang_details::process(value, kind, doc, self).await,
             "current-language" => processor::lang::process(value, kind, doc, self).await,
-            "tutor-data" => fastn_core::tutor::process(&self.config, value, kind, doc).await,
             "toc" => processor::toc::process(value, kind, doc),
             "get-data" => processor::get_data::process(value, kind, doc, self),
             "sitemap" => processor::sitemap::process(value, kind, doc, self),

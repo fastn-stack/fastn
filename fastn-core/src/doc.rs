@@ -203,7 +203,6 @@ pub async fn resolve_import_2022(
                 "is-reader".to_string(),
                 "sql".to_string(),
                 "package-query".to_string(),
-                "tutor".to_string(),
                 "pg".to_string(),
                 "package-tree".to_string(),
                 "fetch-file".to_string(),
@@ -259,7 +258,6 @@ pub async fn resolve_import_2022(
                 "http".to_string(),
                 "sql".to_string(),
                 "package-query".to_string(),
-                "tutor".to_string(),
                 "pg".to_string(),
                 "toc".to_string(),
                 "include".to_string(),
@@ -404,7 +402,7 @@ pub async fn resolve_foreign_variable2022(
                 {
                     let start = std::time::Instant::now();
                     let light = package
-                        .resolve_by_file_name(light_path.as_str(), None, false, &lib.config.ds)
+                        .resolve_by_file_name(light_path.as_str(), None, &lib.config.ds)
                         .await
                         .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
                             message: e.to_string(),
@@ -462,7 +460,7 @@ pub async fn resolve_foreign_variable2022(
                     {
                         dark_mode = dark.to_string();
                     } else if let Ok(dark) = package
-                        .resolve_by_file_name(dark_path.as_str(), None, false, &lib.config.ds)
+                        .resolve_by_file_name(dark_path.as_str(), None, &lib.config.ds)
                         .await
                     {
                         print!("Processing {}/{} ... ", package.name.as_str(), dark_path);
@@ -557,7 +555,7 @@ async fn download(
     {
         let start = std::time::Instant::now();
         let data = package
-            .resolve_by_file_name(path, None, false, &lib.config.ds)
+            .resolve_by_file_name(path, None, &lib.config.ds)
             .await
             .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
                 message: e.to_string(),
@@ -680,12 +678,7 @@ pub async fn resolve_foreign_variable2(
                 {
                     let start = std::time::Instant::now();
                     let light = package
-                        .resolve_by_file_name(
-                            light_path.as_str(),
-                            None,
-                            false,
-                            &lib.config.config.ds,
-                        )
+                        .resolve_by_file_name(light_path.as_str(), None, &lib.config.config.ds)
                         .await
                         .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
                             message: e.to_string(),
@@ -749,12 +742,7 @@ pub async fn resolve_foreign_variable2(
                     {
                         dark_mode = dark.to_string();
                     } else if let Ok(dark) = package
-                        .resolve_by_file_name(
-                            dark_path.as_str(),
-                            None,
-                            false,
-                            &lib.config.config.ds,
-                        )
+                        .resolve_by_file_name(dark_path.as_str(), None, &lib.config.config.ds)
                         .await
                     {
                         print!("Processing {}/{} ... ", package.name.as_str(), dark_path);
