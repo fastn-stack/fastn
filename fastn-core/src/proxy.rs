@@ -15,19 +15,15 @@ static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
     once_cell::sync::Lazy::new(|| std::sync::Arc::new(client_builder()));
 
 // This method will connect client request to the out of the world
-#[tracing::instrument(skip_all)]
+#[tracing::instrument(skip(req, req_headers))]
 pub(crate) async fn get_out(
-    host: &str,
-    req: fastn_core::http::Request,
-    path: &str,
-    package_name: &str,
-    req_headers: &std::collections::HashMap<String, String>,
+    url: url::Url,
+    req: &fastn_core::http::Request,
+    extra_headers: &std::collections::HashMap<String, String>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let headers = req.headers();
     // TODO: It should be part of fastn_core::Request::uri()
     // let path = &req.uri().to_string()[1..];
-
-    tracing::info!("proxy_request: {} {} {}", req.method(), path, host);
 
     let mut proxy_request = reqwest::Request::new(
         match req.method() {
@@ -75,7 +71,7 @@ pub(crate) async fn get_out(
 
     // headers
 
-    for (header_key, header_value) in req_headers {
+    for (header_key, header_value) in extra_headers {
         proxy_request.headers_mut().insert(
             reqwest::header::HeaderName::from_bytes(header_key.as_bytes()).unwrap(),
             reqwest::header::HeaderValue::from_str(header_value.as_str()).unwrap(),
@@ -107,9 +103,5 @@ pub(crate) async fn get_out(
 
     *proxy_request.body_mut() = Some(req.body().to_vec().into());
 
-    Ok(fastn_core::http::ResponseBuilder::from_reqwest(
-        CLIENT.execute(proxy_request).await?,
-        package_name,
-    )
-    .await)
+    Ok(fastn_core::http::ResponseBuilder::from_reqwest(CLIENT.execute(proxy_request).await?).await)
 }

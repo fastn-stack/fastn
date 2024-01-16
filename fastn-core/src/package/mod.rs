@@ -54,8 +54,8 @@ pub struct Package {
     /// in following priority: .ico > .svg > .png > .jpg.
     pub favicon: Option<String>,
 
-    /// endpoint for proxy service
-    pub endpoint: Vec<fastn_package::old_fastn::EndpointData>,
+    /// endpoints for proxy service
+    pub endpoints: Vec<fastn_package::old_fastn::EndpointData>,
 
     /// Attribute to define the usage of a WASM backend
     pub backend: bool,
@@ -104,7 +104,7 @@ impl Package {
             dynamic_urls: None,
             dynamic_urls_temp: None,
             favicon: None,
-            endpoint: vec![],
+            endpoints: vec![],
             backend: false,
             backend_headers: None,
             apps: vec![],
@@ -588,15 +588,15 @@ impl Package {
             }
         };
         dbg!("Reading fastn.package");
-        dbg!(&fastn_document.data.get("fastn#endpoint"));
+        dbg!(&fastn_document.data.get("fastn#endpoints"));
         let mut package = {
             let temp_package: fastn_package::old_fastn::PackageTemp =
                 fastn_document.get("fastn#package")?;
             temp_package.into_package()
         };
-        package.endpoint =
-            fastn_document.get::<Vec<fastn_package::old_fastn::EndpointData>>("fastn#endpoint")?;
-        dbg!(&package.endpoint);
+        package.endpoints =
+            fastn_document.get::<Vec<fastn_package::old_fastn::EndpointData>>("fastn#endpoints")?;
+        dbg!(&package.endpoints);
         package.translation_status_summary =
             fastn_document.get("fastn#translation-status-summary")?;
         package.fastn_path = Some(fastn_path.to_owned());
@@ -753,7 +753,7 @@ impl Package {
 
     // Dependencies with mount point and end point
     // Output: Package Dependencies
-    // [Package, endpoint, mount-point]
+    // [Package, endpoints, mount-point]
     pub fn dep_with_ep_and_mp(&self) -> Vec<(&Package, &str, &str)> {
         self.dependencies
             .iter()
@@ -769,9 +769,9 @@ impl Package {
             .to_owned()
     }
 
-    // Output: Package's dependency which contains mount-point and endpoint
+    // Output: Package's dependency which contains mount-point and endpoints
     // where request path starts-with dependency mount-point.
-    // (endpoint, sanitized request path from mount-point)
+    // (endpoints, sanitized request path from mount-point)
     #[allow(unreachable_code)]
     #[allow(dead_code)]
     pub fn get_dep_endpoint<'a>(&'a self, path: &'a str) -> Option<(&'a str, &'a str)> {
@@ -789,7 +789,10 @@ impl Package {
         match dep_endpoint(self, path) {
             Some((ep, r)) => Some((ep, r)),
             // TODO: should it refer to default package or not?
-            None => self.endpoint.first().map(|ep| (ep.endpoint.as_str(), path)),
+            None => self
+                .endpoints
+                .first()
+                .map(|ep| (ep.endpoint.as_str(), path)),
         }
     }
 
@@ -1014,7 +1017,7 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             dynamic_urls: None,
             dynamic_urls_temp: None,
             favicon: self.favicon,
-            endpoint: self.endpoint,
+            endpoints: self.endpoint,
             backend: self.backend,
             backend_headers: self.backend_headers,
             apps: vec![],
