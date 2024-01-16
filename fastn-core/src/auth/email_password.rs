@@ -1,5 +1,6 @@
 pub(crate) async fn create_user(
     req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -23,7 +24,7 @@ pub(crate) async fn create_user(
     if let Err(e) = user_payload {
         return fastn_core::http::user_err(
             vec![("payload", format!("invalid payload: {:?}", e).as_str())],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -55,7 +56,7 @@ pub(crate) async fn create_user(
     if let Err(_e) = email_check {
         return fastn_core::http::user_err(
             vec![("email", "invalid email")],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -64,14 +65,14 @@ pub(crate) async fn create_user(
     if username_check > 0 {
         return fastn_core::http::user_err(
             vec![("username", "username already taken")],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
     if email_check > 0 {
         return fastn_core::http::user_err(
             vec![("email", "email already taken")],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -128,7 +129,7 @@ pub(crate) async fn create_user(
                 ("email", "invalid email"),
                 ("detail", format!("{e}").as_str()),
             ],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -136,14 +137,21 @@ pub(crate) async fn create_user(
 
     tracing::info!("fastn_user email inserted");
 
-    create_and_send_confirmation_email(email.0.to_string(), db_pool, req).await?;
+    let conf_link = create_and_send_confirmation_email(email.0.to_string(), db_pool, req).await?;
 
-    let resp = serde_json::json!({
+    let resp_body = serde_json::json!({
         "user": user,
         "redirect": redirect_url_from_next(req, next),
     });
 
-    Ok(fastn_core::http::ok(serde_json::to_vec(&resp)?))
+    let mut resp = actix_web::HttpResponse::Ok();
+
+    if config.test_command_running {
+        resp.insert_header(("X-Fastn-Test", "true"))
+            .insert_header(("X-Fastn-Test-Email-Confirmation-Link", conf_link));
+    }
+
+    Ok(resp.json(resp_body))
 }
 
 pub(crate) async fn login(
@@ -170,7 +178,7 @@ pub(crate) async fn login(
     if let Err(e) = payload {
         return fastn_core::http::user_err(
             vec![("payload", format!("invalid payload: {:?}", e).as_str())],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -193,7 +201,7 @@ pub(crate) async fn login(
     if user.is_none() {
         return fastn_core::http::user_err(
             vec![("username", "invalid username")],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -207,7 +215,7 @@ pub(crate) async fn login(
         // redirecting them will require saving the method they used to login which de don't atm
         return fastn_core::http::user_err(
             vec![("username", "invalid username")],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -223,7 +231,7 @@ pub(crate) async fn login(
     if password_match.is_err() {
         return fastn_core::http::user_err(
             vec![("password", "incorrect username/password")],
-            fastn_core::http::StatusCode::BAD_REQUEST,
+            fastn_core::http::StatusCode::OK,
         );
     }
 
@@ -252,10 +260,7 @@ pub(crate) async fn confirm_email(
     let code = req.query().get("code");
 
     if code.is_none() {
-        return fastn_core::http::api_error(
-            "Bad Request",
-            fastn_core::http::StatusCode::BAD_REQUEST.into(),
-        );
+        return fastn_core::http::api_error("Bad Request", fastn_core::http::StatusCode::OK.into());
     }
 
     let code = match code.unwrap() {
@@ -263,7 +268,7 @@ pub(crate) async fn confirm_email(
         _ => {
             return fastn_core::http::api_error(
                 "Bad Request",
-                fastn_core::http::StatusCode::BAD_REQUEST.into(),
+                fastn_core::http::StatusCode::OK.into(),
             );
         }
     };
@@ -287,10 +292,7 @@ pub(crate) async fn confirm_email(
             .optional()?;
 
     if conf_data.is_none() {
-        return fastn_core::http::api_error(
-            "Bad Request",
-            fastn_core::http::StatusCode::BAD_REQUEST.into(),
-        );
+        return fastn_core::http::api_error("Bad Request", fastn_core::http::StatusCode::OK.into());
     }
 
     let (email_id, sent_at) = conf_data.unwrap();
@@ -330,10 +332,7 @@ pub(crate) async fn resend_email(
     let email = req.query().get("email");
 
     if email.is_none() {
-        return fastn_core::http::api_error(
-            "Bad Request",
-            fastn_core::http::StatusCode::BAD_REQUEST.into(),
-        );
+        return fastn_core::http::api_error("Bad Request", fastn_core::http::StatusCode::OK.into());
     }
 
     let email = match email.unwrap() {
@@ -341,7 +340,7 @@ pub(crate) async fn resend_email(
         _ => {
             return fastn_core::http::api_error(
                 "Bad Request",
-                fastn_core::http::StatusCode::BAD_REQUEST.into(),
+                fastn_core::http::StatusCode::OK.into(),
             );
         }
     };
@@ -361,7 +360,7 @@ async fn create_and_send_confirmation_email(
     email: String,
     db_pool: &fastn_core::db::PgPool,
     req: &fastn_core::http::Request,
-) -> fastn_core::Result<()> {
+) -> fastn_core::Result<String> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
@@ -433,12 +432,12 @@ async fn create_and_send_confirmation_email(
                 .parse::<lettre::message::Mailbox>()
                 .unwrap(),
             "Verify your email",
-            confirmation_mail_body(confirmation_link),
+            confirmation_mail_body(&confirmation_link),
         )
         .await
         .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
 
-    Ok(())
+    Ok(confirmation_link)
 }
 
 /// check if it has been 3 days since the verification code was sent
@@ -455,7 +454,7 @@ fn key_expired(sent_at: chrono::DateTime<chrono::Utc>) -> bool {
         <= chrono::offset::Utc::now()
 }
 
-fn confirmation_mail_body(link: String) -> String {
+fn confirmation_mail_body(link: &str) -> String {
     format!("Use this link to verify your email: {link}")
 }
 

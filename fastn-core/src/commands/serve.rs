@@ -191,6 +191,17 @@ pub async fn serve_helper(
     req: fastn_core::http::Request,
     only_js: bool,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    match (req.method().to_lowercase().as_str(), req.path()) {
+        #[cfg(feature = "auth")]
+        (_, t) if t.starts_with("/-/auth/") => {
+            return fastn_core::auth::routes::handle_auth(req, config).await
+        }
+        ("get", "/-/clear-cache/") => return clear_cache(config, req).await,
+        ("get", "/-/poll/") => return fastn_core::watcher::poll().await,
+        ("get", "/test/") => return test().await,
+        _ => {}
+    }
+
     let _lock = LOCK.read().await;
 
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
@@ -576,14 +587,7 @@ async fn actual_route(
 
     let req = fastn_core::http::Request::from_actix(req, body);
 
-    match (req.method().to_lowercase().as_str(), req.path()) {
-        #[cfg(feature = "auth")]
-        (_, t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
-        ("get", "/-/clear-cache/") => clear_cache(config, req).await,
-        ("get", "/-/poll/") => fastn_core::watcher::poll().await,
-        ("get", "/test/") => test().await,
-        (_, _) => serve(config, req).await,
-    }
+    serve(config, req).await
 }
 
 #[tracing::instrument(skip_all)]
@@ -641,14 +645,6 @@ You can try without providing port, it will automatically pick unused port."#,
             std::process::exit(2);
         }
     };
-
-    #[cfg(feature = "auth")]
-    if let Ok(auth_enabled) = std::env::var("FASTN_ENABLE_AUTH") {
-        if auth_enabled == "true" {
-            tracing::info!("running auth related migrations");
-            fastn_core::auth::enable_auth()?
-        }
-    }
 
     let app = move || {
         actix_web::App::new()
