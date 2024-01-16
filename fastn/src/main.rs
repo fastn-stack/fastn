@@ -78,6 +78,8 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let external_css = serve.values_of_("external-css");
         let inline_css = serve.values_of_("css");
 
+        fastn_update::update(&config).await?;
+
         return fastn_core::listen(
             bind.as_str(),
             port,
@@ -138,6 +140,8 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_inline_js(inline_js)
             .add_external_css(external_css)
             .add_inline_css(inline_css);
+
+        fastn_update::update(&config).await?;
 
         return fastn_core::build(
             &config,
