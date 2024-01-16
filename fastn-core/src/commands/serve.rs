@@ -483,9 +483,10 @@ async fn test() -> fastn_core::Result<fastn_core::http::Response> {
 
 async fn handle_static_route(
     path: &str,
+    package_name: &str,
     ds: &fastn_ds::DocumentStore,
 ) -> Option<fastn_core::Result<fastn_core::http::Response>> {
-    return Some(match handle_static_route_(path, ds).await? {
+    return Some(match handle_static_route_(path, package_name, ds).await? {
         Ok(r) => Ok(r),
         Err(fastn_ds::ReadError::NotFound) => {
             Ok(fastn_core::http::not_found_without_warning("".to_string()))
@@ -495,6 +496,7 @@ async fn handle_static_route(
 
     async fn handle_static_route_(
         path: &str,
+        package_name: &str,
         ds: &fastn_ds::DocumentStore,
     ) -> Option<Result<fastn_core::http::Response, fastn_ds::ReadError>> {
         if path == "/favicon.ico" {
@@ -508,11 +510,18 @@ async fn handle_static_route(
         // the path can start with slash or -/. If later, it is a static file from our dependencies, so
         // we have to look for them inside .packages.
         let path = match path.strip_prefix("/-/") {
+            Some(path) if path.starts_with(package_name) => {
+                path.strip_prefix(package_name).unwrap_or(path).to_string()
+            }
             Some(path) => format!(".packages/{path}"),
-            None => path[1..].to_string(),
+            None => path.to_string(),
         };
 
-        Some(static_file(ds, path.as_str()).await.map_err(Into::into))
+        Some(
+            static_file(ds, path.strip_prefix('/').unwrap_or(path.as_str()))
+                .await
+                .map_err(Into::into),
+        )
     }
 
     async fn favicon(
@@ -564,7 +573,7 @@ async fn actual_route(
         return default_response;
     }
 
-    if let Some(static_response) = handle_static_route(req.path(), &config.ds).await {
+    if let Some(static_response) = handle_static_route(req.path(), package_name, &config.ds).await {
         return static_response;
     }
 
