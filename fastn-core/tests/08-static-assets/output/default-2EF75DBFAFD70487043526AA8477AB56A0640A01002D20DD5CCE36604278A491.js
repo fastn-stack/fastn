@@ -1,22 +1,22 @@
 /* ftd-language.js */
 
 Prism.languages.ftd = {
-    'comment': [
+    comment: [
         {
-            'pattern': /\/--\s*((?!--)[\S\s])*/g,
-            'greedy': true,
-            'alias': "section-comment",
+            pattern: /\/--\s*((?!--)[\S\s])*/g,
+            greedy: true,
+            alias: "section-comment",
         },
         {
-            "pattern": /[\s]*\/[\w]+(:).*\n/g,
-            "greedy": true,
-            "alias": "header-comment",
+            pattern: /[\s]*\/[\w]+(:).*\n/g,
+            greedy: true,
+            alias: "header-comment",
         },
         {
-            'pattern': /(;;).*\n/g,
-            'greedy': true,
-            'alias': "inline-or-line-comment",
-        }
+            pattern: /(;;).*\n/g,
+            greedy: true,
+            alias: "inline-or-line-comment",
+        },
     ],
     /*
     -- [section-type] <section-name>: [caption]
@@ -30,73 +30,74 @@ Prism.languages.ftd = {
 
     [-- end: <section-name>]
     */
-    'string': {
-        'pattern': /^[ \t\n]*--\s+(.*)(\n(?![ \n\t]*--).*)*/g,
-        'inside': {
+    string: {
+        pattern: /^[ \t\n]*--\s+(.*)(\n(?![ \n\t]*--).*)*/g,
+        inside: {
             /* section-identifier */
-            'section-identifier': /([ \t\n])*--\s+/g,
+            "section-identifier": /([ \t\n])*--\s+/g,
             /* [section type] <section name>: */
-            'punctuation': {
-                'pattern': /^(.*):/g,
-                'inside': {
+            punctuation: {
+                pattern: /^(.*):/g,
+                inside: {
                     "semi-colon": /:/g,
-                    'keyword': /^(component|record|end|or-type)/g,
+                    keyword: /^(component|record|end|or-type)/g,
                     "value-type": /^(integer|boolean|decimal|string)/g,
                     "kernel-type": /\s*ftd[\S]+/g,
-                    'type-modifier': {
-                        'pattern': /(\s)+list(?=\s)/g,
-                        'lookbehind': true,
+                    "type-modifier": {
+                        pattern: /(\s)+list(?=\s)/g,
+                        lookbehind: true,
                     },
                     "section-name": {
-                        'pattern': /(\s)*.+/g,
-                        'lookbehind': true,
+                        pattern: /(\s)*.+/g,
+                        lookbehind: true,
                     },
-                }
+                },
             },
             /* section caption */
-            'section-caption': /^.+(?=\n)*/g,
+            "section-caption": /^.+(?=\n)*/g,
             /* header name: header value */
-            'regex': {
-                'pattern': /(?!--\s*).*[:]\s*(.*)(\n)*/g,
-                'inside': {
+            regex: {
+                pattern: /(?!--\s*).*[:]\s*(.*)(\n)*/g,
+                inside: {
                     /* if condition on component */
-                    'header-condition': /\s*if\s*:(.)+/g,
+                    "header-condition": /\s*if\s*:(.)+/g,
                     /* header event */
-                    'event': /\s*\$on(.)+\$(?=:)/g,
+                    event: /\s*\$on(.)+\$(?=:)/g,
                     /* header processor */
-                    'processor': /\s*\$[^:]+\$(?=:)/g,
+                    processor: /\s*\$[^:]+\$(?=:)/g,
                     /* header name => [header-type] <name> [header-condition] */
-                    'regex': {
-                        'pattern': /[^:]+(?=:)/g,
-                        'inside': {
+                    regex: {
+                        pattern: /[^:]+(?=:)/g,
+                        inside: {
                             /* [header-condition]  */
-                            'header-condition': /if\s*{.+}/g,
+                            "header-condition": /if\s*{.+}/g,
                             /* [header-type] <name> */
-                            'tag': {
-                                'pattern': /(.)+(?=if)?/g,
-                                'inside': {
-                                    'kernel-type': /^\s*ftd[\S]+/g,
-                                    'header-type': /^(record|caption|body|caption or body|body or caption|integer|boolean|decimal|string)/g,
-                                    'type-modifier': {
-                                        'pattern': /(\s)+list(?=\s)/g,
-                                        'lookbehind': true,
+                            tag: {
+                                pattern: /(.)+(?=if)?/g,
+                                inside: {
+                                    "kernel-type": /^\s*ftd[\S]+/g,
+                                    "header-type":
+                                        /^(record|caption|body|caption or body|body or caption|integer|boolean|decimal|string)/g,
+                                    "type-modifier": {
+                                        pattern: /(\s)+list(?=\s)/g,
+                                        lookbehind: true,
                                     },
-                                    'header-name': {
-                                        'pattern': /(\s)*(.)+/g,
-                                        'lookbehind': true,
+                                    "header-name": {
+                                        pattern: /(\s)*(.)+/g,
+                                        lookbehind: true,
                                     },
-                                }
-                            }
-                        }
+                                },
+                            },
+                        },
                     },
                     /* semicolon */
                     "semi-colon": /:/g,
                     /* header value (if any) */
-                    'header-value': {
-                        'pattern': /(\s)*(.+)/g,
-                        'lookbehind': true,
-                    }
-                }
+                    "header-value": {
+                        pattern: /(\s)*(.+)/g,
+                        lookbehind: true,
+                    },
+                },
             },
         },
     },
@@ -108,7 +109,7 @@ Prism.languages.ftd = {
  */
 // Content taken from https://cdn.jsdelivr.net/npm/marked/marked.min.js
 !function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t((e="undefined"!=typeof globalThis?globalThis:e||self).marked={})}(this,(function(e){"use strict";function t(){return{async:!1,breaks:!1,extensions:null,gfm:!0,hooks:null,pedantic:!1,renderer:null,silent:!1,tokenizer:null,walkTokens:null}}function n(t){e.defaults=t}e.defaults={async:!1,breaks:!1,extensions:null,gfm:!0,hooks:null,pedantic:!1,renderer:null,silent:!1,tokenizer:null,walkTokens:null};const s=/[&<>"']/,r=new RegExp(s.source,"g"),i=/[<>"']|&(?!(#\d{1,7}|#[Xx][a-fA-F0-9]{1,6}|\w+);)/,l=new RegExp(i.source,"g"),o={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"},a=e=>o[e];function c(e,t){if(t){if(s.test(e))return e.replace(r,a)}else if(i.test(e))return e.replace(l,a);return e}const h=/&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/gi;const p=/(^|[^\[])\^/g;function u(e,t){e="string"==typeof e?e:e.source,t=t||"";const n={replace:(t,s)=>(s=(s="object"==typeof s&&"source"in s?s.source:s).replace(p,"$1"),e=e.replace(t,s),n),getRegex:()=>new RegExp(e,t)};return n}function g(e){try{e=encodeURI(e).replace(/%25/g,"%")}catch(e){return null}return e}const k={exec:()=>null};function f(e,t){const n=e.replace(/\|/g,((e,t,n)=>{let s=!1,r=t;for(;--r>=0&&"\\"===n[r];)s=!s;return s?"|":" |"})).split(/ \|/);let s=0;if(n[0].trim()||n.shift(),n.length>0&&!n[n.length-1].trim()&&n.pop(),t)if(n.length>t)n.splice(t);else for(;n.length<t;)n.push("");for(;s<n.length;s++)n[s]=n[s].trim().replace(/\\\|/g,"|");return n}function d(e,t,n){const s=e.length;if(0===s)return"";let r=0;for(;r<s;){const i=e.charAt(s-r-1);if(i!==t||n){if(i===t||!n)break;r++}else r++}return e.slice(0,s-r)}function x(e,t,n,s){const r=t.href,i=t.title?c(t.title):null,l=e[1].replace(/\\([\[\]])/g,"$1");if("!"!==e[0].charAt(0)){s.state.inLink=!0;const e={type:"link",raw:n,href:r,title:i,text:l,tokens:s.inlineTokens(l)};return s.state.inLink=!1,e}return{type:"image",raw:n,href:r,title:i,text:c(l)}}class b{options;rules;lexer;constructor(t){this.options=t||e.defaults}space(e){const t=this.rules.block.newline.exec(e);if(t&&t[0].length>0)return{type:"space",raw:t[0]}}code(e){const t=this.rules.block.code.exec(e);if(t){const e=t[0].replace(/^ {1,4}/gm,"");return{type:"code",raw:t[0],codeBlockStyle:"indented",text:this.options.pedantic?e:d(e,"\n")}}}fences(e){const t=this.rules.block.fences.exec(e);if(t){const e=t[0],n=function(e,t){const n=e.match(/^(\s+)(?:```)/);if(null===n)return t;const s=n[1];return t.split("\n").map((e=>{const t=e.match(/^\s+/);if(null===t)return e;const[n]=t;return n.length>=s.length?e.slice(s.length):e})).join("\n")}(e,t[3]||"");return{type:"code",raw:e,lang:t[2]?t[2].trim().replace(this.rules.inline._escapes,"$1"):t[2],text:n}}}heading(e){const t=this.rules.block.heading.exec(e);if(t){let e=t[2].trim();if(/#$/.test(e)){const t=d(e,"#");this.options.pedantic?e=t.trim():t&&!/ $/.test(t)||(e=t.trim())}return{type:"heading",raw:t[0],depth:t[1].length,text:e,tokens:this.lexer.inline(e)}}}hr(e){const t=this.rules.block.hr.exec(e);if(t)return{type:"hr",raw:t[0]}}blockquote(e){const t=this.rules.block.blockquote.exec(e);if(t){const e=d(t[0].replace(/^ *>[ \t]?/gm,""),"\n"),n=this.lexer.state.top;this.lexer.state.top=!0;const s=this.lexer.blockTokens(e);return this.lexer.state.top=n,{type:"blockquote",raw:t[0],tokens:s,text:e}}}list(e){let t=this.rules.block.list.exec(e);if(t){let n=t[1].trim();const s=n.length>1,r={type:"list",raw:"",ordered:s,start:s?+n.slice(0,-1):"",loose:!1,items:[]};n=s?`\\d{1,9}\\${n.slice(-1)}`:`\\${n}`,this.options.pedantic&&(n=s?n:"[*+-]");const i=new RegExp(`^( {0,3}${n})((?:[\t ][^\\n]*)?(?:\\n|$))`);let l="",o="",a=!1;for(;e;){let n=!1;if(!(t=i.exec(e)))break;if(this.rules.block.hr.test(e))break;l=t[0],e=e.substring(l.length);let s=t[2].split("\n",1)[0].replace(/^\t+/,(e=>" ".repeat(3*e.length))),c=e.split("\n",1)[0],h=0;this.options.pedantic?(h=2,o=s.trimStart()):(h=t[2].search(/[^ ]/),h=h>4?1:h,o=s.slice(h),h+=t[1].length);let p=!1;if(!s&&/^ *$/.test(c)&&(l+=c+"\n",e=e.substring(c.length+1),n=!0),!n){const t=new RegExp(`^ {0,${Math.min(3,h-1)}}(?:[*+-]|\\d{1,9}[.)])((?:[ \t][^\\n]*)?(?:\\n|$))`),n=new RegExp(`^ {0,${Math.min(3,h-1)}}((?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$)`),r=new RegExp(`^ {0,${Math.min(3,h-1)}}(?:\`\`\`|~~~)`),i=new RegExp(`^ {0,${Math.min(3,h-1)}}#`);for(;e;){const a=e.split("\n",1)[0];if(c=a,this.options.pedantic&&(c=c.replace(/^ {1,4}(?=( {4})*[^ ])/g,"  ")),r.test(c))break;if(i.test(c))break;if(t.test(c))break;if(n.test(e))break;if(c.search(/[^ ]/)>=h||!c.trim())o+="\n"+c.slice(h);else{if(p)break;if(s.search(/[^ ]/)>=4)break;if(r.test(s))break;if(i.test(s))break;if(n.test(s))break;o+="\n"+c}p||c.trim()||(p=!0),l+=a+"\n",e=e.substring(a.length+1),s=c.slice(h)}}r.loose||(a?r.loose=!0:/\n *\n *$/.test(l)&&(a=!0));let u,g=null;this.options.gfm&&(g=/^\[[ xX]\] /.exec(o),g&&(u="[ ] "!==g[0],o=o.replace(/^\[[ xX]\] +/,""))),r.items.push({type:"list_item",raw:l,task:!!g,checked:u,loose:!1,text:o,tokens:[]}),r.raw+=l}r.items[r.items.length-1].raw=l.trimEnd(),r.items[r.items.length-1].text=o.trimEnd(),r.raw=r.raw.trimEnd();for(let e=0;e<r.items.length;e++)if(this.lexer.state.top=!1,r.items[e].tokens=this.lexer.blockTokens(r.items[e].text,[]),!r.loose){const t=r.items[e].tokens.filter((e=>"space"===e.type)),n=t.length>0&&t.some((e=>/\n.*\n/.test(e.raw)));r.loose=n}if(r.loose)for(let e=0;e<r.items.length;e++)r.items[e].loose=!0;return r}}html(e){const t=this.rules.block.html.exec(e);if(t){return{type:"html",block:!0,raw:t[0],pre:"pre"===t[1]||"script"===t[1]||"style"===t[1],text:t[0]}}}def(e){const t=this.rules.block.def.exec(e);if(t){const e=t[1].toLowerCase().replace(/\s+/g," "),n=t[2]?t[2].replace(/^<(.*)>$/,"$1").replace(this.rules.inline._escapes,"$1"):"",s=t[3]?t[3].substring(1,t[3].length-1).replace(this.rules.inline._escapes,"$1"):t[3];return{type:"def",tag:e,raw:t[0],href:n,title:s}}}table(e){const t=this.rules.block.table.exec(e);if(t){if(!/[:|]/.test(t[2]))return;const e={type:"table",raw:t[0],header:f(t[1]).map((e=>({text:e,tokens:[]}))),align:t[2].replace(/^\||\| *$/g,"").split("|"),rows:t[3]&&t[3].trim()?t[3].replace(/\n[ \t]*$/,"").split("\n"):[]};if(e.header.length===e.align.length){let t,n,s,r,i=e.align.length;for(t=0;t<i;t++){const n=e.align[t];n&&(/^ *-+: *$/.test(n)?e.align[t]="right":/^ *:-+: *$/.test(n)?e.align[t]="center":/^ *:-+ *$/.test(n)?e.align[t]="left":e.align[t]=null)}for(i=e.rows.length,t=0;t<i;t++)e.rows[t]=f(e.rows[t],e.header.length).map((e=>({text:e,tokens:[]})));for(i=e.header.length,n=0;n<i;n++)e.header[n].tokens=this.lexer.inline(e.header[n].text);for(i=e.rows.length,n=0;n<i;n++)for(r=e.rows[n],s=0;s<r.length;s++)r[s].tokens=this.lexer.inline(r[s].text);return e}}}lheading(e){const t=this.rules.block.lheading.exec(e);if(t)return{type:"heading",raw:t[0],depth:"="===t[2].charAt(0)?1:2,text:t[1],tokens:this.lexer.inline(t[1])}}paragraph(e){const t=this.rules.block.paragraph.exec(e);if(t){const e="\n"===t[1].charAt(t[1].length-1)?t[1].slice(0,-1):t[1];return{type:"paragraph",raw:t[0],text:e,tokens:this.lexer.inline(e)}}}text(e){const t=this.rules.block.text.exec(e);if(t)return{type:"text",raw:t[0],text:t[0],tokens:this.lexer.inline(t[0])}}escape(e){const t=this.rules.inline.escape.exec(e);if(t)return{type:"escape",raw:t[0],text:c(t[1])}}tag(e){const t=this.rules.inline.tag.exec(e);if(t)return!this.lexer.state.inLink&&/^<a /i.test(t[0])?this.lexer.state.inLink=!0:this.lexer.state.inLink&&/^<\/a>/i.test(t[0])&&(this.lexer.state.inLink=!1),!this.lexer.state.inRawBlock&&/^<(pre|code|kbd|script)(\s|>)/i.test(t[0])?this.lexer.state.inRawBlock=!0:this.lexer.state.inRawBlock&&/^<\/(pre|code|kbd|script)(\s|>)/i.test(t[0])&&(this.lexer.state.inRawBlock=!1),{type:"html",raw:t[0],inLink:this.lexer.state.inLink,inRawBlock:this.lexer.state.inRawBlock,block:!1,text:t[0]}}link(e){const t=this.rules.inline.link.exec(e);if(t){const e=t[2].trim();if(!this.options.pedantic&&/^</.test(e)){if(!/>$/.test(e))return;const t=d(e.slice(0,-1),"\\");if((e.length-t.length)%2==0)return}else{const e=function(e,t){if(-1===e.indexOf(t[1]))return-1;let n=0;for(let s=0;s<e.length;s++)if("\\"===e[s])s++;else if(e[s]===t[0])n++;else if(e[s]===t[1]&&(n--,n<0))return s;return-1}(t[2],"()");if(e>-1){const n=(0===t[0].indexOf("!")?5:4)+t[1].length+e;t[2]=t[2].substring(0,e),t[0]=t[0].substring(0,n).trim(),t[3]=""}}let n=t[2],s="";if(this.options.pedantic){const e=/^([^'"]*[^\s])\s+(['"])(.*)\2/.exec(n);e&&(n=e[1],s=e[3])}else s=t[3]?t[3].slice(1,-1):"";return n=n.trim(),/^</.test(n)&&(n=this.options.pedantic&&!/>$/.test(e)?n.slice(1):n.slice(1,-1)),x(t,{href:n?n.replace(this.rules.inline._escapes,"$1"):n,title:s?s.replace(this.rules.inline._escapes,"$1"):s},t[0],this.lexer)}}reflink(e,t){let n;if((n=this.rules.inline.reflink.exec(e))||(n=this.rules.inline.nolink.exec(e))){let e=(n[2]||n[1]).replace(/\s+/g," ");if(e=t[e.toLowerCase()],!e){const e=n[0].charAt(0);return{type:"text",raw:e,text:e}}return x(n,e,n[0],this.lexer)}}emStrong(e,t,n=""){let s=this.rules.inline.emStrong.lDelim.exec(e);if(!s)return;if(s[3]&&n.match(/[\p{L}\p{N}]/u))return;if(!(s[1]||s[2]||"")||!n||this.rules.inline.punctuation.exec(n)){const n=[...s[0]].length-1;let r,i,l=n,o=0;const a="*"===s[0][0]?this.rules.inline.emStrong.rDelimAst:this.rules.inline.emStrong.rDelimUnd;for(a.lastIndex=0,t=t.slice(-1*e.length+s[0].length-1);null!=(s=a.exec(t));){if(r=s[1]||s[2]||s[3]||s[4]||s[5]||s[6],!r)continue;if(i=[...r].length,s[3]||s[4]){l+=i;continue}if((s[5]||s[6])&&n%3&&!((n+i)%3)){o+=i;continue}if(l-=i,l>0)continue;i=Math.min(i,i+l+o);const t=[...e].slice(0,n+s.index+i+1).join("");if(Math.min(n,i)%2){const e=t.slice(1,-1);return{type:"em",raw:t,text:e,tokens:this.lexer.inlineTokens(e)}}const a=t.slice(2,-2);return{type:"strong",raw:t,text:a,tokens:this.lexer.inlineTokens(a)}}}}codespan(e){const t=this.rules.inline.code.exec(e);if(t){let e=t[2].replace(/\n/g," ");const n=/[^ ]/.test(e),s=/^ /.test(e)&&/ $/.test(e);return n&&s&&(e=e.substring(1,e.length-1)),e=c(e,!0),{type:"codespan",raw:t[0],text:e}}}br(e){const t=this.rules.inline.br.exec(e);if(t)return{type:"br",raw:t[0]}}del(e){const t=this.rules.inline.del.exec(e);if(t)return{type:"del",raw:t[0],text:t[2],tokens:this.lexer.inlineTokens(t[2])}}autolink(e){const t=this.rules.inline.autolink.exec(e);if(t){let e,n;return"@"===t[2]?(e=c(t[1]),n="mailto:"+e):(e=c(t[1]),n=e),{type:"link",raw:t[0],text:e,href:n,tokens:[{type:"text",raw:e,text:e}]}}}url(e){let t;if(t=this.rules.inline.url.exec(e)){let e,n;if("@"===t[2])e=c(t[0]),n="mailto:"+e;else{let s;do{s=t[0],t[0]=this.rules.inline._backpedal.exec(t[0])[0]}while(s!==t[0]);e=c(t[0]),n="www."===t[1]?"http://"+t[0]:t[0]}return{type:"link",raw:t[0],text:e,href:n,tokens:[{type:"text",raw:e,text:e}]}}}inlineText(e){const t=this.rules.inline.text.exec(e);if(t){let e;return e=this.lexer.state.inRawBlock?t[0]:c(t[0]),{type:"text",raw:t[0],text:e}}}}const m={newline:/^(?: *(?:\n|$))+/,code:/^( {4}[^\n]+(?:\n(?: *(?:\n|$))*)?)+/,fences:/^ {0,3}(`{3,}(?=[^`\n]*(?:\n|$))|~{3,})([^\n]*)(?:\n|$)(?:|([\s\S]*?)(?:\n|$))(?: {0,3}\1[~`]* *(?=\n|$)|$)/,hr:/^ {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/,heading:/^ {0,3}(#{1,6})(?=\s|$)(.*)(?:\n+|$)/,blockquote:/^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/,list:/^( {0,3}bull)([ \t][^\n]+?)?(?:\n|$)/,html:"^ {0,3}(?:<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n+|$)|comment[^\\n]*(\\n+|$)|<\\?[\\s\\S]*?(?:\\?>\\n*|$)|<![A-Z][\\s\\S]*?(?:>\\n*|$)|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>\\n*|$)|</?(tag)(?: +|\\n|/?>)[\\s\\S]*?(?:(?:\\n *)+\\n|$)|<(?!script|pre|style|textarea)([a-z][\\w-]*)(?:attribute)*? */?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$)|</(?!script|pre|style|textarea)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$))",def:/^ {0,3}\[(label)\]: *(?:\n *)?([^<\s][^\s]*|<.*?>)(?:(?: +(?:\n *)?| *\n *)(title))? *(?:\n+|$)/,table:k,lheading:/^(?!bull )((?:.|\n(?!\s*?\n|bull ))+?)\n {0,3}(=+|-+) *(?:\n+|$)/,_paragraph:/^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html|table| +\n)[^\n]+)*)/,text:/^[^\n]+/,_label:/(?!\s*\])(?:\\.|[^\[\]\\])+/,_title:/(?:"(?:\\"?|[^"\\])*"|'[^'\n]*(?:\n[^'\n]+)*\n?'|\([^()]*\))/};m.def=u(m.def).replace("label",m._label).replace("title",m._title).getRegex(),m.bullet=/(?:[*+-]|\d{1,9}[.)])/,m.listItemStart=u(/^( *)(bull) */).replace("bull",m.bullet).getRegex(),m.list=u(m.list).replace(/bull/g,m.bullet).replace("hr","\\n+(?=\\1?(?:(?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$))").replace("def","\\n+(?="+m.def.source+")").getRegex(),m._tag="address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|section|source|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul",m._comment=/<!--(?!-?>)[\s\S]*?(?:-->|$)/,m.html=u(m.html,"i").replace("comment",m._comment).replace("tag",m._tag).replace("attribute",/ +[a-zA-Z:_][\w.:-]*(?: *= *"[^"\n]*"| *= *'[^'\n]*'| *= *[^\s"'=<>`]+)?/).getRegex(),m.lheading=u(m.lheading).replace(/bull/g,m.bullet).getRegex(),m.paragraph=u(m._paragraph).replace("hr",m.hr).replace("heading"," {0,3}#{1,6}(?:\\s|$)").replace("|lheading","").replace("|table","").replace("blockquote"," {0,3}>").replace("fences"," {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list"," {0,3}(?:[*+-]|1[.)]) ").replace("html","</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag",m._tag).getRegex(),m.blockquote=u(m.blockquote).replace("paragraph",m.paragraph).getRegex(),m.normal={...m},m.gfm={...m.normal,table:"^ *([^\\n ].*)\\n {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)(?:\\n((?:(?! *\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)"},m.gfm.table=u(m.gfm.table).replace("hr",m.hr).replace("heading"," {0,3}#{1,6}(?:\\s|$)").replace("blockquote"," {0,3}>").replace("code"," {4}[^\\n]").replace("fences"," {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list"," {0,3}(?:[*+-]|1[.)]) ").replace("html","</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag",m._tag).getRegex(),m.gfm.paragraph=u(m._paragraph).replace("hr",m.hr).replace("heading"," {0,3}#{1,6}(?:\\s|$)").replace("|lheading","").replace("table",m.gfm.table).replace("blockquote"," {0,3}>").replace("fences"," {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list"," {0,3}(?:[*+-]|1[.)]) ").replace("html","</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag",m._tag).getRegex(),m.pedantic={...m.normal,html:u("^ *(?:comment *(?:\\n|\\s*$)|<(tag)[\\s\\S]+?</\\1> *(?:\\n{2,}|\\s*$)|<tag(?:\"[^\"]*\"|'[^']*'|\\s[^'\"/>\\s]*)*?/?> *(?:\\n{2,}|\\s*$))").replace("comment",m._comment).replace(/tag/g,"(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:|[^\\w\\s@]*@)\\b").getRegex(),def:/^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +(["(][^\n]+[")]))? *(?:\n+|$)/,heading:/^(#{1,6})(.*)(?:\n+|$)/,fences:k,lheading:/^(.+?)\n {0,3}(=+|-+) *(?:\n+|$)/,paragraph:u(m.normal._paragraph).replace("hr",m.hr).replace("heading"," *#{1,6} *[^\n]").replace("lheading",m.lheading).replace("blockquote"," {0,3}>").replace("|fences","").replace("|list","").replace("|html","").getRegex()};const w={escape:/^\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/,autolink:/^<(scheme:[^\s\x00-\x1f<>]*|email)>/,url:k,tag:"^comment|^</[a-zA-Z][\\w:-]*\\s*>|^<[a-zA-Z][\\w-]*(?:attribute)*?\\s*/?>|^<\\?[\\s\\S]*?\\?>|^<![a-zA-Z]+\\s[\\s\\S]*?>|^<!\\[CDATA\\[[\\s\\S]*?\\]\\]>",link:/^!?\[(label)\]\(\s*(href)(?:\s+(title))?\s*\)/,reflink:/^!?\[(label)\]\[(ref)\]/,nolink:/^!?\[(ref)\](?:\[\])?/,reflinkSearch:"reflink|nolink(?!\\()",emStrong:{lDelim:/^(?:\*+(?:((?!\*)[punct])|[^\s*]))|^_+(?:((?!_)[punct])|([^\s_]))/,rDelimAst:/^[^_*]*?__[^_*]*?\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\*)[punct](\*+)(?=[\s]|$)|[^punct\s](\*+)(?!\*)(?=[punct\s]|$)|(?!\*)[punct\s](\*+)(?=[^punct\s])|[\s](\*+)(?!\*)(?=[punct])|(?!\*)[punct](\*+)(?!\*)(?=[punct])|[^punct\s](\*+)(?=[^punct\s])/,rDelimUnd:/^[^_*]*?\*\*[^_*]*?_[^_*]*?(?=\*\*)|[^_]+(?=[^_])|(?!_)[punct](_+)(?=[\s]|$)|[^punct\s](_+)(?!_)(?=[punct\s]|$)|(?!_)[punct\s](_+)(?=[^punct\s])|[\s](_+)(?!_)(?=[punct])|(?!_)[punct](_+)(?!_)(?=[punct])/},code:/^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/,br:/^( {2,}|\\)\n(?!\s*$)/,del:k,text:/^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*_]|\b_|$)|[^ ](?= {2,}\n)))/,punctuation:/^((?![*_])[\spunctuation])/,_punctuation:"\\p{P}$+<=>`^|~"};w.punctuation=u(w.punctuation,"u").replace(/punctuation/g,w._punctuation).getRegex(),w.blockSkip=/\[[^[\]]*?\]\([^\(\)]*?\)|`[^`]*?`|<[^<>]*?>/g,w.anyPunctuation=/\\[punct]/g,w._escapes=/\\([punct])/g,w._comment=u(m._comment).replace("(?:--\x3e|$)","--\x3e").getRegex(),w.emStrong.lDelim=u(w.emStrong.lDelim,"u").replace(/punct/g,w._punctuation).getRegex(),w.emStrong.rDelimAst=u(w.emStrong.rDelimAst,"gu").replace(/punct/g,w._punctuation).getRegex(),w.emStrong.rDelimUnd=u(w.emStrong.rDelimUnd,"gu").replace(/punct/g,w._punctuation).getRegex(),w.anyPunctuation=u(w.anyPunctuation,"gu").replace(/punct/g,w._punctuation).getRegex(),w._escapes=u(w._escapes,"gu").replace(/punct/g,w._punctuation).getRegex(),w._scheme=/[a-zA-Z][a-zA-Z0-9+.-]{1,31}/,w._email=/[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])/,w.autolink=u(w.autolink).replace("scheme",w._scheme).replace("email",w._email).getRegex(),w._attribute=/\s+[a-zA-Z:_][\w.:-]*(?:\s*=\s*"[^"]*"|\s*=\s*'[^']*'|\s*=\s*[^\s"'=<>`]+)?/,w.tag=u(w.tag).replace("comment",w._comment).replace("attribute",w._attribute).getRegex(),w._label=/(?:\[(?:\\.|[^\[\]\\])*\]|\\.|`[^`]*`|[^\[\]\\`])*?/,w._href=/<(?:\\.|[^\n<>\\])+>|[^\s\x00-\x1f]*/,w._title=/"(?:\\"?|[^"\\])*"|'(?:\\'?|[^'\\])*'|\((?:\\\)?|[^)\\])*\)/,w.link=u(w.link).replace("label",w._label).replace("href",w._href).replace("title",w._title).getRegex(),w.reflink=u(w.reflink).replace("label",w._label).replace("ref",m._label).getRegex(),w.nolink=u(w.nolink).replace("ref",m._label).getRegex(),w.reflinkSearch=u(w.reflinkSearch,"g").replace("reflink",w.reflink).replace("nolink",w.nolink).getRegex(),w.normal={...w},w.pedantic={...w.normal,strong:{start:/^__|\*\*/,middle:/^__(?=\S)([\s\S]*?\S)__(?!_)|^\*\*(?=\S)([\s\S]*?\S)\*\*(?!\*)/,endAst:/\*\*(?!\*)/g,endUnd:/__(?!_)/g},em:{start:/^_|\*/,middle:/^()\*(?=\S)([\s\S]*?\S)\*(?!\*)|^_(?=\S)([\s\S]*?\S)_(?!_)/,endAst:/\*(?!\*)/g,endUnd:/_(?!_)/g},link:u(/^!?\[(label)\]\((.*?)\)/).replace("label",w._label).getRegex(),reflink:u(/^!?\[(label)\]\s*\[([^\]]*)\]/).replace("label",w._label).getRegex()},w.gfm={...w.normal,escape:u(w.escape).replace("])","~|])").getRegex(),_extended_email:/[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![-_])/,url:/^((?:ftp|https?):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/,_backpedal:/(?:[^?!.,:;*_'"~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_'"~)]+(?!$))+/,del:/^(~~?)(?=[^\s~])([\s\S]*?[^\s~])\1(?=[^~]|$)/,text:/^([`~]+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|https?:\/\/|ftp:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)))/},w.gfm.url=u(w.gfm.url,"i").replace("email",w.gfm._extended_email).getRegex(),w.breaks={...w.gfm,br:u(w.br).replace("{2,}","*").getRegex(),text:u(w.gfm.text).replace("\\b_","\\b_| {2,}\\n").replace(/\{2,\}/g,"*").getRegex()};class _{tokens;options;state;tokenizer;inlineQueue;constructor(t){this.tokens=[],this.tokens.links=Object.create(null),this.options=t||e.defaults,this.options.tokenizer=this.options.tokenizer||new b,this.tokenizer=this.options.tokenizer,this.tokenizer.options=this.options,this.tokenizer.lexer=this,this.inlineQueue=[],this.state={inLink:!1,inRawBlock:!1,top:!0};const n={block:m.normal,inline:w.normal};this.options.pedantic?(n.block=m.pedantic,n.inline=w.pedantic):this.options.gfm&&(n.block=m.gfm,this.options.breaks?n.inline=w.breaks:n.inline=w.gfm),this.tokenizer.rules=n}static get rules(){return{block:m,inline:w}}static lex(e,t){return new _(t).lex(e)}static lexInline(e,t){return new _(t).inlineTokens(e)}lex(e){let t;for(e=e.replace(/\r\n|\r/g,"\n"),this.blockTokens(e,this.tokens);t=this.inlineQueue.shift();)this.inlineTokens(t.src,t.tokens);return this.tokens}blockTokens(e,t=[]){let n,s,r,i;for(e=this.options.pedantic?e.replace(/\t/g,"    ").replace(/^ +$/gm,""):e.replace(/^( *)(\t+)/gm,((e,t,n)=>t+"    ".repeat(n.length)));e;)if(!(this.options.extensions&&this.options.extensions.block&&this.options.extensions.block.some((s=>!!(n=s.call({lexer:this},e,t))&&(e=e.substring(n.raw.length),t.push(n),!0)))))if(n=this.tokenizer.space(e))e=e.substring(n.raw.length),1===n.raw.length&&t.length>0?t[t.length-1].raw+="\n":t.push(n);else if(n=this.tokenizer.code(e))e=e.substring(n.raw.length),s=t[t.length-1],!s||"paragraph"!==s.type&&"text"!==s.type?t.push(n):(s.raw+="\n"+n.raw,s.text+="\n"+n.text,this.inlineQueue[this.inlineQueue.length-1].src=s.text);else if(n=this.tokenizer.fences(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.heading(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.hr(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.blockquote(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.list(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.html(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.def(e))e=e.substring(n.raw.length),s=t[t.length-1],!s||"paragraph"!==s.type&&"text"!==s.type?this.tokens.links[n.tag]||(this.tokens.links[n.tag]={href:n.href,title:n.title}):(s.raw+="\n"+n.raw,s.text+="\n"+n.raw,this.inlineQueue[this.inlineQueue.length-1].src=s.text);else if(n=this.tokenizer.table(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.lheading(e))e=e.substring(n.raw.length),t.push(n);else{if(r=e,this.options.extensions&&this.options.extensions.startBlock){let t=1/0;const n=e.slice(1);let s;this.options.extensions.startBlock.forEach((e=>{s=e.call({lexer:this},n),"number"==typeof s&&s>=0&&(t=Math.min(t,s))})),t<1/0&&t>=0&&(r=e.substring(0,t+1))}if(this.state.top&&(n=this.tokenizer.paragraph(r)))s=t[t.length-1],i&&"paragraph"===s.type?(s.raw+="\n"+n.raw,s.text+="\n"+n.text,this.inlineQueue.pop(),this.inlineQueue[this.inlineQueue.length-1].src=s.text):t.push(n),i=r.length!==e.length,e=e.substring(n.raw.length);else if(n=this.tokenizer.text(e))e=e.substring(n.raw.length),s=t[t.length-1],s&&"text"===s.type?(s.raw+="\n"+n.raw,s.text+="\n"+n.text,this.inlineQueue.pop(),this.inlineQueue[this.inlineQueue.length-1].src=s.text):t.push(n);else if(e){const t="Infinite loop on byte: "+e.charCodeAt(0);if(this.options.silent){console.error(t);break}throw new Error(t)}}return this.state.top=!0,t}inline(e,t=[]){return this.inlineQueue.push({src:e,tokens:t}),t}inlineTokens(e,t=[]){let n,s,r,i,l,o,a=e;if(this.tokens.links){const e=Object.keys(this.tokens.links);if(e.length>0)for(;null!=(i=this.tokenizer.rules.inline.reflinkSearch.exec(a));)e.includes(i[0].slice(i[0].lastIndexOf("[")+1,-1))&&(a=a.slice(0,i.index)+"["+"a".repeat(i[0].length-2)+"]"+a.slice(this.tokenizer.rules.inline.reflinkSearch.lastIndex))}for(;null!=(i=this.tokenizer.rules.inline.blockSkip.exec(a));)a=a.slice(0,i.index)+"["+"a".repeat(i[0].length-2)+"]"+a.slice(this.tokenizer.rules.inline.blockSkip.lastIndex);for(;null!=(i=this.tokenizer.rules.inline.anyPunctuation.exec(a));)a=a.slice(0,i.index)+"++"+a.slice(this.tokenizer.rules.inline.anyPunctuation.lastIndex);for(;e;)if(l||(o=""),l=!1,!(this.options.extensions&&this.options.extensions.inline&&this.options.extensions.inline.some((s=>!!(n=s.call({lexer:this},e,t))&&(e=e.substring(n.raw.length),t.push(n),!0)))))if(n=this.tokenizer.escape(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.tag(e))e=e.substring(n.raw.length),s=t[t.length-1],s&&"text"===n.type&&"text"===s.type?(s.raw+=n.raw,s.text+=n.text):t.push(n);else if(n=this.tokenizer.link(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.reflink(e,this.tokens.links))e=e.substring(n.raw.length),s=t[t.length-1],s&&"text"===n.type&&"text"===s.type?(s.raw+=n.raw,s.text+=n.text):t.push(n);else if(n=this.tokenizer.emStrong(e,a,o))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.codespan(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.br(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.del(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.autolink(e))e=e.substring(n.raw.length),t.push(n);else if(this.state.inLink||!(n=this.tokenizer.url(e))){if(r=e,this.options.extensions&&this.options.extensions.startInline){let t=1/0;const n=e.slice(1);let s;this.options.extensions.startInline.forEach((e=>{s=e.call({lexer:this},n),"number"==typeof s&&s>=0&&(t=Math.min(t,s))})),t<1/0&&t>=0&&(r=e.substring(0,t+1))}if(n=this.tokenizer.inlineText(r))e=e.substring(n.raw.length),"_"!==n.raw.slice(-1)&&(o=n.raw.slice(-1)),l=!0,s=t[t.length-1],s&&"text"===s.type?(s.raw+=n.raw,s.text+=n.text):t.push(n);else if(e){const t="Infinite loop on byte: "+e.charCodeAt(0);if(this.options.silent){console.error(t);break}throw new Error(t)}}else e=e.substring(n.raw.length),t.push(n);return t}}class y{options;constructor(t){this.options=t||e.defaults}code(e,t,n){const s=(t||"").match(/^\S*/)?.[0];return e=e.replace(/\n$/,"")+"\n",s?'<pre><code class="language-'+c(s)+'">'+(n?e:c(e,!0))+"</code></pre>\n":"<pre><code>"+(n?e:c(e,!0))+"</code></pre>\n"}blockquote(e){return`<blockquote>\n${e}</blockquote>\n`}html(e,t){return e}heading(e,t,n){return`<h${t}>${e}</h${t}>\n`}hr(){return"<hr>\n"}list(e,t,n){const s=t?"ol":"ul";return"<"+s+(t&&1!==n?' start="'+n+'"':"")+">\n"+e+"</"+s+">\n"}listitem(e,t,n){return`<li>${e}</li>\n`}checkbox(e){return"<input "+(e?'checked="" ':"")+'disabled="" type="checkbox">'}paragraph(e){return`<p>${e}</p>\n`}table(e,t){return t&&(t=`<tbody>${t}</tbody>`),"<table>\n<thead>\n"+e+"</thead>\n"+t+"</table>\n"}tablerow(e){return`<tr>\n${e}</tr>\n`}tablecell(e,t){const n=t.header?"th":"td";return(t.align?`<${n} align="${t.align}">`:`<${n}>`)+e+`</${n}>\n`}strong(e){return`<strong>${e}</strong>`}em(e){return`<em>${e}</em>`}codespan(e){return`<code>${e}</code>`}br(){return"<br>"}del(e){return`<del>${e}</del>`}link(e,t,n){const s=g(e);if(null===s)return n;let r='<a href="'+(e=s)+'"';return t&&(r+=' title="'+t+'"'),r+=">"+n+"</a>",r}image(e,t,n){const s=g(e);if(null===s)return n;let r=`<img src="${e=s}" alt="${n}"`;return t&&(r+=` title="${t}"`),r+=">",r}text(e){return e}}class ${strong(e){return e}em(e){return e}codespan(e){return e}del(e){return e}html(e){return e}text(e){return e}link(e,t,n){return""+n}image(e,t,n){return""+n}br(){return""}}class z{options;renderer;textRenderer;constructor(t){this.options=t||e.defaults,this.options.renderer=this.options.renderer||new y,this.renderer=this.options.renderer,this.renderer.options=this.options,this.textRenderer=new $}static parse(e,t){return new z(t).parse(e)}static parseInline(e,t){return new z(t).parseInline(e)}parse(e,t=!0){let n="";for(let s=0;s<e.length;s++){const r=e[s];if(this.options.extensions&&this.options.extensions.renderers&&this.options.extensions.renderers[r.type]){const e=r,t=this.options.extensions.renderers[e.type].call({parser:this},e);if(!1!==t||!["space","hr","heading","code","table","blockquote","list","html","paragraph","text"].includes(e.type)){n+=t||"";continue}}switch(r.type){case"space":continue;case"hr":n+=this.renderer.hr();continue;case"heading":{const e=r;n+=this.renderer.heading(this.parseInline(e.tokens),e.depth,this.parseInline(e.tokens,this.textRenderer).replace(h,((e,t)=>"colon"===(t=t.toLowerCase())?":":"#"===t.charAt(0)?"x"===t.charAt(1)?String.fromCharCode(parseInt(t.substring(2),16)):String.fromCharCode(+t.substring(1)):"")));continue}case"code":{const e=r;n+=this.renderer.code(e.text,e.lang,!!e.escaped);continue}case"table":{const e=r;let t="",s="";for(let t=0;t<e.header.length;t++)s+=this.renderer.tablecell(this.parseInline(e.header[t].tokens),{header:!0,align:e.align[t]});t+=this.renderer.tablerow(s);let i="";for(let t=0;t<e.rows.length;t++){const n=e.rows[t];s="";for(let t=0;t<n.length;t++)s+=this.renderer.tablecell(this.parseInline(n[t].tokens),{header:!1,align:e.align[t]});i+=this.renderer.tablerow(s)}n+=this.renderer.table(t,i);continue}case"blockquote":{const e=r,t=this.parse(e.tokens);n+=this.renderer.blockquote(t);continue}case"list":{const e=r,t=e.ordered,s=e.start,i=e.loose;let l="";for(let t=0;t<e.items.length;t++){const n=e.items[t],s=n.checked,r=n.task;let o="";if(n.task){const e=this.renderer.checkbox(!!s);i?n.tokens.length>0&&"paragraph"===n.tokens[0].type?(n.tokens[0].text=e+" "+n.tokens[0].text,n.tokens[0].tokens&&n.tokens[0].tokens.length>0&&"text"===n.tokens[0].tokens[0].type&&(n.tokens[0].tokens[0].text=e+" "+n.tokens[0].tokens[0].text)):n.tokens.unshift({type:"text",text:e+" "}):o+=e+" "}o+=this.parse(n.tokens,i),l+=this.renderer.listitem(o,r,!!s)}n+=this.renderer.list(l,t,s);continue}case"html":{const e=r;n+=this.renderer.html(e.text,e.block);continue}case"paragraph":{const e=r;n+=this.renderer.paragraph(this.parseInline(e.tokens));continue}case"text":{let i=r,l=i.tokens?this.parseInline(i.tokens):i.text;for(;s+1<e.length&&"text"===e[s+1].type;)i=e[++s],l+="\n"+(i.tokens?this.parseInline(i.tokens):i.text);n+=t?this.renderer.paragraph(l):l;continue}default:{const e='Token with "'+r.type+'" type was not found.';if(this.options.silent)return console.error(e),"";throw new Error(e)}}}return n}parseInline(e,t){t=t||this.renderer;let n="";for(let s=0;s<e.length;s++){const r=e[s];if(this.options.extensions&&this.options.extensions.renderers&&this.options.extensions.renderers[r.type]){const e=this.options.extensions.renderers[r.type].call({parser:this},r);if(!1!==e||!["escape","html","link","image","strong","em","codespan","br","del","text"].includes(r.type)){n+=e||"";continue}}switch(r.type){case"escape":{const e=r;n+=t.text(e.text);break}case"html":{const e=r;n+=t.html(e.text);break}case"link":{const e=r;n+=t.link(e.href,e.title,this.parseInline(e.tokens,t));break}case"image":{const e=r;n+=t.image(e.href,e.title,e.text);break}case"strong":{const e=r;n+=t.strong(this.parseInline(e.tokens,t));break}case"em":{const e=r;n+=t.em(this.parseInline(e.tokens,t));break}case"codespan":{const e=r;n+=t.codespan(e.text);break}case"br":n+=t.br();break;case"del":{const e=r;n+=t.del(this.parseInline(e.tokens,t));break}case"text":{const e=r;n+=t.text(e.text);break}default:{const e='Token with "'+r.type+'" type was not found.';if(this.options.silent)return console.error(e),"";throw new Error(e)}}}return n}}class T{options;constructor(t){this.options=t||e.defaults}static passThroughHooks=new Set(["preprocess","postprocess"]);preprocess(e){return e}postprocess(e){return e}}class R{defaults={async:!1,breaks:!1,extensions:null,gfm:!0,hooks:null,pedantic:!1,renderer:null,silent:!1,tokenizer:null,walkTokens:null};options=this.setOptions;parse=this.#e(_.lex,z.parse);parseInline=this.#e(_.lexInline,z.parseInline);Parser=z;parser=z.parse;Renderer=y;TextRenderer=$;Lexer=_;lexer=_.lex;Tokenizer=b;Hooks=T;constructor(...e){this.use(...e)}walkTokens(e,t){let n=[];for(const s of e)switch(n=n.concat(t.call(this,s)),s.type){case"table":{const e=s;for(const s of e.header)n=n.concat(this.walkTokens(s.tokens,t));for(const s of e.rows)for(const e of s)n=n.concat(this.walkTokens(e.tokens,t));break}case"list":{const e=s;n=n.concat(this.walkTokens(e.items,t));break}default:{const e=s;this.defaults.extensions?.childTokens?.[e.type]?this.defaults.extensions.childTokens[e.type].forEach((s=>{n=n.concat(this.walkTokens(e[s],t))})):e.tokens&&(n=n.concat(this.walkTokens(e.tokens,t)))}}return n}use(...e){const t=this.defaults.extensions||{renderers:{},childTokens:{}};return e.forEach((e=>{const n={...e};if(n.async=this.defaults.async||n.async||!1,e.extensions&&(e.extensions.forEach((e=>{if(!e.name)throw new Error("extension name required");if("renderer"in e){const n=t.renderers[e.name];t.renderers[e.name]=n?function(...t){let s=e.renderer.apply(this,t);return!1===s&&(s=n.apply(this,t)),s}:e.renderer}if("tokenizer"in e){if(!e.level||"block"!==e.level&&"inline"!==e.level)throw new Error("extension level must be 'block' or 'inline'");const n=t[e.level];n?n.unshift(e.tokenizer):t[e.level]=[e.tokenizer],e.start&&("block"===e.level?t.startBlock?t.startBlock.push(e.start):t.startBlock=[e.start]:"inline"===e.level&&(t.startInline?t.startInline.push(e.start):t.startInline=[e.start]))}"childTokens"in e&&e.childTokens&&(t.childTokens[e.name]=e.childTokens)})),n.extensions=t),e.renderer){const t=this.defaults.renderer||new y(this.defaults);for(const n in e.renderer){const s=e.renderer[n],r=n,i=t[r];t[r]=(...e)=>{let n=s.apply(t,e);return!1===n&&(n=i.apply(t,e)),n||""}}n.renderer=t}if(e.tokenizer){const t=this.defaults.tokenizer||new b(this.defaults);for(const n in e.tokenizer){const s=e.tokenizer[n],r=n,i=t[r];t[r]=(...e)=>{let n=s.apply(t,e);return!1===n&&(n=i.apply(t,e)),n}}n.tokenizer=t}if(e.hooks){const t=this.defaults.hooks||new T;for(const n in e.hooks){const s=e.hooks[n],r=n,i=t[r];T.passThroughHooks.has(n)?t[r]=e=>{if(this.defaults.async)return Promise.resolve(s.call(t,e)).then((e=>i.call(t,e)));const n=s.call(t,e);return i.call(t,n)}:t[r]=(...e)=>{let n=s.apply(t,e);return!1===n&&(n=i.apply(t,e)),n}}n.hooks=t}if(e.walkTokens){const t=this.defaults.walkTokens,s=e.walkTokens;n.walkTokens=function(e){let n=[];return n.push(s.call(this,e)),t&&(n=n.concat(t.call(this,e))),n}}this.defaults={...this.defaults,...n}})),this}setOptions(e){return this.defaults={...this.defaults,...e},this}#e(e,t){return(n,s)=>{const r={...s},i={...this.defaults,...r};!0===this.defaults.async&&!1===r.async&&(i.silent||console.warn("marked(): The async option was set to true by an extension. The async: false option sent to parse will be ignored."),i.async=!0);const l=this.#t(!!i.silent,!!i.async);if(null==n)return l(new Error("marked(): input parameter is undefined or null"));if("string"!=typeof n)return l(new Error("marked(): input parameter is of type "+Object.prototype.toString.call(n)+", string expected"));if(i.hooks&&(i.hooks.options=i),i.async)return Promise.resolve(i.hooks?i.hooks.preprocess(n):n).then((t=>e(t,i))).then((e=>i.walkTokens?Promise.all(this.walkTokens(e,i.walkTokens)).then((()=>e)):e)).then((e=>t(e,i))).then((e=>i.hooks?i.hooks.postprocess(e):e)).catch(l);try{i.hooks&&(n=i.hooks.preprocess(n));const s=e(n,i);i.walkTokens&&this.walkTokens(s,i.walkTokens);let r=t(s,i);return i.hooks&&(r=i.hooks.postprocess(r)),r}catch(e){return l(e)}}}#t(e,t){return n=>{if(n.message+="\nPlease report this to https://github.com/markedjs/marked.",e){const e="<p>An error occurred:</p><pre>"+c(n.message+"",!0)+"</pre>";return t?Promise.resolve(e):e}if(t)return Promise.reject(n);throw n}}}const S=new R;function A(e,t){return S.parse(e,t)}A.options=A.setOptions=function(e){return S.setOptions(e),A.defaults=S.defaults,n(A.defaults),A},A.getDefaults=t,A.defaults=e.defaults,A.use=function(...e){return S.use(...e),A.defaults=S.defaults,n(A.defaults),A},A.walkTokens=function(e,t){return S.walkTokens(e,t)},A.parseInline=S.parseInline,A.Parser=z,A.parser=z.parse,A.Renderer=y,A.TextRenderer=$,A.Lexer=_,A.lexer=_.lex,A.Tokenizer=b,A.Hooks=T,A.parse=A;const I=A.options,E=A.setOptions,Z=A.use,q=A.walkTokens,L=A.parseInline,D=A,P=z.parse,v=_.lex;e.Hooks=T,e.Lexer=_,e.Marked=R,e.Parser=z,e.Renderer=y,e.TextRenderer=$,e.Tokenizer=b,e.getDefaults=t,e.lexer=v,e.marked=A,e.options=I,e.parse=D,e.parseInline=L,e.parser=P,e.setOptions=E,e.use=Z,e.walkTokens=q}));
-;const fastn = (function(fastn) {
+const fastn = (function (fastn) {
     class Closure {
         #cached_value;
         #node;
@@ -121,7 +122,7 @@ Prism.languages.ftd = {
             }
             this.#formula = func;
         }
-    
+
         get() {
             return this.#cached_value;
         }
@@ -133,7 +134,7 @@ Prism.languages.ftd = {
             this.#property = property;
             this.#inherited = inherited;
             this.updateUi();
-    
+
             return this;
         }
         update() {
@@ -144,32 +145,45 @@ Prism.languages.ftd = {
             return this.#node;
         }
         updateUi() {
-            if (!this.#node ||
+            if (
+                !this.#node ||
                 this.#property === null ||
                 this.#property === undefined ||
-                !this.#node.getNode()) {
+                !this.#node.getNode()
+            ) {
                 return;
             }
-    
-            this.#node.setStaticProperty(this.#property, this.#cached_value, this.#inherited);
+
+            this.#node.setStaticProperty(
+                this.#property,
+                this.#cached_value,
+                this.#inherited,
+            );
         }
     }
-    
+
     class Mutable {
         #value;
-        #old_closure
+        #old_closure;
         #closures;
         #closureInstance;
         constructor(val) {
             this.#value = null;
             this.#old_closure = null;
             this.#closures = [];
-            this.#closureInstance = fastn.closure(() => this.#closures.forEach((closure) => closure.update()));
+            this.#closureInstance = fastn.closure(() =>
+                this.#closures.forEach((closure) => closure.update()),
+            );
             this.set(val);
         }
         get(key) {
-            if (!fastn_utils.isNull(key) && (this.#value instanceof RecordInstance || this.#value instanceof MutableList || this.#value instanceof Mutable)) {
-                return this.#value.get(key)
+            if (
+                !fastn_utils.isNull(key) &&
+                (this.#value instanceof RecordInstance ||
+                    this.#value instanceof MutableList ||
+                    this.#value instanceof Mutable)
+            ) {
+                return this.#value.get(key);
             }
             return this.#value;
         }
@@ -177,7 +191,7 @@ Prism.languages.ftd = {
             if (this.#old_closure) {
                 this.#value.removeClosure(this.#old_closure);
             }
-    
+
             if (this.#value instanceof RecordInstance) {
                 // this.#value.replace(value); will replace the record type
                 // variable instance created which we don't want.
@@ -189,9 +203,11 @@ Prism.languages.ftd = {
             } else {
                 this.#value = value;
             }
-    
+
             if (this.#value instanceof Mutable) {
-                this.#old_closure = fastn.closureWithoutExecute(() => this.#closureInstance.update());
+                this.#old_closure = fastn.closureWithoutExecute(() =>
+                    this.#closureInstance.update(),
+                );
                 this.#value.addClosure(this.#old_closure);
             } else {
                 this.#old_closure = null;
@@ -199,18 +215,20 @@ Prism.languages.ftd = {
         }
         set(value) {
             this.setWithoutUpdate(value);
-    
+
             this.#closureInstance.update();
         }
         // we have to unlink all nodes, else they will be kept in memory after the node is removed from DOM
         unlinkNode(node) {
-            this.#closures = this.#closures.filter(closure => closure.getNode() !== node);
+            this.#closures = this.#closures.filter(
+                (closure) => closure.getNode() !== node,
+            );
         }
         addClosure(closure) {
             this.#closures.push(closure);
         }
         removeClosure(closure) {
-            this.#closures = this.#closures.filter(c => c !== closure);
+            this.#closures = this.#closures.filter((c) => c !== closure);
         }
         equalMutable(other) {
             if (!fastn_utils.deepEqual(this.get(), other.get())) {
@@ -218,30 +236,32 @@ Prism.languages.ftd = {
             }
             const thisClosures = this.#closures;
             const otherClosures = other.#closures;
-    
+
             return thisClosures === otherClosures;
         }
         getClone() {
             return new Mutable(fastn_utils.clone(this.#value));
         }
     }
-    
+
     class Proxy {
-        #differentiator
-        #cached_value
+        #differentiator;
+        #cached_value;
         #closures;
         #closureInstance;
         constructor(targets, differentiator) {
             this.#differentiator = differentiator;
             this.#cached_value = this.#differentiator().get();
             this.#closures = [];
-    
+
             let proxy = this;
             for (let idx in targets) {
-                targets[idx].addClosure(new Closure(function () {
-                    proxy.update();
-                    proxy.#closures.forEach(closure => closure.update());
-                }));
+                targets[idx].addClosure(
+                    new Closure(function () {
+                        proxy.update();
+                        proxy.#closures.forEach((closure) => closure.update());
+                    }),
+                );
                 targets[idx].addClosure(this);
             }
         }
@@ -249,14 +269,19 @@ Prism.languages.ftd = {
             this.#closures.push(closure);
         }
         removeClosure(closure) {
-            this.#closures = this.#closures.filter(c => c !== closure);
+            this.#closures = this.#closures.filter((c) => c !== closure);
         }
         update() {
             this.#cached_value = this.#differentiator().get();
         }
         get(key) {
-            if (!!key && (this.#cached_value instanceof RecordInstance || this.#cached_value instanceof MutableList || this.#cached_value instanceof Mutable)) {
-                return this.#cached_value.get(key)
+            if (
+                !!key &&
+                (this.#cached_value instanceof RecordInstance ||
+                    this.#cached_value instanceof MutableList ||
+                    this.#cached_value instanceof Mutable)
+            ) {
+                return this.#cached_value.get(key);
             }
             return this.#cached_value;
         }
@@ -268,7 +293,7 @@ Prism.languages.ftd = {
             this.#differentiator().set(value);
         }
     }
-    
+
     class MutableList {
         #list;
         #watchers;
@@ -276,7 +301,10 @@ Prism.languages.ftd = {
         constructor(list) {
             this.#list = [];
             for (let idx in list) {
-                this.#list.push( { item: fastn.wrapMutable(list[idx]), index: new Mutable(parseInt(idx)) });
+                this.#list.push({
+                    item: fastn.wrapMutable(list[idx]),
+                    index: new Mutable(parseInt(idx)),
+                });
             }
             this.#watchers = [];
             this.#closures = [];
@@ -285,7 +313,9 @@ Prism.languages.ftd = {
             this.#closures.push(closure);
         }
         unlinkNode(node) {
-            this.#closures = this.#closures.filter(closure => closure.getNode() !== node);
+            this.#closures = this.#closures.filter(
+                (closure) => closure.getNode() !== node,
+            );
         }
         forLoop(root, dom_constructor) {
             let l = fastn_dom.forLoop(root, dom_constructor, this);
@@ -306,20 +336,20 @@ Prism.languages.ftd = {
         }
         set(index, value) {
             if (value === undefined) {
-                value = index
+                value = index;
                 if (!(value instanceof MutableList)) {
                     if (!Array.isArray(value)) {
                         value = [value];
                     }
                     value = new MutableList(value);
                 }
-    
+
                 let list = value.#list;
                 this.#list = [];
                 for (let i in list) {
                     this.#list.push(list[i]);
                 }
-    
+
                 for (let i in this.#watchers) {
                     this.#watchers[i].createAllNode();
                 }
@@ -327,18 +357,21 @@ Prism.languages.ftd = {
                 index = fastn_utils.getFlattenStaticValue(index);
                 this.#list[index].item.set(value);
             }
-    
+
             this.#closures.forEach((closure) => closure.update());
         }
         insertAt(index, value) {
             index = fastn_utils.getFlattenStaticValue(index);
             let mutable = fastn.wrapMutable(value);
-            this.#list.splice(index, 0, { item: mutable, index: new Mutable(index) });
+            this.#list.splice(index, 0, {
+                item: mutable,
+                index: new Mutable(index),
+            });
             // for every item after the inserted item, update the index
             for (let i = index + 1; i < this.#list.length; i++) {
                 this.#list[i].index.set(i);
             }
-    
+
             for (let i in this.#watchers) {
                 this.#watchers[i].createNode(index);
             }
@@ -354,7 +387,7 @@ Prism.languages.ftd = {
             for (let i = index; i < this.#list.length; i++) {
                 this.#list[i].index.set(i);
             }
-    
+
             for (let i in this.#watchers) {
                 let forLoop = this.#watchers[i];
                 forLoop.deleteNode(index);
@@ -380,19 +413,19 @@ Prism.languages.ftd = {
             return new MutableList(new_list);
         }
     }
-    
+
     fastn.mutable = function (val) {
-        return new Mutable(val)
+        return new Mutable(val);
     };
-    
+
     fastn.closure = function (func) {
         return new Closure(func);
-    }
-    
+    };
+
     fastn.closureWithoutExecute = function (func) {
         return new Closure(func, false);
-    }
-    
+    };
+
     fastn.formula = function (deps, func) {
         let closure = fastn.closure(func);
         let mutable = new Mutable(closure.get());
@@ -400,44 +433,46 @@ Prism.languages.ftd = {
             if (fastn_utils.isNull(deps[idx]) || !deps[idx].addClosure) {
                 continue;
             }
-            deps[idx].addClosure(new Closure(function () {
-                closure.update();
-                mutable.set(closure.get());
-            }));
+            deps[idx].addClosure(
+                new Closure(function () {
+                    closure.update();
+                    mutable.set(closure.get());
+                }),
+            );
         }
-    
+
         return mutable;
-    }
-    
+    };
+
     fastn.proxy = function (targets, differentiator) {
         return new Proxy(targets, differentiator);
     };
-    
-    
+
     fastn.wrapMutable = function (obj) {
-        if (!(obj instanceof Mutable)
-            && !(obj instanceof RecordInstance)
-            && !(obj instanceof MutableList)
+        if (
+            !(obj instanceof Mutable) &&
+            !(obj instanceof RecordInstance) &&
+            !(obj instanceof MutableList)
         ) {
             obj = new Mutable(obj);
         }
         return obj;
-    }
-    
+    };
+
     fastn.mutableList = function (list) {
         return new MutableList(list);
-    }
-    
+    };
+
     class RecordInstance {
         #fields;
         #closures;
         constructor(obj) {
             this.#fields = {};
             this.#closures = [];
-    
+
             for (let key in obj) {
                 if (obj[key] instanceof fastn.mutableClass) {
-                    this.#fields[key] = fastn.mutable(null)
+                    this.#fields[key] = fastn.mutable(null);
                     this.#fields[key].setWithoutUpdate(obj[key]);
                 } else {
                     this.#fields[key] = fastn.mutable(obj[key]);
@@ -451,12 +486,13 @@ Prism.languages.ftd = {
             let clonedFields = {};
             for (let key in this.#fields) {
                 let field_value = this.#fields[key];
-                if (field_value instanceof fastn.recordInstanceClass
-                    || field_value instanceof fastn.mutableClass
-                    || field_value instanceof fastn.mutableListClass) {
+                if (
+                    field_value instanceof fastn.recordInstanceClass ||
+                    field_value instanceof fastn.mutableClass ||
+                    field_value instanceof fastn.mutableListClass
+                ) {
                     clonedFields[key] = this.#fields[key].getClone();
-                }
-                else {
+                } else {
                     clonedFields[key] = this.#fields[key];
                 }
             }
@@ -466,7 +502,9 @@ Prism.languages.ftd = {
             this.#closures.push(closure);
         }
         unlinkNode(node) {
-            this.#closures = this.#closures.filter(closure => closure.getNode() !== node);
+            this.#closures = this.#closures.filter(
+                (closure) => closure.getNode() !== node,
+            );
         }
         get(key) {
             return this.#fields[key];
@@ -477,14 +515,14 @@ Prism.languages.ftd = {
                 if (!(value instanceof RecordInstance)) {
                     value = new RecordInstance(value);
                 }
-    
+
                 let fields = {};
-                for(let key in value.#fields) {
-                    fields[key] = value.#fields[key]
+                for (let key in value.#fields) {
+                    fields[key] = value.#fields[key];
                 }
-    
+
                 this.#fields = fields;
-            }else if (this.#fields[key] === undefined) {
+            } else if (this.#fields[key] === undefined) {
                 this.#fields[key] = fastn.mutable(null);
                 this.#fields[key].setWithoutUpdate(value);
             } else {
@@ -499,17 +537,23 @@ Prism.languages.ftd = {
         replace(obj) {
             for (let key in this.#fields) {
                 if (!(key in obj.#fields)) {
-                    throw new Error("RecordInstance.replace: key " + key + " not present in new object");
+                    throw new Error(
+                        "RecordInstance.replace: key " +
+                            key +
+                            " not present in new object",
+                    );
                 }
                 this.#fields[key] = fastn.wrapMutable(obj.#fields[key]);
             }
             this.#closures.forEach((closure) => closure.update());
         }
         toObject() {
-            return Object.fromEntries(Object.entries(this.#fields).map(([key, value]) => [
-                key, 
-                fastn_utils.getFlattenStaticValue(value)
-            ]));
+            return Object.fromEntries(
+                Object.entries(this.#fields).map(([key, value]) => [
+                    key,
+                    fastn_utils.getFlattenStaticValue(value),
+                ]),
+            );
         }
         getClone() {
             let current_fields = this.#fields;
@@ -524,7 +568,7 @@ Prism.languages.ftd = {
             return new RecordInstance(cloned_fields);
         }
     }
-    
+
     class Module {
         #name;
         #global;
@@ -533,27 +577,29 @@ Prism.languages.ftd = {
             this.#global = global;
         }
 
-        getName() { return this.#name; }
-    
+        getName() {
+            return this.#name;
+        }
+
         get(function_name) {
             return this.#global[`${this.#name}__${function_name}`];
         }
     }
-    
+
     fastn.recordInstance = function (obj) {
         return new RecordInstance(obj);
-    }
-    
+    };
+
     fastn.color = function (r, g, b) {
         return `rgb(${r},${g},${b})`;
-    }
-    
+    };
+
     fastn.mutableClass = Mutable;
     fastn.mutableListClass = MutableList;
     fastn.recordInstanceClass = RecordInstance;
     fastn.module = function (name, global) {
         return new Module(name, global);
-    }
+    };
     fastn.moduleClass = Module;
 
     return fastn;
@@ -563,15 +609,15 @@ let fastn_dom = {};
 fastn_dom.styleClasses = "";
 
 fastn_dom.InternalClass = {
-    FT_COLUMN: 'ft_column',
-    FT_ROW: 'ft_row',
+    FT_COLUMN: "ft_column",
+    FT_ROW: "ft_row",
     FT_FULL_SIZE: "ft_full_size",
 };
 
 fastn_dom.codeData = {
     availableThemes: {},
-    addedCssFile: []
-}
+    addedCssFile: [],
+};
 
 fastn_dom.externalCss = new Set();
 fastn_dom.externalJs = new Set();
@@ -584,8 +630,8 @@ fastn_dom.wrapperNode = "wrapper";
 fastn_dom.commentMessage = "***FASTN***";
 fastn_dom.webComponentArgument = "args";
 
-fastn_dom.classes = { }
-fastn_dom.unsanitised_classes = {}
+fastn_dom.classes = {};
+fastn_dom.unsanitised_classes = {};
 fastn_dom.class_count = 0;
 fastn_dom.propertyMap = {
     "align-items": "ali",
@@ -615,22 +661,22 @@ fastn_dom.propertyMap = {
     "border-top-style": "bts",
     "border-top-width": "btw",
     "border-width": "bw",
-    "bottom": "b",
-    "color": "c",
-    "shadow": "sh",
+    bottom: "b",
+    color: "c",
+    shadow: "sh",
     "text-shadow": "tsh",
-    "cursor": "cur",
-    "display": "d",
+    cursor: "cur",
+    display: "d",
     "flex-wrap": "fw",
     "font-style": "fst",
     "font-weight": "fwt",
-    "gap": "g",
-    "height": "h",
+    gap: "g",
+    height: "h",
     "justify-content": "jc",
-    "left": "l",
-    "link": "lk",
+    left: "l",
+    link: "lk",
     "link-color": "lkc",
-    "margin": "m",
+    margin: "m",
     "margin-bottom": "mb",
     "margin-horizontal": "mh",
     "margin-left": "ml",
@@ -641,28 +687,28 @@ fastn_dom.propertyMap = {
     "max-width": "mxw",
     "min-height": "mnh",
     "min-width": "mnw",
-    "opacity": "op",
-    "overflow": "o",
+    opacity: "op",
+    overflow: "o",
     "overflow-x": "ox",
     "overflow-y": "oy",
     "object-fit": "of",
-    "padding": "p",
+    padding: "p",
     "padding-bottom": "pb",
     "padding-horizontal": "ph",
     "padding-left": "pl",
     "padding-right": "pr",
     "padding-top": "pt",
     "padding-vertical": "pv",
-    "position": "pos",
-    "resize": "res",
-    "role": "rl",
-    "right": "r",
-    "sticky": "s",
+    position: "pos",
+    resize: "res",
+    role: "rl",
+    right: "r",
+    sticky: "s",
     "text-align": "ta",
     "text-decoration": "td",
     "text-transform": "tt",
-    "top": "t",
-    "width": "w",
+    top: "t",
+    width: "w",
     "z-index": "z",
     "-webkit-box-orient": "wbo",
     "-webkit-line-clamp": "wlc",
@@ -675,17 +721,18 @@ fastn_dom.propertyMap = {
     "-webkit-mask-repeat": "wmre",
     "mask-position": "mp",
     "-webkit-mask-position": "wmp",
+    "fetch-priority": "ftp",
 };
 
 // dynamic-class-css.md
-fastn_dom.getClassesAsString = function() {
+fastn_dom.getClassesAsString = function () {
     return `<style id="styles">
     ${fastn_dom.getClassesAsStringWithoutStyleTag()}
     </style>`;
-}
+};
 
-fastn_dom.getClassesAsStringWithoutStyleTag = function() {
-    let classes = Object.entries(fastn_dom.classes).map(entry => {
+fastn_dom.getClassesAsStringWithoutStyleTag = function () {
+    let classes = Object.entries(fastn_dom.classes).map((entry) => {
         return getClassAsString(entry[0], entry[1]);
     });
 
@@ -693,20 +740,24 @@ fastn_dom.getClassesAsStringWithoutStyleTag = function() {
         padding: 0;
     }*/
     return classes.join("\n\t");
-}
+};
 
 function getClassAsString(className, obj) {
-    if (typeof obj.value === 'object' && obj.value !== null) {
+    if (typeof obj.value === "object" && obj.value !== null) {
         let value = "";
         for (let key in obj.value) {
             if (obj.value[key] === undefined || obj.value[key] === null) {
-                continue
+                continue;
             }
-            value = `${value} ${key}: ${obj.value[key]}${key === "color" ? " !important": ""};`
+            value = `${value} ${key}: ${obj.value[key]}${
+                key === "color" ? " !important" : ""
+            };`;
         }
-        return `${className} { ${value} }`
+        return `${className} { ${value} }`;
     } else {
-        return `${className} { ${obj.property}: ${obj.value}${obj.property === "color" ? " !important": ""}; }`;
+        return `${className} { ${obj.property}: ${obj.value}${
+            obj.property === "color" ? " !important" : ""
+        }; }`;
     }
 }
 
@@ -733,7 +784,9 @@ fastn_dom.ElementKind = {
     CodeChild: 16,
     // Note: 'arguments' cant be used as function parameter name bcoz it has
     // internal usage in js functions.
-    WebComponent: (webcomponent, args) => { return [17, [webcomponent, args]]; },
+    WebComponent: (webcomponent, args) => {
+        return [17, [webcomponent, args]];
+    },
     Video: 18,
 };
 
@@ -839,6 +892,7 @@ fastn_dom.PropertyKind = {
         MetaOGImage: 97,
         MetaTwitterImage: 98,
         MetaThemeColor: 99,
+        MetaFacebookDomainVerification: 123,
     },
     Shadow: 100,
     CodeTheme: 101,
@@ -862,20 +916,19 @@ fastn_dom.PropertyKind = {
     BackdropFilter: 119,
     Mask: 120,
     TextInputValue: 121,
+    FetchPriority: 122,
 };
-
-
 
 fastn_dom.Loading = {
     Lazy: "lazy",
     Eager: "eager",
-}
+};
 
 fastn_dom.LinkRel = {
     NoFollow: "nofollow",
     Sponsored: "sponsored",
     Ugc: "ugc",
-}
+};
 
 fastn_dom.TextInputType = {
     Text: "text",
@@ -889,7 +942,7 @@ fastn_dom.TextInputType = {
     Week: "week",
     Color: "color",
     File: "file",
-}
+};
 
 fastn_dom.AlignContent = {
     TopLeft: "top-left",
@@ -901,7 +954,7 @@ fastn_dom.AlignContent = {
     BottomLeft: "bottom-left",
     BottomRight: "bottom-right",
     BottomCenter: "bottom-center",
-}
+};
 
 fastn_dom.Region = {
     H1: "h1",
@@ -910,18 +963,20 @@ fastn_dom.Region = {
     H4: "h4",
     H5: "h5",
     H6: "h6",
-}
+};
 
 fastn_dom.Anchor = {
     Window: [1, "fixed"],
     Parent: [2, "absolute"],
-    Id: (value) => { return [3, value]; },
-}
+    Id: (value) => {
+        return [3, value];
+    },
+};
 
 fastn_dom.DeviceData = {
     Desktop: "desktop",
     Mobile: "mobile",
-}
+};
 
 fastn_dom.TextStyle = {
     Underline: "underline",
@@ -936,21 +991,25 @@ fastn_dom.TextStyle = {
     Light: "300",
     ExtraLight: "200",
     Hairline: "100",
-}
+};
 
 fastn_dom.Resizing = {
     FillContainer: "100%",
     HugContent: "fit-content",
     Auto: "auto",
-    Fixed: (value) => { return value; }
-}
+    Fixed: (value) => {
+        return value;
+    },
+};
 
 fastn_dom.Spacing = {
     SpaceEvenly: [1, "space-evenly"],
     SpaceBetween: [2, "space-between"],
     SpaceAround: [3, "space-around"],
-    Fixed: (value) => { return [4, value]; }
-}
+    Fixed: (value) => {
+        return [4, value];
+    },
+};
 
 fastn_dom.BorderStyle = {
     Solid: "solid",
@@ -961,7 +1020,7 @@ fastn_dom.BorderStyle = {
     Groove: "groove",
     Inset: "inset",
     Outset: "outset",
-}
+};
 
 fastn_dom.Fit = {
     none: "none",
@@ -969,26 +1028,32 @@ fastn_dom.Fit = {
     contain: "contain",
     cover: "cover",
     scaleDown: "scale-down",
-}
+};
+
+fastn_dom.FetchPriority = {
+    auto: "auto",
+    high: "high",
+    low: "low",
+};
 
 fastn_dom.Overflow = {
     Scroll: "scroll",
     Visible: "visible",
     Hidden: "hidden",
     Auto: "auto",
-}
+};
 
 fastn_dom.Display = {
     Block: "block",
     Inline: "inline",
     InlineBlock: "inline-block",
-}
+};
 
 fastn_dom.AlignSelf = {
     Start: "start",
     Center: "center",
     End: "end",
-}
+};
 
 fastn_dom.TextTransform = {
     None: "none",
@@ -997,14 +1062,14 @@ fastn_dom.TextTransform = {
     Lowercase: "lowercase",
     Inherit: "inherit",
     Initial: "initial",
-}
+};
 
 fastn_dom.TextAlign = {
     Start: "start",
     Center: "center",
     End: "end",
     Justify: "justify",
-}
+};
 
 fastn_dom.Cursor = {
     None: "none",
@@ -1040,14 +1105,14 @@ fastn_dom.Cursor = {
     RowResize: "row-resize",
     AllScroll: "all-scroll",
     ZoomIn: "zoom-in",
-    ZoomOut: "zoom-out"
-}
+    ZoomOut: "zoom-out",
+};
 
 fastn_dom.Resize = {
     Vertical: "vertical",
     Horizontal: "horizontal",
     Both: "both",
-}
+};
 
 fastn_dom.WhiteSpace = {
     Normal: "normal",
@@ -1056,7 +1121,7 @@ fastn_dom.WhiteSpace = {
     PreLine: "pre-line",
     PreWrap: "pre-wrap",
     BreakSpaces: "break-spaces",
-}
+};
 
 fastn_dom.BackdropFilter = {
     Blur: (value) => {
@@ -1086,7 +1151,7 @@ fastn_dom.BackdropFilter = {
     Multi: (value) => {
         return [9, value];
     },
-}
+};
 
 fastn_dom.BackgroundStyle = {
     Solid: (value) => {
@@ -1098,7 +1163,7 @@ fastn_dom.BackgroundStyle = {
     LinearGradient: (value) => {
         return [3, value];
     },
-}
+};
 
 fastn_dom.BackgroundRepeat = {
     Repeat: "repeat",
@@ -1107,14 +1172,16 @@ fastn_dom.BackgroundRepeat = {
     NoRepeat: "no-repeat",
     Space: "space",
     Round: "round",
-}
+};
 
 fastn_dom.BackgroundSize = {
     Auto: "auto",
     Cover: "cover",
     Contain: "contain",
-    Length: (value) => { return value; },
-}
+    Length: (value) => {
+        return value;
+    },
+};
 
 fastn_dom.BackgroundPosition = {
     Left: "left",
@@ -1129,12 +1196,18 @@ fastn_dom.BackgroundPosition = {
     RightTop: "right top",
     RightCenter: "right center",
     RightBottom: "right bottom",
-    Length: (value) => { return value; },
-}
+    Length: (value) => {
+        return value;
+    },
+};
 
 fastn_dom.LinearGradientDirection = {
-    Angle: (value) => { return `${value}deg`; },
-    Turn: (value) => { return `${value}turn`; },
+    Angle: (value) => {
+        return `${value}deg`;
+    },
+    Turn: (value) => {
+        return `${value}turn`;
+    },
     Left: "270deg",
     Right: "90deg",
     Top: "0deg",
@@ -1143,115 +1216,163 @@ fastn_dom.LinearGradientDirection = {
     TopRight: "45deg",
     BottomLeft: "225deg",
     BottomRight: "135deg",
-}
+};
 
 fastn_dom.FontSize = {
     Px: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}px`})
+            return fastn.formula([value], function () {
+                return `${value.get()}px`;
+            });
         }
         return `${value}px`;
     },
     Em: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}em`})
+            return fastn.formula([value], function () {
+                return `${value.get()}em`;
+            });
         }
         return `${value}em`;
     },
     Rem: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}rem`})
+            return fastn.formula([value], function () {
+                return `${value.get()}rem`;
+            });
         }
         return `${value}rem`;
     },
-}
+};
 
 fastn_dom.Length = {
     Px: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}px`})
+            return fastn.formula([value], function () {
+                return `${fastn_utils.getStaticValue(value)}px`;
+            });
         }
         return `${value}px`;
     },
     Em: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}em`})
+            return fastn.formula([value], function () {
+                return `${fastn_utils.getStaticValue(value)}em`;
+            });
         }
         return `${value}em`;
     },
     Rem: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}rem`})
+            return fastn.formula([value], function () {
+                return `${fastn_utils.getStaticValue(value)}rem`;
+            });
         }
         return `${value}rem`;
     },
     Percent: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}%`})
+            return fastn.formula([value], function () {
+                return `${fastn_utils.getStaticValue(value)}%`;
+            });
         }
         return `${value}%`;
     },
     Calc: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `calc(${value.get()})`})
+            return fastn.formula([value], function () {
+                return `calc(${fastn_utils.getStaticValue(value)})`;
+            });
         }
         return `calc(${value})`;
     },
     Vh: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}vh`})
+            return fastn.formula([value], function () {
+                return `${fastn_utils.getStaticValue(value)}vh`;
+            });
         }
         return `${value}vh`;
     },
     Vw: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}vw`})
+            return fastn.formula([value], function () {
+                return `${fastn_utils.getStaticValue(value)}vw`;
+            });
         }
         return `${value}vw`;
     },
+    Dvh: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () {
+                return `${fastn_utils.getStaticValue(value)}dvh`;
+            });
+        }
+        return `${value}dvh`;
+    },
+    Lvh: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () {
+                return `${fastn_utils.getStaticValue(value)}lvh`;
+            });
+        }
+        return `${value}lvh`;
+    },
+    Svh: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () {
+                return `${fastn_utils.getStaticValue(value)}svh`;
+            });
+        }
+        return `${value}svh`;
+    },
+
     Vmin: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}vmin`})
+            return fastn.formula([value], function () {
+                return `${fastn_utils.getStaticValue(value)}vmin`;
+            });
         }
         return `${value}vmin`;
     },
     Vmax: (value) => {
         if (value instanceof fastn.mutableClass) {
-            return fastn.formula([value], function () { return `${value.get()}vmax`})
+            return fastn.formula([value], function () {
+                return `${fastn_utils.getStaticValue(value)}vmax`;
+            });
         }
         return `${value}vmax`;
     },
     Responsive: (length) => {
-        return new PropertyValueAsClosure(
-            () => {
-                if (ftd.device.get() === "desktop") {
-                    return length.get("desktop");
-                } else {
-                    let mobile = length.get("mobile");
-                    let desktop = length.get("desktop");
-                    return mobile ? mobile: desktop;
-                }
-            },
-            [ftd.device, length]
-        );
-    }
-}
+        return new PropertyValueAsClosure(() => {
+            if (ftd.device.get() === "desktop") {
+                return length.get("desktop");
+            } else {
+                let mobile = length.get("mobile");
+                let desktop = length.get("desktop");
+                return mobile ? mobile : desktop;
+            }
+        }, [ftd.device, length]);
+    },
+};
 
 fastn_dom.Mask = {
     Image: (value) => {
         return [1, value];
     },
     Multi: (value) => {
-        return [2, value]
+        return [2, value];
     },
-}
+};
 
 fastn_dom.MaskSize = {
     Auto: "auto",
     Cover: "cover",
     Contain: "contain",
-    Fixed: (value) => { return value }
-}
+    Fixed: (value) => {
+        return value;
+    },
+};
 
 fastn_dom.MaskRepeat = {
     Repeat: "repeat",
@@ -1260,7 +1381,7 @@ fastn_dom.MaskRepeat = {
     NoRepeat: "no-repeat",
     Space: "space",
     Round: "round",
-}
+};
 
 fastn_dom.MaskPosition = {
     Left: "left",
@@ -1275,21 +1396,27 @@ fastn_dom.MaskPosition = {
     RightTop: "right top",
     RightCenter: "right center",
     RightBottom: "right bottom",
-    Length: (value) => { return value; },
-}
+    Length: (value) => {
+        return value;
+    },
+};
 
 fastn_dom.Event = {
     Click: 0,
     MouseEnter: 1,
     MouseLeave: 2,
     ClickOutside: 3,
-    GlobalKey: (val) => {return [4, val];},
-    GlobalKeySeq: (val) => {return [5, val];},
+    GlobalKey: (val) => {
+        return [4, val];
+    },
+    GlobalKeySeq: (val) => {
+        return [5, val];
+    },
     Input: 6,
     Change: 7,
     Blur: 8,
     Focus: 9,
-}
+};
 
 class PropertyValueAsClosure {
     closureFunction;
@@ -1330,7 +1457,7 @@ class Node2 {
 
         if (parentOrSibiling instanceof ParentNodeWithSibiling) {
             this.#parent = parentOrSibiling.getParent();
-            while(this.#parent instanceof ParentNodeWithSibiling) {
+            while (this.#parent instanceof ParentNodeWithSibiling) {
                 this.#parent = this.#parent.getParent();
             }
             sibiling = parentOrSibiling.getSibiling();
@@ -1344,7 +1471,6 @@ class Node2 {
             parent = parent.parent();
         }*/
 
-
         if (this.#parent.getNode) {
             this.#parent = this.#parent.getNode();
         }
@@ -1354,7 +1480,10 @@ class Node2 {
             return;
         }
         if (sibiling) {
-            this.#parent.insertBefore(this.#node, fastn_utils.nextSibling(sibiling, this.#parent));
+            this.#parent.insertBefore(
+                this.#node,
+                fastn_utils.nextSibling(sibiling, this.#parent),
+            );
         } else {
             this.#parent.appendChild(this.#node);
         }
@@ -1362,15 +1491,26 @@ class Node2 {
     createNode(kind) {
         if (kind === fastn_dom.ElementKind.Code) {
             let [node, classes, attributes] = fastn_utils.htmlNode(kind);
-            [this.#tagName, this.#node] = fastn_utils.createNodeHelper(node, classes, attributes);
-            let codeNode = new Node2(this.#node, fastn_dom.ElementKind.CodeChild);
+            [this.#tagName, this.#node] = fastn_utils.createNodeHelper(
+                node,
+                classes,
+                attributes,
+            );
+            let codeNode = new Node2(
+                this.#node,
+                fastn_dom.ElementKind.CodeChild,
+            );
             this.#children.push(codeNode);
         } else {
             let [node, classes, attributes] = fastn_utils.htmlNode(kind);
-            [this.#tagName, this.#node] = fastn_utils.createNodeHelper(node, classes, attributes);
+            [this.#tagName, this.#node] = fastn_utils.createNodeHelper(
+                node,
+                classes,
+                attributes,
+            );
         }
     }
-    getTagName(){
+    getTagName() {
         return this.#tagName;
     }
     getParent() {
@@ -1378,15 +1518,17 @@ class Node2 {
     }
     removeAllFaviconLinks() {
         if (doubleBuffering) {
-            const links = document.head.querySelectorAll('link[rel="shortcut icon"]');
-            links.forEach( link => {
+            const links = document.head.querySelectorAll(
+                'link[rel="shortcut icon"]',
+            );
+            links.forEach((link) => {
                 link.parentNode.removeChild(link);
             });
         }
     }
     setFavicon(url) {
         if (doubleBuffering) {
-            if (url instanceof fastn.recordInstanceClass) url = url.get('src');
+            if (url instanceof fastn.recordInstanceClass) url = url.get("src");
             while (true) {
                 if (url instanceof fastn.mutableClass) url = url.get();
                 else break;
@@ -1401,11 +1543,11 @@ class Node2 {
         }
     }
     updateTextInputValue() {
-        if(fastn_utils.isNull(this.#rawInnerValue)) {
+        if (fastn_utils.isNull(this.#rawInnerValue)) {
             this.attachAttribute("value");
             return;
         }
-        if (!ssr && this.#node.tagName.toLowerCase() === 'textarea') {
+        if (!ssr && this.#node.tagName.toLowerCase() === "textarea") {
             this.#node.innerHTML = this.#rawInnerValue;
         } else {
             this.attachAttribute("value", this.#rawInnerValue);
@@ -1448,7 +1590,7 @@ class Node2 {
         let node_kind = this.#kind;
         if (ssr) {
             if (node_kind !== fastn_dom.ElementKind.Image) {
-                this.updateTagName('a');
+                this.updateTagName("a");
                 this.attachAttribute("href", url);
             }
             return;
@@ -1466,9 +1608,11 @@ class Node2 {
     }
     updatePositionForNodeById(node_id, value) {
         if (!ssr) {
-            const target_node = fastnVirtual.root.querySelector(`[id="${node_id}"]`);
+            const target_node = fastnVirtual.root.querySelector(
+                `[id="${node_id}"]`,
+            );
             if (!fastn_utils.isNull(target_node))
-                target_node.style['position'] = value;
+                target_node.style["position"] = value;
         }
     }
     updateParentPosition(value) {
@@ -1480,7 +1624,7 @@ class Node2 {
             let current_node = this.#node;
             if (current_node) {
                 let parent_node = current_node.parentNode;
-                parent_node.style['position'] = value;
+                parent_node.style["position"] = value;
             }
         }
     }
@@ -1495,9 +1639,9 @@ class Node2 {
             return;
         }
         if (!ssr && doubleBuffering) {
-            const metaTag = window.document.createElement('meta');
-            metaTag.setAttribute('name', name);
-            metaTag.setAttribute('content', value);
+            const metaTag = window.document.createElement("meta");
+            metaTag.setAttribute("name", name);
+            metaTag.setAttribute("content", value);
             document.head.appendChild(metaTag);
         }
     }
@@ -1507,18 +1651,18 @@ class Node2 {
             return;
         }
         if (!ssr && doubleBuffering) {
-            const metaTag = window.document.createElement('meta');
-            metaTag.setAttribute('property', property);
-            metaTag.setAttribute('content', value);
+            const metaTag = window.document.createElement("meta");
+            metaTag.setAttribute("property", property);
+            metaTag.setAttribute("content", value);
             document.head.appendChild(metaTag);
         }
     }
     removeMetaTagByName(name) {
         if (!ssr && doubleBuffering) {
-            const metaTags = document.getElementsByTagName('meta');
+            const metaTags = document.getElementsByTagName("meta");
             for (let i = 0; i < metaTags.length; i++) {
                 const metaTag = metaTags[i];
-                if (metaTag.getAttribute('name') === name) {
+                if (metaTag.getAttribute("name") === name) {
                     metaTag.remove();
                     break;
                 }
@@ -1527,10 +1671,10 @@ class Node2 {
     }
     removeMetaTagByProperty(property) {
         if (!ssr && doubleBuffering) {
-            const metaTags = document.getElementsByTagName('meta');
+            const metaTags = document.getElementsByTagName("meta");
             for (let i = 0; i < metaTags.length; i++) {
                 const metaTag = metaTags[i];
-                if (metaTag.getAttribute('property') === property) {
+                if (metaTag.getAttribute("property") === property) {
                     metaTag.remove();
                     break;
                 }
@@ -1543,7 +1687,7 @@ class Node2 {
         propertyShort = `__${propertyShort}`;
         let cls = `${propertyShort}-${fastn_dom.class_count}`;
         if (!!className) {
-           cls = className;
+            cls = className;
         } else {
             if (!fastn_dom.unsanitised_classes[cls]) {
                 fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
@@ -1569,7 +1713,8 @@ class Node2 {
         if (!ssr && !doubleBuffering) {
             if (!!className) {
                 if (!fastn_dom.classes[cssClass]) {
-                    fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
+                    fastn_dom.classes[cssClass] =
+                        fastn_dom.classes[cssClass] || obj;
                     fastn_utils.createStyle(cssClass, obj);
                 }
                 return cls;
@@ -1583,13 +1728,14 @@ class Node2 {
 
             if (createClass) {
                 if (!fastn_dom.classes[cssClass]) {
-                    fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
+                    fastn_dom.classes[cssClass] =
+                        fastn_dom.classes[cssClass] || obj;
                     fastn_utils.createStyle(cssClass, obj);
                 }
                 this.#node.style.removeProperty(property);
                 this.#node.classList.add(cls);
             } else if (!fastn_dom.classes[cssClass]) {
-                if (typeof value === 'object' && value !== null) {
+                if (typeof value === "object" && value !== null) {
                     for (let key in value) {
                         this.#node.style[key] = value[key];
                     }
@@ -1630,15 +1776,22 @@ class Node2 {
         const spread = fastn_utils.getStaticValue(value.get("spread"));
         const inset = fastn_utils.getStaticValue(value.get("inset"));
 
-        const shadowCommonCss = `${inset ? "inset " : ""}${xOffset} ${yOffset} ${blur} ${spread}`;
-        const lightShadowCss =  `${shadowCommonCss} ${lightColor}`;
+        const shadowCommonCss = `${
+            inset ? "inset " : ""
+        }${xOffset} ${yOffset} ${blur} ${spread}`;
+        const lightShadowCss = `${shadowCommonCss} ${lightColor}`;
         const darkShadowCss = `${shadowCommonCss} ${darkColor}`;
 
         if (lightShadowCss === darkShadowCss) {
             this.attachCss("box-shadow", lightShadowCss, false);
         } else {
             let lightClass = this.attachCss("box-shadow", lightShadowCss, true);
-            this.attachCss("box-shadow", darkShadowCss, true, `body.dark .${lightClass}`);
+            this.attachCss(
+                "box-shadow",
+                darkShadowCss,
+                true,
+                `body.dark .${lightClass}`,
+            );
         }
     }
     attachBackdropMultiFilter(value) {
@@ -1676,14 +1829,19 @@ class Node2 {
         const yOffset = fastn_utils.getStaticValue(value.get("y_offset"));
 
         const shadowCommonCss = `${xOffset} ${yOffset} ${blur}`;
-        const lightShadowCss =  `${shadowCommonCss} ${lightColor}`;
+        const lightShadowCss = `${shadowCommonCss} ${lightColor}`;
         const darkShadowCss = `${shadowCommonCss} ${darkColor}`;
 
         if (lightShadowCss === darkShadowCss) {
             this.attachCss("text-shadow", lightShadowCss, false);
         } else {
             let lightClass = this.attachCss("box-shadow", lightShadowCss, true);
-            this.attachCss("text-shadow", darkShadowCss, true, `body.dark .${lightClass}`);
+            this.attachCss(
+                "text-shadow",
+                darkShadowCss,
+                true,
+                `body.dark .${lightClass}`,
+            );
         }
     }
     getLinearGradientString(value) {
@@ -1703,25 +1861,27 @@ class Node2 {
             darkGradientString = `${darkGradientString} ${darkColor}`;
 
             let start = fastn_utils.getStaticValue(lg_color.get("start"));
-            if (start !== undefined && start !== null ) {
+            if (start !== undefined && start !== null) {
                 lightGradientString = `${lightGradientString} ${start}`;
                 darkGradientString = `${darkGradientString} ${start}`;
             }
 
             let end = fastn_utils.getStaticValue(lg_color.get("end"));
-            if (end !== undefined && end !== null ) {
+            if (end !== undefined && end !== null) {
                 lightGradientString = `${lightGradientString} ${end}`;
                 darkGradientString = `${darkGradientString} ${end}`;
             }
 
-            let stop_position = fastn_utils.getStaticValue(lg_color.get("stop_position"));
-            if (stop_position !== undefined && stop_position !== null ) {
+            let stop_position = fastn_utils.getStaticValue(
+                lg_color.get("stop_position"),
+            );
+            if (stop_position !== undefined && stop_position !== null) {
                 lightGradientString = `${lightGradientString}, ${stop_position}`;
                 darkGradientString = `${darkGradientString}, ${stop_position}`;
             }
 
-            lightGradientString = `${lightGradientString},`
-            darkGradientString = `${darkGradientString},`
+            lightGradientString = `${lightGradientString},`;
+            darkGradientString = `${darkGradientString},`;
         });
 
         lightGradientString = lightGradientString.trim().slice(0, -1);
@@ -1735,16 +1895,47 @@ class Node2 {
             return;
         }
 
-        let direction = fastn_utils.getStaticValue(value.get("direction"));
+        const closure = fastn
+            .closure(() => {
+                let direction = fastn_utils.getStaticValue(
+                    value.get("direction"),
+                );
 
-        const [lightGradientString, darkGradientString] = this.getLinearGradientString(value);
+                const [lightGradientString, darkGradientString] =
+                    this.getLinearGradientString(value);
 
-        if (lightGradientString === darkGradientString) {
-            this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
-        } else {
-            let lightClass = this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`,true);
-            this.attachCss("background-image", `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
-        }
+                if (lightGradientString === darkGradientString) {
+                    this.attachCss(
+                        "background-image",
+                        `linear-gradient(${direction}, ${lightGradientString})`,
+                        false,
+                    );
+                } else {
+                    let lightClass = this.attachCss(
+                        "background-image",
+                        `linear-gradient(${direction}, ${lightGradientString})`,
+                        true,
+                    );
+                    this.attachCss(
+                        "background-image",
+                        `linear-gradient(${direction}, ${darkGradientString})`,
+                        true,
+                        `body.dark .${lightClass}`,
+                    );
+                }
+            })
+            .addNodeProperty(this, null, inherited);
+
+        const colorsList = value.get("colors").get().getList();
+
+        colorsList.forEach(({ item }) => {
+            const color = item.get("color");
+
+            [color.get("light"), color.get("dark")].forEach((variant) => {
+                variant.addClosure(closure);
+                this.#mutables.push(variant);
+            });
+        });
     }
     attachBackgroundImageCss(value) {
         if (fastn_utils.isNull(value)) {
@@ -1789,17 +1980,28 @@ class Node2 {
 
         if (repeat !== null) this.attachCss("background-repeat", repeat);
         if (position !== null) this.attachCss("background-position", position);
-        if (size !== null)  this.attachCss("background-size", size);
+        if (size !== null) this.attachCss("background-size", size);
 
         if (lightValue === darkValue) {
             this.attachCss("background-image", `url(${lightValue})`, false);
         } else {
-            let lightClass = this.attachCss("background-image", `url(${lightValue})`, true);
-            this.attachCss("background-image", `url(${darkValue})`, true, `body.dark .${lightClass}`);
+            let lightClass = this.attachCss(
+                "background-image",
+                `url(${lightValue})`,
+                true,
+            );
+            this.attachCss(
+                "background-image",
+                `url(${darkValue})`,
+                true,
+                `body.dark .${lightClass}`,
+            );
         }
     }
     attachMaskImageCss(value, vendorPrefix) {
-        const propertyWithPrefix = vendorPrefix ? `${vendorPrefix}-mask-image` : "mask-image";
+        const propertyWithPrefix = vendorPrefix
+            ? `${vendorPrefix}-mask-image`
+            : "mask-image";
 
         if (fastn_utils.isNull(value)) {
             this.attachCss(propertyWithPrefix, value);
@@ -1807,69 +2009,98 @@ class Node2 {
         }
 
         let src = fastn_utils.getStaticValue(value.get("src"));
-        let linearGradient = fastn_utils.getStaticValue(value.get("linear_gradient"));
+        let linearGradient = fastn_utils.getStaticValue(
+            value.get("linear_gradient"),
+        );
         let color = fastn_utils.getStaticValue(value.get("color"));
 
         const maskLightImageValues = [];
         const maskDarkImageValues = [];
 
-        if(!fastn_utils.isNull(src)) {
+        if (!fastn_utils.isNull(src)) {
             let lightValue = fastn_utils.getStaticValue(src.get("light"));
             let darkValue = fastn_utils.getStaticValue(src.get("dark"));
 
             const lightUrl = `url(${lightValue})`;
             const darkUrl = `url(${darkValue})`;
 
-            if(!fastn_utils.isNull(linearGradient)) {
+            if (!fastn_utils.isNull(linearGradient)) {
                 const lightImageValues = [lightUrl];
                 const darkImageValues = [darkUrl];
 
-                if(!fastn_utils.isNull(color)) {
-                    const lightColor = fastn_utils.getStaticValue(color.get("light"));
-                    const darkColor = fastn_utils.getStaticValue(color.get("dark"));
+                if (!fastn_utils.isNull(color)) {
+                    const lightColor = fastn_utils.getStaticValue(
+                        color.get("light"),
+                    );
+                    const darkColor = fastn_utils.getStaticValue(
+                        color.get("dark"),
+                    );
 
                     lightImageValues.push(lightColor);
                     darkImageValues.push(darkColor);
                 }
-                maskLightImageValues.push(`image(${lightImageValues.join(", ")})`);
-                maskDarkImageValues.push(`image(${darkImageValues.join(", ")})`);
+                maskLightImageValues.push(
+                    `image(${lightImageValues.join(", ")})`,
+                );
+                maskDarkImageValues.push(
+                    `image(${darkImageValues.join(", ")})`,
+                );
             } else {
                 maskLightImageValues.push(lightUrl);
                 maskDarkImageValues.push(darkUrl);
             }
         }
-        
-        if(!fastn_utils.isNull(linearGradient)) {
-            let direction = fastn_utils.getStaticValue(linearGradient.get("direction"));
 
-            const [lightGradientString, darkGradientString] = this.getLinearGradientString(linearGradient);
+        if (!fastn_utils.isNull(linearGradient)) {
+            let direction = fastn_utils.getStaticValue(
+                linearGradient.get("direction"),
+            );
 
-            maskLightImageValues.push(`linear-gradient(${direction}, ${lightGradientString})`);
-            maskDarkImageValues.push(`linear-gradient(${direction}, ${darkGradientString})`);
+            const [lightGradientString, darkGradientString] =
+                this.getLinearGradientString(linearGradient);
+
+            maskLightImageValues.push(
+                `linear-gradient(${direction}, ${lightGradientString})`,
+            );
+            maskDarkImageValues.push(
+                `linear-gradient(${direction}, ${darkGradientString})`,
+            );
         }
 
         const maskLightImageString = maskLightImageValues.join(", ");
         const maskDarkImageString = maskDarkImageValues.join(", ");
 
-        if(maskLightImageString === maskDarkImageString) {
+        if (maskLightImageString === maskDarkImageString) {
             this.attachCss(propertyWithPrefix, maskLightImageString, true);
         } else {
-            let lightClass = this.attachCss(propertyWithPrefix, maskLightImageString, true);
-            this.attachCss(propertyWithPrefix, maskDarkImageString, true, `body.dark .${lightClass}`);
+            let lightClass = this.attachCss(
+                propertyWithPrefix,
+                maskLightImageString,
+                true,
+            );
+            this.attachCss(
+                propertyWithPrefix,
+                maskDarkImageString,
+                true,
+                `body.dark .${lightClass}`,
+            );
         }
     }
     attachMaskSizeCss(value, vendorPrefix) {
-        const propertyNameWithPrefix = vendorPrefix ? `${vendorPrefix}-mask-size` : "mask-size";
-        if(fastn_utils.isNull(value)) {
+        const propertyNameWithPrefix = vendorPrefix
+            ? `${vendorPrefix}-mask-size`
+            : "mask-size";
+        if (fastn_utils.isNull(value)) {
             this.attachCss(propertyNameWithPrefix, value);
         }
-        const [size, ...two_values] = ["size", "size_x", "size_y"]
-            .map(size => fastn_utils.getStaticValue(value.get(size)));
-        
-        if(!fastn_utils.isNull(size)) {
+        const [size, ...two_values] = ["size", "size_x", "size_y"].map((size) =>
+            fastn_utils.getStaticValue(value.get(size)),
+        );
+
+        if (!fastn_utils.isNull(size)) {
             this.attachCss(propertyNameWithPrefix, size, true);
         } else {
-            const [size_x, size_y] = two_values.map(value => value || "auto");
+            const [size_x, size_y] = two_values.map((value) => value || "auto");
             this.attachCss(propertyNameWithPrefix, `${size_x} ${size_y}`, true);
         }
     }
@@ -1881,22 +2112,24 @@ class Node2 {
             this.attachCss("mask-image", value);
             return;
         }
-        
+
         const maskImage = fastn_utils.getStaticValue(value.get("image"));
         this.attachMaskImageCss(maskImage);
         this.attachMaskImageCss(maskImage, vendorPrefix);
         this.attachMaskSizeCss(value);
         this.attachMaskSizeCss(value, vendorPrefix);
         const maskRepeatValue = fastn_utils.getStaticValue(value.get("repeat"));
-        if(fastn_utils.isNull(maskRepeatValue)) {
+        if (fastn_utils.isNull(maskRepeatValue)) {
             this.attachCss("mask-repeat", maskRepeatValue, true);
             this.attachCss("-webkit-mask-repeat", maskRepeatValue, true);
         } else {
             this.attachCss("mask-repeat", maskRepeatValue, true);
             this.attachCss("-webkit-mask-repeat", maskRepeatValue, true);
         }
-        const maskPositionValue = fastn_utils.getStaticValue(value.get("position"));
-        if(fastn_utils.isNull(maskPositionValue)) {
+        const maskPositionValue = fastn_utils.getStaticValue(
+            value.get("position"),
+        );
+        if (fastn_utils.isNull(maskPositionValue)) {
             this.attachCss("mask-position", maskPositionValue, true);
             this.attachCss("-webkit-mask-position", maskPositionValue, true);
         } else {
@@ -1905,26 +2138,28 @@ class Node2 {
         }
     }
     attachExternalCss(css) {
-        if (doubleBuffering) {
-            let css_tag = document.createElement('link');
-            css_tag.rel = 'stylesheet';
-            css_tag.type = 'text/css';
+        if (!ssr) {
+            let css_tag = document.createElement("link");
+            css_tag.rel = "stylesheet";
+            css_tag.type = "text/css";
             css_tag.href = css;
 
-            let head = document.head || document.getElementsByTagName("head")[0];
-            if (!fastn_dom.externalCss.has(css)){
+            let head =
+                document.head || document.getElementsByTagName("head")[0];
+            if (!fastn_dom.externalCss.has(css)) {
                 head.appendChild(css_tag);
                 fastn_dom.externalCss.add(css);
             }
         }
     }
     attachExternalJs(js) {
-        if (doubleBuffering) {
-            let js_tag = document.createElement('script');
+        if (!ssr) {
+            let js_tag = document.createElement("script");
             js_tag.src = js;
 
-            let head = document.head || document.getElementsByTagName("head")[0];
-            if (!fastn_dom.externalJs.has(js)){
+            let head =
+                document.head || document.getElementsByTagName("head")[0];
+            if (!fastn_dom.externalJs.has(js)) {
                 head.appendChild(js_tag);
                 fastn_dom.externalCss.add(js);
             }
@@ -1935,95 +2170,154 @@ class Node2 {
             this.attachCss(property, value);
             return;
         }
-        let lightValue = fastn_utils.getStaticValue(value.get("light"));
-        let darkValue = fastn_utils.getStaticValue(value.get("dark"));
-        if (lightValue === darkValue) {
-            this.attachCss(property, lightValue, false);
-        } else {
-            let lightClass = this.attachCss(property, lightValue, true);
-            this.attachCss(property, darkValue, true, `body.dark .${lightClass}`);
-            if (visited) {
-                this.attachCss(property, lightValue, true, `.${lightClass}:visited`);
-                this.attachCss(property, darkValue, true, `body.dark  .${lightClass}:visited`);
-            }
-        }
+        value = value instanceof fastn.mutableClass ? value.get() : value;
+
+        const lightValue = value.get("light");
+        const darkValue = value.get("dark");
+
+        const closure = fastn
+            .closure(() => {
+                let lightValueStatic = fastn_utils.getStaticValue(lightValue);
+                let darkValueStatic = fastn_utils.getStaticValue(darkValue);
+
+                if (lightValueStatic === darkValueStatic) {
+                    this.attachCss(property, lightValueStatic, false);
+                } else {
+                    let lightClass = this.attachCss(
+                        property,
+                        lightValueStatic,
+                        true,
+                    );
+                    this.attachCss(
+                        property,
+                        darkValueStatic,
+                        true,
+                        `body.dark .${lightClass}`,
+                    );
+                    if (visited) {
+                        this.attachCss(
+                            property,
+                            lightValueStatic,
+                            true,
+                            `.${lightClass}:visited`,
+                        );
+                        this.attachCss(
+                            property,
+                            darkValueStatic,
+                            true,
+                            `body.dark  .${lightClass}:visited`,
+                        );
+                    }
+                }
+            })
+            .addNodeProperty(this, null, inherited);
+
+        [lightValue, darkValue].forEach((modeValue) => {
+            modeValue.addClosure(closure);
+            this.#mutables.push(modeValue);
+        });
     }
     attachRoleCss(value) {
         if (fastn_utils.isNull(value)) {
-            this.attachCss('role', value);
+            this.attachCss("role", value);
             return;
         }
-        let desktopValue = fastn_utils.getStaticValue(value.get("desktop"));
-        let mobileValue = fastn_utils.getStaticValue(value.get("mobile"));
-        if (fastn_utils.sameResponsiveRole(desktopValue, mobileValue)) {
-            this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
-        } else {
-            let desktopClass = this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
-            this.attachCss("role", fastn_utils.getRoleValues(mobileValue), true, `body.mobile .${desktopClass}`);
-        }
+        value.addClosure(
+            fastn
+                .closure(() => {
+                    let desktopValue = value.get("desktop");
+                    let mobileValue = value.get("mobile");
+                    if (
+                        fastn_utils.sameResponsiveRole(
+                            desktopValue,
+                            mobileValue,
+                        )
+                    ) {
+                        this.attachCss(
+                            "role",
+                            fastn_utils.getRoleValues(desktopValue),
+                            true,
+                        );
+                    } else {
+                        let desktopClass = this.attachCss(
+                            "role",
+                            fastn_utils.getRoleValues(desktopValue),
+                            true,
+                        );
+                        this.attachCss(
+                            "role",
+                            fastn_utils.getRoleValues(mobileValue),
+                            true,
+                            `body.mobile .${desktopClass}`,
+                        );
+                    }
+                })
+                .addNodeProperty(this, null, inherited),
+        );
+        this.#mutables.push(value);
     }
     attachTextStyles(styles) {
         if (fastn_utils.isNull(styles)) {
-            this.attachCss('font-style', styles);
-            this.attachCss('font-weight', styles);
-            this.attachCss('text-decoration', styles);
+            this.attachCss("font-style", styles);
+            this.attachCss("font-weight", styles);
+            this.attachCss("text-decoration", styles);
             return;
         }
         for (var s of styles) {
             switch (s) {
-              case 'italic':
-                this.attachCss("font-style", s);
-                break;
-              case 'underline':
-              case 'line-through':
-                this.attachCss("text-decoration", s);
-                break;
-              default:
-                this.attachCss("font-weight", s);
+                case "italic":
+                    this.attachCss("font-style", s);
+                    break;
+                case "underline":
+                case "line-through":
+                    this.attachCss("text-decoration", s);
+                    break;
+                default:
+                    this.attachCss("font-weight", s);
             }
         }
     }
     attachAlignContent(value, node_kind) {
         if (fastn_utils.isNull(value)) {
-            this.attachCss('align-items', value);
+            this.attachCss("align-items", value);
             this.attachCss("justify-content", value);
             return;
         }
         if (node_kind === fastn_dom.ElementKind.Column) {
             switch (value) {
-                case 'top-left':
+                case "top-left":
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "start");
                     break;
-                case 'top-center':
+                case "top-center":
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "center");
                     break;
-                case 'top-right':
+                case "top-right":
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "end");
                     break;
-                case 'left':
+                case "left":
                     this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "start");
                     break;
-                case 'center':
+                case "center":
                     this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "center");
                     break;
-                case 'right':
+                case "right":
                     this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "end");
                     break;
-                case 'bottom-left':
+                case "bottom-left":
                     this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "left");
                     break;
-                case 'bottom-center':
+                case "bottom-center":
                     this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "center");
                     break;
-                case 'bottom-right':
+                case "bottom-right":
                     this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "end");
                     break;
@@ -2032,39 +2326,39 @@ class Node2 {
 
         if (node_kind === fastn_dom.ElementKind.Row) {
             switch (value) {
-                case 'top-left':
+                case "top-left":
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "start");
                     break;
-                case 'top-center':
+                case "top-center":
                     this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "start");
                     break;
-                case 'top-right':
+                case "top-right":
                     this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "start");
                     break;
-                case 'left':
+                case "left":
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "center");
                     break;
-                case 'center':
+                case "center":
                     this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "center");
                     break;
-                case 'right':
+                case "right":
                     this.attachCss("justify-content", "right");
                     this.attachCss("align-items", "center");
                     break;
-                case 'bottom-left':
+                case "bottom-left":
                     this.attachCss("justify-content", "start");
                     this.attachCss("align-items", "end");
                     break;
-                case 'bottom-center':
+                case "bottom-center":
                     this.attachCss("justify-content", "center");
                     this.attachCss("align-items", "end");
                     break;
-                case 'bottom-right':
+                case "bottom-right":
                     this.attachCss("justify-content", "end");
                     this.attachCss("align-items", "end");
                     break;
@@ -2072,55 +2366,84 @@ class Node2 {
         }
     }
     attachLinkColor(value) {
-        ftd.dark_mode.addClosure(fastn.closure(() => {
-            if (!ssr) {
-                const anchors = this.#node.tagName.toLowerCase() === 'a'
-                    ? [this.#node]
-                    : Array.from(this.#node.querySelectorAll("a"));
-                let propertyShort = `__${fastn_dom.propertyMap["link-color"]}`;
+        ftd.dark_mode.addClosure(
+            fastn
+                .closure(() => {
+                    if (!ssr) {
+                        const anchors =
+                            this.#node.tagName.toLowerCase() === "a"
+                                ? [this.#node]
+                                : Array.from(this.#node.querySelectorAll("a"));
+                        let propertyShort = `__${fastn_dom.propertyMap["link-color"]}`;
 
-                if(fastn_utils.isNull(value)) {
-                    anchors.forEach(a => {
-                        a.classList.values().forEach(className => {
-                            if(className.startsWith(`${propertyShort}-`)) {
-                                a.classList.remove(className);
+                        if (fastn_utils.isNull(value)) {
+                            anchors.forEach((a) => {
+                                a.classList.values().forEach((className) => {
+                                    if (
+                                        className.startsWith(
+                                            `${propertyShort}-`,
+                                        )
+                                    ) {
+                                        a.classList.remove(className);
+                                    }
+                                });
+                            });
+                        } else {
+                            const lightValue = fastn_utils.getStaticValue(
+                                value.get("light"),
+                            );
+                            const darkValue = fastn_utils.getStaticValue(
+                                value.get("dark"),
+                            );
+                            let cls = `${propertyShort}-${JSON.stringify(
+                                lightValue,
+                            )}`;
+
+                            if (!fastn_dom.unsanitised_classes[cls]) {
+                                fastn_dom.unsanitised_classes[cls] =
+                                    ++fastn_dom.class_count;
                             }
-                        });
-                    });
-                } else {
-                    const lightValue = fastn_utils.getStaticValue(value.get("light"));
-                    const darkValue = fastn_utils.getStaticValue(value.get("dark"));
-                    let cls = `${propertyShort}-${JSON.stringify(lightValue)}`;
-                    
-                    if (!fastn_dom.unsanitised_classes[cls]) {
-                        fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
-                    }
 
-                    cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
+                            cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
 
-                    const cssClass = `.${cls}`;
+                            const cssClass = `.${cls}`;
 
-                    if (!fastn_dom.classes[cssClass]) {
-                        const obj = { property: "color", value: lightValue };
-                        fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
-                        let styles = document.getElementById('styles');
-                        styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
-                    }
+                            if (!fastn_dom.classes[cssClass]) {
+                                const obj = {
+                                    property: "color",
+                                    value: lightValue,
+                                };
+                                fastn_dom.classes[cssClass] =
+                                    fastn_dom.classes[cssClass] || obj;
+                                let styles = document.getElementById("styles");
+                                styles.innerHTML = `${
+                                    styles.innerHTML
+                                }${getClassAsString(cssClass, obj)}\n`;
+                            }
 
-                    if(lightValue !== darkValue) {
-                        const obj = { property: "color", value: darkValue };
-                        let darkCls = `body.dark ${cssClass}`;
-                        if (!fastn_dom.classes[darkCls]) {
-                            fastn_dom.classes[darkCls] = fastn_dom.classes[darkCls] || obj;
-                            let styles = document.getElementById('styles');
-                            styles.innerHTML = `${styles.innerHTML}${getClassAsString(darkCls, obj)}\n`;
+                            if (lightValue !== darkValue) {
+                                const obj = {
+                                    property: "color",
+                                    value: darkValue,
+                                };
+                                let darkCls = `body.dark ${cssClass}`;
+                                if (!fastn_dom.classes[darkCls]) {
+                                    fastn_dom.classes[darkCls] =
+                                        fastn_dom.classes[darkCls] || obj;
+                                    let styles =
+                                        document.getElementById("styles");
+                                    styles.innerHTML = `${
+                                        styles.innerHTML
+                                    }${getClassAsString(darkCls, obj)}\n`;
+                                }
+                            }
+
+                            anchors.forEach((a) => a.classList.add(cls));
                         }
                     }
-
-                    anchors.forEach(a => a.classList.add(cls));
-                }
-            }
-        }).addNodeProperty(this, null, inherited));
+                })
+                .addNodeProperty(this, null, inherited),
+        );
         this.#mutables.push(ftd.dark_mode);
     }
     setStaticProperty(kind, value, inherited) {
@@ -2132,17 +2455,33 @@ class Node2 {
                 if (Array.isArray(staticValue)) {
                     staticValue.forEach((func, index) => {
                         if (index !== 0) {
-                            parentWithSibiling = new ParentNodeWithSibiling(this.#parent.getParent(), this.#children[index-1]);
+                            parentWithSibiling = new ParentNodeWithSibiling(
+                                this.#parent.getParent(),
+                                this.#children[index - 1],
+                            );
                         }
-                        this.#children.push(fastn_utils.getStaticValue(func.item)(parentWithSibiling, inherited))
+                        this.#children.push(
+                            fastn_utils.getStaticValue(func.item)(
+                                parentWithSibiling,
+                                inherited,
+                            ),
+                        );
                     });
                 } else {
-                    this.#children.push(staticValue(parentWithSibiling, inherited));
+                    this.#children.push(
+                        staticValue(parentWithSibiling, inherited),
+                    );
                 }
             } else {
                 if (Array.isArray(staticValue)) {
-                    staticValue.forEach(func =>
-                        this.#children.push(fastn_utils.getStaticValue(func.item)(this, inherited)));
+                    staticValue.forEach((func) =>
+                        this.#children.push(
+                            fastn_utils.getStaticValue(func.item)(
+                                this,
+                                inherited,
+                            ),
+                        ),
+                    );
                 } else {
                     this.#children.push(staticValue(this, inherited));
                 }
@@ -2155,12 +2494,16 @@ class Node2 {
             }
             ftd.breakpoint_width.set(fastn_utils.getStaticValue(staticValue));
         } else if (kind === fastn_dom.PropertyKind.Css) {
-            let css_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            let css_list = staticValue.map((obj) =>
+                fastn_utils.getStaticValue(obj.item),
+            );
             css_list.forEach((css) => {
                 this.attachExternalCss(css);
             });
         } else if (kind === fastn_dom.PropertyKind.Js) {
-            let js_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            let js_list = staticValue.map((obj) =>
+                fastn_utils.getStaticValue(obj.item),
+            );
             js_list.forEach((js) => {
                 this.attachExternalJs(js);
             });
@@ -2253,28 +2596,62 @@ class Node2 {
             let backdropType = staticValue[0];
             switch (backdropType) {
                 case 1:
-                    this.attachCss("backdrop-filter", `blur(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `blur(${fastn_utils.getStaticValue(staticValue[1])})`,
+                    );
                     break;
                 case 2:
-                    this.attachCss("backdrop-filter", `brightness(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `brightness(${fastn_utils.getStaticValue(
+                            staticValue[1],
+                        )})`,
+                    );
                     break;
                 case 3:
-                    this.attachCss("backdrop-filter", `contrast(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `contrast(${fastn_utils.getStaticValue(
+                            staticValue[1],
+                        )})`,
+                    );
                     break;
                 case 4:
-                    this.attachCss("backdrop-filter", `greyscale(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `greyscale(${fastn_utils.getStaticValue(
+                            staticValue[1],
+                        )})`,
+                    );
                     break;
                 case 5:
-                    this.attachCss("backdrop-filter", `invert(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `invert(${fastn_utils.getStaticValue(staticValue[1])})`,
+                    );
                     break;
                 case 6:
-                    this.attachCss("backdrop-filter", `opacity(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `opacity(${fastn_utils.getStaticValue(
+                            staticValue[1],
+                        )})`,
+                    );
                     break;
                 case 7:
-                    this.attachCss("backdrop-filter", `sepia(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `sepia(${fastn_utils.getStaticValue(staticValue[1])})`,
+                    );
                     break;
                 case 8:
-                    this.attachCss("backdrop-filter", `saturate(${fastn_utils.getStaticValue(staticValue[1])})`);
+                    this.attachCss(
+                        "backdrop-filter",
+                        `saturate(${fastn_utils.getStaticValue(
+                            staticValue[1],
+                        )})`,
+                    );
                     break;
                 case 9:
                     this.attachBackdropMultiFilter(staticValue[1]);
@@ -2301,7 +2678,9 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Classes) {
             fastn_utils.removeNonFastnClasses(this);
             if (!fastn_utils.isNull(staticValue)) {
-                let cls = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+                let cls = staticValue.map((obj) =>
+                    fastn_utils.getStaticValue(obj.item),
+                );
                 cls.forEach((c) => {
                     this.#node.classList.add(c);
                 });
@@ -2316,32 +2695,32 @@ class Node2 {
 
             let anchorType = staticValue[0];
             switch (anchorType) {
-              case 1:
-                this.attachCss("position", staticValue[1]);
-                break;
-              case 2:
-                this.attachCss("position", staticValue[1]);
-                this.updateParentPosition("relative");
-                break;
-              case 3:
-                const parent_node_id = staticValue[1];
-                this.attachCss("position", "absolute");
-                this.updatePositionForNodeById(parent_node_id, "relative");
-                break;
+                case 1:
+                    this.attachCss("position", staticValue[1]);
+                    break;
+                case 2:
+                    this.attachCss("position", staticValue[1]);
+                    this.updateParentPosition("relative");
+                    break;
+                case 3:
+                    const parent_node_id = staticValue[1];
+                    this.attachCss("position", "absolute");
+                    this.updatePositionForNodeById(parent_node_id, "relative");
+                    break;
             }
         } else if (kind === fastn_dom.PropertyKind.Sticky) {
             // sticky is boolean type
             switch (staticValue) {
-              case 'true':
-              case true:
-                this.attachCss("position", "sticky");
-                break;
-              case 'false':
-              case false:
-                this.attachCss("position", "static");
-                break;
-              default:
-                this.attachCss("position", staticValue);
+                case "true":
+                case true:
+                    this.attachCss("position", "sticky");
+                    break;
+                case "false":
+                case false:
+                    this.attachCss("position", "static");
+                    break;
+                default:
+                    this.attachCss("position", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.Top) {
             this.attachCss("top", staticValue);
@@ -2372,23 +2751,25 @@ class Node2 {
                     this.attachCss("justify-content", staticValue[1]);
                     break;
                 case fastn_dom.Spacing.Fixed()[0]:
-                    this.attachCss("gap", fastn_utils.getStaticValue(staticValue[1]));
+                    this.attachCss(
+                        "gap",
+                        fastn_utils.getStaticValue(staticValue[1]),
+                    );
                     break;
             }
-
         } else if (kind === fastn_dom.PropertyKind.Wrap) {
             // sticky is boolean type
             switch (staticValue) {
-              case 'true':
-              case true:
-                this.attachCss("flex-wrap", "wrap");
-                break;
-              case 'false':
-              case false:
-                this.attachCss("flex-wrap", "no-wrap");
-                break;
-              default:
-                this.attachCss("flex-wrap", staticValue);
+                case "true":
+                case true:
+                    this.attachCss("flex-wrap", "wrap");
+                    break;
+                case "false":
+                case false:
+                    this.attachCss("flex-wrap", "no-wrap");
+                    break;
+                default:
+                    this.attachCss("flex-wrap", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextTransform) {
             this.attachCss("text-transform", staticValue);
@@ -2413,7 +2794,7 @@ class Node2 {
             this.attachCss("resize", staticValue);
             this.attachCss("overflow", "auto");
         } else if (kind === fastn_dom.PropertyKind.Selectable) {
-            if(staticValue === false) {
+            if (staticValue === false) {
                 this.attachCss("user-select", "none");
             } else {
                 this.attachCss("user-select", null);
@@ -2497,8 +2878,8 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.TextInputValue) {
             this.#rawInnerValue = staticValue;
             this.updateTextInputValue();
-        } else if(kind === fastn_dom.PropertyKind.DefaultTextInputValue) {
-            if(!fastn_utils.isNull(this.#rawInnerValue)) {
+        } else if (kind === fastn_dom.PropertyKind.DefaultTextInputValue) {
+            if (!fastn_utils.isNull(this.#rawInnerValue)) {
                 return;
             }
             this.#rawInnerValue = staticValue;
@@ -2522,7 +2903,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
-            if(fastn_utils.isNull(staticValue)) {
+            if (fastn_utils.isNull(staticValue)) {
                 return;
             }
             this.updateToAnchor(staticValue);
@@ -2530,20 +2911,24 @@ class Node2 {
             if (fastn_utils.isNull(staticValue)) {
                 this.removeAttribute("rel");
             }
-            let rel_list = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            let rel_list = staticValue.map((obj) =>
+                fastn_utils.getStaticValue(obj.item),
+            );
             this.attachAttribute("rel", rel_list.join(" "));
         } else if (kind === fastn_dom.PropertyKind.OpenInNewTab) {
             // open_in_new_tab is boolean type
             switch (staticValue) {
-              case 'true':
-              case true:
-                this.attachAttribute("target", "_blank");
-                break;
-              default:
-                this.attachAttribute("target", staticValue);
+                case "true":
+                case true:
+                    this.attachAttribute("target", "_blank");
+                    break;
+                default:
+                    this.attachAttribute("target", staticValue);
             }
         } else if (kind === fastn_dom.PropertyKind.TextStyle) {
-            let styles = staticValue?.map(obj => fastn_utils.getStaticValue(obj.item));
+            let styles = staticValue?.map((obj) =>
+                fastn_utils.getStaticValue(obj.item),
+            );
             this.attachTextStyles(styles);
         } else if (kind === fastn_dom.PropertyKind.Region) {
             this.updateTagName(staticValue);
@@ -2558,81 +2943,112 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Src) {
             this.attachAttribute("src", staticValue);
         } else if (kind === fastn_dom.PropertyKind.ImageSrc) {
-            ftd.dark_mode.addClosure(fastn.closure(() => {
-                if (fastn_utils.isNull(staticValue)) {
-                    this.attachAttribute("src", staticValue);
-                    return;
-                }
-                const is_dark_mode = ftd.dark_mode.get();
-                const src = staticValue.get(is_dark_mode ? 'dark' : 'light');
-                if (!ssr) {
-                    let image_node = this.#node;
-                    if( image_node.nodeName.toLowerCase() === "a" ) {
-                        let childNodes = image_node.childNodes;
-                        childNodes.forEach(function(child) {
-                            if (child.nodeName.toLowerCase() === "img")
-                                image_node = child;
-                        });
-                    }
-                    image_node.setAttribute("src", fastn_utils.getStaticValue(src));
-                }
-                else {
-                    this.attachAttribute("src", fastn_utils.getStaticValue(src));
-                }
-            }).addNodeProperty(this, null, inherited));
+            ftd.dark_mode.addClosure(
+                fastn
+                    .closure(() => {
+                        if (fastn_utils.isNull(staticValue)) {
+                            this.attachAttribute("src", staticValue);
+                            return;
+                        }
+                        const is_dark_mode = ftd.dark_mode.get();
+                        const src = staticValue.get(
+                            is_dark_mode ? "dark" : "light",
+                        );
+                        if (!ssr) {
+                            let image_node = this.#node;
+                            if (image_node.nodeName.toLowerCase() === "a") {
+                                let childNodes = image_node.childNodes;
+                                childNodes.forEach(function (child) {
+                                    if (child.nodeName.toLowerCase() === "img")
+                                        image_node = child;
+                                });
+                            }
+                            image_node.setAttribute(
+                                "src",
+                                fastn_utils.getStaticValue(src),
+                            );
+                        } else {
+                            this.attachAttribute(
+                                "src",
+                                fastn_utils.getStaticValue(src),
+                            );
+                        }
+                    })
+                    .addNodeProperty(this, null, inherited),
+            );
             this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Alt) {
             this.attachAttribute("alt", staticValue);
         } else if (kind === fastn_dom.PropertyKind.VideoSrc) {
-            ftd.dark_mode.addClosure(fastn.closure(() => {
-                if (fastn_utils.isNull(staticValue)) {
-                    this.attachAttribute("src", staticValue);
-                    return;
-                }
-                const is_dark_mode = ftd.dark_mode.get();
-                const src = staticValue.get(is_dark_mode ? 'dark' : 'light');
+            ftd.dark_mode.addClosure(
+                fastn
+                    .closure(() => {
+                        if (fastn_utils.isNull(staticValue)) {
+                            this.attachAttribute("src", staticValue);
+                            return;
+                        }
+                        const is_dark_mode = ftd.dark_mode.get();
+                        const src = staticValue.get(
+                            is_dark_mode ? "dark" : "light",
+                        );
 
-                this.attachAttribute("src", fastn_utils.getStaticValue(src));
-            }).addNodeProperty(this, null, inherited));
+                        this.attachAttribute(
+                            "src",
+                            fastn_utils.getStaticValue(src),
+                        );
+                    })
+                    .addNodeProperty(this, null, inherited),
+            );
             this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Autoplay) {
-            if(staticValue) {
+            if (staticValue) {
                 this.attachAttribute("autoplay", staticValue);
             } else {
                 this.removeAttribute("autoplay");
             }
         } else if (kind === fastn_dom.PropertyKind.Muted) {
-            if(staticValue) {
+            if (staticValue) {
                 this.attachAttribute("muted", staticValue);
             } else {
                 this.removeAttribute("muted");
             }
         } else if (kind === fastn_dom.PropertyKind.Controls) {
-            if(staticValue) {
+            if (staticValue) {
                 this.attachAttribute("controls", staticValue);
             } else {
                 this.removeAttribute("controls");
             }
         } else if (kind === fastn_dom.PropertyKind.LoopVideo) {
-            if(staticValue) {
+            if (staticValue) {
                 this.attachAttribute("loop", staticValue);
             } else {
                 this.removeAttribute("loop");
             }
         } else if (kind === fastn_dom.PropertyKind.Poster) {
-            ftd.dark_mode.addClosure(fastn.closure(() => {
-                if (fastn_utils.isNull(staticValue)) {
-                    this.attachAttribute("poster", staticValue);
-                    return;
-                }
-                const is_dark_mode = ftd.dark_mode.get();
-                const posterSrc = staticValue.get(is_dark_mode ? 'dark' : 'light');
+            ftd.dark_mode.addClosure(
+                fastn
+                    .closure(() => {
+                        if (fastn_utils.isNull(staticValue)) {
+                            this.attachAttribute("poster", staticValue);
+                            return;
+                        }
+                        const is_dark_mode = ftd.dark_mode.get();
+                        const posterSrc = staticValue.get(
+                            is_dark_mode ? "dark" : "light",
+                        );
 
-                this.attachAttribute("poster", fastn_utils.getStaticValue(posterSrc));
-            }).addNodeProperty(this, null, inherited));
+                        this.attachAttribute(
+                            "poster",
+                            fastn_utils.getStaticValue(posterSrc),
+                        );
+                    })
+                    .addNodeProperty(this, null, inherited),
+            );
             this.#mutables.push(ftd.dark_mode);
         } else if (kind === fastn_dom.PropertyKind.Fit) {
             this.attachCss("object-fit", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.FetchPriority) {
+            this.attachAttribute("fetchpriority", staticValue);
         } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
             if (fastn_utils.isNull(staticValue)) {
                 this.attachAttribute("src", staticValue);
@@ -2641,19 +3057,19 @@ class Node2 {
             const id_pattern = "^([a-zA-Z0-9_-]{11})$";
             let id = staticValue.match(id_pattern);
             if (!fastn_utils.isNull(id)) {
-                this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
+                this.attachAttribute(
+                    "src",
+                    `https:\/\/youtube.com/embed/${id[0]}`,
+                );
             } else {
                 this.attachAttribute("src", staticValue);
             }
-
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.Code) {
             if (!fastn_utils.isNull(staticValue)) {
-                let {
-                    modifiedText,
-                    highlightedLines
-                } = fastn_utils.findAndRemoveHighlighter(staticValue);
+                let { modifiedText, highlightedLines } =
+                    fastn_utils.findAndRemoveHighlighter(staticValue);
                 if (highlightedLines.length !== 0) {
                     this.attachAttribute("data-line", highlightedLines);
                 }
@@ -2661,19 +3077,23 @@ class Node2 {
             }
             let codeNode = this.#children[0].getNode();
             let codeText = fastn_utils.escapeHtmlInCode(staticValue);
-            codeNode.innerHTML= codeText;
-            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
+            codeNode.innerHTML = codeText;
+            this.#extraData.code = this.#extraData.code
+                ? this.#extraData.code
+                : {};
             fastn_utils.highlightCode(codeNode, this.#extraData.code);
-        }  else if (kind === fastn_dom.PropertyKind.CodeShowLineNumber) {
+        } else if (kind === fastn_dom.PropertyKind.CodeShowLineNumber) {
             if (staticValue) {
                 this.#node.classList.add("line-numbers");
             } else {
                 this.#node.classList.remove("line-numbers");
             }
         } else if (kind === fastn_dom.PropertyKind.CodeTheme) {
-            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
-            if(fastn_utils.isNull(staticValue)) {
-                if(!fastn_utils.isNull(this.#extraData.code.theme)) {
+            this.#extraData.code = this.#extraData.code
+                ? this.#extraData.code
+                : {};
+            if (fastn_utils.isNull(staticValue)) {
+                if (!fastn_utils.isNull(this.#extraData.code.theme)) {
                     this.#node.classList.remove(this.#extraData.code.theme);
                 }
                 return;
@@ -2682,7 +3102,7 @@ class Node2 {
                 fastn_utils.addCodeTheme(staticValue);
             }
             staticValue = fastn_utils.getStaticValue(staticValue);
-            let theme = staticValue.replace("\.", "-");
+            let theme = staticValue.replace(".", "-");
             if (this.#extraData.code.theme !== theme) {
                 let codeNode = this.#children[0].getNode();
                 this.#node.classList.remove(this.#extraData.code.theme);
@@ -2694,7 +3114,9 @@ class Node2 {
             }
         } else if (kind === fastn_dom.PropertyKind.CodeLanguage) {
             let language = `language-${staticValue}`;
-            this.#extraData.code = this.#extraData.code ? this.#extraData.code : {};
+            this.#extraData.code = this.#extraData.code
+                ? this.#extraData.code
+                : {};
             if (this.#extraData.code.language) {
                 this.#node.classList.remove(language);
             }
@@ -2706,68 +3128,130 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Favicon) {
             if (fastn_utils.isNull(staticValue)) return;
             this.setFavicon(staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle) {
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaTitle
+        ) {
             this.updateMetaTitle(staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle) {
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGTitle
+        ) {
             this.addMetaTagByProperty("og:title", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterTitle) {
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterTitle
+        ) {
             this.addMetaTagByName("twitter:title", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaDescription) {
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaDescription
+        ) {
             this.addMetaTagByName("description", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription) {
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription
+        ) {
             this.addMetaTagByProperty("og:description", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription) {
+        } else if (
+            kind ===
+            fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription
+        ) {
             this.addMetaTagByName("twitter:description", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGImage) {
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaOGImage
+        ) {
             // staticValue is of ftd.raw-image-src RecordInstance type
             if (fastn_utils.isNull(staticValue)) {
                 this.removeMetaTagByProperty("og:image");
                 return;
             }
-            this.addMetaTagByProperty("og:image", fastn_utils.getStaticValue(staticValue.get('src')));
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage) {
+            this.addMetaTagByProperty(
+                "og:image",
+                fastn_utils.getStaticValue(staticValue.get("src")),
+            );
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage
+        ) {
             // staticValue is of ftd.raw-image-src RecordInstance type
             if (fastn_utils.isNull(staticValue)) {
                 this.removeMetaTagByName("twitter:image");
                 return;
             }
-            this.addMetaTagByName("twitter:image", fastn_utils.getStaticValue(staticValue.get('src')));
-        } else if (kind === fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor) {
+            this.addMetaTagByName(
+                "twitter:image",
+                fastn_utils.getStaticValue(staticValue.get("src")),
+            );
+        } else if (
+            kind === fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor
+        ) {
             // staticValue is of ftd.color RecordInstance type
             if (fastn_utils.isNull(staticValue)) {
                 this.removeMetaTagByName("theme-color");
                 return;
             }
-            this.addMetaTagByName("theme-color", fastn_utils.getStaticValue(staticValue.get('light')));
-        } else if (kind === fastn_dom.PropertyKind.IntegerValue
-            || kind === fastn_dom.PropertyKind.DecimalValue
-            || kind === fastn_dom.PropertyKind.BooleanValue) {
+            this.addMetaTagByName(
+                "theme-color",
+                fastn_utils.getStaticValue(staticValue.get("light")),
+            );
+        } else if (
+            kind ===
+            fastn_dom.PropertyKind.DocumentProperties
+                .MetaFacebookDomainVerification
+        ) {
+            if (fastn_utils.isNull(staticValue)) {
+                this.removeMetaTagByName("facebook-domain-verification");
+                return;
+            }
+            this.addMetaTagByName(
+                "facebook-domain-verification",
+                fastn_utils.getStaticValue(staticValue),
+            );
+        } else if (
+            kind === fastn_dom.PropertyKind.IntegerValue ||
+            kind === fastn_dom.PropertyKind.DecimalValue ||
+            kind === fastn_dom.PropertyKind.BooleanValue
+        ) {
             this.#node.innerHTML = staticValue;
             this.#rawInnerValue = staticValue;
         } else if (kind === fastn_dom.PropertyKind.StringValue) {
             this.#rawInnerValue = staticValue;
-            staticValue = fastn_utils.markdown_inline(fastn_utils.escapeHtmlInMarkdown(staticValue));
-            staticValue = fastn_utils.process_post_markdown(this.#node, staticValue);
-            if(!fastn_utils.isNull(staticValue)) {
+            staticValue = fastn_utils.markdown_inline(
+                fastn_utils.escapeHtmlInMarkdown(staticValue),
+            );
+            staticValue = fastn_utils.process_post_markdown(
+                this.#node,
+                staticValue,
+            );
+            if (!fastn_utils.isNull(staticValue)) {
                 this.#node.innerHTML = staticValue;
             } else {
                 this.#node.innerHTML = "";
             }
         } else {
-            throw ("invalid fastn_dom.PropertyKind: " + kind);
+            throw "invalid fastn_dom.PropertyKind: " + kind;
         }
     }
     setProperty(kind, value, inherited) {
         if (value instanceof fastn.mutableClass) {
-            this.setDynamicProperty(kind, [value], () => { return value.get(); }, inherited);
+            this.setDynamicProperty(
+                kind,
+                [value],
+                () => {
+                    return value.get();
+                },
+                inherited,
+            );
         } else if (value instanceof PropertyValueAsClosure) {
-            this.setDynamicProperty(kind, value.deps, value.closureFunction, inherited);
+            this.setDynamicProperty(
+                kind,
+                value.deps,
+                value.closureFunction,
+                inherited,
+            );
         } else {
             this.setStaticProperty(kind, value, inherited);
         }
     }
     setDynamicProperty(kind, deps, func, inherited) {
-        let closure = fastn.closure(func).addNodeProperty(this, kind, inherited);
+        let closure = fastn
+            .closure(func)
+            .addNodeProperty(this, kind, inherited);
         for (let dep in deps) {
             if (fastn_utils.isNull(deps[dep]) || !deps[dep].addClosure) {
                 continue;
@@ -2780,7 +3264,7 @@ class Node2 {
         return this.#node;
     }
     getExtraData() {
-        return this.#extraData
+        return this.#extraData;
     }
     getChildren() {
         return this.#children;
@@ -2794,19 +3278,29 @@ class Node2 {
     addEventHandler(event, func) {
         if (event === fastn_dom.Event.Click) {
             let onclickEvents = this.mergeFnCalls(this.#node.onclick, func);
-            if (fastn_utils.isNull(this.#node.onclick)) this.attachCss("cursor", "pointer");
+            if (fastn_utils.isNull(this.#node.onclick))
+                this.attachCss("cursor", "pointer");
             this.#node.onclick = onclickEvents;
         } else if (event === fastn_dom.Event.MouseEnter) {
-            let mouseEnterEvents = this.mergeFnCalls(this.#node.onmouseenter, func);
+            let mouseEnterEvents = this.mergeFnCalls(
+                this.#node.onmouseenter,
+                func,
+            );
             this.#node.onmouseenter = mouseEnterEvents;
         } else if (event === fastn_dom.Event.MouseLeave) {
-            let mouseLeaveEvents = this.mergeFnCalls(this.#node.onmouseleave, func);
+            let mouseLeaveEvents = this.mergeFnCalls(
+                this.#node.onmouseleave,
+                func,
+            );
             this.#node.onmouseleave = mouseLeaveEvents;
         } else if (event === fastn_dom.Event.ClickOutside) {
             ftd.clickOutsideEvents.push([this, func]);
         } else if (!!event[0] && event[0] === fastn_dom.Event.GlobalKey()[0]) {
             ftd.globalKeyEvents.push([this, func, event[1]]);
-        } else if (!!event[0] && event[0] === fastn_dom.Event.GlobalKeySeq()[0]) {
+        } else if (
+            !!event[0] &&
+            event[0] === fastn_dom.Event.GlobalKeySeq()[0]
+        ) {
             ftd.globalKeySeqEvents.push([this, func, event[1]]);
         } else if (event === fastn_dom.Event.Input) {
             let onInputEvents = this.mergeFnCalls(this.#node.oninput, func);
@@ -2847,7 +3341,10 @@ class ConditionalDom {
     #conditionUI;
 
     constructor(parent, deps, condition, node_constructor) {
-        this.#marker = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Comment);
+        this.#marker = fastn_dom.createKernel(
+            parent,
+            fastn_dom.ElementKind.Comment,
+        );
         this.#parent = parent;
 
         this.#conditionUI = null;
@@ -2855,14 +3352,21 @@ class ConditionalDom {
             fastn_utils.resetFullHeight();
             if (condition()) {
                 if (this.#conditionUI) {
-                    let conditionUI = fastn_utils.flattenArray(this.#conditionUI);
+                    let conditionUI = fastn_utils.flattenArray(
+                        this.#conditionUI,
+                    );
                     while (conditionUI.length > 0) {
                         let poppedElement = conditionUI.pop();
                         poppedElement.destroy();
                     }
                 }
-                this.#conditionUI = node_constructor(new ParentNodeWithSibiling(this.#parent, this.#marker));
-                if (!Array.isArray(this.#conditionUI) && fastn_utils.isWrapperNode(this.#conditionUI.getTagName())) {
+                this.#conditionUI = node_constructor(
+                    new ParentNodeWithSibiling(this.#parent, this.#marker),
+                );
+                if (
+                    !Array.isArray(this.#conditionUI) &&
+                    fastn_utils.isWrapperNode(this.#conditionUI.getTagName())
+                ) {
                     this.#conditionUI = this.#conditionUI.getChildren();
                 }
             } else if (this.#conditionUI) {
@@ -2874,8 +3378,8 @@ class ConditionalDom {
                 this.#conditionUI = null;
             }
             fastn_utils.setFullHeight();
-        })
-        deps.forEach(dep => {
+        });
+        deps.forEach((dep) => {
             if (!fastn_utils.isNull(dep) && dep.addClosure) {
                 dep.addClosure(closure);
             }
@@ -2887,7 +3391,7 @@ class ConditionalDom {
     }
 
     getParent() {
-        let nodes =  [this.#marker];
+        let nodes = [this.#marker];
         if (this.#conditionUI) {
             nodes.push(this.#conditionUI);
         }
@@ -2897,11 +3401,16 @@ class ConditionalDom {
 
 fastn_dom.createKernel = function (parent, kind) {
     return new Node2(parent, kind);
-}
+};
 
-fastn_dom.conditionalDom = function (parent, deps, condition, node_constructor) {
+fastn_dom.conditionalDom = function (
+    parent,
+    deps,
+    condition,
+    node_constructor,
+) {
     return new ConditionalDom(parent, deps, condition, node_constructor);
-}
+};
 
 class ParentNodeWithSibiling {
     #parent;
@@ -2925,7 +3434,10 @@ class ForLoop {
     #parent;
     #nodes;
     constructor(parent, node_constructor, list) {
-        this.#wrapper = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Comment);
+        this.#wrapper = fastn_dom.createKernel(
+            parent,
+            fastn_dom.ElementKind.Comment,
+        );
         this.#parent = parent;
         this.#node_constructor = node_constructor;
         this.#list = list;
@@ -2937,13 +3449,19 @@ class ForLoop {
         }
         fastn_utils.setFullHeight();
     }
-    createNode(index, resizeBodyHeight= true) {
+    createNode(index, resizeBodyHeight = true) {
         if (resizeBodyHeight) {
             fastn_utils.resetFullHeight();
         }
-        let parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#wrapper);
+        let parentWithSibiling = new ParentNodeWithSibiling(
+            this.#parent,
+            this.#wrapper,
+        );
         if (index !== 0) {
-            parentWithSibiling = new ParentNodeWithSibiling(this.#parent, this.#nodes[index-1]);
+            parentWithSibiling = new ParentNodeWithSibiling(
+                this.#parent,
+                this.#nodes[index - 1],
+            );
         }
         let v = this.#list.get(index);
         let node = this.#node_constructor(parentWithSibiling, v.item, v.index);
@@ -2961,7 +3479,7 @@ class ForLoop {
         }
         fastn_utils.setFullHeight();
     }
-    deleteAllNode(resizeBodyHeight= true) {
+    deleteAllNode(resizeBodyHeight = true) {
         if (resizeBodyHeight) {
             fastn_utils.resetFullHeight();
         }
@@ -2988,7 +3506,7 @@ class ForLoop {
 
 fastn_dom.forLoop = function (parent, node_constructor, list) {
     return new ForLoop(parent, node_constructor, list);
-}
+};
 let fastn_utils = {
     htmlNode(kind) {
         let node = "div";
@@ -3010,8 +3528,10 @@ let fastn_utils = {
             node = "img";
         } else if (kind === fastn_dom.ElementKind.Video) {
             node = "video";
-        } else if (kind === fastn_dom.ElementKind.ContainerElement ||
-            kind === fastn_dom.ElementKind.Text) {
+        } else if (
+            kind === fastn_dom.ElementKind.ContainerElement ||
+            kind === fastn_dom.ElementKind.Text
+        ) {
             node = "div";
         } else if (kind === fastn_dom.ElementKind.Rive) {
             node = "canvas";
@@ -3025,22 +3545,25 @@ let fastn_utils = {
         } else if (kind === fastn_dom.ElementKind.Wrapper) {
             node = fastn_dom.wrapperNode;
         } else if (kind === fastn_dom.ElementKind.Code) {
-           node = "pre";
+            node = "pre";
         } else if (kind === fastn_dom.ElementKind.CodeChild) {
             node = "code";
         } else if (kind[0] === fastn_dom.ElementKind.WebComponent()[0]) {
             let [webcomponent, args] = kind[1];
             node = `${webcomponent}`;
             fastn_dom.webComponent.push(args);
-            attributes[fastn_dom.webComponentArgument] = fastn_dom.webComponent.length - 1;
+            attributes[fastn_dom.webComponentArgument] =
+                fastn_dom.webComponent.length - 1;
         }
         return [node, css, attributes];
     },
     createStyle(cssClass, obj) {
         if (doubleBuffering) {
-            fastn_dom.styleClasses = `${fastn_dom.styleClasses}${getClassAsString(cssClass, obj)}\n`;
+            fastn_dom.styleClasses = `${
+                fastn_dom.styleClasses
+            }${getClassAsString(cssClass, obj)}\n`;
         } else {
-            let styles = document.getElementById('styles');
+            let styles = document.getElementById("styles");
             let newClasses = getClassAsString(cssClass, obj);
             let textNode = document.createTextNode(newClasses);
             if (styles.styleSheet) {
@@ -3052,37 +3575,37 @@ let fastn_utils = {
     },
     getStaticValue(obj) {
         if (obj instanceof fastn.mutableClass) {
-           return this.getStaticValue(obj.get());
+            return this.getStaticValue(obj.get());
         } else if (obj instanceof fastn.mutableListClass) {
             return obj.getList();
-        }/*
+        } /*
         Todo: Make this work
         else if (obj instanceof fastn.recordInstanceClass) {
             return obj.getAllFields();
         }*/ else {
-           return obj;
+            return obj;
         }
     },
     getInheritedValues(default_args, inherited, function_args) {
         let record_fields = {
-            "colors": ftd.default_colors.getClone().setAndReturn("is_root", true),
-            "types": ftd.default_types.getClone().setAndReturn("is_root", true)
-        }
+            colors: ftd.default_colors.getClone().setAndReturn("is_root", true),
+            types: ftd.default_types.getClone().setAndReturn("is_root", true),
+        };
         Object.assign(record_fields, default_args);
         let fields = {};
         if (inherited instanceof fastn.recordInstanceClass) {
             fields = inherited.getClonedFields();
             if (fastn_utils.getStaticValue(fields["colors"].get("is_root"))) {
-               delete fields.colors;
+                delete fields.colors;
             }
             if (fastn_utils.getStaticValue(fields["types"].get("is_root"))) {
-               delete fields.types;
+                delete fields.types;
             }
         }
         Object.assign(record_fields, fields);
         Object.assign(record_fields, function_args);
         return fastn.recordInstance({
-              ...record_fields
+            ...record_fields,
         });
     },
     removeNonFastnClasses(node) {
@@ -3096,7 +3619,8 @@ let fastn_utils = {
         const classesToRemove = [];
 
         for (const className of iterativeClassList) {
-            if (!className.startsWith('__') && 
+            if (
+                !className.startsWith("__") &&
                 !internalClassNames.includes(className) &&
                 className !== extraCodeData?.language &&
                 className !== extraCodeData?.theme
@@ -3110,10 +3634,11 @@ let fastn_utils = {
         }
     },
     staticToMutables(obj) {
-        if (!(obj instanceof fastn.mutableClass) &&
+        if (
+            !(obj instanceof fastn.mutableClass) &&
             !(obj instanceof fastn.mutableListClass) &&
-            !(obj instanceof fastn.recordInstanceClass))
-        {
+            !(obj instanceof fastn.recordInstanceClass)
+        ) {
             if (Array.isArray(obj)) {
                 let list = [];
                 for (let index in obj) {
@@ -3136,8 +3661,9 @@ let fastn_utils = {
     getFlattenStaticValue(obj) {
         let staticValue = fastn_utils.getStaticValue(obj);
         if (Array.isArray(staticValue)) {
-            return staticValue.map(func =>
-                fastn_utils.getFlattenStaticValue(func.item));
+            return staticValue.map((func) =>
+                fastn_utils.getFlattenStaticValue(func.item),
+            );
         } /*
         Todo: Make this work
         else if (typeof staticValue === 'object' && fastn_utils.isNull(staticValue)) {
@@ -3158,8 +3684,10 @@ let fastn_utils = {
     },
     // Todo: Merge getterByKey with getter
     getterByKey(value, index) {
-        if (value instanceof fastn.mutableClass
-            || value instanceof fastn.recordInstanceClass) {
+        if (
+            value instanceof fastn.mutableClass ||
+            value instanceof fastn.recordInstanceClass
+        ) {
             return value.get(index);
         } else if (value instanceof fastn.mutableListClass) {
             return value.get(index).item;
@@ -3169,8 +3697,8 @@ let fastn_utils = {
     },
     setter(variable, value) {
         if (!fastn_utils.isNull(variable) && variable.set) {
-           variable.set(value);
-           return true;
+            variable.set(value);
+            return true;
         }
         return false;
     },
@@ -3178,19 +3706,27 @@ let fastn_utils = {
         return null;
     },
     sameResponsiveRole(desktop, mobile) {
-       return (desktop.get("font_family") ===  mobile.get("font_family")) &&
-       (desktop.get("letter_spacing") ===  mobile.get("letter_spacing")) &&
-       (desktop.get("line_height") ===  mobile.get("line_height")) &&
-       (desktop.get("size") ===  mobile.get("size")) &&
-       (desktop.get("weight") ===  mobile.get("weight"));
+        return (
+            desktop.get("font_family") === mobile.get("font_family") &&
+            desktop.get("letter_spacing") === mobile.get("letter_spacing") &&
+            desktop.get("line_height") === mobile.get("line_height") &&
+            desktop.get("size") === mobile.get("size") &&
+            desktop.get("weight") === mobile.get("weight")
+        );
     },
     getRoleValues(value) {
-        let font_families = fastn_utils.getStaticValue(value.get("font_family"));
+        let font_families = fastn_utils.getStaticValue(
+            value.get("font_family"),
+        );
         if (Array.isArray(font_families))
-            font_families = font_families.map(obj => fastn_utils.getStaticValue(obj.item)).join(', ');
+            font_families = font_families
+                .map((obj) => fastn_utils.getStaticValue(obj.item))
+                .join(", ");
         return {
             "font-family": font_families,
-            "letter-spacing": fastn_utils.getStaticValue(value.get("letter_spacing")),
+            "letter-spacing": fastn_utils.getStaticValue(
+                value.get("letter_spacing"),
+            ),
             "font-size": fastn_utils.getStaticValue(value.get("size")),
             "font-weight": fastn_utils.getStaticValue(value.get("weight")),
             "line-height": fastn_utils.getStaticValue(value.get("line_height")),
@@ -3200,18 +3736,19 @@ let fastn_utils = {
         if (value === null || value === undefined) {
             return value;
         }
-        if (value instanceof fastn.mutableClass ||
-            value instanceof fastn.mutableListClass )
-        {
+        if (
+            value instanceof fastn.mutableClass ||
+            value instanceof fastn.mutableListClass
+        ) {
             return value.getClone();
         }
-           if (value instanceof fastn.recordInstanceClass) {
+        if (value instanceof fastn.recordInstanceClass) {
             return value.getClone();
         }
         return value;
     },
     getListItem(value) {
-        if (value === undefined){
+        if (value === undefined) {
             return null;
         }
         if (value instanceof Object && value.hasOwnProperty("item")) {
@@ -3222,16 +3759,17 @@ let fastn_utils = {
     getEventKey(event) {
         if (65 <= event.keyCode && event.keyCode <= 90) {
             return String.fromCharCode(event.keyCode).toLowerCase();
-        }
-        else {
+        } else {
             return event.key;
         }
     },
     createNestedObject(currentObject, path, value) {
-        const properties = path.split('.');
+        const properties = path.split(".");
 
         for (let i = 0; i < properties.length - 1; i++) {
-            let property = fastn_utils.private.addUnderscoreToStart(properties[i]);
+            let property = fastn_utils.private.addUnderscoreToStart(
+                properties[i],
+            );
             if (currentObject instanceof fastn.recordInstanceClass) {
                 if (currentObject.get(property) === undefined) {
                     currentObject.set(property, fastn.recordInstance({}));
@@ -3247,7 +3785,7 @@ let fastn_utils = {
 
         const innermostProperty = properties[properties.length - 1];
         if (currentObject instanceof fastn.recordInstanceClass) {
-            currentObject.set(innermostProperty, value)
+            currentObject.set(innermostProperty, value);
         } else {
             currentObject[innermostProperty] = value;
         }
@@ -3266,11 +3804,20 @@ let fastn_utils = {
         i = i.toString();
         const { space_before, space_after } = fastn_utils.private.spaces(i);
         const o = (() => {
-            let g = fastn_utils.private.replace_last_occurrence(marked.parse(i), "<p>", "");
+            let g = fastn_utils.private.replace_last_occurrence(
+                marked.parse(i),
+                "<p>",
+                "",
+            );
             g = fastn_utils.private.replace_last_occurrence(g, "</p>", "");
             return g;
         })();
-        return `${fastn_utils.private.repeated_space(space_before)}${o}${fastn_utils.private.repeated_space(space_after)}`.replace(/\n+$/, '');
+        return `${fastn_utils.private.repeated_space(
+            space_before,
+        )}${o}${fastn_utils.private.repeated_space(space_after)}`.replace(
+            /\n+$/,
+            "",
+        );
     },
 
     process_post_markdown(node, body) {
@@ -3279,23 +3826,31 @@ let fastn_utils = {
             divElement.innerHTML = body;
 
             const current_node = node;
-            const colorClasses = Array.from(current_node.classList).filter(className => className.startsWith('__c'));
-            const roleClasses = Array.from(current_node.classList).filter(className => className.startsWith('__rl'));
-            const tableElements = Array.from(divElement.getElementsByTagName('table'));
-            const codeElements = Array.from(divElement.getElementsByTagName('code'));
+            const colorClasses = Array.from(current_node.classList).filter(
+                (className) => className.startsWith("__c"),
+            );
+            const roleClasses = Array.from(current_node.classList).filter(
+                (className) => className.startsWith("__rl"),
+            );
+            const tableElements = Array.from(
+                divElement.getElementsByTagName("table"),
+            );
+            const codeElements = Array.from(
+                divElement.getElementsByTagName("code"),
+            );
 
-            tableElements.forEach(table => {
-                colorClasses.forEach(colorClass => {
+            tableElements.forEach((table) => {
+                colorClasses.forEach((colorClass) => {
                     table.classList.add(colorClass);
                 });
             });
 
-            codeElements.forEach(code => {
-                roleClasses.forEach(roleClass => {
-                    var roleCls = '.' + roleClass;
+            codeElements.forEach((code) => {
+                roleClasses.forEach((roleClass) => {
+                    var roleCls = "." + roleClass;
                     let role = fastn_dom.classes[roleCls];
-                    let roleValue = role['value'];
-                    let fontFamily = roleValue['font-family'];
+                    let roleValue = role["value"];
+                    let fontFamily = roleValue["font-family"];
                     code.style.fontFamily = fontFamily;
                 });
             });
@@ -3308,7 +3863,7 @@ let fastn_utils = {
         return a === null || a === undefined;
     },
     isCommentNode(node) {
-      return node === fastn_dom.commentNode;
+        return node === fastn_dom.commentNode;
     },
     isWrapperNode(node) {
         return node === fastn_dom.wrapperNode;
@@ -3316,10 +3871,10 @@ let fastn_utils = {
     nextSibling(node, parent) {
         // For Conditional DOM
         while (Array.isArray(node)) {
-            node = node[node.length-1];
+            node = node[node.length - 1];
         }
         if (node.nextSibling) {
-          return node.nextSibling;
+            return node.nextSibling;
         }
         if (node.getNode && node.getNode().nextSibling !== undefined) {
             return node.getNode().nextSibling;
@@ -3330,7 +3885,7 @@ let fastn_utils = {
         let tagName = node;
         let element = fastnVirtual.document.createElement(node);
         for (let key in attributes) {
-            element.setAttribute(key, attributes[key])
+            element.setAttribute(key, attributes[key]);
         }
         for (let c in classes) {
             element.classList.add(classes[c]);
@@ -3379,11 +3934,11 @@ let fastn_utils = {
      * console.log(result.highlightedLines);
      */
     findAndRemoveHighlighter(text) {
-        const lines = text.split('\n');
-        const highlighter = ';; <hl>';
+        const lines = text.split("\n");
+        const highlighter = ";; <hl>";
         const result = {
-            modifiedText: '',
-            highlightedLines: ''
+            modifiedText: "",
+            highlightedLines: "",
         };
 
         let highlightedLines = [];
@@ -3393,13 +3948,17 @@ let fastn_utils = {
 
             if (highlighterIndex !== -1) {
                 highlightedLines.push(i + 1); // Adding 1 to convert to human-readable line numbers
-                result.modifiedText += line.substring(0, highlighterIndex) + line.substring(highlighterIndex + highlighter.length) + '\n';
+                result.modifiedText +=
+                    line.substring(0, highlighterIndex) +
+                    line.substring(highlighterIndex + highlighter.length) +
+                    "\n";
             } else {
-                result.modifiedText += line + '\n';
+                result.modifiedText += line + "\n";
             }
         }
 
-        result.highlightedLines = fastn_utils.private.mergeNumbers(highlightedLines);
+        result.highlightedLines =
+            fastn_utils.private.mergeNumbers(highlightedLines);
 
         return result;
     },
@@ -3407,17 +3966,21 @@ let fastn_utils = {
         return node.getNode().value;
     },
     setFullHeight() {
-        if(!ssr) {
+        if (!ssr) {
             document.body.style.height = `max(${document.documentElement.scrollHeight}px, 100%)`;
         }
     },
     resetFullHeight() {
-        if(!ssr) {
+        if (!ssr) {
             document.body.style.height = `100%`;
         }
     },
     highlightCode(codeElement, extraCodeData) {
-        if (!ssr && !fastn_utils.isNull(extraCodeData.language) && !fastn_utils.isNull(extraCodeData.theme)) {
+        if (
+            !ssr &&
+            !fastn_utils.isNull(extraCodeData.language) &&
+            !fastn_utils.isNull(extraCodeData.theme)
+        ) {
             Prism.highlightElement(codeElement);
         }
     },
@@ -3425,14 +3988,14 @@ let fastn_utils = {
     //Taken from: https://byby.dev/js-slugify-string
     slugify(str) {
         return String(str)
-            .normalize('NFKD') // split accented characters into their base characters and diacritical marks
-            .replace('.', '-')
-            .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
+            .normalize("NFKD") // split accented characters into their base characters and diacritical marks
+            .replace(".", "-")
+            .replace(/[\u0300-\u036f]/g, "") // remove all the accents, which happen to be all in the \u03xx UNICODE block.
             .trim() // trim leading or trailing whitespace
             .toLowerCase() // convert to lowercase
-            .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
-            .replace(/\s+/g, '-') // replace spaces with hyphens
-            .replace(/-+/g, '-'); // remove consecutive hyphens
+            .replace(/[^a-z0-9 -]/g, "") // remove non-alphanumeric characters
+            .replace(/\s+/g, "-") // replace spaces with hyphens
+            .replace(/-+/g, "-"); // remove consecutive hyphens
     },
 
     getEventListeners(node) {
@@ -3442,43 +4005,46 @@ let fastn_utils = {
             onmouseenter: node.onmouseenter,
             oninput: node.oninput,
             onblur: node.onblur,
-            onfocus: node.onfocus
-        }
+            onfocus: node.onfocus,
+        };
     },
 
     flattenArray(arr) {
         return fastn_utils.private.flattenArray([arr]);
     },
     toSnakeCase(value) {
-        return value.trim().split('').map((v, i) => {
-            const lowercased = v.toLowerCase();
-            if(v == " ") {
-              return "_";
-            }
-            if(v != lowercased && i > 0) {
-                return `_${lowercased}`
-            }
-            return lowercased;
-        }).join('');
+        return value
+            .trim()
+            .split("")
+            .map((v, i) => {
+                const lowercased = v.toLowerCase();
+                if (v == " ") {
+                    return "_";
+                }
+                if (v != lowercased && i > 0) {
+                    return `_${lowercased}`;
+                }
+                return lowercased;
+            })
+            .join("");
     },
-
     escapeHtmlInCode(str) {
         return str.replace(/[<]/g, "&lt;");
     },
 
     escapeHtmlInMarkdown(str) {
-        if(typeof str !== 'string') {
+        if (typeof str !== "string") {
             return str;
         }
 
         let result = "";
         let ch_map = {
-            '<': "&lt;",
-            '>': "&gt;",
-            '&': "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            "&": "&amp;",
             '"': "&quot;",
             "'": "&#39;",
-            '/': "&#47;",
+            "/": "&#47;",
         };
         let foundBackTick = false;
         for (var i = 0; i < str.length; i++) {
@@ -3493,7 +4059,10 @@ let fastn_utils = {
             // Also the `/` which is followed by `<` should be escaped.
             // For instance: `</` should be escaped but `http://` should not
             // be escaped. (`(current === '/' && !(i > 0 && str[i-1] === "<"))`)
-            if (foundBackTick || (current === '/' && !(i > 0 && str[i-1] === "<"))) {
+            if (
+                foundBackTick ||
+                (current === "/" && !(i > 0 && str[i - 1] === "<"))
+            ) {
                 result += current;
                 continue;
             }
@@ -3511,7 +4080,10 @@ let fastn_utils = {
                 args[arg] = passed_args[arg];
                 continue;
             }
-            if (default_args.hasOwnProperty(arg) && fastn_utils.getStaticValue(passed_args[arg]) !== undefined) {
+            if (
+                default_args.hasOwnProperty(arg) &&
+                fastn_utils.getStaticValue(passed_args[arg]) !== undefined
+            ) {
                 args[arg] = passed_args[arg];
             }
         }
@@ -3535,13 +4107,16 @@ let fastn_utils = {
         // newChildrenWrapper
         fastn_utils.private.replaceChildren(document.body, newChildrenWrapper);
     },
-}
-
+};
 
 fastn_utils.private = {
     flattenArray(arr) {
         return arr.reduce((acc, item) => {
-            return acc.concat(Array.isArray(item) ? fastn_utils.private.flattenArray(item) : item);
+            return acc.concat(
+                Array.isArray(item)
+                    ? fastn_utils.private.flattenArray(item)
+                    : item,
+            );
         }, []);
     },
     /**
@@ -3555,7 +4130,7 @@ fastn_utils.private = {
     spaces(s) {
         let space_before = 0;
         for (let i = 0; i < s.length; i++) {
-            if (s[i] !== ' ') {
+            if (s[i] !== " ") {
                 space_before = i;
                 break;
             }
@@ -3567,7 +4142,7 @@ fastn_utils.private = {
 
         let space_after = 0;
         for (let i = s.length - 1; i >= 0; i--) {
-            if (s[i] !== ' ') {
+            if (s[i] !== " ") {
                 space_after = s.length - 1 - i;
                 break;
             }
@@ -3601,7 +4176,7 @@ fastn_utils.private = {
      * @returns {string} - A string with 'n' spaces concatenated together.
      */
     repeated_space(n) {
-        return Array.from({ length: n }, () => ' ').join('');
+        return Array.from({ length: n }, () => " ").join("");
     },
     /**
      * Merges consecutive numbers in a comma-separated list into ranges.
@@ -3642,11 +4217,11 @@ fastn_utils.private = {
             mergedRanges.push(`${start}-${end}`);
         }
 
-        return mergedRanges.join(',');
+        return mergedRanges.join(",");
     },
     addUnderscoreToStart(text) {
         if (/^\d/.test(text)) {
-            return '_' + text;
+            return "_" + text;
         }
         return text;
     },
@@ -3667,7 +4242,7 @@ fastn_utils.private = {
         // Loop through the direct children and remove those with tagName 'div'
         for (var i = children.length - 1; i >= 0; i--) {
             var child = children[i];
-            if (child.tagName === 'DIV') {
+            if (child.tagName === "DIV") {
                 parent.removeChild(child);
             }
         }
@@ -3688,17 +4263,22 @@ fastn_utils.private = {
         var expirationDays = 30;
         if (expirationDays) {
             var date = new Date();
-            date.setTime(date.getTime() + (expirationDays * 24 * 60 * 60 * 1000));
+            date.setTime(date.getTime() + expirationDays * 24 * 60 * 60 * 1000);
             expires = "; expires=" + date.toUTCString();
         }
 
-        document.cookie = cookieName + "=" + encodeURIComponent(cookieValue) + expires + "; path=/";
+        document.cookie =
+            cookieName +
+            "=" +
+            encodeURIComponent(cookieValue) +
+            expires +
+            "; path=/";
     },
     getCookie(cookieName) {
         cookieName = fastn_utils.getStaticValue(cookieName);
         var name = cookieName + "=";
         var decodedCookie = decodeURIComponent(document.cookie);
-        var cookieArray = decodedCookie.split(';');
+        var cookieArray = decodedCookie.split(";");
 
         for (var i = 0; i < cookieArray.length; i++) {
             var cookie = cookieArray[i].trim();
@@ -3709,13 +4289,12 @@ fastn_utils.private = {
 
         return "None";
     },
-}
-
+};
 
 /*Object.prototype.get = function(index) {
     return this[index];
 }*/
-let fastnVirtual = {}
+let fastnVirtual = {};
 
 let id_counter = 0;
 let ssr = false;
@@ -3728,10 +4307,10 @@ class ClassList {
     }
 
     remove(itemToRemove) {
-        this.#classes.filter(item => item !== itemToRemove)
+        this.#classes.filter((item) => item !== itemToRemove);
     }
     toString() {
-        return this.#classes.join(' ');
+        return this.#classes.join(" ");
     }
     getClasses() {
         return this.#classes;
@@ -3739,11 +4318,11 @@ class ClassList {
 }
 
 class Node {
-    id
-    #dataId
-    #tagName
-    #children
-    #attributes
+    id;
+    #dataId;
+    #tagName;
+    #children;
+    #attributes;
     constructor(id, tagName) {
         this.#tagName = tagName;
         this.#dataId = id;
@@ -3785,10 +4364,14 @@ class Node {
     }
     // Caution: This is only supported in ssr mode
     toHtmlAsString() {
-        const openingTag = `<${this.#tagName}${this.getDataIdString()}${this.getIdString()}${this.getAttributesString()}${this.getClassString()}${this.getStyleString()}>`;
+        const openingTag = `<${
+            this.#tagName
+        }${this.getDataIdString()}${this.getIdString()}${this.getAttributesString()}${this.getClassString()}${this.getStyleString()}>`;
         const closingTag = `</${this.#tagName}>`;
         const innerHTML = this.innerHTML;
-        const childNodes = this.#children.map(child => child.toHtmlAsString()).join('');
+        const childNodes = this.#children
+            .map((child) => child.toHtmlAsString())
+            .join("");
 
         return `${openingTag}${innerHTML}${childNodes}${closingTag}`;
     }
@@ -3798,19 +4381,19 @@ class Node {
     }
     // Caution: This is only supported in ssr mode
     getIdString() {
-        return fastn_utils.isNull(this.id) ? "": ` id="${this.id}"`;
+        return fastn_utils.isNull(this.id) ? "" : ` id="${this.id}"`;
     }
     // Caution: This is only supported in ssr mode
     getClassString() {
         const classList = this.classList.toString();
-        return classList ? ` class="${classList}"` : '';
+        return classList ? ` class="${classList}"` : "";
     }
     // Caution: This is only supported in ssr mode
     getStyleString() {
         const styleProperties = Object.entries(this.style)
             .map(([prop, value]) => `${prop}:${value}`)
-            .join(';');
-        return styleProperties ? ` style="${styleProperties}"` : '';
+            .join(";");
+        return styleProperties ? ` style="${styleProperties}"` : "";
     }
     // Caution: This is only supported in ssr mode
     getAttributesString() {
@@ -3820,8 +4403,9 @@ class Node {
                     return `${attribute}=\"${value}\"`;
                 }
                 return `${attribute}`;
-            }).join(' ');
-        return nodeAttributes ? ` ${nodeAttributes}` : '';
+            })
+            .join(" ");
+        return nodeAttributes ? ` ${nodeAttributes}` : "";
     }
 }
 
@@ -3850,7 +4434,7 @@ class Document2 {
 fastnVirtual.document = new Document2();
 
 function addClosureToBreakpointWidth() {
-    let closure = fastn.closureWithoutExecute(function() {
+    let closure = fastn.closureWithoutExecute(function () {
         let current = ftd.get_device();
         let lastDevice = ftd.device.get();
         if (current === lastDevice) {
@@ -3863,7 +4447,7 @@ function addClosureToBreakpointWidth() {
     ftd.breakpoint_width.addClosure(closure);
 }
 
-fastnVirtual.doubleBuffer = function(main) {
+fastnVirtual.doubleBuffer = function (main) {
     addClosureToBreakpointWidth();
     let parent = document.createElement("div");
     let current_device = ftd.get_device();
@@ -3871,19 +4455,19 @@ fastnVirtual.doubleBuffer = function(main) {
     doubleBuffering = true;
     fastnVirtual.root = parent;
     main(parent);
-    fastn_utils.replaceBodyStyleAndChildren(parent)
+    fastn_utils.replaceBodyStyleAndChildren(parent);
     doubleBuffering = false;
     fastnVirtual.root = document.body;
-}
+};
 
-fastnVirtual.ssr = function(main) {
+fastnVirtual.ssr = function (main) {
     ssr = true;
     let body = fastnVirtual.document.createElement("body");
-    main(body)
+    main(body);
     ssr = false;
     id_counter = 0;
     return body.toHtmlAsString() + fastn_dom.getClassesAsString();
-}
+};
 class MutableVariable {
     #value;
     constructor(value) {
@@ -3919,7 +4503,7 @@ class MutableListVariable {
         this.#value.set(index, fastn_utils.staticToMutables(list));
     }
     insertAt(index, value) {
-        this.#value.insertAt(index, fastn_utils.staticToMutables(value))
+        this.#value.insertAt(index, fastn_utils.staticToMutables(value));
     }
     deleteAt(index) {
         this.#value.deleteAt(index);
@@ -3928,10 +4512,10 @@ class MutableListVariable {
         this.#value.push(value);
     }
     pop() {
-        this.#value.pop()
+        this.#value.pop();
     }
     clearAll() {
-        this.#value.clearAll()
+        this.#value.clearAll();
     }
     on_change(func) {
         this.#value.addClosure(fastn.closureWithoutExecute(func));
@@ -3963,7 +4547,11 @@ class StaticVariable {
         this.#value = value;
         this.#closures = [];
         if (this.#value instanceof fastn.mutableClass) {
-            this.#value.addClosure(fastn.closure(() => this.#closures.forEach((closure) => closure.update())));
+            this.#value.addClosure(
+                fastn.closure(() =>
+                    this.#closures.forEach((closure) => closure.update()),
+                ),
+            );
         }
     }
 
@@ -3978,7 +4566,7 @@ class StaticVariable {
     }
 }
 
-fastn.webComponentVariable =  {
+fastn.webComponentVariable = {
     mutable: (value) => {
         return new MutableVariable(value);
     },
@@ -3991,8 +4579,8 @@ fastn.webComponentVariable =  {
     record: (value) => {
         return new RecordVariable(value);
     },
-}
-const ftd = (function() {
+};
+const ftd = (function () {
     const exports = {};
 
     const riveNodes = {};
@@ -4007,15 +4595,14 @@ const ftd = (function() {
 
     exports.riveNodes = riveNodes;
 
-    exports.is_empty = value => {
+    exports.is_empty = (value) => {
         value = fastn_utils.getFlattenStaticValue(value);
         return fastn_utils.isNull(value) || value.length === 0;
     };
 
-    exports.len = data => {
+    exports.len = (data) => {
         if (!!data && data instanceof fastn.mutableListClass) {
-            if (data.getLength)
-                return data.getLength();
+            if (data.getLength) return data.getLength();
             return -1;
         }
         if (!!data && data instanceof fastn.mutableClass) {
@@ -4028,9 +4615,10 @@ const ftd = (function() {
         return -2;
     };
 
-    exports.copy_to_clipboard = args => {
+    exports.copy_to_clipboard = (args) => {
         let text = args.a;
-        if (text instanceof fastn.mutableClass) text = fastn_utils.getStaticValue(text);
+        if (text instanceof fastn.mutableClass)
+            text = fastn_utils.getStaticValue(text);
         if (text.startsWith("\\", 0)) {
             text = text.substring(1);
         }
@@ -4038,68 +4626,71 @@ const ftd = (function() {
             fallbackCopyTextToClipboard(text);
             return;
         }
-        navigator.clipboard.writeText(text).then(function() {
-            console.log('Async: Copying to clipboard was successful!');
-        }, function(err) {
-            console.error('Async: Could not copy text: ', err);
-        });
+        navigator.clipboard.writeText(text).then(
+            function () {
+                console.log("Async: Copying to clipboard was successful!");
+            },
+            function (err) {
+                console.error("Async: Could not copy text: ", err);
+            },
+        );
     };
 
     // Todo: Implement this (Remove highlighter)
-    exports.clean_code = args => args.a;
+    exports.clean_code = (args) => args.a;
 
     exports.set_rive_boolean = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
         let riveConst = node.getExtraData().rive;
         const stateMachineName = riveConst.stateMachineNames[0];
         const inputs = riveConst.stateMachineInputs(stateMachineName);
-        const bumpTrigger = inputs.find(i => i.name === args.input);
+        const bumpTrigger = inputs.find((i) => i.name === args.input);
         bumpTrigger.value = args.value;
     };
 
     exports.toggle_rive_boolean = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
         let riveConst = node.getExtraData().rive;
         const stateMachineName = riveConst.stateMachineNames[0];
         const inputs = riveConst.stateMachineInputs(stateMachineName);
-        const trigger = inputs.find(i => i.name === args.input);
+        const trigger = inputs.find((i) => i.name === args.input);
         trigger.value = !trigger.value;
     };
 
     exports.set_rive_integer = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
         let riveConst = node.getExtraData().rive;
         const stateMachineName = riveConst.stateMachineNames[0];
         const inputs = riveConst.stateMachineInputs(stateMachineName);
-        const trigger = inputs.find(i => i.name === args.input);
+        const trigger = inputs.find((i) => i.name === args.input);
         trigger.value = args.value;
     };
 
     exports.fire_rive = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
         let riveConst = node.getExtraData().rive;
         const stateMachineName = riveConst.stateMachineNames[0];
         const inputs = riveConst.stateMachineInputs(stateMachineName);
-        const trigger = inputs.find(i => i.name === args.input);
+        const trigger = inputs.find((i) => i.name === args.input);
         trigger.fire();
     };
 
     exports.play_rive = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
         node.getExtraData().rive.play(args.input);
     };
@@ -4107,7 +4698,7 @@ const ftd = (function() {
     exports.pause_rive = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
         node.getExtraData().rive.pause(args.input);
     };
@@ -4115,72 +4706,113 @@ const ftd = (function() {
     exports.toggle_play_rive = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
-            node = riveNode ? riveNode: node;
+            node = riveNode ? riveNode : node;
         }
-        let riveConst = node.getExtraData().rive
+        let riveConst = node.getExtraData().rive;
         riveConst.playingAnimationNames.includes(args.input)
             ? riveConst.pause(args.input)
             : riveConst.play(args.input);
     };
 
     exports.get = (value, index) => {
-         return fastn_utils.getStaticValue(fastn_utils.getterByKey(value, index));
-    };
-
-    exports.component_data = component => {
-        let attributesIndex = component.getAttribute(fastn_dom.webComponentArgument);
-        let attributes = fastn_dom.webComponent[attributesIndex];
-        return Object.fromEntries(
-            Object.entries(attributes).map(([k,v]) => {
-                // Todo: check if argument is mutable reference or not
-                    if (v instanceof fastn.mutableClass) {
-                        v = fastn.webComponentVariable.mutable(v);
-                    } else if (v instanceof fastn.mutableListClass) {
-                        v = fastn.webComponentVariable.mutableList(v);
-                    } else if (v instanceof fastn.recordInstanceClass) {
-                        v = fastn.webComponentVariable.record(v);
-                    } else {
-                        v = fastn.webComponentVariable.static(v);
-                    }
-                    return [k, v];
-                }
-            )
+        return fastn_utils.getStaticValue(
+            fastn_utils.getterByKey(value, index),
         );
     };
 
-    exports.append = function (list, item) { list.push(item) };
-    exports.pop = function (list) { list.pop() };
-    exports.insert_at = function (list, index, item) { list.insertAt(index, item) };
-    exports.delete_at = function (list, index) { list.deleteAt(index) }
-    exports.clear_all = function (list) { list.clearAll() }
-    exports.clear = exports.clear_all;
-    exports.set_list = function (list, value) { list.set(value) }
+    exports.component_data = (component) => {
+        let attributesIndex = component.getAttribute(
+            fastn_dom.webComponentArgument,
+        );
+        let attributes = fastn_dom.webComponent[attributesIndex];
+        return Object.fromEntries(
+            Object.entries(attributes).map(([k, v]) => {
+                // Todo: check if argument is mutable reference or not
+                if (v instanceof fastn.mutableClass) {
+                    v = fastn.webComponentVariable.mutable(v);
+                } else if (v instanceof fastn.mutableListClass) {
+                    v = fastn.webComponentVariable.mutableList(v);
+                } else if (v instanceof fastn.recordInstanceClass) {
+                    v = fastn.webComponentVariable.record(v);
+                } else {
+                    v = fastn.webComponentVariable.static(v);
+                }
+                return [k, v];
+            }),
+        );
+    };
 
-    /// Sample usage: ftd.http("/api/v1/...", "POST", ("a", 1), ("b", 2))
-    exports.http = function (url, method, fastn_module, ...body) {
+    exports.append = function (list, item) {
+        list.push(item);
+    };
+    exports.pop = function (list) {
+        list.pop();
+    };
+    exports.insert_at = function (list, index, item) {
+        list.insertAt(index, item);
+    };
+    exports.delete_at = function (list, index) {
+        list.deleteAt(index);
+    };
+    exports.clear_all = function (list) {
+        list.clearAll();
+    };
+    exports.clear = exports.clear_all;
+    exports.set_list = function (list, value) {
+        list.set(value);
+    };
+
+    exports.http = function (url, opts, ...body) {
+        if ((!opts) instanceof fastn.recordInstanceClass) {
+            console.info(`opts must be a record instance of
+                -- record ftd.http-options:
+                string method: GET
+                string redirect: manual
+                string fastn-module:
+            `);
+            throw new Error("invalid opts");
+        }
+
+        let method = opts.get("method").get();
+        let fastn_module = opts.get("fastn_module").get();
+        let redirect = opts.get("redirect").get();
+
+        if (!["manual", "follow", "error"].includes(redirect)) {
+            throw new Error(
+                `redirect must be one of "manual", "follow", "error"`,
+            );
+        }
+
         if (url instanceof fastn.mutableClass) url = url.get();
-        if (method instanceof fastn.mutableClass) method = method.get();
-        if (fastn_module instanceof fastn.moduleClass) fastn_module = fastn_module.getName();
         method = method.trim().toUpperCase();
         let request_json = {};
+
         const init = {
             method,
-            headers: {'Content-Type': 'application/json'},
+            headers: { "Content-Type": "application/json" },
             json: null,
+            redirect,
         };
-        if (body && method !== 'GET') {
+
+        if (body && method !== "GET") {
             if (body[0] instanceof fastn.recordInstanceClass) {
                 if (body.length !== 1) {
-                    console.warn("body is a record instance, but has more than 1 element, ignoring");
+                    console.warn(
+                        "body is a record instance, but has more than 1 element, ignoring",
+                    );
                 }
                 request_json = body[0].toObject();
             } else {
                 let json = body[0];
-                if (body.length !== 1 || (body[0].length === 2 && Array.isArray(body[0]))) {
+                if (
+                    body.length !== 1 ||
+                    (body[0].length === 2 && Array.isArray(body[0]))
+                ) {
                     let new_json = {};
                     // @ts-ignore
                     for (let [header, value] of Object.entries(body)) {
-                        let [key, val] = value.length === 2 ? value : [header, value];
+                        let [key, val] =
+                            value.length === 2 ? value : [header, value];
                         new_json[key] = fastn_utils.getStaticValue(val);
                     }
                     json = new_json;
@@ -4193,19 +4825,23 @@ const ftd = (function() {
 
         let json;
         fetch(url, init)
-            .then(res => {
+            .then((res) => {
+                if (res.redirected) {
+                    window.location.href = res.url;
+                    return;
+                }
+
                 if (!res.ok) {
-                    return new Error("[http]: Request failed", res)
+                    return new Error("[http]: Request failed", res);
                 }
 
                 return res.json();
             })
-            .then(response => {
+            .then((response) => {
                 console.log("[http]: Response OK", response);
                 if (response.redirect) {
                     window.location.href = response.redirect;
-                }
-                else if (!!response && !!response.reload) {
+                } else if (!!response && !!response.reload) {
                     window.location.reload();
                 } else {
                     let data = {};
@@ -4224,9 +4860,10 @@ const ftd = (function() {
                     }
                     if (!!response.data) {
                         if (Object.keys(data).length !== 0) {
-                            console.log("both .errors and .data are present in response, ignoring .data");
-                        }
-                        else {
+                            console.log(
+                                "both .errors and .data are present in response, ignoring .data",
+                            );
+                        } else {
                             data = response.data;
                         }
                     }
@@ -4238,13 +4875,15 @@ const ftd = (function() {
             })
             .catch(console.error);
         return json;
-    }
+    };
 
-    exports.navigate = function(url, request_data) {
+    exports.navigate = function (url, request_data) {
         let query_parameters = new URLSearchParams();
-        if(request_data instanceof fastn.recordInstanceClass) {
+        if (request_data instanceof fastn.recordInstanceClass) {
             // @ts-ignore
-            for (let [header, value] of Object.entries(request_data.toObject())) {
+            for (let [header, value] of Object.entries(
+                request_data.toObject(),
+            )) {
                 let [key, val] = value.length === 2 ? value : [header, value];
                 query_parameters.set(key, val);
             }
@@ -4252,15 +4891,14 @@ const ftd = (function() {
         let query_string = query_parameters.toString();
         if (query_string) {
             window.location.href = url + "?" + query_parameters.toString();
-        }
-        else {
+        } else {
             window.location.href = url;
         }
-    }
+    };
 
     exports.toggle_dark_mode = function () {
         const is_dark_mode = exports.get(exports.dark_mode);
-        if(is_dark_mode) {
+        if (is_dark_mode) {
             enable_light_mode();
         } else {
             enable_dark_mode();
@@ -4272,23 +4910,30 @@ const ftd = (function() {
             if (key instanceof fastn.mutableClass) {
                 key = key.get();
             }
-            const packageNamePrefix = __fastn_package_name__ ? `${__fastn_package_name__}_` : "";
+            const packageNamePrefix = __fastn_package_name__
+                ? `${__fastn_package_name__}_`
+                : "";
             const snakeCaseKey = fastn_utils.toSnakeCase(key);
-        
+
             return `${packageNamePrefix}${snakeCaseKey}`;
         },
         set(key, value) {
             key = this._get_key(key);
             value = fastn_utils.getFlattenStaticValue(value);
-            localStorage.setItem(key, value && typeof value === 'object' ? JSON.stringify(value) : value);
+            localStorage.setItem(
+                key,
+                value && typeof value === "object"
+                    ? JSON.stringify(value)
+                    : value,
+            );
         },
         get(key) {
             key = this._get_key(key);
-            if(ssr) {
+            if (ssr) {
                 return;
             }
             const item = localStorage.getItem(key);
-            if(!item) {
+            if (!item) {
                 return;
             }
             try {
@@ -4302,59 +4947,59 @@ const ftd = (function() {
         delete(key) {
             key = this._get_key(key);
             localStorage.removeItem(key);
-        }
-    }
+        },
+    };
 
-    exports.on_load = listener => {
-        if(typeof listener !== 'function') {
+    exports.on_load = (listener) => {
+        if (typeof listener !== "function") {
             throw new Error("listener must be a function");
         }
 
-        if(fastnLoaded) {
+        if (fastnLoaded) {
             listener();
             return;
         }
-        
+
         onLoadListeners.add(listener);
     };
 
     exports.emit_on_load = () => {
-        if(fastnLoaded) return;
-        
+        if (fastnLoaded) return;
+
         fastnLoaded = true;
-        onLoadListeners.forEach(listener => listener());
+        onLoadListeners.forEach((listener) => listener());
     };
 
     // LEGACY
 
     function legacyNameToJS(s) {
         let name = s.toString();
-    
+
         if (name[0].charCodeAt(0) >= 48 && name[0].charCodeAt(0) <= 57) {
-            name = '_' + name;
+            name = "_" + name;
         }
-    
+
         return name
-            .replaceAll('#', "__")
-            .replaceAll('-', "_")
-            .replaceAll(':', "___")
-            .replaceAll(',', "$")
-            .replaceAll('\\', "/")
-            .replaceAll('/', '_')
-            .replaceAll('.', "_");
+            .replaceAll("#", "__")
+            .replaceAll("-", "_")
+            .replaceAll(":", "___")
+            .replaceAll(",", "$")
+            .replaceAll("\\", "/")
+            .replaceAll("/", "_")
+            .replaceAll(".", "_");
     }
 
     function getDocNameAndRemaining(s) {
         let part1 = "";
         let patternToSplitAt = s;
-        
-        const split1 = s.split('#');
+
+        const split1 = s.split("#");
         if (split1.length === 2) {
-            part1 = split1[0] + '#';
+            part1 = split1[0] + "#";
             patternToSplitAt = split1[1];
         }
-    
-        const split2 = patternToSplitAt.split('.');
+
+        const split2 = patternToSplitAt.split(".");
         if (split2.length === 2) {
             return [part1 + split2[0], split2[1]];
         } else {
@@ -4363,40 +5008,46 @@ const ftd = (function() {
     }
 
     function isMutable(obj) {
-        return obj instanceof fastn.mutableClass ||
-        obj instanceof fastn.mutableListClass ||
-        obj instanceof fastn.recordInstanceClass;
+        return (
+            obj instanceof fastn.mutableClass ||
+            obj instanceof fastn.mutableListClass ||
+            obj instanceof fastn.recordInstanceClass
+        );
     }
 
-    exports.set_value = function(variable, value) {
+    exports.set_value = function (variable, value) {
         const [var_name, remaining] = getDocNameAndRemaining(variable);
         let name = legacyNameToJS(var_name);
-        if(global[name] === undefined) {
-            console.log(`[ftd-legacy]: ${variable} is not in global map, ignoring`);
+        if (global[name] === undefined) {
+            console.log(
+                `[ftd-legacy]: ${variable} is not in global map, ignoring`,
+            );
             return;
         }
         const mutable = global[name];
-        if(!isMutable(mutable)) {
+        if (!isMutable(mutable)) {
             console.log(`[ftd-legacy]: ${variable} is not a mutable, ignoring`);
             return;
         }
-        if(remaining) {
+        if (remaining) {
             mutable.get(remaining).set(value);
         } else {
             mutable.set(value);
         }
-    }    
+    };
 
-    exports.get_value = function(variable) {
+    exports.get_value = function (variable) {
         const [var_name, remaining] = getDocNameAndRemaining(variable);
         let name = legacyNameToJS(var_name);
-        if(global[name] === undefined) {
-            console.log(`[ftd-legacy]: ${variable} is not in global map, ignoring`);
+        if (global[name] === undefined) {
+            console.log(
+                `[ftd-legacy]: ${variable} is not in global map, ignoring`,
+            );
             return;
         }
         const value = global[name];
-        if(isMutable(value)) {
-            if(remaining) {
+        if (isMutable(value)) {
+            if (remaining) {
                 return value.get(remaining);
             } else {
                 return value.get();
@@ -4404,21 +5055,18 @@ const ftd = (function() {
         } else {
             return value;
         }
-    }
+    };
 
     // Language related functions ---------------------------------------------
     exports.set_current_language = function (language) {
         language = fastn_utils.getStaticValue(language);
-        console.log("Changing language ->, " + language);
         fastn_utils.private.setCookie("fastn-lang", language);
         location.reload();
-    }
+    };
 
     exports.get_current_language = function () {
-        var current_language = fastn_utils.private.getCookie("fastn_lang");
-        console.log("Current language: " + current_language);
-        return current_language;
-    }
+        return fastn_utils.private.getCookie("fastn-lang");
+    };
 
     return exports;
 })();
@@ -4429,7 +5077,6 @@ const global = ftd.global;
 ftd.clickOutsideEvents = [];
 ftd.globalKeyEvents = [];
 ftd.globalKeySeqEvents = [];
-
 
 ftd.get_device = function () {
     const MOBILE_CLASS = "mobile";
@@ -4447,7 +5094,9 @@ ftd.get_device = function () {
     // function detect_orientation(), "landscape" and "portrait" etc.,
     // and instead of setting `ftd#mobile: boolean` we set `ftd#device`
     // and `ftd#view-port-orientation` etc.
-    let mobile_breakpoint = fastn_utils.getStaticValue(ftd.breakpoint_width.get("mobile"));
+    let mobile_breakpoint = fastn_utils.getStaticValue(
+        ftd.breakpoint_width.get("mobile"),
+    );
     if (width <= mobile_breakpoint) {
         document.body.classList.add(MOBILE_CLASS);
         return fastn_dom.DeviceData.Mobile;
@@ -4456,7 +5105,7 @@ ftd.get_device = function () {
         document.body.classList.remove(MOBILE_CLASS);
     }
     return fastn_dom.DeviceData.Desktop;
-}
+};
 
 ftd.post_init = function () {
     const DARK_MODE_COOKIE = "fastn-dark-mode";
@@ -4468,17 +5117,21 @@ ftd.post_init = function () {
     let last_device = ftd.device.get();
 
     window.onresize = function () {
-        initialise_device()
+        initialise_device();
     };
     function initialise_click_outside_events() {
         document.addEventListener("click", function (event) {
             ftd.clickOutsideEvents.forEach(([ftdNode, func]) => {
                 let node = ftdNode.getNode();
-                if (!!node && node.style.display !== "none" && !node.contains(event.target)) {
+                if (
+                    !!node &&
+                    node.style.display !== "none" &&
+                    !node.contains(event.target)
+                ) {
                     func();
                 }
-            })
-        })
+            });
+        });
     }
     function initialise_global_key_events() {
         let globalKeys = {};
@@ -4486,44 +5139,57 @@ ftd.post_init = function () {
         let lastKeyTime = Date.now();
 
         document.addEventListener("keydown", function (event) {
-            let eventKey =  fastn_utils.getEventKey(event);
+            let eventKey = fastn_utils.getEventKey(event);
             globalKeys[eventKey] = true;
             const currentTime = Date.now();
             if (currentTime - lastKeyTime > 1000) {
                 buffer = [];
             }
             lastKeyTime = currentTime;
-            if ((event.target.nodeName === "INPUT" || event.target.nodeName === "TEXTAREA")
-            && (eventKey !== "ArrowDown" && eventKey !== "ArrowUp" &&
-                    eventKey !== "ArrowRight" && eventKey !== "ArrowLeft")
-             && (event.target.nodeName === "INPUT" && eventKey !== "Enter")) {
+            if (
+                (event.target.nodeName === "INPUT" ||
+                    event.target.nodeName === "TEXTAREA") &&
+                eventKey !== "ArrowDown" &&
+                eventKey !== "ArrowUp" &&
+                eventKey !== "ArrowRight" &&
+                eventKey !== "ArrowLeft" &&
+                event.target.nodeName === "INPUT" &&
+                eventKey !== "Enter"
+            ) {
                 return;
             }
             buffer.push(eventKey);
 
             ftd.globalKeyEvents.forEach(([_ftdNode, func, array]) => {
-                let globalKeysPresent = array.reduce((accumulator, currentValue) => accumulator && !!globalKeys[currentValue], true);
-                if (globalKeysPresent && buffer.join(',').includes(array.join(','))) {
+                let globalKeysPresent = array.reduce(
+                    (accumulator, currentValue) =>
+                        accumulator && !!globalKeys[currentValue],
+                    true,
+                );
+                if (
+                    globalKeysPresent &&
+                    buffer.join(",").includes(array.join(","))
+                ) {
                     func();
                     globalKeys[eventKey] = false;
                     buffer = [];
                 }
                 return;
-            })
+            });
 
             ftd.globalKeySeqEvents.forEach(([_ftdNode, func, array]) => {
-                if (buffer.join(',').includes(array.join(','))) {
+                if (buffer.join(",").includes(array.join(","))) {
                     func();
                     globalKeys[eventKey] = false;
                     buffer = [];
                 }
                 return;
-            })
-        })
+            });
+        });
 
-        document.addEventListener("keyup", function(event) {
+        document.addEventListener("keyup", function (event) {
             globalKeys[fastn_utils.getEventKey(event)] = false;
-        })
+        });
     }
     function initialise_device() {
         let current = ftd.get_device();
@@ -4600,8 +5266,7 @@ ftd.post_init = function () {
             ftd.dark_mode.set(true);
             document.body.classList.add(DARK_MODE_CLASS);
             set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_DARK);
-        }
-        else {
+        } else {
             ftd.dark_mode.set(false);
             if (document.body.classList.contains(DARK_MODE_CLASS)) {
                 document.body.classList.remove(DARK_MODE_CLASS);
@@ -4613,7 +5278,10 @@ ftd.post_init = function () {
         document.cookie = name + "=" + value + "; path=/";
     }
     function system_dark_mode() {
-        return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        return !!(
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+        );
     }
     function initialise_dark_mode() {
         update_dark_mode();
@@ -4621,11 +5289,16 @@ ftd.post_init = function () {
     }
     function get_cookie(name, def) {
         // source: https://stackoverflow.com/questions/5639346/
-        let regex = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+        let regex = document.cookie.match(
+            "(^|;)\\s*" + name + "\\s*=\\s*([^;]+)",
+        );
         return regex !== null ? regex.pop() : def;
     }
     function update_dark_mode() {
-        let current_dark_mode_cookie = get_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT);
+        let current_dark_mode_cookie = get_cookie(
+            DARK_MODE_COOKIE,
+            COOKIE_SYSTEM_LIGHT,
+        );
         switch (current_dark_mode_cookie) {
             case COOKIE_SYSTEM_LIGHT:
             case COOKIE_SYSTEM_DARK:
@@ -4643,7 +5316,9 @@ ftd.post_init = function () {
         }
     }
     function start_watching_dark_mode_system_preference() {
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener("change", update_dark_mode);
+        window
+            .matchMedia("(prefers-color-scheme: dark)")
+            .addEventListener("change", update_dark_mode);
     }
     initialise_device();
     initialise_dark_mode();
@@ -4651,13 +5326,13 @@ ftd.post_init = function () {
     initialise_global_key_events();
     fastn_utils.resetFullHeight();
     fastn_utils.setFullHeight();
-}
+};
 
 window.ftd = ftd;
 
 ftd.toggle = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4674,7 +5349,7 @@ ftd.toggle = function (args) {
 }
 ftd.increment = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4691,7 +5366,7 @@ ftd.increment = function (args) {
 }
 ftd.increment_by = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4708,7 +5383,7 @@ ftd.increment_by = function (args) {
 }
 ftd.decrement = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4725,7 +5400,7 @@ ftd.decrement = function (args) {
 }
 ftd.decrement_by = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4742,7 +5417,7 @@ ftd.decrement_by = function (args) {
 }
 ftd.enable_light_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4753,7 +5428,7 @@ ftd.enable_light_mode = function (args) {
 }
 ftd.enable_dark_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4764,7 +5439,7 @@ ftd.enable_dark_mode = function (args) {
 }
 ftd.enable_system_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4775,7 +5450,7 @@ ftd.enable_system_mode = function (args) {
 }
 ftd.set_bool = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4792,7 +5467,7 @@ ftd.set_bool = function (args) {
 }
 ftd.set_boolean = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4809,7 +5484,7 @@ ftd.set_boolean = function (args) {
 }
 ftd.set_string = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -4826,7 +5501,7 @@ ftd.set_string = function (args) {
 }
 ftd.set_integer = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
