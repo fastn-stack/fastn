@@ -263,37 +263,12 @@ pub async fn serve_helper(
         }
 
         let file_response = serve_file(&mut req_config, path.as_path(), only_js).await;
-        // If path is not present in sitemap then pass it to proxy
-        // TODO: Need to handle other package URL as well, and that will start from `-`
-        // and all the static files starts with `-`
-        // So task is how to handle proxy urls which are starting with `-/<package-name>/<proxy-path>`
-        // In that case need to check whether that url is present in sitemap or not and than proxy
-        // pass the url if the file is not static
-        // So final check would be file is not static and path is not present in the package's sitemap
+
         tracing::info!(
             "before executing proxy: file-status: {}, path: {}",
             file_response.status(),
             &path
         );
-
-        // Fallback to WASM execution in case of no successful response
-        // TODO: This is hacky. Use the sitemap eventually.
-        // if file_response.status() == actix_web::http::StatusCode::NOT_FOUND {
-        //     let package = config.find_package_by_id(path.as_str()).await.unwrap().1;
-        //     let wasm_module = config.get_root_for_package(&package).join("backend.wasm");
-        //     // Set the temp path to and do `get_file_and_package_by_id` to retrieve the backend.wasm
-        //     // File for the particular dependency package
-        //     let wasm_module_path = format!("-/{}/backend.wasm", package.name,);
-        //     config
-        //         .get_file_and_package_by_id(wasm_module_path.as_str())
-        //         .await?;
-        //     let req = if let Some(r) = config.request {
-        //         r
-        //     } else {
-        //         return Ok(fastn_core::server_error!("request not set"));
-        //     };
-        //     fastn_core::wasm::handle_wasm(req, wasm_module, config.package.backend_headers).await
-        // }
 
         file_response
     };
@@ -563,7 +538,6 @@ async fn actual_route(
     body: actix_web::web::Bytes,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     tracing::info!(method = req.method().as_str(), uri = req.path());
-
     let req = fastn_core::http::Request::from_actix(req, body);
 
     serve(config, req).await
@@ -586,7 +560,6 @@ async fn route(
     actual_route(&config, req, body).await
 }
 
-//noinspection HttpUrlsUsage
 #[allow(clippy::too_many_arguments)]
 pub async fn listen(
     bind_address: &str,
@@ -657,7 +630,3 @@ You can try without providing port, it will automatically pick unused port."#,
         .await?;
     Ok(())
 }
-
-// cargo install --features controller --path=.
-// FASTN_CONTROLLER=http://127.0.0.1:8000 FASTN_INSTANCE_ID=12345 fastn serve 8001
-// TRACING=INFO fastn serve

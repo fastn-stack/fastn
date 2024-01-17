@@ -22,8 +22,6 @@ pub(crate) async fn get_out(
     extra_headers: &std::collections::HashMap<String, String>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let headers = req.headers();
-    // TODO: It should be part of fastn_core::Request::uri()
-    // let path = &req.uri().to_string()[1..];
 
     let mut proxy_request = reqwest::Request::new(
         match req.method() {
@@ -53,22 +51,6 @@ pub(crate) async fn get_out(
     );
 
     *proxy_request.headers_mut() = headers.to_owned();
-
-    // TODO: Some extra headers, possibly Authentication header
-    // Authentication header can come from system environment variable
-    // env file path set in FASTN.ftd file
-    // We can get the data from request parameter
-    // Flow will be
-    // 1. Add Movie ftd page
-    // 2. fastn will forward request to microservice and that service will redirect to /movie/?id=5
-    // fastn will send back this response to browser
-    // browser will request now /movie/?id=5
-    // on this movie.ftd page we will call a processor: `request-data` which will give the
-    // `id` from the request query parameter. Than, we will use processor: `http` to call http api
-    // `/api/movie/?id=<id>` of movie-db service, this will happen while fastn is converting ftd code
-    // to html, so all this happening on server side. So we can say server side rendering.
-
-    // headers
 
     for (header_key, header_value) in extra_headers {
         proxy_request.headers_mut().insert(
