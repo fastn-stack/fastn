@@ -95,11 +95,16 @@ pub async fn write_manifest_file(
 
     let manifest = fastn_core::Manifest::new(files, zip_url, checksum);
 
+    let serialized_manifest = serde_json::ser::to_vec_pretty(&manifest)?;
+    let mut content_with_newline = serialized_manifest;
+    // Append newline character
+    content_with_newline.push(b'\n');
+
     let _ = &config
         .ds
         .write_content(
             &build_dir.join(fastn_core::manifest::MANIFEST_FILE),
-            serde_json::ser::to_vec_pretty(&manifest)?,
+            content_with_newline,
         )
         .await?;
 
