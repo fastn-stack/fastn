@@ -1,5 +1,13 @@
--- import: package-doc as pd
+-- import: fastn-community.github.io/expander as e
 
--- pd.h1: Heading 1
+-- e.box: What is `fastn`?
 
-Heading 1 content
+`fastn` is the innovative programming language for writing prose.
+Say goodbye to the complexities of traditional programming languages
+and hello to a simplified and intuitive experience.
+
+`fastn` language is designed for human beings, not just
+programmers, we have taken precautions like not
+requiring quoting for strings, not relying on
+indentation nor on braces that most programming
+languages require.
