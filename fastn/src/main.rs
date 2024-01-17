@@ -133,6 +133,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_js = build.values_of_("js");
         let external_css = build.values_of_("external-css");
         let inline_css = build.values_of_("css");
+        let zip_url = build.value_of_("zip-url");
 
         config = config
             .add_edition(edition)?
@@ -150,6 +151,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             build.get_flag("ignore-failed"),
             matches.get_flag("test"),
             build.get_flag("check-build"),
+            zip_url,
         )
         .await;
     }
@@ -249,6 +251,7 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Build static site from this fastn package")
                 .arg(clap::arg!(file: [FILE]... "The file to build (if specified only these are built, else entire package is built)"))
                 .arg(clap::arg!(-b --base [BASE] "The base path.").default_value("/"))
+                .arg(clap::arg!(--"zip-url" <URL> "The zip archive url for this package"))
                 .arg(clap::arg!(--"ignore-failed" "Ignore failed files."))
                 .arg(clap::arg!(--"check-build" "Checks .build for index files validation."))
                 .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")

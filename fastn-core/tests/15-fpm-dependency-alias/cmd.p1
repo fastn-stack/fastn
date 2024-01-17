@@ -4,7 +4,6 @@ output: amitu/.build
 
 -- stdout:
 
-Updated 2 dependencies.
 Processing fifthtry.github.io/amitu/manifest.json
 done in <omitted>
 Processing fifthtry.github.io/amitu/FASTN/ ... done in <omitted>

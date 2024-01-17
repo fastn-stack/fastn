@@ -6,6 +6,7 @@ pub async fn build(
     ignore_failed: bool,
     test: bool,
     check_build: bool,
+    zip_url: Option<&str>,
 ) -> fastn_core::Result<()> {
     let build_dir = config.ds.root().join(".build");
     // Default css and js
@@ -19,9 +20,9 @@ pub async fn build(
 
     {
         let documents = get_documents_for_current_package(config).await?;
+        let zip_url = zip_url.map_or_else(|| config.package.zip.clone(), |z| Some(z.to_string()));
 
-        fastn_core::manifest::write_manifest_file(config, &build_dir, config.package.zip.clone())
-            .await?;
+        fastn_core::manifest::write_manifest_file(config, &build_dir, zip_url).await?;
 
         match only_id {
             Some(id) => {

@@ -26,13 +26,17 @@ impl Manifest {
 #[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
 pub struct File {
     pub name: String,
-    pub hash: String,
+    pub checksum: String,
     pub size: usize,
 }
 
 impl File {
-    pub fn new(name: String, hash: String, size: usize) -> Self {
-        File { name, hash, size }
+    pub fn new(name: String, checksum: String, size: usize) -> Self {
+        File {
+            name,
+            checksum,
+            size,
+        }
     }
 }
 
@@ -58,12 +62,12 @@ pub async fn write_manifest_file(
             match fastn_core::manifest::utils::get_gh_zipball_url(config.package.name.clone()) {
                 Some(gh_zip_url) => Some(gh_zip_url),
                 None => {
-                    fastn_core::warning!(
-                        "Could not find zip url for package \"{}\".",
-                        &config.package.name
-                    );
-
-                    None
+                    return Err(fastn_core::error::Error::UsageError {
+                        message: format!(
+                            "Could not find zip url for package \"{}\".",
+                            &config.package.name,
+                        ),
+                    });
                 }
             }
         }
