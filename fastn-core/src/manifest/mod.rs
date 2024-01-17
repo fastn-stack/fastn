@@ -103,7 +103,7 @@ pub async fn write_manifest_file(
     // Append newline character
     serialized_manifest.push(b'\n');
 
-    let _ = &config
+    config
         .ds
         .write_content(
             &build_dir.join(fastn_core::manifest::MANIFEST_FILE),
