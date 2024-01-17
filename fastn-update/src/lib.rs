@@ -109,15 +109,6 @@ async fn update_dependencies(
 
             let (manifest, manifest_bytes) = get_manifest(&package_name).await?;
 
-            let zip_url = match manifest.zip_url.clone() {
-                Some(zip_url) => zip_url,
-                None => {
-                    return Err(UpdateError::Manifest(ManifestError::NoZipUrl {
-                        package: package_name.clone(),
-                    }))
-                }
-            };
-
             let manifest_path = dependency_path.join(fastn_core::manifest::MANIFEST_FILE);
 
             // Download the archive if:
@@ -150,7 +141,6 @@ async fn update_dependencies(
                     ds,
                     &packages_root.join(&package_name),
                     &manifest,
-                    zip_url.clone(),
                     &package_name,
                     pb,
                 )
@@ -183,11 +173,10 @@ async fn download_and_unpack_zip(
     ds: &fastn_ds::DocumentStore,
     dependency_path: &fastn_ds::Path,
     manifest: &fastn_core::Manifest,
-    zip_url: String,
     package_name: &str,
     pb: &indicatif::ProgressBar,
 ) -> Result<(), ArchiveError> {
-    let mut archive = fastn_update::utils::download_archive(zip_url)
+    let mut archive = fastn_update::utils::download_archive(manifest.zip_url.clone())
         .await
         .context(DownloadArchiveSnafu {
             package: package_name,

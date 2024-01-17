@@ -5,8 +5,7 @@ skip: will resume once the required dependencies have manifest file
 
 -- stdout:
 
-Processing fifthtry.github.io/amitu/manifest.json
-done in <omitted>
+Processing fifthtry.github.io/amitu/manifest.json ... done in <omitted>
 Processing fifthtry.github.io/amitu/FASTN/ ... done in <omitted>
 Processing fifthtry.github.io/amitu/ ... Processing fastn-community.github.io/expander/images/uparrow.png ... done in <omitted>
 Processing fastn-community.github.io/expander/images/uparrow-dark.png ... done in <omitted>
