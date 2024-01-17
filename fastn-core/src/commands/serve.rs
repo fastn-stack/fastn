@@ -501,7 +501,7 @@ async fn handle_endpoints(
     let mut endpoint = None;
 
     for ep in config.package.endpoints.iter() {
-        if !req.path().starts_with(ep.mountpoint.as_str()) {
+        if !req.path().starts_with(ep.mountpoint.trim_end_matches('/')) {
             continue;
         }
         endpoint = Some(ep.clone());

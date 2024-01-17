@@ -1,4 +1,9 @@
 -- import: fastn
 
 -- fastn.package: integration-tests
-endpoint: http://127.0.0.1:5000
+
+-- fastn.endpoint: http://fastn.com
+mountpoint: /ftd/
+
+-- fastn.endpoint: http://127.0.0.1:5000
+mountpoint: /get-data/
