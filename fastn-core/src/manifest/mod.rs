@@ -5,14 +5,14 @@ pub const MANIFEST_FILE: &str = "manifest.json";
 #[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
 pub struct Manifest {
     pub files: std::collections::BTreeMap<String, File>,
-    pub zip_url: Option<String>,
+    pub zip_url: String,
     pub checksum: String,
 }
 
 impl Manifest {
     pub fn new(
         files: std::collections::BTreeMap<String, File>,
-        zip_url: Option<String>,
+        zip_url: String,
         checksum: String,
     ) -> Self {
         Manifest {
@@ -57,10 +57,10 @@ pub async fn write_manifest_file(
     );
 
     let zip_url = match zip_url {
-        Some(zip_url) => Some(zip_url.to_string()),
+        Some(zip_url) => zip_url,
         None => {
             match fastn_core::manifest::utils::get_gh_zipball_url(config.package.name.clone()) {
-                Some(gh_zip_url) => Some(gh_zip_url),
+                Some(gh_zip_url) => gh_zip_url,
                 None => {
                     return Err(fastn_core::error::Error::UsageError {
                         message: format!(
