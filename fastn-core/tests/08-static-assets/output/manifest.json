@@ -1,0 +1,26 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "DA76B21F274AABDCE5B03F45E412DB91BBE1AED398E4B4E325AB9DCC45583778",
+      "size": 116
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "14A9BF3DE0FBCDA6C849BD611FA2550FE79599A94194DF2986B207320E2126E0",
+      "size": 18
+    },
+    "scrot.png": {
+      "name": "scrot.png",
+      "checksum": "1F886288F2E5D0B1657A0691A842575844944334FB942772A130A2F0258B0C2D",
+      "size": 470661
+    },
+    "static/scrot_2.png": {
+      "name": "static/scrot_2.png",
+      "checksum": "1F886288F2E5D0B1657A0691A842575844944334FB942772A130A2F0258B0C2D",
+      "size": 470661
+    }
+  },
+  "zip_url": "https://codeload.github.com/amitu/dotcom/zip/refs/heads/main",
+  "checksum": "04F1686B70EA1F7F1AC455D13F71F6C6B00E2AA897E561606CFE843333A6B03E"
+}
