@@ -240,7 +240,7 @@ fn read_manifest(bytes: &[u8], package_name: &str) -> Result<fastn_core::Manifes
 async fn get_manifest(
     package_name: &str,
 ) -> Result<(fastn_core::Manifest, Vec<u8>), ManifestError> {
-    let mut manifest_bytes = fastn_core::http::http_get(&format!(
+    let manifest_bytes = fastn_core::http::http_get(&format!(
         "https://{}/{}",
         package_name,
         fastn_core::manifest::MANIFEST_FILE
@@ -249,8 +249,6 @@ async fn get_manifest(
     .context(DownloadManifestSnafu {
         package: package_name,
     })?;
-    // Append newline character
-    manifest_bytes.push(b'\n');
     let manifest = read_manifest(&manifest_bytes, package_name)?;
 
     Ok((manifest, manifest_bytes))
