@@ -191,6 +191,15 @@ pub async fn serve_helper(
     req: fastn_core::http::Request,
     only_js: bool,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    #[cfg(feature = "auth")]
+    if let Ok(auth_enabled) = std::env::var("FASTN_ENABLE_AUTH") {
+        // only apply migrations when FASTN_ENABLE_AUTH=true
+        if auth_enabled == "true" {
+            tracing::info!("running auth related migrations");
+            fastn_core::commands::serve::enable_auth()?
+        }
+    }
+
     match (req.method().to_lowercase().as_str(), req.path()) {
         #[cfg(feature = "auth")]
         (_, t) if t.starts_with("/-/auth/") => {
@@ -682,3 +691,28 @@ You can try without providing port, it will automatically pick unused port."#,
 // cargo install --features controller --path=.
 // FASTN_CONTROLLER=http://127.0.0.1:8000 FASTN_INSTANCE_ID=12345 fastn serve 8001
 // TRACING=INFO fastn serve
+
+#[cfg(feature = "auth")]
+#[tracing::instrument()]
+fn enable_auth() -> fastn_core::Result<()> {
+    use diesel::Connection;
+    use diesel_migrations::MigrationHarness;
+
+    let db_url = std::env::var("FASTN_DB_URL")?;
+
+    const MIGRATIONS: diesel_migrations::EmbeddedMigrations =
+        diesel_migrations::embed_migrations!();
+
+    let mut conn = diesel::pg::PgConnection::establish(&db_url).map_err(|e| {
+        fastn_core::Error::DatabaseError {
+            message: format!("Failed to connect to db. {:?}", e),
+        }
+    })?;
+
+    conn.run_pending_migrations(MIGRATIONS)
+        .map_err(|e| fastn_core::Error::DatabaseError {
+            message: format!("Failed to run migrations. {:?}", e),
+        })?;
+
+    Ok(())
+}
