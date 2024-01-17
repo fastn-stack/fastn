@@ -592,8 +592,25 @@ impl Package {
                 fastn_document.get("fastn#package")?;
             temp_package.into_package()
         };
-        package.endpoints =
-            fastn_document.get::<Vec<fastn_package::old_fastn::EndpointData>>("fastn#endpoint")?;
+
+        let url_mappings = {
+            let url_mappings_temp: Option<redirects::UrlMappingsTemp> =
+                fastn_document.get("fastn#url-mappings")?;
+            if let Some(url_mappings) = url_mappings_temp {
+                let result = url_mappings
+                    .url_mappings_from_body()
+                    .map_err(|e| fastn_core::Error::GenericError(e.to_string()))?;
+                Some(result)
+            } else {
+                None
+            }
+        };
+
+        if let Some(url_mappings) = url_mappings {
+            package.redirects = Some(url_mappings.redirects);
+            package.endpoints = url_mappings.endpoints;
+        }
+
         package.translation_status_summary =
             fastn_document.get("fastn#translation-status-summary")?;
         package.fastn_path = Some(fastn_path.to_owned());
@@ -649,8 +666,23 @@ impl Package {
             }
         };
 
-        package.endpoints =
-            fastn_doc.get::<Vec<fastn_package::old_fastn::EndpointData>>("fastn#endpoint")?;
+        let url_mappings = {
+            let url_mappings_temp: Option<redirects::UrlMappingsTemp> =
+                fastn_doc.get("fastn#url-mappings")?;
+            if let Some(url_mappings) = url_mappings_temp {
+                let result = url_mappings
+                    .url_mappings_from_body()
+                    .map_err(|e| fastn_core::Error::GenericError(e.to_string()))?;
+                Some(result)
+            } else {
+                None
+            }
+        };
+
+        if let Some(url_mappings) = url_mappings {
+            package.redirects = Some(url_mappings.redirects);
+            package.endpoints = url_mappings.endpoints;
+        }
 
         // reading dependencies
         let mut deps = {
@@ -688,19 +720,6 @@ impl Package {
         // package.resolve_system_dependencies()?;
 
         package.fastn_path = Some(ds.root().join("FASTN.ftd"));
-
-        package.redirects = {
-            let redirects_temp: Option<redirects::RedirectsTemp> =
-                fastn_doc.get("fastn#redirects")?;
-            if let Some(redirects) = redirects_temp {
-                let result = redirects
-                    .redirects_from_body()
-                    .map_err(|e| fastn_core::Error::GenericError(e.to_string()))?;
-                Some(result)
-            } else {
-                None
-            }
-        };
 
         package.auto_import = fastn_doc
             .get::<Vec<fastn_core::package::dependency::AutoImportTemp>>("fastn#auto-import")?

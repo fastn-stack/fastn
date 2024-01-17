@@ -1,18 +1,84 @@
+pub struct UrlMappings {
+    pub redirects: ftd::Map<String>,
+    pub endpoints: Vec<fastn_package::old_fastn::EndpointData>,
+    // todo: add dynamic-urls
+    // pub dynamic_urls: <some-type>
+}
+
+impl UrlMappings {
+    pub fn new() -> UrlMappings {
+        UrlMappings {
+            redirects: ftd::Map::new(),
+            endpoints: vec![],
+        }
+    }
+}
+
 #[derive(Debug, serde::Deserialize, Clone)]
-pub struct RedirectsTemp {
-    #[serde(rename = "redirects-body")]
+pub struct UrlMappingsTemp {
+    #[serde(rename = "url-mappings-body")]
     pub body: String,
 }
 
-impl RedirectsTemp {
-    pub(crate) fn redirects_from_body(&self) -> fastn_core::Result<ftd::Map<String>> {
-        let body = self.body.as_str();
+impl UrlMappingsTemp {
+    pub(crate) fn url_mappings_from_body(&self) -> fastn_core::Result<UrlMappings> {
+        let url_mappings_body = self.body.as_str();
+        let redirects = self.find_redirects(url_mappings_body)?;
+        let endpoints = self.find_endpoints(url_mappings_body)?;
+
+        let mut url_mappings = UrlMappings::new();
+        url_mappings.redirects = redirects;
+        url_mappings.endpoints = endpoints;
+        Ok(url_mappings)
+    }
+
+    // todo: merge find functions and do single pass
+    //       parsing for all url mappings
+    fn find_endpoints(
+        &self,
+        body: &str,
+    ) -> fastn_core::Result<Vec<fastn_package::old_fastn::EndpointData>> {
+        let mut endpoints = vec![];
+
+        for line in body.lines() {
+            // Ignore comments
+            if line.is_empty() || line.trim_start().starts_with(';') {
+                continue;
+            }
+
+            // Supported Endpoint Syntax under fastn.url-mappings
+            // /ftd/* -> http+proxy://fastn.com/ftd/*
+            //
+            // localhost+proxy - http://127.0.0.1
+            // /docs/* -> localhost+proxy:<port>
+
+            if line.contains("proxy") {
+                if let Some((first, second)) = line.split_once("->") {
+                    let mountpoint = first.trim().trim_matches('*').to_string();
+                    let endpoint = second
+                        .replace("http+proxy", "http")
+                        .replace("localhost+proxy", "http://127.0.0.1")
+                        .trim_end_matches('*')
+                        .to_string();
+                    endpoints.push(fastn_package::old_fastn::EndpointData {
+                        endpoint,
+                        mountpoint,
+                        user_id: None,
+                    })
+                }
+            }
+        }
+
+        Ok(endpoints)
+    }
+
+    fn find_redirects(&self, body: &str) -> fastn_core::Result<ftd::Map<String>> {
         let mut redirects: ftd::Map<String> = ftd::Map::new();
         for line in body.lines() {
             if line.is_empty() || line.trim_start().starts_with(';') {
                 continue;
             }
-            // Supported Redirects Syntax under fastn.redirects
+            // Supported Redirects Syntax under fastn.url-mappings
             // <some link>: <link to redirect>
             // <some link> -> <link to redirect>
 
