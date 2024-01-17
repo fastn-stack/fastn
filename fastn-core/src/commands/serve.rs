@@ -550,11 +550,10 @@ async fn handle_static_route(
             None => path.to_string(),
         };
 
-        Some(
-            static_file(ds, path.strip_prefix('/').unwrap_or(path.as_str()))
-                .await
-                .map_err(Into::into),
-        )
+        let path = path.strip_prefix('/').unwrap_or(path.as_str());
+
+        // return None for error so that we can try static files with serve_helper
+        static_file(ds, path).await.map(|r| Ok(r)).ok()
     }
 
     async fn favicon(
