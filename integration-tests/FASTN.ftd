@@ -2,8 +2,7 @@
 
 -- fastn.package: integration-tests
 
--- fastn.endpoint: http://fastn.com
-mountpoint: /ftd/
+-- fastn.url-mappings:
 
--- fastn.endpoint: http://127.0.0.1:5000
-mountpoint: /get-data/
+/ftd/* -> http+proxy://fastn.com/ftd/*
+/get-data/ -> localhost+proxy:7999/get-data/

@@ -6,10 +6,13 @@ pub struct UrlMappings {
 }
 
 impl UrlMappings {
-    pub fn new() -> UrlMappings {
+    pub fn new(
+        redirects: ftd::Map<String>,
+        endpoints: Vec<fastn_package::old_fastn::EndpointData>,
+    ) -> UrlMappings {
         UrlMappings {
-            redirects: ftd::Map::new(),
-            endpoints: vec![],
+            redirects,
+            endpoints,
         }
     }
 }
@@ -25,11 +28,7 @@ impl UrlMappingsTemp {
         let url_mappings_body = self.body.as_str();
         let redirects = self.find_redirects(url_mappings_body)?;
         let endpoints = self.find_endpoints(url_mappings_body)?;
-
-        let mut url_mappings = UrlMappings::new();
-        url_mappings.redirects = redirects;
-        url_mappings.endpoints = endpoints;
-        Ok(url_mappings)
+        Ok(UrlMappings::new(redirects, endpoints))
     }
 
     // todo: merge find functions and do single pass

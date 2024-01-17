@@ -498,17 +498,13 @@ async fn handle_endpoints(
     config: &fastn_core::Config,
     req: &fastn_core::http::Request,
 ) -> Option<fastn_core::Result<fastn_core::http::Response>> {
-    let mut endpoint = None;
+    let matched_endpoint = config
+        .package
+        .endpoints
+        .iter()
+        .find(|ep| req.path().starts_with(ep.mountpoint.trim_end_matches('/')));
 
-    for ep in config.package.endpoints.iter() {
-        if !req.path().starts_with(ep.mountpoint.trim_end_matches('/')) {
-            continue;
-        }
-        endpoint = Some(ep.clone());
-        break;
-    }
-
-    let endpoint = match endpoint {
+    let endpoint = match matched_endpoint {
         Some(e) => e,
         None => return None,
     };
@@ -519,7 +515,9 @@ async fn handle_endpoints(
                 format!(
                     "{}/{}",
                     endpoint.endpoint.trim_end_matches('/'),
-                    req.path().trim_start_matches('/')
+                    req.path()
+                        .trim_start_matches(endpoint.mountpoint.trim_end_matches('/'))
+                        .trim_start_matches('/')
                 )
                 .as_str(),
             )
