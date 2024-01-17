@@ -50,8 +50,8 @@ pub async fn write_manifest_file(
 
     let start = std::time::Instant::now();
 
-    println!(
-        "Processing {}/{}",
+    print!(
+        "Processing {}/{} ... ",
         &config.package.name.as_str(),
         fastn_core::manifest::MANIFEST_FILE
     );
