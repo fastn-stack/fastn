@@ -55,20 +55,22 @@ impl UrlMappingsTemp {
                 if let Some((first, second)) = line.split_once("->") {
                     let mountpoint = first.trim().to_string();
                     let endpoint = second
+                        .trim()
                         .replace("http+proxy", "http")
                         .replace("localhost", "127.0.0.1")
                         .to_string();
 
-                    assert!(
-                        mountpoint.ends_with('*'),
-                        "Proxy Mountpoint {} must end with *",
-                        mountpoint.as_str()
-                    );
-                    assert!(
-                        endpoint.ends_with('*'),
-                        "Proxy Endpoint {} must end with *",
-                        endpoint.as_str()
-                    );
+                    if !mountpoint.ends_with('*') {
+                        return Err(fastn_core::Error::AssertError {
+                            message: format!("Proxy Mountpoint {} must end with *", first.trim()),
+                        });
+                    }
+
+                    if !endpoint.ends_with('*') {
+                        return Err(fastn_core::Error::AssertError {
+                            message: format!("Proxy Endpoint {} must end with *", second.trim()),
+                        });
+                    }
 
                     endpoints.push(fastn_package::old_fastn::EndpointData {
                         endpoint: endpoint.trim().trim_end_matches('*').to_string(),
@@ -187,5 +189,59 @@ mod tests {
 
         assert_eq!(url_mappings.endpoints.clone(), expected_endpoints);
         assert_eq!(url_mappings.redirects.clone(), expected_redirects);
+    }
+
+    #[test]
+    fn invalid_endpoint() {
+        let body = "
+                /blog/ -> /blogs/
+                /ftd/* -> http+proxy://fastn.com/ftd/
+            "
+        .to_string();
+        let url_mappings_temp = crate::package::redirects::UrlMappingsTemp { body };
+        let url_mappings = url_mappings_temp.url_mappings_from_body();
+        if url_mappings.is_ok() {
+            panic!("Expecting error but found no error");
+        }
+        match url_mappings.err().unwrap() {
+            fastn_core::Error::AssertError { ref message } => {
+                let invalid_endpoint = "http+proxy://fastn.com/ftd/".to_string();
+                assert_eq!(
+                    message.to_string(),
+                    format!(
+                        "Proxy Endpoint {} must end with *",
+                        invalid_endpoint.as_str()
+                    )
+                );
+            }
+            e => panic!("Was expecting assert error, found: {:?}", e),
+        }
+    }
+
+    #[test]
+    fn invalid_mountpoint() {
+        let body = "
+                /blog/ -> /blogs/
+                /ftd/ -> http+proxy://fastn.com/ftd/*
+            "
+        .to_string();
+        let url_mappings_temp = crate::package::redirects::UrlMappingsTemp { body };
+        let url_mappings = url_mappings_temp.url_mappings_from_body();
+        if url_mappings.is_ok() {
+            panic!("Expecting error but found no error");
+        }
+        match url_mappings.err().unwrap() {
+            fastn_core::Error::AssertError { ref message } => {
+                let invalid_mountpoint = "/ftd/".to_string();
+                assert_eq!(
+                    message.to_string(),
+                    format!(
+                        "Proxy Mountpoint {} must end with *",
+                        invalid_mountpoint.as_str()
+                    )
+                );
+            }
+            e => panic!("Was expecting assert error, found: {:?}", e),
+        }
     }
 }
