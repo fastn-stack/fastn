@@ -17,4 +17,4 @@ http-status: 308
 
 -- fastn.get: Redirect to google
 url: /goo/
-http-status: 308
+http-redirect: http://google.com
