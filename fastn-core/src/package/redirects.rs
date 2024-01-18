@@ -59,8 +59,8 @@ impl UrlMappingsTemp {
                     assert!(endpoint.ends_with('*'));
 
                     endpoints.push(fastn_package::old_fastn::EndpointData {
-                        endpoint: endpoint.trim_end_matches('*').to_string(),
-                        mountpoint: mountpoint.trim_end_matches('*').to_string(),
+                        endpoint: endpoint.trim().trim_end_matches('*').to_string(),
+                        mountpoint: mountpoint.trim().trim_end_matches('*').to_string(),
                         user_id: None,
                     });
                 }
@@ -157,7 +157,7 @@ mod tests {
                 user_id: None,
             },
             fastn_package::old_fastn::EndpointData {
-                endpoint: "http://127.0.0.1:7999".to_string(),
+                endpoint: "http://127.0.0.1:7999/".to_string(),
                 mountpoint: "/slides/".to_string(),
                 user_id: None,
             },
