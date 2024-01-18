@@ -141,12 +141,13 @@ pub fn find_redirect<'a>(redirects: &'a ftd::Map<String>, path: &str) -> Option<
 mod tests {
     #[test]
     fn url_mappings() {
-        let body = format!(indoc::indoc! {"
+        let body = "
                 /blog/ -> /blogs/
                 /ftd/* -> http+proxy://fastn.com/ftd/*
                 /docs/ -> http://fastn.com/docs/
                 /slides/* -> http+proxy://localhost:7999/*
-        "});
+            "
+        .to_string();
         let url_mappings_temp = crate::package::redirects::UrlMappingsTemp { body };
         let url_mappings = url_mappings_temp.url_mappings_from_body().ok();
 
