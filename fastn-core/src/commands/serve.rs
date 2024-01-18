@@ -436,31 +436,7 @@ async fn handle_static_route(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     return match handle_static_route_(path, package_name, ds).await {
         Ok(r) => Ok(r),
-        Err(fastn_ds::ReadError::NotFound) => {
-            let new_file_path = match path.rsplit_once('.') {
-                Some((remaining, ext))
-                    if mime_guess::MimeGuess::from_ext(ext)
-                        .first_or_octet_stream()
-                        .to_string()
-                        .starts_with("image/") =>
-                {
-                    if remaining.ends_with("-dark") {
-                        Some(format!("{}.{}", remaining.trim_end_matches("-dark"), ext))
-                    } else {
-                        Some(format!("{}-dark.{}", remaining, ext))
-                    }
-                }
-                _ => None,
-            };
-
-            if let Some(path) = new_file_path {
-                if let Ok(response) = handle_static_route_(path.as_str(), package_name, ds).await {
-                    return Ok(response);
-                }
-            }
-
-            Ok(fastn_core::http::not_found_without_warning("".to_string()))
-        }
+        Err(fastn_ds::ReadError::NotFound) => handle_not_found_image(path, package_name, ds).await,
         Err(e) => Err(e.into()),
     };
 
@@ -486,6 +462,45 @@ async fn handle_static_route(
         static_file(ds, path.strip_prefix('/').unwrap_or(path.as_str()))
             .await
             .map_err(Into::into)
+    }
+
+    async fn handle_not_found_image(
+        path: &str,
+        package_name: &str,
+        ds: &fastn_ds::DocumentStore,
+    ) -> fastn_core::Result<fastn_core::http::Response> {
+        // todo: handle dark images using manifest
+        if let Some(new_file_path) = generate_dark_image_path(path) {
+            return handle_static_route_(new_file_path.as_str(), package_name, ds)
+                .await
+                .or_else(|e| {
+                    if let fastn_ds::ReadError::NotFound = e {
+                        Ok(fastn_core::http::not_found_without_warning("".to_string()))
+                    } else {
+                        Err(e.into())
+                    }
+                });
+        }
+
+        Ok(fastn_core::http::not_found_without_warning("".to_string()))
+    }
+
+    fn generate_dark_image_path(path: &str) -> Option<String> {
+        match path.rsplit_once('.') {
+            Some((remaining, ext))
+                if mime_guess::MimeGuess::from_ext(ext)
+                    .first_or_octet_stream()
+                    .to_string()
+                    .starts_with("image/") =>
+            {
+                Some(if remaining.ends_with("-dark") {
+                    format!("{}.{}", remaining.trim_end_matches("-dark"), ext)
+                } else {
+                    format!("{}-dark.{}", remaining, ext)
+                })
+            }
+            _ => None,
+        }
     }
 
     async fn favicon(
