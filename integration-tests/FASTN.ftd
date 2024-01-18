@@ -5,4 +5,4 @@
 -- fastn.url-mappings:
 
 /ftd/* -> http+proxy://fastn.com/ftd/*
-/test-server-data/* -> http+proxy://localhost:5000/*
+/test-server-data/* -> http+proxy://localhost:5000/get-data/*

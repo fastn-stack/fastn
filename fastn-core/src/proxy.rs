@@ -84,8 +84,5 @@ pub(crate) async fn get_out(
 
     *proxy_request.body_mut() = Some(req.body().to_vec().into());
 
-    println!("Proxying request");
-    dbg!(proxy_request.url());
-
     Ok(fastn_core::http::ResponseBuilder::from_reqwest(CLIENT.execute(proxy_request).await?).await)
 }
