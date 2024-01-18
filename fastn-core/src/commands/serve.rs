@@ -437,6 +437,28 @@ async fn handle_static_route(
     return match handle_static_route_(path, package_name, ds).await {
         Ok(r) => Ok(r),
         Err(fastn_ds::ReadError::NotFound) => {
+            let new_file_path = match path.rsplit_once('.') {
+                Some((remaining, ext))
+                    if mime_guess::MimeGuess::from_ext(ext)
+                        .first_or_octet_stream()
+                        .to_string()
+                        .starts_with("image/") =>
+                {
+                    if remaining.ends_with("-dark") {
+                        Some(format!("{}.{}", remaining.trim_end_matches("-dark"), ext))
+                    } else {
+                        Some(format!("{}-dark.{}", remaining, ext))
+                    }
+                }
+                _ => None,
+            };
+
+            if let Some(path) = new_file_path {
+                if let Ok(response) = handle_static_route_(path.as_str(), package_name, ds).await {
+                    return Ok(response);
+                }
+            }
+
             Ok(fastn_core::http::not_found_without_warning("".to_string()))
         }
         Err(e) => Err(e.into()),
