@@ -164,15 +164,15 @@ mod tests {
         ];
 
         let mut expected_redirects: ftd::Map<String> = ftd::Map::new();
-        expected_redirects.insert("/blog/".to_string(), "/blogs/".to_string());
-        expected_redirects.insert("/docs/".to_string(), "http://fastn.com/docs/".to_string());
+        expected_redirects.extend([
+            ("/blog/".to_string(), "/blogs/".to_string()),
+            ("/docs/".to_string(), "http://fastn.com/docs/".to_string()),
+        ]);
 
         assert!(url_mappings.is_some());
         let url_mappings = url_mappings.unwrap();
 
-        let found_endpoints = url_mappings.endpoints.clone();
-        let found_redirects = url_mappings.redirects.clone();
-        assert_eq!(found_endpoints, expected_endpoints);
-        assert_eq!(found_redirects, expected_redirects);
+        assert_eq!(url_mappings.endpoints.clone(), expected_endpoints);
+        assert_eq!(url_mappings.redirects.clone(), expected_redirects);
     }
 }
