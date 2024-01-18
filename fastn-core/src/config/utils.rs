@@ -49,24 +49,16 @@ pub fn trim_package_name(path: &str, package_name: &str) -> Option<String> {
 }
 
 // url can be start with /-/package-name/ or  -/package-name/
-// It will return url with end-point, if package or dependency contains endpoint in them
-// url: /-/<package-name>/api/ => (package-name, endpoint/api/, app or package config)
-// url: /-/<package-name>/api/ => (package-name, endpoint/api/, app or package config)
+// It will return url with end-point, if package or dependency contains endpoints in them
+// url: /-/<package-name>/api/ => (package-name, endpoints/api/, app or package config)
+// url: /-/<package-name>/api/ => (package-name, endpoints/api/, app or package config)
 #[tracing::instrument(skip_all)]
 pub fn get_clean_url(
     config: &fastn_core::Config,
     url: &str,
-) -> fastn_core::Result<(
-    Option<String>,
-    url::Url,
-    std::collections::HashMap<String, String>,
-)> {
+) -> fastn_core::Result<(url::Url, std::collections::HashMap<String, String>)> {
     if url.starts_with("http") {
-        return Ok((
-            None,
-            url::Url::parse(url)?,
-            std::collections::HashMap::new(),
-        ));
+        return Ok((url::Url::parse(url)?, std::collections::HashMap::new()));
     }
 
     let url = if url.starts_with("/-/") || url.starts_with("-/") {
@@ -80,18 +72,30 @@ pub fn get_clean_url(
 
     // This is for current package
     if let Some(remaining_url) = trim_package_name(url.as_str(), config.package.name.as_str()) {
-        let end_point = match config.package.endpoint.as_ref() {
-            Some(ep) => ep,
-            None => {
-                return Err(fastn_core::Error::GenericError(format!(
-                    "package does not contain the endpoint: {:?}",
-                    config.package.name
-                )));
+        if config.package.endpoints.is_empty() {
+            return Err(fastn_core::Error::GenericError(format!(
+                "package does not contain the endpoints: {:?}",
+                config.package.name
+            )));
+        }
+
+        let mut end_point = None;
+        for e in config.package.endpoints.iter() {
+            if remaining_url.starts_with(e.mountpoint.as_str()) {
+                end_point = Some(e.endpoint.to_string());
+                break;
             }
-        };
+        }
+
+        if end_point.is_none() {
+            return Err(fastn_core::Error::GenericError(format!(
+                "No mountpoint matched for url: {}",
+                remaining_url.as_str()
+            )));
+        }
+
         return Ok((
-            Some(config.package.name.to_string()),
-            url::Url::parse(format!("{}{}", end_point, remaining_url).as_str())?,
+            url::Url::parse(format!("{}{}", end_point.unwrap(), remaining_url).as_str())?,
             std::collections::HashMap::new(), // TODO:
         ));
     }
@@ -106,7 +110,6 @@ pub fn get_clean_url(
                     app_conf.insert("user-id".to_string(), user_id.clone());
                 }
                 return Ok((
-                    Some(app.package.name.to_string()),
                     url::Url::parse(format!("{}{}", ep, remaining_url).as_str())?,
                     app_conf,
                 ));
@@ -114,13 +117,13 @@ pub fn get_clean_url(
         }
     }
 
-    if let Some(endpoint) = config.package.endpoint.as_ref() {
+    // Todo: Fix this later
+    if let Some(e) = config.package.endpoints.first() {
         return Ok((
-            Some(config.package.name.to_string()),
             url::Url::parse(
                 format!(
                     "{}/{}",
-                    endpoint.trim_end_matches('/'),
+                    e.endpoint.trim_end_matches('/'),
                     url.trim_start_matches('/')
                 )
                 .as_str(),

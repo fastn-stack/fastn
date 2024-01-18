@@ -64,6 +64,14 @@ pub struct BackendHeader {
     pub header_value: String,
 }
 
+#[derive(serde::Deserialize, Debug, Clone, PartialEq)]
+pub struct EndpointData {
+    pub endpoint: String,
+    pub mountpoint: String,
+    #[serde(rename = "user-id")]
+    pub user_id: Option<bool>,
+}
+
 /// PackageTemp is a struct that is used for mapping the `fastn.package` data in FASTN.ftd file. It is
 /// not used elsewhere in program, it is immediately converted to `fastn_core::Package` struct during
 /// deserialization process
@@ -84,7 +92,7 @@ pub struct PackageTemp {
     #[serde(rename = "inherit-auto-imports-from-original")]
     pub import_auto_imports_from_original: bool,
     pub favicon: Option<String>,
-    pub endpoint: Option<String>,
+    pub endpoint: Vec<EndpointData>,
     pub backend: bool,
     #[serde(rename = "backend-headers")]
     pub backend_headers: Option<Vec<BackendHeader>>,

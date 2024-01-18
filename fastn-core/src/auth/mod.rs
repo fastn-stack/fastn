@@ -33,6 +33,7 @@ impl AuthProviders {
         }
     }
 
+    #[allow(dead_code)]
     pub(crate) fn from_str(s: &str) -> Self {
         match s {
             "github" => AuthProviders::GitHub,
@@ -43,6 +44,7 @@ impl AuthProviders {
 
 /// will fetch out the decrypted user data from cookies
 /// and return it as string
+#[allow(dead_code)]
 pub async fn get_user_data_from_cookies(
     provider: &str,
     requested_field: &str,
