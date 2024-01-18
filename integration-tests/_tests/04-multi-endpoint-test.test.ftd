@@ -13,4 +13,5 @@ fastn.assert.eq(fastn.http_response["data"], "Hello, World!");
 ;; Mountpoint: /ftd/* -> Endpoint: http://fastn.com/ftd/*
 -- fastn.get:
 url: /ftd/column/
+http-status: 308
 

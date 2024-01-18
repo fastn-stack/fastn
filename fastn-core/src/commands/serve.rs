@@ -167,6 +167,7 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
 pub async fn serve(
     config: &fastn_core::Config,
     req: fastn_core::http::Request,
+    only_js: bool,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     if let Some(endpoint_response) = handle_endpoints(config, &req).await {
         return endpoint_response;
@@ -182,7 +183,7 @@ pub async fn serve(
         return static_response;
     }
 
-    serve_helper(config, req, false).await
+    serve_helper(config, req, only_js).await
 }
 
 #[tracing::instrument(skip_all)]
@@ -538,7 +539,7 @@ async fn actual_route(
     tracing::info!(method = req.method().as_str(), uri = req.path());
     let req = fastn_core::http::Request::from_actix(req, body);
 
-    serve(config, req).await
+    serve(config, req, false).await
 }
 
 #[tracing::instrument(skip_all)]
