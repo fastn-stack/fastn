@@ -2,15 +2,15 @@
 
 -- fastn.test: 04-multi-endpoint
 
-;; Mountpoint: /get-data/ -> Endpoint: http://127.0.0.1:5000
+;; Mountpoint: /test-server-data/ -> Endpoint: http://127.0.0.1:5000/get-data/
 -- fastn.get: Fetching Test Data (from test server)
-url: /get-data/
+url: /test-server-data/
 
 -- fastn.get.test:
 
 fastn.assert.eq(fastn.http_response["data"], "Hello, World!");
 
-;; Mountpoint: /ftd/ -> Endpoint: http://fastn.com
+;; Mountpoint: /ftd/* -> Endpoint: http://fastn.com/ftd/*
 -- fastn.get:
 url: /ftd/column/
 

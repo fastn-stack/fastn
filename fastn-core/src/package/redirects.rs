@@ -26,22 +26,15 @@ pub struct UrlMappingsTemp {
 impl UrlMappingsTemp {
     pub(crate) fn url_mappings_from_body(&self) -> fastn_core::Result<UrlMappings> {
         let url_mappings_body = self.body.as_str();
-        let redirects = self.find_redirects(url_mappings_body)?;
-        let endpoints = self.find_endpoints(url_mappings_body)?;
-        Ok(UrlMappings::new(redirects, endpoints))
+        self.find_redirects_and_endpoints(url_mappings_body)
     }
 
-    // todo: merge find functions and do single pass
-    //       parsing for all url mappings
-    fn find_endpoints(
-        &self,
-        body: &str,
-    ) -> fastn_core::Result<Vec<fastn_package::old_fastn::EndpointData>> {
+    fn find_redirects_and_endpoints(&self, body: &str) -> fastn_core::Result<UrlMappings> {
+        let mut redirects: ftd::Map<String> = ftd::Map::new();
         let mut endpoints = vec![];
-
         for line in body.lines() {
-            // Ignore comments
-            if line.is_empty() || line.trim_start().starts_with(';') {
+            // Ignore comments and endpoints
+            if line.is_empty() || line.trim_start().starts_with(';') || line.contains("proxy") {
                 continue;
             }
 
@@ -63,20 +56,11 @@ impl UrlMappingsTemp {
                         endpoint,
                         mountpoint,
                         user_id: None,
-                    })
+                    });
                 }
-            }
-        }
-
-        Ok(endpoints)
-    }
-
-    fn find_redirects(&self, body: &str) -> fastn_core::Result<ftd::Map<String>> {
-        let mut redirects: ftd::Map<String> = ftd::Map::new();
-        for line in body.lines() {
-            if line.is_empty() || line.trim_start().starts_with(';') {
                 continue;
             }
+
             // Supported Redirects Syntax under fastn.url-mappings
             // <some link>: <link to redirect>
             // <some link> -> <link to redirect>
@@ -94,7 +78,7 @@ impl UrlMappingsTemp {
                 Self::assert_and_insert_redirect(key, value, &mut redirects)?;
             }
         }
-        Ok(redirects)
+        Ok(UrlMappings::new(redirects, endpoints))
     }
 
     // Assert checks on redirects
