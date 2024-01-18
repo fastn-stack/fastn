@@ -1,4 +1,9 @@
 -- import: fastn
 
 -- fastn.package: integration-tests
-endpoint: http://127.0.0.1:5000
+
+-- fastn.url-mappings:
+
+/ftd/* -> http+proxy://fastn.com/ftd/*
+/test-server-data/* -> http+proxy://localhost:5000/get-data/*
+/goo/ -> http://google.com

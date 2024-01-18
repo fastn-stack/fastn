@@ -1,3 +1,10 @@
+-- record endpoint-data:
+caption endpoint:
+string mountpoint:
+optional boolean user-id:
+
+-- endpoint-data list endpoint:
+
 -- record backend-header:
 string header-key:
 string header-value:
@@ -15,7 +22,7 @@ optional string translation-of:
 string list translation:
 optional string canonical-url:
 boolean inherit-auto-imports-from-original: true
-optional string endpoint:
+endpoint-data list endpoint:
 boolean backend: false
 backend-header list backend-headers:
 optional string system:
@@ -47,7 +54,6 @@ optional string translation-ko:
 caption string lang:
 string module:
 
-
 -- record dependency-data:
 caption name:
 optional string version:
@@ -78,10 +84,10 @@ body sitemap-body:
 
 -- optional sitemap-rec sitemap:
 
--- record redirects-rec:
-body redirects-body:
+-- record url-mappings-rec:
+body url-mappings-body:
 
--- optional redirects-rec redirects:
+-- optional url-mappings-rec url-mappings:
 
 ;; Example: Dynamic Urls
 ;; -- fastn.dynamic-urls:

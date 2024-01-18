@@ -3,8 +3,7 @@
 -- fastn.test:
 
 -- fastn.get: Fetching Test Data (from test server)
-url: /get-data/
-http-status: 200
+url: /test-server-data/
 
 -- fastn.get.test:
 

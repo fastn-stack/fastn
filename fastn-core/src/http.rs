@@ -292,10 +292,7 @@ impl ResponseBuilder {
     // .build
     // response from string, json, bytes etc
 
-    pub async fn from_reqwest(
-        response: reqwest::Response,
-        _package_name: &str,
-    ) -> fastn_core::http::Response {
+    pub async fn from_reqwest(response: reqwest::Response) -> fastn_core::http::Response {
         let status = response.status();
 
         // Remove `Connection` as per

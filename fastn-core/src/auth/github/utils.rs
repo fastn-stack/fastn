@@ -28,7 +28,7 @@ pub fn github_client() -> oauth2::basic::BasicClient {
         oauth2::AuthUrl::new("https://github.com/login/oauth/authorize".to_string()).unwrap(),
         Some(
             oauth2::TokenUrl::new("https://github.com/login/oauth/access_token".to_string())
-                .expect("Invalid token endpoint URL"),
+                .expect("Invalid token endpoints URL"),
         ),
     )
 }

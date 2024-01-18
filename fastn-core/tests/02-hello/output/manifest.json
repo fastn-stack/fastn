@@ -1,0 +1,21 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "FC694BA4CFBB582F3EA48B5AB0C7F380E76271D148232EFD5D8234586502C9BE",
+      "size": 185
+    },
+    "fail_doc.ftd": {
+      "name": "fail_doc.ftd",
+      "checksum": "B33E92CAF6F87911B6B6EC2C5E9F2D20DED04CA44392CDA1F35F818F29C280D4",
+      "size": 47
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "0A0BF8A949025BA3F05B9D86F4302C9CCC90240E5B542584CDFCB1582677B760",
+      "size": 1045
+    }
+  },
+  "zip_url": "https://codeload.github.com/amitu/dotcom/zip/refs/heads/main",
+  "checksum": "81D50921C5CA5A41C4B44C155D06F6F3DC5AAB8B1D819474362AD3E17829B26C"
+}

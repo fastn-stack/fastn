@@ -167,6 +167,7 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
 pub async fn serve(
     config: &fastn_core::Config,
     req: fastn_core::http::Request,
+    only_js: bool,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     if let Some(endpoint_response) = handle_endpoints(config, &req).await {
         return endpoint_response;
@@ -182,7 +183,7 @@ pub async fn serve(
         return static_response;
     }
 
-    serve_helper(config, req, false).await
+    serve_helper(config, req, only_js).await
 }
 
 #[tracing::instrument(skip_all)]
@@ -191,6 +192,17 @@ pub async fn serve_helper(
     req: fastn_core::http::Request,
     only_js: bool,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    match (req.method().to_lowercase().as_str(), req.path()) {
+        #[cfg(feature = "auth")]
+        (_, t) if t.starts_with("/-/auth/") => {
+            return fastn_core::auth::routes::handle_auth(req, config).await
+        }
+        ("get", "/-/clear-cache/") => return clear_cache(config, req).await,
+        ("get", "/-/poll/") => return fastn_core::watcher::poll().await,
+        ("get", "/test/") => return test().await,
+        _ => {}
+    }
+
     let _lock = LOCK.read().await;
 
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
@@ -252,87 +264,12 @@ pub async fn serve_helper(
         }
 
         let file_response = serve_file(&mut req_config, path.as_path(), only_js).await;
-        // If path is not present in sitemap then pass it to proxy
-        // TODO: Need to handle other package URL as well, and that will start from `-`
-        // and all the static files starts with `-`
-        // So task is how to handle proxy urls which are starting with `-/<package-name>/<proxy-path>`
-        // In that case need to check whether that url is present in sitemap or not and than proxy
-        // pass the url if the file is not static
-        // So final check would be file is not static and path is not present in the package's sitemap
+
         tracing::info!(
             "before executing proxy: file-status: {}, path: {}",
             file_response.status(),
             &path
         );
-        if file_response.status() == actix_web::http::StatusCode::NOT_FOUND {
-            // TODO: Check if path exists in dynamic urls also, otherwise pass to endpoint
-            // Already checked in the above method serve_file
-
-            tracing::info!("executing proxy: path: {}", &path);
-            #[allow(unused_mut)]
-            let (package_name, url, mut conf) =
-                fastn_core::config::utils::get_clean_url(config, path.as_str())?;
-            let package_name = package_name.unwrap_or_else(|| config.package.name.to_string());
-
-            let host = if let Some(port) = url.port() {
-                format!("{}://{}:{}", url.scheme(), url.host_str().unwrap(), port)
-            } else {
-                format!("{}://{}", url.scheme(), url.host_str().unwrap())
-            };
-
-            // TODO: read app config and send them to service as header
-            // Adjust x-fastn header from based on the platform and the requested field
-            // this is for fastn.app
-            #[cfg(feature = "auth")]
-            if let Some(user_id) = conf.get("user-id") {
-                // if request goes with mount-point /todos/api/add-todo/
-                // so it should say not found and pass it to proxy
-                let cookies = req_config.request.cookies().clone();
-
-                match user_id.split_once('-') {
-                    Some((platform, requested_field)) => {
-                        if let Some(user_data) = fastn_core::auth::get_user_data_from_cookies(
-                            platform,
-                            requested_field,
-                            &cookies,
-                        )
-                        .await?
-                        {
-                            conf.insert("X-FASTN-USER-ID".to_string(), user_data);
-                        }
-                    }
-                    _ => return Ok(fastn_core::unauthorised!("invalid user-id provided")),
-                }
-            }
-
-            return fastn_core::proxy::get_out(
-                host.as_str(),
-                req,
-                url.path(),
-                package_name.as_str(),
-                &conf,
-            )
-            .await;
-        }
-
-        // Fallback to WASM execution in case of no successful response
-        // TODO: This is hacky. Use the sitemap eventually.
-        // if file_response.status() == actix_web::http::StatusCode::NOT_FOUND {
-        //     let package = config.find_package_by_id(path.as_str()).await.unwrap().1;
-        //     let wasm_module = config.get_root_for_package(&package).join("backend.wasm");
-        //     // Set the temp path to and do `get_file_and_package_by_id` to retrieve the backend.wasm
-        //     // File for the particular dependency package
-        //     let wasm_module_path = format!("-/{}/backend.wasm", package.name,);
-        //     config
-        //         .get_file_and_package_by_id(wasm_module_path.as_str())
-        //         .await?;
-        //     let req = if let Some(r) = config.request {
-        //         r
-        //     } else {
-        //         return Ok(fastn_core::server_error!("request not set"));
-        //     };
-        //     fastn_core::wasm::handle_wasm(req, wasm_module, config.package.backend_headers).await
-        // }
 
         file_response
     };
@@ -559,11 +496,38 @@ async fn handle_static_route(
 }
 
 async fn handle_endpoints(
-    _config: &fastn_core::Config,
-    _req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
+    req: &fastn_core::http::Request,
 ) -> Option<fastn_core::Result<fastn_core::http::Response>> {
-    // static means it has an extension and it does not start with endpoint
-    None
+    let matched_endpoint = config
+        .package
+        .endpoints
+        .iter()
+        .find(|ep| req.path().starts_with(ep.mountpoint.trim_end_matches('/')));
+
+    let endpoint = match matched_endpoint {
+        Some(e) => e,
+        None => return None,
+    };
+
+    Some(
+        fastn_core::proxy::get_out(
+            url::Url::parse(
+                format!(
+                    "{}/{}",
+                    endpoint.endpoint.trim_end_matches('/'),
+                    req.path()
+                        .trim_start_matches(endpoint.mountpoint.trim_end_matches('/'))
+                        .trim_start_matches('/')
+                )
+                .as_str(),
+            )
+            .unwrap(),
+            req,
+            &std::collections::HashMap::new(),
+        )
+        .await,
+    )
 }
 
 #[tracing::instrument(skip_all)]
@@ -573,17 +537,9 @@ async fn actual_route(
     body: actix_web::web::Bytes,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     tracing::info!(method = req.method().as_str(), uri = req.path());
-
     let req = fastn_core::http::Request::from_actix(req, body);
 
-    match (req.method().to_lowercase().as_str(), req.path()) {
-        #[cfg(feature = "auth")]
-        (_, t) if t.starts_with("/-/auth/") => fastn_core::auth::routes::handle_auth(req).await,
-        ("get", "/-/clear-cache/") => clear_cache(config, req).await,
-        ("get", "/-/poll/") => fastn_core::watcher::poll().await,
-        ("get", "/test/") => test().await,
-        (_, _) => serve(config, req).await,
-    }
+    serve(config, req, false).await
 }
 
 #[tracing::instrument(skip_all)]
@@ -603,7 +559,6 @@ async fn route(
     actual_route(&config, req, body).await
 }
 
-//noinspection HttpUrlsUsage
 #[allow(clippy::too_many_arguments)]
 pub async fn listen(
     bind_address: &str,
@@ -642,14 +597,6 @@ You can try without providing port, it will automatically pick unused port."#,
         }
     };
 
-    #[cfg(feature = "auth")]
-    if let Ok(auth_enabled) = std::env::var("FASTN_ENABLE_AUTH") {
-        if auth_enabled == "true" {
-            tracing::info!("running auth related migrations");
-            fastn_core::auth::enable_auth()?
-        }
-    }
-
     let app = move || {
         actix_web::App::new()
             .app_data(actix_web::web::Data::new(AppData {
@@ -682,7 +629,3 @@ You can try without providing port, it will automatically pick unused port."#,
         .await?;
     Ok(())
 }
-
-// cargo install --features controller --path=.
-// FASTN_CONTROLLER=http://127.0.0.1:8000 FASTN_INSTANCE_ID=12345 fastn serve 8001
-// TRACING=INFO fastn serve
