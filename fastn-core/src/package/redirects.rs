@@ -27,16 +27,20 @@ pub struct UrlMappingsTemp {
 impl UrlMappingsTemp {
     pub(crate) fn url_mappings_from_body(&self) -> fastn_core::Result<UrlMappings> {
         let url_mappings_body = self.body.as_str();
-        self.find_redirects_and_endpoints(url_mappings_body)
+        self.find_url_mappings(url_mappings_body)
     }
 
-    fn find_redirects_and_endpoints(&self, body: &str) -> fastn_core::Result<UrlMappings> {
+    // todo: parse dynamic-urls in this later
+    /// Parses url mappings from fastn.url-mappings body
+    ///
+    /// and returns UrlMappings { redirects, endpoints }
+    fn find_url_mappings(&self, body: &str) -> fastn_core::Result<UrlMappings> {
         let mut redirects: ftd::Map<String> = ftd::Map::new();
         let mut endpoints = vec![];
         for line in body.lines() {
             let line = line.trim();
 
-            // Ignore comments and endpoints
+            // Ignore comments
             if line.is_empty() || line.starts_with(';') {
                 continue;
             }
@@ -45,7 +49,7 @@ impl UrlMappingsTemp {
             // /ftd/* -> http+proxy://fastn.com/ftd/*
             //
             // localhost+proxy - http://127.0.0.1
-            // /docs/* -> localhost+proxy:<port>
+            // /docs/* -> http+proxy://localhost:7999/*
 
             if line.contains("proxy") {
                 if let Some((first, second)) = line.split_once("->") {
@@ -55,8 +59,16 @@ impl UrlMappingsTemp {
                         .replace("localhost", "127.0.0.1")
                         .to_string();
 
-                    assert!(mountpoint.ends_with('*'));
-                    assert!(endpoint.ends_with('*'));
+                    assert!(
+                        mountpoint.ends_with('*'),
+                        "Proxy Mountpoint {} must end with *",
+                        mountpoint.as_str()
+                    );
+                    assert!(
+                        endpoint.ends_with('*'),
+                        "Proxy Endpoint {} must end with *",
+                        endpoint.as_str()
+                    );
 
                     endpoints.push(fastn_package::old_fastn::EndpointData {
                         endpoint: endpoint.trim().trim_end_matches('*').to_string(),
