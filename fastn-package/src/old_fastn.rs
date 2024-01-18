@@ -64,7 +64,7 @@ pub struct BackendHeader {
     pub header_value: String,
 }
 
-#[derive(serde::Deserialize, Debug, Clone)]
+#[derive(serde::Deserialize, Debug, Clone, PartialEq)]
 pub struct EndpointData {
     pub endpoint: String,
     pub mountpoint: String,

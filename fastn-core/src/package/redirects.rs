@@ -1,3 +1,4 @@
+#[derive(Debug, PartialEq)]
 pub struct UrlMappings {
     pub redirects: ftd::Map<String>,
     pub endpoints: Vec<fastn_package::old_fastn::EndpointData>,
@@ -33,8 +34,10 @@ impl UrlMappingsTemp {
         let mut redirects: ftd::Map<String> = ftd::Map::new();
         let mut endpoints = vec![];
         for line in body.lines() {
+            let line = line.trim();
+
             // Ignore comments and endpoints
-            if line.is_empty() || line.trim_start().starts_with(';') || line.contains("proxy") {
+            if line.is_empty() || line.starts_with(';') {
                 continue;
             }
 
@@ -46,15 +49,18 @@ impl UrlMappingsTemp {
 
             if line.contains("proxy") {
                 if let Some((first, second)) = line.split_once("->") {
-                    let mountpoint = first.trim().trim_matches('*').to_string();
+                    let mountpoint = first.trim().to_string();
                     let endpoint = second
                         .replace("http+proxy", "http")
-                        .replace("localhost+proxy", "http://127.0.0.1")
-                        .trim_end_matches('*')
+                        .replace("localhost", "127.0.0.1")
                         .to_string();
+
+                    assert!(mountpoint.ends_with('*'));
+                    assert!(endpoint.ends_with('*'));
+
                     endpoints.push(fastn_package::old_fastn::EndpointData {
-                        endpoint,
-                        mountpoint,
+                        endpoint: endpoint.trim_end_matches('*').to_string(),
+                        mountpoint: mountpoint.trim_end_matches('*').to_string(),
                         user_id: None,
                     });
                 }
@@ -129,4 +135,44 @@ pub fn find_redirect<'a>(redirects: &'a ftd::Map<String>, path: &str) -> Option<
     } else {
         None
     };
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn url_mappings() {
+        let body = format!(indoc::indoc! {"
+                /blog/ -> /blogs/
+                /ftd/* -> http+proxy://fastn.com/ftd/*
+                /docs/ -> http://fastn.com/docs/
+                /slides/* -> http+proxy://localhost:7999/*
+        "});
+        let url_mappings_temp = crate::package::redirects::UrlMappingsTemp { body };
+        let url_mappings = url_mappings_temp.url_mappings_from_body().ok();
+
+        let expected_endpoints = vec![
+            fastn_package::old_fastn::EndpointData {
+                endpoint: "http://fastn.com/ftd/".to_string(),
+                mountpoint: "/ftd/".to_string(),
+                user_id: None,
+            },
+            fastn_package::old_fastn::EndpointData {
+                endpoint: "http://127.0.0.1:7999".to_string(),
+                mountpoint: "/slides/".to_string(),
+                user_id: None,
+            },
+        ];
+
+        let mut expected_redirects: ftd::Map<String> = ftd::Map::new();
+        expected_redirects.insert("/blog/".to_string(), "/blogs/".to_string());
+        expected_redirects.insert("/docs/".to_string(), "http://fastn.com/docs/".to_string());
+
+        assert!(url_mappings.is_some());
+        let url_mappings = url_mappings.unwrap();
+
+        let found_endpoints = url_mappings.endpoints.clone();
+        let found_redirects = url_mappings.redirects.clone();
+        assert_eq!(found_endpoints, expected_endpoints);
+        assert_eq!(found_redirects, expected_redirects);
+    }
 }
