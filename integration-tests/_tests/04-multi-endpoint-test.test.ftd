@@ -15,3 +15,6 @@ fastn.assert.eq(fastn.http_response["data"], "Hello, World!");
 url: /ftd/column/
 http-status: 308
 
+-- fastn.get: Redirect to google
+url: /goo/
+http-status: 308

@@ -6,3 +6,4 @@
 
 /ftd/* -> http+proxy://fastn.com/ftd/*
 /test-server-data/* -> http+proxy://localhost:5000/get-data/*
+/goo/ -> http://google.com
