@@ -916,7 +916,7 @@ skip: true
 
 # Blog: /blog/
 
-- Design System Package: /blog/design-system/
+- Design System Package Tutorial (Part 1): /blog/design-system/
   document: blog/design-system.ftd
 - Domain Components: /blog/domain-components/
   document: blog/domain-components.ftd
