@@ -75,6 +75,9 @@ pub enum Error {
     #[error("UsageError: {message}")]
     UsageError { message: String },
 
+    #[error("UpdateError: {message}")]
+    UpdateError { message: String },
+
     #[error("GenericError: {}", _0)]
     GenericError(String),
 
