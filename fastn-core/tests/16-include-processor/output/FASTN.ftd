@@ -3,6 +3,4 @@
 -- fastn.package: fifthtry.github.io/amitu
 download-base-url: github.com/fifthtry/amitu/archive/refs/heads/main.zip
 
--- fastn.dependency: fifthtry.github.io/blog-theme as ft
-
 -- fastn.ignore: code/*
