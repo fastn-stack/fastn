@@ -1,0 +1,654 @@
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/content-library as cl
+-- import: fastn-community.github.io/bling/sidenote
+
+
+
+-- common.post-meta meta: Tutorial (Part 2): Build a fastn-Powered Website Using the Design System Package
+published-on: January 19, 2024
+post-url: /blog/design-system-part-2/
+author: $authors.nandini
+
+Welcome to the second part of our tutorial on building a fastn-powered website 
+using the [`design system package`](https://github.com/fastn-community/design-system/). 
+In this segment, we'll explore creating intricate designs and making your 
+website responsive.
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.h1: The Testimonial Component
+
+Let's look at the Testimonials section of the [talknotes.io](http://talknotes.io/) 
+website, where a UI card design is used for each testimonial. Each card boasts 
+a heading, body, star rating, name, and country. Notably, the cards feature a 
+background color, border radius, and a quote image anchored to the top left 
+corner of the card.
+
+To replicate this card design efficiently for multiple testimonials and future 
+additions, we'll separate the UI design and content into a different components, 
+named **`testimonial-card`** for the UI design and **`testimonials`** for the
+content, respectively. 
+
+
+-- ds.h2: Designing the `testimonial-card` Component
+
+-- ds.h3: 1) Defining Values
+
+Begin by determining the values the testimonial-card component will take, such 
+as caption title, body description, name, and country.
+
+-- ds.code:
+lang: ftd
+
+\-- component testimonial-card:
+caption title:
+body description:
+string name:
+string country:
+
+
+-- ds.h3: 2) Styling the Container
+
+Add attributes to the ds.container to define its design, including inset, 
+background color, width, height, and radius.
+
+-- ds.code:
+lang: ftd
+
+\-- ds.container:
+inset: $ds.spaces.inset-square.medium
+background.solid: $ds.colors.background.step-1
+width.fixed.percent: 30
+height.fixed.px: 190
+radius: $ds.radius.medium
+
+-- ds.h3: 3) Adding the Quote Image
+
+Add the quote image using `ftd.image` with specified width and anchor properties.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.image:
+src: assets/quote.svg
+anchor: parent
+top.px: -6
+left.px: -12
+width.fixed.px: 24
+
+-- ds.markdown:
+
+[Learn more about the anchor property.](https://fastn.com/built-in-types#ftd-anchor)
+
+-- ds.h3: 4) Structure the Content with `ds.column` and `ds.row`
+
+- Use `ds.column` for heading, body description, name, and country, employing 
+  the `$` symbol for variable values.
+
+- For the star ratings, use `ds.row` and `phosphor.fill` with a star icon.
+
+-- ds.code:
+lang: ftd
+
+\-- ds.column:
+
+\-- ds.heading-tiny: $testimonial-card.title ;; <hl>
+
+\-- ds.fine-print:
+
+$testimonial-card.description ;; <hl>
+
+\-- ds.row:
+
+\-- phosphor.fill: star ;; <hl>
+size: 18
+
+\-- phosphor.fill: star
+size: 18
+
+\-- phosphor.fill: star
+size: 18
+
+\-- phosphor.fill: star
+size: 18
+
+\-- phosphor.fill: star
+size: 18
+
+\-- ds.fine-print: 
+
+$testimonial-card.name ;; <hl>
+
+\-- ds.fine-print:
+
+$testimonial-card.country ;; <hl>
+
+\-- end: ds.row
+
+\-- end: ds.column
+
+-- ds.markdown:
+
+In this design, a uniform 5-star rating is implemented across all testimonials. 
+If your testimonials feature different ratings, you can introduce variability. 
+To do this, define a variable within the `testimonial-card` component and invoke 
+it inside the `ds.container`. Follow the code outlined below:
+
+-- ds.code:
+lang: ftd
+
+\-- component testimonial-card:
+caption title:
+body description:
+string name:
+string country:
+ftd.image-src icon: ;; <hl>
+
+-- ds.markdown:
+
+Within the `ds.container`, employ the following syntax to incorporate the star 
+rating variable:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.image:
+src: $testimonial-card.icon ;; <hl>
+
+-- ds.markdown:
+
+Now, the design for the `testimonial-card` is ready. Below is the complete code 
+for the `testimonial-card` component.
+
+-- ds.code:
+lang: ftd
+
+\-- component testimonial-card:
+caption title:
+body description:
+string name:
+string country:
+
+\-- ds.container:
+inset: $ds.spaces.inset-square.medium
+background.solid: $ds.colors.background.step-1
+width.fixed.percent: 30
+height.fixed.px: 190
+radius: $ds.radius.medium
+
+\-- ftd.image:
+src: assets/quote.svg
+anchor: parent
+top.px: -6
+left.px: -12
+width.fixed.px: 24
+
+\-- ds.column:
+spacing: $ds.spaces.horizontal-gap.space-between
+height.fixed.px: 180
+
+\-- ds.heading-tiny: $testimonial-card.title
+color: $ds.colors.text-strong
+
+\-- ds.fine-print:
+color: $ds.colors.text
+
+$testimonial-card.description
+
+\-- ds.row:
+align-content: left
+spacing: $ds.spaces.horizontal-gap.extra-small
+
+\-- phosphor.fill: star
+size: 18
+color: orange
+
+\-- phosphor.fill: star
+size: 18
+color: orange
+
+\-- phosphor.fill: star
+size: 18
+color: orange
+
+\-- phosphor.fill: star
+size: 18
+color: orange
+
+\-- phosphor.fill: star
+size: 18
+color: orange
+
+\-- ds.fine-print:
+color: $ds.colors.text-strong
+
+$testimonial-card.name
+
+\-- ds.fine-print:
+color: $ds.colors.text
+
+$testimonial-card.country
+
+\-- end: ds.row
+
+\-- end: ds.column
+
+\-- end: ds.container
+
+\-- end: testimonial-card
+
+-- ds.markdown:
+
+We'll proceed to create the `testimonials` component to compile the values 
+of the variables and display multiple testimonials.
+
+-- ds.h2: Designing the `testimonials` Component
+
+-- ds.h3: 1) Setting Spacing and Wrapping:
+
+- Use `ds.section-row` with the spacing attributes to establish spacing between 
+  testimonial cards.
+
+- Using the [`wrap: true` attribute](https://fastn.com/container-attributes/) you can wrap the elements to the next line 
+  based on the screen size. 
+
+-- ds.code:
+lang: ftd
+
+\-- component testimonials:
+
+\-- ds.section-row:
+spacing: $ds.spaces.horizontal-gap.medium
+wrap: true ;; <hl>
+flush: full
+inset: $ds.spaces.inset-wide.small
+
+-- ds.h3: 2) Adding Testimonials
+
+Call the `testimonial-card` component for each testimonial, specifying details 
+like heading, name, country, and an optional icon.
+
+-- ds.code:
+lang: ftd
+
+\-- testimonial-card: Outstanding Quality
+name: Thomas Mickeleit
+country: Germany
+icon: assets/image.png (optional)
+
+The quality of the transcriptions is fantastic and requires virtually no rework. 
+Compared to incomparably more expensive professional transcription tools, 
+the results are dimensions better.
+
+-- ds.markdown:
+
+Repeat the above structure for additional testimonials.
+
+-- ds.code:
+lang: ftd
+
+\-- testimonial-card: A Huge Time-Saver
+name: Pier Smulders
+country: New Zealand
+
+This is a really great app and a huge time-saver. I like that the emails are in 
+my personal style, unlike other AI apps where they are really formulaic.
+
+\-- testimonial-card: Had Been Looking for Something Exactly Like This!
+name: Guido
+country: Netherlands
+
+I had been looking for a while for exactly this type of app, and I've yet to 
+find one that works as seamlessly as this one! The multilingual input works 
+really smooth.
+
+-- ds.markdown: 
+
+After adding the testimonials, end the `ds.section-row` and `testimonials` 
+component.
+
+Now the `testimonials` component is complete, call it within the `ds.page` to 
+integrate it into your webpage.
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/design-system as ds
+\-- import: fastn-community.github.io/svg-icons/phosphor
+
+\-- ds.page:
+
+\-- header:
+\-- hero:
+\-- testimonials: ;; <hl>
+
+\-- end: ds.page
+
+-- ds.markdown:
+
+Below is the complete code for the `testimonials` component.
+
+-- ds.code:
+lang: ftd
+
+\-- component testimonials:
+
+\-- ds.section-row:
+spacing: $ds.spaces.horizontal-gap.medium
+wrap: true
+flush: full
+inset: $ds.spaces.inset-wide.small
+
+\-- testimonial-card: Outstanding Quality
+name: Thomas Mickeleit
+country: Germany
+
+The quality of the transcriptions is fantastic and require virtually no rework. Compared to incomparably more expensive professional transcription tools, the results are dimensions better.
+
+\-- testimonial-card: A huge time-saver
+name: Pier Smulders
+country: New Zealand
+
+This is really great app and a huge time-saver. I like that the emails are in my personal style unlike other ai apps where they are really formulaic.
+
+\-- testimonial-card: Had been looking for something exactly like this!
+name: Guido
+country: Netherlands
+
+I had been looking for a while for exactly this type of app, and I've yet to find one that works as seamless as this one! The multilingual input works really smooth.
+
+\-- end: ds.section-row
+
+\-- end: testimonials
+
+-- ds.markdown:
+
+Following this method, you can build other similar sections in the talknotes.io 
+website. 
+
+-- ds.h1: Optimize your design for desktop and mobile
+
+To initiate responsiveness, we will use `ftd.desktop` and `ftd.mobile` into your 
+components. The [`ftd.desktop`](https://fastn.com/desktop/) component serves 
+to optimize webpage rendering for desktop devices. The 
+[`ftd.mobile`](https://fastn.com/mobile/) component serves to optimize webpage
+rendering for mobile devices. Ensure each `ftd.desktop` 
+and `ftd.mobile` is correctly enclosed using the end syntax. 
+
+;; Also, remember to use ftd.desktop and ftd.mobile inside a ds.column. 
+
+-- ds.code:
+lang: ftd
+
+\-- ds.column:
+
+\-- ftd.desktop:
+
+\;; << A child component >>
+
+\-- end: ftd.desktop
+
+\-- ftd.mobile:
+
+\;; << A child component >>
+
+\-- end: ftd.mobile
+
+\-- end: ds.column
+
+-- ds.markdown:
+
+The next step is to customize the design within the `ftd.mobile` to cater specifically to 
+mobile devices. Let's start with a simple component, the arrow.
+
+-- ds.code:
+lang: ftd
+
+\-- component arrow:
+
+\-- ds.section-row:
+\-- phosphor.bold: caret-down
+size: 80
+\-- end: ds.section-row
+
+\-- end: arrow
+
+-- ds.markdown:
+
+Following the above method, let's make the arrow component responsive.
+
+-- ds.code:
+lang: ftd
+
+\-- component arrow:
+
+\-- ds.column:
+
+\-- ftd.desktop:
+\-- ds.section-row:
+\-- phosphor.bold: caret-down
+size: 80
+\-- end: ds.section-row
+\-- end: ftd.desktop
+
+\-- ftd.mobile:
+\-- ds.section-column:
+\-- phosphor.bold: caret-down
+size: 40
+\-- end: ds.section-row
+\-- end: ftd.mobile
+
+\-- end: ds.column
+\-- end: arrow
+
+-- ds.markdown:
+
+In this example, the arrow's size is adjusted to 40 in the mobile version, 
+ensuring optimal display on smaller screens.
+
+Now, let's consider a more complex component- the header component in the 
+[talknotes.io](http://talknotes.io/) website. Check [Part 1 Tutorial](/blog/design-system/)
+
+To achieve mobile responsiveness for the header, follow the steps below.
+
+-- ds.h3: 1) Use ds.column and add `ftd.desktop` and `ftd.mobile` to the component.
+
+-- ds.code:
+lang: ftd
+
+\-- component header:
+
+\-- ds.column: ;; <hl>
+
+\-- ftd.desktop: ;; <hl>
+ 
+\-- ds.section-row:
+inset: $ds.spaces.inset-wide.large
+outer-background.solid: $ds.colors.background.step-2
+spacing: $ds.spaces.horizontal-gap.space-between
+flush: full
+margin: $ds.spaces.vertical-gap.extra-large
+
+\-- ftd.image:
+src: https://talknotes.io/_ipx/w_150&q_80/images/brand/logo-color.svg
+width.fixed.percent: 10
+
+\-- ds.row:
+spacing: $ds.spaces.horizontal-gap.large
+width: fill-container
+
+\-- ds.header-link: Try it
+link: /
+
+\-- ds.header-link: How it works
+link: /
+
+\-- ds.header-link: Use cases
+link: /
+
+\-- ds.header-link: Pricing
+link: /
+
+\-- ds.header-link: FAQ
+link: /
+
+\-- end: ds.row
+
+\-- ds.row:
+width: hug-content
+
+\-- ds.info-button: Login
+link: /
+
+\-- ds.phosphor-icon-button: Get Talknotes +
+icon: arrow-right
+link: /
+
+\-- end: ds.row
+
+\-- end: ds.section-row
+
+\-- end: ftd.desktop  ;; <hl>
+
+
+\-- ftd.mobile:  ;; <hl>
+
+\-- ds.section-row:
+inset: $ds.spaces.inset-wide.large
+outer-background.solid: $ds.colors.background.step-2
+spacing: $ds.spaces.horizontal-gap.space-between
+flush: full
+margin: $ds.spaces.vertical-gap.extra-large
+
+\-- ftd.image:
+src: https://talknotes.io/_ipx/w_150&q_80/images/brand/logo-color.svg
+width.fixed.percent: 10
+
+\-- ds.row:
+spacing: $ds.spaces.horizontal-gap.large
+width: fill-container
+
+\-- ds.header-link: Try it
+link: /
+
+\-- ds.header-link: How it works
+link: /
+
+\-- ds.header-link: Use cases
+link: /
+
+\-- ds.header-link: Pricing
+link: /
+
+\-- ds.header-link: FAQ
+link: /
+
+\-- end: ds.row
+
+\-- ds.row:
+width: hug-content
+
+\-- ds.info-button: Login
+link: /
+
+\-- ds.phosphor-icon-button: Get Talknotes +
+icon: arrow-right
+link: /
+
+\-- end: ds.row
+
+\-- end: ds.section-row
+
+\-- end: ftd.mobile ;; <hl>
+
+\-- end: ds.column  ;; <hl>
+
+\-- end: header 
+
+
+-- ds.h3: 2) Modify the component design in `ftd.mobile`
+
+Unlike the desktop version, in the mobile version we will have only the logo, 
+and Login Button and make header links visible only when users engage with a 
+hamburger icon. To do that, follow the below steps. 
+
+- Change `ds.section-row` to `ds.section-column`.
+- Change horizontal spacing into vertical spacing in `ds.section-row`. 
+  Remove `spacing: $ds.spaces.horizontal-gap.space-between` and add 
+  `spacing: $ds.spaces.horizontal-gap.space-between`
+- Use `ds.row` and use the phosphor icon for the list/hamburger icon.
+- Add [event handling]((https://fastn.com/events/)) to the hamburger icon. 
+  Here we will use `$on-click$` event with [`toggle`]((https://fastn.com/built-in-functions/)) function. 
+
+-- ds.code:
+lang: ftd
+
+\-- phosphor.bold: list
+size: 32
+$on-click$: $ftd.toggle($a = $header.open) ;; <hl>
+
+-- ds.markdown:
+
+- Add the logo and login button within the ds.row and then close it.
+- Design the pop-up screen for the header links and specify the action when the 
+  icon is clicked. Use the provided code snippet. 
+
+-- ds.code:
+lang: ftd
+
+\-- ds.column:
+if: {header.open} ;; (this makes sure the pop-up is visible only when the user clicks on the icon) ;; <hl>
+anchor: parent ;; (anchor property helps to position the pop-up screen) ;; <hl>
+top: 72 
+bottom: 0
+left: 0
+right: 0
+height: hug-content
+z-index: 1 ;; (see below note) ;; <hl>
+background.solid: $ds.colors.background.step-1
+align-content: top-left
+inset: $ds.spaces.inset-square.medium
+
+\-- ds.column:
+inset: $ds.spaces.inset-wide.medium
+align-content: top-left
+
+\-- ds.header-link: Try It
+link: /
+
+\-- ds.header-link: How it works
+link: /
+
+\-- ds.header-link: Usecases
+link: /
+
+\-- ds.header-link: Pricing
+link: /
+
+\-- ds.header-link: FAQ
+link: /
+
+\-- end: ds.column
+
+\-- end: ds.column
+
+-- ds.markdown:
+
+Note: The [z-index property](https://fastn.com/common-attributes#z-index) lets 
+you control the stacking order of positioned elements. It specifies the order 
+in which elements are stacked on top of each other when they overlap. Elements 
+with a higher z-index value appear on top of elements with a lower z-index value. 
+
+By following the above steps, you can easily make all your designs responsive. 
+
+I hope this tutorial helps your proficiency in using the design system package.
+See you all in the next tutorial. 
+
+
+
+
+
+
+-- end: ds.blog-page
