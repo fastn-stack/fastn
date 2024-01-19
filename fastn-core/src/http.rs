@@ -735,7 +735,6 @@ pub fn user_err(
     }
 
     let resp = serde_json::json!({
-        "data": null,
         "errors": json_error,
     });
 
