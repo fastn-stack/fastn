@@ -7,7 +7,7 @@ mod auto_import;
 pub mod commands;
 mod config;
 #[cfg(feature = "auth")]
-mod db;
+pub mod db;
 pub mod doc;
 mod file;
 mod font;
