@@ -263,10 +263,9 @@ pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
     if let Err(e) =
         update_dependencies(&config.ds, &config.packages_root, current_package, &pb).await
     {
-        pb.set_prefix("Update failed");
-        pb.abandon_with_message(e.to_string());
-
-        return Ok(());
+        return Err(fastn_core::Error::UpdateError {
+            message: e.to_string(),
+        });
     }
 
     pb.finish_and_clear();
