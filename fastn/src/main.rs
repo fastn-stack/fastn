@@ -47,7 +47,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         if auth_enabled == "true" {
             tracing::info!("running auth related migrations");
             let db_url = std::env::var("FASTN_DB_URL")?;
-            fastn_core::db::migrate(db_url)?;
+            fastn_core::db::migrate(db_url).await?;
         }
     }
 

@@ -150,7 +150,7 @@ argon2 = "0.5"
 lettre = { version = "0.11", features = ["serde", "tokio1", "tokio1-native-tls"]}
 diesel = { version = "2.1", features = ["chrono", "postgres", "postgres_backend"]}
 diesel-async = { version = "0.4", features = ["postgres", "deadpool", "async-connection-wrapper"]}
-diesel_migrations = "2.1"
+diesel_async_migrations = "0.12"
 chrono = { version = "0.4", features = ["serde"]}
 indicatif = "0.17.1"
 snafu = "0.8.0"

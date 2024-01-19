@@ -17,21 +17,22 @@ pub async fn pool() -> &'static fastn_core::Result<PgPool> {
     POOL_RESULT.get_or_init(create_pool).await
 }
 
+static MIGRATIONS: diesel_async_migrations::EmbeddedMigrations =
+    diesel_async_migrations::embed_migrations!();
+
 /// run migrations on `db_url`
-pub fn migrate(db_url: String) -> fastn_core::Result<()> {
-    use diesel::Connection;
-    use diesel_migrations::MigrationHarness;
+pub async fn migrate(db_url: impl AsRef<str>) -> fastn_core::Result<()> {
+    use diesel_async::AsyncConnection;
 
-    const MIGRATIONS: diesel_migrations::EmbeddedMigrations =
-        diesel_migrations::embed_migrations!();
-
-    let mut conn = diesel::pg::PgConnection::establish(&db_url).map_err(|e| {
-        fastn_core::Error::DatabaseError {
+    let mut conn = diesel_async::AsyncPgConnection::establish(db_url.as_ref())
+        .await
+        .map_err(|e| fastn_core::Error::DatabaseError {
             message: format!("Failed to connect to db. {:?}", e),
-        }
-    })?;
+        })?;
 
-    conn.run_pending_migrations(MIGRATIONS)
+    MIGRATIONS
+        .run_pending_migrations(&mut conn)
+        .await
         .map_err(|e| fastn_core::Error::DatabaseError {
             message: format!("Failed to run migrations. {:?}", e),
         })?;
