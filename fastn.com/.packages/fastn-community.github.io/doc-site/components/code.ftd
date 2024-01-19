@@ -1,0 +1,60 @@
+-- import: fastn-community.github.io/doc-site/components
+
+-- ds.page: code
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+Code component is used to demonstrate the code snippet. If you want to show a
+code snippet to your users then you should use `-- ds.code` component.
+
+-- ds.h2: Example:
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- ds.rendered.output:
+
+-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.markdown:
+
+`-- ds.code` component is built using code-block package. 
+[Click here](https://fastn-community.github.io/code-block/docs/code/) to learn
+more about code-block usage and its properties.
+
+-- end: ds.page

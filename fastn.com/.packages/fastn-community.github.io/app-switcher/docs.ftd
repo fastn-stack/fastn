@@ -1,0 +1,123 @@
+-- import: fastn-community.github.io/app-switcher/assets
+-- import: fastn-community.github.io/app-switcher
+-- import: fastn
+-- import: fastn/processors
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-community.github.io/code-block as cb
+
+-- fastn.app-ui apps:
+$processor$: processors.fastn-apps
+
+
+
+
+-- site-doc.doc-home: App Switcher
+github-url: https://github.com/fastn-community/app-switcher
+color-scheme: \$ftd.default-colors
+typography: \$ftd.default-types
+current-package: fastn-community.github.io/app-switcher
+show-tabs: true
+site-title: App Switcher
+
+-- site-doc.output:
+
+-- ftd.text: Desktop: Press shift key two times to open app switcher demo
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.text: Desktop: Press ESC key to close app switcher
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.text: Mobile: Tap on apps icon visible at bottom left corner
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.text: Mobile: Tab on close icon of app-switcher
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- app-switcher.app-switcher:
+apps: $apps
+
+-- end: site-doc.output
+
+-- site-doc.component-doc: `app-switcher`
+package-link: fastn-community.github.io/app-switcher
+github-link: https://github.com/fastn-community/app-switcher
+package-name: fastn-community.github.io/app-switcher
+info: ` -- app-switcher` is used to show app-switcher component to switch between apps.
+
+The `app-switcher` component is already included inside
+[`doc-site`](fifthtry.github.io/doc-site). If you are using `doc-site` then 
+don't add app-switcher as fastn dependency.
+
+-- site-doc.header: How to use?
+
+Add below code to your FASTN.ftd and Import `app-switcher` into your `.ftd` file
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/app-switcher
+
+-- cb.code: 
+lang: ftd
+
+\-- import: fastn-community.github.io/app-switcher
+
+\-- app-switcher.app-switcher:
+apps: $apps
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of this component.
+
+-- site-doc.component-property: `apps`
+
+`apps` property type is `fastn.app-ui` it need `fastn.app` list to show apps in
+its app container.
+
+Add all your apps into your FASTN.ftd file. 
+
+Sample app code:
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.app: Movie DB
+mount-point: /todos/
+package: kameri-app.herokuapp.com
+end-point: https://kameri-service.herokuapp.com
+readers: fastn-fans
+config: db_url=$ENV.DB_URL
+
+-- site-doc.component-property: `$is-open`
+
+`$is-open` property is a boolean type property by default its false. If sets
+`true` by default app-switcher will be shown on your fastn pages.
+
+-- site-doc.component-property: `$current-app`
+
+`$current-app` property property type is integer. It makes app active which in a
+list is selected. 
+
+-- site-doc.property-header:
+
+-- site-doc.table-of-property: `apps`
+type: `fastn.app-ui`
+default: Default
+
+-- site-doc.table-of-property: `$is-open`
+type: Boolean
+default: Optional
+
+-- site-doc.table-of-property: `$current-app`
+type: Integer (Default `1`)
+default: Optional
+
+-- end: site-doc.property-header
+
+-- end: site-doc.component-doc
+
+-- end: site-doc.doc-home

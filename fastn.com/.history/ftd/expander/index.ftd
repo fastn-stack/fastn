@@ -1,7 +1,7 @@
 -- import: fastn
--- import: gargajit.github.io/expander
--- import: gargajit.github.io/expander/assets
-;; -- import: gargajit.github.io/expander/utils
+-- import: fastn-community.github.io/expander
+-- import: fastn-community.github.io/expander/assets
+;; -- import: fastn-community.github.io/expander/utils
 
 -- my-ds.page: Expander Crash Course
 

@@ -1,5 +1,4 @@
--- import: fastn
--- import: gargajit.github.io/expander
+-- import: fastn-community.github.io/expander
 
 
 -- ds.page: Crash Course

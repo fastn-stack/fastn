@@ -1,0 +1,10 @@
+-- import: fastn
+
+-- fastn.package: fastn-community.github.io/color-doc
+
+-- fastn.dependency: fastn-community.github.io/code-block
+-- fastn.dependency: fastn-community.github.io/footer
+-- fastn.dependency: fastn-community.github.io/inter-font
+-- fastn.dependency: fastn-community.github.io/inter-typography
+
+-- fastn.auto-import: fastn-community.github.io/code-block as cb

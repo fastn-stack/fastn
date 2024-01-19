@@ -1,0 +1,24 @@
+-- import: fifthtry.github.io/doc-site/assets
+-- import: fifthtry.github.io/doc-site as ds
+-- import: fifthtry.github.io/doc-site/blog-articles/category-1/sample-post-1
+-- import: fifthtry.github.io/doc-site/blog-articles/category-1/sample-post-2 
+
+
+
+-- ds.page: Category title - News & Culture
+
+Write some information of this category here. Change the title according to the
+category of your blog.
+
+-- ds.posts:
+
+-- ds.featured-post:
+post-data: $sample-post-1.meta
+
+
+-- ds.image-first:
+post-data: $sample-post-2.meta
+
+-- end: ds.posts
+
+-- end: ds.page

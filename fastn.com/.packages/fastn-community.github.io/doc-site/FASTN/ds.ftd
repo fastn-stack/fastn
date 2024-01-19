@@ -1,0 +1,455 @@
+-- import: fastn-community.github.io/footer
+-- import: fastn-community.github.io/doc-site/common
+-- import: fastn-community.github.io/roboto-typography
+-- import: fastn-community.github.io/doc-site
+export: author-bio,code,compact-text,featured-post,h0,h1,h2,h3,iframe,image,image-first,image-in-between,link,link-group,markdown,not-found-1,not-found-2,output,post,posts,rendered,tip,without-image,youtube, letter, letter-data, letter-bar, letter-category, letter-stack, post-card
+
+-- component page:
+optional caption title:
+optional body body:
+optional string document-title:
+optional string document-description:
+ftd.raw-image-src document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+optional string site-name: Doc Site
+optional ftd.image-src site-logo:
+boolean github-icon: true
+optional string github-url: https://github.com/fastn-community/doc-site/
+boolean full-width: false
+ftd.type-data typography: $roboto-typography.types
+ftd.color-scheme color-scheme: $ftd.default-colors
+integer logo-width: $common.logo-width
+integer logo-height: $common.logo-height
+boolean show-footer: true
+string site-url: $common.site-url
+boolean sidebar: false
+ftd.ui list right-sidebar:
+boolean show-banner: false
+ftd.ui list banner:
+children wrapper:
+
+-- ftd.ui list page.footer:
+
+-- footer.fastn-footer:
+copyright: Copyright © 2023 - [FifthTry](https://www.fifthtry.com/)
+site-logo: $common.fastn-logo
+powered-by-text: Powered by
+powered-by-link: https://fastn.com/
+
+-- end: page.footer
+
+-- doc-site.page: $page.title
+site-logo: $page.site-logo
+body: $page.body
+colors: $page.color-scheme
+sidebar: $page.sidebar
+full-width: $page.full-width
+types: $page.typography
+show-banner: $page.show-banner
+show-footer: $page.show-footer
+site-name: $page.site-name
+logo-height: $page.logo-height
+logo-width: $page.logo-width
+github-icon: $page.github-icon
+github-url: $page.github-url
+right-sidebar: $page.right-sidebar
+footer: $page.footer
+banner: $page.banner
+document-title: $page.document-title
+document-description: $page.document-description
+document-image: $page.document-image
+site-url: $page.site-url
+
+-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+children: $page.wrapper
+
+-- end: ftd.column
+
+-- end: doc-site.page
+
+-- end: page
+
+
+
+
+
+
+
+;; APPENDIX COMPONENTS -------------------------------------------------
+
+-- ftd.color hover-c: coral
+
+-- component letter:
+caption letter-name:
+optional string link:
+ftd.color hover-color: $hover-c
+boolean $is-hovered: false
+
+-- ftd.text: $letter.letter-name
+link if { letter.link != NULL }: $letter.link
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+color if { letter.is-hovered }: $letter.hover-color
+/style if { letter.is-hovered }: bold, underline
+cursor if { letter.is-hovered }: pointer
+$on-mouse-enter$: $ftd.set-bool($a = $letter.is-hovered, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $letter.is-hovered, v = false)
+
+-- end: letter
+
+
+
+
+-- component letter-bar:
+optional string link-a:
+optional string link-b:
+optional string link-c:
+optional string link-d:
+optional string link-e:
+optional string link-f:
+optional string link-g:
+optional string link-h:
+optional string link-i:
+optional string link-j:
+optional string link-k:
+optional string link-l:
+optional string link-m:
+optional string link-n:
+optional string link-o:
+optional string link-p:
+optional string link-q:
+optional string link-r:
+optional string link-s:
+optional string link-t:
+optional string link-u:
+optional string link-v:
+optional string link-w:
+optional string link-x:
+optional string link-y:
+optional string link-z:
+
+
+-- ftd.row:
+width: fill-container
+color: $inherited.colors.text
+spacing: space-between
+wrap: true
+
+-- letter: A
+link: $letter-bar.link-a
+
+-- letter: B
+link: $letter-bar.link-b
+
+-- letter: C
+link: $letter-bar.link-c
+
+-- letter: D
+link: $letter-bar.link-d
+
+-- letter: E
+link: $letter-bar.link-e
+
+-- letter: F
+link: $letter-bar.link-f
+
+-- letter: G
+link: $letter-bar.link-g
+
+-- letter: H
+link: $letter-bar.link-h
+
+-- letter: I
+link: $letter-bar.link-i
+
+-- letter: J
+link: $letter-bar.link-j
+
+-- letter: K
+link: $letter-bar.link-k
+
+-- letter: L
+link: $letter-bar.link-l
+
+-- letter: M
+link: $letter-bar.link-m
+
+-- letter: N
+link: $letter-bar.link-n
+
+-- letter: O
+link: $letter-bar.link-o
+
+-- letter: P
+link: $letter-bar.link-p
+
+-- letter: Q
+link: $letter-bar.link-q
+
+-- letter: R
+link: $letter-bar.link-r
+
+-- letter: S
+link: $letter-bar.link-s
+
+-- letter: T
+link: $letter-bar.link-t
+
+-- letter: U
+link: $letter-bar.link-u
+
+-- letter: V
+link: $letter-bar.link-v
+
+-- letter: W
+link: $letter-bar.link-w
+
+-- letter: X
+link: $letter-bar.link-x
+
+-- letter: Y
+link: $letter-bar.link-y
+
+-- letter: Z
+link: $letter-bar.link-z
+
+-- end: ftd.row
+
+-- end: letter-bar
+
+
+
+
+
+
+
+
+
+
+
+-- component letter-category:
+ftd.resizing width: fill-container
+caption letter-name:
+letter-data list letter-items:
+
+-- ftd.column:
+if: { len(letter-category.letter-items) != 0 }
+width: $letter-category.width
+spacing.fixed.px: 10
+wrap: true
+
+-- ftd.text: $letter-category.letter-name
+color: $inherited.colors.text
+role: $inherited.types.heading-large
+
+-- ftd.column:
+spacing.fixed.px: 5
+wrap: true
+
+-- letter: $item.name
+$loop$: $letter-category.letter-items as $item
+link: $item.link
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: letter-category
+
+
+
+
+
+
+
+
+
+-- component letter-stack:
+optional caption title:
+optional ftd.resizing height:
+letter-data list contents-a: []
+letter-data list contents-b: []
+letter-data list contents-c: []
+letter-data list contents-d: []
+letter-data list contents-e: []
+letter-data list contents-f: []
+letter-data list contents-g: []
+letter-data list contents-h: []
+letter-data list contents-i: []
+letter-data list contents-j: []
+letter-data list contents-k: []
+letter-data list contents-l: []
+letter-data list contents-m: []
+letter-data list contents-n: []
+letter-data list contents-o: []
+letter-data list contents-p: []
+letter-data list contents-q: []
+letter-data list contents-r: []
+letter-data list contents-s: []
+letter-data list contents-t: []
+letter-data list contents-u: []
+letter-data list contents-v: []
+letter-data list contents-w: []
+letter-data list contents-x: []
+letter-data list contents-y: []
+letter-data list contents-z: []
+
+-- ftd.column:
+wrap: true
+width: fill-container
+height: $letter-stack.height
+spacing.fixed.px: 10
+
+-- letter-category: A
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-a
+
+-- letter-category: B
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-b
+
+-- letter-category: C
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-c
+
+-- letter-category: D
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-d
+
+-- letter-category: E
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-e
+
+-- letter-category: F
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-f
+
+-- letter-category: G
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-g
+
+-- letter-category: H
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-h
+
+-- letter-category: I
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-i
+
+-- letter-category: J
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-j
+
+-- letter-category: K
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-k
+
+-- letter-category: L
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-l
+
+-- letter-category: M
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-m
+
+-- letter-category: N
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-n
+
+-- letter-category: O
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-o
+
+-- letter-category: P
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-p
+
+-- letter-category: Q
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-q
+
+-- letter-category: R
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-r
+
+-- letter-category: S
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-s
+
+-- letter-category: T
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-t
+
+-- letter-category: U
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-u
+
+-- letter-category: V
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-v
+
+-- letter-category: W
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-w
+
+-- letter-category: X
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-x
+
+-- letter-category: Y
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-y
+
+-- letter-category: Z
+width.fixed.percent if { ftd.device != "mobile" }: 25
+width: fill-container
+letter-items: $letter-stack.contents-z
+
+-- end: ftd.column
+
+-- end: letter-stack
+
+
+
+
+
+
+
+
+
+-- integer letter-list-length(a):
+letter-data list a:
+
+len(a)
+
+-- letter-data list lst:
+
+-- record letter-data:
+caption name:
+optional string link:

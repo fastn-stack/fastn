@@ -1,0 +1,124 @@
+-- import: fifthtry.github.io/button
+-- import: fastn-community.github.io/bling/modal-cover
+
+-- boolean $toggle-event: false
+
+-- site-doc.doc-home: Disabled Button
+license-url: https://github.com/FifthTry/button/blob/main/LICENSE
+current-package: fifthtry.github.io/button
+show-tabs: false
+site-title: Button
+github-url: https://github.com/FifthTry/button
+
+
+
+-- site-doc.header: Demo
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
+
+-- button.button: Extra Large Button
+role: primary
+extra-large: true
+disabled: true
+
+-- button.button: Large Button
+role: secondary
+large: true
+disabled: true
+
+-- button.button: Medium Button
+role: tertiary
+large: true
+disabled: true
+
+-- button.button: Small Button
+role: primary
+medium: true
+disabled: true
+
+-- end: ftd.row
+
+-- end: site-doc.output
+
+-- site-doc.header: How to use
+
+To use button components on your [fastn](https://fastn.com/) web project, add
+below into `FASTN.ftd` file:
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fifthtry.github.io/button
+
+-- site-doc.markdown:
+
+Now import `button` inside your `.ftd` file
+
+-- cb.code:
+lang: ftd
+
+\-- import: fifthtry.github.io/button
+
+-- site-doc.markdown:
+
+Use `button.button` inside your `.ftd` files
+
+-- cb.rendered:
+
+-- cb.rendered.input:
+
+\-- button.button: PRIMARY
+role: primary
+large: true
+disabled: true
+
+-- cb.rendered.output:
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- button.button: PRIMARY
+role: primary
+large: true
+disabled: true
+
+-- end: site-doc.output
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `button` component.
+
+-- site-doc.component-property: `title`
+type: Caption (`required`)
+
+It's used to title to the `button` component.
+
+-- site-doc.component-property: `role`
+type: String (`required`)
+
+It's used to add role to `button` component. Use role as `primary` `secondary`
+or `tertiary` as per your need.
+
+-- site-doc.component-property: `disabled`
+type: Boolean (`optional`, default: `false`)
+
+If you want use disable a button then add this property with value as `true`. By
+default its value is `false`.
+
+-- site-doc.component-property: `large`
+type: Boolean (`required`)
+
+If you want use `large` button then add this property value as `true`. Use
+`extra-large`, `medium` or `small` and add its value as `true` as per your
+need.
+
+-- end: site-doc.doc-home

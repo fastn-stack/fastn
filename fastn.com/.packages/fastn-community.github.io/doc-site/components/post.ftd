@@ -1,0 +1,200 @@
+-- import: fastn-community.github.io/doc-site/components
+-- import: fastn-community.github.io/bling/collapse
+
+
+-- ds.page: post
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+`ds.post` component, helps you to create your posts and article pages with ease.
+
+-- ds.h2: Example:
+
+To see example post - [Click here](blog-articles/category-1/sample-post-2/)
+
+To write a post/article add your post meta and post details. Below code snippet
+shows how to write a post meta and create your post. 
+
+-- ds.code: Example of how to create blog post 
+lang: ftd
+max-height.fixed.px: 300
+download: post.ftd
+
+\-- import: fastn-community.github.io/doc-site/blog-authors/john-doe as author
+
+\-- common.post-meta meta: A day in a city of dreams
+published-on: July 22, 2014 at 10:02 pm
+post-image: $assets.files.static.image-placeholder.png
+post-url: blog-articles/category-1/sample-post-1/
+author: $author.john-doe
+
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab 
+illo inventore.
+
+\-- ds.post: 
+meta: $meta
+
+\-- ds.markdown:
+
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab 
+illo inventore veritatis et quasi architecto beatae vitae dicta sunt 
+explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut 
+odit aut fugit, sed quia consequuntur magni dolores eos qui ratione 
+voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum 
+quia dolor sit amet, consectetur, adipisci velit, sed.
+
+***Lorem ipsum*** dolor sit amet, consectetur adipiscing elit, sed do 
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad 
+minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip 
+ex ea commodo consequat.
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum 
+dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum 
+dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
+
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab 
+illo inventore beatae vitae dicta sunt explicabo. Nemo enim ipsam 
+voluptatem quia voluptas sit aspernatur aut odit aut f.
+
+`Duis aute irure dolor` in reprehenderit in voluptate velit esse cillum 
+dolore eu.
+
+\-- ds.code: `Duis aute irure dolor` code
+lang: ftd
+
+\-- ftd.text: Title of the text
+role: $fastn.type.fine-print
+color: $fastn.color.main.text-strong
+
+\-- ds.h1: Some title of the level 1 heading
+
+Here we add a body for the level 1 heading. This can be multiline and 
+has no limits.
+
+
+-- ds.h3: Let's understand above code snippet:
+
+-- collapse.collapse: Importing author
+remove-gap: true
+info-right: Learn more: [`ds.author-bio`](components/author-bio/)
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/doc-site/blog-authors/john-doe as author
+
+-- ds.markdown:
+
+It's used to import author metadata. In above fastn `import` we are importing
+`john-doe.ftd` which is inside `blog-authors/` folder.
+
+-- end: collapse.collapse
+
+-- ds.markdown:
+
+Below code snippet is used to add post meta.
+
+-- ds.code:
+lang: ftd
+
+\-- common.post-meta meta: A day in a city of dreams
+published-on: July 22, 2014 at 10:02 pm
+post-image: $assets.files.static.image-placeholder.png
+post-url: blog-articles/category-1/sample-post-1/
+author: $author.john-doe
+
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab 
+illo inventore 
+
+-- ds.markdown:
+
+Let's understand properties of `common.post-meta` record.
+
+-- collapse.collapse: `common.post-meta` - *type:* `record` 
+remove-gap: true
+$is-open: true
+
+It's used to add post metadata. 
+
+Below are properties of `common.post-meta` record:
+
+-- ftd.column:
+margin-top.px: 16
+spacing.fixed.px: 12
+width: fill-container
+
+-- collapse.collapse: `title` - *type:* `caption` 
+remove-gap: true
+
+It's used add title of the post meta component.
+
+-- end: collapse.collapse
+
+-- collapse.collapse: `body` - *type:* `body` 
+remove-gap: true
+
+It's used add body content to the post meta component.
+
+-- end: collapse.collapse
+
+-- collapse.collapse: `published-on` - *type:* `string`
+remove-gap: true
+
+It's used to add post timestamp e.g. 1st Jan 22, 2023 at 10:02 pm. This is
+static property you need to add date and time manually.
+
+-- end: collapse.collapse
+
+-- collapse.collapse: `post-image` - *type:* `ftd.image-src` `optional`
+remove-gap: true
+
+It's used to add image url to post meta component.
+
+-- end: collapse.collapse
+
+-- collapse.collapse: `post-url` - *type:* `string` `optional`
+remove-gap: true
+
+It's used to post url to post meta component.
+
+-- end: collapse.collapse
+
+-- collapse.collapse: `author` - *type:* `author-meta`
+remove-gap: true
+
+It's used to add author meta from `common.author-meta` record to post meta
+component.
+
+-- end: collapse.collapse
+
+-- end: ftd.column
+
+-- end: collapse.collapse
+
+-- ds.markdown:
+
+Using `-- ds.markdown:` you can add more body content to your `ds.post`
+component.
+
+`ds.post` component has built-in container in which you can add as many
+components you want to use, as shown in above example. e.g. `ds.code`, `ds.h1`
+etc.
+
+-- end: ds.page

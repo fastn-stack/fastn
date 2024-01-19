@@ -1,0 +1,230 @@
+-- import: fastn-community.github.io/business-card/docs
+-- import: fastn-community.github.io/business-card/lib
+export: display-card
+exposing: display-card
+
+
+
+-- docs.home-card:
+
+
+
+
+
+
+
+
+
+-- component card:
+caption name:
+string title:
+string company-name:
+ftd.image-src logo:
+optional string contact-1:
+optional string contact-2:
+optional string email:
+optional string website:
+optional string address:
+optional string company-slogan:
+
+-- display-card:
+;; landscape: false
+
+-- display-card.front:
+
+-- front:
+name: $card.name
+title: $card.title
+company-name: $card.company-name
+logo: $card.logo
+contact-1: $card.contact-1
+contact-2: $card.contact-2
+email: $card.email
+website: $card.website
+address: $card.address
+
+-- end: display-card.front
+
+-- display-card.back:
+
+-- back:
+logo: $card.logo
+company-slogan: $card.company-slogan
+
+-- end: display-card.back
+
+-- end: card
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component front:
+caption name:
+string title:
+string company-name:
+ftd.image-src logo:
+optional string contact-1:
+optional string contact-2:
+optional string email:
+optional string website:
+optional string address:
+
+-- ftd.row:
+width: fill-container
+height: fill-container
+background.solid: $card-background-color
+spacing: space-around
+
+-- ftd.column:
+width.fixed.percent: 50
+height: fill-container
+align-content: center
+spacing: space-around
+
+-- ftd.image: $front.logo
+max-width.fixed.px: 250
+
+-- end: ftd.column
+
+-- ftd.column:
+width.fixed.percent: 50
+height: fill-container
+align-content: center
+border-left-width.px: 2
+border-color: $inherited.colors.border-strong
+padding-horizontal.px: 24
+spacing.fixed.px: 8
+color: $inherited.colors.text
+
+-- ftd.text: $front.name
+color: $inherited.colors.text-strong
+role: $inherited.types.heading-small
+
+-- ftd.text: $front.title
+role: $inherited.types.copy-regular
+
+-- ftd.column:
+role: $inherited.types.copy-regular
+margin-top.px: 40
+
+-- ftd.text: $front.contact-1
+if: { front.contact-1 != NULL }
+
+-- ftd.text: $front.contact-2
+if: { front.contact-2 != NULL }
+
+-- end: ftd.column
+
+
+-- ftd.column:
+width: fill-container
+border-top-width.px: 1
+border-color: $inherited.colors.border-strong
+align-content: center
+padding-top.px: 8
+margin-top.px: 8
+spacing.fixed.px: 8
+role: $inherited.types.fine-print
+
+-- ftd.text: $front.company-name
+margin-top.px if { front.contact-1 == NULL && front.contact-2 == NULL }: 50
+role: $inherited.types.button-medium
+text-align: center
+
+-- ftd.text: $front.address
+if: { front.address != NULL }
+text-align: center
+
+-- ftd.column:
+align-content: center
+
+-- ftd.text: $front.email
+if: { front.email != NULL }
+text-align: center
+
+-- ftd.text: $front.website
+if: { front.website != NULL }
+text-align: center
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: front
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component back:
+ftd.image-src logo:
+optional string company-slogan:
+
+-- ftd.row:
+width: fill-container
+height: fill-container
+background.solid: $card-background-color
+spacing: space-around
+align-content: center
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+margin.px: 50
+border-left-width.px: 8
+border-right-width.px: 8
+border-style: double
+border-color: $inherited.colors.border-strong
+align-content: center
+
+-- ftd.image: $back.logo
+if: { back.logo != NULL }
+max-width.fixed.px: 250
+
+-- ftd.text: $back.company-slogan
+if: { back.company-slogan != NULL }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+width: fill-container
+text-align: center
+margin-top.px: 16
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: back
+
+
+
+
+-- ftd.color card-background-color:
+light: #f4edd0
+dark: black

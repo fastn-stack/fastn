@@ -1,0 +1,56 @@
+-- import: fifthtry.github.io/doc-site as ds
+
+
+-- $ds.show-floater: true
+
+
+-- ftd.font-size copy-tight-bold-desktop:
+line-height: 20
+size: 16
+letter-spacing: 0
+
+-- ftd.type copy-tight-bold: $fastn.font-display
+desktop: $copy-tight-bold-desktop
+mobile: $copy-tight-bold-desktop
+xl: $copy-tight-bold-desktop
+weight: 700
+
+-- ftd.text green: text
+role: $copy-tight-bold
+color: $light-green
+
+-- ftd.color light-green:
+light: #0DCEAB
+dark: #0DCEAB
+
+-- fastn.toc-item list sample-left:
+$processor$: toc
+
+- Home: /
+- Image: /image/
+- Floater: /floater/
+
+
+
+-- ds.page: Floater
+
+To see working floater - click on Fifthtry vertical logo at right side of this page.
+
+Floater can be enabled via adding below lines into `FASTN.ftd` file of your package:
+
+-- ds.code: add below lines into `FASTN.ftd` file
+lang: ftd
+
+\-- fastn.dependency: fifthtry.github.io/doc-site as ds
+\-- fastn.auto-import: ds
+
+
+
+-- ds.code: add below lines into `FASTN/confg.ftd` file
+lang: ftd
+
+\-- import: ds
+
+\-- ds.show-floater: true
+
+-- end: ds.page

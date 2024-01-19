@@ -1,0 +1,51 @@
+{
+    "files": {
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "555867EA498D805D339BBC26D6AC4A37D1AB44A3D2F22DC992454DE5A12D97C5",
+            "size": 552
+        },
+        "floating-banner.ftd": {
+            "name": "floating-banner.ftd",
+            "checksum": "D60CC99B54735592A951228B2F20F3C7788E84F4063525FC4AEFD0F85F9968D9",
+            "size": 1416
+        },
+        "static/cross-dark.svg": {
+            "name": "static/cross-dark.svg",
+            "checksum": "2509B4125EC6BC12496B970E276A6439C535DA8660817D255A635F2406393077",
+            "size": 681
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "A796A7CC0778047A3523808B42F0DB4BCE3AC081C2958ACA317A01B7376A4F4E",
+            "size": 1509
+        },
+        "static/cross.svg": {
+            "name": "static/cross.svg",
+            "checksum": "DE0A2D4C3651335FFF978C12B1FD286ECDB86D59FFC6EC06A40066009A9D29C0",
+            "size": 678
+        },
+        "static/twitter.svg": {
+            "name": "static/twitter.svg",
+            "checksum": "EFE8F5F039BE8F088830CCEE6EAB2F09758D3E0AF8DFBA4FCB31F1AB4EC02A6C",
+            "size": 1758
+        },
+        "cta-banner.ftd": {
+            "name": "cta-banner.ftd",
+            "checksum": "6117E862399DD9DCADD1751D4EA1318CB987F3913A15B3CFD6037A414ECDFA86",
+            "size": 1489
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "0B47E69E27296F54E70141B4CB56F245D15038111F4B65E9A42CE87DB8F411A7",
+            "size": 9410
+        },
+        "Changelod.ftd": {
+            "name": "Changelod.ftd",
+            "checksum": "74098FDB8D567D49A34850DFB5B90F59AB953896DA4640435C81E171CCAFDF98",
+            "size": 22
+        }
+    },
+    "zip_url": "https://github.com/fastn-community/banner/archive/b3c80677d92e9cb46e29b0a1abf697820025c49e.zip",
+    "checksum": "F922BDAD4F829D4B304683E55522FCA8B345836B0695AA6B34BD2BCEC599D78F"
+}

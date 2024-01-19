@@ -1,0 +1,123 @@
+-- import: fifthtry.github.io/product-switcher/assets
+-- import: fastn-community.github.io/site-doc
+-- import: fifthtry.github.io/code-block as cb
+-- import: fifthtry.github.io/product-switcher as ps
+
+-- site-doc.doc-home: Documentation
+github-url: https://fifthtry.github.io/product-switcher
+color-scheme: \$ftd.default-colors
+typography: \$ftd.default-types
+current-package: fifthtry.github.io/product-switcher
+show-tabs: true
+site-title: Header
+
+-- site-doc.output:
+
+-- ps.switcher: 
+products: $ps.example-product
+
+-- end: site-doc.output
+
+-- site-doc.component-doc: `Product Switcher`
+package-link: https://fifthtry.github.io/product-switcher
+github-link: https://github.com/FifthTry/product-switcher
+package-name: fifthtry.github.io/product-switcher
+info: `-- switcher` can be used as product switcher on your fastn web projects.
+
+-- site-doc.header: How to use `product-switcher`?
+
+To use `product-switcher` add below line into your FASTN.ftd file:
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fifthtry.github.io/product-switcher
+
+-- site-doc.header: How to use?
+
+-- cb.code:
+lang: ftd
+download: product-switcher.ftd
+
+\-- import: fifthtry.github.io/product-switcher as ps
+
+
+\-- ps.product-data list example-product:
+
+\-- ps.product-data: cDoc
+index: 1
+mobile-logo: $assets.files.assets.images.logo-brand.svg
+logo: $assets.files.assets.images.doc-framework.png
+url: https://fifthtry.github.io/cdoc-doc/
+sub-title: Continuous Documentation
+
+`cdoc` is an open source web application that integrates with Github and works like continuous integration.
+
+- Initial Setup Flow
+- Self Hosted Flow
+
+
+\-- ps.product-data: FTD
+index: 2
+mobile-logo: $assets.files.assets.images.logo-brand.svg
+logo: $assets.files.assets.images.ftd.png
+url: https://ftd.dev/
+sub-title: FifthTry Document
+
+FTD gives you a lot of power over your presentation, and yet it is quite easy to learn.
+
+- FTD Is Easy To Learn
+- FTD Is Quite Powerful
+
+
+\-- ps.product-data: FASTN
+index: 3
+mobile-logo: $assets.files.assets.images.logo-brand.svg
+logo: $assets.files.assets.images.fastn.png
+url: https://fastn.dev/
+sub-title: `ftd` package manager
+
+`fastn` is `ftd package manager`, defines a package format for packaging `ftd` files.
+
+- Distributed Package Manager
+- Translation Tracking
+
+
+\-- ps.product-data: ftd-py
+index: 4
+mobile-logo: $assets.files.assets.images.logo-brand.svg
+logo: $assets.files.assets.images.home.png
+url: https://fifthtry.github.io/python.ftd.dev/
+sub-title: `ftd-py` Documentation
+
+`ftd-py`: Python Package for Working With FTD/FASTN
+
+- Python Package for Working With `FTD/FASTN`
+- `ftd_django` is a Python package
+
+\-- end: example-product
+
+
+\-- ps.switcher: 
+products: $example-product
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of this component.
+
+-- site-doc.component-property: `products`
+
+Its used to pass `products` record list 
+to `switcher` component.
+
+-- site-doc.property-header:
+
+-- site-doc.table-of-property: `products`
+type: List of Record(ps.product-data)
+default: Default
+
+-- end: site-doc.property-header
+
+-- end: site-doc.component-doc
+
+-- end: site-doc.doc-home

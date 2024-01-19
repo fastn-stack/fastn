@@ -1,0 +1,208 @@
+-- import: fastn-community.github.io/doc-site/components
+-- import: fastn-community.github.io/bling/collapse
+
+-- ds.page: page
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+The `ds.page` component empowers you to create **one-off standalone pages**. You
+can use other fastn components, or markdown.
+
+Let's learn how to use `ds.page` and its different properties.
+
+-- ds.code: Basic usage
+lang: ftd
+
+\-- ds.page: This is page title
+
+This is page body content area.
+
+\-- end: ds.page
+
+-- ds.h3: Properties of *ds.page* component
+
+-- collapse.collapse: **title** - *type:* `caption` `optional`
+remove-gap: true
+
+It’s used to add title to `ds.page` component.
+
+-- collapse.collapse:  **body** - *type:* `body` `optional`
+remove-gap: true
+
+It’s used to add body content to `ds.page` component.
+
+-- collapse.collapse: **document-title** - *type:* `string` `optional` 
+remove-gap: true
+info-right: Learn more: [SEO](seo/)
+
+It’s used to add meta title to `ds.page` component. To learn more - [Click here](seo/).
+
+-- collapse.collapse: **document-description** *type:* `string` `optional`
+remove-gap: true 
+info-right: Learn more: [SEO](seo/)
+
+It’s used to add meta description to `ds.page` component. To learn more -[Click here](seo/).
+
+-- collapse.collapse: **document-image** - *type:* `ftd.raw-image-src` `optional`
+remove-gap: true
+info-right: Learn more: [SEO](seo/)
+
+It’s used to add meta `og-image` to `ds.page` component. To learn more [Click here](seo/).
+
+-- collapse.collapse: **site-name** - *type:* `string` `optional`
+remove-gap: true
+info-right: Learn more: [site-name](logo/) | [fastn assets](components/image/#how-to-link-image-from-fastn-assets)
+
+It’s used to add `site-name` to `ds.page` component. To learn more [Click here](logo/).
+
+Learn more: [site-name](logo/) | [fastn assets](components/image/#how-to-link-image-from-fastn-assets)
+
+-- collapse.collapse: **site-logo** - *type:* `ftd.image-src` `optional`
+remove-gap: true
+info-right: Learn more: [site-logo](logo/) | [fastn assets](components/image/#how-to-link-image-from-fastn-assets)
+
+It’s used to add `site-logo` to `ds.page` component. To learn more [Click here](logo/).
+
+Learn more: [site-logo](logo/) | [fastn assets](components/image/#how-to-link-image-from-fastn-assets)
+
+-- collapse.collapse: **github-icon** - *type:* `boolean` 
+remove-gap: true
+
+It’s used to enable github-icon inside header of `ds.page` component. Defaut
+value is `false` change it with `true` and add if you want to show your GitHub
+repository link with icon. You need to add link and pass it to `github-url`
+property. 
+
+Edit `FASTN/ds.ftd` to enable `github-icon` and adding `github-url` on all
+pages. GitHub icon with your given url will be seen in the header component.
+
+-- collapse.collapse: **github-url** - *type:* `string` `optional` 
+remove-gap: true
+
+It’s used to add your GitHub repo url in the header section of `ds.page`. 
+
+Edit `FASTN/ds.ftd` to enable `github-icon` and adding `github-url` on all
+pages. GitHub icon with your given url will be seen in the header component.
+
+-- collapse.collapse: **full-width** - *type:* `boolean`
+remove-gap: true
+
+It’s used to enable width of `ds.page` content area. Defaut value is `false`,
+change it with `true` if you want to use right-sidebar area to show page
+content with more width. 
+
+-- ds.code: Example `full-width: true`
+lang: ftd
+
+\-- ds.page: This is page title
+full-width: true
+
+This is page body content area.
+
+\-- end: ds.page
+
+-- ds.markdown:
+
+⚠️ Make sure `sidebar` property value is `false`.
+
+-- end: collapse.collapse
+
+-- collapse.collapse: **types** - *type:* `ftd.type-data` `optional` 
+remove-gap: true
+info-right: Learn more: [Changing typography](types/)
+
+It’s used to add change typography of doc-site, you can change default
+typography with typography you want. You need to edit `FASTN/ds.ftd` to change
+it. [roboto-typography](https://fastn-community.github.io/roboto-typography/) 
+is defaut typography.
+
+To learn more [Click here](types/).
+
+-- collapse.collapse: **colors** - *type:* `ftd.color-scheme` `optional` 
+remove-gap: true
+info-right: Learn more: [Changing Color Scheme](cs/)
+
+It’s used to add change color scheme of doc-site, you can change default
+color-scheme with color scheme of your choice. You need to edit `FASTN/ds.ftd`
+to change it.
+
+To learn more [Click here](types/).
+
+-- collapse.collapse: **logo-width** - *type:* `integer` `optional` 
+remove-gap: true
+info-right: Learn more: [fastn assets](components/image/#how-to-link-image-from-fastn-assets)
+
+It’s used to add change width of `site-logo`, you can change default
+`common.logo-width` which is `200` pixels with your logo image width.
+
+-- collapse.collapse: **logo-height** - *type:* `integer` `optional` 
+remove-gap: true
+info-right: Learn more: [fastn assets](components/image/#how-to-link-image-from-fastn-assets)
+
+It’s used to add change height of `site-logo`, you can change default
+`common.logo-height` which is `64` pixels with your logo image height.
+
+-- collapse.collapse: **show-footer** - *type:* `boolean`
+remove-gap: true
+info-right: Learn more: [Updating Footer](footer/)
+
+It’s used to show footer on your pages.  Defaut value is `true`, change it with
+`false` if you want to hide footer on your pages. 
+
+To learn more about how to update footer into
+`FASTN/ds.ftd` file - [Click here](footer/).
+
+-- collapse.collapse: **site-url** - *type:* `string` `optional`
+remove-gap: true
+
+It’s used to change home page url of your fastn project. You can edit
+`FASTN/ds.ftd` file and change value of this property with your website url
+e.g. `https://www.johndoe.com`.
+
+In this case value of `site-url` to be updated as `site-url:
+https://www.johndoe.com` inside `FASTN/ds.ftd` file.
+
+This property `site-url` is used to pass url to your `site-logo` and
+`site-name`.
+
+-- collapse.collapse: **sidebar** - *type:* `boolean` 
+remove-gap: true
+info-right: Learn more: [right-sidebar](right-sidebar/)
+
+It’s used to enable `ds.page.right-sidebar` container of `ds.page` component.
+Defaut value is `false` change it with `true` and add `ds.page.right-sidebar`
+to show it inside `ds.page` component. To learn
+how to add right-sidebar - [Click here](right-sidebar/).
+
+-- collapse.collapse: **show-banner** - *type:* `boolean` 
+remove-gap: true
+info-right: Learn more: [Banner](banner/)
+
+It’s used to enable `ds.page.banner` container of `ds.page` component. Defaut
+value is `false` change it with `true` and add `ds.page.banner` to show it
+inside `ds.page` component. To learn how to add banner
+into your pages - [Click here](banner/).
+
+-- collapse.collapse: **search** - *type:* `boolean` 
+remove-gap: true
+
+It's used to enable search button inside header. It will be shown as a last item
+in top section of doc-site header.
+
+-- collapse.collapse: **search-url** - *type:* `string` 
+remove-gap: true
+
+It's used to add search page url for search button. 
+
+-- end: ds.page
+

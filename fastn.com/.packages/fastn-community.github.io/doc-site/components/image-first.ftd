@@ -1,0 +1,79 @@
+-- import: fastn-community.github.io/doc-site/components
+-- import: fastn-community.github.io/doc-site/blog-articles/category-1/sample-post-2 
+
+
+-- ds.page: image-first
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+`ds.image-first` can be used to show blog/article meta as a featured-post with
+image-first layout. To see it in action - [Click here](blog/).
+
+-- ds.h2: Example:
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- common.post-meta meta: Understanding process of statup-up funding
+published-on: July 22, 2014 at 10:02 pm
+post-image: $assets.files.static.image-placeholder.png
+post-url: blog-articles/category-1/sample-post-2/
+author: $author.john-doe
+
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae 
+ab illo inventore.
+
+Totam rem aperiam, eaque ipsa quae ab illo inventore.
+
+\-- ds.image-first:
+post-data: $sample-post-2.meta
+
+-- ds.rendered.output:
+
+-- ds.image-first:
+post-data: $sample-post-2.meta
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.code:
+lang: ftd
+
+\-- ds.image-first:
+post-data: $sample-post-2.meta
+
+-- ds.h3: Properties of `image-post` component
+
+- **post-data** - `type: record` use `common.post-meta` record to create
+    image post of your blog post as shown in below code snippet. 
+    To see it in featured posts page - [Click here](blog/).
+
+-- ds.code:
+lang: ftd
+
+\-- common.post-meta meta: Understanding process of statup-up funding
+published-on: July 22, 2014 at 10:02 pm
+post-image: $assets.files.static.image-placeholder.png
+post-url: blog-articles/category-1/sample-post-2/
+author: $author.john-doe
+
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae 
+ab illo inventore.
+
+Totam rem aperiam, eaque ipsa quae ab illo inventore.
+
+-- end: ds.page

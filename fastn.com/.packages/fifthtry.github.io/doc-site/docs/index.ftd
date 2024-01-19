@@ -1,0 +1,453 @@
+-- import: fifthtry.github.io/doc-site as ds
+-- import: fifthtry.github.io/doc-site/assets
+
+
+;**** Configuration Starts **** 
+;Do not remove below configurations.
+
+-- ftd.text green-link: text
+color: $fastn.color.main.cta-primary.base
+style: bold
+background-color: $fastn.color.main.cta-secondary.text
+
+;**** Configuration Ends **** 
+
+
+
+
+
+-- ds.page: Using `doc-site` for [FTD](https://ftd.dev/) web projects
+
+We at FifthTry designed and developed [FTD](https://ftd.dev/) langauge for you. Using our own [FTD](https://ftd.dev/)
+language `doc-site` is designed for you to create your documentation sites. 
+`doc-site` also helps authors, entrepreneurs, corporate groups and bloggers to
+create their own web projects using [FTD](https://ftd.dev/) language.
+
+This simple and easy documentation will help you to modify or update original `doc-site`
+with your own web projects.
+
+
+-- ds.h2: Creating your first FTD web-site
+
+Please, refer [this documentation](https://fastn.dev/author/create-on-github/) 
+to understand how to create FTD website repository on GitHub.
+
+Once you are done [these steps](https://fastn.dev/author/create-on-github/) follow
+below steps.
+
+
+-- ds.h2: Editing `index.ftd` & updating default content
+
+`index.ftd` is added by default to your `FTD` `doc-site`. Let's edit its default
+content with your new content.
+
+🔏 To edit `index.ftd` file click on `index.ftd` file from your `GitHub` repository 
+home. `GitHub` will open this file as non-editable. 
+
+To edit `index.ftd` file click on edit icon. Once you click on edit icon 
+`index.ftd` file will be opned for editing into `GitHub` live editor.
+
+👍 You can start editing `index.ftd` file with `GitHub` live editor. Use `ds.page` 
+syntax to create page for your `FTD` website homepage. e.g. below code:
+
+
+-- ds.code: Example content for `index.ftd` using `ds.page` syntax:
+lang: ftd
+
+\-- ds.page: ✨ Design the Ultimate Blog Homepage
+
+For blogs, a user’s [first impression is key](https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/). If visitors can’t determine [credibility](http://credibility.stanford.edu/), navigate easily or connect with 
+the content, they are less likely to subscribe or return.
+
+
+-- ds.markdown:
+
+The primary job of a blog is to deliver content to a distinct 
+audience. In staying true to the topic, the blog must also meet
+the challenge of attracting the target reader’s attention and relate 
+to their point of view.
+
+All of these factors are typically handled through design. Naturally, 
+the color palette, imagery, logo placement and style most prominently 
+communicate a blog’s personality andtopic. However, the best blogs are 
+not the most visually stunning, but the most relevant and functional.
+
+
+{ds.yellowmarker:Above post is taken as is from} [contently](https://contently.com/2012/04/10/homepage-design/).
+
+Once you are done with editing `index.ftd` file. Click on `Commit changes` button.
+
+
+-- ds.image: Editing `ingex.ftd` file and `Commit changes`
+src: $assets.files.static.docs.editing-index-ftd-with-homepage-content.png
+width.fixed.px: 500
+
+
+-- ds.markdown:
+
+`FASTN` auto deployment job will run and `index.ftd` file will be deployed on live 
+automatically by our `FASTN` builder.
+
+To cross-check  if `pages build and deployment` workflow ran successfully. Click 
+on `Actions` tab.
+
+
+-- ds.image: `pages build and deployment` workflow should run successfully
+src: $assets.files.static.docs.action-tab-pages-build-and-deployment.png
+width.fixed.px: 750
+
+
+-- ds.markdown:
+
+Once you see {ds.greenmarker:green} tick on `pages build and deployment`, it means your `index.ftd`
+file is successfully deployed on live website.
+
+Click on your `FTD` website url e.g. [`https://gsalunke.github.io/my-ftd-blog/`](https://gsalunke.github.io/my-ftd-blog/) to see updated changes of
+`index.ftd` file on your website homepage.
+
+
+-- ds.image: `index.ftd` with homepage content
+src: $assets.files.static.docs.index-ftd-updated-with-homepage-post.png
+width.fixed.px: 750
+
+
+-- ds.h2: How to create a new page into `FTD` website?
+
+On your `GitHub` repository home, click on `Add file` button dropdown. It will show
+two options `Create new file` and `Upload files`. Click on `Create new file` to 
+create new `.ftd` file.
+
+
+-- ds.image: Creating new `FTD` file
+src: $assets.files.static.docs.create-new-ftd-file-into-ftd-repository.png
+width.fixed.px: 750
+
+
+-- ds.markdown:
+
+Once you clicked on `Create new file`, `GitHub` will open live editor. Provide name 
+of your first `.ftd` file into `Name your file...` input box. e.g. `post.ftd` 
+
+
+-- ds.code: Writing first `FTD` file e.g. `post.ftd`
+lang: ftd
+
+\-- ds.page: My first blog post -- title of the post
+
+Today I started writing my blog using `FTD`. `FTD` language is 
+designed and developed by FifthTry Private Ltd. Its a Banglore based start-up company. 
+
+FifthTry Private Ltd. is backed by [Y Combinators](https://www.fifthtry.com/). 
+They have designed `FTD` language for all technical and non-technical users. 
+
+I started using `FTD` by following very simple steps given on their [Author Docs](https://fifthtry.github.io/doc-site/docs) tutorial.
+
+I would recommend `FTD` for all authors, entrepreneurs, corporate groups and bloggers.
+
+I find it very simple to use. Just few clicks here and there and you 
+are ready with your own `GitHub` live website.
+
+
+-- ds.h3: Commiting my first `post.ftd`
+
+
+Below image shows how to `Commit` your first `post.ftd` file
+
+
+-- ds.image: Creating your first `FTD` blog post
+src: $assets.files.static.docs.first-blog-post-ftd-file.png
+width.fixed.px: 750
+
+
+-- ds.markdown:
+
+Once you click on `Commit new file` button. `GitHub` will add your `post.ftd` file
+into your repository.
+
+`FASTN` auto deployment job will run and your first `post.ftd` file will be deployed
+on live automatically by our `FASTN` builder.
+
+To cross-check  if `pages build and deployment` workflow ran successfully. Click 
+on `Actions` tab.
+
+
+-- ds.image: `pages build and deployment` workflow should run successfully
+src: $assets.files.static.docs.action-tab-pages-build-and-deployment.png
+width.fixed.px: 750
+
+
+
+-- ds.markdown:
+
+Once you see {ds.greenmarker:green} tick on `pages build and deployment`, it means your `post.ftd`
+file is successfully deployed on live website.
+
+To see it live add `post` into your website url. e.g. https://gsalunke.github.io/my-ftd-blog/post/.
+
+
+-- ds.h2: Creating `config.ftd` & changing `ds.site-name` with `My FTD Blog`
+
+Default value of `ds.site-name` variable is `LOGO`. Let's change it with your 
+blog name. e.g. here we will change `LOGO` `site-name` with `My FTD Blog`.
+
+To change default value of `site-name` you need to add `config.ftd` file into `FASTN`
+folder.
+
+To create `config.ftd` file follow same steps we mentioned in [How to create a new page into `FTD` website?](author-docs/#how-to-create-new-ftd-file) to `Create new file`. As mentioned above `config.ftd` should be created inside `FASTN` folder. So to create new folder
+simply type folder-name into `Name your file...` input box followed by `/` `GitHub`
+will consider `FASTN/` as folder and it will create folder named `FASTN` into route
+directory of your `FTD` repository.
+
+Now provide file name as `config.ftd` and add below code into `config.ftd` file
+using `GitHub` live editor.
+
+
+-- ds.code: Creating `config.ftd` file into `My FTD Blog`
+lang: ftd
+
+\-- import: fastn
+\-- import: ds
+
+\-- ds.site-name: My FTD Blog
+
+
+-- ds.image: Creating `FASTN/config.ftd` file
+src: $assets.files.static.docs.adding-config-ftd-into-FASTN-folder.png
+width.fixed.px: 750
+
+
+-- ds.markdown:
+
+Once you commit `FASTN/config.ftd` file, `FASTN` builder will start building newly added
+files.
+
+Let `FASTN` build finish up [pages-build-and-deployment](author-docs/#pages-build-and-deployment-1) build
+process. 
+
+Once you see {ds.greenmarker:green} tick on `pages build and deployment`, it means your `config.ftd`
+file is successfully deployed on live website.
+
+
+-- ds.h2: Udating `config.ftd` into `FASTN.ftd` file
+
+Our newly created `FTD` configuration file should be added into `FASTN.ftd` file,
+otherwise the configurations we mentioned `FASTN/config.ftd` file won't work.
+
+To refer `config.ftd` file inside `FASTN.ftd` click on `FASTN.ftd` file. `GitHub` will
+open this file as non-editable. 
+
+To edit `FASTN.ftd` file click on edit icon. Once you click on edit icon `FASTN.ftd` file
+will be opned for editing into `GitHub` live editor.
+
+Add below code into your `FASTN.ftd` file.
+
+
+-- ds.code: Updating `FASTN.ftd` file with `config.ftd`
+lang: ftd
+
+\-- fastn.auto-import: gsalunke.github.io/my-ftd-blog/FASTN/config
+
+
+-- ds.markdown:
+
+In above example code we have added `config.ftd` file into `gsalunke.github.io/my-ftd-blog/`
+
+So, while linking we should provide full path of `config.ftd` file, as mentioned in above
+example.
+
+Follow same steps [commiting-my-first-post-ftd](author-docs/#commiting-my-first-post-ftd) to `commit` `FASTN.ftd` file. 
+
+
+-- ds.image: Importing `FASTN/config.ftd` into `FASTN.ftd` file
+src: $assets.files.static.docs.referring-config-ftd-into-FASTN-ftd-file.png
+width.fixed.px: 750
+
+Once you click on `Commit changes` button, `FASTN` builder will start building these
+changes and deploy them on live. Ref. [pages-build-and-deployment](author-docs/#pages-build-and-deployment)
+
+
+Visit your `FTD` website, newly added `site-name` `My FTD Blog` will appear instead of
+default `LOGO` site name.
+
+-- ds.image: `My FTD Blog` site name from `FASTN/config.ftd`
+src: $assets.files.static.docs.site-name-and-first-blog-post.png
+width.fixed.px: 750
+
+
+-- ds.markdown:
+
+👍👍 Done! you can add as many pages as you want to create now. [Follow same process to
+create new pages](author-docs/#how-to-create-new-ftd-file). 
+
+
+-- ds.h2: Using `fastn.sitemap` feature for sections in header
+
+
+FifthTry have developed `fastn.sitemap` for you. Using `fastn.sitemap` feature you 
+can add sections and sub-sections into header.
+
+To use `fastn.sitemap` feature, we need to [edit your `FASTN.ftd`](author-docs/#updating-fastn-ftd-file) file and add sections, sub-sections into it.
+
+
+-- ds.code: Using `fastn.sitemap` example code:
+lang: ftd
+
+\-- fastn.sitemap:
+
+# Home: index.html
+
+## My Sub Section: /sub-section/
+
+- Sidebar link: /toc-link/
+  - Sidebar sub-link: /toc-sublink/
+
+# Sample Post: /post/
+
+
+-- ds.markdown:
+
+Once you add sitemap links into your `FASTN.ftd` file and commit it. `FASTN` will auto generate 
+`sitemap` for your `FTD` website. 
+
+
+-- ds.h3: Let's understand above code snippet:
+
+`# Home: index.html` : `#` single hash treated as a section
+
+{ds.yellowmarker:**Home** link will be shown as primary section inside header.}
+
+`## My Sub Section: /sub-section/` : `##` double hash treated as a sub-section
+
+{ds.yellowmarker: **My Sub Section** link will be shown into **Home** page as secondary section below header.}
+
+`- Sidebar link: /toc-link/`  : `-` dash treated as toc-link
+
+{ds.yellowmarker: **Sidebar link** will be shown inside sidebar as table of contents link.}
+
+`  - Sidebar sub-link: /toc-sublink/` : indented `-` dash treated as toc-sub-link
+
+{ds.yellowmarker:**Sidebar sub-link** will be shown as sub-link to **Sidebar link** indented `10px` to it.}
+
+`# Sample Post: /post/` : `#` single hash treated as a section
+
+{ds.yellowmarker:**Sample Post** link will be shown as section inside header.}
+
+Each section or sub-section link will be shown in {green-link: green} color when its active.
+
+{ds.redmarker:***RULE:*** }
+
+Whilte adding links to `fastn.sitemap` `/link-url/` should be a `.ftd` file. e.g. if
+you are adding link as `/my-link/` then in your route folder `my-link.ftd` file 
+should be present. Similarly if you are adding a link from folder e.g. `/directory/folder-link`
+then folder named `directory` should be present in route directory. And inside 
+`directory` folder `folder-link.ftd` file should be present.
+
+For example refer our [fastn.dev](https://fastn.dev/) or [ftd.dev](https://ftd.dev/)
+websites to learn more about sitemap linking.
+
+
+-- ds.image: Updating `FASTN.ftd` file with `fastn.sitemap` feature
+src: $assets.files.static.docs.updating-fastn-ftd-with-sitemap-feature.png
+width.fixed.px: 750
+
+
+-- ds.markdown:
+
+Once you click on `Commit changes` button, `FASTN` builder will start building these
+changes and deploy them on live. Ref. [pages-build-and-deployment](author-docs/#pages-build-and-deployment)
+
+
+-- ds.image: `fastn.sitemap` feature implemented 👍
+src: $assets.files.static.docs.fastn-sitemap-feature-output-homepage.png
+width.fixed.px: 750
+
+
+-- ds.h1: Using `FTD` components inside `doc-site`
+
+FifthTry has designed many `FTD` components for authors. By following simple 
+and easy steps you can use these components into your `FTD` projects.
+
+According to your need you can use these components. [Click here](https://fastn.dev/all)
+
+For example you want to use our [`bling`](https://fifthtry.github.io/bling/) components. 
+To use `bling` library you need to add `-- fastn.dependency: fifthtry.github.io/bling` into 
+`FASTN.ftd` file.
+
+
+Since `bling` library comes with many components. Visit [bling library demo](https://fifthtry.github.io/bling/index.html) and choose component you are looking for.
+
+Lets say if you are looking for an [`sidenote` component](https://fifthtry.github.io/bling/sidenote/). Which highlights important part of content inside your page.
+
+Watch below video which explains - how to add `FASTN` dependencies?
+
+
+
+\-- ds.youtube: 
+v: 8fu8BtKVq9s
+
+
+-- ds.h3: Using `sitenote` component from `Bling` component library
+
+[Click here](https://fifthtry.github.io/bling/sidenote/) to visit `sidenote` documentation.
+
+Its very easy to add any `FTD` dependency in `FASTN.ftd` file. Use below code snippet
+to add `sidenote` dependency in `FASTN.ftd` file.
+
+-- ds.code: Adding `sidenote` as dependency inside `FASTN.ftd`
+lang: ftd
+
+\-- fastn.dependency: fifthtry.github.io/bling
+\-- fastn.auto-import: fifthtry.github.io/bling/sidenote
+
+
+-- ds.markdown:
+
+With `fastn.auto-import` `sidenote` will be auto imported into all `.ftd` files 
+inside your `FTD` web project. Just add below code snippent and change its 
+default content with your content for a sidenote.
+
+
+-- ds.code: Example code for `-- sidenote`
+lang: ftd
+
+\-- sidenote.sidenote:
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+veniam, quis nostrud exercitation ullamco laboris nisi ut
+
+
+-- ds.image: sidenote output
+src: $assets.files.static.docs.sidenote-from-bling-library.png
+width.fixed.px: 750
+
+
+-- ds.h1: Using blog on doc-site
+
+FifthTry `doc-site` static/manual blog components are ready to use. By doing 
+some changes you can start using blog components we have designed for you.
+
+These blog components are as follows:
+
+- Blog meta - meta for the blog
+- Blog article - blog articles
+- Blog authors - author bio
+- Blog featured post list
+
+
+
+-- ds.h2: How to edit README.md file?
+
+Click on edit icon at right side of your README.md file on your `GitHub`repository
+page. `GitHub` will open live editor for your README.md file. You can make changes
+to it and click on `Commit changes` button to save your changes.
+
+
+
+-- end: ds.page
+
+
+
+
+
+

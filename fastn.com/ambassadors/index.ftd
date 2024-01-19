@@ -59,24 +59,24 @@ background.solid: $inherited.colors.background.step-1
 	-- featured-cards:
 	
 		-- lib.card: Grow
-		image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-		min-height.fixed.em: 22
+		bg-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+		;; min-height.fixed.em: 22
 		
 		Apply new learnings to build great solutions for local problems. Advance your
 		skills, career, and network. Give back to your community by helping others
 		learn.
 		
 		-- lib.card: Learn
-		image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
-		min-height.fixed.em: 21
+		bg-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
+		;; min-height.fixed.em: 21
 		
 		Learn about a range of technical topics and gain new skills through hands-on
 		workshops, events, talks, and project-building activities online and
 		in-person.
 		
 		-- lib.card: Connect
-		image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
-		min-height.fixed.em: 21
+		bg-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+		;; min-height.fixed.em: 21
 		
 		Meet students interested in developer technologies at your college or
 		university. All are welcome, including those with diverse backgrounds and

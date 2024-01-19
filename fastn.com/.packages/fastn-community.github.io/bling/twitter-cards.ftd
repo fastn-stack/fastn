@@ -1,0 +1,368 @@
+
+-- site-doc.doc-home: Twitter Cards
+site-title: Bling
+show-tabs: false
+github-url: https://github.com/fastn-community/bling
+current-package: fastn-community.github.io/bling
+
+The twitter card includes a title, a brief description, a thumbnail image, and
+the Twitter handle of the account sharing the link. It provides a basic preview
+of the shared content on twitter.
+
+-- site-doc.header: Example
+
+-- site-doc.output:
+colors: $ftd.default-colors
+types: $ftd.default-types
+
+-- card:
+user: $amitu
+created_at: 9:19 AM · Oct 29, 2020
+place: $amitu.location
+reply_count: 1
+retweet_count: 9
+favorite_count: 1
+
+Just launched http://fifthtry.com homepage! Will give you some idea of what I
+quit Acko to build. If you are developer, engineering manager, product manager,
+it’s relevant to you!
+
+Please reply or DM me with what you think about it, will be immensely helpful
+and appreciated.
+
+-- end: site-doc.output
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `bling` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/bling
+
+-- cb.code: import `twitter-cards` inside your `.ftd` file
+lang: ftd
+
+\-- import: fastn-community.github.io/bling/twitter-cards
+
+-- cb.code: `twitter-cards`
+lang: ftd
+
+\-- twitter-cards.user amitu:
+name: Amit Upadhyay
+screen_name: amitu
+location: Banglore
+url: https://twitter.com/amitu
+description: AmitU is building fastn.com
+verified: true
+followers_count: 918
+profile_image_url: $assets.files.static.amitu.jpg
+
+\-- twitter-cards.card:
+user: $amitu
+created_at: 9:19 AM · Oct 29, 2020
+place: $amitu.location
+reply_count: 1
+retweet_count: 9
+favorite_count: 1
+
+Just launched http://fifthtry.com homepage! Will give you some idea of what I
+quit Acko to build. If you are developer, engineering manager, product manager,
+it’s relevant to you!
+
+Please reply or DM me with what you think about it, will be immensely helpful
+and appreciated.
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `tip` component.
+
+-- site-doc.component-property: `user`
+type: Record (`required`)
+
+It's used to add user details to the `card` component.
+
+Below are properties of `user` record:
+
+-- cb.code:
+lang: ftd
+
+\-- tip.user amitu:
+name: Amit Upadhyay
+screen_name: amitu
+location: Banglore
+url: https://twitter.com/amitu
+description: AmitU is building fastn.com
+verified: true
+followers_count: 918
+profile_image_url: $assets.files.static.amitu.jpg
+
+-- site-doc.component-property: `name`
+type: Caption (`required`)
+
+It's used to add user name.
+
+-- site-doc.component-property: `screen_name`
+type: String (`required`)
+
+It's used to add user's twitter account screen_name.
+
+-- site-doc.component-property: `location`
+type: String (`required`)
+
+It's used to add tweet location, the location from which the tweet was twitted.
+
+-- site-doc.component-property: `url`
+type: String (`required`)
+
+It's used to add tweet link.
+
+-- site-doc.component-property: `description`
+type: String (`required`)
+
+It's used to add tweet description.
+
+-- site-doc.component-property: `verified`
+type: Boolean (`optional`, Default: `false`)
+
+Set `verified` property value as `true` if your twitter account is verified. 
+
+If you pass value as `true` then blue tick will be shown after user name in the
+card.
+
+-- site-doc.component-property: `followers_count`
+type: Integer (`required`)
+
+It's used to add twitter followers count as integer. 
+
+-- site-doc.component-property: `profile_image_url`
+type: ftd.image-src (`required`)
+
+It's used to add twitter account user profile image url/link. 
+
+-- site-doc.component-property: `text`
+type: Body (`required`)
+
+It's used to add body content to `card` component.
+
+-- site-doc.component-property: `created_at`
+type: String (`required`)
+
+It's used to add show tweet timestamp.
+
+-- site-doc.component-property: `place`
+type: String (`required`)
+
+It's used to add show tweet location, which is added in `tip.user` record in
+`location` property.
+
+-- site-doc.component-property: `reply_count`
+type: Integer (`required`)
+
+It's used to add tweet comments or reply count. 
+
+-- site-doc.component-property: `retweet_count`
+type: Integer (`required`)
+
+It's used to add retweet count.
+
+-- site-doc.component-property: `favorite_count`
+type: Integer (`required`)
+
+It's used to add tweet likes count.
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component card:
+user user:
+body text:
+string created_at:
+optional boolean truncated: false
+string place:
+integer reply_count: 
+integer retweet_count:
+integer favorite_count:
+
+-- ftd.column:
+width.fixed.px if { ftd.device == "desktop" }: 500
+width if { ftd.device == "mobile" }: fill-container
+padding.px: 16
+background.solid: $inherited.colors.background.base
+border-radius.px: 10
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+border-width.px: 1
+border-color: $inherited.colors.border
+spacing.fixed.px: 16
+
+-- ftd.row:
+id: card-header
+align-content: center
+width: fill-container
+spacing.fixed.px: 8
+
+-- ftd.image:
+if: { $card.user.profile_image_url != NULL }
+src: $card.user.profile_image_url
+height.fixed.px: 48
+border-radius.px: 100
+link: $card.user.url
+
+-- ftd.image:
+if: { $card.user.profile_image_url == NULL }
+src: $assets.files.static.avatar.svg
+height.fixed.px: 48
+border-radius.px: 100
+link: $card.user.url
+
+-- ftd.column:
+margin-left.px: 8
+width: fill-container
+
+-- ftd.row:
+align-content: center
+link: $card.user.url
+spacing.fixed.px: 4
+
+-- ftd.text: $card.user.name
+color: $inherited.colors.text-strong
+role: $inherited.types.button-large
+
+-- ftd.image:
+if: { card.user.verified }
+src: $assets.files.static.verified.svg
+width.fixed.px: 18
+height.fixed.px: 18
+
+-- end: ftd.row
+
+-- ftd.row:
+align-content: center
+link: $card.user.url
+
+-- ftd.text: @
+color: $inherited.colors.text-strong
+
+-- ftd.text: $card.user.screen_name
+color: $inherited.colors.text-strong
+role: $inherited.types.fine-print
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- ftd.image:
+src: $assets.files.static.twitter-icon.svg
+width.fixed.px: 36
+height.fixed.px: 36
+link: $card.user.url
+
+-- end: ftd.row
+
+-- ftd.text: 
+color: $inherited.colors.text-strong
+
+$card.text
+
+-- ftd.row:
+align-content: center
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+spacing.fixed.px: 8
+
+-- ftd.text: $card.created_at
+
+-- ftd.text: ·
+role: $inherited.types.fine-print
+color: $inherited.colors.text-strong
+
+-- ftd.text: $card.place
+
+-- end: ftd.row
+
+-- ftd.row:
+align-content: center
+role: $inherited.types.fine-print
+color: $inherited.colors.text-strong
+spacing.fixed.px: 25
+
+-- ftd.row:
+align-content: center
+spacing.fixed.px: 4
+
+-- ftd.image:
+src: $assets.files.static.comments.svg
+width.fixed.px: 24
+height.fixed.px: 24
+
+-- ftd.integer: $card.reply_count
+
+-- end: ftd.row
+
+-- ftd.row:
+align-content: center
+spacing.fixed.px: 4
+
+-- ftd.image:
+src: $assets.files.static.retweet.svg
+width.fixed.px: 24
+height.fixed.px: 24
+
+-- ftd.integer: $card.retweet_count
+
+-- end: ftd.row
+
+-- ftd.row:
+align-content: center
+spacing.fixed.px: 4
+
+-- ftd.image:
+src: $assets.files.static.favorite.svg
+width.fixed.px: 24
+height.fixed.px: 24
+
+-- ftd.integer: $card.favorite_count
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: card
+
+
+
+
+-- record user:
+caption name:
+string screen_name:
+string location:
+string url:
+string description:
+boolean verified: false
+integer followers_count: 
+ftd.image-src profile_image_url:
+
+
+
+
+
+
+-- user amitu:
+name: Amit Upadhyay
+screen_name: amitu
+location: Banglore
+url: https://twitter.com/amitu
+description: AmitU is building fastn.com
+verified: true
+followers_count: 918
+profile_image_url: $assets.files.static.amitu.jpg

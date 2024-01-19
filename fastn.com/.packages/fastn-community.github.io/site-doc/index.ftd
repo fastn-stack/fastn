@@ -1,0 +1,2115 @@
+-- import: fastn-community.github.io/site-doc/assets
+-- import: fastn/processors as pr
+
+-- integer $current-tab: 1
+-- boolean $full-screen: false
+
+-- pr.sitemap-data sitemap:
+$processor$: pr.sitemap
+
+
+-- ftd.image-src fastn-logo:
+light: https://fastn.com/-/fastn.com/images/fastn.svg
+dark: https://fastn.com/-/fastn.com/images/fastn-dark.svg
+
+-- string $copyright-info: Copyright © 2023 - [FifthTry](https://www.fifthtry.com/)
+
+-- doc-home: Welcome to your fastn powered website.
+github-url: https://github.com/fastn-community/site-doc
+typography: fifthtry.github.io/doc-site-typography
+current-package: fastn-community.github.io/site-doc
+show-tabs: false
+
+-- header: What is Documentation?
+
+Documentation of a component refers to a set of written materials that provide
+information about the component's features, functionality, and usage. This can
+include technical specifications, user manuals, installation guides, release
+notes, API documentation, and other relevant information.
+
+Documentation is essential for software development, as it helps developers
+understand how a component works, how to integrate it with other components,
+and how to troubleshoot issues. It also helps end-users understand how to use
+the component effectively.
+
+-- header: How to install fastn?
+
+Please, [click here](https://fastn.io/install/) to read fastn installation
+documentation.
+
+
+-- header: How to edit your fastn site on Github?
+
+Please, [click here](https://docs.github.com/en/codespaces/the-githubdev-web-based-editor)
+to read GitHub web editor documentation.
+
+-- header: How to use `site-doc` package?
+
+`site-doc` package is recommended to be used only for documentation of your
+fastn project components.
+
+To use this package add below lines into your FASTN.ftd file:
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/site-doc
+\-- fastn.auto-import: fastn-community.github.io/site-doc as doc
+
+-- header: Invocation
+
+Create new ftd file into your fastn package e.g. `doc.ftd` and add `doc-home`
+component inside it.
+
+
+-- cb.code:
+lang: ftd
+
+\-- doc.doc-home: Welcome to your fastn powered website.
+github-url: https://github.com/fastn-community/site-doc
+color-scheme: Default $inherited
+typography: fifthtry.github.io/doc-site-typography
+current-package: fastn-community.github.io/site-doc
+
+Some body here is coming from `$doc-home.body`
+
+-- header: `doc-home` Properties:
+
+Below are details of all properties of this component.
+
+-- component-property: `title`
+
+It’s used to add a title to `doc-home` component.
+
+-- component-property: `body`
+
+It’s used to add a body content to `doc-home` component.
+
+-- component-property: `github-url`
+
+It’s used to add the `github-url` of your fastn package GitHub repo.
+
+-- component-property: `color-scheme`
+
+It’s used to add a link of `color-scheme` you used for the package.
+
+-- component-property: `typography`
+
+It’s used to add a link of `typography` you used for the package.
+
+
+-- component-property: `current-package`
+
+It’s used to add a link of `current-package` you used for the package.
+
+-- component-property: `show-tabs`
+
+It’s used to show / hide `tabs`.
+
+-- header: Properties at a glance:
+
+Below table shows all properties at a glance and its default types of `doc-home`
+component.
+
+-- property-header:
+
+-- table-of-property: `title`
+type: Caption 
+default: Default
+
+-- table-of-property: `body`
+type: Body 
+default: Optional
+
+-- table-of-property: `github-url`
+type: String
+default: Default
+
+-- table-of-property: `color-scheme`
+type: String
+default: Default
+
+-- table-of-property: `typography`
+type: String
+default: Default
+
+-- table-of-property: `current-package`
+type: String
+default: Default
+
+-- table-of-property: `show-tabs`
+type: Boolean
+default: Optional
+
+-- end: property-header
+
+-- header: How to create a new page?
+
+To create a new page follow below steps:
+
+- Create new `.ftd` file into your project folder
+- Add its link inside `FASTN.ftd` sitemap
+- Import your `lib.ftd` file inside it using `-- import <your-project-name>/lib
+- add `-- lib.page:` inside your `.ftd` file and add title, body to page
+  component.
+- To check it on your local server run `fastn server` from terminal or command
+  prompt. 
+- Access e.g. `http://127.0.0.1:8000/your-ftd-file` into browser.
+
+
+-- header: How to update an existing page?
+
+Simply open the `.ftd` file into any code editor and change its content. For
+e.g. you want to change page title inside `index.ftd` file then open it in code
+editor OR sublime-text editor and change `-- lib.page: <title>` `<title>` with
+new `<title>`.
+
+
+-- end: doc-home
+
+
+
+
+
+
+
+
+
+
+-- component doc-home:
+optional caption title:
+optional string github-url:
+optional string license-url:
+optional string color-scheme:
+optional string typography:
+optional string current-package: 
+optional body body: 
+children doc-childs:
+string site-title: Documentation
+string site-url: index.html
+pr.toc-item list toc: $sitemap.toc
+pr.toc-item list sections: $sitemap.sections
+pr.toc-item list sub-sections: $sitemap.subsections
+ftd.color-scheme colors: $cs.main
+ftd.type-data types: $typo.types
+boolean show-tabs: false
+boolean copy: true
+string $copy-text: null
+boolean $mouse-in: false
+string clean-code: $combine-string(a = -- fastn.dependency:, b = $doc-home.current-package)
+boolean $sidebar-open: false
+string document-title: fastn document site template. Build Your Own documentation site with Ease
+string document-description: Simple, easy-to-use fastn documentation template to write your fastn package document. Change colours and typography effortlessly.
+ftd.raw-image-src document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+
+-- ftd.document:
+title if { doc-home.document-title != NULL }: $doc-home.document-title
+title: $doc-home.title
+og-title if { doc-home.document-title != NULL }: $doc-home.document-title
+og-title: $doc-home.title
+twitter-title if { doc-home.document-title != NULL }: $doc-home.document-title
+twitter-title: $doc-home.title
+description: $doc-home.document-description
+og-image: $doc-home.document-image
+
+-- ftd.column:
+width: fill-container
+background.solid: $inherited.colors.background.base
+
+-- ftd.column:
+if: { doc-home.sidebar-open }
+width: fill-container
+background.solid: $inherited.colors.background.overlay
+height.fixed.calc: 100vh
+z-index: 10
+
+-- mobile-sidebar:
+if: { doc-home.sidebar-open }
+$sidebar-open: $doc-home.sidebar-open
+
+-- end: ftd.column
+
+-- menu-mobile:
+if: { doc-home.sidebar-open }
+site-url: $doc-home.site-url 
+site-name: $doc-home.site-title
+current-url: index.html
+sections: $doc-home.sections
+sub-sections: $doc-home.sub-sections 
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 24
+padding-horizontal.px: 24
+background.solid: $inherited.colors.background.step-2
+align-content: center
+
+-- ftd.row:
+width: fill-container
+align-content: center
+
+-- ftd.mobile:
+
+-- ftd.image:
+src: $assets.files.static.hamburger.svg
+width.fixed.px: 24
+align-self: center
+$on-click$: $ftd.toggle($a = $doc-home.sidebar-open)
+margin-right.px: 24
+
+-- end: ftd.mobile
+
+-- ftd.image:
+if: { ftd.device == "desktop" }
+src: $assets.files.static.minify-icon.svg
+width.fixed.px: 24
+$on-click$: $ftd.toggle($a = $full-screen)
+
+-- ftd.column:
+width: fill-container
+align-self: center
+margin-left.px: 24
+
+-- ftd.column:
+
+-- ftd.text: $doc-home.site-title
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+link: $doc-home.site-url
+
+-- ftd.text: a fastn package
+role: $inherited.types.fine-print
+color: #999999
+color if { doc-home.mouse-in }: $inherited.colors.cta-primary.base
+padding-top.px: 4
+link: https://fastn.com/
+$on-mouse-enter$: $ftd.set-bool($a = $doc-home.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $doc-home.mouse-in, v = false)
+open-in-new-tab: true
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.desktop:
+
+-- ftd.row:
+align-content: center
+spacing.fixed.px: 18
+margin-right.px if { doc-home.github-url != NULL }: 24
+
+-- header-links:
+$loop$: $doc-home.sections as $obj
+sections: $obj
+
+-- end: ftd.row
+
+-- end: ftd.desktop
+
+-- ftd.image:
+if: { doc-home.github-url != NULL }
+src: $assets.files.static.icon-github.svg
+width.fixed.px: 24
+link: $doc-home.github-url
+open-in-new-tab: true
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.row:
+width: fill-container
+align-self: center
+spacing.fixed.px: 48
+padding-horizontal.px: 48
+padding-horizontal.px if {ftd.device == "mobile"}: 24
+
+-- ftd.desktop:
+
+-- ftd.column:
+if: { !full-screen  && !ftd.is_empty($doc-home.toc)}
+width.fixed.percent: 25
+border-right-width.px: 4
+border-color: $inherited.colors.border
+border-style: double
+height: fill-container
+padding-top.px: 24
+padding-right.px: 24
+
+-- render-toc:
+if: { !full-screen && !ftd.is_empty($doc-home.toc) }
+toc-obj: $doc-home.toc
+
+-- end: ftd.column
+
+-- end: ftd.desktop
+
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 44
+margin-vertical.px if { ftd.device == "mobile" }: 24
+
+-- ftd.row:
+if: { doc-home.title != NULL }
+width: fill-container
+border-bottom-width.px: 1 
+border-color: $inherited.colors.border
+align-content: center
+
+-- ftd.text: $doc-home.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+region: h1
+width: fill-container
+
+-- end: ftd.row
+
+-- ftd.desktop:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.column:
+if: { doc-home.current-package != NULL }
+border-width.px: 1
+border-color: $inherited.colors.border
+width: fill-container
+border-radius.px: 3
+margin-top.px: 12
+padding.px: 12
+spacing.fixed.px: 16
+
+-- ftd.row:
+spacing.fixed.px: 12
+
+-- ftd.text: Package name:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+min-width.fixed.px: 170
+
+-- ftd.text: $doc-home.current-package
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+padding-right.px: 50
+
+-- ftd.row:
+spacing.fixed.px: 10
+align-content: right
+align-self: end
+anchor: parent
+top.px: 3
+right.px: 20
+cursor: pointer
+
+-- ftd.image:
+if: { doc-home.copy-text == "null"}
+src: $assets.files.static.copy.svg
+$on-click$: $ftd.copy-to-clipboard(a = $doc-home.clean-code)
+$on-click$: $ftd.set-string($a = $doc-home.copy-text, v = Copied!)
+width.fixed.px: 18
+cursor: pointer
+$on-mouse-leave$: $ftd.set-bool($a = $doc-home.mouse-in, v = true)
+
+-- ftd.image:
+if: { doc-home.copy-text != "null" && doc-home.mouse-in }
+src: $assets.files.static.tick.svg
+width.fixed.px: 18
+$on-mouse-leave$: $ftd.set-bool($a = $doc-home.mouse-in, v = false)
+$on-mouse-leave$: $ftd.set-string($a = $doc-home.copy-text, v = null)
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.row:
+if: { doc-home.license-url != NULL }
+spacing.fixed.px: 12
+align-content: center
+
+-- ftd.text: License:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+min-width.fixed.px: 170
+
+-- ftd.row:
+align-content: center
+spacing.fixed.px: 0
+
+-- ftd.text: Open Source BSD
+role: $inherited.types.copy-regular
+color:  $inherited.colors.text-strong
+link: $doc-home.license-url
+align-self: center
+open-in-new-tab: true
+
+-- ftd.image:
+src: $assets.files.static.link.svg
+link: $doc-home.license-url
+width.fixed.px: 24
+margin-top.px: 2
+open-in-new-tab: true
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.row:
+if: { doc-home.color-scheme != NULL }
+spacing.fixed.px: 12
+
+-- ftd.text: Color Scheme:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+min-width.fixed.px: 170
+
+-- ftd.text: $doc-home.color-scheme
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- ftd.row:
+if: { doc-home.typography != NULL }
+spacing.fixed.px: 12
+
+-- ftd.text: Typography:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+min-width.fixed.px: 170
+
+-- ftd.text: $doc-home.typography
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.column:
+if: { doc-home.current-package != NULL }
+border-width.px: 1
+border-color: $inherited.colors.border
+width: fill-container
+border-radius.px: 3
+margin-top.px: 12
+padding.px: 12
+spacing.fixed.px: 16
+
+-- ftd.row:
+spacing.fixed.px: 10
+align-content: right
+align-self: end
+anchor: parent
+top.px: 20
+right.px: 20
+cursor: pointer
+
+-- ftd.image:
+if: { doc-home.copy-text == "null"}
+src: $assets.files.static.copy.svg
+$on-click$: $ftd.copy-to-clipboard(a = $doc-home.clean-code)
+$on-click$: $ftd.set-string($a = $doc-home.copy-text, v = Copied!)
+width.fixed.px: 18
+cursor: pointer
+$on-mouse-leave$: $ftd.set-bool($a = $doc-home.mouse-in, v = true)
+
+-- ftd.image:
+if: { doc-home.copy-text != "null"}
+src: $assets.files.static.tick.svg
+width.fixed.px: 18
+$on-mouse-leave$: $ftd.set-bool($a = $doc-home.mouse-in, v = false)
+$on-mouse-leave$: $ftd.set-string($a = $doc-home.copy-text, v = null)
+
+-- end: ftd.row
+
+-- ftd.column:
+spacing.fixed.px: 12
+
+-- ftd.text: Package name:
+if: { doc-home.current-package != NULL }
+role: $inherited.types.copy-small
+color: $inherited.colors.text-strong
+min-width.fixed.px: 170
+
+-- ftd.text: $doc-home.current-package
+if: { doc-home.current-package != NULL }
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- ftd.row:
+spacing.fixed.px: 12
+align-content: center
+
+-- ftd.text: License:
+role: $inherited.types.copy-small
+color: $inherited.colors.text-strong
+
+-- ftd.row:
+spacing.fixed.px: 0
+align-content: center
+
+-- ftd.text: Open Source BSD
+role: $inherited.types.fine-print
+color:  $inherited.colors.text-strong
+link: $doc-home.license-url
+align-self: center
+open-in-new-tab: true
+
+-- ftd.image:
+src: $assets.files.static.link.svg
+link: $doc-home.license-url
+width.fixed.px: 22
+margin-top.px: 2
+open-in-new-tab: true
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.mobile
+
+-- ftd.text: 
+if: { doc-home.body != NULL }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+margin-top.px: 24
+
+$doc-home.body
+
+-- ftd.column:
+if: { doc-home.show-tabs }
+width: fill-container
+margin-top.px: 24
+
+-- tabs:
+
+-- tab: Example
+index: 1
+$active-item: true
+
+-- tab: Documentation
+index: 2
+
+-- end: tabs
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 24
+children: $doc-home.doc-childs
+spacing.fixed.px: 24
+min-height.fixed.vh if { full-screen || ftd.is_empty($doc-home.toc) }: 50
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- fastn-footer:
+copyright: $copyright-info
+site-logo: $fastn-logo
+powered-by-text: Powered by
+powered-by-link: https://fastn.io/
+colors: $cs.main
+types: $typo.types
+
+-- dms.dark-mode-switcher-float:
+
+-- end: ftd.column
+
+-- end: ftd.document
+
+-- end: doc-home
+
+
+
+
+
+
+
+
+
+
+-- component component:
+caption title: 
+string package-name:
+optional body body:
+ftd.ui list examples:
+ftd.ui list fields:
+children childs: 
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $component.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+region: h1
+border-bottom-width.px: 1 
+width: fill-container
+border-color: $inherited.colors.border
+
+-- ftd.desktop:
+
+-- ftd.row:
+border-width.px: 1
+border-color: $inherited.colors.border
+width: fill-container
+border-radius.px: 3
+margin-top.px: 12
+padding.px: 12
+spacing.fixed.px: 16
+
+-- ftd.text: Package name:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+-- ftd.text: $component.package-name
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- ftd.column:
+border-width.px: 1
+border-color: $inherited.colors.border
+width: fill-container
+border-radius.px: 3
+margin-top.px: 12
+padding.px: 12
+spacing.fixed.px: 16
+
+-- ftd.text: Package name:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+-- ftd.text: $component.package-name
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: ftd.mobile
+
+-- ftd.text: 
+if: { component.body != NULL }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+margin-top.px: 24
+margin-bottom.px: 16
+
+$component.body
+
+-- cb.code:
+lang: ftd
+body: $dependency(key = -- fastn.dependency:, v = $component.package-name)
+
+-- ftd.column:
+width: fill-container
+children: $component.childs
+spacing.fixed.px: 16
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+children: $component.examples
+spacing.fixed.px: 16
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+children: $component.fields
+spacing.fixed.px: 24
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: component
+
+
+
+
+
+
+
+
+
+
+-- component key-value:
+string value:
+string key: 
+
+-- ftd.column:
+width: fill-container
+
+-- cb.code:
+lang: ftd
+
+$dependency(key = $key-value.key, v = $key-value.value)
+
+-- end: ftd.column
+
+-- end: key-value
+
+
+
+
+
+
+
+
+
+
+-- component example:
+body body:
+
+-- ftd.column:
+width: fill-container
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+$example.body
+
+-- ds.rendered.output:
+
+-- ftd.text: some code here...
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- end: ftd.column
+
+-- end: example
+
+
+
+
+
+
+
+
+
+
+-- component component-field:
+caption title:
+string type:
+string default:
+body body:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $component-field.title
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+
+-- ftd.text: 
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+margin-top.px: 12
+
+$component-field.body
+
+-- ftd.row:
+width: fill-container
+align-content: center
+border-bottom-width.px: 2
+border-color: $inherited.colors.border
+margin-top.px: 24
+padding-bottom.px: 10
+
+-- ftd.text: Property name
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong
+width.fixed.percent: 33.33
+
+-- ftd.text: Type
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong
+width.fixed.percent: 33.33
+
+-- ftd.text: Default / Optional
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong
+width.fixed.percent: 33.33
+
+-- end: ftd.row
+
+-- ftd.row:
+width: fill-container
+align-content: center
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+margin-top.px: 12
+padding-bottom.px: 12
+
+-- ftd.text: $component-field.title
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+width.fixed.percent: 33.33
+
+-- ftd.text: $component-field.type
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+width.fixed.percent: 33.33
+
+-- ftd.text: $component-field.default
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+width.fixed.percent: 33.33
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: component-field
+
+
+
+
+
+
+
+
+
+
+-- string dependency(v): 
+string key:
+string v: 
+
+key + " " + v
+
+
+
+
+
+
+
+
+
+
+-- component header-links:
+pr.toc-item sections:
+
+-- ftd.column:
+
+-- ftd.text: $header-links.sections.title
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+border-bottom-width.px: 2
+border-color: $inherited.colors.background.step-2
+border-color if { header-links.sections.is-active }: $inherited.colors.cta-primary.base
+link: $header-links.sections.url
+white-space: nowrap
+
+-- end: ftd.column
+
+-- end: header-links
+
+
+
+
+
+
+
+
+
+
+-- ftd.shadow body:
+color: #a9a7a5ba
+x-offset.px: 0
+y-offset.px: 0
+blur.px: 24
+inset-body: false
+spread.px: 0
+
+
+
+
+
+
+
+
+
+
+-- component fastn-footer:
+caption copyright: Copyright © 2023 - [FifthTry](https://www.fifthtry.com/)
+optional ftd.image-src site-logo: 
+optional string powered-by-text:
+optional string powered-by-link: 
+ftd.type-data types: $ftd.default-types
+ftd.color-scheme colors: $ftd.default-colors
+
+-- ftd.column:
+width: fill-container
+align-self: center
+align-content: center
+background.solid: $inherited.colors.background.step-2
+
+-- ftd.row:
+width: fill-container
+border-top-width.px: 1
+border-color: $inherited.colors.border
+padding-vertical.px: 20
+padding-horizontal.px: 20
+align-content: center
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.text: 
+text: $fastn-footer.copyright
+color: $inherited.colors.cta-primary.base
+text-align: center
+role: $inherited.types.copy-small
+white-space: nowrap
+
+-- end: ftd.row
+
+-- ftd.row:
+align-self: end
+
+-- powered-by: $fastn-footer.powered-by-text
+fastn: $fastn-footer.site-logo
+link: $fastn-footer.powered-by-link
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: fastn-footer
+
+
+
+
+
+
+
+
+
+
+-- component powered-by:
+caption title: Powered by
+ftd.image-src fastn: $fastn-logo
+string link: https://fastn.io/
+
+-- ftd.column:
+link: $powered-by.link
+
+-- ftd.text: $powered-by.title
+role: $inherited.types.fine-print
+color: $inherited.colors.cta-primary.base
+
+-- ftd.image:
+src: $powered-by.fastn
+max-width.fixed.px: 120
+height.fixed.px: 28
+margin-left.px: 18
+
+-- end: ftd.column
+
+-- end: powered-by
+
+
+
+
+
+
+
+
+
+
+-- component render-toc:
+pr.toc-item list toc-obj:
+
+-- ftd.column:
+width: fill-container
+;;shadow: $body
+;;border-radius.px: 10
+padding-vertical.px: 24
+sticky: true
+top.px: 0
+left.px: 24
+min-width.fixed.percent: 20
+min-height.fixed.calc: 100vh - 0px
+height.fixed.vh: 100
+overflow-y: auto
+align-content: top-left
+background.solid: $inherited.colors.background.step-1
+
+-- toc-instance:
+$loop$: $render-toc.toc-obj as $obj
+toc: $obj
+
+-- end: ftd.column
+
+-- end: render-toc
+
+
+
+
+
+
+
+
+
+
+-- component toc-instance:
+pr.toc-item toc:
+pr.toc-item $toc-clone: *$toc-instance.toc
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 8
+margin-bottom.rem: 1
+$on-click$: $ftd.toggle($a = $toc-instance.toc-clone.is-open)
+
+-- ftd.image:
+if: { toc-instance.toc.font-icon != NULL }
+src: $toc-instance.toc.font-icon
+height.fixed.px: 14
+width: auto
+
+-- ftd.text:
+link if { toc-instance.toc.url != NULL }: $toc-instance.toc.url
+text: $toc-instance.toc.title
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+color if { toc-instance.toc.is-active }: $inherited.colors.cta-primary.base
+
+/-- ftd.image:
+if: { !ftd.is_empty(toc-instance.toc.children) && toc-instance.toc-clone.is-open}
+src: $assets.files.static.open.svg
+height.fixed.px: 14
+width: auto
+align-self: center
+
+/-- ftd.image:
+if: { !ftd.is_empty(toc-instance.toc.children) && !toc-instance.toc-clone.is-open}
+src: $assets.files.static.close.svg
+height.fixed.px: 14
+width: auto
+align-self: center
+
+-- end: ftd.row
+
+-- ftd.column:
+;;if: { !ftd.is_empty(toc-instance.toc.children) && toc-instance.toc-clone.is-open }
+margin-left.px: 12
+padding-left.px: 10
+margin-bottom.rem: 0.2
+
+-- childrens:
+$loop$: $toc-instance.toc.children as $obj
+toc: $obj
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: toc-instance
+
+
+
+
+
+
+
+
+
+
+-- component childrens:
+pr.toc-item toc:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 8
+margin-bottom.em: 0.5
+
+-- ftd.image:
+if: {childrens.toc.font-icon != NULL}
+src: $childrens.toc.font-icon
+height.fixed.px: 14
+width: auto
+
+-- ftd.text:
+link if { childrens.toc.url != NULL } : $childrens.toc.url
+text: $childrens.toc.title
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+color if { childrens.toc.is-active }: $inherited.colors.cta-primary.base
+
+-- end: ftd.row
+
+-- childrens:
+if: {!ftd.is_empty(childrens.toc.children) }
+$loop$: $childrens.toc.children as $obj
+toc: $obj
+
+-- end: ftd.column
+
+-- end: childrens
+
+
+
+
+
+
+
+
+
+
+-- component component-doc:
+optional caption title:
+optional string package-link:
+optional string github-link:
+optional string package-name:
+optional string info:
+optional body body:
+children wrap:
+boolean copy: true
+string $copy-text: null
+boolean $mouse-in: false
+string clean-code: $ftd.clean-code(a = $component-doc.package-name, lang = ftd)
+
+-- ftd.column:
+;;if: { current-tab == 2 }
+spacing.fixed.px: 24
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+margin-top.px: -24
+
+/-- ftd.text: $component-doc.title
+link: $component-doc.package-link
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+
+-- ftd.text: $component-doc.info
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+-- ftd.desktop:
+
+-- ftd.row:
+width: fill-container
+border-width.px: 1
+border-radius.px: 4
+border-color: $inherited.colors.border
+spacing.fixed.px: 24
+padding.px: 18
+
+-- ftd.text: Package Name:
+role: $inherited.types.copy-small
+color: $inherited.colors.text-strong
+
+-- ftd.text: $component-doc.package-name
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+-- ftd.row:
+spacing.fixed.px: 10
+align-content: right
+align-self: end
+cursor: pointer
+
+-- ftd.image:
+if: { component-doc.copy-text == "null"}
+src: $assets.files.static.copy.svg
+$on-click$: $ftd.copy-to-clipboard(a = $component-doc.clean-code)
+$on-click$: $ftd.set-string($a = $component-doc.copy-text, v = Copied!)
+width.fixed.px: 18
+cursor: pointer
+$on-mouse-leave$: $ftd.set-bool($a = $component-doc.mouse-in, v = true)
+
+-- ftd.image:
+if: { component-doc.copy-text != "null" && component-doc.mouse-in }
+src: $assets.files.static.tick.svg
+width.fixed.px: 18
+$on-mouse-leave$: $ftd.set-bool($a = $component-doc.mouse-in, v = false)
+$on-mouse-leave$: $ftd.set-string($a = $component-doc.copy-text, v = null)
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- ftd.column:
+width: fill-container
+border-width.px: 1
+border-radius.px: 4
+border-color: $inherited.colors.border
+spacing.fixed.px: 24
+padding.px: 18
+
+-- ftd.text: Package Name:
+role: $inherited.types.copy-small
+color: $inherited.colors.text-strong
+
+-- ftd.text: $component-doc.package-name
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+-- ftd.row:
+spacing.fixed.px: 10
+align-content: right
+align-self: end
+cursor: pointer
+anchor: parent
+
+-- ftd.image:
+if: { component-doc.copy-text == "null"}
+src: $assets.files.static.copy.svg
+$on-click$: $ftd.copy-to-clipboard(a = $component-doc.clean-code)
+$on-click$: $ftd.set-string($a = $component-doc.copy-text, v = Copied!)
+width.fixed.px: 18
+cursor: pointer
+$on-mouse-leave$: $ftd.set-bool($a = $component-doc.mouse-in, v = true)
+
+-- ftd.image:
+if: { component-doc.copy-text != "null" }
+src: $assets.files.static.tick.svg
+width.fixed.px: 18
+$on-mouse-leave$: $ftd.set-bool($a = $component-doc.mouse-in, v = false)
+$on-mouse-leave$: $ftd.set-string($a = $component-doc.copy-text, v = null)
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.mobile
+
+-- header: Overview
+
+$component-doc.body
+
+-- ftd.column:
+width: fill-container
+children: $component-doc.wrap
+spacing.fixed.px: 18
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: component-doc
+
+
+
+
+
+
+
+
+
+
+-- component properties:
+caption title:
+body info:
+
+-- ftd.column:
+if: { current-tab == 2 }
+width: fill-container
+spacing.fixed.px: 18
+
+-- ftd.text: $properties.title
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+
+-- ftd.text: $properties.info
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: properties
+
+
+
+
+
+
+
+
+
+
+-- component component-property:
+optional string type:
+caption title:
+body body:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- ftd.row:
+align-content: center
+
+-- ftd.text: $component-property.title
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+
+-- ftd.row:
+if: { component-property.type != NULL }
+align-content: center
+padding-left.px: 12
+color: $inherited.colors.custom.nine
+role: $inherited.types.heading-tiny
+
+-- ftd.text: {
+color: $inherited.colors.custom.seven
+
+-- ftd.text: type:
+padding-right.px: 8
+
+-- ftd.text: $component-property.type
+
+-- ftd.text: }
+color: $inherited.colors.custom.seven
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- ftd.column:
+
+-- ftd.text: $component-property.title
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+
+-- ftd.row:
+if: { component-property.type != NULL }
+align-content: center
+color: $inherited.colors.custom.nine
+role: $inherited.types.heading-tiny
+
+-- ftd.text: type:
+padding-right.px: 8
+
+-- ftd.text: $component-property.type
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.mobile
+
+-- ftd.text: 
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+margin-top.px: 12
+
+$component-property.body
+
+-- end: ftd.column
+
+-- end: component-property
+
+
+
+
+
+
+
+
+
+
+-- component property-header:
+children child:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+align-content: center
+border-bottom-width.px: 2
+border-color: $inherited.colors.border
+margin-top.px: 24
+padding-bottom.px: 10
+
+-- ftd.text: Property name
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong
+width.fixed.percent: 33.33
+
+-- ftd.text: Type
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong
+width.fixed.percent: 33.33
+
+-- ftd.text: Default / Optional
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong
+width.fixed.percent: 33.33
+
+-- end: ftd.row
+
+-- ftd.column:
+children: $property-header.child
+width.fixed.percent: 100
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: property-header
+
+
+
+
+
+
+
+
+
+
+-- component table-of-property:
+caption title:
+string type:
+string default:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+align-content: center
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+margin-top.px: 12
+padding-bottom.px: 12
+
+-- ftd.text: $table-of-property.title
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+width.fixed.percent: 33.33
+
+-- ftd.text: $table-of-property.type
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+width.fixed.percent: 33.33
+
+-- ftd.text: $table-of-property.default
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+width.fixed.percent: 33.33
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: table-of-property
+
+
+
+
+
+
+
+
+
+
+-- component code:
+optional caption caption:
+optional string download:
+body body:
+string lang:
+boolean copy: true
+string $copy-text: null
+boolean $copy-mouse-in: false
+boolean $download-mouse-in: false
+boolean $mouse-in: false
+optional ftd.resizing max-height:
+optional ftd.resizing max-width:
+string clean-code: $ftd.clean-code(a = $code.body, lang = $code.lang)
+
+-- ftd.column:
+padding-bottom.px: 12
+padding-top.px: 12
+width: fill-container
+$on-mouse-enter$: $ftd.set-bool($a = $code.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $code.mouse-in, v = false)
+cursor: default
+overflow-y: auto
+
+-- ftd.row:
+if: { code.caption != NULL || code.download != NULL || code.copy }
+width: fill-container
+background.solid: $inherited.colors.background.step-1
+padding-top.px if { code.caption != NULL }: 10
+padding-bottom.px if { code.caption != NULL }: 10
+padding-left.px if { code.caption != NULL }: 20
+padding-right.px if { code.caption != NULL }: 20
+border-top-left-radius.px: 4
+border-top-right-radius.px: 4
+max-width.fixed.px if { code.max-width != NULL }: $code.max-width
+
+-- ftd.text: $code.caption
+if: { code.caption != NULL }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+align-self: start
+width: fill-container
+
+-- ftd.row:
+if: { code.copy }
+spacing.fixed.px: 10
+align-content: right
+align-self: end
+$on-mouse-leave$: $ftd.set-string($a = $code.copy-text, v = null)
+anchor: parent
+top.px: 12
+right.px: 20
+right.px if { code.download != NULL }: 56
+
+-- ftd.text: Copy
+if: { code.copy-text == "null" && code.mouse-in }
+role: $inherited.types.copy-small
+color: $inherited.colors.cta-secondary.text
+$on-mouse-enter$: $ftd.set-bool($a = $code.copy-mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $code.copy-mouse-in, v = false)
+$on-click$: $ftd.copy-to-clipboard(a = $code.clean-code)
+$on-click$: $ftd.set-string($a = $code.copy-text, v = Copied!)
+
+-- ftd.text: $code.copy-text
+if: { code.copy-text != "null" }
+role: $inherited.types.copy-regular
+color: $inherited.colors.border
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.code:
+if: { ftd.dark-mode }
+text: $code.body
+lang: $code.lang
+width: fill-container
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+background.solid: $inherited.colors.background.code
+border-top-left-radius.px if { code.caption == NULL }: 4
+border-top-right-radius.px if { code.caption == NULL }: 4
+border-bottom-left-radius.px if { code.caption == NULL }: 4
+border-bottom-right-radius.px if { code.caption == NULL }: 4
+overflow-x: auto
+overflow-y: auto
+max-height if { code.max-height != NULL }: $code.max-height
+max-width if { code.max-width != NULL }: $code.max-width
+
+-- ftd.code:
+if: { !ftd.dark-mode }
+text: $code.body
+lang: $code.lang
+width: fill-container
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+background.solid: $inherited.colors.background.code
+border-top-left-radius.px if { code.caption == NULL }: 4
+border-top-right-radius.px if { code.caption == NULL }: 4
+border-bottom-left-radius.px if { code.caption == NULL }: 4
+border-bottom-right-radius.px if { code.caption == NULL }: 4
+overflow-x: auto
+overflow-y: auto
+max-height if { code.max-height != NULL }: $code.max-height
+max-width if { code.max-width != NULL }: $code.max-width
+theme: fastn-theme.light
+
+-- ftd.column:
+if: { code.download != NULL }
+anchor: parent
+right.px: 0
+bottom.px: 12
+z-index: 999
+padding.px: 6
+border-bottom-right-radius.px: 4
+
+-- ftd.text: $code.download
+role: $inherited.types.fine-print
+color: $inherited.colors.text.dark
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: code
+
+
+
+
+
+
+
+
+
+
+-- component tabs:
+children tabs:
+
+-- ftd.row:
+width: fill-container
+border-bottom-width.px: 1
+border-bottom-color: $inherited.colors.cta-primary.base
+spacing: space-between
+z-index: 10
+
+-- ftd.row:
+children: $tabs.tabs
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: tabs
+
+
+
+
+
+
+
+
+
+-- component tab:
+caption title:
+optional boolean $active-item: false
+integer index:
+
+-- ftd.column:
+border-width.px if { tab.index == current-tab }: 1
+$on-click$: $ftd.toggle($a = $tab.active-item)
+$on-click$: $ftd.set-integer($a = $current-tab, v = $tab.index)
+border-left-color if { tab.index == current-tab }: $inherited.colors.cta-primary.base
+border-right-color if { tab.index == current-tab }: $inherited.colors.cta-primary.base
+border-top-color if { tab.index == current-tab }: $inherited.colors.cta-primary.base
+shadow if { tab.index == current-tab }: $body
+border-bottom-width.px if { tab.index == current-tab }: 1
+border-bottom-color if { tab.index == current-tab }: $inherited.colors.background.base
+padding-vertical.px: 12
+padding-horizontal.px: 32
+border-top-left-radius.px: 6
+border-top-right-radius.px: 6
+margin-bottom.px: -1
+margin-left.px: 0
+
+-- ftd.text: $tab.title
+role: $inherited.types.button-large
+color: $inherited.colors.text
+color if { tab.index == current-tab }: $inherited.colors.cta-primary.base
+white-space: nowrap
+style: bold
+
+-- end: ftd.column
+
+-- end: tab
+
+
+
+
+
+
+
+
+
+
+-- component output:
+children components:
+ftd.type-data types: $typo.types
+ftd.color-scheme colors: $cs.main
+
+-- ftd.column:
+if: { current-tab == 1 }
+width: fill-container
+
+-- ftd.column:
+spacing.fixed.px: 48
+children: $output.components
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: output
+
+
+
+
+
+
+
+
+
+
+-- component header:
+caption title: 
+optional body body:
+optional string id:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 18
+id: $header.id
+
+-- ftd.text: $header.title
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+width: fill-container
+region: h2
+
+-- ftd.text:
+if: { header.body != NULL }
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+$header.body
+
+-- end: ftd.column
+
+-- end: header
+
+
+
+
+
+
+
+
+
+
+-- component mobile-sidebar:
+boolean $sidebar-open:
+
+-- ftd.column:
+anchor: window
+top.px: 0
+bottom.px: 0
+left.px: 0
+right.px: 0
+background.solid:  $inherited.colors.background.overlay
+z-index: 1
+$on-click$: $ftd.toggle($a = $mobile-sidebar.sidebar-open)
+
+-- ftd.image:
+src: $assets.files.static.cross.svg
+height.fixed.px: 24
+width: hug-content
+anchor: window
+right.px: 16
+top.px: 20
+
+-- end: ftd.column
+
+-- end: mobile-sidebar
+
+
+
+
+
+
+
+
+
+
+-- component menu-mobile:
+ftd.image-src menu-icon: $assets.files.static.hamburger.svg
+string site-url: 
+string current-url:
+optional string site-name:
+pr.toc-item list sections:
+pr.toc-item list sub-sections:
+pr.toc-item list toc: $sitemap.toc
+
+-- ftd.column:
+width.fixed.calc: 100% - 48px
+height.fixed.calc: 100vh - 0px
+anchor: window
+left.px: 0
+top.px: 0
+overflow-y: auto
+padding-top.px: 20
+padding-horizontal.px: 24
+background.solid: $inherited.colors.background.step-1
+z-index: 14
+
+-- ftd.column:
+if: { menu-mobile.site-name != NULL }
+width: fill-container
+padding-bottom.px: 12
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+
+-- ftd.text: $menu-mobile.site-name
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+link: $menu-mobile.site-url
+
+-- ftd.text: a fastn package
+role: $inherited.types.fine-print
+color: $inherited.colors.text-strong
+padding-top.px: 4
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { !ftd.is_empty(menu-mobile.sections) }
+width: fill-container
+padding-top.px: 24
+
+-- toc-instance:
+$loop$: $sitemap.toc as $obj
+toc: $obj
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: menu-mobile
+
+
+
+
+
+
+
+
+
+
+-- component iframe:
+string src:
+optional ftd.resizing width:
+optional ftd.resizing height:
+
+-- ftd.iframe:
+src: $iframe.src
+height: $iframe.height
+width: $iframe.width
+min-height.fixed.px: 400
+margin-bottom.px: 24
+
+-- end: iframe
+
+
+
+
+
+
+
+
+
+
+-- component youtube:
+caption v:
+optional ftd.resizing width: fill-container
+optional ftd.resizing height:
+
+-- ftd.iframe:
+youtube: $youtube.v
+min-height.fixed.px: 400
+width: $youtube.width
+height: $youtube.height
+margin-bottom.px: 24
+
+-- end: youtube
+
+
+
+
+
+
+
+
+
+
+-- component markdown:
+caption or body body:
+optional string id:
+
+-- ftd.text: 
+text: $markdown.body
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+width: fill-container
+id: $markdown.id
+
+-- end: markdown
+
+
+
+
+
+
+
+
+
+
+-- component button:
+caption title:
+optional string link:
+boolean $mouse-in: false
+boolean open-in-new-tab: false
+boolean secondary: false
+
+-- ftd.column:
+
+-- ftd.text: $button.title
+if: { !button.secondary}
+role: $inherited.types.button-medium
+color if { button.mouse-in }: $inherited.colors.cta-tertiary.text
+background.solid if { button.mouse-in }: $inherited.colors.cta-primary.hover
+background.solid: $inherited.colors.cta-primary.base
+color: $inherited.colors.cta-tertiary.text
+padding.px: 8
+border-radius.px: 4
+link: $button.link
+$on-mouse-enter$: $ftd.set-bool($a = $button.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $button.mouse-in, v = false)
+open-in-new-tab: $button.open-in-new-tab
+
+-- ftd.text: $button.title
+if: { button.secondary}
+role: $inherited.types.button-medium
+color if { button.mouse-in }: $inherited.colors.cta-secondary.text
+background.solid if { button.mouse-in }: $inherited.colors.cta-secondary.hover
+background.solid: $inherited.colors.cta-tertiary.base
+color: $inherited.colors.cta-tertiary.text
+padding.px: 8
+border-radius.px: 4
+link: $button.link
+$on-mouse-enter$: $ftd.set-bool($a = $button.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $button.mouse-in, v = false)
+open-in-new-tab: $button.open-in-new-tab
+
+-- end: ftd.column
+
+-- end: button
+
+
+
+
+
+
+
+
+
+
+-- component image:
+optional caption caption:
+optional body body:
+optional string link:
+ftd.image-src src:
+optional ftd.align alignment: center
+optional ftd.resizing width:
+optional ftd.resizing height:
+
+-- ftd.column:
+width: fill-container
+align-content if { image.alignment != NULL }: $image.alignment
+height: $image.height
+
+-- ftd.image:
+src: $image.src
+width: auto
+width if { image.width != NULL }: $image.width
+max-width: fill-container
+height: auto
+
+-- ftd.text:
+if: { image.caption != NULL }
+text: $image.caption
+color: $inherited.colors.text
+role: $inherited.types.label-large
+border-bottom-left-radius.px: 5
+border-bottom-right-radius.px: 5
+background.solid: $inherited.colors.background.step-1
+padding-vertical.px: 8
+padding-horizontal.px: 20
+text-align: center
+
+-- ftd.column:
+if: { image.body != NULL }
+margin-top.px: 20
+align-content if { image.alignment != NULL }: $image.alignment
+width: auto
+width if { image.width != NULL }: $image.width
+
+-- ftd.text: 
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+$image.body
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: image
+
+
+
+
+
+
+
+
+
+
+-- string combine-string(a,b):
+string a:
+string b:
+
+a + " " + b

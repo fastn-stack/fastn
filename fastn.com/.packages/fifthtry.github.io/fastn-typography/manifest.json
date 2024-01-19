@@ -1,0 +1,26 @@
+{
+    "files": {
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "9AAC061DFE4C101CC203C43A0F6D63E8575E6D04BD479A41C6383CCAC3252070",
+            "size": 178
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "DE319B2383C0D9ADB670EBDC601A62CA1568CAA373066E297ACD62F4B4703C14",
+            "size": 15907
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "62B3256ED617C586C6F2285230EE72B9041CCA7E990C7BADBE3B5E18D510569D",
+            "size": 45
+        },
+        "inter.ftd": {
+            "name": "inter.ftd",
+            "checksum": "D629F2FEA54E2AF94854661FE9B7335DF8204EA7616ED57F3CCEBD1CE83ED9E1",
+            "size": 14450
+        }
+    },
+    "zip_url": "https://github.com/FifthTry/fastn-typography/archive/6301c7a42a2c1f1543df29923b35a813597a287d.zip",
+    "checksum": "84FE0970378524BC8B992E9DCA3537D7B14A07E2A570C63F10628623356E6278"
+}

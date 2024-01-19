@@ -1,0 +1,67 @@
+-- import: fastn-community.github.io/doc-site/components
+
+-- ds.page: Link & Link-group
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+`ds.link` and `ds.link-group` can be used to add link with title. You can also
+add child components inside `ds.link-group` component.
+
+-- ds.h2: Example:
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- ds.link: This is link title
+cta: components/link/
+
+\-- ds.link-group: This is link group title
+cta: components/link/
+
+\-- ds.image: You can add any component inside `link-group` component as its child
+link: https://fastn.com
+src: $assets.files.static.image-placeholder.jpg
+width.fixed.px: 300
+
+\-- end: ds.link-group
+
+-- ds.rendered.output:
+
+-- ds.link: This is link title
+cta: components/link/
+
+-- ds.link-group: This is link group title
+cta: components/link/
+
+-- ds.image: You can add any component inside `link-group` component as its child
+link: https://fastn.com
+src: $assets.files.static.image-placeholder.jpg
+width.fixed.px: 300
+
+-- end: ds.link-group
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h3: Properties of `link` & `link-group` component
+
+- **title** - `type: caption` It’s used to add title to `link` & `link-group`
+    components.
+- **cta** - `type: string` It’s used to add link url to `link` & `link-group`
+    components.
+
+
+-- end: ds.page

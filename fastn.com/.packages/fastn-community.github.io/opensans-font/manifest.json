@@ -1,0 +1,516 @@
+{
+    "files": {
+        "static/Open-Sans-500-normal-cyrillic-ext.woff2": {
+            "name": "static/Open-Sans-500-normal-cyrillic-ext.woff2",
+            "checksum": "26EF9B5C3B5E8EC0A6B0F3636F0BAF54EC281F83EC5113A3F5CA1016ADA39F35",
+            "size": 43532
+        },
+        "custom.ftd": {
+            "name": "custom.ftd",
+            "checksum": "81BBBA0CC301EF758D73059526C26B25C273FE37B23624D838764768CC28A93C",
+            "size": 6285
+        },
+        "static/Open-Sans-300-italic-greek-ext.woff2": {
+            "name": "static/Open-Sans-300-italic-greek-ext.woff2",
+            "checksum": "31579EC73A54C03461EFD94939549A1005D11B8C54CE100D9284B2181B1C5F36",
+            "size": 1888
+        },
+        "static/Open-Sans-500-italic-hebrew.woff2": {
+            "name": "static/Open-Sans-500-italic-hebrew.woff2",
+            "checksum": "4D8AF4B7910668E79921E022099FF5D5B15B4ED0753DDFDC6621956E0B2A5821",
+            "size": 13560
+        },
+        "static/Open-Sans-300-normal-cyrillic-ext.woff2": {
+            "name": "static/Open-Sans-300-normal-cyrillic-ext.woff2",
+            "checksum": "26EF9B5C3B5E8EC0A6B0F3636F0BAF54EC281F83EC5113A3F5CA1016ADA39F35",
+            "size": 43532
+        },
+        "static/Open-Sans-400-normal-vietnamese.woff2": {
+            "name": "static/Open-Sans-400-normal-vietnamese.woff2",
+            "checksum": "F42CD37D91E1411AB2E5B6C86E5E1494700258A164261AAE684B8DE7ECFD87E4",
+            "size": 10576
+        },
+        "static/Open-Sans-500-italic-cyrillic.woff2": {
+            "name": "static/Open-Sans-500-italic-cyrillic.woff2",
+            "checksum": "966E88F8A91FA5239FE19524B153D50983F14CBBD84EC90C5FE3164E0071B9B1",
+            "size": 26140
+        },
+        "static/Open-Sans-700-italic-greek.woff2": {
+            "name": "static/Open-Sans-700-italic-greek.woff2",
+            "checksum": "4F083F58E7FD22C2F9467727C86A8250752B28175E41E8A4140EC92D5894F91C",
+            "size": 18624
+        },
+        "static/Open-Sans-700-normal-greek.woff2": {
+            "name": "static/Open-Sans-700-normal-greek.woff2",
+            "checksum": "1504F6EC79E1456A5B9A56F2D08973AE8FF6681A60D0E6359BB032F306EB286A",
+            "size": 17176
+        },
+        "static/Open-Sans-700-normal-cyrillic-ext.woff2": {
+            "name": "static/Open-Sans-700-normal-cyrillic-ext.woff2",
+            "checksum": "26EF9B5C3B5E8EC0A6B0F3636F0BAF54EC281F83EC5113A3F5CA1016ADA39F35",
+            "size": 43532
+        },
+        "static/Open-Sans-800-normal-greek-ext.woff2": {
+            "name": "static/Open-Sans-800-normal-greek-ext.woff2",
+            "checksum": "617B086B3CC86DED003EA04A39CC6335E849EDFF3DCD57EB9FF8DC59915F22BF",
+            "size": 1744
+        },
+        "static/Open-Sans-300-normal-latin-ext.woff2": {
+            "name": "static/Open-Sans-300-normal-latin-ext.woff2",
+            "checksum": "082B92E0D1320D4D8200949CF67A03B0DFA7D8D1EE75F8146D01401AEA503A04",
+            "size": 26656
+        },
+        "static/Open-Sans-800-normal-greek.woff2": {
+            "name": "static/Open-Sans-800-normal-greek.woff2",
+            "checksum": "1504F6EC79E1456A5B9A56F2D08973AE8FF6681A60D0E6359BB032F306EB286A",
+            "size": 17176
+        },
+        "static/Open-Sans-800-normal-hebrew.woff2": {
+            "name": "static/Open-Sans-800-normal-hebrew.woff2",
+            "checksum": "DE98E0466CE66A59890791BCEFAC9FBBF91FC93F3689BEA4DEFEC43970F9091D",
+            "size": 12932
+        },
+        "static/Open-Sans-500-normal-latin-ext.woff2": {
+            "name": "static/Open-Sans-500-normal-latin-ext.woff2",
+            "checksum": "082B92E0D1320D4D8200949CF67A03B0DFA7D8D1EE75F8146D01401AEA503A04",
+            "size": 26656
+        },
+        "static/Open-Sans-600-normal-latin-ext.woff2": {
+            "name": "static/Open-Sans-600-normal-latin-ext.woff2",
+            "checksum": "082B92E0D1320D4D8200949CF67A03B0DFA7D8D1EE75F8146D01401AEA503A04",
+            "size": 26656
+        },
+        "static/Open-Sans-700-italic-latin.woff2": {
+            "name": "static/Open-Sans-700-italic-latin.woff2",
+            "checksum": "D2999DD8B1E89B9BB0E522A363C0FEB6C1A9C6F992BA78EC8A50477245D33C39",
+            "size": 42540
+        },
+        "static/Open-Sans-800-normal-latin.woff2": {
+            "name": "static/Open-Sans-800-normal-latin.woff2",
+            "checksum": "A83C3F260B750DFC47E4E5024EDA4B4F80BE0C0A3E0AE5111A3B0A799DF64448",
+            "size": 39556
+        },
+        "static/Open-Sans-800-normal-cyrillic.woff2": {
+            "name": "static/Open-Sans-800-normal-cyrillic.woff2",
+            "checksum": "5A2C8407B011BF0AF8123C2160FC5B91ECF962E4039E82BABBAAA630549C80F4",
+            "size": 20876
+        },
+        "static/Open-Sans-400-italic-latin.woff2": {
+            "name": "static/Open-Sans-400-italic-latin.woff2",
+            "checksum": "D2999DD8B1E89B9BB0E522A363C0FEB6C1A9C6F992BA78EC8A50477245D33C39",
+            "size": 42540
+        },
+        "static/Open-Sans-400-italic-latin-ext.woff2": {
+            "name": "static/Open-Sans-400-italic-latin-ext.woff2",
+            "checksum": "FDAEB7D52B4D97FBB6A58D4B386EC707C526433AF848ACE7840F0DD3E44A6CC5",
+            "size": 28612
+        },
+        "static/Open-Sans-500-normal-hebrew.woff2": {
+            "name": "static/Open-Sans-500-normal-hebrew.woff2",
+            "checksum": "DE98E0466CE66A59890791BCEFAC9FBBF91FC93F3689BEA4DEFEC43970F9091D",
+            "size": 12932
+        },
+        "static/Open-Sans-600-italic-cyrillic-ext.woff2": {
+            "name": "static/Open-Sans-600-italic-cyrillic-ext.woff2",
+            "checksum": "F23605D10D9E446D598913823AFA5136DC9F12A9008D374C61FD8FB82C6D4FBF",
+            "size": 49100
+        },
+        "static/Open-Sans-700-italic-hebrew.woff2": {
+            "name": "static/Open-Sans-700-italic-hebrew.woff2",
+            "checksum": "4D8AF4B7910668E79921E022099FF5D5B15B4ED0753DDFDC6621956E0B2A5821",
+            "size": 13560
+        },
+        "static/Open-Sans-800-italic-greek.woff2": {
+            "name": "static/Open-Sans-800-italic-greek.woff2",
+            "checksum": "4F083F58E7FD22C2F9467727C86A8250752B28175E41E8A4140EC92D5894F91C",
+            "size": 18624
+        },
+        "static/Open-Sans-800-normal-vietnamese.woff2": {
+            "name": "static/Open-Sans-800-normal-vietnamese.woff2",
+            "checksum": "F42CD37D91E1411AB2E5B6C86E5E1494700258A164261AAE684B8DE7ECFD87E4",
+            "size": 10576
+        },
+        "static/Open-Sans-400-normal-hebrew.woff2": {
+            "name": "static/Open-Sans-400-normal-hebrew.woff2",
+            "checksum": "DE98E0466CE66A59890791BCEFAC9FBBF91FC93F3689BEA4DEFEC43970F9091D",
+            "size": 12932
+        },
+        "static/Open-Sans-700-italic-latin-ext.woff2": {
+            "name": "static/Open-Sans-700-italic-latin-ext.woff2",
+            "checksum": "FDAEB7D52B4D97FBB6A58D4B386EC707C526433AF848ACE7840F0DD3E44A6CC5",
+            "size": 28612
+        },
+        "static/Open-Sans-800-italic-cyrillic.woff2": {
+            "name": "static/Open-Sans-800-italic-cyrillic.woff2",
+            "checksum": "966E88F8A91FA5239FE19524B153D50983F14CBBD84EC90C5FE3164E0071B9B1",
+            "size": 26140
+        },
+        "static/Open-Sans-800-italic-greek-ext.woff2": {
+            "name": "static/Open-Sans-800-italic-greek-ext.woff2",
+            "checksum": "31579EC73A54C03461EFD94939549A1005D11B8C54CE100D9284B2181B1C5F36",
+            "size": 1888
+        },
+        "static/Open-Sans-800-normal-latin-ext.woff2": {
+            "name": "static/Open-Sans-800-normal-latin-ext.woff2",
+            "checksum": "082B92E0D1320D4D8200949CF67A03B0DFA7D8D1EE75F8146D01401AEA503A04",
+            "size": 26656
+        },
+        "static/Open-Sans-400-normal-cyrillic.woff2": {
+            "name": "static/Open-Sans-400-normal-cyrillic.woff2",
+            "checksum": "5A2C8407B011BF0AF8123C2160FC5B91ECF962E4039E82BABBAAA630549C80F4",
+            "size": 20876
+        },
+        "static/Open-Sans-500-italic-latin-ext.woff2": {
+            "name": "static/Open-Sans-500-italic-latin-ext.woff2",
+            "checksum": "FDAEB7D52B4D97FBB6A58D4B386EC707C526433AF848ACE7840F0DD3E44A6CC5",
+            "size": 28612
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "F25765DC7D974472C4D8B9CCCCF0865EF2D64C3F10D32ECE6A0CE5E5E55ED5C0",
+            "size": 23669
+        },
+        "static/Open-Sans-400-italic-cyrillic.woff2": {
+            "name": "static/Open-Sans-400-italic-cyrillic.woff2",
+            "checksum": "966E88F8A91FA5239FE19524B153D50983F14CBBD84EC90C5FE3164E0071B9B1",
+            "size": 26140
+        },
+        "LICENSE": {
+            "name": "LICENSE",
+            "checksum": "13B67C23643C8E2026352DC9C74BC81393936C508C023A75962B7A1EB69BCDE1",
+            "size": 4400
+        },
+        "static/Open-Sans-400-italic-vietnamese.woff2": {
+            "name": "static/Open-Sans-400-italic-vietnamese.woff2",
+            "checksum": "752C4F978BD1D76F94476736D44785E260476A02D20F9B6989C02AA7BC0C0A18",
+            "size": 10800
+        },
+        "static/Open-Sans-400-normal-latin.woff2": {
+            "name": "static/Open-Sans-400-normal-latin.woff2",
+            "checksum": "A83C3F260B750DFC47E4E5024EDA4B4F80BE0C0A3E0AE5111A3B0A799DF64448",
+            "size": 39556
+        },
+        "static/Open-Sans-500-italic-latin.woff2": {
+            "name": "static/Open-Sans-500-italic-latin.woff2",
+            "checksum": "D2999DD8B1E89B9BB0E522A363C0FEB6C1A9C6F992BA78EC8A50477245D33C39",
+            "size": 42540
+        },
+        "static/Open-Sans-300-normal-greek-ext.woff2": {
+            "name": "static/Open-Sans-300-normal-greek-ext.woff2",
+            "checksum": "617B086B3CC86DED003EA04A39CC6335E849EDFF3DCD57EB9FF8DC59915F22BF",
+            "size": 1744
+        },
+        "static/Open-Sans-600-italic-cyrillic.woff2": {
+            "name": "static/Open-Sans-600-italic-cyrillic.woff2",
+            "checksum": "966E88F8A91FA5239FE19524B153D50983F14CBBD84EC90C5FE3164E0071B9B1",
+            "size": 26140
+        },
+        "static/Open-Sans-700-normal-greek-ext.woff2": {
+            "name": "static/Open-Sans-700-normal-greek-ext.woff2",
+            "checksum": "617B086B3CC86DED003EA04A39CC6335E849EDFF3DCD57EB9FF8DC59915F22BF",
+            "size": 1744
+        },
+        "static/Open-Sans-600-normal-latin.woff2": {
+            "name": "static/Open-Sans-600-normal-latin.woff2",
+            "checksum": "A83C3F260B750DFC47E4E5024EDA4B4F80BE0C0A3E0AE5111A3B0A799DF64448",
+            "size": 39556
+        },
+        "static/Open-Sans-400-normal-latin-ext.woff2": {
+            "name": "static/Open-Sans-400-normal-latin-ext.woff2",
+            "checksum": "082B92E0D1320D4D8200949CF67A03B0DFA7D8D1EE75F8146D01401AEA503A04",
+            "size": 26656
+        },
+        "static/Open-Sans-600-normal-vietnamese.woff2": {
+            "name": "static/Open-Sans-600-normal-vietnamese.woff2",
+            "checksum": "F42CD37D91E1411AB2E5B6C86E5E1494700258A164261AAE684B8DE7ECFD87E4",
+            "size": 10576
+        },
+        "static/Open-Sans-400-normal-greek-ext.woff2": {
+            "name": "static/Open-Sans-400-normal-greek-ext.woff2",
+            "checksum": "617B086B3CC86DED003EA04A39CC6335E849EDFF3DCD57EB9FF8DC59915F22BF",
+            "size": 1744
+        },
+        "static/Open-Sans-500-italic-greek-ext.woff2": {
+            "name": "static/Open-Sans-500-italic-greek-ext.woff2",
+            "checksum": "31579EC73A54C03461EFD94939549A1005D11B8C54CE100D9284B2181B1C5F36",
+            "size": 1888
+        },
+        "static/Open-Sans-500-normal-latin.woff2": {
+            "name": "static/Open-Sans-500-normal-latin.woff2",
+            "checksum": "A83C3F260B750DFC47E4E5024EDA4B4F80BE0C0A3E0AE5111A3B0A799DF64448",
+            "size": 39556
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "DF28AE730019B0D98082ECEA837BF375EC543962F76A6C6CBE3E9CE733761EDD",
+            "size": 1267
+        },
+        "static/Open Sans-300-italic-cyrillic-ext.woff2": {
+            "name": "static/Open Sans-300-italic-cyrillic-ext.woff2",
+            "checksum": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+            "size": 0
+        },
+        "static/Open-Sans-300-normal-latin.woff2": {
+            "name": "static/Open-Sans-300-normal-latin.woff2",
+            "checksum": "A83C3F260B750DFC47E4E5024EDA4B4F80BE0C0A3E0AE5111A3B0A799DF64448",
+            "size": 39556
+        },
+        "static/Open-Sans-500-italic-greek.woff2": {
+            "name": "static/Open-Sans-500-italic-greek.woff2",
+            "checksum": "4F083F58E7FD22C2F9467727C86A8250752B28175E41E8A4140EC92D5894F91C",
+            "size": 18624
+        },
+        "static/Open-Sans-400-normal-greek.woff2": {
+            "name": "static/Open-Sans-400-normal-greek.woff2",
+            "checksum": "1504F6EC79E1456A5B9A56F2D08973AE8FF6681A60D0E6359BB032F306EB286A",
+            "size": 17176
+        },
+        "static/Open-Sans-600-normal-hebrew.woff2": {
+            "name": "static/Open-Sans-600-normal-hebrew.woff2",
+            "checksum": "DE98E0466CE66A59890791BCEFAC9FBBF91FC93F3689BEA4DEFEC43970F9091D",
+            "size": 12932
+        },
+        "static/Open-Sans-700-italic-cyrillic.woff2": {
+            "name": "static/Open-Sans-700-italic-cyrillic.woff2",
+            "checksum": "966E88F8A91FA5239FE19524B153D50983F14CBBD84EC90C5FE3164E0071B9B1",
+            "size": 26140
+        },
+        "static/Open-Sans-700-italic-greek-ext.woff2": {
+            "name": "static/Open-Sans-700-italic-greek-ext.woff2",
+            "checksum": "31579EC73A54C03461EFD94939549A1005D11B8C54CE100D9284B2181B1C5F36",
+            "size": 1888
+        },
+        "static/Open-Sans-800-normal-cyrillic-ext.woff2": {
+            "name": "static/Open-Sans-800-normal-cyrillic-ext.woff2",
+            "checksum": "26EF9B5C3B5E8EC0A6B0F3636F0BAF54EC281F83EC5113A3F5CA1016ADA39F35",
+            "size": 43532
+        },
+        "static/Open-Sans-500-normal-vietnamese.woff2": {
+            "name": "static/Open-Sans-500-normal-vietnamese.woff2",
+            "checksum": "F42CD37D91E1411AB2E5B6C86E5E1494700258A164261AAE684B8DE7ECFD87E4",
+            "size": 10576
+        },
+        "static/Open-Sans-400-italic-greek.woff2": {
+            "name": "static/Open-Sans-400-italic-greek.woff2",
+            "checksum": "4F083F58E7FD22C2F9467727C86A8250752B28175E41E8A4140EC92D5894F91C",
+            "size": 18624
+        },
+        "static/Open-Sans-400-italic-cyrillic-ext.woff2": {
+            "name": "static/Open-Sans-400-italic-cyrillic-ext.woff2",
+            "checksum": "F23605D10D9E446D598913823AFA5136DC9F12A9008D374C61FD8FB82C6D4FBF",
+            "size": 49100
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "CD787BC6FDC76D1615CC38784BEDA15DB2DE1D36644B7A69A123A5900A7C0F59",
+            "size": 2333
+        },
+        "static/Open-Sans-300-italic-vietnamese.woff2": {
+            "name": "static/Open-Sans-300-italic-vietnamese.woff2",
+            "checksum": "752C4F978BD1D76F94476736D44785E260476A02D20F9B6989C02AA7BC0C0A18",
+            "size": 10800
+        },
+        "static/Open-Sans-400-italic-greek-ext.woff2": {
+            "name": "static/Open-Sans-400-italic-greek-ext.woff2",
+            "checksum": "31579EC73A54C03461EFD94939549A1005D11B8C54CE100D9284B2181B1C5F36",
+            "size": 1888
+        },
+        "static/Open-Sans-400-italic-hebrew.woff2": {
+            "name": "static/Open-Sans-400-italic-hebrew.woff2",
+            "checksum": "4D8AF4B7910668E79921E022099FF5D5B15B4ED0753DDFDC6621956E0B2A5821",
+            "size": 13560
+        },
+        "static/Open-Sans-600-italic-hebrew.woff2": {
+            "name": "static/Open-Sans-600-italic-hebrew.woff2",
+            "checksum": "4D8AF4B7910668E79921E022099FF5D5B15B4ED0753DDFDC6621956E0B2A5821",
+            "size": 13560
+        },
+        "static/Open-Sans-600-normal-cyrillic.woff2": {
+            "name": "static/Open-Sans-600-normal-cyrillic.woff2",
+            "checksum": "5A2C8407B011BF0AF8123C2160FC5B91ECF962E4039E82BABBAAA630549C80F4",
+            "size": 20876
+        },
+        "static/Open-Sans-500-italic-vietnamese.woff2": {
+            "name": "static/Open-Sans-500-italic-vietnamese.woff2",
+            "checksum": "752C4F978BD1D76F94476736D44785E260476A02D20F9B6989C02AA7BC0C0A18",
+            "size": 10800
+        },
+        "static/Open-Sans-600-normal-greek-ext.woff2": {
+            "name": "static/Open-Sans-600-normal-greek-ext.woff2",
+            "checksum": "617B086B3CC86DED003EA04A39CC6335E849EDFF3DCD57EB9FF8DC59915F22BF",
+            "size": 1744
+        },
+        "static/Open-Sans-700-italic-cyrillic-ext.woff2": {
+            "name": "static/Open-Sans-700-italic-cyrillic-ext.woff2",
+            "checksum": "F23605D10D9E446D598913823AFA5136DC9F12A9008D374C61FD8FB82C6D4FBF",
+            "size": 49100
+        },
+        "static/Open-Sans-700-normal-latin.woff2": {
+            "name": "static/Open-Sans-700-normal-latin.woff2",
+            "checksum": "A83C3F260B750DFC47E4E5024EDA4B4F80BE0C0A3E0AE5111A3B0A799DF64448",
+            "size": 39556
+        },
+        "static/Open-Sans-600-italic-latin-ext.woff2": {
+            "name": "static/Open-Sans-600-italic-latin-ext.woff2",
+            "checksum": "FDAEB7D52B4D97FBB6A58D4B386EC707C526433AF848ACE7840F0DD3E44A6CC5",
+            "size": 28612
+        },
+        "static/Open-Sans-700-normal-cyrillic.woff2": {
+            "name": "static/Open-Sans-700-normal-cyrillic.woff2",
+            "checksum": "5A2C8407B011BF0AF8123C2160FC5B91ECF962E4039E82BABBAAA630549C80F4",
+            "size": 20876
+        },
+        "static/Open-Sans-800-italic-vietnamese.woff2": {
+            "name": "static/Open-Sans-800-italic-vietnamese.woff2",
+            "checksum": "752C4F978BD1D76F94476736D44785E260476A02D20F9B6989C02AA7BC0C0A18",
+            "size": 10800
+        },
+        "static/Open-Sans-300-normal-vietnamese.woff2": {
+            "name": "static/Open-Sans-300-normal-vietnamese.woff2",
+            "checksum": "F42CD37D91E1411AB2E5B6C86E5E1494700258A164261AAE684B8DE7ECFD87E4",
+            "size": 10576
+        },
+        "static/Open-Sans-800-italic-latin.woff2": {
+            "name": "static/Open-Sans-800-italic-latin.woff2",
+            "checksum": "D2999DD8B1E89B9BB0E522A363C0FEB6C1A9C6F992BA78EC8A50477245D33C39",
+            "size": 42540
+        },
+        "static/Open-Sans-300-italic-cyrillic.woff2": {
+            "name": "static/Open-Sans-300-italic-cyrillic.woff2",
+            "checksum": "966E88F8A91FA5239FE19524B153D50983F14CBBD84EC90C5FE3164E0071B9B1",
+            "size": 26140
+        },
+        "static/Open-Sans-500-italic-cyrillic-ext.woff2": {
+            "name": "static/Open-Sans-500-italic-cyrillic-ext.woff2",
+            "checksum": "F23605D10D9E446D598913823AFA5136DC9F12A9008D374C61FD8FB82C6D4FBF",
+            "size": 49100
+        },
+        "static/Open-Sans-800-italic-hebrew.woff2": {
+            "name": "static/Open-Sans-800-italic-hebrew.woff2",
+            "checksum": "4D8AF4B7910668E79921E022099FF5D5B15B4ED0753DDFDC6621956E0B2A5821",
+            "size": 13560
+        },
+        "static/Open-Sans-700-normal-hebrew.woff2": {
+            "name": "static/Open-Sans-700-normal-hebrew.woff2",
+            "checksum": "DE98E0466CE66A59890791BCEFAC9FBBF91FC93F3689BEA4DEFEC43970F9091D",
+            "size": 12932
+        },
+        "static/Open-Sans-600-normal-greek.woff2": {
+            "name": "static/Open-Sans-600-normal-greek.woff2",
+            "checksum": "1504F6EC79E1456A5B9A56F2D08973AE8FF6681A60D0E6359BB032F306EB286A",
+            "size": 17176
+        },
+        "static/Open-Sans-600-italic-latin.woff2": {
+            "name": "static/Open-Sans-600-italic-latin.woff2",
+            "checksum": "D2999DD8B1E89B9BB0E522A363C0FEB6C1A9C6F992BA78EC8A50477245D33C39",
+            "size": 42540
+        },
+        "static/Open-Sans-600-italic-greek.woff2": {
+            "name": "static/Open-Sans-600-italic-greek.woff2",
+            "checksum": "4F083F58E7FD22C2F9467727C86A8250752B28175E41E8A4140EC92D5894F91C",
+            "size": 18624
+        },
+        "static/Open-Sans-500-normal-cyrillic.woff2": {
+            "name": "static/Open-Sans-500-normal-cyrillic.woff2",
+            "checksum": "5A2C8407B011BF0AF8123C2160FC5B91ECF962E4039E82BABBAAA630549C80F4",
+            "size": 20876
+        },
+        "static/Open-Sans-500-normal-greek.woff2": {
+            "name": "static/Open-Sans-500-normal-greek.woff2",
+            "checksum": "1504F6EC79E1456A5B9A56F2D08973AE8FF6681A60D0E6359BB032F306EB286A",
+            "size": 17176
+        },
+        "static/Open-Sans-600-italic-greek-ext.woff2": {
+            "name": "static/Open-Sans-600-italic-greek-ext.woff2",
+            "checksum": "31579EC73A54C03461EFD94939549A1005D11B8C54CE100D9284B2181B1C5F36",
+            "size": 1888
+        },
+        "static/Open-Sans-600-normal-cyrillic-ext.woff2": {
+            "name": "static/Open-Sans-600-normal-cyrillic-ext.woff2",
+            "checksum": "26EF9B5C3B5E8EC0A6B0F3636F0BAF54EC281F83EC5113A3F5CA1016ADA39F35",
+            "size": 43532
+        },
+        "static/Open-Sans-700-italic-vietnamese.woff2": {
+            "name": "static/Open-Sans-700-italic-vietnamese.woff2",
+            "checksum": "752C4F978BD1D76F94476736D44785E260476A02D20F9B6989C02AA7BC0C0A18",
+            "size": 10800
+        },
+        "static/Open-Sans-300-italic-greek.woff2": {
+            "name": "static/Open-Sans-300-italic-greek.woff2",
+            "checksum": "4F083F58E7FD22C2F9467727C86A8250752B28175E41E8A4140EC92D5894F91C",
+            "size": 18624
+        },
+        "static/Open-Sans-400-normal-cyrillic-ext.woff2": {
+            "name": "static/Open-Sans-400-normal-cyrillic-ext.woff2",
+            "checksum": "26EF9B5C3B5E8EC0A6B0F3636F0BAF54EC281F83EC5113A3F5CA1016ADA39F35",
+            "size": 43532
+        },
+        "static/Open-Sans-300-italic-latin-ext.woff2": {
+            "name": "static/Open-Sans-300-italic-latin-ext.woff2",
+            "checksum": "FDAEB7D52B4D97FBB6A58D4B386EC707C526433AF848ACE7840F0DD3E44A6CC5",
+            "size": 28612
+        },
+        "static/Open-Sans-500-normal-greek-ext.woff2": {
+            "name": "static/Open-Sans-500-normal-greek-ext.woff2",
+            "checksum": "617B086B3CC86DED003EA04A39CC6335E849EDFF3DCD57EB9FF8DC59915F22BF",
+            "size": 1744
+        },
+        "static/Open-Sans-700-normal-latin-ext.woff2": {
+            "name": "static/Open-Sans-700-normal-latin-ext.woff2",
+            "checksum": "082B92E0D1320D4D8200949CF67A03B0DFA7D8D1EE75F8146D01401AEA503A04",
+            "size": 26656
+        },
+        "static/Open-Sans-700-normal-vietnamese.woff2": {
+            "name": "static/Open-Sans-700-normal-vietnamese.woff2",
+            "checksum": "F42CD37D91E1411AB2E5B6C86E5E1494700258A164261AAE684B8DE7ECFD87E4",
+            "size": 10576
+        },
+        "static/Open-Sans-300-italic-hebrew.woff2": {
+            "name": "static/Open-Sans-300-italic-hebrew.woff2",
+            "checksum": "4D8AF4B7910668E79921E022099FF5D5B15B4ED0753DDFDC6621956E0B2A5821",
+            "size": 13560
+        },
+        "static/Open-Sans-300-normal-cyrillic.woff2": {
+            "name": "static/Open-Sans-300-normal-cyrillic.woff2",
+            "checksum": "5A2C8407B011BF0AF8123C2160FC5B91ECF962E4039E82BABBAAA630549C80F4",
+            "size": 20876
+        },
+        "static/Open-Sans-600-italic-vietnamese.woff2": {
+            "name": "static/Open-Sans-600-italic-vietnamese.woff2",
+            "checksum": "752C4F978BD1D76F94476736D44785E260476A02D20F9B6989C02AA7BC0C0A18",
+            "size": 10800
+        },
+        "static/Open-Sans-800-italic-cyrillic-ext.woff2": {
+            "name": "static/Open-Sans-800-italic-cyrillic-ext.woff2",
+            "checksum": "F23605D10D9E446D598913823AFA5136DC9F12A9008D374C61FD8FB82C6D4FBF",
+            "size": 49100
+        },
+        "static/Open-Sans-300-italic-cyrillic-ext.woff2": {
+            "name": "static/Open-Sans-300-italic-cyrillic-ext.woff2",
+            "checksum": "F23605D10D9E446D598913823AFA5136DC9F12A9008D374C61FD8FB82C6D4FBF",
+            "size": 49100
+        },
+        "static/Open-Sans-300-normal-greek.woff2": {
+            "name": "static/Open-Sans-300-normal-greek.woff2",
+            "checksum": "1504F6EC79E1456A5B9A56F2D08973AE8FF6681A60D0E6359BB032F306EB286A",
+            "size": 17176
+        },
+        "static/Open-Sans-300-normal-hebrew.woff2": {
+            "name": "static/Open-Sans-300-normal-hebrew.woff2",
+            "checksum": "DE98E0466CE66A59890791BCEFAC9FBBF91FC93F3689BEA4DEFEC43970F9091D",
+            "size": 12932
+        },
+        "static/Open-Sans-300-italic-latin.woff2": {
+            "name": "static/Open-Sans-300-italic-latin.woff2",
+            "checksum": "D2999DD8B1E89B9BB0E522A363C0FEB6C1A9C6F992BA78EC8A50477245D33C39",
+            "size": 42540
+        },
+        "static/Open-Sans-800-italic-latin-ext.woff2": {
+            "name": "static/Open-Sans-800-italic-latin-ext.woff2",
+            "checksum": "FDAEB7D52B4D97FBB6A58D4B386EC707C526433AF848ACE7840F0DD3E44A6CC5",
+            "size": 28612
+        }
+    },
+    "zip_url": "https://github.com/fastn-community/opensans-font/archive/92c331b462846a059f13876c4a2627b1003c328e.zip",
+    "checksum": "F831740930476CC228CCB6597DCE3A191AF7D44E04B5CE90FA64F517FB10718A"
+}

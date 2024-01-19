@@ -1,0 +1,116 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "297B3197D8044F4A6E25029BB545307564D186166BE207C9B951F5484E04E562",
+      "size": 701
+    },
+    "README.md": {
+      "name": "README.md",
+      "checksum": "A3BD4CA43C8DDD795B9DD3148188D7A581F43ACA666D2B02001AF3A6A3A48BB0",
+      "size": 1178
+    },
+    "component-doc.ftd": {
+      "name": "component-doc.ftd",
+      "checksum": "D4D54E5A1D5ED8C849A4DFCA8C6BB50D8C9A7403A26E4D2FAC18D42E6C71BC02",
+      "size": 3212
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "DD71868C0252D1663CBEBDB018FF6EBC51C7CA0B79402C1CC4E9F9ECAF1CCED1",
+      "size": 40199
+    },
+    "static/copy-dark.svg": {
+      "name": "static/copy-dark.svg",
+      "checksum": "DBBFD0F0E590CC4DDF95D6CEF537B4E3E8B2D338AFCF3759B21757026243D189",
+      "size": 1767
+    },
+    "static/copy.svg": {
+      "name": "static/copy.svg",
+      "checksum": "8B7884AE7F358DB83F240CFAB18F9DFE37C9D5C8F18BD7A15305381324F08DAE",
+      "size": 1767
+    },
+    "static/cross-dark.svg": {
+      "name": "static/cross-dark.svg",
+      "checksum": "6205EDE0EC3407E3B9B491652C7701CA250976D25692818545100D3F70DD13C0",
+      "size": 678
+    },
+    "static/cross.svg": {
+      "name": "static/cross.svg",
+      "checksum": "6205EDE0EC3407E3B9B491652C7701CA250976D25692818545100D3F70DD13C0",
+      "size": 678
+    },
+    "static/hamburger-dark.svg": {
+      "name": "static/hamburger-dark.svg",
+      "checksum": "5ACE4B96CE32DF599A487BB0CC823C41E6C8DC255CE27745F48A6F4ED096E170",
+      "size": 610
+    },
+    "static/hamburger.svg": {
+      "name": "static/hamburger.svg",
+      "checksum": "0CAA6A2712D240592A0F0159FF53402F8EBE0498586CFB511718F65EB6115F61",
+      "size": 610
+    },
+    "static/icon-github-dark.svg": {
+      "name": "static/icon-github-dark.svg",
+      "checksum": "A0FEF5A1C1301F43A9C1CEAE956D0447E115C7A75CB3D69F304EF9B5791ACA77",
+      "size": 802
+    },
+    "static/icon-github.svg": {
+      "name": "static/icon-github.svg",
+      "checksum": "3105D2E9C5C7BC52CA61DEF9FA7559ABE2948F2FB5B49C853C6F8B7B65BBAFE7",
+      "size": 802
+    },
+    "static/link-dark.svg": {
+      "name": "static/link-dark.svg",
+      "checksum": "657C7DAA70D412247DB33074F497659C3CFA8C52D2C2C3565D44F18066A1B122",
+      "size": 698
+    },
+    "static/link.svg": {
+      "name": "static/link.svg",
+      "checksum": "D4F21A27B7FAFE042BE816196BC267B4233AEC09D0C70AC3C471F08972A3AC85",
+      "size": 698
+    },
+    "static/minify-icon-dark.svg": {
+      "name": "static/minify-icon-dark.svg",
+      "checksum": "77208D2592BD13E5B03018B8DF3AB2FB602D113F1D05D4A01D6B76F676630610",
+      "size": 240
+    },
+    "static/minify-icon.svg": {
+      "name": "static/minify-icon.svg",
+      "checksum": "E03E28F9959128D149BC4149E7533B3C61F211CFFE898670B6388AADB34D41C7",
+      "size": 225
+    },
+    "static/push-left-dark.svg": {
+      "name": "static/push-left-dark.svg",
+      "checksum": "44D38DEC97B9BE4CE78A863D036F76259CB87E7714BF09BAB8DC92BA721687CC",
+      "size": 366
+    },
+    "static/push-left.svg": {
+      "name": "static/push-left.svg",
+      "checksum": "3FB2B4EB86817D96704EBBE59E100BB0514396B7EBE4D98AAD49F3CA55486BC1",
+      "size": 363
+    },
+    "static/push-right-dark.svg": {
+      "name": "static/push-right-dark.svg",
+      "checksum": "72A2DA9F07A5FB37ACCFD16DABFBA382B155354723A860D2B7B5927356BD9C39",
+      "size": 367
+    },
+    "static/push-right.svg": {
+      "name": "static/push-right.svg",
+      "checksum": "A0CE9C5C02FBF58659D1ED31C179E0D30E2F94B7F0990B5F3425FF79FE761463",
+      "size": 495
+    },
+    "static/tick-dark.svg": {
+      "name": "static/tick-dark.svg",
+      "checksum": "A4D18E8A4EBA18F571C8AFAB3C9894EFCFB966119D53476FFD4E941866C39263",
+      "size": 174
+    },
+    "static/tick.svg": {
+      "name": "static/tick.svg",
+      "checksum": "A4D18E8A4EBA18F571C8AFAB3C9894EFCFB966119D53476FFD4E941866C39263",
+      "size": 174
+    }
+  },
+  "zip_url": "https://github.com/fastn-community/site-doc/archive/a45f0e42549081064bbd3c42d7f850b4897e4c64.zip",
+  "checksum": "C3558AF719503C574E928ECA6A3B66B72C8D87864BEF30689C304C7F386D05C3"
+}

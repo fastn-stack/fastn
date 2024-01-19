@@ -14,7 +14,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 ;; -- fastn.dependency: arjaupashak.com
 ;; -- fastn.dependency: fastn.dev
 -- fastn.dependency: fifthtry.github.io/roboto-font as mono
--- fastn.dependency: gargajit.github.io/expander
+-- fastn.dependency: fastn-community.github.io/expander
 
 -- fastn.auto-import: ds
 -- fastn.auto-import: ws
