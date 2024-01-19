@@ -1,0 +1,133 @@
+-- import: fastn-community.github.io/doc-site/components
+
+
+-- ds.page: Markdown
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+`doc-site` supports markdown. If you want to use it you can use `-- ds.markdown`
+for inline anchor links etc.
+
+-- ds.rendered: Markdown
+
+-- ds.rendered.input:
+
+\-- ds.markdown:
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+tempor incididunt.
+
+-- ds.rendered.output:
+
+-- ds.markdown:
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+tempor incididunt.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.rendered: Inline links
+
+-- ds.rendered.input:
+
+\-- ds.markdown:
+
+Lorem ipsum [inline link](components/markdown/) amet, consectetur 
+adipiscing elit, sed do eiusmod tempor incididunt.
+
+-- ds.rendered.output:
+
+-- ds.markdown:
+
+Lorem ipsum [inline link](components/markdown/) amet, consectetur adipiscing
+elit, sed do eiusmod tempor incididunt.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+-- ds.rendered: Markdown List
+
+-- ds.rendered.input:
+
+\-- ds.markdown:
+
+**Bullet list:**
+
+- List item 1
+- List item 2
+- List item 3
+  - Sub List item 1
+  - Sub List item 1
+
+**Odered list:**
+
+1. List item 
+2. List item 
+3. List item
+   1. Sub List Item
+   2. Sub List Item
+   3. Sub List Item
+
+-- ds.rendered.output:
+
+-- ds.markdown:
+
+**Bullet list:**
+
+- List item 1
+- List item 2
+- List item 3
+  - Sub List item 1
+  - Sub List item 1
+
+**Odered list:**
+
+1. List item 
+2. List item 
+3. List item
+   1. Sub List Item
+   2. Sub List Item
+   3. Sub List Item
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.rendered: Inline styles
+
+-- ds.rendered.input:
+
+\-- ds.markdown:
+
+**Bold Text** dolor sit amet, *Italic text* elit, sed do eiusmod tempor
+  incididunt.
+
+-- ds.rendered.output:
+
+-- ds.markdown:
+
+**Bold Text** dolor sit amet, *Italic text* elit, sed do eiusmod tempor
+  incididunt.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- end: ds.page
+

@@ -1,0 +1,63 @@
+-- import: fastn-community.github.io/doc-site/components
+
+-- ds.page: not-found-1
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+`ds.not-found-1` represents to a 404 page, also known as a "404 error page"
+or "Page Not Found" page, is a standard response displayed by a web server when
+a user requests a web page that cannot be found or accessed. It is an HTTP
+status code that indicates that the requested resource is not available.
+
+-- ds.h2: Example:
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- ds.not-found-1: Page Not Found!
+type: 404
+cta-text: Click here to go back
+cta-link: components/404-1/
+
+Uh oh, Panda can’t seem to find the page you’re looking for.
+
+
+-- ds.rendered.output:
+
+-- ds.not-found-1: Page Not Found!
+type: 404
+cta-text: Click here to go back
+cta-link: components/404-1/
+
+Uh oh, Panda can’t seem to find the page you’re looking for.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h3: Properties of `not-found-1` component
+
+- **title** - `type: caption` It’s used to add title to `not-found-1`
+    component.
+- **type** - `type: string` It’s used to add error type to `not-found-1`
+    component.
+- **cta-text** - `type: string` It’s used to add back button text to
+    `not-found-1` component.
+- **cta-text** - `type: string` It’s used to add back button link url to
+    `not-found-1` component.
+- **body** - `type: body` It’s used to add body content to `not-found-1`
+    component.
+
+-- end: ds.page

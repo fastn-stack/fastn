@@ -1,0 +1,285 @@
+-- import: fastn-community.github.io/opensans-font/assets as opensans-font-assets
+-- import: fifthtry.github.io/package-doc/doc as pd
+-- import: fifthtry.github.io/package-doc/forest-theme as ds
+-- import: fifthtry.github.io/package-doc/footer
+
+;; ⚠️fastn-builders::⚠️ before using this file please find and replace <font-name>
+;; with font name you have given inside 
+;; `fastn-community.github.io/opensans-font/FASTN.ftd file
+
+
+
+
+
+
+-- ds.page: 
+show-footer: true
+site-name: `opensans-font`
+
+-- ds.page.footer:
+
+-- footer.fastn-footer:
+
+-- end: ds.page.footer
+
+-- pd.package: FTD opensans-font package
+name: fastn-community.github.io/opensans-font
+
+This FTD font `opensans-font` package is for your ftd web projects. To Use this
+opensans-font inside `FTD` project follow below instructions.
+
+-- ds.h3: How to use opensans-font?
+
+-- ds.code: Add this to your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/opensans-font
+
+-- ds.markdown: 
+
+After adding opensans-font dependency inside your `FASTN.ftd` file, You need to
+add opensans-font assets and import it inside your `.ftd` files where you are
+using this font for your custom font types. 
+
+To include opensans-font into your `ftd` file follow below instructions.
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/opensans-font/assets as opensans-font-assets
+
+
+-- ds.h3: How to create a custom opensans-font type? 
+
+-- ds.markdown: 
+
+We don't recommend creating custom types. We recommend to use 
+our [opensans-typography](https://fastn-community.github.io/opensans-typography)
+
+If you're using [opensans-typography](https://fastn-community.github.io/opensans-typography) 
+and still your designer has introduced new font size which are not included or 
+part of our [opensans-typography](https://fastn-community.github.io/opensans-typography) 
+then only define custom types. 
+
+We hope you shouldn't need to define a custom type.
+
+Below is an example of creating a custom `ftd.type` using opensans-font.
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- ftd.type opensans-font-size-12-desktop:
+size.px: 12
+weight: 400
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+
+\-- ftd.type opensans-font-size-12-mobile:
+size.px: 12
+weight: 400
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+\-- ftd.responsive-type opensans-font-size-12-400:
+desktop: $opensans-font-size-12-desktop
+mobile: $opensans-font-size-12-mobile
+
+\-- ftd.text: 
+role: $opensans-font-size-12-400
+color: $inherited.colors.text-strong
+
+`font-size: 12px, font-weight: 400` 
+
+👉 The quick brown fox jumps over the lazy dog 
+
+-- ds.rendered.output:
+
+-- ftd.text: 
+role: $opensans-font-size-12-400
+color: $inherited.colors.text-strong
+
+`font-size: 12px, font-weight: 400` 
+
+👉 The quick brown fox jumps over the lazy dog 
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- ftd.type opensans-font-size-12-desktop:
+size.px: 12
+weight: 400
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+
+-- ftd.type opensans-font-size-12-mobile:
+size.px: 12
+weight: 400
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+-- ftd.responsive-type opensans-font-size-12-400:
+desktop: $opensans-font-size-12-desktop
+mobile: $opensans-font-size-12-mobile
+
+
+
+
+
+-- ftd.type opensans-font-size-12-500-desktop:
+size.px: 12
+weight: 500
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+
+-- ftd.type opensans-font-size-12-500-mobile:
+size.px: 12
+weight: 500
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+-- ftd.responsive-type opensans-font-size-12-500:
+desktop: $opensans-font-size-12-500-desktop
+mobile: $opensans-font-size-12-500-mobile
+
+
+
+
+
+-- ftd.type opensans-font-size-12-800-desktop:
+size.px: 12
+weight: 800
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+
+-- ftd.type opensans-font-size-12-800-mobile:
+size.px: 12
+weight: 800
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+-- ftd.responsive-type opensans-font-size-12-800:
+desktop: $opensans-font-size-12-800-desktop
+mobile: $opensans-font-size-12-800-mobile
+
+
+
+
+
+-- ftd.type opensans-font-size-18-desktop:
+size.px: 18
+weight: 400
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+
+-- ftd.type opensans-font-size-18-mobile:
+size.px: 18
+weight: 400
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+-- ftd.responsive-type opensans-font-size-18-400:
+desktop: $opensans-font-size-18-desktop
+mobile: $opensans-font-size-18-mobile
+
+
+
+
+
+-- ftd.type opensans-font-size-18-500-desktop:
+size.px: 18
+weight: 500
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+
+-- ftd.type opensans-font-size-18-500-mobile:
+size.px: 18
+weight: 500
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+-- ftd.responsive-type opensans-font-size-18-500:
+desktop: $opensans-font-size-18-500-desktop
+mobile: $opensans-font-size-18-500-mobile
+
+
+
+
+
+-- ftd.type opensans-font-size-18-800-desktop:
+size.px: 18
+weight: 800
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+
+-- ftd.type opensans-font-size-18-800-mobile:
+size.px: 18
+weight: 800
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+-- ftd.responsive-type opensans-font-size-18-800:
+desktop: $opensans-font-size-18-800-desktop
+mobile: $opensans-font-size-18-800-mobile
+
+
+
+
+
+-- ftd.type opensans-font-size-48-desktop:
+size.px: 48
+weight: 400
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+
+-- ftd.type opensans-font-size-48-mobile:
+size.px: 48
+weight: 400
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+-- ftd.responsive-type opensans-font-size-48-400:
+desktop: $opensans-font-size-48-desktop
+mobile: $opensans-font-size-48-mobile
+
+
+
+
+
+-- ftd.type opensans-font-size-48-500-desktop:
+size.px: 48
+weight: 500
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+
+-- ftd.type opensans-font-size-48-500-mobile:
+size.px: 48
+weight: 500
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+-- ftd.responsive-type opensans-font-size-48-500:
+desktop: $opensans-font-size-48-500-desktop
+mobile: $opensans-font-size-48-500-mobile
+
+
+
+
+
+-- ftd.type opensans-font-size-48-800-desktop:
+size.px: 48
+weight: 800
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+
+-- ftd.type opensans-font-size-48-800-mobile:
+size.px: 48
+weight: 800
+font-family: $opensans-font-assets.fonts.Open-Sans
+
+-- ftd.responsive-type opensans-font-size-48-800:
+desktop: $opensans-font-size-48-800-desktop
+mobile: $opensans-font-size-48-800-mobile

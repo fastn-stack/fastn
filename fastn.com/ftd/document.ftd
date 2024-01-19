@@ -1,4 +1,4 @@
--- ds.page: `ftd.document` 🚧
+-- ds.page: `ftd.document` 🚧 test
 favicon: $fastn-assets.files.images.doc-icon.svg.light
 
 `ftd.document` is a kernel component that provides root-level configuration to

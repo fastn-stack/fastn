@@ -1,0 +1,56 @@
+{
+    "files": {
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "CC99D07DA887588A66AE09D117657BF7B691F9D5388E634DD4243F96015AE7F5",
+            "size": 218
+        },
+        "_config.yml": {
+            "name": "_config.yml",
+            "checksum": "A42D91290C93B5F17412C3B346737EA1C796E5D287306758AFE8B20470119D80",
+            "size": 21
+        },
+        "images/search-optimization.png": {
+            "name": "images/search-optimization.png",
+            "checksum": "F86E7F39FF9D205F3F4BBE9BB60416FDEE2DC64D5E1A9D9ADD318229A940AE27",
+            "size": 116774
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "33AA053EB2C961146E59D76409D54A2B05D5CD5BA3D7D75BB1713647A3270C29",
+            "size": 799
+        },
+        "images/seo-meta.png": {
+            "name": "images/seo-meta.png",
+            "checksum": "7751A6BDD727A4E16E735820A85A325E0A80C8292B7B843DC0211F17EB1BB167",
+            "size": 6122
+        },
+        "images/seo-process-dark.png": {
+            "name": "images/seo-process-dark.png",
+            "checksum": "D5CE4058B63EC19886CBA96C41B353CC85861B0232146C7B15B1A4AEEC4B4D55",
+            "size": 403151
+        },
+        "images/seo-process.png": {
+            "name": "images/seo-process.png",
+            "checksum": "1793B9E8E3EE741C3DA234083DDC14A76AC99310D443AE9F6AFCEE06C68EE37F",
+            "size": 331612
+        },
+        "doc-site-example.jpg": {
+            "name": "doc-site-example.jpg",
+            "checksum": "6B036B79B2334478A00A14E9828EF74BF3B53CCC3C8285562368A46C9497805B",
+            "size": 60036
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "5C3A51DA8CA9FCF14DCD969F233501B9E1274D5917BF67F2B4FCF2164BD97FF4",
+            "size": 1094
+        },
+        "doc-site-example-dark.jpg": {
+            "name": "doc-site-example-dark.jpg",
+            "checksum": "F5B00C3885069AAC08595E88C01399BF75B71B7E6D653308DDF4FDE5E147C187",
+            "size": 58453
+        }
+    },
+    "zip_url": "https://github.com/fastn-community/optimization/archive/8bb60b41b353646cfe8be66a00a718e0b84c93eb.zip",
+    "checksum": "78D0C7EB1B85752F714C1F50752D076BCC45F3BE4F2BCC593D3C7E9DB4E3D340"
+}

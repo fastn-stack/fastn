@@ -1,0 +1,138 @@
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-community.github.io/code-block as cb
+
+
+
+
+-- site-doc.doc-home: Documentation
+site-title: Code Block
+show-tabs: false
+github-url: https://github.com/fastn-community/code-block
+
+-- site-doc.component-doc: `code-block`
+package-link: https://fastn-community.github.io/code-block
+package-name: fastn-community.github.io/code-block
+info: `-- code` can be used as code-block inside your fastn web projects.
+
+Code blocks are typically defined by using specific syntax or indentation rules,
+depending on the programming language.
+
+**Note:** The `code` component is already included within the doc-site.
+  Therefore, if you are utilizing [`doc-site`](https://fastn-community.github.io/doc-site/),
+   there is no need to include the code-block as a fastn dependency. 
+
+
+Using our `lang` property you can define which language code snippet you want to
+show your users.
+
+-- cb.rendered: For e.g.
+
+-- cb.rendered.input:
+
+\-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- cb.rendered.output:
+
+-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `code-block` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/code-block
+
+-- cb.code: Import `code-block` into your `.ftd` document
+lang: ftd
+
+\-- import: fastn-community.github.io/code-block as cb
+
+\-- cb.code:
+lang: ftd
+download: sample.ftd
+
+\-- ftd.text: Hello World
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of this component.
+
+-- site-doc.component-property: `caption`
+type: Caption (`optional`)
+
+It's used to show title for the code block.
+
+-- site-doc.component-property: `lang`
+type: String (`required`)
+
+It's used to define which programming language is used for the code example.
+
+-- site-doc.component-property: `download`
+type: String (`optional`)
+
+It's used to define a file-name which can be downloaded and will contain the
+code shwon inside code-block.
+
+-- site-doc.component-property: `body`
+type: Body (`required`)
+
+Body inside code-block is the code which you show as a example.
+
+-- site-doc.component-property: `copy`
+type: Boolean (`default: true`)
+
+If you want to disable copy feature of code shown inside code-block, you can add
+this property and change its default value from `true` to `false`.
+
+-- site-doc.component-property: `max-height`
+type: ftd.resizing (`optional`)
+
+You can add `max-height` property inside code-block if you want to restrict
+`max-height` of the code-block. This property type is `ftd.resizing` which
+means your can define it as below:
+
+- `max-height.fixed.px: 200` it will restrict max-height to 200 pixels, you can
+  use other CSS units e.g. em, rem etc.
+- `max-height.fixed.percent: 30` it will restrict max-height to 30%.
+- `max-height: fill-container` max-height will be  100 %.
+
+-- site-doc.component-property: `max-width`
+type: ftd.resizing (`optional`)
+
+You can add `max-width` property inside code-block if you want to restrict
+`max-width` of the code-block. This property type is `ftd.resizing` which means
+your can define it as below:
+
+- `max-width.fixed.px: 200` it will restrict max-width to 200 pixels, you can
+  use other CSS units e.g. em, rem etc.
+- `max-width.fixed.percent: 30` it will restrict max-width to 30%.
+- `max-width: fill-container` max-width will be  100%.
+
+-- end: site-doc.component-doc
+
+-- end: site-doc.doc-home

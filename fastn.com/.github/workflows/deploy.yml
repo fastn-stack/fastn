@@ -21,12 +21,19 @@ jobs:
         id: install_fastn
         continue-on-error: false
         run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install.sh)"
+      - name: Get latest commit information
+        id: get_commit
+        run: echo "::set-output name=commit_sha::$(git rev-parse HEAD)"
+      - name: Get raw zipball URL
+        id: get_zip_url
+        run: |
+          echo "::set-output name=zip_url::https://github.com/${{ github.repository }}/archive/${{ steps.get_commit.outputs.commit_sha }}.zip"
       - name: Build the pages with fastn
         id: build
         continue-on-error: false
         run: |
           echo "Using '$CI_REPOSITORY_NAME_SLUG/' as the base while building"
-          fastn build --base=/$CI_REPOSITORY_NAME/ 
+          fastn build --base=/$CI_REPOSITORY_NAME/ --zip-url=${{ steps.get_zip_url.outputs.zip_url }}
       - name: copy CNAME
         run: '(test -f CNAME && cp CNAME .build) || echo "CNAME does not exist, skipping step"'
       - name: Deploy

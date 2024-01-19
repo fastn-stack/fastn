@@ -1,0 +1,51 @@
+{
+    "files": {
+      "Changelog.md": {
+        "name": "Changelog.md",
+        "checksum": "B136EED78D45AD4B73623C1231C4F3BFD7BA472AA0B2F834B606660AED8FA25B",
+        "size": 2694
+      },
+      "LICENSE": {
+        "name": "LICENSE",
+        "checksum": "5B8B83357C092AC57F28508D18CAB65E4965AAA3BA61226DE038719E022638C1",
+        "size": 1516
+      },
+      "_config.yml": {
+        "name": "_config.yml",
+        "checksum": "A42D91290C93B5F17412C3B346737EA1C796E5D287306758AFE8B20470119D80",
+        "size": 21
+      },
+      "contribute.ftd": {
+        "name": "contribute.ftd",
+        "checksum": "F00B49581F1655DA3CAE6A261ECD38E1BC14E35CE8FB76433900AB272E6DDAEE",
+        "size": 2508
+      },
+      "index.ftd": {
+        "name": "index.ftd",
+        "checksum": "C676CEB4C9AA76B6C310E351EAA2CA32EF5A87451A0679845B88070281A48429",
+        "size": 4335
+      },
+      "FASTN.ftd": {
+        "name": "FASTN.ftd",
+        "checksum": "C67463840443354B25149F39C932B778E5AD27F8ACC4DED90C36393843401A7B",
+        "size": 366
+      },
+      "headings.ftd": {
+        "name": "headings.ftd",
+        "checksum": "020C6197CC271BCBE611E845887051C405AF2A739F14D7289CAF993F675DC5A0",
+        "size": 4416
+      },
+      "markdown.ftd": {
+        "name": "markdown.ftd",
+        "checksum": "702447461E2AB83228D64E777F13CC6C185017563859CEF763B1F21B205BA206",
+        "size": 2311
+      },
+      "README.md": {
+        "name": "README.md",
+        "checksum": "37A5659987E69B1BD8064AEDD2F1D687FEBE2D8AE7688A65162E43DCF0891633",
+        "size": 1403
+      }
+    },
+    "zip_url": "https://github.com/fastn-community/typography/archive/806aa35951af6a4a3a5d696be1d4af4f20325794.zip",
+    "checksum": "2276AA5025EA764E492E61C13E3C1A60E8B10728CF9E64AC1E4F254C817AE2EE"
+  }

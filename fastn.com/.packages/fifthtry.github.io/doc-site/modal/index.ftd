@@ -1,0 +1,136 @@
+-- boolean $pop-up-status: false
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.text: click me
+color: $inherited.colors.text-strong
+background.solid: $inherited.colors.cta-primary.base
+role: $inherited.types.copy-regular
+padding-horizontal.px: 12
+padding-vertical.px: 12
+$on-click$: $ftd.toggle($a = $pop-up-status)
+
+
+
+
+
+-- window-popup:
+
+
+
+
+
+
+
+
+
+
+-- component window-popup:
+
+
+-- ftd.column:
+if: {pop-up-status}
+anchor: window
+top.px: 0
+bottom.px: 0
+left.px: 0
+right.px: 0
+width: fill-container
+height: fill-container
+background.solid: $inherited.colors.background.overlay
+z-index: 99999
+
+-- ftd.image:
+src: https://www.fifthtry.com/-/fifthtry.github.io/header/static/header/cross-dark.svg
+height.fixed.px: 24
+width: auto
+anchor: window
+right.px: 16
+top.px: 20
+$on-click$: $ftd.set-bool($a = $pop-up-status, v = false)
+
+-- ftd.column:
+if: {ftd.device != "mobile"}
+width: fill-container
+height: fill-container
+align-content: center
+
+-- ftd.column:  
+background.solid: $inherited.colors.background.base
+width.fixed.px: 614
+border-width.px: 1
+padding-vertical.px: 35
+padding-horizontal.px: 32
+border-top-width.px: 3
+border-radius.px: 8
+border-color: $inherited.colors.warning.text
+
+-- ftd.boolean: $pop-up-status
+color: white
+
+-- ftd.text: CONGRATULATIONS
+text-align: center
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+width: fill-container
+padding-bottom.px: 90
+
+-- end: ftd.column
+
+
+-- end: ftd.column
+
+-- ftd.column:
+if:{ ftd.device == "mobile"}
+width: fill-container
+height: fill-container
+align-content: center
+
+-- ftd.column:
+width: fill-container
+align-content: center
+
+-- ftd.column:
+background.solid: $inherited.colors.background.base
+width.fixed.px: 200
+border-width.px: 1
+padding-vertical.px: 35
+padding-horizontal.px: 32
+;;shadow-offset-x: 3
+;;shadow-offset-y: 4
+;;shadow-size: 1
+;;shadow-blur: 4
+border-top-width.px: 3
+border-radius.px: 8
+border-color: $inherited.colors.warning.text
+
+
+-- ftd.column:
+align-content: center
+
+-- ftd.text: CONGRATULATIONS
+text-align: center
+role: $inherited.types.fine-print
+color: $inherited.colors.text-strong
+width: fill-container
+padding-bottom.px: 90
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: window-popup

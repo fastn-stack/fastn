@@ -1,0 +1,122 @@
+-- import: fastn-community.github.io/bling/collapse
+
+
+
+
+
+-- ds.page: Post List
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+
+-- ds.h2: Creating posts list page
+
+It's very common to display a list of top/latest posts as a blog home page. Our
+`doc-site` blog feature helps you to create your favorite blog posts list home 
+page.
+
+It's very simple to create your top/latest featured posts using `-- ds.posts` which
+can be added inside `-- ds.page`.
+
+Let's learn how to create it.
+
+-- ds.code: Example of how to use `-- ds.posts`
+lang: ftd
+download: post-list.ftd
+max-height.fixed.px: 300
+
+\-- import: fastn-community.github.io/doc-site/blog-articles/category-1/sample-post-1
+\-- import: fastn-community.github.io/doc-site/blog-articles/category-1/sample-post-2 
+\-- import: fastn-community.github.io/doc-site/blog-articles/category-2/sample-post-3 
+\-- import: fastn-community.github.io/doc-site/blog-articles/category-2/sample-post-4
+
+\-- ds.page:
+
+\-- ds.posts:
+
+\-- ds.featured-post:
+post-data: $sample-post-2.meta
+
+\-- ds.image-first:
+post-data: $sample-post-1.meta
+
+\-- ds.image-in-between:
+post-data: $sample-post-3.meta
+
+\-- ds.without-image:
+post-data: $sample-post-4.meta
+
+\-- ds.image-first:
+post-data: $sample-post-1.meta
+
+\-- ds.image-in-between:
+post-data: $sample-post-3.meta
+
+\-- end: ds.posts
+
+\-- end: ds.page
+
+-- ds.h3: Let's understand above code snippet:
+
+
+-- collapse.collapse: Importing blog posts meta with `import` 
+remove-gap: true
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/doc-site/blog-articles/category-1/sample-post-1
+\-- import: fastn-community.github.io/doc-site/blog-articles/category-1/sample-post-2 
+\-- import: fastn-community.github.io/doc-site/blog-articles/category-2/sample-post-3 
+\-- import: fastn-community.github.io/doc-site/blog-articles/category-2/sample-post-4
+
+-- ds.markdown:
+
+It imports `sample-post-1`, `sample-post-2`, `sample-post-3` and `sample-post-4`
+and its all details from `/blog-articles/category-1/` and
+`/blog-articles/category-2/` folder. 
+
+-- end: collapse.collapse
+
+-- collapse.collapse: `-- ds.page:`
+remove-gap: true
+info-right: Learn more: [`ds.page`](components/page/)
+
+Its doc-site default page component.
+
+-- collapse.collapse: `-- ds.posts:`
+remove-gap: true
+info-right: Learn more: [`posts`](components/posts/)
+
+This line imports the `ds.posts` component which helps to create featured list
+page ui.
+
+-- collapse.collapse: `-- ds.featured-post:`
+remove-gap: true
+info-right: Learn more: [`featured-post`](components/featured-post/)
+
+This line imports the `ds.featured-post` component which comes with featured
+post UI. [see our blog page](blog/)
+
+-- collapse.collapse: `-- ds.image-first:`
+remove-gap: true
+info-right: Learn more: [`image-first`](components/image-first/)
+
+The `ds.image-first` component shows your post image at the top then shows the
+title of the post and other post details. [see our blog page](blog/)
+
+-- collapse.collapse: `-- ds.image-in-between`
+remove-gap: true
+info-right: Learn more: [`image-in-between`](components/image-in-between/)
+
+The `ds.image-in-between` component shows your post image after the title and
+post metadata then shows other post details. [see our blog page](blog/)
+
+-- collapse.collapse: `-- ds.without-image:`
+remove-gap: true
+info-right: Learn more: [`ds.without-image`](components/without-image/)
+
+The `ds.without-image` component shows your post without image in case your post
+does not contain the featured image use this component. It shows only the title
+and post metadata then shows other post details. [see our blog page](blog/)
+
+-- end: ds.page

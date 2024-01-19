@@ -1,0 +1,188 @@
+-- import: fastn-community.github.io/bling/collapse
+
+-- site-doc.doc-home: Tip
+site-title: Bling
+show-tabs: false
+github-url: https://github.com/fastn-community/bling
+current-package: fastn-community.github.io/bling
+
+The "tip component" is a UI component used to provide helpful suggestions,
+advice, or recommendations to users. It is commonly used in websites to offer
+tips or best practices that can enhance the user's experience, or provide
+guidance on how to use specific features.
+
+-- site-doc.header: Examples
+
+-- site-doc.output:
+colors: $ftd.default-colors
+types: $ftd.default-types
+
+-- tip: Cool bots hot tip !
+
+Sed ut perspiciatis unde omnis iste natus err or sit voluptatem accusantium
+dolorem queili le laudantium, totam rem aperiam, eaque lai ipsa quae ab illo
+inventore!
+
+-- tip: Cool bots hot tip with additional components !
+
+Sed ut perspiciatis unde omnis iste natus err or sit voluptatem accusantium
+dolorem queili le laudantium, totam rem aperiam, eaque lai ipsa quae ab illo
+inventore!
+
+-- cb.code: Wow! awesome!:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- collapse.collapse: Lorem ipsum dolor
+info-right: Dolor sit amet
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut
+
+-- end: tip
+
+-- end: site-doc.output
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `bling` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/bling
+
+-- cb.code: import `tip` inside your `.ftd` file
+lang: ftd
+
+\-- import: fastn-community.github.io/bling/tip
+
+-- cb.code: sample usage of `-- tip` component
+lang: ftd
+
+\-- tip.tip: Cool bots hot tip !
+
+Sed ut perspiciatis unde omnis iste natus err or sit voluptatem accusantium
+dolorem queili le laudantium, totam rem aperiam, eaque lai ipsa quae ab illo
+inventore!
+
+\-- cb.code: Wow! awesome!:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+\-- collapse.collapse: Lorem ipsum dolor
+info-right: Dolor sit amet
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut
+
+\-- end: tip.tip
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `tip` component.
+
+-- site-doc.component-property: `title`
+type: Caption (`optional`)
+
+It's used to title to the `tip` component.
+
+-- site-doc.component-property: `body`
+type: Body (`required`)
+
+It's used to add body content to `tip` component.
+
+-- site-doc.component-property: `icon`
+type: ftd.image-src (`optional`)
+
+If you want to change default icon with your prefferd icon, then add `icon`
+property and add your image asset file-name.
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component tip:
+optional caption title:
+optional body body:
+optional ftd.image-src icon: $assets.files.static.avatar.svg
+children tip-wrap:
+
+-- ftd.column:
+border-color: $inherited.colors.border
+background.solid: $inherited.colors.background.step-1
+padding.px: 16
+border-radius.px: 4
+border-width.px: 1
+width if { ftd.device != "mobile" }: auto
+width if { ftd.device == "mobile" }: fill-container
+min-width.fixed.percent: 50
+margin-top.px: 8
+margin-bottom.px: 32
+align-self: center
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+align-self: center
+margin-bottom.px: 24
+align-content: center
+
+-- ftd.image:
+src: $tip.icon
+width.fixed.px: 32
+height.fixed.px: 32
+margin-right.px: 16
+border-radius.px: 100
+
+-- ftd.text: $tip.title
+if: { tip.title != NULL }
+color: $inherited.colors.text-strong
+role: $inherited.types.heading-small
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+align-content: center
+align-self: center
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+$tip.body
+
+-- end: ftd.column
+
+-- ftd.column:
+children: $tip.tip-wrap
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: tip

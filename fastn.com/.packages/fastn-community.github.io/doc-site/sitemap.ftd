@@ -1,0 +1,525 @@
+/-- import: fastn.com/expander/ds/understanding-sitemap as ds-sitemap
+
+-- import: fastn-community.github.io/doc-site/components
+-- import: fastn/processors as pr
+
+
+-- ds.page: 
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- show-sm:
+
+-- end: ds.page
+
+/-- ds.page: Understanding Sitemap
+
+The `doc-site` page component has an inbuilt header. Just using the `page`
+header will appear on your page.
+
+The header is built using [header](https://fastn-community.github.io/header) 
+component.
+Header uses `fastn.sitemap` which can be added inside your `FASTN.ftd` file. 
+
+-- ds.youtube:
+v: IIBk8zmspkA
+
+-- ds.markdown:
+
+To learn more how to implement `fastn.sitemap` go through this 
+[video tutorial](https://fastn.com/understanding-sitemap/).
+
+-- ds.h3: How to create clean URL using sitemap
+
+In sitemap, you can clean the URLs and give custom URLs by using the sitemap 
+feature: `document`.
+
+-- ds.youtube:
+v: 4ke75MpOEks
+
+-- ds.markdown:
+
+To learn more how to implement `fastn.sitemap` go through this 
+[video tutorial](https://fastn.com/clean-urls/).
+
+-- ds.h3: Sample `fastn.sitemap` code snippet
+
+Below is a set of simple sitemap links which you will see on the header and
+toc-sidebar in your `doc-site` project.
+
+Add the below code inside your `FASTN.ftd` file
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.sitemap:
+
+# Home: index.html
+
+- Liking fastn lang?: https://fastn.com/clean-urls/-/build/
+- My First Article: /article-1/
+
+# Star us on GitHub
+  url: https://github.com/fastn-stack/fastn
+
+-- ds.markdown:
+
+In the above code snippet `Home` is the main section that will be active when you are
+on the homepage of your `doc-site` project. OnClick of `Home` link it will take 
+you to the `index.html` which is the homepage of your `doc-site` project.
+
+Another link `/article-1/` will go to the `article.ftd` file which you
+created inside the root folder of your `doc-site` project. And it will be seen
+inside the `toc-sidebar` as toc link to the `Home` section.
+
+`Star us on GitHub` will point to `https://github.com/fastn-stack/fastn` which
+is an external URL.
+
+-- end: ds.page
+
+-- ds.page:
+
+-- show-sm:
+
+-- end: ds.page
+
+
+;; borrowed from fastn.com/expander/ds/understanding-sitemap.ftd
+
+-- component show-sm:
+
+/-- ds.page: Understanding Sitemap
+
+-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+
+
+
+	-- ds.h0: Understanding Sitemap
+	
+	
+	-- video-audience: Understanding Sitemap
+	if: { show-planning }
+	owner: Ajit
+	aud: Common
+	
+	Helps learners to understand how to structure their websites
+	
+	-- ds.markdown:
+	if: { !show-planning }
+	
+	In this video we learn about `sitemap`
+	
+	
+	-- ds.youtube:
+	if: { !show-planning }
+	v: IIBk8zmspkA
+	
+	-- ds.markdown:
+	if: { !show-planning }
+	
+	
+	`Sitemap` is used to create a structured representation of the files and pages
+	that make up a website. This structure is created over a layout which we will
+	talk about in a bit.
+	
+	By creating a comprehensive sitemap, website owners and visitors can gain a
+	clear understanding of the website's structure and easily navigate through its
+	content. It ensures that visitors can find the information they need
+	efficiently.
+	
+	-- ds.h1: What is `sitemap`
+	if: { show-planning }
+	
+	`Sitemap` is used to create a structured representation of the files and pages
+	that make up a website.
+	
+	-- ds.image:
+	src: $assets.files.static.sitemap.index.png
+	width: fill-container
+	
+	-- ds.markdown:
+	if: { show-planning }
+	
+	Welcome to the video. I am Ajit. Today we will learn
+	
+	- what is `sitemap`
+	- why sitemap is used, and
+	- how to configure it.
+	
+	-- ds.image:
+	if: { show-planning }
+	src: $assets.files.static.sitemap.sitemap-intro.jpg
+	width: fill-container
+	
+	
+	
+	
+	-- ds.markdown:
+	if: { show-planning }
+	
+	By creating a comprehensive sitemap, website owners and visitors can gain a
+	clear understanding of the website's structure and easily navigate through its
+	content. It ensures that visitors can find the information they need
+	efficiently.
+	
+	
+	In the header of the website, there are `sections`. These sections represent
+	the main divisions of content on the website and provide an overview of the
+	different topics or areas covered.
+	
+	Each top-level section can then be further divided into one or more
+	`subsections`. These subsections act as subcategories or subtopics within the
+	larger sections. To enhance navigation, the subsections should be listed as a
+	second-level navigation within the header itself. This allows users to easily
+	access specific areas of interest within each section.
+	
+	Within each subsection, there are one or more documents or pages organized in a
+	`Table of Contents` (TOC) format. The TOC provides a hierarchical structure,
+	outlining the various pages or documents within the section or subsection.
+	
+	
+	
+	-- ds.h1: Why `sitemap`?
+	$on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
+	
+	Just like a college library needs to organise their shelves, books in an
+	order based on category or genre.
+	Similarly, in a package, we want to organise the documents in different
+	sections, subsections and TOCs.
+	
+	`Sitemap` serves as a blueprint or roadmap, providing information about the
+	organization and hierarchy of content on the website.
+	
+	
+	-- ds.h1: How to configure `sitemap` for your site
+	
+	-- ds.markdown:
+	if: { !show-planning }
+	
+	We create the sitemap in the `FASTN.ftd`. So, we write:
+	
+	-- ds.markdown:
+	if: { show-planning }
+	
+	Now, let's see how to configure the `sitemap` for a website.
+	
+	We create the sitemap in the `FASTN.ftd` document. So, we write:
+	
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- fastn.sitemap:
+	
+	# Section: <url>
+	
+	## SubSection: <url>
+	
+	- TOC-1: <url>
+	- TOC-2: <url>
+	  - SubTOC-2-1: <url>
+	  - SubTOC-2-2: <url>
+	
+	...
+	
+	-- ds.markdown:
+	
+	and after a line space
+	
+	- for `sections` we use `#`
+	- for `subsections` we use `##`, and
+	- for `TOCs` and `sub-TOCs` we use `-`
+	
+	-- ds.markdown:
+	
+	In all the three cases, whatever written before colon is displayed as the title
+	on webpage and whatever is written after colon, becomes the URL to access it.
+	
+	
+	-- ds.h3: First section
+	
+	We put our first section like, hash for section, home as section name and URL:
+	
+	-- ds.code:
+	lang: ftd
+	
+	# Home: /
+	
+	-- ds.markdown:
+	
+	Section `Home` is displayed on the webpage, which displays the content of
+	`index.ftd` document. The URL `/` corresponds to `index.ftd` document.
+	
+	Whereas, any document other than `index.ftd` file we need to write something
+	after `/`. For example, there is a file `foo.ftd`, then to access the foo
+	document, we need to write, `/foo/`.
+	
+	-- ds.h3: Second section
+	
+	Let's add another section.
+	
+	-- ds.code:
+	lang: ftd
+	
+	# Season: /season/summer/
+	
+	-- ds.markdown:
+	
+	The URL is the path of the document. Inside folder season, there is a document
+	called `summer.ftd`.
+	
+	-- ds.markdown:
+	if: { show-planning }
+	
+	Let's check in the browser.
+	
+	We will see how to clean and customize this URL later. For now.
+	
+	
+	
+	-- ds.h3: Subsections
+	
+	Let's give some subsections to this section `season`.
+	
+	-- ds.code:
+	lang: ftd
+	
+	## Autumn: /season/autumn/
+	
+	## Spring: /season/spring/
+	
+	## Summer: /season/summer/
+	
+	## Winter: /season/winter/
+	
+	
+	-- ds.markdown:
+	if: { show-planning }
+	
+	and each subsection points to their respective documents.
+	
+	-- ds.h3: TOCs
+	
+	Similarly, we can add TOCs.
+	
+	TOCs start with single dash or hyphen `-`, followed by TOC title before colon
+	and after the colon, as usual, the URL.
+	
+	Also note, between TOCs we do not give a line space.
+	
+	-- ds.code:
+	lang: ftd
+	
+	- Sunrise: /season/day-event/sunrise/
+	- Sunset: /season/day-event/sunset/
+	
+	-- ds.markdown:
+	
+	and so on, you can give any number of TOCs and even sub-TOCs to the sections
+	or subsections.
+	
+	
+	-- ds.code:
+	lang: ftd
+	
+	# Home: /
+	
+	# Season: /season/summer/
+	
+	
+	## Autumn Season: /season/autumn/
+	
+	- Sunrise: /season/day-event/sunrise/
+	- Sunset: /season/day-event/sunset/
+	
+	## Spring Season: /season/spring/
+	
+	- Sunrise: /season/day-event/sunrise/
+	  - Today's News: /season/day-event/news/rained/
+	- Sunset: /season/day-event/sunset/
+	
+	## Summer Season: /season/summer/
+	
+	- Sunrise: /season/day-event/sunrise/
+	- Sunset: /season/day-event/sunset/
+	
+	## Winter Season: /season/winter/
+	
+	- Sunrise: /season/day-event/sunrise/
+	- Sunset: /season/day-event/sunset/
+	
+	
+	
+	-- ds.markdown:
+	if: { show-planning }
+	
+	This way we have learnt how to configure the sitemap in `FASTN.ftd` document.
+	
+	-- ds.markdown:
+	
+	The URLs can be cleaned and customized by using the `document feature` of
+	sitemap.
+	
+	
+	-- ds.code:
+	lang: ftd
+	
+	# Home: /
+	
+	# Season: /current-season/
+	  document: /season/summer.ftd
+	
+	
+	## Autumn: /autumn/
+	   document: /season/autumn.ftd
+	
+	- Sunrise: /sunrise-in-autumn/
+	  document: /season/day-event/sunrise.ftd
+	- Sunset: /sunset-in-autumn/
+	  document: /season/day-event/sunset.ftd
+	
+	## Spring: /spring/
+	  document: /seasons/spring.ftd
+	
+	- Sunrise: /sunrise-in-spring/
+	  document: /season/day-event/sunrise.ftd
+	  - Today's News: /news-of-the-day/
+	    document: /season/day-event/news/rained.ftd
+	- Sunset: /sunset-in-spring/
+	  document: /season/day-event/sunset.ftd
+	
+	## Summer: /summer/
+	  document: /season/summer.ftd
+	
+	- Sunrise: /sunrise-in-summer/
+	  document: /season/day-event/sunrise.ftd
+	- Sunset: /sunset-in-summer/
+	  document: /season/day-event/sunset.ftd
+	
+	## Winter: /winter/
+	  document: /season/winter.ftd
+	
+	- Sunrise: /sunrise-in-winter/
+	  document: /season/day-event/sunrise.ftd
+	- Sunset: /sunset-in-winter/
+	  document: /season/day-event/sunset.ftd
+	
+	
+	-- ds.markdown:
+	
+	To know all about this feature you can checkout the video about
+	[`How to create clean URLs`](/clean-urls/).
+	
+	-- ds.markdown:
+	if: { show-planning }
+	
+	Link is shared in the description.
+	
+	-- ds.markdown:
+	if: { show-planning }
+	
+	I hope this video will help you to create the structure of your website. You
+	can share your feedback on comments and/or our discord channel.
+	
+	
+	-- ds.h1: Closing Remarks
+	if: { show-planning }
+	
+	Thank you guys, keep watching these videos to learn more about fastn. Checkout
+	the `fastn` website.
+	
+	Support us by clicking on this link and give us a star ⭐ on GitHub and join
+	our fastn community on Discord.
+	
+	
+	-- ds.markdown:
+	if: { !show-planning }
+	
+	Thank you guys, keep watching these videos to learn more about fastn.
+	
+	Support us by giving a star ⭐ on
+	[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community
+	on [Discord](/discord/).
+	
+	
+	-- ds.h1: Final Video
+	if: { show-planning }
+	
+	-- ds.youtube:
+	if: { show-planning }
+	v: IIBk8zmspkA
+	
+	/-- end: ds.page
+	
+-- end: ftd.column
+
+-- end: show-sm
+
+-- boolean $show-planning: false
+$processor$: pr.get-data
+key: show-planning
+
+-- component video-audience:
+caption title:
+string owner:
+string aud:
+body goal:
+
+-- ftd.column:
+spacing.fixed.em: 0.5
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+	-- ftd.row:
+	spacing.fixed.em: 0.25
+	
+		-- ftd.text: Video Title:
+		style: bold
+		
+		-- ftd.text: $video-audience.title
+		
+	-- end: ftd.row
+
+	-- ftd.row:
+	spacing.fixed.em: 0.25
+	
+		-- ftd.text: Owner:
+		style: bold
+		
+		-- ftd.text: $video-audience.owner
+		
+	-- end: ftd.row
+
+	-- ftd.row:
+	spacing.fixed.em: 0.25
+	
+		-- ftd.text: Audience:
+		style: bold
+		
+		-- ftd.text: $video-audience.aud
+		
+	-- end: ftd.row
+
+	-- ftd.row:
+	spacing.fixed.em: 0.25
+	
+		-- ftd.text: Goal:
+		style: bold
+		
+		-- ftd.text: $video-audience.goal
+		
+	-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: video-audience

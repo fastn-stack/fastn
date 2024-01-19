@@ -1,0 +1,34 @@
+-- ftd.image-src fastn:
+light: https://fastn.io/-/fastn.io/images/fastn.svg
+dark: https://fastn.io/-/fastn.io/images/fastn-dark.svg
+
+
+
+
+
+
+
+
+
+
+-- component powered-by:
+caption title: Powered by
+ftd.image-src fastn: $fastn
+string link: https://fastn.io/
+
+-- ftd.column:
+link: $powered-by.link
+
+-- ftd.text: $powered-by.title
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- ftd.image:
+src: $powered-by.fastn
+max-width.fixed.px: 120
+height.fixed.px: 28
+margin-left.px: 18
+
+-- end: ftd.column
+
+-- end: powered-by

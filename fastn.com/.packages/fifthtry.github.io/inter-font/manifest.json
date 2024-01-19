@@ -1,0 +1,341 @@
+{
+    "files": {
+        "static/Inter-100-normal-latin-ext.woff2": {
+            "name": "static/Inter-100-normal-latin-ext.woff2",
+            "checksum": "01BD76A63D1A3E8DCE2D5E3B76DA2618D166786AFCE754E0FCBF3BD356C2C5EC",
+            "size": 57252
+        },
+        "static/Inter-100-normal-vietnamese.woff2": {
+            "name": "static/Inter-100-normal-vietnamese.woff2",
+            "checksum": "A203EBB13EC09E482CD64924F81A3250C30934433F703B2A8BCF22804FAF39C6",
+            "size": 8664
+        },
+        "static/Inter-200-normal-cyrillic-ext.woff2": {
+            "name": "static/Inter-200-normal-cyrillic-ext.woff2",
+            "checksum": "505975951F7B4B1EC1143CB7DD230846B19A868BE84A17E707E5E3C0F03AC25D",
+            "size": 26644
+        },
+        "static/Inter-200-normal-latin-ext.woff2": {
+            "name": "static/Inter-200-normal-latin-ext.woff2",
+            "checksum": "01BD76A63D1A3E8DCE2D5E3B76DA2618D166786AFCE754E0FCBF3BD356C2C5EC",
+            "size": 57252
+        },
+        "static/Inter-600-normal-cyrillic-ext.woff2": {
+            "name": "static/Inter-600-normal-cyrillic-ext.woff2",
+            "checksum": "505975951F7B4B1EC1143CB7DD230846B19A868BE84A17E707E5E3C0F03AC25D",
+            "size": 26644
+        },
+        "static/Inter-400-normal-greek-ext.woff2": {
+            "name": "static/Inter-400-normal-greek-ext.woff2",
+            "checksum": "E057566D9B6FB8F019FF2D48C21091466F89BD2A8D04011C8AF38FE56F8B6136",
+            "size": 11944
+        },
+        "static/Inter-400-normal-latin-ext.woff2": {
+            "name": "static/Inter-400-normal-latin-ext.woff2",
+            "checksum": "01BD76A63D1A3E8DCE2D5E3B76DA2618D166786AFCE754E0FCBF3BD356C2C5EC",
+            "size": 57252
+        },
+        "static/Inter-900-normal-cyrillic.woff2": {
+            "name": "static/Inter-900-normal-cyrillic.woff2",
+            "checksum": "BD8C2E90F9F60A8B2C88CB32D469226E6E9067D639F5BF3314F81FFF49B29C74",
+            "size": 16832
+        },
+        "static/Inter-700-normal-latin.woff2": {
+            "name": "static/Inter-700-normal-latin.woff2",
+            "checksum": "799C2B76F617EBE6CF5C90E376212FAA5FD523ABB39325CF4FBD848C3C9C930B",
+            "size": 37780
+        },
+        "static/Inter-300-normal-vietnamese.woff2": {
+            "name": "static/Inter-300-normal-vietnamese.woff2",
+            "checksum": "A203EBB13EC09E482CD64924F81A3250C30934433F703B2A8BCF22804FAF39C6",
+            "size": 8664
+        },
+        "static/Inter-800-normal-greek-ext.woff2": {
+            "name": "static/Inter-800-normal-greek-ext.woff2",
+            "checksum": "E057566D9B6FB8F019FF2D48C21091466F89BD2A8D04011C8AF38FE56F8B6136",
+            "size": 11944
+        },
+        "static/Inter-600-normal-latin-ext.woff2": {
+            "name": "static/Inter-600-normal-latin-ext.woff2",
+            "checksum": "01BD76A63D1A3E8DCE2D5E3B76DA2618D166786AFCE754E0FCBF3BD356C2C5EC",
+            "size": 57252
+        },
+        "static/Inter-800-normal-latin-ext.woff2": {
+            "name": "static/Inter-800-normal-latin-ext.woff2",
+            "checksum": "01BD76A63D1A3E8DCE2D5E3B76DA2618D166786AFCE754E0FCBF3BD356C2C5EC",
+            "size": 57252
+        },
+        "static/Inter-300-normal-cyrillic.woff2": {
+            "name": "static/Inter-300-normal-cyrillic.woff2",
+            "checksum": "BD8C2E90F9F60A8B2C88CB32D469226E6E9067D639F5BF3314F81FFF49B29C74",
+            "size": 16832
+        },
+        "static/Inter-500-normal-cyrillic.woff2": {
+            "name": "static/Inter-500-normal-cyrillic.woff2",
+            "checksum": "BD8C2E90F9F60A8B2C88CB32D469226E6E9067D639F5BF3314F81FFF49B29C74",
+            "size": 16832
+        },
+        "static/Inter-800-normal-cyrillic.woff2": {
+            "name": "static/Inter-800-normal-cyrillic.woff2",
+            "checksum": "BD8C2E90F9F60A8B2C88CB32D469226E6E9067D639F5BF3314F81FFF49B29C74",
+            "size": 16832
+        },
+        "static/Inter-400-normal-cyrillic.woff2": {
+            "name": "static/Inter-400-normal-cyrillic.woff2",
+            "checksum": "BD8C2E90F9F60A8B2C88CB32D469226E6E9067D639F5BF3314F81FFF49B29C74",
+            "size": 16832
+        },
+        "static/Inter-600-normal-latin.woff2": {
+            "name": "static/Inter-600-normal-latin.woff2",
+            "checksum": "799C2B76F617EBE6CF5C90E376212FAA5FD523ABB39325CF4FBD848C3C9C930B",
+            "size": 37780
+        },
+        "static/Inter-900-normal-vietnamese.woff2": {
+            "name": "static/Inter-900-normal-vietnamese.woff2",
+            "checksum": "A203EBB13EC09E482CD64924F81A3250C30934433F703B2A8BCF22804FAF39C6",
+            "size": 8664
+        },
+        "static/Inter-600-normal-greek-ext.woff2": {
+            "name": "static/Inter-600-normal-greek-ext.woff2",
+            "checksum": "E057566D9B6FB8F019FF2D48C21091466F89BD2A8D04011C8AF38FE56F8B6136",
+            "size": 11944
+        },
+        "static/Inter-300-normal-greek.woff2": {
+            "name": "static/Inter-300-normal-greek.woff2",
+            "checksum": "598E85C4FB1F9E5269DE4955CC9D9E3B7301122EABA31A2B7885D3F784A1AB25",
+            "size": 21876
+        },
+        "static/Inter-600-normal-vietnamese.woff2": {
+            "name": "static/Inter-600-normal-vietnamese.woff2",
+            "checksum": "A203EBB13EC09E482CD64924F81A3250C30934433F703B2A8BCF22804FAF39C6",
+            "size": 8664
+        },
+        "static/Inter-100-normal-greek.woff2": {
+            "name": "static/Inter-100-normal-greek.woff2",
+            "checksum": "598E85C4FB1F9E5269DE4955CC9D9E3B7301122EABA31A2B7885D3F784A1AB25",
+            "size": 21876
+        },
+        "static/Inter-200-normal-greek.woff2": {
+            "name": "static/Inter-200-normal-greek.woff2",
+            "checksum": "598E85C4FB1F9E5269DE4955CC9D9E3B7301122EABA31A2B7885D3F784A1AB25",
+            "size": 21876
+        },
+        "static/Inter-200-normal-greek-ext.woff2": {
+            "name": "static/Inter-200-normal-greek-ext.woff2",
+            "checksum": "E057566D9B6FB8F019FF2D48C21091466F89BD2A8D04011C8AF38FE56F8B6136",
+            "size": 11944
+        },
+        "static/Inter-500-normal-greek.woff2": {
+            "name": "static/Inter-500-normal-greek.woff2",
+            "checksum": "598E85C4FB1F9E5269DE4955CC9D9E3B7301122EABA31A2B7885D3F784A1AB25",
+            "size": 21876
+        },
+        "static/Inter-900-normal-latin.woff2": {
+            "name": "static/Inter-900-normal-latin.woff2",
+            "checksum": "799C2B76F617EBE6CF5C90E376212FAA5FD523ABB39325CF4FBD848C3C9C930B",
+            "size": 37780
+        },
+        "static/Inter-900-normal-cyrillic-ext.woff2": {
+            "name": "static/Inter-900-normal-cyrillic-ext.woff2",
+            "checksum": "505975951F7B4B1EC1143CB7DD230846B19A868BE84A17E707E5E3C0F03AC25D",
+            "size": 26644
+        },
+        "static/Inter-600-normal-greek.woff2": {
+            "name": "static/Inter-600-normal-greek.woff2",
+            "checksum": "598E85C4FB1F9E5269DE4955CC9D9E3B7301122EABA31A2B7885D3F784A1AB25",
+            "size": 21876
+        },
+        "static/Inter-800-normal-vietnamese.woff2": {
+            "name": "static/Inter-800-normal-vietnamese.woff2",
+            "checksum": "A203EBB13EC09E482CD64924F81A3250C30934433F703B2A8BCF22804FAF39C6",
+            "size": 8664
+        },
+        "static/Inter-300-normal-latin.woff2": {
+            "name": "static/Inter-300-normal-latin.woff2",
+            "checksum": "799C2B76F617EBE6CF5C90E376212FAA5FD523ABB39325CF4FBD848C3C9C930B",
+            "size": 37780
+        },
+        "static/Inter-400-normal-greek.woff2": {
+            "name": "static/Inter-400-normal-greek.woff2",
+            "checksum": "598E85C4FB1F9E5269DE4955CC9D9E3B7301122EABA31A2B7885D3F784A1AB25",
+            "size": 21876
+        },
+        "static/Inter-500-normal-vietnamese.woff2": {
+            "name": "static/Inter-500-normal-vietnamese.woff2",
+            "checksum": "A203EBB13EC09E482CD64924F81A3250C30934433F703B2A8BCF22804FAF39C6",
+            "size": 8664
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "F66B0CE1E516E90BD639AC1D703336D58A6E54638771175307CE7C37EFE7DA76",
+            "size": 4297
+        },
+        "static/Inter-700-normal-greek.woff2": {
+            "name": "static/Inter-700-normal-greek.woff2",
+            "checksum": "598E85C4FB1F9E5269DE4955CC9D9E3B7301122EABA31A2B7885D3F784A1AB25",
+            "size": 21876
+        },
+        "static/Inter-100-normal-latin.woff2": {
+            "name": "static/Inter-100-normal-latin.woff2",
+            "checksum": "799C2B76F617EBE6CF5C90E376212FAA5FD523ABB39325CF4FBD848C3C9C930B",
+            "size": 37780
+        },
+        "static/Inter-300-normal-cyrillic-ext.woff2": {
+            "name": "static/Inter-300-normal-cyrillic-ext.woff2",
+            "checksum": "505975951F7B4B1EC1143CB7DD230846B19A868BE84A17E707E5E3C0F03AC25D",
+            "size": 26644
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "FAFFB70FAD9D4A31C5F545A83BF0325D8677996CAAC9A5AE4F0D81F05101CD8B",
+            "size": 13928
+        },
+        "static/Inter-800-normal-cyrillic-ext.woff2": {
+            "name": "static/Inter-800-normal-cyrillic-ext.woff2",
+            "checksum": "505975951F7B4B1EC1143CB7DD230846B19A868BE84A17E707E5E3C0F03AC25D",
+            "size": 26644
+        },
+        "static/Inter-500-normal-greek-ext.woff2": {
+            "name": "static/Inter-500-normal-greek-ext.woff2",
+            "checksum": "E057566D9B6FB8F019FF2D48C21091466F89BD2A8D04011C8AF38FE56F8B6136",
+            "size": 11944
+        },
+        "static/Inter-100-normal-cyrillic.woff2": {
+            "name": "static/Inter-100-normal-cyrillic.woff2",
+            "checksum": "BD8C2E90F9F60A8B2C88CB32D469226E6E9067D639F5BF3314F81FFF49B29C74",
+            "size": 16832
+        },
+        "static/Inter-300-normal-greek-ext.woff2": {
+            "name": "static/Inter-300-normal-greek-ext.woff2",
+            "checksum": "E057566D9B6FB8F019FF2D48C21091466F89BD2A8D04011C8AF38FE56F8B6136",
+            "size": 11944
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "A147FD64488538DF4379C2B6AAECD2AB7DBCEF6F288203D8952ACBCC6DF56FEA",
+            "size": 1481
+        },
+        "static/Inter-500-normal-latin-ext.woff2": {
+            "name": "static/Inter-500-normal-latin-ext.woff2",
+            "checksum": "01BD76A63D1A3E8DCE2D5E3B76DA2618D166786AFCE754E0FCBF3BD356C2C5EC",
+            "size": 57252
+        },
+        "static/Inter-900-normal-greek-ext.woff2": {
+            "name": "static/Inter-900-normal-greek-ext.woff2",
+            "checksum": "E057566D9B6FB8F019FF2D48C21091466F89BD2A8D04011C8AF38FE56F8B6136",
+            "size": 11944
+        },
+        "static/Inter-900-normal-latin-ext.woff2": {
+            "name": "static/Inter-900-normal-latin-ext.woff2",
+            "checksum": "01BD76A63D1A3E8DCE2D5E3B76DA2618D166786AFCE754E0FCBF3BD356C2C5EC",
+            "size": 57252
+        },
+        "static/Inter-600-normal-cyrillic.woff2": {
+            "name": "static/Inter-600-normal-cyrillic.woff2",
+            "checksum": "BD8C2E90F9F60A8B2C88CB32D469226E6E9067D639F5BF3314F81FFF49B29C74",
+            "size": 16832
+        },
+        "static/Inter-700-normal-greek-ext.woff2": {
+            "name": "static/Inter-700-normal-greek-ext.woff2",
+            "checksum": "E057566D9B6FB8F019FF2D48C21091466F89BD2A8D04011C8AF38FE56F8B6136",
+            "size": 11944
+        },
+        "static/Inter-300-normal-latin-ext.woff2": {
+            "name": "static/Inter-300-normal-latin-ext.woff2",
+            "checksum": "01BD76A63D1A3E8DCE2D5E3B76DA2618D166786AFCE754E0FCBF3BD356C2C5EC",
+            "size": 57252
+        },
+        "static/Inter-200-normal-latin.woff2": {
+            "name": "static/Inter-200-normal-latin.woff2",
+            "checksum": "799C2B76F617EBE6CF5C90E376212FAA5FD523ABB39325CF4FBD848C3C9C930B",
+            "size": 37780
+        },
+        "static/Inter-500-normal-cyrillic-ext.woff2": {
+            "name": "static/Inter-500-normal-cyrillic-ext.woff2",
+            "checksum": "505975951F7B4B1EC1143CB7DD230846B19A868BE84A17E707E5E3C0F03AC25D",
+            "size": 26644
+        },
+        "static/Inter-700-normal-vietnamese.woff2": {
+            "name": "static/Inter-700-normal-vietnamese.woff2",
+            "checksum": "A203EBB13EC09E482CD64924F81A3250C30934433F703B2A8BCF22804FAF39C6",
+            "size": 8664
+        },
+        "static/Inter-100-normal-greek-ext.woff2": {
+            "name": "static/Inter-100-normal-greek-ext.woff2",
+            "checksum": "E057566D9B6FB8F019FF2D48C21091466F89BD2A8D04011C8AF38FE56F8B6136",
+            "size": 11944
+        },
+        "LICENSE": {
+            "name": "LICENSE",
+            "checksum": "4D7D9C95E7D7F2F0EBF76D5E0B344826B74E903A34028EE18AB54BB639E45906",
+            "size": 4426
+        },
+        "static/Inter-700-normal-cyrillic-ext.woff2": {
+            "name": "static/Inter-700-normal-cyrillic-ext.woff2",
+            "checksum": "505975951F7B4B1EC1143CB7DD230846B19A868BE84A17E707E5E3C0F03AC25D",
+            "size": 26644
+        },
+        "static/Inter-200-normal-vietnamese.woff2": {
+            "name": "static/Inter-200-normal-vietnamese.woff2",
+            "checksum": "A203EBB13EC09E482CD64924F81A3250C30934433F703B2A8BCF22804FAF39C6",
+            "size": 8664
+        },
+        "static/Inter-700-normal-latin-ext.woff2": {
+            "name": "static/Inter-700-normal-latin-ext.woff2",
+            "checksum": "01BD76A63D1A3E8DCE2D5E3B76DA2618D166786AFCE754E0FCBF3BD356C2C5EC",
+            "size": 57252
+        },
+        "static/Inter-500-normal-latin.woff2": {
+            "name": "static/Inter-500-normal-latin.woff2",
+            "checksum": "799C2B76F617EBE6CF5C90E376212FAA5FD523ABB39325CF4FBD848C3C9C930B",
+            "size": 37780
+        },
+        "static/Inter-900-normal-greek.woff2": {
+            "name": "static/Inter-900-normal-greek.woff2",
+            "checksum": "598E85C4FB1F9E5269DE4955CC9D9E3B7301122EABA31A2B7885D3F784A1AB25",
+            "size": 21876
+        },
+        "static/Inter-700-normal-cyrillic.woff2": {
+            "name": "static/Inter-700-normal-cyrillic.woff2",
+            "checksum": "BD8C2E90F9F60A8B2C88CB32D469226E6E9067D639F5BF3314F81FFF49B29C74",
+            "size": 16832
+        },
+        "static/Inter-800-normal-latin.woff2": {
+            "name": "static/Inter-800-normal-latin.woff2",
+            "checksum": "799C2B76F617EBE6CF5C90E376212FAA5FD523ABB39325CF4FBD848C3C9C930B",
+            "size": 37780
+        },
+        "static/Inter-800-normal-greek.woff2": {
+            "name": "static/Inter-800-normal-greek.woff2",
+            "checksum": "598E85C4FB1F9E5269DE4955CC9D9E3B7301122EABA31A2B7885D3F784A1AB25",
+            "size": 21876
+        },
+        "static/Inter-400-normal-latin.woff2": {
+            "name": "static/Inter-400-normal-latin.woff2",
+            "checksum": "799C2B76F617EBE6CF5C90E376212FAA5FD523ABB39325CF4FBD848C3C9C930B",
+            "size": 37780
+        },
+        "static/Inter-100-normal-cyrillic-ext.woff2": {
+            "name": "static/Inter-100-normal-cyrillic-ext.woff2",
+            "checksum": "505975951F7B4B1EC1143CB7DD230846B19A868BE84A17E707E5E3C0F03AC25D",
+            "size": 26644
+        },
+        "static/Inter-400-normal-cyrillic-ext.woff2": {
+            "name": "static/Inter-400-normal-cyrillic-ext.woff2",
+            "checksum": "505975951F7B4B1EC1143CB7DD230846B19A868BE84A17E707E5E3C0F03AC25D",
+            "size": 26644
+        },
+        "static/Inter-400-normal-vietnamese.woff2": {
+            "name": "static/Inter-400-normal-vietnamese.woff2",
+            "checksum": "A203EBB13EC09E482CD64924F81A3250C30934433F703B2A8BCF22804FAF39C6",
+            "size": 8664
+        },
+        "static/Inter-200-normal-cyrillic.woff2": {
+            "name": "static/Inter-200-normal-cyrillic.woff2",
+            "checksum": "BD8C2E90F9F60A8B2C88CB32D469226E6E9067D639F5BF3314F81FFF49B29C74",
+            "size": 16832
+        }
+    },
+    "zip_url": "https://github.com/FifthTry/inter-font/archive/383b723e16ab9559fd8b81f8ab85233643ba63cd.zip",
+    "checksum": "77B397E826F5DBDF247BE769D924C29DEF53A4C011B7F8C4744F2240A04E07F2"
+}

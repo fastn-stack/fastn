@@ -1,0 +1,31 @@
+{
+    "files": {
+        "LICENSE.md": {
+            "name": "LICENSE.md",
+            "checksum": "19A9C4397966D1792B7B65065BD5F2AAFE8A41A843CE41D124D41C44D72627C1",
+            "size": 4303
+        },
+        "fastn-typography.ftd": {
+            "name": "fastn-typography.ftd",
+            "checksum": "AAAFCAC4F314796E9B82696F61F95B80D4749DC79610AB9FC48085AFD151ADE0",
+            "size": 9041
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "AD5494E12344DA6FF79FA78AAC8830205FB57FACA1F5E861FBA835C3872BCE68",
+            "size": 400
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "F2C3E95350880084375702619670BD1C7504997050E6313242B608F783697758",
+            "size": 686
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "F38D5C9666AB68BC42618169A39E0F8C519CB3F914AF01FED8A56C7BFCF40DA3",
+            "size": 13373
+        }
+    },
+    "zip_url": "https://github.com/fastn-community/virgil-typography/archive/0a1e513b9fb1ebfdbc60ccfc6d647444193ead0a.zip",
+    "checksum": "C71D13576BB18D27D66DD5C74973DF750E4ADC747A47EB517BD089B9611F2DCF"
+}

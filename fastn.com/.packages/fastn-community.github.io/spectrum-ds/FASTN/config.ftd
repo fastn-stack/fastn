@@ -1,0 +1,53 @@
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/footer
+
+-- ftd.image-src fastn-logo:
+light: https://fastn.com/-/fastn.com/images/fastn.svg
+dark: https://fastn.com/-/fastn.com/images/fastn-dark.svg
+
+
+-- component page:
+children wrapper:
+optional caption title:
+optional body body:
+optional string document-title:
+optional string document-description:
+optional ftd.raw-image-src document-image:
+optional string site-name: NULL
+ftd.ui list abstract-bar:
+ftd.ui list layout-bar:
+boolean distribution-bar: false
+
+-- ds.page: $page.title
+site-name: $page.site-name
+body: $page.body
+abstract-bar: $page.abstract-bar
+layout-bar: $page.layout-bar
+distribution-bar: $page.distribution-bar
+show-footer: true
+document-title: $page.document-title
+document-description: $page.document-description
+document-image: $page.document-image
+github-url: https://github.com/fastn-community/doc-site/
+github-icon: true
+
+-- ds.page.footer:
+
+-- footer.fastn-footer:
+copyright: Copyright © 2023 - [FifthTry](https://www.fifthtry.com/)
+site-logo: $fastn-logo
+powered-by-text: Powered by
+powered-by-link: https://fastn.com/
+
+-- end: ds.page.footer
+
+-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+children: $page.wrapper
+
+-- end: ftd.column
+
+-- end: ds.page
+
+-- end: page

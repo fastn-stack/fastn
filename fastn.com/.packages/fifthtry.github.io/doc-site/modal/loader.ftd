@@ -1,0 +1,50 @@
+-- boolean $open: true
+
+
+
+-- loader:
+$show-loader: $open
+$on-click$: $ftd.set-bool($a = $open, v = false)
+
+
+
+
+
+
+
+
+
+
+-- component loader:
+boolean $show-loader: false
+
+-- ftd.container:
+
+-- ftd.column:
+if: { $loader.show-loader }
+width: fill-container
+height: fill-container
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+anchor: window
+left.px: 0
+top.px: 0
+background.solid: #000000
+align-content: center
+
+
+-- ftd.image:
+src: https://i.giphy.com/media/6036p0cTnjUrNFpAlr/giphy.webp
+width.fixed.px: 100
+height.fixed.px: 100
+align-self: center
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.container
+
+-- end: loader

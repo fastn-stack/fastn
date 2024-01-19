@@ -1,0 +1,126 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "C571DEC21BDC2C44A465C91C524FBD8E5B230FE20FBDD57B846FB95E9EB92639",
+      "size": 596
+    },
+    "LICENSE": {
+      "name": "LICENSE",
+      "checksum": "5B8B83357C092AC57F28508D18CAB65E4965AAA3BA61226DE038719E022638C1",
+      "size": 1516
+    },
+    "README.md": {
+      "name": "README.md",
+      "checksum": "6A7C301463396C949C3473D47FC48F3720CF3DC2C4DD36C12D292D49D3726294",
+      "size": 64
+    },
+    "_config.yml": {
+      "name": "_config.yml",
+      "checksum": "A42D91290C93B5F17412C3B346737EA1C796E5D287306758AFE8B20470119D80",
+      "size": 21
+    },
+    "assets/download-dark.svg": {
+      "name": "assets/download-dark.svg",
+      "checksum": "D6F756207B780B679E1FF4957597FBBC843EBDE678761A9181F6E61DEB011769",
+      "size": 344
+    },
+    "assets/download-hover.svg": {
+      "name": "assets/download-hover.svg",
+      "checksum": "947D31FE76E6929F600D7A3AE19805957DCE0508F2E731444322A7EE9C5CB12E",
+      "size": 344
+    },
+    "assets/download.svg": {
+      "name": "assets/download.svg",
+      "checksum": "911B6368A3506C9939E16AD3CE06BD36FDD82B6F3D3D0D05504D90C91FEB5425",
+      "size": 344
+    },
+    "assets/fastn-badge-dark.svg": {
+      "name": "assets/fastn-badge-dark.svg",
+      "checksum": "70FA4F035EFF8A3D71920D6D9570B89B311A3DCF736CC5E59D78E0F8842E4DB4",
+      "size": 11356
+    },
+    "assets/fastn-badge-white-dark.svg": {
+      "name": "assets/fastn-badge-white-dark.svg",
+      "checksum": "1D43A0697ECDF3A3E5A9E76EFF01539EF4AC940928C5C7830834DF7EE12907A5",
+      "size": 11451
+    },
+    "assets/fastn-badge-white.svg": {
+      "name": "assets/fastn-badge-white.svg",
+      "checksum": "9D3626F3BFA1E309BA0A9827279CEF1E890311BEEA3920BB42643E8F49884430",
+      "size": 11453
+    },
+    "assets/fastn-badge.svg": {
+      "name": "assets/fastn-badge.svg",
+      "checksum": "004E32CFFE57ECB1C28611B4F40E5725656F033EEAC77F21123C52A0F6CDDD01",
+      "size": 11484
+    },
+    "assets/fastn.svg": {
+      "name": "assets/fastn.svg",
+      "checksum": "888A6CF14FC366ED98620D67E1FFA45345732A10AFA17DFEE02E17071C63FDB5",
+      "size": 4959
+    },
+    "assets/final-output.png": {
+      "name": "assets/final-output.png",
+      "checksum": "3AFC356C7794894945B25AAF36AFF1145A126EA64EA2AB711A827773A434BDFD",
+      "size": 174398
+    },
+    "assets/flip-icon-dark.svg": {
+      "name": "assets/flip-icon-dark.svg",
+      "checksum": "EBAB15B1756FBE39A631B65D5E1A273441DE5B2EC27AE7E95A33352561EEA96E",
+      "size": 1163
+    },
+    "assets/flip-icon-hover.svg": {
+      "name": "assets/flip-icon-hover.svg",
+      "checksum": "36E58C3BACB1A6BF1E311A170EF21AD6CC935CD873270D808F2F03ADE48AFB48",
+      "size": 1163
+    },
+    "assets/flip-icon.svg": {
+      "name": "assets/flip-icon.svg",
+      "checksum": "37788A15B7EC0E3D87009B02211593D12CF78604F91FC3BFBC2A794D1D9FC10A",
+      "size": 1163
+    },
+    "assets/ipsum-logo-dark.svg": {
+      "name": "assets/ipsum-logo-dark.svg",
+      "checksum": "8290B3397C465FE1BB40B7CA280C976DF7DA3DABFC655B429805ABF33964FB5B",
+      "size": 16202
+    },
+    "assets/ipsum-logo.svg": {
+      "name": "assets/ipsum-logo.svg",
+      "checksum": "A227CF22E798ACFB2D01B6352FC22A28047444F028AF05440C6CE6F9499C0EDF",
+      "size": 15494
+    },
+    "assets/qr-code.png": {
+      "name": "assets/qr-code.png",
+      "checksum": "9D1AE6B8BA63A7D83830876FD53BDDAAB1ED56D7A0287A0536BCA2440AEB0A49",
+      "size": 147928
+    },
+    "docs.ftd": {
+      "name": "docs.ftd",
+      "checksum": "E1834CD2EBD67F45CFEAB27C04FD9D6C768F881CDCAA4534052A87BCC22E02D9",
+      "size": 9273
+    },
+    "favicon.ico": {
+      "name": "favicon.ico",
+      "checksum": "65056A1D6C6AAE6E3DC4626E29F4BD4B628B17A8E9CC1D3A5E8FE9F6743F306B",
+      "size": 15406
+    },
+    "how-to-use.ftd": {
+      "name": "how-to-use.ftd",
+      "checksum": "E6DB4CDB5E9C7C0ACC74D4249138763DCE97C47EF01BCC36B1B254F810C4FC86",
+      "size": 78
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "D7AADB3A6A3FDF631536BE60980EA6A548A056D66279129CF0058EB7E667A4DA",
+      "size": 3593
+    },
+    "lib.ftd": {
+      "name": "lib.ftd",
+      "checksum": "0CCBA175AF893D8E6CE0BE7BF3D2347CC7019EA47923DE25040998D9AF2AF7EE",
+      "size": 1992
+    }
+  },
+  "zip_url": "https://github.com/fastn-community/business-card/archive/1553bb57a10f4677840723ac131e6acf284e9431.zip",
+  "checksum": "08F13F6754AAC9BA795A667061092B57EE68F586323B8890BA8D180228CCA717"
+}

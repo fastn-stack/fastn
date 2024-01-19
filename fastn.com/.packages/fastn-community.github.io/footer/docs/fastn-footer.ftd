@@ -1,0 +1,80 @@
+-- import: fastn-community.github.io/footer
+
+
+
+
+-- site-doc.doc-home: Documentation - fastn Powered by Footer
+site-title: Footer
+show-tabs: false
+github-url: https://github.com/fastn-community/footer
+
+-- site-doc.component-doc: `footer`
+package-link: https://fastn-community.github.io/footer
+package-name: fastn-community.github.io/footer
+info: The `--footer` option serves as a convenient way to add a footer to your [fastn](https://fastn.com/) web projects.
+
+
+- **Logo:** Your [fastn](https://fastn.com/) website logo is placed in the
+    top-left corner of the footer. Clicking on the logo leads back to the
+    homepage.
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `footer` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/footer
+
+-- cb.code: `-- fastn-footer`
+lang: ftd
+
+\-- import: fastn-community.github.io/footer
+
+\-- footer.fastn-footer:
+copyright: Copyright © 2023 - [FifthTry](https://www.fifthtry.com/)
+site-logo: https://fastn.com/-/fastn.com/images/fastn.svg
+powered-by-text: Powered by
+powered-by-link: https://fastn.com/
+
+
+-- site-doc.header: Example
+
+-- site-doc.output:
+colors: $ftd.default-colors
+types: $ftd.default-types
+
+-- footer.fastn-footer:
+copyright: Copyright © 2023 - [FifthTry](https://www.fifthtry.com/)
+site-logo: $footer.fastn-logo
+powered-by-text: Powered by
+powered-by-link: https://fastn.com/
+
+-- end: site-doc.output
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `fastn-footer`.
+
+-- site-doc.component-property: `copyright`
+type: String (`optional`)
+
+It's used show copyright information of your project.
+
+-- site-doc.component-property: `site-logo`
+type: ftd.image-src (`optional`)
+
+It's used to show your [fastn](https://fastn.com/) web site logo.
+
+-- site-doc.component-property: `powered-by-text`
+type: String (`optional`)
+
+It's used to show powered by text.
+
+-- site-doc.component-property: `powered-by-link`
+type: String (`optional`)
+
+It's used to add link to powered by logo.
+
+-- end: site-doc.component-doc
+
+-- end: site-doc.doc-home

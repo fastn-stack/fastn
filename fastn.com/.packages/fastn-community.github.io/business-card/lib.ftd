@@ -1,0 +1,79 @@
+-- import: fastn-stack.github.io/fastn-js/utils
+
+-- component display-card:
+ftd.ui list front:
+ftd.ui list back:
+boolean landscape: true
+private string card-id: some-card-id-for-download-purpose
+private boolean $open: false
+private boolean $mouse-in: false
+private boolean $on-hover: false
+private boolean $mouse-over: false
+
+-- ftd.row:
+width if { ftd.device == "mobile" }: fill-container
+spacing.fixed.px: 24
+
+-- ftd.column:
+width: fill-container
+id: $display-card.card-id
+
+-- ftd.column:
+if: { !display-card.open }
+width.fixed.px: 350
+width.fixed.px if { display-card.landscape }: 700
+height.fixed.px: 500
+height.fixed.px if { display-card.landscape }: 350
+
+-- display-card.front.0:
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { display-card.open }
+width.fixed.px: 350
+width.fixed.px if { display-card.landscape }: 700
+height.fixed.px: 500
+height.fixed.px if { display-card.landscape }: 350
+
+-- display-card.back.0:
+
+-- end: ftd.column
+
+-- ftd.image:
+src: $assets.files.assets.fastn-badge-white.svg
+width.fixed.px: 140
+link: https://fastn.com/
+align-self: center
+margin-top.px: 8
+open-in-new-tab: true
+
+-- end: ftd.column
+
+-- ftd.column:
+spacing.fixed.px: 12
+align-content: center
+
+-- ftd.image:
+src: $assets.files.assets.flip-icon-hover.svg
+src if { !display-card.mouse-in }: $assets.files.assets.flip-icon.svg
+width.fixed.px: 24
+height.fixed.px: 24
+$on-click$: $ftd.toggle($a = $display-card.open)
+$on-mouse-enter$: $ftd.set-bool($a = $display-card.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $display-card.mouse-in, v = false)
+
+-- ftd.image:
+src: $assets.files.assets.download.svg
+src if { display-card.mouse-over }: $assets.files.assets.download-hover.svg
+width.fixed.px: 30
+$on-click$: $utils.download-as-image(element_id = $display-card.card-id, filename = card.jpg)
+$on-mouse-enter$: $ftd.set-bool($a = $display-card.mouse-over, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $display-card.mouse-over, v = false)
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+
+-- end: display-card

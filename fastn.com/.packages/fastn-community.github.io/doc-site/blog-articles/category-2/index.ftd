@@ -1,0 +1,28 @@
+-- import: fastn-community.github.io/doc-site/assets
+-- import: fastn-community.github.io/doc-site as ds
+-- import: fastn-community.github.io/doc-site/blog-articles/category-2/sample-post-3
+-- import: fastn-community.github.io/doc-site/blog-articles/category-2/sample-post-4 
+
+
+
+
+
+-- ds.page: Category title - Technology & Learning
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+
+Write some information about this category here. Change the title according to
+the category of your blog.
+
+-- ds.posts:
+
+-- ds.featured-post:
+post-data: $sample-post-3.meta
+
+-- ds.without-image:
+post-data: $sample-post-4.meta
+
+-- end: ds.posts
+
+-- end: ds.page

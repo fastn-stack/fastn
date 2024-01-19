@@ -1,0 +1,80 @@
+-- import: fastn-community.github.io/doc-site/components
+-- import: fastn-community.github.io/doc-site/blog-authors/john-doe as author
+
+-- ds.page: compact-text
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+`ds.compact-text` is a component with title and body. You can also add child
+components(as seen in below example) to `ds.compact-text`
+
+-- ds.h2: Example:
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- ds.compact-text: Support `fastn`!
+
+\-- ds.compact-text.body:
+
+Enjoying `fastn`? Please consider giving us a star ⭐️ on
+[GitHub](https://github.com/fastn-stack/fastn) to show your support!
+
+Using `ds.compact-text.inner` property you can add any component inside it, 
+like below author-bio.
+
+\-- ds.compact-text.inner:
+
+\-- ds.author-bio: 
+author: $author.john-doe
+
+\-- end: ds.compact-text.inner
+
+\-- end: ds.compact-text
+
+-- ds.rendered.output:
+
+-- ds.compact-text: Support `fastn`!
+
+-- ds.compact-text.body:
+
+Enjoying `fastn`? Please consider giving us a star ⭐️ on
+[GitHub](https://github.com/fastn-stack/fastn) to show your support!
+
+Using `ds.compact-text.inner` property you can add any component inside it, like
+below author-bio.
+
+-- ds.compact-text.inner:
+
+-- ds.author-bio: 
+author: $author.john-doe
+
+-- end: ds.compact-text.inner
+
+-- end: ds.compact-text
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h3: Properties of `compact-text` component
+
+- **title** - `type: caption` It’s used to add title to compact-text component.
+- **body** - `type: body` It’s used to add body content to compact-text
+    component.
+- **inner** - `type: ftd.ui list` It’s used to add to child components  to
+    compact-text component.
+
+-- end: ds.page

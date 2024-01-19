@@ -1,0 +1,21 @@
+{
+    "files": {
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "C68321BE61168546EDC02E4B5ED6F33DCA4D3131351CAAF5F2E4B04EB9FCA946",
+            "size": 15801
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "86D7F14B0E0DF3AA8308FA3FEF7C133E14F4A4FCB2653065AC8967863D85E52E",
+            "size": 1098
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "319D3C21DB36B5245CCC84FA761AEA3D579CF920D6C40728EED71A337DC98B01",
+            "size": 128
+        }
+    },
+    "zip_url": "https://github.com/FifthTry/doc-site-typography/archive/c183b9cc59d2785c685a9ead13e0e101f45338d7.zip",
+    "checksum": "45BF4A421A422064594EB0C2D2E8E8774B158F06ACC9FD2C0A51B6499DAF3476"
+}

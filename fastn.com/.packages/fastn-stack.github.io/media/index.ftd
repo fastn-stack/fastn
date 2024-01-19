@@ -1,0 +1,14 @@
+-- ftd.column:
+padding-horizontal.px: 20
+padding-vertical.px: 40
+
+-- ftd.text: Welcome to FifthTry Media
+role: $inherited.types.heading-hero
+
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+
+This repository contains the media that is used for FifthTry purpose.
+
+-- end: ftd.column

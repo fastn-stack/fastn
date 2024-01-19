@@ -1,0 +1,14 @@
+-- import: fifthtry.github.io/doc-site/assets
+-- import: fifthtry.github.io/doc-site as ds
+
+-- ds.page: Image with Caption
+
+-- ds.image: This is the image with caption
+src: $assets.files.static.image-placeholder.png
+width.fixed.px: 500
+
+-- ds.image: This is the image with caption
+src: $assets.files.static.image-placeholder.png
+
+
+-- end: ds.page

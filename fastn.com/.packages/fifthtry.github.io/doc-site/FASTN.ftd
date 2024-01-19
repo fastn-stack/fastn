@@ -45,8 +45,8 @@ icon: -/fifthtry.github.io/doc-site/static/primary-favorites.svg
 - 404 `ds.not-found-1`: 404/
 icon: -/fifthtry.github.io/doc-site/static/primary-favorites.svg
 
-- 404 `ds.not-found-2`: 404/not-found-2/
-icon: -/fifthtry.github.io/doc-site/static/primary-favorites.svg
+;; - 404 `ds.not-found-2`: 404/not-found-2/
+;; icon: -/fifthtry.github.io/doc-site/static/primary-favorites.svg
 
 # Blog: /featured-posts/
 

@@ -1,0 +1,9 @@
+-- import: fastn
+
+-- fastn.package: fastn-community.github.io/pretty-ws
+
+-- fastn.dependency: fifthtry.github.io/ds-set1-typography
+-- fastn.dependency: fastn-community.github.io/winter-cs
+
+
+-- fastn.auto-import: fastn-community.github.io/pretty-ws/assets

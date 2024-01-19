@@ -60,7 +60,6 @@ lang: ftd
 
 
 
-
 -- component switcher:
 ftd.color bg-color: $inherited.colors.background.step-1
 ftd.color text-color: $inherited.colors.text-strong
@@ -124,7 +123,7 @@ optional ftd.color bg-color:
 optional ftd.color text-color:
 optional ftd.color bg-hover:
 ftd.color body-text-color:
-ftd.color shadow-color:
+ftd.color shadow-color: 
 
 -- ftd.row:
 width: fill-container
@@ -170,12 +169,8 @@ top.px if {switcher-desktop.on-left}: 25
 right.px if {!switcher-desktop.on-left}: -3
 top.px if {!switcher-desktop.on-left}: 40
 background.solid: $switcher-desktop.bg-hover
-;;shadow-offset-x: 0
-;;shadow-offset-y: 4
-;;shadow-size: 0
-;;shadow-blur: 4
-;;shadow-color: $switcher-desktop.shadow-color
-;; z-index: 999 -- TODO FTD 0.3
+shadow: $ps-shadow
+z-index: 999
 $on-mouse-enter$: $ftd.set-bool($a = $switcher-desktop.mouse-events, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $switcher-desktop.mouse-events, v = false)
 ;;$on-mouse-leave$: $var-current-product = $current-product
@@ -230,7 +225,7 @@ ftd.color body-text-color:
 
 -- ftd.row:
 width: fill-container
-;; z-index: 1 -- TODO FTD 0.3
+z-index: 1
 
 -- title-list:
 brand: $product-list.brand
@@ -308,7 +303,7 @@ ftd.color body-text-color:
 
 -- ftd.row:
 $on-mouse-enter$: $ftd.set-integer($a = $var-current-product, v = $title-image.index)
-background.solid: $title-image.bg-hover
+;;background.solid: $title-image.bg-hover
 width: fill-container
 
 -- ftd.row:
@@ -317,11 +312,13 @@ padding-vertical.px:16
 padding-horizontal.px:16
 padding-right.px: 24
 padding-bottom.px: 24
-background.solid: $title-image.bg-hover
+;;background.solid: $title-image.bg-hover
 background.solid if {var-current-product == title-image.index}: $title-image.bg-color
 color: $title-image.body-text-color
 color if {var-current-product == title-image.index}: $inherited.colors.text-strong
 link: $title-image.url
+border-top-left-radius.px: 8
+border-bottom-left-radius.px: 8
 
 -- ftd.image:
 src: $title-image.logo
@@ -365,8 +362,7 @@ optional string button-text:
 -- ftd.column:
 width: fill-container
 min-height.fixed.px: 288
-border-top-right-radius.px: 8
-border-top-left-radius.px: 8
+border-radius.px: 8
 if:{var-current-product == copy-list.index}
 background.solid: $copy-list.bg-color
 link: $copy-list.url
@@ -707,3 +703,10 @@ value = v
 
 
 
+-- ftd.shadow ps-shadow:
+color: #a9a7a5ba
+x-offset.px: -2
+y-offset.px: 8
+blur.px: 10
+inset-body: false
+spread.px: 0

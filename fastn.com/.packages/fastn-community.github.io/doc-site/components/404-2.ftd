@@ -1,0 +1,64 @@
+-- import: fastn-community.github.io/doc-site/components
+
+-- ds.page: not-found-2
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+`ds.not-found-2` represents to a error page, also known as a "500 Internal
+Server Error," is an HTTP status code that indicates a server-side error
+occurred while processing a request. When you encounter a 500 error page, it
+means that something went wrong on the web server, and it was unable to fulfill
+the request from the client (typically a web browser).
+
+-- ds.h2: Example:
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- ds.not-found-2: Internal server error
+type: 500
+cta-text: Back to home
+cta-link: components/404-2/
+
+Uh oh, Panda can’t seem to find the page you’re looking for.
+
+
+-- ds.rendered.output:
+
+-- ds.not-found-2: Internal server error
+type: 500
+cta-text: Back to home
+cta-link: components/404-2/
+
+Uh oh, Panda can’t seem to find the page you’re looking for.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h3: Properties of `not-found-2` component
+
+- **title** - `type: caption` It’s used to add title to `not-found-2`
+    component.
+- **type** - `type: string` It’s used to add error type to `not-found-2`
+    component.
+- **cta-text** - `type: string` It’s used to add back button text to
+    `not-found-2` component.
+- **cta-text** - `type: string` It’s used to add back button link url to
+    `not-found-2` component.
+- **body** - `type: body` It’s used to add body content to `not-found-2`
+    component.
+
+-- end: ds.page

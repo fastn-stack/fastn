@@ -1,0 +1,74 @@
+-- import: fastn-community.github.io/bling/assets
+-- import: fastn-community.github.io/bling/chat
+-- import: fastn-community.github.io/bling/tip
+-- import: fastn-community.github.io/bling/quote
+-- import: fastn-community.github.io/bling/modal-cover
+
+
+
+-- boolean $show-modal: false
+
+
+
+
+-- site-doc.doc-home: Bling
+license-url: https://github.com/fastn-community/bling/blob/main/LICENSE
+current-package: fastn-community.github.io/bling
+show-tabs: false
+site-title: Bling
+github-url: https://github.com/fastn-community/bling
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- ftd.column:
+width.fixed.px if { ftd.device != "mobile" }: 380
+width: fill-container
+padding.px if { ftd.device != "mobile" }: 24
+padding.px if { ftd.device == "mobile" }: 16
+border-radius.px: 10
+background.solid: $inherited.colors.background.base
+
+-- chat.message-left: Hey Buddy! liking [fastn](https://fastn.com/)? 🙂
+
+-- chat.message-right: Hi! [fastn](https://fastn.com/) is awesome! 👍🏻
+
+-- end: ftd.column
+
+-- tip.tip: [fastn's](https://fastn.com/) hot tip!
+
+`If you can type you can code` - [fastn](https://fastn.com/)
+
+-- quote.scorpion: Abraham Lincoln
+label: U.S.A.
+
+"In the end, it's not the years in your life that count. It's the life in your
+ years."
+
+-- quote.echo: Swami Vivekananda
+
+"Take up one idea. Make that one idea your life; dream of it; think of it; live
+ on that idea. Let the brain, the body, muscles, nerves, every part of your
+ body be full of that idea, and just leave every other idea alone. This is the
+ way to success, and this is the way great spiritual giants are produced."
+
+-- end: site-doc.output
+
+-- site-doc.header: What is a bling component
+
+Bling components refer to a collection of visually appealing and interactive
+elements designed to enhance the presentation and engagement of web pages.
+These components are designed to captivate and add sparkle to content pages
+such as blog posts, news articles, and more.
+
+-- site-doc.header: How to use bling
+
+To use bling components on your [fastn](https://fastn.com/) web project, add below into `FASTN.ftd`
+file:
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/bling
+
+-- end: site-doc.doc-home
