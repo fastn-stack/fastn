@@ -177,10 +177,8 @@ pub async fn serve(
         return default_response;
     }
 
-    if let Some(static_response) =
-        handle_static_route(req.path(), config.package.name.as_str(), &config.ds).await
-    {
-        return static_response;
+    if fastn_core::utils::is_static_path(req.path()) {
+        return handle_static_route(req.path(), config.package.name.as_str(), &config.ds).await;
     }
 
     serve_helper(config, req, only_js).await
@@ -435,26 +433,20 @@ async fn handle_static_route(
     path: &str,
     package_name: &str,
     ds: &fastn_ds::DocumentStore,
-) -> Option<fastn_core::Result<fastn_core::http::Response>> {
-    return Some(match handle_static_route_(path, package_name, ds).await? {
+) -> fastn_core::Result<fastn_core::http::Response> {
+    return match handle_static_route_(path, package_name, ds).await {
         Ok(r) => Ok(r),
-        Err(fastn_ds::ReadError::NotFound) => {
-            Ok(fastn_core::http::not_found_without_warning("".to_string()))
-        }
+        Err(fastn_ds::ReadError::NotFound) => handle_not_found_image(path, package_name, ds).await,
         Err(e) => Err(e.into()),
-    });
+    };
 
     async fn handle_static_route_(
         path: &str,
         package_name: &str,
         ds: &fastn_ds::DocumentStore,
-    ) -> Option<Result<fastn_core::http::Response, fastn_ds::ReadError>> {
+    ) -> Result<fastn_core::http::Response, fastn_ds::ReadError> {
         if path == "/favicon.ico" {
-            return Some(favicon(ds).await);
-        }
-
-        if !fastn_core::utils::is_static_path(path) {
-            return None;
+            return favicon(ds).await;
         }
 
         // the path can start with slash or -/. If later, it is a static file from our dependencies, so
@@ -467,11 +459,48 @@ async fn handle_static_route(
             None => path.to_string(),
         };
 
-        Some(
-            static_file(ds, path.strip_prefix('/').unwrap_or(path.as_str()))
+        static_file(ds, path.strip_prefix('/').unwrap_or(path.as_str()))
+            .await
+            .map_err(Into::into)
+    }
+
+    async fn handle_not_found_image(
+        path: &str,
+        package_name: &str,
+        ds: &fastn_ds::DocumentStore,
+    ) -> fastn_core::Result<fastn_core::http::Response> {
+        // todo: handle dark images using manifest
+        if let Some(new_file_path) = generate_dark_image_path(path) {
+            return handle_static_route_(new_file_path.as_str(), package_name, ds)
                 .await
-                .map_err(Into::into),
-        )
+                .or_else(|e| {
+                    if let fastn_ds::ReadError::NotFound = e {
+                        Ok(fastn_core::http::not_found_without_warning("".to_string()))
+                    } else {
+                        Err(e.into())
+                    }
+                });
+        }
+
+        Ok(fastn_core::http::not_found_without_warning("".to_string()))
+    }
+
+    fn generate_dark_image_path(path: &str) -> Option<String> {
+        match path.rsplit_once('.') {
+            Some((remaining, ext))
+                if mime_guess::MimeGuess::from_ext(ext)
+                    .first_or_octet_stream()
+                    .to_string()
+                    .starts_with("image/") =>
+            {
+                Some(if remaining.ends_with("-dark") {
+                    format!("{}.{}", remaining.trim_end_matches("-dark"), ext)
+                } else {
+                    format!("{}-dark.{}", remaining, ext)
+                })
+            }
+            _ => None,
+        }
     }
 
     async fn favicon(

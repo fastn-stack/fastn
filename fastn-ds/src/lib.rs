@@ -85,9 +85,19 @@ pub enum RenameError {
 #[derive(thiserror::Error, Debug)]
 pub enum ReadError {
     #[error("io error {0}")]
-    IOError(#[from] std::io::Error),
+    IOError(std::io::Error),
     #[error("not found")]
     NotFound,
+}
+
+impl From<std::io::Error> for ReadError {
+    fn from(err: std::io::Error) -> Self {
+        if err.kind() == std::io::ErrorKind::NotFound {
+            ReadError::NotFound
+        } else {
+            ReadError::IOError(err)
+        }
+    }
 }
 
 #[derive(thiserror::Error, Debug)]
