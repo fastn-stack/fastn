@@ -1027,7 +1027,7 @@ skip: true
 - Rive Video: /planning/rive/
 - Developer Course: /planning/developer-course/
 
--- fastn.redirects:
+--  fastn.url-mappings:
 
 /ftd/kernel/ -> /kernel/
 /ftd/list/ -> /list/
