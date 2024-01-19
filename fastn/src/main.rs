@@ -112,6 +112,8 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_inline_css(inline_css)
             .set_test_command_running();
 
+        fastn_update::update(&config).await?;
+
         return fastn_core::test(
             &config,
             test.value_of_("file"), // TODO: handle more than one files
