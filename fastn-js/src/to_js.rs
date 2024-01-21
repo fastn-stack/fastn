@@ -289,11 +289,6 @@ impl fastn_js::InstantiateComponent {
             pretty::RcDoc::nil()
         })
         .append(text(");"))
-        .append(if self.should_return {
-            text(format!("return {};", self.var_name).as_str())
-        } else {
-            pretty::RcDoc::nil()
-        })
     }
 }
 
