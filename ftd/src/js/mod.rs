@@ -548,7 +548,6 @@ impl ftd::interpreter::Component {
                 arguments,
                 parent,
                 rdata.inherited_variable_name,
-                should_return,
                 index,
                 false,
             );
@@ -566,6 +565,12 @@ impl ftd::interpreter::Component {
                         fastn_js::ComponentStatement::AddEventHandler(event_handler)
                     })
             }));
+
+            if should_return {
+                component_statements.push(fastn_js::ComponentStatement::Return {
+                    component_name: instantiate_component_var_name.to_string(),
+                });
+            }
 
             Some(component_statements)
         } else {
@@ -631,7 +636,6 @@ impl ftd::interpreter::Component {
             arguments,
             parent,
             rdata.inherited_variable_name,
-            should_return,
             index,
             true,
         );
@@ -648,6 +652,12 @@ impl ftd::interpreter::Component {
                 .to_event_handler_js(&instantiate_component_var_name, doc, rdata)
                 .map(fastn_js::ComponentStatement::AddEventHandler)
         }));
+
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: instantiate_component_var_name.to_string(),
+            });
+        }
 
         Some(component_statements)
     }
@@ -685,7 +695,6 @@ impl ftd::interpreter::Component {
             vec![],
             parent,
             rdata.inherited_variable_name,
-            should_return,
             index,
             true,
         );
@@ -702,6 +711,12 @@ impl ftd::interpreter::Component {
                 .to_event_handler_js(&instantiate_component_var_name, doc, rdata)
                 .map(fastn_js::ComponentStatement::AddEventHandler)
         }));
+
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: instantiate_component_var_name.to_string(),
+            });
+        }
 
         Some(component_statements)
     }

@@ -1,0 +1,21 @@
+-- boolean $flag: true
+
+-- foo:
+
+-- component foo:
+
+-- bar:
+$on-click$: $ftd.toggle($a = $flag)
+
+-- end: foo
+
+
+
+
+-- component bar:
+
+-- ftd.text: Bar says hello
+color: red
+color if { flag }: green
+
+-- end: bar

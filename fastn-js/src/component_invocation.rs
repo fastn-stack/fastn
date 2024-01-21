@@ -47,7 +47,6 @@ pub struct InstantiateComponent {
     pub arguments: Vec<(String, fastn_js::SetPropertyValue, bool)>,
     pub parent: String,
     pub inherited: String,
-    pub should_return: bool,
     pub var_name: String,
     pub already_formatted: bool,
 }
@@ -69,7 +68,6 @@ impl InstantiateComponent {
         arguments: Vec<(String, fastn_js::SetPropertyValue, bool)>,
         parent: &str,
         inherited: &str,
-        should_return: bool,
         index: usize,
         already_formatted: bool,
     ) -> InstantiateComponent {
@@ -78,7 +76,6 @@ impl InstantiateComponent {
             arguments,
             parent: parent.to_string(),
             inherited: inherited.to_string(),
-            should_return,
             var_name: component_declaration_variable_name(parent, index),
             already_formatted,
         }
@@ -89,7 +86,6 @@ impl InstantiateComponent {
         arguments: Vec<(String, fastn_js::SetPropertyValue, bool)>,
         parent: &str,
         inherited: &str,
-        should_return: bool,
         index: usize,
         already_formatted: bool,
     ) -> InstantiateComponent {
@@ -98,7 +94,6 @@ impl InstantiateComponent {
             arguments,
             parent: parent.to_string(),
             inherited: inherited.to_string(),
-            should_return,
             var_name: component_declaration_variable_name(parent, index),
             already_formatted,
         }
