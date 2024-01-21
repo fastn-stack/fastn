@@ -1,4 +1,5 @@
 pub fn process(
+    variable_name: String,
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
@@ -6,7 +7,7 @@ pub fn process(
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let mut data = req_config.request.query().clone();
 
-    for (name, param_value) in req_config.named_parameters.iter() {
+    for (name, param_value) in dbg!(&req_config.named_parameters).iter() {
         let json_value =
             param_value
                 .to_serde_value()
@@ -28,7 +29,7 @@ pub fn process(
                 format!("Error while parsing request body: {e:?}"),
                 doc.name,
                 value.line_number(),
-            )
+            );
         }
     }
 
@@ -39,5 +40,8 @@ pub fn process(
             .map(|(k, v)| (k.to_string(), serde_json::Value::String(v.to_string()))),
     );
 
+    if let Some(data) = data.get(variable_name.as_str()) {
+        return doc.from_json(data, &kind, &value);
+    }
     doc.from_json(&data, &kind, &value)
 }

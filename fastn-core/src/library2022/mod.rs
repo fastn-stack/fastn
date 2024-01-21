@@ -225,7 +225,7 @@ impl Library2022 {
             processor = processor
         );
         let line_number = ast.line_number();
-        let (_processor, value, kind) = get_processor_data(ast, doc)?;
+        let (_processor, variable_name, value, kind) = get_processor_data(ast, doc)?;
         match processor.as_str() {
             "figma-typo-token" => {
                 processor::figma_typography_tokens::process_typography_tokens(value, kind, doc)
@@ -241,7 +241,9 @@ impl Library2022 {
             "get-data" => processor::get_data::process(value, kind, doc, self),
             "sitemap" => processor::sitemap::process(value, kind, doc, self),
             "full-sitemap" => processor::sitemap::full_sitemap_process(value, kind, doc, self),
-            "request-data" => processor::request_data::process(value, kind, doc, self),
+            "request-data" => {
+                processor::request_data::process(variable_name, value, kind, doc, self)
+            }
             "document-readers" => processor::document::process_readers(
                 value,
                 kind,
@@ -284,7 +286,12 @@ impl Library2022 {
 fn get_processor_data(
     ast: ftd::ast::AST,
     doc: &mut ftd::interpreter::TDoc,
-) -> ftd::interpreter::Result<(String, ftd::ast::VariableValue, ftd::interpreter::Kind)> {
+) -> ftd::interpreter::Result<(
+    String,
+    String,
+    ftd::ast::VariableValue,
+    ftd::interpreter::Kind,
+)> {
     let line_number = ast.line_number();
     let ast_name = ast.name();
     if let Ok(variable_definition) = ast.clone().get_variable_definition(doc.name) {
@@ -311,7 +318,12 @@ fn get_processor_data(
                     doc_id: doc.name.to_string(),
                     line_number,
                 })?;
-        Ok((processor, variable_definition.value, kind.kind))
+        Ok((
+            processor,
+            variable_definition.name.to_string(),
+            variable_definition.value,
+            kind.kind,
+        ))
     } else {
         let variable_invocation = ast.get_variable_invocation(doc.name)?;
         let kind = doc
@@ -328,6 +340,11 @@ fn get_processor_data(
                     doc_id: doc.name.to_string(),
                     line_number,
                 })?;
-        Ok((processor, variable_invocation.value, kind.kind))
+        Ok((
+            processor,
+            variable_invocation.name.to_string(),
+            variable_invocation.value,
+            kind.kind,
+        ))
     }
 }
