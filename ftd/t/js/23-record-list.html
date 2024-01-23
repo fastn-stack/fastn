@@ -66,8 +66,8 @@ let foo__show_person = function (parent, inherited, args)
       rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
         let record = fastn.recordInstance({
         });
-        record.set("dark", "green");
         record.set("light", "green");
+        record.set("dark", "green");
         return record;
       }(), inherited);
     },
@@ -77,8 +77,8 @@ let foo__show_person = function (parent, inherited, args)
       rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
         let record = fastn.recordInstance({
         });
-        record.set("dark", "blue");
         record.set("light", "blue");
+        record.set("dark", "blue");
         return record;
       }(), inherited);
     }
@@ -119,15 +119,15 @@ global["foo__show_persons"] = foo__show_persons;
 fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([function () {
   let record = fastn.recordInstance({
   });
-  record.set("emp_id", 1);
   record.set("name", "Ritesh");
+  record.set("emp_id", 1);
   return record;
 }(),
 function () {
   let record = fastn.recordInstance({
   });
-  record.set("emp_id", 2);
   record.set("name", "Ajinosaurus");
+  record.set("emp_id", 2);
   return record;
 }()]));
 let foo__get_first_person = function (args)

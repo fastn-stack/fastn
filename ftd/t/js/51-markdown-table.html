@@ -63,8 +63,8 @@
     parenti0.setProperty(fastn_dom.PropertyKind.Color, function () {
       let record = fastn.recordInstance({
       });
-      record.set("dark", "blue");
       record.set("light", "blue");
+      record.set("dark", "blue");
       return record;
     }(), inherited);
     let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
@@ -81,16 +81,16 @@
           return function () {
             let record = fastn.recordInstance({
             });
-            record.set("dark", "green");
             record.set("light", "green");
+            record.set("dark", "green");
             return record;
           }();
         } else {
           return function () {
             let record = fastn.recordInstance({
             });
-            record.set("dark", "red");
             record.set("light", "red");
+            record.set("dark", "red");
             return record;
           }();
         }

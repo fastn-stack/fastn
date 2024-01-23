@@ -369,7 +369,6 @@ impl Component {
             doc,
             ast_component.line_number,
         )?);
-
         if let Some((_name, arguments)) = definition_name_with_arguments {
             Self::assert_no_private_properties_while_invocation(&properties, arguments)?;
         } else if let ftd::interpreter::Thing::Component(c) =
