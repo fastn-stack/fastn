@@ -1,0 +1,21 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "3F0FE32A85BE3B42CD68A30475F7FDA3BFA93D62739D3EAECCEDCDD857DA0CC9",
+      "size": 140
+    },
+    "guide/install.ftd": {
+      "name": "guide/install.ftd",
+      "checksum": "93C1E95557B77616E22534963339C92295CF8CF9A8715620B820AD19E8B92673",
+      "size": 83
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "6D183832C5C811EA68F50D8C9D8E9B66D6B36937F5C2905A58F29E2D55C7B957",
+      "size": 25
+    }
+  },
+  "zip_url": "https://codeload.github.com/fastn-stack/guide/zip/refs/heads/main",
+  "checksum": "18FA253E1AD811D7616F5DFBD88F5B8F8BEDC1EB37F82A8854D51F0CBD985EE0"
+}

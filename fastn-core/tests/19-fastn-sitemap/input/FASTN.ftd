@@ -1,0 +1,8 @@
+-- import: fastn
+
+-- fastn.package: fastn-stack.github.io/guide
+
+-- fastn.sitemap:
+
+# Installation: /install/
+  document: guide/install.ftd
