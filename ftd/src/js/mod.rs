@@ -110,6 +110,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
             continue;
         }
         if let ftd::interpreter::Thing::Component(c) = thing {
+            dbg!(&c.arguments);
             document_asts.push(c.to_ast(&doc, &mut has_rive_components));
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
             document_asts.push(v.to_ast(
@@ -229,7 +230,14 @@ impl ftd::interpreter::Variable {
                     if let Some(value) = record_fields.get(field.name.as_str()) {
                         fields.push((
                             field.name.to_string(),
-                            value.to_fastn_js_value_with_none(doc, has_rive_components),
+                            value.to_fastn_js_value_with_ui(
+                                doc,
+                                &ftd::js::ResolverData::new_with_record_definition_name(&Some(
+                                    name.to_string(),
+                                )),
+                                has_rive_components,
+                                false,
+                            ),
                         ));
                     } else {
                         fields.push((
@@ -237,7 +245,14 @@ impl ftd::interpreter::Variable {
                             field
                                 .get_default_value()
                                 .unwrap()
-                                .to_set_property_value_with_none(doc, has_rive_components),
+                                .to_set_property_value_with_ui(
+                                    doc,
+                                    &ftd::js::ResolverData::new_with_record_definition_name(&Some(
+                                        name.to_string(),
+                                    )),
+                                    has_rive_components,
+                                    false,
+                                ),
                         ));
                     }
                 }

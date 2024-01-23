@@ -1,6 +1,7 @@
 #[derive(Debug, Clone)]
 pub struct ResolverData<'a> {
     pub component_definition_name: &'a Option<String>,
+    pub record_definition_name: &'a Option<String>,
     pub component_name: Option<String>,
     pub loop_alias: &'a Option<String>,
     pub loop_counter_alias: &'a Option<String>,
@@ -13,6 +14,7 @@ impl<'a> ResolverData<'a> {
     pub(crate) fn none() -> ResolverData<'a> {
         ResolverData {
             component_definition_name: &None,
+            record_definition_name: &None,
             component_name: None,
             loop_alias: &None,
             loop_counter_alias: &None,
@@ -30,9 +32,18 @@ impl<'a> ResolverData<'a> {
         rdata
     }
 
+    pub(crate) fn new_with_record_definition_name(
+        record_definition_name: &'a Option<String>,
+    ) -> ResolverData<'a> {
+        let mut rdata = ResolverData::none();
+        rdata.record_definition_name = record_definition_name;
+        rdata
+    }
+
     pub(crate) fn clone_with_default_inherited_variable(&self) -> ResolverData<'a> {
         ResolverData {
             component_definition_name: self.component_definition_name,
+            record_definition_name: self.record_definition_name,
             component_name: self.component_name.clone(),
             loop_alias: self.loop_alias,
             loop_counter_alias: self.loop_counter_alias,
@@ -48,6 +59,7 @@ impl<'a> ResolverData<'a> {
     ) -> ResolverData<'a> {
         ResolverData {
             component_definition_name: self.component_definition_name,
+            record_definition_name: self.record_definition_name,
             component_name: self.component_name.clone(),
             loop_alias: self.loop_alias,
             loop_counter_alias: self.loop_counter_alias,
@@ -63,6 +75,7 @@ impl<'a> ResolverData<'a> {
     ) -> ResolverData<'a> {
         ResolverData {
             component_definition_name: self.component_definition_name,
+            record_definition_name: self.record_definition_name,
             component_name,
             loop_alias: self.loop_alias,
             loop_counter_alias: self.loop_counter_alias,
@@ -78,6 +91,7 @@ impl<'a> ResolverData<'a> {
     ) -> ResolverData<'a> {
         ResolverData {
             component_definition_name: self.component_definition_name,
+            record_definition_name: self.record_definition_name,
             component_name: self.component_name.clone(),
             loop_alias: self.loop_alias,
             loop_counter_alias: self.loop_counter_alias,
@@ -95,6 +109,7 @@ impl<'a> ResolverData<'a> {
     ) -> ResolverData<'a> {
         ResolverData {
             component_definition_name: self.component_definition_name,
+            record_definition_name: self.record_definition_name,
             component_name: self.component_name.clone(),
             loop_alias,
             loop_counter_alias,
