@@ -179,11 +179,11 @@ impl OrTypeVariant {
         match self {
             OrTypeVariant::AnonymousRecord(r) => Ok(ftd::interpreter::Thing::Record(r.clone())),
             OrTypeVariant::Constant(_) | OrTypeVariant::Regular(_) => {
-                return Err(ftd::interpreter::Error::ParseError {
+                Err(ftd::interpreter::Error::ParseError {
                     message: format!("Can't convert the or-type-variant to thing `{self:?}`"),
                     doc_id: doc_name.to_string(),
                     line_number,
-                });
+                })
             }
         }
     }
