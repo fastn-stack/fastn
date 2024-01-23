@@ -2,47 +2,55 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
 
-    naersk.url = "github:nix-community/naersk";
-
-    rust-overlay.url = "github:oxalica/rust-overlay";
-
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:junjihashimoto/nixpkgs/feature/rust-dup";
   };
 
-  outputs = { self, flake-utils, nixpkgs, rust-overlay, naersk }:
+  outputs = { self, flake-utils, nixpkgs }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = (import nixpkgs) {
           inherit system;
 
           overlays = [
-            (import rust-overlay)
+            (final: prev: {
+              postgresql-static = (prev.postgresql.overrideAttrs (old: { dontDisableStatic = true; })).override {
+                # We need libpq, which does not need systemd,
+                # and systemd doesn't currently build with musl.
+                enableSystemd = false;
+              };
+            })
           ];
         };
 
-        toolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain;
-
-        naersk' = pkgs.callPackage naersk {
-          cargo = toolchain;
-          rustc = toolchain;
-        };
-
-        cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
-
-        fastn = naersk'.buildPackage {
+        fastn = pkgs.pkgsStatic.rustPlatform.buildRustPackage {
           name = "fastn";
-          version = cargoToml.workspace.package.version;
+          version = "0.4.47";
           src = pkgs.lib.cleanSource ./.;
+          doCheck = false;
 
-          nativeBuildInputs = with pkgs; [
-            pkg-config
-            openssl.dev
-          ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+          nativeBuildInputs = [ pkgs.pkgsStatic.pkg-config pkgs.postgresql-static ];
 
-          buildInputs = with pkgs; lib.optionals stdenv.isDarwin [
-            darwin.apple_sdk.frameworks.SystemConfiguration
-          ];
+          PKG_CONFIG_PATH = "${pkgs.pkgsStatic.openssl.dev}/lib/pkgconfig";
+
+          buildFeatures = [ "auth" ];
+
+          cargoLock = {
+            lockFile = ./Cargo.lock;
+            allowBuiltinFetchGit = true;
+          };
         };
+
+        # my-bin = pkgs.pkgsCross.mingwW64.rustPlatform.buildRustPackage {
+        #   name = "fastn";
+        #   version = "0.4.42";
+        #   src = pkgs.lib.cleanSource ./.;
+        #   cargoLock = {
+        #     lockFile = ./Cargo.lock;
+        #     allowBuiltinFetchGit = true;
+        #   };
+
+        #   target = "x86_64-pc-windows-gnu";
+        # };
       in
       rec {
         # For `nix build` & `nix run`:
@@ -55,7 +63,7 @@
         # nix develop
         devShell = pkgs.mkShell {
           name = "fastn-shell";
-          nativeBuildInputs = with pkgs; [ toolchain pkg-config openssl.dev postgresql_14 rust-analyzer ];
+          nativeBuildInputs = with pkgs; [ pkg-config openssl.dev postgresql_14 rust-analyzer ];
 
           shellHook = ''
             export PATH="$PATH:$HOME/.cargo/bin"
