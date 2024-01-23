@@ -60,7 +60,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::create_package(name, path, download_base_url).await;
     }
 
-    let mut config = fastn_core::Config::read_current(false).await?;
+    let mut config = fastn_core::Config::read_current(true).await?;
 
     if let Some(serve) = matches.subcommand_matches("serve") {
         let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
