@@ -1,0 +1,24 @@
+-- record name-data:
+caption name:
+string full-name: $name-data.name
+
+
+-- name-data arpita: Arpita
+
+-- display-name: $arpita
+
+-- component display-name:
+caption name-data name:
+name-data clone-name: $display-name.name
+
+-- ftd.column:
+
+-- ftd.text: $display-name.name.name
+color: green
+
+-- ftd.text: $display-name.name.full-name
+color: red
+
+-- end: ftd.column
+
+-- end: display-name

@@ -10,7 +10,9 @@ pub fn is_kernel(s: &str) -> bool {
 }
 
 pub fn reference_to_js(s: &str) -> String {
+    dbg!("reference_to_js", &s);
     let (prefix, s) = get_prefix(s);
+    dbg!("prefix", &prefix, &s);
 
     let (mut p1, mut p2) = get_doc_name_and_remaining(s.as_str());
     p1 = fastn_js::utils::name_to_js_(p1.as_str());

@@ -128,6 +128,12 @@ pub(crate) fn update_reference(reference: &str, rdata: &ftd::js::ResolverData) -
         }
     }
 
+    if let Some(record_definition_name) = rdata.record_definition_name {
+        if let Some(alias) = name.strip_prefix(format!("{record_definition_name}.").as_str()) {
+            return format!("{}.{alias}", fastn_js::LOCAL_RECORD_MAP);
+        }
+    }
+
     if let Some(loop_alias) = rdata.loop_alias {
         if let Some(alias) = name.strip_prefix(format!("{loop_alias}.").as_str()) {
             return format!("item.{alias}");
