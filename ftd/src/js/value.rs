@@ -430,17 +430,44 @@ impl ftd::interpreter::Value {
                         .collect_vec(),
                 })
             }
-            ftd::interpreter::Value::Record { fields, .. } => {
+            ftd::interpreter::Value::Record {
+                fields: record_fields,
+                name,
+            } => {
+                let record = doc.get_record(name, 0).unwrap();
+                let mut fields = vec![];
+                for field in record.fields {
+                    if let Some(value) = record_fields.get(field.name.as_str()) {
+                        fields.push((
+                            field.name.to_string(),
+                            value.to_fastn_js_value_with_ui(
+                                doc,
+                                &ftd::js::ResolverData::new_with_record_definition_name(&Some(
+                                    name.to_string(),
+                                )),
+                                has_rive_components,
+                                false,
+                            ),
+                        ));
+                    } else {
+                        fields.push((
+                            field.name.to_string(),
+                            field
+                                .get_default_value()
+                                .unwrap()
+                                .to_set_property_value_with_ui(
+                                    doc,
+                                    &ftd::js::ResolverData::new_with_record_definition_name(&Some(
+                                        name.to_string(),
+                                    )),
+                                    has_rive_components,
+                                    false,
+                                ),
+                        ));
+                    }
+                }
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
-                    fields: fields
-                        .iter()
-                        .map(|(k, v)| {
-                            (
-                                k.to_string(),
-                                v.to_fastn_js_value(doc, rdata, should_return),
-                            )
-                        })
-                        .collect_vec(),
+                    fields,
                     other_references: vec![],
                 })
             }

@@ -219,48 +219,15 @@ impl ftd::interpreter::Variable {
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast {
         if let Ok(value) = self.value.value(doc.name, self.value.line_number()) {
-            if let ftd::interpreter::Kind::Record { name } = &self.kind.kind {
-                let record = doc.get_record(name, self.line_number).unwrap();
-                let record_fields = value
-                    .record_fields(doc.name, self.value.line_number())
-                    .unwrap();
-                let mut fields = vec![];
-                for field in record.fields {
-                    if let Some(value) = record_fields.get(field.name.as_str()) {
-                        fields.push((
-                            field.name.to_string(),
-                            value.to_fastn_js_value_with_ui(
-                                doc,
-                                &ftd::js::ResolverData::new_with_record_definition_name(&Some(
-                                    name.to_string(),
-                                )),
-                                has_rive_components,
-                                false,
-                            ),
-                        ));
-                    } else {
-                        fields.push((
-                            field.name.to_string(),
-                            field
-                                .get_default_value()
-                                .unwrap()
-                                .to_set_property_value_with_ui(
-                                    doc,
-                                    &ftd::js::ResolverData::new_with_record_definition_name(&Some(
-                                        name.to_string(),
-                                    )),
-                                    has_rive_components,
-                                    false,
-                                ),
-                        ));
-                    }
-                }
+            if self.kind.is_record() {
                 return fastn_js::Ast::RecordInstance(fastn_js::RecordInstance {
                     name: self.name.to_string(),
-                    fields: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
-                        fields,
-                        other_references: vec![],
-                    }),
+                    fields: value.to_fastn_js_value(
+                        doc,
+                        &ftd::js::ResolverData::none(),
+                        has_rive_components,
+                        false,
+                    ),
                     prefix,
                 });
             } else if self.kind.is_list() {
