@@ -64,10 +64,13 @@
     let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
     parenti2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
     parenti2.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)), inherited);
-    let __$$inherited$$__parenti2 = fastn.recordInstance({
-      ...inherited.getAllFields(),
-      colors: global.foo__colors
-    });
+    let __$$inherited$$__parenti2 = function () {
+      let record = fastn.recordInstance({
+        ...inherited.getAllFields(),
+      });
+      record.set("colors", global.foo__colors);
+      return record;
+    }();
     parenti2.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
       rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
@@ -107,401 +110,653 @@ let foo__foo = function (parent, inherited, args) {
   }
 }
 global["foo__foo"] = foo__foo;
-fastn_utils.createNestedObject(global, "foo__base_", fastn.recordInstance({
-  light: "#FFFFFF",
-  dark: "#000000"
-}));
-fastn_utils.createNestedObject(global, "foo__step_1_", fastn.recordInstance({
-  light: "#FDFAF1",
-  dark: "#111111"
-}));
-fastn_utils.createNestedObject(global, "foo__step_2_", fastn.recordInstance({
-  light: "#fbf3dc",
-  dark: "#2b2b2b"
-}));
-fastn_utils.createNestedObject(global, "foo__overlay_", fastn.recordInstance({
-  light: "#000000",
-  dark: "#000000"
-}));
-fastn_utils.createNestedObject(global, "foo__code_", fastn.recordInstance({
-  light: "#f5f5f5",
-  dark: "#21222c"
-}));
-fastn_utils.createNestedObject(global, "foo__background_", fastn.recordInstance({
-  base: global.foo__base_,
-  step_1: global.foo__step_1_,
-  step_2: global.foo__step_2_,
-  overlay: global.foo__overlay_,
-  code: global.foo__code_
-}));
-fastn_utils.createNestedObject(global, "foo__border_", fastn.recordInstance({
-  light: "#f0ece2",
-  dark: "#434547"
-}));
-fastn_utils.createNestedObject(global, "foo__border_strong_", fastn.recordInstance({
-  light: "#D9D9D9",
-  dark: "#333333"
-}));
-fastn_utils.createNestedObject(global, "foo__text_", fastn.recordInstance({
-  light: "#707070",
-  dark: "#D9D9D9"
-}));
-fastn_utils.createNestedObject(global, "foo__text_strong_", fastn.recordInstance({
-  light: "#333333",
-  dark: "#FFFFFF"
-}));
-fastn_utils.createNestedObject(global, "foo__shadow_", fastn.recordInstance({
-  light: "#EF8435",
-  dark: "#EF8435"
-}));
-fastn_utils.createNestedObject(global, "foo__scrim_", fastn.recordInstance({
-  light: "#393939",
-  dark: "#393939"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_primary_base_", fastn.recordInstance({
-  light: "#EF8435",
-  dark: "#EF8435"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_primary_hover_", fastn.recordInstance({
-  light: "#D77730",
-  dark: "#D77730"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_primary_pressed_", fastn.recordInstance({
-  light: "#BF6A2A",
-  dark: "#BF6A2A"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_primary_disabled_", fastn.recordInstance({
-  light: "#FAD9C0",
-  dark: "#FAD9C0"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_primary_focused_", fastn.recordInstance({
-  light: "#B36328",
-  dark: "#B36328"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_primary_border_", fastn.recordInstance({
-  light: "#F3A063",
-  dark: "#F3A063"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_primary_text_", fastn.recordInstance({
-  light: "#512403",
-  dark: "#512403"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_primary_text_disabled_", fastn.recordInstance({
-  light: "#f2a164",
-  dark: "#f2a164"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_primary_border_disabled_", fastn.recordInstance({
-  light: "#fad9c0",
-  dark: "#fad9c0"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_primary_", fastn.recordInstance({
-  base: global.foo__cta_primary_base_,
-  hover: global.foo__cta_primary_hover_,
-  pressed: global.foo__cta_primary_pressed_,
-  disabled: global.foo__cta_primary_disabled_,
-  focused: global.foo__cta_primary_focused_,
-  border: global.foo__cta_primary_border_,
-  border_disabled: global.foo__cta_primary_border_disabled_,
-  text: global.foo__cta_primary_text_,
-  text_disabled: global.foo__cta_primary_text_disabled_
-}));
-fastn_utils.createNestedObject(global, "foo__cta_secondary_base_", fastn.recordInstance({
-  light: "#EBE8E5",
-  dark: "#EBE8E5"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_secondary_hover_", fastn.recordInstance({
-  light: "#D4D1CE",
-  dark: "#D4D1CE"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_secondary_pressed_", fastn.recordInstance({
-  light: "#BCBAB7",
-  dark: "#BCBAB7"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_secondary_disabled_", fastn.recordInstance({
-  light: "#F9F8F7",
-  dark: "#F9F8F7"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_secondary_focused_", fastn.recordInstance({
-  light: "#B0AEAC",
-  dark: "#B0AEAC"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_secondary_border_", fastn.recordInstance({
-  light: "#B0AEAC",
-  dark: "#B0AEAC"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_secondary_text_", fastn.recordInstance({
-  light: "#333333",
-  dark: "#333333"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_secondary_text_disabled_", fastn.recordInstance({
-  light: "#304655",
-  dark: "#fff"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_secondary_border_disabled_", fastn.recordInstance({
-  light: "#304655",
-  dark: "#f1dac0"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_secondary_", fastn.recordInstance({
-  base: global.foo__cta_secondary_base_,
-  hover: global.foo__cta_secondary_hover_,
-  pressed: global.foo__cta_secondary_pressed_,
-  disabled: global.foo__cta_secondary_disabled_,
-  focused: global.foo__cta_secondary_focused_,
-  border: global.foo__cta_secondary_border_,
-  border_disabled: global.foo__cta_secondary_border_disabled_,
-  text: global.foo__cta_secondary_text_,
-  text_disabled: global.foo__cta_secondary_text_disabled_
-}));
-fastn_utils.createNestedObject(global, "foo__cta_tertiary_base_", fastn.recordInstance({
-  light: "#4A6490",
-  dark: "#4A6490"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_tertiary_hover_", fastn.recordInstance({
-  light: "#3d5276",
-  dark: "#3d5276"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_tertiary_pressed_", fastn.recordInstance({
-  light: "#2b3a54",
-  dark: "#2b3a54"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_tertiary_disabled_", fastn.recordInstance({
-  light: "rgba(74, 100, 144, 0.4)",
-  dark: "rgba(74, 100, 144, 0.4)"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_tertiary_focused_", fastn.recordInstance({
-  light: "#6882b1",
-  dark: "#6882b1"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_tertiary_border_", fastn.recordInstance({
-  light: "#4e6997",
-  dark: "#4e6997"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_tertiary_text_", fastn.recordInstance({
-  light: "#ffffff",
-  dark: "#ffffff"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_tertiary_text_disabled_", fastn.recordInstance({
-  light: "#304655",
-  dark: "#fff"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_tertiary_border_disabled_", fastn.recordInstance({
-  light: "#304655",
-  dark: "#f1dac0"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_tertiary_", fastn.recordInstance({
-  base: global.foo__cta_tertiary_base_,
-  hover: global.foo__cta_tertiary_hover_,
-  pressed: global.foo__cta_tertiary_pressed_,
-  disabled: global.foo__cta_tertiary_disabled_,
-  focused: global.foo__cta_tertiary_focused_,
-  border: global.foo__cta_tertiary_border_,
-  border_disabled: global.foo__cta_tertiary_border_disabled_,
-  text: global.foo__cta_tertiary_text_,
-  text_disabled: global.foo__cta_tertiary_text_disabled_
-}));
-fastn_utils.createNestedObject(global, "foo__cta_danger_base_", fastn.recordInstance({
-  light: "#F9E4E1",
-  dark: "#F9E4E1"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_danger_hover_", fastn.recordInstance({
-  light: "#F1BDB6",
-  dark: "#F1BDB6"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_danger_pressed_", fastn.recordInstance({
-  light: "#D46A63",
-  dark: "#D46A63"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_danger_disabled_", fastn.recordInstance({
-  light: "#FAECEB",
-  dark: "#FAECEB"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_danger_focused_", fastn.recordInstance({
-  light: "#D97973",
-  dark: "#D97973"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_danger_border_", fastn.recordInstance({
-  light: "#E9968C",
-  dark: "#E9968C"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_danger_text_", fastn.recordInstance({
-  light: "#D84836",
-  dark: "#D84836"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_danger_text_disabled_", fastn.recordInstance({
-  light: "#304655",
-  dark: "#fff"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_danger_border_disabled_", fastn.recordInstance({
-  light: "#304655",
-  dark: "#f1dac0"
-}));
-fastn_utils.createNestedObject(global, "foo__cta_danger_", fastn.recordInstance({
-  base: global.foo__cta_danger_base_,
-  hover: global.foo__cta_danger_hover_,
-  pressed: global.foo__cta_danger_pressed_,
-  disabled: global.foo__cta_danger_disabled_,
-  focused: global.foo__cta_danger_focused_,
-  border: global.foo__cta_danger_border_,
-  border_disabled: global.foo__cta_danger_border_disabled_,
-  text: global.foo__cta_danger_text_,
-  text_disabled: global.foo__cta_danger_text_disabled_
-}));
-fastn_utils.createNestedObject(global, "foo__accent_primary_", fastn.recordInstance({
-  light: "#EF8435",
-  dark: "#EF8435"
-}));
-fastn_utils.createNestedObject(global, "foo__accent_secondary_", fastn.recordInstance({
-  light: "#EBE8E5",
-  dark: "#EBE8E5"
-}));
-fastn_utils.createNestedObject(global, "foo__accent_tertiary_", fastn.recordInstance({
-  light: "#c5cbd7",
-  dark: "#c5cbd7"
-}));
-fastn_utils.createNestedObject(global, "foo__accent_", fastn.recordInstance({
-  primary: global.foo__accent_primary_,
-  secondary: global.foo__accent_secondary_,
-  tertiary: global.foo__accent_tertiary_
-}));
-fastn_utils.createNestedObject(global, "foo__error_base_", fastn.recordInstance({
-  light: "#F9E4E1",
-  dark: "#4f2a25c9"
-}));
-fastn_utils.createNestedObject(global, "foo__error_text_", fastn.recordInstance({
-  light: "#D84836",
-  dark: "#D84836"
-}));
-fastn_utils.createNestedObject(global, "foo__error_border_", fastn.recordInstance({
-  light: "#E9968C",
-  dark: "#E9968C"
-}));
-fastn_utils.createNestedObject(global, "foo__error_btb_", fastn.recordInstance({
-  base: global.foo__error_base_,
-  text: global.foo__error_text_,
-  border: global.foo__error_border_
-}));
-fastn_utils.createNestedObject(global, "foo__success_base_", fastn.recordInstance({
-  light: "#DCEFE4",
-  dark: "#033a1bb8"
-}));
-fastn_utils.createNestedObject(global, "foo__success_text_", fastn.recordInstance({
-  light: "#3E8D61",
-  dark: "#159f52"
-}));
-fastn_utils.createNestedObject(global, "foo__success_border_", fastn.recordInstance({
-  light: "#95D0AF",
-  dark: "#95D0AF"
-}));
-fastn_utils.createNestedObject(global, "foo__success_btb_", fastn.recordInstance({
-  base: global.foo__success_base_,
-  text: global.foo__success_text_,
-  border: global.foo__success_border_
-}));
-fastn_utils.createNestedObject(global, "foo__info_base_", fastn.recordInstance({
-  light: "#DAE7FB",
-  dark: "#233a5dc7"
-}));
-fastn_utils.createNestedObject(global, "foo__info_text_", fastn.recordInstance({
-  light: "#5290EC",
-  dark: "#5290EC"
-}));
-fastn_utils.createNestedObject(global, "foo__info_border_", fastn.recordInstance({
-  light: "#7EACF1",
-  dark: "#7EACF1"
-}));
-fastn_utils.createNestedObject(global, "foo__info_btb_", fastn.recordInstance({
-  base: global.foo__info_base_,
-  text: global.foo__info_text_,
-  border: global.foo__info_border_
-}));
-fastn_utils.createNestedObject(global, "foo__warning_base_", fastn.recordInstance({
-  light: "#FDF7F1",
-  dark: "#3b2c1ee6"
-}));
-fastn_utils.createNestedObject(global, "foo__warning_text_", fastn.recordInstance({
-  light: "#E78B3E",
-  dark: "#E78B3E"
-}));
-fastn_utils.createNestedObject(global, "foo__warning_border_", fastn.recordInstance({
-  light: "#F2C097",
-  dark: "#F2C097"
-}));
-fastn_utils.createNestedObject(global, "foo__warning_btb_", fastn.recordInstance({
-  base: global.foo__warning_base_,
-  text: global.foo__warning_text_,
-  border: global.foo__warning_border_
-}));
-fastn_utils.createNestedObject(global, "foo__custom_one_", fastn.recordInstance({
-  light: "#4AA35C",
-  dark: "#4AA35C"
-}));
-fastn_utils.createNestedObject(global, "foo__custom_two_", fastn.recordInstance({
-  light: "#5C2860",
-  dark: "#5C2860"
-}));
-fastn_utils.createNestedObject(global, "foo__custom_three_", fastn.recordInstance({
-  light: "#EBBE52",
-  dark: "#EBBE52"
-}));
-fastn_utils.createNestedObject(global, "foo__custom_four_", fastn.recordInstance({
-  light: "#FDFAF1",
-  dark: "#111111"
-}));
-fastn_utils.createNestedObject(global, "foo__custom_five_", fastn.recordInstance({
-  light: "#FBF5E2",
-  dark: "#222222"
-}));
-fastn_utils.createNestedObject(global, "foo__custom_six_", fastn.recordInstance({
-  light: "#ef8dd6",
-  dark: "#ef8dd6"
-}));
-fastn_utils.createNestedObject(global, "foo__custom_seven_", fastn.recordInstance({
-  light: "#7564be",
-  dark: "#7564be"
-}));
-fastn_utils.createNestedObject(global, "foo__custom_eight_", fastn.recordInstance({
-  light: "#d554b3",
-  dark: "#d554b3"
-}));
-fastn_utils.createNestedObject(global, "foo__custom_nine_", fastn.recordInstance({
-  light: "#ec8943",
-  dark: "#ec8943"
-}));
-fastn_utils.createNestedObject(global, "foo__custom_ten_", fastn.recordInstance({
-  light: "#da7a4a",
-  dark: "#da7a4a"
-}));
-fastn_utils.createNestedObject(global, "foo__custom_", fastn.recordInstance({
-  one: global.foo__custom_one_,
-  two: global.foo__custom_two_,
-  three: global.foo__custom_three_,
-  four: global.foo__custom_four_,
-  five: global.foo__custom_five_,
-  six: global.foo__custom_six_,
-  seven: global.foo__custom_seven_,
-  eight: global.foo__custom_eight_,
-  nine: global.foo__custom_nine_,
-  ten: global.foo__custom_ten_
-}));
-fastn_utils.createNestedObject(global, "foo__colors", fastn.recordInstance({
-  background: global.foo__background_,
-  border: global.foo__border_,
-  border_strong: global.foo__border_strong_,
-  text: global.foo__text_,
-  text_strong: global.foo__text_strong_,
-  shadow: global.foo__shadow_,
-  scrim: global.foo__scrim_,
-  cta_primary: global.foo__cta_primary_,
-  cta_secondary: global.foo__cta_secondary_,
-  cta_tertiary: global.foo__cta_tertiary_,
-  cta_danger: global.foo__cta_danger_,
-  accent: global.foo__accent_,
-  error: global.foo__error_btb_,
-  success: global.foo__success_btb_,
-  info: global.foo__info_btb_,
-  warning: global.foo__warning_btb_,
-  custom: global.foo__custom_
-}));
+fastn_utils.createNestedObject(global, "foo__base_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#FFFFFF");
+  record.set("dark", "#000000");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__step_1_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#FDFAF1");
+  record.set("dark", "#111111");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__step_2_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#fbf3dc");
+  record.set("dark", "#2b2b2b");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__overlay_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#000000");
+  record.set("dark", "#000000");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__code_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#f5f5f5");
+  record.set("dark", "#21222c");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__background_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("base", global.foo__base_);
+  record.set("step_1", global.foo__step_1_);
+  record.set("step_2", global.foo__step_2_);
+  record.set("overlay", global.foo__overlay_);
+  record.set("code", global.foo__code_);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__border_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#f0ece2");
+  record.set("dark", "#434547");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__border_strong_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#D9D9D9");
+  record.set("dark", "#333333");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__text_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#707070");
+  record.set("dark", "#D9D9D9");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__text_strong_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#333333");
+  record.set("dark", "#FFFFFF");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__shadow_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#EF8435");
+  record.set("dark", "#EF8435");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__scrim_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#393939");
+  record.set("dark", "#393939");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_primary_base_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#EF8435");
+  record.set("dark", "#EF8435");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_primary_hover_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#D77730");
+  record.set("dark", "#D77730");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_primary_pressed_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#BF6A2A");
+  record.set("dark", "#BF6A2A");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_primary_disabled_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#FAD9C0");
+  record.set("dark", "#FAD9C0");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_primary_focused_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#B36328");
+  record.set("dark", "#B36328");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_primary_border_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#F3A063");
+  record.set("dark", "#F3A063");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_primary_text_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#512403");
+  record.set("dark", "#512403");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_primary_text_disabled_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#f2a164");
+  record.set("dark", "#f2a164");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_primary_border_disabled_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#fad9c0");
+  record.set("dark", "#fad9c0");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_primary_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("base", global.foo__cta_primary_base_);
+  record.set("hover", global.foo__cta_primary_hover_);
+  record.set("pressed", global.foo__cta_primary_pressed_);
+  record.set("disabled", global.foo__cta_primary_disabled_);
+  record.set("focused", global.foo__cta_primary_focused_);
+  record.set("border", global.foo__cta_primary_border_);
+  record.set("border_disabled", global.foo__cta_primary_border_disabled_);
+  record.set("text", global.foo__cta_primary_text_);
+  record.set("text_disabled", global.foo__cta_primary_text_disabled_);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_secondary_base_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#EBE8E5");
+  record.set("dark", "#EBE8E5");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_secondary_hover_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#D4D1CE");
+  record.set("dark", "#D4D1CE");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_secondary_pressed_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#BCBAB7");
+  record.set("dark", "#BCBAB7");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_secondary_disabled_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#F9F8F7");
+  record.set("dark", "#F9F8F7");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_secondary_focused_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#B0AEAC");
+  record.set("dark", "#B0AEAC");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_secondary_border_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#B0AEAC");
+  record.set("dark", "#B0AEAC");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_secondary_text_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#333333");
+  record.set("dark", "#333333");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_secondary_text_disabled_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#304655");
+  record.set("dark", "#fff");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_secondary_border_disabled_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#304655");
+  record.set("dark", "#f1dac0");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_secondary_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("base", global.foo__cta_secondary_base_);
+  record.set("hover", global.foo__cta_secondary_hover_);
+  record.set("pressed", global.foo__cta_secondary_pressed_);
+  record.set("disabled", global.foo__cta_secondary_disabled_);
+  record.set("focused", global.foo__cta_secondary_focused_);
+  record.set("border", global.foo__cta_secondary_border_);
+  record.set("border_disabled", global.foo__cta_secondary_border_disabled_);
+  record.set("text", global.foo__cta_secondary_text_);
+  record.set("text_disabled", global.foo__cta_secondary_text_disabled_);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_tertiary_base_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#4A6490");
+  record.set("dark", "#4A6490");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_tertiary_hover_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#3d5276");
+  record.set("dark", "#3d5276");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_tertiary_pressed_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#2b3a54");
+  record.set("dark", "#2b3a54");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_tertiary_disabled_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "rgba(74, 100, 144, 0.4)");
+  record.set("dark", "rgba(74, 100, 144, 0.4)");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_tertiary_focused_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#6882b1");
+  record.set("dark", "#6882b1");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_tertiary_border_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#4e6997");
+  record.set("dark", "#4e6997");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_tertiary_text_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#ffffff");
+  record.set("dark", "#ffffff");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_tertiary_text_disabled_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#304655");
+  record.set("dark", "#fff");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_tertiary_border_disabled_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#304655");
+  record.set("dark", "#f1dac0");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_tertiary_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("base", global.foo__cta_tertiary_base_);
+  record.set("hover", global.foo__cta_tertiary_hover_);
+  record.set("pressed", global.foo__cta_tertiary_pressed_);
+  record.set("disabled", global.foo__cta_tertiary_disabled_);
+  record.set("focused", global.foo__cta_tertiary_focused_);
+  record.set("border", global.foo__cta_tertiary_border_);
+  record.set("border_disabled", global.foo__cta_tertiary_border_disabled_);
+  record.set("text", global.foo__cta_tertiary_text_);
+  record.set("text_disabled", global.foo__cta_tertiary_text_disabled_);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_danger_base_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#F9E4E1");
+  record.set("dark", "#F9E4E1");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_danger_hover_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#F1BDB6");
+  record.set("dark", "#F1BDB6");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_danger_pressed_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#D46A63");
+  record.set("dark", "#D46A63");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_danger_disabled_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#FAECEB");
+  record.set("dark", "#FAECEB");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_danger_focused_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#D97973");
+  record.set("dark", "#D97973");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_danger_border_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#E9968C");
+  record.set("dark", "#E9968C");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_danger_text_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#D84836");
+  record.set("dark", "#D84836");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_danger_text_disabled_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#304655");
+  record.set("dark", "#fff");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_danger_border_disabled_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#304655");
+  record.set("dark", "#f1dac0");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__cta_danger_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("base", global.foo__cta_danger_base_);
+  record.set("hover", global.foo__cta_danger_hover_);
+  record.set("pressed", global.foo__cta_danger_pressed_);
+  record.set("disabled", global.foo__cta_danger_disabled_);
+  record.set("focused", global.foo__cta_danger_focused_);
+  record.set("border", global.foo__cta_danger_border_);
+  record.set("border_disabled", global.foo__cta_danger_border_disabled_);
+  record.set("text", global.foo__cta_danger_text_);
+  record.set("text_disabled", global.foo__cta_danger_text_disabled_);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__accent_primary_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#EF8435");
+  record.set("dark", "#EF8435");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__accent_secondary_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#EBE8E5");
+  record.set("dark", "#EBE8E5");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__accent_tertiary_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#c5cbd7");
+  record.set("dark", "#c5cbd7");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__accent_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("primary", global.foo__accent_primary_);
+  record.set("secondary", global.foo__accent_secondary_);
+  record.set("tertiary", global.foo__accent_tertiary_);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__error_base_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#F9E4E1");
+  record.set("dark", "#4f2a25c9");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__error_text_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#D84836");
+  record.set("dark", "#D84836");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__error_border_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#E9968C");
+  record.set("dark", "#E9968C");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__error_btb_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("base", global.foo__error_base_);
+  record.set("text", global.foo__error_text_);
+  record.set("border", global.foo__error_border_);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__success_base_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#DCEFE4");
+  record.set("dark", "#033a1bb8");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__success_text_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#3E8D61");
+  record.set("dark", "#159f52");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__success_border_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#95D0AF");
+  record.set("dark", "#95D0AF");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__success_btb_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("base", global.foo__success_base_);
+  record.set("text", global.foo__success_text_);
+  record.set("border", global.foo__success_border_);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__info_base_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#DAE7FB");
+  record.set("dark", "#233a5dc7");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__info_text_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#5290EC");
+  record.set("dark", "#5290EC");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__info_border_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#7EACF1");
+  record.set("dark", "#7EACF1");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__info_btb_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("base", global.foo__info_base_);
+  record.set("text", global.foo__info_text_);
+  record.set("border", global.foo__info_border_);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__warning_base_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#FDF7F1");
+  record.set("dark", "#3b2c1ee6");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__warning_text_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#E78B3E");
+  record.set("dark", "#E78B3E");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__warning_border_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#F2C097");
+  record.set("dark", "#F2C097");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__warning_btb_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("base", global.foo__warning_base_);
+  record.set("text", global.foo__warning_text_);
+  record.set("border", global.foo__warning_border_);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__custom_one_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#4AA35C");
+  record.set("dark", "#4AA35C");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__custom_two_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#5C2860");
+  record.set("dark", "#5C2860");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__custom_three_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#EBBE52");
+  record.set("dark", "#EBBE52");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__custom_four_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#FDFAF1");
+  record.set("dark", "#111111");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__custom_five_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#FBF5E2");
+  record.set("dark", "#222222");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__custom_six_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#ef8dd6");
+  record.set("dark", "#ef8dd6");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__custom_seven_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#7564be");
+  record.set("dark", "#7564be");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__custom_eight_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#d554b3");
+  record.set("dark", "#d554b3");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__custom_nine_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#ec8943");
+  record.set("dark", "#ec8943");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__custom_ten_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#da7a4a");
+  record.set("dark", "#da7a4a");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__custom_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("one", global.foo__custom_one_);
+  record.set("two", global.foo__custom_two_);
+  record.set("three", global.foo__custom_three_);
+  record.set("four", global.foo__custom_four_);
+  record.set("five", global.foo__custom_five_);
+  record.set("six", global.foo__custom_six_);
+  record.set("seven", global.foo__custom_seven_);
+  record.set("eight", global.foo__custom_eight_);
+  record.set("nine", global.foo__custom_nine_);
+  record.set("ten", global.foo__custom_ten_);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__colors", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("background", global.foo__background_);
+  record.set("border", global.foo__border_);
+  record.set("border_strong", global.foo__border_strong_);
+  record.set("text", global.foo__text_);
+  record.set("text_strong", global.foo__text_strong_);
+  record.set("shadow", global.foo__shadow_);
+  record.set("scrim", global.foo__scrim_);
+  record.set("cta_primary", global.foo__cta_primary_);
+  record.set("cta_secondary", global.foo__cta_secondary_);
+  record.set("cta_tertiary", global.foo__cta_tertiary_);
+  record.set("cta_danger", global.foo__cta_danger_);
+  record.set("accent", global.foo__accent_);
+  record.set("error", global.foo__error_btb_);
+  record.set("success", global.foo__success_btb_);
+  record.set("info", global.foo__info_btb_);
+  record.set("warning", global.foo__warning_btb_);
+  record.set("custom", global.foo__custom_);
+  return record;
+}());
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

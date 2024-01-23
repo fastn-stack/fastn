@@ -62,15 +62,21 @@ let foo__append_person = function (args) {
   }
 }
 global["foo__append_person"] = foo__append_person;
-fastn_utils.createNestedObject(global, "foo__first", fastn.recordInstance({
-  name: "Jill",
-  bio: "I am Jill"
-}));
+fastn_utils.createNestedObject(global, "foo__first", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "Jill");
+  record.set("bio", "I am Jill");
+  return record;
+}());
 fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([global.foo__first]));
-fastn_utils.createNestedObject(global, "foo__tom", fastn.recordInstance({
-  name: "Tom",
-  bio: "I am Tom"
-}));
+fastn_utils.createNestedObject(global, "foo__tom", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "Tom");
+  record.set("bio", "I am Tom");
+  return record;
+}());
 let foo__show_person = function (parent, inherited, args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;

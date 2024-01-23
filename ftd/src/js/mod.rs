@@ -110,7 +110,6 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
             continue;
         }
         if let ftd::interpreter::Thing::Component(c) = thing {
-            dbg!(&c.arguments);
             document_asts.push(c.to_ast(&doc, &mut has_rive_components));
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
             document_asts.push(v.to_ast(

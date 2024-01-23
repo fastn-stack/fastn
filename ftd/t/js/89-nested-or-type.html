@@ -44,10 +44,13 @@ let foo__page = function (parent, inherited, args)
   __fastn_package_name__ = "foo";
   try {
     let __args__ = {
-      background: fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })),
+      background: fastn_dom.BackgroundStyle.Solid(function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "yellow");
+        record.set("light", "yellow");
+        return record;
+      }()),
       max_width: fastn_dom.Length.Px(70),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);

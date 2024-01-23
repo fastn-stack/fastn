@@ -941,10 +941,13 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
         }()) {
           return global.foo__bp;
         } else {
-          return fastn.recordInstance({
-            dark: "red",
-            light: "red"
-          });
+          return function () {
+            let record = fastn.recordInstance({
+            });
+            record.set("dark", "red");
+            record.set("light", "red");
+            return record;
+          }();
         }
       }
       ), inherited);
@@ -1052,10 +1055,13 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
       rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(20), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(50), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.ZIndex, 3, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "deepskyblue",
-        light: "deepskyblue"
-      })), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "deepskyblue");
+        record.set("light", "deepskyblue");
+        return record;
+      }()), inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
@@ -1067,10 +1073,13 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
       rooti0.setProperty(fastn_dom.PropertyKind.Bottom, fastn_dom.Length.Px(70), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Right, fastn_dom.Length.Px(60), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.ZIndex, 2, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "deepskyblue",
-        light: "deepskyblue"
-      })), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "deepskyblue");
+        record.set("light", "deepskyblue");
+        return record;
+      }()), inherited);
     }
     ]), inherited);
     let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
@@ -1093,14 +1102,20 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
       rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(0), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(50), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Sticky, true, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "black",
-        light: "black"
-      }), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "deepskyblue",
-        light: "deepskyblue"
-      })), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "black");
+        record.set("light", "black");
+        return record;
+      }(), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "deepskyblue");
+        record.set("light", "deepskyblue");
+        return record;
+      }()), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
     },
     function (root, inherited) {
@@ -1112,10 +1127,13 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
     let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
     parenti3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
     parenti3.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(50), inherited);
-    parenti3.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "red",
-      light: "red"
-    })), inherited);
+    parenti3.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("dark", "red");
+      record.set("light", "red");
+      return record;
+    }()), inherited);
     parenti3.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceEvenly, inherited);
     parenti3.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
@@ -1157,10 +1175,13 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
     let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
     parenti4.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
     parenti4.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(50), inherited);
-    parenti4.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "green",
-      light: "green"
-    })), inherited);
+    parenti4.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("dark", "green");
+      record.set("light", "green");
+      return record;
+    }()), inherited);
     parenti4.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceEvenly, inherited);
     parenti4.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
@@ -1202,10 +1223,13 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
     let parenti5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
     parenti5.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
     parenti5.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(50), inherited);
-    parenti5.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "deepskyblue",
-      light: "deepskyblue"
-    })), inherited);
+    parenti5.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("dark", "deepskyblue");
+      record.set("light", "deepskyblue");
+      return record;
+    }()), inherited);
     parenti5.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceEvenly, inherited);
     parenti5.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
@@ -1348,10 +1372,13 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
     parenti7.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
     parenti7.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
     parenti7.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    parenti7.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "blue",
-      light: "blue"
-    }), inherited);
+    parenti7.setProperty(fastn_dom.PropertyKind.Color, function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("dark", "blue");
+      record.set("light", "blue");
+      return record;
+    }(), inherited);
     parenti7.setProperty(fastn_dom.PropertyKind.Wrap, true, inherited);
     parenti7.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
     parenti7.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
@@ -1381,19 +1408,25 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
     ]), inherited);
     let parenti8 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
     parenti8.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    parenti8.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "#963770",
-      light: "#963770"
-    })), inherited);
+    parenti8.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("dark", "#963770");
+      record.set("light", "#963770");
+      return record;
+    }()), inherited);
     parenti8.setProperty(fastn_dom.PropertyKind.Opacity, 0.6, inherited);
     parenti8.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "white",
-        light: "white"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "white");
+        record.set("light", "white");
+        return record;
+      }(), inherited);
     }
     ]), inherited);
     let parenti9 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
@@ -1625,10 +1658,13 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
     "b",
     "c",
     "d"]), inherited);
-    parenti14.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "red",
-      light: "red"
-    }), inherited);
+    parenti14.setProperty(fastn_dom.PropertyKind.Color, function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("dark", "red");
+      record.set("light", "red");
+      return record;
+    }(), inherited);
     let parenti15 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
     parenti15.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(600)), inherited);
     parenti15.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
@@ -1643,20 +1679,26 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
       rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-        dark: "green",
-        light: "green"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "green");
+        record.set("light", "green");
+        return record;
+      }(), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
         rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Inside Inner Container", inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.Anchor, fastn_dom.Anchor.Id("c1"), inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(0), inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(0), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "green",
-          light: "green"
-        }), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+          let record = fastn.recordInstance({
+          });
+          record.set("dark", "green");
+          record.set("light", "green");
+          return record;
+        }(), inherited);
       }
       ]), inherited);
     }
@@ -1675,20 +1717,26 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
       rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
-        dark: "blue",
-        light: "blue"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "blue");
+        record.set("light", "blue");
+        return record;
+      }(), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
         rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Inside Outer Container", inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.Anchor, fastn_dom.Anchor.Id("c2"), inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(0), inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(0), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-          dark: "blue",
-          light: "blue"
-        }), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+          let record = fastn.recordInstance({
+          });
+          record.set("dark", "blue");
+          record.set("light", "blue");
+          return record;
+        }(), inherited);
       }
       ]), inherited);
     }
@@ -1711,46 +1759,61 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
     ]), inherited);
     let parenti18 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
     parenti18.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    parenti18.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "blue:",
-      light: "blue:"
-    })), inherited);
+    parenti18.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("dark", "blue:");
+      record.set("light", "blue:");
+      return record;
+    }()), inherited);
     parenti18.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "These are stylized values", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "red",
-        light: "red"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "red");
+        record.set("light", "red");
+        return record;
+      }(), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.TextStyle, fastn.mutableList([fastn_dom.TextStyle.Italic,
       fastn_dom.TextStyle.Regular]), inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
       rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, 1234, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "red",
-        light: "red"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "red");
+        record.set("light", "red");
+        return record;
+      }(), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.TextStyle, fastn.mutableList([fastn_dom.TextStyle.Bold]), inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Decimal);
       rooti0.setProperty(fastn_dom.PropertyKind.DecimalValue, 3.142, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "red",
-        light: "red"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "red");
+        record.set("light", "red");
+        return record;
+      }(), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.TextStyle, fastn.mutableList([fastn_dom.TextStyle.Underline,
       fastn_dom.TextStyle.Italic]), inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Boolean);
       rooti0.setProperty(fastn_dom.PropertyKind.BooleanValue, true, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "red",
-        light: "red"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "red");
+        record.set("light", "red");
+        return record;
+      }(), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.TextStyle, fastn.mutableList([fastn_dom.TextStyle.Heavy]), inherited);
     }
     ]), inherited);
@@ -1761,10 +1824,13 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello World", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Region, fastn_dom.Region.H1, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "blue",
-        light: "blue"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "blue");
+        record.set("light", "blue");
+        return record;
+      }(), inherited);
     }
     ]), inherited);
     let parenti20 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
@@ -1773,10 +1839,13 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
     parenti20.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2), inherited);
     parenti20.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid, inherited);
     parenti20.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow, inherited);
-    parenti20.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "green",
-      light: "green"
-    }), inherited);
+    parenti20.setProperty(fastn_dom.PropertyKind.Color, function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("dark", "green");
+      record.set("light", "green");
+      return record;
+    }(), inherited);
     parenti20.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
     parenti20.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
@@ -1801,14 +1870,20 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "foo__ylg", fastn.recordInstance({
-  light: "yellow",
-  dark: "lightgreen"
-}));
-fastn_utils.createNestedObject(global, "foo__red_yellow", fastn.recordInstance({
-  light: "red",
-  dark: "yellow"
-}));
+fastn_utils.createNestedObject(global, "foo__ylg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "yellow");
+  record.set("dark", "lightgreen");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__red_yellow", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "red");
+  record.set("dark", "yellow");
+  return record;
+}());
 let foo__increment = function (args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
@@ -1829,50 +1904,74 @@ let foo__increment = function (args)
 }
 global["foo__increment"] = foo__increment;
 fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));
-fastn_utils.createNestedObject(global, "foo__og", fastn.recordInstance({
-  light: "orange",
-  dark: "green"
-}));
-fastn_utils.createNestedObject(global, "foo__bp", fastn.recordInstance({
-  light: "blue",
-  dark: "purple"
-}));
-fastn_utils.createNestedObject(global, "foo__dtype", fastn.recordInstance({
-  size: fastn_dom.FontSize.Px(40),
-  line_height: fastn_dom.FontSize.Px(65),
-  letter_spacing: fastn_dom.FontSize.Px(5),
-  weight: 700,
-  font_family: fastn.mutableList(["cursive"])
-}));
-fastn_utils.createNestedObject(global, "foo__mtype", fastn.recordInstance({
-  size: fastn_dom.FontSize.Px(20),
-  line_height: fastn_dom.FontSize.Px(35),
-  letter_spacing: fastn_dom.FontSize.Px(3),
-  weight: 100,
-  font_family: fastn.mutableList(["fantasy"])
-}));
-fastn_utils.createNestedObject(global, "foo__rtype", fastn.recordInstance({
-  desktop: global.foo__dtype,
-  mobile: global.foo__mtype
-}));
-fastn_utils.createNestedObject(global, "foo__red_blue", fastn.recordInstance({
-  light: "red",
-  dark: "blue"
-}));
+fastn_utils.createNestedObject(global, "foo__og", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "orange");
+  record.set("dark", "green");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__bp", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "blue");
+  record.set("dark", "purple");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__dtype", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("size", fastn_dom.FontSize.Px(40));
+  record.set("line_height", fastn_dom.FontSize.Px(65));
+  record.set("letter_spacing", fastn_dom.FontSize.Px(5));
+  record.set("weight", 700);
+  record.set("font_family", fastn.mutableList(["cursive"]));
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__mtype", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("size", fastn_dom.FontSize.Px(20));
+  record.set("line_height", fastn_dom.FontSize.Px(35));
+  record.set("letter_spacing", fastn_dom.FontSize.Px(3));
+  record.set("weight", 100);
+  record.set("font_family", fastn.mutableList(["fantasy"]));
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__rtype", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("desktop", global.foo__dtype);
+  record.set("mobile", global.foo__mtype);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__red_blue", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "red");
+  record.set("dark", "blue");
+  return record;
+}());
 fastn_utils.createNestedObject(global, "foo__sample_text", "Far far away, behind the word mountains, far from the countries\nVokalia and Consonantia, there live the blind texts. Separated they\nin Bookmarksgrove right at the coast of the Semantics, a large language\nocean. A small river named Duden flows by their place and supplies it\nwith the necessary regelialia. It is a paradisematic country, in which\nroasted parts of sentences fly into your mouth. Even the all-powerful\nPointing has no control about the blind texts it is an almost unorthographic\nlife One day however a small line of blind text by the name of Lorem\nIpsum decided to leave for the far World of Grammar.");
 fastn_utils.createNestedObject(global, "foo__sample_text2", "But ere she from the church-door stepped She smiled and told us why:\n\n'It was a wicked woman's curse,' Quoth she, 'and what care I?'\nShe smiled, and smiled, and passed it off Ere from the door she stept-");
-fastn_utils.createNestedObject(global, "foo__yellow_red", fastn.recordInstance({
-  light: "yellow",
-  dark: "red"
-}));
-fastn_utils.createNestedObject(global, "foo__s", fastn.recordInstance({
-  x_offset: fastn_dom.Length.Px(10),
-  y_offset: fastn_dom.Length.Px(10),
-  blur: fastn_dom.Length.Px(1),
-  spread: fastn_dom.Length.Px(0),
-  color: global.foo__yellow_red,
-  inset: false
-}));
+fastn_utils.createNestedObject(global, "foo__yellow_red", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "yellow");
+  record.set("dark", "red");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__s", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("x_offset", fastn_dom.Length.Px(10));
+  record.set("y_offset", fastn_dom.Length.Px(10));
+  record.set("blur", fastn_dom.Length.Px(1));
+  record.set("spread", fastn_dom.Length.Px(0));
+  record.set("color", global.foo__yellow_red);
+  record.set("inset", false);
+  return record;
+}());
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
