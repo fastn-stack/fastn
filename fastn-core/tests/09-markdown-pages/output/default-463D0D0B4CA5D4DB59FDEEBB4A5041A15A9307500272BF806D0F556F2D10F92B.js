@@ -5526,563 +5526,1011 @@ ftd.follow_system_dark_mode = fastn.mutable(true);
 ftd.font_display = fastn.mutable("sans-serif");
 ftd.font_copy = fastn.mutable("sans-serif");
 ftd.font_code = fastn.mutable("sans-serif");
-ftd.default_types = fastn.recordInstance({
-  heading_large: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(65),
-      size: fastn_dom.FontSize.Px(50),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(54),
-      size: fastn_dom.FontSize.Px(36),
-      weight: 400
-    })
-  }),
-  heading_medium: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(57),
-      size: fastn_dom.FontSize.Px(38),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(40),
-      size: fastn_dom.FontSize.Px(26),
-      weight: 400
-    })
-  }),
-  heading_small: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(31),
-      size: fastn_dom.FontSize.Px(24),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(29),
-      size: fastn_dom.FontSize.Px(22),
-      weight: 400
-    })
-  }),
-  heading_hero: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(104),
-      size: fastn_dom.FontSize.Px(80),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(64),
-      size: fastn_dom.FontSize.Px(48),
-      weight: 400
-    })
-  }),
-  heading_tiny: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(26),
-      size: fastn_dom.FontSize.Px(20),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(24),
-      size: fastn_dom.FontSize.Px(18),
-      weight: 400
-    })
-  }),
-  copy_small: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_copy,
-      line_height: fastn_dom.FontSize.Px(24),
-      size: fastn_dom.FontSize.Px(14),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_copy,
-      line_height: fastn_dom.FontSize.Px(16),
-      size: fastn_dom.FontSize.Px(12),
-      weight: 400
-    })
-  }),
-  copy_regular: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_copy,
-      line_height: fastn_dom.FontSize.Px(30),
-      size: fastn_dom.FontSize.Px(18),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_copy,
-      line_height: fastn_dom.FontSize.Px(24),
-      size: fastn_dom.FontSize.Px(16),
-      weight: 400
-    })
-  }),
-  copy_large: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_copy,
-      line_height: fastn_dom.FontSize.Px(34),
-      size: fastn_dom.FontSize.Px(22),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_copy,
-      line_height: fastn_dom.FontSize.Px(28),
-      size: fastn_dom.FontSize.Px(18),
-      weight: 400
-    })
-  }),
-  fine_print: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_code,
-      line_height: fastn_dom.FontSize.Px(16),
-      size: fastn_dom.FontSize.Px(12),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_code,
-      line_height: fastn_dom.FontSize.Px(16),
-      size: fastn_dom.FontSize.Px(12),
-      weight: 400
-    })
-  }),
-  blockquote: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_code,
-      line_height: fastn_dom.FontSize.Px(21),
-      size: fastn_dom.FontSize.Px(16),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_code,
-      line_height: fastn_dom.FontSize.Px(21),
-      size: fastn_dom.FontSize.Px(16),
-      weight: 400
-    })
-  }),
-  source_code: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_code,
-      line_height: fastn_dom.FontSize.Px(30),
-      size: fastn_dom.FontSize.Px(18),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_code,
-      line_height: fastn_dom.FontSize.Px(21),
-      size: fastn_dom.FontSize.Px(16),
-      weight: 400
-    })
-  }),
-  button_small: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(19),
-      size: fastn_dom.FontSize.Px(14),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(19),
-      size: fastn_dom.FontSize.Px(14),
-      weight: 400
-    })
-  }),
-  button_medium: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(21),
-      size: fastn_dom.FontSize.Px(16),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(21),
-      size: fastn_dom.FontSize.Px(16),
-      weight: 400
-    })
-  }),
-  button_large: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(24),
-      size: fastn_dom.FontSize.Px(18),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(24),
-      size: fastn_dom.FontSize.Px(18),
-      weight: 400
-    })
-  }),
-  link: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(19),
-      size: fastn_dom.FontSize.Px(14),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(19),
-      size: fastn_dom.FontSize.Px(14),
-      weight: 400
-    })
-  }),
-  label_large: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(19),
-      size: fastn_dom.FontSize.Px(14),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(19),
-      size: fastn_dom.FontSize.Px(14),
-      weight: 400
-    })
-  }),
-  label_small: fastn.recordInstance({
-    desktop: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(16),
-      size: fastn_dom.FontSize.Px(12),
-      weight: 400
-    }),
-    mobile: fastn.recordInstance({
-      font_family: ftd.font_display,
-      line_height: fastn_dom.FontSize.Px(16),
-      size: fastn_dom.FontSize.Px(12),
-      weight: 400
-    })
-  })
-});
-ftd.default_colors = fastn.recordInstance({
-  background: fastn.recordInstance({
-    base: fastn.recordInstance({
-      dark: "#18181b",
-      light: "#e7e7e4"
-    }),
-    code: fastn.recordInstance({
-      dark: "#21222C",
-      light: "#F5F5F5"
-    }),
-    overlay: fastn.recordInstance({
-      dark: "rgba(0, 0, 0, 0.8)",
-      light: "rgba(0, 0, 0, 0.8)"
-    }),
-    step_1: fastn.recordInstance({
-      dark: "#141414",
-      light: "#f3f3f3"
-    }),
-    step_2: fastn.recordInstance({
-      dark: "#585656",
-      light: "#c9cece"
-    })
-  }),
-  border: fastn.recordInstance({
-    dark: "#434547",
-    light: "#434547"
-  }),
-  border_strong: fastn.recordInstance({
-    dark: "#919192",
-    light: "#919192"
-  }),
-  text: fastn.recordInstance({
-    dark: "#a8a29e",
-    light: "#584b42"
-  }),
-  text_strong: fastn.recordInstance({
-    dark: "#ffffff",
-    light: "#141414"
-  }),
-  shadow: fastn.recordInstance({
-    dark: "#007f9b",
-    light: "#007f9b"
-  }),
-  scrim: fastn.recordInstance({
-    dark: "#007f9b",
-    light: "#007f9b"
-  }),
-  cta_primary: fastn.recordInstance({
-    base: fastn.recordInstance({
-      dark: "#2dd4bf",
-      light: "#2dd4bf"
-    }),
-    border: fastn.recordInstance({
-      dark: "#2b8074",
-      light: "#2b8074"
-    }),
-    border_disabled: fastn.recordInstance({
-      dark: "#65b693",
-      light: "#65b693"
-    }),
-    disabled: fastn.recordInstance({
-      dark: "rgba(44, 201, 181, 0.1)",
-      light: "rgba(44, 201, 181, 0.1)"
-    }),
-    focused: fastn.recordInstance({
-      dark: "#2cbfac",
-      light: "#2cbfac"
-    }),
-    hover: fastn.recordInstance({
-      dark: "#2c9f90",
-      light: "#2c9f90"
-    }),
-    pressed: fastn.recordInstance({
-      dark: "#2cc9b5",
-      light: "#2cc9b5"
-    }),
-    text: fastn.recordInstance({
-      dark: "#feffff",
-      light: "#feffff"
-    }),
-    text_disabled: fastn.recordInstance({
-      dark: "#65b693",
-      light: "#65b693"
-    })
-  }),
-  cta_secondary: fastn.recordInstance({
-    base: fastn.recordInstance({
-      dark: "#4fb2df",
-      light: "#4fb2df"
-    }),
-    border: fastn.recordInstance({
-      dark: "#209fdb",
-      light: "#209fdb"
-    }),
-    border_disabled: fastn.recordInstance({
-      dark: "#65b693",
-      light: "#65b693"
-    }),
-    disabled: fastn.recordInstance({
-      dark: "rgba(79, 178, 223, 0.1)",
-      light: "rgba(79, 178, 223, 0.1)"
-    }),
-    focused: fastn.recordInstance({
-      dark: "#4fb1df",
-      light: "#4fb1df"
-    }),
-    hover: fastn.recordInstance({
-      dark: "#40afe1",
-      light: "#40afe1"
-    }),
-    pressed: fastn.recordInstance({
-      dark: "#4fb2df",
-      light: "#4fb2df"
-    }),
-    text: fastn.recordInstance({
-      dark: "#ffffff",
-      light: "#584b42"
-    }),
-    text_disabled: fastn.recordInstance({
-      dark: "#65b693",
-      light: "#65b693"
-    })
-  }),
-  cta_tertiary: fastn.recordInstance({
-    base: fastn.recordInstance({
-      dark: "#556375",
-      light: "#556375"
-    }),
-    border: fastn.recordInstance({
-      dark: "#e2e4e7",
-      light: "#e2e4e7"
-    }),
-    border_disabled: fastn.recordInstance({
-      dark: "#65b693",
-      light: "#65b693"
-    }),
-    disabled: fastn.recordInstance({
-      dark: "rgba(85, 99, 117, 0.1)",
-      light: "rgba(85, 99, 117, 0.1)"
-    }),
-    focused: fastn.recordInstance({
-      dark: "#e0e2e6",
-      light: "#e0e2e6"
-    }),
-    hover: fastn.recordInstance({
-      dark: "#c7cbd1",
-      light: "#c7cbd1"
-    }),
-    pressed: fastn.recordInstance({
-      dark: "#3b4047",
-      light: "#3b4047"
-    }),
-    text: fastn.recordInstance({
-      dark: "#ffffff",
-      light: "#ffffff"
-    }),
-    text_disabled: fastn.recordInstance({
-      dark: "#65b693",
-      light: "#65b693"
-    })
-  }),
-  cta_danger: fastn.recordInstance({
-    base: fastn.recordInstance({
-      dark: "#1C1B1F",
-      light: "#1C1B1F"
-    }),
-    border: fastn.recordInstance({
-      dark: "#1C1B1F",
-      light: "#1C1B1F"
-    }),
-    border_disabled: fastn.recordInstance({
-      dark: "#feffff",
-      light: "#feffff"
-    }),
-    disabled: fastn.recordInstance({
-      dark: "#1C1B1F",
-      light: "#1C1B1F"
-    }),
-    focused: fastn.recordInstance({
-      dark: "#1C1B1F",
-      light: "#1C1B1F"
-    }),
-    hover: fastn.recordInstance({
-      dark: "#1C1B1F",
-      light: "#1C1B1F"
-    }),
-    pressed: fastn.recordInstance({
-      dark: "#1C1B1F",
-      light: "#1C1B1F"
-    }),
-    text: fastn.recordInstance({
-      dark: "#1C1B1F",
-      light: "#1C1B1F"
-    }),
-    text_disabled: fastn.recordInstance({
-      dark: "#feffff",
-      light: "#feffff"
-    })
-  }),
-  accent: fastn.recordInstance({
-    primary: fastn.recordInstance({
-      dark: "#2dd4bf",
-      light: "#2dd4bf"
-    }),
-    secondary: fastn.recordInstance({
-      dark: "#4fb2df",
-      light: "#4fb2df"
-    }),
-    tertiary: fastn.recordInstance({
-      dark: "#c5cbd7",
-      light: "#c5cbd7"
-    })
-  }),
-  error: fastn.recordInstance({
-    base: fastn.recordInstance({
-      dark: "#311b1f",
-      light: "#f5bdbb"
-    }),
-    border: fastn.recordInstance({
-      dark: "#df2b2b",
-      light: "#df2b2b"
-    }),
-    text: fastn.recordInstance({
-      dark: "#c62a21",
-      light: "#c62a21"
-    })
-  }),
-  success: fastn.recordInstance({
-    base: fastn.recordInstance({
-      dark: "#405508ad",
-      light: "#e3f0c4"
-    }),
-    border: fastn.recordInstance({
-      dark: "#3d741f",
-      light: "#3d741f"
-    }),
-    text: fastn.recordInstance({
-      dark: "#479f16",
-      light: "#467b28"
-    })
-  }),
-  info: fastn.recordInstance({
-    base: fastn.recordInstance({
-      dark: "#15223a",
-      light: "#c4edfd"
-    }),
-    border: fastn.recordInstance({
-      dark: "#205694",
-      light: "#205694"
-    }),
-    text: fastn.recordInstance({
-      dark: "#1f6feb",
-      light: "#205694"
-    })
-  }),
-  warning: fastn.recordInstance({
-    base: fastn.recordInstance({
-      dark: "#544607a3",
-      light: "#fbefba"
-    }),
-    border: fastn.recordInstance({
-      dark: "#966220",
-      light: "#966220"
-    }),
-    text: fastn.recordInstance({
-      dark: "#d07f19",
-      light: "#966220"
-    })
-  }),
-  custom: fastn.recordInstance({
-    eight: fastn.recordInstance({
-      dark: "#d554b3",
-      light: "#d554b3"
-    }),
-    five: fastn.recordInstance({
-      dark: "#eb57be",
-      light: "#eb57be"
-    }),
-    four: fastn.recordInstance({
-      dark: "#7a65c7",
-      light: "#7a65c7"
-    }),
-    nine: fastn.recordInstance({
-      dark: "#ec8943",
-      light: "#ec8943"
-    }),
-    one: fastn.recordInstance({
-      dark: "#ed753a",
-      light: "#ed753a"
-    }),
-    seven: fastn.recordInstance({
-      dark: "#7564be",
-      light: "#7564be"
-    }),
-    six: fastn.recordInstance({
-      dark: "#ef8dd6",
-      light: "#ef8dd6"
-    }),
-    ten: fastn.recordInstance({
-      dark: "#da7a4a",
-      light: "#da7a4a"
-    }),
-    three: fastn.recordInstance({
-      dark: "#8fdcf8",
-      light: "#8fdcf8"
-    }),
-    two: fastn.recordInstance({
-      dark: "#f3db5f",
-      light: "#f3db5f"
-    })
-  })
-});
-ftd.breakpoint_width = fastn.recordInstance({
-  mobile: 768
-});
+ftd.default_types = function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("heading_large", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(50));
+      record.set("line_height", fastn_dom.FontSize.Px(65));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(36));
+      record.set("line_height", fastn_dom.FontSize.Px(54));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("heading_medium", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(38));
+      record.set("line_height", fastn_dom.FontSize.Px(57));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(26));
+      record.set("line_height", fastn_dom.FontSize.Px(40));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("heading_small", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(24));
+      record.set("line_height", fastn_dom.FontSize.Px(31));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(22));
+      record.set("line_height", fastn_dom.FontSize.Px(29));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("heading_hero", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(80));
+      record.set("line_height", fastn_dom.FontSize.Px(104));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(48));
+      record.set("line_height", fastn_dom.FontSize.Px(64));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("heading_tiny", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(20));
+      record.set("line_height", fastn_dom.FontSize.Px(26));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(18));
+      record.set("line_height", fastn_dom.FontSize.Px(24));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("copy_small", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(14));
+      record.set("line_height", fastn_dom.FontSize.Px(24));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_copy);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(12));
+      record.set("line_height", fastn_dom.FontSize.Px(16));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_copy);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("copy_regular", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(18));
+      record.set("line_height", fastn_dom.FontSize.Px(30));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_copy);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(16));
+      record.set("line_height", fastn_dom.FontSize.Px(24));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_copy);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("copy_large", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(22));
+      record.set("line_height", fastn_dom.FontSize.Px(34));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_copy);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(18));
+      record.set("line_height", fastn_dom.FontSize.Px(28));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_copy);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("fine_print", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(12));
+      record.set("line_height", fastn_dom.FontSize.Px(16));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_code);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(12));
+      record.set("line_height", fastn_dom.FontSize.Px(16));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_code);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("blockquote", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(16));
+      record.set("line_height", fastn_dom.FontSize.Px(21));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_code);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(16));
+      record.set("line_height", fastn_dom.FontSize.Px(21));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_code);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("source_code", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(18));
+      record.set("line_height", fastn_dom.FontSize.Px(30));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_code);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(16));
+      record.set("line_height", fastn_dom.FontSize.Px(21));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_code);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("button_small", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(14));
+      record.set("line_height", fastn_dom.FontSize.Px(19));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(14));
+      record.set("line_height", fastn_dom.FontSize.Px(19));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("button_medium", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(16));
+      record.set("line_height", fastn_dom.FontSize.Px(21));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(16));
+      record.set("line_height", fastn_dom.FontSize.Px(21));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("button_large", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(18));
+      record.set("line_height", fastn_dom.FontSize.Px(24));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(18));
+      record.set("line_height", fastn_dom.FontSize.Px(24));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("link", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(14));
+      record.set("line_height", fastn_dom.FontSize.Px(19));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(14));
+      record.set("line_height", fastn_dom.FontSize.Px(19));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("label_large", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(14));
+      record.set("line_height", fastn_dom.FontSize.Px(19));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(14));
+      record.set("line_height", fastn_dom.FontSize.Px(19));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    return record;
+  }());
+  record.set("label_small", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("desktop", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(12));
+      record.set("line_height", fastn_dom.FontSize.Px(16));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    record.set("mobile", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("size", fastn_dom.FontSize.Px(12));
+      record.set("line_height", fastn_dom.FontSize.Px(16));
+      record.set("letter_spacing", null);
+      record.set("weight", 400);
+      record.set("font_family", ftd.font_display);
+      return record;
+    }());
+    return record;
+  }());
+  return record;
+}();
+ftd.default_colors = function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("background", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("base", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#e7e7e4");
+      record.set("dark", "#18181b");
+      return record;
+    }());
+    record.set("step_1", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#f3f3f3");
+      record.set("dark", "#141414");
+      return record;
+    }());
+    record.set("step_2", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#c9cece");
+      record.set("dark", "#585656");
+      return record;
+    }());
+    record.set("overlay", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "rgba(0, 0, 0, 0.8)");
+      record.set("dark", "rgba(0, 0, 0, 0.8)");
+      return record;
+    }());
+    record.set("code", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#F5F5F5");
+      record.set("dark", "#21222C");
+      return record;
+    }());
+    return record;
+  }());
+  record.set("border", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("light", "#434547");
+    record.set("dark", "#434547");
+    return record;
+  }());
+  record.set("border_strong", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("light", "#919192");
+    record.set("dark", "#919192");
+    return record;
+  }());
+  record.set("text", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("light", "#584b42");
+    record.set("dark", "#a8a29e");
+    return record;
+  }());
+  record.set("text_strong", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("light", "#141414");
+    record.set("dark", "#ffffff");
+    return record;
+  }());
+  record.set("shadow", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("light", "#007f9b");
+    record.set("dark", "#007f9b");
+    return record;
+  }());
+  record.set("scrim", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("light", "#007f9b");
+    record.set("dark", "#007f9b");
+    return record;
+  }());
+  record.set("cta_primary", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("base", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#2dd4bf");
+      record.set("dark", "#2dd4bf");
+      return record;
+    }());
+    record.set("hover", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#2c9f90");
+      record.set("dark", "#2c9f90");
+      return record;
+    }());
+    record.set("pressed", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#2cc9b5");
+      record.set("dark", "#2cc9b5");
+      return record;
+    }());
+    record.set("disabled", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "rgba(44, 201, 181, 0.1)");
+      record.set("dark", "rgba(44, 201, 181, 0.1)");
+      return record;
+    }());
+    record.set("focused", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#2cbfac");
+      record.set("dark", "#2cbfac");
+      return record;
+    }());
+    record.set("border", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#2b8074");
+      record.set("dark", "#2b8074");
+      return record;
+    }());
+    record.set("border_disabled", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#65b693");
+      record.set("dark", "#65b693");
+      return record;
+    }());
+    record.set("text", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#feffff");
+      record.set("dark", "#feffff");
+      return record;
+    }());
+    record.set("text_disabled", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#65b693");
+      record.set("dark", "#65b693");
+      return record;
+    }());
+    return record;
+  }());
+  record.set("cta_secondary", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("base", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#4fb2df");
+      record.set("dark", "#4fb2df");
+      return record;
+    }());
+    record.set("hover", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#40afe1");
+      record.set("dark", "#40afe1");
+      return record;
+    }());
+    record.set("pressed", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#4fb2df");
+      record.set("dark", "#4fb2df");
+      return record;
+    }());
+    record.set("disabled", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "rgba(79, 178, 223, 0.1)");
+      record.set("dark", "rgba(79, 178, 223, 0.1)");
+      return record;
+    }());
+    record.set("focused", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#4fb1df");
+      record.set("dark", "#4fb1df");
+      return record;
+    }());
+    record.set("border", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#209fdb");
+      record.set("dark", "#209fdb");
+      return record;
+    }());
+    record.set("border_disabled", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#65b693");
+      record.set("dark", "#65b693");
+      return record;
+    }());
+    record.set("text", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#584b42");
+      record.set("dark", "#ffffff");
+      return record;
+    }());
+    record.set("text_disabled", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#65b693");
+      record.set("dark", "#65b693");
+      return record;
+    }());
+    return record;
+  }());
+  record.set("cta_tertiary", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("base", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#556375");
+      record.set("dark", "#556375");
+      return record;
+    }());
+    record.set("hover", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#c7cbd1");
+      record.set("dark", "#c7cbd1");
+      return record;
+    }());
+    record.set("pressed", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#3b4047");
+      record.set("dark", "#3b4047");
+      return record;
+    }());
+    record.set("disabled", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "rgba(85, 99, 117, 0.1)");
+      record.set("dark", "rgba(85, 99, 117, 0.1)");
+      return record;
+    }());
+    record.set("focused", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#e0e2e6");
+      record.set("dark", "#e0e2e6");
+      return record;
+    }());
+    record.set("border", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#e2e4e7");
+      record.set("dark", "#e2e4e7");
+      return record;
+    }());
+    record.set("border_disabled", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#65b693");
+      record.set("dark", "#65b693");
+      return record;
+    }());
+    record.set("text", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#ffffff");
+      record.set("dark", "#ffffff");
+      return record;
+    }());
+    record.set("text_disabled", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#65b693");
+      record.set("dark", "#65b693");
+      return record;
+    }());
+    return record;
+  }());
+  record.set("cta_danger", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("base", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#1C1B1F");
+      record.set("dark", "#1C1B1F");
+      return record;
+    }());
+    record.set("hover", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#1C1B1F");
+      record.set("dark", "#1C1B1F");
+      return record;
+    }());
+    record.set("pressed", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#1C1B1F");
+      record.set("dark", "#1C1B1F");
+      return record;
+    }());
+    record.set("disabled", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#1C1B1F");
+      record.set("dark", "#1C1B1F");
+      return record;
+    }());
+    record.set("focused", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#1C1B1F");
+      record.set("dark", "#1C1B1F");
+      return record;
+    }());
+    record.set("border", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#1C1B1F");
+      record.set("dark", "#1C1B1F");
+      return record;
+    }());
+    record.set("border_disabled", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#feffff");
+      record.set("dark", "#feffff");
+      return record;
+    }());
+    record.set("text", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#1C1B1F");
+      record.set("dark", "#1C1B1F");
+      return record;
+    }());
+    record.set("text_disabled", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#feffff");
+      record.set("dark", "#feffff");
+      return record;
+    }());
+    return record;
+  }());
+  record.set("accent", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("primary", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#2dd4bf");
+      record.set("dark", "#2dd4bf");
+      return record;
+    }());
+    record.set("secondary", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#4fb2df");
+      record.set("dark", "#4fb2df");
+      return record;
+    }());
+    record.set("tertiary", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#c5cbd7");
+      record.set("dark", "#c5cbd7");
+      return record;
+    }());
+    return record;
+  }());
+  record.set("error", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("base", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#f5bdbb");
+      record.set("dark", "#311b1f");
+      return record;
+    }());
+    record.set("text", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#c62a21");
+      record.set("dark", "#c62a21");
+      return record;
+    }());
+    record.set("border", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#df2b2b");
+      record.set("dark", "#df2b2b");
+      return record;
+    }());
+    return record;
+  }());
+  record.set("success", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("base", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#e3f0c4");
+      record.set("dark", "#405508ad");
+      return record;
+    }());
+    record.set("text", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#467b28");
+      record.set("dark", "#479f16");
+      return record;
+    }());
+    record.set("border", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#3d741f");
+      record.set("dark", "#3d741f");
+      return record;
+    }());
+    return record;
+  }());
+  record.set("info", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("base", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#c4edfd");
+      record.set("dark", "#15223a");
+      return record;
+    }());
+    record.set("text", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#205694");
+      record.set("dark", "#1f6feb");
+      return record;
+    }());
+    record.set("border", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#205694");
+      record.set("dark", "#205694");
+      return record;
+    }());
+    return record;
+  }());
+  record.set("warning", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("base", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#fbefba");
+      record.set("dark", "#544607a3");
+      return record;
+    }());
+    record.set("text", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#966220");
+      record.set("dark", "#d07f19");
+      return record;
+    }());
+    record.set("border", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#966220");
+      record.set("dark", "#966220");
+      return record;
+    }());
+    return record;
+  }());
+  record.set("custom", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("one", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#ed753a");
+      record.set("dark", "#ed753a");
+      return record;
+    }());
+    record.set("two", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#f3db5f");
+      record.set("dark", "#f3db5f");
+      return record;
+    }());
+    record.set("three", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#8fdcf8");
+      record.set("dark", "#8fdcf8");
+      return record;
+    }());
+    record.set("four", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#7a65c7");
+      record.set("dark", "#7a65c7");
+      return record;
+    }());
+    record.set("five", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#eb57be");
+      record.set("dark", "#eb57be");
+      return record;
+    }());
+    record.set("six", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#ef8dd6");
+      record.set("dark", "#ef8dd6");
+      return record;
+    }());
+    record.set("seven", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#7564be");
+      record.set("dark", "#7564be");
+      return record;
+    }());
+    record.set("eight", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#d554b3");
+      record.set("dark", "#d554b3");
+      return record;
+    }());
+    record.set("nine", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#ec8943");
+      record.set("dark", "#ec8943");
+      return record;
+    }());
+    record.set("ten", function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#da7a4a");
+      record.set("dark", "#da7a4a");
+      return record;
+    }());
+    return record;
+  }());
+  return record;
+}();
+ftd.breakpoint_width = function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("mobile", 768);
+  return record;
+}();
 ftd.device = fastn.mutable(fastn_dom.DeviceData.Mobile);
-let inherited = fastn.recordInstance({
-  colors: ftd.default_colors.getClone().setAndReturn("is_root", true),
-  types: ftd.default_types.getClone().setAndReturn("is_root", true)
-});
+let inherited = function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("colors", ftd.default_colors.getClone().setAndReturn("is_root", true));
+  record.set("types", ftd.default_types.getClone().setAndReturn("is_root", true));
+  return record;
+}();
