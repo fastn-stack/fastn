@@ -94,6 +94,7 @@ global["foo__switcher"] = foo__switcher;
 fastn_utils.createNestedObject(global, "foo__c", fastn.mutableList([function () {
   let record = fastn.recordInstance({
   });
+  record.set("name", "me");
   record.set("elements", fastn.mutableList([function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Me component", inherited);
@@ -104,12 +105,12 @@ fastn_utils.createNestedObject(global, "foo__c", fastn.mutableList([function () 
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Me component 2", inherited);
   }
   ]));
-  record.set("name", "me");
   return record;
 }(),
 function () {
   let record = fastn.recordInstance({
   });
+  record.set("name", "me22");
   record.set("elements", fastn.mutableList([function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Me component22", inherited);
@@ -119,7 +120,6 @@ function () {
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Me component22 2", inherited);
   }
   ]));
-  record.set("name", "me22");
   return record;
 }()]));
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";

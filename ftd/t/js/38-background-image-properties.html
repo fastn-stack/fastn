@@ -48,8 +48,8 @@ fastn_utils.createNestedObject(global, "foo__bg_image", function () {
   record.set("src", function () {
     let record = fastn.recordInstance({
     });
-    record.set("dark", "https://picsum.photos/200/300");
     record.set("light", "https://picsum.photos/200/300");
+    record.set("dark", "https://picsum.photos/200/300");
     return record;
   }());
   record.set("repeat", fastn_dom.BackgroundRepeat.NoRepeat);

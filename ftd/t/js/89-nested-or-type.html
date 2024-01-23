@@ -47,8 +47,8 @@ let foo__page = function (parent, inherited, args)
       background: fastn_dom.BackgroundStyle.Solid(function () {
         let record = fastn.recordInstance({
         });
-        record.set("dark", "yellow");
         record.set("light", "yellow");
+        record.set("dark", "yellow");
         return record;
       }()),
       max_width: fastn_dom.Length.Px(70),

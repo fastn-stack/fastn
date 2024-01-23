@@ -116,6 +116,7 @@ global["foo__first_person_details"] = foo__first_person_details;
 fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([function () {
   let record = fastn.recordInstance({
   });
+  record.set("name", "Sam Ather");
   record.set("age", 30);
   record.set("meta", function () {
     let record = fastn.recordInstance({
@@ -124,7 +125,6 @@ fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([functio
     record.set("phone_number", "+987-654321");
     return record;
   }());
-  record.set("name", "Sam Ather");
   return record;
 }(),
 global.foo__r]));

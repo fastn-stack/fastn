@@ -101,15 +101,15 @@ let foo__button = function (parent, inherited, args)
     parenti0.setProperty(fastn_dom.PropertyKind.Color, function () {
       let record = fastn.recordInstance({
       });
-      record.set("dark", "white");
       record.set("light", "white");
+      record.set("dark", "white");
       return record;
     }(), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
       let record = fastn.recordInstance({
       });
-      record.set("dark", "blue");
       record.set("light", "blue");
+      record.set("dark", "blue");
       return record;
     }()), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.MinWidth, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(240)), inherited);
