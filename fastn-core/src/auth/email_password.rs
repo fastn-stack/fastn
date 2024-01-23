@@ -6,16 +6,21 @@ pub(crate) async fn create_user(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
+    use validator::ValidateArgs;
 
     if req.method() != "POST" {
         return Ok(fastn_core::not_found!("invalid route"));
     }
 
-    #[derive(serde::Deserialize, serde::Serialize, Debug)]
+    #[derive(serde::Deserialize, serde::Serialize, validator::Validate, Debug)]
     struct UserPayload {
+        #[validate(length(min = 4, message = "username must be at least 4 character long"))]
         username: String,
+        #[validate(email(message = "invalid email format"))]
         email: String,
+        #[validate(length(min = 1, message = "name must be at least 1 character long"))]
         name: String,
+        #[validate(custom(function = "fastn_core::auth::validator::validate_strong_password"))]
         password: String,
     }
 
@@ -23,12 +28,16 @@ pub(crate) async fn create_user(
 
     if let Err(e) = user_payload {
         return fastn_core::http::user_err(
-            vec![("payload", format!("invalid payload: {:?}", e).as_str())],
+            vec![("payload".into(), vec![format!("Invalid payload. Required the request body to contain json. Original error: {:?}", e)])],
             fastn_core::http::StatusCode::OK,
         );
     }
 
     let user_payload = user_payload.unwrap();
+
+    if let Err(e) = user_payload.validate_args(()) {
+        return fastn_core::http::validation_error_to_user_err(e, fastn_core::http::StatusCode::OK);
+    }
 
     let mut conn = db_pool
         .get()
@@ -43,35 +52,25 @@ pub(crate) async fn create_user(
         .first(&mut conn)
         .await?;
 
-    let email_check: Result<i64, diesel::result::Error> =
-        fastn_core::schema::fastn_user_email::table
-            .filter(
-                fastn_core::schema::fastn_user_email::email
-                    .eq(fastn_core::utils::citext(user_payload.email.as_str())),
-            )
-            .select(diesel::dsl::count(fastn_core::schema::fastn_user_email::id))
-            .first(&mut conn)
-            .await;
-
-    if let Err(_e) = email_check {
-        return fastn_core::http::user_err(
-            vec![("email", "invalid email")],
-            fastn_core::http::StatusCode::OK,
-        );
-    }
-
-    let email_check = email_check.expect("expected email_check to be Some");
-
     if username_check > 0 {
         return fastn_core::http::user_err(
-            vec![("username", "username already taken")],
+            vec![("username".into(), vec!["username already taken".into()])],
             fastn_core::http::StatusCode::OK,
         );
     }
+
+    let email_check: i64 = fastn_core::schema::fastn_user_email::table
+        .filter(
+            fastn_core::schema::fastn_user_email::email
+                .eq(fastn_core::utils::citext(&user_payload.email)),
+        )
+        .select(diesel::dsl::count(fastn_core::schema::fastn_user_email::id))
+        .first(&mut conn)
+        .await?;
 
     if email_check > 0 {
         return fastn_core::http::user_err(
-            vec![("email", "email already taken")],
+            vec![("email".into(), vec!["email already taken".into()])],
             fastn_core::http::StatusCode::OK,
         );
     }
@@ -126,8 +125,8 @@ pub(crate) async fn create_user(
     if let Err(e) = save_user_email_transaction {
         return fastn_core::http::user_err(
             vec![
-                ("email", "invalid email"),
-                ("detail", format!("{e}").as_str()),
+                ("email".into(), vec!["invalid email".into()]),
+                ("detail".into(), vec![format!("{e}")]),
             ],
             fastn_core::http::StatusCode::OK,
         );
@@ -177,7 +176,7 @@ pub(crate) async fn login(
 
     if let Err(e) = payload {
         return fastn_core::http::user_err(
-            vec![("payload", format!("invalid payload: {:?}", e).as_str())],
+            vec![("payload".into(), vec![format!("invalid payload: {:?}", e)])],
             fastn_core::http::StatusCode::OK,
         );
     }
@@ -200,7 +199,7 @@ pub(crate) async fn login(
 
     if user.is_none() {
         return fastn_core::http::user_err(
-            vec![("username", "invalid username")],
+            vec![("username".into(), vec!["invalid username".into()])],
             fastn_core::http::StatusCode::OK,
         );
     }
@@ -214,7 +213,7 @@ pub(crate) async fn login(
         // or should we redirect them to the oauth provider they used last time?
         // redirecting them will require saving the method they used to login which de don't atm
         return fastn_core::http::user_err(
-            vec![("username", "invalid username")],
+            vec![("username".into(), vec!["invalid username".into()])],
             fastn_core::http::StatusCode::OK,
         );
     }
@@ -230,7 +229,10 @@ pub(crate) async fn login(
 
     if password_match.is_err() {
         return fastn_core::http::user_err(
-            vec![("password", "incorrect username/password")],
+            vec![(
+                "password".into(),
+                vec!["incorrect username/password".into()],
+            )],
             fastn_core::http::StatusCode::OK,
         );
     }

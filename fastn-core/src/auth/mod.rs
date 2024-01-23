@@ -5,6 +5,8 @@ pub(crate) mod utils;
 
 mod email_password;
 
+pub(crate) mod validator;
+
 pub const COOKIE_NAME: &str = "fastn_session";
 
 #[derive(
@@ -244,7 +246,7 @@ async fn set_session_cookie_and_redirect_to_next(
                 return fastn_core::http::user_err(
                     // TODO: there should be an option to configure the resend verification
                     // mail webpage
-                    vec![("username", "User is not verified")],
+                    vec![("username".into(), vec!["User is not verified".into()])],
                     fastn_core::http::StatusCode::OK,
                 );
             }

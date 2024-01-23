@@ -725,16 +725,19 @@ pub async fn github_graphql<T: serde::de::DeserializeOwned>(
 /// }
 /// ```
 pub fn user_err(
-    errors: Vec<(&str, &str)>,
+    errors: Vec<(String, Vec<String>)>,
     status_code: fastn_core::http::StatusCode,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let mut json_error = serde_json::Map::new();
 
     for (k, v) in errors {
-        json_error.insert(k.to_string(), serde_json::Value::String(v.to_string()));
+        let messages =
+            serde_json::Value::Array(v.into_iter().map(serde_json::Value::String).collect());
+        json_error.insert(k.to_string(), messages);
     }
 
     let resp = serde_json::json!({
+        "success": false,
         "errors": json_error,
     });
 
@@ -744,15 +747,59 @@ pub fn user_err(
         .body(serde_json::to_string(&resp)?))
 }
 
+pub fn validation_error_to_user_err(
+    e: validator::ValidationErrors,
+    status_code: fastn_core::http::StatusCode,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    use itertools::Itertools;
+
+    let converted_error = e
+        .into_errors()
+        .into_iter()
+        .filter_map(|(k, v)| match v {
+            validator::ValidationErrorsKind::Field(f) => {
+                let messages = f
+                    .iter()
+                    .flat_map(|v| {
+                        let param_messages = v
+                            .params
+                            .iter()
+                            .filter(|(k, _)| k != &"value")
+                            .collect::<std::collections::HashMap<_, _>>()
+                            .values()
+                            // remove " from serde_json::Value::String
+                            .map(|&x| x.to_string().replace('\"', ""))
+                            .collect_vec();
+
+                        v.message
+                            .clone()
+                            .map(|x| vec![x.to_string()])
+                            .unwrap_or(param_messages)
+                    })
+                    .collect();
+
+                Some((k.to_string(), messages))
+            }
+            _ => None,
+        })
+        .collect();
+
+    fastn_core::http::user_err(converted_error, status_code)
+}
+
 #[cfg(test)]
 mod test {
     use actix_web::body::MessageBody;
+    use pretty_assertions::assert_eq;
 
     #[tokio::test]
     async fn user_err() -> fastn_core::Result<()> {
-        let user_err = "invalid email";
-        let token_err = "no key expected with name token";
-        let errors = vec![("user", user_err), ("token", token_err)];
+        let user_err = vec!["invalid email".into()];
+        let token_err = vec!["no key expected with name token".into()];
+        let errors = vec![
+            ("user".into(), user_err.clone()),
+            ("token".into(), token_err.clone()),
+        ];
 
         let res = fastn_core::http::user_err(errors, fastn_core::http::StatusCode::BAD_REQUEST)?;
 
@@ -760,13 +807,13 @@ mod test {
 
         #[derive(serde::Deserialize)]
         struct Errors {
-            user: String,
-            token: String,
+            user: Vec<String>,
+            token: Vec<String>,
         }
 
         #[derive(serde::Deserialize)]
         struct TestErrorResponse {
-            data: Option<String>,
+            success: bool,
             errors: Errors,
         }
 
@@ -774,9 +821,84 @@ mod test {
 
         let body: TestErrorResponse = serde_json::from_slice(&bytes)?;
 
-        assert_eq!(body.data, None);
+        assert_eq!(body.success, false);
         assert_eq!(body.errors.user, user_err);
         assert_eq!(body.errors.token, token_err);
+
+        Ok(())
+    }
+
+    #[tokio::test]
+    async fn validation_error_to_user_err() -> fastn_core::Result<()> {
+        use validator::Validate;
+
+        #[derive(serde::Deserialize, serde::Serialize, validator::Validate, Debug)]
+        struct UserPayload {
+            #[validate(length(min = 4, message = "username must be at least 4 character long"))]
+            username: String,
+            #[validate(email(message = "invalid email format"))]
+            email: String,
+            #[validate(length(min = 1, message = "name must be at least 1 character long"))]
+            name: String,
+            #[validate(custom(
+                function = "fastn_core::auth::validator::validate_strong_password"
+            ))]
+            password: String,
+        }
+
+        let user: UserPayload = UserPayload {
+            email: "email".to_string(),
+            name: "".to_string(),
+            username: "si".to_string(),
+            password: "four".to_string(),
+        };
+
+        if let Err(e) = user.validate() {
+            let res = fastn_core::http::validation_error_to_user_err(
+                e,
+                fastn_core::http::StatusCode::BAD_REQUEST,
+            )
+            .unwrap();
+
+            assert_eq!(res.status(), fastn_core::http::StatusCode::BAD_REQUEST);
+
+            #[derive(serde::Deserialize, Debug)]
+            struct Errors {
+                email: Vec<String>,
+                name: Vec<String>,
+                password: Vec<String>,
+            }
+
+            #[derive(serde::Deserialize, Debug)]
+            struct TestErrorResponse {
+                success: bool,
+                errors: Errors,
+            }
+
+            let bytes = res.into_body().try_into_bytes().unwrap();
+
+            let body: TestErrorResponse = serde_json::from_slice(&bytes).unwrap();
+
+            assert_eq!(body.success, false);
+            assert_eq!(body.errors.email, vec!["invalid email format"]);
+            assert_eq!(
+                body.errors.name,
+                vec!["name must be at least 1 character long"]
+            );
+
+            assert!(body
+                .errors
+                .password
+                .contains(&"password must contain at least one uppercase letter".to_string()));
+            assert!(body
+                .errors
+                .password
+                .contains(&"password must contain at least one number".to_string()));
+            assert!(body.errors.password.contains(
+                &"password must contain at least one special character (!@#$%^&*()_+{}|:<>?~)"
+                    .to_string()
+            ));
+        }
 
         Ok(())
     }

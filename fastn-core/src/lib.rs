@@ -17,7 +17,7 @@ pub(crate) mod watcher;
 #[macro_use]
 pub mod http;
 #[cfg(feature = "auth")]
-mod auth;
+pub mod auth;
 mod ds;
 mod error;
 mod i18n;
