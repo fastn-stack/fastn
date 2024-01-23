@@ -1005,7 +1005,7 @@ impl<'a> TDoc<'a> {
                             doc_id: doc.name.to_string(),
                             line_number,
                         })?;
-                    variant.to_thing()?
+                    variant.to_thing(doc.name, line_number)?
                 }
                 _ => {
                     return doc.err("not an or-type", thing, "get_thing", line_number);
