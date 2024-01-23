@@ -2054,9 +2054,9 @@ set_data_value(data, "foo#moo:mv:0,0", value);
 }
 window.ftd.call_mutable_value_changes("foo#foo:fv:0", "main");
 window.ftd.call_immutable_value_changes("foo#foo:fv:0", "main");
-window.ftd.utils.node_change_call("main","0,0,2:main__text", data);
-window.ftd.utils.node_change_call("main","0,0,3:main__text", data);
 window.ftd.utils.node_change_call("main","0,2:main__text", data);
+window.ftd.utils.node_change_call("main","0,0,3:main__text", data);
+window.ftd.utils.node_change_call("main","0,0,2:main__text", data);
 window.ftd.utils.node_change_call("main","0,0,0,1:main__text", data);
 };
 
@@ -2069,11 +2069,20 @@ set_data_value(data, "foo#boo:bv:0,0,0", value);
 }
 window.ftd.call_mutable_value_changes("foo#moo:mv:0,0", "main");
 window.ftd.call_immutable_value_changes("foo#moo:mv:0,0", "main");
-window.ftd.utils.node_change_call("main","0,0,0,1:main__text", data);
 window.ftd.utils.node_change_call("main","0,0,3:main__text", data);
+window.ftd.utils.node_change_call("main","0,0,0,1:main__text", data);
 };
 
 window.resolve_value_main = {};
+window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
+if(function(){
+return (resolve_reference("foo#foo:fv:0", data)>2);
+}()){
+set_data_value(data, "foo#moo:mv:0,0", 6);
+}
+else {set_data_value(data, "foo#moo:mv:0,0", 7);}
+
+}
 window.resolve_value_main["foo#boo:bv:0,0,0"] = function(data) {
 if(function(){
 return (resolve_reference("foo#foo:fv:0", data)>10);
@@ -2086,15 +2095,6 @@ return (resolve_reference("foo#moo:mv:0,0", data)>6);
 set_data_value(data, "foo#boo:bv:0,0,0", 5);
 }
 else {set_data_value(data, "foo#boo:bv:0,0,0", 4);}
-
-}
-window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
-if(function(){
-return (resolve_reference("foo#foo:fv:0", data)>2);
-}()){
-set_data_value(data, "foo#moo:mv:0,0", 6);
-}
-else {set_data_value(data, "foo#moo:mv:0,0", 7);}
 
 }
 
