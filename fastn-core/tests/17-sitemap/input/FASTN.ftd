@@ -1,63 +1,8 @@
--- import: fpm
+-- import: fastn
 
--- fpm.package: fpm-sitemap
-download-base-url: github.com/fifthtry/fpm-sitemap/archive/refs/heads/main.zip
+-- fastn.package: fastn-stack.github.io/guide
 
--- fpm.auto-import: fpm-sitemap/FPM/config
+-- fastn.sitemap:
 
-
-
--- fpm.sitemap:
-
-# other: -/other-package/inside/foo/
-
-
-# other foo with main: -/other-package/inside/foo/-/main/
-data: Other package foo calling main
-
-
-# Section Title: /
-name: Priyanka
-show: true
-int: 10
-dec: 0.3
-
-
-## First Subsection: /
-nav-title: This is nav title of First Subsection
-
-- First Toc: /
-nav-title: This is nav title of First Toc
-
-
-## Subsection Title: subsection/
-nav-title: This is nav title of Subsection
-
-- Toc Title: toc/
-  - Child Toc: childtoc/index.html
-    key: value
-    nav-title: This is nav title of Child Toc
-  - Other info: -/other-package/info/
-
-
-## Subsection Title 2: subsection/-/arpita/
-name: Arpita
-
-
-## Other index: -/other-package/
-
-
-
-
-
-# Section Title 2: /section/index.html
-nav-title: This is nav title of section 2
-
-
-
-# Section Title 3: /-/index-alias/
-nav-title: This is nav title of section 2
-
-
-# Section Title 4: index.html
-nav-title: This is nav title of section 2
+# Installation: /install/
+  document: guide/install.ftd
