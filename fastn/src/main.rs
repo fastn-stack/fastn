@@ -42,6 +42,15 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return Ok(());
     }
 
+    #[cfg(feature = "auth")]
+    if let Ok(auth_enabled) = std::env::var("FASTN_ENABLE_AUTH") {
+        if auth_enabled == "true" {
+            tracing::info!("running auth related migrations");
+            let db_url = std::env::var("FASTN_DB_URL")?;
+            fastn_core::db::migrate(db_url).await?;
+        }
+    }
+
     if let Some(project) = matches.subcommand_matches("create-package") {
         // project-name => required field (any package Url or standard project name)
         let name = project.value_of_("name").unwrap();
@@ -51,7 +60,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::create_package(name, path, download_base_url).await;
     }
 
-    let mut config = fastn_core::Config::read_current(false).await?;
+    let mut config = fastn_core::Config::read_current(true).await?;
 
     if let Some(serve) = matches.subcommand_matches("serve") {
         let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
@@ -69,6 +78,8 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_js = serve.values_of_("js");
         let external_css = serve.values_of_("external-css");
         let inline_css = serve.values_of_("css");
+
+        fastn_update::update(&config).await?;
 
         return fastn_core::listen(
             bind.as_str(),
@@ -102,6 +113,8 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_inline_css(inline_css)
             .set_test_command_running();
 
+        fastn_update::update(&config).await?;
+
         return fastn_core::test(
             &config,
             test.value_of_("file"), // TODO: handle more than one files
@@ -123,6 +136,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_js = build.values_of_("js");
         let external_css = build.values_of_("external-css");
         let inline_css = build.values_of_("css");
+        let zip_url = build.value_of_("zip-url");
 
         config = config
             .add_edition(edition)?
@@ -131,14 +145,16 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_external_css(external_css)
             .add_inline_css(inline_css);
 
+        fastn_update::update(&config).await?;
+
         return fastn_core::build(
             &config,
             build.value_of_("file"), // TODO: handle more than one files
             build.value_of_("base").unwrap_or("/"),
-            build.value_of_("zip-url"),
             build.get_flag("ignore-failed"),
             matches.get_flag("test"),
             build.get_flag("check-build"),
+            zip_url,
         )
         .await;
     }
@@ -238,7 +254,7 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Build static site from this fastn package")
                 .arg(clap::arg!(file: [FILE]... "The file to build (if specified only these are built, else entire package is built)"))
                 .arg(clap::arg!(-b --base [BASE] "The base path.").default_value("/"))
-                .arg(clap::arg!(--"zip-url" ["ZIP URL"] "The zip url of the package."))
+                .arg(clap::arg!(--"zip-url" <URL> "The zip archive url for this package"))
                 .arg(clap::arg!(--"ignore-failed" "Ignore failed files."))
                 .arg(clap::arg!(--"check-build" "Checks .build for index files validation."))
                 .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")

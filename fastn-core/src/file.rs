@@ -220,11 +220,18 @@ pub async fn get_file(
 }
 
 pub fn is_static(path: &str) -> fastn_core::Result<bool> {
-    Ok(match path.rsplit_once('.') {
-        Some((_, "ftd")) | Some((_, "md")) => false,
-        Some((_, "svg")) | Some((_, "woff")) | Some((_, "woff2")) => true,
-        Some((_, ext)) if ftd::ftd2021::code::KNOWN_EXTENSIONS.contains(ext) => false,
-        None => false,
-        _ => true,
-    })
+    Ok(
+        match path
+            .rsplit_once('/')
+            .map(|v| v.1)
+            .unwrap_or(path)
+            .rsplit_once('.')
+        {
+            Some((_, "ftd")) | Some((_, "md")) => false,
+            Some((_, "svg")) | Some((_, "woff")) | Some((_, "woff2")) => true,
+            Some((_, ext)) if ftd::ftd2021::code::KNOWN_EXTENSIONS.contains(ext) => false,
+            None => false,
+            _ => true,
+        },
+    )
 }

@@ -1,0 +1,20 @@
+-- import: fastn
+
+-- fastn.test: 04-multi-endpoint
+
+;; Mountpoint: /test-server-data/ -> Endpoint: http://127.0.0.1:5000/get-data/
+-- fastn.get: Fetching Test Data (from test server)
+url: /test-server-data/
+
+-- fastn.get.test:
+
+fastn.assert.eq(fastn.http_response["data"], "Hello, World!");
+
+;; Mountpoint: /ftd/* -> Endpoint: http://fastn.com/ftd/*
+-- fastn.get: Fetching content from fastn.com
+url: /ftd/column/
+http-status: 308
+
+-- fastn.get: Redirect to google
+url: /goo/
+http-redirect: http://google.com
