@@ -63,18 +63,24 @@ let foo__show_person = function (parent, inherited, args)
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
       rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, __args__.emp_id, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "green",
-        light: "green"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "green");
+        record.set("light", "green");
+        return record;
+      }(), inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "blue",
-        light: "blue"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "blue");
+        record.set("light", "blue");
+        return record;
+      }(), inherited);
     }
     ]), inherited);
     return parenti0;
@@ -110,14 +116,20 @@ let foo__show_persons = function (parent, inherited, args)
   }
 }
 global["foo__show_persons"] = foo__show_persons;
-fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([fastn.recordInstance({
-  emp_id: 1,
-  name: "Ritesh"
-}),
-fastn.recordInstance({
-  emp_id: 2,
-  name: "Ajinosaurus"
-})]));
+fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("emp_id", 1);
+  record.set("name", "Ritesh");
+  return record;
+}(),
+function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("emp_id", 2);
+  record.set("name", "Ajinosaurus");
+  return record;
+}()]));
 let foo__get_first_person = function (args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;

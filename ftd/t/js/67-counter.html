@@ -70,10 +70,13 @@ let foo__counter = function (parent, inherited, args) {
       if (function () {
         return (fastn_utils.getter(__args__.count) % 2 == 0);
       }()) {
-        return fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-          dark: "yellow",
-          light: "yellow"
-        }));
+        return fastn_dom.BackgroundStyle.Solid(function () {
+          let record = fastn.recordInstance({
+          });
+          record.set("dark", "yellow");
+          record.set("light", "yellow");
+          return record;
+        }());
       }
     }
     ), inherited);

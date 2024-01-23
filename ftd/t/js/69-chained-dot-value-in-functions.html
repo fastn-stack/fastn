@@ -67,15 +67,21 @@ let foo__some_details = function (args) {
   }
 }
 global["foo__some_details"] = foo__some_details;
-fastn_utils.createNestedObject(global, "foo__meta", fastn.recordInstance({
-  address: "Sam City in Some House",
-  phone_number: "+1234-56789"
-}));
-fastn_utils.createNestedObject(global, "foo__r", fastn.recordInstance({
-  name: "Sam Wan",
-  age: 23,
-  meta: global.foo__meta
-}));
+fastn_utils.createNestedObject(global, "foo__meta", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("address", "Sam City in Some House");
+  record.set("phone_number", "+1234-56789");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__r", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "Sam Wan");
+  record.set("age", 23);
+  record.set("meta", global.foo__meta);
+  return record;
+}());
 fastn_utils.createNestedObject(global, "foo__places", fastn.mutableList(["Bangalore",
 "Mumbai",
 "Chennai",
@@ -107,14 +113,20 @@ let foo__first_person_details = function (args)
   }
 }
 global["foo__first_person_details"] = foo__first_person_details;
-fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([fastn.recordInstance({
-  age: 30,
-  meta: fastn.recordInstance({
-    address: "Sam Ather City at Some Other House",
-    phone_number: "+987-654321"
-  }),
-  name: "Sam Ather"
-}),
+fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("age", 30);
+  record.set("meta", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("address", "Sam Ather City at Some Other House");
+    record.set("phone_number", "+987-654321");
+    return record;
+  }());
+  record.set("name", "Sam Ather");
+  return record;
+}(),
 global.foo__r]));
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";

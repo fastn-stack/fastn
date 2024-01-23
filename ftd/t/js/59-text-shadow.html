@@ -39,17 +39,23 @@
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "foo__s", fastn.recordInstance({
-  x_offset: fastn_dom.Length.Px(1),
-  y_offset: fastn_dom.Length.Px(1),
-  blur: fastn_dom.Length.Px(4),
-  spread: fastn_dom.Length.Px(0),
-  color: fastn.recordInstance({
-    dark: "#000000",
-    light: "#000000"
-  }),
-  inset: false
-}));
+fastn_utils.createNestedObject(global, "foo__s", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("x_offset", fastn_dom.Length.Px(1));
+  record.set("y_offset", fastn_dom.Length.Px(1));
+  record.set("blur", fastn_dom.Length.Px(4));
+  record.set("spread", fastn_dom.Length.Px(0));
+  record.set("color", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("dark", "#000000");
+    record.set("light", "#000000");
+    return record;
+  }());
+  record.set("inset", false);
+  return record;
+}());
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

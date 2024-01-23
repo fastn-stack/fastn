@@ -35,15 +35,21 @@
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is some text", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "red",
-        light: "red"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "red");
+        record.set("light", "red");
+        return record;
+      }(), inherited);
     }
     ]), inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Favicon, fastn.recordInstance({
-      src: "https://fastn.com/-/fastn.com/images/favicon.svg"
-    }), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Favicon, function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("src", "https://fastn.com/-/fastn.com/images/favicon.svg");
+      return record;
+    }(), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaTitle, "Testing favicon", inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;

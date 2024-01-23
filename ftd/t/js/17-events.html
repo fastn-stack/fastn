@@ -64,15 +64,21 @@
       if (function () {
         return fastn_utils.getter(global.foo__flag);
       }()) {
-        return fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        });
+        return function () {
+          let record = fastn.recordInstance({
+          });
+          record.set("dark", "red");
+          record.set("light", "red");
+          return record;
+        }();
       } else {
-        return fastn.recordInstance({
-          dark: "green",
-          light: "green"
-        });
+        return function () {
+          let record = fastn.recordInstance({
+          });
+          record.set("dark", "green");
+          record.set("light", "green");
+          return record;
+        }();
       }
     }
     ), inherited);

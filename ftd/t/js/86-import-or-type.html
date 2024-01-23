@@ -38,11 +38,14 @@
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "_80_or_type_constant__button_type", fastn.recordInstance({
-  small: 1,
-  medium: 2,
-  large: 3
-}));
+fastn_utils.createNestedObject(global, "_80_or_type_constant__button_type", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("small", 1);
+  record.set("medium", 2);
+  record.set("large", 3);
+  return record;
+}());
 fastn_utils.createNestedObject(global, "_80_or_type_constant__small", 1);
 let _80_or_type_constant__fancy_button = function (parent, inherited, args)
 {

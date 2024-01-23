@@ -56,10 +56,13 @@
     }
     parenti0.setProperty(fastn_dom.PropertyKind.Id, "panda", inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(500)), inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "yellow",
-      light: "yellow"
-    })), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("dark", "yellow");
+      record.set("light", "yellow");
+      return record;
+    }()), inherited);
     let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Rive);
     if (!ssr) {
       let extraData = parenti1.getExtraData();

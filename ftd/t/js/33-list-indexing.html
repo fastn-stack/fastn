@@ -44,10 +44,13 @@
     fastn_utils.getter(global.foo__names).forLoop(parent, function (root, item, index) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "green",
-        light: "green"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "green");
+        record.set("light", "green");
+        return record;
+      }(), inherited);
       return rooti0;
     });
     fastn_dom.conditionalDom(parent, [
@@ -57,10 +60,13 @@
     }, function (root) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn_utils.getListItem(global.foo__names.get(2)), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "red",
-        light: "red"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("dark", "red");
+        record.set("light", "red");
+        return record;
+      }(), inherited);
       return rooti0;
     });
   } finally {

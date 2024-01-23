@@ -64,10 +64,13 @@
       }
     }
     ), inherited);
-    parenti4.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "yellow",
-      light: "yellow"
-    })), inherited);
+    parenti4.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("dark", "yellow");
+      record.set("light", "yellow");
+      return record;
+    }()), inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

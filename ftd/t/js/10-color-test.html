@@ -64,10 +64,13 @@ consectetur voluptatum et Quis inventore ab dignissimos amet?</div></div></div><
       }()) {
         return fastn_dom.BackgroundStyle.Solid(global.foo__bg_bp);
       } else {
-        return fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-          dark: "pink",
-          light: "pink"
-        }));
+        return fastn_dom.BackgroundStyle.Solid(function () {
+          let record = fastn.recordInstance({
+          });
+          record.set("dark", "pink");
+          record.set("light", "pink");
+          return record;
+        }());
       }
     }
     ), inherited);
@@ -94,10 +97,13 @@ consectetur voluptatum et Quis inventore ab dignissimos amet?</div></div></div><
         }()) {
           return global.foo__bp;
         } else {
-          return fastn.recordInstance({
-            dark: "red",
-            light: "red"
-          });
+          return function () {
+            let record = fastn.recordInstance({
+            });
+            record.set("dark", "red");
+            record.set("light", "red");
+            return record;
+          }();
         }
       }
       ), inherited);
@@ -108,10 +114,13 @@ consectetur voluptatum et Quis inventore ab dignissimos amet?</div></div></div><
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "foo__bg_og", fastn.recordInstance({
-  light: "#170d03",
-  dark: "#edfce8"
-}));
+fastn_utils.createNestedObject(global, "foo__bg_og", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#170d03");
+  record.set("dark", "#edfce8");
+  return record;
+}());
 let foo__increment = function (args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
@@ -132,36 +141,54 @@ let foo__increment = function (args)
 }
 global["foo__increment"] = foo__increment;
 fastn_utils.createNestedObject(global, "foo__value", fastn.mutable(0));
-fastn_utils.createNestedObject(global, "foo__og", fastn.recordInstance({
-  light: "orange",
-  dark: "green"
-}));
-fastn_utils.createNestedObject(global, "foo__bp", fastn.recordInstance({
-  light: "blue",
-  dark: "purple"
-}));
-fastn_utils.createNestedObject(global, "foo__dtype", fastn.recordInstance({
-  size: fastn_dom.FontSize.Px(36),
-  line_height: fastn_dom.FontSize.Px(40),
-  letter_spacing: fastn_dom.FontSize.Px(5),
-  weight: 700,
-  font_family: fastn.mutableList(["cursive"])
-}));
-fastn_utils.createNestedObject(global, "foo__mtype", fastn.recordInstance({
-  size: fastn_dom.FontSize.Px(20),
-  line_height: fastn_dom.FontSize.Px(35),
-  letter_spacing: fastn_dom.FontSize.Px(3),
-  weight: 100,
-  font_family: fastn.mutableList(["fantasy"])
-}));
-fastn_utils.createNestedObject(global, "foo__rtype", fastn.recordInstance({
-  desktop: global.foo__dtype,
-  mobile: global.foo__mtype
-}));
-fastn_utils.createNestedObject(global, "foo__bg_bp", fastn.recordInstance({
-  light: "#e8eafc",
-  dark: "#f4e8fc"
-}));
+fastn_utils.createNestedObject(global, "foo__og", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "orange");
+  record.set("dark", "green");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__bp", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "blue");
+  record.set("dark", "purple");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__dtype", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("size", fastn_dom.FontSize.Px(36));
+  record.set("line_height", fastn_dom.FontSize.Px(40));
+  record.set("letter_spacing", fastn_dom.FontSize.Px(5));
+  record.set("weight", 700);
+  record.set("font_family", fastn.mutableList(["cursive"]));
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__mtype", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("size", fastn_dom.FontSize.Px(20));
+  record.set("line_height", fastn_dom.FontSize.Px(35));
+  record.set("letter_spacing", fastn_dom.FontSize.Px(3));
+  record.set("weight", 100);
+  record.set("font_family", fastn.mutableList(["fantasy"]));
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__rtype", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("desktop", global.foo__dtype);
+  record.set("mobile", global.foo__mtype);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__bg_bp", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#e8eafc");
+  record.set("dark", "#f4e8fc");
+  return record;
+}());
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

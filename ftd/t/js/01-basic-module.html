@@ -54,18 +54,24 @@
         v: false,
       }, parenti0);
     });
-    parenti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "red",
-      light: "red"
-    }), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("dark", "red");
+      record.set("light", "red");
+      return record;
+    }(), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn.formula([global.foo__hover], function () {
       if (function () {
         return fastn_utils.getter(global.foo__hover);
       }()) {
-        return fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-          dark: "#eaaaff",
-          light: "#eaaaff"
-        }));
+        return fastn_dom.BackgroundStyle.Solid(function () {
+          let record = fastn.recordInstance({
+          });
+          record.set("dark", "#eaaaff");
+          record.set("light", "#eaaaff");
+          return record;
+        }());
       }
     }
     ), inherited);
@@ -83,10 +89,13 @@
 }
 global["main"] = main;
 fastn_utils.createNestedObject(global, "foo__hover", fastn.mutable(false));
-fastn_utils.createNestedObject(global, "foo__bg_og", fastn.recordInstance({
-  light: "yellow",
-  dark: "green"
-}));
+fastn_utils.createNestedObject(global, "foo__bg_og", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "yellow");
+  record.set("dark", "green");
+  return record;
+}());
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
