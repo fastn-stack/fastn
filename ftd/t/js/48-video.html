@@ -40,14 +40,20 @@
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "foo__my_video", fastn.recordInstance({
-  light: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-  dark: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
-}));
-fastn_utils.createNestedObject(global, "foo__my_video_poster", fastn.recordInstance({
-  light: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
-  dark: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerFun.jpg"
-}));
+fastn_utils.createNestedObject(global, "foo__my_video", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4");
+  record.set("dark", "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__my_video_poster", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg");
+  record.set("dark", "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerFun.jpg");
+  return record;
+}());
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

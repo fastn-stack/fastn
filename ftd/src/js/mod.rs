@@ -219,34 +219,15 @@ impl ftd::interpreter::Variable {
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast {
         if let Ok(value) = self.value.value(doc.name, self.value.line_number()) {
-            if let ftd::interpreter::Kind::Record { name } = &self.kind.kind {
-                let record = doc.get_record(name, self.line_number).unwrap();
-                let record_fields = value
-                    .record_fields(doc.name, self.value.line_number())
-                    .unwrap();
-                let mut fields = vec![];
-                for field in record.fields {
-                    if let Some(value) = record_fields.get(field.name.as_str()) {
-                        fields.push((
-                            field.name.to_string(),
-                            value.to_fastn_js_value_with_none(doc, has_rive_components),
-                        ));
-                    } else {
-                        fields.push((
-                            field.name.to_string(),
-                            field
-                                .get_default_value()
-                                .unwrap()
-                                .to_set_property_value_with_none(doc, has_rive_components),
-                        ));
-                    }
-                }
+            if self.kind.is_record() {
                 return fastn_js::Ast::RecordInstance(fastn_js::RecordInstance {
                     name: self.name.to_string(),
-                    fields: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
-                        fields,
-                        other_references: vec![],
-                    }),
+                    fields: value.to_fastn_js_value(
+                        doc,
+                        &ftd::js::ResolverData::none(),
+                        has_rive_components,
+                        false,
+                    ),
                     prefix,
                 });
             } else if self.kind.is_list() {
@@ -548,7 +529,6 @@ impl ftd::interpreter::Component {
                 arguments,
                 parent,
                 rdata.inherited_variable_name,
-                should_return,
                 index,
                 false,
             );
@@ -566,6 +546,12 @@ impl ftd::interpreter::Component {
                         fastn_js::ComponentStatement::AddEventHandler(event_handler)
                     })
             }));
+
+            if should_return {
+                component_statements.push(fastn_js::ComponentStatement::Return {
+                    component_name: instantiate_component_var_name.to_string(),
+                });
+            }
 
             Some(component_statements)
         } else {
@@ -631,7 +617,6 @@ impl ftd::interpreter::Component {
             arguments,
             parent,
             rdata.inherited_variable_name,
-            should_return,
             index,
             true,
         );
@@ -648,6 +633,12 @@ impl ftd::interpreter::Component {
                 .to_event_handler_js(&instantiate_component_var_name, doc, rdata)
                 .map(fastn_js::ComponentStatement::AddEventHandler)
         }));
+
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: instantiate_component_var_name.to_string(),
+            });
+        }
 
         Some(component_statements)
     }
@@ -685,7 +676,6 @@ impl ftd::interpreter::Component {
             vec![],
             parent,
             rdata.inherited_variable_name,
-            should_return,
             index,
             true,
         );
@@ -702,6 +692,12 @@ impl ftd::interpreter::Component {
                 .to_event_handler_js(&instantiate_component_var_name, doc, rdata)
                 .map(fastn_js::ComponentStatement::AddEventHandler)
         }));
+
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: instantiate_component_var_name.to_string(),
+            });
+        }
 
         Some(component_statements)
     }

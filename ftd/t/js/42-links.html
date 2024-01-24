@@ -36,10 +36,13 @@
     }, function (root) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from mobile", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("light", "yellow");
+        record.set("dark", "yellow");
+        return record;
+      }()), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Link, "fastn.com", inherited);
       return rooti0;
     });
@@ -50,10 +53,13 @@
     }, function (root) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-        dark: "yellow",
-        light: "yellow"
-      })), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("light", "yellow");
+        record.set("dark", "yellow");
+        return record;
+      }()), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Link, "fastn.com", inherited);
       return rooti0;
     });

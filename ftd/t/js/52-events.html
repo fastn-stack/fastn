@@ -72,10 +72,13 @@ let foo__display_name = function (parent, inherited, args)
       if (function () {
         return (fastn_utils.getter(__args__.selected) == fastn_utils.getter(__args__.idx));
       }()) {
-        return fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-          dark: "yellow",
-          light: "yellow"
-        }));
+        return fastn_dom.BackgroundStyle.Solid(function () {
+          let record = fastn.recordInstance({
+          });
+          record.set("light", "yellow");
+          record.set("dark", "yellow");
+          return record;
+        }());
       }
     }
     ), inherited);

@@ -1,0 +1,47 @@
+-- record name-data:
+caption name:
+string full-name: $name-data.name
+
+
+-- name-data arpita: Arpita
+
+-- name-data john: John
+full-name: John Doe
+
+
+
+-- display-name: $arpita
+-- display-name: $name
+for: name in $names
+
+
+
+-- name-data list names:
+
+-- name-data: $arpita
+
+-- name-data: FifthTry
+
+-- name-data: fastn
+full-name: fastn framework
+
+-- name-data: $john
+
+-- end: names
+
+
+-- component display-name:
+caption name-data name:
+name-data clone-name: $display-name.name
+
+-- ftd.column:
+
+-- ftd.text: $display-name.name.name
+color: green
+
+-- ftd.text: $display-name.name.full-name
+color: red
+
+-- end: ftd.column
+
+-- end: display-name

@@ -1,19 +1,12 @@
 -- fbt:
-cmd: $FBT_CWD/../target/debug/fastn --test build --test
+cmd: $FBT_CWD/../target/debug/fastn --test build
 output: .build
-skip: Need to fix this test
 
 -- stdout:
 
-Processing fpm-sitemap/-/index-alias/index.ftd ... done in <omitted>
-Processing fpm-sitemap/-/other-package/index.ftd ... done in <omitted>
-Processing fpm-sitemap/-/other-package/info/index.ftd ... done in <omitted>
-Processing fpm-sitemap/-/other-package/inside/foo/-/main/index.ftd ... done in <omitted>
-Processing fpm-sitemap/-/other-package/inside/foo/index.ftd ... done in <omitted>
-Processing fpm-sitemap/FPM.ftd ... done in <omitted>
-Processing fpm-sitemap/childtoc.ftd ... done in <omitted>
-Processing fpm-sitemap/index.ftd ... done in <omitted>
-Processing fpm-sitemap/section.ftd ... done in <omitted>
-Processing fpm-sitemap/subsection.ftd ... done in <omitted>
-Processing fpm-sitemap/subsection/-/arpita/index.ftd ... done in <omitted>
-Processing fpm-sitemap/toc.ftd ... done in <omitted>
+Updated package dependency
+Processing fastn-stack.github.io/guide/manifest.json ... done in <omitted>
+Processing fastn-stack.github.io/guide/FASTN/ ... done in <omitted>
+Processing fastn-stack.github.io/guide/guide/install/ ... done in <omitted>
+Processing fastn-stack.github.io/guide/ ... done in <omitted>
+Processing fastn-stack.github.io/guide/install/ ... done in <omitted>

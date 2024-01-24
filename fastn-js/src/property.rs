@@ -242,7 +242,8 @@ impl Value {
                 fields,
                 other_references,
             } => format!(
-                "fastn.recordInstance({{{}{}}})",
+                "function() {{let {} = fastn.recordInstance({{{}}}); {} return record;}}()",
+                fastn_js::LOCAL_RECORD_MAP,
                 if other_references.is_empty() {
                     "".to_string()
                 } else {
@@ -258,11 +259,12 @@ impl Value {
                 fields
                     .iter()
                     .map(|(k, v)| format!(
-                        "{}: {}",
+                        "{}.set(\"{}\", {});",
+                        fastn_js::LOCAL_RECORD_MAP,
                         fastn_js::utils::name_to_js_(k),
                         v.to_js_with_element_name(element_name)
                     ))
-                    .join(", ")
+                    .join("\n")
             ),
             Value::UI { value } => format!(
                 "function({}, {}){{{}}}",

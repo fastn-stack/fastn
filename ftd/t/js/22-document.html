@@ -38,26 +38,38 @@
     parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaDescription, "This is main description", inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaOGDescription, "This is og description", inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaTwitterDescription, "This is twitter description", inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaOGImage, fastn.recordInstance({
-      src: global.foo__fastn_image.get("light")
-    }), inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage, fastn.recordInstance({
-      src: global.foo__fastn_image.get("dark")
-    }), inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor, fastn.recordInstance({
-      dark: "white",
-      light: "white"
-    }), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaOGImage, function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("src", global.foo__fastn_image.get("light"));
+      return record;
+    }(), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaTwitterImage, function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("src", global.foo__fastn_image.get("dark"));
+      return record;
+    }(), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaThemeColor, function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "white");
+      record.set("dark", "white");
+      return record;
+    }(), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaFacebookDomainVerification, "7uedwv99dgux8pbshcr7jzhb3l3hvu", inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "foo__fastn_image", fastn.recordInstance({
-  light: "https://fastn.io/-/fastn.io/images/fastn.svg",
-  dark: "https://fastn.io/-/fastn.io/images/fastn-dark.svg"
-}));
+fastn_utils.createNestedObject(global, "foo__fastn_image", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "https://fastn.io/-/fastn.io/images/fastn.svg");
+  record.set("dark", "https://fastn.io/-/fastn.io/images/fastn-dark.svg");
+  return record;
+}());
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

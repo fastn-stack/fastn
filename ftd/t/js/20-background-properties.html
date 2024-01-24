@@ -84,52 +84,82 @@
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "foo__bg_solid", fastn.recordInstance({
-  light: "red",
-  dark: "green"
-}));
-fastn_utils.createNestedObject(global, "foo__bg_image_src", fastn.recordInstance({
-  light: "https://picsum.photos/id/236/200/300",
-  dark: "https://picsum.photos/id/237/200/300"
-}));
-fastn_utils.createNestedObject(global, "foo__len", fastn_dom.BackgroundSize.Length(fastn.recordInstance({
-  x: fastn_dom.Length.Px(150),
-  y: fastn_dom.Length.Px(150)
-})));
-fastn_utils.createNestedObject(global, "foo__pos", fastn_dom.BackgroundPosition.Length(fastn.recordInstance({
-  x: fastn_dom.Length.Px(0),
-  y: fastn_dom.Length.Px(25)
-})));
-fastn_utils.createNestedObject(global, "foo__bg_image", fastn.recordInstance({
-  src: global.foo__bg_image_src,
-  repeat: fastn_dom.BackgroundRepeat.NoRepeat,
-  size: fastn_dom.BackgroundSize.Length(global.foo__len),
-  position: fastn_dom.BackgroundPosition.Length(global.foo__pos)
-}));
-fastn_utils.createNestedObject(global, "foo__red_orange", fastn.recordInstance({
-  light: "red",
-  dark: "orange"
-}));
-fastn_utils.createNestedObject(global, "foo__yellow_blue", fastn.recordInstance({
-  light: "yellow",
-  dark: "blue"
-}));
-fastn_utils.createNestedObject(global, "foo__color_values", fastn.mutableList([fastn.recordInstance({
-  color: global.foo__red_orange,
-  end: null,
-  start: null,
-  stop_position: fastn_dom.Length.Percent(40)
-}),
-fastn.recordInstance({
-  color: global.foo__yellow_blue,
-  end: null,
-  start: null,
-  stop_position: null
-})]));
-fastn_utils.createNestedObject(global, "foo__lg", fastn.recordInstance({
-  direction: fastn_dom.LinearGradientDirection.BottomLeft,
-  colors: global.foo__color_values
-}));
+fastn_utils.createNestedObject(global, "foo__bg_solid", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "red");
+  record.set("dark", "green");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__bg_image_src", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "https://picsum.photos/id/236/200/300");
+  record.set("dark", "https://picsum.photos/id/237/200/300");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__len", fastn_dom.BackgroundSize.Length(function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("x", fastn_dom.Length.Px(150));
+  record.set("y", fastn_dom.Length.Px(150));
+  return record;
+}()));
+fastn_utils.createNestedObject(global, "foo__pos", fastn_dom.BackgroundPosition.Length(function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("x", fastn_dom.Length.Px(0));
+  record.set("y", fastn_dom.Length.Px(25));
+  return record;
+}()));
+fastn_utils.createNestedObject(global, "foo__bg_image", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("src", global.foo__bg_image_src);
+  record.set("repeat", fastn_dom.BackgroundRepeat.NoRepeat);
+  record.set("size", fastn_dom.BackgroundSize.Length(global.foo__len));
+  record.set("position", fastn_dom.BackgroundPosition.Length(global.foo__pos));
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__red_orange", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "red");
+  record.set("dark", "orange");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__yellow_blue", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "yellow");
+  record.set("dark", "blue");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__color_values", fastn.mutableList([function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("color", global.foo__red_orange);
+  record.set("start", null);
+  record.set("end", null);
+  record.set("stop_position", fastn_dom.Length.Percent(40));
+  return record;
+}(),
+function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("color", global.foo__yellow_blue);
+  record.set("start", null);
+  record.set("end", null);
+  record.set("stop_position", null);
+  return record;
+}()]));
+fastn_utils.createNestedObject(global, "foo__lg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("direction", fastn_dom.LinearGradientDirection.BottomLeft);
+  record.set("colors", global.foo__color_values);
+  return record;
+}());
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

@@ -46,10 +46,13 @@
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "foo__bg_og", fastn.recordInstance({
-  light: "yellow",
-  dark: "green"
-}));
+fastn_utils.createNestedObject(global, "foo__bg_og", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "yellow");
+  record.set("dark", "green");
+  return record;
+}());
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
