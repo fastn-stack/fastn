@@ -747,6 +747,7 @@ pub fn user_err(
         .body(serde_json::to_string(&resp)?))
 }
 
+#[cfg(feature = "auth")]
 pub fn validation_error_to_user_err(
     e: validator::ValidationErrors,
     status_code: fastn_core::http::StatusCode,
@@ -829,6 +830,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[cfg(feature = "auth")]
     async fn validation_error_to_user_err() -> fastn_core::Result<()> {
         use validator::Validate;
 
