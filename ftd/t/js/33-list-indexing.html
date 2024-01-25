@@ -56,7 +56,7 @@
     fastn_dom.conditionalDom(parent, [
       fastn_utils.getListItem(global.foo__names.get(2))
     ], function () {
-      return (fastn_utils.getter(fastn_utils.getListItem(global.foo__names.get(2))) !== null);
+      return (fastn_utils.getStaticValue(fastn_utils.getListItem(global.foo__names.get(2))) !== null);
     }, function (root) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn_utils.getListItem(global.foo__names.get(2)), inherited);

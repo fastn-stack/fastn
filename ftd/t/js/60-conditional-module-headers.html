@@ -36,7 +36,7 @@
       title: fastn.formula([global.foo__title,
       global.foo__flag], function () {
         if (function () {
-          return (!fastn_utils.getter(global.foo__flag));
+          return (!fastn_utils.getStaticValue(global.foo__flag));
         }()) {
           return global.foo__title;
         }

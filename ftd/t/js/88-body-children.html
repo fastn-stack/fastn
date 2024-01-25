@@ -34,7 +34,7 @@
         fastn_dom.conditionalDom(root, [
           global.foo__name
         ], function () {
-          return (fastn_utils.getter(global.foo__name) !== null);
+          return (fastn_utils.getStaticValue(global.foo__name) !== null);
         }, function (root) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
           rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name, inherited);
@@ -45,7 +45,7 @@
         fastn_dom.conditionalDom(root, [
           global.foo__name
         ], function () {
-          return (fastn_utils.getter(global.foo__name) !== null);
+          return (fastn_utils.getStaticValue(global.foo__name) !== null);
         }, function (root) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Code);
           rooti0.setProperty(fastn_dom.PropertyKind.Code, global.foo__name, inherited);

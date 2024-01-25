@@ -46,7 +46,7 @@
     global.foo__flag,
     global.foo__flag], function () {
       if (function () {
-        return (fastn_utils.getter(global.foo__flag) % 4 == 1);
+        return (fastn_utils.getStaticValue(global.foo__flag) % 4 == 1);
       }()) {
         return function () {
           let record = fastn.recordInstance({
@@ -56,7 +56,7 @@
           return record;
         }();
       } else if (function () {
-        return (fastn_utils.getter(global.foo__flag) % 4 == 2);
+        return (fastn_utils.getStaticValue(global.foo__flag) % 4 == 2);
       }()) {
         return function () {
           let record = fastn.recordInstance({
@@ -66,7 +66,7 @@
           return record;
         }();
       } else if (function () {
-        return (fastn_utils.getter(global.foo__flag) % 4 == 3);
+        return (fastn_utils.getStaticValue(global.foo__flag) % 4 == 3);
       }()) {
         return function () {
           let record = fastn.recordInstance({

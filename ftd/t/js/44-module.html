@@ -51,7 +51,7 @@ let _01_basic__append = function (args) {
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
+    return (fastn_utils.getStaticValue(__args__.a) + " " + fastn_utils.getStaticValue(__args__.b));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -130,7 +130,7 @@ let _01_basic_module__append = function (args)
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    return (fastn_utils.getter(__args__.a) + " ++++ " + fastn_utils.getter(__args__.b));
+    return (fastn_utils.getStaticValue(__args__.a) + " ++++ " + fastn_utils.getStaticValue(__args__.b));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

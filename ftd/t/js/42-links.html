@@ -32,7 +32,7 @@
     fastn_dom.conditionalDom(parent, [
       ftd.device
     ], function () {
-      return (fastn_utils.getter(ftd.device) == "mobile");
+      return (fastn_utils.getStaticValue(ftd.device) == "mobile");
     }, function (root) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from mobile", inherited);
@@ -49,7 +49,7 @@
     fastn_dom.conditionalDom(parent, [
       ftd.device
     ], function () {
-      return (fastn_utils.getter(ftd.device) == "desktop");
+      return (fastn_utils.getStaticValue(ftd.device) == "desktop");
     }, function (root) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop", inherited);

@@ -68,7 +68,7 @@ let foo__counter = function (parent, inherited, args) {
     parenti0.setProperty(fastn_dom.PropertyKind.BorderRadius, fastn_dom.Length.Px(5), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn.formula([__args__.count], function () {
       if (function () {
-        return (fastn_utils.getter(__args__.count) % 2 == 0);
+        return (fastn_utils.getStaticValue(__args__.count) % 2 == 0);
       }()) {
         return fastn_dom.BackgroundStyle.Solid(function () {
           let record = fastn.recordInstance({
