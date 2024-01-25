@@ -26,7 +26,7 @@ controller = ["remote"]
 # is created for every user, and local edits in the workspace is allowed.
 remote = []
 
-auth = ["oauth2", "diesel", "diesel-async", "diesel_async_migrations", "lettre", "argon2", "magic-crypt", "validator"]
+auth = ["oauth2", "diesel", "diesel-async", "diesel_async_migrations", "lettre", "argon2", "magic-crypt", "validator", "zxcvbn"]
 
 [dependencies]
 actix-web.workspace = true
@@ -86,6 +86,7 @@ tracing.workspace = true
 url.workspace = true
 uuid.workspace = true
 validator = { workspace = true, optional = true }
+zxcvbn = { workspace = true, optional = true }
 zip.workspace = true
 
 [dev-dependencies]

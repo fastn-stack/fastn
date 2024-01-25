@@ -1811,6 +1811,7 @@ dependencies = [
  "uuid",
  "validator",
  "zip",
+ "zxcvbn",
 ]
 
 [[package]]
@@ -3731,6 +3732,12 @@ dependencies = [
  "quote",
  "syn 1.0.109",
 ]
+
+[[package]]
+name = "quick-error"
+version = "2.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a993555f31e5a609f617c12db6250dedcac1b0a85076912c436e6fc9b2c8e6a3"
 
 [[package]]
 name = "quick-js"
@@ -5711,4 +5718,20 @@ checksum = "9e16efa8a874a0481a574084d34cc26fdb3b99627480f785888deb6386506656"
 dependencies = [
  "cc",
  "pkg-config",
+]
+
+[[package]]
+name = "zxcvbn"
+version = "2.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "103fa851fff70ea29af380e87c25c48ff7faac5c530c70bd0e65366d4e0c94e4"
+dependencies = [
+ "derive_builder",
+ "fancy-regex",
+ "itertools 0.10.5",
+ "js-sys",
+ "lazy_static 1.4.0",
+ "quick-error",
+ "regex",
+ "time",
 ]

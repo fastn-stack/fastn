@@ -1,56 +1,65 @@
-pub fn validate_strong_password(password: &str) -> Result<(), validator::ValidationError> {
-    let mut has_uppercase = false;
-    let mut has_lowercase = false;
-    let mut has_number = false;
-    let mut has_special = false;
+/// validate password strength using zxcvbn
+/// arg: (String, String, String)
+/// arg.0: username
+/// arg.1: email
+/// arg.2: full name
+pub fn validate_strong_password(
+    password: &str,
+    arg: (&str, &str, &str),
+) -> Result<(), validator::ValidationError> {
+    let entropy = zxcvbn::zxcvbn(password, &[arg.0, arg.1, arg.2]).map_err(|e| match e {
+        zxcvbn::ZxcvbnError::BlankPassword => {
+            let mut error = validator::ValidationError::new("password validation error");
 
-    for c in password.chars() {
-        if c.is_ascii_uppercase() {
-            has_uppercase = true;
-        } else if c.is_ascii_lowercase() {
-            has_lowercase = true;
-        } else if c.is_ascii_digit() {
-            has_number = true;
-        } else if c.is_ascii_punctuation() {
-            has_special = true;
+            error.add_param(
+                "password".into(),
+                &std::borrow::Cow::from("password is blank"),
+            );
+            error
         }
-    }
+        zxcvbn::ZxcvbnError::DurationOutOfRange => {
+            let mut error = validator::ValidationError::new("password validation error");
 
-    let mut error = validator::ValidationError::new("password validation error");
+            error.add_param(
+                "password".into(),
+                &std::borrow::Cow::from("password is too long"),
+            );
+            error
+        }
+    })?;
 
-    if !has_uppercase {
+    // from zxcvbn docs:
+    // Overall strength score from 0-4. Any score less than 3 should be considered too weak.
+    if entropy.score() < 3 {
+        let mut error = validator::ValidationError::new("password validation error");
+
         error.add_param(
-            "uppercase".into(),
-            &std::borrow::Cow::from("password must contain at least one uppercase letter"),
-        )
-    }
-
-    if !has_lowercase {
-        error.add_param(
-            "lowercase".into(),
-            &std::borrow::Cow::from("password must contain at least one lowercase letter"),
+            "password".into(),
+            &std::borrow::Cow::from("password is too weak"),
         );
-    }
 
-    if !has_number {
-        error.add_param(
-            "number".into(),
-            &std::borrow::Cow::from("password must contain at least one number"),
-        );
-    }
+        if let Some(feedback) = entropy.feedback() {
+            if let Some(warning) = feedback.warning() {
+                error.add_param(
+                    "warning".into(),
+                    &std::borrow::Cow::from(format!("{}", warning)),
+                );
+            }
 
-    if !has_special {
-        error.add_param(
-            "special".into(),
-            &std::borrow::Cow::from(
-                "password must contain at least one special character (!@#$%^&*()_+{}|:<>?~)",
-            ),
-        );
-    }
+            feedback
+                .suggestions()
+                .iter()
+                .enumerate()
+                .for_each(|(idx, suggestion)| {
+                    error.add_param(
+                        format!("suggestion{}", idx).into(),
+                        &std::borrow::Cow::from(format!("{}", suggestion)),
+                    );
+                });
+        }
 
-    if error.params.is_empty() {
-        Ok(())
-    } else {
         Err(error)
+    } else {
+        Ok(())
     }
 }

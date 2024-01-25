@@ -39,7 +39,10 @@ pub(crate) async fn create_user(
         email: String,
         #[validate(length(min = 1, message = "name must be at least 1 character long"))]
         name: String,
-        #[validate(custom(function = "fastn_core::auth::validator::validate_strong_password"))]
+        #[validate(custom(
+            function = "fastn_core::auth::validator::validate_strong_password",
+            arg = "(&'v_a str, &'v_a str, &'v_a str)"
+        ))]
         password: String,
     }
 
@@ -54,7 +57,11 @@ pub(crate) async fn create_user(
 
     let user_payload = user_payload.unwrap();
 
-    if let Err(e) = user_payload.validate_args(()) {
+    if let Err(e) = user_payload.validate_args((
+        user_payload.username.as_str(),
+        user_payload.email.as_str(),
+        user_payload.name.as_str(),
+    )) {
         return fastn_core::http::validation_error_to_user_err(e, fastn_core::http::StatusCode::OK);
     }
 
