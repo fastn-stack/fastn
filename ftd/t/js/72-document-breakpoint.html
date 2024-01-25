@@ -40,7 +40,7 @@
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([ftd.device], function () {
         if (function () {
-          return (fastn_utils.getter(ftd.device) == "mobile");
+          return (fastn_utils.getStaticValue(ftd.device) == "mobile");
         }()) {
           return "Mobile text";
         } else {

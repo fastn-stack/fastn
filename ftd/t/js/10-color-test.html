@@ -56,11 +56,11 @@ consectetur voluptatum et Quis inventore ab dignissimos amet?</div></div></div><
     parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn.formula([global.foo__value,
     global.foo__value], function () {
       if (function () {
-        return (fastn_utils.getter(global.foo__value) % 3 == 0);
+        return (fastn_utils.getStaticValue(global.foo__value) % 3 == 0);
       }()) {
         return fastn_dom.BackgroundStyle.Solid(global.foo__bg_og);
       } else if (function () {
-        return (fastn_utils.getter(global.foo__value) % 3 == 1);
+        return (fastn_utils.getStaticValue(global.foo__value) % 3 == 1);
       }()) {
         return fastn_dom.BackgroundStyle.Solid(global.foo__bg_bp);
       } else {
@@ -89,11 +89,11 @@ consectetur voluptatum et Quis inventore ab dignissimos amet?</div></div></div><
       global.foo__bp,
       global.foo__value], function () {
         if (function () {
-          return (fastn_utils.getter(global.foo__value) % 3 == 0);
+          return (fastn_utils.getStaticValue(global.foo__value) % 3 == 0);
         }()) {
           return global.foo__og;
         } else if (function () {
-          return (fastn_utils.getter(global.foo__value) % 3 == 1);
+          return (fastn_utils.getStaticValue(global.foo__value) % 3 == 1);
         }()) {
           return global.foo__bp;
         } else {
@@ -128,7 +128,7 @@ let foo__increment = function (args)
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
+    let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getStaticValue(__args__.a) + 1);
     if (fastn_utils_val___args___a instanceof fastn.mutableClass) {
       fastn_utils_val___args___a = fastn_utils_val___args___a.get();
     }

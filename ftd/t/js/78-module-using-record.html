@@ -48,7 +48,7 @@ let foo__header = function (parent, inherited, args) {
       fastn_dom.conditionalDom(root, [
         __args__.m.get("user").get("is_logged_in")
       ], function () {
-        return fastn_utils.getter(__args__.m.get("user").get("is_logged_in"));
+        return fastn_utils.getStaticValue(__args__.m.get("user").get("is_logged_in"));
       }, function (root) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
         rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);

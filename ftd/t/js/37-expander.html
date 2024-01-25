@@ -125,7 +125,7 @@ let foo__box = function (parent, inherited, args) {
         fastn_dom.conditionalDom(root, [
           __args__.open
         ], function () {
-          return (!fastn_utils.getter(__args__.open));
+          return (!fastn_utils.getStaticValue(__args__.open));
         }, function (root) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
           rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "O", inherited);
@@ -136,7 +136,7 @@ let foo__box = function (parent, inherited, args) {
         fastn_dom.conditionalDom(root, [
           __args__.open
         ], function () {
-          return fastn_utils.getter(__args__.open);
+          return fastn_utils.getStaticValue(__args__.open);
         }, function (root) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
           rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "X", inherited);
@@ -149,7 +149,7 @@ let foo__box = function (parent, inherited, args) {
       fastn_dom.conditionalDom(root, [
         __args__.open
       ], function () {
-        return fastn_utils.getter(__args__.open);
+        return fastn_utils.getStaticValue(__args__.open);
       }, function (root) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
         rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.body, inherited);

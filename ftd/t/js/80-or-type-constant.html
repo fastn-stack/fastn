@@ -32,7 +32,7 @@
     parenti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([global.foo__b,
     global.foo__small], function () {
       if (function () {
-        return (fastn_utils.getter(global.foo__b) == fastn_utils.getter(global.foo__small));
+        return (fastn_utils.getStaticValue(global.foo__b) == fastn_utils.getStaticValue(global.foo__small));
       }()) {
         return "Smol";
       } else {
@@ -44,7 +44,7 @@
       global.foo__b,
       global.foo__button_type.get("medium")
     ], function () {
-      return (fastn_utils.getter(global.foo__b) !== fastn_utils.getter(global.foo__button_type.get("medium")));
+      return (fastn_utils.getStaticValue(global.foo__b) !== fastn_utils.getStaticValue(global.foo__button_type.get("medium")));
     }, function (root) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "not medium", inherited);
@@ -81,7 +81,7 @@ let foo__fancy_button = function (parent, inherited, args)
     parenti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([__args__.bt,
     global.foo__small], function () {
       if (function () {
-        return (fastn_utils.getter(__args__.bt) == fastn_utils.getter(global.foo__small));
+        return (fastn_utils.getStaticValue(__args__.bt) == fastn_utils.getStaticValue(global.foo__small));
       }()) {
         return "Smol";
       } else {

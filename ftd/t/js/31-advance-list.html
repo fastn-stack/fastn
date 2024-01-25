@@ -215,7 +215,7 @@ let foo__form = function (parent, inherited, args)
         __args__.ns.get("score"),
         ftd.empty
       ], function () {
-        return (fastn_utils.getter(__args__.ns.get("name")) !== fastn_utils.getter(ftd.empty) && fastn_utils.getter(__args__.ns.get("score")) !== fastn_utils.getter(ftd.empty));
+        return (fastn_utils.getStaticValue(__args__.ns.get("name")) !== fastn_utils.getStaticValue(ftd.empty) && fastn_utils.getStaticValue(__args__.ns.get("score")) !== fastn_utils.getStaticValue(ftd.empty));
       }, function (root) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
         rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Submit", inherited);
@@ -271,7 +271,7 @@ let foo__plus_one = function (args) {
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    return (fastn_utils.getter(__args__.a) + 1);
+    return (fastn_utils.getStaticValue(__args__.a) + 1);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

@@ -68,11 +68,11 @@ let foo__youtube = function (parent, inherited, args) {
     parenti0.setProperty(fastn_dom.PropertyKind.MinHeight, fastn.formula([ftd.device,
     ftd.device], function () {
       if (function () {
-        return (fastn_utils.getter(ftd.device) == "desktop");
+        return (fastn_utils.getStaticValue(ftd.device) == "desktop");
       }()) {
         return fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400));
       } else if (function () {
-        return (fastn_utils.getter(ftd.device) == "mobile");
+        return (fastn_utils.getStaticValue(ftd.device) == "mobile");
       }()) {
         return fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200));
       }
