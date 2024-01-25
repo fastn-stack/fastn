@@ -45,3 +45,7 @@ color: red
 -- end: ftd.column
 
 -- end: display-name
+
+
+-- ftd.text: Now the full name is Arpita Jaiswal
+if: { arpita.full-name == "Arpita" }
