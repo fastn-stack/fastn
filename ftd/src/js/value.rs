@@ -442,9 +442,8 @@ impl ftd::interpreter::Value {
                             field.name.to_string(),
                             value.to_fastn_js_value_with_ui(
                                 doc,
-                                &ftd::js::ResolverData::new_with_record_definition_name(&Some(
-                                    name.to_string(),
-                                )),
+                                &rdata
+                                    .clone_with_new_record_definition_name(&Some(name.to_string())),
                                 has_rive_components,
                                 false,
                             ),
@@ -457,7 +456,7 @@ impl ftd::interpreter::Value {
                                 .unwrap()
                                 .to_set_property_value_with_ui(
                                     doc,
-                                    &ftd::js::ResolverData::new_with_record_definition_name(&Some(
+                                    &rdata.clone_with_new_record_definition_name(&Some(
                                         name.to_string(),
                                     )),
                                     has_rive_components,
