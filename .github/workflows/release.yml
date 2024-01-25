@@ -35,7 +35,7 @@ jobs:
           docker cp fastn-build:/home/rust/src/target/x86_64-unknown-linux-musl/release/fastn out/
       - name: run fastn
         run: out/fastn --version
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v3
         with:
           name: linux_musl_x86_64
           path: out/fastn
@@ -63,7 +63,7 @@ jobs:
           args: --release
       - name: run fastn
         run: ./target/release/fastn.exe --version
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v3
         with:
           name: windows_x64_latest
           path: target/release/fastn.exe
@@ -80,7 +80,7 @@ jobs:
         with:
           arguments: /V3 /DCURRENT_WD=${{ github.workspace }} /DVERSION=${{ github.event.inputs.releaseTag }}
           additional-plugin-paths: ${{ github.workspace }}/NSIS_Plugins/Plugins
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v3
         with:
           name: windows_x64_installer.exe
           path: windows_x64_installer.exe
@@ -108,7 +108,7 @@ jobs:
           args: --release --features=auth
       - name: run fastn
         run: ./target/release/fastn --version
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v3
         with:
           name: macos_x64_latest
           path: |
