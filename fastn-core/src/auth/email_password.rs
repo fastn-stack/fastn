@@ -155,11 +155,12 @@ pub(crate) async fn create_user(
 
     tracing::info!("fastn_user email inserted");
 
-    let conf_link = create_and_send_confirmation_email(email.0.to_string(), db_pool, req).await?;
+    let conf_link =
+        create_and_send_confirmation_email(email.0.to_string(), db_pool, req, next).await?;
 
     let resp_body = serde_json::json!({
         "user": user,
-        "redirect": redirect_url_from_next(req, next),
+        "redirect": redirect_url_from_next(req, "/-/auth/create-user/".to_string()),
     });
 
     let mut resp = actix_web::HttpResponse::Ok();
@@ -281,12 +282,14 @@ pub(crate) async fn confirm_email(
     let code = req.query().get("code");
 
     if code.is_none() {
+        tracing::info!("finishing response due to bad ?code");
         return fastn_core::http::api_error("Bad Request", fastn_core::http::StatusCode::OK.into());
     }
 
     let code = match code.unwrap() {
         serde_json::Value::String(c) => c,
         _ => {
+            tracing::info!("failed to Deserialize ?code as string");
             return fastn_core::http::api_error(
                 "Bad Request",
                 fastn_core::http::StatusCode::OK.into(),
@@ -301,25 +304,29 @@ pub(crate) async fn confirm_email(
             message: format!("Failed to get connection to db. {:?}", e),
         })?;
 
-    let conf_data: Option<(i32, chrono::DateTime<chrono::Utc>)> =
+    let conf_data: Option<(i32, i32, chrono::DateTime<chrono::Utc>)> =
         fastn_core::schema::fastn_email_confirmation::table
             .select((
                 fastn_core::schema::fastn_email_confirmation::email_id,
+                fastn_core::schema::fastn_email_confirmation::session_id,
                 fastn_core::schema::fastn_email_confirmation::sent_at,
             ))
-            .filter(fastn_core::schema::fastn_email_confirmation::key.eq(code))
+            .filter(fastn_core::schema::fastn_email_confirmation::key.eq(&code))
             .first(&mut conn)
             .await
             .optional()?;
 
     if conf_data.is_none() {
+        tracing::info!("invalid code value. No entry exists for the given code in db");
+        tracing::info!("provided code: {}", &code);
         return fastn_core::http::api_error("Bad Request", fastn_core::http::StatusCode::OK.into());
     }
 
-    let (email_id, sent_at) = conf_data.unwrap();
+    let (email_id, session_id, sent_at) = conf_data.unwrap();
 
     if key_expired(sent_at) {
         // TODO: this redirect route should be configurable
+        tracing::info!("provided code has expired.");
         return Ok(fastn_core::http::redirect_with_code(
             format!(
                 "{}://{}/-/auth/resend-confirmation-email/",
@@ -330,18 +337,21 @@ pub(crate) async fn confirm_email(
         ));
     }
 
-    let affected = diesel::update(fastn_core::schema::fastn_user_email::table)
+    diesel::update(fastn_core::schema::fastn_user_email::table)
         .set(fastn_core::schema::fastn_user_email::verified.eq(true))
         .filter(fastn_core::schema::fastn_user_email::id.eq(email_id))
         .execute(&mut conn)
         .await?;
 
-    tracing::info!("verified {} email", affected);
+    let affected = diesel::update(fastn_core::schema::fastn_session::table)
+        .set(fastn_core::schema::fastn_session::active.eq(true))
+        .filter(fastn_core::schema::fastn_session::id.eq(session_id))
+        .execute(&mut conn)
+        .await?;
 
-    Ok(fastn_core::http::redirect_with_code(
-        redirect_url_from_next(req, next),
-        302,
-    ))
+    tracing::info!("session created, rows affected: {}", affected);
+
+    fastn_core::auth::set_session_cookie_and_redirect_to_next(req, session_id, next).await
 }
 
 pub(crate) async fn resend_email(
@@ -350,6 +360,9 @@ pub(crate) async fn resend_email(
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     // TODO: should be able to use username for this too
+    // TODO: use req.body and make it POST
+    // verify email with regex or validator crate
+    // on GET this handler should render auth.resend-email-page
     let email = req.query().get("email");
 
     if email.is_none() {
@@ -366,7 +379,7 @@ pub(crate) async fn resend_email(
         }
     };
 
-    create_and_send_confirmation_email(email, db_pool, req).await?;
+    create_and_send_confirmation_email(email, db_pool, req, next.clone()).await?;
 
     // TODO: there's no GET /-/auth/login/ yet
     // the client will have to create one for now
@@ -381,6 +394,7 @@ async fn create_and_send_confirmation_email(
     email: String,
     db_pool: &fastn_core::db::PgPool,
     req: &fastn_core::http::Request,
+    next: String,
 ) -> fastn_core::Result<String> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
@@ -406,10 +420,21 @@ async fn create_and_send_confirmation_email(
         .first(&mut conn)
         .await?;
 
+    // create a non active fastn_sesion entry for auto login
+    let session_id: i32 = diesel::insert_into(fastn_core::schema::fastn_session::table)
+        .values((
+            fastn_core::schema::fastn_session::user_id.eq(&user_id),
+            fastn_core::schema::fastn_session::active.eq(false),
+        ))
+        .returning(fastn_core::schema::fastn_session::id)
+        .get_result(&mut conn)
+        .await?;
+
     let stored_key: String =
         diesel::insert_into(fastn_core::schema::fastn_email_confirmation::table)
             .values((
                 fastn_core::schema::fastn_email_confirmation::email_id.eq(email_id),
+                fastn_core::schema::fastn_email_confirmation::session_id.eq(&session_id),
                 fastn_core::schema::fastn_email_confirmation::sent_at
                     .eq(chrono::offset::Utc::now()),
                 fastn_core::schema::fastn_email_confirmation::key.eq(key),
@@ -418,7 +443,7 @@ async fn create_and_send_confirmation_email(
             .get_result(&mut conn)
             .await?;
 
-    let confirmation_link = confirmation_link(req, stored_key);
+    let confirmation_link = confirmation_link(req, stored_key, next);
 
     let mailer = fastn_core::mail::Mailer::from_env();
 
@@ -488,11 +513,12 @@ fn generate_key(length: usize) -> String {
     )
 }
 
-fn confirmation_link(req: &fastn_core::http::Request, key: String) -> String {
+fn confirmation_link(req: &fastn_core::http::Request, key: String, next: String) -> String {
     format!(
-        "{}://{}/-/auth/confirm-email/?code={key}",
+        "{}://{}/-/auth/confirm-email/?code={key}&next={}",
         req.connection_info.scheme(),
-        req.connection_info.host()
+        req.connection_info.host(),
+        next
     )
 }
 

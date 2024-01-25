@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS fastn_user (
 CREATE TABLE IF NOT EXISTS fastn_session (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES fastn_user(id) ON DELETE CASCADE NOT NULL,
+    active BOOLEAN DEFAULT true NOT NULL, -- for auto login
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE default NOW() NOT NULL
 );
@@ -47,6 +48,7 @@ CREATE TABLE IF NOT EXISTS fastn_user_email (
 create table if not exists fastn_email_confirmation(
     id SERIAL PRIMARY KEY,
     email_id INTEGER REFERENCES fastn_user_email(id) ON DELETE CASCADE NOT NULL,
+    session_id INTEGER REFERENCES fastn_session(id) ON DELETE CASCADE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
     sent_at TIMESTAMP WITH TIME ZONE NOT NULL, -- to check expiration
     "key" TEXT UNIQUE NOT NULL -- for verification
