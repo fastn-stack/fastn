@@ -75,7 +75,7 @@ let foo__switcher = function (parent, inherited, args)
           index,
           __args__.is_active
         ], function () {
-          return (fastn_utils.getter(__args__.is_active) == fastn_utils.getter(index));
+          return (fastn_utils.getStaticValue(__args__.is_active) == fastn_utils.getStaticValue(index));
         }, function (root) {
           let rooti0 = foo__box(root, inherited, {
             uis: item.get("elements")

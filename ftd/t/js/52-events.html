@@ -70,7 +70,7 @@ let foo__display_name = function (parent, inherited, args)
     parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn.formula([__args__.idx,
     __args__.selected], function () {
       if (function () {
-        return (fastn_utils.getter(__args__.selected) == fastn_utils.getter(__args__.idx));
+        return (fastn_utils.getStaticValue(__args__.selected) == fastn_utils.getStaticValue(__args__.idx));
       }()) {
         return fastn_dom.BackgroundStyle.Solid(function () {
           let record = fastn.recordInstance({
@@ -95,7 +95,7 @@ let foo__increment = function (args)
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    let fastn_utils_val___args___a = fastn_utils.clone((fastn_utils.getter(__args__.a) + 1) % fastn_utils.getter(__args__.n));
+    let fastn_utils_val___args___a = fastn_utils.clone((fastn_utils.getStaticValue(__args__.a) + 1) % fastn_utils.getStaticValue(__args__.n));
     if (fastn_utils_val___args___a instanceof fastn.mutableClass) {
       fastn_utils_val___args___a = fastn_utils_val___args___a.get();
     }
@@ -114,7 +114,7 @@ let foo__decrement = function (args)
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    let fastn_utils_val___args___a = fastn_utils.clone((fastn_utils.getter(__args__.a) - 1) % fastn_utils.getter(__args__.n));
+    let fastn_utils_val___args___a = fastn_utils.clone((fastn_utils.getStaticValue(__args__.a) - 1) % fastn_utils.getStaticValue(__args__.n));
     if (fastn_utils_val___args___a instanceof fastn.mutableClass) {
       fastn_utils_val___args___a = fastn_utils_val___args___a.get();
     }

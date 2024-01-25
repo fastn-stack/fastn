@@ -86,11 +86,11 @@ let foo__button = function (parent, inherited, args)
     __args__.type,
     global._80_or_type_constant__button_type.get("medium")], function () {
       if (function () {
-        return (fastn_utils.getter(__args__.type) == fastn_utils.getter(global._80_or_type_constant__button_type.get("small")));
+        return (fastn_utils.getStaticValue(__args__.type) == fastn_utils.getStaticValue(global._80_or_type_constant__button_type.get("small")));
       }()) {
         return fastn_dom.Length.Px(4);
       } else if (function () {
-        return (fastn_utils.getter(__args__.type) == fastn_utils.getter(global._80_or_type_constant__button_type.get("medium")));
+        return (fastn_utils.getStaticValue(__args__.type) == fastn_utils.getStaticValue(global._80_or_type_constant__button_type.get("medium")));
       }()) {
         return fastn_dom.Length.Px(8);
       } else {

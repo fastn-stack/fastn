@@ -170,7 +170,7 @@ let foo__code = function (parent, inherited, args) {
       fastn_dom.conditionalDom(root, [
         ftd.dark_mode
       ], function () {
-        return (!fastn_utils.getter(ftd.dark_mode));
+        return (!fastn_utils.getStaticValue(ftd.dark_mode));
       }, function (root) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Code);
         rooti0.setProperty(fastn_dom.PropertyKind.Code, __args__.text, inherited);
@@ -185,7 +185,7 @@ let foo__code = function (parent, inherited, args) {
       fastn_dom.conditionalDom(root, [
         ftd.dark_mode
       ], function () {
-        return fastn_utils.getter(ftd.dark_mode);
+        return fastn_utils.getStaticValue(ftd.dark_mode);
       }, function (root) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Code);
         rooti0.setProperty(fastn_dom.PropertyKind.Code, __args__.text, inherited);
