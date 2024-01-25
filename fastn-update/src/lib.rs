@@ -32,6 +32,10 @@ pub enum ArchiveError {
         package: String,
         source: std::io::Error,
     },
+    #[snafu(display(
+        "Failed to read the archive entry path for the entry '{name}' in the package '{package}'"
+    ))]
+    ArchiveEntryPathError { package: String, name: String },
     #[snafu(display("Failed to unpack archive for package '{package}'"))]
     ArchiveEntryRead {
         package: String,
@@ -91,6 +95,7 @@ async fn update_dependencies(
     packages_root: &fastn_ds::Path,
     current_package: &fastn_core::Package,
     pb: &indicatif::ProgressBar,
+    offline: bool,
 ) -> Result<(), UpdateError> {
     let mut stack = vec![current_package.clone()];
     let mut resolved = std::collections::HashSet::new();
@@ -116,6 +121,8 @@ async fn update_dependencies(
             // 2. The checksums of the downloaded package manifest and the existing manifest do not match
             let should_download_archive = if !ds.exists(dependency_path).await {
                 true
+            } else if offline {
+                false
             } else {
                 let existing_manifest_bytes =
                     ds.read_content(&manifest_path)
@@ -192,23 +199,25 @@ async fn download_and_unpack_zip(
             std::io::Read::read_to_end(&mut entry, &mut buffer).context(ReadArchiveSnafu {
                 package: package_name,
             })?;
-            if let Some(path) = entry.enclosed_name() {
-                let path = path.to_str().unwrap();
-                let path_without_prefix = match path.split_once(std::path::MAIN_SEPARATOR) {
-                    Some((_, path)) => path,
-                    None => path,
-                };
-                if manifest.files.get(path_without_prefix).is_none() {
-                    continue;
-                }
-                let output_path = &dependency_path.join(path_without_prefix);
-                ds.write_content(output_path, buffer)
-                    .await
-                    .context(WriteArchiveContentSnafu {
-                        package: package_name,
-                    })?;
-                pb.tick();
+            let path = entry.enclosed_name().context(ArchiveEntryPathSnafu {
+                package: package_name,
+                name: entry.name(),
+            })?;
+            let path = path.to_str().unwrap();
+            let path_without_prefix = match path.split_once(std::path::MAIN_SEPARATOR) {
+                Some((_, path)) => path,
+                None => path,
+            };
+            if manifest.files.get(path_without_prefix).is_none() {
+                continue;
             }
+            let output_path = &dependency_path.join(path_without_prefix);
+            ds.write_content(output_path, buffer)
+                .await
+                .context(WriteArchiveContentSnafu {
+                    package: package_name,
+                })?;
+            pb.tick();
         }
     }
 
@@ -244,7 +253,7 @@ async fn get_manifest(
 }
 
 #[tracing::instrument(skip_all)]
-pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
+pub async fn update(config: &fastn_core::Config, offline: bool) -> fastn_core::Result<()> {
     if config.package.dependencies.is_empty() {
         println!("No dependencies to update.");
         return Ok(());
@@ -260,8 +269,14 @@ pub async fn update(config: &fastn_core::Config) -> fastn_core::Result<()> {
     pb.set_style(spinner_style);
     pb.set_prefix("Updating dependencies");
 
-    if let Err(e) =
-        update_dependencies(&config.ds, &config.packages_root, current_package, &pb).await
+    if let Err(e) = update_dependencies(
+        &config.ds,
+        &config.packages_root,
+        current_package,
+        &pb,
+        offline,
+    )
+    .await
     {
         return Err(fastn_core::Error::UpdateError {
             message: e.to_string(),

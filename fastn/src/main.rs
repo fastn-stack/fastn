@@ -62,6 +62,8 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
 
     let mut config = fastn_core::Config::read_current(true).await?;
 
+    let offline = matches.get_flag("offline");
+
     if let Some(serve) = matches.subcommand_matches("serve") {
         let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
             Ok(v) => v,
@@ -79,7 +81,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let external_css = serve.values_of_("external-css");
         let inline_css = serve.values_of_("css");
 
-        fastn_update::update(&config).await?;
+        fastn_update::update(&config, offline).await?;
 
         return fastn_core::listen(
             bind.as_str(),
@@ -95,7 +97,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     }
 
     if matches.subcommand_matches("update").is_some() {
-        return fastn_update::update(&config).await;
+        return fastn_update::update(&config, offline).await;
     }
 
     if let Some(test) = matches.subcommand_matches("test") {
@@ -113,7 +115,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_inline_css(inline_css)
             .set_test_command_running();
 
-        fastn_update::update(&config).await?;
+        fastn_update::update(&config, offline).await?;
 
         return fastn_core::test(
             &config,
@@ -145,7 +147,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_external_css(external_css)
             .add_inline_css(inline_css);
 
-        fastn_update::update(&config).await?;
+        fastn_update::update(&config, offline).await?;
 
         return fastn_core::build(
             &config,
@@ -238,6 +240,7 @@ fn app(version: &'static str) -> clap::Command {
         .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
         .arg(clap::arg!(--test "Runs the command in test mode").hide(true))
         .arg(clap::arg!(--trace "Activate tracing").hide(true))
+        .arg(clap::arg!(--offline "Disables automatic package update checks to operate in offline mode"))
         .subcommand(
             // Initial subcommand format
             // fastn create-package <project-name> [project-path]
