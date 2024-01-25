@@ -18,6 +18,9 @@ website responsive.
 -- ds.blog-page:
 meta: $meta
 
+-- ds.youtube:
+v: 8LkwpXhALCQ
+
 -- ds.h1: The Testimonial Component
 
 Let's look at the Testimonials section of the [talknotes.io](http://talknotes.io/) 
@@ -363,6 +366,9 @@ I had been looking for a while for exactly this type of app, and I've yet to fin
 
 \-- end: testimonials
 
+-- ds.image: Testimonials Component
+src: $fastn-assets.files.images.blog.tn-testimonial.png
+
 -- ds.markdown:
 
 Following this method, you can build other similar sections in the talknotes.io 
@@ -374,10 +380,10 @@ To initiate responsiveness, we will use `ftd.desktop` and `ftd.mobile` into your
 components. The [`ftd.desktop`](https://fastn.com/desktop/) component serves 
 to optimize webpage rendering for desktop devices. The 
 [`ftd.mobile`](https://fastn.com/mobile/) component serves to optimize webpage
-rendering for mobile devices. Ensure each `ftd.desktop` 
-and `ftd.mobile` is correctly enclosed using the end syntax. 
+rendering for mobile devices. 
 
-;; Also, remember to use ftd.desktop and ftd.mobile inside a ds.column. 
+Note: Ensure each `ftd.desktop` and `ftd.mobile` is correctly enclosed using the end syntax. 
+When using ftd.desktop and ftd.mobile, always wrap them inside a parent row or column
 
 -- ds.code:
 lang: ftd
@@ -442,6 +448,12 @@ size: 40
 
 \-- end: ds.column
 \-- end: arrow
+
+-- ds.image: Arrow in Desktop version
+src: $fastn-assets.files.images.blog.tn-arrow.png
+
+-- ds.image: Arrow in Mobile version
+src: $fastn-assets.files.images.blog.tn-arrow-mobile.png
 
 -- ds.markdown:
 
@@ -577,10 +589,19 @@ hamburger icon. To do that, follow the below steps.
 - Change `ds.section-row` to `ds.section-column`.
 - Change horizontal spacing into vertical spacing in `ds.section-row`. 
   Remove `spacing: $ds.spaces.horizontal-gap.space-between` and add 
-  `spacing: $ds.spaces.horizontal-gap.space-between`
+  `spacing: $ds.spaces.vertical-gap.space-between`
 - Use `ds.row` and use the phosphor icon for the list/hamburger icon.
-- Add [event handling]((https://fastn.com/events/)) to the hamburger icon. 
-  Here we will use `$on-click$` event with [`toggle`]((https://fastn.com/built-in-functions/)) function. 
+- To introduce [event handling](https://fastn.com/events/) add the below line to your component.
+
+-- ds.code:
+lang: ftd
+
+\-- component header:
+optional boolean $open: false ;; <hl>
+
+-- ds.markdown:
+
+- Now add the add `$on-click$` event with [`toggle`](https://fastn.com/built-in-functions/) function to the icon
 
 -- ds.code:
 lang: ftd
@@ -591,28 +612,19 @@ $on-click$: $ftd.toggle($a = $header.open) ;; <hl>
 
 -- ds.markdown:
 
-- Add the logo and login button within the ds.row and then close it.
-- Design the pop-up screen for the header links and specify the action when the 
-  icon is clicked. Use the provided code snippet. 
+- Next, add the logo and login button within the ds.row and close it.
+- Next, use `ds.column` with an `if condition` and add the header links. 
+  This condition will make sure that the toggle functoion upon being clicked will display the header links.
+  In other words, when the user clicks on the icon, the header links will be visible  and when clicked again it will be closed. 
 
 -- ds.code:
 lang: ftd
 
 \-- ds.column:
-if: {header.open} ;; (this makes sure the pop-up is visible only when the user clicks on the icon) ;; <hl>
-anchor: parent ;; (anchor property helps to position the pop-up screen) ;; <hl>
-top: 72 
-bottom: 0
-left: 0
-right: 0
-height: hug-content
-z-index: 1 ;; (see below note) ;; <hl>
-background.solid: $ds.colors.background.step-1
-align-content: top-left
-inset: $ds.spaces.inset-square.medium
-
-\-- ds.column:
+if: {header.open}
 inset: $ds.spaces.inset-wide.medium
+height: hug-content
+background.solid: $ds.colors.background.step-1
 align-content: top-left
 
 \-- ds.header-link: Try It
@@ -632,14 +644,13 @@ link: /
 
 \-- end: ds.column
 
-\-- end: ds.column
+-- ds.image: Header in Mobile version
+src: $fastn-assets.files.images.blog.header-mobile.png
+
+-- ds.image: Header when the icon is clicked in the Mobile version
+src: $fastn-assets.files.images.blog.header-mobile-open.png
 
 -- ds.markdown:
-
-Note: The [z-index property](https://fastn.com/common-attributes#z-index) lets 
-you control the stacking order of positioned elements. It specifies the order 
-in which elements are stacked on top of each other when they overlap. Elements 
-with a higher z-index value appear on top of elements with a lower z-index value. 
 
 By following the above steps, you can easily make all your designs responsive. 
 
