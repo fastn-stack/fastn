@@ -1,5 +1,14 @@
+fn create_user_success_ftd() -> &'static str {
+    r#"
+    -- import: fastn/processors as pr
+
+    -- auth.create-user-success:
+    "#
+}
+
 pub(crate) async fn create_user(
     req: &fastn_core::http::Request,
+    req_config: &mut fastn_core::RequestConfig,
     config: &fastn_core::Config,
     db_pool: &fastn_core::db::PgPool,
     next: String,
@@ -9,7 +18,17 @@ pub(crate) async fn create_user(
     use validator::ValidateArgs;
 
     if req.method() != "POST" {
-        return Ok(fastn_core::not_found!("invalid route"));
+        let main = fastn_core::Document {
+            package_name: config.package.name.clone(),
+            id: "/-/create-user-success".to_string(),
+            content: create_user_success_ftd().to_string(),
+            parent_path: fastn_ds::Path::new("/"),
+        };
+
+        let resp = fastn_core::package::package_doc::read_ftd(req_config, &main, "/", false, false)
+            .await?;
+
+        return Ok(resp.into());
     }
 
     #[derive(serde::Deserialize, serde::Serialize, validator::Validate, Debug)]
