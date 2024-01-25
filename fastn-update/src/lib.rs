@@ -106,9 +106,24 @@ async fn update_dependencies(
             if resolved.contains(&dependency.package.name) {
                 continue;
             }
+
             let dep_package = &dependency.package;
             let package_name = dep_package.name.clone();
             let dependency_path = &packages_root.join(&package_name);
+
+            if offline {
+                if package_name.eq(&fastn_core::FASTN_UI_INTERFACE) {
+                    resolved.insert(package_name.to_string());
+                    continue;
+                }
+
+                let dep_package =
+                    resolve_dependency_package(ds, &dependency, dependency_path).await?;
+                resolved.insert(package_name.to_string());
+                pb.inc_length(1);
+                stack.push(dep_package);
+                continue;
+            }
 
             pb.set_message(format!("Resolving {}/manifest.json", &package_name));
 
@@ -121,8 +136,6 @@ async fn update_dependencies(
             // 2. The checksums of the downloaded package manifest and the existing manifest do not match
             let should_download_archive = if !ds.exists(dependency_path).await {
                 true
-            } else if offline {
-                false
             } else {
                 let existing_manifest_bytes =
                     ds.read_content(&manifest_path)
@@ -160,7 +173,7 @@ async fn update_dependencies(
                     })?
             }
 
-            if dependency.package.name.eq(&fastn_core::FASTN_UI_INTERFACE) {
+            if package_name.eq(&fastn_core::FASTN_UI_INTERFACE) {
                 resolved.insert(package_name.to_string());
                 continue;
             }
