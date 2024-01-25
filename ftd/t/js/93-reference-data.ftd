@@ -1,0 +1,77 @@
+-- record company:
+caption name:
+ftd.color brand-color:
+
+-- record person:
+caption name:
+integer age:
+company company-details:
+
+-- ftd.color ft-brand-color:
+dark: rgb(239, 132, 53)
+light: rgb(239, 132, 53)
+
+-- company fifthtry: FifthTry
+brand-color: $ft-brand-color
+
+-- person list people:
+
+-- person: Harsh
+age: 21
+company-details: $fifthtry
+
+-- person: Harshit
+age: 20
+company-details: $fifthtry
+
+-- end: people
+
+
+
+-- display-people: $people
+full-details: true
+
+-- component display-people:
+caption person list people:
+boolean full-details:
+
+-- ftd.container:
+
+-- display-person: $p.name
+age: $p.age
+company: $p.company-details
+brand-color: $p.company-details.brand-color.light
+if: { display-people.full-details }
+for: $p in $display-people.people
+
+-- display-person: $p.name
+age: $p.age
+company: $p.company-details
+brand-color: $p.company-details.brand-color.dark
+if: { !display-people.full-details }
+for: $p in $display-people.people
+
+-- end: ftd.container
+
+-- end: display-people
+
+
+
+-- component display-person:
+caption name:
+integer age:
+company company:
+ftd.color brand-color:
+
+-- ftd.row:
+spacing.fixed.rem: 1
+
+-- ftd.text: $display-person.name
+
+-- ftd.integer: $display-person.age
+
+-- ftd.text: $display-person.company.name
+
+-- end: ftd.row
+
+-- end: display-person
