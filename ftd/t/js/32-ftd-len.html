@@ -76,7 +76,7 @@
         rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([index,
         index], function () {
           if (function () {
-            return (fastn_utils.getter(index) % 3 == 1);
+            return (fastn_utils.getStaticValue(index) % 3 == 1);
           }()) {
             return function () {
               let record = fastn.recordInstance({
@@ -86,7 +86,7 @@
               return record;
             }();
           } else if (function () {
-            return (fastn_utils.getter(index) % 3 == 2);
+            return (fastn_utils.getStaticValue(index) % 3 == 2);
           }()) {
             return function () {
               let record = fastn.recordInstance({
@@ -186,7 +186,7 @@ let foo__mbox = function (parent, inherited, args)
         fastn_dom.conditionalDom(root, [
           __args__.current_value
         ], function () {
-          return (fastn_utils.getter(__args__.current_value) !== null);
+          return (fastn_utils.getStaticValue(__args__.current_value) !== null);
         }, function (root) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
           rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.current_value, inherited);

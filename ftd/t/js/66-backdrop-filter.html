@@ -55,15 +55,15 @@
     global.foo__contrast_image,
     global.foo__set_multi_filters], function () {
       if (function () {
-        return fastn_utils.getter(global.foo__blur_image);
+        return fastn_utils.getStaticValue(global.foo__blur_image);
       }()) {
         return fastn_dom.BackdropFilter.Blur(fastn_dom.Length.Px(10));
       } else if (function () {
-        return fastn_utils.getter(global.foo__contrast_image);
+        return fastn_utils.getStaticValue(global.foo__contrast_image);
       }()) {
         return fastn_dom.BackdropFilter.Contrast(fastn_dom.Length.Percent(30));
       } else if (function () {
-        return fastn_utils.getter(global.foo__set_multi_filters);
+        return fastn_utils.getStaticValue(global.foo__set_multi_filters);
       }()) {
         return fastn_dom.BackdropFilter.Multi(global.foo__bdf);
       }

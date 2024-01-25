@@ -32,7 +32,7 @@
       return fastn_dom.conditionalDom(parent, [
         index
       ], function () {
-        return (fastn_utils.getter(index) >= 2);
+        return (fastn_utils.getStaticValue(index) >= 2);
       }, function (root) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
         rooti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([index,
@@ -64,7 +64,7 @@ let foo__join = function (args)
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    return (fastn_utils.getter(__args__.a) + " " + fastn_utils.getter(__args__.b));
+    return (fastn_utils.getStaticValue(__args__.a) + " " + fastn_utils.getStaticValue(__args__.b));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
