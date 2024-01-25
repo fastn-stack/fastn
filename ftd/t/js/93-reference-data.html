@@ -85,7 +85,7 @@ let foo__display_people = function (parent, inherited, args)
         return fastn_dom.conditionalDom(root, [
           __args__.full_details
         ], function () {
-          return fastn_utils.getter(__args__.full_details);
+          return fastn_utils.getStaticValue(__args__.full_details);
         }, function (root) {
           let rooti0 = foo__display_person(root, inherited, {
             name: item.get("name"),
@@ -108,7 +108,7 @@ let foo__display_people = function (parent, inherited, args)
         return fastn_dom.conditionalDom(root, [
           __args__.full_details
         ], function () {
-          return (!fastn_utils.getter(__args__.full_details));
+          return (!fastn_utils.getStaticValue(__args__.full_details));
         }, function (root) {
           let rooti0 = foo__display_person(root, inherited, {
             name: item.get("name"),
