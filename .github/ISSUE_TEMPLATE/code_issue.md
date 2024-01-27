@@ -1,6 +1,7 @@
 ---
 name: Code Issue
 about: You have found some issue with the code?
+labels: code-issue
 ---
 
 Your issue may already be reported! Please search on the [`fastn` issue tracker](https://github.com/fastn-stack/fastn/issues) before creating one.
