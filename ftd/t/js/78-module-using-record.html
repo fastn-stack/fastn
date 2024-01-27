@@ -48,7 +48,7 @@ let foo__header = function (parent, inherited, args) {
       fastn_dom.conditionalDom(root, [
         __args__.m.get("user").get("is_logged_in")
       ], function () {
-        return fastn_utils.getter(__args__.m.get("user").get("is_logged_in"));
+        return fastn_utils.getStaticValue(__args__.m.get("user").get("is_logged_in"));
       }, function (root) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
         rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
@@ -62,10 +62,13 @@ let foo__header = function (parent, inherited, args) {
   }
 }
 global["foo__header"] = foo__header;
-fastn_utils.createNestedObject(global, "_78_data_for_module__user", fastn.recordInstance({
-  is_logged_in: false,
-  user: null
-}));
+fastn_utils.createNestedObject(global, "_78_data_for_module__user", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("is_logged_in", false);
+  record.set("user", null);
+  return record;
+}());
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

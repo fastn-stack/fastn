@@ -36,19 +36,25 @@
     parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(global.foo__bg_yg), inherited);
     let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
     parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "hello", inherited);
-    parenti1.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "yellow",
-      light: "yellow"
-    })), inherited);
+    parenti1.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "yellow");
+      record.set("dark", "yellow");
+      return record;
+    }()), inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "foo__bg_yg", fastn.recordInstance({
-  light: "yellow",
-  dark: "green"
-}));
+fastn_utils.createNestedObject(global, "foo__bg_yg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "yellow");
+  record.set("dark", "green");
+  return record;
+}());
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

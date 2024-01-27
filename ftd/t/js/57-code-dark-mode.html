@@ -44,7 +44,7 @@ border-width.px: 2
     parenti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.CodeTheme, fastn.formula([ftd.dark_mode], function () {
       if (function () {
-        return fastn_utils.getter(ftd.dark_mode);
+        return fastn_utils.getStaticValue(ftd.dark_mode);
       }()) {
         return "fastn-theme.dark";
       } else {

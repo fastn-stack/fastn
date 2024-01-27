@@ -305,13 +305,28 @@ async fn incremental_build(
     let mut processed: Vec<String> = vec![];
 
     if cache_hit {
-        let mut unresolved_dependencies: Vec<String> = documents
-            .iter()
-            .filter(|(_, f)| f.is_ftd())
-            .map(|(_, f)| remove_extension(f.get_id()))
-            .collect_vec();
+        let mut unresolved_dependencies = vec![];
         let mut resolved_dependencies: Vec<String> = vec![];
         let mut resolving_dependencies: Vec<String> = vec![];
+
+        for file in documents.values() {
+            // copy static files
+            if file.is_static() {
+                handle_file(
+                    file,
+                    config,
+                    base_url,
+                    ignore_failed,
+                    test,
+                    true,
+                    Some(&mut c),
+                )
+                .await?;
+                continue;
+            }
+
+            unresolved_dependencies.push(remove_extension(file.get_id()));
+        }
 
         while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
             // println!("Current UR: {}", unresolved_dependency.as_str());

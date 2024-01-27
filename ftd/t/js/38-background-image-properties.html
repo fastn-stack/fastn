@@ -42,15 +42,21 @@
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "foo__bg_image", fastn.recordInstance({
-  src: fastn.recordInstance({
-    dark: "https://picsum.photos/200/300",
-    light: "https://picsum.photos/200/300"
-  }),
-  repeat: fastn_dom.BackgroundRepeat.NoRepeat,
-  size: null,
-  position: fastn_dom.BackgroundPosition.Center
-}));
+fastn_utils.createNestedObject(global, "foo__bg_image", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("src", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("light", "https://picsum.photos/200/300");
+    record.set("dark", "https://picsum.photos/200/300");
+    return record;
+  }());
+  record.set("repeat", fastn_dom.BackgroundRepeat.NoRepeat);
+  record.set("size", null);
+  record.set("position", fastn_dom.BackgroundPosition.Center);
+  return record;
+}());
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

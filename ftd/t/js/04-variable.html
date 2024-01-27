@@ -41,7 +41,7 @@
     });
     parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn.formula([global.foo__i], function () {
       if (function () {
-        return (fastn_utils.getter(global.foo__i) > 10);
+        return (fastn_utils.getStaticValue(global.foo__i) > 10);
       }()) {
         return fastn_dom.Length.Px(4);
       }
@@ -59,7 +59,7 @@
     fastn_dom.conditionalDom(parent, [
       global.foo__i
     ], function () {
-      return (fastn_utils.getter(global.foo__i) > 11);
+      return (fastn_utils.getStaticValue(global.foo__i) > 11);
     }, function (root) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
@@ -84,7 +84,7 @@
       return fastn_dom.conditionalDom(parent, [
         index
       ], function () {
-        return (fastn_utils.getter(index) % 2 == 0);
+        return (fastn_utils.getStaticValue(index) % 2 == 0);
       }, function (root) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
         rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
@@ -102,7 +102,7 @@ let foo__increment = function (args) {
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
+    let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getStaticValue(__args__.a) + 1);
     if (fastn_utils_val___args___a instanceof fastn.mutableClass) {
       fastn_utils_val___args___a = fastn_utils_val___args___a.get();
     }

@@ -36,7 +36,7 @@
       title: fastn.formula([global.foo__title,
       global.foo__flag], function () {
         if (function () {
-          return (!fastn_utils.getter(global.foo__flag));
+          return (!fastn_utils.getStaticValue(global.foo__flag));
         }()) {
           return global.foo__title;
         }
@@ -60,10 +60,13 @@ let foo__bar = function (parent, inherited, args) {
     __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
     parenti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.title, inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "red",
-      light: "red"
-    }), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "red");
+      record.set("dark", "red");
+      return record;
+    }(), inherited);
     return parenti0;
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;

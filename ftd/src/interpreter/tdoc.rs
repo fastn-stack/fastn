@@ -885,6 +885,8 @@ impl<'a> TDoc<'a> {
             name: &str,
             thing: &ftd::interpreter::Thing,
         ) -> ftd::interpreter::Result<ftd::interpreter::Thing> {
+            use itertools::Itertools;
+
             let (v, remaining) = ftd::interpreter::utils::split_at(name, ".");
             let thing = match thing.clone() {
                 ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
@@ -989,6 +991,21 @@ impl<'a> TDoc<'a> {
                         }
                         _ => thing.clone(),
                     }
+                }
+                ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                    name,
+                    variants,
+                    ..
+                }) => {
+                    let variant = variants
+                        .iter()
+                        .find_or_first(|variant| variant.name().eq(&format!("{name}.{v}")))
+                        .ok_or(ftd::interpreter::Error::ParseError {
+                            message: format!("Cant't find `{v}` variant in `{name}` or-type"),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        })?;
+                    variant.to_thing(doc.name, line_number)?
                 }
                 _ => {
                     return doc.err("not an or-type", thing, "get_thing", line_number);

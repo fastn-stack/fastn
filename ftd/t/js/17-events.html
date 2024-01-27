@@ -62,17 +62,23 @@
     });
     parenti0.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([global.foo__flag], function () {
       if (function () {
-        return fastn_utils.getter(global.foo__flag);
+        return fastn_utils.getStaticValue(global.foo__flag);
       }()) {
-        return fastn.recordInstance({
-          dark: "red",
-          light: "red"
-        });
+        return function () {
+          let record = fastn.recordInstance({
+          });
+          record.set("light", "red");
+          record.set("dark", "red");
+          return record;
+        }();
       } else {
-        return fastn.recordInstance({
-          dark: "green",
-          light: "green"
-        });
+        return function () {
+          let record = fastn.recordInstance({
+          });
+          record.set("light", "green");
+          record.set("dark", "green");
+          return record;
+        }();
       }
     }
     ), inherited);

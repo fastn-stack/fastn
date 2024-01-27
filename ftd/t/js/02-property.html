@@ -56,7 +56,7 @@
     });
     parenti4.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([global.foo__flag], function () {
       if (function () {
-        return fastn_utils.getter(global.foo__flag);
+        return fastn_utils.getStaticValue(global.foo__flag);
       }()) {
         return fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(40));
       } else {
@@ -64,10 +64,13 @@
       }
     }
     ), inherited);
-    parenti4.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "yellow",
-      light: "yellow"
-    })), inherited);
+    parenti4.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "yellow");
+      record.set("dark", "yellow");
+      return record;
+    }()), inherited);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

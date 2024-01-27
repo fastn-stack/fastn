@@ -49,15 +49,21 @@
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "_08_inherited__base_", fastn.recordInstance({
-  light: "#FFFFFF",
-  dark: "#000000"
-}));
-fastn_utils.createNestedObject(global, "_80_or_type_constant__button_type", fastn.recordInstance({
-  small: 1,
-  medium: 2,
-  large: 3
-}));
+fastn_utils.createNestedObject(global, "_08_inherited__base_", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#FFFFFF");
+  record.set("dark", "#000000");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "_80_or_type_constant__button_type", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("small", 1);
+  record.set("medium", 2);
+  record.set("large", 3);
+  return record;
+}());
 let foo__button = function (parent, inherited, args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
@@ -80,11 +86,11 @@ let foo__button = function (parent, inherited, args)
     __args__.type,
     global._80_or_type_constant__button_type.get("medium")], function () {
       if (function () {
-        return (fastn_utils.getter(__args__.type) == fastn_utils.getter(global._80_or_type_constant__button_type.get("small")));
+        return (fastn_utils.getStaticValue(__args__.type) == fastn_utils.getStaticValue(global._80_or_type_constant__button_type.get("small")));
       }()) {
         return fastn_dom.Length.Px(4);
       } else if (function () {
-        return (fastn_utils.getter(__args__.type) == fastn_utils.getter(global._80_or_type_constant__button_type.get("medium")));
+        return (fastn_utils.getStaticValue(__args__.type) == fastn_utils.getStaticValue(global._80_or_type_constant__button_type.get("medium")));
       }()) {
         return fastn_dom.Length.Px(8);
       } else {
@@ -92,14 +98,20 @@ let foo__button = function (parent, inherited, args)
       }
     }
     ), inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "white",
-      light: "white"
-    }), inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "blue",
-      light: "blue"
-    })), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "white");
+      record.set("dark", "white");
+      return record;
+    }(), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "blue");
+      record.set("dark", "blue");
+      return record;
+    }()), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.MinWidth, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(240)), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Selectable, false, inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);

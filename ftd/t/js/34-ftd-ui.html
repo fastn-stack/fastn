@@ -75,7 +75,7 @@ let foo__switcher = function (parent, inherited, args)
           index,
           __args__.is_active
         ], function () {
-          return (fastn_utils.getter(__args__.is_active) == fastn_utils.getter(index));
+          return (fastn_utils.getStaticValue(__args__.is_active) == fastn_utils.getStaticValue(index));
         }, function (root) {
           let rooti0 = foo__box(root, inherited, {
             uis: item.get("elements")
@@ -91,8 +91,11 @@ let foo__switcher = function (parent, inherited, args)
   }
 }
 global["foo__switcher"] = foo__switcher;
-fastn_utils.createNestedObject(global, "foo__c", fastn.mutableList([fastn.recordInstance({
-  elements: fastn.mutableList([function (root, inherited) {
+fastn_utils.createNestedObject(global, "foo__c", fastn.mutableList([function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "me");
+  record.set("elements", fastn.mutableList([function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Me component", inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text_strong"), inherited);
@@ -101,11 +104,14 @@ fastn_utils.createNestedObject(global, "foo__c", fastn.mutableList([fastn.record
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Me component 2", inherited);
   }
-  ]),
-  name: "me"
-}),
-fastn.recordInstance({
-  elements: fastn.mutableList([function (root, inherited) {
+  ]));
+  return record;
+}(),
+function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "me22");
+  record.set("elements", fastn.mutableList([function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Me component22", inherited);
   },
@@ -113,9 +119,9 @@ fastn.recordInstance({
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Me component22 2", inherited);
   }
-  ]),
-  name: "me22"
-})]));
+  ]));
+  return record;
+}()]));
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
