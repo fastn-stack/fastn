@@ -2,7 +2,11 @@ name: fastn build to update vh_pages branch
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -11,13 +15,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Install Fastn
+      - name: Install fastn
         run: source <(curl -fsSL https://fastn.com/install.sh)
-      - name: Build pages with Fastn
+      - name: Build pages with fastn
         run: fastn build --offline
       - name: Deploy to vh_page branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./.build
           publish_branch: vh_page
+          full_commit_message: ${{ github.event.pull_request.head.sha }}
