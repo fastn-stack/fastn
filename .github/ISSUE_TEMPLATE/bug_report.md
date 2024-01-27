@@ -1,6 +1,7 @@
 ---
 name: Bug Report
 about: Create a bug report.
+labels: bug
 ---
 
 Your issue may already be reported! Please search on the [`fastn` issue tracker](https://github.com/fastn-stack/fastn/issues) before creating one.
