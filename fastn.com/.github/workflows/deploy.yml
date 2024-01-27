@@ -7,17 +7,14 @@ on:
 
 jobs:
   fastn-build:
-    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Pull the latest commits
-        run: git pull
-      - uses: FranzDiebold/github-env-vars-action@v2
-      - run: sh -c "$(curl -fsSL https://fastn.com/install.sh)"
-      - name: Build the pages with fastn
-        run: fastn build --base=/ --offline
+      - name: Install Fastn
+        run: source <(curl -fsSL https://fastn.com/install.sh)
+      - name: Build pages with Fastn
+        run: fastn build --offline
       - name: Deploy to vh_page branch
         uses: peaceiris/actions-gh-pages@v3
         with:
