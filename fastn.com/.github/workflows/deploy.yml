@@ -3,9 +3,6 @@ name: Deploy Site
 on:
   push:
     branches: [ main ]
-    paths:
-    - '**.ftd'
-    - '**.md'
   workflow_dispatch:
   workflow_call:
 env:
