@@ -174,6 +174,7 @@ setup() {
     if [ -e "${DESTINATION_PATH}/fastn" ]; then
         if update_path; then
             print_success_box
+            export PATH=$PATH:$DESTINATION_PATH
         else
             echo "Failed to update PATH settings in your shell."
             echo "Please manually add ${DESTINATION_PATH} to your PATH."
