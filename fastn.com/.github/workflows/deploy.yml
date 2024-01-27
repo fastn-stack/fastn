@@ -26,4 +26,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./.build
           publish_branch: vh_page
+          force_orphan: true
           full_commit_message: ${{ github.event.pull_request.head.sha }}
