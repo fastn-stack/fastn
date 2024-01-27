@@ -62,10 +62,8 @@ print_fastn_logo() {
 print_success_box() {
     log_message "╭────────────────────────────────────────╮"
     log_message "│                                        │"
-    log_message "│   fastn installation completed         │"
+    log_message "│   fastn installation completed.        │"
     log_message "│                                        │"
-    log_message "│   Restart your terminal to apply       │"
-    log_message "│   the changes.                         │"
     log_message "│                                        │"
     log_message "│   Get started with fastn at:           │"
     log_message "│   ${FMT_BLUE}https://fastn.com${FMT_RESET}                    │"
@@ -89,6 +87,7 @@ command_exists() {
 
 update_path() {
     local shell_config_file
+
     if [ -n "$ZSH_VERSION" ]; then
         shell_config_file="${HOME}/.zshrc"
     elif [ -n "$BASH_VERSION" ]; then
@@ -108,17 +107,17 @@ update_path() {
     if ! grep -qF "export PATH=\"\$PATH:${DESTINATION_PATH}\"" "$shell_config_file"; then
         if [ -w "$shell_config_file" ]; then
             # Add the destination path to the PATH variable in the shell config file
-            echo "export PATH=\"\$PATH:${DESTINATION_PATH}\"" >> "$shell_config_file" &&
-            return 0
+            echo "export PATH=\"\$PATH:${DESTINATION_PATH}\"" >> "$shell_config_file"
         else
             log_error "Failed to add '${DESTINATION_PATH}' to PATH. Insufficient permissions for '$shell_config_file'."
             log_message "The installer has successfully downloaded the \`fastn\` binary in '${DESTINATION_PATH}' but it failed to add it in your \$PATH variable."
             log_message "Configure the \$PATH manually or run \`fastn\` binary from '${DESTINATION_PATH}/fastn'"
             return 1
         fi
-    else
-        return 0
     fi
+
+    export PATH=$PATH:$DESTINATION_PATH
+    return 0
 }
 
 
@@ -149,15 +148,18 @@ setup() {
         mkdir -p "$DESTINATION_PATH"
     fi
 
-    if [ -n "$PRE_RELEASE" ]; then
-        URL="https://github.com/fastn-stack/fastn/releases/latest/download"
-        log_message "Downloading the latest pre-release binaries in $DESTINATION_PATH."
-    elif [ -n "$VERSION" ]; then
+    if [ -n "$VERSION" ]; then
         URL="https://github.com/fastn-stack/fastn/releases/download/$VERSION"
+        log_message "fastn-version file found."
         log_message "Installing fastn $VERSION in $DESTINATION_PATH."
+    elif [ -n "$PRE_RELEASE" ]; then
+        URL="https://github.com/fastn-stack/fastn/releases/latest/download"
+        log_message "fastn-version file not found."
+        log_message "Downloading the latest pre-release of fastn in $DESTINATION_PATH."
     else
         URL="https://github.com/fastn-stack/fastn/releases/latest/download"
-        log_message "Downloading the latest production-ready binaries in $DESTINATION_PATH."
+        log_message "fastn-version file not found."
+        log_message "Downloading the latest release of fastn in $DESTINATION_PATH."
     fi
 
     if [ "$(uname)" = "Darwin" ]; then
@@ -170,11 +172,10 @@ setup() {
     curl -# -L -o "${DESTINATION_PATH}/fastn" "${URL}/${FILENAME}"
     chmod +x "${DESTINATION_PATH}/fastn"
 
-    # Check if the destination files are moved successfully before setting permissions
+    # Check if the destination files is present and executable before updating the PATH
     if [ -e "${DESTINATION_PATH}/fastn" ]; then
         if update_path; then
             print_success_box
-            export PATH=$PATH:$DESTINATION_PATH
         else
             echo "Failed to update PATH settings in your shell."
             echo "Please manually add ${DESTINATION_PATH} to your PATH."
