@@ -246,17 +246,17 @@ impl Package {
             .find(|dep| dep.implements.contains(&interface.to_string()))
     }
 
-    pub fn get_flattened_dependencies(&self) -> Vec<fastn_core::Dependency> {
-        self.dependencies
-            .clone()
-            .into_iter()
-            .fold(&mut vec![], |old_val, dep| {
-                old_val.extend(dep.package.get_flattened_dependencies());
-                old_val.push(dep);
-                old_val
-            })
-            .to_owned()
-    }
+    // pub fn get_flattened_dependencies(&self) -> Vec<fastn_core::Dependency> {
+    //     self.dependencies
+    //         .clone()
+    //         .into_iter()
+    //         .fold(&mut vec![], |old_val, dep| {
+    //             old_val.extend(dep.package.get_flattened_dependencies());
+    //             old_val.push(dep);
+    //             old_val
+    //         })
+    //         .to_owned()
+    // }
 
     pub fn get_font_html(&self) -> String {
         self.fonts.iter().fold(String::new(), |accumulator, font| {
@@ -279,7 +279,7 @@ impl Package {
                         {
                             import_doc_path = ai.path.replacen(
                                 dependency.alias.as_ref()?.as_str(),
-                                dependency.package.name.as_str(),
+                                dependency.package.as_str(),
                                 1,
                             );
                         }
@@ -311,7 +311,7 @@ impl Package {
         for dependency in &self.dependencies {
             if let Some(dep_alias) = &dependency.alias {
                 if dep_alias.as_str().eq(alias) {
-                    full_path = Some(dependency.package.name.clone());
+                    full_path = Some(dependency.package.clone());
                 }
             }
         }
@@ -544,13 +544,13 @@ impl Package {
     }
 
     /// aliases() returns the list of the available aliases at the package level.
-    pub fn aliases(&self) -> std::collections::BTreeMap<&str, &fastn_core::Package> {
+    pub fn aliases(&self) -> std::collections::BTreeMap<&str, &String> {
         let mut resp = std::collections::BTreeMap::new();
         for d in &self.dependencies {
             if let Some(a) = &d.alias {
                 resp.insert(a.as_str(), &d.package);
             }
-            resp.insert(&d.package.name, &d.package);
+            resp.insert(&d.package, &d.package);
         }
         resp
     }
@@ -704,7 +704,7 @@ impl Package {
             })
         {
             deps.push(fastn_core::Dependency {
-                package: fastn_core::Package::new(fastn_core::FASTN_UI_INTERFACE),
+                package: fastn_core::FASTN_UI_INTERFACE.to_string(),
                 version: None,
                 notes: None,
                 alias: None,
@@ -773,13 +773,13 @@ impl Package {
     // Dependencies with mount point and end point
     // Output: Package Dependencies
     // [Package, endpoints, mount-point]
-    pub fn dep_with_ep_and_mp(&self) -> Vec<(&Package, &str, &str)> {
+    pub fn dep_with_ep_and_mp(&self) -> Vec<(&str, &str)> {
         self.dependencies
             .iter()
             .fold(&mut vec![], |accumulator, dep| {
                 if let Some(ep) = &dep.endpoint {
                     if let Some(mp) = &dep.mountpoint {
-                        accumulator.push((&dep.package, ep.as_str(), mp.as_str()))
+                        accumulator.push((ep.as_str(), mp.as_str()))
                     }
                 }
 
@@ -796,7 +796,7 @@ impl Package {
     pub fn get_dep_endpoint<'a>(&'a self, path: &'a str) -> Option<(&'a str, &'a str)> {
         fn dep_endpoint<'a>(package: &'a Package, path: &'a str) -> Option<(&'a str, &'a str)> {
             let dependencies = package.dep_with_ep_and_mp();
-            for (_, ep, mp) in dependencies {
+            for (ep, mp) in dependencies {
                 if path.starts_with(mp.trim_matches('/')) {
                     let path_without_mp = path.trim_start_matches(mp.trim_start_matches('/'));
                     return Some((ep, path_without_mp));

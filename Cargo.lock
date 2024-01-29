@@ -1724,6 +1724,7 @@ dependencies = [
 name = "fastn"
 version = "0.4.51"
 dependencies = [
+ "camino",
  "clap",
  "colored",
  "dotenvy",

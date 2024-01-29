@@ -76,23 +76,21 @@ pub enum UpdateError {
 
 async fn resolve_dependency_package(
     ds: &fastn_ds::DocumentStore,
-    dependency: &fastn_core::package::dependency::Dependency,
+    package_name: &str,
     dependency_path: &fastn_ds::Path,
 ) -> Result<fastn_core::Package, DependencyError> {
-    let mut dep_package = dependency.package.clone();
     let fastn_path = dependency_path.join("FASTN.ftd");
-    dep_package
-        .resolve(&fastn_path, ds)
+    let dep_package = from_fastn_doc(ds, &fastn_path)
         .await
         .context(ResolveDependencySnafu {
-            package: dependency.package.name.clone(),
+            package: package_name,
         })?;
     Ok(dep_package)
 }
 
 async fn update_dependencies(
     ds: &fastn_ds::DocumentStore,
-    packages_root: &fastn_ds::Path,
+    packages_root: fastn_ds::Path,
     current_package: &fastn_core::Package,
     pb: &indicatif::ProgressBar,
     offline: bool,
@@ -103,12 +101,11 @@ async fn update_dependencies(
 
     while let Some(package) = stack.pop() {
         for dependency in package.dependencies {
-            if resolved.contains(&dependency.package.name) {
+            if resolved.contains(&dependency.package) {
                 continue;
             }
 
-            let dep_package = &dependency.package;
-            let package_name = dep_package.name.clone();
+            let package_name = dependency.package.clone();
             let dependency_path = &packages_root.join(&package_name);
 
             if offline {
@@ -118,7 +115,7 @@ async fn update_dependencies(
                 }
 
                 let dep_package =
-                    resolve_dependency_package(ds, &dependency, dependency_path).await?;
+                    resolve_dependency_package(ds, &package_name, dependency_path).await?;
                 resolved.insert(package_name.to_string());
                 pb.inc_length(1);
                 stack.push(dep_package);
@@ -178,7 +175,8 @@ async fn update_dependencies(
                 continue;
             }
 
-            let dep_package = resolve_dependency_package(ds, &dependency, dependency_path).await?;
+            let dep_package =
+                resolve_dependency_package(ds, &package_name, dependency_path).await?;
             resolved.insert(package_name.to_string());
             pb.inc_length(1);
             stack.push(dep_package);
@@ -265,9 +263,37 @@ async fn get_manifest(
     Ok((manifest, manifest_bytes))
 }
 
+pub async fn from_fastn_doc(
+    ds: &fastn_ds::DocumentStore,
+    fastn_path: &fastn_ds::Path,
+) -> fastn_core::Result<fastn_core::Package> {
+    let doc = ds.read_to_string(fastn_path).await?;
+    let lib = fastn_core::FastnLibrary::default();
+    let fastn_doc = match fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib) {
+        Ok(v) => Ok(v),
+        Err(e) => Err(fastn_core::Error::PackageError {
+            message: format!("failed to parse FASTN.ftd 3: {:?}", &e),
+        }),
+    }?;
+    let package = fastn_core::Package::from_fastn_doc(ds, &fastn_doc)?;
+
+    Ok(package)
+}
+
+pub async fn read_current_package(
+    ds: &fastn_ds::DocumentStore,
+) -> fastn_core::Result<fastn_core::Package> {
+    let fastn_path = fastn_ds::Path::new("FASTN.ftd");
+
+    from_fastn_doc(ds, &fastn_path).await
+}
+
 #[tracing::instrument(skip_all)]
-pub async fn update(config: &fastn_core::Config, offline: bool) -> fastn_core::Result<()> {
-    if config.package.dependencies.is_empty() {
+pub async fn update(ds: &fastn_ds::DocumentStore, offline: bool) -> fastn_core::Result<()> {
+    let packages_root = ds.root().join(".packages");
+    let current_package = read_current_package(ds).await?;
+
+    if current_package.dependencies.is_empty() {
         println!("No dependencies to update.");
         return Ok(());
     }
@@ -277,20 +303,11 @@ pub async fn update(config: &fastn_core::Config, offline: bool) -> fastn_core::R
             .unwrap()
             .tick_chars("⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏");
 
-    let current_package = &config.package;
     let pb = indicatif::ProgressBar::new(current_package.dependencies.len() as u64);
     pb.set_style(spinner_style);
     pb.set_prefix("Updating dependencies");
 
-    if let Err(e) = update_dependencies(
-        &config.ds,
-        &config.packages_root,
-        current_package,
-        &pb,
-        offline,
-    )
-    .await
-    {
+    if let Err(e) = update_dependencies(ds, packages_root, &current_package, &pb, offline).await {
         return Err(fastn_core::Error::UpdateError {
             message: e.to_string(),
         });
@@ -298,7 +315,7 @@ pub async fn update(config: &fastn_core::Config, offline: bool) -> fastn_core::R
 
     pb.finish_and_clear();
 
-    match config.package.dependencies.len() {
+    match current_package.dependencies.len() {
         1 => println!("Updated package dependency"),
         n => println!("Updated {} dependencies.", n),
     }
