@@ -27,10 +27,8 @@ pub async fn logout(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    if let Some(session_data) = req.cookie(fastn_core::auth::COOKIE_NAME) {
-        let session_data = fastn_core::auth::utils::decrypt(&session_data)
-            .await
-            .unwrap_or_default();
+    if let Some(session_data) = req.cookie(fastn_core::auth::SESSION_COOKIE_NAME) {
+        let session_data = fastn_core::auth::utils::decrypt(&session_data).unwrap_or_default();
 
         #[derive(serde::Deserialize)]
         struct SessionData {
@@ -58,7 +56,7 @@ pub async fn logout(
 
     Ok(actix_web::HttpResponse::Found()
         .cookie(
-            actix_web::cookie::Cookie::build(fastn_core::auth::COOKIE_NAME, "")
+            actix_web::cookie::Cookie::build(fastn_core::auth::SESSION_COOKIE_NAME, "")
                 .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
