@@ -88,7 +88,9 @@ impl Library2022 {
         ) -> fastn_core::Result<(String, String, usize)> {
             let package = lib.get_current_package(current_processing_module)?;
             if name.starts_with(package.name.as_str()) {
-                if let Some((content, size)) = get_data_from_package(name, &package, lib).await? {
+                if let Some((content, size)) =
+                    get_data_from_package(name, &package.name, lib).await?
+                {
                     return Ok((content, name.to_string(), size));
                 }
             }
@@ -96,7 +98,7 @@ impl Library2022 {
             if package.name.ends_with(name.trim_end_matches('/')) {
                 let package_index = format!("{}/", package.name.as_str());
                 if let Some((content, size)) =
-                    get_data_from_package(package_index.as_str(), &package, lib).await?
+                    get_data_from_package(package_index.as_str(), &package.name, lib).await?
                 {
                     return Ok((content, format!("{package_index}index.ftd"), size));
                 }
@@ -105,7 +107,7 @@ impl Library2022 {
             for (alias, package) in package.aliases() {
                 lib.push_package_under_process(name, package).await?;
                 if name.starts_with(alias) {
-                    let name = name.replacen(alias, &package.name, 1);
+                    let name = name.replacen(alias, package, 1);
                     if let Some((content, size)) =
                         get_data_from_package(name.as_str(), package, lib).await?
                     {
@@ -146,12 +148,17 @@ impl Library2022 {
         #[allow(clippy::await_holding_refcell_ref)]
         async fn get_data_from_package(
             name: &str,
-            package: &fastn_core::Package,
+            package: &str,
             lib: &mut fastn_core::Library2022,
         ) -> fastn_core::Result<Option<(String, usize)>> {
             lib.push_package_under_process(name, package).await?;
-            let packages = lib.config.all_packages.borrow();
-            let package = packages.get(package.name.as_str()).unwrap_or(package);
+            let package = lib.config.resolve_package(package).map_err(|e| {
+                ftd::ftd2021::p1::Error::ParseError {
+                    message: format!("Cannot resolve the package: {}, Error: {}", package, e),
+                    doc_id: name.to_string(),
+                    line_number: 0,
+                }
+            })?;
             // Explicit check for the current package.
             let name = format!("{}/", name.trim_end_matches('/'));
             if !name.starts_with(format!("{}/", package.name.as_str()).as_str()) {
@@ -181,24 +188,17 @@ impl Library2022 {
     pub(crate) async fn push_package_under_process(
         &mut self,
         module: &str,
-        package: &fastn_core::Package,
+        package: &str,
     ) -> ftd::ftd2021::p1::Result<()> {
-        self.module_package_map.insert(
-            module.trim_matches('/').to_string(),
-            package.name.to_string(),
-        );
-        if self
-            .config
-            .all_packages
-            .borrow()
-            .contains_key(package.name.as_str())
-        {
+        self.module_package_map
+            .insert(module.trim_matches('/').to_string(), package.to_string());
+        if self.config.all_packages.borrow().contains_key(package) {
             return Ok(());
         }
 
-        let package = self.config.resolve_package(package).await.map_err(|e| {
+        let package = self.config.resolve_package(package).map_err(|e| {
             ftd::ftd2021::p1::Error::ParseError {
-                message: format!("Cannot resolve the package: {}, Error: {}", package.name, e),
+                message: format!("Cannot resolve the package: {}, Error: {}", package, e),
                 doc_id: self.document_id.to_string(),
                 line_number: 0,
             }

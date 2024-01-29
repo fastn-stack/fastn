@@ -42,6 +42,7 @@ impl Library {
 
         return get_for_package(name, packages, self).await;
 
+        #[allow(clippy::await_holding_refcell_ref)]
         async fn get_for_package(
             name: &str,
             packages: &mut Vec<fastn_core::Package>,
@@ -57,7 +58,7 @@ impl Library {
 
             for (alias, package) in package.to_owned().aliases() {
                 if name.starts_with(alias) {
-                    let package = lib.config.config.resolve_package(package).await.ok()?;
+                    let package = lib.config.config.resolve_package(package).ok()?;
                     if let Some(r) = get_data_from_package(
                         name.replacen(alias, &package.name, 1).as_str(),
                         &package,
@@ -86,15 +87,24 @@ impl Library {
 
             for (alias, package) in translation_of.aliases() {
                 if name.starts_with(alias) {
-                    if let Some(r) = get_data_from_package(
-                        name.replacen(alias, &package.name, 1).as_str(),
-                        package,
-                        lib,
-                    )
-                    .await
+                    if let Some(package) = lib
+                        .config
+                        .config
+                        .to_owned()
+                        .all_packages
+                        .borrow()
+                        .get(package)
                     {
-                        packages.push(package.clone());
-                        return Some(r);
+                        if let Some(r) = get_data_from_package(
+                            name.replacen(alias, &package.name, 1).as_str(),
+                            package,
+                            lib,
+                        )
+                        .await
+                        {
+                            packages.push(package.clone());
+                            return Some(r);
+                        }
                     }
                 }
             }
@@ -177,15 +187,15 @@ pub struct Library2 {
 impl Library2 {
     pub(crate) async fn push_package_under_process(
         &mut self,
-        package: &fastn_core::Package,
+        package: String,
     ) -> ftd::ftd2021::p1::Result<()> {
-        self.packages_under_process.push(package.name.to_string());
+        self.packages_under_process.push(package.to_string());
         if self
             .config
             .config
             .all_packages
             .borrow()
-            .contains_key(package.name.as_str())
+            .contains_key(package.as_str())
         {
             return Ok(());
         }
@@ -193,10 +203,9 @@ impl Library2 {
         let package = self
             .config
             .config
-            .resolve_package(package)
-            .await
+            .resolve_package(package.as_str())
             .map_err(|_| ftd::ftd2021::p1::Error::ParseError {
-                message: format!("Cannot resolve the package: {}", package.name),
+                message: format!("Cannot resolve the package: {}", package),
                 doc_id: self.document_id.to_string(),
                 line_number: 0,
             })?;
@@ -252,6 +261,7 @@ impl Library2 {
 
         return get_for_package(format!("{}/", name.trim_end_matches('/')).as_str(), self).await;
 
+        #[allow(clippy::await_holding_refcell_ref)]
         async fn get_for_package(name: &str, lib: &mut fastn_core::Library2) -> Option<String> {
             let package = lib.get_current_package().ok()?;
             if name.starts_with(package.name.as_str()) {
@@ -262,14 +272,23 @@ impl Library2 {
 
             for (alias, package) in package.aliases() {
                 if name.starts_with(alias) {
-                    if let Some(r) = get_data_from_package(
-                        name.replacen(alias, &package.name, 1).as_str(),
-                        package,
-                        lib,
-                    )
-                    .await
+                    if let Some(package) = lib
+                        .config
+                        .config
+                        .to_owned()
+                        .all_packages
+                        .borrow()
+                        .get(package)
                     {
-                        return Some(r);
+                        if let Some(r) = get_data_from_package(
+                            name.replacen(alias, &package.name, 1).as_str(),
+                            package,
+                            lib,
+                        )
+                        .await
+                        {
+                            return Some(r);
+                        }
                     }
                 }
             }
@@ -288,6 +307,13 @@ impl Library2 {
 
             for (alias, package) in translation_of.aliases() {
                 if name.starts_with(alias) {
+                    let config = lib.config.config.to_owned();
+                    let all_packages = config.all_packages.borrow();
+                    let package = match all_packages.get(package.as_str()) {
+                        Some(package) => package,
+                        None => continue,
+                    };
+
                     if let Some(r) = get_data_from_package(
                         name.replacen(alias, &package.name, 1).as_str(),
                         package,
@@ -309,7 +335,9 @@ impl Library2 {
             package: &fastn_core::Package,
             lib: &mut Library2,
         ) -> Option<String> {
-            lib.push_package_under_process(package).await.ok()?;
+            lib.push_package_under_process(package.name.clone())
+                .await
+                .ok()?;
             let packages = lib.config.config.all_packages.borrow();
             let package = packages.get(package.name.as_str()).unwrap_or(package);
             // Explicit check for the current package.

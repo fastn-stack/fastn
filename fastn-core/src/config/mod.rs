@@ -1,6 +1,5 @@
 // Document: https://fastn_core.dev/crate/config/
 // Document: https://fastn_core.dev/crate/package/
-
 pub(crate) mod utils;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
@@ -345,7 +344,7 @@ impl Config {
                 self.package
                     .get_dependency_for_interface(fastn_core::PACKAGE_THEME_INTERFACE)
             }) {
-            Some(dep) => dep.package.name.as_str(),
+            Some(dep) => dep.package.as_str(),
             None => fastn_core::FASTN_UI_INTERFACE,
         }
     }
@@ -462,40 +461,22 @@ impl Config {
     /// ftd document. Currently this function does not check for fonts in package dependencies
     /// nor it tries to avoid fonts that are configured but not needed in current document.
     pub fn get_font_style(&self) -> String {
-        use itertools::Itertools;
         // TODO: accept list of actual fonts used in the current document. each document accepts
         //       a different list of fonts and only fonts used by a given document should be
         //       included in the HTML produced by that font
         // TODO: fetch fonts from package dependencies as well (ideally this function should fail
         //       if one of the fonts used by any ftd document is not found
+        let generated_style = self.all_packages.borrow().values().fold(
+            self.package.get_font_html(),
+            |accumulator, package| {
+                format!(
+                    "{pre}\n{new}",
+                    pre = accumulator,
+                    new = package.get_font_html()
+                )
+            },
+        );
 
-        let generated_style = {
-            let mut generated_style = self
-                .package
-                .get_flattened_dependencies()
-                .into_iter()
-                .unique_by(|dep| dep.package.name.clone())
-                .collect_vec()
-                .iter()
-                .fold(self.package.get_font_html(), |accumulator, dep| {
-                    format!(
-                        "{pre}\n{new}",
-                        pre = accumulator,
-                        new = dep.package.get_font_html()
-                    )
-                });
-            generated_style = self.all_packages.borrow().values().fold(
-                generated_style,
-                |accumulator, package| {
-                    format!(
-                        "{pre}\n{new}",
-                        pre = accumulator,
-                        new = package.get_font_html()
-                    )
-                },
-            );
-            generated_style
-        };
         return match generated_style.trim().is_empty() {
             false => format!("<style>{}</style>", generated_style),
             _ => "".to_string(),
@@ -503,17 +484,7 @@ impl Config {
     }
 
     pub(crate) async fn download_fonts(&self) -> fastn_core::Result<()> {
-        use itertools::Itertools;
-
         let mut fonts = vec![];
-        for dep in self
-            .package
-            .get_flattened_dependencies()
-            .into_iter()
-            .unique_by(|dep| dep.package.name.clone())
-        {
-            fonts.extend(dep.package.fonts);
-        }
 
         for package in self.all_packages.borrow().values() {
             fonts.extend(package.fonts.clone());
@@ -711,7 +682,7 @@ impl Config {
         let fastn_path = &self.packages_root.join(&package.name).join("FASTN.ftd");
 
         if !self.ds.exists(fastn_path).await {
-            let package = self.resolve_package(package).await?;
+            let package = self.resolve_package(&package.name)?;
             self.add_package(&package);
         }
 
@@ -798,8 +769,6 @@ impl Config {
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         let (package_name, package) = self.find_package_by_id(id).await?;
 
-        let package = self.resolve_package(&package).await?;
-        self.add_package(&package);
         let mut id = id.to_string();
         let mut add_packages = "".to_string();
         if let Some(new_id) = id.strip_prefix("-/") {
@@ -853,7 +822,10 @@ impl Config {
 
         if let Some(package) = self.package.aliases().iter().rev().find_map(|(alias, d)| {
             if id.starts_with(alias) {
-                Some((alias.to_string(), (*d).to_owned()))
+                self.all_packages
+                    .borrow_mut()
+                    .get(d.as_str())
+                    .map(|dep_package| (alias.to_string(), (*dep_package).to_owned()))
             } else {
                 None
             }
@@ -1215,117 +1187,107 @@ impl Config {
         Ok(config)
     }
 
-    fn get_package_name_for_module(&self, module_name: &str) -> fastn_core::Result<String> {
-        if module_name.starts_with(format!("{}/", &self.package.name).as_str())
-            || module_name.eq(&self.package.name)
-        {
-            Ok(self.package.name.clone())
-        } else if let Some(package_dependency) = self.package.dependencies.iter().find(|v| {
-            module_name.starts_with(format!("{}/", &v.package.name).as_str())
-                || module_name.eq(&v.package.name)
-        }) {
-            Ok(package_dependency.package.name.clone())
-        } else {
-            fastn_core::usage_error(format!("Can't find package for module {}", module_name))
-        }
-    }
+    // fn get_package_name_for_module(&self, module_name: &str) -> fastn_core::Result<String> {
+    //     if module_name.starts_with(format!("{}/", &self.package.name).as_str())
+    //         || module_name.eq(&self.package.name)
+    //     {
+    //         Ok(self.package.name.clone())
+    //     } else if let Some(package_dependency) = self.package.dependencies.iter().find(|v| {
+    //         module_name.starts_with(format!("{}/", &v.package).as_str())
+    //             || module_name.eq(&v.package)
+    //     }) {
+    //         Ok(package_dependency.package.clone())
+    //     } else {
+    //         fastn_core::usage_error(format!("Can't find package for module {}", module_name))
+    //     }
+    // }
 
-    fn check_dependencies_provided(
-        &self,
-        package: &mut fastn_core::Package,
-    ) -> fastn_core::Result<()> {
-        let mut auto_imports = vec![];
-        for dependency in package.dependencies.iter_mut() {
-            if let Some(ref required_as) = dependency.required_as {
-                if let Some(provided_via) = self.package.dependencies.iter().find_map(|v| {
-                    if v.package.name.eq(&dependency.package.name) {
-                        v.provided_via.clone()
-                    } else {
-                        None
-                    }
-                }) {
-                    let package_name = self.get_package_name_for_module(provided_via.as_str())?;
-                    dependency.package.name = package_name;
-                    auto_imports.push(fastn_core::AutoImport {
-                        path: provided_via.to_string(),
-                        alias: Some(required_as.clone()),
-                        exposing: vec![],
-                    });
-                } else {
-                    /*auto_imports.push(fastn_core::AutoImport {
-                        path: dependency.package.name.to_string(),
-                        alias: Some(required_as.clone()),
-                        exposing: vec![],
-                    });*/
-                    dbg!("Dependency needs to be provided.", &dependency.package.name);
-                    return fastn_core::usage_error(format!(
-                        "Dependency {} needs to be provided.",
-                        dependency.package.name
-                    ));
-                }
-            }
-        }
-        package.auto_import.extend(auto_imports);
-        if let Some(ref package_alias) = package.system {
-            if package.system_is_confidential.unwrap_or(true) {
-                return fastn_core::usage_error(format!("system-is-confidential is needed for system package {} and currently only false is supported.", package.name));
-            }
-            if let Some(provided_via) = self.package.dependencies.iter().find_map(|v| {
-                if v.package.name.eq(&package.name) {
-                    v.provided_via.clone()
-                } else {
-                    None
-                }
-            }) {
-                let package_name = self.get_package_name_for_module(provided_via.as_str())?;
-                package.dependencies.push(fastn_core::Dependency {
-                    package: fastn_core::Package::new(package_name.as_str()),
-                    version: None,
-                    notes: None,
-                    alias: None,
-                    implements: vec![],
-                    endpoint: None,
-                    mountpoint: None,
-                    provided_via: None,
-                    required_as: None,
-                });
-                package.auto_import.push(fastn_core::AutoImport {
-                    path: provided_via.to_string(),
-                    alias: Some(package_alias.clone()),
-                    exposing: vec![],
-                });
-            } else {
-                package.auto_import.push(fastn_core::AutoImport {
-                    path: package.name.to_string(),
-                    alias: Some(package_alias.clone()),
-                    exposing: vec![],
-                });
-            }
-        }
-        Ok(())
-    }
+    // fn check_dependencies_provided(
+    //     &self,
+    //     package: &mut fastn_core::Package,
+    // ) -> fastn_core::Result<()> {
+    //     let mut auto_imports = vec![];
+    //     for dependency in package.dependencies.iter_mut() {
+    //         if let Some(ref required_as) = dependency.required_as {
+    //             if let Some(provided_via) = self.package.dependencies.iter().find_map(|v| {
+    //                 if v.package.eq(&dependency.package) {
+    //                     v.provided_via.clone()
+    //                 } else {
+    //                     None
+    //                 }
+    //             }) {
+    //                 let package_name = self.get_package_name_for_module(provided_via.as_str())?;
+    //                 dependency.package = package_name;
+    //                 auto_imports.push(fastn_core::AutoImport {
+    //                     path: provided_via.to_string(),
+    //                     alias: Some(required_as.clone()),
+    //                     exposing: vec![],
+    //                 });
+    //             } else {
+    //                 /*auto_imports.push(fastn_core::AutoImport {
+    //                     path: dependency.package.name.to_string(),
+    //                     alias: Some(required_as.clone()),
+    //                     exposing: vec![],
+    //                 });*/
+    //                 dbg!("Dependency needs to be provided.", &dependency.package);
+    //                 return fastn_core::usage_error(format!(
+    //                     "Dependency {} needs to be provided.",
+    //                     dependency.package
+    //                 ));
+    //             }
+    //         }
+    //     }
+    //     package.auto_import.extend(auto_imports);
+    //     if let Some(ref package_alias) = package.system {
+    //         if package.system_is_confidential.unwrap_or(true) {
+    //             return fastn_core::usage_error(format!("system-is-confidential is needed for system package {} and currently only false is supported.", package.name));
+    //         }
+    //         if let Some(provided_via) = self.package.dependencies.iter().find_map(|v| {
+    //             if v.package.eq(&package.name) {
+    //                 v.provided_via.clone()
+    //             } else {
+    //                 None
+    //             }
+    //         }) {
+    //             let package_name = self.get_package_name_for_module(provided_via.as_str())?;
+    //             package.dependencies.push(fastn_core::Dependency {
+    //                 package: package_name,
+    //                 version: None,
+    //                 notes: None,
+    //                 alias: None,
+    //                 implements: vec![],
+    //                 endpoint: None,
+    //                 mountpoint: None,
+    //                 provided_via: None,
+    //                 required_as: None,
+    //             });
+    //             package.auto_import.push(fastn_core::AutoImport {
+    //                 path: provided_via.to_string(),
+    //                 alias: Some(package_alias.clone()),
+    //                 exposing: vec![],
+    //             });
+    //         } else {
+    //             package.auto_import.push(fastn_core::AutoImport {
+    //                 path: package.name.to_string(),
+    //                 alias: Some(package_alias.clone()),
+    //                 exposing: vec![],
+    //             });
+    //         }
+    //     }
+    //     Ok(())
+    // }
 
-    pub(crate) async fn resolve_package(
-        &self,
-        package: &fastn_core::Package,
-    ) -> fastn_core::Result<fastn_core::Package> {
-        if self.package.name.eq(package.name.as_str()) {
+    pub(crate) fn resolve_package(&self, package: &str) -> fastn_core::Result<fastn_core::Package> {
+        if self.package.name.eq(package) {
             return Ok(self.package.clone());
         }
 
-        if let Some(package) = { self.all_packages.borrow().get(package.name.as_str()) } {
-            return Ok(package.clone());
+        match { self.all_packages.borrow().get(package) } {
+            Some(package) => Ok(package.clone()),
+            None => Err(fastn_core::Error::PackageError {
+                message: format!("Could not resolve package {}", package),
+            }),
         }
-        let mut package = package
-            .get_and_resolve(&self.get_root_for_package(package), &self.ds)
-            .await?;
-        self.check_dependencies_provided(&mut package)?;
-        package.auto_import_language(
-            self.package.requested_language.clone(),
-            self.package.selected_language.clone(),
-        )?;
-        self.add_package(&package);
-        Ok(package)
     }
     pub(crate) fn add_package(&self, package: &fastn_core::Package) {
         self.all_packages

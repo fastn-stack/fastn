@@ -74,11 +74,7 @@ impl AppTemp {
     }
 
     pub async fn into_app(self, config: &fastn_core::Config) -> fastn_core::Result<App> {
-        let package = config
-            .resolve_package(&fastn_core::Package::new(
-                self.package.trim().trim_matches('/'),
-            ))
-            .await?;
+        let package = config.resolve_package(self.package.trim().trim_matches('/'))?;
 
         Ok(App {
             name: self.name,
