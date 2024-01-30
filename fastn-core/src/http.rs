@@ -175,6 +175,41 @@ impl Request {
             .and_then(|v| v.parse().ok())
     }
 
+    #[cfg(feature = "auth")]
+    pub fn ud(&self) -> Option<fastn_core::UserData> {
+        let session_data = match self.cookie(fastn_core::auth::SESSION_COOKIE_NAME) {
+            Some(c) => {
+                if c.is_empty() {
+                    return None;
+                } else {
+                    c
+                }
+            }
+            None => return None,
+        };
+
+        let session_data = match fastn_core::auth::utils::decrypt(&session_data) {
+            Ok(v) => v,
+            Err(e) => {
+                tracing::warn!("failed to decrypt session data: {:?}", e);
+                return None;
+            }
+        };
+
+        #[derive(serde::Deserialize)]
+        struct SessionData {
+            user: fastn_core::UserData,
+        }
+
+        match serde_json::from_str::<SessionData>(session_data.as_str()) {
+            Ok(sd) => Some(sd.user),
+            Err(e) => {
+                tracing::warn!("failed to deserialize session data: {:?}", e);
+                None
+            }
+        }
+    }
+
     pub fn body(&self) -> &[u8] {
         &self.body
     }

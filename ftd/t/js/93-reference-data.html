@@ -18,17 +18,11 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __p-3 __mb-4 __bw-5"><div data-id="4">FifthTry Hello World!!</div><div data-id="5">Hello World!!</div><div data-id="6" class="__c-6">default header again</div></div><div data-id="7" class="ft_column __p-7 __mb-8 __bw-9"><div data-id="8">FifthTry Hello World!!</div><div data-id="9">Hello World!!</div><div data-id="10" class="__c-10">default header again</div></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3"><comment data-id="4"></comment><comment data-id="5"></comment><div data-id="6" class="ft_row __g-3"><div data-id="7">Harsh</div><div data-id="8">21</div><div data-id="9">FifthTry</div></div><comment data-id="10"></comment><div data-id="11" class="ft_row __g-4"><div data-id="12">Harshit</div><div data-id="13">20</div><div data-id="14">FifthTry</div></div><comment data-id="15"></comment><comment data-id="16"></comment><comment data-id="17"></comment></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
-	.__p-3 { padding: 10px; }
-	.__mb-4 { margin-bottom: 5px; }
-	.__bw-5 { border-width: 1px; }
-	.__c-6 { color: orange !important; }
-	.__p-7 { padding: 10px; }
-	.__mb-8 { margin-bottom: 5px; }
-	.__bw-9 { border-width: 1px; }
-	.__c-10 { color: orange !important; }
+	.__g-3 { gap: 1rem; }
+	.__g-4 { gap: 1rem; }
     </style>
 <script>
     (function() {
@@ -36,26 +30,16 @@
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let parenti0 = foo__goo(parent, inherited);
-    let parenti1 = foo__moo(parent, inherited);
+    let parenti0 = foo__display_people(parent, inherited, {
+      people: global.foo__people,
+      full_details: true
+    });
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 global["main"] = main;
-let _01_basic__append = function (args) {
-  let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "foo";
-  try {
-    let __args__ = fastn_utils.getArgs({
-    }, args);
-    return (fastn_utils.getStaticValue(__args__.a) + " " + fastn_utils.getStaticValue(__args__.b));
-  } finally {
-    __fastn_package_name__ = __fastn_super_package_name__;
-  }
-}
-global["_01_basic__append"] = _01_basic__append;
-let _01_basic_module__print = function (parent, inherited, args)
+let foo__display_person = function (parent, inherited, args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
@@ -64,52 +48,82 @@ let _01_basic_module__print = function (parent, inherited, args)
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);
-    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-    parenti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Color, function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("light", "orange");
-      record.set("dark", "orange");
-      return record;
-    }(), inherited);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Rem(1)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+      rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, __args__.age, inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.company.get("name"), inherited);
+    }
+    ]), inherited);
     return parenti0;
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
-global["_01_basic_module__print"] = _01_basic_module__print;
-let _44_module__bar = function (parent, inherited, args)
+global["foo__display_person"] = foo__display_person;
+let foo__display_people = function (parent, inherited, args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
     let __args__ = {
-      m: fastn.module("_01_basic", global),
-      title: "default header again",
+      people: fastn.mutableList([]),
     };
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);
-    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-    parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.MarginBottom, fastn_dom.Length.Px(5), inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1), inherited);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.ContainerElement);
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, fastn.formula([__args__.m.get("hello")], function () {
-        return fastn_utils.getStaticValue(__args__.m.get("append")) ({
-          a: "FifthTry",
-          b: __args__.m.get("hello"),
-        }, rooti0);
-      }), inherited);
+      fastn_utils.getter(__args__.people).forLoop(root, function (root, item, index) {
+        return fastn_dom.conditionalDom(root, [
+          __args__.full_details
+        ], function () {
+          return fastn_utils.getStaticValue(__args__.full_details);
+        }, function (root) {
+          let rooti0 = foo__display_person(root, inherited, {
+            name: item.get("name"),
+            age: item.get("age"),
+            company: item.get("company_details"),
+            brand_color: function () {
+              let record = fastn.recordInstance({
+              });
+              record.set("light", item.get("company_details").get("brand_color").get("light"));
+              record.set("dark", item.get("company_details").get("brand_color").get("light"));
+              return record;
+            }()
+          });
+          return rooti0;
+        }).getParent();
+      });
     },
     function (root, inherited) {
-      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.m.get("hello"), inherited);
-    },
-    function (root, inherited) {
-      let rooti0 = fastn_utils.getStaticValue(__args__.m.get("print")) (root, inherited, {
-        name: __args__.title
+      fastn_utils.getter(__args__.people).forLoop(root, function (root, item, index) {
+        return fastn_dom.conditionalDom(root, [
+          __args__.full_details
+        ], function () {
+          return (!fastn_utils.getStaticValue(__args__.full_details));
+        }, function (root) {
+          let rooti0 = foo__display_person(root, inherited, {
+            name: item.get("name"),
+            age: item.get("age"),
+            company: item.get("company_details"),
+            brand_color: function () {
+              let record = fastn.recordInstance({
+              });
+              record.set("light", item.get("company_details").get("brand_color").get("dark"));
+              record.set("dark", item.get("company_details").get("brand_color").get("dark"));
+              return record;
+            }()
+          });
+          return rooti0;
+        }).getParent();
       });
     }
     ]), inherited);
@@ -118,46 +132,37 @@ let _44_module__bar = function (parent, inherited, args)
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
-global["_44_module__bar"] = _44_module__bar;
-fastn_utils.createNestedObject(global, "_01_basic__hello", "Hello World!!");
-let foo__goo = function (parent, inherited, args)
-{
-  let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "foo";
-  try {
-    let __args__ = {
-      c: fastn.module("_44_module", global),
-    };
-    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = fastn_utils.getArgs(__args__, args);
-    let parenti0 = fastn_utils.getStaticValue(__args__.c.get("bar")) (parent, inherited);
-    return parenti0;
-  } finally {
-    __fastn_package_name__ = __fastn_super_package_name__;
-  }
-}
-global["foo__goo"] = foo__goo;
-let foo__moo = function (parent, inherited, args)
-{
-  let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "foo";
-  try {
-    let __args__ = {
-      c_moo: fastn.module("_44_module", global),
-    };
-    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = fastn_utils.getArgs(__args__, args);
-    let parenti0 = foo__goo(parent, inherited, {
-      c: __args__.c_moo
-    });
-    return parenti0;
-  } finally {
-    __fastn_package_name__ = __fastn_super_package_name__;
-  }
-}
-global["foo__moo"] = foo__moo;
-let _01_basic__print = global["_01_basic_module__print"];
-global["_01_basic__print"] = _01_basic__print;
+global["foo__display_people"] = foo__display_people;
+fastn_utils.createNestedObject(global, "foo__ft_brand_color", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "rgb(239, 132, 53)");
+  record.set("dark", "rgb(239, 132, 53)");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__fifthtry", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "FifthTry");
+  record.set("brand_color", global.foo__ft_brand_color);
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__people", fastn.mutableList([function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "Harsh");
+  record.set("age", 21);
+  record.set("company_details", global.foo__fifthtry);
+  return record;
+}(),
+function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "Harshit");
+  record.set("age", 20);
+  record.set("company_details", global.foo__fifthtry);
+  return record;
+}()]));
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

@@ -153,7 +153,7 @@ let foo__header = function (parent, inherited, args)
       rooti0.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(40), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Wrap, fastn.formula([ftd.device], function () {
         if (function () {
-          return (fastn_utils.getter(ftd.device) == "mobile");
+          return (fastn_utils.getStaticValue(ftd.device) == "mobile");
         }()) {
           return true;
         }
@@ -209,7 +209,7 @@ let foo__header = function (parent, inherited, args)
         rooti0.setProperty(fastn_dom.PropertyKind.BorderRadius, fastn_dom.Length.Px(5), inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn.formula([__args__.mouse_in], function () {
           if (function () {
-            return fastn_utils.getter(__args__.mouse_in);
+            return fastn_utils.getStaticValue(__args__.mouse_in);
           }()) {
             return fastn_dom.BackgroundStyle.Solid(function () {
               let record = fastn.recordInstance({
@@ -236,7 +236,7 @@ let foo__header = function (parent, inherited, args)
       fastn_dom.conditionalDom(root, [
         __args__.show_link
       ], function () {
-        return fastn_utils.getter(__args__.show_link);
+        return fastn_utils.getStaticValue(__args__.show_link);
       }, function (root) {
         let rooti0 = foo__demo_link(root, inherited);
         return rooti0;
@@ -324,7 +324,7 @@ let foo__ftd_world = function (parent, inherited, args)
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
     parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([ftd.device], function () {
       if (function () {
-        return (fastn_utils.getter(ftd.device) == "mobile");
+        return (fastn_utils.getStaticValue(ftd.device) == "mobile");
       }()) {
         return fastn_dom.Resizing.FillContainer;
       } else {
@@ -348,7 +348,7 @@ let foo__ftd_world = function (parent, inherited, args)
       ftd.device,
       inherited.get("types").get("heading_small")], function () {
         if (function () {
-          return (fastn_utils.getter(ftd.device) !== "mobile");
+          return (fastn_utils.getStaticValue(ftd.device) !== "mobile");
         }()) {
           return inherited.get("types").get("heading_medium");
         } else {
@@ -402,7 +402,7 @@ let foo__demo = function (parent, inherited, args)
     parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn.formula([ftd.device], function () {
       if (function () {
-        return (fastn_utils.getter(ftd.device) !== "mobile");
+        return (fastn_utils.getStaticValue(ftd.device) !== "mobile");
       }()) {
         return fastn_dom.Length.Px(40);
       } else {
@@ -421,7 +421,7 @@ let foo__demo = function (parent, inherited, args)
       rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Wrap, fastn.formula([ftd.device], function () {
         if (function () {
-          return (fastn_utils.getter(ftd.device) == "mobile");
+          return (fastn_utils.getStaticValue(ftd.device) == "mobile");
         }()) {
           return true;
         }
@@ -432,7 +432,7 @@ let foo__demo = function (parent, inherited, args)
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
         rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([ftd.device], function () {
           if (function () {
-            return (fastn_utils.getter(ftd.device) == "mobile");
+            return (fastn_utils.getStaticValue(ftd.device) == "mobile");
           }()) {
             return fastn_dom.Resizing.FillContainer;
           } else {

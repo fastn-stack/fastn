@@ -53,7 +53,7 @@ let foo__increment = function (args) {
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
+    let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getStaticValue(__args__.a) + 1);
     if (fastn_utils_val___args___a instanceof fastn.mutableClass) {
       fastn_utils_val___args___a = fastn_utils_val___args___a.get();
     }
@@ -73,7 +73,7 @@ let foo__multiply_by_two = function (args)
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    return (fastn_utils.getter(__args__.a) * 2);
+    return (fastn_utils.getStaticValue(__args__.a) * 2);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

@@ -32,14 +32,6 @@ impl<'a> ResolverData<'a> {
         rdata
     }
 
-    pub(crate) fn new_with_record_definition_name(
-        record_definition_name: &'a Option<String>,
-    ) -> ResolverData<'a> {
-        let mut rdata = ResolverData::none();
-        rdata.record_definition_name = record_definition_name;
-        rdata
-    }
-
     pub(crate) fn clone_with_default_inherited_variable(&self) -> ResolverData<'a> {
         ResolverData {
             component_definition_name: self.component_definition_name,
@@ -116,6 +108,22 @@ impl<'a> ResolverData<'a> {
             inherited_variable_name: self.inherited_variable_name,
             device: self.device,
             doc_name: Some(doc_name),
+        }
+    }
+
+    pub(crate) fn clone_with_new_record_definition_name(
+        &self,
+        record_definition_name: &'a Option<String>,
+    ) -> ResolverData<'a> {
+        ResolverData {
+            component_definition_name: self.component_definition_name,
+            record_definition_name,
+            component_name: self.component_name.clone(),
+            loop_alias: self.loop_alias,
+            loop_counter_alias: self.loop_counter_alias,
+            inherited_variable_name: self.inherited_variable_name,
+            device: self.device,
+            doc_name: self.doc_name.clone(),
         }
     }
 }

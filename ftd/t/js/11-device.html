@@ -84,7 +84,7 @@ let foo__desktop_view = function (parent, inherited, args)
     return fastn_dom.conditionalDom(parent, [
       __args__.show
     ], function () {
-      return fastn_utils.getter(__args__.show);
+      return fastn_utils.getStaticValue(__args__.show);
     }, function (root) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
       rooti0.addEventHandler(fastn_dom.Event.Click, function () {

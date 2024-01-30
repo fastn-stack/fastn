@@ -18,7 +18,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column"><div data-id="4" class="__c-3">Arpita</div><div data-id="5" class="__c-4">Arpita</div></div><comment data-id="6"></comment><div data-id="7" class="ft_column"><div data-id="8" class="__c-5">Arpita</div><div data-id="9" class="__c-6">Arpita</div></div><div data-id="10" class="ft_column"><div data-id="11" class="__c-7">FifthTry</div><div data-id="12" class="__c-8">FifthTry</div></div><div data-id="13" class="ft_column"><div data-id="14" class="__c-9">fastn</div><div data-id="15" class="__c-10">fastn framework</div></div><div data-id="16" class="ft_column"><div data-id="17" class="__c-11">John</div><div data-id="18" class="__c-12">John Doe</div></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column"><div data-id="4" class="__c-3">Arpita</div><div data-id="5" class="__c-4">Arpita</div></div><comment data-id="6"></comment><div data-id="7" class="ft_column"><div data-id="8" class="__c-5">Arpita</div><div data-id="9" class="__c-6">Arpita</div></div><div data-id="10" class="ft_column"><div data-id="11" class="__c-7">FifthTry</div><div data-id="12" class="__c-8">FifthTry</div></div><div data-id="13" class="ft_column"><div data-id="14" class="__c-9">fastn</div><div data-id="15" class="__c-10">fastn framework</div></div><div data-id="16" class="ft_column"><div data-id="17" class="__c-11">John</div><div data-id="18" class="__c-12">John Doe</div></div><comment data-id="19"></comment><div data-id="20">Now the full name is Arpita Jaiswal</div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__c-3 { color: green !important; }
@@ -45,6 +45,15 @@
       let rooti0 = foo__display_name(root, inherited, {
         name: item
       });
+      return rooti0;
+    });
+    fastn_dom.conditionalDom(parent, [
+      global.foo__arpita.get("full_name")
+    ], function () {
+      return (fastn_utils.getStaticValue(global.foo__arpita.get("full_name")) == "Arpita");
+    }, function (root) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Now the full name is Arpita Jaiswal", inherited);
       return rooti0;
     });
   } finally {
