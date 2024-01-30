@@ -4,8 +4,10 @@ pub(crate) mod routes;
 pub(crate) mod utils;
 
 mod email_password;
+mod ud;
 
-pub const COOKIE_NAME: &str = "fastn_session";
+pub use ud::UserData;
+pub const SESSION_COOKIE_NAME: &str = "fastn_session";
 
 #[derive(
     Debug, PartialEq, serde::Deserialize, serde::Serialize, diesel::Queryable, diesel::Selectable,
@@ -50,9 +52,11 @@ pub async fn get_user_data_from_cookies(
     requested_field: &str,
     cookies: &std::collections::HashMap<String, String>,
 ) -> fastn_core::Result<Option<String>> {
-    let session_id = cookies.get(fastn_core::auth::COOKIE_NAME).ok_or_else(|| {
-        fastn_core::Error::GenericError("user detail not found in the cookie".to_string())
-    });
+    let session_id = cookies
+        .get(fastn_core::auth::SESSION_COOKIE_NAME)
+        .ok_or_else(|| {
+            fastn_core::Error::GenericError("user detail not found in the cookie".to_string())
+        });
 
     match session_id {
         Ok(session_id) => {
@@ -153,7 +157,7 @@ pub async fn get_auth_identities(
 
     let session_id =
         cookies
-            .get(fastn_core::auth::COOKIE_NAME)
+            .get(fastn_core::auth::SESSION_COOKIE_NAME)
             .ok_or(fastn_core::Error::GenericError(
                 "github user detail not found in the cookies".to_string(),
             ));
@@ -266,15 +270,18 @@ async fn set_session_cookie_and_redirect_to_next(
         }
     });
 
-    let encrypted_cookie = fastn_core::auth::utils::encrypt(&cookie_json.to_string()).await;
+    let encrypted_cookie = fastn_core::auth::utils::encrypt(&cookie_json.to_string());
 
     return Ok(actix_web::HttpResponse::Found()
         .cookie(
-            actix_web::cookie::Cookie::build(fastn_core::auth::COOKIE_NAME, encrypted_cookie)
-                .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
-                .path("/")
-                .permanent()
-                .finish(),
+            actix_web::cookie::Cookie::build(
+                fastn_core::auth::SESSION_COOKIE_NAME,
+                encrypted_cookie,
+            )
+            .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+            .path("/")
+            .permanent()
+            .finish(),
         )
         // redirect to next
         .append_header((actix_web::http::header::LOCATION, next))
