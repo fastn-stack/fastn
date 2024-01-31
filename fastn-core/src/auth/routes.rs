@@ -70,6 +70,7 @@ pub async fn logout(
 #[tracing::instrument(skip_all)]
 pub async fn handle_auth(
     req: fastn_core::http::Request,
+    req_config: &mut fastn_core::RequestConfig,
     config: &fastn_core::Config,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let next = req.q("next", "/".to_string())?;
@@ -89,7 +90,8 @@ pub async fn handle_auth(
         "/-/auth/logout/" => logout(&req, pool, next).await,
 
         "/-/auth/create-user/" => {
-            fastn_core::auth::email_password::create_user(&req, config, pool, next).await
+            fastn_core::auth::email_password::create_user(&req, req_config, config, pool, next)
+                .await
         }
         "/-/auth/confirm-email/" => {
             fastn_core::auth::email_password::confirm_email(&req, pool, next).await
@@ -97,7 +99,9 @@ pub async fn handle_auth(
         "/-/auth/resend-confirmation-email/" => {
             fastn_core::auth::email_password::resend_email(&req, pool, next).await
         }
-
+        "/-/auth/onboarding/" => {
+            fastn_core::auth::email_password::onboarding(&req, req_config, config, next).await
+        }
         // "/-/auth/send-email-login-code/" => todo!(),
         // "/-/auth/add-email/" => todo!(),
         // "/-/auth/update-name/" => todo!(),
