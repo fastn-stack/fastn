@@ -10536,8 +10536,6 @@ pub fn fastn_post_function() -> ftd::interpreter::ComponentDefinition {
 }
 
 pub fn fastn_test_function() -> ftd::interpreter::ComponentDefinition {
-    // optional caption title:
-    // string list fixtures:
     ftd::interpreter::ComponentDefinition {
         name: "fastn#test".to_string(),
         arguments: [vec![
