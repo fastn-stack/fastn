@@ -1004,7 +1004,6 @@ fn fastn_test_data(
         .headers()
         .iter()
         .filter_map(|(k, v)| {
-            dbg!(&k, &v);
             if k.as_str().starts_with("x-fastn-test-") {
                 let key = k
                     .as_str()
