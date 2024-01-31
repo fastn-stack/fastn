@@ -867,7 +867,7 @@ mod test {
     #[tokio::test]
     #[cfg(feature = "auth")]
     async fn validation_error_to_user_err() -> fastn_core::Result<()> {
-        use validator::Validate;
+        use validator::ValidateArgs;
 
         #[derive(serde::Deserialize, serde::Serialize, validator::Validate, Debug)]
         struct UserPayload {
@@ -878,7 +878,8 @@ mod test {
             #[validate(length(min = 1, message = "name must be at least 1 character long"))]
             name: String,
             #[validate(custom(
-                function = "fastn_core::auth::validator::validate_strong_password"
+                function = "fastn_core::auth::validator::validate_strong_password",
+                arg = "(&'v_a str, &'v_a str, &'v_a str)"
             ))]
             password: String,
         }
@@ -890,7 +891,11 @@ mod test {
             password: "four".to_string(),
         };
 
-        if let Err(e) = user.validate() {
+        if let Err(e) = user.validate_args((
+            user.username.as_str(),
+            user.email.as_str(),
+            user.name.as_str(),
+        )) {
             let res = fastn_core::http::validation_error_to_user_err(
                 e,
                 fastn_core::http::StatusCode::BAD_REQUEST,
@@ -926,15 +931,7 @@ mod test {
             assert!(body
                 .errors
                 .password
-                .contains(&"password must contain at least one uppercase letter".to_string()));
-            assert!(body
-                .errors
-                .password
-                .contains(&"password must contain at least one number".to_string()));
-            assert!(body.errors.password.contains(
-                &"password must contain at least one special character (!@#$%^&*()_+{}|:<>?~)"
-                    .to_string()
-            ));
+                .contains(&"password is too weak".to_string()));
         }
 
         Ok(())
