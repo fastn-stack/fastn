@@ -1,10 +1,4 @@
-fn create_user_success_ftd() -> &'static str {
-    r#"
-    -- import: fastn/processors as pr
-
-    -- auth.create-user-success:
-    "#
-}
+const FIRST_TIME_SESSION_COOKIE_NAME: &str = "fastn_first_time_user";
 
 pub(crate) async fn create_user(
     req: &fastn_core::http::Request,
@@ -20,8 +14,8 @@ pub(crate) async fn create_user(
     if req.method() != "POST" {
         let main = fastn_core::Document {
             package_name: config.package.name.clone(),
-            id: "/-/create-user-success".to_string(),
-            content: create_user_success_ftd().to_string(),
+            id: "/-/email-confirmation-request-sent".to_string(),
+            content: email_confirmation_sent_ftd().to_string(),
             parent_path: fastn_ds::Path::new("/"),
         };
 
@@ -167,6 +161,7 @@ pub(crate) async fn create_user(
 
     let resp_body = serde_json::json!({
         "user": user,
+        "success": true,
         "redirect": redirect_url_from_next(req, "/-/auth/create-user/".to_string()),
     });
 
@@ -278,6 +273,55 @@ pub(crate) async fn login(
     fastn_core::auth::set_session_cookie_and_redirect_to_next(req, session_id, next).await
 }
 
+pub(crate) async fn onboarding(
+    req: &fastn_core::http::Request,
+    req_config: &mut fastn_core::RequestConfig,
+    config: &fastn_core::Config,
+    next: String,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    // The user is logged in after having verfied their email. This is them first time signing
+    // in so we render `onboarding_ftd`.
+    // If this is an old user, the cookie FIRST_TIME_SESSION_COOKIE_NAME won't be set for them
+    // and this will redirect to `next` which is usually the home page.
+    if req.cookie(FIRST_TIME_SESSION_COOKIE_NAME).is_none() {
+        return Ok(fastn_core::http::redirect_with_code(
+            redirect_url_from_next(req, next),
+            307,
+        ));
+    }
+
+    let first_signin_doc = fastn_core::Document {
+        package_name: config.package.name.clone(),
+        id: "/-/onboarding".to_string(),
+        content: onboarding_ftd().to_string(),
+        parent_path: fastn_ds::Path::new("/"),
+    };
+
+    let resp = fastn_core::package::package_doc::read_ftd(
+        req_config,
+        &first_signin_doc,
+        "/",
+        false,
+        false,
+    )
+    .await?;
+
+    let mut resp: fastn_core::http::Response = resp.into();
+
+    // clear the cookie so that subsequent requests redirect to `next`
+    // this gives the onboarding page a single chance to do the process
+    resp.add_cookie(
+        &actix_web::cookie::Cookie::build(FIRST_TIME_SESSION_COOKIE_NAME, "")
+            .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+            .path("/")
+            .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
+            .finish(),
+    )
+    .map_err(|e| fastn_core::Error::generic(format!("failed to set cookie: {e}")))?;
+
+    Ok(resp)
+}
+
 pub(crate) async fn confirm_email(
     req: &fastn_core::http::Request,
     db_pool: &fastn_core::db::PgPool,
@@ -358,7 +402,23 @@ pub(crate) async fn confirm_email(
 
     tracing::info!("session created, rows affected: {}", affected);
 
-    fastn_core::auth::set_session_cookie_and_redirect_to_next(req, session_id, next).await
+    // redirect to onboarding route with a GET request
+    let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
+        req,
+        session_id,
+        format!("/-/auth/onboarding/?next={}", next),
+    )
+    .await?;
+
+    resp.add_cookie(
+        &actix_web::cookie::Cookie::build(FIRST_TIME_SESSION_COOKIE_NAME, "1")
+            .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+            .path("/")
+            .finish(),
+    )
+    .map_err(|e| fastn_core::Error::generic(format!("failed to set cookie: {e}")))?;
+
+    Ok(resp)
 }
 
 pub(crate) async fn resend_email(
@@ -536,4 +596,20 @@ fn redirect_url_from_next(req: &fastn_core::http::Request, next: String) -> Stri
         req.connection_info.host(),
         next,
     )
+}
+
+fn email_confirmation_sent_ftd() -> &'static str {
+    r#"
+    -- import: fastn/processors as pr
+
+    -- auth.email-confirmation-request-sent:
+    "#
+}
+
+fn onboarding_ftd() -> &'static str {
+    r#"
+    -- import: fastn/processors as pr
+
+    -- auth.onboarding:
+    "#
 }

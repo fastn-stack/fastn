@@ -99,7 +99,9 @@ pub async fn handle_auth(
         "/-/auth/resend-confirmation-email/" => {
             fastn_core::auth::email_password::resend_email(&req, pool, next).await
         }
-
+        "/-/auth/onboarding/" => {
+            fastn_core::auth::email_password::onboarding(&req, req_config, config, next).await
+        }
         // "/-/auth/send-email-login-code/" => todo!(),
         // "/-/auth/add-email/" => todo!(),
         // "/-/auth/update-name/" => todo!(),
