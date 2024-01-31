@@ -10,6 +10,7 @@ mod ud;
 pub use ud::UserData;
 
 pub const SESSION_COOKIE_NAME: &str = "fastn_session";
+pub const FIRST_TIME_SESSION_COOKIE_NAME: &str = "fastn_first_time_user";
 
 #[derive(
     Debug, PartialEq, serde::Deserialize, serde::Serialize, diesel::Queryable, diesel::Selectable,

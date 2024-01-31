@@ -1,5 +1,3 @@
-const FIRST_TIME_SESSION_COOKIE_NAME: &str = "fastn_first_time_user";
-
 pub(crate) async fn create_user(
     req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
@@ -283,7 +281,10 @@ pub(crate) async fn onboarding(
     // in so we render `onboarding_ftd`.
     // If this is an old user, the cookie FIRST_TIME_SESSION_COOKIE_NAME won't be set for them
     // and this will redirect to `next` which is usually the home page.
-    if req.cookie(FIRST_TIME_SESSION_COOKIE_NAME).is_none() {
+    if req
+        .cookie(fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME)
+        .is_none()
+    {
         return Ok(fastn_core::http::redirect_with_code(
             redirect_url_from_next(req, next),
             307,
@@ -311,7 +312,7 @@ pub(crate) async fn onboarding(
     // clear the cookie so that subsequent requests redirect to `next`
     // this gives the onboarding page a single chance to do the process
     resp.add_cookie(
-        &actix_web::cookie::Cookie::build(FIRST_TIME_SESSION_COOKIE_NAME, "")
+        &actix_web::cookie::Cookie::build(fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME, "")
             .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
             .path("/")
             .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
@@ -411,7 +412,7 @@ pub(crate) async fn confirm_email(
     .await?;
 
     resp.add_cookie(
-        &actix_web::cookie::Cookie::build(FIRST_TIME_SESSION_COOKIE_NAME, "1")
+        &actix_web::cookie::Cookie::build(fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME, "1")
             .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
             .path("/")
             .finish(),
