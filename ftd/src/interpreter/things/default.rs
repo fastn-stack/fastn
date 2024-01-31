@@ -10543,7 +10543,10 @@ pub fn fastn_test_function() -> ftd::interpreter::ComponentDefinition {
         arguments: [vec![
             ftd::interpreter::Argument::default(
                 "title",
-                ftd::interpreter::Kind::string().into_kind_data().caption(),
+                ftd::interpreter::Kind::string()
+                    .into_kind_data()
+                    .caption()
+                    .into_optional(),
             ),
             ftd::interpreter::Argument::default(
                 "fixtures",
