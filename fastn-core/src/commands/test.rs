@@ -43,6 +43,7 @@ pub struct TestParameters {
     pub verbose: bool,
     pub instruction_number: i64,
     pub test_results: ftd::Map<String>,
+    pub test_data: ftd::Map<String>,
 }
 
 impl TestParameters {
@@ -52,6 +53,7 @@ impl TestParameters {
             verbose,
             instruction_number: 0,
             test_results: Default::default(),
+            test_data: Default::default(),
         }
     }
 }
@@ -494,7 +496,7 @@ async fn get_post_response_for_id(
     let response = fastn_core::commands::serve::serve(config, request, true).await?;
     update_cookies(saved_cookies, &response);
 
-    let test_data = fastn_test_data(&response);
+    let test_data = fastn_test_data(&response, test_parameters);
 
     log_message!(test_parameters.verbose, "Response details");
     log_variable!(test_parameters.verbose, &response);
@@ -708,7 +710,7 @@ async fn get_js_for_id(
     let response = fastn_core::commands::serve::serve(config, request, true).await?;
     update_cookies(saved_cookies, &response);
 
-    let test_data = fastn_test_data(&response);
+    let test_data = fastn_test_data(&response, test_parameters);
 
     log_message!(test_parameters.verbose, "Response details");
     log_variable!(test_parameters.verbose, &response);
@@ -990,29 +992,47 @@ async fn generate_script_file(
         .unwrap();
 }
 
-fn fastn_test_data(response: &actix_web::HttpResponse) -> String {
+/// Extract test data from response headers
+/// persists them across tests in `test_parameters.test_data`
+fn fastn_test_data(
+    response: &actix_web::HttpResponse,
+    test_parameters: &mut TestParameters,
+) -> String {
     use itertools::Itertools;
 
     let mut res = response
         .headers()
         .iter()
         .filter_map(|(k, v)| {
-            if k.as_str().starts_with("X-Fastn-Test-") {
-                Some(format!(
-                    "fastn.test_data[\"{}\"] = \"{}\";",
-                    k.as_str()
-                        .strip_prefix("X-Fastn-Test-")
-                        .unwrap()
-                        .to_lowercase()
-                        .replace('-', "_"),
-                    v.to_str().unwrap(),
-                ))
+            dbg!(&k, &v);
+            if k.as_str().starts_with("x-fastn-test-") {
+                let key = k
+                    .as_str()
+                    .strip_prefix("x-fastn-test-")
+                    .unwrap()
+                    .to_lowercase()
+                    .replace('-', "_");
+
+                let val = v.to_str().unwrap();
+
+                test_parameters
+                    .test_data
+                    .insert(key.clone(), val.to_string());
+
+                Some(format!("fastn.test_data[\"{}\"] = \"{}\";", key, val,))
             } else {
                 None
             }
         })
         .join("\n");
 
+    let existing_test_data = test_parameters
+        .test_data
+        .iter()
+        .map(|(k, v)| format!("fastn.test_data[\"{}\"] = \"{}\";", k, v,))
+        .join("\n");
+
+    res.push_str(existing_test_data.as_str());
     res.insert_str(0, "fastn.test_data = {};\n");
 
     res
