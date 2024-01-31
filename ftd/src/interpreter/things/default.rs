@@ -10377,6 +10377,190 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
     things.into_iter().collect()
 }
 
+pub fn default_test_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
+    let test_things = vec![
+        (
+            ftd::interpreter::FASTN_GET_QUERY_PARAMS.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FASTN_GET_QUERY_PARAMS.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "key".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data().caption(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "value".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ])
+                .collect(),
+                line_number: 0,
+            }),
+        ),
+        (
+            "fastn#get".to_string(),
+            ftd::interpreter::Thing::Component(fastn_get_function()),
+        ),
+        (
+            "fastn#post".to_string(),
+            ftd::interpreter::Thing::Component(fastn_post_function()),
+        ),
+        (
+            "fastn#test".to_string(),
+            ftd::interpreter::Thing::Component(fastn_test_function()),
+        ),
+    ];
+    test_things.into_iter().collect()
+}
+
+pub fn fastn_get_function() -> ftd::interpreter::ComponentDefinition {
+    ftd::interpreter::ComponentDefinition {
+        name: "fastn#get".to_string(),
+        arguments: [vec![
+            ftd::interpreter::Argument::default(
+                "title",
+                ftd::interpreter::Kind::string().into_kind_data().caption(),
+            ),
+            ftd::interpreter::Argument::default(
+                "url",
+                ftd::interpreter::Kind::string().into_kind_data(),
+            ),
+            ftd::interpreter::Argument::default(
+                "test",
+                ftd::interpreter::Kind::string()
+                    .into_kind_data()
+                    .into_optional(),
+            ),
+            ftd::interpreter::Argument::default(
+                "http-status",
+                ftd::interpreter::Kind::string()
+                    .into_kind_data()
+                    .into_optional(),
+            ),
+            ftd::interpreter::Argument::default(
+                "http-location",
+                ftd::interpreter::Kind::string()
+                    .into_kind_data()
+                    .into_optional(),
+            ),
+            ftd::interpreter::Argument::default(
+                "http-redirect",
+                ftd::interpreter::Kind::string()
+                    .into_kind_data()
+                    .into_optional(),
+            ),
+            ftd::interpreter::Argument::default(
+                "id",
+                ftd::interpreter::Kind::string()
+                    .into_kind_data()
+                    .into_optional(),
+            ),
+            ftd::interpreter::Argument::default(
+                "query-params",
+                ftd::interpreter::Kind::record(ftd::interpreter::FASTN_GET_QUERY_PARAMS)
+                    .into_list()
+                    .into_kind_data(),
+            ),
+        ]]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
+pub fn fastn_post_function() -> ftd::interpreter::ComponentDefinition {
+    ftd::interpreter::ComponentDefinition {
+        name: "fastn#post".to_string(),
+        arguments: [vec![
+            ftd::interpreter::Argument::default(
+                "title",
+                ftd::interpreter::Kind::string().into_kind_data().caption(),
+            ),
+            ftd::interpreter::Argument::default(
+                "url",
+                ftd::interpreter::Kind::string().into_kind_data(),
+            ),
+            ftd::interpreter::Argument::default(
+                "body",
+                ftd::interpreter::Kind::string().into_kind_data().body(),
+            ),
+            ftd::interpreter::Argument::default(
+                "test",
+                ftd::interpreter::Kind::string()
+                    .into_kind_data()
+                    .into_optional(),
+            ),
+            ftd::interpreter::Argument::default(
+                "http-status",
+                ftd::interpreter::Kind::string()
+                    .into_kind_data()
+                    .into_optional(),
+            ),
+            ftd::interpreter::Argument::default(
+                "http-location",
+                ftd::interpreter::Kind::string()
+                    .into_kind_data()
+                    .into_optional(),
+            ),
+            ftd::interpreter::Argument::default(
+                "http-redirect",
+                ftd::interpreter::Kind::string()
+                    .into_kind_data()
+                    .into_optional(),
+            ),
+            ftd::interpreter::Argument::default(
+                "id",
+                ftd::interpreter::Kind::string()
+                    .into_kind_data()
+                    .into_optional(),
+            ),
+        ]]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
+pub fn fastn_test_function() -> ftd::interpreter::ComponentDefinition {
+    // optional caption title:
+    // string list fixtures:
+    ftd::interpreter::ComponentDefinition {
+        name: "fastn#test".to_string(),
+        arguments: [vec![
+            ftd::interpreter::Argument::default(
+                "title",
+                ftd::interpreter::Kind::string().into_kind_data().caption(),
+            ),
+            ftd::interpreter::Argument::default(
+                "fixtures",
+                ftd::interpreter::Kind::string()
+                    .into_list()
+                    .into_kind_data(),
+            ),
+        ]]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
 pub static DEFAULT_BAG: once_cell::sync::OnceCell<
     indexmap::IndexMap<String, ftd::interpreter::things::Thing>,
 > = once_cell::sync::OnceCell::new();

@@ -377,3 +377,5 @@ pub const FTD_MASK_POSITION_RIGHT_TOP: &str = "ftd#mask-position.right-top";
 pub const FTD_MASK_POSITION_RIGHT_CENTER: &str = "ftd#mask-position.right-center";
 pub const FTD_MASK_POSITION_RIGHT_BOTTOM: &str = "ftd#mask-position.right-bottom";
 pub const FTD_MASK_POSITION_LENGTH: &str = "ftd#mask-position.length";
+
+pub const FASTN_GET_QUERY_PARAMS: &str = "fastn#query";

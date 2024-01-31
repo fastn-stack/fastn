@@ -219,11 +219,10 @@ async fn read_ftd_test_file(
     )
     .await?;
 
-    let doc = ftd::interpreter::TDoc::new(
-        &main_ftd_doc.name,
-        &main_ftd_doc.aliases,
-        &main_ftd_doc.data,
-    );
+    let mut bag = main_ftd_doc.data.clone();
+    bag.extend(ftd::interpreter::default::default_test_bag());
+
+    let doc = ftd::interpreter::TDoc::new(&main_ftd_doc.name, &main_ftd_doc.aliases, &bag);
     let all_instructions = get_all_instructions(&main_ftd_doc.tree, &doc, config).await?;
     let mut instruction_number = 1;
     for instruction in all_instructions.iter() {
@@ -520,7 +519,8 @@ async fn get_post_response_for_id(
             }
             format!("fastn.http_response = {}", just_response_body)
         } else {
-            format!("fastn.http_response = {}", just_response_body)
+            // considering raw text when json response is not received
+            format!("fastn.http_response = \"{}\";", just_response_body.trim())
         };
 
         log_message!(test_parameters.verbose, "fastn.http_response = ");
