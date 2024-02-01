@@ -2254,7 +2254,7 @@ class Node2 {
                 default:
                     this.attachAttribute("checked", staticValue);
             }
-            if(!ssr) this.#node.checked = staticValue;
+            if (!ssr) this.#node.checked = staticValue;
         } else if (kind === fastn_dom.PropertyKind.Enabled) {
             switch (staticValue) {
                 case "false":
