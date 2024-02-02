@@ -155,7 +155,7 @@ pub(crate) async fn create_user(
     tracing::info!("fastn_user email inserted");
 
     let conf_link =
-        create_and_send_confirmation_email(email.0.to_string(), db_pool, req, next).await?;
+        create_and_send_confirmation_email(email.0.to_string(), db_pool, req, config, next).await?;
 
     let resp_body = serde_json::json!({
         "user": user,
@@ -424,6 +424,7 @@ pub(crate) async fn confirm_email(
 
 pub(crate) async fn resend_email(
     req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -447,7 +448,7 @@ pub(crate) async fn resend_email(
         }
     };
 
-    create_and_send_confirmation_email(email, db_pool, req, next.clone()).await?;
+    create_and_send_confirmation_email(email, db_pool, req, config, next.clone()).await?;
 
     // TODO: there's no GET /-/auth/login/ yet
     // the client will have to create one for now
@@ -462,6 +463,7 @@ async fn create_and_send_confirmation_email(
     email: String,
     db_pool: &fastn_core::db::PgPool,
     req: &fastn_core::http::Request,
+    config: &fastn_core::Config,
     next: String,
 ) -> fastn_core::Result<String> {
     use diesel::prelude::*;
@@ -540,13 +542,17 @@ async fn create_and_send_confirmation_email(
         .first(&mut conn)
         .await?;
 
+    let file_path = fastn_ds::Path::new("email/confirmation-mail.html");
+
+    let html_file = config.ds.read_to_string(&file_path).await?;
+
     mailer
         .send_raw(
             format!("{} <{}>", name, email)
                 .parse::<lettre::message::Mailbox>()
                 .unwrap(),
             "Verify your email",
-            confirmation_mail_body(&confirmation_link),
+            confirmation_mail_body(html_file, &confirmation_link),
         )
         .await
         .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
@@ -568,8 +574,11 @@ fn key_expired(sent_at: chrono::DateTime<chrono::Utc>) -> bool {
         <= chrono::offset::Utc::now()
 }
 
-fn confirmation_mail_body(link: &str) -> String {
-    format!("Use this link to verify your email: {link}")
+fn confirmation_mail_body(content: String, link: &str) -> String {
+    // content will have a placeholder for the link
+    let content = content.replace("{{link}}", link);
+
+    format!("{}", content)
 }
 
 fn generate_key(length: usize) -> String {

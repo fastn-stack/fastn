@@ -1,4 +1,4 @@
-/// currently returns the github user details
+/// returns details of the logged in user
 pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
