@@ -78,8 +78,9 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_js = serve.values_of_("js");
         let external_css = serve.values_of_("external-css");
         let inline_css = serve.values_of_("css");
+        let offline = serve.get_flag("offline");
 
-        fastn_update::update(&config).await?;
+        fastn_update::update(&config, offline).await?;
 
         return fastn_core::listen(
             bind.as_str(),
@@ -95,7 +96,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     }
 
     if matches.subcommand_matches("update").is_some() {
-        return fastn_update::update(&config).await;
+        return fastn_update::update(&config, false).await;
     }
 
     if let Some(test) = matches.subcommand_matches("test") {
@@ -104,6 +105,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_js = test.values_of_("js");
         let external_css = test.values_of_("external-css");
         let inline_css = test.values_of_("css");
+        let offline: bool = test.get_flag("offline");
 
         config = config
             .add_edition(edition)?
@@ -113,7 +115,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_inline_css(inline_css)
             .set_test_command_running();
 
-        fastn_update::update(&config).await?;
+        fastn_update::update(&config, offline).await?;
 
         return fastn_core::test(
             &config,
@@ -137,6 +139,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let external_css = build.values_of_("external-css");
         let inline_css = build.values_of_("css");
         let zip_url = build.value_of_("zip-url");
+        let offline: bool = build.get_flag("offline");
 
         config = config
             .add_edition(edition)?
@@ -145,7 +148,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_external_css(external_css)
             .add_inline_css(inline_css);
 
-        fastn_update::update(&config).await?;
+        fastn_update::update(&config, offline).await?;
 
         return fastn_core::build(
             &config,
@@ -266,6 +269,7 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
                     .action(clap::ArgAction::Append))
                 .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
+                .arg(clap::arg!(--offline "Disables automatic package update checks to operate in offline mode"))
         )
         .subcommand(
             clap::Command::new("fmt")
@@ -290,6 +294,7 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
                 .arg(clap::arg!(--"script" "Generates a script file (for debugging purposes)"))
                 .arg(clap::arg!(--"verbose" "To provide more better logs (for debugging purposes)"))
+                .arg(clap::arg!(--offline "Disables automatic package update checks to operate in offline mode"))
         )
         .subcommand(
             clap::Command::new("query")
@@ -329,7 +334,8 @@ mod sub_command {
                 .action(clap::ArgAction::Append))
             .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
                 .action(clap::ArgAction::Append))
-            .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"));
+            .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"))
+            .arg(clap::arg!(--offline "Disables automatic package update checks to operate in offline mode"));
         if cfg!(feature = "remote") {
             serve
         } else {

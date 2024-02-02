@@ -62,10 +62,13 @@
     parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1), inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-      dark: "#eee",
-      light: "#eee"
-    })), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "#eee");
+      record.set("dark", "#eee");
+      return record;
+    }()), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.TopCenter, inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(50)), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
@@ -122,7 +125,7 @@ let foo__box = function (parent, inherited, args) {
         fastn_dom.conditionalDom(root, [
           __args__.open
         ], function () {
-          return (!fastn_utils.getter(__args__.open));
+          return (!fastn_utils.getStaticValue(__args__.open));
         }, function (root) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
           rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "O", inherited);
@@ -133,7 +136,7 @@ let foo__box = function (parent, inherited, args) {
         fastn_dom.conditionalDom(root, [
           __args__.open
         ], function () {
-          return fastn_utils.getter(__args__.open);
+          return fastn_utils.getStaticValue(__args__.open);
         }, function (root) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
           rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "X", inherited);
@@ -146,7 +149,7 @@ let foo__box = function (parent, inherited, args) {
       fastn_dom.conditionalDom(root, [
         __args__.open
       ], function () {
-        return fastn_utils.getter(__args__.open);
+        return fastn_utils.getStaticValue(__args__.open);
       }, function (root) {
         let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
         rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.body, inherited);

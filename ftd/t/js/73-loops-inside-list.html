@@ -51,10 +51,13 @@
         fastn_utils.getter(global.foo__places).forLoop(root, function (root, item, index) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
           rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
-          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-            dark: "green",
-            light: "green"
-          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+            let record = fastn.recordInstance({
+            });
+            record.set("light", "green");
+            record.set("dark", "green");
+            return record;
+          }(), inherited);
           return rooti0;
         });
       },
@@ -62,10 +65,13 @@
         fastn_utils.getter(global.foo__odds).forLoop(root, function (root, item, index) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
           rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, item, inherited);
-          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-            dark: "brown",
-            light: "brown"
-          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+            let record = fastn.recordInstance({
+            });
+            record.set("light", "brown");
+            record.set("dark", "brown");
+            return record;
+          }(), inherited);
           return rooti0;
         });
       },
@@ -73,10 +79,13 @@
         fastn_utils.getter(global.foo__persons).forLoop(root, function (root, item, index) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
           rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item.get("name"), inherited);
-          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-            dark: "green",
-            light: "green"
-          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+            let record = fastn.recordInstance({
+            });
+            record.set("light", "green");
+            record.set("dark", "green");
+            return record;
+          }(), inherited);
           return rooti0;
         });
       },
@@ -84,10 +93,13 @@
         fastn_utils.getter(global.foo__persons).forLoop(root, function (root, item, index) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
           rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, index, inherited);
-          rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-            dark: "blue",
-            light: "blue"
-          }), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+            let record = fastn.recordInstance({
+            });
+            record.set("light", "blue");
+            record.set("dark", "blue");
+            return record;
+          }(), inherited);
           return rooti0;
         });
       }
@@ -111,10 +123,13 @@ let foo__test = function (parent, inherited, args) {
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "red",
-        light: "red"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("light", "red");
+        record.set("dark", "red");
+        return record;
+      }(), inherited);
     },
     function (root, inherited) {
       fastn_utils.getter(__args__.uis).forLoop(root, function (root, item, index) {
@@ -139,18 +154,27 @@ fastn_utils.createNestedObject(global, "foo__odds", fastn.mutableList([1,
 7,
 9,
 11]));
-fastn_utils.createNestedObject(global, "foo__persons", fastn.mutableList([fastn.recordInstance({
-  age: 28,
-  name: "John Doe"
-}),
-fastn.recordInstance({
-  age: 24,
-  name: "Sam Wan"
-}),
-fastn.recordInstance({
-  age: 30,
-  name: "Sam Ather"
-})]));
+fastn_utils.createNestedObject(global, "foo__persons", fastn.mutableList([function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "John Doe");
+  record.set("age", 28);
+  return record;
+}(),
+function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "Sam Wan");
+  record.set("age", 24);
+  return record;
+}(),
+function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "Sam Ather");
+  record.set("age", 30);
+  return record;
+}()]));
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

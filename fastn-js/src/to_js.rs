@@ -1054,13 +1054,13 @@ impl ExpressionGenerator {
             // like person.name, person.meta.address
             if chain_dot_operator_count > 1 {
                 return format!(
-                    "fastn_utils.getter({})",
+                    "fastn_utils.getStaticValue({})",
                     get_chained_getter_string(value.as_str())
                 );
             }
 
             // When there is no chained dot operator value
-            format!("fastn_utils.getter({})", value)
+            format!("fastn_utils.getStaticValue({})", value)
         } else {
             value
         }

@@ -39,10 +39,13 @@
   }
 }
 global["main"] = main;
-fastn_utils.createNestedObject(global, "_78_data_for_module__user", fastn.recordInstance({
-  is_logged_in: false,
-  user: null
-}));
+fastn_utils.createNestedObject(global, "_78_data_for_module__user", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("is_logged_in", false);
+  record.set("user", null);
+  return record;
+}());
 let _78_data_for_module__loggedIn = function (args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
@@ -51,7 +54,7 @@ let _78_data_for_module__loggedIn = function (args)
     let __args__ = fastn_utils.getArgs({
       u: global._78_data_for_module__user,
     }, args);
-    return fastn_utils.getter(fastn_utils.getterByKey(__args__.u, "is_logged_in"));
+    return fastn_utils.getStaticValue(fastn_utils.getterByKey(__args__.u, "is_logged_in"));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -64,7 +67,7 @@ let _78_data_for_module__increase = function (args)
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    return (fastn_utils.getter(__args__.a) + 1);
+    return (fastn_utils.getStaticValue(__args__.a) + 1);
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
@@ -77,7 +80,7 @@ let _78_data_for_module__increment = function (args)
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getter(__args__.a) + 1);
+    let fastn_utils_val___args___a = fastn_utils.clone(fastn_utils.getStaticValue(__args__.a) + 1);
     if (fastn_utils_val___args___a instanceof fastn.mutableClass) {
       fastn_utils_val___args___a = fastn_utils_val___args___a.get();
     }
@@ -104,10 +107,13 @@ let foo__header = function (parent, inherited, args)
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Is user logged in ?", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "black",
-        light: "black"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("light", "black");
+        record.set("dark", "black");
+        return record;
+      }(), inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Boolean);
@@ -116,10 +122,13 @@ let foo__header = function (parent, inherited, args)
           u: global._78_data_for_module__user,
         }, rooti0);
       }), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "green",
-        light: "green"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("light", "green");
+        record.set("dark", "green");
+        return record;
+      }(), inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
@@ -128,10 +137,13 @@ let foo__header = function (parent, inherited, args)
           a: __args__.num,
         }, rooti0);
       }), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "blue",
-        light: "blue"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("light", "blue");
+        record.set("dark", "blue");
+        return record;
+      }(), inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
@@ -141,10 +153,13 @@ let foo__header = function (parent, inherited, args)
           a: __args__.num,
         }, rooti0);
       });
-      rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-        dark: "green",
-        light: "green"
-      }), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("light", "green");
+        record.set("dark", "green");
+        return record;
+      }(), inherited);
     }
     ]), inherited);
     return parenti0;

@@ -55,7 +55,7 @@
         # nix develop
         devShell = pkgs.mkShell {
           name = "fastn-shell";
-          nativeBuildInputs = with pkgs; [ toolchain pkg-config openssl.dev postgresql_14 rust-analyzer ];
+          nativeBuildInputs = with pkgs; [ toolchain pkg-config openssl.dev postgresql_14 rust-analyzer diesel-cli ];
 
           shellHook = ''
             export PATH="$PATH:$HOME/.cargo/bin"

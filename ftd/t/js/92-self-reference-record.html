@@ -18,11 +18,19 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column ft_full_size"><div data-id="4" class="__m-3 __c-4">This is some text</div></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column"><div data-id="4" class="__c-3">Arpita</div><div data-id="5" class="__c-4">Arpita</div></div><comment data-id="6"></comment><div data-id="7" class="ft_column"><div data-id="8" class="__c-5">Arpita</div><div data-id="9" class="__c-6">Arpita</div></div><div data-id="10" class="ft_column"><div data-id="11" class="__c-7">FifthTry</div><div data-id="12" class="__c-8">FifthTry</div></div><div data-id="13" class="ft_column"><div data-id="14" class="__c-9">fastn</div><div data-id="15" class="__c-10">fastn framework</div></div><div data-id="16" class="ft_column"><div data-id="17" class="__c-11">John</div><div data-id="18" class="__c-12">John Doe</div></div><comment data-id="19"></comment><div data-id="20">Now the full name is Arpita Jaiswal</div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
-	.__m-3 { margin: 20px; }
+	.__c-3 { color: green !important; }
 	.__c-4 { color: red !important; }
+	.__c-5 { color: green !important; }
+	.__c-6 { color: red !important; }
+	.__c-7 { color: green !important; }
+	.__c-8 { color: red !important; }
+	.__c-9 { color: green !important; }
+	.__c-10 { color: red !important; }
+	.__c-11 { color: green !important; }
+	.__c-12 { color: red !important; }
     </style>
 <script>
     (function() {
@@ -30,11 +38,54 @@
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Document);
+    let parenti0 = foo__display_name(parent, inherited, {
+      name: global.foo__arpita
+    });
+    fastn_utils.getter(global.foo__names).forLoop(parent, function (root, item, index) {
+      let rooti0 = foo__display_name(root, inherited, {
+        name: item
+      });
+      return rooti0;
+    });
+    fastn_dom.conditionalDom(parent, [
+      global.foo__arpita.get("full_name")
+    ], function () {
+      return (fastn_utils.getStaticValue(global.foo__arpita.get("full_name")) == "Arpita");
+    }, function (root) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Now the full name is Arpita Jaiswal", inherited);
+      return rooti0;
+    });
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["main"] = main;
+let foo__display_name = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    __args__.clone_name = __args__.clone_name ? __args__.clone_name : __args__.name;
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is some text", inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name.get("name"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("light", "green");
+        record.set("dark", "green");
+        return record;
+      }(), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name.get("full_name"), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
         let record = fastn.recordInstance({
         });
@@ -44,18 +95,42 @@
       }(), inherited);
     }
     ]), inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Favicon, function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("src", "https://fastn.com/-/fastn.com/images/favicon.svg");
-      return record;
-    }(), inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.DocumentProperties.MetaTitle, "Testing favicon", inherited);
+    return parenti0;
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
-global["main"] = main;
+global["foo__display_name"] = foo__display_name;
+fastn_utils.createNestedObject(global, "foo__arpita", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "Arpita");
+  record.set("full_name", record.get("name"));
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__john", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "John");
+  record.set("full_name", "John Doe");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "foo__names", fastn.mutableList([global.foo__arpita,
+function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "FifthTry");
+  record.set("full_name", record.get("name"));
+  return record;
+}(),
+function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "fastn");
+  record.set("full_name", "fastn framework");
+  return record;
+}(),
+global.foo__john]));
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";

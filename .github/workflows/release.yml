@@ -16,8 +16,8 @@ jobs:
     env:
       CARGO_TERM_COLOR: always
     steps:
-      - uses: actions/checkout@main
-      - uses: actions/cache@v2
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
@@ -35,7 +35,7 @@ jobs:
           docker cp fastn-build:/home/rust/src/target/x86_64-unknown-linux-musl/release/fastn out/
       - name: run fastn
         run: out/fastn --version
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: linux_musl_x86_64
           path: out/fastn
@@ -43,9 +43,9 @@ jobs:
     name: Build for Windows
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v4
       - uses: actions-rs/toolchain@v1
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
@@ -63,7 +63,7 @@ jobs:
           args: --release
       - name: run fastn
         run: ./target/release/fastn.exe --version
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: windows_x64_latest
           path: target/release/fastn.exe
@@ -80,7 +80,7 @@ jobs:
         with:
           arguments: /V3 /DCURRENT_WD=${{ github.workspace }} /DVERSION=${{ github.event.inputs.releaseTag }}
           additional-plugin-paths: ${{ github.workspace }}/NSIS_Plugins/Plugins
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: windows_x64_installer.exe
           path: windows_x64_installer.exe
@@ -88,9 +88,9 @@ jobs:
     name: Build for MacOS
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v4
       - uses: actions-rs/toolchain@v1
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
@@ -108,7 +108,7 @@ jobs:
           args: --release --features=auth
       - name: run fastn
         run: ./target/release/fastn --version
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: macos_x64_latest
           path: |
@@ -118,20 +118,20 @@ jobs:
     runs-on: ubuntu-latest
     needs: [release-ubuntu, release-macos, release-windows]
     steps:
-      - uses: actions/checkout@main
-      - uses: actions/download-artifact@v3
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
         with:
           name: macos_x64_latest
           path: ~/download/macos
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: linux_musl_x86_64
           path: ~/download/linux_musl
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: windows_x64_latest
           path: ~/download/windows
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: windows_x64_installer.exe
           path: ~/download/windows

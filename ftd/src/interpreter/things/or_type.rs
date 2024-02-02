@@ -170,6 +170,23 @@ impl OrTypeVariant {
             OrTypeVariant::Constant(c) => vec![c],
         }
     }
+
+    pub fn to_thing(
+        &self,
+        doc_name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<ftd::interpreter::Thing> {
+        match self {
+            OrTypeVariant::AnonymousRecord(r) => Ok(ftd::interpreter::Thing::Record(r.clone())),
+            OrTypeVariant::Constant(_) | OrTypeVariant::Regular(_) => {
+                Err(ftd::interpreter::Error::ParseError {
+                    message: format!("Can't convert the or-type-variant to thing `{self:?}`"),
+                    doc_id: doc_name.to_string(),
+                    line_number,
+                })
+            }
+        }
+    }
 }
 
 fn validate_constant_variant(

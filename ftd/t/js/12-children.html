@@ -57,10 +57,13 @@ let foo__show_children = function (parent, inherited, args)
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-    parenti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
-      dark: "red",
-      light: "red"
-    }), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+      let record = fastn.recordInstance({
+      });
+      record.set("light", "red");
+      record.set("dark", "red");
+      return record;
+    }(), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Children, __args__.uis, inherited);
     return parenti0;
   } finally {
