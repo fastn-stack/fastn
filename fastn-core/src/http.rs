@@ -834,7 +834,7 @@ static BOT_USER_AGENTS: once_cell::sync::Lazy<std::collections::HashSet<&'static
 
 /// Checks whether a request was made by a Google/Bing bot based on its User-Agent
 pub fn is_bot(user_agent: &str) -> bool {
-    BOT_USER_AGENTS.contains(user_agent)
+    BOT_USER_AGENTS.iter().any(|bot| user_agent.contains(bot))
 }
 
 #[cfg(feature = "auth")]
