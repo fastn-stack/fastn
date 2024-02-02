@@ -319,6 +319,12 @@ impl Request {
     pub fn scheme(&self) -> String {
         self.scheme.to_string()
     }
+    pub fn is_bot(&self) -> bool {
+        match self.user_agent() {
+            Some(user_agent) => is_bot(&user_agent),
+            None => true,
+        }
+    }
 }
 
 pub(crate) struct ResponseBuilder {
@@ -786,6 +792,45 @@ pub fn user_err(
         .status(status_code)
         .content_type(actix_web::http::header::ContentType::json())
         .body(serde_json::to_string(&resp)?))
+}
+
+/// Checks whether a request was made by a Google/Bing bot based on its User-Agent
+/// Google crawlers and fetchers: https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers
+/// Bing crawlers: https://www.bing.com/webmasters/help/which-crawlers-does-bing-use-8c184ec0
+pub fn is_bot(user_agent: &str) -> bool {
+    let bot_user_agents = vec![
+        // GoogleBot user agents
+        // Common crawlers
+        "Googlebot",
+        "Google-InspectionTool",
+        "GoogleOther",
+        "Google-Extended",
+        "Googlebot-Image",
+        "Googlebot-News",
+        "Googlebot-Video",
+        "Storebot-Google",
+        // Special-case crawlers
+        "APIs-Google",
+        "AdsBot-Google-Mobile",
+        "AdsBot-Google",
+        "Mediapartners-Google",
+        "Google-Safety",
+        // User-triggered fetchers
+        "FeedFetcher-Google",
+        "GoogleProducer",
+        "Google-Read-Aloud",
+        "Google-Site-Verification",
+        // Bingbot user agents
+        "bingbot/2.0",
+        // AdIdxBot
+        "adidxbot/2.0",
+        // BingPreview
+        "bingbot/2.0",
+        // MicrosoftPreview
+        "MicrosoftPreview/2.0",
+    ];
+
+    bot_user_agents.iter().any(|bot| user_agent.contains(bot))
 }
 
 #[cfg(feature = "auth")]
