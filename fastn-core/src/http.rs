@@ -800,13 +800,13 @@ pub fn user_err(
 static BOT_USER_AGENTS_REGEX: once_cell::sync::Lazy<regex::Regex> =
     once_cell::sync::Lazy::new(|| {
         let bot_user_agents = include_str!("../bot_user_agents.txt").to_lowercase();
-        let bot_user_agents = bot_user_agents.replace("\n", "|");
+        let bot_user_agents = bot_user_agents.replace('\n', "|");
         regex::Regex::new(&format!("(?:{})", bot_user_agents)).unwrap()
     });
 
 /// Checks whether a request was made by a Google/Bing bot based on its User-Agent
 pub fn is_bot(user_agent: &str) -> bool {
-    BOT_USER_AGENTS_REGEX.is_match(user_agent.to_lowercase().as_str())
+    BOT_USER_AGENTS_REGEX.is_match(&user_agent.to_ascii_lowercase())
 }
 
 #[cfg(feature = "auth")]
