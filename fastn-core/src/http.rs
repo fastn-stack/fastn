@@ -796,7 +796,7 @@ pub fn user_err(
 
 // Google crawlers and fetchers: https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers
 // Bing crawlers: https://www.bing.com/webmasters/help/which-crawlers-does-bing-use-8c184ec0
-static BOT_USER_AGENTS: once_cell::sync::Lazy<std::collections::HashSet<&'static str>> =
+static BOT_USER_AGENTS: once_cell::sync::Lazy<Vec<&'static str>> =
     once_cell::sync::Lazy::new(|| {
         [
             // GoogleBot user agents
@@ -829,7 +829,7 @@ static BOT_USER_AGENTS: once_cell::sync::Lazy<std::collections::HashSet<&'static
             // MicrosoftPreview
             "MicrosoftPreview/2.0",
         ]
-        .into()
+        .to_vec()
     });
 
 /// Checks whether a request was made by a Google/Bing bot based on its User-Agent
