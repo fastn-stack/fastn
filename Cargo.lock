@@ -1775,6 +1775,7 @@ dependencies = [
  "ignore",
  "indoc 2.0.4",
  "intl-memoizer",
+ "isbot",
  "itertools 0.12.1",
  "lettre",
  "magic-crypt",
@@ -2684,6 +2685,15 @@ dependencies = [
  "hermit-abi",
  "rustix",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "isbot"
+version = "0.1.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f98d665d8689fd01bd1572c10fd58cf38a811f56c2d00b5ec5c0c50dc1eee956"
+dependencies = [
+ "regex",
 ]
 
 [[package]]
