@@ -568,7 +568,7 @@ pub(crate) async fn read_ftd_2023(
 ) -> fastn_core::Result<FTDResult> {
     let is_bot = match config.request.user_agent() {
         Some(user_agent) => KNOWN_BOTS.is_bot(&user_agent),
-        None => false,
+        None => true,
     };
     let package_name = config.config.package.name.to_string();
     let c = &config.config.clone();
