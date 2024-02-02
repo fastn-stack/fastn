@@ -800,7 +800,12 @@ pub fn user_err(
 static BOT_USER_AGENTS_REGEX: once_cell::sync::Lazy<regex::Regex> =
     once_cell::sync::Lazy::new(|| {
         let bot_user_agents = include_str!("../bot_user_agents.txt").to_lowercase();
-        let bot_user_agents = bot_user_agents.replace('\n', "|");
+        let bot_user_agents = bot_user_agents
+            .lines()
+            .map(str::trim)
+            .filter(|line| !line.is_empty())
+            .collect::<Vec<&str>>()
+            .join("|");
         regex::Regex::new(&format!("(?:{})", bot_user_agents)).unwrap()
     });
 
