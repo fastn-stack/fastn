@@ -170,9 +170,15 @@ impl Request {
 
     pub fn content_type(&self) -> Option<mime_guess::Mime> {
         self.headers
-            .get("content-type")
+            .get(actix_web::http::header::CONTENT_TYPE)
             .and_then(|v| v.to_str().ok())
             .and_then(|v| v.parse().ok())
+    }
+
+    pub fn user_agent(&self) -> Option<String> {
+        self.headers
+            .get(actix_web::http::header::USER_AGENT)
+            .and_then(|v| v.to_str().map(|v| v.to_string()).ok())
     }
 
     #[cfg(feature = "auth")]

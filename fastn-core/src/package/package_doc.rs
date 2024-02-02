@@ -566,6 +566,10 @@ pub(crate) async fn read_ftd_2023(
     download_assets: bool,
     only_js: bool,
 ) -> fastn_core::Result<FTDResult> {
+    let is_bot = match config.request.user_agent() {
+        Some(user_agent) => KNOWN_BOTS.is_bot(&user_agent),
+        None => false,
+    };
     let package_name = config.config.package.name.to_string();
     let c = &config.config.clone();
 
@@ -621,10 +625,14 @@ pub(crate) async fn read_ftd_2023(
             format!("{js_ftd_script}\n{js_document_script}").as_str(),
         )
     } else {
-        let ssr_body = fastn_js::ssr_with_js_string(
-            &package_name,
-            format!("{js_ftd_script}\n{js_document_script}").as_str(),
-        );
+        let ssr_body = if !is_bot {
+            EMPTY_HTML_BODY.to_string()
+        } else {
+            fastn_js::ssr_with_js_string(
+                &package_name,
+                format!("{js_ftd_script}\n{js_document_script}").as_str(),
+            )
+        };
 
         fastn_core::utils::replace_markers_2023(
             js_document_script.as_str(),
@@ -656,3 +664,8 @@ pub(crate) async fn process_ftd(
 
     Ok(response)
 }
+
+static KNOWN_BOTS: once_cell::sync::Lazy<isbot::Bots> =
+    once_cell::sync::Lazy::new(isbot::Bots::default);
+
+const EMPTY_HTML_BODY: &str = "<body></body><style id=\"styles\"></style>";
