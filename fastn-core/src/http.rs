@@ -794,47 +794,19 @@ pub fn user_err(
         .body(serde_json::to_string(&resp)?))
 }
 
-// Google crawlers and fetchers: https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers
-// Bing crawlers: https://www.bing.com/webmasters/help/which-crawlers-does-bing-use-8c184ec0
-static BOT_USER_AGENTS: once_cell::sync::Lazy<Vec<&'static str>> =
+/// Google crawlers and fetchers: https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers
+/// Bing crawlers: https://www.bing.com/webmasters/help/which-crawlers-does-bing-use-8c184ec0
+/// Bot user agents are listed in fastn-core/bot_user_agents.txt
+static BOT_USER_AGENTS_REGEX: once_cell::sync::Lazy<regex::Regex> =
     once_cell::sync::Lazy::new(|| {
-        [
-            // GoogleBot user agents
-            // Common crawlers
-            "Googlebot",
-            "Google-InspectionTool",
-            "GoogleOther",
-            "Google-Extended",
-            "Googlebot-Image",
-            "Googlebot-News",
-            "Googlebot-Video",
-            "Storebot-Google",
-            // Special-case crawlers
-            "APIs-Google",
-            "AdsBot-Google-Mobile",
-            "AdsBot-Google",
-            "Mediapartners-Google",
-            "Google-Safety",
-            // User-triggered fetchers
-            "FeedFetcher-Google",
-            "GoogleProducer",
-            "Google-Read-Aloud",
-            "Google-Site-Verification",
-            // Bingbot user agents
-            "bingbot/2.0",
-            // AdIdxBot
-            "adidxbot/2.0",
-            // BingPreview
-            "bingbot/2.0",
-            // MicrosoftPreview
-            "MicrosoftPreview/2.0",
-        ]
-        .to_vec()
+        let bot_user_agents = include_str!("../bot_user_agents.txt").to_lowercase();
+        let bot_user_agents = bot_user_agents.replace("\n", "|");
+        regex::Regex::new(&format!("(?:{})", bot_user_agents)).unwrap()
     });
 
 /// Checks whether a request was made by a Google/Bing bot based on its User-Agent
 pub fn is_bot(user_agent: &str) -> bool {
-    BOT_USER_AGENTS.iter().any(|bot| user_agent.contains(bot))
+    BOT_USER_AGENTS_REGEX.is_match(user_agent.to_lowercase().as_str())
 }
 
 #[cfg(feature = "auth")]
