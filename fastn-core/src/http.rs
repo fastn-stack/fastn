@@ -806,12 +806,19 @@ static BOT_USER_AGENTS_REGEX: once_cell::sync::Lazy<regex::Regex> =
             .filter(|line| !line.is_empty())
             .collect::<Vec<&str>>()
             .join("|");
-        regex::Regex::new(&format!("(?:{})", bot_user_agents)).unwrap()
+        regex::Regex::new(&bot_user_agents).unwrap()
     });
 
 /// Checks whether a request was made by a Google/Bing bot based on its User-Agent
 pub fn is_bot(user_agent: &str) -> bool {
     BOT_USER_AGENTS_REGEX.is_match(&user_agent.to_ascii_lowercase())
+}
+
+#[test]
+fn test_is_bot() {
+    assert_eq!(is_bot("Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm) Chrome/"), true);
+    assert_eq!(is_bot("Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/W.X.Y.Z Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)) Chrome/"), true);
+    assert_ne!(is_bot("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"), true);
 }
 
 #[cfg(feature = "auth")]
