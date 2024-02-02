@@ -88,7 +88,6 @@ uuid.workspace = true
 validator = { workspace = true, optional = true }
 zxcvbn = { workspace = true, optional = true }
 zip.workspace = true
-isbot.workspace = true
 
 [dev-dependencies]
 fbt-lib.workspace = true
