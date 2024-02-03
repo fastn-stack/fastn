@@ -19,3 +19,12 @@ bingbot/2.0
 adidxbot/2.0
 bingbot/2.0
 MicrosoftPreview/2.0
+Twitterbot
+Pinterest
+FacebookExternalHit
+LinkedInBot
+Slackbot
+WhatsApp
+Instagram
+Discordbot
+TelegramBot
