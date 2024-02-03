@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
 
   PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
 
-  RUSTFLAGS = "-C target-feature=+crt-static";
+  # RUSTFLAGS = "-C target-feature=+crt-static";
 
   buildFeatures = [ "auth" ];
 

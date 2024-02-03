@@ -12,6 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v9
+      - uses: DeterminateSystems/magic-nix-cache-action@v3
       - name: build linux-musl
         run: nix build -L .#fastn
       - name: test the output binary
@@ -39,6 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v9
+      - uses: DeterminateSystems/magic-nix-cache-action@v3
       - name: build mingwW64
         run: nix build -L .#fastn-win
       - name: test the output binary
@@ -55,6 +57,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v9
+      - uses: DeterminateSystems/magic-nix-cache-action@v3
       - name: build mac
         run: nix build -L .#fastn
       - name: test the output binary on mac
