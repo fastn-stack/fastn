@@ -2,7 +2,7 @@
 let
   fastnCargo = builtins.fromTOML (builtins.readFile ./fastn/Cargo.toml);
   version = fastnCargo.package.version;
-in 
+in
 rustPlatform.buildRustPackage {
   name = "fastn";
   inherit version;

@@ -34,12 +34,14 @@
           name = "fastn-shell";
           nativeBuildInputs = with pkgs; [
             rustc
+            rustfmt
+            clippy
             cargo
             pkg-config
             openssl.dev
-            rust-analyzer
             postgresql_14
             diesel-cli
+            rust-analyzer
           ];
 
           shellHook = ''
