@@ -27,10 +27,8 @@ pub async fn logout(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    if let Some(session_data) = req.cookie(fastn_core::auth::COOKIE_NAME) {
-        let session_data = fastn_core::auth::utils::decrypt(&session_data)
-            .await
-            .unwrap_or_default();
+    if let Some(session_data) = req.cookie(fastn_core::auth::SESSION_COOKIE_NAME) {
+        let session_data = fastn_core::auth::utils::decrypt(&session_data).unwrap_or_default();
 
         #[derive(serde::Deserialize)]
         struct SessionData {
@@ -58,7 +56,7 @@ pub async fn logout(
 
     Ok(actix_web::HttpResponse::Found()
         .cookie(
-            actix_web::cookie::Cookie::build(fastn_core::auth::COOKIE_NAME, "")
+            actix_web::cookie::Cookie::build(fastn_core::auth::SESSION_COOKIE_NAME, "")
                 .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
@@ -72,6 +70,7 @@ pub async fn logout(
 #[tracing::instrument(skip_all)]
 pub async fn handle_auth(
     req: fastn_core::http::Request,
+    req_config: &mut fastn_core::RequestConfig,
     config: &fastn_core::Config,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let next = req.q("next", "/".to_string())?;
@@ -91,7 +90,8 @@ pub async fn handle_auth(
         "/-/auth/logout/" => logout(&req, pool, next).await,
 
         "/-/auth/create-user/" => {
-            fastn_core::auth::email_password::create_user(&req, config, pool, next).await
+            fastn_core::auth::email_password::create_user(&req, req_config, config, pool, next)
+                .await
         }
         "/-/auth/confirm-email/" => {
             fastn_core::auth::email_password::confirm_email(&req, pool, next).await
@@ -99,7 +99,9 @@ pub async fn handle_auth(
         "/-/auth/resend-confirmation-email/" => {
             fastn_core::auth::email_password::resend_email(&req, pool, next).await
         }
-
+        "/-/auth/onboarding/" => {
+            fastn_core::auth::email_password::onboarding(&req, req_config, config, next).await
+        }
         // "/-/auth/send-email-login-code/" => todo!(),
         // "/-/auth/add-email/" => todo!(),
         // "/-/auth/update-name/" => todo!(),

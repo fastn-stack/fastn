@@ -32,7 +32,7 @@ optional string id:
 caption title:
 string url:
 body body:
-string test:
+optional string test:
 optional string http-status:
 optional string http-location:
 optional string http-redirect:

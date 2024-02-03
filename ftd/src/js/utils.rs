@@ -122,6 +122,14 @@ pub(crate) fn update_reference(reference: &str, rdata: &ftd::js::ResolverData) -
         return format!("fastn_utils.getNodeValue({component_name})");
     }
 
+    if ftd::interpreter::FTD_SPECIAL_CHECKED
+        .trim_start_matches('$')
+        .eq(reference)
+    {
+        let component_name = rdata.component_name.clone().unwrap();
+        return format!("fastn_utils.getNodeCheckedState({component_name})");
+    }
+
     if let Some(component_definition_name) = rdata.component_definition_name {
         if let Some(alias) = name.strip_prefix(format!("{component_definition_name}.").as_str()) {
             return format!("{}.{alias}", fastn_js::LOCAL_VARIABLE_MAP);

@@ -190,7 +190,23 @@ pub async fn callback(
 
     tracing::info!("token stored. token_id: {}", &token_id);
 
-    fastn_core::auth::set_session_cookie_and_redirect_to_next(req, session_id, next).await
+    // redirect to onboarding route with a GET request
+    let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
+        req,
+        session_id,
+        format!("/-/auth/onboarding/?next={}", next),
+    )
+    .await?;
+
+    resp.add_cookie(
+        &actix_web::cookie::Cookie::build(fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME, "1")
+            .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+            .path("/")
+            .finish(),
+    )
+    .map_err(|e| fastn_core::Error::generic(format!("failed to set cookie: {e}")))?;
+
+    Ok(resp)
 }
 
 // it returns identities which matches to given input

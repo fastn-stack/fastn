@@ -38,6 +38,8 @@
             pkg-config
             openssl.dev
             rust-analyzer
+            postgresql_14
+            diesel-cli
           ];
 
           shellHook = ''

@@ -456,6 +456,9 @@ let fastn_utils = {
     getNodeValue(node) {
         return node.getNode().value;
     },
+    getNodeCheckedState(node) {
+        return node.getNode().checked;
+    },
     setFullHeight() {
         if (!ssr) {
             document.body.style.height = `max(${document.documentElement.scrollHeight}px, 100%)`;

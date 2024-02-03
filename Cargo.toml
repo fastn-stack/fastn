@@ -154,6 +154,8 @@ diesel_async_migrations = "0.12"
 chrono = { version = "0.4", features = ["serde"]}
 indicatif = "0.17.1"
 snafu = "0.8.0"
+validator = { version = "0.16", features = ["derive"] }
+zxcvbn = "2"
 
 [workspace.dependencies.uuid]
 version = "1.6.1"
