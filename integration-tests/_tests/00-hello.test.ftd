@@ -1,7 +1,0 @@
--- import: fastn
-
--- fastn.test: Hello route
-
--- fastn.get: Fetching Test Data (from test server)
-url: /hello/
-http-status: 200
