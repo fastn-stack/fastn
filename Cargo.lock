@@ -1816,6 +1816,7 @@ dependencies = [
  "dirs",
  "ftd 0.3.0",
  "ignore",
+ "reqwest",
  "thiserror",
  "tokio",
  "tracing",

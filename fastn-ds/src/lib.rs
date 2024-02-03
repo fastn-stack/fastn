@@ -110,9 +110,12 @@ pub enum ReadStringError {
 
 #[derive(thiserror::Error, Debug)]
 pub enum WriteError {
-    #[error("pool error {0}")]
+    #[error("io error {0}")]
     IOError(#[from] std::io::Error),
 }
+
+#[derive(thiserror::Error, Debug)]
+pub enum HttpError {}
 
 impl DocumentStore {
     pub fn new<T: AsRef<camino::Utf8Path>>(root: T) -> Self {
@@ -232,6 +235,124 @@ impl DocumentStore {
 
     pub async fn exists(&self, path: &fastn_ds::Path) -> bool {
         path.path.exists()
+    }
+
+    #[tracing::instrument(skip_all)]
+    pub(crate) async fn http_get_with_cookie(
+        url: &str,
+        cookie: Option<String>,
+        headers: &std::collections::HashMap<String, String>,
+    ) -> (Result<Vec<u8>, HttpError>, Vec<String>) {
+        let mut cookies = vec![];
+
+        tracing::info!(url = url);
+        let mut req_headers = reqwest::header::HeaderMap::new();
+        req_headers.insert(
+            reqwest::header::USER_AGENT,
+            reqwest::header::HeaderValue::from_static("fastn"),
+        );
+        if let Some(cookie) = cookie {
+            req_headers.insert(
+                reqwest::header::COOKIE,
+                reqwest::header::HeaderValue::from_str(cookie.as_str()).unwrap(),
+            );
+        }
+
+        for (key, value) in headers.iter() {
+            req_headers.insert(
+                reqwest::header::HeaderName::from_bytes(key.as_bytes()).unwrap(),
+                reqwest::header::HeaderValue::from_str(value.as_str()).unwrap(),
+            );
+        }
+
+        let c = reqwest::Client::builder()
+            .default_headers(req_headers)
+            .build()?;
+
+        // if we are not able to send the request, we could not have read the cookie
+        let res = c.get(url).send().await?;
+
+        res.headers().iter().for_each(|(k, v)| {
+            if k.as_str().eq("set-cookie") {
+                if let Ok(v) = v.to_str() {
+                    cookies.push(v.to_string());
+                }
+            }
+        });
+
+        if !res.status().eq(&reqwest::StatusCode::OK) {
+            let message = format!(
+                "url: {}, response_status: {}, response: {:?}",
+                url,
+                res.status(),
+                res.text().await
+            );
+            tracing::error!(url = url, msg = message);
+
+            return Ok((Err(fastn_core::Error::APIResponseError(message)), cookies));
+        }
+
+        tracing::info!(msg = "returning success", url = url);
+        (Ok(res.bytes().await?.into()), cookies)
+    }
+
+    #[tracing::instrument(skip_all)]
+    pub(crate) async fn http_post_with_cookie(
+        url: &str,
+        cookie: Option<String>,
+        headers: &std::collections::HashMap<String, String>,
+        body: &str,
+    ) -> Result<(fastn_core::Result<Vec<u8>>, Vec<String>), HttpError> {
+        let mut resp_cookies = vec![];
+
+        tracing::info!(url = url);
+        let mut req_headers = reqwest::header::HeaderMap::new();
+        req_headers.insert(
+            reqwest::header::USER_AGENT,
+            reqwest::header::HeaderValue::from_static("fastn"),
+        );
+        if let Some(cookie) = cookie {
+            req_headers.insert(
+                reqwest::header::COOKIE,
+                reqwest::header::HeaderValue::from_str(cookie.as_str()).unwrap(),
+            );
+        }
+
+        for (key, value) in headers.iter() {
+            req_headers.insert(
+                reqwest::header::HeaderName::from_bytes(key.as_bytes()).unwrap(),
+                reqwest::header::HeaderValue::from_str(value.as_str()).unwrap(),
+            );
+        }
+
+        let c = reqwest::Client::builder()
+            .default_headers(req_headers)
+            .build()?;
+
+        let res = c.post(url).body(body.to_string()).send().await?;
+        res.headers().iter().for_each(|(k, v)| {
+            if k.as_str().eq("set-cookie") {
+                if let Ok(v) = v.to_str() {
+                    resp_cookies.push(v.to_string());
+                }
+            }
+        });
+
+        if !res.status().eq(&reqwest::StatusCode::OK) {
+            let message = format!(
+                "url: {}, response_status: {}, response: {:?}",
+                url,
+                res.status(),
+                res.text().await
+            );
+            tracing::error!(url = url, msg = message);
+            return Ok((
+                Err(fastn_core::Error::APIResponseError(message)),
+                resp_cookies,
+            ));
+        }
+        tracing::info!(msg = "returning success", url = url);
+        Ok((Ok(res.bytes().await?.into()), resp_cookies))
     }
 }
 
