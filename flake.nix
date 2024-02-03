@@ -2,6 +2,8 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
 
+    # TODO: use nixpkgs/unstable when this is merged:
+    # https://github.com/NixOS/nixpkgs/pull/282798
     nixpkgs.url = "github:junjihashimoto/nixpkgs/feature/rust-dup";
   };
 

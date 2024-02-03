@@ -1,9 +1,14 @@
 { rustPlatform, stdenv, pkg-config, lib, windows, openssl }:
+let
+  fastnCargo = builtins.fromTOML (builtins.readFile ./fastn/Cargo.toml);
+  version = fastnCargo.package.version;
+in 
 rustPlatform.buildRustPackage {
   name = "fastn";
-  version = "0.4.47";
+  inherit version;
   src = lib.cleanSource ./.;
-  doCheck = false;
+
+  doCheck = false; # set this to true to run cargo test
 
   nativeBuildInputs = [ pkg-config ];
 
