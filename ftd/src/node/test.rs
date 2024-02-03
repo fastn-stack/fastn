@@ -77,7 +77,7 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
         ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
     let mut node = ftd::node::NodeData::from_rt(executor);
     for thing in ftd::interpreter::default::get_default_bag().keys() {
-        node.bag.remove(thing);
+        node.bag.swap_remove(thing);
     }
     let expected_json = serde_json::to_string_pretty(&node).unwrap();
     if fix {
