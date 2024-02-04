@@ -52,12 +52,9 @@ Section "Fastn Installer" SectionOne
     
     ; CURRENT_WD is provided through cmd arguments
     ; Copy application files
-    File ${CURRENT_WD}\target\release\fastn.exe
+    File ${CURRENT_WD}\result\bin\fastn.exe
     File ${CURRENT_WD}\LICENSE
     File ${CURRENT_WD}\README.md
-    File "${CURRENT_WD}\.github\lib\libpq.dll"
-    File "${CURRENT_WD}\.github\lib\libcrypto-3-x64.dll"
-    File "${CURRENT_WD}\.github\lib\libssl-3-x64.dll"
 
     ; Set the Path variables
     EnVar::SetHKCU
@@ -80,9 +77,6 @@ Section "Uninstall"
     Delete "$INSTDIR\fastn.exe"
     Delete "$INSTDIR\LICENSE"
     Delete "$INSTDIR\README.md"
-    Delete "$INSTDIR\libpq.dll"
-    Delete "$INSTDIR\libcrypto-3-x64.dll"
-    Delete "$INSTDIR\libssl-3-x64.dll"
     RMDir "$INSTDIR"
     ; Remove from PATH
     EnVar::SetHKCU
