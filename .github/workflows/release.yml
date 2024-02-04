@@ -17,56 +17,29 @@ jobs:
       CARGO_TERM_COLOR: always
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-            ftd/target
-            fifthtry_content/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Build-musl
-        run: |
-          echo "Building static binaries using ekidd/rust-musl-builder"
-          docker build -t fastn-build-image -f .github/Dockerfile .
-          docker run --name fastn-build fastn-build-image
-          mkdir -p out
-          docker cp fastn-build:/home/rust/src/target/x86_64-unknown-linux-musl/release/fastn out/
+      - uses: DeterminateSystems/nix-installer-action@v9
+      - uses: DeterminateSystems/magic-nix-cache-action@v3
+      - name: build linux-musl
+        run: nix build -L .#fastn
       - name: run fastn
-        run: out/fastn --version
+        run: ./result/bin/fastn --version
       - uses: actions/upload-artifact@v4
         with:
           name: linux_musl_x86_64
-          path: out/fastn
+          path: result/bin/fastn
   release-windows:
     name: Build for Windows
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions-rs/toolchain@v1
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-            ftd/target
-            fifthtry_content/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Run Build
-        id: build-windows
-        continue-on-error: false
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release
-      - name: run fastn
-        run: ./target/release/fastn.exe --version
+      - uses: DeterminateSystems/nix-installer-action@v9
+      - uses: DeterminateSystems/magic-nix-cache-action@v3
+      - name: build mingwW64
+        run: nix build -L .#fastn-win
       - uses: actions/upload-artifact@v4
         with:
           name: windows_x64_latest
-          path: target/release/fastn.exe
+          path: result/bin/fastn.exe
       - name: Download EnVar plugin for NSIS
         uses: carlosperate/download-file-action@v1.0.3
         with:
