@@ -99,7 +99,7 @@ jobs:
           bash .github/scripts/run-integration-tests.sh
       - name: Run SSR test
         id: ssr-test
-        continue-on-error: false
+        continue-on-error: true
         run: |
           bash .github/scripts/run-ssr-test.sh
       - name: Check if JS code is properly formatted
@@ -126,4 +126,7 @@ jobs:
         run: exit 1
       - name: Check if integration test passed
         if: steps.integration-test.outcome != 'success'
+        run: exit 1
+      - name: Check if SSR test passed
+        if: steps.ssr-test.outcome != 'success'
         run: exit 1
