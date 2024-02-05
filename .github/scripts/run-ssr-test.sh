@@ -28,7 +28,7 @@ echo "Updating fastn packages ..."
 fastn update
 
 echo "Starting fastn server in the background..."
-fastn serve --offline &
+fastn --test serve --offline &
 FASTN_SERVE_PID=$!
 
 # Wait for the server to start
