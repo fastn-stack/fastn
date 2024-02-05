@@ -101,6 +101,7 @@ jobs:
         id: ssr-test
         continue-on-error: true
         run: |
+          cargo install --path=fastn
           bash .github/scripts/run-ssr-test.sh
       - name: Check if JS code is properly formatted
         # curl -fsSL https://dprint.dev/install.sh | sh
