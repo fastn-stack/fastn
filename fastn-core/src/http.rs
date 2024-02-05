@@ -182,7 +182,7 @@ impl Request {
     }
 
     #[cfg(feature = "auth")]
-    pub async fn ud(&self) -> Option<fastn_core::UserData> {
+    pub async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<fastn_core::UserData> {
         let session_data = match self.cookie(fastn_core::auth::SESSION_COOKIE_NAME) {
             Some(c) => {
                 if c.is_empty() {
@@ -194,7 +194,7 @@ impl Request {
             None => return None,
         };
 
-        let session_data = match fastn_core::auth::utils::decrypt(&session_data).await {
+        let session_data = match fastn_core::auth::utils::decrypt(ds, &session_data).await {
             Ok(v) => v,
             Err(e) => {
                 tracing::warn!("failed to decrypt session data: {:?}", e);
@@ -423,7 +423,7 @@ where
         format!("https://{}", url)
     };
 
-    if let Ok(package_proxy) = fastn_ds::DocumentStore::env("FASTN_PACKAGE_PROXY").await {
+    if let Ok(package_proxy) = std::env::var("FASTN_PACKAGE_PROXY") {
         url = format!("{}/proxy/?url={}", package_proxy, url);
     }
 

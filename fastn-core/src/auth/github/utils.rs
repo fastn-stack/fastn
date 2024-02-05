@@ -1,8 +1,11 @@
-pub async fn github_client() -> Result<oauth2::basic::BasicClient, fastn_ds::EnvironmentError> {
-    let client_id = fastn_ds::DocumentStore::env("FASTN_GITHUB_CLIENT_ID").await?;
+pub async fn github_client(
+    ds: &fastn_ds::DocumentStore,
+) -> Result<oauth2::basic::BasicClient, fastn_ds::EnvironmentError> {
+    let client_id = ds.env("FASTN_GITHUB_CLIENT_ID").await?;
     let client_id = oauth2::ClientId::new(client_id);
 
-    let client_secret = fastn_ds::DocumentStore::env("FASTN_GITHUB_CLIENT_SECRET")
+    let client_secret = ds
+        .env("FASTN_GITHUB_CLIENT_SECRET")
         .await
         .ok()
         .map(oauth2::ClientSecret::new);

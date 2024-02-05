@@ -558,7 +558,12 @@ pub async fn access_identities(
     // discord-server: abrark.com
     // github-watches: fastn-lang/ftd
     #[cfg(feature = "auth")]
-    match fastn_core::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await
+    match fastn_core::auth::get_auth_identities(
+        &config.ds,
+        req.cookies(),
+        sitemap_identities.as_slice(),
+    )
+    .await
     {
         Ok(ids) => Ok(ids),
         Err(fastn_core::Error::GenericError(_err)) => Ok(vec![]),
