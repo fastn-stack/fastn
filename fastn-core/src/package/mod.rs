@@ -57,12 +57,6 @@ pub struct Package {
     /// endpoints for proxy service
     pub endpoints: Vec<fastn_package::old_fastn::EndpointData>,
 
-    /// Attribute to define the usage of a WASM backend
-    pub backend: bool,
-
-    /// Headers for the WASM backend
-    pub backend_headers: Option<Vec<fastn_package::old_fastn::BackendHeader>>,
-
     /// Installed Apps
     pub apps: Vec<app::App>,
 
@@ -105,8 +99,6 @@ impl Package {
             dynamic_urls_temp: None,
             favicon: None,
             endpoints: vec![],
-            backend: false,
-            backend_headers: None,
             apps: vec![],
             icon: None,
             redirects: None,
@@ -1037,8 +1029,6 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             dynamic_urls_temp: None,
             favicon: self.favicon,
             endpoints: self.endpoint,
-            backend: self.backend,
-            backend_headers: self.backend_headers,
             apps: vec![],
             icon: self.icon,
             redirects: None,
