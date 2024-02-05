@@ -273,7 +273,7 @@ async fn set_session_cookie_and_redirect_to_next(
         }
     });
 
-    let encrypted_cookie = fastn_core::auth::utils::encrypt(&cookie_json.to_string());
+    let encrypted_cookie = fastn_core::auth::utils::encrypt(&cookie_json.to_string()).await;
 
     return Ok(actix_web::HttpResponse::Found()
         .cookie(

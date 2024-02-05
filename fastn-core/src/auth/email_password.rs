@@ -376,7 +376,7 @@ pub(crate) async fn confirm_email(
 
     let (email_id, session_id, sent_at) = conf_data.unwrap();
 
-    if key_expired(sent_at) {
+    if key_expired(sent_at).await {
         // TODO: this redirect route should be configurable
         tracing::info!("provided code has expired.");
         return Ok(fastn_core::http::redirect_with_code(
@@ -513,7 +513,7 @@ async fn create_and_send_confirmation_email(
 
     let confirmation_link = confirmation_link(req, stored_key, next);
 
-    let mailer = fastn_core::mail::Mailer::from_env();
+    let mailer = fastn_core::mail::Mailer::from_env().await;
 
     if mailer.is_err() {
         return Err(fastn_core::Error::generic(
@@ -528,7 +528,7 @@ async fn create_and_send_confirmation_email(
 
     let mut mailer = mailer.unwrap();
 
-    if let Ok(debug_mode) = std::env::var("DEBUG") {
+    if let Ok(debug_mode) = fastn_ds::DocumentStore::env("DEBUG").await {
         if debug_mode == "true" {
             mailer.mock();
         }
@@ -556,8 +556,9 @@ async fn create_and_send_confirmation_email(
 
 /// check if it has been 3 days since the verification code was sent
 /// can be configured using EMAIL_CONFIRMATION_EXPIRE_DAYS
-fn key_expired(sent_at: chrono::DateTime<chrono::Utc>) -> bool {
-    let expiry_limit_in_days: u64 = std::env::var("EMAIL_CONFIRMATION_EXPIRE_DAYS")
+async fn key_expired(sent_at: chrono::DateTime<chrono::Utc>) -> bool {
+    let expiry_limit_in_days: u64 = fastn_ds::DocumentStore::env("EMAIL_CONFIRMATION_EXPIRE_DAYS")
+        .await
         .unwrap_or("3".to_string())
         .parse()
         .expect("EMAIL_CONFIRMATION_EXPIRE_DAYS should be a number");
