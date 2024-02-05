@@ -21,6 +21,8 @@ pub async fn login(
     // Note: public_repos user:email all these things are github resources
     // So we have to tell oauth_client who is getting logged in what are we going to access
     let (authorize_url, _token) = fastn_core::auth::github::utils::github_client()
+        .await
+        .unwrap()
         .set_redirect_uri(oauth2::RedirectUrl::new(redirect_url)?)
         .authorize_url(oauth2::CsrfToken::new_random)
         .add_scope(oauth2::Scope::new("public_repo".to_string()))
@@ -57,6 +59,8 @@ pub async fn callback(
     }
 
     let access_token = match fastn_core::auth::github::utils::github_client()
+        .await
+        .unwrap()
         .exchange_code(oauth2::AuthorizationCode::new(code))
         .request_async(oauth2::reqwest::async_http_client)
         .await

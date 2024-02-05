@@ -10,8 +10,9 @@ impl DatabaseConfig {
     }
 }
 
-pub(crate) fn get_db_config() -> ftd::interpreter::Result<DatabaseConfig> {
-    let db_url = std::env::var("FASTN_DB_URL")
+pub(crate) async fn get_db_config() -> ftd::interpreter::Result<DatabaseConfig> {
+    let db_url = fastn_ds::DocumentStore::env("FASTN_DB_URL")
+        .await
         .map_err(|_| ftd::interpreter::Error::OtherError("FASTN_DB_URL is not set".to_string()))?;
 
     if let Some(db_url) = db_url.strip_prefix("sqlite:///") {
@@ -44,7 +45,7 @@ pub async fn process(
             }
             None => DatabaseConfig::new(url, "sqlite".to_string()),
         },
-        None => fastn_core::library2022::processor::sql::get_db_config()?,
+        None => fastn_core::library2022::processor::sql::get_db_config().await?,
     };
 
     let db_type = db_config.db_type.as_str();

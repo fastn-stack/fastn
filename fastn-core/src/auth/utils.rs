@@ -6,22 +6,22 @@ pub fn domain(host: &str) -> String {
     }
 }
 
-pub fn encrypt(input: &str) -> String {
+pub async fn encrypt(input: &str) -> String {
     use magic_crypt::MagicCryptTrait;
-    let secret_key = fastn_core::auth::utils::secret_key();
+    let secret_key = fastn_core::auth::utils::secret_key().await;
     let mc_obj = magic_crypt::new_magic_crypt!(secret_key.as_str(), 256);
     mc_obj.encrypt_to_base64(input).as_str().to_owned()
 }
 
-pub fn decrypt(input: &str) -> Result<String, magic_crypt::MagicCryptError> {
+pub async fn decrypt(input: &str) -> Result<String, magic_crypt::MagicCryptError> {
     use magic_crypt::MagicCryptTrait;
-    let secret_key = fastn_core::auth::utils::secret_key();
+    let secret_key = fastn_core::auth::utils::secret_key().await;
     let mc_obj = magic_crypt::new_magic_crypt!(&secret_key, 256);
     mc_obj.decrypt_base64_to_string(input)
 }
 
-pub fn secret_key() -> String {
-    match std::env::var("FASTN_SECRET_KEY") {
+pub async fn secret_key() -> String {
+    match fastn_ds::DocumentStore::env("FASTN_SECRET_KEY").await {
         Ok(secret) => secret,
         Err(_e) => {
             fastn_core::warning!(

@@ -6,7 +6,7 @@ pub async fn process(
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     #[cfg(feature = "auth")]
-    if let Some(ud) = req_config.request.ud() {
+    if let Some(ud) = req_config.request.ud().await {
         let ud = UserDetails {
             is_logged_in: true,
             username: ud.username,

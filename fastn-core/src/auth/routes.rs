@@ -28,7 +28,9 @@ pub async fn logout(
     use diesel_async::RunQueryDsl;
 
     if let Some(session_data) = req.cookie(fastn_core::auth::SESSION_COOKIE_NAME) {
-        let session_data = fastn_core::auth::utils::decrypt(&session_data).unwrap_or_default();
+        let session_data = fastn_core::auth::utils::decrypt(&session_data)
+            .await
+            .unwrap_or_default();
 
         #[derive(serde::Deserialize)]
         struct SessionData {
