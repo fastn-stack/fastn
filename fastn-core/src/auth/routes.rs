@@ -14,7 +14,7 @@ pub async fn login(
     match provider.as_str() {
         "github" => fastn_core::auth::github::login(ds, req, next).await,
         // client should handle redirects to next for email_password login
-        "emailpassword" => fastn_core::auth::email_password::login(req, ds, db_pool, next).await,
+        "email-password" => fastn_core::auth::email_password::login(req, ds, db_pool, next).await,
         _ => Ok(fastn_core::not_found!("unknown provider: {}", provider)),
     }
 }
