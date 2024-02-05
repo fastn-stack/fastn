@@ -1,8 +1,0 @@
--- ft.doc-page:
-toc: $config.alternatives-toc
-header-left: $config.why-header
-
--- ft.h0: Alternatives
-
-- [MDX](/why/not-mdx/)
-

@@ -1,9 +1,0 @@
--- my-ds.page: Dependency: `ftd`
-
-
-We use [`ftd`](https://docs.rs/ftd/) crate which handles ftd grammer and
-compilation of ftd files in HTML etc.
-
-Version: [git-c317e24](https://github.com/FifthTry/ftd/commit/c317e24e948a6e8e8d83c75a9789f27453d41fcf)
-
--- end: my-ds.page

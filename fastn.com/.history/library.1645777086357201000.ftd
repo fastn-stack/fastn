@@ -1,5 +1,0 @@
--- ft.doc-page:
-toc: $config.doc-toc
-header-left: $config.doc-header
-    
--- ft.h0: `ftd::Library`
