@@ -8,6 +8,7 @@ pub struct UserDetail {
 }
 
 pub async fn login(
+    ds: &fastn_ds::DocumentStore,
     req: &fastn_core::http::Request,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -20,7 +21,7 @@ pub async fn login(
 
     // Note: public_repos user:email all these things are github resources
     // So we have to tell oauth_client who is getting logged in what are we going to access
-    let (authorize_url, _token) = fastn_core::auth::github::utils::github_client()
+    let (authorize_url, _token) = fastn_core::auth::github::utils::github_client(ds)
         .await
         .unwrap()
         .set_redirect_uri(oauth2::RedirectUrl::new(redirect_url)?)
@@ -38,6 +39,7 @@ pub async fn login(
 // the token and setting it to cookies
 pub async fn callback(
     req: &fastn_core::http::Request,
+    ds: &fastn_ds::DocumentStore,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -58,7 +60,7 @@ pub async fn callback(
             .finish());
     }
 
-    let access_token = match fastn_core::auth::github::utils::github_client()
+    let access_token = match fastn_core::auth::github::utils::github_client(ds)
         .await
         .unwrap()
         .exchange_code(oauth2::AuthorizationCode::new(code))
@@ -135,8 +137,10 @@ pub async fn callback(
 
         tracing::info!("token stored. token_id: {}", &token_id);
 
-        return fastn_core::auth::set_session_cookie_and_redirect_to_next(req, session_id, next)
-            .await;
+        return fastn_core::auth::set_session_cookie_and_redirect_to_next(
+            req, ds, session_id, next,
+        )
+        .await;
     }
 
     // first time login, create fastn_user
@@ -197,6 +201,7 @@ pub async fn callback(
     // redirect to onboarding route with a GET request
     let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
         req,
+        ds,
         session_id,
         format!("/-/auth/onboarding/?next={}", next),
     )

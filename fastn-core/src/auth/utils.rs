@@ -6,22 +6,25 @@ pub fn domain(host: &str) -> String {
     }
 }
 
-pub async fn encrypt(input: &str) -> String {
+pub async fn encrypt(ds: &fastn_ds::DocumentStore, input: &str) -> String {
     use magic_crypt::MagicCryptTrait;
-    let secret_key = fastn_core::auth::utils::secret_key().await;
+    let secret_key = fastn_core::auth::utils::secret_key(ds).await;
     let mc_obj = magic_crypt::new_magic_crypt!(secret_key.as_str(), 256);
     mc_obj.encrypt_to_base64(input).as_str().to_owned()
 }
 
-pub async fn decrypt(input: &str) -> Result<String, magic_crypt::MagicCryptError> {
+pub async fn decrypt(
+    ds: &fastn_ds::DocumentStore,
+    input: &str,
+) -> Result<String, magic_crypt::MagicCryptError> {
     use magic_crypt::MagicCryptTrait;
-    let secret_key = fastn_core::auth::utils::secret_key().await;
+    let secret_key = fastn_core::auth::utils::secret_key(ds).await;
     let mc_obj = magic_crypt::new_magic_crypt!(&secret_key, 256);
     mc_obj.decrypt_base64_to_string(input)
 }
 
-pub async fn secret_key() -> String {
-    match fastn_ds::DocumentStore::env("FASTN_SECRET_KEY").await {
+pub async fn secret_key(ds: &fastn_ds::DocumentStore) -> String {
+    match ds.env("FASTN_SECRET_KEY").await {
         Ok(secret) => secret,
         Err(_e) => {
             fastn_core::warning!(

@@ -58,9 +58,8 @@ impl AppTemp {
                     }),
                 };
 
-                let value = fastn_ds::DocumentStore::env(env_var_name)
-                    .await
-                    .map_err(|err| fastn_core::Error::PackageError {
+                let value =
+                    std::env::var(env_var_name).map_err(|err| fastn_core::Error::PackageError {
                         message: format!(
                             "package-config-error,$ENV {} variable is not set for {}, err: {}",
                             env_var_name, value, err
@@ -133,6 +132,7 @@ pub async fn can_read(config: &fastn_core::RequestConfig, path: &str) -> fastn_c
     let auth_identities = {
         #[cfg(feature = "auth")]
         let i = fastn_core::auth::get_auth_identities(
+            &config.config.ds,
             config.request.cookies(),
             app_identities.as_slice(),
         )
