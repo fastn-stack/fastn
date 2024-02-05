@@ -1283,8 +1283,6 @@ impl Config {
                     notes: None,
                     alias: None,
                     implements: vec![],
-                    endpoint: None,
-                    mountpoint: None,
                     provided_via: None,
                     required_as: None,
                 });
