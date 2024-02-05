@@ -40,19 +40,18 @@ jobs:
         with:
           name: windows_x64_latest
           path: result/bin/fastn.exe
-      - name: Download EnVar plugin for NSIS
-        uses: carlosperate/download-file-action@v1.0.3
-        with:
-          file-url: https://github.com/GsNSIS/EnVar/releases/download/v0.3.1/EnVar-Plugin.zip
-          file-name: envar_plugin.zip
-          location: ${{ github.workspace }}
-      - name: Extract EnVar plugin
-        run: 7z x -o"${{ github.workspace }}/NSIS_Plugins" "${{ github.workspace }}/envar_plugin.zip"
-      - name: Create installer
-        uses: joncloud/makensis-action@v4
-        with:
-          arguments: /V3 /DCURRENT_WD=${{ github.workspace }} /DVERSION=${{ github.event.inputs.releaseTag }}
-          additional-plugin-paths: ${{ github.workspace }}/NSIS_Plugins/Plugins
+      - name: Install NSIS & Plugins
+        run: |
+          sudo apt update && sudo apt install -y nsis nsis-pluginapi
+          sudo chown -R $(whoami) /usr/share/nsis/Plugins/
+
+          wget https://github.com/GsNSIS/EnVar/releases/download/v0.3.1/EnVar-Plugin.zip
+          unzip EnVar-Plugin.zip -d EnVar-Plugin
+          sudo mv EnVar-Plugin/Plugins/amd64-unicode/* /usr/share/nsis/Plugins/amd64-unicode/
+          sudo mv EnVar-Plugin/Plugins/x86-ansi/* /usr/share/nsis/Plugins/x86-ansi/
+          sudo mv EnVar-Plugin/Plugins/x86-unicode/* /usr/share/nsis/Plugins/x86-unicode/
+      - name: Create Installer
+        run: makensis -V3 -DCURRENT_WD=${{ github.workspace }} -DVERSION=${{ github.event.inputs.releaseTag }} install.nsi
       - uses: actions/upload-artifact@v4
         with:
           name: windows_x64_installer.exe

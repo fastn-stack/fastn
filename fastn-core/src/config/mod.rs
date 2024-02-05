@@ -5,7 +5,6 @@ pub(crate) mod utils;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub enum FTDEdition {
-    FTD2021,
     FTD2022,
     #[default]
     FTD2023,
@@ -1284,8 +1283,6 @@ impl Config {
                     notes: None,
                     alias: None,
                     implements: vec![],
-                    endpoint: None,
-                    mountpoint: None,
                     provided_via: None,
                     required_as: None,
                 });

@@ -170,9 +170,15 @@ impl Request {
 
     pub fn content_type(&self) -> Option<mime_guess::Mime> {
         self.headers
-            .get("content-type")
+            .get(actix_web::http::header::CONTENT_TYPE)
             .and_then(|v| v.to_str().ok())
             .and_then(|v| v.parse().ok())
+    }
+
+    pub fn user_agent(&self) -> Option<String> {
+        self.headers
+            .get(actix_web::http::header::USER_AGENT)
+            .and_then(|v| v.to_str().map(|v| v.to_string()).ok())
     }
 
     #[cfg(feature = "auth")]
@@ -312,6 +318,12 @@ impl Request {
     }
     pub fn scheme(&self) -> String {
         self.scheme.to_string()
+    }
+    pub fn is_bot(&self) -> bool {
+        match self.user_agent() {
+            Some(user_agent) => is_bot(&user_agent),
+            None => true,
+        }
     }
 }
 
@@ -780,6 +792,33 @@ pub fn user_err(
         .status(status_code)
         .content_type(actix_web::http::header::ContentType::json())
         .body(serde_json::to_string(&resp)?))
+}
+
+/// Google crawlers and fetchers: https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers
+/// Bing crawlers: https://www.bing.com/webmasters/help/which-crawlers-does-bing-use-8c184ec0
+/// Bot user agents are listed in fastn-core/bot_user_agents.txt
+static BOT_USER_AGENTS_REGEX: once_cell::sync::Lazy<regex::Regex> =
+    once_cell::sync::Lazy::new(|| {
+        let bot_user_agents = include_str!("../bot_user_agents.txt").to_lowercase();
+        let bot_user_agents = bot_user_agents
+            .lines()
+            .map(str::trim)
+            .filter(|line| !line.is_empty())
+            .collect::<Vec<&str>>()
+            .join("|");
+        regex::Regex::new(&bot_user_agents).unwrap()
+    });
+
+/// Checks whether a request was made by a Google/Bing bot based on its User-Agent
+pub fn is_bot(user_agent: &str) -> bool {
+    BOT_USER_AGENTS_REGEX.is_match(&user_agent.to_ascii_lowercase())
+}
+
+#[test]
+fn test_is_bot() {
+    assert!(is_bot("Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm) Chrome/"));
+    assert!(is_bot("Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/W.X.Y.Z Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)) Chrome/"));
+    assert!(!is_bot("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"));
 }
 
 #[cfg(feature = "auth")]
