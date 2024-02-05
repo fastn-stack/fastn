@@ -1,0 +1,15 @@
+-- import: fastn-community.github.io/business-card as b-card
+-- import: fastn-community.github.io/ssr-test/assets
+
+-- ftd.text: Hello SSR!
+
+-- b-card.card: John Doe
+title: Software Developer
+company-name: John Doe Pvt. Ltd.
+logo: $assets.files.assets.ipsum-logo.svg
+contact-1: +91 12345 99999
+contact-2: +91 12345 88888
+email: john@johndoe.com
+website: www.johndoe.com
+address: 123, Block No. A-123, Times Square, Bangalore - 123456
+company-slogan: If you can type you can code

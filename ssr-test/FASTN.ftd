@@ -1,0 +1,5 @@
+-- import: fastn
+
+-- fastn.package: fastn-community.github.io/ssr-test
+
+-- fastn.dependency: fastn-community.github.io/business-card

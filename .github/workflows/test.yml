@@ -97,6 +97,11 @@ jobs:
         continue-on-error: true
         run: |
           bash .github/scripts/run-integration-tests.sh
+      - name: Run SSR test
+        id: ssr-test
+        continue-on-error: false
+        run: |
+          bash .github/scripts/run-ssr-test.sh
       - name: Check if JS code is properly formatted
         # curl -fsSL https://dprint.dev/install.sh | sh
         # /Users/amitu/.dprint/bin/dprint fmt --config .github/dprint-ci.json
