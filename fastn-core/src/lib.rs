@@ -17,7 +17,7 @@ pub(crate) mod watcher;
 #[macro_use]
 pub mod http;
 #[cfg(feature = "auth")]
-mod auth;
+pub mod auth;
 mod ds;
 mod error;
 mod i18n;
@@ -37,6 +37,8 @@ mod library2022;
 #[cfg(feature = "auth")]
 mod mail;
 
+#[cfg(feature = "auth")]
+pub use auth::UserData;
 pub(crate) use auto_import::AutoImport;
 pub use commands::{
     build::build, check::post_build_check, create_package::create_package, fmt::fmt, query::query,

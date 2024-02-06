@@ -1,21 +1,40 @@
 pub(crate) async fn create_user(
     req: &fastn_core::http::Request,
+    req_config: &mut fastn_core::RequestConfig,
     config: &fastn_core::Config,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
+    use validator::ValidateArgs;
 
     if req.method() != "POST" {
-        return Ok(fastn_core::not_found!("invalid route"));
+        let main = fastn_core::Document {
+            package_name: config.package.name.clone(),
+            id: "/-/email-confirmation-request-sent".to_string(),
+            content: email_confirmation_sent_ftd().to_string(),
+            parent_path: fastn_ds::Path::new("/"),
+        };
+
+        let resp = fastn_core::package::package_doc::read_ftd(req_config, &main, "/", false, false)
+            .await?;
+
+        return Ok(resp.into());
     }
 
-    #[derive(serde::Deserialize, serde::Serialize, Debug)]
+    #[derive(serde::Deserialize, serde::Serialize, validator::Validate, Debug)]
     struct UserPayload {
+        #[validate(length(min = 4, message = "username must be at least 4 character long"))]
         username: String,
+        #[validate(email(message = "invalid email format"))]
         email: String,
+        #[validate(length(min = 1, message = "name must be at least 1 character long"))]
         name: String,
+        #[validate(custom(
+            function = "fastn_core::auth::validator::validate_strong_password",
+            arg = "(&'v_a str, &'v_a str, &'v_a str)"
+        ))]
         password: String,
     }
 
@@ -23,12 +42,20 @@ pub(crate) async fn create_user(
 
     if let Err(e) = user_payload {
         return fastn_core::http::user_err(
-            vec![("payload", format!("invalid payload: {:?}", e).as_str())],
+            vec![("payload".into(), vec![format!("Invalid payload. Required the request body to contain json. Original error: {:?}", e)])],
             fastn_core::http::StatusCode::OK,
         );
     }
 
     let user_payload = user_payload.unwrap();
+
+    if let Err(e) = user_payload.validate_args((
+        user_payload.username.as_str(),
+        user_payload.email.as_str(),
+        user_payload.name.as_str(),
+    )) {
+        return fastn_core::http::validation_error_to_user_err(e, fastn_core::http::StatusCode::OK);
+    }
 
     let mut conn = db_pool
         .get()
@@ -43,35 +70,25 @@ pub(crate) async fn create_user(
         .first(&mut conn)
         .await?;
 
-    let email_check: Result<i64, diesel::result::Error> =
-        fastn_core::schema::fastn_user_email::table
-            .filter(
-                fastn_core::schema::fastn_user_email::email
-                    .eq(fastn_core::utils::citext(user_payload.email.as_str())),
-            )
-            .select(diesel::dsl::count(fastn_core::schema::fastn_user_email::id))
-            .first(&mut conn)
-            .await;
-
-    if let Err(_e) = email_check {
-        return fastn_core::http::user_err(
-            vec![("email", "invalid email")],
-            fastn_core::http::StatusCode::OK,
-        );
-    }
-
-    let email_check = email_check.expect("expected email_check to be Some");
-
     if username_check > 0 {
         return fastn_core::http::user_err(
-            vec![("username", "username already taken")],
+            vec![("username".into(), vec!["username already taken".into()])],
             fastn_core::http::StatusCode::OK,
         );
     }
+
+    let email_check: i64 = fastn_core::schema::fastn_user_email::table
+        .filter(
+            fastn_core::schema::fastn_user_email::email
+                .eq(fastn_core::utils::citext(&user_payload.email)),
+        )
+        .select(diesel::dsl::count(fastn_core::schema::fastn_user_email::id))
+        .first(&mut conn)
+        .await?;
 
     if email_check > 0 {
         return fastn_core::http::user_err(
-            vec![("email", "email already taken")],
+            vec![("email".into(), vec!["email already taken".into()])],
             fastn_core::http::StatusCode::OK,
         );
     }
@@ -126,8 +143,8 @@ pub(crate) async fn create_user(
     if let Err(e) = save_user_email_transaction {
         return fastn_core::http::user_err(
             vec![
-                ("email", "invalid email"),
-                ("detail", format!("{e}").as_str()),
+                ("email".into(), vec!["invalid email".into()]),
+                ("detail".into(), vec![format!("{e}")]),
             ],
             fastn_core::http::StatusCode::OK,
         );
@@ -137,11 +154,19 @@ pub(crate) async fn create_user(
 
     tracing::info!("fastn_user email inserted");
 
-    let conf_link = create_and_send_confirmation_email(email.0.to_string(), db_pool, req).await?;
+    let conf_link = create_and_send_confirmation_email(
+        email.0.to_string(),
+        db_pool,
+        req,
+        &req_config.config.ds,
+        next,
+    )
+    .await?;
 
     let resp_body = serde_json::json!({
         "user": user,
-        "redirect": redirect_url_from_next(req, next),
+        "success": true,
+        "redirect": redirect_url_from_next(req, "/-/auth/create-user/".to_string()),
     });
 
     let mut resp = actix_web::HttpResponse::Ok();
@@ -156,6 +181,7 @@ pub(crate) async fn create_user(
 
 pub(crate) async fn login(
     req: &fastn_core::http::Request,
+    ds: &fastn_ds::DocumentStore,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -177,7 +203,7 @@ pub(crate) async fn login(
 
     if let Err(e) = payload {
         return fastn_core::http::user_err(
-            vec![("payload", format!("invalid payload: {:?}", e).as_str())],
+            vec![("payload".into(), vec![format!("invalid payload: {:?}", e)])],
             fastn_core::http::StatusCode::OK,
         );
     }
@@ -200,7 +226,7 @@ pub(crate) async fn login(
 
     if user.is_none() {
         return fastn_core::http::user_err(
-            vec![("username", "invalid username")],
+            vec![("username".into(), vec!["invalid username".into()])],
             fastn_core::http::StatusCode::OK,
         );
     }
@@ -214,7 +240,7 @@ pub(crate) async fn login(
         // or should we redirect them to the oauth provider they used last time?
         // redirecting them will require saving the method they used to login which de don't atm
         return fastn_core::http::user_err(
-            vec![("username", "invalid username")],
+            vec![("username".into(), vec!["invalid username".into()])],
             fastn_core::http::StatusCode::OK,
         );
     }
@@ -230,7 +256,10 @@ pub(crate) async fn login(
 
     if password_match.is_err() {
         return fastn_core::http::user_err(
-            vec![("password", "incorrect username/password")],
+            vec![(
+                "password".into(),
+                vec!["incorrect username/password".into()],
+            )],
             fastn_core::http::StatusCode::OK,
         );
     }
@@ -246,11 +275,64 @@ pub(crate) async fn login(
 
     // client has to 'follow' this request
     // https://stackoverflow.com/a/39739894
-    fastn_core::auth::set_session_cookie_and_redirect_to_next(req, session_id, next).await
+    fastn_core::auth::set_session_cookie_and_redirect_to_next(req, ds, session_id, next).await
+}
+
+pub(crate) async fn onboarding(
+    req: &fastn_core::http::Request,
+    req_config: &mut fastn_core::RequestConfig,
+    config: &fastn_core::Config,
+    next: String,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    // The user is logged in after having verfied their email. This is them first time signing
+    // in so we render `onboarding_ftd`.
+    // If this is an old user, the cookie FIRST_TIME_SESSION_COOKIE_NAME won't be set for them
+    // and this will redirect to `next` which is usually the home page.
+    if req
+        .cookie(fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME)
+        .is_none()
+    {
+        return Ok(fastn_core::http::redirect_with_code(
+            redirect_url_from_next(req, next),
+            307,
+        ));
+    }
+
+    let first_signin_doc = fastn_core::Document {
+        package_name: config.package.name.clone(),
+        id: "/-/onboarding".to_string(),
+        content: onboarding_ftd().to_string(),
+        parent_path: fastn_ds::Path::new("/"),
+    };
+
+    let resp = fastn_core::package::package_doc::read_ftd(
+        req_config,
+        &first_signin_doc,
+        "/",
+        false,
+        false,
+    )
+    .await?;
+
+    let mut resp: fastn_core::http::Response = resp.into();
+
+    // clear the cookie so that subsequent requests redirect to `next`
+    // this gives the onboarding page a single chance to do the process
+    resp.add_cookie(
+        &actix_web::cookie::Cookie::build(fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME, "")
+            .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+            .path("/")
+            .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
+            .finish(),
+    )
+    .map_err(|e| fastn_core::Error::generic(format!("failed to set cookie: {e}")))?;
+
+    Ok(resp)
 }
 
 pub(crate) async fn confirm_email(
     req: &fastn_core::http::Request,
+    ds: &fastn_ds::DocumentStore,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -260,12 +342,14 @@ pub(crate) async fn confirm_email(
     let code = req.query().get("code");
 
     if code.is_none() {
+        tracing::info!("finishing response due to bad ?code");
         return fastn_core::http::api_error("Bad Request", fastn_core::http::StatusCode::OK.into());
     }
 
     let code = match code.unwrap() {
         serde_json::Value::String(c) => c,
         _ => {
+            tracing::info!("failed to Deserialize ?code as string");
             return fastn_core::http::api_error(
                 "Bad Request",
                 fastn_core::http::StatusCode::OK.into(),
@@ -280,25 +364,29 @@ pub(crate) async fn confirm_email(
             message: format!("Failed to get connection to db. {:?}", e),
         })?;
 
-    let conf_data: Option<(i32, chrono::DateTime<chrono::Utc>)> =
+    let conf_data: Option<(i32, i32, chrono::DateTime<chrono::Utc>)> =
         fastn_core::schema::fastn_email_confirmation::table
             .select((
                 fastn_core::schema::fastn_email_confirmation::email_id,
+                fastn_core::schema::fastn_email_confirmation::session_id,
                 fastn_core::schema::fastn_email_confirmation::sent_at,
             ))
-            .filter(fastn_core::schema::fastn_email_confirmation::key.eq(code))
+            .filter(fastn_core::schema::fastn_email_confirmation::key.eq(&code))
             .first(&mut conn)
             .await
             .optional()?;
 
     if conf_data.is_none() {
+        tracing::info!("invalid code value. No entry exists for the given code in db");
+        tracing::info!("provided code: {}", &code);
         return fastn_core::http::api_error("Bad Request", fastn_core::http::StatusCode::OK.into());
     }
 
-    let (email_id, sent_at) = conf_data.unwrap();
+    let (email_id, session_id, sent_at) = conf_data.unwrap();
 
-    if key_expired(sent_at) {
+    if key_expired(ds, sent_at).await {
         // TODO: this redirect route should be configurable
+        tracing::info!("provided code has expired.");
         return Ok(fastn_core::http::redirect_with_code(
             format!(
                 "{}://{}/-/auth/resend-confirmation-email/",
@@ -309,26 +397,50 @@ pub(crate) async fn confirm_email(
         ));
     }
 
-    let affected = diesel::update(fastn_core::schema::fastn_user_email::table)
+    diesel::update(fastn_core::schema::fastn_user_email::table)
         .set(fastn_core::schema::fastn_user_email::verified.eq(true))
         .filter(fastn_core::schema::fastn_user_email::id.eq(email_id))
         .execute(&mut conn)
         .await?;
 
-    tracing::info!("verified {} email", affected);
+    let affected = diesel::update(fastn_core::schema::fastn_session::table)
+        .set(fastn_core::schema::fastn_session::active.eq(true))
+        .filter(fastn_core::schema::fastn_session::id.eq(session_id))
+        .execute(&mut conn)
+        .await?;
 
-    Ok(fastn_core::http::redirect_with_code(
-        redirect_url_from_next(req, next),
-        302,
-    ))
+    tracing::info!("session created, rows affected: {}", affected);
+
+    // redirect to onboarding route with a GET request
+    let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
+        req,
+        ds,
+        session_id,
+        format!("/-/auth/onboarding/?next={}", next),
+    )
+    .await?;
+
+    resp.add_cookie(
+        &actix_web::cookie::Cookie::build(fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME, "1")
+            .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+            .path("/")
+            .finish(),
+    )
+    .map_err(|e| fastn_core::Error::generic(format!("failed to set cookie: {e}")))?;
+
+    Ok(resp)
 }
 
 pub(crate) async fn resend_email(
     req: &fastn_core::http::Request,
+    ds: &fastn_ds::DocumentStore,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     // TODO: should be able to use username for this too
+    // TODO: use req.body and make it POST
+    // verify email with regex or validator crate
+    // on GET this handler should render auth.resend-email-page
     let email = req.query().get("email");
 
     if email.is_none() {
@@ -345,7 +457,7 @@ pub(crate) async fn resend_email(
         }
     };
 
-    create_and_send_confirmation_email(email, db_pool, req).await?;
+    create_and_send_confirmation_email(email, db_pool, req, ds, next.clone()).await?;
 
     // TODO: there's no GET /-/auth/login/ yet
     // the client will have to create one for now
@@ -360,6 +472,8 @@ async fn create_and_send_confirmation_email(
     email: String,
     db_pool: &fastn_core::db::PgPool,
     req: &fastn_core::http::Request,
+    ds: &fastn_ds::DocumentStore,
+    next: String,
 ) -> fastn_core::Result<String> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
@@ -385,10 +499,21 @@ async fn create_and_send_confirmation_email(
         .first(&mut conn)
         .await?;
 
+    // create a non active fastn_sesion entry for auto login
+    let session_id: i32 = diesel::insert_into(fastn_core::schema::fastn_session::table)
+        .values((
+            fastn_core::schema::fastn_session::user_id.eq(&user_id),
+            fastn_core::schema::fastn_session::active.eq(false),
+        ))
+        .returning(fastn_core::schema::fastn_session::id)
+        .get_result(&mut conn)
+        .await?;
+
     let stored_key: String =
         diesel::insert_into(fastn_core::schema::fastn_email_confirmation::table)
             .values((
                 fastn_core::schema::fastn_email_confirmation::email_id.eq(email_id),
+                fastn_core::schema::fastn_email_confirmation::session_id.eq(&session_id),
                 fastn_core::schema::fastn_email_confirmation::sent_at
                     .eq(chrono::offset::Utc::now()),
                 fastn_core::schema::fastn_email_confirmation::key.eq(key),
@@ -397,9 +522,9 @@ async fn create_and_send_confirmation_email(
             .get_result(&mut conn)
             .await?;
 
-    let confirmation_link = confirmation_link(req, stored_key);
+    let confirmation_link = confirmation_link(req, stored_key, next);
 
-    let mailer = fastn_core::mail::Mailer::from_env();
+    let mailer = fastn_core::mail::Mailer::from_env(ds).await;
 
     if mailer.is_err() {
         return Err(fastn_core::Error::generic(
@@ -414,7 +539,7 @@ async fn create_and_send_confirmation_email(
 
     let mut mailer = mailer.unwrap();
 
-    if let Ok(debug_mode) = std::env::var("DEBUG") {
+    if let Ok(debug_mode) = ds.env("DEBUG").await {
         if debug_mode == "true" {
             mailer.mock();
         }
@@ -442,8 +567,10 @@ async fn create_and_send_confirmation_email(
 
 /// check if it has been 3 days since the verification code was sent
 /// can be configured using EMAIL_CONFIRMATION_EXPIRE_DAYS
-fn key_expired(sent_at: chrono::DateTime<chrono::Utc>) -> bool {
-    let expiry_limit_in_days: u64 = std::env::var("EMAIL_CONFIRMATION_EXPIRE_DAYS")
+async fn key_expired(ds: &fastn_ds::DocumentStore, sent_at: chrono::DateTime<chrono::Utc>) -> bool {
+    let expiry_limit_in_days: u64 = ds
+        .env("EMAIL_CONFIRMATION_EXPIRE_DAYS")
+        .await
         .unwrap_or("3".to_string())
         .parse()
         .expect("EMAIL_CONFIRMATION_EXPIRE_DAYS should be a number");
@@ -467,11 +594,12 @@ fn generate_key(length: usize) -> String {
     )
 }
 
-fn confirmation_link(req: &fastn_core::http::Request, key: String) -> String {
+fn confirmation_link(req: &fastn_core::http::Request, key: String, next: String) -> String {
     format!(
-        "{}://{}/-/auth/confirm-email/?code={key}",
+        "{}://{}/-/auth/confirm-email/?code={key}&next={}",
         req.connection_info.scheme(),
-        req.connection_info.host()
+        req.connection_info.host(),
+        next
     )
 }
 
@@ -482,4 +610,20 @@ fn redirect_url_from_next(req: &fastn_core::http::Request, next: String) -> Stri
         req.connection_info.host(),
         next,
     )
+}
+
+fn email_confirmation_sent_ftd() -> &'static str {
+    r#"
+    -- import: fastn/processors as pr
+
+    -- auth.email-confirmation-request-sent:
+    "#
+}
+
+fn onboarding_ftd() -> &'static str {
+    r#"
+    -- import: fastn/processors as pr
+
+    -- auth.onboarding:
+    "#
 }

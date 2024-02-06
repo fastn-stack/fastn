@@ -148,12 +148,14 @@ prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }
 argon2 = "0.5"
 lettre = { version = "0.11", features = ["serde", "tokio1", "tokio1-native-tls"]}
-diesel = { version = "2.1", no_default_features = true, features = [ "chrono" ] }
+diesel = { version = "2.1", features = ["chrono", "postgres_backend"]}
 diesel-async = { version = "0.4", features = ["postgres", "deadpool", "async-connection-wrapper"]}
 diesel_async_migrations = "0.12"
 chrono = { version = "0.4", features = ["serde"]}
 indicatif = "0.17.1"
 snafu = "0.8.0"
+validator = { version = "0.16", features = ["derive"] }
+zxcvbn = "2"
 
 [workspace.dependencies.uuid]
 version = "1.6.1"
@@ -180,14 +182,6 @@ features = [
     "bundled",
     "column_decltype",
 ]
-
-[workspace.dependencies.pq-sys]
-version = "0.4"
-features = [
-    # see workspace.dependencies.rusqlite
-    "bundled"
-]
-
 
 [workspace.dependencies.web-sys]
 version = "0.3"

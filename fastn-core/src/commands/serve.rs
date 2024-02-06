@@ -190,10 +190,12 @@ pub async fn serve_helper(
     req: fastn_core::http::Request,
     only_js: bool,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
+
     match (req.method().to_lowercase().as_str(), req.path()) {
         #[cfg(feature = "auth")]
         (_, t) if t.starts_with("/-/auth/") => {
-            return fastn_core::auth::routes::handle_auth(req, config).await
+            return fastn_core::auth::routes::handle_auth(req, &mut req_config, config).await
         }
         ("get", "/-/clear-cache/") => return clear_cache(config, req).await,
         ("get", "/-/poll/") => return fastn_core::watcher::poll().await,
@@ -203,7 +205,6 @@ pub async fn serve_helper(
 
     let _lock = LOCK.read().await;
 
-    let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
 
     let mut resp = if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {

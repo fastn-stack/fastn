@@ -2,10 +2,15 @@ pub(crate) mod config;
 pub(crate) mod github;
 pub(crate) mod routes;
 pub(crate) mod utils;
+pub(crate) mod validator;
 
 mod email_password;
+mod ud;
 
-pub const COOKIE_NAME: &str = "fastn_session";
+pub use ud::UserData;
+
+pub const SESSION_COOKIE_NAME: &str = "fastn_session";
+pub const FIRST_TIME_SESSION_COOKIE_NAME: &str = "fastn_first_time_user";
 
 #[derive(
     Debug, PartialEq, serde::Deserialize, serde::Serialize, diesel::Queryable, diesel::Selectable,
@@ -42,110 +47,8 @@ impl AuthProviders {
     }
 }
 
-/// will fetch out the decrypted user data from cookies
-/// and return it as string
-#[allow(dead_code)]
-pub async fn get_user_data_from_cookies(
-    provider: &str,
-    requested_field: &str,
-    cookies: &std::collections::HashMap<String, String>,
-) -> fastn_core::Result<Option<String>> {
-    let session_id = cookies.get(fastn_core::auth::COOKIE_NAME).ok_or_else(|| {
-        fastn_core::Error::GenericError("user detail not found in the cookie".to_string())
-    });
-
-    match session_id {
-        Ok(session_id) => {
-            let session_id: i32 = session_id.parse()?;
-
-            return match fastn_core::auth::AuthProviders::from_str(provider) {
-                fastn_core::auth::AuthProviders::GitHub => {
-                    let user = match fastn_core::auth::get_authenticated_user_with_email(
-                        &session_id,
-                    )
-                    .await
-                    {
-                        Err(e) => {
-                            tracing::error!(
-                                "couldn't retrieve authenticated user. Reason: {:?}",
-                                e
-                            );
-
-                            if e == AuthUserError::UserDoesNotExist {
-                                return Err(fastn_core::Error::GenericError(
-                                    "User does not exist".to_string(),
-                                ));
-                            } else if let AuthUserError::UserExistsWithUnverifiedEmail(_) = e {
-                                return Err(fastn_core::Error::GenericError(
-                                    "User is not verified".to_string(),
-                                ));
-                            }
-
-                            return Err(fastn_core::Error::GenericError(
-                                "Failed to query database".to_string(),
-                            ));
-                        }
-
-                        Ok((user, _)) => user,
-                    };
-
-                    match requested_field {
-                        "username" | "user_name" | "user-name" => Ok(Some(user.username)),
-
-                        "token" => {
-                            use diesel::prelude::*;
-                            use diesel_async::RunQueryDsl;
-
-                            let pool = fastn_core::db::pool().await.as_ref().map_err(|e| {
-                                fastn_core::Error::DatabaseError {
-                                    message: format!("Failed to get connection to db. {:?}", e),
-                                }
-                            })?;
-
-                            let mut conn =
-                                pool.get()
-                                    .await
-                                    .map_err(|e| fastn_core::Error::DatabaseError {
-                                        message: format!("Failed to get connection to db. {:?}", e),
-                                    })?;
-
-                            let token = fastn_core::schema::fastn_oauthtoken::table
-                                .select(fastn_core::schema::fastn_oauthtoken::token)
-                                .filter(
-                                    fastn_core::schema::fastn_oauthtoken::session_id
-                                        .eq(&session_id),
-                                )
-                                .filter(fastn_core::schema::fastn_oauthtoken::provider.eq("github"))
-                                .first::<String>(&mut conn)
-                                .await
-                                .optional()
-                                .map_err(|e| fastn_core::Error::DatabaseError {
-                                    message: format!(
-                                        "failed to get token from fastn_oauthtoken: {e}"
-                                    ),
-                                })?;
-
-                            Ok(token)
-                        }
-                        _ => Err(fastn_core::Error::GenericError(format!(
-                            "invalid field {} requested for platform {}",
-                            requested_field, provider
-                        ))),
-                    }
-                }
-            };
-        }
-        Err(err) => {
-            // Debug out the error and return None
-            let error_msg = format!("User data error: {}", err);
-            dbg!(&error_msg);
-        }
-    };
-
-    Ok(None)
-}
-
 pub async fn get_auth_identities(
+    ds: &fastn_ds::DocumentStore,
     cookies: &std::collections::HashMap<String, String>,
     identities: &[fastn_core::user_group::UserIdentity],
 ) -> fastn_core::Result<Vec<fastn_core::user_group::UserIdentity>> {
@@ -153,7 +56,7 @@ pub async fn get_auth_identities(
 
     let session_id =
         cookies
-            .get(fastn_core::auth::COOKIE_NAME)
+            .get(fastn_core::auth::SESSION_COOKIE_NAME)
             .ok_or(fastn_core::Error::GenericError(
                 "github user detail not found in the cookies".to_string(),
             ));
@@ -165,7 +68,7 @@ pub async fn get_auth_identities(
 
             let session_id: i32 = session_id.parse()?;
 
-            let pool = fastn_core::db::pool().await.as_ref().map_err(|e| {
+            let pool = fastn_core::db::pool(ds).await.as_ref().map_err(|e| {
                 fastn_core::Error::DatabaseError {
                     message: format!("Failed to get connection to db. {:?}", e),
                 }
@@ -188,28 +91,28 @@ pub async fn get_auth_identities(
                     message: format!("failed to get token from fastn_oauthtoken: {e}"),
                 })?;
 
-            let user = match fastn_core::auth::get_authenticated_user_with_email(&session_id).await
-            {
-                Err(e) => {
-                    tracing::error!("couldn't retrieve authenticated user. Reason: {:?}", e);
+            let user =
+                match fastn_core::auth::get_authenticated_user_with_email(&session_id, ds).await {
+                    Err(e) => {
+                        tracing::error!("couldn't retrieve authenticated user. Reason: {:?}", e);
 
-                    if e == AuthUserError::UserDoesNotExist {
+                        if e == AuthUserError::UserDoesNotExist {
+                            return Err(fastn_core::Error::GenericError(
+                                "User does not exist".to_string(),
+                            ));
+                        } else if let AuthUserError::UserExistsWithUnverifiedEmail(_) = e {
+                            return Err(fastn_core::Error::GenericError(
+                                "User is not verified".to_string(),
+                            ));
+                        }
+
                         return Err(fastn_core::Error::GenericError(
-                            "User does not exist".to_string(),
-                        ));
-                    } else if let AuthUserError::UserExistsWithUnverifiedEmail(_) = e {
-                        return Err(fastn_core::Error::GenericError(
-                            "User is not verified".to_string(),
+                            "Failed to query database".to_string(),
                         ));
                     }
 
-                    return Err(fastn_core::Error::GenericError(
-                        "Failed to query database".to_string(),
-                    ));
-                }
-
-                Ok((user, _)) => user,
-            };
+                    Ok((user, _)) => user,
+                };
 
             let github_ud: github::UserDetail = github::UserDetail {
                 access_token: token,
@@ -228,34 +131,35 @@ pub async fn get_auth_identities(
 
 async fn set_session_cookie_and_redirect_to_next(
     req: &fastn_core::http::Request,
+    ds: &fastn_ds::DocumentStore,
     session_id: i32,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let (user, email) = match fastn_core::auth::get_authenticated_user_with_email(&session_id).await
-    {
-        Err(e) => {
-            tracing::error!("couldn't retrieve authenticated user. Reason: {:?}", e);
+    let (user, email) =
+        match fastn_core::auth::get_authenticated_user_with_email(&session_id, ds).await {
+            Err(e) => {
+                tracing::error!("couldn't retrieve authenticated user. Reason: {:?}", e);
 
-            if e == AuthUserError::UserDoesNotExist {
+                if e == AuthUserError::UserDoesNotExist {
+                    return Err(fastn_core::Error::GenericError(
+                        "User does not exist".to_string(),
+                    ));
+                } else if let AuthUserError::UserExistsWithUnverifiedEmail(_) = e {
+                    return fastn_core::http::user_err(
+                        // TODO: there should be an option to configure the resend verification
+                        // mail webpage
+                        vec![("username".into(), vec!["User is not verified".into()])],
+                        fastn_core::http::StatusCode::OK,
+                    );
+                }
+
                 return Err(fastn_core::Error::GenericError(
-                    "User does not exist".to_string(),
+                    "Failed to query database".to_string(),
                 ));
-            } else if let AuthUserError::UserExistsWithUnverifiedEmail(_) = e {
-                return fastn_core::http::user_err(
-                    // TODO: there should be an option to configure the resend verification
-                    // mail webpage
-                    vec![("username", "User is not verified")],
-                    fastn_core::http::StatusCode::OK,
-                );
             }
 
-            return Err(fastn_core::Error::GenericError(
-                "Failed to query database".to_string(),
-            ));
-        }
-
-        Ok(data) => data,
-    };
+            Ok(data) => data,
+        };
 
     let cookie_json = serde_json::json!({
         "session_id": session_id,
@@ -266,15 +170,18 @@ async fn set_session_cookie_and_redirect_to_next(
         }
     });
 
-    let encrypted_cookie = fastn_core::auth::utils::encrypt(&cookie_json.to_string()).await;
+    let encrypted_cookie = fastn_core::auth::utils::encrypt(ds, &cookie_json.to_string()).await;
 
     return Ok(actix_web::HttpResponse::Found()
         .cookie(
-            actix_web::cookie::Cookie::build(fastn_core::auth::COOKIE_NAME, encrypted_cookie)
-                .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
-                .path("/")
-                .permanent()
-                .finish(),
+            actix_web::cookie::Cookie::build(
+                fastn_core::auth::SESSION_COOKIE_NAME,
+                encrypted_cookie,
+            )
+            .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+            .path("/")
+            .permanent()
+            .finish(),
         )
         // redirect to next
         .append_header((actix_web::http::header::LOCATION, next))
@@ -299,11 +206,12 @@ pub enum AuthUserError {
 /// get FastnUser and its primary email from session
 pub async fn get_authenticated_user_with_email(
     session_id: &i32,
+    ds: &fastn_ds::DocumentStore,
 ) -> Result<(fastn_core::auth::FastnUser, String), AuthUserError> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    let pool = fastn_core::db::pool()
+    let pool = fastn_core::db::pool(ds)
         .await
         .as_ref()
         .map_err(|e| AuthUserError::Connection {
