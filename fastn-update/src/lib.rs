@@ -216,10 +216,11 @@ async fn download_and_unpack_zip(
                 package: package_name,
                 name: entry.name(),
             })?;
-            let path = path.to_str().unwrap();
-            let path_without_prefix = match path.split_once(std::path::MAIN_SEPARATOR) {
+            let path_string = path.to_string_lossy().into_owned();
+            let path_normalized = path_string.replace('\\', "/");
+            let path_without_prefix = match path_normalized.split_once('/') {
                 Some((_, path)) => path,
-                None => path,
+                None => &path_normalized,
             };
             if manifest.files.get(path_without_prefix).is_none() {
                 continue;
