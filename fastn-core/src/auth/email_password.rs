@@ -154,8 +154,14 @@ pub(crate) async fn create_user(
 
     tracing::info!("fastn_user email inserted");
 
-    let conf_link =
-        create_and_send_confirmation_email(email.0.to_string(), db_pool, req, config, next).await?;
+    let conf_link = create_and_send_confirmation_email(
+        email.0.to_string(),
+        db_pool,
+        req,
+        &req_config.config.ds,
+        next,
+    )
+    .await?;
 
     let resp_body = serde_json::json!({
         "user": user,
@@ -175,6 +181,7 @@ pub(crate) async fn create_user(
 
 pub(crate) async fn login(
     req: &fastn_core::http::Request,
+    ds: &fastn_ds::DocumentStore,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -268,7 +275,7 @@ pub(crate) async fn login(
 
     // client has to 'follow' this request
     // https://stackoverflow.com/a/39739894
-    fastn_core::auth::set_session_cookie_and_redirect_to_next(req, session_id, next).await
+    fastn_core::auth::set_session_cookie_and_redirect_to_next(req, ds, session_id, next).await
 }
 
 pub(crate) async fn onboarding(
@@ -325,6 +332,7 @@ pub(crate) async fn onboarding(
 
 pub(crate) async fn confirm_email(
     req: &fastn_core::http::Request,
+    ds: &fastn_ds::DocumentStore,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -376,7 +384,7 @@ pub(crate) async fn confirm_email(
 
     let (email_id, session_id, sent_at) = conf_data.unwrap();
 
-    if key_expired(sent_at) {
+    if key_expired(ds, sent_at).await {
         // TODO: this redirect route should be configurable
         tracing::info!("provided code has expired.");
         return Ok(fastn_core::http::redirect_with_code(
@@ -406,6 +414,7 @@ pub(crate) async fn confirm_email(
     // redirect to onboarding route with a GET request
     let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
         req,
+        ds,
         session_id,
         format!("/-/auth/onboarding/?next={}", next),
     )
@@ -424,7 +433,7 @@ pub(crate) async fn confirm_email(
 
 pub(crate) async fn resend_email(
     req: &fastn_core::http::Request,
-    config: &fastn_core::Config,
+    ds: &fastn_ds::DocumentStore,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -448,7 +457,7 @@ pub(crate) async fn resend_email(
         }
     };
 
-    create_and_send_confirmation_email(email, db_pool, req, config, next.clone()).await?;
+    create_and_send_confirmation_email(email, db_pool, req, ds, next.clone()).await?;
 
     // TODO: there's no GET /-/auth/login/ yet
     // the client will have to create one for now
@@ -463,7 +472,7 @@ async fn create_and_send_confirmation_email(
     email: String,
     db_pool: &fastn_core::db::PgPool,
     req: &fastn_core::http::Request,
-    config: &fastn_core::Config,
+    ds: &fastn_ds::DocumentStore,
     next: String,
 ) -> fastn_core::Result<String> {
     use diesel::prelude::*;
@@ -515,7 +524,7 @@ async fn create_and_send_confirmation_email(
 
     let confirmation_link = confirmation_link(req, stored_key, next);
 
-    let mailer = fastn_core::mail::Mailer::from_env();
+    let mailer = fastn_core::mail::Mailer::from_env(ds).await;
 
     if mailer.is_err() {
         return Err(fastn_core::Error::generic(
@@ -530,7 +539,7 @@ async fn create_and_send_confirmation_email(
 
     let mut mailer = mailer.unwrap();
 
-    if let Ok(debug_mode) = std::env::var("DEBUG") {
+    if let Ok(debug_mode) = ds.env("DEBUG").await {
         if debug_mode == "true" {
             mailer.mock();
         }
@@ -562,8 +571,10 @@ async fn create_and_send_confirmation_email(
 
 /// check if it has been 3 days since the verification code was sent
 /// can be configured using EMAIL_CONFIRMATION_EXPIRE_DAYS
-fn key_expired(sent_at: chrono::DateTime<chrono::Utc>) -> bool {
-    let expiry_limit_in_days: u64 = std::env::var("EMAIL_CONFIRMATION_EXPIRE_DAYS")
+async fn key_expired(ds: &fastn_ds::DocumentStore, sent_at: chrono::DateTime<chrono::Utc>) -> bool {
+    let expiry_limit_in_days: u64 = ds
+        .env("EMAIL_CONFIRMATION_EXPIRE_DAYS")
+        .await
         .unwrap_or("3".to_string())
         .parse()
         .expect("EMAIL_CONFIRMATION_EXPIRE_DAYS should be a number");

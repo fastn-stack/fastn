@@ -57,12 +57,6 @@ pub struct Package {
     /// endpoints for proxy service
     pub endpoints: Vec<fastn_package::old_fastn::EndpointData>,
 
-    /// Attribute to define the usage of a WASM backend
-    pub backend: bool,
-
-    /// Headers for the WASM backend
-    pub backend_headers: Option<Vec<fastn_package::old_fastn::BackendHeader>>,
-
     /// Installed Apps
     pub apps: Vec<app::App>,
 
@@ -105,8 +99,6 @@ impl Package {
             dynamic_urls_temp: None,
             favicon: None,
             endpoints: vec![],
-            backend: false,
-            backend_headers: None,
             apps: vec![],
             icon: None,
             redirects: None,
@@ -709,8 +701,6 @@ impl Package {
                 notes: None,
                 alias: None,
                 implements: Vec::new(),
-                endpoint: None,
-                mountpoint: None,
                 provided_via: None,
                 required_as: None,
             });
@@ -768,51 +758,6 @@ impl Package {
         }
 
         Ok(package)
-    }
-
-    // Dependencies with mount point and end point
-    // Output: Package Dependencies
-    // [Package, endpoints, mount-point]
-    pub fn dep_with_ep_and_mp(&self) -> Vec<(&Package, &str, &str)> {
-        self.dependencies
-            .iter()
-            .fold(&mut vec![], |accumulator, dep| {
-                if let Some(ep) = &dep.endpoint {
-                    if let Some(mp) = &dep.mountpoint {
-                        accumulator.push((&dep.package, ep.as_str(), mp.as_str()))
-                    }
-                }
-
-                accumulator
-            })
-            .to_owned()
-    }
-
-    // Output: Package's dependency which contains mount-point and endpoints
-    // where request path starts-with dependency mount-point.
-    // (endpoints, sanitized request path from mount-point)
-    #[allow(unreachable_code)]
-    #[allow(dead_code)]
-    pub fn get_dep_endpoint<'a>(&'a self, path: &'a str) -> Option<(&'a str, &'a str)> {
-        fn dep_endpoint<'a>(package: &'a Package, path: &'a str) -> Option<(&'a str, &'a str)> {
-            let dependencies = package.dep_with_ep_and_mp();
-            for (_, ep, mp) in dependencies {
-                if path.starts_with(mp.trim_matches('/')) {
-                    let path_without_mp = path.trim_start_matches(mp.trim_start_matches('/'));
-                    return Some((ep, path_without_mp));
-                }
-            }
-            None
-        }
-
-        match dep_endpoint(self, path) {
-            Some((ep, r)) => Some((ep, r)),
-            // TODO: should it refer to default package or not?
-            None => self
-                .endpoints
-                .first()
-                .map(|ep| (ep.endpoint.as_str(), path)),
-        }
     }
 
     pub fn auto_import_language(
@@ -1037,8 +982,6 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             dynamic_urls_temp: None,
             favicon: self.favicon,
             endpoints: self.endpoint,
-            backend: self.backend,
-            backend_headers: self.backend_headers,
             apps: vec![],
             icon: self.icon,
             redirects: None,

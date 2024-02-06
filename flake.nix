@@ -2,47 +2,23 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
 
-    naersk.url = "github:nix-community/naersk";
-
-    rust-overlay.url = "github:oxalica/rust-overlay";
-
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    # TODO: use nixpkgs/unstable when this is merged:
+    # https://github.com/NixOS/nixpkgs/pull/282798
+    nixpkgs.url = "github:junjihashimoto/nixpkgs/feature/rust-dup";
   };
 
-  outputs = { self, flake-utils, nixpkgs, rust-overlay, naersk }:
+  outputs = { self, flake-utils, nixpkgs }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = (import nixpkgs) {
           inherit system;
 
-          overlays = [
-            (import rust-overlay)
-          ];
+          overlays = [ ];
         };
 
-        toolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain;
 
-        naersk' = pkgs.callPackage naersk {
-          cargo = toolchain;
-          rustc = toolchain;
-        };
-
-        cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
-
-        fastn = naersk'.buildPackage {
-          name = "fastn";
-          version = cargoToml.workspace.package.version;
-          src = pkgs.lib.cleanSource ./.;
-
-          nativeBuildInputs = with pkgs; [
-            pkg-config
-            openssl.dev
-          ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
-
-          buildInputs = with pkgs; lib.optionals stdenv.isDarwin [
-            darwin.apple_sdk.frameworks.SystemConfiguration
-          ];
-        };
+        fastn = pkgs.pkgsStatic.callPackage ./fastn.nix { };
+        fastn-win = pkgs.pkgsStatic.pkgsCross.mingwW64.callPackage ./fastn.nix { };
       in
       rec {
         # For `nix build` & `nix run`:
@@ -50,12 +26,23 @@
 
         packages = {
           inherit fastn;
+          inherit fastn-win;
         };
 
         # nix develop
         devShell = pkgs.mkShell {
           name = "fastn-shell";
-          nativeBuildInputs = with pkgs; [ toolchain pkg-config openssl.dev postgresql_14 rust-analyzer diesel-cli ];
+          nativeBuildInputs = with pkgs; [
+            rustc
+            rustfmt
+            clippy
+            cargo
+            pkg-config
+            openssl.dev
+            postgresql_14
+            diesel-cli
+            rust-analyzer
+          ];
 
           shellHook = ''
             export PATH="$PATH:$HOME/.cargo/bin"

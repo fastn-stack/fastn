@@ -20,12 +20,14 @@ pub struct Mailer {
 
 impl Mailer {
     /// Create a new instance of Mail using values from environment variables.
-    pub fn from_env() -> fastn_core::Result<Self> {
-        let smtp_username = std::env::var("FASTN_SMTP_USERNAME")?;
-        let smtp_password = std::env::var("FASTN_SMTP_PASSWORD")?;
-        let smtp_host = std::env::var("FASTN_SMTP_HOST")?;
-        let sender_email = std::env::var("FASTN_SMTP_SENDER_EMAIL")?;
-        let sender_name = std::env::var("FASTN_SMTP_SENDER_NAME").ok();
+    pub async fn from_env(
+        ds: &fastn_ds::DocumentStore,
+    ) -> Result<Self, fastn_ds::EnvironmentError> {
+        let smtp_username = ds.env("FASTN_SMTP_USERNAME").await?;
+        let smtp_password = ds.env("FASTN_SMTP_PASSWORD").await?;
+        let smtp_host = ds.env("FASTN_SMTP_HOST").await?;
+        let sender_email = ds.env("FASTN_SMTP_SENDER_EMAIL").await?;
+        let sender_name = ds.env("FASTN_SMTP_SENDER_NAME").await.ok();
 
         Ok(Mailer {
             smtp_username,
