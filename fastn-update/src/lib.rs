@@ -62,6 +62,19 @@ pub enum DependencyError {
     },
 }
 
+#[derive(Snafu, Debug)]
+pub enum CheckError {
+    #[snafu(display(
+        "Write operation detected during check for package '{}' at '{}'",
+        package,
+        output_path
+    ))]
+    WriteDuringCheck {
+        package: String,
+        output_path: String,
+    },
+}
+
 #[derive(thiserror::Error, Debug)]
 pub enum UpdateError {
     #[error("Manifest error: {0}")]
@@ -72,6 +85,9 @@ pub enum UpdateError {
 
     #[error("Dependency error: {0}")]
     Dependency(#[from] DependencyError),
+
+    #[error("Check error: {0}")]
+    Check(#[from] CheckError),
 }
 
 async fn resolve_dependency_package(
@@ -96,10 +112,12 @@ async fn update_dependencies(
     current_package: &fastn_core::Package,
     pb: &indicatif::ProgressBar,
     offline: bool,
-) -> Result<(), UpdateError> {
+    check: bool,
+) -> Result<usize, UpdateError> {
     let mut stack = vec![current_package.clone()];
     let mut resolved = std::collections::HashSet::new();
     resolved.insert(current_package.name.to_string());
+    let mut updated_packages: usize = 0;
 
     while let Some(package) = stack.pop() {
         for dependency in package.dependencies {
@@ -163,14 +181,14 @@ async fn update_dependencies(
                     &manifest,
                     &package_name,
                     pb,
+                    check,
                 )
                 .await?;
 
-                ds.write_content(&manifest_path, manifest_bytes)
-                    .await
-                    .context(WriteArchiveContentSnafu {
-                        package: package_name.clone(),
-                    })?
+                write_archive_content(ds, &manifest_path, manifest_bytes, &package_name, check)
+                    .await?;
+
+                updated_packages += 1;
             }
 
             if package_name.eq(&fastn_core::FASTN_UI_INTERFACE) {
@@ -186,7 +204,29 @@ async fn update_dependencies(
 
         pb.inc(1);
     }
-    Ok(())
+    Ok(updated_packages)
+}
+
+async fn write_archive_content(
+    ds: &fastn_ds::DocumentStore,
+    output_path: &fastn_ds::Path,
+    buffer: Vec<u8>,
+    package_name: &str,
+    check: bool,
+) -> Result<(), UpdateError> {
+    if check {
+        return Err(UpdateError::Check(CheckError::WriteDuringCheck {
+            package: package_name.to_string(),
+            output_path: output_path.to_string(),
+        }));
+    }
+
+    Ok(ds
+        .write_content(output_path, buffer)
+        .await
+        .context(WriteArchiveContentSnafu {
+            package: package_name,
+        })?)
 }
 
 async fn download_and_unpack_zip(
@@ -195,7 +235,8 @@ async fn download_and_unpack_zip(
     manifest: &fastn_core::Manifest,
     package_name: &str,
     pb: &indicatif::ProgressBar,
-) -> Result<(), ArchiveError> {
+    check: bool,
+) -> Result<(), UpdateError> {
     let mut archive = fastn_update::utils::download_archive(manifest.zip_url.clone())
         .await
         .context(DownloadArchiveSnafu {
@@ -226,11 +267,7 @@ async fn download_and_unpack_zip(
                 continue;
             }
             let output_path = &dependency_path.join(path_without_prefix);
-            ds.write_content(output_path, buffer)
-                .await
-                .context(WriteArchiveContentSnafu {
-                    package: package_name,
-                })?;
+            write_archive_content(ds, output_path, buffer, package_name, check).await?;
             pb.tick();
         }
     }
@@ -267,7 +304,11 @@ async fn get_manifest(
 }
 
 #[tracing::instrument(skip_all)]
-pub async fn update(config: &fastn_core::Config, offline: bool) -> fastn_core::Result<()> {
+pub async fn update(
+    config: &fastn_core::Config,
+    offline: bool,
+    check: bool,
+) -> fastn_core::Result<()> {
     if config.package.dependencies.is_empty() {
         println!("No dependencies to update.");
         return Ok(());
@@ -283,24 +324,29 @@ pub async fn update(config: &fastn_core::Config, offline: bool) -> fastn_core::R
     pb.set_style(spinner_style);
     pb.set_prefix("Updating dependencies");
 
-    if let Err(e) = update_dependencies(
+    let updated_packages = match update_dependencies(
         &config.ds,
         &config.packages_root,
         current_package,
         &pb,
         offline,
+        check,
     )
     .await
     {
-        return Err(fastn_core::Error::UpdateError {
-            message: e.to_string(),
-        });
-    }
+        Ok(n) => n,
+        Err(e) => {
+            return Err(fastn_core::Error::UpdateError {
+                message: e.to_string(),
+            })
+        }
+    };
 
     pb.finish_and_clear();
 
-    match config.package.dependencies.len() {
-        1 => println!("Updated package dependency"),
+    match updated_packages {
+        0 => println!("No packages updated."),
+        1 => println!("Updated package dependency."),
         n => println!("Updated {} dependencies.", n),
     }
 
