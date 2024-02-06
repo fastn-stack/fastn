@@ -4,9 +4,9 @@ output: .build
 
 -- stdout:
 
-Updated 2 dependencies.
+Updated package dependency
 Starting fastn server ...
-Updated 2 dependencies.
+Updated package dependency
 ### Server Started ###
 Go to: http://127.0.0.1:8000
 Curling http://127.0.0.1:8000 with User Agent Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html) ...
