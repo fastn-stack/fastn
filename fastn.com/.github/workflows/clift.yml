@@ -14,6 +14,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/clift/main/install.sh)"
       - run: clift upload fastn.fifthtry.com
