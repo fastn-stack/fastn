@@ -158,7 +158,7 @@ pub(crate) async fn create_user(
         email.0.to_string(),
         db_pool,
         req,
-        &req_config.config.ds,
+        req_config,
         next,
     )
     .await?;
@@ -433,7 +433,7 @@ pub(crate) async fn confirm_email(
 
 pub(crate) async fn resend_email(
     req: &fastn_core::http::Request,
-    ds: &fastn_ds::DocumentStore,
+    req_config: &mut fastn_core::RequestConfig,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -457,7 +457,7 @@ pub(crate) async fn resend_email(
         }
     };
 
-    create_and_send_confirmation_email(email, db_pool, req, ds, next.clone()).await?;
+    create_and_send_confirmation_email(email, db_pool, req, req_config, next.clone()).await?;
 
     // TODO: there's no GET /-/auth/login/ yet
     // the client will have to create one for now
@@ -472,7 +472,7 @@ async fn create_and_send_confirmation_email(
     email: String,
     db_pool: &fastn_core::db::PgPool,
     req: &fastn_core::http::Request,
-    ds: &fastn_ds::DocumentStore,
+    req_config: &mut fastn_core::RequestConfig,
     next: String,
 ) -> fastn_core::Result<String> {
     use diesel::prelude::*;
@@ -524,7 +524,7 @@ async fn create_and_send_confirmation_email(
 
     let confirmation_link = confirmation_link(req, stored_key, next);
 
-    let mailer = fastn_core::mail::Mailer::from_env(ds).await;
+    let mailer = fastn_core::mail::Mailer::from_env(&req_config.config.ds).await;
 
     if mailer.is_err() {
         return Err(fastn_core::Error::generic(
@@ -539,7 +539,7 @@ async fn create_and_send_confirmation_email(
 
     let mut mailer = mailer.unwrap();
 
-    if let Ok(debug_mode) = ds.env("DEBUG").await {
+    if let Ok(debug_mode) = req_config.config.ds.env("DEBUG").await {
         if debug_mode == "true" {
             mailer.mock();
         }
@@ -551,9 +551,42 @@ async fn create_and_send_confirmation_email(
         .first(&mut conn)
         .await?;
 
-    let file_path = fastn_ds::Path::new("email/confirmation-mail.html");
+    let path = req_config.config.package.eval_auto_import("auth").unwrap();
+    let path = path.strip_prefix(format!("{}/", req_config.config.package.name).as_str()).unwrap();
 
-    let html_file = config.ds.read_to_string(&file_path).await?;
+    dbg!(&path);
+
+    let content = req_config.config.ds.read_to_string(&fastn_ds::Path::new(format!("{}.ftd", path))).await?;
+
+    dbg!(&content);
+
+    let auth_doc = fastn_core::Document {
+        package_name: req_config.config.package.name.clone(),
+        id: "auth".to_string(),
+        content,
+        parent_path: fastn_ds::Path::new("/"),
+    };
+
+    let main_ftd_doc = fastn_core::doc::interpret_helper(
+        auth_doc.id_with_package().as_str(),
+        auth_doc.content.as_str(),
+        req_config,
+        "/",
+        false,
+        0,
+    )
+    .await?;
+
+    let html: String = main_ftd_doc.get("confirmation-mail-html").unwrap();
+
+    // let html = match var.value {
+    //     ftd::interpreter::prelude::PropertyValue::Value{value, ..} => {
+    //         value.string("auth", 0)
+    //     },
+    //     t => ftd::interpreter::utils::e2(format!("Expected confirmation-mail-html to be a string, found {:?}", t), "auth", 0),
+    // }.unwrap();
+
+    dbg!(&html);
 
     mailer
         .send_raw(
@@ -561,7 +594,7 @@ async fn create_and_send_confirmation_email(
                 .parse::<lettre::message::Mailbox>()
                 .unwrap(),
             "Verify your email",
-            confirmation_mail_body(html_file, &confirmation_link),
+            confirmation_mail_body(html, &confirmation_link),
         )
         .await
         .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
