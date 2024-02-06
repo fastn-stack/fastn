@@ -476,9 +476,6 @@ pub(crate) async fn read_ftd_(
 ) -> fastn_core::Result<FTDResult> {
     tracing::info!(document = main.id);
     match config.config.ftd_edition {
-        fastn_core::FTDEdition::FTD2021 => {
-            unimplemented!()
-        }
         fastn_core::FTDEdition::FTD2022 => {
             read_ftd_2022(config, main, base_url, download_assets, test).await
         }
