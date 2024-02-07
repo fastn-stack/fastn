@@ -62,18 +62,31 @@ pub enum DependencyError {
     },
 }
 
-#[derive(Snafu, Debug)]
+#[derive(Debug)]
 pub enum CheckError {
-    #[snafu(display(
-        "Write operation detected during check for package '{}' at '{}'",
-        package,
-        output_path
-    ))]
-    WriteDuringCheck {
-        package: String,
-        output_path: String,
-    },
+    WriteDuringCheck { package: String, file: String },
 }
+
+impl std::fmt::Display for CheckError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        use colored::*;
+
+        match self {
+            CheckError::WriteDuringCheck { package, file } => {
+                write!(
+                    f,
+                    "{}\n\nThe package '{}' is out of sync with the FASTN.ftd file.\n\nFile: '{}'\nOperation: {}",
+                    "Error: Out of Sync Package".red().bold(),
+                    package,
+                    file,
+                    "Write Attempt".yellow()
+                )
+            }
+        }
+    }
+}
+
+impl std::error::Error for CheckError {}
 
 #[derive(thiserror::Error, Debug)]
 pub enum UpdateError {
@@ -217,7 +230,7 @@ async fn write_archive_content(
     if check {
         return Err(UpdateError::Check(CheckError::WriteDuringCheck {
             package: package_name.to_string(),
-            output_path: output_path.to_string(),
+            file: output_path.to_string(),
         }));
     }
 
@@ -335,10 +348,14 @@ pub async fn update(
     .await
     {
         Ok(n) => n,
+        Err(UpdateError::Check(e)) => {
+            eprintln!("{}", e);
+            std::process::exit(7);
+        }
         Err(e) => {
             return Err(fastn_core::Error::UpdateError {
                 message: e.to_string(),
-            })
+            });
         }
     };
 
