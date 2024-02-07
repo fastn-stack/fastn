@@ -1,0 +1,9 @@
+-- fbt:
+cmd: $FBT_CWD/../target/debug/fastn --test update --check
+exit-code: 1
+
+-- stdout:
+
+-- stderr:
+
+FastnCoreError(UpdateError { message: "Check error: Write operation detected during check for package 'fastn-community.github.io/bling' at '<cwd>/.packages/fastn-community.github.io/bling/Changelog.md'" })
