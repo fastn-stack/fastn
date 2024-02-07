@@ -154,14 +154,9 @@ pub(crate) async fn create_user(
 
     tracing::info!("fastn_user email inserted");
 
-    let conf_link = create_and_send_confirmation_email(
-        email.0.to_string(),
-        db_pool,
-        req,
-        req_config,
-        next,
-    )
-    .await?;
+    let conf_link =
+        create_and_send_confirmation_email(email.0.to_string(), db_pool, req, req_config, next)
+            .await?;
 
     let resp_body = serde_json::json!({
         "user": user,
@@ -551,25 +546,47 @@ async fn create_and_send_confirmation_email(
         .first(&mut conn)
         .await?;
 
-    let path = req_config.config.package.eval_auto_import("auth").unwrap();
-    let path = path.strip_prefix(format!("{}/", req_config.config.package.name).as_str()).unwrap();
+    // To use auth. The package has to have auto import with alias `auth` setup
+    let path = req_config
+        .config
+        .package
+        .eval_auto_import("auth")
+        .unwrap()
+        .to_owned();
 
-    dbg!(&path);
+    let path = path
+        .strip_prefix(format!("{}/", req_config.config.package.name).as_str())
+        .unwrap();
 
-    let content = req_config.config.ds.read_to_string(&fastn_ds::Path::new(format!("{}.ftd", path))).await?;
-
-    dbg!(&content);
+    let content = req_config
+        .config
+        .ds
+        .read_to_string(&fastn_ds::Path::new(format!("{}.ftd", path)))
+        .await?;
 
     let auth_doc = fastn_core::Document {
         package_name: req_config.config.package.name.clone(),
-        id: "auth".to_string(),
+        id: path.to_string(),
         content,
         parent_path: fastn_ds::Path::new("/"),
     };
 
-    let main_ftd_doc = fastn_core::doc::parse_ftd(&auth_doc.id, &auth_doc.content, &Default::default())?;
+    let main_ftd_doc = fastn_core::doc::interpret_helper(
+        auth_doc.id_with_package().as_str(),
+        auth_doc.content.as_str(),
+        req_config,
+        "/",
+        false,
+        0,
+    )
+    .await?;
 
-    let html: String  = main_ftd_doc.get("confirmation-mail-html").unwrap();
+    let html_email_templ = format!(
+        "{}/{}#confirmation-mail-html",
+        req_config.config.package.name, path
+    );
+
+    let html: String = main_ftd_doc.get(&html_email_templ).unwrap();
 
     mailer
         .send_raw(

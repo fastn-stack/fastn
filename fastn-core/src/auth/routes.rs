@@ -103,8 +103,7 @@ pub async fn handle_auth(
                 .await
         }
         "/-/auth/resend-confirmation-email/" => {
-            fastn_core::auth::email_password::resend_email(&req, req_config, pool, next)
-                .await
+            fastn_core::auth::email_password::resend_email(&req, req_config, pool, next).await
         }
         "/-/auth/onboarding/" => {
             fastn_core::auth::email_password::onboarding(&req, req_config, config, next).await
