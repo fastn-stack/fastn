@@ -4,7 +4,7 @@ output: .build
 
 -- stdout:
 
-Updated package dependency
+Updated package dependency.
 Processing fifthtry.github.io/amitu/manifest.json ... done in <omitted>
 Processing fifthtry.github.io/amitu/FASTN/ ... done in <omitted>
 Processing fifthtry.github.io/amitu/ ... done in <omitted>
