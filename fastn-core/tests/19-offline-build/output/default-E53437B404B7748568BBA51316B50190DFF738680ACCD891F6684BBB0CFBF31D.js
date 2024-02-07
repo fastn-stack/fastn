@@ -2860,6 +2860,7 @@ class Node2 {
                 default:
                     this.attachAttribute("checked", staticValue);
             }
+            if (!ssr) this.#node.checked = staticValue;
         } else if (kind === fastn_dom.PropertyKind.Enabled) {
             switch (staticValue) {
                 case "false":
@@ -3964,6 +3965,9 @@ let fastn_utils = {
     },
     getNodeValue(node) {
         return node.getNode().value;
+    },
+    getNodeCheckedState(node) {
+        return node.getNode().checked;
     },
     setFullHeight() {
         if (!ssr) {
