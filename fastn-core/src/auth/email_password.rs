@@ -622,7 +622,7 @@ fn confirmation_mail_body(content: String, link: &str) -> String {
     // content will have a placeholder for the link
     let content = content.replace("{{link}}", link);
 
-    format!("{}", content)
+    content.to_string()
 }
 
 fn generate_key(length: usize) -> String {
