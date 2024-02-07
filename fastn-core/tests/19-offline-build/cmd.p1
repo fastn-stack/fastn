@@ -4,8 +4,8 @@ output: .build
 
 -- stdout:
 
-Updated 2 dependencies.
-Updated 2 dependencies.
+Updated 36 dependencies.
+No packages updated.
 Processing fastn-community.github.io/business-card-demo/manifest.json ... done in <omitted>
 Processing fastn-community.github.io/business-card-demo/FASTN/ ... done in <omitted>
 Processing fastn-community.github.io/business-card-demo/assets/ipsum-logo-dark.svg ... done in <omitted>
