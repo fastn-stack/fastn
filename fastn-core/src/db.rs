@@ -1,7 +1,9 @@
 pub type PgPool = diesel_async::pooled_connection::deadpool::Pool<diesel_async::AsyncPgConnection>;
 
-async fn create_pool() -> fastn_core::Result<PgPool> {
-    let db_url = std::env::var("FASTN_DB_URL")?;
+async fn create_pool(ds: &fastn_ds::DocumentStore) -> fastn_core::Result<PgPool> {
+    let db_url = ds.env("FASTN_DB_URL").await.map_err(|e| {
+        fastn_core::error::Error::generic(format!("Failed to get db url from env: {e}"))
+    })?;
 
     let config = diesel_async::pooled_connection::AsyncDieselConnectionManager::new(db_url);
 
@@ -13,8 +15,8 @@ async fn create_pool() -> fastn_core::Result<PgPool> {
 static POOL_RESULT: tokio::sync::OnceCell<fastn_core::Result<PgPool>> =
     tokio::sync::OnceCell::const_new();
 
-pub async fn pool() -> &'static fastn_core::Result<PgPool> {
-    POOL_RESULT.get_or_init(create_pool).await
+pub async fn pool(ds: &fastn_ds::DocumentStore) -> &'static fastn_core::Result<PgPool> {
+    POOL_RESULT.get_or_init(|| create_pool(ds)).await
 }
 
 static MIGRATIONS: diesel_async_migrations::EmbeddedMigrations =

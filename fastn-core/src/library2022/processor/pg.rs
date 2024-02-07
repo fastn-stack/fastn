@@ -2,7 +2,7 @@ async fn create_pool(
     req_config: &fastn_core::RequestConfig,
 ) -> Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
     let mut cfg = deadpool_postgres::Config::new();
-    cfg.libpq_style_connection_string = match std::env::var("FASTN_DB_URL") {
+    cfg.libpq_style_connection_string = match req_config.config.ds.env("FASTN_DB_URL").await {
         Ok(v) => Some(v),
         Err(_) => {
             fastn_core::warning!("FASTN_DB_URL is not set");
@@ -17,7 +17,7 @@ async fn create_pool(
     });
     let runtime = Some(deadpool_postgres::Runtime::Tokio1);
 
-    if std::env::var("FASTN_PG_DANGER_DISABLE_SSL") == Ok("false".to_string()) {
+    if req_config.config.ds.env("FASTN_PG_DANGER_ENABLE_SSL").await == Ok("true".to_string()) {
         fastn_core::warning!(
             "FASTN_PG_DANGER_DISABLE_SSL is set to false, this is not recommended for production use",
         );
@@ -27,7 +27,13 @@ async fn create_pool(
 
     let mut connector = native_tls::TlsConnector::builder();
 
-    match std::env::var("FASTN_PG_SSL_MODE").as_deref() {
+    match req_config
+        .config
+        .ds
+        .env("FASTN_PG_SSL_MODE")
+        .await
+        .as_deref()
+    {
         Err(_) | Ok("require") => {
             cfg.ssl_mode = Some(deadpool_postgres::SslMode::Require);
         }
@@ -51,7 +57,13 @@ async fn create_pool(
         }
     }
 
-    if std::env::var("FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE") == Ok("true".to_string()) {
+    if req_config
+        .config
+        .ds
+        .env("FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE")
+        .await
+        == Ok("true".to_string())
+    {
         fastn_core::warning!(
             "FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE is set to true, this is not \
             recommended for production use",
@@ -59,7 +71,7 @@ async fn create_pool(
         connector.danger_accept_invalid_certs(true);
     }
 
-    if let Ok(cert) = std::env::var("FASTN_PG_CERTIFICATE") {
+    if let Ok(cert) = req_config.config.ds.env("FASTN_PG_CERTIFICATE").await {
         // TODO: This does not work with Heroku certificate.
         let cert = req_config
             .config
