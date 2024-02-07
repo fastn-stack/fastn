@@ -567,26 +567,9 @@ async fn create_and_send_confirmation_email(
         parent_path: fastn_ds::Path::new("/"),
     };
 
-    let main_ftd_doc = fastn_core::doc::interpret_helper(
-        auth_doc.id_with_package().as_str(),
-        auth_doc.content.as_str(),
-        req_config,
-        "/",
-        false,
-        0,
-    )
-    .await?;
+    let main_ftd_doc = fastn_core::doc::parse_ftd(&auth_doc.id, &auth_doc.content, &Default::default())?;
 
-    let html: String = main_ftd_doc.get("confirmation-mail-html").unwrap();
-
-    // let html = match var.value {
-    //     ftd::interpreter::prelude::PropertyValue::Value{value, ..} => {
-    //         value.string("auth", 0)
-    //     },
-    //     t => ftd::interpreter::utils::e2(format!("Expected confirmation-mail-html to be a string, found {:?}", t), "auth", 0),
-    // }.unwrap();
-
-    dbg!(&html);
+    let html: String  = main_ftd_doc.get("confirmation-mail-html").unwrap();
 
     mailer
         .send_raw(
