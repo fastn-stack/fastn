@@ -60,7 +60,14 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::create_package(name, path, download_base_url).await;
     }
 
-    let mut config = fastn_core::Config::read_current(true).await?;
+    let current_dir: camino::Utf8PathBuf = std::env::current_dir()?.canonicalize()?.try_into()?;
+    let ds = fastn_ds::DocumentStore::new(current_dir);
+
+    if matches.subcommand_matches("update").is_some() {
+        return fastn_update::update(&ds, false).await;
+    }
+
+    let mut config = fastn_core::Config::read(ds, true).await?;
 
     if let Some(serve) = matches.subcommand_matches("serve") {
         let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
@@ -80,7 +87,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_css = serve.values_of_("css");
         let offline = serve.get_flag("offline");
 
-        fastn_update::update(&config, offline).await?;
+        fastn_update::update(&config.ds, offline).await?;
 
         return fastn_core::listen(
             bind.as_str(),
@@ -93,10 +100,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             inline_css,
         )
         .await;
-    }
-
-    if matches.subcommand_matches("update").is_some() {
-        return fastn_update::update(&config, false).await;
     }
 
     if let Some(test) = matches.subcommand_matches("test") {
@@ -115,7 +118,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_inline_css(inline_css)
             .set_test_command_running();
 
-        fastn_update::update(&config, offline).await?;
+        fastn_update::update(&config.ds, offline).await?;
 
         return fastn_core::test(
             &config,
@@ -148,7 +151,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_external_css(external_css)
             .add_inline_css(inline_css);
 
-        fastn_update::update(&config, offline).await?;
+        fastn_update::update(&config.ds, offline).await?;
 
         return fastn_core::build(
             &config,
