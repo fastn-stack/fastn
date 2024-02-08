@@ -1,10 +1,9 @@
 -- fbt:
-cmd: $FBT_CWD/tests/19-bot-ssr/run-test.sh
+cmd: $FBT_CWD/tests/21-bot-ssr/run-test.sh
 output: .build
 
 -- stdout:
 
-Updated package dependency.
 Starting fastn server ...
 No packages updated.
 ### Server Started ###
