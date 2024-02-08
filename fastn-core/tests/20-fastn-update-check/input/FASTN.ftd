@@ -1,0 +1,5 @@
+-- import: fastn
+
+-- fastn.package: fastn-stack.github.io/fastn-update-check
+
+-- fastn.dependency: fastn-community.github.io/bling

@@ -476,9 +476,6 @@ pub(crate) async fn read_ftd_(
 ) -> fastn_core::Result<FTDResult> {
     tracing::info!(document = main.id);
     match config.config.ftd_edition {
-        fastn_core::FTDEdition::FTD2021 => {
-            unimplemented!()
-        }
         fastn_core::FTDEdition::FTD2022 => {
             read_ftd_2022(config, main, base_url, download_assets, test).await
         }
@@ -502,7 +499,6 @@ pub(crate) async fn read_ftd_2022(
     let current_package = config
         .config
         .all_packages
-        .borrow()
         .get(main.package_name.as_str())
         .unwrap_or(&config.config.package)
         .to_owned();
@@ -572,7 +568,6 @@ pub(crate) async fn read_ftd_2023(
     let current_package = config
         .config
         .all_packages
-        .borrow()
         .get(main.package_name.as_str())
         .unwrap_or(&config.config.package)
         .to_owned();
@@ -621,10 +616,14 @@ pub(crate) async fn read_ftd_2023(
             format!("{js_ftd_script}\n{js_document_script}").as_str(),
         )
     } else {
-        let ssr_body = fastn_js::ssr_with_js_string(
-            &package_name,
-            format!("{js_ftd_script}\n{js_document_script}").as_str(),
-        );
+        let ssr_body = if config.request.is_bot() {
+            fastn_js::ssr_with_js_string(
+                &package_name,
+                format!("{js_ftd_script}\n{js_document_script}").as_str(),
+            )
+        } else {
+            EMPTY_HTML_BODY.to_string()
+        };
 
         fastn_core::utils::replace_markers_2023(
             js_document_script.as_str(),
@@ -656,3 +655,5 @@ pub(crate) async fn process_ftd(
 
     Ok(response)
 }
+
+const EMPTY_HTML_BODY: &str = "<body></body><style id=\"styles\"></style>";

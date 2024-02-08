@@ -27,7 +27,7 @@ pub struct AppTemp {
 }
 
 impl AppTemp {
-    fn parse_config(
+    async fn parse_config(
         config: &[String],
     ) -> fastn_core::Result<std::collections::HashMap<String, String>> {
         let mut hm = std::collections::HashMap::new();
@@ -86,7 +86,7 @@ impl AppTemp {
             mount_point: self.mount_point,
             end_point: self.end_point,
             user_id: self.user_id,
-            config: Self::parse_config(&self.config)?,
+            config: Self::parse_config(&self.config).await?,
             readers: self.readers,
             writers: self.writers,
         })
@@ -132,6 +132,7 @@ pub async fn can_read(config: &fastn_core::RequestConfig, path: &str) -> fastn_c
     let auth_identities = {
         #[cfg(feature = "auth")]
         let i = fastn_core::auth::get_auth_identities(
+            &config.config.ds,
             config.request.cookies(),
             app_identities.as_slice(),
         )

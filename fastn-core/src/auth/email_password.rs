@@ -155,7 +155,8 @@ pub(crate) async fn create_user(
     tracing::info!("fastn_user email inserted");
 
     let conf_link =
-        create_and_send_confirmation_email(email.0.to_string(), db_pool, req, next).await?;
+        create_and_send_confirmation_email(email.0.to_string(), db_pool, req, req_config, next)
+            .await?;
 
     let resp_body = serde_json::json!({
         "user": user,
@@ -175,6 +176,7 @@ pub(crate) async fn create_user(
 
 pub(crate) async fn login(
     req: &fastn_core::http::Request,
+    ds: &fastn_ds::DocumentStore,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -268,7 +270,7 @@ pub(crate) async fn login(
 
     // client has to 'follow' this request
     // https://stackoverflow.com/a/39739894
-    fastn_core::auth::set_session_cookie_and_redirect_to_next(req, session_id, next).await
+    fastn_core::auth::set_session_cookie_and_redirect_to_next(req, ds, session_id, next).await
 }
 
 pub(crate) async fn onboarding(
@@ -325,6 +327,7 @@ pub(crate) async fn onboarding(
 
 pub(crate) async fn confirm_email(
     req: &fastn_core::http::Request,
+    ds: &fastn_ds::DocumentStore,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -376,7 +379,7 @@ pub(crate) async fn confirm_email(
 
     let (email_id, session_id, sent_at) = conf_data.unwrap();
 
-    if key_expired(sent_at) {
+    if key_expired(ds, sent_at).await {
         // TODO: this redirect route should be configurable
         tracing::info!("provided code has expired.");
         return Ok(fastn_core::http::redirect_with_code(
@@ -406,6 +409,7 @@ pub(crate) async fn confirm_email(
     // redirect to onboarding route with a GET request
     let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
         req,
+        ds,
         session_id,
         format!("/-/auth/onboarding/?next={}", next),
     )
@@ -424,6 +428,7 @@ pub(crate) async fn confirm_email(
 
 pub(crate) async fn resend_email(
     req: &fastn_core::http::Request,
+    req_config: &mut fastn_core::RequestConfig,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -447,7 +452,7 @@ pub(crate) async fn resend_email(
         }
     };
 
-    create_and_send_confirmation_email(email, db_pool, req, next.clone()).await?;
+    create_and_send_confirmation_email(email, db_pool, req, req_config, next.clone()).await?;
 
     // TODO: there's no GET /-/auth/login/ yet
     // the client will have to create one for now
@@ -462,6 +467,7 @@ async fn create_and_send_confirmation_email(
     email: String,
     db_pool: &fastn_core::db::PgPool,
     req: &fastn_core::http::Request,
+    req_config: &mut fastn_core::RequestConfig,
     next: String,
 ) -> fastn_core::Result<String> {
     use diesel::prelude::*;
@@ -513,7 +519,7 @@ async fn create_and_send_confirmation_email(
 
     let confirmation_link = confirmation_link(req, stored_key, next);
 
-    let mailer = fastn_core::mail::Mailer::from_env();
+    let mailer = fastn_core::mail::Mailer::from_env(&req_config.config.ds).await;
 
     if mailer.is_err() {
         return Err(fastn_core::Error::generic(
@@ -528,7 +534,7 @@ async fn create_and_send_confirmation_email(
 
     let mut mailer = mailer.unwrap();
 
-    if let Ok(debug_mode) = std::env::var("DEBUG") {
+    if let Ok(debug_mode) = req_config.config.ds.env("DEBUG").await {
         if debug_mode == "true" {
             mailer.mock();
         }
@@ -540,13 +546,55 @@ async fn create_and_send_confirmation_email(
         .first(&mut conn)
         .await?;
 
+    // To use auth. The package has to have auto import with alias `auth` setup
+    let path = req_config
+        .config
+        .package
+        .eval_auto_import("auth")
+        .unwrap()
+        .to_owned();
+
+    let path = path
+        .strip_prefix(format!("{}/", req_config.config.package.name).as_str())
+        .unwrap();
+
+    let content = req_config
+        .config
+        .ds
+        .read_to_string(&fastn_ds::Path::new(format!("{}.ftd", path)))
+        .await?;
+
+    let auth_doc = fastn_core::Document {
+        package_name: req_config.config.package.name.clone(),
+        id: path.to_string(),
+        content,
+        parent_path: fastn_ds::Path::new("/"),
+    };
+
+    let main_ftd_doc = fastn_core::doc::interpret_helper(
+        auth_doc.id_with_package().as_str(),
+        auth_doc.content.as_str(),
+        req_config,
+        "/",
+        false,
+        0,
+    )
+    .await?;
+
+    let html_email_templ = format!(
+        "{}/{}#confirmation-mail-html",
+        req_config.config.package.name, path
+    );
+
+    let html: String = main_ftd_doc.get(&html_email_templ).unwrap();
+
     mailer
         .send_raw(
             format!("{} <{}>", name, email)
                 .parse::<lettre::message::Mailbox>()
                 .unwrap(),
             "Verify your email",
-            confirmation_mail_body(&confirmation_link),
+            confirmation_mail_body(html, &confirmation_link),
         )
         .await
         .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
@@ -556,8 +604,10 @@ async fn create_and_send_confirmation_email(
 
 /// check if it has been 3 days since the verification code was sent
 /// can be configured using EMAIL_CONFIRMATION_EXPIRE_DAYS
-fn key_expired(sent_at: chrono::DateTime<chrono::Utc>) -> bool {
-    let expiry_limit_in_days: u64 = std::env::var("EMAIL_CONFIRMATION_EXPIRE_DAYS")
+async fn key_expired(ds: &fastn_ds::DocumentStore, sent_at: chrono::DateTime<chrono::Utc>) -> bool {
+    let expiry_limit_in_days: u64 = ds
+        .env("EMAIL_CONFIRMATION_EXPIRE_DAYS")
+        .await
         .unwrap_or("3".to_string())
         .parse()
         .expect("EMAIL_CONFIRMATION_EXPIRE_DAYS should be a number");
@@ -568,8 +618,11 @@ fn key_expired(sent_at: chrono::DateTime<chrono::Utc>) -> bool {
         <= chrono::offset::Utc::now()
 }
 
-fn confirmation_mail_body(link: &str) -> String {
-    format!("Use this link to verify your email: {link}")
+fn confirmation_mail_body(content: String, link: &str) -> String {
+    // content will have a placeholder for the link
+    let content = content.replace("{{link}}", link);
+
+    content.to_string()
 }
 
 fn generate_key(length: usize) -> String {

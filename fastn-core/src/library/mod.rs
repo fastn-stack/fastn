@@ -175,37 +175,24 @@ pub struct Library2 {
 }
 
 impl Library2 {
-    pub(crate) async fn push_package_under_process(
+    pub(crate) fn push_package_under_process(
         &mut self,
         package: &fastn_core::Package,
     ) -> ftd::ftd2021::p1::Result<()> {
         self.packages_under_process.push(package.name.to_string());
-        if self
+        if !self
             .config
             .config
             .all_packages
-            .borrow()
             .contains_key(package.name.as_str())
         {
-            return Ok(());
-        }
-
-        let package = self
-            .config
-            .config
-            .resolve_package(package)
-            .await
-            .map_err(|_| ftd::ftd2021::p1::Error::ParseError {
+            return Err(ftd::ftd2021::p1::Error::ParseError {
                 message: format!("Cannot resolve the package: {}", package.name),
                 doc_id: self.document_id.to_string(),
                 line_number: 0,
-            })?;
+            });
+        }
 
-        self.config
-            .config
-            .all_packages
-            .borrow_mut()
-            .insert(package.name.to_string(), package);
         Ok(())
     }
 
@@ -221,7 +208,6 @@ impl Library2 {
         self.config
             .config
             .all_packages
-            .borrow()
             .get(current_package_name)
             .map(|p| p.to_owned())
             .ok_or_else(|| ftd::ftd2021::p1::Error::ParseError {
@@ -309,8 +295,8 @@ impl Library2 {
             package: &fastn_core::Package,
             lib: &mut Library2,
         ) -> Option<String> {
-            lib.push_package_under_process(package).await.ok()?;
-            let packages = lib.config.config.all_packages.borrow();
+            lib.push_package_under_process(package).ok()?;
+            let packages = &lib.config.config.all_packages;
             let package = packages.get(package.name.as_str()).unwrap_or(package);
             // Explicit check for the current package.
             if !name.starts_with(package.name.as_str()) {

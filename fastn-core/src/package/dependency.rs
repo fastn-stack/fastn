@@ -7,8 +7,6 @@ pub struct Dependency {
     pub notes: Option<String>,
     pub alias: Option<String>,
     pub implements: Vec<String>,
-    pub endpoint: Option<String>,
-    pub mountpoint: Option<String>,
     pub provided_via: Option<String>,
     pub required_as: Option<String>,
 }
@@ -71,9 +69,6 @@ pub(crate) struct DependencyTemp {
     pub version: Option<String>,
     pub notes: Option<String>,
     pub implements: Vec<String>,
-    pub endpoint: Option<String>,
-    #[serde(rename = "mount-point")]
-    pub mountpoint: Option<String>,
     #[serde(rename = "provided-via")]
     pub provided_via: Option<String>,
     #[serde(rename = "required-as")]
@@ -92,14 +87,6 @@ impl DependencyTemp {
             notes: self.notes,
             alias,
             implements: self.implements,
-            endpoint: self.endpoint,
-            mountpoint: match self.mountpoint {
-                Some(mp) => {
-                    let trimmed_mountpoint = mp.trim_start_matches('/').trim_end_matches('/');
-                    Some(format!("/{trimmed_mountpoint}/"))
-                }
-                None => None,
-            },
             provided_via: self.provided_via,
             required_as: self.required_as,
         })

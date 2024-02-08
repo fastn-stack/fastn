@@ -1,6 +1,6 @@
 [package]
 name = "fastn"
-version = "0.4.54"
+version = "0.4.56"
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -22,6 +22,7 @@ tracing.workspace = true
 tracing-subscriber.workspace = true
 dotenvy.workspace = true
 fastn-ds.workspace = true
+camino.workspace = true
 
 
 [features]

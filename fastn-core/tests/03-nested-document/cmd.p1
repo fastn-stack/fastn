@@ -5,7 +5,7 @@ output: amitu/.build
 
 -- stdout:
 
-Updated package dependency
+Updated package dependency.
 Processing amitu/manifest.json ... done in <omitted>
 Processing amitu/FASTN/ ... done in <omitted>
 Processing amitu/ ... done in <omitted>

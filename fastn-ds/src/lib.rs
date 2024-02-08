@@ -233,6 +233,18 @@ impl DocumentStore {
     pub async fn exists(&self, path: &fastn_ds::Path) -> bool {
         path.path.exists()
     }
+
+    pub async fn env(&self, key: &str) -> Result<String, EnvironmentError> {
+        std::env::var(key).map_err(|_| EnvironmentError::NotSet(key.to_string()))
+    }
+}
+
+#[derive(thiserror::Error, PartialEq, Debug)]
+pub enum EnvironmentError {
+    /// The environment variable is not set.
+    /// Contains the name of the environment variable.
+    #[error("environment variable not set: {0}")]
+    NotSet(String),
 }
 
 fn home() -> camino::Utf8PathBuf {

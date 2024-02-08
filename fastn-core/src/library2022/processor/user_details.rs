@@ -1,4 +1,4 @@
-/// currently returns the github user details
+/// returns details of the logged in user
 pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
@@ -6,7 +6,7 @@ pub async fn process(
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     #[cfg(feature = "auth")]
-    if let Some(ud) = req_config.request.ud() {
+    if let Some(ud) = req_config.request.ud(&req_config.config.ds).await {
         let ud = UserDetails {
             is_logged_in: true,
             username: ud.username,

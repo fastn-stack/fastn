@@ -60,7 +60,13 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::create_package(name, path, download_base_url).await;
     }
 
-    let mut config = fastn_core::Config::read_current(true).await?;
+    let current_dir: camino::Utf8PathBuf = std::env::current_dir()?.canonicalize()?.try_into()?;
+    let ds = fastn_ds::DocumentStore::new(current_dir);
+
+    if let Some(update) = matches.subcommand_matches("update") {
+        let check = update.get_flag("check");
+        return fastn_update::update(&ds, false, check).await;
+    }
 
     if let Some(serve) = matches.subcommand_matches("serve") {
         let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
@@ -80,23 +86,23 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_css = serve.values_of_("css");
         let offline = serve.get_flag("offline");
 
-        fastn_update::update(&config, offline).await?;
+        fastn_update::update(&ds, offline, false).await?;
+
+        let config = fastn_core::Config::read(ds, false)
+            .await?
+            .add_edition(edition.map(ToString::to_string))?
+            .add_external_js(external_js.clone())
+            .add_inline_js(inline_js.clone())
+            .add_external_css(external_css.clone())
+            .add_inline_css(inline_css.clone());
 
         return fastn_core::listen(
+            std::sync::Arc::new(config),
             bind.as_str(),
             port,
             download_base_url.map(ToString::to_string),
-            edition.map(ToString::to_string),
-            external_js,
-            inline_js,
-            external_css,
-            inline_css,
         )
         .await;
-    }
-
-    if matches.subcommand_matches("update").is_some() {
-        return fastn_update::update(&config, false).await;
     }
 
     if let Some(test) = matches.subcommand_matches("test") {
@@ -107,6 +113,10 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_css = test.values_of_("css");
         let offline: bool = test.get_flag("offline");
 
+        fastn_update::update(&ds, offline, false).await?;
+
+        let mut config = fastn_core::Config::read(ds, true).await?;
+
         config = config
             .add_edition(edition)?
             .add_external_js(external_js)
@@ -114,8 +124,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_external_css(external_css)
             .add_inline_css(inline_css)
             .set_test_command_running();
-
-        fastn_update::update(&config, offline).await?;
 
         return fastn_core::test(
             &config,
@@ -141,14 +149,16 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let zip_url = build.value_of_("zip-url");
         let offline: bool = build.get_flag("offline");
 
+        fastn_update::update(&ds, offline, false).await?;
+
+        let mut config = fastn_core::Config::read(ds, true).await?;
+
         config = config
             .add_edition(edition)?
             .add_external_js(external_js)
             .add_inline_js(inline_js)
             .add_external_css(external_css)
             .add_inline_css(inline_css);
-
-        fastn_update::update(&config, offline).await?;
 
         return fastn_core::build(
             &config,
@@ -161,6 +171,8 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         )
         .await;
     }
+
+    let config = fastn_core::Config::read(ds, true).await?;
 
     if let Some(fmt) = matches.subcommand_matches("fmt") {
         return fastn_core::fmt(&config, fmt.value_of_("file"), fmt.get_flag("noidentation")).await;
@@ -312,6 +324,7 @@ fn app(version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("update")
                 .about("Update dependency packages for this fastn package")
+                .arg(clap::arg!(--check "Check if packages are in sync with FASTN.ftd without performing updates."))
         )
         .subcommand(sub_command::serve())
 }

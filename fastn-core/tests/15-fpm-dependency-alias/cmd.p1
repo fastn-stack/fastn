@@ -1,10 +1,10 @@
 -- fbt:
 cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test build --edition 2022
 output: amitu/.build
-skip: will resume once the required dependencies have manifest file
 
 -- stdout:
 
+Updated 41 dependencies.
 Processing fifthtry.github.io/amitu/manifest.json ... done in <omitted>
 Processing fifthtry.github.io/amitu/FASTN/ ... done in <omitted>
 Processing fifthtry.github.io/amitu/ ... Processing fastn-community.github.io/expander/images/uparrow.png ... done in <omitted>
