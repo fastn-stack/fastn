@@ -499,7 +499,6 @@ pub(crate) async fn read_ftd_2022(
     let current_package = config
         .config
         .all_packages
-        .borrow()
         .get(main.package_name.as_str())
         .unwrap_or(&config.config.package)
         .to_owned();
@@ -569,7 +568,6 @@ pub(crate) async fn read_ftd_2023(
     let current_package = config
         .config
         .all_packages
-        .borrow()
         .get(main.package_name.as_str())
         .unwrap_or(&config.config.package)
         .to_owned();

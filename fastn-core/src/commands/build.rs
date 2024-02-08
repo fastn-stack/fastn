@@ -647,14 +647,6 @@ async fn handle_file_(
                 )
                 .await;
 
-                config.all_packages.borrow_mut().extend(
-                    req_config
-                        .config
-                        .all_packages
-                        .borrow()
-                        .iter()
-                        .map(|(k, v)| (k.clone(), v.clone())),
-                );
                 resp
             };
 

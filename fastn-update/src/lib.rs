@@ -101,22 +101,9 @@ pub enum UpdateError {
 
     #[error("Check error: {0}")]
     Check(#[from] CheckError),
-}
 
-async fn resolve_dependency_package(
-    ds: &fastn_ds::DocumentStore,
-    dependency: &fastn_core::package::dependency::Dependency,
-    dependency_path: &fastn_ds::Path,
-) -> Result<fastn_core::Package, DependencyError> {
-    let mut dep_package = dependency.package.clone();
-    let fastn_path = dependency_path.join("FASTN.ftd");
-    dep_package
-        .resolve(&fastn_path, ds)
-        .await
-        .context(ResolveDependencySnafu {
-            package: dependency.package.name.clone(),
-        })?;
-    Ok(dep_package)
+    #[error("Config error: {0}")]
+    Config(#[from] fastn_core::config_temp::Error),
 }
 
 async fn update_dependencies(
@@ -130,6 +117,7 @@ async fn update_dependencies(
     let mut stack = vec![current_package.clone()];
     let mut resolved = std::collections::HashSet::new();
     resolved.insert(current_package.name.to_string());
+    let mut all_packages: Vec<(String, fastn_core::Manifest)> = vec![];
     let mut updated_packages: usize = 0;
 
     while let Some(package) = stack.pop() {
@@ -149,7 +137,7 @@ async fn update_dependencies(
                 }
 
                 let dep_package =
-                    resolve_dependency_package(ds, &dependency, dependency_path).await?;
+                    utils::resolve_dependency_package(ds, &dependency, dependency_path).await?;
                 resolved.insert(package_name.to_string());
                 pb.inc_length(1);
                 stack.push(dep_package);
@@ -158,7 +146,7 @@ async fn update_dependencies(
 
             pb.set_message(format!("Resolving {}/manifest.json", &package_name));
 
-            let (manifest, manifest_bytes) = get_manifest(&package_name).await?;
+            let (manifest, manifest_bytes) = utils::get_manifest(&package_name).await?;
 
             let manifest_path = dependency_path.join(fastn_core::manifest::MANIFEST_FILE);
 
@@ -175,7 +163,7 @@ async fn update_dependencies(
                             package: package_name.clone(),
                         })?;
                 let existing_manifest: fastn_core::Manifest =
-                    read_manifest(&existing_manifest_bytes, &package_name)?;
+                    utils::read_manifest(&existing_manifest_bytes, &package_name)?;
 
                 existing_manifest.checksum.ne(manifest.checksum.as_str())
             };
@@ -204,12 +192,15 @@ async fn update_dependencies(
                 updated_packages += 1;
             }
 
+            all_packages.push((package_name.to_string(), manifest));
+
             if package_name.eq(&fastn_core::FASTN_UI_INTERFACE) {
                 resolved.insert(package_name.to_string());
                 continue;
             }
 
-            let dep_package = resolve_dependency_package(ds, &dependency, dependency_path).await?;
+            let dep_package =
+                utils::resolve_dependency_package(ds, &dependency, dependency_path).await?;
             resolved.insert(package_name.to_string());
             pb.inc_length(1);
             stack.push(dep_package);
@@ -217,6 +208,16 @@ async fn update_dependencies(
 
         pb.inc(1);
     }
+
+    if !offline {
+        fastn_core::ConfigTemp::write(
+            ds,
+            current_package.name.clone(),
+            all_packages.into_iter().collect(),
+        )
+        .await?;
+    }
+
     Ok(updated_packages)
 }
 
@@ -250,7 +251,7 @@ async fn download_and_unpack_zip(
     pb: &indicatif::ProgressBar,
     check: bool,
 ) -> Result<(), UpdateError> {
-    let mut archive = fastn_update::utils::download_archive(manifest.zip_url.clone())
+    let mut archive = utils::download_archive(manifest.zip_url.clone())
         .await
         .context(DownloadArchiveSnafu {
             package: package_name,
@@ -288,59 +289,6 @@ async fn download_and_unpack_zip(
     Ok(())
 }
 
-fn read_manifest(bytes: &[u8], package_name: &str) -> Result<fastn_core::Manifest, ManifestError> {
-    let manifest: fastn_core::Manifest =
-        serde_json::de::from_slice(bytes).context(DeserializeManifestSnafu {
-            package: package_name,
-        })?;
-
-    Ok(manifest)
-}
-
-/// Download manifest of the package `<package-name>/manifest.json`
-/// Resolve to `fastn_core::Manifest` struct
-async fn get_manifest(
-    package_name: &str,
-) -> Result<(fastn_core::Manifest, Vec<u8>), ManifestError> {
-    let manifest_bytes = fastn_core::http::http_get(&format!(
-        "https://{}/{}",
-        package_name,
-        fastn_core::manifest::MANIFEST_FILE
-    ))
-    .await
-    .context(DownloadManifestSnafu {
-        package: package_name,
-    })?;
-    let manifest = read_manifest(&manifest_bytes, package_name)?;
-
-    Ok((manifest, manifest_bytes))
-}
-
-pub async fn from_fastn_doc(
-    ds: &fastn_ds::DocumentStore,
-    fastn_path: &fastn_ds::Path,
-) -> fastn_core::Result<fastn_core::Package> {
-    let doc = ds.read_to_string(fastn_path).await?;
-    let lib = fastn_core::FastnLibrary::default();
-    let fastn_doc = match fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib) {
-        Ok(v) => Ok(v),
-        Err(e) => Err(fastn_core::Error::PackageError {
-            message: format!("failed to parse FASTN.ftd 3: {:?}", &e),
-        }),
-    }?;
-    let package = fastn_core::Package::from_fastn_doc(ds, &fastn_doc)?;
-
-    Ok(package)
-}
-
-pub async fn read_current_package(
-    ds: &fastn_ds::DocumentStore,
-) -> fastn_core::Result<fastn_core::Package> {
-    let fastn_path = fastn_ds::Path::new("FASTN.ftd");
-
-    from_fastn_doc(ds, &fastn_path).await
-}
-
 #[tracing::instrument(skip_all)]
 pub async fn update(
     ds: &fastn_ds::DocumentStore,
@@ -348,7 +296,7 @@ pub async fn update(
     check: bool,
 ) -> fastn_core::Result<()> {
     let packages_root = ds.root().join(".packages");
-    let current_package = read_current_package(ds).await?;
+    let current_package = utils::read_current_package(ds).await?;
 
     if current_package.dependencies.is_empty() {
         println!("No dependencies to update.");

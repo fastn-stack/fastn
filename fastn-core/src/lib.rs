@@ -44,7 +44,7 @@ pub use commands::{
     build::build, check::post_build_check, create_package::create_package, fmt::fmt, query::query,
     serve::listen, test::test,
 };
-pub use config::{Config, FTDEdition, RequestConfig};
+pub use config::{config_temp, Config, ConfigTemp, FTDEdition, RequestConfig};
 pub use error::Error;
 pub use file::File;
 pub use file::{get_file, paths_to_files, Document, Static};
