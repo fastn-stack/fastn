@@ -76,7 +76,7 @@ impl ConfigTemp {
 
         for (package_name, manifest) in &self.all_packages {
             let package = manifest
-                .to_package(&package_root, &package_name, &ds)
+                .to_package(package_root, package_name, ds)
                 .await?;
             all_packages.insert(package_name.clone(), package);
         }
