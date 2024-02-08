@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <base href="/">
+    <meta content="fastn" name="generator">
+    
+    
+    <script>
+        let __fastn_package_name__ = "fastn-community.github.io/business-card-demo";
+
+    </script>
+
+    
+                <script src="markdown-24E09EFC0C2B9A11DEA9AC71888EB3A1E85864FA7D9C95A3EB5075A0E0F49A5F.js"></script>
+                <script src="prism-8FE3A42AD547E2DBBC9FE16BA059F8F1870D613AD0C5B0B013D6205B72A62BAF.js"></script>
+                <script src="default-E53437B404B7748568BBA51316B50190DFF738680ACCD891F6684BBB0CFBF31D.js"></script>
+                <link rel="stylesheet" href="prism-73F718B9234C00C5C14AB6A11BF239A103F0B0F93B69CD55CB5C6530501182EB.css">
+                <script src="//cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script><script src="-/fastn-stack.github.io/fastn-js/download.js"></script>
+            
+    
+
+    <style>
+       /* http://meyerweb.com/eric/tools/css/reset/
+          v2.0 | 20110126
+          License: none (public domain)
+       */
+
+/*html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+!* HTML5 display-role reset for older browsers *!
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}*/
+
+*, :after, :before {
+    /*box-sizing: inherit;*/
+    box-sizing: border-box;
+    text-decoration: none;
+    box-sizing: border-box;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-style: solid;
+    height: auto;
+    width: auto;
+}
+
+*, pre, div {
+    padding: 0;
+    margin: 0;
+    gap: 0;
+    outline: none;
+}
+
+
+body, ol ol, ol ul, ul ol, ul ul {
+    margin:0
+}
+pre, table{
+    overflow:auto
+}
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+}
+
+input {
+    vertical-align: middle;
+}
+pre {
+    white-space: break-spaces;
+    word-wrap: break-word;
+}
+html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+iframe {
+    border: 0;
+    color-scheme: auto;
+}
+
+pre code {
+    /*
+    This break show-line-number in `ftd.code`
+    overflow-x: auto;
+    */
+    display: block;
+    padding: 0 1em !important;
+}
+
+/* Common styles  */
+.ft_common{
+    text-decoration: none;
+    box-sizing: border-box;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-style: solid;
+    height: auto;
+    width: auto;
+}
+
+/* Common container attributes */
+.ft_row, .ft_column {
+    display: flex;
+    align-items: start;
+    justify-content: start
+}
+
+.ft_full_size {
+    width: 100%;
+    height: 100%;
+}
+
+.ft_row {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: row;
+    box-sizing: border-box;
+}
+.ft_column {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.ft_row {
+    flex-direction: row;
+}
+
+.ft_column {
+    flex-direction: column;
+}
+
+.ft_md ul,
+.ft_md ol{
+    margin: 10px 0;
+}
+
+.ft_md ul ul,
+.ft_md ul ol,
+.ft_md ol ul,
+.ft_md ol ol {
+    margin: 0;
+}
+
+.ft_md ul li,
+.ft_md ol li,
+.ft_md ul ol li .ft_md ul ul li .ft_md ol ul li .ft_md ol ol li {
+    position: relative;
+    padding-left: 32px;
+    margin: 4px 0;
+}
+
+.ft_md ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.ft_md ol {
+    list-style: none;
+    padding-left: 0;
+    counter-reset: item;
+}
+
+.ft_md ol li:before,
+.ft_md ol ol li:before,
+.ft_md ul ol li:before {
+    content: counter(item);
+    counter-increment: item;
+    font-size: 11px;
+    line-height: 10px;
+    text-align: center;
+    padding: 4px 0;
+    height: 10px;
+    width: 18px;
+    border-radius: 10px;
+    position: absolute;
+    left: 0;
+    top: 5px;
+}
+
+.ft_md ul li::before,
+.ft_md ul ul li::before,
+.ft_md ol ul li::before {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    left: 8px;
+    top: 10px;
+    border-radius: 50%;
+    background: #c1c8ce;
+}
+
+ul, ol {
+    /* Added padding to the left to move the ol number/ ul bullet to the right */
+    padding-left: 20px;
+}
+
+a {
+    color: #2952a3;
+}
+
+a:visited {
+    color: #856ab9;
+}
+
+a:hover {
+    color: #24478f;
+}
+
+.ft_md a {
+    text-decoration: none;
+}
+
+.ft_md a:visited {
+    text-decoration: none;
+}
+
+.ft_md a:hover {
+    text-decoration: none;
+}
+
+code {
+    padding: 0.1rem 0.25rem;
+    border-radius: 4px;
+    background-color: #0000000d;
+}
+
+.ft_md blockquote {
+    padding: 0.25rem 1rem;
+    margin: 1rem 0;
+    border-radius: 3px;
+}
+
+.ft_md blockquote > blockquote {
+    margin: 0;
+}
+
+
+body.dark code {
+    padding: 0.1rem 0.25rem;
+    border-radius: 4px;
+    background-color: #ffffff1f;
+}
+
+
+body.dark a {
+    color: #6498ff
+}
+
+body.dark a:visited {
+    color: #b793fb;
+}
+
+
+p {
+    margin-block-end: 1em;
+}
+
+h1:only-child {
+    margin-block-end: 0.67em
+}
+
+table, td, th {
+  border: 1px solid;
+}
+
+th {
+    padding: 6px;
+}
+
+td {
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_row __w-3 __g-4"><div data-id="4" id="some-card-id-for-download-purpose" class="ft_column __w-5"><comment data-id="5"></comment><div data-id="6" class="ft_column __w-6 __h-7"><div data-id="7" class="ft_row __w-8 __h-9 __bgc-10 __jc-11"><div data-id="8" class="ft_column __w-12 __h-13 __jc-14 __ali-15 __jc-16"><img data-id="9" src="-/fastn-community.github.io/business-card-demo/assets/ipsum-logo.svg" class="__mxw-17"></img></div><div data-id="10" class="ft_column __w-18 __h-19 __pl-20 __pr-21 __blw-22 __bc-23 __c-24 __jc-25 __ali-26 __g-27"><div data-id="11" class="__rl-28 __c-29">John Doe</div><div data-id="12" class="__rl-30">Software Developer</div><div data-id="13" class="ft_column __mt-31 __rl-32"><comment data-id="14"></comment><div data-id="15">+91 12345 99999</div><comment data-id="16"></comment><div data-id="17">+91 12345 88888</div></div><div data-id="18" class="ft_column __w-33 __pt-34 __mt-35 __btw-36 __bc-37 __rl-38 __jc-39 __ali-40 __g-41"><div data-id="19" class="__rl-42 __ta-44">John Doe Pvt. Ltd.</div><comment data-id="20"></comment><div data-id="21" class="__ta-45">123, Block No. A-123, Times Square, Bangalore - 123456</div><div data-id="22" class="ft_column __jc-46 __ali-47"><comment data-id="23"></comment><div data-id="24" class="__ta-48"><a href="mailto:john@johndoe.com">john@johndoe.com</a></div><comment data-id="25"></comment><div data-id="26" class="__ta-49"><a href="http://www.johndoe.com">www.johndoe.com</a></div></div></div></div></div></div><comment data-id="27"></comment><img data-id="28" src="-/fastn-community.github.io/business-card/assets/fastn-badge-white.svg" target="_blank" class="__as-50 __w-51 __mt-52"></img></div><div data-id="29" class="ft_column __jc-53 __ali-54 __g-55"><img data-id="30" src="-/fastn-community.github.io/business-card/assets/flip-icon.svg" class="__cur-56 __w-57 __h-58"></img><img data-id="31" src="-/fastn-community.github.io/business-card/assets/download.svg" class="__cur-59 __w-60"></img></div></div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__w-3 { width: 100%; }
+	.__g-4 { gap: 24px; }
+	.__w-5 { width: 100%; }
+	.__w-6 { width: 700px; }
+	.__h-7 { height: 350px; }
+	.__w-8 { width: 100%; }
+	.__h-9 { height: 100%; }
+	.__bgc-10 { background-color: #f4edd0; }
+	body.dark .__bgc-10 { background-color: black; }
+	.__jc-11 { justify-content: space-around; }
+	.__w-12 { width: 50%; }
+	.__h-13 { height: 100%; }
+	.__jc-14 { justify-content: center; }
+	.__ali-15 { align-items: center; }
+	.__jc-16 { justify-content: space-around; }
+	.__mxw-17 { max-width: 250px; }
+	.__w-18 { width: 50%; }
+	.__h-19 { height: 100%; }
+	.__pl-20 { padding-left: 24px; }
+	.__pr-21 { padding-right: 24px; }
+	.__blw-22 { border-left-width: 2px; }
+	.__bc-23 { border-color: #919192; }
+	.__c-24 { color: #584b42 !important; }
+	body.dark .__c-24 { color: #a8a29e !important; }
+	.__c-24:visited { color: #584b42 !important; }
+	body.dark  .__c-24:visited { color: #a8a29e !important; }
+	.__jc-25 { justify-content: center; }
+	.__ali-26 { align-items: center; }
+	.__g-27 { gap: 8px; }
+	.__rl-28 {  font-family: sans-serif; font-size: 24px; font-weight: 400; line-height: 31px; }
+	body.mobile .__rl-28 {  font-family: sans-serif; font-size: 22px; font-weight: 400; line-height: 29px; }
+	.__c-29 { color: #141414 !important; }
+	body.dark .__c-29 { color: #ffffff !important; }
+	.__c-29:visited { color: #141414 !important; }
+	body.dark  .__c-29:visited { color: #ffffff !important; }
+	.__rl-30 {  font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px; }
+	body.mobile .__rl-30 {  font-family: sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__mt-31 { margin-top: 40px; }
+	.__rl-32 {  font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px; }
+	body.mobile .__rl-32 {  font-family: sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-33 { width: 100%; }
+	.__pt-34 { padding-top: 8px; }
+	.__mt-35 { margin-top: 8px; }
+	.__btw-36 { border-top-width: 1px; }
+	.__bc-37 { border-color: #919192; }
+	.__rl-38 {  font-family: sans-serif; font-size: 12px; font-weight: 400; line-height: 16px; }
+	body.mobile .__rl-38 {  font-family: sans-serif; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__jc-39 { justify-content: center; }
+	.__ali-40 { align-items: center; }
+	.__g-41 { gap: 8px; }
+	.__rl-42 {  font-family: sans-serif; font-size: 16px; font-weight: 400; line-height: 21px; }
+	body.mobile .__rl-42 {  font-family: sans-serif; font-size: 16px; font-weight: 400; line-height: 21px; }
+	.__ta-44 { text-align: center; }
+	.__ta-45 { text-align: center; }
+	.__jc-46 { justify-content: center; }
+	.__ali-47 { align-items: center; }
+	.__ta-48 { text-align: center; }
+	.__ta-49 { text-align: center; }
+	.__as-50 { align-self: center; }
+	.__w-51 { width: 140px; }
+	.__mt-52 { margin-top: 8px; }
+	.__jc-53 { justify-content: center; }
+	.__ali-54 { align-items: center; }
+	.__g-55 { gap: 12px; }
+	.__cur-56 { cursor: pointer; }
+	.__w-57 { width: 24px; }
+	.__h-58 { height: 24px; }
+	.__cur-59 { cursor: pointer; }
+	.__w-60 { width: 30px; }
+    </style>
+<script>
+    (function() {
+        let main = function (parent) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
+  try {
+    let parenti0 = fastn_community_github_io_business_card__card(parent, inherited, {
+      name: "John Doe",
+      title: "Software Developer",
+      company_name: "John Doe Pvt. Ltd.",
+      logo: global.fastn_community_github_io_business_card_demo_assets__files.get("assets").get("ipsum_logo").get("svg"),
+      contact_1: "+91 12345 99999",
+      contact_2: "+91 12345 88888",
+      email: "john@johndoe.com",
+      website: "www.johndoe.com",
+      address: "123, Block No. A-123, Times Square, Bangalore - 123456",
+      company_slogan: "If you can type you can code"
+    });
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["main"] = main;
+fastn_utils.createNestedObject(global, "fastn_community_github_io_business_card_assets__files.assets.fastn_badge_white.svg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/fastn-community.github.io/business-card/assets/fastn-badge-white.svg");
+  record.set("dark", "-/fastn-community.github.io/business-card/assets/fastn-badge-white-dark.svg");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "fastn_community_github_io_business_card_assets__files.assets.download_hover.svg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/fastn-community.github.io/business-card/assets/download-hover.svg");
+  record.set("dark", "-/fastn-community.github.io/business-card/assets/download-hover-dark.svg");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "fastn_community_github_io_business_card_assets__files.assets.download.svg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/fastn-community.github.io/business-card/assets/download.svg");
+  record.set("dark", "-/fastn-community.github.io/business-card/assets/download-dark.svg");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "fastn_community_github_io_business_card_assets__files.assets.flip_icon.svg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/fastn-community.github.io/business-card/assets/flip-icon.svg");
+  record.set("dark", "-/fastn-community.github.io/business-card/assets/flip-icon-dark.svg");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "fastn_community_github_io_business_card_assets__files.assets.flip_icon_hover.svg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/fastn-community.github.io/business-card/assets/flip-icon-hover.svg");
+  record.set("dark", "-/fastn-community.github.io/business-card/assets/flip-icon-hover-dark.svg");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "fastn_stack_github_io_fastn_js_assets__files.download.js", "-/fastn-stack.github.io/fastn-js/download.js");
+let fastn_stack_github_io_fastn_js_utils__download_as_image = function (args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return (download_as_image(__args__.element_id, __args__.filename));
+  } catch (e) {
+    if (!ssr) {
+      throw e;
+    }
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["fastn_stack_github_io_fastn_js_utils__download_as_image"] = fastn_stack_github_io_fastn_js_utils__download_as_image;
+let fastn_community_github_io_business_card_lib__display_card = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
+  try {
+    let __args__ = {
+      front: fastn.mutableList([]),
+      back: fastn.mutableList([]),
+      landscape: true,
+      card_id: "some-card-id-for-download-purpose",
+      open: fastn.wrapMutable(false),
+      mouse_in: fastn.wrapMutable(false),
+      on_hover: fastn.wrapMutable(false),
+      mouse_over: fastn.wrapMutable(false),
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([ftd.device], function () {
+      if (function () {
+        return (fastn_utils.getStaticValue(ftd.device) == "mobile");
+      }()) {
+        return fastn_dom.Resizing.FillContainer;
+      }
+    }
+    ), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(24)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.Id, __args__.card_id, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        fastn_dom.conditionalDom(root, [
+          __args__.open
+        ], function () {
+          return (!fastn_utils.getStaticValue(__args__.open));
+        }, function (root) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+          rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([__args__.landscape], function () {
+            if (function () {
+              return fastn_utils.getStaticValue(__args__.landscape);
+            }()) {
+              return fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(700));
+            } else {
+              return fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(350));
+            }
+          }
+          ), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn.formula([__args__.landscape], function () {
+            if (function () {
+              return fastn_utils.getStaticValue(__args__.landscape);
+            }()) {
+              return fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(350));
+            } else {
+              return fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(500));
+            }
+          }
+          ), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+            let rooti0 = fastn_utils.getStaticValue(fastn_utils.getListItem(__args__.front.get(0))) (root, inherited);
+          }
+          ]), inherited);
+          return rooti0;
+        });
+      },
+      function (root, inherited) {
+        fastn_dom.conditionalDom(root, [
+          __args__.open
+        ], function () {
+          return fastn_utils.getStaticValue(__args__.open);
+        }, function (root) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+          rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([__args__.landscape], function () {
+            if (function () {
+              return fastn_utils.getStaticValue(__args__.landscape);
+            }()) {
+              return fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(700));
+            } else {
+              return fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(350));
+            }
+          }
+          ), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn.formula([__args__.landscape], function () {
+            if (function () {
+              return fastn_utils.getStaticValue(__args__.landscape);
+            }()) {
+              return fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(350));
+            } else {
+              return fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(500));
+            }
+          }
+          ), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+            let rooti0 = fastn_utils.getStaticValue(fastn_utils.getListItem(__args__.back.get(0))) (root, inherited);
+          }
+          ]), inherited);
+          return rooti0;
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Image);
+        rooti0.setProperty(fastn_dom.PropertyKind.ImageSrc, global.fastn_community_github_io_business_card_assets__files.get("assets").get("fastn_badge_white").get("svg"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.Center, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(140)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.MarginTop, fastn_dom.Length.Px(8), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://fastn.com/", inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.OpenInNewTab, true, inherited);
+      }
+      ]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(12)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Image);
+        rooti0.setProperty(fastn_dom.PropertyKind.ImageSrc, fastn.formula([global.fastn_community_github_io_business_card_assets__files.get("assets").get("flip_icon_hover").get("svg"),
+        global.fastn_community_github_io_business_card_assets__files.get("assets").get("flip_icon").get("svg"),
+        __args__.mouse_in], function () {
+          if (function () {
+            return (!fastn_utils.getStaticValue(__args__.mouse_in));
+          }()) {
+            return global.fastn_community_github_io_business_card_assets__files.get("assets").get("flip_icon").get("svg");
+          } else {
+            return global.fastn_community_github_io_business_card_assets__files.get("assets").get("flip_icon_hover").get("svg");
+          }
+        }
+        ), inherited);
+        rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+          ftd.toggle({
+            a: __args__.open,
+          }, rooti0);
+        });
+        rooti0.addEventHandler(fastn_dom.Event.MouseEnter, function () {
+          ftd.set_bool({
+            a: __args__.mouse_in,
+            v: true,
+          }, rooti0);
+        });
+        rooti0.addEventHandler(fastn_dom.Event.MouseLeave, function () {
+          ftd.set_bool({
+            a: __args__.mouse_in,
+            v: false,
+          }, rooti0);
+        });
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(24)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(24)), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Image);
+        rooti0.setProperty(fastn_dom.PropertyKind.ImageSrc, fastn.formula([global.fastn_community_github_io_business_card_assets__files.get("assets").get("download").get("svg"),
+        global.fastn_community_github_io_business_card_assets__files.get("assets").get("download_hover").get("svg"),
+        __args__.mouse_over], function () {
+          if (function () {
+            return fastn_utils.getStaticValue(__args__.mouse_over);
+          }()) {
+            return global.fastn_community_github_io_business_card_assets__files.get("assets").get("download_hover").get("svg");
+          } else {
+            return global.fastn_community_github_io_business_card_assets__files.get("assets").get("download").get("svg");
+          }
+        }
+        ), inherited);
+        rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+          fastn_stack_github_io_fastn_js_utils__download_as_image({
+            element_id: __args__.card_id,
+            filename: "card.jpg",
+          }, rooti0);
+        });
+        rooti0.addEventHandler(fastn_dom.Event.MouseEnter, function () {
+          ftd.set_bool({
+            a: __args__.mouse_over,
+            v: true,
+          }, rooti0);
+        });
+        rooti0.addEventHandler(fastn_dom.Event.MouseLeave, function () {
+          ftd.set_bool({
+            a: __args__.mouse_over,
+            v: false,
+          }, rooti0);
+        });
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(30)), inherited);
+      }
+      ]), inherited);
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["fastn_community_github_io_business_card_lib__display_card"] = fastn_community_github_io_business_card_lib__display_card;
+fastn_utils.createNestedObject(global, "fastn_community_github_io_business_card__card_background_color", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "#f4edd0");
+  record.set("dark", "black");
+  return record;
+}());
+let fastn_community_github_io_business_card__front = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
+  try {
+    let __args__ = {
+      contact_1: null,
+      contact_2: null,
+      email: null,
+      website: null,
+      address: null,
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(global.fastn_community_github_io_business_card__card_background_color), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(50)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Image);
+        rooti0.setProperty(fastn_dom.PropertyKind.ImageSrc, __args__.logo, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.MaxWidth, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(250)), inherited);
+      }
+      ]), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(50)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingHorizontal, fastn_dom.Length.Px(24), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderLeftWidth, fastn_dom.Length.Px(2), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, inherited.get("colors").get("border_strong"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(8)), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_small"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text_strong"), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.title, inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+        rooti0.setProperty(fastn_dom.PropertyKind.MarginTop, fastn_dom.Length.Px(40), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          fastn_dom.conditionalDom(root, [
+            __args__.contact_1
+          ], function () {
+            return (fastn_utils.getStaticValue(__args__.contact_1) !== null);
+          }, function (root) {
+            let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.contact_1, inherited);
+            return rooti0;
+          });
+        },
+        function (root, inherited) {
+          fastn_dom.conditionalDom(root, [
+            __args__.contact_2
+          ], function () {
+            return (fastn_utils.getStaticValue(__args__.contact_2) !== null);
+          }, function (root) {
+            let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.contact_2, inherited);
+            return rooti0;
+          });
+        }
+        ]), inherited);
+      },
+      function (root, inherited) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.PaddingTop, fastn_dom.Length.Px(8), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.MarginTop, fastn_dom.Length.Px(8), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderTopWidth, fastn_dom.Length.Px(1), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, inherited.get("colors").get("border_strong"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("fine_print"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(8)), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("button_medium"), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.company_name, inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.MarginTop, fastn.formula([__args__.contact_1,
+          __args__.contact_2], function () {
+            if (function () {
+              return (fastn_utils.getStaticValue(__args__.contact_1) == null && fastn_utils.getStaticValue(__args__.contact_2) == null);
+            }()) {
+              return fastn_dom.Length.Px(50);
+            }
+          }
+          ), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
+        },
+        function (root, inherited) {
+          fastn_dom.conditionalDom(root, [
+            __args__.address
+          ], function () {
+            return (fastn_utils.getStaticValue(__args__.address) !== null);
+          }, function (root) {
+            let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.address, inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
+            return rooti0;
+          });
+        },
+        function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+          rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+            fastn_dom.conditionalDom(root, [
+              __args__.email
+            ], function () {
+              return (fastn_utils.getStaticValue(__args__.email) !== null);
+            }, function (root) {
+              let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+              rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.email, inherited);
+              rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
+              return rooti0;
+            });
+          },
+          function (root, inherited) {
+            fastn_dom.conditionalDom(root, [
+              __args__.website
+            ], function () {
+              return (fastn_utils.getStaticValue(__args__.website) !== null);
+            }, function (root) {
+              let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+              rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.website, inherited);
+              rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
+              return rooti0;
+            });
+          }
+          ]), inherited);
+        }
+        ]), inherited);
+      }
+      ]), inherited);
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["fastn_community_github_io_business_card__front"] = fastn_community_github_io_business_card__front;
+let fastn_community_github_io_business_card__back = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
+  try {
+    let __args__ = {
+      company_slogan: null,
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(global.fastn_community_github_io_business_card__card_background_color), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(50), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderLeftWidth, fastn_dom.Length.Px(8), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderRightWidth, fastn_dom.Length.Px(8), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, inherited.get("colors").get("border_strong"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+        fastn_dom.conditionalDom(root, [
+          __args__.logo
+        ], function () {
+          return (fastn_utils.getStaticValue(__args__.logo) !== null);
+        }, function (root) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Image);
+          rooti0.setProperty(fastn_dom.PropertyKind.ImageSrc, __args__.logo, inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.MaxWidth, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(250)), inherited);
+          return rooti0;
+        });
+      },
+      function (root, inherited) {
+        fastn_dom.conditionalDom(root, [
+          __args__.company_slogan
+        ], function () {
+          return (fastn_utils.getStaticValue(__args__.company_slogan) !== null);
+        }, function (root) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+          rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.company_slogan, inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.MarginTop, fastn_dom.Length.Px(16), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text_strong"), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
+          return rooti0;
+        });
+      }
+      ]), inherited);
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["fastn_community_github_io_business_card__back"] = fastn_community_github_io_business_card__back;
+let fastn_community_github_io_business_card__card = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
+  try {
+    let __args__ = {
+      contact_1: null,
+      contact_2: null,
+      email: null,
+      website: null,
+      address: null,
+      company_slogan: null,
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_community_github_io_business_card__display_card(parent, inherited, {
+      front: fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_community_github_io_business_card__front(root, inherited, {
+          name: __args__.name,
+          title: __args__.title,
+          company_name: __args__.company_name,
+          logo: __args__.logo,
+          contact_1: __args__.contact_1,
+          contact_2: __args__.contact_2,
+          email: __args__.email,
+          website: __args__.website,
+          address: __args__.address
+        });
+      }
+      ]),
+      back: fastn.mutableList([function (root, inherited) {
+        let rooti0 = fastn_community_github_io_business_card__back(root, inherited, {
+          logo: __args__.logo,
+          company_slogan: __args__.company_slogan
+        });
+      }
+      ])
+    });
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["fastn_community_github_io_business_card__card"] = fastn_community_github_io_business_card__card;
+fastn_utils.createNestedObject(global, "fastn_community_github_io_business_card_demo_assets__files.assets.ipsum_logo.svg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/fastn-community.github.io/business-card-demo/assets/ipsum-logo.svg");
+  record.set("dark", "-/fastn-community.github.io/business-card-demo/assets/ipsum-logo-dark.svg");
+  return record;
+}());
+let fastn_community_github_io_business_card__display_card = global["fastn_community_github_io_business_card_lib__display_card"];
+global["fastn_community_github_io_business_card__display_card"] = fastn_community_github_io_business_card__display_card;
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "code-theme-9A3284FD117DFF7CFD432FF860A5E14169FA592BC3DA4F5E8A6975143F5EA07F.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "code-theme-99CD7B013C96C4632F0AEA39AC265387B814AE85A7D33666A4AE4BEFF59016D0.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "code-theme-B3AEA322EADEDA61F0E219845A0E9C8E73F6345E49362B46E6F52CEE40471248.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "code-theme-0CA636E4954E3FC6184FB8000174F8EAA6C61DB10F6A18D74740E6D2032C1A2E.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "code-theme-95B9118AFC8631777EEBBD89B2066C3706A6DF3579B14F41AF05564E41CAA09C.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "code-theme-6EB6F03F9F578742CA0CD1189693E43A6135D910989ADD88CA3C0D6117EE24D7.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "code-theme-256C21B515FC9E77F95D88689A4086B9D9406B7AAE3A273780FE8B8748C5A7D2.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "code-theme-0800A18B1822D6AFDAF807CF840379A2DB3483A1F058CA29FBCFB3815CA76148.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "code-theme-9A45313F167DBD90654BFD5BB3BC0BDF6AE447485C30B0389ADA7B49C069E46A.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "code-theme-4DD8479BE14A755645BC09FF433FB70EB4CB28F0CBF3CA98DCB71B244B85B194.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "code-theme-F614177D3155EA8E915B35A3445175DC7C96D02FBC621F8AFD0FCCC417ED8A43.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "code-theme-B8645DE281A38A3068C56919DE1BB0511696A1EE8002C5088748DA0BAC0806E6.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "code-theme-A352AF572179AB980583D41BC41ADDBA36C4C17757A34C1C6AAAF2C253E25CE3.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "code-theme-B68AA27E05B319F04A9CD747AADBF9B9CD791E040DEC519AE9544B4FF65DDBAC.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "code-theme-06E6F84E43C61CB1653D9F4FACD46B7EBCB3CD8A48EFAEF2E5BE3E9E9212D1E6.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "code-theme-0F444C6433C356376F7E92122F6C521FE40242BEC9D9E050359EE1DF4A9D5E6D.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "code-theme-8CCA3D600F91FA55950DF3132F2ABE4BA14CEEA13CD23E157BF6A137762B8452.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "code-theme-8C59190F5018F48CCBB063359072EE9053D04923BBC5D1BA52B574E78D8C536A.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "code-theme-88F91252A8A0EA125B4BA2C7B85E65580DB580F1477931AADCB5118E4E69D1CD.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "code-theme-A24DC8F09D03756A62923E8A883CAE3B938D54E2813F0855312D2554DBE97BAD.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "code-theme-60E02531E77333F3F1B636C4FC43E976EA9F41AD75268B2DD825C33C68B573A6.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "code-theme-DC76F700474E809F7BA2D9914793D04881B17EA4699BA9C568C83D32A18B0173.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "code-theme-7852E516BA094B01897820BB3432BE553FE5B28F00E9CA0EBC9DFFB8312EE8BF.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "code-theme-792C7BB9F4C8DFF3E0CBC354D2084DBF71BC5750C2C1357F0E7D936867AFAB62.css";
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastnVirtual.doubleBuffer(main_wrapper);
+        ftd.post_init();
+    })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+        ftd.emit_on_load();
+    };
+</script>
+</html>
