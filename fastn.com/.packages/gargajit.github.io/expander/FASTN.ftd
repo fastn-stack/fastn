@@ -1,0 +1,10 @@
+-- import: fastn
+
+-- fastn.package: gargajit.github.io/expander
+
+-- fastn.dependency: fifthtry.github.io/doc-site
+-- fastn.dependency: fifthtry.github.io/forest-cs
+-- fastn.dependency: fifthtry.github.io/admonitions
+-- fastn.dependency: fastn-community.github.io/business-card
+
+-- fastn.auto-import: ds
