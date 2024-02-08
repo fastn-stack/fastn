@@ -923,6 +923,8 @@ skip: true
   document: blog/content-library.ftd
 - Memory, Mutability and Reactivity: /blog/strongly-typed/
   document: blog/strongly-typed.ftd
+- Design System Package Tutorial (Part 1): /blog/design-system/
+  document: blog/design-system.ftd
 - Domain Components: /blog/domain-components/
   document: blog/domain-components.ftd
 - Search Feature in fastn.com: /blog/search/
