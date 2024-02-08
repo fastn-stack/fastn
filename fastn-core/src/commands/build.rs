@@ -60,7 +60,9 @@ pub async fn build(
         }
     }
 
-    config.download_fonts().await?;
+    if !test {
+        config.download_fonts().await?;
+    }
 
     if check_build {
         return fastn_core::post_build_check(config).await;
