@@ -212,16 +212,20 @@ pub(crate) async fn login(
             message: format!("Failed to get connection to db. {:?}", e),
         })?;
 
-    let user: Option<fastn_core::auth::FastnUser> = fastn_core::schema::fastn_user::table
+    let query = fastn_core::schema::fastn_user::table
+        .inner_join(fastn_core::schema::fastn_user_email::table)
         .filter(fastn_core::schema::fastn_user::username.eq(&payload.username))
-        .select(fastn_core::auth::FastnUser::as_select())
-        .first(&mut conn)
-        .await
-        .optional()?;
+        .or_filter(
+            fastn_core::schema::fastn_user_email::email
+                .eq(fastn_core::utils::citext(&payload.username)),
+        )
+        .select(fastn_core::auth::FastnUser::as_select());
+
+    let user: Option<fastn_core::auth::FastnUser> = query.first(&mut conn).await.optional()?;
 
     if user.is_none() {
         return fastn_core::http::user_err(
-            vec![("username".into(), vec!["invalid username".into()])],
+            vec![("username".into(), vec!["invalid email/username".into()])],
             fastn_core::http::StatusCode::OK,
         );
     }
