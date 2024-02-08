@@ -364,27 +364,19 @@ pub async fn update(
     pb.set_style(spinner_style);
     pb.set_prefix("Updating dependencies");
 
-    let updated_packages = match update_dependencies(
-        &config.ds,
-        &config.packages_root,
-        current_package,
-        &pb,
-        offline,
-        check,
-    )
-    .await
-    {
-        Ok(n) => n,
-        Err(UpdateError::Check(e)) => {
-            eprintln!("{}", e);
-            std::process::exit(7);
-        }
-        Err(e) => {
-            return Err(fastn_core::Error::UpdateError {
-                message: e.to_string(),
-            });
-        }
-    };
+    let updated_packages =
+        match update_dependencies(ds, packages_root, &current_package, &pb, offline, check).await {
+            Ok(n) => n,
+            Err(UpdateError::Check(e)) => {
+                eprintln!("{}", e);
+                std::process::exit(7);
+            }
+            Err(e) => {
+                return Err(fastn_core::Error::UpdateError {
+                    message: e.to_string(),
+                });
+            }
+        };
 
     pb.finish_and_clear();
 

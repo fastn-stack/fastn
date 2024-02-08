@@ -63,8 +63,9 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     let current_dir: camino::Utf8PathBuf = std::env::current_dir()?.canonicalize()?.try_into()?;
     let ds = fastn_ds::DocumentStore::new(current_dir);
 
-    if matches.subcommand_matches("update").is_some() {
-        return fastn_update::update(&ds, false).await;
+    if let Some(update) = matches.subcommand_matches("update") {
+        let check = update.get_flag("check");
+        return fastn_update::update(&ds, false, check).await;
     }
 
     let mut config = fastn_core::Config::read(ds, true).await?;
@@ -100,11 +101,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             inline_css,
         )
         .await;
-    }
-
-    if let Some(update) = matches.subcommand_matches("update") {
-        let check = update.get_flag("check");
-        return fastn_update::update(&config, false, check).await;
     }
 
     if let Some(test) = matches.subcommand_matches("test") {
