@@ -198,22 +198,32 @@ pub async fn callback(
 
     tracing::info!("token stored. token_id: {}", &token_id);
 
-    // redirect to onboarding route with a GET request
-    let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
-        req,
-        ds,
-        session_id,
-        format!("/-/auth/onboarding/?next={}", next),
-    )
-    .await?;
+    // Onboarding step is opt-in
+    let onboarding_enabled = ds.env("FASTN_AUTH_ADD_ONBOARDING_STEP").await.is_ok();
 
-    resp.add_cookie(
-        &actix_web::cookie::Cookie::build(fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME, "1")
+    let next_path = if onboarding_enabled {
+        format!("/-/auth/onboarding/?next={}", next)
+    } else {
+        next.to_string()
+    };
+
+    // redirect to onboarding route with a GET request
+    let mut resp =
+        fastn_core::auth::set_session_cookie_and_redirect_to_next(req, ds, session_id, next_path)
+            .await?;
+
+    if onboarding_enabled {
+        resp.add_cookie(
+            &actix_web::cookie::Cookie::build(
+                fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME,
+                "1",
+            )
             .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
             .path("/")
             .finish(),
-    )
-    .map_err(|e| fastn_core::Error::generic(format!("failed to set cookie: {e}")))?;
+        )
+        .map_err(|e| fastn_core::Error::generic(format!("failed to set cookie: {e}")))?;
+    }
 
     Ok(resp)
 }
