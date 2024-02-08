@@ -1187,7 +1187,7 @@ impl Config {
         &self,
         package: &fastn_core::Package,
     ) -> fastn_core::Result<fastn_core::Package> {
-        match { self.all_packages.get(&package.name) } {
+        match self.all_packages.get(&package.name) {
             Some(package) => Ok(package.clone()),
             None => Err(fastn_core::Error::PackageError {
                 message: format!("Could not resolve package {}", &package.name),
