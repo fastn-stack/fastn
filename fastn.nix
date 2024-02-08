@@ -24,8 +24,6 @@ rustPlatform.buildRustPackage {
 
   RUSTFLAGS = "-C target-feature=+crt-static";
 
-  buildFeatures = [ "auth" ];
-
   cargoLock = {
     lockFile = ./Cargo.lock;
     allowBuiltinFetchGit = true;

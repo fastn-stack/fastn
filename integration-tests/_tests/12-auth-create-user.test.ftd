@@ -1,4 +1,3 @@
-;; require fastn built using --features auth flag
 ;; FASTN_DB_URL, FASTN_ENABLE_AUTH must be set
 -- import: fastn
 
