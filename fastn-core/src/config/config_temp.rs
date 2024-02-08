@@ -70,15 +70,110 @@ impl ConfigTemp {
     pub async fn get_all_packages(
         &self,
         ds: &fastn_ds::DocumentStore,
+        package: &mut fastn_core::Package,
         package_root: &fastn_ds::Path,
     ) -> fastn_core::Result<std::collections::BTreeMap<String, fastn_core::Package>> {
         let mut all_packages = std::collections::BTreeMap::new();
 
         for (package_name, manifest) in &self.all_packages {
-            let package = manifest.to_package(package_root, package_name, ds).await?;
-            all_packages.insert(package_name.clone(), package);
+            let mut current_package = manifest.to_package(package_root, package_name, ds).await?;
+            ConfigTemp::check_dependencies_provided(package, &mut current_package)?;
+            all_packages.insert(package_name.clone(), current_package);
         }
 
         Ok(all_packages)
+    }
+
+    fn get_package_name_for_module(
+        package: &mut fastn_core::Package,
+        module_name: &str,
+    ) -> fastn_core::Result<String> {
+        if module_name.starts_with(format!("{}/", &package.name).as_str())
+            || module_name.eq(&package.name)
+        {
+            Ok(package.name.clone())
+        } else if let Some(package_dependency) = package.dependencies.iter().find(|v| {
+            module_name.starts_with(format!("{}/", &v.package.name).as_str())
+                || module_name.eq(&v.package.name)
+        }) {
+            Ok(package_dependency.package.name.clone())
+        } else {
+            fastn_core::usage_error(format!("Can't find package for module {}", module_name))
+        }
+    }
+
+    fn check_dependencies_provided(
+        package: &mut fastn_core::Package,
+        current_package: &mut fastn_core::Package,
+    ) -> fastn_core::Result<()> {
+        let mut auto_imports = vec![];
+        for dependency in current_package.dependencies.iter_mut() {
+            if let Some(ref required_as) = dependency.required_as {
+                if let Some(provided_via) = package.dependencies.iter().find_map(|v| {
+                    if v.package.name.eq(&dependency.package.name) {
+                        v.provided_via.clone()
+                    } else {
+                        None
+                    }
+                }) {
+                    let package_name =
+                        ConfigTemp::get_package_name_for_module(package, provided_via.as_str())?;
+                    dependency.package.name = package_name;
+                    auto_imports.push(fastn_core::AutoImport {
+                        path: provided_via.to_string(),
+                        alias: Some(required_as.clone()),
+                        exposing: vec![],
+                    });
+                } else {
+                    /*auto_imports.push(fastn_core::AutoImport {
+                        path: dependency.package.name.to_string(),
+                        alias: Some(required_as.clone()),
+                        exposing: vec![],
+                    });*/
+                    dbg!("Dependency needs to be provided.", &dependency.package.name);
+                    return fastn_core::usage_error(format!(
+                        "Dependency {} needs to be provided.",
+                        dependency.package.name
+                    ));
+                }
+            }
+        }
+        current_package.auto_import.extend(auto_imports);
+        if let Some(ref package_alias) = current_package.system {
+            if current_package.system_is_confidential.unwrap_or(true) {
+                return fastn_core::usage_error(format!("system-is-confidential is needed for system package {} and currently only false is supported.", current_package.name));
+            }
+            if let Some(provided_via) = package.dependencies.iter().find_map(|v| {
+                if v.package.name.eq(&current_package.name) {
+                    v.provided_via.clone()
+                } else {
+                    None
+                }
+            }) {
+                let package_name =
+                    ConfigTemp::get_package_name_for_module(package, provided_via.as_str())?;
+                current_package.dependencies.push(fastn_core::Dependency {
+                    package: fastn_core::Package::new(package_name.as_str()),
+                    version: None,
+                    notes: None,
+                    alias: None,
+                    implements: vec![],
+                    provided_via: None,
+                    required_as: None,
+                });
+                current_package.auto_import.push(fastn_core::AutoImport {
+                    path: provided_via.to_string(),
+                    alias: Some(package_alias.clone()),
+                    exposing: vec![],
+                });
+            } else {
+                current_package.auto_import.push(fastn_core::AutoImport {
+                    path: current_package.name.to_string(),
+                    alias: Some(package_alias.clone()),
+                    exposing: vec![],
+                });
+            }
+        }
+        Ok(())
     }
 }
