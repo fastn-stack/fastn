@@ -1,0 +1,213 @@
+
+-- ds.page: Creating A Page
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+
+In this section, we will learn about creating pages in `doc-site`.
+
+The `page` component empowers you to create **one-off standalone pages**. You
+can use other fastn components, or markdown.
+
+-- ds.h3: 💡 How to create `page` module?
+
+Create a new file into your fastn project let’s say `ds.ftd`. 
+
+Here’s what your `ds.ftd` module would look like:
+
+-- cb.code: ds.ftd module
+lang: ftd
+download: ds.ftd
+
+\-- import: fastn-community.github.io/doc-site as ds
+
+\-- component page:
+children wrapper:
+optional caption title:
+optional body body:
+
+\-- ds.page: $page.title
+site-logo: https://fastn.com/-/fastn.io/images/fastn.svg
+body: $page.body
+
+\-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+children: $page.wrapper
+
+\-- end: ftd.column
+
+\-- end: ds.page
+
+\-- end: page
+
+-- ds.markdown:
+
+Click on the download icon of the above code-block. `ds.ftd` file will be
+downloaded. Import this file inside your new `.ftd` or download below given
+`page.ftd` file.
+
+Use the `my-ds` component to create a new page using it.
+
+-- ds.code:
+lang: ftd
+download: page.ftd
+
+\-- import: fastn-community.github.io/doc-site as ds
+\-- import: <your fastn package name>/my-ds
+
+\-- ds.page: This is page title
+
+This is body area. It contains multiple paragraphs.
+
+At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+praesentium voluptatum.
+
+\-- ds.h1: This is heading level 1
+
+This is heading level 1 optional body content.
+
+\-- ds.h2: This is heading level 2
+
+This is heading level 2 optional body content.
+
+\-- ds.h3: This is heading level 3
+
+This is heading level 3 optional body content.
+
+\-- end: ds.page
+
+-- ds.markdown:
+
+Click on the download icon of the above code-block. `page.ftd` file will be
+downloaded.
+
+Add this file inside your `fastn` project and deploy or run `fastn serve` on
+your localhost. Access your localhost in the browser
+e.g.`http://127.0.0.1:8000/page/`.
+
+-- ds.h3: Adding global footer to `my-ds` module
+
+You can add our footer component and change its properties as per your web site
+details. [Click here](https://fastn-community.github.io/footer/) to read footer 
+documentation and select a footer for your project.
+
+Just add `show-footer` property in `ds.page` component and pass its value as
+`true`. 
+
+Here’s what your `ds.ftd` module would look like:
+
+-- cb.code: ds.ftd module
+lang: ftd
+download: ds.ftd
+
+\-- import: fastn-community.github.io/doc-site as ds
+\-- import: fastn-community.github.io/doc-site/common
+\-- import: fastn-community.github.io/footer
+
+\-- component page:
+children wrapper:
+optional caption title:
+optional body body:
+
+\-- ds.page: $page.title
+site-logo: https://fastn.com/-/fastn.io/images/fastn.svg
+body: $page.body
+show-footer: true
+
+\-- ds.page.footer:
+
+\-- footer.social-sideline-footer:
+social: true
+site-logo: https://fastn.com/-/fastn.io/images/fastn.svg
+site-url: index.html
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+\-- end: ds.page.footer
+
+\-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+children: $page.wrapper
+
+\-- end: ftd.column
+
+\-- end: ds.page
+
+\-- end: page
+
+-- ds.h3: Adding global right-sidebar to `my-ds` module
+
+If you want to show [right-sidebar](right-sidebar/) on all pages and the content
+of your [right-sidebar](right-sidebar/) is the same for all pages.
+
+Just add `sidebar` property in `ds.page` component and pass its value as
+`true`. 
+
+Here’s what your `ds.ftd` module would look like:
+
+-- cb.code: ds.ftd module
+lang: ftd
+download: ds.ftd
+
+\-- import: fastn-community.github.io/doc-site as ds
+\-- import: fastn-community.github.io/doc-site/common
+\-- import: fastn-community.github.io/footer
+
+\-- component page:
+children wrapper:
+optional caption title:
+optional body body:
+boolean sidebar: true
+
+\-- ds.page: $page.title
+site-logo: https://fastn.com/-/fastn.io/images/fastn.svg
+body: $page.body
+show-footer: true
+sidebar: $page.sidebar
+
+\-- ds.page.footer:
+
+\-- footer.social-sideline-footer:
+social: true
+site-logo: https://fastn.com/-/fastn.io/images/fastn.svg
+site-url: index.html
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+\-- end: ds.page.footer
+
+\-- ds.page.right-sidebar:
+
+\-- ds.h3: Heading in sidebar
+
+You can call any component inside sidebar. 
+
+This right-sidebar will appear on all pages.
+
+\-- ds.code:
+lang: ftd
+
+\-- ftd.text: Hello World
+
+\-- end: ds.page.right-sidebar
+
+\-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+children: $page.wrapper
+
+\-- end: ftd.column
+
+\-- end: ds.page
+
+\-- end: page
+
+-- ds.markdown: 
+
+To change `site-logo` and `site-name` [read `site-logo`](logo/) documentation.
+
+-- end: ds.page

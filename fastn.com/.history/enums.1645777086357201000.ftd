@@ -1,5 +1,0 @@
--- ft.doc-page:
-toc: $config.data-toc
-header-left: $config.doc-header
-    
--- ft.h0: Enums

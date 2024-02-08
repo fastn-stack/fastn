@@ -1,0 +1,75 @@
+-- import: fastn-community.github.io/doc-site/components
+
+-- ds.page: h0, h1, h2, h3
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+The `ds.h0` to `ds.h3` components are used to define headings with varying
+levels of importance. These components represent different levels of heading,
+with `ds.h0` being the highest level and `ds.h3` being the lowest level. 
+
+-- ds.h2: Examples:
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- cb.code:
+lang: ftd
+
+\-- ds.h0: Title of the h0
+
+`ds.h0` is the highest level of heading component of doc-site.
+
+\-- ds.h1: Title of the h1
+
+`ds.h1` is the second highest level of heading component of doc-site.
+
+\-- ds.h2: Title of the h2
+
+`ds.h2` is the third highest level of heading component of doc-site.
+
+\-- ds.h3: Title of the h3
+
+`ds.h3` is the lowest level of heading component of doc-site.
+
+-- ds.rendered.output:
+
+-- ds.h0: Title of the h0
+
+`ds.h0` is the highest level of heading component of doc-site.
+
+-- ds.h1: Title of the h1
+
+`ds.h1` is the second highest level of heading component of doc-site.
+
+-- ds.h2: Title of the h2
+
+`ds.h2` is the third highest level of heading component of doc-site.
+
+-- ds.h3: Title of the h3
+
+`ds.h3` is the lowest level of heading component of doc-site.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h3: Properties of *h0, h1, h2, h3* components
+
+- **title** - `type: caption` It’s used to add title to `h0, h1, h2, h3`
+    components.
+- **body** - `type: body` It’s used to add body content to `h0, h1, h2, h3`
+    components.
+
+-- end: ds.page

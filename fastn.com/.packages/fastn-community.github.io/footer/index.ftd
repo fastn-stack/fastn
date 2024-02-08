@@ -1,0 +1,2039 @@
+-- import: fastn-community.github.io/footer/assets
+-- import: fastn-community.github.io/footer/toc
+-- import: fastn/processors as pr
+
+-- pr.toc-item list empty-toc: 
+
+-- pr.sitemap-data sitemap:
+$processor$: pr.sitemap
+
+-- pr.sitemap-data footer-toc:
+$processor$: pr.full-sitemap
+
+-- string $selected-item: System
+
+-- string bio-text: 
+
+I'm surprised you had the courage to take the responsibility yourself. Leave
+that to me.
+
+
+-- ftd.image-src fastn-logo:
+light: https://fastn.com/-/fastn.com/images/fastn.svg
+dark: https://fastn.com/-/fastn.com/images/fastn-dark.svg
+
+
+
+
+
+-- site-doc.doc-home: fastn package: Footer
+license-url: https://github.com/fastn-community/footer/blob/main/LICENSE
+current-package: fastn-community.github.io/footer
+show-tabs: false
+site-title: Footer
+github-url: https://github.com/fastn-community/footer
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- social-sideline-footer:
+social: true
+site-logo: $assets.files.assets.ipsum-logo.svg
+site-url: index.html
+site-name: NULL
+twitter-url: https://twitter.com/FifthTryHQ
+facebook-url: index.html
+discord-url: https://discord.gg/bucrdvptYd
+instagram-url: index.html
+telegram-url: index.html
+copyright: Copyright © 2023 - fifthtry.com
+
+I appreciate your initiative in taking on the responsibility, but please allow
+me to handle it.
+
+-- end: site-doc.output
+
+-- site-doc.header: What is footer
+
+A website footer is the bottom section of a web page, appearing on all pages. It
+contains useful information for users, not the main focus. It is often
+separated from the main content area by a line or distinct background color.
+
+-- site-doc.header: How to use `footer`
+
+If you are using our [doc-site](https://fastn-community.github.io/doc-site/) 
+theme then go through our doc-site
+[documentation](https://fastn-community.github.io/doc-site/footer/) of how to
+add footer in a document.
+
+
+To learn all types of footer [click here](docs/).
+
+To use `footer` add below lines into your FASTN.ftd document:
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/footer
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+
+-- component basic-footer:
+optional string site-name:
+optional string site-url: /
+optional string copyright: Copyright © 2023 - fifthtry.com
+optional ftd.image-src site-logo: $assets.files.assets.ipsum-logo.svg
+pr.toc-item list footer-links: $sitemap.sections
+integer logo-height: 32
+
+-- ftd.column:
+width: fill-container
+align-self: center
+align-content: center
+padding-vertical.px: 40
+spacing.fixed.px: 24
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.row:
+align-self: center
+align-content: center
+max-width.fixed.px: 1200
+
+-- logo-with-name:
+site-logo: $basic-footer.site-logo
+site-name: $basic-footer.site-name
+site-url: $basic-footer.site-url
+logo-height: $basic-footer.logo-height
+
+-- end: ftd.row
+
+-- ftd.row:
+align-content: center
+spacing.fixed.px: 16
+max-width.fixed.percent: 70
+wrap: true
+
+-- footer-links-section: 
+title: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+sub-sections: $empty-toc
+$loop$: $basic-footer.footer-links as $obj
+
+-- end: ftd.row
+
+-- ftd.row:
+width: fill-container
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+
+-- end: ftd.row
+
+-- ftd.text: 
+if: { basic-footer.copyright != NULL }
+text: $basic-footer.copyright
+color: $inherited.colors.text
+text-align: center
+role: $inherited.types.copy-small
+
+-- end: ftd.column
+
+-- end: basic-footer
+
+
+
+
+
+
+
+
+
+
+-- component fallback-title:
+optional string site-name:
+
+-- ftd.text: LOGO
+if: { fallback-title.site-name == NULL }
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+
+-- end: fallback-title
+
+
+
+
+
+
+
+
+
+
+-- component social-footer:
+optional ftd.image-src twitter-logo: $assets.files.assets.twitter.svg
+optional ftd.image-src facebook-logo: $assets.files.assets.facebook.svg
+optional ftd.image-src discord-logo: $assets.files.assets.discord.svg
+optional ftd.image-src instagram-logo: $assets.files.assets.instagram.svg
+optional ftd.image-src telegram-logo: $assets.files.assets.telegram.svg
+optional string twitter-url: 
+optional string facebook-url: 
+optional string discord-url: 
+optional string instagram-url: 
+optional string telegram-url: 
+optional string copyright:
+pr.toc-item list footer-links: $sitemap.sections
+
+-- ftd.column:
+width: fill-container
+align-content: center
+align-self: center
+padding-vertical.px: 40
+spacing.fixed.px: 24
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.row:
+align-content: center
+max-width.fixed.px: 1200
+
+-- images-list:
+twitter-logo: $social-footer.twitter-logo
+twitter-url: $social-footer.twitter-url
+facebook-logo: $social-footer.facebook-logo
+facebook-url: $social-footer.facebook-url
+discord-logo: $social-footer.discord-logo
+discord-url: $social-footer.discord-url
+instagram-logo: $social-footer.instagram-logo
+instagram-url: $social-footer.instagram-url
+telegram-logo: $social-footer.telegram-logo
+telegram-url: $social-footer.telegram-url
+
+-- end: ftd.row
+
+-- ftd.row:
+align-content: center
+spacing.fixed.px: 32
+max-width.fixed.percent: 70
+wrap: true
+
+-- footer-links-section: 
+title: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+sub-sections: $empty-toc
+$loop$: $social-footer.footer-links as $obj
+
+-- end: ftd.row
+
+-- ftd.row:
+width: fill-container
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+
+-- end: ftd.row
+
+-- ftd.text: 
+text: $social-footer.copyright
+color: $inherited.colors.text
+text-align: center
+role: $inherited.types.copy-small
+
+-- end: ftd.column
+
+-- end: social-footer
+
+
+
+
+
+
+
+
+
+
+-- component social-sideline-footer:
+optional string site-name:
+optional string site-url: /
+optional ftd.image-src twitter-logo: $assets.files.assets.twitter.svg
+optional ftd.image-src facebook-logo: $assets.files.assets.facebook.svg
+optional ftd.image-src discord-logo: $assets.files.assets.discord.svg
+optional ftd.image-src instagram-logo: $assets.files.assets.instagram.svg
+optional ftd.image-src telegram-logo: $assets.files.assets.telegram.svg
+optional string twitter-url: 
+optional string facebook-url: 
+optional string discord-url: 
+optional string instagram-url: 
+optional string telegram-url: 
+optional string copyright:
+optional body bio:
+optional ftd.image-src site-logo: $assets.files.assets.dummy-site-logo.png
+integer logo-height: 32
+boolean social: false
+pr.toc-item list footer-links: $sitemap.sections
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- social-sideline-footer-desktop:
+site-name: $social-sideline-footer.site-name
+telegram-url: $social-sideline-footer.telegram-url
+instagram-url: $social-sideline-footer.instagram-url
+twitter-url: $social-sideline-footer.twitter-url
+discord-url: $social-sideline-footer.discord-url
+facebook-url: $social-sideline-footer.facebook-url
+telegram-logo: $social-sideline-footer.telegram-logo
+instagram-logo: $social-sideline-footer.instagram-logo
+bio: $social-sideline-footer.bio
+copyright: $social-sideline-footer.copyright
+logo-height: $social-sideline-footer.logo-height
+footer-links: $social-sideline-footer.footer-links
+twitter-logo: $social-sideline-footer.twitter-logo
+facebook-logo: $social-sideline-footer.facebook-logo
+discord-logo: $social-sideline-footer.discord-logo
+site-url: $social-sideline-footer.site-url
+site-logo: $social-sideline-footer.site-logo
+social: $social-sideline-footer.social
+
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
+-- social-sideline-footer-mobile:
+site-name: $social-sideline-footer.site-name
+telegram-url: $social-sideline-footer.telegram-url
+instagram-url: $social-sideline-footer.instagram-url
+twitter-url: $social-sideline-footer.twitter-url
+discord-url: $social-sideline-footer.discord-url
+facebook-url: $social-sideline-footer.facebook-url
+telegram-logo: $social-sideline-footer.telegram-logo
+instagram-logo: $social-sideline-footer.instagram-logo
+bio: $social-sideline-footer.bio
+copyright: $social-sideline-footer.copyright
+logo-height: $social-sideline-footer.logo-height
+footer-links: $social-sideline-footer.footer-links
+twitter-logo: $social-sideline-footer.twitter-logo
+facebook-logo: $social-sideline-footer.facebook-logo
+discord-logo: $social-sideline-footer.discord-logo
+site-url: $social-sideline-footer.site-url
+site-logo: $social-sideline-footer.site-logo
+social: $social-sideline-footer.social
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: social-sideline-footer
+
+
+
+
+
+
+
+
+
+
+-- component social-sideline-footer-desktop:
+optional string site-name:
+optional string site-url:
+optional ftd.image-src twitter-logo: 
+optional ftd.image-src facebook-logo:
+optional ftd.image-src discord-logo: 
+optional ftd.image-src instagram-logo:
+optional ftd.image-src telegram-logo:
+optional string twitter-url: 
+optional string facebook-url: 
+optional string discord-url: 
+optional string instagram-url: 
+optional string telegram-url: 
+optional string copyright:
+optional body bio:
+optional ftd.image-src site-logo:
+integer logo-height:
+boolean social:
+pr.toc-item list footer-links:
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 40
+background.solid: $inherited.colors.background.step-1
+spacing.fixed.px: 24
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 40
+padding-horizontal.px: 40
+
+-- logo-with-name:
+site-logo: $social-sideline-footer-desktop.site-logo
+site-name: $social-sideline-footer-desktop.site-name
+site-url: $social-sideline-footer-desktop.site-url
+logo-height: $social-sideline-footer-desktop.logo-height
+
+-- ftd.text:
+if: { social-sideline-footer-desktop.bio != NULL }
+text: $social-sideline-footer-desktop.bio
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+width.fixed.px: 305
+
+-- end: ftd.row
+
+-- ftd.row:
+width: fill-container
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+
+-- end: ftd.row
+
+-- ftd.row:
+padding-horizontal.px: 40
+width: fill-container
+align-content: center
+
+-- ftd.text: 
+text: $social-sideline-footer-desktop.copyright
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+width: fill-container
+
+-- ftd.row:
+if: { !social-sideline-footer-desktop.social }
+align-content: center
+spacing.fixed.px: 32
+
+-- footer-links-section: 
+title: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+sub-sections: $empty-toc
+$loop$: $social-sideline-footer-desktop.footer-links as $obj
+
+-- end: ftd.row
+
+-- ftd.row:
+spacing.fixed.px: 32
+if: { social-sideline-footer-desktop.social }
+
+-- images-list:
+twitter-logo: $social-sideline-footer-desktop.twitter-logo
+twitter-url: $social-sideline-footer-desktop.twitter-url
+facebook-logo: $social-sideline-footer-desktop.facebook-logo
+facebook-url: $social-sideline-footer-desktop.facebook-url
+discord-logo: $social-sideline-footer-desktop.discord-logo
+discord-url: $social-sideline-footer-desktop.discord-url
+instagram-logo: $social-sideline-footer-desktop.instagram-logo
+instagram-url: $social-sideline-footer-desktop.instagram-url
+telegram-logo: $social-sideline-footer-desktop.telegram-logo
+telegram-url: $social-sideline-footer-desktop.telegram-url
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: social-sideline-footer-desktop
+
+
+
+
+
+
+
+
+
+
+-- component social-sideline-footer-mobile:
+optional string site-name:
+optional string site-url:
+optional ftd.image-src twitter-logo:
+optional ftd.image-src facebook-logo:
+optional ftd.image-src discord-logo:
+optional ftd.image-src instagram-logo:
+optional ftd.image-src telegram-logo:
+optional string twitter-url: 
+optional string facebook-url: 
+optional string discord-url: 
+optional string instagram-url: 
+optional string telegram-url: 
+optional string copyright:
+optional body bio:
+optional ftd.image-src site-logo:
+integer logo-height:
+boolean social:
+pr.toc-item list footer-links:
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 24
+background.solid: $inherited.colors.background.step-1
+spacing.fixed.px: 24
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 24
+padding-horizontal.px: 24
+align-content: center
+
+-- logo-with-name:
+site-logo: $social-sideline-footer-mobile.site-logo
+site-name: $social-sideline-footer-mobile.site-name
+site-url: $social-sideline-footer-mobile.site-url
+logo-height: $social-sideline-footer-mobile.logo-height
+
+-- ftd.text:
+if: { social-sideline-footer-mobile.bio != NULL }
+text: $social-sideline-footer-mobile.bio
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+width: fill-container
+text-align: center
+
+-- end: ftd.column
+
+-- ftd.row:
+width: fill-container
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+
+-- end: ftd.row
+
+-- ftd.column:
+spacing.fixed.px: 24
+padding-horizontal.px: 24
+width: fill-container
+align-content: center
+
+-- ftd.row:
+if: { !social-sideline-footer-mobile.social }
+align-content: center
+spacing.fixed.px: 32
+
+-- footer-links-section: 
+title: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+sub-sections: $empty-toc
+$loop$: $social-sideline-footer-mobile.footer-links as $obj
+
+-- end: ftd.row
+
+-- ftd.row:
+spacing.fixed.px: 32
+if: { social-sideline-footer-mobile.social }
+
+-- images-list:
+twitter-logo: $social-sideline-footer-mobile.twitter-logo
+twitter-url: $social-sideline-footer-mobile.twitter-url
+facebook-logo: $social-sideline-footer-mobile.facebook-logo
+facebook-url: $social-sideline-footer-mobile.facebook-url
+discord-logo: $social-sideline-footer-mobile.discord-logo
+discord-url: $social-sideline-footer-mobile.discord-url
+instagram-logo: $social-sideline-footer-mobile.instagram-logo
+instagram-url: $social-sideline-footer-mobile.instagram-url
+telegram-logo: $social-sideline-footer-mobile.telegram-logo
+telegram-url: $social-sideline-footer-mobile.telegram-url
+
+-- end: ftd.row
+
+-- ftd.text: 
+text: $social-sideline-footer-mobile.copyright
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+width: fill-container
+text-align: center
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: social-sideline-footer-mobile
+
+
+
+
+
+
+
+
+
+
+-- component left-hug-sitemap-footer:
+optional string site-name:
+optional string site-url: /
+optional string copyright:
+optional body bio:
+optional ftd.image-src site-logo: $assets.files.assets.dummy-site-logo.png
+integer logo-height: 32
+pr.toc-item list footer-links: $sitemap.sections
+optional ftd.image-src twitter-logo: $assets.files.assets.twitter.svg
+optional ftd.image-src facebook-logo: $assets.files.assets.facebook.svg
+optional ftd.image-src discord-logo: $assets.files.assets.discord.svg
+optional ftd.image-src instagram-logo: $assets.files.assets.instagram.svg
+optional ftd.image-src telegram-logo: $assets.files.assets.telegram.svg
+optional string twitter-url: 
+optional string facebook-url: 
+optional string discord-url: 
+optional string instagram-url: 
+optional string telegram-url: 
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- left-hug-sitemap-footer-desktop:
+site-name: $left-hug-sitemap-footer.site-name
+telegram-url: $left-hug-sitemap-footer.telegram-url
+instagram-url: $left-hug-sitemap-footer.instagram-url
+twitter-url: $left-hug-sitemap-footer.twitter-url
+discord-url: $left-hug-sitemap-footer.discord-url
+facebook-url: $left-hug-sitemap-footer.facebook-url
+telegram-logo: $left-hug-sitemap-footer.telegram-logo
+instagram-logo: $left-hug-sitemap-footer.instagram-logo
+bio: $left-hug-sitemap-footer.bio
+copyright: $left-hug-sitemap-footer.copyright
+logo-height: $left-hug-sitemap-footer.logo-height
+footer-links: $left-hug-sitemap-footer.footer-links
+twitter-logo: $left-hug-sitemap-footer.twitter-logo
+facebook-logo: $left-hug-sitemap-footer.facebook-logo
+discord-logo: $left-hug-sitemap-footer.discord-logo
+site-url: $left-hug-sitemap-footer.site-url
+site-logo: $left-hug-sitemap-footer.site-logo
+
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
+-- left-hug-sitemap-footer-mobile:
+site-name: $left-hug-sitemap-footer.site-name
+telegram-url: $left-hug-sitemap-footer.telegram-url
+instagram-url: $left-hug-sitemap-footer.instagram-url
+twitter-url: $left-hug-sitemap-footer.twitter-url
+discord-url: $left-hug-sitemap-footer.discord-url
+facebook-url: $left-hug-sitemap-footer.facebook-url
+telegram-logo: $left-hug-sitemap-footer.telegram-logo
+instagram-logo: $left-hug-sitemap-footer.instagram-logo
+bio: $left-hug-sitemap-footer.bio
+copyright: $left-hug-sitemap-footer.copyright
+logo-height: $left-hug-sitemap-footer.logo-height
+footer-links: $left-hug-sitemap-footer.footer-links
+twitter-logo: $left-hug-sitemap-footer.twitter-logo
+facebook-logo: $left-hug-sitemap-footer.facebook-logo
+discord-logo: $left-hug-sitemap-footer.discord-logo
+site-url: $left-hug-sitemap-footer.site-url
+site-logo: $left-hug-sitemap-footer.site-logo
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: left-hug-sitemap-footer
+
+
+
+
+
+
+
+
+
+
+-- component left-hug-sitemap-footer-desktop:
+optional string site-name:
+optional string site-url:
+optional string copyright:
+optional body bio:
+optional ftd.image-src site-logo:
+integer logo-height: 32
+pr.toc-item list footer-links:
+pr.toc-item list footer-links:
+optional ftd.image-src twitter-logo:
+optional ftd.image-src facebook-logo:
+optional ftd.image-src discord-logo:
+optional ftd.image-src instagram-logo:
+optional ftd.image-src telegram-logo:
+optional string twitter-url: 
+optional string facebook-url: 
+optional string discord-url: 
+optional string instagram-url: 
+optional string telegram-url: 
+
+-- ftd.row:
+width: fill-container
+padding-vertical.px: 40
+padding-horizontal.px: 40
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.column:
+spacing.fixed.px: 24
+width.fixed.percent: 30
+max-width.fixed.px: 1200
+
+-- logo-with-name:
+site-logo: $left-hug-sitemap-footer-desktop.site-logo
+site-name: $left-hug-sitemap-footer-desktop.site-name
+site-url: $left-hug-sitemap-footer-desktop.site-url
+logo-height: $left-hug-sitemap-footer-desktop.logo-height
+
+-- ftd.text:
+text: $left-hug-sitemap-footer-desktop.bio
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+width.fixed.percent: 70
+
+-- ftd.row:
+padding-vertical.px: 16
+
+-- images-list:
+twitter-logo: $left-hug-sitemap-footer-desktop.twitter-logo
+twitter-url: $left-hug-sitemap-footer-desktop.twitter-url
+facebook-logo: $left-hug-sitemap-footer-desktop.facebook-logo
+facebook-url: $left-hug-sitemap-footer-desktop.facebook-url
+discord-logo: $left-hug-sitemap-footer-desktop.discord-logo
+discord-url: $left-hug-sitemap-footer-desktop.discord-url
+instagram-logo: $left-hug-sitemap-footer-desktop.instagram-logo
+instagram-url: $left-hug-sitemap-footer-desktop.instagram-url
+telegram-logo: $left-hug-sitemap-footer-desktop.telegram-logo
+telegram-url: $left-hug-sitemap-footer-desktop.telegram-url
+
+-- end: ftd.row
+
+-- ftd.text: 
+text: $left-hug-sitemap-footer-desktop.copyright
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+
+-- end: ftd.column
+
+-- ftd.row:
+max-width.fixed.percent: 688
+spacing: space-between
+wrap: true
+margin-left.px: 32
+width.fixed.percent: 65
+
+-- footer-links-section: 
+title: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+sub-sections: $obj.children
+show-subsections: true
+$loop$: $left-hug-sitemap-footer-desktop.footer-links as $obj
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: left-hug-sitemap-footer-desktop
+
+
+
+
+
+
+
+
+
+
+-- component left-hug-sitemap-footer-mobile:
+optional string site-name:
+optional string site-url:
+optional string copyright:
+optional body bio:
+optional ftd.image-src site-logo:
+integer logo-height: 32
+pr.toc-item list footer-links:
+pr.toc-item list footer-links:
+optional ftd.image-src twitter-logo:
+optional ftd.image-src facebook-logo:
+optional ftd.image-src discord-logo:
+optional ftd.image-src instagram-logo:
+optional ftd.image-src telegram-logo:
+optional string twitter-url: 
+optional string facebook-url: 
+optional string discord-url: 
+optional string instagram-url: 
+optional string telegram-url: 
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 24
+padding-horizontal.px: 24
+background.solid: $inherited.colors.background.step-1
+spacing.fixed.px: 24
+
+-- logo-with-name:
+site-logo: $left-hug-sitemap-footer-mobile.site-logo
+site-name: $left-hug-sitemap-footer-mobile.site-name
+site-url: $left-hug-sitemap-footer-mobile.site-url
+logo-height: $left-hug-sitemap-footer-mobile.logo-height
+
+-- ftd.text:
+text: $left-hug-sitemap-footer-mobile.bio
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+width: fill-container
+
+-- ftd.row:
+spacing: space-between
+wrap: true
+width: fill-container
+
+-- footer-links-section: 
+title: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+sub-sections: $obj.children
+show-subsections: true
+$loop$: $left-hug-sitemap-footer-mobile.footer-links as $obj
+
+-- end: ftd.row
+
+-- ftd.row:
+padding-vertical.px: 16
+
+-- images-list:
+twitter-logo: $left-hug-sitemap-footer-mobile.twitter-logo
+twitter-url: $left-hug-sitemap-footer-mobile.twitter-url
+facebook-logo: $left-hug-sitemap-footer-mobile.facebook-logo
+facebook-url: $left-hug-sitemap-footer-mobile.facebook-url
+discord-logo: $left-hug-sitemap-footer-mobile.discord-logo
+discord-url: $left-hug-sitemap-footer-mobile.discord-url
+instagram-logo: $left-hug-sitemap-footer-mobile.instagram-logo
+instagram-url: $left-hug-sitemap-footer-mobile.instagram-url
+telegram-logo: $left-hug-sitemap-footer-mobile.telegram-logo
+telegram-url: $left-hug-sitemap-footer-mobile.telegram-url
+
+-- end: ftd.row
+
+-- ftd.text: 
+text: $left-hug-sitemap-footer-mobile.copyright
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+
+-- end: ftd.column
+
+-- end: left-hug-sitemap-footer-mobile
+
+
+
+
+
+
+
+
+
+
+-- component sitemap-footer:
+optional string site-name:
+optional string site-url: /
+optional string copyright:
+optional body bio:
+optional ftd.image-src site-logo: $assets.files.assets.dummy-site-logo.png
+integer logo-height: 32
+optional ftd.image-src twitter-logo: $assets.files.assets.twitter.svg
+optional ftd.image-src facebook-logo: $assets.files.assets.facebook.svg
+optional ftd.image-src discord-logo: $assets.files.assets.discord.svg
+optional ftd.image-src instagram-logo: $assets.files.assets.instagram.svg
+optional ftd.image-src telegram-logo: $assets.files.assets.telegram.svg
+optional string twitter-url: 
+optional string facebook-url: 
+optional string discord-url: 
+optional string instagram-url: 
+optional string telegram-url: 
+pr.toc-item list footer-links: $sitemap.sections
+optional string sign-up-txt:
+optional string sign-up-link: 
+optional boolean subscription: false
+
+-- ftd.column:
+width: fill-container
+align-content: center
+align-self: center
+padding-vertical.px: 40
+spacing.fixed.px: 32
+padding-horizontal.px: 40
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.row:
+width: fill-container
+wrap if { ftd.device =="mobile" }: true
+
+-- footer-loop: 
+title: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+sub-sections: $obj.children
+show-toc: true
+$loop$: $sitemap-footer.footer-links as $obj
+
+-- end: ftd.row
+
+-- ftd.row:
+align-content if { sitemap-footer.subscription }: center
+width if { sitemap-footer.subscription }: fill-container
+
+-- ftd.column:
+align-content: center
+spacing.fixed.px: 48
+width: fill-container
+
+-- logo-with-name:
+site-logo: $sitemap-footer.site-logo
+site-name: $sitemap-footer.site-name
+site-url: $sitemap-footer.site-url
+logo-height: $sitemap-footer.logo-height
+
+-- ftd.row:
+if: { sitemap-footer.subscription }
+
+-- subscription-form: $sitemap-footer.sign-up-txt
+link: $sitemap-footer.sign-up-link
+
+-- end: ftd.row
+
+-- images-list:
+twitter-logo: $sitemap-footer.twitter-logo
+twitter-url: $sitemap-footer.twitter-url
+facebook-logo: $sitemap-footer.facebook-logo
+facebook-url: $sitemap-footer.facebook-url
+discord-logo: $sitemap-footer.discord-logo
+discord-url: $sitemap-footer.discord-url
+instagram-logo: $sitemap-footer.instagram-logo
+instagram-url: $sitemap-footer.instagram-url
+telegram-logo: $sitemap-footer.telegram-logo
+telegram-url: $sitemap-footer.telegram-url
+
+-- ftd.text: 
+text: $sitemap-footer.copyright
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+text-align if { ftd.device == "mobile" }: center
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: sitemap-footer
+
+
+
+
+
+
+
+
+
+
+-- component subscription-form:
+caption title: 
+string link: 
+boolean $mouse-in: false
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 8
+
+-- ftd.text-input: 
+border-radius.px: 8
+background.solid: $inherited.colors.custom.three
+color: $inherited.colors.background.overlay
+padding-vertical.px: 12
+padding-horizontal.px: 16
+placeholder: Enter your Email...
+min-width.fixed.px: 220
+
+-- ftd.row:
+width: fill-container
+padding-vertical.px: 10
+padding-horizontal.px: 24
+border-radius.px: 8
+background.solid if { !subscription-form.mouse-in }: $inherited.colors.cta-primary.base
+background.solid if { subscription-form.mouse-in }: $inherited.colors.cta-primary.hover
+$on-mouse-enter$: $ftd.set-bool($a = $subscription-form.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $subscription-form.mouse-in, v = false)
+align-content: center
+spacing.fixed.px: 8
+link: $subscription-form.link
+
+-- ftd.text: $subscription-form.title
+role: $inherited.types.button-medium
+color:  $inherited.colors.cta-primary.text
+white-space: nowrap
+
+-- ftd.image:
+src: $assets.files.assets.right-arrow.svg
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: subscription-form
+
+
+
+
+
+
+
+
+
+
+-- component logo-with-name:
+optional string site-name:
+optional string site-url: 
+optional ftd.image-src site-logo: 
+integer logo-height: 38
+
+-- ftd.row:
+
+-- ftd.row:
+spacing.fixed.px: 8
+link: $logo-with-name.site-url
+align-content: center
+
+-- ftd.image:
+if: { logo-with-name.site-logo != NULL }
+src: $logo-with-name.site-logo
+width: auto
+height.fixed.px: $logo-with-name.logo-height
+
+-- ftd.text: $logo-with-name.site-name
+if: { logo-with-name.site-name != NULL }
+color: $inherited.colors.text-strong
+role: $inherited.types.heading-small
+
+-- end: ftd.row
+
+-- fallback-title:
+if: { logo-with-name.site-logo == NULL }
+site-name: $logo-with-name.site-name
+
+-- end: ftd.row
+
+-- end: logo-with-name
+
+
+
+
+
+
+
+
+
+
+-- component images-list:
+optional ftd.image-src twitter-logo:
+optional ftd.image-src facebook-logo:
+optional ftd.image-src discord-logo:
+optional ftd.image-src instagram-logo:
+optional ftd.image-src telegram-logo:
+optional string twitter-url: 
+optional string facebook-url: 
+optional string discord-url: 
+optional string instagram-url: 
+optional string telegram-url: 
+
+-- ftd.row:
+spacing.fixed.px: 32
+
+-- ftd.image: 
+if: { images-list.twitter-logo != NULL && images-list.twitter-url != NULL}
+src: $images-list.twitter-logo
+link: $images-list.twitter-url
+width.fixed.px: 32
+height.fixed.px: 32
+width.fixed.px if { ftd.device == "mobile" }: 24
+height.fixed.px if { ftd.device == "mobile" }: 24
+open-in-new-tab: true
+
+-- ftd.image: 
+if: { images-list.facebook-logo != NULL && images-list.facebook-url != NULL }
+src: $images-list.facebook-logo
+link: $images-list.facebook-url
+width.fixed.px: 32
+height.fixed.px: 32
+width.fixed.px if { ftd.device == "mobile" }: 24
+height.fixed.px if { ftd.device == "mobile" }: 24
+open-in-new-tab: true
+
+-- ftd.image: 
+if: { images-list.discord-logo != NULL && images-list.discord-url != NULL}
+src: $images-list.discord-logo
+link: $images-list.discord-url
+width.fixed.px: 32
+height.fixed.px: 32
+width.fixed.px if { ftd.device == "mobile" }: 24
+height.fixed.px if { ftd.device == "mobile" }: 24
+open-in-new-tab: true
+
+-- ftd.image: 
+if: { images-list.instagram-logo != NULL && images-list.instagram-url != NULL}
+src: $images-list.instagram-logo
+link: $images-list.instagram-url
+width.fixed.px: 32
+height.fixed.px: 32
+width.fixed.px if { ftd.device == "mobile" }: 24
+height.fixed.px if { ftd.device == "mobile" }: 24
+open-in-new-tab: true
+
+-- ftd.image: 
+if: { images-list.telegram-logo != NULL && images-list.telegram-url != NULL}
+src: $images-list.telegram-logo
+link: $images-list.telegram-url
+width.fixed.px: 32
+height.fixed.px: 32
+width.fixed.px if { ftd.device == "mobile" }: 24
+height.fixed.px if { ftd.device == "mobile" }: 24
+open-in-new-tab: true
+
+-- end: ftd.row
+
+-- end: images-list
+
+
+
+
+
+
+
+
+
+
+-- component footer-loop:
+caption title:
+string url:
+boolean $shows-data: false
+boolean is-active: false
+pr.toc-item list sub-sections: $empty-toc
+boolean show-toc: false
+boolean show-subsections: false
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.mobile:
+
+-- footer-loop-mobile: $footer-loop.title
+url: $footer-loop.url
+is-active: $footer-loop.is-active
+sub-sections: $footer-loop.sub-sections 
+$shows-data: $footer-loop.shows-data
+show-toc: $footer-loop.show-toc
+show-subsections: $footer-loop.show-subsections
+
+-- end: ftd.mobile
+
+-- ftd.desktop:
+
+-- ftd.row:
+spacing: space-between
+align-self: center
+wrap: true
+width: fill-container
+
+-- footer-links-section: $footer-loop.title
+url: $footer-loop.url
+sub-sections: $footer-loop.sub-sections 
+show-toc: $footer-loop.show-toc
+show-subsections: $footer-loop.show-subsections
+
+-- end: ftd.row
+
+-- end: ftd.desktop
+
+-- end: ftd.column
+
+-- end: footer-loop
+
+
+
+
+
+
+
+
+
+
+-- component footer-loop-mobile:
+caption title:
+string url:
+boolean $shows-data: 
+boolean is-active: false
+pr.toc-item list sub-sections:
+boolean show-toc:
+boolean show-subsections:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 14
+
+-- ftd.column:
+border-color: $inherited.colors.border-strong
+border-bottom-width.px: 1
+width: fill-container
+padding-vertical.px: 16
+padding-horizontal.px: 16
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.text: $footer-loop-mobile.title
+role: $inherited.types.heading-tiny
+width: fill-container
+color: $inherited.colors.text-strong
+link: $footer-loop-mobile.url
+
+-- ftd.image:
+if: { footer-loop-mobile.shows-data }
+src: $assets.files.assets.down.svg
+width.fixed.px: 16
+$on-click$: $ftd.toggle($a= $footer-loop-mobile.shows-data)
+align-self: center
+
+-- ftd.image:
+if: { !footer-loop-mobile.shows-data }
+src: $assets.files.assets.drop-down.svg
+width.fixed.px: 16
+$on-click$: $ftd.toggle($a= $footer-loop-mobile.shows-data)
+align-self: center
+
+-- end: ftd.row
+
+-- ftd.column:
+if: { footer-loop-mobile.shows-data }
+spacing.fixed.px: 14
+margin-top.px if { $footer-loop-mobile.shows-data }: 12
+
+-- footer-links-toc: 
+title: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+toc: $obj.children
+$loop$: $footer-loop-mobile.sub-sections as $obj
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: footer-loop-mobile
+
+
+
+
+
+
+
+
+
+
+-- component footer-links-section:
+caption title:
+optional string url: /
+boolean is-active: false
+pr.toc-item list sub-sections: $empty-toc
+boolean show-toc: false
+boolean show-subsections: false
+
+-- ftd.column:
+width.fixed.percent if { ftd.device == "mobile" && footer-links-section.show-subsections }: 50
+margin-bottom.px if { ftd.device == "mobile" }: 24
+
+-- ftd.text: $footer-links-section.title
+if: { footer-links-section.show-toc }
+color: $inherited.colors.text
+role: $inherited.types.button-large
+link: $footer-links-section.url
+width: fill-container
+white-space: nowrap
+margin-bottom.px: 12
+
+-- ftd.text: $footer-links-section.title
+if: { footer-links-section.show-subsections && !footer-links-section.show-toc }
+color: $inherited.colors.text
+role: $inherited.types.button-medium
+link: $footer-links-section.url
+width: fill-container
+white-space: nowrap
+margin-bottom.px: 12
+
+-- ftd.text: $footer-links-section.title
+if: { !footer-links-section.show-toc && ! footer-links-section.show-subsections }
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+link: $footer-links-section.url
+width: fill-container
+white-space: nowrap
+
+-- footer-links-toc: 
+if: { !footer-links-section.show-toc }
+title: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+toc: $empty-toc
+show-subsections: $footer-links-section.show-subsections 
+$loop$: $footer-links-section.sub-sections as $obj
+
+-- footer-links-toc: 
+if: { footer-links-section.show-toc }
+title: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+toc: $obj.children
+$loop$: $footer-links-section.sub-sections as $obj
+
+-- end: ftd.column
+
+-- end: footer-links-section
+
+
+
+
+
+
+
+
+
+
+-- component footer-links-toc:
+caption title:
+optional string url: /
+boolean is-active: false
+pr.toc-item list toc: $empty-toc
+children wrap:
+boolean show-subsections: false
+
+-- ftd.column:
+
+-- ftd.text: $footer-links-toc.title
+if: { footer-links-toc.show-subsections }
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+link: $footer-links-toc.url
+width: fill-container
+white-space: nowrap
+margin-bottom.px: 12
+
+-- ftd.text: $footer-links-toc.title
+if: { !footer-links-toc.show-subsections }
+color: $inherited.colors.text
+role: $inherited.types.button-medium
+link: $footer-links-toc.url
+width: fill-container
+white-space: nowrap
+margin-bottom.px: 12
+
+-- ftd.column:
+if: { !ftd.is_empty(footer-links-toc.toc) }
+spacing.fixed.px: 12
+
+-- footer-links-toc-children: 
+title: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+toc: $obj.children
+$loop$: $footer-links-toc.toc as $obj
+
+-- ftd.column:
+children: $footer-links-toc.wrap
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: footer-links-toc
+
+
+
+
+
+
+
+
+
+
+-- component footer-links-toc-children:
+caption title:
+optional string url: /
+boolean is-active: false
+pr.toc-item list toc: $empty-toc
+children wrap:
+
+-- ftd.column:
+spacing.fixed.px: 16
+
+-- ftd.text: $footer-links-toc-children.title
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+link: $footer-links-toc-children.url
+width: fill-container
+white-space: nowrap
+
+-- ftd.column:
+if: { !ftd.is_empty(footer-links-toc-children.toc) }
+spacing.fixed.px: 16
+
+-- footer-links-toc-children: 
+title: $obj.title
+url: $obj.url
+is-active: $obj.is-active
+$loop$: $footer-links-toc-children.toc as $obj
+
+-- ftd.column:
+children: $footer-links-toc-children.wrap
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: footer-links-toc-children
+
+
+
+
+
+
+
+
+
+
+-- component fastn-footer:
+caption copyright: Copyright © 2023 - [FifthTry](https://www.fifthtry.com/)
+optional ftd.image-src site-logo: 
+optional string powered-by-text:
+optional string powered-by-link: 
+
+-- ftd.column:
+width: fill-container
+align-self: center
+align-content: center
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.row:
+width: fill-container
+border-top-width.px: 1
+border-color: $inherited.colors.border
+padding-vertical.px: 20
+padding-horizontal.px: 20
+align-content: center
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.text: 
+if: { fastn-footer.copyright != NULL }
+text: $fastn-footer.copyright
+color: $inherited.colors.text
+text-align: center
+role: $inherited.types.copy-small
+white-space: nowrap
+
+-- end: ftd.row
+
+-- ftd.row:
+align-self: end
+
+-- powered-by: $fastn-footer.powered-by-text
+if: { fastn-footer.site-logo != NULL }
+fastn: $fastn-footer.site-logo
+link: $fastn-footer.powered-by-link
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: fastn-footer
+
+
+
+
+
+
+
+
+
+
+-- component powered-by:
+caption title: Powered by
+ftd.image-src fastn: $fastn-logo
+string link: https://fastn.com/
+
+-- ftd.column:
+link: $powered-by.link
+
+-- ftd.text: $powered-by.title
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- ftd.image:
+src: $powered-by.fastn
+max-width.fixed.px: 120
+height.fixed.px: 28
+margin-left.px: 18
+
+-- end: ftd.column
+
+-- end: powered-by
+
+
+
+
+
+
+
+
+
+
+-- component footer:
+pr.toc-item list footer-toc: 
+integer width: 
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- footer-desktop:
+footer-toc: $footer.footer-toc
+width: $footer.width
+
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
+-- footer-mobile:
+footer-toc: $footer.footer-toc
+width: $footer.width
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: footer
+
+
+
+
+
+
+
+
+
+
+-- component footer-desktop:
+pr.toc-item list footer-toc: 
+integer width: 
+
+-- ftd.column:
+width: fill-container
+border-top-width.px: 1
+border-color: $inherited.colors.border-strong
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $footer-desktop.width
+padding-vertical.px: 60
+padding-horizontal.px: 60
+align-self: center
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.text: Fastn
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+width.fixed.px: 200
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 70
+
+-- footer-loop-new: $obj.title
+$loop$: $footer-desktop.footer-toc as $obj
+children: $obj.children
+url: $obj.url
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- dropdown:
+
+-- ftd.row:
+width: fill-container
+border-top-width.px: 1
+border-color: $inherited.colors.border-strong
+margin-top.px: 82
+padding-top.px: 17
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 18
+
+-- ftd.image:
+src: $assets.files.assets.discord.svg
+width.fixed.px: 42
+
+-- ftd.image:
+src: $assets.files.assets.linkedin.svg
+width.fixed.px: 42
+
+-- ftd.image:
+src: $assets.files.assets.twitter.svg
+width.fixed.px: 42
+
+-- end: ftd.row
+
+-- ftd.text: © 2023 Fastn.inc
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong
+white-space: nowrap
+align-self: center
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: footer-desktop
+
+
+
+
+
+
+
+
+
+
+-- component footer-mobile:
+pr.toc-item list footer-toc: 
+integer width: 1320
+
+-- ftd.column:
+width: fill-container
+border-top-width.px: 1
+border-color: $inherited.colors.border-strong
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 30
+
+-- ftd.text: Fastn
+role: $inherited.types.heading-small
+text-align: center
+color: $inherited.colors.text-strong
+width: fill-container
+
+-- ftd.column:
+width: fill-container
+
+-- footer-loop-new: $obj.title
+$loop$: $footer-mobile.footer-toc as $obj
+children: $obj.children
+url: $obj.url
+
+-- end: ftd.column
+
+-- dropdown:
+
+-- ftd.column:
+width: fill-container
+border-top-width.px: 1
+border-color: $inherited.colors.border-strong
+margin-top.px: 82
+padding-top.px: 17
+spacing.fixed.px: 18
+
+-- ftd.row:
+align-self: center
+spacing.fixed.px: 18
+
+-- ftd.image:
+src: $assets.files.assets.discord.svg
+width.fixed.px: 42
+
+-- ftd.image:
+src: $assets.files.assets.linkedin.svg
+width.fixed.px: 42
+
+-- ftd.image:
+src: $assets.files.assets.twitter.svg
+width.fixed.px: 42
+
+-- end: ftd.row
+
+-- ftd.text: © 2022 Fastn.inc
+role: $inherited.types.button-medium
+color: $inherited.colors.text
+text-align: center
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: footer-mobile
+
+
+
+
+
+
+
+
+
+
+-- component footer-loop-new:
+caption title:
+string url:
+pr.toc-item list children:
+boolean $shows-data: false
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.mobile:
+
+-- footer-loop-new-mobile: $footer-loop-new.title
+url: $footer-loop-new.url
+children: $footer-loop-new.children 
+$shows-data: $footer-loop-new.shows-data
+
+-- end: ftd.mobile
+
+
+-- ftd.desktop:
+
+-- footer-loop-new-desktop: $footer-loop-new.title
+url: $footer-loop-new.url
+children: $footer-loop-new.children
+
+-- end: ftd.desktop
+
+-- end: ftd.column
+
+-- end: footer-loop-new
+
+
+
+
+
+
+
+
+
+
+-- component footer-loop-new-mobile:
+caption title:
+string url:
+pr.toc-item list children:
+boolean $shows-data: 
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 14
+
+-- ftd.column:
+border-color: $inherited.colors.border-strong
+border-bottom-width.px: 1
+width: fill-container
+padding-vertical.px: 16
+padding-horizontal.px: 16
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.text: $footer-loop-new-mobile.title
+role: $inherited.types.heading-tiny
+width: fill-container
+color: $inherited.colors.text-strong
+link: $footer-loop-new-mobile.url
+
+-- ftd.image:
+if: { footer-loop-new-mobile.shows-data }
+src: $assets.files.assets.drop-up.svg
+width.fixed.px: 16
+$on-click$: $ftd.toggle( $a= $footer-loop-new-mobile.shows-data )
+align-self: center
+
+-- ftd.image:
+if: { !footer-loop-new-mobile.shows-data }
+src: $assets.files.assets.drop-down.svg
+width.fixed.px: 16
+$on-click$: $ftd.toggle( $a= $footer-loop-new-mobile.shows-data )
+align-self: center
+
+-- end: ftd.row
+
+-- ftd.column:
+spacing.fixed.px: 14
+margin-top.px if { $footer-loop-new-mobile.shows-data }: 12
+
+-- children-loop: $obj.title
+if: { footer-loop-new-mobile.shows-data }
+url: $obj.url
+children: $obj.children
+$loop$: $footer-loop-new-mobile.children as $obj
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: footer-loop-new-mobile
+
+
+
+
+
+
+
+
+
+
+-- component footer-loop-new-desktop:
+caption title:
+string url:
+pr.toc-item list children:
+
+-- ftd.column:
+spacing.fixed.px: 14
+
+-- ftd.text: $footer-loop-new-desktop.title
+role: $inherited.types.copy-large
+color: $inherited.colors.text-strong
+link: $footer-loop-new-desktop.url
+
+-- children-loop: $obj.title
+url: $obj.url
+children: $obj.children
+$loop$: $footer-loop-new-desktop.children as $obj
+
+-- end: ftd.column
+
+-- end: footer-loop-new-desktop
+
+
+
+
+
+
+
+
+
+
+-- component children-loop:
+caption title:
+string url:
+pr.toc-item list children:
+
+-- ftd.column:
+spacing.fixed.px: 14
+
+-- ftd.desktop:
+
+-- ftd.text: $children-loop.title
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+link: $children-loop.url
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- ftd.text: $children-loop.title
+role: $inherited.types.button-medium
+color: $inherited.colors.text
+link: $children-loop.url
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: children-loop
+
+
+
+
+
+
+
+
+
+
+-- component dropdown:
+caption title: $selected-item
+ftd.color theme-color: $inherited.colors.border-strong
+boolean $show-options: false
+
+-- ftd.column:
+width: fill-container
+z-index: 0
+
+-- ftd.row:
+background.solid: $inherited.colors.background.base
+padding-vertical.px: 11
+padding-horizontal.px: 14
+border-radius.px: 30
+anchor: parent
+bottom.px: 23
+right.px: 23
+bottom.px if { ftd.device == "mobile }: -65
+right.px if { ftd.device == "mobile }: 104
+min-width.fixed.px: 152
+$on-click$: $ftd.toggle( $a = $dropdown.show-options )
+border-color: $inherited.colors.border
+border-width.px: 1
+
+-- ftd.text: $selected-item
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+padding-right.px: 52
+min-width.fixed.px: 112
+
+-- ftd.image:
+src: $assets.files.static.footer.down.svg
+width.fixed.px: 12
+height: auto
+align-self: center
+
+-- ftd.column:
+if: { $dropdown.show-options }
+
+-- mode-changer: $dropdown.title
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: dropdown
+
+
+
+
+
+
+
+
+
+
+-- component mode-changer:
+caption title:
+string $mode-1: Dark
+string $mode-2: Light
+string $mode-3: System
+boolean $mouse-in: false
+
+-- ftd.column:
+background.solid: $inherited.colors.background.base
+padding-vertical.px: 11
+padding-horizontal.px: 14
+anchor: parent
+top.px: 38
+left.px: -136
+min-width.fixed.px: 152
+spacing.fixed.px: 20
+border-color: $inherited.colors.border
+border-width.px: 1
+border-radius.px: 10
+
+-- ftd.column:
+if: { mode-changer.title == "System" }
+spacing.fixed.px: 24
+
+-- ftd.text: $mode-changer.mode-1
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+padding-right.px: 52
+min-width.fixed.px: 112
+$on-click$: $ftd.set-string( $a = $selected-item, v = $mode-changer.mode-1 )
+$on-click$: $ftd.enable-dark-mode()
+
+-- ftd.text: $mode-changer.mode-2
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+padding-right.px: 52
+width.fixed.px: 112
+$on-click$: $ftd.set-string( $a = $selected-item, v = $mode-changer.mode-2 )
+$on-click$: $ftd.enable-light-mode()
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { mode-changer.title == "Dark" }
+spacing.fixed.px: 12
+
+-- ftd.text: $mode-changer.mode-2
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+$on-click$: $ftd.set-string( $a = $selected-item, v = $mode-changer.mode-2 )
+$on-click$: $ftd.enable-light-mode()
+min-width.fixed.px: 112
+
+-- ftd.text: $mode-changer.mode-3
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+$on-click$: $ftd.set-string( $a = $selected-item, v = $mode-changer.mode-3 )
+$on-click$: $ftd.enable-system-mode()
+min-width.fixed.px: 112
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { mode-changer.title == "Light" }
+spacing.fixed.px: 12
+
+-- ftd.text: $mode-changer.mode-1
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+$on-click$: $ftd.set-string( $a = $selected-item, v = $mode-changer.mode-1 )
+$on-click$: $ftd.enable-dark-mode()
+min-width.fixed.px: 112
+
+-- ftd.text: $mode-changer.mode-3
+role: $inherited.types.button-large
+color: $inherited.colors.accent.primary
+$on-click$: $ftd.set-string( $a = $selected-item, v = $mode-changer.mode-3 )
+$on-click$: $ftd.enable-system-mode()
+min-width.fixed.px: 112
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: mode-changer

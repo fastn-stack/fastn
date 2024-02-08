@@ -1,0 +1,13 @@
+-- import: fastn
+
+-- fastn.package: fifthtry.github.io/code-block
+
+-- fastn.dependency: fifthtry.github.io/package-doc as pd
+
+-- fastn.auto-import: pd
+
+-- fastn.sitemap: 
+
+# Home: index.html
+# GitHub
+  url: https://github.com/FifthTry/code-block/

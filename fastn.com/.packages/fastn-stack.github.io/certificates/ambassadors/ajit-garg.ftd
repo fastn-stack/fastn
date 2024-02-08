@@ -1,0 +1,14 @@
+-- import: fastn-stack.github.io/certificates/ambassador
+
+-- ds.page: Ambassador Certification
+
+-- ftd.column:
+width: fill-container
+
+-- ambassador.certificate-2: Ajit garg
+date: 6th October 2023
+avatar: $assets.files.assets.avatar.ajit.jpg
+
+-- end: ftd.column
+
+-- end: ds.page

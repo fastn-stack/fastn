@@ -1,0 +1,67 @@
+-- import: fastn-community.github.io/banner/assets
+-- import: fifthtry.github.io/package-doc/doc as pd
+-- import: fastn-community.github.io/banner
+
+-- ft.page: Banner Components
+show-banner: true
+
+-- ft.page.banner: 
+
+-- banner.cta-banner: 
+cta-text: Ahoy, Web Components!
+cta-link: https://fastn.io/blog/web-components/
+
+🚀 Checkout our latest blog post
+
+-- end: ft.page.banner
+
+-- ft.page.body:
+
+-- pd.package: CTA Banner
+name: fastn-community.github.io/banner
+
+`cta-banner` is another banner component which have `cta-text` and `cta-link` as
+additional(optional) parameters.
+
+Use our `cta-banner` on your fastn web projects where you would like to add
+click to action for your web page users.
+
+🌟 Ex.g. Look at the top of this page.
+
+To use cta-banner on your `FTD` web pages, add below `fastn` dependency into
+`FASTN.ftd` file:
+
+-- ft.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/banner
+\-- fastn.auto-import: fastn-community.github.io/banner
+
+-- tf.markdown:
+
+Once you add above lines into your `fastn` package, add `banner` into your
+`.ftd` files:
+
+-- cb.rendered:
+
+-- cb.rendered.input:
+
+\-- banner.cta-banner: 
+cta-text: Ahoy, Web Components!
+cta-link: https://fastn.io/blog/web-components/
+
+🚀 Checkout our latest blog post
+
+-- cb.rendered.output:
+
+-- banner.cta-banner: 
+cta-text: Ahoy, Web Components!
+cta-link: https://fastn.io/blog/web-components/
+
+🚀 Checkout our latest blog post
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- end: ft.page

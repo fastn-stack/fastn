@@ -1,0 +1,56 @@
+{
+    "files": {
+        "doc-site-example.png": {
+            "name": "doc-site-example.png",
+            "checksum": "611E21D16829D0FACDB5D2C21ABA2ADF95BF7359DAFA16FCE1351F0AC0E5C44B",
+            "size": 90059
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "70B897B07454A3277A184E43ED90274988EBF3F7199943693B3106B05E0AB3E0",
+            "size": 5055
+        },
+        "images/FTD.svg": {
+            "name": "images/FTD.svg",
+            "checksum": "E1AF84F956375D4D61AC238C6B4B393B947F4FE245736BECF80843F7C9313511",
+            "size": 3798
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "9C481C6518E151058FD4EC4FF962CA20735CA60447D82992F9D8F9214914880C",
+            "size": 1091
+        },
+        "images/app-switcher-mobile.svg": {
+            "name": "images/app-switcher-mobile.svg",
+            "checksum": "0E80A211F7B95221F83B95AF52BED4EFA7835173DE2040FE807A10475DF189C3",
+            "size": 252
+        },
+        "images/cross.svg": {
+            "name": "images/cross.svg",
+            "checksum": "2C312823EEAB39775C496367DC2723B096B32EEC47FF53F2790A6E79705A9029",
+            "size": 678
+        },
+        "LICENSE": {
+            "name": "LICENSE",
+            "checksum": "5B8B83357C092AC57F28508D18CAB65E4965AAA3BA61226DE038719E022638C1",
+            "size": 1516
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "C623C3898EEC94D73FCE3F998DD39D98053D886C4C25A7329C503EDB00447D6F",
+            "size": 1003
+        },
+        "images/Fifthtry.svg": {
+            "name": "images/Fifthtry.svg",
+            "checksum": "D35F99848896239279A7C8F20522880C650626D8BE1785DE5B0B3CD7D87CCA03",
+            "size": 10581
+        },
+        "images/FPM.svg": {
+            "name": "images/FPM.svg",
+            "checksum": "5A84F16B1B39D55E37BA547B6EA2DBB6D62C48A4D4B40FE4EE0599B3B9E8DEE7",
+            "size": 3895
+        }
+    },
+    "zip_url": "https://github.com/FifthTry/app-switcher/archive/96c854aa5f7414cb78aa32ecbd26890333bc7ce2.zip",
+    "checksum": "38CB1CD0E73C366E1D84AD05BE7D446BB3EF28159835FFF45CA829F24853515A"
+}

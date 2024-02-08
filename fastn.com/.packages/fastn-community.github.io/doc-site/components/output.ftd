@@ -1,0 +1,68 @@
+-- import: fastn-community.github.io/doc-site/components
+
+-- ds.page: output
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+`ds.output` can be used to show a output container with title. You can show a
+output of a code example using this component or if you want to show a
+component with border covered with vertical padding 30px and horizontal padding
+20px with a title.
+
+-- ds.h2: Example:
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- ds.output: This is the title of output component
+
+\-- ds.output.output-container:
+
+\-- ds.image: This is image caption
+link: https://fastn.com
+src: $assets.files.static.image-placeholder.jpg
+
+This is addition body content for above image. At vero eos et accusamus.
+
+\-- end: ds.output.output-container
+
+\-- end: ds.output
+
+-- ds.rendered.output:
+
+-- ds.output: This is the title of output component
+
+-- ds.output.output-container:
+
+-- ds.image: This is image caption
+link: https://fastn.com
+src: $assets.files.static.image-placeholder.jpg
+
+This is addition body content for above image. At vero eos et accusamus.
+
+-- end: ds.output.output-container
+
+-- end: ds.output
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h3: Properties of `output` component
+
+- **title** - `type: caption` It’s used to add title to `output` component.
+- **output-container** - `type: ftd.ui list` It’s used to add to child
+    components  to `output` component.
+
+-- end: ds.page

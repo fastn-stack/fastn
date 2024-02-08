@@ -1,0 +1,81 @@
+{
+    "files": {
+        "docs.ftd": {
+            "name": "docs.ftd",
+            "checksum": "B72A49D5E631AA2D06F4580F95FEBFFDFC278F6F5EFABF9059B7DA9A4952281B",
+            "size": 3102
+        },
+        "assets/images/fastn.png": {
+            "name": "assets/images/fastn.png",
+            "checksum": "B343BA7FC15A0BAA6EB7F0BBD109263DB7958DCED9DB21CC89FAC09B61565B8D",
+            "size": 1505
+        },
+        "LICENSE": {
+            "name": "LICENSE",
+            "checksum": "5B8B83357C092AC57F28508D18CAB65E4965AAA3BA61226DE038719E022638C1",
+            "size": 1516
+        },
+        "test.ftd": {
+            "name": "test.ftd",
+            "checksum": "14C6A76B996ED2274267A0EBAC9B7C82109196BA99A9FB3C247ACD34BEAF94AB",
+            "size": 129
+        },
+        "assets/images/ftd.png": {
+            "name": "assets/images/ftd.png",
+            "checksum": "BBE9F3793752430EED8C702AB4DAF8C70E2762972EC648DF6B5BE04B29266F3B",
+            "size": 1391
+        },
+        "assets/images/logo-brand.svg": {
+            "name": "assets/images/logo-brand.svg",
+            "checksum": "811F5B9D0EED27CCA76CD142F155D3994C844F4A97FB7ECE20A05099EAABF8D5",
+            "size": 1438
+        },
+        "assets/images/down-arrow.svg": {
+            "name": "assets/images/down-arrow.svg",
+            "checksum": "8F73662534E8104D71F5B8110787C824007292BDC8C8CF05425B614A69C179DF",
+            "size": 347
+        },
+        "assets/images/home.png": {
+            "name": "assets/images/home.png",
+            "checksum": "A14AE412E4AB7B653B8F676CD7E62C1D419602CFEC16463C4044F18C18EDE322",
+            "size": 1147
+        },
+        "assets/images/doc-framework.png": {
+            "name": "assets/images/doc-framework.png",
+            "checksum": "6AC59E5D93D939DBFDD7377BE098F6E4F5390296AA3194176EAD8BF44E6F0840",
+            "size": 864
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "70C5997CB096DB97DDF3B2A3E4B19A601253AE1D182753744A67C0C225A14AA6",
+            "size": 294
+        },
+        "assets/images/brand-logo.png": {
+            "name": "assets/images/brand-logo.png",
+            "checksum": "0B2A7BAE6E5EABF3F347F6B05F8E129534BFDD35ED7515CF3B9BECBA6BFF69D1",
+            "size": 757
+        },
+        "assets/images/triangle-down.png": {
+            "name": "assets/images/triangle-down.png",
+            "checksum": "2504513E99765E6FDEF8AEB56CEED5E30C192637683FAC48561EE19FCECB1E39",
+            "size": 196
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "B27AE657E42CCC07FDED97F6ED86E2E32814AC80F54F33C0556FFDFAA4D7CB70",
+            "size": 306
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "00EA2E49B0F1978F421A6964B44F208C0FDF0D8A8B84A2D998752BFC69A73180",
+            "size": 13304
+        },
+        "assets/images/switcher-demo.png": {
+            "name": "assets/images/switcher-demo.png",
+            "checksum": "D1C3602466C6E5FEFB95BC37293D1D1C13A68CD9EDF506A131D49FF01EF38182",
+            "size": 43952
+        }
+    },
+    "zip_url": "https://github.com/FifthTry/product-switcher/archive/375cf93ced74268a6261247b8335355226d76c01.zip",
+    "checksum": "919EC54C594BCFF7AF5E3A823BEBA651A7A027C378224551D71FF6BE885AAADA"
+}

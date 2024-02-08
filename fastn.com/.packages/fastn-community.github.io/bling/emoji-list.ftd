@@ -1,0 +1,116 @@
+
+-- site-doc.doc-home: Emoji-List
+site-title: Bling
+show-tabs: false
+github-url: https://github.com/fastn-community/bling
+current-package: fastn-community.github.io/bling
+
+An emoji list refers to a collection list items with emoji as a bullet. Emoji's 
+are small graphical icons or symbols used to convey emotions, ideas, or
+concepts in digital communication. Emojis are widely used in various forms of
+online communication, such as messaging apps, social media platforms, and
+emails, to add visual expressions and enhance the tone and meaning of
+text-based messages.
+
+-- site-doc.header: Example
+
+-- emoji-list: Lorem ipsum dolor sit amet, consectetur adipiscing 
+emoji: 💫
+
+-- emoji-list: Lorem ipsum dolor sit amet, consectetur adipiscing 
+emoji: 🌟
+
+-- emoji-list: Lorem ipsum dolor sit amet, consectetur adipiscing 
+emoji: 💥
+
+-- emoji-list: Lorem ipsum dolor sit amet, consectetur adipiscing 
+emoji: 🌺
+
+-- emoji-list: 
+emoji: ❤️
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `bling` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/bling
+
+-- cb.code: import `emoji-list` inside your `.ftd` file
+lang: ftd
+
+\-- import: fastn-community.github.io/bling/emoji-list
+
+-- cb.code: copy any one of these `-- emoji-list` you like to use
+lang: ftd
+
+\-- emoji-list: Lorem ipsum dolor sit amet, consectetur adipiscing 
+emoji: 💫
+
+\-- emoji-list: Lorem ipsum dolor sit amet, consectetur adipiscing 
+emoji: 🌟
+
+\-- emoji-list: Lorem ipsum dolor sit amet, consectetur adipiscing 
+emoji: 💥
+
+\-- emoji-list: Lorem ipsum dolor sit amet, consectetur adipiscing 
+emoji: 🌺
+
+\-- emoji-list: 
+emoji: ✨
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `emoji-list` component.
+
+-- site-doc.component-property: `emoji`
+type: String (`required`)
+
+It's used to add emoji as a list bullet to emoji-list.
+
+-- site-doc.component-property: `body`
+type: Body (`optional`)
+
+It's used to add body content to emoji-list component.
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component emoji-list:
+string emoji:
+caption or body body: 
+
+-- ftd.row:
+max-width.fixed.px: 800
+margin-bottom.px: 12
+width: auto
+spacing.fixed.px: 10
+
+-- ftd.text: $emoji-list.emoji
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+
+-- ftd.text:
+text: $emoji-list.body
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+
+-- end: ftd.row
+
+-- end: emoji-list

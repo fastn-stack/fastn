@@ -1,0 +1,147 @@
+-- import: fastn-community.github.io/code-block as cb
+-- import: fastn-community.github.io/site-doc
+
+
+
+
+
+-- site-doc.doc-home: Code Block
+site-title: Code Block
+github-url: https://github.com/fastn-community/code-block
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/code-block
+
+
+-- site-doc.header: Basic code example
+
+-- cb.rendered: 
+
+-- cb.rendered.input:
+
+\-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- cb.rendered.output:
+
+-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+
+-- site-doc.header: Download code block in a file
+
+-- cb.rendered: 
+
+-- cb.rendered.input:
+
+\-- cb.code:
+lang: java
+download: example.java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- cb.rendered.output:
+
+-- cb.code:
+lang: java
+download: example.java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+
+-- site-doc.header: Copy `false`
+
+-- cb.rendered: 
+
+-- cb.rendered.input:
+
+\-- cb.code:
+lang: java
+copy: false
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- cb.rendered.output:
+
+-- cb.code:
+lang: java
+copy: false
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+
+-- site-doc.header: `ftd` lang example
+
+-- cb.rendered: 
+
+-- cb.rendered.input:
+
+\-- cb.code:
+lang: ftd
+
+\-- ftd.text: Hello I am fastn lang
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+-- cb.rendered.output:
+
+-- cb.code:
+lang: ftd
+
+\-- ftd.text: Hello I am fastn lang
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- end: site-doc.doc-home

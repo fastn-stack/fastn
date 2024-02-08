@@ -1,0 +1,42 @@
+/-- import: fastn.com/expander/ds/meta-data as ds-meta
+-- import: fastn-community.github.io/doc-site/components
+
+
+
+
+
+-- ds.page: SEO
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+fastn SEO helps to boost your search engine optimization with its buit-in
+ [`ftd.document`](https://fastn.com/document/) features.
+
+/-- ds-meta.show-md:
+
+-- show-md:
+
+-- end: ds.page
+
+
+-- component show-md:
+
+-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+
+	-- ds.h0: Add meta-data to `doc-site`
+
+-- end: ftd.column
+
+-- end: show-md

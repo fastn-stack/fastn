@@ -1,0 +1,55 @@
+-- import: fastn-community.github.io/doc-site/assets
+
+
+
+
+
+-- ds.page: Getting Started
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+
+You can create your documentation website using `doc-site`. `doc-site` also
+helps authors, entrepreneurs, corporate groups, and bloggers to create their
+own fastn web project.
+
+-- ds.h2: 🎨 Creating fastn web-site using `doc-site`
+
+To understand how to create fastn website repository on GitHub - [Click here](https://fastn.com/github-pages/).
+
+-- ds.h3: 🤔 How to publish a package?
+
+Watch this quick video tutorial to learn how to publish a package.
+
+-- ds.youtube:
+v: tsHB2Vrhb2c
+
+-- ds.markdown:
+
+🛠️ Resources:
+
+- [Fastn Template](https://github.com/fastn-stack/fastn-template) 
+
+-- ds.h2: 🌟 Whats next?
+
+The `-- ds.page` component comes with an built-in navbar, sidebar, and body
+content area. Start creating new `.ftd` files inside your project and use
+`doc-site` `ds.page` component to write your documentation, blog posts, etc.
+
+🔸 To learn how to configure your fastn website - [Click here](https://fastn-community.github.io/doc-site/domain-setup/).
+
+🔸 To know more details of the `ds.page` component - [Click here](https://fastn-community.github.io/doc-site/components/page/).
+
+🔸 To learn how to generate a better `sitemap` for navigation -  [Click here](https://fastn-community.github.io/doc-site/sitemap/).
+
+🔸 To change the `typography` and font - [Click here](https://fastn-community.github.io/doc-site/types/).
+
+🔸 To change the color schemes - [Click here](https://fastn-community.github.io/doc-site/cs/).
+
+🔸 To know about SEO support - [Click here](https://fastn-community.github.io/doc-site/seo/).
+
+🔸 To learn how to update footer - [Click here](https://fastn-community.github.io/doc-site/footer/).
+
+🔸 To know about static assets - [Click here](https://fastn-community.github.io/doc-site/components/image/).
+
+-- end: ds.page

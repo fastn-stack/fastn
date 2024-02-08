@@ -1,0 +1,46 @@
+
+-- ds.page: How to use `doc-site`?
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+
+
+`doc-site` package is recommended to be used only for documentation, of your
+[fastn](https://fastn.com/) projects.
+
+To use this package add below lines into your `FASTN.ftd` file:
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/doc-site
+\-- fastn.auto-import: fastn-community.github.io/doc-site/FASTN/ds
+
+
+-- ds.h2: Invocation
+
+Create new ftd file into your [fastn](https://fastn.com/) package e.g. index.ftd
+and add page component inside it.
+
+-- ds.code:
+lang: ftd
+download: index.ftd
+
+\-- ds.page: Welcome to your fastn powered website.
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+site-name: NULL
+github-url: https://github.com/fastn-community/doc-site/
+github-icon: true
+color-scheme: fastn-community.github.io/dark-flame-cs
+typography: fastn-community.github.io/midnight-rush-typography
+
+Some body here is coming from `$page.body`
+
+\-- end: ds.page
+
+
+-- ds.h3: [Click here](components/) to learn more about `doc-site` components
+
+-- end: ds.page

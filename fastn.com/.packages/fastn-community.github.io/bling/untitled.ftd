@@ -1,0 +1,98 @@
+-- component message-left:
+optional caption title:
+optional body body:
+optional string username:
+optional string time:
+optional ftd.image-src avatar: $assets.files.static.avatar.svg
+boolean round-avatar: true
+children container:
+
+-- ftd.column:
+margin-bottom.px: 24
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.image:
+src: $message-left.avatar
+width.fixed.px: 32
+height: auto
+margin-right.px: 20
+border-radius.px if { !message-left.round-avatar }: 32
+
+-- ftd.image:
+src: $assets.files.static.left-pointer.svg
+width.fixed.px: 32
+height.fixed.px: 32
+anchor: parent
+left.px: 38
+z-index: 0
+top.px: 4
+
+-- ftd.column:
+border-width.px: 1
+border-color: $inherited.colors.cta-secondary.border
+background.solid: $inherited.colors.background.step-1
+padding-vertical.px: 12
+padding-horizontal.px: 22
+border-radius.px: 10
+width: fill-container
+z-index: 1
+spacing.fixed.px: 12
+
+-- ftd.text: $message-left.username
+if: { message-left.username != NULL }
+color: $inherited.colors.text
+role: $inherited.types.fine-print
+width: fill-container
+text-align: start
+
+-- ftd.text: $message-left.title
+if: { message-left.title != NULL }
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+width: fill-container
+text-align: start
+
+-- ftd.text:
+if: { message-left.body != NULL }
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+width: fill-container
+text-align: start
+
+$message-left.body
+
+-- ftd.column:
+padding-bottom.px if { message-left.time != NULL }: 16
+children: $message-left.container
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+anchor: parent
+bottom.px: 8
+right.px: 8
+
+-- ftd.text: $message-left.time
+if: { message-left.time != NULL }
+color: $inherited.colors.text
+role: $inherited.types.fine-print
+width: fill-container
+text-align: end
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: message-left

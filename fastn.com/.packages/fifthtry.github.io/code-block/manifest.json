@@ -1,0 +1,81 @@
+{
+    "files": {
+        "static/copy-dark.svg": {
+            "name": "static/copy-dark.svg",
+            "checksum": "DBBFD0F0E590CC4DDF95D6CEF537B4E3E8B2D338AFCF3759B21757026243D189",
+            "size": 1767
+        },
+        "static/icon-dark.svg": {
+            "name": "static/icon-dark.svg",
+            "checksum": "94F7A2C1F9C1BD687033EA5C05D1C225FE1B593296595012D7A3A36BAA083BE6",
+            "size": 644
+        },
+        "static/download.svg": {
+            "name": "static/download.svg",
+            "checksum": "AFEE96EDD08DEF895DEA72DACEE2CE1CC7A2F308544A59824405E6B56896ED19",
+            "size": 344
+        },
+        "LICENSE": {
+            "name": "LICENSE",
+            "checksum": "61B96B6BF183983862D39452862BE96EF5E8B2AAB2B60BF7D7F2E65861B6D2DE",
+            "size": 1318
+        },
+        "static/download-hover-dark.svg": {
+            "name": "static/download-hover-dark.svg",
+            "checksum": "A7C0B2EADB712F4A5B369E8E80478F396B345DC4AB1C2DDB8A647B45C06C9AF6",
+            "size": 344
+        },
+        "static/tick.svg": {
+            "name": "static/tick.svg",
+            "checksum": "A4D18E8A4EBA18F571C8AFAB3C9894EFCFB966119D53476FFD4E941866C39263",
+            "size": 174
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "2A6BDA33AF7911D2F0B73160351421CF6D4A81904ECF67DC855DF6DC7152EC44",
+            "size": 12
+        },
+        "static/copy-hover.svg": {
+            "name": "static/copy-hover.svg",
+            "checksum": "DD791A63E284ACD26306854B963E49808B40CEE9B4611F6708E15F44FB20BBE1",
+            "size": 1767
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "042CBEAA99455AB84CBCDE221B28342426F887F14D7650584AB6C1D3C7B91ADF",
+            "size": 13765
+        },
+        "static/copy.svg": {
+            "name": "static/copy.svg",
+            "checksum": "E29572BC1687F0D1D7BE831A367EF85C0326726A58004BD00F5C9C20877DA2D6",
+            "size": 1767
+        },
+        "static/copy-hover-dark.svg": {
+            "name": "static/copy-hover-dark.svg",
+            "checksum": "F5EDC961FA806BFF6BC13B508B8414EE1CB2CB8490F9DD14290DB4A4EBF3CCAD",
+            "size": 1767
+        },
+        "static/download-dark.svg": {
+            "name": "static/download-dark.svg",
+            "checksum": "D6F756207B780B679E1FF4957597FBBC843EBDE678761A9181F6E61DEB011769",
+            "size": 344
+        },
+        "static/switch-mode-icon.svg": {
+            "name": "static/switch-mode-icon.svg",
+            "checksum": "BBA72E204A2BAE21C0696C6840C5BC7A4CA7747260AC83C1CF96C20475E19AA4",
+            "size": 645
+        },
+        "static/download-hover.svg": {
+            "name": "static/download-hover.svg",
+            "checksum": "1450A84E2E08E0F946F72E7BA08F465A36BF1D9269694784E59A4139772037A7",
+            "size": 349
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "8830314D51CEAC4346168C0A6E1CCAA7BC7A8489782ACA2B5D15AEA7F734A597",
+            "size": 247
+        }
+    },
+    "zip_url": "https://github.com/FifthTry/code-block/archive/0e805cbc5a3f38aeb3ea7ea46a969dcd205a5101.zip",
+    "checksum": "88C2B9A31B9E47748FB8C11ACC7314648326C594922E83F41866AE89E1DD486D"
+}

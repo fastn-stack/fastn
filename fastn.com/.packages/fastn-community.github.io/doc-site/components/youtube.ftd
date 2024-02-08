@@ -1,0 +1,62 @@
+-- import: fastn-community.github.io/doc-site/components
+
+-- ds.page: youtube
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+In this section, we will learn more about `ds.youtube` component and its usage.
+
+The `ds.youtube` component creates a rectangular region in your page where the
+embedded YouTube video will be displayed. You specify the source of the content
+using the `v` property, which can be a vertion of a YouTube video.
+
+-- ds.h2: Example:
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- cb.code:
+lang: java
+
+\-- ds.youtube:
+v: UzAC8aOf2is
+width: fill-container
+height.fixed.px: 450
+
+-- ds.rendered.output:
+
+-- ds.youtube:
+v: UzAC8aOf2is
+width: fill-container
+height.fixed.px: 450
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h3: Properties of `ds.youtube` component
+
+- **v** - `type: string` It’s used to add YouTube video versionto `ds.youtube`
+    component. 
+
+    For e.g. the YouTube link of above example video is
+    `https://www.youtube.com/watch?v=UzAC8aOf2is` in this link `v=UzAC8aOf2is`
+    version value is the value of `v` property.
+- **width** - `type: ftd.resizing` It’s used to add width to `ds.youtube`
+    component.
+- **height** - `type: ftd.resizing` It’s used to add height to `ds.youtube`
+    component.
+
+
+-- end: ds.page

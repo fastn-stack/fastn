@@ -1,0 +1,242 @@
+-- import: fastn-community.github.io/code-block as cb
+-- import: fastn-community.github.io/site-doc
+
+
+
+
+
+-- site-doc.doc-home: Rendered Code Block
+site-title: Code Block
+github-url: https://github.com/fastn-community/code-block
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/code-block
+
+-- site-doc.header: Basic code example
+
+-- cb.rendered: 
+
+-- cb.rendered.input:
+
+\-- cb.rendered: 
+
+\-- cb.rendered.input:
+
+\-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+\-- cb.rendered.output:
+
+\-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+\-- end: cb.rendered.output
+
+\-- end: cb.rendered
+
+-- cb.rendered.output:
+
+-- cb.rendered: 
+
+-- cb.rendered.input:
+
+\-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- cb.rendered.output:
+
+-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+
+-- site-doc.header: Example with a `ftd` component
+
+-- cb.rendered: 
+
+-- cb.rendered.input:
+
+\-- cb.rendered: 
+
+\-- cb.rendered.input:
+
+\-- ftd.text: Hello World I am rendered code-block
+role: $inherited.types.heading-medium
+color: $inherited.colors.custom.nine
+
+\-- cb.rendered.output:
+
+\-- ftd.text: Hello World I am rendered code-block
+role: $inherited.types.heading-medium
+color: $inherited.colors.custom.nine
+
+\-- end: cb.rendered.output
+
+\-- end: cb.rendered
+
+-- cb.rendered.output:
+
+-- cb.rendered: 
+
+-- cb.rendered.input:
+
+\-- ftd.text: Hello World I am rendered code-block
+role: $inherited.types.heading-medium
+color: $inherited.colors.custom.nine
+
+-- cb.rendered.output:
+
+-- ftd.text: Hello World I am rendered code-block
+role: $inherited.types.heading-medium
+color: $inherited.colors.custom.nine
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+
+-- site-doc.header: Copy `false`
+
+-- cb.rendered: 
+copy: false
+
+-- cb.rendered.input:
+
+\-- cb.rendered: 
+copy: false
+
+\-- cb.rendered.input:
+
+\-- ftd.text: Hello World I am rendered code-block
+role: $inherited.types.heading-medium
+color: $inherited.colors.custom.nine
+
+\-- cb.rendered.output:
+
+\-- ftd.text: Hello World I am rendered code-block
+role: $inherited.types.heading-medium
+color: $inherited.colors.custom.nine
+
+\-- end: cb.rendered.output
+
+\-- end: cb.rendered
+
+-- cb.rendered.output:
+
+-- cb.rendered: 
+copy: false
+
+-- cb.rendered.input:
+
+\-- ftd.text: Hello World I am rendered code-block
+role: $inherited.types.heading-medium
+color: $inherited.colors.custom.nine
+
+-- cb.rendered.output:
+
+-- ftd.text: Hello World I am rendered code-block
+role: $inherited.types.heading-medium
+color: $inherited.colors.custom.nine
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+
+-- site-doc.header: Download rendered code block in a file
+
+-- cb.rendered: 
+download: example.ftd
+
+-- cb.rendered.input:
+
+\-- cb.rendered: 
+download: example.ftd
+
+\-- cb.rendered.input:
+
+\-- ftd.text: Hello World I am rendered code-block
+role: $inherited.types.heading-medium
+color: $inherited.colors.custom.nine
+
+\-- cb.rendered.output:
+
+\-- ftd.text: Hello World I am rendered code-block
+role: $inherited.types.heading-medium
+color: $inherited.colors.custom.nine
+
+\-- end: cb.rendered.output
+
+\-- end: cb.rendered
+
+-- cb.rendered.output:
+
+-- cb.rendered: 
+download: example.ftd
+
+-- cb.rendered.input:
+
+\-- ftd.text: Hello World I am rendered code-block
+role: $inherited.types.heading-medium
+color: $inherited.colors.custom.nine
+
+-- cb.rendered.output:
+
+-- ftd.text: Hello World I am rendered code-block
+role: $inherited.types.heading-medium
+color: $inherited.colors.custom.nine
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- end: site-doc.doc-home

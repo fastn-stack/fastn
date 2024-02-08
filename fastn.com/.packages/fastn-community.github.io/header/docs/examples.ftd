@@ -1,0 +1,205 @@
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-community.github.io/header
+-- import: fifthtry.github.io/product-switcher as ps
+-- import: fastn-community.github.io/code-block as cb
+
+
+
+
+-- site-doc.doc-home: Examples
+site-title: Header
+github-url: https://github.com/fastn-community/header/
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/header
+
+
+-- site-doc.header: Basic Header with logo
+
+-- cb.rendered:
+
+-- cb.rendered.input:
+
+\-- import: fastn-community.github.io/header
+
+\-- header.header:
+sections: $header.sitemap.sections
+site-url: /docs/
+site-logo: $header.site-logo
+
+-- cb.rendered.output:
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- header.header:
+sections: $header.sitemap.sections
+site-url: /docs/
+site-logo: $header.site-logo
+
+-- end: site-doc.output
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+
+-- site-doc.header: Basic Header with site-name
+
+-- cb.rendered:
+
+-- cb.rendered.input:
+
+\-- import: fastn-community.github.io/header
+
+\-- header.header:
+sections: $header.sitemap.sections
+site-url: /docs/
+site-name: Docs
+
+-- cb.rendered.output:
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- header.header:
+sections: $header.sitemap.sections
+site-url: /docs/
+site-name: Docs
+
+-- end: site-doc.output
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+
+-- site-doc.header: Header with sub-sections
+
+-- cb.rendered:
+
+-- cb.rendered.input:
+
+\-- import: fastn-community.github.io/header
+
+\-- header.header:
+sections: $header.sitemap.sections
+sub-sections: $header.sitemap.subsections
+current-subsection: $header.sitemap.current-subsection
+current-section: $header.sitemap.current-section
+current-page: $header.sitemap.current-page
+site-url: $header.site-url
+site-logo: $header.site-logo
+
+-- cb.rendered.output:
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- header.header:
+sections: $header.sitemap.sections
+sub-sections: $header.sitemap.subsections
+current-subsection: $header.sitemap.current-subsection
+current-section: $header.sitemap.current-section
+current-page: $header.sitemap.current-page
+site-url: $header.site-url
+site-logo: $header.site-logo
+
+-- end: site-doc.output
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+
+-- site-doc.header: Header with Search
+
+-- cb.rendered:
+
+-- cb.rendered.input:
+
+\-- import: fastn-community.github.io/header
+
+\-- header.header:
+sections: $header.sitemap.sections
+sub-sections: $header.sitemap.subsections
+current-subsection: $header.sitemap.current-subsection
+current-section: $header.sitemap.current-section
+current-page: $header.sitemap.current-page
+site-url: $header.site-url
+site-logo: $header.site-logo
+search: true
+search-url: index.html
+
+-- cb.rendered.output:
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- header.header:
+sections: $header.sitemap.sections
+sub-sections: $header.sitemap.subsections
+current-subsection: $header.sitemap.current-subsection
+current-section: $header.sitemap.current-section
+current-page: $header.sitemap.current-page
+site-url: $header.site-url
+site-logo: $header.site-logo
+search: true
+search-url: index.html
+
+-- end: site-doc.output
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+
+-- site-doc.header: Header with Product Switcher and Login
+
+-- cb.rendered:
+
+-- cb.rendered.input:
+
+\-- import: fastn-community.github.io/header
+\-- import: fifthtry.github.io/product-switcher as ps
+
+\-- header.header:
+sections: $header.sitemap.sections
+sub-sections: $header.sitemap.subsections
+current-subsection: $header.sitemap.current-subsection
+current-section: $header.sitemap.current-section
+current-page: $header.sitemap.current-page
+site-url: $header.site-url
+site-logo: $header.site-logo
+products: $ps.example-product
+login-button: true
+login-btn-txt: Login
+login-btn-url: https://fastn.com/
+-- cb.rendered.output:
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- header.header:
+sections: $header.sitemap.sections
+sub-sections: $header.sitemap.subsections
+current-subsection: $header.sitemap.current-subsection
+current-section: $header.sitemap.current-section
+current-page: $header.sitemap.current-page
+site-url: $header.site-url
+site-logo: $header.site-logo
+products: $ps.example-product
+login-button: true
+login-btn-txt: Login
+login-btn-url: https://fastn.com/
+
+-- end: site-doc.output
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- end: site-doc.doc-home

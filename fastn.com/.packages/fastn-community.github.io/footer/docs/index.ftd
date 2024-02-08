@@ -1,0 +1,104 @@
+-- import: fastn-community.github.io/footer
+
+
+
+
+-- site-doc.doc-home: Documentation - Basic Footer
+site-title: Footer
+show-tabs: false
+github-url: https://github.com/fastn-community/footer
+
+-- site-doc.component-doc: `footer`
+package-link: https://fastn-community.github.io/footer
+package-name: fastn-community.github.io/footer
+info: The `--footer` option serves as a convenient way to add a footer to your [fastn](https://fastn.com/) web projects.
+
+- **Logo:** The [fastn](https://fastn.com/) website logo is placed in the
+    top-left corner of the footer. Clicking on the logo leads back to the
+    homepage.
+- **Footer Links:** The primary navigation, referred to as sections in
+    fastn.sitemap, is displayed as a horizontal list of links positioned on the
+    right side of the logo.
+
+- **Sub-sections:** Secondary navigation which called as sub-sections in
+  `fastn.sitemap` is placed in the footer.
+
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `footer` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/footer
+
+-- cb.code: `-- basic-footer`
+lang: ftd
+
+\-- import: fastn-community.github.io/footer
+
+\-- footer.basic-footer:
+footer-links: $footer.sitemap.sections
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+site-name: fastn
+site-url: index.html
+site-logo: $assets.files.assets.ipsum-logo.svg
+logo-height: 42
+
+
+-- site-doc.header: Example
+
+-- site-doc.output:
+colors: $ftd.default-colors
+types: $ftd.default-types
+
+-- footer.basic-footer:
+footer-links: $footer.sitemap.sections
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+site-name: fastn
+site-url: index.html
+site-logo: $assets.files.assets.ipsum-logo.svg
+logo-height: 42
+
+-- end: site-doc.output
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `basic-footer`.
+
+-- site-doc.component-property: `footer-links`
+type: Sections list (`required`)
+
+It's used to show `fastn.sitemap` sections.
+
+-- site-doc.component-property: `copyright`
+type: String (`optional`)
+
+It's used show copyright information of your project.
+
+-- site-doc.component-property: `site-name`
+type: String (`optional`)
+
+It's used to show your [fastn](https://fastn.com/) web site name.
+
+-- site-doc.component-property: `site-url`
+type: String (`optional`)
+
+It's used to add your site homepage url, which will be added to `site-name` and
+`site-logo`. Onclick of `site-name` or `site-logo` page will be redirected to
+`site-url` link you add as a value to this property.
+
+-- site-doc.component-property: `site-logo`
+type: ftd.image-src (`optional`)
+
+It's used to show your [fastn](https://fastn.com/) web site logo.
+
+-- site-doc.component-property: `logo-height`
+type: Integer (`optional`, default: 32 pixels)
+
+If you want to change height of the logo image you using in `site-logo`
+property. Just add a integer value to this property the height of the logo will
+change in that value pixels.
+
+-- end: site-doc.component-doc
+
+-- end: site-doc.doc-home
