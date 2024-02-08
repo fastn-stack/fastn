@@ -935,7 +935,7 @@ impl Config {
         id: &str,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<String> {
-        let mut id = dbg!(id).to_string();
+        let mut id = id.to_string();
         let mut add_packages = "".to_string();
         if let Some(new_id) = id.strip_prefix("-/") {
             id = new_id.to_string();
