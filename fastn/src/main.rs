@@ -88,15 +88,19 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
 
         fastn_update::update(&ds, offline, false).await?;
 
+        let config = fastn_core::Config::read(ds, false)
+            .await?
+            .add_edition(edition.map(ToString::to_string))?
+            .add_external_js(external_js.clone())
+            .add_inline_js(inline_js.clone())
+            .add_external_css(external_css.clone())
+            .add_inline_css(inline_css.clone());
+
         return fastn_core::listen(
+            std::sync::Arc::new(config),
             bind.as_str(),
             port,
             download_base_url.map(ToString::to_string),
-            edition.map(ToString::to_string),
-            external_js,
-            inline_js,
-            external_css,
-            inline_css,
         )
         .await;
     }
