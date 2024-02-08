@@ -1,0 +1,14 @@
+-- fbt:
+cmd: $FBT_CWD/../target/debug/fastn --test update --check
+exit-code: 7
+
+-- stdout:
+
+-- stderr:
+
+Error: Out of Sync Package
+
+The package 'fastn-community.github.io/bling' is out of sync with the FASTN.ftd file.
+
+File: '<cwd>/.packages/fastn-community.github.io/bling/Changelog.md'
+Operation: Write Attempt

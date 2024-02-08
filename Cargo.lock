@@ -1722,7 +1722,7 @@ dependencies = [
 
 [[package]]
 name = "fastn"
-version = "0.4.55"
+version = "0.4.56"
 dependencies = [
  "camino",
  "clap",
@@ -1894,6 +1894,7 @@ dependencies = [
 name = "fastn-update"
 version = "0.1.0"
 dependencies = [
+ "colored",
  "fastn-core",
  "fastn-ds",
  "fastn-package",

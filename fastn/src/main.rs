@@ -87,7 +87,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_css = serve.values_of_("css");
         let offline = serve.get_flag("offline");
 
-        fastn_update::update(&config.ds, offline).await?;
+        fastn_update::update(&config.ds, offline, false).await?;
 
         return fastn_core::listen(
             bind.as_str(),
@@ -100,6 +100,11 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             inline_css,
         )
         .await;
+    }
+
+    if let Some(update) = matches.subcommand_matches("update") {
+        let check = update.get_flag("check");
+        return fastn_update::update(&config, false, check).await;
     }
 
     if let Some(test) = matches.subcommand_matches("test") {
@@ -118,7 +123,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_inline_css(inline_css)
             .set_test_command_running();
 
-        fastn_update::update(&config.ds, offline).await?;
+        fastn_update::update(&config.ds, offline, false).await?;
 
         return fastn_core::test(
             &config,
@@ -151,7 +156,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_external_css(external_css)
             .add_inline_css(inline_css);
 
-        fastn_update::update(&config.ds, offline).await?;
+        fastn_update::update(&config.ds, offline, false).await?;
 
         return fastn_core::build(
             &config,
@@ -315,6 +320,7 @@ fn app(version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("update")
                 .about("Update dependency packages for this fastn package")
+                .arg(clap::arg!(--check "Check if packages are in sync with FASTN.ftd without performing updates."))
         )
         .subcommand(sub_command::serve())
 }
