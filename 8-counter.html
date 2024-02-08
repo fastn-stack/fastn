@@ -2058,9 +2058,9 @@ window.ftd.utils.set_value_helper(data, "foo#value", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#value", "main");
 window.ftd.call_immutable_value_changes("foo#value", "main");
-window.ftd.utils.node_change_call("main","0,4:main__text", data);
 window.ftd.utils.node_change_call("main","0,3:main__text", data);
 window.ftd.utils.node_change_call("main","0:main__padding", data);
+window.ftd.utils.node_change_call("main","0,4:main__text", data);
 };
 
 
