@@ -637,7 +637,7 @@ async fn handle_file_(
                     fastn_core::RequestConfig::new(config, &req, doc.id.as_str(), base_url);
                 req_config.current_document = Some(document.get_id().to_string());
 
-                let resp = fastn_core::package::package_doc::process_ftd(
+                fastn_core::package::package_doc::process_ftd(
                     &mut req_config,
                     doc,
                     base_url,
@@ -645,9 +645,7 @@ async fn handle_file_(
                     test,
                     file_path.as_str(),
                 )
-                .await;
-
-                resp
+                .await
             };
 
             match (resp, ignore_failed) {
