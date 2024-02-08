@@ -60,7 +60,9 @@ pub async fn build(
         }
     }
 
-    config.download_fonts().await?;
+    if !test {
+        config.download_fonts().await?;
+    }
 
     if check_build {
         return fastn_core::post_build_check(config).await;
@@ -637,7 +639,7 @@ async fn handle_file_(
                     fastn_core::RequestConfig::new(config, &req, doc.id.as_str(), base_url);
                 req_config.current_document = Some(document.get_id().to_string());
 
-                let resp = fastn_core::package::package_doc::process_ftd(
+                fastn_core::package::package_doc::process_ftd(
                     &mut req_config,
                     doc,
                     base_url,
@@ -645,17 +647,7 @@ async fn handle_file_(
                     test,
                     file_path.as_str(),
                 )
-                .await;
-
-                config.all_packages.borrow_mut().extend(
-                    req_config
-                        .config
-                        .all_packages
-                        .borrow()
-                        .iter()
-                        .map(|(k, v)| (k.clone(), v.clone())),
-                );
-                resp
+                .await
             };
 
             match (resp, ignore_failed) {

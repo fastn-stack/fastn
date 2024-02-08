@@ -1,8 +1,9 @@
 -- fbt:
-cmd: $FBT_CWD/../target/debug/fastn --test fmt
+cmd: $FBT_CWD/../target/debug/fastn --test update && $FBT_CWD/../target/debug/fastn --test fmt
 output: .
 
 -- stdout:
 
+Updated package dependency.
 Formatting FASTN.ftd ... Done
 Formatting index.ftd ... Done

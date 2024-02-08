@@ -128,6 +128,9 @@ pub enum Error {
 
     #[error("AssertError: {message}")]
     AssertError { message: String },
+
+    #[error("config_temp::Error: {}", _0)]
+    ConfigTempError(#[from] fastn_core::config_temp::Error),
 }
 
 impl From<std::convert::Infallible> for Error {
