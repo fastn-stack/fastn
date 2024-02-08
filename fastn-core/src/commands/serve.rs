@@ -193,7 +193,6 @@ pub async fn serve_helper(
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
 
     match (req.method().to_lowercase().as_str(), req.path()) {
-        #[cfg(feature = "auth")]
         (_, t) if t.starts_with("/-/auth/") => {
             return fastn_core::auth::routes::handle_auth(req, &mut req_config, config).await
         }
@@ -299,7 +298,6 @@ pub async fn clear_cache(
     config: &fastn_core::Config,
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    #[cfg(feature = "auth")]
     fn is_login(req: &fastn_core::http::Request) -> bool {
         // TODO: Need refactor not happy with this
         req.cookie(fastn_core::auth::AuthProviders::GitHub.as_str())
@@ -318,7 +316,6 @@ pub async fn clear_cache(
     }
     // TODO: Remove After Demo, till here
 
-    #[cfg(feature = "auth")]
     if !is_login(&req) {
         return Ok(actix_web::HttpResponse::Found()
             .append_header((

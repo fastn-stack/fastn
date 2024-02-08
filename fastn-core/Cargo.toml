@@ -26,12 +26,10 @@ controller = ["remote"]
 # is created for every user, and local edits in the workspace is allowed.
 remote = []
 
-auth = ["oauth2", "diesel", "diesel-async", "diesel_async_migrations", "lettre", "argon2", "magic-crypt", "validator", "zxcvbn"]
-
 [dependencies]
 actix-web.workspace = true
 antidote.workspace = true
-argon2 = { workspace = true, optional = true }
+argon2.workspace = true
 async-lock.workspace = true
 async-recursion.workspace = true
 camino.workspace = true
@@ -39,9 +37,9 @@ chrono.workspace = true
 clap.workspace = true
 colored.workspace = true
 deadpool-postgres.workspace = true
-diesel-async = { workspace = true, optional = true }
-diesel = { workspace = true, optional = true }
-diesel_async_migrations = { workspace = true, optional = true }
+diesel-async.workspace = true
+diesel.workspace = true
+diesel_async_migrations.workspace = true
 diffy.workspace = true
 dirs.workspace = true
 edit.workspace = true
@@ -60,12 +58,12 @@ ignore.workspace = true
 indoc.workspace = true
 intl-memoizer.workspace = true
 itertools.workspace = true
-lettre = { workspace = true, optional = true }
-magic-crypt = { workspace = true, optional = true }
+lettre.workspace = true
+magic-crypt.workspace = true
 mime_guess.workspace = true
 native-tls.workspace = true
 notify.workspace = true
-oauth2 = { workspace = true, optional = true }
+oauth2.workspace = true
 once_cell.workspace = true
 postgres-native-tls.workspace = true
 postgres-types.workspace = true
@@ -85,8 +83,8 @@ tracing-subscriber.workspace = true
 tracing.workspace = true
 url.workspace = true
 uuid.workspace = true
-validator = { workspace = true, optional = true }
-zxcvbn = { workspace = true, optional = true }
+validator.workspace = true
+zxcvbn.workspace = true
 zip.workspace = true
 
 [dev-dependencies]

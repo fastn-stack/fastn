@@ -181,7 +181,6 @@ impl Request {
             .and_then(|v| v.to_str().map(|v| v.to_string()).ok())
     }
 
-    #[cfg(feature = "auth")]
     pub async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<fastn_core::UserData> {
         let session_data = match self.cookie(fastn_core::auth::SESSION_COOKIE_NAME) {
             Some(c) => {
@@ -821,7 +820,6 @@ fn test_is_bot() {
     assert!(!is_bot("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"));
 }
 
-#[cfg(feature = "auth")]
 pub fn validation_error_to_user_err(
     e: validator::ValidationErrors,
     status_code: fastn_core::http::StatusCode,
@@ -904,7 +902,6 @@ mod test {
     }
 
     #[tokio::test]
-    #[cfg(feature = "auth")]
     async fn validation_error_to_user_err() -> fastn_core::Result<()> {
         use validator::ValidateArgs;
 
