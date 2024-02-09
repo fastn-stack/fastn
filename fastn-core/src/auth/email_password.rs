@@ -602,6 +602,8 @@ async fn create_and_send_confirmation_email(
 
     let html: String = main_ftd_doc.get(&html_email_templ).unwrap();
 
+    tracing::info!("confirmation link: {}", &confirmation_link);
+
     mailer
         .send_raw(
             format!("{} <{}>", name, email)
