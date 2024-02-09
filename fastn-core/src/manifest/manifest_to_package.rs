@@ -9,6 +9,7 @@ impl fastn_core::Manifest {
         package
             .resolve(&package_root.join(package_name).join("FASTN.ftd"), ds)
             .await?;
+        package.auto_import_language(None, None)?;
 
         Ok(package)
     }
