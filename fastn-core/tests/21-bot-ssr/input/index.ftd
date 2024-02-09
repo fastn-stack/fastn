@@ -1,0 +1,13 @@
+-- import: fastn-community.github.io/ssr-test/assets
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+align-content: center
+spacing.fixed.rem: 2
+
+-- ftd.image: $assets.files.assets.ipsum-logo.svg
+
+-- ftd.text: Hello SSR!
+
+-- end: ftd.column
