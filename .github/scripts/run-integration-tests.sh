@@ -24,4 +24,4 @@ sleep 10
 
 echo "Running integration tests"
 cd "${FASTN_ROOT}/integration-tests" || exit 1
-fastn test --headless
+fastn --trace test --headless
