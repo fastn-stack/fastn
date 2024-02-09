@@ -1,3 +1,5 @@
+#![recursion_limit = "256"]
+
 extern crate self as fastn_core;
 
 #[macro_use]
