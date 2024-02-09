@@ -917,6 +917,12 @@ skip: true
 
 # Blog: /blog/
 
+- Building Your Personal Website with fastn: /blog/personal-website-1/
+  document: blog/personal-website-1.ftd
+- Content Library: /blog/content-library/
+  document: blog/content-library.ftd
+- Memory, Mutability and Reactivity: /blog/strongly-typed/
+  document: blog/strongly-typed.ftd
 - Design System Package Tutorial (Part 1): /blog/design-system/
   document: blog/design-system.ftd
 - Domain Components: /blog/domain-components/
