@@ -8,7 +8,6 @@ mod apis;
 mod auto_import;
 pub mod commands;
 mod config;
-#[cfg(feature = "auth")]
 pub mod db;
 pub mod doc;
 mod file;
@@ -18,14 +17,12 @@ pub mod package;
 pub(crate) mod watcher;
 #[macro_use]
 pub mod http;
-#[cfg(feature = "auth")]
 pub mod auth;
 mod ds;
 mod error;
 mod i18n;
 pub mod library;
 mod proxy;
-#[cfg(feature = "auth")]
 mod schema;
 pub mod sitemap;
 mod snapshot;
@@ -36,10 +33,8 @@ mod version;
 pub mod catch_panic;
 pub(crate) mod google_sheets;
 mod library2022;
-#[cfg(feature = "auth")]
 mod mail;
 
-#[cfg(feature = "auth")]
 pub use auth::UserData;
 pub(crate) use auto_import::AutoImport;
 pub use commands::{

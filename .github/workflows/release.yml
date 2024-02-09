@@ -77,7 +77,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --features=auth
+          args: --release
       - name: run fastn
         run: ./target/release/fastn --version
       - uses: actions/upload-artifact@v4

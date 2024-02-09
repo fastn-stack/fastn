@@ -42,7 +42,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return Ok(());
     }
 
-    #[cfg(feature = "auth")]
     if let Ok(auth_enabled) = std::env::var("FASTN_ENABLE_AUTH") {
         if auth_enabled == "true" {
             tracing::info!("running auth related migrations");

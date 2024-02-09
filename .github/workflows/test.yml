@@ -63,13 +63,6 @@ jobs:
         with:
           command: clippy
           args: --tests -- -D warnings
-      - name: Run cargo clippy (with feature=auth)
-        id: clippy-auth
-        continue-on-error: true
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: --tests --features=auth -- -D warnings
 #      - name: Install cargo check tools
 #        run: |
 #          cargo install --locked cargo-deny || true
@@ -91,7 +84,6 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --features=auth
       - name: Run integration tests
         id: integration-test
         continue-on-error: true
@@ -109,9 +101,6 @@ jobs:
         run: exit 1
       - name: Check if clippy is happy
         if: steps.clippy.outcome != 'success'
-        run: exit 1
-      - name: Check if clippy-auth is happy
-        if: steps.clippy-auth.outcome != 'success'
         run: exit 1
       - name: Check if js-fmt is happy
         if: steps.js-fmt.outcome != 'success'

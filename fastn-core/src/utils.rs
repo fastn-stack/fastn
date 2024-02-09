@@ -1021,7 +1021,6 @@ pub(crate) fn is_ftd_path(path: &str) -> bool {
     path.trim_matches('/').ends_with(".ftd")
 }
 
-#[cfg(feature = "auth")]
 #[derive(
     Clone,
     Debug,
@@ -1033,12 +1032,10 @@ pub(crate) fn is_ftd_path(path: &str) -> bool {
 #[diesel(sql_type = fastn_core::schema::sql_types::Citext)]
 pub struct CiString(pub String);
 
-#[cfg(feature = "auth")]
 pub fn citext(s: &str) -> CiString {
     CiString(s.into())
 }
 
-#[cfg(feature = "auth")]
 impl diesel::serialize::ToSql<fastn_core::schema::sql_types::Citext, diesel::pg::Pg> for CiString {
     fn to_sql<'b>(
         &'b self,
@@ -1048,7 +1045,6 @@ impl diesel::serialize::ToSql<fastn_core::schema::sql_types::Citext, diesel::pg:
     }
 }
 
-#[cfg(feature = "auth")]
 impl diesel::deserialize::FromSql<fastn_core::schema::sql_types::Citext, diesel::pg::Pg>
     for CiString
 {

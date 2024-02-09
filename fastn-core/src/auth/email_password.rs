@@ -212,16 +212,20 @@ pub(crate) async fn login(
             message: format!("Failed to get connection to db. {:?}", e),
         })?;
 
-    let user: Option<fastn_core::auth::FastnUser> = fastn_core::schema::fastn_user::table
+    let query = fastn_core::schema::fastn_user::table
+        .inner_join(fastn_core::schema::fastn_user_email::table)
         .filter(fastn_core::schema::fastn_user::username.eq(&payload.username))
-        .select(fastn_core::auth::FastnUser::as_select())
-        .first(&mut conn)
-        .await
-        .optional()?;
+        .or_filter(
+            fastn_core::schema::fastn_user_email::email
+                .eq(fastn_core::utils::citext(&payload.username)),
+        )
+        .select(fastn_core::auth::FastnUser::as_select());
+
+    let user: Option<fastn_core::auth::FastnUser> = query.first(&mut conn).await.optional()?;
 
     if user.is_none() {
         return fastn_core::http::user_err(
-            vec![("username".into(), vec!["invalid username".into()])],
+            vec![("username".into(), vec!["invalid email/username".into()])],
             fastn_core::http::StatusCode::OK,
         );
     }
@@ -406,22 +410,32 @@ pub(crate) async fn confirm_email(
 
     tracing::info!("session created, rows affected: {}", affected);
 
-    // redirect to onboarding route with a GET request
-    let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
-        req,
-        ds,
-        session_id,
-        format!("/-/auth/onboarding/?next={}", next),
-    )
-    .await?;
+    // Onboarding step is opt-in
+    let onboarding_enabled = ds.env("FASTN_AUTH_ADD_ONBOARDING_STEP").await.is_ok();
 
-    resp.add_cookie(
-        &actix_web::cookie::Cookie::build(fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME, "1")
+    let next_path = if onboarding_enabled {
+        format!("/-/auth/onboarding/?next={}", next)
+    } else {
+        next.to_string()
+    };
+
+    // redirect to onboarding route with a GET request
+    let mut resp =
+        fastn_core::auth::set_session_cookie_and_redirect_to_next(req, ds, session_id, next_path)
+            .await?;
+
+    if onboarding_enabled {
+        resp.add_cookie(
+            &actix_web::cookie::Cookie::build(
+                fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME,
+                "1",
+            )
             .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
             .path("/")
             .finish(),
-    )
-    .map_err(|e| fastn_core::Error::generic(format!("failed to set cookie: {e}")))?;
+        )
+        .map_err(|e| fastn_core::Error::generic(format!("failed to set cookie: {e}")))?;
+    }
 
     Ok(resp)
 }
