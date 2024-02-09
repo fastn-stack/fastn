@@ -187,9 +187,8 @@ pub(crate) async fn login(
         return Ok(fastn_core::not_found!("invalid route"));
     }
 
-    #[derive(serde::Deserialize, Debug)]
+    #[derive(serde::Deserialize, validator::Validate, Debug)]
     struct Payload {
-        // TODO: add support for login using email
         username: String,
         password: String,
     }
@@ -204,6 +203,20 @@ pub(crate) async fn login(
     }
 
     let payload = payload.unwrap();
+
+    let mut errors = Vec::new();
+
+    if payload.username.is_empty() {
+        errors.push(("username".into(), vec!["username/email is required".into()]));
+    }
+
+    if payload.password.is_empty() {
+        errors.push(("password".into(), vec!["password is required".into()]));
+    }
+
+    if errors.len() > 0 {
+        return fastn_core::http::user_err(errors, fastn_core::http::StatusCode::OK);
+    }
 
     let mut conn = db_pool
         .get()
@@ -546,13 +559,7 @@ async fn create_and_send_confirmation_email(
         ));
     }
 
-    let mut mailer = mailer.unwrap();
-
-    if let Ok(debug_mode) = req_config.config.ds.env("DEBUG").await {
-        if debug_mode == "true" {
-            mailer.mock();
-        }
-    }
+    let mailer = mailer.unwrap();
 
     let name: String = fastn_core::schema::fastn_user::table
         .select(fastn_core::schema::fastn_user::name)
