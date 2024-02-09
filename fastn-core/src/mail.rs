@@ -46,6 +46,11 @@ impl Mailer {
         subject: &str,
         body: String,
     ) -> Result<(), MailError> {
+        if fastn_observer::is_traced() {
+            tracing::info!("mail sent to: {}", &to);
+            return Ok(());
+        }
+
         let email = lettre::Message::builder()
             .from(lettre::message::Mailbox::new(
                 self.sender_name.clone(),

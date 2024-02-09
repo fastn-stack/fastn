@@ -214,7 +214,7 @@ pub(crate) async fn login(
         errors.push(("password".into(), vec!["password is required".into()]));
     }
 
-    if errors.len() > 0 {
+    if !errors.is_empty() {
         return fastn_core::http::user_err(errors, fastn_core::http::StatusCode::OK);
     }
 
