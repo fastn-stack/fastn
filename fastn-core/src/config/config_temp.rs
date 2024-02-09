@@ -76,7 +76,9 @@ impl ConfigTemp {
         let mut all_packages = std::collections::BTreeMap::new();
 
         for (package_name, manifest) in &self.all_packages {
-            let mut current_package = manifest.to_package(package_root, package_name, ds).await?;
+            let mut current_package = manifest
+                .to_package(package_root, package_name, ds, package)
+                .await?;
             ConfigTemp::check_dependencies_provided(package, &mut current_package)?;
             all_packages.insert(package_name.clone(), current_package);
         }
