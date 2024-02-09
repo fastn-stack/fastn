@@ -1,6 +1,0 @@
--- my-ds.page: Dependency: `camino`
-
-We use [`camino`](https://docs.rs/camino/) crate which provides us "UTF-8
-encoded paths".
-
--- end: my-ds.page

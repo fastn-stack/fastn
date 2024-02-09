@@ -1,44 +1,30 @@
-name: Deploy Site
+name: fastn build to update vh_pages branch
 
 on:
   push:
-    branches: [ main ]
-    paths:
-    - '**.ftd'
-    - '**.md'
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
-  workflow_call:
-env:
-  CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  fastn-build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: FranzDiebold/github-env-vars-action@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Install fastn
-        id: install_fastn
-        continue-on-error: false
-        run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install.sh)"
-      - name: Get latest commit information
-        id: get_commit
-        run: echo "::set-output name=commit_sha::$(git rev-parse HEAD)"
-      - name: Get raw zipball URL
-        id: get_zip_url
-        run: |
-          echo "::set-output name=zip_url::https://github.com/${{ github.repository }}/archive/${{ steps.get_commit.outputs.commit_sha }}.zip"
-      - name: Build the pages with fastn
-        id: build
-        continue-on-error: false
-        run: |
-          echo "Using '$CI_REPOSITORY_NAME_SLUG/' as the base while building"
-          fastn build --base=/$CI_REPOSITORY_NAME/ --zip-url=${{ steps.get_zip_url.outputs.zip_url }}
-      - name: copy CNAME
-        run: '(test -f CNAME && cp CNAME .build) || echo "CNAME does not exist, skipping step"'
-      - name: Deploy
+        run: source <(curl -fsSL https://fastn.com/install.sh)
+      - name: Build pages with fastn
+        run: fastn build --offline
+      - name: Deploy to vh_page branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./.build
+          publish_branch: vh_page
+          force_orphan: false
+          full_commit_message: ${{ github.event.pull_request.head.sha }}

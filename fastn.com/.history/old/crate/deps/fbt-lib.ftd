@@ -1,8 +1,0 @@
--- my-ds.page: Dependency: `fbt-lib`
-
-We use [`fbt-lib`](https://docs.rs/fbt-lib/) in development mode for testing.
-Tests are present in [tests folder](https://github.com/FifthTry/fastn/tree/main/tests).
-
-Version: [0.1.18](https://crates.io/crates/fbt-lib/0.1.18)
-
--- end: my-ds.page

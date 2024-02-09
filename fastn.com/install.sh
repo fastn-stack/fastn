@@ -1,10 +1,7 @@
 #!/bin/sh
 
-# TODO: //
 # This script should be run via curl:
-# sh -c "$(curl -fsSL https://fpm.dev/install.sh)"
-# or via wget
-# sh -c "$(wget -qO- https://fastn.dev/install.sh)"
+# source < "$(curl -fsSL https://fastn.com/install.sh)"
 
 # The [ -t 1 ] check only works when the function is not called from
 # a subshell (like in `$(...)` or `(...)`, so this hack redefines the
@@ -62,10 +59,8 @@ print_fastn_logo() {
 print_success_box() {
     log_message "╭────────────────────────────────────────╮"
     log_message "│                                        │"
-    log_message "│   fastn installation completed         │"
+    log_message "│   fastn installation completed.        │"
     log_message "│                                        │"
-    log_message "│   Restart your terminal to apply       │"
-    log_message "│   the changes.                         │"
     log_message "│                                        │"
     log_message "│   Get started with fastn at:           │"
     log_message "│   ${FMT_BLUE}https://fastn.com${FMT_RESET}                    │"
@@ -89,6 +84,7 @@ command_exists() {
 
 update_path() {
     local shell_config_file
+
     if [ -n "$ZSH_VERSION" ]; then
         shell_config_file="${HOME}/.zshrc"
     elif [ -n "$BASH_VERSION" ]; then
@@ -108,34 +104,21 @@ update_path() {
     if ! grep -qF "export PATH=\"\$PATH:${DESTINATION_PATH}\"" "$shell_config_file"; then
         if [ -w "$shell_config_file" ]; then
             # Add the destination path to the PATH variable in the shell config file
-            echo "export PATH=\"\$PATH:${DESTINATION_PATH}\"" >> "$shell_config_file" &&
-            return 0
+            echo "export PATH=\"\$PATH:${DESTINATION_PATH}\"" >> "$shell_config_file"
         else
             log_error "Failed to add '${DESTINATION_PATH}' to PATH. Insufficient permissions for '$shell_config_file'."
             log_message "The installer has successfully downloaded the \`fastn\` binary in '${DESTINATION_PATH}' but it failed to add it in your \$PATH variable."
             log_message "Configure the \$PATH manually or run \`fastn\` binary from '${DESTINATION_PATH}/fastn'"
             return 1
         fi
-    else
-        return 0
     fi
+
+    export PATH=$PATH:$DESTINATION_PATH
+    return 0
 }
 
-remove_temp_files() {
-    rm -f fastn_macos_x86_64 fastn_linux_musl_x86_64
-}
-
-# Function to handle Ctrl+C
-exit_on_interrupt() {
-    log_error "Installation interrupted."
-    remove_temp_files
-    exit 1
-}
 
 setup() {
-    # Trap Ctrl+C and call the exit_on_interrupt function
-    trap exit_on_interrupt INT
-
     PRE_RELEASE=""
     VERSION=""
 
@@ -149,19 +132,8 @@ setup() {
         shift
     done
 
-    if [ -n "$VERSION" ]; then
-        echo "Installing fastn version: $VERSION"
-    fi
-
-    if [ -n "$PRE_RELEASE" ]; then
-        URL="https://github.com/fastn-stack/fastn/releases/latest/download"
-        log_message "Downloading the latest pre-release binaries"
-    elif [ -n "$VERSION" ]; then
-        URL="https://github.com/fastn-stack/fastn/releases/download/$VERSION"
-        log_message "Downloading fastn release $VERSION binaries"
-    else
-        URL="https://github.com/fastn-stack/fastn/releases/latest/download"
-        log_message "Downloading the latest production-ready binaries"
+    if [ -z "$VERSION" ] && [ -f fastn-version ]; then
+        VERSION=$(cat fastn-version | tr -d '\n')
     fi
 
     DESTINATION_PATH="/usr/local/bin"
@@ -173,8 +145,19 @@ setup() {
         mkdir -p "$DESTINATION_PATH"
     fi
 
-    # Remove temporary files from previous install attempts
-    remove_temp_files
+    if [ -n "$VERSION" ]; then
+        URL="https://github.com/fastn-stack/fastn/releases/download/$VERSION"
+        log_message "fastn-version file found."
+        log_message "Installing fastn $VERSION in $DESTINATION_PATH."
+    elif [ -n "$PRE_RELEASE" ]; then
+        URL="https://github.com/fastn-stack/fastn/releases/latest/download"
+        log_message "fastn-version file not found."
+        log_message "Downloading the latest pre-release of fastn in $DESTINATION_PATH."
+    else
+        URL="https://github.com/fastn-stack/fastn/releases/latest/download"
+        log_message "fastn-version file not found."
+        log_message "Downloading the latest release of fastn in $DESTINATION_PATH."
+    fi
 
     if [ "$(uname)" = "Darwin" ]; then
         FILENAME="fastn_macos_x86_64"
@@ -186,17 +169,19 @@ setup() {
     curl -# -L -o "${DESTINATION_PATH}/fastn" "${URL}/${FILENAME}"
     chmod +x "${DESTINATION_PATH}/fastn"
 
-    # Check if the destination files are moved successfully before setting permissions
+    # Check if the destination files is present and executable before updating the PATH
     if [ -e "${DESTINATION_PATH}/fastn" ]; then
         if update_path; then
             print_success_box
+        else
+            echo "Failed to update PATH settings in your shell."
+            echo "Please manually add ${DESTINATION_PATH} to your PATH."
+            echo "Or you can run fastn using full path:"
+            echo "${DESTINATION_PATH}/fastn"
         fi
     else
         log_error "Installation failed. Please check if you have sufficient permissions to install in $DESTINATION_PATH."
     fi
-
-    # Remove temporary files from this install attempt
-    remove_temp_files
 }
 
 

@@ -1,9 +1,0 @@
--- my-ds.page: Supported Browsers
-
-The list of browser supported is not yet decided. We hope to finalise it before
-our first supported release.
-
-Currently we depend on flex, which rules out some old browsers.
-
-
--- end: my-ds.page

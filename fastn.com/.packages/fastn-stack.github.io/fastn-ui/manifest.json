@@ -2,8 +2,8 @@
   "files": {
     "FASTN.ftd": {
       "name": "FASTN.ftd",
-      "checksum": "1066A9EFBCD55602BA348B7FA1D1FF0825A84FA8853EA6E3B26E9E0C5F4C1FB6",
-      "size": 201
+      "checksum": "22E9BA037F761093E2BEA5C9D4E33E03787661992D94BA0612BD996FFA1AAE0F",
+      "size": 208
     },
     "arrow-right.png": {
       "name": "arrow-right.png",
@@ -82,8 +82,8 @@
     },
     "editor.ftd": {
       "name": "editor.ftd",
-      "checksum": "11B31365CDDFBD6C7EC903FCB4047D72DD3C58B604C01AF57A9F3D19A109DDC8",
-      "size": 59025
+      "checksum": "E4EC691229D5AE382614B0E3E066E14C4E8FABECCE861DDDD6BC24CFF4BAFFFA",
+      "size": 59032
     },
     "file.svg": {
       "name": "file.svg",
@@ -206,6 +206,6 @@
       "size": 3168
     }
   },
-  "zip_url": "https://codeload.github.com/fastn-stack/fastn-ui/zip/refs/heads/main",
-  "checksum": "906F7026F82EDA11C1C2FAD7E889B73C82E96EB2EB8A69B01347D368E0F216D2"
+  "zip_url": "https://github.com/fastn-stack/fastn-ui/archive/9b154f7807d317c4f617b06726a11ca2ab0a42a1.zip",
+  "checksum": "01F7EA2F19DBBC720D062757D833BA3C63D282FC7111C13E9E904391EC8CDBFD"
 }
