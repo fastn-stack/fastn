@@ -3,6 +3,15 @@
 
 -- fastn.test: create user
 
+-- fastn.post: Create user with empty data
+url: /-/auth/create-user/
+body: {"name": "", "email": "", "password": "", "username": ""}
+
+-- fastn.post.test:
+
+fastn.assert.eq(fastn.http_response.success, false);
+fastn.assert.not_empty(fastn.http_response.errors);
+
 -- fastn.post: Create user with insufficient data should fail
 url: /-/auth/create-user/
 body: {"username": "siddhant"}
@@ -41,6 +50,17 @@ body: {"name": "John", "email": "john@mail.com", "password": "john the don", "us
 
 fastn.assert.not_empty(fastn.http_response.errors.username);
 
+
+-- fastn.post: login with empty data should error
+url: /-/auth/login/?provider=email-password
+body: {"username": "", "password": ""}
+
+-- fastn.post.test:
+
+fastn.assert.eq(fastn.http_response.success, false);
+fastn.assert.not_empty(fastn.http_response.errors);
+fastn.assert.not_empty(fastn.http_response.errors.username);
+fastn.assert.not_empty(fastn.http_response.errors.password);
 
 -- fastn.post: login with insufficient data should error
 url: /-/auth/login/?provider=email-password
