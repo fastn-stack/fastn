@@ -15,7 +15,6 @@ pub struct Mailer {
     smtp_host: String,
     sender_email: String,
     sender_name: Option<String>,
-    mock: bool,
 }
 
 impl Mailer {
@@ -35,16 +34,7 @@ impl Mailer {
             sender_email,
             sender_name,
             smtp_host,
-            mock: false,
         })
-    }
-
-    /// log the email body without actually sending it
-    /// useful for testing
-    pub fn mock(&mut self) -> &Self {
-        self.mock = true;
-
-        self
     }
 
     // TODO: add support for DKIM
@@ -56,11 +46,6 @@ impl Mailer {
         subject: &str,
         body: String,
     ) -> Result<(), MailError> {
-        if self.mock {
-            println!("to: {}\nsubject: {}\nbody: {}", to, subject, body);
-            return Ok(());
-        }
-
         let email = lettre::Message::builder()
             .from(lettre::message::Mailbox::new(
                 self.sender_name.clone(),
@@ -80,12 +65,7 @@ impl Mailer {
             .credentials(creds)
             .build();
 
-        let response = lettre::AsyncTransport::send(&mailer, email).await?;
-
-        tracing::info!(
-            "sent email: {:?}",
-            response.message().collect::<Vec<&str>>()
-        );
+        lettre::AsyncTransport::send(&mailer, email).await?;
 
         Ok(())
     }
