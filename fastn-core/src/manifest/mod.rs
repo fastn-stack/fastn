@@ -1,3 +1,4 @@
+mod manifest_to_package;
 pub mod utils;
 
 pub const MANIFEST_FILE: &str = "manifest.json";

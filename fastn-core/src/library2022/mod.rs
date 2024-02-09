@@ -43,7 +43,6 @@ impl Library2022 {
 
         self.config
             .all_packages
-            .borrow()
             .get(current_package_name)
             .map(|p| p.to_owned())
             .ok_or_else(|| ftd::p1::Error::ParseError {
@@ -103,7 +102,7 @@ impl Library2022 {
             }
 
             for (alias, package) in package.aliases() {
-                lib.push_package_under_process(name, package).await?;
+                lib.push_package_under_process(name, package)?;
                 if name.starts_with(alias) {
                     let name = name.replacen(alias, &package.name, 1);
                     if let Some((content, size)) =
@@ -149,8 +148,8 @@ impl Library2022 {
             package: &fastn_core::Package,
             lib: &mut fastn_core::Library2022,
         ) -> fastn_core::Result<Option<(String, usize)>> {
-            lib.push_package_under_process(name, package).await?;
-            let packages = lib.config.all_packages.borrow();
+            lib.push_package_under_process(name, package)?;
+            let packages = &lib.config.all_packages;
             let package = packages.get(package.name.as_str()).unwrap_or(package);
             // Explicit check for the current package.
             let name = format!("{}/", name.trim_end_matches('/'));
@@ -178,7 +177,7 @@ impl Library2022 {
         }
     }
 
-    pub(crate) async fn push_package_under_process(
+    pub(crate) fn push_package_under_process(
         &mut self,
         module: &str,
         package: &fastn_core::Package,
@@ -187,27 +186,14 @@ impl Library2022 {
             module.trim_matches('/').to_string(),
             package.name.to_string(),
         );
-        if self
-            .config
-            .all_packages
-            .borrow()
-            .contains_key(package.name.as_str())
-        {
-            return Ok(());
-        }
-
-        let package = self.config.resolve_package(package).await.map_err(|e| {
-            ftd::ftd2021::p1::Error::ParseError {
-                message: format!("Cannot resolve the package: {}, Error: {}", package.name, e),
+        if !self.config.all_packages.contains_key(package.name.as_str()) {
+            return Err(ftd::ftd2021::p1::Error::ParseError {
+                message: format!("Cannot resolve the package: {}", package.name),
                 doc_id: self.document_id.to_string(),
                 line_number: 0,
-            }
-        })?;
+            });
+        }
 
-        self.config
-            .all_packages
-            .borrow_mut()
-            .insert(package.name.to_string(), package);
         Ok(())
     }
 

@@ -336,15 +336,6 @@ pub async fn clear_cache(
         .finish());
 }
 
-#[derive(serde::Deserialize, Default, Clone)]
-pub(crate) struct AppData {
-    pub(crate) edition: Option<String>,
-    pub(crate) external_js: Vec<String>,
-    pub(crate) inline_js: Vec<String>,
-    pub(crate) external_css: Vec<String>,
-    pub(crate) inline_css: Vec<String>,
-}
-
 pub fn handle_default_route(
     req: &fastn_core::http::Request,
     package_name: &str,
@@ -576,29 +567,17 @@ async fn actual_route(
 async fn route(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
-    app_data: actix_web::web::Data<AppData>,
+    config: actix_web::web::Data<std::sync::Arc<fastn_core::Config>>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let config = fastn_core::Config::read_current(false)
-        .await?
-        .add_edition(app_data.edition.clone())?
-        .add_external_js(app_data.external_js.clone())
-        .add_inline_js(app_data.inline_js.clone())
-        .add_external_css(app_data.external_css.clone())
-        .add_inline_css(app_data.inline_css.clone());
-
     actual_route(&config, req, body).await
 }
 
 #[allow(clippy::too_many_arguments)]
 pub async fn listen(
+    config: std::sync::Arc<fastn_core::Config>,
     bind_address: &str,
     port: Option<u16>,
     package_download_base_url: Option<String>,
-    edition: Option<String>,
-    external_js: Vec<String>,
-    inline_js: Vec<String>,
-    external_css: Vec<String>,
-    inline_css: Vec<String>,
 ) -> fastn_core::Result<()> {
     use colored::Colorize;
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
@@ -629,13 +608,7 @@ You can try without providing port, it will automatically pick unused port."#,
 
     let app = move || {
         actix_web::App::new()
-            .app_data(actix_web::web::Data::new(AppData {
-                edition: edition.clone(),
-                external_js: external_js.clone(),
-                inline_js: inline_js.clone(),
-                external_css: external_css.clone(),
-                inline_css: inline_css.clone(),
-            }))
+            .app_data(actix_web::web::Data::new(std::sync::Arc::clone(&config)))
             .wrap(actix_web::middleware::Compress::default())
             .wrap(fastn_core::catch_panic::CatchPanic::default())
             .wrap(

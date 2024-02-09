@@ -122,13 +122,13 @@ pub async fn resolve_import(
     let current_package = lib.get_current_package()?;
     let source = if module.eq("fastn/time") {
         state.add_foreign_variable_prefix(module, vec![module.to_string()]);
-        lib.push_package_under_process(&current_package).await?;
+        lib.push_package_under_process(&current_package)?;
         "".to_string()
     } else if module.ends_with("assets") {
         state.add_foreign_variable_prefix(module, vec![format!("{}#files", module)]);
 
         if module.starts_with(current_package.name.as_str()) {
-            lib.push_package_under_process(&current_package).await?;
+            lib.push_package_under_process(&current_package)?;
             lib.get_current_package()?
                 .get_font_ftd()
                 .unwrap_or_default()
@@ -136,12 +136,11 @@ pub async fn resolve_import(
             let mut font_ftd = "".to_string();
             for (alias, package) in current_package.aliases() {
                 if module.starts_with(alias) {
-                    lib.push_package_under_process(package).await?;
+                    lib.push_package_under_process(package)?;
                     font_ftd = lib
                         .config
                         .config
                         .all_packages
-                        .borrow()
                         .get(package.name.as_str())
                         .unwrap()
                         .get_font_ftd()
@@ -229,11 +228,10 @@ pub async fn resolve_import_2022(
             let mut path = "".to_string();
             for (alias, package) in current_package.aliases() {
                 if module.starts_with(alias) {
-                    lib.push_package_under_process(module, package).await?;
+                    lib.push_package_under_process(module, package)?;
                     font_ftd = lib
                         .config
                         .all_packages
-                        .borrow()
                         .get(package.name.as_str())
                         .unwrap()
                         .get_font_ftd()
@@ -327,11 +325,9 @@ pub async fn resolve_foreign_variable2022(
         }
         for (alias, package) in package.aliases() {
             if alias.eq(&package_name) {
-                lib.push_package_under_process(doc_name, package).await?;
                 let package = lib
                     .config
                     .all_packages
-                    .borrow()
                     .get(package.name.as_str())
                     .unwrap_or(package)
                     .to_owned();
@@ -361,7 +357,7 @@ pub async fn resolve_foreign_variable2022(
         base_url: &str,
         download_assets: bool, // true: in case of `fastn build`
     ) -> ftd::ftd2021::p1::Result<ftd::interpreter::Value> {
-        lib.push_package_under_process(module, package).await?;
+        lib.push_package_under_process(module, package)?;
         let _base_url = base_url.trim_end_matches('/');
         let mut files = files.to_string();
         let light = {
@@ -631,7 +627,7 @@ pub async fn resolve_foreign_variable2(
         base_url: &str,
         download_assets: bool, // true: in case of `fastn build`
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
-        lib.push_package_under_process(package).await?;
+        lib.push_package_under_process(package)?;
         let base_url = base_url.trim_end_matches('/');
         let mut files = files.to_string();
         let light = {
