@@ -8,6 +8,7 @@ pub mod user_group;
 pub struct Package {
     pub name: String,
     /// The `versioned` stores the boolean value storing of the fastn package is versioned or not
+    pub files: Vec<String>,
     pub versioned: bool,
     pub translation_of: Box<Option<Package>>,
     pub translations: Vec<Package>,
@@ -75,6 +76,7 @@ impl Package {
     pub fn new(name: &str) -> fastn_core::Package {
         fastn_core::Package {
             name: name.to_string(),
+            files: vec![],
             versioned: false,
             translation_of: Box::new(None),
             translations: vec![],
@@ -958,6 +960,7 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
 
         Package {
             name: self.name.clone(),
+            files: vec![],
             versioned: self.versioned,
             translation_of: Box::new(translation_of),
             translations,
