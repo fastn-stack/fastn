@@ -130,6 +130,9 @@ pub enum Error {
 
     #[error("config_temp::Error: {}", _0)]
     ConfigTempError(#[from] fastn_core::config_temp::Error),
+
+    #[error("FormError: {:?}", _0)]
+    FormError(std::collections::HashMap<String, String>),
 }
 
 impl From<std::convert::Infallible> for Error {
