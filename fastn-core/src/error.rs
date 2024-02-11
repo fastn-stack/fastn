@@ -149,4 +149,29 @@ impl Error {
     pub fn generic_err<T: AsRef<str> + ToString, O>(error: T) -> fastn_core::Result<O> {
         Err(Self::generic(error))
     }
+
+    pub fn to_html(&self) -> fastn_core::http::Response {
+        // TODO: hate this error type, have no idea how to handle things properly at this stage now
+        //       we should remove this type and write more precise error types
+        match self {
+            Error::FormError(errors) => {
+                tracing::info!("form error: {:?}", errors);
+                fastn_core::http::Response::Ok()
+                    .content_type("application/json")
+                    .json(serde_json::json!({"errors": errors}))
+            }
+            Error::NotFound(message) => {
+                tracing::info!("not found: {:?}", message);
+                fastn_core::http::Response::NotFound().body(message)
+            }
+            Error::DSReadError(fastn_ds::ReadError::NotFound) => {
+                tracing::info!("ds read errro, not found");
+                fastn_core::http::Response::NotFound().body("page not found")
+            }
+            _ => {
+                trace!("error: {:?}", self);
+                fastn_core::http::Response::InternalServerError().body("internal server error")
+            }
+        }
+    }
 }
