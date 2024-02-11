@@ -169,7 +169,7 @@ impl Error {
                 fastn_core::http::Response::NotFound().body("page not found")
             }
             _ => {
-                trace!("error: {:?}", self);
+                tracing::error!("error: {:?}", self);
                 fastn_core::http::Response::InternalServerError().body("internal server error")
             }
         }
