@@ -162,7 +162,7 @@ impl Error {
             }
             Error::NotFound(message) => {
                 tracing::info!("not found: {:?}", message);
-                fastn_core::http::Response::NotFound().body(message)
+                fastn_core::http::Response::NotFound().body(message.to_string())
             }
             Error::DSReadError(fastn_ds::ReadError::NotFound) => {
                 tracing::info!("ds read errro, not found");
