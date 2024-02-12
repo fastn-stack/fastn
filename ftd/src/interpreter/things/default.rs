@@ -10414,6 +10414,10 @@ pub fn default_test_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing>
             ftd::interpreter::Thing::Component(fastn_post_function()),
         ),
         (
+            "fastn#redirect".to_string(),
+            ftd::interpreter::Thing::Component(fastn_redirect_function()),
+        ),
+        (
             "fastn#test".to_string(),
             ftd::interpreter::Thing::Component(fastn_test_function()),
         ),
@@ -10529,6 +10533,19 @@ pub fn fastn_post_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
+        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
+pub fn fastn_redirect_function() -> ftd::interpreter::ComponentDefinition {
+    ftd::interpreter::ComponentDefinition {
+        name: "fastn#redirect".to_string(),
+        arguments: vec![ftd::interpreter::Argument::default(
+            "http-redirect",
+            ftd::interpreter::Kind::string().into_kind_data().caption(),
+        )],
         definition: ftd::interpreter::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,

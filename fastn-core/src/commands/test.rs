@@ -274,7 +274,7 @@ async fn get_all_instructions(
                         .await?,
                 );
             }
-            "fastn#get" | "fastn#post" => {
+            "fastn#get" | "fastn#post" | "fastn#redirect" => {
                 if !found_test_component {
                     return fastn_core::usage_error(format!(
                         "fastn.test doesn't exist for this test, doc: {} \
@@ -313,6 +313,10 @@ async fn execute_instruction(
         }
         "fastn#post" => {
             execute_post_instruction(instruction, doc, config, saved_cookies, test_parameters).await
+        }
+        "fastn#redirect" => {
+            execute_redirect_instruction(instruction, doc, config, saved_cookies, test_parameters)
+                .await
         }
         t => fastn_core::usage_error(format!(
             "Unknown instruction {}, line number: {}",
@@ -1035,4 +1039,54 @@ fn fastn_test_data(
     res.insert_str(0, "fastn.test_data = {};\n");
 
     res
+}
+
+async fn execute_redirect_instruction(
+    instruction: &ftd::interpreter::Component,
+    doc: &ftd::interpreter::TDoc<'_>,
+    config: &fastn_core::Config,
+    saved_cookies: &mut std::collections::HashMap<String, String>,
+    test_parameters: &mut TestParameters,
+) -> fastn_core::Result<bool> {
+    let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc)?;
+
+    let redirect = get_value_ok(
+        HTTP_REDIRECT_HEADER,
+        &property_values,
+        instruction.line_number,
+    )?
+    .to_string(doc, false)?
+    .unwrap();
+
+    let (redirect_from_url, redirect_to_url) = match redirect.split_once("->") {
+        Some((from, to)) => (from.trim(), to.trim()),
+        None => {
+            return fastn_core::usage_error(
+                "Invalid redirection format. Please use '->' to indicate the redirection URL."
+                    .to_string(),
+            );
+        }
+    };
+
+    let mut params: ftd::Map<String> = ftd::Map::new();
+
+    params.insert(
+        HTTP_REDIRECT_HEADER.to_string(),
+        redirect_to_url.to_string(),
+    );
+
+    get_js_for_id(
+        redirect_from_url,
+        format!(
+            "Redirecting from {} -> {}",
+            redirect_from_url, redirect_to_url,
+        )
+        .as_str(),
+        params,
+        config,
+        saved_cookies,
+        doc.name,
+        test_parameters,
+    )
+    .await
 }
