@@ -1,0 +1,5 @@
+-- import: fastn
+
+-- fastn.test: 11-fastn-redirect
+
+-- fastn.redirect: /redirect-to-hello/ -> /hello/
