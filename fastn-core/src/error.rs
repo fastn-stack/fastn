@@ -170,7 +170,8 @@ impl Error {
             }
             _ => {
                 tracing::error!("error: {:?}", self);
-                fastn_core::http::Response::InternalServerError().body("internal server error")
+                fastn_core::http::Response::InternalServerError()
+                    .body(format!("internal server error: {self:?}"))
             }
         }
     }
