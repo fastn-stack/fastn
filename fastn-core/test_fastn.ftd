@@ -61,6 +61,19 @@ string list fixtures:
 
 
 
+-- component redirect:
+caption http-redirect:
+
+-- ftd.text: NOT IMPLEMENTED HERE
+
+-- end: redirect
+
+
+
+
+
+
+
 
 -- record test-data-structure:
 caption next-url:

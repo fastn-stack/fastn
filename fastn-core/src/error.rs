@@ -130,6 +130,9 @@ pub enum Error {
 
     #[error("config_temp::Error: {}", _0)]
     ConfigTempError(#[from] fastn_core::config_temp::Error),
+
+    #[error("FormError: {:?}", _0)]
+    FormError(std::collections::HashMap<String, String>),
 }
 
 impl From<std::convert::Infallible> for Error {
@@ -145,5 +148,31 @@ impl Error {
 
     pub fn generic_err<T: AsRef<str> + ToString, O>(error: T) -> fastn_core::Result<O> {
         Err(Self::generic(error))
+    }
+
+    pub fn to_html(&self) -> fastn_core::http::Response {
+        // TODO: hate this error type, have no idea how to handle things properly at this stage now
+        //       we should remove this type and write more precise error types
+        match self {
+            Error::FormError(errors) => {
+                tracing::info!("form error: {:?}", errors);
+                fastn_core::http::Response::Ok()
+                    .content_type("application/json")
+                    .json(serde_json::json!({"errors": errors}))
+            }
+            Error::NotFound(message) => {
+                tracing::info!("not found: {:?}", message);
+                fastn_core::http::Response::NotFound().body(message.to_string())
+            }
+            Error::DSReadError(fastn_ds::ReadError::NotFound) => {
+                tracing::info!("ds read errro, not found");
+                fastn_core::http::Response::NotFound().body("page not found")
+            }
+            _ => {
+                tracing::error!("error: {:?}", self);
+                fastn_core::http::Response::InternalServerError()
+                    .body(format!("internal server error: {self:?}"))
+            }
+        }
     }
 }
