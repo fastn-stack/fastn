@@ -146,7 +146,7 @@ impl Request {
         }
     }
 
-    pub fn json<T: serde::de::DeserializeOwned>(&self) -> fastn_core::Result<T> {
+    pub fn json<T: serde::de::DeserializeOwned>(&self) -> serde_json::Result<T> {
         Ok(serde_json::from_slice(&self.body)?)
     }
 
