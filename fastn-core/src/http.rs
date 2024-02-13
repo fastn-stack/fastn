@@ -633,13 +633,19 @@ pub(crate) async fn http_get_str(url: &str) -> fastn_core::Result<String> {
     }
 }
 
-pub fn reload() -> fastn_core::http::Response {
+pub fn frontend_reload() -> fastn_core::http::Response {
     fastn_core::http::Response::Ok()
         .content_type("application/json")
         .json(serde_json::json!({"reload": true}))
 }
 
-pub fn api_ok(data: impl serde::Serialize) -> fastn_core::Result<fastn_core::http::Response> {
+pub fn frontend_redirect<T: AsRef<str>>(url: T) -> fastn_core::http::Response {
+    fastn_core::http::Response::Ok()
+        .content_type("application/json")
+        .json(serde_json::json!({"redirect": url.as_ref()}))
+}
+
+pub fn api_ok(data: impl serde::Serialize) -> serde_json::Result<fastn_core::http::Response> {
     #[derive(serde::Serialize)]
     struct SuccessResponse<T: serde::Serialize> {
         data: T,
@@ -662,7 +668,7 @@ pub fn api_ok(data: impl serde::Serialize) -> fastn_core::Result<fastn_core::htt
 pub fn api_error<T: Into<String>>(
     message: T,
     status_code: Option<actix_web::http::StatusCode>,
-) -> fastn_core::Result<fastn_core::http::Response> {
+) -> serde_json::Result<fastn_core::http::Response> {
     #[derive(serde::Serialize, Debug)]
     struct ErrorResponse {
         message: String,
