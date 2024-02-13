@@ -633,6 +633,12 @@ pub(crate) async fn http_get_str(url: &str) -> fastn_core::Result<String> {
     }
 }
 
+pub fn reload() -> fastn_core::http::Response {
+    fastn_core::http::Response::Ok()
+        .content_type("application/json")
+        .json(serde_json::json!({"reload": true}))
+}
+
 pub fn api_ok(data: impl serde::Serialize) -> fastn_core::Result<fastn_core::http::Response> {
     #[derive(serde::Serialize)]
     struct SuccessResponse<T: serde::Serialize> {
