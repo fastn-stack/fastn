@@ -108,6 +108,14 @@ pub struct Request {
 
 impl Request {
     //pub fn get_named_params() -> {}
+    pub fn full_path(&self) -> String {
+        if self.query_string.is_empty() {
+            self.path.clone()
+        } else {
+            format!("{}?{}", self.path, self.query_string)
+        }
+    }
+
     pub fn from_actix(req: actix_web::HttpRequest, body: actix_web::web::Bytes) -> Self {
         let headers = {
             let mut headers = reqwest::header::HeaderMap::new();
