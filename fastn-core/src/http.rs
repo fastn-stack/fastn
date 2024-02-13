@@ -6,6 +6,13 @@ macro_rules! server_error {
 }
 
 #[macro_export]
+macro_rules! server_error_without_warning {
+    ($($t:tt)*) => {{
+        fastn_core::http::server_error_without_warning(format!($($t)*))
+    }};
+}
+
+#[macro_export]
 macro_rules! unauthorised {
     ($($t:tt)*) => {{
         fastn_core::http::unauthorised_(format!($($t)*))
@@ -21,6 +28,10 @@ macro_rules! not_found {
 
 pub fn server_error_(msg: String) -> fastn_core::http::Response {
     fastn_core::warning!("server error: {}", msg);
+    server_error_without_warning(msg)
+}
+
+pub fn server_error_without_warning(msg: String) -> fastn_core::http::Response {
     actix_web::HttpResponse::InternalServerError().body(msg)
 }
 
@@ -643,6 +654,12 @@ pub fn frontend_redirect<T: AsRef<str>>(url: T) -> fastn_core::http::Response {
     fastn_core::http::Response::Ok()
         .content_type("application/json")
         .json(serde_json::json!({"redirect": url.as_ref()}))
+}
+
+pub fn frontend_error<T: serde::Serialize>(errors: T) -> fastn_core::http::Response {
+    fastn_core::http::Response::Ok()
+        .content_type("application/json")
+        .json(serde_json::json!({"errors": errors}))
 }
 
 pub fn api_ok(data: impl serde::Serialize) -> serde_json::Result<fastn_core::http::Response> {
