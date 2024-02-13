@@ -664,11 +664,8 @@ pub fn api_ok(data: impl serde::Serialize) -> serde_json::Result<fastn_core::htt
 }
 
 // construct an error response with `message`
-/// and `status_code`. Use 500 if `status_code` is None
-pub fn api_error<T: Into<String>>(
-    message: T,
-    status_code: Option<actix_web::http::StatusCode>,
-) -> serde_json::Result<fastn_core::http::Response> {
+/// and `status_code`. Use 200 if `status_code` is None
+pub fn api_error<T: Into<String>>(message: T) -> serde_json::Result<fastn_core::http::Response> {
     #[derive(serde::Serialize, Debug)]
     struct ErrorResponse {
         message: String,
@@ -682,7 +679,7 @@ pub fn api_error<T: Into<String>>(
 
     Ok(actix_web::HttpResponse::Ok()
         .content_type(actix_web::http::header::ContentType::json())
-        .status(status_code.unwrap_or(actix_web::http::StatusCode::INTERNAL_SERVER_ERROR))
+        .status(actix_web::http::StatusCode::OK)
         .body(serde_json::to_string(&resp)?))
 }
 

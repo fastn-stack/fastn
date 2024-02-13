@@ -355,20 +355,14 @@ pub(crate) async fn confirm_email(
 
     if code.is_none() {
         tracing::info!("finishing response due to bad ?code");
-        return Ok(fastn_core::http::api_error(
-            "Bad Request",
-            fastn_core::http::StatusCode::OK.into(),
-        )?);
+        return Ok(fastn_core::http::api_error("Bad Request")?);
     }
 
     let code = match code.unwrap() {
         serde_json::Value::String(c) => c,
         _ => {
             tracing::info!("failed to Deserialize ?code as string");
-            return Ok(fastn_core::http::api_error(
-                "Bad Request",
-                fastn_core::http::StatusCode::OK.into(),
-            )?);
+            return Ok(fastn_core::http::api_error("Bad Request")?);
         }
     };
 
@@ -394,10 +388,7 @@ pub(crate) async fn confirm_email(
     if conf_data.is_none() {
         tracing::info!("invalid code value. No entry exists for the given code in db");
         tracing::info!("provided code: {}", &code);
-        return Ok(fastn_core::http::api_error(
-            "Bad Request",
-            fastn_core::http::StatusCode::OK.into(),
-        )?);
+        return Ok(fastn_core::http::api_error("Bad Request")?);
     }
 
     let (email_id, session_id, sent_at) = conf_data.unwrap();
@@ -472,19 +463,13 @@ pub(crate) async fn resend_email(
     let email = req.query().get("email");
 
     if email.is_none() {
-        return Ok(fastn_core::http::api_error(
-            "Bad Request",
-            fastn_core::http::StatusCode::OK.into(),
-        )?);
+        return Ok(fastn_core::http::api_error("Bad Request")?);
     }
 
     let email = match email.unwrap() {
         serde_json::Value::String(c) => c.to_owned(),
         _ => {
-            return Ok(fastn_core::http::api_error(
-                "Bad Request",
-                fastn_core::http::StatusCode::OK.into(),
-            )?);
+            return Ok(fastn_core::http::api_error("Bad Request")?);
         }
     };
 
