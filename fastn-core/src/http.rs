@@ -147,7 +147,7 @@ impl Request {
     }
 
     pub fn json<T: serde::de::DeserializeOwned>(&self) -> serde_json::Result<T> {
-        Ok(serde_json::from_slice(&self.body)?)
+        serde_json::from_slice(&self.body)
     }
 
     pub fn body_as_json(
