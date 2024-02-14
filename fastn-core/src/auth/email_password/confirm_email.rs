@@ -1,4 +1,4 @@
-use crate::auth::email_password::key_expired;
+use crate::auth::email_password::{email_confirmation_sent_ftd, key_expired};
 
 pub(crate) async fn confirm_email(
     req: &fastn_core::http::Request,
@@ -8,6 +8,20 @@ pub(crate) async fn confirm_email(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
+
+    if req.method() != "POST" {
+        let main = fastn_core::Document {
+            package_name: config.package.name.clone(),
+            id: "/-/confirm-email/".to_string(),
+            content: email_confirmation_sent_ftd().to_string(),
+            parent_path: fastn_ds::Path::new("/"),
+        };
+
+        let resp = fastn_core::package::package_doc::read_ftd(req_config, &main, "/", false, false)
+            .await?;
+
+        return Ok(resp.into());
+    }
 
     let code = req.query().get("code");
 

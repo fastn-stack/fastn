@@ -123,6 +123,7 @@ pub(crate) async fn create_and_send_confirmation_email(
 
     mailer
         .send_raw(
+            req_config.config.ds.env_bool("FASTN_ENABLE_EMAIL", true),
             format!("{} <{}>", name, email)
                 .parse::<lettre::message::Mailbox>()
                 .unwrap(),

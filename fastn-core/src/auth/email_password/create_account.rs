@@ -1,5 +1,5 @@
 use crate::auth::email_password::{
-    create_and_send_confirmation_email, email_confirmation_sent_ftd, redirect_url_from_next,
+    create_account_ftd, email_confirmation_sent_ftd, redirect_url_from_next,
 };
 
 #[derive(serde::Deserialize, serde::Serialize, validator::Validate, Debug)]
@@ -31,8 +31,8 @@ pub(crate) async fn create_account(
     if req.method() != "POST" {
         let main = fastn_core::Document {
             package_name: config.package.name.clone(),
-            id: "/-/email-confirmation-request-sent/".to_string(),
-            content: email_confirmation_sent_ftd().to_string(),
+            id: "/-/create-account/".to_string(),
+            content: create_account_ftd().to_string(),
             parent_path: fastn_ds::Path::new("/"),
         };
 
@@ -162,7 +162,7 @@ pub(crate) async fn create_account(
     let resp_body = serde_json::json!({
         "user": user,
         "success": true,
-        "redirect": redirect_url_from_next(req, "/-/auth/create-account/".to_string()),
+        "redirect": redirect_url_from_next(req, "/-/auth/confirm-email/".to_string()),
     });
 
     let mut resp = actix_web::HttpResponse::Ok();

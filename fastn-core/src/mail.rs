@@ -42,14 +42,17 @@ impl Mailer {
     /// send {body} as html body of the email
     pub async fn send_raw(
         &self,
+        enable_email: bool,
         to: lettre::message::Mailbox,
         subject: &str,
         body: String,
     ) -> Result<(), MailError> {
-        if fastn_observer::is_traced() {
+        if !enable_email {
             tracing::info!("mail sent to: {}", &to);
             return Ok(());
         }
+
+        // read the env vars
 
         let email = lettre::Message::builder()
             .from(lettre::message::Mailbox::new(
