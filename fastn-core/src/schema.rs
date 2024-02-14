@@ -29,6 +29,16 @@ diesel::table! {
 }
 
 diesel::table! {
+    fastn_password_reset (id) {
+        id -> Int4,
+        user_id -> Int4,
+        created_at -> Timestamptz,
+        sent_at -> Timestamptz,
+        key -> Text,
+    }
+}
+
+diesel::table! {
     fastn_session (id) {
         id -> Int4,
         user_id -> Int4,
@@ -66,12 +76,14 @@ diesel::table! {
 diesel::joinable!(fastn_email_confirmation -> fastn_session (session_id));
 diesel::joinable!(fastn_email_confirmation -> fastn_user_email (email_id));
 diesel::joinable!(fastn_oauthtoken -> fastn_session (session_id));
+diesel::joinable!(fastn_password_reset -> fastn_user (user_id));
 diesel::joinable!(fastn_session -> fastn_user (user_id));
 diesel::joinable!(fastn_user_email -> fastn_user (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     fastn_email_confirmation,
     fastn_oauthtoken,
+    fastn_password_reset,
     fastn_session,
     fastn_user,
     fastn_user_email,

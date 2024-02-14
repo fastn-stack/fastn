@@ -181,6 +181,8 @@ async fn set_session_cookie_and_redirect_to_next(
             .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
             .path("/")
             .permanent()
+            .http_only(true)
+            .same_site(actix_web::cookie::SameSite::Lax)
             .finish(),
         )
         // redirect to next

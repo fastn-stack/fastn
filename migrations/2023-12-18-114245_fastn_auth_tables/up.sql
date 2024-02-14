@@ -53,3 +53,12 @@ create table if not exists fastn_email_confirmation(
     sent_at TIMESTAMP WITH TIME ZONE NOT NULL, -- to check expiration
     "key" TEXT UNIQUE NOT NULL -- for verification
 );
+
+-- fastn_password_reset
+create table if not exists fastn_password_reset(
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES fastn_user(id) ON DELETE CASCADE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+    sent_at TIMESTAMP WITH TIME ZONE NOT NULL, -- to check expiration
+    "key" TEXT UNIQUE NOT NULL -- for verification
+);
