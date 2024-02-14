@@ -15,6 +15,7 @@
 -- import: fastn.com/blog/show-cs as p1
 -- import: fastn.com/blog/breakpoint as r1
 -- import: fastn.com/blog/domain-components
+-- import: fastn.com/blog/design-system-part-2
 -- import: fastn.com/blog/content-library
 -- import: fastn.com/blog/personal-website-1
 -- import: fastn.com/blog/design-system
@@ -22,6 +23,13 @@
 -- ds.page-with-no-right-sidebar:
 
 -- ds.posts:
+
+
+-- ds.without-image-half:
+post-data: $design-system-part-2.meta
+
+-- ds.without-image-half:
+post-data: $design-system.meta
 
 -- ds.featured-post:
 post-data: $personal-website-1.meta
@@ -74,54 +82,6 @@ post-data: $p2.meta
 -- ds.without-image:
 post-data: $p1.meta
 
--- ds.without-image-half:
-post-data: $design-system.meta
-
-	-- ds.without-image-half:
-	post-data: $domain-components.meta
-	
-	-- ds.without-image-half:
-	post-data: $r1.index-meta
-	
-	-- ds.featured-post:
-	post-data: $fp.meta
-	
-	-- ds.without-image-half:
-	post-data: $p12.meta
-	
-	-- ds.without-image-half:
-	post-data: $p11.meta
-	
-	-- ds.without-image-half:
-	post-data: $p10.meta
-	
-	-- ds.without-image-half:
-	post-data: $p9.meta
-	
-	-- ds.without-image-half:
-	post-data: $p8.meta
-	
-	-- ds.without-image:
-	post-data: $p7.meta
-	
-	-- ds.without-image-half:
-	post-data: $p6.meta
-	
-	-- ds.without-image-half:
-	post-data: $p5.meta
-	
-	-- ds.without-image:
-	post-data: $p4.meta
-	
-	-- ds.image-in-between:
-	post-data: $p3.meta
-	
-	-- ds.without-image-half:
-	post-data: $p2.meta
-	
-	-- ds.without-image:
-	post-data: $p1.meta
-	
 -- end: ds.posts
 
 -- end: ds.page-with-no-right-sidebar

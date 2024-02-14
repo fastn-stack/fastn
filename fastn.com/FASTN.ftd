@@ -919,14 +919,16 @@ skip: true
 
 # Blog: /blog/
 
+- Design System Package Tutorial (Part 2): /blog/design-system-part-2/
+  document: blog/design-system-part-2.ftd
+- Design System Package Tutorial (Part 1): /blog/design-system/
+  document: blog/design-system.ftd
 - Building Your Personal Website with fastn: /blog/personal-website-1/
   document: blog/personal-website-1.ftd
 - Content Library: /blog/content-library/
   document: blog/content-library.ftd
 - Memory, Mutability and Reactivity: /blog/strongly-typed/
   document: blog/strongly-typed.ftd
-- Design System Package Tutorial (Part 1): /blog/design-system/
-  document: blog/design-system.ftd
 - Domain Components: /blog/domain-components/
   document: blog/domain-components.ftd
 - Search Feature in fastn.com: /blog/search/
