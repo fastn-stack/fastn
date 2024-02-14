@@ -117,17 +117,17 @@ pub fn get_clean_url(
         }
     }
 
-    // Todo: Fix this later
-    if let Some(e) = config.package.endpoints.first() {
+    if let Some(e) = config
+        .package
+        .endpoints
+        .iter()
+        .find(|&endpoint| url.starts_with(&endpoint.mountpoint))
+    {
+        let endpoint_url = e.endpoint.trim_end_matches('/');
+        let relative_path = url.trim_start_matches(&e.mountpoint);
+        let full_url = format!("{}/{}", endpoint_url, relative_path);
         return Ok((
-            url::Url::parse(
-                format!(
-                    "{}/{}",
-                    e.endpoint.trim_end_matches('/'),
-                    url.trim_start_matches('/')
-                )
-                .as_str(),
-            )?,
+            url::Url::parse(&full_url)?,
             std::collections::HashMap::new(),
         ));
     }
