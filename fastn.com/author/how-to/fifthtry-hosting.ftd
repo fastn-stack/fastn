@@ -4,7 +4,7 @@ Welcome to FifthTry Hosting – the perfect hosting solution for `fastn`
 enthusiasts. Follow these simple steps to have your `fastn-powered website`
 up and running in no time. 
 
--- h1: Step 1: Create an Account
+-- ds.h1: Step 1: Create an Account
 
 - Visit [FifthTry](https://www.fifthtry.com/) and sign up for an account.
 - Verify your email address. Alternatively, use your `GitHub` account for a 
@@ -14,7 +14,7 @@ up and running in no time.
 src: $fastn-assets.files.images.blog.sign-up.png
 width: fill-container
 
--- h1: Step 2: Create Your Website
+-- ds.h1: Step 2: Create Your Website
 
 - Log in to your FifthTry account to access the dashboard.
 - Click on the `Create Site` button to create your website.
@@ -39,7 +39,7 @@ width: fill-container
 src: $fastn-assets.files.images.blog.site-info.png
 width: fill-container
 
--- h1: Manage Domain Settings and Monitor DNS/SSL Status
+-- ds.h1: Manage Domain Settings and Monitor DNS/SSL Status
 
 - Navigate to the `Domains` tab to oversee all your domains, and check the 
   status of your `DNS and SSL` configurations.
@@ -48,7 +48,7 @@ width: fill-container
 src: $fastn-assets.files.images.blog.domains.png
 width: fill-container
 
--- h1: Configure GitHub for your website
+-- ds.h1: Configure GitHub for your website
 
 - Under the `GitHub` tab, click `Configure Now` to configure your GitHub 
   repository with your FifthTry-hosted website.
