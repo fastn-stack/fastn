@@ -23,7 +23,7 @@ pub(crate) async fn resend_email(
         }
     };
 
-    create_and_send_confirmation_email(email, db_pool, req, req_config, next.clone()).await?;
+    create_and_send_confirmation_email(email, db_pool, req_config, next.clone()).await?;
 
     // TODO: there's no GET /-/auth/login/ yet
     // the client will have to create one for now
