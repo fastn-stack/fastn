@@ -1,0 +1,80 @@
+-- ds.page: Getting Started with FifthTry Hosting
+
+Welcome to FifthTry Hosting – the perfect hosting solution for `fastn` 
+enthusiasts. Follow these simple steps to have your `fastn-powered website`
+up and running in no time. 
+
+-- h1: Step 1: Create an Account
+
+- Visit [FifthTry](https://www.fifthtry.com/) and sign up for an account.
+- Verify your email address. Alternatively, use your `GitHub` account for a 
+  quick signup process.
+
+-- ds.image: Set up your FifthTry Account
+src: $fastn-assets.files.images.blog.sign-up.png
+width: fill-container
+
+-- h1: Step 2: Create Your Website
+
+- Log in to your FifthTry account to access the dashboard.
+- Click on the `Create Site` button to create your website.
+
+-- ds.image: Dashboard
+src: $fastn-assets.files.images.blog.dashboard.png
+width: fill-container
+
+- On the Create Site page, enter your desired `domain name` and click **Create Site**
+  Keep in mind that custom domains can be added at a later stage.
+
+-- ds.image: Add your domain name
+src: $fastn-assets.files.images.blog.create-site.png
+width: fill-container
+
+- Your website will be generated with a sample template, and default `.ftd` 
+  files are pre-installed. For an immediate view of your live site, click on `Visit Site`.
+  
+- Click `View Details` to access site information and explore additional settings.
+
+-- ds.image: Site Information Page
+src: $fastn-assets.files.images.blog.site-info.png
+width: fill-container
+
+-- h1: Manage Domain Settings and Monitor DNS/SSL Status
+
+- Navigate to the `Domains` tab to oversee all your domains, and check the 
+  status of your `DNS and SSL` configurations.
+
+-- ds.image: Domains Page
+src: $fastn-assets.files.images.blog.domains.png
+width: fill-container
+
+-- h1: Configure GitHub for your website
+
+- Under the `GitHub` tab, click `Configure Now` to configure your GitHub 
+  repository with your FifthTry-hosted website.
+
+-- ds.image: Before GitHub Configuration
+src: $fastn-assets.files.images.blog.unconfigured.png
+width: fill-container
+
+- Provide your GitHub Organization, GitHub Repo name, and Branch Name and click 
+  on `Save`
+
+-- ds.image: Github Configuration Form
+src: $fastn-assets.files.images.blog.configure-form.png
+width: fill-container
+
+-- ds.image: After GitHub Configuration 
+src: $fastn-assets.files.images.blog.configured.png
+width: fill-container
+
+- Setting up GitHub configuration is **crucial**, as this ensures that your website 
+  receives automatic updates whenever modifications are made to your 
+  GitHub repository. 
+
+Congratulations! Your fastn-powered website is now `hosted on FifthTry!`
+
+
+
+
+-- end: ds.page
