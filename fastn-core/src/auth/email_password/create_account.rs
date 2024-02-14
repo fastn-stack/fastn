@@ -2,6 +2,21 @@ use crate::auth::email_password::{
     create_and_send_confirmation_email, email_confirmation_sent_ftd, redirect_url_from_next,
 };
 
+#[derive(serde::Deserialize, serde::Serialize, validator::Validate, Debug)]
+struct UserPayload {
+    #[validate(length(min = 4, message = "username must be at least 4 character long"))]
+    username: String,
+    #[validate(email(message = "invalid email format"))]
+    email: String,
+    #[validate(length(min = 1, message = "name must be at least 1 character long"))]
+    name: String,
+    #[validate(custom(
+        function = "fastn_core::auth::validator::validate_strong_password",
+        arg = "(&'v_a str, &'v_a str, &'v_a str)"
+    ))]
+    password: String,
+}
+
 pub(crate) async fn create_account(
     req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
@@ -16,7 +31,7 @@ pub(crate) async fn create_account(
     if req.method() != "POST" {
         let main = fastn_core::Document {
             package_name: config.package.name.clone(),
-            id: "/-/email-confirmation-request-sent".to_string(),
+            id: "/-/email-confirmation-request-sent/".to_string(),
             content: email_confirmation_sent_ftd().to_string(),
             parent_path: fastn_ds::Path::new("/"),
         };
@@ -27,38 +42,20 @@ pub(crate) async fn create_account(
         return Ok(resp.into());
     }
 
-    #[derive(serde::Deserialize, serde::Serialize, validator::Validate, Debug)]
-    struct UserPayload {
-        #[validate(length(min = 4, message = "username must be at least 4 character long"))]
-        username: String,
-        #[validate(email(message = "invalid email format"))]
-        email: String,
-        #[validate(length(min = 1, message = "name must be at least 1 character long"))]
-        name: String,
-        #[validate(custom(
-            function = "fastn_core::auth::validator::validate_strong_password",
-            arg = "(&'v_a str, &'v_a str, &'v_a str)"
-        ))]
-        password: String,
-    }
-
-    let user_payload = req.json::<UserPayload>();
-
-    if let Err(e) = user_payload {
-        return fastn_core::http::user_err(
+    let user_payload = match req.json::<UserPayload>() {
+        Ok(p) => p,
+        Err(e) => return fastn_core::http::user_err(
             vec![("payload".into(), vec![format!("Invalid payload. Required the request body to contain json. Original error: {:?}", e)])],
             fastn_core::http::StatusCode::OK,
-        );
-    }
-
-    let user_payload = user_payload.unwrap();
+        )
+    };
 
     if let Err(e) = user_payload.validate_args((
         user_payload.username.as_str(),
         user_payload.email.as_str(),
         user_payload.name.as_str(),
     )) {
-        return fastn_core::http::validation_error_to_user_err(e, fastn_core::http::StatusCode::OK);
+        return fastn_core::http::validation_error_to_user_err(e);
     }
 
     let mut conn = db_pool
@@ -165,7 +162,7 @@ pub(crate) async fn create_account(
     let resp_body = serde_json::json!({
         "user": user,
         "success": true,
-        "redirect": redirect_url_from_next(req, "/-/auth/create-user/".to_string()),
+        "redirect": redirect_url_from_next(req, "/-/auth/create-account/".to_string()),
     });
 
     let mut resp = actix_web::HttpResponse::Ok();

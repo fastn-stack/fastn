@@ -50,16 +50,12 @@ fn generate_key(length: usize) -> String {
 
 fn email_confirmation_sent_ftd() -> &'static str {
     r#"
-    -- import: fastn/processors as pr
-
     -- auth.email-confirmation-request-sent:
     "#
 }
 
 fn onboarding_ftd() -> &'static str {
     r#"
-    -- import: fastn/processors as pr
-
     -- auth.onboarding:
     "#
 }

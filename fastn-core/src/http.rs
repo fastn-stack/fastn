@@ -856,7 +856,6 @@ fn test_is_bot() {
 
 pub fn validation_error_to_user_err(
     e: validator::ValidationErrors,
-    status_code: fastn_core::http::StatusCode,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use itertools::Itertools;
 
@@ -891,7 +890,7 @@ pub fn validation_error_to_user_err(
         })
         .collect();
 
-    fastn_core::http::user_err(converted_error, status_code)
+    fastn_core::http::user_err(converted_error, fastn_core::http::StatusCode::OK)
 }
 
 #[cfg(test)]

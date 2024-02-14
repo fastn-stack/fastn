@@ -22,7 +22,7 @@ pub(crate) async fn onboarding(
 
     let first_signin_doc = fastn_core::Document {
         package_name: config.package.name.clone(),
-        id: "/-/onboarding".to_string(),
+        id: "/-/onboarding/".to_string(),
         content: onboarding_ftd().to_string(),
         parent_path: fastn_ds::Path::new("/"),
     };
