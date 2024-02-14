@@ -1,8 +1,7 @@
 -- ds.page: Hosting your fastn site on FifthTry
 
-Welcome to FifthTry Hosting – the perfect hosting solution for `fastn` 
-enthusiasts. Follow these simple steps to have your `fastn-powered website`
-up and running in no time. 
+With FifthTry hosting, you can host both static and 
+dynamic sites. Follow these steps to get started:
 
 -- ds.h1: Step 1: Create an Account
 
@@ -23,7 +22,7 @@ width: fill-container
 src: $fastn-assets.files.images.blog.dashboard.png
 width: fill-container
 
-- On the Create Site page, enter your desired `domain name` and click **Create Site**
+- On the Create Site page, enter your desired `domain name` and click **Create Site**.
   Keep in mind that custom domains can be added at a later stage.
 
 -- ds.image: Add your domain name

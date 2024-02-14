@@ -708,7 +708,7 @@ skip: true
 ## Deploy: /github-pages/
   document: author/how-to/github-pages.ftd
 
-- FifthTry Hosting: /fifthtry-hosting/
+- FifthTry Hosting: /ft/
   document: author/how-to/fifthtry-hosting.ftd
 - Static Hosting:
   - Github pages: /github-pages/
