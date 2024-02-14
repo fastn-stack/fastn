@@ -64,7 +64,7 @@ impl Node {
 
         let all_children = {
             let mut children: Vec<ftd::Node> = self.children.to_vec();
-            #[allow(clippy::blocks_in_conditions)]
+            // #[allow(clippy::blocks_in_conditions)]
             if let Some(ext_children) = external_children {
                 if *external_open_id
                     == self.attrs.get("data-id").map(|v| {

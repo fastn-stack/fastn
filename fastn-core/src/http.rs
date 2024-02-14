@@ -6,6 +6,13 @@ macro_rules! server_error {
 }
 
 #[macro_export]
+macro_rules! server_error_without_warning {
+    ($($t:tt)*) => {{
+        fastn_core::http::server_error_without_warning(format!($($t)*))
+    }};
+}
+
+#[macro_export]
 macro_rules! unauthorised {
     ($($t:tt)*) => {{
         fastn_core::http::unauthorised_(format!($($t)*))
@@ -21,6 +28,10 @@ macro_rules! not_found {
 
 pub fn server_error_(msg: String) -> fastn_core::http::Response {
     fastn_core::warning!("server error: {}", msg);
+    server_error_without_warning(msg)
+}
+
+pub fn server_error_without_warning(msg: String) -> fastn_core::http::Response {
     actix_web::HttpResponse::InternalServerError().body(msg)
 }
 
@@ -97,6 +108,14 @@ pub struct Request {
 
 impl Request {
     //pub fn get_named_params() -> {}
+    pub fn full_path(&self) -> String {
+        if self.query_string.is_empty() {
+            self.path.clone()
+        } else {
+            format!("{}?{}", self.path, self.query_string)
+        }
+    }
+
     pub fn from_actix(req: actix_web::HttpRequest, body: actix_web::web::Bytes) -> Self {
         let headers = {
             let mut headers = reqwest::header::HeaderMap::new();
@@ -146,8 +165,8 @@ impl Request {
         }
     }
 
-    pub fn json<T: serde::de::DeserializeOwned>(&self) -> fastn_core::Result<T> {
-        Ok(serde_json::from_slice(&self.body)?)
+    pub fn json<T: serde::de::DeserializeOwned>(&self) -> serde_json::Result<T> {
+        serde_json::from_slice(&self.body)
     }
 
     pub fn body_as_json(
@@ -633,7 +652,25 @@ pub(crate) async fn http_get_str(url: &str) -> fastn_core::Result<String> {
     }
 }
 
-pub fn api_ok(data: impl serde::Serialize) -> fastn_core::Result<fastn_core::http::Response> {
+pub fn frontend_reload() -> fastn_core::http::Response {
+    fastn_core::http::Response::Ok()
+        .content_type("application/json")
+        .json(serde_json::json!({"reload": true}))
+}
+
+pub fn frontend_redirect<T: AsRef<str>>(url: T) -> fastn_core::http::Response {
+    fastn_core::http::Response::Ok()
+        .content_type("application/json")
+        .json(serde_json::json!({"redirect": url.as_ref()}))
+}
+
+pub fn frontend_error<T: serde::Serialize>(errors: T) -> fastn_core::http::Response {
+    fastn_core::http::Response::Ok()
+        .content_type("application/json")
+        .json(serde_json::json!({"errors": errors}))
+}
+
+pub fn api_ok(data: impl serde::Serialize) -> serde_json::Result<fastn_core::http::Response> {
     #[derive(serde::Serialize)]
     struct SuccessResponse<T: serde::Serialize> {
         data: T,
@@ -652,11 +689,8 @@ pub fn api_ok(data: impl serde::Serialize) -> fastn_core::Result<fastn_core::htt
 }
 
 // construct an error response with `message`
-/// and `status_code`. Use 500 if `status_code` is None
-pub fn api_error<T: Into<String>>(
-    message: T,
-    status_code: Option<actix_web::http::StatusCode>,
-) -> fastn_core::Result<fastn_core::http::Response> {
+/// and `status_code`. Use 200 if `status_code` is None
+pub fn api_error<T: Into<String>>(message: T) -> serde_json::Result<fastn_core::http::Response> {
     #[derive(serde::Serialize, Debug)]
     struct ErrorResponse {
         message: String,
@@ -670,7 +704,7 @@ pub fn api_error<T: Into<String>>(
 
     Ok(actix_web::HttpResponse::Ok()
         .content_type(actix_web::http::header::ContentType::json())
-        .status(status_code.unwrap_or(actix_web::http::StatusCode::INTERNAL_SERVER_ERROR))
+        .status(actix_web::http::StatusCode::OK)
         .body(serde_json::to_string(&resp)?))
 }
 
@@ -822,7 +856,6 @@ fn test_is_bot() {
 
 pub fn validation_error_to_user_err(
     e: validator::ValidationErrors,
-    status_code: fastn_core::http::StatusCode,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use itertools::Itertools;
 
@@ -857,7 +890,7 @@ pub fn validation_error_to_user_err(
         })
         .collect();
 
-    fastn_core::http::user_err(converted_error, status_code)
+    fastn_core::http::user_err(converted_error, fastn_core::http::StatusCode::OK)
 }
 
 #[cfg(test)]

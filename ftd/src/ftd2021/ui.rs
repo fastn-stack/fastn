@@ -603,7 +603,7 @@ impl Element {
             _ => return d,
         };
 
-        #[allow(clippy::blocks_in_conditions)]
+        // #[allow(clippy::blocks_in_conditions)]
         if *external_open_id
             == id.as_ref().map(|v| {
                 if v.contains(':') {

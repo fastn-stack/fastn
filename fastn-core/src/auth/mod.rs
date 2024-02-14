@@ -1,4 +1,3 @@
-pub(crate) mod config;
 pub(crate) mod github;
 pub(crate) mod routes;
 pub(crate) mod utils;

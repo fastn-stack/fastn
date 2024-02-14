@@ -10,6 +10,7 @@ impl fastn_core::Manifest {
         package
             .resolve(&package_root.join(package_name).join("FASTN.ftd"), ds)
             .await?;
+        package.files = self.files.keys().map(|f| f.to_string()).collect();
         package.auto_import_language(
             main_package.requested_language.clone(),
             main_package.selected_language.clone(),

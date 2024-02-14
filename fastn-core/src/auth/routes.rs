@@ -94,8 +94,8 @@ pub async fn handle_auth(
         }
         "/-/auth/logout/" => logout(&req, &req_config.config.ds, pool, next).await,
 
-        "/-/auth/create-user/" => {
-            fastn_core::auth::email_password::create_user(&req, req_config, config, pool, next)
+        "/-/auth/create-account/" => {
+            fastn_core::auth::email_password::create_account(&req, req_config, config, pool, next)
                 .await
         }
         "/-/auth/confirm-email/" => {

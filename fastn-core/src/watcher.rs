@@ -92,5 +92,5 @@ pub async fn poll() -> fastn_core::Result<fastn_core::http::Response> {
         WATCHER.1.send(id).await?;
     }
 
-    fastn_core::http::api_ok(got_something)
+    Ok(fastn_core::http::api_ok(got_something)?)
 }
