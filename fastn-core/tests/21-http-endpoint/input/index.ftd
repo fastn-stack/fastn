@@ -1,0 +1,31 @@
+-- import: fastn/processors as pr
+
+-- record user-data:
+integer id:
+string email:
+string first_name:
+
+-- record user:
+user-data data:
+
+
+-- user u:
+$processor$: pr.http
+url: /api/users/2
+
+
+-- component display-user:
+user u:
+
+-- ftd.row:
+spacing.fixed.rem: 1
+
+-- ftd.integer: $display-user.u.data.id
+
+-- ftd.text: $display-user.u.data.first_name
+
+-- ftd.text: $display-user.u.data.email
+
+-- end: ftd.row
+
+-- end: display-user

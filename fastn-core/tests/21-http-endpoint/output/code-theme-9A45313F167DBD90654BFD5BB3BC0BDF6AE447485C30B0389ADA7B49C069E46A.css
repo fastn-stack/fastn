@@ -1,0 +1,172 @@
+/*
+Name: Duotone Sea
+Author: by Simurai, adapted from DuoTone themes by Simurai for Atom (http://simurai.com/projects/2016/01/01/duotone-themes)
+
+Conversion: Bram de Haan (http://atelierbram.github.io/Base2Tone-prism/output/prism/prism-base2tone-sea-dark.css)
+Generated with Base16 Builder (https://github.com/base16-builder/base16-builder)
+*/
+
+code[class*="language-"].duotone-theme-sea,
+pre[class*="language-"].duotone-theme-sea {
+	font-family: Consolas, Menlo, Monaco, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", "Courier New", Courier, monospace;
+	font-size: 14px;
+	line-height: 1.375;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	background: #1d262f;
+	color: #57718e;
+}
+
+pre > code[class*="language-"].duotone-theme-sea {
+	font-size: 1em;
+}
+
+pre[class*="language-"].duotone-theme-sea::-moz-selection, pre[class*="language-"].duotone-theme-sea ::-moz-selection,
+code[class*="language-"].duotone-theme-sea::-moz-selection, code[class*="language-"].duotone-theme-sea ::-moz-selection {
+	text-shadow: none;
+	background: #004a9e;
+}
+
+pre[class*="language-"].duotone-theme-sea::selection, pre[class*="language-"].duotone-theme-sea ::selection,
+code[class*="language-"].duotone-theme-sea::selection, code[class*="language-"].duotone-theme-sea ::selection {
+	text-shadow: none;
+	background: #004a9e;
+}
+
+/* Code blocks */
+pre[class*="language-"].duotone-theme-sea {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"].duotone-theme-sea {
+	padding: .1em;
+	border-radius: .3em;
+}
+
+.duotone-theme-sea .token.comment,
+.duotone-theme-sea .token.prolog,
+.duotone-theme-sea .token.doctype,
+.duotone-theme-sea .token.cdata {
+	color: #4a5f78;
+}
+
+.duotone-theme-sea .token.punctuation {
+	color: #4a5f78;
+}
+
+.duotone-theme-sea .token.namespace {
+	opacity: .7;
+}
+
+.duotone-theme-sea .token.tag,
+.duotone-theme-sea .token.operator,
+.duotone-theme-sea .token.number {
+	color: #0aa370;
+}
+
+.duotone-theme-sea .token.property,
+.duotone-theme-sea .token.function {
+	color: #57718e;
+}
+
+.duotone-theme-sea .token.tag-id,
+.duotone-theme-sea .token.selector,
+.duotone-theme-sea .token.atrule-id {
+	color: #ebf4ff;
+}
+
+code.language-javascript,
+.duotone-theme-sea .token.attr-name {
+	color: #7eb6f6;
+}
+
+code.language-css,
+code.language-scss,
+.duotone-theme-sea .token.boolean,
+.duotone-theme-sea .token.string,
+.duotone-theme-sea .token.entity,
+.duotone-theme-sea .token.url,
+.language-css .duotone-theme-sea .token.string,
+.language-scss .duotone-theme-sea .token.string,
+.style .duotone-theme-sea .token.string,
+.duotone-theme-sea .token.attr-value,
+.duotone-theme-sea .token.keyword,
+.duotone-theme-sea .token.control,
+.duotone-theme-sea .token.directive,
+.duotone-theme-sea .token.unit,
+.duotone-theme-sea .token.statement,
+.duotone-theme-sea .token.regex,
+.duotone-theme-sea .token.atrule {
+	color: #47ebb4;
+}
+
+.duotone-theme-sea .token.placeholder,
+.duotone-theme-sea .token.variable {
+	color: #47ebb4;
+}
+
+.duotone-theme-sea .token.deleted {
+	text-decoration: line-through;
+}
+
+.duotone-theme-sea .token.inserted {
+	border-bottom: 1px dotted #ebf4ff;
+	text-decoration: none;
+}
+
+.duotone-theme-sea .token.italic {
+	font-style: italic;
+}
+
+.duotone-theme-sea .token.important,
+.duotone-theme-sea .token.bold {
+	font-weight: bold;
+}
+
+.duotone-theme-sea .token.important {
+	color: #7eb6f6;
+}
+
+.duotone-theme-sea .token.entity {
+	cursor: help;
+}
+
+pre > code.highlight {
+	outline: .4em solid #34659d;
+	outline-offset: .4em;
+}
+
+/* overrides color-values for the Line Numbers plugin
+ * http://prismjs.com/plugins/line-numbers/
+ */
+.line-numbers.line-numbers .line-numbers-rows {
+	border-right-color: #1f2932;
+}
+
+.line-numbers .line-numbers-rows > span:before {
+	color: #2c3847;
+}
+
+/* overrides color-values for the Line Highlight plugin
+* http://prismjs.com/plugins/line-highlight/
+*/
+.line-highlight.line-highlight {
+	background: rgba(10, 163, 112, 0.2);
+	background: -webkit-linear-gradient(left, rgba(10, 163, 112, 0.2) 70%, rgba(10, 163, 112, 0));
+	background: linear-gradient(to right, rgba(10, 163, 112, 0.2) 70%, rgba(10, 163, 112, 0));
+}

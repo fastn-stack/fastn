@@ -1,0 +1,7 @@
+-- import: fastn
+
+-- fastn.package: fastn-stack.github.io/http-endpoint-test
+
+-- fastn.url-mappings:
+
+/api/* -> http+proxy://reqres.in/api/*
