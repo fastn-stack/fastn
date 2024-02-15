@@ -1,4 +1,4 @@
-use crate::auth::email_password::{email_confirmation_sent_ftd, key_expired};
+use crate::auth::email_password::key_expired;
 
 pub(crate) async fn confirm_email(
     req_config: &mut fastn_core::RequestConfig,
@@ -11,17 +11,8 @@ pub(crate) async fn confirm_email(
     let code = req_config.request.query().get("code");
 
     if code.is_none() {
-        let main = fastn_core::Document {
-            package_name: req_config.config.package.name.clone(),
-            id: "/-/confirm-email/".to_string(),
-            content: email_confirmation_sent_ftd().to_string(),
-            parent_path: fastn_ds::Path::new("/"),
-        };
-
-        let resp = fastn_core::package::package_doc::read_ftd(req_config, &main, "/", false, false)
-            .await?;
-
-        return Ok(resp.into());
+        tracing::info!("finishing response due to bad ?code");
+        return Ok(fastn_core::http::api_error("Bad Request")?);
     }
 
     let code = match code.unwrap() {
@@ -99,6 +90,9 @@ pub(crate) async fn confirm_email(
     } else {
         next.to_string()
     };
+
+    // TODO: check session id cookie, if it exists, update the session and store user_id, else
+    // create a session
 
     // redirect to onboarding route with a GET request
     let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
