@@ -16,5 +16,5 @@ pub(crate) async fn email_confirmation_sent(
     let resp =
         fastn_core::package::package_doc::read_ftd(req_config, &main, "/", false, false).await?;
 
-    return Ok(resp.into());
+    Ok(resp.into())
 }

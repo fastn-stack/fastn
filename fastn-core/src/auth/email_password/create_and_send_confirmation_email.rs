@@ -48,6 +48,7 @@ pub(crate) async fn create_and_send_confirmation_email(
                 fastn_core::schema::fastn_email_confirmation::email_id.eq(email_id),
                 fastn_core::schema::fastn_email_confirmation::session_id.eq(&session_id),
                 fastn_core::schema::fastn_email_confirmation::sent_at.eq(&now),
+                fastn_core::schema::fastn_email_confirmation::created_at.eq(&now),
                 fastn_core::schema::fastn_email_confirmation::key.eq(key),
             ))
             .returning(fastn_core::schema::fastn_email_confirmation::key)

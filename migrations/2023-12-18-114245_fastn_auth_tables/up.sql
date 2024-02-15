@@ -45,7 +45,8 @@ CREATE TABLE IF NOT EXISTS fastn_user_email (
     email email NOT NULL UNIQUE,
     verified BOOLEAN DEFAULT FALSE NOT NULL,
     "primary" BOOLEAN DEFAULT FALSE NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 -- email confirmations. Can't log in without confirming email first

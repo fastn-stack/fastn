@@ -64,6 +64,7 @@ diesel::table! {
         verified -> Bool,
         primary -> Bool,
         created_at -> Timestamptz,
+        updated_at -> Timestamptz,
     }
 }
 

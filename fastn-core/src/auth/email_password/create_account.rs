@@ -130,6 +130,7 @@ pub(crate) async fn create_account(
                         fastn_core::schema::fastn_user_email::verified.eq(false),
                         fastn_core::schema::fastn_user_email::primary.eq(true),
                         fastn_core::schema::fastn_user_email::created_at.eq(now),
+                        fastn_core::schema::fastn_user_email::updated_at.eq(now),
                     ))
                     .returning(fastn_core::schema::fastn_user_email::email)
                     .execute(c)
