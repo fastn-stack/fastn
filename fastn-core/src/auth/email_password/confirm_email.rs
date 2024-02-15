@@ -8,7 +8,9 @@ pub(crate) async fn confirm_email(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    if req_config.request.method() != "POST" {
+    let code = req_config.request.query().get("code");
+
+    if code.is_none() {
         let main = fastn_core::Document {
             package_name: req_config.config.package.name.clone(),
             id: "/-/confirm-email/".to_string(),
@@ -20,13 +22,6 @@ pub(crate) async fn confirm_email(
             .await?;
 
         return Ok(resp.into());
-    }
-
-    let code = req_config.request.query().get("code");
-
-    if code.is_none() {
-        tracing::info!("finishing response due to bad ?code");
-        return Ok(fastn_core::http::api_error("Bad Request")?);
     }
 
     let code = match code.unwrap() {
