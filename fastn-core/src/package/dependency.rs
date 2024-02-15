@@ -55,13 +55,16 @@ impl AutoImportTemp {
                 exposing,
             },
             None => {
-                let alias = self.name.rsplit_once('/').map(|(_, alias)| alias.to_string());
+                let alias = self
+                    .name
+                    .rsplit_once('/')
+                    .map(|(_, alias)| alias.to_string());
                 fastn_core::AutoImport {
                     path: self.name.trim().to_string(),
                     alias,
                     exposing,
                 }
-            },
+            }
         }
     }
 }
