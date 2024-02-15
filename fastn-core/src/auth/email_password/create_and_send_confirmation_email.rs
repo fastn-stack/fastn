@@ -5,11 +5,12 @@ pub(crate) async fn create_and_send_confirmation_email(
     db_pool: &fastn_core::db::PgPool,
     req_config: &mut fastn_core::RequestConfig,
     next: String,
-) -> fastn_core::Result<String> {
+) -> fastn_core::Result<(String, i64)> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
     let key = generate_key(64);
+    let now = chrono::Utc::now();
 
     let mut conn = db_pool
         .get()
@@ -18,7 +19,7 @@ pub(crate) async fn create_and_send_confirmation_email(
             message: format!("Failed to get connection to db. {:?}", e),
         })?;
 
-    let (email_id, user_id): (i32, i32) = fastn_core::schema::fastn_user_email::table
+    let (email_id, user_id): (i64, i64) = fastn_core::schema::fastn_user_email::table
         .select((
             fastn_core::schema::fastn_user_email::id,
             fastn_core::schema::fastn_user_email::user_id,
@@ -30,13 +31,14 @@ pub(crate) async fn create_and_send_confirmation_email(
         .first(&mut conn)
         .await?;
 
-    // create a non active fastn_sesion entry for auto login
-    let session_id: i32 = diesel::insert_into(fastn_core::schema::fastn_session::table)
+    // create a non active fastn_auth_session entry for auto login
+    let session_id: i64 = diesel::insert_into(fastn_core::schema::fastn_auth_session::table)
         .values((
-            fastn_core::schema::fastn_session::user_id.eq(&user_id),
-            fastn_core::schema::fastn_session::active.eq(false),
+            fastn_core::schema::fastn_auth_session::user_id.eq(&user_id),
+            fastn_core::schema::fastn_auth_session::created_at.eq(&now),
+            fastn_core::schema::fastn_auth_session::updated_at.eq(&now),
         ))
-        .returning(fastn_core::schema::fastn_session::id)
+        .returning(fastn_core::schema::fastn_auth_session::id)
         .get_result(&mut conn)
         .await?;
 
@@ -45,8 +47,8 @@ pub(crate) async fn create_and_send_confirmation_email(
             .values((
                 fastn_core::schema::fastn_email_confirmation::email_id.eq(email_id),
                 fastn_core::schema::fastn_email_confirmation::session_id.eq(&session_id),
-                fastn_core::schema::fastn_email_confirmation::sent_at
-                    .eq(chrono::offset::Utc::now()),
+                fastn_core::schema::fastn_email_confirmation::sent_at.eq(&now),
+                fastn_core::schema::fastn_email_confirmation::created_at.eq(&now),
                 fastn_core::schema::fastn_email_confirmation::key.eq(key),
             ))
             .returning(fastn_core::schema::fastn_email_confirmation::key)
@@ -136,5 +138,5 @@ pub(crate) async fn create_and_send_confirmation_email(
         .await
         .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
 
-    Ok(confirmation_link)
+    Ok((confirmation_link, session_id))
 }

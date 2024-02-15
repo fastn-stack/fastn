@@ -15,7 +15,7 @@ pub async fn logout(
 
         #[derive(serde::Deserialize)]
         struct SessionData {
-            session_id: i32,
+            session_id: i64,
         }
 
         if let Ok(data) = serde_json::from_str::<SessionData>(session_data.as_str()) {
@@ -28,8 +28,8 @@ pub async fn logout(
                     message: format!("Failed to get connection to db. {:?}", e),
                 })?;
 
-            let affected = diesel::delete(fastn_core::schema::fastn_session::table)
-                .filter(fastn_core::schema::fastn_session::id.eq(&session_id))
+            let affected = diesel::delete(fastn_core::schema::fastn_auth_session::table)
+                .filter(fastn_core::schema::fastn_auth_session::id.eq(&session_id))
                 .execute(&mut conn)
                 .await?;
 
@@ -78,6 +78,9 @@ pub async fn handle_auth(
 
         "/-/auth/create-account/" => {
             fastn_core::auth::email_password::create_account(req_config, pool, next).await
+        }
+        "/-/auth/email-confirmation-sent/" => {
+            fastn_core::auth::email_password::email_confirmation_sent(req_config).await
         }
         "/-/auth/confirm-email/" => {
             fastn_core::auth::email_password::confirm_email(req_config, pool, next).await
