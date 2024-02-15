@@ -1,24 +1,3 @@
-/// route handler: /-/auth/login/
-pub async fn login(
-    req: &fastn_core::http::Request,
-    ds: &fastn_ds::DocumentStore,
-    db_pool: &fastn_core::db::PgPool,
-    next: String,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    if fastn_core::auth::utils::is_authenticated(req) {
-        return Ok(fastn_core::http::redirect(next));
-    }
-
-    let provider = req.q("provider", "github".to_string())?;
-
-    match provider.as_str() {
-        "github" => fastn_core::auth::github::login(ds, req, next).await,
-        // client should handle redirects to next for email_password login
-        "email-password" => fastn_core::auth::email_password::login(req, ds, db_pool, next).await,
-        _ => Ok(fastn_core::not_found!("unknown provider: {}", provider)),
-    }
-}
-
 // route: /-/auth/logout/
 pub async fn logout(
     req: &fastn_core::http::Request,
@@ -87,9 +66,14 @@ pub async fn handle_auth(
         })?;
 
     match req.path() {
-        "/-/auth/login/" => login(&req, &req_config.config.ds, pool, next).await,
+        "/-/auth/login/" => {
+            fastn_core::auth::email_password::login(&req, &req_config.config.ds, pool, next).await
+        }
         // TODO: This has be set while creating the GitHub OAuth Application
         "/-/auth/github/" => {
+            fastn_core::auth::github::login(&req_config.config.ds, &req, next).await
+        }
+        "/-/auth/github/callback/" => {
             fastn_core::auth::github::callback(&req, &req_config.config.ds, pool, next).await
         }
         "/-/auth/logout/" => logout(&req, &req_config.config.ds, pool, next).await,
