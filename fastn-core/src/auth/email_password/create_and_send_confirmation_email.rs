@@ -55,21 +55,6 @@ pub(crate) async fn create_and_send_confirmation_email(
 
     let confirmation_link = confirmation_link(&req_config.request, stored_key, next);
 
-    let mailer = fastn_core::mail::Mailer::from_env(&req_config.config.ds).await;
-
-    if mailer.is_err() {
-        return Err(fastn_core::Error::generic(
-            "Failed to create mailer from env. Creating mailer requires the following environment variables: \
-                \tFASTN_SMTP_USERNAME \
-                \tFASTN_SMTP_PASSWORD \
-                \tFASTN_SMTP_HOST \
-                \tFASTN_SMTP_SENDER_EMAIL \
-                \tFASTN_SMTP_SENDER_NAME",
-        ));
-    }
-
-    let mailer = mailer.unwrap();
-
     let name: String = fastn_core::schema::fastn_user::table
         .select(fastn_core::schema::fastn_user::name)
         .filter(fastn_core::schema::fastn_user::id.eq(user_id))
@@ -120,21 +105,21 @@ pub(crate) async fn create_and_send_confirmation_email(
 
     tracing::info!("confirmation link: {}", &confirmation_link);
 
-    mailer
-        .send_raw(
-            req_config
-                .config
-                .ds
-                .env_bool("FASTN_ENABLE_EMAIL", true)
-                .await,
-            format!("{} <{}>", name, email)
-                .parse::<lettre::message::Mailbox>()
-                .unwrap(),
-            "Verify your email",
-            confirmation_mail_body(html, &confirmation_link),
-        )
-        .await
-        .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
+    fastn_core::mail::Mailer::send_raw(
+        req_config
+            .config
+            .ds
+            .env_bool("FASTN_ENABLE_EMAIL", true)
+            .await,
+        &req_config.config.ds,
+        format!("{} <{}>", name, email)
+            .parse::<lettre::message::Mailbox>()
+            .unwrap(),
+        "Verify your email",
+        confirmation_mail_body(html, &confirmation_link),
+    )
+    .await
+    .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
 
     Ok(confirmation_link)
 }
