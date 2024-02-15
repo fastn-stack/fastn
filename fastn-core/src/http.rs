@@ -965,13 +965,9 @@ mod test {
             user.email.as_str(),
             user.name.as_str(),
         )) {
-            let res = fastn_core::http::validation_error_to_user_err(
-                e,
-                fastn_core::http::StatusCode::BAD_REQUEST,
-            )
-            .unwrap();
+            let res = fastn_core::http::validation_error_to_user_err(e).unwrap();
 
-            assert_eq!(res.status(), fastn_core::http::StatusCode::BAD_REQUEST);
+            assert_eq!(res.status(), fastn_core::http::StatusCode::OK);
 
             #[derive(serde::Deserialize, Debug)]
             struct Errors {
