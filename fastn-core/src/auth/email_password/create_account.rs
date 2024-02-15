@@ -26,6 +26,8 @@ pub(crate) async fn create_account(
     use diesel_async::RunQueryDsl;
     use validator::ValidateArgs;
 
+    let now = chrono::Utc::now();
+
     if req_config.request.method() != "POST" {
         let main = fastn_core::Document {
             package_name: req_config.config.package.name.clone(),
@@ -111,9 +113,22 @@ pub(crate) async fn create_account(
                         fastn_core::schema::fastn_user::username.eq(user_payload.username),
                         fastn_core::schema::fastn_user::password.eq(hashed_password),
                         fastn_core::schema::fastn_user::name.eq(user_payload.name),
+                        fastn_core::schema::fastn_user::email.eq(user_payload.email),
+                        fastn_core::schema::fastn_user::created_at.eq(now),
+                        fastn_core::schema::fastn_user::updated_at.eq(now),
                     ))
                     .returning(fastn_core::auth::FastnUser::as_returning())
                     .get_result(c)
+                    .await?;
+
+                let session_id = diesel::insert_into(fastn_core::schema::fastn_session::table)
+                    .values((
+                        fastn_core::schema::fastn_session::user_id.eq(user.id),
+                        fastn_core::schema::fastn_session::created_at.eq(now),
+                        fastn_core::schema::fastn_session::updated_at.eq(now),
+                    ))
+                    .returning(fastn_core::schema::fastn_session::id)
+                    .get_result<i64>(c)
                     .await?;
 
                 tracing::info!("fastn_user created. user_id: {}", &user.id);
@@ -126,15 +141,16 @@ pub(crate) async fn create_account(
                                 .eq(fastn_core::utils::citext(user_payload.email.as_str())),
                             fastn_core::schema::fastn_user_email::verified.eq(false),
                             fastn_core::schema::fastn_user_email::primary.eq(true),
+                            fastn_core::schema::fastn_user_email::created_at.eq(now),
                         ))
                         .returning(fastn_core::schema::fastn_user_email::email)
                         .get_result(c)
                         .await?;
 
                 Ok::<
-                    (fastn_core::auth::FastnUser, fastn_core::utils::CiString),
+                    (fastn_core::auth::FastnUser, fastn_core::utils::CiString, i64),
                     diesel::result::Error,
-                >((user, email))
+                >((user, email, session_id))
             })
         })
         .await;
@@ -159,7 +175,7 @@ pub(crate) async fn create_account(
     let resp_body = serde_json::json!({
         "user": user,
         "success": true,
-        "redirect": redirect_url_from_next(&req_config.request, "/-/auth/confirm-email/".to_string()),
+        "redirect": redirect_url_from_next(&req_config.request, "/-/auth/email-confirmation-sent/".to_string()),
     });
 
     let mut resp = actix_web::HttpResponse::Ok();
@@ -170,4 +186,6 @@ pub(crate) async fn create_account(
     }
 
     Ok(resp.json(resp_body))
+
+    // TODO: fastn_core::auth::set_session_cookie_and_redirect_to_next(req, ds, session_id, next).await
 }

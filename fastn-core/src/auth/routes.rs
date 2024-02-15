@@ -97,6 +97,9 @@ pub async fn handle_auth(
         "/-/auth/create-account/" => {
             fastn_core::auth::email_password::create_account(req_config, pool, next).await
         }
+        "/-/auth/email-confirmation-sent/" => {
+            fastn_core::auth::email_password::email_confirmation_sent(req_config).await
+        }
         "/-/auth/confirm-email/" => {
             fastn_core::auth::email_password::confirm_email(req_config, pool, next).await
         }
