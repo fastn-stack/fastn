@@ -11,7 +11,12 @@ pub fn is_kernel(s: &str) -> bool {
 
 pub fn reference_to_js(s: &str) -> String {
     let (prefix, s) = get_prefix(s);
-    let (mut p1, mut p2) = get_doc_name_and_remaining(s.as_str());
+    let (mut p1, p2) = get_doc_name_and_remaining(s.as_str());
+    let mut p2 = if is_asset_path(p1.as_str()) {
+        p2.map(|s| s.replace('.', "_"))
+    } else {
+        p2
+    };
     p1 = fastn_js::utils::name_to_js_(p1.as_str());
     let mut wrapper_function = None;
     while let Some(ref remaining) = p2 {
@@ -124,4 +129,16 @@ pub fn trim_brackets(s: &str) -> String {
 
 pub(crate) fn kebab_to_snake_case(s: &str) -> String {
     s.replace('-', "_")
+}
+
+pub(crate) fn ends_with_exact_suffix(name: &str, separator: &str, suffix: &str) -> bool {
+    if let Some((_, end)) = name.rsplit_once(separator) {
+        end.eq(suffix)
+    } else {
+        false
+    }
+}
+
+pub(crate) fn is_asset_path(name: &str) -> bool {
+    ends_with_exact_suffix(name, "/", "assets#files")
 }
