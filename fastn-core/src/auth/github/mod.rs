@@ -13,7 +13,7 @@ pub async fn login(
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let redirect_url: String = format!(
-        "{}://{}/-/auth/github/?next={}",
+        "{}://{}/-/auth/github/callback/?next={}",
         req.connection_info.scheme(),
         req.connection_info.host(),
         next, // TODO: we should url escape this

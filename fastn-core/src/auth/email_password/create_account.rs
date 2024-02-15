@@ -27,9 +27,11 @@ pub(crate) async fn create_account(
     let now = chrono::Utc::now();
 
     if req_config.request.method() != "POST" {
+        // TODO: if user is logged in redirect to next
+
         let main = fastn_core::Document {
             package_name: req_config.config.package.name.clone(),
-            id: "/-/create-account/".to_string(),
+            id: "/-/auth/create-account/".to_string(),
             content: create_account_ftd().to_string(),
             parent_path: fastn_ds::Path::new("/"),
         };
