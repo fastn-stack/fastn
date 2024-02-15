@@ -166,6 +166,7 @@ async fn set_session_cookie_and_redirect_to_next(
             "username": user.username,
             "name": user.name,
             "email": email,
+            "id": user.id,
         }
     });
 
