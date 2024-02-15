@@ -10,16 +10,19 @@ CREATE TABLE IF NOT EXISTS fastn_user (
     id BIGSERIAL PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
-    email TEXT NOT NULL,  -- de-normalised data to avoid joins
+    email email NOT NULL UNIQUE, -- de-normalised data to avoid joins
+    verified_email BOOLEAN DEFAULT FALSE NOT NULL,
     name TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 -- logged in user session store
-CREATE TABLE IF NOT EXISTS fastn_session (
+-- right now, we do not have a generalised session store like django's
+-- in future, this table will be dissolved into that session table
+CREATE TABLE IF NOT EXISTS fastn_auth_session (
     id BIGSERIAL PRIMARY KEY,
-    user_id BIGINT REFERENCES fastn_user(id) ON DELETE CASCADE NULL,
+    user_id BIGINT REFERENCES fastn_user(id) ON DELETE CASCADE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
@@ -28,7 +31,7 @@ CREATE TABLE IF NOT EXISTS fastn_session (
 -- TODO: handle expiration of tokens
 CREATE TABLE IF NOT EXISTS fastn_oauthtoken (
     id BIGSERIAL PRIMARY KEY,
-    session_id BIGINT REFERENCES fastn_session(id) ON DELETE CASCADE NOT NULL,
+    session_id BIGINT REFERENCES fastn_auth_session(id) ON DELETE CASCADE NOT NULL,
     token TEXT NOT NULL,
     provider TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -49,7 +52,7 @@ CREATE TABLE IF NOT EXISTS fastn_user_email (
 create table if not exists fastn_email_confirmation(
     id BIGSERIAL PRIMARY KEY,
     email_id BIGINT REFERENCES fastn_user_email(id) ON DELETE CASCADE NOT NULL,
-    session_id INTEGER REFERENCES fastn_session(id) ON DELETE CASCADE NOT NULL,
+    session_id BIGINT REFERENCES fastn_auth_session(id) ON DELETE CASCADE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     sent_at TIMESTAMP WITH TIME ZONE NOT NULL, -- to check expiration
     "key" TEXT UNIQUE NOT NULL -- for verification

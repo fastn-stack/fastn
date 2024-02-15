@@ -93,7 +93,7 @@ pub async fn callback(
             message: format!("Failed to get connection to db. {:?}", e),
         })?;
 
-    let existing_email_and_user_id: Option<(fastn_core::utils::CiString, i32)> =
+    let existing_email_and_user_id: Option<(fastn_core::utils::CiString, i64)> =
         fastn_core::schema::fastn_user_email::table
             .select((
                 fastn_core::schema::fastn_user_email::email,
@@ -115,9 +115,9 @@ pub async fn callback(
         // user already exists, just create a session and redirect to next
         let (_, user_id) = existing_email_and_user_id.unwrap();
 
-        let session_id: i32 = diesel::insert_into(fastn_core::schema::fastn_session::table)
-            .values(fastn_core::schema::fastn_session::user_id.eq(&user_id))
-            .returning(fastn_core::schema::fastn_session::id)
+        let session_id: i64 = diesel::insert_into(fastn_core::schema::fastn_auth_session::table)
+            .values(fastn_core::schema::fastn_auth_session::user_id.eq(&user_id))
+            .returning(fastn_core::schema::fastn_auth_session::id)
             .get_result(&mut conn)
             .await?;
 
@@ -125,7 +125,7 @@ pub async fn callback(
 
         // TODO: access_token expires?
         // handle refresh tokens
-        let token_id: i32 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
+        let token_id: i64 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
             .values((
                 fastn_core::schema::fastn_oauthtoken::session_id.eq(session_id),
                 fastn_core::schema::fastn_oauthtoken::token.eq(access_token),
@@ -157,7 +157,7 @@ pub async fn callback(
 
     tracing::info!("fastn_user created. user_id: {:?}", &user.id);
 
-    let email_id: i32 = diesel::insert_into(fastn_core::schema::fastn_user_email::table)
+    let email_id: i64 = diesel::insert_into(fastn_core::schema::fastn_user_email::table)
         .values((
             fastn_core::schema::fastn_user_email::user_id.eq(&user.id),
             fastn_core::schema::fastn_user_email::email.eq(fastn_core::utils::citext(
@@ -176,9 +176,9 @@ pub async fn callback(
     tracing::info!("fastn_user_email created. email: {:?}", &email_id);
 
     // TODO: session should store device that was used to login (chrome desktop on windows)
-    let session_id: i32 = diesel::insert_into(fastn_core::schema::fastn_session::table)
-        .values((fastn_core::schema::fastn_session::user_id.eq(&user.id),))
-        .returning(fastn_core::schema::fastn_session::id)
+    let session_id: i64 = diesel::insert_into(fastn_core::schema::fastn_auth_session::table)
+        .values((fastn_core::schema::fastn_auth_session::user_id.eq(&user.id),))
+        .returning(fastn_core::schema::fastn_auth_session::id)
         .get_result(&mut conn)
         .await?;
 
@@ -186,7 +186,7 @@ pub async fn callback(
 
     // TODO: access_token expires?
     // handle refresh tokens
-    let token_id: i32 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
+    let token_id: i64 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
         .values((
             fastn_core::schema::fastn_oauthtoken::session_id.eq(session_id),
             fastn_core::schema::fastn_oauthtoken::token.eq(access_token),

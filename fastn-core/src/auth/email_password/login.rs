@@ -50,11 +50,9 @@ pub(crate) async fn login(
         })?;
 
     let query = fastn_core::schema::fastn_user::table
-        .inner_join(fastn_core::schema::fastn_user_email::table)
         .filter(fastn_core::schema::fastn_user::username.eq(&payload.username))
         .or_filter(
-            fastn_core::schema::fastn_user_email::email
-                .eq(fastn_core::utils::citext(&payload.username)),
+            fastn_core::schema::fastn_user::email.eq(fastn_core::utils::citext(&payload.username)),
         )
         .select(fastn_core::auth::FastnUser::as_select());
 
@@ -101,9 +99,9 @@ pub(crate) async fn login(
     }
 
     // TODO: session should store device that was used to login (chrome desktop on windows)
-    let session_id: i32 = diesel::insert_into(fastn_core::schema::fastn_session::table)
-        .values((fastn_core::schema::fastn_session::user_id.eq(&user.id),))
-        .returning(fastn_core::schema::fastn_session::id)
+    let session_id: i64 = diesel::insert_into(fastn_core::schema::fastn_auth_session::table)
+        .values((fastn_core::schema::fastn_auth_session::user_id.eq(&user.id),))
+        .returning(fastn_core::schema::fastn_auth_session::id)
         .get_result(&mut conn)
         .await?;
 

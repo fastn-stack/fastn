@@ -16,12 +16,16 @@ pub const FIRST_TIME_SESSION_COOKIE_NAME: &str = "fastn_first_time_user";
 )]
 #[diesel(table_name = fastn_core::schema::fastn_user)]
 pub struct FastnUser {
-    pub id: i32,
+    pub id: i64,
     pub username: String,
     #[serde(skip_serializing)]
     pub password: String,
     pub name: String,
     pub created_at: chrono::DateTime<chrono::Utc>,
+    // TODO: manually derive Deserialize/Serialize
+    #[serde(skip_serializing, skip_deserializing)]
+    pub email: fastn_core::utils::CiString,
+    pub verified_email: bool,
 }
 
 #[derive(Debug)]
@@ -65,7 +69,7 @@ pub async fn get_auth_identities(
             use diesel::prelude::*;
             use diesel_async::RunQueryDsl;
 
-            let session_id: i32 = session_id.parse()?;
+            let session_id: i64 = session_id.parse()?;
 
             let pool = fastn_core::db::pool(ds).await.as_ref().map_err(|e| {
                 fastn_core::Error::DatabaseError {
@@ -131,7 +135,7 @@ pub async fn get_auth_identities(
 async fn set_session_cookie_and_redirect_to_next(
     req: &fastn_core::http::Request,
     ds: &fastn_ds::DocumentStore,
-    session_id: i32,
+    session_id: i64,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let (user, email) =
@@ -166,6 +170,7 @@ async fn set_session_cookie_and_redirect_to_next(
             "username": user.username,
             "name": user.name,
             "email": email,
+            "verified_email": user.verified_email,
         }
     });
 
@@ -204,7 +209,7 @@ pub enum AuthUserError {
 
 /// get FastnUser and its primary email from session
 pub async fn get_authenticated_user_with_email(
-    session_id: &i32,
+    session_id: &i64,
     ds: &fastn_ds::DocumentStore,
 ) -> Result<(fastn_core::auth::FastnUser, String), AuthUserError> {
     use diesel::prelude::*;
@@ -221,9 +226,9 @@ pub async fn get_authenticated_user_with_email(
         reason: format!("{:?}", e),
     })?;
 
-    let user_id: Option<i32> = fastn_core::schema::fastn_session::table
-        .select(fastn_core::schema::fastn_session::user_id)
-        .filter(fastn_core::schema::fastn_session::id.eq(session_id))
+    let user_id: Option<i64> = fastn_core::schema::fastn_auth_session::table
+        .select(fastn_core::schema::fastn_auth_session::user_id)
+        .filter(fastn_core::schema::fastn_auth_session::id.eq(session_id))
         .first(&mut conn)
         .await
         .optional()?;
