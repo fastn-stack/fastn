@@ -235,8 +235,7 @@ impl DocumentStore {
     }
 
     pub async fn env_bool(&self, key: &str, default: bool) -> bool {
-        self.environments
-            .get(key)
+        self.env(key)
             .map(|x| x.to_string() == "true")
             .unwrap_or(default)
     }
