@@ -705,9 +705,11 @@ skip: true
 - Enviroment Variables: /env/
   document: backend/env-vars.ftd
 
-## Deploy: /github-pages/
-  document: author/how-to/github-pages.ftd
+## Deploy: /ft/
+  document: author/how-to/fifthtry-hosting.ftd
 
+- FifthTry Hosting: /ft/
+  document: author/how-to/fifthtry-hosting.ftd
 - Static Hosting:
   - Github pages: /github-pages/
     document: author/how-to/github-pages.ftd

@@ -8,7 +8,7 @@ built assets.
 -- cbox.warning: You Lose Many Dynamic Features In Static Modes
 
 `fastn` comes with a lot of dynamic features, which are only available when you
-are using [fastn server](/server/) for hosting.
+are using [FifthTry Hosting](https://www.fifthtry.com/)
 
 
 -- ds.h1: Using the template repository
