@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS fastn_user (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
+    -- email TEXT NOT NULL,  -- de-normalised data to avoid joins
     name TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL

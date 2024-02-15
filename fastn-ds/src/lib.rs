@@ -234,6 +234,12 @@ impl DocumentStore {
         path.path.exists()
     }
 
+    pub async fn env_bool(&self, key: &str, default: bool) -> bool {
+        self.env(key)
+            .map(|x| x.to_string() == "true")
+            .unwrap_or(default)
+    }
+
     pub async fn env(&self, key: &str) -> Result<String, EnvironmentError> {
         std::env::var(key).map_err(|_| EnvironmentError::NotSet(key.to_string()))
     }

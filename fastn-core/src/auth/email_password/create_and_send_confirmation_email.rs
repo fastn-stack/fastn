@@ -3,7 +3,6 @@ use crate::auth::email_password::{confirmation_link, confirmation_mail_body, gen
 pub(crate) async fn create_and_send_confirmation_email(
     email: String,
     db_pool: &fastn_core::db::PgPool,
-    req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
     next: String,
 ) -> fastn_core::Result<String> {
@@ -54,7 +53,7 @@ pub(crate) async fn create_and_send_confirmation_email(
             .get_result(&mut conn)
             .await?;
 
-    let confirmation_link = confirmation_link(req, stored_key, next);
+    let confirmation_link = confirmation_link(&req_config.request, stored_key, next);
 
     let mailer = fastn_core::mail::Mailer::from_env(&req_config.config.ds).await;
 
@@ -123,6 +122,11 @@ pub(crate) async fn create_and_send_confirmation_email(
 
     mailer
         .send_raw(
+            req_config
+                .config
+                .ds
+                .env_bool("FASTN_ENABLE_EMAIL", true)
+                .await,
             format!("{} <{}>", name, email)
                 .parse::<lettre::message::Mailbox>()
                 .unwrap(),

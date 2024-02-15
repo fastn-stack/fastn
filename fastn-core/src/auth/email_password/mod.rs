@@ -50,12 +50,18 @@ fn generate_key(length: usize) -> String {
 
 fn email_confirmation_sent_ftd() -> &'static str {
     r#"
-    -- auth.email-confirmation-request-sent:
+    -- auth.email-confirmation-request-sent-page:
+    "#
+}
+
+fn create_account_ftd() -> &'static str {
+    r#"
+    -- auth.create-account-page:
     "#
 }
 
 fn onboarding_ftd() -> &'static str {
     r#"
-    -- auth.onboarding:
+    -- auth.onboarding-page:
     "#
 }

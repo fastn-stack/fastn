@@ -1,5 +1,5 @@
 use crate::auth::email_password::{
-    create_and_send_confirmation_email, email_confirmation_sent_ftd, redirect_url_from_next,
+    create_account_ftd, create_and_send_confirmation_email, redirect_url_from_next,
 };
 
 #[derive(serde::Deserialize, serde::Serialize, validator::Validate, Debug)]
@@ -18,9 +18,7 @@ struct UserPayload {
 }
 
 pub(crate) async fn create_account(
-    req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
-    config: &fastn_core::Config,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -28,11 +26,11 @@ pub(crate) async fn create_account(
     use diesel_async::RunQueryDsl;
     use validator::ValidateArgs;
 
-    if req.method() != "POST" {
+    if req_config.request.method() != "POST" {
         let main = fastn_core::Document {
-            package_name: config.package.name.clone(),
-            id: "/-/email-confirmation-request-sent/".to_string(),
-            content: email_confirmation_sent_ftd().to_string(),
+            package_name: req_config.config.package.name.clone(),
+            id: "/-/create-account/".to_string(),
+            content: create_account_ftd().to_string(),
             parent_path: fastn_ds::Path::new("/"),
         };
 
@@ -42,7 +40,7 @@ pub(crate) async fn create_account(
         return Ok(resp.into());
     }
 
-    let user_payload = match req.json::<UserPayload>() {
+    let user_payload = match req_config.request.json::<UserPayload>() {
         Ok(p) => p,
         Err(e) => return fastn_core::http::user_err(
             vec![("payload".into(), vec![format!("Invalid payload. Required the request body to contain json. Original error: {:?}", e)])],
@@ -156,18 +154,17 @@ pub(crate) async fn create_account(
     tracing::info!("fastn_user email inserted");
 
     let conf_link =
-        create_and_send_confirmation_email(email.0.to_string(), db_pool, req, req_config, next)
-            .await?;
+        create_and_send_confirmation_email(email.0.to_string(), db_pool, req_config, next).await?;
 
     let resp_body = serde_json::json!({
         "user": user,
         "success": true,
-        "redirect": redirect_url_from_next(req, "/-/auth/create-account/".to_string()),
+        "redirect": redirect_url_from_next(&req_config.request, "/-/auth/confirm-email/".to_string()),
     });
 
     let mut resp = actix_web::HttpResponse::Ok();
 
-    if config.test_command_running {
+    if req_config.config.test_command_running {
         resp.insert_header(("X-Fastn-Test", "true"))
             .insert_header(("X-Fastn-Test-Email-Confirmation-Link", conf_link));
     }

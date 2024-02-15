@@ -95,12 +95,10 @@ pub async fn handle_auth(
         "/-/auth/logout/" => logout(&req, &req_config.config.ds, pool, next).await,
 
         "/-/auth/create-account/" => {
-            fastn_core::auth::email_password::create_account(&req, req_config, config, pool, next)
-                .await
+            fastn_core::auth::email_password::create_account(req_config, pool, next).await
         }
         "/-/auth/confirm-email/" => {
-            fastn_core::auth::email_password::confirm_email(&req, &req_config.config.ds, pool, next)
-                .await
+            fastn_core::auth::email_password::confirm_email(req_config, pool, next).await
         }
         "/-/auth/resend-confirmation-email/" => {
             fastn_core::auth::email_password::resend_email(&req, req_config, pool, next).await

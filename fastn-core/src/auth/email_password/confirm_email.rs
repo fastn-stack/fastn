@@ -1,15 +1,28 @@
-use crate::auth::email_password::key_expired;
+use crate::auth::email_password::{email_confirmation_sent_ftd, key_expired};
 
 pub(crate) async fn confirm_email(
-    req: &fastn_core::http::Request,
-    ds: &fastn_ds::DocumentStore,
+    req_config: &mut fastn_core::RequestConfig,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    let code = req.query().get("code");
+    if req_config.request.method() != "POST" {
+        let main = fastn_core::Document {
+            package_name: req_config.config.package.name.clone(),
+            id: "/-/confirm-email/".to_string(),
+            content: email_confirmation_sent_ftd().to_string(),
+            parent_path: fastn_ds::Path::new("/"),
+        };
+
+        let resp = fastn_core::package::package_doc::read_ftd(req_config, &main, "/", false, false)
+            .await?;
+
+        return Ok(resp.into());
+    }
+
+    let code = req_config.request.query().get("code");
 
     if code.is_none() {
         tracing::info!("finishing response due to bad ?code");
@@ -51,14 +64,14 @@ pub(crate) async fn confirm_email(
 
     let (email_id, session_id, sent_at) = conf_data.unwrap();
 
-    if key_expired(ds, sent_at).await {
+    if key_expired(&req_config.config.ds, sent_at).await {
         // TODO: this redirect route should be configurable
         tracing::info!("provided code has expired.");
         return Ok(fastn_core::http::redirect_with_code(
             format!(
                 "{}://{}/-/auth/resend-confirmation-email/",
-                req.connection_info.scheme(),
-                req.connection_info.host(),
+                req_config.request.connection_info.scheme(),
+                req_config.request.connection_info.host(),
             ),
             302,
         ));
@@ -79,7 +92,12 @@ pub(crate) async fn confirm_email(
     tracing::info!("session created, rows affected: {}", affected);
 
     // Onboarding step is opt-in
-    let onboarding_enabled = ds.env("FASTN_AUTH_ADD_ONBOARDING_STEP").await.is_ok();
+    let onboarding_enabled = req_config
+        .config
+        .ds
+        .env("FASTN_AUTH_ADD_ONBOARDING_STEP")
+        .await
+        .is_ok();
 
     let next_path = if onboarding_enabled {
         format!("/-/auth/onboarding/?next={}", next)
@@ -88,9 +106,13 @@ pub(crate) async fn confirm_email(
     };
 
     // redirect to onboarding route with a GET request
-    let mut resp =
-        fastn_core::auth::set_session_cookie_and_redirect_to_next(req, ds, session_id, next_path)
-            .await?;
+    let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
+        &req_config.request,
+        &req_config.config.ds,
+        session_id,
+        next_path,
+    )
+    .await?;
 
     if onboarding_enabled {
         resp.add_cookie(
@@ -98,7 +120,9 @@ pub(crate) async fn confirm_email(
                 fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME,
                 "1",
             )
-            .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
+            .domain(fastn_core::auth::utils::domain(
+                req_config.request.connection_info.host(),
+            ))
             .path("/")
             .finish(),
         )
