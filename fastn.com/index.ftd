@@ -309,11 +309,11 @@ sidebar: false
 	-- end: lib.cards-section
 
 	-- lib.our-community: fastn Community
-	image: $fastn-assets.files.images.landing.discord-community.svg
+	image: $fastn-assets.files.images.landing.discord-3k.png
 	cta-primary-text: Join Discord
 	cta-primary-url: /discord/
 	
-	Join a vibrant community of 1000+ developers and designers who are actively
+	Join a vibrant community of 3000+ developers and designers who are actively
 	building fastn components for you.
 	
 -- end: ds.page.fluid-wrap
