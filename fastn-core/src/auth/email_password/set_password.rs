@@ -1,8 +1,11 @@
+use crate::auth::email_password::{
+    email_reset_request_sent_ftd, generate_key, redirect_url_from_next, set_password_form_ftd
+};
+
 /// GET | POST /-/auth/forgot-password/
 /// POST forgot_password_request: send email with a link containing a key to reset password
 /// for unauthenticated users
 async fn forgot_password_request(
-    req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
     db_pool: &fastn_core::db::PgPool,
     next: String,
@@ -10,11 +13,11 @@ async fn forgot_password_request(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    if req.method() == "GET" {
+    if req_config.request.method() == "GET" {
         let main = fastn_core::Document {
             package_name: req_config.config.package.name.clone(),
             id: "/-/password-reset-request-sent".to_string(),
-            content: email_confirmation_sent_ftd().to_string(),
+            content: email_reset_request_sent_ftd().to_string(),
             parent_path: fastn_ds::Path::new("/"),
         };
 
@@ -24,17 +27,17 @@ async fn forgot_password_request(
         return Ok(resp.into());
     }
 
-    if req.method() != "POST" {
+    if req_config.request.method() != "POST" {
         return Ok(fastn_core::not_found!("invalid route"));
     }
 
-    #[derive(serde::Deserialize, Debug)]
+    #[derive(serde::Deserialize)]
     struct Payload {
         #[serde(rename = "username")]
         email_or_username: String,
     }
 
-    let payload = req.json::<Payload>();
+    let payload = req_config.request.json::<Payload>();
 
     if let Err(e) = payload {
         return fastn_core::http::user_err(
@@ -80,6 +83,8 @@ async fn forgot_password_request(
             fastn_core::schema::fastn_user_email::email,
         ));
 
+    dbg!("{:?}", diesel::debug_query::<diesel::pg::Pg, _>(&query));
+
     let user: Option<(fastn_core::auth::FastnUser, fastn_core::utils::CiString)> =
         query.first(&mut conn).await.optional()?;
 
@@ -106,13 +111,10 @@ async fn forgot_password_request(
         .execute(&mut conn)
         .await?;
 
-    let mailer = get_mailer(&req_config.config.ds).await?;
-
     let reset_link = format!(
-        "{}://{}/-/auth/reset-password/?code={key}",
-        req.connection_info.scheme(),
-        req.connection_info.host(),
-        key = key,
+        "{}://{}/-/auth/reset-password/?code={key}?next={next}",
+        req_config.request.connection_info.scheme(),
+        req_config.request.connection_info.host(),
     );
 
     // To use auth. The package has to have auto import with alias `auth` setup
@@ -160,20 +162,25 @@ async fn forgot_password_request(
 
     tracing::info!("confirmation link: {}", &reset_link);
 
-    mailer
-        .send_raw(
-            format!("{} <{}>", user.name, email.0)
-                .parse::<lettre::message::Mailbox>()
-                .unwrap(),
-            "Reset your password",
-            html,
-        )
-        .await
-        .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
+    fastn_core::mail::Mailer::send_raw(
+        req_config
+            .config
+            .ds
+            .env_bool("FASTN_ENABLE_EMAIL", true)
+            .await,
+        &req_config.config.ds,
+        format!("{} <{}>", user.name, email.0)
+            .parse::<lettre::message::Mailbox>()
+            .unwrap(),
+        "Reset your password",
+        html,
+    )
+    .await
+    .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
 
     let resp_body = serde_json::json!({
         "success": true,
-        "redirect": redirect_url_from_next(req, "/-/auth/forgot-password/".to_string()),
+        "redirect": redirect_url_from_next(&req_config.request, "/-/auth/forgot-password/".to_string()),
     });
 
     let mut resp = actix_web::HttpResponse::Ok();
@@ -187,27 +194,199 @@ async fn forgot_password_request(
 }
 
 /// GET | POST /-/auth/reset-password/
-/// reset_password_request -> authenticated user -> construct url to set_password_with_key -> forward them to set_password
-/// supposed to be used when the user is already authenticated and wants to change their password
-async fn reset_password_request(
-    req: &fastn_core::http::Request,
+/// setup set-password route
+async fn reset_password(
     req_config: &mut fastn_core::RequestConfig,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    // check if I'm authenticated -> I forward to set_password with ?code
-    todo!("reset_password_request");
+    use diesel::prelude::*;
+    use diesel_async::RunQueryDsl;
+
+    let user_id = req_config
+        .request
+        .ud(&req_config.config.ds)
+        .await
+        .map(|u| format!("{}", u.id));
+
+    let encrypted_user_id = if user_id.is_some() {
+        // if user is authenticated, get user_id from there
+        fastn_core::auth::utils::encrypt(&req_config.config.ds, &user_id.unwrap()).await
+    } else {
+        // use the ?code from query params, this is set in /-/auth/forgot-password/
+        let key = req_config.request.query().get("code");
+
+        if key.is_none() {
+            return Ok(fastn_core::http::api_error("Bad Request")?);
+        }
+
+        let key = match key.unwrap() {
+            serde_json::Value::String(c) => c.to_owned(),
+            _ => {
+                return Ok(fastn_core::http::api_error("Bad Request")?);
+            }
+        };
+
+        let mut conn = db_pool
+            .get()
+            .await
+            .map_err(|e| fastn_core::Error::DatabaseError {
+                message: format!("Failed to get connection to db. {:?}", e),
+            })?;
+
+        let query = diesel::delete(
+            fastn_core::schema::fastn_password_reset::table
+                .filter(fastn_core::schema::fastn_password_reset::key.eq(&key)),
+        )
+        .returning(fastn_core::schema::fastn_password_reset::user_id);
+
+        dbg!("{:?}", diesel::debug_query::<diesel::pg::Pg, _>(&query));
+
+        let user_id: Option<i32> = query.get_result::<i32>(&mut conn).await.optional()?;
+
+        if user_id.is_none() {
+            return Ok(fastn_core::http::api_error("Bad Request")?);
+        }
+
+        let user_id = format!("{}", user_id.unwrap());
+
+        fastn_core::auth::utils::encrypt(&req_config.config.ds, &user_id).await
+    };
+
+    let cookie = actix_web::cookie::Cookie::build("fastn_target_user_id", encrypted_user_id)
+        .path("/-/auth/set-password")
+        .same_site(actix_web::cookie::SameSite::Strict)
+        .http_only(true)
+        .secure(true)
+        .finish();
+
+    let resp = actix_web::HttpResponse::Ok()
+        .cookie(cookie)
+        .status(actix_web::http::StatusCode::TEMPORARY_REDIRECT)
+        .insert_header((actix_web::http::header::LOCATION, format!("/-/auth/set-password?next={next}")))
+        .finish();
+
+    return Ok(resp);
 }
 
 // both forgot_password_request and reset_password_request will set some secure cookie that'll contain the fastn_target_user_id
-// use sameSite: strict cookies for state
-
-// set_password: will read the cookie and set the password
+/// GET | POST /-/auth/set-password/
+/// read the cookie `fastn_target_user_id` and set the password
 async fn set_password(
-    req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    todo!("set_password");
+    if req_config.request.method() == "GET" {
+        let main = fastn_core::Document {
+            package_name: req_config.config.package.name.clone(),
+            id: "/-/set-password".to_string(),
+            content: set_password_form_ftd().to_string(),
+            parent_path: fastn_ds::Path::new("/"),
+        };
+
+        let resp = fastn_core::package::package_doc::read_ftd(req_config, &main, "/", false, false)
+            .await?;
+
+        return Ok(resp.into());
+    }
+
+    if req_config.request.method() != "POST" {
+        return Ok(fastn_core::not_found!("invalid route"));
+    }
+
+    #[derive(serde::Deserialize)]
+    struct Payload {
+        new_password: String,
+        new_password2: String,
+    }
+
+    let payload = req_config.request.json::<Payload>();
+
+    if let Err(e) = payload {
+        return fastn_core::http::user_err(
+            vec![
+                ("payload".into(), vec![format!("invalid payload: {:?}", e)]),
+                (
+                    "new_password".into(),
+                    vec!["new password is required".to_string()],
+                ),
+                (
+                    "new_password2".into(),
+                    vec!["confirm new password is required".to_string()],
+                ),
+            ],
+            fastn_core::http::StatusCode::OK,
+        );
+    }
+
+    let payload = payload.unwrap();
+
+    if payload.new_password.is_empty() {
+        return fastn_core::http::user_err(
+            vec![(
+                "new_password".into(),
+                vec!["new password is required".to_string()],
+            )],
+            fastn_core::http::StatusCode::OK,
+        );
+    }
+
+    if payload.new_password2.is_empty() {
+        return fastn_core::http::user_err(
+            vec![(
+                "new_password2".into(),
+                vec!["confirm new password is required".to_string()],
+            )],
+            fastn_core::http::StatusCode::OK,
+        );
+    }
+
+    if payload.new_password != payload.new_password2 {
+        return fastn_core::http::user_err(
+            vec![(
+                "new_password2".into(),
+                vec!["new password and confirm new password do not match".to_string()],
+            )],
+            fastn_core::http::StatusCode::OK,
+        );
+    }
+
+    let encrypted_user_id = match req_config 
+        .request
+        .cookie("fastn_target_user_id") {
+            Some(v) => v,
+            None => {
+                return Ok(fastn_core::http::api_error("Bad Request")?);
+            }
+        };
+
+    let user_id = fastn_core::auth::utils::decrypt(&req_config.config.ds, &encrypted_user_id).await
+        .map(|v| v.parse::<i32>().expect("user_id must be an i32"))
+        .map_err(
+        |e| fastn_core::Error::generic(format!("decryption failed: {:?}", e)),
+    )?;
+
+    let mut conn = db_pool
+        .get()
+        .await
+        .map_err(|e| fastn_core::Error::DatabaseError {
+            message: format!("Failed to get connection to db. {:?}", e),
+        })?;
+
+    let salt =
+        argon2::password_hash::SaltString::generate(&mut argon2::password_hash::rand_core::OsRng);
+
+    let argon2 = argon2::Argon2::default();
+
+    let hashed_password =
+        argon2::PasswordHasher::hash_password(&argon2, payload.new_password.as_bytes(), &salt)
+            .map_err(|e| fastn_core::Error::generic(format!("error in hashing password: {e}")))?
+            .to_string();
+
+    diesel::update(fastn_core::schema::fastn_user::table)
+        .set(fastn_core::schema::fastn_user::password.eq(&hashed_password))
+        .filter(fastn_core::schema::fastn_user::id.eq(&user_id))
+        .execute(&mut conn)
+        .await?;
 }

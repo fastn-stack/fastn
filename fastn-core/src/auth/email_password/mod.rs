@@ -4,6 +4,7 @@ mod create_and_send_confirmation_email;
 mod login;
 mod onboarding;
 mod resend_email;
+mod set_password;
 mod urls;
 
 pub(crate) use {
@@ -53,6 +54,19 @@ fn email_confirmation_sent_ftd() -> &'static str {
     -- auth.email-confirmation-request-sent-page:
     "#
 }
+
+fn email_reset_request_sent_ftd() -> &'static str {
+    r#"
+    -- auth.email-password-reset-request-sent-page:
+    "#
+}
+
+fn set_password_form_ftd() -> &'static str {
+    r#"
+    -- auth.set-password-form-page:
+    "#
+}
+
 
 fn create_account_ftd() -> &'static str {
     r#"
