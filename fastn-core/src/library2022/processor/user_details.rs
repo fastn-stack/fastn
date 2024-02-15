@@ -29,5 +29,6 @@ struct UserDetails {
     username: String,
     name: String,
     email: String,
+    #[serde(rename = "verified-email")]
     verified_email: bool,
 }
