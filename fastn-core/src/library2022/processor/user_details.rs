@@ -11,6 +11,7 @@ pub async fn process(
             username: ud.username,
             name: ud.name,
             email: ud.email,
+            verified_email: ud.verified_email,
         };
 
         return doc.from_json(&ud, &kind, &value);
@@ -28,4 +29,5 @@ struct UserDetails {
     username: String,
     name: String,
     email: String,
+    verified_email: bool,
 }

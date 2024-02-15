@@ -114,7 +114,7 @@ pub async fn get_auth_identities(
                         ));
                     }
 
-                    Ok((user, _)) => user,
+                    Ok(user) => user,
                 };
 
             let github_ud: github::UserDetail = github::UserDetail {
@@ -138,38 +138,37 @@ async fn set_session_cookie_and_redirect_to_next(
     session_id: i64,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let (user, email) =
-        match fastn_core::auth::get_authenticated_user_with_email(&session_id, ds).await {
-            Err(e) => {
-                tracing::error!("couldn't retrieve authenticated user. Reason: {:?}", e);
+    let user = match fastn_core::auth::get_authenticated_user_with_email(&session_id, ds).await {
+        Err(e) => {
+            tracing::error!("couldn't retrieve authenticated user. Reason: {:?}", e);
 
-                if e == AuthUserError::UserDoesNotExist {
-                    return Err(fastn_core::Error::GenericError(
-                        "User does not exist".to_string(),
-                    ));
-                } else if let AuthUserError::UserExistsWithUnverifiedEmail(_) = e {
-                    return fastn_core::http::user_err(
-                        // TODO: there should be an option to configure the resend verification
-                        // mail webpage
-                        vec![("username".into(), vec!["User is not verified".into()])],
-                        fastn_core::http::StatusCode::OK,
-                    );
-                }
-
+            if e == AuthUserError::UserDoesNotExist {
                 return Err(fastn_core::Error::GenericError(
-                    "Failed to query database".to_string(),
+                    "User does not exist".to_string(),
                 ));
+            } else if let AuthUserError::UserExistsWithUnverifiedEmail(_) = e {
+                return fastn_core::http::user_err(
+                    // TODO: there should be an option to configure the resend verification
+                    // mail webpage
+                    vec![("username".into(), vec!["User is not verified".into()])],
+                    fastn_core::http::StatusCode::OK,
+                );
             }
 
-            Ok(data) => data,
-        };
+            return Err(fastn_core::Error::GenericError(
+                "Failed to query database".to_string(),
+            ));
+        }
+
+        Ok(data) => data,
+    };
 
     let cookie_json = serde_json::json!({
         "session_id": session_id,
         "user": {
             "username": user.username,
             "name": user.name,
-            "email": email,
+            "email": user.email.0,
             "verified_email": user.verified_email,
         }
     });
@@ -211,7 +210,7 @@ pub enum AuthUserError {
 pub async fn get_authenticated_user_with_email(
     session_id: &i64,
     ds: &fastn_ds::DocumentStore,
-) -> Result<(fastn_core::auth::FastnUser, String), AuthUserError> {
+) -> Result<fastn_core::auth::FastnUser, AuthUserError> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
@@ -252,20 +251,5 @@ pub async fn get_authenticated_user_with_email(
 
     let user = user.expect("user must be Some");
 
-    let email: Option<fastn_core::utils::CiString> = fastn_core::schema::fastn_user_email::table
-        .filter(fastn_core::schema::fastn_user_email::user_id.eq(user_id))
-        .filter(fastn_core::schema::fastn_user_email::verified.eq(true))
-        .filter(fastn_core::schema::fastn_user_email::primary.eq(true))
-        .select(fastn_core::schema::fastn_user_email::email)
-        .first(&mut conn)
-        .await
-        .optional()?;
-
-    if email.is_none() {
-        return Err(AuthUserError::UserExistsWithUnverifiedEmail(user));
-    }
-
-    let email = email.expect("email must be Some");
-
-    Ok((user, email.0))
+    Ok(user)
 }

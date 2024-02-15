@@ -55,7 +55,6 @@ pub(crate) async fn create_and_send_confirmation_email(
             .await?;
 
     let confirmation_link = confirmation_link(&req_config.request, stored_key, next);
-    println!("confirmation_link: {}", confirmation_link);
 
     let mailer = fastn_core::mail::Mailer::from_env(&req_config.config.ds).await;
 

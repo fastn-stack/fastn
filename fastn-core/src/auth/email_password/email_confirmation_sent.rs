@@ -1,5 +1,8 @@
 use crate::auth::email_password::email_confirmation_sent_ftd;
 
+// TODO: this is unused right now
+// the user is immediately logged in after creating an account and this page is never
+// visited/redirected to
 pub(crate) async fn email_confirmation_sent(
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {

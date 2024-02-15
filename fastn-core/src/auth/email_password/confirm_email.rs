@@ -30,7 +30,7 @@ pub(crate) async fn confirm_email(
             message: format!("Failed to get connection to db. {:?}", e),
         })?;
 
-    let conf_data: Option<(i32, i32, chrono::DateTime<chrono::Utc>)> =
+    let conf_data: Option<(i64, i64, chrono::DateTime<chrono::Utc>)> =
         fastn_core::schema::fastn_email_confirmation::table
             .select((
                 fastn_core::schema::fastn_email_confirmation::email_id,
@@ -63,19 +63,20 @@ pub(crate) async fn confirm_email(
         ));
     }
 
-    diesel::update(fastn_core::schema::fastn_user_email::table)
-        .set(fastn_core::schema::fastn_user_email::verified.eq(true))
-        .filter(fastn_core::schema::fastn_user_email::id.eq(email_id))
-        .execute(&mut conn)
-        .await?;
+    let email: fastn_core::utils::CiString =
+        diesel::update(fastn_core::schema::fastn_user_email::table)
+            .set(fastn_core::schema::fastn_user_email::verified.eq(true))
+            .filter(fastn_core::schema::fastn_user_email::id.eq(email_id))
+            .returning(fastn_core::schema::fastn_user_email::email)
+            .get_result(&mut conn)
+            .await?;
 
-    let affected = diesel::update(fastn_core::schema::fastn_session::table)
-        .set(fastn_core::schema::fastn_session::active.eq(true))
-        .filter(fastn_core::schema::fastn_session::id.eq(session_id))
-        .execute(&mut conn)
+    let user_id: i64 = diesel::update(fastn_core::schema::fastn_user::table)
+        .set(fastn_core::schema::fastn_user::verified_email.eq(true))
+        .filter(fastn_core::schema::fastn_user::email.eq(&email))
+        .returning(fastn_core::schema::fastn_user::id)
+        .get_result(&mut conn)
         .await?;
-
-    tracing::info!("session created, rows affected: {}", affected);
 
     // Onboarding step is opt-in
     let onboarding_enabled = req_config
@@ -91,10 +92,22 @@ pub(crate) async fn confirm_email(
         next.to_string()
     };
 
-    // TODO: check session id cookie, if it exists, update the session and store user_id, else
-    // create a session
+    let now = chrono::Utc::now();
+
+    // session always exists for new unverified user since it is created during `create-account`
+    let affected = diesel::update(fastn_core::schema::fastn_auth_session::table)
+        .set((
+            fastn_core::schema::fastn_auth_session::user_id.eq(&user_id),
+            fastn_core::schema::fastn_auth_session::updated_at.eq(&now),
+        ))
+        .filter(fastn_core::schema::fastn_auth_session::id.eq(session_id))
+        .execute(&mut conn)
+        .await?;
+
+    tracing::info!("updated session. affected: {}", affected);
 
     // redirect to onboarding route with a GET request
+    // if some user is already logged in, this will override their session with this one
     let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
         &req_config.request,
         &req_config.config.ds,
