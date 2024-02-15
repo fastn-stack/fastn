@@ -60,6 +60,12 @@ fn create_account_ftd() -> &'static str {
     "#
 }
 
+fn login_ftd() -> &'static str {
+    r#"
+    -- auth.login-page:
+    "#
+}
+
 fn onboarding_ftd() -> &'static str {
     r#"
     -- auth.onboarding-page:

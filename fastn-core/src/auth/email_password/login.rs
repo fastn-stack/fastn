@@ -1,14 +1,25 @@
 pub(crate) async fn login(
-    req: &fastn_core::http::Request,
-    ds: &fastn_ds::DocumentStore,
+    req_config: &mut fastn_core::RequestConfig,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    if req.method() != "POST" {
-        return Ok(fastn_core::not_found!("invalid route"));
+    if req_config.request.method() != "POST" {
+        // TODO: if user is logged in redirect to next
+
+        let main = fastn_core::Document {
+            package_name: req_config.config.package.name.clone(),
+            id: "/-/auth/login/".to_string(),
+            content: fastn_core::auth::email_password::login_ftd().to_string(),
+            parent_path: fastn_ds::Path::new("/"),
+        };
+
+        let resp = fastn_core::package::package_doc::read_ftd(req_config, &main, "/", false, false)
+            .await?;
+
+        return Ok(resp.into());
     }
 
     #[derive(serde::Deserialize, validator::Validate, Debug)]
@@ -17,7 +28,7 @@ pub(crate) async fn login(
         password: String,
     }
 
-    let payload = req.json::<Payload>();
+    let payload = req_config.request.json::<Payload>();
 
     if let Err(e) = payload {
         return fastn_core::http::user_err(
@@ -111,5 +122,11 @@ pub(crate) async fn login(
 
     // client has to 'follow' this request
     // https://stackoverflow.com/a/39739894
-    fastn_core::auth::set_session_cookie_and_redirect_to_next(req, ds, session_id, next).await
+    fastn_core::auth::set_session_cookie_and_redirect_to_next(
+        &req_config.request,
+        &req_config.config.ds,
+        session_id,
+        next,
+    )
+    .await
 }
