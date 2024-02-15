@@ -4,11 +4,13 @@
 
 -- ds.page-with-get-started-and-no-right-sidebar: fastn vs Webflow, Framer and Wix
 
-fastn is a straightforward substitute for Webflow, Framer, and Wix, providing
-additional benefits such as enhanced customization, seamless collaboration
-and more.
-
-Here is a quick glance.
+Website builders like Wix, Webflow, Framer, and other WYSIWYG editors are not 
+reliable in the long term. They operate on the 80-20 Pareto Principle, 
+addressing 80% of use cases but leaving you uncertain about whether your 
+crucial features fall within the remaining 20%. They pose the risk of having to 
+migrate to another platform later on due to limitations like alterations to 
+features you depend on, business closures, or pricing changes. But with `fastn`,
+that isn't the case. Here is a quick glance.
 
 
 -- cl.very-easy-syntax:
@@ -17,13 +19,13 @@ Here is a quick glance.
 
 -- cl.github-integration:
 
--- cl.visualize-with-vercel:
-
 -- cl.webflow-vs-fastn-readymade-components:
 
 -- cl.design-system:
 
 -- cl.seo:
+
+-- cl.visualize-with-vercel:
 
 -- cl.webflow-vs-fastn-best-choice-for-startup:
 

@@ -23,10 +23,10 @@ width: fill-container
 spacing.fixed.em: 0.8
 max-width.fixed.px: 980
 
-	-- ds.h1: Very Easy Syntax
+	-- ds.h1: Anyone can learn in a day 
 	
-	fastn simplifies programming making it accessible to everyone.
-	Developers, designers, and non-programmers alike can easily learn fastn to build
+	`fastn` simplifies programming making it accessible to everyone.
+	Developers, designers, and non-programmers alike can easily learn `fastn` to build
 	stunning web projects.
 	
 	Its **user-friendly interface and minimal syntax** allow even those with no
@@ -163,13 +163,13 @@ max-width.fixed.px: 980
 	[hero sections](https://fastn.com/featured/sections/heros/), and more.
 	
 	The best part? All components in the ecosystem adhere to a unified design
-	system. This ensures that every component blends seamlessly with others,
-	creating a cohesive look and feel across your entire site.
+	system. This ensures that `every component blends seamlessly with others`,
+	creating a `cohesive look and feel` across your entire site.
 	
 	-- ds.h2: Create your own custom component
 	
 	From buttons that seamlessly blend with your design to interactive elements that
-	engage users, fastn makes component creation intuitive and efficient.
+	engage users, `fastn` makes component creation intuitive and efficient.
 	
 	-- ds.code: Creating a custom component
 	lang: ftd
@@ -204,7 +204,7 @@ max-width.fixed.px: 980
 
 	-- ds.h2: Content Components
 	
-	In fastn, you can create custom content components for recurring information.
+	In fastn, you can `create custom content components` for recurring information.
 	This ensures a consistent user experience throughout your website while saving
 	your time.
 	
@@ -244,8 +244,8 @@ max-width.fixed.px: 980
 
 	-- ds.h3: Built-in Rive
 	
-	Elevate your website's visual appeal with built-in Rive animations. Easily embed
-	animations into your fastn documents for engaging user experiences.
+	Elevate your website's visual appeal with built-in Rive animations. `Easily embed
+	animations` into your fastn documents for engaging user experiences.
 	
 	
 	-- ds.rendered:
@@ -275,6 +275,21 @@ max-width.fixed.px: 980
 		-- end: ds.rendered.output
 
 	-- end: ds.rendered
+
+
+	-- ds.h2: Open source Advantage
+	
+	Our [design community portal](https://fastn.com/featured/) serves as a
+	hub for designers and frontend developers to submit their fastn packages for end
+	users to discover and use.
+	
+	Currently we have a community of 3000+ developers and designers on our
+	[Discord Channel](https://discord.gg/xs4FM8UZB5) with active participants
+	contributing to fastn.
+	
+	-- ds.image: Our Discord Server
+	src: $fastn-assets.files.compare.discord-3k.png
+	width.fixed.percent: 95
 
 -- end: ftd.column
 
@@ -332,12 +347,12 @@ max-width.fixed.px: 980
 	hub for designers and frontend developers to submit their fastn packages for end
 	users to discover and use.
 	
-	Currently we have a community of 1000 developers and designers on our
+	Currently we have a community of 3000+ developers and designers on our
 	[Discord Channel](https://discord.gg/xs4FM8UZB5) with active participants
 	contributing to fastn.
 	
 	-- ds.image: Our Discord Server
-	src: $fastn-assets.files.compare.discord.png
+	src: $fastn-assets.files.compare.discord-3k.png
 	width.fixed.percent: 95
 	
 	
@@ -369,14 +384,14 @@ max-width.fixed.px: 980
 	-- ds.h1: Full stack framework
 	
 	Along with [building frontends](https://fastn.com/frontend/), `fastn` can be
-	used for building data driven websites and dashboards.
+	used for building `data driven websites and dashboards`.
 	
 	-- ds.h2: Seamless API Integration
 	
 	You can interact with backend APIs, and use the API responses to
 	- Create dynamic web pages,
 	- Display and render the response data
-	- Conditional Rendering. etc.
+	- Conditional Rendering, etc.
 	
 	Checkout the [http processor](https://fastn.com/http/) to know more.
 	
@@ -441,14 +456,14 @@ max-width.fixed.px: 980
 
 	-- ds.h1: Opinionated Design System
 	
-	fastn comes with integrated design system. We've many pre-made design choices
+	`fastn` comes with integrated design system. We've many pre-made design choices
 	so you can build your website quickly.
 	
 	-- ds.h2: Unified Color and Typography
 	
 	A lot of [color scheme](/featured/cs/) and
 	[typography](featured/fonts-typography/) packages are available, which you can
-	import and change the entire typography or color scheme in a few lines of code.
+	import and `change the entire typography or color scheme in a few lines of code`.
 	
 	You can manage color palettes and typography centrally to save time and ensure
 	consistent usage across your website.
@@ -473,7 +488,7 @@ max-width.fixed.px: 980
 	
 	-- ds.h2: Responsive Ready
 	
-	fastn has built in support for responsive design. Your creations automatically
+	All fastn templates and components are responsive by default. Your creations automatically
 	adapt to the perfect size, whether your users are on mobile or desktop devices.
 	
 	
@@ -502,7 +517,7 @@ max-width.fixed.px: 980
 	
 	-- ds.h2: Custom and Clean URLs
 	
-	fastn allows you to map documents to any URL you like, allowing you to make all
+	fastn allows you to `map documents to any URL you like`, allowing you to make all
 	your URLs clean, and folders organised! You can also create dynamic URLs in
 	fastn.
 	
@@ -657,12 +672,12 @@ max-width.fixed.px: 980
 	-- ds.h2: Full Control
 	
 	Relying heavily on a single platform can introduce risks, especially if that
-	platform undergoes changes or disruptions.Websites built on Webflow are tightly
+	platform undergoes changes or disruptions.Websites built on Wix, Webflow, etc. are tightly
 	linked to the platform. Users who later wish to migrate their sites to other
 	platforms or hosting services might encounter compatibility issues and data
 	transfer challenges.
 	
-	With fastn, you retain full control and ownership. Your content and audience
+	`With fastn, you retain full control and ownership.` Your content and audience
 	always belongs to you. fastn being open-source, ensures your content lives
 	forever.
 	
