@@ -13,8 +13,7 @@ sections on websites? Or perhaps you're tired of copy-pasting content
 and the inconsistencies in design that follow?
 
 Let's dive into a relatable scenario: Imagine you want to showcase
-customer testimonials on your website. Each testimonial requires a name,
-a title, image and a quote. Each testimonial needs a name, title, image,
+customer testimonials on your website. Each testimonial needs a name, title, image,
 and quote, neatly arranged within the page layout, adhering to the
 page's color scheme and typography.
 
@@ -23,7 +22,7 @@ meta: $meta
 
 -- ds.markdown:
 
-Below is one way to create such testimonials. Start by creating a record for all the necessary values of a
+One way to create such testimonials is by first creating a record for all the necessary values of a
 testimonial, such as the name, designation, quote, and image.
 
 -- ds.code:
