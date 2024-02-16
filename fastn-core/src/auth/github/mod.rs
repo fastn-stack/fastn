@@ -13,7 +13,7 @@ pub async fn login(
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let redirect_url: String = format!(
-        "{}://{}/-/auth/github/?next={}",
+        "{}://{}/-/auth/github/callback/?next={}",
         req.connection_info.scheme(),
         req.connection_info.host(),
         next, // TODO: we should url escape this
@@ -46,6 +46,7 @@ pub async fn callback(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
+    let now = chrono::Utc::now();
     let code = req.q("code", "".to_string())?;
     // TODO: CSRF check
 
@@ -93,7 +94,7 @@ pub async fn callback(
             message: format!("Failed to get connection to db. {:?}", e),
         })?;
 
-    let existing_email_and_user_id: Option<(fastn_core::utils::CiString, i32)> =
+    let existing_email_and_user_id: Option<(fastn_core::utils::CiString, i64)> =
         fastn_core::schema::fastn_user_email::table
             .select((
                 fastn_core::schema::fastn_user_email::email,
@@ -115,9 +116,13 @@ pub async fn callback(
         // user already exists, just create a session and redirect to next
         let (_, user_id) = existing_email_and_user_id.unwrap();
 
-        let session_id: i32 = diesel::insert_into(fastn_core::schema::fastn_session::table)
-            .values(fastn_core::schema::fastn_session::user_id.eq(&user_id))
-            .returning(fastn_core::schema::fastn_session::id)
+        let session_id: i64 = diesel::insert_into(fastn_core::schema::fastn_auth_session::table)
+            .values((
+                fastn_core::schema::fastn_auth_session::user_id.eq(&user_id),
+                fastn_core::schema::fastn_auth_session::created_at.eq(now),
+                fastn_core::schema::fastn_auth_session::updated_at.eq(now),
+            ))
+            .returning(fastn_core::schema::fastn_auth_session::id)
             .get_result(&mut conn)
             .await?;
 
@@ -125,11 +130,13 @@ pub async fn callback(
 
         // TODO: access_token expires?
         // handle refresh tokens
-        let token_id: i32 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
+        let token_id: i64 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
             .values((
                 fastn_core::schema::fastn_oauthtoken::session_id.eq(session_id),
                 fastn_core::schema::fastn_oauthtoken::token.eq(access_token),
                 fastn_core::schema::fastn_oauthtoken::provider.eq("github"),
+                fastn_core::schema::fastn_oauthtoken::created_at.eq(now),
+                fastn_core::schema::fastn_oauthtoken::updated_at.eq(now),
             ))
             .returning(fastn_core::schema::fastn_oauthtoken::id)
             .get_result(&mut conn)
@@ -150,6 +157,15 @@ pub async fn callback(
             fastn_core::schema::fastn_user::password.eq(""),
             // TODO: should present an onabording form that asks for a name if github name is null
             fastn_core::schema::fastn_user::name.eq(gh_user.name.unwrap_or_default()),
+            fastn_core::schema::fastn_user::verified_email.eq(true),
+            fastn_core::schema::fastn_user::email.eq(fastn_core::utils::citext(
+                gh_user
+                    .email
+                    .as_ref()
+                    .expect("Every github account has a primary email"),
+            )),
+            fastn_core::schema::fastn_user::created_at.eq(now),
+            fastn_core::schema::fastn_user::updated_at.eq(now),
         ))
         .returning(fastn_core::auth::FastnUser::as_returning())
         .get_result(&mut conn)
@@ -157,7 +173,7 @@ pub async fn callback(
 
     tracing::info!("fastn_user created. user_id: {:?}", &user.id);
 
-    let email_id: i32 = diesel::insert_into(fastn_core::schema::fastn_user_email::table)
+    let email_id: i64 = diesel::insert_into(fastn_core::schema::fastn_user_email::table)
         .values((
             fastn_core::schema::fastn_user_email::user_id.eq(&user.id),
             fastn_core::schema::fastn_user_email::email.eq(fastn_core::utils::citext(
@@ -168,6 +184,8 @@ pub async fn callback(
             )),
             fastn_core::schema::fastn_user_email::verified.eq(true),
             fastn_core::schema::fastn_user_email::primary.eq(true),
+            fastn_core::schema::fastn_user_email::created_at.eq(now),
+            fastn_core::schema::fastn_user_email::updated_at.eq(now),
         ))
         .returning(fastn_core::schema::fastn_user_email::id)
         .get_result(&mut conn)
@@ -176,9 +194,13 @@ pub async fn callback(
     tracing::info!("fastn_user_email created. email: {:?}", &email_id);
 
     // TODO: session should store device that was used to login (chrome desktop on windows)
-    let session_id: i32 = diesel::insert_into(fastn_core::schema::fastn_session::table)
-        .values((fastn_core::schema::fastn_session::user_id.eq(&user.id),))
-        .returning(fastn_core::schema::fastn_session::id)
+    let session_id: i64 = diesel::insert_into(fastn_core::schema::fastn_auth_session::table)
+        .values((
+            fastn_core::schema::fastn_auth_session::user_id.eq(&user.id),
+            fastn_core::schema::fastn_auth_session::created_at.eq(now),
+            fastn_core::schema::fastn_auth_session::updated_at.eq(now),
+        ))
+        .returning(fastn_core::schema::fastn_auth_session::id)
         .get_result(&mut conn)
         .await?;
 
@@ -186,11 +208,13 @@ pub async fn callback(
 
     // TODO: access_token expires?
     // handle refresh tokens
-    let token_id: i32 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
+    let token_id: i64 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
         .values((
             fastn_core::schema::fastn_oauthtoken::session_id.eq(session_id),
             fastn_core::schema::fastn_oauthtoken::token.eq(access_token),
             fastn_core::schema::fastn_oauthtoken::provider.eq("github"),
+            fastn_core::schema::fastn_oauthtoken::created_at.eq(now),
+            fastn_core::schema::fastn_oauthtoken::updated_at.eq(now),
         ))
         .returning(fastn_core::schema::fastn_oauthtoken::id)
         .get_result(&mut conn)

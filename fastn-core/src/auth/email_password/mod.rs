@@ -1,6 +1,7 @@
 mod confirm_email;
 mod create_account;
 mod create_and_send_confirmation_email;
+mod email_confirmation_sent;
 mod login;
 mod onboarding;
 mod resend_email;
@@ -11,6 +12,7 @@ pub(crate) use {
     confirm_email::confirm_email,
     create_account::create_account,
     create_and_send_confirmation_email::create_and_send_confirmation_email,
+    email_confirmation_sent::email_confirmation_sent,
     login::login,
     onboarding::onboarding,
     resend_email::resend_email,
@@ -71,6 +73,12 @@ fn set_password_form_ftd() -> &'static str {
 fn create_account_ftd() -> &'static str {
     r#"
     -- auth.create-account-page:
+    "#
+}
+
+fn login_ftd() -> &'static str {
+    r#"
+    -- auth.login-page:
     "#
 }
 

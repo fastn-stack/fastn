@@ -1024,6 +1024,7 @@ pub(crate) fn is_ftd_path(path: &str) -> bool {
 #[derive(
     Clone,
     Debug,
+    Default,
     diesel::deserialize::FromSqlRow,
     diesel::expression::AsExpression,
     PartialOrd,

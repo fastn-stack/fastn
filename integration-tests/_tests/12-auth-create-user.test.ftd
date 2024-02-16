@@ -52,7 +52,7 @@ fastn.assert.not_empty(fastn.http_response.errors.username);
 
 
 -- fastn.post: login with empty data should error
-url: /-/auth/login/?provider=email-password
+url: /-/auth/login/
 body: {"username": "", "password": ""}
 
 -- fastn.post.test:
@@ -63,7 +63,7 @@ fastn.assert.not_empty(fastn.http_response.errors.username);
 fastn.assert.not_empty(fastn.http_response.errors.password);
 
 -- fastn.post: login with insufficient data should error
-url: /-/auth/login/?provider=email-password
+url: /-/auth/login/
 body: {"username": "someone"}
 
 -- fastn.post.test:
@@ -72,7 +72,7 @@ fastn.assert.not_empty(fastn.http_response.errors.payload);
 
 
 -- fastn.post: login with invalid user shouldn't work
-url: /-/auth/login/?provider=email-password
+url: /-/auth/login/
 body: {"username": "someone", "password": "veryrealpasswd"}
 
 -- fastn.post.test:
@@ -81,7 +81,7 @@ fastn.assert.not_empty(fastn.http_response.errors.username);
 
 
 -- fastn.post: login with valid user but wrong password
-url: /-/auth/login/?provider=email-password
+url: /-/auth/login/
 body: {"username": "john", "password": "veryrealpasswd"}
 
 -- fastn.post.test:
@@ -90,7 +90,7 @@ fastn.assert.not_empty(fastn.http_response.errors.password);
 
 
 -- fastn.post: login with valid but unverfied user
-url: /-/auth/login/?provider=email-password&next=/hello/
+url: /-/auth/login/?next=/hello/
 body: {"username": "john", "password": "john the don"}
 
 -- fastn.post.test:
