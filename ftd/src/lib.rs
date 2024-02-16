@@ -18,6 +18,7 @@ pub use ftd2021::variable::{PropertyValue, TextSource, Value, Variable, Variable
 
 pub mod ast;
 pub mod executor;
+pub mod expr;
 pub mod ftd2021;
 pub mod html;
 pub mod interpreter;
