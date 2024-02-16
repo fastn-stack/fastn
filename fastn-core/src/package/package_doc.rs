@@ -1,5 +1,5 @@
 impl fastn_core::Package {
-    #[tracing::instrument(skip(self))]
+    #[tracing::instrument(skip(self, ds))]
     pub(crate) async fn fs_fetch_by_file_name(
         &self,
         name: &str,
@@ -70,7 +70,7 @@ impl fastn_core::Package {
         Ok(manifest)
     }
 
-    #[tracing::instrument(skip(self))]
+    #[tracing::instrument(skip(self, ds))]
     pub(crate) async fn fs_fetch_by_id(
         &self,
         id: &str,
@@ -256,7 +256,7 @@ impl fastn_core::Package {
             .await
     }
 
-    #[tracing::instrument(skip(self))]
+    #[tracing::instrument(skip(self, ds))]
     pub(crate) async fn resolve_by_id(
         &self,
         id: &str,
