@@ -14,9 +14,8 @@ pub(crate) async fn onboarding(
         .cookie(fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME)
         .is_none()
     {
-        return Ok(fastn_core::http::redirect_with_code(
+        return Ok(fastn_core::http::temporary_redirect(
             redirect_url_from_next(req, next),
-            307,
         ));
     }
 
