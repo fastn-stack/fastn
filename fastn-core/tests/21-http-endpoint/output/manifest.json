@@ -2,8 +2,8 @@
   "files": {
     "FASTN.ftd": {
       "name": "FASTN.ftd",
-      "checksum": "C2CE66A098529553F69A4B28405B0777037EDFA90E02D4B054C0239D38FAF9FA",
-      "size": 141
+      "checksum": "1A051A65F8DEDF8464FC2B0BC057E78D565655893F0435EE5E145EB23A667C7C",
+      "size": 145
     },
     "index.ftd": {
       "name": "index.ftd",
@@ -12,5 +12,5 @@
     }
   },
   "zip_url": "https://codeload.github.com/fastn-stack/http-endpoint-test/zip/refs/heads/main",
-  "checksum": "8FE0D88CC4B265A00618574359DC902976A2B4494B950D547F7D939E7F2A25E2"
+  "checksum": "6B712EBA21408F2619EC7EBB3B90BAE0879A4AA451F08BD9FA54F2D34159BBE0"
 }
