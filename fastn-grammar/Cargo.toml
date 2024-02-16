@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 serde.workspace = true
-
+thiserror.workspace = true
 
 [dev-dependencies]
 ron.workspace = true
