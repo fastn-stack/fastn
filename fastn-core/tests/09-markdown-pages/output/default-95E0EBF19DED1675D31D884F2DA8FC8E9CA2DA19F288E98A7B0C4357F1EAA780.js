@@ -4798,6 +4798,11 @@ const ftd = (function () {
             redirect,
         };
 
+        if (method === "GET") {
+            console.warn("Method `GET` is not yet supported.");
+            return;
+        }
+
         if (body && method !== "GET") {
             if (body[0] instanceof fastn.recordInstanceClass) {
                 if (body.length !== 1) {
