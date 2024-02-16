@@ -5,15 +5,6 @@ pub static SS: once_cell::sync::Lazy<syntect::parsing::SyntaxSet> =
     once_cell::sync::Lazy::new(|| {
         let mut builder = syntect::parsing::SyntaxSet::load_defaults_newlines().into_builder();
         for f in SYNTAX_DIR.files() {
-            match f.path().extension().and_then(|v| v.to_str()) {
-                Some(ext) => {
-                    if ext.ne("sublime-syntax") {
-                        continue;
-                    }
-                }
-                None => continue,
-            }
-
             builder.add(
                 syntect::parsing::syntax_definition::SyntaxDefinition::load_from_str(
                     f.contents_utf8().unwrap(),
