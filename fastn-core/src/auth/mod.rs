@@ -4,9 +4,13 @@ pub(crate) mod utils;
 pub(crate) mod validator;
 
 mod email_password;
+mod logout;
 mod ud;
+mod urls;
 
+pub(crate) use logout::logout;
 pub use ud::UserData;
+pub(crate) use urls::Route;
 
 pub const SESSION_COOKIE_NAME: &str = "fastn_session";
 pub const FIRST_TIME_SESSION_COOKIE_NAME: &str = "fastn_first_time_user";

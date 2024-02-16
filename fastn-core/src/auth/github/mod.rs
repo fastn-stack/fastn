@@ -13,10 +13,11 @@ pub async fn login(
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let redirect_url: String = format!(
-        "{}://{}/-/auth/github/callback/?next={}",
-        req.connection_info.scheme(),
-        req.connection_info.host(),
-        next, // TODO: we should url escape this
+        "{scheme}://{host}{callback_url}?next={next}",
+        scheme = req.connection_info.scheme(),
+        host = req.connection_info.host(),
+        callback_url = fastn_core::auth::Route::GithubCallback,
+        next = next, // TODO: we should url escape this
     );
 
     // Note: public_repos user:email all these things are github resources
@@ -226,7 +227,10 @@ pub async fn callback(
     let onboarding_enabled = ds.env("FASTN_AUTH_ADD_ONBOARDING_STEP").await.is_ok();
 
     let next_path = if onboarding_enabled {
-        format!("/-/auth/onboarding/?next={}", next)
+        format!(
+            "{onboarding_route}?next={next}",
+            onboarding_route = fastn_core::auth::Route::Onboarding
+        )
     } else {
         next.to_string()
     };

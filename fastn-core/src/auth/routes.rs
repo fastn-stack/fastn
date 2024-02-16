@@ -1,54 +1,3 @@
-// route: /-/auth/logout/
-pub async fn logout(
-    req: &fastn_core::http::Request,
-    ds: &fastn_ds::DocumentStore,
-    db_pool: &fastn_core::db::PgPool,
-    next: String,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    use diesel::prelude::*;
-    use diesel_async::RunQueryDsl;
-
-    if let Some(session_data) = req.cookie(fastn_core::auth::SESSION_COOKIE_NAME) {
-        let session_data = fastn_core::auth::utils::decrypt(ds, &session_data)
-            .await
-            .unwrap_or_default();
-
-        #[derive(serde::Deserialize)]
-        struct SessionData {
-            session_id: i64,
-        }
-
-        if let Ok(data) = serde_json::from_str::<SessionData>(session_data.as_str()) {
-            let session_id = data.session_id;
-
-            let mut conn = db_pool
-                .get()
-                .await
-                .map_err(|e| fastn_core::Error::DatabaseError {
-                    message: format!("Failed to get connection to db. {:?}", e),
-                })?;
-
-            let affected = diesel::delete(fastn_core::schema::fastn_auth_session::table)
-                .filter(fastn_core::schema::fastn_auth_session::id.eq(&session_id))
-                .execute(&mut conn)
-                .await?;
-
-            tracing::info!("session destroyed for {session_id}. Rows affected {affected}.");
-        }
-    }
-
-    Ok(actix_web::HttpResponse::Found()
-        .cookie(
-            actix_web::cookie::Cookie::build(fastn_core::auth::SESSION_COOKIE_NAME, "")
-                .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
-                .path("/")
-                .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
-                .finish(),
-        )
-        .append_header((actix_web::http::header::LOCATION, next))
-        .finish())
-}
-
 // handle: if request.url starts with /-/auth/
 #[tracing::instrument(skip_all)]
 pub async fn handle_auth(
@@ -56,6 +5,8 @@ pub async fn handle_auth(
     req_config: &mut fastn_core::RequestConfig,
     config: &fastn_core::Config,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    use fastn_core::auth::Route;
+
     let next = req.q("next", "/".to_string())?;
 
     let pool = fastn_core::db::pool(&req_config.config.ds)
@@ -65,40 +16,45 @@ pub async fn handle_auth(
             message: format!("Failed to get connection to db. {:?}", e),
         })?;
 
-    match req.path() {
-        "/-/auth/login/" => fastn_core::auth::email_password::login(req_config, pool, next).await,
-        // TODO: This has be set while creating the GitHub OAuth Application
-        "/-/auth/github/" => {
+    match Into::<Route>::into(req.path()) {
+        Route::Login => fastn_core::auth::email_password::login(req_config, pool, next).await,
+        Route::GithubLogin => {
             fastn_core::auth::github::login(&req_config.config.ds, &req, next).await
         }
-        "/-/auth/github/callback/" => {
+        Route::GithubCallback => {
             fastn_core::auth::github::callback(&req, &req_config.config.ds, pool, next).await
         }
-        "/-/auth/logout/" => logout(&req, &req_config.config.ds, pool, next).await,
-
-        "/-/auth/create-account/" => {
+        Route::Logout => fastn_core::auth::logout(&req, &req_config.config.ds, pool, next).await,
+        Route::CreateAccount => {
             fastn_core::auth::email_password::create_account(req_config, pool, next).await
         }
-        "/-/auth/email-confirmation-sent/" => {
+        Route::EmailConfirmationSent => {
             fastn_core::auth::email_password::email_confirmation_sent(req_config).await
         }
-        "/-/auth/confirm-email/" => {
+        Route::ConfirmEmail => {
             fastn_core::auth::email_password::confirm_email(req_config, pool, next).await
         }
-        "/-/auth/resend-confirmation-email/" => {
+        Route::ResendConfirmationEmail => {
             fastn_core::auth::email_password::resend_email(&req, req_config, pool, next).await
         }
-        "/-/auth/onboarding/" => {
+        Route::Onboarding => {
             fastn_core::auth::email_password::onboarding(&req, req_config, config, next).await
         }
-        // "/-/auth/send-email-login-code/" => todo!(),
-        // "/-/auth/add-email/" => todo!(),
-        // "/-/auth/update-name/" => todo!(),
-        // "/-/auth/update-password/" => todo!(),
-        // "/-/auth/update-username/" => todo!(),
-        // "/-/auth/update-email/" => todo!(),
-        // "/-/auth/disable-account/" => todo!(),
-        // "/-/auth/close-sessions/?session=<session-id|all>" => todo!(),
-        _ => Ok(fastn_core::not_found!("route not found: {}", req.path())),
+        Route::ForgotPassword => {
+            fastn_core::auth::email_password::forgot_password_request(req_config, pool, next).await
+        }
+        Route::ResetPassword => {
+            fastn_core::auth::email_password::reset_password(req_config, pool, next).await
+        }
+        Route::ForgotPasswordSuccess => {
+            fastn_core::auth::email_password::forgot_password_request_success(req_config).await
+        }
+        Route::SetPassword => {
+            fastn_core::auth::email_password::set_password(req_config, pool, next).await
+        }
+        Route::SetPasswordSuccess => {
+            fastn_core::auth::email_password::set_password_success(req_config).await
+        }
+        Route::Invalid => Ok(fastn_core::not_found!("route not found: {}", req.path())),
     }
 }

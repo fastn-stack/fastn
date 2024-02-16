@@ -11,7 +11,7 @@ pub(crate) async fn login(
 
         let main = fastn_core::Document {
             package_name: req_config.config.package.name.clone(),
-            id: "/-/auth/login/".to_string(),
+            id: fastn_core::auth::Route::Login.to_string(),
             content: fastn_core::auth::email_password::login_ftd().to_string(),
             parent_path: fastn_ds::Path::new("/"),
         };

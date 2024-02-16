@@ -16,6 +16,7 @@ pub(crate) use {
     login::login,
     onboarding::onboarding,
     resend_email::resend_email,
+    set_password::*,
     urls::{confirmation_link, redirect_url_from_next},
 };
 
@@ -57,9 +58,9 @@ fn email_confirmation_sent_ftd() -> &'static str {
     "#
 }
 
-fn email_reset_request_sent_ftd() -> &'static str {
+fn forgot_password_request_success_ftd() -> &'static str {
     r#"
-    -- auth.email-password-reset-request-sent-page:
+    -- auth.forgot-password-request-email-sent-page:
     "#
 }
 
@@ -69,6 +70,17 @@ fn set_password_form_ftd() -> &'static str {
     "#
 }
 
+fn set_password_success_ftd() -> &'static str {
+    r#"
+    -- auth.set-password-success-page:
+    "#
+}
+
+fn forgot_password_form_ftd() -> &'static str {
+    r#"
+    -- auth.forgot-password-form-page:
+    "#
+}
 
 fn create_account_ftd() -> &'static str {
     r#"

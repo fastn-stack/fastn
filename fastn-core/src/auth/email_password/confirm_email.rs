@@ -55,9 +55,10 @@ pub(crate) async fn confirm_email(
         tracing::info!("provided code has expired.");
         return Ok(fastn_core::http::redirect_with_code(
             format!(
-                "{}://{}/-/auth/resend-confirmation-email/",
-                req_config.request.connection_info.scheme(),
-                req_config.request.connection_info.host(),
+                "{scheme}://{host}{resend_confirmation_email_route}",
+                scheme = req_config.request.connection_info.scheme(),
+                host = req_config.request.connection_info.host(),
+                resend_confirmation_email_route = fastn_core::auth::Route::ResendConfirmationEmail,
             ),
             302,
         ));
@@ -87,7 +88,10 @@ pub(crate) async fn confirm_email(
         .is_ok();
 
     let next_path = if onboarding_enabled {
-        format!("/-/auth/onboarding/?next={}", next)
+        format!(
+            "{onboarding_route}?next={next}",
+            onboarding_route = fastn_core::auth::Route::Onboarding
+        )
     } else {
         next.to_string()
     };

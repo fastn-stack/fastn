@@ -31,7 +31,7 @@ pub(crate) async fn create_account(
 
         let main = fastn_core::Document {
             package_name: req_config.config.package.name.clone(),
-            id: "/-/auth/create-account/".to_string(),
+            id: fastn_core::auth::Route::CreateAccount.to_string(),
             content: create_account_ftd().to_string(),
             parent_path: fastn_ds::Path::new("/"),
         };
