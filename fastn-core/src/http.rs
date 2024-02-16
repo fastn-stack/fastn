@@ -58,10 +58,12 @@ pub fn ok(data: Vec<u8>) -> fastn_core::http::Response {
     actix_web::HttpResponse::Ok().body(data)
 }
 
-pub fn redirect(url: String) -> fastn_core::http::Response {
-    actix_web::HttpResponse::PermanentRedirect()
-        .insert_header(("LOCATION", url))
-        .finish()
+pub fn permanent_redirect(url: String) -> fastn_core::http::Response {
+    redirect_with_code(url, 308)
+}
+
+pub fn temporary_redirect(url: String) -> fastn_core::http::Response {
+    redirect_with_code(url, 307)
 }
 
 pub fn redirect_with_code(url: String, code: i32) -> fastn_core::http::Response {
