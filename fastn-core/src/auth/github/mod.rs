@@ -31,7 +31,9 @@ pub async fn login(
         .add_scope(oauth2::Scope::new("read:org".to_string()))
         .url();
 
-    Ok(fastn_core::http::redirect(authorize_url.to_string()))
+    Ok(fastn_core::http::temporary_redirect(
+        authorize_url.to_string(),
+    ))
 }
 
 // route: /-/auth/github/done/
@@ -56,9 +58,7 @@ pub async fn callback(
     // ask to update details by giving a form
     // redirect to next for now
     if fastn_core::auth::utils::is_authenticated(req) {
-        return Ok(actix_web::HttpResponse::Found()
-            .append_header((actix_web::http::header::LOCATION, next))
-            .finish());
+        return Ok(fastn_core::http::temporary_redirect(next));
     }
 
     let access_token = match fastn_core::auth::github::utils::github_client(ds)

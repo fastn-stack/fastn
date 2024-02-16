@@ -11,7 +11,7 @@ fn handle_redirect(
         .redirects
         .as_ref()
         .and_then(|v| fastn_core::package::redirects::find_redirect(v, path.as_str()))
-        .map(|r| fastn_core::http::redirect(r.to_string()))
+        .map(|r| fastn_core::http::permanent_redirect(r.to_string()))
 }
 
 /// path: /-/<package-name>/<file-name>/

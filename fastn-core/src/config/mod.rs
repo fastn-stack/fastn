@@ -1180,6 +1180,15 @@ impl Config {
             apps
         };
 
+        config.package.endpoints = {
+            for endpoint in &mut config.package.endpoints {
+                endpoint.endpoint =
+                    fastn_core::utils::interpolate_env_vars(&config.ds, &endpoint.endpoint).await?;
+            }
+
+            config.package.endpoints
+        };
+
         config
             .all_packages
             .insert(package.name.to_string(), package.to_owned());

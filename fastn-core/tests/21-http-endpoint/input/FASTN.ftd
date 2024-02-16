@@ -4,4 +4,4 @@
 
 -- fastn.url-mappings:
 
-/api/* -> http+proxy://reqres.in/api/*
+/api/* -> http+proxy://${env.REQRES}/api/*
