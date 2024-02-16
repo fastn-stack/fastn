@@ -299,7 +299,7 @@ pub(crate) async fn reset_password(
         ))
         .finish();
 
-    return Ok(resp);
+    Ok(resp)
 }
 
 // both forgot_password_request and reset_password_request will set some secure cookie that'll contain the fastn_target_user_id
