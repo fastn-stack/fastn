@@ -1089,7 +1089,7 @@ pub(crate) async fn interpolate_env_vars(
         let end = capture.end();
         result.push_str(&endpoint[last_end..start]);
 
-        let key = captures.get(1).unwrap().as_str();
+        let key = captures.get(1).unwrap().as_str().trim();
 
         let value = match key {
             key if key.starts_with("env.") => {
