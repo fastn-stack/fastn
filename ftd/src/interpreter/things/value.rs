@@ -2022,7 +2022,7 @@ impl Value {
         }
     }
 
-    pub fn to_string(
+    pub fn to_json_string(
         &self,
         doc: &ftd::interpreter::TDoc<'_>,
         use_quotes: bool,
@@ -2040,7 +2040,7 @@ impl Value {
             Value::Boolean { value } => Ok(Some(value.to_string())),
             Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
-                    data.to_string(doc, use_quotes)
+                    data.to_json_string(doc, use_quotes)
                 } else {
                     Ok(Some("".to_string()))
                 }

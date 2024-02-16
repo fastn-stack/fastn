@@ -408,10 +408,10 @@ async fn execute_post_instruction(
 
     // Mandatory test parameters --------------------------------
     let url = get_value_ok(TEST_URL_HEADER, &property_values, instruction.line_number)?
-        .to_string(doc, false)?
+        .to_json_string(doc, false)?
         .unwrap();
     let title = get_value_ok(TEST_TITLE_HEADER, &property_values, instruction.line_number)?
-        .to_string(doc, false)?
+        .to_json_string(doc, false)?
         .unwrap();
 
     // Optional test parameters --------------------------------
@@ -597,10 +597,10 @@ async fn execute_get_instruction(
 
     // Mandatory test parameters --------------------------------
     let url = get_value_ok(TEST_URL_HEADER, &property_values, instruction.line_number)?
-        .to_string(doc, false)?
+        .to_json_string(doc, false)?
         .unwrap();
     let title = get_value_ok(TEST_TITLE_HEADER, &property_values, instruction.line_number)?
-        .to_string(doc, false)?
+        .to_json_string(doc, false)?
         .unwrap();
 
     // Optional test parameters --------------------------------
@@ -620,14 +620,14 @@ async fn execute_get_instruction(
                     .unwrap()
                     .clone()
                     .resolve(doc, 0)?
-                    .to_string(doc, false)?
+                    .to_json_string(doc, false)?
                     .unwrap();
                 let resolved_value = fields
                     .get(QUERY_PARAMS_HEADER_VALUE)
                     .unwrap()
                     .clone()
                     .resolve(doc, 0)?
-                    .to_string(doc, false)?
+                    .to_json_string(doc, false)?
                     .unwrap();
                 let query_key_value =
                     format!("{}={}", resolved_key.as_str(), resolved_value.as_str());
@@ -869,7 +869,7 @@ fn get_optional_value_string(
 ) -> ftd::interpreter::Result<Option<String>> {
     let value = get_optional_value(key, property_values);
     if let Some(ref value) = value {
-        return value.to_string(doc, false);
+        return value.to_json_string(doc, false);
     }
     Ok(None)
 }
@@ -1055,7 +1055,7 @@ async fn execute_redirect_instruction(
         &property_values,
         instruction.line_number,
     )?
-    .to_string(doc, false)?
+    .to_json_string(doc, false)?
     .unwrap();
 
     let (redirect_from_url, redirect_to_url) = match redirect.split_once("->") {
