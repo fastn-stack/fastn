@@ -82,7 +82,7 @@ pub async fn process(
         if value.starts_with('$') {
             if let Some(value) = doc
                 .get_value(header.line_number, value.as_str())?
-                .to_string(doc, true)?
+                .to_json_string(doc, true)?
             {
                 if method.as_str().eq("post") {
                     body.push(format!("\"{}\": {}", header.key, value));
