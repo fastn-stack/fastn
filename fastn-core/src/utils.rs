@@ -1072,3 +1072,48 @@ pub(crate) fn is_static_path(path: &str) -> bool {
         None => false,
     }
 }
+
+static VARIABLE_INTERPOLATION_RGX: once_cell::sync::Lazy<regex::Regex> =
+    once_cell::sync::Lazy::new(|| regex::Regex::new(r"\$\{([^}]+)\}").unwrap());
+
+pub(crate) async fn interpolate_env_vars(
+    ds: &fastn_ds::DocumentStore,
+    endpoint: &str,
+) -> fastn_core::Result<String> {
+    let mut result = String::new();
+    let mut last_end = 0;
+
+    for captures in VARIABLE_INTERPOLATION_RGX.captures_iter(endpoint) {
+        let capture = captures.get(0).unwrap();
+        let start = capture.start();
+        let end = capture.end();
+        result.push_str(&endpoint[last_end..start]);
+
+        let key = captures.get(1).unwrap().as_str().trim();
+
+        let value = match key {
+            key if key.starts_with("env.") => {
+                let env_key = key.trim_start_matches("env.");
+                ds.env(env_key).await.map_err(|e| {
+                    fastn_core::error::Error::generic(format!(
+                        "Failed to interpolate environment variable '{}' in endpoint.: {e}",
+                        env_key
+                    ))
+                })?
+            }
+            _ => {
+                return Err(fastn_core::error::Error::generic(format!(
+                    "Failed to interpolate unknown variable '{}' in endpoint.",
+                    key
+                )))
+            }
+        };
+
+        result.push_str(&value);
+
+        last_end = end;
+    }
+
+    result.push_str(&endpoint[last_end..]);
+    Ok(result)
+}

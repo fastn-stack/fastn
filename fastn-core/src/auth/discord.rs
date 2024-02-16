@@ -64,9 +64,7 @@ pub async fn login(req: actix_web::HttpRequest) -> fastn_core::Result<fastn_core
         DiscordScopes::GuildsMembersRead.as_str()
     );
     // send redirect to /auth/discord/callback/
-    Ok(actix_web::HttpResponse::Found()
-        .append_header((actix_web::http::header::LOCATION, discord_auth_url))
-        .finish())
+    Ok(fastn_core::http::temporary_redirect(discord_auth_url))
 }
 
 // route: /auth/discord/callback/

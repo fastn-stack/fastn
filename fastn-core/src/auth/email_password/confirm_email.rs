@@ -53,15 +53,12 @@ pub(crate) async fn confirm_email(
     if key_expired(&req_config.config.ds, sent_at).await {
         // TODO: this redirect route should be configurable
         tracing::info!("provided code has expired.");
-        return Ok(fastn_core::http::redirect_with_code(
-            format!(
-                "{scheme}://{host}{resend_confirmation_email_route}",
-                scheme = req_config.request.connection_info.scheme(),
-                host = req_config.request.connection_info.host(),
-                resend_confirmation_email_route = fastn_core::auth::Route::ResendConfirmationEmail,
-            ),
-            302,
-        ));
+        return Ok(fastn_core::http::temporary_redirect(format!(
+            "{scheme}://{host}{resend_confirmation_email_route}",
+            scheme = req_config.request.connection_info.scheme(),
+            host = req_config.request.connection_info.host(),
+            resend_confirmation_email_route = fastn_core::auth::Route::ResendConfirmationEmail
+        )));
     }
 
     let email: fastn_core::utils::CiString =

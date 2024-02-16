@@ -168,7 +168,7 @@ features = [
 
 [workspace.dependencies.fastn-observer]
 git = "https://github.com/fastn-stack/fastn-observer"
-rev = "47b29ea"
+rev = "5f64c7b"
 
 [workspace.dependencies.rusqlite]
 version = "0.30"

@@ -71,7 +71,8 @@ impl fastn_js::SetProperty {
             .append(text(
                 format!(
                     "{},",
-                    self.value
+                    &self
+                        .value
                         .to_js_with_element_name(&Some(self.element_name.clone()))
                 )
                 .as_str(),
@@ -677,6 +678,11 @@ fn variable_to_js(
         let (doc_name, remaining) = fastn_js::utils::get_doc_name_and_remaining(variable_name);
         let mut name = fastn_js::utils::name_to_js(doc_name.as_str());
         if let Some(remaining) = remaining {
+            let remaining = if fastn_js::utils::is_asset_path(doc_name.as_str()) {
+                remaining.replace('.', "_")
+            } else {
+                remaining
+            };
             name = format!(
                 "{}.{}",
                 name,

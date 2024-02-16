@@ -102,9 +102,7 @@ pub async fn login(req: actix_web::HttpRequest) -> fastn_core::Result<fastn_core
         TwitterScopes::ReadList.as_str(),
     );
     // send redirect to /auth/twitter/callback/
-    Ok(actix_web::HttpResponse::Found()
-        .append_header((actix_web::http::header::LOCATION, twitter_auth_url))
-        .finish())
+    Ok(fastn_core::http::temporary_redirect(twitter_auth_url))
 }
 // route: /auth/twitter/callback/
 // In this API we are accessing

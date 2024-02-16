@@ -217,7 +217,6 @@ const ftd = (function () {
             return;
         }
 
-
         if (body && method !== "GET") {
             if (body[0] instanceof fastn.recordInstanceClass) {
                 if (body.length !== 1) {

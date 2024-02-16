@@ -28,8 +28,7 @@ pub(crate) async fn resend_email(
     // TODO: there's no GET /-/auth/login/ yet
     // the client will have to create one for now
     // this path should be configuratble too
-    Ok(fastn_core::http::redirect_with_code(
+    Ok(fastn_core::http::temporary_redirect(
         redirect_url_from_next(req, next),
-        302,
     ))
 }
