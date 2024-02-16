@@ -1,4 +1,4 @@
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, Clone)]
 pub struct UserData {
     pub username: String,
     pub name: String,
