@@ -118,6 +118,10 @@ fn test_expr() {
         ))]
     );
     assert_eq!(
+        tokenize(r#""This is a \\" inside a string literal""#).unwrap_err(),
+        TokenizerError::StringLeftOpen { position: 39 }
+    );
+    assert_eq!(
         tokenize(r#""This is string that was left open"#).unwrap_err(),
         TokenizerError::StringLeftOpen { position: 34 }
     );
