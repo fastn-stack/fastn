@@ -10,7 +10,9 @@ pub enum TokenizerError {
 pub enum Token {
     Identifier(String),
     Operator(Operator),
-    Literal(String),
+    StringLiteral(String),
+    Integer(i64),
+    Decimal(f64),
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -36,8 +38,7 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, TokenizerError> {
                 escaped = true;
             } else if c == '"' {
                 in_string_literal = false;
-                current_token.push(c);
-                tokens.push(Token::Literal(current_token.clone()));
+                tokens.push(Token::StringLiteral(current_token.clone()));
                 current_token.clear();
             } else {
                 current_token.push(c);
@@ -53,7 +54,6 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, TokenizerError> {
             current_token.push(c);
         } else if c == '"' {
             in_string_literal = true;
-            current_token.push(c);
         } else if !current_token.is_empty() {
             tokens.push(get_token(&current_token));
             current_token.clear();
@@ -80,11 +80,15 @@ fn get_token(token_str: &str) -> Token {
     match token_str {
         "or" => Token::Operator(Operator::Or),
         _ => {
-            if token_str.parse::<f64>().is_ok() {
-                Token::Literal(token_str.to_string())
-            } else {
-                Token::Identifier(token_str.to_string())
+            if let Ok(value) = token_str.parse::<i64>() {
+                return Token::Integer(value);
             }
+
+            if let Ok(value) = token_str.parse::<f64>() {
+                return Token::Decimal(value);
+            }
+
+            Token::Identifier(token_str.to_string())
         }
     }
 }
@@ -96,7 +100,7 @@ fn test_expr() {
         vec![
             Token::Identifier(String::from("env.ENDPOINT")),
             Token::Operator(Operator::Or),
-            Token::Literal(String::from("\"127.0.0.1:8000\""))
+            Token::StringLiteral(String::from("127.0.0.1:8000"))
         ]
     );
     assert_eq!(
@@ -104,17 +108,14 @@ fn test_expr() {
         vec![
             Token::Identifier(String::from("env.ENDPOINT")),
             Token::Operator(Operator::Or),
-            Token::Literal(String::from("\"or 127.0.0.1:8000\""))
+            Token::StringLiteral(String::from("or 127.0.0.1:8000"))
         ]
     );
-    assert_eq!(
-        tokenize(r#"-100"#).unwrap(),
-        vec![Token::Literal(String::from("-100"))]
-    );
+    assert_eq!(tokenize(r#"-100"#).unwrap(), vec![Token::Integer(-100)]);
     assert_eq!(
         tokenize(r#""This is a \" inside a string literal""#).unwrap(),
-        vec![Token::Literal(String::from(
-            r#""This is a " inside a string literal""#
+        vec![Token::StringLiteral(String::from(
+            r#"This is a " inside a string literal"#
         ))]
     );
     assert_eq!(

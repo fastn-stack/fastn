@@ -13,7 +13,9 @@ pub enum ParseError {
 #[derive(Debug, PartialEq, Clone)]
 pub enum ExprNode {
     Identifier(String),
-    Literal(String),
+    StringLiteral(String),
+    Integer(i64),
+    Decimal(f64),
     Binary(Box<ExprNode>, Operator, Box<ExprNode>),
 }
 
@@ -40,7 +42,9 @@ pub fn parse_expr(
             State::InMain => {
                 let left_expr = match token {
                     Token::Identifier(identifier) => ExprNode::Identifier(identifier.to_string()),
-                    Token::Literal(literal) => ExprNode::Literal(literal.to_string()),
+                    Token::StringLiteral(value) => ExprNode::StringLiteral(value.to_string()),
+                    Token::Integer(value) => ExprNode::Integer(*value),
+                    Token::Decimal(value) => ExprNode::Decimal(*value),
                     _ => return Err(ParseError::UnexpectedToken(token.clone())),
                 };
 
@@ -69,9 +73,9 @@ fn test_parser() {
             Box::new(ExprNode::Identifier(String::from("env.ENDPOINT"))),
             Operator::Or,
             Box::new(ExprNode::Binary(
-                Box::new(ExprNode::Literal(String::from("\"127.0.0.1:8000\""))),
+                Box::new(ExprNode::StringLiteral(String::from("127.0.0.1:8000"))),
                 Operator::Or,
-                Box::new(ExprNode::Literal(String::from("\"127.0.0.1:7999\""))),
+                Box::new(ExprNode::StringLiteral(String::from("127.0.0.1:7999"))),
             ))
         )
     );
