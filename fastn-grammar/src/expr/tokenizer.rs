@@ -29,7 +29,6 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, TokenizerError> {
                 escaped = false;
             } else if c == '\\' {
                 escaped = true;
-                current_token.push(c);
             } else if c == '"' {
                 in_string_literal = false;
                 current_token.push(c);
@@ -101,8 +100,12 @@ fn test_expr() {
     );
     assert_eq!(
         tokenize(r#"-100"#).unwrap(),
-        vec![
-            Token::Literal(String::from("-100"))
-        ]
+        vec![Token::Literal(String::from("-100"))]
+    );
+    assert_eq!(
+        tokenize(r#""This is a \" inside a string literal""#).unwrap(),
+        vec![Token::Literal(String::from(
+            r#""This is a " inside a string literal""#
+        ))]
     );
 }
