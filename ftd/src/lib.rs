@@ -20,7 +20,6 @@ pub mod ast;
 pub mod executor;
 pub mod ftd2021;
 pub mod html;
-pub mod interpolation_helpers;
 pub mod interpreter;
 pub mod js;
 pub mod node;

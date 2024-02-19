@@ -10,7 +10,8 @@ members = [
     "fastn-lang",
     "foo",
     "fastn-ds", 
-    "fastn-update",
+    "fastn-update", "fastn-expr",
+    "fastn-expr",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
@@ -93,6 +94,7 @@ fastn-package = { path = "fastn-package" }
 fastn-runtime = { path = "fastn-runtime" }
 fastn-wasm = { path = "fastn-wasm" }
 fastn-grammar = { path = "fastn-grammar" }
+fastn-expr = { path = "fastn-expr" }
 fluent = "0.16"
 format_num = "0.1"
 ftd = { path = "ftd" }

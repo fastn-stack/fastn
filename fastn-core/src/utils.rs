@@ -1113,7 +1113,7 @@ async fn get_interpolated_value(
     ds: &fastn_ds::DocumentStore,
     input: &str,
 ) -> fastn_core::Result<String> {
-    let value = match ftd::interpolation_helpers::get_var_name_and_default(input)? {
+    let value = match fastn_expr::interpolator::get_var_name_and_default(input)? {
         (Some(var_name), default_value) => match var_name {
             key if key.starts_with("env.") => {
                 let env_key = key.trim_start_matches("env.");

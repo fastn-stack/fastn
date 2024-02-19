@@ -1,7 +1,6 @@
 extern crate self as fastn_grammar;
 
 pub mod evalexpr;
-pub mod expr;
 
 pub fn add(left: usize, right: usize) -> usize {
     left + right
