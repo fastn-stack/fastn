@@ -20,14 +20,16 @@ pub fn get_var_name_and_default(
             let (var_name, default_value) = match (*boxed_lhs, *boxed_rhs) {
                 (
                     fastn_expr::parser::ExprNode::Identifier(var_name),
-                    fastn_expr::parser::ExprNode::Literal(default_value),
-                ) => (
-                    Some(var_name.clone()),
-                    Some(trim_quotes(default_value.as_str())),
-                ),
-                (fastn_expr::parser::ExprNode::Literal(value), _) => {
-                    return Ok((None, Some(trim_quotes(value.as_str()))))
-                }
+                    fastn_expr::parser::ExprNode::StringLiteral(default_value),
+                ) => (Some(var_name.clone()), Some(default_value)),
+                (
+                    fastn_expr::parser::ExprNode::Identifier(var_name),
+                    fastn_expr::parser::ExprNode::Integer(default_value),
+                ) => (Some(var_name.clone()), Some(default_value.to_string())),
+                (
+                    fastn_expr::parser::ExprNode::Identifier(var_name),
+                    fastn_expr::parser::ExprNode::Decimal(default_value),
+                ) => (Some(var_name.clone()), Some(default_value.to_string())),
                 _ => {
                     return Err(InterpolationError::CantInterpolate(
                         "Invalid expression".to_string(),
@@ -38,12 +40,8 @@ pub fn get_var_name_and_default(
             Ok((var_name, default_value))
         }
         fastn_expr::parser::ExprNode::Identifier(var_name) => Ok((Some(var_name), None)),
-        fastn_expr::parser::ExprNode::Literal(value) => {
-            Ok((None, Some(trim_quotes(value.as_str()))))
-        }
+        fastn_expr::parser::ExprNode::StringLiteral(value) => Ok((None, Some(value))),
+        fastn_expr::parser::ExprNode::Integer(value) => Ok((None, Some(value.to_string()))),
+        fastn_expr::parser::ExprNode::Decimal(value) => Ok((None, Some(value.to_string()))),
     }
-}
-
-fn trim_quotes(s: &str) -> String {
-    s.trim_matches('"').to_string()
 }
