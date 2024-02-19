@@ -1,4 +1,4 @@
-use fastn_grammar::expr::parser::{parse, ExprNode, ParseError};
+use fastn_expr::parser::{parse, ExprNode, ParseError};
 
 #[derive(thiserror::Error, Debug)]
 pub enum EvalError {
