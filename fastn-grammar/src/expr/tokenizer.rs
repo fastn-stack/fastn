@@ -45,6 +45,8 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, TokenizerError> {
             }
         } else if (c == '.' && !current_token.is_empty()) || c.is_alphanumeric() {
             current_token.push(c);
+        } else if c == '-' && current_token.is_empty() {
+            current_token.push(c);
         } else if c == '"' {
             in_string_literal = true;
             current_token.push(c);
@@ -95,6 +97,12 @@ fn test_expr() {
             Token::Identifier(String::from("env.ENDPOINT")),
             Token::Operator(Operator::Or),
             Token::Literal(String::from("\"or 127.0.0.1:8000\""))
+        ]
+    );
+    assert_eq!(
+        tokenize(r#"-100"#).unwrap(),
+        vec![
+            Token::Literal(String::from("-100"))
         ]
     );
 }
