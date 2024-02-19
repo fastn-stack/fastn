@@ -14,8 +14,13 @@ $processor$: pr.http
 url: /api/users/2
 
 
+
+-- display-user: $u
+
+
+
 -- component display-user:
-user u:
+caption user u:
 
 -- ftd.row:
 spacing.fixed.rem: 1
