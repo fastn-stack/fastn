@@ -17,7 +17,7 @@ pub fn get_var_name_and_default(
             fastn_grammar::expr::tokenizer::Operator::Or,
             boxed_rhs,
         ) => {
-            let (var_name, default_value) = match (&*boxed_lhs, &*boxed_rhs) {
+            let (var_name, default_value) = match (*boxed_lhs, *boxed_rhs) {
                 (
                     fastn_grammar::expr::parser::ExprNode::Identifier(var_name),
                     fastn_grammar::expr::parser::ExprNode::Literal(default_value),
