@@ -47,9 +47,9 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, TokenizerError> {
                 tokens.push(get_token(&current_token));
                 current_token.clear();
             }
-        } else if (c == '.' && !current_token.is_empty()) || c.is_alphanumeric() {
-            current_token.push(c);
-        } else if c == '-' && current_token.is_empty() {
+        } else if ((c == '.' && !current_token.is_empty()) || c.is_alphanumeric())
+            || (c == '-' && current_token.is_empty())
+        {
             current_token.push(c);
         } else if c == '"' {
             in_string_literal = true;
