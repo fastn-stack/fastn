@@ -1182,9 +1182,8 @@ impl Config {
 
         config.package.endpoints = {
             for endpoint in &mut config.package.endpoints {
-                endpoint.endpoint = dbg!(
-                    fastn_core::utils::interpolate_env_vars(&config.ds, &endpoint.endpoint).await?
-                );
+                endpoint.endpoint =
+                    fastn_core::utils::interpolate_env_vars(&config.ds, &endpoint.endpoint).await?;
             }
 
             config.package.endpoints
