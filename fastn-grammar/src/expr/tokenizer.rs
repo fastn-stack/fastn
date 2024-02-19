@@ -2,6 +2,8 @@
 pub enum TokenizerError {
     #[error("Unexpected token '{token}' at position {token}")]
     UnexpectedToken { token: char, position: usize },
+    #[error("String left open at position {position}")]
+    StringLeftOpen { position: usize },
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -21,8 +23,11 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, TokenizerError> {
     let mut current_token = String::new();
     let mut in_string_literal = false;
     let mut escaped = false;
+    let mut pos = 0;
 
-    for (i, c) in input.chars().enumerate() {
+    for c in input.chars() {
+        pos += 1;
+
         if in_string_literal {
             if escaped {
                 current_token.push(c);
@@ -55,9 +60,13 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, TokenizerError> {
         } else {
             return Err(TokenizerError::UnexpectedToken {
                 token: c,
-                position: i,
+                position: pos,
             });
         }
+    }
+
+    if in_string_literal {
+        return Err(TokenizerError::StringLeftOpen { position: pos });
     }
 
     if !current_token.is_empty() {
@@ -107,5 +116,9 @@ fn test_expr() {
         vec![Token::Literal(String::from(
             r#""This is a " inside a string literal""#
         ))]
+    );
+    assert_eq!(
+        tokenize(r#""This is string that was left open"#).unwrap_err(),
+        TokenizerError::StringLeftOpen { position: 34 }
     );
 }
