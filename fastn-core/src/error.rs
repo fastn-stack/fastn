@@ -18,6 +18,9 @@ pub enum Error {
     #[error("FTDP1Error: {}", _0)]
     FTDP1Error(#[from] ftd::p1::Error),
 
+    #[error("FTDInterpolatioError: {}", _0)]
+    FTDInterpolatioError(#[from] ftd::interpolation_helpers::InterpolationError),
+
     #[error("FTDAstError: {}", _0)]
     FTDAstError(#[from] ftd::ast::Error),
 
