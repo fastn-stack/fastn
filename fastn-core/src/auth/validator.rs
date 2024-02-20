@@ -64,9 +64,7 @@ pub fn validate_strong_password(
     }
 }
 
-pub fn accept_terms(
-    val: &bool,
-) -> Result<(), validator::ValidationError> {
+pub fn accept_terms(val: &bool) -> Result<(), validator::ValidationError> {
     if *val {
         return Ok(());
     }
