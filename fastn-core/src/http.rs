@@ -229,18 +229,12 @@ impl Request {
         }
 
         let session_data = match serde_json::from_str::<SessionData>(session_data.as_str()) {
-            Ok(sd) => Some(sd),
+            Ok(sd) => sd,
             Err(e) => {
                 tracing::warn!("failed to deserialize session data: {:?}", e);
-                None
+                return None;
             }
         };
-
-        if session_data.is_none() {
-            return None;
-        }
-
-        let session_data = session_data.unwrap();
 
         // if the session does not exist, return None
         match fastn_core::auth::get_authenticated_user_with_email(&session_data.session_id, ds)
