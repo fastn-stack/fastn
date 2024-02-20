@@ -48,20 +48,29 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, TokenizerError> {
                 tokens.push(get_token(&current_token));
                 current_token.clear();
             }
-        } else if (((c == '.' || c == '_') && !current_token.is_empty()) || c.is_alphanumeric())
-            || (c == '-' && current_token.is_empty())
-        {
-            current_token.push(c);
-        } else if c == '"' {
-            in_string_literal = true;
-        } else if !current_token.is_empty() {
-            tokens.push(get_token(&current_token));
-            current_token.clear();
         } else {
-            return Err(TokenizerError::UnexpectedToken {
-                token: c,
-                position: pos,
-            });
+            match c {
+                '.' | '_' if !current_token.is_empty() => {
+                    current_token.push(c);
+                }
+                '-' if current_token.is_empty() => {
+                    current_token.push(c);
+                }
+                '"' => in_string_literal = true,
+                _ => {
+                    if c.is_alphanumeric() {
+                        current_token.push(c);
+                    } else if !current_token.is_empty() {
+                        tokens.push(get_token(&current_token));
+                        current_token.clear();
+                    } else {
+                        return Err(TokenizerError::UnexpectedToken {
+                            token: c,
+                            position: pos,
+                        });
+                    }
+                }
+            }
         }
     }
 
