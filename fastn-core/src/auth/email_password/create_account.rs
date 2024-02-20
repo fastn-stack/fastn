@@ -13,6 +13,16 @@ struct UserPayload {
         arg = "(&'v_a str, &'v_a str, &'v_a str)"
     ))]
     password: String,
+    #[validate(must_match(
+        other = "password",
+        message = "password and confirm password field do not match"
+    ))]
+    password2: String,
+    #[validate(custom(
+        function = "fastn_core::auth::validator::accept_terms",
+        message = "you must accept the terms and conditions"
+    ))]
+    accept_terms: bool,
 }
 
 pub(crate) async fn create_account(
