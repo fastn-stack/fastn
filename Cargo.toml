@@ -11,7 +11,6 @@ members = [
     "foo",
     "fastn-ds", 
     "fastn-update", "fastn-expr",
-    "fastn-expr",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
