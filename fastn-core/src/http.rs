@@ -224,13 +224,31 @@ impl Request {
 
         #[derive(serde::Deserialize)]
         struct SessionData {
+            session_id: i64,
             user: fastn_core::UserData,
         }
 
-        match serde_json::from_str::<SessionData>(session_data.as_str()) {
-            Ok(sd) => Some(sd.user),
+        let session_data = match serde_json::from_str::<SessionData>(session_data.as_str()) {
+            Ok(sd) => Some(sd),
             Err(e) => {
                 tracing::warn!("failed to deserialize session data: {:?}", e);
+                None
+            }
+        };
+
+        if session_data.is_none() {
+            return None;
+        }
+
+        let session_data = session_data.unwrap();
+
+        // if the session does not exist, return None
+        match fastn_core::auth::get_authenticated_user_with_email(&session_data.session_id, ds)
+            .await
+        {
+            Ok(_) => Some(session_data.user),
+            Err(e) => {
+                tracing::warn!("failed to get user data from session: {e}");
                 None
             }
         }
