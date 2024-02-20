@@ -48,7 +48,7 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, TokenizerError> {
                 tokens.push(get_token(&current_token));
                 current_token.clear();
             }
-        } else if ((c == '.' && !current_token.is_empty()) || c.is_alphanumeric())
+        } else if (((c == '.' || c == '_') && !current_token.is_empty()) || c.is_alphanumeric())
             || (c == '-' && current_token.is_empty())
         {
             current_token.push(c);
@@ -104,9 +104,9 @@ fn test_expr() {
         ]
     );
     assert_eq!(
-        tokenize(r#"env.ENDPOINT or "or 127.0.0.1:8000""#).unwrap(),
+        tokenize(r#"env.FT_ENDPOINT or "or 127.0.0.1:8000""#).unwrap(),
         vec![
-            Token::Identifier(String::from("env.ENDPOINT")),
+            Token::Identifier(String::from("env.FT_ENDPOINT")),
             Token::Operator(Operator::Or),
             Token::StringLiteral(String::from("or 127.0.0.1:8000"))
         ]
