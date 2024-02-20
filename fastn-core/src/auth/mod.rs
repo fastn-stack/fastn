@@ -170,6 +170,7 @@ async fn set_session_cookie_and_redirect_to_next(
     let cookie_json = serde_json::json!({
         "session_id": session_id,
         "user": {
+            "id": user.id,
             "username": user.username,
             "name": user.name,
             "email": user.email.0,
