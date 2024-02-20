@@ -14,11 +14,7 @@ jobs:
       FASTN_DB_URL: postgres://testuser:testpassword@localhost:5432/testdb
       DEBUG: true
       FASTN_ENABLE_AUTH: true
-      FASTN_SMTP_USERNAME: 
-      FASTN_SMTP_PASSWORD: 
-      FASTN_SMTP_HOST: 
-      FASTN_SMTP_SENDER_EMAIL: 
-      FASTN_SMTP_SENDER_NAME: 
+      FASTN_ENABLE_EMAIL: false
     services:
       postgres:
         image: postgres:latest
