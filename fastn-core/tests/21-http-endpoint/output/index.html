@@ -332,9 +332,10 @@ td {
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_row __g-3"><div data-id="4">2</div><div data-id="5">Janet</div><div data-id="6"><a href="mailto:janet.weaver@reqres.in">janet.weaver@reqres.in</a></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
+	.__g-3 { gap: 1rem; }
     </style>
 <script>
     (function() {
@@ -342,11 +343,57 @@ td {
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "fastn_stack_github_io_http_endpoint_test";
   try {
+    let parenti0 = fastn_stack_github_io_http_endpoint_test___display_user(parent, inherited, {
+      u: global.fastn_stack_github_io_http_endpoint_test___u
+    });
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 global["main"] = main;
+let fastn_stack_github_io_http_endpoint_test___display_user = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "fastn_stack_github_io_http_endpoint_test";
+  try {
+    let __args__ = {
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+    parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Rem(1)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+      rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, __args__.u.get("data").get("id"), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.u.get("data").get("first_name"), inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.u.get("data").get("email"), inherited);
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["fastn_stack_github_io_http_endpoint_test___display_user"] = fastn_stack_github_io_http_endpoint_test___display_user;
+fastn_utils.createNestedObject(global, "fastn_stack_github_io_http_endpoint_test___u", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("data", function () {
+    let record = fastn.recordInstance({
+    });
+    record.set("id", 2);
+    record.set("email", "janet.weaver@reqres.in");
+    record.set("first_name", "Janet");
+    return record;
+  }());
+  return record;
+}());
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "code-theme-9A3284FD117DFF7CFD432FF860A5E14169FA592BC3DA4F5E8A6975143F5EA07F.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "code-theme-99CD7B013C96C4632F0AEA39AC265387B814AE85A7D33666A4AE4BEFF59016D0.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "code-theme-B3AEA322EADEDA61F0E219845A0E9C8E73F6345E49362B46E6F52CEE40471248.css";

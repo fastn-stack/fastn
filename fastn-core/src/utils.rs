@@ -1091,21 +1091,12 @@ pub(crate) async fn interpolate_env_vars(
 
         let key = captures.get(1).unwrap().as_str().trim();
 
-        let value = match key {
-            key if key.starts_with("env.") => {
-                let env_key = key.trim_start_matches("env.");
-                ds.env(env_key).await.map_err(|e| {
-                    fastn_core::error::Error::generic(format!(
-                        "Failed to interpolate environment variable '{}' in endpoint.: {e}",
-                        env_key
-                    ))
-                })?
-            }
-            _ => {
-                return Err(fastn_core::error::Error::generic(format!(
-                    "Failed to interpolate unknown variable '{}' in endpoint.",
-                    key
-                )))
+        let value = match get_interpolated_value(ds, key).await {
+            Ok(value) => value,
+            Err(e) => {
+                return fastn_core::generic_error(format!(
+                    "Failed to interpolate value in endpoint: {e}"
+                ));
             }
         };
 
@@ -1116,4 +1107,53 @@ pub(crate) async fn interpolate_env_vars(
 
     result.push_str(&endpoint[last_end..]);
     Ok(result)
+}
+
+async fn get_interpolated_value(
+    ds: &fastn_ds::DocumentStore,
+    input: &str,
+) -> fastn_core::Result<String> {
+    let value = match fastn_expr::interpolator::get_var_name_and_default(input)? {
+        (Some(var_name), default_value) => match var_name {
+            key if key.starts_with("env.") => {
+                let env_key = key.trim_start_matches("env.");
+
+                get_env_value_or_default(ds, env_key, default_value).await?
+            }
+            _ => {
+                return Err(fastn_core::error::Error::generic(format!(
+                    "unknown variable '{}'.",
+                    input,
+                )))
+            }
+        },
+        (None, Some(default_value)) => default_value,
+        _ => {
+            return Err(fastn_core::error::Error::generic(
+                "unsupported interpolation syntax used.".to_string(),
+            ))
+        }
+    };
+
+    Ok(value)
+}
+
+async fn get_env_value_or_default(
+    ds: &fastn_ds::DocumentStore,
+    env_key: &str,
+    default_value: Option<String>,
+) -> fastn_core::Result<String> {
+    match ds.env(env_key).await {
+        Ok(value) => Ok(value),
+        Err(e) => {
+            if let Some(default_value) = default_value {
+                Ok(default_value)
+            } else {
+                Err(fastn_core::error::Error::generic(format!(
+                    "could not find environment variable '{}': {e}",
+                    env_key
+                )))
+            }
+        }
+    }
 }

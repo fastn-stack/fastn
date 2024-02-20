@@ -2,15 +2,15 @@
   "files": {
     "FASTN.ftd": {
       "name": "FASTN.ftd",
-      "checksum": "1A051A65F8DEDF8464FC2B0BC057E78D565655893F0435EE5E145EB23A667C7C",
-      "size": 145
+      "checksum": "ABE2D16D99185C27D6D576949BDC5B0E5DD95C64731873126B1033A9C0E8B4DB",
+      "size": 212
     },
     "index.ftd": {
       "name": "index.ftd",
-      "checksum": "6010AAF5DE489BB2FDA2A46ADC560309F2C5E4A5D16E5CCC2787D6B4C60D8AE5",
-      "size": 424
+      "checksum": "C0F81A62DC5A838C286CDFE72FFD50467C99312D3A1367AFC14105941AB12BC9",
+      "size": 456
     }
   },
   "zip_url": "https://codeload.github.com/fastn-stack/http-endpoint-test/zip/refs/heads/main",
-  "checksum": "6B712EBA21408F2619EC7EBB3B90BAE0879A4AA451F08BD9FA54F2D34159BBE0"
+  "checksum": "D365DD22B14D7FFB1C3D6E27AF6FD658351AB6B3F4A2ABA2E55BC63DC61898FC"
 }

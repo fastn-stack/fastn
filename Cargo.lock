@@ -1722,7 +1722,7 @@ dependencies = [
 
 [[package]]
 name = "fastn"
-version = "0.4.56"
+version = "0.4.57"
 dependencies = [
  "camino",
  "clap",
@@ -1763,6 +1763,7 @@ dependencies = [
  "edit",
  "env_logger",
  "fastn-ds",
+ "fastn-expr",
  "fastn-js",
  "fastn-observer",
  "fastn-package",
@@ -1820,6 +1821,13 @@ dependencies = [
  "thiserror",
  "tokio",
  "tracing",
+]
+
+[[package]]
+name = "fastn-expr"
+version = "0.1.0"
+dependencies = [
+ "thiserror",
 ]
 
 [[package]]
