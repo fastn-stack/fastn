@@ -1,6 +1,6 @@
 #[derive(thiserror::Error, Debug, PartialEq)]
 pub enum TokenizerError {
-    #[error("Unexpected token '{token}' at position {token}")]
+    #[error("Unexpected token '{token}' at position {position}")]
     UnexpectedToken { token: char, position: usize },
     #[error("String left open at position {position}")]
     StringLeftOpen { position: usize },
