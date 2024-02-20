@@ -1118,19 +1118,7 @@ async fn get_interpolated_value(
             key if key.starts_with("env.") => {
                 let env_key = key.trim_start_matches("env.");
 
-                match ds.env(env_key).await {
-                    Ok(value) => value,
-                    Err(e) => {
-                        if let Some(default_value) = default_value {
-                            default_value
-                        } else {
-                            return Err(fastn_core::error::Error::generic(format!(
-                                "could not find environment variable '{}': {e}",
-                                env_key
-                            )));
-                        }
-                    }
-                }
+                get_env_value_or_default(ds, env_key, default_value).await?
             }
             _ => {
                 return Err(fastn_core::error::Error::generic(format!(
@@ -1148,4 +1136,24 @@ async fn get_interpolated_value(
     };
 
     Ok(value)
+}
+
+async fn get_env_value_or_default(
+    ds: &fastn_ds::DocumentStore,
+    env_key: &str,
+    default_value: Option<String>,
+) -> fastn_core::Result<String> {
+    match ds.env(env_key).await {
+        Ok(value) => Ok(value),
+        Err(e) => {
+            if let Some(default_value) = default_value {
+                Ok(default_value)
+            } else {
+                Err(fastn_core::error::Error::generic(format!(
+                    "could not find environment variable '{}': {e}",
+                    env_key
+                )))
+            }
+        }
+    }
 }
