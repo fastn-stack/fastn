@@ -4,7 +4,7 @@ use crate::auth::email_password::{
 };
 
 /// GET | POST /-/auth/forgot-password/
-/// POST forgot_password_request: send email with a link containing a key to reset password
+/// POST forgot_password_request: send email with a link containing a key to set password
 /// for unauthenticated users
 pub(crate) async fn forgot_password_request(
     req_config: &mut fastn_core::RequestConfig,
@@ -13,6 +13,10 @@ pub(crate) async fn forgot_password_request(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
+
+    if req_config.request.ud(&req_config.config.ds).await.is_some() {
+        return Ok(fastn_core::http::api_error("Bad Request")?);
+    }
 
     if req_config.request.method() == "GET" {
         let main = fastn_core::Document {
@@ -113,10 +117,10 @@ pub(crate) async fn forgot_password_request(
         .await?;
 
     let reset_link = format!(
-        "{scheme}://{host}{reset_password_route}?code={key}?next={next}",
+        "{scheme}://{host}{reset_password_route}?code={key}&next={next}",
         scheme = req_config.request.connection_info.scheme(),
         host = req_config.request.connection_info.host(),
-        reset_password_route = fastn_core::auth::Route::ResetPassword,
+        reset_password_route = fastn_core::auth::Route::SetPassword,
     );
 
     // To use auth. The package has to have auto import with alias `auth` setup
@@ -168,7 +172,7 @@ pub(crate) async fn forgot_password_request(
         .env_bool("FASTN_ENABLE_EMAIL", true)
         .await;
 
-    if enable_email {
+    if !enable_email {
         println!("RESET LINK: {}", &reset_link);
     }
 
@@ -219,92 +223,7 @@ pub(crate) async fn forgot_password_request_success(
     Ok(resp.into())
 }
 
-/// GET | POST /-/auth/reset-password/
-/// setup set-password route
-pub(crate) async fn reset_password(
-    req_config: &mut fastn_core::RequestConfig,
-    db_pool: &fastn_core::db::PgPool,
-    next: String,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    use diesel::prelude::*;
-    use diesel_async::RunQueryDsl;
-
-    let user_id = req_config
-        .request
-        .ud(&req_config.config.ds)
-        .await
-        .map(|u| format!("{}", u.id));
-
-    let encrypted_user_id = if user_id.is_some() {
-        // if user is authenticated, get user_id from there
-        fastn_core::auth::utils::encrypt(&req_config.config.ds, &user_id.unwrap()).await
-    } else {
-        // use the ?code from query params, this is set in /-/auth/forgot-password/
-        let key = req_config.request.query().get("code");
-
-        if key.is_none() {
-            return Ok(fastn_core::http::api_error("Bad Request")?);
-        }
-
-        let key = match key.unwrap() {
-            serde_json::Value::String(c) => c.to_owned(),
-            _ => {
-                return Ok(fastn_core::http::api_error("Bad Request")?);
-            }
-        };
-
-        let mut conn = db_pool
-            .get()
-            .await
-            .map_err(|e| fastn_core::Error::DatabaseError {
-                message: format!("Failed to get connection to db. {:?}", e),
-            })?;
-
-        let query = diesel::delete(
-            fastn_core::schema::fastn_password_reset::table
-                .filter(fastn_core::schema::fastn_password_reset::key.eq(&key)),
-        )
-        .returning(fastn_core::schema::fastn_password_reset::user_id);
-
-        dbg!("{:?}", diesel::debug_query::<diesel::pg::Pg, _>(&query));
-
-        let user_id = query.get_result::<i64>(&mut conn).await.optional()?;
-
-        if user_id.is_none() {
-            return Ok(fastn_core::http::api_error("Bad Request")?);
-        }
-
-        let user_id = format!("{}", user_id.unwrap());
-
-        fastn_core::auth::utils::encrypt(&req_config.config.ds, &user_id).await
-    };
-
-    let cookie = actix_web::cookie::Cookie::build("fastn_target_user_id", encrypted_user_id)
-        .path(fastn_core::auth::Route::SetPassword.to_string())
-        .same_site(actix_web::cookie::SameSite::Strict)
-        .http_only(true)
-        .secure(true)
-        .finish();
-
-    let resp = actix_web::HttpResponse::Ok()
-        .cookie(cookie)
-        .status(actix_web::http::StatusCode::TEMPORARY_REDIRECT)
-        .insert_header((
-            actix_web::http::header::LOCATION,
-            format!(
-                "{set_password_url}?next={next}",
-                set_password_url = fastn_core::auth::Route::SetPassword,
-                next = next
-            ),
-        ))
-        .finish();
-
-    Ok(resp)
-}
-
-// both forgot_password_request and reset_password_request will set some secure cookie that'll contain the fastn_target_user_id
 /// GET | POST /-/auth/set-password/
-/// read the cookie `fastn_target_user_id` and set the password
 pub(crate) async fn set_password(
     req_config: &mut fastn_core::RequestConfig,
     db_pool: &fastn_core::db::PgPool,
@@ -386,17 +305,49 @@ pub(crate) async fn set_password(
         return fastn_core::http::user_err(errors, fastn_core::http::StatusCode::OK);
     }
 
-    let encrypted_user_id = match req_config.request.cookie("fastn_target_user_id") {
-        Some(v) => v,
+    let user_id = match req_config.request.ud(&req_config.config.ds).await {
+        Some(v) => v.id,
         None => {
-            return Ok(fastn_core::http::api_error("Bad Request")?);
+            // use the ?code from query params, this is set in /-/auth/forgot-password/
+            let key = req_config.request.query().get("code");
+
+            if key.is_none() {
+                return Ok(fastn_core::http::api_error("Bad Request")?);
+            }
+
+            let key = match key.unwrap() {
+                serde_json::Value::String(c) => c.to_owned(),
+                _ => {
+                    return Ok(fastn_core::http::api_error("Bad Request")?);
+                }
+            };
+
+            let mut conn = db_pool
+                .get()
+                .await
+                .map_err(|e| fastn_core::Error::DatabaseError {
+                    message: format!("Failed to get connection to db. {:?}", e),
+                })?;
+
+            let query = diesel::delete(
+                fastn_core::schema::fastn_password_reset::table
+                    .filter(fastn_core::schema::fastn_password_reset::key.eq(&key)),
+            )
+            .returning(fastn_core::schema::fastn_password_reset::user_id);
+
+            dbg!("{:?}", diesel::debug_query::<diesel::pg::Pg, _>(&query));
+
+            let user_id: Option<i64> = query.get_result(&mut conn).await.optional()?;
+
+            dbg!(user_id);
+
+            if user_id.is_none() {
+                return Ok(fastn_core::http::api_error("Bad Request")?);
+            }
+
+            user_id.unwrap()
         }
     };
-
-    let user_id = fastn_core::auth::utils::decrypt(&req_config.config.ds, &encrypted_user_id)
-        .await
-        .map(|v| v.parse::<i64>().expect("user_id must be an i64"))
-        .map_err(|e| fastn_core::Error::generic(format!("decryption failed: {:?}", e)))?;
 
     let mut conn = db_pool
         .get()
@@ -421,12 +372,36 @@ pub(crate) async fn set_password(
         .execute(&mut conn)
         .await?;
 
-    let resp_body = serde_json::json!({
-        "success": true,
-        "redirect": redirect_url_from_next(&req_config.request, format!("{}?next={next}", fastn_core::auth::Route::SetPasswordSuccess)),
-    });
+    // log the user out of all sessions
+    let affected = diesel::delete(
+        fastn_core::schema::fastn_auth_session::table
+            .filter(fastn_core::schema::fastn_auth_session::user_id.eq(&user_id)),
+    )
+    .execute(&mut conn)
+    .await?;
 
-    Ok(actix_web::HttpResponse::Ok().json(resp_body))
+    tracing::info!("{affected} session removed");
+
+    let success_route = redirect_url_from_next(
+        &req_config.request,
+        format!(
+            "{}?next={next}",
+            fastn_core::auth::Route::SetPasswordSuccess
+        ),
+    );
+
+    Ok(actix_web::HttpResponse::TemporaryRedirect()
+        .cookie(
+            actix_web::cookie::Cookie::build(fastn_core::auth::SESSION_COOKIE_NAME, "")
+                .domain(fastn_core::auth::utils::domain(
+                    req_config.request.connection_info.host(),
+                ))
+                .path("/")
+                .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
+                .finish(),
+        )
+        .append_header((actix_web::http::header::LOCATION, success_route))
+        .finish())
 }
 
 pub(crate) async fn set_password_success(

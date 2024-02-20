@@ -43,9 +43,6 @@ pub async fn handle_auth(
         Route::ForgotPassword => {
             fastn_core::auth::email_password::forgot_password_request(req_config, pool, next).await
         }
-        Route::ResetPassword => {
-            fastn_core::auth::email_password::reset_password(req_config, pool, next).await
-        }
         Route::ForgotPasswordSuccess => {
             fastn_core::auth::email_password::forgot_password_request_success(req_config).await
         }
