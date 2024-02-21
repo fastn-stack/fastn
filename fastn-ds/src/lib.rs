@@ -234,18 +234,24 @@ impl DocumentStore {
         path.path.exists()
     }
 
-    pub async fn env_bool(&self, key: &str, default: bool) -> bool {
-        self.env(key)
-            .await
-            .inspect(|v| tracing::info!("env_bool {key} = {v}"))
-            .map(|x| x == "true")
-            .inspect_err(|e| tracing::error!("env_bool error {e:?}"))
-            .unwrap_or(default)
+    pub async fn env_bool(&self, key: &str, default: bool) -> Result<bool, BoolEnvironmentError> {
+        match self.env(key).await {
+            Ok(t) if t.eq("true") => Ok(true),
+            Ok(t) if t.eq("false") => Ok(false),
+            Ok(value) => Err(BoolEnvironmentError::InvalidValue(value.to_string())),
+            Err(EnvironmentError::NotSet(_)) => Ok(default),
+        }
     }
 
     pub async fn env(&self, key: &str) -> Result<String, EnvironmentError> {
         std::env::var(key).map_err(|_| EnvironmentError::NotSet(key.to_string()))
     }
+}
+
+#[derive(thiserror::Error, PartialEq, Debug)]
+pub enum BoolEnvironmentError {
+    #[error("Invalid value found for boolean: {0}")]
+    InvalidValue(String),
 }
 
 #[derive(thiserror::Error, PartialEq, Debug)]
