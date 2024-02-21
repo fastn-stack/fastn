@@ -48,7 +48,7 @@ impl Mailer {
         body: String,
     ) -> Result<(), MailError> {
         if !enable_email {
-            tracing::info!("mail sent to: {}", &to);
+            tracing::info!("enable_mail is not set, not sending mail to: {}", &to);
             return Ok(());
         }
 
