@@ -121,7 +121,7 @@ pub(crate) async fn create_and_send_confirmation_email(
                 .config
                 .ds
                 .env_bool("FASTN_ENABLE_EMAIL", true)
-                .await,
+                .await?,
             format!("{} <{}>", name, email)
                 .parse::<lettre::message::Mailbox>()
                 .unwrap(),

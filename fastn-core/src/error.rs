@@ -107,6 +107,9 @@ pub enum Error {
     #[error("MissingEnvironmentVariableError: {}", _0)]
     EnvironmentVariableError(#[from] std::env::VarError),
 
+    #[error("BoolEnvironmentError: {}", _0)]
+    BoolEnvironmentError(#[from] fastn_ds::BoolEnvironmentError),
+
     #[error("DatabaseError: {message}")]
     DatabaseError { message: String },
 

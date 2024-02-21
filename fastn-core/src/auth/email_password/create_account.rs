@@ -171,7 +171,7 @@ pub(crate) async fn create_account(
         .config
         .ds
         .env_bool("FASTN_ENABLE_EMAIL", true)
-        .await
+        .await?
     {
         println!("CONFIRMATION LINK: {}", conf_link);
     }
