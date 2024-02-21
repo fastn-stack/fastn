@@ -198,7 +198,6 @@ impl Library2022 {
     }
 
     /// process the $processor$ and return the processor's output
-    #[tracing::instrument(name = "fastn_core::stuck-on-processor", skip_all, err)]
     pub async fn process<'a>(
         &'a mut self,
         ast: ftd::ast::AST,
