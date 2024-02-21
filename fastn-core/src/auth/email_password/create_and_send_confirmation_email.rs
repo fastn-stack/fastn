@@ -2,7 +2,7 @@ use crate::auth::email_password::{confirmation_link, confirmation_mail_body, gen
 
 pub(crate) async fn create_and_send_confirmation_email(
     email: String,
-    db_pool: &fastn_core::db::PgPool,
+    conn: &mut fastn_core::db::Conn,
     req_config: &mut fastn_core::RequestConfig,
     next: String,
 ) -> fastn_core::Result<(String, i64)> {
@@ -11,13 +11,6 @@ pub(crate) async fn create_and_send_confirmation_email(
 
     let key = generate_key(64);
     let now = chrono::Utc::now();
-
-    let mut conn = db_pool
-        .get()
-        .await
-        .map_err(|e| fastn_core::Error::DatabaseError {
-            message: format!("Failed to get connection to db. {:?}", e),
-        })?;
 
     let (email_id, user_id): (i64, i64) = fastn_core::schema::fastn_user_email::table
         .select((
@@ -28,7 +21,7 @@ pub(crate) async fn create_and_send_confirmation_email(
             fastn_core::schema::fastn_user_email::email
                 .eq(fastn_core::utils::citext(email.as_str())),
         )
-        .first(&mut conn)
+        .first(conn)
         .await?;
 
     // create a non active fastn_auth_session entry for auto login
@@ -39,7 +32,7 @@ pub(crate) async fn create_and_send_confirmation_email(
             fastn_core::schema::fastn_auth_session::updated_at.eq(&now),
         ))
         .returning(fastn_core::schema::fastn_auth_session::id)
-        .get_result(&mut conn)
+        .get_result(conn)
         .await?;
 
     let stored_key: String =
@@ -52,7 +45,7 @@ pub(crate) async fn create_and_send_confirmation_email(
                 fastn_core::schema::fastn_email_confirmation::key.eq(key),
             ))
             .returning(fastn_core::schema::fastn_email_confirmation::key)
-            .get_result(&mut conn)
+            .get_result(conn)
             .await?;
 
     let confirmation_link = confirmation_link(&req_config.request, stored_key, next);
@@ -75,7 +68,7 @@ pub(crate) async fn create_and_send_confirmation_email(
     let name: String = fastn_core::schema::fastn_user::table
         .select(fastn_core::schema::fastn_user::name)
         .filter(fastn_core::schema::fastn_user::id.eq(user_id))
-        .first(&mut conn)
+        .first(conn)
         .await?;
 
     // To use auth. The package has to have auto import with alias `auth` setup

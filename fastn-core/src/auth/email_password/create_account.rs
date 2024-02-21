@@ -160,7 +160,7 @@ pub(crate) async fn create_account(
 
     let (conf_link, session_id) = create_and_send_confirmation_email(
         user.email.0.to_string(),
-        db_pool,
+        &mut conn,
         req_config,
         next.clone(),
     )
