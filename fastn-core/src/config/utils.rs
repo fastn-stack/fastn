@@ -52,7 +52,6 @@ pub fn trim_package_name(path: &str, package_name: &str) -> Option<String> {
 // It will return url with end-point, if package or dependency contains endpoints in them
 // url: /-/<package-name>/api/ => (package-name, endpoints/api/, app or package config)
 // url: /-/<package-name>/api/ => (package-name, endpoints/api/, app or package config)
-#[tracing::instrument(skip_all)]
 pub fn get_clean_url(
     config: &fastn_core::Config,
     url: &str,

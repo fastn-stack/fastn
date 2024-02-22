@@ -558,7 +558,6 @@ impl Package {
     //     crate::http::construct_url_and_get_str(format!("{}/FASTN.ftd", self.name).as_str()).await
     // }
 
-    #[tracing::instrument(skip_all)]
     pub async fn resolve(
         &mut self,
         fastn_path: &fastn_ds::Path,

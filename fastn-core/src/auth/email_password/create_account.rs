@@ -170,7 +170,7 @@ pub(crate) async fn create_account(
 
     let (conf_link, session_id) = create_and_send_confirmation_email(
         user.email.0.to_string(),
-        db_pool,
+        &mut conn,
         req_config,
         next.clone(),
     )
@@ -181,7 +181,7 @@ pub(crate) async fn create_account(
         .config
         .ds
         .env_bool("FASTN_ENABLE_EMAIL", true)
-        .await
+        .await?
     {
         println!("CONFIRMATION LINK: {}", conf_link);
     }

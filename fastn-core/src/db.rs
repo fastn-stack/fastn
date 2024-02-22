@@ -1,4 +1,5 @@
 pub type PgPool = diesel_async::pooled_connection::deadpool::Pool<diesel_async::AsyncPgConnection>;
+pub type Conn = diesel_async::AsyncPgConnection;
 
 async fn create_pool(ds: &fastn_ds::DocumentStore) -> fastn_core::Result<PgPool> {
     let db_url = ds.env("FASTN_DB_URL").await.map_err(|e| {

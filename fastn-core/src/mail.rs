@@ -51,8 +51,10 @@ impl Mailer {
         subject: &str,
         body: String,
     ) -> Result<(), MailError> {
+        println!("send_raw");
         if !enable_email {
-            tracing::info!("mail sent to: {}", &to);
+            tracing::info!("enable_mail is not set, not sending mail to: {}", &to);
+            println!("enable_mail is not set, not sending mail to: {}", &to);
             return Ok(());
         }
 
@@ -83,11 +85,15 @@ impl Mailer {
         );
 
         let mailer =
-            lettre::AsyncSmtpTransport::<lettre::Tokio1Executor>::relay(&mailer.smtp_host)?
+            lettre::AsyncSmtpTransport::<lettre::Tokio1Executor>::starttls_relay(&self.smtp_host)?
                 .credentials(creds)
                 .build();
 
+        println!("mailer created");
+
         lettre::AsyncTransport::send(&mailer, email).await?;
+
+        println!("mail sent");
 
         Ok(())
     }

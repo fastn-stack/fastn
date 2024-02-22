@@ -1,12 +1,11 @@
 impl fastn_core::Package {
-    #[tracing::instrument(skip(self, ds))]
     pub(crate) async fn fs_fetch_by_file_name(
         &self,
         name: &str,
         package_root: Option<&fastn_ds::Path>,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<Vec<u8>> {
-        tracing::info!(document = name);
+        tracing::debug!(document = name);
         let package_root = self.package_root_with_default(package_root)?;
 
         let file_path = package_root.join(name.trim_start_matches('/'));
@@ -70,7 +69,6 @@ impl fastn_core::Package {
         Ok(manifest)
     }
 
-    #[tracing::instrument(skip(self, ds))]
     pub(crate) async fn fs_fetch_by_id(
         &self,
         id: &str,

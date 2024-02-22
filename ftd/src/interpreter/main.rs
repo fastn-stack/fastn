@@ -134,7 +134,6 @@ impl InterpreterState {
         }
     }
 
-    #[tracing::instrument(name = "continue_processing", skip_all)]
     pub fn continue_processing(mut self) -> ftd::interpreter::Result<Interpreter> {
         while let Some((doc_name, number_of_scan, ast, exports)) = self.get_next_ast() {
             if let Some(interpreter) = self.resolve_pending_imports::<ftd::interpreter::Thing>()? {
@@ -733,7 +732,6 @@ impl InterpreterState {
         Ok(ftd::interpreter::StateWithThing::new_continue())
     }
 
-    #[tracing::instrument(skip_all)]
     pub fn continue_after_import(
         mut self,
         module: &str,
@@ -888,7 +886,6 @@ impl ParsedDocument {
         ParsedDocument::parse_with_line_number(id, source, 0)
     }
 
-    #[tracing::instrument(skip(source))]
     pub fn parse_with_line_number(
         id: &str,
         source: &str,
