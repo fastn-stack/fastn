@@ -84,10 +84,11 @@ impl Mailer {
             mailer.smtp_password.clone(),
         );
 
-        let mailer =
-            lettre::AsyncSmtpTransport::<lettre::Tokio1Executor>::starttls_relay(&self.smtp_host)?
-                .credentials(creds)
-                .build();
+        let mailer = lettre::AsyncSmtpTransport::<lettre::Tokio1Executor>::starttls_relay(
+            &mailer.smtp_host,
+        )?
+        .credentials(creds)
+        .build();
 
         println!("mailer created");
 

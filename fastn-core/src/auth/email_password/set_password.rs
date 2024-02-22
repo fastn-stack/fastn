@@ -170,7 +170,8 @@ pub(crate) async fn forgot_password_request(
         .config
         .ds
         .env_bool("FASTN_ENABLE_EMAIL", true)
-        .await;
+        .await
+        .unwrap_or(true);
 
     if !enable_email {
         println!("RESET LINK: {}", &reset_link);
