@@ -3,7 +3,8 @@
 // - Will create mail table entries for mail dispatch worker to work upon
 // ------------------------------------------------------------------------------------------------
  */
-pub async fn mail_entry_worker(req_config: &mut fastn_core::RequestConfig) {
+
+pub async fn mail_entry_worker(mut req_config: fastn_core::RequestConfig) {
     let pool = fastn_core::db::pool(&req_config.config.ds)
         .await
         .as_ref()
@@ -13,7 +14,7 @@ pub async fn mail_entry_worker(req_config: &mut fastn_core::RequestConfig) {
 
     loop {
         tokio::time::sleep(std::time::Duration::from_secs(10)).await;
-        match mail_entry_once(req_config, &pool).await {
+        match mail_entry_once(&mut req_config, &pool).await {
             Ok(()) => {}
             Err(e) => tracing::error!("error creating mail entry (worker): {:?}", e),
         }
@@ -22,7 +23,7 @@ pub async fn mail_entry_worker(req_config: &mut fastn_core::RequestConfig) {
 
 #[tracing::instrument(skip(pool))]
 pub async fn mail_entry_once(
-    req_config: &mut fastn_core::RequestConfig,
+    _req_config: &mut fastn_core::RequestConfig,
     pool: &fastn_core::db::PgPool,
 ) -> fastn_core::Result<()> {
     use ft_db::prelude::*;
@@ -30,7 +31,6 @@ pub async fn mail_entry_once(
 
     tracing::info!("mail dispatch worker initialized");
     let mut conn = pool.get().await?;
-    // todo: implement this
 
     Ok(())
 }
@@ -42,7 +42,7 @@ pub async fn mail_entry_once(
 // ------------------------------------------------------------------------------------------------
  */
 
-pub async fn mail_dispatch_worker(req_config: &mut fastn_core::RequestConfig) {
+pub async fn mail_dispatch_worker(mut req_config: fastn_core::RequestConfig) {
     let pool = fastn_core::db::pool(&req_config.config.ds)
         .await
         .as_ref()
@@ -52,7 +52,7 @@ pub async fn mail_dispatch_worker(req_config: &mut fastn_core::RequestConfig) {
 
     loop {
         tokio::time::sleep(std::time::Duration::from_secs(10)).await;
-        match mail_dispatch_once(req_config, &pool).await {
+        match mail_dispatch_once(&mut req_config, &pool).await {
             Ok(()) => {}
             Err(e) => tracing::error!("error dispatching mail (worker): {:?}", e),
         }
@@ -71,18 +71,19 @@ pub async fn mail_dispatch_once(
     tracing::info!("mail dispatch worker initialized");
     let mut conn = pool.get().await?;
 
-    let mailer = fastn_core::mail::Mailer::from_env(&req_config.config.ds).await;
-
-    if mailer.is_err() {
-        return Err(fastn_core::Error::generic(
-            "Failed to create mailer from env. Creating mailer requires the following environment variables: \
+    let mailer = match fastn_core::mail::Mailer::from_env(ds).await {
+        Ok(mailer) => mailer,
+        Err(_) => {
+            return Err(fastn_core::Error::generic(
+                "Creating mailer requires the following environment variables: \
                 \tFASTN_SMTP_USERNAME \
                 \tFASTN_SMTP_PASSWORD \
                 \tFASTN_SMTP_HOST \
                 \tFASTN_SMTP_SENDER_EMAIL \
                 \tFASTN_SMTP_SENDER_NAME",
-        ));
-    }
+            ))
+        }
+    };
 
     let mailer = mailer.unwrap();
 
@@ -153,4 +154,15 @@ pub async fn mail_dispatch_once(
         .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
 
     Ok(())
+}
+
+#[derive(Queryable, Selectable, Insertable)]
+#[diesel(table_name = fastn_core::schema::fastn_mail_request)]
+pub struct FastnMailRequest {
+    pub user_id: i64,
+    pub ekind: String,
+    pub priority: String, // todo: make this enum
+    pub email: fastn_core::utils::CiString,
+    pub created_at: chrono::DateTime<chrono::Utc>,
+    pub sent_at: Option<chrono::DateTime<chrono::Utc>>,
 }

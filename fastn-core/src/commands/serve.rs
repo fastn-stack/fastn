@@ -196,10 +196,13 @@ pub async fn serve_helper(
         || std::env::var("FASTN_ENABLE_MAIL").is_ok_and(|v| v.to_lowercase().eq("true"))
     {
         println!("Enabling mail workers");
-        let mail_entry_worker = fastn_core::email_service::mail_entry_worker(&mut req_config);
-        let mail_dispatch_worker = fastn_core::email_service::mail_dispatch_worker(&mut req_config);
 
-        futures::join!(mail_entry_worker, mail_entry_worker);
+        // can we avoid cloning here ?
+        let mail_entry_worker = fastn_core::email_service::mail_entry_worker(req_config.clone());
+        let mail_dispatch_worker =
+            fastn_core::email_service::mail_dispatch_worker(req_config.clone());
+
+        futures::join!(mail_entry_worker, mail_dispatch_worker);
     }
 
     match (req.method().to_lowercase().as_str(), req.path()) {

@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS fastn_user_email;
 DROP TABLE IF EXISTS fastn_oauthtoken;
 DROP TABLE IF EXISTS fastn_auth_session;
 DROP TABLE IF EXISTS fastn_user;
+DROP TABLE IF EXISTS fastn_mail_request;
 
 DROP DOMAIN IF EXISTS email;
 DROP EXTENSION IF EXISTS citext;
