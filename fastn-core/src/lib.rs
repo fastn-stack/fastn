@@ -31,9 +31,11 @@ mod translation;
 mod version;
 // mod wasm;
 pub mod catch_panic;
+mod email_service;
 pub(crate) mod google_sheets;
 mod library2022;
-mod mail;
+pub mod mail;
+pub use email_service::{mail_dispatch_worker, mail_entry_worker};
 
 pub use auth::UserData;
 pub(crate) use auto_import::AutoImport;
