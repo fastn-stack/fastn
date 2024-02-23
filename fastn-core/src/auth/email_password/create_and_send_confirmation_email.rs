@@ -12,7 +12,7 @@ pub(crate) async fn create_and_send_confirmation_email(
     let key = generate_key(64);
     let now = chrono::Utc::now();
 
-    let (email_id, user_id): (i64, i64) = fastn_core::schema::fastn_user_email::table
+    let query_result: Result<(i64, i64), _> = fastn_core::schema::fastn_user_email::table
         .select((
             fastn_core::schema::fastn_user_email::id,
             fastn_core::schema::fastn_user_email::user_id,
@@ -22,7 +22,14 @@ pub(crate) async fn create_and_send_confirmation_email(
                 .eq(fastn_core::utils::citext(email.as_str())),
         )
         .first(conn)
-        .await?;
+        .await;
+
+    if let Err(e) = query_result {
+        tracing::error!("failed to get email_id and user_id from db: {:?}", e);
+        return Err(fastn_core::error::Error::generic("Bad request"));
+    }
+
+    let (email_id, user_id) = query_result.unwrap();
 
     // create a non active fastn_auth_session entry for auto login
     let session_id: i64 = diesel::insert_into(fastn_core::schema::fastn_auth_session::table)

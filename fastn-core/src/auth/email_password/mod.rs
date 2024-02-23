@@ -4,7 +4,7 @@ mod create_and_send_confirmation_email;
 mod email_confirmation_sent;
 mod login;
 mod onboarding;
-mod resend_email;
+mod resend_confirmation_email;
 mod set_password;
 mod urls;
 
@@ -15,7 +15,7 @@ pub(crate) use {
     email_confirmation_sent::email_confirmation_sent,
     login::login,
     onboarding::onboarding,
-    resend_email::resend_email,
+    resend_confirmation_email::resend_confirmation_email,
     set_password::*,
     urls::{confirmation_link, redirect_url_from_next},
 };

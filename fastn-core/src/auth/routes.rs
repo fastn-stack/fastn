@@ -35,7 +35,10 @@ pub async fn handle_auth(
             fastn_core::auth::email_password::confirm_email(req_config, pool, next).await
         }
         Route::ResendConfirmationEmail => {
-            fastn_core::auth::email_password::resend_email(&req, req_config, pool, next).await
+            fastn_core::auth::email_password::resend_confirmation_email(
+                &req, req_config, pool, next,
+            )
+            .await
         }
         Route::Onboarding => {
             fastn_core::auth::email_password::onboarding(&req, req_config, config, next).await
