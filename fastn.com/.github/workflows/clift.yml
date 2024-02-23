@@ -16,4 +16,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/clift/main/install.sh)"
-      - run: clift upload fastn.fifthtry.com
+      - run: clift upload fastn.fifthtry.site
