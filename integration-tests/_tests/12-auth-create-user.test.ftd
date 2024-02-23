@@ -22,28 +22,25 @@ fastn.assert.not_empty(fastn.http_response.errors.payload);
 
 -- fastn.post: Create user with invalid data
 url: /-/auth/create-account/?next=/hello/
-body: {"name": "John", "email": "john@mail.com", "password": "testpasswd", "username": "john"}
+body: {"name": "John", "email": "john@mail.com", "password": "testpasswd", "password2": "test", "username": "john", "accept_terms": false}
 
 
 -- fastn.post.test:
 
 fastn.assert.eq(fastn.http_response.success, false);
 fastn.assert.not_empty(fastn.http_response.errors.password);
+fastn.assert.not_empty(fastn.http_response.errors.password2);
+fastn.assert.not_empty(fastn.http_response.errors.accept_terms);
 
 
 -- fastn.post: Create user with valid data
 url: /-/auth/create-account/?next=/hello/
-body: {"name": "John", "email": "john@mail.com", "password": "john the don", "username": "john"}
-
-
--- fastn.post.test:
-
-fastn.assert.eq(fastn.http_response.user.username, "john");
-
+body: {"name": "John", "email": "john@mail.com", "password": "john the don", "password2": "john the don", "username": "john", "accept_terms": true}
+http-redirect: http://localhost:8080/-/auth/resend-confirmation-email/?email=john@mail.com&next=/hello/
 
 -- fastn.post: Create user with same data should result in an error
 url: /-/auth/create-account/?next=/hello/
-body: {"name": "John", "email": "john@mail.com", "password": "john the don", "username": "john"}
+body: {"name": "John", "email": "john@mail.com", "password": "john the don", "password2": "john the don", "username": "john", "accept_terms": true}
 
 
 -- fastn.post.test:
@@ -89,13 +86,11 @@ body: {"username": "john", "password": "veryrealpasswd"}
 fastn.assert.not_empty(fastn.http_response.errors.password);
 
 
--- fastn.post: login with valid but unverfied user
+-- fastn.post: login with valid but unverfied user also works
 url: /-/auth/login/?next=/hello/
 body: {"username": "john", "password": "john the don"}
+http-redirect: /hello/
 
--- fastn.post.test:
-
-fastn.assert.not_empty(fastn.http_response.errors.username);
 
 ;; TODO: verify user
 ;; TODO: resend email

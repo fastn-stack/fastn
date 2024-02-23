@@ -4,18 +4,17 @@ pub(crate) fn confirmation_link(
     next: String,
 ) -> String {
     format!(
-        "{}://{}/-/auth/confirm-email/?code={key}&next={}",
-        req.connection_info.scheme(),
-        req.connection_info.host(),
-        next
+        "{scheme}://{host}{confirm_email_route}?code={key}&next={next}",
+        scheme = req.connection_info.scheme(),
+        host = req.connection_info.host(),
+        confirm_email_route = fastn_core::auth::Route::ConfirmEmail,
     )
 }
 
 pub(crate) fn redirect_url_from_next(req: &fastn_core::http::Request, next: String) -> String {
     format!(
-        "{}://{}{}",
-        req.connection_info.scheme(),
-        req.connection_info.host(),
-        next,
+        "{scheme}://{host}{next}",
+        scheme = req.connection_info.scheme(),
+        host = req.connection_info.host(),
     )
 }

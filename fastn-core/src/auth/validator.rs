@@ -63,3 +63,13 @@ pub fn validate_strong_password(
         Ok(())
     }
 }
+
+pub fn accept_terms(val: &bool) -> Result<(), validator::ValidationError> {
+    if *val {
+        return Ok(());
+    }
+
+    let error = validator::ValidationError::new("accept terms validation error");
+
+    Err(error)
+}

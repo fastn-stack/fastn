@@ -12,7 +12,7 @@ pub(crate) async fn create_and_send_confirmation_email(
     let key = generate_key(64);
     let now = chrono::Utc::now();
 
-    let (email_id, user_id): (i64, i64) = fastn_core::schema::fastn_user_email::table
+    let query_result: Result<(i64, i64), _> = fastn_core::schema::fastn_user_email::table
         .select((
             fastn_core::schema::fastn_user_email::id,
             fastn_core::schema::fastn_user_email::user_id,
@@ -22,7 +22,14 @@ pub(crate) async fn create_and_send_confirmation_email(
                 .eq(fastn_core::utils::citext(email.as_str())),
         )
         .first(conn)
-        .await?;
+        .await;
+
+    if let Err(e) = query_result {
+        tracing::error!("failed to get email_id and user_id from db: {:?}", e);
+        return Err(fastn_core::error::Error::generic("Bad request"));
+    }
+
+    let (email_id, user_id) = query_result.unwrap();
 
     // create a non active fastn_auth_session entry for auto login
     let session_id: i64 = diesel::insert_into(fastn_core::schema::fastn_auth_session::table)
@@ -49,21 +56,6 @@ pub(crate) async fn create_and_send_confirmation_email(
             .await?;
 
     let confirmation_link = confirmation_link(&req_config.request, stored_key, next);
-
-    let mailer = fastn_core::mail::Mailer::from_env(&req_config.config.ds).await;
-
-    if mailer.is_err() {
-        return Err(fastn_core::Error::generic(
-            "Failed to create mailer from env. Creating mailer requires the following environment variables: \
-                \tFASTN_SMTP_USERNAME \
-                \tFASTN_SMTP_PASSWORD \
-                \tFASTN_SMTP_HOST \
-                \tFASTN_SMTP_SENDER_EMAIL \
-                \tFASTN_SMTP_SENDER_NAME",
-        ));
-    }
-
-    let mailer = mailer.unwrap();
 
     let name: String = fastn_core::schema::fastn_user::table
         .select(fastn_core::schema::fastn_user::name)
@@ -115,21 +107,22 @@ pub(crate) async fn create_and_send_confirmation_email(
 
     tracing::info!("confirmation link: {}", &confirmation_link);
 
-    mailer
-        .send_raw(
-            req_config
-                .config
-                .ds
-                .env_bool("FASTN_ENABLE_EMAIL", true)
-                .await?,
-            format!("{} <{}>", name, email)
-                .parse::<lettre::message::Mailbox>()
-                .unwrap(),
-            "Verify your email",
-            confirmation_mail_body(html, &confirmation_link),
-        )
-        .await
-        .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
+    fastn_core::mail::Mailer::send_raw(
+        req_config
+            .config
+            .ds
+            .env_bool("FASTN_ENABLE_EMAIL", true)
+            .await
+            .unwrap_or(true),
+        &req_config.config.ds,
+        format!("{} <{}>", name, email)
+            .parse::<lettre::message::Mailbox>()
+            .unwrap(),
+        "Verify your email",
+        confirmation_mail_body(html, &confirmation_link),
+    )
+    .await
+    .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
 
     Ok((confirmation_link, session_id))
 }

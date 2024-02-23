@@ -19,9 +19,7 @@ pub struct Mailer {
 
 impl Mailer {
     /// Create a new instance of Mail using values from environment variables.
-    pub async fn from_env(
-        ds: &fastn_ds::DocumentStore,
-    ) -> Result<Self, fastn_ds::EnvironmentError> {
+    async fn from_env(ds: &fastn_ds::DocumentStore) -> Result<Self, fastn_ds::EnvironmentError> {
         let smtp_username = ds.env("FASTN_SMTP_USERNAME").await?;
         let smtp_password = ds.env("FASTN_SMTP_PASSWORD").await?;
         let smtp_host = ds.env("FASTN_SMTP_HOST").await?;
@@ -40,9 +38,15 @@ impl Mailer {
     // TODO: add support for DKIM
     // https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail
     /// send {body} as html body of the email
+    /// Requires the following environment variables to be set:
+    /// - FASTN_SMTP_USERNAME
+    /// - FASTN_SMTP_PASSWORD
+    /// - FASTN_SMTP_HOST
+    /// - FASTN_SMTP_SENDER_EMAIL
+    /// - FASTN_SMTP_SENDER_NAME
     pub async fn send_raw(
-        &self,
         enable_email: bool,
+        ds: &fastn_ds::DocumentStore,
         to: lettre::message::Mailbox,
         subject: &str,
         body: String,
@@ -54,12 +58,21 @@ impl Mailer {
             return Ok(());
         }
 
-        // read the env vars
+        // in dev mode we only log emails
+        // in prod, this should fail if the env vars are not configured
+        let mailer = Mailer::from_env(ds).await.expect(
+            "Creating mailer requires the following environment variables: \
+                \tFASTN_SMTP_USERNAME \
+                \tFASTN_SMTP_PASSWORD \
+                \tFASTN_SMTP_HOST \
+                \tFASTN_SMTP_SENDER_EMAIL \
+                \tFASTN_SMTP_SENDER_NAME",
+        );
 
         let email = lettre::Message::builder()
             .from(lettre::message::Mailbox::new(
-                self.sender_name.clone(),
-                self.sender_email.parse::<lettre::Address>()?,
+                mailer.sender_name.clone(),
+                mailer.sender_email.parse::<lettre::Address>()?,
             ))
             .to(to)
             .subject(subject)
@@ -67,14 +80,15 @@ impl Mailer {
             .body(body)?;
 
         let creds = lettre::transport::smtp::authentication::Credentials::new(
-            self.smtp_username.clone(),
-            self.smtp_password.clone(),
+            mailer.smtp_username.clone(),
+            mailer.smtp_password.clone(),
         );
 
-        let mailer =
-            lettre::AsyncSmtpTransport::<lettre::Tokio1Executor>::starttls_relay(&self.smtp_host)?
-                .credentials(creds)
-                .build();
+        let mailer = lettre::AsyncSmtpTransport::<lettre::Tokio1Executor>::starttls_relay(
+            &mailer.smtp_host,
+        )?
+        .credentials(creds)
+        .build();
 
         println!("mailer created");
 

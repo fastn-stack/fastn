@@ -8,7 +8,7 @@ pub(crate) async fn email_confirmation_sent(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let main = fastn_core::Document {
         package_name: req_config.config.package.name.clone(),
-        id: "/-/auth/confirmation-email-sent/".to_string(),
+        id: fastn_core::auth::Route::EmailConfirmationSent.to_string(),
         content: email_confirmation_sent_ftd().to_string(),
         parent_path: fastn_ds::Path::new("/"),
     };

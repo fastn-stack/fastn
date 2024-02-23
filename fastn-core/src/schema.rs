@@ -38,6 +38,16 @@ diesel::table! {
 }
 
 diesel::table! {
+    fastn_password_reset (id) {
+        id -> Int8,
+        user_id -> Int8,
+        created_at -> Timestamptz,
+        sent_at -> Timestamptz,
+        key -> Text,
+    }
+}
+
+diesel::table! {
     use diesel::sql_types::*;
     use super::sql_types::Citext;
 
@@ -72,12 +82,14 @@ diesel::joinable!(fastn_auth_session -> fastn_user (user_id));
 diesel::joinable!(fastn_email_confirmation -> fastn_auth_session (session_id));
 diesel::joinable!(fastn_email_confirmation -> fastn_user_email (email_id));
 diesel::joinable!(fastn_oauthtoken -> fastn_auth_session (session_id));
+diesel::joinable!(fastn_password_reset -> fastn_user (user_id));
 diesel::joinable!(fastn_user_email -> fastn_user (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     fastn_auth_session,
     fastn_email_confirmation,
     fastn_oauthtoken,
+    fastn_password_reset,
     fastn_user,
     fastn_user_email,
 );

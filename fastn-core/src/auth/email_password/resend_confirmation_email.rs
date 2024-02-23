@@ -1,15 +1,12 @@
-use crate::auth::email_password::{create_and_send_confirmation_email, redirect_url_from_next};
+use crate::auth::email_password::create_and_send_confirmation_email;
 
-pub(crate) async fn resend_email(
+pub(crate) async fn resend_confirmation_email(
     req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     // TODO: should be able to use username for this too
-    // TODO: use req.body and make it POST
-    // verify email with regex or validator crate
-    // on GET this handler should render auth.resend-email-page
     let email = req.query().get("email");
 
     if email.is_none() {
@@ -23,6 +20,10 @@ pub(crate) async fn resend_email(
         }
     };
 
+    if !validator::validate_email(&email) {
+        return Ok(fastn_core::http::api_error("Bad Request")?);
+    }
+
     let mut conn = db_pool
         .get()
         .await
@@ -30,12 +31,24 @@ pub(crate) async fn resend_email(
             message: format!("Failed to get connection to db. {:?}", e),
         })?;
 
-    create_and_send_confirmation_email(email, &mut conn, req_config, next.clone()).await?;
+    let (conf_link, session_id) =
+        create_and_send_confirmation_email(email, &mut conn, req_config, next.clone()).await?;
 
-    // TODO: there's no GET /-/auth/login/ yet
-    // the client will have to create one for now
-    // this path should be configuratble too
-    Ok(fastn_core::http::temporary_redirect(
-        redirect_url_from_next(req, next),
-    ))
+    // email is not enabled, we should log conf link assuming dev mode
+    if !req_config
+        .config
+        .ds
+        .env_bool("FASTN_ENABLE_EMAIL", true)
+        .await?
+    {
+        println!("CONFIRMATION LINK: {}", conf_link);
+    }
+
+    fastn_core::auth::set_session_cookie_and_redirect_to_next(
+        &req_config.request,
+        &req_config.config.ds,
+        session_id,
+        next,
+    )
+    .await
 }

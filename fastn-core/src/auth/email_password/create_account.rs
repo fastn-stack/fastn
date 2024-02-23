@@ -1,4 +1,4 @@
-use crate::auth::email_password::{create_account_ftd, create_and_send_confirmation_email};
+use crate::auth::email_password::{create_account_ftd, redirect_url_from_next};
 
 #[derive(serde::Deserialize, serde::Serialize, validator::Validate, Debug)]
 struct UserPayload {
@@ -13,6 +13,16 @@ struct UserPayload {
         arg = "(&'v_a str, &'v_a str, &'v_a str)"
     ))]
     password: String,
+    #[validate(must_match(
+        other = "password",
+        message = "password and confirm password field do not match"
+    ))]
+    password2: String,
+    #[validate(custom(
+        function = "fastn_core::auth::validator::accept_terms",
+        message = "you must accept the terms and conditions"
+    ))]
+    accept_terms: bool,
 }
 
 pub(crate) async fn create_account(
@@ -31,7 +41,7 @@ pub(crate) async fn create_account(
 
         let main = fastn_core::Document {
             package_name: req_config.config.package.name.clone(),
-            id: "/-/auth/create-account/".to_string(),
+            id: fastn_core::auth::Route::CreateAccount.to_string(),
             content: create_account_ftd().to_string(),
             parent_path: fastn_ds::Path::new("/"),
         };
@@ -156,31 +166,15 @@ pub(crate) async fn create_account(
 
     let user = save_user_email_transaction.expect("expected transaction to yield Some");
 
-    tracing::info!("fastn_user email inserted");
+    tracing::info!("fastn_user email inserted, id: {}", user.id);
 
-    let (conf_link, session_id) = create_and_send_confirmation_email(
-        user.email.0.to_string(),
-        &mut conn,
-        req_config,
-        next.clone(),
-    )
-    .await?;
+    let next = format!(
+        "{resend_conf_route}?email={email}&next={next}",
+        resend_conf_route = fastn_core::auth::Route::ResendConfirmationEmail,
+        email = user.email.0
+    );
 
-    // email is not enabled, we should log conf link assuming dev mode
-    if !req_config
-        .config
-        .ds
-        .env_bool("FASTN_ENABLE_EMAIL", true)
-        .await?
-    {
-        println!("CONFIRMATION LINK: {}", conf_link);
-    }
-
-    fastn_core::auth::set_session_cookie_and_redirect_to_next(
-        &req_config.request,
-        &req_config.config.ds,
-        session_id,
-        next,
-    )
-    .await
+    Ok(fastn_core::http::temporary_redirect(
+        redirect_url_from_next(&req_config.request, next),
+    ))
 }

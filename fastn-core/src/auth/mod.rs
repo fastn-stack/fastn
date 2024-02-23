@@ -4,9 +4,13 @@ pub(crate) mod utils;
 pub(crate) mod validator;
 
 mod email_password;
+mod logout;
 mod ud;
+mod urls;
 
+pub(crate) use logout::logout;
 pub use ud::UserData;
+pub(crate) use urls::Route;
 
 pub const SESSION_COOKIE_NAME: &str = "fastn_session";
 pub const FIRST_TIME_SESSION_COOKIE_NAME: &str = "fastn_first_time_user";
@@ -166,6 +170,7 @@ async fn set_session_cookie_and_redirect_to_next(
     let cookie_json = serde_json::json!({
         "session_id": session_id,
         "user": {
+            "id": user.id,
             "username": user.username,
             "name": user.name,
             "email": user.email.0,
@@ -184,6 +189,8 @@ async fn set_session_cookie_and_redirect_to_next(
             .domain(fastn_core::auth::utils::domain(req.connection_info.host()))
             .path("/")
             .permanent()
+            .http_only(true)
+            .same_site(actix_web::cookie::SameSite::Lax)
             .finish(),
         )
         // redirect to next

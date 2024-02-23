@@ -4,7 +4,8 @@ mod create_and_send_confirmation_email;
 mod email_confirmation_sent;
 mod login;
 mod onboarding;
-mod resend_email;
+mod resend_confirmation_email;
+mod set_password;
 mod urls;
 
 pub(crate) use {
@@ -14,7 +15,8 @@ pub(crate) use {
     email_confirmation_sent::email_confirmation_sent,
     login::login,
     onboarding::onboarding,
-    resend_email::resend_email,
+    resend_confirmation_email::resend_confirmation_email,
+    set_password::*,
     urls::{confirmation_link, redirect_url_from_next},
 };
 
@@ -53,6 +55,30 @@ fn generate_key(length: usize) -> String {
 fn email_confirmation_sent_ftd() -> &'static str {
     r#"
     -- auth.email-confirmation-request-sent-page:
+    "#
+}
+
+fn forgot_password_request_success_ftd() -> &'static str {
+    r#"
+    -- auth.forgot-password-request-email-sent-page:
+    "#
+}
+
+fn set_password_form_ftd() -> &'static str {
+    r#"
+    -- auth.set-password-form-page:
+    "#
+}
+
+fn set_password_success_ftd() -> &'static str {
+    r#"
+    -- auth.set-password-success-page:
+    "#
+}
+
+fn forgot_password_form_ftd() -> &'static str {
+    r#"
+    -- auth.forgot-password-form-page:
     "#
 }
 

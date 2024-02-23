@@ -1,5 +1,6 @@
 #[derive(serde::Deserialize, Clone)]
 pub struct UserData {
+    pub id: i64,
     pub username: String,
     pub name: String,
     pub email: String,
