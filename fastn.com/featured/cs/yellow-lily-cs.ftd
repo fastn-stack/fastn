@@ -32,7 +32,7 @@ max-width.fixed.px: 1340
 
 	-- footer.footer:
 	site-logo: $fastn-assets.files.images.fastn.svg
-	site-url: index.html
+	site-url: /
 	social-links: $footer.social-links
 	copyright: Copyright © 2023 - fastn.com
 	full-width: false

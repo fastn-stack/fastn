@@ -65,7 +65,7 @@ lang: ftd
 
 \-- fastn.sitemap:
 
-# Home: index.html
+# Home: /
 icon: assets/home.svg
 
 # About Me: /#about-me
@@ -114,9 +114,9 @@ tag: Hello there...
 designation: I Am Passionate Developer!
 avatar: $assets.files.assets.me.jpg
 cta-primary: My Work
-cta-primary-link: index.html
+cta-primary-link: /
 cta-secondary: Hire Me
-cta-secondary-link: index.html
+cta-secondary-link: /
 
 The namics of how users interact with interactive elements within
 a user interface flow chart based on container proportion.
@@ -130,7 +130,7 @@ id: about-me
 \-- contact-form: GET IN TOUCH
 sub-title: SAY SOMETHING
 cta-text: SEND MESSAGE
-link: index.html
+link: /
 id: contact
 
 A LEAD UX & UI DESIGNER BASED IN CANADA

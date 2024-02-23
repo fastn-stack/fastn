@@ -470,7 +470,7 @@ background.solid: $inherited.colors.background.step-2
 -- pr.toc-item list toc:
 $processor$: pr.toc
 
-- Header: index.html
+- Header: /
   - Example 1: /
     - first-code: /
       - `index.ftd`: /
@@ -503,7 +503,7 @@ $processor$: pr.toc
     - `index.ftd`: /
     - `home.ftd`: /
     - `section.ftd`:
-- Blog: index.html
+- Blog: /
   - `blog-1.ftd`: /
   - `blog-2.ftd`: /
   - `blog-3.ftd`: /
