@@ -19,7 +19,7 @@ sidebar: false
 
 	-- lib.hero-content:
 	
-	-- lib.feature-card: Everyone in your team can learn fastn in a day!
+	-- lib.feature-card: Everyone in your team can learn fastn in a day!!
 	cta-text: Learn more
 	cta-link: /install/
 	image: $fastn-assets.files.images.landing.chat-group.png
