@@ -1,6 +1,6 @@
 use crate::auth::email_password::{confirmation_link, confirmation_mail_body, generate_key};
 
-// This will just create a db entries needed to dispatch email
+// This will create db entries needed to dispatch email
 // Mail workers will carry on the actual email sending process
 pub(crate) async fn create_and_send_confirmation_email(
     email: String,
