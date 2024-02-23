@@ -192,6 +192,16 @@ pub async fn serve_helper(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
 
+    if std::env::args().any(|e| e == "--mail-service")
+        || std::env::var("FASTN_ENABLE_MAIL").is_ok_and(|v| v.to_lowercase().eq("true"))
+    {
+        println!("Enabling mail workers");
+        let mail_entry_worker = fastn_core::email_service::mail_entry_worker(&mut req_config);
+        let mail_dispatch_worker = fastn_core::email_service::mail_dispatch_worker(&mut req_config);
+
+        futures::join!(mail_entry_worker, mail_entry_worker);
+    }
+
     match (req.method().to_lowercase().as_str(), req.path()) {
         (_, t) if t.starts_with("/-/auth/") => {
             return fastn_core::auth::routes::handle_auth(req, &mut req_config, config).await
