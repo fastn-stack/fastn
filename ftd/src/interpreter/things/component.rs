@@ -833,6 +833,8 @@ impl Property {
             line_number,
         )?);
 
+        let kw_args = component_arguments.iter().find(|a| a.kind.is_kwargs());
+
         for property in ast_properties {
             properties.push(try_ok_state!(Property::from_ast_property(
                 property,
@@ -871,6 +873,7 @@ impl Property {
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Property>> {
+        dbg!(&component_arguments);
         let argument = try_ok_state!(Property::get_argument_for_property(
             &ast_property,
             component_name,

@@ -1466,6 +1466,9 @@ pub enum Value {
         name: String,
         fields: ftd::Map<PropertyValue>,
     },
+    KwArgs {
+        arguments: ftd::Map<PropertyValue>,
+    },
     OrType {
         name: String,
         variant: String,
@@ -1600,7 +1603,7 @@ impl Value {
                 is_static
             }
             ftd::interpreter::Value::Record { fields, .. }
-            | ftd::interpreter::Value::Object { values: fields, .. } => {
+            | ftd::interpreter::Value::Object { values: fields, .. } | ftd::interpreter::Value::KwArgs { arguments: fields, .. } => {
                 let mut is_static = true;
                 for d in fields.values() {
                     if !d.is_static(doc) {
@@ -1622,6 +1625,7 @@ impl Value {
             Value::Boolean { .. } => ftd::interpreter::Kind::boolean(),
             Value::Object { .. } => ftd::interpreter::Kind::object(),
             Value::Record { name, .. } => ftd::interpreter::Kind::record(name),
+            Value::KwArgs { .. } => ftd::interpreter::Kind::kwargs(),
             Value::List { kind, .. } => kind.kind.clone().into_list(),
             Value::Optional { kind, .. } => ftd::interpreter::Kind::Optional {
                 kind: Box::new(kind.kind.clone()),
@@ -1980,6 +1984,16 @@ impl Value {
                 }
                 Ok(Some(serde_json::to_value(&new_values)?))
             }
+            Value::KwArgs { arguments } => {
+                let mut new_values: ftd::Map<serde_json::Value> = Default::default();
+                for (k, v) in arguments {
+                    let resolved_value = v.clone().resolve(doc, 0)?;
+                    if let Some(v) = resolved_value.to_serde_value(doc)? {
+                        new_values.insert(k.to_owned(), v);
+                    }
+                }
+                Ok(Some(serde_json::to_value(&new_values)?))
+            }
             Value::Record { fields, .. } => {
                 let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in fields {
@@ -2045,7 +2059,7 @@ impl Value {
                     Ok(Some("".to_string()))
                 }
             }
-            Value::Object { .. } | Value::Record { .. } | Value::List { .. } => {
+            Value::Object { .. } | Value::Record { .. } | Value::List { .. } | Value::KwArgs { .. } => {
                 Ok(Some(serde_json::to_string(&self.to_serde_value(doc)?)?))
             }
             _ => Ok(None),
