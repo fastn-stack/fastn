@@ -60,12 +60,24 @@ pub(crate) async fn create_account(
         )
     };
 
-    if let Err(e) = user_payload.validate_args((
+    if let Err(mut e) = user_payload.validate_args((
         user_payload.username.as_str(),
         user_payload.email.as_str(),
         user_payload.name.as_str(),
     )) {
-        return fastn_core::http::validation_error_to_user_err(e);
+        if req_config
+            .config
+            .ds
+            .env_bool("FASTN_DISABLE_STRONG_PASSWORD_CHECK", false)
+            .await?
+            && !user_payload.password.is_empty()
+        {
+            e.errors_mut().remove("password");
+        }
+
+        if !e.is_empty() {
+            return fastn_core::http::validation_error_to_user_err(e);
+        }
     }
 
     let mut conn = db_pool
