@@ -2957,17 +2957,22 @@ class Node2 {
                         );
                         if (!ssr) {
                             let image_node = this.#node;
-                            if (image_node.nodeName.toLowerCase() === "a") {
-                                let childNodes = image_node.childNodes;
-                                childNodes.forEach(function (child) {
-                                    if (child.nodeName.toLowerCase() === "img")
-                                        image_node = child;
-                                });
+                            if (!fastn_utils.isNull(image_node)) {
+                                if (image_node.nodeName.toLowerCase() === "a") {
+                                    let childNodes = image_node.childNodes;
+                                    childNodes.forEach(function (child) {
+                                        if (
+                                            child.nodeName.toLowerCase() ===
+                                            "img"
+                                        )
+                                            image_node = child;
+                                    });
+                                }
+                                image_node.setAttribute(
+                                    "src",
+                                    fastn_utils.getStaticValue(src),
+                                );
                             }
-                            image_node.setAttribute(
-                                "src",
-                                fastn_utils.getStaticValue(src),
-                            );
                         } else {
                             this.attachAttribute(
                                 "src",
