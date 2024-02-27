@@ -107,22 +107,16 @@ pub(crate) async fn create_and_send_confirmation_email(
 
     tracing::info!("confirmation link: {}", &confirmation_link);
 
-    fastn_core::mail::Mailer::send_raw(
-        req_config
-            .config
-            .ds
-            .env_bool("FASTN_ENABLE_EMAIL", true)
-            .await
-            .unwrap_or(true),
-        &req_config.config.ds,
-        format!("{} <{}>", name, email)
-            .parse::<lettre::message::Mailbox>()
-            .unwrap(),
-        "Verify your email",
-        confirmation_mail_body(html, &confirmation_link),
-    )
-    .await
-    .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
+    req_config
+        .config
+        .ds
+        .send_email(
+            (&name, &email),
+            "Verify your email",
+            confirmation_mail_body(html, &confirmation_link),
+        )
+        .await
+        .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
 
     Ok((confirmation_link, session_id))
 }
