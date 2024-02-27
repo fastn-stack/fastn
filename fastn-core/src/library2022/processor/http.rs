@@ -84,7 +84,7 @@ pub async fn process(
                 .get_value(header.line_number, value.as_str())?
                 .to_json_string(doc, true)?
             {
-                if let Some(key) = header.key.strip_prefix("header-") {
+                if let Some(key) = fastn_core::http::match_header_key(header.key.as_str()) {
                     conf.insert(key.to_string(), value);
                     continue;
                 }
@@ -96,7 +96,7 @@ pub async fn process(
                     .append_pair(header.key.as_str(), value.trim_matches('"'));
             }
         } else {
-            if let Some(key) = header.key.strip_prefix("header-") {
+            if let Some(key) = fastn_core::http::match_header_key(header.key.as_str()) {
                 conf.insert(key.to_string(), value);
                 continue;
             }
