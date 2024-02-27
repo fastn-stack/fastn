@@ -2355,7 +2355,10 @@ class Node2 {
                                 if (image_node.nodeName.toLowerCase() === "a") {
                                     let childNodes = image_node.childNodes;
                                     childNodes.forEach(function (child) {
-                                        if (child.nodeName.toLowerCase() === "img")
+                                        if (
+                                            child.nodeName.toLowerCase() ===
+                                            "img"
+                                        )
                                             image_node = child;
                                     });
                                 }
