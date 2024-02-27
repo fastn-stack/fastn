@@ -88,8 +88,6 @@ pub(crate) async fn forgot_password_request(
             fastn_core::schema::fastn_user_email::email,
         ));
 
-    dbg!("{:?}", diesel::debug_query::<diesel::pg::Pg, _>(&query));
-
     let user: Option<(fastn_core::auth::FastnUser, fastn_core::utils::CiString)> =
         query.first(&mut conn).await.optional()?;
 
@@ -331,11 +329,7 @@ pub(crate) async fn set_password(
             )
             .returning(fastn_core::schema::fastn_password_reset::user_id);
 
-            dbg!("{:?}", diesel::debug_query::<diesel::pg::Pg, _>(&query));
-
             let user_id: Option<i64> = query.get_result(&mut conn).await.optional()?;
-
-            dbg!(user_id);
 
             if user_id.is_none() {
                 return Ok(fastn_core::http::api_error("Bad Request")?);
