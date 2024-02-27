@@ -87,6 +87,7 @@ validator.workspace = true
 zxcvbn.workspace = true
 zip.workspace = true
 fastn-expr.workspace = true
+ipnetwork.workspace = true
 
 [dev-dependencies]
 fbt-lib.workspace = true

@@ -9,7 +9,7 @@ members = [
     "fastn-grammar",
     "fastn-lang",
     "foo",
-    "fastn-ds", 
+    "fastn-ds",
     "fastn-update", "fastn-expr",
     # "fastn-wasm",
     # "fastn-runtime",
@@ -240,3 +240,7 @@ version = "0.20"
 # to_string() interface. https://fpm.dev/journal/#markdown-styling. So in the meanwhile
 # we are disabling their conflicting syntect implementation.
 default-features = false
+
+
+[workspace.dependencies.ipnetwork]
+version = ">=0.12.2, <0.21.0"

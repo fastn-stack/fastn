@@ -186,7 +186,8 @@ pub(crate) async fn create_account(
         email = user.email.0
     );
 
-    Ok(fastn_core::http::temporary_redirect(
-        redirect_url_from_next(&req_config.request, next),
-    ))
+    Ok(fastn_core::http::frontend_redirect(redirect_url_from_next(
+        &req_config.request,
+        next,
+    )))
 }

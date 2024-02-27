@@ -345,9 +345,20 @@ impl Request {
         Ok(serde_json::from_value(value.clone())?)
     }
 
-    pub fn get_ip(&self) -> Option<String> {
+    pub fn get_ip_str(&self) -> Option<String> {
         self.ip.clone()
     }
+
+    pub fn get_ip(&self) -> Option<ipnetwork::IpNetwork> {
+        self.get_ip_str().map(|ip| {
+            ip.parse::<ipnetwork::IpNetwork>().unwrap_or_else(|_| {
+                ipnetwork::IpNetwork::V4(
+                    ipnetwork::Ipv4Network::new(std::net::Ipv4Addr::new(127, 0, 0, 1), 32).unwrap(),
+                )
+            })
+        }) // Todo: fix default value or throw error
+    }
+
     pub fn scheme(&self) -> String {
         self.scheme.to_string()
     }
@@ -356,6 +367,28 @@ impl Request {
             Some(user_agent) => is_bot(&user_agent),
             None => true,
         }
+    }
+
+    pub fn get_event_data(&self) -> serde_json::Value {
+        // Todo: Store all headers
+        let headers: std::collections::HashMap<String, String> = self
+            .headers()
+            .iter()
+            .filter_map(|(k, v)| {
+                if let Ok(v) = v.to_str() {
+                    Some((k.to_string(), v.to_string()))
+                } else {
+                    None
+                }
+            })
+            .collect();
+
+        serde_json::json!({
+            "json": self.json::<serde_json::Value>().unwrap_or_default(),
+            "cookies": self.cookies(),
+            "query": self.query(),
+            "headers": headers
+        })
     }
 }
 

@@ -64,7 +64,7 @@ pub(crate) async fn get_out(
         reqwest::header::HeaderValue::from_static("fastn"),
     );
 
-    if let Some(ip) = req.get_ip() {
+    if let Some(ip) = req.get_ip_str() {
         proxy_request.headers_mut().insert(
             reqwest::header::FORWARDED,
             reqwest::header::HeaderValue::from_str(ip.as_str()).unwrap(),
