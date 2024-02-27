@@ -20,6 +20,17 @@ body: {"username": "siddhant"}
 
 fastn.assert.not_empty(fastn.http_response.errors.payload);
 
+-- fastn.post: Create user with empty data
+url: /-/auth/create-account/?next=/hello/
+body: {"name": "", "email": "", "password": "", "password2": "", "username": "", "accept_terms": false}
+
+
+-- fastn.post.test:
+
+fastn.assert.eq(fastn.http_response.success, false);
+fastn.assert.not_empty(fastn.http_response.errors.password);
+
+
 -- fastn.post: Create user with invalid data
 url: /-/auth/create-account/?next=/hello/
 body: {"name": "John", "email": "john@mail.com", "password": "testpasswd", "password2": "test", "username": "john", "accept_terms": false}
@@ -28,7 +39,6 @@ body: {"name": "John", "email": "john@mail.com", "password": "testpasswd", "pass
 -- fastn.post.test:
 
 fastn.assert.eq(fastn.http_response.success, false);
-fastn.assert.not_empty(fastn.http_response.errors.password);
 fastn.assert.not_empty(fastn.http_response.errors.password2);
 fastn.assert.not_empty(fastn.http_response.errors.accept_terms);
 
