@@ -57,7 +57,7 @@ pub async fn process(
         }
     };
 
-    let (mut url, conf) =
+    let (mut url, mut conf) =
         fastn_core::config::utils::get_clean_url(&req_config.config, url.as_str()).map_err(
             |e| ftd::interpreter::Error::ParseError {
                 message: format!("invalid url: {:?}", e),
@@ -84,16 +84,22 @@ pub async fn process(
                 .get_value(header.line_number, value.as_str())?
                 .to_json_string(doc, true)?
             {
+                if let Some(key) = header.key.strip_prefix("header-") {
+                    conf.insert(key.to_string(), value);
+                    continue;
+                }
                 if method.as_str().eq("post") {
                     body.push(format!("\"{}\": {}", header.key, value));
                     continue;
                 }
-                url.query_pairs_mut().append_pair(
-                    header.key.as_str(),
-                    value.trim_start_matches('"').trim_end_matches('"'),
-                );
+                url.query_pairs_mut()
+                    .append_pair(header.key.as_str(), value.trim_matches('"'));
             }
         } else {
+            if let Some(key) = header.key.strip_prefix("header-") {
+                conf.insert(key.to_string(), value);
+                continue;
+            }
             if method.as_str().eq("post") {
                 body.push(format!(
                     "\"{}\": \"{}\"",
