@@ -17,3 +17,7 @@ camino.workspace = true
 ignore.workspace = true
 dirs.workspace = true
 tracing.workspace = true
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+ipnetwork.workspace = true

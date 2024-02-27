@@ -5,6 +5,25 @@ pub struct DocumentStore {
     root: Path,
 }
 
+#[derive(Debug)]
+pub struct Event {
+    pub ip: Option<ipnetwork::IpNetwork>,
+    pub user_agent: String,
+    pub domain: Option<String>,
+    pub okind: String,
+    pub ekind: String,
+    pub outcome: String,
+    pub outcome_data: String,
+    pub data: serde_json::Value,
+    pub count_1: i32,
+    pub response_time_ns: i32,
+    pub created_at: chrono::DateTime<chrono::Utc>,
+    pub myself: Option<i64>,
+    pub org_id: Option<i64>,
+    pub site_id: Option<i64>,
+    pub someone: Option<i64>,
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct Path {
     path: camino::Utf8PathBuf,
@@ -71,6 +90,9 @@ fn package_ignores(
 }
 
 #[derive(thiserror::Error, Debug)]
+pub enum EventError {}
+
+#[derive(thiserror::Error, Debug)]
 pub enum RemoveError {
     #[error("io error {0}")]
     IOError(#[from] std::io::Error),
@@ -119,6 +141,10 @@ impl DocumentStore {
         Self {
             root: Path::new(root.as_ref().as_str()),
         }
+    }
+
+    pub async fn capture_event(&self, _event: fastn_ds::Event) -> Result<(), EventError> {
+        Ok(())
     }
 
     pub fn root(&self) -> fastn_ds::Path {

@@ -1816,9 +1816,13 @@ version = "0.1.0"
 dependencies = [
  "actix-web",
  "camino",
+ "chrono",
  "dirs",
  "ftd 0.3.0",
  "ignore",
+ "ipnetwork",
+ "serde",
+ "serde_json",
  "thiserror",
  "tokio",
  "tracing",
