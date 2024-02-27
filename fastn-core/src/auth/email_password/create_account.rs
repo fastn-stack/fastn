@@ -68,7 +68,7 @@ pub(crate) async fn create_account(
         if req_config
             .config
             .ds
-            .env_bool("FASTN_DISABLE_STRONG_PASSWORD_CHECK", false)
+            .env_bool("DEBUG_FASTN_DISABLE_STRONG_PASSWORD_CHECK", false)
             .await?
             && !user_payload.password.is_empty()
         {
