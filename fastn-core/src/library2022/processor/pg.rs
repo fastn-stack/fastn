@@ -17,7 +17,12 @@ async fn create_pool(
     });
     let runtime = Some(deadpool_postgres::Runtime::Tokio1);
 
-    if req_config.config.ds.env("FASTN_PG_DANGER_ENABLE_SSL").await == Ok("true".to_string()) {
+    if let Ok(true) = req_config
+        .config
+        .ds
+        .env_bool("FASTN_PG_DANGER_ENABLE_SSL", false)
+        .await
+    {
         fastn_core::warning!(
             "FASTN_PG_DANGER_DISABLE_SSL is set to false, this is not recommended for production use",
         );
@@ -57,12 +62,11 @@ async fn create_pool(
         }
     }
 
-    if req_config
+    if let Ok(true) = req_config
         .config
         .ds
-        .env("FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE")
+        .env_bool("FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE", false)
         .await
-        == Ok("true".to_string())
     {
         fastn_core::warning!(
             "FASTN_PG_DANGER_ALLOW_UNVERIFIED_CERTIFICATE is set to true, this is not \
