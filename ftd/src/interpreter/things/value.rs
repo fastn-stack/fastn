@@ -1603,7 +1603,10 @@ impl Value {
                 is_static
             }
             ftd::interpreter::Value::Record { fields, .. }
-            | ftd::interpreter::Value::Object { values: fields, .. } | ftd::interpreter::Value::KwArgs { arguments: fields, .. } => {
+            | ftd::interpreter::Value::Object { values: fields, .. }
+            | ftd::interpreter::Value::KwArgs {
+                arguments: fields, ..
+            } => {
                 let mut is_static = true;
                 for d in fields.values() {
                     if !d.is_static(doc) {
@@ -2059,9 +2062,10 @@ impl Value {
                     Ok(Some("".to_string()))
                 }
             }
-            Value::Object { .. } | Value::Record { .. } | Value::List { .. } | Value::KwArgs { .. } => {
-                Ok(Some(serde_json::to_string(&self.to_serde_value(doc)?)?))
-            }
+            Value::Object { .. }
+            | Value::Record { .. }
+            | Value::List { .. }
+            | Value::KwArgs { .. } => Ok(Some(serde_json::to_string(&self.to_serde_value(doc)?)?)),
             _ => Ok(None),
         }
     }
