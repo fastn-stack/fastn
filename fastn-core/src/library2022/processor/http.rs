@@ -85,7 +85,7 @@ pub async fn process(
                 .to_json_string(doc, true)?
             {
                 if let Some(key) = fastn_core::http::get_header_key(header.key.as_str()) {
-                    conf.insert(key.to_string(), value);
+                    conf.insert(key, value);
                     continue;
                 }
                 if method.as_str().eq("post") {
@@ -97,7 +97,7 @@ pub async fn process(
             }
         } else {
             if let Some(key) = fastn_core::http::get_header_key(header.key.as_str()) {
-                conf.insert(key.to_string(), value);
+                conf.insert(key, value);
                 continue;
             }
             if method.as_str().eq("post") {
