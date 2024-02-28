@@ -5,25 +5,6 @@ pub struct DocumentStore {
     root: Path,
 }
 
-#[derive(Debug)]
-pub struct Event {
-    pub ip: Option<ipnetwork::IpNetwork>,
-    pub user_agent: String,
-    pub domain: Option<String>,
-    pub okind: String,
-    pub ekind: String,
-    pub outcome: String,
-    pub outcome_data: String,
-    pub data: serde_json::Value,
-    pub count_1: i32,
-    pub response_time_ns: i32,
-    pub created_at: chrono::DateTime<chrono::Utc>,
-    pub myself: Option<i64>,
-    pub org_id: Option<i64>,
-    pub site_id: Option<i64>,
-    pub someone: Option<i64>,
-}
-
 #[derive(Debug, Clone, PartialEq)]
 pub struct Path {
     path: camino::Utf8PathBuf,
@@ -143,7 +124,14 @@ impl DocumentStore {
         }
     }
 
-    pub async fn capture_event(&self, _event: fastn_ds::Event) -> Result<(), EventError> {
+    pub async fn capture_event(
+        &self,
+        _okind: String,
+        _ekind: String,
+        _outcome: String,
+        _outcome_data: String,
+        _data: serde_json::Value,
+    ) -> Result<(), EventError> {
         Ok(())
     }
 
