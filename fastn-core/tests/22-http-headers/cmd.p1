@@ -1,0 +1,12 @@
+-- fbt:
+cmd: $FBT_CWD/../target/debug/fastn --test build
+output: .build
+
+-- stdout:
+
+Updated package dependency.
+Processing fastn-stack.github.io/http-headers-test/manifest.json ... done in <omitted>
+Processing fastn-stack.github.io/http-headers-test/FASTN/ ... done in <omitted>
+Processing fastn-stack.github.io/http-headers-test/ ... calling `http` processor with url: https://dummyjson.com/auth/login
+calling `http` processor with url: https://dummyjson.com/auth/me
+done in <omitted>
