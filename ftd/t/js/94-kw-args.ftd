@@ -6,6 +6,8 @@ string baz:
 
 -- ftd.text: $foo.args.bar
 
+-- inner-component: $foo.args.bar
+
 -- ftd.text: $foo.baz
 
 -- end: ftd.column
@@ -13,6 +15,15 @@ string baz:
 -- end: foo
 
 
+-- component inner-component:
+caption bar:
+
+-- ftd.text: $inner-component.bar
+
+-- end: inner-component
+
+
 -- foo:
 bar: hello
 baz: world
+
