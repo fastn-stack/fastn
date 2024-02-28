@@ -1,0 +1,7 @@
+-- import: fastn
+
+-- fastn.test: Passing request headers to http processor
+
+-- fastn.get: Authenticating and Fetching User Details (using http processor)
+url: /dummy-json-auth/
+http-status: 200
