@@ -909,9 +909,7 @@ pub fn validation_error_to_user_err(
 
 pub(crate) fn get_header_key(header_key: &str) -> Option<String> {
     if let Some(remaining) = header_key.strip_prefix("$header-") {
-        if remaining.ends_with('$') {
-            return remaining.strip_suffix('$').map(|s| s.to_string());
-        }
+        return remaining.strip_suffix('$').map(|s| s.to_string());
     }
 
     None
