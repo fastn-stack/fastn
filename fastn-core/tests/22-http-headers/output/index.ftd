@@ -1,0 +1,74 @@
+-- import: fastn/processors as pr
+
+-- record auth-response:
+string token:
+
+-- record user-response:
+integer id:
+string username:
+string email:
+string firstName:
+string lastName:
+
+
+
+-- auth-response auth-res:
+$processor$: pr.http
+method: post
+url: https://dummyjson.com/auth/login
+username: kminchelle
+password: 0lelplR
+$header-content-type$: application/json
+
+
+
+-- string bearer-token: $join(a = Bearer, b = *$auth-res.token)
+
+
+
+-- user-response user-res:
+$processor$: pr.http
+method: get
+url: https://dummyjson.com/auth/me
+$header-authorization$: $bearer-token
+
+
+
+-- display-user: $user-res
+
+
+
+-- string join(a, b):
+string a:
+string b:
+
+a + " " + b
+
+
+
+-- component display-user:
+caption user-res user:
+
+-- ftd.column:
+
+-- ftd.row:
+spacing.fixed.rem: 1
+
+-- ftd.text: Username:
+
+-- ftd.text: $user-res.username
+
+-- end: ftd.row
+
+-- ftd.row:
+spacing.fixed.rem: 1
+
+-- ftd.text: Email:
+
+-- ftd.text: $user-res.email
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: display-user
