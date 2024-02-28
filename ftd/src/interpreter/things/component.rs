@@ -884,7 +884,6 @@ impl Property {
         }
 
         if let Some(kw_args) = kw_args {
-            // TODO: Move this to a function
             properties.push(ftd::interpreter::Property {
                 value: ftd::interpreter::PropertyValue::Value {
                     value: ftd::interpreter::Value::KwArgs {
