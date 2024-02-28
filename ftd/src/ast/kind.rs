@@ -622,7 +622,9 @@ impl VariableValue {
             })
             .map(|header| {
                 let key = header.get_key();
-                let header_key = if ftd::ast::utils::is_variable_mutable(key.as_str()) {
+                let header_key = if ftd::ast::utils::is_variable_mutable(key.as_str())
+                    && !ftd::ast::utils::is_header_key(key.as_str())
+                {
                     key.trim_start_matches(ftd::ast::utils::REFERENCE)
                 } else {
                     key.as_str()

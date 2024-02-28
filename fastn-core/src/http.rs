@@ -907,6 +907,14 @@ pub fn validation_error_to_user_err(
     fastn_core::http::user_err(converted_error, fastn_core::http::StatusCode::OK)
 }
 
+pub(crate) fn get_header_key(header_key: &str) -> Option<&str> {
+    if let Some(remaining) = header_key.strip_prefix("$header-") {
+        return remaining.strip_suffix('$');
+    }
+
+    None
+}
+
 #[cfg(test)]
 mod test {
     use actix_web::body::MessageBody;
