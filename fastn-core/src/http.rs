@@ -907,6 +907,17 @@ pub fn validation_error_to_user_err(
     fastn_core::http::user_err(converted_error, fastn_core::http::StatusCode::OK)
 }
 
+static HEADER_KEY_PATTERN: once_cell::sync::Lazy<regex::Regex> =
+    once_cell::sync::Lazy::new(|| regex::Regex::new(r"\$header-(\w+)\$").unwrap());
+
+pub(crate) fn match_header_key(header_key: &str) -> Option<String> {
+    if let Some(captures) = HEADER_KEY_PATTERN.captures(header_key) {
+        return captures.get(1).map(|c| c.as_str().to_string());
+    }
+
+    None
+}
+
 #[cfg(test)]
 mod test {
     use actix_web::body::MessageBody;
@@ -1015,15 +1026,4 @@ mod test {
 
         Ok(())
     }
-}
-
-static HEADER_KEY_PATTERN: once_cell::sync::Lazy<regex::Regex> =
-    once_cell::sync::Lazy::new(|| regex::Regex::new(r"\$header-(\w+)\$").unwrap());
-
-pub(crate) fn match_header_key(header_key: &str) -> Option<String> {
-    if let Some(captures) = HEADER_KEY_PATTERN.captures(header_key) {
-        return captures.get(1).map(|c| c.as_str().to_string());
-    }
-
-    None
 }
