@@ -10,6 +10,8 @@ string baz:
 
 -- ftd.text: $foo.baz
 
+-- ftd.text: $foo.args.biz
+
 -- end: ftd.column
 
 -- end: foo
@@ -26,4 +28,4 @@ caption bar:
 -- foo:
 bar: hello
 baz: world
-
+biz: universe
