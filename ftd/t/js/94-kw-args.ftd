@@ -1,7 +1,14 @@
 -- component foo:
 kw-args args:
+string baz:
+
+-- ftd.column:
 
 -- ftd.text: $foo.args.bar
+
+-- ftd.text: $foo.baz
+
+-- end: ftd.column
 
 -- end: foo
 

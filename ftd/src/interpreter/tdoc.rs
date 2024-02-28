@@ -698,6 +698,9 @@ impl<'a> TDoc<'a> {
                         Ok(state_with_thing)
                     }
                 }
+                ftd::interpreter::Kind::KwArgs => Ok(ftd::interpreter::StateWithThing::new_thing(
+                    ftd::interpreter::KindData::new(ftd::interpreter::Kind::String),
+                )),
                 t => ftd::interpreter::utils::e2(
                     format!("Expected Record field `{}`, found: `{:?}`", name, t),
                     doc.name,
