@@ -1,9 +1,7 @@
 -- component foo:
 kw-args args:
 
-/-- ftd.text: $foo.args.bar
-
--- ftd.text: Hello
+-- ftd.text: $foo.args.bar
 
 -- end: foo
 
