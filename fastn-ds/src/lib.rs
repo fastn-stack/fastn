@@ -124,8 +124,8 @@ impl DocumentStore {
         }
     }
 
-    pub async fn capture_event(
-        &self,
+    pub fn capture_event(
+        &mut self,
         _okind: String,
         _ekind: String,
         _outcome: String,
