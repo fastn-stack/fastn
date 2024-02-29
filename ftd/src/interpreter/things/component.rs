@@ -851,8 +851,8 @@ impl Property {
                 }
                 Err(e) => {
                     if kw_args.is_some() {
-                        if let Ok(Some((name, value))) =
-                            get_extra_argument_property_value(property, doc.name.to_string())
+                        if let Some((name, value)) =
+                            get_extra_argument_property_value(property, doc.name.to_string())?
                         {
                             extra_arguments.push((name, value));
                             continue;
