@@ -851,31 +851,12 @@ impl Property {
                 }
                 Err(e) => {
                     if kw_args.is_some() {
-                        if let ftd::ast::PropertySource::Header { name, .. } =
-                            property.source.clone()
+                        if let Ok(Some((name, value))) =
+                            get_extra_argument_property_value(property, doc.name.to_string())
                         {
-                            let line_number = property.value.line_number();
-                            let value = match property.value {
-                                ftd::ast::VariableValue::String { value, .. } => value,
-                                value => {
-                                    return Err(ftd::interpreter::Error::InvalidKind {
-                                        doc_id: doc.name.to_string(),
-                                        line_number: value.line_number(),
-                                        message: "kw-args currently support only string values."
-                                            .to_string(),
-                                    })
-                                }
-                            };
-                            extra_arguments.push((
-                                name,
-                                ftd::interpreter::PropertyValue::Value {
-                                    value: ftd::interpreter::Value::new_string(&value),
-                                    is_mutable: false,
-                                    line_number,
-                                },
-                            ));
+                            extra_arguments.push((name, value));
                             continue;
-                        }
+                        };
                     }
 
                     return Err(e);
@@ -1071,6 +1052,36 @@ impl Property {
         }
         None
     }
+}
+
+fn get_extra_argument_property_value(
+    property: ftd::ast::Property,
+    doc_id: String,
+) -> ftd::interpreter::Result<Option<(String, ftd::interpreter::PropertyValue)>> {
+    if let ftd::ast::PropertySource::Header { name, .. } = property.source.clone() {
+        let line_number = property.value.line_number();
+        let value = match property.value {
+            ftd::ast::VariableValue::String { value, .. } => value,
+            value => {
+                return Err(ftd::interpreter::Error::InvalidKind {
+                    doc_id,
+                    line_number: value.line_number(),
+                    message: "kw-args currently support only string values.".to_string(),
+                })
+            }
+        };
+
+        return Ok(Some((
+            name,
+            ftd::interpreter::PropertyValue::Value {
+                value: ftd::interpreter::Value::new_string(&value),
+                is_mutable: false,
+                line_number,
+            },
+        )));
+    }
+
+    Ok(None)
 }
 
 fn check_if_property_is_provided_for_required_argument(
