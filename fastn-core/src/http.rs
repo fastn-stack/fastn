@@ -678,6 +678,12 @@ pub fn frontend_redirect<T: AsRef<str>>(url: T) -> fastn_core::http::Response {
         .json(serde_json::json!({"redirect": url.as_ref()}))
 }
 
+pub fn frontend_data<T: serde::Serialize>(data: T) -> fastn_core::http::Response {
+    fastn_core::http::Response::Ok()
+        .content_type("application/json")
+        .json(serde_json::json!({"data": data}))
+}
+
 pub fn frontend_error<T: serde::Serialize>(errors: T) -> fastn_core::http::Response {
     fastn_core::http::Response::Ok()
         .content_type("application/json")
