@@ -457,7 +457,7 @@ const ftd = (function () {
         } else {
             let mutableValue = fastn_utils.staticToMutables(value);
             if (mutableValue instanceof fastn.mutableClass) {
-                mutableValue = mutableValue.get()
+                mutableValue = mutableValue.get();
             }
             mutable.set(mutableValue);
         }
