@@ -222,6 +222,25 @@ impl Component {
         Ok(vec![])
     }
 
+    pub fn get_kwargs(
+        &self,
+        kwargs_name: &str,
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<
+        Option<std::collections::BTreeMap<String, ftd::interpreter::PropertyValue>>,
+    > {
+        let property =
+            if let Some(property) = self.get_interpreter_value_of_argument(kwargs_name, doc)? {
+                property
+            } else {
+                return Ok(None);
+            };
+
+        let kwargs = property.kwargs(doc.name, self.line_number)?;
+
+        Ok(Some(kwargs))
+    }
+
     pub(crate) fn is_loop(&self) -> bool {
         self.iteration.is_some()
     }
