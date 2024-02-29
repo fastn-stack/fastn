@@ -487,24 +487,6 @@ impl ftd::interpreter::Value {
                     name: name.to_string(),
                 })
             }
-            ftd::interpreter::Value::KwArgs { arguments } => {
-                let mut fields = vec![];
-                for (name, value) in arguments.iter() {
-                    fields.push((
-                        name.to_string(),
-                        value.to_fastn_js_value_with_ui(
-                            doc,
-                            &rdata.clone_with_new_record_definition_name(&Some(name.to_string())),
-                            has_rive_components,
-                            false,
-                        ),
-                    ));
-                }
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
-                    fields,
-                    other_references: vec![],
-                })
-            }
             t => todo!("{:?}", t),
         }
     }

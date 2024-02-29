@@ -2,30 +2,10 @@
 kw-args args:
 string baz:
 
--- ftd.column:
-
--- ftd.text: $foo.args.bar
-
--- inner-component: $foo.args.bar
-
 -- ftd.text: $foo.baz
-
--- ftd.text: $foo.args.biz
-
--- end: ftd.column
 
 -- end: foo
 
 
--- component inner-component:
-caption bar:
-
--- ftd.text: $inner-component.bar
-
--- end: inner-component
-
-
 -- foo:
-bar: hello
 baz: world
-biz: universe
