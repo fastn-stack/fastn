@@ -29,6 +29,7 @@ pub enum Kind {
     },
     Void,
     Module,
+    KwArgs,
 }
 
 impl Kind {
@@ -45,6 +46,7 @@ impl Kind {
             Kind::Optional { .. } => "optional".to_string(),
             Kind::Void { .. } => "void".to_string(),
             Kind::Module => "module".to_string(),
+            Kind::KwArgs => "kw-args".to_string(),
             Kind::UI { name, .. } => name.clone().unwrap_or("record".to_string()),
             Kind::Record { name } => name.clone(),
         }
@@ -83,6 +85,10 @@ impl Kind {
 
     pub fn module() -> Kind {
         Kind::Module
+    }
+
+    pub fn kwargs() -> Kind {
+        Kind::KwArgs
     }
 
     pub fn ui() -> Kind {
@@ -281,6 +287,10 @@ impl Kind {
         matches!(self, Kind::Module)
     }
 
+    pub fn is_kwargs(&self) -> bool {
+        matches!(self, Kind::KwArgs)
+    }
+
     pub fn is_integer(&self) -> bool {
         matches!(self, Kind::Integer { .. })
     }
@@ -436,6 +446,7 @@ impl KindData {
             "void" => Kind::void(),
             "ftd.ui" => Kind::ui(),
             "module" => Kind::module(),
+            "kw-args" => Kind::kwargs(),
             "children" => {
                 if let Some(modifier) = var_kind.modifier {
                     return ftd::interpreter::utils::e2(
@@ -568,6 +579,10 @@ impl KindData {
 
     pub fn is_void(&self) -> bool {
         self.kind.is_void()
+    }
+
+    pub fn is_kwargs(&self) -> bool {
+        self.kind.is_kwargs()
     }
 
     pub fn inner_list(self) -> KindData {

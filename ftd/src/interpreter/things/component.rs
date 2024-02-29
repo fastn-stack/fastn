@@ -833,16 +833,55 @@ impl Property {
             line_number,
         )?);
 
+        let kw_args = component_arguments.iter().find(|a| a.kind.is_kwargs());
+
+        let mut extra_arguments = vec![];
+
         for property in ast_properties {
-            properties.push(try_ok_state!(Property::from_ast_property(
-                property,
+            match Property::from_ast_property(
+                property.clone(),
                 component_name,
                 component_arguments.as_slice(),
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
                 doc,
-            )?));
+            ) {
+                Ok(property) => {
+                    properties.push(try_ok_state!(property));
+                }
+                Err(e) => {
+                    if kw_args.is_some() {
+                        if let Ok(Some((name, value))) =
+                            get_extra_argument_property_value(property, doc.name.to_string())
+                        {
+                            extra_arguments.push((name, value));
+                            continue;
+                        };
+                    }
+
+                    return Err(e);
+                }
+            };
         }
+
+        if let Some(kw_args) = kw_args {
+            properties.push(ftd::interpreter::Property {
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::KwArgs {
+                        arguments: std::collections::BTreeMap::from_iter(extra_arguments),
+                    },
+                    is_mutable: false,
+                    line_number: kw_args.line_number,
+                },
+                source: ftd::interpreter::PropertySource::Header {
+                    name: kw_args.name.clone(),
+                    mutable: false,
+                },
+                condition: None,
+                line_number: kw_args.line_number,
+            });
+        }
+
         try_ok_state!(search_things_for_module(
             component_name,
             properties.as_slice(),
@@ -1015,6 +1054,36 @@ impl Property {
     }
 }
 
+fn get_extra_argument_property_value(
+    property: ftd::ast::Property,
+    doc_id: String,
+) -> ftd::interpreter::Result<Option<(String, ftd::interpreter::PropertyValue)>> {
+    if let ftd::ast::PropertySource::Header { name, .. } = property.source.clone() {
+        let line_number = property.value.line_number();
+        let value = match property.value {
+            ftd::ast::VariableValue::String { value, .. } => value,
+            value => {
+                return Err(ftd::interpreter::Error::InvalidKind {
+                    doc_id,
+                    line_number: value.line_number(),
+                    message: "kw-args currently support only string values.".to_string(),
+                })
+            }
+        };
+
+        return Ok(Some((
+            name,
+            ftd::interpreter::PropertyValue::Value {
+                value: ftd::interpreter::Value::new_string(&value),
+                is_mutable: false,
+                line_number,
+            },
+        )));
+    }
+
+    Ok(None)
+}
+
 fn check_if_property_is_provided_for_required_argument(
     component_arguments: &[ftd::interpreter::Field],
     properties: &[ftd::interpreter::Property],
@@ -1023,7 +1092,7 @@ fn check_if_property_is_provided_for_required_argument(
     doc_id: &str,
 ) -> ftd::interpreter::Result<()> {
     for argument in component_arguments {
-        if !argument.is_value_required() {
+        if !argument.is_value_required() || argument.kind.is_kwargs() {
             continue;
         }
         if argument
