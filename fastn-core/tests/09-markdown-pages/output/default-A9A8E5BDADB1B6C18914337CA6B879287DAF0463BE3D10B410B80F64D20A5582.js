@@ -5046,7 +5046,11 @@ const ftd = (function () {
         if (remaining) {
             mutable.get(remaining).set(value);
         } else {
-            mutable.set(value);
+            let mutableValue = fastn_utils.staticToMutables(value);
+            if (mutableValue instanceof fastn.mutableClass) {
+                mutableValue = mutableValue.get();
+            }
+            mutable.set(mutableValue);
         }
     };
 
