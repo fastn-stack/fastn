@@ -180,7 +180,12 @@ pub(crate) async fn forgot_password_request(
     req_config
         .config
         .ds
-        .send_email((&user.name, &email.0), "Reset your password", html)
+        .send_email(
+            (&user.name, &email.0),
+            "Reset your password",
+            html,
+            fastn_ds::mail::EmailKind::PasswordReset,
+        )
         .await
         .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
 

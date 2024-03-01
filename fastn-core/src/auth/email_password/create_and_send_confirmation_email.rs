@@ -114,6 +114,7 @@ pub(crate) async fn create_and_send_confirmation_email(
             (&name, &email),
             "Verify your email",
             confirmation_mail_body(html, &confirmation_link),
+            fastn_ds::mail::EmailKind::AccountVerification,
         )
         .await
         .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;

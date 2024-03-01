@@ -99,3 +99,17 @@ impl Mailer {
         Ok(())
     }
 }
+
+pub enum EmailKind {
+    AccountVerification,
+    PasswordReset,
+}
+
+impl std::fmt::Display for EmailKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            EmailKind::AccountVerification => write!(f, "account-verification"),
+            EmailKind::PasswordReset => write!(f, "password-reset"),
+        }
+    }
+}

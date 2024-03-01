@@ -1,6 +1,6 @@
 extern crate self as fastn_ds;
 
-mod mail;
+pub mod mail;
 
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
@@ -256,6 +256,7 @@ impl DocumentStore {
         to: (&str, &str),
         subject: &str,
         body_html: String,
+        mkind: fastn_ds::mail::EmailKind,
     ) -> Result<(), fastn_ds::mail::MailError> {
         let enable_email = self
             .env_bool("FASTN_ENABLE_EMAIL", true)
@@ -263,6 +264,8 @@ impl DocumentStore {
             .unwrap_or(true);
 
         let (name, email) = to;
+
+        tracing::info!("sending mail of {mkind}");
 
         fastn_ds::mail::Mailer::send_raw(
             enable_email,
