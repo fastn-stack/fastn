@@ -74,6 +74,10 @@ pub(crate) fn get_css_and_fields_from_headers(
     Ok((css, fields))
 }
 
+pub(crate) fn is_header_key(key: &str) -> bool {
+    key.starts_with(HEADER_KEY_START) && key.ends_with('$')
+}
+
 pub const REFERENCE: &str = "$";
 pub const CLONE: &str = "*$";
 pub const LOOP: &str = "$loop$";
@@ -82,3 +86,4 @@ pub const IN: &str = " in ";
 pub const IF: &str = "if";
 pub const FOR: &str = "for";
 pub const PROCESSOR: &str = "$processor$";
+pub const HEADER_KEY_START: &str = "$header-";
