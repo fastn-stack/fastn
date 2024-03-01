@@ -284,6 +284,7 @@ pub(crate) fn get_set_property_values_for_provided_component_properties(
             // Collect valid arguments matching the provided properties and their set property values
             arguments
                 .iter()
+                .filter(|argument| !argument.kind.is_kwargs())
                 .filter_map(|v| {
                     v.get_optional_value(component_properties).map(|val| {
                         (

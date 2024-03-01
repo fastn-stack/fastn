@@ -1,0 +1,12 @@
+-- component foo:
+kw-args args:
+string baz:
+
+-- ftd.text: Hello
+
+-- end: foo
+
+
+-- foo:
+bar: hello
+baz: world

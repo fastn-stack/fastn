@@ -698,6 +698,9 @@ impl<'a> TDoc<'a> {
                         Ok(state_with_thing)
                     }
                 }
+                ftd::interpreter::Kind::KwArgs => Ok(ftd::interpreter::StateWithThing::new_thing(
+                    ftd::interpreter::KindData::new(ftd::interpreter::Kind::String),
+                )),
                 t => ftd::interpreter::utils::e2(
                     format!("Expected Record field `{}`, found: `{:?}`", name, t),
                     doc.name,
@@ -899,6 +902,7 @@ impl<'a> TDoc<'a> {
                     let fields = match value.resolve(doc, line_number)?.inner() {
                         Some(ftd::interpreter::Value::Record { fields, .. }) => fields,
                         Some(ftd::interpreter::Value::Object { values }) => values,
+                        Some(ftd::interpreter::Value::KwArgs { arguments }) => arguments,
                         Some(ftd::interpreter::Value::List { data, .. }) => data
                             .into_iter()
                             .enumerate()
@@ -1335,6 +1339,7 @@ impl<'a> TDoc<'a> {
                     let fields = match value.resolve(doc, line_number)?.inner() {
                         Some(ftd::interpreter::Value::Record { fields, .. }) => fields,
                         Some(ftd::interpreter::Value::Object { values }) => values,
+                        Some(ftd::interpreter::Value::KwArgs { arguments }) => arguments,
                         Some(ftd::interpreter::Value::List { data, .. }) => data
                             .into_iter()
                             .enumerate()

@@ -1,0 +1,116 @@
+{
+  "data": {
+    "foo#foo": {
+      "Component": {
+        "name": "foo#foo",
+        "arguments": [
+          {
+            "name": "data",
+            "kind": {
+              "kind": "KwArgs",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2,
+            "access_modifier": "Public"
+          }
+        ],
+        "definition": {
+          "name": "ftd#text",
+          "properties": [
+            {
+              "value": {
+                "Value": {
+                  "value": {
+                    "String": {
+                      "text": "Hello world"
+                    }
+                  },
+                  "is_mutable": false,
+                  "line_number": 4
+                }
+              },
+              "source": "Caption",
+              "condition": null,
+              "line_number": 4
+            }
+          ],
+          "iteration": null,
+          "condition": null,
+          "events": [],
+          "children": [],
+          "source": "Declaration",
+          "line_number": 4
+        },
+        "css": null,
+        "line_number": 1
+      }
+    }
+  },
+  "name": "foo",
+  "tree": [
+    {
+      "name": "foo#foo",
+      "properties": [
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "KwArgs": {
+                  "arguments": {
+                    "bar": {
+                      "Value": {
+                        "value": {
+                          "String": {
+                            "text": "Hello"
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 9
+                      }
+                    },
+                    "baz": {
+                      "Value": {
+                        "value": {
+                          "String": {
+                            "text": "World"
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 10
+                      }
+                    }
+                  }
+                }
+              },
+              "is_mutable": false,
+              "line_number": 2
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "data",
+              "mutable": false
+            }
+          },
+          "condition": null,
+          "line_number": 2
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "source": "Declaration",
+      "line_number": 8
+    }
+  ],
+  "aliases": {
+    "ftd": "ftd",
+    "inherited": "inherited"
+  },
+  "js": [],
+  "css": []
+}
