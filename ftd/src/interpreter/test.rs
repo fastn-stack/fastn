@@ -275,7 +275,7 @@ fn test_extract_kwargs() {
     baz: World
 "#,
     )
-    .unwrap_or_else(|e| panic!("{:?}", e));
+    .unwrap();
 
     let tdoc = doc.tdoc();
     let instructions = doc.get_instructions("foo#foo");
