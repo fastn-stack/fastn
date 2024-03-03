@@ -278,20 +278,10 @@ fn test_extract_kwargs() {
     .unwrap_or_else(|e| panic!("{:?}", e));
 
     let tdoc = doc.tdoc();
-
     let instructions = doc.get_instructions("foo#foo");
     let instruction = instructions.first().unwrap();
-    let kwargs = instruction.get_kwargs("data", &tdoc).unwrap().unwrap();
-    // TODO: resolve value based on kwarg kind
-    let data: std::collections::BTreeMap<String, String> = kwargs
-        .iter()
-        .map(|(name, property_value)| {
-            (
-                name.to_string(),
-                property_value.to_value().get_string_data().unwrap(),
-            )
-        })
-        .collect();
+
+    let data = instruction.get_kwargs("data", &tdoc).unwrap();
 
     assert_eq!(data.get("bar"), Some(&String::from("Hello")));
     assert_eq!(data.get("baz"), Some(&String::from("World")));

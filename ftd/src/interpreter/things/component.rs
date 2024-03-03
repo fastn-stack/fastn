@@ -226,19 +226,38 @@ impl Component {
         &self,
         kwargs_name: &str,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<
-        Option<std::collections::BTreeMap<String, ftd::interpreter::PropertyValue>>,
-    > {
-        let property =
-            if let Some(property) = self.get_interpreter_value_of_argument(kwargs_name, doc)? {
-                property
-            } else {
-                return Ok(None);
-            };
+    ) -> ftd::interpreter::Result<ftd::Map<String>> {
+        let property = match self.get_interpreter_value_of_argument(kwargs_name, doc)? {
+            Some(property) => property,
+            None => {
+                return Err(ftd::interpreter::Error::OtherError(format!(
+                    "kw-args '{}' does not exists on component.",
+                    kwargs_name
+                )));
+            }
+        };
 
-        let kwargs = property.kwargs(doc.name, self.line_number)?;
+        let kwargs = property
+            .kwargs(doc.name, self.line_number)?
+            .iter()
+            .map(|(name, value)| {
+                let value = match value.to_value().get_string_data() {
+                    Some(v) => v,
+                    None => {
+                        return Err(ftd::interpreter::Error::ParseError {
+                            message: "Could not parse keyword argument value as string."
+                                .to_string(),
+                            doc_id: doc.name.to_string(),
+                            line_number: value.line_number(),
+                        });
+                    }
+                };
 
-        Ok(Some(kwargs))
+                Ok((name.to_string(), value))
+            })
+            .collect::<Result<ftd::Map<String>, _>>()?;
+
+        Ok(kwargs)
     }
 
     pub(crate) fn is_loop(&self) -> bool {
