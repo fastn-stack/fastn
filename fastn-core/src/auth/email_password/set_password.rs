@@ -14,10 +14,10 @@ pub(crate) async fn forgot_password_request(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
-    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
 
     req.log_with_no_site(
-        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ForgotPasswordRoute)),
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ForgotPassword),
+        fastn_core::log::EntityKind::Myself,
         line!(),
     );
 
@@ -213,10 +213,9 @@ pub(crate) async fn forgot_password_request_success(
     req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
-
     req.log_with_no_site(
-        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ForgotPasswordSuccessRoute)),
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ForgotPasswordSuccess),
+        fastn_core::log::EntityKind::Myself,
         line!(),
     );
 
@@ -246,10 +245,10 @@ pub(crate) async fn set_password(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
-    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
 
     req.log_with_no_site(
-        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::SetPasswordRoute)),
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::SetPassword),
+        fastn_core::log::EntityKind::Myself,
         line!(),
     );
 
@@ -425,10 +424,9 @@ pub(crate) async fn set_password_success(
     req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
-
     req.log_with_no_site(
-        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::SetPasswordSuccessRoute)),
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::SetPasswordSuccess),
+        fastn_core::log::EntityKind::Myself,
         line!(),
     );
 

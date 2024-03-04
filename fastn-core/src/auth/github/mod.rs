@@ -12,10 +12,9 @@ pub async fn login(
     ds: &fastn_ds::DocumentStore,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
-
     req.log_with_no_site(
-        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::GithubLoginRoute)),
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubLogin),
+        fastn_core::log::EntityKind::Myself,
         line!(),
     );
 
@@ -55,10 +54,10 @@ pub async fn callback(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
-    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
 
     req.log_with_no_site(
-        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::GithubCallbackRoute)),
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubCallback),
+        fastn_core::log::EntityKind::Myself,
         line!(),
     );
 

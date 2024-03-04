@@ -6,10 +6,9 @@ pub(crate) async fn onboarding(
     config: &fastn_core::Config,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
-
     req.log_with_no_site(
-        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::OnboardingRoute)),
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Onboarding),
+        fastn_core::log::EntityKind::Myself,
         line!(),
     );
 

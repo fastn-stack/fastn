@@ -1,4 +1,33 @@
 #[derive(Debug, Clone)]
+pub enum EventKind {
+    Auth(AuthEvent),
+}
+
+#[derive(Debug, Clone)]
+pub enum AuthEvent {
+    Initial,
+    Login,
+    Logout,
+    GithubLogin,
+    GithubCallback,
+    CreateAccount,
+    EmailConfirmation,
+    ConfirmEmail,
+    ResendConfirmationEmail,
+    Onboarding,
+    ForgotPassword,
+    ForgotPasswordSuccess,
+    SetPassword,
+    SetPasswordSuccess,
+    InvalidRoute,
+}
+
+#[derive(Debug, Clone)]
+pub enum EntityKind {
+    Myself,
+}
+
+#[derive(Debug, Clone)]
 pub enum LogLevel {
     Info(InfoLevel),
     Error(ErrorLevel),
@@ -7,6 +36,52 @@ pub enum LogLevel {
 }
 
 impl LogLevel {
+    pub fn from(ekind: &fastn_core::log::EventKind, okind: &fastn_core::log::EntityKind) -> Self {
+        match (ekind, okind) {
+            (EventKind::Auth(event), EntityKind::Myself) => match event {
+                AuthEvent::Initial => LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::Initial)),
+                AuthEvent::Login => LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::LoginRoute)),
+                AuthEvent::Logout => LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::LogoutRoute)),
+                AuthEvent::GithubLogin => {
+                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::GithubLoginRoute))
+                }
+                AuthEvent::GithubCallback => {
+                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::GithubCallbackRoute))
+                }
+                AuthEvent::CreateAccount => {
+                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::CreateAccountRoute))
+                }
+                AuthEvent::EmailConfirmation => {
+                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::EmailConfirmationSentRoute))
+                }
+                AuthEvent::ConfirmEmail => {
+                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ConfirmEmailRoute))
+                }
+                AuthEvent::ResendConfirmationEmail => {
+                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ResendConfirmationEmailRoute))
+                }
+                AuthEvent::Onboarding => {
+                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::OnboardingRoute))
+                }
+                AuthEvent::ForgotPassword => {
+                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ForgotPasswordRoute))
+                }
+                AuthEvent::ForgotPasswordSuccess => {
+                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ForgotPasswordSuccessRoute))
+                }
+                AuthEvent::SetPassword => {
+                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::SetPasswordRoute))
+                }
+                AuthEvent::SetPasswordSuccess => {
+                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::SetPasswordSuccessRoute))
+                }
+                AuthEvent::InvalidRoute => {
+                    LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::InvalidRoute))
+                }
+            },
+        }
+    }
+
     fn message(&self) -> String {
         match self {
             LogLevel::Info(i) => i.message(),
@@ -71,11 +146,9 @@ impl AuthErrorLevel {
     }
 }
 
-// todo: implement this
 #[derive(Debug, Clone)]
 pub enum InfoLevel {
     Auth(AuthInfoLevel),
-    // Worker(WorkerLevel),
 }
 
 impl InfoLevel {
@@ -86,11 +159,9 @@ impl InfoLevel {
     }
 }
 
-// todo: implement this
 #[derive(Debug, Clone)]
 pub enum ErrorLevel {
     Auth(AuthErrorLevel),
-    // Worker(WorkerErrorLevel),
 }
 
 impl ErrorLevel {
@@ -108,8 +179,6 @@ pub struct SiteLog {
     pub org_id: Option<i64>,
     pub someone: Option<i64>,
     pub myself: Option<i64>,
-    pub ekind: Option<String>,
-    pub okind: Option<String>,
 }
 
 // todo: more relevant fields will be added in future
@@ -127,6 +196,8 @@ pub struct RequestLog {
 #[derive(Debug, Clone)]
 pub struct Log {
     pub level: fastn_core::log::LogLevel,
+    pub ekind: fastn_core::log::EventKind,
+    pub okind: fastn_core::log::EntityKind,
     pub message: String,
     pub site: Option<fastn_core::log::SiteLog>,
     pub request: fastn_core::log::RequestLog,
@@ -138,11 +209,15 @@ impl fastn_core::http::Request {
     pub fn log(
         &self,
         site: Option<fastn_core::log::SiteLog>,
-        log_level: fastn_core::log::LogLevel,
+        ekind: fastn_core::log::EventKind,
+        okind: fastn_core::log::EntityKind,
         line_number: u32,
     ) {
+        let log_level = LogLevel::from(&ekind, &okind);
         let mut log = self.log.write().unwrap();
         (*log).push(Log {
+            ekind,
+            okind,
             request: self.to_request_log(),
             message: log_level.message(),
             level: log_level,
@@ -155,11 +230,15 @@ impl fastn_core::http::Request {
     pub fn log_with_no_message(
         &self,
         site: Option<fastn_core::log::SiteLog>,
-        log_level: fastn_core::log::LogLevel,
+        ekind: fastn_core::log::EventKind,
+        okind: fastn_core::log::EntityKind,
         line_number: u32,
     ) {
+        let log_level = LogLevel::from(&ekind, &okind);
         let mut log = self.log.write().unwrap();
         (*log).push(Log {
+            ekind,
+            okind,
             request: self.to_request_log(),
             message: log_level.message(),
             level: log_level,
@@ -169,9 +248,17 @@ impl fastn_core::http::Request {
         });
     }
 
-    pub fn log_with_no_site(&self, log_level: fastn_core::log::LogLevel, line_number: u32) {
+    pub fn log_with_no_site(
+        &self,
+        ekind: fastn_core::log::EventKind,
+        okind: fastn_core::log::EntityKind,
+        line_number: u32,
+    ) {
+        let log_level = LogLevel::from(&ekind, &okind);
         let mut log = self.log.write().unwrap();
         (*log).push(Log {
+            ekind,
+            okind,
             request: self.to_request_log(),
             message: log_level.message(),
             level: log_level,

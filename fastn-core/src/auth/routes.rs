@@ -6,10 +6,10 @@ pub async fn handle_auth(
     config: &fastn_core::Config,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use fastn_core::auth::Route;
-    use fastn_core::log::{AuthErrorLevel, AuthInfoLevel, ErrorLevel, InfoLevel, LogLevel};
 
     req.log_with_no_site(
-        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::Initial)),
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ConfirmEmail),
+        fastn_core::log::EntityKind::Myself,
         line!(),
     );
 
@@ -65,7 +65,8 @@ pub async fn handle_auth(
         }
         Route::Invalid => {
             req.log_with_no_site(
-                LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::InvalidRoute)),
+                fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::InvalidRoute),
+                fastn_core::log::EntityKind::Myself,
                 line!(),
             );
             Ok(fastn_core::not_found!("route not found: {}", req.path()))

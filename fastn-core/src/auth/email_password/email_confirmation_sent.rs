@@ -7,10 +7,9 @@ pub(crate) async fn email_confirmation_sent(
     req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
-
     req.log_with_no_site(
-        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::EmailConfirmationSentRoute)),
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::EmailConfirmation),
+        fastn_core::log::EntityKind::Myself,
         line!(),
     );
 

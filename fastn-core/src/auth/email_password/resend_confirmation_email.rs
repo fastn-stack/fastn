@@ -6,10 +6,9 @@ pub(crate) async fn resend_confirmation_email(
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
-
     req.log_with_no_site(
-        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ResendConfirmationEmailRoute)),
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ResendConfirmationEmail),
+        fastn_core::log::EntityKind::Myself,
         line!(),
     );
 

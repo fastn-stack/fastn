@@ -6,10 +6,10 @@ pub(crate) async fn login(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
-    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
 
     req.log_with_no_site(
-        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::LoginRoute)),
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
+        fastn_core::log::EntityKind::Myself,
         line!(),
     );
 
