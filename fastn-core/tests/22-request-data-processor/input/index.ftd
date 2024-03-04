@@ -1,0 +1,25 @@
+-- import: fastn/processors as pr
+
+;; if ?code=smth in url then $code is "smth"
+;; else $code is NULL
+-- optional string code: 
+$processor$: pr.request-data
+
+;; if ?code=smth in url then $code is "smth"
+;; else $code is "default"
+-- optional string code-def: default
+$processor$: pr.request-data
+
+;; if ?name=smth in url then $name is "smth"
+;; else $name is "default"
+-- string name: default
+$processor$: pr.request-data
+
+-- ftd.column:
+
+-- ftd.text: $code
+-- ftd.text: $code-def
+
+-- ftd.text: $name
+
+-- end: ftd.column

@@ -1,0 +1,16 @@
+-- fbt:
+cmd: $FBT_CWD/../target/debug/fastn --test build
+output: .build
+exit-code: 1
+
+-- stdout:
+
+Updated package dependency.
+Processing fastn-stack.github.io/request-data-processor-test/manifest.json ... done in <omitted>
+Processing fastn-stack.github.io/request-data-processor-test/FASTN/ ... done in <omitted>
+Processing fastn-stack.github.io/request-data-processor-test/err/ ... done in <omitted>
+
+-- stderr:
+
+[fastn-core/src/library2022/processor/request_data.rs:10] &req_config.named_parameters = []
+FastnCoreError(PackageError { message: "failed to parse ParseError { message: \"Can't parse to string, found: null\", doc_id: \"fastn-stack.github.io/request-data-processor-test/err/\", line_number: 5 }" })
