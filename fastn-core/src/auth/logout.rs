@@ -7,6 +7,12 @@ pub async fn logout(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
+    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
+
+    req.log_with_no_site(
+        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::LogoutRoute)),
+        line!(),
+    );
 
     if let Some(session_data) = req.cookie(fastn_core::auth::SESSION_COOKIE_NAME) {
         let session_data = fastn_core::auth::utils::decrypt(ds, &session_data)

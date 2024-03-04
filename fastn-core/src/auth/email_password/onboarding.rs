@@ -6,6 +6,13 @@ pub(crate) async fn onboarding(
     config: &fastn_core::Config,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
+
+    req.log_with_no_site(
+        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::OnboardingRoute)),
+        line!(),
+    );
+
     // The user is logged in after having verfied their email. This is them first time signing
     // in so we render `onboarding_ftd`.
     // If this is an old user, the cookie FIRST_TIME_SESSION_COOKIE_NAME won't be set for them

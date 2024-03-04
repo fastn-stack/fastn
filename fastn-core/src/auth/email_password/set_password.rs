@@ -7,12 +7,19 @@ use crate::auth::email_password::{
 /// POST forgot_password_request: send email with a link containing a key to set password
 /// for unauthenticated users
 pub(crate) async fn forgot_password_request(
+    req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
+    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
+
+    req.log_with_no_site(
+        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ForgotPasswordRoute)),
+        line!(),
+    );
 
     if req_config.request.ud(&req_config.config.ds).await.is_some() {
         return Ok(fastn_core::http::api_error("Bad Request")?);
@@ -203,8 +210,16 @@ pub(crate) async fn forgot_password_request(
 }
 
 pub(crate) async fn forgot_password_request_success(
+    req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
+
+    req.log_with_no_site(
+        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ForgotPasswordSuccessRoute)),
+        line!(),
+    );
+
     if req_config.request.method() != "GET" {
         return Ok(fastn_core::not_found!("invalid route"));
     }
@@ -224,12 +239,19 @@ pub(crate) async fn forgot_password_request_success(
 
 /// GET | POST /-/auth/set-password/
 pub(crate) async fn set_password(
+    req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
+    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
+
+    req.log_with_no_site(
+        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::SetPasswordRoute)),
+        line!(),
+    );
 
     if req_config.request.method() == "GET" {
         // render set password form
@@ -400,8 +422,16 @@ pub(crate) async fn set_password(
 }
 
 pub(crate) async fn set_password_success(
+    req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
+
+    req.log_with_no_site(
+        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::SetPasswordSuccessRoute)),
+        line!(),
+    );
+
     if req_config.request.method() != "GET" {
         return Ok(fastn_core::not_found!("invalid route"));
     }

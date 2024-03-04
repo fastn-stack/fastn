@@ -26,13 +26,20 @@ struct UserPayload {
 }
 
 pub(crate) async fn create_account(
+    req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
+    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
     use validator::ValidateArgs;
+
+    req.log_with_no_site(
+        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::CreateAccountRoute)),
+        line!(),
+    );
 
     let now = chrono::Utc::now();
 

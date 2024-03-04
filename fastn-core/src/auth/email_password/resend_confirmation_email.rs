@@ -6,6 +6,13 @@ pub(crate) async fn resend_confirmation_email(
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
+
+    req.log_with_no_site(
+        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ResendConfirmationEmailRoute)),
+        line!(),
+    );
+
     // TODO: should be able to use username for this too
     let email = req.query().get("email");
 

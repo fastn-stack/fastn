@@ -6,6 +6,12 @@ pub async fn handle_auth(
     config: &fastn_core::Config,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use fastn_core::auth::Route;
+    use fastn_core::log::{AuthErrorLevel, AuthInfoLevel, ErrorLevel, InfoLevel, LogLevel};
+
+    req.log_with_no_site(
+        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::Initial)),
+        line!(),
+    );
 
     let next = req.q("next", "/".to_string())?;
 
@@ -17,22 +23,22 @@ pub async fn handle_auth(
         })?;
 
     match Into::<Route>::into(req.path()) {
-        Route::Login => fastn_core::auth::email_password::login(req_config, pool, next).await,
+        Route::Login => fastn_core::auth::email_password::login(&req, req_config, pool, next).await,
         Route::GithubLogin => {
-            fastn_core::auth::github::login(&req_config.config.ds, &req, next).await
+            fastn_core::auth::github::login(&req, &req_config.config.ds, next).await
         }
         Route::GithubCallback => {
             fastn_core::auth::github::callback(&req, &req_config.config.ds, pool, next).await
         }
         Route::Logout => fastn_core::auth::logout(&req, &req_config.config.ds, pool, next).await,
         Route::CreateAccount => {
-            fastn_core::auth::email_password::create_account(req_config, pool, next).await
+            fastn_core::auth::email_password::create_account(&req, req_config, pool, next).await
         }
         Route::EmailConfirmationSent => {
-            fastn_core::auth::email_password::email_confirmation_sent(req_config).await
+            fastn_core::auth::email_password::email_confirmation_sent(&req, req_config).await
         }
         Route::ConfirmEmail => {
-            fastn_core::auth::email_password::confirm_email(req_config, pool, next).await
+            fastn_core::auth::email_password::confirm_email(&req, req_config, pool, next).await
         }
         Route::ResendConfirmationEmail => {
             fastn_core::auth::email_password::resend_confirmation_email(
@@ -44,17 +50,25 @@ pub async fn handle_auth(
             fastn_core::auth::email_password::onboarding(&req, req_config, config, next).await
         }
         Route::ForgotPassword => {
-            fastn_core::auth::email_password::forgot_password_request(req_config, pool, next).await
+            fastn_core::auth::email_password::forgot_password_request(&req, req_config, pool, next)
+                .await
         }
         Route::ForgotPasswordSuccess => {
-            fastn_core::auth::email_password::forgot_password_request_success(req_config).await
+            fastn_core::auth::email_password::forgot_password_request_success(&req, req_config)
+                .await
         }
         Route::SetPassword => {
-            fastn_core::auth::email_password::set_password(req_config, pool, next).await
+            fastn_core::auth::email_password::set_password(&req, req_config, pool, next).await
         }
         Route::SetPasswordSuccess => {
-            fastn_core::auth::email_password::set_password_success(req_config).await
+            fastn_core::auth::email_password::set_password_success(&req, req_config).await
         }
-        Route::Invalid => Ok(fastn_core::not_found!("route not found: {}", req.path())),
+        Route::Invalid => {
+            req.log_with_no_site(
+                LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::InvalidRoute)),
+                line!(),
+            );
+            Ok(fastn_core::not_found!("route not found: {}", req.path()))
+        }
     }
 }

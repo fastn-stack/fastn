@@ -8,10 +8,17 @@ pub struct UserDetail {
 }
 
 pub async fn login(
-    ds: &fastn_ds::DocumentStore,
     req: &fastn_core::http::Request,
+    ds: &fastn_ds::DocumentStore,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
+
+    req.log_with_no_site(
+        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::GithubLoginRoute)),
+        line!(),
+    );
+
     let redirect_url: String = format!(
         "{scheme}://{host}{callback_url}?next={next}",
         scheme = req.connection_info.scheme(),
@@ -48,6 +55,12 @@ pub async fn callback(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
+    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
+
+    req.log_with_no_site(
+        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::GithubCallbackRoute)),
+        line!(),
+    );
 
     let now = chrono::Utc::now();
     let code = req.q("code", "".to_string())?;

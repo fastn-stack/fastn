@@ -91,45 +91,6 @@ pub fn ok_with_content_type(
         .body(data)
 }
 
-#[derive(Debug, Default, Clone)]
-pub enum LogLevel {
-    #[default]
-    Info,
-    Warning,
-    Error,
-}
-
-// todo: more relevant fields will be added in future
-#[derive(Debug, Default, Clone)]
-pub struct SiteLog {
-    pub site_id: Option<i64>,
-    pub org_id: Option<i64>,
-    pub someone: Option<i64>,
-    pub myself: Option<i64>,
-    pub ekind: Option<String>,
-    pub okind: Option<String>,
-}
-
-// todo: more relevant fields will be added in future
-#[derive(Debug, Default, Clone)]
-pub struct RequestLog {
-    pub host: String,
-    pub scheme: String,
-    pub method: String,
-    pub path: String,
-    pub query: String,
-    pub ip: Option<String>,
-    pub body: Vec<u8>,
-}
-
-#[derive(Debug, Default, Clone)]
-pub struct Log {
-    pub level: fastn_core::http::LogLevel,
-    pub site: fastn_core::http::SiteLog,
-    pub request: fastn_core::http::RequestLog,
-    pub timestamp: chrono::DateTime<chrono::Utc>,
-}
-
 #[derive(Debug, Clone, Default)]
 pub struct Request {
     method: String,
@@ -144,7 +105,7 @@ pub struct Request {
     scheme: String,
     host: String,
     pub connection_info: actix_web::dev::ConnectionInfo,
-    pub log: std::cell::RefCell<fastn_core::http::Log>,
+    pub log: std::sync::Arc<std::sync::RwLock<Vec<fastn_core::log::Log>>>,
     // path_params: Vec<(String, )>
 }
 
@@ -184,7 +145,7 @@ impl Request {
             ip: req.peer_addr().map(|x| x.ip().to_string()),
             scheme: req.connection_info().scheme().to_string(),
             host: req.connection_info().host().to_string(),
-            log: std::cell::RefCell::new(fastn_core::http::Log::default()),
+            log: std::sync::Arc::new(std::sync::RwLock::new(vec![])),
         };
 
         fn get_cookies(
@@ -208,8 +169,8 @@ impl Request {
         }
     }
 
-    pub fn to_request_log(&self) -> fastn_core::http::RequestLog {
-        fastn_core::http::RequestLog {
+    pub fn to_request_log(&self) -> fastn_core::log::RequestLog {
+        fastn_core::log::RequestLog {
             host: self.host.clone(),
             scheme: self.scheme.to_string(),
             method: self.method.clone(),
@@ -218,19 +179,6 @@ impl Request {
             ip: self.ip.clone(),
             body: Vec::from(self.body()),
         }
-    }
-
-    pub fn log(
-        &self,
-        site: fastn_core::http::SiteLog,
-        log_level: Option<fastn_core::http::LogLevel>,
-    ) {
-        *self.log.borrow_mut() = Log {
-            request: self.to_request_log(),
-            level: log_level.unwrap_or_default(),
-            site,
-            timestamp: chrono::Utc::now(),
-        };
     }
 
     pub fn json<T: serde::de::DeserializeOwned>(&self) -> serde_json::Result<T> {

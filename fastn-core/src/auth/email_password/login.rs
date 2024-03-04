@@ -1,10 +1,17 @@
 pub(crate) async fn login(
+    req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
+    use fastn_core::log::{AuthInfoLevel, InfoLevel, LogLevel};
+
+    req.log_with_no_site(
+        LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::LoginRoute)),
+        line!(),
+    );
 
     if req_config.request.method() != "POST" {
         // TODO: if user is logged in redirect to next
