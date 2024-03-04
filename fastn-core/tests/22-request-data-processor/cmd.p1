@@ -12,5 +12,5 @@ Processing fastn-stack.github.io/request-data-processor-test/err/ ... done in <o
 
 -- stderr:
 
-[fastn-core/src/library2022/processor/request_data.rs:10] &req_config.named_parameters = []
+[fastn-core/src/library2022/processor/request_data.rs:10:32] &req_config.named_parameters = []
 FastnCoreError(PackageError { message: "failed to parse ParseError { message: \"Can't parse to string, found: null\", doc_id: \"fastn-stack.github.io/request-data-processor-test/err/\", line_number: 5 }" })
