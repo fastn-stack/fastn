@@ -14,7 +14,6 @@ pub async fn login(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     req.log(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubLogin),
-        fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),
@@ -59,7 +58,6 @@ pub async fn callback(
 
     req.log(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubCallback),
-        fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),

@@ -309,11 +309,11 @@ impl fastn_core::http::Request {
     pub fn log(
         &self,
         ekind: fastn_core::log::EventKind,
-        okind: fastn_core::log::EntityKind,
         outcome: fastn_core::log::OutcomeKind,
         doc_name: &str,
         line_number: u32,
     ) {
+        let okind = fastn_core::log::EntityKind::Myself;
         let log_level = LogLevel::from(&ekind, &okind, &outcome);
         let mut log = self.log.write().unwrap();
         (*log).push(Log {

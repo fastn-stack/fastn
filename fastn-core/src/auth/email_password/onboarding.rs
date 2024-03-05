@@ -8,7 +8,6 @@ pub(crate) async fn onboarding(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     req.log(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Onboarding),
-        fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),

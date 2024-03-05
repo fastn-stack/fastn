@@ -152,7 +152,6 @@ async fn set_session_cookie_and_redirect_to_next(
                     let log_err_message = "user: not verified".to_string();
                     req.log(
                         ekind,
-                        fastn_core::log::EntityKind::Myself,
                         fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                         file!(),
                         line!(),
@@ -169,7 +168,6 @@ async fn set_session_cookie_and_redirect_to_next(
                     let log_err_message = "user: does not exist".to_string();
                     req.log(
                         ekind,
-                        fastn_core::log::EntityKind::Myself,
                         fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                         file!(),
                         line!(),
@@ -183,7 +181,6 @@ async fn set_session_cookie_and_redirect_to_next(
                     let log_err_message = format!("diesel: {:?}", &e);
                     req.log(
                         ekind,
-                        fastn_core::log::EntityKind::Myself,
                         fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                         file!(),
                         line!(),
@@ -198,7 +195,6 @@ async fn set_session_cookie_and_redirect_to_next(
                     let log_err_message = format!("diesel: {:?}", reason.as_str());
                     req.log(
                         ekind,
-                        fastn_core::log::EntityKind::Myself,
                         fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                         file!(),
                         line!(),
