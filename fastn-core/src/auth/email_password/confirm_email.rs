@@ -13,6 +13,7 @@ pub(crate) async fn confirm_email(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ConfirmEmail),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
+        file!(),
         line!(),
     );
 
@@ -119,6 +120,7 @@ pub(crate) async fn confirm_email(
     // if some user is already logged in, this will override their session with this one
     let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
         &req_config.request,
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ConfirmEmail),
         &req_config.config.ds,
         session_id,
         next_path,

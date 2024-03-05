@@ -10,6 +10,7 @@ pub(crate) async fn resend_confirmation_email(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ResendConfirmationEmail),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
+        file!(),
         line!(),
     );
 
@@ -53,6 +54,7 @@ pub(crate) async fn resend_confirmation_email(
 
     fastn_core::auth::set_session_cookie_and_redirect_to_next(
         &req_config.request,
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ResendConfirmationEmail),
         &req_config.config.ds,
         session_id,
         next,

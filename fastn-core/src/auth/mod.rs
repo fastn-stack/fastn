@@ -138,6 +138,7 @@ pub async fn get_auth_identities(
 
 async fn set_session_cookie_and_redirect_to_next(
     req: &fastn_core::http::Request,
+    ekind: fastn_core::log::EventKind,
     ds: &fastn_ds::DocumentStore,
     session_id: i64,
     next: String,
@@ -145,23 +146,69 @@ async fn set_session_cookie_and_redirect_to_next(
     let user = match fastn_core::auth::get_authenticated_user_with_email(&session_id, ds).await {
         Err(e) => {
             tracing::error!("couldn't retrieve authenticated user. Reason: {:?}", e);
+            return match e {
+                AuthUserError::UserExistsWithUnverifiedEmail(_) => {
+                    // [ERROR] logging (user: not verified)
+                    let log_err_message = "user: not verified".to_string();
+                    req.log(
+                        ekind,
+                        fastn_core::log::EntityKind::Myself,
+                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        file!(),
+                        line!(),
+                    );
+                    fastn_core::http::user_err(
+                        // TODO: there should be an option to configure the resend verification
+                        // mail webpage
+                        vec![("username".into(), vec!["User is not verified".into()])],
+                        fastn_core::http::StatusCode::OK,
+                    )
+                }
+                AuthUserError::UserDoesNotExist => {
+                    // [ERROR] logging (user: non-existent)
+                    let log_err_message = "user: does not exist".to_string();
+                    req.log(
+                        ekind,
+                        fastn_core::log::EntityKind::Myself,
+                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        file!(),
+                        line!(),
+                    );
+                    Err(fastn_core::Error::GenericError(
+                        "User does not exist".to_string(),
+                    ))
+                }
+                AuthUserError::WrongQuery(e) => {
+                    // [ERROR] logging (user: database query error)
+                    let log_err_message = format!("diesel: {:?}", &e);
+                    req.log(
+                        ekind,
+                        fastn_core::log::EntityKind::Myself,
+                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        file!(),
+                        line!(),
+                    );
 
-            if e == AuthUserError::UserDoesNotExist {
-                return Err(fastn_core::Error::GenericError(
-                    "User does not exist".to_string(),
-                ));
-            } else if let AuthUserError::UserExistsWithUnverifiedEmail(_) = e {
-                return fastn_core::http::user_err(
-                    // TODO: there should be an option to configure the resend verification
-                    // mail webpage
-                    vec![("username".into(), vec!["User is not verified".into()])],
-                    fastn_core::http::StatusCode::OK,
-                );
-            }
+                    Err(fastn_core::Error::DatabaseError {
+                        message: e.to_string(),
+                    })
+                }
+                AuthUserError::Connection { ref reason } => {
+                    // [ERROR] logging (user: database connection error)
+                    let log_err_message = format!("diesel: {:?}", reason.as_str());
+                    req.log(
+                        ekind,
+                        fastn_core::log::EntityKind::Myself,
+                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        file!(),
+                        line!(),
+                    );
 
-            return Err(fastn_core::Error::GenericError(
-                "Failed to query database".to_string(),
-            ));
+                    Err(fastn_core::Error::DatabaseError {
+                        message: reason.clone(),
+                    })
+                }
+            };
         }
 
         Ok(data) => data,
@@ -209,7 +256,7 @@ pub enum AuthUserError {
     #[error("Failed to query db. Details: {0:?}")]
     WrongQuery(#[from] diesel::result::Error),
 
-    #[error("Faile to get a connection to the database, reason: {reason:?}")]
+    #[error("Failed to get a connection to the database, reason: {reason:?}")]
     Connection { reason: String },
 }
 

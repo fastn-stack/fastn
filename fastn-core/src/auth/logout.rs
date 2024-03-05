@@ -12,6 +12,7 @@ pub async fn logout(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Logout),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
+        file!(),
         line!(),
     );
 

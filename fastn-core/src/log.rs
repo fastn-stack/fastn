@@ -301,6 +301,7 @@ pub struct Log {
     pub message: String,
     pub request: fastn_core::log::RequestLog,
     pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub doc: String,
     pub line_number: u32,
 }
 
@@ -310,6 +311,7 @@ impl fastn_core::http::Request {
         ekind: fastn_core::log::EventKind,
         okind: fastn_core::log::EntityKind,
         outcome: fastn_core::log::OutcomeKind,
+        doc_name: &str,
         line_number: u32,
     ) {
         let log_level = LogLevel::from(&ekind, &okind, &outcome);
@@ -322,6 +324,7 @@ impl fastn_core::http::Request {
             message: log_level.message(),
             level: log_level,
             timestamp: chrono::Utc::now(),
+            doc: doc_name.to_string(),
             line_number,
         });
     }

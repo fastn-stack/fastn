@@ -12,6 +12,7 @@ pub(crate) async fn login(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
+        file!(),
         line!(),
     );
 
@@ -36,6 +37,7 @@ pub(crate) async fn login(
                     fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
                     fastn_core::log::EntityKind::Myself,
                     fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Default),
+                    file!(),
                     line!(),
                 );
 
@@ -48,6 +50,7 @@ pub(crate) async fn login(
                     fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
                     fastn_core::log::EntityKind::Myself,
                     fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    file!(),
                     line!(),
                 );
 
@@ -71,6 +74,7 @@ pub(crate) async fn login(
                 fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
                 fastn_core::log::EntityKind::Myself,
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
                 line!(),
             );
 
@@ -108,6 +112,7 @@ pub(crate) async fn login(
             fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
             fastn_core::log::EntityKind::Myself,
             fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            file!(),
             line!(),
         );
 
@@ -125,6 +130,7 @@ pub(crate) async fn login(
                 fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
                 fastn_core::log::EntityKind::Myself,
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
                 line!(),
             );
 
@@ -153,6 +159,7 @@ pub(crate) async fn login(
                 fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
                 fastn_core::log::EntityKind::Myself,
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
                 line!(),
             );
 
@@ -176,6 +183,7 @@ pub(crate) async fn login(
             fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
             fastn_core::log::EntityKind::Myself,
             fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            file!(),
             line!(),
         );
 
@@ -196,6 +204,7 @@ pub(crate) async fn login(
                 fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
                 fastn_core::log::EntityKind::Myself,
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
                 line!(),
             );
 
@@ -216,6 +225,7 @@ pub(crate) async fn login(
             fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
             fastn_core::log::EntityKind::Myself,
             fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            file!(),
             line!(),
         );
 
@@ -249,6 +259,7 @@ pub(crate) async fn login(
                 fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
                 fastn_core::log::EntityKind::Myself,
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
                 line!(),
             );
             return Err(e.into());
@@ -261,6 +272,7 @@ pub(crate) async fn login(
     // https://stackoverflow.com/a/39739894
     fastn_core::auth::set_session_cookie_and_redirect_to_next(
         &req_config.request,
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
         &req_config.config.ds,
         session_id,
         next,

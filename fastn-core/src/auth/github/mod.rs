@@ -16,6 +16,7 @@ pub async fn login(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubLogin),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
+        file!(),
         line!(),
     );
 
@@ -60,6 +61,7 @@ pub async fn callback(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubCallback),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
+        file!(),
         line!(),
     );
 
@@ -160,7 +162,11 @@ pub async fn callback(
         tracing::info!("token stored. token_id: {}", &token_id);
 
         return fastn_core::auth::set_session_cookie_and_redirect_to_next(
-            req, ds, session_id, next,
+            req,
+            fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubCallback),
+            ds,
+            session_id,
+            next,
         )
         .await;
     }
@@ -250,9 +256,14 @@ pub async fn callback(
     };
 
     // redirect to onboarding route with a GET request
-    let mut resp =
-        fastn_core::auth::set_session_cookie_and_redirect_to_next(req, ds, session_id, next_path)
-            .await?;
+    let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
+        req,
+        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubCallback),
+        ds,
+        session_id,
+        next_path,
+    )
+    .await?;
 
     if onboarding_enabled {
         resp.add_cookie(
