@@ -251,29 +251,6 @@ impl fastn_core::http::Request {
         });
     }
 
-    pub fn log_with_no_message(
-        &self,
-        site: Option<fastn_core::log::SiteLog>,
-        ekind: fastn_core::log::EventKind,
-        okind: fastn_core::log::EntityKind,
-        outcome: fastn_core::log::OutcomeKind,
-        line_number: u32,
-    ) {
-        let log_level = LogLevel::from(&ekind, &okind, &outcome);
-        let mut log = self.log.write().unwrap();
-        (*log).push(Log {
-            ekind,
-            okind,
-            outcome,
-            request: self.to_request_log(),
-            message: log_level.message(),
-            level: log_level,
-            site,
-            timestamp: chrono::Utc::now(),
-            line_number,
-        });
-    }
-
     pub fn log_with_no_site(
         &self,
         ekind: fastn_core::log::EventKind,
