@@ -47,9 +47,7 @@ pub(crate) async fn login(
                 req.log(
                     fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
                     fastn_core::log::EntityKind::Myself,
-                    fastn_core::log::OutcomeKind::Error(fastn_core::log::Outcome::Descriptive(
-                        log_err_message,
-                    )),
+                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                     line!(),
                 );
 
@@ -72,9 +70,7 @@ pub(crate) async fn login(
             req.log(
                 fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
                 fastn_core::log::EntityKind::Myself,
-                fastn_core::log::OutcomeKind::Error(fastn_core::log::Outcome::Descriptive(
-                    log_err_message,
-                )),
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 line!(),
             );
 
@@ -111,9 +107,7 @@ pub(crate) async fn login(
         req.log(
             fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
             fastn_core::log::EntityKind::Myself,
-            fastn_core::log::OutcomeKind::Error(fastn_core::log::Outcome::Descriptive(
-                log_err_message,
-            )),
+            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
             line!(),
         );
 
@@ -130,9 +124,7 @@ pub(crate) async fn login(
             req.log(
                 fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
                 fastn_core::log::EntityKind::Myself,
-                fastn_core::log::OutcomeKind::Error(fastn_core::log::Outcome::Descriptive(
-                    log_err_message,
-                )),
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 line!(),
             );
 
@@ -160,9 +152,7 @@ pub(crate) async fn login(
             req.log(
                 fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
                 fastn_core::log::EntityKind::Myself,
-                fastn_core::log::OutcomeKind::Error(fastn_core::log::Outcome::Descriptive(
-                    log_err_message,
-                )),
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 line!(),
             );
 
@@ -185,9 +175,7 @@ pub(crate) async fn login(
         req.log(
             fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
             fastn_core::log::EntityKind::Myself,
-            fastn_core::log::OutcomeKind::Error(fastn_core::log::Outcome::Descriptive(
-                log_err_message,
-            )),
+            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
             line!(),
         );
 
@@ -207,9 +195,7 @@ pub(crate) async fn login(
             req.log(
                 fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
                 fastn_core::log::EntityKind::Myself,
-                fastn_core::log::OutcomeKind::Error(fastn_core::log::Outcome::Descriptive(
-                    log_err_message,
-                )),
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 line!(),
             );
 
@@ -229,9 +215,7 @@ pub(crate) async fn login(
         req.log(
             fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
             fastn_core::log::EntityKind::Myself,
-            fastn_core::log::OutcomeKind::Error(fastn_core::log::Outcome::Descriptive(
-                log_err_message,
-            )),
+            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
             line!(),
         );
 
@@ -264,9 +248,7 @@ pub(crate) async fn login(
             req.log(
                 fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
                 fastn_core::log::EntityKind::Myself,
-                fastn_core::log::OutcomeKind::Error(fastn_core::log::Outcome::Descriptive(
-                    log_err_message,
-                )),
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 line!(),
             );
             return Err(e.into());

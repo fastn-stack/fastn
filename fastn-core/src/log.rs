@@ -27,11 +27,30 @@ pub enum EntityKind {
     Myself,
 }
 
+// todo: convert descriptive outcomes as enums
 #[derive(Debug, Clone)]
 pub enum OutcomeKind {
     Info,
     Success(Outcome),
     Error(Outcome),
+}
+
+impl OutcomeKind {
+    pub fn success_default() -> Self {
+        OutcomeKind::Success(Outcome::Default)
+    }
+
+    pub fn success_descriptive(message: String) -> Self {
+        OutcomeKind::Success(Outcome::Descriptive(message))
+    }
+
+    pub fn error_default() -> Self {
+        OutcomeKind::Error(Outcome::Default)
+    }
+
+    pub fn error_descriptive(message: String) -> Self {
+        OutcomeKind::Error(Outcome::Descriptive(message))
+    }
 }
 
 // todo: implement this as enum for different auth operations
