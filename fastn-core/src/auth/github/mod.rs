@@ -13,7 +13,7 @@ pub async fn login(
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     req.log(
-        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubLogin),
+        "github-login",
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),
@@ -57,7 +57,7 @@ pub async fn callback(
     use diesel_async::RunQueryDsl;
 
     req.log(
-        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubCallback),
+        "github-callback",
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),
@@ -161,7 +161,7 @@ pub async fn callback(
 
         return fastn_core::auth::set_session_cookie_and_redirect_to_next(
             req,
-            fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubCallback),
+            "github-callback",
             ds,
             session_id,
             next,
@@ -256,7 +256,7 @@ pub async fn callback(
     // redirect to onboarding route with a GET request
     let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
         req,
-        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubCallback),
+        "github-callback",
         ds,
         session_id,
         next_path,

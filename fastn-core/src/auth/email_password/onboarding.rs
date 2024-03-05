@@ -7,7 +7,7 @@ pub(crate) async fn onboarding(
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     req.log(
-        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Onboarding),
+        "onboarding",
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),

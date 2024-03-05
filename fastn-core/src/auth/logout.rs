@@ -9,7 +9,7 @@ pub async fn logout(
     use diesel_async::RunQueryDsl;
 
     req.log(
-        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Logout),
+        "logout",
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),

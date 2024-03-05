@@ -8,7 +8,7 @@ pub async fn handle_auth(
     use fastn_core::auth::Route;
 
     req.log(
-        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ConfirmEmail),
+        "initial",
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),
@@ -66,7 +66,7 @@ pub async fn handle_auth(
         }
         Route::Invalid => {
             req.log(
-                fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::InvalidRoute),
+                "invalid-route",
                 fastn_core::log::OutcomeKind::Error(fastn_core::log::Outcome::Default),
                 file!(),
                 line!(),

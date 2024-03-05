@@ -16,7 +16,7 @@ pub(crate) async fn forgot_password_request(
     use diesel_async::RunQueryDsl;
 
     req.log(
-        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ForgotPassword),
+        "forgot-password",
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),
@@ -215,7 +215,7 @@ pub(crate) async fn forgot_password_request_success(
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     req.log(
-        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ForgotPasswordSuccess),
+        "forgot-password-success",
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),
@@ -249,7 +249,7 @@ pub(crate) async fn set_password(
     use diesel_async::RunQueryDsl;
 
     req.log(
-        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::SetPassword),
+        "set-password",
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),
@@ -428,7 +428,7 @@ pub(crate) async fn set_password_success(
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     req.log(
-        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::SetPasswordSuccess),
+        "set-password-success",
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),

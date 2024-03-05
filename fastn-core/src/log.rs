@@ -3,6 +3,12 @@ pub enum EventKind {
     Auth(AuthEvent),
 }
 
+impl EventKind {
+    pub fn from_auth_event_str(event: &str) -> Self {
+        EventKind::Auth(AuthEvent::from_str(event))
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum AuthEvent {
     Initial,
@@ -20,6 +26,28 @@ pub enum AuthEvent {
     SetPassword,
     SetPasswordSuccess,
     InvalidRoute,
+}
+
+impl AuthEvent {
+    pub fn from_str(event: &str) -> Self {
+        match event {
+            "login" => AuthEvent::Login,
+            "logout" => AuthEvent::Logout,
+            "github-login" => AuthEvent::GithubLogin,
+            "github-callback" => AuthEvent::GithubCallback,
+            "create-account" => AuthEvent::CreateAccount,
+            "email-confirmation" => AuthEvent::EmailConfirmation,
+            "confirm-email" => AuthEvent::ConfirmEmail,
+            "resend-confirmation-email" => AuthEvent::ResendConfirmationEmail,
+            "onboarding" => AuthEvent::Onboarding,
+            "forgot-password" => AuthEvent::ForgotPassword,
+            "forgot-password-success" => AuthEvent::ForgotPasswordSuccess,
+            "set-password" => AuthEvent::SetPassword,
+            "set-password-success" => AuthEvent::SetPasswordSuccess,
+            "initial" => AuthEvent::Initial,
+            "invalid-route" | _ => AuthEvent::InvalidRoute,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -308,12 +336,15 @@ pub struct Log {
 impl fastn_core::http::Request {
     pub fn log(
         &self,
-        ekind: fastn_core::log::EventKind,
+        ekind: &str,
         outcome: fastn_core::log::OutcomeKind,
         doc_name: &str,
         line_number: u32,
     ) {
+        // Auth specific ----------------------------------
+        let ekind = fastn_core::log::EventKind::Auth(AuthEvent::from_str(ekind));
         let okind = fastn_core::log::EntityKind::Myself;
+        // ------------------------------------------------
         let log_level = LogLevel::from(&ekind, &okind, &outcome);
         let mut log = self.log.write().unwrap();
         (*log).push(Log {

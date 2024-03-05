@@ -36,7 +36,7 @@ pub(crate) async fn create_account(
     use validator::ValidateArgs;
 
     req.log(
-        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::CreateAccount),
+        "create-account",
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),

@@ -138,7 +138,7 @@ pub async fn get_auth_identities(
 
 async fn set_session_cookie_and_redirect_to_next(
     req: &fastn_core::http::Request,
-    ekind: fastn_core::log::EventKind,
+    ekind: &str,
     ds: &fastn_ds::DocumentStore,
     session_id: i64,
     next: String,

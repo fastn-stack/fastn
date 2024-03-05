@@ -9,7 +9,7 @@ pub(crate) async fn login(
 
     // [INFO] logging
     req.log(
-        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
+        "login",
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),
@@ -33,7 +33,7 @@ pub(crate) async fn login(
             Ok(resp) => {
                 // [SUCCESS] logging
                 req.log(
-                    fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
+                    "login",
                     fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Default),
                     file!(),
                     line!(),
@@ -45,7 +45,7 @@ pub(crate) async fn login(
                 // [ERROR] logging (read_ftd)
                 let log_err_message = format!("read_ftd: {:?}", &e);
                 req.log(
-                    fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
+                    "login",
                     fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                     file!(),
                     line!(),
@@ -68,7 +68,7 @@ pub(crate) async fn login(
             // [ERROR] logging (payload)
             let log_err_message = format!("payload: invalid payload {:?}", &e);
             req.log(
-                fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
+                "login",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 file!(),
                 line!(),
@@ -105,7 +105,7 @@ pub(crate) async fn login(
         let log_err_message = format!("User err: {}", err_message);
         // [ERROR] logging (user)
         req.log(
-            fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
+            "login",
             fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
             file!(),
             line!(),
@@ -122,7 +122,7 @@ pub(crate) async fn login(
 
             // [ERROR] logging (pool error)
             req.log(
-                fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
+                "login",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 file!(),
                 line!(),
@@ -150,7 +150,7 @@ pub(crate) async fn login(
 
             // [ERROR] logging (user not found)
             req.log(
-                fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
+                "login",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 file!(),
                 line!(),
@@ -173,7 +173,7 @@ pub(crate) async fn login(
         // [ERROR] logging (user password is empty)
         let log_err_message = "User password: Is empty/blank".to_string();
         req.log(
-            fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
+            "login",
             fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
             file!(),
             line!(),
@@ -193,7 +193,7 @@ pub(crate) async fn login(
             // [ERROR] logging (hashed password: parse error)
             let log_err_message = format!("hashed password: {}", err_message.as_str());
             req.log(
-                fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
+                "login",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 file!(),
                 line!(),
@@ -213,7 +213,7 @@ pub(crate) async fn login(
         // [ERROR] logging (password: mismatch)
         let log_err_message = "password: incorrect password".to_string();
         req.log(
-            fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
+            "login",
             fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
             file!(),
             line!(),
@@ -246,7 +246,7 @@ pub(crate) async fn login(
             // [ERROR] logging (session_id)
             let log_err_message = format!("session_id: {:?}", &e);
             req.log(
-                fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
+                "login",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 file!(),
                 line!(),
@@ -261,7 +261,7 @@ pub(crate) async fn login(
     // https://stackoverflow.com/a/39739894
     fastn_core::auth::set_session_cookie_and_redirect_to_next(
         &req_config.request,
-        fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Login),
+        "login",
         &req_config.config.ds,
         session_id,
         next,
