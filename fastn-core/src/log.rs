@@ -27,19 +27,34 @@ pub enum EntityKind {
     Myself,
 }
 
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Clone)]
 pub enum OutcomeKind {
-    #[default]
     Info,
-    Error,
+    Success(Outcome),
+    Error(Outcome),
+}
+
+// todo: implement this as enum for different auth operations
+#[derive(Debug, Clone)]
+pub enum Outcome {
+    Default,
+    Descriptive(String),
+}
+
+impl Outcome {
+    fn message(&self) -> String {
+        match self {
+            Outcome::Default => "Default".to_string(),
+            Outcome::Descriptive(s) => s.clone(),
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
 pub enum LogLevel {
     Info(InfoLevel),
     Error(ErrorLevel),
-    // todo: implement this
-    // Warning(WarningLevel),
+    Success(SuccessLevel),
 }
 
 impl LogLevel {
@@ -90,12 +105,25 @@ impl LogLevel {
                     LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::InvalidRoute))
                 }
             },
-            (EventKind::Auth(event), EntityKind::Myself, OutcomeKind::Error) => match event {
-                AuthEvent::InvalidRoute => {
-                    LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::InvalidRoute))
+            (EventKind::Auth(event), EntityKind::Myself, OutcomeKind::Error(error)) => {
+                match event {
+                    AuthEvent::InvalidRoute => {
+                        LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::InvalidRoute))
+                    }
+                    AuthEvent::Login => {
+                        LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::Login(error.to_owned())))
+                    }
+                    _ => LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::Undefined)),
                 }
-                _ => LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::Undefined)),
-            },
+            }
+            (EventKind::Auth(event), EntityKind::Myself, OutcomeKind::Success(outcome)) => {
+                match event {
+                    AuthEvent::Login => LogLevel::Success(SuccessLevel::Auth(
+                        AuthSuccessLevel::Login(outcome.to_owned()),
+                    )),
+                    _ => LogLevel::Success(SuccessLevel::Undefined),
+                }
+            }
         }
     }
 
@@ -103,6 +131,7 @@ impl LogLevel {
         match self {
             LogLevel::Info(i) => i.message(),
             LogLevel::Error(e) => e.message(),
+            LogLevel::Success(s) => s.message(),
         }
     }
 }
@@ -153,6 +182,7 @@ impl AuthInfoLevel {
 
 #[derive(Debug, Clone)]
 pub enum AuthErrorLevel {
+    Login(Outcome),
     InvalidRoute,
     Undefined,
 }
@@ -160,10 +190,10 @@ pub enum AuthErrorLevel {
 impl AuthErrorLevel {
     fn message(&self) -> String {
         match self {
-            AuthErrorLevel::InvalidRoute => "[ERROR]: Invalid Auth Route",
-            AuthErrorLevel::Undefined => "[ERROR]: Undefined Auth Route",
+            AuthErrorLevel::Login(error) => format!("[ERROR]: Login: {}", error.message()),
+            AuthErrorLevel::InvalidRoute => "[ERROR]: Invalid Auth Route".to_string(),
+            AuthErrorLevel::Undefined => "[ERROR]: Undefined Auth Route".to_string(),
         }
-        .to_string()
     }
 }
 
@@ -189,6 +219,35 @@ impl ErrorLevel {
     fn message(&self) -> String {
         match self {
             ErrorLevel::Auth(e) => e.message(),
+        }
+    }
+}
+
+// todo: remove undefined later
+#[derive(Debug, Clone)]
+pub enum SuccessLevel {
+    Auth(AuthSuccessLevel),
+    Undefined,
+}
+
+impl SuccessLevel {
+    fn message(&self) -> String {
+        match self {
+            SuccessLevel::Auth(e) => e.message(),
+            SuccessLevel::Undefined => "[SUCCESS]: Undefined".to_string(),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum AuthSuccessLevel {
+    Login(Outcome),
+}
+
+impl AuthSuccessLevel {
+    fn message(&self) -> String {
+        match self {
+            AuthSuccessLevel::Login(outcome) => format!("[SUCCESS]: Login: {}", outcome.message()),
         }
     }
 }
@@ -221,7 +280,6 @@ pub struct Log {
     pub okind: fastn_core::log::EntityKind,
     pub outcome: fastn_core::log::OutcomeKind,
     pub message: String,
-    pub site: Option<fastn_core::log::SiteLog>,
     pub request: fastn_core::log::RequestLog,
     pub timestamp: chrono::DateTime<chrono::Utc>,
     pub line_number: u32,
@@ -230,7 +288,6 @@ pub struct Log {
 impl fastn_core::http::Request {
     pub fn log(
         &self,
-        site: Option<fastn_core::log::SiteLog>,
         ekind: fastn_core::log::EventKind,
         okind: fastn_core::log::EntityKind,
         outcome: fastn_core::log::OutcomeKind,
@@ -245,29 +302,6 @@ impl fastn_core::http::Request {
             request: self.to_request_log(),
             message: log_level.message(),
             level: log_level,
-            site,
-            timestamp: chrono::Utc::now(),
-            line_number,
-        });
-    }
-
-    pub fn log_with_no_site(
-        &self,
-        ekind: fastn_core::log::EventKind,
-        okind: fastn_core::log::EntityKind,
-        outcome: fastn_core::log::OutcomeKind,
-        line_number: u32,
-    ) {
-        let log_level = LogLevel::from(&ekind, &okind, &outcome);
-        let mut log = self.log.write().unwrap();
-        (*log).push(Log {
-            ekind,
-            okind,
-            outcome,
-            request: self.to_request_log(),
-            message: log_level.message(),
-            level: log_level,
-            site: None,
             timestamp: chrono::Utc::now(),
             line_number,
         });

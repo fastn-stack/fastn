@@ -15,7 +15,7 @@ pub(crate) async fn forgot_password_request(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    req.log_with_no_site(
+    req.log(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ForgotPassword),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
@@ -214,7 +214,7 @@ pub(crate) async fn forgot_password_request_success(
     req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    req.log_with_no_site(
+    req.log(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ForgotPasswordSuccess),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
@@ -248,7 +248,7 @@ pub(crate) async fn set_password(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    req.log_with_no_site(
+    req.log(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::SetPassword),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
@@ -427,7 +427,7 @@ pub(crate) async fn set_password_success(
     req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    req.log_with_no_site(
+    req.log(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::SetPasswordSuccess),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,

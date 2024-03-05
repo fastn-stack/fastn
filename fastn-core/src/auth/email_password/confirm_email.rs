@@ -9,7 +9,7 @@ pub(crate) async fn confirm_email(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    req.log_with_no_site(
+    req.log(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ConfirmEmail),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,

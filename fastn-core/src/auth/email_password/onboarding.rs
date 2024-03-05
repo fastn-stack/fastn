@@ -6,7 +6,7 @@ pub(crate) async fn onboarding(
     config: &fastn_core::Config,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    req.log_with_no_site(
+    req.log(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Onboarding),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,

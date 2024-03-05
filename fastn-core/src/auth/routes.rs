@@ -7,7 +7,7 @@ pub async fn handle_auth(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use fastn_core::auth::Route;
 
-    req.log_with_no_site(
+    req.log(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ConfirmEmail),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
@@ -65,10 +65,10 @@ pub async fn handle_auth(
             fastn_core::auth::email_password::set_password_success(&req, req_config).await
         }
         Route::Invalid => {
-            req.log_with_no_site(
+            req.log(
                 fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::InvalidRoute),
                 fastn_core::log::EntityKind::Myself,
-                fastn_core::log::OutcomeKind::Error,
+                fastn_core::log::OutcomeKind::Error(fastn_core::log::Outcome::Default),
                 line!(),
             );
             Ok(fastn_core::not_found!("route not found: {}", req.path()))

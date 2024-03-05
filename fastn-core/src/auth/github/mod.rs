@@ -12,7 +12,7 @@ pub async fn login(
     ds: &fastn_ds::DocumentStore,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    req.log_with_no_site(
+    req.log(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubLogin),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
@@ -56,7 +56,7 @@ pub async fn callback(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    req.log_with_no_site(
+    req.log(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::GithubCallback),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,

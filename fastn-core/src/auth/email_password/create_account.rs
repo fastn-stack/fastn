@@ -35,7 +35,7 @@ pub(crate) async fn create_account(
     use diesel_async::RunQueryDsl;
     use validator::ValidateArgs;
 
-    req.log_with_no_site(
+    req.log(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::CreateAccount),
         fastn_core::log::EntityKind::Myself,
         fastn_core::log::OutcomeKind::Info,
