@@ -27,6 +27,13 @@ pub enum EntityKind {
     Myself,
 }
 
+#[derive(Debug, Default, Clone)]
+pub enum OutcomeKind {
+    #[default]
+    Info,
+    Error,
+}
+
 #[derive(Debug, Clone)]
 pub enum LogLevel {
     Info(InfoLevel),
@@ -36,9 +43,13 @@ pub enum LogLevel {
 }
 
 impl LogLevel {
-    pub fn from(ekind: &fastn_core::log::EventKind, okind: &fastn_core::log::EntityKind) -> Self {
-        match (ekind, okind) {
-            (EventKind::Auth(event), EntityKind::Myself) => match event {
+    pub fn from(
+        ekind: &fastn_core::log::EventKind,
+        okind: &fastn_core::log::EntityKind,
+        outcome: &fastn_core::log::OutcomeKind,
+    ) -> Self {
+        match (ekind, okind, outcome) {
+            (EventKind::Auth(event), EntityKind::Myself, OutcomeKind::Info) => match event {
                 AuthEvent::Initial => LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::Initial)),
                 AuthEvent::Login => LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::LoginRoute)),
                 AuthEvent::Logout => LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::LogoutRoute)),
@@ -76,8 +87,14 @@ impl LogLevel {
                     LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::SetPasswordSuccessRoute))
                 }
                 AuthEvent::InvalidRoute => {
+                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::InvalidRoute))
+                }
+            },
+            (EventKind::Auth(event), EntityKind::Myself, OutcomeKind::Error) => match event {
+                AuthEvent::InvalidRoute => {
                     LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::InvalidRoute))
                 }
+                _ => LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::Undefined)),
             },
         }
     }
@@ -106,6 +123,7 @@ pub enum AuthInfoLevel {
     ForgotPasswordSuccessRoute,
     SetPasswordRoute,
     SetPasswordSuccessRoute,
+    InvalidRoute,
 }
 
 impl AuthInfoLevel {
@@ -127,6 +145,7 @@ impl AuthInfoLevel {
             AuthInfoLevel::ForgotPasswordSuccessRoute => "[INFO]: Forgot Password Success Route",
             AuthInfoLevel::SetPasswordRoute => "[INFO]: Set Password Route",
             AuthInfoLevel::SetPasswordSuccessRoute => "[INFO]: Set Password Success Route",
+            AuthInfoLevel::InvalidRoute => "[INFO]: Accessing Invalid Route",
         }
         .to_string()
     }
@@ -135,12 +154,14 @@ impl AuthInfoLevel {
 #[derive(Debug, Clone)]
 pub enum AuthErrorLevel {
     InvalidRoute,
+    Undefined,
 }
 
 impl AuthErrorLevel {
     fn message(&self) -> String {
         match self {
             AuthErrorLevel::InvalidRoute => "[ERROR]: Invalid Auth Route",
+            AuthErrorLevel::Undefined => "[ERROR]: Undefined Auth Route",
         }
         .to_string()
     }
@@ -198,6 +219,7 @@ pub struct Log {
     pub level: fastn_core::log::LogLevel,
     pub ekind: fastn_core::log::EventKind,
     pub okind: fastn_core::log::EntityKind,
+    pub outcome: fastn_core::log::OutcomeKind,
     pub message: String,
     pub site: Option<fastn_core::log::SiteLog>,
     pub request: fastn_core::log::RequestLog,
@@ -211,13 +233,15 @@ impl fastn_core::http::Request {
         site: Option<fastn_core::log::SiteLog>,
         ekind: fastn_core::log::EventKind,
         okind: fastn_core::log::EntityKind,
+        outcome: fastn_core::log::OutcomeKind,
         line_number: u32,
     ) {
-        let log_level = LogLevel::from(&ekind, &okind);
+        let log_level = LogLevel::from(&ekind, &okind, &outcome);
         let mut log = self.log.write().unwrap();
         (*log).push(Log {
             ekind,
             okind,
+            outcome,
             request: self.to_request_log(),
             message: log_level.message(),
             level: log_level,
@@ -232,13 +256,15 @@ impl fastn_core::http::Request {
         site: Option<fastn_core::log::SiteLog>,
         ekind: fastn_core::log::EventKind,
         okind: fastn_core::log::EntityKind,
+        outcome: fastn_core::log::OutcomeKind,
         line_number: u32,
     ) {
-        let log_level = LogLevel::from(&ekind, &okind);
+        let log_level = LogLevel::from(&ekind, &okind, &outcome);
         let mut log = self.log.write().unwrap();
         (*log).push(Log {
             ekind,
             okind,
+            outcome,
             request: self.to_request_log(),
             message: log_level.message(),
             level: log_level,
@@ -252,13 +278,15 @@ impl fastn_core::http::Request {
         &self,
         ekind: fastn_core::log::EventKind,
         okind: fastn_core::log::EntityKind,
+        outcome: fastn_core::log::OutcomeKind,
         line_number: u32,
     ) {
-        let log_level = LogLevel::from(&ekind, &okind);
+        let log_level = LogLevel::from(&ekind, &okind, &outcome);
         let mut log = self.log.write().unwrap();
         (*log).push(Log {
             ekind,
             okind,
+            outcome,
             request: self.to_request_log(),
             message: log_level.message(),
             level: log_level,

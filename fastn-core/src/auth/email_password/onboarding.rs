@@ -9,10 +9,11 @@ pub(crate) async fn onboarding(
     req.log_with_no_site(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::Onboarding),
         fastn_core::log::EntityKind::Myself,
+        fastn_core::log::OutcomeKind::Info,
         line!(),
     );
 
-    // The user is logged in after having verfied their email. This is them first time signing
+    // The user is logged in after having verified their email. This is them first time signing
     // in so we render `onboarding_ftd`.
     // If this is an old user, the cookie FIRST_TIME_SESSION_COOKIE_NAME won't be set for them
     // and this will redirect to `next` which is usually the home page.

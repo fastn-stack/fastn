@@ -10,6 +10,7 @@ pub(crate) async fn email_confirmation_sent(
     req.log_with_no_site(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::EmailConfirmation),
         fastn_core::log::EntityKind::Myself,
+        fastn_core::log::OutcomeKind::Info,
         line!(),
     );
 

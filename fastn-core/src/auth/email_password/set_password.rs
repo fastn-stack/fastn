@@ -18,6 +18,7 @@ pub(crate) async fn forgot_password_request(
     req.log_with_no_site(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ForgotPassword),
         fastn_core::log::EntityKind::Myself,
+        fastn_core::log::OutcomeKind::Info,
         line!(),
     );
 
@@ -216,6 +217,7 @@ pub(crate) async fn forgot_password_request_success(
     req.log_with_no_site(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ForgotPasswordSuccess),
         fastn_core::log::EntityKind::Myself,
+        fastn_core::log::OutcomeKind::Info,
         line!(),
     );
 
@@ -249,6 +251,7 @@ pub(crate) async fn set_password(
     req.log_with_no_site(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::SetPassword),
         fastn_core::log::EntityKind::Myself,
+        fastn_core::log::OutcomeKind::Info,
         line!(),
     );
 
@@ -427,6 +430,7 @@ pub(crate) async fn set_password_success(
     req.log_with_no_site(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::SetPasswordSuccess),
         fastn_core::log::EntityKind::Myself,
+        fastn_core::log::OutcomeKind::Info,
         line!(),
     );
 

@@ -38,6 +38,7 @@ pub(crate) async fn create_account(
     req.log_with_no_site(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::CreateAccount),
         fastn_core::log::EntityKind::Myself,
+        fastn_core::log::OutcomeKind::Info,
         line!(),
     );
 

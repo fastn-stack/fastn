@@ -10,6 +10,7 @@ pub async fn handle_auth(
     req.log_with_no_site(
         fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::ConfirmEmail),
         fastn_core::log::EntityKind::Myself,
+        fastn_core::log::OutcomeKind::Info,
         line!(),
     );
 
@@ -67,6 +68,7 @@ pub async fn handle_auth(
             req.log_with_no_site(
                 fastn_core::log::EventKind::Auth(fastn_core::log::AuthEvent::InvalidRoute),
                 fastn_core::log::EntityKind::Myself,
+                fastn_core::log::OutcomeKind::Error,
                 line!(),
             );
             Ok(fastn_core::not_found!("route not found: {}", req.path()))
