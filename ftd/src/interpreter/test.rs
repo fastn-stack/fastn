@@ -209,7 +209,7 @@ fn test_extract_kwargs() {
     )
     .unwrap();
 
-    let component = doc.get_component_by_id("foo#fizz", "test").unwrap();
+    let component = doc.get_component_by_id("test").unwrap();
     let data = component.get_kwargs(&doc, "data").unwrap();
 
     assert_eq!(data.get("bar"), Some(&String::from("Hello")));

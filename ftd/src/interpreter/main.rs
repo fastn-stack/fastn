@@ -1096,14 +1096,10 @@ impl Document {
             .collect_vec()
     }
 
-    pub fn get_component_by_id(
-        &self,
-        component_name: &str,
-        component_id: &str,
-    ) -> Option<&ftd::interpreter::Component> {
+    pub fn get_component_by_id(&self, component_id: &str) -> Option<&ftd::interpreter::Component> {
         self.tree.iter().find(|v| {
             if let Some(id) = &v.id {
-                return v.name.eq(component_name) && id.eq(component_id);
+                return id.eq(component_id);
             }
 
             false
