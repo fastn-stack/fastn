@@ -419,6 +419,14 @@ impl Log {
     pub fn event_data(&self) -> serde_json::Value {
         self.request.event_data()
     }
+
+    pub fn source(&self) -> String {
+        format!("{}, Line: {}", self.doc.as_str(), self.line_number)
+    }
+
+    pub fn message(&self) -> String {
+        self.message.clone()
+    }
 }
 
 impl fastn_core::http::Request {
