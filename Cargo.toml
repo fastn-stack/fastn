@@ -9,7 +9,7 @@ members = [
     "fastn-grammar",
     "fastn-lang",
     "foo",
-    "fastn-ds", 
+    "fastn-ds",
     "fastn-update", "fastn-expr",
     # "fastn-wasm",
     # "fastn-runtime",
@@ -70,7 +70,7 @@ async-recursion = "1"
 async-trait = "0.1"
 actix-web-lab = "0.20"
 bitflags = "2"
-bytemuck = { version = "1", features = [ "derive" ] }
+bytemuck = { version = "1", features = ["derive"] }
 camino = "1"
 clap = "4"
 colored = "2"
@@ -82,7 +82,7 @@ dioxus-native-core = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52
 dioxus-native-core-macro = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 dotenvy = "0.15"
 edit = "0.1"
-env_logger = "0.10"
+env_logger = "0.11"
 enum-iterator = "0.6"
 enum-iterator-derive = "0.6"
 fastn-ds = { path = "fastn-ds" }
@@ -119,9 +119,9 @@ rand_pcg = "0.3"
 realm-lang = "0.1"
 regex = "1"
 reqwest = { version = "0.11", features = ["json"] }
-rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
+# rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 ron = "0.8"
-rquickjs = { version = "0.4", features = ["macro"] }
+rquickjs = { version = "0.5", features = ["macro"] }
 quick-js = "0.4"
 rustc-hash = "1"
 rusty-hook = "0.11"
@@ -130,7 +130,7 @@ serde_json = "1"
 sha2 = "0.10"
 slotmap = "1"
 slug = "0.1"
-taffy = "0.3"
+taffy = "0.4"
 tejar = "0.1"
 thiserror = "1"
 tokio = { version = "1", features = ["full"] }
@@ -141,28 +141,28 @@ ansi_term = "0.12"
 walkdir = "2"
 smallvec = "1"
 wasm-bindgen = "0.2"
-wasmtime = "16"
-wgpu = "0.18"
+wasmtime = "18"
+wgpu = "0.19"
 winit = "0.29"
 zip = "0.6"
 prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }
 argon2 = "0.5"
-lettre = { version = "0.11", features = ["serde", "tokio1", "tokio1-native-tls"]}
-diesel = { version = "2.1", features = ["chrono", "postgres_backend"]}
-diesel-async = { version = "0.4", features = ["postgres", "deadpool", "async-connection-wrapper"]}
+lettre = { version = "0.11", features = ["serde", "tokio1", "tokio1-native-tls"] }
+diesel = { version = "2.1", features = ["chrono", "postgres_backend"] }
+diesel-async = { version = "0.4", features = ["postgres", "deadpool", "async-connection-wrapper"] }
 diesel_async_migrations = "0.12"
-chrono = { version = "0.4", features = ["serde"]}
+chrono = { version = "0.4", features = ["serde"] }
 indicatif = "0.17.1"
 snafu = "0.8.0"
-validator = { version = "0.16", features = ["derive"] }
+validator = { version = "0.17", features = ["derive"] }
 zxcvbn = "2"
 
 [workspace.dependencies.uuid]
 version = "1.6.1"
 features = [
-    "v4",                # Lets you generate random UUIDs
-    "fast-rng",          # Use a faster (but still sufficiently random) RNG
+    "v4", # Lets you generate random UUIDs
+    "fast-rng", # Use a faster (but still sufficiently random) RNG
     "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
     "serde",
 ]
@@ -172,7 +172,7 @@ git = "https://github.com/fastn-stack/fastn-observer"
 rev = "5f64c7b"
 
 [workspace.dependencies.rusqlite]
-version = "0.30"
+version = "0.31"
 features = [
     # We are using bundled version of rusqlite, so we do not need sqlitelib, headers as a
     # dependency. By default, if we do not bundle, our binary will link against system
@@ -204,7 +204,7 @@ features = ["http1", "server"]
 # https://docs.rs/notify/5.0.0/notify/index.html#crossbeam-channel--tokio
 version = "6"
 default-features = false
-features=["macos_kqueue"]
+features = ["macos_kqueue"]
 
 [workspace.dependencies.fbt-lib]
 git = "https://github.com/FifthTry/fbt"
@@ -230,7 +230,7 @@ features = [
 
 [workspace.dependencies.comrak]
 # We use comrak for markup processing.
-version = "0.20"
+version = "0.21"
 # By default, comrak ships with support for syntax highlighting using syntext for "fenced
 # code blocks". We have disabled that by not using default features. We did that because
 # we already have a way to show code in ftd, ftd.code. Further, comark requires syntect 4.6,
