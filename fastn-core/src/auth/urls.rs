@@ -15,6 +15,28 @@ pub(crate) enum Route {
     Invalid,
 }
 
+impl Route {
+    pub fn to_event_kind(&self) -> String {
+        match self {
+            Route::Login => "login",
+            Route::GithubLogin => "github-login",
+            Route::GithubCallback => "github-callback",
+            Route::Logout => "logout",
+            Route::CreateAccount => "create-account",
+            Route::EmailConfirmationSent => "email-confirmation-sent",
+            Route::ConfirmEmail => "confirm-email",
+            Route::ResendConfirmationEmail => "resend-confirmation-email",
+            Route::Onboarding => "onboarding",
+            Route::ForgotPassword => "forgot-password",
+            Route::ForgotPasswordSuccess => "forgot-password-success",
+            Route::SetPassword => "set-password",
+            Route::SetPasswordSuccess => "set-password-success",
+            Route::Invalid => "invalid",
+        }
+        .to_string()
+    }
+}
+
 impl From<&str> for Route {
     fn from(s: &str) -> Self {
         match s {

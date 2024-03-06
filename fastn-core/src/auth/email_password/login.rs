@@ -31,10 +31,13 @@ pub(crate) async fn login(
         .await
         {
             Ok(resp) => {
-                // [SUCCESS] logging
+                // [SUCCESS] logging: login (already logged in)
+                let log_success_message = "user: already logged in".to_string();
                 req.log(
                     "login",
-                    fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Default),
+                    fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Descriptive(
+                        log_success_message,
+                    )),
                     file!(),
                     line!(),
                 );
