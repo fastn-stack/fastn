@@ -43,5 +43,21 @@ pub fn process(
     if let Some(data) = data.get(variable_name.as_str()) {
         return doc.from_json(data, &kind, &value);
     }
+
+    let data = match &value {
+        ftd::ast::VariableValue::String { value, .. } => {
+            serde_json::Value::String(value.to_string())
+        }
+        ftd::ast::VariableValue::Optional {
+            value: ref ivalue, ..
+        } => match ivalue.as_ref() {
+            Some(ftd::ast::VariableValue::String { value, .. }) => {
+                serde_json::Value::String(value.to_string())
+            }
+            _ => serde_json::Value::Null,
+        },
+        _ => serde_json::Value::Null,
+    };
+
     doc.from_json(&data, &kind, &value)
 }
