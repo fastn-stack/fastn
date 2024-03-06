@@ -7,6 +7,29 @@ impl EventKind {
     pub fn from_auth_event_str(event: &str) -> Self {
         EventKind::Auth(AuthEvent::from_str(event))
     }
+
+    pub fn to_string(&self) -> String {
+        match self {
+            EventKind::Auth(event) => match event {
+                AuthEvent::Initial => "initial",
+                AuthEvent::Login => "login",
+                AuthEvent::Logout => "logout",
+                AuthEvent::GithubLogin => "github-login",
+                AuthEvent::GithubCallback => "github-callback",
+                AuthEvent::CreateAccount => "create-account",
+                AuthEvent::EmailConfirmation => "email-confirmation",
+                AuthEvent::ConfirmEmail => "confirm-email",
+                AuthEvent::ResendConfirmationEmail => "resend-confirmation-email",
+                AuthEvent::Onboarding => "onboarding",
+                AuthEvent::ForgotPassword => "forgot-password",
+                AuthEvent::ForgotPasswordSuccess => "forgot-password-success",
+                AuthEvent::SetPassword => "set-password",
+                AuthEvent::SetPasswordSuccess => "set-password-success",
+                AuthEvent::InvalidRoute => "invalid-route",
+            }
+            .to_string(),
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -53,6 +76,15 @@ impl AuthEvent {
 #[derive(Debug, Clone)]
 pub enum EntityKind {
     Myself,
+}
+
+impl EntityKind {
+    pub fn to_string(&self) -> String {
+        match self {
+            EntityKind::Myself => "myself",
+        }
+        .to_string()
+    }
 }
 
 // todo: convert descriptive outcomes as enums
