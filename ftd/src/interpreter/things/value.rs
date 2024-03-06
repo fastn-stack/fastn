@@ -1579,6 +1579,21 @@ impl Value {
         }
     }
 
+    pub fn get_kwargs(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<&ftd::Map<ftd::interpreter::PropertyValue>> {
+        match self {
+            Self::KwArgs { arguments } => Ok(arguments),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected kw-args, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
     pub fn is_equal(&self, other: &Self) -> bool {
         match (self.to_owned().inner(), other.to_owned().inner()) {
             (Some(Value::String { text: ref a, .. }), Some(Value::String { text: ref b, .. })) => {

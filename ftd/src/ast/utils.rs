@@ -78,6 +78,16 @@ pub(crate) fn is_header_key(key: &str) -> bool {
     key.starts_with(HEADER_KEY_START) && key.ends_with('$')
 }
 
+pub(crate) fn get_component_id(
+    headers: &ftd::p1::Headers,
+    doc_id: &str,
+) -> ftd::p1::Result<Option<String>> {
+    match headers.0.iter().find(|header| header.get_key().eq("id")) {
+        Some(id) => id.get_value(doc_id),
+        None => Ok(None),
+    }
+}
+
 pub const REFERENCE: &str = "$";
 pub const CLONE: &str = "*$";
 pub const LOOP: &str = "$loop$";

@@ -79,6 +79,7 @@ impl ComponentDefinition {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Component {
+    pub id: Option<String>,
     pub name: String,
     pub properties: Vec<Property>,
     pub iteration: Option<Loop>,
@@ -90,7 +91,9 @@ pub struct Component {
 }
 
 impl Component {
+    #[allow(clippy::too_many_arguments)]
     fn new(
+        id: Option<String>,
         name: &str,
         properties: Vec<Property>,
         iteration: Option<Loop>,
@@ -100,6 +103,7 @@ impl Component {
         line_number: usize,
     ) -> Component {
         Component {
+            id,
             name: name.to_string(),
             properties,
             iteration,
@@ -178,8 +182,10 @@ impl Component {
         let iteration = Loop::from_headers(&section.headers, doc_id)?;
         let events = Event::from_headers(&section.headers, doc_id)?;
         let condition = ftd::ast::Condition::from_headers(&section.headers, doc_id)?;
+        let id = ftd::ast::utils::get_component_id(&section.headers, doc_id)?;
 
         Ok(Component::new(
+            id,
             section.name.as_str(),
             properties,
             iteration,
@@ -200,6 +206,7 @@ impl Component {
                 Component::from_variable_value(key, value.unwrap(), doc_id)
             }
             ftd::ast::VariableValue::Optional { line_number, .. } => Ok(ftd::ast::Component {
+                id: None,
                 name: key.to_string(),
                 properties: vec![],
                 iteration: None,
@@ -209,6 +216,7 @@ impl Component {
                 line_number,
             }),
             ftd::ast::VariableValue::Constant { line_number, .. } => Ok(ftd::ast::Component {
+                id: None,
                 name: key.to_string(),
                 properties: vec![],
                 iteration: None,
@@ -231,6 +239,7 @@ impl Component {
                     )?);
                 }
                 Ok(ftd::ast::Component {
+                    id: None,
                     name: key.to_string(),
                     properties: vec![],
                     iteration: None,
@@ -298,6 +307,7 @@ impl Component {
                 }
 
                 Ok(ftd::ast::Component {
+                    id: None,
                     name,
                     properties,
                     iteration,
@@ -313,6 +323,7 @@ impl Component {
                 source: value_source,
                 condition,
             } => Ok(ftd::ast::Component {
+                id: None,
                 name: key.to_string(),
                 properties: vec![Property::from_value(
                     Some(value),
