@@ -1,7 +1,7 @@
 // handle: if request.url starts with /-/auth/
 #[tracing::instrument(skip_all)]
 pub async fn handle_auth(
-    req: fastn_core::http::Request,
+    req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
     config: &fastn_core::Config,
 ) -> fastn_core::Result<fastn_core::http::Response> {

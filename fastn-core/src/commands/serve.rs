@@ -166,14 +166,14 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
 #[tracing::instrument(skip_all)]
 pub async fn serve(
     config: &fastn_core::Config,
-    req: fastn_core::http::Request,
+    req: &fastn_core::http::Request,
     only_js: bool,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    if let Some(endpoint_response) = handle_endpoints(config, &req).await {
+    if let Some(endpoint_response) = handle_endpoints(config, req).await {
         return endpoint_response;
     }
 
-    if let Some(default_response) = handle_default_route(&req, config.package.name.as_str()) {
+    if let Some(default_response) = handle_default_route(req, config.package.name.as_str()) {
         return default_response;
     }
 
@@ -187,16 +187,16 @@ pub async fn serve(
 #[tracing::instrument(skip_all)]
 pub async fn serve_helper(
     config: &fastn_core::Config,
-    req: fastn_core::http::Request,
+    req: &fastn_core::http::Request,
     only_js: bool,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
+    let mut req_config = fastn_core::RequestConfig::new(config, req, "", "/");
 
     match (req.method().to_lowercase().as_str(), req.path()) {
         (_, t) if t.starts_with("/-/auth/") => {
             return fastn_core::auth::routes::handle_auth(req, &mut req_config, config).await
         }
-        ("get", "/-/clear-cache/") => return clear_cache(config, req).await,
+        ("get", "/-/clear-cache/") => return clear_cache(config, &req).await,
         ("get", "/-/poll/") => return fastn_core::watcher::poll().await,
         ("get", "/test/") => return test().await,
         _ => {}
@@ -296,7 +296,7 @@ pub(crate) async fn download_init_package(url: &Option<String>) -> std::io::Resu
 
 pub async fn clear_cache(
     config: &fastn_core::Config,
-    req: fastn_core::http::Request,
+    req: &fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     fn is_login(req: &fastn_core::http::Request) -> bool {
         // TODO: Need refactor not happy with this
@@ -312,11 +312,11 @@ pub async fn clear_cache(
     let from = actix_web::web::Query::<Temp>::from_query(req.query_string())?;
     if from.from.eq(&Some("temp-github".to_string())) {
         let _lock = LOCK.write().await;
-        return Ok(fastn_core::apis::cache::clear(config, &req).await);
+        return Ok(fastn_core::apis::cache::clear(config, req).await);
     }
     // TODO: Remove After Demo, till here
 
-    if !is_login(&req) {
+    if !is_login(req) {
         return Ok(actix_web::HttpResponse::Found()
             .append_header((
                 actix_web::http::header::LOCATION,
@@ -326,7 +326,7 @@ pub async fn clear_cache(
     }
 
     let _lock = LOCK.write().await;
-    fastn_core::apis::cache::clear(config, &req).await;
+    fastn_core::apis::cache::clear(config, req).await;
     // TODO: Redirect to Referrer uri
     return Ok(actix_web::HttpResponse::Found()
         .append_header((actix_web::http::header::LOCATION, "/".to_string()))
@@ -557,7 +557,7 @@ async fn actual_route(
     tracing::info!(method = req.method().as_str(), uri = req.path());
     let req = fastn_core::http::Request::from_actix(req, body);
 
-    serve(config, req, false).await
+    serve(config, &req, false).await
 }
 
 #[tracing::instrument(skip_all)]

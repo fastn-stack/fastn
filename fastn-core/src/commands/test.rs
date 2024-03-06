@@ -497,7 +497,7 @@ async fn get_post_response_for_id(
     log_message!(test_parameters.verbose, "Request details");
     log_variable!(test_parameters.verbose, &request);
 
-    let response = fastn_core::commands::serve::serve(config, request, true).await?;
+    let response = fastn_core::commands::serve::serve(config, &request, true).await?;
     update_cookies(saved_cookies, &response);
 
     let test_data = fastn_test_data(&response, test_parameters);
@@ -711,7 +711,7 @@ async fn get_js_for_id(
     log_message!(test_parameters.verbose, "Request details");
     log_variable!(test_parameters.verbose, &request);
 
-    let response = fastn_core::commands::serve::serve(config, request, true).await?;
+    let response = fastn_core::commands::serve::serve(config, &request, true).await?;
     update_cookies(saved_cookies, &response);
 
     let test_data = fastn_test_data(&response, test_parameters);
