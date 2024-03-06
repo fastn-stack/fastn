@@ -344,12 +344,48 @@ pub struct SiteLog {
 #[derive(Debug, Clone)]
 pub struct RequestLog {
     pub host: String,
+    pub user_agent: String,
     pub scheme: String,
     pub method: String,
     pub path: String,
-    pub query: String,
+    pub query_string: String,
     pub ip: Option<String>,
     pub body: Vec<u8>,
+    pub cookies: std::collections::HashMap<String, String>,
+    pub headers: reqwest::header::HeaderMap,
+    pub query: std::collections::HashMap<String, serde_json::Value>,
+}
+
+impl RequestLog {
+    pub fn user_agent(&self) -> String {
+        self.user_agent.clone()
+    }
+
+    pub fn body_as_json<T: serde::de::DeserializeOwned>(&self) -> serde_json::Result<T> {
+        serde_json::from_slice(&self.body)
+    }
+
+    pub fn event_data(&self) -> serde_json::Value {
+        // Todo: Store all headers
+        let headers: std::collections::HashMap<String, String> = self
+            .headers
+            .iter()
+            .filter_map(|(k, v)| {
+                if let Ok(v) = v.to_str() {
+                    Some((k.to_string(), v.to_string()))
+                } else {
+                    None
+                }
+            })
+            .collect();
+
+        serde_json::json!({
+            "json": self.body_as_json::<serde_json::Value>().unwrap_or_default(),
+            "cookies": &self.cookies,
+            "query": &self.query,
+            "headers": headers
+        })
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -363,6 +399,26 @@ pub struct Log {
     pub timestamp: chrono::DateTime<chrono::Utc>,
     pub doc: String,
     pub line_number: u32,
+}
+
+impl Log {
+    pub fn outcome(&self) -> String {
+        match &self.outcome {
+            // todo: improve error outcome
+            OutcomeKind::Error(_outcome) => "error",
+            OutcomeKind::Success(_outcome) => "success",
+            OutcomeKind::Info => "info",
+        }
+        .to_string()
+    }
+
+    pub fn outcome_data(&self) -> String {
+        format!("{:?}", self)
+    }
+
+    pub fn event_data(&self) -> serde_json::Value {
+        self.request.event_data()
+    }
 }
 
 impl fastn_core::http::Request {

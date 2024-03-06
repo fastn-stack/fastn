@@ -180,10 +180,14 @@ impl Request {
     pub fn to_request_log(&self) -> fastn_core::log::RequestLog {
         fastn_core::log::RequestLog {
             host: self.host.clone(),
+            user_agent: self.user_agent().unwrap_or("anonymous".to_string()),
             scheme: self.scheme.to_string(),
             method: self.method.clone(),
             path: self.path.to_string(),
-            query: self.query_string().to_string(),
+            query_string: self.query_string().to_string(),
+            query: self.query.clone(),
+            cookies: self.cookies.clone(),
+            headers: self.headers.clone(),
             ip: self.ip.clone(),
             body: Vec::from(self.body()),
         }
