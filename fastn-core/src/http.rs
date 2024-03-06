@@ -119,11 +119,11 @@ impl Request {
         }
     }
 
-    fn logs(&self) -> Vec<fastn_core::Log> {
+    pub fn logs(&self) -> Vec<fastn_core::Log> {
         self.log.read().unwrap().to_vec()
     }
 
-    fn to_actix(&self) -> actix_web::web::Data<&Self> {
+    pub fn to_actix(&self) -> actix_web::web::Data<&Self> {
         actix_web::web::Data::new(&self)
     }
 
