@@ -119,6 +119,14 @@ impl Request {
         }
     }
 
+    fn logs(&self) -> Vec<fastn_core::Log> {
+        self.log.read().unwrap().to_vec()
+    }
+
+    fn to_actix(&self) -> actix_web::web::Data<&Self> {
+        actix_web::web::Data::new(&self)
+    }
+
     pub fn from_actix(req: actix_web::HttpRequest, body: actix_web::web::Bytes) -> Self {
         let headers = {
             let mut headers = reqwest::header::HeaderMap::new();
