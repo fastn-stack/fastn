@@ -17,7 +17,7 @@ impl EventKind {
                 AuthEvent::GithubLogin => "github-login",
                 AuthEvent::GithubCallback => "github-callback",
                 AuthEvent::CreateAccount => "create-account",
-                AuthEvent::EmailConfirmation => "email-confirmation",
+                AuthEvent::EmailConfirmationSent => "email-confirmation-sent",
                 AuthEvent::ConfirmEmail => "confirm-email",
                 AuthEvent::ResendConfirmationEmail => "resend-confirmation-email",
                 AuthEvent::Onboarding => "onboarding",
@@ -40,7 +40,7 @@ pub enum AuthEvent {
     GithubLogin,
     GithubCallback,
     CreateAccount,
-    EmailConfirmation,
+    EmailConfirmationSent,
     ConfirmEmail,
     ResendConfirmationEmail,
     Onboarding,
@@ -59,7 +59,7 @@ impl AuthEvent {
             "github-login" => AuthEvent::GithubLogin,
             "github-callback" => AuthEvent::GithubCallback,
             "create-account" => AuthEvent::CreateAccount,
-            "email-confirmation" => AuthEvent::EmailConfirmation,
+            "email-confirmation-sent" => AuthEvent::EmailConfirmationSent,
             "confirm-email" => AuthEvent::ConfirmEmail,
             "resend-confirmation-email" => AuthEvent::ResendConfirmationEmail,
             "onboarding" => AuthEvent::Onboarding,
@@ -156,7 +156,7 @@ impl LogLevel {
                 AuthEvent::CreateAccount => {
                     LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::CreateAccountRoute))
                 }
-                AuthEvent::EmailConfirmation => {
+                AuthEvent::EmailConfirmationSent => {
                     LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::EmailConfirmationSentRoute))
                 }
                 AuthEvent::ConfirmEmail => {
@@ -199,6 +199,42 @@ impl LogLevel {
                 match event {
                     AuthEvent::Login => LogLevel::Success(SuccessLevel::Auth(
                         AuthSuccessLevel::Login(outcome.to_owned()),
+                    )),
+                    AuthEvent::Logout => LogLevel::Success(SuccessLevel::Auth(
+                        AuthSuccessLevel::Logout(outcome.to_owned()),
+                    )),
+                    AuthEvent::GithubLogin => LogLevel::Success(SuccessLevel::Auth(
+                        AuthSuccessLevel::GithubLogin(outcome.to_owned()),
+                    )),
+                    AuthEvent::GithubCallback => LogLevel::Success(SuccessLevel::Auth(
+                        AuthSuccessLevel::GithubCallback(outcome.to_owned()),
+                    )),
+                    AuthEvent::CreateAccount => LogLevel::Success(SuccessLevel::Auth(
+                        AuthSuccessLevel::CreateAccount(outcome.to_owned()),
+                    )),
+                    AuthEvent::EmailConfirmationSent => LogLevel::Success(SuccessLevel::Auth(
+                        AuthSuccessLevel::EmailConfirmationSent(outcome.to_owned()),
+                    )),
+                    AuthEvent::ConfirmEmail => LogLevel::Success(SuccessLevel::Auth(
+                        AuthSuccessLevel::ConfirmEmail(outcome.to_owned()),
+                    )),
+                    AuthEvent::ResendConfirmationEmail => LogLevel::Success(SuccessLevel::Auth(
+                        AuthSuccessLevel::ResendConfirmationEmail(outcome.to_owned()),
+                    )),
+                    AuthEvent::Onboarding => LogLevel::Success(SuccessLevel::Auth(
+                        AuthSuccessLevel::Onboarding(outcome.to_owned()),
+                    )),
+                    AuthEvent::ForgotPassword => LogLevel::Success(SuccessLevel::Auth(
+                        AuthSuccessLevel::ForgotPassword(outcome.to_owned()),
+                    )),
+                    AuthEvent::ForgotPasswordSuccess => LogLevel::Success(SuccessLevel::Auth(
+                        AuthSuccessLevel::ForgotPasswordSuccess(outcome.to_owned()),
+                    )),
+                    AuthEvent::SetPassword => LogLevel::Success(SuccessLevel::Auth(
+                        AuthSuccessLevel::SetPassword(outcome.to_owned()),
+                    )),
+                    AuthEvent::SetPasswordSuccess => LogLevel::Success(SuccessLevel::Auth(
+                        AuthSuccessLevel::SetPasswordSuccess(outcome.to_owned()),
                     )),
                     _ => LogLevel::Success(SuccessLevel::Undefined),
                 }
@@ -321,12 +357,63 @@ impl SuccessLevel {
 #[derive(Debug, Clone)]
 pub enum AuthSuccessLevel {
     Login(Outcome),
+    GithubLogin(Outcome),
+    GithubCallback(Outcome),
+    Logout(Outcome),
+    CreateAccount(Outcome),
+    EmailConfirmationSent(Outcome),
+    ConfirmEmail(Outcome),
+    ResendConfirmationEmail(Outcome),
+    Onboarding(Outcome),
+    ForgotPassword(Outcome),
+    ForgotPasswordSuccess(Outcome),
+    SetPassword(Outcome),
+    SetPasswordSuccess(Outcome),
 }
 
 impl AuthSuccessLevel {
     fn message(&self) -> String {
         match self {
             AuthSuccessLevel::Login(outcome) => format!("[SUCCESS]: Login: {}", outcome.message()),
+            AuthSuccessLevel::GithubLogin(outcome) => {
+                format!("[SUCCESS]: Github Login: {}", outcome.message())
+            }
+            AuthSuccessLevel::GithubCallback(outcome) => {
+                format!("[SUCCESS]: Github Callback: {}", outcome.message())
+            }
+            AuthSuccessLevel::Logout(outcome) => {
+                format!("[SUCCESS]: Logout: {}", outcome.message())
+            }
+            AuthSuccessLevel::CreateAccount(outcome) => {
+                format!("[SUCCESS]: Create Account: {}", outcome.message())
+            }
+            AuthSuccessLevel::EmailConfirmationSent(outcome) => {
+                format!("[SUCCESS]: Email Confirmation Sent: {}", outcome.message())
+            }
+            AuthSuccessLevel::ConfirmEmail(outcome) => {
+                format!("[SUCCESS]: Confirm Email: {}", outcome.message())
+            }
+            AuthSuccessLevel::ResendConfirmationEmail(outcome) => {
+                format!(
+                    "[SUCCESS]: Resend Confirmation Email: {}",
+                    outcome.message()
+                )
+            }
+            AuthSuccessLevel::Onboarding(outcome) => {
+                format!("[SUCCESS]: Onboarding: {}", outcome.message())
+            }
+            AuthSuccessLevel::ForgotPassword(outcome) => {
+                format!("[SUCCESS]: Forgot Password: {}", outcome.message())
+            }
+            AuthSuccessLevel::ForgotPasswordSuccess(outcome) => {
+                format!("[SUCCESS]: Forgot Password Success: {}", outcome.message())
+            }
+            AuthSuccessLevel::SetPassword(outcome) => {
+                format!("[SUCCESS]: Set Password: {}", outcome.message())
+            }
+            AuthSuccessLevel::SetPasswordSuccess(outcome) => {
+                format!("[SUCCESS]: Set Password Success: {}", outcome.message())
+            }
         }
     }
 }

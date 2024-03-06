@@ -8,7 +8,7 @@ pub(crate) async fn email_confirmation_sent(
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     req.log(
-        "email-confirmation",
+        "email-confirmation-sent",
         fastn_core::log::OutcomeKind::Info,
         file!(),
         line!(),
