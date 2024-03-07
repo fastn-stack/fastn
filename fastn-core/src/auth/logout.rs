@@ -8,6 +8,7 @@ pub async fn logout(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
+    // [INFO] logging: logout
     req.log(
         "logout",
         fastn_core::log::OutcomeKind::Info,
@@ -16,9 +17,21 @@ pub async fn logout(
     );
 
     if let Some(session_data) = req.cookie(fastn_core::auth::SESSION_COOKIE_NAME) {
-        let session_data = fastn_core::auth::utils::decrypt(ds, &session_data)
-            .await
-            .unwrap_or_default();
+        let session_data = match fastn_core::auth::utils::decrypt(ds, &session_data).await {
+            Ok(data) => data,
+            Err(e) => {
+                // [ERROR] logging (Session cookie decrypt Error)
+                let err_message = format!("Failed to decrypt session cookie. {:?}", &e);
+                let log_err_message = format!("session cookie: {:?}", &err_message);
+                req.log(
+                    "logout",
+                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    file!(),
+                    line!(),
+                );
+                String::default()
+            }
+        };
 
         #[derive(serde::Deserialize)]
         struct SessionData {
@@ -28,17 +41,43 @@ pub async fn logout(
         if let Ok(data) = serde_json::from_str::<SessionData>(session_data.as_str()) {
             let session_id = data.session_id;
 
-            let mut conn = db_pool
-                .get()
-                .await
-                .map_err(|e| fastn_core::Error::DatabaseError {
-                    message: format!("Failed to get connection to db. {:?}", e),
-                })?;
+            let mut conn = match db_pool.get().await {
+                Ok(conn) => conn,
+                Err(e) => {
+                    // [ERROR] logging (Database Error)
+                    let err_message = format!("Failed to get connection to db. {:?}", &e);
+                    let log_err_message = format!("database: {:?}", &err_message);
+                    req.log(
+                        "logout",
+                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        file!(),
+                        line!(),
+                    );
+                    return Err(fastn_core::Error::DatabaseError {
+                        message: err_message,
+                    });
+                }
+            };
 
-            let affected = diesel::delete(fastn_core::schema::fastn_auth_session::table)
+            let affected = match diesel::delete(fastn_core::schema::fastn_auth_session::table)
                 .filter(fastn_core::schema::fastn_auth_session::id.eq(&session_id))
                 .execute(&mut conn)
-                .await?;
+                .await
+            {
+                Ok(affected) => affected,
+                Err(e) => {
+                    // [ERROR] logging (Database Error)
+                    let err_message = format!("{:?}", &e);
+                    let log_err_message = format!("database: {:?}", &err_message);
+                    req.log(
+                        "logout",
+                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        file!(),
+                        line!(),
+                    );
+                    return Err(e.into());
+                }
+            };
 
             tracing::info!("session destroyed for {session_id}. Rows affected {affected}.");
         }
