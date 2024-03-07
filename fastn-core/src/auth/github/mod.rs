@@ -230,17 +230,14 @@ pub async fn callback(
             Ok(v) => v,
             Err(e) => {
                 // [ERROR] logging (Database Error)
-                let err_message = format!("{:?}", &e);
-                let log_err_message = format!("database: {:?}", &err_message);
+                let log_err_message = format!("database: {:?}", &e);
                 req.log(
                     "github-callback",
                     fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                     file!(),
                     line!(),
                 );
-                return Err(fastn_core::Error::DatabaseError {
-                    message: err_message,
-                });
+                return Err(e.into());
             }
         };
 
@@ -485,8 +482,7 @@ pub async fn callback(
         Ok(response) => response,
         Err(e) => {
             // [ERROR] logging (Session Cookie Error)
-            let err_message = format!("{:?}", &e);
-            let log_err_message = format!("session cookie: {:?}", &err_message);
+            let log_err_message = format!("session cookie: {:?}", &e);
             req.log(
                 "github-callback",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),

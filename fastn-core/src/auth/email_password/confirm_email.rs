@@ -9,6 +9,7 @@ pub(crate) async fn confirm_email(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
+    // [INFO] logging: confirm-email
     req.log(
         "confirm-email",
         fastn_core::log::OutcomeKind::Info,
@@ -16,30 +17,62 @@ pub(crate) async fn confirm_email(
         line!(),
     );
 
-    let code = req_config.request.query().get("code");
+    let code = match req_config.request.query().get("code") {
+        Some(code) => code,
+        None => {
+            tracing::info!("finishing response due to bad code");
 
-    if code.is_none() {
-        tracing::info!("finishing response due to bad ?code");
-        return Ok(fastn_core::http::api_error("Bad Request")?);
-    }
-
-    let code = match code.unwrap() {
-        serde_json::Value::String(c) => c,
-        _ => {
-            tracing::info!("failed to Deserialize ?code as string");
+            // [ERROR] logging (query: code not found)
+            let log_err_message = "query: code not found".to_string();
+            req.log(
+                "confirm-email",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
             return Ok(fastn_core::http::api_error("Bad Request")?);
         }
     };
 
-    let mut conn = db_pool
-        .get()
-        .await
-        .map_err(|e| fastn_core::Error::DatabaseError {
-            message: format!("Failed to get connection to db. {:?}", e),
-        })?;
+    let code = match code {
+        serde_json::Value::String(c) => c,
+        _ => {
+            tracing::info!("failed to Deserialize ?code as string");
+
+            // [ERROR] logging (query: code deserialization failure)
+            let log_err_message = "query: failed to deserialize code as string".to_string();
+            req.log(
+                "confirm-email",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+
+            return Ok(fastn_core::http::api_error("Bad Request")?);
+        }
+    };
+
+    let mut conn = match db_pool.get().await {
+        Ok(conn) => conn,
+        Err(e) => {
+            // [ERROR] logging (pool error)
+            let err_message = format!("Failed to get connection to db. {:?}", &e);
+            let log_err_message = format!("pool error: {}", err_message.as_str());
+            req.log(
+                "confirm-email",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+
+            return Err(fastn_core::Error::DatabaseError {
+                message: err_message,
+            });
+        }
+    };
 
     let conf_data: Option<(i64, i64, chrono::DateTime<chrono::Utc>)> =
-        fastn_core::schema::fastn_email_confirmation::table
+        match fastn_core::schema::fastn_email_confirmation::table
             .select((
                 fastn_core::schema::fastn_email_confirmation::email_id,
                 fastn_core::schema::fastn_email_confirmation::session_id,
@@ -48,19 +81,56 @@ pub(crate) async fn confirm_email(
             .filter(fastn_core::schema::fastn_email_confirmation::key.eq(&code))
             .first(&mut conn)
             .await
-            .optional()?;
+            .optional()
+        {
+            Ok(v) => v,
+            Err(e) => {
+                // [ERROR] logging (Database Error)
+                let log_err_message = format!("database: {:?}", &e);
+                req.log(
+                    "confirm-email",
+                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    file!(),
+                    line!(),
+                );
+                return Err(e.into());
+            }
+        };
 
-    if conf_data.is_none() {
-        tracing::info!("invalid code value. No entry exists for the given code in db");
-        tracing::info!("provided code: {}", &code);
-        return Ok(fastn_core::http::api_error("Bad Request")?);
-    }
+    let (email_id, session_id, sent_at) = match conf_data {
+        Some(values) => values,
+        None => {
+            tracing::info!("invalid code value. No entry exists for the given code in db");
+            tracing::info!("provided code: {}", &code);
 
-    let (email_id, session_id, sent_at) = conf_data.unwrap();
+            // [ERROR] logging (query: invalid code Error)
+            let log_err_message = format!("query: invalid code value. No entry exists for the given code in db. Provided code: {}", &code);
+            req.log(
+                "confirm-email",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+
+            return Ok(fastn_core::http::api_error("Bad Request")?);
+        }
+    };
 
     if key_expired(&req_config.config.ds, sent_at).await {
         // TODO: this redirect route should be configurable
         tracing::info!("provided code has expired.");
+
+        // [SUCCESS] logging: redirect ResendConfirmationEmail (key expired)
+        let log_success_message = "confirm-email: redirect to ResendConfirmationEmail (key expired: EMAIL_CONFIRMATION_EXPIRE_DAYS)".to_string();
+        req.log(
+            "confirm-email",
+            fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Descriptive(
+                log_success_message,
+            )),
+            file!(),
+            line!(),
+        );
+
         return Ok(fastn_core::http::temporary_redirect(format!(
             "{scheme}://{host}{resend_confirmation_email_route}",
             scheme = req_config.request.connection_info.scheme(),
@@ -70,19 +140,47 @@ pub(crate) async fn confirm_email(
     }
 
     let email: fastn_core::utils::CiString =
-        diesel::update(fastn_core::schema::fastn_user_email::table)
+        match diesel::update(fastn_core::schema::fastn_user_email::table)
             .set(fastn_core::schema::fastn_user_email::verified.eq(true))
             .filter(fastn_core::schema::fastn_user_email::id.eq(email_id))
             .returning(fastn_core::schema::fastn_user_email::email)
             .get_result(&mut conn)
-            .await?;
+            .await
+        {
+            Ok(email) => email,
+            Err(e) => {
+                // [ERROR] logging (Database Error)
+                let log_err_message = format!("database: {:?}", &e);
+                req.log(
+                    "confirm-email",
+                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    file!(),
+                    line!(),
+                );
+                return Err(e.into());
+            }
+        };
 
-    let user_id: i64 = diesel::update(fastn_core::schema::fastn_user::table)
+    let user_id: i64 = match diesel::update(fastn_core::schema::fastn_user::table)
         .set(fastn_core::schema::fastn_user::verified_email.eq(true))
         .filter(fastn_core::schema::fastn_user::email.eq(&email))
         .returning(fastn_core::schema::fastn_user::id)
         .get_result(&mut conn)
-        .await?;
+        .await
+    {
+        Ok(id) => id,
+        Err(e) => {
+            // [ERROR] logging (Database Error)
+            let log_err_message = format!("database: {:?}", &e);
+            req.log(
+                "confirm-email",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(e.into());
+        }
+    };
 
     // Onboarding step is opt-in
     let onboarding_enabled = req_config
@@ -104,27 +202,55 @@ pub(crate) async fn confirm_email(
     let now = chrono::Utc::now();
 
     // session always exists for new unverified user since it is created during `create-account`
-    let affected = diesel::update(fastn_core::schema::fastn_auth_session::table)
+    let affected = match diesel::update(fastn_core::schema::fastn_auth_session::table)
         .set((
             fastn_core::schema::fastn_auth_session::user_id.eq(&user_id),
             fastn_core::schema::fastn_auth_session::updated_at.eq(&now),
         ))
         .filter(fastn_core::schema::fastn_auth_session::id.eq(session_id))
         .execute(&mut conn)
-        .await?;
+        .await
+    {
+        Ok(affected) => affected,
+        Err(e) => {
+            // [ERROR] logging (Database Error)
+            let log_err_message = format!("database: {:?}", &e);
+            req.log(
+                "confirm-email",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(e.into());
+        }
+    };
 
     tracing::info!("updated session. affected: {}", affected);
 
     // redirect to onboarding route with a GET request
     // if some user is already logged in, this will override their session with this one
-    let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
+    let mut resp = match fastn_core::auth::set_session_cookie_and_redirect_to_next(
         &req_config.request,
         "confirm-email",
         &req_config.config.ds,
         session_id,
         next_path,
     )
-    .await?;
+    .await
+    {
+        Ok(response) => response,
+        Err(e) => {
+            // [ERROR] logging (Session Cookie Error)
+            let log_err_message = format!("session cookie: {:?}", &e);
+            req.log(
+                "confirm-email",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(e);
+        }
+    };
 
     if onboarding_enabled {
         resp.add_cookie(
@@ -138,7 +264,19 @@ pub(crate) async fn confirm_email(
             .path("/")
             .finish(),
         )
-        .map_err(|e| fastn_core::Error::generic(format!("failed to set cookie: {e}")))?;
+        .map_err(|e| {
+            // [ERROR] logging (Set Cookie Error)
+            let err_message = format!("failed to set cookie: {:?}", &e);
+            let log_err_message = format!("set cookie: {:?}", &err_message);
+            req.log(
+                "confirm-email",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+
+            fastn_core::Error::generic(err_message)
+        })?;
     }
 
     Ok(resp)
