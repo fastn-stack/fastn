@@ -27,7 +27,7 @@ pub(crate) async fn forgot_password_request(
         // [ERROR] logging (bad-request)
         let log_err_message = "bad request".to_string();
         req.log(
-            "set-password",
+            "forgot-password",
             fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
             file!(),
             line!(),
@@ -68,7 +68,7 @@ pub(crate) async fn forgot_password_request(
         // [ERROR] logging (invalid-route)
         let log_err_message = "invalid route".to_string();
         req.log(
-            "set-password",
+            "forgot-password",
             fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
             file!(),
             line!(),
@@ -101,7 +101,7 @@ pub(crate) async fn forgot_password_request(
             let err_message = fastn_core::auth::utils::errors_to_message(&errors);
             let log_err_message = format!("payload: {:?}", &err_message);
             req.log(
-                "set-password",
+                "forgot-password",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 file!(),
                 line!(),
@@ -121,7 +121,7 @@ pub(crate) async fn forgot_password_request(
         let err_message = fastn_core::auth::utils::errors_to_message(&errors);
         let log_err_message = format!("user: {:?}", &err_message);
         req.log(
-            "set-password",
+            "forgot-password",
             fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
             file!(),
             line!(),
@@ -137,7 +137,7 @@ pub(crate) async fn forgot_password_request(
             let err_message = format!("Failed to get connection to db. {:?}", &e);
             let log_err_message = format!("pool error: {}", err_message.as_str());
             req.log(
-                "set-password",
+                "forgot-password",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 file!(),
                 line!(),
@@ -170,7 +170,7 @@ pub(crate) async fn forgot_password_request(
                 // [ERROR] logging (database-error)
                 let log_err_message = format!("database: {:?}", &e);
                 req.log(
-                    "set-password",
+                    "forgot-password",
                     fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                     file!(),
                     line!(),
@@ -191,7 +191,7 @@ pub(crate) async fn forgot_password_request(
             let err_message = fastn_core::auth::utils::errors_to_message(&errors);
             let log_err_message = format!("user: {:?}", &err_message);
             req.log(
-                "set-password",
+                "forgot-password",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 file!(),
                 line!(),
@@ -217,7 +217,7 @@ pub(crate) async fn forgot_password_request(
             // [ERROR] logging (database-error)
             let log_err_message = format!("database: {:?}", &e);
             req.log(
-                "set-password",
+                "forgot-password",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 file!(),
                 line!(),
@@ -256,7 +256,7 @@ pub(crate) async fn forgot_password_request(
             // [ERROR] logging (read-error)
             let log_err_message = format!("read: {:?}", &e);
             req.log(
-                "set-password",
+                "forgot-password",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 file!(),
                 line!(),
@@ -287,7 +287,7 @@ pub(crate) async fn forgot_password_request(
             // [ERROR] logging (interpreter-error)
             let log_err_message = format!("read: {:?}", &e);
             req.log(
-                "set-password",
+                "forgot-password",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 file!(),
                 line!(),
@@ -308,7 +308,7 @@ pub(crate) async fn forgot_password_request(
             let err_message = "html email template not found".to_string();
             let log_err_message = format!("mail: {:?}", &err_message);
             req.log(
-                "set-password",
+                "forgot-password",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
                 file!(),
                 line!(),
@@ -344,7 +344,7 @@ pub(crate) async fn forgot_password_request(
         let err_message = format!("failed to send email: {:?}", &e);
         let log_err_message = format!("mail: {:?}", &err_message);
         req.log(
-            "set-password",
+            "forgot-password",
             fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
             file!(),
             line!(),
@@ -631,6 +631,14 @@ pub(crate) async fn set_password(
             match user_id {
                 Some(user_id) => user_id,
                 None => {
+                    // [ERROR] logging (bad-request)
+                    let log_err_message = "bad-request: user-id not found".to_string();
+                    req.log(
+                        "set-password",
+                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        file!(),
+                        line!(),
+                    );
                     return Ok(fastn_core::http::api_error("Bad Request")?);
                 }
             };
