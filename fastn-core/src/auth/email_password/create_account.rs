@@ -35,6 +35,7 @@ pub(crate) async fn create_account(
     use diesel_async::RunQueryDsl;
     use validator::ValidateArgs;
 
+    // [INFO] logging: create-account
     req.log(
         "create-account",
         fastn_core::log::OutcomeKind::Info,
@@ -53,19 +54,60 @@ pub(crate) async fn create_account(
             content: create_account_ftd().to_string(),
             parent_path: fastn_ds::Path::new("/"),
         };
+        return match fastn_core::package::package_doc::read_ftd(
+            req_config, &main, "/", false, false,
+        )
+        .await
+        {
+            Ok(resp) => {
+                // [SUCCESS] logging: GET
+                let log_success_message = "create-account: GET".to_string();
+                req.log(
+                    "login",
+                    fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Descriptive(
+                        log_success_message,
+                    )),
+                    file!(),
+                    line!(),
+                );
 
-        let resp = fastn_core::package::package_doc::read_ftd(req_config, &main, "/", false, false)
-            .await?;
-
-        return Ok(resp.into());
+                Ok(resp.into())
+            }
+            Err(e) => {
+                // [ERROR] logging (read_ftd)
+                let log_err_message = format!("read_ftd: {:?}", &e);
+                req.log(
+                    "create-account",
+                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    file!(),
+                    line!(),
+                );
+                Err(e)
+            }
+        };
     }
 
     let user_payload = match req_config.request.json::<UserPayload>() {
         Ok(p) => p,
-        Err(e) => return fastn_core::http::user_err(
-            vec![("payload".into(), vec![format!("Invalid payload. Required the request body to contain json. Original error: {:?}", e)])],
-            fastn_core::http::StatusCode::OK,
-        )
+        Err(e) => {
+            // [ERROR] logging (payload)
+            let err_message = format!(
+                "Invalid payload. Required the request body to contain json. Original error: {:?}",
+                e
+            );
+            let log_err_message = format!("payload: {:?}", &err_message);
+            req.log(
+                "create-account",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+
+            return fastn_core::http::user_err(
+                vec![("payload".into(), vec![err_message])],
+                fastn_core::http::StatusCode::OK,
+            );
+        }
     };
 
     if let Err(mut e) = user_payload.validate_args((
@@ -84,42 +126,110 @@ pub(crate) async fn create_account(
         }
 
         if !e.is_empty() {
+            // [ERROR] logging (user error);
+            let log_err_message = format!("user: {:?}", &e);
+            req.log(
+                "create-account",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+
             return fastn_core::http::validation_error_to_user_err(e);
         }
     }
 
-    let mut conn = db_pool
-        .get()
-        .await
-        .map_err(|e| fastn_core::Error::DatabaseError {
-            message: format!("Failed to get connection to db. {:?}", e),
-        })?;
+    let mut conn = match db_pool.get().await {
+        Ok(conn) => conn,
+        Err(e) => {
+            // [ERROR] logging (pool error)
+            let err_message = format!("Failed to get connection to db. {:?}", &e);
+            let log_err_message = format!("pool error: {}", err_message.as_str());
+            req.log(
+                "create-account",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(fastn_core::Error::DatabaseError {
+                message: err_message,
+            });
+        }
+    };
 
-    let username_check: i64 = fastn_core::schema::fastn_user::table
+    let username_check: i64 = match fastn_core::schema::fastn_user::table
         .filter(fastn_core::schema::fastn_user::username.eq(&user_payload.username))
         .select(diesel::dsl::count(fastn_core::schema::fastn_user::id))
         .first(&mut conn)
-        .await?;
+        .await
+    {
+        Ok(user_count) => user_count,
+        Err(e) => {
+            // [ERROR] logging (Database Error)
+            let log_err_message = format!("database: {:?}", &e);
+            req.log(
+                "create-account",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(e.into());
+        }
+    };
 
     if username_check > 0 {
+        // [ERROR] logging (User Error: Username already taken)
+        let err_message = "username already taken".to_string();
+        let log_err_message = format!("user: {:?}", &err_message);
+        req.log(
+            "create-account",
+            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            file!(),
+            line!(),
+        );
+
         return fastn_core::http::user_err(
-            vec![("username".into(), vec!["username already taken".into()])],
+            vec![("username".into(), vec![err_message])],
             fastn_core::http::StatusCode::OK,
         );
     }
 
-    let email_check: i64 = fastn_core::schema::fastn_user::table
+    let email_check: i64 = match fastn_core::schema::fastn_user::table
         .filter(
             fastn_core::schema::fastn_user::email
                 .eq(fastn_core::utils::citext(&user_payload.email)),
         )
         .select(diesel::dsl::count(fastn_core::schema::fastn_user::id))
         .first(&mut conn)
-        .await?;
+        .await
+    {
+        Ok(email_count) => email_count,
+        Err(e) => {
+            // [ERROR] logging (Database Error)
+            let log_err_message = format!("database: {:?}", &e);
+            req.log(
+                "create-account",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(e.into());
+        }
+    };
 
     if email_check > 0 {
+        // [ERROR] logging (User Error: Email already taken)
+        let err_message = "email already taken".to_string();
+        let log_err_message = format!("user: {:?}", &err_message);
+        req.log(
+            "create-account",
+            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            file!(),
+            line!(),
+        );
+
         return fastn_core::http::user_err(
-            vec![("email".into(), vec!["email already taken".into()])],
+            vec![("email".into(), vec![err_message])],
             fastn_core::http::StatusCode::OK,
         );
     }
@@ -131,14 +241,25 @@ pub(crate) async fn create_account(
 
     let hashed_password =
         argon2::PasswordHasher::hash_password(&argon2, user_payload.password.as_bytes(), &salt)
-            .map_err(|e| fastn_core::Error::generic(format!("error in hashing password: {e}")))?
+            .map_err(|e| {
+                // [ERROR] logging (Database Error)
+                let err_message = format!("error in hashing password: {:?}", &e);
+                let log_err_message = format!("password: {:?}", &err_message);
+                req.log(
+                    "create-account",
+                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    file!(),
+                    line!(),
+                );
+                fastn_core::Error::generic(err_message)
+            })?
             .to_string();
 
     let save_user_email_transaction = conn
         .build_transaction()
         .run(|c| {
             Box::pin(async move {
-                let user = diesel::insert_into(fastn_core::schema::fastn_user::table)
+                let user = match diesel::insert_into(fastn_core::schema::fastn_user::table)
                     .values((
                         fastn_core::schema::fastn_user::username.eq(user_payload.username),
                         fastn_core::schema::fastn_user::password.eq(hashed_password),
@@ -150,23 +271,52 @@ pub(crate) async fn create_account(
                     ))
                     .returning(fastn_core::auth::FastnUser::as_returning())
                     .get_result(c)
-                    .await?;
+                    .await
+                {
+                    Ok(fastn_user) => fastn_user,
+                    Err(e) => {
+                        // [ERROR] logging (Database Error)
+                        let log_err_message = format!("database: {:?}", &e);
+                        req.log(
+                            "create-account",
+                            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                            file!(),
+                            line!(),
+                        );
+                        return Err(e.into());
+                    }
+                };
 
                 // just for record keeping
                 // we do not use `fastn_user_email` for auth at all
-                diesel::insert_into(fastn_core::schema::fastn_user_email::table)
-                    .values((
-                        fastn_core::schema::fastn_user_email::user_id.eq(user.id),
-                        fastn_core::schema::fastn_user_email::email
-                            .eq(fastn_core::utils::citext(user_payload.email.as_str())),
-                        fastn_core::schema::fastn_user_email::verified.eq(false),
-                        fastn_core::schema::fastn_user_email::primary.eq(true),
-                        fastn_core::schema::fastn_user_email::created_at.eq(now),
-                        fastn_core::schema::fastn_user_email::updated_at.eq(now),
-                    ))
-                    .returning(fastn_core::schema::fastn_user_email::email)
-                    .execute(c)
-                    .await?;
+                let _user_email =
+                    match diesel::insert_into(fastn_core::schema::fastn_user_email::table)
+                        .values((
+                            fastn_core::schema::fastn_user_email::user_id.eq(user.id),
+                            fastn_core::schema::fastn_user_email::email
+                                .eq(fastn_core::utils::citext(user_payload.email.as_str())),
+                            fastn_core::schema::fastn_user_email::verified.eq(false),
+                            fastn_core::schema::fastn_user_email::primary.eq(true),
+                            fastn_core::schema::fastn_user_email::created_at.eq(now),
+                            fastn_core::schema::fastn_user_email::updated_at.eq(now),
+                        ))
+                        .returning(fastn_core::schema::fastn_user_email::email)
+                        .execute(c)
+                        .await
+                    {
+                        Ok(email) => email,
+                        Err(e) => {
+                            // [ERROR] logging (Database Error)
+                            let log_err_message = format!("database: {:?}", &e);
+                            req.log(
+                                "create-account",
+                                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                                file!(),
+                                line!(),
+                            );
+                            return Err(e.into());
+                        }
+                    };
 
                 tracing::info!("fastn_user created. user_id: {}", &user.id);
                 Ok::<fastn_core::auth::FastnUser, diesel::result::Error>(user)
@@ -174,17 +324,28 @@ pub(crate) async fn create_account(
         })
         .await;
 
-    if let Err(e) = save_user_email_transaction {
-        return fastn_core::http::user_err(
-            vec![
-                ("email".into(), vec!["invalid email".into()]),
-                ("detail".into(), vec![format!("{e}")]),
-            ],
-            fastn_core::http::StatusCode::OK,
-        );
-    }
+    let user = match save_user_email_transaction {
+        Ok(user) => user,
+        Err(e) => {
+            // [ERROR] logging (User error)
+            let err_message = format!("email: invalid email, detail: {:?}", &e);
+            let log_err_message = format!("user: {:?}", &err_message);
+            req.log(
+                "create-account",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
 
-    let user = save_user_email_transaction.expect("expected transaction to yield Some");
+            return fastn_core::http::user_err(
+                vec![
+                    ("email".into(), vec!["invalid email".into()]),
+                    ("detail".into(), vec![format!("{e}")]),
+                ],
+                fastn_core::http::StatusCode::OK,
+            );
+        }
+    };
 
     tracing::info!("fastn_user email inserted, id: {}", user.id);
 

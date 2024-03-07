@@ -31,8 +31,8 @@ pub(crate) async fn login(
         .await
         {
             Ok(resp) => {
-                // [SUCCESS] logging: login (already logged in)
-                let log_success_message = "user: already logged in".to_string();
+                // [SUCCESS] logging: GET
+                let log_success_message = "login: GET".to_string();
                 req.log(
                     "login",
                     fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Descriptive(
@@ -69,7 +69,8 @@ pub(crate) async fn login(
         Ok(payload) => payload,
         Err(e) => {
             // [ERROR] logging (payload)
-            let log_err_message = format!("payload: invalid payload {:?}", &e);
+            let err_message = format!("invalid payload: {:?}", &e);
+            let log_err_message = format!("payload: {:?}", &err_message);
             req.log(
                 "login",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
@@ -78,7 +79,7 @@ pub(crate) async fn login(
             );
 
             return fastn_core::http::user_err(
-                vec![("payload".into(), vec![format!("invalid payload: {:?}", e)])],
+                vec![("payload".into(), vec![err_message])],
                 fastn_core::http::StatusCode::OK,
             );
         }
@@ -120,10 +121,9 @@ pub(crate) async fn login(
     let mut conn = match db_pool.get().await {
         Ok(conn) => conn,
         Err(e) => {
-            let err_message = format!("Failed to get connection to db. {:?}", &e);
-            let log_err_message = format!("Pool error: {}", err_message.as_str());
-
             // [ERROR] logging (pool error)
+            let err_message = format!("Failed to get connection to db. {:?}", &e);
+            let log_err_message = format!("pool error: {}", err_message.as_str());
             req.log(
                 "login",
                 fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
