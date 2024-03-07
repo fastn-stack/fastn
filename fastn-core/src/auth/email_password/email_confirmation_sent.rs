@@ -7,6 +7,7 @@ pub(crate) async fn email_confirmation_sent(
     req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    // [INFO] logging: email-confirmation-sent
     req.log(
         "email-confirmation-sent",
         fastn_core::log::OutcomeKind::Info,
@@ -21,8 +22,20 @@ pub(crate) async fn email_confirmation_sent(
         parent_path: fastn_ds::Path::new("/"),
     };
 
-    let resp =
-        fastn_core::package::package_doc::read_ftd(req_config, &main, "/", false, false).await?;
-
-    Ok(resp.into())
+    return match fastn_core::package::package_doc::read_ftd(req_config, &main, "/", false, false)
+        .await
+    {
+        Ok(resp) => Ok(resp.into()),
+        Err(e) => {
+            // [ERROR] logging (read_ftd)
+            let log_err_message = format!("read_ftd: {:?}", &e);
+            req.log(
+                "email-confirmation-sent",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            Err(e)
+        }
+    };
 }
