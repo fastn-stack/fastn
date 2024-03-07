@@ -185,9 +185,9 @@ pub(crate) async fn create_and_send_confirmation_email(
     );
 
     let html: String = match main_ftd_doc.get(&html_email_templ) {
-        Ok(Some(html)) => html,
+        Ok(html) => html,
         _ => {
-            // [ERROR] logging (html-mail-template: not-found)
+            // [ERROR] logging (html-email-template: not-found)
             let err_message = "html email template not found".to_string();
             let log_err_message = format!("mail: {:?}", &err_message);
             req.log(

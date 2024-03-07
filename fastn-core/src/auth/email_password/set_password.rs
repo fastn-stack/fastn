@@ -15,6 +15,7 @@ pub(crate) async fn forgot_password_request(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
+    // [INFO] logging: forgot-password
     req.log(
         "forgot-password",
         fastn_core::log::OutcomeKind::Info,
@@ -23,6 +24,15 @@ pub(crate) async fn forgot_password_request(
     );
 
     if req_config.request.ud(&req_config.config.ds).await.is_some() {
+        // [ERROR] logging (bad-request)
+        let log_err_message = "bad request".to_string();
+        req.log(
+            "set-password",
+            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            file!(),
+            line!(),
+        );
+
         return Ok(fastn_core::http::api_error("Bad Request")?);
     }
 
@@ -34,13 +44,36 @@ pub(crate) async fn forgot_password_request(
             parent_path: fastn_ds::Path::new("/"),
         };
 
-        let resp = fastn_core::package::package_doc::read_ftd(req_config, &main, "/", false, false)
-            .await?;
-
-        return Ok(resp.into());
+        return match fastn_core::package::package_doc::read_ftd(
+            req_config, &main, "/", false, false,
+        )
+        .await
+        {
+            Ok(response) => Ok(response.into()),
+            Err(e) => {
+                // [ERROR] logging (read_ftd)
+                let log_err_message = format!("read_ftd: {:?}", &e);
+                req.log(
+                    "set-password",
+                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    file!(),
+                    line!(),
+                );
+                Err(e)
+            }
+        };
     }
 
     if req_config.request.method() != "POST" {
+        // [ERROR] logging (invalid-route)
+        let log_err_message = "invalid route".to_string();
+        req.log(
+            "set-password",
+            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            file!(),
+            line!(),
+        );
+
         return Ok(fastn_core::not_found!("invalid route"));
     }
 
@@ -50,77 +83,148 @@ pub(crate) async fn forgot_password_request(
         email_or_username: String,
     }
 
-    let payload = req_config.request.json::<Payload>();
-
-    if let Err(e) = payload {
-        return fastn_core::http::user_err(
-            vec![
-                ("payload".into(), vec![format!("invalid payload: {:?}", e)]),
+    let payload = match req_config.request.json::<Payload>() {
+        Ok(payload) => payload,
+        Err(e) => {
+            let errors = vec![
                 (
-                    "username".into(),
+                    "payload".to_string(),
+                    vec![format!("invalid payload: {:?}", &e)],
+                ),
+                (
+                    "username".to_string(),
                     vec!["username/email is required".to_string()],
                 ),
-            ],
-            fastn_core::http::StatusCode::OK,
-        );
-    }
+            ];
 
-    let payload = payload.unwrap();
+            // [ERROR] logging (payload-error)
+            let err_message = fastn_core::auth::utils::errors_to_message(&errors);
+            let log_err_message = format!("payload: {:?}", &err_message);
+            req.log(
+                "set-password",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+
+            return fastn_core::http::user_err(errors, fastn_core::http::StatusCode::OK);
+        }
+    };
 
     if payload.email_or_username.is_empty() {
-        return fastn_core::http::user_err(
-            vec![(
-                "username".into(),
-                vec!["username/email is required".to_string()],
-            )],
-            fastn_core::http::StatusCode::OK,
+        let errors = vec![(
+            "username".into(),
+            vec!["username/email is required".to_string()],
+        )];
+
+        // [ERROR] logging (user-error)
+        let err_message = fastn_core::auth::utils::errors_to_message(&errors);
+        let log_err_message = format!("user: {:?}", &err_message);
+        req.log(
+            "set-password",
+            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            file!(),
+            line!(),
         );
+
+        return fastn_core::http::user_err(errors, fastn_core::http::StatusCode::OK);
     }
 
-    let mut conn = db_pool
-        .get()
-        .await
-        .map_err(|e| fastn_core::Error::DatabaseError {
-            message: format!("Failed to get connection to db. {:?}", e),
-        })?;
+    let mut conn = match db_pool.get().await {
+        Ok(conn) => conn,
+        Err(e) => {
+            // [ERROR] logging (pool-error)
+            let err_message = format!("Failed to get connection to db. {:?}", &e);
+            let log_err_message = format!("pool error: {}", err_message.as_str());
+            req.log(
+                "set-password",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
 
-    let query = fastn_core::schema::fastn_user::table
-        .inner_join(fastn_core::schema::fastn_user_email::table)
-        .filter(fastn_core::schema::fastn_user::username.eq(&payload.email_or_username))
-        .or_filter(
-            fastn_core::schema::fastn_user_email::email
-                .eq(fastn_core::utils::citext(&payload.email_or_username)),
-        )
-        .select((
-            fastn_core::auth::FastnUser::as_select(),
-            fastn_core::schema::fastn_user_email::email,
-        ));
+            return Err(fastn_core::Error::DatabaseError {
+                message: err_message,
+            });
+        }
+    };
 
     let user: Option<(fastn_core::auth::FastnUser, fastn_core::utils::CiString)> =
-        query.first(&mut conn).await.optional()?;
+        match fastn_core::schema::fastn_user::table
+            .inner_join(fastn_core::schema::fastn_user_email::table)
+            .filter(fastn_core::schema::fastn_user::username.eq(&payload.email_or_username))
+            .or_filter(
+                fastn_core::schema::fastn_user_email::email
+                    .eq(fastn_core::utils::citext(&payload.email_or_username)),
+            )
+            .select((
+                fastn_core::auth::FastnUser::as_select(),
+                fastn_core::schema::fastn_user_email::email,
+            ))
+            .first(&mut conn)
+            .await
+            .optional()
+        {
+            Ok(v) => v,
+            Err(e) => {
+                // [ERROR] logging (database-error)
+                let log_err_message = format!("database: {:?}", &e);
+                req.log(
+                    "set-password",
+                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    file!(),
+                    line!(),
+                );
+                return Err(e.into());
+            }
+        };
 
-    if user.is_none() {
-        return fastn_core::http::user_err(
-            vec![(
+    let (user, email) = match user {
+        Some(v) => v,
+        None => {
+            let errors = vec![(
                 "username".into(),
                 vec!["invalid email/username".to_string()],
-            )],
-            fastn_core::http::StatusCode::OK,
-        );
-    }
+            )];
 
-    let (user, email) = user.expect("expected user to be Some");
+            // [ERROR] logging (user-error)
+            let err_message = fastn_core::auth::utils::errors_to_message(&errors);
+            let log_err_message = format!("user: {:?}", &err_message);
+            req.log(
+                "set-password",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+
+            return fastn_core::http::user_err(errors, fastn_core::http::StatusCode::OK);
+        }
+    };
 
     let key = generate_key(64);
 
-    diesel::insert_into(fastn_core::schema::fastn_password_reset::table)
+    let _ = match diesel::insert_into(fastn_core::schema::fastn_password_reset::table)
         .values((
             fastn_core::schema::fastn_password_reset::user_id.eq(&user.id),
             fastn_core::schema::fastn_password_reset::key.eq(&key),
             fastn_core::schema::fastn_password_reset::sent_at.eq(chrono::offset::Utc::now()),
         ))
         .execute(&mut conn)
-        .await?;
+        .await
+    {
+        Ok(v) => v,
+        Err(e) => {
+            // [ERROR] logging (database-error)
+            let log_err_message = format!("database: {:?}", &e);
+            req.log(
+                "set-password",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(e.into());
+        }
+    };
 
     let reset_link = format!(
         "{scheme}://{host}{reset_password_route}?code={key}&next={next}",
@@ -141,11 +245,25 @@ pub(crate) async fn forgot_password_request(
         .strip_prefix(format!("{}/", req_config.config.package.name).as_str())
         .unwrap();
 
-    let content = req_config
+    let content = match req_config
         .config
         .ds
         .read_to_string(&fastn_ds::Path::new(format!("{}.ftd", path)))
-        .await?;
+        .await
+    {
+        Ok(content) => content,
+        Err(e) => {
+            // [ERROR] logging (read-error)
+            let log_err_message = format!("read: {:?}", &e);
+            req.log(
+                "set-password",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(e.into());
+        }
+    };
 
     let auth_doc = fastn_core::Document {
         package_name: req_config.config.package.name.clone(),
@@ -154,7 +272,7 @@ pub(crate) async fn forgot_password_request(
         parent_path: fastn_ds::Path::new("/"),
     };
 
-    let main_ftd_doc = fastn_core::doc::interpret_helper(
+    let main_ftd_doc = match fastn_core::doc::interpret_helper(
         auth_doc.id_with_package().as_str(),
         auth_doc.content.as_str(),
         req_config,
@@ -162,14 +280,42 @@ pub(crate) async fn forgot_password_request(
         false,
         0,
     )
-    .await?;
+    .await
+    {
+        Ok(doc) => doc,
+        Err(e) => {
+            // [ERROR] logging (interpreter-error)
+            let log_err_message = format!("read: {:?}", &e);
+            req.log(
+                "set-password",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(e.into());
+        }
+    };
 
     let html_email_templ = format!(
         "{}/{}#reset-password-request-mail-html",
         req_config.config.package.name, path
     );
 
-    let html: String = main_ftd_doc.get(&html_email_templ).unwrap();
+    let html: String = match main_ftd_doc.get(&html_email_templ) {
+        Ok(html) => html,
+        _ => {
+            // [ERROR] logging (html-email-template: not-found)
+            let err_message = "html email template not found".to_string();
+            let log_err_message = format!("mail: {:?}", &err_message);
+            req.log(
+                "set-password",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(fastn_core::Error::GenericError(err_message));
+        }
+    };
     let html = html.replace("{{link}}", &reset_link);
 
     let enable_email = req_config
@@ -193,14 +339,24 @@ pub(crate) async fn forgot_password_request(
         html,
     )
     .await
-    .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
+    .map_err(|e| {
+        // [ERROR] logging (mail-error)
+        let err_message = format!("failed to send email: {:?}", &e);
+        let log_err_message = format!("mail: {:?}", &err_message);
+        req.log(
+            "set-password",
+            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            file!(),
+            line!(),
+        );
+        fastn_core::Error::generic(err_message)
+    })?;
 
+    let mut resp = actix_web::HttpResponse::Ok();
     let resp_body = serde_json::json!({
         "success": true,
         "redirect": redirect_url_from_next(&req_config.request, fastn_core::auth::Route::ForgotPasswordSuccess.to_string()),
     });
-
-    let mut resp = actix_web::HttpResponse::Ok();
 
     if req_config.config.test_command_running {
         resp.insert_header(("X-Fastn-Test", "true"))

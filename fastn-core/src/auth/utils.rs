@@ -38,3 +38,15 @@ pub async fn secret_key(ds: &fastn_ds::DocumentStore) -> String {
 pub fn is_authenticated(req: &fastn_core::http::Request) -> bool {
     req.cookie(fastn_core::auth::SESSION_COOKIE_NAME).is_some()
 }
+
+pub fn errors_to_message(errors: &[(String, Vec<String>)]) -> String {
+    errors
+        .iter()
+        .flat_map(|(field, messages)| {
+            messages
+                .iter()
+                .map(|message| format!("{}: {}", field.as_str(), message.as_str()))
+        })
+        .collect::<Vec<String>>()
+        .join(", ")
+}
