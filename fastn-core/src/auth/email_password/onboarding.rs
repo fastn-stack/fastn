@@ -6,6 +6,7 @@ pub(crate) async fn onboarding(
     config: &fastn_core::Config,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    // [INFO] logging: onboarding
     req.log(
         "onboarding",
         fastn_core::log::OutcomeKind::Info,
@@ -21,6 +22,16 @@ pub(crate) async fn onboarding(
         .cookie(fastn_core::auth::FIRST_TIME_SESSION_COOKIE_NAME)
         .is_none()
     {
+        // [SUCCESS] logging: redirect-next
+        let log_success_message = "onboarding: redirect-next".to_string();
+        req.log(
+            "onboarding",
+            fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Descriptive(
+                log_success_message,
+            )),
+            file!(),
+            line!(),
+        );
         return Ok(fastn_core::http::temporary_redirect(
             redirect_url_from_next(req, next),
         ));
@@ -33,16 +44,29 @@ pub(crate) async fn onboarding(
         parent_path: fastn_ds::Path::new("/"),
     };
 
-    let resp = fastn_core::package::package_doc::read_ftd(
+    let mut resp: fastn_core::http::Response = match fastn_core::package::package_doc::read_ftd(
         req_config,
         &first_signin_doc,
         "/",
         false,
         false,
     )
-    .await?;
+    .await
+    {
+        Ok(response) => response.into(),
+        Err(e) => {
+            // [ERROR] logging (read_ftd)
+            let log_err_message = format!("read_ftd: {:?}", &e);
+            req.log(
+                "onboarding",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
 
-    let mut resp: fastn_core::http::Response = resp.into();
+            return Err(e);
+        }
+    };
 
     // clear the cookie so that subsequent requests redirect to `next`
     // this gives the onboarding page a single chance to do the process
@@ -53,7 +77,19 @@ pub(crate) async fn onboarding(
             .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
             .finish(),
     )
-    .map_err(|e| fastn_core::Error::generic(format!("failed to set cookie: {e}")))?;
+    .map_err(|e| {
+        // [ERROR] logging (Set Cookie Error)
+        let err_message = format!("failed to set cookie: {:?}", &e);
+        let log_err_message = format!("set cookie: {:?}", &err_message);
+        req.log(
+            "onboarding",
+            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            file!(),
+            line!(),
+        );
+
+        fastn_core::Error::generic(err_message)
+    })?;
 
     Ok(resp)
 }
