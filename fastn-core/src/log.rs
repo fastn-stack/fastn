@@ -448,8 +448,28 @@ impl RequestLog {
         self.user_agent.clone()
     }
 
-    pub fn body_as_json<T: serde::de::DeserializeOwned>(&self) -> serde_json::Result<T> {
+    pub fn body_as_json(&self) -> serde_json::Result<serde_json::Value> {
         serde_json::from_slice(&self.body)
+    }
+
+    pub fn filtered_json_body(&self) -> serde_json::Result<serde_json::Value> {
+        let json_body = self.body_as_json().unwrap_or_default();
+        return match &json_body {
+            serde_json::Value::Object(map) => {
+                let filtered_map: serde_json::Map<String, serde_json::Value> = map
+                    .iter()
+                    .filter_map(|(k, v)| {
+                        if !k.contains("password") {
+                            Some((k.to_string(), v.clone()))
+                        } else {
+                            None
+                        }
+                    })
+                    .collect();
+                Ok(serde_json::Value::from(filtered_map))
+            }
+            _ => Ok(json_body),
+        };
     }
 
     pub fn event_data(&self) -> serde_json::Value {
@@ -466,8 +486,9 @@ impl RequestLog {
             })
             .collect();
 
+        let filtered_body_json = self.filtered_json_body().unwrap_or_default();
         serde_json::json!({
-            "json": self.body_as_json::<serde_json::Value>().unwrap_or_default(),
+            "json": filtered_body_json,
             "cookies": &self.cookies,
             "query": &self.query,
             "headers": headers

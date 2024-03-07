@@ -178,6 +178,15 @@ impl Request {
     }
 
     pub fn to_request_log(&self) -> fastn_core::log::RequestLog {
+        let mut headers = self.headers.clone();
+        let mut drained_headers = headers.drain();
+        let mut filtered_headers = reqwest::header::HeaderMap::new();
+        while let Some((Some(header_name), header_value)) = drained_headers.next() {
+            if header_name.ne("user-agent") {
+                filtered_headers.insert(header_name, header_value);
+            }
+        }
+
         fastn_core::log::RequestLog {
             host: self.host.clone(),
             user_agent: self.user_agent().unwrap_or("anonymous".to_string()),
@@ -187,7 +196,7 @@ impl Request {
             query_string: self.query_string().to_string(),
             query: self.query.clone(),
             cookies: self.cookies.clone(),
-            headers: self.headers.clone(),
+            headers: filtered_headers,
             ip: self.ip.clone(),
             body: Vec::from(self.body()),
         }
