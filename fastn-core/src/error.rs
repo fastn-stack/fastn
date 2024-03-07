@@ -107,6 +107,9 @@ pub enum Error {
     #[error("MissingEnvironmentVariableError: {}", _0)]
     EnvironmentVariableError(#[from] std::env::VarError),
 
+    #[error("EnvironmentError: {}", _0)]
+    EnvironmentError(#[from] fastn_ds::EnvironmentError),
+
     #[error("BoolEnvironmentError: {}", _0)]
     BoolEnvironmentError(#[from] fastn_ds::BoolEnvironmentError),
 

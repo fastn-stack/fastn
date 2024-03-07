@@ -12,6 +12,7 @@ pub async fn login(
     ds: &fastn_ds::DocumentStore,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    // [INFO] logging: github-login
     req.log(
         "github-login",
         fastn_core::log::OutcomeKind::Info,
@@ -29,9 +30,22 @@ pub async fn login(
 
     // Note: public_repos user:email all these things are github resources
     // So we have to tell oauth_client who is getting logged in what are we going to access
-    let (authorize_url, _token) = fastn_core::auth::github::utils::github_client(ds)
-        .await
-        .unwrap()
+    let github_client = match fastn_core::auth::github::utils::github_client(ds).await {
+        Ok(client) => client,
+        Err(e) => {
+            // [ERROR] logging (Environment Error)
+            let log_err_message = format!("environment: {:?}", &e);
+            req.log(
+                "github-login",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(e.into());
+        }
+    };
+
+    let (authorize_url, _token) = github_client
         .set_redirect_uri(oauth2::RedirectUrl::new(redirect_url)?)
         .authorize_url(oauth2::CsrfToken::new_random)
         .add_scope(oauth2::Scope::new("public_repo".to_string()))
@@ -56,6 +70,7 @@ pub async fn callback(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
+    // [INFO] logging: github-callback
     req.log(
         "github-callback",
         fastn_core::log::OutcomeKind::Info,
@@ -73,12 +88,36 @@ pub async fn callback(
     // ask to update details by giving a form
     // redirect to next for now
     if fastn_core::auth::utils::is_authenticated(req) {
+        // [SUCCESS] logging: already authenticated
+        let log_success_message = "user: already authenticated".to_string();
+        req.log(
+            "github-callback",
+            fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Descriptive(
+                log_success_message,
+            )),
+            file!(),
+            line!(),
+        );
+
         return Ok(fastn_core::http::temporary_redirect(next));
     }
 
-    let access_token = match fastn_core::auth::github::utils::github_client(ds)
-        .await
-        .unwrap()
+    let client = match fastn_core::auth::github::utils::github_client(ds).await {
+        Ok(client) => client,
+        Err(e) => {
+            // [ERROR] logging (Environment Error)
+            let log_err_message = format!("environment: {:?}", &e);
+            req.log(
+                "github-callback",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(e.into());
+        }
+    };
+
+    let access_token = match client
         .exchange_code(oauth2::AuthorizationCode::new(code))
         .request_async(oauth2::reqwest::async_http_client)
         .await
@@ -86,31 +125,92 @@ pub async fn callback(
         Ok(access_token) => oauth2::TokenResponse::access_token(&access_token)
             .secret()
             .to_string(),
-        Err(e) => return Ok(fastn_core::server_error!("{}", e.to_string())),
+        Err(e) => {
+            // [ERROR] logging (Request Token Error)
+            let log_err_message = format!("request token: {:?}", &e);
+            req.log(
+                "github-callback",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Ok(fastn_core::server_error!("{}", e.to_string()));
+        }
     };
 
-    let mut gh_user = fastn_core::auth::github::apis::user_details(access_token.as_str()).await?;
+    let mut gh_user =
+        match fastn_core::auth::github::apis::user_details(access_token.as_str()).await {
+            Ok(user) => user,
+            Err(e) => {
+                // [ERROR] logging (Github user Error)
+                let log_err_message = format!("github user: {:?}", &e);
+                req.log(
+                    "github-callback",
+                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    file!(),
+                    line!(),
+                );
+                return Err(e);
+            }
+        };
 
     if gh_user.email.is_none() {
         // pick primary email
-        let emails = fastn_core::auth::github::apis::user_emails(access_token.as_str()).await?;
-        let primary = emails
-            .into_iter()
-            .find(|e| e.primary)
-            .expect("primary email must exist for a github account");
+        let emails = match fastn_core::auth::github::apis::user_emails(access_token.as_str()).await
+        {
+            Ok(emails) => emails,
+            Err(e) => {
+                // [ERROR] logging (Github email Error)
+                let log_err_message = format!("github email: {:?}", &e);
+                req.log(
+                    "github-callback",
+                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    file!(),
+                    line!(),
+                );
+                return Err(e);
+            }
+        };
+
+        let primary = match emails.into_iter().find(|e| e.primary) {
+            Some(primary) => primary,
+            None => {
+                // [ERROR] logging (Github primary email Error)
+                let err_message = "primary email must exist for a github account".to_string();
+                let log_err_message = format!("github primary email: {:?}", &err_message);
+                req.log(
+                    "github-callback",
+                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    file!(),
+                    line!(),
+                );
+                return Err(fastn_core::Error::NotFound(err_message));
+            }
+        };
 
         gh_user.email = Some(primary.email);
     }
 
-    let mut conn = db_pool
-        .get()
-        .await
-        .map_err(|e| fastn_core::Error::DatabaseError {
-            message: format!("Failed to get connection to db. {:?}", e),
-        })?;
+    let mut conn = match db_pool.get().await {
+        Ok(conn) => conn,
+        Err(e) => {
+            // [ERROR] logging (Database Error)
+            let err_message = format!("Failed to get connection to db. {:?}", &e);
+            let log_err_message = format!("database: {:?}", &err_message);
+            req.log(
+                "github-callback",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(fastn_core::Error::DatabaseError {
+                message: err_message,
+            });
+        }
+    };
 
     let existing_email_and_user_id: Option<(fastn_core::utils::CiString, i64)> =
-        fastn_core::schema::fastn_user_email::table
+        match fastn_core::schema::fastn_user_email::table
             .select((
                 fastn_core::schema::fastn_user_email::email,
                 fastn_core::schema::fastn_user_email::user_id,
@@ -125,27 +225,61 @@ pub async fn callback(
             )
             .first(&mut conn)
             .await
-            .optional()?;
+            .optional()
+        {
+            Ok(v) => v,
+            Err(e) => {
+                // [ERROR] logging (Database Error)
+                let err_message = format!("{:?}", &e);
+                let log_err_message = format!("database: {:?}", &err_message);
+                req.log(
+                    "github-callback",
+                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    file!(),
+                    line!(),
+                );
+                return Err(fastn_core::Error::DatabaseError {
+                    message: err_message,
+                });
+            }
+        };
 
-    if existing_email_and_user_id.is_some() {
+    if let Some((_, user_id)) = existing_email_and_user_id {
         // user already exists, just create a session and redirect to next
-        let (_, user_id) = existing_email_and_user_id.unwrap();
 
-        let session_id: i64 = diesel::insert_into(fastn_core::schema::fastn_auth_session::table)
-            .values((
-                fastn_core::schema::fastn_auth_session::user_id.eq(&user_id),
-                fastn_core::schema::fastn_auth_session::created_at.eq(now),
-                fastn_core::schema::fastn_auth_session::updated_at.eq(now),
-            ))
-            .returning(fastn_core::schema::fastn_auth_session::id)
-            .get_result(&mut conn)
-            .await?;
+        let session_id: i64 =
+            match diesel::insert_into(fastn_core::schema::fastn_auth_session::table)
+                .values((
+                    fastn_core::schema::fastn_auth_session::user_id.eq(&user_id),
+                    fastn_core::schema::fastn_auth_session::created_at.eq(now),
+                    fastn_core::schema::fastn_auth_session::updated_at.eq(now),
+                ))
+                .returning(fastn_core::schema::fastn_auth_session::id)
+                .get_result(&mut conn)
+                .await
+            {
+                Ok(id) => id,
+                Err(e) => {
+                    // [ERROR] logging (Database Error)
+                    let err_message = format!("{:?}", &e);
+                    let log_err_message = format!("database: {:?}", &err_message);
+                    req.log(
+                        "github-callback",
+                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        file!(),
+                        line!(),
+                    );
+                    return Err(fastn_core::Error::DatabaseError {
+                        message: err_message,
+                    });
+                }
+            };
 
         tracing::info!("session created. session_id: {}", &session_id);
 
         // TODO: access_token expires?
         // handle refresh tokens
-        let token_id: i64 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
+        let token_id: i64 = match diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
             .values((
                 fastn_core::schema::fastn_oauthtoken::session_id.eq(session_id),
                 fastn_core::schema::fastn_oauthtoken::token.eq(access_token),
@@ -155,7 +289,24 @@ pub async fn callback(
             ))
             .returning(fastn_core::schema::fastn_oauthtoken::id)
             .get_result(&mut conn)
-            .await?;
+            .await
+        {
+            Ok(id) => id,
+            Err(e) => {
+                // [ERROR] logging (Database Error)
+                let err_message = format!("{:?}", &e);
+                let log_err_message = format!("database: {:?}", &err_message);
+                req.log(
+                    "github-callback",
+                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    file!(),
+                    line!(),
+                );
+                return Err(fastn_core::Error::DatabaseError {
+                    message: err_message,
+                });
+            }
+        };
 
         tracing::info!("token stored. token_id: {}", &token_id);
 
@@ -170,11 +321,11 @@ pub async fn callback(
     }
 
     // first time login, create fastn_user
-    let user = diesel::insert_into(fastn_core::schema::fastn_user::table)
+    let user = match diesel::insert_into(fastn_core::schema::fastn_user::table)
         .values((
             fastn_core::schema::fastn_user::username.eq(gh_user.login),
             fastn_core::schema::fastn_user::password.eq(""),
-            // TODO: should present an onabording form that asks for a name if github name is null
+            // TODO: should present an onboarding form that asks for a name if github name is null
             fastn_core::schema::fastn_user::name.eq(gh_user.name.unwrap_or_default()),
             fastn_core::schema::fastn_user::verified_email.eq(true),
             fastn_core::schema::fastn_user::email.eq(fastn_core::utils::citext(
@@ -188,11 +339,28 @@ pub async fn callback(
         ))
         .returning(fastn_core::auth::FastnUser::as_returning())
         .get_result(&mut conn)
-        .await?;
+        .await
+    {
+        Ok(fastn_user) => fastn_user,
+        Err(e) => {
+            // [ERROR] logging (Database Error)
+            let err_message = format!("{:?}", &e);
+            let log_err_message = format!("database: {:?}", &err_message);
+            req.log(
+                "github-callback",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(fastn_core::Error::DatabaseError {
+                message: err_message,
+            });
+        }
+    };
 
     tracing::info!("fastn_user created. user_id: {:?}", &user.id);
 
-    let email_id: i64 = diesel::insert_into(fastn_core::schema::fastn_user_email::table)
+    let email_id: i64 = match diesel::insert_into(fastn_core::schema::fastn_user_email::table)
         .values((
             fastn_core::schema::fastn_user_email::user_id.eq(&user.id),
             fastn_core::schema::fastn_user_email::email.eq(fastn_core::utils::citext(
@@ -208,12 +376,29 @@ pub async fn callback(
         ))
         .returning(fastn_core::schema::fastn_user_email::id)
         .get_result(&mut conn)
-        .await?;
+        .await
+    {
+        Ok(email_id) => email_id,
+        Err(e) => {
+            // [ERROR] logging (Database Error)
+            let err_message = format!("{:?}", &e);
+            let log_err_message = format!("database: {:?}", &err_message);
+            req.log(
+                "github-callback",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(fastn_core::Error::DatabaseError {
+                message: err_message,
+            });
+        }
+    };
 
     tracing::info!("fastn_user_email created. email: {:?}", &email_id);
 
     // TODO: session should store device that was used to login (chrome desktop on windows)
-    let session_id: i64 = diesel::insert_into(fastn_core::schema::fastn_auth_session::table)
+    let session_id: i64 = match diesel::insert_into(fastn_core::schema::fastn_auth_session::table)
         .values((
             fastn_core::schema::fastn_auth_session::user_id.eq(&user.id),
             fastn_core::schema::fastn_auth_session::created_at.eq(now),
@@ -221,13 +406,30 @@ pub async fn callback(
         ))
         .returning(fastn_core::schema::fastn_auth_session::id)
         .get_result(&mut conn)
-        .await?;
+        .await
+    {
+        Ok(id) => id,
+        Err(e) => {
+            // [ERROR] logging (Database Error)
+            let err_message = format!("{:?}", &e);
+            let log_err_message = format!("database: {:?}", &err_message);
+            req.log(
+                "github-callback",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(fastn_core::Error::DatabaseError {
+                message: err_message,
+            });
+        }
+    };
 
     tracing::info!("session created. session_id: {}", &session_id);
 
     // TODO: access_token expires?
     // handle refresh tokens
-    let token_id: i64 = diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
+    let token_id: i64 = match diesel::insert_into(fastn_core::schema::fastn_oauthtoken::table)
         .values((
             fastn_core::schema::fastn_oauthtoken::session_id.eq(session_id),
             fastn_core::schema::fastn_oauthtoken::token.eq(access_token),
@@ -237,7 +439,24 @@ pub async fn callback(
         ))
         .returning(fastn_core::schema::fastn_oauthtoken::id)
         .get_result(&mut conn)
-        .await?;
+        .await
+    {
+        Ok(id) => id,
+        Err(e) => {
+            // [ERROR] logging (Database Error)
+            let err_message = format!("{:?}", &e);
+            let log_err_message = format!("database: {:?}", &err_message);
+            req.log(
+                "github-callback",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(fastn_core::Error::DatabaseError {
+                message: err_message,
+            });
+        }
+    };
 
     tracing::info!("token stored. token_id: {}", &token_id);
 
@@ -254,14 +473,29 @@ pub async fn callback(
     };
 
     // redirect to onboarding route with a GET request
-    let mut resp = fastn_core::auth::set_session_cookie_and_redirect_to_next(
+    let mut resp = match fastn_core::auth::set_session_cookie_and_redirect_to_next(
         req,
         "github-callback",
         ds,
         session_id,
         next_path,
     )
-    .await?;
+    .await
+    {
+        Ok(response) => response,
+        Err(e) => {
+            // [ERROR] logging (Session Cookie Error)
+            let err_message = format!("{:?}", &e);
+            let log_err_message = format!("session cookie: {:?}", &err_message);
+            req.log(
+                "github-callback",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            return Err(e);
+        }
+    };
 
     if onboarding_enabled {
         resp.add_cookie(
@@ -273,7 +507,18 @@ pub async fn callback(
             .path("/")
             .finish(),
         )
-        .map_err(|e| fastn_core::Error::generic(format!("failed to set cookie: {e}")))?;
+        .map_err(|e| {
+            // [ERROR] logging (Set Cookie Error)
+            let err_message = format!("failed to set cookie: {:?}", &e);
+            let log_err_message = format!("set cookie: {:?}", &err_message);
+            req.log(
+                "github-callback",
+                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                file!(),
+                line!(),
+            );
+            fastn_core::Error::generic(err_message)
+        })?;
     }
 
     Ok(resp)
