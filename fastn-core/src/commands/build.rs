@@ -7,7 +7,6 @@ pub async fn build(
     test: bool,
     check_build: bool,
     zip_url: Option<&str>,
-    _dev_mode: bool,
 ) -> fastn_core::Result<()> {
     let build_dir = config.ds.root().join(".build");
     // Default css and js

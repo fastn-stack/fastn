@@ -147,6 +147,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_css = build.values_of_("css");
         let zip_url = build.value_of_("zip-url");
         let offline: bool = build.get_flag("offline");
+        let _dev_mode: bool = build.get_flag("dev");
 
         fastn_update::update(&ds, offline, false).await?;
 
@@ -281,6 +282,7 @@ fn app(version: &'static str) -> clap::Command {
                     .action(clap::ArgAction::Append))
                 .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
                 .arg(clap::arg!(--offline "Disables automatic package update checks to operate in offline mode"))
+                .arg(clap::arg!(--"dev" "Runs fastn build in dev mode for performing download-on-demand"))
         )
         .subcommand(
             clap::Command::new("fmt")
@@ -347,7 +349,8 @@ mod sub_command {
             .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
                 .action(clap::ArgAction::Append))
             .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"))
-            .arg(clap::arg!(--offline "Disables automatic package update checks to operate in offline mode"));
+            .arg(clap::arg!(--offline "Disables automatic package update checks to operate in offline mode"))
+            .arg(clap::arg!(--"dev" "Runs fastn serve in dev mode for performing download-on-demand"));
         if cfg!(feature = "remote") {
             serve
         } else {
