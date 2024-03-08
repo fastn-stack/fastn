@@ -26,7 +26,7 @@ pub(crate) async fn onboarding(
         let log_success_message = "onboarding: redirect-next".to_string();
         req.log(
             "onboarding",
-            fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Descriptive(
+            fastn_core::log::OutcomeKind::Success(fastn_core::log::SuccessOutcome::Descriptive(
                 log_success_message,
             )),
             file!(),
@@ -55,11 +55,14 @@ pub(crate) async fn onboarding(
     {
         Ok(response) => response.into(),
         Err(e) => {
-            // [ERROR] logging (read_ftd)
-            let log_err_message = format!("read_ftd: {:?}", &e);
+            // [ERROR] logging (server-error: ReadFTDError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "onboarding",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::ReadFTDError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -78,12 +81,14 @@ pub(crate) async fn onboarding(
             .finish(),
     )
     .map_err(|e| {
-        // [ERROR] logging (Set Cookie Error)
+        // [ERROR] logging (server-error: CookieError)
         let err_message = format!("failed to set cookie: {:?}", &e);
-        let log_err_message = format!("set cookie: {:?}", &err_message);
         req.log(
             "onboarding",
-            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            fastn_core::log::ServerErrorOutcome::CookieError {
+                message: err_message.clone(),
+            }
+            .into_kind(),
             file!(),
             line!(),
         );

@@ -148,11 +148,10 @@ async fn set_session_cookie_and_redirect_to_next(
             tracing::error!("couldn't retrieve authenticated user. Reason: {:?}", e);
             return match e {
                 AuthUserError::UserExistsWithUnverifiedEmail(_) => {
-                    // [ERROR] logging (user: not verified)
-                    let log_err_message = "user: not verified".to_string();
+                    // [ERROR] logging (unauthorized-error: UserNotVerified)
                     req.log(
                         ekind,
-                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        fastn_core::log::UnauthorizedErrorOutcome::UserNotVerified.into_kind(),
                         file!(),
                         line!(),
                     );
@@ -164,11 +163,10 @@ async fn set_session_cookie_and_redirect_to_next(
                     )
                 }
                 AuthUserError::UserDoesNotExist => {
-                    // [ERROR] logging (user: non-existent)
-                    let log_err_message = "user: does not exist".to_string();
+                    // [ERROR] logging (unauthorized-error: UserDoesNotExist)
                     req.log(
                         ekind,
-                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        fastn_core::log::UnauthorizedErrorOutcome::UserDoesNotExist.into_kind(),
                         file!(),
                         line!(),
                     );
@@ -177,11 +175,14 @@ async fn set_session_cookie_and_redirect_to_next(
                     ))
                 }
                 AuthUserError::WrongQuery(e) => {
-                    // [ERROR] logging (user: database query error)
-                    let log_err_message = format!("diesel: {:?}", &e);
+                    // [ERROR] logging (server-error: DatabaseQueryError)
+                    let err_message = format!("{:?}", &e);
                     req.log(
                         ekind,
-                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                            message: err_message,
+                        }
+                        .into_kind(),
                         file!(),
                         line!(),
                     );
@@ -191,11 +192,14 @@ async fn set_session_cookie_and_redirect_to_next(
                     })
                 }
                 AuthUserError::Connection { ref reason } => {
-                    // [ERROR] logging (user: database connection error)
-                    let log_err_message = format!("diesel: {:?}", reason.as_str());
+                    // [ERROR] logging (server-error: PoolError)
+                    let err_message = format!("{:?}", reason.as_str());
                     req.log(
                         ekind,
-                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        fastn_core::log::ServerErrorOutcome::PoolError {
+                            message: err_message,
+                        }
+                        .into_kind(),
                         file!(),
                         line!(),
                     );

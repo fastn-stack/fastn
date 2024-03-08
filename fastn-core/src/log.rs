@@ -91,41 +91,206 @@ impl EntityKind {
 #[derive(Debug, Clone)]
 pub enum OutcomeKind {
     Info,
-    Success(Outcome),
-    Error(Outcome),
+    Success(SuccessOutcome),
+    Error(ErrorOutcome),
 }
 
 impl OutcomeKind {
     pub fn success_default() -> Self {
-        OutcomeKind::Success(Outcome::Default)
+        OutcomeKind::Success(SuccessOutcome::Default)
     }
 
     pub fn success_descriptive(message: String) -> Self {
-        OutcomeKind::Success(Outcome::Descriptive(message))
+        OutcomeKind::Success(SuccessOutcome::Descriptive(message))
     }
 
     pub fn error_default() -> Self {
-        OutcomeKind::Error(Outcome::Default)
-    }
-
-    pub fn error_descriptive(message: String) -> Self {
-        OutcomeKind::Error(Outcome::Descriptive(message))
+        OutcomeKind::Error(ErrorOutcome::Default)
     }
 }
 
-// todo: implement this as enum for different auth operations
 #[derive(Debug, Clone)]
-pub enum Outcome {
+pub enum SuccessOutcome {
     Default,
     Descriptive(String),
 }
 
-impl Outcome {
+impl SuccessOutcome {
     fn message(&self) -> String {
         match self {
-            Outcome::Default => "Default".to_string(),
-            Outcome::Descriptive(s) => s.clone(),
+            SuccessOutcome::Default => "default".to_string(),
+            SuccessOutcome::Descriptive(s) => s.clone(),
         }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum ErrorOutcome {
+    Default,
+    UnauthorizedError(UnauthorizedErrorOutcome),
+    ServerError(ServerErrorOutcome),
+    FormError(FormErrorOutcome),
+    BadRequest(BadRequestOutcome),
+}
+
+impl ErrorOutcome {
+    pub fn message(&self) -> String {
+        match self {
+            ErrorOutcome::Default => "default".to_string(),
+            ErrorOutcome::UnauthorizedError(outcome) => outcome.message(),
+            ErrorOutcome::ServerError(outcome) => outcome.message(),
+            ErrorOutcome::FormError(outcome) => outcome.message(),
+            ErrorOutcome::BadRequest(outcome) => outcome.message(),
+        }
+    }
+
+    pub fn outcome(&self) -> String {
+        match self {
+            ErrorOutcome::Default => "error".to_string(),
+            ErrorOutcome::UnauthorizedError(outcome) => outcome.outcome(),
+            ErrorOutcome::ServerError(outcome) => outcome.outcome(),
+            ErrorOutcome::FormError(outcome) => outcome.outcome(),
+            ErrorOutcome::BadRequest(outcome) => outcome.outcome(),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum UnauthorizedErrorOutcome {
+    Default,
+    UserDoesNotExist,
+    UserNotVerified,
+}
+
+impl UnauthorizedErrorOutcome {
+    pub fn message(&self) -> String {
+        match self {
+            UnauthorizedErrorOutcome::Default => "default".to_string(),
+            UnauthorizedErrorOutcome::UserDoesNotExist => "user: does not exist".to_string(),
+            UnauthorizedErrorOutcome::UserNotVerified => "user: not verified".to_string(),
+        }
+    }
+
+    pub fn outcome(&self) -> String {
+        "unauthorized-error".to_string()
+    }
+
+    pub fn into_kind(self) -> OutcomeKind {
+        OutcomeKind::Error(ErrorOutcome::UnauthorizedError(self))
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum ServerErrorOutcome {
+    Default,
+    DatabaseQueryError { message: String },
+    PoolError { message: String },
+    CookieError { message: String },
+    ReadFTDError { message: String },
+    InterpreterError { message: String },
+    HashingError { message: String },
+    MailError { message: String },
+    EnvironmentError { message: String },
+    RequestTokenError { message: String },
+    HttpError { message: String },
+}
+
+impl ServerErrorOutcome {
+    pub fn message(&self) -> String {
+        match self {
+            ServerErrorOutcome::Default => "default".to_string(),
+            ServerErrorOutcome::DatabaseQueryError { message } => {
+                format!("database query error: {}", message)
+            }
+            ServerErrorOutcome::PoolError { message } => format!("pool error: {}", message),
+            ServerErrorOutcome::CookieError { message } => {
+                format!("session cookie error: {}", message)
+            }
+            ServerErrorOutcome::ReadFTDError { message } => format!("read_ftd error: {}", message),
+            ServerErrorOutcome::HashingError { message } => format!("hashing error: {}", message),
+            ServerErrorOutcome::InterpreterError { message } => {
+                format!("interpreter error: {}", message)
+            }
+            ServerErrorOutcome::MailError { message } => format!("mail error: {}", message),
+            ServerErrorOutcome::EnvironmentError { message } => format!("env error: {}", message),
+            ServerErrorOutcome::RequestTokenError { message } => {
+                format!("request token error: {}", message)
+            }
+            ServerErrorOutcome::HttpError { message } => format!("http error: {}", message),
+        }
+    }
+
+    pub fn outcome(&self) -> String {
+        "server-error".to_string()
+    }
+
+    pub fn into_kind(self) -> OutcomeKind {
+        OutcomeKind::Error(ErrorOutcome::ServerError(self))
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum FormErrorOutcome {
+    Default,
+    PayloadError { message: String },
+    ValidationError { message: String },
+}
+
+impl FormErrorOutcome {
+    pub fn message(&self) -> String {
+        match self {
+            FormErrorOutcome::Default => "default".to_string(),
+            FormErrorOutcome::PayloadError { message } => format!("payload error: {}", message),
+            FormErrorOutcome::ValidationError { message } => {
+                format!("validation error: {}", message)
+            }
+        }
+    }
+
+    pub fn outcome(&self) -> String {
+        "form-error".to_string()
+    }
+
+    pub fn into_kind(self) -> OutcomeKind {
+        OutcomeKind::Error(ErrorOutcome::FormError(self))
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum BadRequestOutcome {
+    Default,
+    InvalidCode { code: String },
+    QueryNotFoundError { query: String },
+    QueryDeserializeError { query: String },
+    NotFound { message: String },
+    InvalidRoute { message: String },
+}
+
+impl BadRequestOutcome {
+    pub fn message(&self) -> String {
+        match self {
+            BadRequestOutcome::Default => "default".to_string(),
+            BadRequestOutcome::QueryNotFoundError { query } => {
+                format!("query error: {} not found", query)
+            }
+            BadRequestOutcome::QueryDeserializeError { query } => {
+                format!("deserialize error: failed to deserialize query {}", query)
+            }
+            BadRequestOutcome::InvalidCode { code } => format!(
+                "invalid code value. No entry exists for the given code in db. Provided code: {}",
+                code
+            ),
+            BadRequestOutcome::NotFound { message } => format!("not found: {}", message),
+            BadRequestOutcome::InvalidRoute { message } => format!("invalid route: {}", message),
+        }
+    }
+
+    pub fn outcome(&self) -> String {
+        "bad-request".to_string()
+    }
+
+    pub fn into_kind(self) -> OutcomeKind {
+        OutcomeKind::Error(ErrorOutcome::BadRequest(self))
     }
 }
 
@@ -297,7 +462,7 @@ impl AuthInfoLevel {
 
 #[derive(Debug, Clone)]
 pub enum AuthErrorLevel {
-    Login(Outcome),
+    Login(ErrorOutcome),
     InvalidRoute,
     Undefined,
 }
@@ -356,19 +521,19 @@ impl SuccessLevel {
 
 #[derive(Debug, Clone)]
 pub enum AuthSuccessLevel {
-    Login(Outcome),
-    GithubLogin(Outcome),
-    GithubCallback(Outcome),
-    Logout(Outcome),
-    CreateAccount(Outcome),
-    EmailConfirmationSent(Outcome),
-    ConfirmEmail(Outcome),
-    ResendConfirmationEmail(Outcome),
-    Onboarding(Outcome),
-    ForgotPassword(Outcome),
-    ForgotPasswordSuccess(Outcome),
-    SetPassword(Outcome),
-    SetPasswordSuccess(Outcome),
+    Login(SuccessOutcome),
+    GithubLogin(SuccessOutcome),
+    GithubCallback(SuccessOutcome),
+    Logout(SuccessOutcome),
+    CreateAccount(SuccessOutcome),
+    EmailConfirmationSent(SuccessOutcome),
+    ConfirmEmail(SuccessOutcome),
+    ResendConfirmationEmail(SuccessOutcome),
+    Onboarding(SuccessOutcome),
+    ForgotPassword(SuccessOutcome),
+    ForgotPasswordSuccess(SuccessOutcome),
+    SetPassword(SuccessOutcome),
+    SetPasswordSuccess(SuccessOutcome),
 }
 
 impl AuthSuccessLevel {
@@ -512,12 +677,10 @@ pub struct Log {
 impl Log {
     pub fn outcome(&self) -> String {
         match &self.outcome {
-            // todo: improve error outcome
-            OutcomeKind::Error(_outcome) => "error",
-            OutcomeKind::Success(_outcome) => "success",
-            OutcomeKind::Info => "info",
+            OutcomeKind::Error(outcome) => outcome.outcome(),
+            OutcomeKind::Success(_outcome) => "success".to_string(),
+            OutcomeKind::Info => "info".to_string(),
         }
-        .to_string()
     }
 
     pub fn outcome_data(&self) -> String {

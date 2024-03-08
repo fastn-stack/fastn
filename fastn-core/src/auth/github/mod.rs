@@ -33,11 +33,14 @@ pub async fn login(
     let github_client = match fastn_core::auth::github::utils::github_client(ds).await {
         Ok(client) => client,
         Err(e) => {
-            // [ERROR] logging (Environment Error)
-            let log_err_message = format!("environment: {:?}", &e);
+            // [ERROR] logging (server-error: EnvironmentError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "github-login",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::EnvironmentError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -92,7 +95,7 @@ pub async fn callback(
         let log_success_message = "user: already authenticated".to_string();
         req.log(
             "github-callback",
-            fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Descriptive(
+            fastn_core::log::OutcomeKind::Success(fastn_core::log::SuccessOutcome::Descriptive(
                 log_success_message,
             )),
             file!(),
@@ -105,11 +108,14 @@ pub async fn callback(
     let client = match fastn_core::auth::github::utils::github_client(ds).await {
         Ok(client) => client,
         Err(e) => {
-            // [ERROR] logging (Environment Error)
-            let log_err_message = format!("environment: {:?}", &e);
+            // [ERROR] logging (server-error: EnvironmentError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "github-callback",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::EnvironmentError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -126,11 +132,14 @@ pub async fn callback(
             .secret()
             .to_string(),
         Err(e) => {
-            // [ERROR] logging (Request Token Error)
-            let log_err_message = format!("request token: {:?}", &e);
+            // [ERROR] logging (server-error: RequestTokenError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "github-callback",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::RequestTokenError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -142,11 +151,14 @@ pub async fn callback(
         match fastn_core::auth::github::apis::user_details(access_token.as_str()).await {
             Ok(user) => user,
             Err(e) => {
-                // [ERROR] logging (Github user Error)
-                let log_err_message = format!("github user: {:?}", &e);
+                // [ERROR] logging (server-error: HttpError)
+                let err_message = format!("github user: {:?}", &e);
                 req.log(
                     "github-callback",
-                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    fastn_core::log::ServerErrorOutcome::HttpError {
+                        message: err_message,
+                    }
+                    .into_kind(),
                     file!(),
                     line!(),
                 );
@@ -160,11 +172,14 @@ pub async fn callback(
         {
             Ok(emails) => emails,
             Err(e) => {
-                // [ERROR] logging (Github email Error)
-                let log_err_message = format!("github email: {:?}", &e);
+                // [ERROR] logging (server-error: HttpError)
+                let err_message = format!("github email: {:?}", &e);
                 req.log(
                     "github-callback",
-                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    fastn_core::log::ServerErrorOutcome::HttpError {
+                        message: err_message,
+                    }
+                    .into_kind(),
                     file!(),
                     line!(),
                 );
@@ -175,12 +190,14 @@ pub async fn callback(
         let primary = match emails.into_iter().find(|e| e.primary) {
             Some(primary) => primary,
             None => {
-                // [ERROR] logging (Github primary email Error)
+                // [ERROR] logging (bad-request: NotFound)
                 let err_message = "primary email must exist for a github account".to_string();
-                let log_err_message = format!("github primary email: {:?}", &err_message);
                 req.log(
                     "github-callback",
-                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    fastn_core::log::BadRequestOutcome::NotFound {
+                        message: err_message.clone(),
+                    }
+                    .into_kind(),
                     file!(),
                     line!(),
                 );
@@ -194,12 +211,14 @@ pub async fn callback(
     let mut conn = match db_pool.get().await {
         Ok(conn) => conn,
         Err(e) => {
-            // [ERROR] logging (Database Error)
+            // [ERROR] logging (server-error: PoolError)
             let err_message = format!("Failed to get connection to db. {:?}", &e);
-            let log_err_message = format!("database: {:?}", &err_message);
             req.log(
                 "github-callback",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::PoolError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -229,11 +248,14 @@ pub async fn callback(
         {
             Ok(v) => v,
             Err(e) => {
-                // [ERROR] logging (Database Error)
-                let log_err_message = format!("database: {:?}", &e);
+                // [ERROR] logging (server-error: DatabaseQueryError)
+                let err_message = format!("{:?}", &e);
                 req.log(
                     "github-callback",
-                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                        message: err_message,
+                    }
+                    .into_kind(),
                     file!(),
                     line!(),
                 );
@@ -257,12 +279,14 @@ pub async fn callback(
             {
                 Ok(id) => id,
                 Err(e) => {
-                    // [ERROR] logging (Database Error)
+                    // [ERROR] logging (server-error: DatabaseQueryError)
                     let err_message = format!("{:?}", &e);
-                    let log_err_message = format!("database: {:?}", &err_message);
                     req.log(
                         "github-callback",
-                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                            message: err_message.clone(),
+                        }
+                        .into_kind(),
                         file!(),
                         line!(),
                     );
@@ -290,12 +314,14 @@ pub async fn callback(
         {
             Ok(id) => id,
             Err(e) => {
-                // [ERROR] logging (Database Error)
+                // [ERROR] logging (server-error: DatabaseQueryError)
                 let err_message = format!("{:?}", &e);
-                let log_err_message = format!("database: {:?}", &err_message);
                 req.log(
                     "github-callback",
-                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                        message: err_message.clone(),
+                    }
+                    .into_kind(),
                     file!(),
                     line!(),
                 );
@@ -340,12 +366,14 @@ pub async fn callback(
     {
         Ok(fastn_user) => fastn_user,
         Err(e) => {
-            // [ERROR] logging (Database Error)
+            // [ERROR] logging (server-error: DatabaseQueryError)
             let err_message = format!("{:?}", &e);
-            let log_err_message = format!("database: {:?}", &err_message);
             req.log(
                 "github-callback",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -377,12 +405,14 @@ pub async fn callback(
     {
         Ok(email_id) => email_id,
         Err(e) => {
-            // [ERROR] logging (Database Error)
+            // [ERROR] logging (server-error: DatabaseQueryError)
             let err_message = format!("{:?}", &e);
-            let log_err_message = format!("database: {:?}", &err_message);
             req.log(
                 "github-callback",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -407,12 +437,14 @@ pub async fn callback(
     {
         Ok(id) => id,
         Err(e) => {
-            // [ERROR] logging (Database Error)
+            // [ERROR] logging (server-error: DatabaseQueryError)
             let err_message = format!("{:?}", &e);
-            let log_err_message = format!("database: {:?}", &err_message);
             req.log(
                 "github-callback",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -440,12 +472,14 @@ pub async fn callback(
     {
         Ok(id) => id,
         Err(e) => {
-            // [ERROR] logging (Database Error)
+            // [ERROR] logging (server-error: DatabaseQueryError)
             let err_message = format!("{:?}", &e);
-            let log_err_message = format!("database: {:?}", &err_message);
             req.log(
                 "github-callback",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -481,11 +515,14 @@ pub async fn callback(
     {
         Ok(response) => response,
         Err(e) => {
-            // [ERROR] logging (Session Cookie Error)
-            let log_err_message = format!("session cookie: {:?}", &e);
+            // [ERROR] logging (server-error: CookieError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "github-callback",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::CookieError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -504,12 +541,14 @@ pub async fn callback(
             .finish(),
         )
         .map_err(|e| {
-            // [ERROR] logging (Set Cookie Error)
+            // [ERROR] logging (server-error: CookieError)
             let err_message = format!("failed to set cookie: {:?}", &e);
-            let log_err_message = format!("set cookie: {:?}", &err_message);
             req.log(
                 "github-callback",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::CookieError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );

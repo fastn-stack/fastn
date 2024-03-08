@@ -20,12 +20,14 @@ pub async fn logout(
         let session_data = match fastn_core::auth::utils::decrypt(ds, &session_data).await {
             Ok(data) => data,
             Err(e) => {
-                // [ERROR] logging (Session cookie decrypt Error)
+                // [ERROR] logging (server-error: CookieError)
                 let err_message = format!("Failed to decrypt session cookie. {:?}", &e);
-                let log_err_message = format!("session cookie: {:?}", &err_message);
                 req.log(
                     "logout",
-                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    fastn_core::log::ServerErrorOutcome::CookieError {
+                        message: err_message,
+                    }
+                    .into_kind(),
                     file!(),
                     line!(),
                 );
@@ -44,12 +46,14 @@ pub async fn logout(
             let mut conn = match db_pool.get().await {
                 Ok(conn) => conn,
                 Err(e) => {
-                    // [ERROR] logging (Database Error)
+                    // [ERROR] logging (server-error: PoolError)
                     let err_message = format!("Failed to get connection to db. {:?}", &e);
-                    let log_err_message = format!("database: {:?}", &err_message);
                     req.log(
                         "logout",
-                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        fastn_core::log::ServerErrorOutcome::PoolError {
+                            message: err_message.clone(),
+                        }
+                        .into_kind(),
                         file!(),
                         line!(),
                     );
@@ -66,12 +70,14 @@ pub async fn logout(
             {
                 Ok(affected) => affected,
                 Err(e) => {
-                    // [ERROR] logging (Database Error)
+                    // [ERROR] logging (server-error: DatabaseQueryError)
                     let err_message = format!("{:?}", &e);
-                    let log_err_message = format!("database: {:?}", &err_message);
                     req.log(
                         "logout",
-                        fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                        fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                            message: err_message,
+                        }
+                        .into_kind(),
                         file!(),
                         line!(),
                     );

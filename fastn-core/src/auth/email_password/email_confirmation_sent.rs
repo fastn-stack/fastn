@@ -27,11 +27,14 @@ pub(crate) async fn email_confirmation_sent(
     {
         Ok(resp) => Ok(resp.into()),
         Err(e) => {
-            // [ERROR] logging (read_ftd)
-            let log_err_message = format!("read_ftd: {:?}", &e);
+            // [ERROR] logging (server-error: ReadFTDError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "email-confirmation-sent",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::ReadFTDError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );

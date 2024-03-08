@@ -35,9 +35,9 @@ pub(crate) async fn login(
                 let log_success_message = "login: GET".to_string();
                 req.log(
                     "login",
-                    fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Descriptive(
-                        log_success_message,
-                    )),
+                    fastn_core::log::OutcomeKind::Success(
+                        fastn_core::log::SuccessOutcome::Descriptive(log_success_message),
+                    ),
                     file!(),
                     line!(),
                 );
@@ -45,11 +45,14 @@ pub(crate) async fn login(
                 Ok(resp.into())
             }
             Err(e) => {
-                // [ERROR] logging (read_ftd)
-                let log_err_message = format!("read_ftd: {:?}", &e);
+                // [ERROR] logging (server-error: ReadFTDError)
+                let err_message = format!("{:?}", &e);
                 req.log(
                     "login",
-                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    fastn_core::log::ServerErrorOutcome::ReadFTDError {
+                        message: err_message,
+                    }
+                    .into_kind(),
                     file!(),
                     line!(),
                 );
@@ -68,12 +71,14 @@ pub(crate) async fn login(
     let payload = match req_config.request.json::<Payload>() {
         Ok(payload) => payload,
         Err(e) => {
-            // [ERROR] logging (payload)
+            // [ERROR] logging (form-error: PayloadError)
             let err_message = format!("invalid payload: {:?}", &e);
-            let log_err_message = format!("payload: {:?}", &err_message);
             req.log(
                 "login",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::FormErrorOutcome::PayloadError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -96,6 +101,7 @@ pub(crate) async fn login(
     }
 
     if !errors.is_empty() {
+        // [ERROR] logging (form-error: ValidationError)
         let err_message = errors
             .iter()
             .flat_map(|(field, messages)| {
@@ -106,11 +112,12 @@ pub(crate) async fn login(
             .collect::<Vec<String>>()
             .join(", ");
 
-        let log_err_message = format!("User err: {}", err_message);
-        // [ERROR] logging (user)
         req.log(
             "login",
-            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            fastn_core::log::FormErrorOutcome::ValidationError {
+                message: err_message,
+            }
+            .into_kind(),
             file!(),
             line!(),
         );
@@ -121,12 +128,14 @@ pub(crate) async fn login(
     let mut conn = match db_pool.get().await {
         Ok(conn) => conn,
         Err(e) => {
-            // [ERROR] logging (pool error)
+            // [ERROR] logging (server-error: PoolError)
             let err_message = format!("Failed to get connection to db. {:?}", &e);
-            let log_err_message = format!("pool error: {}", err_message.as_str());
             req.log(
                 "login",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::PoolError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -137,24 +146,44 @@ pub(crate) async fn login(
         }
     };
 
-    let query = fastn_core::schema::fastn_user::table
+    let user: Option<fastn_core::auth::FastnUser> = match fastn_core::schema::fastn_user::table
         .filter(fastn_core::schema::fastn_user::username.eq(&payload.username))
         .or_filter(
             fastn_core::schema::fastn_user::email.eq(fastn_core::utils::citext(&payload.username)),
         )
-        .select(fastn_core::auth::FastnUser::as_select());
-
-    let user: Option<fastn_core::auth::FastnUser> = query.first(&mut conn).await.optional()?;
+        .select(fastn_core::auth::FastnUser::as_select())
+        .first(&mut conn)
+        .await
+        .optional()
+    {
+        Ok(v) => v,
+        Err(e) => {
+            // [ERROR] logging (server-error: DatabaseQueryError)
+            let err_message = format!("{:?}", &e);
+            req.log(
+                "login",
+                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                    message: err_message,
+                }
+                .into_kind(),
+                file!(),
+                line!(),
+            );
+            return Err(e.into());
+        }
+    };
 
     let user = match user {
         Some(user) => user,
         None => {
-            let log_err_message = "User: Invalid email/username".to_string();
-
-            // [ERROR] logging (user not found)
+            // [ERROR] logging (form-error: ValidationError)
+            let err_message = "User: Invalid email/username".to_string();
             req.log(
                 "login",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::FormErrorOutcome::ValidationError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -173,11 +202,14 @@ pub(crate) async fn login(
         // or should we redirect them to the oauth provider they used last time?
         // redirecting them will require saving the method they used to login which de don't atm
 
-        // [ERROR] logging (user password is empty)
-        let log_err_message = "User password: Is empty/blank".to_string();
+        // [ERROR] logging (form-error: ValidationError)
+        let err_message = "password: can't be empty".to_string();
         req.log(
             "login",
-            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            fastn_core::log::FormErrorOutcome::ValidationError {
+                message: err_message,
+            }
+            .into_kind(),
             file!(),
             line!(),
         );
@@ -191,13 +223,14 @@ pub(crate) async fn login(
     let parsed_hash = match argon2::PasswordHash::new(&user.password) {
         Ok(hash) => hash,
         Err(e) => {
-            let err_message = format!("failed to parse hashed password: {e}");
-
             // [ERROR] logging (hashed password: parse error)
-            let log_err_message = format!("hashed password: {}", err_message.as_str());
+            let err_message = format!("failed to parse hashed password: {e}");
             req.log(
                 "login",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::HashingError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -213,20 +246,20 @@ pub(crate) async fn login(
     );
 
     if password_match.is_err() {
-        // [ERROR] logging (password: mismatch)
-        let log_err_message = "password: incorrect password".to_string();
+        // [ERROR] logging (form-error: ValidationError)
+        let err_message = "password: incorrect password".to_string();
         req.log(
             "login",
-            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            fastn_core::log::FormErrorOutcome::ValidationError {
+                message: err_message,
+            }
+            .into_kind(),
             file!(),
             line!(),
         );
 
         return fastn_core::http::user_err(
-            vec![(
-                "password".into(),
-                vec!["incorrect username/password".into()],
-            )],
+            vec![("password".into(), vec!["incorrect password".into()])],
             fastn_core::http::StatusCode::OK,
         );
     }
@@ -246,11 +279,14 @@ pub(crate) async fn login(
     {
         Ok(id) => id,
         Err(e) => {
-            // [ERROR] logging (session_id)
-            let log_err_message = format!("session_id: {:?}", &e);
+            // [ERROR] logging (server-error: DatabaseQueryError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "login",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );

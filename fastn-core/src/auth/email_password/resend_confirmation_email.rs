@@ -18,11 +18,13 @@ pub(crate) async fn resend_confirmation_email(
     let email = match req.query().get("email") {
         Some(email) => email,
         None => {
-            // [ERROR] logging (query: not-found)
-            let log_err_message = "query: email not found".to_string();
+            // [ERROR] logging (bad-request: QueryNotFoundError)
             req.log(
                 "resend-confirmation-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::BadRequestOutcome::QueryNotFoundError {
+                    query: "email".to_string(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -34,11 +36,13 @@ pub(crate) async fn resend_confirmation_email(
     let email = match email {
         serde_json::Value::String(c) => c.to_owned(),
         _ => {
-            // [ERROR] logging (query: failed-to-deserialize)
-            let log_err_message = "query: failed to deserialize email".to_string();
+            // [ERROR] logging (bad-request: QueryDeserializeError)
             req.log(
                 "resend-confirmation-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::BadRequestOutcome::QueryDeserializeError {
+                    query: "email".to_string(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -48,11 +52,14 @@ pub(crate) async fn resend_confirmation_email(
     };
 
     if !validator::validate_email(&email) {
-        // [ERROR] logging (query: validation-error)
-        let log_err_message = "query: failed to validate email".to_string();
+        // [ERROR] logging (form-error: ValidationError)
+        let err_message = "failed to validate email".to_string();
         req.log(
             "resend-confirmation-email",
-            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            fastn_core::log::FormErrorOutcome::ValidationError {
+                message: err_message,
+            }
+            .into_kind(),
             file!(),
             line!(),
         );
@@ -63,12 +70,14 @@ pub(crate) async fn resend_confirmation_email(
     let mut conn = match db_pool.get().await {
         Ok(conn) => conn,
         Err(e) => {
-            // [ERROR] logging (pool-error)
+            // [ERROR] logging (server-error: PoolError)
             let err_message = format!("Failed to get connection to db. {:?}", &e);
-            let log_err_message = format!("pool error: {}", err_message.as_str());
             req.log(
                 "resend-confirmation-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::PoolError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );

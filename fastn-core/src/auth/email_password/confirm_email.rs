@@ -22,11 +22,13 @@ pub(crate) async fn confirm_email(
         None => {
             tracing::info!("finishing response due to bad code");
 
-            // [ERROR] logging (query: code not found)
-            let log_err_message = "query: code not found".to_string();
+            // [ERROR] logging (bad-request: QueryNotFound)
             req.log(
                 "confirm-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::BadRequestOutcome::QueryNotFoundError {
+                    query: "code".to_string(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -39,11 +41,13 @@ pub(crate) async fn confirm_email(
         _ => {
             tracing::info!("failed to Deserialize ?code as string");
 
-            // [ERROR] logging (query: code deserialization failure)
-            let log_err_message = "query: failed to deserialize code as string".to_string();
+            // [ERROR] logging (bad-request: QueryDeserializeError)
             req.log(
                 "confirm-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::BadRequestOutcome::QueryDeserializeError {
+                    query: "code".to_string(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -55,12 +59,14 @@ pub(crate) async fn confirm_email(
     let mut conn = match db_pool.get().await {
         Ok(conn) => conn,
         Err(e) => {
-            // [ERROR] logging (pool error)
+            // [ERROR] logging (server-error: PoolError)
             let err_message = format!("Failed to get connection to db. {:?}", &e);
-            let log_err_message = format!("pool error: {}", err_message.as_str());
             req.log(
                 "confirm-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::PoolError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -85,11 +91,14 @@ pub(crate) async fn confirm_email(
         {
             Ok(v) => v,
             Err(e) => {
-                // [ERROR] logging (Database Error)
-                let log_err_message = format!("database: {:?}", &e);
+                // [ERROR] logging (server-error: DatabaseQueryError)
+                let err_message = format!("{:?}", &e);
                 req.log(
                     "confirm-email",
-                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                        message: err_message,
+                    }
+                    .into_kind(),
                     file!(),
                     line!(),
                 );
@@ -103,11 +112,13 @@ pub(crate) async fn confirm_email(
             tracing::info!("invalid code value. No entry exists for the given code in db");
             tracing::info!("provided code: {}", &code);
 
-            // [ERROR] logging (query: invalid code Error)
-            let log_err_message = format!("query: invalid code value. No entry exists for the given code in db. Provided code: {}", &code);
+            // [ERROR] logging (bad-request: InvalidCode)
             req.log(
                 "confirm-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::BadRequestOutcome::InvalidCode {
+                    code: code.to_string(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -124,7 +135,7 @@ pub(crate) async fn confirm_email(
         let log_success_message = "confirm-email: redirect to ResendConfirmationEmail (key expired: EMAIL_CONFIRMATION_EXPIRE_DAYS)".to_string();
         req.log(
             "confirm-email",
-            fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Descriptive(
+            fastn_core::log::OutcomeKind::Success(fastn_core::log::SuccessOutcome::Descriptive(
                 log_success_message,
             )),
             file!(),
@@ -149,11 +160,14 @@ pub(crate) async fn confirm_email(
         {
             Ok(email) => email,
             Err(e) => {
-                // [ERROR] logging (Database Error)
-                let log_err_message = format!("database: {:?}", &e);
+                // [ERROR] logging (server-error: DatabaseQueryError)
+                let err_message = format!("{:?}", &e);
                 req.log(
                     "confirm-email",
-                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                        message: err_message,
+                    }
+                    .into_kind(),
                     file!(),
                     line!(),
                 );
@@ -170,11 +184,14 @@ pub(crate) async fn confirm_email(
     {
         Ok(id) => id,
         Err(e) => {
-            // [ERROR] logging (Database Error)
-            let log_err_message = format!("database: {:?}", &e);
+            // [ERROR] logging (server-error: DatabaseQueryError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "confirm-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -213,11 +230,14 @@ pub(crate) async fn confirm_email(
     {
         Ok(affected) => affected,
         Err(e) => {
-            // [ERROR] logging (Database Error)
-            let log_err_message = format!("database: {:?}", &e);
+            // [ERROR] logging (server-error: DatabaseQueryError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "confirm-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -240,11 +260,14 @@ pub(crate) async fn confirm_email(
     {
         Ok(response) => response,
         Err(e) => {
-            // [ERROR] logging (Session Cookie Error)
-            let log_err_message = format!("session cookie: {:?}", &e);
+            // [ERROR] logging (server-error: CookieError)
+            let err_message = format!("session cookie: {:?}", &e);
             req.log(
                 "confirm-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::CookieError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -267,10 +290,12 @@ pub(crate) async fn confirm_email(
         .map_err(|e| {
             // [ERROR] logging (Set Cookie Error)
             let err_message = format!("failed to set cookie: {:?}", &e);
-            let log_err_message = format!("set cookie: {:?}", &err_message);
             req.log(
                 "confirm-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::CookieError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );

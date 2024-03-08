@@ -29,11 +29,14 @@ pub(crate) async fn create_and_send_confirmation_email(
         Err(e) => {
             tracing::error!("failed to get email_id and user_id from db: {:?}", &e);
 
-            // [ERROR] logging (database-error)
-            let log_err_message = format!("database: {:?}", &e);
+            // [ERROR] logging (server-error: DatabaseQueryError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "resend-confirmation-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -55,11 +58,14 @@ pub(crate) async fn create_and_send_confirmation_email(
     {
         Ok(id) => id,
         Err(e) => {
-            // [ERROR] logging (database-error)
-            let log_err_message = format!("database: {:?}", &e);
+            // [ERROR] logging (server-error: DatabaseQueryError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "resend-confirmation-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -82,11 +88,14 @@ pub(crate) async fn create_and_send_confirmation_email(
         {
             Ok(key) => key,
             Err(e) => {
-                // [ERROR] logging (database-error)
-                let log_err_message = format!("database: {:?}", &e);
+                // [ERROR] logging (server-error: DatabaseQueryError)
+                let err_message = format!("{:?}", &e);
                 req.log(
                     "resend-confirmation-email",
-                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                        message: err_message,
+                    }
+                    .into_kind(),
                     file!(),
                     line!(),
                 );
@@ -104,11 +113,14 @@ pub(crate) async fn create_and_send_confirmation_email(
     {
         Ok(id) => id,
         Err(e) => {
-            // [ERROR] logging (database-error)
-            let log_err_message = format!("database: {:?}", &e);
+            // [ERROR] logging (server-error: DatabaseQueryError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "resend-confirmation-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -136,11 +148,14 @@ pub(crate) async fn create_and_send_confirmation_email(
     {
         Ok(content) => content,
         Err(e) => {
-            // [ERROR] logging (read-error)
-            let log_err_message = format!("read: {:?}", &e);
+            // [ERROR] logging (server-error: ReadFTDError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "resend-confirmation-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::ReadFTDError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -167,11 +182,14 @@ pub(crate) async fn create_and_send_confirmation_email(
     {
         Ok(doc) => doc,
         Err(e) => {
-            // [ERROR] logging (interpreter-error)
-            let log_err_message = format!("interpreter: {:?}", &e);
+            // [ERROR] logging (server-error: InterpreterError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "resend-confirmation-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::InterpreterError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -187,12 +205,14 @@ pub(crate) async fn create_and_send_confirmation_email(
     let html: String = match main_ftd_doc.get(&html_email_templ) {
         Ok(html) => html,
         _ => {
-            // [ERROR] logging (html-email-template: not-found)
+            // [ERROR] logging (server-error: MailError)
             let err_message = "html email template not found".to_string();
-            let log_err_message = format!("mail: {:?}", &err_message);
             req.log(
                 "resend-confirmation-email",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::MailError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -218,12 +238,14 @@ pub(crate) async fn create_and_send_confirmation_email(
     )
     .await
     .map_err(|e| {
-        // [ERROR] logging (mail-error)
+        // [ERROR] logging (server-error: MailError)
         let err_message = format!("failed to send email: {:?}", &e);
-        let log_err_message = format!("mail: {:?}", &err_message);
         req.log(
             "resend-confirmation-email",
-            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            fastn_core::log::ServerErrorOutcome::MailError {
+                message: err_message.clone(),
+            }
+            .into_kind(),
             file!(),
             line!(),
         );

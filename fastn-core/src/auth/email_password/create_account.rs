@@ -64,9 +64,9 @@ pub(crate) async fn create_account(
                 let log_success_message = "create-account: GET".to_string();
                 req.log(
                     "login",
-                    fastn_core::log::OutcomeKind::Success(fastn_core::log::Outcome::Descriptive(
-                        log_success_message,
-                    )),
+                    fastn_core::log::OutcomeKind::Success(
+                        fastn_core::log::SuccessOutcome::Descriptive(log_success_message),
+                    ),
                     file!(),
                     line!(),
                 );
@@ -74,11 +74,14 @@ pub(crate) async fn create_account(
                 Ok(resp.into())
             }
             Err(e) => {
-                // [ERROR] logging (read_ftd)
-                let log_err_message = format!("read_ftd: {:?}", &e);
+                // [ERROR] logging (server-error: ReadFTDError)
+                let err_message = format!("{:?}", &e);
                 req.log(
                     "create-account",
-                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    fastn_core::log::ServerErrorOutcome::ReadFTDError {
+                        message: err_message,
+                    }
+                    .into_kind(),
                     file!(),
                     line!(),
                 );
@@ -90,15 +93,17 @@ pub(crate) async fn create_account(
     let user_payload = match req_config.request.json::<UserPayload>() {
         Ok(p) => p,
         Err(e) => {
-            // [ERROR] logging (payload)
+            // [ERROR] logging (form-error: PayloadError)
             let err_message = format!(
                 "Invalid payload. Required the request body to contain json. Original error: {:?}",
                 e
             );
-            let log_err_message = format!("payload: {:?}", &err_message);
             req.log(
                 "create-account",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::FormErrorOutcome::PayloadError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -126,11 +131,14 @@ pub(crate) async fn create_account(
         }
 
         if !e.is_empty() {
-            // [ERROR] logging (user error);
-            let log_err_message = format!("user: {:?}", &e);
+            // [ERROR] logging (form-error: ValidationError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "create-account",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::FormErrorOutcome::ValidationError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -142,12 +150,14 @@ pub(crate) async fn create_account(
     let mut conn = match db_pool.get().await {
         Ok(conn) => conn,
         Err(e) => {
-            // [ERROR] logging (pool error)
+            // [ERROR] logging (server-error: PoolError)
             let err_message = format!("Failed to get connection to db. {:?}", &e);
-            let log_err_message = format!("pool error: {}", err_message.as_str());
             req.log(
                 "create-account",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::PoolError {
+                    message: err_message.clone(),
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -165,11 +175,14 @@ pub(crate) async fn create_account(
     {
         Ok(user_count) => user_count,
         Err(e) => {
-            // [ERROR] logging (Database Error)
-            let log_err_message = format!("database: {:?}", &e);
+            // [ERROR] logging (server-error: DatabaseQueryError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "create-account",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -178,12 +191,14 @@ pub(crate) async fn create_account(
     };
 
     if username_check > 0 {
-        // [ERROR] logging (User Error: Username already taken)
+        // [ERROR] logging (form-error: ValidationError)
         let err_message = "username already taken".to_string();
-        let log_err_message = format!("user: {:?}", &err_message);
         req.log(
             "create-account",
-            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            fastn_core::log::FormErrorOutcome::ValidationError {
+                message: err_message.clone(),
+            }
+            .into_kind(),
             file!(),
             line!(),
         );
@@ -205,11 +220,14 @@ pub(crate) async fn create_account(
     {
         Ok(email_count) => email_count,
         Err(e) => {
-            // [ERROR] logging (Database Error)
-            let log_err_message = format!("database: {:?}", &e);
+            // [ERROR] logging (server-error: DatabaseQueryError)
+            let err_message = format!("{:?}", &e);
             req.log(
                 "create-account",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
@@ -218,12 +236,14 @@ pub(crate) async fn create_account(
     };
 
     if email_check > 0 {
-        // [ERROR] logging (User Error: Email already taken)
+        // [ERROR] logging (form-error: ValidationError)
         let err_message = "email already taken".to_string();
-        let log_err_message = format!("user: {:?}", &err_message);
         req.log(
             "create-account",
-            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+            fastn_core::log::FormErrorOutcome::ValidationError {
+                message: err_message.clone(),
+            }
+            .into_kind(),
             file!(),
             line!(),
         );
@@ -242,12 +262,14 @@ pub(crate) async fn create_account(
     let hashed_password =
         argon2::PasswordHasher::hash_password(&argon2, user_payload.password.as_bytes(), &salt)
             .map_err(|e| {
-                // [ERROR] logging (Database Error)
+                // [ERROR] logging (server-error: HashingError)
                 let err_message = format!("error in hashing password: {:?}", &e);
-                let log_err_message = format!("password: {:?}", &err_message);
                 req.log(
                     "create-account",
-                    fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                    fastn_core::log::ServerErrorOutcome::HashingError {
+                        message: err_message.clone(),
+                    }
+                    .into_kind(),
                     file!(),
                     line!(),
                 );
@@ -275,11 +297,14 @@ pub(crate) async fn create_account(
                 {
                     Ok(fastn_user) => fastn_user,
                     Err(e) => {
-                        // [ERROR] logging (Database Error)
-                        let log_err_message = format!("database: {:?}", &e);
+                        // [ERROR] logging (server-error: DatabaseQueryError)
+                        let err_message = format!("{:?}", &e);
                         req.log(
                             "create-account",
-                            fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                            fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                                message: err_message,
+                            }
+                            .into_kind(),
                             file!(),
                             line!(),
                         );
@@ -306,11 +331,14 @@ pub(crate) async fn create_account(
                     {
                         Ok(email) => email,
                         Err(e) => {
-                            // [ERROR] logging (Database Error)
-                            let log_err_message = format!("database: {:?}", &e);
+                            // [ERROR] logging (server-error: DatabaseQueryError)
+                            let err_message = format!("{:?}", &e);
                             req.log(
                                 "create-account",
-                                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                                fastn_core::log::ServerErrorOutcome::DatabaseQueryError {
+                                    message: err_message,
+                                }
+                                .into_kind(),
                                 file!(),
                                 line!(),
                             );
@@ -327,12 +355,14 @@ pub(crate) async fn create_account(
     let user = match save_user_email_transaction {
         Ok(user) => user,
         Err(e) => {
-            // [ERROR] logging (User error)
+            // [ERROR] logging (form-error: ValidationError)
             let err_message = format!("email: invalid email, detail: {:?}", &e);
-            let log_err_message = format!("user: {:?}", &err_message);
             req.log(
                 "create-account",
-                fastn_core::log::OutcomeKind::error_descriptive(log_err_message),
+                fastn_core::log::FormErrorOutcome::ValidationError {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
