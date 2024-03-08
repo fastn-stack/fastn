@@ -11,7 +11,6 @@ impl EventKind {
     pub fn to_string(&self) -> String {
         match self {
             EventKind::Auth(event) => match event {
-                AuthEvent::Initial => "initial",
                 AuthEvent::Login => "login",
                 AuthEvent::Logout => "logout",
                 AuthEvent::GithubLogin => "github-login",
@@ -34,7 +33,6 @@ impl EventKind {
 
 #[derive(Debug, Clone)]
 pub enum AuthEvent {
-    Initial,
     Login,
     Logout,
     GithubLogin,
@@ -67,8 +65,7 @@ impl AuthEvent {
             "forgot-password-success" => AuthEvent::ForgotPasswordSuccess,
             "set-password" => AuthEvent::SetPassword,
             "set-password-success" => AuthEvent::SetPasswordSuccess,
-            "initial" => AuthEvent::Initial,
-            "invalid-route" | _ => AuthEvent::InvalidRoute,
+            _ => AuthEvent::InvalidRoute,
         }
     }
 }
@@ -90,7 +87,6 @@ impl EntityKind {
 // todo: convert descriptive outcomes as enums
 #[derive(Debug, Clone)]
 pub enum OutcomeKind {
-    Info,
     Success(SuccessOutcome),
     Error(ErrorOutcome),
 }
@@ -296,7 +292,6 @@ impl BadRequestOutcome {
 
 #[derive(Debug, Clone)]
 pub enum LogLevel {
-    Info(InfoLevel),
     Error(ErrorLevel),
     Success(SuccessLevel),
 }
@@ -308,56 +303,50 @@ impl LogLevel {
         outcome: &fastn_core::log::OutcomeKind,
     ) -> Self {
         match (ekind, okind, outcome) {
-            (EventKind::Auth(event), EntityKind::Myself, OutcomeKind::Info) => match event {
-                AuthEvent::Initial => LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::Initial)),
-                AuthEvent::Login => LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::LoginRoute)),
-                AuthEvent::Logout => LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::LogoutRoute)),
-                AuthEvent::GithubLogin => {
-                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::GithubLoginRoute))
-                }
-                AuthEvent::GithubCallback => {
-                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::GithubCallbackRoute))
-                }
-                AuthEvent::CreateAccount => {
-                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::CreateAccountRoute))
-                }
-                AuthEvent::EmailConfirmationSent => {
-                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::EmailConfirmationSentRoute))
-                }
-                AuthEvent::ConfirmEmail => {
-                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ConfirmEmailRoute))
-                }
-                AuthEvent::ResendConfirmationEmail => {
-                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ResendConfirmationEmailRoute))
-                }
-                AuthEvent::Onboarding => {
-                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::OnboardingRoute))
-                }
-                AuthEvent::ForgotPassword => {
-                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ForgotPasswordRoute))
-                }
-                AuthEvent::ForgotPasswordSuccess => {
-                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::ForgotPasswordSuccessRoute))
-                }
-                AuthEvent::SetPassword => {
-                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::SetPasswordRoute))
-                }
-                AuthEvent::SetPasswordSuccess => {
-                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::SetPasswordSuccessRoute))
-                }
-                AuthEvent::InvalidRoute => {
-                    LogLevel::Info(InfoLevel::Auth(AuthInfoLevel::InvalidRoute))
-                }
-            },
             (EventKind::Auth(event), EntityKind::Myself, OutcomeKind::Error(error)) => {
                 match event {
-                    AuthEvent::InvalidRoute => {
-                        LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::InvalidRoute))
-                    }
                     AuthEvent::Login => {
                         LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::Login(error.to_owned())))
                     }
-                    _ => LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::Undefined)),
+                    AuthEvent::Logout => {
+                        LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::Logout(error.to_owned())))
+                    }
+                    AuthEvent::GithubLogin => LogLevel::Error(ErrorLevel::Auth(
+                        AuthErrorLevel::GithubLogin(error.to_owned()),
+                    )),
+                    AuthEvent::GithubCallback => LogLevel::Error(ErrorLevel::Auth(
+                        AuthErrorLevel::GithubCallback(error.to_owned()),
+                    )),
+                    AuthEvent::CreateAccount => LogLevel::Error(ErrorLevel::Auth(
+                        AuthErrorLevel::CreateAccount(error.to_owned()),
+                    )),
+                    AuthEvent::EmailConfirmationSent => LogLevel::Error(ErrorLevel::Auth(
+                        AuthErrorLevel::EmailConfirmationSent(error.to_owned()),
+                    )),
+                    AuthEvent::ConfirmEmail => LogLevel::Error(ErrorLevel::Auth(
+                        AuthErrorLevel::ConfirmEmail(error.to_owned()),
+                    )),
+                    AuthEvent::ResendConfirmationEmail => LogLevel::Error(ErrorLevel::Auth(
+                        AuthErrorLevel::ResendConfirmationEmail(error.to_owned()),
+                    )),
+                    AuthEvent::Onboarding => LogLevel::Error(ErrorLevel::Auth(
+                        AuthErrorLevel::Onboarding(error.to_owned()),
+                    )),
+                    AuthEvent::ForgotPassword => LogLevel::Error(ErrorLevel::Auth(
+                        AuthErrorLevel::ForgotPassword(error.to_owned()),
+                    )),
+                    AuthEvent::ForgotPasswordSuccess => LogLevel::Error(ErrorLevel::Auth(
+                        AuthErrorLevel::ForgotPasswordSuccess(error.to_owned()),
+                    )),
+                    AuthEvent::SetPassword => LogLevel::Error(ErrorLevel::Auth(
+                        AuthErrorLevel::SetPassword(error.to_owned()),
+                    )),
+                    AuthEvent::SetPasswordSuccess => LogLevel::Error(ErrorLevel::Auth(
+                        AuthErrorLevel::SetPasswordSuccess(error.to_owned()),
+                    )),
+                    AuthEvent::InvalidRoute => {
+                        LogLevel::Error(ErrorLevel::Auth(AuthErrorLevel::InvalidRoute))
+                    }
                 }
             }
             (EventKind::Auth(event), EntityKind::Myself, OutcomeKind::Success(outcome)) => {
@@ -409,7 +398,6 @@ impl LogLevel {
 
     fn message(&self) -> String {
         match self {
-            LogLevel::Info(i) => i.message(),
             LogLevel::Error(e) => e.message(),
             LogLevel::Success(s) => s.message(),
         }
@@ -417,54 +405,21 @@ impl LogLevel {
 }
 
 #[derive(Debug, Clone)]
-pub enum AuthInfoLevel {
-    Initial,
-    LoginRoute,
-    GithubLoginRoute,
-    GithubCallbackRoute,
-    LogoutRoute,
-    CreateAccountRoute,
-    EmailConfirmationSentRoute,
-    ConfirmEmailRoute,
-    ResendConfirmationEmailRoute,
-    OnboardingRoute,
-    ForgotPasswordRoute,
-    ForgotPasswordSuccessRoute,
-    SetPasswordRoute,
-    SetPasswordSuccessRoute,
-    InvalidRoute,
-}
-
-impl AuthInfoLevel {
-    fn message(&self) -> String {
-        match self {
-            AuthInfoLevel::Initial => "[INFO]: Attempting Auth",
-            AuthInfoLevel::LoginRoute => "[INFO]: Login Route",
-            AuthInfoLevel::GithubLoginRoute => "[INFO]: Github Login Route",
-            AuthInfoLevel::GithubCallbackRoute => "[INFO]: Github CallBack Route",
-            AuthInfoLevel::LogoutRoute => "[INFO]: Logout Route",
-            AuthInfoLevel::CreateAccountRoute => "[INFO]: Create Account Route",
-            AuthInfoLevel::EmailConfirmationSentRoute => "[INFO]: Email Confirmation Route",
-            AuthInfoLevel::ConfirmEmailRoute => "[INFO]: Confirm Email Route",
-            AuthInfoLevel::ResendConfirmationEmailRoute => {
-                "[INFO]: Resend Confirmation Email Route"
-            }
-            AuthInfoLevel::OnboardingRoute => "[INFO]: Onboarding Route",
-            AuthInfoLevel::ForgotPasswordRoute => "[INFO]: Forgot Password Route",
-            AuthInfoLevel::ForgotPasswordSuccessRoute => "[INFO]: Forgot Password Success Route",
-            AuthInfoLevel::SetPasswordRoute => "[INFO]: Set Password Route",
-            AuthInfoLevel::SetPasswordSuccessRoute => "[INFO]: Set Password Success Route",
-            AuthInfoLevel::InvalidRoute => "[INFO]: Accessing Invalid Route",
-        }
-        .to_string()
-    }
-}
-
-#[derive(Debug, Clone)]
 pub enum AuthErrorLevel {
     Login(ErrorOutcome),
+    GithubLogin(ErrorOutcome),
+    GithubCallback(ErrorOutcome),
+    Logout(ErrorOutcome),
+    CreateAccount(ErrorOutcome),
+    EmailConfirmationSent(ErrorOutcome),
+    ConfirmEmail(ErrorOutcome),
+    ResendConfirmationEmail(ErrorOutcome),
+    Onboarding(ErrorOutcome),
+    ForgotPassword(ErrorOutcome),
+    ForgotPasswordSuccess(ErrorOutcome),
+    SetPassword(ErrorOutcome),
+    SetPasswordSuccess(ErrorOutcome),
     InvalidRoute,
-    Undefined,
 }
 
 impl AuthErrorLevel {
@@ -472,20 +427,40 @@ impl AuthErrorLevel {
         match self {
             AuthErrorLevel::Login(error) => format!("[ERROR]: Login: {}", error.message()),
             AuthErrorLevel::InvalidRoute => "[ERROR]: Invalid Auth Route".to_string(),
-            AuthErrorLevel::Undefined => "[ERROR]: Undefined Auth Route".to_string(),
-        }
-    }
-}
-
-#[derive(Debug, Clone)]
-pub enum InfoLevel {
-    Auth(AuthInfoLevel),
-}
-
-impl InfoLevel {
-    fn message(&self) -> String {
-        match self {
-            InfoLevel::Auth(i) => i.message(),
+            AuthErrorLevel::GithubLogin(error) => {
+                format!("[ERROR]: Github Login: {}", error.message())
+            }
+            AuthErrorLevel::GithubCallback(error) => {
+                format!("[ERROR]: Github Callback: {}", error.message())
+            }
+            AuthErrorLevel::Logout(error) => format!("[ERROR]: Logout: {}", error.message()),
+            AuthErrorLevel::CreateAccount(error) => {
+                format!("[ERROR]: Create Account: {}", error.message())
+            }
+            AuthErrorLevel::EmailConfirmationSent(error) => {
+                format!("[ERROR]: Email Confirmation Sent: {}", error.message())
+            }
+            AuthErrorLevel::ConfirmEmail(error) => {
+                format!("[ERROR]: Confirm Email: {}", error.message())
+            }
+            AuthErrorLevel::ResendConfirmationEmail(error) => {
+                format!("[ERROR]: Resend Confirmation Email: {}", error.message())
+            }
+            AuthErrorLevel::Onboarding(error) => {
+                format!("[ERROR]: Onboarding: {}", error.message())
+            }
+            AuthErrorLevel::ForgotPassword(error) => {
+                format!("[ERROR]: Forgot Password: {}", error.message())
+            }
+            AuthErrorLevel::ForgotPasswordSuccess(error) => {
+                format!("[ERROR]: Forgot Password Success: {}", error.message())
+            }
+            AuthErrorLevel::SetPassword(error) => {
+                format!("[ERROR]: Set Password: {}", error.message())
+            }
+            AuthErrorLevel::SetPasswordSuccess(error) => {
+                format!("[ERROR]: Set Password Success: {}", error.message())
+            }
         }
     }
 }
@@ -679,7 +654,6 @@ impl Log {
         match &self.outcome {
             OutcomeKind::Error(outcome) => outcome.outcome(),
             OutcomeKind::Success(_outcome) => "success".to_string(),
-            OutcomeKind::Info => "info".to_string(),
         }
     }
 

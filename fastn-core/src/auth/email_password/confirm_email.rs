@@ -9,14 +9,6 @@ pub(crate) async fn confirm_email(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    // [INFO] logging: confirm-email
-    req.log(
-        "confirm-email",
-        fastn_core::log::OutcomeKind::Info,
-        file!(),
-        line!(),
-    );
-
     let code = match req_config.request.query().get("code") {
         Some(code) => code,
         None => {

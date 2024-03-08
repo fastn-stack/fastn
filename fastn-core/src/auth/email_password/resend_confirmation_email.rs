@@ -6,14 +6,6 @@ pub(crate) async fn resend_confirmation_email(
     db_pool: &fastn_core::db::PgPool,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    // [INFO] logging: resend-confirmation-email
-    req.log(
-        "resend-confirmation-email",
-        fastn_core::log::OutcomeKind::Info,
-        file!(),
-        line!(),
-    );
-
     // TODO: should be able to use username for this too
     let email = match req.query().get("email") {
         Some(email) => email,

@@ -7,14 +7,6 @@ pub(crate) async fn login(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    // [INFO] logging
-    req.log(
-        "login",
-        fastn_core::log::OutcomeKind::Info,
-        file!(),
-        line!(),
-    );
-
     if req_config.request.method() != "POST" {
         // TODO: if user is logged in redirect to next
 

@@ -12,14 +12,6 @@ pub async fn login(
     ds: &fastn_ds::DocumentStore,
     next: String,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    // [INFO] logging: github-login
-    req.log(
-        "github-login",
-        fastn_core::log::OutcomeKind::Info,
-        file!(),
-        line!(),
-    );
-
     let redirect_url: String = format!(
         "{scheme}://{host}{callback_url}?next={next}",
         scheme = req.connection_info.scheme(),
@@ -72,14 +64,6 @@ pub async fn callback(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
-
-    // [INFO] logging: github-callback
-    req.log(
-        "github-callback",
-        fastn_core::log::OutcomeKind::Info,
-        file!(),
-        line!(),
-    );
 
     let now = chrono::Utc::now();
     let code = req.q("code", "".to_string())?;

@@ -35,14 +35,6 @@ pub(crate) async fn create_account(
     use diesel_async::RunQueryDsl;
     use validator::ValidateArgs;
 
-    // [INFO] logging: create-account
-    req.log(
-        "create-account",
-        fastn_core::log::OutcomeKind::Info,
-        file!(),
-        line!(),
-    );
-
     let now = chrono::Utc::now();
 
     if req_config.request.method() != "POST" {

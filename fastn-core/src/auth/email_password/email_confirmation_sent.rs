@@ -7,14 +7,6 @@ pub(crate) async fn email_confirmation_sent(
     req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    // [INFO] logging: email-confirmation-sent
-    req.log(
-        "email-confirmation-sent",
-        fastn_core::log::OutcomeKind::Info,
-        file!(),
-        line!(),
-    );
-
     let main = fastn_core::Document {
         package_name: req_config.config.package.name.clone(),
         id: fastn_core::auth::Route::EmailConfirmationSent.to_string(),

@@ -15,14 +15,6 @@ pub(crate) async fn forgot_password_request(
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
 
-    // [INFO] logging: forgot-password
-    req.log(
-        "forgot-password",
-        fastn_core::log::OutcomeKind::Info,
-        file!(),
-        line!(),
-    );
-
     if req_config.request.ud(&req_config.config.ds).await.is_some() {
         // [ERROR] logging (bad-request: Default)
         req.log(
@@ -403,14 +395,6 @@ pub(crate) async fn forgot_password_request_success(
     req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    // [INFO] logging: forgot-password-success
-    req.log(
-        "forgot-password-success",
-        fastn_core::log::OutcomeKind::Info,
-        file!(),
-        line!(),
-    );
-
     if req_config.request.method() != "GET" {
         // [ERROR] logging (bad-request: InvalidRoute)
         let err_message = format!(
@@ -468,14 +452,6 @@ pub(crate) async fn set_password(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
-
-    // [INFO] logging: set-password
-    req.log(
-        "set-password",
-        fastn_core::log::OutcomeKind::Info,
-        file!(),
-        line!(),
-    );
 
     if req_config.request.method() == "GET" {
         // render set password form
@@ -834,14 +810,6 @@ pub(crate) async fn set_password_success(
     req: &fastn_core::http::Request,
     req_config: &mut fastn_core::RequestConfig,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    // [INFO] logging: set-password-success
-    req.log(
-        "set-password-success",
-        fastn_core::log::OutcomeKind::Info,
-        file!(),
-        line!(),
-    );
-
     if req_config.request.method() != "GET" {
         // [ERROR] logging (bad-request: InvalidRoute)
         let err_message = format!(

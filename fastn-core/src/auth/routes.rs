@@ -7,13 +7,6 @@ pub async fn handle_auth(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use fastn_core::auth::Route;
 
-    req.log(
-        "initial",
-        fastn_core::log::OutcomeKind::Info,
-        file!(),
-        line!(),
-    );
-
     let next = req.q("next", "/".to_string())?;
 
     let pool = fastn_core::db::pool(&req_config.config.ds)
