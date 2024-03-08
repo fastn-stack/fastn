@@ -55,7 +55,7 @@ pub(crate) async fn create_account(
                 // [SUCCESS] logging: GET
                 let log_success_message = "create-account: GET".to_string();
                 req.log(
-                    "login",
+                    "create-account",
                     fastn_core::log::OutcomeKind::Success(
                         fastn_core::log::SuccessOutcome::Descriptive(log_success_message),
                     ),

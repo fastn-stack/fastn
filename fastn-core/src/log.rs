@@ -114,7 +114,7 @@ pub enum SuccessOutcome {
 impl SuccessOutcome {
     fn message(&self) -> String {
         match self {
-            SuccessOutcome::Default => "default".to_string(),
+            SuccessOutcome::Default => "Processed".to_string(),
             SuccessOutcome::Descriptive(s) => s.clone(),
         }
     }
@@ -149,6 +149,16 @@ impl ErrorOutcome {
             ErrorOutcome::BadRequest(outcome) => outcome.outcome(),
         }
     }
+
+    pub fn outcome_detail(&self) -> String {
+        match self {
+            ErrorOutcome::Default => "error".to_string(),
+            ErrorOutcome::UnauthorizedError(outcome) => outcome.outcome_detail(),
+            ErrorOutcome::ServerError(outcome) => outcome.outcome_detail(),
+            ErrorOutcome::FormError(outcome) => outcome.outcome_detail(),
+            ErrorOutcome::BadRequest(outcome) => outcome.outcome_detail(),
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -169,6 +179,15 @@ impl UnauthorizedErrorOutcome {
 
     pub fn outcome(&self) -> String {
         "unauthorized-error".to_string()
+    }
+
+    pub fn outcome_detail(&self) -> String {
+        match self {
+            UnauthorizedErrorOutcome::Default => "unauthorized-error",
+            UnauthorizedErrorOutcome::UserDoesNotExist => "user-does-not-exist",
+            UnauthorizedErrorOutcome::UserNotVerified => "user-not-verified",
+        }
+        .to_string()
     }
 
     pub fn into_kind(self) -> OutcomeKind {
@@ -220,6 +239,23 @@ impl ServerErrorOutcome {
         "server-error".to_string()
     }
 
+    pub fn outcome_detail(&self) -> String {
+        match self {
+            ServerErrorOutcome::Default => "server-error",
+            ServerErrorOutcome::DatabaseQueryError { .. } => "database-query-error",
+            ServerErrorOutcome::PoolError { .. } => "pool-error",
+            ServerErrorOutcome::CookieError { .. } => "cookie-error",
+            ServerErrorOutcome::ReadFTDError { .. } => "read-ftd-error",
+            ServerErrorOutcome::InterpreterError { .. } => "interpreter-error",
+            ServerErrorOutcome::HashingError { .. } => "hashing-error",
+            ServerErrorOutcome::MailError { .. } => "mail-error",
+            ServerErrorOutcome::EnvironmentError { .. } => "environment-error",
+            ServerErrorOutcome::RequestTokenError { .. } => "request-token-error",
+            ServerErrorOutcome::HttpError { .. } => "http-error",
+        }
+        .to_string()
+    }
+
     pub fn into_kind(self) -> OutcomeKind {
         OutcomeKind::Error(ErrorOutcome::ServerError(self))
     }
@@ -245,6 +281,15 @@ impl FormErrorOutcome {
 
     pub fn outcome(&self) -> String {
         "form-error".to_string()
+    }
+
+    pub fn outcome_detail(&self) -> String {
+        match self {
+            FormErrorOutcome::Default => "form-error",
+            FormErrorOutcome::PayloadError { .. } => "payload-error",
+            FormErrorOutcome::ValidationError { .. } => "validation-error",
+        }
+        .to_string()
     }
 
     pub fn into_kind(self) -> OutcomeKind {
@@ -283,6 +328,18 @@ impl BadRequestOutcome {
 
     pub fn outcome(&self) -> String {
         "bad-request".to_string()
+    }
+
+    pub fn outcome_detail(&self) -> String {
+        match self {
+            BadRequestOutcome::Default => "bad-request",
+            BadRequestOutcome::InvalidCode { .. } => "invalid-code",
+            BadRequestOutcome::QueryNotFoundError { .. } => "query-not-found",
+            BadRequestOutcome::QueryDeserializeError { .. } => "query-deserialize-error",
+            BadRequestOutcome::NotFound { .. } => "not-found",
+            BadRequestOutcome::InvalidRoute { .. } => "invalid-route",
+        }
+        .to_string()
     }
 
     pub fn into_kind(self) -> OutcomeKind {
@@ -628,7 +685,7 @@ impl RequestLog {
 
         let filtered_body_json = self.filtered_json_body().unwrap_or_default();
         serde_json::json!({
-            "json": filtered_body_json,
+            "body": filtered_body_json,
             "cookies": &self.cookies,
             "query": &self.query,
             "headers": headers
@@ -657,8 +714,20 @@ impl Log {
         }
     }
 
-    pub fn outcome_data(&self) -> String {
-        format!("{:?}", self)
+    pub fn outcome_detail(&self) -> String {
+        match &self.outcome {
+            OutcomeKind::Error(outcome) => outcome.outcome_detail(),
+            OutcomeKind::Success(_outcome) => "success".to_string(),
+        }
+    }
+
+    pub fn outcome_data(&self) -> serde_json::Value {
+        let outcome_detail = self.outcome_detail();
+        let outcome_message = self.message();
+        serde_json::json!({
+            "detail": outcome_detail,
+            "message": outcome_message
+        })
     }
 
     pub fn event_data(&self) -> serde_json::Value {
