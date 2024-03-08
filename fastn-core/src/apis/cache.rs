@@ -102,12 +102,8 @@ pub async fn clear_(
     for package in query.package.iter() {
         if package.eq("main") {
             // TODO: List directories and files other than main
-            fastn_core::utils::remove_except(
-                &config.ds.root(),
-                &[".fastn", ".build"],
-                &config.ds,
-            )
-            .await?;
+            fastn_core::utils::remove_except(&config.ds.root(), &[".fastn", ".build"], &config.ds)
+                .await?;
         } else {
             let path = config.packages_root.join(package);
             if path
