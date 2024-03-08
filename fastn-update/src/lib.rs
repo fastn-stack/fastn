@@ -295,7 +295,7 @@ pub async fn update(
     offline: bool,
     check: bool,
 ) -> fastn_core::Result<()> {
-    let packages_root = ds.root().join(".packages");
+    let packages_root = ds.root().join(".fastn/packages-cache");
     let current_package = utils::read_current_package(ds).await?;
 
     if current_package.dependencies.is_empty() {

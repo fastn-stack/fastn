@@ -104,7 +104,7 @@ pub async fn clear_(
             // TODO: List directories and files other than main
             fastn_core::utils::remove_except(
                 &config.ds.root(),
-                &[".packages", ".build"],
+                &[".fastn/packages-cache", ".build"],
                 &config.ds,
             )
             .await?;
