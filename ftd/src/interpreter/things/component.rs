@@ -122,6 +122,7 @@ pub type Argument = ftd::interpreter::Field;
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Component {
+    pub id: Option<String>,
     pub name: String,
     pub properties: Vec<Property>,
     pub iteration: Box<Option<Loop>>,
@@ -142,6 +143,7 @@ pub enum ComponentSource {
 impl Component {
     pub(crate) fn from_name(name: &str) -> Component {
         Component {
+            id: None,
             name: name.to_string(),
             properties: vec![],
             iteration: Box::new(None),
@@ -220,6 +222,44 @@ impl Component {
         }
 
         Ok(vec![])
+    }
+
+    pub fn get_kwargs(
+        &self,
+        doc: &ftd::interpreter::Document,
+        kwargs_name: &str,
+    ) -> ftd::interpreter::Result<ftd::Map<String>> {
+        let property = match self.get_interpreter_value_of_argument(kwargs_name, &doc.tdoc())? {
+            Some(property) => property,
+            None => {
+                return Err(ftd::interpreter::Error::OtherError(format!(
+                    "kw-args '{}' does not exists on component.",
+                    kwargs_name
+                )));
+            }
+        };
+
+        let kwargs = property
+            .kwargs(doc.name.as_str(), self.line_number)?
+            .iter()
+            .map(|(name, value)| {
+                let value = match value.to_value().get_string_data() {
+                    Some(v) => v,
+                    None => {
+                        return Err(ftd::interpreter::Error::ParseError {
+                            message: "Could not parse keyword argument value as string."
+                                .to_string(),
+                            doc_id: doc.name.clone(),
+                            line_number: value.line_number(),
+                        });
+                    }
+                };
+
+                Ok((name.to_string(), value))
+            })
+            .collect::<Result<ftd::Map<String>, _>>()?;
+
+        Ok(kwargs)
     }
 
     pub(crate) fn is_loop(&self) -> bool {
@@ -377,7 +417,10 @@ impl Component {
             Self::assert_no_private_properties_while_invocation(&properties, &c.arguments)?;
         }
 
+        let id = ast_component.id;
+
         Ok(ftd::interpreter::StateWithThing::new_thing(Component {
+            id,
             name,
             properties,
             iteration: Box::new(iteration),
@@ -511,6 +554,7 @@ impl Component {
 
                 return Ok(ftd::interpreter::StateWithThing::new_thing(Some(
                     Component {
+                        id: None,
                         name,
                         properties,
                         iteration: Box::new(iteration.to_owned()),

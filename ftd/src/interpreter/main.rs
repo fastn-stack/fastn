@@ -1096,6 +1096,16 @@ impl Document {
             .collect_vec()
     }
 
+    pub fn get_component_by_id(&self, component_id: &str) -> Option<&ftd::interpreter::Component> {
+        self.tree.iter().find(|v| {
+            if let Some(id) = &v.id {
+                return id.eq(component_id);
+            }
+
+            false
+        })
+    }
+
     pub fn get_redirect(&self) -> ftd::interpreter::Result<Option<(String, i32)>> {
         let components = self.get_instructions("ftd#redirect");
 
