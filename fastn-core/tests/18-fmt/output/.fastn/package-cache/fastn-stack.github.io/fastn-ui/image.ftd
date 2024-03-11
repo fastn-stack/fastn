@@ -1,0 +1,4 @@
+-- ftd.image image-page:
+caption file-name:
+ftd.image-src src:
+src: $src
