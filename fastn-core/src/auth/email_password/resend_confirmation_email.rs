@@ -93,12 +93,24 @@ pub(crate) async fn resend_confirmation_email(
         println!("CONFIRMATION LINK: {}", conf_link);
     }
 
-    fastn_core::auth::set_session_cookie_and_redirect_to_next(
+    let result = fastn_core::auth::set_session_cookie_and_redirect_to_next(
         &req_config.request,
         "resend-confirmation-email",
         &req_config.config.ds,
         session_id,
         next,
     )
-    .await
+    .await;
+
+    // [SUCCESS] logging: Default
+    if result.is_ok() {
+        req.log(
+            "resend-confirmation-email",
+            fastn_core::log::OutcomeKind::success_default(),
+            file!(),
+            line!(),
+        );
+    }
+
+    result
 }

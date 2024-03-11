@@ -377,6 +377,14 @@ pub(crate) async fn create_account(
         email = user.email.0
     );
 
+    // [SUCCESS] logging: Default
+    req.log(
+        "create-account",
+        fastn_core::log::OutcomeKind::success_default(),
+        file!(),
+        line!(),
+    );
+
     Ok(fastn_core::http::temporary_redirect(
         redirect_url_from_next(&req_config.request, next),
     ))

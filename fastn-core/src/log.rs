@@ -114,7 +114,7 @@ pub enum SuccessOutcome {
 impl SuccessOutcome {
     fn message(&self) -> String {
         match self {
-            SuccessOutcome::Default => "Processed".to_string(),
+            SuccessOutcome::Default => "Completed".to_string(),
             SuccessOutcome::Descriptive(s) => s.clone(),
         }
     }

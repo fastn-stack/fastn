@@ -388,6 +388,14 @@ pub(crate) async fn forgot_password_request(
             .insert_header(("X-Fastn-Test-Reset-Link", reset_link));
     }
 
+    // [SUCCESS] logging: Default
+    req.log(
+        "forgot-password",
+        fastn_core::log::OutcomeKind::success_default(),
+        file!(),
+        line!(),
+    );
+
     Ok(resp.json(resp_body))
 }
 
@@ -790,6 +798,14 @@ pub(crate) async fn set_password(
             "{}?next={next}",
             fastn_core::auth::Route::SetPasswordSuccess
         ),
+    );
+
+    // [SUCCESS] logging: Default
+    req.log(
+        "set-password",
+        fastn_core::log::OutcomeKind::success_default(),
+        file!(),
+        line!(),
     );
 
     Ok(actix_web::HttpResponse::TemporaryRedirect()

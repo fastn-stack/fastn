@@ -17,6 +17,7 @@ pub async fn handle_auth(
         })?;
 
     let route = Into::<Route>::into(req.path());
+    let ekind = route.to_event_kind();
     let response = match route {
         Route::Login => fastn_core::auth::email_password::login(&req, req_config, pool, next).await,
         Route::GithubLogin => {
@@ -58,29 +59,46 @@ pub async fn handle_auth(
         Route::SetPasswordSuccess => {
             fastn_core::auth::email_password::set_password_success(&req, req_config).await
         }
-        Route::Invalid => Ok(fastn_core::not_found!("route not found: {}", req.path())),
-    };
-
-    // [SUCCESS] + [ERROR] logging: Default
-    let ekind = route.to_event_kind();
-    match response {
-        Ok(_) => {
-            let outcome = match route {
-                Route::Invalid => fastn_core::log::OutcomeKind::error_default(),
-                _ => fastn_core::log::OutcomeKind::success_default(),
-            };
-            // [SUCCESS] logging: Default
-            req.log(ekind.as_str(), outcome, file!(), line!());
-        }
-        Err(_) => {
-            // [ERROR] logging: Default
+        Route::Invalid => {
+            // [ERROR] logging (bad-request: InvalidRoute)
+            let err_message = format!(
+                "req: {}, method: {}",
+                req_config.request.path.as_str(),
+                req_config.request.method()
+            );
             req.log(
-                ekind.as_str(),
-                fastn_core::log::OutcomeKind::error_default(),
+                "invalid-route",
+                fastn_core::log::BadRequestOutcome::InvalidRoute {
+                    message: err_message,
+                }
+                .into_kind(),
                 file!(),
                 line!(),
             );
+            Ok(fastn_core::not_found!("route not found: {}", req.path()))
         }
+    };
+
+    // [SUCCESS] logging: Default
+    if response.is_ok() {
+        match route {
+            Route::GithubLogin
+            | Route::GithubCallback
+            | Route::Logout
+            | Route::EmailConfirmationSent
+            | Route::ConfirmEmail
+            | Route::Onboarding
+            | Route::ForgotPasswordSuccess
+            | Route::SetPasswordSuccess => {
+                req.log(
+                    ekind.as_str(),
+                    fastn_core::log::OutcomeKind::success_default(),
+                    file!(),
+                    line!(),
+                );
+            }
+            _ => {} // other routes return form errors so handled separately
+        };
     }
 
     response

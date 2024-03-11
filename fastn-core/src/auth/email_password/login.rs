@@ -290,12 +290,24 @@ pub(crate) async fn login(
 
     // client has to 'follow' this request
     // https://stackoverflow.com/a/39739894
-    fastn_core::auth::set_session_cookie_and_redirect_to_next(
+    let result = fastn_core::auth::set_session_cookie_and_redirect_to_next(
         &req_config.request,
         "login",
         &req_config.config.ds,
         session_id,
         next,
     )
-    .await
+    .await;
+
+    // [SUCCESS] logging: Default
+    if result.is_ok() {
+        req.log(
+            "login",
+            fastn_core::log::OutcomeKind::success_default(),
+            file!(),
+            line!(),
+        );
+    }
+
+    result
 }
