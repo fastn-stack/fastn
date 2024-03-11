@@ -10,5 +10,5 @@ Error: Out of Sync Package
 
 The package 'fastn-community.github.io/bling' is out of sync with the FASTN.ftd file.
 
-File: '<cwd>/.fastn/packages-cache/fastn-community.github.io/bling/Changelog.md'
+File: '<cwd>/.fastn/package-cache/fastn-community.github.io/bling/Changelog.md'
 Operation: Write Attempt
