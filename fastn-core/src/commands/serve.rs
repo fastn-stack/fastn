@@ -439,12 +439,12 @@ async fn handle_static_route(
         }
 
         // the path can start with slash or -/. If later, it is a static file from our dependencies, so
-        // we have to look for them inside .fastn/packages-cache.
+        // we have to look for them inside .fastn/package-cache.
         let path = match path.strip_prefix("/-/") {
             Some(path) if path.starts_with(package_name) => {
                 path.strip_prefix(package_name).unwrap_or(path).to_string()
             }
-            Some(path) => format!(".fastn/packages-cache/{path}"),
+            Some(path) => format!(".fastn/package-cache/{path}"),
             None => path.to_string(),
         };
 

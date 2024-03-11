@@ -603,7 +603,7 @@ impl Config {
     ) -> fastn_core::Result<Vec<fastn_ds::Path>> {
         let mut ignored_files = vec![
             ".history".to_string(),
-            ".fastn/packages-cache".to_string(),
+            ".fastn/package-cache".to_string(),
             ".tracks".to_string(),
             "fastn".to_string(),
             "rust-toolchain".to_string(),
@@ -731,7 +731,7 @@ impl Config {
                 id = new_id.to_string();
             }
             if !package.name.eq(self.package.name.as_str()) {
-                add_packages = format!(".fastn/packages-cache/{}/", package.name);
+                add_packages = format!(".fastn/package-cache/{}/", package.name);
             }
         }
         let id = {
@@ -776,7 +776,7 @@ impl Config {
                 id = new_id.to_string();
             }
             if !package.name.eq(self.package.name.as_str()) {
-                add_packages = format!(".fastn/packages-cache/{}/", package.name);
+                add_packages = format!(".fastn/package-cache/{}/", package.name);
             }
         }
         let id = {
@@ -861,11 +861,11 @@ impl Config {
             .await
             {
                 let base = root
-                    .join(".fastn/packages-cache")
+                    .join(".fastn/package-cache")
                     .join(package.name.as_str());
                 ds.write_content(&base.join("index.ftd"), string.into_bytes())
                     .await?;
-                return Ok(format!(".fastn/packages-cache/{}/index.ftd", package.name));
+                return Ok(format!(".fastn/package-cache/{}/index.ftd", package.name));
             }
             if let Ok(string) = crate::http::http_get_str(
                 format!("{}/README.md", base.trim_end_matches('/')).as_str(),
@@ -873,11 +873,11 @@ impl Config {
             .await
             {
                 let base = root
-                    .join(".fastn/packages-cache")
+                    .join(".fastn/package-cache")
                     .join(package.name.as_str());
                 ds.write_content(&base.join("README.md"), string.into_bytes())
                     .await?;
-                return Ok(format!(".fastn/packages-cache/{}/README.md", package.name));
+                return Ok(format!(".fastn/package-cache/{}/README.md", package.name));
             }
             return Err(fastn_core::Error::UsageError {
                 message: "File not found".to_string(),
@@ -893,7 +893,7 @@ impl Config {
                 Some((prefix, id)) => (format!("/{}", prefix), id.to_string()),
                 None => ("".to_string(), id),
             };
-            let base = root.join(".fastn/packages-cache").join(format!(
+            let base = root.join(".fastn/package-cache").join(format!(
                 "{}{}",
                 package.name.as_str(),
                 prefix
@@ -908,7 +908,7 @@ impl Config {
         .await
         {
             let base = root
-                .join(".fastn/packages-cache")
+                .join(".fastn/package-cache")
                 .join(package.name.as_str())
                 .join(id);
             let file_path = base.join("index.ftd");
@@ -920,11 +920,11 @@ impl Config {
                 .await
         {
             let base = root
-                .join(".fastn/packages-cache")
+                .join(".fastn/package-cache")
                 .join(package.name.as_str());
             ds.write_content(&base.join(format!("{}.md", id)), string.into_bytes())
                 .await?;
-            return Ok(format!(".fastn/packages-cache/{}/{}.md", package.name, id));
+            return Ok(format!(".fastn/package-cache/{}/{}.md", package.name, id));
         }
         if let Ok(string) = crate::http::http_get_str(
             format!("{}/{}/README.md", base.trim_end_matches('/'), id).as_str(),
@@ -932,12 +932,12 @@ impl Config {
         .await
         {
             let base = root
-                .join(".fastn/packages-cache")
+                .join(".fastn/package-cache")
                 .join(package.name.as_str());
             ds.write_content(&base.join(format!("{}/README.md", id)), string.into_bytes())
                 .await?;
             return Ok(format!(
-                ".fastn/packages-cache/{}/{}/README.md",
+                ".fastn/package-cache/{}/{}/README.md",
                 package.name, id
             ));
         }
@@ -955,7 +955,7 @@ impl Config {
         let mut add_packages = "".to_string();
         if let Some(new_id) = id.strip_prefix("-/") {
             id = new_id.to_string();
-            add_packages = ".fastn/packages-cache/".to_string()
+            add_packages = ".fastn/package-cache/".to_string()
         }
         let mut id = id
             .split_once("-/")
@@ -1119,7 +1119,7 @@ impl Config {
         let fastn_doc = utils::fastn_doc(&ds, &fastn_ds::Path::new("FASTN.ftd")).await?;
         let config_temp = config_temp::ConfigTemp::read(&ds).await?;
         let mut package = fastn_core::Package::from_fastn_doc(&ds, &fastn_doc)?;
-        let package_root = ds.root().join(".fastn/packages-cache");
+        let package_root = ds.root().join(".fastn/package-cache");
         let all_packages = {
             let mut all_packages = std::collections::BTreeMap::new();
             all_packages.insert(package.name.to_string(), package.to_owned());
