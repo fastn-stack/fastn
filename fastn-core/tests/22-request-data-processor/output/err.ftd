@@ -1,0 +1,12 @@
+-- import: fastn/processors as pr
+
+;; if ?err=smth in url then $err is "smth"
+;; else an error will be thrown by fastn
+-- string err:
+$processor$: pr.request-data
+
+-- ftd.column:
+
+-- ftd.text: $err
+
+-- end: ftd.column

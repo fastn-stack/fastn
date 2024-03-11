@@ -1544,6 +1544,21 @@ impl Value {
         }
     }
 
+    pub fn kwargs(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<ftd::Map<PropertyValue>> {
+        match self {
+            Self::KwArgs { arguments } => Ok(arguments.to_owned()),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected kwargs, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
     pub fn get_or_type(
         &self,
         doc_id: &str,
@@ -1558,6 +1573,21 @@ impl Value {
             } => Ok((name, variant, value)),
             t => ftd::interpreter::utils::e2(
                 format!("Expected or-type, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn get_kwargs(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<&ftd::Map<ftd::interpreter::PropertyValue>> {
+        match self {
+            Self::KwArgs { arguments } => Ok(arguments),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected kw-args, found: `{:?}`", t),
                 doc_id,
                 line_number,
             ),
