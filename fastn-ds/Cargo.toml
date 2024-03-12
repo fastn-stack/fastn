@@ -17,3 +17,7 @@ camino.workspace = true
 ignore.workspace = true
 dirs.workspace = true
 tracing.workspace = true
+reqwest.workspace = true
+once_cell.workspace = true
+url.workspace = true
+regex.workspace = true
