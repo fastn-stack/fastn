@@ -529,22 +529,24 @@ async fn handle_endpoints(
     };
 
     Some(
-        fastn_core::proxy::get_out(
-            url::Url::parse(
-                format!(
-                    "{}/{}",
-                    endpoint.endpoint.trim_end_matches('/'),
-                    req.path()
-                        .trim_start_matches(endpoint.mountpoint.trim_end_matches('/'))
-                        .trim_start_matches('/')
+        config
+            .ds
+            .http(
+                url::Url::parse(
+                    format!(
+                        "{}/{}",
+                        endpoint.endpoint.trim_end_matches('/'),
+                        req.path()
+                            .trim_start_matches(endpoint.mountpoint.trim_end_matches('/'))
+                            .trim_start_matches('/')
+                    )
+                    .as_str(),
                 )
-                .as_str(),
+                .unwrap(),
+                req,
+                &std::collections::HashMap::new(),
             )
-            .unwrap(),
-            req,
-            &std::collections::HashMap::new(),
-        )
-        .await,
+            .await,
     )
 }
 
