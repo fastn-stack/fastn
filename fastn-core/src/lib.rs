@@ -33,6 +33,7 @@ mod version;
 pub mod catch_panic;
 pub(crate) mod google_sheets;
 mod library2022;
+pub mod log;
 mod mail;
 
 pub use auth::UserData;
