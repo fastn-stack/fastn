@@ -1493,9 +1493,13 @@ dependencies = [
  "dirs",
  "ftd 0.3.0",
  "ignore",
+ "once_cell",
+ "regex",
+ "reqwest",
  "thiserror",
  "tokio",
  "tracing",
+ "url",
 ]
 
 [[package]]
