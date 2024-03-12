@@ -63,6 +63,7 @@ pub struct RequestConfig {
     pub module_package_map: std::collections::BTreeMap<String, String>,
     /// each string is the value of Set-Cookie header
     pub processor_set_cookies: Vec<String>,
+    pub log: std::sync::Arc<std::sync::RwLock<Option<fastn_core::log::Log>>>,
 }
 
 impl RequestConfig {

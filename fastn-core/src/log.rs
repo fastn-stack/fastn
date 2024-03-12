@@ -84,7 +84,6 @@ impl EntityKind {
     }
 }
 
-// todo: convert descriptive outcomes as enums
 #[derive(Debug, Clone)]
 pub enum OutcomeKind {
     Success(SuccessOutcome),
@@ -695,52 +694,11 @@ impl RequestLog {
 
 #[derive(Debug, Clone)]
 pub struct Log {
-    pub level: fastn_core::log::LogLevel,
-    pub ekind: fastn_core::log::EventKind,
-    pub okind: fastn_core::log::EntityKind,
-    pub outcome: fastn_core::log::OutcomeKind,
-    pub message: String,
-    pub request: fastn_core::log::RequestLog,
-    pub timestamp: chrono::DateTime<chrono::Utc>,
-    pub doc: String,
-    pub line_number: u32,
-}
-
-impl Log {
-    pub fn outcome(&self) -> String {
-        match &self.outcome {
-            OutcomeKind::Error(outcome) => outcome.outcome(),
-            OutcomeKind::Success(_outcome) => "success".to_string(),
-        }
-    }
-
-    pub fn outcome_detail(&self) -> String {
-        match &self.outcome {
-            OutcomeKind::Error(outcome) => outcome.outcome_detail(),
-            OutcomeKind::Success(_outcome) => "success".to_string(),
-        }
-    }
-
-    pub fn outcome_data(&self) -> serde_json::Value {
-        let outcome_detail = self.outcome_detail();
-        let outcome_message = self.message();
-        serde_json::json!({
-            "detail": outcome_detail,
-            "message": outcome_message
-        })
-    }
-
-    pub fn event_data(&self) -> serde_json::Value {
-        self.request.event_data()
-    }
-
-    pub fn source(&self) -> String {
-        format!("{}, Line: {}", self.doc.as_str(), self.line_number)
-    }
-
-    pub fn message(&self) -> String {
-        self.message.clone()
-    }
+    pub ekind: String,
+    pub okind: String,
+    pub outcome: String,
+    pub outcome_data: serde_json::Value,
+    pub input: serde_json::Value,
 }
 
 impl fastn_core::http::Request {

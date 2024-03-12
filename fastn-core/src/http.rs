@@ -105,8 +105,9 @@ pub struct Request {
     scheme: String,
     host: String,
     pub connection_info: actix_web::dev::ConnectionInfo,
-    pub log: std::sync::Arc<std::sync::RwLock<Vec<fastn_core::log::Log>>>,
-    // path_params: Vec<(String, )>
+    pub log: std::sync::Arc<std::sync::RwLock<Option<fastn_core::log::Log>>>, // todo: one log
+                                                                              // per request
+                                                                              // path_params: Vec<(String, )>
 }
 
 impl Request {
