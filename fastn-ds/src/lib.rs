@@ -2,22 +2,6 @@ extern crate self as fastn_ds;
 pub mod http;
 mod utils;
 
-fn client_builder() -> reqwest::Client {
-    // TODO: Connection Pool, It by default holds the connection pool internally
-    reqwest::ClientBuilder::new()
-        .http2_adaptive_window(true)
-        .tcp_keepalive(std::time::Duration::new(150, 0))
-        .tcp_nodelay(true)
-        .connect_timeout(std::time::Duration::new(150, 0))
-        .connection_verbose(true)
-        .redirect(reqwest::redirect::Policy::none())
-        .build()
-        .unwrap()
-}
-
-static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
-    once_cell::sync::Lazy::new(|| std::sync::Arc::new(client_builder()));
-
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
     root: Path,
@@ -358,10 +342,10 @@ impl DocumentStore {
 
         *proxy_request.body_mut() = Some(req.body().to_vec().into());
 
-        Ok(
-            fastn_ds::http::ResponseBuilder::from_reqwest(CLIENT.execute(proxy_request).await?)
-                .await,
+        Ok(fastn_ds::http::ResponseBuilder::from_reqwest(
+            fastn_ds::http::CLIENT.execute(proxy_request).await?,
         )
+        .await)
     }
 }
 
