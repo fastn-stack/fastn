@@ -14,6 +14,10 @@ fn client_builder() -> reqwest::Client {
 pub static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
     once_cell::sync::Lazy::new(|| std::sync::Arc::new(client_builder()));
 
+pub static NOT_FOUND_CACHE: once_cell::sync::Lazy<
+    antidote::RwLock<std::collections::HashSet<String>>,
+> = once_cell::sync::Lazy::new(|| antidote::RwLock::new(Default::default()));
+
 pub(crate) struct ResponseBuilder {}
 
 impl ResponseBuilder {
@@ -35,7 +39,7 @@ impl ResponseBuilder {
             Ok(b) => b,
             Err(e) => {
                 return actix_web::HttpResponse::from(actix_web::error::ErrorInternalServerError(
-                    fastn_ds::HttpError::HttpError(e),
+                    fastn_ds::DSError::HttpError(e),
                 ))
             }
         };

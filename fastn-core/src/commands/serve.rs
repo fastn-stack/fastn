@@ -547,7 +547,7 @@ async fn handle_endpoints(
                 &std::collections::HashMap::new(),
             )
             .await
-            .map_err(fastn_core::Error::DSHttpError),
+            .map_err(fastn_core::Error::DSError),
     )
 }
 
