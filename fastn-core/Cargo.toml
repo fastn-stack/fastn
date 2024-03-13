@@ -34,6 +34,7 @@ async-lock.workspace = true
 async-recursion.workspace = true
 camino.workspace = true
 chrono.workspace = true
+async-trait = "0.1"
 clap.workspace = true
 colored.workspace = true
 deadpool-postgres.workspace = true

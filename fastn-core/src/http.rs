@@ -108,6 +108,46 @@ pub struct Request {
     // path_params: Vec<(String, )>
 }
 
+#[async_trait::async_trait]
+impl fastn_ds::RequestType for Request {
+    async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<fastn_ds::UserData> {
+        self.ud(ds).await
+    }
+    fn headers(&self) -> &reqwest::header::HeaderMap {
+        &self.headers
+    }
+
+    fn method(&self) -> &str {
+        self.method.as_str()
+    }
+
+    fn query_string(&self) -> &str {
+        self.query_string.as_str()
+    }
+
+    fn get_ip(&self) -> Option<String> {
+        self.ip.clone()
+    }
+
+    fn cookies_string(&self) -> Option<String> {
+        if self.cookies.is_empty() {
+            return None;
+        }
+        Some(
+            self.cookies()
+                .iter()
+                // TODO: check if extra escaping is needed
+                .map(|(k, v)| format!("{}={}", k, v).replace(';', "%3B"))
+                .collect::<Vec<_>>()
+                .join(";"),
+        )
+    }
+
+    fn body(&self) -> &[u8] {
+        &self.body
+    }
+}
+
 impl Request {
     //pub fn get_named_params() -> {}
     pub fn full_path(&self) -> String {
@@ -356,63 +396,6 @@ impl Request {
             Some(user_agent) => is_bot(&user_agent),
             None => true,
         }
-    }
-}
-
-pub(crate) struct ResponseBuilder {
-    // headers: std::collections::HashMap<String, String>,
-    // code: u16,
-    // remaining
-}
-
-// We will no do stream, data is going to less from services
-impl ResponseBuilder {
-    // chain implementation
-    // .build
-    // response from string, json, bytes etc
-
-    pub async fn from_reqwest(response: reqwest::Response) -> fastn_core::http::Response {
-        let status = response.status();
-
-        // Remove `Connection` as per
-        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection#Directives
-        let mut response_builder = actix_web::HttpResponse::build(status);
-        for header in response
-            .headers()
-            .iter()
-            .filter(|(h, _)| *h != "connection")
-        {
-            response_builder.insert_header(header);
-        }
-
-        // if status == actix_web::http::StatusCode::FOUND && false {
-        //     response_builder.status(actix_web::http::StatusCode::OK);
-        //     if let Some(location) = response.headers().get(actix_web::http::header::LOCATION) {
-        //         let redirect = location.to_str().unwrap();
-        //         let path = if redirect.trim_matches('/').is_empty() {
-        //             format!("/-/{}/", package_name)
-        //         } else {
-        //             // if it contains query-params so url should not end with /
-        //             if redirect.contains('?') {
-        //                 format!("/-/{}/{}", package_name, redirect.trim_matches('/'))
-        //             } else {
-        //                 format!("/-/{}/{}/", package_name, redirect.trim_matches('/'))
-        //             }
-        //         };
-        //         let t = serde_json::json!({"redirect": path.as_str()}).to_string();
-        //         return response_builder.body(t);
-        //     }
-        // }
-
-        let content = match response.bytes().await {
-            Ok(b) => b,
-            Err(e) => {
-                return actix_web::HttpResponse::from(actix_web::error::ErrorInternalServerError(
-                    fastn_core::Error::HttpError(e),
-                ))
-            }
-        };
-        response_builder.body(content)
     }
 }
 

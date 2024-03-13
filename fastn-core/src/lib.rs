@@ -34,7 +34,6 @@ pub mod catch_panic;
 pub(crate) mod google_sheets;
 mod library2022;
 
-pub use auth::UserData;
 pub(crate) use auto_import::AutoImport;
 pub use commands::{
     build::build, check::post_build_check, create_package::create_package, fmt::fmt, query::query,
@@ -42,6 +41,7 @@ pub use commands::{
 };
 pub use config::{config_temp, Config, ConfigTemp, FTDEdition, RequestConfig};
 pub use error::Error;
+pub use fastn_ds::UserData;
 pub use file::File;
 pub use file::{get_file, paths_to_files, Document, Static};
 pub(crate) use font::Font;
@@ -217,7 +217,6 @@ pub(crate) fn assert_error<T>(message: String) -> Result<T> {
 
 #[cfg(test)]
 mod tests {
-
     #[test]
     fn fbt() {
         if fbt_lib::main().is_some() {
