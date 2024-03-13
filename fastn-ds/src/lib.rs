@@ -1,8 +1,5 @@
 extern crate self as fastn_ds;
 pub mod http;
-
-pub mod ud;
-pub use ud::UserData;
 mod utils;
 
 #[derive(Debug, Clone)]
